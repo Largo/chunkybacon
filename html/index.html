@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruby lernen mit Chunky Bacon</title>
+    <link rel="stylesheet" href="assets/app.css">
+    <script src="browser.script.iife.js"></script>
+    <meta name="description" property="og:description" content="Lerne die Programmiersprache Ruby direkt im Browser – auf Deutsch, mit Chunky Bacon. Ein interaktives Notizbuch mit Ruby.wasm, kein Setup nötig.">
+    <meta name="author" content="Andi Idogawa">
+    <meta name="image" property="og:image" content="assets/chunky.svg">
+    <link rel="stylesheet" href="assets/codemirror.css">
+    <script src="assets/codemirror.js"></script>
+    <script src="assets/codemirror-ruby.js"></script>
+    <script src="lessons.js"></script>
+    <link rel="icon" href="assets/chunky.svg">
+</head>
+<body>
+
+    <div class="spinner" id="spinner">
+      <img class="spinner-image" src="assets/chunky.svg" alt="Chunky Bacon Fuchs">
+      <h1 id="spinnerTitle">Ruby lernen mit Chunky Bacon</h1>
+      <p id="spinnerText">Ruby wird geladen … / Loading Ruby … (einmalig / one-time, ~35&nbsp;MB)</p>
+    </div>
+
+    <div id="app" style="display:none">
+      <header>
+        <img id="mascot" src="assets/chunky.svg" alt="Chunky Bacon Fuchs">
+        <div class="headerText">
+          <h1 id="siteTitle">Ruby lernen mit Chunky Bacon</h1>
+          <p id="siteSubtitle"></p>
+        </div>
+        <select id="langSelect" title="Sprache / Language">
+          <option value="de">Deutsch</option>
+          <option value="en">English</option>
+        </select>
+      </header>
+
+      <div class="layout">
+        <nav id="lessonNav"></nav>
+
+        <main>
+          <article id="lessonBody"></article>
+
+          <div id="chunkyChat">
+            <div class="chat-avatar"><img src="assets/chunky.svg" alt="Chunky"></div>
+            <div class="chat-message"><p id="chunkyText"></p></div>
+          </div>
+
+          <div class="buttons">
+            <button id="reset-code" type="button" class="reset"></button>
+          </div>
+        </main>
+      </div>
+
+      <footer>
+        <p id="footerCredit"></p>
+        <p><small id="footerLicense"></small></p>
+      </footer>
+    </div>
+
+  <script>
+    // Per-cell CodeMirror helpers called from Ruby (main.rb)
+    window.cellEditors = {};
+    window.initCell = function (idx) {
+      var ta = document.getElementById("cell-code-" + idx);
+      if (!ta) return;
+      window.cellEditors[idx] = CodeMirror.fromTextArea(ta, {
+        lineNumbers: true,
+        mode: "text/x-ruby",
+        matchBrackets: true,
+        indentUnit: 2,
+        viewportMargin: Infinity,
+        extraKeys: {
+          "Shift-Enter": function () {
+            var btn = document.querySelector('.run-cell[data-idx="' + idx + '"]');
+            if (btn) btn.click();
+          }
+        }
+      });
+    };
+    window.getCellCode = function (idx) {
+      return window.cellEditors[idx] ? window.cellEditors[idx].getValue() : "";
+    };
+    window.setCellCode = function (idx, code) {
+      if (window.cellEditors[idx]) window.cellEditors[idx].setValue(code);
+    };
+    window.clearCellMarks = function (idx) {
+      var ed = window.cellEditors[idx];
+      if (ed) ed.getAllMarks().forEach(function (m) { m.clear(); });
+    };
+    window.markCellLine = function (idx, lineNo) {
+      var ed = window.cellEditors[idx];
+      if (!ed) return;
+      var line = ed.getLine(lineNo - 1) || "";
+      var start = Math.max(line.search(/\S/), 0);
+      ed.markText(
+        { line: lineNo - 1, ch: start },
+        { line: lineNo - 1, ch: line.length },
+        { className: "marker" }
+      );
+      ed.scrollIntoView({ line: lineNo - 1, ch: 0 }, 200);
+    };
+  </script>
+  <script type="text/ruby" src="main.rb" data-eval="async"></script>
+</body>
+</html>

@@ -1,0 +1,340 @@
+// Lesson data for "Ruby lernen mit Chunky Bacon".
+// Notebook format: each lesson (per language) is a list of cells:
+//   { t: "h", html: ... }                        text block
+//   { t: "c", code: ... }                        runnable demo cell
+//   { t: "x", code, check, hint }                exercise cell (checked)
+// All code cells of a lesson share one binding (like a notebook kernel).
+// Check snippets are Ruby, eval'd in that binding with extra locals:
+// output (captured stdout), result (last expression value), code (source).
+window.LESSONS_JSON = JSON.stringify({
+  ui: {
+    de: {
+      title: "Ruby lernen mit Chunky Bacon",
+      subtitle: "Ein Ruby-Notizbuch im Browser – kein Setup, einfach lostippen.",
+      runCell: "▶ Ausführen",
+      reset: "Lektion zurücksetzen",
+      taskLabel: "Aufgabe",
+      loading: "Ruby wird geladen … (einmalig ca. 35 MB)",
+      welcome: "Hallo! Ich bin <strong>Chunky Bacon</strong>, dein Fuchs-Begleiter. 🦊🥓 Diese Seite ist ein <strong>Notizbuch</strong>: Führe jede Code-Zelle mit <em>▶ Ausführen</em> oder <kbd>Shift</kbd>+<kbd>Enter</kbd> aus – den Wert der letzten Zeile zeigt Ruby automatisch als <code>=&gt;</code>. Die Zelle mit dem orangen Rand ist deine Aufgabe. Los geht's!",
+      resetConfirm: "Alle Zellen dieser Lektion zurücksetzen?",
+      praise: [
+        "CHUNKY BACON! 🥓 Genau so!",
+        "Sauber! Die Füchse jubeln: CHUNKY BACON!",
+        "Perfekt! Du bist auf dem Weg zur Ruby-Erleuchtung.",
+        "Ausgezeichnet! Matz wäre stolz auf dich.",
+        "Wunderbar! Weiter so!"
+      ],
+      failIntro: "Hmm, das ist noch nicht ganz richtig.",
+      errorIntro: "Autsch, Ruby meldet einen Fehler – schau unter die Zelle.",
+      nextLesson: "→ Weiter zur nächsten Lektion",
+      progress: "Lektion %d von %d",
+      allDone: "🎉 Du hast alle Lektionen geschafft! CHUNKY BACON! Als nächsten Schritt empfehle ich dir die <a href='https://koans.idogawa.com'>Ruby Koans im Browser</a>.",
+      footerCredit: "Ein Angebot von <a href='https://idogawa.com'>Andi Idogawa</a>. Läuft komplett in deinem Browser dank <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Schon fertig? Weiter geht's mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
+      footerLicense: "„Chunky Bacon“ stammt aus why's (poignant) guide to Ruby von why the lucky stiff – in liebevoller Erinnerung. Kursinhalte: CC BY-NC-SA 4.0."
+    },
+    en: {
+      title: "Learn Ruby with Chunky Bacon",
+      subtitle: "A Ruby notebook in your browser – no setup, just start typing.",
+      runCell: "▶ Run",
+      reset: "Reset lesson",
+      taskLabel: "Task",
+      loading: "Loading Ruby … (one-time, about 35 MB)",
+      welcome: "Hi! I'm <strong>Chunky Bacon</strong>, your fox companion. 🦊🥓 This page is a <strong>notebook</strong>: run every code cell with <em>▶ Run</em> or <kbd>Shift</kbd>+<kbd>Enter</kbd> – Ruby automatically shows the value of the last line as <code>=&gt;</code>. The cell with the orange border is your task. Let's go!",
+      resetConfirm: "Reset all cells of this lesson?",
+      praise: [
+        "CHUNKY BACON! 🥓 That's it!",
+        "Nice! The foxes cheer: CHUNKY BACON!",
+        "Perfect! You are on the path to Ruby enlightenment.",
+        "Excellent! Matz would be proud.",
+        "Wonderful! Keep going!"
+      ],
+      failIntro: "Hmm, that's not quite right yet.",
+      errorIntro: "Ouch, Ruby reports an error – check below the cell.",
+      nextLesson: "→ On to the next lesson",
+      progress: "Lesson %d of %d",
+      allDone: "🎉 You finished all lessons! CHUNKY BACON! As a next step, try the <a href='https://koans.idogawa.com'>Ruby Koans in the browser</a>.",
+      footerCredit: "A service by <a href='https://idogawa.com'>Andi Idogawa</a>. Runs entirely in your browser thanks to <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Done here? Continue with the <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
+      footerLicense: "“Chunky Bacon” comes from why's (poignant) guide to Ruby by why the lucky stiff – fondly remembered. Course content: CC BY-NC-SA 4.0."
+    }
+  },
+  lessons: [
+    {
+      id: "hallo",
+      de: {
+        title: "1. Hallo, Welt!",
+        cells: [
+          { t: "h", html: "<h2>Hallo, Welt!</h2><p>Ruby ist eine Programmiersprache, die für <strong>Menschen</strong> gemacht ist. Ihr Erfinder Yukihiro „Matz“ Matsumoto wollte, dass Programmieren Freude macht.</p><p>Diese Seite funktioniert wie ein <strong>Notizbuch</strong>: Sie besteht aus Text und Code-Zellen. Jede Zelle kannst du verändern und mit <em>▶ Ausführen</em> oder <kbd>Shift</kbd>+<kbd>Enter</kbd> laufen lassen. Probier es gleich aus:</p>" },
+          { t: "c", code: "1 + 1" },
+          { t: "h", html: "<p>Unter der Zelle erscheint <code>=&gt; 2</code>. Das <code>=&gt;</code> zeigt den <strong>Wert der letzten Zeile</strong> – Ruby macht das automatisch, ganz ohne Extra-Befehl.</p><p>Wenn du Text ausdrücklich <em>ausgeben</em> willst, nimm <code>puts</code> („put string“):</p>" },
+          { t: "c", code: "puts \"Chunky Bacon!\"" },
+          { t: "h", html: "<p>Der Text zwischen den Anführungszeichen heisst <strong>String</strong> (Zeichenkette). <code>puts</code> schreibt ihn in die Ausgabe. Übrigens: <code>puts</code> selbst hat den Wert <code>nil</code> – „nichts“ – darum siehst du hier keine <code>=&gt;</code>-Zeile.</p><div class='task'><strong>Aufgabe:</strong> Bring die Zelle unten dazu, <code>Hallo, Welt!</code> zu zeigen – mit <code>puts</code> oder einfach als Wert der letzten Zeile.</div>" },
+          { t: "x", code: "# Dein Code:\n",
+            check: "output.include?(\"Hallo, Welt!\") || result == \"Hallo, Welt!\"",
+            hint: "Schreibe <code>puts \"Hallo, Welt!\"</code> – oder einfach <code>\"Hallo, Welt!\"</code> als letzte Zeile." }
+        ]
+      },
+      en: {
+        title: "1. Hello, World!",
+        cells: [
+          { t: "h", html: "<h2>Hello, World!</h2><p>Ruby is a programming language made for <strong>humans</strong>. Its creator Yukihiro “Matz” Matsumoto wanted programming to be joyful.</p><p>This page works like a <strong>notebook</strong>: it consists of text and code cells. You can edit every cell and run it with <em>▶ Run</em> or <kbd>Shift</kbd>+<kbd>Enter</kbd>. Try it right away:</p>" },
+          { t: "c", code: "1 + 1" },
+          { t: "h", html: "<p>Below the cell you see <code>=&gt; 2</code>. The <code>=&gt;</code> shows the <strong>value of the last line</strong> – Ruby does that automatically, no extra command needed.</p><p>If you want to explicitly <em>print</em> text, use <code>puts</code> (“put string”):</p>" },
+          { t: "c", code: "puts \"Chunky Bacon!\"" },
+          { t: "h", html: "<p>The text between the quotes is called a <strong>string</strong>. <code>puts</code> writes it to the output. By the way: <code>puts</code> itself has the value <code>nil</code> – “nothing” – which is why there is no <code>=&gt;</code> line here.</p><div class='task'><strong>Task:</strong> Make the cell below show <code>Hello, World!</code> – with <code>puts</code> or simply as the value of the last line.</div>" },
+          { t: "x", code: "# Your code:\n",
+            check: "output.include?(\"Hello, World!\") || result == \"Hello, World!\"",
+            hint: "Write <code>puts \"Hello, World!\"</code> – or simply <code>\"Hello, World!\"</code> as the last line." }
+        ]
+      }
+    },
+    {
+      id: "rechnen",
+      de: {
+        title: "2. Rechnen",
+        cells: [
+          { t: "h", html: "<h2>Ruby als Taschenrechner</h2><p>Ruby rechnet mit <code>+</code>, <code>-</code>, <code>*</code> (mal) und <code>/</code> (geteilt). Führ die Zelle aus – und ändere die Zahlen ruhig:</p>" },
+          { t: "c", code: "3 + 4" },
+          { t: "h", html: "<p>Alles hinter <code>#</code> ist ein <strong>Kommentar</strong> – Ruby ignoriert ihn. Kommentare sind Notizen für Menschen (und Füchse):</p>" },
+          { t: "c", code: "5 * 5   # fünf mal fünf" },
+          { t: "h", html: "<div class='task'><strong>Aufgabe:</strong> Wie viel ist 6 mal 7? Lass Ruby rechnen: Die Zelle soll das Ergebnis von <code>6 * 7</code> zeigen. (Nicht selbst rechnen – das ist ja der Witz!)</div>" },
+          { t: "x", code: "",
+            check: "(output.include?(\"42\") || result == 42) && code.include?(\"*\")",
+            hint: "Schreibe einfach <code>6 * 7</code> in die Zelle. Der Stern <code>*</code> bedeutet „mal“." }
+        ]
+      },
+      en: {
+        title: "2. Arithmetic",
+        cells: [
+          { t: "h", html: "<h2>Ruby as a calculator</h2><p>Ruby calculates with <code>+</code>, <code>-</code>, <code>*</code> (times) and <code>/</code> (divided by). Run the cell – and feel free to change the numbers:</p>" },
+          { t: "c", code: "3 + 4" },
+          { t: "h", html: "<p>Everything after <code>#</code> is a <strong>comment</strong> – Ruby ignores it. Comments are notes for humans (and foxes):</p>" },
+          { t: "c", code: "5 * 5   # five times five" },
+          { t: "h", html: "<div class='task'><strong>Task:</strong> What is 6 times 7? Let Ruby do the math: the cell should show the result of <code>6 * 7</code>. (Don't compute it yourself – that's the whole point!)</div>" },
+          { t: "x", code: "",
+            check: "(output.include?(\"42\") || result == 42) && code.include?(\"*\")",
+            hint: "Simply write <code>6 * 7</code> into the cell. The star <code>*</code> means “times”." }
+        ]
+      }
+    },
+    {
+      id: "variablen",
+      de: {
+        title: "3. Variablen",
+        cells: [
+          { t: "h", html: "<h2>Variablen – Dinge beim Namen nennen</h2><p>Eine <strong>Variable</strong> ist ein Name für einen Wert. Mit <code>=</code> weist du ihn zu. Variablennamen schreibt man klein, mit Unterstrichen: <code>lieblings_essen</code>, <code>anzahl_streifen</code>.</p>" },
+          { t: "c", code: "essen = \"Speck\"\nmenge = 3\nessen" },
+          { t: "h", html: "<p>Die Zellen einer Lektion teilen sich ihren Speicher – wie in einem echten Notizbuch. Die Variable <code>menge</code> von oben kannst du hier weiterverwenden. (Kommt ein Fehler? Dann führe zuerst die Zelle darüber aus.)</p>" },
+          { t: "c", code: "menge * 2" },
+          { t: "h", html: "<div class='task'><strong>Aufgabe:</strong> Lege zwei Variablen an: <code>name</code> mit deinem Namen (ein String) und <code>alter</code> mit einer Zahl.</div>" },
+          { t: "x", code: "# name = ...\n# alter = ...\n",
+            check: "name.is_a?(String) && !name.empty? && alter.is_a?(Integer)",
+            hint: "Zum Beispiel: <code>name = \"Kaz\"</code> und <code>alter = 7</code>." }
+        ]
+      },
+      en: {
+        title: "3. Variables",
+        cells: [
+          { t: "h", html: "<h2>Variables – naming things</h2><p>A <strong>variable</strong> is a name for a value. You assign it with <code>=</code>. Variable names are lowercase, with underscores: <code>favorite_food</code>, <code>bacon_strips</code>.</p>" },
+          { t: "c", code: "food = \"bacon\"\namount = 3\nfood" },
+          { t: "h", html: "<p>The cells of a lesson share their memory – like in a real notebook. You can reuse the variable <code>amount</code> from above here. (Getting an error? Run the cell above first.)</p>" },
+          { t: "c", code: "amount * 2" },
+          { t: "h", html: "<div class='task'><strong>Task:</strong> Create two variables: <code>name</code> with your name (a string) and <code>age</code> with a number.</div>" },
+          { t: "x", code: "# name = ...\n# age = ...\n",
+            check: "name.is_a?(String) && !name.empty? && age.is_a?(Integer)",
+            hint: "For example: <code>name = \"Kaz\"</code> and <code>age = 7</code>." }
+        ]
+      }
+    },
+    {
+      id: "strings",
+      de: {
+        title: "4. Strings verketten",
+        cells: [
+          { t: "h", html: "<h2>Strings und Interpolation</h2><p>Du kannst Variablen direkt in einen String einbauen – das heisst <strong>Interpolation</strong> und funktioniert mit <code>#{}</code> in doppelten Anführungszeichen:</p>" },
+          { t: "c", code: "tier = \"Fuchs\"\n\"Der #{tier} ruft!\"" },
+          { t: "h", html: "<p>Ruby wertet aus, was zwischen <code>#{</code> und <code>}</code> steht, und setzt das Ergebnis ein. Es darf auch gerechnet werden:</p>" },
+          { t: "c", code: "\"#{3 * 7} Streifen Speck\"" },
+          { t: "h", html: "<div class='task'><strong>Aufgabe:</strong> Unten ist die Variable <code>lieblingsessen</code> vorbereitet. Baue mit Interpolation den Satz <code>Ich mag Chunky Bacon!</code> – die Variable gehört mit <code>#{}</code> in den String.</div>" },
+          { t: "x", code: "lieblingsessen = \"Chunky Bacon\"\n# \"Ich mag ...!\"\n",
+            check: "(output.include?(\"Ich mag Chunky Bacon!\") || result == \"Ich mag Chunky Bacon!\") && code.include?('#{')",
+            hint: "Schreibe <code>\"Ich mag #{lieblingsessen}!\"</code> als letzte Zeile – mit doppelten Anführungszeichen." }
+        ]
+      },
+      en: {
+        title: "4. String interpolation",
+        cells: [
+          { t: "h", html: "<h2>Strings and interpolation</h2><p>You can embed variables right inside a string – that's called <strong>interpolation</strong> and works with <code>#{}</code> inside double quotes:</p>" },
+          { t: "c", code: "animal = \"fox\"\n\"The #{animal} shouts!\"" },
+          { t: "h", html: "<p>Ruby evaluates whatever is between <code>#{</code> and <code>}</code> and inserts the result. Math works too:</p>" },
+          { t: "c", code: "\"#{3 * 7} strips of bacon\"" },
+          { t: "h", html: "<div class='task'><strong>Task:</strong> The variable <code>favorite_food</code> is prepared below. Use interpolation to build the sentence <code>I love Chunky Bacon!</code> – the variable goes into the string with <code>#{}</code>.</div>" },
+          { t: "x", code: "favorite_food = \"Chunky Bacon\"\n# \"I love ...!\"\n",
+            check: "(output.include?(\"I love Chunky Bacon!\") || result == \"I love Chunky Bacon!\") && code.include?('#{')",
+            hint: "Write <code>\"I love #{favorite_food}!\"</code> as the last line – with double quotes." }
+        ]
+      }
+    },
+    {
+      id: "wenn",
+      de: {
+        title: "5. Entscheidungen (if)",
+        cells: [
+          { t: "h", html: "<h2>Wenn … dann … sonst</h2><p>Mit <code>if</code> trifft dein Programm Entscheidungen. Vergleiche: <code>&gt;</code> grösser, <code>&lt;</code> kleiner, <code>==</code> gleich (zwei Gleichheitszeichen!), <code>!=</code> ungleich. Jeder <code>if</code>-Block endet mit <code>end</code>.</p>" },
+          { t: "c", code: "hunger = 9\nif hunger > 7\n  \"Zeit für Speck!\"\nelse\n  \"Alles gut.\"\nend" },
+          { t: "h", html: "<p>Sogar <code>if</code> hat in Ruby einen Wert: den Zweig, der gewonnen hat. Ändere <code>hunger</code> auf <code>3</code> und führ die Zelle nochmal aus!</p><div class='task'><strong>Aufgabe:</strong> Unten steht <code>zahl = 7</code>. Die Zelle soll <code>gross</code> ergeben, wenn die Zahl grösser als 5 ist, sonst <code>klein</code> – als Wert oder mit <code>puts</code>.</div>" },
+          { t: "x", code: "zahl = 7\n# if ...\n",
+            check: "((output + result.to_s).include?(\"gross\") && !(output + result.to_s).include?(\"klein\")) && code.include?(\"if\")",
+            hint: "So geht's: <code>if zahl > 5</code>, dann <code>\"gross\"</code>, dann <code>else</code>, <code>\"klein\"</code> und zum Schluss <code>end</code>." }
+        ]
+      },
+      en: {
+        title: "5. Decisions (if)",
+        cells: [
+          { t: "h", html: "<h2>If … then … else</h2><p>With <code>if</code> your program makes decisions. Comparisons: <code>&gt;</code> greater, <code>&lt;</code> less, <code>==</code> equal (two equals signs!), <code>!=</code> not equal. Every <code>if</code> block ends with <code>end</code>.</p>" },
+          { t: "c", code: "hunger = 9\nif hunger > 7\n  \"Time for bacon!\"\nelse\n  \"All good.\"\nend" },
+          { t: "h", html: "<p>Even <code>if</code> has a value in Ruby: the branch that won. Change <code>hunger</code> to <code>3</code> and run the cell again!</p><div class='task'><strong>Task:</strong> Below you have <code>number = 7</code>. The cell should yield <code>big</code> if the number is greater than 5, otherwise <code>small</code> – as a value or with <code>puts</code>.</div>" },
+          { t: "x", code: "number = 7\n# if ...\n",
+            check: "((output + result.to_s).include?(\"big\") && !(output + result.to_s).include?(\"small\")) && code.include?(\"if\")",
+            hint: "Like this: <code>if number > 5</code>, then <code>\"big\"</code>, then <code>else</code>, <code>\"small\"</code> and finally <code>end</code>." }
+        ]
+      }
+    },
+    {
+      id: "schleifen",
+      de: {
+        title: "6. Schleifen",
+        cells: [
+          { t: "h", html: "<h2>Schleifen – Dinge wiederholen</h2><p>In why's legendärem Ruby-Buch rufen zwei Comic-Füchse immer wieder: <em>„Chunky Bacon!“</em> – Wiederholung ist in Ruby wunderbar einfach:</p>" },
+          { t: "c", code: "3.times do\n  puts \"Chunky Bacon!\"\nend" },
+          { t: "h", html: "<p>Der Code zwischen <code>do</code> und <code>end</code> heisst <strong>Block</strong> und wird hier dreimal ausgeführt. (Das <code>=&gt; 3</code> darunter ist der Wert von <code>3.times</code> selbst.) Mit Zähler geht es auch:</p>" },
+          { t: "c", code: "3.times do |i|\n  puts \"Streifen Nummer #{i + 1}\"\nend" },
+          { t: "h", html: "<div class='task'><strong>Aufgabe:</strong> Gib <code>Chunky Bacon!</code> genau fünfmal aus – mit einer Schleife, nicht mit fünf <code>puts</code>-Zeilen.</div>" },
+          { t: "x", code: "# 5 mal Chunky Bacon, bitte!\n",
+            check: "((output + result.inspect).scan(\"Chunky Bacon!\").length >= 5) && (code.include?(\"times\") || code.include?(\"each\") || code.include?(\"while\") || code.include?(\"upto\") || code.include?(\"for \"))",
+            hint: "Schreibe <code>5.times do</code> … <code>puts \"Chunky Bacon!\"</code> … <code>end</code>." }
+        ]
+      },
+      en: {
+        title: "6. Loops",
+        cells: [
+          { t: "h", html: "<h2>Loops – repeating things</h2><p>In why's legendary Ruby book two cartoon foxes keep shouting: <em>“Chunky Bacon!”</em> – repetition is delightfully easy in Ruby:</p>" },
+          { t: "c", code: "3.times do\n  puts \"Chunky Bacon!\"\nend" },
+          { t: "h", html: "<p>The code between <code>do</code> and <code>end</code> is called a <strong>block</strong> and runs three times here. (The <code>=&gt; 3</code> below is the value of <code>3.times</code> itself.) With a counter it looks like this:</p>" },
+          { t: "c", code: "3.times do |i|\n  puts \"Strip number #{i + 1}\"\nend" },
+          { t: "h", html: "<div class='task'><strong>Task:</strong> Print <code>Chunky Bacon!</code> exactly five times – with a loop, not with five <code>puts</code> lines.</div>" },
+          { t: "x", code: "# 5 times Chunky Bacon, please!\n",
+            check: "((output + result.inspect).scan(\"Chunky Bacon!\").length >= 5) && (code.include?(\"times\") || code.include?(\"each\") || code.include?(\"while\") || code.include?(\"upto\") || code.include?(\"for \"))",
+            hint: "Write <code>5.times do</code> … <code>puts \"Chunky Bacon!\"</code> … <code>end</code>." }
+        ]
+      }
+    },
+    {
+      id: "arrays",
+      de: {
+        title: "7. Arrays",
+        cells: [
+          { t: "h", html: "<h2>Arrays – Listen von Dingen</h2><p>Ein <strong>Array</strong> ist eine Liste. Es wird mit eckigen Klammern geschrieben:</p>" },
+          { t: "c", code: "fruehstueck = [\"Ei\", \"Brot\"]\nfruehstueck.length" },
+          { t: "h", html: "<p>Mit eckigen Klammern greifst du auf ein Element zu – die Zählung beginnt bei 0!</p>" },
+          { t: "c", code: "fruehstueck[0]" },
+          { t: "h", html: "<p>Mit <code>&lt;&lt;</code> („Schaufel“) hängst du etwas hinten an, mit <code>each</code> gehst du alles durch:</p>" },
+          { t: "c", code: "fruehstueck << \"Kaffee\"\nfruehstueck.each do |sache|\n  puts sache\nend" },
+          { t: "h", html: "<div class='task'><strong>Aufgabe:</strong> Häng an das Array unten <code>\"Speck\"</code> an. Bonus: gib alle Elemente mit <code>each</code> aus.</div>" },
+          { t: "x", code: "fruehstueck = [\"Ei\", \"Brot\"]\n# ...\n",
+            check: "fruehstueck.is_a?(Array) && fruehstueck.include?(\"Speck\") && fruehstueck.include?(\"Ei\")",
+            hint: "Schreibe <code>fruehstueck << \"Speck\"</code> unter die erste Zeile." }
+        ]
+      },
+      en: {
+        title: "7. Arrays",
+        cells: [
+          { t: "h", html: "<h2>Arrays – lists of things</h2><p>An <strong>array</strong> is a list. You write it with square brackets:</p>" },
+          { t: "c", code: "breakfast = [\"egg\", \"toast\"]\nbreakfast.length" },
+          { t: "h", html: "<p>With square brackets you access an element – counting starts at 0!</p>" },
+          { t: "c", code: "breakfast[0]" },
+          { t: "h", html: "<p>With <code>&lt;&lt;</code> (the “shovel”) you append to the end, with <code>each</code> you walk through it:</p>" },
+          { t: "c", code: "breakfast << \"coffee\"\nbreakfast.each do |item|\n  puts item\nend" },
+          { t: "h", html: "<div class='task'><strong>Task:</strong> Append <code>\"bacon\"</code> to the array below. Bonus: print every element with <code>each</code>.</div>" },
+          { t: "x", code: "breakfast = [\"egg\", \"toast\"]\n# ...\n",
+            check: "breakfast.is_a?(Array) && breakfast.include?(\"bacon\") && breakfast.include?(\"egg\")",
+            hint: "Write <code>breakfast << \"bacon\"</code> below the first line." }
+        ]
+      }
+    },
+    {
+      id: "hashes",
+      de: {
+        title: "8. Hashes",
+        cells: [
+          { t: "h", html: "<h2>Hashes – Nachschlagewerke</h2><p>Ein <strong>Hash</strong> ordnet Schlüsseln Werte zu, wie ein kleines Wörterbuch. Die Schlüssel wie <code>:name</code> heissen <strong>Symbole</strong> – leichtgewichtige Namen mit Doppelpunkt.</p>" },
+          { t: "c", code: "tier = { name: \"Chunky\", essen: \"Speck\" }\ntier[:name]" },
+          { t: "h", html: "<p>Probiere auch <code>tier[:essen]</code> – oder einen Schlüssel, den es nicht gibt: dann bekommst du <code>nil</code>.</p><div class='task'><strong>Aufgabe:</strong> Baue einen Hash <code>fuchs</code> mit den Schlüsseln <code>:name</code> und <code>:essen</code> (Werte darfst du wählen).</div>" },
+          { t: "x", code: "# fuchs = { ... }\n",
+            check: "fuchs.is_a?(Hash) && fuchs[:name].to_s.length > 0 && fuchs[:essen].to_s.length > 0",
+            hint: "Zum Beispiel: <code>fuchs = { name: \"Chunky\", essen: \"Speck\" }</code>." }
+        ]
+      },
+      en: {
+        title: "8. Hashes",
+        cells: [
+          { t: "h", html: "<h2>Hashes – lookup tables</h2><p>A <strong>hash</strong> maps keys to values, like a little dictionary. Keys like <code>:name</code> are <strong>symbols</strong> – lightweight names with a colon.</p>" },
+          { t: "c", code: "animal = { name: \"Chunky\", food: \"bacon\" }\nanimal[:name]" },
+          { t: "h", html: "<p>Also try <code>animal[:food]</code> – or a key that doesn't exist: then you get <code>nil</code>.</p><div class='task'><strong>Task:</strong> Build a hash <code>fox</code> with the keys <code>:name</code> and <code>:food</code> (pick any values).</div>" },
+          { t: "x", code: "# fox = { ... }\n",
+            check: "fox.is_a?(Hash) && fox[:name].to_s.length > 0 && fox[:food].to_s.length > 0",
+            hint: "For example: <code>fox = { name: \"Chunky\", food: \"bacon\" }</code>." }
+        ]
+      }
+    },
+    {
+      id: "methoden",
+      de: {
+        title: "9. Methoden",
+        cells: [
+          { t: "h", html: "<h2>Eigene Methoden schreiben</h2><p>Mit <code>def</code> definierst du eine <strong>Methode</strong> – ein Stück Code mit Namen, das du beliebig oft aufrufen kannst:</p>" },
+          { t: "c", code: "def begruessung(name)\n  \"Hallo, #{name}!\"\nend\n\nbegruessung(\"Kaz\")" },
+          { t: "h", html: "<p>Der Wert der <em>letzten Zeile</em> einer Methode ist automatisch ihr Rückgabewert – ein <code>return</code> ist meist unnötig. Das ist sehr rubyisch.</p><div class='task'><strong>Aufgabe:</strong> Schreibe eine Methode <code>quadrat(zahl)</code>, die die Zahl mit sich selbst multipliziert zurückgibt. Teste sie: <code>quadrat(9)</code> als letzte Zeile.</div>" },
+          { t: "x", code: "# def quadrat(zahl)\n#   ...\n# end\n\n# quadrat(9)\n",
+            check: "quadrat(9) == 81 && quadrat(5) == 25 && code.include?(\"def\")",
+            hint: "So geht's: <code>def quadrat(zahl)</code>, darunter <code>zahl * zahl</code>, dann <code>end</code>." }
+        ]
+      },
+      en: {
+        title: "9. Methods",
+        cells: [
+          { t: "h", html: "<h2>Writing your own methods</h2><p>With <code>def</code> you define a <strong>method</strong> – a named piece of code you can call as often as you like:</p>" },
+          { t: "c", code: "def greeting(name)\n  \"Hello, #{name}!\"\nend\n\ngreeting(\"Kaz\")" },
+          { t: "h", html: "<p>The value of a method's <em>last line</em> is automatically its return value – an explicit <code>return</code> is usually unnecessary. Very Ruby.</p><div class='task'><strong>Task:</strong> Write a method <code>square(number)</code> that returns the number multiplied by itself. Test it: <code>square(9)</code> as the last line.</div>" },
+          { t: "x", code: "# def square(number)\n#   ...\n# end\n\n# square(9)\n",
+            check: "square(9) == 81 && square(5) == 25 && code.include?(\"def\")",
+            hint: "Like this: <code>def square(number)</code>, below it <code>number * number</code>, then <code>end</code>." }
+        ]
+      }
+    },
+    {
+      id: "klassen",
+      de: {
+        title: "10. Klassen",
+        cells: [
+          { t: "h", html: "<h2>Klassen – eigene Dinge erschaffen</h2><p>In Ruby ist <em>alles</em> ein Objekt. Mit einer <strong>Klasse</strong> baust du deine eigenen Objekte:</p>" },
+          { t: "c", code: "class Katze\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def ruf\n    \"Miau!\"\n  end\nend\n\nk = Katze.new(\"Mimi\")\nk.ruf" },
+          { t: "h", html: "<p><code>initialize</code> läuft bei <code>Katze.new</code>. Variablen mit <code>@</code> gehören zum Objekt, und <code>attr_reader :name</code> macht <code>@name</code> von aussen lesbar – probiere <code>k.name</code>!</p><div class='task'><strong>Aufgabe:</strong> Schreibe nach diesem Vorbild die Klasse <code>Fuchs</code>: mit <code>initialize(name)</code>, <code>attr_reader :name</code> und einer Methode <code>ruf</code>, die <code>\"Chunky Bacon!\"</code> zurückgibt.</div>" },
+          { t: "x", code: "# class Fuchs\n#   ...\n# end\n",
+            check: "f = Fuchs.new(\"Kaz\"); f.name == \"Kaz\" && f.ruf == \"Chunky Bacon!\" && code.include?(\"class Fuchs\")",
+            hint: "Übernimm das Katzen-Beispiel und pass es an: Klasse <code>Fuchs</code>, und <code>ruf</code> gibt genau <code>\"Chunky Bacon!\"</code> zurück." }
+        ]
+      },
+      en: {
+        title: "10. Classes",
+        cells: [
+          { t: "h", html: "<h2>Classes – creating your own things</h2><p>In Ruby, <em>everything</em> is an object. With a <strong>class</strong> you build objects of your own:</p>" },
+          { t: "c", code: "class Cat\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def shout\n    \"Meow!\"\n  end\nend\n\nk = Cat.new(\"Mimi\")\nk.shout" },
+          { t: "h", html: "<p><code>initialize</code> runs on <code>Cat.new</code>. Variables with <code>@</code> belong to the object, and <code>attr_reader :name</code> makes <code>@name</code> readable from outside – try <code>k.name</code>!</p><div class='task'><strong>Task:</strong> Following this example, write the class <code>Fox</code>: with <code>initialize(name)</code>, <code>attr_reader :name</code> and a method <code>shout</code> that returns <code>\"Chunky Bacon!\"</code>.</div>" },
+          { t: "x", code: "# class Fox\n#   ...\n# end\n",
+            check: "f = Fox.new(\"Kaz\"); f.name == \"Kaz\" && f.shout == \"Chunky Bacon!\" && code.include?(\"class Fox\")",
+            hint: "Copy the cat example and adapt it: class <code>Fox</code>, and <code>shout</code> returns exactly <code>\"Chunky Bacon!\"</code>." }
+        ]
+      }
+    }
+  ]
+});

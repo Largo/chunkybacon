@@ -1,0 +1,240 @@
+:root {
+  --fox: #e8722a;
+  --fox-dark: #b5541a;
+  --bacon: #c14a2e;
+  --cream: #fff8ef;
+  --paper: #ffffff;
+  --ink: #2b1608;
+  --ok: #2e7d32;
+  --err: #b00020;
+  --border: #eadfd0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+/* ---------- spinner ---------- */
+.spinner {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+.spinner-image {
+  width: 140px;
+  animation: wobble 1.6s ease-in-out infinite;
+}
+@keyframes wobble {
+  0%, 100% { transform: rotate(-6deg); }
+  50% { transform: rotate(6deg); }
+}
+
+/* ---------- header ---------- */
+header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1.2rem;
+  background: var(--fox);
+  color: #fff;
+}
+header #mascot { width: 64px; height: 64px; }
+header .headerText { flex: 1; }
+header h1 { margin: 0; font-size: 1.4rem; }
+header p { margin: 0.1rem 0 0; opacity: 0.9; font-size: 0.95rem; }
+header select {
+  font-size: 1rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  border: none;
+}
+
+/* ---------- layout ---------- */
+.layout {
+  display: flex;
+  gap: 1.2rem;
+  max-width: 1100px;
+  margin: 1.2rem auto;
+  padding: 0 1rem;
+  align-items: flex-start;
+}
+
+nav#lessonNav {
+  flex: 0 0 240px;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem;
+  position: sticky;
+  top: 1rem;
+}
+nav#lessonNav a {
+  display: block;
+  padding: 0.45rem 0.6rem;
+  border-radius: 7px;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+nav#lessonNav a:hover { background: var(--cream); }
+nav#lessonNav a.active { background: var(--fox); color: #fff; }
+nav#lessonNav a.done::after { content: " ✓"; color: var(--ok); font-weight: bold; }
+nav#lessonNav a.active.done::after { color: #d7ffd9; }
+
+main { flex: 1; min-width: 0; }
+
+article#lessonBody {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.4rem;
+}
+.lessonText h2 { margin-top: 0.2rem; color: var(--fox-dark); }
+.lessonText pre {
+  background: #2b2118;
+  color: #ffe9d2;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.92rem;
+}
+.lessonText code { font-family: ui-monospace, "Cascadia Code", Menlo, monospace; }
+.lessonText p > code, .lessonText li > code, .task code {
+  background: #f4e8d8;
+  padding: 0.05rem 0.35rem;
+  border-radius: 5px;
+  font-size: 0.9em;
+}
+.task {
+  border-left: 5px solid var(--fox);
+  background: #fff1e2;
+  padding: 0.6rem 1rem;
+  border-radius: 0 8px 8px 0;
+  margin: 1rem 0 0.4rem;
+}
+
+/* ---------- notebook cells ---------- */
+.cell {
+  margin: 0.9rem 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--paper);
+  overflow: hidden;
+}
+.cell.exercise {
+  border: 2px solid var(--fox);
+  position: relative;
+}
+.cell.exercise::before {
+  content: attr(data-label);
+  display: block;
+  background: var(--fox);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.15rem 0.8rem;
+  letter-spacing: 0.03em;
+}
+.CodeMirror {
+  height: auto;
+  font-size: 15px;
+  background: var(--paper);
+}
+.cell-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.3rem 0.5rem;
+  background: #faf3e8;
+  border-top: 1px solid var(--border);
+}
+.cell-toolbar .run-cell {
+  font-size: 0.9rem;
+  padding: 0.3rem 1rem;
+}
+.cell-out {
+  border-top: 1px solid var(--border);
+  padding: 0.5rem 0.8rem;
+  background: #fffdf8;
+}
+.cell-stdout {
+  font-family: ui-monospace, Menlo, monospace;
+  white-space: pre-wrap;
+  margin: 0 0 0.3rem;
+  font-size: 0.92rem;
+}
+.cell-result {
+  font-family: ui-monospace, Menlo, monospace;
+  color: var(--ok);
+  font-size: 0.92rem;
+}
+.cell-error {
+  font-family: ui-monospace, Menlo, monospace;
+  color: var(--err);
+  white-space: pre-wrap;
+  font-size: 0.92rem;
+}
+.marker { background: #ffd3d3; border-bottom: 2px solid var(--err); }
+
+.buttons { margin: 0.7rem 0; display: flex; gap: 0.6rem; }
+button {
+  font-size: 1.05rem;
+  padding: 0.55rem 1.4rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: var(--fox);
+  color: white;
+  font-weight: 600;
+}
+button:hover { background: var(--fox-dark); }
+button.reset { background: #8d7a66; }
+button.reset:hover { background: #6f5f4e; }
+
+/* ---------- chunky chat ---------- */
+#chunkyChat {
+  display: none;
+  gap: 0.8rem;
+  align-items: flex-start;
+  margin: 0.8rem 0;
+}
+#chunkyChat .chat-avatar img { width: 64px; }
+#chunkyChat .chat-message {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.6rem 1rem;
+  position: relative;
+  flex: 1;
+}
+#chunkyChat.pass .chat-message { border-color: var(--ok); background: #f0fff1; }
+#chunkyChat.fail .chat-message { border-color: var(--bacon); background: #fff4f2; }
+#chunkyChat .chat-message code {
+  font-family: ui-monospace, Menlo, monospace;
+  background: #f4e8d8;
+  padding: 0.05rem 0.3rem;
+  border-radius: 4px;
+}
+
+footer {
+  text-align: center;
+  padding: 1.5rem 1rem 2rem;
+  color: #6f5f4e;
+  font-size: 0.9rem;
+}
+footer a { color: var(--fox-dark); }
+
+@media (max-width: 760px) {
+  .layout { flex-direction: column; }
+  nav#lessonNav { position: static; flex: none; width: 100%; }
+}
