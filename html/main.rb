@@ -66,6 +66,10 @@ Minitest.parallel_executor = Object.new.tap do |stub|
   end
 end
 
+# Simulations for the sandbox: virtual filesystem behind File/Dir,
+# virtual sleep, cooperative SimThread as Thread.
+require_relative "sandbox_sim"
+
 Net::HTTP.transport = lambda do |_method, uri|
   prefix = NET_HTTP_HOSTS[uri.host.to_s.downcase]
   unless prefix
@@ -199,6 +203,13 @@ class ChunkyApp
       elsif css_class.include?("mb-go")
         widget = target.closest(".mini-browser")
         navigate_browser(widget) unless js_null?(widget)
+      elsif css_class.include?("fe-refresh")
+        widget = target.closest(".file-explorer")
+        refresh_file_widget(widget) unless js_null?(widget)
+      elsif !js_null?(target.closest(".fe-file"))
+        row = target.closest(".fe-file")
+        widget = row.closest(".file-explorer")
+        preview_file(widget, row.getAttribute("data-path").to_s) unless js_null?(widget)
       elsif target[:tagName].to_s == "A" && !js_null?(target.closest(".mb-view"))
         # links inside the fake browser navigate the fake browser
         event.preventDefault
@@ -383,6 +394,48 @@ class ChunkyApp
     @run_images << data_url if @run_images
   end
 
+  # ---------- file explorer widget ----------
+
+  def add_files_widget
+    @run_files << true if @run_files
+  end
+
+  def files_list_html
+    keys = SandboxFS.store.keys.sort
+    dirs = keys.map { |k| k.include?("/") ? k.split("/").first : nil }.compact.uniq
+    html = dirs.map { |d| "<li class=\"fe-dir\">📁 #{escape_html(d)}/</li>" }.join
+    html + keys.map do |k|
+      size = SandboxFS.store[k].bytesize
+      "<li class=\"fe-file\" data-path=\"#{escape_html(k)}\">📄 <span class=\"fe-name\">#{escape_html(k)}</span><span class=\"fe-size\">#{size} B</span></li>"
+    end.join
+  end
+
+  def files_widget_html
+    <<~HTML
+      <div class="file-explorer">
+        <div class="fe-title"><span class="fe-dots"><span></span><span></span><span></span></span> 📁 timelog #{ui["filesTitle"]} <button type="button" class="fe-refresh" title="refresh">⟳</button></div>
+        <ul class="fe-list">#{files_list_html}</ul>
+        <pre class="fe-preview" style="display:none"></pre>
+      </div>
+    HTML
+  end
+
+  def refresh_file_widget(widget)
+    widget.querySelector(".fe-list").innerHTML = files_list_html
+    widget.querySelector(".fe-preview").style.display = "none"
+  end
+
+  def preview_file(widget, path)
+    preview = widget.querySelector(".fe-preview")
+    content = begin
+      SandboxFS.read(path)
+    rescue StandardError
+      "?"
+    end
+    preview[:textContent] = content
+    preview.style.display = "block"
+  end
+
   # ---------- mini browser ----------
 
   def js_null?(obj)
@@ -546,6 +599,7 @@ class ChunkyApp
     @run_images = []
     @run_browsers = []
     @run_irbs = []
+    @run_files = []
 
     error = nil
     result = nil
@@ -584,6 +638,7 @@ class ChunkyApp
       @irb_sessions << { bind: eval("proc { binding }.call", TOPLEVEL_BINDING), line: 1, buffer: "" }
       out_html += irb_widget_html(sid)
     end
+    @run_files.each { out_html += files_widget_html }
     out_el = $d.getElementById("cell-out-#{idx}")
     out_el.innerHTML = out_html
     out_el.style.display = "block"
@@ -658,6 +713,12 @@ module Kernel
   # Renders an interactive IRB terminal below the cell.
   def show_irb
     ChunkyApp.instance.add_irb
+    nil
+  end
+
+  # Renders a file-explorer window showing the simulated filesystem.
+  def show_files
+    ChunkyApp.instance.add_files_widget
     nil
   end
 

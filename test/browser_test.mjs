@@ -223,6 +223,35 @@ await setExercise('require "net/http"\nNet::HTTP.get(URI("https://example.com/")
 await runExercise();
 check('unknown host raises friendly SocketError', (await exerciseOut()).includes('SocketError'));
 
+// timelog track: simulated filesystem + explorer widget
+await page.click('#lessonNav a[data-id="tl-formats"]');
+await page.waitForTimeout(300);
+await page.click('.run-cell[data-idx="7"]');
+await page.waitForTimeout(1000);
+check('file explorer widget appears', await page.isVisible('.file-explorer'));
+check('explorer lists demo + written files', (await page.textContent('.fe-list')).includes('notizen.txt') && (await page.textContent('.fe-list')).includes('projekte/plan.txt'));
+await page.click('.fe-file[data-path="notizen.txt"]');
+await page.waitForTimeout(300);
+check('clicking a file previews content', (await page.textContent('.fe-preview')).includes('Speck kaufen'));
+await page.click('.run-cell[data-idx="9"]');
+await page.waitForTimeout(600);
+check('File.read and Dir.glob work in cells', (await page.textContent('#cell-out-9')).includes('projekte/plan.txt'));
+await setExercise('require "csv"\n\ndaten = [\n  { projekt: "A", stunden: 1.5 },\n  { projekt: "B", stunden: 2.0 }\n]\n\ndef nach_csv(eintraege)\n  CSV.generate do |csv|\n    csv << ["projekt", "stunden"]\n    eintraege.each { |e| csv << [e[:projekt], e[:stunden]] }\n  end\nend\n\ndef aus_csv(text)\n  CSV.parse(text, headers: true).map { |z| { projekt: z["projekt"], stunden: z["stunden"].to_f } }\nend\n\nFile.write("eintraege.csv", nach_csv(daten))\naus_csv(File.read("eintraege.csv"))');
+await runExercise();
+check('file round-trip exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// timelog track: simulated threads with virtual sleep
+await page.click('#lessonNav a[data-id="tl-performance"]');
+await page.waitForTimeout(300);
+await page.click('.run-cell[data-idx="3"]');
+await page.waitForTimeout(1500);
+check('simulated thread downloads collect values', (await page.textContent('#cell-out-3')).includes('kunden: geladen'));
+await page.click('.run-cell[data-idx="5"]');
+await page.waitForTimeout(1500);
+const interleaved = await page.textContent('#cell-out-5');
+check('sim threads print all steps', interleaved.includes('Faden 0: Schritt 2') && interleaved.includes('Faden 1: Schritt 2'));
+check('sim threads genuinely interleave', interleaved.indexOf('Faden 1: Schritt 0') < interleaved.indexOf('Faden 0: Schritt 1'));
+
 // timelog track: Minitest runs for real in the browser
 await page.click('#lessonNav a[data-id="tl-minitest"]');
 await page.waitForTimeout(300);

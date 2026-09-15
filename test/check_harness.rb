@@ -6,6 +6,7 @@ require 'json'
 require 'stringio'
 require_relative "../html/browser_gems"
 require_relative "../html/rack_playground"
+require_relative "../html/sandbox_sim"
 
 CACHE = File.expand_path("../html/gems/cache", __dir__)
 BrowserGems.cache_base = "cache"
@@ -30,6 +31,10 @@ module Kernel
   end
 
   def show_irb
+    nil
+  end
+
+  def show_files
     nil
   end
 
@@ -304,7 +309,11 @@ end
 
 def aus_csv(text)
   CSV.parse(text, headers: true).map { |z| { projekt: z["projekt"], stunden: z["stunden"].to_f } }
-end)],
+end
+
+daten = [{ projekt: "A", stunden: 1.5 }, { projekt: "B", stunden: 2.0 }]
+File.write("eintraege.csv", nach_csv(daten))
+aus_csv(File.read("eintraege.csv")))],
     "en" => [%(require "csv"
 
 def to_csv(entries)
@@ -316,7 +325,11 @@ end
 
 def from_csv(text)
   CSV.parse(text, headers: true).map { |r| { project: r["project"], hours: r["hours"].to_f } }
-end)]
+end
+
+data = [{ project: "A", hours: 1.5 }, { project: "B", hours: 2.0 }]
+File.write("entries.csv", to_csv(data))
+from_csv(File.read("entries.csv")))]
   },
   "tl-cli" => {
     "de" => [%(require "optparse"
@@ -585,6 +598,7 @@ def run_harness
       next if demo_failed
 
       $shown_images = []
+      SandboxFS.reset!
       result, output, error = run_in(bind, candidate)
       if error && label != "starter"
         puts "FAIL #{lesson["id"]}/#{lang} (#{label}): raised #{error.class}: #{error.message}"

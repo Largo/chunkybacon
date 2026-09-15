@@ -430,3 +430,61 @@ footer a { color: var(--fox-dark); }
   .layout { flex-direction: column; }
   .sidebar { position: static; flex: none; width: 100%; }
 }
+
+/* ---------- file explorer widget (simulated filesystem) ---------- */
+.file-explorer {
+  margin: 0.6rem 0;
+  border: 1px solid #cfc4b4;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(43, 22, 8, 0.08);
+  font-size: 0.92rem;
+}
+.fe-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: #ece4d8;
+  border-bottom: 1px solid #cfc4b4;
+  font-weight: 600;
+  color: #6f5f4e;
+}
+.fe-dots { display: flex; gap: 0.28rem; }
+.fe-dots span { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+.fe-dots span:nth-child(1) { background: #f56d5c; }
+.fe-dots span:nth-child(2) { background: #f5bf4f; }
+.fe-dots span:nth-child(3) { background: #59c837; }
+.fe-refresh {
+  margin-left: auto;
+  font-size: 0.9rem;
+  padding: 0.1rem 0.55rem;
+  background: #fff;
+  color: #6f5f4e;
+  border: 1px solid #cfc4b4;
+}
+.fe-refresh:hover { background: var(--cream); }
+.fe-list { list-style: none; margin: 0; padding: 0.3rem 0; max-height: 220px; overflow-y: auto; }
+.fe-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.9rem;
+  font-family: ui-monospace, Menlo, monospace;
+}
+.fe-list li.fe-file { cursor: pointer; }
+.fe-list li.fe-file:hover { background: #fff1e2; }
+.fe-list li.fe-dir { color: #8d7a66; }
+.fe-name { flex: 1; }
+.fe-size { color: #8d7a66; font-size: 0.8rem; }
+.fe-preview {
+  margin: 0;
+  border-top: 1px solid #cfc4b4;
+  background: #fffdf8;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.88rem;
+  white-space: pre-wrap;
+  max-height: 200px;
+  overflow-y: auto;
+}
