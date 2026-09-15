@@ -77,6 +77,10 @@ SOLUTIONS = {
     "de" => [%(class Fuchs\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def ruf\n    "Chunky Bacon!"\n  end\nend\nf = Fuchs.new("Kaz")\nf.ruf)],
     "en" => [%(class Fox\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def shout\n    "Chunky Bacon!"\n  end\nend\nf = Fox.new("Kaz")\nf.shout)]
   },
+  "module" => {
+    "de" => [%(module Laut\n  def ruf\n    "CHUNKY BACON!"\n  end\nend\n\nclass Dachs\n  include Laut\nend\n\nDachs.new.ruf)],
+    "en" => [%(module Loud\n  def shout\n    "CHUNKY BACON!"\n  end\nend\n\nclass Badger\n  include Loud\nend\n\nBadger.new.shout)]
+  },
   "irb" => {
     "de" => [%([4, 8, 15].map { |x| x * 3 })],
     "en" => [%([4, 8, 15].map { |x| x * 3 })]

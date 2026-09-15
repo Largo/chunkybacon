@@ -30,7 +30,7 @@ await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 check('app becomes visible after wasm boot', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('15 lessons in nav', (await page.$$('#lessonNav a')).length === 15);
+check('16 lessons in nav', (await page.$$('#lessonNav a')).length === 16);
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
 check('exercise cell has task label', (await page.getAttribute('.cell.exercise', 'data-label')) === 'Aufgabe');
@@ -119,6 +119,19 @@ check('link extraction exercise passes', (await page.getAttribute('#chunkyChat',
 await setExercise('install_gem "paint"');
 await runExercise();
 check('remote install via proxy works', (await exerciseOut()).includes('paint '));
+
+// modules lesson: namespace demo + mixin exercise
+await page.click('#lessonNav a[data-id="module"]');
+await page.waitForTimeout(300);
+await page.click('.run-cell[data-idx="4"]');
+await page.waitForTimeout(600);
+check('module namespace demo works', (await page.textContent('#cell-out-4')).includes('=> "Chunky Bacon!"'));
+await page.click('.run-cell[data-idx="6"]');
+await page.waitForTimeout(600);
+check('mixin demo works', (await page.textContent('#cell-out-6')).includes('Hallo, ich bin Isi!'));
+await setExercise('module Laut\n  def ruf\n    "CHUNKY BACON!"\n  end\nend\n\nclass Dachs\n  include Laut\nend\n\nDachs.new.ruf');
+await runExercise();
+check('modules exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 
 // IRB lesson: interactive terminal widget
 await page.click('#lessonNav a[data-id="irb"]');

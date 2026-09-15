@@ -355,9 +355,44 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      id: "module",
+      de: {
+        title: "11. Module",
+        cells: [
+          { t: "h", html: "<h2>Module – Werkzeugkisten für Code</h2><p>Ein <strong>Modul</strong> ist eine benannte Kiste für Methoden und Konstanten. Anders als eine Klasse kann man von einem Modul keine Objekte erzeugen (<code>new</code> gibt es nicht) – Module haben zwei andere Jobs: <strong>Ordnung schaffen</strong> und <strong>Fähigkeiten teilen</strong>.</p><p>Du kennst schon einige: <code>Math</code> aus Rubys Standardbibliothek sammelt Mathe-Werkzeuge. An Konstanten kommst du mit <code>::</code>, Methoden rufst du mit Punkt auf:</p>" },
+          { t: "c", code: "Math::PI" },
+          { t: "c", code: "Math.sqrt(49)" },
+          { t: "h", html: "<p><strong>Job 1 – Namensraum:</strong> Ein Modul gruppiert zusammengehörige Klassen unter einem Dach, damit sich Namen nicht in die Quere kommen. Genau darum heissen die Klassen aus früheren Lektionen <code>ChunkyPNG::Image</code> und <code>Sinatra::Base</code> – Klasse <code>Image</code> im Modul <code>ChunkyPNG</code>, Klasse <code>Base</code> im Modul <code>Sinatra</code>:</p>" },
+          { t: "c", code: "module Wald\n  class Fuchs\n    def ruf\n      \"Chunky Bacon!\"\n    end\n  end\nend\n\nWald::Fuchs.new.ruf" },
+          { t: "h", html: "<p><strong>Job 2 – Mixin:</strong> Mit <code>include</code> mischst du die Methoden eines Moduls in eine Klasse hinein – so teilen sich viele Klassen eine Fähigkeit, ohne voneinander zu erben:</p>" },
+          { t: "c", code: "module Begruessung\n  def hallo\n    \"Hallo, ich bin #{name}!\"\n  end\nend\n\nclass Igel\n  include Begruessung\n\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\nend\n\nIgel.new(\"Isi\").hallo" },
+          { t: "h", html: "<p>So funktionieren auch Rubys berühmteste Mixins: <code>Comparable</code> schenkt einer Klasse <code>&lt;</code>, <code>&gt;</code> und <code>between?</code>, sobald sie <code>&lt;=&gt;</code> kann, und <code>Enumerable</code> schenkt ihr <code>map</code>, <code>select</code> &amp; Co., sobald sie <code>each</code> kann.</p><div class='task'><strong>Aufgabe:</strong> Schreibe ein Modul <code>Laut</code> mit einer Methode <code>ruf</code>, die <code>CHUNKY BACON!</code> zurückgibt. Mische es mit <code>include</code> in eine neue Klasse <code>Dachs</code> und probiere <code>Dachs.new.ruf</code> als letzte Zeile.</div>" },
+          { t: "x", code: "# module Laut\n#   ...\n# end\n\n# class Dachs\n#   ...\n# end\n",
+            check: "Laut.is_a?(Module) && !Laut.is_a?(Class) && Dachs.include?(Laut) && Dachs.new.ruf == \"CHUNKY BACON!\" && code.include?(\"include\")",
+            hint: "<code>module Laut</code> mit <code>def ruf</code> … <code>\"CHUNKY BACON!\"</code> … dann <code>class Dachs</code> mit <code>include Laut</code> darin." }
+        ]
+      },
+      en: {
+        title: "11. Modules",
+        cells: [
+          { t: "h", html: "<h2>Modules – toolboxes for code</h2><p>A <strong>module</strong> is a named box for methods and constants. Unlike a class, a module cannot create objects (there is no <code>new</code>) – modules have two other jobs: <strong>keeping things organized</strong> and <strong>sharing abilities</strong>.</p><p>You already know some: <code>Math</code> from Ruby's standard library collects math tools. You reach constants with <code>::</code> and call methods with a dot:</p>" },
+          { t: "c", code: "Math::PI" },
+          { t: "c", code: "Math.sqrt(49)" },
+          { t: "h", html: "<p><strong>Job 1 – namespace:</strong> A module groups related classes under one roof so names don't clash. That's exactly why the classes from earlier lessons are called <code>ChunkyPNG::Image</code> and <code>Sinatra::Base</code> – class <code>Image</code> inside module <code>ChunkyPNG</code>, class <code>Base</code> inside module <code>Sinatra</code>:</p>" },
+          { t: "c", code: "module Forest\n  class Fox\n    def shout\n      \"Chunky Bacon!\"\n    end\n  end\nend\n\nForest::Fox.new.shout" },
+          { t: "h", html: "<p><strong>Job 2 – mixin:</strong> With <code>include</code> you mix a module's methods into a class – that way many classes can share an ability without inheriting from each other:</p>" },
+          { t: "c", code: "module Greeting\n  def hello\n    \"Hello, I am #{name}!\"\n  end\nend\n\nclass Hedgehog\n  include Greeting\n\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\nend\n\nHedgehog.new(\"Izzy\").hello" },
+          { t: "h", html: "<p>Ruby's most famous mixins work the same way: <code>Comparable</code> gives a class <code>&lt;</code>, <code>&gt;</code> and <code>between?</code> as soon as it can <code>&lt;=&gt;</code>, and <code>Enumerable</code> gives it <code>map</code>, <code>select</code> &amp; co. as soon as it can <code>each</code>.</p><div class='task'><strong>Task:</strong> Write a module <code>Loud</code> with a method <code>shout</code> that returns <code>CHUNKY BACON!</code>. Mix it into a new class <code>Badger</code> with <code>include</code> and try <code>Badger.new.shout</code> as the last line.</div>" },
+          { t: "x", code: "# module Loud\n#   ...\n# end\n\n# class Badger\n#   ...\n# end\n",
+            check: "Loud.is_a?(Module) && !Loud.is_a?(Class) && Badger.include?(Loud) && Badger.new.shout == \"CHUNKY BACON!\" && code.include?(\"include\")",
+            hint: "<code>module Loud</code> with <code>def shout</code> … <code>\"CHUNKY BACON!\"</code> … then <code>class Badger</code> with <code>include Loud</code> inside." }
+        ]
+      }
+    },
+    {
       id: "irb",
       de: {
-        title: "11. IRB – Rubys Spielwiese",
+        title: "12. IRB – Rubys Spielwiese",
         cells: [
           { t: "h", html: "<h2>IRB – Rubys Spielwiese</h2><p>Auf jedem Computer mit Ruby ist <strong>IRB</strong> schon dabei („Interactive RuBy“). Du startest es, indem du im Terminal <code>irb</code> tippst – dann fütterst du Ruby Zeile für Zeile, und wie in diesem Notizbuch zeigt IRB nach jeder Zeile den Wert mit <code>=&gt;</code>:</p><pre><code>$ irb\nirb(main):001:0&gt; 1 + 1\n=&gt; 2\nirb(main):002:0&gt; \"Chunky \" + \"Bacon!\"\n=&gt; \"Chunky Bacon!\"</code></pre><p>Rubyisten haben IRB ständig offen: zum Ausprobieren, Rechnen und Nachschauen, was eine Methode wohl zurückgibt. Hier ist eine <strong>echte IRB-Sitzung</strong> für dich – tippe unten ins Terminal und drücke <kbd>Enter</kbd>:</p>" },
           { t: "c", code: "show_irb" },
@@ -368,7 +403,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       en: {
-        title: "11. IRB – Ruby's playground",
+        title: "12. IRB – Ruby's playground",
         cells: [
           { t: "h", html: "<h2>IRB – Ruby's playground</h2><p>Every computer with Ruby already ships with <strong>IRB</strong> (“Interactive RuBy”). You start it by typing <code>irb</code> into a terminal – then you feed Ruby one line at a time, and just like this notebook IRB shows each line's value with <code>=&gt;</code>:</p><pre><code>$ irb\nirb(main):001:0&gt; 1 + 1\n=&gt; 2\nirb(main):002:0&gt; \"Chunky \" + \"Bacon!\"\n=&gt; \"Chunky Bacon!\"</code></pre><p>Rubyists keep IRB open all the time: for experiments, quick math, and checking what a method returns. Here is a <strong>real IRB session</strong> for you – type into the terminal below and press <kbd>Enter</kbd>:</p>" },
           { t: "c", code: "show_irb" },
@@ -382,7 +417,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       id: "gems",
       de: {
-        title: "12. Gems installieren",
+        title: "13. Gems installieren",
         cells: [
           { t: "h", html: "<h2>Gems – Rubys Bausteine</h2><p>Eine <strong>Gem</strong> ist ein fertiges Ruby-Paket, das du in dein Programm laden kannst. Die zentrale Sammelstelle ist <a href='https://rubygems.org' target='_blank'>rubygems.org</a> – über 180&nbsp;000 Gems für alles Mögliche.</p><p>Auf deinem eigenen Computer installierst du eine Gem im Terminal mit <code>gem install</code> und lädst sie danach in IRB oder deinem Programm mit <code>require</code>:</p><pre><code>$ gem install chunky_png\nSuccessfully installed chunky_png-1.4.0\n$ irb\nirb(main):001:0&gt; require \"chunky_png\"\n=&gt; true</code></pre><p>In richtigen Projekten listet man alle Gems in einer Datei namens <code>Gemfile</code> (eine Zeile pro Gem: <code>gem \"chunky_png\"</code>) und holt sie mit <code>bundle install</code> auf einen Schlag – das erledigt <a href='https://bundler.io' target='_blank'>Bundler</a>.</p><p>Auf dieser Seite übernimmt <code>install_gem</code> diesen Job für <em>pure-Ruby</em>-Gems, direkt im Browser (oder du nutzt das 💎-Panel links). Häufig gebrauchte Gems sind lokal zwischengespeichert (⚡) und installieren blitzschnell:</p>" },
           { t: "c", code: "install_gem \"chunky_png\"" },
@@ -395,7 +430,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       en: {
-        title: "12. Installing gems",
+        title: "13. Installing gems",
         cells: [
           { t: "h", html: "<h2>Gems – Ruby's building blocks</h2><p>A <strong>gem</strong> is a ready-made Ruby package you can load into your program. The central collection is <a href='https://rubygems.org' target='_blank'>rubygems.org</a> – over 180,000 gems for everything imaginable.</p><p>On your own computer you install a gem in the terminal with <code>gem install</code>, then load it in IRB or your program with <code>require</code>:</p><pre><code>$ gem install chunky_png\nSuccessfully installed chunky_png-1.4.0\n$ irb\nirb(main):001:0&gt; require \"chunky_png\"\n=&gt; true</code></pre><p>In real projects you list all gems in a file called <code>Gemfile</code> (one line per gem: <code>gem \"chunky_png\"</code>) and fetch them in one go with <code>bundle install</code> – that's <a href='https://bundler.io' target='_blank'>Bundler</a>'s job.</p><p>On this site, <code>install_gem</code> does that job for <em>pure-Ruby</em> gems, right in your browser (or use the 💎 panel on the left). Frequently used gems are cached locally (⚡) and install instantly:</p>" },
           { t: "c", code: "install_gem \"chunky_png\"" },
@@ -411,7 +446,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       id: "html",
       de: {
-        title: "13. HTML parsen",
+        title: "14. HTML parsen",
         cells: [
           { t: "h", html: "<h2>HTML parsen – wie die Profis</h2><p>Ruby wird oft benutzt, um Webseiten auszulesen (<em>Scraping</em>). Das berühmteste Werkzeug dafür heisst <strong>Nokogiri</strong>:</p><pre><code>require \"nokogiri\"\ndoc = Nokogiri::HTML(html)\ndoc.css(\"a\").each { |link| puts link.text }</code></pre><p>Nokogiri ist aber zu grossen Teilen in <strong>C</strong> geschrieben. Hier im Browser läuft Ruby als WebAssembly, und dort lassen sich zur Laufzeit nur pure-Ruby-Gems installieren – C-Gems müssten fest in die wasm-Datei einkompiliert werden. Probier ruhig aus, was passiert:</p>" },
           { t: "c", code: "install_gem \"nokogiri\"" },
@@ -426,7 +461,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       en: {
-        title: "13. Parsing HTML",
+        title: "14. Parsing HTML",
         cells: [
           { t: "h", html: "<h2>Parsing HTML – like the pros</h2><p>Ruby is often used to read websites (<em>scraping</em>). The most famous tool for that is <strong>Nokogiri</strong>:</p><pre><code>require \"nokogiri\"\ndoc = Nokogiri::HTML(html)\ndoc.css(\"a\").each { |link| puts link.text }</code></pre><p>But Nokogiri is largely written in <strong>C</strong>. In this browser Ruby runs as WebAssembly, where only pure-Ruby gems can be installed at runtime – C gems would have to be compiled into the wasm binary itself. Go ahead and see what happens:</p>" },
           { t: "c", code: "install_gem \"nokogiri\"" },
@@ -444,7 +479,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       id: "sinatra",
       de: {
-        title: "14. Sinatra – Webserver",
+        title: "15. Sinatra – Webserver",
         cells: [
           { t: "h", html: "<h2>Webseiten bauen – Request und Response</h2><p>Bisher lief dein Code einfach von oben nach unten. Ein <strong>Webserver</strong> arbeitet anders: Er wartet auf <em>Anfragen</em> (Requests) wie <code>GET /speisekarte</code> und schickt <em>Antworten</em> (Responses) zurück – meistens HTML. Welcher Code auf welchen Pfad reagiert, bestimmen <strong>Routen</strong>.</p><p><strong>Sinatra</strong> ist seit 2007 der Klassiker unter Rubys Web-Frameworks: Eine Route ist einfach ein Methodenaufruf mit Block. Führ die Zelle aus – darunter erscheint ein kleiner Browser:</p>" },
           { t: "c", code: "install_gem \"sinatra\"\nrequire \"sinatra/base\"\n\nclass Imbiss < Sinatra::Base\n  get \"/\" do\n    \"<h1>Chunkys Imbiss</h1>\n     <p>Willkommen! Heute im Angebot: Speck.</p>\n     <a href='/speisekarte'>Zur Speisekarte</a>\"\n  end\n\n  get \"/speisekarte\" do\n    \"<h2>Speisekarte</h2>\n     <ul><li>Speck</li><li>Ei</li><li>Kaffee</li></ul>\n     <a href='/'>Zurück</a>\"\n  end\n\n  get \"/hallo/:name\" do\n    \"Hallo, #{params[:name]}! Schön, dass du da bist.\"\n  end\nend\n\nshow_browser Imbiss, \"/\"" },
@@ -455,7 +490,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       en: {
-        title: "14. Sinatra – web server",
+        title: "15. Sinatra – web server",
         cells: [
           { t: "h", html: "<h2>Building websites – request and response</h2><p>So far your code simply ran top to bottom. A <strong>web server</strong> works differently: it waits for <em>requests</em> like <code>GET /menu</code> and sends back <em>responses</em> – usually HTML. Which code answers which path is decided by <strong>routes</strong>.</p><p><strong>Sinatra</strong> has been the classic among Ruby's web frameworks since 2007: a route is just a method call with a block. Run the cell – a little browser appears below it:</p>" },
           { t: "c", code: "install_gem \"sinatra\"\nrequire \"sinatra/base\"\n\nclass Diner < Sinatra::Base\n  get \"/\" do\n    \"<h1>Chunky's Diner</h1>\n     <p>Welcome! Today's special: bacon.</p>\n     <a href='/menu'>See the menu</a>\"\n  end\n\n  get \"/menu\" do\n    \"<h2>Menu</h2>\n     <ul><li>Bacon</li><li>Egg</li><li>Coffee</li></ul>\n     <a href='/'>Back</a>\"\n  end\n\n  get \"/hello/:name\" do\n    \"Hello, #{params[:name]}! Nice to see you.\"\n  end\nend\n\nshow_browser Diner, \"/\"" },
@@ -469,7 +504,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       id: "roda",
       de: {
-        title: "15. Roda – der Routing-Baum",
+        title: "16. Roda – der Routing-Baum",
         cells: [
           { t: "h", html: "<h2>Roda – der Routing-Baum</h2><p><strong>Roda</strong> (von Jeremy Evans, dem Autor von Sequel) ist ein modernes, sehr schnelles Web-Framework. Statt einer flachen Routenliste wie bei Sinatra kletterst du einen <strong>Baum</strong> hinauf: Der <code>route</code>-Block bekommt den Request <code>r</code>, und du entscheidest Stück für Stück, was mit dem Pfad passiert:</p>" },
           { t: "c", code: "install_gem \"roda\"\nrequire \"roda\"\n\nclass Laden < Roda\n  route do |r|\n    r.root do\n      \"<h1>Chunkys Laden</h1>\n       <a href='/speck'>Speck</a>\n       <a href='/gruss/Chunky'>Begrüssung</a>\"\n    end\n\n    r.get \"speck\" do\n      \"<p>Speck: 3 Streifen für 2 Franken.</p><a href='/'>Zurück</a>\"\n    end\n\n    r.get \"gruss\", String do |name|\n      \"Hallo, #{name}! <a href='/'>Zurück</a>\"\n    end\n  end\nend\n\nshow_browser Laden, \"/\"" },
@@ -480,7 +515,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       en: {
-        title: "15. Roda – the routing tree",
+        title: "16. Roda – the routing tree",
         cells: [
           { t: "h", html: "<h2>Roda – the routing tree</h2><p><strong>Roda</strong> (by Jeremy Evans, the author of Sequel) is a modern, very fast web framework. Instead of a flat list of routes like Sinatra, you climb a <strong>tree</strong>: the <code>route</code> block receives the request <code>r</code>, and you decide piece by piece what happens with the path:</p>" },
           { t: "c", code: "install_gem \"roda\"\nrequire \"roda\"\n\nclass Shop < Roda\n  route do |r|\n    r.root do\n      \"<h1>Chunky's Shop</h1>\n       <a href='/bacon'>Bacon</a>\n       <a href='/greet/Chunky'>Greeting</a>\"\n    end\n\n    r.get \"bacon\" do\n      \"<p>Bacon: 3 strips for 2 francs.</p><a href='/'>Back</a>\"\n    end\n\n    r.get \"greet\", String do |name|\n      \"Hello, #{name}! <a href='/'>Back</a>\"\n    end\n  end\nend\n\nshow_browser Shop, \"/\"" },
