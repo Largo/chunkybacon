@@ -132,6 +132,12 @@ module BrowserGems
     "net/https.rb" => "require 'net/http'\n"
   }.freeze
 
+  # Source appended to specific gem files after install - for small
+  # browser-compat fixes that keep the taught API untouched. (Currently
+  # empty; the builtin-minitest thread fix lives in main.rb instead.)
+  POST_INSTALL_PATCHES = {
+  }.freeze
+
   class << self
     attr_accessor :fetch_binary, :fetch_text, :cache_base, :proxy_base
 
@@ -195,6 +201,9 @@ module BrowserGems
       lib = {}
       inner.each do |path, content|
         lib[path[4..]] = content if path.start_with?("lib/") && path.end_with?(".rb")
+      end
+      (POST_INSTALL_PATCHES[name] || {}).each do |file, patch|
+        lib[file] = lib[file].to_s + patch
       end
       files[name] = lib
       installed[name] = version

@@ -30,7 +30,8 @@ await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 check('app becomes visible after wasm boot', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('17 lessons in nav', (await page.$$('#lessonNav a')).length === 17);
+check('33 lessons in nav', (await page.$$('#lessonNav a')).length === 33);
+check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
 check('exercise cell has task label', (await page.getAttribute('.cell.exercise', 'data-label')) === 'Aufgabe');
@@ -49,7 +50,7 @@ await setExercise('"Hallo, Welt!"');
 await runExercise();
 check('no-puts solution passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 check('exercise output shows => "Hallo, Welt!"', (await exerciseOut()).includes('=> "Hallo, Welt!"'));
-check('nav shows done tick class', (await page.getAttribute('#lessonNav a:first-child', 'class')).includes('done'));
+check('nav shows done tick class', (await page.getAttribute('#lessonNav a:first-of-type', 'class')).includes('done'));
 
 // next-lesson link advances
 await page.click('#nextLessonLink');
@@ -222,6 +223,32 @@ await setExercise('require "net/http"\nNet::HTTP.get(URI("https://example.com/")
 await runExercise();
 check('unknown host raises friendly SocketError', (await exerciseOut()).includes('SocketError'));
 
+// timelog track: Minitest runs for real in the browser
+await page.click('#lessonNav a[data-id="tl-minitest"]');
+await page.waitForTimeout(300);
+await page.click('.run-cell[data-idx="1"]');
+await page.waitForTimeout(2500);
+check('minitest demo reports green run', /2 runs.*0 failures/.test(await page.textContent('#cell-out-1')));
+await page.click('.run-cell[data-idx="3"]');
+await page.waitForTimeout(1500);
+check('minitest failing demo reports failure', /1 failures/.test(await page.textContent('#cell-out-3')));
+await setExercise('class Eintrag\n  attr_reader :projekt, :stunden\n  def initialize(projekt, stunden)\n    @projekt = projekt\n    @stunden = stunden\n  end\n  def gueltig?\n    stunden > 0 && !projekt.to_s.empty?\n  end\nend\n\nclass TestEintrag < Minitest::Test\n  def test_gueltig\n    assert Eintrag.new("X", 2.0).gueltig?\n  end\n  def test_negative\n    refute Eintrag.new("X", -1).gueltig?\n  end\nend\n\nrun_tests');
+await runExercise();
+check('minitest exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// timelog capstone: Roda + ERB web view in the mini browser
+await page.click('#lessonNav a[data-id="tl-capstone"]');
+await page.waitForTimeout(300);
+await page.click('.run-cell[data-idx="1"]');
+await page.waitForTimeout(6000);
+check('capstone ERB table renders', (await page.textContent('#cell-out-1 .mb-view')).includes('timelog'));
+await setExercise('install_gem "roda"\nrequire "roda"\nrequire "erb"\n\nEINTRAEGE = [\n  { projekt: "ProjectX", stunden: 3.5 },\n  { projekt: "Intern",   stunden: 2.0 },\n  { projekt: "ProjectX", stunden: 3.0 }\n]\n\nclass TimelogWeb < Roda\n  route do |r|\n    r.root do\n      "<h1>timelog</h1><a href=\'/projekt/ProjectX\'>ProjectX</a>"\n    end\n    r.get "projekt", String do |name|\n      passende = EINTRAEGE.select { |e| e[:projekt] == name }\n      "<h2>#{name}</h2>" + passende.map { |e| "#{e[:stunden]}h" }.join(", ")\n    end\n  end\nend\n\nshow_browser TimelogWeb, "/"');
+await runExercise();
+check('capstone exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+await page.click('.cell.exercise .mb-view a');
+await page.waitForTimeout(600);
+check('capstone project link navigates', (await page.textContent('.cell.exercise .mb-view')).includes('3.5h'));
+
 // gems panel input installs (paint is now already installed → instant)
 await page.fill('#gemNameInput', 'paint');
 await page.click('#gemInstallBtn');
@@ -232,14 +259,14 @@ check('panel install shows bubble', (await page.textContent('#chunkyText')).incl
 await page.selectOption('#langSelect', 'en');
 await page.waitForTimeout(300);
 check('English title', (await page.textContent('#siteTitle')).includes('Learn Ruby with Chunky Bacon'));
-check('English lesson rendered', (await page.textContent('#lessonBody')).includes('Fetching data from the web'));
-check('progress survives lang switch', (await page.getAttribute('#lessonNav a:first-child', 'class')).includes('done'));
+check('English lesson rendered', (await page.textContent('#lessonBody')).includes('Everything together'));
+check('progress survives lang switch', (await page.getAttribute('#lessonNav a:first-of-type', 'class')).includes('done'));
 
 // reload: language + progress persist
 await page.reload({ waitUntil: 'domcontentloaded' });
 await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 check('after reload still English', (await page.textContent('#siteTitle')).includes('Learn Ruby'));
-check('after reload progress kept', (await page.getAttribute('#lessonNav a:first-child', 'class')).includes('done'));
+check('after reload progress kept', (await page.getAttribute('#lessonNav a:first-of-type', 'class')).includes('done'));
 
 // solve the class lesson (lesson 10) end to end in English
 await page.click('#lessonNav a[data-id="klassen"]');

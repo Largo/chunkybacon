@@ -78,6 +78,7 @@ window.LESSONS_JSON = JSON.stringify({
   lessons: [
     {
       id: "hallo",
+      section: { de: "Grundkurs", en: "Basics" },
       de: {
         title: "1. Hallo, Welt!",
         cells: [
@@ -560,6 +561,1038 @@ window.LESSONS_JSON = JSON.stringify({
           { t: "x", code: "require \"net/http\"\nrequire \"json\"\n\n# info = JSON.parse(Net::HTTP.get(URI(\"...\")))\n# info[\"downloads\"]\n",
             check: "info.is_a?(Hash) && info[\"name\"] == \"sinatra\" && info[\"downloads\"].is_a?(Integer) && info[\"downloads\"] > 0 && result == info[\"downloads\"]",
             hint: "<code>info = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/sinatra.json\")))</code> – and as the last line <code>info[\"downloads\"]</code>." }
+        ]
+      }
+    }
+,
+    {
+      "id": "tl-collections",
+      "section": {
+        "de": "Aufbaukurs: timelog",
+        "en": "Advanced: timelog"
+      },
+      "de": {
+        "title": "18. Projekt timelog: Collections",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Projekt timelog – los geht's!</h2><p>Ab hier bauen wir gemeinsam ein richtiges Programm: <strong>timelog</strong>, eine Zeiterfassung. In jeder Lektion wächst sie ein Stück – bis sie am Ende Einträge parst, Berichte rechnet, getestet ist und sogar eine Weboberfläche hat.</p><p>Wir starten mit der Datenform. Ein Zeiteintrag hat ein Projekt und Stunden – als Hash. Viele Einträge – als Array von Hashes:</p>"
+          },
+          {
+            "t": "c",
+            "code": "eintraege = [\n  { projekt: \"ProjectX\", stunden: 3.5 },\n  { projekt: \"Intern\",   stunden: 2.0 },\n  { projekt: \"ProjectX\", stunden: 3.0 }\n]\neintraege.length"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jetzt zeigen die Collection-Methoden ihre Kraft. <code>map</code> zieht Werte heraus, <code>select</code> filtert, <code>sum</code> summiert – und alles lässt sich verketten:</p>"
+          },
+          {
+            "t": "c",
+            "code": "eintraege.select { |e| e[:projekt] == \"ProjectX\" }\n         .sum { |e| e[:stunden] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Der Star für Berichte ist <code>group_by</code>: Es sortiert Elemente in einen Hash von Gruppen. Zusammen mit <code>transform_values</code> wird daraus in zwei Zeilen ein kompletter Bericht:</p>"
+          },
+          {
+            "t": "c",
+            "code": "eintraege.group_by { |e| e[:projekt] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Auch nützlich: <code>tally</code> zählt Vorkommen, <code>sort_by</code> sortiert, <code>each_with_object</code> baut beliebige Strukturen auf.</p><div class='task'><strong>Aufgabe:</strong> Baue aus <code>eintraege</code> einen Hash <code>stunden</code>, der jedem Projekt die <strong>Gesamtstunden</strong> zuordnet: <code>{\"ProjectX\"=>6.5, \"Intern\"=>2.0}</code>. Tipp: <code>group_by</code> + <code>transform_values</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "eintraege = [\n  { projekt: \"ProjectX\", stunden: 3.5 },\n  { projekt: \"Intern\",   stunden: 2.0 },\n  { projekt: \"ProjectX\", stunden: 3.0 }\n]\n\n# stunden = ...\n",
+            "check": "stunden == { \"ProjectX\" => 6.5, \"Intern\" => 2.0 }",
+            "hint": "<code>stunden = eintraege.group_by { |e| e[:projekt] }.transform_values { |liste| liste.sum { |e| e[:stunden] } }</code>"
+          }
+        ]
+      },
+      "en": {
+        "title": "18. Project timelog: collections",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Project timelog – here we go!</h2><p>From here on we build a real program together: <strong>timelog</strong>, a time tracker. It grows a little in every lesson – until it parses entries, computes reports, is fully tested and even has a web interface.</p><p>We start with the data shape. A time entry has a project and hours – as a hash. Many entries – as an array of hashes:</p>"
+          },
+          {
+            "t": "c",
+            "code": "entries = [\n  { project: \"ProjectX\", hours: 3.5 },\n  { project: \"Intern\",   hours: 2.0 },\n  { project: \"ProjectX\", hours: 3.0 }\n]\nentries.length"
+          },
+          {
+            "t": "h",
+            "html": "<p>Now the collection methods show their power. <code>map</code> extracts values, <code>select</code> filters, <code>sum</code> adds up – and everything chains:</p>"
+          },
+          {
+            "t": "c",
+            "code": "entries.select { |e| e[:project] == \"ProjectX\" }\n       .sum { |e| e[:hours] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>The star for reports is <code>group_by</code>: it sorts elements into a hash of groups. Together with <code>transform_values</code> that becomes a complete report in two lines:</p>"
+          },
+          {
+            "t": "c",
+            "code": "entries.group_by { |e| e[:project] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Also useful: <code>tally</code> counts occurrences, <code>sort_by</code> sorts, <code>each_with_object</code> builds arbitrary structures.</p><div class='task'><strong>Task:</strong> Build a hash <code>hours</code> from <code>entries</code> that maps each project to its <strong>total hours</strong>: <code>{\"ProjectX\"=>6.5, \"Intern\"=>2.0}</code>. Hint: <code>group_by</code> + <code>transform_values</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "entries = [\n  { project: \"ProjectX\", hours: 3.5 },\n  { project: \"Intern\",   hours: 2.0 },\n  { project: \"ProjectX\", hours: 3.0 }\n]\n\n# hours = ...\n",
+            "check": "hours == { \"ProjectX\" => 6.5, \"Intern\" => 2.0 }",
+            "hint": "<code>hours = entries.group_by { |e| e[:project] }.transform_values { |list| list.sum { |e| e[:hours] } }</code>"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tl-parsing",
+      "de": {
+        "title": "19. Text parsen: Regex",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Einträge parsen – reguläre Ausdrücke</h2><p>timelog soll Zeilen wie diese verstehen:</p><pre><code>2026-09-15 08:30-12:00 ProjectX Planungsmeeting</code></pre><p>Dafür gibt es <strong>reguläre Ausdrücke</strong> (Regex): Muster, die Text beschreiben. <code>\\d</code> ist eine Ziffer, <code>{2}</code> heisst „genau zwei davon“, und mit <code>(?&lt;name&gt;…)</code> gibst du einer Fundstelle einen Namen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "zeile = \"2026-09-15 08:30-12:00 ProjectX Planungsmeeting\"\n\nmuster = /(?<datum>\\d{4}-\\d{2}-\\d{2}) (?<von>\\d{2}:\\d{2})-(?<bis>\\d{2}:\\d{2}) (?<projekt>\\S+)/\ntreffer = zeile.match(muster)\ntreffer[:projekt]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>match</code> liefert ein <code>MatchData</code>-Objekt – benannte Gruppen holst du mit <code>treffer[:von]</code> heraus. Passt nichts, kommt <code>nil</code> zurück (perfekt für <code>if</code>). Schnelltest ohne Daten: <code>zeile.match?(muster)</code>.</p><p>Für Fallunterscheidungen hat Ruby das elegante <code>case/when</code> – es versteht Ranges, Klassen und sogar Regexe:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def einordnen(stunden)\n  case stunden\n  when 0...4 then \"Halbtag\"\n  when 4...9 then \"Ganztag\"\n  else            \"Ueberstunden!\"\n  end\nend\n\neinordnen(7.5)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>Aufgabe:</strong> Schreibe <code>parse_zeile(zeile)</code>: Sie zerlegt eine timelog-Zeile mit benannten Gruppen und gibt <code>{ projekt:, von:, bis: }</code> zurück – bei unpassenden Zeilen <code>nil</code>. Teste mit der Beispielzeile als letzter Zeile: <code>parse_zeile(\"2026-09-15 08:30-12:00 ProjectX Meeting\")</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def parse_zeile(zeile)\n#   muster = /.../  # benannte Gruppen: datum, von, bis, projekt\n#   ...\n# end\n",
+            "check": "parse_zeile(\"2026-09-15 08:30-12:00 ProjectX Meeting\") == { projekt: \"ProjectX\", von: \"08:30\", bis: \"12:00\" } && parse_zeile(\"Kaffeepause\").nil? && code.include?(\"(?<\")",
+            "hint": "Muster wie in der Demo. Danach: <code>treffer = zeile.match(muster)</code>, <code>return nil unless treffer</code>, dann <code>{ projekt: treffer[:projekt], von: treffer[:von], bis: treffer[:bis] }</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "19. Parsing text: regex",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Parsing entries – regular expressions</h2><p>timelog should understand lines like this:</p><pre><code>2026-09-15 08:30-12:00 ProjectX planning-meeting</code></pre><p>That's what <strong>regular expressions</strong> (regex) are for: patterns that describe text. <code>\\d</code> is a digit, <code>{2}</code> means “exactly two of them”, and <code>(?&lt;name&gt;…)</code> gives a match a name:</p>"
+          },
+          {
+            "t": "c",
+            "code": "line = \"2026-09-15 08:30-12:00 ProjectX planning-meeting\"\n\npattern = /(?<date>\\d{4}-\\d{2}-\\d{2}) (?<from>\\d{2}:\\d{2})-(?<to>\\d{2}:\\d{2}) (?<project>\\S+)/\nhit = line.match(pattern)\nhit[:project]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>match</code> returns a <code>MatchData</code> object – you fetch named groups with <code>hit[:from]</code>. If nothing matches you get <code>nil</code> (perfect for <code>if</code>). Quick test without data: <code>line.match?(pattern)</code>.</p><p>For branching, Ruby has the elegant <code>case/when</code> – it understands ranges, classes and even regexes:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def classify(hours)\n  case hours\n  when 0...4 then \"half day\"\n  when 4...9 then \"full day\"\n  else            \"overtime!\"\n  end\nend\n\nclassify(7.5)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>Task:</strong> Write <code>parse_line(line)</code>: it splits a timelog line using named groups and returns <code>{ project:, from:, to: }</code> – or <code>nil</code> for lines that don't match. Test it as the last line: <code>parse_line(\"2026-09-15 08:30-12:00 ProjectX meeting\")</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def parse_line(line)\n#   pattern = /.../  # named groups: date, from, to, project\n#   ...\n# end\n",
+            "check": "parse_line(\"2026-09-15 08:30-12:00 ProjectX meeting\") == { project: \"ProjectX\", from: \"08:30\", to: \"12:00\" } && parse_line(\"coffee break\").nil? && code.include?(\"(?<\")",
+            "hint": "Pattern like in the demo. Then: <code>hit = line.match(pattern)</code>, <code>return nil unless hit</code>, then <code>{ project: hit[:project], from: hit[:from], to: hit[:to] }</code>."
+          }
+        ]
+      }
+    },
+    {
+      "id": "tl-methods",
+      "de": {
+        "title": "20. Methoden richtig bauen",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Methoden mit Stil</h2><p>Du kennst <code>def</code> – jetzt kommen die Feinheiten, die Ruby-Code lesbar machen. <strong>Keyword-Argumente</strong> machen Aufrufe selbsterklärend, Defaults machen Argumente optional:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def gruss(name:, laut: false)\n  text = \"Hallo, #{name}\"\n  laut ? text.upcase + \"!\" : text\nend\n\ngruss(name: \"Kaz\", laut: true)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Vergleiche <code>gruss(name: \"Kaz\")</code> mit einem anonymen <code>gruss(\"Kaz\", true)</code> – bei mehreren Argumenten gewinnt die Keyword-Variante klar an Lesbarkeit. Weitere Konventionen: <code>*rest</code> sammelt beliebig viele Argumente ein, Methoden mit <code>?</code> geben wahr/falsch zurück, Methoden mit <code>!</code> sind die „gefährliche“ Variante. Und: Der Wert der letzten Zeile ist automatisch der Rückgabewert.</p><p>Für timelog brauchen wir Zeitrechnung – <code>\"08:30\"</code> in Stunden seit Mitternacht:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def als_stunden(uhrzeit)\n  h, m = uhrzeit.split(\":\").map(&:to_i)\n  h + m / 60.0\nend\n\nals_stunden(\"08:30\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>Aufgabe:</strong> Schreibe <code>add_entry(projekt:, von:, bis:, notiz: nil)</code>. Sie gibt einen Hash zurück: <code>{ projekt:, von:, bis:, notiz:, stunden: }</code>, wobei <code>stunden</code> die Differenz aus <code>als_stunden(bis)</code> und <code>als_stunden(von)</code> ist. <code>add_entry(projekt: \"X\", von: \"08:30\", bis: \"10:00\")</code> soll also <code>stunden: 1.5</code> enthalten.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def als_stunden(uhrzeit)\n  h, m = uhrzeit.split(\":\").map(&:to_i)\n  h + m / 60.0\nend\n\n# def add_entry(projekt:, von:, bis:, notiz: nil)\n#   ...\n# end\n",
+            "check": "e = add_entry(projekt: \"X\", von: \"08:30\", bis: \"10:00\"); e[:stunden] == 1.5 && e[:projekt] == \"X\" && e[:notiz].nil? && add_entry(projekt: \"Y\", von: \"09:00\", bis: \"17:00\", notiz: \"Doku\")[:notiz] == \"Doku\" && code.include?(\"projekt:\")",
+            "hint": "<code>{ projekt: projekt, von: von, bis: bis, notiz: notiz, stunden: als_stunden(bis) - als_stunden(von) }</code> – als letzte Zeile der Methode."
+          }
+        ]
+      },
+      "en": {
+        "title": "20. Building methods properly",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Methods with style</h2><p>You know <code>def</code> – now come the finer points that make Ruby code readable. <strong>Keyword arguments</strong> make calls self-explaining, defaults make arguments optional:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def greet(name:, loud: false)\n  text = \"Hello, #{name}\"\n  loud ? text.upcase + \"!\" : text\nend\n\ngreet(name: \"Kaz\", loud: true)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Compare <code>greet(name: \"Kaz\")</code> with an anonymous <code>greet(\"Kaz\", true)</code> – with several arguments the keyword variant clearly wins on readability. More conventions: <code>*rest</code> collects any number of arguments, methods ending in <code>?</code> return true/false, methods ending in <code>!</code> are the “dangerous” variant. And: the value of the last line is automatically the return value.</p><p>timelog needs time math – <code>\"08:30\"</code> as hours since midnight:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def as_hours(time)\n  h, m = time.split(\":\").map(&:to_i)\n  h + m / 60.0\nend\n\nas_hours(\"08:30\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>Task:</strong> Write <code>add_entry(project:, from:, to:, note: nil)</code>. It returns a hash: <code>{ project:, from:, to:, note:, hours: }</code>, where <code>hours</code> is the difference of <code>as_hours(to)</code> and <code>as_hours(from)</code>. So <code>add_entry(project: \"X\", from: \"08:30\", to: \"10:00\")</code> should contain <code>hours: 1.5</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def as_hours(time)\n  h, m = time.split(\":\").map(&:to_i)\n  h + m / 60.0\nend\n\n# def add_entry(project:, from:, to:, note: nil)\n#   ...\n# end\n",
+            "check": "e = add_entry(project: \"X\", from: \"08:30\", to: \"10:00\"); e[:hours] == 1.5 && e[:project] == \"X\" && e[:note].nil? && add_entry(project: \"Y\", from: \"09:00\", to: \"17:00\", note: \"docs\")[:note] == \"docs\" && code.include?(\"project:\")",
+            "hint": "<code>{ project: project, from: from, to: to, note: note, hours: as_hours(to) - as_hours(from) }</code> – as the method's last line."
+          }
+        ]
+      }
+    },
+    {
+      "id": "tl-classes",
+      "de": {
+        "title": "21. Entry & Timesheet",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Vom Hash zur Klasse</h2><p>Hashes sind super zum Anfangen – aber sobald Daten <em>Verhalten</em> brauchen (Stunden ausrechnen, sich schön ausgeben), ist eine Klasse der richtige Ort. Wir bauen timelog um zwei Klassen: <code>Entry</code> (ein Eintrag) und <code>Timesheet</code> (die Sammlung).</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Entry\n  attr_reader :projekt, :von, :bis, :notiz\n\n  def initialize(projekt:, von:, bis:, notiz: nil)\n    @projekt = projekt\n    @von = von\n    @bis = bis\n    @notiz = notiz\n  end\n\n  def stunden\n    als_stunden(@bis) - als_stunden(@von)\n  end\n\n  def to_s\n    \"#{@projekt}: #{@von}-#{@bis} (#{stunden}h)\"\n  end\n\n  private\n\n  def als_stunden(uhrzeit)\n    h, m = uhrzeit.split(\":\").map(&:to_i)\n    h + m / 60.0\n  end\nend\n\nEntry.new(projekt: \"ProjectX\", von: \"08:30\", bis: \"12:00\").to_s"
+          },
+          {
+            "t": "h",
+            "html": "<p>Beachte: <code>als_stunden</code> ist <code>private</code> – ein internes Detail, das von aussen niemand braucht. <code>to_s</code> bestimmt, wie sich das Objekt als Text ausgibt. Instanzvariablen (<code>@projekt</code>) gehören zum Objekt; Konstanten (<code>GROSS</code>) zur Klasse. Von Klassenvariablen (<code>@@…</code>) und globalen Variablen (<code>$…</code>) lässt man besser die Finger – sie sind geteilter Zustand, der schwer zu verfolgen ist.</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Timesheet\n  def initialize\n    @eintraege = []\n  end\n\n  def add(entry)\n    @eintraege << entry\n    self\n  end\n\n  def anzahl\n    @eintraege.length\n  end\nend\n\nblatt = Timesheet.new\nblatt.add(Entry.new(projekt: \"ProjectX\", von: \"08:30\", bis: \"12:00\"))\nblatt.anzahl"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das <code>self</code> am Ende von <code>add</code> erlaubt Verkettung: <code>blatt.add(a).add(b)</code>.</p><div class='task'><strong>Aufgabe:</strong> Ergänze <code>Timesheet</code> um <code>total_for(projekt)</code>: die Gesamtstunden aller Einträge dieses Projekts. Nutze <code>select</code> und <code>sum</code> auf <code>@eintraege</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Entry aus der Demo-Zelle oben wird hier weiterverwendet -\n# fuehre sie zuerst aus!\n\nclass Timesheet\n  def initialize\n    @eintraege = []\n  end\n\n  def add(entry)\n    @eintraege << entry\n    self\n  end\n\n  # def total_for(projekt)\n  #   ...\n  # end\nend\n",
+            "check": "ts = Timesheet.new.add(Entry.new(projekt: \"A\", von: \"08:00\", bis: \"10:30\")).add(Entry.new(projekt: \"B\", von: \"10:30\", bis: \"11:30\")).add(Entry.new(projekt: \"A\", von: \"13:00\", bis: \"14:00\")); ts.total_for(\"A\") == 3.5 && ts.total_for(\"B\") == 1.0 && ts.total_for(\"C\") == 0",
+            "hint": "<code>def total_for(projekt); @eintraege.select { |e| e.projekt == projekt }.sum(&:stunden); end</code> – und vorher die Entry-Zelle oben ausführen."
+          }
+        ]
+      },
+      "en": {
+        "title": "21. Entry & Timesheet",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>From hash to class</h2><p>Hashes are great to start with – but as soon as data needs <em>behavior</em> (computing hours, printing itself nicely), a class is the right home. We build timelog around two classes: <code>Entry</code> (one entry) and <code>Timesheet</code> (the collection).</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Entry\n  attr_reader :project, :from, :to, :note\n\n  def initialize(project:, from:, to:, note: nil)\n    @project = project\n    @from = from\n    @to = to\n    @note = note\n  end\n\n  def hours\n    as_hours(@to) - as_hours(@from)\n  end\n\n  def to_s\n    \"#{@project}: #{@from}-#{@to} (#{hours}h)\"\n  end\n\n  private\n\n  def as_hours(time)\n    h, m = time.split(\":\").map(&:to_i)\n    h + m / 60.0\n  end\nend\n\nEntry.new(project: \"ProjectX\", from: \"08:30\", to: \"12:00\").to_s"
+          },
+          {
+            "t": "h",
+            "html": "<p>Note: <code>as_hours</code> is <code>private</code> – an internal detail nobody outside needs. <code>to_s</code> decides how the object prints as text. Instance variables (<code>@project</code>) belong to the object; constants (<code>BIG</code>) to the class. Class variables (<code>@@…</code>) and globals (<code>$…</code>) are best avoided – shared state that's hard to trace.</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Timesheet\n  def initialize\n    @entries = []\n  end\n\n  def add(entry)\n    @entries << entry\n    self\n  end\n\n  def count\n    @entries.length\n  end\nend\n\nsheet = Timesheet.new\nsheet.add(Entry.new(project: \"ProjectX\", from: \"08:30\", to: \"12:00\"))\nsheet.count"
+          },
+          {
+            "t": "h",
+            "html": "<p>The <code>self</code> at the end of <code>add</code> enables chaining: <code>sheet.add(a).add(b)</code>.</p><div class='task'><strong>Task:</strong> Extend <code>Timesheet</code> with <code>total_for(project)</code>: the total hours of all entries for that project. Use <code>select</code> and <code>sum</code> on <code>@entries</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Entry from the demo cell above is reused here -\n# run it first!\n\nclass Timesheet\n  def initialize\n    @entries = []\n  end\n\n  def add(entry)\n    @entries << entry\n    self\n  end\n\n  # def total_for(project)\n  #   ...\n  # end\nend\n",
+            "check": "ts = Timesheet.new.add(Entry.new(project: \"A\", from: \"08:00\", to: \"10:30\")).add(Entry.new(project: \"B\", from: \"10:30\", to: \"11:30\")).add(Entry.new(project: \"A\", from: \"13:00\", to: \"14:00\")); ts.total_for(\"A\") == 3.5 && ts.total_for(\"B\") == 1.0 && ts.total_for(\"C\") == 0",
+            "hint": "<code>def total_for(project); @entries.select { |e| e.project == project }.sum(&:hours); end</code> – and run the Entry cell above first."
+          }
+        ]
+      }
+    }
+,
+    {
+      "id": "tl-minitest",
+      "de": {
+        "title": "22. Testen mit Minitest",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Tests – dein Sicherheitsnetz</h2><p>Ruby prüft Typen erst zur Laufzeit – ein Tippfehler fällt sonst erst auf, wenn der Code läuft. Deshalb gehören <strong>Tests</strong> in Ruby-Projekten fest dazu. Das Werkzeug ist schon an Bord: <strong>Minitest</strong> kommt mit Ruby mit.</p><p>Ein Test ist eine Klasse, die von <code>Minitest::Test</code> erbt; jede Methode, die mit <code>test_</code> beginnt, ist ein Testfall. <code>assert_equal erwartet, tatsaechlich</code> prüft Gleichheit. Hier im Notizbuch startet <code>run_tests</code> den Testlauf:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Dauer\n  attr_reader :minuten\n\n  def initialize(minuten)\n    @minuten = minuten\n  end\n\n  def in_stunden\n    minuten / 60.0\n  end\nend\n\nclass TestDauer < Minitest::Test\n  def test_in_stunden\n    assert_equal 1.5, Dauer.new(90).in_stunden\n  end\n\n  def test_null_minuten\n    assert_equal 0.0, Dauer.new(0).in_stunden\n  end\nend\n\nrun_tests"
+          },
+          {
+            "t": "h",
+            "html": "<p>Der Bericht liest sich so: <code>2 runs</code> (zwei Testmethoden), <code>2 assertions</code> (zwei Prüfungen), <code>0 failures, 0 errors</code> – alles grün. Und wenn etwas schiefgeht? Minitest zeigt dir genau, <em>was</em> erwartet wurde und <em>was</em> kam:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class TestKaputt < Minitest::Test\n  def test_absichtlich_falsch\n    assert_equal 100, Dauer.new(90).minuten\n  end\nend\n\nrun_tests"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Dort schreibst du Tests in eigene Dateien und startest sie direkt – <code>minitest/autorun</code> sorgt dafür, dass sie am Programmende automatisch laufen:</p><pre><code># test/test_dauer.rb\nrequire \"minitest/autorun\"\nrequire_relative \"../lib/dauer\"\n\nclass TestDauer < Minitest::Test\n  def test_in_stunden\n    assert_equal 1.5, Dauer.new(90).in_stunden\n  end\nend</code></pre><pre><code>$ ruby test/test_dauer.rb\n2 runs, 2 assertions, 0 failures, 0 errors, 0 skips</code></pre><p>Weitere Helfer: <code>assert</code>, <code>refute</code>, <code>assert_nil</code>, <code>assert_raises</code>, und <code>setup</code> für gemeinsame Vorbereitung. RSpec ist die bekannteste Alternative mit eigener Sprache (<code>expect(x).to eq(y)</code>).</p></div><div class='task'><strong>Aufgabe:</strong> Unten steht die Klasse <code>Eintrag</code>. Schreibe <code>TestEintrag</code> mit <strong>mindestens zwei</strong> Tests: einer für einen gültigen Eintrag, einer für ungültige Fälle (negative Stunden oder leeres Projekt). Starte mit <code>run_tests</code> – alles muss grün sein. Ab jetzt gilt: <em>Keine Aufgabe ohne Tests!</em></div>"
+          },
+          {
+            "t": "x",
+            "code": "class Eintrag\n  attr_reader :projekt, :stunden\n\n  def initialize(projekt, stunden)\n    @projekt = projekt\n    @stunden = stunden\n  end\n\n  def gueltig?\n    stunden > 0 && !projekt.to_s.empty?\n  end\nend\n\n# class TestEintrag < Minitest::Test\n#   def test_...\n#   end\n# end\n\n# run_tests\n",
+            "check": "defined?(TestEintrag) && TestEintrag.instance_methods.grep(/\\Atest_/).length >= 2 && output.include?(\"0 failures\") && output.include?(\"0 errors\") && output.include?(\"runs,\")",
+            "hint": "Zum Beispiel: <code>def test_gueltig; assert Eintrag.new(\"X\", 2.0).gueltig?; end</code> und <code>def test_negative_stunden; refute Eintrag.new(\"X\", -1).gueltig?; end</code> – dann <code>run_tests</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "22. Testing with Minitest",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Tests – your safety net</h2><p>Ruby checks types only at runtime – a typo won't surface until the code actually runs. That's why <strong>tests</strong> are a fixture of Ruby projects. The tool is already on board: <strong>Minitest</strong> ships with Ruby.</p><p>A test is a class inheriting from <code>Minitest::Test</code>; every method starting with <code>test_</code> is a test case. <code>assert_equal expected, actual</code> checks equality. Here in the notebook, <code>run_tests</code> starts the test run:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Duration\n  attr_reader :minutes\n\n  def initialize(minutes)\n    @minutes = minutes\n  end\n\n  def in_hours\n    minutes / 60.0\n  end\nend\n\nclass TestDuration < Minitest::Test\n  def test_in_hours\n    assert_equal 1.5, Duration.new(90).in_hours\n  end\n\n  def test_zero_minutes\n    assert_equal 0.0, Duration.new(0).in_hours\n  end\nend\n\nrun_tests"
+          },
+          {
+            "t": "h",
+            "html": "<p>Reading the report: <code>2 runs</code> (two test methods), <code>2 assertions</code> (two checks), <code>0 failures, 0 errors</code> – all green. And when something breaks? Minitest shows you exactly <em>what</em> was expected and <em>what</em> arrived:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class TestBroken < Minitest::Test\n  def test_deliberately_wrong\n    assert_equal 100, Duration.new(90).minutes\n  end\nend\n\nrun_tests"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p>There you put tests into their own files and run them directly – <code>minitest/autorun</code> makes them run automatically when the program ends:</p><pre><code># test/test_duration.rb\nrequire \"minitest/autorun\"\nrequire_relative \"../lib/duration\"\n\nclass TestDuration < Minitest::Test\n  def test_in_hours\n    assert_equal 1.5, Duration.new(90).in_hours\n  end\nend</code></pre><pre><code>$ ruby test/test_duration.rb\n2 runs, 2 assertions, 0 failures, 0 errors, 0 skips</code></pre><p>More helpers: <code>assert</code>, <code>refute</code>, <code>assert_nil</code>, <code>assert_raises</code>, and <code>setup</code> for shared preparation. RSpec is the best-known alternative with its own language (<code>expect(x).to eq(y)</code>).</p></div><div class='task'><strong>Task:</strong> Below is the class <code>Entry</code>. Write <code>TestEntry</code> with <strong>at least two</strong> tests: one for a valid entry, one for invalid cases (negative hours or empty project). Finish with <code>run_tests</code> – everything must be green. From now on: <em>no exercise without tests!</em></div>"
+          },
+          {
+            "t": "x",
+            "code": "class Entry\n  attr_reader :project, :hours\n\n  def initialize(project, hours)\n    @project = project\n    @hours = hours\n  end\n\n  def valid?\n    hours > 0 && !project.to_s.empty?\n  end\nend\n\n# class TestEntry < Minitest::Test\n#   def test_...\n#   end\n# end\n\n# run_tests\n",
+            "check": "defined?(TestEntry) && TestEntry.instance_methods.grep(/\\Atest_/).length >= 2 && output.include?(\"0 failures\") && output.include?(\"0 errors\") && output.include?(\"runs,\")",
+            "hint": "For example: <code>def test_valid; assert Entry.new(\"X\", 2.0).valid?; end</code> and <code>def test_negative_hours; refute Entry.new(\"X\", -1).valid?; end</code> – then <code>run_tests</code>."
+          }
+        ]
+      }
+    },
+    {
+      "id": "tl-mixins",
+      "de": {
+        "title": "23. Enumerable & Data",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Zwei Superkräfte zum Einmischen</h2><p>In der Modul-Lektion hast du Mixins kennengelernt – jetzt kommen die zwei berühmtesten im Einsatz für timelog. <strong>Comparable</strong>: Sobald deine Klasse <code>&lt;=&gt;</code> kann (den „Raumschiff-Operator“: -1, 0 oder 1), schenkt dir das Mixin <code>&lt;</code>, <code>&gt;</code>, <code>==</code>, <code>between?</code> und mehr.</p><p>Gleichzeitig lernst du <code>Data</code> kennen – Rubys Klasse für unveränderliche Wertobjekte:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Dauer = Data.define(:minuten) do\n  include Comparable\n\n  def <=>(andere)\n    minuten <=> andere.minuten\n  end\n\n  def to_s\n    \"#{minuten / 60}h #{minuten % 60}min\"\n  end\nend\n\npausen = [Dauer.new(minuten: 90), Dauer.new(minuten: 45), Dauer.new(minuten: 120)]\npausen.max.to_s"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 18, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+          },
+          {
+            "t": "x",
+            "code": "class Timesheet\n  # include ...\n\n  def initialize(eintraege)\n    @eintraege = eintraege\n  end\n\n  # def each(&block)\n  #   ...\n  # end\nend\n\nts = Timesheet.new([\n  { projekt: \"A\", stunden: 2.0 },\n  { projekt: \"B\", stunden: 1.0 }\n])\n\n# ts.sum { |e| e[:stunden] }\n",
+            "check": "Timesheet.include?(Enumerable) && ts.map { |e| e[:projekt] } == [\"A\", \"B\"] && ts.sum { |e| e[:stunden] } == 3.0 && code.include?(\"include Enumerable\") && code.include?(\"def each\")",
+            "hint": "<code>include Enumerable</code> in die Klasse, dazu <code>def each(&block); @eintraege.each(&block); end</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "23. Enumerable & Data",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Two superpowers to mix in</h2><p>You met mixins in the modules lesson – now come the two most famous ones, deployed for timelog. <strong>Comparable</strong>: as soon as your class can <code>&lt;=&gt;</code> (the “spaceship operator”: -1, 0 or 1), the mixin gives you <code>&lt;</code>, <code>&gt;</code>, <code>==</code>, <code>between?</code> and more.</p><p>At the same time, meet <code>Data</code> – Ruby's class for immutable value objects:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Duration = Data.define(:minutes) do\n  include Comparable\n\n  def <=>(other)\n    minutes <=> other.minutes\n  end\n\n  def to_s\n    \"#{minutes / 60}h #{minutes % 60}min\"\n  end\nend\n\nbreaks = [Duration.new(minutes: 90), Duration.new(minutes: 45), Duration.new(minutes: 120)]\nbreaks.max.to_s"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 18, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+          },
+          {
+            "t": "x",
+            "code": "class Timesheet\n  # include ...\n\n  def initialize(entries)\n    @entries = entries\n  end\n\n  # def each(&block)\n  #   ...\n  # end\nend\n\nts = Timesheet.new([\n  { project: \"A\", hours: 2.0 },\n  { project: \"B\", hours: 1.0 }\n])\n\n# ts.sum { |e| e[:hours] }\n",
+            "check": "Timesheet.include?(Enumerable) && ts.map { |e| e[:project] } == [\"A\", \"B\"] && ts.sum { |e| e[:hours] } == 3.0 && code.include?(\"include Enumerable\") && code.include?(\"def each\")",
+            "hint": "<code>include Enumerable</code> into the class, plus <code>def each(&block); @entries.each(&block); end</code>."
+          }
+        ]
+      }
+    },
+    {
+      "id": "tl-blocks",
+      "de": {
+        "title": "24. Blocks, Procs & Lambdas",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Blocks – Code als Geschenk</h2><p>Du benutzt Blocks seit Lektion 6 – jetzt schauen wir hinter den Vorhang. Eine Methode nimmt einen Block entgegen und führt ihn mit <code>yield</code> aus; <code>block_given?</code> verrät, ob einer da ist. Damit baust du „Rahmen“-Methoden wie diese Stoppuhr:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def mit_zeitmessung(name)\n  start = Process.clock_gettime(Process::CLOCK_MONOTONIC)\n  ergebnis = yield\n  ms = (Process.clock_gettime(Process::CLOCK_MONOTONIC) - start) * 1000\n  puts \"#{name}: #{ms.round(1)} ms\"\n  ergebnis\nend\n\nmit_zeitmessung(\"Summe\") { (1..100_000).sum }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ein Block ist kein Objekt – aber du kannst ihn zu einem machen. <code>proc</code> und <code>lambda</code> verpacken Code in Variablen. Die Unterschiede: Ein Lambda prüft die Argumentzahl streng und <code>return</code> verlässt nur das Lambda; ein Proc ist bei beidem locker. Und <code>&amp;:to_s</code> ist die Kurzform „mach aus dem Symbol einen Block“:</p>"
+          },
+          {
+            "t": "c",
+            "code": "verdopple = ->(x) { x * 2 }\n\n[verdopple.call(21), verdopple.(5), [1, 2, 3].map(&:to_s)]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Lambdas sind <strong>Closures</strong>: Sie nehmen ihre Umgebung mit. Perfekt für timelog-Berichtsformate – jedes Format ist ein kleines verpacktes Programm:</p>"
+          },
+          {
+            "t": "c",
+            "code": "formate = {\n  text: ->(e) { \"#{e[:projekt].ljust(10)} #{e[:stunden]}h\" },\n  csv:  ->(e) { \"#{e[:projekt]};#{e[:stunden]}\" }\n}\n\neintrag = { projekt: \"ProjectX\", stunden: 3.5 }\nformate[:csv].call(eintrag)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>Aufgabe:</strong> Schreibe <code>each_projekt(eintraege)</code>: Die Methode gruppiert die Einträge nach Projekt und übergibt <strong>per <code>yield</code></strong> jedes Paar <code>(projekt, liste)</code> an den Block – wie <code>each</code>, nur eine Etage höher.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def each_projekt(eintraege)\n#   ... group_by ... yield ...\n# end\n\n# Test:\n# each_projekt([{ projekt: \"A\", stunden: 1.0 }]) do |projekt, liste|\n#   puts \"#{projekt}: #{liste.length} Eintraege\"\n# end\n",
+            "check": "gesammelt = []; each_projekt([{ projekt: \"A\", stunden: 1.0 }, { projekt: \"B\", stunden: 2.0 }, { projekt: \"A\", stunden: 0.5 }]) { |p, liste| gesammelt << [p, liste.length] }; gesammelt == [[\"A\", 2], [\"B\", 1]] && code.include?(\"yield\")",
+            "hint": "<code>def each_projekt(eintraege); eintraege.group_by { |e| e[:projekt] }.each { |projekt, liste| yield(projekt, liste) }; end</code>"
+          }
+        ]
+      },
+      "en": {
+        "title": "24. Blocks, procs & lambdas",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Blocks – code as a gift</h2><p>You've been using blocks since lesson 6 – now let's look behind the curtain. A method receives a block and runs it with <code>yield</code>; <code>block_given?</code> tells you whether one arrived. That's how you build “wrapper” methods like this stopwatch:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def with_timing(name)\n  start = Process.clock_gettime(Process::CLOCK_MONOTONIC)\n  result = yield\n  ms = (Process.clock_gettime(Process::CLOCK_MONOTONIC) - start) * 1000\n  puts \"#{name}: #{ms.round(1)} ms\"\n  result\nend\n\nwith_timing(\"sum\") { (1..100_000).sum }"
+          },
+          {
+            "t": "h",
+            "html": "<p>A block is not an object – but you can make it one. <code>proc</code> and <code>lambda</code> wrap code into variables. The differences: a lambda checks its argument count strictly and <code>return</code> leaves only the lambda; a proc is relaxed about both. And <code>&amp;:to_s</code> is the shorthand for “turn this symbol into a block”:</p>"
+          },
+          {
+            "t": "c",
+            "code": "double = ->(x) { x * 2 }\n\n[double.call(21), double.(5), [1, 2, 3].map(&:to_s)]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Lambdas are <strong>closures</strong>: they carry their environment with them. Perfect for timelog report formats – each format is a small packaged program:</p>"
+          },
+          {
+            "t": "c",
+            "code": "formats = {\n  text: ->(e) { \"#{e[:project].ljust(10)} #{e[:hours]}h\" },\n  csv:  ->(e) { \"#{e[:project]};#{e[:hours]}\" }\n}\n\nentry = { project: \"ProjectX\", hours: 3.5 }\nformats[:csv].call(entry)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>Task:</strong> Write <code>each_project(entries)</code>: the method groups the entries by project and hands <strong>via <code>yield</code></strong> each pair <code>(project, list)</code> to the block – like <code>each</code>, one floor up.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def each_project(entries)\n#   ... group_by ... yield ...\n# end\n\n# Test:\n# each_project([{ project: \"A\", hours: 1.0 }]) do |project, list|\n#   puts \"#{project}: #{list.length} entries\"\n# end\n",
+            "check": "collected = []; each_project([{ project: \"A\", hours: 1.0 }, { project: \"B\", hours: 2.0 }, { project: \"A\", hours: 0.5 }]) { |p, list| collected << [p, list.length] }; collected == [[\"A\", 2], [\"B\", 1]] && code.include?(\"yield\")",
+            "hint": "<code>def each_project(entries); entries.group_by { |e| e[:project] }.each { |project, list| yield(project, list) }; end</code>"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tl-errors",
+      "de": {
+        "title": "25. Fehler behandeln",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Wenn etwas schiefgeht</h2><p>Mit <code>raise</code> wirft Ruby eine Exception, mit <code>rescue</code> fängst du sie, <code>ensure</code> läuft <em>immer</em> (aufräumen!). Gute Programme definieren eine eigene <strong>Fehler-Familie</strong> – dann können Aufrufer gezielt „alle timelog-Fehler“ fangen, ohne fremde Fehler zu verschlucken:</p>"
+          },
+          {
+            "t": "c",
+            "code": "module Timelog\n  class Error        < StandardError; end\n  class ParseError   < Error; end\n  class OverlapError < Error; end\nend\n\nbegin\n  raise Timelog::ParseError, \"Zeile 7 ist kein Zeiteintrag\"\nrescue Timelog::Error => e\n  \"gefangen: #{e.class}: #{e.message}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Wann Exception, wann Rückgabewert? Faustregel: <code>nil</code> für „kann normal vorkommen“ (Zeile passt nicht ins Muster), Exception für „hier stimmt etwas grundsätzlich nicht“ (Eintrag endet vor seinem Beginn). Erbe immer von <code>StandardError</code>, nie von <code>Exception</code> direkt – sonst fängst du auch Strg-C. Und pack die Familie in dein Modul (<code>Timelog::ParseError</code>), damit sie niemandem in die Quere kommt.</p><p>Bei <em>vorübergehenden</em> Fehlern (Netzwerk!) hilft <code>retry</code>: Es springt zurück an den Anfang des <code>begin</code>-Blocks:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class TimelogError < StandardError; end\n\nversuche = 0\nwackliger_dienst = lambda do\n  versuche += 1\n  raise TimelogError, \"Netzwerkfehler\" if versuche < 3\n  \"Daten empfangen (Versuch #{versuche})\"\nend\n\nbegin\n  wackliger_dienst.call\nrescue TimelogError\n  retry if versuche < 5\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Echter Retry-Code wartet zwischen den Versuchen immer länger (<em>Backoff</em>) – <code>sleep</code> gibt es im Browser nicht:</p><pre><code>rescue TimelogError\n  wartezeit = 2 ** versuch   # 1s, 2s, 4s, 8s ...\n  sleep(wartezeit)\n  retry if versuch < 5</code></pre></div><div class='task'><strong>Aufgabe:</strong> Schreibe <code>sync_mit_retry(dienst, max:)</code>: Sie ruft <code>dienst.call</code> auf. Wirft der Dienst einen <code>TimelogError</code>, wird bis zu <code>max</code>-mal insgesamt versucht – danach fliegt der Fehler weiter (einfach nicht mehr <code>retry</code> aufrufen). Bei Erfolg gibt sie das Ergebnis zurück.</div>"
+          },
+          {
+            "t": "x",
+            "code": "class TimelogError < StandardError; end\n\n# def sync_mit_retry(dienst, max:)\n#   versuche = 0\n#   begin\n#     ...\n#   rescue TimelogError\n#     ...\n#   end\n# end\n",
+            "check": "z1 = 0; ok_dienst = lambda { z1 += 1; raise TimelogError, \"kaputt\" if z1 < 3; \"ok\" }; erg = sync_mit_retry(ok_dienst, max: 5); kaputt = begin; z2 = 0; immer_kaputt = lambda { z2 += 1; raise TimelogError, \"kaputt\" }; sync_mit_retry(immer_kaputt, max: 2); false; rescue TimelogError; z2 == 2; end; erg == \"ok\" && z1 == 3 && kaputt && code.include?(\"retry\")",
+            "hint": "<code>versuche += 1</code> im begin-Block vor <code>dienst.call</code>; im rescue: <code>retry if versuche < max</code>, sonst <code>raise</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "25. Handling errors",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>When things go wrong</h2><p><code>raise</code> throws an exception, <code>rescue</code> catches it, <code>ensure</code> runs <em>always</em> (cleanup!). Good programs define their own <strong>error family</strong> – then callers can catch “all timelog errors” without swallowing unrelated ones:</p>"
+          },
+          {
+            "t": "c",
+            "code": "module Timelog\n  class Error        < StandardError; end\n  class ParseError   < Error; end\n  class OverlapError < Error; end\nend\n\nbegin\n  raise Timelog::ParseError, \"line 7 is not a time entry\"\nrescue Timelog::Error => e\n  \"caught: #{e.class}: #{e.message}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Exception or return value? Rule of thumb: <code>nil</code> for “can happen normally” (a line doesn't match the pattern), exception for “something is fundamentally wrong here” (an entry ends before it starts). Always inherit from <code>StandardError</code>, never from <code>Exception</code> directly – or you'll catch Ctrl-C too. And put the family into your module (<code>Timelog::ParseError</code>) so it never clashes with anyone else's.</p><p>For <em>transient</em> errors (networks!) there's <code>retry</code>: it jumps back to the start of the <code>begin</code> block:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class TimelogError < StandardError; end\n\nattempts = 0\nflaky_service = lambda do\n  attempts += 1\n  raise TimelogError, \"network error\" if attempts < 3\n  \"data received (attempt #{attempts})\"\nend\n\nbegin\n  flaky_service.call\nrescue TimelogError\n  retry if attempts < 5\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p>Real retry code waits longer between attempts (<em>backoff</em>) – there is no <code>sleep</code> in the browser:</p><pre><code>rescue TimelogError\n  wait = 2 ** attempt   # 1s, 2s, 4s, 8s ...\n  sleep(wait)\n  retry if attempt < 5</code></pre></div><div class='task'><strong>Task:</strong> Write <code>sync_with_retry(service, max:)</code>: it calls <code>service.call</code>. If the service raises a <code>TimelogError</code>, it tries up to <code>max</code> times in total – after that the error propagates (simply don't <code>retry</code> anymore). On success it returns the result.</div>"
+          },
+          {
+            "t": "x",
+            "code": "class TimelogError < StandardError; end\n\n# def sync_with_retry(service, max:)\n#   attempts = 0\n#   begin\n#     ...\n#   rescue TimelogError\n#     ...\n#   end\n# end\n",
+            "check": "c1 = 0; ok_service = lambda { c1 += 1; raise TimelogError, \"broken\" if c1 < 3; \"ok\" }; res = sync_with_retry(ok_service, max: 5); broke = begin; c2 = 0; always_broken = lambda { c2 += 1; raise TimelogError, \"broken\" }; sync_with_retry(always_broken, max: 2); false; rescue TimelogError; c2 == 2; end; res == \"ok\" && c1 == 3 && broke && code.include?(\"retry\")",
+            "hint": "<code>attempts += 1</code> in the begin block before <code>service.call</code>; in the rescue: <code>retry if attempts < max</code>, otherwise <code>raise</code>."
+          }
+        ]
+      }
+    }
+,
+    {
+      "id": "tl-formats",
+      "de": {
+        "title": "26. Daten speichern: Formate",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>timelog wird dauerhaft</h2><p>Bisher leben unsere Einträge nur im Speicher. Zeit für <strong>Serialisierung</strong>: Daten in Text verwandeln und zurück. Ruby bringt die drei wichtigsten Formate mit. <strong>JSON</strong> ist die Sprache der Web-APIs:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\n\neintraege = [\n  { projekt: \"ProjectX\", stunden: 3.5 },\n  { projekt: \"Intern\",   stunden: 2.0 }\n]\n\ntext = JSON.pretty_generate(eintraege)\nputs text\nJSON.parse(text, symbolize_names: true) == eintraege"
+          },
+          {
+            "t": "h",
+            "html": "<p>Beachte <code>symbolize_names: true</code> – JSON kennt keine Symbole, beim Einlesen wären die Schlüssel sonst Strings. <strong>CSV</strong> ist das Format für Tabellen (Excel!):</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"csv\"\n\ncsv_text = CSV.generate do |csv|\n  csv << [\"projekt\", \"stunden\"]\n  eintraege.each { |e| csv << [e[:projekt], e[:stunden]] }\nend\nputs csv_text\n\nCSV.parse(csv_text, headers: true).map { |zeile| zeile[\"projekt\"] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Und <strong>YAML</strong> ist das Lieblingsformat für Konfigurationsdateien – Menschen können es gut lesen und schreiben:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"yaml\"\n\nkonfig = YAML.safe_load(\"stundensatz: 120\\nrunden_auf: 15\\n\")\nkonfig[\"stundensatz\"]"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Dort schreibst du diese Texte in echte Dateien – das Dateisystem fehlt im Browser (schreibgeschützt):</p><pre><code>File.write(\"eintraege.json\", JSON.pretty_generate(eintraege))\ndaten = JSON.parse(File.read(\"eintraege.json\"), symbolize_names: true)\n\n# Die Block-Form schliesst die Datei automatisch:\nFile.open(\"log.txt\", \"a\") { |f| f.puts \"neuer Eintrag\" }\n\n# Nuetzliche Begleiter:\nDir.glob(\"*.json\")          # Dateien finden\nPathname.new(\"a/b.json\")    # Pfade als Objekte\nTempfile.create(\"test\")     # Wegwerf-Dateien fuer Tests\nStringIO.new(\"...\")         # \"Datei\" im Speicher - auch fuer Tests</code></pre></div><div class='task'><strong>Aufgabe:</strong> Schreibe zwei Methoden: <code>nach_csv(eintraege)</code> erzeugt CSV-Text mit Kopfzeile <code>projekt,stunden</code>, und <code>aus_csv(text)</code> liest ihn zurück in ein Array von Hashes mit Symbol-Schlüsseln und <code>Float</code>-Stunden. Die Reise hin und zurück muss verlustfrei sein.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"csv\"\n\n# def nach_csv(eintraege)\n#   ...\n# end\n\n# def aus_csv(text)\n#   ...  # Tipp: zeile[\"stunden\"].to_f\n# end\n",
+            "check": "probe = [{ projekt: \"A\", stunden: 1.5 }, { projekt: \"B\", stunden: 2.0 }]; aus_csv(nach_csv(probe)) == probe && nach_csv(probe).lines.first.strip == \"projekt,stunden\"",
+            "hint": "<code>nach_csv</code> wie in der Demo. <code>aus_csv</code>: <code>CSV.parse(text, headers: true).map { |z| { projekt: z[\"projekt\"], stunden: z[\"stunden\"].to_f } }</code>"
+          }
+        ]
+      },
+      "en": {
+        "title": "26. Saving data: formats",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>timelog becomes persistent</h2><p>So far our entries live only in memory. Time for <strong>serialization</strong>: turning data into text and back. Ruby ships the three most important formats. <strong>JSON</strong> is the language of web APIs:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\n\nentries = [\n  { project: \"ProjectX\", hours: 3.5 },\n  { project: \"Intern\",   hours: 2.0 }\n]\n\ntext = JSON.pretty_generate(entries)\nputs text\nJSON.parse(text, symbolize_names: true) == entries"
+          },
+          {
+            "t": "h",
+            "html": "<p>Note <code>symbolize_names: true</code> – JSON has no symbols, so keys would come back as strings otherwise. <strong>CSV</strong> is the format for tables (Excel!):</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"csv\"\n\ncsv_text = CSV.generate do |csv|\n  csv << [\"project\", \"hours\"]\n  entries.each { |e| csv << [e[:project], e[:hours]] }\nend\nputs csv_text\n\nCSV.parse(csv_text, headers: true).map { |row| row[\"project\"] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>And <strong>YAML</strong> is the favorite for configuration files – pleasant for humans to read and write:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"yaml\"\n\nconfig = YAML.safe_load(\"rate: 120\\nround_to: 15\\n\")\nconfig[\"rate\"]"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p>There you write these texts into real files – the browser's filesystem is read-only:</p><pre><code>File.write(\"entries.json\", JSON.pretty_generate(entries))\ndata = JSON.parse(File.read(\"entries.json\"), symbolize_names: true)\n\n# The block form closes the file automatically:\nFile.open(\"log.txt\", \"a\") { |f| f.puts \"new entry\" }\n\n# Useful companions:\nDir.glob(\"*.json\")          # find files\nPathname.new(\"a/b.json\")    # paths as objects\nTempfile.create(\"test\")     # throwaway files for tests\nStringIO.new(\"...\")         # in-memory \"file\" - great for tests</code></pre></div><div class='task'><strong>Task:</strong> Write two methods: <code>to_csv(entries)</code> produces CSV text with header <code>project,hours</code>, and <code>from_csv(text)</code> reads it back into an array of hashes with symbol keys and <code>Float</code> hours. The round trip must be lossless.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"csv\"\n\n# def to_csv(entries)\n#   ...\n# end\n\n# def from_csv(text)\n#   ...  # hint: row[\"hours\"].to_f\n# end\n",
+            "check": "sample = [{ project: \"A\", hours: 1.5 }, { project: \"B\", hours: 2.0 }]; from_csv(to_csv(sample)) == sample && to_csv(sample).lines.first.strip == \"project,hours\"",
+            "hint": "<code>to_csv</code> like the demo. <code>from_csv</code>: <code>CSV.parse(text, headers: true).map { |r| { project: r[\"project\"], hours: r[\"hours\"].to_f } }</code>"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tl-cli",
+      "de": {
+        "title": "27. Kommandozeile & Gems",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>timelog als richtiges Werkzeug</h2><p>Auf deinem Rechner startet man Programme im Terminal: <code>timelog add \"ProjectX\" --from 08:30</code>. Alles hinter dem Programmnamen landet als String-Array in <code>ARGV</code>. Für das saubere Zerlegen gibt es <strong>OptionParser</strong> aus der Standardbibliothek – hier üben wir mit selbstgebauten Arrays:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"optparse\"\n\nargv = [\"report\", \"--week\", \"--format\", \"csv\"]\n\noptionen = { format: \"text\", woche: false }\nparser = OptionParser.new do |p|\n  p.on(\"--week\", \"nur diese Woche\")        { optionen[:woche] = true }\n  p.on(\"--format FORMAT\", \"text oder csv\") { |f| optionen[:format] = f }\nend\n\nrest = parser.parse(argv)\n[optionen, rest]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>parse</code> pflückt die Optionen heraus und gibt zurück, was übrig bleibt – hier das Kommando <code>\"report\"</code>. Gratis dazu: <code>--help</code> mit den Beschreibungstexten.</p></div>"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer: vom Skript zur Gem'><p>Ein installierbares Werkzeug hat eine feste Struktur und eine <code>.gemspec</code>-Datei:</p><pre><code>timelog/\n├── lib/timelog.rb        # der Code\n├── bin/timelog           # das Kommando (#!/usr/bin/env ruby)\n├── test/test_timelog.rb\n├── timelog.gemspec       # Name, Version, Autor, Dateien\n├── Gemfile               # Abhaengigkeiten (Bundler)\n└── Rakefile              # Aufgaben: rake test</code></pre><pre><code>$ bundle install          # holt Abhaengigkeiten, schreibt Gemfile.lock\n$ rake test               # laesst die Tests laufen\n$ gem build timelog.gemspec\n$ gem install timelog-0.1.0.gem\n$ timelog report --week   # dein Werkzeug, ueberall!</code></pre><p>Exit-Codes nicht vergessen: <code>exit 1</code> bei Fehlern, damit Skripte deine Fehlschläge bemerken.</p></div><div class='task'><strong>Aufgabe:</strong> Schreibe <code>parse_argv(argv)</code> mit OptionParser: Unterstützt werden <code>--week</code> und <code>--format FORMAT</code> (Default <code>\"text\"</code>). Zurück kommt ein Hash <code>{ befehl:, woche:, format: }</code>, wobei <code>befehl</code> das erste übrige Argument ist.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"optparse\"\n\n# def parse_argv(argv)\n#   optionen = { woche: false, format: \"text\" }\n#   ...\n# end\n",
+            "check": "a = parse_argv([\"report\", \"--week\"]); b = parse_argv([\"export\", \"--format\", \"csv\"]); c2 = parse_argv([\"add\"]); a == { befehl: \"report\", woche: true, format: \"text\" } && b == { befehl: \"export\", woche: false, format: \"csv\" } && c2 == { befehl: \"add\", woche: false, format: \"text\" }",
+            "hint": "Wie in der Demo – am Ende: <code>rest = parser.parse(argv); { befehl: rest.first, woche: optionen[:woche], format: optionen[:format] }</code>"
+          }
+        ]
+      },
+      "en": {
+        "title": "27. Command line & gems",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>timelog as a real tool</h2><p>On your machine, programs start in the terminal: <code>timelog add \"ProjectX\" --from 08:30</code>. Everything after the program name arrives as a string array in <code>ARGV</code>. For clean parsing there's <strong>OptionParser</strong> from the standard library – here we practice with hand-built arrays:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"optparse\"\n\nargv = [\"report\", \"--week\", \"--format\", \"csv\"]\n\noptions = { format: \"text\", week: false }\nparser = OptionParser.new do |p|\n  p.on(\"--week\", \"this week only\")        { options[:week] = true }\n  p.on(\"--format FORMAT\", \"text or csv\")  { |f| options[:format] = f }\nend\n\nrest = parser.parse(argv)\n[options, rest]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>parse</code> plucks out the options and returns what remains – here the command <code>\"report\"</code>. For free on top: <code>--help</code> with the description texts.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine: from script to gem'><p>An installable tool has a fixed structure and a <code>.gemspec</code> file:</p><pre><code>timelog/\n├── lib/timelog.rb        # the code\n├── bin/timelog           # the command (#!/usr/bin/env ruby)\n├── test/test_timelog.rb\n├── timelog.gemspec       # name, version, author, files\n├── Gemfile               # dependencies (Bundler)\n└── Rakefile              # tasks: rake test</code></pre><pre><code>$ bundle install          # fetches deps, writes Gemfile.lock\n$ rake test               # runs the tests\n$ gem build timelog.gemspec\n$ gem install timelog-0.1.0.gem\n$ timelog report --week   # your tool, everywhere!</code></pre><p>Don't forget exit codes: <code>exit 1</code> on failure, so scripts notice your errors.</p></div><div class='task'><strong>Task:</strong> Write <code>parse_argv(argv)</code> with OptionParser: it supports <code>--week</code> and <code>--format FORMAT</code> (default <code>\"text\"</code>). It returns a hash <code>{ command:, week:, format: }</code>, where <code>command</code> is the first remaining argument.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"optparse\"\n\n# def parse_argv(argv)\n#   options = { week: false, format: \"text\" }\n#   ...\n# end\n",
+            "check": "a = parse_argv([\"report\", \"--week\"]); b = parse_argv([\"export\", \"--format\", \"csv\"]); c2 = parse_argv([\"add\"]); a == { command: \"report\", week: true, format: \"text\" } && b == { command: \"export\", week: false, format: \"csv\" } && c2 == { command: \"add\", week: false, format: \"text\" }",
+            "hint": "Like the demo – at the end: <code>rest = parser.parse(argv); { command: rest.first, week: options[:week], format: options[:format] }</code>"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tl-pattern",
+      "de": {
+        "title": "28. Pattern Matching",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Modernes Ruby: case/in</h2><p>Seit Ruby 3 gibt es neben <code>case/when</code> das mächtigere <strong>Pattern Matching</strong> mit <code>case/in</code>: Es prüft die <em>Form</em> von Daten und zerlegt sie im selben Schritt. Perfekt für unser Kommando-Array aus der CLI-Lektion:</p>"
+          },
+          {
+            "t": "c",
+            "code": "befehl = [\"add\", \"ProjectX\", 3.5]\n\ncase befehl\nin [\"add\", projekt, stunden]\n  \"Neuer Eintrag: #{projekt} (#{stunden}h)\"\nin [\"report\"]\n  \"Bericht wird erstellt\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das Muster <code>[\"add\", projekt, stunden]</code> passt nur auf dreielementige Arrays mit <code>\"add\"</code> vorn – und bindet die restlichen Werte gleich an Variablen. Auch Hashes lassen sich zerlegen, mit Typ-Prüfung und Wächter-Bedingung (<code>if</code>) obendrauf:</p>"
+          },
+          {
+            "t": "c",
+            "code": "eintrag = { projekt: \"ProjectX\", stunden: 3.5 }\n\ncase eintrag\nin { projekt: String => p, stunden: Float => s } if s > 0\n  \"#{p}: #{s}h - sieht gut aus\"\nin { stunden: }\n  \"Ungueltige Stunden: #{stunden.inspect}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dazu passt der Rest des modernen Rubys: <em>endless methods</em> für Einzeiler (<code>def quadrat(x) = x * x</code>), die Hash-Kurzform <code>{ projekt:, stunden: }</code> wenn Variable und Schlüssel gleich heissen, und <code>daten => { projekt: }</code> als Zerlege-Zuweisung ausserhalb von <code>case</code>.</p><div class='task'><strong>Aufgabe:</strong> Schreibe <code>dispatch(befehl)</code> mit <code>case/in</code>: <code>[\"add\", projekt, stunden]</code> → <code>\"Eintrag: &lt;projekt&gt; (&lt;stunden&gt;h)\"</code>, <code>[\"report\"]</code> → <code>\"Bericht\"</code>, <code>[\"export\", format]</code> → <code>\"Export als &lt;format&gt;\"</code>, alles andere (<code>else</code>) → <code>\"Unbekanntes Kommando\"</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def dispatch(befehl)\n#   case befehl\n#   in ...\n#   end\n# end\n",
+            "check": "dispatch([\"add\", \"X\", 2.5]) == \"Eintrag: X (2.5h)\" && dispatch([\"report\"]) == \"Bericht\" && dispatch([\"export\", \"csv\"]) == \"Export als csv\" && dispatch([\"tanzen\"]) == \"Unbekanntes Kommando\" && code.include?(\"in [\")",
+            "hint": "Vier Zweige: <code>in [\"add\", projekt, stunden]</code>, <code>in [\"report\"]</code>, <code>in [\"export\", format]</code>, <code>else</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "28. Pattern matching",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Modern Ruby: case/in</h2><p>Since Ruby 3 there is, next to <code>case/when</code>, the more powerful <strong>pattern matching</strong> with <code>case/in</code>: it checks the <em>shape</em> of data and takes it apart in the same step. Perfect for our command array from the CLI lesson:</p>"
+          },
+          {
+            "t": "c",
+            "code": "command = [\"add\", \"ProjectX\", 3.5]\n\ncase command\nin [\"add\", project, hours]\n  \"New entry: #{project} (#{hours}h)\"\nin [\"report\"]\n  \"Generating report\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>The pattern <code>[\"add\", project, hours]</code> only matches three-element arrays starting with <code>\"add\"</code> – and binds the remaining values to variables right away. Hashes deconstruct too, with type checks and a guard condition (<code>if</code>) on top:</p>"
+          },
+          {
+            "t": "c",
+            "code": "entry = { project: \"ProjectX\", hours: 3.5 }\n\ncase entry\nin { project: String => p, hours: Float => h } if h > 0\n  \"#{p}: #{h}h - looks good\"\nin { hours: }\n  \"Invalid hours: #{hours.inspect}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>The rest of modern Ruby fits right in: <em>endless methods</em> for one-liners (<code>def square(x) = x * x</code>), the hash shorthand <code>{ project:, hours: }</code> when variable and key share a name, and <code>data => { project: }</code> as a deconstructing assignment outside of <code>case</code>.</p><div class='task'><strong>Task:</strong> Write <code>dispatch(command)</code> with <code>case/in</code>: <code>[\"add\", project, hours]</code> → <code>\"Entry: &lt;project&gt; (&lt;hours&gt;h)\"</code>, <code>[\"report\"]</code> → <code>\"Report\"</code>, <code>[\"export\", format]</code> → <code>\"Export as &lt;format&gt;\"</code>, anything else (<code>else</code>) → <code>\"Unknown command\"</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def dispatch(command)\n#   case command\n#   in ...\n#   end\n# end\n",
+            "check": "dispatch([\"add\", \"X\", 2.5]) == \"Entry: X (2.5h)\" && dispatch([\"report\"]) == \"Report\" && dispatch([\"export\", \"csv\"]) == \"Export as csv\" && dispatch([\"dance\"]) == \"Unknown command\" && code.include?(\"in [\")",
+            "hint": "Four branches: <code>in [\"add\", project, hours]</code>, <code>in [\"report\"]</code>, <code>in [\"export\", format]</code>, <code>else</code>."
+          }
+        ]
+      }
+    },
+    {
+      "id": "tl-meta",
+      "de": {
+        "title": "29. Objektmodell & Metaprogrammierung",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Wie Ruby Methoden findet</h2><p>Wenn du <code>objekt.methode</code> aufrufst, klettert Ruby eine Kette hinauf: erst die Singleton-Klasse des Objekts (dort landen Methoden, die nur <em>dieses</em> Objekt hat), dann seine Klasse, dann die Mixins, dann die Oberklassen. Die Kette kannst du dir anzeigen lassen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "sonderling = \"normaler String\"\n\ndef sonderling.schrei\n  upcase + \"!!!\"\nend\n\n[sonderling.schrei, String.ancestors.first(4)]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Weil Klassen selbst Objekte sind, kann Code <em>Code erzeugen</em> – das ist Metaprogrammierung. <code>define_method</code> definiert Methoden zur Laufzeit, <code>send</code> ruft eine Methode auf, deren Name in einer Variablen steckt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Konfig\n  def initialize(werte)\n    @werte = werte\n  end\n\n  %w[host port sprache].each do |feld|\n    define_method(feld) { @werte[feld] }\n  end\nend\n\nk = Konfig.new({ \"host\" => \"idogawa.com\", \"port\" => 8011 })\n[k.host, k.send(\"port\")]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Genau so bauen Rails &amp; Co. ihre Makros wie <code>has_many</code> oder <code>validates</code>. Wichtige Warnung eines weisen Fuchses: <em>Der cleverste Code ist oft das Erste, was man später löscht.</em> Auch <code>method_missing</code> existiert (fängt alle unbekannten Aufrufe – immer zusammen mit <code>respond_to_missing?</code>), aber ein explizites <code>define_method</code> ist fast immer klarer.</p><div class='task'><strong>Aufgabe:</strong> Baue dein eigenes Rails-Makro: <code>Modell.validates_presence_of(*felder)</code> soll per <code>define_method</code> eine Methode <code>valid?</code> erzeugen, die prüft, dass keines der Felder <code>nil</code> oder <code>\"\"</code> ist. Die Klasse <code>Buchung</code> unten benutzt es dann wie in Rails.</div>"
+          },
+          {
+            "t": "x",
+            "code": "class Modell\n  # def self.validates_presence_of(*felder)\n  #   define_method(:valid?) do\n  #     ...\n  #   end\n  # end\nend\n\nclass Buchung < Modell\n  attr_accessor :projekt, :stunden\n  # validates_presence_of :projekt\nend\n",
+            "check": "b = Buchung.new; b.projekt = \"X\"; b2 = Buchung.new; b2.projekt = \"\"; b3 = Buchung.new; b.valid? && !b2.valid? && !b3.valid? && code.include?(\"define_method\")",
+            "hint": "<code>felder.all? { |f| wert = send(f); !wert.nil? && wert != \"\" }</code> – im define_method-Block. Danach in <code>Buchung</code> die Zeile <code>validates_presence_of :projekt</code> aktivieren."
+          }
+        ]
+      },
+      "en": {
+        "title": "29. Object model & metaprogramming",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>How Ruby finds methods</h2><p>When you call <code>object.method</code>, Ruby climbs a chain: first the object's singleton class (home of methods only <em>this</em> object has), then its class, then the mixins, then the superclasses. You can display the chain:</p>"
+          },
+          {
+            "t": "c",
+            "code": "oddball = \"a normal string\"\n\ndef oddball.shout\n  upcase + \"!!!\"\nend\n\n[oddball.shout, String.ancestors.first(4)]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Because classes are objects themselves, code can <em>create code</em> – that's metaprogramming. <code>define_method</code> defines methods at runtime, <code>send</code> calls a method whose name sits in a variable:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Config\n  def initialize(values)\n    @values = values\n  end\n\n  %w[host port language].each do |field|\n    define_method(field) { @values[field] }\n  end\nend\n\nc = Config.new({ \"host\" => \"idogawa.com\", \"port\" => 8011 })\n[c.host, c.send(\"port\")]"
+          },
+          {
+            "t": "h",
+            "html": "<p>That's exactly how Rails &amp; co. build their macros like <code>has_many</code> or <code>validates</code>. An important warning from a wise fox: <em>the cleverest code is often the first thing you delete later.</em> <code>method_missing</code> exists too (catches all unknown calls – always pair it with <code>respond_to_missing?</code>), but an explicit <code>define_method</code> is almost always clearer.</p><div class='task'><strong>Task:</strong> Build your own Rails macro: <code>BaseModel.validates_presence_of(*fields)</code> should use <code>define_method</code> to create a <code>valid?</code> method checking that none of the fields is <code>nil</code> or <code>\"\"</code>. The class <code>Booking</code> below then uses it Rails-style.</div>"
+          },
+          {
+            "t": "x",
+            "code": "class BaseModel\n  # def self.validates_presence_of(*fields)\n  #   define_method(:valid?) do\n  #     ...\n  #   end\n  # end\nend\n\nclass Booking < BaseModel\n  attr_accessor :project, :hours\n  # validates_presence_of :project\nend\n",
+            "check": "b = Booking.new; b.project = \"X\"; b2 = Booking.new; b2.project = \"\"; b3 = Booking.new; b.valid? && !b2.valid? && !b3.valid? && code.include?(\"define_method\")",
+            "hint": "<code>fields.all? { |f| value = send(f); !value.nil? && value != \"\" }</code> – inside the define_method block. Then activate the line <code>validates_presence_of :project</code> in <code>Booking</code>."
+          }
+        ]
+      }
+    }
+,
+    {
+      "id": "tl-dsl",
+      "de": {
+        "title": "30. Eine eigene DSL",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Konfiguration wie die Grossen</h2><p>Viele Ruby-Werkzeuge konfiguriert man mit eleganten Blöcken – das nennt man eine <strong>DSL</strong> (domain-specific language). Der Trick dahinter ist eine einzige Methode: <code>instance_eval</code> führt einen Block so aus, als stünde er <em>im Objekt drin</em> – <code>self</code> wechselt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Speisekarte\n  attr_reader :gerichte\n\n  def initialize\n    @gerichte = {}\n  end\n\n  def gericht(name, preis:)\n    @gerichte[name] = preis\n  end\nend\n\ndef speisekarte(&block)\n  karte = Speisekarte.new\n  karte.instance_eval(&block)\n  karte\nend\n\nkarte = speisekarte do\n  gericht \"Speck\", preis: 8\n  gericht \"Ei\",    preis: 3\nend\n\nkarte.gerichte"
+          },
+          {
+            "t": "h",
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 24 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+          },
+          {
+            "t": "x",
+            "code": "module Timelog\n  class Konfiguration\n    attr_reader :projekte, :raster\n\n    def initialize\n      @projekte = {}\n      @raster = 60\n    end\n\n    # def projekt(name, satz:)\n    #   ...\n    # end\n\n    # def runde_auf(minuten)\n    #   ...\n    # end\n  end\n\n  # def self.configure(&block)\n  #   ...\n  # end\n\n  # def self.config\n  #   ...\n  # end\nend\n\n# Timelog.configure do\n#   projekt \"ProjectX\", satz: 120\n#   runde_auf 15\n# end\n",
+            "check": "Timelog.configure { projekt \"A\", satz: 100\n runde_auf 30 }; Timelog.config.projekte[\"A\"] == 100 && Timelog.config.raster == 30 && code.include?(\"instance_eval\")",
+            "hint": "<code>def self.configure(&block); @config = Konfiguration.new; @config.instance_eval(&block); @config; end</code> und <code>def self.config; @config; end</code>. Die DSL-Methoden schreiben einfach in <code>@projekte</code> bzw. <code>@raster</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "30. Your own DSL",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Configuration like the big ones</h2><p>Many Ruby tools are configured with elegant blocks – that's called a <strong>DSL</strong> (domain-specific language). The trick behind it is a single method: <code>instance_eval</code> runs a block as if it were written <em>inside the object</em> – <code>self</code> switches:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Menu\n  attr_reader :dishes\n\n  def initialize\n    @dishes = {}\n  end\n\n  def dish(name, price:)\n    @dishes[name] = price\n  end\nend\n\ndef menu(&block)\n  m = Menu.new\n  m.instance_eval(&block)\n  m\nend\n\ncard = menu do\n  dish \"Bacon\", price: 8\n  dish \"Egg\",   price: 3\nend\n\ncard.dishes"
+          },
+          {
+            "t": "h",
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 24 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+          },
+          {
+            "t": "x",
+            "code": "module Timelog\n  class Configuration\n    attr_reader :projects, :grid\n\n    def initialize\n      @projects = {}\n      @grid = 60\n    end\n\n    # def project(name, rate:)\n    #   ...\n    # end\n\n    # def round_to(minutes)\n    #   ...\n    # end\n  end\n\n  # def self.configure(&block)\n  #   ...\n  # end\n\n  # def self.config\n  #   ...\n  # end\nend\n\n# Timelog.configure do\n#   project \"ProjectX\", rate: 120\n#   round_to 15\n# end\n",
+            "check": "Timelog.configure { project \"A\", rate: 100\n round_to 30 }; Timelog.config.projects[\"A\"] == 100 && Timelog.config.grid == 30 && code.include?(\"instance_eval\")",
+            "hint": "<code>def self.configure(&block); @config = Configuration.new; @config.instance_eval(&block); @config; end</code> and <code>def self.config; @config; end</code>. The DSL methods simply write into <code>@projects</code> / <code>@grid</code>."
+          }
+        ]
+      }
+    },
+    {
+      "id": "tl-quality",
+      "de": {
+        "title": "31. Codequalität & Debugging",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Werkzeuge für sauberen Code</h2><p>In Teams sorgt ein <strong>Linter</strong> für einheitlichen Stil: <em>RuboCop</em> ist der grosse Konfigurierbare mit hunderten Regeln, <em>Standard</em> die Null-Diskussionen-Variante („eine Konfiguration für alle“). Wichtiger als jede einzelne Regel: Das Team streitet nicht mehr über Kommas. Dazu kommen <em>YARD</em> für Doku-Kommentare und – wer mag – Typsignaturen mit <em>RBS</em> oder <em>Sorbet</em>.</p><div class='offweb' data-title='Auf deinem Computer'><pre><code>$ gem install standard\n$ standardrb            # prueft den Stil\n$ standardrb --fix      # repariert vieles gleich selbst\n\n# Und zum Debuggen mit Haltepunkt mitten im Code:\nrequire \"debug\"\nbinding.break           # oder binding.irb - oeffnet eine Konsole GENAU HIER</code></pre></div><p>Debuggen geht aber überall – auch hier. Das Universalwerkzeug heisst <code>p</code>: Es druckt sein Argument <em>und gibt es zurück</em>, du kannst es also mitten in jede Kette einschleusen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "werte = [3, 1, 4, 1, 5, 9]\n\nwerte.select { |x| p(x).odd? }.sum"
+          },
+          {
+            "t": "h",
+            "html": "<p>Verwandte Helfer: <code>pp</code> für hübsche Hashes, <code>obj.inspect</code> für die ehrliche Darstellung, <code>caller</code> zeigt, wer die aktuelle Methode aufgerufen hat.</p><div class='task'><strong>Aufgabe:</strong> In der Zelle unten steckt ein klassischer Bug: <code>runde</code> soll Minuten auf das <strong>nächste</strong> Raster runden (<code>runde(38, 15)</code> → <code>45</code>), schneidet aber immer ab. Finde den Fehler (probier <code>p</code>!) und repariere die Methode.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Diese Methode soll auf das NAECHSTE Raster runden -\n# aber sie liefert runde(38, 15) => 30 statt 45. Warum?\n\ndef runde(minuten, raster)\n  (minuten / raster) * raster\nend\n\nrunde(38, 15)\n",
+            "check": "runde(38, 15) == 45 && runde(8, 15) == 15 && runde(7, 15) == 0 && runde(22, 15) == 15 && runde(60, 60) == 60",
+            "hint": "<code>38 / 15</code> ist Ganzzahl-Division (ergibt 2, Rest weg!). Erst zu Float machen, dann runden: <code>(minuten.to_f / raster).round * raster</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "31. Code quality & debugging",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Tools for clean code</h2><p>In teams, a <strong>linter</strong> keeps the style uniform: <em>RuboCop</em> is the big configurable one with hundreds of rules, <em>Standard</em> the zero-discussion variant (“one config for everyone”). More important than any single rule: the team stops arguing about commas. Add <em>YARD</em> for doc comments and – if you like – type signatures with <em>RBS</em> or <em>Sorbet</em>.</p><div class='offweb' data-title='On your machine'><pre><code>$ gem install standard\n$ standardrb            # checks the style\n$ standardrb --fix      # repairs a lot by itself\n\n# And for breakpoint debugging right in your code:\nrequire \"debug\"\nbinding.break           # or binding.irb - opens a console RIGHT HERE</code></pre></div><p>But debugging works everywhere – including here. The universal tool is <code>p</code>: it prints its argument <em>and returns it</em>, so you can sneak it into the middle of any chain:</p>"
+          },
+          {
+            "t": "c",
+            "code": "values = [3, 1, 4, 1, 5, 9]\n\nvalues.select { |x| p(x).odd? }.sum"
+          },
+          {
+            "t": "h",
+            "html": "<p>Related helpers: <code>pp</code> for pretty hashes, <code>obj.inspect</code> for the honest representation, <code>caller</code> shows who called the current method.</p><div class='task'><strong>Task:</strong> The cell below hides a classic bug: <code>round_to</code> should round minutes to the <strong>nearest</strong> grid (<code>round_to(38, 15)</code> → <code>45</code>), but it always truncates. Find the bug (try <code>p</code>!) and repair the method.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# This method should round to the NEAREST grid -\n# but it returns round_to(38, 15) => 30 instead of 45. Why?\n\ndef round_to(minutes, grid)\n  (minutes / grid) * grid\nend\n\nround_to(38, 15)\n",
+            "check": "round_to(38, 15) == 45 && round_to(8, 15) == 15 && round_to(7, 15) == 0 && round_to(22, 15) == 15 && round_to(60, 60) == 60",
+            "hint": "<code>38 / 15</code> is integer division (gives 2, remainder gone!). Convert to Float first, then round: <code>(minutes.to_f / grid).round * grid</code>."
+          }
+        ]
+      }
+    },
+    {
+      "id": "tl-performance",
+      "de": {
+        "title": "32. Performance & Nebenläufigkeit",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Erst messen, dann optimieren</h2><p>Die goldene Regel: <strong>niemals raten</strong>. Rubys <code>Benchmark</code> misst, was wirklich langsam ist – oft ist es nicht das, was man denkt. Klassiker: <code>+=</code> auf Strings erzeugt jedes Mal einen <em>neuen</em> String, die Schaufel <code>&lt;&lt;</code> erweitert denselben:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"benchmark\"\n\nn = 5_000\nplus = Benchmark.realtime do\n  s = \"\"\n  n.times { s += \"x\" }\nend\nschaufel = Benchmark.realtime do\n  s = \"\"\n  n.times { s << \"x\" }\nend\n\n{ plus: plus.round(4), schaufel: schaufel.round(4) }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dahinter steckt das grosse Thema <strong>Allokationen</strong>: Jedes unnötige Zwischenobjekt kostet Zeit und Speicher. Und die schnellste Optimierung überhaupt: Code, der gar nicht erst läuft.</p><div class='offweb' data-title='Auf deinem Computer: Profiler & Threads'><pre><code>$ gem install benchmark-ips stackprof\n# benchmark-ips: wie oft pro Sekunde? (aussagekraeftiger als einmal messen)\n# stackprof:     WO verbringt das Programm seine Zeit?</code></pre><p><strong>Threads</strong> laufen im Browser nicht – und in MRI teilen sie sich ohnehin einen Interpreter (GVL): echter Parallel-Gewinn entsteht nur beim <em>Warten</em> (Netzwerk, Dateien). Für CPU-Parallelität gibt es <em>Ractors</em>:</p><pre><code>abrufe = urls.map { |url| Thread.new { hole(url) } }\ndaten = abrufe.map(&:value)   # 10 Downloads in der Zeit von einem</code></pre></div><p><strong>Fibers</strong> dagegen funktionieren sogar hier: kooperative Mini-Programme, die sich die Kontrolle explizit zuwerfen – das Fundament vieler async-Bibliotheken:</p>"
+          },
+          {
+            "t": "c",
+            "code": "erzaehler = Fiber.new do\n  Fiber.yield \"Kapitel 1: Speck\"\n  Fiber.yield \"Kapitel 2: Mehr Speck\"\n  \"Ende\"\nend\n\n[erzaehler.resume, erzaehler.resume, erzaehler.resume]"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>Aufgabe:</strong> <code>langsamer_bericht</code> unten durchsucht die Einträge <strong>einmal pro Projekt</strong> – bei vielen Projekten wird das quadratisch langsam. Schreibe <code>schneller_bericht</code>, der mit <strong>einem einzigen</strong> <code>group_by</code>-Durchlauf dasselbe Ergebnis liefert. Miss den Unterschied mit Benchmark!</div>"
+          },
+          {
+            "t": "x",
+            "code": "eintraege = 500.times.map { |i| { projekt: \"P#{i % 5}\", stunden: 1.0 } }\n\ndef langsamer_bericht(eintraege)\n  eintraege.map { |e| e[:projekt] }.uniq.to_h do |p|\n    [p, eintraege.select { |e| e[:projekt] == p }.sum { |e| e[:stunden] }]\n  end\nend\n\n# def schneller_bericht(eintraege)\n#   ...\n# end\n\n# require \"benchmark\"\n# { langsam: Benchmark.realtime { 50.times { langsamer_bericht(eintraege) } }.round(3),\n#   schnell: Benchmark.realtime { 50.times { schneller_bericht(eintraege) } }.round(3) }\n",
+            "check": "schneller_bericht(eintraege) == langsamer_bericht(eintraege) && code.include?(\"group_by\")",
+            "hint": "<code>eintraege.group_by { |e| e[:projekt] }.transform_values { |l| l.sum { |e| e[:stunden] } }</code> – ein Durchlauf statt einer pro Projekt."
+          }
+        ]
+      },
+      "en": {
+        "title": "32. Performance & concurrency",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Measure first, then optimize</h2><p>The golden rule: <strong>never guess</strong>. Ruby's <code>Benchmark</code> measures what is actually slow – often it's not what you think. A classic: <code>+=</code> on strings creates a <em>new</em> string every time, the shovel <code>&lt;&lt;</code> extends the same one:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"benchmark\"\n\nn = 5_000\nplus = Benchmark.realtime do\n  s = \"\"\n  n.times { s += \"x\" }\nend\nshovel = Benchmark.realtime do\n  s = \"\"\n  n.times { s << \"x\" }\nend\n\n{ plus: plus.round(4), shovel: shovel.round(4) }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Behind this sits the big topic of <strong>allocations</strong>: every unnecessary intermediate object costs time and memory. And the fastest optimization of all: code that never runs in the first place.</p><div class='offweb' data-title='On your machine: profilers & threads'><pre><code>$ gem install benchmark-ips stackprof\n# benchmark-ips: how many times per second? (more telling than one run)\n# stackprof:     WHERE does the program spend its time?</code></pre><p><strong>Threads</strong> don't run in the browser – and in MRI they share one interpreter anyway (the GVL): real parallel gains only appear while <em>waiting</em> (network, files). For CPU parallelism there are <em>Ractors</em>:</p><pre><code>fetches = urls.map { |url| Thread.new { fetch(url) } }\ndata = fetches.map(&:value)   # 10 downloads in the time of one</code></pre></div><p><strong>Fibers</strong> however work even here: cooperative mini-programs that pass control explicitly – the foundation of many async libraries:</p>"
+          },
+          {
+            "t": "c",
+            "code": "narrator = Fiber.new do\n  Fiber.yield \"Chapter 1: Bacon\"\n  Fiber.yield \"Chapter 2: More bacon\"\n  \"The end\"\nend\n\n[narrator.resume, narrator.resume, narrator.resume]"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>Task:</strong> <code>slow_report</code> below scans the entries <strong>once per project</strong> – with many projects that turns quadratic. Write <code>fast_report</code> producing the same result with a <strong>single</strong> <code>group_by</code> pass. Measure the difference with Benchmark!</div>"
+          },
+          {
+            "t": "x",
+            "code": "entries = 500.times.map { |i| { project: \"P#{i % 5}\", hours: 1.0 } }\n\ndef slow_report(entries)\n  entries.map { |e| e[:project] }.uniq.to_h do |p|\n    [p, entries.select { |e| e[:project] == p }.sum { |e| e[:hours] }]\n  end\nend\n\n# def fast_report(entries)\n#   ...\n# end\n\n# require \"benchmark\"\n# { slow: Benchmark.realtime { 50.times { slow_report(entries) } }.round(3),\n#   fast: Benchmark.realtime { 50.times { fast_report(entries) } }.round(3) }\n",
+            "check": "fast_report(entries) == slow_report(entries) && code.include?(\"group_by\")",
+            "hint": "<code>entries.group_by { |e| e[:project] }.transform_values { |l| l.sum { |e| e[:hours] } }</code> – one pass instead of one per project."
+          }
+        ]
+      }
+    },
+    {
+      "id": "tl-capstone",
+      "de": {
+        "title": "33. Finale: timelog im Web",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Alles zusammen: die Weboberfläche</h2><p>Zum Abschluss verbinden wir <em>alles</em>: Collections für den Bericht, Roda fürs Routing, <strong>ERB</strong> als Vorlagensprache und den Mini-Browser als Bühne. ERB ist HTML mit eingebettetem Ruby: <code>&lt;%= … %&gt;</code> fügt einen Wert ein, <code>&lt;% … %&gt;</code> führt Code aus (Schleifen!):</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"roda\"\nrequire \"roda\"\nrequire \"erb\"\n\nEINTRAEGE = [\n  { projekt: \"ProjectX\", stunden: 3.5 },\n  { projekt: \"Intern\",   stunden: 2.0 },\n  { projekt: \"ProjectX\", stunden: 3.0 }\n]\n\nVORLAGE = ERB.new(<<~HTML)\n  <h1>timelog</h1>\n  <table border='1' cellpadding='6'>\n    <tr><th>Projekt</th><th>Stunden</th></tr>\n    <% bericht.each do |projekt, stunden| %>\n      <tr>\n        <td><a href='/projekt/<%= projekt %>'><%= projekt %></a></td>\n        <td><%= stunden %></td>\n      </tr>\n    <% end %>\n  </table>\nHTML\n\nclass TimelogWeb < Roda\n  route do |r|\n    r.root do\n      bericht = EINTRAEGE.group_by { |e| e[:projekt] }\n                         .transform_values { |l| l.sum { |e| e[:stunden] } }\n      VORLAGE.result(binding)\n    end\n  end\nend\n\nshow_browser TimelogWeb, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p><code>VORLAGE.result(binding)</code> gibt der Vorlage Zugriff auf die lokalen Variablen der Route – so kommt <code>bericht</code> ins HTML. Genau so funktionieren die Views in Rails, Sinatra und Roda (dort mit Komfort-Helfern drumherum).</p><div class='task'><strong>Aufgabe:</strong> Die Projektnamen sind schon Links! Ergänze die Route <code>r.get \"projekt\", String do |name| … end</code>: Sie zeigt eine Detailseite mit dem Projektnamen als Überschrift und allen Stunden-Werten des Projekts (z.&nbsp;B. per <code>map</code>/<code>join</code>). Unbekannte Pfade sollen 404 bleiben. Damit ist timelog komplett – klick dich durch!</div>"
+          },
+          {
+            "t": "x",
+            "code": "install_gem \"roda\"\nrequire \"roda\"\nrequire \"erb\"\n\nEINTRAEGE = [\n  { projekt: \"ProjectX\", stunden: 3.5 },\n  { projekt: \"Intern\",   stunden: 2.0 },\n  { projekt: \"ProjectX\", stunden: 3.0 }\n]\n\nclass TimelogWeb < Roda\n  route do |r|\n    r.root do\n      \"<h1>timelog</h1><a href='/projekt/ProjectX'>ProjectX</a> <a href='/projekt/Intern'>Intern</a>\"\n    end\n\n    # r.get \"projekt\", String do |name|\n    #   passende = EINTRAEGE.select { ... }\n    #   \"<h2>...</h2>...\"\n    # end\n  end\nend\n\nshow_browser TimelogWeb, \"/\"\n",
+            "check": "s1, b1 = mock_get(TimelogWeb, \"/\"); s2, b2 = mock_get(TimelogWeb, \"/projekt/ProjectX\"); s3, _ = mock_get(TimelogWeb, \"/quatsch\"); s1 == 200 && b1.include?(\"ProjectX\") && s2 == 200 && b2.include?(\"ProjectX\") && b2.include?(\"3.5\") && s3 == 404",
+            "hint": "<code>r.get \"projekt\", String do |name|; passende = EINTRAEGE.select { |e| e[:projekt] == name }; \"&lt;h2&gt;#{name}&lt;/h2&gt;\" + passende.map { |e| \"#{e[:stunden]}h\" }.join(\", \"); end</code>"
+          },
+          {
+            "t": "h",
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 27 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+          }
+        ]
+      },
+      "en": {
+        "title": "33. Finale: timelog on the web",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Everything together: the web interface</h2><p>To finish, we connect <em>everything</em>: collections for the report, Roda for routing, <strong>ERB</strong> as the template language and the mini browser as the stage. ERB is HTML with embedded Ruby: <code>&lt;%= … %&gt;</code> inserts a value, <code>&lt;% … %&gt;</code> runs code (loops!):</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"roda\"\nrequire \"roda\"\nrequire \"erb\"\n\nENTRIES = [\n  { project: \"ProjectX\", hours: 3.5 },\n  { project: \"Intern\",   hours: 2.0 },\n  { project: \"ProjectX\", hours: 3.0 }\n]\n\nTEMPLATE = ERB.new(<<~HTML)\n  <h1>timelog</h1>\n  <table border='1' cellpadding='6'>\n    <tr><th>Project</th><th>Hours</th></tr>\n    <% report.each do |project, hours| %>\n      <tr>\n        <td><a href='/project/<%= project %>'><%= project %></a></td>\n        <td><%= hours %></td>\n      </tr>\n    <% end %>\n  </table>\nHTML\n\nclass TimelogWeb < Roda\n  route do |r|\n    r.root do\n      report = ENTRIES.group_by { |e| e[:project] }\n                      .transform_values { |l| l.sum { |e| e[:hours] } }\n      TEMPLATE.result(binding)\n    end\n  end\nend\n\nshow_browser TimelogWeb, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p><code>TEMPLATE.result(binding)</code> gives the template access to the route's local variables – that's how <code>report</code> reaches the HTML. Views in Rails, Sinatra and Roda work exactly like this (with comfort helpers wrapped around).</p><div class='task'><strong>Task:</strong> The project names are already links! Add the route <code>r.get \"project\", String do |name| … end</code>: it shows a detail page with the project name as heading and all the project's hour values (e.g. via <code>map</code>/<code>join</code>). Unknown paths stay 404. With that, timelog is complete – click around!</div>"
+          },
+          {
+            "t": "x",
+            "code": "install_gem \"roda\"\nrequire \"roda\"\nrequire \"erb\"\n\nENTRIES = [\n  { project: \"ProjectX\", hours: 3.5 },\n  { project: \"Intern\",   hours: 2.0 },\n  { project: \"ProjectX\", hours: 3.0 }\n]\n\nclass TimelogWeb < Roda\n  route do |r|\n    r.root do\n      \"<h1>timelog</h1><a href='/project/ProjectX'>ProjectX</a> <a href='/project/Intern'>Intern</a>\"\n    end\n\n    # r.get \"project\", String do |name|\n    #   matching = ENTRIES.select { ... }\n    #   \"<h2>...</h2>...\"\n    # end\n  end\nend\n\nshow_browser TimelogWeb, \"/\"\n",
+            "check": "s1, b1 = mock_get(TimelogWeb, \"/\"); s2, b2 = mock_get(TimelogWeb, \"/project/ProjectX\"); s3, _ = mock_get(TimelogWeb, \"/nonsense\"); s1 == 200 && b1.include?(\"ProjectX\") && s2 == 200 && b2.include?(\"ProjectX\") && b2.include?(\"3.5\") && s3 == 404",
+            "hint": "<code>r.get \"project\", String do |name|; matching = ENTRIES.select { |e| e[:project] == name }; \"&lt;h2&gt;#{name}&lt;/h2&gt;\" + matching.map { |e| \"#{e[:hours]}h\" }.join(\", \"); end</code>"
+          },
+          {
+            "t": "h",
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 27 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+          }
         ]
       }
     }

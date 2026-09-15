@@ -32,7 +32,17 @@ module Kernel
   def show_irb
     nil
   end
+
+  def run_tests
+    require "minitest"
+    result = Minitest.run([])
+    Minitest::Runnable.runnables.clear
+    result
+  end
 end
+
+require "minitest"
+Minitest::Runnable.runnables.clear
 
 # NB: the harness body lives inside a method on purpose. Lesson bindings are
 # created from TOPLEVEL_BINDING, so any top-level local here would be captured
@@ -103,6 +113,426 @@ SOLUTIONS = {
   "http" => {
     "de" => [%(require "net/http"\nrequire "json"\ninfo = JSON.parse(Net::HTTP.get(URI("https://rubygems.org/api/v1/gems/sinatra.json")))\ninfo["downloads"])],
     "en" => [%(require "net/http"\nrequire "json"\ninfo = JSON.parse(Net::HTTP.get(URI("https://rubygems.org/api/v1/gems/sinatra.json")))\ninfo["downloads"])]
+  },
+  "tl-collections" => {
+    "de" => [%(eintraege = [{ projekt: "ProjectX", stunden: 3.5 }, { projekt: "Intern", stunden: 2.0 }, { projekt: "ProjectX", stunden: 3.0 }]
+stunden = eintraege.group_by { |e| e[:projekt] }.transform_values { |l| l.sum { |e| e[:stunden] } })],
+    "en" => [%(entries = [{ project: "ProjectX", hours: 3.5 }, { project: "Intern", hours: 2.0 }, { project: "ProjectX", hours: 3.0 }]
+hours = entries.group_by { |e| e[:project] }.transform_values { |l| l.sum { |e| e[:hours] } })]
+  },
+  "tl-parsing" => {
+    "de" => [%(def parse_zeile(zeile)
+  muster = /(?<datum>\\d{4}-\\d{2}-\\d{2}) (?<von>\\d{2}:\\d{2})-(?<bis>\\d{2}:\\d{2}) (?<projekt>\\S+)/
+  treffer = zeile.match(muster)
+  return nil unless treffer
+  { projekt: treffer[:projekt], von: treffer[:von], bis: treffer[:bis] }
+end)],
+    "en" => [%(def parse_line(line)
+  pattern = /(?<date>\\d{4}-\\d{2}-\\d{2}) (?<from>\\d{2}:\\d{2})-(?<to>\\d{2}:\\d{2}) (?<project>\\S+)/
+  hit = line.match(pattern)
+  return nil unless hit
+  { project: hit[:project], from: hit[:from], to: hit[:to] }
+end)]
+  },
+  "tl-methods" => {
+    "de" => [%(def als_stunden(uhrzeit)
+  h, m = uhrzeit.split(":").map(&:to_i)
+  h + m / 60.0
+end
+
+def add_entry(projekt:, von:, bis:, notiz: nil)
+  { projekt: projekt, von: von, bis: bis, notiz: notiz, stunden: als_stunden(bis) - als_stunden(von) }
+end)],
+    "en" => [%(def as_hours(time)
+  h, m = time.split(":").map(&:to_i)
+  h + m / 60.0
+end
+
+def add_entry(project:, from:, to:, note: nil)
+  { project: project, from: from, to: to, note: note, hours: as_hours(to) - as_hours(from) }
+end)]
+  },
+  "tl-classes" => {
+    "de" => [%(class Timesheet
+  def initialize
+    @eintraege = []
+  end
+
+  def add(entry)
+    @eintraege << entry
+    self
+  end
+
+  def total_for(projekt)
+    @eintraege.select { |e| e.projekt == projekt }.sum(&:stunden)
+  end
+end)],
+    "en" => [%(class Timesheet
+  def initialize
+    @entries = []
+  end
+
+  def add(entry)
+    @entries << entry
+    self
+  end
+
+  def total_for(project)
+    @entries.select { |e| e.project == project }.sum(&:hours)
+  end
+end)]
+  },
+  "tl-minitest" => {
+    "de" => [%(class Eintrag
+  attr_reader :projekt, :stunden
+  def initialize(projekt, stunden)
+    @projekt = projekt
+    @stunden = stunden
+  end
+  def gueltig?
+    stunden > 0 && !projekt.to_s.empty?
+  end
+end
+
+class TestEintrag < Minitest::Test
+  def test_gueltig
+    assert Eintrag.new("X", 2.0).gueltig?
+  end
+
+  def test_negative_stunden
+    refute Eintrag.new("X", -1).gueltig?
+  end
+end
+
+run_tests)],
+    "en" => [%(class Entry
+  attr_reader :project, :hours
+  def initialize(project, hours)
+    @project = project
+    @hours = hours
+  end
+  def valid?
+    hours > 0 && !project.to_s.empty?
+  end
+end
+
+class TestEntry < Minitest::Test
+  def test_valid
+    assert Entry.new("X", 2.0).valid?
+  end
+
+  def test_negative_hours
+    refute Entry.new("X", -1).valid?
+  end
+end
+
+run_tests)]
+  },
+  "tl-mixins" => {
+    "de" => [%(class Timesheet
+  include Enumerable
+
+  def initialize(eintraege)
+    @eintraege = eintraege
+  end
+
+  def each(&block)
+    @eintraege.each(&block)
+  end
+end
+
+ts = Timesheet.new([{ projekt: "A", stunden: 2.0 }, { projekt: "B", stunden: 1.0 }])
+ts.sum { |e| e[:stunden] })],
+    "en" => [%(class Timesheet
+  include Enumerable
+
+  def initialize(entries)
+    @entries = entries
+  end
+
+  def each(&block)
+    @entries.each(&block)
+  end
+end
+
+ts = Timesheet.new([{ project: "A", hours: 2.0 }, { project: "B", hours: 1.0 }])
+ts.sum { |e| e[:hours] })]
+  },
+  "tl-blocks" => {
+    "de" => [%(def each_projekt(eintraege)
+  eintraege.group_by { |e| e[:projekt] }.each { |projekt, liste| yield(projekt, liste) }
+end)],
+    "en" => [%(def each_project(entries)
+  entries.group_by { |e| e[:project] }.each { |project, list| yield(project, list) }
+end)]
+  },
+  "tl-errors" => {
+    "de" => [%(class TimelogError < StandardError; end
+
+def sync_mit_retry(dienst, max:)
+  versuche = 0
+  begin
+    versuche += 1
+    dienst.call
+  rescue TimelogError
+    retry if versuche < max
+    raise
+  end
+end)],
+    "en" => [%(class TimelogError < StandardError; end
+
+def sync_with_retry(service, max:)
+  attempts = 0
+  begin
+    attempts += 1
+    service.call
+  rescue TimelogError
+    retry if attempts < max
+    raise
+  end
+end)]
+  },
+  "tl-formats" => {
+    "de" => [%(require "csv"
+
+def nach_csv(eintraege)
+  CSV.generate do |csv|
+    csv << ["projekt", "stunden"]
+    eintraege.each { |e| csv << [e[:projekt], e[:stunden]] }
+  end
+end
+
+def aus_csv(text)
+  CSV.parse(text, headers: true).map { |z| { projekt: z["projekt"], stunden: z["stunden"].to_f } }
+end)],
+    "en" => [%(require "csv"
+
+def to_csv(entries)
+  CSV.generate do |csv|
+    csv << ["project", "hours"]
+    entries.each { |e| csv << [e[:project], e[:hours]] }
+  end
+end
+
+def from_csv(text)
+  CSV.parse(text, headers: true).map { |r| { project: r["project"], hours: r["hours"].to_f } }
+end)]
+  },
+  "tl-cli" => {
+    "de" => [%(require "optparse"
+
+def parse_argv(argv)
+  optionen = { woche: false, format: "text" }
+  parser = OptionParser.new do |p|
+    p.on("--week") { optionen[:woche] = true }
+    p.on("--format FORMAT") { |f| optionen[:format] = f }
+  end
+  rest = parser.parse(argv)
+  { befehl: rest.first, woche: optionen[:woche], format: optionen[:format] }
+end)],
+    "en" => [%(require "optparse"
+
+def parse_argv(argv)
+  options = { week: false, format: "text" }
+  parser = OptionParser.new do |p|
+    p.on("--week") { options[:week] = true }
+    p.on("--format FORMAT") { |f| options[:format] = f }
+  end
+  rest = parser.parse(argv)
+  { command: rest.first, week: options[:week], format: options[:format] }
+end)]
+  },
+  "tl-pattern" => {
+    "de" => [%(def dispatch(befehl)
+  case befehl
+  in ["add", projekt, stunden]
+    "Eintrag: \#{projekt} (\#{stunden}h)"
+  in ["report"]
+    "Bericht"
+  in ["export", format]
+    "Export als \#{format}"
+  else
+    "Unbekanntes Kommando"
+  end
+end)],
+    "en" => [%(def dispatch(command)
+  case command
+  in ["add", project, hours]
+    "Entry: \#{project} (\#{hours}h)"
+  in ["report"]
+    "Report"
+  in ["export", format]
+    "Export as \#{format}"
+  else
+    "Unknown command"
+  end
+end)]
+  },
+  "tl-meta" => {
+    "de" => [%(class Modell
+  def self.validates_presence_of(*felder)
+    define_method(:valid?) do
+      felder.all? { |f| wert = send(f); !wert.nil? && wert != "" }
+    end
+  end
+end
+
+class Buchung < Modell
+  attr_accessor :projekt, :stunden
+  validates_presence_of :projekt
+end)],
+    "en" => [%(class BaseModel
+  def self.validates_presence_of(*fields)
+    define_method(:valid?) do
+      fields.all? { |f| value = send(f); !value.nil? && value != "" }
+    end
+  end
+end
+
+class Booking < BaseModel
+  attr_accessor :project, :hours
+  validates_presence_of :project
+end)]
+  },
+  "tl-dsl" => {
+    "de" => [%(module Timelog
+  class Konfiguration
+    attr_reader :projekte, :raster
+
+    def initialize
+      @projekte = {}
+      @raster = 60
+    end
+
+    def projekt(name, satz:)
+      @projekte[name] = satz
+    end
+
+    def runde_auf(minuten)
+      @raster = minuten
+    end
+  end
+
+  def self.configure(&block)
+    @config = Konfiguration.new
+    @config.instance_eval(&block)
+    @config
+  end
+
+  def self.config
+    @config
+  end
+end)],
+    "en" => [%(module Timelog
+  class Configuration
+    attr_reader :projects, :grid
+
+    def initialize
+      @projects = {}
+      @grid = 60
+    end
+
+    def project(name, rate:)
+      @projects[name] = rate
+    end
+
+    def round_to(minutes)
+      @grid = minutes
+    end
+  end
+
+  def self.configure(&block)
+    @config = Configuration.new
+    @config.instance_eval(&block)
+    @config
+  end
+
+  def self.config
+    @config
+  end
+end)]
+  },
+  "tl-quality" => {
+    "de" => [%(def runde(minuten, raster)
+  (minuten.to_f / raster).round * raster
+end)],
+    "en" => [%(def round_to(minutes, grid)
+  (minutes.to_f / grid).round * grid
+end)]
+  },
+  "tl-performance" => {
+    "de" => [%(eintraege = 500.times.map { |i| { projekt: "P\#{i % 5}", stunden: 1.0 } }
+
+def langsamer_bericht(eintraege)
+  eintraege.map { |e| e[:projekt] }.uniq.to_h do |p|
+    [p, eintraege.select { |e| e[:projekt] == p }.sum { |e| e[:stunden] }]
+  end
+end
+
+def schneller_bericht(eintraege)
+  eintraege.group_by { |e| e[:projekt] }.transform_values { |l| l.sum { |e| e[:stunden] } }
+end)],
+    "en" => [%(entries = 500.times.map { |i| { project: "P\#{i % 5}", hours: 1.0 } }
+
+def slow_report(entries)
+  entries.map { |e| e[:project] }.uniq.to_h do |p|
+    [p, entries.select { |e| e[:project] == p }.sum { |e| e[:hours] }]
+  end
+end
+
+def fast_report(entries)
+  entries.group_by { |e| e[:project] }.transform_values { |l| l.sum { |e| e[:hours] } }
+end)]
+  },
+  "tl-capstone" => {
+    "de" => [%(install_gem "roda"
+require "roda"
+require "erb"
+
+EINTRAEGE = [
+  { projekt: "ProjectX", stunden: 3.5 },
+  { projekt: "Intern",   stunden: 2.0 },
+  { projekt: "ProjectX", stunden: 3.0 }
+]
+
+class TimelogWeb < Roda
+  route do |r|
+    r.root do
+      "<h1>timelog</h1><a href='/projekt/ProjectX'>ProjectX</a>"
+    end
+
+    r.get "projekt", String do |name|
+      passende = EINTRAEGE.select { |e| e[:projekt] == name }
+      "<h2>\#{name}</h2>" + passende.map { |e| "\#{e[:stunden]}h" }.join(", ")
+    end
+  end
+end
+
+show_browser TimelogWeb, "/")],
+    "en" => [%(install_gem "roda"
+require "roda"
+require "erb"
+
+ENTRIES = [
+  { project: "ProjectX", hours: 3.5 },
+  { project: "Intern",   hours: 2.0 },
+  { project: "ProjectX", hours: 3.0 }
+]
+
+class TimelogWeb < Roda
+  route do |r|
+    r.root do
+      "<h1>timelog</h1><a href='/project/ProjectX'>ProjectX</a>"
+    end
+
+    r.get "project", String do |name|
+      matching = ENTRIES.select { |e| e[:project] == name }
+      "<h2>\#{name}</h2>" + matching.map { |e| "\#{e[:hours]}h" }.join(", ")
+    end
+  end
+end
+
+show_browser TimelogWeb, "/")]
   },
   "roda" => {
     "de" => [%(install_gem "roda"\nrequire "roda"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      "<h1>Kiosk</h1>"\n    end\n    r.get "bestellung", Integer do |anzahl|\n      "\#{anzahl} Streifen Speck, kommt sofort!"\n    end\n  end\nend\nshow_browser Kiosk, "/bestellung/5")],

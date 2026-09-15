@@ -10,6 +10,10 @@ require 'fileutils'
 
 GEMS = %w[chunky_png gammo racc sinatra roda]
 
+# gems pinned below their latest version, when the latest pulls in native
+# dependencies (e.g. minitest 6 depends on prism, a C extension)
+PINNED = {}
+
 # gems whose C extension is optional (pure-Ruby fallback in lib/)
 ALLOW_EXTENSIONS = %w[racc]
 
@@ -26,8 +30,13 @@ until queue.empty?
   name = queue.shift
   next if manifest.key?(name)
 
-  info = JSON.parse(Net::HTTP.get(URI("https://rubygems.org/api/v1/gems/#{name}.json")))
-  version = info["version"]
+  if PINNED.key?(name)
+    version = PINNED[name]
+    info = JSON.parse(Net::HTTP.get(URI("https://rubygems.org/api/v2/rubygems/#{name}/versions/#{version}.json")))
+  else
+    info = JSON.parse(Net::HTTP.get(URI("https://rubygems.org/api/v1/gems/#{name}.json")))
+    version = info["version"]
+  end
   file = "#{name}-#{version}.gem"
   path = File.join(CACHE_DIR, file)
 

@@ -54,6 +54,18 @@ NET_HTTP_HOSTS = {
   "api.github.com" => "https://api.github.com"
 }.freeze
 
+# Minitest ships builtin with this Ruby (5.20). Its parallel executor
+# spawns threads on Minitest.run, and WASI has no threads - replace it
+# with a serial stub once, at boot, so tests run in lesson cells.
+require "minitest"
+Minitest.parallel_executor = Object.new.tap do |stub|
+  def stub.start; end
+  def stub.shutdown; end
+  def stub.<<(_work)
+    raise NotImplementedError, "parallelize_me! is unavailable in the browser (no threads in WASI)"
+  end
+end
+
 Net::HTTP.transport = lambda do |_method, uri|
   prefix = NET_HTTP_HOSTS[uri.host.to_s.downcase]
   unless prefix
@@ -276,7 +288,8 @@ class ChunkyApp
       classes = []
       classes << "active" if lesson["id"] == active_id
       classes << "done" if done.include?(lesson["id"])
-      "<a class=\"#{classes.join(' ')}\" data-id=\"#{lesson["id"]}\">#{l10n(lesson)["title"]}</a>"
+      section = lesson["section"] ? "<div class=\"nav-section\">#{lesson["section"][@lang] || lesson["section"]["de"]}</div>" : ""
+      "#{section}<a class=\"#{classes.join(' ')}\" data-id=\"#{lesson["id"]}\">#{l10n(lesson)["title"]}</a>"
     end.join
     $d.getElementById("lessonNav").innerHTML = html
   end
@@ -646,6 +659,15 @@ module Kernel
   def show_irb
     ChunkyApp.instance.add_irb
     nil
+  end
+
+  # Runs all Minitest tests defined so far, prints the familiar report,
+  # then clears the registry so the next cell starts fresh. (On a real
+  # machine you'd use require "minitest/autorun" and just run the file.)
+  def run_tests
+    result = Minitest.run([])
+    Minitest::Runnable.runnables.clear
+    result
   end
 end
 
