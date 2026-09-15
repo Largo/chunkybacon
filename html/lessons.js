@@ -602,6 +602,18 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
+            "html": "<p>Kleine Überraschung: Du rufst schon seit Lektion 1 Methoden auf – denn <code>puts</code> ist eine! Ruby macht die <strong>Klammern optional</strong>: <code>puts \"Hallo\"</code> ist in Wahrheit <code>puts(\"Hallo\")</code>. Das gilt auch für deine eigenen Methoden:</p>"
+          },
+          {
+            "t": "c",
+            "code": "mit_klammern  = begruessung(\"Kaz\")\nohne_klammern = begruessung \"Kaz\"\n\n[mit_klammern, ohne_klammern]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Genau deshalb lesen sich viele Ruby-Zeilen wie normale Sprache. Die Faustregel der Rubyisten: Klammern <em>weglassen</em>, wenn der Aufruf wie eine Anweisung wirkt (<code>puts \"…\"</code>, <code>require \"csv\"</code>) – Klammern <em>setzen</em>, wenn du mit dem Ergebnis weiterrechnest (<code>begruessung(\"Kaz\").upcase</code>). Bei Aufrufen ganz ohne Argumente lässt man sie fast immer weg: <code>name.upcase</code> statt <code>name.upcase()</code>.</p>"
+          },
+          {
+            "t": "h",
             "html": "<p>Der Wert der <em>letzten Zeile</em> einer Methode ist automatisch ihr Rückgabewert – ein <code>return</code> ist meist unnötig. Das ist sehr rubyisch.</p><div class='task'><strong>Aufgabe:</strong> Schreibe eine Methode <code>quadrat(zahl)</code>, die die Zahl mit sich selbst multipliziert zurückgibt. Teste sie: <code>quadrat(9)</code> als letzte Zeile.</div>"
           },
           {
@@ -622,6 +634,18 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "c",
             "code": "def greeting(name)\n  \"Hello, #{name}!\"\nend\n\ngreeting(\"Kaz\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Small surprise: you've been calling methods since lesson 1 – because <code>puts</code> is one! Ruby makes the <strong>parentheses optional</strong>: <code>puts \"Hello\"</code> is really <code>puts(\"Hello\")</code>. That works for your own methods too:</p>"
+          },
+          {
+            "t": "c",
+            "code": "with_parens    = greeting(\"Kaz\")\nwithout_parens = greeting \"Kaz\"\n\n[with_parens, without_parens]"
+          },
+          {
+            "t": "h",
+            "html": "<p>That's exactly why so many Ruby lines read like plain language. The Rubyists' rule of thumb: <em>omit</em> the parentheses when the call reads like a statement (<code>puts \"…\"</code>, <code>require \"csv\"</code>) – <em>use</em> them when you keep computing with the result (<code>greeting(\"Kaz\").upcase</code>). For calls with no arguments at all they're almost always omitted: <code>name.upcase</code> instead of <code>name.upcase()</code>.</p>"
           },
           {
             "t": "h",
@@ -651,7 +675,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>initialize</code> läuft bei <code>Katze.new</code>. Variablen mit <code>@</code> gehören zum Objekt, und <code>attr_reader :name</code> macht <code>@name</code> von aussen lesbar – probiere <code>k.name</code>!</p><div class='task'><strong>Aufgabe:</strong> Schreibe nach diesem Vorbild die Klasse <code>Fuchs</code>: mit <code>initialize(name)</code>, <code>attr_reader :name</code> und einer Methode <code>ruf</code>, die <code>\"Chunky Bacon!\"</code> zurückgibt.</div>"
+            "html": "<p><code>initialize</code> läuft bei <code>Katze.new</code>. Variablen mit <code>@</code> gehören zum Objekt, und <code>attr_reader :name</code> macht <code>@name</code> von aussen lesbar – probiere <code>k.name</code>! Und noch ein Aha: <code>attr_reader :name</code> ist kein Spezialbefehl, sondern ein ganz normaler Methodenaufruf ohne Klammern – wie in Lektion 9 gelernt: <code>attr_reader(:name)</code>.</p><div class='task'><strong>Aufgabe:</strong> Schreibe nach diesem Vorbild die Klasse <code>Fuchs</code>: mit <code>initialize(name)</code>, <code>attr_reader :name</code> und einer Methode <code>ruf</code>, die <code>\"Chunky Bacon!\"</code> zurückgibt.</div>"
           },
           {
             "t": "x",
@@ -674,7 +698,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>initialize</code> runs on <code>Cat.new</code>. Variables with <code>@</code> belong to the object, and <code>attr_reader :name</code> makes <code>@name</code> readable from outside – try <code>k.name</code>!</p><div class='task'><strong>Task:</strong> Following this example, write the class <code>Fox</code>: with <code>initialize(name)</code>, <code>attr_reader :name</code> and a method <code>shout</code> that returns <code>\"Chunky Bacon!\"</code>.</div>"
+            "html": "<p><code>initialize</code> runs on <code>Cat.new</code>. Variables with <code>@</code> belong to the object, and <code>attr_reader :name</code> makes <code>@name</code> readable from outside – try <code>k.name</code>! And another aha: <code>attr_reader :name</code> is no special keyword but a perfectly normal method call without parentheses – as learned in lesson 9: <code>attr_reader(:name)</code>.</p><div class='task'><strong>Task:</strong> Following this example, write the class <code>Fox</code>: with <code>initialize(name)</code>, <code>attr_reader :name</code> and a method <code>shout</code> that returns <code>\"Chunky Bacon!\"</code>.</div>"
           },
           {
             "t": "x",
@@ -712,7 +736,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><strong>Job 2 – Mixin:</strong> Mit <code>include</code> mischst du die Methoden eines Moduls in eine Klasse hinein – so teilen sich viele Klassen eine Fähigkeit, ohne voneinander zu erben:</p>"
+            "html": "<p><strong>Job 2 – Mixin:</strong> Mit <code>include</code> mischst du die Methoden eines Moduls in eine Klasse hinein – so teilen sich viele Klassen eine Fähigkeit, ohne voneinander zu erben: (Auch <code>include</code> ist übrigens nur ein Methodenaufruf ohne Klammern.)</p>"
           },
           {
             "t": "c",
@@ -755,7 +779,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><strong>Job 2 – mixin:</strong> With <code>include</code> you mix a module's methods into a class – that way many classes can share an ability without inheriting from each other:</p>"
+            "html": "<p><strong>Job 2 – mixin:</strong> With <code>include</code> you mix a module's methods into a class – that way many classes can share an ability without inheriting from each other: (By the way, <code>include</code> too is just a method call without parentheses.)</p>"
           },
           {
             "t": "c",
@@ -1329,7 +1353,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Vergleiche <code>gruss(name: \"Kaz\")</code> mit einem anonymen <code>gruss(\"Kaz\", true)</code> – bei mehreren Argumenten gewinnt die Keyword-Variante klar an Lesbarkeit. Weitere Konventionen: <code>*rest</code> sammelt beliebig viele Argumente ein, Methoden mit <code>?</code> geben wahr/falsch zurück, Methoden mit <code>!</code> sind die „gefährliche“ Variante. Und: Der Wert der letzten Zeile ist automatisch der Rückgabewert.</p><p>Für timelog brauchen wir Zeitrechnung – <code>\"08:30\"</code> in Stunden seit Mitternacht:</p>"
+            "html": "<p>Vergleiche <code>gruss(name: \"Kaz\")</code> mit einem anonymen <code>gruss(\"Kaz\", true)</code> – bei mehreren Argumenten gewinnt die Keyword-Variante klar an Lesbarkeit. Weitere Konventionen: <code>*rest</code> sammelt beliebig viele Argumente ein, Methoden mit <code>?</code> geben wahr/falsch zurück, Methoden mit <code>!</code> sind die „gefährliche“ Variante. Und: Der Wert der letzten Zeile ist automatisch der Rückgabewert.</p><p>Zur Erinnerung aus Lektion 9: Klammern sind optional. Zusammen mit Keyword-Argumenten entsteht so der deklarative Ruby-Stil, den du aus <code>attr_reader :name</code> kennst – <code>add_entry projekt: \"X\", von: \"08:30\", bis: \"10:00\"</code> liest sich fast wie Konfiguration. In verschachtelten Ausdrücken gehören die Klammern aber wieder hin.</p><p>Für timelog brauchen wir Zeitrechnung – <code>\"08:30\"</code> in Stunden seit Mitternacht:</p>"
           },
           {
             "t": "c",
@@ -1360,7 +1384,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Compare <code>greet(name: \"Kaz\")</code> with an anonymous <code>greet(\"Kaz\", true)</code> – with several arguments the keyword variant clearly wins on readability. More conventions: <code>*rest</code> collects any number of arguments, methods ending in <code>?</code> return true/false, methods ending in <code>!</code> are the “dangerous” variant. And: the value of the last line is automatically the return value.</p><p>timelog needs time math – <code>\"08:30\"</code> as hours since midnight:</p>"
+            "html": "<p>Compare <code>greet(name: \"Kaz\")</code> with an anonymous <code>greet(\"Kaz\", true)</code> – with several arguments the keyword variant clearly wins on readability. More conventions: <code>*rest</code> collects any number of arguments, methods ending in <code>?</code> return true/false, methods ending in <code>!</code> are the “dangerous” variant. And: the value of the last line is automatically the return value.</p><p>Remember lesson 9: parentheses are optional. Combined with keyword arguments this creates the declarative Ruby style you know from <code>attr_reader :name</code> – <code>add_entry project: \"X\", from: \"08:30\", to: \"10:00\"</code> reads almost like configuration. In nested expressions, though, the parentheses go back in.</p><p>timelog needs time math – <code>\"08:30\"</code> as hours since midnight:</p>"
           },
           {
             "t": "c",
