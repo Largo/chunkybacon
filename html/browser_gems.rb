@@ -30,7 +30,7 @@ module BrowserGems
   # network sockets). Enough for gems like ipaddr/sinatra to LOAD; anything
   # actually touching the network raises a clear error.
   SHIMS = {
-    "socket.rb" => <<~'RUBY'
+    "socket.rb" => <<~'RUBY',
       class SocketError < StandardError; end unless defined?(SocketError)
       class BasicSocket; end unless defined?(BasicSocket)
       class Socket < BasicSocket
@@ -53,6 +53,83 @@ module BrowserGems
       class TCPSocket < IPSocket; end
       class UDPSocket < IPSocket; end
     RUBY
+    # Minimal Net::HTTP with the familiar stdlib API, backed by a pluggable
+    # transport (the browser wires it to synchronous XHR). The REAL net/http
+    # must keep failing its builtin require (io/wait is absent in this wasm
+    # build) so this shim wins - do NOT shim io/wait.
+    "net/http.rb" => <<~'RUBY',
+      require 'uri'
+      class SocketError < StandardError; end unless defined?(SocketError)
+      module Net
+        class HTTPError < StandardError; end unless defined?(Net::HTTPError)
+
+        class HTTPResponse
+          MESSAGES = { 200 => "OK", 201 => "Created", 204 => "No Content",
+                       301 => "Moved Permanently", 302 => "Found",
+                       304 => "Not Modified", 400 => "Bad Request",
+                       403 => "Forbidden", 404 => "Not Found",
+                       429 => "Too Many Requests",
+                       500 => "Internal Server Error" }.freeze
+
+          attr_reader :code, :message, :body, :uri
+
+          def initialize(status, body, headers, uri)
+            @code = status.to_s
+            @message = MESSAGES[status] || ""
+            @body = body
+            @headers = headers || {}
+            @uri = uri
+          end
+
+          def [](key)
+            @headers[key.to_s.downcase]
+          end
+
+          def content_type
+            self["content-type"].to_s.split(";").first
+          end
+
+          def read_body
+            @body
+          end
+
+          def value
+            return nil if is_a?(HTTPSuccess)
+            raise HTTPError, "#{@code} #{@message}"
+          end
+        end
+
+        class HTTPSuccess < HTTPResponse; end
+        class HTTPRedirection < HTTPResponse; end
+        class HTTPClientError < HTTPResponse; end
+        class HTTPServerError < HTTPResponse; end
+
+        class HTTP
+          class << self
+            attr_accessor :transport
+
+            def get_response(uri, *_rest)
+              uri = URI(uri.to_s)
+              raise SocketError, "no HTTP transport configured" unless transport
+              status, headers, body = transport.call("GET", uri)
+              klass = case status
+                      when 200..299 then HTTPSuccess
+                      when 300..399 then HTTPRedirection
+                      when 400..499 then HTTPClientError
+                      else HTTPServerError
+                      end
+              klass.new(status, body, headers, uri)
+            end
+
+            def get(uri_or_host, path = nil, _port = nil)
+              uri = path ? URI("http://#{uri_or_host}#{path}") : URI(uri_or_host.to_s)
+              get_response(uri).body
+            end
+          end
+        end
+      end
+    RUBY
+    "net/https.rb" => "require 'net/http'\n"
   }.freeze
 
   class << self

@@ -525,6 +525,43 @@ window.LESSONS_JSON = JSON.stringify({
             hint: "<code>r.get \"order\", Integer do |amount|</code> … <code>\"#{amount} strips of bacon, coming right up!\"</code> … <code>end</code> – inside the route block." }
         ]
       }
+    },
+    {
+      id: "http",
+      de: {
+        title: "17. HTTP – Daten aus dem Netz",
+        cells: [
+          { t: "h", html: "<h2>Daten aus dem Netz holen</h2><p>Bisher haben wir Webseiten <em>gebaut</em> – jetzt drehen wir den Spiess um und <em>rufen welche ab</em>. Rubys Standardbibliothek bringt dafür <code>net/http</code> mit: Du baust aus einer Adresse ein <code>URI</code>-Objekt und schickst eine Anfrage los. Holen wir uns die offizielle Ruby-Website:</p>" },
+          { t: "c", code: "require \"net/http\"\n\nantwort = Net::HTTP.get_response(URI(\"https://www.ruby-lang.org/de/\"))\nantwort.code" },
+          { t: "h", html: "<p><code>get_response</code> liefert ein Antwort-Objekt: <code>code</code> ist der Statuscode (als String – eine berühmte kleine Eigenheit von <code>net/http</code>!), und in <code>body</code> steckt die ganze Seite als HTML-Text:</p>" },
+          { t: "c", code: "antwort.body[0, 160]" },
+          { t: "h", html: "<p>Moderne Dienste liefern Daten meist als <strong>JSON</strong> – perfekt zum Weiterverarbeiten. Die rubygems.org-API kennst du ja schon von der Gems-Lektion; fragen wir sie, wie oft <code>rack</code> heruntergeladen wurde:</p>" },
+          { t: "c", code: "require \"json\"\n\ndaten = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/rack.json\")))\ndaten[\"downloads\"]" },
+          { t: "h", html: "<p>Auch die GitHub-API antwortet mit JSON – zum Beispiel mit den Sternen von Ruby selbst:</p>" },
+          { t: "c", code: "repo = JSON.parse(Net::HTTP.get(URI(\"https://api.github.com/repos/ruby/ruby\")))\nrepo[\"stargazers_count\"]" },
+          { t: "h", html: "<p><strong>Ehrliche Fussnote:</strong> Im Browser sitzt Ruby in einer Sandbox und darf nicht beliebige Server ansprechen. Diese Seite stellt deshalb eine kleine Brücke bereit – erreichbar sind <code>www.ruby-lang.org</code>, <code>rubygems.org</code> und <code>api.github.com</code>; andere Adressen ergeben einen <code>SocketError</code>. Auf deinem eigenen Computer funktioniert <code>net/http</code> mit jeder URL.</p><div class='task'><strong>Aufgabe:</strong> Frag die rubygems-API nach der Gem <code>sinatra</code>: Parse <code>https://rubygems.org/api/v1/gems/sinatra.json</code> in eine Variable <code>info</code> und lass die Zelle die Zahl der Downloads (<code>info[\"downloads\"]</code>) ergeben.</div>" },
+          { t: "x", code: "require \"net/http\"\nrequire \"json\"\n\n# info = JSON.parse(Net::HTTP.get(URI(\"...\")))\n# info[\"downloads\"]\n",
+            check: "info.is_a?(Hash) && info[\"name\"] == \"sinatra\" && info[\"downloads\"].is_a?(Integer) && info[\"downloads\"] > 0 && result == info[\"downloads\"]",
+            hint: "<code>info = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/sinatra.json\")))</code> – und als letzte Zeile <code>info[\"downloads\"]</code>." }
+        ]
+      },
+      en: {
+        title: "17. HTTP – fetching data from the web",
+        cells: [
+          { t: "h", html: "<h2>Fetching data from the web</h2><p>So far we've <em>built</em> websites – now let's turn the tables and <em>fetch</em> some. Ruby's standard library ships <code>net/http</code> for that: you build a <code>URI</code> object from an address and send a request. Let's fetch the official Ruby website:</p>" },
+          { t: "c", code: "require \"net/http\"\n\nresponse = Net::HTTP.get_response(URI(\"https://www.ruby-lang.org/en/\"))\nresponse.code" },
+          { t: "h", html: "<p><code>get_response</code> returns a response object: <code>code</code> is the status code (as a String – a famous little quirk of <code>net/http</code>!), and <code>body</code> holds the whole page as HTML text:</p>" },
+          { t: "c", code: "response.body[0, 160]" },
+          { t: "h", html: "<p>Modern services usually deliver data as <strong>JSON</strong> – perfect for processing. You already know the rubygems.org API from the gems lesson; let's ask it how often <code>rack</code> has been downloaded:</p>" },
+          { t: "c", code: "require \"json\"\n\ndata = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/rack.json\")))\ndata[\"downloads\"]" },
+          { t: "h", html: "<p>The GitHub API answers with JSON too – for example with the stars of Ruby itself:</p>" },
+          { t: "c", code: "repo = JSON.parse(Net::HTTP.get(URI(\"https://api.github.com/repos/ruby/ruby\")))\nrepo[\"stargazers_count\"]" },
+          { t: "h", html: "<p><strong>Honest footnote:</strong> in the browser Ruby sits in a sandbox and may not talk to arbitrary servers. This site therefore provides a little bridge – reachable are <code>www.ruby-lang.org</code>, <code>rubygems.org</code> and <code>api.github.com</code>; other addresses raise a <code>SocketError</code>. On your own computer <code>net/http</code> works with any URL.</p><div class='task'><strong>Task:</strong> Ask the rubygems API about the gem <code>sinatra</code>: parse <code>https://rubygems.org/api/v1/gems/sinatra.json</code> into a variable <code>info</code> and make the cell yield the number of downloads (<code>info[\"downloads\"]</code>).</div>" },
+          { t: "x", code: "require \"net/http\"\nrequire \"json\"\n\n# info = JSON.parse(Net::HTTP.get(URI(\"...\")))\n# info[\"downloads\"]\n",
+            check: "info.is_a?(Hash) && info[\"name\"] == \"sinatra\" && info[\"downloads\"].is_a?(Integer) && info[\"downloads\"] > 0 && result == info[\"downloads\"]",
+            hint: "<code>info = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/sinatra.json\")))</code> – and as the last line <code>info[\"downloads\"]</code>." }
+        ]
+      }
     }
   ]
 });

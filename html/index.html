@@ -103,6 +103,23 @@
       } catch (e) { return "ERROR " + e; }
     };
 
+    // Full HTTP fetch (status + content type + body) for the Net::HTTP
+    // shim. Returns a JSON string so only one value crosses the bridge.
+    window.fetchHttpSync = function (url) {
+      try {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, false);
+        xhr.send(null);
+        return JSON.stringify({
+          status: xhr.status,
+          contentType: xhr.getResponseHeader("Content-Type") || "",
+          body: xhr.responseText
+        });
+      } catch (e) {
+        return JSON.stringify({ status: 0, contentType: "", body: String(e) });
+      }
+    };
+
     // Per-cell CodeMirror helpers called from Ruby (main.rb)
     window.cellEditors = {};
     window.initCell = function (idx) {

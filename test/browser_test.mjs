@@ -30,7 +30,7 @@ await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 check('app becomes visible after wasm boot', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('16 lessons in nav', (await page.$$('#lessonNav a')).length === 16);
+check('17 lessons in nav', (await page.$$('#lessonNav a')).length === 17);
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
 check('exercise cell has task label', (await page.getAttribute('.cell.exercise', 'data-label')) === 'Aufgabe');
@@ -203,6 +203,25 @@ await runExercise();
 check('roda exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 check('roda exercise widget shows order', (await page.textContent('.cell.exercise .mb-view')).includes('5 Streifen Speck'));
 
+// HTTP lesson: Net::HTTP shim through the browser bridge
+await page.click('#lessonNav a[data-id="http"]');
+await page.waitForTimeout(300);
+await page.click('.run-cell[data-idx="1"]');
+await page.waitForTimeout(3000);
+check('net/http fetches ruby-lang.org (code 200)', (await page.textContent('#cell-out-1')).includes('=> "200"'));
+await page.click('.run-cell[data-idx="3"]');
+await page.waitForTimeout(800);
+check('response body holds HTML', /DOCTYPE|html/i.test(await page.textContent('#cell-out-3')));
+await page.click('.run-cell[data-idx="5"]');
+await page.waitForTimeout(2000);
+check('rubygems JSON API via proxy', /=> \d{6,}/.test(await page.textContent('#cell-out-5')));
+await setExercise('require "net/http"\nrequire "json"\ninfo = JSON.parse(Net::HTTP.get(URI("https://rubygems.org/api/v1/gems/sinatra.json")))\ninfo["downloads"]');
+await runExercise();
+check('http exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+await setExercise('require "net/http"\nNet::HTTP.get(URI("https://example.com/"))');
+await runExercise();
+check('unknown host raises friendly SocketError', (await exerciseOut()).includes('SocketError'));
+
 // gems panel input installs (paint is now already installed → instant)
 await page.fill('#gemNameInput', 'paint');
 await page.click('#gemInstallBtn');
@@ -213,7 +232,7 @@ check('panel install shows bubble', (await page.textContent('#chunkyText')).incl
 await page.selectOption('#langSelect', 'en');
 await page.waitForTimeout(300);
 check('English title', (await page.textContent('#siteTitle')).includes('Learn Ruby with Chunky Bacon'));
-check('English lesson rendered', (await page.textContent('#lessonBody')).includes('routing tree'));
+check('English lesson rendered', (await page.textContent('#lessonBody')).includes('Fetching data from the web'));
 check('progress survives lang switch', (await page.getAttribute('#lessonNav a:first-child', 'class')).includes('done'));
 
 // reload: language + progress persist

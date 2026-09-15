@@ -34,7 +34,10 @@ module Kernel
   end
 end
 
-data = JSON.parse(File.read(File.expand_path("lessons.json", __dir__)))
+# NB: the harness body lives inside a method on purpose. Lesson bindings are
+# created from TOPLEVEL_BINDING, so any top-level local here would be captured
+# and clobbered by lesson code (the HTTP lesson's `data = ...` did exactly
+# that). Method locals are invisible to those bindings.
 
 SOLUTIONS = {
   "hallo" => {
@@ -97,6 +100,10 @@ SOLUTIONS = {
     "de" => [%(install_gem "sinatra"\nrequire "sinatra/base"\nclass MeineSeite < Sinatra::Base\n  get "/" do\n    "<h1>Meine Seite</h1>"\n  end\n  get "/speck" do\n    "CHUNKY BACON!"\n  end\nend\nshow_browser MeineSeite, "/speck")],
     "en" => [%(install_gem "sinatra"\nrequire "sinatra/base"\nclass MySite < Sinatra::Base\n  get "/" do\n    "<h1>My Site</h1>"\n  end\n  get "/bacon" do\n    "CHUNKY BACON!"\n  end\nend\nshow_browser MySite, "/bacon")]
   },
+  "http" => {
+    "de" => [%(require "net/http"\nrequire "json"\ninfo = JSON.parse(Net::HTTP.get(URI("https://rubygems.org/api/v1/gems/sinatra.json")))\ninfo["downloads"])],
+    "en" => [%(require "net/http"\nrequire "json"\ninfo = JSON.parse(Net::HTTP.get(URI("https://rubygems.org/api/v1/gems/sinatra.json")))\ninfo["downloads"])]
+  },
   "roda" => {
     "de" => [%(install_gem "roda"\nrequire "roda"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      "<h1>Kiosk</h1>"\n    end\n    r.get "bestellung", Integer do |anzahl|\n      "\#{anzahl} Streifen Speck, kommt sofort!"\n    end\n  end\nend\nshow_browser Kiosk, "/bestellung/5")],
     "en" => [%(install_gem "roda"\nrequire "roda"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      "<h1>Kiosk</h1>"\n    end\n    r.get "order", Integer do |amount|\n      "\#{amount} strips of bacon, coming right up!"\n    end\n  end\nend\nshow_browser Kiosk, "/order/5")]
@@ -119,9 +126,11 @@ def run_in(bind, code)
   [result, buffer.string, error]
 end
 
-failures = 0
+def run_harness
+  data = JSON.parse(File.read(File.expand_path("lessons.json", __dir__)))
+  failures = 0
 
-data["lessons"].each do |lesson|
+  data["lessons"].each do |lesson|
   %w[de en].each do |lang|
     l = lesson[lang]
     exercise = l["cells"].find { |c| c["t"] == "x" }
@@ -174,5 +183,8 @@ data["lessons"].each do |lesson|
   end
 end
 
-puts failures.zero? ? "ALL CHECKS OK (#{data["lessons"].length} lessons x 2 langs, puts + no-puts variants)" : "#{failures} failures"
-exit(failures.zero? ? 0 : 1)
+  puts failures.zero? ? "ALL CHECKS OK (#{data["lessons"].length} lessons x 2 langs, puts + no-puts variants)" : "#{failures} failures"
+  failures.zero?
+end
+
+exit(run_harness ? 0 : 1)

@@ -42,6 +42,30 @@ BrowserGems.fetch_binary = lambda do |url|
   base64.start_with?("ERROR ") ? nil : base64.unpack1("m0")
 end
 
+# Net::HTTP in the browser: the stdlib version cannot load (no io/wait, no
+# sockets in WASI), so the require hook serves our API-compatible shim and
+# we back it with the browser's own HTTP. CORS limits which hosts a page
+# may call - these are reachable (proxied same-origin or CORS-open):
+require "net/http"
+NET_HTTP_HOSTS = {
+  "www.ruby-lang.org" => "/proxy/ruby-lang",
+  "ruby-lang.org" => "/proxy/ruby-lang",
+  "rubygems.org" => "/rubygems",
+  "api.github.com" => "https://api.github.com"
+}.freeze
+
+Net::HTTP.transport = lambda do |_method, uri|
+  prefix = NET_HTTP_HOSTS[uri.host.to_s.downcase]
+  unless prefix
+    raise SocketError, "#{uri.host} is not reachable from this browser playground " \
+                       "(allowed: #{NET_HTTP_HOSTS.keys.join(', ')}) - on your own " \
+                       "computer net/http can reach any URL"
+  end
+  data = JSON.parse(JS.global.fetchHttpSync(prefix + uri.request_uri.to_s).to_s)
+  raise SocketError, "connection to #{uri.host} failed" if data["status"].to_i.zero?
+  [data["status"].to_i, { "content-type" => data["contentType"].to_s }, data["body"].to_s]
+end
+
 # "Ruby lernen mit Chunky Bacon" - a notebook-style browser Ruby course built
 # on the same ruby.wasm setup as BrowserRubyKoans (koans.idogawa.com).
 # Lessons are sequences of text blocks and runnable code cells; all cells of
