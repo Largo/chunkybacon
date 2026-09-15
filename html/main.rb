@@ -60,6 +60,7 @@ class ChunkyApp
     @lang = stored("chunky_lang", "de")
     @lang = "de" unless @data["ui"].key?(@lang)
     @browser_apps = []
+    @irb_sessions = []
     setup_elements
     render_all
     show_bubble(ui["welcome"], nil)
@@ -173,12 +174,17 @@ class ChunkyApp
       end
     end
 
-    # Enter in a mini-browser URL bar navigates
+    # Enter in a mini-browser URL bar navigates; Enter in an IRB input evals
     $d.getElementById("lessonBody").addEventListener("keydown") do |event|
-      if event.target[:className].to_s.include?("mb-url") && event.key.to_s == "Enter"
+      target_class = event.target[:className].to_s
+      if target_class.include?("mb-url") && event.key.to_s == "Enter"
         event.preventDefault
         widget = event.target.closest(".mini-browser")
         navigate_browser(widget) unless js_null?(widget)
+      elsif target_class.include?("irb-input") && event.key.to_s == "Enter"
+        event.preventDefault
+        term = event.target.closest(".irb-term")
+        irb_submit(term) unless js_null?(term)
       end
     end
 
@@ -392,6 +398,87 @@ class ChunkyApp
     end
   end
 
+  # ---------- IRB terminal widget ----------
+
+  def add_irb
+    @run_irbs << true if @run_irbs
+  end
+
+  def irb_prompt(session)
+    depth = session[:buffer].empty? ? 0 : session[:buffer].lines.length
+    format("irb(main):%03d:%d%s", session[:line], depth, depth.positive? ? "*" : ">")
+  end
+
+  def irb_widget_html(sid)
+    <<~HTML
+      <div class="irb-term" data-sid="#{sid}">
+        <div class="irb-history"></div>
+        <div class="irb-line">
+          <span class="irb-prompt">irb(main):001:0&gt;</span>
+          <input class="irb-input" spellcheck="false" autocomplete="off" title="irb">
+        </div>
+      </div>
+    HTML
+  end
+
+  # incomplete expressions (open def/do/string) get a continuation prompt
+  INCOMPLETE_RE = /unexpected end-of-input|expected an? `?end`?|unterminated string|unterminated regexp|expects an expression after/i
+
+  def irb_submit(term)
+    sid = term.getAttribute("data-sid").to_s.to_i
+    session = @irb_sessions[sid]
+    return unless session
+    input_el = term.querySelector(".irb-input")
+    history = term.querySelector(".irb-history")
+    line = input_el.value.to_s
+    input_el.value = ""
+
+    append = "<div class=\"irb-echo\">#{escape_html(irb_prompt(session))} #{escape_html(line)}</div>"
+
+    if line.strip == "exit" || line.strip == "quit"
+      session[:buffer] = ""
+      append += "<div class=\"irb-note\">#{ui["irbExitNote"]}</div>"
+    else
+      session[:buffer] = session[:buffer].empty? ? line : session[:buffer] + "\n" + line
+      old_stdout = $stdout
+      buffer = StringIO.new
+      $stdout = buffer
+      result = nil
+      error = nil
+      incomplete = false
+      begin
+        result = eval(session[:buffer], session[:bind], "irb")
+      rescue SyntaxError => e
+        if e.message =~ INCOMPLETE_RE
+          incomplete = true
+        else
+          error = e
+        end
+      rescue Exception => e
+        error = e
+      ensure
+        $stdout = old_stdout
+      end
+
+      unless incomplete
+        session[:buffer] = ""
+        session[:line] += 1
+        append += "<pre class=\"irb-stdout\">#{escape_html(buffer.string)}</pre>" unless buffer.string.empty?
+        if error
+          append += "<div class=\"irb-error\">#{escape_html("#{error.class}: #{error.message.lines.first.to_s.strip}")}</div>"
+        else
+          session[:bind].local_variable_set(:_, result)
+          append += "<div class=\"irb-result\">=&gt; #{escape_html(inspect_result(result))}</div>"
+        end
+      end
+    end
+
+    history.innerHTML = history.innerHTML.to_s + append
+    term.querySelector(".irb-prompt").innerText = irb_prompt(session)
+    history[:scrollTop] = history[:scrollHeight]
+    input_el.focus
+  end
+
   # ---------- running cells ----------
 
   def error_line(error)
@@ -421,6 +508,7 @@ class ChunkyApp
     $window.clearCellMarks(idx)
     @run_images = []
     @run_browsers = []
+    @run_irbs = []
 
     error = nil
     result = nil
@@ -438,9 +526,10 @@ class ChunkyApp
 
     out_html = ""
     out_html += "<pre class=\"cell-stdout\">#{escape_html(output)}</pre>" unless output.empty?
+    widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any?
     if error
       out_html += "<div class=\"cell-error\">#{escape_html(error.class)}: #{escape_html(error.message)}</div>"
-    elsif !(result.nil? && !output.empty?)
+    elsif !(result.nil? && (!output.empty? || widgets_present))
       out_html += "<div class=\"cell-result\">=&gt; #{escape_html(inspect_result(result))}</div>"
     end
     @run_images.each do |data_url|
@@ -452,6 +541,11 @@ class ChunkyApp
       @browser_apps << spec[:app]
       new_widgets << bid
       out_html += browser_widget_html(bid, spec[:path])
+    end
+    @run_irbs.each do
+      sid = @irb_sessions.length
+      @irb_sessions << { bind: eval("proc { binding }.call", TOPLEVEL_BINDING), line: 1, buffer: "" }
+      out_html += irb_widget_html(sid)
     end
     out_el = $d.getElementById("cell-out-#{idx}")
     out_el.innerHTML = out_html
@@ -521,6 +615,12 @@ module Kernel
   # app (a Sinatra/Roda class or anything with #call).
   def show_browser(app, path = "/")
     ChunkyApp.instance.add_browser(app, path)
+    nil
+  end
+
+  # Renders an interactive IRB terminal below the cell.
+  def show_irb
+    ChunkyApp.instance.add_irb
     nil
   end
 end

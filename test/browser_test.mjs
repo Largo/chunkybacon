@@ -30,7 +30,7 @@ await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 check('app becomes visible after wasm boot', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('14 lessons in nav', (await page.$$('#lessonNav a')).length === 14);
+check('15 lessons in nav', (await page.$$('#lessonNav a')).length === 15);
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
 check('exercise cell has task label', (await page.getAttribute('.cell.exercise', 'data-label')) === 'Aufgabe');
@@ -97,7 +97,7 @@ check('demo cell renders a PNG image', await page.isVisible('#cell-out-3 img.cel
 await setExercise('install_gem "chunky_png"\nrequire "chunky_png"\nbild = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times do |y|\n  next unless y.even?\n  8.times { |x| bild[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }\nend\nshow_image bild');
 await runExercise();
 check('bacon flag exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
-check('exercise shows the flag image', (await exerciseOut()).length > 0 && await page.isVisible('.cell.exercise .cell-out img.cell-image'));
+check('exercise shows the flag image', await page.isVisible('.cell.exercise .cell-out img.cell-image'));
 
 // lesson 12: HTML parsing — nokogiri fails helpfully, gammo works
 await page.click('#lessonNav a[data-id="html"]');
@@ -120,7 +120,37 @@ await setExercise('install_gem "paint"');
 await runExercise();
 check('remote install via proxy works', (await exerciseOut()).includes('paint '));
 
-// lesson 13: Sinatra — mini browser widget, links, params, exercise
+// IRB lesson: interactive terminal widget
+await page.click('#lessonNav a[data-id="irb"]');
+await page.waitForTimeout(300);
+await page.click('.run-cell[data-idx="1"]');
+await page.waitForTimeout(600);
+check('irb terminal appears', await page.isVisible('.irb-term'));
+const irbType = async (line) => {
+  await page.fill('.irb-input', line);
+  await page.press('.irb-input', 'Enter');
+  await page.waitForTimeout(300);
+};
+await irbType('6 * 7');
+check('irb evaluates 6 * 7', (await page.textContent('.irb-history')).includes('=> 42'));
+await irbType('_ + 1');
+check('irb underscore holds last result', (await page.textContent('.irb-history')).includes('=> 43'));
+await irbType('def verdoppeln(x)');
+check('irb continuation prompt with *', (await page.textContent('.irb-prompt')).includes('*'));
+await irbType('x * 2');
+await irbType('end');
+check('irb multi-line def completes', (await page.textContent('.irb-history')).includes('=> :verdoppeln'));
+await irbType('verdoppeln(21)');
+check('irb calls defined method', (await page.textContent('.irb-history')).includes('=> 42'));
+await irbType('puts "Ha"');
+check('irb shows stdout and nil', (await page.textContent('.irb-history')).includes('Ha') && (await page.textContent('.irb-history')).includes('=> nil'));
+await irbType('exit');
+check('irb exit shows playful note', (await page.textContent('.irb-history')).includes('IRB'));
+await setExercise('[4, 8, 15].map { |x| x * 3 }');
+await runExercise();
+check('irb lesson exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// lesson: Sinatra — mini browser widget, links, params, exercise
 await page.click('#lessonNav a[data-id="sinatra"]');
 await page.waitForTimeout(300);
 await page.click('.run-cell[data-idx="1"]');

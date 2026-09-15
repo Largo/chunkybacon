@@ -239,6 +239,42 @@ article#lessonBody {
 }
 .marker { background: #ffd3d3; border-bottom: 2px solid var(--err); }
 
+/* ---------- IRB terminal widget ---------- */
+.irb-term {
+  margin: 0.6rem 0;
+  background: #241c14;
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  font-family: ui-monospace, "Cascadia Code", Menlo, monospace;
+  font-size: 0.9rem;
+  color: #f2e8da;
+  box-shadow: 0 2px 8px rgba(43, 22, 8, 0.15);
+}
+.irb-history {
+  max-height: 260px;
+  overflow-y: auto;
+  margin-bottom: 0.2rem;
+}
+.irb-echo { color: #f2e8da; white-space: pre-wrap; }
+.irb-echo::first-line { color: #f2e8da; }
+.irb-stdout { margin: 0; color: #cfe3ff; white-space: pre-wrap; font-family: inherit; }
+.irb-result { color: #8ee08f; }
+.irb-error { color: #ff9d94; }
+.irb-note { color: #f5bf4f; font-style: italic; }
+.irb-line { display: flex; align-items: center; gap: 0.45rem; }
+.irb-prompt { color: #f5bf4f; white-space: nowrap; }
+.irb-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-family: inherit;
+  font-size: inherit;
+  caret-color: #8ee08f;
+}
+
 /* ---------- mini browser widget ---------- */
 .mini-browser {
   margin: 0.6rem 0;

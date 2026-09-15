@@ -28,6 +28,10 @@ module Kernel
   def show_browser(_app, _path = "/")
     nil
   end
+
+  def show_irb
+    nil
+  end
 end
 
 data = JSON.parse(File.read(File.expand_path("lessons.json", __dir__)))
@@ -72,6 +76,10 @@ SOLUTIONS = {
   "klassen" => {
     "de" => [%(class Fuchs\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def ruf\n    "Chunky Bacon!"\n  end\nend\nf = Fuchs.new("Kaz")\nf.ruf)],
     "en" => [%(class Fox\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def shout\n    "Chunky Bacon!"\n  end\nend\nf = Fox.new("Kaz")\nf.shout)]
+  },
+  "irb" => {
+    "de" => [%([4, 8, 15].map { |x| x * 3 })],
+    "en" => [%([4, 8, 15].map { |x| x * 3 })]
   },
   "gems" => {
     "de" => [%(install_gem "chunky_png"\nrequire "chunky_png"\nbild = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times do |y|\n  next unless y.even?\n  8.times { |x| bild[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }\nend\nshow_image bild)],
