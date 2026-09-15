@@ -47,6 +47,13 @@ end
 # we back it with the browser's own HTTP. CORS limits which hosts a page
 # may call - these are reachable (proxied same-origin or CORS-open):
 require "net/http"
+unless Net::HTTP.respond_to?(:transport=)
+  # this wasm build managed to load the REAL net/http (io/wait present);
+  # it still cannot work without sockets - overlay the shim
+  Net.send(:remove_const, :HTTP)
+  BrowserGems.loaded.delete("(shims):net/http.rb")
+  BrowserGems.load_feature("net/http")
+end
 NET_HTTP_HOSTS = {
   "www.ruby-lang.org" => "/proxy/ruby-lang",
   "ruby-lang.org" => "/proxy/ruby-lang",
@@ -54,10 +61,19 @@ NET_HTTP_HOSTS = {
   "api.github.com" => "https://api.github.com"
 }.freeze
 
-# Minitest ships builtin with this Ruby (5.20). Its parallel executor
-# spawns threads on Minitest.run, and WASI has no threads - replace it
-# with a serial stub once, at boot, so tests run in lesson cells.
-require "minitest"
+# Minitest: the ruby.wasm 4.0 build does not bundle it, so install the
+# cached pure-Ruby 5.x on demand. Its parallel executor spawns threads on
+# Minitest.run - replace it with a serial stub once, at boot.
+begin
+  require "minitest"
+rescue LoadError
+  BrowserGems.install("minitest")
+  require "minitest"
+end
+unless Gem.respond_to?(:find_files)
+  # minitest's plugin scan needs this; the wasm build ships a stripped Gem
+  def Gem.find_files(*_args) = []
+end
 Minitest.parallel_executor = Object.new.tap do |stub|
   def stub.start; end
   def stub.shutdown; end
@@ -94,7 +110,7 @@ class ChunkyApp
 
   def initialize
     $window = JS.global
-    $d = JS.global.document
+    $d = JS.global[:document]
     @data = JSON.parse(JS.global[:LESSONS_JSON].to_s)
     @lessons = @data["lessons"]
     @lang = stored("chunky_lang", "de")
@@ -102,10 +118,14 @@ class ChunkyApp
     @browser_apps = []
     @irb_sessions = []
     setup_elements
+    # show the app BEFORE building cells: CodeMirror measures its container
+    # at init, and inside a display:none #app it measures zero and renders
+    # blank until something forces a re-measure (the Ctrl+Shift+R bug)
+    $d.getElementById("spinner")[:style][:display] = "none"
+    $d.getElementById("app")[:style][:display] = "block"
     render_all
     show_bubble(ui["welcome"], nil)
-    $d.getElementById("spinner").style.display = "none"
-    $d.getElementById("app").style.display = "block"
+    $window.refreshAllCells
   end
 
   # ---------- helpers ----------
@@ -115,12 +135,12 @@ class ChunkyApp
   end
 
   def stored(key, default = "")
-    value = $window.localStorage.getItem(key).to_s
+    value = $window[:localStorage].getItem(key).to_s
     (value.empty? || value == "null") ? default : value
   end
 
   def store(key, value)
-    $window.localStorage.setItem(key, value)
+    $window[:localStorage].setItem(key, value)
   end
 
   def done_ids
@@ -179,23 +199,23 @@ class ChunkyApp
 
   def setup_elements
     $d.getElementById("reset-code").addEventListener("click") do
-      reset_lesson if $window.confirm(ui["resetConfirm"])
+      reset_lesson if $window.confirm(ui["resetConfirm"]).to_s == "true"
     end
 
     $d.getElementById("langSelect").addEventListener("change") do
-      switch_lang($d.getElementById("langSelect").value.to_s)
+      switch_lang($d.getElementById("langSelect")[:value].to_s)
     end
 
     # one delegated listener for the lesson navigation
     $d.getElementById("lessonNav").addEventListener("click") do |event|
       event.preventDefault
-      id = event.target.getAttribute("data-id").to_s
+      id = event[:target].getAttribute("data-id").to_s
       select_lesson(id) unless id.empty? || id == "null"
     end
 
     # one delegated listener for cell run buttons and mini-browser widgets
     $d.getElementById("lessonBody").addEventListener("click") do |event|
-      target = event.target
+      target = event[:target]
       css_class = target[:className].to_s
       if css_class.include?("run-cell")
         idx = target.getAttribute("data-idx").to_s
@@ -215,7 +235,7 @@ class ChunkyApp
         event.preventDefault
         widget = target.closest(".mini-browser")
         unless js_null?(widget)
-          widget.querySelector(".mb-url").value = target.getAttribute("href").to_s
+          widget.querySelector(".mb-url")[:value] = target.getAttribute("href").to_s
           navigate_browser(widget)
         end
       end
@@ -223,28 +243,28 @@ class ChunkyApp
 
     # Enter in a mini-browser URL bar navigates; Enter in an IRB input evals
     $d.getElementById("lessonBody").addEventListener("keydown") do |event|
-      target_class = event.target[:className].to_s
-      if target_class.include?("mb-url") && event.key.to_s == "Enter"
+      target_class = event[:target][:className].to_s
+      if target_class.include?("mb-url") && event[:key].to_s == "Enter"
         event.preventDefault
-        widget = event.target.closest(".mini-browser")
+        widget = event[:target].closest(".mini-browser")
         navigate_browser(widget) unless js_null?(widget)
-      elsif target_class.include?("irb-input") && event.key.to_s == "Enter"
+      elsif target_class.include?("irb-input") && event[:key].to_s == "Enter"
         event.preventDefault
-        term = event.target.closest(".irb-term")
+        term = event[:target].closest(".irb-term")
         irb_submit(term) unless js_null?(term)
       end
     end
 
     # delegated listener for the "next lesson" link inside the chat bubble
     $d.getElementById("chunkyChat").addEventListener("click") do |event|
-      if event.target[:id].to_s == "nextLessonLink"
+      if event[:target][:id].to_s == "nextLessonLink"
         event.preventDefault
         go_to_next_lesson
       end
     end
 
     $window.addEventListener("keydown") do |event|
-      if (event.altKey && event.key === 'r')
+      if event[:altKey].to_s == "true" && event[:key].to_s == "r"
         event.preventDefault
         idx = exercise_index
         run_cell(idx) if idx
@@ -253,11 +273,11 @@ class ChunkyApp
 
     # gems panel: chip click installs that gem, button installs typed name
     $d.getElementById("gemsList").addEventListener("click") do |event|
-      name = event.target.getAttribute("data-gem").to_s
+      name = event[:target].getAttribute("data-gem").to_s
       panel_install(name) unless name.empty? || name == "null"
     end
     $d.getElementById("gemInstallBtn").addEventListener("click") do
-      name = $d.getElementById("gemNameInput").value.to_s.strip
+      name = $d.getElementById("gemNameInput")[:value].to_s.strip
       panel_install(name) unless name.empty?
     end
   end
@@ -265,23 +285,23 @@ class ChunkyApp
   # ---------- rendering ----------
 
   def render_all
-    $d.documentElement.setAttribute("lang", @lang)
+    $d[:documentElement].setAttribute("lang", @lang)
     $d[:title] = ui["title"]
-    $d.getElementById("siteTitle").innerText = ui["title"]
-    $d.getElementById("siteSubtitle").innerText = ui["subtitle"]
-    $d.getElementById("reset-code").innerText = ui["reset"]
-    $d.getElementById("footerCredit").innerHTML = ui["footerCredit"]
-    $d.getElementById("footerLicense").innerHTML = ui["footerLicense"]
-    $d.getElementById("langSelect").value = @lang
+    $d.getElementById("siteTitle")[:innerText] = ui["title"]
+    $d.getElementById("siteSubtitle")[:innerText] = ui["subtitle"]
+    $d.getElementById("reset-code")[:innerText] = ui["reset"]
+    $d.getElementById("footerCredit")[:innerHTML] = ui["footerCredit"]
+    $d.getElementById("footerLicense")[:innerHTML] = ui["footerLicense"]
+    $d.getElementById("langSelect")[:value] = @lang
     render_gems_panel
     render_nav
     render_lesson
   end
 
   def render_gems_panel
-    $d.getElementById("gemsTitle").innerText = ui["gemsTitle"]
-    $d.getElementById("gemInstallBtn").innerText = ui["gemsInstallBtn"]
-    $d.getElementById("gemsNote").innerHTML = ui["gemsNote"]
+    $d.getElementById("gemsTitle")[:innerText] = ui["gemsTitle"]
+    $d.getElementById("gemInstallBtn")[:innerText] = ui["gemsInstallBtn"]
+    $d.getElementById("gemsNote")[:innerHTML] = ui["gemsNote"]
     names = (BrowserGems.manifest.keys + BrowserGems.installed.keys).uniq
     html = names.map do |name|
       version = BrowserGems.installed[name]
@@ -289,7 +309,7 @@ class ChunkyApp
       label = version ? "#{name} ✓" : "#{name} ⚡"
       "<button type=\"button\" class=\"#{css_class}\" data-gem=\"#{name}\" title=\"#{version || ui["gemsCachedTip"]}\">#{label}</button>"
     end.join
-    $d.getElementById("gemsList").innerHTML = html
+    $d.getElementById("gemsList")[:innerHTML] = html
   end
 
   def render_nav
@@ -302,7 +322,7 @@ class ChunkyApp
       section = lesson["section"] ? "<div class=\"nav-section\">#{lesson["section"][@lang] || lesson["section"]["de"]}</div>" : ""
       "#{section}<a class=\"#{classes.join(' ')}\" data-id=\"#{lesson["id"]}\">#{l10n(lesson)["title"]}</a>"
     end.join
-    $d.getElementById("lessonNav").innerHTML = html
+    $d.getElementById("lessonNav")[:innerHTML] = html
   end
 
   def render_lesson
@@ -322,7 +342,7 @@ class ChunkyApp
         "<div class=\"lessonText\">#{cell["html"]}</div>"
       end
     end.join
-    $d.getElementById("lessonBody").innerHTML = html
+    $d.getElementById("lessonBody")[:innerHTML] = html
     cells.each_with_index do |cell, idx|
       next unless code_cell?(cell)
       $window.initCell(idx)
@@ -333,8 +353,8 @@ class ChunkyApp
   def show_bubble(html, state)
     chat = $d.getElementById("chunkyChat")
     chat[:className] = state.to_s
-    $d.getElementById("chunkyText").innerHTML = html
-    chat.style.display = "flex"
+    $d.getElementById("chunkyText")[:innerHTML] = html
+    chat[:style][:display] = "flex"
   end
 
   # ---------- actions ----------
@@ -363,9 +383,9 @@ class ChunkyApp
     lesson_id = current_lesson["id"]
     cells.each_with_index do |cell, idx|
       next unless code_cell?(cell)
-      $window.localStorage.removeItem(code_key(lesson_id, idx))
+      $window[:localStorage].removeItem(code_key(lesson_id, idx))
       $window.setCellCode(idx, cell["code"])
-      $d.getElementById("cell-out-#{idx}").style.display = "none"
+      $d.getElementById("cell-out-#{idx}")[:style][:display] = "none"
     end
     fresh_binding
     show_bubble(ui["welcome"], nil)
@@ -421,8 +441,8 @@ class ChunkyApp
   end
 
   def refresh_file_widget(widget)
-    widget.querySelector(".fe-list").innerHTML = files_list_html
-    widget.querySelector(".fe-preview").style.display = "none"
+    widget.querySelector(".fe-list")[:innerHTML] = files_list_html
+    widget.querySelector(".fe-preview")[:style][:display] = "none"
   end
 
   def preview_file(widget, path)
@@ -433,7 +453,7 @@ class ChunkyApp
       "?"
     end
     preview[:textContent] = content
-    preview.style.display = "block"
+    preview[:style][:display] = "block"
   end
 
   # ---------- mini browser ----------
@@ -466,25 +486,25 @@ class ChunkyApp
     app = @browser_apps[bid]
     return unless app
     input = widget.querySelector(".mb-url")
-    path = input.value.to_s
+    path = input[:value].to_s
     path = "/" + path unless path.start_with?("/")
-    input.value = path
+    input[:value] = path
     status_el = widget.querySelector(".mb-status")
     view = widget.querySelector(".mb-view")
     begin
       status, headers, body = RackPlayground.get(app, path)
       content_type = (headers["content-type"] || headers["Content-Type"]).to_s
-      status_el.innerText = status.to_s
+      status_el[:innerText] = status.to_s
       status_el[:className] = "mb-status #{status < 400 ? 'ok' : 'err'}"
       if content_type.empty? || content_type.include?("html")
-        view.innerHTML = body
+        view[:innerHTML] = body
       else
-        view.innerHTML = "<pre>#{escape_html(body)}</pre>"
+        view[:innerHTML] = "<pre>#{escape_html(body)}</pre>"
       end
     rescue Exception => e
-      status_el.innerText = "ERR"
+      status_el[:innerText] = "ERR"
       status_el[:className] = "mb-status err"
-      view.innerHTML = "<pre class=\"mb-error\">#{escape_html("#{e.class}: #{e.message}")}</pre>"
+      view[:innerHTML] = "<pre class=\"mb-error\">#{escape_html("#{e.class}: #{e.message}")}</pre>"
     end
   end
 
@@ -520,8 +540,8 @@ class ChunkyApp
     return unless session
     input_el = term.querySelector(".irb-input")
     history = term.querySelector(".irb-history")
-    line = input_el.value.to_s
-    input_el.value = ""
+    line = input_el[:value].to_s
+    input_el[:value] = ""
 
     append = "<div class=\"irb-echo\">#{escape_html(irb_prompt(session))} #{escape_html(line)}</div>"
 
@@ -563,8 +583,8 @@ class ChunkyApp
       end
     end
 
-    history.innerHTML = history.innerHTML.to_s + append
-    term.querySelector(".irb-prompt").innerText = irb_prompt(session)
+    history[:innerHTML] = history[:innerHTML].to_s + append
+    term.querySelector(".irb-prompt")[:innerText] = irb_prompt(session)
     history[:scrollTop] = history[:scrollHeight]
     input_el.focus
   end
@@ -640,8 +660,8 @@ class ChunkyApp
     end
     @run_files.each { out_html += files_widget_html }
     out_el = $d.getElementById("cell-out-#{idx}")
-    out_el.innerHTML = out_html
-    out_el.style.display = "block"
+    out_el[:innerHTML] = out_html
+    out_el[:style][:display] = "block"
     new_widgets.each do |bid|
       widget = out_el.querySelector(".mini-browser[data-bid='#{bid}']")
       navigate_browser(widget) unless js_null?(widget)

@@ -8,11 +8,11 @@ require 'net/http'
 require 'rubygems/package'
 require 'fileutils'
 
-GEMS = %w[chunky_png gammo racc sinatra roda]
+GEMS = %w[chunky_png gammo racc sinatra roda minitest csv benchmark]
 
 # gems pinned below their latest version, when the latest pulls in native
 # dependencies (e.g. minitest 6 depends on prism, a C extension)
-PINNED = {}
+PINNED = { "minitest" => "5.27.0" }
 
 # gems whose C extension is optional (pure-Ruby fallback in lib/)
 ALLOW_EXTENSIONS = %w[racc]

@@ -237,6 +237,18 @@ module BrowserGems
       @autoload_map ||= {}
     end
 
+    # If a required feature belongs to a cached-but-uninstalled gem,
+    # install it transparently (used for stdlib that became bundled gems -
+    # csv, benchmark - which real Ruby installs ship out of the box).
+    def auto_install_feature(feature)
+      name = feature.split("/").first
+      return nil if installed.key?(name) || !manifest.key?(name)
+      install(name)
+      load_feature(feature)
+    rescue StandardError
+      nil
+    end
+
     # Loads a feature ("chunky_png" or "gammo/css_selector") from an
     # installed gem. Returns true when found, nil otherwise.
     def load_feature(path)
@@ -266,7 +278,8 @@ module Kernel
   def require(path)
     bg_original_require(path)
   rescue LoadError => e
-    BrowserGems.load_feature(path.to_s) or raise e
+    feature = path.to_s
+    BrowserGems.load_feature(feature) or BrowserGems.auto_install_feature(feature) or raise e
   end
 end
 

@@ -20,7 +20,7 @@
     <div class="spinner" id="spinner">
       <img class="spinner-image" src="assets/chunky.svg" alt="Chunky Bacon Fuchs">
       <h1 id="spinnerTitle">Ruby lernen mit Chunky Bacon</h1>
-      <p id="spinnerText">Ruby wird geladen … / Loading Ruby … (einmalig / one-time, ~35&nbsp;MB)</p>
+      <p id="spinnerText">Ruby wird geladen … / Loading Ruby … (einmalig / one-time, ~32&nbsp;MB)</p>
     </div>
 
     <div id="app" style="display:none">
@@ -144,6 +144,9 @@
     };
     window.setCellCode = function (idx, code) {
       if (window.cellEditors[idx]) window.cellEditors[idx].setValue(code);
+    };
+    window.refreshAllCells = function () {
+      Object.values(window.cellEditors).forEach(function (ed) { ed.refresh(); });
     };
     window.clearCellMarks = function (idx) {
       var ed = window.cellEditors[idx];
