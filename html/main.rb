@@ -2,9 +2,44 @@ app_path = __FILE__
 $0 = File::basename(app_path, ".rb") if app_path
 
 require 'js'
+require 'js/require_remote'
 require 'json'
 require 'stringio'
 require 'singleton'
+
+# require_relative bridge (pattern from BrowserRubyKoans): builtin files
+# first, gem-space files for code loaded by BrowserGems, remote URL fetch
+# for our own source files (browser_gems.rb).
+module Kernel
+  alias original_require_relative require_relative
+  def require_relative(path)
+    location = caller_locations(1, 1).first
+    caller_path = (location.absolute_path || location.path).to_s
+    if caller_path.start_with?("/browser_gems/")
+      BrowserGems.load_feature(BrowserGems.relative_key(caller_path, path)) or
+        raise LoadError, "cannot load such file -- #{path}"
+    else
+      begin
+        original_require_relative(File.absolute_path(path, File.dirname(caller_path)))
+      rescue LoadError
+        JS::RequireRemote.instance.load(path)
+      end
+    end
+  end
+end
+
+require_relative "browser_gems"
+
+BrowserGems.cache_base = "gems/cache"
+BrowserGems.proxy_base = "/rubygems"
+BrowserGems.fetch_text = lambda do |url|
+  text = JS.global.fetchTextSync(url).to_s
+  text.start_with?("ERROR ") ? nil : text
+end
+BrowserGems.fetch_binary = lambda do |url|
+  base64 = JS.global.fetchBinaryBase64(url).to_s
+  base64.start_with?("ERROR ") ? nil : base64.unpack1("m0")
+end
 
 # "Ruby lernen mit Chunky Bacon" - a notebook-style browser Ruby course built
 # on the same ruby.wasm setup as BrowserRubyKoans (koans.idogawa.com).
@@ -138,6 +173,16 @@ class ChunkyApp
         run_cell(idx) if idx
       end
     end
+
+    # gems panel: chip click installs that gem, button installs typed name
+    $d.getElementById("gemsList").addEventListener("click") do |event|
+      name = event.target.getAttribute("data-gem").to_s
+      panel_install(name) unless name.empty? || name == "null"
+    end
+    $d.getElementById("gemInstallBtn").addEventListener("click") do
+      name = $d.getElementById("gemNameInput").value.to_s.strip
+      panel_install(name) unless name.empty?
+    end
   end
 
   # ---------- rendering ----------
@@ -151,8 +196,23 @@ class ChunkyApp
     $d.getElementById("footerCredit").innerHTML = ui["footerCredit"]
     $d.getElementById("footerLicense").innerHTML = ui["footerLicense"]
     $d.getElementById("langSelect").value = @lang
+    render_gems_panel
     render_nav
     render_lesson
+  end
+
+  def render_gems_panel
+    $d.getElementById("gemsTitle").innerText = ui["gemsTitle"]
+    $d.getElementById("gemInstallBtn").innerText = ui["gemsInstallBtn"]
+    $d.getElementById("gemsNote").innerHTML = ui["gemsNote"]
+    names = (BrowserGems.manifest.keys + BrowserGems.installed.keys).uniq
+    html = names.map do |name|
+      version = BrowserGems.installed[name]
+      css_class = version ? "gem-chip installed" : "gem-chip"
+      label = version ? "#{name} ✓" : "#{name} ⚡"
+      "<button type=\"button\" class=\"#{css_class}\" data-gem=\"#{name}\" title=\"#{version || ui["gemsCachedTip"]}\">#{label}</button>"
+    end.join
+    $d.getElementById("gemsList").innerHTML = html
   end
 
   def render_nav
@@ -233,6 +293,31 @@ class ChunkyApp
     show_bubble(ui["welcome"], nil)
   end
 
+  # ---------- gems ----------
+
+  def install_gem_ui(name)
+    version = BrowserGems.install(name)
+    render_gems_panel
+    "#{name} #{version}"
+  rescue BrowserGems::NativeGemError
+    raise BrowserGems::NativeGemError, format(ui["nativeGem"], name)
+  rescue BrowserGems::NotFoundError
+    raise BrowserGems::NotFoundError, format(ui["gemNotFound"], name)
+  end
+
+  def panel_install(name)
+    result = install_gem_ui(name)
+    show_bubble(format(ui["gemInstalled"], result), "pass")
+  rescue StandardError => e
+    show_bubble(escape_html(e.message), "fail")
+  end
+
+  def add_image(data_url)
+    @run_images << data_url if @run_images
+  end
+
+  # ---------- running cells ----------
+
   def error_line(error)
     source = error.is_a?(SyntaxError) ? error.message.to_s : (error.backtrace || []).join("\n")
     match = source[/#{EVAL_FILE}:(\d+)/, 1]
@@ -258,6 +343,7 @@ class ChunkyApp
     code = $window.getCellCode(idx).to_s
     store(code_key(current_lesson["id"], idx), code)
     $window.clearCellMarks(idx)
+    @run_images = []
 
     error = nil
     result = nil
@@ -280,6 +366,9 @@ class ChunkyApp
     elsif !(result.nil? && !output.empty?)
       out_html += "<div class=\"cell-result\">=&gt; #{escape_html(inspect_result(result))}</div>"
     end
+    @run_images.each do |data_url|
+      out_html += "<img class=\"cell-image\" alt=\"\" src=\"#{data_url}\">"
+    end
     out_el = $d.getElementById("cell-out-#{idx}")
     out_el.innerHTML = out_html
     out_el.style.display = "block"
@@ -298,6 +387,7 @@ class ChunkyApp
     @bind.local_variable_set(:output, output)
     @bind.local_variable_set(:result, result)
     @bind.local_variable_set(:code, code)
+    @bind.local_variable_set(:images, (@run_images || []).dup)
     passed = begin
       !!eval(cell["check"], @bind, "check.rb")
     rescue Exception
@@ -320,6 +410,23 @@ class ChunkyApp
     else
       show_bubble("#{ui["failIntro"]}<br>💡 #{cell["hint"]}", "fail")
     end
+  end
+end
+
+# helpers available inside notebook cells
+module Kernel
+  def install_gem(name)
+    ChunkyApp.instance.install_gem_ui(name)
+  end
+
+  def show_image(image)
+    data_url = if image.respond_to?(:to_data_url)
+                 image.to_data_url
+               else
+                 "data:image/png;base64," + [image.to_s].pack("m0")
+               end
+    ChunkyApp.instance.add_image(data_url)
+    nil
   end
 end
 

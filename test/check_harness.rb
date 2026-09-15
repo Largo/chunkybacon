@@ -4,6 +4,26 @@
 # (puts-style and no-puts-style) DOES pass. Mirrors main.rb's eval mechanics.
 require 'json'
 require 'stringio'
+require_relative "../html/browser_gems"
+
+CACHE = File.expand_path("../html/gems/cache", __dir__)
+BrowserGems.cache_base = "cache"
+BrowserGems.proxy_base = "remote"
+BrowserGems.fetch_binary = ->(url) { (p = url.sub("cache/", "#{CACHE}/")) && File.exist?(p) ? File.binread(p) : nil }
+BrowserGems.fetch_text = ->(url) { (p = url.sub("cache/", "#{CACHE}/")) && File.exist?(p) ? File.read(p) : nil }
+
+# cell helpers as provided by main.rb in the browser
+$shown_images = []
+module Kernel
+  def install_gem(name)
+    "#{name} #{BrowserGems.install(name)}"
+  end
+
+  def show_image(image)
+    $shown_images << (image.respond_to?(:to_data_url) ? image.to_data_url : image.to_s)
+    nil
+  end
+end
 
 data = JSON.parse(File.read(File.expand_path("lessons.json", __dir__)))
 
@@ -47,6 +67,14 @@ SOLUTIONS = {
   "klassen" => {
     "de" => [%(class Fuchs\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def ruf\n    "Chunky Bacon!"\n  end\nend\nf = Fuchs.new("Kaz")\nf.ruf)],
     "en" => [%(class Fox\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def shout\n    "Chunky Bacon!"\n  end\nend\nf = Fox.new("Kaz")\nf.shout)]
+  },
+  "gems" => {
+    "de" => [%(install_gem "chunky_png"\nrequire "chunky_png"\nbild = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times do |y|\n  next unless y.even?\n  8.times { |x| bild[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }\nend\nshow_image bild)],
+    "en" => [%(install_gem "chunky_png"\nrequire "chunky_png"\nimage = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times do |y|\n  next unless y.even?\n  8.times { |x| image[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }\nend\nshow_image image)]
+  },
+  "html" => {
+    "de" => [%(links = doc.css("a").map { |link| link.attributes.to_h["href"] }\nlinks)],
+    "en" => [%(links = doc.css("a").map { |link| link.attributes.to_h["href"] }\nlinks)]
   }
 }
 
@@ -82,6 +110,8 @@ data["lessons"].each do |lesson|
       demo_failed = false
       demos.each do |demo|
         _, _, err = run_in(bind, demo["code"])
+        # the nokogiri demo cell is SUPPOSED to raise NativeGemError
+        next if err.is_a?(BrowserGems::NativeGemError)
         if err
           puts "FAIL #{lesson["id"]}/#{lang}: demo cell raised #{err.class}: #{err.message}"
           failures += 1
@@ -90,6 +120,7 @@ data["lessons"].each do |lesson|
       end
       next if demo_failed
 
+      $shown_images = []
       result, output, error = run_in(bind, candidate)
       if error && label != "starter"
         puts "FAIL #{lesson["id"]}/#{lang} (#{label}): raised #{error.class}: #{error.message}"
@@ -100,6 +131,7 @@ data["lessons"].each do |lesson|
       bind.local_variable_set(:output, output)
       bind.local_variable_set(:result, result)
       bind.local_variable_set(:code, candidate)
+      bind.local_variable_set(:images, $shown_images.dup)
       passed = begin
         !!eval(exercise["check"], bind, "check.rb")
       rescue Exception

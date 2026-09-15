@@ -29,6 +29,13 @@ window.LESSONS_JSON = JSON.stringify({
       nextLesson: "→ Weiter zur nächsten Lektion",
       progress: "Lektion %d von %d",
       allDone: "🎉 Du hast alle Lektionen geschafft! CHUNKY BACON! Als nächsten Schritt empfehle ich dir die <a href='https://koans.idogawa.com'>Ruby Koans im Browser</a>.",
+      gemsTitle: "💎 Gems",
+      gemsInstallBtn: "Installieren",
+      gemsCachedTip: "lokal zwischengespeichert – installiert sofort",
+      gemsNote: "Pure-Ruby-Gems von rubygems.org, direkt im Browser installiert. ⚡ = lokal zwischengespeichert. Gems mit C-Code (z.&nbsp;B. nokogiri) funktionieren hier nicht.",
+      gemInstalled: "💎 %s installiert! Jetzt einfach mit <code>require</code> laden.",
+      nativeGem: "%s enthält C-Code (eine „native extension“) und kann nicht zur Laufzeit im Browser installiert werden. Solche Gems müssen beim Bauen der ruby.wasm-Datei fest einkompiliert werden – so macht es z. B. Evil Martians' TutorialKit.rb.",
+      gemNotFound: "Gem „%s“ wurde nicht gefunden (oder der Download schlug fehl).",
       footerCredit: "Ein Angebot von <a href='https://idogawa.com'>Andi Idogawa</a>. Läuft komplett in deinem Browser dank <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Schon fertig? Weiter geht's mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
       footerLicense: "„Chunky Bacon“ stammt aus why's (poignant) guide to Ruby von why the lucky stiff – in liebevoller Erinnerung. Kursinhalte: CC BY-NC-SA 4.0."
     },
@@ -53,6 +60,13 @@ window.LESSONS_JSON = JSON.stringify({
       nextLesson: "→ On to the next lesson",
       progress: "Lesson %d of %d",
       allDone: "🎉 You finished all lessons! CHUNKY BACON! As a next step, try the <a href='https://koans.idogawa.com'>Ruby Koans in the browser</a>.",
+      gemsTitle: "💎 Gems",
+      gemsInstallBtn: "Install",
+      gemsCachedTip: "cached locally – installs instantly",
+      gemsNote: "Pure-Ruby gems from rubygems.org, installed right in your browser. ⚡ = cached locally. Gems with C code (e.g. nokogiri) do not work here.",
+      gemInstalled: "💎 %s installed! Now just load it with <code>require</code>.",
+      nativeGem: "%s contains C code (a “native extension”) and cannot be installed at runtime in the browser. Such gems must be compiled into the ruby.wasm binary itself – that is how Evil Martians' TutorialKit.rb does it.",
+      gemNotFound: "Gem “%s” was not found (or the download failed).",
       footerCredit: "A service by <a href='https://idogawa.com'>Andi Idogawa</a>. Runs entirely in your browser thanks to <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Done here? Continue with the <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
       footerLicense: "“Chunky Bacon” comes from why's (poignant) guide to Ruby by why the lucky stiff – fondly remembered. Course content: CC BY-NC-SA 4.0."
     }
@@ -333,6 +347,68 @@ window.LESSONS_JSON = JSON.stringify({
           { t: "x", code: "# class Fox\n#   ...\n# end\n",
             check: "f = Fox.new(\"Kaz\"); f.name == \"Kaz\" && f.shout == \"Chunky Bacon!\" && code.include?(\"class Fox\")",
             hint: "Copy the cat example and adapt it: class <code>Fox</code>, and <code>shout</code> returns exactly <code>\"Chunky Bacon!\"</code>." }
+        ]
+      }
+    },
+    {
+      id: "gems",
+      de: {
+        title: "11. Gems installieren",
+        cells: [
+          { t: "h", html: "<h2>Gems – Rubys Bausteine</h2><p>Eine <strong>Gem</strong> ist ein fertiges Ruby-Paket, das du in dein Programm laden kannst. Die zentrale Sammelstelle ist <a href='https://rubygems.org' target='_blank'>rubygems.org</a> – über 180&nbsp;000 Gems für alles Mögliche.</p><p>Auf dieser Seite kannst du <em>pure-Ruby</em>-Gems direkt im Browser installieren – mit <code>install_gem</code> (oder über das 💎-Panel links). Häufig gebrauchte Gems sind lokal zwischengespeichert (⚡) und installieren blitzschnell:</p>" },
+          { t: "c", code: "install_gem \"chunky_png\"" },
+          { t: "h", html: "<p><code>chunky_png</code> – der Name ist natürlich kein Zufall, liebe Füchse! 🥓 – erstellt PNG-Bilder in purem Ruby. Nach der Installation lädst du es ganz normal mit <code>require</code>. Und mit <code>show_image</code> zeigst du ein Bild direkt unter der Zelle an:</p>" },
+          { t: "c", code: "require \"chunky_png\"\n\nbild = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times { |i| bild[i, i] = ChunkyPNG::Color.rgb(232, 114, 42) }\nshow_image bild" },
+          { t: "h", html: "<p>Jeder Pixel ist ansprechbar: <code>bild[x, y] = farbe</code>. Farben baust du mit <code>ChunkyPNG::Color.rgb(rot, gruen, blau)</code>.</p><div class='task'><strong>Aufgabe:</strong> Male die Speck-Fahne! Erzeuge ein Bild <code>bild</code> (mindestens 8×8) und färbe die geraden Zeilen speckrot – <code>ChunkyPNG::Color.rgb(193, 74, 46)</code> –, die ungeraden lässt du weiss. Zeig dein Werk mit <code>show_image bild</code>.</div>" },
+          { t: "x", code: "install_gem \"chunky_png\"\nrequire \"chunky_png\"\n\n# bild = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n# ...\n# show_image bild\n",
+            check: "defined?(ChunkyPNG) && bild.is_a?(ChunkyPNG::Image) && bild.width >= 8 && bild.pixels.include?(ChunkyPNG::Color.rgb(193, 74, 46)) && images.length >= 1",
+            hint: "Zum Beispiel: <code>8.times do |y|</code> … wenn <code>y.even?</code>, dann <code>8.times { |x| bild[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }</code> … <code>end</code> – und am Ende <code>show_image bild</code>." }
+        ]
+      },
+      en: {
+        title: "11. Installing gems",
+        cells: [
+          { t: "h", html: "<h2>Gems – Ruby's building blocks</h2><p>A <strong>gem</strong> is a ready-made Ruby package you can load into your program. The central collection is <a href='https://rubygems.org' target='_blank'>rubygems.org</a> – over 180,000 gems for everything imaginable.</p><p>On this site you can install <em>pure-Ruby</em> gems right in your browser – with <code>install_gem</code> (or via the 💎 panel on the left). Frequently used gems are cached locally (⚡) and install instantly:</p>" },
+          { t: "c", code: "install_gem \"chunky_png\"" },
+          { t: "h", html: "<p><code>chunky_png</code> – the name is no coincidence, dear foxes! 🥓 – creates PNG images in pure Ruby. After installing you load it with a normal <code>require</code>. And <code>show_image</code> displays a picture right below the cell:</p>" },
+          { t: "c", code: "require \"chunky_png\"\n\nimage = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times { |i| image[i, i] = ChunkyPNG::Color.rgb(232, 114, 42) }\nshow_image image" },
+          { t: "h", html: "<p>Every pixel is addressable: <code>image[x, y] = color</code>. You build colors with <code>ChunkyPNG::Color.rgb(red, green, blue)</code>.</p><div class='task'><strong>Task:</strong> Paint the bacon flag! Create an image <code>image</code> (at least 8×8) and color the even rows bacon-red – <code>ChunkyPNG::Color.rgb(193, 74, 46)</code> – leaving the odd rows white. Show your work with <code>show_image image</code>.</div>" },
+          { t: "x", code: "install_gem \"chunky_png\"\nrequire \"chunky_png\"\n\n# image = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n# ...\n# show_image image\n",
+            check: "defined?(ChunkyPNG) && image.is_a?(ChunkyPNG::Image) && image.width >= 8 && image.pixels.include?(ChunkyPNG::Color.rgb(193, 74, 46)) && images.length >= 1",
+            hint: "For example: <code>8.times do |y|</code> … if <code>y.even?</code>, then <code>8.times { |x| image[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }</code> … <code>end</code> – and finally <code>show_image image</code>." }
+        ]
+      }
+    },
+    {
+      id: "html",
+      de: {
+        title: "12. HTML parsen",
+        cells: [
+          { t: "h", html: "<h2>HTML parsen – wie die Profis</h2><p>Ruby wird oft benutzt, um Webseiten auszulesen (<em>Scraping</em>). Das berühmteste Werkzeug dafür heisst <strong>Nokogiri</strong>:</p><pre><code>require \"nokogiri\"\ndoc = Nokogiri::HTML(html)\ndoc.css(\"a\").each { |link| puts link.text }</code></pre><p>Nokogiri ist aber zu grossen Teilen in <strong>C</strong> geschrieben. Hier im Browser läuft Ruby als WebAssembly, und dort lassen sich zur Laufzeit nur pure-Ruby-Gems installieren – C-Gems müssten fest in die wasm-Datei einkompiliert werden. Probier ruhig aus, was passiert:</p>" },
+          { t: "c", code: "install_gem \"nokogiri\"" },
+          { t: "h", html: "<p>Zum Glück gibt es <code>gammo</code>, einen HTML5-Parser in purem Ruby. Die Ideen sind genau dieselben wie bei Nokogiri: erst <em>parsen</em> (aus Text wird ein Baum), dann mit <strong>CSS-Selektoren</strong> suchen:</p>" },
+          { t: "c", code: "install_gem \"gammo\"\nrequire \"gammo\"\nrequire \"gammo/css_selector\"\n\nhtml = \"<html><body>\n  <h1>Speisekarte</h1>\n  <ul>\n    <li><a href='/speck'>Speck</a></li>\n    <li><a href='/ei'>Ei</a></li>\n    <li><a href='/kaffee'>Kaffee</a></li>\n  </ul>\n</body></html>\"\n\ndoc = Gammo.new(html).parse\ndoc.css(\"li\").length" },
+          { t: "h", html: "<p><code>doc.css(\"li\")</code> findet alle <code>&lt;li&gt;</code>-Elemente – wie in einem Stylesheet. Jeder Treffer ist ein Knoten mit <code>inner_text</code> und <code>attributes</code>:</p>" },
+          { t: "c", code: "doc.css(\"a\").map { |link| link.inner_text }" },
+          { t: "h", html: "<div class='task'><strong>Aufgabe:</strong> Sammle alle <strong>Link-Adressen</strong> aus dem Dokument: Baue mit <code>map</code> ein Array <code>links</code> aller <code>href</code>-Werte. An ein Attribut kommst du mit <code>link.attributes.to_h[\"href\"]</code>. Ergebnis: <code>[\"/speck\", \"/ei\", \"/kaffee\"]</code>. (Führe zuerst die Zellen oben aus, damit <code>doc</code> existiert.)</div>" },
+          { t: "x", code: "# links = doc.css(\"a\").map { |link| ... }\n",
+            check: "links == [\"/speck\", \"/ei\", \"/kaffee\"]",
+            hint: "<code>links = doc.css(\"a\").map { |link| link.attributes.to_h[\"href\"] }</code> – und vorher die Demo-Zellen ausführen, damit <code>doc</code> existiert." }
+        ]
+      },
+      en: {
+        title: "12. Parsing HTML",
+        cells: [
+          { t: "h", html: "<h2>Parsing HTML – like the pros</h2><p>Ruby is often used to read websites (<em>scraping</em>). The most famous tool for that is <strong>Nokogiri</strong>:</p><pre><code>require \"nokogiri\"\ndoc = Nokogiri::HTML(html)\ndoc.css(\"a\").each { |link| puts link.text }</code></pre><p>But Nokogiri is largely written in <strong>C</strong>. In this browser Ruby runs as WebAssembly, where only pure-Ruby gems can be installed at runtime – C gems would have to be compiled into the wasm binary itself. Go ahead and see what happens:</p>" },
+          { t: "c", code: "install_gem \"nokogiri\"" },
+          { t: "h", html: "<p>Luckily there is <code>gammo</code>, an HTML5 parser in pure Ruby. The ideas are exactly the same as Nokogiri's: first <em>parse</em> (text becomes a tree), then search with <strong>CSS selectors</strong>:</p>" },
+          { t: "c", code: "install_gem \"gammo\"\nrequire \"gammo\"\nrequire \"gammo/css_selector\"\n\nhtml = \"<html><body>\n  <h1>Menu</h1>\n  <ul>\n    <li><a href='/bacon'>Bacon</a></li>\n    <li><a href='/egg'>Egg</a></li>\n    <li><a href='/coffee'>Coffee</a></li>\n  </ul>\n</body></html>\"\n\ndoc = Gammo.new(html).parse\ndoc.css(\"li\").length" },
+          { t: "h", html: "<p><code>doc.css(\"li\")</code> finds all <code>&lt;li&gt;</code> elements – just like in a stylesheet. Every match is a node with <code>inner_text</code> and <code>attributes</code>:</p>" },
+          { t: "c", code: "doc.css(\"a\").map { |link| link.inner_text }" },
+          { t: "h", html: "<div class='task'><strong>Task:</strong> Collect all <strong>link addresses</strong> from the document: use <code>map</code> to build an array <code>links</code> of all <code>href</code> values. You reach an attribute via <code>link.attributes.to_h[\"href\"]</code>. Expected result: <code>[\"/bacon\", \"/egg\", \"/coffee\"]</code>. (Run the cells above first so <code>doc</code> exists.)</div>" },
+          { t: "x", code: "# links = doc.css(\"a\").map { |link| ... }\n",
+            check: "links == [\"/bacon\", \"/egg\", \"/coffee\"]",
+            hint: "<code>links = doc.css(\"a\").map { |link| link.attributes.to_h[\"href\"] }</code> – and run the demo cells first so <code>doc</code> exists." }
         ]
       }
     }

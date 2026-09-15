@@ -30,7 +30,8 @@ await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 check('app becomes visible after wasm boot', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('10 lessons in nav', (await page.$$('#lessonNav a')).length === 10);
+check('12 lessons in nav', (await page.$$('#lessonNav a')).length === 12);
+check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
 check('exercise cell has task label', (await page.getAttribute('.cell.exercise', 'data-label')) === 'Aufgabe');
 
@@ -83,11 +84,53 @@ const cell1 = await page.evaluate(() => window.cellEditors[1].getValue());
 check('reset restores demo cell code', cell1.includes('essen = "Speck"'));
 check('reset hides cell output', !(await page.isVisible('#cell-out-3')));
 
+// lesson 11: gems — install chunky_png from local cache, draw an image
+await page.click('#lessonNav a[data-id="gems"]');
+await page.waitForTimeout(300);
+await page.click('.run-cell[data-idx="1"]');
+await page.waitForTimeout(1500);
+check('chunky_png installs from cache', (await page.textContent('#cell-out-1')).includes('chunky_png 1.4.0'));
+check('gems panel marks chunky_png installed', (await page.textContent('#gemsList')).includes('chunky_png ✓'));
+await page.click('.run-cell[data-idx="3"]');
+await page.waitForTimeout(1000);
+check('demo cell renders a PNG image', await page.isVisible('#cell-out-3 img.cell-image'));
+await setExercise('install_gem "chunky_png"\nrequire "chunky_png"\nbild = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times do |y|\n  next unless y.even?\n  8.times { |x| bild[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }\nend\nshow_image bild');
+await runExercise();
+check('bacon flag exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+check('exercise shows the flag image', (await exerciseOut()).length > 0 && await page.isVisible('.cell.exercise .cell-out img.cell-image'));
+
+// lesson 12: HTML parsing — nokogiri fails helpfully, gammo works
+await page.click('#lessonNav a[data-id="html"]');
+await page.waitForTimeout(300);
+await page.click('.run-cell[data-idx="1"]');
+await page.waitForTimeout(2000);
+check('nokogiri explains native extension limit', (await page.textContent('#cell-out-1')).includes('native extension'));
+await page.click('.run-cell[data-idx="3"]');
+await page.waitForTimeout(2000);
+check('gammo parses: 3 li elements', (await page.textContent('#cell-out-3')).includes('=> 3'));
+await page.click('.run-cell[data-idx="5"]');
+await page.waitForTimeout(800);
+check('gammo css text extraction', (await page.textContent('#cell-out-5')).includes('Speck'));
+await setExercise('links = doc.css("a").map { |link| link.attributes.to_h["href"] }\nlinks');
+await runExercise();
+check('link extraction exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// remote gem install through the nginx rubygems proxy
+await setExercise('install_gem "paint"');
+await runExercise();
+check('remote install via proxy works', (await exerciseOut()).includes('paint '));
+
+// gems panel input installs (paint is now already installed → instant)
+await page.fill('#gemNameInput', 'paint');
+await page.click('#gemInstallBtn');
+await page.waitForTimeout(500);
+check('panel install shows bubble', (await page.textContent('#chunkyText')).includes('paint'));
+
 // switch language to English
 await page.selectOption('#langSelect', 'en');
 await page.waitForTimeout(300);
 check('English title', (await page.textContent('#siteTitle')).includes('Learn Ruby with Chunky Bacon'));
-check('English cells rendered', (await page.evaluate(() => window.cellEditors[1].getValue())).includes('food = "bacon"'));
+check('English lesson rendered', (await page.textContent('#lessonBody')).includes('Parsing HTML'));
 check('progress survives lang switch', (await page.getAttribute('#lessonNav a:first-child', 'class')).includes('done'));
 
 // reload: language + progress persist

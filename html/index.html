@@ -37,7 +37,18 @@
       </header>
 
       <div class="layout">
-        <nav id="lessonNav"></nav>
+        <div class="sidebar">
+          <nav id="lessonNav"></nav>
+          <div id="gemsPanel">
+            <h3 id="gemsTitle"></h3>
+            <div id="gemsList"></div>
+            <div class="gemsInstallRow">
+              <input id="gemNameInput" type="text" placeholder="gem">
+              <button id="gemInstallBtn" type="button"></button>
+            </div>
+            <p id="gemsNote"></p>
+          </div>
+        </div>
 
         <main>
           <article id="lessonBody"></article>
@@ -60,6 +71,38 @@
     </div>
 
   <script>
+    // Synchronous fetch helpers for the in-browser gem installer (main.rb).
+    // Sync XHR blocks the main thread, which is fine here: installs are
+    // user-triggered and cached gems resolve in milliseconds.
+    window.fetchTextSync = function (url) {
+      try {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, false);
+        xhr.send(null);
+        if (xhr.status !== 200) return "ERROR " + xhr.status;
+        return xhr.responseText;
+      } catch (e) { return "ERROR " + e; }
+    };
+    window.fetchBinaryBase64 = function (url) {
+      try {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, false);
+        // classic binary-over-sync-XHR trick: raw bytes survive in the
+        // low byte of each char with this charset override
+        xhr.overrideMimeType("text/plain; charset=x-user-defined");
+        xhr.send(null);
+        if (xhr.status !== 200) return "ERROR " + xhr.status;
+        var text = xhr.responseText;
+        var bytes = new Uint8Array(text.length);
+        for (var i = 0; i < text.length; i++) bytes[i] = text.charCodeAt(i) & 0xff;
+        var chunks = [];
+        for (var j = 0; j < bytes.length; j += 0x8000) {
+          chunks.push(String.fromCharCode.apply(null, bytes.subarray(j, j + 0x8000)));
+        }
+        return btoa(chunks.join(""));
+      } catch (e) { return "ERROR " + e; }
+    };
+
     // Per-cell CodeMirror helpers called from Ruby (main.rb)
     window.cellEditors = {};
     window.initCell = function (idx) {

@@ -1,0 +1,19 @@
+{
+  "chunky_png": {
+    "version": "1.4.0",
+    "file": "chunky_png-1.4.0.gem",
+    "deps": []
+  },
+  "gammo": {
+    "version": "0.3.0",
+    "file": "gammo-0.3.0.gem",
+    "deps": [
+      "racc"
+    ]
+  },
+  "racc": {
+    "version": "1.8.1",
+    "file": "racc-1.8.1.gem",
+    "deps": []
+  }
+}
