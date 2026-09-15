@@ -5,6 +5,7 @@
 require 'json'
 require 'stringio'
 require_relative "../html/browser_gems"
+require_relative "../html/rack_playground"
 
 CACHE = File.expand_path("../html/gems/cache", __dir__)
 BrowserGems.cache_base = "cache"
@@ -21,6 +22,10 @@ module Kernel
 
   def show_image(image)
     $shown_images << (image.respond_to?(:to_data_url) ? image.to_data_url : image.to_s)
+    nil
+  end
+
+  def show_browser(_app, _path = "/")
     nil
   end
 end
@@ -75,6 +80,14 @@ SOLUTIONS = {
   "html" => {
     "de" => [%(links = doc.css("a").map { |link| link.attributes.to_h["href"] }\nlinks)],
     "en" => [%(links = doc.css("a").map { |link| link.attributes.to_h["href"] }\nlinks)]
+  },
+  "sinatra" => {
+    "de" => [%(install_gem "sinatra"\nrequire "sinatra/base"\nclass MeineSeite < Sinatra::Base\n  get "/" do\n    "<h1>Meine Seite</h1>"\n  end\n  get "/speck" do\n    "CHUNKY BACON!"\n  end\nend\nshow_browser MeineSeite, "/speck")],
+    "en" => [%(install_gem "sinatra"\nrequire "sinatra/base"\nclass MySite < Sinatra::Base\n  get "/" do\n    "<h1>My Site</h1>"\n  end\n  get "/bacon" do\n    "CHUNKY BACON!"\n  end\nend\nshow_browser MySite, "/bacon")]
+  },
+  "roda" => {
+    "de" => [%(install_gem "roda"\nrequire "roda"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      "<h1>Kiosk</h1>"\n    end\n    r.get "bestellung", Integer do |anzahl|\n      "\#{anzahl} Streifen Speck, kommt sofort!"\n    end\n  end\nend\nshow_browser Kiosk, "/bestellung/5")],
+    "en" => [%(install_gem "roda"\nrequire "roda"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      "<h1>Kiosk</h1>"\n    end\n    r.get "order", Integer do |amount|\n      "\#{amount} strips of bacon, coming right up!"\n    end\n  end\nend\nshow_browser Kiosk, "/order/5")]
   }
 }
 

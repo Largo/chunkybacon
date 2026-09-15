@@ -239,6 +239,74 @@ article#lessonBody {
 }
 .marker { background: #ffd3d3; border-bottom: 2px solid var(--err); }
 
+/* ---------- mini browser widget ---------- */
+.mini-browser {
+  margin: 0.6rem 0;
+  border: 1px solid #cfc4b4;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(43, 22, 8, 0.08);
+  background: #fff;
+}
+.mb-chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: #ece4d8;
+  border-bottom: 1px solid #cfc4b4;
+}
+.mb-dots { display: flex; gap: 0.28rem; }
+.mb-dots span {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.mb-dots span:nth-child(1) { background: #f56d5c; }
+.mb-dots span:nth-child(2) { background: #f5bf4f; }
+.mb-dots span:nth-child(3) { background: #59c837; }
+.mb-scheme {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.85rem;
+  color: #8d7a66;
+  white-space: nowrap;
+}
+.mb-url {
+  flex: 1;
+  min-width: 0;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.9rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #cfc4b4;
+  border-radius: 6px;
+  background: #fff;
+}
+button.mb-go {
+  font-size: 0.85rem;
+  padding: 0.25rem 0.8rem;
+}
+.mb-status {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  min-width: 2.6em;
+  text-align: center;
+}
+.mb-status.ok { background: #e2f3e3; color: var(--ok); }
+.mb-status.err { background: #ffe0dd; color: var(--err); }
+.mb-view {
+  padding: 0.8rem 1rem;
+  min-height: 60px;
+  background: #fff;
+}
+.mb-view h1, .mb-view h2 { margin: 0.2rem 0 0.5rem; }
+.mb-view a { color: #1a5dc8; text-decoration: underline; cursor: pointer; }
+.mb-view pre { margin: 0; white-space: pre-wrap; font-size: 0.88rem; }
+.mb-error { color: var(--err); }
+
 .buttons { margin: 0.7rem 0; display: flex; gap: 0.6rem; }
 button {
   font-size: 1.05rem;

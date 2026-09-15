@@ -26,6 +26,35 @@ module BrowserGems
     commonmarker sassc grpc google-protobuf rmagick vips json-c openssl
   ].freeze
 
+  # Minimal stand-ins for stdlib that is missing in ruby.wasm (WASI has no
+  # network sockets). Enough for gems like ipaddr/sinatra to LOAD; anything
+  # actually touching the network raises a clear error.
+  SHIMS = {
+    "socket.rb" => <<~'RUBY'
+      class SocketError < StandardError; end unless defined?(SocketError)
+      class BasicSocket; end unless defined?(BasicSocket)
+      class Socket < BasicSocket
+        AF_UNSPEC = 0
+        AF_INET = 2
+        AF_INET6 = 10
+        PF_UNSPEC = 0
+        PF_INET = 2
+        PF_INET6 = 10
+        SOCK_STREAM = 1
+        SOCK_DGRAM = 2
+        def self.method_missing(name, *_args)
+          raise NotImplementedError, "Socket.#{name} is unavailable in the browser (no sockets in WASI)"
+        end
+        def self.respond_to_missing?(_name, _priv = false) = true
+      end
+      class IPSocket < BasicSocket
+        def self.getaddress(_host) = "127.0.0.1"
+      end
+      class TCPSocket < IPSocket; end
+      class UDPSocket < IPSocket; end
+    RUBY
+  }.freeze
+
   class << self
     attr_accessor :fetch_binary, :fetch_text, :cache_base, :proxy_base
 
@@ -34,7 +63,7 @@ module BrowserGems
     end
 
     def files
-      @files ||= {}
+      @files ||= { "(shims)" => SHIMS.dup }
     end
 
     def loaded
@@ -113,6 +142,15 @@ module BrowserGems
       result
     end
 
+    def feature?(path)
+      key = path.to_s.sub(/\.rb\z/, "") + ".rb"
+      files.any? { |_, lib| lib.key?(key) }
+    end
+
+    def autoload_map
+      @autoload_map ||= {}
+    end
+
     # Loads a feature ("chunky_png" or "gammo/css_selector") from an
     # installed gem. Returns true when found, nil otherwise.
     def load_feature(path)
@@ -143,5 +181,48 @@ module Kernel
     bg_original_require(path)
   rescue LoadError => e
     BrowserGems.load_feature(path.to_s) or raise e
+  end
+end
+
+# Ruby's autoload is C-level and bypasses the require hook above, and it
+# needs real files (which the wasm VFS cannot provide). For gem-space paths
+# we register the constant ourselves and resolve it lazily in const_missing
+# - same semantics, no filesystem.
+class Module
+  alias_method :bg_original_autoload, :autoload
+  def autoload(const, path)
+    if BrowserGems.feature?(path)
+      BrowserGems.autoload_map[[self, const.to_sym]] = path.to_s
+    else
+      bg_original_autoload(const, path)
+    end
+  end
+
+  alias_method :bg_original_const_missing, :const_missing
+  def const_missing(name)
+    if (path = BrowserGems.autoload_map.delete([self, name.to_sym]))
+      BrowserGems.load_feature(path)
+      return const_get(name) if const_defined?(name)
+    end
+    bg_original_const_missing(name)
+  end
+end
+
+# Outside the browser (test harness) main.rb's require_relative bridge is
+# absent - provide the gem-space branch here. The absolute-path trick keeps
+# the builtin resolution correct despite the wrapper frame.
+unless Kernel.private_method_defined?(:original_require_relative)
+  module Kernel
+    alias_method :bg_original_require_relative, :require_relative
+    def require_relative(path)
+      location = caller_locations(1, 1).first
+      caller_path = ((location && (location.absolute_path || location.path)) || "").to_s
+      if caller_path.start_with?("/browser_gems/")
+        BrowserGems.load_feature(BrowserGems.relative_key(caller_path, path)) or
+          raise LoadError, "cannot load such file -- #{path}"
+      else
+        bg_original_require_relative(File.absolute_path(path, File.dirname(caller_path)))
+      end
+    end
   end
 end

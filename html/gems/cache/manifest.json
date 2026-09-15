@@ -15,5 +15,66 @@
     "version": "1.8.1",
     "file": "racc-1.8.1.gem",
     "deps": []
+  },
+  "sinatra": {
+    "version": "4.2.1",
+    "file": "sinatra-4.2.1.gem",
+    "deps": [
+      "logger",
+      "mustermann",
+      "rack",
+      "rack-protection",
+      "rack-session",
+      "tilt"
+    ]
+  },
+  "roda": {
+    "version": "3.108.0",
+    "file": "roda-3.108.0.gem",
+    "deps": [
+      "rack"
+    ]
+  },
+  "logger": {
+    "version": "1.7.0",
+    "file": "logger-1.7.0.gem",
+    "deps": []
+  },
+  "mustermann": {
+    "version": "4.0.0",
+    "file": "mustermann-4.0.0.gem",
+    "deps": []
+  },
+  "rack": {
+    "version": "3.2.7",
+    "file": "rack-3.2.7.gem",
+    "deps": []
+  },
+  "rack-protection": {
+    "version": "4.2.1",
+    "file": "rack-protection-4.2.1.gem",
+    "deps": [
+      "base64",
+      "logger",
+      "rack"
+    ]
+  },
+  "rack-session": {
+    "version": "2.1.2",
+    "file": "rack-session-2.1.2.gem",
+    "deps": [
+      "base64",
+      "rack"
+    ]
+  },
+  "tilt": {
+    "version": "2.9.0",
+    "file": "tilt-2.9.0.gem",
+    "deps": []
+  },
+  "base64": {
+    "version": "0.3.0",
+    "file": "base64-0.3.0.gem",
+    "deps": []
   }
 }

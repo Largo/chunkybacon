@@ -29,6 +29,7 @@ module Kernel
 end
 
 require_relative "browser_gems"
+require_relative "rack_playground"
 
 BrowserGems.cache_base = "gems/cache"
 BrowserGems.proxy_base = "/rubygems"
@@ -58,6 +59,7 @@ class ChunkyApp
     @lessons = @data["lessons"]
     @lang = stored("chunky_lang", "de")
     @lang = "de" unless @data["ui"].key?(@lang)
+    @browser_apps = []
     setup_elements
     render_all
     show_bubble(ui["welcome"], nil)
@@ -150,11 +152,33 @@ class ChunkyApp
       select_lesson(id) unless id.empty? || id == "null"
     end
 
-    # one delegated listener for all cell run buttons
+    # one delegated listener for cell run buttons and mini-browser widgets
     $d.getElementById("lessonBody").addEventListener("click") do |event|
-      if event.target[:className].to_s.include?("run-cell")
-        idx = event.target.getAttribute("data-idx").to_s
+      target = event.target
+      css_class = target[:className].to_s
+      if css_class.include?("run-cell")
+        idx = target.getAttribute("data-idx").to_s
         run_cell(idx.to_i) unless idx.empty? || idx == "null"
+      elsif css_class.include?("mb-go")
+        widget = target.closest(".mini-browser")
+        navigate_browser(widget) unless js_null?(widget)
+      elsif target[:tagName].to_s == "A" && !js_null?(target.closest(".mb-view"))
+        # links inside the fake browser navigate the fake browser
+        event.preventDefault
+        widget = target.closest(".mini-browser")
+        unless js_null?(widget)
+          widget.querySelector(".mb-url").value = target.getAttribute("href").to_s
+          navigate_browser(widget)
+        end
+      end
+    end
+
+    # Enter in a mini-browser URL bar navigates
+    $d.getElementById("lessonBody").addEventListener("keydown") do |event|
+      if event.target[:className].to_s.include?("mb-url") && event.key.to_s == "Enter"
+        event.preventDefault
+        widget = event.target.closest(".mini-browser")
+        navigate_browser(widget) unless js_null?(widget)
       end
     end
 
@@ -316,6 +340,58 @@ class ChunkyApp
     @run_images << data_url if @run_images
   end
 
+  # ---------- mini browser ----------
+
+  def js_null?(obj)
+    obj.nil? || obj.to_s == "null" || obj.to_s == "undefined"
+  end
+
+  def add_browser(app, path)
+    @run_browsers << { app: app, path: path.to_s } if @run_browsers
+  end
+
+  def browser_widget_html(bid, path)
+    <<~HTML
+      <div class="mini-browser" data-bid="#{bid}">
+        <div class="mb-chrome">
+          <span class="mb-dots"><span></span><span></span><span></span></span>
+          <span class="mb-scheme">http://localhost</span>
+          <input class="mb-url" value="#{escape_html(path)}" spellcheck="false" title="URL">
+          <button type="button" class="mb-go">#{ui["browserGo"]}</button>
+          <span class="mb-status"></span>
+        </div>
+        <div class="mb-view"></div>
+      </div>
+    HTML
+  end
+
+  def navigate_browser(widget)
+    bid = widget.getAttribute("data-bid").to_s.to_i
+    app = @browser_apps[bid]
+    return unless app
+    input = widget.querySelector(".mb-url")
+    path = input.value.to_s
+    path = "/" + path unless path.start_with?("/")
+    input.value = path
+    status_el = widget.querySelector(".mb-status")
+    view = widget.querySelector(".mb-view")
+    begin
+      status, headers, body = RackPlayground.get(app, path)
+      content_type = (headers["content-type"] || headers["Content-Type"]).to_s
+      status_el.innerText = status.to_s
+      status_el[:className] = "mb-status #{status < 400 ? 'ok' : 'err'}"
+      if content_type.empty? || content_type.include?("html")
+        view.innerHTML = body
+      else
+        view.innerHTML = "<pre>#{escape_html(body)}</pre>"
+      end
+    rescue Exception => e
+      status_el.innerText = "ERR"
+      status_el[:className] = "mb-status err"
+      view.innerHTML = "<pre class=\"mb-error\">#{escape_html("#{e.class}: #{e.message}")}</pre>"
+    end
+  end
+
   # ---------- running cells ----------
 
   def error_line(error)
@@ -344,6 +420,7 @@ class ChunkyApp
     store(code_key(current_lesson["id"], idx), code)
     $window.clearCellMarks(idx)
     @run_images = []
+    @run_browsers = []
 
     error = nil
     result = nil
@@ -369,9 +446,20 @@ class ChunkyApp
     @run_images.each do |data_url|
       out_html += "<img class=\"cell-image\" alt=\"\" src=\"#{data_url}\">"
     end
+    new_widgets = []
+    @run_browsers.each do |spec|
+      bid = @browser_apps.length
+      @browser_apps << spec[:app]
+      new_widgets << bid
+      out_html += browser_widget_html(bid, spec[:path])
+    end
     out_el = $d.getElementById("cell-out-#{idx}")
     out_el.innerHTML = out_html
     out_el.style.display = "block"
+    new_widgets.each do |bid|
+      widget = out_el.querySelector(".mini-browser[data-bid='#{bid}']")
+      navigate_browser(widget) unless js_null?(widget)
+    end
 
     if error
       line = error_line(error)
@@ -426,6 +514,13 @@ module Kernel
                  "data:image/png;base64," + [image.to_s].pack("m0")
                end
     ChunkyApp.instance.add_image(data_url)
+    nil
+  end
+
+  # Renders a mini browser widget below the cell, wired to the given Rack
+  # app (a Sinatra/Roda class or anything with #call).
+  def show_browser(app, path = "/")
+    ChunkyApp.instance.add_browser(app, path)
     nil
   end
 end

@@ -23,7 +23,8 @@ check = lambda do |name, cond|
   failures += 1 unless cond
 end
 
-check.call "manifest lists cached gems", BrowserGems.manifest.keys.sort == %w[chunky_png gammo racc]
+check.call "manifest lists cached gems",
+           (%w[chunky_png gammo racc sinatra roda rack] - BrowserGems.manifest.keys).empty?
 
 version = BrowserGems.install("chunky_png")
 check.call "chunky_png installs from cache", version == BrowserGems.manifest["chunky_png"]["version"]
@@ -43,6 +44,46 @@ doc = Gammo.new(html).parse
 texts = doc.css("a").map(&:inner_text)
 check.call "gammo parses and css-selects", texts == %w[Speck Ei]
 check.call "gammo reads attributes", doc.css("a").first.attributes.to_h["href"] == "/speck"
+
+# --- web frameworks through the exact browser code path ---
+require_relative "../html/rack_playground"
+
+BrowserGems.install("sinatra")
+require "sinatra/base"
+class HarnessSinatra < Sinatra::Base
+  get "/" do
+    "<h1>Imbiss</h1>"
+  end
+  get "/hallo/:name" do
+    "Hallo, #{params[:name]}!"
+  end
+end
+status, body = mock_get(HarnessSinatra, "/")
+check.call "sinatra root route", status == 200 && body.include?("Imbiss")
+status, body = mock_get(HarnessSinatra, "/hallo/Kaz")
+check.call "sinatra param route", status == 200 && body == "Hallo, Kaz!"
+status, _ = mock_get(HarnessSinatra, "/nope")
+check.call "sinatra 404", status == 404
+
+BrowserGems.install("roda")
+require "roda"
+class HarnessRoda < Roda
+  route do |r|
+    r.root { "<h1>Laden</h1>" }
+    r.get "speck" do
+      "3 Streifen"
+    end
+    r.get "gruss", String do |name|
+      "Hallo, #{name}!"
+    end
+  end
+end
+status, body = mock_get(HarnessRoda, "/")
+check.call "roda root route", status == 200 && body.include?("Laden")
+status, body = mock_get(HarnessRoda, "/gruss/Chunky")
+check.call "roda string matcher", status == 200 && body == "Hallo, Chunky!"
+status, _ = mock_get(HarnessRoda, "/pizza")
+check.call "roda 404", status == 404
 
 begin
   BrowserGems.install("nokogiri")

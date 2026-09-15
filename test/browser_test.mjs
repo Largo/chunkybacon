@@ -30,7 +30,7 @@ await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 check('app becomes visible after wasm boot', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('12 lessons in nav', (await page.$$('#lessonNav a')).length === 12);
+check('14 lessons in nav', (await page.$$('#lessonNav a')).length === 14);
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
 check('exercise cell has task label', (await page.getAttribute('.cell.exercise', 'data-label')) === 'Aufgabe');
@@ -120,6 +120,46 @@ await setExercise('install_gem "paint"');
 await runExercise();
 check('remote install via proxy works', (await exerciseOut()).includes('paint '));
 
+// lesson 13: Sinatra — mini browser widget, links, params, exercise
+await page.click('#lessonNav a[data-id="sinatra"]');
+await page.waitForTimeout(300);
+await page.click('.run-cell[data-idx="1"]');
+await page.waitForTimeout(8000);
+check('sinatra widget renders root page', (await page.textContent('#cell-out-1 .mb-view')).includes('Chunkys Imbiss'));
+check('sinatra widget status 200', (await page.textContent('#cell-out-1 .mb-status')).trim() === '200');
+await page.click('#cell-out-1 .mb-view a');
+await page.waitForTimeout(600);
+check('clicking a link navigates the fake browser', (await page.textContent('#cell-out-1 .mb-view')).includes('Speisekarte'));
+await page.fill('#cell-out-1 .mb-url', '/hallo/Kaz');
+await page.click('#cell-out-1 .mb-go');
+await page.waitForTimeout(600);
+check('sinatra param route in widget', (await page.textContent('#cell-out-1 .mb-view')).includes('Hallo, Kaz!'));
+await page.fill('#cell-out-1 .mb-url', '/pizza');
+await page.click('#cell-out-1 .mb-go');
+await page.waitForTimeout(600);
+check('sinatra 404 in widget', (await page.textContent('#cell-out-1 .mb-status')).trim() === '404');
+await runExercise();
+check('sinatra starter fails (404 on /speck)', (await page.getAttribute('#chunkyChat', 'class')).includes('fail'));
+await setExercise('install_gem "sinatra"\nrequire "sinatra/base"\nclass MeineSeite < Sinatra::Base\n  get "/" do\n    "<h1>Meine Seite</h1>"\n  end\n  get "/speck" do\n    "CHUNKY BACON!"\n  end\nend\nshow_browser MeineSeite, "/speck"');
+await runExercise();
+check('sinatra exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+check('sinatra exercise widget shows response', (await page.textContent('.cell.exercise .mb-view')).includes('CHUNKY BACON!'));
+
+// lesson 14: Roda — routing tree, string matcher, 404, exercise
+await page.click('#lessonNav a[data-id="roda"]');
+await page.waitForTimeout(300);
+await page.click('.run-cell[data-idx="1"]');
+await page.waitForTimeout(6000);
+check('roda widget renders root', (await page.textContent('#cell-out-1 .mb-view')).includes('Chunkys Laden'));
+await page.fill('#cell-out-1 .mb-url', '/gruss/Ada');
+await page.click('#cell-out-1 .mb-go');
+await page.waitForTimeout(600);
+check('roda string matcher in widget', (await page.textContent('#cell-out-1 .mb-view')).includes('Hallo, Ada!'));
+await setExercise('install_gem "roda"\nrequire "roda"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      "<h1>Kiosk</h1>"\n    end\n    r.get "bestellung", Integer do |anzahl|\n      "#{anzahl} Streifen Speck, kommt sofort!"\n    end\n  end\nend\nshow_browser Kiosk, "/bestellung/5"');
+await runExercise();
+check('roda exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+check('roda exercise widget shows order', (await page.textContent('.cell.exercise .mb-view')).includes('5 Streifen Speck'));
+
 // gems panel input installs (paint is now already installed → instant)
 await page.fill('#gemNameInput', 'paint');
 await page.click('#gemInstallBtn');
@@ -130,7 +170,7 @@ check('panel install shows bubble', (await page.textContent('#chunkyText')).incl
 await page.selectOption('#langSelect', 'en');
 await page.waitForTimeout(300);
 check('English title', (await page.textContent('#siteTitle')).includes('Learn Ruby with Chunky Bacon'));
-check('English lesson rendered', (await page.textContent('#lessonBody')).includes('Parsing HTML'));
+check('English lesson rendered', (await page.textContent('#lessonBody')).includes('routing tree'));
 check('progress survives lang switch', (await page.getAttribute('#lessonNav a:first-child', 'class')).includes('done'));
 
 // reload: language + progress persist

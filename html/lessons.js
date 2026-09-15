@@ -36,6 +36,7 @@ window.LESSONS_JSON = JSON.stringify({
       gemInstalled: "💎 %s installiert! Jetzt einfach mit <code>require</code> laden.",
       nativeGem: "%s enthält C-Code (eine „native extension“) und kann nicht zur Laufzeit im Browser installiert werden. Solche Gems müssen beim Bauen der ruby.wasm-Datei fest einkompiliert werden – so macht es z. B. Evil Martians' TutorialKit.rb.",
       gemNotFound: "Gem „%s“ wurde nicht gefunden (oder der Download schlug fehl).",
+      browserGo: "Los",
       footerCredit: "Ein Angebot von <a href='https://idogawa.com'>Andi Idogawa</a>. Läuft komplett in deinem Browser dank <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Schon fertig? Weiter geht's mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
       footerLicense: "„Chunky Bacon“ stammt aus why's (poignant) guide to Ruby von why the lucky stiff – in liebevoller Erinnerung. Kursinhalte: CC BY-NC-SA 4.0."
     },
@@ -67,6 +68,7 @@ window.LESSONS_JSON = JSON.stringify({
       gemInstalled: "💎 %s installed! Now just load it with <code>require</code>.",
       nativeGem: "%s contains C code (a “native extension”) and cannot be installed at runtime in the browser. Such gems must be compiled into the ruby.wasm binary itself – that is how Evil Martians' TutorialKit.rb does it.",
       gemNotFound: "Gem “%s” was not found (or the download failed).",
+      browserGo: "Go",
       footerCredit: "A service by <a href='https://idogawa.com'>Andi Idogawa</a>. Runs entirely in your browser thanks to <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Done here? Continue with the <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
       footerLicense: "“Chunky Bacon” comes from why's (poignant) guide to Ruby by why the lucky stiff – fondly remembered. Course content: CC BY-NC-SA 4.0."
     }
@@ -409,6 +411,56 @@ window.LESSONS_JSON = JSON.stringify({
           { t: "x", code: "# links = doc.css(\"a\").map { |link| ... }\n",
             check: "links == [\"/bacon\", \"/egg\", \"/coffee\"]",
             hint: "<code>links = doc.css(\"a\").map { |link| link.attributes.to_h[\"href\"] }</code> – and run the demo cells first so <code>doc</code> exists." }
+        ]
+      }
+    },
+    {
+      id: "sinatra",
+      de: {
+        title: "13. Sinatra – Webserver",
+        cells: [
+          { t: "h", html: "<h2>Webseiten bauen – Request und Response</h2><p>Bisher lief dein Code einfach von oben nach unten. Ein <strong>Webserver</strong> arbeitet anders: Er wartet auf <em>Anfragen</em> (Requests) wie <code>GET /speisekarte</code> und schickt <em>Antworten</em> (Responses) zurück – meistens HTML. Welcher Code auf welchen Pfad reagiert, bestimmen <strong>Routen</strong>.</p><p><strong>Sinatra</strong> ist seit 2007 der Klassiker unter Rubys Web-Frameworks: Eine Route ist einfach ein Methodenaufruf mit Block. Führ die Zelle aus – darunter erscheint ein kleiner Browser:</p>" },
+          { t: "c", code: "install_gem \"sinatra\"\nrequire \"sinatra/base\"\n\nclass Imbiss < Sinatra::Base\n  get \"/\" do\n    \"<h1>Chunkys Imbiss</h1>\n     <p>Willkommen! Heute im Angebot: Speck.</p>\n     <a href='/speisekarte'>Zur Speisekarte</a>\"\n  end\n\n  get \"/speisekarte\" do\n    \"<h2>Speisekarte</h2>\n     <ul><li>Speck</li><li>Ei</li><li>Kaffee</li></ul>\n     <a href='/'>Zurück</a>\"\n  end\n\n  get \"/hallo/:name\" do\n    \"Hallo, #{params[:name]}! Schön, dass du da bist.\"\n  end\nend\n\nshow_browser Imbiss, \"/\"" },
+          { t: "h", html: "<p>Der Mini-Browser spricht direkt mit deiner App: Klick auf die Links, oder tipp einen Pfad in die Adressleiste – probier <code>/hallo/Kaz</code> oder auch <code>/pizza</code> (ergibt 404!).</p><p>So funktioniert es: <code>get \"/pfad\" do … end</code> registriert eine Route, der <strong>Rückgabewert des Blocks</strong> wird die Antwort. Teile mit Doppelpunkt wie <code>:name</code> sind Platzhalter und landen in <code>params</code>. Auf einem richtigen Server startest du so eine App mit <code>ruby app.rb</code> und besuchst <code>localhost:4567</code> – hier ruft der Mini-Browser die App direkt auf (beide sprechen <em>Rack</em>, Rubys Web-Standard).</p><div class='task'><strong>Aufgabe:</strong> Ergänze die Route <code>get \"/speck\"</code>, die <code>CHUNKY BACON!</code> zurückgibt. Der Mini-Browser unten zeigt <code>/speck</code> – im Moment noch ein 404.</div>" },
+          { t: "x", code: "install_gem \"sinatra\"\nrequire \"sinatra/base\"\n\nclass MeineSeite < Sinatra::Base\n  get \"/\" do\n    \"<h1>Meine Seite</h1>\"\n  end\n\n  # get \"/speck\" do\n  #   ...\n  # end\nend\n\nshow_browser MeineSeite, \"/speck\"",
+            check: "s1, _ = mock_get(MeineSeite, \"/\"); s2, b2 = mock_get(MeineSeite, \"/speck\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\")",
+            hint: "Genau wie die anderen Routen: <code>get \"/speck\" do</code>, darunter <code>\"CHUNKY BACON!\"</code>, dann <code>end</code>. Danach die Zelle neu ausführen." }
+        ]
+      },
+      en: {
+        title: "13. Sinatra – web server",
+        cells: [
+          { t: "h", html: "<h2>Building websites – request and response</h2><p>So far your code simply ran top to bottom. A <strong>web server</strong> works differently: it waits for <em>requests</em> like <code>GET /menu</code> and sends back <em>responses</em> – usually HTML. Which code answers which path is decided by <strong>routes</strong>.</p><p><strong>Sinatra</strong> has been the classic among Ruby's web frameworks since 2007: a route is just a method call with a block. Run the cell – a little browser appears below it:</p>" },
+          { t: "c", code: "install_gem \"sinatra\"\nrequire \"sinatra/base\"\n\nclass Diner < Sinatra::Base\n  get \"/\" do\n    \"<h1>Chunky's Diner</h1>\n     <p>Welcome! Today's special: bacon.</p>\n     <a href='/menu'>See the menu</a>\"\n  end\n\n  get \"/menu\" do\n    \"<h2>Menu</h2>\n     <ul><li>Bacon</li><li>Egg</li><li>Coffee</li></ul>\n     <a href='/'>Back</a>\"\n  end\n\n  get \"/hello/:name\" do\n    \"Hello, #{params[:name]}! Nice to see you.\"\n  end\nend\n\nshow_browser Diner, \"/\"" },
+          { t: "h", html: "<p>The mini browser talks directly to your app: click the links, or type a path into the address bar – try <code>/hello/Kaz</code> or even <code>/pizza</code> (a 404!).</p><p>How it works: <code>get \"/path\" do … end</code> registers a route, and the <strong>block's return value</strong> becomes the response. Parts with a colon like <code>:name</code> are placeholders and end up in <code>params</code>. On a real server you'd start such an app with <code>ruby app.rb</code> and visit <code>localhost:4567</code> – here the mini browser calls the app directly (both speak <em>Rack</em>, Ruby's web standard).</p><div class='task'><strong>Task:</strong> Add the route <code>get \"/bacon\"</code> returning <code>CHUNKY BACON!</code>. The mini browser below shows <code>/bacon</code> – a 404 for now.</div>" },
+          { t: "x", code: "install_gem \"sinatra\"\nrequire \"sinatra/base\"\n\nclass MySite < Sinatra::Base\n  get \"/\" do\n    \"<h1>My Site</h1>\"\n  end\n\n  # get \"/bacon\" do\n  #   ...\n  # end\nend\n\nshow_browser MySite, \"/bacon\"",
+            check: "s1, _ = mock_get(MySite, \"/\"); s2, b2 = mock_get(MySite, \"/bacon\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\")",
+            hint: "Just like the other routes: <code>get \"/bacon\" do</code>, below it <code>\"CHUNKY BACON!\"</code>, then <code>end</code>. Then run the cell again." }
+        ]
+      }
+    },
+    {
+      id: "roda",
+      de: {
+        title: "14. Roda – der Routing-Baum",
+        cells: [
+          { t: "h", html: "<h2>Roda – der Routing-Baum</h2><p><strong>Roda</strong> (von Jeremy Evans, dem Autor von Sequel) ist ein modernes, sehr schnelles Web-Framework. Statt einer flachen Routenliste wie bei Sinatra kletterst du einen <strong>Baum</strong> hinauf: Der <code>route</code>-Block bekommt den Request <code>r</code>, und du entscheidest Stück für Stück, was mit dem Pfad passiert:</p>" },
+          { t: "c", code: "install_gem \"roda\"\nrequire \"roda\"\n\nclass Laden < Roda\n  route do |r|\n    r.root do\n      \"<h1>Chunkys Laden</h1>\n       <a href='/speck'>Speck</a>\n       <a href='/gruss/Chunky'>Begrüssung</a>\"\n    end\n\n    r.get \"speck\" do\n      \"<p>Speck: 3 Streifen für 2 Franken.</p><a href='/'>Zurück</a>\"\n    end\n\n    r.get \"gruss\", String do |name|\n      \"Hallo, #{name}! <a href='/'>Zurück</a>\"\n    end\n  end\nend\n\nshow_browser Laden, \"/\"" },
+          { t: "h", html: "<p>Lies den Baum von oben: <code>r.root</code> fängt <code>/</code>, <code>r.get \"speck\"</code> fängt <code>GET /speck</code>. Spannend wird's bei <code>r.get \"gruss\", String</code>: Das matcht <code>/gruss/&lt;irgendwas&gt;</code>, und das Pfadstück landet als Block-Parameter in <code>name</code> – probier <code>/gruss/Ada</code> im Mini-Browser! Passt gar nichts, antwortet Roda automatisch mit <strong>404</strong>.</p><div class='task'><strong>Aufgabe:</strong> Ergänze im Kiosk die Route <code>r.get \"bestellung\", Integer do |anzahl| … end</code>, die z.&nbsp;B. für <code>/bestellung/5</code> den Text <code>5 Streifen Speck, kommt sofort!</code> zurückgibt (nutze Interpolation). Der Mini-Browser unten zeigt aktuell noch 404.</div>" },
+          { t: "x", code: "install_gem \"roda\"\nrequire \"roda\"\n\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      \"<h1>Kiosk</h1><a href='/bestellung/5'>5 Streifen bestellen</a>\"\n    end\n\n    # r.get \"bestellung\", Integer do |anzahl|\n    #   ...\n    # end\n  end\nend\n\nshow_browser Kiosk, \"/bestellung/5\"",
+            check: "s1, b1 = mock_get(Kiosk, \"/\"); s2, b2 = mock_get(Kiosk, \"/bestellung/5\"); s3, _ = mock_get(Kiosk, \"/pizza\"); s1 == 200 && b1.include?(\"Kiosk\") && s2 == 200 && b2.include?(\"5\") && b2.include?(\"Speck\") && s3 == 404",
+            hint: "<code>r.get \"bestellung\", Integer do |anzahl|</code> … <code>\"#{anzahl} Streifen Speck, kommt sofort!\"</code> … <code>end</code> – innerhalb des route-Blocks." }
+        ]
+      },
+      en: {
+        title: "14. Roda – the routing tree",
+        cells: [
+          { t: "h", html: "<h2>Roda – the routing tree</h2><p><strong>Roda</strong> (by Jeremy Evans, the author of Sequel) is a modern, very fast web framework. Instead of a flat list of routes like Sinatra, you climb a <strong>tree</strong>: the <code>route</code> block receives the request <code>r</code>, and you decide piece by piece what happens with the path:</p>" },
+          { t: "c", code: "install_gem \"roda\"\nrequire \"roda\"\n\nclass Shop < Roda\n  route do |r|\n    r.root do\n      \"<h1>Chunky's Shop</h1>\n       <a href='/bacon'>Bacon</a>\n       <a href='/greet/Chunky'>Greeting</a>\"\n    end\n\n    r.get \"bacon\" do\n      \"<p>Bacon: 3 strips for 2 francs.</p><a href='/'>Back</a>\"\n    end\n\n    r.get \"greet\", String do |name|\n      \"Hello, #{name}! <a href='/'>Back</a>\"\n    end\n  end\nend\n\nshow_browser Shop, \"/\"" },
+          { t: "h", html: "<p>Read the tree top to bottom: <code>r.root</code> catches <code>/</code>, <code>r.get \"bacon\"</code> catches <code>GET /bacon</code>. It gets interesting with <code>r.get \"greet\", String</code>: that matches <code>/greet/&lt;anything&gt;</code>, and the path segment arrives as the block parameter <code>name</code> – try <code>/greet/Ada</code> in the mini browser! If nothing matches, Roda automatically answers with <strong>404</strong>.</p><div class='task'><strong>Task:</strong> Add the route <code>r.get \"order\", Integer do |amount| … end</code> to the kiosk so that e.g. <code>/order/5</code> returns <code>5 strips of bacon, coming right up!</code> (use interpolation). The mini browser below still shows a 404.</div>" },
+          { t: "x", code: "install_gem \"roda\"\nrequire \"roda\"\n\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      \"<h1>Kiosk</h1><a href='/order/5'>Order 5 strips</a>\"\n    end\n\n    # r.get \"order\", Integer do |amount|\n    #   ...\n    # end\n  end\nend\n\nshow_browser Kiosk, \"/order/5\"",
+            check: "s1, b1 = mock_get(Kiosk, \"/\"); s2, b2 = mock_get(Kiosk, \"/order/5\"); s3, _ = mock_get(Kiosk, \"/pizza\"); s1 == 200 && b1.include?(\"Kiosk\") && s2 == 200 && b2.include?(\"5\") && b2.include?(\"bacon\") && s3 == 404",
+            hint: "<code>r.get \"order\", Integer do |amount|</code> … <code>\"#{amount} strips of bacon, coming right up!\"</code> … <code>end</code> – inside the route block." }
         ]
       }
     }

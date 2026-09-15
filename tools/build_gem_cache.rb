@@ -8,7 +8,7 @@ require 'net/http'
 require 'rubygems/package'
 require 'fileutils'
 
-GEMS = %w[chunky_png gammo racc]
+GEMS = %w[chunky_png gammo racc sinatra roda]
 
 # gems whose C extension is optional (pure-Ruby fallback in lib/)
 ALLOW_EXTENSIONS = %w[racc]
