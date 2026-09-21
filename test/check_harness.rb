@@ -16,6 +16,7 @@ BrowserGems.fetch_text = ->(url) { (p = url.sub("cache/", "#{CACHE}/")) && File.
 
 # cell helpers as provided by main.rb in the browser
 $shown_images = []
+$shown_scenes = []
 module Kernel
   def install_gem(name)
     "#{name} #{BrowserGems.install(name)}"
@@ -27,6 +28,14 @@ module Kernel
   end
 
   def show_browser(_app, _path = "/")
+    nil
+  end
+
+  # 3D needs a WebGL canvas, so offline we only record the scene and run the
+  # animation block once - enough for the checks, which look at the graph.
+  def show_three(scene, _camera, **_options)
+    $shown_scenes << scene
+    yield 1 if block_given?
     nil
   end
 
@@ -118,6 +127,14 @@ SOLUTIONS = {
   "http" => {
     "de" => [%(require "net/http"\nrequire "json"\ninfo = JSON.parse(Net::HTTP.get(URI("https://rubygems.org/api/v1/gems/sinatra.json")))\ninfo["downloads"])],
     "en" => [%(require "net/http"\nrequire "json"\ninfo = JSON.parse(Net::HTTP.get(URI("https://rubygems.org/api/v1/gems/sinatra.json")))\ninfo["downloads"])]
+  },
+  "three" => {
+    "de" => [
+      %(turm = Three::Scene.new\nturm.add(Three::AmbientLight.new(0xffffff, 0.4))\nlampe = Three::DirectionalLight.new(0xffffff, 2.0)\nlampe.position.set(2, 4, 3)\nturm.add(lampe)\n\n3.times do |i|\n  klotz = Three::Mesh.new(\n    Three::BoxGeometry.new(1, 1, 1),\n    Three::MeshStandardMaterial.new(color: 0xe8722a)\n  )\n  klotz.position.y = i - 1.0\n  turm.add(klotz)\nend\n\nshow_three turm, kamera do\n  turm.rotation.y += 0.01\nend)
+    ],
+    "en" => [
+      %(tower = Three::Scene.new\ntower.add(Three::AmbientLight.new(0xffffff, 0.4))\nsun = Three::DirectionalLight.new(0xffffff, 2.0)\nsun.position.set(2, 4, 3)\ntower.add(sun)\n\n3.times do |i|\n  block = Three::Mesh.new(\n    Three::BoxGeometry.new(1, 1, 1),\n    Three::MeshStandardMaterial.new(color: 0xe8722a)\n  )\n  block.position.y = i - 1.0\n  tower.add(block)\nend\n\nshow_three tower, camera do\n  tower.rotation.y += 0.01\nend)
+    ]
   },
   "tl-collections" => {
     "de" => [%(eintraege = [{ projekt: "ProjectX", stunden: 3.5 }, { projekt: "Intern", stunden: 2.0 }, { projekt: "ProjectX", stunden: 3.0 }]
@@ -598,6 +615,7 @@ def run_harness
       next if demo_failed
 
       $shown_images = []
+      $shown_scenes = []
       SandboxFS.reset!
       result, output, error = run_in(bind, candidate)
       if error && label != "starter"
@@ -610,6 +628,7 @@ def run_harness
       bind.local_variable_set(:result, result)
       bind.local_variable_set(:code, candidate)
       bind.local_variable_set(:images, $shown_images.dup)
+      bind.local_variable_set(:scenes, $shown_scenes.dup)
       passed = begin
         !!eval(exercise["check"], bind, "check.rb")
       rescue Exception

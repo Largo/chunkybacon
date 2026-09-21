@@ -117,6 +117,8 @@ class ChunkyApp
     @lang = "de" unless @data["ui"].key?(@lang)
     @browser_apps = []
     @irb_sessions = []
+    @three_renderers = {}
+    @three_seq = 0
     setup_elements
     # show the app BEFORE building cells: CodeMirror measures its container
     # at init, and inside a display:none #app it measures zero and renders
@@ -327,7 +329,9 @@ class ChunkyApp
 
   def render_lesson
     fresh_binding
+    dispose_three
     lesson_id = current_lesson["id"]
+    preload_three if cells.any? { |c| code_cell?(c) && c["code"].to_s.include?("show_three") }
     html = cells.each_with_index.map do |cell, idx|
       if code_cell?(cell)
         exercise = cell["t"] == "x"
@@ -387,6 +391,7 @@ class ChunkyApp
       $window.setCellCode(idx, cell["code"])
       $d.getElementById("cell-out-#{idx}")[:style][:display] = "none"
     end
+    dispose_three
     fresh_binding
     show_bubble(ui["welcome"], nil)
   end
@@ -454,6 +459,106 @@ class ChunkyApp
     end
     preview[:textContent] = content
     preview[:style][:display] = "block"
+  end
+
+  # ---------- 3D stage (three-rb + three.js) ----------
+
+  # three-rb builds the scene graph in pure Ruby and hands the drawing to
+  # three.js, which it picks up as globalThis.THREE. index.html imports that
+  # module lazily (window.ensureThree), so a lesson that uses show_three
+  # kicks the import off when it opens and we only mount once it is there.
+  def three_ready?
+    $window[:threeReady].to_s == "true"
+  end
+
+  def preload_three
+    $window.ensureThree
+  end
+
+  # One backend for the whole page. It caches the three.js objects it built
+  # for each Ruby object and then only pushes what changed, so a second
+  # backend would start from an empty cache and rebuild a scene that has no
+  # pending changes left as bare defaults (camera back at the origin, meshes
+  # untransformed) - a blank canvas. Renderers are per canvas, three.js
+  # objects are not, so they can all share this one.
+  def three_backend
+    @three_backend ||= Three::Backends::ThreeJS.new
+  end
+
+  def add_three(scene, camera, options, animate)
+    return unless @run_three
+    @run_three << {
+      scene: scene,
+      camera: camera,
+      animate: animate,
+      width: (options[:width] || 460).to_i,
+      height: (options[:height] || 320).to_i,
+      background: options[:background] || 0x151a20,
+      orbit: !!options[:orbit]
+    }
+  end
+
+  def three_widget_html(tid, spec)
+    <<~HTML
+      <div class="three-stage" data-tid="#{tid}" style="width:#{spec[:width]}px;height:#{spec[:height]}px">
+        <canvas id="three-canvas-#{tid}" width="#{spec[:width]}" height="#{spec[:height]}"></canvas>
+      </div>
+    HTML
+  end
+
+  # Each WebGL canvas holds a real GPU context and browsers only allow a
+  # handful of them, so a cell disposes the stages it created last time
+  # (their DOM is replaced anyway) before it mounts new ones.
+  def dispose_three(idx = nil)
+    keys = idx.nil? ? @three_renderers.keys : [idx]
+    keys.each do |key|
+      (@three_renderers.delete(key) || []).each do |renderer, controls|
+        begin
+          renderer.handle.call(:setAnimationLoop, JS::Null)
+          controls&.dispose
+          renderer.handle.call(:dispose)
+        rescue StandardError
+          nil
+        end
+      end
+    end
+  end
+
+  def mount_three(idx, tid, spec)
+    canvas = $d.getElementById("three-canvas-#{tid}")
+    return if js_null?(canvas)
+
+    # preserveDrawingBuffer keeps the last frame readable after compositing,
+    # which is what lets the smoke test look at the rendered pixels
+    renderer = Three::Renderers::ThreeJSRenderer.new(
+      canvas: canvas, backend: three_backend,
+      antialias: true, preserveDrawingBuffer: true
+    )
+    renderer.set_clear_color(spec[:background], 1)
+    renderer.set_size(spec[:width], spec[:height])
+
+    scene = spec[:scene]
+    camera = spec[:camera]
+    animate = spec[:animate]
+    controls = nil
+    if spec[:orbit]
+      controls = Three::Controls::OrbitControls.new(
+        camera, renderer: renderer, enable_damping: true, damping_factor: 0.08
+      )
+    end
+    (@three_renderers[idx] ||= []) << [renderer, controls]
+
+    if animate || controls
+      frame = 0
+      renderer.animation_loop do
+        frame += 1
+        animate.call(frame) if animate
+        controls&.update
+        renderer.render(scene, camera)
+      end
+    else
+      renderer.render(scene, camera)
+    end
   end
 
   # ---------- mini browser ----------
@@ -620,6 +725,8 @@ class ChunkyApp
     @run_browsers = []
     @run_irbs = []
     @run_files = []
+    @run_three = []
+    dispose_three(idx)
 
     error = nil
     result = nil
@@ -637,7 +744,7 @@ class ChunkyApp
 
     out_html = ""
     out_html += "<pre class=\"cell-stdout\">#{escape_html(output)}</pre>" unless output.empty?
-    widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any?
+    widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any? || @run_three.any?
     if error
       out_html += "<div class=\"cell-error\">#{escape_html(error.class)}: #{escape_html(error.message)}</div>"
     elsif !(result.nil? && (!output.empty? || widgets_present))
@@ -659,6 +766,20 @@ class ChunkyApp
       out_html += irb_widget_html(sid)
     end
     @run_files.each { out_html += files_widget_html }
+    new_stages = []
+    @run_three.each do |spec|
+      if three_ready?
+        # ids must be unique across the whole page, not just this cell -
+        # two stages sharing an id would have the second renderer draw onto
+        # the first one's canvas
+        tid = (@three_seq += 1)
+        new_stages << [tid, spec]
+        out_html += three_widget_html(tid, spec)
+      else
+        preload_three
+        out_html += "<div class=\"cell-error\">#{escape_html(ui["threeLoading"])}</div>"
+      end
+    end
     out_el = $d.getElementById("cell-out-#{idx}")
     out_el[:innerHTML] = out_html
     out_el[:style][:display] = "block"
@@ -666,6 +787,7 @@ class ChunkyApp
       widget = out_el.querySelector(".mini-browser[data-bid='#{bid}']")
       navigate_browser(widget) unless js_null?(widget)
     end
+    new_stages.each { |tid, spec| mount_three(idx, tid, spec) }
 
     if error
       line = error_line(error)
@@ -682,6 +804,7 @@ class ChunkyApp
     @bind.local_variable_set(:result, result)
     @bind.local_variable_set(:code, code)
     @bind.local_variable_set(:images, (@run_images || []).dup)
+    @bind.local_variable_set(:scenes, (@run_three || []).map { |spec| spec[:scene] })
     passed = begin
       !!eval(cell["check"], @bind, "check.rb")
     rescue Exception
@@ -727,6 +850,18 @@ module Kernel
   # app (a Sinatra/Roda class or anything with #call).
   def show_browser(app, path = "/")
     ChunkyApp.instance.add_browser(app, path)
+    nil
+  end
+
+  # Renders a 3D stage below the cell: a WebGL canvas driven by three-rb.
+  # With a block the stage animates - the block runs once per frame, right
+  # before the scene is drawn again.
+  def show_three(scene, camera, width: 460, height: 320, background: 0x151a20, orbit: false, &animate)
+    ChunkyApp.instance.add_three(
+      scene, camera,
+      { width: width, height: height, background: background, orbit: orbit },
+      animate
+    )
     nil
   end
 

@@ -24,7 +24,7 @@ check = lambda do |name, cond|
 end
 
 check.call "manifest lists cached gems",
-           (%w[chunky_png gammo racc sinatra roda rack] - BrowserGems.manifest.keys).empty?
+           (%w[chunky_png gammo racc sinatra roda rack three-rb] - BrowserGems.manifest.keys).empty?
 
 version = BrowserGems.install("chunky_png")
 check.call "chunky_png installs from cache", version == BrowserGems.manifest["chunky_png"]["version"]
@@ -43,6 +43,18 @@ html = '<html><body><h1>Menu</h1><a href="/speck">Speck</a><a href="/ei">Ei</a><
 doc = Gammo.new(html).parse
 texts = doc.css("a").map(&:inner_text)
 check.call "gammo parses and css-selects", texts == %w[Speck Ei]
+
+# three-rb: the gem is named three-rb but required as "three" - the deep
+# require_relative chain inside it is what the gem-space loader has to get
+# right. The scene graph itself is pure Ruby and works without a canvas.
+BrowserGems.install("three-rb")
+require "three"
+scene = Three::Scene.new
+scene.add(Three::Mesh.new(Three::BoxGeometry.new(1, 1, 1),
+                          Three::MeshBasicMaterial.new(color: 0xe8722a)))
+check.call "three-rb installs as three-rb and loads as three",
+           BrowserGems.installed.key?("three-rb") && defined?(Three::VERSION)
+check.call "three-rb builds a scene graph", scene.children.length == 1
 check.call "gammo reads attributes", doc.css("a").first.attributes.to_h["href"] == "/speck"
 
 # --- web frameworks through the exact browser code path ---

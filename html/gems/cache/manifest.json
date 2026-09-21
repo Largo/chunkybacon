@@ -50,6 +50,11 @@
     "file": "benchmark-0.5.0.gem",
     "deps": []
   },
+  "three-rb": {
+    "version": "0.2.1",
+    "file": "three-rb-0.2.1.gem",
+    "deps": []
+  },
   "logger": {
     "version": "1.7.0",
     "file": "logger-1.7.0.gem",

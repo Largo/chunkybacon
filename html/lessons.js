@@ -40,6 +40,7 @@ window.LESSONS_JSON = JSON.stringify({
       "browserGo": "Los",
       "irbExitNote": "(Auf deinem Computer wäre IRB jetzt beendet – hier darfst du einfach weitertippen. 🦊)",
       "filesTitle": "Dateien (simuliert)",
+      "threeLoading": "Die 3D-Engine (three.js) wird noch geladen – führe die Zelle gleich nochmal aus.",
       "footerCredit": "Ein Angebot von <a href='https://idogawa.com'>Andi Idogawa</a>. Läuft komplett in deinem Browser dank <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Schon fertig? Weiter geht's mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
       "footerLicense": "„Chunky Bacon“ stammt aus why's (poignant) guide to Ruby von why the lucky stiff – in liebevoller Erinnerung. Kursinhalte: CC BY-NC-SA 4.0."
     },
@@ -74,6 +75,7 @@ window.LESSONS_JSON = JSON.stringify({
       "browserGo": "Go",
       "irbExitNote": "(On your computer IRB would have quit now – here you can just keep typing. 🦊)",
       "filesTitle": "files (simulated)",
+      "threeLoading": "The 3D engine (three.js) is still loading – run the cell again in a moment.",
       "footerCredit": "A service by <a href='https://idogawa.com'>Andi Idogawa</a>. Runs entirely in your browser thanks to <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Done here? Continue with the <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
       "footerLicense": "“Chunky Bacon” comes from why's (poignant) guide to Ruby by why the lucky stiff – fondly remembered. Course content: CC BY-NC-SA 4.0."
     }
@@ -1189,13 +1191,114 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "three",
+      "section": {
+        "de": "3D mit three-rb",
+        "en": "3D with three-rb"
+      },
+      "de": {
+        "title": "18. 3D mit three-rb",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>3D im Browser – mit Ruby</h2><p>Die bekannteste 3D-Bibliothek des Webs heisst <strong>three.js</strong> und ist in JavaScript geschrieben. Die Gem <a href='https://github.com/lef237/three-rb' target='_blank'><code>three-rb</code></a> gibt dir dieselben Bausteine in <strong>Ruby</strong>: Szene, Kamera, Formen und Materialien baust du in purem Ruby – das eigentliche Zeichnen auf der Grafikkarte übernimmt three.js.</p><p>Dafür ist diese Seite wie gemacht: Ruby läuft hier als WebAssembly, three.js liegt gleich daneben, und die beiden reden über die JavaScript-Brücke miteinander.</p><p>Eine kleine Stolperfalle gleich vorweg: die Gem <em>heisst</em> <code>three-rb</code>, geladen wird sie aber als <code>three</code>. Das kommt öfter vor – der Gem-Name und der <code>require</code>-Name sind zwei verschiedene Dinge.</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"three-rb\"\nrequire \"three\"\n\nszene = Three::Scene.new\nkamera = Three::PerspectiveCamera.new(70, aspect: 460.0 / 320, near: 0.1, far: 100)\nkamera.position.z = 3\n\nwuerfel = Three::Mesh.new(\n  Three::BoxGeometry.new(1, 1, 1),\n  Three::MeshBasicMaterial.new(color: 0xe8722a)\n)\nszene.add(wuerfel)\n\nshow_three szene, kamera"
+          },
+          {
+            "t": "h",
+            "html": "<p>Drei Dinge braucht jedes 3D-Bild:</p><ul><li><strong>Szene</strong> (<code>Three::Scene</code>) – die Bühne, auf der alles steht.</li><li><strong>Kamera</strong> (<code>Three::PerspectiveCamera</code>) – der Blickwinkel. <code>70</code> ist das Sichtfeld in Grad, <code>aspect</code> das Seitenverhältnis, <code>near</code> und <code>far</code> begrenzen die sichtbare Tiefe.</li><li><strong>Mesh</strong> (<code>Three::Mesh</code>) – ein Ding zum Anschauen, immer aus zwei Teilen: einer <em>Geometrie</em> (die Form) und einem <em>Material</em> (die Oberfläche).</li></ul><p>Bis dahin ist alles ganz normales Ruby: Objekte, die in einem Baum hängen. Gezeichnet wird nichts. Erst <code>show_three szene, kamera</code> baut unten eine Bühne und lässt three.js ein Bild davon machen.</p><p>Jedes Objekt hat <code>position</code>, <code>rotation</code> und <code>scale</code> – jeweils mit <code>x</code>, <code>y</code> und <code>z</code>. Dreh den Würfel ein wenig; die Zellen teilen sich ja ein Gedächtnis, <code>wuerfel</code> gibt es also noch:</p>"
+          },
+          {
+            "t": "c",
+            "code": "wuerfel.rotation.x = 0.5\nwuerfel.rotation.y = 0.8\nwuerfel.scale.set(1.4, 1.4, 1.4)\n\nshow_three szene, kamera"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jetzt sieht man immerhin Kanten – vorher war der Würfel ein oranges Quadrat. Schuld ist das Material: <code>MeshBasicMaterial</code> ist eine flache Farbe, der das Licht völlig egal ist.</p><p>Räumlich wird es mit <code>MeshStandardMaterial</code>. Das <em>braucht</em> Licht – ohne bleibt es schwarz. Also eine zweite Szene, diesmal beleuchtet: ein <code>AmbientLight</code> (überall gleich hell, damit nichts ganz im Dunkeln liegt) und ein <code>DirectionalLight</code> (wie die Sonne: aus einer Richtung).</p>"
+          },
+          {
+            "t": "c",
+            "code": "szene2 = Three::Scene.new\nszene2.add(Three::AmbientLight.new(0xffffff, 0.35))\n\nlicht = Three::DirectionalLight.new(0xffffff, 2.5)\nlicht.position.set(2, 3, 4)\nszene2.add(licht)\n\nkugel = Three::Mesh.new(\n  Three::SphereGeometry.new(1, width_segments: 48, height_segments: 24),\n  Three::MeshStandardMaterial.new(color: 0xc14a2e, roughness: 0.35, metalness: 0.1)\n)\nszene2.add(kugel)\n\nshow_three szene2, kamera"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ein Standbild ist schön, Bewegung ist schöner. Gib <code>show_three</code> einen <strong>Block</strong> mit: er läuft vor jedem Einzelbild – rund 60-mal pro Sekunde – und bekommt die Bildnummer. Mit <code>orbit: true</code> darfst du die Szene ausserdem mit der Maus drehen und mit dem Mausrad zoomen.</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_three szene2, kamera, orbit: true do |bild|\n  kugel.position.y = Math.sin(bild * 0.05) * 0.5\n  kugel.rotation.y += 0.01\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Auf deinem eigenen Rechner ist der Aufbau derselbe, nur hängst du den Renderer selbst an ein <code>&lt;canvas&gt;</code>:</p><pre><code>renderer = Three::Renderers::ThreeJSRenderer.new(canvas: \"#scene\")\nrenderer.set_size(640, 480)\nrenderer.render(szene, kamera)</code></pre><p>Genau das nimmt dir <code>show_three</code> hier ab.</p><div class='task'><strong>Aufgabe:</strong> Bau einen Turm! Lege eine Szene <code>turm</code> an, gib ihr Licht, und stapel <strong>mindestens drei</strong> Würfel übereinander – über <code>position.y</code> auf verschiedene Höhen. Zeig ihn mit <code>show_three turm, kamera</code> und lass ihn sich im Block langsam drehen.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# turm = Three::Scene.new\n# turm.add(Three::AmbientLight.new(0xffffff, 0.4))\n# ...\n# show_three turm, kamera do\n#   turm.rotation.y += 0.01\n# end\n",
+            "check": "defined?(Three) && turm.is_a?(Three::Scene) && turm.children.count { |k| k.is_a?(Three::Mesh) } >= 3 && scenes.any? { |s| s.equal?(turm) }",
+            "hint": "Drei Würfel auf einmal: <code>3.times do |i|</code> … ein <code>Three::Mesh</code> bauen, <code>klotz.position.y = i - 1.0</code> setzen und mit <code>turm.add(klotz)</code> in die Szene hängen … <code>end</code>. Und nicht vergessen, zuerst die Zellen oben auszuführen, damit <code>kamera</code> existiert."
+          }
+        ]
+      },
+      "en": {
+        "title": "18. 3D with three-rb",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>3D in the browser – with Ruby</h2><p>The best known 3D library of the web is called <strong>three.js</strong> and is written in JavaScript. The gem <a href='https://github.com/lef237/three-rb' target='_blank'><code>three-rb</code></a> gives you the same building blocks in <strong>Ruby</strong>: you build scene, camera, shapes and materials in pure Ruby – the actual drawing on the graphics card is done by three.js.</p><p>This page is made for exactly that: Ruby runs here as WebAssembly, three.js sits right next to it, and the two talk over the JavaScript bridge.</p><p>One little trap up front: the gem is <em>called</em> <code>three-rb</code>, but you load it as <code>three</code>. That happens quite often – the gem name and the <code>require</code> name are two different things.</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"three-rb\"\nrequire \"three\"\n\nscene = Three::Scene.new\ncamera = Three::PerspectiveCamera.new(70, aspect: 460.0 / 320, near: 0.1, far: 100)\ncamera.position.z = 3\n\ncube = Three::Mesh.new(\n  Three::BoxGeometry.new(1, 1, 1),\n  Three::MeshBasicMaterial.new(color: 0xe8722a)\n)\nscene.add(cube)\n\nshow_three scene, camera"
+          },
+          {
+            "t": "h",
+            "html": "<p>Every 3D picture needs three things:</p><ul><li>a <strong>scene</strong> (<code>Three::Scene</code>) – the stage everything stands on;</li><li>a <strong>camera</strong> (<code>Three::PerspectiveCamera</code>) – the point of view. <code>70</code> is the field of view in degrees, <code>aspect</code> the aspect ratio, <code>near</code> and <code>far</code> limit the visible depth;</li><li>a <strong>mesh</strong> (<code>Three::Mesh</code>) – a thing to look at, always made of two parts: a <em>geometry</em> (the shape) and a <em>material</em> (the surface).</li></ul><p>Up to that point it is all ordinary Ruby: objects hanging in a tree. Nothing is drawn. Only <code>show_three scene, camera</code> builds a stage below and lets three.js make a picture of it.</p><p>Every object has <code>position</code>, <code>rotation</code> and <code>scale</code> – each with <code>x</code>, <code>y</code> and <code>z</code>. Turn the cube a little; the cells share one memory, so <code>cube</code> is still around:</p>"
+          },
+          {
+            "t": "c",
+            "code": "cube.rotation.x = 0.5\ncube.rotation.y = 0.8\ncube.scale.set(1.4, 1.4, 1.4)\n\nshow_three scene, camera"
+          },
+          {
+            "t": "h",
+            "html": "<p>At least you can see edges now – before, the cube was an orange square. The material is to blame: <code>MeshBasicMaterial</code> is a flat color that does not care about light at all.</p><p>It gets three-dimensional with <code>MeshStandardMaterial</code>. That one <em>needs</em> light – without it, it stays black. So here is a second scene, this time lit: an <code>AmbientLight</code> (equally bright everywhere, so nothing is pitch dark) and a <code>DirectionalLight</code> (like the sun: coming from one direction).</p>"
+          },
+          {
+            "t": "c",
+            "code": "scene2 = Three::Scene.new\nscene2.add(Three::AmbientLight.new(0xffffff, 0.35))\n\nsun = Three::DirectionalLight.new(0xffffff, 2.5)\nsun.position.set(2, 3, 4)\nscene2.add(sun)\n\nball = Three::Mesh.new(\n  Three::SphereGeometry.new(1, width_segments: 48, height_segments: 24),\n  Three::MeshStandardMaterial.new(color: 0xc14a2e, roughness: 0.35, metalness: 0.1)\n)\nscene2.add(ball)\n\nshow_three scene2, camera"
+          },
+          {
+            "t": "h",
+            "html": "<p>A still picture is nice, movement is nicer. Hand <code>show_three</code> a <strong>block</strong>: it runs before every frame – about 60 times per second – and receives the frame number. With <code>orbit: true</code> you can also turn the scene with the mouse and zoom with the wheel.</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_three scene2, camera, orbit: true do |frame|\n  ball.position.y = Math.sin(frame * 0.05) * 0.5\n  ball.rotation.y += 0.01\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>On your own machine the setup is the same, except that you attach the renderer to a <code>&lt;canvas&gt;</code> yourself:</p><pre><code>renderer = Three::Renderers::ThreeJSRenderer.new(canvas: \"#scene\")\nrenderer.set_size(640, 480)\nrenderer.render(scene, camera)</code></pre><p>That is exactly what <code>show_three</code> does for you here.</p><div class='task'><strong>Task:</strong> Build a tower! Create a scene <code>tower</code>, give it light, and stack <strong>at least three</strong> cubes on top of each other – at different heights via <code>position.y</code>. Show it with <code>show_three tower, camera</code> and let it turn slowly in the block.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# tower = Three::Scene.new\n# tower.add(Three::AmbientLight.new(0xffffff, 0.4))\n# ...\n# show_three tower, camera do\n#   tower.rotation.y += 0.01\n# end\n",
+            "check": "defined?(Three) && tower.is_a?(Three::Scene) && tower.children.count { |k| k.is_a?(Three::Mesh) } >= 3 && scenes.any? { |s| s.equal?(tower) }",
+            "hint": "Three cubes at once: <code>3.times do |i|</code> … build a <code>Three::Mesh</code>, set <code>block.position.y = i - 1.0</code> and hang it in the scene with <code>tower.add(block)</code> … <code>end</code>. And remember to run the cells above first, so that <code>camera</code> exists."
+          }
+        ]
+      }
+    },
+    {
       "id": "tl-collections",
       "section": {
         "de": "Aufbaukurs: timelog",
         "en": "Advanced: timelog"
       },
       "de": {
-        "title": "18. Projekt timelog: Collections",
+        "title": "19. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -1234,7 +1337,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "18. Project timelog: collections",
+        "title": "19. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -1276,7 +1379,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "19. Text parsen: Regex",
+        "title": "20. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -1307,7 +1410,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "19. Parsing text: regex",
+        "title": "20. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -1341,7 +1444,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "20. Methoden richtig bauen",
+        "title": "21. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -1372,7 +1475,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "20. Building methods properly",
+        "title": "21. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -1406,7 +1509,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "21. Entry & Timesheet",
+        "title": "22. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -1437,7 +1540,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "21. Entry & Timesheet",
+        "title": "22. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -1471,7 +1574,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "22. Testen mit Minitest",
+        "title": "23. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -1502,7 +1605,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "22. Testing with Minitest",
+        "title": "23. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -1536,7 +1639,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "23. Enumerable & Data",
+        "title": "24. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -1559,7 +1662,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "23. Enumerable & Data",
+        "title": "24. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -1585,7 +1688,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "24. Blocks, Procs & Lambdas",
+        "title": "25. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -1624,7 +1727,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "24. Blocks, procs & lambdas",
+        "title": "25. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -1666,7 +1769,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "25. Fehler behandeln",
+        "title": "26. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -1697,7 +1800,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "25. Handling errors",
+        "title": "26. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -1731,7 +1834,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "26. Daten speichern: Formate",
+        "title": "27. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -1786,7 +1889,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "26. Saving data: formats",
+        "title": "27. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -1844,7 +1947,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "27. Kommandozeile & Gems",
+        "title": "28. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -1871,7 +1974,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "27. Command line & gems",
+        "title": "28. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -1901,7 +2004,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "28. Pattern Matching",
+        "title": "29. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -1932,7 +2035,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "28. Pattern matching",
+        "title": "29. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -1966,7 +2069,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "29. Objektmodell & Metaprogrammierung",
+        "title": "30. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -1997,7 +2100,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "29. Object model & metaprogramming",
+        "title": "30. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -2031,7 +2134,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "30. Eine eigene DSL",
+        "title": "31. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -2054,7 +2157,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "30. Your own DSL",
+        "title": "31. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -2080,7 +2183,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "31. Codequalität & Debugging",
+        "title": "32. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -2103,7 +2206,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "31. Code quality & debugging",
+        "title": "32. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -2129,7 +2232,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "32. Performance & Nebenläufigkeit",
+        "title": "33. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -2176,7 +2279,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "32. Performance & concurrency",
+        "title": "33. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -2226,7 +2329,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "33. Finale: timelog im Web",
+        "title": "34. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -2253,7 +2356,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "33. Finale: timelog on the web",
+        "title": "34. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",

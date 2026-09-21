@@ -8,7 +8,7 @@ require 'net/http'
 require 'rubygems/package'
 require 'fileutils'
 
-GEMS = %w[chunky_png gammo racc sinatra roda minitest csv benchmark]
+GEMS = %w[chunky_png gammo racc sinatra roda minitest csv benchmark three-rb]
 
 # gems pinned below their latest version, when the latest pulls in native
 # dependencies (e.g. minitest 6 depends on prism, a C extension)

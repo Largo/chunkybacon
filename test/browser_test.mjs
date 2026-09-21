@@ -30,7 +30,7 @@ await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 check('app becomes visible after wasm boot', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('33 lessons in nav', (await page.$$('#lessonNav a')).length === 33);
+check('34 lessons in nav', (await page.$$('#lessonNav a')).length === 34);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -222,6 +222,51 @@ check('http exercise passes', (await page.getAttribute('#chunkyChat', 'class')).
 await setExercise('require "net/http"\nNet::HTTP.get(URI("https://example.com/"))');
 await runExercise();
 check('unknown host raises friendly SocketError', (await exerciseOut()).includes('SocketError'));
+
+// 3D lesson: three-rb builds the scene in Ruby, three.js draws it on WebGL
+const canvasColors = async (selector) => page.evaluate((sel) => {
+  const canvas = document.querySelector(sel);
+  if (!canvas) return null;
+  const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+  if (!gl) return null;
+  const w = gl.drawingBufferWidth, h = gl.drawingBufferHeight;
+  const px = new Uint8Array(w * h * 4);
+  gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, px);
+  const seen = new Set();
+  let signature = 0;
+  for (let i = 0; i < px.length; i += 4) {
+    seen.add((px[i] << 16) | (px[i + 1] << 8) | px[i + 2]);
+    signature = (signature + px[i] * (i + 1)) % 2147483647;
+  }
+  return { distinct: seen.size, signature };
+}, selector);
+
+await page.click('#lessonNav a[data-id="three"]');
+await page.waitForTimeout(500);
+check('three.js module loads for the 3D lesson', await page.evaluate(() => window.ensureThree().then(() => window.threeReady)));
+await page.click('.run-cell[data-idx="1"]');
+await page.waitForTimeout(6000);
+check('three-rb installs from cache', (await page.textContent('#gemsList')).includes('three-rb ✓'));
+check('3D stage canvas appears', await page.isVisible('#cell-out-1 .three-stage canvas'));
+const still = await canvasColors('#cell-out-1 .three-stage canvas');
+check('static scene renders more than the clear color', still !== null && still.distinct > 1);
+await page.click('.run-cell[data-idx="3"]');
+await page.waitForTimeout(1500);
+check('rotated cube still renders', (await canvasColors('#cell-out-3 .three-stage canvas')).distinct > 1);
+await page.click('.run-cell[data-idx="5"]');
+await page.waitForTimeout(2000);
+check('lit sphere renders many shades', (await canvasColors('#cell-out-5 .three-stage canvas')).distinct > 20);
+await page.click('.run-cell[data-idx="7"]');
+await page.waitForTimeout(1500);
+const frameA = await canvasColors('#cell-out-7 .three-stage canvas');
+await page.waitForTimeout(1200);
+const frameB = await canvasColors('#cell-out-7 .three-stage canvas');
+check('animation block keeps redrawing new frames', frameA.signature !== frameB.signature);
+await setExercise('turm = Three::Scene.new\nturm.add(Three::AmbientLight.new(0xffffff, 0.4))\nlampe = Three::DirectionalLight.new(0xffffff, 2.0)\nlampe.position.set(2, 4, 3)\nturm.add(lampe)\n\n3.times do |i|\n  klotz = Three::Mesh.new(\n    Three::BoxGeometry.new(1, 1, 1),\n    Three::MeshStandardMaterial.new(color: 0xe8722a)\n  )\n  klotz.position.y = i - 1.0\n  turm.add(klotz)\nend\n\nshow_three turm, kamera do\n  turm.rotation.y += 0.01\nend');
+await runExercise();
+await page.waitForTimeout(1200);
+check('tower exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+check('tower exercise renders its own stage', (await canvasColors('.cell.exercise .three-stage canvas')).distinct > 1);
 
 // timelog track: simulated filesystem + explorer widget
 await page.click('#lessonNav a[data-id="tl-formats"]');

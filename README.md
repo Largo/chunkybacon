@@ -6,8 +6,9 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **16 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
-  gems, HTML parsing, and web routing with Sinatra and Roda.
+- **34 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+  gems, HTML parsing, web routing with Sinatra and Roda, 3D graphics, and
+  a project track that builds a small time tracker.
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
   cell shows its last expression as `=> …` — `puts` is never required.
@@ -18,7 +19,9 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **Interactive widgets**: `show_irb` (a real IRB terminal with `_`,
   multi-line input, and authentic prompts), `show_browser` (a fake
   browser window that speaks Rack directly to your Sinatra/Roda app),
-  and `show_image` (inline PNGs from chunky_png).
+  `show_image` (inline PNGs from chunky_png), and `show_three` (a WebGL
+  stage for scenes built with [three-rb](https://github.com/lef237/three-rb),
+  optionally animated per frame and orbitable with the mouse).
 - Chunky Bacon, an original cartoon fox, cheers you on.
 
 ## Architecture
@@ -29,6 +32,14 @@ Built on the same foundation as
 logic written in Ruby (`html/main.rb`) via the JS bridge. Lesson content
 lives in `html/lessons.js`; the gem loader in `html/browser_gems.rb`
 unpacks `.gem` files in Ruby and hooks `require`/`autoload`.
+
+three.js is vendored under `html/assets/three/` and imported lazily
+(`window.ensureThree` in `index.html`) only by lessons whose cells call
+`show_three` - three-rb builds the scene graph in Ruby and looks the
+library up as `globalThis.THREE`. All stages on the page share one
+`Three::Backends::ThreeJS`: that backend caches the three.js objects it
+built and afterwards only pushes what changed, so a second one would
+rebuild an already-clean scene as bare defaults.
 
 ## Run locally
 
@@ -55,4 +66,4 @@ Course content: CC BY-NC-SA 4.0, © [Andi Idogawa](https://idogawa.com).
 The phrase "Chunky Bacon" is an homage to _why's (poignant) guide to
 Ruby_ by why the lucky stiff — fondly remembered. The mascot is an
 original character. Bundled third-party components (ruby.wasm build,
-CodeMirror, cached gems) remain under their own licenses.
+CodeMirror, three.js, cached gems) remain under their own licenses.

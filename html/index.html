@@ -13,6 +13,17 @@
     <script src="assets/codemirror.js"></script>
     <script src="assets/codemirror-ruby.js"></script>
     <script src="lessons.js"></script>
+    <!-- three.js is vendored locally and only fetched when the 3D lesson
+         needs it (see window.ensureThree below); the import map lets the
+         addon files resolve their "three" import to the same copy. -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./assets/three/three.module.min.js",
+          "three/addons/": "./assets/three/"
+        }
+      }
+    </script>
     <link rel="icon" href="assets/chunky.svg">
 </head>
 <body>
@@ -118,6 +129,32 @@
       } catch (e) {
         return JSON.stringify({ status: 0, contentType: "", body: String(e) });
       }
+    };
+
+    // Lazy three.js loader for the 3D lesson. three-rb (Ruby) builds the
+    // scene graph and delegates the actual WebGL work to three.js, which it
+    // looks up as globalThis.THREE - so the module has to be imported and
+    // published before any Three::Renderers::ThreeJSRenderer is created.
+    // ~750 KB, so we only pay for it on the lesson that asks (main.rb calls
+    // ensureThree when that lesson is opened) and Ruby checks threeReady
+    // before mounting a canvas.
+    window.threeReady = false;
+    window.threeLoading = null;
+    window.ensureThree = function () {
+      if (window.threeLoading) return window.threeLoading;
+      window.threeLoading = (async function () {
+        var three = await import("./assets/three/three.module.min.js");
+        globalThis.THREE = three;
+        var orbit = await import("./assets/three/OrbitControls.js");
+        globalThis.THREE_ORBIT_CONTROLS = orbit.OrbitControls;
+        window.threeReady = true;
+        return true;
+      })().catch(function (e) {
+        window.threeLoading = null;
+        console.error("three.js failed to load", e);
+        return false;
+      });
+      return window.threeLoading;
     };
 
     // Per-cell CodeMirror helpers called from Ruby (main.rb)

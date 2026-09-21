@@ -274,6 +274,22 @@ article#lessonBody {
 }
 .marker { background: #ffd3d3; border-bottom: 2px solid var(--err); }
 
+/* ---------- 3D stage widget (three-rb) ---------- */
+.three-stage {
+  margin: 0.6rem 0;
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #151a20;
+}
+.three-stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
 /* ---------- IRB terminal widget ---------- */
 .irb-term {
   margin: 0.6rem 0;
