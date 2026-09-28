@@ -55,6 +55,14 @@
     "file": "three-rb-0.2.1.gem",
     "deps": []
   },
+  "ruby_pptx": {
+    "version": "0.2.0",
+    "file": "ruby_pptx-0.2.0.gem",
+    "deps": [
+      "rexml",
+      "rubyzip"
+    ]
+  },
   "logger": {
     "version": "1.7.0",
     "file": "logger-1.7.0.gem",
@@ -90,6 +98,16 @@
   "tilt": {
     "version": "2.9.0",
     "file": "tilt-2.9.0.gem",
+    "deps": []
+  },
+  "rexml": {
+    "version": "3.4.4",
+    "file": "rexml-3.4.4.gem",
+    "deps": []
+  },
+  "rubyzip": {
+    "version": "3.7.0",
+    "file": "rubyzip-3.7.0.gem",
     "deps": []
   },
   "base64": {
