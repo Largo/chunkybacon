@@ -287,10 +287,14 @@ const deckLink = await waitForDownload('#cell-out-1', 'chunky.pptx');
 check('ruby_pptx installs from cache', (await page.textContent('#gemsList')).includes('ruby_pptx ✓'));
 check('saving a deck offers it for download', deckLink !== null);
 check('the download is a real .pptx (zip)', deckLink !== null && JSON.stringify(await firstBytes(deckLink.href)) === '[80,75]');
+const shapeCell = {};
 for (const idx of [5, 7, 9]) {
   await page.click(`.run-cell[data-idx="${idx}"]`);
-  await waitForDownload(`#cell-out-${idx}`, 'chunky.pptx');
+  shapeCell[idx] = await waitForDownload(`#cell-out-${idx}`, 'chunky.pptx');
 }
+check('2.cm works after using Pptx::Lengths (shape and chart cells)',
+      shapeCell[7] !== null && shapeCell[9] !== null &&
+      !(await page.textContent('#cell-out-7')).includes('Error') && !(await page.textContent('#cell-out-9')).includes('Error'));
 await page.click('.run-cell[data-idx="11"]');
 await page.waitForTimeout(1500);
 check('the saved deck reads back slide by slide', (await page.textContent('#cell-out-11')).includes('"Speck pro Tag"'));

@@ -1329,11 +1329,11 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Auf einer leeren Folie (<code>\"Blank\"</code>) platzierst du Formen selbst. Positionen und Grössen sind echte Längen: <code>Pptx.cm(2)</code>, <code>Pptx.inches(1)</code> oder <code>Pptx.pt(28)</code> – keine nackten Zahlen, bei denen man raten muss, ob Pixel oder Zentimeter gemeint sind. <code>at:</code> ist die linke obere Ecke, <code>size:</code> Breite und Höhe.</p>"
+            "html": "<p>Auf einer leeren Folie (<code>\"Blank\"</code>) platzierst du Formen selbst. Positionen und Grössen sind echte Längen, keine nackten Zahlen, bei denen man raten muss, ob Pixel oder Zentimeter gemeint sind. <code>at:</code> ist die linke obere Ecke, <code>size:</code> Breite und Höhe.</p><p>Lesen soll sich das wie Ruby: <code>2.cm</code>, <code>1.inch</code>, <code>28.pt</code>. Dafür bringt die Gem eine <strong>Refinement</strong> mit – eine Erweiterung einer eingebauten Klasse, hier <code>Numeric</code>, die nur dort gilt, wo du sie mit <code>using</code> einschaltest. Anders als ein Monkeypatch, der Ruby für alle ändert, kann sie keiner anderen Bibliothek in die Quere kommen. Ohne sie schreibst du <code>Pptx.cm(2)</code> – dasselbe, nur länger.</p><p>Farben gibst du als Hex-Code an, wie in CSS: <code>\"E8722A\"</code> ist das Orange von Chunky Bacon.</p>"
           },
           {
             "t": "c",
-            "code": "folie = praesi.slides.add(praesi.slide_layouts[\"Blank\"])\nbox = folie.shapes.add_shape(:rounded_rectangle,\n                             at: [Pptx.cm(2), Pptx.cm(2)],\n                             size: [Pptx.cm(12), Pptx.cm(4)])\nbox.fill.solid\nbox.fill.fore_color.rgb = Pptx::RGBColor[\"E8722A\"]\nbox.text_frame.text = \"Chunky Bacon!\"\nbox.text_frame.paragraphs[0].runs[0].font.size = Pptx.pt(28)\n\npraesi.save(\"chunky.pptx\")"
+            "code": "require \"ruby_pptx/refinements\"\nusing Pptx::Lengths\n\nfolie = praesi.slides.add(praesi.slide_layouts[\"Blank\"])\nbox = folie.shapes.add_shape(:rounded_rectangle,\n                             at: [2.cm, 2.cm],\n                             size: [12.cm, 4.cm])\nbox.fill.solid\nbox.fill.fore_color.rgb = \"E8722A\"\nbox.text_frame.text = \"Chunky Bacon!\"\nbox.text_frame.paragraphs[0].runs[0].font.size = 28.pt\n\npraesi.save(\"chunky.pptx\")"
           },
           {
             "t": "h",
@@ -1341,7 +1341,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "daten = Pptx::ChartData.new\ndaten.categories = %w[Mo Di Mi Do Fr]\ndaten.add_series(\"Speck\", [3, 5, 2, 6, 4])\n\nfolie = praesi.slides.add(praesi.slide_layouts[\"Title Only\"])\nfolie.shapes.title.text = \"Speck pro Tag\"\nfolie.shapes.add_chart(:column_clustered, daten,\n                       at: [Pptx.cm(2), Pptx.cm(4)],\n                       size: [Pptx.cm(20), Pptx.cm(12)])\n\npraesi.save(\"chunky.pptx\")"
+            "code": "daten = Pptx::ChartData.new\ndaten.categories = %w[Mo Di Mi Do Fr]\ndaten.add_series(\"Speck\", [3, 5, 2, 6, 4])\n\nfolie = praesi.slides.add(praesi.slide_layouts[\"Title Only\"])\nfolie.shapes.title.text = \"Speck pro Tag\"\nfolie.shapes.add_chart(:column_clustered, daten,\n                       at: [2.cm, 4.cm],\n                       size: [20.cm, 12.cm])\n\npraesi.save(\"chunky.pptx\")"
           },
           {
             "t": "h",
@@ -1392,11 +1392,11 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>On an empty slide (<code>\"Blank\"</code>) you place shapes yourself. Positions and sizes are real lengths: <code>Pptx.cm(2)</code>, <code>Pptx.inches(1)</code> or <code>Pptx.pt(28)</code> – no bare numbers where you have to guess whether pixels or centimetres are meant. <code>at:</code> is the top-left corner, <code>size:</code> width and height.</p>"
+            "html": "<p>On an empty slide (<code>\"Blank\"</code>) you place shapes yourself. Positions and sizes are real lengths – no bare numbers where you have to guess whether pixels or centimetres are meant. <code>at:</code> is the top-left corner, <code>size:</code> width and height.</p><p>It should read like Ruby: <code>2.cm</code>, <code>1.inch</code>, <code>28.pt</code>. For that the gem ships a <strong>refinement</strong> – an extension of a built-in class, here <code>Numeric</code>, that only applies where you switch it on with <code>using</code>. Unlike a monkey patch, which changes Ruby for everyone, it cannot get in the way of any other library. Without it you write <code>Pptx.cm(2)</code> – the same thing, just longer.</p><p>Colours are hex codes, as in CSS: <code>\"E8722A\"</code> is Chunky Bacon orange.</p>"
           },
           {
             "t": "c",
-            "code": "slide = deck.slides.add(deck.slide_layouts[\"Blank\"])\nbox = slide.shapes.add_shape(:rounded_rectangle,\n                             at: [Pptx.cm(2), Pptx.cm(2)],\n                             size: [Pptx.cm(12), Pptx.cm(4)])\nbox.fill.solid\nbox.fill.fore_color.rgb = Pptx::RGBColor[\"E8722A\"]\nbox.text_frame.text = \"Chunky Bacon!\"\nbox.text_frame.paragraphs[0].runs[0].font.size = Pptx.pt(28)\n\ndeck.save(\"chunky.pptx\")"
+            "code": "require \"ruby_pptx/refinements\"\nusing Pptx::Lengths\n\nslide = deck.slides.add(deck.slide_layouts[\"Blank\"])\nbox = slide.shapes.add_shape(:rounded_rectangle,\n                             at: [2.cm, 2.cm],\n                             size: [12.cm, 4.cm])\nbox.fill.solid\nbox.fill.fore_color.rgb = \"E8722A\"\nbox.text_frame.text = \"Chunky Bacon!\"\nbox.text_frame.paragraphs[0].runs[0].font.size = 28.pt\n\ndeck.save(\"chunky.pptx\")"
           },
           {
             "t": "h",
@@ -1404,7 +1404,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "data = Pptx::ChartData.new\ndata.categories = %w[Mon Tue Wed Thu Fri]\ndata.add_series(\"Bacon\", [3, 5, 2, 6, 4])\n\nslide = deck.slides.add(deck.slide_layouts[\"Title Only\"])\nslide.shapes.title.text = \"Bacon per day\"\nslide.shapes.add_chart(:column_clustered, data,\n                       at: [Pptx.cm(2), Pptx.cm(4)],\n                       size: [Pptx.cm(20), Pptx.cm(12)])\n\ndeck.save(\"chunky.pptx\")"
+            "code": "data = Pptx::ChartData.new\ndata.categories = %w[Mon Tue Wed Thu Fri]\ndata.add_series(\"Bacon\", [3, 5, 2, 6, 4])\n\nslide = deck.slides.add(deck.slide_layouts[\"Title Only\"])\nslide.shapes.title.text = \"Bacon per day\"\nslide.shapes.add_chart(:column_clustered, data,\n                       at: [2.cm, 4.cm],\n                       size: [20.cm, 12.cm])\n\ndeck.save(\"chunky.pptx\")"
           },
           {
             "t": "h",
