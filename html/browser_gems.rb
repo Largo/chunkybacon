@@ -26,6 +26,16 @@ module BrowserGems
     commonmarker sassc grpc google-protobuf rmagick vips json-c openssl
   ].freeze
 
+  # native runtime dependencies a gem declares but can do without: skipped
+  # when installing that gem, because it falls back to pure Ruby. ruby_pptx
+  # uses Nokogiri when it loads and REXML otherwise.
+  OPTIONAL_NATIVE_DEPS = { "ruby_pptx" => %w[nokogiri] }.freeze
+
+  # gem code is evaluated as if it lived here; files in a gem's lib/ that are
+  # not Ruby (templates, data) are written to the same place, so the gem
+  # finds them relative to __dir__ as it would on disk
+  ROOT = "/browser_gems"
+
   # Minimal stand-ins for stdlib that is missing in ruby.wasm (WASI has no
   # network sockets). Enough for gems like ipaddr/sinatra to LOAD; anything
   # actually touching the network raises a clear error.
@@ -140,6 +150,13 @@ module BrowserGems
 
   class << self
     attr_accessor :fetch_binary, :fetch_text, :cache_base, :proxy_base
+    # where non-Ruby lib files are written; the offline harness points it
+    # at a temp dir instead of the real filesystem root
+    attr_writer :asset_root
+
+    def asset_root
+      @asset_root || ROOT
+    end
 
     def installed
       @installed ||= {}
@@ -173,7 +190,7 @@ module BrowserGems
       seen[name] = true
 
       if (entry = manifest[name])
-        (entry["deps"] || []).each { |dep| install(dep, seen) }
+        runtime_deps(name, entry["deps"] || []).each { |dep| install(dep, seen) }
         bytes = fetch_binary.call("#{cache_base}/#{entry["file"]}")
         raise NotFoundError, name unless bytes
         install_from_bytes(name, entry["version"], bytes)
@@ -183,7 +200,7 @@ module BrowserGems
         info = JSON.parse(info_text)
         version = info["version"]
         deps = (info.dig("dependencies", "runtime") || []).map { |d| d["name"] }
-        deps.each { |dep| install(dep, seen) }
+        runtime_deps(name, deps).each { |dep| install(dep, seen) }
         bytes = fetch_binary.call("#{proxy_base}/gems/#{name}-#{version}.gem")
         raise NotFoundError, name unless bytes
         install_from_bytes(name, version, bytes)
@@ -199,15 +216,41 @@ module BrowserGems
       end
 
       lib = {}
+      assets = {}
       inner.each do |path, content|
-        lib[path[4..]] = content if path.start_with?("lib/") && path.end_with?(".rb")
+        next unless path.start_with?("lib/")
+        if path.end_with?(".rb")
+          lib[path[4..]] = content
+        else
+          assets[path[4..]] = content
+        end
       end
+      write_assets(name, assets)
       (POST_INSTALL_PATCHES[name] || {}).each do |file, patch|
         lib[file] = lib[file].to_s + patch
       end
       files[name] = lib
       installed[name] = version
       version
+    end
+
+    def runtime_deps(name, deps)
+      deps - OPTIONAL_NATIVE_DEPS.fetch(name, [])
+    end
+
+    # ruby.wasm's filesystem is writable memory, so non-Ruby lib files can
+    # live where the gem expects them. Where it cannot be written, gems that
+    # need no such files still install.
+    def write_assets(name, assets)
+      return if assets.empty?
+      require 'fileutils'
+      assets.each do |path, content|
+        target = File.join(asset_root, name, path)
+        FileUtils.mkdir_p(File.dirname(target))
+        File.binwrite(target, content)
+      end
+    rescue SystemCallError
+      nil
     end
 
     # Minimal POSIX tar reader: returns { path => content } for regular files.
@@ -258,7 +301,7 @@ module BrowserGems
         full = "#{gem_name}:#{key}"
         return true if loaded[full]
         loaded[full] = true
-        Kernel.eval(lib[key], TOPLEVEL_BINDING, "/browser_gems/#{gem_name}/#{key}")
+        Kernel.eval(lib[key], TOPLEVEL_BINDING, "#{ROOT}/#{gem_name}/#{key}")
         return true
       end
       nil

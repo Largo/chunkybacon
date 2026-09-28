@@ -8,7 +8,7 @@ require 'net/http'
 require 'rubygems/package'
 require 'fileutils'
 
-GEMS = %w[chunky_png gammo racc sinatra roda minitest csv benchmark three-rb]
+GEMS = %w[chunky_png gammo racc sinatra roda minitest csv benchmark three-rb ruby_pptx]
 
 # gems pinned below their latest version, when the latest pulls in native
 # dependencies (e.g. minitest 6 depends on prism, a C extension)
@@ -20,6 +20,12 @@ ALLOW_EXTENSIONS = %w[racc]
 # dependencies not declared in the gemspec but needed at runtime in the
 # browser (racc is a default gem locally, absent from the wasm stdlib)
 EXTRA_DEPS = { "gammo" => %w[racc] }
+
+# native dependencies a gem declares but falls back from (ruby_pptx uses
+# Nokogiri when it loads, REXML otherwise) - left out of the cache and the
+# manifest; keep in sync with BrowserGems::OPTIONAL_NATIVE_DEPS
+OPTIONAL_NATIVE_DEPS = { "ruby_pptx" => %w[nokogiri] }
+
 CACHE_DIR = File.expand_path("../html/gems/cache", __dir__)
 FileUtils.mkdir_p(CACHE_DIR)
 
@@ -52,7 +58,8 @@ until queue.empty?
     abort "#{name} has native extensions (#{spec.extensions}) - not browser-installable"
   end
 
-  deps = (info.dig("dependencies", "runtime") || []).map { |d| d["name"] } | EXTRA_DEPS.fetch(name, [])
+  deps = ((info.dig("dependencies", "runtime") || []).map { |d| d["name"] } | EXTRA_DEPS.fetch(name, [])) -
+         OPTIONAL_NATIVE_DEPS.fetch(name, [])
   queue.concat(deps)
   manifest[name] = { "version" => version, "file" => file, "deps" => deps }
 end

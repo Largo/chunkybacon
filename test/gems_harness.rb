@@ -111,6 +111,48 @@ rescue BrowserGems::NotFoundError
   check.call "unknown gem raises NotFoundError", true
 end
 
+# --- ruby_pptx: an optional native dependency, and non-Ruby lib files ---
+# ruby_pptx declares nokogiri but falls back to REXML without it, and reads
+# its templates (default.pptx and friends) relative to __dir__. Assets go to
+# a temp dir here; in the browser they land in wasm memory at /browser_gems.
+require "tmpdir"
+Dir.mktmpdir do |assets|
+  BrowserGems.asset_root = assets
+  BrowserGems.install("ruby_pptx")
+  check.call "ruby_pptx installs without its optional nokogiri",
+             BrowserGems.installed.key?("ruby_pptx") && !BrowserGems.installed.key?("nokogiri")
+  check.call "ruby_pptx brings its pure-Ruby dependencies",
+             %w[rubyzip rexml].all? { |dep| BrowserGems.installed.key?(dep) }
+  template = File.join(assets, "ruby_pptx", "ruby_pptx", "templates", "default.pptx")
+  check.call "ruby_pptx's templates are written where its code looks for them",
+             File.file?(template) && File.binread(template, 2) == "PK"
+
+  # the same gem through the rubygems.org path, whose metadata does list
+  # nokogiri: it must be skipped there too, not refused
+  entry = BrowserGems.manifest.delete("ruby_pptx")
+  BrowserGems.installed.delete("ruby_pptx")
+  fetch_text, fetch_binary = BrowserGems.fetch_text, BrowserGems.fetch_binary
+  BrowserGems.fetch_text = lambda do |url|
+    next fetch_text.call(url) unless url == "remote/api/v1/gems/ruby_pptx.json"
+    { "version" => entry["version"],
+      "dependencies" => { "runtime" => %w[nokogiri rexml rubyzip].map { |n| { "name" => n } } } }.to_json
+  end
+  BrowserGems.fetch_binary = lambda do |url|
+    url == "remote/gems/#{entry["file"]}" ? fetch_binary.call("cache/#{entry["file"]}") : fetch_binary.call(url)
+  end
+  begin
+    check.call "ruby_pptx from rubygems.org skips nokogiri too",
+               BrowserGems.install("ruby_pptx") == entry["version"] && !BrowserGems.installed.key?("nokogiri")
+  rescue BrowserGems::NativeGemError
+    check.call "ruby_pptx from rubygems.org skips nokogiri too", false
+  ensure
+    BrowserGems.fetch_text, BrowserGems.fetch_binary = fetch_text, fetch_binary
+    BrowserGems.manifest["ruby_pptx"] = entry
+  end
+ensure
+  BrowserGems.asset_root = nil
+end
+
 check.call "second install is a no-op returning version",
            BrowserGems.install("chunky_png") == version
 
