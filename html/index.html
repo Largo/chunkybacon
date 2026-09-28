@@ -5,6 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ruby lernen mit Chunky Bacon</title>
     <link rel="stylesheet" href="assets/app.css">
+    <script>
+      // The Ruby sources (main.rb and what it require_relative's) are loaded
+      // by ruby.wasm with fetch(), which reuses a cached copy for as long as
+      // the browser deems it fresh - even across a hard reload. Ask the
+      // server every time instead: a 304 when nothing changed, the new code
+      // right after a deploy. Must run before browser.script.iife.js.
+      (function () {
+        var plainFetch = window.fetch.bind(window);
+        window.fetch = function (resource, init) {
+          // a string, a URL object (what require_relative's loader passes)
+          // or a Request
+          var url = resource instanceof Request ? resource.url : String(resource);
+          if (/\.rb(\?|#|$)/.test(url)) {
+            init = Object.assign({}, init, { cache: "no-cache" });
+          }
+          return plainFetch(resource, init);
+        };
+      })();
+    </script>
     <script src="browser.script.iife.js"></script>
     <meta name="description" property="og:description" content="Lerne die Programmiersprache Ruby direkt im Browser – auf Deutsch, mit Chunky Bacon. Ein interaktives Notizbuch mit Ruby.wasm, kein Setup nötig.">
     <meta name="author" content="Andi Idogawa">
