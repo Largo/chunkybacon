@@ -274,6 +274,29 @@ article#lessonBody {
 }
 .marker { background: #ffd3d3; border-bottom: 2px solid var(--err); }
 
+/* ---------- downloads: files a cell wrote ---------- */
+.cell-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.4rem 0;
+}
+.cell-download {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--bacon);
+  border-radius: 999px;
+  color: var(--bacon);
+  background: #fff;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.88rem;
+  text-decoration: none;
+}
+.cell-download:hover { background: var(--bacon); color: #fff; }
+.cell-download small { opacity: 0.7; }
+
 /* ---------- 3D stage widget (three-rb) ---------- */
 .three-stage {
   margin: 0.6rem 0;

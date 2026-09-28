@@ -96,6 +96,45 @@ class Dir
 end
 
 # ---------------------------------------------------------------------------
+# Which files a cell run wrote, so they can be offered as downloads. They end
+# up in two places: File.write with a relative path goes to the virtual store
+# above, while File.open/File.binwrite - what gems such as rubyzip use -
+# reach the real in-memory filesystem under the working directory ("/").
+module FileWatch
+  class << self
+    # [virtual, real] path => content fingerprint, before the run
+    def snapshot
+      [SandboxFS.store.transform_values(&:hash), real_files.transform_values(&:hash)]
+    end
+
+    # [[path, bytes], ...] for every file new or changed since +snapshot+
+    def changes_since(snapshot)
+      virtual, real = snapshot
+      changed = SandboxFS.store.filter_map { |path, data| [path, data] if virtual[path] != data.hash }
+      changed + real_files.filter_map { |path, data| [path, data] if real[path] != data.hash }
+    end
+
+    private
+
+    # Files under the working directory, gem code (BrowserGems.root) aside.
+    def real_files(dir = Dir.pwd, prefix = "", found = {})
+      Dir.children(dir).each do |name|
+        full = File.join(dir, name)
+        next if defined?(BrowserGems) && full == BrowserGems.root
+        if File.directory?(full)
+          real_files(full, "#{prefix}#{name}/", found)
+        elsif File.file?(full)
+          found["#{prefix}#{name}"] = File.binread(full)
+        end
+      end
+      found
+    rescue SystemCallError
+      found
+    end
+  end
+end
+
+# ---------------------------------------------------------------------------
 # Virtual time: sleep advances a clock instead of blocking (real sleep would
 # crash the wasm VM - and makes tests slow everywhere else).
 module SandboxTime

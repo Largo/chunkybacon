@@ -6,8 +6,9 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **34 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
-  gems, HTML parsing, web routing with Sinatra and Roda, 3D graphics, and
+- **35 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+  gems, HTML parsing, web routing with Sinatra and Roda, 3D graphics,
+  PowerPoint decks with [ruby_pptx](https://github.com/Largo/ruby_pptx), and
   a project track that builds a small time tracker.
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
@@ -15,7 +16,14 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **In-browser gem installer**: pure-Ruby gems install at runtime
   (`install_gem "chunky_png"`), fetched from a local cache or from
   rubygems.org through a same-origin nginx proxy. Native gems (nokogiri)
-  fail with a friendly explanation of the wasm limitation.
+  fail with a friendly explanation of the wasm limitation - unless the gem
+  that wants one can do without it (`OPTIONAL_NATIVE_DEPS`: ruby_pptx
+  falls back to REXML). Non-Ruby files in a gem's `lib/`, such as
+  ruby_pptx's templates, are written to the in-memory filesystem where the
+  gem expects them.
+- **Downloads**: any file a cell writes - `deck.save("chunky.pptx")`,
+  `File.write("notes.txt", …)` - appears below the cell as a download link;
+  `download_file(data, "name")` offers data that never went through a file.
 - **Interactive widgets**: `show_irb` (a real IRB terminal with `_`,
   multi-line input, and authentic prompts), `show_browser` (a fake
   browser window that speaks Rack directly to your Sinatra/Roda app),

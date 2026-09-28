@@ -6,7 +6,8 @@
 // All code cells of a lesson share one binding (like a notebook kernel).
 // Check snippets are Ruby, eval'd in that binding with extra locals:
 // output (captured stdout), result (last expression value), code (source),
-// images (data urls from show_image during the run).
+// images (data urls from show_image during the run), downloads (names of
+// the files offered below the cell: written by the run or download_file).
 window.LESSONS_JSON = JSON.stringify({
   "ui": {
     "de": {
@@ -41,6 +42,7 @@ window.LESSONS_JSON = JSON.stringify({
       "irbExitNote": "(Auf deinem Computer wäre IRB jetzt beendet – hier darfst du einfach weitertippen. 🦊)",
       "filesTitle": "Dateien (simuliert)",
       "threeLoading": "Die 3D-Engine (three.js) wird noch geladen – führe die Zelle gleich nochmal aus.",
+      "downloadTip": "Dateien, die deine Zelle geschrieben hat – zum Herunterladen anklicken.",
       "footerCredit": "Ein Angebot von <a href='https://idogawa.com'>Andi Idogawa</a>. Läuft komplett in deinem Browser dank <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Schon fertig? Weiter geht's mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
       "footerLicense": "„Chunky Bacon“ stammt aus why's (poignant) guide to Ruby von why the lucky stiff – in liebevoller Erinnerung. Kursinhalte: CC BY-NC-SA 4.0."
     },
@@ -76,6 +78,7 @@ window.LESSONS_JSON = JSON.stringify({
       "irbExitNote": "(On your computer IRB would have quit now – here you can just keep typing. 🦊)",
       "filesTitle": "files (simulated)",
       "threeLoading": "The 3D engine (three.js) is still loading – run the cell again in a moment.",
+      "downloadTip": "Files your cell wrote – click to download.",
       "footerCredit": "A service by <a href='https://idogawa.com'>Andi Idogawa</a>. Runs entirely in your browser thanks to <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Done here? Continue with the <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
       "footerLicense": "“Chunky Bacon” comes from why's (poignant) guide to Ruby by why the lucky stiff – fondly remembered. Course content: CC BY-NC-SA 4.0."
     }
@@ -1292,13 +1295,146 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "pptx",
+      "section": {
+        "de": "Präsentationen mit ruby_pptx",
+        "en": "Slide decks with ruby_pptx"
+      },
+      "de": {
+        "title": "19. PowerPoint mit ruby_pptx",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Folien aus Ruby</h2><p>Eine PowerPoint-Datei (<code>.pptx</code>) ist in Wahrheit ein ZIP-Archiv voller XML-Dateien – eine pro Folie, dazu Layouts, Designs und Bilder. Von Hand baut das niemand, aber mit einer Gem wird es ganz einfach: <a href='https://github.com/Largo/ruby_pptx' target='_blank'><code>ruby_pptx</code></a> ist eine Ruby-Portierung der bekannten Python-Bibliothek <em>python-pptx</em>.</p><p>Alles läuft hier im Browser: die Gem wird installiert, die Präsentation in Ruby gebaut und gespeichert. <strong>Jede Datei, die deine Zelle speichert, erscheint darunter als Download</strong> – klick drauf, und du kannst sie in PowerPoint, Keynote oder LibreOffice öffnen.</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"ruby_pptx\"\nrequire \"ruby_pptx\"\n\npraesi = Pptx::Presentation.new_default\ntitel = praesi.slides.add(praesi.slide_layouts[\"Title Slide\"])\ntitel.shapes.title.text = \"Chunky Bacon\"\ntitel.placeholders[1].text_frame.text = \"Eine Präsentation, gebaut mit Ruby\"\n\npraesi.save(\"chunky.pptx\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Was ist da passiert?</p><ul><li><code>Presentation.new_default</code> legt eine leere Präsentation mit der Standard-Vorlage an.</li><li>Jede Folie beruht auf einem <strong>Layout</strong>, genau wie in PowerPoint, wenn du auf „Neue Folie“ klickst. <code>slide_layouts[\"Title Slide\"]</code> sucht es beim Namen.</li><li>Ein Layout bringt <strong>Platzhalter</strong> mit: <code>shapes.title</code> ist der Titel, <code>placeholders[1]</code> das Feld darunter. In ihren <code>text_frame</code> schreibst du den Text.</li><li><code>save</code> schreibt die Datei – und schon liegt sie unten zum Herunterladen bereit.</li></ul><p>Welche Layouts gibt es überhaupt? Frag einfach nach – <code>praesi</code> kennt die Zelle von oben noch:</p>"
+          },
+          {
+            "t": "c",
+            "code": "praesi.slide_layouts.map(&:name)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Für Aufzählungen nimmst du <code>\"Title and Content\"</code>. Jede Zeile (getrennt mit <code>\\n</code>) wird ein <strong>Absatz</strong> mit eigenem Aufzählungspunkt. Ein Absatz hat eine <code>level</code> für die Einrückung, und seine Textstücke (<code>runs</code>) haben eine <code>font</code> – fett, kursiv, Grösse, Farbe.</p>"
+          },
+          {
+            "t": "c",
+            "code": "folie = praesi.slides.add(praesi.slide_layouts[\"Title and Content\"])\nfolie.shapes.title.text = \"Frühstück\"\n\ntext = folie.placeholders[1].text_frame\ntext.text = \"Speck\\nknusprig gebraten\\nEier\\nToast\"\ntext.paragraphs[1].level = 1\ntext.paragraphs[0].runs[0].font.bold = true\n\npraesi.save(\"chunky.pptx\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Auf einer leeren Folie (<code>\"Blank\"</code>) platzierst du Formen selbst. Positionen und Grössen sind echte Längen: <code>Pptx.cm(2)</code>, <code>Pptx.inches(1)</code> oder <code>Pptx.pt(28)</code> – keine nackten Zahlen, bei denen man raten muss, ob Pixel oder Zentimeter gemeint sind. <code>at:</code> ist die linke obere Ecke, <code>size:</code> Breite und Höhe.</p>"
+          },
+          {
+            "t": "c",
+            "code": "folie = praesi.slides.add(praesi.slide_layouts[\"Blank\"])\nbox = folie.shapes.add_shape(:rounded_rectangle,\n                             at: [Pptx.cm(2), Pptx.cm(2)],\n                             size: [Pptx.cm(12), Pptx.cm(4)])\nbox.fill.solid\nbox.fill.fore_color.rgb = Pptx::RGBColor[\"E8722A\"]\nbox.text_frame.text = \"Chunky Bacon!\"\nbox.text_frame.paragraphs[0].runs[0].font.size = Pptx.pt(28)\n\npraesi.save(\"chunky.pptx\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Und Diagramme? Die Zahlen kommen in ein <code>ChartData</code>: Kategorien für die x-Achse, dazu eine oder mehrere Datenreihen. Die Gem legt sogar die Excel-Tabelle mit ab, die hinter dem Diagramm steckt – in PowerPoint kannst du die Daten später bearbeiten.</p>"
+          },
+          {
+            "t": "c",
+            "code": "daten = Pptx::ChartData.new\ndaten.categories = %w[Mo Di Mi Do Fr]\ndaten.add_series(\"Speck\", [3, 5, 2, 6, 4])\n\nfolie = praesi.slides.add(praesi.slide_layouts[\"Title Only\"])\nfolie.shapes.title.text = \"Speck pro Tag\"\nfolie.shapes.add_chart(:column_clustered, daten,\n                       at: [Pptx.cm(2), Pptx.cm(4)],\n                       size: [Pptx.cm(20), Pptx.cm(12)])\n\npraesi.save(\"chunky.pptx\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Lesen geht auch: <code>Presentation.open</code> öffnet eine vorhandene Datei, und du läufst durch ihre Folien wie durch ein Array. Die leere Folie hat keinen Titel – deshalb <code>&amp;.</code>, das bei <code>nil</code> einfach <code>nil</code> liefert, statt abzustürzen.</p>"
+          },
+          {
+            "t": "c",
+            "code": "gelesen = Pptx::Presentation.open(\"chunky.pptx\")\ngelesen.slides.map { |f| f.shapes.title&.text }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb'><strong>Auf deinem Rechner:</strong> <code>gem install ruby_pptx</code> – oder <code>gem \"ruby_pptx\"</code> im Gemfile. Dort liest und schreibt die Gem XML mit <em>Nokogiri</em>, einer schnellen C-Erweiterung. Hier im Browser gibt es keine C-Erweiterungen, also nimmt sie automatisch <em>REXML</em>, das in reinem Ruby geschrieben ist: langsamer, aber mit genau derselben Datei als Ergebnis. Speichern kannst du dort überall hin, z. B. <code>praesi.save(\"~/Desktop/chunky.pptx\")</code>.</div><div class='task'><strong>Aufgabe:</strong> Bau eine <strong>Speisekarte</strong>! Lege eine neue Präsentation <code>karte</code> an, mit einer Titelfolie und <strong>mindestens zwei</strong> weiteren Folien – jede mit einem Titel, z. B. „Vorspeisen“ und „Hauptgänge“ mit ein paar Gerichten als Aufzählung. Speichere sie als <code>karte.pptx</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# karte = Pptx::Presentation.new_default\n# titel = karte.slides.add(karte.slide_layouts[\"Title Slide\"])\n# ...\n# karte.save(\"karte.pptx\")\n",
+            "check": "downloads.include?(\"karte.pptx\") && (k = Pptx::Presentation.open(\"karte.pptx\")).slides.size >= 3 && k.slides.all? { |f| !f.shapes.title.nil? && !f.shapes.title.text.strip.empty? }",
+            "hint": "Drei Folien, jede mit einem Layout, das einen Titel hat (\"Title Slide\", \"Title and Content\"), jeweils <code>shapes.title.text</code> setzen – und am Ende <code>karte.save(\"karte.pptx\")</code>. Der Download muss unter <em>dieser</em> Zelle erscheinen."
+          }
+        ]
+      },
+      "en": {
+        "title": "19. PowerPoint with ruby_pptx",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Slides from Ruby</h2><p>A PowerPoint file (<code>.pptx</code>) is really a ZIP archive full of XML files – one per slide, plus layouts, themes and images. Nobody writes that by hand, but with a gem it becomes easy: <a href='https://github.com/Largo/ruby_pptx' target='_blank'><code>ruby_pptx</code></a> is a Ruby port of the well-known Python library <em>python-pptx</em>.</p><p>Everything here runs in the browser: the gem is installed, the presentation is built and saved in Ruby. <strong>Every file your cell saves shows up below it as a download</strong> – click it and open it in PowerPoint, Keynote or LibreOffice.</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"ruby_pptx\"\nrequire \"ruby_pptx\"\n\ndeck = Pptx::Presentation.new_default\ntitle = deck.slides.add(deck.slide_layouts[\"Title Slide\"])\ntitle.shapes.title.text = \"Chunky Bacon\"\ntitle.placeholders[1].text_frame.text = \"A presentation, built with Ruby\"\n\ndeck.save(\"chunky.pptx\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>What just happened?</p><ul><li><code>Presentation.new_default</code> creates an empty presentation from the default template.</li><li>Every slide is based on a <strong>layout</strong>, just like in PowerPoint when you click “New Slide”. <code>slide_layouts[\"Title Slide\"]</code> finds one by name.</li><li>A layout brings <strong>placeholders</strong>: <code>shapes.title</code> is the title, <code>placeholders[1]</code> the box below it. You write text into their <code>text_frame</code>.</li><li><code>save</code> writes the file – and it is ready to download below.</li></ul><p>Which layouts are there? Just ask – the cell still knows <code>deck</code> from above:</p>"
+          },
+          {
+            "t": "c",
+            "code": "deck.slide_layouts.map(&:name)"
+          },
+          {
+            "t": "h",
+            "html": "<p>For bullet points use <code>\"Title and Content\"</code>. Each line (separated by <code>\\n</code>) becomes a <strong>paragraph</strong> with its own bullet. A paragraph has a <code>level</code> for indentation, and its pieces of text (<code>runs</code>) have a <code>font</code> – bold, italic, size, colour.</p>"
+          },
+          {
+            "t": "c",
+            "code": "slide = deck.slides.add(deck.slide_layouts[\"Title and Content\"])\nslide.shapes.title.text = \"Breakfast\"\n\ntext = slide.placeholders[1].text_frame\ntext.text = \"Bacon\\nnice and crispy\\nEggs\\nToast\"\ntext.paragraphs[1].level = 1\ntext.paragraphs[0].runs[0].font.bold = true\n\ndeck.save(\"chunky.pptx\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>On an empty slide (<code>\"Blank\"</code>) you place shapes yourself. Positions and sizes are real lengths: <code>Pptx.cm(2)</code>, <code>Pptx.inches(1)</code> or <code>Pptx.pt(28)</code> – no bare numbers where you have to guess whether pixels or centimetres are meant. <code>at:</code> is the top-left corner, <code>size:</code> width and height.</p>"
+          },
+          {
+            "t": "c",
+            "code": "slide = deck.slides.add(deck.slide_layouts[\"Blank\"])\nbox = slide.shapes.add_shape(:rounded_rectangle,\n                             at: [Pptx.cm(2), Pptx.cm(2)],\n                             size: [Pptx.cm(12), Pptx.cm(4)])\nbox.fill.solid\nbox.fill.fore_color.rgb = Pptx::RGBColor[\"E8722A\"]\nbox.text_frame.text = \"Chunky Bacon!\"\nbox.text_frame.paragraphs[0].runs[0].font.size = Pptx.pt(28)\n\ndeck.save(\"chunky.pptx\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>And charts? The numbers go into a <code>ChartData</code>: categories for the x axis, plus one or more series. The gem even stores the Excel sheet behind the chart – in PowerPoint you can edit the data later.</p>"
+          },
+          {
+            "t": "c",
+            "code": "data = Pptx::ChartData.new\ndata.categories = %w[Mon Tue Wed Thu Fri]\ndata.add_series(\"Bacon\", [3, 5, 2, 6, 4])\n\nslide = deck.slides.add(deck.slide_layouts[\"Title Only\"])\nslide.shapes.title.text = \"Bacon per day\"\nslide.shapes.add_chart(:column_clustered, data,\n                       at: [Pptx.cm(2), Pptx.cm(4)],\n                       size: [Pptx.cm(20), Pptx.cm(12)])\n\ndeck.save(\"chunky.pptx\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Reading works too: <code>Presentation.open</code> opens an existing file, and you walk through its slides like an array. The blank slide has no title – hence <code>&amp;.</code>, which simply returns <code>nil</code> for <code>nil</code> instead of crashing.</p>"
+          },
+          {
+            "t": "c",
+            "code": "opened = Pptx::Presentation.open(\"chunky.pptx\")\nopened.slides.map { |s| s.shapes.title&.text }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb'><strong>On your machine:</strong> <code>gem install ruby_pptx</code> – or <code>gem \"ruby_pptx\"</code> in your Gemfile. There the gem reads and writes XML with <em>Nokogiri</em>, a fast C extension. The browser has no C extensions, so here it automatically uses <em>REXML</em>, written in pure Ruby: slower, but producing exactly the same file. On your machine you can save anywhere, e.g. <code>deck.save(\"~/Desktop/chunky.pptx\")</code>.</div><div class='task'><strong>Task:</strong> Build a <strong>menu</strong>! Create a new presentation <code>menu</code> with a title slide and <strong>at least two</strong> more slides – each with a title, e.g. “Starters” and “Mains” with a few dishes as bullet points. Save it as <code>menu.pptx</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# menu = Pptx::Presentation.new_default\n# title = menu.slides.add(menu.slide_layouts[\"Title Slide\"])\n# ...\n# menu.save(\"menu.pptx\")\n",
+            "check": "downloads.include?(\"menu.pptx\") && (m = Pptx::Presentation.open(\"menu.pptx\")).slides.size >= 3 && m.slides.all? { |s| !s.shapes.title.nil? && !s.shapes.title.text.strip.empty? }",
+            "hint": "Three slides, each from a layout that has a title (\"Title Slide\", \"Title and Content\"), each with <code>shapes.title.text</code> set – and finally <code>menu.save(\"menu.pptx\")</code>. The download has to appear below <em>this</em> cell."
+          }
+        ]
+      }
+    },
+    {
       "id": "tl-collections",
       "section": {
         "de": "Aufbaukurs: timelog",
         "en": "Advanced: timelog"
       },
       "de": {
-        "title": "19. Projekt timelog: Collections",
+        "title": "20. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -1337,7 +1473,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "19. Project timelog: collections",
+        "title": "20. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -1379,7 +1515,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "20. Text parsen: Regex",
+        "title": "21. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -1410,7 +1546,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "20. Parsing text: regex",
+        "title": "21. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -1444,7 +1580,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "21. Methoden richtig bauen",
+        "title": "22. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -1475,7 +1611,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "21. Building methods properly",
+        "title": "22. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -1509,7 +1645,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "22. Entry & Timesheet",
+        "title": "23. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -1540,7 +1676,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "22. Entry & Timesheet",
+        "title": "23. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -1574,7 +1710,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "23. Testen mit Minitest",
+        "title": "24. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -1605,7 +1741,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "23. Testing with Minitest",
+        "title": "24. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -1639,7 +1775,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "24. Enumerable & Data",
+        "title": "25. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -1651,7 +1787,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 18, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 20, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -1662,7 +1798,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "24. Enumerable & Data",
+        "title": "25. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -1674,7 +1810,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 18, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 20, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -1688,7 +1824,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "25. Blocks, Procs & Lambdas",
+        "title": "26. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -1727,7 +1863,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "25. Blocks, procs & lambdas",
+        "title": "26. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -1769,7 +1905,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "26. Fehler behandeln",
+        "title": "27. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -1800,7 +1936,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "26. Handling errors",
+        "title": "27. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -1834,7 +1970,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "27. Daten speichern: Formate",
+        "title": "28. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -1889,7 +2025,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "27. Saving data: formats",
+        "title": "28. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -1947,7 +2083,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "28. Kommandozeile & Gems",
+        "title": "29. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -1974,7 +2110,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "28. Command line & gems",
+        "title": "29. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -2004,7 +2140,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "29. Pattern Matching",
+        "title": "30. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -2035,7 +2171,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "29. Pattern matching",
+        "title": "30. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -2069,7 +2205,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "30. Objektmodell & Metaprogrammierung",
+        "title": "31. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -2100,7 +2236,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "30. Object model & metaprogramming",
+        "title": "31. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -2134,7 +2270,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "31. Eine eigene DSL",
+        "title": "32. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -2157,7 +2293,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "31. Your own DSL",
+        "title": "32. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -2183,7 +2319,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "32. Codequalität & Debugging",
+        "title": "33. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -2206,7 +2342,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "32. Code quality & debugging",
+        "title": "33. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -2232,7 +2368,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "33. Performance & Nebenläufigkeit",
+        "title": "34. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -2279,7 +2415,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "33. Performance & concurrency",
+        "title": "34. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -2329,7 +2465,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "34. Finale: timelog im Web",
+        "title": "35. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -2356,7 +2492,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "34. Finale: timelog on the web",
+        "title": "35. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",

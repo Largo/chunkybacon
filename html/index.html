@@ -157,6 +157,16 @@
       return window.threeLoading;
     };
 
+    // A Blob URL for bytes handed over from Ruby as base64 - the link a cell
+    // offers for a file it wrote. Blob rather than data: URLs, which break
+    // down for multi-megabyte files.
+    window.makeDownloadUrl = function (base64, type) {
+      var raw = atob(base64);
+      var bytes = new Uint8Array(raw.length);
+      for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+      return URL.createObjectURL(new Blob([bytes], { type: type }));
+    };
+
     // Per-cell CodeMirror helpers called from Ruby (main.rb)
     window.cellEditors = {};
     window.initCell = function (idx) {

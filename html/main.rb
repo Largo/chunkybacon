@@ -74,6 +74,12 @@ unless Gem.respond_to?(:find_files)
   # minitest's plugin scan needs this; the wasm build ships a stripped Gem
   def Gem.find_files(*_args) = []
 end
+# ...but the stub does not last: a gem that loads full RubyGems (rubyzip
+# does, so ruby_pptx does) brings the real Gem.find_files, whose plugin scan
+# finds the wasm image's bundled minitest 6 and loads it over this 5.x -
+# after which every run_tests dies with an ArgumentError. Minitest's own
+# switch skips the scan whatever Gem looks like.
+ENV["MT_NO_PLUGINS"] = "1"
 Minitest.parallel_executor = Object.new.tap do |stub|
   def stub.start; end
   def stub.shutdown; end
@@ -419,6 +425,41 @@ class ChunkyApp
     @run_images << data_url if @run_images
   end
 
+  # ---------- downloads ----------
+
+  DOWNLOAD_TYPES = {
+    ".pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    ".xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ".png" => "image/png", ".jpg" => "image/jpeg", ".svg" => "image/svg+xml",
+    ".csv" => "text/csv", ".json" => "application/json", ".html" => "text/html",
+    ".txt" => "text/plain", ".md" => "text/markdown", ".zip" => "application/zip"
+  }.freeze
+
+  # A file to offer below the cell. The same name twice keeps the last.
+  def add_download(name, bytes)
+    return unless @run_downloads
+    @run_downloads.reject! { |existing, _| existing == name }
+    @run_downloads << [name, bytes.to_s.b]
+  end
+
+  def downloads_html(idx)
+    (@download_urls[idx] || []).each { |url| $window[:URL].revokeObjectURL(url) }
+    @download_urls[idx] = []
+    links = @run_downloads.map do |name, bytes|
+      type = DOWNLOAD_TYPES.fetch(File.extname(name).downcase, "application/octet-stream")
+      url = $window.makeDownloadUrl([bytes].pack("m0"), type).to_s
+      @download_urls[idx] << url
+      "<a class=\"cell-download\" href=\"#{url}\" download=\"#{escape_html(File.basename(name))}\">" \
+        "⬇ #{escape_html(name)} <small>#{format_size(bytes.bytesize)}</small></a>"
+    end
+    "<div class=\"cell-downloads\" title=\"#{escape_html(ui["downloadTip"])}\">#{links.join}</div>"
+  end
+
+  def format_size(bytes)
+    bytes < 1024 ? "#{bytes} B" : "#{(bytes / 1024.0).round(1)} KB"
+  end
+
   # ---------- file explorer widget ----------
 
   def add_files_widget
@@ -726,7 +767,10 @@ class ChunkyApp
     @run_irbs = []
     @run_files = []
     @run_three = []
+    @run_downloads = []
+    @download_urls ||= {}
     dispose_three(idx)
+    watch = FileWatch.snapshot
 
     error = nil
     result = nil
@@ -741,10 +785,17 @@ class ChunkyApp
       $stdout = old_stdout
     end
     output = buffer.string
+    # files the code wrote come first; an explicit download_file of the same
+    # name replaces its entry
+    explicit = @run_downloads
+    @run_downloads = []
+    FileWatch.changes_since(watch).each { |path, bytes| add_download(path, bytes) }
+    explicit.each { |name, bytes| add_download(name, bytes) }
 
     out_html = ""
     out_html += "<pre class=\"cell-stdout\">#{escape_html(output)}</pre>" unless output.empty?
-    widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any? || @run_three.any?
+    widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any? || @run_three.any? ||
+                      @run_downloads.any?
     if error
       out_html += "<div class=\"cell-error\">#{escape_html(error.class)}: #{escape_html(error.message)}</div>"
     elsif !(result.nil? && (!output.empty? || widgets_present))
@@ -753,6 +804,7 @@ class ChunkyApp
     @run_images.each do |data_url|
       out_html += "<img class=\"cell-image\" alt=\"\" src=\"#{data_url}\">"
     end
+    out_html += downloads_html(idx) if @run_downloads.any?
     new_widgets = []
     @run_browsers.each do |spec|
       bid = @browser_apps.length
@@ -804,6 +856,7 @@ class ChunkyApp
     @bind.local_variable_set(:result, result)
     @bind.local_variable_set(:code, code)
     @bind.local_variable_set(:images, (@run_images || []).dup)
+    @bind.local_variable_set(:downloads, (@run_downloads || []).map(&:first))
     @bind.local_variable_set(:scenes, (@run_three || []).map { |spec| spec[:scene] })
     passed = begin
       !!eval(cell["check"], @bind, "check.rb")
@@ -843,6 +896,22 @@ module Kernel
                  "data:image/png;base64," + [image.to_s].pack("m0")
                end
     ChunkyApp.instance.add_image(data_url)
+    nil
+  end
+
+  # Offers a download below the cell. Files a cell writes are offered
+  # anyway; this is for data that never went through a file:
+  #   download_file praesi.to_blob, "chunky.pptx"
+  #   download_file "notizen.txt"            # a file, by its path
+  def download_file(data, name = nil)
+    if name.nil?
+      name = data.to_s
+      virtual = SandboxFS.virtual?(name) && SandboxFS.exist?(name)
+      data = virtual ? SandboxFS.read(name) : File.binread(name)
+    elsif data.respond_to?(:to_blob)
+      data = data.to_blob
+    end
+    ChunkyApp.instance.add_download(name.to_s, data)
     nil
   end
 

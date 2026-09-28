@@ -3,6 +3,12 @@
 # exercises them: chunky_png draws a PNG, gammo parses HTML with CSS
 # selectors. Also verifies the native-gem guard and unknown-gem error.
 require_relative "../html/browser_gems"
+require "tmpdir"
+
+# gem code "lives" under this root; in the browser it is /browser_gems in
+# wasm memory, here a temp dir, so gem assets never touch the real root
+BrowserGems.root = Dir.mktmpdir("browser_gems")
+at_exit { FileUtils.rm_rf(BrowserGems.root) }
 
 CACHE = File.expand_path("../html/gems/cache", __dir__)
 
@@ -113,17 +119,14 @@ end
 
 # --- ruby_pptx: an optional native dependency, and non-Ruby lib files ---
 # ruby_pptx declares nokogiri but falls back to REXML without it, and reads
-# its templates (default.pptx and friends) relative to __dir__. Assets go to
-# a temp dir here; in the browser they land in wasm memory at /browser_gems.
-require "tmpdir"
-Dir.mktmpdir do |assets|
-  BrowserGems.asset_root = assets
+# its templates (default.pptx and friends) relative to __dir__.
+begin
   BrowserGems.install("ruby_pptx")
   check.call "ruby_pptx installs without its optional nokogiri",
              BrowserGems.installed.key?("ruby_pptx") && !BrowserGems.installed.key?("nokogiri")
   check.call "ruby_pptx brings its pure-Ruby dependencies",
              %w[rubyzip rexml].all? { |dep| BrowserGems.installed.key?(dep) }
-  template = File.join(assets, "ruby_pptx", "ruby_pptx", "templates", "default.pptx")
+  template = File.join(BrowserGems.root, "ruby_pptx", "ruby_pptx", "templates", "default.pptx")
   check.call "ruby_pptx's templates are written where its code looks for them",
              File.file?(template) && File.binread(template, 2) == "PK"
 
@@ -149,8 +152,6 @@ Dir.mktmpdir do |assets|
     BrowserGems.fetch_text, BrowserGems.fetch_binary = fetch_text, fetch_binary
     BrowserGems.manifest["ruby_pptx"] = entry
   end
-ensure
-  BrowserGems.asset_root = nil
 end
 
 check.call "second install is a no-op returning version",

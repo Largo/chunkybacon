@@ -7,6 +7,15 @@ require 'stringio'
 require_relative "../html/browser_gems"
 require_relative "../html/rack_playground"
 require_relative "../html/sandbox_sim"
+require "tmpdir"
+require "fileutils"
+
+# Gem code "lives" under BrowserGems.root and cells write files relative to
+# the working directory; both are temp dirs here, as both are wasm memory in
+# the browser, so nothing lands in the checkout or the real filesystem root.
+BrowserGems.root = Dir.mktmpdir("browser_gems")
+WORKDIR = Dir.mktmpdir("chunky_cwd")
+at_exit { FileUtils.rm_rf([BrowserGems.root, WORKDIR]) }
 
 CACHE = File.expand_path("../html/gems/cache", __dir__)
 BrowserGems.cache_base = "cache"
@@ -17,7 +26,13 @@ BrowserGems.fetch_text = ->(url) { (p = url.sub("cache/", "#{CACHE}/")) && File.
 # cell helpers as provided by main.rb in the browser
 $shown_images = []
 $shown_scenes = []
+$explicit_downloads = []
 module Kernel
+  def download_file(data, name = nil)
+    $explicit_downloads << (name || data).to_s
+    nil
+  end
+
   def install_gem(name)
     "#{name} #{BrowserGems.install(name)}"
   end
@@ -135,6 +150,26 @@ SOLUTIONS = {
     "en" => [
       %(tower = Three::Scene.new\ntower.add(Three::AmbientLight.new(0xffffff, 0.4))\nsun = Three::DirectionalLight.new(0xffffff, 2.0)\nsun.position.set(2, 4, 3)\ntower.add(sun)\n\n3.times do |i|\n  block = Three::Mesh.new(\n    Three::BoxGeometry.new(1, 1, 1),\n    Three::MeshStandardMaterial.new(color: 0xe8722a)\n  )\n  block.position.y = i - 1.0\n  tower.add(block)\nend\n\nshow_three tower, camera do\n  tower.rotation.y += 0.01\nend)
     ]
+  },
+  "pptx" => {
+    "de" => [%(karte = Pptx::Presentation.new_default
+titel = karte.slides.add(karte.slide_layouts["Title Slide"])
+titel.shapes.title.text = "Speisekarte"
+%w[Vorspeisen Hauptgänge].each do |gang|
+  folie = karte.slides.add(karte.slide_layouts["Title and Content"])
+  folie.shapes.title.text = gang
+  folie.placeholders[1].text_frame.text = "Speck\nEier"
+end
+karte.save("karte.pptx"))],
+    "en" => [%(menu = Pptx::Presentation.new_default
+title = menu.slides.add(menu.slide_layouts["Title Slide"])
+title.shapes.title.text = "Menu"
+%w[Starters Mains].each do |course|
+  slide = menu.slides.add(menu.slide_layouts["Title and Content"])
+  slide.shapes.title.text = course
+  slide.placeholders[1].text_frame.text = "Bacon\nEggs"
+end
+menu.save("menu.pptx"))]
   },
   "tl-collections" => {
     "de" => [%(eintraege = [{ projekt: "ProjectX", stunden: 3.5 }, { projekt: "Intern", stunden: 2.0 }, { projekt: "ProjectX", stunden: 3.0 }]
@@ -589,6 +624,7 @@ end
 def run_harness
   data = JSON.parse(File.read(File.expand_path("lessons.json", __dir__)))
   failures = 0
+  Dir.chdir(WORKDIR)
 
   data["lessons"].each do |lesson|
   %w[de en].each do |lang|
@@ -616,8 +652,11 @@ def run_harness
 
       $shown_images = []
       $shown_scenes = []
+      $explicit_downloads = []
       SandboxFS.reset!
+      watch = FileWatch.snapshot
       result, output, error = run_in(bind, candidate)
+      downloads = FileWatch.changes_since(watch).map(&:first) | $explicit_downloads
       if error && label != "starter"
         puts "FAIL #{lesson["id"]}/#{lang} (#{label}): raised #{error.class}: #{error.message}"
         failures += 1
@@ -629,6 +668,7 @@ def run_harness
       bind.local_variable_set(:code, candidate)
       bind.local_variable_set(:images, $shown_images.dup)
       bind.local_variable_set(:scenes, $shown_scenes.dup)
+      bind.local_variable_set(:downloads, downloads)
       passed = begin
         !!eval(exercise["check"], bind, "check.rb")
       rescue Exception

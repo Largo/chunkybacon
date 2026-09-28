@@ -30,7 +30,7 @@ await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 check('app becomes visible after wasm boot', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('34 lessons in nav', (await page.$$('#lessonNav a')).length === 34);
+check('35 lessons in nav', (await page.$$('#lessonNav a')).length === 35);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -268,6 +268,41 @@ await page.waitForTimeout(1200);
 check('tower exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 check('tower exercise renders its own stage', (await canvasColors('.cell.exercise .three-stage canvas')).distinct > 1);
 
+// ruby_pptx lesson: the gem runs on REXML in the browser, and files a cell
+// saves are offered below it as downloads
+const downloadLinks = async (sel) => page.$$eval(`${sel} a.cell-download`, as => as.map(a => ({ name: a.getAttribute('download'), href: a.href })));
+const firstBytes = async (href) => page.evaluate(async (h) => Array.from(new Uint8Array(await (await fetch(h)).arrayBuffer())).slice(0, 2), href);
+const waitForDownload = async (sel, name) => {
+  for (let i = 0; i < 60; i++) {
+    const found = (await downloadLinks(sel)).find(l => l.name === name);
+    if (found) return found;
+    await page.waitForTimeout(500);
+  }
+  return null;
+};
+await page.click('#lessonNav a[data-id="pptx"]');
+await page.waitForTimeout(300);
+await page.click('.run-cell[data-idx="1"]');
+const deckLink = await waitForDownload('#cell-out-1', 'chunky.pptx');
+check('ruby_pptx installs from cache', (await page.textContent('#gemsList')).includes('ruby_pptx ✓'));
+check('saving a deck offers it for download', deckLink !== null);
+check('the download is a real .pptx (zip)', deckLink !== null && JSON.stringify(await firstBytes(deckLink.href)) === '[80,75]');
+for (const idx of [5, 7, 9]) {
+  await page.click(`.run-cell[data-idx="${idx}"]`);
+  await waitForDownload(`#cell-out-${idx}`, 'chunky.pptx');
+}
+await page.click('.run-cell[data-idx="11"]');
+await page.waitForTimeout(1500);
+check('the saved deck reads back slide by slide', (await page.textContent('#cell-out-11')).includes('"Speck pro Tag"'));
+await setExercise('download_file "Hallo", "gruss.txt"');
+await runExercise();
+check('download_file offers data that was never a file', (await downloadLinks('.cell.exercise')).some(l => l.name === 'gruss.txt'));
+await setExercise('karte = Pptx::Presentation.new_default\ntitel = karte.slides.add(karte.slide_layouts["Title Slide"])\ntitel.shapes.title.text = "Speisekarte"\n%w[Vorspeisen Hauptgänge].each do |gang|\n  folie = karte.slides.add(karte.slide_layouts["Title and Content"])\n  folie.shapes.title.text = gang\n  folie.placeholders[1].text_frame.text = "Speck\\nEier"\nend\nkarte.save("karte.pptx")');
+await runExercise();
+await waitForDownload('.cell.exercise', 'karte.pptx');
+await page.waitForTimeout(500);
+check('menu exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
 // timelog track: simulated filesystem + explorer widget
 await page.click('#lessonNav a[data-id="tl-formats"]');
 await page.waitForTimeout(300);
@@ -297,7 +332,9 @@ const interleaved = await page.textContent('#cell-out-5');
 check('sim threads print all steps', interleaved.includes('Faden 0: Schritt 2') && interleaved.includes('Faden 1: Schritt 2'));
 check('sim threads genuinely interleave', interleaved.indexOf('Faden 1: Schritt 0') < interleaved.indexOf('Faden 0: Schritt 1'));
 
-// timelog track: Minitest runs for real in the browser
+// timelog track: Minitest runs for real in the browser. Runs after the
+// ruby_pptx lesson on purpose: rubyzip loads full RubyGems, which once let
+// minitest's plugin scan pull the bundled minitest 6 over the cached 5.x.
 await page.click('#lessonNav a[data-id="tl-minitest"]');
 await page.waitForTimeout(300);
 await page.click('.run-cell[data-idx="1"]');

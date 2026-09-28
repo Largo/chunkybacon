@@ -33,7 +33,8 @@ module BrowserGems
 
   # gem code is evaluated as if it lived here; files in a gem's lib/ that are
   # not Ruby (templates, data) are written to the same place, so the gem
-  # finds them relative to __dir__ as it would on disk
+  # finds them relative to __dir__ as it would on disk. main.rb's
+  # require_relative bridge assumes this default.
   ROOT = "/browser_gems"
 
   # Minimal stand-ins for stdlib that is missing in ruby.wasm (WASI has no
@@ -150,12 +151,12 @@ module BrowserGems
 
   class << self
     attr_accessor :fetch_binary, :fetch_text, :cache_base, :proxy_base
-    # where non-Ruby lib files are written; the offline harness points it
-    # at a temp dir instead of the real filesystem root
-    attr_writer :asset_root
+    # the offline harnesses point this at a temp dir, so gem assets are not
+    # written to the real filesystem root; set it before installing anything
+    attr_writer :root
 
-    def asset_root
-      @asset_root || ROOT
+    def root
+      @root || ROOT
     end
 
     def installed
@@ -245,7 +246,7 @@ module BrowserGems
       return if assets.empty?
       require 'fileutils'
       assets.each do |path, content|
-        target = File.join(asset_root, name, path)
+        target = File.join(root, name, path)
         FileUtils.mkdir_p(File.dirname(target))
         File.binwrite(target, content)
       end
@@ -301,7 +302,7 @@ module BrowserGems
         full = "#{gem_name}:#{key}"
         return true if loaded[full]
         loaded[full] = true
-        Kernel.eval(lib[key], TOPLEVEL_BINDING, "#{ROOT}/#{gem_name}/#{key}")
+        Kernel.eval(lib[key], TOPLEVEL_BINDING, "#{root}/#{gem_name}/#{key}")
         return true
       end
       nil
@@ -311,7 +312,7 @@ module BrowserGems
     # require_relative argument back to a gem-space feature key.
     def relative_key(caller_path, relative)
       File.expand_path(relative, File.dirname(caller_path))
-          .sub(%r{\A/browser_gems/[^/]+/}, "")
+          .sub(%r{\A#{Regexp.escape(root)}/[^/]+/}, "")
     end
   end
 end
@@ -359,7 +360,7 @@ unless Kernel.private_method_defined?(:original_require_relative)
     def require_relative(path)
       location = caller_locations(1, 1).first
       caller_path = ((location && (location.absolute_path || location.path)) || "").to_s
-      if caller_path.start_with?("/browser_gems/")
+      if caller_path.start_with?("#{BrowserGems.root}/")
         BrowserGems.load_feature(BrowserGems.relative_key(caller_path, path)) or
           raise LoadError, "cannot load such file -- #{path}"
       else
