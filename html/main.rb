@@ -7,23 +7,42 @@ require 'json'
 require 'stringio'
 require 'singleton'
 
-# require_relative bridge (pattern from BrowserRubyKoans): builtin files
-# first, gem-space files for code loaded by BrowserGems, remote URL fetch
-# for our own source files (browser_gems.rb).
+# require_relative bridge (pattern from BrowserRubyKoans): files on the
+# wasm filesystem first (stdlib, installed gems), remote URL fetch for our
+# own source files (browser_gems.rb), which are not on that filesystem.
+# Code that is (stdlib's net/https, gems) never falls through to the remote
+# fetch - a missing file there is a plain LoadError, which the require hook
+# may still answer with a shim.
 module Kernel
   alias original_require_relative require_relative
   def require_relative(path)
     location = caller_locations(1, 1).first
     caller_path = (location.absolute_path || location.path).to_s
-    if caller_path.start_with?("/browser_gems/")
-      BrowserGems.load_feature(BrowserGems.relative_key(caller_path, path)) or
-        raise LoadError, "cannot load such file -- #{path}"
-    else
-      begin
-        original_require_relative(File.absolute_path(path, File.dirname(caller_path)))
-      rescue LoadError
-        JS::RequireRemote.instance.load(path)
-      end
+    begin
+      original_require_relative(File.absolute_path(path, File.dirname(caller_path)))
+    rescue LoadError
+      raise if caller_path.start_with?("/")
+      JS::RequireRemote.instance.load(path)
+    end
+  end
+end
+
+# gems (roo, Tempfile users) expect a temp dir; the wasm filesystem starts
+# without one, and reports no permission bits, which Dir.tmpdir rejects
+Dir.mkdir("/tmp") unless Dir.exist?("/tmp")
+require "tmpdir"
+def Dir.tmpdir = "/tmp"
+
+# ...nor owners or settable times: gems that set them after writing a file
+# (rubyzip extracting, so roo) carry on, as the call can change nothing
+class << File
+  { chmod: 1, lchmod: 1, chown: 2, lchown: 2, utime: 2, lutime: 2 }.each do |name, leading|
+    next unless method_defined?(name)
+    alias_method :"wasm_orig_#{name}", name
+    define_method(name) do |*args|
+      send(:"wasm_orig_#{name}", *args)
+    rescue Errno::ENOSYS, Errno::ENOTSUP
+      args.size - leading
     end
   end
 end
@@ -73,6 +92,13 @@ end
 unless Gem.respond_to?(:find_files)
   # minitest's plugin scan needs this; the wasm build ships a stripped Gem
   def Gem.find_files(*_args) = []
+end
+# ...which also lacks Gem::Deprecate, used by gems at load time
+# (addressable, and so premailer)
+begin
+  require "rubygems/deprecate" unless defined?(Gem::Deprecate)
+rescue LoadError
+  nil
 end
 # ...but the stub does not last: a gem that loads full RubyGems (rubyzip
 # does, so ruby_pptx does) brings the real Gem.find_files, whose plugin scan
@@ -455,8 +481,10 @@ class ChunkyApp
     version = BrowserGems.install(name)
     render_gems_panel
     "#{name} #{version}"
-  rescue BrowserGems::NativeGemError
-    raise BrowserGems::NativeGemError, format(ui["nativeGem"], name)
+  rescue BrowserGems::NativeGemError => e
+    # the gem with C code may be a dependency of the one asked for
+    message = e.message == name ? format(ui["nativeGem"], name) : format(ui["nativeDep"], name, e.message)
+    raise BrowserGems::NativeGemError, message
   rescue BrowserGems::NotFoundError
     raise BrowserGems::NotFoundError, format(ui["gemNotFound"], name)
   end

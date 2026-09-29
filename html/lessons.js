@@ -37,6 +37,7 @@ window.LESSONS_JSON = JSON.stringify({
       "gemsCachedTip": "lokal zwischengespeichert – installiert sofort",
       "gemsNote": "Pure-Ruby-Gems von rubygems.org, direkt im Browser installiert. ⚡ = lokal zwischengespeichert. Gems mit C-Code (z.&nbsp;B. nokogiri) funktionieren hier nicht.",
       "gemInstalled": "💎 %s installiert! Jetzt einfach mit <code>require</code> laden.",
+      "nativeDep": "%s braucht %s, und das enthält C-Code (eine „native extension“) – das kann nicht zur Laufzeit im Browser installiert werden. Solche Gems müssen beim Bauen der ruby.wasm-Datei fest einkompiliert werden.",
       "nativeGem": "%s enthält C-Code (eine „native extension“) und kann nicht zur Laufzeit im Browser installiert werden. Solche Gems müssen beim Bauen der ruby.wasm-Datei fest einkompiliert werden – so macht es z. B. Evil Martians' TutorialKit.rb.",
       "gemNotFound": "Gem „%s“ wurde nicht gefunden (oder der Download schlug fehl).",
       "browserGo": "Los",
@@ -74,6 +75,7 @@ window.LESSONS_JSON = JSON.stringify({
       "gemsCachedTip": "cached locally – installs instantly",
       "gemsNote": "Pure-Ruby gems from rubygems.org, installed right in your browser. ⚡ = cached locally. Gems with C code (e.g. nokogiri) do not work here.",
       "gemInstalled": "💎 %s installed! Now just load it with <code>require</code>.",
+      "nativeDep": "%s needs %s, which contains C code (a “native extension”) and cannot be installed at runtime in the browser. Such gems must be compiled into the ruby.wasm binary itself.",
       "nativeGem": "%s contains C code (a “native extension”) and cannot be installed at runtime in the browser. Such gems must be compiled into the ruby.wasm binary itself – that is how Evil Martians' TutorialKit.rb does it.",
       "gemNotFound": "Gem “%s” was not found (or the download failed).",
       "browserGo": "Go",
@@ -926,7 +928,7 @@ window.LESSONS_JSON = JSON.stringify({
         "cells": [
           {
             "t": "h",
-            "html": "<h2>HTML parsen – wie die Profis</h2><p>Ruby wird oft benutzt, um Webseiten auszulesen (<em>Scraping</em>). Das berühmteste Werkzeug dafür heisst <strong>Nokogiri</strong>:</p><pre><code>require \"nokogiri\"\ndoc = Nokogiri::HTML(html)\ndoc.css(\"a\").each { |link| puts link.text }</code></pre><p>Nokogiri ist aber zu grossen Teilen in <strong>C</strong> geschrieben. Hier im Browser läuft Ruby als WebAssembly, und dort lassen sich zur Laufzeit nur pure-Ruby-Gems installieren – C-Gems müssten fest in die wasm-Datei einkompiliert werden. Probier ruhig aus, was passiert:</p>"
+            "html": "<h2>HTML parsen – wie die Profis</h2><p>Ruby wird oft benutzt, um Webseiten auszulesen (<em>Scraping</em>). Das berühmteste Werkzeug dafür heisst <strong>Nokogiri</strong> – fast jedes Ruby-Programm, das HTML oder XML liest, benutzt es:</p><pre><code>require \"nokogiri\"\ndoc = Nokogiri::HTML5(html)\ndoc.css(\"a\").each { |link| puts link.text }</code></pre><p>Auf deinem Rechner ist Nokogiri zu grossen Teilen <strong>C</strong>: Es bringt die C-Bibliotheken <em>libxml2</em> und <em>gumbo</em> mit. Hier im Browser läuft Ruby als WebAssembly, und dort lassen sich zur Laufzeit nur Gems in purem Ruby installieren. Darum bekommst du hier <strong>nokogiri-pure</strong>: dasselbe Nokogiri, nur sind seine C-Teile nach Ruby übersetzt. Es ist langsamer, liefert aber dieselben Ergebnisse – und Gems, die Nokogiri brauchen (<code>loofah</code>, <code>sanitize</code>, <code>premailer</code>, <code>rubyXL</code> …), laufen damit auch hier.</p>"
           },
           {
             "t": "c",
@@ -934,29 +936,29 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Zum Glück gibt es <code>gammo</code>, einen HTML5-Parser in purem Ruby. Die Ideen sind genau dieselben wie bei Nokogiri: erst <em>parsen</em> (aus Text wird ein Baum), dann mit <strong>CSS-Selektoren</strong> suchen:</p>"
+            "html": "<p>Die Idee: erst <em>parsen</em> (aus Text wird ein Baum), dann mit <strong>CSS-Selektoren</strong> suchen. <code>Nokogiri::HTML5</code> liest HTML so, wie es ein moderner Browser tut:</p>"
           },
           {
             "t": "c",
-            "code": "install_gem \"gammo\"\nrequire \"gammo\"\nrequire \"gammo/css_selector\"\n\nhtml = \"<html><body>\n  <h1>Speisekarte</h1>\n  <ul>\n    <li><a href='/speck'>Speck</a></li>\n    <li><a href='/ei'>Ei</a></li>\n    <li><a href='/kaffee'>Kaffee</a></li>\n  </ul>\n</body></html>\"\n\ndoc = Gammo.new(html).parse\ndoc.css(\"li\").length"
+            "code": "require \"nokogiri\"\n\nhtml = \"<html><body>\n  <h1>Speisekarte</h1>\n  <ul>\n    <li><a href='/speck'>Speck</a></li>\n    <li><a href='/ei'>Ei</a></li>\n    <li><a href='/kaffee'>Kaffee</a></li>\n  </ul>\n</body></html>\"\n\ndoc = Nokogiri::HTML5(html)\ndoc.css(\"li\").length"
           },
           {
             "t": "h",
-            "html": "<p><code>doc.css(\"li\")</code> findet alle <code>&lt;li&gt;</code>-Elemente – wie in einem Stylesheet. Jeder Treffer ist ein Knoten mit <code>inner_text</code> und <code>attributes</code>:</p>"
+            "html": "<p><code>doc.css(\"li\")</code> findet alle <code>&lt;li&gt;</code>-Elemente – wie in einem Stylesheet. Jeder Treffer ist ein Knoten: <code>text</code> liefert seinen Text, und ein Attribut liest du wie bei einem Hash, mit <code>link[\"href\"]</code>:</p>"
           },
           {
             "t": "c",
-            "code": "doc.css(\"a\").map { |link| link.inner_text }"
+            "code": "doc.css(\"a\").map { |link| link.text }"
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Aufgabe:</strong> Sammle alle <strong>Link-Adressen</strong> aus dem Dokument: Baue mit <code>map</code> ein Array <code>links</code> aller <code>href</code>-Werte. An ein Attribut kommst du mit <code>link.attributes.to_h[\"href\"]</code>. Ergebnis: <code>[\"/speck\", \"/ei\", \"/kaffee\"]</code>. (Führe zuerst die Zellen oben aus, damit <code>doc</code> existiert.)</div>"
+            "html": "<div class='task'><strong>Aufgabe:</strong> Sammle alle <strong>Link-Adressen</strong> aus dem Dokument: Baue mit <code>map</code> ein Array <code>links</code> aller <code>href</code>-Werte. An ein Attribut kommst du mit <code>link[\"href\"]</code>. Ergebnis: <code>[\"/speck\", \"/ei\", \"/kaffee\"]</code>. (Führe zuerst die Zellen oben aus, damit <code>doc</code> existiert.)</div>"
           },
           {
             "t": "x",
             "code": "# links = doc.css(\"a\").map { |link| ... }\n",
             "check": "links == [\"/speck\", \"/ei\", \"/kaffee\"]",
-            "hint": "<code>links = doc.css(\"a\").map { |link| link.attributes.to_h[\"href\"] }</code> – und vorher die Demo-Zellen ausführen, damit <code>doc</code> existiert."
+            "hint": "<code>links = doc.css(\"a\").map { |link| link[\"href\"] }</code> – und vorher die Demo-Zellen ausführen, damit <code>doc</code> existiert."
           }
         ]
       },
@@ -965,7 +967,7 @@ window.LESSONS_JSON = JSON.stringify({
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Parsing HTML – like the pros</h2><p>Ruby is often used to read websites (<em>scraping</em>). The most famous tool for that is <strong>Nokogiri</strong>:</p><pre><code>require \"nokogiri\"\ndoc = Nokogiri::HTML(html)\ndoc.css(\"a\").each { |link| puts link.text }</code></pre><p>But Nokogiri is largely written in <strong>C</strong>. In this browser Ruby runs as WebAssembly, where only pure-Ruby gems can be installed at runtime – C gems would have to be compiled into the wasm binary itself. Go ahead and see what happens:</p>"
+            "html": "<h2>Parsing HTML – like the pros</h2><p>Ruby is often used to read websites (<em>scraping</em>). The most famous tool for that is <strong>Nokogiri</strong> – almost every Ruby program that reads HTML or XML uses it:</p><pre><code>require \"nokogiri\"\ndoc = Nokogiri::HTML5(html)\ndoc.css(\"a\").each { |link| puts link.text }</code></pre><p>On your machine Nokogiri is largely <strong>C</strong>: it ships the C libraries <em>libxml2</em> and <em>gumbo</em>. In this browser Ruby runs as WebAssembly, where only pure-Ruby gems can be installed at runtime. So here you get <strong>nokogiri-pure</strong>: the same Nokogiri with its C parts translated to Ruby. It is slower, but gives the same results – and gems that need Nokogiri (<code>loofah</code>, <code>sanitize</code>, <code>premailer</code>, <code>rubyXL</code> …) run here too.</p>"
           },
           {
             "t": "c",
@@ -973,29 +975,29 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Luckily there is <code>gammo</code>, an HTML5 parser in pure Ruby. The ideas are exactly the same as Nokogiri's: first <em>parse</em> (text becomes a tree), then search with <strong>CSS selectors</strong>:</p>"
+            "html": "<p>The idea: first <em>parse</em> (text becomes a tree), then search with <strong>CSS selectors</strong>. <code>Nokogiri::HTML5</code> reads HTML the way a modern browser does:</p>"
           },
           {
             "t": "c",
-            "code": "install_gem \"gammo\"\nrequire \"gammo\"\nrequire \"gammo/css_selector\"\n\nhtml = \"<html><body>\n  <h1>Menu</h1>\n  <ul>\n    <li><a href='/bacon'>Bacon</a></li>\n    <li><a href='/egg'>Egg</a></li>\n    <li><a href='/coffee'>Coffee</a></li>\n  </ul>\n</body></html>\"\n\ndoc = Gammo.new(html).parse\ndoc.css(\"li\").length"
+            "code": "require \"nokogiri\"\n\nhtml = \"<html><body>\n  <h1>Menu</h1>\n  <ul>\n    <li><a href='/bacon'>Bacon</a></li>\n    <li><a href='/egg'>Egg</a></li>\n    <li><a href='/coffee'>Coffee</a></li>\n  </ul>\n</body></html>\"\n\ndoc = Nokogiri::HTML5(html)\ndoc.css(\"li\").length"
           },
           {
             "t": "h",
-            "html": "<p><code>doc.css(\"li\")</code> finds all <code>&lt;li&gt;</code> elements – just like in a stylesheet. Every match is a node with <code>inner_text</code> and <code>attributes</code>:</p>"
+            "html": "<p><code>doc.css(\"li\")</code> finds all <code>&lt;li&gt;</code> elements – just like in a stylesheet. Every match is a node: <code>text</code> gives its text, and you read an attribute like a hash, with <code>link[\"href\"]</code>:</p>"
           },
           {
             "t": "c",
-            "code": "doc.css(\"a\").map { |link| link.inner_text }"
+            "code": "doc.css(\"a\").map { |link| link.text }"
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Task:</strong> Collect all <strong>link addresses</strong> from the document: use <code>map</code> to build an array <code>links</code> of all <code>href</code> values. You reach an attribute via <code>link.attributes.to_h[\"href\"]</code>. Expected result: <code>[\"/bacon\", \"/egg\", \"/coffee\"]</code>. (Run the cells above first so <code>doc</code> exists.)</div>"
+            "html": "<div class='task'><strong>Task:</strong> Collect all <strong>link addresses</strong> from the document: use <code>map</code> to build an array <code>links</code> of all <code>href</code> values. You reach an attribute via <code>link[\"href\"]</code>. Expected result: <code>[\"/bacon\", \"/egg\", \"/coffee\"]</code>. (Run the cells above first so <code>doc</code> exists.)</div>"
           },
           {
             "t": "x",
             "code": "# links = doc.css(\"a\").map { |link| ... }\n",
             "check": "links == [\"/bacon\", \"/egg\", \"/coffee\"]",
-            "hint": "<code>links = doc.css(\"a\").map { |link| link.attributes.to_h[\"href\"] }</code> – and run the demo cells first so <code>doc</code> exists."
+            "hint": "<code>links = doc.css(\"a\").map { |link| link[\"href\"] }</code> – and run the demo cells first so <code>doc</code> exists."
           }
         ]
       }

@@ -126,5 +126,12 @@
     "version": "0.3.0",
     "file": "base64-0.3.0.gem",
     "deps": []
+  },
+  "nokogiri": {
+    "version": "1.19.4",
+    "file": "nokogiri-1.19.4.gem",
+    "deps": [
+      "racc"
+    ]
   }
 }

@@ -15,12 +15,21 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   cell shows its last expression as `=> …` — `puts` is never required.
 - **In-browser gem installer**: pure-Ruby gems install at runtime
   (`install_gem "chunky_png"`), fetched from a local cache or from
-  rubygems.org through a same-origin nginx proxy. Native gems (nokogiri)
-  fail with a friendly explanation of the wasm limitation - unless the gem
-  that wants one can do without it (`OPTIONAL_NATIVE_DEPS`: ruby_pptx
-  falls back to REXML). Non-Ruby files in a gem's `lib/`, such as
-  ruby_pptx's templates, are written to the in-memory filesystem where the
-  gem expects them.
+  rubygems.org through a same-origin nginx proxy, and unpacked onto the
+  wasm filesystem (writable memory) with their declared load paths on
+  `$LOAD_PATH` - so `require`, `require_relative`, `autoload`, `__dir__`
+  and data files next to `lib/` behave as on disk.
+- **Nokogiri in the browser**: the cache holds
+  [nokogiri-pure](https://github.com/Largo/nokogiri-pure) - Nokogiri
+  1.19.4 with its C extension, libxml2, libxslt and gumbo ported to Ruby -
+  built under the name `nokogiri`, so gems that depend on nokogiri
+  (loofah, sanitize, rails-html-sanitizer, premailer, feedjira, rubyXL,
+  roo, caxlsx, reverse_markdown …) install and run too. Other native gems
+  fail with a friendly explanation of the wasm limitation that names the
+  gem with the C code (often a dependency: `bigdecimal` blocks
+  activesupport, liquid, prawn), unless it is built into the wasm image
+  (json, date, openssl …) or the gem that wants it can do without it
+  (`OPTIONAL_NATIVE_DEPS`: ruby_pptx falls back to REXML).
 - **Downloads**: any file a cell writes - `deck.save("chunky.pptx")`,
   `File.write("notes.txt", …)` - appears below the cell as a download link;
   `download_file(data, "name")` offers data that never went through a file.
@@ -39,7 +48,9 @@ Built on the same foundation as
 (koans.idogawa.com): `browser.script.iife.js` + `ruby-app.wasm` with app
 logic written in Ruby (`html/main.rb`) via the JS bridge. Lesson content
 lives in `html/lessons.js`; the gem loader in `html/browser_gems.rb`
-unpacks `.gem` files in Ruby and hooks `require`/`autoload`.
+unpacks `.gem` files in Ruby onto the wasm filesystem, and hooks `require`
+for shims of stdlib that cannot load in WASI (socket, net/http over the
+browser's fetch, resolv).
 
 three.js is vendored under `html/assets/three/` and imported lazily
 (`window.ensureThree` in `index.html`) only by lessons whose cells call

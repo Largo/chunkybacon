@@ -116,11 +116,13 @@ module FileWatch
 
     private
 
-    # Files under the working directory, gem code (BrowserGems.root) aside.
+    # Files under the working directory - gem code (BrowserGems.root) and
+    # temp files aside.
     def real_files(dir = Dir.pwd, prefix = "", found = {})
       Dir.children(dir).each do |name|
         full = File.join(dir, name)
         next if defined?(BrowserGems) && full == BrowserGems.root
+        next if full == "/tmp"
         if File.directory?(full)
           real_files(full, "#{prefix}#{name}/", found)
         elsif File.file?(full)

@@ -191,8 +191,8 @@ SOLUTIONS = {
     "en" => [%(install_gem "chunky_png"\nrequire "chunky_png"\nimage = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times do |y|\n  next unless y.even?\n  8.times { |x| image[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }\nend\nshow_image image)]
   },
   "html" => {
-    "de" => [%(links = doc.css("a").map { |link| link.attributes.to_h["href"] }\nlinks)],
-    "en" => [%(links = doc.css("a").map { |link| link.attributes.to_h["href"] }\nlinks)]
+    "de" => [%(links = doc.css("a").map { |link| link["href"] }\nlinks)],
+    "en" => [%(links = doc.css("a").map { |link| link["href"] }\nlinks)]
   },
   "sinatra" => {
     "de" => [%(install_gem "sinatra"\nrequire "sinatra/base"\nclass MeineSeite < Sinatra::Base\n  get "/" do\n    "<h1>Meine Seite</h1>"\n  end\n  get "/speck" do\n    "CHUNKY BACON!"\n  end\nend\nshow_browser MeineSeite, "/speck")],
@@ -707,8 +707,6 @@ def run_harness
       demo_failed = false
       demos.each do |demo|
         _, _, err = run_in(bind, demo["code"])
-        # the nokogiri demo cell is SUPPOSED to raise NativeGemError
-        next if err.is_a?(BrowserGems::NativeGemError)
         if err
           puts "FAIL #{lesson["id"]}/#{lang}: demo cell raised #{err.class}: #{err.message}"
           failures += 1

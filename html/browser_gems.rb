@@ -1,10 +1,14 @@
 # BrowserGems: runtime installation of pure-Ruby gems for ruby.wasm,
 # in the spirit of irb.wasm and Evil Martians' Ruby Next playground.
 # A .gem file is a tar archive (metadata.gz + data.tar.gz); we fetch it,
-# unpack it in Ruby (Zlib + a minimal tar reader), keep the lib/ files in
-# memory and hook Kernel#require so `require "chunky_png"` just works.
+# unpack it in Ruby (Zlib + a minimal tar reader) and write its lib/ to the
+# wasm filesystem (writable memory) on $LOAD_PATH, so `require`,
+# require_relative, autoload, __dir__ and Dir globs all behave as on disk.
 # Native (C extension) gems cannot work at runtime - they would have to be
-# compiled into the wasm binary itself (the TutorialKit.rb approach).
+# compiled into the wasm binary itself (the TutorialKit.rb approach). The
+# one big exception is nokogiri: the cache holds nokogiri-pure (Nokogiri
+# with its C extension, libxml2, libxslt and gumbo ported to Ruby), built
+# under the name "nokogiri" so every gem depending on nokogiri gets it.
 #
 # Environment-agnostic: the host injects fetch_binary/fetch_text lambdas
 # (sync XHR in the browser, File.read in the offline test harness).
@@ -21,7 +25,7 @@ module BrowserGems
 
   # well-known native gems: fail fast with a clear error before downloading
   NATIVE_GEMS = %w[
-    nokogiri sqlite3 pg mysql2 ffi byebug debug bcrypt puma eventmachine
+    sqlite3 pg mysql2 ffi byebug debug bcrypt puma eventmachine
     nio4r websocket-driver msgpack oj yajl-ruby curb typhoeus redcarpet
     commonmarker sassc grpc google-protobuf rmagick vips json-c openssl
   ].freeze
@@ -31,10 +35,7 @@ module BrowserGems
   # uses Nokogiri when it loads and REXML otherwise.
   OPTIONAL_NATIVE_DEPS = { "ruby_pptx" => %w[nokogiri] }.freeze
 
-  # gem code is evaluated as if it lived here; files in a gem's lib/ that are
-  # not Ruby (templates, data) are written to the same place, so the gem
-  # finds them relative to __dir__ as it would on disk. main.rb's
-  # require_relative bridge assumes this default.
+  # installed gems live here, one <name>-<version>/lib per gem
   ROOT = "/browser_gems"
 
   # Minimal stand-ins for stdlib that is missing in ruby.wasm (WASI has no
@@ -53,6 +54,7 @@ module BrowserGems
         PF_INET6 = 10
         SOCK_STREAM = 1
         SOCK_DGRAM = 2
+        def self.gethostname = "localhost"
         def self.method_missing(name, *_args)
           raise NotImplementedError, "Socket.#{name} is unavailable in the browser (no sockets in WASI)"
         end
@@ -71,8 +73,16 @@ module BrowserGems
     "net/http.rb" => <<~'RUBY',
       require 'uri'
       class SocketError < StandardError; end unless defined?(SocketError)
+      require 'timeout'
       module Net
         class HTTPError < StandardError; end unless defined?(Net::HTTPError)
+        # the exception classes of net/protocol, which gems name in rescues
+        class ProtocolError < StandardError; end unless defined?(Net::ProtocolError)
+        class OpenTimeout < Timeout::Error; end unless defined?(Net::OpenTimeout)
+        class ReadTimeout < Timeout::Error; end unless defined?(Net::ReadTimeout)
+        class WriteTimeout < Timeout::Error; end unless defined?(Net::WriteTimeout)
+        class HTTPBadResponse < StandardError; end unless defined?(Net::HTTPBadResponse)
+        class HTTPHeaderSyntaxError < StandardError; end unless defined?(Net::HTTPHeaderSyntaxError)
 
         class HTTPResponse
           MESSAGES = { 200 => "OK", 201 => "Created", 204 => "No Content",
@@ -101,7 +111,15 @@ module BrowserGems
           end
 
           def read_body
+            yield @body if block_given?
             @body
+          end
+
+          def each_header(&block) = @headers.each(&block)
+          alias each each_header
+
+          def to_hash
+            @headers.transform_values { |v| [v] }
           end
 
           def value
@@ -136,11 +154,118 @@ module BrowserGems
               uri = path ? URI("http://#{uri_or_host}#{path}") : URI(uri_or_host.to_s)
               get_response(uri).body
             end
+
+            def start(host, port = nil, *_rest, **opts, &block)
+              http = new(host, port)
+              http.use_ssl = opts[:use_ssl] if opts.key?(:use_ssl)
+              http.start(&block)
+            end
           end
+
+          # the object API (Net::HTTP.new(...).request(Net::HTTP::Get.new(path)))
+          # that most HTTP-using gems are written against; GET and HEAD only,
+          # like the transport behind it
+          attr_reader :address, :port
+          attr_accessor :use_ssl, :open_timeout, :read_timeout, :write_timeout,
+                        :verify_mode, :ca_file, :cert_store, :keep_alive_timeout
+          alias use_ssl? use_ssl
+
+          def initialize(address, port = nil, *_proxy)
+            @address = address
+            @port = port || 80
+            @use_ssl = @port == 443
+          end
+
+          def start
+            return self unless block_given?
+            yield self
+          end
+
+          def started? = true
+          def finish; end
+
+          def request(req, _body = nil)
+            unless %w[GET HEAD].include?(req.method)
+              raise NotImplementedError, "#{req.method} requests are unavailable in the browser playground (GET and HEAD only)"
+            end
+            scheme = use_ssl ? "https" : "http"
+            default_port = use_ssl ? 443 : 80
+            host = port == default_port ? address : "#{address}:#{port}"
+            response = HTTP.get_response(URI("#{scheme}://#{host}#{req.path}"))
+            yield response if block_given?
+            response
+          end
+
+          def get(path, headers = nil, &block)
+            request(Get.new(path, headers), &block)
+          end
+
+          def head(path, headers = nil)
+            request(Head.new(path, headers))
+          end
+
+          def post(path, _data = nil, headers = nil) = request(Post.new(path, headers))
+          def put(path, _data = nil, headers = nil) = request(Put.new(path, headers))
+          def patch(path, _data = nil, headers = nil) = request(Patch.new(path, headers))
+          def delete(path, headers = nil) = request(Delete.new(path, headers))
+
+          class Request
+            attr_reader :method, :path
+
+            def initialize(path, headers = nil)
+              path = path.request_uri if path.respond_to?(:request_uri)
+              @path = path.to_s
+              @method = self.class::METHOD
+              @headers = {}
+              (headers || {}).each { |k, v| self[k] = v }
+            end
+
+            def [](key) = @headers[key.to_s.downcase]
+            def []=(key, value)
+              @headers[key.to_s.downcase] = value
+            end
+            def each_header(&block) = @headers.each(&block)
+            def basic_auth(*); end
+            def body=(_body); end
+          end
+
+          class Get < Request; METHOD = "GET"; end
+          class Head < Request; METHOD = "HEAD"; end
+          class Post < Request; METHOD = "POST"; end
+          class Put < Request; METHOD = "PUT"; end
+          class Patch < Request; METHOD = "PATCH"; end
+          class Delete < Request; METHOD = "DELETE"; end
+          class Options < Request; METHOD = "OPTIONS"; end
         end
       end
     RUBY
-    "net/https.rb" => "require 'net/http'\n"
+    "net/https.rb" => "require 'net/http'\n",
+    # stdlib resolv needs io/wait; there is no DNS in the browser anyway.
+    # Enough for gems that load it up front (ssrf_filter, so premailer).
+    "resolv.rb" => <<~'RUBY'
+      class Resolv
+        class ResolvError < StandardError; end
+        class ResolvTimeout < ResolvError; end
+
+        def self.getaddress(name)
+          raise ResolvError, "no DNS for #{name} in the browser (WASI has no sockets)"
+        end
+
+        def self.getaddresses(_name) = []
+        def self.each_address(_name) = nil
+
+        def self.getname(address)
+          raise ResolvError, "no DNS for #{address} in the browser (WASI has no sockets)"
+        end
+
+        class DNS
+          def self.open(*) = yield(new)
+          def getresources(*) = []
+          def getaddresses(*) = []
+          def close; end
+        end
+      end
+    RUBY
   }.freeze
 
   # Source appended to specific gem files after install - for small
@@ -152,7 +277,7 @@ module BrowserGems
     # lookup is short-circuited to the same "no release" answer it would
     # otherwise reach - quietly.
     "lacci" => {
-      "shoes/changelog.rb" => <<~'RUBY'
+      "lib/shoes/changelog.rb" => <<~'RUBY'
         class Shoes
           class Changelog
             def get_latest_release_info
@@ -166,7 +291,7 @@ module BrowserGems
 
   class << self
     attr_accessor :fetch_binary, :fetch_text, :cache_base, :proxy_base
-    # the offline harnesses point this at a temp dir, so gem assets are not
+    # the offline harnesses point this at a temp dir, so gems are not
     # written to the real filesystem root; set it before installing anything
     attr_writer :root
 
@@ -178,6 +303,8 @@ module BrowserGems
       @installed ||= {}
     end
 
+    # the shims: the only code still evaluated from memory, as a fallback
+    # for stdlib that fails to load
     def files
       @files ||= { "(shims)" => SHIMS.dup }
     end
@@ -197,11 +324,15 @@ module BrowserGems
 
     # Installs a gem (latest version) plus its runtime dependencies.
     # Sources: the local cache first, then rubygems.org via the proxy.
-    # Returns the installed version string.
+    # Returns the installed version string. A NativeGemError names the gem
+    # that actually has C code, which may be a dependency.
     def install(name, seen = {})
       name = name.to_s.strip
       return installed[name] if installed[name]
-      raise NativeGemError, name if NATIVE_GEMS.include?(name)
+      if NATIVE_GEMS.include?(name)
+        return installed[name] = "builtin" if builtin?(name)
+        raise NativeGemError, name
+      end
       return if seen[name]
       seen[name] = true
 
@@ -228,45 +359,50 @@ module BrowserGems
       data = outer["data.tar.gz"] or raise NotFoundError, "#{name} (bad .gem file)"
       inner = untar(Zlib.gunzip(data))
       if !PURE_FALLBACK_GEMS.include?(name) && inner.keys.any? { |k| k.end_with?("extconf.rb") }
+        return installed[name] = "builtin" if builtin?(name)
         raise NativeGemError, name
       end
 
-      lib = {}
-      assets = {}
+      # the whole gem, not just lib/: some read data next to it
+      # (unicode-display_width's data/)
+      patches = POST_INSTALL_PATCHES[name] || {}
+      gem_dir = File.join(root, "#{name}-#{version}")
+      require 'fileutils'
       inner.each do |path, content|
-        next unless path.start_with?("lib/")
-        if path.end_with?(".rb")
-          lib[path[4..]] = content
-        else
-          assets[path[4..]] = content
-        end
+        content = content + patches[path] if patches[path]
+        target = File.join(gem_dir, path)
+        FileUtils.mkdir_p(File.dirname(target))
+        File.binwrite(target, content)
       end
-      write_assets(name, assets)
-      (POST_INSTALL_PATCHES[name] || {}).each do |file, patch|
-        lib[file] = lib[file].to_s + patch
+      require_paths(outer["metadata.gz"]).reverse_each do |dir|
+        lib_dir = File.join(gem_dir, dir)
+        $LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
       end
-      files[name] = lib
       installed[name] = version
-      version
+    end
+
+    # A gem's load paths from its gemspec - "lib" for most, but not all
+    # (concurrent-ruby's is lib/concurrent-ruby). Read from the YAML text
+    # directly: loading it would need Gem::Specification.
+    def require_paths(metadata_gz)
+      yaml = metadata_gz ? Zlib.gunzip(metadata_gz) : ""
+      block = yaml[/^require_paths:\n((?:- .*\n)+)/, 1].to_s
+      paths = block.lines.map { |l| l.sub(/\A- /, "").strip.delete_prefix('"').delete_suffix('"') }
+      paths.empty? ? ["lib"] : paths
+    end
+
+    # Default gems compiled into the wasm image (json, date, ...) have C
+    # code too, yet need no install: a gem depending on one is satisfied by
+    # the built-in copy, as it would be by a default gem on disk.
+    def builtin?(name)
+      require name.tr("-", "/")
+      true
+    rescue LoadError
+      false
     end
 
     def runtime_deps(name, deps)
       deps - OPTIONAL_NATIVE_DEPS.fetch(name, [])
-    end
-
-    # ruby.wasm's filesystem is writable memory, so non-Ruby lib files can
-    # live where the gem expects them. Where it cannot be written, gems that
-    # need no such files still install.
-    def write_assets(name, assets)
-      return if assets.empty?
-      require 'fileutils'
-      assets.each do |path, content|
-        target = File.join(root, name, path)
-        FileUtils.mkdir_p(File.dirname(target))
-        File.binwrite(target, content)
-      end
-    rescue SystemCallError
-      nil
     end
 
     # Minimal POSIX tar reader: returns { path => content } for regular files.
@@ -287,15 +423,6 @@ module BrowserGems
       result
     end
 
-    def feature?(path)
-      key = path.to_s.sub(/\.rb\z/, "") + ".rb"
-      files.any? { |_, lib| lib.key?(key) }
-    end
-
-    def autoload_map
-      @autoload_map ||= {}
-    end
-
     # If a required feature belongs to a cached-but-uninstalled gem,
     # install it transparently (used for stdlib that became bundled gems -
     # csv, benchmark - which real Ruby installs ship out of the box).
@@ -303,13 +430,13 @@ module BrowserGems
       name = feature.split("/").first
       return nil if installed.key?(name) || !manifest.key?(name)
       install(name)
-      load_feature(feature)
-    rescue StandardError
+      require feature
+      true
+    rescue StandardError, LoadError
       nil
     end
 
-    # Loads a feature ("chunky_png" or "gammo/css_selector") from an
-    # installed gem. Returns true when found, nil otherwise.
+    # Loads a shim ("net/http"). Returns true when found, nil otherwise.
     def load_feature(path)
       key = path.sub(/\.rb\z/, "") + ".rb"
       files.each do |gem_name, lib|
@@ -322,13 +449,6 @@ module BrowserGems
       end
       nil
     end
-
-    # Maps an absolute in-gem path (as used in eval filenames) plus a
-    # require_relative argument back to a gem-space feature key.
-    def relative_key(caller_path, relative)
-      File.expand_path(relative, File.dirname(caller_path))
-          .sub(%r{\A#{Regexp.escape(root)}/[^/]+/}, "")
-    end
   end
 end
 
@@ -339,48 +459,5 @@ module Kernel
   rescue LoadError => e
     feature = path.to_s
     BrowserGems.load_feature(feature) or BrowserGems.auto_install_feature(feature) or raise e
-  end
-end
-
-# Ruby's autoload is C-level and bypasses the require hook above, and it
-# needs real files (which the wasm VFS cannot provide). For gem-space paths
-# we register the constant ourselves and resolve it lazily in const_missing
-# - same semantics, no filesystem.
-class Module
-  alias_method :bg_original_autoload, :autoload
-  def autoload(const, path)
-    if BrowserGems.feature?(path)
-      BrowserGems.autoload_map[[self, const.to_sym]] = path.to_s
-    else
-      bg_original_autoload(const, path)
-    end
-  end
-
-  alias_method :bg_original_const_missing, :const_missing
-  def const_missing(name)
-    if (path = BrowserGems.autoload_map.delete([self, name.to_sym]))
-      BrowserGems.load_feature(path)
-      return const_get(name) if const_defined?(name)
-    end
-    bg_original_const_missing(name)
-  end
-end
-
-# Outside the browser (test harness) main.rb's require_relative bridge is
-# absent - provide the gem-space branch here. The absolute-path trick keeps
-# the builtin resolution correct despite the wrapper frame.
-unless Kernel.private_method_defined?(:original_require_relative)
-  module Kernel
-    alias_method :bg_original_require_relative, :require_relative
-    def require_relative(path)
-      location = caller_locations(1, 1).first
-      caller_path = ((location && (location.absolute_path || location.path)) || "").to_s
-      if caller_path.start_with?("#{BrowserGems.root}/")
-        BrowserGems.load_feature(BrowserGems.relative_key(caller_path, path)) or
-          raise LoadError, "cannot load such file -- #{path}"
-      else
-        bg_original_require_relative(File.absolute_path(path, File.dirname(caller_path)))
-      end
-    end
   end
 end

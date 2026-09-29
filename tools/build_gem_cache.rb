@@ -8,7 +8,7 @@ require 'net/http'
 require 'rubygems/package'
 require 'fileutils'
 
-GEMS = %w[chunky_png gammo racc sinatra roda minitest csv benchmark three-rb ruby_pptx lacci]
+GEMS = %w[chunky_png gammo racc sinatra roda minitest csv benchmark three-rb ruby_pptx lacci nokogiri]
 
 # gems pinned below their latest version, when the latest pulls in native
 # dependencies (e.g. minitest 6 depends on prism, a C extension)
@@ -26,6 +26,14 @@ EXTRA_DEPS = { "gammo" => %w[racc] }
 # manifest; keep in sync with BrowserGems::OPTIONAL_NATIVE_DEPS
 OPTIONAL_NATIVE_DEPS = { "ruby_pptx" => %w[nokogiri] }
 
+# gems built from a local checkout instead of downloaded: nokogiri is
+# nokogiri-pure's nokogiri.gemspec (named "nokogiri" so that gems depending
+# on nokogiri resolve to it). Set NOKOGIRI_PURE to point elsewhere.
+LOCAL_GEMS = {
+  "nokogiri" => File.join(ENV.fetch("NOKOGIRI_PURE", File.expand_path("../../../../nokogiri-pure", __dir__)),
+                          "nokogiri.gemspec")
+}
+
 CACHE_DIR = File.expand_path("../html/gems/cache", __dir__)
 FileUtils.mkdir_p(CACHE_DIR)
 
@@ -35,6 +43,21 @@ queue = GEMS.dup
 until queue.empty?
   name = queue.shift
   next if manifest.key?(name)
+
+  if LOCAL_GEMS.key?(name)
+    gemspec = LOCAL_GEMS[name]
+    spec = Gem::Specification.load(gemspec) or abort "#{name}: cannot load #{gemspec}"
+    file = "#{name}-#{spec.version}.gem"
+    Dir.chdir(File.dirname(gemspec)) do
+      Gem::Package.build(spec)
+      FileUtils.mv(file, File.join(CACHE_DIR, file))
+    end
+    puts "built #{file} from #{gemspec}"
+    deps = spec.runtime_dependencies.map(&:name)
+    queue.concat(deps)
+    manifest[name] = { "version" => spec.version.to_s, "file" => file, "deps" => deps }
+    next
+  end
 
   if PINNED.key?(name)
     version = PINNED[name]

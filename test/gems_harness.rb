@@ -103,12 +103,23 @@ check.call "roda string matcher", status == 200 && body == "Hallo, Chunky!"
 status, _ = mock_get(HarnessRoda, "/pizza")
 check.call "roda 404", status == 404
 
-begin
-  BrowserGems.install("nokogiri")
-  check.call "nokogiri raises NativeGemError", false
-rescue BrowserGems::NativeGemError
-  check.call "nokogiri raises NativeGemError", true
+# a native gem this Ruby does not have built in (CRuby here may have
+# sqlite3 or pg installed, which then count as built in, as they should)
+native = BrowserGems::NATIVE_GEMS.find do |n|
+  require n.tr("-", "/")
+  false
+rescue LoadError
+  true
 end
+begin
+  BrowserGems.install(native)
+  check.call "#{native} raises NativeGemError", false
+rescue BrowserGems::NativeGemError => e
+  check.call "#{native} raises NativeGemError", e.message == native
+end
+
+check.call "a native gem built into Ruby counts as installed",
+           BrowserGems.install("openssl") == "builtin"
 
 begin
   BrowserGems.install("definitely-not-a-gem-#{rand(1000)}")
@@ -126,7 +137,8 @@ begin
              BrowserGems.installed.key?("ruby_pptx") && !BrowserGems.installed.key?("nokogiri")
   check.call "ruby_pptx brings its pure-Ruby dependencies",
              %w[rubyzip rexml].all? { |dep| BrowserGems.installed.key?(dep) }
-  template = File.join(BrowserGems.root, "ruby_pptx", "ruby_pptx", "templates", "default.pptx")
+  template = File.join(BrowserGems.root, "ruby_pptx-#{BrowserGems.installed["ruby_pptx"]}", "lib",
+                       "ruby_pptx", "templates", "default.pptx")
   check.call "ruby_pptx's templates are written where its code looks for them",
              File.file?(template) && File.binread(template, 2) == "PK"
 
@@ -153,6 +165,17 @@ begin
     BrowserGems.manifest["ruby_pptx"] = entry
   end
 end
+
+# --- nokogiri: nokogiri-pure from the cache, real files on $LOAD_PATH ---
+# (after ruby_pptx, whose checks need nokogiri not installed yet)
+BrowserGems.install("nokogiri")
+require "nokogiri"
+check.call "nokogiri is nokogiri-pure", defined?(Nokogiri::Pure::VERSION) &&
+                                         $LOADED_FEATURES.any? { |f| f.start_with?(BrowserGems.root) && f.end_with?("/nokogiri.rb") }
+doc = Nokogiri::HTML5("<ul><li class=a>Chunky<li>Bacon</ul>")
+check.call "nokogiri parses HTML5 with CSS selectors", doc.css("li.a").map(&:text) == ["Chunky"]
+xml = Nokogiri::XML(%(<r xmlns:x="urn:x"><x:b>two &amp; three</x:b></r>))
+check.call "nokogiri namespaced XPath", xml.xpath("//x:b", "x" => "urn:x").text == "two & three"
 
 check.call "second install is a no-op returning version",
            BrowserGems.install("chunky_png") == version

@@ -100,21 +100,42 @@ await runExercise();
 check('bacon flag exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 check('exercise shows the flag image', await page.isVisible('.cell.exercise .cell-out img.cell-image'));
 
-// lesson 12: HTML parsing — nokogiri fails helpfully, gammo works
+// lesson 14: HTML parsing with Nokogiri (nokogiri-pure, from the gem cache)
 await page.click('#lessonNav a[data-id="html"]');
 await page.waitForTimeout(300);
 await page.click('.run-cell[data-idx="1"]');
-await page.waitForTimeout(2000);
-check('nokogiri explains native extension limit', (await page.textContent('#cell-out-1')).includes('native extension'));
+await page.waitForTimeout(3000);
+const nokoInstall = await page.textContent('#cell-out-1');
+check('nokogiri installs (nokogiri-pure)', nokoInstall.includes('nokogiri 1.19'));
+check('installed gem files are not offered as downloads', !nokoInstall.includes('.rb'));
 await page.click('.run-cell[data-idx="3"]');
-await page.waitForTimeout(2000);
-check('gammo parses: 3 li elements', (await page.textContent('#cell-out-3')).includes('=> 3'));
+await page.waitForTimeout(6000);
+check('nokogiri parses: 3 li elements', (await page.textContent('#cell-out-3')).includes('=> 3'));
 await page.click('.run-cell[data-idx="5"]');
 await page.waitForTimeout(800);
-check('gammo css text extraction', (await page.textContent('#cell-out-5')).includes('Speck'));
-await setExercise('links = doc.css("a").map { |link| link.attributes.to_h["href"] }\nlinks');
+check('nokogiri css text extraction', (await page.textContent('#cell-out-5')).includes('Speck'));
+await setExercise('links = doc.css("a").map { |link| link["href"] }\nlinks');
 await runExercise();
 check('link extraction exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// gems from rubygems.org (via the proxy) that need nokogiri, a gem whose
+// load path is not lib/ (concurrent-ruby, via i18n), and a native
+// dependency named as the culprit
+await page.evaluate(() => window.cellEditors[5].setValue(
+  'install_gem "loofah"\nrequire "loofah"\nLoofah.fragment(%(<p>Hi<script>x()</script></p>)).scrub!(:prune).to_s'));
+await page.click('.run-cell[data-idx="5"]');
+await page.waitForTimeout(8000);
+check('loofah (needs nokogiri) installs and sanitizes', (await page.textContent('#cell-out-5')).includes('<p>Hi</p>'));
+await page.evaluate(() => window.cellEditors[5].setValue(
+  'install_gem "i18n"\nrequire "i18n"\nI18n.backend.store_translations(:de, speck: "Speck!")\nI18n.t(:speck, locale: :de)'));
+await page.click('.run-cell[data-idx="5"]');
+await page.waitForTimeout(8000);
+check('i18n with concurrent-ruby (lib/concurrent-ruby load path)', (await page.textContent('#cell-out-5')).includes('Speck!'));
+await page.evaluate(() => window.cellEditors[5].setValue('install_gem "nori"'));
+await page.click('.run-cell[data-idx="5"]');
+await page.waitForTimeout(5000);
+check('native dependency is named in the error', (await page.textContent('#cell-out-5')).includes('nori braucht bigdecimal'));
+await page.evaluate(() => window.cellEditors[5].setValue('doc.css("a").map { |link| link.text }'));
 
 // remote gem install through the nginx rubygems proxy
 await setExercise('install_gem "paint"');
