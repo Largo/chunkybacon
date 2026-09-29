@@ -30,7 +30,7 @@ await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 check('app becomes visible after wasm boot', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('35 lessons in nav', (await page.$$('#lessonNav a')).length === 35);
+check('36 lessons in nav', (await page.$$('#lessonNav a')).length === 36);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -306,6 +306,73 @@ await runExercise();
 await waitForDownload('.cell.exercise', 'karte.pptx');
 await page.waitForTimeout(500);
 check('menu exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// Scarpe lesson: real Shoes apps from the lacci gem, drawn into the page by a
+// Lacci display service (shoes_dom.rb); several stay live at once
+await page.click('#lessonNav a[data-id="scarpe"]');
+await page.waitForTimeout(500);
+await page.click('.run-cell[data-idx="1"]');
+await page.waitForFunction(() => !document.querySelector('.run-cell[data-idx="1"]').disabled, null, { timeout: 90000 });
+check('lacci installs from cache', (await page.textContent('#gemsList')).includes('lacci ✓'));
+check('a Shoes app renders below the cell', (await page.textContent('#cell-out-1 .shoes-app')).includes('Hallo aus einer Shoes-App!'));
+check('no lacci CHANGELOG noise in the output', !(await page.textContent('#cell-out-1')).includes('CHANGELOG'));
+for (const i of [3, 5, 7]) { await page.click(`.run-cell[data-idx="${i}"]`); await page.waitForTimeout(1500); }
+check('stack/flow layout renders', (await page.$$('#cell-out-3 .shoes-flow .shoes-button')).length === 3);
+await page.click('#cell-out-5 .shoes-button'); await page.waitForTimeout(400);
+await page.click('#cell-out-5 .shoes-button'); await page.waitForTimeout(400);
+check('button block updates a para through Lacci', (await page.textContent('#cell-out-5 .shoes-app p')).includes('2 Streifen'));
+await page.fill('#cell-out-7 .shoes-editline', 'Kaz'); await page.waitForTimeout(400);
+check('edit_line change reaches the Shoes block', (await page.textContent('#cell-out-7 .shoes-app p')).includes('Hallo, Kaz!'));
+await page.click('#cell-out-5 .shoes-button'); await page.waitForTimeout(400);
+check('an earlier app stays live after later ones mount', (await page.textContent('#cell-out-5 .shoes-app p')).includes('3 Streifen'));
+await page.click('.run-cell[data-idx="5"]'); await page.waitForTimeout(1500);
+await page.click('#cell-out-5 .shoes-button'); await page.waitForTimeout(400);
+check('re-running a cell starts a fresh app', (await page.textContent('#cell-out-5 .shoes-app p')).includes('1 Streifen'));
+await runExercise();
+check('scarpe starter fails', (await page.getAttribute('#chunkyChat', 'class')).includes('fail'));
+await setExercise('show_shoes do\n  stack do\n    title "Gruss-App"\n    @feld = edit_line ""\n    @gruss = para "Wer bist du?"\n    button "Gruess mich" do\n      @gruss.replace("Hallo, #{@feld.text}!")\n    end\n  end\nend');
+await runExercise(); await page.waitForTimeout(1200);
+check('scarpe exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+await page.fill('.cell.exercise .shoes-editline', 'Isi');
+await page.click('.cell.exercise .shoes-button'); await page.waitForTimeout(400);
+check('the greeter greets', (await page.textContent('.cell.exercise .shoes-app')).includes('Hallo, Isi!'));
+
+// running a cell: the running state is on screen before Ruby blocks, and
+// the cell settles afterwards
+await page.evaluate(() => window.cellEditors[3].setValue('t = Time.now\nn = 0\nn += 1 while Time.now - t < 1.5\nn'));
+// The page cannot answer an evaluate() while Ruby blocks it, so the states are
+// recorded as they happen by an observer installed beforehand.
+await page.evaluate(() => {
+  const cell = document.querySelector('.run-cell[data-idx="3"]').closest('.cell');
+  window.__runLog = [];
+  new MutationObserver(() => {
+    const b = cell.querySelector('.run-cell');
+    window.__runLog.push({ running: cell.classList.contains('running'), disabled: b.disabled, fox: !!b.querySelector('.run-fox'), t: performance.now() });
+  }).observe(cell, { attributes: true, subtree: true, childList: true });
+});
+await page.click('.run-cell[data-idx="3"]');
+await page.waitForFunction(() => !document.querySelector('.run-cell[data-idx="3"]').disabled, null, { timeout: 20000 });
+const runLog = await page.evaluate(() => window.__runLog);
+const on = runLog.find(e => e.running), off = runLog.findLast(e => !e.running);
+check('run marks the cell as running', !!on);
+check('run button is disabled with a running label', !!on && on.disabled && on.fox);
+check('the running state lasts for the run', !!on && !!off && off.t - on.t > 1200);
+check('running state is cleared afterwards', await page.evaluate(() => !document.querySelector('.run-cell[data-idx="3"]').closest('.cell').classList.contains('running')));
+check('run time is shown', /1[,.]\d s/.test(await page.evaluate(() => document.querySelector('.run-cell[data-idx="3"]').closest('.cell').querySelector('.run-time').textContent)));
+await page.evaluate(() => window.cellEditors[3].setValue('nope_not_defined'));
+await page.click('.run-cell[data-idx="3"]'); await page.waitForTimeout(500);
+check('an error shakes the cell', await page.evaluate(() => document.querySelector('.run-cell[data-idx="3"]').closest('.cell').classList.contains('shake')));
+
+// lesson URLs: deep links, real hrefs, back/forward, bad ids
+check('nav entries are real links', (await page.getAttribute('#lessonNav a[data-id="three"]', 'href')) === '#three');
+check('URL names the open lesson', (await page.evaluate(() => location.hash)) === '#scarpe');
+check('tab title names the lesson', (await page.title()).includes('Scarpe'));
+await page.click('#lessonNav a[data-id="three"]'); await page.waitForTimeout(500);
+check('clicking a lesson updates the URL', (await page.evaluate(() => location.hash)) === '#three');
+await page.goBack(); await page.waitForTimeout(800);
+check('back returns to the previous lesson', (await page.getAttribute('#lessonNav a.active', 'data-id')) === 'scarpe');
+await page.evaluate(() => { location.hash = 'nonsense'; }); await page.waitForTimeout(600);
+check('an unknown lesson id is corrected in the URL', (await page.evaluate(() => location.hash)) === '#scarpe');
 
 // timelog track: simulated filesystem + explorer widget
 await page.click('#lessonNav a[data-id="tl-formats"]');

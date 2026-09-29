@@ -14,6 +14,7 @@ window.LESSONS_JSON = JSON.stringify({
       "title": "Ruby lernen mit Chunky Bacon",
       "subtitle": "Ein Ruby-Notizbuch im Browser – kein Setup, einfach lostippen.",
       "runCell": "▶ Ausführen",
+      "running": "läuft …",
       "reset": "Lektion zurücksetzen",
       "taskLabel": "Aufgabe",
       "loading": "Ruby wird geladen … (einmalig ca. 35 MB)",
@@ -50,6 +51,7 @@ window.LESSONS_JSON = JSON.stringify({
       "title": "Learn Ruby with Chunky Bacon",
       "subtitle": "A Ruby notebook in your browser – no setup, just start typing.",
       "runCell": "▶ Run",
+      "running": "running …",
       "reset": "Reset lesson",
       "taskLabel": "Task",
       "loading": "Loading Ruby … (one-time, about 35 MB)",
@@ -1428,13 +1430,114 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "scarpe",
+      "section": {
+        "de": "Shoes mit Scarpe",
+        "en": "Shoes with Scarpe"
+      },
+      "de": {
+        "title": "20. Shoes-Apps mit Scarpe",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Shoes: kleine Fenster, wenig Code</h2><p><strong>Shoes</strong> ist why the lucky stiffs GUI-Baukasten – dieselbe Feder, von der auch „Chunky Bacon“ stammt. Die Idee: ein Fenster mit Text und Knöpfen soll ein paar Zeilen kosten, nicht ein paar hundert.</p><p><a href='https://github.com/scarpe-team/scarpe' target='_blank'><strong>Scarpe</strong></a> ist die heutige Wiederauflage, und sie ist in zwei Teile geschnitten:</p><ul><li><strong>Lacci</strong> (die Gem <code>lacci</code>) kennt nur die Sprache: <code>stack</code>, <code>para</code>, <code>button</code>. Von Pixeln weiss sie nichts.</li><li>Ein <strong>Display-Service</strong> malt diesen Baum dann wirklich – mit Webview, mit libui, oder eben mit irgendetwas anderem.</li></ul><p>Genau deshalb läuft Shoes hier: Diese Seite bringt ihren eigenen Display-Service mit, der den Baum ins HTML dieser Seite zeichnet. Die Gem darunter ist unverändert die echte.</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"lacci\"\nrequire \"shoes\"\n\nshow_shoes do\n  para \"Hallo aus einer Shoes-App!\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das Kästchen oben ist eine laufende Shoes-App. <code>show_shoes</code> übernimmt hier die Rolle von <code>Shoes.app</code>.</p><p>Angeordnet wird mit zwei Behältern – mehr braucht Shoes nicht:</p><ul><li><code>stack</code> stapelt seinen Inhalt <strong>untereinander</strong>,</li><li><code>flow</code> reiht ihn <strong>nebeneinander</strong> auf.</li></ul><p>Alles andere sind <em>Drawables</em>: <code>title</code>, <code>para</code>, <code>button</code>, <code>edit_line</code> und so weiter.</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_shoes do\n  stack do\n    title \"Chunkys Imbiss\"\n    para \"Speck, Ei und Kaffee.\"\n    flow do\n      button \"Speck\"\n      button \"Ei\"\n      button \"Kaffee\"\n    end\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Knöpfe tun noch nichts. In Shoes hängst du einen <strong>Block</strong> an einen Knopf, und jedes Drawable, das du in einer Variablen festhältst, kannst du später ändern – <code>para</code> etwa mit <code>replace</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_shoes do\n  stack do\n    @streifen = 0\n    @anzeige = para \"Noch kein Speck.\"\n\n    button \"Speck bestellen\" do\n      @streifen += 1\n      @anzeige.replace(\"#{@streifen} Streifen Speck! 🥓\")\n    end\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Drück den Knopf – der Text darüber ändert sich. Und genau hier wird die Zweiteilung interessant: dein Block läuft in <em>Lacci</em>, das daraufhin nur meldet „diese Eigenschaft hat sich geändert“. Der Display-Service hört zu und fasst den passenden DOM-Knoten an. Bei Scarpe auf dem Desktop hört stattdessen Webview oder libui zu – derselbe Code, anderes Fenster.</p><p>Eingaben laufen genauso, nur rückwärts: <code>edit_line</code> meldet jede Änderung an Lacci weiter.</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_shoes do\n  stack do\n    @gruss = para \"Wie heisst du?\"\n    edit_line \"\" do |text|\n      @gruss.replace(text.empty? ? \"Wie heisst du?\" : \"Hallo, #{text}!\")\n    end\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Auf deinem eigenen Rechner installierst du <code>scarpe</code> statt <code>lacci</code>, schreibst <code>Shoes.app do … end</code> in eine Datei und startest sie mit <code>scarpe meine_app.rb</code> – dann geht ein echtes Fenster auf. Die App selbst bleibt Zeile für Zeile dieselbe.</p><p>Der Display-Service, der hier zeichnet, ist übrigens kein Spezialfall der Seite, sondern ein ganz normaler: rund 250 Zeilen Ruby in <code>shoes_dom.rb</code>. Nach demselben Muster ist auch <a href='https://github.com/Largo/hacketyhack' target='_blank'>Clogs</a> gebaut, ein Shoes auf libui.</p><div class='task'><strong>Aufgabe:</strong> Bau eine Gruss-App. Sie braucht einen <code>title</code>, ein <code>edit_line</code>, einen <code>button</code> und einen weiteren <code>para</code>, der beim Klick den Namen aus dem Eingabefeld begrüsst. Halte das Eingabefeld dafür in einer Variablen fest – <code>@feld.text</code> gibt dir, was drinsteht.</div>"
+          },
+          {
+            "t": "x",
+            "code": "show_shoes do\n  stack do\n    # title \"...\"\n    # @feld = edit_line \"\"\n    # @gruss = para \"...\"\n    # button \"Gruess mich\" do\n    #   ...\n    # end\n  end\nend\n",
+            "check": "apps >= 1 && shoes_types.include?(\"EditLine\") && shoes_types.include?(\"Button\") && shoes_types.count { |t| t == \"Para\" } >= 2",
+            "hint": "Etwa so: <code>@feld = edit_line \"\"</code>, dann <code>@gruss = para \"...\"</code>, und im Knopf-Block <code>@gruss.replace(\"Hallo, #{@feld.text}!\")</code>. <code>title</code> zählt übrigens auch als <code>para</code> – zwei Textzeilen brauchst du trotzdem."
+          }
+        ]
+      },
+      "en": {
+        "title": "20. Shoes apps with Scarpe",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Shoes: small windows, little code</h2><p><strong>Shoes</strong> is why the lucky stiff's GUI toolkit – the same pen that gave us “Chunky Bacon”. The idea: a window with some text and a button should cost a few lines, not a few hundred.</p><p><a href='https://github.com/scarpe-team/scarpe' target='_blank'><strong>Scarpe</strong></a> is today's revival, and it is cut in two:</p><ul><li><strong>Lacci</strong> (the <code>lacci</code> gem) knows only the language: <code>stack</code>, <code>para</code>, <code>button</code>. It knows nothing about pixels.</li><li>A <strong>display service</strong> then actually paints that tree – with Webview, with libui, or with something else entirely.</li></ul><p>That is exactly why Shoes runs here: this page brings its own display service, which draws the tree into the page's HTML. The gem underneath is the real one, unchanged.</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"lacci\"\nrequire \"shoes\"\n\nshow_shoes do\n  para \"Hello from a Shoes app!\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>The box above is a running Shoes app. Here <code>show_shoes</code> plays the part of <code>Shoes.app</code>.</p><p>Layout uses two containers – Shoes needs no more than that:</p><ul><li><code>stack</code> piles its contents <strong>on top of each other</strong>,</li><li><code>flow</code> lines them up <strong>side by side</strong>.</li></ul><p>Everything else is a <em>drawable</em>: <code>title</code>, <code>para</code>, <code>button</code>, <code>edit_line</code> and so on.</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_shoes do\n  stack do\n    title \"Chunky's Diner\"\n    para \"Bacon, egg and coffee.\"\n    flow do\n      button \"Bacon\"\n      button \"Egg\"\n      button \"Coffee\"\n    end\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Those buttons do nothing yet. In Shoes you hang a <strong>block</strong> on a button, and any drawable you keep in a variable can be changed later – a <code>para</code> with <code>replace</code>, for instance:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_shoes do\n  stack do\n    @strips = 0\n    @display = para \"No bacon yet.\"\n\n    button \"Order bacon\" do\n      @strips += 1\n      @display.replace(\"#{@strips} strips of bacon! 🥓\")\n    end\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Press the button – the text above it changes. And this is where the split gets interesting: your block runs in <em>Lacci</em>, which only announces “this property changed”. The display service listens and touches the matching DOM node. In Scarpe on the desktop, Webview or libui listens instead – same code, different window.</p><p>Input works the same way, just backwards: <code>edit_line</code> reports every change back to Lacci.</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_shoes do\n  stack do\n    @greeting = para \"What's your name?\"\n    edit_line \"\" do |text|\n      @greeting.replace(text.empty? ? \"What's your name?\" : \"Hello, #{text}!\")\n    end\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>On your own machine you install <code>scarpe</code> instead of <code>lacci</code>, write <code>Shoes.app do … end</code> in a file and start it with <code>scarpe my_app.rb</code> – and a real window opens. The app itself stays the same, line for line.</p><p>The display service drawing here is not a special case of this site either, but an ordinary one: about 250 lines of Ruby in <code>shoes_dom.rb</code>. <a href='https://github.com/Largo/hacketyhack' target='_blank'>Clogs</a>, a Shoes on libui, is built to the same pattern.</p><div class='task'><strong>Task:</strong> Build a greeting app. It needs a <code>title</code>, an <code>edit_line</code>, a <code>button</code> and one more <code>para</code> that greets the name from the field when clicked. Keep the field in a variable – <code>@field.text</code> gives you what is in it.</div>"
+          },
+          {
+            "t": "x",
+            "code": "show_shoes do\n  stack do\n    # title \"...\"\n    # @field = edit_line \"\"\n    # @greeting = para \"...\"\n    # button \"Greet me\" do\n    #   ...\n    # end\n  end\nend\n",
+            "check": "apps >= 1 && shoes_types.include?(\"EditLine\") && shoes_types.include?(\"Button\") && shoes_types.count { |t| t == \"Para\" } >= 2",
+            "hint": "Something like: <code>@field = edit_line \"\"</code>, then <code>@greeting = para \"...\"</code>, and inside the button block <code>@greeting.replace(\"Hello, #{@field.text}!\")</code>. Note that <code>title</code> counts as a <code>para</code> too – you still need two lines of text."
+          }
+        ]
+      }
+    },
+    {
       "id": "tl-collections",
       "section": {
         "de": "Aufbaukurs: timelog",
         "en": "Advanced: timelog"
       },
       "de": {
-        "title": "20. Projekt timelog: Collections",
+        "title": "21. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -1473,7 +1576,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "20. Project timelog: collections",
+        "title": "21. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -1515,7 +1618,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "21. Text parsen: Regex",
+        "title": "22. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -1546,7 +1649,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "21. Parsing text: regex",
+        "title": "22. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -1580,7 +1683,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "22. Methoden richtig bauen",
+        "title": "23. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -1611,7 +1714,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "22. Building methods properly",
+        "title": "23. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -1645,7 +1748,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "23. Entry & Timesheet",
+        "title": "24. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -1676,7 +1779,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "23. Entry & Timesheet",
+        "title": "24. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -1710,7 +1813,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "24. Testen mit Minitest",
+        "title": "25. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -1741,7 +1844,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "24. Testing with Minitest",
+        "title": "25. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -1775,7 +1878,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "25. Enumerable & Data",
+        "title": "26. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -1798,7 +1901,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "25. Enumerable & Data",
+        "title": "26. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -1824,7 +1927,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "26. Blocks, Procs & Lambdas",
+        "title": "27. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -1863,7 +1966,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "26. Blocks, procs & lambdas",
+        "title": "27. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -1905,7 +2008,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "27. Fehler behandeln",
+        "title": "28. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -1936,7 +2039,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "27. Handling errors",
+        "title": "28. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -1970,7 +2073,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "28. Daten speichern: Formate",
+        "title": "29. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -2025,7 +2128,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "28. Saving data: formats",
+        "title": "29. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -2083,7 +2186,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "29. Kommandozeile & Gems",
+        "title": "30. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -2110,7 +2213,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "29. Command line & gems",
+        "title": "30. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -2140,7 +2243,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "30. Pattern Matching",
+        "title": "31. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -2171,7 +2274,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "30. Pattern matching",
+        "title": "31. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -2205,7 +2308,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "31. Objektmodell & Metaprogrammierung",
+        "title": "32. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -2236,7 +2339,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "31. Object model & metaprogramming",
+        "title": "32. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -2270,7 +2373,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "32. Eine eigene DSL",
+        "title": "33. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -2293,7 +2396,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "32. Your own DSL",
+        "title": "33. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -2319,7 +2422,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "33. Codequalität & Debugging",
+        "title": "34. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -2342,7 +2445,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "33. Code quality & debugging",
+        "title": "34. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -2368,7 +2471,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "34. Performance & Nebenläufigkeit",
+        "title": "35. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -2415,7 +2518,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "34. Performance & concurrency",
+        "title": "35. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -2465,7 +2568,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "35. Finale: timelog im Web",
+        "title": "36. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -2492,7 +2595,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "35. Finale: timelog on the web",
+        "title": "36. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",

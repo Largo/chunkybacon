@@ -26,6 +26,7 @@ BrowserGems.fetch_text = ->(url) { (p = url.sub("cache/", "#{CACHE}/")) && File.
 # cell helpers as provided by main.rb in the browser
 $shown_images = []
 $shown_scenes = []
+$shown_apps = []
 $explicit_downloads = []
 module Kernel
   def download_file(data, name = nil)
@@ -43,6 +44,14 @@ module Kernel
   end
 
   def show_browser(_app, _path = "/")
+    nil
+  end
+
+  # Offline there is no DOM, so the app runs against a display service that
+  # only records which drawables Lacci asked for - the same list ShoesDom
+  # exposes to checks in the browser.
+  def show_shoes(width: 460, height: 260, &block)
+    HarnessShoes.run(&block)
     nil
   end
 
@@ -72,6 +81,56 @@ end
 
 require "minitest"
 Minitest::Runnable.runnables.clear
+
+# Lacci display service for the harness: no DOM, it only records the Shoes
+# class names created, into the last entry of $shown_apps.
+module HarnessShoes
+  module NullLog
+    module Logger
+      def self.debug(*) = nil
+      def self.info(*) = nil
+      def self.warn(*) = nil
+      def self.error(*) = nil
+      def self.fatal(*) = nil
+    end
+    def self.logger_for_component(_c) = Logger
+    def self.configure_logger(_c) = nil
+  end
+
+  def self.setup!
+    return if @setup
+
+    Shoes::Log.instance = NullLog unless Shoes::Log.instance
+    # same as ShoesDom: every cell's app lives at once
+    Shoes::FEATURES << :multi_app unless Shoes::FEATURES.include?(:multi_app)
+    drawable = Class.new(Shoes::Linkable) do
+      def initialize(id) = super(linkable_id: id)
+    end
+    app = Class.new(drawable) do
+      def initialize(id)
+        super
+        bind_shoes_event(event_name: "run") { send_shoes_event("return", event_name: "custom_event_loop") }
+      end
+    end
+    service = Class.new(Shoes::DisplayService) do
+      define_method(:create_display_drawable_for) do |cls, id, _props, parent_id:, is_widget:|
+        $shown_apps.last << cls unless cls == "App"
+        d = cls == "App" ? app.new(id) : drawable.new(id)
+        set_drawable_pairing(id, d)
+        d
+      end
+      define_method(:destroy) { nil }
+    end
+    Shoes::DisplayService.set_display_service_class(service)
+    @setup = true
+  end
+
+  def self.run(&block)
+    setup!
+    $shown_apps << []
+    Shoes.app(title: "Shoes", width: 460, height: 260, &block)
+  end
+end
 
 # NB: the harness body lives inside a method on purpose. Lesson bindings are
 # created from TOPLEVEL_BINDING, so any top-level local here would be captured
@@ -170,6 +229,14 @@ title.shapes.title.text = "Menu"
   slide.placeholders[1].text_frame.text = "Bacon\nEggs"
 end
 menu.save("menu.pptx"))]
+  },
+  "scarpe" => {
+    "de" => [
+      %(show_shoes do\n  stack do\n    title "Gruss-App"\n    @feld = edit_line ""\n    @gruss = para "Wer bist du?"\n    button "Gruess mich" do\n      @gruss.replace("Hallo, \#{@feld.text}!")\n    end\n  end\nend)
+    ],
+    "en" => [
+      %(show_shoes do\n  stack do\n    title "Greeter"\n    @field = edit_line ""\n    @greeting = para "Who are you?"\n    button "Greet me" do\n      @greeting.replace("Hello, \#{@field.text}!")\n    end\n  end\nend)
+    ]
   },
   "tl-collections" => {
     "de" => [%(eintraege = [{ projekt: "ProjectX", stunden: 3.5 }, { projekt: "Intern", stunden: 2.0 }, { projekt: "ProjectX", stunden: 3.0 }]
@@ -652,6 +719,7 @@ def run_harness
 
       $shown_images = []
       $shown_scenes = []
+      $shown_apps = []
       $explicit_downloads = []
       SandboxFS.reset!
       watch = FileWatch.snapshot
@@ -668,6 +736,8 @@ def run_harness
       bind.local_variable_set(:code, candidate)
       bind.local_variable_set(:images, $shown_images.dup)
       bind.local_variable_set(:scenes, $shown_scenes.dup)
+      bind.local_variable_set(:apps, $shown_apps.length)
+      bind.local_variable_set(:shoes_types, $shown_apps.last || [])
       bind.local_variable_set(:downloads, downloads)
       passed = begin
         !!eval(exercise["check"], bind, "check.rb")

@@ -186,6 +186,17 @@
       return URL.createObjectURL(new Blob([bytes], { type: type }));
     };
 
+    // Calls fn once the current state is on screen. Ruby blocks the main
+    // thread while a cell runs, so main.rb shows its running state first and
+    // runs the cell from here: after two frames the first one has been drawn.
+    // Hidden tabs pause requestAnimationFrame, hence the timer fallback.
+    window.afterPaint = function (fn) {
+      var done = false;
+      var go = function () { if (!done) { done = true; fn(); } };
+      requestAnimationFrame(function () { requestAnimationFrame(go); });
+      setTimeout(go, 150);
+    };
+
     // Per-cell CodeMirror helpers called from Ruby (main.rb)
     window.cellEditors = {};
     window.initCell = function (idx) {

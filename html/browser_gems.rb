@@ -144,9 +144,24 @@ module BrowserGems
   }.freeze
 
   # Source appended to specific gem files after install - for small
-  # browser-compat fixes that keep the taught API untouched. (Currently
-  # empty; the builtin-minitest thread fix lives in main.rb instead.)
+  # browser-compat fixes that keep the taught API untouched.
   POST_INSTALL_PATCHES = {
+    # Lacci looks for the CHANGELOG.md of a git checkout to report its build,
+    # and prints a line when it cannot find one. A gem install never has that
+    # file, and in the notebook the line lands in the lesson's output, so the
+    # lookup is short-circuited to the same "no release" answer it would
+    # otherwise reach - quietly.
+    "lacci" => {
+      "shoes/changelog.rb" => <<~'RUBY'
+        class Shoes
+          class Changelog
+            def get_latest_release_info
+              { RELEASE_NAME: nil, RELEASE_BUILD_DATE: nil, RELEASE_ID: nil, REVISION: nil }
+            end
+          end
+        end
+      RUBY
+    }
   }.freeze
 
   class << self
