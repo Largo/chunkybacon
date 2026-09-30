@@ -21,8 +21,11 @@ async function open(ctx, hash = '') {
   page.on('dialog', d => d.accept());
   await page.goto(BASE + hash, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
+  await kernelReady(page);
   return page;
 }
+// the page is drawn by the shell (PicoRuby) before the kernel (CRuby) is up
+const kernelReady = p => p.waitForFunction(() => window.ChunkyBridge && window.ChunkyBridge.ready, null, { timeout: 120000 });
 const exerciseIdx = page => page.getAttribute('.cell.exercise .run-cell', 'data-idx');
 const exerciseCode = async page => page.evaluate(i => window.cellEditors[i].getValue(), await exerciseIdx(page));
 const isDone = async (page, id) => (await page.getAttribute(`#lessonNav a[data-id="${id}"]`, 'class')).includes('done');
@@ -178,6 +181,7 @@ check('progress goes into the folder by itself', JSON.parse(saved.entries.chunky
 
 await c.reload({ waitUntil: 'domcontentloaded' });
 await c.waitForSelector('#app', { state: 'visible', timeout: 120000 });
+await kernelReady(c);
 await c.waitForFunction(() => window.ChunkyStorage.state() === 'folder', null, { timeout: 15000 });
 check('the folder comes back after a reload', true);
 

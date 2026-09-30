@@ -140,6 +140,13 @@ end
 # Lessons are sequences of text blocks and runnable code cells; all cells of
 # a lesson share one binding (like a notebook kernel) and each cell shows the
 # value of its last expression as "=> ..." so puts is never required.
+#
+# This is the KERNEL: it runs cells, checks, gems and the widgets. The page
+# around it - index, lesson text, editors, language, routing, Chunky's
+# bubble - is the shell (shell/*.rb on PicoRuby.wasm), which is on screen
+# long before this 10 MB Ruby has loaded. The shell says which lesson is
+# open and asks for runs through shell/bridge.js (chunky:* events on
+# window); the kernel answers through window.ChunkyBridge.
 class ChunkyApp
   include Singleton
 
@@ -150,27 +157,41 @@ class ChunkyApp
     $d = JS.global[:document]
     @data = JSON.parse(JS.global[:LESSONS_JSON].to_s)
     @lessons = @data["lessons"]
-    @lang = stored("chunky_lang", "de")
-    @lang = "de" unless @data["ui"].key?(@lang)
     @browser_apps = []
     @irb_sessions = []
     @three_renderers = {}
     @three_seq = 0
     @shoes_apps = {}
-    @workshop = workshop_hash?
+    @seq = nil
+    sync_state(bridge[:state])
     setup_elements
-    # show the app BEFORE building cells: CodeMirror measures its container
-    # at init, and inside a display:none #app it measures zero and renders
-    # blank until something forces a re-measure (the Ctrl+Shift+R bug)
-    $d.getElementById("spinner")[:style][:display] = "none"
-    $d.getElementById("app")[:style][:display] = "block"
-    render_all
-    # A bare URL still names its lesson afterwards, without a history entry.
-    unless hash_lesson_id || workshop?
-      $window[:history].replaceState(nil, "", "##{current_lesson["id"]}")
-    end
-    show_bubble(workshop? ? ui["workshopWelcome"] : ui["welcome"], nil)
-    $window.refreshAllCells
+    bridge.kernelReady(installed_json)
+  end
+
+  # ---------- the shell (shell/bridge.js) ----------
+
+  def bridge
+    $window[:ChunkyBridge]
+  end
+
+  # The lesson (or the workshop) the shell shows, in its language. A new seq
+  # means a new page or a lesson reset: a fresh binding, old stages gone.
+  def sync_state(state)
+    @lang = state[:lang].to_s
+    @lang = "de" unless @data["ui"].key?(@lang)
+    @lesson_id = state[:lesson].to_s
+    @workshop = state[:workshop].to_s == "true"
+    seq = state[:seq].to_i
+    return if seq == @seq
+
+    @seq = seq
+    fresh_binding
+    dispose_three
+    dispose_shoes
+  end
+
+  def installed_json
+    JSON.generate(BrowserGems.installed)
   end
 
   # ---------- helpers ----------
@@ -179,74 +200,18 @@ class ChunkyApp
     @data["ui"][@lang]
   end
 
-  def stored(key, default = "")
-    value = $window[:localStorage].getItem(key).to_s
-    (value.empty? || value == "null") ? default : value
-  end
-
   def store(key, value)
     $window[:localStorage].setItem(key, value)
   end
 
-  def done_ids
-    JSON.parse(stored("chunky_done", "[]"))
-  rescue
-    []
-  end
-
-  def mark_done(id)
-    ids = done_ids
-    unless ids.include?(id)
-      ids << id
-      store("chunky_done", JSON.generate(ids))
-    end
-  end
-
-  # The URL names the lesson (/#scarpe), so a lesson can be linked, opened
-  # in a new tab, bookmarked, and reached with back/forward. localStorage is
-  # only the fallback for a bare URL: it brings you back where you left off.
+  # the lesson the shell shows (sync_state)
   def current_index
-    id = hash_lesson_id || stored("chunky_current", @lessons[0]["id"])
-    idx = @lessons.index { |l| l["id"] == id }
-    idx || 0
+    @lessons.index { |l| l["id"] == @lesson_id } || 0
   end
 
-  # The lesson id in location.hash, or nil when it names no lesson.
-  def hash_lesson_id
-    raw = $window[:location][:hash].to_s.delete_prefix("#")
-    @lessons.any? { |l| l["id"] == raw } ? raw : nil
-  end
-
-  # Assigning location.hash adds a history entry, so back returns to the
-  # previous lesson. The hashchange it causes finds that lesson already
-  # rendered and does nothing.
-  def set_lesson_hash(id)
-    $window[:location][:hash] = id unless hash_lesson_id == id
-  end
-
-  def route_from_hash
-    return open_workshop if workshop_hash? && !workshop?
-    return if workshop_hash?
-
-    id = hash_lesson_id
-    if id.nil?
-      # a hash naming no lesson: keep the page, correct the address bar
-      current = workshop? ? WORKSHOP_ID : @rendered_lesson_id
-      $window[:history].replaceState(nil, "", "##{current}") if current
-    elsif workshop? || id != @rendered_lesson_id
-      select_lesson(id)
-    end
-  end
-
-  # The workshop is a page of its own beside the lessons, at #werkstatt.
-  WORKSHOP_ID = "werkstatt"
-
+  # the workshop (#werkstatt): the learner's own programs
   def workshop?
     @workshop
-  end
-
-  def workshop_hash?
-    $window[:location][:hash].to_s.delete_prefix("#") == WORKSHOP_ID
   end
 
   def current_lesson
@@ -265,10 +230,6 @@ class ChunkyApp
     cell["t"] == "c" || cell["t"] == "x"
   end
 
-  def exercise_index
-    cells.index { |c| c["t"] == "x" }
-  end
-
   def escape_html(text)
     text.to_s.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;")
   end
@@ -283,48 +244,25 @@ class ChunkyApp
 
   # ---------- setup ----------
 
+  # The shell handles the page (index, language, reset, Run buttons, the
+  # bubble, the gems panel); what is left here are the requests it sends
+  # and the widgets whose Ruby objects live in this VM.
   def setup_elements
-    $d.getElementById("reset-code").addEventListener("click") do
-      reset_lesson if $window.confirm(ui["resetConfirm"]).to_s == "true"
+    $window.addEventListener("chunky:run") do |event|
+      sync_state(event[:detail])
+      finish_cell_run(event[:detail][:idx].to_i)
+    end
+    $window.addEventListener("chunky:lesson") { |event| sync_state(event[:detail]) }
+    $window.addEventListener("chunky:install") do |event|
+      sync_state(event[:detail])
+      panel_install(event[:detail][:name].to_s)
     end
 
-    $d.getElementById("langSelect").addEventListener("change") do
-      switch_lang($d.getElementById("langSelect")[:value].to_s)
-    end
-
-    # Nav entries are real links (#lesson-id). A plain click is handled here;
-    # ctrl/cmd/shift/middle clicks are left to the browser, so "open in new
-    # tab" and "copy link" behave as they do on any link.
-    $d.getElementById("lessonNav").addEventListener("click") do |event|
-      modified = %i[ctrlKey metaKey shiftKey altKey].any? { |k| event[k].to_s == "true" }
-      next if modified || event[:button].to_i != 0
-
-      id = event[:target].getAttribute("data-id").to_s
-      next if id.empty? || id == "null"
-
-      event.preventDefault
-      select_lesson(id)
-    end
-
-    # back/forward, and a lesson id typed or pasted into the address bar
-    $window.addEventListener("hashchange") { route_from_hash }
-
-    # a progress file was loaded or a folder reconnected (storage.js): show
-    # what localStorage holds now
-    $window.addEventListener("chunky-progress-loaded") do
-      lang = stored("chunky_lang", @lang)
-      @lang = lang if @data["ui"].key?(lang)
-      render_all
-    end
-
-    # one delegated listener for cell run buttons and mini-browser widgets
+    # delegated listener for the mini-browser and file-explorer widgets
     $d.getElementById("lessonBody").addEventListener("click") do |event|
       target = event[:target]
       css_class = target[:className].to_s
-      if css_class.include?("run-cell")
-        idx = target.getAttribute("data-idx").to_s
-        start_cell_run(idx.to_i) unless idx.empty? || idx == "null"
-      elsif css_class.include?("mb-go")
+      if css_class.include?("mb-go")
         widget = target.closest(".mini-browser")
         navigate_browser(widget) unless js_null?(widget)
       elsif css_class.include?("fe-refresh")
@@ -358,201 +296,13 @@ class ChunkyApp
         irb_submit(term) unless js_null?(term)
       end
     end
-
-    # delegated listener for the "next lesson" link inside the chat bubble
-    $d.getElementById("chunkyChat").addEventListener("click") do |event|
-      if event[:target][:id].to_s == "nextLessonLink"
-        event.preventDefault
-        go_to_next_lesson
-      end
-    end
-
-    $window.addEventListener("keydown") do |event|
-      if event[:altKey].to_s == "true" && event[:key].to_s == "r"
-        event.preventDefault
-        idx = exercise_index
-        run_cell(idx) if idx
-      end
-    end
-
-    # gems panel: chip click installs that gem, button installs typed name
-    $d.getElementById("gemsList").addEventListener("click") do |event|
-      name = event[:target].getAttribute("data-gem").to_s
-      panel_install(name) unless name.empty? || name == "null"
-    end
-    $d.getElementById("gemInstallBtn").addEventListener("click") do
-      name = $d.getElementById("gemNameInput")[:value].to_s.strip
-      panel_install(name) unless name.empty?
-    end
-  end
-
-  # ---------- rendering ----------
-
-  def render_all
-    $d[:documentElement].setAttribute("lang", @lang)
-    $d[:title] = ui["title"]
-    $d.getElementById("siteTitle")[:innerText] = ui["title"]
-    $d.getElementById("siteSubtitle")[:innerText] = ui["subtitle"]
-    $d.getElementById("reset-code")[:innerText] = ui["reset"]
-    $d.getElementById("footerCredit")[:innerHTML] = ui["footerCredit"]
-    $d.getElementById("footerLicense")[:innerHTML] = ui["footerLicense"]
-    $d.getElementById("langSelect")[:value] = @lang
-    render_gems_panel
-    render_nav
-    render_lesson
-  end
-
-  def render_gems_panel
-    $d.getElementById("gemsTitle")[:innerText] = ui["gemsTitle"]
-    $d.getElementById("gemInstallBtn")[:innerText] = ui["gemsInstallBtn"]
-    $d.getElementById("gemsNote")[:innerHTML] = ui["gemsNote"]
-    names = (BrowserGems.manifest.keys + BrowserGems.installed.keys).uniq
-    html = names.map do |name|
-      version = BrowserGems.installed[name]
-      css_class = version ? "gem-chip installed" : "gem-chip"
-      label = version ? "#{name} ✓" : "#{name} ⚡"
-      "<button type=\"button\" class=\"#{css_class}\" data-gem=\"#{name}\" title=\"#{version || ui["gemsCachedTip"]}\">#{label}</button>"
-    end.join
-    $d.getElementById("gemsList")[:innerHTML] = html
-  end
-
-  def render_nav
-    done = done_ids
-    active_id = current_lesson["id"]
-    html = @lessons.map do |lesson|
-      classes = []
-      classes << "active" if lesson["id"] == active_id && !workshop?
-      classes << "done" if done.include?(lesson["id"])
-      section = lesson["section"] ? "<div class=\"nav-section\">#{lesson["section"][@lang] || lesson["section"]["de"]}</div>" : ""
-      "#{section}<a class=\"#{classes.join(' ')}\" href=\"##{lesson["id"]}\" data-id=\"#{lesson["id"]}\">#{l10n(lesson)["title"]}</a>"
-    end.join
-    $d.getElementById("lessonNav")[:innerHTML] = html
-    link = $d.getElementById("workshopLink")
-    link[:textContent] = ui["workshopNav"]
-    link[:className] = workshop? ? "workshop-link active" : "workshop-link"
-  end
-
-  def render_lesson
-    fresh_binding
-    dispose_three
-    dispose_shoes
-    $d[:body][:classList].toggle("in-workshop", workshop?)
-    $d.getElementById("reset-code")[:hidden] = workshop?
-    return render_workshop if workshop?
-
-    lesson_id = current_lesson["id"]
-    preload_three if cells.any? { |c| code_cell?(c) && c["code"].to_s.include?("show_three") }
-    @rendered_lesson_id = lesson_id
-    # the lesson in the tab title makes bookmarks and history entries legible
-    $d[:title] = "#{l10n(current_lesson)["title"]} – #{ui["title"]}"
-    html = cells.each_with_index.map do |cell, idx|
-      if code_cell?(cell)
-        exercise = cell["t"] == "x"
-        <<~HTML
-          <div class="cell#{exercise ? ' exercise' : ''}" data-label="#{ui["taskLabel"]}">
-            <textarea title="code" id="cell-code-#{idx}"></textarea>
-            <div class="cell-toolbar"><button type="button" class="run-cell" data-idx="#{idx}">#{ui["runCell"]}</button></div>
-            <div class="cell-out" id="cell-out-#{idx}" style="display:none"></div>
-          </div>
-        HTML
-      else
-        "<div class=\"lessonText\">#{cell["html"]}</div>"
-      end
-    end.join
-    $d.getElementById("lessonBody")[:innerHTML] = html
-    cells.each_with_index do |cell, idx|
-      next unless code_cell?(cell)
-      $window.initCell(idx)
-      $window.setCellCode(idx, stored(code_key(lesson_id, idx), cell["code"]))
-    end
-  end
-
-  # The workshop's frame: the file panel (#wsFiles) and the stdin box are
-  # filled by workspace_ui.js, the editor is cell 0 like in a lesson.
-  def render_workshop
-    @rendered_lesson_id = nil
-    $d[:title] = "#{ui["workshopTitle"]} – #{ui["title"]}"
-    $d.getElementById("lessonBody")[:innerHTML] = <<~HTML
-      <div class="lessonText"><h2>#{ui["workshopTitle"]}</h2><p>#{ui["workshopIntro"]}</p></div>
-      <div class="workshop">
-        <aside class="ws-files" id="wsFiles"></aside>
-        <div class="cell ws-editor">
-          <div class="ws-tab" id="wsTab"></div>
-          <textarea title="code" id="cell-code-0"></textarea>
-          <div class="ws-stdin" id="wsStdinBox"></div>
-          <div class="cell-toolbar"><button type="button" class="run-cell" data-idx="0">#{ui["runCell"]}</button></div>
-          <div class="cell-out" id="cell-out-0" style="display:none"></div>
-        </div>
-      </div>
-    HTML
-    $window.initCell(0)
-    $window.workshopMount
-  end
-
-  def open_workshop
-    @workshop = true
-    $window[:location][:hash] = WORKSHOP_ID unless workshop_hash?
-    render_nav
-    render_lesson
-    show_bubble(ui["workshopWelcome"], nil)
-    $window.scrollTo(0, 0)
-  end
-
-  def show_bubble(html, state)
-    chat = $d.getElementById("chunkyChat")
-    chat[:className] = state.to_s
-    $d.getElementById("chunkyText")[:innerHTML] = html
-    chat[:style][:display] = "flex"
-  end
-
-  # ---------- actions ----------
-
-  def select_lesson(id)
-    return open_workshop if id == WORKSHOP_ID
-
-    @workshop = false
-    store("chunky_current", id)
-    set_lesson_hash(id)
-    render_nav
-    render_lesson
-    show_bubble(ui["welcome"], nil)
-    # a new lesson starts at its top, wherever the old one was scrolled to
-    # (on phones the index sits below the lesson)
-    $window.scrollTo(0, 0)
-  end
-
-  def go_to_next_lesson
-    idx = current_index
-    select_lesson(@lessons[idx + 1]["id"]) if idx + 1 < @lessons.length
-  end
-
-  def switch_lang(lang)
-    return unless @data["ui"].key?(lang)
-    @lang = lang
-    store("chunky_lang", lang)
-    render_all
-    show_bubble(ui["welcome"], nil)
-  end
-
-  def reset_lesson
-    lesson_id = current_lesson["id"]
-    cells.each_with_index do |cell, idx|
-      next unless code_cell?(cell)
-      $window[:localStorage].removeItem(code_key(lesson_id, idx))
-      $window.setCellCode(idx, cell["code"])
-      $d.getElementById("cell-out-#{idx}")[:style][:display] = "none"
-    end
-    dispose_three
-    dispose_shoes
-    fresh_binding
-    show_bubble(ui["welcome"], nil)
   end
 
   # ---------- gems ----------
 
+  # the shell's gems panel shows the change (after every run, too)
   def install_gem_ui(name)
     version = BrowserGems.install(name)
-    render_gems_panel
     "#{name} #{version}"
   rescue BrowserGems::NativeGemError => e
     # the gem with C code may be a dependency of the one asked for
@@ -562,11 +312,14 @@ class ChunkyApp
     raise BrowserGems::NotFoundError, format(ui["gemNotFound"], name)
   end
 
+  # the panel's chips and its install button (Chunky's bubble says how it went)
   def panel_install(name)
     result = install_gem_ui(name)
-    show_bubble(format(ui["gemInstalled"], result), "pass")
+    bridge.installed(name, true, result)
   rescue StandardError => e
-    show_bubble(escape_html(e.message), "fail")
+    bridge.installed(name, false, e.message)
+  ensure
+    bridge.gems(installed_json)
   end
 
   def add_image(data_url)
@@ -974,34 +727,11 @@ class ChunkyApp
   # ---------- running a cell, visibly ----------
 
   # Ruby runs on the page's main thread, so while a cell runs the page cannot
-  # repaint -- a gem install used to be seconds of frozen page. The running
-  # state is therefore put on screen *before* the run: afterPaint (index.html)
-  # waits until that frame has been drawn, and only then does Ruby block.
-  # What moves during the run is limited to transform and opacity, which the
-  # browser animates off the main thread, so it keeps moving while Ruby works.
-  def start_cell_run(idx)
-    @running ||= {}
-    return if @running[idx]
-
-    cell_el, button = cell_parts(idx)
-    return if js_null?(button)
-
-    @running[idx] = true
-    begin
-      unless js_null?(cell_el)
-        cell_el[:classList].remove("shake", "celebrate")
-        cell_el[:classList].add("running")
-      end
-      button[:disabled] = true
-      button[:innerHTML] = %(<img class="run-fox" src="assets/chunky.svg" alt="">#{ui["running"]})
-      $window.afterPaint(proc { finish_cell_run(idx) })
-    rescue StandardError => e
-      # the running look is decoration: if it fails, still run the cell
-      $window[:console].call(:error, "running state #{idx}: #{e.class}: #{e.message}")
-      finish_cell_run(idx)
-    end
-  end
-
+  # repaint. The shell puts the running state on screen *before* the run and
+  # the bridge sends chunky:run only once that frame has been drawn
+  # (afterPaint, index.html). What moves during the run is limited to
+  # transform and opacity, which the browser animates off the main thread.
+  # Afterwards the shell settles the cell: "ok" | "error" | "pass" | "fail".
   def finish_cell_run(idx)
     started = $window[:performance].now.to_f
     outcome = begin
@@ -1012,53 +742,8 @@ class ChunkyApp
     end
     elapsed = ($window[:performance].now.to_f - started) / 1000.0
   ensure
-    @running&.delete(idx)
-    settle_cell(idx, outcome, elapsed)
-  end
-
-  def settle_cell(idx, outcome, elapsed)
-    cell_el, button = cell_parts(idx)
-    unless js_null?(button)
-      button[:disabled] = false
-      button[:textContent] = ui["runCell"]
-    end
-    return if js_null?(cell_el)
-
-    cell_el[:classList].remove("running")
-    replay(cell_el, "shake") if outcome == :error
-    replay(cell_el, "celebrate") if outcome == :pass
-    out_el = $d.getElementById("cell-out-#{idx}")
-    replay(out_el, "reveal") unless js_null?(out_el)
-    show_run_time(cell_el, elapsed) if elapsed
-  end
-
-  # Re-adding a class does not restart its animation; reading a layout
-  # property in between forces the browser to see the removal first.
-  def replay(el, css_class)
-    el[:classList].remove(css_class)
-    el[:offsetWidth]
-    el[:classList].add(css_class)
-  end
-
-  def show_run_time(cell_el, seconds)
-    toolbar = cell_el.querySelector(".cell-toolbar")
-    return if js_null?(toolbar)
-
-    stamp = toolbar.querySelector(".run-time")
-    if js_null?(stamp)
-      stamp = $d.createElement("span")
-      stamp[:className] = "run-time"
-      toolbar.insertBefore(stamp, toolbar[:firstChild])
-    end
-    text = seconds < 0.1 ? "< 0.1 s" : format("%.1f s", seconds)
-    stamp[:textContent] = @lang == "de" ? text.tr(".", ",") : text
-    replay(stamp, "fresh")
-  end
-
-  def cell_parts(idx)
-    button = $d.querySelector(".run-cell[data-idx='#{idx}']")
-    cell_el = js_null?(button) ? nil : button.closest(".cell")
-    [cell_el, button]
+    bridge.ran(idx, (outcome || :error).to_s, elapsed || -1)
+    bridge.gems(installed_json)
   end
 
   def run_cell(idx)
@@ -1181,7 +866,6 @@ class ChunkyApp
     if error
       line = error_line(error, file)
       $window.markCellLine(idx, line) if line
-      show_bubble(ui["errorIntro"], "fail") if cell["t"] == "x"
       return :error
     end
 
@@ -1190,6 +874,8 @@ class ChunkyApp
     check_exercise(cell, code, output, result) ? :pass : :fail
   end
 
+  # true when the exercise's check passes; the shell marks the lesson done
+  # and has Chunky say so
   def check_exercise(cell, code, output, result)
     @bind.local_variable_set(:output, output)
     @bind.local_variable_set(:result, result)
@@ -1199,30 +885,9 @@ class ChunkyApp
     @bind.local_variable_set(:scenes, (@run_three || []).map { |spec| spec[:scene] })
     @bind.local_variable_set(:apps, (@run_shoes || []).length)
     @bind.local_variable_set(:shoes_types, (@last_shoes_types || []).dup)
-    passed = begin
-      !!eval(cell["check"], @bind, "check.rb")
-    rescue Exception
-      false
-    end
-
-    if passed
-      mark_done(current_lesson["id"])
-      render_nav
-      praise = ui["praise"][rand(ui["praise"].length)]
-      idx = current_index
-      if done_ids.length >= @lessons.length
-        show_bubble("#{praise}<br><br>#{ui["allDone"]}", "pass")
-      elsif idx + 1 < @lessons.length
-        progress = format(ui["progress"], idx + 1, @lessons.length)
-        next_id = @lessons[idx + 1]["id"]
-        show_bubble("#{praise}<br><small>#{progress}</small><br><a href=\"##{next_id}\" id=\"nextLessonLink\">#{ui["nextLesson"]}</a>", "pass")
-      else
-        show_bubble(praise, "pass")
-      end
-    else
-      show_bubble("#{ui["failIntro"]}<br>💡 #{cell["hint"]}", "fail")
-    end
-    passed
+    !!eval(cell["check"], @bind, "check.rb")
+  rescue Exception
+    false
   end
 end
 

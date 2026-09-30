@@ -1,0 +1,8 @@
+package=@picoruby/wasm-wasi
+version=4.0.3
+source=https://registry.npmjs.org/@picoruby/wasm-wasi/-/wasm-wasi-4.0.3.tgz
+integrity=sha512-cT6dU+AfKictr22fmZQTSyEItqqMHZXynlwP0ucZfDhTgX0gIWVaCpDf72GCaJd1JUp4Q5H1uMk18lYlv6v3uA==
+installed_by=create-jobrouter-custom-application/scripts/install_picoruby.rb
+file=init.iife.js 5214
+file=picoruby.js 135389
+file=picoruby.wasm 2104568

@@ -1,0 +1,11 @@
+# The page shell: Ruby on PicoRuby.wasm (docs/PICORUBY_SHELL.md).
+# shell/loader.js loads these files in this order as ONE script (PicoRuby
+# runs every script tag as a task of its own, concurrently), and
+# test/shell/ loads the same files in the same order under CRuby.
+jsg.rb
+support.rb
+course.rb
+store.rb
+view.rb
+app.rb
+boot.rb

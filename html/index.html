@@ -9,12 +9,20 @@
          types, Shantell Sans for Chunky's own voice (see app.css); self-hosted,
          so a visit makes no third-party requests -->
     <link rel="stylesheet" href="assets/fonts/fonts.css">
+    <!-- The page is drawn by Ruby on PicoRuby.wasm (shell/, 0.9 MB), the
+         lessons' code runs on CRuby ruby.wasm (main.rb, 10 MB), which loads
+         once the page is up (shell/bridge.js). The shell's runtime downloads
+         from here on, while the rest of the page loads. -->
+    <link rel="modulepreload" href="assets/picoruby/picoruby.js">
+    <link rel="preload" href="assets/picoruby/picoruby.wasm" as="fetch" type="application/wasm" crossorigin>
+    <link rel="preload" href="assets/picoruby/init.iife.js" as="script">
     <script>
-      // The Ruby sources (main.rb and what it require_relative's) are loaded
-      // by ruby.wasm with fetch(), which reuses a cached copy for as long as
-      // the browser deems it fresh - even across a hard reload. Ask the
-      // server every time instead: a 304 when nothing changed, the new code
-      // right after a deploy. Must run before browser.script.iife.js.
+      // The Ruby sources (main.rb and what it require_relative's, the
+      // shell's files) are loaded with fetch(), which reuses a cached copy
+      // for as long as the browser deems it fresh - even across a hard
+      // reload. Ask the server every time instead: a 304 when nothing
+      // changed, the new code right after a deploy. Must run before
+      // browser.script.iife.js.
       (function () {
         var plainFetch = window.fetch.bind(window);
         window.fetch = function (resource, init) {
@@ -28,7 +36,6 @@
         };
       })();
     </script>
-    <script src="browser.script.iife.js"></script>
     <meta name="description" property="og:description" content="Lerne die Programmiersprache Ruby direkt im Browser – auf Deutsch, mit Chunky Bacon. Ein interaktives Notizbuch mit Ruby.wasm, kein Setup nötig.">
     <meta name="author" content="Andi Idogawa">
     <meta name="image" property="og:image" content="assets/chunky.svg">
@@ -55,7 +62,7 @@
     <div class="spinner" id="spinner">
       <img class="spinner-image" src="assets/chunky.svg" alt="Chunky Bacon Fuchs">
       <h1 id="spinnerTitle">Ruby lernen mit Chunky Bacon</h1>
-      <p id="spinnerText">Ruby wird geladen … / Loading Ruby … (einmalig / one-time, ~32&nbsp;MB)</p>
+      <p id="spinnerText">Einen Moment … / One moment … / 少々お待ちください …</p>
       <div class="load-bar" aria-hidden="true"></div>
     </div>
 
@@ -65,6 +72,8 @@
         <div class="headerText">
           <h1 id="siteTitle">Ruby lernen mit Chunky Bacon</h1>
           <p id="siteSubtitle"></p>
+          <!-- until CRuby is up (shell/app.rb): Run waits for it -->
+          <p id="kernelStatus" class="kernel-status" role="status" hidden></p>
         </div>
         <button id="progressBtn" class="progress-btn" type="button" aria-haspopup="dialog">
           <svg class="progress-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7A1.5 1.5 0 0 1 5 5.5h4.2l2 2H19A1.5 1.5 0 0 1 20.5 9v8.5A1.5 1.5 0 0 1 19 19H5a1.5 1.5 0 0 1-1.5-1.5z"/></svg>
@@ -234,7 +243,8 @@
       document.querySelector(".sidebar").scrollIntoView({ behavior: calm ? "auto" : "smooth" });
     });
 
-    // Per-cell CodeMirror helpers called from Ruby (main.rb)
+    // Per-cell CodeMirror helpers called from Ruby (shell/app.rb builds the
+    // editors, main.rb reads and marks them)
     window.cellEditors = {};
     window.initCell = function (idx) {
       var ta = document.getElementById("cell-code-" + idx);
@@ -280,9 +290,13 @@
     };
   </script>
   <!-- where the learner's work lives (localStorage, a connected folder, a
-       progress file) and its UI; before main.rb, which stores through it -->
+       progress file) and its UI; before both Rubies, which store through it -->
   <script src="storage.js"></script>
   <script src="workspace_ui.js"></script>
+  <!-- the page shell (PicoRuby) and its bridge to the kernel (CRuby);
+       the bridge starts browser.script.iife.js, which runs main.rb -->
+  <script src="shell/bridge.js"></script>
+  <script src="shell/loader.js"></script>
   <script type="text/ruby" src="main.rb" data-eval="async"></script>
 </body>
 </html>

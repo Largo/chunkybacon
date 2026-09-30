@@ -152,6 +152,20 @@ header h1 {
   line-height: 1.1;
 }
 header p { margin: 0.2rem 0 0; color: var(--ink-soft); font-size: 0.95rem; }
+/* the lessons are readable before CRuby has loaded; this says it is coming */
+header .kernel-status { font-size: 0.85rem; }
+header .kernel-status::before {
+  content: "";
+  display: inline-block;
+  width: 0.55em;
+  height: 0.55em;
+  margin-right: 0.45em;
+  border-radius: 50%;
+  background: var(--fox);
+  animation: kernel-pulse 1.2s ease-in-out infinite;
+}
+@keyframes kernel-pulse { 50% { opacity: 0.25; } }
+@media (prefers-reduced-motion: reduce) { header .kernel-status::before { animation: none; } }
 header select, header .nav-jump {
   font: 600 0.95rem/1.2 var(--font-print);
   color: var(--ink);

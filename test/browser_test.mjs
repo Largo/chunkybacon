@@ -25,9 +25,19 @@ const exerciseOut = async () => {
   return (await page.textContent(`#cell-out-${idx}`)) || '';
 };
 
+// The page is drawn by the shell (PicoRuby); the kernel that runs the code
+// (CRuby, 10 MB) loads afterwards. A run asked for meanwhile waits for it.
+const kernelReady = p => p.waitForFunction(() => window.ChunkyBridge && window.ChunkyBridge.ready, null, { timeout: 120000 });
+
 await page.goto(BASE, { waitUntil: 'domcontentloaded' });
 await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 check('app becomes visible after wasm boot', true);
+check('the lesson is readable before the kernel has loaded',
+      (await page.textContent('#lessonBody h2')).includes('Hallo') && !(await page.evaluate(() => window.ChunkyBridge.ready)));
+await page.click('.run-cell[data-idx="1"]');
+await kernelReady(page);
+await page.waitForFunction(() => document.getElementById('cell-out-1').textContent.includes('=> 2'), null, { timeout: 30000 });
+check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
 check('38 lessons in nav', (await page.$$('#lessonNav a')).length === 38);
@@ -499,6 +509,7 @@ check('progress survives lang switch', (await page.getAttribute('#lessonNav a:fi
 // reload: language + progress persist
 await page.reload({ waitUntil: 'domcontentloaded' });
 await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
+await kernelReady(page);
 check('after reload still English', (await page.textContent('#siteTitle')).includes('Learn Ruby'));
 check('after reload progress kept', (await page.getAttribute('#lessonNav a:first-of-type', 'class')).includes('done'));
 
