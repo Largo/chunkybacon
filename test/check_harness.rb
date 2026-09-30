@@ -202,6 +202,10 @@ SOLUTIONS = {
     "de" => [%(require "net/http"\nrequire "json"\ninfo = JSON.parse(Net::HTTP.get(URI("https://rubygems.org/api/v1/gems/sinatra.json")))\ninfo["downloads"])],
     "en" => [%(require "net/http"\nrequire "json"\ninfo = JSON.parse(Net::HTTP.get(URI("https://rubygems.org/api/v1/gems/sinatra.json")))\ninfo["downloads"])]
   },
+  "bigdecimal" => {
+    "de" => [%(require "bigdecimal/util"\ntotal = "4.20".to_d * 3 + "1.15".to_d * 2 + "3.80".to_d\ntotal)],
+    "en" => [%(require "bigdecimal/util"\ntotal = "4.20".to_d * 3 + "1.15".to_d * 2 + "3.80".to_d\ntotal)]
+  },
   "three" => {
     "de" => [
       %(turm = Three::Scene.new\nturm.add(Three::AmbientLight.new(0xffffff, 0.4))\nlampe = Three::DirectionalLight.new(0xffffff, 2.0)\nlampe.position.set(2, 4, 3)\nturm.add(lampe)\n\n3.times do |i|\n  klotz = Three::Mesh.new(\n    Three::BoxGeometry.new(1, 1, 1),\n    Three::MeshStandardMaterial.new(color: 0xe8722a)\n  )\n  klotz.position.y = i - 1.0\n  turm.add(klotz)\nend\n\nshow_three turm, kamera do\n  turm.rotation.y += 0.01\nend)

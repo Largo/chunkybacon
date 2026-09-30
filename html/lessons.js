@@ -35,7 +35,7 @@ window.LESSONS_JSON = JSON.stringify({
       "gemsTitle": "💎 Gems",
       "gemsInstallBtn": "Installieren",
       "gemsCachedTip": "lokal zwischengespeichert – installiert sofort",
-      "gemsNote": "Pure-Ruby-Gems von rubygems.org, direkt im Browser installiert. ⚡ = lokal zwischengespeichert. Gems mit C-Code (z.&nbsp;B. nokogiri) funktionieren hier nicht.",
+      "gemsNote": "Pure-Ruby-Gems von rubygems.org, direkt im Browser installiert. ⚡ = lokal zwischengespeichert. Gems mit C-Code funktionieren hier nicht – ausser nokogiri und bigdecimal, die es in reinem Ruby nachgebaut gibt.",
       "gemInstalled": "💎 %s installiert! Jetzt einfach mit <code>require</code> laden.",
       "nativeDep": "%s braucht %s, und das enthält C-Code (eine „native extension“) – das kann nicht zur Laufzeit im Browser installiert werden. Solche Gems müssen beim Bauen der ruby.wasm-Datei fest einkompiliert werden.",
       "nativeGem": "%s enthält C-Code (eine „native extension“) und kann nicht zur Laufzeit im Browser installiert werden. Solche Gems müssen beim Bauen der ruby.wasm-Datei fest einkompiliert werden – so macht es z. B. Evil Martians' TutorialKit.rb.",
@@ -73,7 +73,7 @@ window.LESSONS_JSON = JSON.stringify({
       "gemsTitle": "💎 Gems",
       "gemsInstallBtn": "Install",
       "gemsCachedTip": "cached locally – installs instantly",
-      "gemsNote": "Pure-Ruby gems from rubygems.org, installed right in your browser. ⚡ = cached locally. Gems with C code (e.g. nokogiri) do not work here.",
+      "gemsNote": "Pure-Ruby gems from rubygems.org, installed right in your browser. ⚡ = cached locally. Gems with C code do not work here – except nokogiri and bigdecimal, which exist rebuilt in pure Ruby.",
       "gemInstalled": "💎 %s installed! Now just load it with <code>require</code>.",
       "nativeDep": "%s needs %s, which contains C code (a “native extension”) and cannot be installed at runtime in the browser. Such gems must be compiled into the ruby.wasm binary itself.",
       "nativeGem": "%s contains C code (a “native extension”) and cannot be installed at runtime in the browser. Such gems must be compiled into the ruby.wasm binary itself – that is how Evil Martians' TutorialKit.rb does it.",
@@ -1198,13 +1198,110 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "bigdecimal",
+      "de": {
+        "title": "18. Genau rechnen mit BigDecimal",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Wenn 0.1 + 0.2 nicht 0.3 ist</h2><p>Computer speichern Kommazahlen (<em>Floats</em>) binär – und im Binärsystem ist 0.1 ein unendlicher Bruch, so wie 1/3 im Dezimalsystem. Also wird gerundet, und manchmal sieht man das:</p>"
+          },
+          {
+            "t": "c",
+            "code": "0.1 + 0.2"
+          },
+          {
+            "t": "h",
+            "html": "<p>Bei Geld ist das nicht lustig: Wer Rappen falsch rundet, hat am Monatsende eine Abrechnung, die nicht aufgeht. Rubys Standardbibliothek bringt darum <strong>BigDecimal</strong> mit – Dezimalzahlen, die genau so rechnen, wie du es in der Schule gelernt hast. Du erzeugst sie aus <strong>Strings</strong>, damit die Zahl nie durch einen Float geht:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"bigdecimal\"\n\nBigDecimal(\"0.1\") + BigDecimal(\"0.2\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>0.3e0</code> ist die wissenschaftliche Schreibweise: 0.3 mal 10 hoch 0. Lesbarer wird es mit <code>to_s(\"F\")</code>. Und <code>bigdecimal/util</code> bringt <code>to_d</code> mit, das aus Strings und Zahlen BigDecimals macht:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"bigdecimal/util\"\n\npreis = \"19.90\".to_d\nmenge = 3\n(preis * menge).to_s(\"F\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Runden kann BigDecimal auf beliebig viele Stellen – und nach klaren Regeln. Kaufmännisch heisst <code>:half_up</code> (2.5 wird 3), Banker runden mit <code>:half_even</code> zur geraden Zahl (2.5 wird 2), damit sich Rundungsfehler über viele Buchungen ausgleichen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "drittel = BigDecimal(\"1\") / 3\n\n[drittel.round(2).to_s(\"F\"),\n BigDecimal(\"2.5\").round(0, :half_up).to_s(\"F\"),\n BigDecimal(\"2.5\").round(0, :half_even).to_s(\"F\")]"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb'><strong>Auf deinem Rechner:</strong> BigDecimal ist eine C-Erweiterung, die bei Ruby dabei ist (seit Ruby 3.4 als eigene Gem – mit Bundler gehört <code>gem \"bigdecimal\"</code> ins Gemfile). Hier im Browser gibt es keine C-Erweiterungen; du rechnest gerade mit <a href='https://github.com/Largo/bigdecimal-pure'>bigdecimal-pure</a>, das dieselbe Klasse in reinem Ruby nachbaut – innen aus Brüchen (<code>Rational</code>). Gleiche API, gleiche Ergebnisse.</div><div class='task'><strong>Aufgabe:</strong> Die Frühstücksrechnung: 3 × Speck zu 4.20, 2 × Ei zu 1.15 und 1 × Kaffee zu 3.80. Rechne die Summe mit BigDecimal aus (nicht mit Floats!) und speichere sie in <code>total</code>. Die Zelle soll <code>total</code> ergeben – erwartet: <code>0.187e2</code>, also 18.70.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"bigdecimal/util\"\n\n# total = \"4.20\".to_d * 3 + ...\n",
+            "check": "total.is_a?(BigDecimal) && total == BigDecimal(\"18.7\")",
+            "hint": "<code>total = \"4.20\".to_d * 3 + \"1.15\".to_d * 2 + \"3.80\".to_d</code> – Strings mit <code>to_d</code> in BigDecimals verwandeln, dann ganz normal rechnen."
+          }
+        ]
+      },
+      "en": {
+        "title": "18. Exact arithmetic with BigDecimal",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>When 0.1 + 0.2 is not 0.3</h2><p>Computers store decimal numbers (<em>floats</em>) in binary – and in binary 0.1 is a repeating fraction, like 1/3 in decimal. So it gets rounded, and sometimes that shows:</p>"
+          },
+          {
+            "t": "c",
+            "code": "0.1 + 0.2"
+          },
+          {
+            "t": "h",
+            "html": "<p>With money that is no joke: round cents wrongly and the books will not balance at the end of the month. That is why Ruby's standard library ships <strong>BigDecimal</strong> – decimal numbers that calculate exactly the way you learned at school. You create them from <strong>strings</strong>, so the number never passes through a float:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"bigdecimal\"\n\nBigDecimal(\"0.1\") + BigDecimal(\"0.2\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>0.3e0</code> is scientific notation: 0.3 times 10 to the power of 0. <code>to_s(\"F\")</code> makes it readable. And <code>bigdecimal/util</code> adds <code>to_d</code>, which turns strings and numbers into BigDecimals:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"bigdecimal/util\"\n\nprice = \"19.90\".to_d\nquantity = 3\n(price * quantity).to_s(\"F\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>BigDecimal rounds to any number of digits – by clear rules. Commercial rounding is <code>:half_up</code> (2.5 becomes 3); bankers round to the even number with <code>:half_even</code> (2.5 becomes 2), so rounding errors cancel out over many transactions:</p>"
+          },
+          {
+            "t": "c",
+            "code": "third = BigDecimal(\"1\") / 3\n\n[third.round(2).to_s(\"F\"),\n BigDecimal(\"2.5\").round(0, :half_up).to_s(\"F\"),\n BigDecimal(\"2.5\").round(0, :half_even).to_s(\"F\")]"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb'><strong>On your machine:</strong> BigDecimal is a C extension that comes with Ruby (since Ruby 3.4 as a gem of its own – with Bundler, <code>gem \"bigdecimal\"</code> belongs in the Gemfile). The browser has no C extensions; you are calculating with <a href='https://github.com/Largo/bigdecimal-pure'>bigdecimal-pure</a>, which rebuilds the same class in pure Ruby – out of fractions (<code>Rational</code>) inside. Same API, same results.</div><div class='task'><strong>Task:</strong> The breakfast bill: 3 × bacon at 4.20, 2 × egg at 1.15 and 1 × coffee at 3.80. Add it up with BigDecimal (not with floats!) and store the sum in <code>total</code>. The cell should evaluate to <code>total</code> – expected: <code>0.187e2</code>, that is 18.70.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"bigdecimal/util\"\n\n# total = \"4.20\".to_d * 3 + ...\n",
+            "check": "total.is_a?(BigDecimal) && total == BigDecimal(\"18.7\")",
+            "hint": "<code>total = \"4.20\".to_d * 3 + \"1.15\".to_d * 2 + \"3.80\".to_d</code> – turn the strings into BigDecimals with <code>to_d</code>, then calculate as usual."
+          }
+        ]
+      }
+    },
+    {
       "id": "three",
       "section": {
         "de": "3D mit three-rb",
         "en": "3D with three-rb"
       },
       "de": {
-        "title": "18. 3D mit three-rb",
+        "title": "19. 3D mit three-rb",
         "cells": [
           {
             "t": "h",
@@ -1251,7 +1348,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "18. 3D with three-rb",
+        "title": "19. 3D with three-rb",
         "cells": [
           {
             "t": "h",
@@ -1305,7 +1402,7 @@ window.LESSONS_JSON = JSON.stringify({
         "en": "Slide decks with ruby_pptx"
       },
       "de": {
-        "title": "19. PowerPoint mit ruby_pptx",
+        "title": "20. PowerPoint mit ruby_pptx",
         "cells": [
           {
             "t": "h",
@@ -1368,7 +1465,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "19. PowerPoint with ruby_pptx",
+        "title": "20. PowerPoint with ruby_pptx",
         "cells": [
           {
             "t": "h",
@@ -1438,7 +1535,7 @@ window.LESSONS_JSON = JSON.stringify({
         "en": "Shoes with Scarpe"
       },
       "de": {
-        "title": "20. Shoes-Apps mit Scarpe",
+        "title": "21. Shoes-Apps mit Scarpe",
         "cells": [
           {
             "t": "h",
@@ -1485,7 +1582,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "20. Shoes apps with Scarpe",
+        "title": "21. Shoes apps with Scarpe",
         "cells": [
           {
             "t": "h",
@@ -1539,7 +1636,7 @@ window.LESSONS_JSON = JSON.stringify({
         "en": "Advanced: timelog"
       },
       "de": {
-        "title": "21. Projekt timelog: Collections",
+        "title": "22. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -1578,7 +1675,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "21. Project timelog: collections",
+        "title": "22. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -1620,7 +1717,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "22. Text parsen: Regex",
+        "title": "23. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -1651,7 +1748,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "22. Parsing text: regex",
+        "title": "23. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -1685,7 +1782,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "23. Methoden richtig bauen",
+        "title": "24. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -1716,7 +1813,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "23. Building methods properly",
+        "title": "24. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -1750,7 +1847,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "24. Entry & Timesheet",
+        "title": "25. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -1781,7 +1878,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "24. Entry & Timesheet",
+        "title": "25. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -1815,7 +1912,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "25. Testen mit Minitest",
+        "title": "26. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -1846,7 +1943,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "25. Testing with Minitest",
+        "title": "26. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -1880,7 +1977,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "26. Enumerable & Data",
+        "title": "27. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -1903,7 +2000,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "26. Enumerable & Data",
+        "title": "27. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -1929,7 +2026,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "27. Blocks, Procs & Lambdas",
+        "title": "28. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -1968,7 +2065,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "27. Blocks, procs & lambdas",
+        "title": "28. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -2010,7 +2107,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "28. Fehler behandeln",
+        "title": "29. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -2041,7 +2138,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "28. Handling errors",
+        "title": "29. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -2075,7 +2172,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "29. Daten speichern: Formate",
+        "title": "30. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -2130,7 +2227,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "29. Saving data: formats",
+        "title": "30. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -2188,7 +2285,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "30. Kommandozeile & Gems",
+        "title": "31. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -2215,7 +2312,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "30. Command line & gems",
+        "title": "31. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -2245,7 +2342,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "31. Pattern Matching",
+        "title": "32. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -2276,7 +2373,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "31. Pattern matching",
+        "title": "32. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -2310,7 +2407,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "32. Objektmodell & Metaprogrammierung",
+        "title": "33. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -2341,7 +2438,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "32. Object model & metaprogramming",
+        "title": "33. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -2375,7 +2472,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "33. Eine eigene DSL",
+        "title": "34. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -2398,7 +2495,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "33. Your own DSL",
+        "title": "34. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -2424,7 +2521,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "34. Codequalität & Debugging",
+        "title": "35. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -2447,7 +2544,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "34. Code quality & debugging",
+        "title": "35. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -2473,7 +2570,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "35. Performance & Nebenläufigkeit",
+        "title": "36. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -2520,7 +2617,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "35. Performance & concurrency",
+        "title": "36. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -2570,7 +2667,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "36. Finale: timelog im Web",
+        "title": "37. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -2597,7 +2694,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "36. Finale: timelog on the web",
+        "title": "37. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
