@@ -394,6 +394,7 @@ module JS
       requests = @calls
       {
         "ready" => false,
+        "failed" => false,
         "setState" => proc { |*a| requests << ["setState", *a]; nil },
         "reset" => proc { requests << ["reset"]; nil },
         "run" => proc { |idx| requests << ["run", idx]; props["ChunkyBridge"]["ready"] },

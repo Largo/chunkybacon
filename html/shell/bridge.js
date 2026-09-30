@@ -20,6 +20,7 @@
 //                     chunky:install {name, ...}
 //   kernel -> shell   chunky:kernel-ready, chunky:ran {idx, outcome, elapsed},
 //                     chunky:gems {installed: JSON}, chunky:installed {name, ok, message}
+//   bridge -> shell   chunky:kernel-failed {reason}   (CRuby did not come up)
 (function () {
   "use strict";
 
@@ -37,14 +38,14 @@
     return Object.assign({ lang: state.lang, lesson: state.lesson, workshop: state.workshop, seq: state.seq }, detail);
   }
 
+  // The shell has put what it shows meanwhile on the page (the running look);
+  // once that frame is drawn, CRuby may block the main thread. This also
+  // keeps CRuby from ever running inside one of PicoRuby's handlers.
   function send(item) {
-    if (item.type === "run") {
-      // the shell has put the running look on the page; once that frame is
-      // drawn, Ruby may block the main thread
-      window.afterPaint(function () { emit("chunky:run", withState({ idx: item.idx })); });
-    } else {
-      emit("chunky:install", withState({ name: item.name }));
-    }
+    window.afterPaint(function () {
+      if (item.type === "run") emit("chunky:run", withState({ idx: item.idx }));
+      else emit("chunky:install", withState({ name: item.name }));
+    });
   }
 
   function request(item) {
@@ -57,11 +58,36 @@
     kernelStarted = true;
     var script = document.createElement("script");
     script.src = "browser.script.iife.js";   // runs main.rb (<script type="text/ruby">)
+    script.onerror = function () { kernelFailed("browser.script.iife.js could not be loaded"); };
     document.head.appendChild(script);
   }
 
+  // CRuby's loader does not catch: a failed wasm download or compile, or an
+  // error while main.rb boots, surfaces as an unhandled rejection. Until the
+  // kernel is up nothing else on the page leaves one unhandled.
+  function kernelFailed(reason) {
+    if (bridge.ready || bridge.failed) return;
+    bridge.failed = true;
+    waiting = [];
+    console.error("the kernel (CRuby) did not start:", reason);
+    emit("chunky:kernel-failed", { reason: String(reason) });
+  }
+  window.addEventListener("unhandledrejection", function (event) {
+    if (kernelStarted) kernelFailed(event.reason && event.reason.message ? event.reason.message : event.reason);
+  });
+
+  // The shell draws the page; if it never comes up (a Ruby error at boot, a
+  // browser without WebAssembly), say so where the spinner is.
+  setTimeout(function () {
+    if (shellUp) return;
+    var text = document.getElementById("spinnerText");
+    if (text) text.textContent = "Die Seite konnte nicht starten – bitte neu laden. / The page could not start – please reload. / ページを開始できませんでした。再読み込みしてください。";
+  }, 20000);
+  var shellUp = false;
+
   var bridge = window.ChunkyBridge = {
     ready: false,
+    failed: false,
     state: state,
 
     // ---- called by the shell ----
@@ -84,6 +110,7 @@
     run: function (idx) { return request({ type: "run", idx: Number(idx) }); },
     install: function (name) { return request({ type: "install", name: String(name) }); },
     shellReady: function () {
+      shellUp = true;
       emit("chunky:shell-ready", {});
       startKernel();
     },

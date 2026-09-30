@@ -16,7 +16,7 @@ UPSTREAM = %q{document.querySelectorAll('script[type="text/ruby"]')}
 PATCHED = %q{document.querySelectorAll('script[type="text/picoruby"]')}
 
 abort "no PicoRuby loader at #{LOADER} - install the runtime first" unless File.file?(LOADER)
-source = File.read(LOADER)
+source = File.binread(LOADER)   # binary: no CRLF on Windows
 upstream = source.scan(UPSTREAM).size
 patched = source.scan(PATCHED).size
 
@@ -32,5 +32,5 @@ if upstream.zero? && patched == 1
 end
 abort "expected the upstream selector exactly once, found #{upstream} (and #{patched} patched) - loader changed shape, adjust this script" unless upstream == 1 && patched.zero?
 
-File.write(LOADER, source.sub(UPSTREAM, PATCHED))
+File.binwrite(LOADER, source.sub(UPSTREAM, PATCHED))
 puts "patched #{LOADER}: text/ruby -> text/picoruby"

@@ -57,6 +57,21 @@ class AppTest < Minitest::Test
     refute_includes doc.js_get("body").attrs["class"].to_s, "kernel-loading"
   end
 
+  def test_a_kernel_that_never_comes_says_so_and_frees_the_cells
+    start
+    click(run_button(1))
+    fire("chunky:kernel-failed", { "reason" => "CompileError" })
+    status = byid("kernelStatus")
+    assert_includes status.text, "nicht geladen"
+    assert_includes status.attrs["class"], "is-failed"
+    refute_includes doc.js_get("body").attrs["class"].to_s, "kernel-loading"
+    refute_includes cell(1).attrs["class"], "running"
+    refute run_button(1).props["disabled"]
+    assert_equal "fail", bubble_state
+    click(run_button(1))
+    assert_equal 1, calls("run").length, "no run is asked for any more"
+  end
+
   def test_the_url_wins_over_the_stored_lesson
     start(hash: "#variablen", storage: { "chunky_current" => "rechnen" })
     assert_equal "variablen", find("#lessonNav a.active").attrs["data-id"]
@@ -200,7 +215,7 @@ class AppTest < Minitest::Test
   end
 
   def test_the_last_lesson_passed_says_all_done
-    ids = JSG.w.LESSONS.lessons.to_a.map(&:id)
+    ids = JS.global[:LESSONS][:lessons].to_a.map { |lesson| lesson[:id] }
     start(storage: { "chunky_done" => JSON.generate(ids) })
     idx = exercise_idx
     fire("chunky:ran", { "idx" => idx, "outcome" => "pass", "elapsed" => 0.2 })

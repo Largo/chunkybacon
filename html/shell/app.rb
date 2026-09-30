@@ -7,6 +7,14 @@ module ChunkyShell
   class App
     include Support
 
+    # What the header says when CRuby never came up (shell/bridge.js). Here
+    # until lessons.js has a UI string for it.
+    KERNEL_FAILED = {
+      "de" => "Ruby konnte nicht geladen werden – bitte lade die Seite neu.",
+      "en" => "Ruby could not be loaded – please reload the page.",
+      "ja" => "Rubyを読み込めませんでした。ページを再読み込みしてください。"
+    }.freeze
+
     attr_reader :lang
 
     def initialize(data = JSG.w.LESSONS, bridge = JSG.w.ChunkyBridge)
@@ -19,6 +27,7 @@ module ChunkyShell
       @gem_names = []
       @installed = {}
       @kernel_ready = bridge.ready == true
+      @kernel_failed = bridge.failed == true
       @rendered_lesson_id = nil
     end
 
@@ -64,6 +73,7 @@ module ChunkyShell
       window.addEventListener("chunky:gems", sync: true) { |event| guard("gems") { gems_changed(event.detail.installed) } }
       window.addEventListener("chunky:installed", sync: true) { |event| guard("installed") { installed(event.detail) } }
       window.addEventListener("chunky:kernel-ready", sync: true) { guard("kernel") { kernel_ready } }
+      window.addEventListener("chunky:kernel-failed", sync: true) { guard("kernel failed") { kernel_failed } }
     end
 
     # Nav entries are real links (#lesson-id): a plain click is handled here,
@@ -235,15 +245,19 @@ module ChunkyShell
       chat.style.display = "flex"
     end
 
-    # "Ruby wird geladen ..." in the header until the kernel is up
+    # "Ruby wird geladen ..." in the header until the kernel is up - or
+    # that it will not come
     def kernel_status
       status = el("kernelStatus")
       return unless status
 
-      status.textContent = ui.loading
+      status.textContent = @kernel_failed ? kernel_failed_text : ui.loading
       status.hidden = @kernel_ready
-      JSG.d.body.classList.toggle("kernel-loading", !@kernel_ready)
+      status.classList.toggle("is-failed", @kernel_failed)
+      JSG.d.body.classList.toggle("kernel-loading", !@kernel_ready && !@kernel_failed)
     end
+
+    def kernel_failed_text = KERNEL_FAILED[@lang] || KERNEL_FAILED["de"]
 
     # ---------- actions ----------
 
@@ -311,6 +325,7 @@ module ChunkyShell
     # screen first; the bridge hands the run to the kernel after the next
     # paint - or keeps it until the kernel has loaded.
     def start_cell_run(idx)
+      return show_bubble(kernel_failed_text, "fail") if @kernel_failed
       return if @running[idx]
 
       cell, button = cell_parts(idx)
@@ -407,6 +422,15 @@ module ChunkyShell
     def kernel_ready
       @kernel_ready = true
       kernel_status
+    end
+
+    # the runs that were waiting will not happen: their cells go back to idle
+    def kernel_failed
+      @kernel_failed = true
+      @running.keys.each { |idx| settle_cell(idx, nil, -1) }
+      @running = {}
+      kernel_status
+      show_bubble(kernel_failed_text, "fail")
     end
 
     # ---------- gems ----------

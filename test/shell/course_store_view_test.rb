@@ -7,7 +7,7 @@ class CourseStoreViewTest < Minitest::Test
 
   def setup
     fresh_page
-    @course = ChunkyShell::Course.new(JSG.w.LESSONS)
+    @course = ChunkyShell::Course.new(JS.global[:LESSONS])
   end
 
   # ---------- Course ----------
