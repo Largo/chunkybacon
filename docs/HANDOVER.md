@@ -42,6 +42,11 @@ html/
                         Fiber-based Thread, FileWatch (downloads)
   rack_playground.rb    show_browser: talks Rack to Sinatra/Roda apps, mock_get
   shoes_dom.rb          Lacci (Shoes) display service drawing into the page
+  workshop.rb           the workshop's runs: project files as the virtual FS,
+                        require_relative between them, gets, write-back
+  storage.js            where the work lives: localStorage change times, the
+                        progress file, a connected folder (File System Access)
+  workspace_ui.js       the progress dialog and the workshop's file panel
   assets/               app.css, CodeMirror, three.js (vendored), the fox SVG,
                         fonts/ (self-hosted web fonts + fonts.css, OFL 1.1)
   gems/cache/           .gem files + manifest.json (instant offline installs)
@@ -52,6 +57,7 @@ tools/update_ruby_wasm.rb  updates the wasm + loader from npm
 test/check_harness.rb      every lesson offline under CRuby
 test/gems_harness.rb       gem installer offline under CRuby
 test/browser_test.mjs      Playwright end-to-end (124 checks)
+test/progress_test.mjs     Playwright: progress file, workshop, folder (37 checks)
 docs/HANDOVER.md           this file
 ```
 
@@ -98,7 +104,8 @@ Rules that the code and tests rely on:
   lesson bindings capture top-level locals. In `%()` literals write `\\d`.
 - `test/lessons.json` is generated (gitignored):
   `node -e 'global.window={}; require("../html/lessons.js"); require("fs").writeFileSync("lessons.json", window.LESSONS_JSON)'`.
-- Progress, language and per-cell code persist in `localStorage`.
+- Progress, language and per-cell code persist in `localStorage` - and from
+  there in a progress file or a connected folder, see §6a.
 
 Helpers available in cells (defined in `main.rb`): `install_gem`,
 `show_image` (chunky_png), `show_browser(app, path)` + `mock_get`,
@@ -209,6 +216,41 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
 - CodeMirror cells must not be built while `#app` is `display:none`
   (blank editors after hard reload). Prose `pre/code` CSS stays scoped to
   `.lessonText`, or it bleeds into CodeMirror's internal `<pre>`s.
+
+## 6a. Progress files, a connected folder, the workshop
+
+Nothing is stored on a server - by design. The work stays on the learner's
+machine:
+
+- **localStorage** is the working copy, as before. `storage.js` wraps
+  `Storage.prototype.setItem/removeItem`, so every `chunky_*` key main.rb
+  writes gets a change time (in `chunkysync_times`, which is not synced).
+- **Progress file** (every browser): the header button *Fortschritt* opens
+  a dialog to download `chunkybacon-progress-<date>.json` and load it again.
+  Format: `{format: "chunkybacon-progress", version: 1, entries: {key: {v, t}}}`.
+  Loading merges key by key: the newer `t` wins, a removed key (lesson reset)
+  travels as `v: null`, `chunky_done` is united. main.rb re-renders on the
+  `chunky-progress-loaded` event.
+- **Folder** (Chrome/Edge, File System Access API): *Ordner wählen* picks a
+  folder; its handle is kept in IndexedDB. Every change is merged into
+  `chunkybacon-progress.json` there (800 ms debounce, flushed when the tab is
+  hidden). After a browser restart the permission may need one click
+  (*Ordner wieder öffnen*; the button shows an orange dot). **Needs a secure
+  context**: https or localhost. On the current `http://<ip>:8011` the
+  browser hides the API and the dialog offers only the file.
+- **Workshop** (`#werkstatt`, link above the lessons): the learner's own
+  programs. Without a folder the files are `chunky_file:<path>` keys (so they
+  travel in the progress file); with a folder they are real text files in it
+  (read in at connect and on window focus; dotfiles, `node_modules`,
+  `vendor` and files over 1 MB skipped). The editor is cell 0; main.rb's
+  `run_cell` hands the run to `workshop.rb`: project files become
+  `SandboxFS.store`, `require_relative` resolves project files, `gets` reads
+  the input box, `$0` names the file; afterwards written/deleted text files
+  go back through `workspaceWrite`/`workspaceDelete` and the lesson's demo
+  files return. A run saves the open file.
+- Dev on this machine: serve on localhost (127.0.0.1 counts), where the
+  folder API is available. `test/progress_test.mjs` drives the folder through
+  the origin-private file system (same API, no native picker).
 
 ## 7. nginx and the proxy
 

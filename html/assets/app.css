@@ -147,6 +147,41 @@ header select, header .nav-jump {
 header .nav-jump { display: none; font-size: 1.1rem; }
 header .nav-jump:hover { background: var(--fat); }
 
+/* progress: where the work is saved; the dot says whether a folder is on */
+header .progress-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font: 600 0.95rem/1.2 var(--font-print);
+  color: var(--ink);
+  padding: 0.4rem 0.7rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  background: var(--paper);
+}
+header .progress-btn:hover { background: var(--fat); }
+.progress-icon {
+  width: 1.15em;
+  height: 1.15em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+.progress-dot {
+  display: none;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid var(--paper);
+}
+.progress-btn.is-connected .progress-dot { display: block; background: var(--ok); }
+.progress-btn.needs-attention .progress-dot { display: block; background: var(--fox); }
+
 /* ---------- layout: the index in the margin, the lesson on the page ---------- */
 .layout {
   display: grid;
@@ -175,6 +210,22 @@ main {
   padding: 2rem 0 3rem 2.5rem;
 }
 main > * { max-width: var(--column); }
+
+/* ---------- the workshop's entry, above the lessons ---------- */
+.workshop-link {
+  display: block;
+  margin: 0 0 1.2rem;
+  padding: 0.45rem 0.7rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+.workshop-link:hover { background: var(--fat); color: var(--ink); }
+.workshop-link.active { background: var(--highlight); }
 
 /* ---------- lesson index ---------- */
 nav#lessonNav { display: flex; flex-direction: column; }
@@ -736,6 +787,145 @@ button.reset {
 }
 button.reset:hover { background: var(--paper); color: var(--ink); border-color: var(--ink); }
 
+/* ---------- the workshop: files beside a program editor ---------- */
+.in-workshop main > * { max-width: 64rem; }
+.workshop {
+  display: grid;
+  grid-template-columns: 12.5rem minmax(0, 1fr);
+  gap: 1.2rem;
+  align-items: start;
+  margin-top: 1.2rem;
+}
+/* until the editor has room beside it, the file panel sits above it */
+@media (max-width: 1100px) {
+  .workshop { grid-template-columns: minmax(0, 1fr); }
+}
+.ws-files h3 { margin: 0; font-size: 0.95rem; font-weight: 700; }
+.ws-where { margin: 0.1rem 0 0.6rem; font-size: 0.82rem; color: var(--ink-soft); overflow-wrap: anywhere; }
+.ws-locked {
+  font-size: 0.85rem;
+  margin: 0 0 0.6rem;
+  padding: 0.5rem 0.6rem;
+  background: var(--fat);
+  border-left: 3px solid var(--fox);
+  border-radius: 0 4px 4px 0;
+}
+.ws-list { list-style: none; margin: 0 0 0.6rem; padding: 0; }
+.ws-list li { display: flex; align-items: center; border-radius: 4px; }
+.ws-list li:hover { background: var(--code-bg); }
+.ws-list li.is-open {
+  background: linear-gradient(100deg,
+    transparent 0.2rem, var(--highlight) 0.2rem,
+    var(--highlight) calc(100% - 0.2rem), transparent calc(100% - 0.2rem));
+}
+.ws-files button.ws-file {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  font: 400 0.86rem/1.35 var(--font-code);
+  padding: 0.3rem 0.5rem;
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.ws-list li.is-open button.ws-file { font-weight: 700; }
+.ws-files button.ws-del {
+  flex: none;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.2rem 0.45rem;
+  background: transparent;
+  border: 0;
+  color: var(--ink-soft);
+  opacity: 0.45;
+}
+.ws-list li:hover button.ws-del, .ws-files button.ws-del:focus-visible { opacity: 1; }
+.ws-files button.ws-del:hover { color: var(--err); background: transparent; }
+.ws-files button.ws-action, .progress-dialog button.pd-secondary {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.3rem 0.7rem;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1.5px solid var(--ink-soft);
+}
+.ws-files button.ws-action:hover, .progress-dialog button.pd-secondary:hover { background: var(--fat); border-color: var(--ink); }
+.ws-files button.ws-action:disabled { opacity: 0.45; cursor: not-allowed; }
+.ws-newname {
+  width: 100%;
+  font: 0.86rem/1.3 var(--font-code);
+  padding: 0.35rem 0.5rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+}
+.ws-error { font-size: 0.8rem; color: var(--err); margin: 0.4rem 0 0; }
+.ws-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.8rem; }
+
+.cell.ws-editor { margin: 0; }
+.ws-tab {
+  font: 700 0.85rem/1.3 var(--font-code);
+  padding: 0.4rem 0.9rem;
+  background: var(--code-bg);
+  border-bottom: 1px solid var(--rule);
+  overflow-wrap: anywhere;
+}
+.ws-editor .CodeMirror-scroll { min-height: 20em; }
+.ws-stdin { border-top: 1px solid var(--rule); }
+.ws-stdin summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  padding: 0.35rem 0.9rem;
+}
+.ws-stdin textarea {
+  display: block;
+  width: calc(100% - 1.8rem);
+  margin: 0 0.9rem 0.6rem;
+  font: 0.88rem/1.45 var(--font-code);
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  resize: vertical;
+}
+/* a text file cannot be run (not the running state, which is disabled too) */
+.run-cell[disabled]:not(:has(.run-fox)) { opacity: 0.45; cursor: not-allowed; }
+
+/* ---------- the progress dialog ---------- */
+.progress-dialog {
+  width: min(34rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  padding: 1.3rem 1.5rem 1.1rem;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.progress-dialog::backdrop { background: rgba(26, 18, 8, 0.35); }
+.pd-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.pd-head h2 { margin: 0; font-size: 1.45rem; font-weight: 800; line-height: 1.2; }
+.progress-dialog button.pd-close {
+  font-size: 1.4rem;
+  line-height: 1;
+  padding: 0.1rem 0.45rem;
+  background: transparent;
+  border: 0;
+  color: var(--ink-soft);
+}
+.progress-dialog button.pd-close:hover { color: var(--ink); background: var(--code-bg); }
+.pd-intro { color: var(--ink-soft); margin: 0.5rem 0 0.4rem; }
+.progress-dialog section { border-top: 1px solid var(--rule); margin-top: 1rem; padding-top: 0.2rem; }
+.progress-dialog h3 { font-size: 1rem; font-weight: 700; margin: 0.8rem 0 0.2rem; }
+.progress-dialog p { margin: 0.3rem 0 0.6rem; }
+.pd-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.progress-dialog button.pd-primary { font-size: 0.95rem; padding: 0.45rem 1rem; }
+.pd-connected { font-weight: 600; }
+.pd-error, .pd-message.is-error { color: var(--err); }
+.pd-message { min-height: 1.6em; margin: 1rem 0 0; font-weight: 600; }
+.pd-message.is-ok { color: var(--ok); }
+
 /* ---------- Chunky speaks: a comic speech bubble, hand-lettered ---------- */
 #chunkyChat {
   --bubble: var(--paper);
@@ -830,6 +1020,8 @@ footer a { color: var(--ink); }
   }
   .lessonText h2 { font-size: 1.7rem; }
   .cell .CodeMirror { font-size: 14px; }
+  .workshop { grid-template-columns: minmax(0, 1fr); }
+  .ws-editor .CodeMirror-scroll { min-height: 14em; }
   #chunkyChat { gap: 0.9rem; }
   #chunkyChat .chat-avatar img { width: 64px; }
 }
@@ -839,6 +1031,14 @@ footer a { color: var(--ink); }
   header #mascot { width: 40px; height: 40px; }
   header p { display: none; }
   header h1 { font-size: 1.05rem; }
+  header .progress-btn { padding: 0.35rem 0.5rem; }
+  header .progress-label { display: none; }
+}
+/* narrow phones: three buttons need the room, Chunky still waves from his
+   speech bubble below */
+@media (max-width: 420px) {
+  header #mascot { display: none; }
+  header h1 { font-size: 1rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

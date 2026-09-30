@@ -66,6 +66,11 @@
           <h1 id="siteTitle">Ruby lernen mit Chunky Bacon</h1>
           <p id="siteSubtitle"></p>
         </div>
+        <button id="progressBtn" class="progress-btn" type="button" aria-haspopup="dialog">
+          <svg class="progress-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7A1.5 1.5 0 0 1 5 5.5h4.2l2 2H19A1.5 1.5 0 0 1 20.5 9v8.5A1.5 1.5 0 0 1 19 19H5a1.5 1.5 0 0 1-1.5-1.5z"/></svg>
+          <span class="progress-label" id="progressLabel">Fortschritt</span>
+          <span class="progress-dot" aria-hidden="true"></span>
+        </button>
         <button id="navJump" class="nav-jump" type="button" title="Lektionen / Lessons" aria-label="Lektionen / Lessons">☰</button>
         <select id="langSelect" title="Sprache / Language">
           <option value="de">Deutsch</option>
@@ -75,6 +80,7 @@
 
       <div class="layout">
         <div class="sidebar">
+          <a id="workshopLink" class="workshop-link" href="#werkstatt"></a>
           <nav id="lessonNav"></nav>
           <div id="gemsPanel">
             <h3 id="gemsTitle"></h3>
@@ -105,6 +111,9 @@
         <p id="footerCredit"></p>
         <p><small id="footerLicense"></small></p>
       </footer>
+
+      <!-- saving and loading progress: filled by workspace_ui.js -->
+      <dialog id="progressDialog" class="progress-dialog" aria-labelledby="progressTitle"></dialog>
     </div>
 
   <script>
@@ -269,6 +278,10 @@
       ed.scrollIntoView({ line: lineNo - 1, ch: 0 }, 200);
     };
   </script>
+  <!-- where the learner's work lives (localStorage, a connected folder, a
+       progress file) and its UI; before main.rb, which stores through it -->
+  <script src="storage.js"></script>
+  <script src="workspace_ui.js"></script>
   <script type="text/ruby" src="main.rb" data-eval="async"></script>
 </body>
 </html>

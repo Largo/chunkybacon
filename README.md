@@ -37,6 +37,13 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **Downloads**: any file a cell writes - `deck.save("chunky.pptx")`,
   `File.write("notes.txt", …)` - appears below the cell as a download link;
   `download_file(data, "name")` offers data that never went through a file.
+- **Workshop**: beside the lessons, a small IDE for your own multi-file
+  programs - `require_relative` between files, `File.read`/`File.write` on
+  the project, input for `gets` - with every widget below available.
+- **Your progress stays yours**: nothing is stored on a server. Progress,
+  code and workshop files live in the browser and can be saved as a progress
+  file (download, load again, merged key by key) or - in Chrome and Edge over
+  https - into a connected folder, where workshop files are real files.
 - **Interactive widgets**: `show_irb` (a real IRB terminal with `_`,
   multi-line input, and authentic prompts), `show_browser` (a fake
   browser window that speaks Rack directly to your Sinatra/Roda app),
@@ -83,6 +90,7 @@ node -e 'global.window={}; require("../html/lessons.js"); require("fs").writeFil
 ruby check_harness.rb     # every lesson: starter fails, solutions pass
 ruby gems_harness.rb      # gem installer, sinatra + roda offline
 node browser_test.mjs     # Playwright end-to-end against port 8011
+node progress_test.mjs    # progress file, workshop, connected folder
 ```
 
 ## License

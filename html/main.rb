@@ -22,6 +22,9 @@ module Kernel
       original_require_relative(File.absolute_path(path, File.dirname(caller_path)))
     rescue LoadError
       raise if caller_path.start_with?("/")
+      # a workshop program requiring another of its files (workshop.rb)
+      loaded = defined?(Workshop) ? Workshop.require_relative(path, caller_path) : nil
+      return loaded unless loaded.nil?
       JS::RequireRemote.instance.load(path)
     end
   end
@@ -117,6 +120,8 @@ end
 # Simulations for the sandbox: virtual filesystem behind File/Dir,
 # virtual sleep, cooperative SimThread as Thread.
 require_relative "sandbox_sim"
+# The workshop: the learner's own multi-file programs.
+require_relative "workshop"
 
 Net::HTTP.transport = lambda do |_method, uri|
   prefix = NET_HTTP_HOSTS[uri.host.to_s.downcase]
@@ -152,6 +157,7 @@ class ChunkyApp
     @three_renderers = {}
     @three_seq = 0
     @shoes_apps = {}
+    @workshop = workshop_hash?
     setup_elements
     # show the app BEFORE building cells: CodeMirror measures its container
     # at init, and inside a display:none #app it measures zero and renders
@@ -160,10 +166,10 @@ class ChunkyApp
     $d.getElementById("app")[:style][:display] = "block"
     render_all
     # A bare URL still names its lesson afterwards, without a history entry.
-    unless hash_lesson_id
+    unless hash_lesson_id || workshop?
       $window[:history].replaceState(nil, "", "##{current_lesson["id"]}")
     end
-    show_bubble(ui["welcome"], nil)
+    show_bubble(workshop? ? ui["workshopWelcome"] : ui["welcome"], nil)
     $window.refreshAllCells
   end
 
@@ -219,13 +225,28 @@ class ChunkyApp
   end
 
   def route_from_hash
+    return open_workshop if workshop_hash? && !workshop?
+    return if workshop_hash?
+
     id = hash_lesson_id
     if id.nil?
       # a hash naming no lesson: keep the page, correct the address bar
-      $window[:history].replaceState(nil, "", "##{@rendered_lesson_id}") if @rendered_lesson_id
-    elsif id != @rendered_lesson_id
+      current = workshop? ? WORKSHOP_ID : @rendered_lesson_id
+      $window[:history].replaceState(nil, "", "##{current}") if current
+    elsif workshop? || id != @rendered_lesson_id
       select_lesson(id)
     end
+  end
+
+  # The workshop is a page of its own beside the lessons, at #werkstatt.
+  WORKSHOP_ID = "werkstatt"
+
+  def workshop?
+    @workshop
+  end
+
+  def workshop_hash?
+    $window[:location][:hash].to_s.delete_prefix("#") == WORKSHOP_ID
   end
 
   def current_lesson
@@ -287,6 +308,14 @@ class ChunkyApp
 
     # back/forward, and a lesson id typed or pasted into the address bar
     $window.addEventListener("hashchange") { route_from_hash }
+
+    # a progress file was loaded or a folder reconnected (storage.js): show
+    # what localStorage holds now
+    $window.addEventListener("chunky-progress-loaded") do
+      lang = stored("chunky_lang", @lang)
+      @lang = lang if @data["ui"].key?(lang)
+      render_all
+    end
 
     # one delegated listener for cell run buttons and mini-browser widgets
     $d.getElementById("lessonBody").addEventListener("click") do |event|
@@ -392,18 +421,25 @@ class ChunkyApp
     active_id = current_lesson["id"]
     html = @lessons.map do |lesson|
       classes = []
-      classes << "active" if lesson["id"] == active_id
+      classes << "active" if lesson["id"] == active_id && !workshop?
       classes << "done" if done.include?(lesson["id"])
       section = lesson["section"] ? "<div class=\"nav-section\">#{lesson["section"][@lang] || lesson["section"]["de"]}</div>" : ""
       "#{section}<a class=\"#{classes.join(' ')}\" href=\"##{lesson["id"]}\" data-id=\"#{lesson["id"]}\">#{l10n(lesson)["title"]}</a>"
     end.join
     $d.getElementById("lessonNav")[:innerHTML] = html
+    link = $d.getElementById("workshopLink")
+    link[:textContent] = ui["workshopNav"]
+    link[:className] = workshop? ? "workshop-link active" : "workshop-link"
   end
 
   def render_lesson
     fresh_binding
     dispose_three
     dispose_shoes
+    $d[:body][:classList].toggle("in-workshop", workshop?)
+    $d.getElementById("reset-code")[:hidden] = workshop?
+    return render_workshop if workshop?
+
     lesson_id = current_lesson["id"]
     preload_three if cells.any? { |c| code_cell?(c) && c["code"].to_s.include?("show_three") }
     @rendered_lesson_id = lesson_id
@@ -431,6 +467,37 @@ class ChunkyApp
     end
   end
 
+  # The workshop's frame: the file panel (#wsFiles) and the stdin box are
+  # filled by workspace_ui.js, the editor is cell 0 like in a lesson.
+  def render_workshop
+    @rendered_lesson_id = nil
+    $d[:title] = "#{ui["workshopTitle"]} – #{ui["title"]}"
+    $d.getElementById("lessonBody")[:innerHTML] = <<~HTML
+      <div class="lessonText"><h2>#{ui["workshopTitle"]}</h2><p>#{ui["workshopIntro"]}</p></div>
+      <div class="workshop">
+        <aside class="ws-files" id="wsFiles"></aside>
+        <div class="cell ws-editor">
+          <div class="ws-tab" id="wsTab"></div>
+          <textarea title="code" id="cell-code-0"></textarea>
+          <div class="ws-stdin" id="wsStdinBox"></div>
+          <div class="cell-toolbar"><button type="button" class="run-cell" data-idx="0">#{ui["runCell"]}</button></div>
+          <div class="cell-out" id="cell-out-0" style="display:none"></div>
+        </div>
+      </div>
+    HTML
+    $window.initCell(0)
+    $window.workshopMount
+  end
+
+  def open_workshop
+    @workshop = true
+    $window[:location][:hash] = WORKSHOP_ID unless workshop_hash?
+    render_nav
+    render_lesson
+    show_bubble(ui["workshopWelcome"], nil)
+    $window.scrollTo(0, 0)
+  end
+
   def show_bubble(html, state)
     chat = $d.getElementById("chunkyChat")
     chat[:className] = state.to_s
@@ -441,6 +508,9 @@ class ChunkyApp
   # ---------- actions ----------
 
   def select_lesson(id)
+    return open_workshop if id == WORKSHOP_ID
+
+    @workshop = false
     store("chunky_current", id)
     set_lesson_hash(id)
     render_nav
@@ -868,9 +938,9 @@ class ChunkyApp
 
   # ---------- running cells ----------
 
-  def error_line(error)
+  def error_line(error, file = EVAL_FILE)
     source = error.is_a?(SyntaxError) ? error.message.to_s : (error.backtrace || []).join("\n")
-    match = source[/#{EVAL_FILE}:(\d+)/, 1]
+    match = source[/(?:\A|[\s(])#{Regexp.escape(file)}:(\d+)/, 1]
     match && match.to_i
   end
 
@@ -978,10 +1048,18 @@ class ChunkyApp
   end
 
   def run_cell(idx)
-    cell = cells[idx]
+    # the workshop's editor holds a whole program: one plain code cell
+    cell = workshop? ? { "t" => "c" } : cells[idx]
     return unless cell && code_cell?(cell)
     code = $window.getCellCode(idx).to_s
-    store(code_key(current_lesson["id"], idx), code)
+    if workshop?
+      file = $window.workshopOpenPath.to_s
+      Workshop.prepare(JSON.parse($window.workspaceSnapshot.to_s), file, code)
+      fresh_binding   # each run of a program starts from scratch
+    else
+      file = EVAL_FILE
+      store(code_key(current_lesson["id"], idx), code)
+    end
     $window.clearCellMarks(idx)
     @run_images = []
     @run_browsers = []
@@ -1002,7 +1080,11 @@ class ChunkyApp
     buffer = StringIO.new
     $stdout = buffer
     begin
-      result = eval(code, @bind, EVAL_FILE)
+      result = if workshop?
+        Workshop.with_io(file, $window.workshopStdin.to_s) { eval(code, @bind, file) }
+      else
+        eval(code, @bind, file)
+      end
     rescue Exception => e
       error = e
     ensure
@@ -1015,13 +1097,22 @@ class ChunkyApp
     @run_downloads = []
     FileWatch.changes_since(watch).each { |path, bytes| add_download(path, bytes) }
     explicit.each { |name, bytes| add_download(name, bytes) }
+    if workshop?
+      where = error && Workshop.location(error, file)
+      # what the program wrote goes into its project, next to the downloads
+      Workshop.finish.each do |path, text|
+        text ? $window.workspaceWrite(path, text) : $window.workspaceDelete(path)
+      end
+      $window.workshopAfterRun
+    end
 
     out_html = ""
     out_html += "<pre class=\"cell-stdout\">#{escape_html(output)}</pre>" unless output.empty?
     widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any? || @run_three.any? ||
                       @run_shoes.any? || @run_downloads.any?
     if error
-      out_html += "<div class=\"cell-error\">#{escape_html(error.class)}: #{escape_html(error.message)}</div>"
+      out_html += "<div class=\"cell-error\">#{escape_html(error.class)}: #{escape_html(error.message)}" \
+                  "#{where ? " (#{escape_html(where)})" : ""}</div>"
     elsif !(result.nil? && (!output.empty? || widgets_present))
       out_html += "<div class=\"cell-result\">=&gt; #{escape_html(inspect_result(result))}</div>"
     end
@@ -1072,7 +1163,7 @@ class ChunkyApp
     end
 
     if error
-      line = error_line(error)
+      line = error_line(error, file)
       $window.markCellLine(idx, line) if line
       show_bubble(ui["errorIntro"], "fail") if cell["t"] == "x"
       return :error
