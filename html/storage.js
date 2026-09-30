@@ -8,7 +8,7 @@
 // folder is connected, the workshop's files ("chunky_file:<path>"). Each key
 // carries the time it last changed, so two copies merge key by key: the newer
 // value wins, a lesson reset (a removed key) included, and finished lessons
-// are united. No UI here - workspace_ui.js draws the dialog and the
+// are united. No UI here - shell/workspace.rb draws the dialog and the
 // workshop's file panel.
 (function () {
   "use strict";

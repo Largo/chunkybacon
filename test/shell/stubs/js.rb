@@ -11,23 +11,28 @@
 #   type"); a string with "\n" or "\t" next to a non-string argument makes
 #   the call fail ("Bad control character ... in JSON")
 # - JS::Object#each yields nothing (use to_a, or jsg's each)
-# - a Task's block runs with another self
+# - a Task's block, and a register_callback block called from JavaScript,
+#   run with another self
+# - promise.await (inside a Task) answers the value or raises RuntimeError
 #
 # The DOM is a small tree: innerHTML is parsed (well-formed markup only),
 # and getElementById / querySelector(All) / closest understand the selectors
 # the shell uses: tag, #id, .class, [attr], [attr='value'], combined.
+# storage.js (window.ChunkyStorage) is a Hash-backed fake, CodeMirror
+# (window.cellEditors) a fake editor per initCell.
 require "json"
 
 module JS
   class << self
-    attr_accessor :console_errors, :window, :documents
+    attr_accessor :console_errors, :window, :documents, :callbacks
 
     def global = window
     def document = window.__target.document_node.wrap
+    def generic_callbacks = callbacks.transform_values { |fn| Object.new(fn) }
 
     def to_rb(value)
       case value
-      when ::Hash, ::Array, ::Proc, Node then Object.new(value)
+      when ::Hash, ::Array, ::Proc, Node, Promise then Object.new(value)
       else value
       end
     end
@@ -38,18 +43,47 @@ module JS
 
     def reset!
       self.console_errors = []
+      self.callbacks = {}
       self.window = Object.new(Window.new)
     end
   end
 
+  # a settled JavaScript promise; await answers it (PicoRuby: inside a Task)
+  class Promise
+    attr_reader :value, :error
+
+    def self.resolve(value = nil) = new(value, nil)
+    def self.reject(message) = new(nil, message)
+
+    def initialize(value, error)
+      @value = value
+      @error = error
+    end
+  end
+
   class Object < BasicObject
-    def self.register_callback(*) = nil
+    # JavaScript calls the block with its arguments as Ruby values; the block
+    # does not run with the self it was written in
+    def self.register_callback(name, &block)
+      ::JS.callbacks[name.to_sym] = proc do |*args|
+        ::JS.to_js(::Object.new.instance_exec(*args.map { |a| ::JS.to_rb(a) }, &block))
+      end
+      nil
+    end
+
+    def await
+      return self unless @target.is_a?(::JS::Promise)
+      raise @target.error if @target.error
+
+      ::JS.to_rb(@target.value)
+    end
 
     def initialize(target)
       @target = target
     end
 
     def __target = @target
+    def nil? = false   # PicoRuby's JS::Object has nil?; null itself arrives as nil
     def is_a?(klass) = klass == ::JS::Object || klass == ::BasicObject
     alias kind_of? is_a?
     def ==(other) = other.is_a?(::JS::Object) && ::JS.to_js(other).equal?(@target)
@@ -152,7 +186,7 @@ module JS
     def elements = children.reject(&:text?)
     def js_list = nil
 
-    def js_has?(key) = js_get(key) != nil || props.key?(key) || %w[hidden disabled value title].include?(key)
+    def js_has?(key) = js_get(key) != nil || props.key?(key) || %w[hidden disabled value title open].include?(key)
 
     def js_get(key)
       case key
@@ -165,7 +199,8 @@ module JS
       when "style" then (props["style"] ||= {})
       when "firstChild" then children.first
       when "offsetWidth" then 0
-      when "hidden", "disabled" then props.fetch(key, attrs.key?(key))
+      when "hidden", "disabled", "open" then props.fetch(key, attrs.key?(key))
+      when "files" then props["files"] || []
       when "value" then props.fetch("value", attrs["value"].to_s)
       when "title" then props.fetch("title", attrs["title"])
       else
@@ -233,9 +268,11 @@ module JS
     end
 
     def js_remove = parent&.children&.delete(self)
-    def js_focus = nil
+    def js_focus = (props["focused"] = true) && nil
     def js_click = JS.fire(wrap, "click")
     def js_addEventListener(*) = nil
+    def js_showModal = (props["open"] = true) && nil
+    def js_close = (props["open"] = false) && nil
 
     def listeners(type) = (props["__listeners"] || {})[type.to_s] || []
   end
@@ -347,12 +384,76 @@ module JS
     end
 
     def js_createElement(tag) = Node.new(tag.to_s.downcase)
+    def js_createTextNode(text) = Node.text(text.to_s)
     def js_addEventListener(*) = nil
+  end
+
+  # CodeMirror, as far as the shell uses it
+  class Editor < Node
+    def initialize
+      super("#editor")
+      @value = ""
+      @on_change = []
+    end
+
+    def js_getValue = @value
+    def js_setOption(*) = nil
+    def js_clearHistory = nil
+    def js_on(_type, fn) = (@on_change << fn) && nil
+
+    def js_setValue(text) = change(text.to_s, "setValue")
+    def type(text) = change(text, "+input")   # the learner typing
+
+    def change(text, origin)
+      @value = text
+      @on_change.each { |fn| fn.call(wrap.__target, { "origin" => origin }) }
+      nil
+    end
+  end
+
+  # storage.js: the browser's files, no folder; records what is asked
+  class Storage
+    attr_reader :files, :listeners, :calls
+    attr_accessor :state, :error, :load_result
+
+    def initialize
+      @files = {}
+      @listeners = Hash.new { |h, k| h[k] = [] }
+      @calls = []
+      @state = "none"
+      @error = nil
+      @load_result = JS::Promise.resolve(true)
+    end
+
+    def emit(name) = listeners[name].each(&:call)
+
+    def js
+      files = @files
+      {
+        "supported" => false, "PROGRESS_FILE" => "chunkybacon-progress.json",
+        "state" => proc { @state }, "error" => proc { @error }, "folderName" => proc { "kurs" }, "savedAt" => proc { nil },
+        "on" => proc { |name, fn| @listeners[name] << fn; nil },
+        "downloadProgress" => proc { @calls << ["downloadProgress"]; nil },
+        "loadProgressFile" => proc { |file| @calls << ["loadProgressFile", file]; @load_result },
+        "connectFolder" => proc { @calls << ["connectFolder"]; JS::Promise.resolve },
+        "resumeFolder" => proc { @calls << ["resumeFolder"]; JS::Promise.resolve },
+        "disconnectFolder" => proc { @calls << ["disconnectFolder"]; JS::Promise.resolve },
+        "files" => {
+          "kind" => proc { "browser" },
+          "list" => proc { files.keys.sort },
+          "read" => proc { |path| files[path] },
+          "write" => proc { |path, text| files[path] = text; JS::Promise.resolve },
+          "remove" => proc { |path| files.delete(path); JS::Promise.resolve },
+          "refresh" => proc { JS::Promise.resolve(false) },
+          "snapshot" => proc { files.dup }
+        }
+      }
+    end
   end
 
   # window: what html/index.html, storage.js and shell/bridge.js provide
   class Window < Node
-    attr_reader :document_node, :calls, :storage
+    attr_reader :document_node, :calls, :storage, :fs, :editors
 
     def initialize
       super("#window")
@@ -360,6 +461,11 @@ module JS
       @document_node = Document.new(body.gsub(%r{<script.*?</script>}m, ""))
       @storage = {}
       @calls = []
+      @fs = Storage.new
+      @editors = {}
+      props["ChunkyStorage"] = @fs.js
+      props["cellEditors"] = @editors
+      props["initCell"] = proc { |idx| @calls << ["initCell", idx]; @editors[idx.to_s] = Editor.new; nil }
       props["location"] = { "hash" => "" }
       props["history"] = { "replaceState" => proc { |_s, _t, url| props["location"]["hash"] = url.to_s } }
       props["localStorage"] = {
@@ -368,11 +474,11 @@ module JS
         "removeItem" => proc { |k| @storage.delete(k); nil }
       }
       props["console"] = { "error" => proc { |*a| JS.console_errors << a.join(" "); nil } }
-      props["JSON"] = { "parse" => proc { |text| JSON.parse(text.to_s) } }
+      props["JSON"] = { "parse" => proc { |text| JSON.parse(text.to_s) }, "stringify" => proc { |o| JSON.generate(o) } }
       props["Object"] = { "keys" => proc { |o| o.is_a?(::Hash) ? o.keys : [] } }
       props["LESSONS"] = JSON.parse(File.read(File.expand_path("../../lessons.json", __dir__)))
       @confirm = true
-      %w[initCell setCellCode refreshAllCells ensureThree workshopMount scrollTo].each do |name|
+      %w[setCellCode refreshAllCells ensureThree scrollTo].each do |name|
         props[name] = proc { |*args| @calls << [name, *args]; nil }
       end
       props["confirm"] = proc { |_msg| @confirm }
@@ -399,7 +505,12 @@ module JS
         "reset" => proc { requests << ["reset"]; nil },
         "run" => proc { |idx| requests << ["run", idx]; props["ChunkyBridge"]["ready"] },
         "install" => proc { |name| requests << ["install", name]; props["ChunkyBridge"]["ready"] },
-        "shellReady" => proc { requests << ["shellReady"]; nil }
+        "shellReady" => proc { requests << ["shellReady"]; nil },
+        "saveText" => proc { |name, text| requests << ["saveText", name, text]; nil },
+        "settle" => proc do |promise|
+          JS::Promise.resolve(promise.error ? { "ok" => false, "name" => "Error", "message" => promise.error }
+                                            : { "ok" => true, "value" => promise.value })
+        end
       }
     end
 

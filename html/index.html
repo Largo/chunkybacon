@@ -122,7 +122,7 @@
         <p><small id="footerLicense"></small></p>
       </footer>
 
-      <!-- saving and loading progress: filled by workspace_ui.js -->
+      <!-- saving and loading progress: filled by shell/workspace.rb -->
       <dialog id="progressDialog" class="progress-dialog" aria-labelledby="progressTitle"></dialog>
     </div>
 
@@ -290,9 +290,9 @@
     };
   </script>
   <!-- where the learner's work lives (localStorage, a connected folder, a
-       progress file) and its UI; before both Rubies, which store through it -->
+       progress file); before both Rubies, which store through it. Its UI is
+       the shell's (shell/workspace.rb) -->
   <script src="storage.js"></script>
-  <script src="workspace_ui.js"></script>
   <!-- the page shell (PicoRuby) and its bridge to the kernel (CRuby);
        the bridge starts browser.script.iife.js, which runs main.rb -->
   <script src="shell/bridge.js"></script>

@@ -134,6 +134,30 @@
     gems: function (installed) { emit("chunky:gems", { installed: String(installed || "{}") }); },
     installed: function (name, ok, message) {
       emit("chunky:installed", { name: String(name), ok: !!ok, message: String(message) });
+    },
+
+    // ---- for the shell's workshop and progress dialog (shell/workspace.rb) ----
+    // A promise that always fulfils, with what happened: PicoRuby's await
+    // raises on a rejection but loses the error's name (AbortError = the
+    // learner closed the folder picker).
+    settle: function (promise) {
+      return Promise.resolve(promise).then(function (value) {
+        return { ok: true, value: value === undefined ? null : value };
+      }, function (e) {
+        return { ok: false, name: (e && e.name) || "", message: (e && e.message) || String(e) };
+      });
+    },
+    // a text file to the learner's downloads (PicoRuby cannot build the
+    // Blob: it passes no arrays)
+    saveText: function (name, text) {
+      var url = URL.createObjectURL(new Blob([text], { type: "text/plain;charset=utf-8" }));
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = String(name).split("/").pop();
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
     }
   };
 

@@ -183,10 +183,13 @@ new_parts = [
   ["main.rb (kernel)", measure(read.("html/main.rb"), :ruby)],
   ["shell/*.rb (#{shell_files.size} files)", sum(shell_parts)],
   ["shell/bridge.js + loader.js", measure(read.("html/shell/bridge.js"), :js) + measure(read.("html/shell/loader.js"), :js)],
-  ["storage.js", measure(read.("html/storage.js"), :js)],
-  ["workspace_ui.js", measure(read.("html/workspace_ui.js"), :js)],
-  ["index.html inline JS", measure(inline_js(read.("html/index.html")), :js)]
+  ["storage.js", measure(read.("html/storage.js"), :js)]
 ]
+# workspace_ui.js until the shell took it over (shell/workspace.rb)
+if File.file?(File.join(ROOT, "html/workspace_ui.js"))
+  new_parts << ["workspace_ui.js", measure(read.("html/workspace_ui.js"), :js)]
+end
+new_parts << ["index.html inline JS", measure(inline_js(read.("html/index.html")), :js)]
 
 old_main_m = old_parts.first.last
 new_main_m = new_parts.first.last
@@ -238,6 +241,22 @@ puts
 puts "Old to shipped: #{percent(old_same.code_bytes, new_same.code_bytes)} code bytes, " \
      "#{percent(old_same.code_tokens, new_same.code_tokens)} lexical tokens"
 
+# The same component in both languages: the progress dialog and the
+# workshop's file panel, workspace_ui.js before, shell/workspace.rb after.
+if shell_files.include?("workspace.rb")
+  ws_js = measure(git_show(rev, "html/workspace_ui.js"), :js)
+  ws_rb = measure(read.("html/shell/workspace.rb"), :ruby)
+  ws_plain = measure(desugar(lf(read.("html/shell/workspace.rb"))), :ruby)
+  puts
+  puts "## One component, two languages: the progress dialog + workshop file panel\n\n#{HEADER}"
+  puts row("workspace_ui.js (JavaScript, before)", ws_js)
+  puts row("shell/workspace.rb, PicoRuby plain interop (desugared)", ws_plain)
+  puts row("shell/workspace.rb, with the jsg-style sugar (as shipped)", ws_rb)
+  puts
+  puts "JavaScript to Ruby: #{percent(ws_js.code_bytes, ws_rb.code_bytes)} code bytes, " \
+       "#{percent(ws_js.code_tokens, ws_rb.code_tokens)} lexical tokens, #{percent(ws_js.code_est, ws_rb.code_est)} est. tokens"
+end
+
 # the shell with and without the sugar (jsg.rb itself left out of both)
 sugared = shell_parts.reject { |name, _| name.end_with?("jsg.rb") }
 plain = shell_files.reject { |f| f == "jsg.rb" }.map { |f| [f, measure(desugar(lf(read.("html/shell/#{f}"))), :ruby)] }
@@ -264,7 +283,7 @@ if (i = ARGV.index("--desugar"))
 
   # the same program? the shell's tests (all but jsg_test.rb) on the copy
   require "rbconfig"
-  %w[app_test course_store_view_test portability_test].each do |test|
+  %w[app_test course_store_view_test workspace_test portability_test].each do |test|
     ok = system({ "SHELL_DIR" => dir }, RbConfig.ruby, File.join(ROOT, "test/shell/#{test}.rb"), out: File::NULL)
     puts "test/shell/#{test}.rb on the desugared shell: #{ok ? 'pass' : 'FAIL'}"
   end

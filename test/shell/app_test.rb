@@ -114,7 +114,7 @@ class AppTest < Minitest::Test
   def test_workshop
     start(hash: "#werkstatt")
     refute_nil byid("wsFiles")
-    assert_equal 1, calls("workshopMount").length
+    assert_includes byid("wsFiles").text, "main.rb", "the file panel is filled (workspace.rb)"
     assert byid("reset-code").props["hidden"]
     assert_includes doc.js_get("body").attrs["class"], "in-workshop"
     assert_equal ["setState", "de", "", true], calls("setState").last

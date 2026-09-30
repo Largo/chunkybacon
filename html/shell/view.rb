@@ -1,7 +1,7 @@
 # The page's HTML, as strings: one innerHTML write per part is the fastest
 # way through the bridge. Everything here is a plain function of its
 # arguments, which is what the unit tests look at. The markup (ids, classes)
-# is the one app.css, workspace_ui.js, the kernel and the tests rely on.
+# is the one app.css, workspace.rb, the kernel and the tests rely on.
 module ChunkyShell
   module View
     extend Support
@@ -41,7 +41,7 @@ module ChunkyShell
       HTML
     end
 
-    # The workshop's frame: workspace_ui.js fills the file panel (#wsFiles)
+    # The workshop's frame: workspace.rb fills the file panel (#wsFiles)
     # and the stdin box; the editor is cell 0 like in a lesson.
     def self.workshop_html(title, intro, run_label)
       <<~HTML

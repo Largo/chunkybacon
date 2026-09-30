@@ -15,7 +15,7 @@ module ChunkyShell
       "ja" => "Rubyを読み込めませんでした。ページを再読み込みしてください。"
     }.freeze
 
-    attr_reader :lang
+    attr_reader :lang, :course
 
     def initialize(data = JSG.w.LESSONS, bridge = JSG.w.ChunkyBridge)
       @course = Course.new(data)
@@ -33,6 +33,8 @@ module ChunkyShell
 
     def start
       wire_events
+      # the progress dialog and the workshop's files (storage.js keeps them)
+      @workspace = Workspace.new(self).start
       # the page before the editors: CodeMirror measures its container when
       # it is built, and inside a display:none #app it measures zero
       el("spinner").style.display = "none"
@@ -179,6 +181,7 @@ module ChunkyShell
       render_nav
       render_lesson
       kernel_status
+      @workspace&.language_changed
     end
 
     def render_nav
@@ -227,7 +230,7 @@ module ChunkyShell
       JSG.d.title = "#{ui.workshopTitle} – #{ui.title}"
       el("lessonBody").innerHTML = View.workshop_html(ui.workshopTitle, ui.workshopIntro, ui.runCell)
       JSG.w.initCell(0)
-      JSG.w.workshopMount
+      @workspace&.mount
     end
 
     def render_gems_panel

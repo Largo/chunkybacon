@@ -7,5 +7,6 @@ support.rb
 course.rb
 store.rb
 view.rb
+workspace.rb
 app.rb
 boot.rb

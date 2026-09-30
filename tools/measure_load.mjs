@@ -5,6 +5,8 @@
 //   BASE=http://127.0.0.1:18011/ LABEL=prototype RUNS=3 node tools/measure_load.mjs
 //   PROFILES=warm ...                     # a repeat visit instead
 //   BASE="http://127.0.0.1:18011/?kernel=eager" ...   # CRuby beside the shell
+//   SITES="baseline=http://127.0.0.1:18012/,prototype=http://127.0.0.1:18011/" ...
+//       # several sites, their runs interleaved, so a busy machine slows all alike
 //
 // (Playwright is imported from the server path, like test/browser_test.mjs.)
 // Every run uses a fresh browser context (cold cache). Metrics, all measured
@@ -20,8 +22,9 @@
 import { chromium } from '/usr/local/lib/node_modules/playwright/index.mjs';
 import { writeFileSync, mkdirSync } from 'node:fs';
 
-const BASE = process.env.BASE || 'http://127.0.0.1:18011/';
-const LABEL = process.env.LABEL || 'site';
+const SITES = process.env.SITES
+  ? process.env.SITES.split(',').map(s => { const i = s.indexOf('='); return { label: s.slice(0, i), base: s.slice(i + 1) }; })
+  : [{ label: process.env.LABEL || 'site', base: process.env.BASE || 'http://127.0.0.1:18011/' }];
 const RUNS = Number(process.env.RUNS || 3);
 const PROFILES = (process.env.PROFILES || 'fast,20mbit').split(',');
 const OUT = process.env.OUT || 'tmp/results';
@@ -68,7 +71,7 @@ function category(url) {
   return 'common';
 }
 
-async function once(browser, profile) {
+async function once(browser, profile, BASE) {
   const ctx = await browser.newContext();
   await ctx.addInitScript(probe);
   if (profile === 'warm') {
@@ -131,26 +134,30 @@ const median = xs => {
 
 const browser = await chromium.launch();
 mkdirSync(OUT, { recursive: true });
-const all = {};
+const all = {};   // label -> profile -> runs
+for (const site of SITES) all[site.label] = {};
 for (const profile of PROFILES) {
-  all[profile] = [];
   for (let i = 0; i < RUNS; i++) {
-    const r = await once(browser, profile);
-    console.log(`${LABEL} ${profile} run ${i + 1}: readable ${Math.round(r.readable)} ms, ran ${Math.round(r.ran)} ms, ` +
-      `bytes readable ${r.bytesReadable}, ran ${r.bytesRan}, total ${r.bytesTotal} (${r.requests} req)` +
-      (r.errors.length ? ` ERRORS ${r.errors.join(' | ')}` : ''));
-    all[profile].push(r);
+    for (const site of SITES) {
+      const r = await once(browser, profile, site.base);
+      console.log(`${site.label} ${profile} run ${i + 1}: readable ${Math.round(r.readable)} ms, ran ${Math.round(r.ran)} ms, ` +
+        `bytes readable ${r.bytesReadable}, ran ${r.bytesRan}, total ${r.bytesTotal} (${r.requests} req)` +
+        (r.errors.length ? ` ERRORS ${r.errors.join(' | ')}` : ''));
+      (all[site.label][profile] = all[site.label][profile] || []).push(r);
+    }
   }
 }
 await browser.close();
 
-const summary = {};
-for (const [profile, runs] of Object.entries(all)) {
-  summary[profile] = {};
-  for (const k of ['fcp', 'readable', 'shellReady', 'kernelReady', 'ran', 'bytesReadable', 'bytesRan', 'bytesTotal', 'requests']) {
-    summary[profile][k] = median(runs.map(r => r[k]));
+for (const site of SITES) {
+  const summary = {};
+  for (const [profile, runs] of Object.entries(all[site.label])) {
+    summary[profile] = {};
+    for (const k of ['fcp', 'readable', 'shellReady', 'kernelReady', 'ran', 'bytesReadable', 'bytesRan', 'bytesTotal', 'requests']) {
+      summary[profile][k] = median(runs.map(r => r[k]));
+    }
+    summary[profile].byCat = runs[0].byCat;
   }
-  summary[profile].byCat = runs[0].byCat;
+  writeFileSync(`${OUT}/${site.label}.json`, JSON.stringify({ label: site.label, base: site.base, runs: all[site.label], summary }, null, 1));
+  console.log(site.label, JSON.stringify(summary, null, 1));
 }
-writeFileSync(`${OUT}/${LABEL}.json`, JSON.stringify({ label: LABEL, base: BASE, runs: all, summary }, null, 1));
-console.log(JSON.stringify(summary, null, 1));

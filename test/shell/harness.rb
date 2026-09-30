@@ -34,9 +34,11 @@ module ShellTest
   def bubble = byid("chunkyText").text
   def bubble_state = byid("chunkyChat").attrs["class"]
 
+  # the page, booted; a block runs on the fresh page before the shell starts
   def start(hash: "", storage: {})
     fresh_page(hash: hash, storage: storage)
-    ChunkyShell::App.new.start
+    yield if block_given?
+    @app = ChunkyShell::App.new.start
   end
 
   def click(node, **fields)
