@@ -30,4 +30,8 @@ iife = iife.sub(cdn_fetch, 'fetch("ruby+stdlib.wasm")')
 File.write(File.join(HTML, "browser.script.iife.js"), iife)
 FileUtils.cp(File.join(dir, "package/dist/ruby+stdlib.wasm"), File.join(HTML, "ruby+stdlib.wasm"))
 puts "installed browser.script.iife.js (CDN fetch patched to local) and ruby+stdlib.wasm (#{File.size(File.join(HTML, 'ruby+stdlib.wasm')) / 1024 / 1024} MB)"
+# nginx serves the wasm from the .gz next to it (gzip_static): a stale one
+# would ship the old Ruby
+require "rbconfig"
+system(RbConfig.ruby, File.join(__dir__, "compress_assets.rb")) or abort "writing ruby+stdlib.wasm.gz failed"
 puts "NOTE: remove the old ruby-app.wasm if still present"

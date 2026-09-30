@@ -20,7 +20,11 @@ Last updated 2026-09-30 (37 lessons in German, English and Japanese).
   restart. nginx sends `Cache-Control: no-cache` for html/rb/js/css/json, and
   `index.html` forces `cache: "no-cache"` on the `.rb` fetches, so a normal
   reload picks up the change.
-- **Changing `nginx.conf`** needs `docker exec chunkybacon nginx -s reload`.
+- **Changing `nginx.conf`** needs `docker exec chunkybacon nginx -t && docker exec chunkybacon nginx -s reload`.
+- **Compression**: nginx gzips text on the fly; `ruby+stdlib.wasm` goes out
+  as the `ruby+stdlib.wasm.gz` next to it (`gzip_static`, 33 → 10 MB). That
+  `.gz` must match the wasm: `ruby tools/compress_assets.rb --check`
+  (`tools/update_ruby_wasm.rb` rewrites it).
 - The gem proxy's disk cache lives in the named volume `gemcache`.
 
 The upstream test `cd test && node browser_test.mjs` runs against the live
@@ -271,6 +275,12 @@ machine:
 
 ## 7. nginx and the proxy
 
+Compression: `gzip on` for text (html, rb - typed `text/plain` in the app-code
+location, since `mime.types` has no `.rb` -, js, css, json, svg) and
+`gzip_static on`, which serves `ruby+stdlib.wasm.gz` in place of the wasm.
+Only files that change through a tool get a `.gz` (`tools/compress_assets.rb`),
+so a hand-edited lessons.js or main.rb can never be shadowed by a stale one.
+
 `nginx.conf` is deliberately not an open proxy: upstream hosts are
 hardcoded (`rubygems.org`, `www.ruby-lang.org`), only the path is forwarded,
 `GET`/`HEAD` only, rubygems locked to `api/v1/gems/` and `gems/`, per-IP
@@ -320,7 +330,8 @@ read `#cell-out-<idx>`.
 
 `ruby tools/update_ruby_wasm.rb` fetches the latest `@ruby/4.0-wasm-wasi`
 npm package, installs `browser.script.iife.js` + `ruby+stdlib.wasm` into
-`html/` and patches the loader's hardcoded jsDelivr URL to our host. After
+`html/`, patches the loader's hardcoded jsDelivr URL to our host and rewrites
+`ruby+stdlib.wasm.gz` (`tools/compress_assets.rb`). After
 an update re-check: `io/wait` still absent (else the net/http shim loses),
 `csv`/`benchmark` still not bundled (they auto-install from the cache),
 Minitest, and the nokogiri load (deep-AST stack limits differ per build;
