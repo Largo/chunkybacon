@@ -17,7 +17,9 @@ window.LESSONS_JSON = JSON.stringify({
       "running": "läuft …",
       "reset": "Lektion zurücksetzen",
       "taskLabel": "Aufgabe",
-      "loading": "Ruby wird geladen … (einmalig ca. 35 MB)",
+      "loading": "Ruby wird geladen … (einmalig ca. 10 MB)",
+      "kernelFailed": "Ruby konnte nicht geladen werden – bitte lade die Seite neu.",
+      "shellFailed": "Die Seite konnte nicht starten – bitte lade sie neu.",
       "welcome": "Hallo! Ich bin <strong>Chunky Bacon</strong>, dein Fuchs-Begleiter. 🦊🥓 Diese Seite ist ein <strong>Notizbuch</strong>: Führe jede Code-Zelle mit <em>▶ Ausführen</em> oder <kbd>Shift</kbd>+<kbd>Enter</kbd> aus – den Wert der letzten Zeile zeigt Ruby automatisch als <code>=&gt;</code>. Die Zelle mit dem orangen Rand ist deine Aufgabe. Los geht's!",
       "resetConfirm": "Alle Zellen dieser Lektion zurücksetzen?",
       "praise": [
@@ -96,7 +98,9 @@ window.LESSONS_JSON = JSON.stringify({
       "running": "running …",
       "reset": "Reset lesson",
       "taskLabel": "Task",
-      "loading": "Loading Ruby … (one-time, about 35 MB)",
+      "loading": "Loading Ruby … (one-time, about 10 MB)",
+      "kernelFailed": "Ruby could not be loaded – please reload the page.",
+      "shellFailed": "The page could not start – please reload it.",
       "welcome": "Hi! I'm <strong>Chunky Bacon</strong>, your fox companion. 🦊🥓 This page is a <strong>notebook</strong>: run every code cell with <em>▶ Run</em> or <kbd>Shift</kbd>+<kbd>Enter</kbd> – Ruby automatically shows the value of the last line as <code>=&gt;</code>. The cell with the orange border is your task. Let's go!",
       "resetConfirm": "Reset all cells of this lesson?",
       "praise": [
@@ -175,7 +179,9 @@ window.LESSONS_JSON = JSON.stringify({
       "running": "実行中 …",
       "reset": "レッスンをリセット",
       "taskLabel": "課題",
-      "loading": "Rubyを読み込み中 …（初回のみ、約35 MB）",
+      "loading": "Rubyを読み込み中 …（初回のみ、約10 MB）",
+      "kernelFailed": "Rubyを読み込めませんでした。ページを再読み込みしてください。",
+      "shellFailed": "ページを開始できませんでした。再読み込みしてください。",
       "welcome": "こんにちは！ぼくは<strong>Chunky Bacon</strong>、きみの相棒のキツネだよ。🦊🥓 このページは<strong>ノートブック</strong>になっていて、どのコードセルも<em>▶ 実行</em>か<kbd>Shift</kbd>+<kbd>Enter</kbd>で動かせるよ。最後の行の値は、Rubyが自動で<code>=&gt;</code>のあとに見せてくれる。オレンジの枠のセルがきみの課題だよ。さあ、始めよう！",
       "resetConfirm": "このレッスンのセルをすべて元に戻しますか？",
       "praise": [

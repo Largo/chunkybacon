@@ -34,12 +34,17 @@ port by default; see §8 for a private dev copy.
 
 ```
 html/
-  index.html            page shell, JS helpers the Ruby side calls (fetch*Sync,
+  index.html            the page, JS helpers both Rubies call (fetch*Sync,
                         ensureThree, afterPaint, cell editors), import map
+  shell/                THE PAGE, on PicoRuby (§2a): app.rb, course.rb,
+                        view.rb, store.rb, workspace.rb (progress dialog,
+                        workshop file panel), jsg.rb, support.rb, boot.rb;
+                        manifest.txt (load order), loader.js, bridge.js
+  assets/picoruby/      PicoRuby.wasm 4.0.3 (loader patched to text/picoruby)
   browser.script.iife.js  ruby.wasm browser loader (patched: fetches OUR wasm)
   ruby+stdlib.wasm      Ruby 4.0 (@ruby/4.0-wasm-wasi 2.10.1), 32 MB
-  main.rb               the app: ChunkyApp (lessons, cells, checks, widgets,
-                        i18n, persistence) plus browser-environment fixups
+  main.rb               THE KERNEL, on CRuby: ChunkyApp runs cells, checks,
+                        gems and widgets; plus browser-environment fixups
   lessons.js            ALL lesson content + UI strings, as JSON in JS
   browser_gems.rb       gem installer + stdlib shims (socket, net/http, resolv)
   sandbox_sim.rb        virtual FS for relative paths, virtual sleep,
@@ -50,7 +55,6 @@ html/
                         require_relative between them, gets, write-back
   storage.js            where the work lives: localStorage change times, the
                         progress file, a connected folder (File System Access)
-  workspace_ui.js       the progress dialog and the workshop's file panel
   assets/               app.css, CodeMirror, three.js (vendored), the fox SVG,
                         fonts/ (self-hosted web fonts + fonts.css, OFL 1.1)
   gems/cache/           .gem files + manifest.json (instant offline installs)
@@ -61,16 +65,56 @@ THIRD_PARTY_NOTICES.md     bundled components and their licenses - update it
                            with the gem cache, the wasm or the vendored assets
 tools/build_gem_cache.rb   regenerates html/gems/cache/
 tools/update_ruby_wasm.rb  updates the wasm + loader from npm
+tools/compress_assets.rb   the .gz copies nginx serves (both wasm runtimes)
+tools/patch_picoruby_loader.rb  PicoRuby's loader: text/ruby -> text/picoruby
+tools/measure_load.mjs, tools/shell_metrics.rb  load times, code size (PICORUBY_SHELL.md)
 test/check_harness.rb      every lesson offline under CRuby
 test/gems_harness.rb       gem installer offline under CRuby
-test/browser_test.mjs      Playwright end-to-end (135 checks)
+test/shell/run.rb          Minitest for the shell, on a stub of PicoRuby's js
+test/browser_test.mjs      Playwright end-to-end
 test/progress_test.mjs     Playwright: progress file, workshop, folder (37 checks)
+test/boot_failure_test.mjs Playwright: what the page says when a runtime fails
+test/make_lessons_json.js  writes test/lessons.json for the harnesses
 docs/HANDOVER.md           this file
+docs/PICORUBY_SHELL.md     the shell/kernel split in depth: bridge API,
+                           PicoRuby's traps, measurements, jsg
 ```
 
-The JS/Ruby bridge: `main.rb` runs inside the wasm and drives the DOM through
-`JS.global`. Property access on JS objects is `obj[:prop]`; a dot is a method
-call. JS `false`/`null` come back as truthy Ruby objects: compare `.to_s`.
+## 2a. Two Rubies: the shell and the kernel
+
+The page runs two Ruby VMs. **The shell** (`html/shell/*.rb`, PicoRuby.wasm,
+0.9 MB gzipped, up in ~0.3 s) draws everything the learner reads: header,
+index, lesson text and editors, language, routing, Chunky's bubble, the gems
+panel, the progress dialog and the workshop's file panel. **The kernel**
+(`html/main.rb`, CRuby's ruby.wasm, 10 MB gzipped) starts only after the
+shell has drawn the page, and runs cells, checks, gems and widgets. A lesson
+is readable in 0.4 s (1.0 s on a 20 Mbit/s line) instead of 1.2 s (5.8 s);
+a Run clicked while the kernel loads waits and runs once it is up.
+
+- `shell/loader.js` fetches the files in `shell/manifest.txt` and joins them
+  into ONE `<script type="text/picoruby">` (PicoRuby runs every script tag as
+  a concurrent task). PicoRuby's loader is patched to read `text/picoruby`,
+  so it leaves `main.rb` (`text/ruby`) to CRuby's.
+- `shell/bridge.js` is the only contact: the shell calls `ChunkyBridge.*`
+  with plain values, the kernel listens for `chunky:*` events and answers
+  through `ChunkyBridge.*` (table in PICORUBY_SHELL.md §2). It also parses
+  `LESSONS_JSON` once into `window.LESSONS`: **never `JSON.parse` the lesson
+  data in PicoRuby** - 35 s for 300 KB.
+- **Where new code goes**: anything at lesson *render* time (an asset
+  preload when a lesson opens, a new UI string on the page) belongs in the
+  shell; anything at *run* time (`show_pdf`, widgets, checks) in `main.rb`.
+- **PicoRuby is not CRuby** (PICORUBY_SHELL.md §5): no `\A`/`\z` in regexps,
+  no `sort_by`/`group_by`/`each_slice`/`find_index`/`Struct`, no enumerator
+  without a block, `NodeList#each` yields nothing. The Minitest suite runs
+  under CRuby, so `test/shell/portability_test.rb` scans the shell for these.
+- `?kernel=eager` in the URL starts CRuby with the page instead (for
+  measuring; `bridge.js` makes it the default in one line).
+
+Both Rubies drive the DOM through their `js` bridge. In the shell property
+reads already come back as Ruby values (`el.textContent`), and `shell/jsg.rb`
+adds the jsg-style rest (`el.textContent = "x"`, `el.hidden?`, `JSG.d`). In
+the kernel (ruby.wasm) property access is `obj[:prop]`, a dot is a method
+call, and JS `false`/`null` come back as truthy Ruby objects: compare `.to_s`.
 
 ## 3. Lessons
 
@@ -88,7 +132,7 @@ changes and rewrites it; prose edits can be done by hand.
   "ja": { "title": "14. HTMLのパース", "cells": [ ... ] } }
 ```
 
-A language is whatever `ui` has a key for: main.rb and workspace_ui.js take
+A language is whatever `ui` has a key for: the shell takes
 the list from there, `index.html`'s `#langSelect` names them. German has its
 own code (German names, Katze/Fuchs); **Japanese runs the English code** -
 only the Ruby comments are translated, `check` is byte-identical to `en`, and
@@ -124,7 +168,7 @@ Rules that the code and tests rely on:
   outlive the binding (an English solution would let the Japanese starter
   pass). In `%()` literals write `\\d`.
 - `test/lessons.json` is generated (gitignored):
-  `node -e 'global.window={}; require("../html/lessons.js"); require("fs").writeFileSync("lessons.json", window.LESSONS_JSON)'`.
+  `node test/make_lessons_json.js`.
 - Progress, language and per-cell code persist in `localStorage` - and from
   there in a progress file or a connected folder, see §6a.
 
@@ -243,9 +287,10 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
 - **show_pdf**: an `<iframe>` on a Blob URL, so the browser's own viewer
   renders it. Headless Chromium and the Electron preview have no PDF viewer
   and show it blank - the tests check the bytes (`%PDF`), not the picture.
-- **Running a cell** freezes the page (Ruby is synchronous); the running
-  look (stripe, dimmed editor, wobbling fox) is painted before the run via
-  `afterPaint` and uses compositor-only CSS animations so it keeps moving.
+- **Running a cell** freezes the page (CRuby is synchronous); the shell
+  paints the running look (stripe, dimmed editor, wobbling fox) and the
+  bridge hands the run to the kernel after `afterPaint`; compositor-only CSS
+  animations keep it moving. CRuby's ~1 s boot freezes the page the same way.
   Respects `prefers-reduced-motion`.
 - CodeMirror cells must not be built while `#app` is `display:none`
   (blank editors after hard reload). Prose `pre/code` CSS stays scoped to
@@ -263,7 +308,7 @@ machine:
   a dialog to download `chunkybacon-progress-<date>.json` and load it again.
   Format: `{format: "chunkybacon-progress", version: 1, entries: {key: {v, t}}}`.
   Loading merges key by key: the newer `t` wins, a removed key (lesson reset)
-  travels as `v: null`, `chunky_done` is united. main.rb re-renders on the
+  travels as `v: null`, `chunky_done` is united. The shell re-renders on the
   `chunky-progress-loaded` event.
 - **Folder** (Chrome/Edge, File System Access API): *Ordner wählen* picks a
   folder; its handle is kept in IndexedDB. Every change is merged into
@@ -307,9 +352,10 @@ container started with plain `docker run` on the default bridge gets 502s.
 
 ```sh
 cd test
-node -e 'global.window={}; require("../html/lessons.js"); require("fs").writeFileSync("lessons.json", window.LESSONS_JSON)'
+node make_lessons_json.js      # test/lessons.json
 ruby check_harness.rb          # 38 lessons x 3 languages, starter fails, solutions pass
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
+ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 BASE=http://127.0.0.1:8011/ node browser_test.mjs   # Playwright, ~5 min
 ```
 

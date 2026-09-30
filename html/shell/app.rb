@@ -7,14 +7,6 @@ module ChunkyShell
   class App
     include Support
 
-    # What the header says when CRuby never came up (shell/bridge.js). Here
-    # until lessons.js has a UI string for it.
-    KERNEL_FAILED = {
-      "de" => "Ruby konnte nicht geladen werden – bitte lade die Seite neu.",
-      "en" => "Ruby could not be loaded – please reload the page.",
-      "ja" => "Rubyを読み込めませんでした。ページを再読み込みしてください。"
-    }.freeze
-
     attr_reader :lang, :course
 
     def initialize(data = JSG.w.LESSONS, bridge = JSG.w.ChunkyBridge)
@@ -260,7 +252,8 @@ module ChunkyShell
       JSG.d.body.classList.toggle("kernel-loading", !@kernel_ready && !@kernel_failed)
     end
 
-    def kernel_failed_text = KERNEL_FAILED[@lang] || KERNEL_FAILED["de"]
+    # what the header and the bubble say when CRuby never came up (shell/bridge.js)
+    def kernel_failed_text = ui.kernelFailed
 
     # ---------- actions ----------
 

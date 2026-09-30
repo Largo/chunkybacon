@@ -77,11 +77,16 @@
   });
 
   // The shell draws the page; if it never comes up (a Ruby error at boot, a
-  // browser without WebAssembly), say so where the spinner is.
+  // browser without WebAssembly), say so where the spinner is - in the
+  // language the learner chose last time (lessons.js's ui strings).
   setTimeout(function () {
     if (shellUp) return;
     var text = document.getElementById("spinnerText");
-    if (text) text.textContent = "Die Seite konnte nicht starten – bitte neu laden. / The page could not start – please reload. / ページを開始できませんでした。再読み込みしてください。";
+    if (!text) return;
+    var ui = (window.LESSONS && window.LESSONS.ui) || {};
+    var lang = null;
+    try { lang = localStorage.getItem("chunky_lang"); } catch (e) { /* storage blocked */ }
+    text.textContent = ((ui[lang] || ui.de || {}).shellFailed) || "The page could not start - please reload it.";
   }, 20000);
   var shellUp = false;
 

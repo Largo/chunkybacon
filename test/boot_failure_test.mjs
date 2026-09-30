@@ -31,7 +31,7 @@ const check = (name, cond) => { console.log(`${cond ? 'PASS' : 'FAIL'} ${name}`)
   const page = await ctx.newPage();
   await page.goto(BASE + '#hallo');
   await page.waitForTimeout(21000);
-  check('the spinner says the page could not start', (await page.textContent('#spinnerText')).includes('could not start'));
+  check('the spinner says the page could not start', (await page.textContent('#spinnerText')).includes('nicht starten'));
   await ctx.close();
 }
 await browser.close();

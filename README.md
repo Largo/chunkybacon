@@ -58,6 +58,11 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 For operations, internals and traps see [docs/HANDOVER.md](docs/HANDOVER.md).
 
+The page runs on two Rubies: [PicoRuby.wasm](https://github.com/picoruby/picoruby)
+(0.9 MB) draws everything you read within a fraction of a second, while
+CRuby's ruby.wasm (10 MB) loads behind it and runs the code - see
+[docs/PICORUBY_SHELL.md](docs/PICORUBY_SHELL.md).
+
 Built on the same foundation as
 [BrowserRubyKoans](https://github.com/Largo/BrowserRubyKoans)
 (koans.idogawa.com): `browser.script.iife.js` + `ruby-app.wasm` with app
@@ -88,11 +93,13 @@ nginx, see `nginx.conf`).
 
 ```sh
 cd test
-node -e 'global.window={}; require("../html/lessons.js"); require("fs").writeFileSync("lessons.json", window.LESSONS_JSON)'
+node make_lessons_json.js # test/lessons.json for the Ruby harnesses
 ruby check_harness.rb     # every lesson: starter fails, solutions pass
 ruby gems_harness.rb      # gem installer, sinatra + roda offline
+ruby shell/run.rb         # the page shell (PicoRuby code) under Minitest
 node browser_test.mjs     # Playwright end-to-end against port 8011
 node progress_test.mjs    # progress file, workshop, connected folder
+node boot_failure_test.mjs # what the page says when a runtime fails
 ```
 
 ## License
