@@ -1,5 +1,7 @@
 # Ruby lernen mit Chunky Bacon 🦊🥓
 
+![Chunky Bacon: learn Ruby right in your browser](docs/social/twitter-card.png)
+
 Learn Ruby in your browser — an interactive, notebook-style course in
 **German, English and Japanese**. No setup: Ruby itself runs client-side via
 [ruby.wasm](https://github.com/ruby/ruby.wasm).

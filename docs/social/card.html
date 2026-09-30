@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!-- Social card. Screenshot the page at its exact size (tools/render_social_cards.mjs):
+       card.html                 1600x900 (16:9) -> twitter-card.png  (X, Bluesky, Mastodon, README)
+       card.html?format=github   1600x800 (2:1)  -> github-social.png (GitHub social preview, og:image)
+     A page of the squared exercise book the site is drawn as, with a notebook
+     cell on it whose answer is the course's name, and Chunky saying hello in
+     the course's three languages. ?lessons=N fills in the lesson count. The
+     page is laid out on a 1200-unit stage scaled to 1600 pixels; it needs a
+     server (the fonts are blocked on file://). -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Chunky Bacon social card</title>
+<script>
+  if (new URLSearchParams(location.search).get("format") === "github") document.documentElement.classList.add("github");
+</script>
+<link rel="stylesheet" href="/html/assets/fonts/fonts.css">
+<style>
+  :root {
+    --paper: #ffffff;
+    --karo: #e3eaf1;
+    --margin-line: #e9a393;
+    --ink: #1a1208;
+    --ink-soft: #5f5247;
+    --rule: #d4dbe3;
+    --fox: #e8722a;
+    --highlight: #ffc9a1;
+    --ok: #2e7d32;
+    --grid: 24px;
+    /* the stage: 1200 units wide, scaled to 1600 pixels */
+    --stage-h: 675px;
+    --word-top: 40px;  --word-size: 150px;
+    --tag-top: 372px;
+    --cell-top: 492px;
+    --fox-top: 252px;  --fox-size: 410px;
+    --bubble-top: 64px;
+  }
+  html.github {
+    --stage-h: 600px;
+    --word-top: 26px;  --word-size: 140px;
+    --tag-top: 324px;
+    --cell-top: 434px;
+    --fox-top: 196px;  --fox-size: 392px;
+    --bubble-top: 30px;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; background: var(--paper); }
+  html.github, html.github body { height: 800px; }
+
+  .stage {
+    position: relative;
+    width: 1200px;
+    height: var(--stage-h);
+    transform: scale(1.3333333);
+    transform-origin: 0 0;
+    color: var(--ink);
+    font-family: "Atkinson Hyperlegible Next", sans-serif;
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(var(--karo) 1px, transparent 1px),
+      linear-gradient(90deg, var(--karo) 1px, transparent 1px);
+    background-size: var(--grid) var(--grid);
+    background-position: -1px -1px;
+    overflow: hidden;
+  }
+  /* the exercise book's red margin */
+  .stage::before {
+    content: "";
+    position: absolute;
+    left: 108px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--margin-line);
+  }
+
+  .wordmark {
+    position: absolute;
+    left: 142px;
+    top: var(--word-top);
+    font-family: "Shantell Sans", sans-serif;
+    font-weight: 800;
+    font-variation-settings: "INFM" 70, "BNCE" 45;
+    font-size: var(--word-size);
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    transform: rotate(-2.5deg);
+    transform-origin: 0 50%;
+  }
+
+  .tagline {
+    position: absolute;
+    left: 150px;
+    top: var(--tag-top);
+    font-size: 31px;
+    line-height: 1.24;
+    font-weight: 600;
+  }
+  .tagline .sub { display: block; color: var(--ink-soft); font-weight: 500; }
+
+  /* a notebook cell as the site draws it: the task's orange border, the
+     code, the Run button, and its answer - marked with the highlighter
+     the index uses for the current lesson */
+  .cell {
+    position: absolute;
+    left: 150px;
+    top: var(--cell-top);
+    width: 716px;
+    border: 2.5px solid var(--fox);
+    border-radius: 6px;
+    background: var(--paper);
+    transform: rotate(-1deg);
+    transform-origin: 0 0;
+    overflow: hidden;
+  }
+  .code {
+    display: flex;
+    font-family: "Atkinson Hyperlegible Mono", monospace;
+    font-size: 20px;
+    line-height: 1.55;
+    padding: 7px 0;
+  }
+  .gutter {
+    color: #7d8894;
+    padding: 0 10px 0 12px;
+    border-right: 1px solid var(--rule);
+  }
+  .line { padding: 0 14px; white-space: pre; }
+  .s { color: #1f7a3f; }
+  .y { color: #7b3fa0; }
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 8px 10px 8px 16px;
+    border-top: 1px solid var(--rule);
+  }
+  .result {
+    font-family: "Atkinson Hyperlegible Mono", monospace;
+    font-size: 20px;
+    color: var(--ok);
+    padding: 1px 12px;
+    background: linear-gradient(100deg,
+      transparent 5px, var(--highlight) 5px,
+      var(--highlight) calc(100% - 5px), transparent calc(100% - 5px));
+  }
+  .run {
+    font-weight: 700;
+    font-size: 19px;
+    padding: 6px 18px;
+    border-radius: 6px;
+    border: 1.5px solid var(--ink);
+    background: var(--fox);
+  }
+
+  .fox {
+    position: absolute;
+    left: 800px;
+    top: var(--fox-top);
+    width: var(--fox-size);
+    height: var(--fox-size);
+    transform: rotate(4deg);
+  }
+
+  /* Chunky's speech bubble, uneven like the site's */
+  .bubble {
+    position: absolute;
+    left: 900px;
+    top: var(--bubble-top);
+    padding: 18px 30px 20px;
+    border: 3px solid var(--ink);
+    border-radius: 34px 26px 32px 22px / 26px 32px 24px 34px;
+    background: var(--paper);
+    font-family: "Shantell Sans", sans-serif;
+    font-weight: 700;
+    font-variation-settings: "INFM" 60, "BNCE" 30;
+    font-size: 38px;
+    line-height: 1.18;
+    transform: rotate(3deg);
+  }
+  /* UD Digi Kyokasho: a Japanese schoolbook face, for the exercise book */
+  .bubble .ja { font-family: "UD Digi Kyokasho N-B", "BIZ UDPGothic", sans-serif; font-size: 35px; }
+  /* the tail, down to his open mouth: ink triangle, paper inside */
+  .bubble::before, .bubble::after {
+    content: "";
+    position: absolute;
+    border-style: solid;
+  }
+  .bubble::before {
+    left: 58px;
+    bottom: -34px;
+    border-width: 34px 30px 0 0;
+    border-color: var(--ink) transparent transparent transparent;
+    transform: skewX(12deg);
+  }
+  .bubble::after {
+    left: 62px;
+    bottom: -25px;
+    border-width: 26px 22px 0 0;
+    border-color: var(--paper) transparent transparent transparent;
+    transform: skewX(12deg);
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="wordmark">Chunky<br>Bacon</div>
+
+  <p class="tagline">Learn Ruby right in your browser.<span class="sub"><span id="lessons">38</span> lessons, nothing to install.</span></p>
+
+  <div class="cell">
+    <div class="code"><span class="gutter">1</span><span class="line"><span class="s">"chunky bacon"</span>.split.map(<span class="y">&amp;:capitalize</span>).join(<span class="s">" "</span>)</span></div>
+    <div class="toolbar"><span class="result">=&gt; "Chunky Bacon"</span><span class="run">▶ Run</span></div>
+  </div>
+
+  <div class="bubble">Hallo!<br>Hi!<br><span class="ja">こんにちは!</span></div>
+  <img class="fox" src="/html/assets/chunky.svg" alt="">
+</div>
+<script>
+  var n = new URLSearchParams(location.search).get("lessons");
+  if (n) document.getElementById("lessons").textContent = n;
+</script>
+</body>
+</html>

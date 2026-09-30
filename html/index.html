@@ -36,9 +36,21 @@
         };
       })();
     </script>
-    <meta name="description" property="og:description" content="Lerne die Programmiersprache Ruby direkt im Browser – auf Deutsch, mit Chunky Bacon. Ein interaktives Notizbuch mit Ruby.wasm, kein Setup nötig.">
+    <meta name="description" content="Lerne die Programmiersprache Ruby direkt im Browser – mit Chunky Bacon. Ein interaktives Notizbuch auf Deutsch, Englisch und Japanisch, kein Setup nötig.">
     <meta name="author" content="Andi Idogawa">
-    <meta name="image" property="og:image" content="assets/chunky.svg">
+    <!-- Link previews (Slack, X, LinkedIn, Discord, messengers): the 2:1 card
+         from docs/social/card.html (tools/render_social_cards.mjs). Scrapers
+         want an absolute URL: GitHub's raw copy until the site has a domain. -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Chunky Bacon">
+    <meta property="og:title" content="Learn Ruby with Chunky Bacon">
+    <meta property="og:description" content="An interactive Ruby notebook in your browser, in German, English and Japanese – from puts to web apps, PDFs and 3D. Nothing to install.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/Largo/chunkybacon/main/docs/social/github-social.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1600">
+    <meta property="og:image:height" content="800">
+    <meta property="og:image:alt" content="Chunky Bacon, a cartoon fox holding a strip of bacon, says hello in German, English and Japanese beside a notebook cell whose Ruby code answers &quot;Chunky Bacon&quot;.">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="stylesheet" href="assets/codemirror.css">
     <link rel="stylesheet" href="assets/app.css">
     <script src="assets/codemirror.js"></script>

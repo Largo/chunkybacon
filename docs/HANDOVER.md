@@ -68,6 +68,12 @@ tools/update_ruby_wasm.rb  updates the wasm + loader from npm
 tools/compress_assets.rb   the .gz copies nginx serves (both wasm runtimes)
 tools/patch_picoruby_loader.rb  PicoRuby's loader: text/ruby -> text/picoruby
 tools/measure_load.mjs, tools/shell_metrics.rb  load times, code size (PICORUBY_SHELL.md)
+tools/render_social_cards.mjs  docs/social/card.html -> twitter-card.png (1600x900: X,
+                           Bluesky, Mastodon, README) and github-social.png (1600x800:
+                           GitHub social preview, og:image); fills in the lesson count,
+                           so rerun it when that changes. og:image points at GitHub's
+                           raw copy - switch it to the site's own URL once a domain is bound
+docs/social/               the social cards: card.html (source) and the two PNGs
 test/check_harness.rb      every lesson offline under CRuby
 test/gems_harness.rb       gem installer offline under CRuby
 test/shell/run.rb          Minitest for the shell, on a stub of PicoRuby's js
