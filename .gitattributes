@@ -1,0 +1,3 @@
+# The PicoRuby runtime is checked byte for byte (NOTICE.md's SHA-256,
+# tools/compress_assets.rb's .gz check): never convert its line endings.
+html/assets/picoruby/** -text
