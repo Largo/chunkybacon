@@ -35,6 +35,12 @@ module BrowserGems
   # uses Nokogiri when it loads and REXML otherwise.
   OPTIONAL_NATIVE_DEPS = { "ruby_pptx" => %w[nokogiri] }.freeze
 
+  # gems replaced by a pure-Ruby stand-in providing the same require: a
+  # dependency on bigdecimal (C extension, absent from the wasm image)
+  # installs bigdecimal-pure, whose lib/bigdecimal.rb is BigDecimal on
+  # Rational
+  SUBSTITUTES = { "bigdecimal" => "bigdecimal-pure" }.freeze
+
   # installed gems live here, one <name>-<version>/lib per gem
   ROOT = "/browser_gems"
 
@@ -329,6 +335,9 @@ module BrowserGems
     def install(name, seen = {})
       name = name.to_s.strip
       return installed[name] if installed[name]
+      if (substitute = SUBSTITUTES[name])
+        return installed[name] = install(substitute, seen)
+      end
       if NATIVE_GEMS.include?(name)
         return installed[name] = "builtin" if builtin?(name)
         raise NativeGemError, name
@@ -428,7 +437,7 @@ module BrowserGems
     # csv, benchmark - which real Ruby installs ship out of the box).
     def auto_install_feature(feature)
       name = feature.split("/").first
-      return nil if installed.key?(name) || !manifest.key?(name)
+      return nil if installed.key?(name) || !manifest.key?(SUBSTITUTES.fetch(name, name))
       install(name)
       require feature
       true

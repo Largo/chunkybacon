@@ -177,6 +177,13 @@ check.call "nokogiri parses HTML5 with CSS selectors", doc.css("li.a").map(&:tex
 xml = Nokogiri::XML(%(<r xmlns:x="urn:x"><x:b>two &amp; three</x:b></r>))
 check.call "nokogiri namespaced XPath", xml.xpath("//x:b", "x" => "urn:x").text == "two & three"
 
+# --- bigdecimal: a dependency substituted by bigdecimal-pure from the cache ---
+check.call "bigdecimal installs as bigdecimal-pure",
+           BrowserGems.install("bigdecimal") == BrowserGems.manifest["bigdecimal-pure"]["version"] &&
+           BrowserGems.installed.key?("bigdecimal-pure")
+require "bigdecimal"
+check.call "BigDecimal works after the substitution", BigDecimal("0.1") + BigDecimal("0.2") == BigDecimal("0.3")
+
 check.call "second install is a no-op returning version",
            BrowserGems.install("chunky_png") == version
 

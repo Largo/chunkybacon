@@ -26,10 +26,13 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   (loofah, sanitize, rails-html-sanitizer, premailer, feedjira, rubyXL,
   roo, caxlsx, reverse_markdown …) install and run too. Other native gems
   fail with a friendly explanation of the wasm limitation that names the
-  gem with the C code (often a dependency: `bigdecimal` blocks
-  activesupport, liquid, prawn), unless it is built into the wasm image
-  (json, date, openssl …) or the gem that wants it can do without it
-  (`OPTIONAL_NATIVE_DEPS`: ruby_pptx falls back to REXML).
+  gem with the C code (often a dependency), unless it is built into the
+  wasm image (json, date, openssl …), has a pure-Ruby stand-in in the
+  cache (`SUBSTITUTES`: a dependency on `bigdecimal` installs
+  [bigdecimal-pure](https://github.com/Largo/bigdecimal-pure), which
+  unblocks activesupport, liquid, prawn, dry-types …) or the gem that
+  wants it can do without it (`OPTIONAL_NATIVE_DEPS`: ruby_pptx falls
+  back to REXML).
 - **Downloads**: any file a cell writes - `deck.save("chunky.pptx")`,
   `File.write("notes.txt", …)` - appears below the cell as a download link;
   `download_file(data, "name")` offers data that never went through a file.

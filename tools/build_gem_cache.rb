@@ -8,7 +8,7 @@ require 'net/http'
 require 'rubygems/package'
 require 'fileutils'
 
-GEMS = %w[chunky_png gammo racc sinatra roda minitest csv benchmark three-rb ruby_pptx lacci nokogiri]
+GEMS = %w[chunky_png gammo racc sinatra roda minitest csv benchmark three-rb ruby_pptx lacci nokogiri bigdecimal-pure]
 
 # gems pinned below their latest version, when the latest pulls in native
 # dependencies (e.g. minitest 6 depends on prism, a C extension)
@@ -29,9 +29,12 @@ OPTIONAL_NATIVE_DEPS = { "ruby_pptx" => %w[nokogiri] }
 # gems built from a local checkout instead of downloaded: nokogiri is
 # nokogiri-pure's nokogiri.gemspec (named "nokogiri" so that gems depending
 # on nokogiri resolve to it). Set NOKOGIRI_PURE to point elsewhere.
+# bigdecimal-pure keeps its own name; BrowserGems::SUBSTITUTES maps a
+# dependency on bigdecimal to it.
+WORKSPACE = File.expand_path("../../../..", __dir__)
 LOCAL_GEMS = {
-  "nokogiri" => File.join(ENV.fetch("NOKOGIRI_PURE", File.expand_path("../../../../nokogiri-pure", __dir__)),
-                          "nokogiri.gemspec")
+  "nokogiri" => File.join(ENV.fetch("NOKOGIRI_PURE", "#{WORKSPACE}/nokogiri-pure"), "nokogiri.gemspec"),
+  "bigdecimal-pure" => File.join(ENV.fetch("BIGDECIMAL_PURE", "#{WORKSPACE}/bigdecimal-pure"), "bigdecimal-pure.gemspec")
 }
 
 CACHE_DIR = File.expand_path("../html/gems/cache", __dir__)

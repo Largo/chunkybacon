@@ -131,10 +131,15 @@ await page.evaluate(() => window.cellEditors[5].setValue(
 await page.click('.run-cell[data-idx="5"]');
 await page.waitForTimeout(8000);
 check('i18n with concurrent-ruby (lib/concurrent-ruby load path)', (await page.textContent('#cell-out-5')).includes('Speck!'));
-await page.evaluate(() => window.cellEditors[5].setValue('install_gem "nori"'));
+await page.evaluate(() => window.cellEditors[5].setValue(
+  'install_gem "nori"\nrequire "nori"\nrequire "bigdecimal"\n[Nori.new(parser: :nokogiri).parse("<n>1</n>")["n"], BigDecimal("0.1") + BigDecimal("0.2"), BigDecimalPure.pure?]'));
 await page.click('.run-cell[data-idx="5"]');
-await page.waitForTimeout(5000);
-check('native dependency is named in the error', (await page.textContent('#cell-out-5')).includes('nori braucht bigdecimal'));
+await page.waitForTimeout(8000);
+check('bigdecimal dependency resolves to bigdecimal-pure', (await page.textContent('#cell-out-5')).includes('["1", 0.3e0, true]'));
+await page.evaluate(() => window.cellEditors[5].setValue('install_gem "jekyll-sass-converter"'));
+await page.click('.run-cell[data-idx="5"]');
+await page.waitForTimeout(8000);
+check('native dependency is named in the error', (await page.textContent('#cell-out-5')).includes('jekyll-sass-converter braucht google-protobuf'));
 await page.evaluate(() => window.cellEditors[5].setValue('doc.css("a").map { |link| link.text }'));
 
 // remote gem install through the nginx rubygems proxy

@@ -133,5 +133,10 @@
     "deps": [
       "racc"
     ]
+  },
+  "bigdecimal-pure": {
+    "version": "0.1.0",
+    "file": "bigdecimal-pure-0.1.0.gem",
+    "deps": []
   }
 }
