@@ -29,17 +29,19 @@
     --grid: 24px;
     /* the stage: 1200 units wide, scaled to 1600 pixels */
     --stage-h: 675px;
-    --word-top: 40px;  --word-size: 150px;
-    --tag-top: 372px;
-    --cell-top: 492px;
+    --word-top: 30px;  --word-size: 144px;
+    --tag-top: 348px;
+    --cell-top: 460px;
+    --by-top: 603px;
     --fox-top: 252px;  --fox-size: 410px;
     --bubble-top: 64px;
   }
   html.github {
     --stage-h: 600px;
-    --word-top: 26px;  --word-size: 140px;
-    --tag-top: 324px;
-    --cell-top: 434px;
+    --word-top: 22px;  --word-size: 124px;
+    --tag-top: 272px;
+    --cell-top: 374px;
+    --by-top: 524px;
     --fox-top: 196px;  --fox-size: 392px;
     --bubble-top: 30px;
   }
@@ -154,6 +156,27 @@
     background: var(--fox);
   }
 
+  /* who made it and where it lives, along the bottom of the page - where
+     you sign an exercise book */
+  .byline {
+    position: absolute;
+    left: 150px;
+    top: var(--by-top);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .byline img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    object-fit: cover;
+  }
+  .byline .name { font-weight: 700; font-size: 20px; line-height: 1.2; }
+  .byline .handle { font-weight: 500; color: var(--ink-soft); margin-left: 4px; }
+  .byline .repo { font-family: "Atkinson Hyperlegible Mono", monospace; font-size: 17px; color: var(--ink-soft); }
+
   .fox {
     position: absolute;
     left: 800px;
@@ -212,6 +235,11 @@
   <div class="cell">
     <div class="code"><span class="gutter">1</span><span class="line"><span class="s">"chunky bacon"</span>.split.map(<span class="y">&amp;:capitalize</span>).join(<span class="s">" "</span>)</span></div>
     <div class="toolbar"><span class="result">=&gt; "Chunky Bacon"</span><span class="run">▶ Run</span></div>
+  </div>
+
+  <div class="byline">
+    <img src="avatar.jpg" alt="">
+    <div><div class="name">Andi Idogawa<span class="handle">@largo</span></div><div class="repo">github.com/Largo/chunkybacon</div></div>
   </div>
 
   <div class="bubble">Hallo!<br>Hi!<br><span class="ja">こんにちは!</span></div>
