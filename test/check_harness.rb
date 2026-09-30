@@ -137,6 +137,11 @@ end
 # and clobbered by lesson code (the HTTP lesson's `data = ...` did exactly
 # that). Method locals are invisible to those bindings.
 
+LANGS = %w[de en ja].freeze
+# The Japanese lessons run the English code (only its comments are
+# translated), so they are checked with the English solutions.
+SOLUTION_LANG = { "ja" => "en" }.freeze
+
 SOLUTIONS = {
   "hallo" => {
     "de" => [%(puts "Hallo, Welt!"), %("Hallo, Welt!")],
@@ -692,18 +697,19 @@ def run_in(bind, code)
   [result, buffer.string, error]
 end
 
-def run_harness
+def run_harness(langs)
   data = JSON.parse(File.read(File.expand_path("lessons.json", __dir__)))
   failures = 0
   Dir.chdir(WORKDIR)
 
   data["lessons"].each do |lesson|
-  %w[de en].each do |lang|
-    l = lesson[lang]
+  langs.each do |lang|
+    l = lesson.fetch(lang)
     exercise = l["cells"].find { |c| c["t"] == "x" }
     demos = l["cells"].select { |c| c["t"] == "c" }
+    solutions = SOLUTIONS.fetch(lesson["id"]).fetch(SOLUTION_LANG.fetch(lang, lang))
     variants = [["starter", exercise["code"]]] +
-               SOLUTIONS.fetch(lesson["id"]).fetch(lang).each_with_index.map { |s, i| ["solution#{i + 1}", s] }
+               solutions.each_with_index.map { |s, i| ["solution#{i + 1}", s] }
 
     variants.each do |label, candidate|
       bind = eval("proc { binding }.call", TOPLEVEL_BINDING)
@@ -758,8 +764,17 @@ def run_harness
   end
 end
 
-  puts failures.zero? ? "ALL CHECKS OK (#{data["lessons"].length} lessons x 2 langs, puts + no-puts variants)" : "#{failures} failures"
+  puts failures.zero? ? "ALL CHECKS OK (#{data["lessons"].length} lessons x #{langs.join("+")}, puts + no-puts variants)" : "#{failures} failures (#{langs.join("+")})"
   failures.zero?
 end
 
-exit(run_harness ? 0 : 1)
+# One process per language: lesson code defines methods and classes at the
+# top level, which outlive the binding, and ja runs the same code as en - an
+# en solution's `def square` would let the ja starter pass.
+if (lang = ENV["HARNESS_LANG"])
+  exit(run_harness([lang]) ? 0 : 1)
+else
+  require "rbconfig"
+  results = LANGS.map { |l| system({ "HARNESS_LANG" => l }, RbConfig.ruby, __FILE__) }
+  exit(results.all? ? 0 : 1)
+end

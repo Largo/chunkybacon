@@ -2,7 +2,7 @@
 
 Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
-Last updated 2026-09-30 (37 lessons, commit `a715545`).
+Last updated 2026-09-30 (37 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -59,7 +59,7 @@ tools/build_gem_cache.rb   regenerates html/gems/cache/
 tools/update_ruby_wasm.rb  updates the wasm + loader from npm
 test/check_harness.rb      every lesson offline under CRuby
 test/gems_harness.rb       gem installer offline under CRuby
-test/browser_test.mjs      Playwright end-to-end (124 checks)
+test/browser_test.mjs      Playwright end-to-end (128 checks)
 test/progress_test.mjs     Playwright: progress file, workshop, folder (37 checks)
 docs/HANDOVER.md           this file
 ```
@@ -78,10 +78,20 @@ changes and rewrites it; prose edits can be done by hand.
 
 ```json
 { "id": "html",
-  "section": { "de": "Grundkurs", "en": "Basics" },   // optional: starts a nav section
+  "section": { "de": "Grundkurs", "en": "Basics", "ja": "基礎コース" },   // optional: starts a nav section
   "de": { "title": "14. HTML parsen", "cells": [ ... ] },
-  "en": { "title": "14. Parsing HTML", "cells": [ ... ] } }
+  "en": { "title": "14. Parsing HTML", "cells": [ ... ] },
+  "ja": { "title": "14. HTMLのパース", "cells": [ ... ] } }
 ```
+
+A language is whatever `ui` has a key for: main.rb and workspace_ui.js take
+the list from there, `index.html`'s `#langSelect` names them. German has its
+own code (German names, Katze/Fuchs); **Japanese runs the English code** -
+only the Ruby comments are translated, `check` is byte-identical to `en`, and
+the harness checks `ja` with the English solutions. So a change to an English
+code cell or check must be made in `ja` too (same cell, same code, comments
+in Japanese). Japanese prose is です・ます体, hints are Chunky speaking
+(casual); app.css adds Japanese fallback fonts under `:lang(ja)`.
 
 Cells, per language:
 
@@ -94,8 +104,9 @@ Cells, per language:
 Rules that the code and tests rely on:
 
 - `id` is stable and is the URL (`/#bigdecimal`); titles carry the number, so
-  **inserting a lesson means renumbering every later title in both
-  languages** (see the script pattern in git history of lesson 18).
+  **inserting a lesson means renumbering every later title in all three
+  languages** (see the script pattern in git history of lesson 18) - and the
+  prose references like "lesson 22" / "Lektion 22" / 「レッスン22」.
 - All cells of a lesson share one binding (notebook kernel). Demo and
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
@@ -103,8 +114,11 @@ Rules that the code and tests rely on:
 - `test/browser_test.mjs` asserts the lesson count (`'37 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
-  snippets per language) or it aborts. Its body runs in a method because
-  lesson bindings capture top-level locals. In `%()` literals write `\\d`.
+  snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
+  a method because lesson bindings capture top-level locals, and each
+  language runs in a process of its own because top-level `def`/`class`
+  outlive the binding (an English solution would let the Japanese starter
+  pass). In `%()` literals write `\\d`.
 - `test/lessons.json` is generated (gitignored):
   `node -e 'global.window={}; require("../html/lessons.js"); require("fs").writeFileSync("lessons.json", window.LESSONS_JSON)'`.
 - Progress, language and per-cell code persist in `localStorage` - and from
@@ -271,7 +285,7 @@ container started with plain `docker run` on the default bridge gets 502s.
 ```sh
 cd test
 node -e 'global.window={}; require("../html/lessons.js"); require("fs").writeFileSync("lessons.json", window.LESSONS_JSON)'
-ruby check_harness.rb          # 37 lessons x 2 languages, starter fails, solutions pass
+ruby check_harness.rb          # 37 lessons x 3 languages, starter fails, solutions pass
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 BASE=http://127.0.0.1:8011/ node browser_test.mjs   # Playwright, ~5 min
 ```

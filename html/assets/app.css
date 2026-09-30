@@ -35,6 +35,23 @@
   --column: 44rem;        /* the lesson column: text ~65ch, cells full width */
 }
 
+/* Japanese: the three faces above have no kana or kanji, and a browser left
+   to itself may take those from a Chinese font. The platforms' Japanese faces
+   follow the Latin ones, so Latin letters keep their shapes and Japanese text
+   gets Japanese glyphs - BIZ UD first on Windows, universal design like
+   Atkinson. */
+:root:lang(ja) {
+  --font-print: "Atkinson Hyperlegible Next", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", "Yu Gothic UI", "Yu Gothic", Meiryo, "Noto Sans JP", sans-serif;
+  --font-code: "Atkinson Hyperlegible Mono", "BIZ UDGothic", "Osaka-Mono", "MS Gothic", "Noto Sans Mono CJK JP", ui-monospace, monospace;
+  --font-hand: "Shantell Sans", "Hiragino Maru Gothic ProN", "BIZ UDPGothic", "Yu Gothic UI", "Yu Gothic", Meiryo, "Noto Sans JP", sans-serif;
+}
+
+/* Slanted kana and kanji are only a faked oblique; Japanese type marks
+   emphasis with weight */
+:lang(ja) em { font-style: normal; font-weight: 600; }
+:lang(ja) .cell .cm-s-default .cm-comment,
+:lang(ja) .irb-note { font-style: normal; }
+
 * { box-sizing: border-box; }
 
 html { background: var(--paper); }

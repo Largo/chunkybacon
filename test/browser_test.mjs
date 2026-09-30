@@ -484,6 +484,16 @@ await runExercise();
 check('class lesson passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 check('class lesson shows => "Chunky Bacon!"', (await exerciseOut()).includes('=> "Chunky Bacon!"'));
 
+// Japanese: the lesson around the same (English) code, and it still passes
+await page.selectOption('#langSelect', 'ja');
+await page.waitForTimeout(300);
+check('Japanese title', (await page.textContent('#siteTitle')).includes('Chunky Baconと学ぶRuby'));
+check('Japanese sets <html lang>', (await page.getAttribute('html', 'lang')) === 'ja');
+check('Japanese run button', (await page.textContent('.run-cell')).includes('実行'));
+await setExercise('class Fox\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def shout\n    "Chunky Bacon!"\n  end\nend\nFox.new("Kaz").shout');
+await runExercise();
+check('class lesson passes in Japanese', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
 await page.screenshot({ path: '/tmp/chunkybacon.png', fullPage: true });
 await browser.close();
 console.log(failures === 0 ? 'ALL BROWSER TESTS OK' : `${failures} FAILURES`);

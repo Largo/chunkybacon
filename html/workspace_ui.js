@@ -10,7 +10,7 @@
   var UI = JSON.parse(window.LESSONS_JSON).ui;
   var OPEN_KEY = "chunkyui_ws_open";   // no "chunky_": a view setting, not progress
 
-  function lang() { return document.documentElement.lang === "en" ? "en" : "de"; }
+  function lang() { var l = document.documentElement.lang; return UI[l] ? l : "de"; }
   function t(key, arg) {
     var text = (UI[lang()] && UI[lang()][key]) || UI.de[key] || key;
     return arg === undefined ? text : text.replace("%s", arg);
@@ -57,7 +57,8 @@
   var message = null;   // [text, "ok" | "error"] after an action
 
   function clock(date) {
-    return date.toLocaleTimeString(lang() === "en" ? "en-GB" : "de-CH", { hour: "2-digit", minute: "2-digit" });
+    var locale = { de: "de-CH", en: "en-GB", ja: "ja-JP" }[lang()] || "de-CH";
+    return date.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
   }
 
   function renderButton() {

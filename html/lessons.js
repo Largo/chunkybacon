@@ -167,6 +167,85 @@ window.LESSONS_JSON = JSON.stringify({
       "wsStdinHint": "Each line answers one gets.",
       "wsNotRuby": ".rb files can be run.",
       "wsStarter": "# Welcome to the workshop! This is your own program.\n# Change it, add more files and start it with ▶ Run.\n\nname = gets&.chomp\nname = \"Fox\" if name.nil? || name.empty?\nputs \"Hello, #{name}! 🦊\"\n\n# Whatever your program writes shows up in the file list on the left.\nFile.write(\"greeting.txt\", \"Chunky Bacon greets #{name}!\\n\")\nputs File.read(\"greeting.txt\")\n"
+    },
+    "ja": {
+      "title": "Chunky Baconと学ぶRuby",
+      "subtitle": "ブラウザで動くRubyのノートブック。セットアップ不要、すぐに書き始められます。",
+      "runCell": "▶ 実行",
+      "running": "実行中 …",
+      "reset": "レッスンをリセット",
+      "taskLabel": "課題",
+      "loading": "Rubyを読み込み中 …（初回のみ、約35 MB）",
+      "welcome": "こんにちは！ぼくは<strong>Chunky Bacon</strong>、きみの相棒のキツネだよ。🦊🥓 このページは<strong>ノートブック</strong>になっていて、どのコードセルも<em>▶ 実行</em>か<kbd>Shift</kbd>+<kbd>Enter</kbd>で動かせるよ。最後の行の値は、Rubyが自動で<code>=&gt;</code>のあとに見せてくれる。オレンジの枠のセルがきみの課題だよ。さあ、始めよう！",
+      "resetConfirm": "このレッスンのセルをすべて元に戻しますか？",
+      "praise": [
+        "CHUNKY BACON! 🥓 そのとおり！",
+        "いいね！キツネたちも大喜び：CHUNKY BACON!",
+        "完璧！Rubyの悟りへの道を着実に進んでるよ。",
+        "すばらしい！Matzもきっと喜ぶよ。",
+        "お見事！この調子でいこう！"
+      ],
+      "failIntro": "うーん、まだちょっと違うみたい。",
+      "errorIntro": "あいたっ、Rubyがエラーを出したよ。セルの下を見てみて。",
+      "nextLesson": "→ 次のレッスンへ",
+      "progress": "レッスン %d / %d",
+      "allDone": "🎉 全レッスン制覇！CHUNKY BACON! 次のステップには<a href='https://koans.idogawa.com'>ブラウザで動くRuby Koans</a>がおすすめだよ。",
+      "gemsTitle": "💎 Gems",
+      "gemsInstallBtn": "インストール",
+      "gemsCachedTip": "ローカルにキャッシュ済み – すぐにインストールできます",
+      "gemsNote": "rubygems.orgのピュアRubyのgemを、ブラウザの中で直接インストールします。⚡ = ローカルにキャッシュ済み。Cのコードを含むgemはここでは動きません。ただしnokogiriとbigdecimalは、ピュアRubyで作り直した版があるので使えます。",
+      "gemInstalled": "💎 %sをインストールしたよ！あとは<code>require</code>で読み込むだけ。",
+      "nativeDep": "%sは%sを必要としますが、そちらにはCのコード（「ネイティブ拡張」）が含まれているため、ブラウザの中で実行時にインストールすることはできません。こうしたgemは、ruby.wasmのバイナリをビルドするときに組み込んでおく必要があります。",
+      "nativeGem": "%sにはCのコード（「ネイティブ拡張」）が含まれているため、ブラウザの中で実行時にインストールすることはできません。こうしたgemは、ruby.wasmのバイナリをビルドするときに組み込んでおく必要があります。Evil MartiansのTutorialKit.rbもこの方法をとっています。",
+      "gemNotFound": "gem「%s」が見つかりませんでした（またはダウンロードに失敗しました）。",
+      "browserGo": "移動",
+      "irbExitNote": "（きみのコンピューターなら、IRBはここで終了しているところ。ここではそのまま入力を続けていいよ。🦊）",
+      "filesTitle": "ファイル（シミュレーション）",
+      "threeLoading": "3Dエンジン（three.js）をまだ読み込んでいます。少し待ってから、もう一度セルを実行してください。",
+      "downloadTip": "セルが書き出したファイルです。クリックするとダウンロードできます。",
+      "footerCredit": "制作：<a href='https://idogawa.com'>Andi Idogawa</a>。<a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>のおかげで、すべてブラウザの中だけで動いています。ひととおり終わったら、次は<a href='https://koans.idogawa.com'>Ruby Koans</a>へどうぞ。",
+      "footerLicense": "「Chunky Bacon」は、why the lucky stiffの『why's (poignant) guide to Ruby』に由来します。なつかしい思い出とともに。コースの内容：<a href='https://creativecommons.org/licenses/by-sa/4.0/deed.ja'>CC BY-SA 4.0</a>、コード：<a href='https://github.com/Largo/chunkybacon/blob/main/LICENSE'>MIT</a>。",
+      "progressButton": "進捗",
+      "progressTitle": "あなたの進捗",
+      "progressIntro": "終えたレッスン、あなたのコード、工房のファイルは、すべてあなたの端末に残ります。このサイトはサーバーに何も保存しません。なくさないように、また別のコンピューターへ移せるように、保存しておきましょう。",
+      "folderTitle": "フォルダーに保存",
+      "folderExplain": "コンピューター上のフォルダーを選んでください。変更はすぐにそこへ保存されます。進捗はchunkybacon-progress.jsonに、工房のファイルは本物のファイルとして保存されます。",
+      "folderChoose": "フォルダーを選ぶ",
+      "folderResume": "フォルダー「%s」をもう一度開く",
+      "folderResumeNote": "ブラウザを再起動したあとは、このサイトがフォルダーを引き続き使ってよいか、ブラウザが一度だけ確認します。",
+      "folderConnected": "フォルダー「%s」に接続しています。",
+      "folderSavedAt": "最終保存：%s",
+      "folderDisconnect": "フォルダーの接続を解除",
+      "folderError": "フォルダーへの保存に失敗しました：%s",
+      "folderUnsupported": "フォルダーへの保存は、サイトがhttpsで配信されているときにChromeとEdgeで使えます。ここではファイルで保存できます：",
+      "fileTitle": "ファイルとして保存",
+      "fileExplain": "ファイルをダウンロードしておけば、あとでここに読み込み直せます。別のブラウザや別のコンピューターでも使えます。",
+      "fileDownload": "ファイルをダウンロード",
+      "fileLoad": "ファイルを読み込む",
+      "fileLoaded": "進捗を読み込みました。",
+      "fileUnchanged": "このファイルには、ここにまだないものは含まれていません。",
+      "fileInvalid": "これはChunky Baconの進捗ファイルではありません。",
+      "close": "閉じる",
+      "workshopNav": "🛠 工房",
+      "workshopTitle": "工房",
+      "workshopIntro": "ここでは自分だけのプログラムを作れます。ファイルはいくつでも作れます。プログラムはファイルを読み書きしたり（<code>File.read</code>、<code>File.write</code>）、<code>require_relative</code>でほかの.rbファイルを読み込んだり、<code>gets</code>で入力を読んだりできます。",
+      "workshopWelcome": "<strong>工房</strong>へようこそ！🛠 ここには課題はないよ。きみとRubyだけ。ファイルはこのブラウザの中に保存される。ChromeとEdgeなら、上の<em>進捗</em>からフォルダーをつなげば、きみのコンピューター上の本物のファイルになるよ。",
+      "wsFiles": "ファイル",
+      "wsInBrowser": "このブラウザ内",
+      "wsInFolder": "フォルダー「%s」内",
+      "wsLocked": "フォルダー「%s」があなたの許可を待っています。",
+      "wsUnlock": "許可する",
+      "wsNewFile": "+ 新しいファイル",
+      "wsBadName": "英字、数字、-、_ を使ってください。例：game.rb、data/list.txt",
+      "wsExists": "「%s」はすでにあります。",
+      "wsDelete": "「%s」を削除",
+      "wsDeleteConfirm": "「%s」を本当に削除しますか？",
+      "wsUpload": "アップロード",
+      "wsDownload": "ダウンロード",
+      "wsStdin": "getsへの入力",
+      "wsStdinHint": "1行が、getsの1回ぶんの答えになります。",
+      "wsNotRuby": "実行できるのは.rbファイルです。",
+      "wsStarter": "# 工房へようこそ！これはきみ自身のプログラムだよ。\n# 書き換えたり、ファイルを増やしたりして、▶ 実行で動かしてみよう。\n\nname = gets&.chomp\nname = \"Fox\" if name.nil? || name.empty?\nputs \"Hello, #{name}! 🦊\"\n\n# プログラムが書き出したファイルは、左のファイル一覧に出てくるよ。\nFile.write(\"greeting.txt\", \"Chunky Bacon greets #{name}!\\n\")\nputs File.read(\"greeting.txt\")\n"
     }
   },
   "lessons": [
@@ -174,7 +253,8 @@ window.LESSONS_JSON = JSON.stringify({
       "id": "hallo",
       "section": {
         "de": "Grundkurs",
-        "en": "Basics"
+        "en": "Basics",
+        "ja": "基礎コース"
       },
       "de": {
         "title": "1. Hallo, Welt!",
@@ -235,6 +315,37 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "# Your code:\n",
             "check": "output.include?(\"Hello, World!\") || result == \"Hello, World!\"",
             "hint": "Write <code>puts \"Hello, World!\"</code> – or simply <code>\"Hello, World!\"</code> as the last line."
+          }
+        ]
+      },
+      "ja": {
+        "title": "1. Hello, World!",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Hello, World!</h2><p>Rubyは<strong>人間</strong>のために作られたプログラミング言語です。生みの親のまつもとゆきひろ（Matz）は、プログラミングを楽しいものにしたいと考えました。</p><p>このページは<strong>ノートブック</strong>のようになっていて、文章のセルとコードのセルでできています。どのセルも自由に書き換えられ、<em>▶ 実行</em>か<kbd>Shift</kbd>+<kbd>Enter</kbd>で実行できます。さっそく試してみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "1 + 1"
+          },
+          {
+            "t": "h",
+            "html": "<p>セルの下に<code>=&gt; 2</code>と表示されましたね。この<code>=&gt;</code>は<strong>最後の行の値</strong>を示しています。特別な命令を書かなくても、Rubyが自動で表示してくれるのです。</p><p>テキストを明示的に<em>出力</em>したいときは、<code>puts</code>（「put string」の略）を使います：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"Chunky Bacon!\""
+          },
+          {
+            "t": "h",
+            "html": "<p>引用符で囲まれたテキストを<strong>文字列</strong>といいます。<code>puts</code>は、それを出力に書き出します。ちなみに<code>puts</code>そのものの値は<code>nil</code>、つまり「何もない」です。だから、ここには<code>=&gt;</code>の行が出ないのです。</p><div class='task'><strong>課題：</strong>下のセルに<code>Hello, World!</code>と表示させましょう。<code>puts</code>を使っても、単に最後の行の値にしてもかまいません。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# ここにコードを書こう:\n",
+            "check": "output.include?(\"Hello, World!\") || result == \"Hello, World!\"",
+            "hint": "<code>puts \"Hello, World!\"</code>って書いてみて。最後の行にただ<code>\"Hello, World!\"</code>と書くだけでもいいよ。"
           }
         ]
       }
@@ -302,6 +413,37 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "Simply write <code>6 * 7</code> into the cell. The star <code>*</code> means “times”."
           }
         ]
+      },
+      "ja": {
+        "title": "2. 計算",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Rubyを電卓として使う</h2><p>Rubyは<code>+</code>、<code>-</code>、<code>*</code>（かける）、<code>/</code>（わる）で計算します。セルを実行してみましょう。数字も自由に変えてみてください：</p>"
+          },
+          {
+            "t": "c",
+            "code": "3 + 4"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>#</code>から後ろはすべて<strong>コメント</strong>で、Rubyはこれを無視します。コメントは人間（とキツネ）のためのメモです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "5 * 5   # 5かける5"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>課題：</strong>6かける7はいくつでしょう？計算はRubyにまかせて、セルに<code>6 * 7</code>の結果が表示されるようにしてください。（自分で計算してはいけませんよ。それでは意味がありませんからね！）</div>"
+          },
+          {
+            "t": "x",
+            "code": "",
+            "check": "(output.include?(\"42\") || result == 42) && code.include?(\"*\")",
+            "hint": "セルに<code>6 * 7</code>って書くだけでいいよ。星印の<code>*</code>は「かける」って意味なんだ。"
+          }
+        ]
       }
     },
     {
@@ -365,6 +507,37 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "# name = ...\n# age = ...\n",
             "check": "name.is_a?(String) && !name.empty? && age.is_a?(Integer)",
             "hint": "For example: <code>name = \"Kaz\"</code> and <code>age = 7</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "3. 変数",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>変数：値に名前をつける</h2><p><strong>変数</strong>は、値につける名前です。<code>=</code>で値を代入します。変数名は小文字で書き、単語のあいだはアンダースコアでつなぎます：<code>favorite_food</code>、<code>bacon_strips</code>。</p>"
+          },
+          {
+            "t": "c",
+            "code": "food = \"bacon\"\namount = 3\nfood"
+          },
+          {
+            "t": "h",
+            "html": "<p>同じレッスンのセルどうしは、記憶を共有しています。本物のノートと同じですね。上で作った変数<code>amount</code>は、ここでもそのまま使えます。（エラーが出たら、先に上のセルを実行してください。）</p>"
+          },
+          {
+            "t": "c",
+            "code": "amount * 2"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>課題：</strong>変数を2つ作りましょう。<code>name</code>には自分の名前（文字列）を、<code>age</code>には数を入れてください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# name = ...\n# age = ...\n",
+            "check": "name.is_a?(String) && !name.empty? && age.is_a?(Integer)",
+            "hint": "たとえば<code>name = \"Kaz\"</code>と<code>age = 7</code>みたいにね。"
           }
         ]
       }
@@ -432,6 +605,37 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "Write <code>\"I love #{favorite_food}!\"</code> as the last line – with double quotes."
           }
         ]
+      },
+      "ja": {
+        "title": "4. 文字列の式展開",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>文字列と式展開</h2><p>文字列の中には、変数をそのまま埋め込めます。これを<strong>式展開</strong>といい、ダブルクォートで囲んだ文字列の中で<code>#{}</code>を使います：</p>"
+          },
+          {
+            "t": "c",
+            "code": "animal = \"fox\"\n\"The #{animal} shouts!\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Rubyは<code>#{</code>と<code>}</code>のあいだにあるものを評価して、その結果を差し込みます。計算もできます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "\"#{3 * 7} strips of bacon\""
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>課題：</strong>下に変数<code>favorite_food</code>を用意しました。式展開を使って、<code>I love Chunky Bacon!</code>という文を作りましょう。変数は<code>#{}</code>で文字列の中に入れます。</div>"
+          },
+          {
+            "t": "x",
+            "code": "favorite_food = \"Chunky Bacon\"\n# \"I love ...!\"\n",
+            "check": "(output.include?(\"I love Chunky Bacon!\") || result == \"I love Chunky Bacon!\") && code.include?('#{')",
+            "hint": "最後の行に<code>\"I love #{favorite_food}!\"</code>って書いてみて。ダブルクォートを使うのを忘れずにね。"
+          }
+        ]
       }
     },
     {
@@ -479,6 +683,29 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "number = 7\n# if ...\n",
             "check": "((output + result.to_s).include?(\"big\") && !(output + result.to_s).include?(\"small\")) && code.include?(\"if\")",
             "hint": "Like this: <code>if number > 5</code>, then <code>\"big\"</code>, then <code>else</code>, <code>\"small\"</code> and finally <code>end</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "5. 条件分岐（if）",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>もし〜なら、そうでなければ</h2><p><code>if</code>を使うと、プログラムが判断を下せるようになります。比較には次の記号を使います：<code>&gt;</code>（より大きい）、<code>&lt;</code>（より小さい）、<code>==</code>（等しい。イコールを2つ！）、<code>!=</code>（等しくない）。<code>if</code>のブロックは、どれも<code>end</code>で終わります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "hunger = 9\nif hunger > 7\n  \"Time for bacon!\"\nelse\n  \"All good.\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Rubyでは<code>if</code>にも値があります。選ばれたほうの分岐の値です。<code>hunger</code>を<code>3</code>に変えて、もう一度セルを実行してみましょう！</p><div class='task'><strong>課題：</strong>下に<code>number = 7</code>があります。数が5より大きければ<code>big</code>、そうでなければ<code>small</code>になるようにしてください。値として返しても、<code>puts</code>で出力してもかまいません。</div>"
+          },
+          {
+            "t": "x",
+            "code": "number = 7\n# if ...\n",
+            "check": "((output + result.to_s).include?(\"big\") && !(output + result.to_s).include?(\"small\")) && code.include?(\"if\")",
+            "hint": "こんなふうに書くよ：<code>if number > 5</code>、次に<code>\"big\"</code>、それから<code>else</code>と<code>\"small\"</code>、最後に<code>end</code>。"
           }
         ]
       }
@@ -544,6 +771,37 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "# 5 times Chunky Bacon, please!\n",
             "check": "((output + result.inspect).scan(\"Chunky Bacon!\").length >= 5) && (code.include?(\"times\") || code.include?(\"each\") || code.include?(\"while\") || code.include?(\"upto\") || code.include?(\"for \"))",
             "hint": "Write <code>5.times do</code> … <code>puts \"Chunky Bacon!\"</code> … <code>end</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "6. ループ",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>ループ：くり返し</h2><p>why the lucky stiffの伝説のRuby本『why's (poignant) guide to Ruby』では、マンガのキツネ2匹が何度も<em>「Chunky Bacon!」</em>と叫びます。Rubyなら、くり返しも驚くほど簡単です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "3.times do\n  puts \"Chunky Bacon!\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>do</code>と<code>end</code>のあいだのコードを<strong>ブロック</strong>といい、ここでは3回実行されます。（下に出る<code>=&gt; 3</code>は、<code>3.times</code>そのものの値です。）カウンターを使うと、こうなります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "3.times do |i|\n  puts \"Strip number #{i + 1}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>課題：</strong><code>Chunky Bacon!</code>をちょうど5回出力しましょう。<code>puts</code>を5行並べるのではなく、ループを使ってくださいね。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Chunky Baconを5回、お願い！\n",
+            "check": "((output + result.inspect).scan(\"Chunky Bacon!\").length >= 5) && (code.include?(\"times\") || code.include?(\"each\") || code.include?(\"while\") || code.include?(\"upto\") || code.include?(\"for \"))",
+            "hint": "<code>5.times do</code>、<code>puts \"Chunky Bacon!\"</code>、<code>end</code>の3行を書いてみて。"
           }
         ]
       }
@@ -627,6 +885,45 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "Write <code>breakfast << \"bacon\"</code> below the first line."
           }
         ]
+      },
+      "ja": {
+        "title": "7. 配列",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>配列：ものを並べたリスト</h2><p><strong>配列</strong>はリストです。角かっこで囲んで書きます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "breakfast = [\"egg\", \"toast\"]\nbreakfast.length"
+          },
+          {
+            "t": "h",
+            "html": "<p>要素を取り出すときも角かっこを使います。数えはじめは0からですよ！</p>"
+          },
+          {
+            "t": "c",
+            "code": "breakfast[0]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>&lt;&lt;</code>（「シャベル」と呼ばれます）で末尾に要素を追加し、<code>each</code>で要素を1つずつ順番にたどれます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "breakfast << \"coffee\"\nbreakfast.each do |item|\n  puts item\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>課題：</strong>下の配列に<code>\"bacon\"</code>を追加しましょう。ボーナス：<code>each</code>ですべての要素を出力してみてください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "breakfast = [\"egg\", \"toast\"]\n# ...\n",
+            "check": "breakfast.is_a?(Array) && breakfast.include?(\"bacon\") && breakfast.include?(\"egg\")",
+            "hint": "1行目の下に<code>breakfast << \"bacon\"</code>って書いてみて。"
+          }
+        ]
       }
     },
     {
@@ -674,6 +971,29 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "# fox = { ... }\n",
             "check": "fox.is_a?(Hash) && fox[:name].to_s.length > 0 && fox[:food].to_s.length > 0",
             "hint": "For example: <code>fox = { name: \"Chunky\", food: \"bacon\" }</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "8. ハッシュ",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>ハッシュ：対応表</h2><p><strong>ハッシュ</strong>は、キーと値を結びつけます。ちょうど小さな辞書のようなものです。<code>:name</code>のようなキーは<strong>シンボル</strong>といい、コロンのついた軽い名前です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "animal = { name: \"Chunky\", food: \"bacon\" }\nanimal[:name]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>animal[:food]</code>も試してみましょう。存在しないキーを指定すると、<code>nil</code>が返ってきます。</p><div class='task'><strong>課題：</strong>キー<code>:name</code>と<code>:food</code>を持つハッシュ<code>fox</code>を作りましょう（値は何でもかまいません）。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# fox = { ... }\n",
+            "check": "fox.is_a?(Hash) && fox[:name].to_s.length > 0 && fox[:food].to_s.length > 0",
+            "hint": "たとえば<code>fox = { name: \"Chunky\", food: \"bacon\" }</code>みたいにね。"
           }
         ]
       }
@@ -749,6 +1069,41 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "Like this: <code>def square(number)</code>, below it <code>number * number</code>, then <code>end</code>."
           }
         ]
+      },
+      "ja": {
+        "title": "9. メソッド",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>自分でメソッドを書く</h2><p><code>def</code>で<strong>メソッド</strong>を定義します。メソッドとは名前のついたコードのかたまりで、何度でも呼び出せます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def greeting(name)\n  \"Hello, #{name}!\"\nend\n\ngreeting(\"Kaz\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>ちょっと驚くかもしれませんが、じつはレッスン1からずっと、メソッドを呼び出していたのです。<code>puts</code>もメソッドだからです！Rubyでは<strong>かっこを省略できます</strong>。<code>puts \"Hello\"</code>は、本当は<code>puts(\"Hello\")</code>なのです。自分で作ったメソッドでも同じです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "with_parens    = greeting(\"Kaz\")\nwithout_parens = greeting \"Kaz\"\n\n[with_parens, without_parens]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Rubyのコードの多くがふつうの英文のように読めるのは、まさにこのおかげです。Rubyistの目安はこうです：呼び出しが命令文のように読めるとき（<code>puts \"…\"</code>、<code>require \"csv\"</code>）はかっこを<em>省き</em>、結果を使ってさらに計算を続けるとき（<code>greeting(\"Kaz\").upcase</code>）はかっこを<em>つけます</em>。引数がひとつもない呼び出しでは、ほぼ必ず省略します。<code>name.upcase()</code>ではなく<code>name.upcase</code>と書きます。</p>"
+          },
+          {
+            "t": "h",
+            "html": "<p>メソッドの<em>最後の行</em>の値は、自動的にそのメソッドの戻り値になります。わざわざ<code>return</code>と書く必要は、たいていありません。いかにもRubyらしいところです。</p><div class='task'><strong>課題：</strong>数をそれ自身とかけ合わせた値を返すメソッド<code>square(number)</code>を書きましょう。最後の行を<code>square(9)</code>にして試してください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def square(number)\n#   ...\n# end\n\n# square(9)\n",
+            "check": "square(9) == 81 && square(5) == 25 && code.include?(\"def\")",
+            "hint": "こんなふうに書くよ：<code>def square(number)</code>、その下に<code>number * number</code>、最後に<code>end</code>。"
+          }
+        ]
       }
     },
     {
@@ -798,6 +1153,29 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "Copy the cat example and adapt it: class <code>Fox</code>, and <code>shout</code> returns exactly <code>\"Chunky Bacon!\"</code>."
           }
         ]
+      },
+      "ja": {
+        "title": "10. クラス",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>クラス：自分だけのものを作る</h2><p>Rubyでは<em>すべて</em>がオブジェクトです。<strong>クラス</strong>を使えば、自分だけのオブジェクトを作れます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Cat\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def shout\n    \"Meow!\"\n  end\nend\n\nk = Cat.new(\"Mimi\")\nk.shout"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>initialize</code>は<code>Cat.new</code>のときに実行されます。<code>@</code>のついた変数はそのオブジェクトのもので、<code>attr_reader :name</code>と書くと<code>@name</code>を外から読めるようになります。<code>k.name</code>を試してみましょう！もうひとつ、なるほどと思える話があります。<code>attr_reader :name</code>は特別なキーワードではなく、かっこを省いたごくふつうのメソッド呼び出しです。レッスン9で学んだとおり、<code>attr_reader(:name)</code>と同じなのです。</p><div class='task'><strong>課題：</strong>この例にならって、クラス<code>Fox</code>を書きましょう。<code>initialize(name)</code>と<code>attr_reader :name</code>、そして<code>\"Chunky Bacon!\"</code>を返すメソッド<code>shout</code>を用意してください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# class Fox\n#   ...\n# end\n",
+            "check": "f = Fox.new(\"Kaz\"); f.name == \"Kaz\" && f.shout == \"Chunky Bacon!\" && code.include?(\"class Fox\")",
+            "hint": "猫の例をコピーして書き換えてみて。クラス名は<code>Fox</code>、<code>shout</code>はぴったり<code>\"Chunky Bacon!\"</code>を返すようにね。"
+          }
+        ]
       }
     },
     {
@@ -819,7 +1197,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><strong>Job 1 – Namensraum:</strong> Ein Modul gruppiert zusammengehörige Klassen unter einem Dach, damit sich Namen nicht in die Quere kommen. Genau darum heissen die Klassen aus früheren Lektionen <code>ChunkyPNG::Image</code> und <code>Sinatra::Base</code> – Klasse <code>Image</code> im Modul <code>ChunkyPNG</code>, Klasse <code>Base</code> im Modul <code>Sinatra</code>:</p>"
+            "html": "<p><strong>Job 1 – Namensraum:</strong> Ein Modul gruppiert zusammengehörige Klassen unter einem Dach, damit sich Namen nicht in die Quere kommen. Genau darum heissen die Klassen, die dir in späteren Lektionen begegnen, <code>ChunkyPNG::Image</code> und <code>Sinatra::Base</code> – Klasse <code>Image</code> im Modul <code>ChunkyPNG</code>, Klasse <code>Base</code> im Modul <code>Sinatra</code>:</p>"
           },
           {
             "t": "c",
@@ -862,7 +1240,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><strong>Job 1 – namespace:</strong> A module groups related classes under one roof so names don't clash. That's exactly why the classes from earlier lessons are called <code>ChunkyPNG::Image</code> and <code>Sinatra::Base</code> – class <code>Image</code> inside module <code>ChunkyPNG</code>, class <code>Base</code> inside module <code>Sinatra</code>:</p>"
+            "html": "<p><strong>Job 1 – namespace:</strong> A module groups related classes under one roof so names don't clash. That's exactly why the classes you'll meet in later lessons are called <code>ChunkyPNG::Image</code> and <code>Sinatra::Base</code> – class <code>Image</code> inside module <code>ChunkyPNG</code>, class <code>Base</code> inside module <code>Sinatra</code>:</p>"
           },
           {
             "t": "c",
@@ -885,6 +1263,49 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "# module Loud\n#   ...\n# end\n\n# class Badger\n#   ...\n# end\n",
             "check": "Loud.is_a?(Module) && !Loud.is_a?(Class) && Badger.include?(Loud) && Badger.new.shout == \"CHUNKY BACON!\" && code.include?(\"include\")",
             "hint": "<code>module Loud</code> with <code>def shout</code> … <code>\"CHUNKY BACON!\"</code> … then <code>class Badger</code> with <code>include Loud</code> inside."
+          }
+        ]
+      },
+      "ja": {
+        "title": "11. モジュール",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>モジュール：コードの道具箱</h2><p><strong>モジュール</strong>は、メソッドや定数を入れておく名前つきの箱です。クラスとちがって、モジュールからオブジェクトを作ることはできません（<code>new</code>がありません）。そのかわりモジュールには、別の2つの役割があります。<strong>整理整頓</strong>と<strong>能力の共有</strong>です。</p><p>じつは、もういくつか知っています。Rubyの標準ライブラリにある<code>Math</code>は、数学の道具を集めたモジュールです。定数には<code>::</code>でアクセスし、メソッドはドットで呼び出します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "Math::PI"
+          },
+          {
+            "t": "c",
+            "code": "Math.sqrt(49)"
+          },
+          {
+            "t": "h",
+            "html": "<p><strong>役割1は名前空間です。</strong>モジュールは、関係のあるクラスをひとつ屋根の下にまとめて、名前がぶつからないようにします。ほかのレッスンに出てくるクラスが<code>ChunkyPNG::Image</code>や<code>Sinatra::Base</code>という名前なのは、まさにこのためです。モジュール<code>ChunkyPNG</code>の中にクラス<code>Image</code>が、モジュール<code>Sinatra</code>の中にクラス<code>Base</code>がある、というわけです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "module Forest\n  class Fox\n    def shout\n      \"Chunky Bacon!\"\n    end\n  end\nend\n\nForest::Fox.new.shout"
+          },
+          {
+            "t": "h",
+            "html": "<p><strong>役割2はMix-inです。</strong><code>include</code>を使うと、モジュールのメソッドをクラスに混ぜ込めます。こうすれば、たがいに継承しあわなくても、たくさんのクラスで同じ能力を共有できます（ちなみに<code>include</code>も、かっこを省いたただのメソッド呼び出しです）：</p>"
+          },
+          {
+            "t": "c",
+            "code": "module Greeting\n  def hello\n    \"Hello, I am #{name}!\"\n  end\nend\n\nclass Hedgehog\n  include Greeting\n\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\nend\n\nHedgehog.new(\"Izzy\").hello"
+          },
+          {
+            "t": "h",
+            "html": "<p>Rubyでいちばん有名なMix-inも、同じしくみで動いています。<code>Comparable</code>は、<code>&lt;=&gt;</code>が使えるクラスに<code>&lt;</code>、<code>&gt;</code>、<code>between?</code>を与えます。<code>Enumerable</code>は、<code>each</code>が使えるクラスに<code>map</code>や<code>select</code>などを与えます。</p><div class='task'><strong>課題：</strong><code>CHUNKY BACON!</code>を返すメソッド<code>shout</code>を持つモジュール<code>Loud</code>を書きましょう。それを<code>include</code>で新しいクラス<code>Badger</code>に混ぜ込み、最後の行で<code>Badger.new.shout</code>を試してください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# module Loud\n#   ...\n# end\n\n# class Badger\n#   ...\n# end\n",
+            "check": "Loud.is_a?(Module) && !Loud.is_a?(Class) && Badger.include?(Loud) && Badger.new.shout == \"CHUNKY BACON!\" && code.include?(\"include\")",
+            "hint": "<code>module Loud</code>の中に<code>def shout</code>を書いて、<code>\"CHUNKY BACON!\"</code>を返すようにしよう。それから<code>class Badger</code>を作って、その中に<code>include Loud</code>と書くんだよ。"
           }
         ]
       }
@@ -934,6 +1355,29 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "# [4, 8, 15].map { |x| ... }\n",
             "check": "result == [12, 24, 45] && code.include?(\"map\")",
             "hint": "Write <code>[4, 8, 15].map { |x| x * 3 }</code> as the last line – <code>map</code> builds a new array from every element."
+          }
+        ]
+      },
+      "ja": {
+        "title": "12. IRB：Rubyの遊び場",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>IRB：Rubyの遊び場</h2><p>Rubyが入っているコンピューターには、<strong>IRB</strong>（「Interactive RuBy」）が最初からついてきます。ターミナルで<code>irb</code>と入力すると起動し、あとはRubyに1行ずつ入力していくだけです。このノートブックと同じように、IRBも各行の値を<code>=&gt;</code>のあとに表示します：</p><pre><code>$ irb\nirb(main):001:0&gt; 1 + 1\n=&gt; 2\nirb(main):002:0&gt; \"Chunky \" + \"Bacon!\"\n=&gt; \"Chunky Bacon!\"</code></pre><p>RubyistはいつもIRBを開きっぱなしにしていて、ちょっとした実験や計算、メソッドが何を返すかの確認に使います。ここに<strong>本物のIRBセッション</strong>を用意しました。下のターミナルに入力して、<kbd>Enter</kbd>を押してみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_irb"
+          },
+          {
+            "t": "h",
+            "html": "<p>IRBの達人ならだれでも知っている3つの技です。上で試してみましょう：</p><ul><li><code>_</code>（アンダースコア）には、いつも<strong>直前の答え</strong>が入っています。まず<code>6 * 7</code>、次に<code>_ + 1</code>と入力してみてください。</li><li>IRBは<strong>複数行の入力</strong>も理解します。<code>def double(x)</code>と入力すると、プロンプトに<code>*</code>がついて、<code>x * 2</code>と<code>end</code>が入力されるまで待ってくれます。</li><li><code>exit</code>でIRBを終了します（自分のコンピューターでは、の話です……ここではキツネが帰ろうとしません）。</li></ul><div class='task'><strong>課題：</strong>下のセルをIRBの1行のように使ってみましょう。<code>map</code>を使って、配列<code>[4, 8, 15]</code>のすべての数を3倍にしてください。値が<code>[12, 24, 45]</code>になれば正解です。（まずは上のターミナルで試してみましょう！）</div>"
+          },
+          {
+            "t": "x",
+            "code": "# [4, 8, 15].map { |x| ... }\n",
+            "check": "result == [12, 24, 45] && code.include?(\"map\")",
+            "hint": "最後の行に<code>[4, 8, 15].map { |x| x * 3 }</code>って書いてみて。<code>map</code>は、それぞれの要素から新しい配列を作ってくれるよ。"
           }
         ]
       }
@@ -999,6 +1443,37 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "install_gem \"chunky_png\"\nrequire \"chunky_png\"\n\n# image = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n# ...\n# show_image image\n",
             "check": "defined?(ChunkyPNG) && image.is_a?(ChunkyPNG::Image) && image.width >= 8 && image.pixels.include?(ChunkyPNG::Color.rgb(193, 74, 46)) && images.length >= 1",
             "hint": "For example: <code>8.times do |y|</code> … if <code>y.even?</code>, then <code>8.times { |x| image[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }</code> … <code>end</code> – and finally <code>show_image image</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "13. gemのインストール",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>gem：Rubyの部品</h2><p><strong>gem</strong>は、プログラムに読み込んで使える、できあいのRubyパッケージです。gemが集まる中心地が<a href='https://rubygems.org' target='_blank'>rubygems.org</a>で、思いつくかぎりのあらゆる用途に180,000を超えるgemがそろっています。</p><p>自分のコンピューターでは、ターミナルで<code>gem install</code>を実行してgemをインストールし、IRBやプログラムの中で<code>require</code>して読み込みます：</p><pre><code>$ gem install chunky_png\nSuccessfully installed chunky_png-1.4.0\n$ irb\nirb(main):001:0&gt; require \"chunky_png\"\n=&gt; true</code></pre><p>本格的なプロジェクトでは、使うgemをすべて<code>Gemfile</code>というファイルに書き（1つのgemにつき1行：<code>gem \"chunky_png\"</code>）、<code>bundle install</code>でまとめて取ってきます。これは<a href='https://bundler.io' target='_blank'>Bundler</a>の仕事です。</p><p>このサイトでは、<em>ピュアRuby</em>のgemに限り、<code>install_gem</code>がその仕事をブラウザの中で直接引き受けます（左の💎パネルを使ってもかまいません）。よく使われるgemはローカルにキャッシュされていて（⚡）、一瞬でインストールできます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"chunky_png\""
+          },
+          {
+            "t": "h",
+            "html": "<p><code>chunky_png</code>は、ピュアRubyでPNG画像を作るgemです（キツネのみなさん、この名前はもちろん偶然ではありませんよ！🥓）。インストールしたら、ふつうに<code>require</code>で読み込みます。そして<code>show_image</code>を使うと、セルのすぐ下に画像を表示できます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"chunky_png\"\n\nimage = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times { |i| image[i, i] = ChunkyPNG::Color.rgb(232, 114, 42) }\nshow_image image"
+          },
+          {
+            "t": "h",
+            "html": "<p>ピクセルは1つずつ指定できます：<code>image[x, y] = color</code>。色は<code>ChunkyPNG::Color.rgb(red, green, blue)</code>で作ります。</p><div class='task'><strong>課題：</strong>ベーコンの旗を描きましょう！画像<code>image</code>（8×8以上）を作り、偶数行をベーコンの赤（<code>ChunkyPNG::Color.rgb(193, 74, 46)</code>）で塗って、奇数行は白のままにします。できあがったら<code>show_image image</code>で見せてください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "install_gem \"chunky_png\"\nrequire \"chunky_png\"\n\n# image = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n# ...\n# show_image image\n",
+            "check": "defined?(ChunkyPNG) && image.is_a?(ChunkyPNG::Image) && image.width >= 8 && image.pixels.include?(ChunkyPNG::Color.rgb(193, 74, 46)) && images.length >= 1",
+            "hint": "たとえば<code>8.times do |y|</code>で1行ずつくり返して、<code>y.even?</code>のときだけ<code>8.times { |x| image[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }</code>で塗り、<code>end</code>で閉じる。最後に<code>show_image image</code>で表示しよう。"
           }
         ]
       }
@@ -1082,6 +1557,45 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "<code>links = doc.css(\"a\").map { |link| link[\"href\"] }</code> – and run the demo cells first so <code>doc</code> exists."
           }
         ]
+      },
+      "ja": {
+        "title": "14. HTMLのパース",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>プロと同じ道具でHTMLをパースする</h2><p>Rubyは、Webサイトから情報を読み取る用途（<em>スクレイピング</em>）によく使われます。そのための道具として最も有名なのが<strong>Nokogiri</strong>です。HTMLやXMLを読むRubyプログラムのほとんどが、これを使っています。</p><pre><code>require \"nokogiri\"\ndoc = Nokogiri::HTML5(html)\ndoc.css(\"a\").each { |link| puts link.text }</code></pre><p>自分のコンピューターにインストールするNokogiriは、大部分が<strong>C</strong>で書かれています。Cのライブラリである<em>libxml2</em>と<em>gumbo</em>を同梱しているのです。一方、このブラウザの中のRubyはWebAssemblyとして動いていて、実行中にインストールできるのはピュアRubyのgemだけです。そこでここでは<strong>nokogiri-pure</strong>を使います。Nokogiriそのままで、Cの部分だけをRubyに書き直したものです。速度は落ちますが結果は同じで、Nokogiriを必要とするgem（<code>loofah</code>、<code>sanitize</code>、<code>premailer</code>、<code>rubyXL</code>など）もここで動きます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"nokogiri\""
+          },
+          {
+            "t": "h",
+            "html": "<p>考え方はシンプルです。まずテキストを<em>パース</em>して木構造にし、それから<strong>CSSセレクター</strong>で検索します。<code>Nokogiri::HTML5</code>は、最新のブラウザと同じやり方でHTMLを読み込みます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"nokogiri\"\n\nhtml = \"<html><body>\n  <h1>Menu</h1>\n  <ul>\n    <li><a href='/bacon'>Bacon</a></li>\n    <li><a href='/egg'>Egg</a></li>\n    <li><a href='/coffee'>Coffee</a></li>\n  </ul>\n</body></html>\"\n\ndoc = Nokogiri::HTML5(html)\ndoc.css(\"li\").length"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>doc.css(\"li\")</code>は、すべての<code>&lt;li&gt;</code>要素を見つけます。スタイルシートとまったく同じ書き方です。見つかった要素はそれぞれノードで、<code>text</code>でそのテキストを取り出せます。属性はハッシュと同じように、<code>link[\"href\"]</code>で読み取ります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "doc.css(\"a\").map { |link| link.text }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>課題：</strong>ドキュメントから<strong>リンク先のアドレス</strong>をすべて集めましょう。<code>map</code>を使って、<code>href</code>の値をすべて集めた配列<code>links</code>を作ってください。属性は<code>link[\"href\"]</code>で取り出せます。結果は<code>[\"/bacon\", \"/egg\", \"/coffee\"]</code>になるはずです。（先に上のセルを実行して、<code>doc</code>を作っておいてください。）</div>"
+          },
+          {
+            "t": "x",
+            "code": "# links = doc.css(\"a\").map { |link| ... }\n",
+            "check": "links == [\"/bacon\", \"/egg\", \"/coffee\"]",
+            "hint": "こう書いてみて：<code>links = doc.css(\"a\").map { |link| link[\"href\"] }</code>。それと、<code>doc</code>ができるように、先に上のデモのセルを実行しておいてね。"
+          }
+        ]
       }
     },
     {
@@ -1131,6 +1645,29 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "Just like the other routes: <code>get \"/bacon\" do</code>, below it <code>\"CHUNKY BACON!\"</code>, then <code>end</code>. Then run the cell again."
           }
         ]
+      },
+      "ja": {
+        "title": "15. SinatraでWebサーバー",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Webサイトを作る：リクエストとレスポンス</h2><p>これまでのコードは、上から下へ順番に実行されるだけでした。<strong>Webサーバー</strong>の動き方は違います。<code>GET /menu</code>のような<em>リクエスト</em>が来るのを待ち、<em>レスポンス</em>を返します。レスポンスの中身は、たいていHTMLです。どのパスにどのコードが応えるかは、<strong>ルート</strong>で決めます。</p><p><strong>Sinatra</strong>は2007年から使われ続けている、RubyのWebフレームワークの定番です。ルートといっても、ブロック付きのメソッド呼び出しにすぎません。セルを実行してみてください。下に小さなブラウザが現れます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"sinatra\"\nrequire \"sinatra/base\"\n\nclass Diner < Sinatra::Base\n  get \"/\" do\n    \"<h1>Chunky's Diner</h1>\n     <p>Welcome! Today's special: bacon.</p>\n     <a href='/menu'>See the menu</a>\"\n  end\n\n  get \"/menu\" do\n    \"<h2>Menu</h2>\n     <ul><li>Bacon</li><li>Egg</li><li>Coffee</li></ul>\n     <a href='/'>Back</a>\"\n  end\n\n  get \"/hello/:name\" do\n    \"Hello, #{params[:name]}! Nice to see you.\"\n  end\nend\n\nshow_browser Diner, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p>このミニブラウザは、あなたのアプリと直接やりとりします。リンクをクリックしたり、アドレスバーにパスを入力したりしてみましょう。<code>/hello/Kaz</code>や、あえて<code>/pizza</code>（404になります！）も試してみてください。</p><p>しくみはこうです。<code>get \"/path\" do … end</code>でルートを登録すると、<strong>ブロックの戻り値</strong>がレスポンスになります。<code>:name</code>のようにコロンで始まる部分はプレースホルダーで、実際の値は<code>params</code>に入ります。本物のサーバーなら、このアプリは<code>ruby app.rb</code>で起動して、ブラウザで<code>localhost:4567</code>を開きます。ここでは、ミニブラウザがアプリを直接呼び出しています（ミニブラウザもアプリも、RubyのWeb標準である<em>Rack</em>に従っているからです）。</p><div class='task'><strong>課題：</strong><code>CHUNKY BACON!</code>を返すルート<code>get \"/bacon\"</code>を追加しましょう。下のミニブラウザは<code>/bacon</code>を表示していますが、今はまだ404です。</div>"
+          },
+          {
+            "t": "x",
+            "code": "install_gem \"sinatra\"\nrequire \"sinatra/base\"\n\nclass MySite < Sinatra::Base\n  get \"/\" do\n    \"<h1>My Site</h1>\"\n  end\n\n  # get \"/bacon\" do\n  #   ...\n  # end\nend\n\nshow_browser MySite, \"/bacon\"",
+            "check": "s1, _ = mock_get(MySite, \"/\"); s2, b2 = mock_get(MySite, \"/bacon\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\")",
+            "hint": "ほかのルートと同じだよ。<code>get \"/bacon\" do</code>と書いて、その下に<code>\"CHUNKY BACON!\"</code>、最後に<code>end</code>。書けたら、もう一度セルを実行してね。"
+          }
+        ]
       }
     },
     {
@@ -1178,6 +1715,29 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "install_gem \"roda\"\nrequire \"roda\"\n\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      \"<h1>Kiosk</h1><a href='/order/5'>Order 5 strips</a>\"\n    end\n\n    # r.get \"order\", Integer do |amount|\n    #   ...\n    # end\n  end\nend\n\nshow_browser Kiosk, \"/order/5\"",
             "check": "s1, b1 = mock_get(Kiosk, \"/\"); s2, b2 = mock_get(Kiosk, \"/order/5\"); s3, _ = mock_get(Kiosk, \"/pizza\"); s1 == 200 && b1.include?(\"Kiosk\") && s2 == 200 && b2.include?(\"5\") && b2.include?(\"bacon\") && s3 == 404",
             "hint": "<code>r.get \"order\", Integer do |amount|</code> … <code>\"#{amount} strips of bacon, coming right up!\"</code> … <code>end</code> – inside the route block."
+          }
+        ]
+      },
+      "ja": {
+        "title": "16. Rodaとルーティングツリー",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Rodaとルーティングツリー</h2><p><strong>Roda</strong>（作者はSequelでも知られるJeremy Evans）は、モダンでとても高速なWebフレームワークです。Sinatraのようにルートを平らなリストに並べるのではなく、<strong>ツリー</strong>をたどっていきます。<code>route</code>ブロックがリクエスト<code>r</code>を受け取り、パスをどう扱うかを一段ずつ決めていくのです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"roda\"\nrequire \"roda\"\n\nclass Shop < Roda\n  route do |r|\n    r.root do\n      \"<h1>Chunky's Shop</h1>\n       <a href='/bacon'>Bacon</a>\n       <a href='/greet/Chunky'>Greeting</a>\"\n    end\n\n    r.get \"bacon\" do\n      \"<p>Bacon: 3 strips for 2 francs.</p><a href='/'>Back</a>\"\n    end\n\n    r.get \"greet\", String do |name|\n      \"Hello, #{name}! <a href='/'>Back</a>\"\n    end\n  end\nend\n\nshow_browser Shop, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p>ツリーは上から順に読みます。<code>r.root</code>は<code>/</code>を、<code>r.get \"bacon\"</code>は<code>GET /bacon</code>を受け止めます。おもしろくなるのは<code>r.get \"greet\", String</code>からです。これは<code>/greet/&lt;anything&gt;</code>にマッチし、パスのその部分がブロック引数<code>name</code>として渡されます。ミニブラウザで<code>/greet/Ada</code>を試してみてください！どれにもマッチしなければ、Rodaが自動で<strong>404</strong>を返します。</p><div class='task'><strong>課題：</strong>Kioskアプリにルート<code>r.get \"order\", Integer do |amount| … end</code>を追加して、たとえば<code>/order/5</code>が<code>5 strips of bacon, coming right up!</code>を返すようにしましょう（文字列の式展開を使います）。下のミニブラウザは、まだ404を表示しています。</div>"
+          },
+          {
+            "t": "x",
+            "code": "install_gem \"roda\"\nrequire \"roda\"\n\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      \"<h1>Kiosk</h1><a href='/order/5'>Order 5 strips</a>\"\n    end\n\n    # r.get \"order\", Integer do |amount|\n    #   ...\n    # end\n  end\nend\n\nshow_browser Kiosk, \"/order/5\"",
+            "check": "s1, b1 = mock_get(Kiosk, \"/\"); s2, b2 = mock_get(Kiosk, \"/order/5\"); s3, _ = mock_get(Kiosk, \"/pizza\"); s1 == 200 && b1.include?(\"Kiosk\") && s2 == 200 && b2.include?(\"5\") && b2.include?(\"bacon\") && s3 == 404",
+            "hint": "routeブロックの中に、こう書いてみて：<code>r.get \"order\", Integer do |amount|</code> … <code>\"#{amount} strips of bacon, coming right up!\"</code> … <code>end</code>"
           }
         ]
       }
@@ -1277,6 +1837,53 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "<code>info = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/sinatra.json\")))</code> – and as the last line <code>info[\"downloads\"]</code>."
           }
         ]
+      },
+      "ja": {
+        "title": "17. HTTPでWebからデータ取得",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Webからデータを取ってくる</h2><p>ここまではWebサイトを<em>作って</em>きました。今度は立場を入れ替えて、Webサイトを<em>取ってくる</em>側に回りましょう。そのために、Rubyの標準ライブラリには<code>net/http</code>が入っています。アドレスから<code>URI</code>オブジェクトを作り、リクエストを送ります。まずはRubyの公式サイトを取ってきましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"net/http\"\n\nresponse = Net::HTTP.get_response(URI(\"https://www.ruby-lang.org/en/\"))\nresponse.code"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>get_response</code>はレスポンスオブジェクトを返します。<code>code</code>はステータスコードで、なぜか文字列で返ってきます（<code>net/http</code>の有名なちょっとしたクセです！）。<code>body</code>には、ページ全体がHTMLのテキストとして入っています。</p>"
+          },
+          {
+            "t": "c",
+            "code": "response.body[0, 160]"
+          },
+          {
+            "t": "h",
+            "html": "<p>最近のWebサービスは、たいていデータを<strong>JSON</strong>で返します。プログラムで扱うのにぴったりの形式です。rubygems.orgのAPIは、gemのレッスンですでに登場しましたね。<code>rack</code>がこれまでに何回ダウンロードされたか、聞いてみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\n\ndata = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/rack.json\")))\ndata[\"downloads\"]"
+          },
+          {
+            "t": "h",
+            "html": "<p>GitHubのAPIもJSONで答えてくれます。たとえば、Ruby本体のリポジトリについているスターの数を聞いてみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "repo = JSON.parse(Net::HTTP.get(URI(\"https://api.github.com/repos/ruby/ruby\")))\nrepo[\"stargazers_count\"]"
+          },
+          {
+            "t": "h",
+            "html": "<p><strong>正直なところ：</strong>ブラウザの中のRubyはサンドボックスに入っていて、好きなサーバーと自由に通信できるわけではありません。そこでこのサイトでは、小さな橋渡しの仕組みを用意しています。つながるのは<code>www.ruby-lang.org</code>、<code>rubygems.org</code>、<code>api.github.com</code>だけで、それ以外のアドレスでは<code>SocketError</code>が発生します。自分のコンピューターでは、<code>net/http</code>はどんなURLにも使えます。</p><div class='task'><strong>課題：</strong>rubygemsのAPIに、<code>sinatra</code>というgemについて聞いてみましょう。<code>https://rubygems.org/api/v1/gems/sinatra.json</code>をパースして変数<code>info</code>に入れ、セルの最後の行の値がダウンロード数（<code>info[\"downloads\"]</code>）になるようにしてください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"net/http\"\nrequire \"json\"\n\n# info = JSON.parse(Net::HTTP.get(URI(\"...\")))\n# info[\"downloads\"]\n",
+            "check": "info.is_a?(Hash) && info[\"name\"] == \"sinatra\" && info[\"downloads\"].is_a?(Integer) && info[\"downloads\"] > 0 && result == info[\"downloads\"]",
+            "hint": "<code>info = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/sinatra.json\")))</code>と書いて、最後の行を<code>info[\"downloads\"]</code>にしてみて。"
+          }
+        ]
       }
     },
     {
@@ -1374,13 +1981,61 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "<code>total = \"4.20\".to_d * 3 + \"1.15\".to_d * 2 + \"3.80\".to_d</code> – turn the strings into BigDecimals with <code>to_d</code>, then calculate as usual."
           }
         ]
+      },
+      "ja": {
+        "title": "18. BigDecimalで正確な計算",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>0.1 + 0.2が0.3にならないとき</h2><p>コンピューターは小数（<em>浮動小数点数</em>）を2進数で保存します。ところが2進数では、0.1は10進数の1/3と同じように、どこまでも続く循環小数になります。そのため丸めが起こり、それが表に出てしまうことがあります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "0.1 + 0.2"
+          },
+          {
+            "t": "h",
+            "html": "<p>お金の計算では、これは笑いごとではありません。たとえば消費税や為替の計算で1円未満の端数を間違って丸めると、月末に帳簿の数字が合わなくなってしまいます。そこでRubyの標準ライブラリには<strong>BigDecimal</strong>が用意されています。学校で習ったとおりに正確に計算できる、10進数の小数です。BigDecimalは<strong>文字列</strong>から作ります。こうすれば、数値が一度も浮動小数点数を経由しません。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"bigdecimal\"\n\nBigDecimal(\"0.1\") + BigDecimal(\"0.2\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>0.3e0</code>は指数表記で、「0.3×10の0乗」という意味です。<code>to_s(\"F\")</code>を使うと読みやすい形になります。また、<code>bigdecimal/util</code>を読み込むと<code>to_d</code>が使えるようになり、文字列や数値をBigDecimalに変換できます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"bigdecimal/util\"\n\nprice = \"19.90\".to_d\nquantity = 3\n(price * quantity).to_s(\"F\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>BigDecimalなら、好きな桁数に、はっきりしたルールで丸めることができます。おなじみの四捨五入は<code>:half_up</code>です（2.5は3になります）。一方、銀行などで使われる偶数丸め（銀行丸め）は<code>:half_even</code>で、ちょうど真ん中の値をいちばん近い偶数に丸めます（2.5は2になります）。こうすると、たくさんの取引を重ねても丸め誤差が打ち消し合います。</p>"
+          },
+          {
+            "t": "c",
+            "code": "third = BigDecimal(\"1\") / 3\n\n[third.round(2).to_s(\"F\"),\n BigDecimal(\"2.5\").round(0, :half_up).to_s(\"F\"),\n BigDecimal(\"2.5\").round(0, :half_even).to_s(\"F\")]"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb'><strong>自分のコンピューターでは：</strong>BigDecimalはRubyに付属しているC拡張です（Ruby 3.4からは独立したgemになったので、Bundlerを使う場合は<code>gem \"bigdecimal\"</code>をGemfileに書きます）。ブラウザではC拡張が使えないため、ここでは<a href='https://github.com/Largo/bigdecimal-pure'>bigdecimal-pure</a>で計算しています。同じクラスをピュアRubyで作り直したもので、内部では分数（<code>Rational</code>）を使っています。APIも結果も同じです。</div><div class='task'><strong>課題：</strong>海外のカフェで朝ごはんのお会計です（単位はドル）。ベーコン4.20 × 3、卵1.15 × 2、コーヒー3.80 × 1。浮動小数点数ではなくBigDecimalで合計を計算して（ここが大事！）、<code>total</code>に入れてください。セルの最後の行の値は<code>total</code>にします。期待される値は<code>0.187e2</code>、つまり18.70です。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"bigdecimal/util\"\n\n# total = \"4.20\".to_d * 3 + ...\n",
+            "check": "total.is_a?(BigDecimal) && total == BigDecimal(\"18.7\")",
+            "hint": "たとえばこう：<code>total = \"4.20\".to_d * 3 + \"1.15\".to_d * 2 + \"3.80\".to_d</code>。文字列を<code>to_d</code>でBigDecimalに変えたら、あとはいつもどおり計算するだけだよ。"
+          }
+        ]
       }
     },
     {
       "id": "three",
       "section": {
         "de": "3D mit three-rb",
-        "en": "3D with three-rb"
+        "en": "3D with three-rb",
+        "ja": "three-rbで3D"
       },
       "de": {
         "title": "19. 3D mit three-rb",
@@ -1475,13 +2130,61 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "Three cubes at once: <code>3.times do |i|</code> … build a <code>Three::Mesh</code>, set <code>block.position.y = i - 1.0</code> and hang it in the scene with <code>tower.add(block)</code> … <code>end</code>. And remember to run the cells above first, so that <code>camera</code> exists."
           }
         ]
+      },
+      "ja": {
+        "title": "19. three-rbで3D",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Rubyで、ブラウザに3Dを</h2><p>Webでいちばん有名な3Dライブラリは<strong>three.js</strong>といって、JavaScriptで書かれています。<a href='https://github.com/lef237/three-rb' target='_blank'><code>three-rb</code></a>というgemを使うと、それと同じ部品を<strong>Ruby</strong>で使えます。シーン、カメラ、形状、マテリアルはすべてRubyだけで組み立て、グラフィックカードへの実際の描画はthree.jsが引き受けます。</p><p>このページは、まさにそれにうってつけです。ここではRubyがWebAssemblyとして動いていて、すぐ隣にはthree.jsがあり、両者はJavaScriptブリッジを通してやりとりします。</p><p>最初に、ちょっとした落とし穴をひとつ。このgemの<em>名前</em>は<code>three-rb</code>ですが、読み込むときは<code>three</code>と書きます。これはよくあることで、gemの名前と<code>require</code>で指定する名前は、別々のものなのです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"three-rb\"\nrequire \"three\"\n\nscene = Three::Scene.new\ncamera = Three::PerspectiveCamera.new(70, aspect: 460.0 / 320, near: 0.1, far: 100)\ncamera.position.z = 3\n\ncube = Three::Mesh.new(\n  Three::BoxGeometry.new(1, 1, 1),\n  Three::MeshBasicMaterial.new(color: 0xe8722a)\n)\nscene.add(cube)\n\nshow_three scene, camera"
+          },
+          {
+            "t": "h",
+            "html": "<p>3Dの絵を描くには、いつも次の3つが必要です。</p><ul><li><strong>シーン</strong>（<code>Three::Scene</code>）：すべてが載る舞台。</li><li><strong>カメラ</strong>（<code>Three::PerspectiveCamera</code>）：視点。<code>70</code>は視野角（度）、<code>aspect</code>は縦横比で、<code>near</code>と<code>far</code>は見える奥行きの範囲を決めます。</li><li><strong>メッシュ</strong>（<code>Three::Mesh</code>）：目に見える物体。必ず<em>ジオメトリ</em>（形）と<em>マテリアル</em>（表面）の2つからできています。</li></ul><p>ここまでは、ごくふつうのRubyです。オブジェクトが木構造にぶら下がっているだけで、まだ何も描かれていません。<code>show_three scene, camera</code>を呼んで初めて、下に舞台が用意され、three.jsがその様子を絵にします。</p><p>どのオブジェクトにも<code>position</code>、<code>rotation</code>、<code>scale</code>があり、それぞれに<code>x</code>、<code>y</code>、<code>z</code>があります。立方体を少し回してみましょう。セルどうしは同じメモリを共有しているので、<code>cube</code>はまだ残っています。</p>"
+          },
+          {
+            "t": "c",
+            "code": "cube.rotation.x = 0.5\ncube.rotation.y = 0.8\ncube.scale.set(1.4, 1.4, 1.4)\n\nshow_three scene, camera"
+          },
+          {
+            "t": "h",
+            "html": "<p>これでようやく辺が見えるようになりました。さっきまでの立方体は、ただのオレンジ色の四角形でしたね。原因はマテリアルです。<code>MeshBasicMaterial</code>は光のことをまったく気にしない、のっぺりした単色なのです。</p><p>立体感を出すには<code>MeshStandardMaterial</code>を使います。こちらは光を<em>必要とし</em>、光がないと真っ黒のままです。そこで2つ目のシーンを、今度は照明つきで作ります。<code>AmbientLight</code>（どこでも同じ明るさの光。真っ暗な部分がなくなります）と、<code>DirectionalLight</code>（太陽のように、一方向から差す光）です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "scene2 = Three::Scene.new\nscene2.add(Three::AmbientLight.new(0xffffff, 0.35))\n\nsun = Three::DirectionalLight.new(0xffffff, 2.5)\nsun.position.set(2, 3, 4)\nscene2.add(sun)\n\nball = Three::Mesh.new(\n  Three::SphereGeometry.new(1, width_segments: 48, height_segments: 24),\n  Three::MeshStandardMaterial.new(color: 0xc14a2e, roughness: 0.35, metalness: 0.1)\n)\nscene2.add(ball)\n\nshow_three scene2, camera"
+          },
+          {
+            "t": "h",
+            "html": "<p>静止画もいいですが、動くともっと楽しくなります。<code>show_three</code>に<strong>ブロック</strong>を渡してみましょう。ブロックは毎フレームの描画の前に（1秒に約60回）実行され、フレーム番号を受け取ります。さらに<code>orbit: true</code>を付けると、マウスでシーンを回したり、ホイールでズームしたりできます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_three scene2, camera, orbit: true do |frame|\n  ball.position.y = Math.sin(frame * 0.05) * 0.5\n  ball.rotation.y += 0.01\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>自分のコンピューターでも組み立て方は同じです。ただし、レンダラーを<code>&lt;canvas&gt;</code>に取り付ける作業は自分で行います。</p><pre><code>renderer = Three::Renderers::ThreeJSRenderer.new(canvas: \"#scene\")\nrenderer.set_size(640, 480)\nrenderer.render(scene, camera)</code></pre><p>ここでは、この部分を<code>show_three</code>が代わりにやってくれています。</p><div class='task'><strong>課題：</strong>タワーを建てましょう！シーン<code>tower</code>を作って光を当て、立方体を<strong>3つ以上</strong>積み重ねてください。<code>position.y</code>で、それぞれの高さを変えます。<code>show_three tower, camera</code>で表示し、ブロックを渡してゆっくり回転させましょう。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# tower = Three::Scene.new\n# tower.add(Three::AmbientLight.new(0xffffff, 0.4))\n# ...\n# show_three tower, camera do\n#   tower.rotation.y += 0.01\n# end\n",
+            "check": "defined?(Three) && tower.is_a?(Three::Scene) && tower.children.count { |k| k.is_a?(Three::Mesh) } >= 3 && scenes.any? { |s| s.equal?(tower) }",
+            "hint": "3つまとめて作るなら：<code>3.times do |i|</code> … <code>Three::Mesh</code>を作って<code>block.position.y = i - 1.0</code>を設定し、<code>tower.add(block)</code>でシーンに追加 … <code>end</code>。それから、<code>camera</code>ができるように、先に上のセルを実行しておくのを忘れないでね。"
+          }
+        ]
       }
     },
     {
       "id": "pptx",
       "section": {
         "de": "Präsentationen mit ruby_pptx",
-        "en": "Slide decks with ruby_pptx"
+        "en": "Slide decks with ruby_pptx",
+        "ja": "ruby_pptxでスライド作成"
       },
       "de": {
         "title": "20. PowerPoint mit ruby_pptx",
@@ -1608,13 +2311,77 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "Three slides, each from a layout that has a title (\"Title Slide\", \"Title and Content\"), each with <code>shapes.title.text</code> set – and finally <code>menu.save(\"menu.pptx\")</code>. The download has to appear below <em>this</em> cell."
           }
         ]
+      },
+      "ja": {
+        "title": "20. ruby_pptxでPowerPoint",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Rubyでスライドを作る</h2><p>PowerPointのファイル（<code>.pptx</code>）の正体は、XMLファイルがぎっしり詰まったZIPアーカイブです。スライド1枚ごとに1つのファイルがあり、さらにレイアウト、テーマ、画像も入っています。これを手で書く人はいませんが、gemを使えば簡単です。<a href='https://github.com/Largo/ruby_pptx' target='_blank'><code>ruby_pptx</code></a>は、有名なPythonライブラリ<em>python-pptx</em>をRubyに移植したものです。</p><p>ここでは、すべてがブラウザの中で動きます。gemをインストールし、プレゼンテーションを組み立てて保存するまで、全部Rubyで行います。<strong>セルが保存したファイルは、どれもそのセルの下にダウンロードとして表示されます</strong>。クリックして、PowerPoint、Keynote、LibreOfficeで開いてみてください。</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"ruby_pptx\"\nrequire \"ruby_pptx\"\n\ndeck = Pptx::Presentation.new_default\ntitle = deck.slides.add(deck.slide_layouts[\"Title Slide\"])\ntitle.shapes.title.text = \"Chunky Bacon\"\ntitle.placeholders[1].text_frame.text = \"A presentation, built with Ruby\"\n\ndeck.save(\"chunky.pptx\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>いま何が起きたのでしょうか？</p><ul><li><code>Presentation.new_default</code>は、標準のテンプレートから空のプレゼンテーションを作ります。</li><li>どのスライドも<strong>レイアウト</strong>をもとにしています。PowerPointで「新しいスライド」をクリックしたときと同じです。<code>slide_layouts[\"Title Slide\"]</code>は、名前でレイアウトを探します。</li><li>レイアウトには<strong>プレースホルダー</strong>が付いてきます。<code>shapes.title</code>がタイトル、<code>placeholders[1]</code>がその下の枠です。テキストは、それぞれの<code>text_frame</code>に書き込みます。</li><li><code>save</code>がファイルを書き出します。これで、下からすぐにダウンロードできます。</li></ul><p>どんなレイアウトがあるのでしょう？聞いてみればわかります。このセルは、上で作った<code>deck</code>をまだ覚えています：</p>"
+          },
+          {
+            "t": "c",
+            "code": "deck.slide_layouts.map(&:name)"
+          },
+          {
+            "t": "h",
+            "html": "<p>箇条書きには<code>\"Title and Content\"</code>を使います。<code>\\n</code>で区切った1行1行が、それぞれ行頭記号の付いた<strong>段落</strong>になります。段落には字下げを決める<code>level</code>があり、段落の中のテキストの断片（<code>runs</code>）には<code>font</code>があります。太字、斜体、サイズ、色などはここで指定します。</p>"
+          },
+          {
+            "t": "c",
+            "code": "slide = deck.slides.add(deck.slide_layouts[\"Title and Content\"])\nslide.shapes.title.text = \"Breakfast\"\n\ntext = slide.placeholders[1].text_frame\ntext.text = \"Bacon\\nnice and crispy\\nEggs\\nToast\"\ntext.paragraphs[1].level = 1\ntext.paragraphs[0].runs[0].font.bold = true\n\ndeck.save(\"chunky.pptx\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>空のスライド（<code>\"Blank\"</code>）には、図形を自分で配置します。位置や大きさは、単位の付いた本物の長さで指定します。ピクセルなのかセンチメートルなのか迷ってしまうような、単位のない数値は使いません。<code>at:</code>は左上の角、<code>size:</code>は幅と高さです。</p><p><code>2.cm</code>、<code>1.inch</code>、<code>28.pt</code>のように、Rubyらしく読める書き方にしたいところです。そのために、このgemには<strong>refinement</strong>（リファインメント）が付いています。refinementは組み込みクラス（ここでは<code>Numeric</code>）を拡張するしくみで、<code>using</code>で有効にした場所でだけ効きます。Ruby全体を書き換えてしまうモンキーパッチと違って、ほかのライブラリの邪魔をすることはありません。refinementを使わない場合は<code>Pptx.cm(2)</code>と書きます。意味は同じで、少し長くなるだけです。</p><p>色はCSSと同じく16進数のコードで指定します。<code>\"E8722A\"</code>はChunky Baconのオレンジです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby_pptx/refinements\"\nusing Pptx::Lengths\n\nslide = deck.slides.add(deck.slide_layouts[\"Blank\"])\nbox = slide.shapes.add_shape(:rounded_rectangle,\n                             at: [2.cm, 2.cm],\n                             size: [12.cm, 4.cm])\nbox.fill.solid\nbox.fill.fore_color.rgb = \"E8722A\"\nbox.text_frame.text = \"Chunky Bacon!\"\nbox.text_frame.paragraphs[0].runs[0].font.size = 28.pt\n\ndeck.save(\"chunky.pptx\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>グラフはどうでしょう？数値は<code>ChartData</code>に入れます。x軸に並べるカテゴリと、1つ以上の系列です。このgemは、グラフの裏にあるExcelのシートまで一緒に保存してくれます。そのため、PowerPointであとからデータを編集することもできます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "data = Pptx::ChartData.new\ndata.categories = %w[Mon Tue Wed Thu Fri]\ndata.add_series(\"Bacon\", [3, 5, 2, 6, 4])\n\nslide = deck.slides.add(deck.slide_layouts[\"Title Only\"])\nslide.shapes.title.text = \"Bacon per day\"\nslide.shapes.add_chart(:column_clustered, data,\n                       at: [2.cm, 4.cm],\n                       size: [20.cm, 12.cm])\n\ndeck.save(\"chunky.pptx\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>読み込みもできます。<code>Presentation.open</code>で既存のファイルを開けば、配列と同じようにスライドを順にたどれます。空のスライドにはタイトルがないので、<code>&amp;.</code>を使っています。これは、相手が<code>nil</code>のときにエラーで止まらず、そのまま<code>nil</code>を返してくれる書き方です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "opened = Pptx::Presentation.open(\"chunky.pptx\")\nopened.slides.map { |s| s.shapes.title&.text }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb'><strong>自分のコンピューターでは：</strong><code>gem install ruby_pptx</code>でインストールします。Gemfileに<code>gem \"ruby_pptx\"</code>と書いてもかまいません。そこでは、gemは高速なC拡張である<em>Nokogiri</em>を使ってXMLを読み書きします。ブラウザにはC拡張がないので、ここでは自動的に、ピュアRubyで書かれた<em>REXML</em>が使われます。速度は落ちますが、できあがるファイルはまったく同じです。自分のコンピューターなら保存先も自由で、たとえば<code>deck.save(\"~/Desktop/chunky.pptx\")</code>とすればデスクトップに保存されます。</div><div class='task'><strong>課題：</strong><strong>メニュー</strong>を作りましょう！新しいプレゼンテーション<code>menu</code>を作り、タイトルスライドに加えて、<strong>2枚以上</strong>のスライドを追加してください。どのスライドにもタイトルを付けます。たとえば「前菜」と「メイン」のスライドを作り、料理をいくつか箇条書きにします。最後に<code>menu.pptx</code>として保存してください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# menu = Pptx::Presentation.new_default\n# title = menu.slides.add(menu.slide_layouts[\"Title Slide\"])\n# ...\n# menu.save(\"menu.pptx\")\n",
+            "check": "downloads.include?(\"menu.pptx\") && (m = Pptx::Presentation.open(\"menu.pptx\")).slides.size >= 3 && m.slides.all? { |s| !s.shapes.title.nil? && !s.shapes.title.text.strip.empty? }",
+            "hint": "スライドは3枚だよ。どれもタイトルのあるレイアウト（\"Title Slide\"、\"Title and Content\"）から作って、それぞれ<code>shapes.title.text</code>を設定しよう。最後に<code>menu.save(\"menu.pptx\")</code>。ダウンロードが<em>この</em>セルの下に出てくればOKだよ。"
+          }
+        ]
       }
     },
     {
       "id": "scarpe",
       "section": {
         "de": "Shoes mit Scarpe",
-        "en": "Shoes with Scarpe"
+        "en": "Shoes with Scarpe",
+        "ja": "ScarpeでShoes"
       },
       "de": {
         "title": "21. Shoes-Apps mit Scarpe",
@@ -1709,13 +2476,61 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "Something like: <code>@field = edit_line \"\"</code>, then <code>@greeting = para \"...\"</code>, and inside the button block <code>@greeting.replace(\"Hello, #{@field.text}!\")</code>. Note that <code>title</code> counts as a <code>para</code> too – you still need two lines of text."
           }
         ]
+      },
+      "ja": {
+        "title": "21. ScarpeでShoesアプリ",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Shoes：小さなウィンドウを、少ないコードで</h2><p><strong>Shoes</strong>は、why the lucky stiffが作ったGUIツールキットです。「Chunky Bacon」と同じ人の手から生まれました。その考え方はシンプルで、テキストとボタンがいくつかあるだけのウィンドウなら、数百行ではなく数行で書けるべきだ、というものです。</p><p><a href='https://github.com/scarpe-team/scarpe' target='_blank'><strong>Scarpe</strong></a>は、そのShoesを現代によみがえらせたもので、2つの部分に分かれています：</p><ul><li><strong>Lacci</strong>（<code>lacci</code> gem）が知っているのは、<code>stack</code>、<code>para</code>、<code>button</code>といった言語の部分だけです。ピクセルのことは何も知りません。</li><li>こうして組み立てられたツリーを実際に描くのは、<strong>ディスプレイサービス</strong>です。Webviewで描いても、libuiで描いても、まったく別のもので描いてもかまいません。</li></ul><p>だからこそ、Shoesはこのページでも動きます。このページは独自のディスプレイサービスを持っていて、ツリーをページのHTMLとして描き出します。その下で動いているgemは、手を加えていない本物です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"lacci\"\nrequire \"shoes\"\n\nshow_shoes do\n  para \"Hello from a Shoes app!\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>上の枠は、実際に動いているShoesアプリです。ここでは<code>show_shoes</code>が<code>Shoes.app</code>の役目を果たしています。</p><p>レイアウトには2種類のコンテナを使います。Shoesにはそれだけで十分です：</p><ul><li><code>stack</code>は中身を<strong>縦に積み重ね</strong>、</li><li><code>flow</code>は中身を<strong>横に並べます</strong>。</li></ul><p>それ以外の<code>title</code>、<code>para</code>、<code>button</code>、<code>edit_line</code>などは、すべて<em>drawable</em>（描画される部品）です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_shoes do\n  stack do\n    title \"Chunky's Diner\"\n    para \"Bacon, egg and coffee.\"\n    flow do\n      button \"Bacon\"\n      button \"Egg\"\n      button \"Coffee\"\n    end\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>このボタンは、まだ何もしません。Shoesでは、ボタンに<strong>ブロック</strong>を渡します。また、変数に入れておいたdrawableは、あとから変更できます。たとえば<code>para</code>なら<code>replace</code>で書き換えられます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_shoes do\n  stack do\n    @strips = 0\n    @display = para \"No bacon yet.\"\n\n    button \"Order bacon\" do\n      @strips += 1\n      @display.replace(\"#{@strips} strips of bacon! 🥓\")\n    end\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>ボタンを押してみてください。その上のテキストが変わります。ここで、2つに分かれた設計がおもしろくなってきます。ブロックは<em>Lacci</em>の中で実行され、Lacciは「このプロパティが変わった」と知らせるだけです。ディスプレイサービスがその知らせを受け取って、対応するDOMノードを書き換えます。デスクトップのScarpeでは、代わりにWebviewやlibuiが知らせを受け取ります。コードは同じで、ウィンドウだけが違うわけです。</p><p>入力も同じしくみで、向きが逆になるだけです。<code>edit_line</code>は、内容が変わるたびにLacciへ知らせます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_shoes do\n  stack do\n    @greeting = para \"What's your name?\"\n    edit_line \"\" do |text|\n      @greeting.replace(text.empty? ? \"What's your name?\" : \"Hello, #{text}!\")\n    end\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>自分のコンピューターでは、<code>lacci</code>の代わりに<code>scarpe</code>をインストールし、ファイルに<code>Shoes.app do … end</code>と書いて、<code>scarpe my_app.rb</code>で起動します。すると本物のウィンドウが開きます。アプリのコードは1行も変わりません。</p><p>ちなみに、ここで描画しているディスプレイサービスも、このサイトだけの特別なしかけではなく、ごく普通のものです。<code>shoes_dom.rb</code>に書かれた、250行ほどのRubyにすぎません。libuiの上で動くShoesである<a href='https://github.com/Largo/hacketyhack' target='_blank'>Clogs</a>も、同じパターンで作られています。</p><div class='task'><strong>課題：</strong>あいさつアプリを作りましょう。<code>title</code>、<code>edit_line</code>、<code>button</code>に加えて、ボタンがクリックされたら入力欄の名前にあいさつする<code>para</code>をもう1つ用意してください。入力欄は変数に入れておきましょう。<code>@field.text</code>で中身を取り出せます。</div>"
+          },
+          {
+            "t": "x",
+            "code": "show_shoes do\n  stack do\n    # title \"...\"\n    # @field = edit_line \"\"\n    # @greeting = para \"...\"\n    # button \"Greet me\" do\n    #   ...\n    # end\n  end\nend\n",
+            "check": "apps >= 1 && shoes_types.include?(\"EditLine\") && shoes_types.include?(\"Button\") && shoes_types.count { |t| t == \"Para\" } >= 2",
+            "hint": "たとえばこんな感じ：<code>@field = edit_line \"\"</code>、次に<code>@greeting = para \"...\"</code>、そしてボタンのブロックの中で<code>@greeting.replace(\"Hello, #{@field.text}!\")</code>。ちなみに<code>title</code>も<code>para</code>として数えられるけど、テキストの行が2つ必要なことに変わりはないよ。"
+          }
+        ]
       }
     },
     {
       "id": "tl-collections",
       "section": {
         "de": "Aufbaukurs: timelog",
-        "en": "Advanced: timelog"
+        "en": "Advanced: timelog",
+        "ja": "応用コース：timelog"
       },
       "de": {
         "title": "22. Projekt timelog: Collections",
@@ -1794,6 +2609,45 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "<code>hours = entries.group_by { |e| e[:project] }.transform_values { |list| list.sum { |e| e[:hours] } }</code>"
           }
         ]
+      },
+      "ja": {
+        "title": "22. timelogプロジェクト：コレクション",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>timelogプロジェクト、始動！</h2><p>ここからは、本格的なプログラムをいっしょに作っていきます。作るのは、作業時間を記録するツール<strong>timelog</strong>です。レッスンごとに少しずつ育てていき、最後にはエントリをパースし、レポートを計算し、テストもしっかりそろい、Webインターフェースまで備えたプログラムになります。</p><p>まずはデータの形から始めましょう。作業時間のエントリ1件には、プロジェクトと時間があります。これをハッシュで表します。エントリがたくさんあるなら、ハッシュの配列にします：</p>"
+          },
+          {
+            "t": "c",
+            "code": "entries = [\n  { project: \"ProjectX\", hours: 3.5 },\n  { project: \"Intern\",   hours: 2.0 },\n  { project: \"ProjectX\", hours: 3.0 }\n]\nentries.length"
+          },
+          {
+            "t": "h",
+            "html": "<p>ここでコレクションのメソッドが本領を発揮します。<code>map</code>は値を取り出し、<code>select</code>は絞り込み、<code>sum</code>は合計します。しかも、どれもつなげて書けます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "entries.select { |e| e[:project] == \"ProjectX\" }\n       .sum { |e| e[:hours] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>レポート作りの主役は<code>group_by</code>です。要素をグループに振り分けて、グループのハッシュにしてくれます。<code>transform_values</code>と組み合わせれば、たった2行で立派なレポートになります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "entries.group_by { |e| e[:project] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>ほかにも便利なメソッドがあります。<code>tally</code>は出現回数を数え、<code>sort_by</code>は並べ替え、<code>each_with_object</code>は好きな構造を組み立てます。</p><div class='task'><strong>課題：</strong><code>entries</code>から、各プロジェクトにその<strong>合計時間</strong>を対応させたハッシュ<code>hours</code>を作ってください：<code>{\"ProjectX\"=>6.5, \"Intern\"=>2.0}</code>。ヒント：<code>group_by</code>と<code>transform_values</code>を組み合わせます。</div>"
+          },
+          {
+            "t": "x",
+            "code": "entries = [\n  { project: \"ProjectX\", hours: 3.5 },\n  { project: \"Intern\",   hours: 2.0 },\n  { project: \"ProjectX\", hours: 3.0 }\n]\n\n# hours = ...\n",
+            "check": "hours == { \"ProjectX\" => 6.5, \"Intern\" => 2.0 }",
+            "hint": "こう書けるよ：<code>hours = entries.group_by { |e| e[:project] }.transform_values { |list| list.sum { |e| e[:hours] } }</code>"
+          }
+        ]
       }
     },
     {
@@ -1857,6 +2711,37 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "# def parse_line(line)\n#   pattern = /.../  # named groups: date, from, to, project\n#   ...\n# end\n",
             "check": "parse_line(\"2026-09-15 08:30-12:00 ProjectX meeting\") == { project: \"ProjectX\", from: \"08:30\", to: \"12:00\" } && parse_line(\"coffee break\").nil? && code.include?(\"(?<\")",
             "hint": "Pattern like in the demo. Then: <code>hit = line.match(pattern)</code>, <code>return nil unless hit</code>, then <code>{ project: hit[:project], from: hit[:from], to: hit[:to] }</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "23. テキストのパース：正規表現",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>エントリをパースする：正規表現</h2><p>timelogには、次のような行を読み取れるようになってもらいます：</p><pre><code>2026-09-15 08:30-12:00 ProjectX planning-meeting</code></pre><p>そのためにあるのが<strong>正規表現</strong>（regex）です。正規表現は、テキストの形を表すパターンです。<code>\\d</code>は数字1文字、<code>{2}</code>は「ちょうど2つ」という意味です。そして<code>(?&lt;name&gt;…)</code>を使うと、マッチした部分に名前を付けられます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "line = \"2026-09-15 08:30-12:00 ProjectX planning-meeting\"\n\npattern = /(?<date>\\d{4}-\\d{2}-\\d{2}) (?<from>\\d{2}:\\d{2})-(?<to>\\d{2}:\\d{2}) (?<project>\\S+)/\nhit = line.match(pattern)\nhit[:project]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>match</code>は<code>MatchData</code>オブジェクトを返します。名前付きグループは<code>hit[:from]</code>のように取り出せます。何もマッチしなければ<code>nil</code>が返ってきます（<code>if</code>にぴったりです）。データはいらず、マッチするかどうかだけを手早く調べたいなら<code>line.match?(pattern)</code>を使います。</p><p>条件分岐には、Rubyのエレガントな<code>case/when</code>があります。範囲やクラス、さらには正規表現まで理解してくれます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def classify(hours)\n  case hours\n  when 0...4 then \"half day\"\n  when 4...9 then \"full day\"\n  else            \"overtime!\"\n  end\nend\n\nclassify(7.5)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>課題：</strong><code>parse_line(line)</code>を書いてください。このメソッドは、名前付きグループを使ってtimelogの行を分解し、<code>{ project:, from:, to: }</code>を返します。マッチしない行には<code>nil</code>を返します。最後の行に<code>parse_line(\"2026-09-15 08:30-12:00 ProjectX meeting\")</code>と書いて試してみましょう。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def parse_line(line)\n#   pattern = /.../  # 名前付きグループ：date、from、to、project\n#   ...\n# end\n",
+            "check": "parse_line(\"2026-09-15 08:30-12:00 ProjectX meeting\") == { project: \"ProjectX\", from: \"08:30\", to: \"12:00\" } && parse_line(\"coffee break\").nil? && code.include?(\"(?<\")",
+            "hint": "パターンはデモと同じでいいよ。そのあとは<code>hit = line.match(pattern)</code>、<code>return nil unless hit</code>、そして<code>{ project: hit[:project], from: hit[:from], to: hit[:to] }</code>を返そう。"
           }
         ]
       }
@@ -1924,6 +2809,37 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "<code>{ project: project, from: from, to: to, note: note, hours: as_hours(to) - as_hours(from) }</code> – as the method's last line."
           }
         ]
+      },
+      "ja": {
+        "title": "24. メソッドをきちんと作る",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>メソッドをスマートに</h2><p><code>def</code>はもう知っていますね。ここでは、Rubyのコードを読みやすくするための細かな工夫を紹介します。<strong>キーワード引数</strong>を使うと、呼び出しを見ただけで意味がわかるようになります。デフォルト値を決めておけば、その引数は省略できるようになります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def greet(name:, loud: false)\n  text = \"Hello, #{name}\"\n  loud ? text.upcase + \"!\" : text\nend\n\ngreet(name: \"Kaz\", loud: true)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>greet(name: \"Kaz\")</code>と、何を渡しているのかわからない<code>greet(\"Kaz\", true)</code>を比べてみてください。引数がいくつもあるときは、読みやすさの点でキーワード引数のほうがはっきり有利です。ほかにも決まりごとがあります。<code>*rest</code>は任意の数の引数をまとめて受け取ります。<code>?</code>で終わるメソッドはtrueかfalseを返し、<code>!</code>で終わるメソッドは「危険な」バージョンです。そして、最後の行の値が自動的に戻り値になります。</p><p>レッスン9を思い出してください。メソッド呼び出しのかっこは省略できるのでした。これをキーワード引数と組み合わせると、<code>attr_reader :name</code>でおなじみの、宣言的なRubyのスタイルになります。<code>add_entry project: \"X\", from: \"08:30\", to: \"10:00\"</code>は、まるで設定ファイルのように読めます。ただし、式が入れ子になるときは、かっこを付けましょう。</p><p>timelogには時刻の計算が必要です。<code>\"08:30\"</code>を、午前0時から数えて何時間かという数値に直します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def as_hours(time)\n  h, m = time.split(\":\").map(&:to_i)\n  h + m / 60.0\nend\n\nas_hours(\"08:30\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>課題：</strong><code>add_entry(project:, from:, to:, note: nil)</code>を書いてください。戻り値はハッシュ<code>{ project:, from:, to:, note:, hours: }</code>で、<code>hours</code>は<code>as_hours(to)</code>と<code>as_hours(from)</code>の差です。つまり<code>add_entry(project: \"X\", from: \"08:30\", to: \"10:00\")</code>の結果には、<code>hours: 1.5</code>が含まれるはずです。</div>"
+          },
+          {
+            "t": "x",
+            "code": "def as_hours(time)\n  h, m = time.split(\":\").map(&:to_i)\n  h + m / 60.0\nend\n\n# def add_entry(project:, from:, to:, note: nil)\n#   ...\n# end\n",
+            "check": "e = add_entry(project: \"X\", from: \"08:30\", to: \"10:00\"); e[:hours] == 1.5 && e[:project] == \"X\" && e[:note].nil? && add_entry(project: \"Y\", from: \"09:00\", to: \"17:00\", note: \"docs\")[:note] == \"docs\" && code.include?(\"project:\")",
+            "hint": "メソッドの最後の行に<code>{ project: project, from: from, to: to, note: note, hours: as_hours(to) - as_hours(from) }</code>と書けばOKだよ。"
+          }
+        ]
       }
     },
     {
@@ -1987,6 +2903,37 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "# Entry from the demo cell above is reused here -\n# run it first!\n\nclass Timesheet\n  def initialize\n    @entries = []\n  end\n\n  def add(entry)\n    @entries << entry\n    self\n  end\n\n  # def total_for(project)\n  #   ...\n  # end\nend\n",
             "check": "ts = Timesheet.new.add(Entry.new(project: \"A\", from: \"08:00\", to: \"10:30\")).add(Entry.new(project: \"B\", from: \"10:30\", to: \"11:30\")).add(Entry.new(project: \"A\", from: \"13:00\", to: \"14:00\")); ts.total_for(\"A\") == 3.5 && ts.total_for(\"B\") == 1.0 && ts.total_for(\"C\") == 0",
             "hint": "<code>def total_for(project); @entries.select { |e| e.project == project }.sum(&:hours); end</code> – and run the Entry cell above first."
+          }
+        ]
+      },
+      "ja": {
+        "title": "25. EntryとTimesheet",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>ハッシュからクラスへ</h2><p>最初のうちはハッシュで十分です。でも、データに<em>ふるまい</em>（時間を計算する、自分をきれいに表示する、など）が必要になったら、クラスの出番です。timelogは2つのクラスを中心に組み立てていきます。1件のエントリを表す<code>Entry</code>と、エントリをまとめる<code>Timesheet</code>です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Entry\n  attr_reader :project, :from, :to, :note\n\n  def initialize(project:, from:, to:, note: nil)\n    @project = project\n    @from = from\n    @to = to\n    @note = note\n  end\n\n  def hours\n    as_hours(@to) - as_hours(@from)\n  end\n\n  def to_s\n    \"#{@project}: #{@from}-#{@to} (#{hours}h)\"\n  end\n\n  private\n\n  def as_hours(time)\n    h, m = time.split(\":\").map(&:to_i)\n    h + m / 60.0\n  end\nend\n\nEntry.new(project: \"ProjectX\", from: \"08:30\", to: \"12:00\").to_s"
+          },
+          {
+            "t": "h",
+            "html": "<p>ポイント：<code>as_hours</code>は<code>private</code>にしてあります。外から使う人のいない、内部の細かい処理だからです。<code>to_s</code>は、オブジェクトを文字列にしたときの見た目を決めます。インスタンス変数（<code>@project</code>）はオブジェクトのもの、定数（<code>BIG</code>）はクラスのものです。クラス変数（<code>@@…</code>）やグローバル変数（<code>$…</code>）は、なるべく使わないようにしましょう。あちこちで共有される状態になり、どこで変わったのかを追いかけにくくなるからです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Timesheet\n  def initialize\n    @entries = []\n  end\n\n  def add(entry)\n    @entries << entry\n    self\n  end\n\n  def count\n    @entries.length\n  end\nend\n\nsheet = Timesheet.new\nsheet.add(Entry.new(project: \"ProjectX\", from: \"08:30\", to: \"12:00\"))\nsheet.count"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>add</code>の最後で<code>self</code>を返しているので、<code>sheet.add(a).add(b)</code>のように呼び出しをつなげられます（メソッドチェーン）。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>に<code>total_for(project)</code>を追加しましょう。指定したプロジェクトのエントリをすべて集めて、時間を合計するメソッドです。<code>@entries</code>に<code>select</code>と<code>sum</code>を使います。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# 上のデモセルのEntryをここでも使う。\n# 先にそのセルを実行しておこう！\n\nclass Timesheet\n  def initialize\n    @entries = []\n  end\n\n  def add(entry)\n    @entries << entry\n    self\n  end\n\n  # def total_for(project)\n  #   ...\n  # end\nend\n",
+            "check": "ts = Timesheet.new.add(Entry.new(project: \"A\", from: \"08:00\", to: \"10:30\")).add(Entry.new(project: \"B\", from: \"10:30\", to: \"11:30\")).add(Entry.new(project: \"A\", from: \"13:00\", to: \"14:00\")); ts.total_for(\"A\") == 3.5 && ts.total_for(\"B\") == 1.0 && ts.total_for(\"C\") == 0",
+            "hint": "こう書けるよ：<code>def total_for(project); @entries.select { |e| e.project == project }.sum(&:hours); end</code>。それと、上のEntryのセルを先に実行しておいてね。"
           }
         ]
       }
@@ -2054,6 +3001,37 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "For example: <code>def test_valid; assert Entry.new(\"X\", 2.0).valid?; end</code> and <code>def test_negative_hours; refute Entry.new(\"X\", -1).valid?; end</code> – then <code>run_tests</code>."
           }
         ]
+      },
+      "ja": {
+        "title": "26. Minitestでテスト",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>テストは頼れる安全ネット</h2><p>Rubyが型をチェックするのは、実行するときだけです。タイプミスがあっても、そのコードが実際に動くまで気づけません。だからこそ、Rubyのプロジェクトに<strong>テスト</strong>は欠かせません。道具はもうそろっています。<strong>Minitest</strong>はRubyに最初から付いてきます。</p><p>テストは<code>Minitest::Test</code>を継承したクラスです。<code>test_</code>で始まるメソッドが、それぞれ1つのテストケースになります。<code>assert_equal expected, actual</code>は、期待する値と実際の値が等しいかどうかを確かめます。このノートブックでは、<code>run_tests</code>でテストを実行します。</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Duration\n  attr_reader :minutes\n\n  def initialize(minutes)\n    @minutes = minutes\n  end\n\n  def in_hours\n    minutes / 60.0\n  end\nend\n\nclass TestDuration < Minitest::Test\n  def test_in_hours\n    assert_equal 1.5, Duration.new(90).in_hours\n  end\n\n  def test_zero_minutes\n    assert_equal 0.0, Duration.new(0).in_hours\n  end\nend\n\nrun_tests"
+          },
+          {
+            "t": "h",
+            "html": "<p>結果の読み方：<code>2 runs</code>（テストメソッドが2つ）、<code>2 assertions</code>（チェックが2回）、<code>0 failures, 0 errors</code>。すべて成功、オールグリーンです。では、何かが壊れていたら？Minitestは、<em>何</em>が期待されていて、実際には<em>何</em>が返ってきたのかを正確に教えてくれます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "class TestBroken < Minitest::Test\n  def test_deliberately_wrong\n    assert_equal 100, Duration.new(90).minutes\n  end\nend\n\nrun_tests"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>テストは専用のファイルに書いて、そのファイルを直接実行します。<code>minitest/autorun</code>を読み込んでおくと、プログラムの最後にテストが自動で実行されます。</p><pre><code># test/test_duration.rb\nrequire \"minitest/autorun\"\nrequire_relative \"../lib/duration\"\n\nclass TestDuration < Minitest::Test\n  def test_in_hours\n    assert_equal 1.5, Duration.new(90).in_hours\n  end\nend</code></pre><pre><code>$ ruby test/test_duration.rb\n2 runs, 2 assertions, 0 failures, 0 errors, 0 skips</code></pre><p>ほかにも便利なメソッドがあります。<code>assert</code>、<code>refute</code>、<code>assert_nil</code>、<code>assert_raises</code>、そして共通の準備をまとめて書ける<code>setup</code>です。Minitestのほかにいちばんよく知られているのはRSpecで、独自の書き方（<code>expect(x).to eq(y)</code>）をします。</p></div><div class='task'><strong>課題：</strong>下にあるのはクラス<code>Entry</code>です。<strong>2つ以上</strong>のテストを持つ<code>TestEntry</code>を書きましょう。1つは正しいエントリのテスト、もう1つは正しくないケース（時間がマイナス、またはプロジェクトが空）のテストです。最後に<code>run_tests</code>を実行して、すべて成功させてください。これからは<em>テストのない課題はなし！</em>です。</div>"
+          },
+          {
+            "t": "x",
+            "code": "class Entry\n  attr_reader :project, :hours\n\n  def initialize(project, hours)\n    @project = project\n    @hours = hours\n  end\n\n  def valid?\n    hours > 0 && !project.to_s.empty?\n  end\nend\n\n# class TestEntry < Minitest::Test\n#   def test_...\n#   end\n# end\n\n# run_tests\n",
+            "check": "defined?(TestEntry) && TestEntry.instance_methods.grep(/\\Atest_/).length >= 2 && output.include?(\"0 failures\") && output.include?(\"0 errors\") && output.include?(\"runs,\")",
+            "hint": "たとえば<code>def test_valid; assert Entry.new(\"X\", 2.0).valid?; end</code>と<code>def test_negative_hours; refute Entry.new(\"X\", -1).valid?; end</code>を書いて、最後に<code>run_tests</code>を呼んでみて。"
+          }
+        ]
       }
     },
     {
@@ -2071,7 +3049,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 20, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 22, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -2094,13 +3072,36 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 20, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 22, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
             "code": "class Timesheet\n  # include ...\n\n  def initialize(entries)\n    @entries = entries\n  end\n\n  # def each(&block)\n  #   ...\n  # end\nend\n\nts = Timesheet.new([\n  { project: \"A\", hours: 2.0 },\n  { project: \"B\", hours: 1.0 }\n])\n\n# ts.sum { |e| e[:hours] }\n",
             "check": "Timesheet.include?(Enumerable) && ts.map { |e| e[:project] } == [\"A\", \"B\"] && ts.sum { |e| e[:hours] } == 3.0 && code.include?(\"include Enumerable\") && code.include?(\"def each\")",
             "hint": "<code>include Enumerable</code> into the class, plus <code>def each(&block); @entries.each(&block); end</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "27. EnumerableとData",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Mix-inで手に入る2つの超能力</h2><p>Mix-inにはモジュールのレッスンで出会いましたね。今回は、なかでも特に有名な2つをtimelogで活躍させます。まずは<strong>Comparable</strong>。クラスに<code>&lt;=&gt;</code>（「宇宙船演算子」。-1、0、1のどれかを返す）を用意するだけで、このMix-inが<code>&lt;</code>、<code>&gt;</code>、<code>==</code>、<code>between?</code>などを使えるようにしてくれます。</p><p>あわせて<code>Data</code>も紹介します。変更できない値オブジェクトを作るための、Rubyのクラスです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "Duration = Data.define(:minutes) do\n  include Comparable\n\n  def <=>(other)\n    minutes <=> other.minutes\n  end\n\n  def to_s\n    \"#{minutes / 60}h #{minutes % 60}min\"\n  end\nend\n\nbreaks = [Duration.new(minutes: 90), Duration.new(minutes: 45), Duration.new(minutes: 120)]\nbreaks.max.to_s"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン22で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+          },
+          {
+            "t": "x",
+            "code": "class Timesheet\n  # include ...\n\n  def initialize(entries)\n    @entries = entries\n  end\n\n  # def each(&block)\n  #   ...\n  # end\nend\n\nts = Timesheet.new([\n  { project: \"A\", hours: 2.0 },\n  { project: \"B\", hours: 1.0 }\n])\n\n# ts.sum { |e| e[:hours] }\n",
+            "check": "Timesheet.include?(Enumerable) && ts.map { |e| e[:project] } == [\"A\", \"B\"] && ts.sum { |e| e[:hours] } == 3.0 && code.include?(\"include Enumerable\") && code.include?(\"def each\")",
+            "hint": "クラスの中に<code>include Enumerable</code>を書いて、<code>def each(&block); @entries.each(&block); end</code>も足してみて。"
           }
         ]
       }
@@ -2184,6 +3185,45 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "<code>def each_project(entries); entries.group_by { |e| e[:project] }.each { |project, list| yield(project, list) }; end</code>"
           }
         ]
+      },
+      "ja": {
+        "title": "28. ブロック、Proc、lambda",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>ブロックは、コードの贈り物</h2><p>ブロックはレッスン6からずっと使ってきました。今回はその舞台裏をのぞいてみましょう。メソッドはブロックを受け取り、<code>yield</code>でそれを実行します。ブロックが渡されたかどうかは<code>block_given?</code>でわかります。これを使うと、次のストップウォッチのように、処理を包み込む「ラッパー」メソッドが作れます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "def with_timing(name)\n  start = Process.clock_gettime(Process::CLOCK_MONOTONIC)\n  result = yield\n  ms = (Process.clock_gettime(Process::CLOCK_MONOTONIC) - start) * 1000\n  puts \"#{name}: #{ms.round(1)} ms\"\n  result\nend\n\nwith_timing(\"sum\") { (1..100_000).sum }"
+          },
+          {
+            "t": "h",
+            "html": "<p>ブロックそのものはオブジェクトではありません。でも、オブジェクトにすることはできます。<code>proc</code>や<code>lambda</code>を使うと、コードを包んで変数に入れておけます。違いは2つあります。lambdaは引数の数を厳しくチェックし、<code>return</code>してもlambdaから抜けるだけです。procはどちらについてもゆるやかです。また、<code>&amp;:to_s</code>は「このシンボルをブロックにして」という意味の省略記法です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "double = ->(x) { x * 2 }\n\n[double.call(21), double.(5), [1, 2, 3].map(&:to_s)]"
+          },
+          {
+            "t": "h",
+            "html": "<p>lambdaは<strong>クロージャ</strong>です。作られた場所の環境（変数など）をいっしょに持ち歩きます。timelogのレポートの出力形式にぴったりです。形式のひとつひとつが、小さくまとめられたプログラムになります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "formats = {\n  text: ->(e) { \"#{e[:project].ljust(10)} #{e[:hours]}h\" },\n  csv:  ->(e) { \"#{e[:project]};#{e[:hours]}\" }\n}\n\nentry = { project: \"ProjectX\", hours: 3.5 }\nformats[:csv].call(entry)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>課題：</strong><code>each_project(entries)</code>を書きましょう。このメソッドはエントリをプロジェクトごとにグループ分けし、<code>(project, list)</code>の組をひとつずつ<strong><code>yield</code>で</strong>ブロックに渡します。いわば、1段上のレベルの<code>each</code>です。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def each_project(entries)\n#   ... group_by ... yield ...\n# end\n\n# テスト:\n# each_project([{ project: \"A\", hours: 1.0 }]) do |project, list|\n#   puts \"#{project}: #{list.length} entries\"\n# end\n",
+            "check": "collected = []; each_project([{ project: \"A\", hours: 1.0 }, { project: \"B\", hours: 2.0 }, { project: \"A\", hours: 0.5 }]) { |p, list| collected << [p, list.length] }; collected == [[\"A\", 2], [\"B\", 1]] && code.include?(\"yield\")",
+            "hint": "たとえばこう書けるよ：<code>def each_project(entries); entries.group_by { |e| e[:project] }.each { |project, list| yield(project, list) }; end</code>"
+          }
+        ]
       }
     },
     {
@@ -2247,6 +3287,37 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "class TimelogError < StandardError; end\n\n# def sync_with_retry(service, max:)\n#   attempts = 0\n#   begin\n#     ...\n#   rescue TimelogError\n#     ...\n#   end\n# end\n",
             "check": "c1 = 0; ok_service = lambda { c1 += 1; raise TimelogError, \"broken\" if c1 < 3; \"ok\" }; res = sync_with_retry(ok_service, max: 5); broke = begin; c2 = 0; always_broken = lambda { c2 += 1; raise TimelogError, \"broken\" }; sync_with_retry(always_broken, max: 2); false; rescue TimelogError; c2 == 2; end; res == \"ok\" && c1 == 3 && broke && code.include?(\"retry\")",
             "hint": "<code>attempts += 1</code> in the begin block before <code>service.call</code>; in the rescue: <code>retry if attempts < max</code>, otherwise <code>raise</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "29. エラー処理",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>うまくいかないときは</h2><p><code>raise</code>で例外を発生させ、<code>rescue</code>でそれを捕まえます。<code>ensure</code>の中身は<em>どんなときでも</em>実行されます（後片付けに便利！）。よくできたプログラムは、自分専用の<strong>エラークラスの一族</strong>を定義します。そうすれば呼び出す側は、関係のないエラーまで握りつぶすことなく、「timelogのエラー全部」をまとめて捕まえられます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "module Timelog\n  class Error        < StandardError; end\n  class ParseError   < Error; end\n  class OverlapError < Error; end\nend\n\nbegin\n  raise Timelog::ParseError, \"line 7 is not a time entry\"\nrescue Timelog::Error => e\n  \"caught: #{e.class}: #{e.message}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>例外にするか、戻り値で知らせるか？目安はこうです。「ふつうに起こりうること」（ある行がパターンに合わない）なら<code>nil</code>、「何かが根本的におかしい」（エントリの終わりが始まりより前になっている）なら例外です。継承元はかならず<code>StandardError</code>にして、<code>Exception</code>を直接継承してはいけません。そうしないと、Ctrl-Cまで捕まえてしまいます。それから、一族は自分のモジュールの中に入れておきましょう（<code>Timelog::ParseError</code>）。そうすれば、ほかの誰かのクラスと名前がぶつかることはありません。</p><p><em>一時的な</em>エラー（ネットワークなど！）には<code>retry</code>が使えます。<code>begin</code>ブロックの先頭に戻って、もう一度やり直してくれます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "class TimelogError < StandardError; end\n\nattempts = 0\nflaky_service = lambda do\n  attempts += 1\n  raise TimelogError, \"network error\" if attempts < 3\n  \"data received (attempt #{attempts})\"\nend\n\nbegin\n  flaky_service.call\nrescue TimelogError\n  retry if attempts < 5\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>実際のリトライ処理では、試すたびに待ち時間を長くしていきます（<em>バックオフ</em>）。ブラウザの中には<code>sleep</code>がないため、上の例では待ち時間を入れていません。</p><pre><code>rescue TimelogError\n  wait = 2 ** attempt   # 1s, 2s, 4s, 8s ...\n  sleep(wait)\n  retry if attempt < 5</code></pre></div><div class='task'><strong>課題：</strong><code>sync_with_retry(service, max:)</code>を書きましょう。このメソッドは<code>service.call</code>を呼び出します。サービスが<code>TimelogError</code>を発生させたら、合計で<code>max</code>回まで試します。それでもだめなら、エラーをそのまま外に伝えます（もう<code>retry</code>しなければいいだけです）。成功したら、その結果を返します。</div>"
+          },
+          {
+            "t": "x",
+            "code": "class TimelogError < StandardError; end\n\n# def sync_with_retry(service, max:)\n#   attempts = 0\n#   begin\n#     ...\n#   rescue TimelogError\n#     ...\n#   end\n# end\n",
+            "check": "c1 = 0; ok_service = lambda { c1 += 1; raise TimelogError, \"broken\" if c1 < 3; \"ok\" }; res = sync_with_retry(ok_service, max: 5); broke = begin; c2 = 0; always_broken = lambda { c2 += 1; raise TimelogError, \"broken\" }; sync_with_retry(always_broken, max: 2); false; rescue TimelogError; c2 == 2; end; res == \"ok\" && c1 == 3 && broke && code.include?(\"retry\")",
+            "hint": "beginブロックの中で、<code>service.call</code>の前に<code>attempts += 1</code>しよう。rescueの中では<code>retry if attempts < max</code>、そうでなければ<code>raise</code>だよ。"
           }
         ]
       }
@@ -2362,6 +3433,61 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "<code>to_csv</code>/<code>from_csv</code> like the demos, then <code>File.write(\"entries.csv\", to_csv(data))</code> and as the last line <code>from_csv(File.read(\"entries.csv\"))</code>."
           }
         ]
+      },
+      "ja": {
+        "title": "30. データの保存：フォーマット",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>timelogのデータを永続化する</h2><p>これまで、エントリはメモリの中にしかありませんでした。そこで<strong>シリアライズ</strong>の出番です。データをテキストに変換し、またデータに戻すことをいいます。Rubyには、特に大事な3つのフォーマットが最初から付いています。まずは<strong>JSON</strong>。Web APIの共通語です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\n\nentries = [\n  { project: \"ProjectX\", hours: 3.5 },\n  { project: \"Intern\",   hours: 2.0 }\n]\n\ntext = JSON.pretty_generate(entries)\nputs text\nJSON.parse(text, symbolize_names: true) == entries"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>symbolize_names: true</code>に注目してください。JSONにはシンボルがないので、これを付けないとキーが文字列で返ってきます。<strong>CSV</strong>は表のためのフォーマットです（Excelでおなじみ！）。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"csv\"\n\ncsv_text = CSV.generate do |csv|\n  csv << [\"project\", \"hours\"]\n  entries.each { |e| csv << [e[:project], e[:hours]] }\nend\nputs csv_text\n\nCSV.parse(csv_text, headers: true).map { |row| row[\"project\"] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>そして<strong>YAML</strong>は、設定ファイルの定番です。人間が読むのも書くのも楽なフォーマットです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"yaml\"\n\nconfig = YAML.safe_load(\"rate: 120\\nround_to: 15\\n\")\nconfig[\"rate\"]"
+          },
+          {
+            "t": "h",
+            "html": "<p>いよいよ<strong>ファイル</strong>です！自分のコンピューターでは、Rubyは<code>File.write</code>で保存し、<code>File.read</code>で読み込みます。ここブラウザの中では、そのために小さなファイルシステムをシミュレーションしています。専用のファイルウィンドウ（<code>show_files</code>）付きです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "File.write(\"notizen.txt\", \"buy bacon!\\ntest timelog.\")\nFile.write(\"projekte/plan.txt\", \"Q4: finish timelog\")\n\nshow_files"
+          },
+          {
+            "t": "h",
+            "html": "<p>ファイルをクリックすると、中身をのぞけます。エクスプローラーやFinderと同じですね。ほかの操作も、いつもどおりに使えます。読み込んだり、探したり、あるかどうか確かめたり。</p>"
+          },
+          {
+            "t": "c",
+            "code": "[File.read(\"notizen.txt\"),\n Dir.glob(\"**/*.txt\"),\n File.exist?(\"beispiel.csv\")]"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>このファイルウィンドウはシミュレーションです。自分のコンピューターでは、同じコードのままディスク上の本物のファイルを扱えます。さらに、便利な道具も使えます。</p><pre><code># Block form closes the file automatically:\nFile.open(\"log.txt\", \"a\") { |f| f.puts \"new entry\" }\n\nPathname.new(\"a/b.json\")    # paths as objects\nTempfile.create(\"test\")     # throwaway files for tests\nStringIO.new(\"...\")         # in-memory \"file\"</code></pre></div><div class='task'><strong>課題：</strong><code>to_csv(entries)</code>（ヘッダー行が<code>project,hours</code>のCSVテキストを返す）と、<code>from_csv(text)</code>（キーがシンボルで、時間の値が<code>Float</code>のハッシュに戻す）を書きましょう。次に、<code>data</code>を<code>File.write</code>で<code>entries.csv</code>に保存し、<code>from_csv(File.read(…))</code>で読み戻します。データが1つも失われずに元どおりになれば成功です。終わったら、上のファイルウィンドウ（⟳）ものぞいてみてください！</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"csv\"\n\ndata = [\n  { project: \"A\", hours: 1.5 },\n  { project: \"B\", hours: 2.0 }\n]\n\n# def to_csv(entries)\n#   ...\n# end\n\n# def from_csv(text)\n#   ...  # ヒント: row[\"hours\"].to_f\n# end\n\n# File.write(\"entries.csv\", to_csv(data))\n# from_csv(File.read(\"entries.csv\"))\n",
+            "check": "File.exist?(\"entries.csv\") && from_csv(File.read(\"entries.csv\")) == data && to_csv(data).lines.first.strip == \"project,hours\"",
+            "hint": "<code>to_csv</code>と<code>from_csv</code>はデモと同じ要領で書けるよ。そのあと<code>File.write(\"entries.csv\", to_csv(data))</code>で保存して、最後の行を<code>from_csv(File.read(\"entries.csv\"))</code>にしてね。"
+          }
+        ]
       }
     },
     {
@@ -2417,6 +3543,33 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "require \"optparse\"\n\n# def parse_argv(argv)\n#   options = { week: false, format: \"text\" }\n#   ...\n# end\n",
             "check": "a = parse_argv([\"report\", \"--week\"]); b = parse_argv([\"export\", \"--format\", \"csv\"]); c2 = parse_argv([\"add\"]); a == { command: \"report\", week: true, format: \"text\" } && b == { command: \"export\", week: false, format: \"csv\" } && c2 == { command: \"add\", week: false, format: \"text\" }",
             "hint": "Like the demo – at the end: <code>rest = parser.parse(argv); { command: rest.first, week: options[:week], format: options[:format] }</code>"
+          }
+        ]
+      },
+      "ja": {
+        "title": "31. コマンドラインとgem",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>timelogを本物のツールに</h2><p>自分のコンピューターでは、プログラムはターミナルから起動します：<code>timelog add \"ProjectX\" --from 08:30</code>。プログラム名のあとに書いたものは、すべて文字列の配列として<code>ARGV</code>に入ります。これをきれいに解析するには、標準ライブラリの<strong>OptionParser</strong>が便利です。ここでは、自分で用意した配列で練習しましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"optparse\"\n\nargv = [\"report\", \"--week\", \"--format\", \"csv\"]\n\noptions = { format: \"text\", week: false }\nparser = OptionParser.new do |p|\n  p.on(\"--week\", \"this week only\")        { options[:week] = true }\n  p.on(\"--format FORMAT\", \"text or csv\")  { |f| options[:format] = f }\nend\n\nrest = parser.parse(argv)\n[options, rest]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>parse</code>はオプションを抜き出して、残ったものを返します。ここではコマンドの<code>\"report\"</code>です。おまけに、説明文つきの<code>--help</code>も自動で使えるようになります。</p>"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは：スクリプトからgemへ'><p>インストールできるツールには、決まったフォルダー構成と<code>.gemspec</code>ファイルがあります：</p><pre><code>timelog/\n├── lib/timelog.rb        # the code\n├── bin/timelog           # the command (#!/usr/bin/env ruby)\n├── test/test_timelog.rb\n├── timelog.gemspec       # name, version, author, files\n├── Gemfile               # dependencies (Bundler)\n└── Rakefile              # tasks: rake test</code></pre><pre><code>$ bundle install          # fetches deps, writes Gemfile.lock\n$ rake test               # runs the tests\n$ gem build timelog.gemspec\n$ gem install timelog-0.1.0.gem\n$ timelog report --week   # your tool, everywhere!</code></pre><p>終了コードも忘れずに。失敗したときは<code>exit 1</code>で終わらせれば、ツールを呼び出したスクリプトがエラーに気づけます。</p></div><div class='task'><strong>課題：</strong>OptionParserを使って<code>parse_argv(argv)</code>を書きましょう。対応するのは<code>--week</code>と<code>--format FORMAT</code>（デフォルトは<code>\"text\"</code>）です。戻り値はハッシュ<code>{ command:, week:, format: }</code>で、<code>command</code>には残った引数の最初のものが入ります。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"optparse\"\n\n# def parse_argv(argv)\n#   options = { week: false, format: \"text\" }\n#   ...\n# end\n",
+            "check": "a = parse_argv([\"report\", \"--week\"]); b = parse_argv([\"export\", \"--format\", \"csv\"]); c2 = parse_argv([\"add\"]); a == { command: \"report\", week: true, format: \"text\" } && b == { command: \"export\", week: false, format: \"csv\" } && c2 == { command: \"add\", week: false, format: \"text\" }",
+            "hint": "デモと同じやり方でいいよ。最後はこうしよう：<code>rest = parser.parse(argv); { command: rest.first, week: options[:week], format: options[:format] }</code>"
           }
         ]
       }
@@ -2484,6 +3637,37 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "Four branches: <code>in [\"add\", project, hours]</code>, <code>in [\"report\"]</code>, <code>in [\"export\", format]</code>, <code>else</code>."
           }
         ]
+      },
+      "ja": {
+        "title": "32. パターンマッチ",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>モダンなRuby：case/in</h2><p>Ruby 3からは、<code>case/when</code>に加えて、もっと強力な<strong>パターンマッチ</strong>が<code>case/in</code>で使えます。データの<em>形</em>を調べて、同時にそれを分解してくれる仕組みです。コマンドラインのレッスンで出てきたコマンドの配列にぴったりです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "command = [\"add\", \"ProjectX\", 3.5]\n\ncase command\nin [\"add\", project, hours]\n  \"New entry: #{project} (#{hours}h)\"\nin [\"report\"]\n  \"Generating report\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>パターン<code>[\"add\", project, hours]</code>は、<code>\"add\"</code>で始まる要素3つの配列にだけマッチし、残りの値をその場で変数に入れてくれます。ハッシュも同じように分解できます。型のチェックやガード条件（<code>if</code>）を付けることもできます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "entry = { project: \"ProjectX\", hours: 3.5 }\n\ncase entry\nin { project: String => p, hours: Float => h } if h > 0\n  \"#{p}: #{h}h - looks good\"\nin { hours: }\n  \"Invalid hours: #{hours.inspect}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>モダンなRubyのほかの機能も、これとよくなじみます。1行で書ける<em>エンドレスメソッド</em>（<code>def square(x) = x * x</code>）、変数とキーが同じ名前のときのハッシュの省略記法<code>{ project:, hours: }</code>、そして<code>case</code>の外で分解しながら代入する<code>data => { project: }</code>です。</p><div class='task'><strong>課題：</strong><code>case/in</code>を使って、次のように値を返す<code>dispatch(command)</code>を書きましょう：<code>[\"add\", project, hours]</code> → <code>\"Entry: &lt;project&gt; (&lt;hours&gt;h)\"</code>、<code>[\"report\"]</code> → <code>\"Report\"</code>、<code>[\"export\", format]</code> → <code>\"Export as &lt;format&gt;\"</code>、それ以外（<code>else</code>）→ <code>\"Unknown command\"</code>。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def dispatch(command)\n#   case command\n#   in ...\n#   end\n# end\n",
+            "check": "dispatch([\"add\", \"X\", 2.5]) == \"Entry: X (2.5h)\" && dispatch([\"report\"]) == \"Report\" && dispatch([\"export\", \"csv\"]) == \"Export as csv\" && dispatch([\"dance\"]) == \"Unknown command\" && code.include?(\"in [\")",
+            "hint": "分岐は4つだよ：<code>in [\"add\", project, hours]</code>、<code>in [\"report\"]</code>、<code>in [\"export\", format]</code>、そして<code>else</code>。"
+          }
+        ]
       }
     },
     {
@@ -2549,6 +3733,37 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "<code>fields.all? { |f| value = send(f); !value.nil? && value != \"\" }</code> – inside the define_method block. Then activate the line <code>validates_presence_of :project</code> in <code>Booking</code>."
           }
         ]
+      },
+      "ja": {
+        "title": "33. オブジェクトモデルとメタプログラミング",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Rubyはどうやってメソッドを見つけるのか</h2><p><code>object.method</code>を呼び出すと、Rubyは決まった順番でメソッドを探していきます。まずそのオブジェクトの特異クラス（<em>このオブジェクトだけ</em>が持つメソッドの置き場所）、次にそのクラス、次にMix-inしたモジュール、そしてスーパークラスへと上っていきます。この順番は表示させることもできます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "oddball = \"a normal string\"\n\ndef oddball.shout\n  upcase + \"!!!\"\nend\n\n[oddball.shout, String.ancestors.first(4)]"
+          },
+          {
+            "t": "h",
+            "html": "<p>クラスそのものもオブジェクトなので、コードが<em>コードを作る</em>こともできます。これがメタプログラミングです。<code>define_method</code>は実行時にメソッドを定義し、<code>send</code>は名前が変数に入っているメソッドを呼び出します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Config\n  def initialize(values)\n    @values = values\n  end\n\n  %w[host port language].each do |field|\n    define_method(field) { @values[field] }\n  end\nend\n\nc = Config.new({ \"host\" => \"idogawa.com\", \"port\" => 8011 })\n[c.host, c.send(\"port\")]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Railsなどのフレームワークも、<code>has_many</code>や<code>validates</code>のようなマクロをまさにこうやって作っています。ただし、賢いキツネから大事な忠告をひとつ：<em>凝りに凝ったコードほど、あとで真っ先に消すことになりがちです。</em><code>method_missing</code>というしくみもあります（知らない呼び出しをすべて受け止めます。使うときは必ず<code>respond_to_missing?</code>とセットで）。それでも、はっきり書いた<code>define_method</code>のほうが、ほとんどの場合わかりやすいです。</p><div class='task'><strong>課題：</strong>自分だけのRailsマクロを作りましょう。<code>BaseModel.validates_presence_of(*fields)</code>は、<code>define_method</code>で<code>valid?</code>メソッドを作ります。このメソッドは、指定したフィールドのどれも<code>nil</code>や<code>\"\"</code>でないことを確かめます。下の<code>Booking</code>クラスでは、それをRails風に使います。</div>"
+          },
+          {
+            "t": "x",
+            "code": "class BaseModel\n  # def self.validates_presence_of(*fields)\n  #   define_method(:valid?) do\n  #     ...\n  #   end\n  # end\nend\n\nclass Booking < BaseModel\n  attr_accessor :project, :hours\n  # validates_presence_of :project\nend\n",
+            "check": "b = Booking.new; b.project = \"X\"; b2 = Booking.new; b2.project = \"\"; b3 = Booking.new; b.valid? && !b2.valid? && !b3.valid? && code.include?(\"define_method\")",
+            "hint": "define_methodのブロックの中で<code>fields.all? { |f| value = send(f); !value.nil? && value != \"\" }</code>を使ってみて。それから<code>Booking</code>の中の<code>validates_presence_of :project</code>の行を有効にしよう（先頭の#を消すだけだよ）。"
+          }
+        ]
       }
     },
     {
@@ -2566,7 +3781,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 24 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 28 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -2589,13 +3804,36 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 24 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 28 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
             "code": "module Timelog\n  class Configuration\n    attr_reader :projects, :grid\n\n    def initialize\n      @projects = {}\n      @grid = 60\n    end\n\n    # def project(name, rate:)\n    #   ...\n    # end\n\n    # def round_to(minutes)\n    #   ...\n    # end\n  end\n\n  # def self.configure(&block)\n  #   ...\n  # end\n\n  # def self.config\n  #   ...\n  # end\nend\n\n# Timelog.configure do\n#   project \"ProjectX\", rate: 120\n#   round_to 15\n# end\n",
             "check": "Timelog.configure { project \"A\", rate: 100\n round_to 30 }; Timelog.config.projects[\"A\"] == 100 && Timelog.config.grid == 30 && code.include?(\"instance_eval\")",
             "hint": "<code>def self.configure(&block); @config = Configuration.new; @config.instance_eval(&block); @config; end</code> and <code>def self.config; @config; end</code>. The DSL methods simply write into <code>@projects</code> / <code>@grid</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "34. 自分だけのDSL",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>人気ツールのような設定の書き方</h2><p>Rubyのツールの多くは、エレガントなブロックで設定を書けるようになっています。これを<strong>DSL</strong>（ドメイン固有言語、domain-specific language）と呼びます。その裏にある仕掛けは、たった1つのメソッドです。<code>instance_eval</code>は、ブロックをまるで<em>そのオブジェクトの中に</em>書いたかのように実行します。つまり<code>self</code>が切り替わるのです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Menu\n  attr_reader :dishes\n\n  def initialize\n    @dishes = {}\n  end\n\n  def dish(name, price:)\n    @dishes[name] = price\n  end\nend\n\ndef menu(&block)\n  m = Menu.new\n  m.instance_eval(&block)\n  m\nend\n\ncard = menu do\n  dish \"Bacon\", price: 8\n  dish \"Egg\",   price: 3\nend\n\ncard.dishes"
+          },
+          {
+            "t": "h",
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン28のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+          },
+          {
+            "t": "x",
+            "code": "module Timelog\n  class Configuration\n    attr_reader :projects, :grid\n\n    def initialize\n      @projects = {}\n      @grid = 60\n    end\n\n    # def project(name, rate:)\n    #   ...\n    # end\n\n    # def round_to(minutes)\n    #   ...\n    # end\n  end\n\n  # def self.configure(&block)\n  #   ...\n  # end\n\n  # def self.config\n  #   ...\n  # end\nend\n\n# Timelog.configure do\n#   project \"ProjectX\", rate: 120\n#   round_to 15\n# end\n",
+            "check": "Timelog.configure { project \"A\", rate: 100\n round_to 30 }; Timelog.config.projects[\"A\"] == 100 && Timelog.config.grid == 30 && code.include?(\"instance_eval\")",
+            "hint": "<code>def self.configure(&block); @config = Configuration.new; @config.instance_eval(&block); @config; end</code>と<code>def self.config; @config; end</code>だよ。DSLのメソッドは、<code>@projects</code>や<code>@grid</code>に書き込むだけでいいんだ。"
           }
         ]
       }
@@ -2645,6 +3883,29 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "# This method should round to the NEAREST grid -\n# but it returns round_to(38, 15) => 30 instead of 45. Why?\n\ndef round_to(minutes, grid)\n  (minutes / grid) * grid\nend\n\nround_to(38, 15)\n",
             "check": "round_to(38, 15) == 45 && round_to(8, 15) == 15 && round_to(7, 15) == 0 && round_to(22, 15) == 15 && round_to(60, 60) == 60",
             "hint": "<code>38 / 15</code> is integer division (gives 2, remainder gone!). Convert to Float first, then round: <code>(minutes.to_f / grid).round * grid</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "35. コードの品質とデバッグ",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>きれいなコードのための道具</h2><p>チームで開発するときは、<strong>リンター</strong>がコードのスタイルをそろえてくれます。<em>RuboCop</em>は何百ものルールを細かく設定できる大物、<em>Standard</em>は議論いらずの選択肢です（「全員に同じ設定を」）。どのルールよりも大切なのは、チームがカンマの位置で言い争わなくなることです。さらに、ドキュメントコメントには<em>YARD</em>、お好みで<em>RBS</em>や<em>Sorbet</em>による型シグネチャも使えます。</p><div class='offweb' data-title='自分のコンピューターでは'><pre><code>$ gem install standard\n$ standardrb            # checks the style\n$ standardrb --fix      # repairs a lot by itself\n\n# And for breakpoint debugging right in your code:\nrequire \"debug\"\nbinding.break           # or binding.irb - opens a console RIGHT HERE</code></pre></div><p>でも、デバッグはどこでもできます。もちろんここでも。万能の道具は<code>p</code>です。引数を出力して、<em>しかもそれをそのまま返す</em>ので、どんなメソッドチェーンの途中にもこっそり差し込めます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "values = [3, 1, 4, 1, 5, 9]\n\nvalues.select { |x| p(x).odd? }.sum"
+          },
+          {
+            "t": "h",
+            "html": "<p>ほかにも便利な道具があります。ハッシュを見やすく表示する<code>pp</code>、オブジェクトのありのままの姿を見せる<code>obj.inspect</code>、そして今のメソッドを誰が呼び出したかを教えてくれる<code>caller</code>です。</p><div class='task'><strong>課題：</strong>下のセルには、よくあるバグが隠れています。<code>round_to</code>は分を<strong>いちばん近い</strong>刻みに丸めるはずなのに（<code>round_to(38, 15)</code> → <code>45</code>）、いつも切り捨ててしまいます。バグを見つけて（<code>p</code>を使ってみましょう！）、メソッドを直してください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# このメソッドは「いちばん近い」刻みに丸めるはず。\n# なのにround_to(38, 15)が45ではなく30を返す。なぜ？\n\ndef round_to(minutes, grid)\n  (minutes / grid) * grid\nend\n\nround_to(38, 15)\n",
+            "check": "round_to(38, 15) == 45 && round_to(8, 15) == 15 && round_to(7, 15) == 0 && round_to(22, 15) == 15 && round_to(60, 60) == 60",
+            "hint": "<code>38 / 15</code>は整数どうしの割り算だよ（答えは2で、余りは消えちゃう！）。先にFloatに変換してから丸めよう：<code>(minutes.to_f / grid).round * grid</code>"
           }
         ]
       }
@@ -2744,6 +4005,53 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "<code>entries.group_by { |e| e[:project] }.transform_values { |l| l.sum { |e| e[:hours] } }</code> – one pass instead of one per project."
           }
         ]
+      },
+      "ja": {
+        "title": "36. パフォーマンスと並行処理",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>まず測って、それから最適化</h2><p>黄金律は<strong>決して推測しないこと</strong>です。Rubyの<code>Benchmark</code>を使えば、本当に遅いのはどこかを測れます。たいてい、思っていたのとは別の場所です。定番の例を見てみましょう。文字列に<code>+=</code>を使うと毎回<em>新しい</em>文字列が作られますが、シャベル演算子<code>&lt;&lt;</code>は同じ文字列を伸ばしていきます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"benchmark\"\n\nn = 5_000\nplus = Benchmark.realtime do\n  s = \"\"\n  n.times { s += \"x\" }\nend\nshovel = Benchmark.realtime do\n  s = \"\"\n  n.times { s << \"x\" }\nend\n\n{ plus: plus.round(4), shovel: shovel.round(4) }"
+          },
+          {
+            "t": "h",
+            "html": "<p>この背景には、<strong>アロケーション</strong>（メモリの割り当て）という大きなテーマがあります。不要な中間オブジェクトは、ひとつひとつが時間とメモリを消費します。そして何より速い最適化は、そもそも実行されないコードです。</p><div class='offweb' data-title='自分のコンピューターでは：プロファイラー'><pre><code>$ gem install benchmark-ips stackprof\n# benchmark-ips: how many times per second? (more telling than one run)\n# stackprof:     WHERE does the program spend its time?</code></pre></div><p><strong>並行処理：</strong><code>Thread</code>を使うと、Rubyは複数のことを「同時に」こなせます。MRIではすべてのスレッドが1つのインタープリターを共有している（<em>GVL</em>）ので、効果が出るのはおもに<em>待ち時間</em>のある処理（ネットワーク、ファイル）です。CPUを使う処理を並列に動かしたいときは<em>Ractor</em>があります。ブラウザには本物のスレッドがないため、ここでの<code>Thread</code>と<code>sleep</code>は<strong>シミュレーション</strong>です（協調的に、仮想の時間で動きます）。でもAPIは本物と同じです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "fetches = [\"clients\", \"projects\", \"times\"].map do |name|\n  Thread.new do\n    sleep 1   # ネットワークからのダウンロードのシミュレーション\n    \"#{name}: loaded\"\n  end\nend\n\nfetches.map(&:value)"
+          },
+          {
+            "t": "h",
+            "html": "<p>3つの「ダウンロード」を<code>Thread.new</code>で始めて、<code>value</code>で結果を集めました。自分のコンピューターなら、かかる時間は3回ぶんではなく<em>1回</em>ぶんで済みます。しかも、ここでシミュレーションしているスレッドは<code>sleep</code>のたびに順番を譲り合うので、処理が交互に進む様子を出力で確かめることもできます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "threads = 2.times.map do |i|\n  Thread.new do\n    3.times do |n|\n      puts \"thread #{i}: step #{n}\"\n      sleep 0.1\n    end\n  end\nend\nthreads.each(&:join)\n\"done\""
+          },
+          {
+            "t": "h",
+            "html": "<p>ちなみに、このシミュレーションの中身は<strong>Fiber</strong>でできています。Fiberは、制御を明示的に受け渡しながら協調して動くミニプログラムで、多くの非同期ライブラリの土台になっています。Fiberを直接使うこともできます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "narrator = Fiber.new do\n  Fiber.yield \"Chapter 1: Bacon\"\n  Fiber.yield \"Chapter 2: More bacon\"\n  \"The end\"\nend\n\n[narrator.resume, narrator.resume, narrator.resume]"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>課題：</strong>下の<code>slow_report</code>は、エントリを<strong>プロジェクトごとに1回ずつ</strong>調べ直しています。プロジェクトが多いと、処理量は2乗のペースで増えてしまいます。<code>group_by</code>で<strong>1回だけ</strong>走査して同じ結果を返す<code>fast_report</code>を書きましょう。違いをBenchmarkで測ってみてください！</div>"
+          },
+          {
+            "t": "x",
+            "code": "entries = 500.times.map { |i| { project: \"P#{i % 5}\", hours: 1.0 } }\n\ndef slow_report(entries)\n  entries.map { |e| e[:project] }.uniq.to_h do |p|\n    [p, entries.select { |e| e[:project] == p }.sum { |e| e[:hours] }]\n  end\nend\n\n# def fast_report(entries)\n#   ...\n# end\n\n# require \"benchmark\"\n# { slow: Benchmark.realtime { 50.times { slow_report(entries) } }.round(3),\n#   fast: Benchmark.realtime { 50.times { fast_report(entries) } }.round(3) }\n",
+            "check": "fast_report(entries) == slow_report(entries) && code.include?(\"group_by\")",
+            "hint": "<code>entries.group_by { |e| e[:project] }.transform_values { |l| l.sum { |e| e[:hours] } }</code>を使ってみて。プロジェクトごとに1回ずつじゃなくて、全体を1回たどるだけで済むよ。"
+          }
+        ]
       }
     },
     {
@@ -2771,7 +4079,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 27 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 31 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
@@ -2798,7 +4106,34 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 27 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 31 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+          }
+        ]
+      },
+      "ja": {
+        "title": "37. フィナーレ：Webで動くtimelog",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>すべてを組み合わせる：Webインターフェース</h2><p>最後に、これまで学んだ<em>すべて</em>をつなげましょう。集計にはコレクション、ルーティングにはRoda、テンプレート言語には<strong>ERB</strong>、そして舞台はミニブラウザです。ERBは、Rubyを埋め込んだHTMLです。<code>&lt;%= … %&gt;</code>は値を差し込み、<code>&lt;% … %&gt;</code>はコードを実行します（ループも書けます！）：</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"roda\"\nrequire \"roda\"\nrequire \"erb\"\n\nENTRIES = [\n  { project: \"ProjectX\", hours: 3.5 },\n  { project: \"Intern\",   hours: 2.0 },\n  { project: \"ProjectX\", hours: 3.0 }\n]\n\nTEMPLATE = ERB.new(<<~HTML)\n  <h1>timelog</h1>\n  <table border='1' cellpadding='6'>\n    <tr><th>Project</th><th>Hours</th></tr>\n    <% report.each do |project, hours| %>\n      <tr>\n        <td><a href='/project/<%= project %>'><%= project %></a></td>\n        <td><%= hours %></td>\n      </tr>\n    <% end %>\n  </table>\nHTML\n\nclass TimelogWeb < Roda\n  route do |r|\n    r.root do\n      report = ENTRIES.group_by { |e| e[:project] }\n                      .transform_values { |l| l.sum { |e| e[:hours] } }\n      TEMPLATE.result(binding)\n    end\n  end\nend\n\nshow_browser TimelogWeb, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p><code>TEMPLATE.result(binding)</code>は、テンプレートからルートのローカル変数を使えるようにします。こうして<code>report</code>がHTMLまで届くのです。Rails、Sinatra、Rodaのビューも、まさにこの仕組みで動いています（実際には、便利なヘルパーがいろいろ用意されていますが）。</p><div class='task'><strong>課題：</strong>プロジェクト名はもうリンクになっています！ルート<code>r.get \"project\", String do |name| … end</code>を追加しましょう。プロジェクト名を見出しにして、そのプロジェクトの時間をすべて並べた詳細ページを表示します（たとえば<code>map</code>/<code>join</code>を使って）。知らないパスは404のままにしておきます。これでtimelogは完成です。あちこちクリックしてみてください！</div>"
+          },
+          {
+            "t": "x",
+            "code": "install_gem \"roda\"\nrequire \"roda\"\nrequire \"erb\"\n\nENTRIES = [\n  { project: \"ProjectX\", hours: 3.5 },\n  { project: \"Intern\",   hours: 2.0 },\n  { project: \"ProjectX\", hours: 3.0 }\n]\n\nclass TimelogWeb < Roda\n  route do |r|\n    r.root do\n      \"<h1>timelog</h1><a href='/project/ProjectX'>ProjectX</a> <a href='/project/Intern'>Intern</a>\"\n    end\n\n    # r.get \"project\", String do |name|\n    #   matching = ENTRIES.select { ... }\n    #   \"<h2>...</h2>...\"\n    # end\n  end\nend\n\nshow_browser TimelogWeb, \"/\"\n",
+            "check": "s1, b1 = mock_get(TimelogWeb, \"/\"); s2, b2 = mock_get(TimelogWeb, \"/project/ProjectX\"); s3, _ = mock_get(TimelogWeb, \"/nonsense\"); s1 == 200 && b1.include?(\"ProjectX\") && s2 == 200 && b2.include?(\"ProjectX\") && b2.include?(\"3.5\") && s3 == 404",
+            "hint": "たとえばこう書けるよ：<code>r.get \"project\", String do |name|; matching = ENTRIES.select { |e| e[:project] == name }; \"&lt;h2&gt;#{name}&lt;/h2&gt;\" + matching.map { |e| \"#{e[:hours]}h\" }.join(\", \"); end</code>"
+          },
+          {
+            "t": "h",
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン31で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }

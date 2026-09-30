@@ -24,8 +24,9 @@ module SandboxFS
       DEMO_FILES.each { |k, v| store[k] = v.dup }
     end
 
+    # "C:/..." counts as absolute too, for the offline harness on Windows
     def virtual?(path)
-      !path.to_s.start_with?("/")
+      !(path.to_s.start_with?("/") || File.absolute_path?(path.to_s))
     end
 
     def write(path, content)
