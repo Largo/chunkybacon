@@ -29,12 +29,11 @@ OPTIONAL_NATIVE_DEPS = { "ruby_pptx" => %w[nokogiri] }
 # gems built from a local checkout instead of downloaded: nokogiri is
 # nokogiri-pure's nokogiri.gemspec (named "nokogiri" so that gems depending
 # on nokogiri resolve to it). Set NOKOGIRI_PURE to point elsewhere.
-# bigdecimal-pure keeps its own name; BrowserGems::SUBSTITUTES maps a
-# dependency on bigdecimal to it.
+# (bigdecimal-pure, the other stand-in, is on rubygems.org under its own
+# name; BrowserGems::SUBSTITUTES maps a dependency on bigdecimal to it.)
 WORKSPACE = File.expand_path("../../../..", __dir__)
 LOCAL_GEMS = {
-  "nokogiri" => File.join(ENV.fetch("NOKOGIRI_PURE", "#{WORKSPACE}/nokogiri-pure"), "nokogiri.gemspec"),
-  "bigdecimal-pure" => File.join(ENV.fetch("BIGDECIMAL_PURE", "#{WORKSPACE}/bigdecimal-pure"), "bigdecimal-pure.gemspec")
+  "nokogiri" => File.join(ENV.fetch("NOKOGIRI_PURE", "#{WORKSPACE}/nokogiri-pure"), "nokogiri.gemspec")
 }
 
 CACHE_DIR = File.expand_path("../html/gems/cache", __dir__)
