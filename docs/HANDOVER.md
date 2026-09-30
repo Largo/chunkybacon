@@ -42,7 +42,8 @@ html/
                         Fiber-based Thread, FileWatch (downloads)
   rack_playground.rb    show_browser: talks Rack to Sinatra/Roda apps, mock_get
   shoes_dom.rb          Lacci (Shoes) display service drawing into the page
-  assets/               app.css, CodeMirror, three.js (vendored), the fox SVG
+  assets/               app.css, CodeMirror, three.js (vendored), the fox SVG,
+                        fonts/ (self-hosted web fonts + fonts.css, OFL 1.1)
   gems/cache/           .gem files + manifest.json (instant offline installs)
 nginx.conf              static files + same-origin bridges (rubygems, ruby-lang)
 docker-compose.yml

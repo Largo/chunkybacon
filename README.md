@@ -91,4 +91,5 @@ Course content: CC BY-NC-SA 4.0, © [Andi Idogawa](https://idogawa.com).
 The phrase "Chunky Bacon" is an homage to _why's (poignant) guide to
 Ruby_ by why the lucky stiff — fondly remembered. The mascot is an
 original character. Bundled third-party components (ruby.wasm build,
-CodeMirror, three.js, cached gems) remain under their own licenses.
+CodeMirror, three.js, cached gems, the web fonts under SIL OFL 1.1) remain
+under their own licenses.

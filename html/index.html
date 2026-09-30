@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ruby lernen mit Chunky Bacon</title>
-    <link rel="stylesheet" href="assets/app.css">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Atkinson Hyperlegible Next/Mono for everything the learner reads and
+         types, Shantell Sans for Chunky's own voice (see app.css); self-hosted,
+         so a visit makes no third-party requests -->
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
     <script>
       // The Ruby sources (main.rb and what it require_relative's) are loaded
       // by ruby.wasm with fetch(), which reuses a cached copy for as long as
@@ -29,6 +33,7 @@
     <meta name="author" content="Andi Idogawa">
     <meta name="image" property="og:image" content="assets/chunky.svg">
     <link rel="stylesheet" href="assets/codemirror.css">
+    <link rel="stylesheet" href="assets/app.css">
     <script src="assets/codemirror.js"></script>
     <script src="assets/codemirror-ruby.js"></script>
     <script src="lessons.js"></script>
@@ -51,6 +56,7 @@
       <img class="spinner-image" src="assets/chunky.svg" alt="Chunky Bacon Fuchs">
       <h1 id="spinnerTitle">Ruby lernen mit Chunky Bacon</h1>
       <p id="spinnerText">Ruby wird geladen … / Loading Ruby … (einmalig / one-time, ~32&nbsp;MB)</p>
+      <div class="load-bar" aria-hidden="true"></div>
     </div>
 
     <div id="app" style="display:none">
@@ -60,6 +66,7 @@
           <h1 id="siteTitle">Ruby lernen mit Chunky Bacon</h1>
           <p id="siteSubtitle"></p>
         </div>
+        <button id="navJump" class="nav-jump" type="button" title="Lektionen / Lessons" aria-label="Lektionen / Lessons">☰</button>
         <select id="langSelect" title="Sprache / Language">
           <option value="de">Deutsch</option>
           <option value="en">English</option>
@@ -196,6 +203,26 @@
       requestAnimationFrame(function () { requestAnimationFrame(go); });
       setTimeout(go, 150);
     };
+
+    // On wide screens the lesson index scrolls on its own (app.css). Keep the
+    // current lesson in view there whenever main.rb re-renders the index -
+    // scrolling only the sidebar, never the page (on phones the index sits
+    // below the lesson and does not scroll by itself).
+    new MutationObserver(function () {
+      var bar = document.querySelector(".sidebar");
+      var active = document.querySelector("#lessonNav a.active");
+      if (!bar || !active || bar.scrollHeight <= bar.clientHeight) return;
+      var top = active.offsetTop, bottom = top + active.offsetHeight;
+      if (top < bar.scrollTop || bottom > bar.scrollTop + bar.clientHeight) {
+        bar.scrollTop = top - bar.clientHeight / 3;
+      }
+    }).observe(document.getElementById("lessonNav"), { childList: true });
+
+    // phones only (app.css): the header button jumps down to the index
+    document.getElementById("navJump").addEventListener("click", function () {
+      var calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      document.querySelector(".sidebar").scrollIntoView({ behavior: calm ? "auto" : "smooth" });
+    });
 
     // Per-cell CodeMirror helpers called from Ruby (main.rb)
     window.cellEditors = {};

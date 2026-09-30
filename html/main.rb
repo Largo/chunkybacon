@@ -446,6 +446,9 @@ class ChunkyApp
     render_nav
     render_lesson
     show_bubble(ui["welcome"], nil)
+    # a new lesson starts at its top, wherever the old one was scrolled to
+    # (on phones the index sits below the lesson)
+    $window.scrollTo(0, 0)
   end
 
   def go_to_next_lesson
