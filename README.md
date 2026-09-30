@@ -6,10 +6,11 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **37 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **38 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics,
-  PowerPoint decks with [ruby_pptx](https://github.com/Largo/ruby_pptx), and
+  PowerPoint decks with [ruby_pptx](https://github.com/Largo/ruby_pptx),
+  PDFs with Prawn and HexaPDF, and
   a project track that builds a small time tracker.
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
@@ -36,7 +37,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   back to REXML).
 - **Downloads**: any file a cell writes - `deck.save("chunky.pptx")`,
   `File.write("notes.txt", …)` - appears below the cell as a download link;
-  `download_file(data, "name")` offers data that never went through a file.
+  `download_file(data, "name")` offers data that never went through a file,
+  and `show_pdf` puts a PDF in the browser's own viewer below the cell.
 - **Workshop**: beside the lessons, a small IDE for your own multi-file
   programs - `require_relative` between files, `File.read`/`File.write` on
   the project, input for `gets` - with every widget below available.

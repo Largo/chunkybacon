@@ -2377,6 +2377,155 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "pdf",
+      "section": {
+        "de": "PDFs mit Prawn & HexaPDF",
+        "en": "PDFs with Prawn & HexaPDF",
+        "ja": "PrawnとHexaPDFでPDF"
+      },
+      "de": {
+        "title": "21. PDFs mit Prawn & HexaPDF",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>PDFs aus Ruby</h2><p>Rechnungen, Tickets, Urkunden – früher oder später muss fast jedes Programm ein PDF erzeugen. Ruby hat dafür zwei starke Gems: <strong>Prawn</strong> zeichnet PDFs mit einer freundlichen DSL, und <strong>HexaPDF</strong> kann bestehende PDFs auch <em>öffnen</em> und verändern. Beide sind reines Ruby, laufen also direkt hier in deinem Browser:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"prawn\"\nrequire \"prawn\"\n\npdf = Prawn::Document.new\npdf.text \"Chunky Bacons Frühstücksclub\", size: 24, style: :bold\npdf.move_down 10\npdf.text \"Mitgliederausweis für Kaz\"\npdf.stroke_horizontal_rule\nshow_pdf pdf"
+          },
+          {
+            "t": "h",
+            "html": "<p>Was ist passiert?</p><ul><li><code>Prawn::Document.new</code> beginnt ein leeres Dokument mit einer Seite.</li><li><code>text</code> schreibt einen Absatz – <code>size:</code> und <code>style:</code> sind Keyword-Argumente. Lange Zeilen bricht Prawn selbst um, und ist eine Seite voll, beginnt es eine neue.</li><li><code>move_down 10</code> lässt 10 <strong>Punkte</strong> Abstand: PDF misst in Punkten, 72 pro Zoll (eine A4-Seite ist 595 × 842 gross).</li><li><code>show_pdf</code> ist ein Helfer dieser Seite und zeigt das PDF unter der Zelle. Auf deinem Computer schreibst du es in eine Datei: <code>pdf.render_file \"ausweis.pdf\"</code>.</li></ul><p>Statt vor alles <code>pdf.</code> zu schreiben, kannst du <code>Prawn::Document.generate</code> einen Block geben – am Ende schreibt es die Datei:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Prawn::Document.generate(\"speisekarte.pdf\", page_size: \"A4\") do\n  text \"Speisekarte\", size: 28, align: :center\n  move_down 20\n  { \"Speck mit Ei\" => 9.5, \"Pfannkuchen\" => 7.0, \"Kaffee\" => 3.2 }.each do |gericht, preis|\n    float { text gericht }\n    text format(\"%.2f Fr.\", preis), align: :right\n  end\n  start_new_page\n  text \"Seite zwei: das Kleingedruckte\", size: 10\n  number_pages \"<page> / <total>\", at: [bounds.right - 50, 0]\nend\nshow_pdf \"speisekarte.pdf\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 35). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"hexapdf\"\nrequire \"hexapdf\"\n\ndoc = HexaPDF::Document.open(\"speisekarte.pdf\")\ndoc.pages.each do |seite|\n  leinwand = seite.canvas(type: :overlay)\n  leinwand.fill_color(193, 74, 46)\n  leinwand.font(\"Helvetica\", size: 48)\n  leinwand.text(\"CHUNKY!\", at: [170, 420])\nend\ndoc.write(\"speisekarte-gestempelt.pdf\")\nshow_pdf \"speisekarte-gestempelt.pdf\"\ndoc.pages.count"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>seite.canvas(type: :overlay)</code> ist eine Zeichenfläche <em>über</em> dem, was schon auf der Seite steht. Ihr Nullpunkt <code>[0, 0]</code> ist die linke untere Ecke – in PDF zählt y nach oben. <code>fill_color(193, 74, 46)</code> ist Speckrot in RGB.</p><p>Zusammenfügen ist genauso kurz: Jede Seite mehrerer Dokumente in ein neues importieren.</p>"
+          },
+          {
+            "t": "c",
+            "code": "beide = HexaPDF::Document.new\n[\"speisekarte.pdf\", \"speisekarte-gestempelt.pdf\"].each do |datei|\n  quelle = HexaPDF::Document.open(datei)\n  quelle.pages.each { |seite| beide.pages << beide.import(seite) }\nend\nbeide.write(\"beide.pdf\")\nshow_pdf beide\nbeide.pages.count"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install prawn hexapdf</code>, und <code>render_file</code> und <code>write</code> speichern echte Dateien. HexaPDF bringt auch ein Kommandozeilen-Werkzeug mit: <code>hexapdf info speisekarte.pdf</code>, <code>hexapdf merge</code>, <code>hexapdf optimize</code>.</p><p><strong>Schriften:</strong> Die 14 Standardschriften von PDF (Helvetica, Times, Courier …) kennen nur westeuropäische Buchstaben. Für andere Schriften – etwa Japanisch – bettest du eine TrueType-Schrift ein: <code>pdf.font \"NotoSansJP-Regular.ttf\"</code> in Prawn, <code>canvas.font(\"NotoSansJP-Regular.ttf\")</code> in HexaPDF.</p><p><strong>Lizenzen:</strong> Prawn steht unter der Ruby-Lizenz oder der GPL. HexaPDF steht unter der <strong>AGPL</strong>: Gibst du ein Programm weiter, das HexaPDF benutzt, oder bietest es als Webdienst an, verlangt die AGPL in aller Regel, dass du auch dessen Quellcode unter der AGPL veröffentlichst – ausser du kaufst die kommerzielle Lizenz von HexaPDF.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky hat sich eine Urkunde verdient. Schreibe mit Prawn <code>urkunde.pdf</code> mit genau <strong>3 Seiten</strong>: <code>Stufe 1</code> auf der ersten, <code>Stufe 2</code> auf der zweiten, <code>Stufe 3</code> auf der dritten.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# urkunde.pdf: 3 Seiten – \"Stufe 1\", \"Stufe 2\", \"Stufe 3\"\n",
+            "check": "downloads.include?(\"urkunde.pdf\") && code.include?(\"Prawn\") && (require \"hexapdf\"; HexaPDF::Document.open(\"urkunde.pdf\") { |d| d.pages.count } == 3)",
+            "hint": "Beginne mit <code>Prawn::Document.generate(\"urkunde.pdf\") do … end</code> und setze <code>start_new_page</code> zwischen die drei <code>text</code>-Zeilen."
+          }
+        ]
+      },
+      "en": {
+        "title": "21. PDFs with Prawn & HexaPDF",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>PDFs from Ruby</h2><p>Invoices, tickets, certificates – sooner or later almost every program has to produce a PDF. Ruby has two strong gems for it: <strong>Prawn</strong> draws PDFs with a friendly DSL, and <strong>HexaPDF</strong> can also <em>open</em> existing PDFs and change them. Both are pure Ruby, so they run right here in your browser:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"prawn\"\nrequire \"prawn\"\n\npdf = Prawn::Document.new\npdf.text \"Chunky Bacon's Breakfast Club\", size: 24, style: :bold\npdf.move_down 10\npdf.text \"Membership card for Kaz\"\npdf.stroke_horizontal_rule\nshow_pdf pdf"
+          },
+          {
+            "t": "h",
+            "html": "<p>What happened?</p><ul><li><code>Prawn::Document.new</code> starts an empty document with one page.</li><li><code>text</code> writes a paragraph – <code>size:</code> and <code>style:</code> are keyword arguments. Prawn wraps long lines by itself and starts a new page when one is full.</li><li><code>move_down 10</code> leaves 10 <strong>points</strong> of space: PDF measures in points, 72 to the inch (an A4 page is 595 × 842).</li><li><code>show_pdf</code> is a helper of this site that shows the PDF below the cell. On your computer you would write it to a file: <code>pdf.render_file \"card.pdf\"</code>.</li></ul><p>Instead of putting <code>pdf.</code> in front of everything, you can give <code>Prawn::Document.generate</code> a block – at the end it writes the file:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Prawn::Document.generate(\"menu.pdf\", page_size: \"A4\") do\n  text \"Menu\", size: 28, align: :center\n  move_down 20\n  { \"Bacon & eggs\" => 9.5, \"Pancakes\" => 7.0, \"Coffee\" => 3.2 }.each do |dish, price|\n    float { text dish }\n    text format(\"$%.2f\", price), align: :right\n  end\n  start_new_page\n  text \"Page two: the fine print\", size: 10\n  number_pages \"<page> / <total>\", at: [bounds.right - 50, 0]\nend\nshow_pdf \"menu.pdf\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 35 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"hexapdf\"\nrequire \"hexapdf\"\n\ndoc = HexaPDF::Document.open(\"menu.pdf\")\ndoc.pages.each do |page|\n  canvas = page.canvas(type: :overlay)\n  canvas.fill_color(193, 74, 46)\n  canvas.font(\"Helvetica\", size: 48)\n  canvas.text(\"CHUNKY!\", at: [170, 420])\nend\ndoc.write(\"menu-stamped.pdf\")\nshow_pdf \"menu-stamped.pdf\"\ndoc.pages.count"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>page.canvas(type: :overlay)</code> is a drawing surface <em>on top of</em> what is already on the page. Its origin <code>[0, 0]</code> is the bottom left corner – in PDF, y counts upwards. <code>fill_color(193, 74, 46)</code> is bacon red in RGB.</p><p>Merging is just as short: import every page of several documents into a new one.</p>"
+          },
+          {
+            "t": "c",
+            "code": "merged = HexaPDF::Document.new\n[\"menu.pdf\", \"menu-stamped.pdf\"].each do |file|\n  source = HexaPDF::Document.open(file)\n  source.pages.each { |page| merged.pages << merged.import(page) }\nend\nmerged.write(\"both.pdf\")\nshow_pdf merged\nmerged.pages.count"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install prawn hexapdf</code>, and <code>render_file</code> and <code>write</code> save real files. HexaPDF also comes with a command line tool: <code>hexapdf info menu.pdf</code>, <code>hexapdf merge</code>, <code>hexapdf optimize</code>.</p><p><strong>Fonts:</strong> the 14 standard PDF fonts (Helvetica, Times, Courier …) only know Western European letters. For other scripts – Japanese, say – embed a TrueType font: <code>pdf.font \"NotoSansJP-Regular.ttf\"</code> in Prawn, <code>canvas.font(\"NotoSansJP-Regular.ttf\")</code> in HexaPDF.</p><p><strong>Licences:</strong> Prawn comes under Ruby's licence or the GPL. HexaPDF comes under the <strong>AGPL</strong>: if you pass on a program that uses it, or offer one as a web service, the AGPL generally requires you to publish that program's source under the AGPL too – unless you buy HexaPDF's commercial licence.</p></div><div class='task'><strong>Task:</strong> Chunky has earned a certificate. Use Prawn to write <code>certificate.pdf</code> with exactly <strong>3 pages</strong>: <code>Level 1</code> on the first, <code>Level 2</code> on the second, <code>Level 3</code> on the third.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# certificate.pdf: 3 pages – \"Level 1\", \"Level 2\", \"Level 3\"\n",
+            "check": "downloads.include?(\"certificate.pdf\") && code.include?(\"Prawn\") && (require \"hexapdf\"; HexaPDF::Document.open(\"certificate.pdf\") { |d| d.pages.count } == 3)",
+            "hint": "Start with <code>Prawn::Document.generate(\"certificate.pdf\") do … end</code> and put <code>start_new_page</code> between the three <code>text</code> lines."
+          }
+        ]
+      },
+      "ja": {
+        "title": "21. PrawnとHexaPDFでPDF",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>RubyでPDFを作る</h2><p>請求書、チケット、修了証。遅かれ早かれ、ほとんどのプログラムはPDFを作ることになります。Rubyにはそのための強力なgemが2つあります。<strong>Prawn</strong>はわかりやすいDSLでPDFを描き、<strong>HexaPDF</strong>は既存のPDFを<em>開いて</em>変更することもできます。どちらもピュアRubyなので、このブラウザの中でそのまま動きます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"prawn\"\nrequire \"prawn\"\n\npdf = Prawn::Document.new\npdf.text \"Chunky Bacon's Breakfast Club\", size: 24, style: :bold\npdf.move_down 10\npdf.text \"Membership card for Kaz\"\npdf.stroke_horizontal_rule\nshow_pdf pdf"
+          },
+          {
+            "t": "h",
+            "html": "<p>何が起きたのでしょう？</p><ul><li><code>Prawn::Document.new</code>は、1ページの空のドキュメントを作ります。</li><li><code>text</code>は段落を書きます。<code>size:</code>と<code>style:</code>はキーワード引数です。長い行はPrawnが自動で折り返し、ページがいっぱいになると新しいページを始めます。</li><li><code>move_down 10</code>は10<strong>ポイント</strong>の余白を空けます。PDFの単位はポイントで、1インチが72ポイントです（A4のページは595 × 842）。</li><li><code>show_pdf</code>はこのサイトのヘルパーで、PDFをセルの下に表示します。自分のコンピューターでは、<code>pdf.render_file \"card.pdf\"</code>でファイルに書き出します。</li></ul><p>毎回<code>pdf.</code>を付ける代わりに、<code>Prawn::Document.generate</code>にブロックを渡すこともできます。最後にファイルを書き出してくれます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "Prawn::Document.generate(\"menu.pdf\", page_size: \"A4\") do\n  text \"Menu\", size: 28, align: :center\n  move_down 20\n  { \"Bacon & eggs\" => 9.5, \"Pancakes\" => 7.0, \"Coffee\" => 3.2 }.each do |dish, price|\n    float { text dish }\n    text format(\"$%.2f\", price), align: :right\n  end\n  start_new_page\n  text \"Page two: the fine print\", size: 10\n  number_pages \"<page> / <total>\", at: [bounds.right - 50, 0]\nend\nshow_pdf \"menu.pdf\""
+          },
+          {
+            "t": "h",
+            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン35で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"hexapdf\"\nrequire \"hexapdf\"\n\ndoc = HexaPDF::Document.open(\"menu.pdf\")\ndoc.pages.each do |page|\n  canvas = page.canvas(type: :overlay)\n  canvas.fill_color(193, 74, 46)\n  canvas.font(\"Helvetica\", size: 48)\n  canvas.text(\"CHUNKY!\", at: [170, 420])\nend\ndoc.write(\"menu-stamped.pdf\")\nshow_pdf \"menu-stamped.pdf\"\ndoc.pages.count"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>page.canvas(type: :overlay)</code>は、ページにすでにあるものの<em>上に</em>重ねて描くキャンバスです。原点<code>[0, 0]</code>は左下の角で、PDFではyが上に向かって増えます。<code>fill_color(193, 74, 46)</code>は、RGBで表したベーコンの赤です。</p><p>結合も同じくらい簡単です。複数のドキュメントの全ページを、新しいドキュメントにインポートします。</p>"
+          },
+          {
+            "t": "c",
+            "code": "merged = HexaPDF::Document.new\n[\"menu.pdf\", \"menu-stamped.pdf\"].each do |file|\n  source = HexaPDF::Document.open(file)\n  source.pages.each { |page| merged.pages << merged.import(page) }\nend\nmerged.write(\"both.pdf\")\nshow_pdf merged\nmerged.pages.count"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p><code>gem install prawn hexapdf</code>を実行すれば、<code>render_file</code>や<code>write</code>で本物のファイルとして保存できます。HexaPDFにはコマンドラインツールも付いています：<code>hexapdf info menu.pdf</code>、<code>hexapdf merge</code>、<code>hexapdf optimize</code>。</p><p><strong>フォント：</strong>PDFの14の標準フォント（Helvetica、Times、Courierなど）が扱えるのは、西ヨーロッパの文字だけです。日本語などほかの文字を使うには、TrueTypeフォントを埋め込みます。Prawnでは<code>pdf.font \"NotoSansJP-Regular.ttf\"</code>、HexaPDFでは<code>canvas.font(\"NotoSansJP-Regular.ttf\")</code>です。このノートブックにはフォントファイルがないので、ここでは英語の文字列を使っています。</p><p><strong>ライセンス：</strong>PrawnはRubyライセンスまたはGPLです。HexaPDFは<strong>AGPL</strong>です。HexaPDFを使ったプログラムを配布したり、Webサービスとして提供したりする場合、AGPLでは原則として、そのプログラムのソースコードもAGPLで公開する必要があります。そうしたくない場合は、HexaPDFの商用ライセンスを購入します。</p></div><div class='task'><strong>課題：</strong>Chunkyが修了証をもらいました。Prawnを使って、ちょうど<strong>3ページ</strong>の<code>certificate.pdf</code>を書き出しましょう。1ページ目に<code>Level 1</code>、2ページ目に<code>Level 2</code>、3ページ目に<code>Level 3</code>と書きます。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# certificate.pdf：3ページ – \"Level 1\"、\"Level 2\"、\"Level 3\"\n",
+            "check": "downloads.include?(\"certificate.pdf\") && code.include?(\"Prawn\") && (require \"hexapdf\"; HexaPDF::Document.open(\"certificate.pdf\") { |d| d.pages.count } == 3)",
+            "hint": "<code>Prawn::Document.generate(\"certificate.pdf\") do … end</code>で始めて、3つの<code>text</code>の行の間に<code>start_new_page</code>を入れてみて。"
+          }
+        ]
+      }
+    },
+    {
       "id": "scarpe",
       "section": {
         "de": "Shoes mit Scarpe",
@@ -2384,7 +2533,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "ScarpeでShoes"
       },
       "de": {
-        "title": "21. Shoes-Apps mit Scarpe",
+        "title": "22. Shoes-Apps mit Scarpe",
         "cells": [
           {
             "t": "h",
@@ -2431,7 +2580,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "21. Shoes apps with Scarpe",
+        "title": "22. Shoes apps with Scarpe",
         "cells": [
           {
             "t": "h",
@@ -2478,7 +2627,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "21. ScarpeでShoesアプリ",
+        "title": "22. ScarpeでShoesアプリ",
         "cells": [
           {
             "t": "h",
@@ -2533,7 +2682,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "応用コース：timelog"
       },
       "de": {
-        "title": "22. Projekt timelog: Collections",
+        "title": "23. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -2572,7 +2721,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "22. Project timelog: collections",
+        "title": "23. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -2611,7 +2760,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "22. timelogプロジェクト：コレクション",
+        "title": "23. timelogプロジェクト：コレクション",
         "cells": [
           {
             "t": "h",
@@ -2653,7 +2802,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "23. Text parsen: Regex",
+        "title": "24. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -2684,7 +2833,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "23. Parsing text: regex",
+        "title": "24. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -2715,7 +2864,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "23. テキストのパース：正規表現",
+        "title": "24. テキストのパース：正規表現",
         "cells": [
           {
             "t": "h",
@@ -2749,7 +2898,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "24. Methoden richtig bauen",
+        "title": "25. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -2780,7 +2929,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "24. Building methods properly",
+        "title": "25. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -2811,7 +2960,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "24. メソッドをきちんと作る",
+        "title": "25. メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -2845,7 +2994,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "25. Entry & Timesheet",
+        "title": "26. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -2876,7 +3025,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "25. Entry & Timesheet",
+        "title": "26. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -2907,7 +3056,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "25. EntryとTimesheet",
+        "title": "26. EntryとTimesheet",
         "cells": [
           {
             "t": "h",
@@ -2941,7 +3090,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "26. Testen mit Minitest",
+        "title": "27. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -2972,7 +3121,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "26. Testing with Minitest",
+        "title": "27. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -3003,7 +3152,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "26. Minitestでテスト",
+        "title": "27. Minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -3037,7 +3186,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "27. Enumerable & Data",
+        "title": "28. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -3049,7 +3198,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 22, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 23, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -3060,7 +3209,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "27. Enumerable & Data",
+        "title": "28. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -3072,7 +3221,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 22, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 23, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -3083,7 +3232,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "27. EnumerableとData",
+        "title": "28. EnumerableとData",
         "cells": [
           {
             "t": "h",
@@ -3095,7 +3244,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン22で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン23で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
           },
           {
             "t": "x",
@@ -3109,7 +3258,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "28. Blocks, Procs & Lambdas",
+        "title": "29. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -3148,7 +3297,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "28. Blocks, procs & lambdas",
+        "title": "29. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -3187,7 +3336,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "28. ブロック、Proc、lambda",
+        "title": "29. ブロック、Proc、lambda",
         "cells": [
           {
             "t": "h",
@@ -3229,7 +3378,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "29. Fehler behandeln",
+        "title": "30. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -3260,7 +3409,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "29. Handling errors",
+        "title": "30. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -3291,7 +3440,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "29. エラー処理",
+        "title": "30. エラー処理",
         "cells": [
           {
             "t": "h",
@@ -3325,7 +3474,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "30. Daten speichern: Formate",
+        "title": "31. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -3380,7 +3529,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "30. Saving data: formats",
+        "title": "31. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -3435,7 +3584,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "30. データの保存：フォーマット",
+        "title": "31. データの保存：フォーマット",
         "cells": [
           {
             "t": "h",
@@ -3493,7 +3642,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "31. Kommandozeile & Gems",
+        "title": "32. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -3520,7 +3669,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "31. Command line & gems",
+        "title": "32. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -3547,7 +3696,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "31. コマンドラインとgem",
+        "title": "32. コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -3577,7 +3726,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "32. Pattern Matching",
+        "title": "33. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -3608,7 +3757,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "32. Pattern matching",
+        "title": "33. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -3639,7 +3788,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "32. パターンマッチ",
+        "title": "33. パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -3673,7 +3822,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "33. Objektmodell & Metaprogrammierung",
+        "title": "34. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -3704,7 +3853,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "33. Object model & metaprogramming",
+        "title": "34. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -3735,7 +3884,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "33. オブジェクトモデルとメタプログラミング",
+        "title": "34. オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -3769,7 +3918,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "34. Eine eigene DSL",
+        "title": "35. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -3781,7 +3930,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 28 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 29 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -3792,7 +3941,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "34. Your own DSL",
+        "title": "35. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -3804,7 +3953,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 28 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 29 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
@@ -3815,7 +3964,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "34. 自分だけのDSL",
+        "title": "35. 自分だけのDSL",
         "cells": [
           {
             "t": "h",
@@ -3827,7 +3976,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン28のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン29のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
           },
           {
             "t": "x",
@@ -3841,7 +3990,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "35. Codequalität & Debugging",
+        "title": "36. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -3864,7 +4013,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "35. Code quality & debugging",
+        "title": "36. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -3887,7 +4036,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "35. コードの品質とデバッグ",
+        "title": "36. コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -3913,7 +4062,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "36. Performance & Nebenläufigkeit",
+        "title": "37. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -3960,7 +4109,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "36. Performance & concurrency",
+        "title": "37. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -4007,7 +4156,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "36. パフォーマンスと並行処理",
+        "title": "37. パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -4057,7 +4206,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "37. Finale: timelog im Web",
+        "title": "38. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -4079,12 +4228,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 31 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 32 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "en": {
-        "title": "37. Finale: timelog on the web",
+        "title": "38. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
@@ -4106,12 +4255,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 31 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 32 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "ja": {
-        "title": "37. フィナーレ：Webで動くtimelog",
+        "title": "38. フィナーレ：Webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -4133,7 +4282,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン31で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン32で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }

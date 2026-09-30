@@ -2,7 +2,7 @@
 
 Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
-Last updated 2026-09-30 (37 lessons in German, English and Japanese).
+Last updated 2026-09-30 (38 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -63,7 +63,7 @@ tools/build_gem_cache.rb   regenerates html/gems/cache/
 tools/update_ruby_wasm.rb  updates the wasm + loader from npm
 test/check_harness.rb      every lesson offline under CRuby
 test/gems_harness.rb       gem installer offline under CRuby
-test/browser_test.mjs      Playwright end-to-end (128 checks)
+test/browser_test.mjs      Playwright end-to-end (135 checks)
 test/progress_test.mjs     Playwright: progress file, workshop, folder (37 checks)
 docs/HANDOVER.md           this file
 ```
@@ -109,13 +109,13 @@ Rules that the code and tests rely on:
 
 - `id` is stable and is the URL (`/#bigdecimal`); titles carry the number, so
   **inserting a lesson means renumbering every later title in all three
-  languages** (see the script pattern in git history of lesson 18) - and the
-  prose references like "lesson 22" / "Lektion 22" / 「レッスン22」.
+  languages** (see the script pattern in git history of lessons 18 and 21) -
+  and the prose references like "lesson 22" / "Lektion 22" / 「レッスン22」.
 - All cells of a lesson share one binding (notebook kernel). Demo and
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
 - Checks accept output OR result; `puts` is never required.
-- `test/browser_test.mjs` asserts the lesson count (`'37 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'38 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -131,7 +131,8 @@ Rules that the code and tests rely on:
 Helpers available in cells (defined in `main.rb`): `install_gem`,
 `show_image` (chunky_png), `show_browser(app, path)` + `mock_get`,
 `show_irb`, `show_files`, `show_three(scene, camera, orbit:, &animate)`,
-`show_shoes { ... }`, `download_file(data, name)`, `run_tests` (Minitest).
+`show_shoes { ... }`, `download_file(data, name)`, `show_pdf(pdf)` (a file
+name, PDF bytes, a Prawn or HexaPDF document), `run_tests` (Minitest).
 
 ## 4. Gems
 
@@ -197,6 +198,12 @@ reach the hosts in `NET_HTTP_HOSTS` (ruby-lang.org, rubygems.org,
 api.github.com). What cannot work: anything needing a C extension with no
 pure stand-in (sqlite3, pg, ffi …), threads, sockets, subprocesses.
 
+prawn and hexapdf are in the cache (lesson 21). prawn's ttfunk depends on
+bigdecimal (→ bigdecimal-pure); hexapdf depends on openssl and strscan, both
+compiled into the wasm (`NATIVE_GEMS` + `builtin?`; `tools/build_gem_cache.rb`
+skips them as `BUILTIN`). In Chrome: both install from the cache in 0.5 s,
+a 2-page Prawn PDF takes 0.12 s, HexaPDF open + stamp + write 0.17 s.
+
 ## 5. Browser-environment fixups (in `main.rb`, top)
 
 Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
@@ -212,7 +219,10 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   `File`/`Dir`; absolute paths pass through. `sleep` is a virtual clock (a
   real sleep crashes the VM uncatchably); `Thread` is a Fiber scheduler that
   interleaves at sleep points. `FileWatch` snapshots both stores per cell run
-  to offer downloads; it skips `BrowserGems.root` and `/tmp`.
+  to offer downloads; it skips `BrowserGems.root` and `/tmp`. It compares
+  contents, so it also notes what `File.open` opened for writing: a run that
+  writes the same bytes again (Prawn's PDFs are deterministic) still offers
+  the file.
 - Real `Module#autoload` works now that gems are files; the loader no longer
   hooks it.
 
@@ -230,6 +240,9 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   `height:` is given.
 - **show_irb**: continuation lines via a SyntaxError heuristic
   (`INCOMPLETE_RE`), `_` supported.
+- **show_pdf**: an `<iframe>` on a Blob URL, so the browser's own viewer
+  renders it. Headless Chromium and the Electron preview have no PDF viewer
+  and show it blank - the tests check the bytes (`%PDF`), not the picture.
 - **Running a cell** freezes the page (Ruby is synchronous); the running
   look (stripe, dimmed editor, wobbling fox) is painted before the run via
   `afterPaint` and uses compositor-only CSS animations so it keeps moving.
@@ -295,7 +308,7 @@ container started with plain `docker run` on the default bridge gets 502s.
 ```sh
 cd test
 node -e 'global.window={}; require("../html/lessons.js"); require("fs").writeFileSync("lessons.json", window.LESSONS_JSON)'
-ruby check_harness.rb          # 37 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 38 lessons x 3 languages, starter fails, solutions pass
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 BASE=http://127.0.0.1:8011/ node browser_test.mjs   # Playwright, ~5 min
 ```
@@ -349,7 +362,9 @@ nokogiri-pure's CI has a wasm job for this).
 - [BrowserRubyKoans](https://github.com/Largo/BrowserRubyKoans) - the
   original foundation (koans.idogawa.com), linked as the follow-up course.
 - [three-rb](https://github.com/lef237/three-rb), [lacci / scarpe](https://github.com/scarpe-team/scarpe)
-  - lessons 19 and 21.
+  - lessons 19 and 22.
+- [Prawn](https://github.com/prawnpdf/prawn), [HexaPDF](https://hexapdf.gettalong.org/)
+  (AGPL-3.0 or commercial) - lesson 21.
 
 ## 11. Open ends
 

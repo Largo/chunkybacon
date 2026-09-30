@@ -30,7 +30,7 @@ await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 check('app becomes visible after wasm boot', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('37 lessons in nav', (await page.$$('#lessonNav a')).length === 37);
+check('38 lessons in nav', (await page.$$('#lessonNav a')).length === 38);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -332,6 +332,32 @@ await runExercise();
 await waitForDownload('.cell.exercise', 'karte.pptx');
 await page.waitForTimeout(500);
 check('menu exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// PDF lesson: Prawn writes PDFs, HexaPDF reads, stamps and merges them;
+// show_pdf puts the browser's own viewer below the cell
+await page.click('#lessonNav a[data-id="pdf"]');
+await page.waitForTimeout(300);
+await page.click('.run-cell[data-idx="1"]');
+await page.waitForSelector('#cell-out-1 iframe.cell-pdf', { timeout: 60000 });
+check('prawn installs from cache', (await page.textContent('#gemsList')).includes('prawn ✓'));
+const pdfSrc = await page.getAttribute('#cell-out-1 iframe.cell-pdf', 'src');
+check('show_pdf shows a real PDF (%P)', JSON.stringify(await firstBytes(pdfSrc.split('#')[0])) === '[37,80]');
+await page.click('.run-cell[data-idx="3"]');
+check('a PDF the cell wrote is offered for download', (await waitForDownload('#cell-out-3', 'speisekarte.pdf')) !== null);
+await page.evaluate(() => { document.getElementById('cell-out-3').innerHTML = ''; });
+await page.click('.run-cell[data-idx="3"]');
+check('writing the same bytes again still offers the file', (await waitForDownload('#cell-out-3', 'speisekarte.pdf')) !== null);
+await page.click('.run-cell[data-idx="5"]');
+await page.waitForSelector('#cell-out-5 iframe.cell-pdf', { timeout: 60000 });
+check('hexapdf opens and stamps both pages', (await page.textContent('#cell-out-5')).includes('=> 2'));
+await page.click('.run-cell[data-idx="7"]');
+await page.waitForSelector('#cell-out-7 iframe.cell-pdf', { timeout: 60000 });
+check('hexapdf merges into 4 pages', (await page.textContent('#cell-out-7')).includes('=> 4'));
+await setExercise('Prawn::Document.generate("urkunde.pdf") do\n  text "Stufe 1"\n  start_new_page\n  text "Stufe 2"\n  start_new_page\n  text "Stufe 3"\nend');
+await runExercise();
+await waitForDownload('.cell.exercise', 'urkunde.pdf');
+await page.waitForTimeout(300);
+check('certificate exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 
 // Scarpe lesson: real Shoes apps from the lacci gem, drawn into the page by a
 // Lacci display service (shoes_dom.rb); several stay live at once

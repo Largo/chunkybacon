@@ -8,7 +8,17 @@ require 'net/http'
 require 'rubygems/package'
 require 'fileutils'
 
-GEMS = %w[chunky_png gammo racc sinatra roda minitest csv benchmark three-rb ruby_pptx lacci nokogiri bigdecimal-pure]
+GEMS = %w[chunky_png gammo racc sinatra roda minitest csv benchmark three-rb ruby_pptx lacci nokogiri bigdecimal-pure
+          prawn hexapdf]
+
+# C extensions compiled into the wasm image: a gem may depend on them (hexapdf
+# on openssl and strscan), the browser finds them built in (BrowserGems
+# NATIVE_GEMS + builtin?), so they are neither downloaded nor cached
+BUILTIN = %w[openssl strscan]
+
+# a dependency on the C extension resolves to the pure stand-in, as in
+# BrowserGems::SUBSTITUTES (ttfunk, under prawn, depends on bigdecimal)
+SUBSTITUTES = { "bigdecimal" => "bigdecimal-pure" }
 
 # gems pinned below their latest version, when the latest pulls in native
 # dependencies (e.g. minitest 6 depends on prism, a C extension)
@@ -44,7 +54,8 @@ queue = GEMS.dup
 
 until queue.empty?
   name = queue.shift
-  next if manifest.key?(name)
+  name = SUBSTITUTES.fetch(name, name)
+  next if manifest.key?(name) || BUILTIN.include?(name)
 
   if LOCAL_GEMS.key?(name)
     gemspec = LOCAL_GEMS[name]

@@ -573,6 +573,19 @@ class ChunkyApp
     @run_images << data_url if @run_images
   end
 
+  def add_pdf(bytes)
+    @run_pdfs << bytes.to_s.b if @run_pdfs
+  end
+
+  # The browser's own PDF viewer, on a Blob URL; the previous run's URLs of
+  # this cell are released first.
+  def pdfs_html(idx)
+    @pdf_urls ||= {}
+    (@pdf_urls[idx] || []).each { |url| $window[:URL].revokeObjectURL(url) }
+    @pdf_urls[idx] = @run_pdfs.map { |bytes| $window.makeDownloadUrl([bytes].pack("m0"), "application/pdf").to_s }
+    @pdf_urls[idx].map { |url| "<iframe class=\"cell-pdf\" title=\"PDF\" src=\"#{url}#view=FitH\"></iframe>" }.join
+  end
+
   # ---------- downloads ----------
 
   DOWNLOAD_TYPES = {
@@ -581,7 +594,8 @@ class ChunkyApp
     ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ".png" => "image/png", ".jpg" => "image/jpeg", ".svg" => "image/svg+xml",
     ".csv" => "text/csv", ".json" => "application/json", ".html" => "text/html",
-    ".txt" => "text/plain", ".md" => "text/markdown", ".zip" => "application/zip"
+    ".txt" => "text/plain", ".md" => "text/markdown", ".zip" => "application/zip",
+    ".pdf" => "application/pdf"
   }.freeze
 
   # A file to offer below the cell. The same name twice keeps the last.
@@ -1062,6 +1076,7 @@ class ChunkyApp
     end
     $window.clearCellMarks(idx)
     @run_images = []
+    @run_pdfs = []
     @run_browsers = []
     @run_irbs = []
     @run_files = []
@@ -1109,7 +1124,7 @@ class ChunkyApp
     out_html = ""
     out_html += "<pre class=\"cell-stdout\">#{escape_html(output)}</pre>" unless output.empty?
     widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any? || @run_three.any? ||
-                      @run_shoes.any? || @run_downloads.any?
+                      @run_shoes.any? || @run_downloads.any? || @run_pdfs.any?
     if error
       out_html += "<div class=\"cell-error\">#{escape_html(error.class)}: #{escape_html(error.message)}" \
                   "#{where ? " (#{escape_html(where)})" : ""}</div>"
@@ -1119,6 +1134,7 @@ class ChunkyApp
     @run_images.each do |data_url|
       out_html += "<img class=\"cell-image\" alt=\"\" src=\"#{data_url}\">"
     end
+    out_html += pdfs_html(idx)
     out_html += downloads_html(idx) if @run_downloads.any?
     new_widgets = []
     @run_browsers.each do |spec|
@@ -1223,6 +1239,29 @@ module Kernel
                  "data:image/png;base64," + [image.to_s].pack("m0")
                end
     ChunkyApp.instance.add_image(data_url)
+    nil
+  end
+
+  # Shows a PDF below the cell, in the browser's own viewer:
+  #   show_pdf "menu.pdf"      # a file the cell wrote
+  #   show_pdf pdf             # a Prawn::Document, HexaPDF::Document or HexaPDF::Composer
+  #   show_pdf bytes           # the PDF itself, as a String
+  def show_pdf(pdf)
+    pdf = pdf.document if defined?(HexaPDF::Composer) && pdf.is_a?(HexaPDF::Composer)
+    bytes = if pdf.is_a?(String)
+              if pdf.start_with?("%PDF")
+                pdf
+              elsif SandboxFS.virtual?(pdf) && SandboxFS.exist?(pdf)
+                SandboxFS.read(pdf)
+              else
+                File.binread(pdf)
+              end
+            elsif pdf.respond_to?(:render)
+              pdf.render
+            else
+              StringIO.new("".b).tap { |io| pdf.write(io) }.string
+            end
+    ChunkyApp.instance.add_pdf(bytes)
     nil
   end
 

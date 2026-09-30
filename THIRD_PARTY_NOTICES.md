@@ -45,13 +45,19 @@ noted.
 | benchmark | 0.5.0 | Ruby, BSD-2-Clause | Yukihiro Matsumoto | COPYING |
 | bigdecimal-pure | 0.1.0 | MIT | Andi Idogawa | LICENSE |
 | chunky_png | 1.4.0 | MIT | Willem van Bergen | LICENSE |
+| cmdparse | 3.0.7 | MIT | Thomas Leitner | COPYING |
 | csv | 3.3.6 | Ruby, BSD-2-Clause | James Edward Gray II, Kouhei Sutou | LICENSE.txt |
 | gammo | 0.3.0 | MIT | namusyaka | LICENSE.txt |
+| geom2d | 0.4.1 | MIT | Thomas Leitner | LICENSE |
+| hexapdf | 1.11.0 | AGPL-3.0 (or a commercial licence from its author) | Thomas Leitner | LICENSE, agpl-3.0.txt; data/hexapdf/cmap/LICENSE.txt for its CMap data |
 | lacci | 0.5.0 | MIT | Marco Concetto Rudilosso, Noah Gibbs | none - see below |
 | logger | 1.7.0 | Ruby, BSD-2-Clause | Naotoshi Seo, SHIBATA Hiroshi | COPYING |
+| matrix | 0.4.3 | Ruby, BSD-2-Clause | Marc-Andre Lafortune | COPYING |
 | minitest | 5.27.0 | MIT | Ryan Davis | none - see below |
 | mustermann | 4.0.0 | MIT | Konstantin Haase and others | LICENSE |
 | nokogiri (nokogiri-pure) | 1.19.4 | MIT | Andi Idogawa; Nokogiri: Mike Dalessio, Aaron Patterson and others | LICENSE-nokogiri.md, LICENSE-DEPENDENCIES.md (the ported libxml2, libxslt and gumbo) |
+| pdf-core | 0.10.0 | Prawn's Ruby-style licence, GPL-2.0 or GPL-3.0, at your choice | Alexander Mankuta, Gregory Brown, Brad Ediger and others | LICENSE, COPYING, GPLv2, GPLv3 |
+| prawn | 2.5.0 | Prawn's Ruby-style licence, GPL-2.0 or GPL-3.0, at your choice | Alexander Mankuta, Gregory Brown, Brad Ediger and others | LICENSE, COPYING, GPLv2, GPLv3 |
 | racc | 1.8.1 | Ruby, BSD-2-Clause | Minero Aoki, Aaron Patterson | COPYING |
 | rack | 3.2.7 | MIT | Leah Neukirchen | MIT-LICENSE |
 | rack-protection | 4.2.1 | MIT | Sinatra contributors | License |
@@ -64,8 +70,13 @@ noted.
 | sinatra | 4.2.1 | MIT | Blake Mizerany, Ryan Tomayko, Simon Rozet, Konstantin Haase | LICENSE |
 | three-rb | 0.2.1 | MIT | LEF | LICENSE |
 | tilt | 2.9.0 | MIT | Ryan Tomayko, Magnus Holm, Jeremy Evans | COPYING |
+| ttfunk | 1.8.0 | Prawn's Ruby-style licence, GPL-2.0 or GPL-3.0, at your choice | Alexander Mankuta, Gregory Brown, Brad Ediger, Cameron Dutro and others | LICENSE, COPYING, GPLv2, GPLv3 |
 
 `tools/build_gem_cache.rb` rewrites this cache; update the table with it.
+
+**HexaPDF** is served unmodified, as published on rubygems.org; the archive
+is its complete source, with the AGPL text. The PDF lesson tells learners
+what the AGPL means for programs of their own that use HexaPDF.
 
 ### Gems published without a license file
 

@@ -47,6 +47,10 @@ module Kernel
     nil
   end
 
+  def show_pdf(_pdf)
+    nil
+  end
+
   # Offline there is no DOM, so the app runs against a display service that
   # only records which drawables Lacci asked for - the same list ShoesDom
   # exposes to checks in the browser.
@@ -238,6 +242,36 @@ title.shapes.title.text = "Menu"
   slide.placeholders[1].text_frame.text = "Bacon\nEggs"
 end
 menu.save("menu.pptx"))]
+  },
+  "pdf" => {
+    "de" => [%(require "prawn"
+Prawn::Document.generate("urkunde.pdf") do
+  text "Stufe 1"
+  start_new_page
+  text "Stufe 2"
+  start_new_page
+  text "Stufe 3"
+end), %(install_gem "prawn"
+pdf = Prawn::Document.new
+3.times do |i|
+  pdf.start_new_page unless i.zero?
+  pdf.text "Stufe \#{i + 1}"
+end
+pdf.render_file "urkunde.pdf")],
+    "en" => [%(require "prawn"
+Prawn::Document.generate("certificate.pdf") do
+  text "Level 1"
+  start_new_page
+  text "Level 2"
+  start_new_page
+  text "Level 3"
+end), %(install_gem "prawn"
+pdf = Prawn::Document.new
+3.times do |i|
+  pdf.start_new_page unless i.zero?
+  pdf.text "Level \#{i + 1}"
+end
+pdf.render_file "certificate.pdf")]
   },
   "scarpe" => {
     "de" => [

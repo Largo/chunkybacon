@@ -28,6 +28,7 @@ module BrowserGems
     sqlite3 pg mysql2 ffi byebug debug bcrypt puma eventmachine
     nio4r websocket-driver msgpack oj yajl-ruby curb typhoeus redcarpet
     commonmarker sassc grpc google-protobuf rmagick vips json-c openssl
+    strscan
   ].freeze
 
   # native runtime dependencies a gem declares but can do without: skipped

@@ -105,14 +105,27 @@ module FileWatch
   class << self
     # [virtual, real] path => content fingerprint, before the run
     def snapshot
+      written.clear
       [SandboxFS.store.transform_values(&:hash), real_files.transform_values(&:hash)]
     end
 
-    # [[path, bytes], ...] for every file new or changed since +snapshot+
+    # [[path, bytes], ...] for every file new or changed since +snapshot+ -
+    # or opened for writing: a run that writes the same bytes again (Prawn's
+    # PDFs are deterministic) still offers its file
     def changes_since(snapshot)
       virtual, real = snapshot
       changed = SandboxFS.store.filter_map { |path, data| [path, data] if virtual[path] != data.hash }
-      changed + real_files.filter_map { |path, data| [path, data] if real[path] != data.hash }
+      changed + real_files.filter_map { |path, data| [path, data] if real[path] != data.hash || written.include?(path) }
+    end
+
+    # names (relative, as real_files has them) File.open opened for writing
+    def written
+      @written ||= []
+    end
+
+    def note_open(path, mode)
+      writing = mode.is_a?(Integer) ? (mode & (File::WRONLY | File::RDWR)) != 0 : mode.to_s.match?(/[wa+]/)
+      written << path.to_s.delete_prefix("./") if writing && (path.is_a?(String) || path.respond_to?(:to_path))
     end
 
     private
@@ -133,6 +146,17 @@ module FileWatch
       found
     rescue SystemCallError
       found
+    end
+  end
+end
+
+class File
+  class << self
+    alias_method :filewatch_orig_open, :open
+
+    def open(path, *args, **kw, &block)
+      FileWatch.note_open(path, kw.fetch(:mode) { args.first || "r" })
+      filewatch_orig_open(path, *args, **kw, &block)
     end
   end
 end

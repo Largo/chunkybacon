@@ -138,5 +138,51 @@
     "version": "0.1.0",
     "file": "bigdecimal-pure-0.1.0.gem",
     "deps": []
+  },
+  "prawn": {
+    "version": "2.5.0",
+    "file": "prawn-2.5.0.gem",
+    "deps": [
+      "matrix",
+      "pdf-core",
+      "ttfunk"
+    ]
+  },
+  "pdf-core": {
+    "version": "0.10.0",
+    "file": "pdf-core-0.10.0.gem",
+    "deps": []
+  },
+  "ttfunk": {
+    "version": "1.8.0",
+    "file": "ttfunk-1.8.0.gem",
+    "deps": [
+      "bigdecimal"
+    ]
+  },
+  "matrix": {
+    "version": "0.4.3",
+    "file": "matrix-0.4.3.gem",
+    "deps": []
+  },
+  "hexapdf": {
+    "version": "1.11.0",
+    "file": "hexapdf-1.11.0.gem",
+    "deps": [
+      "cmdparse",
+      "geom2d",
+      "openssl",
+      "strscan"
+    ]
+  },
+  "cmdparse": {
+    "version": "3.0.7",
+    "file": "cmdparse-3.0.7.gem",
+    "deps": []
+  },
+  "geom2d": {
+    "version": "0.4.1",
+    "file": "geom2d-0.4.1.gem",
+    "deps": []
   }
 }
