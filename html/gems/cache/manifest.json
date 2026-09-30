@@ -184,5 +184,13 @@
     "version": "0.4.1",
     "file": "geom2d-0.4.1.gem",
     "deps": []
+  },
+  "jsg": {
+    "version": "0.2.1",
+    "file": "jsg-0.2.1.gem",
+    "deps": [
+      "js",
+      "ruby_wasm"
+    ]
   }
 }

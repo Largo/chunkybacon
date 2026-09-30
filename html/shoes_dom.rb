@@ -53,7 +53,7 @@ module ShoesDom
   class << self
     attr_accessor :service, :container, :current
 
-    def document = JS.global[:document]
+    def document = JSG.d
 
     # Runs +block+ as a Shoes app and returns a {Mounted}.
     #
@@ -63,11 +63,11 @@ module ShoesDom
     # for cell 5 would silently disconnect the buttons of the app in cell 3.
     def mount(width:, height:, &block)
       setup!
-      root = document.call(:createElement, "div")
-      root[:className] = "shoes-app"
-      root[:style][:width] = "#{width}px"
+      root = document.createElement("div")
+      root.className = "shoes-app"
+      root.style.width = "#{width}px"
       # sized to its content unless the app asks for a height, as a window would
-      root[:style][:minHeight] = "#{height}px" if height
+      root.style.minHeight = "#{height}px" if height
       self.container = root
       self.current = Mounted.new(root, [], [])
 
@@ -112,21 +112,21 @@ module ShoesDom
       super(linkable_id: id)
 
       @el = build_element
-      @el[:dataset][:shoes] = shoes_type if @el
+      @el.dataset.shoes = shoes_type if @el
 
       bind_shoes_event(event_name: "prop_change", target: id) do |changes|
         changes.each { |k, v| @props[k.to_s] = v }
         refresh
       end
       bind_shoes_event(event_name: "destroy", target: id) do
-        @el&.call(:remove)
+        @el&.remove
       end
     end
 
     def append_to(parent)
       return unless @el && parent&.el
 
-      parent.el.call(:appendChild, @el)
+      parent.el.appendChild(@el)
     end
 
     private
@@ -151,8 +151,8 @@ module ShoesDom
     end
 
     def element(tag, css_class = nil)
-      node = ShoesDom.document.call(:createElement, tag)
-      node[:className] = css_class if css_class
+      node = ShoesDom.document.createElement(tag)
+      node.className = css_class if css_class
       node
     end
 
@@ -171,76 +171,74 @@ module ShoesDom
 
     def button_element
       node = element("button", "shoes-button")
-      node[:textContent] = prop(:text).to_s
-      node.call(:addEventListener, "click", proc { send_shoes_event(event_name: "click", target: @id) })
+      node.textContent = prop(:text).to_s
+      node.addEventListener("click") { send_shoes_event(event_name: "click", target: @id) }
       node
     end
 
     def edit_line_element
       node = element("input", "shoes-editline")
-      node[:type] = "text"
-      node[:value] = prop(:text).to_s
-      node.call(:addEventListener, "input", proc do |event|
-        send_shoes_event(event[:target][:value].to_s, event_name: "change", target: @id)
-      end)
+      node.type = "text"
+      node.value = prop(:text).to_s
+      node.addEventListener("input") { |event| send_shoes_event(event.target.value, event_name: "change", target: @id) }
       node
     end
 
     def edit_box_element
       node = element("textarea", "shoes-editbox")
-      node[:value] = prop(:text).to_s
-      node.call(:addEventListener, "input", proc do |event|
-        send_shoes_event(event[:target][:value].to_s, event_name: "change", target: @id)
-      end)
+      node.value = prop(:text).to_s
+      node.addEventListener("input") { |event| send_shoes_event(event.target.value, event_name: "change", target: @id) }
       node
     end
 
     def link_element
       node = element("a", "shoes-link")
-      node[:href] = "#"
+      node.href = "#"
       write_text(node)
-      node.call(:addEventListener, "click", proc do |event|
-        event.call(:preventDefault)
+      node.addEventListener("click") do |event|
+        event.preventDefault
         send_shoes_event(event_name: "click", target: @id)
-      end)
+      end
       node
     end
 
     def image_element
       node = element("img", "shoes-image")
-      node[:src] = prop(:filename).to_s
-      node[:alt] = ""
+      node.src = prop(:filename).to_s
+      node.alt = ""
       node
     end
 
     # text_items mixes plain strings with the linkable ids of nested text
     # drawables -- `para "Chunky ", strong("Bacon")` arrives as ["Chunky ", 5].
     def write_text(node)
-      node[:innerHTML] = ""
+      node.innerHTML = ""
       Array(prop(:text_items)).each do |item|
         if item.is_a?(String)
-          node.call(:appendChild, ShoesDom.document.call(:createTextNode, item))
+          node.appendChild(ShoesDom.document.createTextNode(item))
         else
           nested = ShoesDom.service&.drawable_for(item)
-          node.call(:appendChild, nested.el) if nested&.el
+          node.appendChild(nested.el) if nested&.el
         end
       end
       apply_text_style(node)
     end
 
     def apply_text_style(node)
-      node[:style][:color] = css_color(prop(:stroke)) if prop(:stroke)
-      node[:style][:textAlign] = prop(:align).to_s if prop(:align)
-      node[:style][:fontFamily] = prop(:family).to_s if prop(:family)
+      style = node.style
+      style.color = css_color(prop(:stroke)) if prop(:stroke)
+      style.textAlign = prop(:align).to_s if prop(:align)
+      style.fontFamily = prop(:family).to_s if prop(:family)
       size = prop(:size)
-      node[:style][:fontSize] = "#{size}px" if size.is_a?(Numeric)
+      style.fontSize = "#{size}px" if size.is_a?(Numeric)
     end
 
     def apply_box(node)
-      node[:style][:width] = css_length(prop(:width)) if prop(:width)
-      node[:style][:height] = css_length(prop(:height)) if prop(:height)
-      node[:style][:margin] = "#{prop(:margin).to_i}px" if prop(:margin).is_a?(Numeric)
-      node[:style][:background] = css_color(prop(:background_color)) if prop(:background_color)
+      style = node.style
+      style.width = css_length(prop(:width)) if prop(:width)
+      style.height = css_length(prop(:height)) if prop(:height)
+      style.margin = "#{prop(:margin).to_i}px" if prop(:margin).is_a?(Numeric)
+      style.background = css_color(prop(:background_color)) if prop(:background_color)
     end
 
     # Shoes sizes are pixels, or a fraction of the parent between 0 and 1.
@@ -262,8 +260,8 @@ module ShoesDom
     def refresh
       case @shoes_type
       when "Para", *INLINE_TAGS.keys, "Link" then write_text(@el)
-      when "Button" then @el[:textContent] = prop(:text).to_s
-      when "EditLine", "EditBox" then @el[:value] = prop(:text).to_s
+      when "Button" then @el.textContent = prop(:text).to_s
+      when "EditLine", "EditBox" then @el.value = prop(:text).to_s
       when "Stack", "Flow" then apply_box(@el)
       end
     end
@@ -317,7 +315,7 @@ module ShoesDom
       end
 
       if class_name == "DocumentRoot"
-        ShoesDom.container&.call(:appendChild, drawable.el)
+        ShoesDom.container&.appendChild(drawable.el)
       elsif parent_id
         drawable.append_to(@drawables[parent_id])
       end

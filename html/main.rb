@@ -64,6 +64,13 @@ BrowserGems.fetch_binary = lambda do |url|
   base64.start_with?("ERROR ") ? nil : base64.unpack1("m0")
 end
 
+# jsg (github.com/Largo/jsg) - the js gem with a friendlier syntax:
+# el.textContent = "x", input.value, el.closest(".x") is nil when nothing
+# matches, results come back as Ruby values. From the gem cache, so the two
+# fetchers above are the only code here written without it.
+BrowserGems.install("jsg")
+require "jsg"
+
 # Net::HTTP in the browser: the stdlib version cannot load (no io/wait, no
 # sockets in WASI), so the require hook serves our API-compatible shim and
 # we back it with the browser's own HTTP. CORS limits which hosts a page
@@ -130,7 +137,7 @@ Net::HTTP.transport = lambda do |_method, uri|
                        "(allowed: #{NET_HTTP_HOSTS.keys.join(', ')}) - on your own " \
                        "computer net/http can reach any URL"
   end
-  data = JSON.parse(JS.global.fetchHttpSync(prefix + uri.request_uri.to_s).to_s)
+  data = JSON.parse(JSG.w.fetchHttpSync(prefix + uri.request_uri.to_s))
   raise SocketError, "connection to #{uri.host} failed" if data["status"].to_i.zero?
   [data["status"].to_i, { "content-type" => data["contentType"].to_s }, data["body"].to_s]
 end
@@ -153,9 +160,9 @@ class ChunkyApp
   EVAL_FILE = "chunky.rb"
 
   def initialize
-    $window = JS.global
-    $d = JS.global[:document]
-    @data = JSON.parse(JS.global[:LESSONS_JSON].to_s)
+    $window = JSG.w
+    $d = JSG.d
+    @data = JSON.parse($window.LESSONS_JSON)
     @lessons = @data["lessons"]
     @browser_apps = []
     @irb_sessions = []
@@ -163,7 +170,7 @@ class ChunkyApp
     @three_seq = 0
     @shoes_apps = {}
     @seq = nil
-    sync_state(bridge[:state])
+    sync_state(bridge.state)
     setup_elements
     bridge.kernelReady(installed_json)
   end
@@ -171,17 +178,17 @@ class ChunkyApp
   # ---------- the shell (shell/bridge.js) ----------
 
   def bridge
-    $window[:ChunkyBridge]
+    $window.ChunkyBridge
   end
 
   # The lesson (or the workshop) the shell shows, in its language. A new seq
   # means a new page or a lesson reset: a fresh binding, old stages gone.
   def sync_state(state)
-    @lang = state[:lang].to_s
+    @lang = state.lang
     @lang = "de" unless @data["ui"].key?(@lang)
-    @lesson_id = state[:lesson].to_s
-    @workshop = state[:workshop].to_s == "true"
-    seq = state[:seq].to_i
+    @lesson_id = state.lesson
+    @workshop = state.workshop
+    seq = state.seq.to_i
     return if seq == @seq
 
     @seq = seq
@@ -201,7 +208,7 @@ class ChunkyApp
   end
 
   def store(key, value)
-    $window[:localStorage].setItem(key, value)
+    $window.localStorage.setItem(key, value)
   end
 
   # the lesson the shell shows (sync_state)
@@ -249,35 +256,35 @@ class ChunkyApp
   # and the widgets whose Ruby objects live in this VM.
   def setup_elements
     $window.addEventListener("chunky:run") do |event|
-      sync_state(event[:detail])
-      finish_cell_run(event[:detail][:idx].to_i)
+      sync_state(event.detail)
+      finish_cell_run(event.detail.idx.to_i)
     end
-    $window.addEventListener("chunky:lesson") { |event| sync_state(event[:detail]) }
+    $window.addEventListener("chunky:lesson") { |event| sync_state(event.detail) }
     $window.addEventListener("chunky:install") do |event|
-      sync_state(event[:detail])
-      panel_install(event[:detail][:name].to_s)
+      sync_state(event.detail)
+      panel_install(event.detail.name)
     end
 
-    # delegated listener for the mini-browser and file-explorer widgets
+    # delegated listener for the mini-browser and file-explorer widgets;
+    # closest() answers nil when nothing matches
     $d.getElementById("lessonBody").addEventListener("click") do |event|
-      target = event[:target]
-      css_class = target[:className].to_s
+      target = event.target
+      css_class = target.className.to_s   # an SVG's className is an object
       if css_class.include?("mb-go")
         widget = target.closest(".mini-browser")
-        navigate_browser(widget) unless js_null?(widget)
+        navigate_browser(widget) if widget
       elsif css_class.include?("fe-refresh")
         widget = target.closest(".file-explorer")
-        refresh_file_widget(widget) unless js_null?(widget)
-      elsif !js_null?(target.closest(".fe-file"))
-        row = target.closest(".fe-file")
+        refresh_file_widget(widget) if widget
+      elsif (row = target.closest(".fe-file"))
         widget = row.closest(".file-explorer")
-        preview_file(widget, row.getAttribute("data-path").to_s) unless js_null?(widget)
-      elsif target[:tagName].to_s == "A" && !js_null?(target.closest(".mb-view"))
+        preview_file(widget, row.getAttribute("data-path")) if widget
+      elsif target.tagName == "A" && target.closest(".mb-view")
         # links inside the fake browser navigate the fake browser
         event.preventDefault
         widget = target.closest(".mini-browser")
-        unless js_null?(widget)
-          widget.querySelector(".mb-url")[:value] = target.getAttribute("href").to_s
+        if widget
+          widget.querySelector(".mb-url").value = target.getAttribute("href").to_s
           navigate_browser(widget)
         end
       end
@@ -285,15 +292,18 @@ class ChunkyApp
 
     # Enter in a mini-browser URL bar navigates; Enter in an IRB input evals
     $d.getElementById("lessonBody").addEventListener("keydown") do |event|
-      target_class = event[:target][:className].to_s
-      if target_class.include?("mb-url") && event[:key].to_s == "Enter"
+      next unless event.key == "Enter"
+
+      target = event.target
+      target_class = target.className.to_s
+      if target_class.include?("mb-url")
         event.preventDefault
-        widget = event[:target].closest(".mini-browser")
-        navigate_browser(widget) unless js_null?(widget)
-      elsif target_class.include?("irb-input") && event[:key].to_s == "Enter"
+        widget = target.closest(".mini-browser")
+        navigate_browser(widget) if widget
+      elsif target_class.include?("irb-input")
         event.preventDefault
-        term = event[:target].closest(".irb-term")
-        irb_submit(term) unless js_null?(term)
+        term = target.closest(".irb-term")
+        irb_submit(term) if term
       end
     end
   end
@@ -334,8 +344,8 @@ class ChunkyApp
   # this cell are released first.
   def pdfs_html(idx)
     @pdf_urls ||= {}
-    (@pdf_urls[idx] || []).each { |url| $window[:URL].revokeObjectURL(url) }
-    @pdf_urls[idx] = @run_pdfs.map { |bytes| $window.makeDownloadUrl([bytes].pack("m0"), "application/pdf").to_s }
+    (@pdf_urls[idx] || []).each { |url| $window.URL.revokeObjectURL(url) }
+    @pdf_urls[idx] = @run_pdfs.map { |bytes| $window.makeDownloadUrl([bytes].pack("m0"), "application/pdf") }
     @pdf_urls[idx].map { |url| "<iframe class=\"cell-pdf\" title=\"PDF\" src=\"#{url}#view=FitH\"></iframe>" }.join
   end
 
@@ -359,11 +369,11 @@ class ChunkyApp
   end
 
   def downloads_html(idx)
-    (@download_urls[idx] || []).each { |url| $window[:URL].revokeObjectURL(url) }
+    (@download_urls[idx] || []).each { |url| $window.URL.revokeObjectURL(url) }
     @download_urls[idx] = []
     links = @run_downloads.map do |name, bytes|
       type = DOWNLOAD_TYPES.fetch(File.extname(name).downcase, "application/octet-stream")
-      url = $window.makeDownloadUrl([bytes].pack("m0"), type).to_s
+      url = $window.makeDownloadUrl([bytes].pack("m0"), type)
       @download_urls[idx] << url
       "<a class=\"cell-download\" href=\"#{url}\" download=\"#{escape_html(File.basename(name))}\">" \
         "⬇ #{escape_html(name)} <small>#{format_size(bytes.bytesize)}</small></a>"
@@ -402,8 +412,8 @@ class ChunkyApp
   end
 
   def refresh_file_widget(widget)
-    widget.querySelector(".fe-list")[:innerHTML] = files_list_html
-    widget.querySelector(".fe-preview")[:style][:display] = "none"
+    widget.querySelector(".fe-list").innerHTML = files_list_html
+    widget.querySelector(".fe-preview").style.display = "none"
   end
 
   def preview_file(widget, path)
@@ -413,8 +423,8 @@ class ChunkyApp
     rescue StandardError
       "?"
     end
-    preview[:textContent] = content
-    preview[:style][:display] = "block"
+    preview.textContent = content
+    preview.style.display = "block"
   end
 
   # ---------- Shoes app stage (lacci + ShoesDom) ----------
@@ -435,13 +445,13 @@ class ChunkyApp
   def shoes_dom_loaded?
     return true if defined?(ShoesDom)
 
-    source = $window.fetchTextSync("shoes_dom.rb").to_s
+    source = $window.fetchTextSync("shoes_dom.rb")
     raise LoadError, "could not fetch shoes_dom.rb" if source.start_with?("ERROR ")
 
     eval(source, TOPLEVEL_BINDING, "shoes_dom.rb")
     true
   rescue StandardError, ScriptError => e
-    $window[:console].call(:log, "shoes_dom load failed: #{e.class}: #{e.message}")
+    $window.console.log("shoes_dom load failed: #{e.class}: #{e.message}")
     false
   end
 
@@ -454,10 +464,10 @@ class ChunkyApp
     @last_shoes_types = mounted.types
     mounted.element
   rescue StandardError => e
-    node = $d.call(:createElement, "div")
-    node[:className] = "cell-error"
-    node[:textContent] = "#{e.class}: #{e.message}"
-    node
+    $d.createElement("div").tap do |node|
+      node.className = "cell-error"
+      node.textContent = "#{e.class}: #{e.message}"
+    end
   end
 
   def dispose_shoes(idx = nil)
@@ -477,7 +487,7 @@ class ChunkyApp
   # module lazily (window.ensureThree), so a lesson that uses show_three
   # kicks the import off when it opens and we only mount once it is there.
   def three_ready?
-    $window[:threeReady].to_s == "true"
+    $window.threeReady?
   end
 
   def preload_three
@@ -523,9 +533,9 @@ class ChunkyApp
     keys.each do |key|
       (@three_renderers.delete(key) || []).each do |renderer, controls|
         begin
-          renderer.handle.call(:setAnimationLoop, JS::Null)
+          renderer.handle.setAnimationLoop(JS::Null)
           controls&.dispose
-          renderer.handle.call(:dispose)
+          renderer.handle.dispose
         rescue StandardError
           nil
         end
@@ -535,7 +545,7 @@ class ChunkyApp
 
   def mount_three(idx, tid, spec)
     canvas = $d.getElementById("three-canvas-#{tid}")
-    return if js_null?(canvas)
+    return unless canvas
 
     # preserveDrawingBuffer keeps the last frame readable after compositing,
     # which is what lets the smoke test look at the rendered pixels
@@ -572,10 +582,6 @@ class ChunkyApp
 
   # ---------- mini browser ----------
 
-  def js_null?(obj)
-    obj.nil? || obj.to_s == "null" || obj.to_s == "undefined"
-  end
-
   def add_browser(app, path)
     @run_browsers << { app: app, path: path.to_s } if @run_browsers
   end
@@ -596,29 +602,24 @@ class ChunkyApp
   end
 
   def navigate_browser(widget)
-    bid = widget.getAttribute("data-bid").to_s.to_i
-    app = @browser_apps[bid]
+    app = @browser_apps[widget.getAttribute("data-bid").to_i]
     return unless app
     input = widget.querySelector(".mb-url")
-    path = input[:value].to_s
+    path = input.value
     path = "/" + path unless path.start_with?("/")
-    input[:value] = path
+    input.value = path
     status_el = widget.querySelector(".mb-status")
     view = widget.querySelector(".mb-view")
     begin
       status, headers, body = RackPlayground.get(app, path)
       content_type = (headers["content-type"] || headers["Content-Type"]).to_s
-      status_el[:innerText] = status.to_s
-      status_el[:className] = "mb-status #{status < 400 ? 'ok' : 'err'}"
-      if content_type.empty? || content_type.include?("html")
-        view[:innerHTML] = body
-      else
-        view[:innerHTML] = "<pre>#{escape_html(body)}</pre>"
-      end
+      status_el.innerText = status.to_s
+      status_el.className = "mb-status #{status < 400 ? 'ok' : 'err'}"
+      view.innerHTML = content_type.empty? || content_type.include?("html") ? body : "<pre>#{escape_html(body)}</pre>"
     rescue Exception => e
-      status_el[:innerText] = "ERR"
-      status_el[:className] = "mb-status err"
-      view[:innerHTML] = "<pre class=\"mb-error\">#{escape_html("#{e.class}: #{e.message}")}</pre>"
+      status_el.innerText = "ERR"
+      status_el.className = "mb-status err"
+      view.innerHTML = "<pre class=\"mb-error\">#{escape_html("#{e.class}: #{e.message}")}</pre>"
     end
   end
 
@@ -649,13 +650,12 @@ class ChunkyApp
   INCOMPLETE_RE = /unexpected end-of-input|expected an? `?end`?|unterminated string|unterminated regexp|expects an expression after/i
 
   def irb_submit(term)
-    sid = term.getAttribute("data-sid").to_s.to_i
-    session = @irb_sessions[sid]
+    session = @irb_sessions[term.getAttribute("data-sid").to_i]
     return unless session
     input_el = term.querySelector(".irb-input")
     history = term.querySelector(".irb-history")
-    line = input_el[:value].to_s
-    input_el[:value] = ""
+    line = input_el.value
+    input_el.value = ""
 
     append = "<div class=\"irb-echo\">#{escape_html(irb_prompt(session))} #{escape_html(line)}</div>"
 
@@ -697,9 +697,9 @@ class ChunkyApp
       end
     end
 
-    history[:innerHTML] = history[:innerHTML].to_s + append
-    term.querySelector(".irb-prompt")[:innerText] = irb_prompt(session)
-    history[:scrollTop] = history[:scrollHeight]
+    history.innerHTML += append
+    term.querySelector(".irb-prompt").innerText = irb_prompt(session)
+    history.scrollTop = history.scrollHeight
     input_el.focus
   end
 
@@ -733,14 +733,14 @@ class ChunkyApp
   # transform and opacity, which the browser animates off the main thread.
   # Afterwards the shell settles the cell: "ok" | "error" | "pass" | "fail".
   def finish_cell_run(idx)
-    started = $window[:performance].now.to_f
+    started = $window.performance.now
     outcome = begin
       run_cell(idx)
     rescue Exception => e
-      $window[:console].call(:error, "run_cell #{idx}: #{e.class}: #{e.message}")
+      $window.console.error("run_cell #{idx}: #{e.class}: #{e.message}")
       :error
     end
-    elapsed = ($window[:performance].now.to_f - started) / 1000.0
+    elapsed = ($window.performance.now - started) / 1000.0
   ensure
     bridge.ran(idx, (outcome || :error).to_s, elapsed || -1)
     bridge.gems(installed_json)
@@ -750,8 +750,9 @@ class ChunkyApp
     # the workshop's editor holds a whole program: one plain code cell
     cell = workshop? ? { "t" => "c" } : cells[idx]
     return unless cell && code_cell?(cell)
-    code = $window.getCellCode(idx).to_s
+    code = $window.getCellCode(idx)
     if workshop?
+      # the shell's callbacks (shell/workspace.rb), across the two Rubies
       file = $window.workshopOpenPath.to_s
       Workshop.prepare(JSON.parse($window.workspaceSnapshot.to_s), file, code)
       fresh_binding   # each run of a program starts from scratch
@@ -849,19 +850,17 @@ class ChunkyApp
       end
     end
     out_el = $d.getElementById("cell-out-#{idx}")
-    out_el[:innerHTML] = out_html
-    out_el[:style][:display] = "block"
+    out_el.innerHTML = out_html
+    out_el.style.display = "block"
     new_widgets.each do |bid|
       widget = out_el.querySelector(".mini-browser[data-bid='#{bid}']")
-      navigate_browser(widget) unless js_null?(widget)
+      navigate_browser(widget) if widget
     end
     new_stages.each { |tid, spec| mount_three(idx, tid, spec) }
     # Shoes apps are built as detached DOM and appended, rather than written
     # into out_html, because the display service creates real elements with
     # real event handlers as the app's block runs.
-    @run_shoes.each do |spec|
-      out_el.call(:appendChild, build_shoes_stage(idx, spec))
-    end
+    @run_shoes.each { |spec| out_el.appendChild(build_shoes_stage(idx, spec)) }
 
     if error
       line = error_line(error, file)

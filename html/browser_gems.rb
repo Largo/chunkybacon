@@ -28,13 +28,14 @@ module BrowserGems
     sqlite3 pg mysql2 ffi byebug debug bcrypt puma eventmachine
     nio4r websocket-driver msgpack oj yajl-ruby curb typhoeus redcarpet
     commonmarker sassc grpc google-protobuf rmagick vips json-c openssl
-    strscan
+    strscan js
   ].freeze
 
   # native runtime dependencies a gem declares but can do without: skipped
   # when installing that gem, because it falls back to pure Ruby. ruby_pptx
-  # uses Nokogiri when it loads and REXML otherwise.
-  OPTIONAL_NATIVE_DEPS = { "ruby_pptx" => %w[nokogiri] }.freeze
+  # uses Nokogiri when it loads and REXML otherwise; jsg needs ruby_wasm (the
+  # build tool) only for its `jsg` command, not in the browser.
+  OPTIONAL_NATIVE_DEPS = { "ruby_pptx" => %w[nokogiri], "jsg" => %w[ruby_wasm] }.freeze
 
   # gems replaced by a pure-Ruby stand-in providing the same require: a
   # dependency on bigdecimal (C extension, absent from the wasm image)

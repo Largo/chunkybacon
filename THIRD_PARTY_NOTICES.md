@@ -59,6 +59,7 @@ noted.
 | gammo | 0.3.0 | MIT | namusyaka | LICENSE.txt |
 | geom2d | 0.4.1 | MIT | Thomas Leitner | LICENSE |
 | hexapdf | 1.11.0 | AGPL-3.0 (or a commercial licence from its author) | Thomas Leitner | LICENSE, agpl-3.0.txt; data/hexapdf/cmap/LICENSE.txt for its CMap data |
+| jsg | 0.2.1 | MIT | Andi Idogawa | LICENSE.txt |
 | lacci | 0.5.0 | MIT | Marco Concetto Rudilosso, Noah Gibbs | none - see below |
 | logger | 1.7.0 | Ruby, BSD-2-Clause | Naotoshi Seo, SHIBATA Hiroshi | COPYING |
 | matrix | 0.4.3 | Ruby, BSD-2-Clause | Marc-Andre Lafortune | COPYING |

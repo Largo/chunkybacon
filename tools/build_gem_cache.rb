@@ -9,12 +9,12 @@ require 'rubygems/package'
 require 'fileutils'
 
 GEMS = %w[chunky_png gammo racc sinatra roda minitest csv benchmark three-rb ruby_pptx lacci nokogiri bigdecimal-pure
-          prawn hexapdf]
+          prawn hexapdf jsg]
 
 # C extensions compiled into the wasm image: a gem may depend on them (hexapdf
-# on openssl and strscan), the browser finds them built in (BrowserGems
-# NATIVE_GEMS + builtin?), so they are neither downloaded nor cached
-BUILTIN = %w[openssl strscan]
+# on openssl and strscan, jsg on js), the browser finds them built in
+# (BrowserGems NATIVE_GEMS + builtin?), so they are neither downloaded nor cached
+BUILTIN = %w[openssl strscan js]
 
 # a dependency on the C extension resolves to the pure stand-in, as in
 # BrowserGems::SUBSTITUTES (ttfunk, under prawn, depends on bigdecimal)
@@ -34,7 +34,7 @@ EXTRA_DEPS = { "gammo" => %w[racc] }
 # native dependencies a gem declares but falls back from (ruby_pptx uses
 # Nokogiri when it loads, REXML otherwise) - left out of the cache and the
 # manifest; keep in sync with BrowserGems::OPTIONAL_NATIVE_DEPS
-OPTIONAL_NATIVE_DEPS = { "ruby_pptx" => %w[nokogiri] }
+OPTIONAL_NATIVE_DEPS = { "ruby_pptx" => %w[nokogiri], "jsg" => %w[ruby_wasm] }
 
 # gems built from a local checkout instead of downloaded: nokogiri is
 # nokogiri-pure's nokogiri.gemspec (named "nokogiri" so that gems depending

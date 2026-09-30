@@ -110,11 +110,27 @@ a Run clicked while the kernel loads waits and runs once it is up.
 - `?kernel=eager` in the URL starts CRuby with the page instead (for
   measuring; `bridge.js` makes it the default in one line).
 
-Both Rubies drive the DOM through their `js` bridge. In the shell property
-reads already come back as Ruby values (`el.textContent`), and `shell/jsg.rb`
-adds the jsg-style rest (`el.textContent = "x"`, `el.hidden?`, `JSG.d`). In
-the kernel (ruby.wasm) property access is `obj[:prop]`, a dot is a method
-call, and JS `false`/`null` come back as truthy Ruby objects: compare `.to_s`.
+Both Rubies drive the DOM in the style of [jsg](https://github.com/Largo/jsg).
+In the shell, PicoRuby's own bridge already returns Ruby values
+(`el.textContent`) and `shell/jsg.rb` adds the rest (`el.textContent = "x"`,
+`el.hidden?`, `JSG.d`). The kernel loads the real gem from the cache at boot
+(`BrowserGems.install("jsg")`, main.rb): `input.value`, `el.style.display =
+"none"`, `$d.createElement("div").tap { ... }`, `$window.threeReady?`. What
+jsg changes on ruby.wasm's `JS::Object`, for main.rb, shoes_dom.rb and
+learners' cells alike:
+
+- results come back as Ruby values: strings, `true`/`false`, **numbers as
+  Float** (`.to_i` where an Integer is wanted), JS arrays as Arrays;
+- JS `null` is `nil`: `el.closest(".x")` is nil when nothing matches, so
+  `if widget` replaces the old `js_null?`;
+- a property that is `undefined` raises `NoMethodError` - read optional ones
+  with `obj[:prop]`, which jsg leaves as it was, like `call(:name, ...)`
+  (three-rb uses only those two, so it is unaffected);
+- a capitalized name without arguments is a constructor or namespace:
+  `$window.URL.revokeObjectURL(url)`.
+
+The two fetchers at the top of main.rb run before jsg is installed (they
+install it), so they keep the plain style with `.to_s`.
 
 ## 3. Lessons
 
