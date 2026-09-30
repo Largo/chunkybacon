@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
   <!-- Chunky Bacon fox — original character by Andi Idogawa & Claude for this
        course. Loose hand-drawn cartoon style; not derived from any existing
-       artwork. License: CC BY-NC-SA 4.0 (course assets). -->
+       artwork. License: CC BY-SA 4.0 (course assets). -->
   <g stroke="#1a1208" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="rotate(-3 100 100)">
     <!-- bushy tail -->
     <path d="M138 148 q34 6 40 -22 q4 -19 -12 -28 q6 14 -4 22 q2 -14 -12 -18 q8 20 -14 30 z" fill="#fff"/>

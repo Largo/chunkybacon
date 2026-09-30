@@ -95,9 +95,20 @@ node progress_test.mjs    # progress file, workshop, connected folder
 
 ## License
 
-Course content: CC BY-NC-SA 4.0, © [Andi Idogawa](https://idogawa.com).
+Both licenses allow commercial use.
+
+- **Code**: [MIT](LICENSE), © [Andi Idogawa](https://idogawa.com) - the
+  app, tools and tests.
+- **Course content**: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/),
+  © [Andi Idogawa](https://idogawa.com) - the lesson and interface texts in
+  `html/lessons.js` and the Chunky Bacon fox (`html/assets/chunky.svg`).
+  Credit the course and keep adapted versions under CC BY-SA. The code
+  examples inside the lessons are also available under the MIT license, so
+  you can use them in your own programs freely.
+- **Third-party components** (the ruby.wasm build, CodeMirror, three.js,
+  the cached gems, the web fonts) keep their own licenses - see
+  [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
 The phrase "Chunky Bacon" is an homage to _why's (poignant) guide to
 Ruby_ by why the lucky stiff — fondly remembered. The mascot is an
-original character. Bundled third-party components (ruby.wasm build,
-CodeMirror, three.js, cached gems, the web fonts under SIL OFL 1.1) remain
-under their own licenses.
+original character, not a copy of _why's foxes.

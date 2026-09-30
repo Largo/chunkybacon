@@ -52,6 +52,9 @@ html/
   gems/cache/           .gem files + manifest.json (instant offline installs)
 nginx.conf              static files + same-origin bridges (rubygems, ruby-lang)
 docker-compose.yml
+LICENSE                    MIT for the code; course content is CC BY-SA 4.0 (README)
+THIRD_PARTY_NOTICES.md     bundled components and their licenses - update it
+                           with the gem cache, the wasm or the vendored assets
 tools/build_gem_cache.rb   regenerates html/gems/cache/
 tools/update_ruby_wasm.rb  updates the wasm + loader from npm
 test/check_harness.rb      every lesson offline under CRuby
