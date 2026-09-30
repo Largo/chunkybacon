@@ -6,8 +6,9 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **35 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
-  gems, HTML parsing, web routing with Sinatra and Roda, 3D graphics,
+- **37 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+  gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
+  routing with Sinatra and Roda, 3D graphics,
   PowerPoint decks with [ruby_pptx](https://github.com/Largo/ruby_pptx), and
   a project track that builds a small time tracker.
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
@@ -45,6 +46,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - Chunky Bacon, an original cartoon fox, cheers you on.
 
 ## Architecture
+
+For operations, internals and traps see [docs/HANDOVER.md](docs/HANDOVER.md).
 
 Built on the same foundation as
 [BrowserRubyKoans](https://github.com/Largo/BrowserRubyKoans)
