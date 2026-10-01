@@ -1,4 +1,4 @@
-# Writes the pre-compressed copies nginx serves with gzip_static (nginx.conf):
+# Writes the pre-compressed copies nginx serves with gzip_static (nginx/default.conf):
 # <file>.gz next to each large file that only changes through a tool.
 # Everything else - lessons.js, main.rb, the CSS - nginx gzips on the fly,
 # so an edit can never be shadowed by a stale .gz.

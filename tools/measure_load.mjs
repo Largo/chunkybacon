@@ -1,6 +1,6 @@
 // Load-time measurement of the site (docs/PICORUBY_SHELL.md): how soon the
 // lesson can be read, how soon its first cell has run, and how many bytes
-// that took. Needs a server with gzip like nginx.conf (a dev copy of the site).
+// that took. Needs a server with gzip like nginx/default.conf (a dev copy of the site).
 //
 //   BASE=http://127.0.0.1:18011/ LABEL=prototype RUNS=3 node tools/measure_load.mjs
 //   PROFILES=warm ...                     # a repeat visit instead

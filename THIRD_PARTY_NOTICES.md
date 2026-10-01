@@ -123,5 +123,5 @@ SOFTWARE.
 ## Not bundled
 
 Gems installed at runtime from rubygems.org, and pages fetched through the
-same-origin bridges (`nginx.conf`), go straight from their source to the
+same-origin bridges (`nginx/default.conf`), go straight from their source to the
 learner's browser; the site only relays and caches them.

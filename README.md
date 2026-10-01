@@ -98,7 +98,7 @@ docker compose up -d      # serves on port 8011
 ```
 
 Or any static file server over `html/` (the rubygems proxy then needs
-nginx, see `nginx.conf`).
+nginx, see `nginx/default.conf`).
 
 ## Tests
 

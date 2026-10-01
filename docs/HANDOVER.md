@@ -14,13 +14,17 @@ Last updated 2026-09-30 (38 lessons in German, English and Japanese).
 | GitHub | https://github.com/Largo/chunkybacon (public) |
 
 `docker-compose.yml` bind-mounts `html/` read-only into the container and
-`nginx.conf` as the server config. Consequences:
+`nginx/` as its `conf.d` (the folder, not the file: git replaces a file on
+update, and a single-file mount would keep serving the old one). Consequences:
 
 - **Saving a file under `html/` is a deploy.** There is no build step and no
   restart. nginx sends `Cache-Control: no-cache` for html/rb/js/css/json, and
   `index.html` forces `cache: "no-cache"` on the `.rb` fetches, so a normal
   reload picks up the change.
-- **Changing `nginx.conf`** needs `docker exec chunkybacon nginx -t && docker exec chunkybacon nginx -s reload`.
+- **Pushing to `main` is a deploy.** The host checks GitHub every minute,
+  moves its checkout to `origin/main` and reloads nginx (only if `nginx -t`
+  passes; otherwise the old config keeps running).
+- **Changing `nginx/default.conf`** by hand on the host needs `docker exec chunkybacon nginx -t && docker exec chunkybacon nginx -s reload`.
 - **Compression**: nginx gzips text on the fly; `ruby+stdlib.wasm` goes out
   as the `ruby+stdlib.wasm.gz` next to it (`gzip_static`, 33 → 10 MB). That
   `.gz` must match the wasm: `ruby tools/compress_assets.rb --check`
@@ -58,7 +62,7 @@ html/
   assets/               app.css, CodeMirror, three.js (vendored), the fox SVG,
                         fonts/ (self-hosted web fonts + fonts.css, OFL 1.1)
   gems/cache/           .gem files + manifest.json (instant offline installs)
-nginx.conf              static files + same-origin bridges (rubygems, ruby-lang)
+nginx/default.conf      static files + same-origin bridges (rubygems, ruby-lang)
 docker-compose.yml
 LICENSE                    MIT for the code; course content is CC BY-SA 4.0 (README)
 THIRD_PARTY_NOTICES.md     bundled components and their licenses - update it
@@ -382,7 +386,7 @@ location, since `mime.types` has no `.rb` -, js, css, json, svg) and
 Only files that change through a tool get a `.gz` (`tools/compress_assets.rb`),
 so a hand-edited lessons.js or main.rb can never be shadowed by a stale one.
 
-`nginx.conf` is deliberately not an open proxy: upstream hosts are
+`nginx/default.conf` is deliberately not an open proxy: upstream hosts are
 hardcoded (`rubygems.org`, `www.ruby-lang.org`), only the path is forwarded,
 `GET`/`HEAD` only, rubygems locked to `api/v1/gems/` and `gems/`, per-IP
 `limit_req` 5 r/s with burst 60 (a gem with many dependencies makes two
@@ -418,9 +422,9 @@ git worktree add -b my-change ../chunkybacon-dev main
 docker network create chunkybacon-dev
 docker run -d --name chunkybacon-dev --network chunkybacon-dev -p 127.0.0.1:18011:80 \
   -v $PWD/../chunkybacon-dev/html:/usr/share/nginx/html:ro \
-  -v $PWD/../chunkybacon-dev/nginx.conf:/etc/nginx/conf.d/default.conf:ro nginx:1.27-alpine
+  -v $PWD/../chunkybacon-dev/nginx:/etc/nginx/conf.d:ro nginx:1.27-alpine
 BASE=http://127.0.0.1:18011/ node test/browser_test.mjs
-# then: git merge --ff-only, reload nginx if nginx.conf changed, push, remove container + worktree
+# then: git merge --ff-only, push (the host deploys it), remove container + worktree
 ```
 
 A quick way to run arbitrary Ruby in a cell from Node (used for the gem
