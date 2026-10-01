@@ -183,9 +183,10 @@ lessons that start a real course - a lesson on its own belongs in "Ausflüge"
 
 The sidebar itself (`index.html` `#sidebar`, `shell/app.rb`, `app.css`): from
 the top of the window to its foot with its own scroll; head with the course
-count and a bacon progress strip, the workshop, a search over titles and
-section names (Enter opens the first hit, Escape empties it), the groups
-with done counts, the gems panel folded at the foot. The fixed
+count and a bacon progress strip, the workshop, the gems panel (folded, a
+button like the workshop's; open, its chips scroll inside it), a search
+over titles and section names (Enter opens the first hit, Escape empties
+it), the groups with done counts. The fixed
 `#sidebarToggle` puts it away on a wide screen (`chunkyui_sidebar`, a view
 setting); at 820 px and below (`App::NARROW`, the same width as in app.css)
 it is a drawer that a lesson, a tap beside it or Escape put away again.
