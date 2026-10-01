@@ -58,10 +58,15 @@
   function startKernel() {
     if (kernelStarted) return;
     kernelStarted = true;
-    var script = document.createElement("script");
-    script.src = "browser.script.iife.js";   // runs main.rb (<script type="text/ruby">)
-    script.onerror = function () { kernelFailed("browser.script.iife.js could not be loaded"); };
-    document.head.appendChild(script);
+    // a page from the offline copy first reads what the kernel fetches
+    // synchronously (offline.js); otherwise this resolves at once
+    var offline = window.ChunkyOffline ? window.ChunkyOffline.kernelReady() : Promise.resolve();
+    offline.then(function () {
+      var script = document.createElement("script");
+      script.src = "browser.script.iife.js";   // runs main.rb (<script type="text/ruby">)
+      script.onerror = function () { kernelFailed("browser.script.iife.js could not be loaded"); };
+      document.head.appendChild(script);
+    });
   }
 
   // CRuby's loader does not catch: a failed wasm download or compile, or an

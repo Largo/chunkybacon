@@ -18,8 +18,9 @@
 # The DOM is a small tree: innerHTML is parsed (well-formed markup only),
 # and getElementById / querySelector(All) / closest understand the selectors
 # the shell uses: tag, #id, .class, [attr], [attr='value'], combined.
-# storage.js (window.ChunkyStorage) is a Hash-backed fake, CodeMirror
-# (window.cellEditors) a fake editor per initCell.
+# storage.js (window.ChunkyStorage) and offline.js (window.ChunkyOffline) are
+# Hash-backed fakes, CodeMirror (window.cellEditors) a fake editor per
+# initCell.
 require "json"
 
 module JS
@@ -455,9 +456,43 @@ module JS
     end
   end
 
-  # window: what html/index.html, storage.js and shell/bridge.js provide
+  # offline.js: the copy of the course on this device; records what is asked
+  class Offline
+    attr_reader :listeners, :calls
+    attr_accessor :supported, :state, :done, :total, :updating, :from_copy, :error
+
+    def initialize
+      @listeners = Hash.new { |h, k| h[k] = [] }
+      @calls = []
+      @supported = true
+      @state = "off"
+      @done = 0
+      @total = 0
+      @updating = false
+      @from_copy = false
+      @error = nil
+    end
+
+    def emit(name) = listeners[name].each(&:call)
+
+    def js
+      {
+        # a property in offline.js; a proc here so a test can change it before start
+        "supported" => proc { @supported },
+        "on" => proc { |name, fn| @listeners[name] << fn; nil },
+        "state" => proc { @state }, "updating" => proc { @updating }, "fromCopy" => proc { @from_copy },
+        "done" => proc { @done }, "total" => proc { @total }, "error" => proc { @error },
+        "sizeMb" => proc { 44 },
+        "savedAt" => proc { |lang| lang == "de" ? "01.10.26, 15:30" : "10/1/26, 3:30 PM" },
+        "enable" => proc { @calls << ["enable"]; JS::Promise.resolve },
+        "disable" => proc { @calls << ["disable"]; JS::Promise.resolve }
+      }
+    end
+  end
+
+  # window: what html/index.html, storage.js, offline.js and shell/bridge.js provide
   class Window < Node
-    attr_reader :document_node, :calls, :storage, :fs, :editors
+    attr_reader :document_node, :calls, :storage, :fs, :offline, :editors
 
     def initialize
       super("#window")
@@ -466,8 +501,10 @@ module JS
       @storage = {}
       @calls = []
       @fs = Storage.new
+      @offline = Offline.new
       @editors = {}
       props["ChunkyStorage"] = @fs.js
+      props["ChunkyOffline"] = @offline.js
       props["cellEditors"] = @editors
       props["initCell"] = proc do |idx|
         @calls << ["initCell", idx]

@@ -21,9 +21,10 @@ update, and a single-file mount would keep serving the old one). Consequences:
   restart. nginx sends `Cache-Control: no-cache` for html/rb/js/css/json, and
   `index.html` forces `cache: "no-cache"` on the `.rb` fetches, so a normal
   reload picks up the change.
-- **Pushing to `main` is a deploy.** The host checks GitHub every minute,
-  moves its checkout to `origin/main` and reloads nginx (only if `nginx -t`
-  passes; otherwise the old config keeps running).
+- **Pushing to `main` is a deploy.** GitHub tells the host about every push
+  (a webhook; it also checks by itself every few hours), and within seconds
+  the host moves its checkout to `origin/main` and reloads nginx (only if
+  `nginx -t` passes; otherwise the old config keeps running).
 - **Changing `nginx/default.conf`** by hand on the host needs `docker exec chunkybacon nginx -t && docker exec chunkybacon nginx -s reload`.
 - **Compression**: nginx gzips text on the fly; `ruby+stdlib.wasm` goes out
   as the `ruby+stdlib.wasm.gz` next to it (`gzip_static`, 33 → 10 MB). That
@@ -62,6 +63,8 @@ html/
                         limit, taking back the files a rehearsal wrote
   storage.js            where the work lives: localStorage change times, the
                         progress file, a connected folder (File System Access)
+  offline.js, sw.js     offline mode (§6c): the page's side and the service worker
+  offline-files.txt     what the offline copy holds (tools/offline_files.rb)
   assets/               app.css, CodeMirror, three.js (vendored), the fox SVG,
                         fonts/ (self-hosted web fonts + fonts.css, OFL 1.1)
   gems/cache/           .gem files + manifest.json (instant offline installs)
@@ -74,6 +77,7 @@ THIRD_PARTY_NOTICES.md     bundled components and their licenses - update it
 tools/build_gem_cache.rb   regenerates html/gems/cache/
 tools/update_ruby_wasm.rb  updates the wasm + loader from npm
 tools/compress_assets.rb   the .gz copies nginx serves (both wasm runtimes)
+tools/offline_files.rb     html/offline-files.txt - rerun after adding/removing a file
 tools/patch_picoruby_loader.rb  PicoRuby's loader: text/ruby -> text/picoruby
 tools/measure_load.mjs, tools/shell_metrics.rb  load times, code size (PICORUBY_SHELL.md)
 tools/render_social_cards.mjs  docs/social/card.html -> twitter-card.png (1600x900: X,
@@ -96,6 +100,7 @@ test/browser_test.mjs      Playwright end-to-end
 test/progress_test.mjs     Playwright: progress file, workshop, folder (48 checks)
 test/boot_failure_test.mjs Playwright: what the page says when a runtime fails
 test/language_test.mjs     Playwright: which language a visitor gets (11 checks)
+test/offline_test.mjs      Playwright: offline mode, behind a proxy it takes down
 test/make_lessons_json.js  writes test/lessons.json for the harnesses
 docs/HANDOVER.md           this file
 docs/PICORUBY_SHELL.md     the shell/kernel split in depth: bridge API,
@@ -455,6 +460,49 @@ shell does the timing, the kernel the guarding:
   (to probe a shape, run it in a child process with a timeout: an event-less
   loop hangs the tracing parent too).
 
+## 6c. Offline mode
+
+The progress dialog's *Offline lernen* keeps the whole course on the device
+(~45 MB stored, up to ~20 MB to download): the course then opens and runs
+without a connection. **Off until the learner turns it on** - before that
+no service worker is registered and nothing changes. The choice is
+`chunkyui_offline` (a view setting, not synced).
+
+- **Online nothing changes.** `html/sw.js` sends every request to the
+  network as before - a deploy is seen on the next load, just as without it.
+  The copy only answers when the network does not (an error, a 5xx from a
+  proxy whose server is down, or a page taking over 6 s). A page that came
+  from the copy takes every file from it, so it is one version throughout.
+- **The copy** is the files in `html/offline-files.txt` plus the page as
+  `./` answers it (with the server: the permalink page, so `/de/methoden`
+  works offline too). After an online visit, once the kernel is up, the
+  worker checks it (at most every 10 minutes): a HEAD per file, and only
+  files whose ETag/Last-Modified changed are fetched (no validator, as with
+  the server's page: a SHA-256 of the body). A new copy counts only once
+  complete and a second check saw no deploy meanwhile; one Cache Storage
+  entry per file version, `__offline__/index.json` names the current ones -
+  writing it is the switch. An interrupted download resumes where it was.
+- **No build step for edits**: an edited file has a new ETag. **Adding,
+  renaming or deleting a file under `html/`** needs `ruby
+  tools/offline_files.rb` (`--check` says whether the list is current). A
+  file missing from the list is simply not offline; a listed file that is
+  gone is skipped.
+- **Synchronous XHR does not pass a service worker in Chrome**, and the
+  kernel fetches gems that way (`fetch*Sync` in index.html). So `sw.js`
+  marks a page it serves from the copy (`<meta name="chunky-offline-copy">`),
+  `offline.js` then reads the gem cache and `shoes_dom.rb` (~7 MB) into
+  memory before the kernel starts (`bridge.js` waits for
+  `ChunkyOffline.kernelReady()`), and the sync helpers answer from there. A
+  new file the kernel fetches synchronously must be added there too.
+- **What needs the internet says so**: a gem not in the cache
+  (`gemOffline`), `Net::HTTP` ("this page is offline"); `/api`, the bridges
+  and the webhook are never answered from the copy.
+- Tests: `test/offline_test.mjs` (Chromium, `BROWSER=firefox|webkit`; with
+  the server on 8012 it also opens a permalink offline). Playwright's
+  offline switch does not reach a service worker in Firefox, so the test
+  puts a proxy in front of `BASE` and takes that down instead. To look at it
+  in a browser: DevTools → Application → Service workers / Cache storage.
+
 ## 7. nginx and the proxy
 
 Compression: `gzip on` for text (html, rb - typed `text/plain` in the app-code
@@ -536,7 +584,9 @@ ruby check_harness.rb          # 40 lessons x 3 languages, starter fails, soluti
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof
+ruby ../tools/offline_files.rb --check   # the offline copy's file list is current
 BASE=http://127.0.0.1:8011/ node browser_test.mjs   # Playwright, ~5 min
+BASE=http://127.0.0.1:8011/ node offline_test.mjs   # offline mode (§6c), ~1 min
 ```
 
 The CRuby harnesses exercise the real `browser_gems.rb` with `File.read`

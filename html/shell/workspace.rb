@@ -20,10 +20,11 @@ module ChunkyShell
     TEXT_FILES = ".rb,.txt,.csv,.tsv,.json,.md,.yml,.yaml,.erb,.html,.css,.xml"
     UPLOADS = "#{TEXT_FILES},.png,.jpg,.jpeg,.gif,.webp,.pdf"
 
-    def initialize(app, storage = JSG.w.ChunkyStorage, bridge = JSG.w.ChunkyBridge)
+    def initialize(app, storage = JSG.w.ChunkyStorage, bridge = JSG.w.ChunkyBridge, offline = JSG.w.ChunkyOffline)
       @app = app
       @s = storage
       @bridge = bridge
+      @offline = offline   # offline.js: the copy of the course on this device
       @message = nil        # [text, "ok" | "error"] after an action
       @open = nil
       @editor = nil
@@ -125,6 +126,8 @@ module ChunkyShell
       register("chunkyWsStatus") { ws.status_changed }
       @s.on("workspace", JS.generic_callbacks[:chunkyWsWorkspace])
       @s.on("status", JS.generic_callbacks[:chunkyWsStatus])
+      register("chunkyOfflineStatus") { ws.offline_changed }
+      @offline.on("status", JS.generic_callbacks[:chunkyOfflineStatus])
       # files edited in another program come in when the tab gets focus back
       listen(JSG.w, "focus", proc { @s.files.refresh if el("wsFiles") })
       # what the kernel asks for while it runs a workshop program (main.rb)
@@ -217,6 +220,67 @@ module ChunkyShell
       ]
     end
 
+    # offline.js keeps the copy; this shows how it is doing and turns it on
+    # and off. Its progress comes as status events (render_dialog).
+    def offline_act(promise)
+      later(promise) do |result|
+        @message = result.ok ? nil : [t("offlineError", result.message), "error"]
+        render_dialog
+      end
+    end
+
+    # a status event per file while the copy is saved: only the count
+    # changes then, and a re-render would take the focus off the buttons
+    def offline_changed
+      busy = dialog.querySelector(".pd-offline .pd-busy")
+      if offline_look == @offline_shown && busy && @offline.state == "loading"
+        busy.textContent = loading_text
+      else
+        render_dialog
+      end
+    end
+
+    # what offline_section draws, apart from the count
+    def offline_look = "#{@offline.state} #{@offline.updating} #{@offline.fromCopy}"
+
+    def loading_text
+      total = @offline.total.to_i
+      total > 0 ? "#{t('offlineLoading')} #{@offline.done.to_i}/#{total}" : t("offlineLoading")
+    end
+
+    def offline_section
+      out = [node("h3", {}, [t("offlineTitle")])]
+      return out << node("p", {}, [t("offlineUnsupported")]) unless @offline.supported
+
+      state = @offline.state
+      @offline_shown = offline_look
+      if state == "off"
+        out << node("p", {}, [t("offlineExplain")])
+        out << node("div", { className: "pd-actions" }, [
+          action_button("pd-secondary", t("offlineEnable")) { offline_act(@offline.enable) }
+        ])
+      elsif state == "loading"
+        out << node("p", { className: "pd-busy" }, [loading_text])
+        out << node("div", { className: "pd-actions" }, [
+          action_button("pd-secondary", t("offlineDisable")) { offline_act(@offline.disable) }
+        ])
+      elsif state == "error"
+        out << node("p", { className: "pd-error" }, [t("offlineError", @offline.error)])
+        out << node("div", { className: "pd-actions" }, [
+          action_button("pd-secondary", t("offlineRetry")) { offline_act(@offline.enable) },
+          action_button("pd-secondary", t("offlineDisable")) { offline_act(@offline.disable) }
+        ])
+      else
+        out << node("p", { className: "pd-connected" }, ["✓ #{t('offlineReady', @offline.savedAt(@app.lang))}"])
+        out << node("p", { className: "pd-busy" }, [t("offlineUpdating")]) if @offline.updating
+        out << node("p", {}, [t("offlineFromCopy")]) if @offline.fromCopy
+        out << node("div", { className: "pd-actions" }, [
+          action_button("pd-secondary", "#{t('offlineDisable')} (#{@offline.sizeMb} MB)") { offline_act(@offline.disable) }
+        ])
+      end
+      out
+    end
+
     def load_progress(input)
       file = input.files[0]
       return unless file
@@ -243,6 +307,7 @@ module ChunkyShell
         node("p", { className: "pd-intro" }, [t("progressIntro")]),
         node("section", {}, folder_section),
         node("section", {}, file_section),
+        node("section", { className: "pd-offline" }, offline_section),
         node("p", { className: message_class, role: "status" }, [@message ? @message[0] : ""])
       ])
     end

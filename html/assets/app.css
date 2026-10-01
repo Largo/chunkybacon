@@ -1026,6 +1026,7 @@ button.reset:hover { background: var(--paper); color: var(--ink); border-color: 
 .progress-dialog button.pd-primary { font-size: 0.95rem; padding: 0.45rem 1rem; }
 .pd-connected { font-weight: 600; }
 .pd-error, .pd-message.is-error { color: var(--err); }
+.pd-busy { color: var(--ink-soft); font-style: italic; }   /* the offline copy being saved */
 .pd-message { min-height: 1.6em; margin: 1rem 0 0; font-weight: 600; }
 .pd-message.is-ok { color: var(--ok); }
 

@@ -57,6 +57,10 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   code and workshop files live in the browser and can be saved as a progress
   file (download, load again, merged key by key) or - in Chrome and Edge over
   https - into a connected folder, where workshop files are real files.
+- **Offline, if you like**: one click keeps the whole course on your device
+  (about 45 MB), and it opens and runs without a connection - lessons,
+  cells, the bundled gems. Online it always loads the current version, and
+  the copy updates itself.
 - **Interactive widgets**: `show_irb` (a real IRB terminal with `_`,
   multi-line input, and authentic prompts), `show_browser` (a fake
   browser window that speaks Rack directly to your Sinatra/Roda app),
@@ -139,6 +143,7 @@ node progress_test.mjs    # progress file, workshop, connected folder
 node boot_failure_test.mjs # what the page says when a runtime fails
 node language_test.mjs    # ?lang=, last choice, browser languages, English
 node live_test.mjs        # live runs in a lesson and in the workshop
+node offline_test.mjs     # offline mode: the copy, offline, a deploy, turning it off
 ruby server_test.rb       # the optional server (server/)
 BASE=http://127.0.0.1:8012/ node permalink_test.mjs   # permalinks, against the server
 cd ../gem/chunky_bacon && rake test   # the companion gem

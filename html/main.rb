@@ -59,12 +59,17 @@ require_relative "rack_playground"
 
 BrowserGems.cache_base = "gems/cache"
 BrowserGems.proxy_base = "/rubygems"
+# OFFLINE[:miss]: a download failed because the page is offline (index.html's
+# helpers say "ERROR offline") - the install message says so
+OFFLINE = { miss: false }
 BrowserGems.fetch_text = lambda do |url|
   text = JS.global.fetchTextSync(url).to_s
+  OFFLINE[:miss] = true if text == "ERROR offline"
   text.start_with?("ERROR ") ? nil : text
 end
 BrowserGems.fetch_binary = lambda do |url|
   base64 = JS.global.fetchBinaryBase64(url).to_s
+  OFFLINE[:miss] = true if base64 == "ERROR offline"
   base64.start_with?("ERROR ") ? nil : base64.unpack1("m0")
 end
 
@@ -148,7 +153,9 @@ Net::HTTP.transport = lambda do |_method, uri|
                        "computer net/http can reach any URL"
   end
   data = JSON.parse(JSG.w.fetchHttpSync(prefix + uri.request_uri.to_s))
-  raise SocketError, "connection to #{uri.host} failed" if data["status"].to_i.zero?
+  if data["status"].to_i.zero?
+    raise SocketError, "connection to #{uri.host} failed#{' - this page is offline' if data['body'] == 'offline'}"
+  end
   [data["status"].to_i, { "content-type" => data["contentType"].to_s }, data["body"].to_s]
 end
 
@@ -326,6 +333,7 @@ class ChunkyApp
   def install_gem_ui(name)
     raise AutoRun::NeedsRun if auto_run? && !(BrowserGems.installed.key?(name) || BrowserGems.manifest.key?(name))
 
+    OFFLINE[:miss] = false
     version = AutoRun.untraced { BrowserGems.install(name) }
     "#{name} #{version}"
   rescue BrowserGems::NativeGemError => e
@@ -333,7 +341,7 @@ class ChunkyApp
     message = e.message == name ? format(ui["nativeGem"], name) : format(ui["nativeDep"], name, e.message)
     raise BrowserGems::NativeGemError, message
   rescue BrowserGems::NotFoundError
-    raise BrowserGems::NotFoundError, format(ui["gemNotFound"], name)
+    raise BrowserGems::NotFoundError, format(ui[OFFLINE[:miss] ? "gemOffline" : "gemNotFound"], name)
   end
 
   # the panel's chips and its install button (Chunky's bubble says how it went)

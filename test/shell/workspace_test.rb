@@ -81,6 +81,76 @@ class WorkspaceTest < Minitest::Test
     refute dialog.props["open"]
   end
 
+  # ---------- offline (offline.js) ----------
+
+  def offline = window.offline
+  def offline_text = dialog.js_querySelector(".pd-offline").text
+
+  def open_dialog(&setup)
+    start(&setup)
+    click(byid("progressBtn"))
+  end
+
+  def test_offline_is_off_until_asked_for
+    open_dialog
+    assert_includes offline_text, "Offline lernen"
+    assert_includes offline_text, "45 MB Speicherplatz"
+    click(button_labelled("Auf diesem Gerät speichern", dialog))
+    assert_equal [["enable"]], offline.calls
+  end
+
+  def test_offline_where_the_browser_cannot
+    open_dialog { offline.supported = false }
+    assert_includes offline_text, "geht in diesem Browser nicht"
+    assert_nil button_labelled("Auf diesem Gerät speichern", dialog)
+  end
+
+  def test_saving_counts_files_without_redrawing
+    open_dialog do
+      offline.state = "loading"
+      offline.total = 40
+      offline.done = 12
+    end
+    busy = dialog.js_querySelector(".pd-offline .pd-busy")
+    assert_equal "Wird gespeichert … 12/40", busy.text
+    offline.done = 13
+    offline.emit("status")
+    assert_same busy, dialog.js_querySelector(".pd-offline .pd-busy"), "the same element, so focus stays"
+    assert_equal "Wird gespeichert … 13/40", busy.text
+    offline.state = "ready"
+    offline.emit("status")
+    assert_includes offline_text, "Stand: 01.10.26, 15:30"
+  end
+
+  def test_a_saved_copy_and_deleting_it
+    open_dialog do
+      offline.state = "ready"
+      offline.from_copy = true
+    end
+    assert_includes offline_text, "✓ Auf diesem Gerät gespeichert"
+    assert_includes offline_text, "Du bist gerade offline"
+    click(button_labelled("Kopie löschen (44 MB)", dialog))
+    assert_equal [["disable"]], offline.calls
+  end
+
+  def test_a_failed_copy_offers_another_try
+    open_dialog do
+      offline.state = "error"
+      offline.error = "QuotaExceededError"
+    end
+    assert_includes offline_text, "konnte nicht gespeichert werden: QuotaExceededError"
+    click(button_labelled("Nochmals versuchen", dialog))
+    assert_equal [["enable"]], offline.calls
+  end
+
+  def test_offline_in_english
+    open_dialog { offline.state = "ready" }
+    byid("langSelect").props["value"] = "en"
+    JS.fire(byid("langSelect").wrap, "change")
+    assert_includes offline_text, "Saved on this device – works offline too. As of 10/1/26, 3:30 PM"
+    assert button_labelled("Delete the copy (44 MB)", dialog)
+  end
+
   # ---------- the workshop ----------
 
   def test_the_workshop_starts_with_a_main_rb
