@@ -273,6 +273,28 @@ pdf = Prawn::Document.new
 end
 pdf.render_file "certificate.pdf")]
   },
+  "jpeg" => {
+    "de" => [%(require "pure_jpeg"
+karte = PureJPEG::Source::RawSource.new(80, 60) do |x, y|
+  y < 30 ? [100, 160, 230] : [60, 160, 60]
+end
+PureJPEG.encode(karte).write("postkarte.jpg")), %(install_gem "pure_jpeg"
+karte = PureJPEG::Source::RawSource.new(80, 60)
+80.times do |x|
+  60.times { |y| y < 30 ? karte.set(x, y, 100, 160, 230) : karte.set(x, y, 60, 160, 60) }
+end
+PureJPEG.encode(karte, quality: 60).write("postkarte.jpg"))],
+    "en" => [%(require "pure_jpeg"
+card = PureJPEG::Source::RawSource.new(80, 60) do |x, y|
+  y < 30 ? [100, 160, 230] : [60, 160, 60]
+end
+PureJPEG.encode(card).write("postcard.jpg")), %(install_gem "pure_jpeg"
+card = PureJPEG::Source::RawSource.new(80, 60)
+80.times do |x|
+  60.times { |y| y < 30 ? card.set(x, y, 100, 160, 230) : card.set(x, y, 60, 160, 60) }
+end
+PureJPEG.encode(card, quality: 60).write("postcard.jpg"))]
+  },
   "scarpe" => {
     "de" => [
       %(show_shoes do\n  stack do\n    title "Gruss-App"\n    @feld = edit_line ""\n    @gruss = para "Wer bist du?"\n    button "Gruess mich" do\n      @gruss.replace("Hallo, \#{@feld.text}!")\n    end\n  end\nend)

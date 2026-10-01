@@ -346,6 +346,26 @@ class ChunkyApp
     @run_images << data_url if @run_images
   end
 
+  # the first bytes of the picture formats a browser shows
+  IMAGE_SIGNATURES = {
+    "\x89PNG".b => "image/png", "\xFF\xD8\xFF".b => "image/jpeg",
+    "GIF8".b => "image/gif", "RIFF".b => "image/webp"
+  }.freeze
+
+  # show_image's argument as a data: URL - a picture's bytes, or the name of
+  # a file the cell wrote (virtual, or real: File.binwrite, ChunkyPNG#save)
+  def image_data_url(image)
+    return image.to_data_url if image.respond_to?(:to_data_url)
+
+    bytes = image.respond_to?(:to_bytes) ? image.to_bytes.b : image.to_s.b
+    unless IMAGE_SIGNATURES.any? { |magic, _type| bytes.start_with?(magic) }
+      name = image.to_s
+      bytes = (SandboxFS.virtual?(name) && SandboxFS.exist?(name) ? SandboxFS.read(name) : File.binread(name)).b
+    end
+    type = IMAGE_SIGNATURES.find { |magic, _type| bytes.start_with?(magic) }&.last || "image/png"
+    "data:#{type};base64,#{[bytes].pack('m0')}"
+  end
+
   def add_pdf(bytes)
     @run_pdfs << bytes.to_s.b if @run_pdfs
   end
@@ -746,16 +766,34 @@ class ChunkyApp
   # stays) | "stopped" (time limit) | "needs" (wants the Run button).
   def finish_cell_run(idx, auto = false)
     started = $window.performance.now
+    AutoRun.library_time = 0.0
     outcome = begin
       run_cell(idx, auto: auto)
     rescue Exception => e
       $window.console.error("run_cell #{idx}: #{e.class}: #{e.message}")
       :error
+    ensure
+      end_rehearsal
     end
     elapsed = ($window.performance.now - started) / 1000.0
   ensure
-    bridge.ran(idx, (outcome || :error).to_s, elapsed || -1, auto)
+    # +own+: without installing and loading gems, for the shell's "too slow
+    # for live runs"
+    own = elapsed ? [elapsed - AutoRun.library_time, 0.0].max : -1
+    bridge.ran(idx, (outcome || :error).to_s, elapsed || -1, auto, own)
     bridge.gems(installed_json)
+  end
+
+  # A live run keeps nothing it wrote: its new files on the real filesystem
+  # go, the lesson's virtual ones come back - after the run, so that the
+  # exercise's check still sees them (a PDF, a JPEG the cell wrote).
+  def end_rehearsal
+    changes, watch, lesson_files = @rehearsal
+    @rehearsal = nil
+    return unless changes
+
+    AutoRun.take_back(changes, watch)
+    SandboxFS.store.replace(lesson_files) if lesson_files
   end
 
   def auto_run? = @auto_run == true
@@ -821,11 +859,9 @@ class ChunkyApp
     changes = FileWatch.changes_since(watch)
     changes.each { |path, bytes| add_download(path, bytes) }
     explicit.each { |name, bytes| add_download(name, bytes) }
-    if auto
-      # a rehearsal keeps nothing; what it wrote is still shown and offered
-      AutoRun.take_back(changes, watch)
-      SandboxFS.store.replace(lesson_files) unless workshop?
-    end
+    # a rehearsal keeps nothing (end_rehearsal); what it wrote is still
+    # shown and offered
+    @rehearsal = [changes, watch, lesson_files] if auto
     if workshop?
       where = error && Workshop.location(error, file)
       # pictures and PDFs the program wrote show up below the editor - unless
@@ -959,13 +995,14 @@ module Kernel
     ChunkyApp.instance.install_gem_ui(name)
   end
 
+  # Shows a picture below the cell:
+  #   show_image png            # a ChunkyPNG::Image
+  #   show_image jpeg           # what PureJPEG.encode returns (anything with to_bytes)
+  #   show_image bytes          # a PNG, JPEG, GIF or WebP, as a String
+  #   show_image "sonne.jpg"    # a file the cell wrote
   def show_image(image)
-    data_url = if image.respond_to?(:to_data_url)
-                 image.to_data_url
-               else
-                 "data:image/png;base64," + [image.to_s].pack("m0")
-               end
-    ChunkyApp.instance.add_image(data_url)
+    app = ChunkyApp.instance
+    app.add_image(app.image_data_url(image))
     nil
   end
 

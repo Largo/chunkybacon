@@ -18,7 +18,7 @@
 //   shell -> kernel   chunky:run {idx, auto, lang, lesson, workshop, seq}   (auto: a live run)
 //                     chunky:lesson {lang, lesson, workshop, seq}   (seq: a new binding)
 //                     chunky:install {name, ...}
-//   kernel -> shell   chunky:kernel-ready, chunky:ran {idx, outcome, elapsed, auto},
+//   kernel -> shell   chunky:kernel-ready, chunky:ran {idx, outcome, elapsed, auto, own},
 //                     chunky:gems {installed: JSON}, chunky:installed {name, ok, message}
 //   bridge -> shell   chunky:kernel-failed {reason}   (CRuby did not come up)
 (function () {
@@ -173,8 +173,10 @@
         items.forEach(send);
       }, 0);
     },
-    ran: function (idx, outcome, elapsed, auto) {
-      emit("chunky:ran", { idx: Number(idx), outcome: String(outcome), elapsed: Number(elapsed), auto: !!auto });
+    // own: elapsed without installing and loading gems
+    ran: function (idx, outcome, elapsed, auto, own) {
+      emit("chunky:ran", { idx: Number(idx), outcome: String(outcome), elapsed: Number(elapsed), auto: !!auto,
+                           own: own === undefined ? Number(elapsed) : Number(own) });
     },
     gems: function (installed) { emit("chunky:gems", { installed: String(installed || "{}") }); },
     installed: function (name, ok, message) {

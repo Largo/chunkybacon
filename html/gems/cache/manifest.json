@@ -197,5 +197,10 @@
       "js",
       "ruby_wasm"
     ]
+  },
+  "pure_jpeg": {
+    "version": "0.4.0",
+    "file": "pure_jpeg-0.4.0.gem",
+    "deps": []
   }
 }

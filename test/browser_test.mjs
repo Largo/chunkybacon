@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('38 lessons in nav', (await page.$$('#lessonNav a')).length === 38);
+check('39 lessons in nav', (await page.$$('#lessonNav a')).length === 39);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -372,6 +372,38 @@ await runExercise();
 await waitForDownload('.cell.exercise', 'urkunde.pdf');
 await page.waitForTimeout(300);
 check('certificate exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// JPEG lesson: pure_jpeg writes and reads JPEGs in pure Ruby; show_image
+// takes the encoder, the bytes or the name of a file, shown as image/jpeg
+await page.click('#lessonNav a[data-id="jpeg"]');
+await page.waitForTimeout(300);
+await page.click('.run-cell[data-idx="1"]');
+await page.waitForSelector('#cell-out-1 img.cell-image', { timeout: 60000 });
+check('pure_jpeg installs from cache', (await page.textContent('#gemsList')).includes('pure_jpeg ✓'));
+check('show_image shows a JPEG as a JPEG', (await page.getAttribute('#cell-out-1 img.cell-image', 'src')).startsWith('data:image/jpeg;base64,/9j/'));
+check('the sunset is 1400 bytes', (await page.textContent('#cell-out-1')).includes('=> 1400'));
+await page.click('.run-cell[data-idx="3"]');
+await page.waitForFunction(() => document.querySelectorAll('#cell-out-3 img.cell-image').length === 3, null, { timeout: 30000 }).catch(() => {});
+check('three qualities, three pictures', (await page.$$('#cell-out-3 img.cell-image')).length === 3 &&
+  (await page.textContent('#cell-out-3')).includes('quality 5: 760 Bytes'));
+await page.click('.run-cell[data-idx="5"]');
+await page.waitForFunction(() => (document.getElementById('cell-out-5').textContent || '').includes('=>'), null, { timeout: 30000 }).catch(() => {});
+check('a JPEG reads back pixel by pixel, almost exactly', (await page.textContent('#cell-out-5')).includes('=> [96, 64, 255, 210, 59]'));
+await page.click('.run-cell[data-idx="7"]');
+await page.waitForFunction(() => (document.getElementById('cell-out-7').textContent || '').includes('=>'), null, { timeout: 30000 }).catch(() => {});
+check('show_image takes the name of a file the cell wrote', (await page.$$('#cell-out-7 img.cell-image')).length === 2);
+check('the JPEG the cell wrote is offered for download', (await waitForDownload('#cell-out-7', 'sonne-grau.jpg')) !== null);
+check('PureJPEG.info finds that file', (await page.textContent('#cell-out-7')).includes('component_count=1'));
+await setExercise('karte = PureJPEG::Source::RawSource.new(80, 60) { |x, y| y < 30 ? [100, 160, 230] : [60, 160, 60] }\nPureJPEG.encode(karte).write("postkarte.jpg")');
+await runExercise();
+await waitForDownload('.cell.exercise', 'postkarte.jpg');
+await page.waitForTimeout(300);
+check('postcard exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+await page.evaluate(() => { document.getElementById('chunkyChat').className = ''; });
+await runExercise();
+await waitForDownload('.cell.exercise', 'postkarte.jpg');
+await page.waitForTimeout(300);
+check('... and again with the same bytes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 
 // Scarpe lesson: real Shoes apps from the lacci gem, drawn into the page by a
 // Lacci display service (shoes_dom.rb); several stay live at once

@@ -111,7 +111,7 @@ kernel listens for `chunky:*` events on `window` and answers through
 | `shellReady()` | shell, after the first render | `chunky:shell-ready`, starts the kernel |
 | `kernelReady(installedJson)` | kernel, end of `ChunkyApp#initialize` | `ready = true`, `chunky:kernel-ready`, `chunky:gems`, then the queue |
 | (none: an unhandled rejection before `ready`) | CRuby's loader | `failed = true`, queue dropped, `chunky:kernel-failed {reason}` |
-| `ran(idx, outcome, elapsed, auto)` | kernel, after every run | `chunky:ran {idx, outcome: ok/error/pass/fail (a live run also skipped/stopped/needs), elapsed, auto}` |
+| `ran(idx, outcome, elapsed, auto, own)` | kernel, after every run | `chunky:ran {idx, outcome: ok/error/pass/fail (a live run also skipped/stopped/needs), elapsed, auto, own}` - `own`: elapsed without installing and loading gems |
 | `gems(installedJson)` | kernel, after runs and installs | `chunky:gems {installed}` |
 | `installed(name, ok, message)` | kernel, panel install | `chunky:installed {name, ok, message}` |
 | `ready`, `state` | both | `state = {lang, lesson, workshop, seq}`; the kernel reads it at boot |

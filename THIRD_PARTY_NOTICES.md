@@ -69,6 +69,7 @@ noted.
 | nokogiri (nokogiri-pure) | 1.19.4 | MIT | Andi Idogawa; Nokogiri: Mike Dalessio, Aaron Patterson and others | LICENSE-nokogiri.md, LICENSE-DEPENDENCIES.md (the ported libxml2, libxslt and gumbo) |
 | pdf-core | 0.10.0 | Prawn's Ruby-style licence, GPL-2.0 or GPL-3.0, at your choice | Alexander Mankuta, Gregory Brown, Brad Ediger and others | LICENSE, COPYING, GPLv2, GPLv3 |
 | prawn | 2.5.0 | Prawn's Ruby-style licence, GPL-2.0 or GPL-3.0, at your choice | Alexander Mankuta, Gregory Brown, Brad Ediger and others | LICENSE, COPYING, GPLv2, GPLv3 |
+| pure_jpeg | 0.4.0 | MIT | Peter Cooper | LICENSE |
 | racc | 1.8.1 | Ruby, BSD-2-Clause | Minero Aoki, Aaron Patterson | COPYING |
 | rack | 3.2.7 | MIT | Leah Neukirchen | MIT-LICENSE |
 | rack-protection | 4.2.1 | MIT | Sinatra contributors | License |

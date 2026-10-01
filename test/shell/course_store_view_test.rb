@@ -13,7 +13,7 @@ class CourseStoreViewTest < Minitest::Test
   # ---------- Course ----------
 
   def test_course_has_every_lesson_and_language
-    assert_equal 38, @course.size
+    assert_equal 39, @course.size
     assert_equal "hallo", @course.id(0)
     assert_equal %w[de en ja], @course.langs
     assert_equal 1, @course.index("rechnen")
@@ -77,7 +77,7 @@ class CourseStoreViewTest < Minitest::Test
 
   def test_nav_links_sections_and_marks
     html = ChunkyShell::View.nav_html(@course, "de", "rechnen", ["hallo"])
-    assert_equal 38, html.scan("<a ").length
+    assert_equal 39, html.scan("<a ").length
     assert_includes html, %(<div class="nav-section">Grundkurs</div>)
     assert_includes html, %(<a class="done" href="#hallo" data-id="hallo">1. Hallo, Welt!</a>)
     assert_match(/<a class="active" href="#rechnen" data-id="rechnen">2\./, html)

@@ -1,6 +1,7 @@
 # The rules for live runs (html/autorun.rb), under CRuby:
 #   ruby test/autorun_test.rb
 require "minitest/autorun"
+require "tmpdir"
 require_relative "../html/autorun"
 
 class AutoRunTest < Minitest::Test
@@ -75,5 +76,28 @@ class AutoRunTest < Minitest::Test
       eval("AutoRun.untraced { sleep 0.2; :done }", binding, "chunky.rb")
     end
     assert_equal :done, result
+  end
+
+  # a cached install or a require taking longer than the limit, then a
+  # moment of the learner's own code: not stopped
+  def test_untraced_time_does_not_count
+    code = "AutoRun.untraced { AutoRun.untraced { sleep 0.2 } }\n" \
+           "t = Process.clock_gettime(Process::CLOCK_MONOTONIC)\n" \
+           "n = 0\nn += 1 while Process.clock_gettime(Process::CLOCK_MONOTONIC) - t < 0.05\n:done"
+    result = AutoRun.with_time_limit(["chunky.rb"], 0.15) { eval(code, binding, "chunky.rb") }
+    assert_equal :done, result
+  end
+
+  def test_a_slow_require_does_not_count
+    Dir.mktmpdir do |dir|
+      lib = File.join(dir, "slow_lib.rb")
+      File.write(lib, "t = Process.clock_gettime(Process::CLOCK_MONOTONIC)\n" \
+                      "nil while Process.clock_gettime(Process::CLOCK_MONOTONIC) - t < 0.2\n")
+      code = "require #{lib.dump}\n" \
+             "t = Process.clock_gettime(Process::CLOCK_MONOTONIC)\n" \
+             "n = 0\nn += 1 while Process.clock_gettime(Process::CLOCK_MONOTONIC) - t < 0.05\n:done"
+      result = AutoRun.with_time_limit(["chunky.rb"], 0.15) { eval(code, binding, "chunky.rb") }
+      assert_equal :done, result
+    end
   end
 end

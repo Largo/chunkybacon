@@ -19,7 +19,7 @@ class LiveTest < Minitest::Test
   end
 
   def live_ran(idx, outcome, elapsed = 0.05)
-    fire("chunky:ran", { "idx" => idx, "outcome" => outcome, "elapsed" => elapsed, "auto" => true })
+    fire("chunky:ran", { "idx" => idx, "outcome" => outcome, "elapsed" => elapsed, "auto" => true, "own" => elapsed })
   end
 
   def test_a_key_runs_the_cell_a_moment_later
@@ -110,14 +110,24 @@ class LiveTest < Minitest::Test
 
   def test_a_slow_cell_waits_for_run
     start_ready
-    fire("chunky:ran", { "idx" => 1, "outcome" => "ok", "elapsed" => 0.8 })
+    fire("chunky:ran", { "idx" => 1, "outcome" => "ok", "elapsed" => 0.8, "auto" => false, "own" => 0.8 })
     assert_includes toggle(1).attrs["class"], "is-paused"
     assert_includes toggle(1).props["title"], "zu lange"
     refute_includes toggle(exercise_idx).attrs["class"].to_s, "is-paused", "only that cell"
     type_in(1, "puts 3")
     assert_empty calls("autorun")
-    fire("chunky:ran", { "idx" => 1, "outcome" => "ok", "elapsed" => 0.05 })
+    fire("chunky:ran", { "idx" => 1, "outcome" => "ok", "elapsed" => 0.05, "auto" => false, "own" => 0.05 })
     refute_includes toggle(1).attrs["class"], "is-paused"
+    type_in(1, "puts 4")
+    assert_equal [["autorun", 1]], calls("autorun")
+  end
+
+  # elapsed 2.5 s, of which installing and loading a gem took all but 0.05 s
+  def test_installing_a_gem_does_not_make_a_cell_slow
+    start_ready
+    fire("chunky:ran", { "idx" => 1, "outcome" => "ok", "elapsed" => 2.5, "auto" => false, "own" => 0.05 })
+    refute_includes toggle(1).attrs["class"].to_s, "is-paused"
+    assert_equal "2,5 s", cell(1).js_querySelector(".run-time").text, "the run time is the whole run"
     type_in(1, "puts 4")
     assert_equal [["autorun", 1]], calls("autorun")
   end

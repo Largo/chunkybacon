@@ -16,7 +16,7 @@ class AppTest < Minitest::Test
     assert_equal "none", byid("spinner").props["style"]["display"]
     assert_equal "block", byid("app").props["style"]["display"]
     assert_equal "Ruby lernen mit Chunky Bacon", byid("siteTitle").text
-    assert_equal 38, find_all("#lessonNav a").length
+    assert_equal 39, find_all("#lessonNav a").length
     assert_equal "hallo", find("#lessonNav a.active").attrs["data-id"]
     assert_equal "Hallo, Welt!", find("#lessonBody h2").text
     assert_equal 3, find_all("#lessonBody .cell").length
@@ -182,7 +182,7 @@ class AppTest < Minitest::Test
   def test_ran_settles_the_cell
     start
     click(run_button(1))
-    fire("chunky:ran", { "idx" => 1, "outcome" => "ok", "elapsed" => 1.54 })
+    fire("chunky:ran", { "idx" => 1, "outcome" => "ok", "elapsed" => 1.54, "auto" => false, "own" => 1.54 })
     refute_includes cell(1).attrs["class"], "running"
     refute run_button(1).props["disabled"]
     assert_equal "▶ Ausführen", run_button(1).text
@@ -195,7 +195,7 @@ class AppTest < Minitest::Test
     start
     idx = exercise_idx
     click(run_button(idx))
-    fire("chunky:ran", { "idx" => idx, "outcome" => "error", "elapsed" => 0.2 })
+    fire("chunky:ran", { "idx" => idx, "outcome" => "error", "elapsed" => 0.2, "auto" => false, "own" => 0.2 })
     assert_includes cell(idx).attrs["class"], "shake"
     assert_equal "fail", bubble_state
     assert_includes bubble, "Fehler"
@@ -204,7 +204,7 @@ class AppTest < Minitest::Test
   def test_a_failed_check_gives_the_hint
     start
     idx = exercise_idx
-    fire("chunky:ran", { "idx" => idx, "outcome" => "fail", "elapsed" => 0.2 })
+    fire("chunky:ran", { "idx" => idx, "outcome" => "fail", "elapsed" => 0.2, "auto" => false, "own" => 0.2 })
     assert_equal "fail", bubble_state
     assert_includes bubble, "💡"
   end
@@ -212,7 +212,7 @@ class AppTest < Minitest::Test
   def test_a_passed_check_marks_the_lesson_and_links_the_next
     start
     idx = exercise_idx
-    fire("chunky:ran", { "idx" => idx, "outcome" => "pass", "elapsed" => 0.2 })
+    fire("chunky:ran", { "idx" => idx, "outcome" => "pass", "elapsed" => 0.2, "auto" => false, "own" => 0.2 })
     assert_equal "pass", bubble_state
     assert_equal '["hallo"]', window.storage["chunky_done"]
     assert_includes find('#lessonNav a[data-id="hallo"]').attrs["class"], "done"
@@ -226,7 +226,7 @@ class AppTest < Minitest::Test
     ids = JS.global[:LESSONS][:lessons].to_a.map { |lesson| lesson[:id] }
     start(storage: { "chunky_done" => JSON.generate(ids) })
     idx = exercise_idx
-    fire("chunky:ran", { "idx" => idx, "outcome" => "pass", "elapsed" => 0.2 })
+    fire("chunky:ran", { "idx" => idx, "outcome" => "pass", "elapsed" => 0.2, "auto" => false, "own" => 0.2 })
     assert_includes bubble, "Koans"
   end
 

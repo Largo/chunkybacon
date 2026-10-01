@@ -8,11 +8,12 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **38 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **39 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics,
   PowerPoint decks with [ruby_pptx](https://github.com/Largo/ruby_pptx),
-  PDFs with Prawn and HexaPDF, and
+  PDFs with Prawn and HexaPDF, JPEG photos with
+  [pure_jpeg](https://github.com/peterc/pure_jpeg), and
   a project track that builds a small time tracker.
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
@@ -58,9 +59,10 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **Interactive widgets**: `show_irb` (a real IRB terminal with `_`,
   multi-line input, and authentic prompts), `show_browser` (a fake
   browser window that speaks Rack directly to your Sinatra/Roda app),
-  `show_image` (inline PNGs from chunky_png), and `show_three` (a WebGL
-  stage for scenes built with [three-rb](https://github.com/lef237/three-rb),
-  optionally animated per frame and orbitable with the mouse).
+  `show_image` (inline pictures: PNGs from chunky_png, JPEGs from
+  pure_jpeg), and `show_three` (a WebGL stage for scenes built with
+  [three-rb](https://github.com/lef237/three-rb), optionally animated per
+  frame and orbitable with the mouse).
 - Chunky Bacon, an original cartoon fox, cheers you on.
 
 ## On your own computer: the chunky_bacon gem

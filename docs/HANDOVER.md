@@ -2,7 +2,7 @@
 
 Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
-Last updated 2026-09-30 (38 lessons in German, English and Japanese).
+Last updated 2026-09-30 (39 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -210,7 +210,7 @@ Rules that the code and tests rely on:
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
 - Checks accept output OR result; `puts` is never required.
-- `test/browser_test.mjs` asserts the lesson count (`'38 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'39 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -224,7 +224,8 @@ Rules that the code and tests rely on:
   there in a progress file or a connected folder, see §6a.
 
 Helpers available in cells (defined in `main.rb`): `install_gem`,
-`show_image` (chunky_png), `show_browser(app, path)` + `mock_get`,
+`show_image` (a ChunkyPNG image, a PureJPEG encoder, PNG/JPEG/GIF/WebP bytes
+or the name of a file the cell wrote), `show_browser(app, path)` + `mock_get`,
 `show_irb`, `show_files`, `show_three(scene, camera, orbit:, &animate)`,
 `show_shoes { ... }`, `download_file(data, name)`, `show_pdf(pdf)` (a file
 name, PDF bytes, a Prawn or HexaPDF document), `run_tests` (Minitest).
@@ -311,11 +312,15 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   not make Minitest pick up the image's bundled Minitest 6 over cached 5.x.
 - Minitest 5.x from the cache with a serial `parallel_executor`.
 - `sandbox_sim.rb`: relative paths go to an in-memory store behind
-  `File`/`Dir`; absolute paths pass through. `sleep` is a virtual clock (a
+  `File`/`Dir`; absolute paths pass through. `File.binwrite` and
+  `File.open`, what gems write with, are not redirected: their files land in
+  the real working directory, so `File.read`/`exist?`/`delete` of a relative
+  path fall back to a real file when the store does not have it (pure_jpeg
+  asks `File.exist?` before `File.binread`). `sleep` is a virtual clock (a
   real sleep crashes the VM uncatchably); `Thread` is a Fiber scheduler that
   interleaves at sleep points. `FileWatch` snapshots both stores per cell run
   to offer downloads; it skips `BrowserGems.root` and `/tmp`. It compares
-  contents, so it also notes what `File.open` opened for writing: a run that
+  contents, so it also notes what `File.open` and `File.binwrite` wrote: a run that
   writes the same bytes again (Prawn's PDFs are deterministic) still offers
   the file.
 - Real `Module#autoload` works now that gems are files; the loader no longer
@@ -410,7 +415,9 @@ shell does the timing, the kernel the guarding:
   the page it was typed on (`@view_gen`), while the cell is idle, the
   switch on and the cell quick. `autorun` never queues: while CRuby loads,
   typing is just typing. A run (live or ▶) over `LIVE_SLOW` (0.3 s) pauses
-  that cell's live runs until a quick ▶ run (the switch is struck through).
+  that cell's live runs until a quick ▶ run (the switch is struck through) -
+  measured without installing and loading gems (`chunky:ran`'s `own`, from
+  `AutoRun.library_time`), which a cell's first run does once.
   A live result is quiet: no shake, no reveal, no run time, no bubble - only
   a pass that is new (`@last_outcome`) cheers and marks the lesson done.
   Switches: `chunkyui_live` (lessons, on unless "off") and
@@ -420,17 +427,21 @@ shell does the timing, the kernel the guarding:
   locals declared, so `x /2` parses as on ▶), and IRB cells and loops that
   raise no TracePoint event (`while true; end`, one-line modifier loops) are
   refused outright → outcome `skipped`, output untouched. The run is a
-  **rehearsal**: in a lesson the `SandboxFS` store is restored afterwards,
-  files it wrote on the real filesystem are deleted (`AutoRun.take_back`),
-  and in the workshop nothing goes back to the project (`workspaceWrite`/
-  `workshopAfterRun` are skipped) - its output, previews and downloads still
-  show. **No downloads**: `install_gem` of a gem neither installed nor cached
-  and the Net::HTTP transport raise `AutoRun::NeedsRun` (outcome `needs`, a
-  hint to press ▶); a cached install runs untraced. **A time limit**:
+  **rehearsal**: after the run - and after the exercise's check, which may
+  read what it wrote (`end_rehearsal` in `finish_cell_run`) - a lesson's
+  `SandboxFS` store is restored and files it wrote on the real filesystem
+  are deleted (`AutoRun.take_back`); in the workshop nothing goes back to
+  the project (`workspaceWrite`/`workshopAfterRun` are skipped). Its output,
+  previews and downloads still show. **No downloads**: `install_gem` of a
+  gem neither installed nor cached and the Net::HTTP transport raise
+  `AutoRun::NeedsRun` (outcome `needs`, a hint to press ▶); `require`
+  auto-installs cached gems only. **A time limit**:
   `AutoRun.with_time_limit` (TracePoint `:line`, `:b_call`, `:c_call`, the
   clock read every 128 events) raises `AutoRun::Stopped` after `LIMIT`
   (1 s), but only on a line of the learner's own file(s) - never inside a
-  gem being loaded or the app (outcome `stopped`, a hint). Both exceptions
+  gem being loaded or the app (outcome `stopped`, a hint). Installing a
+  cached gem and every `require` run untraced and off the clock
+  (`AutoRun.untraced` moves the deadline by their time). Both exceptions
   descend from `Exception`, so `rescue => e` in learner code cannot swallow
   them. The output gets `.is-rehearsal` (errors fainter); no line is marked.
 - **▶ has no time limit**: TracePoint costs ~3x on gem-heavy code, so a
@@ -462,7 +473,7 @@ container started with plain `docker run` on the default bridge gets 502s.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 38 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 39 lessons x 3 languages, starter fails, solutions pass
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof

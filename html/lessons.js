@@ -2431,7 +2431,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 35). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
+            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 36). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
           },
           {
             "t": "c",
@@ -2478,7 +2478,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 35 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
+            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 36 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
           },
           {
             "t": "c",
@@ -2525,7 +2525,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン35で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
+            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン36で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
           },
           {
             "t": "c",
@@ -2553,6 +2553,155 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "jpeg",
+      "section": {
+        "de": "JPEG mit pure_jpeg",
+        "en": "JPEG with pure_jpeg",
+        "ja": "pure_jpegでJPEG"
+      },
+      "de": {
+        "title": "22. JPEG-Fotos mit pure_jpeg",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>JPEG – Fotos aus Ruby</h2><p>In Lektion 13 hast du mit <code>chunky_png</code> PNG-Bilder gemalt. PNG speichert jeden Pixel <strong>exakt</strong> – ideal für Logos, Pixel-Art und Screenshots, für Fotos aber riesig. Darum ist fast jedes Foto ein <strong>JPEG</strong>: Es lässt weg, was das Auge kaum bemerkt, und wird dadurch viel kleiner.</p><p>Normalerweise erledigt das eine Bibliothek in C. <a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a> von Peter Cooper schreibt und liest JPEGs in reinem Ruby – darum läuft es hier im Browser. Malen wir einen Sonnenuntergang, Pixel für Pixel:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"pure_jpeg\"\nrequire \"pure_jpeg\"\n\nbild = PureJPEG::Source::RawSource.new(96, 64) do |x, y|\n  if (x - 48)**2 + (y - 40)**2 < 18**2\n    [255, 210, 60]                  # die Sonne\n  else\n    [40 + y * 3, 70 + y, 170 - y]   # der Himmel, unten röter\n  end\nend\njpeg = PureJPEG.encode(bild, quality: 85)\nshow_image jpeg\njpeg.to_bytes.bytesize"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>RawSource.new(96, 64)</code> ruft den Block für jeden Pixel einmal auf: mit <code>x</code> von 0 bis 95 nach rechts und <code>y</code> von 0 bis 63 nach <em>unten</em> – anders als im PDF der letzten Lektion. Der Block liefert die Farbe als <code>[rot, grün, blau]</code>, jeden Wert von 0 bis 255. Die Sonne ist ein Kreis: alle Punkte, die weniger als 18 Pixel von <code>(48, 40)</code> entfernt sind – Pythagoras, ohne Wurzel.</p><p><code>PureJPEG.encode</code> macht daraus ein JPEG, <code>show_image</code> zeigt es, und <code>to_bytes</code> liefert die fertige Datei: rund 1,4 KB. Die rohen Pixel wären 96 × 64 × 3 = 18&nbsp;432 Bytes, gut dreizehnmal so viel. Wie viel JPEG weglässt, bestimmt <code>quality:</code>, von 1 bis 100:</p>"
+          },
+          {
+            "t": "c",
+            "code": "[90, 30, 5].each do |qualitaet|\n  daten = PureJPEG.encode(bild, quality: qualitaet).to_bytes\n  show_image daten\n  puts \"quality #{qualitaet}: #{daten.bytesize} Bytes\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Je kleiner die Zahl, desto kleiner die Datei – und desto deutlicher siehst du <strong>Kästchen</strong>. JPEG zerlegt das Bild in Blöcke von 8 × 8 Pixeln und beschreibt jeden Block als Mischung von Wellenmustern, von ganz glatt bis ganz fein (die <em>diskrete Kosinustransformation</em>). Je tiefer die Qualität, desto mehr feine Wellen rundet es weg. Sanfte Verläufe wie der Himmel überstehen das gut, harte Kanten wie der Sonnenrand nicht. Darum: Fotos als JPEG, Logos und Screenshots als PNG.</p><p>pure_jpeg liest JPEGs auch wieder ein:</p>"
+          },
+          {
+            "t": "c",
+            "code": "foto = PureJPEG.read(jpeg.to_bytes)\nmitte = foto[48, 40]   # mitten in der Sonne\n[foto.width, foto.height, mitte.r, mitte.g, mitte.b]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>PureJPEG.read</code> nimmt die Bytes oder einen Dateinamen und gibt ein Bild zurück; <code>foto[x, y]</code> ist ein Pixel mit <code>r</code>, <code>g</code> und <code>b</code>. Die Sonne war <code>[255, 210, 60]</code> – zurück kommt fast dasselbe, aber nicht ganz: JPEG ist <strong>verlustbehaftet</strong>, jedes Speichern verliert ein wenig.</p><p><code>PureJPEG.encode</code> nimmt jedes Objekt, das <code>width</code>, <code>height</code> und <code>[x, y]</code> kennt – auch ein gelesenes Foto. So rechnest du Bilder um, zum Beispiel ins Negativ oder in Graustufen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "negativ = PureJPEG::Source::RawSource.new(foto.width, foto.height) do |x, y|\n  punkt = foto[x, y]\n  [255 - punkt.r, 255 - punkt.g, 255 - punkt.b]\nend\nshow_image PureJPEG.encode(negativ)\n\nPureJPEG.encode(foto, grayscale: true).write(\"sonne-grau.jpg\")\nshow_image \"sonne-grau.jpg\"\nPureJPEG.info(\"sonne-grau.jpg\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>write</code> speichert das JPEG als Datei – sie erscheint als Download unter der Zelle, und <code>show_image</code> nimmt auch ihren Namen. <code>PureJPEG.info</code> liest nur den Kopf der Datei, ohne die Pixel zu entpacken: die Grösse und <code>component_count</code>, 1 Kanal für Graustufen, 3 für Farbe.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>gem install pure_jpeg</code>, und <code>write</code> legt eine echte Datei an. Fotos aus der Kamera liest <code>PureJPEG.read(\"ferien.jpg\")</code> genauso, auch progressive JPEGs. Mit chunky_png geht es in beide Richtungen: <code>PureJPEG.from_chunky_png(png, quality: 80)</code> macht aus einem PNG ein JPEG, und mit <code>foto.each_pixel { |x, y, punkt| … }</code> malst du ein JPEG Pixel für Pixel in ein <code>ChunkyPNG::Image</code>.</p><p>Grenzen: EXIF-Daten (Kamera, Datum, GPS) gehen beim Neu-Speichern verloren, und Ruby rechnet die Wellen langsamer als C – für grosse Fotos nimmst du lieber eine C-Bibliothek wie libvips (Gem <code>ruby-vips</code>). Dafür läuft pure_jpeg überall, wo Ruby läuft, sogar hier. Peter Cooper hat es unter der MIT-Lizenz veröffentlicht.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky schickt eine Postkarte aus den Ferien. Schreibe <code>postkarte.jpg</code>, 80 × 60 Pixel: die obere Hälfte himmelblau <code>[100, 160, 230]</code>, die untere Hälfte grasgrün <code>[60, 160, 60]</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# postkarte.jpg: 80 × 60, oben himmelblau, unten grasgrün\n",
+            "check": "downloads.include?(\"postkarte.jpg\") && PureJPEG.read(\"postkarte.jpg\").then { |img| [img.width, img.height, img[40, 10], img[40, 50]] }.then { |w, h, oben, unten| w == 80 && h == 60 && oben.b > 180 && oben.b > oben.r + 50 && unten.g > 120 && unten.r < 120 && unten.b < 120 }",
+            "hint": "Ein <code>PureJPEG::Source::RawSource.new(80, 60) do |x, y| … end</code>, der für <code>y &lt; 30</code> <code>[100, 160, 230]</code> liefert und sonst <code>[60, 160, 60]</code> – dann <code>PureJPEG.encode(…).write(\"postkarte.jpg\")</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "22. JPEG photos with pure_jpeg",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>JPEG – photos from Ruby</h2><p>In lesson 13 you painted PNG pictures with <code>chunky_png</code>. PNG keeps every pixel <strong>exactly</strong> – ideal for logos, pixel art and screenshots, but huge for photos. That is why almost every photo is a <strong>JPEG</strong>: it leaves out what the eye barely notices, and gets much smaller for it.</p><p>Usually a library written in C does this. <a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a> by Peter Cooper writes and reads JPEGs in pure Ruby – which is why it runs here in your browser. Let's paint a sunset, pixel by pixel:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"pure_jpeg\"\nrequire \"pure_jpeg\"\n\npicture = PureJPEG::Source::RawSource.new(96, 64) do |x, y|\n  if (x - 48)**2 + (y - 40)**2 < 18**2\n    [255, 210, 60]                  # the sun\n  else\n    [40 + y * 3, 70 + y, 170 - y]   # the sky, redder further down\n  end\nend\njpeg = PureJPEG.encode(picture, quality: 85)\nshow_image jpeg\njpeg.to_bytes.bytesize"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>RawSource.new(96, 64)</code> calls the block once for every pixel: with <code>x</code> from 0 to 95 going right and <code>y</code> from 0 to 63 going <em>down</em> – unlike the PDF in the last lesson. The block returns the colour as <code>[red, green, blue]</code>, each from 0 to 255. The sun is a circle: every point less than 18 pixels away from <code>(48, 40)</code> – Pythagoras, without the square root.</p><p><code>PureJPEG.encode</code> turns it into a JPEG, <code>show_image</code> shows it, and <code>to_bytes</code> returns the finished file: about 1.4 KB. The raw pixels would be 96 × 64 × 3 = 18,432 bytes, more than thirteen times as much. How much JPEG leaves out is up to <code>quality:</code>, from 1 to 100:</p>"
+          },
+          {
+            "t": "c",
+            "code": "[90, 30, 5].each do |quality|\n  data = PureJPEG.encode(picture, quality: quality).to_bytes\n  show_image data\n  puts \"quality #{quality}: #{data.bytesize} bytes\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>The smaller the number, the smaller the file – and the clearer the <strong>little squares</strong>. JPEG cuts the picture into blocks of 8 × 8 pixels and describes each block as a mix of wave patterns, from completely smooth to very fine (the <em>discrete cosine transform</em>). The lower the quality, the more of the fine waves it rounds away. Smooth gradients like the sky survive that well, hard edges like the rim of the sun do not. Hence: photos as JPEG, logos and screenshots as PNG.</p><p>pure_jpeg reads JPEGs back in, too:</p>"
+          },
+          {
+            "t": "c",
+            "code": "photo = PureJPEG.read(jpeg.to_bytes)\nmiddle = photo[48, 40]   # right in the sun\n[photo.width, photo.height, middle.r, middle.g, middle.b]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>PureJPEG.read</code> takes the bytes or a file name and returns a picture; <code>photo[x, y]</code> is a pixel with <code>r</code>, <code>g</code> and <code>b</code>. The sun was <code>[255, 210, 60]</code> – what comes back is almost the same, but not quite: JPEG is <strong>lossy</strong>, every save loses a little.</p><p><code>PureJPEG.encode</code> takes any object that knows <code>width</code>, <code>height</code> and <code>[x, y]</code> – a photo it has read, too. That is how you transform pictures, into a negative, say, or into greyscale:</p>"
+          },
+          {
+            "t": "c",
+            "code": "negative = PureJPEG::Source::RawSource.new(photo.width, photo.height) do |x, y|\n  pixel = photo[x, y]\n  [255 - pixel.r, 255 - pixel.g, 255 - pixel.b]\nend\nshow_image PureJPEG.encode(negative)\n\nPureJPEG.encode(photo, grayscale: true).write(\"sun-gray.jpg\")\nshow_image \"sun-gray.jpg\"\nPureJPEG.info(\"sun-gray.jpg\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>write</code> saves the JPEG as a file – it appears as a download below the cell, and <code>show_image</code> takes its name too. <code>PureJPEG.info</code> only reads the file's header, without unpacking the pixels: the size, and <code>component_count</code> – 1 channel for greyscale, 3 for colour.</p><div class='offweb' data-title='On your machine'><p><code>gem install pure_jpeg</code>, and <code>write</code> creates a real file. <code>PureJPEG.read(\"holiday.jpg\")</code> reads photos from your camera just the same, progressive JPEGs included. With chunky_png it works both ways: <code>PureJPEG.from_chunky_png(png, quality: 80)</code> turns a PNG into a JPEG, and <code>photo.each_pixel { |x, y, pixel| … }</code> lets you paint a JPEG into a <code>ChunkyPNG::Image</code> pixel by pixel.</p><p>Limits: EXIF data (camera, date, GPS) is lost when you save again, and Ruby computes the waves more slowly than C – for big photos, reach for a C library such as libvips (the <code>ruby-vips</code> gem). In return, pure_jpeg runs wherever Ruby runs, even here. Peter Cooper published it under the MIT licence.</p></div><div class='task'><strong>Task:</strong> Chunky is sending a postcard from the holidays. Write <code>postcard.jpg</code>, 80 × 60 pixels: the top half sky blue <code>[100, 160, 230]</code>, the bottom half grass green <code>[60, 160, 60]</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# postcard.jpg: 80 × 60, top half sky blue, bottom half grass green\n",
+            "check": "downloads.include?(\"postcard.jpg\") && PureJPEG.read(\"postcard.jpg\").then { |img| [img.width, img.height, img[40, 10], img[40, 50]] }.then { |w, h, top, bottom| w == 80 && h == 60 && top.b > 180 && top.b > top.r + 50 && bottom.g > 120 && bottom.r < 120 && bottom.b < 120 }",
+            "hint": "A <code>PureJPEG::Source::RawSource.new(80, 60) do |x, y| … end</code> that returns <code>[100, 160, 230]</code> for <code>y &lt; 30</code> and <code>[60, 160, 60]</code> otherwise – then <code>PureJPEG.encode(…).write(\"postcard.jpg\")</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "22. pure_jpegでJPEG写真",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>JPEG – Rubyで写真を作る</h2><p>レッスン13では、<code>chunky_png</code>でPNG画像を描きました。PNGはすべてのピクセルを<strong>正確に</strong>保存します。ロゴやドット絵、スクリーンショットには最適ですが、写真だとファイルがとても大きくなります。そこで、ほとんどの写真は<strong>JPEG</strong>です。JPEGは目にはほとんどわからない部分を省くので、ずっと小さくなります。</p><p>ふつうはC言語で書かれたライブラリがこの仕事をします。Peter Cooperさんの<a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a>は、JPEGの書き出しも読み込みもピュアRubyで行います。だから、このブラウザの中で動くのです。夕焼けを1ピクセルずつ描いてみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"pure_jpeg\"\nrequire \"pure_jpeg\"\n\npicture = PureJPEG::Source::RawSource.new(96, 64) do |x, y|\n  if (x - 48)**2 + (y - 40)**2 < 18**2\n    [255, 210, 60]                  # 太陽\n  else\n    [40 + y * 3, 70 + y, 170 - y]   # 空。下へ行くほど赤くなる\n  end\nend\njpeg = PureJPEG.encode(picture, quality: 85)\nshow_image jpeg\njpeg.to_bytes.bytesize"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>RawSource.new(96, 64)</code>は、ピクセルごとに1回ずつブロックを呼び出します。<code>x</code>は右へ0から95まで、<code>y</code>は<em>下へ</em>0から63まで進みます。前のレッスンのPDFとは向きが逆です。ブロックは色を<code>[赤, 緑, 青]</code>で返し、それぞれの値は0から255です。太陽は円です。<code>(48, 40)</code>からの距離が18ピクセルより小さい点をすべて塗ります。平方根を使わないピタゴラスの定理です。</p><p><code>PureJPEG.encode</code>がJPEGを作り、<code>show_image</code>がそれを表示し、<code>to_bytes</code>が完成したファイルを返します。約1.4 KBです。生のピクセルなら96 × 64 × 3 = 18,432バイト、13倍以上になります。JPEGがどれだけ省くかは、1から100までの<code>quality:</code>で決まります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "[90, 30, 5].each do |quality|\n  data = PureJPEG.encode(picture, quality: quality).to_bytes\n  show_image data\n  puts \"quality #{quality}: #{data.bytesize} bytes\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>数字が小さいほどファイルは小さくなり、<strong>四角いブロック</strong>がはっきり見えてきます。JPEGは画像を8 × 8ピクセルのブロックに分け、それぞれを、なめらかなものから細かいものまでの波の模様の組み合わせとして表します（<em>離散コサイン変換</em>）。品質が低いほど、細かい波をたくさん丸めて捨てます。空のようななめらかなグラデーションはほとんど影響を受けませんが、太陽のふちのようなくっきりした境目はくずれます。だから、写真はJPEG、ロゴやスクリーンショットはPNGで保存します。</p><p>pure_jpegはJPEGを読み込むこともできます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "photo = PureJPEG.read(jpeg.to_bytes)\nmiddle = photo[48, 40]   # 太陽のまん中\n[photo.width, photo.height, middle.r, middle.g, middle.b]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>PureJPEG.read</code>はバイト列かファイル名を受け取り、画像を返します。<code>photo[x, y]</code>は<code>r</code>、<code>g</code>、<code>b</code>を持つピクセルです。太陽は<code>[255, 210, 60]</code>でしたが、戻ってくる色はほとんど同じでも、まったく同じではありません。JPEGは<strong>非可逆圧縮</strong>で、保存するたびに少しずつ失われるのです。</p><p><code>PureJPEG.encode</code>は、<code>width</code>、<code>height</code>、<code>[x, y]</code>を持つオブジェクトなら何でも受け取ります。読み込んだ写真もそうです。こうして画像を変換できます。たとえば、ネガにしたり、グレースケールにしたり：</p>"
+          },
+          {
+            "t": "c",
+            "code": "negative = PureJPEG::Source::RawSource.new(photo.width, photo.height) do |x, y|\n  pixel = photo[x, y]\n  [255 - pixel.r, 255 - pixel.g, 255 - pixel.b]\nend\nshow_image PureJPEG.encode(negative)\n\nPureJPEG.encode(photo, grayscale: true).write(\"sun-gray.jpg\")\nshow_image \"sun-gray.jpg\"\nPureJPEG.info(\"sun-gray.jpg\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>write</code>はJPEGをファイルに保存します。ファイルはセルの下にダウンロードとして現れ、<code>show_image</code>にはファイル名を渡すこともできます。<code>PureJPEG.info</code>はピクセルを展開せずに、ファイルの先頭部分だけを読みます。サイズと<code>component_count</code>、つまりグレースケールなら1チャンネル、カラーなら3チャンネルです。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>gem install pure_jpeg</code>を実行すれば、<code>write</code>で本物のファイルが作られます。カメラで撮った写真も<code>PureJPEG.read(\"holiday.jpg\")</code>で同じように読めます。プログレッシブJPEGも大丈夫です。chunky_pngとは両方向に変換できます。<code>PureJPEG.from_chunky_png(png, quality: 80)</code>はPNGからJPEGを作り、<code>photo.each_pixel { |x, y, pixel| … }</code>を使えばJPEGを1ピクセルずつ<code>ChunkyPNG::Image</code>に描き写せます。</p><p>限界もあります。保存し直すとEXIFデータ（カメラ、日付、GPS）は失われますし、RubyはCより波の計算が遅いので、大きな写真にはlibvips（gemは<code>ruby-vips</code>）のようなCのライブラリが向いています。そのかわり、pure_jpegはRubyが動くところならどこでも、ここでさえ動きます。Peter CooperさんがMITライセンスで公開しています。</p></div><div class='task'><strong>課題：</strong>Chunkyが旅先からポストカードを送ります。80 × 60ピクセルの<code>postcard.jpg</code>を書き出しましょう。上半分は空色<code>[100, 160, 230]</code>、下半分は草色<code>[60, 160, 60]</code>です。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# postcard.jpg：80 × 60、上半分は空色、下半分は草色\n",
+            "check": "downloads.include?(\"postcard.jpg\") && PureJPEG.read(\"postcard.jpg\").then { |img| [img.width, img.height, img[40, 10], img[40, 50]] }.then { |w, h, top, bottom| w == 80 && h == 60 && top.b > 180 && top.b > top.r + 50 && bottom.g > 120 && bottom.r < 120 && bottom.b < 120 }",
+            "hint": "<code>PureJPEG::Source::RawSource.new(80, 60) do |x, y| … end</code>で、<code>y &lt; 30</code>なら<code>[100, 160, 230]</code>、それ以外なら<code>[60, 160, 60]</code>を返すようにしてみて。最後に<code>PureJPEG.encode(…).write(\"postcard.jpg\")</code>だよ。"
+          }
+        ]
+      }
+    },
+    {
       "id": "scarpe",
       "section": {
         "de": "Shoes mit Scarpe",
@@ -2560,7 +2709,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "ScarpeでShoes"
       },
       "de": {
-        "title": "22. Shoes-Apps mit Scarpe",
+        "title": "23. Shoes-Apps mit Scarpe",
         "cells": [
           {
             "t": "h",
@@ -2607,7 +2756,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "22. Shoes apps with Scarpe",
+        "title": "23. Shoes apps with Scarpe",
         "cells": [
           {
             "t": "h",
@@ -2654,7 +2803,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "22. ScarpeでShoesアプリ",
+        "title": "23. ScarpeでShoesアプリ",
         "cells": [
           {
             "t": "h",
@@ -2709,7 +2858,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "応用コース：timelog"
       },
       "de": {
-        "title": "23. Projekt timelog: Collections",
+        "title": "24. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -2748,7 +2897,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "23. Project timelog: collections",
+        "title": "24. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -2787,7 +2936,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "23. timelogプロジェクト：コレクション",
+        "title": "24. timelogプロジェクト：コレクション",
         "cells": [
           {
             "t": "h",
@@ -2829,7 +2978,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "24. Text parsen: Regex",
+        "title": "25. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -2860,7 +3009,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "24. Parsing text: regex",
+        "title": "25. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -2891,7 +3040,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "24. テキストのパース：正規表現",
+        "title": "25. テキストのパース：正規表現",
         "cells": [
           {
             "t": "h",
@@ -2925,7 +3074,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "25. Methoden richtig bauen",
+        "title": "26. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -2956,7 +3105,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "25. Building methods properly",
+        "title": "26. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -2987,7 +3136,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "25. メソッドをきちんと作る",
+        "title": "26. メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -3021,7 +3170,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "26. Entry & Timesheet",
+        "title": "27. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -3052,7 +3201,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "26. Entry & Timesheet",
+        "title": "27. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -3083,7 +3232,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "26. EntryとTimesheet",
+        "title": "27. EntryとTimesheet",
         "cells": [
           {
             "t": "h",
@@ -3117,7 +3266,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "27. Testen mit Minitest",
+        "title": "28. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -3148,7 +3297,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "27. Testing with Minitest",
+        "title": "28. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -3179,7 +3328,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "27. Minitestでテスト",
+        "title": "28. Minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -3213,7 +3362,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "28. Enumerable & Data",
+        "title": "29. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -3225,7 +3374,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 23, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 24, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -3236,7 +3385,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "28. Enumerable & Data",
+        "title": "29. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -3248,7 +3397,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 23, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 24, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -3259,7 +3408,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "28. EnumerableとData",
+        "title": "29. EnumerableとData",
         "cells": [
           {
             "t": "h",
@@ -3271,7 +3420,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン23で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン24で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
           },
           {
             "t": "x",
@@ -3285,7 +3434,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "29. Blocks, Procs & Lambdas",
+        "title": "30. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -3324,7 +3473,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "29. Blocks, procs & lambdas",
+        "title": "30. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -3363,7 +3512,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "29. ブロック、Proc、lambda",
+        "title": "30. ブロック、Proc、lambda",
         "cells": [
           {
             "t": "h",
@@ -3405,7 +3554,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "30. Fehler behandeln",
+        "title": "31. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -3436,7 +3585,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "30. Handling errors",
+        "title": "31. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -3467,7 +3616,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "30. エラー処理",
+        "title": "31. エラー処理",
         "cells": [
           {
             "t": "h",
@@ -3501,7 +3650,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "31. Daten speichern: Formate",
+        "title": "32. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -3556,7 +3705,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "31. Saving data: formats",
+        "title": "32. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -3611,7 +3760,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "31. データの保存：フォーマット",
+        "title": "32. データの保存：フォーマット",
         "cells": [
           {
             "t": "h",
@@ -3669,7 +3818,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "32. Kommandozeile & Gems",
+        "title": "33. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -3696,7 +3845,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "32. Command line & gems",
+        "title": "33. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -3723,7 +3872,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "32. コマンドラインとgem",
+        "title": "33. コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -3753,7 +3902,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "33. Pattern Matching",
+        "title": "34. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -3784,7 +3933,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "33. Pattern matching",
+        "title": "34. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -3815,7 +3964,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "33. パターンマッチ",
+        "title": "34. パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -3849,7 +3998,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "34. Objektmodell & Metaprogrammierung",
+        "title": "35. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -3880,7 +4029,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "34. Object model & metaprogramming",
+        "title": "35. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -3911,7 +4060,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "34. オブジェクトモデルとメタプログラミング",
+        "title": "35. オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -3945,7 +4094,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "35. Eine eigene DSL",
+        "title": "36. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -3957,7 +4106,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 29 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 30 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -3968,7 +4117,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "35. Your own DSL",
+        "title": "36. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -3980,7 +4129,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 29 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 30 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
@@ -3991,7 +4140,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "35. 自分だけのDSL",
+        "title": "36. 自分だけのDSL",
         "cells": [
           {
             "t": "h",
@@ -4003,7 +4152,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン29のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン30のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
           },
           {
             "t": "x",
@@ -4017,7 +4166,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "36. Codequalität & Debugging",
+        "title": "37. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -4040,7 +4189,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "36. Code quality & debugging",
+        "title": "37. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -4063,7 +4212,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "36. コードの品質とデバッグ",
+        "title": "37. コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -4089,7 +4238,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "37. Performance & Nebenläufigkeit",
+        "title": "38. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -4136,7 +4285,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "37. Performance & concurrency",
+        "title": "38. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -4183,7 +4332,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "37. パフォーマンスと並行処理",
+        "title": "38. パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -4233,7 +4382,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "38. Finale: timelog im Web",
+        "title": "39. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -4255,12 +4404,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 32 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 33 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "en": {
-        "title": "38. Finale: timelog on the web",
+        "title": "39. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
@@ -4282,12 +4431,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 32 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 33 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "ja": {
-        "title": "38. フィナーレ：Webで動くtimelog",
+        "title": "39. フィナーレ：Webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -4309,7 +4458,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン32で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン33で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }

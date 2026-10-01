@@ -2,7 +2,9 @@
 # curated gem list into html/gems/cache/ and writes manifest.json so the
 # in-browser installer can install them instantly without hitting rubygems.
 # Refuses gems with native extensions - the browser can only load pure Ruby.
-# Usage: ruby tools/build_gem_cache.rb
+# Usage: ruby tools/build_gem_cache.rb             # the whole list, latest versions
+#        ruby tools/build_gem_cache.rb pure_jpeg   # adds gems (and their deps) to the
+#                                                  # cache, leaving the cached ones as they are
 require 'json'
 require 'net/http'
 require 'rubygems/package'
@@ -10,7 +12,7 @@ require 'fileutils'
 
 # chunky_bacon: the course's own gem (gem/chunky_bacon), lesson 13's first
 GEMS = %w[chunky_bacon chunky_png gammo racc sinatra roda minitest csv benchmark three-rb ruby_pptx lacci nokogiri
-          bigdecimal-pure prawn hexapdf jsg]
+          bigdecimal-pure prawn hexapdf jsg pure_jpeg]
 
 # C extensions compiled into the wasm image: a gem may depend on them (hexapdf
 # on openssl and strscan, jsg on js), the browser finds them built in
@@ -50,8 +52,9 @@ LOCAL_GEMS = {
 CACHE_DIR = File.expand_path("../html/gems/cache", __dir__)
 FileUtils.mkdir_p(CACHE_DIR)
 
-manifest = {}
-queue = GEMS.dup
+MANIFEST = File.join(CACHE_DIR, "manifest.json")
+manifest = ARGV.empty? ? {} : JSON.parse(File.read(MANIFEST))
+queue = ARGV.empty? ? GEMS.dup : ARGV.dup
 
 until queue.empty?
   name = queue.shift
@@ -101,5 +104,5 @@ until queue.empty?
   manifest[name] = { "version" => version, "file" => file, "deps" => deps }
 end
 
-File.write(File.join(CACHE_DIR, "manifest.json"), JSON.pretty_generate(manifest))
+File.write(MANIFEST, JSON.pretty_generate(manifest))
 puts "manifest: #{manifest.keys.join(', ')}"

@@ -368,7 +368,7 @@ module ChunkyShell
       idx = detail.idx
       outcome = detail.outcome
       @running.delete(idx)
-      note_speed(idx, outcome, detail.elapsed)
+      note_speed(idx, outcome, detail.own)
       before = @last_outcome[idx]
       @last_outcome[idx] = outcome unless outcome == "skipped"
       return settle_live(idx, outcome, before) if detail.auto == true
@@ -504,11 +504,13 @@ module ChunkyShell
     end
 
     # A cell that took longer than LIVE_SLOW runs only with ▶ until a run
-    # is quick again. A skipped run tells nothing: its code did not run.
-    def note_speed(idx, outcome, elapsed)
-      return if outcome == "skipped" || elapsed.nil? || elapsed < 0
+    # is quick again. +seconds+ leaves out installing and loading gems, which
+    # a cell's first run does once. A skipped run tells nothing: its code did
+    # not run.
+    def note_speed(idx, outcome, seconds)
+      return if outcome == "skipped" || seconds.nil? || seconds < 0
 
-      @slow[idx] = elapsed > LIVE_SLOW
+      @slow[idx] = seconds > LIVE_SLOW
       refresh_live_toggle(idx)
     end
 

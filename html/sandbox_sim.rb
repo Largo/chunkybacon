@@ -60,8 +60,12 @@ class File
     alias_method :sandbox_orig_exist?, :exist?
     alias_method :sandbox_orig_delete, :delete
 
+    # A relative path is the virtual store's - unless only the real working
+    # directory has it: File.binwrite and File.open, what gems write with,
+    # land there, and a gem may ask File.exist? before File.binread
+    # (PureJPEG.read does).
     def read(path, *args, **kw)
-      SandboxFS.virtual?(path) ? SandboxFS.read(path) : sandbox_orig_read(path, *args, **kw)
+      sandboxed?(path) ? SandboxFS.read(path) : sandbox_orig_read(path, *args, **kw)
     end
 
     def write(path, content, *args, **kw)
@@ -69,13 +73,19 @@ class File
     end
 
     def exist?(path)
-      SandboxFS.virtual?(path) ? SandboxFS.exist?(path) : sandbox_orig_exist?(path)
+      sandboxed?(path) ? SandboxFS.exist?(path) : sandbox_orig_exist?(path)
     end
 
     def delete(*paths)
-      return sandbox_orig_delete(*paths) unless paths.all? { |p| SandboxFS.virtual?(p) }
+      return sandbox_orig_delete(*paths) unless paths.all? { |p| sandboxed?(p) }
       paths.each { |p| SandboxFS.delete(p) }
       paths.length
+    end
+
+    private
+
+    def sandboxed?(path)
+      SandboxFS.virtual?(path) && (SandboxFS.exist?(path) || !sandbox_orig_exist?(path))
     end
   end
 end
@@ -157,6 +167,15 @@ class File
     def open(path, *args, **kw, &block)
       FileWatch.note_open(path, kw.fetch(:mode) { args.first || "r" })
       filewatch_orig_open(path, *args, **kw, &block)
+    end
+
+    # binwrite does not go through open (PureJPEG's write: the same bytes
+    # on every run of a cell, still a download every time)
+    alias_method :filewatch_orig_binwrite, :binwrite
+
+    def binwrite(path, *args, **kw)
+      FileWatch.note_open(path, "w")
+      filewatch_orig_binwrite(path, *args, **kw)
     end
   end
 end

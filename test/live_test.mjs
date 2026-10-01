@@ -121,6 +121,21 @@ const responsive = async page => {
   await ctx.close();
 }
 
+// ---------- a check that reads the file a live run wrote ----------
+{
+  const ctx = await browser.newContext({ locale: 'de-DE' });
+  const page = await open(ctx, '#jpeg');
+  const ex = await page.getAttribute('.cell.exercise .run-cell', 'data-idx');
+  await edit(page, ex, 'install_gem "pure_jpeg"\nrequire "pure_jpeg"\nkarte = PureJPEG::Source::RawSource.new(80, 60) { |x, y| y < 30 ? [100, 160, 230] : [60, 160, 60] }\nPureJPEG.encode(karte).write("postkarte.jpg")');
+  await page.waitForFunction(() => document.getElementById('chunkyChat').className === 'pass', null, { timeout: 15000 }).catch(() => {});
+  check('a live run installs a cached gem and passes a check that reads its file', (await page.getAttribute('#chunkyChat', 'class')) === 'pass');
+  await page.evaluate(() => window.cellEditors[1].setValue('File.exist?("postkarte.jpg")'));
+  await page.click('.run-cell[data-idx="1"]');
+  await page.waitForFunction(() => (document.getElementById('cell-out-1').textContent || '').includes('=>'), null, { timeout: 10000 });
+  check('... and the file is gone afterwards', (await out(page, 1)).includes('=> false'));
+  await ctx.close();
+}
+
 // ---------- the workshop: off by default, a rehearsal keeps no file ----------
 {
   const ctx = await browser.newContext({ locale: 'de-DE' });
