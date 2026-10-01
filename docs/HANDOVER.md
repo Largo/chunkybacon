@@ -8,7 +8,7 @@ Last updated 2026-09-30 (38 lessons in German, English and Japanese).
 
 | | |
 |---|---|
-| Live | port 8011 on the server (no domain yet); its address and the host's paths are kept outside the repository |
+| Live | https://chunkybacon.idogawa.com/ (behind the host's reverse proxy); the host's address and paths are kept outside the repository |
 | Host | container `chunkybacon` (nginx:1.27-alpine) |
 | Checkout on the host | this repo, branch `main` |
 | GitHub | https://github.com/Largo/chunkybacon (public) |
@@ -362,8 +362,9 @@ machine:
   `chunkybacon-progress.json` there (800 ms debounce, flushed when the tab is
   hidden). After a browser restart the permission may need one click
   (*Ordner wieder öffnen*; the button shows an orange dot). **Needs a secure
-  context**: https or localhost. On the current `http://<ip>:8011` the
-  browser hides the API and the dialog offers only the file.
+  context**: https or localhost. The live site is https, so it works there;
+  on a plain `http://<ip>` the browser hides the API and the dialog offers
+  only the file.
 - **Workshop** (`#werkstatt`, link above the lessons): the learner's own
   programs. Without a folder the files are `chunky_file:<path>` keys (so they
   travel in the progress file); with a folder they are real text files in it
@@ -499,7 +500,6 @@ that license too. Contact in the gemspecs: web@idogawa.com.
 
 ## 11. Open ends
 
-- No domain: when one is bound, add a Caddy reverse proxy in front; the site itself needs no change.
 - Lesson 14 could show more Nokogiri (XPath, Builder) now that it works.
 - `NATIVE_GEMS` is a hand-kept list; a gem not on it still gets downloaded
   before its `extconf.rb` is noticed (cheap, but the message arrives late).
