@@ -16,7 +16,7 @@ class AppTest < Minitest::Test
     assert_equal "none", byid("spinner").props["style"]["display"]
     assert_equal "block", byid("app").props["style"]["display"]
     assert_equal "Ruby lernen mit Chunky Bacon", byid("siteTitle").text
-    assert_equal 39, find_all("#lessonNav a").length
+    assert_equal 40, find_all("#lessonNav a").length
     assert_equal "hallo", find("#lessonNav a.active").attrs["data-id"]
     assert_equal "Hallo, Welt!", find("#lessonBody h2").text
     assert_equal 3, find_all("#lessonBody .cell").length

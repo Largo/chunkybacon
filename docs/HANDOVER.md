@@ -2,7 +2,7 @@
 
 Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
-Last updated 2026-09-30 (39 lessons in German, English and Japanese).
+Last updated 2026-09-30 (40 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -210,7 +210,7 @@ Rules that the code and tests rely on:
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
 - Checks accept output OR result; `puts` is never required.
-- `test/browser_test.mjs` asserts the lesson count (`'39 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'40 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -473,7 +473,7 @@ container started with plain `docker run` on the default bridge gets 502s.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 39 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 40 lessons x 3 languages, starter fails, solutions pass
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof

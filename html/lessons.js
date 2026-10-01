@@ -39,7 +39,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveNeedsRun": "Gems installieren und Daten aus dem Netz holen geht nur mit ▶.",
       "nextLesson": "→ Weiter zur nächsten Lektion",
       "progress": "Lektion %d von %d",
-      "allDone": "🎉 Du hast alle Lektionen geschafft! CHUNKY BACON! Als nächsten Schritt empfehle ich dir die <a href='https://koans.idogawa.com'>Ruby Koans im Browser</a>.",
+      "allDone": "🎉 Du hast alle Lektionen geschafft! CHUNKY BACON! Als nächsten Schritt empfehle ich dir die <a href='https://koans.idogawa.com'>Ruby Koans im Browser</a> – und auf <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> die nächste Ruby-Konferenz oder ein Meetup.",
       "gemsTitle": "💎 Gems",
       "gemsInstallBtn": "Installieren",
       "gemsCachedTip": "lokal zwischengespeichert – installiert sofort",
@@ -127,7 +127,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveNeedsRun": "Installing gems and fetching from the web only happen with ▶.",
       "nextLesson": "→ On to the next lesson",
       "progress": "Lesson %d of %d",
-      "allDone": "🎉 You finished all lessons! CHUNKY BACON! As a next step, try the <a href='https://koans.idogawa.com'>Ruby Koans in the browser</a>.",
+      "allDone": "🎉 You finished all lessons! CHUNKY BACON! As a next step, try the <a href='https://koans.idogawa.com'>Ruby Koans in the browser</a> – and find your next Ruby conference or meetup on <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>.",
       "gemsTitle": "💎 Gems",
       "gemsInstallBtn": "Install",
       "gemsCachedTip": "cached locally – installs instantly",
@@ -215,7 +215,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveNeedsRun": "gemのインストールやネットからのデータ取得は ▶ のときだけ行います。",
       "nextLesson": "→ 次のレッスンへ",
       "progress": "レッスン %d / %d",
-      "allDone": "🎉 全レッスン制覇！CHUNKY BACON! 次のステップには<a href='https://koans.idogawa.com'>ブラウザで動くRuby Koans</a>がおすすめだよ。",
+      "allDone": "🎉 全レッスン制覇！CHUNKY BACON! 次のステップには<a href='https://koans.idogawa.com'>ブラウザで動くRuby Koans</a>がおすすめだよ。次のRubyカンファレンスやミートアップは<a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>で探してみてね。",
       "gemsTitle": "💎 Gems",
       "gemsInstallBtn": "インストール",
       "gemsCachedTip": "ローカルにキャッシュ済み – すぐにインストールできます",
@@ -2431,7 +2431,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 36). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
+            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 37). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
           },
           {
             "t": "c",
@@ -2478,7 +2478,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 36 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
+            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 37 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
           },
           {
             "t": "c",
@@ -2525,7 +2525,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン36で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
+            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン37で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
           },
           {
             "t": "c",
@@ -2851,6 +2851,227 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "rubykaigi",
+      "section": {
+        "de": "Ruby-Gemeinschaft",
+        "en": "The Ruby community",
+        "ja": "Rubyのコミュニティ"
+      },
+      "de": {
+        "title": "24. RubyKaigi & seltsamer Code",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ruby ist auch eine Gemeinschaft</h2><p>Hinter Ruby stehen Menschen – und die treffen sich. Die grösste Ruby-Konferenz ist die <a href='https://rubykaigi.org' target='_blank'>RubyKaigi</a> in Japan („Kaigi“ heisst Konferenz): seit 2006, inzwischen jedes Jahr in einer anderen Stadt, drei Tage Vorträge auf Japanisch und Englisch, und mittendrin Matz und die Leute, die Ruby selbst weiterentwickeln. Dazu kommen die RubyConf in den USA, die EuRuKo in Europa, Rails World und Meetups in vielen Städten.</p><p>Nicht dabei gewesen? <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> sammelt die Videos von Tausenden Ruby-Vorträgen, kostenlos und durchsuchbar, und zeigt, welche Konferenzen und Meetups bald stattfinden. In dieser Lektion folgen wir einem Rubyisten durch drei Vorträge: <strong>Tomoya Ishida</strong> (<code>@tompng</code>). Er ist Ruby-Committer und pflegt IRB, das Werkzeug aus Lektion 12.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<p>Auf der RubyKaigi 2024 in Okinawa hielt tompng die Keynote <a href='https://www.rubyevents.org/talks/keynote-writing-weird-code' target='_blank'>„Writing Weird Code“</a> – gesprochen auf Japanisch, die Folien auf Englisch. Seine These: Ruby kann wunderbar lesbaren Code – und herrlich seltsamen. Ein paar Ideen aus dem Vortrag, in eigenen Beispielen. Zuerst Schreibweisen, die du schon halb kennst:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p %(Speck)              # wie \"Speck\"\np %w[Kaz Isi Chunky]    # ein Array aus Wörtern\np \"RubyKaigi %d\" % 2024 # String#% füllt %d aus\np ?a                    # ein einzelnes Zeichen\np %%%                   # %…% mit % als Klammer: leer\np %%%%%%%               # leer % leer"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>%(…)</code> und <code>%w[…]</code> schreiben Strings und Wort-Arrays, <code>?a</code> ein einzelnes Zeichen, und <code>String#%</code> füllt Platzhalter aus. Die Klammer hinter <code>%</code> darf fast jedes Zeichen sein – sogar <code>%</code> selbst: <code>%%%</code> ist ein leerer String, und sieben Prozentzeichen sind „leer % leer“. tompng zeigte: Jede Reihe aus 4n + 3 Prozentzeichen ist gültiges Ruby. Auch Namen dürfen seltsam sein:</p>"
+          },
+          {
+            "t": "c",
+            "code": "🦊 = \"Chunky\"\n🥓 = \"Speck\"\nputs \"#{🦊} liebt #{🥓}\"\n\nbeide = <<~EINS + <<~ZWEI\n  Erste Zeile\nEINS\n  Zweite Zeile\nZWEI\nbeide"
+          },
+          {
+            "t": "h",
+            "html": "<p>Variablennamen dürfen Unicode sein, sogar Emoji (lesbarer wird es dadurch nicht unbedingt). Und zwei Heredocs in einer Zeile: Ruby liest erst die Zeile zu Ende und holt sich dann die Texte der Reihe nach. Genau solche Fälle brachten IRB früher beim Einrücken durcheinander; seit IRB 1.7.1 kommt es damit klar.</p><p>Reguläre Ausdrücke können mehr, als man denkt – dieser hier erkennt Primzahlen, ohne eine einzige Division im Code:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def prim?(zahl)\n  zahl > 1 && (\"x\" * zahl) !~ /\\A(xx+)\\1+\\z/\nend\n\n(1..30).select { |zahl| prim?(zahl) }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Aus 9 wird <code>\"xxxxxxxxx\"</code>. <code>(xx+)</code> fängt eine Gruppe aus mindestens zwei x, und <code>\\1+</code> verlangt, dass genau diese Gruppe sich bis zum Ende wiederholt. Das klappt nur, wenn die x sich in gleich grosse Gruppen teilen lassen – wenn die Zahl also zusammengesetzt ist. Die Regex-Maschine probiert dafür jede Gruppengrösse durch: langsam, aber schön. Ein alter Trick aus der Perl-Welt, den tompng im Vortrag zeigte. Und ein Rätsel zum Schluss: Was kommt hier heraus?</p>"
+          },
+          {
+            "t": "c",
+            "code": "FUCHS = \"Chunky\"\n\nmodule Wald\n  FUCHS += \" Bacon\"\nend\n\n[FUCHS, Wald::FUCHS]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>FUCHS += \" Bacon\"</code> heisst <code>FUCHS = FUCHS + \" Bacon\"</code>. Das Lesen findet das äussere <code>FUCHS</code>, das Zuweisen legt ein neues <code>Wald::FUCHS</code> an – zwei Konstanten. Solche Fälle muss ein Werkzeug kennen, das Ruby-Code versteht: Die Tests von tompngs Typ-Vervollständigung für IRB prüfen genau diesen.</p><p>Wozu das alles? Im Vortrag nennt tompng drei Gründe: Seltsamer Code ist ein Rätsel, das Spass macht. Wer es knackt, versteht Ruby tiefer. Und seltsamer Code findet Fehler – in IRB, im Parser –, die braven Programmen nie begegnen. Für ihn selbst war ein Wettbewerb für seltsamen Code der Anlass, an IRB und Reline mitzuarbeiten. Im zweiten Teil der Keynote zeigte er sechs Programme zum Thema Okinawa, etwa eine Datei, die zugleich ein Bild einer Osterlilie (BMP) und ein Ruby-Programm ist, und eines, das im Terminal endlos Muster der okinawanischen Minsa-Weberei webt – zu finden auf <a href='https://github.com/tompng/selftrick2024' target='_blank'>GitHub</a>.</p><p>Dieser Wettbewerb heisst <strong>TRICK</strong> (Transcendental Ruby Imbroglio Contest for rubyKaigi). Seit 2013 reichen Rubyistinnen und Rubyisten Programme ein, die die Jury überraschen, begeistern oder zum Lachen bringen sollen; in der Jury sitzt auch Matz. tompng gewann 2022 Gold. Bei <a href='https://www.rubyevents.org/talks/trick-2025-episode-i' target='_blank'>TRICK 2025</a> sass er selbst in der Jury – und belegte trotzdem die Plätze 3, 4 und 5, denn diesmal reichten auch die Juroren Programme ein. Alle Gewinner liegen mit Erklärungen <a href='https://github.com/tric/trick2025' target='_blank'>auf GitHub</a>, unter der MIT-Lizenz.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ein Jahr später, auf der RubyKaigi 2025 in Matsuyama, erzählte tompng in <a href='https://www.rubyevents.org/talks/analyzing-ruby-code-in-irb' target='_blank'>„Analyzing Ruby Code in IRB“</a>, wie IRB deinen Code liest, während du tippst: um ihn einzufärben, um zu erkennen, ob deine Eingabe fertig ist oder noch ein <code>end</code> fehlt, um einzurücken und um zu vervollständigen. Dafür betrachtet IRB den Code auf zwei Arten – als Folge von <strong>Tokens</strong>, den „Wörtern“ des Codes, und als <strong>Syntaxbaum</strong> –, und seltsamer Code ist der Härtetest. Helfen soll <strong>Prism</strong>, der Parser, mit dem Ruby seit Version 3.4 selbst deinen Code liest. Probier ihn aus:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"prism\"\n\nPrism.lex(\"puts 6 * 7\").value.map { |token, _zustand| token.type }"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Prism.lex</code> zerlegt den Code in Tokens: ein Name, eine Zahl, ein Stern, eine Zahl, das Ende. Daran sieht IRB zum Beispiel, was es wie einfärbt. <code>Prism.parse</code> baut den ganzen Syntaxbaum – und sagt mit <code>success?</code>, ob der Code vollständig und gültig ist:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts Prism.parse(\"def fuchs\").errors.last.message\n\n[\"def fuchs\", \"def fuchs\\nend\", \"[1, 2,\", \"\\\"Speck\"].map do |code|\n  [code, Prism.parse(code).success?]\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Bei <code>def fuchs</code> fehlt das <code>end</code>, bei <code>[1, 2,</code> die Klammer, bei <code>\"Speck</code> das Anführungszeichen: Hier wartet IRB auf die nächste Zeile. Echtes IRB unterscheidet zusätzlich, ob Code nur <em>unfertig</em> ist oder schon <em>falsch</em> – auch darum ging es im Vortrag. Diese Seite nutzt dieselbe Idee: ⚡ Live startet deinen Code erst, wenn er sich parsen lässt.</p><div class='offweb' data-title='Mach mit'><p>Auf <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> findest du Vorträge zu fast jedem Thema dieses Kurses – such einmal nach „IRB“, „Prism“ oder „TRICK“. Viele RubyKaigi-Vorträge sind auf Japanisch, ihre Folien aber meist auf Englisch; die Seite des Vortrags auf <a href='https://rubykaigi.org' target='_blank'>rubykaigi.org</a> verlinkt sie. RubyEvents zeigt auch, welche Konferenzen und Meetups bald stattfinden und welche gerade Vorträge suchen. Ruby-Konferenzen freuen sich über neue Gesichter – im Publikum und auf der Bühne.</p></div><div class='task'><strong>Aufgabe:</strong> Bau IRBs Zeilensammler: <code>eingaben(zeilen)</code> bekommt die Zeilen, die jemand nacheinander tippt, und gibt die fertigen Eingaben zurück, so wie IRB sie ausführen würde – die Zeilen einer Eingabe mit <code>\"\\n\"</code> verbunden. <code>eingaben([\"x = 1\", \"def doppelt(n)\", \"  n * 2\", \"end\"])</code> ergibt <code>[\"x = 1\", \"def doppelt(n)\\n  n * 2\\nend\"]</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"prism\"\n\ndef eingaben(zeilen)\n  # Zeilen sammeln, bis Prism.parse(code).success? ist\nend\n",
+            "check": "eingaben([\"x = 1\", \"def doppelt(n)\", \"  n * 2\", \"end\", \"doppelt(x)\"]) == [\"x = 1\", \"def doppelt(n)\\n  n * 2\\nend\", \"doppelt(x)\"] && eingaben([\"[1,\", \"2]\", \"\\\"Speck\", \"\\\"\", \"puts 3\"]) == [\"[1,\\n2]\", \"\\\"Speck\\n\\\"\", \"puts 3\"]",
+            "hint": "Ein Puffer für die Zeilen der aktuellen Eingabe: jede Zeile anhängen, <code>puffer.join(\"\\n\")</code> parsen – und wenn das klappt, den Code ins Ergebnis legen und den Puffer leeren."
+          }
+        ]
+      },
+      "en": {
+        "title": "24. RubyKaigi & weird code",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ruby is a community, too</h2><p>Behind Ruby there are people – and they meet. The biggest Ruby conference is <a href='https://rubykaigi.org' target='_blank'>RubyKaigi</a> in Japan (\"kaigi\" means conference): running since 2006, nowadays in a different city every year, three days of talks in Japanese and English, with Matz and the people who develop Ruby itself right in the middle. There is also RubyConf in the USA, EuRuKo in Europe, Rails World and meetups in many cities.</p><p>Weren't there? <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> collects the videos of thousands of Ruby talks, free and searchable, and shows which conferences and meetups are coming up. In this lesson we follow one Rubyist through three talks: <strong>Tomoya Ishida</strong> (<code>@tompng</code>). He is a Ruby committer and maintains IRB, the tool from lesson 12.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<p>At RubyKaigi 2024 in Okinawa, tompng gave the keynote <a href='https://www.rubyevents.org/talks/keynote-writing-weird-code' target='_blank'>\"Writing Weird Code\"</a> – spoken in Japanese, with English slides. His point: Ruby can be wonderfully readable – and gloriously weird. A few ideas from the talk, in our own examples. First, notations you half know already:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p %(bacon)              # like \"bacon\"\np %w[Kaz Isi Chunky]    # an array of words\np \"RubyKaigi %d\" % 2024 # String#% fills in %d\np ?a                    # a single character\np %%%                   # %…% with % as the bracket: empty\np %%%%%%%               # empty % empty"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>%(…)</code> and <code>%w[…]</code> write strings and arrays of words, <code>?a</code> a single character, and <code>String#%</code> fills in placeholders. The bracket after <code>%</code> can be almost any character – even <code>%</code> itself: <code>%%%</code> is an empty string, and seven percent signs are \"empty % empty\". tompng showed that every run of 4n + 3 percent signs is valid Ruby. Names can be weird, too:</p>"
+          },
+          {
+            "t": "c",
+            "code": "🦊 = \"Chunky\"\n🥓 = \"bacon\"\nputs \"#{🦊} loves #{🥓}\"\n\nboth = <<~ONE + <<~TWO\n  First line\nONE\n  Second line\nTWO\nboth"
+          },
+          {
+            "t": "h",
+            "html": "<p>Variable names may be Unicode, emoji included (which doesn't necessarily make them more readable). And two heredocs on one line: Ruby reads the line to its end first, then picks up the texts one after the other. Cases like this used to confuse IRB's indentation; since IRB 1.7.1 it gets them right.</p><p>Regular expressions can do more than you would think – this one spots prime numbers without a single division in the code:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def prime?(number)\n  number > 1 && (\"x\" * number) !~ /\\A(xx+)\\1+\\z/\nend\n\n(1..30).select { |number| prime?(number) }"
+          },
+          {
+            "t": "h",
+            "html": "<p>9 becomes <code>\"xxxxxxxxx\"</code>. <code>(xx+)</code> captures a group of at least two x, and <code>\\1+</code> demands that exactly this group repeats to the end. That only works if the x split into groups of equal size – that is, if the number is composite. The regex engine tries every group size to find out: slow, but beautiful. An old trick from the Perl world that tompng showed in his talk. And a puzzle to finish: what comes out here?</p>"
+          },
+          {
+            "t": "c",
+            "code": "FOX = \"Chunky\"\n\nmodule Forest\n  FOX += \" Bacon\"\nend\n\n[FOX, Forest::FOX]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>FOX += \" Bacon\"</code> means <code>FOX = FOX + \" Bacon\"</code>. Reading finds the outer <code>FOX</code>, assigning creates a new <code>Forest::FOX</code> – two constants. A tool that understands Ruby code has to know such cases: the tests of tompng's type completion for IRB check exactly this one.</p><p>Why all this? In the talk, tompng gives three reasons: weird code is a puzzle that's fun. Cracking it, you understand Ruby more deeply. And weird code finds bugs – in IRB, in the parser – that well-behaved programs never run into. For him, a contest for weird code is what got him contributing to IRB and Reline. In the second part of the keynote he showed six programs on the theme of Okinawa, such as a file that is a picture of an Easter lily (a BMP) and a Ruby program at the same time, and one that endlessly weaves patterns of Okinawan Minsa weaving in the terminal – they are on <a href='https://github.com/tompng/selftrick2024' target='_blank'>GitHub</a>.</p><p>That contest is called <strong>TRICK</strong> (Transcendental Ruby Imbroglio Contest for rubyKaigi). Since 2013, Rubyists have been sending in programs meant to surprise, excite or amuse the judges, Matz among them. tompng won gold in 2022. At <a href='https://www.rubyevents.org/talks/trick-2025-episode-i' target='_blank'>TRICK 2025</a> he was a judge himself – and still took 3rd, 4th and 5th place, because this time the judges sent in programs too. All the winners are <a href='https://github.com/tric/trick2025' target='_blank'>on GitHub</a> with explanations, under the MIT licence.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<p>A year later, at RubyKaigi 2025 in Matsuyama, tompng explained in <a href='https://www.rubyevents.org/talks/analyzing-ruby-code-in-irb' target='_blank'>\"Analyzing Ruby Code in IRB\"</a> how IRB reads your code while you type: to colour it, to tell whether your input is finished or still lacks an <code>end</code>, to indent and to complete. For that, IRB looks at code in two ways – as a sequence of <strong>tokens</strong>, the \"words\" of the code, and as a <strong>syntax tree</strong> – and weird code is the acid test. Helping it is <strong>Prism</strong>, the parser that Ruby itself has used to read your code since version 3.4. Try it:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"prism\"\n\nPrism.lex(\"puts 6 * 7\").value.map { |token, _state| token.type }"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Prism.lex</code> splits the code into tokens: a name, a number, a star, a number, the end. That is how IRB knows, for example, what to colour how. <code>Prism.parse</code> builds the whole syntax tree – and <code>success?</code> tells whether the code is complete and valid:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts Prism.parse(\"def fox\").errors.last.message\n\n[\"def fox\", \"def fox\\nend\", \"[1, 2,\", \"\\\"bacon\"].map do |code|\n  [code, Prism.parse(code).success?]\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>def fox</code> lacks its <code>end</code>, <code>[1, 2,</code> its bracket, <code>\"bacon</code> its quote: here IRB waits for the next line. Real IRB also tells code that is merely <em>unfinished</em> from code that is already <em>wrong</em> – that was part of the talk, too. This page uses the same idea: ⚡ Live only starts your code once it parses.</p><div class='offweb' data-title='Join in'><p>On <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> you'll find talks on almost every topic of this course – try searching for \"IRB\", \"Prism\" or \"TRICK\". Many RubyKaigi talks are in Japanese, but their slides are mostly in English; the talk's page on <a href='https://rubykaigi.org' target='_blank'>rubykaigi.org</a> links them. RubyEvents also shows which conferences and meetups are coming up and which are looking for talks. Ruby conferences are glad to see new faces – in the audience and on stage.</p></div><div class='task'><strong>Task:</strong> Build IRB's line collector: <code>inputs(lines)</code> gets the lines someone types one after the other and returns the finished inputs, the way IRB would run them – the lines of one input joined with <code>\"\\n\"</code>. <code>inputs([\"x = 1\", \"def double(n)\", \"  n * 2\", \"end\"])</code> gives <code>[\"x = 1\", \"def double(n)\\n  n * 2\\nend\"]</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"prism\"\n\ndef inputs(lines)\n  # collect lines until Prism.parse(code).success?\nend\n",
+            "check": "inputs([\"x = 1\", \"def double(n)\", \"  n * 2\", \"end\", \"double(x)\"]) == [\"x = 1\", \"def double(n)\\n  n * 2\\nend\", \"double(x)\"] && inputs([\"[1,\", \"2]\", \"\\\"bacon\", \"\\\"\", \"puts 3\"]) == [\"[1,\\n2]\", \"\\\"bacon\\n\\\"\", \"puts 3\"]",
+            "hint": "A buffer for the lines of the current input: append each line, parse <code>buffer.join(\"\\n\")</code> – and when that works, put the code into the result and empty the buffer."
+          }
+        ]
+      },
+      "ja": {
+        "title": "24. RubyKaigiと変なコード",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Rubyはコミュニティでもある</h2><p>Rubyの向こうには人がいて、その人たちは集まります。いちばん大きなRubyのカンファレンスは日本の<a href='https://rubykaigi.org' target='_blank'>RubyKaigi</a>です。2006年から続き、今では毎年ちがう街で開かれます。3日間、日本語と英語のトークがあり、その真ん中にはMatzとRuby自体を開発している人たちがいます。ほかにもアメリカのRubyConf、ヨーロッパのEuRuKo、Rails World、そして多くの街のミートアップがあります。</p><p>参加できなかった？ <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>には何千ものRubyのトーク動画が集められていて、無料で検索して見られます。これから開かれるカンファレンスやミートアップもわかります。このレッスンでは、1人のRubyistの3つのトークをたどります。<strong>石田智也さん</strong>（<code>@tompng</code>）です。Rubyコミッターで、レッスン12で使ったIRBのメンテナーです。</p>"
+          },
+          {
+            "t": "h",
+            "html": "<p>沖縄で開かれたRubyKaigi 2024で、tompngさんはキーノート<a href='https://www.rubyevents.org/talks/keynote-writing-weird-code' target='_blank'>「Writing Weird Code」</a>を行いました。発表は日本語、スライドは英語です。言いたいことはこうです：Rubyはとても読みやすいコードも書けるし、とびきり変なコードも書ける。トークのアイデアをいくつか、自分たちの例で試してみましょう。まずは、半分くらいは知っている書き方から：</p>"
+          },
+          {
+            "t": "c",
+            "code": "p %(bacon)              # \"bacon\"と同じ\np %w[Kaz Isi Chunky]    # 単語の配列\np \"RubyKaigi %d\" % 2024 # String#%が%dを埋める\np ?a                    # 1文字\np %%%                   # %をかっこにした%…%：空\np %%%%%%%               # 空 % 空"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>%(…)</code>と<code>%w[…]</code>は文字列と単語の配列を、<code>?a</code>は1文字を表し、<code>String#%</code>はプレースホルダーを埋めます。<code>%</code>の後ろのかっこには、ほとんどどんな文字でも使えます。<code>%</code>自身でさえも。<code>%%%</code>は空の文字列で、パーセント記号7つは「空 % 空」です。tompngさんは、4n + 3個のパーセント記号の並びはどれも正しいRubyだと示しました。名前も変にできます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "🦊 = \"Chunky\"\n🥓 = \"bacon\"\nputs \"#{🦊} loves #{🥓}\"\n\nboth = <<~ONE + <<~TWO\n  First line\nONE\n  Second line\nTWO\nboth"
+          },
+          {
+            "t": "h",
+            "html": "<p>変数名にはUnicode、絵文字さえも使えます（読みやすくなるとはかぎりませんが）。そして1行に2つのヒアドキュメント。Rubyはまずその行を最後まで読み、それから本文を順番に拾います。こういうケースは以前、IRBの自動インデントを混乱させていましたが、IRB 1.7.1からは正しく扱えます。</p><p>正規表現は思ったよりたくさんのことができます。これは、コードの中で一度も割り算をせずに素数を見分けます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def prime?(number)\n  number > 1 && (\"x\" * number) !~ /\\A(xx+)\\1+\\z/\nend\n\n(1..30).select { |number| prime?(number) }"
+          },
+          {
+            "t": "h",
+            "html": "<p>9は<code>\"xxxxxxxxx\"</code>になります。<code>(xx+)</code>は2つ以上のxのグループをとらえ、<code>\\1+</code>はまさにそのグループが最後までくり返されることを求めます。それができるのは、xを同じ大きさのグループに分けられるとき、つまりその数が合成数のときだけです。正規表現エンジンはそれを確かめるためにすべてのグループの大きさを試します。遅いけれど美しい。Perlの世界の古い技で、tompngさんがトークで紹介しました。最後にクイズです。ここでは何が出てくるでしょう？</p>"
+          },
+          {
+            "t": "c",
+            "code": "FOX = \"Chunky\"\n\nmodule Forest\n  FOX += \" Bacon\"\nend\n\n[FOX, Forest::FOX]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>FOX += \" Bacon\"</code>は<code>FOX = FOX + \" Bacon\"</code>という意味です。読むときは外側の<code>FOX</code>が見つかり、代入すると新しい<code>Forest::FOX</code>ができます。定数が2つになるのです。Rubyのコードを理解するツールは、こういうケースを知っていなければなりません。tompngさんが作ったIRBの型補完のテストは、まさにこのケースを確かめています。</p><p>なぜこんなことを？ トークの中でtompngさんは3つの理由を挙げています。変なコードは楽しいパズルであること。それを解くと、Rubyをもっと深く理解できること。そして変なコードは、行儀のよいプログラムでは決して出会わないバグを、IRBやパーサーの中に見つけてくれること。彼自身、変なコードのコンテストがきっかけでIRBとRelineに貢献するようになりました。キーノートの後半では、沖縄をテーマにした6つのプログラムを見せました。たとえば、テッポウユリの画像（BMP）であると同時にRubyプログラムでもあるファイルや、ターミナルの中で沖縄のミンサー織りの模様を永遠に織り続けるプログラムです。<a href='https://github.com/tompng/selftrick2024' target='_blank'>GitHub</a>で見られます。</p><p>そのコンテストは<strong>TRICK</strong>（Transcendental Ruby Imbroglio Contest for rubyKaigi）といいます。2013年から、審査員を驚かせ、わくわくさせ、笑わせるプログラムが応募されてきました。審査員にはMatzもいます。tompngさんは2022年に金賞を取りました。<a href='https://www.rubyevents.org/talks/trick-2025-episode-i' target='_blank'>TRICK 2025</a>では自分も審査員でしたが、それでも3位、4位、5位を取りました。今回は審査員もプログラムを応募したのです。受賞作品はすべて解説つきで<a href='https://github.com/tric/trick2025' target='_blank'>GitHub</a>にあり、MITライセンスです。</p>"
+          },
+          {
+            "t": "h",
+            "html": "<p>1年後、松山で開かれたRubyKaigi 2025で、tompngさんは<a href='https://www.rubyevents.org/talks/analyzing-ruby-code-in-irb' target='_blank'>「Analyzing Ruby Code in IRB」</a>の中で、入力中のコードをIRBがどう読んでいるかを話しました。色をつけるため、入力が終わったのか、まだ<code>end</code>が足りないのかを見分けるため、インデントするため、補完するためです。そのためにIRBはコードを2つの見方で調べます。コードの「単語」である<strong>トークン</strong>の並びとして、そして<strong>構文木</strong>として。変なコードはその試金石です。助けになるのが<strong>Prism</strong>、Ruby 3.4からRuby自身がコードを読むのに使っているパーサーです。試してみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"prism\"\n\nPrism.lex(\"puts 6 * 7\").value.map { |token, _state| token.type }"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Prism.lex</code>はコードをトークンに分けます。名前、数、星、数、終わり。IRBはこれを見て、たとえば何をどう色づけするかを決めます。<code>Prism.parse</code>は構文木全体を作り、<code>success?</code>でコードが完全で正しいかどうかを教えてくれます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts Prism.parse(\"def fox\").errors.last.message\n\n[\"def fox\", \"def fox\\nend\", \"[1, 2,\", \"\\\"bacon\"].map do |code|\n  [code, Prism.parse(code).success?]\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>def fox</code>には<code>end</code>が、<code>[1, 2,</code>にはかっこが、<code>\"bacon</code>には引用符が足りません。こういうとき、IRBは次の行を待ちます。本物のIRBはさらに、コードがただ<em>途中</em>なのか、もう<em>まちがっている</em>のかも区別します。それもトークのテーマでした。このページも同じ考え方を使っています。⚡ ライブは、コードがパースできるようになってから実行します。</p><div class='offweb' data-title='参加してみよう'><p><a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>には、このコースのほとんどのテーマについてのトークがあります。「IRB」「Prism」「TRICK」で検索してみましょう。RubyKaigiのトークの多くは日本語ですが、スライドはたいてい英語で、<a href='https://rubykaigi.org' target='_blank'>rubykaigi.org</a>のトークのページからリンクされています。RubyEventsでは、これから開かれるカンファレンスやミートアップ、トークを募集中のイベントもわかります。Rubyのカンファレンスは新しい顔を歓迎しています。客席でも、ステージの上でも。</p></div><div class='task'><strong>課題：</strong>IRBの行集めを作りましょう。<code>inputs(lines)</code>は、だれかが1行ずつ入力した行を受け取り、IRBが実行するのと同じように、完成した入力を返します。1つの入力の行は<code>\"\\n\"</code>でつなげます。<code>inputs([\"x = 1\", \"def double(n)\", \"  n * 2\", \"end\"])</code>は<code>[\"x = 1\", \"def double(n)\\n  n * 2\\nend\"]</code>になります。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"prism\"\n\ndef inputs(lines)\n  # Prism.parse(code).success? になるまで行を集める\nend\n",
+            "check": "inputs([\"x = 1\", \"def double(n)\", \"  n * 2\", \"end\", \"double(x)\"]) == [\"x = 1\", \"def double(n)\\n  n * 2\\nend\", \"double(x)\"] && inputs([\"[1,\", \"2]\", \"\\\"bacon\", \"\\\"\", \"puts 3\"]) == [\"[1,\\n2]\", \"\\\"bacon\\n\\\"\", \"puts 3\"]",
+            "hint": "今の入力の行をためるバッファを用意して、1行ずつ追加し、<code>buffer.join(\"\\n\")</code>をパースしてみて。うまくいったら、そのコードを結果に入れてバッファを空にするんだよ。"
+          }
+        ]
+      }
+    },
+    {
       "id": "tl-collections",
       "section": {
         "de": "Aufbaukurs: timelog",
@@ -2858,7 +3079,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "応用コース：timelog"
       },
       "de": {
-        "title": "24. Projekt timelog: Collections",
+        "title": "25. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -2897,7 +3118,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "24. Project timelog: collections",
+        "title": "25. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -2936,7 +3157,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "24. timelogプロジェクト：コレクション",
+        "title": "25. timelogプロジェクト：コレクション",
         "cells": [
           {
             "t": "h",
@@ -2978,7 +3199,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "25. Text parsen: Regex",
+        "title": "26. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -3009,7 +3230,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "25. Parsing text: regex",
+        "title": "26. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -3040,7 +3261,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "25. テキストのパース：正規表現",
+        "title": "26. テキストのパース：正規表現",
         "cells": [
           {
             "t": "h",
@@ -3074,7 +3295,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "26. Methoden richtig bauen",
+        "title": "27. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -3105,7 +3326,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "26. Building methods properly",
+        "title": "27. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -3136,7 +3357,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "26. メソッドをきちんと作る",
+        "title": "27. メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -3170,7 +3391,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "27. Entry & Timesheet",
+        "title": "28. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -3201,7 +3422,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "27. Entry & Timesheet",
+        "title": "28. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -3232,7 +3453,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "27. EntryとTimesheet",
+        "title": "28. EntryとTimesheet",
         "cells": [
           {
             "t": "h",
@@ -3266,7 +3487,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "28. Testen mit Minitest",
+        "title": "29. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -3297,7 +3518,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "28. Testing with Minitest",
+        "title": "29. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -3328,7 +3549,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "28. Minitestでテスト",
+        "title": "29. Minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -3362,7 +3583,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "29. Enumerable & Data",
+        "title": "30. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -3374,7 +3595,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 24, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 25, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -3385,7 +3606,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "29. Enumerable & Data",
+        "title": "30. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -3397,7 +3618,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 24, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 25, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -3408,7 +3629,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "29. EnumerableとData",
+        "title": "30. EnumerableとData",
         "cells": [
           {
             "t": "h",
@@ -3420,7 +3641,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン24で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン25で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
           },
           {
             "t": "x",
@@ -3434,7 +3655,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "30. Blocks, Procs & Lambdas",
+        "title": "31. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -3473,7 +3694,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "30. Blocks, procs & lambdas",
+        "title": "31. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -3512,7 +3733,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "30. ブロック、Proc、lambda",
+        "title": "31. ブロック、Proc、lambda",
         "cells": [
           {
             "t": "h",
@@ -3554,7 +3775,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "31. Fehler behandeln",
+        "title": "32. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -3585,7 +3806,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "31. Handling errors",
+        "title": "32. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -3616,7 +3837,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "31. エラー処理",
+        "title": "32. エラー処理",
         "cells": [
           {
             "t": "h",
@@ -3650,7 +3871,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "32. Daten speichern: Formate",
+        "title": "33. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -3705,7 +3926,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "32. Saving data: formats",
+        "title": "33. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -3760,7 +3981,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "32. データの保存：フォーマット",
+        "title": "33. データの保存：フォーマット",
         "cells": [
           {
             "t": "h",
@@ -3818,7 +4039,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "33. Kommandozeile & Gems",
+        "title": "34. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -3845,7 +4066,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "33. Command line & gems",
+        "title": "34. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -3872,7 +4093,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "33. コマンドラインとgem",
+        "title": "34. コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -3902,7 +4123,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "34. Pattern Matching",
+        "title": "35. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -3933,7 +4154,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "34. Pattern matching",
+        "title": "35. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -3964,7 +4185,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "34. パターンマッチ",
+        "title": "35. パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -3998,7 +4219,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "35. Objektmodell & Metaprogrammierung",
+        "title": "36. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -4029,7 +4250,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "35. Object model & metaprogramming",
+        "title": "36. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -4060,7 +4281,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "35. オブジェクトモデルとメタプログラミング",
+        "title": "36. オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -4094,7 +4315,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "36. Eine eigene DSL",
+        "title": "37. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -4106,7 +4327,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 30 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 31 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -4117,7 +4338,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "36. Your own DSL",
+        "title": "37. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -4129,7 +4350,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 30 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 31 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
@@ -4140,7 +4361,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "36. 自分だけのDSL",
+        "title": "37. 自分だけのDSL",
         "cells": [
           {
             "t": "h",
@@ -4152,7 +4373,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン30のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン31のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
           },
           {
             "t": "x",
@@ -4166,7 +4387,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "37. Codequalität & Debugging",
+        "title": "38. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -4189,7 +4410,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "37. Code quality & debugging",
+        "title": "38. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -4212,7 +4433,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "37. コードの品質とデバッグ",
+        "title": "38. コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -4238,7 +4459,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "38. Performance & Nebenläufigkeit",
+        "title": "39. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -4285,7 +4506,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "38. Performance & concurrency",
+        "title": "39. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -4332,7 +4553,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "38. パフォーマンスと並行処理",
+        "title": "39. パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -4382,7 +4603,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "39. Finale: timelog im Web",
+        "title": "40. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -4404,12 +4625,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 33 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 34 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "en": {
-        "title": "39. Finale: timelog on the web",
+        "title": "40. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
@@ -4431,12 +4652,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 33 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 34 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "ja": {
-        "title": "39. フィナーレ：Webで動くtimelog",
+        "title": "40. フィナーレ：Webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -4458,7 +4679,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン33で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン34で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }

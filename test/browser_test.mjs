@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('39 lessons in nav', (await page.$$('#lessonNav a')).length === 39);
+check('40 lessons in nav', (await page.$$('#lessonNav a')).length === 40);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -404,6 +404,30 @@ await runExercise();
 await waitForDownload('.cell.exercise', 'postkarte.jpg');
 await page.waitForTimeout(300);
 check('... and again with the same bytes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// RubyKaigi lesson: weird but valid Ruby, and Prism (a C extension built
+// into the wasm) splitting and parsing code the way IRB reads it
+await page.click('#lessonNav a[data-id="rubykaigi"]');
+await page.waitForTimeout(300);
+const ranCell = async (idx) => {
+  await page.click(`.run-cell[data-idx="${idx}"]`);
+  await page.waitForFunction(i => !document.querySelector(`.run-cell[data-idx="${i}"]`).disabled &&
+    document.getElementById('cell-out-' + i).style.display !== 'none', idx, { timeout: 30000 }).catch(() => {});
+  return (await page.textContent(`#cell-out-${idx}`)) || '';
+};
+check('%%% and friends are valid Ruby', (await ranCell(2)).includes('"RubyKaigi 2024"'));
+check('emoji names and two heredocs on a line', (await ranCell(4)).includes('Chunky liebt Speck') &&
+  (await page.textContent('#cell-out-4')).includes('"Erste Zeile\\nZweite Zeile\\n"'));
+check('a regexp finds the primes', (await ranCell(6)).includes('[2, 3, 5, 7, 11, 13, 17, 19, 23, 29]'));
+check('+= on a constant makes a second one', (await ranCell(8)).includes('["Chunky", "Chunky Bacon"]'));
+check('Prism splits code into tokens', (await ranCell(11)).includes('[:IDENTIFIER, :INTEGER, :STAR, :INTEGER, :EOF]'));
+const parsed = await ranCell(13);
+check('Prism tells finished code from unfinished', parsed.includes('["def fuchs\\nend", true]') && parsed.includes('["def fuchs", false]'));
+check('... and says what is missing', parsed.includes('expected an `end` to close the `def` statement'));
+await setExercise('require "prism"\ndef eingaben(zeilen)\n  fertig = []\n  puffer = []\n  zeilen.each do |zeile|\n    puffer << zeile\n    code = puffer.join("\\n")\n    if Prism.parse(code).success?\n      fertig << code\n      puffer = []\n    end\n  end\n  fertig\nend');
+await runExercise();
+await page.waitForTimeout(300);
+check('line collector exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 
 // Scarpe lesson: real Shoes apps from the lacci gem, drawn into the page by a
 // Lacci display service (shoes_dom.rb); several stay live at once

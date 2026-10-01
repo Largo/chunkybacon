@@ -8,12 +8,13 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **39 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **40 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics,
   PowerPoint decks with [ruby_pptx](https://github.com/Largo/ruby_pptx),
   PDFs with Prawn and HexaPDF, JPEG photos with
-  [pure_jpeg](https://github.com/peterc/pure_jpeg), and
+  [pure_jpeg](https://github.com/peterc/pure_jpeg), a look at the Ruby
+  community (RubyKaigi, weird code, how IRB reads code), and
   a project track that builds a small time tracker.
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every

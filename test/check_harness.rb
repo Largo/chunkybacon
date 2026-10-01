@@ -303,6 +303,62 @@ PureJPEG.encode(card, quality: 60).write("postcard.jpg"))]
       %(show_shoes do\n  stack do\n    title "Greeter"\n    @field = edit_line ""\n    @greeting = para "Who are you?"\n    button "Greet me" do\n      @greeting.replace("Hello, \#{@field.text}!")\n    end\n  end\nend)
     ]
   },
+  "rubykaigi" => {
+    "de" => [%(require "prism"
+def eingaben(zeilen)
+  fertig = []
+  puffer = []
+  zeilen.each do |zeile|
+    puffer << zeile
+    code = puffer.join("\n")
+    if Prism.parse(code).success?
+      fertig << code
+      puffer = []
+    end
+  end
+  fertig
+end), %(def eingaben(zeilen)
+  ergebnis = []
+  code = nil
+  zeilen.each do |zeile|
+    code = code ? code + "\n" + zeile : zeile
+    begin
+      RubyVM::InstructionSequence.compile(code)
+      ergebnis << code
+      code = nil
+    rescue SyntaxError
+    end
+  end
+  ergebnis
+end)],
+    "en" => [%(require "prism"
+def inputs(lines)
+  done = []
+  buffer = []
+  lines.each do |line|
+    buffer << line
+    code = buffer.join("\n")
+    if Prism.parse(code).success?
+      done << code
+      buffer = []
+    end
+  end
+  done
+end), %(def inputs(lines)
+  result = []
+  code = nil
+  lines.each do |line|
+    code = code ? code + "\n" + line : line
+    begin
+      RubyVM::InstructionSequence.compile(code)
+      result << code
+      code = nil
+    rescue SyntaxError
+    end
+  end
+  result
+end)]
+  },
   "tl-collections" => {
     "de" => [%(eintraege = [{ projekt: "ProjectX", stunden: 3.5 }, { projekt: "Intern", stunden: 2.0 }, { projekt: "ProjectX", stunden: 3.0 }]
 stunden = eintraege.group_by { |e| e[:projekt] }.transform_values { |l| l.sum { |e| e[:stunden] } })],
