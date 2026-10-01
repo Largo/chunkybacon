@@ -19,11 +19,14 @@ module ChunkyShell
       html
     end
 
-    def self.lesson_html(cells, task_label, run_label)
+    # +live+: the Live switch for every toolbar (live_html), or "" - not
+    # beside an IRB, which never runs live (main.rb's AutoRun)
+    def self.lesson_html(cells, task_label, run_label, live = "")
       html = "".dup
       cells.each_with_index do |cell, idx|
         if code_cell?(cell)
-          html << cell_html(idx, cell.t == "x", task_label, run_label)
+          switch = cell.code.to_s.include?("show_irb") ? "" : live
+          html << cell_html(idx, cell.t == "x", task_label, run_label, switch)
         else
           html << %(<div class="lessonText">#{cell.html}</div>)
         end
@@ -31,20 +34,25 @@ module ChunkyShell
       html
     end
 
-    def self.cell_html(idx, exercise, task_label, run_label)
+    def self.cell_html(idx, exercise, task_label, run_label, live = "")
       <<~HTML
         <div class="cell#{exercise ? ' exercise' : ''}" data-label="#{task_label}">
           <textarea title="code" id="cell-code-#{idx}"></textarea>
-          <div class="cell-toolbar"><button type="button" class="run-cell" data-idx="#{idx}">#{run_label}</button></div>
+          <div class="cell-toolbar">#{live}<button type="button" class="run-cell" data-idx="#{idx}">#{run_label}</button></div>
           <div class="cell-out" id="cell-out-#{idx}" style="display:none"></div>
         </div>
       HTML
     end
 
+    # Live runs on or off - one switch for the page, drawn in every toolbar
+    def self.live_html(on, label, title)
+      %(<button type="button" class="live-toggle" aria-pressed="#{on}" title="#{escape_html(title)}">#{escape_html(label)}</button>)
+    end
+
     # The workshop's frame: workspace.rb fills the file panel (#wsFiles),
     # the stdin box and the preview of a picture or PDF (#wsPreview); the
     # editor is cell 0 like in a lesson.
-    def self.workshop_html(title, intro, run_label)
+    def self.workshop_html(title, intro, run_label, live = "")
       <<~HTML
         <div class="lessonText"><h2>#{title}</h2><p>#{intro}</p></div>
         <div class="workshop">
@@ -54,7 +62,7 @@ module ChunkyShell
             <textarea title="code" id="cell-code-0"></textarea>
             <div class="ws-preview" id="wsPreview" hidden></div>
             <div class="ws-stdin" id="wsStdinBox"></div>
-            <div class="cell-toolbar"><button type="button" class="run-cell" data-idx="0">#{run_label}</button></div>
+            <div class="cell-toolbar">#{live}<button type="button" class="run-cell" data-idx="0">#{run_label}</button></div>
             <div class="cell-out" id="cell-out-0" style="display:none"></div>
           </div>
         </div>

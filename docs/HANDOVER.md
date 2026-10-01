@@ -57,6 +57,8 @@ html/
   shoes_dom.rb          Lacci (Shoes) display service drawing into the page
   workshop.rb           the workshop's runs: project files as the virtual FS,
                         require_relative between them, gets, write-back
+  autorun.rb            live runs (§6b): what may run by itself, the time
+                        limit, taking back the files a rehearsal wrote
   storage.js            where the work lives: localStorage change times, the
                         progress file, a connected folder (File System Access)
   assets/               app.css, CodeMirror, three.js (vendored), the fox SVG,
@@ -84,6 +86,8 @@ gem/chunkybacon/, gem/chunky-bacon/  its alias gems (like rubyllm -> ruby_llm)
 test/check_harness.rb      every lesson offline under CRuby
 test/gems_harness.rb       gem installer offline under CRuby
 test/shell/run.rb          Minitest for the shell, on a stub of PicoRuby's js
+test/autorun_test.rb       live runs under CRuby: runnable?, the time limit
+test/live_test.mjs         Playwright: live runs in a lesson and the workshop
 test/browser_test.mjs      Playwright end-to-end
 test/progress_test.mjs     Playwright: progress file, workshop, folder (48 checks)
 test/boot_failure_test.mjs Playwright: what the page says when a runtime fails
@@ -394,6 +398,48 @@ machine:
   folder API is available. `test/progress_test.mjs` drives the folder through
   the origin-private file system (same API, no native picker).
 
+## 6b. Live runs
+
+A cell runs by itself a second after the last key (`⚡ Live` beside ▶). The
+shell does the timing, the kernel the guarding:
+
+- **Shell** (`shell/app.rb`, *live runs*): index.html's `initCell` calls
+  `window.chunkyEdited(idx)` on every change that is not `setValue` (the
+  page's own); `edited` waits `LIVE_DELAY_MS` in a Task and asks
+  `ChunkyBridge.autorun(idx)` - only for the latest key (`@live_gen`), on
+  the page it was typed on (`@view_gen`), while the cell is idle, the
+  switch on and the cell quick. `autorun` never queues: while CRuby loads,
+  typing is just typing. A run (live or ▶) over `LIVE_SLOW` (0.3 s) pauses
+  that cell's live runs until a quick ▶ run (the switch is struck through).
+  A live result is quiet: no shake, no reveal, no run time, no bubble - only
+  a pass that is new (`@last_outcome`) cheers and marks the lesson done.
+  Switches: `chunkyui_live` (lessons, on unless "off") and
+  `chunkyui_live_ws` (workshop, off unless "on"); view settings, not synced.
+- **Kernel** (`run_cell(idx, auto: true)`, `autorun.rb`): the code is stored
+  as on ▶, then `AutoRun.runnable?` - it must compile (with the binding's
+  locals declared, so `x /2` parses as on ▶), and IRB cells and loops that
+  raise no TracePoint event (`while true; end`, one-line modifier loops) are
+  refused outright → outcome `skipped`, output untouched. The run is a
+  **rehearsal**: in a lesson the `SandboxFS` store is restored afterwards,
+  files it wrote on the real filesystem are deleted (`AutoRun.take_back`),
+  and in the workshop nothing goes back to the project (`workspaceWrite`/
+  `workshopAfterRun` are skipped) - its output, previews and downloads still
+  show. **No downloads**: `install_gem` of a gem neither installed nor cached
+  and the Net::HTTP transport raise `AutoRun::NeedsRun` (outcome `needs`, a
+  hint to press ▶); a cached install runs untraced. **A time limit**:
+  `AutoRun.with_time_limit` (TracePoint `:line`, `:b_call`, `:c_call`, the
+  clock read every 128 events) raises `AutoRun::Stopped` after `LIMIT`
+  (1 s), but only on a line of the learner's own file(s) - never inside a
+  gem being loaded or the app (outcome `stopped`, a hint). Both exceptions
+  descend from `Exception`, so `rescue => e` in learner code cannot swallow
+  them. The output gets `.is-rehearsal` (errors fainter); no line is marked.
+- **▶ has no time limit**: TracePoint costs ~3x on gem-heavy code, so a
+  manual run still can hang the page on an endless loop, as before.
+  An endless loop that raises no TracePoint event and that `runnable?` does
+  not recognise would hang a live run the same way - add its shape there
+  (to probe a shape, run it in a child process with a timeout: an event-less
+  loop hangs the tracing parent too).
+
 ## 7. nginx and the proxy
 
 Compression: `gzip on` for text (html, rb - typed `text/plain` in the app-code
@@ -419,6 +465,7 @@ node make_lessons_json.js      # test/lessons.json
 ruby check_harness.rb          # 38 lessons x 3 languages, starter fails, solutions pass
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
+ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof
 BASE=http://127.0.0.1:8011/ node browser_test.mjs   # Playwright, ~5 min
 ```
 

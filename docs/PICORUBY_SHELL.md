@@ -106,11 +106,12 @@ kernel listens for `chunky:*` events on `window` and answers through
 | `setState(lang, lesson, workshop)` | shell, on every lesson render | stores `state`, `seq += 1`, drops queued runs, sends `chunky:lesson` |
 | `reset()` | shell, lesson reset | `seq += 1`, sends `chunky:lesson` |
 | `run(idx)` → `true` / `false` | shell, Run / Shift+Enter / Alt+R | kernel up: `chunky:run` after the next paint (`afterPaint`); else queued. Returns whether it went now |
+| `autorun(idx)` → `true` / `false` | shell, a second after the last key (live runs, HANDOVER §6b) | kernel up: `chunky:run {auto: true}` after the next paint; else `false` - never queued |
 | `install(name)` → `true` / `false` | shell, gem chip / button | `chunky:install` after the next paint, or queued |
 | `shellReady()` | shell, after the first render | `chunky:shell-ready`, starts the kernel |
 | `kernelReady(installedJson)` | kernel, end of `ChunkyApp#initialize` | `ready = true`, `chunky:kernel-ready`, `chunky:gems`, then the queue |
 | (none: an unhandled rejection before `ready`) | CRuby's loader | `failed = true`, queue dropped, `chunky:kernel-failed {reason}` |
-| `ran(idx, outcome, elapsed)` | kernel, after every run | `chunky:ran {idx, outcome: ok/error/pass/fail, elapsed}` |
+| `ran(idx, outcome, elapsed, auto)` | kernel, after every run | `chunky:ran {idx, outcome: ok/error/pass/fail (a live run also skipped/stopped/needs), elapsed, auto}` |
 | `gems(installedJson)` | kernel, after runs and installs | `chunky:gems {installed}` |
 | `installed(name, ok, message)` | kernel, panel install | `chunky:installed {name, ok, message}` |
 | `ready`, `state` | both | `state = {lang, lesson, workshop, seq}`; the kernel reads it at boot |
@@ -121,11 +122,13 @@ The kernel reaches the workshop through window functions the shell
 registers (`JS::Object.register_callback`): `workshopOpenPath`,
 `workshopStdin`, `workspaceSnapshot`, `workspaceWrite(path, text)`,
 `workspaceDelete(path)`, `workshopAfterRun` - the same names
-`workspace_ui.js` had, so `run_cell` did not change.
+`workspace_ui.js` had, so `run_cell` did not change. One more such
+function, `chunkyEdited(idx)`, is for index.html's editors: a key in a
+cell, which starts the shell's live-run timer.
 
 | event | to | detail |
 |---|---|---|
-| `chunky:run` | kernel | `{idx, lang, lesson, workshop, seq}` |
+| `chunky:run` | kernel | `{idx, auto, lang, lesson, workshop, seq}` - `auto`: a live run |
 | `chunky:lesson` | kernel | `{lang, lesson, workshop, seq}` - a new `seq` means a fresh binding, old 3D/Shoes stages disposed (`sync_state`) |
 | `chunky:install` | kernel | `{name, ...state}` |
 | `chunky:ran`, `chunky:gems`, `chunky:installed`, `chunky:kernel-ready`, `chunky:kernel-failed` | shell | as above |

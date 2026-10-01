@@ -129,8 +129,14 @@ end
 require_relative "sandbox_sim"
 # The workshop: the learner's own multi-file programs.
 require_relative "workshop"
+# Live runs: rehearsals a moment after the learner stops typing.
+require_relative "autorun"
 
 Net::HTTP.transport = lambda do |_method, uri|
+  # a live run fetches nothing: it would freeze the typing and ask the
+  # server once per pause
+  raise AutoRun::NeedsRun if ChunkyApp.instance.auto_run?
+
   prefix = NET_HTTP_HOSTS[uri.host.to_s.downcase]
   unless prefix
     raise SocketError, "#{uri.host} is not reachable from this browser playground " \
@@ -257,7 +263,7 @@ class ChunkyApp
   def setup_elements
     $window.addEventListener("chunky:run") do |event|
       sync_state(event.detail)
-      finish_cell_run(event.detail.idx.to_i)
+      finish_cell_run(event.detail.idx.to_i, event.detail.auto.to_s == "true")
     end
     $window.addEventListener("chunky:lesson") { |event| sync_state(event.detail) }
     $window.addEventListener("chunky:install") do |event|
@@ -311,8 +317,12 @@ class ChunkyApp
   # ---------- gems ----------
 
   # the shell's gems panel shows the change (after every run, too)
+  # A live run installs only from the cache, and outside its time limit: a
+  # gem installed halfway would stay broken.
   def install_gem_ui(name)
-    version = BrowserGems.install(name)
+    raise AutoRun::NeedsRun if auto_run? && !(BrowserGems.installed.key?(name) || BrowserGems.manifest.key?(name))
+
+    version = AutoRun.untraced { BrowserGems.install(name) }
     "#{name} #{version}"
   rescue BrowserGems::NativeGemError => e
     # the gem with C code may be a dependency of the one asked for
@@ -731,26 +741,35 @@ class ChunkyApp
   # the bridge sends chunky:run only once that frame has been drawn
   # (afterPaint, index.html). What moves during the run is limited to
   # transform and opacity, which the browser animates off the main thread.
-  # Afterwards the shell settles the cell: "ok" | "error" | "pass" | "fail".
-  def finish_cell_run(idx)
+  # Afterwards the shell settles the cell: "ok" | "error" | "pass" | "fail",
+  # and for a live run (+auto+) also "skipped" (nothing ran, the output
+  # stays) | "stopped" (time limit) | "needs" (wants the Run button).
+  def finish_cell_run(idx, auto = false)
     started = $window.performance.now
     outcome = begin
-      run_cell(idx)
+      run_cell(idx, auto: auto)
     rescue Exception => e
       $window.console.error("run_cell #{idx}: #{e.class}: #{e.message}")
       :error
     end
     elapsed = ($window.performance.now - started) / 1000.0
   ensure
-    bridge.ran(idx, (outcome || :error).to_s, elapsed || -1)
+    bridge.ran(idx, (outcome || :error).to_s, elapsed || -1, auto)
     bridge.gems(installed_json)
   end
 
-  def run_cell(idx)
+  def auto_run? = @auto_run == true
+
+  def run_cell(idx, auto: false)
     # the workshop's editor holds a whole program: one plain code cell
     cell = workshop? ? { "t" => "c" } : cells[idx]
     return unless cell && code_cell?(cell)
     code = $window.getCellCode(idx)
+    store(code_key(current_lesson["id"], idx), code) unless workshop?
+    # a live run starts only for code that parses - otherwise the output
+    # stays as it is (autorun.rb)
+    return :skipped if auto && !AutoRun.runnable?(code, workshop? ? [] : @bind.local_variables)
+
     if workshop?
       # the shell's callbacks (shell/workspace.rb), across the two Rubies
       file = $window.workshopOpenPath.to_s
@@ -758,8 +777,9 @@ class ChunkyApp
       fresh_binding   # each run of a program starts from scratch
     else
       file = EVAL_FILE
-      store(code_key(current_lesson["id"], idx), code)
     end
+    # a live run keeps no file it writes: the lesson's virtual ones come back
+    lesson_files = SandboxFS.store.transform_values(&:dup) if auto && !workshop?
     $window.clearCellMarks(idx)
     @run_images = []
     @run_pdfs = []
@@ -780,16 +800,18 @@ class ChunkyApp
     old_stdout = $stdout
     buffer = StringIO.new
     $stdout = buffer
+    @auto_run = auto
     begin
-      result = if workshop?
-        Workshop.with_io(file, $window.workshopStdin.to_s) { eval(code, @bind, file) }
+      result = if auto
+        AutoRun.with_time_limit(workshop? ? Workshop.paths : [file]) { evaluate(code, file) }
       else
-        eval(code, @bind, file)
+        evaluate(code, file)
       end
     rescue Exception => e
       error = e
     ensure
       $stdout = old_stdout
+      @auto_run = false
     end
     output = buffer.string
     # files the code wrote come first; an explicit download_file of the same
@@ -799,6 +821,11 @@ class ChunkyApp
     changes = FileWatch.changes_since(watch)
     changes.each { |path, bytes| add_download(path, bytes) }
     explicit.each { |name, bytes| add_download(name, bytes) }
+    if auto
+      # a rehearsal keeps nothing; what it wrote is still shown and offered
+      AutoRun.take_back(changes, watch)
+      SandboxFS.store.replace(lesson_files) unless workshop?
+    end
     if workshop?
       where = error && Workshop.location(error, file)
       # pictures and PDFs the program wrote show up below the editor - unless
@@ -811,18 +838,22 @@ class ChunkyApp
           @run_images << url unless @run_images.include?(url)
         end
       end
-      # what the program wrote goes into its project, next to the downloads
-      Workshop.finish(changes).each do |path, value|
-        value ? $window.workspaceWrite(path, value) : $window.workspaceDelete(path)
+      # what the program wrote goes into its project, next to the downloads -
+      # not after a live run (finish gives the lessons their files back either way)
+      kept = Workshop.finish(changes)
+      unless auto
+        kept.each { |path, value| value ? $window.workspaceWrite(path, value) : $window.workspaceDelete(path) }
+        $window.workshopAfterRun
       end
-      $window.workshopAfterRun
     end
 
     out_html = ""
     out_html += "<pre class=\"cell-stdout\">#{escape_html(output)}</pre>" unless output.empty?
     widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any? || @run_three.any? ||
                       @run_shoes.any? || @run_downloads.any? || @run_pdfs.any?
-    if error
+    if (hint = live_hint(error))
+      out_html += "<div class=\"cell-hint\">#{escape_html(hint)}</div>"
+    elsif error
       out_html += "<div class=\"cell-error\">#{escape_html(error.class)}: #{escape_html(error.message)}" \
                   "#{where ? " (#{escape_html(where)})" : ""}</div>"
     elsif !(result.nil? && (!output.empty? || widgets_present))
@@ -863,6 +894,7 @@ class ChunkyApp
     out_el = $d.getElementById("cell-out-#{idx}")
     out_el.innerHTML = out_html
     out_el.style.display = "block"
+    out_el.classList.toggle("is-rehearsal", auto)   # app.css: a live run's errors fainter
     new_widgets.each do |bid|
       widget = out_el.querySelector(".mini-browser[data-bid='#{bid}']")
       navigate_browser(widget) if widget
@@ -874,7 +906,11 @@ class ChunkyApp
     @run_shoes.each { |spec| out_el.appendChild(build_shoes_stage(idx, spec)) }
 
     if error
-      line = error_line(error, file)
+      return :stopped if error.is_a?(AutoRun::Stopped)
+      return :needs if error.is_a?(AutoRun::NeedsRun)
+
+      # a live run marks no line: the learner is still typing
+      line = !auto && error_line(error, file)
       $window.markCellLine(idx, line) if line
       return :error
     end
@@ -882,6 +918,22 @@ class ChunkyApp
     return :ok unless cell["t"] == "x"
 
     check_exercise(cell, code, output, result) ? :pass : :fail
+  end
+
+  def evaluate(code, file)
+    if workshop?
+      Workshop.with_io(file, $window.workshopStdin.to_s) { eval(code, @bind, file) }
+    else
+      eval(code, @bind, file)
+    end
+  end
+
+  # what a live run says instead of an error when it stopped or wants ▶
+  def live_hint(error)
+    return ui["liveStopped"] if error.is_a?(AutoRun::Stopped)
+    return ui["liveNeedsRun"] if error.is_a?(AutoRun::NeedsRun)
+
+    nil
   end
 
   # true when the exercise's check passes; the shell marks the lesson done

@@ -9,6 +9,15 @@ module ChunkyShell
 
     attr_reader :lang, :course
 
+    # Live runs (main.rb's AutoRun): a moment after the last key, as long as
+    # a cell's runs are quick; one switch for the lessons (on unless turned
+    # off), one for the workshop (off unless turned on) - view settings, so
+    # "chunkyui_" and not synced
+    LIVE_DELAY_MS = 1000
+    LIVE_SLOW = 0.3
+    LIVE_KEY = "chunkyui_live"
+    LIVE_WORKSHOP_KEY = "chunkyui_live_ws"
+
     def initialize(data = JSG.w.LESSONS, bridge = JSG.w.ChunkyBridge)
       @course = Course.new(data)
       @bridge = bridge
@@ -23,6 +32,10 @@ module ChunkyShell
       @kernel_ready = bridge.ready == true
       @kernel_failed = bridge.failed == true
       @rendered_lesson_id = nil
+      @view_gen = 0         # a new lesson drops the live runs still waiting
+      @live_gen = {}        # per cell: the latest keystroke's live run
+      @slow = {}            # cells whose last run took too long to run live
+      @last_outcome = {}    # a live pass celebrates only when it is new
     end
 
     def start
@@ -70,6 +83,10 @@ module ChunkyShell
       window.addEventListener("chunky:installed", sync: true) { |event| guard("installed") { installed(event.detail) } }
       window.addEventListener("chunky:kernel-ready", sync: true) { guard("kernel") { kernel_ready } }
       window.addEventListener("chunky:kernel-failed", sync: true) { guard("kernel failed") { kernel_failed } }
+      # typing in a cell (index.html's initCell), for live runs
+      app = self
+      JS::Object.register_callback("chunkyEdited") { |idx| app.edited(idx.to_i) }
+      window["chunkyEdited"] = JS.generic_callbacks[:chunkyEdited]
     end
 
     # Nav entries are real links (#lesson-id): a plain click is handled here,
@@ -86,6 +103,7 @@ module ChunkyShell
 
     def body_click(event)
       target = event.target
+      return toggle_live if target.className.to_s.include?("live-toggle")
       return unless target.className.to_s.include?("run-cell")
 
       idx = target.getAttribute("data-idx")
@@ -190,6 +208,9 @@ module ChunkyShell
     # bridge passes the state on and drops runs still waiting for the old one.
     def render_lesson
       @running = {}
+      @view_gen += 1
+      @slow = {}
+      @last_outcome = {}
       JSG.d.body.classList.toggle("in-workshop", workshop?)
       el("reset-code").hidden = workshop?
       @bridge.setState(@lang, workshop? ? "" : current_lesson_id, workshop?)
@@ -203,7 +224,7 @@ module ChunkyShell
       @rendered_lesson_id = id
       # the lesson in the tab title makes bookmarks and history legible
       JSG.d.title = "#{@course.title(idx, @lang)} – #{ui.title}"
-      el("lessonBody").innerHTML = View.lesson_html(cells, ui.taskLabel, ui.runCell)
+      el("lessonBody").innerHTML = View.lesson_html(cells, ui.taskLabel, ui.runCell, live_toggle_html)
       cells.each_with_index do |cell, i|
         next unless code_cell?(cell)
 
@@ -222,7 +243,7 @@ module ChunkyShell
     def render_workshop
       @rendered_lesson_id = nil
       JSG.d.title = "#{ui.workshopTitle} – #{ui.title}"
-      el("lessonBody").innerHTML = View.workshop_html(ui.workshopTitle, ui.workshopIntro, ui.runCell)
+      el("lessonBody").innerHTML = View.workshop_html(ui.workshopTitle, ui.workshopIntro, ui.runCell, live_toggle_html)
       JSG.w.initCell(0)
       @workspace&.mount
     end
@@ -330,6 +351,7 @@ module ChunkyShell
       return unless button
 
       @running[idx] = true
+      drop_live_run(idx)   # this run replaces the live one still waiting
       if cell
         cell.classList.remove("shake", "celebrate")
         cell.classList.add("running")
@@ -339,11 +361,18 @@ module ChunkyShell
       @bridge.run(idx)
     end
 
-    # the kernel ran cell idx: "ok" | "error" | "pass" | "fail"
+    # the kernel ran cell idx: "ok" | "error" | "pass" | "fail"; a live run
+    # also "skipped" (its code does not parse yet), "stopped" (time limit)
+    # or "needs" (it wanted a download)
     def ran(detail)
       idx = detail.idx
       outcome = detail.outcome
       @running.delete(idx)
+      note_speed(idx, outcome, detail.elapsed)
+      before = @last_outcome[idx]
+      @last_outcome[idx] = outcome unless outcome == "skipped"
+      return settle_live(idx, outcome, before) if detail.auto == true
+
       settle_cell(idx, outcome, detail.elapsed)
       return if workshop?
 
@@ -413,6 +442,90 @@ module ChunkyShell
       button = JSG.d.querySelector(".run-cell[data-idx='#{idx}']")
       cell = button ? button.closest(".cell") : nil
       [cell, button]
+    end
+
+    # ---------- live runs ----------
+
+    # the page's switch: the lessons' is on unless turned off, the
+    # workshop's off unless turned on (a program there may take its time)
+    def live?
+      return Store.get(LIVE_WORKSHOP_KEY, "off") == "on" if workshop?
+
+      Store.get(LIVE_KEY, "on") != "off"
+    end
+
+    def live_toggle_html = View.live_html(live?, ui.liveLabel, live? ? ui.liveOn : ui.liveOff)
+
+    # A key in cell idx (index.html): its live run a moment later, unless
+    # another key, a click on ▶ or another page comes first. A Task's
+    # block runs with another self, hence app and the locals.
+    def edited(idx)
+      guard("live") do
+        if live? && !@kernel_failed
+          gen = drop_live_run(idx)
+          view = @view_gen
+          delay = LIVE_DELAY_MS
+          app = self
+          Task.new do
+            sleep_ms delay
+            app.live_run(idx, gen, view)
+          end
+        end
+      end
+    end
+
+    # the live run of cell idx that is still waiting will not happen; the
+    # number the next one goes by
+    def drop_live_run(idx)
+      @live_gen[idx] = (@live_gen[idx] || 0) + 1
+    end
+
+    # Only the latest key's run, on the page it was typed on, while the
+    # cell is idle and quick. The kernel does not keep it waiting: while
+    # Ruby loads, typing is just typing (bridge.js).
+    def live_run(idx, gen, view)
+      guard("live run") do
+        current = view == @view_gen && gen == @live_gen[idx]
+        if current && live? && !@running[idx] && !@slow[idx] && @kernel_ready && !@kernel_failed
+          @running[idx] = true
+          @running.delete(idx) unless @bridge.autorun(idx)
+        end
+      end
+    end
+
+    # A live run is a rehearsal: no shake, no reveal, no bubble for an
+    # error or a wrong answer. Chunky cheers for a pass - once, when it is new.
+    def settle_live(idx, outcome, before)
+      cell = cell_parts(idx)[0]
+      return unless outcome == "pass" && before != "pass"
+
+      replay(cell, "celebrate") if cell
+      exercise_passed
+    end
+
+    # A cell that took longer than LIVE_SLOW runs only with ▶ until a run
+    # is quick again. A skipped run tells nothing: its code did not run.
+    def note_speed(idx, outcome, elapsed)
+      return if outcome == "skipped" || elapsed.nil? || elapsed < 0
+
+      @slow[idx] = elapsed > LIVE_SLOW
+      refresh_live_toggle(idx)
+    end
+
+    def toggle_live
+      Store.set(workshop? ? LIVE_WORKSHOP_KEY : LIVE_KEY, live? ? "off" : "on")
+      JSG.q(".run-cell").each { |button| refresh_live_toggle(button.getAttribute("data-idx").to_i) }
+    end
+
+    def refresh_live_toggle(idx)
+      cell = cell_parts(idx)[0]
+      toggle = cell ? cell.querySelector(".live-toggle") : nil
+      return unless toggle
+
+      on = live?
+      toggle.setAttribute("aria-pressed", on.to_s)
+      toggle.classList.toggle("is-paused", on && @slow[idx] == true)
+      toggle.title = !on ? ui.liveOff : (@slow[idx] ? ui.liveSlow : ui.liveOn)
     end
 
     # ---------- the kernel ----------

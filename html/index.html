@@ -274,6 +274,11 @@
           }
         }
       });
+      // typing - not code the page puts in - tells the shell, for live runs
+      // (shell/app.rb); the cell number goes over as a string
+      window.cellEditors[idx].on("change", function (cm, change) {
+        if (change.origin !== "setValue" && window.chunkyEdited) window.chunkyEdited(String(idx));
+      });
     };
     window.getCellCode = function (idx) {
       return window.cellEditors[idx] ? window.cellEditors[idx].getValue() : "";

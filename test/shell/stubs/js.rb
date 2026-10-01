@@ -469,7 +469,16 @@ module JS
       @editors = {}
       props["ChunkyStorage"] = @fs.js
       props["cellEditors"] = @editors
-      props["initCell"] = proc { |idx| @calls << ["initCell", idx]; @editors[idx.to_s] = Editor.new; nil }
+      props["initCell"] = proc do |idx|
+        @calls << ["initCell", idx]
+        editor = @editors[idx.to_s] = Editor.new
+        # index.html: a key in the editor tells the shell (live runs)
+        editor.js_on("change", proc do |_cm, change|
+          edited = props["chunkyEdited"]
+          edited.call(idx.to_s) if edited && change["origin"] != "setValue"
+        end)
+        nil
+      end
       props["location"] = { "hash" => "" }
       props["history"] = { "replaceState" => proc { |_s, _t, url| props["location"]["hash"] = url.to_s } }
       props["localStorage"] = {
@@ -508,6 +517,8 @@ module JS
         "setState" => proc { |*a| requests << ["setState", *a]; nil },
         "reset" => proc { requests << ["reset"]; nil },
         "run" => proc { |idx| requests << ["run", idx]; props["ChunkyBridge"]["ready"] },
+        # a live run goes out only once the kernel is up, never queued
+        "autorun" => proc { |idx| props["ChunkyBridge"]["ready"] && (requests << ["autorun", idx]) && true },
         "install" => proc { |name| requests << ["install", name]; props["ChunkyBridge"]["ready"] },
         "shellReady" => proc { requests << ["shellReady"]; nil },
         "saveText" => proc { |name, text| requests << ["saveText", name, text]; nil },
@@ -543,10 +554,26 @@ module JS
   end
 end
 
-# PicoRuby's Task, run at once - with another self, as in PicoRuby
+# PicoRuby's Task, run at once - with another self, as in PicoRuby. With
+# Task.held set to [], blocks wait there until Task.release (a test looks
+# at the page between a key and the live run a second later).
 class Task
+  class << self
+    attr_accessor :held
+
+    def release
+      blocks = held || []
+      self.held = []
+      blocks.each { |block| Object.new.instance_exec(&block) }
+    end
+  end
+
   def initialize(&block)
-    Object.new.instance_exec(&block)
+    if Task.held
+      Task.held << block
+    else
+      Object.new.instance_exec(&block)
+    end
   end
 end
 

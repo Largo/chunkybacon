@@ -15,10 +15,10 @@
 // outcome in the same task as the run (the shell's listeners are sync).
 // Requests made while the kernel is still loading wait here, in order.
 //
-//   shell -> kernel   chunky:run {idx, lang, lesson, workshop, seq}
+//   shell -> kernel   chunky:run {idx, auto, lang, lesson, workshop, seq}   (auto: a live run)
 //                     chunky:lesson {lang, lesson, workshop, seq}   (seq: a new binding)
 //                     chunky:install {name, ...}
-//   kernel -> shell   chunky:kernel-ready, chunky:ran {idx, outcome, elapsed},
+//   kernel -> shell   chunky:kernel-ready, chunky:ran {idx, outcome, elapsed, auto},
 //                     chunky:gems {installed: JSON}, chunky:installed {name, ok, message}
 //   bridge -> shell   chunky:kernel-failed {reason}   (CRuby did not come up)
 (function () {
@@ -43,7 +43,9 @@
   // keeps CRuby from ever running inside one of PicoRuby's handlers.
   function send(item) {
     window.afterPaint(function () {
-      if (item.type === "run") emit("chunky:run", withState({ idx: item.idx }));
+      if (item.type === "run" || item.type === "autorun") {
+        emit("chunky:run", withState({ idx: item.idx, auto: item.type === "autorun" }));
+      }
       else emit("chunky:install", withState({ name: item.name }));
     });
   }
@@ -144,6 +146,13 @@
     },
     // true when the kernel takes it now, false when it waits for the kernel
     run: function (idx) { return request({ type: "run", idx: Number(idx) }); },
+    // a live run (shell/app.rb, autorun.rb): only once the kernel is up, never
+    // queued - while Ruby loads, typing is just typing. true when it went out.
+    autorun: function (idx) {
+      if (!bridge.ready) return false;
+      send({ type: "autorun", idx: Number(idx) });
+      return true;
+    },
     install: function (name) { return request({ type: "install", name: String(name) }); },
     shellReady: function () {
       shellUp = true;
@@ -164,8 +173,8 @@
         items.forEach(send);
       }, 0);
     },
-    ran: function (idx, outcome, elapsed) {
-      emit("chunky:ran", { idx: Number(idx), outcome: String(outcome), elapsed: Number(elapsed) });
+    ran: function (idx, outcome, elapsed, auto) {
+      emit("chunky:ran", { idx: Number(idx), outcome: String(outcome), elapsed: Number(elapsed), auto: !!auto });
     },
     gems: function (installed) { emit("chunky:gems", { installed: String(installed || "{}") }); },
     installed: function (name, ok, message) {

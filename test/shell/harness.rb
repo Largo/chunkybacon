@@ -20,6 +20,7 @@ SHELL_FILES.each { |file| load File.join(SHELL_DIR, file) }
 module ShellTest
   def fresh_page(hash: "", storage: {})
     JS.reset!
+    Task.held = nil
     window.location["hash"] = hash
     window.storage.merge!(storage)
     JS.console_errors.clear

@@ -537,6 +537,39 @@ kbd {
 }
 .run-time.fresh { animation: out-in 0.3s ease-out; }
 
+/* ⚡ Live, beside ▶: a quiet switch, marked like the highlighter when on;
+   paused (a cell too slow for live runs) it is struck through */
+.live-toggle {
+  margin-right: 0.5rem;
+  padding: 0.2rem 0.6rem;
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 1px dashed var(--rule);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.live-toggle:hover { color: var(--ink); background: transparent; border-color: var(--ink-soft); }
+.live-toggle[aria-pressed="true"] {
+  color: var(--ink);
+  background: var(--highlight);
+  border: 1px solid transparent;
+}
+.live-toggle.is-paused {
+  color: var(--ink-soft);
+  background: var(--fat);
+  text-decoration: line-through;
+}
+/* what a live run printed is a rehearsal: its errors are fainter, its
+   notes ("stopped after a second") quieter still */
+.cell-out.is-rehearsal .cell-error { opacity: 0.6; }
+.cell-hint {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
 .cell-out {
   border-top: 1px solid var(--rule);
   padding: 0.6rem 0.9rem;

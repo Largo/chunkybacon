@@ -59,6 +59,9 @@ module Workshop
       kept + (@before.keys - after.keys).filter_map { |path| [path, nil] if storable?(path) }
     end
 
+    # the project's files, by name - a live run's time limit counts their lines
+    def paths = (@before || {}).keys
+
     # the pictures and PDFs among +changes+, to show below the editor
     def previews(changes)
       changes.select { |path, bytes| binary?(path) && bytes.bytesize <= MAX_BINARY }

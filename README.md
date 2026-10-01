@@ -17,6 +17,12 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
   cell shows its last expression as `=> …` — `puts` is never required.
+- **Live runs**: a cell runs by itself a second after you stop typing, as
+  long as the code parses - a rehearsal that keeps no file it writes,
+  installs only gems already in the cache, fetches nothing from the web and
+  is stopped after a second; ▶ runs the code for real. Chunky only speaks
+  up when an exercise passes. On in the lessons, off in the workshop (the
+  ⚡ Live switch beside ▶).
 - **In-browser gem installer**: pure-Ruby gems install at runtime
   (`install_gem "chunky_png"`), fetched from a local cache or from
   rubygems.org through a same-origin nginx proxy, and unpacked onto the
@@ -109,10 +115,12 @@ node make_lessons_json.js # test/lessons.json for the Ruby harnesses
 ruby check_harness.rb     # every lesson: starter fails, solutions pass
 ruby gems_harness.rb      # gem installer, sinatra + roda offline
 ruby shell/run.rb         # the page shell (PicoRuby code) under Minitest
+ruby autorun_test.rb      # live runs: what may run, the time limit
 node browser_test.mjs     # Playwright end-to-end against port 8011
 node progress_test.mjs    # progress file, workshop, connected folder
 node boot_failure_test.mjs # what the page says when a runtime fails
 node language_test.mjs    # ?lang=, last choice, browser languages, English
+node live_test.mjs        # live runs in a lesson and in the workshop
 cd ../gem/chunky_bacon && rake test   # the companion gem
 ```
 
