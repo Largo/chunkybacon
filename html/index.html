@@ -9,6 +9,17 @@
          types, Shantell Sans for Chunky's own voice (see app.css); self-hosted,
          so a visit makes no third-party requests -->
     <link rel="stylesheet" href="assets/fonts/fonts.css">
+    <!-- three.js is vendored locally and only fetched when the 3D lesson
+         needs it (see window.ensureThree below); the import map lets the
+         addon files resolve their "three" import to the same copy. -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./assets/three/three.module.min.js",
+          "three/addons/": "./assets/three/"
+        }
+      }
+    </script>
     <!-- The page is drawn by Ruby on PicoRuby.wasm (shell/, 0.9 MB), the
          lessons' code runs on CRuby ruby.wasm (main.rb, 10 MB), which loads
          once the page is up (shell/bridge.js). The shell's runtime downloads
@@ -56,17 +67,6 @@
     <script src="assets/codemirror.js"></script>
     <script src="assets/codemirror-ruby.js"></script>
     <script src="lessons.js"></script>
-    <!-- three.js is vendored locally and only fetched when the 3D lesson
-         needs it (see window.ensureThree below); the import map lets the
-         addon files resolve their "three" import to the same copy. -->
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "./assets/three/three.module.min.js",
-          "three/addons/": "./assets/three/"
-        }
-      }
-    </script>
     <link rel="icon" href="assets/chunky.svg">
 </head>
 <body>
