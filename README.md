@@ -56,6 +56,15 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   optionally animated per frame and orbitable with the mouse).
 - Chunky Bacon, an original cartoon fox, cheers you on.
 
+## On your own computer: the chunky_bacon gem
+
+[`gem/chunky_bacon`](gem/chunky_bacon) gives a Ruby program on your own
+computer the course's helpers (`show_image`, `show_browser`,
+`download_file`, ...), so code from the lessons and the workshop runs
+unchanged. `chunkybacon run` starts a program with them loaded.
+[`gem/chunkybacon`](gem/chunkybacon) and [`gem/chunky-bacon`](gem/chunky-bacon)
+are aliases: all three names install the same gem.
+
 ## Architecture
 
 For operations, internals and traps see [docs/HANDOVER.md](docs/HANDOVER.md).
@@ -103,6 +112,7 @@ node browser_test.mjs     # Playwright end-to-end against port 8011
 node progress_test.mjs    # progress file, workshop, connected folder
 node boot_failure_test.mjs # what the page says when a runtime fails
 node language_test.mjs    # ?lang=, last choice, browser languages, English
+cd ../gem/chunky_bacon && rake test   # the companion gem
 ```
 
 ## License
@@ -113,7 +123,8 @@ Both licenses allow commercial use.
   app, tools and tests.
 - **Course content**: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/),
   © [Andi Idogawa](https://idogawa.com) - the lesson and interface texts in
-  `html/lessons.js` and the Chunky Bacon fox (`html/assets/chunky.svg`).
+  `html/lessons.js` and the Chunky Bacon fox (`html/assets/chunky.svg`, and
+  in ASCII in the gem, `gem/chunky_bacon/lib/chunky_bacon/fox.txt`).
   Credit the course and keep adapted versions under CC BY-SA. The code
   examples inside the lessons are also available under the MIT license, so
   you can use them in your own programs freely.

@@ -74,6 +74,9 @@ tools/render_social_cards.mjs  docs/social/card.html -> twitter-card.png (1600x9
                            so rerun it when that changes. og:image points at GitHub's
                            raw copy - switch it to the site's own URL once a domain is bound
 docs/social/               the social cards: card.html (source) and the two PNGs
+gem/chunky_bacon/          the companion gem: the course's helpers on a computer,
+                           the fox, `chunkybacon run` (§10a)
+gem/chunkybacon/, gem/chunky-bacon/  its alias gems (like rubyllm -> ruby_llm)
 test/check_harness.rb      every lesson offline under CRuby
 test/gems_harness.rb       gem installer offline under CRuby
 test/shell/run.rb          Minitest for the shell, on a stub of PicoRuby's js
@@ -451,6 +454,44 @@ nokogiri-pure's CI has a wasm job for this).
   - lessons 19 and 22.
 - [Prawn](https://github.com/prawnpdf/prawn), [HexaPDF](https://hexapdf.gettalong.org/)
   (AGPL-3.0 or commercial) - lesson 21.
+
+## 10a. The companion gem (`gem/`)
+
+`chunky_bacon` (named by the RubyGems guide: two words, underscore, module
+`ChunkyBacon`) takes the course to the learner's computer. Pure Ruby, no
+dependencies, Ruby >= 3.1. Code MIT; the fox drawing (`lib/chunky_bacon/fox.txt`,
+read by `fox.rb`) CC BY-SA 4.0 like the course's other content
+(`LICENSE-ASSETS`) - any further asset goes into a file of its own and under
+that license too. Contact in the gemspecs: web@idogawa.com.
+
+- `require "chunky_bacon"` defines the notebook helpers as private Kernel
+  methods - same names, arguments and defaults as `main.rb`'s. What the page
+  showed below a cell becomes a file in the program's folder
+  (`ChunkyBacon.output_dir`), opened in the system viewer
+  (`ChunkyBacon::Opener`; `CHUNKYBACON_OPEN=0` turns that off). Status lines
+  go to stderr. `show_browser` runs `ChunkyBacon::Server`, a tiny HTTP server
+  on 127.0.0.1, and keeps the program alive after its last line until
+  Ctrl+C. `show_three`/`show_shoes` raise `ChunkyBacon::NotHere` with what
+  to do instead. When `main.rb` changes a helper, change the gem's too.
+- Under ruby.wasm (`ChunkyBacon.browser?`) the gem leaves the page's helpers
+  alone and only adds the fox - so `install_gem "chunky_bacon"` will work in
+  a lesson once it is published.
+- `chunkybacon` (exe): the fox; `chunkybacon run [FILE]` = a child Ruby with
+  `-r chunky_bacon`, the terminal as stdin, its exit status.
+- `gem/chunkybacon` and `gem/chunky-bacon` are aliases (like `rubyllm` for
+  `ruby_llm`): each depends on `chunky_bacon >= 0.1` and requires it, and
+  needs no new release when `chunky_bacon` gets one. They keep the other
+  spellings from going to someone else.
+- Tests: `cd gem/chunky_bacon && rake test` (Minitest; the CLI tests run the
+  real command in a temp folder).
+- Releasing: bump `lib/chunky_bacon/version.rb` and the CHANGELOG, commit,
+  then push a tag `chunky_bacon-v<version>`. `.github/workflows/release.yaml`
+  tests, checks the tag against `version.rb`, builds all three gems and
+  pushes them by **trusted publishing** (rubygems.org trusts that workflow
+  file in this repo with the `release` environment; no API key exists). It
+  pushes `chunky_bacon` first and skips versions already on rubygems.org, so
+  the aliases stay at 0.1.0 until their own version is bumped. The workflow
+  can also be started from the Actions tab.
 
 ## 11. Open ends
 

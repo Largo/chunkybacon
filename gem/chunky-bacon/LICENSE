@@ -19,11 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-This license covers the code of Chunky Bacon. The course content - the
-lesson and interface texts in html/lessons.js and the Chunky Bacon fox in
-html/assets/chunky.svg and gem/chunky_bacon/lib/chunky_bacon/fox.txt - is
-licensed under CC BY-SA 4.0; see README.md.
-Third-party components keep their own licenses; see THIRD_PARTY_NOTICES.md.

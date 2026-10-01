@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative "../lib/chunky_bacon"
+require_relative "../lib/chunky_bacon/cli"
+
+begin
+  exit ChunkyBacon::CLI.new.call(ARGV)
+rescue Interrupt
+  exit 130
+end

@@ -1,0 +1,71 @@
+# Releases the companion gem (gem/chunky_bacon) and its aliases
+# (gem/chunkybacon, gem/chunky-bacon) to rubygems.org by trusted publishing:
+# no API key anywhere - rubygems.org trusts this workflow file, in this
+# repository, running in the "release" environment, and hands it a token
+# that lasts for the one push.
+#
+# Run it by pushing a tag chunky_bacon-v<version> that matches
+# gem/chunky_bacon/lib/chunky_bacon/version.rb, or from the Actions tab.
+name: Release gems
+
+on:
+  push:
+    tags: ["chunky_bacon-v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: read
+      id-token: write   # the OIDC token rubygems.org exchanges for a push key
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0"
+
+      - name: Test
+        working-directory: gem/chunky_bacon
+        run: rake test
+
+      - name: The tag names the gem's version
+        if: github.ref_type == 'tag'
+        run: |
+          version=$(sed -n 's/.*VERSION = "\(.*\)".*/\1/p' gem/chunky_bacon/lib/chunky_bacon/version.rb)
+          if [ "${GITHUB_REF_NAME#chunky_bacon-v}" != "$version" ]; then
+            echo "::error::tag $GITHUB_REF_NAME, but version.rb says $version"
+            exit 1
+          fi
+
+      - name: Build
+        run: |
+          for gem in chunky_bacon chunkybacon chunky-bacon; do
+            (cd "gem/$gem" && gem build "$gem.gemspec")
+          done
+
+      - name: Configure trusted publishing credentials
+        uses: rubygems/configure-rubygems-credentials@dc5a8d8553e6ee01fc26761a49e99e733d17954a # v2.1.0
+
+      # chunky_bacon first - the aliases depend on it. A version that is on
+      # rubygems.org already is left alone: the aliases rarely change, and a
+      # version cannot be pushed twice.
+      - name: Push
+        run: |
+          for gem in chunky_bacon chunkybacon chunky-bacon; do
+            file=$(ls "gem/$gem/$gem"-*.gem)
+            version=${file##*-}
+            version=${version%.gem}
+            if curl -sf "https://rubygems.org/api/v2/rubygems/$gem/versions/$version.json" > /dev/null; then
+              echo "$gem $version is on rubygems.org already"
+            else
+              gem push "$file"
+            fi
+          done
