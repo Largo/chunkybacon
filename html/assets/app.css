@@ -873,7 +873,7 @@ button.reset:hover { background: var(--paper); color: var(--ink); border-color: 
   overflow-wrap: anywhere;
 }
 .ws-list li.is-open button.ws-file { font-weight: 700; }
-.ws-files button.ws-del {
+.ws-files button.ws-del, .ws-files button.ws-ren {
   flex: none;
   font-size: 1rem;
   line-height: 1;
@@ -883,8 +883,11 @@ button.reset:hover { background: var(--paper); color: var(--ink); border-color: 
   color: var(--ink-soft);
   opacity: 0.45;
 }
-.ws-list li:hover button.ws-del, .ws-files button.ws-del:focus-visible { opacity: 1; }
+.ws-list li:hover button.ws-del, .ws-files button.ws-del:focus-visible,
+.ws-list li:hover button.ws-ren, .ws-files button.ws-ren:focus-visible { opacity: 1; }
 .ws-files button.ws-del:hover { color: var(--err); background: transparent; }
+.ws-files button.ws-ren:hover { color: var(--ink); background: transparent; }
+.ws-list li.is-renaming { padding: 0.15rem 0; }
 .ws-files button.ws-action, .progress-dialog button.pd-secondary {
   font-size: 0.85rem;
   font-weight: 600;
@@ -914,6 +917,30 @@ button.reset:hover { background: var(--paper); color: var(--ink); border-color: 
   overflow-wrap: anywhere;
 }
 .ws-editor .CodeMirror-scroll { min-height: 20em; }
+/* a picture or PDF from the project, in place of the editor */
+.ws-editor.is-preview .CodeMirror, .ws-editor.is-preview .ws-stdin { display: none; }
+.ws-preview {
+  padding: 1rem;
+  background:
+    repeating-conic-gradient(var(--code-bg) 0 25%, var(--paper) 0 50%) 0 0 / 16px 16px;
+  text-align: center;
+}
+.ws-preview img {
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: middle;
+  border: 1px solid var(--rule);
+  background: #fff;
+}
+/* ChunkyPNG's 8x8 pixels, drawn big enough to see */
+.ws-preview img.is-tiny { width: 160px; image-rendering: pixelated; }
+.ws-preview iframe.ws-pdf {
+  display: block;
+  width: 100%;
+  height: 28rem;
+  border: 1px solid var(--rule);
+  background: #fff;
+}
 .ws-stdin { border-top: 1px solid var(--rule); }
 .ws-stdin summary {
   cursor: pointer;

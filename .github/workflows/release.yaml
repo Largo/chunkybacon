@@ -1,8 +1,9 @@
 # Releases the companion gem (gem/chunky_bacon) and its aliases
 # (gem/chunkybacon, gem/chunky-bacon) to rubygems.org by trusted publishing:
 # no API key anywhere - rubygems.org trusts this workflow file, in this
-# repository, running in the "release" environment, and hands it a token
-# that lasts for the one push.
+# repository, running in the "rubygems" environment, and hands it a token
+# that lasts for the one push. (The trusted publishers on rubygems.org name
+# that environment: rename it here only together with them.)
 #
 # Run it by pushing a tag chunky_bacon-v<version> that matches
 # gem/chunky_bacon/lib/chunky_bacon/version.rb, or from the Actions tab.
@@ -19,7 +20,9 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    environment: release
+    environment:
+      name: rubygems
+      url: https://rubygems.org/gems/chunky_bacon
     permissions:
       contents: read
       id-token: write   # the OIDC token rubygems.org exchanges for a push key

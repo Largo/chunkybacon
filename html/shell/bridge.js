@@ -185,8 +185,11 @@
     },
     // a text file to the learner's downloads (PicoRuby cannot build the
     // Blob: it passes no arrays)
+    // (a picture or PDF comes as the data: URL the workshop keeps it as)
     saveText: function (name, text) {
-      var url = URL.createObjectURL(new Blob([text], { type: "text/plain;charset=utf-8" }));
+      var binary = /^data:[^,]*;base64,/.test(text) && window.ChunkyStorage && window.ChunkyStorage.files.isBinary(name);
+      var blob = binary ? blobOf(text) : new Blob([text], { type: "text/plain;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
       var a = document.createElement("a");
       a.href = url;
       a.download = String(name).split("/").pop();
@@ -194,8 +197,22 @@
       a.click();
       a.remove();
       setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
-    }
+    },
+    // A Blob URL for a data: URL - the workshop's PDF preview: browsers show
+    // a PDF in an iframe from a Blob URL, not from a data: URL. The shell
+    // releases it with revokeUrl when the preview goes.
+    objectUrl: function (dataUrl) { return URL.createObjectURL(blobOf(String(dataUrl))); },
+    revokeUrl: function (url) { if (url) URL.revokeObjectURL(String(url)); }
   };
+
+  function blobOf(dataUrl) {
+    var comma = dataUrl.indexOf(",");
+    var type = dataUrl.slice(5, comma).replace(/;base64$/, "");
+    var raw = atob(dataUrl.slice(comma + 1));
+    var bytes = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+    return new Blob([bytes], { type: type });
+  }
 
   // ?kernel=eager starts CRuby at once, beside the shell (for comparison)
   if (/[?&]kernel=eager(&|$)/.test(location.search)) startKernel();

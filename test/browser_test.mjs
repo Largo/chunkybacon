@@ -96,15 +96,18 @@ const cell1 = await page.evaluate(() => window.cellEditors[1].getValue());
 check('reset restores demo cell code', cell1.includes('essen = "Speck"'));
 check('reset hides cell output', !(await page.isVisible('#cell-out-3')));
 
-// lesson 11: gems — install chunky_png from local cache, draw an image
+// lesson 13: gems — the course's own gem from the local cache, then
+// chunky_png drawing an image
 await page.click('#lessonNav a[data-id="gems"]');
 await page.waitForTimeout(300);
 await page.click('.run-cell[data-idx="1"]');
 await page.waitForTimeout(1500);
-check('chunky_png installs from cache', (await page.textContent('#cell-out-1')).includes('chunky_png 1.4.0'));
-check('gems panel marks chunky_png installed', (await page.textContent('#gemsList')).includes('chunky_png ✓'));
+check('chunky_bacon installs from cache and Chunky shouts', (await page.textContent('#cell-out-1')).includes('CHUNKY BACON!'));
+check('gems panel marks chunky_bacon installed', (await page.textContent('#gemsList')).includes('chunky_bacon ✓'));
+check('in the browser the gem keeps the page helpers', await page.evaluate(() => !document.querySelector('#cell-out-1 .cell-error')));
 await page.click('.run-cell[data-idx="3"]');
-await page.waitForTimeout(1000);
+await page.waitForTimeout(1500);
+check('gems panel marks chunky_png installed', (await page.textContent('#gemsList')).includes('chunky_png ✓'));
 check('demo cell renders a PNG image', await page.isVisible('#cell-out-3 img.cell-image'));
 await setExercise('install_gem "chunky_png"\nrequire "chunky_png"\nbild = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times do |y|\n  next unless y.even?\n  8.times { |x| bild[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }\nend\nshow_image bild');
 await runExercise();

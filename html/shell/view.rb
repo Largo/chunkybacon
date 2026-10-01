@@ -41,8 +41,9 @@ module ChunkyShell
       HTML
     end
 
-    # The workshop's frame: workspace.rb fills the file panel (#wsFiles)
-    # and the stdin box; the editor is cell 0 like in a lesson.
+    # The workshop's frame: workspace.rb fills the file panel (#wsFiles),
+    # the stdin box and the preview of a picture or PDF (#wsPreview); the
+    # editor is cell 0 like in a lesson.
     def self.workshop_html(title, intro, run_label)
       <<~HTML
         <div class="lessonText"><h2>#{title}</h2><p>#{intro}</p></div>
@@ -51,6 +52,7 @@ module ChunkyShell
           <div class="cell ws-editor">
             <div class="ws-tab" id="wsTab"></div>
             <textarea title="code" id="cell-code-0"></textarea>
+            <div class="ws-preview" id="wsPreview" hidden></div>
             <div class="ws-stdin" id="wsStdinBox"></div>
             <div class="cell-toolbar"><button type="button" class="run-cell" data-idx="0">#{run_label}</button></div>
             <div class="cell-out" id="cell-out-0" style="display:none"></div>

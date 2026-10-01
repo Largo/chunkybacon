@@ -4,16 +4,32 @@
 # For the run they become the virtual filesystem (SandboxFS), so a program
 # can File.read and File.write its project's files and require_relative its
 # other .rb files, and gets reads what the learner typed as input. Whatever
-# the program wrote or deleted goes back to storage.js afterwards; the
+# the program wrote or deleted goes back to storage.js afterwards - text as
+# text, pictures and PDFs as data: URLs, which the workshop previews; the
 # lessons get their own virtual files back.
+require "fileutils"
+
 module Workshop
+  # The binary files a project keeps: storage.js holds them as data: URLs,
+  # a run gets their bytes, the workshop shows them instead of the editor.
+  # Other binary data a program writes is offered as a download only.
+  PREVIEW_TYPES = {
+    ".png" => "image/png", ".jpg" => "image/jpeg", ".jpeg" => "image/jpeg",
+    ".gif" => "image/gif", ".webp" => "image/webp", ".pdf" => "application/pdf"
+  }.freeze
+  # bigger ones stay downloads: the browser's localStorage holds a few MB
+  MAX_BINARY = 1_000_000
+
   class << self
     # Swaps the project's files in; +file+ is the one in the editor, with
     # +code+ as it stands there (maybe not saved yet).
     def prepare(snapshot, file, code)
       @lesson_files = SandboxFS.store.dup
-      @before = snapshot.merge(file => code)
+      @before = snapshot.merge(file => code).to_h { |path, value| [path, decode(path, value)] }
       SandboxFS.store.replace(@before.transform_values(&:dup))
+      # Pictures and PDFs also as real files: File.binread and File.open, and
+      # so ChunkyPNG and Prawn reading them, go past SandboxFS.
+      @before.each { |path, bytes| write_real(path, bytes) if binary?(path) }
       @loaded = [file]
     end
 
@@ -31,18 +47,33 @@ module Workshop
       @running = false
     end
 
-    # What the run changed, as [[path, text or nil], ...] - nil for a deleted
-    # file. Binary data and odd paths stay out: they are still offered as
-    # downloads, but storage.js keeps text files with plain names.
-    def finish
+    # What the run changed, as [[path, value or nil], ...]: a text file as
+    # text, a picture or PDF as a data: URL, nil for a deleted file.
+    # +changes+ are FileWatch's [path, bytes] for every file the program
+    # wrote, through SandboxFS or onto the real filesystem. Other binary data,
+    # big files and odd paths stay out: they are still offered as downloads.
+    def finish(changes)
       after = SandboxFS.store.dup
       SandboxFS.store.replace(@lesson_files || {})
-      changes = after.filter_map do |path, data|
-        next if @before[path] == data || !storable?(path)
-        text = data.to_s.dup.force_encoding(Encoding::UTF_8)
-        [path, text] if text.valid_encoding?
-      end
-      changes + (@before.keys - after.keys).filter_map { |path| [path, nil] if storable?(path) }
+      kept = changes.filter_map { |path, bytes| keep(path, bytes) }
+      kept + (@before.keys - after.keys).filter_map { |path| [path, nil] if storable?(path) }
+    end
+
+    # the pictures and PDFs among +changes+, to show below the editor
+    def previews(changes)
+      changes.select { |path, bytes| binary?(path) && bytes.bytesize <= MAX_BINARY }
+    end
+
+    def binary?(path)
+      PREVIEW_TYPES.key?(File.extname(path.to_s).downcase)
+    end
+
+    def pdf?(path)
+      File.extname(path.to_s).downcase == ".pdf"
+    end
+
+    def data_url(path, bytes)
+      "data:#{PREVIEW_TYPES.fetch(File.extname(path).downcase)};base64,#{[bytes].pack('m0')}"
     end
 
     # require_relative from a project file, for a project file: evaluated
@@ -77,6 +108,32 @@ module Workshop
     end
 
     private
+
+    # a picture or PDF arrives as a data: URL; a text file as itself
+    def decode(path, value)
+      return value unless binary?(path) && value.to_s.start_with?("data:") && value.include?(";base64,")
+
+      value.split(",", 2).last.unpack1("m0")
+    end
+
+    def keep(path, bytes)
+      return nil unless storable?(path)
+
+      if binary?(path)
+        [path, data_url(path, bytes)] if bytes.bytesize <= MAX_BINARY
+      else
+        text = bytes.to_s.dup.force_encoding(Encoding::UTF_8)
+        [path, text] if text.valid_encoding?
+      end
+    end
+
+    def write_real(path, bytes)
+      full = File.join(Dir.pwd, path)
+      FileUtils.mkdir_p(File.dirname(full))
+      File.binwrite(full, bytes)
+    rescue SystemCallError
+      nil # a program reading it with File.binread fails as it would anyway
+    end
 
     def storable?(path)
       path.split("/").all? { |part| part.match?(/\A[\p{L}\p{N}_][\p{L}\p{N}_.\-]*\z/) }

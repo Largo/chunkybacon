@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1
+
+- The course is named by its English title, "Learn Ruby with Chunky Bacon",
+  in the gem's description, README and license notes.
+- The course's lesson 13 now starts with `install_gem "chunky_bacon"`.
+
 ## 0.1.0
 
 - The course's helpers on a computer: `install_gem`, `show_image`,

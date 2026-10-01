@@ -53,6 +53,7 @@ noted.
 | base64 | 0.3.0 | Ruby, BSD-2-Clause | Yusuke Endoh | COPYING, LEGAL |
 | benchmark | 0.5.0 | Ruby, BSD-2-Clause | Yukihiro Matsumoto | COPYING |
 | bigdecimal-pure | 0.1.0 | MIT | Andi Idogawa | LICENSE |
+| chunky_bacon | 0.1.0 | MIT; the fox drawing CC BY-SA 4.0 | Andi Idogawa | LICENSE, LICENSE-ASSETS |
 | chunky_png | 1.4.0 | MIT | Willem van Bergen | LICENSE |
 | cmdparse | 3.0.7 | MIT | Thomas Leitner | COPYING |
 | csv | 3.3.6 | Ruby, BSD-2-Clause | James Edward Gray II, Kouhei Sutou | LICENSE.txt |

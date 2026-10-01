@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "The Chunky Bacon Ruby course's helpers on your own computer - and a fox that shouts."
   spec.description = <<~TEXT.tr("\n", " ").strip
-    The companion gem of "Ruby lernen mit Chunky Bacon", an interactive Ruby course
+    The companion gem of "Learn Ruby with Chunky Bacon", an interactive Ruby course
     that runs in the browser. require "chunky_bacon" gives a program the course's
     helpers - show_image, show_pdf, show_browser, download_file, mock_get, show_irb,
     show_files, run_tests, install_gem - so code written in the course runs unchanged

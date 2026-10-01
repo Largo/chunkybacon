@@ -1,6 +1,6 @@
 # chunky_bacon
 
-The companion gem of **[Ruby lernen mit Chunky Bacon](https://github.com/Largo/chunkybacon)**,
+The companion gem of **[Learn Ruby with Chunky Bacon](https://github.com/Largo/chunkybacon)**,
 an interactive Ruby course that runs in the browser.
 
 In the course, notebook cells and the workshop have helpers like `show_image`,
@@ -46,6 +46,12 @@ never mix with your program's output.
 `CHUNKYBACON_OPEN=0` stops the viewer and the browser from opening (CI, a
 machine without a desktop); the files are saved either way. Inside the course
 page the gem keeps the page's own helpers and only adds the fox.
+
+## Why "Chunky Bacon"?
+
+It is what the cartoon foxes shout in _why's (poignant) guide to Ruby - see
+[Chunky bacon](https://chunkybacon.dev/glossary/chunky-bacon/) in Ruby Lore's
+glossary. Chunky, this course's fox, is an original character.
 
 ## License
 

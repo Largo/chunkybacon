@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# chunky_bacon: the companion gem of "Ruby lernen mit Chunky Bacon", the Ruby
+# chunky_bacon: the companion gem of "Learn Ruby with Chunky Bacon", the Ruby
 # course that runs in the browser (https://github.com/Largo/chunkybacon).
 #
 # On your own computer, `require "chunky_bacon"` gives a program the helpers

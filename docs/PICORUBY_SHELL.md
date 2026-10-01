@@ -533,10 +533,14 @@ error page image (as before).
   cycle (look, queue, double click, settle, run time), error/fail/pass
   bubbles, all-done, Alt+R, reset and its confirm, gems panel (chips from
   the cache manifest, installed marks, queued install, outcomes, escaping).
-- `workspace_test.rb` (21) - the progress button and dialog (language,
+- `workspace_test.rb` (29) - the progress button and dialog (language,
   locked folder, download, loading a good and a bad file, close, backdrop),
   the workshop (starter file, last open file, new file, bad and taken
   names, name rules, typing saves, non-Ruby files, delete, download,
+  renaming - the extension kept, the open file following, bad/taken names
+  and Escape -, pictures and PDFs in place of the editor - a tiny picture
+  pixelated, the PDF's Blob URL released, a picture the program writes, a
+  picture downloaded as what it is -,
   stdin) and what the kernel asks for during a run (open path, snapshot,
   files written and deleted, save after the run, files changed elsewhere).
 - `course_store_view_test.rb` (14) - on the real course from

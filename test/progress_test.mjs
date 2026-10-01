@@ -128,6 +128,36 @@ await a.click('.run-cell[data-idx="0"]');
 await a.waitForTimeout(800);
 check('an error in a required file names file and line', (await a.textContent('#cell-out-0')).includes('(rechner.rb:1)'));
 
+// pictures and PDFs a program writes: shown below the editor, kept in the
+// project, opened in place of the editor - and renaming
+const files = () => a.evaluate(() => window.ChunkyStorage.files.list());
+await a.evaluate(() => window.cellEditors[0].setValue(
+  'install_gem "chunky_png"\nrequire "chunky_png"\n' +
+  'bild = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color.rgb(232, 114, 42))\nbild.save("bild.png")\n' +
+  'File.binwrite("mini.pdf", "%PDF-1.4\\n1 0 obj << /Type /Catalog >> endobj\\ntrailer << /Root 1 0 R >>\\n%%EOF\\n")\n:ok'));
+await a.click('.run-cell[data-idx="0"]');
+await a.waitForTimeout(2500);
+check('a picture the program saves shows below the editor', await a.isVisible('#cell-out-0 img.cell-image'));
+check('a PDF it writes shows in the viewer below', (await a.$$('#cell-out-0 iframe.cell-pdf')).length === 1);
+const kept = await a.evaluate(() => [window.ChunkyStorage.files.read('bild.png'), window.ChunkyStorage.files.read('mini.pdf')]);
+check('both are kept in the project', kept[0]?.startsWith('data:image/png;base64,') && kept[1]?.startsWith('data:application/pdf;base64,'));
+await a.click('#wsFiles >> text=bild.png');
+check('a picture opens in place of the editor', (await a.getAttribute('#wsPreview img', 'src')).startsWith('data:image/png;base64,') &&
+  !(await a.isVisible('.ws-editor .CodeMirror')));
+await a.click('#wsFiles >> text=mini.pdf');
+check('a PDF opens in the browser viewer', (await a.getAttribute('#wsPreview iframe.ws-pdf', 'src')).startsWith('blob:'));
+await a.click('#wsFiles button.ws-ren[aria-label*="bild.png"]');
+await a.fill('.ws-newname', 'fuchs');
+await a.press('.ws-newname', 'Enter');
+await a.waitForTimeout(300);
+check('a renamed file keeps its extension', (await files()).includes('fuchs.png') && !(await files()).includes('bild.png'));
+await a.click('#wsFiles >> text=main.rb');
+check('a text file brings the editor back', await a.isVisible('.ws-editor .CodeMirror'));
+await a.evaluate(() => window.cellEditors[0].setValue('require "chunky_png"\nChunkyPNG::Image.from_file("fuchs.png").width'));
+await a.click('.run-cell[data-idx="0"]');
+await a.waitForTimeout(1500);
+check('a program reads a picture from the project', (await a.textContent('#cell-out-0')).includes('=> 8'));
+
 await a.click('#lessonNav a[data-id="tl-formats"]');
 const cellIdx = await a.getAttribute('#lessonBody .cell:not(.exercise) .run-cell', 'data-idx');
 await a.evaluate(i => window.cellEditors[i].setValue('[File.exist?("notizen.txt"), File.exist?("rechner.rb")]'), cellIdx);
@@ -172,6 +202,28 @@ check('the program runs from the folder', (await c.textContent('#cell-out-0')).i
 check('what it writes is a real file in the folder', (await readFolder('daten/liste.txt')) === 'Speck\nEier\n');
 check('running saved the program into the folder', (await readFolder('mein.rb')).startsWith('File.write'));
 
+// a picture in the folder is a real PNG; renaming moves it there too
+const pngIn = path => c.evaluate(async p => {
+  let dir = await (await navigator.storage.getDirectory()).getDirectoryHandle('kurs');
+  const parts = p.split('/');
+  const name = parts.pop();
+  try {
+    for (const part of parts) dir = await dir.getDirectoryHandle(part);
+    const bytes = new Uint8Array(await (await (await dir.getFileHandle(name)).getFile()).arrayBuffer());
+    return String.fromCharCode(...bytes.slice(1, 4)) === 'PNG';
+  } catch (e) { return false; }
+}, path);
+await c.evaluate(() => window.cellEditors[0].setValue(
+  'install_gem "chunky_png"\nrequire "chunky_png"\nChunkyPNG::Image.new(4, 4, ChunkyPNG::Color::BLACK).save("punkt.png")\n:ok'));
+await c.click('.run-cell[data-idx="0"]');
+await c.waitForTimeout(2500);
+check('a picture the program saves is a real PNG in the folder', await pngIn('punkt.png'));
+await c.click('#wsFiles button.ws-ren[aria-label*="punkt.png"]');
+await c.fill('.ws-newname', 'bilder/punkt.png');
+await c.press('.ws-newname', 'Enter');
+await c.waitForTimeout(1000);
+check('renaming moves it in the folder', !(await pngIn('punkt.png')) && (await pngIn('bilder/punkt.png')));
+
 await c.click('#lessonNav a[data-id="hallo"]');
 await c.evaluate(i => window.cellEditors[i].setValue('"Hallo, Welt!"'), await exerciseIdx(c));
 await c.click('.cell.exercise .run-cell');
@@ -184,6 +236,8 @@ await c.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 await kernelReady(c);
 await c.waitForFunction(() => window.ChunkyStorage.state() === 'folder', null, { timeout: 15000 });
 check('the folder comes back after a reload', true);
+check('pictures in the folder come back as pictures',
+  (await c.evaluate(() => window.ChunkyStorage.files.read('bilder/punkt.png') || '')).startsWith('data:image/png;base64,'));
 
 await c.click('#workshopLink');
 await c.waitForSelector('#wsFiles li');

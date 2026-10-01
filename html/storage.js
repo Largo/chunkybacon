@@ -22,6 +22,15 @@
   var MAX_FILE_BYTES = 1000000;            // workshop files read from a folder
   var MAX_FILES = 300;
   var TEXT_NAME = /\.(rb|txt|csv|tsv|json|md|ya?ml|erb|html?|css|js|xml|svg|ini|toml|rake|gemspec|log)$|^(Gemfile|Rakefile)$/i;
+  // pictures and PDFs: data: URLs in localStorage and in a run's snapshot,
+  // real binary files in a folder; the workshop previews them (workshop.rb
+  // has the same list)
+  var BINARY_TYPES = { png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg", gif: "image/gif",
+                       webp: "image/webp", pdf: "application/pdf" };
+  function binaryType(path) {
+    var m = /\.([A-Za-z0-9]+)$/.exec(String(path));
+    return (m && BINARY_TYPES[m[1].toLowerCase()]) || null;
+  }
   var SKIP_DIRS = { "node_modules": true, "vendor": true };
 
   var ls = window.localStorage;
@@ -281,7 +290,7 @@
       if (applyEntries(merge(localEntries(), incoming)) && announce) {
         announceProgress();
       }
-      return writeText(dir, PROGRESS_FILE, progressDocument(localEntries()));
+      return writeFile(dir, PROGRESS_FILE, progressDocument(localEntries()));
     }).then(function () {
       status.savedAt = new Date();
       status.error = null;
@@ -325,11 +334,30 @@
       });
   }
 
-  function writeText(dir, path, text) {
+  // A picture or PDF is a data: URL here and its bytes on disk.
+  function bytesOf(path, value) {
+    if (!binaryType(path) || !/^data:[^,]*;base64,/.test(value)) return value;
+    var raw = atob(value.slice(value.indexOf(",") + 1));
+    var bytes = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+    return bytes;
+  }
+
+  function dataUrlOf(file, type) {
+    return file.arrayBuffer().then(function (buffer) {
+      var bytes = new Uint8Array(buffer), chunks = [];
+      for (var i = 0; i < bytes.length; i += 0x8000) {
+        chunks.push(String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)));
+      }
+      return "data:" + type + ";base64," + btoa(chunks.join(""));
+    });
+  }
+
+  function writeFile(dir, path, value) {
     return parentOf(dir, path, true)
       .then(function (pn) { return pn[0].getFileHandle(pn[1], { create: true }); })
       .then(function (fh) { return fh.createWritable(); })
-      .then(function (w) { return w.write(text).then(function () { return w.close(); }); });
+      .then(function (w) { return w.write(bytesOf(path, value)).then(function () { return w.close(); }); });
   }
 
   function removeFile(dir, path) {
@@ -346,9 +374,10 @@
       var path = prefix + name;
       if (handle.kind === "directory") {
         if (depth < 3 && !SKIP_DIRS[name]) await scan(handle, path + "/", depth + 1, found);
-      } else if (path !== PROGRESS_FILE && TEXT_NAME.test(name)) {
+      } else if (path !== PROGRESS_FILE && (TEXT_NAME.test(name) || binaryType(name))) {
         var file = await handle.getFile();
-        if (file.size <= MAX_FILE_BYTES) found.set(path, await file.text());
+        if (file.size > MAX_FILE_BYTES) continue;
+        found.set(path, binaryType(name) ? await dataUrlOf(file, binaryType(name)) : await file.text());
       }
     }
   }
@@ -366,7 +395,7 @@
       var text = ls.getItem(FILE_PREFIX + path);
       return p.then(function () {
         mirror.set(path, text);
-        return writeText(folder, path, text);
+        return writeFile(folder, path, text);
       });
     }, Promise.resolve());
   }
@@ -415,7 +444,7 @@
       if (files.kind() === "folder") {
         mirror.set(path, text);
         var dir = folder;
-        return serial(function () { return writeText(dir, path, text); }).catch(function (e) {
+        return serial(function () { return writeFile(dir, path, text); }).catch(function (e) {
           status.error = e.message || String(e);
           emit("status");
         });
@@ -437,6 +466,37 @@
       ls.removeItem(FILE_PREFIX + path);
       return Promise.resolve();
     },
+    // a new name: the file is there under +to+ and gone under +from+ - in a
+    // folder written first, removed second, so nothing is lost on a failure
+    rename: function (from, to) {
+      var value = files.read(from);
+      if (value === null || from === to) return Promise.resolve();
+      if (files.kind() === "folder") {
+        mirror.set(to, value);
+        mirror.delete(from);
+        var dir = folder;
+        return serial(function () {
+          return writeFile(dir, to, value).then(function () { return removeFile(dir, from); });
+        }).catch(function (e) {
+          status.error = e.message || String(e);
+          emit("status");
+        });
+      }
+      try {
+        ls.setItem(FILE_PREFIX + to, value);
+      } catch (e) {
+        status.error = e.message || String(e);   // localStorage is full
+        emit("status");
+        return Promise.resolve();
+      }
+      ls.removeItem(FILE_PREFIX + from);
+      return Promise.resolve();
+    },
+    // a picture or PDF a learner uploads, as the data: URL it is kept as
+    readDataUrl: function (file) {
+      return dataUrlOf(file, binaryType(file.name) || "application/octet-stream");
+    },
+    isBinary: function (path) { return !!binaryType(path); },
     // re-read the folder: files changed in another program show up
     refresh: function () {
       if (files.kind() !== "folder") return Promise.resolve(false);

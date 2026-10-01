@@ -85,7 +85,7 @@ test/check_harness.rb      every lesson offline under CRuby
 test/gems_harness.rb       gem installer offline under CRuby
 test/shell/run.rb          Minitest for the shell, on a stub of PicoRuby's js
 test/browser_test.mjs      Playwright end-to-end
-test/progress_test.mjs     Playwright: progress file, workshop, folder (37 checks)
+test/progress_test.mjs     Playwright: progress file, workshop, folder (48 checks)
 test/boot_failure_test.mjs Playwright: what the page says when a runtime fails
 test/language_test.mjs     Playwright: which language a visitor gets (11 checks)
 test/make_lessons_json.js  writes test/lessons.json for the harnesses
@@ -367,14 +367,29 @@ machine:
   only the file.
 - **Workshop** (`#werkstatt`, link above the lessons): the learner's own
   programs. Without a folder the files are `chunky_file:<path>` keys (so they
-  travel in the progress file); with a folder they are real text files in it
+  travel in the progress file); with a folder they are real files in it
   (read in at connect and on window focus; dotfiles, `node_modules`,
   `vendor` and files over 1 MB skipped). The editor is cell 0; main.rb's
   `run_cell` hands the run to `workshop.rb`: project files become
   `SandboxFS.store`, `require_relative` resolves project files, `gets` reads
-  the input box, `$0` names the file; afterwards written/deleted text files
-  go back through `workspaceWrite`/`workspaceDelete` and the lesson's demo
-  files return. A run saves the open file.
+  the input box, `$0` names the file; afterwards every file the program
+  wrote (FileWatch: through SandboxFS or onto the real filesystem) and every
+  deletion go back through `workspaceWrite`/`workspaceDelete`, and the
+  lesson's demo files return. A run saves the open file. Files can be
+  renamed (✎; without an extension typed, the old one stays).
+- **Pictures and PDFs** (png, jpg, gif, webp, pdf - the same list in
+  `workshop.rb`, `storage.js` and `shell/workspace.rb`): kept as `data:`
+  URLs in localStorage and in a run's snapshot, as real binary files in a
+  connected folder; up to 1 MB, bigger ones stay downloads. A run gets their
+  bytes in `SandboxFS` *and* as real files (so `File.binread`, ChunkyPNG's
+  `from_file` and Prawn's `image` find them). The ones a run writes are
+  previewed below the editor (unless the program called
+  `show_image`/`show_pdf` for the same bytes), and selecting one in the file
+  list shows it in place of the editor - a picture from its data: URL (tiny
+  ones pixelated at 160 px), a PDF in the browser's viewer from a Blob URL
+  (`ChunkyBridge.objectUrl`, released when the preview goes). The editor
+  never holds a picture's data: URL: saving, a run's save and a change from
+  storage leave a previewed file alone.
 - Dev on this machine: serve on localhost (127.0.0.1 counts), where the
   folder API is available. `test/progress_test.mjs` drives the folder through
   the origin-private file system (same API, no native picker).
@@ -479,8 +494,12 @@ that license too. Contact in the gemspecs: web@idogawa.com.
   Ctrl+C. `show_three`/`show_shoes` raise `ChunkyBacon::NotHere` with what
   to do instead. When `main.rb` changes a helper, change the gem's too.
 - Under ruby.wasm (`ChunkyBacon.browser?`) the gem leaves the page's helpers
-  alone and only adds the fox - so `install_gem "chunky_bacon"` will work in
-  a lesson once it is published.
+  alone and only adds the fox. Lesson 13 opens with
+  `install_gem "chunky_bacon"` + `ChunkyBacon.shout`, from the gem cache
+  (`html/gems/cache/chunky_bacon-0.1.0.gem`, the published file - same SHA-256
+  as on rubygems.org; first in `tools/build_gem_cache.rb`'s list, so its chip
+  leads the gems panel). A new release does not need a new cached copy unless
+  the lesson uses something new.
 - `chunkybacon` (exe): the fox; `chunkybacon run [FILE]` = a child Ruby with
   `-r chunky_bacon`, the terminal as stdin, its exit status.
 - `gem/chunkybacon` and `gem/chunky-bacon` are aliases (like `rubyllm` for
@@ -493,7 +512,9 @@ that license too. Contact in the gemspecs: web@idogawa.com.
   then push a tag `chunky_bacon-v<version>`. `.github/workflows/release.yaml`
   tests, checks the tag against `version.rb`, builds all three gems and
   pushes them by **trusted publishing** (rubygems.org trusts that workflow
-  file in this repo with the `release` environment; no API key exists). It
+  file in this repo with the `rubygems` environment; no API key exists - the
+  environment name is part of each gem's trusted-publisher entry on
+  rubygems.org, so rename both or neither). It
   pushes `chunky_bacon` first and skips versions already on rubygems.org, so
   the aliases stay at 0.1.0 until their own version is bumped. The workflow
   can also be started from the Actions tab.

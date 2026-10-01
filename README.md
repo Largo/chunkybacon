@@ -43,7 +43,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   and `show_pdf` puts a PDF in the browser's own viewer below the cell.
 - **Workshop**: beside the lessons, a small IDE for your own multi-file
   programs - `require_relative` between files, `File.read`/`File.write` on
-  the project, input for `gets` - with every widget below available.
+  the project, input for `gets`, pictures and PDFs it writes previewed and
+  kept, files renamable - with every widget below available.
 - **Your progress stays yours**: nothing is stored on a server. Progress,
   code and workshop files live in the browser and can be saved as a progress
   file (download, load again, merged key by key) or - in Chrome and Edge over
@@ -132,6 +133,7 @@ Both licenses allow commercial use.
   the cached gems, the web fonts) keep their own licenses - see
   [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-The phrase "Chunky Bacon" is an homage to _why's (poignant) guide to
-Ruby_ by why the lucky stiff — fondly remembered. The mascot is an
+The phrase "[Chunky Bacon](https://chunkybacon.dev/glossary/chunky-bacon/)" is
+an homage to _why's (poignant) guide to Ruby_ by why the lucky stiff — fondly
+remembered. The mascot is an
 original character, not a copy of _why's foxes.

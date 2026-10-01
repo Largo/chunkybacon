@@ -48,7 +48,7 @@ window.LESSONS_JSON = JSON.stringify({
       "threeLoading": "Die 3D-Engine (three.js) wird noch geladen – führe die Zelle gleich nochmal aus.",
       "downloadTip": "Dateien, die deine Zelle geschrieben hat – zum Herunterladen anklicken.",
       "footerCredit": "Ein Angebot von <a href='https://idogawa.com'>Andi Idogawa</a>. Läuft komplett in deinem Browser dank <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Schon fertig? Weiter geht's mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
-      "footerLicense": "„Chunky Bacon“ stammt aus why's (poignant) guide to Ruby von why the lucky stiff – in liebevoller Erinnerung. Kursinhalte: <a href='https://creativecommons.org/licenses/by-sa/4.0/deed.de'>CC BY-SA 4.0</a>, Code: <a href='https://github.com/Largo/chunkybacon/blob/main/LICENSE'>MIT</a>.",
+      "footerLicense": "„<a href='https://chunkybacon.dev/glossary/chunky-bacon/'>Chunky Bacon</a>“ stammt aus why's (poignant) guide to Ruby von why the lucky stiff – in liebevoller Erinnerung. Kursinhalte: <a href='https://creativecommons.org/licenses/by-sa/4.0/deed.de'>CC BY-SA 4.0</a>, Code: <a href='https://github.com/Largo/chunkybacon/blob/main/LICENSE'>MIT</a>.",
       "progressButton": "Fortschritt",
       "progressTitle": "Dein Fortschritt",
       "progressIntro": "Erledigte Lektionen, dein Code und deine Werkstatt-Dateien bleiben auf deinem Gerät – diese Seite speichert nichts auf einem Server. Sichere sie, damit nichts verloren geht und alles auf einen anderen Rechner umziehen kann.",
@@ -83,6 +83,7 @@ window.LESSONS_JSON = JSON.stringify({
       "wsBadName": "Nimm Buchstaben, Ziffern, - und _, z. B. spiel.rb oder daten/liste.txt.",
       "wsExists": "„%s“ gibt es schon.",
       "wsDelete": "„%s“ löschen",
+      "wsRename": "„%s“ umbenennen",
       "wsDeleteConfirm": "„%s“ wirklich löschen?",
       "wsUpload": "Hochladen",
       "wsDownload": "Herunterladen",
@@ -129,7 +130,7 @@ window.LESSONS_JSON = JSON.stringify({
       "threeLoading": "The 3D engine (three.js) is still loading – run the cell again in a moment.",
       "downloadTip": "Files your cell wrote – click to download.",
       "footerCredit": "A service by <a href='https://idogawa.com'>Andi Idogawa</a>. Runs entirely in your browser thanks to <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Done here? Continue with the <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
-      "footerLicense": "“Chunky Bacon” comes from why's (poignant) guide to Ruby by why the lucky stiff – fondly remembered. Course content: <a href='https://creativecommons.org/licenses/by-sa/4.0/'>CC BY-SA 4.0</a>, code: <a href='https://github.com/Largo/chunkybacon/blob/main/LICENSE'>MIT</a>.",
+      "footerLicense": "“<a href='https://chunkybacon.dev/glossary/chunky-bacon/'>Chunky Bacon</a>” comes from why's (poignant) guide to Ruby by why the lucky stiff – fondly remembered. Course content: <a href='https://creativecommons.org/licenses/by-sa/4.0/'>CC BY-SA 4.0</a>, code: <a href='https://github.com/Largo/chunkybacon/blob/main/LICENSE'>MIT</a>.",
       "progressButton": "Progress",
       "progressTitle": "Your progress",
       "progressIntro": "Finished lessons, your code and your workshop files stay on your device – this site stores nothing on a server. Save them so nothing gets lost and everything can move to another computer.",
@@ -164,6 +165,7 @@ window.LESSONS_JSON = JSON.stringify({
       "wsBadName": "Use letters, digits, - and _, e.g. game.rb or data/list.txt.",
       "wsExists": "“%s” exists already.",
       "wsDelete": "Delete “%s”",
+      "wsRename": "Rename “%s”",
       "wsDeleteConfirm": "Really delete “%s”?",
       "wsUpload": "Upload",
       "wsDownload": "Download",
@@ -210,7 +212,7 @@ window.LESSONS_JSON = JSON.stringify({
       "threeLoading": "3Dエンジン（three.js）をまだ読み込んでいます。少し待ってから、もう一度セルを実行してください。",
       "downloadTip": "セルが書き出したファイルです。クリックするとダウンロードできます。",
       "footerCredit": "制作：<a href='https://idogawa.com'>Andi Idogawa</a>。<a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>のおかげで、すべてブラウザの中だけで動いています。ひととおり終わったら、次は<a href='https://koans.idogawa.com'>Ruby Koans</a>へどうぞ。",
-      "footerLicense": "「Chunky Bacon」は、why the lucky stiffの『why's (poignant) guide to Ruby』に由来します。なつかしい思い出とともに。コースの内容：<a href='https://creativecommons.org/licenses/by-sa/4.0/deed.ja'>CC BY-SA 4.0</a>、コード：<a href='https://github.com/Largo/chunkybacon/blob/main/LICENSE'>MIT</a>。",
+      "footerLicense": "「<a href='https://chunkybacon.dev/glossary/chunky-bacon/'>Chunky Bacon</a>」は、why the lucky stiffの『why's (poignant) guide to Ruby』に由来します。なつかしい思い出とともに。コースの内容：<a href='https://creativecommons.org/licenses/by-sa/4.0/deed.ja'>CC BY-SA 4.0</a>、コード：<a href='https://github.com/Largo/chunkybacon/blob/main/LICENSE'>MIT</a>。",
       "progressButton": "進捗",
       "progressTitle": "あなたの進捗",
       "progressIntro": "終えたレッスン、あなたのコード、工房のファイルは、すべてあなたの端末に残ります。このサイトはサーバーに何も保存しません。なくさないように、また別のコンピューターへ移せるように、保存しておきましょう。",
@@ -245,6 +247,7 @@ window.LESSONS_JSON = JSON.stringify({
       "wsBadName": "英字、数字、-、_ を使ってください。例：game.rb、data/list.txt",
       "wsExists": "「%s」はすでにあります。",
       "wsDelete": "「%s」を削除",
+      "wsRename": "「%s」の名前を変更",
       "wsDeleteConfirm": "「%s」を本当に削除しますか？",
       "wsUpload": "アップロード",
       "wsDownload": "ダウンロード",
@@ -723,7 +726,7 @@ window.LESSONS_JSON = JSON.stringify({
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Schleifen – Dinge wiederholen</h2><p>In why's legendärem Ruby-Buch rufen zwei Comic-Füchse immer wieder: <em>„Chunky Bacon!“</em> – Wiederholung ist in Ruby wunderbar einfach:</p>"
+            "html": "<h2>Schleifen – Dinge wiederholen</h2><p>In why's legendärem Ruby-Buch rufen zwei Comic-Füchse immer wieder: <a href='https://chunkybacon.dev/glossary/chunky-bacon/' target='_blank'><em>„Chunky Bacon!“</em></a> – Wiederholung ist in Ruby wunderbar einfach:</p>"
           },
           {
             "t": "c",
@@ -754,7 +757,7 @@ window.LESSONS_JSON = JSON.stringify({
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Loops – repeating things</h2><p>In why's legendary Ruby book two cartoon foxes keep shouting: <em>“Chunky Bacon!”</em> – repetition is delightfully easy in Ruby:</p>"
+            "html": "<h2>Loops – repeating things</h2><p>In why's legendary Ruby book two cartoon foxes keep shouting: <a href='https://chunkybacon.dev/glossary/chunky-bacon/' target='_blank'><em>“Chunky Bacon!”</em></a> – repetition is delightfully easy in Ruby:</p>"
           },
           {
             "t": "c",
@@ -785,7 +788,7 @@ window.LESSONS_JSON = JSON.stringify({
         "cells": [
           {
             "t": "h",
-            "html": "<h2>ループ：くり返し</h2><p>why the lucky stiffの伝説のRuby本『why's (poignant) guide to Ruby』では、マンガのキツネ2匹が何度も<em>「Chunky Bacon!」</em>と叫びます。Rubyなら、くり返しも驚くほど簡単です：</p>"
+            "html": "<h2>ループ：くり返し</h2><p>why the lucky stiffの伝説のRuby本『why's (poignant) guide to Ruby』では、マンガのキツネ2匹が何度も<a href='https://chunkybacon.dev/glossary/chunky-bacon/' target='_blank'><em>「Chunky Bacon!」</em></a>と叫びます。Rubyなら、くり返しも驚くほど簡単です：</p>"
           },
           {
             "t": "c",
@@ -1399,15 +1402,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "install_gem \"chunky_png\""
+            "code": "install_gem \"chunky_bacon\"\nrequire \"chunky_bacon\"\n\nChunkyBacon.shout"
           },
           {
             "t": "h",
-            "html": "<p><code>chunky_png</code> – der Name ist natürlich kein Zufall, liebe Füchse! 🥓 – erstellt PNG-Bilder in purem Ruby. Nach der Installation lädst du es ganz normal mit <code>require</code>. Und mit <code>show_image</code> zeigst du ein Bild direkt unter der Zelle an:</p>"
+            "html": "<p>Das war <code>chunky_bacon</code> – die Gem dieses Kurses, zu finden auf <a href='https://rubygems.org/gems/chunky_bacon' target='_blank'>rubygems.org</a>. Auf deinem eigenen Computer bringt <code>gem install chunky_bacon</code> deinen Programmen die Helfer dieser Seite mit – <code>show_image</code>, <code>show_browser</code> und Co. –, und <code>chunkybacon run main.rb</code> startet ein Programm aus der Werkstatt genau wie hier.</p><p>Jetzt eine Gem, die richtig arbeitet: <code>chunky_png</code> – der Name ist natürlich kein Zufall, liebe Füchse! 🥓 – erstellt PNG-Bilder in purem Ruby. Installieren, mit <code>require</code> laden – und mit <code>show_image</code> zeigst du ein Bild direkt unter der Zelle an:</p>"
           },
           {
             "t": "c",
-            "code": "require \"chunky_png\"\n\nbild = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times { |i| bild[i, i] = ChunkyPNG::Color.rgb(232, 114, 42) }\nshow_image bild"
+            "code": "install_gem \"chunky_png\"\nrequire \"chunky_png\"\n\nbild = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times { |i| bild[i, i] = ChunkyPNG::Color.rgb(232, 114, 42) }\nshow_image bild"
           },
           {
             "t": "h",
@@ -1430,15 +1433,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "install_gem \"chunky_png\""
+            "code": "install_gem \"chunky_bacon\"\nrequire \"chunky_bacon\"\n\nChunkyBacon.shout"
           },
           {
             "t": "h",
-            "html": "<p><code>chunky_png</code> – the name is no coincidence, dear foxes! 🥓 – creates PNG images in pure Ruby. After installing you load it with a normal <code>require</code>. And <code>show_image</code> displays a picture right below the cell:</p>"
+            "html": "<p>That was <code>chunky_bacon</code> – this course's own gem, on <a href='https://rubygems.org/gems/chunky_bacon' target='_blank'>rubygems.org</a>. On your own computer, <code>gem install chunky_bacon</code> gives your programs this page's helpers – <code>show_image</code>, <code>show_browser</code> and friends – and <code>chunkybacon run main.rb</code> runs a program from the workshop just like here.</p><p>Now a gem that does real work: <code>chunky_png</code> – the name is no coincidence, dear foxes! 🥓 – creates PNG images in pure Ruby. Install it, load it with <code>require</code> – and <code>show_image</code> displays a picture right below the cell:</p>"
           },
           {
             "t": "c",
-            "code": "require \"chunky_png\"\n\nimage = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times { |i| image[i, i] = ChunkyPNG::Color.rgb(232, 114, 42) }\nshow_image image"
+            "code": "install_gem \"chunky_png\"\nrequire \"chunky_png\"\n\nimage = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times { |i| image[i, i] = ChunkyPNG::Color.rgb(232, 114, 42) }\nshow_image image"
           },
           {
             "t": "h",
@@ -1461,15 +1464,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "install_gem \"chunky_png\""
+            "code": "install_gem \"chunky_bacon\"\nrequire \"chunky_bacon\"\n\nChunkyBacon.shout"
           },
           {
             "t": "h",
-            "html": "<p><code>chunky_png</code>は、ピュアRubyでPNG画像を作るgemです（キツネのみなさん、この名前はもちろん偶然ではありませんよ！🥓）。インストールしたら、ふつうに<code>require</code>で読み込みます。そして<code>show_image</code>を使うと、セルのすぐ下に画像を表示できます：</p>"
+            "html": "<p>いまのが<code>chunky_bacon</code>、このコース自身のgemです（<a href='https://rubygems.org/gems/chunky_bacon' target='_blank'>rubygems.org</a>で公開しています）。自分のコンピューターで<code>gem install chunky_bacon</code>すると、このページのヘルパー（<code>show_image</code>や<code>show_browser</code>など）が自分のプログラムでも使えるようになり、<code>chunkybacon run main.rb</code>で工房のプログラムをここと同じように実行できます。</p><p>次は、本格的に働くgemです。<code>chunky_png</code>は、ピュアRubyでPNG画像を作るgemです（キツネのみなさん、この名前はもちろん偶然ではありませんよ！🥓）。インストールして<code>require</code>で読み込み、<code>show_image</code>を使うと、セルのすぐ下に画像を表示できます：</p>"
           },
           {
             "t": "c",
-            "code": "require \"chunky_png\"\n\nimage = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times { |i| image[i, i] = ChunkyPNG::Color.rgb(232, 114, 42) }\nshow_image image"
+            "code": "install_gem \"chunky_png\"\nrequire \"chunky_png\"\n\nimage = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times { |i| image[i, i] = ChunkyPNG::Color.rgb(232, 114, 42) }\nshow_image image"
           },
           {
             "t": "h",

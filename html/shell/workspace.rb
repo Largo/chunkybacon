@@ -13,7 +13,12 @@ module ChunkyShell
     PROPS = %w[className type id textContent hidden disabled value title placeholder
                spellcheck accept multiple rows open].freeze
     RUBY_FILE = /\.rb$|^(Gemfile|Rakefile)$/
+    # pictures and PDFs - data: URLs in storage.js - show instead of the
+    # editor; matched against the lowercased name
+    PICTURE_OR_PDF = /\.(png|jpg|jpeg|gif|webp|pdf)$/
+    PDF_FILE = /\.pdf$/
     TEXT_FILES = ".rb,.txt,.csv,.tsv,.json,.md,.yml,.yaml,.erb,.html,.css,.xml"
+    UPLOADS = "#{TEXT_FILES},.png,.jpg,.jpeg,.gif,.webp,.pdf"
 
     def initialize(app, storage = JSG.w.ChunkyStorage, bridge = JSG.w.ChunkyBridge)
       @app = app
@@ -25,8 +30,10 @@ module ChunkyShell
       @dirty = false
       @save_gen = 0         # a pending debounced save runs only if still current
       @creating = false
+      @renaming = nil       # the file whose name is being edited
       @name_error = ""
       @stdin = ""
+      @preview_url = nil    # the Blob URL of a previewed PDF, released when it goes
     end
 
     def start
@@ -255,6 +262,8 @@ module ChunkyShell
     # ---------- the workshop's file panel ----------
 
     def ruby?(path) = !(path.split("/").last.to_s =~ RUBY_FILE).nil?
+    def binary?(path) = !(path.to_s.downcase =~ PICTURE_OR_PDF).nil?
+    def pdf?(path) = !(path.to_s.downcase =~ PDF_FILE).nil?
     def files = @s.files.list.to_a
 
     def preferred(list)
@@ -271,7 +280,8 @@ module ChunkyShell
 
     def flush_save
       @save_gen += 1   # a pending debounced save is not needed any more
-      return unless @dirty && @open && @editor
+      # a picture or PDF is never the editor's text
+      return unless @dirty && @open && @editor && !binary?(@open)
 
       @dirty = false
       @s.files.write(@open, @editor.getValue)
@@ -283,10 +293,15 @@ module ChunkyShell
       return render_files if path.nil? || @editor.nil?
 
       storage_set(OPEN_KEY, path)
-      text = @s.files.read(path)
-      @editor.setValue(text.nil? ? "" : text)
-      @editor.setOption("mode", ruby?(path) ? "text/x-ruby" : "text/plain")
-      @editor.clearHistory
+      if binary?(path)
+        show_preview(path)
+      else
+        hide_preview
+        text = @s.files.read(path)
+        @editor.setValue(text.nil? ? "" : text)
+        @editor.setOption("mode", ruby?(path) ? "text/x-ruby" : "text/plain")
+        @editor.clearHistory
+      end
       tab = el("wsTab")
       tab.textContent = path if tab
       run = JSG.d.querySelector('.run-cell[data-idx="0"]')
@@ -296,6 +311,47 @@ module ChunkyShell
       end
       render_files
     end
+
+    # A picture or PDF in place of the editor: the picture from its data:
+    # URL, the PDF in the browser's own viewer from a Blob URL. A tiny
+    # picture (ChunkyPNG's 8x8) is drawn bigger, pixel by pixel.
+    def show_preview(path)
+      box = el("wsPreview")
+      return unless box
+
+      editor_box&.classList&.add("is-preview")
+      release_preview_url
+      value = @s.files.read(path).to_s
+      shown = if pdf?(path)
+                @preview_url = @bridge.objectUrl(value)
+                node("iframe", { className: "ws-pdf", title: path, src: "#{@preview_url}#view=FitH" })
+              else
+                picture = node("img", { alt: path, src: value })
+                listen(picture, "load", proc { picture.classList.add("is-tiny") if picture.naturalWidth < 160 })
+                picture
+              end
+      fill(box, [shown])
+      box.hidden = false
+    end
+
+    # back to the editor; CodeMirror redraws what it could not measure hidden
+    def hide_preview
+      box = el("wsPreview")
+      return unless box && !box.hidden
+
+      release_preview_url
+      box.hidden = true
+      box.textContent = ""
+      editor_box&.classList&.remove("is-preview")
+      @editor&.refresh
+    end
+
+    def release_preview_url
+      @bridge.revokeUrl(@preview_url) if @preview_url
+      @preview_url = nil
+    end
+
+    def editor_box = JSG.d.querySelector(".ws-editor")
 
     NAME_PART = /^[A-Za-z0-9_äöüÄÖÜ][A-Za-z0-9_.\-äöüÄÖÜ]*$/
     NAMED_FILE = /\.[A-Za-z0-9]+$|^(Gemfile|Rakefile)$/
@@ -329,6 +385,53 @@ module ChunkyShell
       @editor.focus if @editor
     end
 
+    # A file under a new name. Typed without an extension, it keeps its own
+    # (bild -> bild.png); the open file stays open under the new name.
+    def rename_file(from, raw)
+      to = raw.to_s.strip
+      to += extension(from) if !to.empty? && (to =~ /\.[^\/]+$/).nil?
+      return stop_renaming if to == from
+      unless valid_name?(to)
+        @name_error = t("wsBadName")
+        return render_files
+      end
+      unless @s.files.read(to).nil?
+        @name_error = t("wsExists", to)
+        return render_files
+      end
+      was_open = from == @open
+      flush_save if was_open
+      @renaming = nil
+      @name_error = ""
+      @s.files.rename(from, to)
+      if was_open
+        @open = nil   # nothing left to save under the old name
+        open_file(to)
+      else
+        render_files
+      end
+    end
+
+    # ".png" for "bilder/fuchs.png", "" for "Gemfile"
+    def extension(path)
+      name = path.split("/").last.to_s
+      parts = name.split(".")
+      parts.length > 1 ? ".#{parts.last}" : ""
+    end
+
+    def start_renaming(path)
+      @renaming = path
+      @creating = false
+      @name_error = ""
+      render_files
+    end
+
+    def stop_renaming
+      @renaming = nil
+      @name_error = ""
+      render_files
+    end
+
     def remove_file(path)
       return unless JSG.w.confirm(t("wsDeleteConfirm", path))
 
@@ -356,8 +459,9 @@ module ChunkyShell
       guard("upload") do
         names = []
         picked.each do |file|
-          text = file.text.await
-          @bridge.settle(@s.files.write(file.name, text)).await
+          # a picture or PDF is kept as its data: URL
+          value = binary?(file.name) ? @bridge.settle(@s.files.readDataUrl(file)).await.value : file.text.await
+          @bridge.settle(@s.files.write(file.name, value)).await
           names << file.name
         end
         @name_error = skipped ? t("wsBadName") : ""
@@ -372,7 +476,7 @@ module ChunkyShell
       list = files
       where = @s.files.kind == "folder" ? "📁 #{t('wsInFolder', @s.folderName)}" : t("wsInBrowser")
       items = list.map { |path| file_item(path) }
-      picker = node("input", { type: "file", multiple: true, hidden: true, accept: TEXT_FILES })
+      picker = node("input", { type: "file", multiple: true, hidden: true, accept: UPLOADS })
       listen(picker, "change", proc { upload(picker.files) })
       fill(box, [
         node("h3", {}, [t("wsFiles")]),
@@ -390,13 +494,36 @@ module ChunkyShell
     end
 
     def file_item(path)
+      return rename_item(path) if path == @renaming
+
       current = path == @open
       node("li", { className: current ? "is-open" : "" }, [
         node("button", { type: "button", className: "ws-file", "aria-current" => current ? "true" : "false",
                          on: { "click" => proc { open_file(path) unless path == @open } } }, [path]),
+        node("button", { type: "button", className: "ws-ren", "aria-label" => t("wsRename", path), title: t("wsRename", path),
+                         on: { "click" => proc { start_renaming(path) } } }, ["✎"]),
         node("button", { type: "button", className: "ws-del", "aria-label" => t("wsDelete", path), title: t("wsDelete", path),
                          on: { "click" => proc { remove_file(path) } } }, ["×"])
       ])
+    end
+
+    # the name, editable: Enter renames, Escape leaves it as it was
+    def rename_item(path)
+      input = node("input", { type: "text", className: "ws-newname", value: path, spellcheck: false,
+                              "aria-label" => t("wsRename", path) })
+      listen(input, "keydown", proc do |event|
+        if event.key == "Enter"
+          event.preventDefault
+          rename_file(path, input.value)
+        elsif event.key == "Escape"
+          stop_renaming
+        end
+      end)
+      Task.new do
+        sleep_ms 0
+        input.focus
+      end
+      node("li", { className: "is-renaming" }, [input])
     end
 
     def locked_note
@@ -432,6 +559,7 @@ module ChunkyShell
 
     def start_creating
       @creating = true
+      @renaming = nil
       render_files
     end
 
@@ -488,7 +616,9 @@ module ChunkyShell
       list = files
       return open_file(preferred(list)) if @open.nil? || !list.include?(@open)
 
-      unless @dirty
+      if binary?(@open)
+        show_preview(@open)
+      elsif !@dirty
         text = @s.files.read(@open)
         @editor.setValue(text) if !text.nil? && text != @editor.getValue
       end
@@ -501,14 +631,16 @@ module ChunkyShell
     def stdin = @stdin
     def snapshot = JSG.w.JSON.stringify(@s.files.snapshot)
 
-    # a file the program wrote; the one in the editor shows the new text
+    # A file the program wrote (a picture or PDF as a data: URL); the open
+    # one shows what is new - in the editor, or in the preview.
     def program_wrote(path, text)
-      if path == @open && @editor
+      if path == @open && @editor && !binary?(path)
         @dirty = false
         @save_gen += 1
         @editor.setValue(text)
       end
       @s.files.write(path, text)
+      show_preview(path) if path == @open && binary?(path)
       nil
     end
 
@@ -522,7 +654,7 @@ module ChunkyShell
     def after_run
       @save_gen += 1
       @dirty = false
-      if @open && @editor && @s.files.read(@open) != @editor.getValue
+      if @open && @editor && !binary?(@open) && @s.files.read(@open) != @editor.getValue
         @s.files.write(@open, @editor.getValue)
       end
       render_files

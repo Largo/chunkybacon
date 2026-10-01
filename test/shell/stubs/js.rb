@@ -399,6 +399,7 @@ module JS
     def js_getValue = @value
     def js_setOption(*) = nil
     def js_clearHistory = nil
+    def js_refresh = (props["refreshed"] = true) && nil   # redraw after being hidden
     def js_on(_type, fn) = (@on_change << fn) && nil
 
     def js_setValue(text) = change(text.to_s, "setValue")
@@ -444,6 +445,9 @@ module JS
           "read" => proc { |path| files[path] },
           "write" => proc { |path, text| files[path] = text; JS::Promise.resolve },
           "remove" => proc { |path| files.delete(path); JS::Promise.resolve },
+          "rename" => proc { |from, to| files[to] = files.delete(from) if files.key?(from) && from != to; JS::Promise.resolve },
+          "readDataUrl" => proc { |file| JS::Promise.resolve("data:image/png;base64,#{file["name"]}") },
+          "isBinary" => proc { |path| path.to_s.downcase.match?(/\.(png|jpe?g|gif|webp|pdf)\z/) },
           "refresh" => proc { JS::Promise.resolve(false) },
           "snapshot" => proc { files.dup }
         }
@@ -507,6 +511,8 @@ module JS
         "install" => proc { |name| requests << ["install", name]; props["ChunkyBridge"]["ready"] },
         "shellReady" => proc { requests << ["shellReady"]; nil },
         "saveText" => proc { |name, text| requests << ["saveText", name, text]; nil },
+        "objectUrl" => proc { |url| requests << ["objectUrl", url]; "blob:preview-#{requests.length}" },
+        "revokeUrl" => proc { |url| requests << ["revokeUrl", url]; nil },
         "settle" => proc do |promise|
           JS::Promise.resolve(promise.error ? { "ok" => false, "name" => "Error", "message" => promise.error }
                                             : { "ok" => true, "value" => promise.value })

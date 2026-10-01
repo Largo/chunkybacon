@@ -796,13 +796,24 @@ class ChunkyApp
     # name replaces its entry
     explicit = @run_downloads
     @run_downloads = []
-    FileWatch.changes_since(watch).each { |path, bytes| add_download(path, bytes) }
+    changes = FileWatch.changes_since(watch)
+    changes.each { |path, bytes| add_download(path, bytes) }
     explicit.each { |name, bytes| add_download(name, bytes) }
     if workshop?
       where = error && Workshop.location(error, file)
+      # pictures and PDFs the program wrote show up below the editor - unless
+      # it showed them itself (show_image, show_pdf)
+      Workshop.previews(changes).each do |path, bytes|
+        if Workshop.pdf?(path)
+          @run_pdfs << bytes.b unless @run_pdfs.include?(bytes.b)
+        else
+          url = Workshop.data_url(path, bytes)
+          @run_images << url unless @run_images.include?(url)
+        end
+      end
       # what the program wrote goes into its project, next to the downloads
-      Workshop.finish.each do |path, text|
-        text ? $window.workspaceWrite(path, text) : $window.workspaceDelete(path)
+      Workshop.finish(changes).each do |path, value|
+        value ? $window.workspaceWrite(path, value) : $window.workspaceDelete(path)
       end
       $window.workshopAfterRun
     end

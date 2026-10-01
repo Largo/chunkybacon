@@ -157,6 +157,112 @@ class WorkspaceTest < Minitest::Test
     assert_equal "main.rb", calls("saveText").last[1]
   end
 
+  # ---------- renaming ----------
+
+  def file_button(path) = find_all("#wsFiles .ws-file").find { |b| b.text == path }
+  def rename_button(path) = find_all("#wsFiles .ws-ren").find { |b| b.attrs["aria-label"].include?(path) }
+
+  # the rename input for +path+, given +name+ and +key+
+  def rename(path, name, key = "Enter")
+    click(rename_button(path))
+    input = find(".ws-newname")
+    assert_equal path, input.props["value"], "the input starts with the current name"
+    input.props["value"] = name
+    JS.fire(input.wrap, "keydown", "key" => key)
+  end
+
+  PNG = "data:image/png;base64,iVBORw0KGgo="
+  PDF = "data:application/pdf;base64,JVBERi0xLjQ="
+
+  def test_rename_keeps_the_extension_when_none_is_typed
+    workshop(files: { "a.rb" => "1", "main.rb" => "2", "bild.png" => PNG })
+    rename("a.rb", "rechner")
+    assert_equal "1", fs.files["rechner.rb"]
+    refute fs.files.key?("a.rb")
+    rename("bild.png", "fuchs")
+    assert_equal PNG, fs.files["fuchs.png"]
+    assert_nil find(".ws-newname")
+    assert file_button("fuchs.png")
+  end
+
+  def test_renaming_the_open_file_keeps_it_open
+    workshop
+    editor.type("puts 3")
+    rename("main.rb", "start.rb")
+    assert_equal "puts 3", fs.files["start.rb"]
+    refute fs.files.key?("main.rb")
+    assert_equal "start.rb", byid("wsTab").text
+    assert_equal "start.rb", window.storage["chunkyui_ws_open"]
+    assert_equal "puts 3", editor.js_getValue
+  end
+
+  def test_rename_refuses_taken_and_bad_names_and_escape_keeps_the_old_one
+    workshop(files: { "a.rb" => "1", "main.rb" => "2" })
+    rename("a.rb", "main.rb")
+    assert_includes find(".ws-error").text, "gibt es schon"
+    assert find(".ws-newname"), "still renaming"
+    find(".ws-newname").props["value"] = "a b.rb"
+    JS.fire(find(".ws-newname").wrap, "keydown", "key" => "Enter")
+    assert_includes find(".ws-error").text, "Buchstaben"
+    JS.fire(find(".ws-newname").wrap, "keydown", "key" => "Escape")
+    assert_nil find(".ws-newname")
+    assert_equal({ "a.rb" => "1", "main.rb" => "2" }, fs.files)
+  end
+
+  # ---------- pictures and PDFs ----------
+
+  def test_a_picture_shows_instead_of_the_editor
+    workshop(files: { "main.rb" => "puts 1", "bild.png" => PNG })
+    click(file_button("bild.png"))
+    assert_equal PNG, find("#wsPreview img").attrs["src"]
+    refute byid("wsPreview").props["hidden"]
+    assert_includes find(".ws-editor").attrs["class"], "is-preview"
+    assert_equal "bild.png", byid("wsTab").text
+    assert find('.run-cell[data-idx="0"]').props["disabled"]
+    assert_equal "puts 1", editor.js_getValue, "the editor keeps its text"
+    kernel_calls("workshopAfterRun")
+    assert_equal PNG, fs.files["bild.png"], "a run does not save the editor over the picture"
+    assert_empty JS.console_errors
+  end
+
+  def test_a_tiny_picture_is_drawn_bigger
+    workshop(files: { "main.rb" => "1", "bild.png" => PNG })
+    click(file_button("bild.png"))
+    picture = find("#wsPreview img")
+    picture.props["naturalWidth"] = 8
+    JS.fire(picture.wrap, "load")
+    assert_includes picture.attrs["class"].to_s, "is-tiny"
+  end
+
+  def test_a_pdf_shows_in_the_browsers_viewer_and_goes_again
+    workshop(files: { "main.rb" => "1", "karte.pdf" => PDF })
+    click(file_button("karte.pdf"))
+    src = find("#wsPreview iframe").attrs["src"]
+    assert_match(/\Ablob:preview-\d+#view=FitH\z/, src)
+    assert_equal PDF, calls("objectUrl").last[1]
+    click(file_button("main.rb"))
+    assert byid("wsPreview").props["hidden"]
+    refute_includes find(".ws-editor").attrs["class"].to_s, "is-preview"
+    assert_equal src.delete_suffix("#view=FitH"), calls("revokeUrl").last[1], "the Blob URL is released"
+    assert editor.props["refreshed"], "CodeMirror redraws after being hidden"
+    assert_equal "1", editor.js_getValue
+  end
+
+  def test_a_picture_the_program_writes_shows_at_once
+    workshop(storage: { "chunkyui_ws_open" => "bild.png" }, files: { "main.rb" => "1", "bild.png" => PNG })
+    fresh = "data:image/png;base64,TkVX"
+    kernel_calls("workspaceWrite", "bild.png", fresh)
+    assert_equal fresh, fs.files["bild.png"]
+    assert_equal fresh, find("#wsPreview img").attrs["src"]
+    refute editor.js_getValue.start_with?("data:"), "the picture never goes into the editor"
+  end
+
+  def test_download_a_picture_as_what_it_is
+    workshop(storage: { "chunkyui_ws_open" => "bild.png" }, files: { "main.rb" => "1", "bild.png" => PNG })
+    click(button_labelled("Herunterladen"))
+    assert_equal ["saveText", "bild.png", PNG], calls("saveText").last
+  end
+
   def test_stdin_box
     workshop
     area = byid("wsStdin")
