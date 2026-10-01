@@ -21,7 +21,9 @@ services:
     working_dir: /srv/chunkybacon/server
     command: sh -c "bundle install --quiet && exec bundle exec puma -b tcp://0.0.0.0:9292 config.ru"
     environment:
+      RACK_ENV: production
       BUNDLE_WITHOUT: test
+      BUNDLE_FROZEN: "true"   # use Gemfile.lock as it is: the checkout is mounted read-only
     volumes:
       - ./:/srv/chunkybacon:ro
       - serverbundle:/usr/local/bundle
