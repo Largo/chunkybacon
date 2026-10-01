@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # chunky_bacon: the companion gem of "Learn Ruby with Chunky Bacon", the Ruby
-# course that runs in the browser (https://github.com/Largo/chunkybacon).
+# course that runs in the browser (https://chunkybacon.idogawa.com).
 #
 # On your own computer, `require "chunky_bacon"` gives a program the helpers
 # the course's notebook cells and workshop have - show_image, show_browser,

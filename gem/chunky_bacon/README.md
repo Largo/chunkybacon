@@ -1,6 +1,6 @@
 # chunky_bacon
 
-The companion gem of **[Learn Ruby with Chunky Bacon](https://github.com/Largo/chunkybacon)**,
+The companion gem of **[Learn Ruby with Chunky Bacon](https://chunkybacon.idogawa.com)**,
 an interactive Ruby course that runs in the browser.
 
 In the course, notebook cells and the workshop have helpers like `show_image`,

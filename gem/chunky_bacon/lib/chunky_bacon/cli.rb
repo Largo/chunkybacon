@@ -15,7 +15,7 @@ module ChunkyBacon
         version             the version of chunky_bacon
         help                this text
 
-      The course: https://github.com/Largo/chunkybacon
+      The course: https://chunkybacon.idogawa.com
     TEXT
 
     def initialize(out: $stdout, err: $stderr)

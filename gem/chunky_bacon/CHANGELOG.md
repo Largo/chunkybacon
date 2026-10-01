@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2
+
+- The homepage is the course itself, https://chunkybacon.idogawa.com (also
+  in the README, the license notes and `chunkybacon help`); the source stays
+  on GitHub. The aliases `chunkybacon` and `chunky-bacon` 0.1.1 link it too.
+
 ## 0.1.1
 
 - The course is named by its English title, "Learn Ruby with Chunky Bacon",

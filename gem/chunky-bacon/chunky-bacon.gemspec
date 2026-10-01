@@ -6,14 +6,14 @@
 # has one.
 Gem::Specification.new do |spec|
   spec.name = "chunky-bacon"
-  spec.version = "0.1.0"
+  spec.version = "0.1.1"
   spec.authors = ["Andi Idogawa"]
   spec.email = ["web@idogawa.com"]
 
   spec.summary = "An alias for the chunky_bacon gem."
   spec.description = "Installing chunky-bacon installs chunky_bacon, and requiring chunky-bacon " \
                      "loads it. Use whichever name you like; they are the same library."
-  spec.homepage = "https://github.com/Largo/chunkybacon"
+  spec.homepage = "https://chunkybacon.idogawa.com"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1"
 

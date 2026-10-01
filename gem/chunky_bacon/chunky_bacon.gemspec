@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
     with plain Ruby; `chunkybacon run` starts a program with them loaded. Pure Ruby,
     no dependencies.
   TEXT
-  spec.homepage = "https://github.com/Largo/chunkybacon"
+  spec.homepage = "https://chunkybacon.idogawa.com"
   # the code MIT, the fox drawing (lib/chunky_bacon/fox.txt) CC BY-SA 4.0
   spec.licenses = ["MIT", "CC-BY-SA-4.0"]
   spec.required_ruby_version = ">= 3.1"
