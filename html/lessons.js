@@ -89,6 +89,11 @@ window.LESSONS_JSON = JSON.stringify({
       "gemOffline": "Gem „%s“ ist nicht in der Offline-Kopie – zum Installieren brauchst du eine Internetverbindung.",
       "close": "Schliessen",
       "workshopNav": "🛠 Werkstatt",
+      "navTitle": "Lektionen",
+      "navSearch": "Lektion suchen",
+      "navNone": "Keine Lektion passt.",
+      "navToggle": "Lektionen ein- und ausblenden",
+      "navDone": "%d von %d fertig",
       "workshopTitle": "Werkstatt",
       "workshopIntro": "Hier baust du deine eigenen Programme – mit so vielen Dateien, wie du willst. Ein Programm kann Dateien lesen und schreiben (<code>File.read</code>, <code>File.write</code>), andere .rb-Dateien mit <code>require_relative</code> laden und mit <code>gets</code> Eingaben lesen.",
       "workshopWelcome": "Willkommen in der <strong>Werkstatt</strong>! 🛠 Hier gibt es keine Aufgaben – nur dich und Ruby. Deine Dateien bleiben in diesem Browser. In Chrome und Edge kannst du oben unter <em>Fortschritt</em> einen Ordner verbinden, dann liegen sie als echte Dateien auf deinem Rechner.",
@@ -189,6 +194,11 @@ window.LESSONS_JSON = JSON.stringify({
       "gemOffline": "Gem “%s” is not in the offline copy – installing it needs an internet connection.",
       "close": "Close",
       "workshopNav": "🛠 Workshop",
+      "navTitle": "Lessons",
+      "navSearch": "Find a lesson",
+      "navNone": "No lesson matches.",
+      "navToggle": "Show or hide the lessons",
+      "navDone": "%d of %d done",
       "workshopTitle": "Workshop",
       "workshopIntro": "Build your own programs here – with as many files as you like. A program can read and write files (<code>File.read</code>, <code>File.write</code>), load other .rb files with <code>require_relative</code> and read input with <code>gets</code>.",
       "workshopWelcome": "Welcome to the <strong>workshop</strong>! 🛠 No tasks here – just you and Ruby. Your files stay in this browser. In Chrome and Edge you can connect a folder under <em>Progress</em> at the top, and they become real files on your computer.",
@@ -289,6 +299,11 @@ window.LESSONS_JSON = JSON.stringify({
       "gemOffline": "gem「%s」はオフライン用コピーに含まれていません。インストールするにはインターネット接続が必要です。",
       "close": "閉じる",
       "workshopNav": "🛠 工房",
+      "navTitle": "レッスン",
+      "navSearch": "レッスンを探す",
+      "navNone": "当てはまるレッスンはありません。",
+      "navToggle": "レッスン一覧を開く・閉じる",
+      "navDone": "%d / %d 完了",
       "workshopTitle": "工房",
       "workshopIntro": "ここでは自分だけのプログラムを作れます。ファイルはいくつでも作れます。プログラムはファイルを読み書きしたり（<code>File.read</code>、<code>File.write</code>）、<code>require_relative</code>でほかの.rbファイルを読み込んだり、<code>gets</code>で入力を読んだりできます。",
       "workshopWelcome": "<strong>工房</strong>へようこそ！🛠 ここには課題はないよ。きみとRubyだけ。ファイルはこのブラウザの中に保存される。ChromeとEdgeなら、上の<em>進捗</em>からフォルダーをつなげば、きみのコンピューター上の本物のファイルになるよ。",
@@ -2096,9 +2111,9 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "three",
       "section": {
-        "de": "3D mit three-rb",
-        "en": "3D with three-rb",
-        "ja": "three-rbで3D"
+        "de": "Ausflüge",
+        "en": "Side trips",
+        "ja": "寄り道"
       },
       "de": {
         "title": "19. 3D mit three-rb",
@@ -2244,11 +2259,6 @@ window.LESSONS_JSON = JSON.stringify({
     },
     {
       "id": "pptx",
-      "section": {
-        "de": "Präsentationen mit ruby_pptx",
-        "en": "Slide decks with ruby_pptx",
-        "ja": "ruby_pptxでスライド作成"
-      },
       "de": {
         "title": "20. PowerPoint mit ruby_pptx",
         "cells": [
@@ -2441,11 +2451,6 @@ window.LESSONS_JSON = JSON.stringify({
     },
     {
       "id": "pdf",
-      "section": {
-        "de": "PDFs mit Prawn & HexaPDF",
-        "en": "PDFs with Prawn & HexaPDF",
-        "ja": "PrawnとHexaPDFでPDF"
-      },
       "de": {
         "title": "21. PDFs mit Prawn & HexaPDF",
         "cells": [
@@ -2590,11 +2595,6 @@ window.LESSONS_JSON = JSON.stringify({
     },
     {
       "id": "jpeg",
-      "section": {
-        "de": "JPEG mit pure_jpeg",
-        "en": "JPEG with pure_jpeg",
-        "ja": "pure_jpegでJPEG"
-      },
       "de": {
         "title": "22. JPEG-Fotos mit pure_jpeg",
         "cells": [
@@ -2739,11 +2739,6 @@ window.LESSONS_JSON = JSON.stringify({
     },
     {
       "id": "scarpe",
-      "section": {
-        "de": "Shoes mit Scarpe",
-        "en": "Shoes with Scarpe",
-        "ja": "ScarpeでShoes"
-      },
       "de": {
         "title": "23. Shoes-Apps mit Scarpe",
         "cells": [
@@ -2888,11 +2883,6 @@ window.LESSONS_JSON = JSON.stringify({
     },
     {
       "id": "rubykaigi",
-      "section": {
-        "de": "Ruby-Gemeinschaft",
-        "en": "The Ruby community",
-        "ja": "Rubyのコミュニティ"
-      },
       "de": {
         "title": "24. RubyKaigi & seltsamer Code",
         "cells": [

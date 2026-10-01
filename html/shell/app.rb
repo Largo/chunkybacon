@@ -17,6 +17,13 @@ module ChunkyShell
     LIVE_SLOW = 0.3
     LIVE_KEY = "chunkyui_live"
     LIVE_WORKSHOP_KEY = "chunkyui_live_ws"
+    # The sidebar, put away on a wide screen ("closed"), and the index's
+    # folded groups (comma-separated group keys, View.nav_groups) - view
+    # settings too. Below NARROW (app.css) the sidebar is a drawer instead,
+    # out only until a lesson is picked.
+    SIDEBAR_KEY = "chunkyui_sidebar"
+    NAV_CLOSED_KEY = "chunkyui_nav_closed"
+    NARROW = "(max-width: 820px)"
 
     def initialize(data = JSG.w.LESSONS, bridge = JSG.w.ChunkyBridge)
       @course = Course.new(data)
@@ -38,6 +45,8 @@ module ChunkyShell
       @live_gen = {}        # per cell: the latest keystroke's live run
       @slow = {}            # cells whose last run took too long to run live
       @last_outcome = {}    # a live pass celebrates only when it is new
+      @nav_closed = Store.get(NAV_CLOSED_KEY, "").split(",")
+      @nav_query = ""       # the index's search field
     end
 
     def start
@@ -46,6 +55,8 @@ module ChunkyShell
       @workspace = Workspace.new(self).start
       # the page before the editors: CodeMirror measures its container when
       # it is built, and inside a display:none #app it measures zero
+      JSG.d.body.classList.toggle("sidebar-closed", Store.get(SIDEBAR_KEY, "") == "closed")
+      sidebar_expanded
       el("spinner").style.display = "none"
       el("app").style.display = "block"
       render_all
@@ -70,12 +81,19 @@ module ChunkyShell
       el("reset-code").addEventListener("click", sync: true) { guard("reset") { reset_lesson if JSG.w.confirm(ui.resetConfirm) } }
       el("langSelect").addEventListener("change", sync: true) { guard("language") { switch_lang(el("langSelect").value) } }
       el("lessonNav").addEventListener("click", sync: true) { |event| guard("index") { nav_click(event) } }
+      el("navSearch").addEventListener("input", sync: true) { guard("search") { search(el("navSearch").value) } }
+      el("navSearch").addEventListener("keydown", sync: true) { |event| guard("search") { search_key(event) } }
+      el("sidebarToggle").addEventListener("click", sync: true) { guard("sidebar") { toggle_sidebar } }
       el("lessonBody").addEventListener("click", sync: true) { |event| guard("run") { body_click(event) } }
       el("chunkyChat").addEventListener("click", sync: true) { |event| guard("next") { chat_click(event) } }
       el("gemsList").addEventListener("click", sync: true) { |event| guard("gem chip") { chip_click(event) } }
       el("gemInstallBtn").addEventListener("click", sync: true) { guard("gem install") { typed_install } }
       window = JSG.w
       window.addEventListener("keydown", sync: true) { |event| guard("hotkey") { hotkey(event) } }
+      # a tap beside the drawer puts it away (the scrim is the body's ::after)
+      window.addEventListener("click", sync: true) { |event| guard("drawer") { drawer_click(event) } }
+      # the drawer button's aria-expanded follows the window across NARROW
+      window.matchMedia(NARROW).addEventListener("change", sync: true) { guard("sidebar") { sidebar_expanded } }
       # back/forward, and a lesson id typed or pasted into the address bar
       window.addEventListener("hashchange", sync: true) { guard("route") { route_from_address } }
       # back/forward between permalinks (history.pushState)
@@ -97,14 +115,92 @@ module ChunkyShell
 
     # Nav entries are real links (#lesson-id): a plain click is handled here,
     # ctrl/cmd/shift/middle clicks are the browser's (new tab, copy link).
+    # A group's head folds the group.
     def nav_click(event)
+      head = event.target.closest(".nav-group-head")
+      return toggle_group(head) unless head.nil?
       return if event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button != 0
 
-      id = event.target.getAttribute("data-id")
+      link = event.target.closest("a")
+      return if link.nil?
+
+      id = link.getAttribute("data-id")
       return if id.nil? || id == ""
 
       event.preventDefault
       select_lesson(id)
+    end
+
+    # Folds or unfolds in place, so the head keeps the keyboard focus; the
+    # next render_nav draws it the same from @nav_closed.
+    def toggle_group(head)
+      key = head.getAttribute("data-group")
+      open = @nav_closed.include?(key)
+      open ? @nav_closed.delete(key) : @nav_closed << key
+      Store.set(NAV_CLOSED_KEY, @nav_closed.join(","))
+      head.closest(".nav-group").classList.toggle("closed", !open)
+      head.setAttribute("aria-expanded", open.to_s)
+    end
+
+    # The search field: the index shows what matches, as you type
+    def search(text)
+      @nav_query = text.to_s
+      render_nav
+    end
+
+    # Escape empties the field, Enter opens the first lesson that matches
+    def search_key(event)
+      key = event.key
+      if key == "Escape" && @nav_query != ""
+        event.preventDefault
+        el("navSearch").value = ""
+        search("")
+      elsif key == "Enter"
+        event.preventDefault
+        first = JSG.d.querySelector("#lessonNav a")
+        select_lesson(first.getAttribute("data-id")) unless first.nil?
+      end
+    end
+
+    # ---------- the sidebar ----------
+
+    def narrow? = JSG.w.matchMedia(NARROW).matches == true
+    def body_class?(name) = JSG.d.body.classList.contains(name) == true
+
+    # Wide: shows or puts away the sidebar, and remembers it. Narrow: pulls
+    # the drawer out or pushes it back, and forgets it.
+    def toggle_sidebar
+      list = JSG.d.body.classList
+      if narrow?
+        list.toggle("sidebar-open")
+      else
+        closed = list.toggle("sidebar-closed") == true
+        Store.set(SIDEBAR_KEY, closed ? "closed" : "open")
+      end
+      sidebar_expanded
+    end
+
+    # whether the sidebar is showing: on a wide screen unless put away, on a
+    # narrow one only while the drawer is out
+    def sidebar_expanded
+      showing = narrow? ? body_class?("sidebar-open") : !body_class?("sidebar-closed")
+      el("sidebarToggle").setAttribute("aria-expanded", showing.to_s)
+    end
+
+    # +focus+: hand the keyboard back to the button that opened the drawer
+    def close_drawer(focus = false)
+      return unless body_class?("sidebar-open")
+
+      JSG.d.body.classList.remove("sidebar-open")
+      sidebar_expanded
+      el("sidebarToggle").focus if focus
+    end
+
+    def drawer_click(event)
+      return unless body_class?("sidebar-open")
+
+      target = event.target
+      close_drawer if target.closest("#sidebar").nil? && target.closest("#sidebarToggle").nil?
     end
 
     def body_click(event)
@@ -132,8 +228,9 @@ module ChunkyShell
       go_to_next_lesson
     end
 
-    # Alt+R runs the exercise
+    # Alt+R runs the exercise; Escape puts the drawer away
     def hotkey(event)
+      return close_drawer(true) if event.key == "Escape"
       return unless event.altKey && event.key == "r"
 
       event.preventDefault
@@ -217,7 +314,23 @@ module ChunkyShell
 
     def render_nav
       active = workshop? ? nil : current_lesson_id
-      el("lessonNav").innerHTML = View.nav_html(@course, @lang, active, Store.done_ids, @router.prefix(@lang))
+      done = Store.done_ids
+      el("lessonNav").innerHTML = View.nav_html(@course, @lang, active, done, @router.prefix(@lang),
+                                                @nav_closed, @nav_query, ui.navNone, ui.navDone)
+      # the head: how far the whole course is
+      finished = @course.ids.select { |id| done.include?(id) }.length
+      el("navTitle").textContent = ui.navTitle
+      count = el("navCount")
+      count.textContent = "#{finished}/#{@course.size}"
+      count.setAttribute("title", format(ui.navDone, finished, @course.size))
+      el("navBarFill").style.width = "#{finished * 100 / @course.size}%"
+      search = el("navSearch")
+      search.setAttribute("placeholder", ui.navSearch)
+      search.setAttribute("aria-label", ui.navSearch)
+      toggle = el("sidebarToggle")
+      toggle.setAttribute("title", ui.navToggle)
+      toggle.setAttribute("aria-label", ui.navToggle)
+      el("sidebar").setAttribute("aria-label", ui.navTitle)
       link = el("workshopLink")
       link.textContent = ui.workshopNav
       link.setAttribute("href", @router.href(@lang, WORKSHOP_ID))
@@ -309,17 +422,31 @@ module ChunkyShell
       @workshop = false
       Store.set("chunky_current", id)
       set_lesson_address(id)
+      unfold_group_of(id)
+      close_drawer
       render_nav
       render_lesson
       show_bubble(ui.welcome, nil)
-      # a new lesson starts at its top (on phones the index sits below it)
+      # a new lesson starts at its top
       JSG.w.scrollTo(0, 0)
+    end
+
+    # A lesson reached by "next lesson", back or a link shows in the index
+    # even when its group was folded away.
+    def unfold_group_of(id)
+      idx = @course.index(id)
+      group = View.nav_groups(@course, @lang).find { |g| g[2].include?(idx) }
+      return if group.nil? || !@nav_closed.include?(group[0])
+
+      @nav_closed.delete(group[0])
+      Store.set(NAV_CLOSED_KEY, @nav_closed.join(","))
     end
 
     # The workshop is a page of its own beside the lessons, at #werkstatt.
     def open_workshop
       @workshop = true
       @router.show(@lang, WORKSHOP_ID, true) unless workshop_address?
+      close_drawer
       render_nav
       render_lesson
       show_bubble(ui.workshopWelcome, nil)

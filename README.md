@@ -19,6 +19,10 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
   cell shows its last expression as `=> …` — `puts` is never required.
+- **Lesson sidebar**: the 40 lessons in three groups (basics, side trips,
+  the timelog track) with done counts, ticks and a bacon progress strip,
+  searchable and foldable; it can be put away, and on a phone it is a
+  drawer.
 - **Live runs**: a cell runs by itself a second after you stop typing, as
   long as the code parses - a rehearsal that keeps no file it writes,
   installs only gems already in the cache, fetches nothing from the web and

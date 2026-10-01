@@ -6,18 +6,71 @@ module ChunkyShell
   module View
     extend Support
 
+    # The index: one group per section, each with a head that folds it and
+    # says how much of it is done. A group is named by the id of the lesson
+    # that opens it, the same in every language.
     # +prefix+: what goes before a lesson id in its link (Router#prefix)
-    def self.nav_html(course, lang, active_id, done, prefix = "#")
+    # +closed+: the groups folded away (App keeps them)
+    # +query+: what the search field holds; only the lessons it matches show,
+    #   in open groups, or +none+ when there are none
+    # +done_text+: "%d of %d done", for the head's count
+    def self.nav_html(course, lang, active_id, done, prefix = "#", closed = [], query = "", none = "", done_text = "%d/%d")
+      needle = query.to_s.strip.downcase
       html = "".dup
+      nav_groups(course, lang).each do |group|
+        key, name, indexes = group
+        shown = needle == "" ? indexes : indexes.select { |idx| nav_match?(course, idx, lang, name, needle) }
+        next if shown.empty?
+
+        finished = indexes.select { |idx| done.include?(course.id(idx)) }.length
+        open = needle != "" || !closed.include?(key)
+        css = "nav-group"
+        css += " closed" unless open
+        css += " complete" if finished == indexes.length
+        html << %(<section class="#{css}" data-group="#{key}">)
+        if name
+          count = format(done_text, finished, indexes.length)
+          html << %(<button type="button" class="nav-group-head" data-group="#{key}" aria-expanded="#{open}" aria-controls="nav-#{key}">)
+          html << %(<span class="nav-group-name">#{escape_html(name)}</span>)
+          html << %(<span class="nav-group-count" title="#{escape_html(count)}" aria-label="#{escape_html(count)}">#{finished}/#{indexes.length}</span>)
+          html << %(<svg class="nav-chevron" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></button>)
+        end
+        html << %(<div class="nav-group-items" id="nav-#{key}">)
+        shown.each { |idx| html << nav_link(course, idx, lang, active_id, done, prefix) }
+        html << "</div></section>"
+      end
+      html << %(<p class="nav-none">#{escape_html(none)}</p>) if html == ""
+      html
+    end
+
+    # [[key, section name or nil, [lesson indexes]], ...] in course order
+    def self.nav_groups(course, lang)
+      groups = []
       course.ids.each_with_index do |id, idx|
         section = course.section(idx, lang)
-        html << %(<div class="nav-section">#{section}</div>) if section
-        classes = []
-        classes << "active" if id == active_id
-        classes << "done" if done.include?(id)
-        html << %(<a class="#{classes.join(' ')}" href="#{prefix}#{id}" data-id="#{id}">#{course.title(idx, lang)}</a>)
+        groups << [id, section, []] if section || groups.empty?
+        groups.last[2] << idx
       end
-      html
+      groups
+    end
+
+    def self.nav_match?(course, idx, lang, section, needle)
+      course.title(idx, lang).downcase.include?(needle) || section.to_s.downcase.include?(needle)
+    end
+
+    # "13. Gems installieren" as a numbered row: the number in a badge,
+    # which turns into a tick once the lesson is done
+    def self.nav_link(course, idx, lang, active_id, done, prefix)
+      id = course.id(idx)
+      title = course.title(idx, lang)
+      number = (idx + 1).to_s
+      name = title.start_with?("#{number}. ") ? title[number.length + 2, title.length] : title
+      classes = ["lesson"]
+      classes << "active" if id == active_id
+      classes << "done" if done.include?(id)
+      current = id == active_id ? ' aria-current="page"' : ""
+      %(<a class="#{classes.join(' ')}" href="#{prefix}#{id}" data-id="#{id}"#{current}>) +
+        %(<span class="num">#{number}</span><span class="name">#{escape_html(name)}</span></a>)
     end
 
     # +live+: the Live switch for every toolbar (live_html), or "" - not

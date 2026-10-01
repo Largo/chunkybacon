@@ -79,60 +79,79 @@
     </div>
 
     <div id="app" style="display:none">
-      <header>
-        <img id="mascot" src="assets/chunky.svg" alt="Chunky Bacon Fuchs">
-        <div class="headerText">
-          <h1 id="siteTitle">Ruby lernen mit Chunky Bacon</h1>
-          <p id="siteSubtitle"></p>
-          <!-- until CRuby is up (shell/app.rb): Run waits for it -->
-          <p id="kernelStatus" class="kernel-status" role="status" hidden></p>
-        </div>
-        <button id="progressBtn" class="progress-btn" type="button" aria-haspopup="dialog">
-          <svg class="progress-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7A1.5 1.5 0 0 1 5 5.5h4.2l2 2H19A1.5 1.5 0 0 1 20.5 9v8.5A1.5 1.5 0 0 1 19 19H5a1.5 1.5 0 0 1-1.5-1.5z"/></svg>
-          <span class="progress-label" id="progressLabel">Fortschritt</span>
-          <span class="progress-dot" aria-hidden="true"></span>
-        </button>
-        <button id="navJump" class="nav-jump" type="button" title="Lektionen / Lessons / レッスン" aria-label="Lektionen / Lessons / レッスン">☰</button>
-        <select id="langSelect" title="Sprache / Language / 言語">
-          <option value="de">Deutsch</option>
-          <option value="en">English</option>
-          <option value="ja">日本語</option>
-        </select>
-      </header>
+      <!-- Shows and hides the lessons: fixed top left, the same spot open or
+           closed, wide screen or phone (a drawer there). First in the page,
+           so it is also first for the keyboard. shell/app.rb drives it. -->
+      <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-controls="sidebar" aria-expanded="true">
+        <svg viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="3.5" width="13" height="11" rx="2"/><path d="M7 3.5v11"/></svg>
+      </button>
 
       <div class="layout">
-        <div class="sidebar">
+        <!-- the lessons, from the top of the window to its foot: their own
+             scroll, a search, one group per course, the gems at the end -->
+        <aside id="sidebar" class="sidebar">
+          <div class="sidebar-head">
+            <span id="navTitle" class="nav-title"></span>
+            <span id="navCount" class="nav-count"></span>
+            <span class="nav-bar" aria-hidden="true"><span id="navBarFill"></span></span>
+          </div>
           <a id="workshopLink" class="workshop-link" href="#werkstatt"></a>
+          <label class="nav-search">
+            <svg viewBox="0 0 14 14" aria-hidden="true"><circle cx="6" cy="6" r="4.2"/><path d="M9.2 9.2 12.5 12.5"/></svg>
+            <input id="navSearch" type="search" autocomplete="off" spellcheck="false">
+          </label>
           <nav id="lessonNav"></nav>
-          <div id="gemsPanel">
-            <h3 id="gemsTitle"></h3>
+          <details id="gemsPanel">
+            <summary id="gemsTitle"></summary>
             <div id="gemsList"></div>
             <div class="gemsInstallRow">
               <input id="gemNameInput" type="text" placeholder="gem">
               <button id="gemInstallBtn" type="button"></button>
             </div>
             <p id="gemsNote"></p>
-          </div>
+          </details>
+        </aside>
+
+        <div class="column">
+          <header>
+            <img id="mascot" src="assets/chunky.svg" alt="Chunky Bacon Fuchs">
+            <div class="headerText">
+              <h1 id="siteTitle">Ruby lernen mit Chunky Bacon</h1>
+              <p id="siteSubtitle"></p>
+              <!-- until CRuby is up (shell/app.rb): Run waits for it -->
+              <p id="kernelStatus" class="kernel-status" role="status" hidden></p>
+            </div>
+            <button id="progressBtn" class="progress-btn" type="button" aria-haspopup="dialog">
+              <svg class="progress-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7A1.5 1.5 0 0 1 5 5.5h4.2l2 2H19A1.5 1.5 0 0 1 20.5 9v8.5A1.5 1.5 0 0 1 19 19H5a1.5 1.5 0 0 1-1.5-1.5z"/></svg>
+              <span class="progress-label" id="progressLabel">Fortschritt</span>
+              <span class="progress-dot" aria-hidden="true"></span>
+            </button>
+            <select id="langSelect" title="Sprache / Language / 言語">
+              <option value="de">Deutsch</option>
+              <option value="en">English</option>
+              <option value="ja">日本語</option>
+            </select>
+          </header>
+
+          <main>
+            <article id="lessonBody"></article>
+
+            <div id="chunkyChat">
+              <div class="chat-avatar"><img src="assets/chunky.svg" alt="Chunky"></div>
+              <div class="chat-message"><p id="chunkyText"></p></div>
+            </div>
+
+            <div class="buttons">
+              <button id="reset-code" type="button" class="reset"></button>
+            </div>
+          </main>
+
+          <footer>
+            <p id="footerCredit"></p>
+            <p><small id="footerLicense"></small></p>
+          </footer>
         </div>
-
-        <main>
-          <article id="lessonBody"></article>
-
-          <div id="chunkyChat">
-            <div class="chat-avatar"><img src="assets/chunky.svg" alt="Chunky"></div>
-            <div class="chat-message"><p id="chunkyText"></p></div>
-          </div>
-
-          <div class="buttons">
-            <button id="reset-code" type="button" class="reset"></button>
-          </div>
-        </main>
       </div>
-
-      <footer>
-        <p id="footerCredit"></p>
-        <p><small id="footerLicense"></small></p>
-      </footer>
 
       <!-- saving and loading progress: filled by shell/workspace.rb -->
       <dialog id="progressDialog" class="progress-dialog" aria-labelledby="progressTitle"></dialog>
@@ -261,12 +280,12 @@
       setTimeout(go, 150);
     };
 
-    // On wide screens the lesson index scrolls on its own (app.css). Keep the
-    // current lesson in view there whenever main.rb re-renders the index -
-    // scrolling only the sidebar, never the page (on phones the index sits
-    // below the lesson and does not scroll by itself).
+    // The lesson index scrolls on its own (app.css), on a wide screen and in
+    // the drawer on a phone. Keep the current lesson in view whenever the
+    // shell re-renders the index - scrolling only the sidebar, never the page.
+    // The sidebar is the offsetParent of every lesson link.
     new MutationObserver(function () {
-      var bar = document.querySelector(".sidebar");
+      var bar = document.getElementById("sidebar");
       var active = document.querySelector("#lessonNav a.active");
       if (!bar || !active || bar.scrollHeight <= bar.clientHeight) return;
       var top = active.offsetTop, bottom = top + active.offsetHeight;
@@ -274,12 +293,6 @@
         bar.scrollTop = top - bar.clientHeight / 3;
       }
     }).observe(document.getElementById("lessonNav"), { childList: true });
-
-    // phones only (app.css): the header button jumps down to the index
-    document.getElementById("navJump").addEventListener("click", function () {
-      var calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      document.querySelector(".sidebar").scrollIntoView({ behavior: calm ? "auto" : "smooth" });
-    });
 
     // Per-cell CodeMirror helpers called from Ruby (shell/app.rb builds the
     // editors, main.rb reads and marks them)

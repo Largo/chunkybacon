@@ -169,11 +169,26 @@ changes and rewrites it; prose edits can be done by hand.
 
 ```json
 { "id": "html",
-  "section": { "de": "Grundkurs", "en": "Basics", "ja": "基礎コース" },   // optional: starts a nav section
+  "section": { "de": "Grundkurs", "en": "Basics", "ja": "基礎コース" },   // optional: starts a group in the sidebar
   "de": { "title": "14. HTML parsen", "cells": [ ... ] },
   "en": { "title": "14. Parsing HTML", "cells": [ ... ] },
   "ja": { "title": "14. HTMLのパース", "cells": [ ... ] } }
 ```
+
+A section opens a group in the sidebar's index and runs until the next one
+(`View.nav_groups`); the group is named by its first lesson's id, which is
+what `chunkyui_nav_closed` stores for a folded group. Give a section only to
+lessons that start a real course - a lesson on its own belongs in "Ausflüge"
+(side trips, 19-24), not in a group of one.
+
+The sidebar itself (`index.html` `#sidebar`, `shell/app.rb`, `app.css`): from
+the top of the window to its foot with its own scroll; head with the course
+count and a bacon progress strip, the workshop, a search over titles and
+section names (Enter opens the first hit, Escape empties it), the groups
+with done counts, the gems panel folded at the foot. The fixed
+`#sidebarToggle` puts it away on a wide screen (`chunkyui_sidebar`, a view
+setting); at 820 px and below (`App::NARROW`, the same width as in app.css)
+it is a drawer that a lesson, a tap beside it or Escape put away again.
 
 A language is whatever `ui` has a key for: the shell takes
 the list from there, `index.html`'s `#langSelect` names them. German has its

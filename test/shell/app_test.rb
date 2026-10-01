@@ -262,6 +262,107 @@ class AppTest < Minitest::Test
     assert_equal 2, calls("run").length
   end
 
+  # ---------- the sidebar ----------
+
+  def body_classes = doc.js_get("body").attrs["class"].to_s.split
+  def toggle = byid("sidebarToggle")
+
+  def type_search(text)
+    byid("navSearch").props["value"] = text
+    JS.fire(byid("navSearch").wrap, "input")
+  end
+
+  def test_sidebar_head_counts_the_course
+    start(storage: { "chunky_done" => '["hallo","rechnen"]' })
+    assert_equal "Lektionen", byid("navTitle").text
+    assert_equal "2/40", byid("navCount").text
+    assert_equal "2 von 40 fertig", byid("navCount").attrs["title"]
+    assert_equal "5%", byid("navBarFill").props["style"]["width"]
+    assert_equal "Lektion suchen", byid("navSearch").attrs["placeholder"]
+    switch_to_english
+    assert_equal "2 of 40 done", byid("navCount").attrs["title"]
+  end
+
+  def switch_to_english
+    byid("langSelect").props["value"] = "en"
+    JS.fire(byid("langSelect").wrap, "change")
+  end
+
+  def test_a_click_on_the_name_inside_a_row_opens_the_lesson
+    start
+    assert click(find('#lessonNav a[data-id="hashes"] .name')), "the link's default is prevented"
+    assert_equal "hashes", find("#lessonNav a.active").attrs["data-id"]
+  end
+
+  def test_wide_screen_toggle_puts_the_sidebar_away_and_remembers
+    start
+    assert_equal "true", toggle.attrs["aria-expanded"]
+    click(toggle)
+    assert_includes body_classes, "sidebar-closed"
+    assert_equal "false", toggle.attrs["aria-expanded"]
+    assert_equal "closed", window.storage["chunkyui_sidebar"]
+    start(storage: { "chunkyui_sidebar" => "closed" })
+    assert_includes body_classes, "sidebar-closed", "still away after a reload"
+    click(toggle)
+    refute_includes body_classes, "sidebar-closed"
+    assert_equal "open", window.storage["chunkyui_sidebar"]
+  end
+
+  def test_phone_drawer_opens_and_goes_away_with_a_lesson_a_tap_or_escape
+    start { window.narrow = true }
+    assert_equal "false", toggle.attrs["aria-expanded"]
+    click(toggle)
+    assert_includes body_classes, "sidebar-open"
+    assert_equal "true", toggle.attrs["aria-expanded"]
+    assert_nil window.storage["chunkyui_sidebar"], "a drawer is not remembered"
+    click(find('#lessonNav a[data-id="arrays"]'))
+    refute_includes body_classes, "sidebar-open"
+    click(toggle)
+    click(find("#lessonBody"))
+    refute_includes body_classes, "sidebar-open", "a tap beside the drawer"
+    click(toggle)
+    click(byid("navSearch"))
+    assert_includes body_classes, "sidebar-open", "a tap inside it keeps it out"
+    JS.fire(JS.window, "keydown", "key" => "Escape")
+    refute_includes body_classes, "sidebar-open"
+    assert toggle.props["focused"], "the keyboard goes back to the button"
+  end
+
+  def test_group_folds_in_place_and_stays_folded
+    start
+    head = find('#lessonNav .nav-group-head[data-group="three"]')
+    click(head)
+    assert_includes find('#lessonNav section[data-group="three"]').attrs["class"], "closed"
+    assert_equal "false", head.attrs["aria-expanded"]
+    assert_equal "three", window.storage["chunkyui_nav_closed"]
+    assert_equal "hallo", find("#lessonNav a.active").attrs["data-id"], "no lesson opened"
+    start(storage: { "chunkyui_nav_closed" => "three" })
+    assert_includes find('#lessonNav section[data-group="three"]').attrs["class"], "closed"
+  end
+
+  def test_a_lesson_reached_in_a_folded_group_unfolds_it
+    start(hash: "#bigdecimal", storage: { "chunkyui_nav_closed" => "hallo,three" })
+    fire("chunky:ran", { "idx" => exercise_idx, "outcome" => "pass", "elapsed" => 0.1, "auto" => false, "own" => 0.1 })
+    click(byid("nextLessonLink"))
+    assert_equal "three", find("#lessonNav a.active").attrs["data-id"]
+    refute_includes find('#lessonNav section[data-group="three"]').attrs["class"], "closed"
+    assert_equal "hallo", window.storage["chunkyui_nav_closed"]
+  end
+
+  def test_search_filters_escape_clears_enter_opens
+    start
+    type_search("PDF")
+    assert_equal ["pdf"], find_all("#lessonNav a").map { |a| a.attrs["data-id"] }
+    type_search("xyz")
+    assert_equal "Keine Lektion passt.", find("#lessonNav .nav-none").text
+    type_search("regex")
+    assert JS.fire(byid("navSearch").wrap, "keydown", "key" => "Enter")
+    assert_equal "tl-parsing", find("#lessonNav a.active").attrs["data-id"]
+    assert JS.fire(byid("navSearch").wrap, "keydown", "key" => "Escape")
+    assert_equal "", byid("navSearch").props["value"]
+    assert_equal 40, find_all("#lessonNav a").length
+  end
+
   # ---------- gems ----------
 
   def test_installed_gems_from_the_kernel

@@ -553,7 +553,9 @@ await page.click('.cell.exercise .mb-view a');
 await page.waitForTimeout(600);
 check('capstone project link navigates', (await page.textContent('.cell.exercise .mb-view')).includes('3.5h'));
 
-// gems panel input installs (paint is now already installed → instant)
+// gems panel input installs (paint is now already installed → instant);
+// the panel is folded at the foot of the sidebar until opened
+await page.click('#gemsTitle');
 await page.fill('#gemNameInput', 'paint');
 await page.click('#gemInstallBtn');
 await page.waitForTimeout(500);

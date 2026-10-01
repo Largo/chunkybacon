@@ -535,10 +535,12 @@ module JS
         props[name] = proc { |*args| @calls << [name, *args]; nil }
       end
       props["confirm"] = proc { |_msg| @confirm }
+      # a phone-sized window once a test sets narrow = true
+      props["matchMedia"] = proc { |query| { "matches" => @narrow == true, "media" => query.to_s } }
       props["ChunkyBridge"] = bridge
     end
 
-    attr_writer :confirm
+    attr_writer :confirm, :narrow
 
     def location = props["location"]
 
