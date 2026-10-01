@@ -479,8 +479,11 @@ module JS
         end)
         nil
       end
-      props["location"] = { "hash" => "" }
-      props["history"] = { "replaceState" => proc { |_s, _t, url| props["location"]["hash"] = url.to_s } }
+      props["location"] = { "hash" => "", "pathname" => "/" }
+      props["history"] = {
+        "replaceState" => proc { |_s, _t, url| go_to(url.to_s); nil },
+        "pushState" => proc { |_s, _t, url| @calls << ["pushState", url.to_s]; go_to(url.to_s); nil }
+      }
       props["localStorage"] = {
         "getItem" => proc { |k| @storage[k] },
         "setItem" => proc { |k, v| @storage[k] = v.to_s; nil },
@@ -501,6 +504,18 @@ module JS
     attr_writer :confirm
 
     def location = props["location"]
+
+    # history.replaceState/pushState: "#id" changes the hash, "/de/id" the
+    # path (and drops the hash, as a URL without one does)
+    def go_to(url)
+      if url.start_with?("#")
+        location["hash"] = url
+      else
+        path, fragment = url.split("#", 2)
+        location["pathname"] = path
+        location["hash"] = fragment ? "##{fragment}" : ""
+      end
+    end
 
     def js_get(key)
       return document_node if key == "document"

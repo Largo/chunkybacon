@@ -25,7 +25,9 @@ module ChunkyShell
       # languages, English; without a bridge's word, the stored choice
       @lang = bridge[:lang] || Store.get("chunky_lang", "de")
       @lang = "de" unless @course.lang?(@lang)
-      @workshop = workshop_hash?
+      # /#methoden, or /de/methoden when the server gives lessons permalinks
+      @router = Router.new(bridge[:permalinks])
+      @workshop = workshop_address?
       @running = {}
       @gem_names = []
       @installed = {}
@@ -47,8 +49,9 @@ module ChunkyShell
       el("spinner").style.display = "none"
       el("app").style.display = "block"
       render_all
-      # a bare URL still names its lesson afterwards, without a history entry
-      JSG.w.history.replaceState(nil, "", "##{current_lesson_id}") unless hash_lesson_id || workshop?
+      # a bare URL still names its lesson afterwards, without a history
+      # entry; with permalinks an old /#methoden link becomes /de/methoden
+      @router.show(@lang, current_place, false)
       show_bubble(workshop? ? ui.workshopWelcome : ui.welcome, nil)
       JSG.w.refreshAllCells
       @bridge.shellReady
@@ -74,7 +77,10 @@ module ChunkyShell
       window = JSG.w
       window.addEventListener("keydown", sync: true) { |event| guard("hotkey") { hotkey(event) } }
       # back/forward, and a lesson id typed or pasted into the address bar
-      window.addEventListener("hashchange", sync: true) { guard("route") { route_from_hash } }
+      window.addEventListener("hashchange", sync: true) { guard("route") { route_from_address } }
+      # back/forward between permalinks (history.pushState)
+      window.addEventListener("popstate", sync: true) { guard("route") { route_from_address } }
+      el("workshopLink").addEventListener("click", sync: true) { |event| guard("workshop") { workshop_click(event) } }
       # a progress file was loaded or a folder reconnected (storage.js)
       window.addEventListener("chunky-progress-loaded", sync: true) { guard("progress") { progress_loaded } }
       # the kernel's answers (shell/bridge.js)
@@ -110,6 +116,14 @@ module ChunkyShell
       start_cell_run(idx.to_i) unless idx.nil? || idx == ""
     end
 
+    # the workshop link above the index: a plain click opens it in place
+    def workshop_click(event)
+      return if event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button != 0
+
+      event.preventDefault
+      open_workshop unless workshop?
+    end
+
     # the "next lesson" link inside the bubble
     def chat_click(event)
       return unless event.target.id == "nextLessonLink"
@@ -129,26 +143,31 @@ module ChunkyShell
 
     # ---------- where we are ----------
 
-    # The URL names the lesson (/#scarpe), so a lesson can be linked,
-    # bookmarked and reached with back/forward. localStorage is only the
-    # fallback for a bare URL: it brings you back where you left off.
+    # The URL names the lesson (/#scarpe, or /de/scarpe with permalinks), so
+    # a lesson can be linked, bookmarked and reached with back/forward.
+    # localStorage is only the fallback for a bare URL: it brings you back
+    # where you left off.
     def current_index
-      id = hash_lesson_id || Store.get("chunky_current", @course.id(0))
+      id = address_lesson_id || Store.get("chunky_current", @course.id(0))
       @course.index(id) || 0
     end
 
     def current_lesson_id = @course.id(current_index)
     def current_cells = @course.cells(current_index, @lang)
 
-    def hash_value = JSG.w.location.hash.to_s.delete_prefix("#")
+    # what the address names: a lesson id, WORKSHOP_ID or anything else
+    def address = @router.place
 
-    # the lesson id in location.hash, or nil when it names no lesson
-    def hash_lesson_id
-      raw = hash_value
+    # the lesson id in the address, or nil when it names no lesson
+    def address_lesson_id
+      raw = address
       @course.index(raw) ? raw : nil
     end
 
-    def workshop_hash? = hash_value == WORKSHOP_ID
+    def workshop_address? = address == WORKSHOP_ID
+
+    # what the address should name: the workshop or the lesson on screen
+    def current_place = workshop? ? WORKSHOP_ID : current_lesson_id
 
     def exercise_index
       return nil if workshop?
@@ -156,22 +175,22 @@ module ChunkyShell
       current_cells.index { |cell| cell.t == "x" }
     end
 
-    # Assigning location.hash adds a history entry, so back returns to the
-    # previous lesson. The hashchange it causes finds that lesson already
+    # A new history entry, so back returns to the previous lesson. The
+    # hashchange (or popstate) it may cause finds that lesson already
     # rendered and does nothing.
-    def set_lesson_hash(id)
-      JSG.w.location.hash = id unless hash_lesson_id == id
+    def set_lesson_address(id)
+      @router.show(@lang, id, true) unless address_lesson_id == id
     end
 
-    def route_from_hash
-      return open_workshop if workshop_hash? && !workshop?
-      return if workshop_hash?
+    def route_from_address
+      return open_workshop if workshop_address? && !workshop?
+      return if workshop_address?
 
-      id = hash_lesson_id
+      id = address_lesson_id
       if id.nil?
-        # a hash naming no lesson: keep the page, correct the address bar
+        # an address naming no lesson: keep the page, correct the address bar
         current = workshop? ? WORKSHOP_ID : @rendered_lesson_id
-        JSG.w.history.replaceState(nil, "", "##{current}") if current
+        @router.show(@lang, current, false) if current
       elsif workshop? || id != @rendered_lesson_id
         select_lesson(id)
       end
@@ -198,9 +217,10 @@ module ChunkyShell
 
     def render_nav
       active = workshop? ? nil : current_lesson_id
-      el("lessonNav").innerHTML = View.nav_html(@course, @lang, active, Store.done_ids)
+      el("lessonNav").innerHTML = View.nav_html(@course, @lang, active, Store.done_ids, @router.prefix(@lang))
       link = el("workshopLink")
       link.textContent = ui.workshopNav
+      link.setAttribute("href", @router.href(@lang, WORKSHOP_ID))
       link.className = workshop? ? "workshop-link active" : "workshop-link"
     end
 
@@ -222,6 +242,9 @@ module ChunkyShell
       # three.js (750 KB) only for the lesson that draws with it
       JSG.w.ensureThree if cells.any? { |cell| code_cell?(cell) && cell.code.to_s.include?("show_three") }
       @rendered_lesson_id = id
+      # a lesson opened from a link is where the learner left off, too (only
+      # a change is written: every write reaches a connected folder)
+      Store.set("chunky_current", id) unless Store.get("chunky_current", "") == id
       # the lesson in the tab title makes bookmarks and history legible
       JSG.d.title = "#{@course.title(idx, @lang)} – #{ui.title}"
       el("lessonBody").innerHTML = View.lesson_html(cells, ui.taskLabel, ui.runCell, live_toggle_html)
@@ -285,7 +308,7 @@ module ChunkyShell
 
       @workshop = false
       Store.set("chunky_current", id)
-      set_lesson_hash(id)
+      set_lesson_address(id)
       render_nav
       render_lesson
       show_bubble(ui.welcome, nil)
@@ -296,7 +319,7 @@ module ChunkyShell
     # The workshop is a page of its own beside the lessons, at #werkstatt.
     def open_workshop
       @workshop = true
-      JSG.w.location.hash = WORKSHOP_ID unless workshop_hash?
+      @router.show(@lang, WORKSHOP_ID, true) unless workshop_address?
       render_nav
       render_lesson
       show_bubble(ui.workshopWelcome, nil)
@@ -314,6 +337,7 @@ module ChunkyShell
       @lang = lang
       Store.set("chunky_lang", lang)
       render_all
+      @router.show(@lang, current_place, false)   # /de/methoden -> /en/methoden
       show_bubble(ui.welcome, nil)
     end
 
@@ -336,6 +360,7 @@ module ChunkyShell
       lang = Store.get("chunky_lang", @lang)
       @lang = lang if @course.lang?(lang)
       render_all
+      @router.show(@lang, current_place, false)
     end
 
     # ---------- running a cell ----------
@@ -397,7 +422,7 @@ module ChunkyShell
       total = @course.size
       next_id = idx + 1 < total ? @course.id(idx + 1) : nil
       all_done = Store.done_ids.length >= total
-      show_bubble(View.passed_html(praise[rand(praise.length)], ui, idx, total, next_id, all_done), "pass")
+      show_bubble(View.passed_html(praise[rand(praise.length)], ui, idx, total, next_id, all_done, @router.prefix(@lang)), "pass")
     end
 
     def settle_cell(idx, outcome, elapsed)

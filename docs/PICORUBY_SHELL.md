@@ -180,6 +180,7 @@ New:
 | `html/shell/course.rb` | `Course`: the lessons through the bridge (`window.LESSONS`) |
 | `html/shell/store.rb` | `Store`: localStorage keys, done list |
 | `html/shell/view.rb` | `View`: the HTML strings (nav, lesson, cell, workshop, chips, bubble texts) |
+| `html/shell/router.rb` | `Router`: the address - `/#methoden`, or `/de/methoden` when the optional server announces permalinks (HANDOVER §7a) |
 | `html/shell/workspace.rb` | `Workspace`: the progress dialog and the workshop's file panel (the port of `workspace_ui.js`, which is gone) |
 | `html/shell/app.rb` | `App`: state, events, routing, rendering, the run cycle, gems panel |
 | `html/shell/boot.rb` | starts the page |

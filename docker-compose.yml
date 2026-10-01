@@ -10,5 +10,23 @@ services:
       - ./html:/usr/share/nginx/html:ro
       - ./nginx:/etc/nginx/conf.d:ro   # a folder: git replaces files, a file mount keeps the old one
       - gemcache:/var/cache/nginx
+  # Optional (server/app.rb): permalinks like /de/methoden and room for
+  # backend code. Started only with: docker compose --profile server up -d
+  # nginx then needs to send the page's addresses to it (docs/HANDOVER.md §7a).
+  server:
+    profiles: ["server"]
+    image: ruby:4.0
+    container_name: chunkybacon-server
+    restart: unless-stopped
+    working_dir: /srv/chunkybacon/server
+    command: sh -c "bundle install --quiet && exec bundle exec puma -b tcp://0.0.0.0:9292 config.ru"
+    environment:
+      BUNDLE_WITHOUT: test
+    volumes:
+      - ./:/srv/chunkybacon:ro
+      - serverbundle:/usr/local/bundle
+    ports:
+      - "127.0.0.1:8012:9292"
 volumes:
   gemcache:
+  serverbundle:

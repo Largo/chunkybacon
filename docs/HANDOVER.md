@@ -41,8 +41,9 @@ html/
   index.html            the page, JS helpers both Rubies call (fetch*Sync,
                         ensureThree, afterPaint, cell editors), import map
   shell/                THE PAGE, on PicoRuby (§2a): app.rb, course.rb,
-                        view.rb, store.rb, workspace.rb (progress dialog,
-                        workshop file panel), jsg.rb, support.rb, boot.rb;
+                        view.rb, router.rb (addresses), store.rb, workspace.rb
+                        (progress dialog, workshop file panel), jsg.rb,
+                        support.rb, boot.rb;
                         manifest.txt (load order), loader.js, bridge.js
   assets/picoruby/      PicoRuby.wasm 4.0.3 (loader patched to text/picoruby)
   browser.script.iife.js  ruby.wasm browser loader (patched: fetches OUR wasm)
@@ -65,6 +66,7 @@ html/
                         fonts/ (self-hosted web fonts + fonts.css, OFL 1.1)
   gems/cache/           .gem files + manifest.json (instant offline installs)
 nginx/default.conf      static files + same-origin bridges (rubygems, ruby-lang)
+server/                 the optional Roda server (§7a): permalinks, /api, the bridges
 docker-compose.yml
 LICENSE                    MIT for the code; course content is CC BY-SA 4.0 (README)
 THIRD_PARTY_NOTICES.md     bundled components and their licenses - update it
@@ -88,6 +90,8 @@ test/gems_harness.rb       gem installer offline under CRuby
 test/shell/run.rb          Minitest for the shell, on a stub of PicoRuby's js
 test/autorun_test.rb       live runs under CRuby: runnable?, the time limit
 test/live_test.mjs         Playwright: live runs in a lesson and the workshop
+test/server_test.rb        the optional server under Rack::MockRequest
+test/permalink_test.mjs    Playwright: permalinks, against the server (port 8012)
 test/browser_test.mjs      Playwright end-to-end
 test/progress_test.mjs     Playwright: progress file, workshop, folder (48 checks)
 test/boot_failure_test.mjs Playwright: what the page says when a runtime fails
@@ -467,6 +471,61 @@ requests per dependency), responses disk-cached (gems 60 days). Locations
 are `^~` so the no-cache regex cannot capture proxied `.json`. The resolver
 is Docker's `127.0.0.11`, which only exists on user-defined networks - a
 container started with plain `docker run` on the default bridge gets 502s.
+
+## 7a. The optional server: permalinks and a backend
+
+The course is a static site and stays one: without `server/` lessons live at
+`/#methoden`. `server/app.rb` (Roda, run by Puma) adds what a static host
+cannot:
+
+- **Permalinks**: `/`, `/de`, `/de/methoden`, `/de/werkstatt` answer with
+  `index.html`, plus `<base href="/">` (relative URLs keep pointing at the
+  site's root) and `<meta name="chunky-permalinks" content="/">`. For a
+  lesson also `<html lang>`, its title, its first paragraph as description
+  and `og:` tags, a canonical link and `hreflang` alternates - what search
+  engines and link previews read. Unknown languages and lessons are 404.
+  The course comes from `html/lessons.js` itself (`server/course.rb`),
+  parsed again when the file changes.
+- **The page side**: `shell/bridge.js` reads the meta tag
+  (`ChunkyBridge.permalinks`, the base path) and takes the language from the
+  path; `shell/router.rb` builds links and addresses either way - `#id` or
+  `/lang/id` - with `history.pushState`, back/forward through `popstate`,
+  an old `/#methoden` link turned into `/de/methoden`, a language switch
+  into `/en/methoden`. main.rb points `JS::RequireRemote` at
+  `document.baseURI`: it would resolve `require_relative` against
+  `location.href`, i.e. under `/de/`.
+- **Backend code** goes under `/api` (`/api/lessons` for now: ids and
+  titles as JSON).
+- **Files** come from `html/` as they are (Roda's `public` plugin, the
+  `.gz` copies of the wasm runtimes, `Cache-Control: no-cache`), text
+  compressed by `Rack::Deflater`; the rubygems and ruby-lang bridges are
+  the same as nginx's (hardcoded hosts, GET/HEAD, two path shapes on
+  rubygems) - without nginx's cache and rate limit.
+
+Locally: `cd server && bundle install && bundle exec puma -b
+tcp://127.0.0.1:8012 config.ru`, then `test/permalink_test.mjs` against it
+(`ruby test/server_test.rb` needs no port).
+
+On the host: `docker compose --profile server up -d` starts it beside nginx
+(port 8012 on localhost, `ruby:4.0`, gems in the `serverbundle` volume).
+nginx keeps the files and the bridges and hands the page's addresses over -
+inside the `server` block of `nginx/default.conf` (with a variable, nginx
+starts even when the server does not run; those addresses are then 502):
+
+```nginx
+location ~ ^/((de|en|ja)(/[^/]*)?)?$ {
+    resolver 127.0.0.11 ipv6=off valid=30s;
+    set $chunky_server http://chunkybacon-server:9292;
+    proxy_pass $chunky_server;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
+location ^~ /api/ { ... the same ... }
+```
+
+The host's own reverse proxy must pass `X-Forwarded-Proto` through, or the
+canonical links say `http`. A new language in `lessons.js` needs its code
+in that regex.
 
 ## 8. Tests and a private dev copy
 

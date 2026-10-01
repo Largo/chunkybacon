@@ -3,6 +3,10 @@ $0 = File::basename(app_path, ".rb") if app_path
 
 require 'js'
 require 'js/require_remote'
+# our files are where the page's <base> says - under a permalink
+# (/de/methoden, server/app.rb) that is not where location.href points;
+# without a <base> the two are the same
+JS::RequireRemote.instance.base_url = JS.global[:document][:baseURI].to_s
 require 'json'
 require 'stringio'
 require 'singleton'

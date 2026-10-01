@@ -6,7 +6,8 @@ module ChunkyShell
   module View
     extend Support
 
-    def self.nav_html(course, lang, active_id, done)
+    # +prefix+: what goes before a lesson id in its link (Router#prefix)
+    def self.nav_html(course, lang, active_id, done, prefix = "#")
       html = "".dup
       course.ids.each_with_index do |id, idx|
         section = course.section(idx, lang)
@@ -14,7 +15,7 @@ module ChunkyShell
         classes = []
         classes << "active" if id == active_id
         classes << "done" if done.include?(id)
-        html << %(<a class="#{classes.join(' ')}" href="##{id}" data-id="#{id}">#{course.title(idx, lang)}</a>)
+        html << %(<a class="#{classes.join(' ')}" href="#{prefix}#{id}" data-id="#{id}">#{course.title(idx, lang)}</a>)
       end
       html
     end
@@ -92,12 +93,12 @@ module ChunkyShell
     end
 
     # Chunky after a passed exercise: praise, then where to go next
-    def self.passed_html(praise, ui, idx, total, next_id, all_done)
+    def self.passed_html(praise, ui, idx, total, next_id, all_done, prefix = "#")
       return "#{praise}<br><br>#{ui.allDone}" if all_done
       return praise unless next_id
 
       progress = format(ui.progress, idx + 1, total)
-      %(#{praise}<br><small>#{progress}</small><br><a href="##{next_id}" id="nextLessonLink">#{ui.nextLesson}</a>)
+      %(#{praise}<br><small>#{progress}</small><br><a href="#{prefix}#{next_id}" id="nextLessonLink">#{ui.nextLesson}</a>)
     end
 
     def self.failed_html(ui, hint)

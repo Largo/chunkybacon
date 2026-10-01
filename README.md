@@ -108,7 +108,22 @@ docker compose up -d      # serves on port 8011
 ```
 
 Or any static file server over `html/` (the rubygems proxy then needs
-nginx, see `nginx/default.conf`).
+nginx, see `nginx/default.conf`). Lessons then live at `/#methoden`.
+
+### Permalinks and a backend (optional)
+
+[`server/`](server) is a small [Roda](https://roda.jeremyevans.net) app
+that serves the same `html/` and gives every lesson a permalink -
+`/de/methoden`, `/en/werkstatt` - with its own title and link preview, plus
+room for backend code under `/api`:
+
+```sh
+cd server && bundle install && bundle exec puma -b tcp://127.0.0.1:8012 config.ru
+```
+
+The page notices it is served with permalinks and uses them; without the
+server everything works as before. With Docker:
+`docker compose --profile server up -d` (see docs/HANDOVER.md §7a for nginx).
 
 ## Tests
 
@@ -124,6 +139,8 @@ node progress_test.mjs    # progress file, workshop, connected folder
 node boot_failure_test.mjs # what the page says when a runtime fails
 node language_test.mjs    # ?lang=, last choice, browser languages, English
 node live_test.mjs        # live runs in a lesson and in the workshop
+ruby server_test.rb       # the optional server (server/)
+BASE=http://127.0.0.1:8012/ node permalink_test.mjs   # permalinks, against the server
 cd ../gem/chunky_bacon && rake test   # the companion gem
 ```
 

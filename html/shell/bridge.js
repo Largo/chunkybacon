@@ -78,7 +78,15 @@
     if (kernelStarted) kernelFailed(event.reason && event.reason.message ? event.reason.message : event.reason);
   });
 
+  // server/app.rb gives lessons permalinks (/de/methoden) and says so with
+  // <meta name="chunky-permalinks" content="/">, the base path; a static host
+  // has none, and lessons live at /#methoden (shell/router.rb).
+  var permalinkMeta = document.querySelector('meta[name="chunky-permalinks"]');
+  var permalinkBase = permalinkMeta ? (permalinkMeta.getAttribute("content") || "/") : null;
+
   // The language the page opens in; the shell takes it from ChunkyBridge.lang.
+  //   0. the language of a permalink, /de/methoden - kept as the learner's
+  //      choice, like 1.
   //   1. ?lang=xx in the address - a link that picks the language. Kept as
   //      the learner's choice, like the selector's, and taken out of the
   //      address again, so it cannot overrule a later switch on reload.
@@ -89,6 +97,13 @@
   function pickLang(available) {
     var has = function (code) { return available.indexOf(code) >= 0; };
     var base = function (tag) { return String(tag || "").toLowerCase().split("-")[0]; };
+    if (permalinkBase && location.pathname.indexOf(permalinkBase) === 0) {
+      var named = location.pathname.slice(permalinkBase.length).split("/")[0];
+      if (has(named)) {
+        try { localStorage.setItem("chunky_lang", named); } catch (e) { /* storage blocked: this visit only */ }
+        return named;
+      }
+    }
     var params = new URLSearchParams(location.search);
     if (params.has("lang")) {
       var asked = base(params.get("lang"));
@@ -127,6 +142,7 @@
     failed: false,
     state: state,
     lang: "de",   // set below by pickLang, once the course is parsed
+    permalinks: permalinkBase,   // "/" when lessons have permalinks, else null
 
     // ---- called by the shell ----
     // the lesson (or the workshop) on screen, in this language
