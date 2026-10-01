@@ -138,6 +138,14 @@ class AppTest < Minitest::Test
     assert_includes find(".run-cell").text, "実行"
   end
 
+  # bridge.js decides (?lang=, last choice, browser languages); its word
+  # beats what localStorage held
+  def test_the_language_bridge_js_picked
+    start(storage: { "chunky_lang" => "de" }) { window.props["ChunkyBridge"]["lang"] = "en" }
+    assert_equal "en", doc.js_get("documentElement").attrs["lang"]
+    assert_equal "Learn Ruby with Chunky Bacon", byid("siteTitle").text
+  end
+
   def test_unknown_stored_language_falls_back_to_german
     start(storage: { "chunky_lang" => "xx" })
     assert_equal "de", doc.js_get("documentElement").attrs["lang"]

@@ -53,7 +53,7 @@ async function load(page, text, outcome = 'ok') {
 }
 
 // ---------- 1. progress travels as a file ----------
-const ctxA = await browser.newContext({ acceptDownloads: true });
+const ctxA = await browser.newContext({ acceptDownloads: true, locale: 'de-DE' });
 const a = await open(ctxA);
 await a.evaluate(i => window.cellEditors[i].setValue('puts "Hallo, Welt!"'), await exerciseIdx(a));
 await a.click('.cell.exercise .run-cell');
@@ -73,7 +73,7 @@ check('it holds the cell code', Object.entries(doc.entries)
   .some(([k, e]) => k.startsWith('chunky_cell_de_hallo_') && e.v === 'puts "Hallo, Welt!"'));
 check('it holds the workshop files', doc.entries['chunky_file:notiz.txt']?.v === 'Speck!');
 
-const ctxB = await browser.newContext({ acceptDownloads: true });
+const ctxB = await browser.newContext({ acceptDownloads: true, locale: 'de-DE' });
 const b = await open(ctxB, '#hallo');
 check('a fresh browser starts without progress', !(await isDone(b, 'hallo')));
 check('loading reports success', (await load(b, fileA)).includes('geladen'));
@@ -136,7 +136,7 @@ await a.waitForTimeout(600);
 check('lessons keep their own files', (await a.textContent(`#cell-out-${cellIdx}`)).includes('[true, false]'));
 
 // ---------- 3. a connected folder ----------
-const ctxC = await browser.newContext();
+const ctxC = await browser.newContext({ locale: 'de-DE' });
 await ctxC.addInitScript(() => {
   window.showDirectoryPicker = async () =>
     (await navigator.storage.getDirectory()).getDirectoryHandle('kurs', { create: true });

@@ -102,6 +102,7 @@ ruby shell/run.rb         # the page shell (PicoRuby code) under Minitest
 node browser_test.mjs     # Playwright end-to-end against port 8011
 node progress_test.mjs    # progress file, workshop, connected folder
 node boot_failure_test.mjs # what the page says when a runtime fails
+node language_test.mjs    # ?lang=, last choice, browser languages, English
 ```
 
 ## License

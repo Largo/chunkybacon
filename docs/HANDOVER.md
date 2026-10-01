@@ -80,6 +80,7 @@ test/shell/run.rb          Minitest for the shell, on a stub of PicoRuby's js
 test/browser_test.mjs      Playwright end-to-end
 test/progress_test.mjs     Playwright: progress file, workshop, folder (37 checks)
 test/boot_failure_test.mjs Playwright: what the page says when a runtime fails
+test/language_test.mjs     Playwright: which language a visitor gets (11 checks)
 test/make_lessons_json.js  writes test/lessons.json for the harnesses
 docs/HANDOVER.md           this file
 docs/PICORUBY_SHELL.md     the shell/kernel split in depth: bridge API,
@@ -162,6 +163,23 @@ the harness checks `ja` with the English solutions. So a change to an English
 code cell or check must be made in `ja` too (same cell, same code, comments
 in Japanese). Japanese prose is です・ます体, hints are Chunky speaking
 (casual); app.css adds Japanese fallback fonts under `:lang(ja)`.
+
+Which language a visitor gets is decided in the browser, by
+`shell/bridge.js` (`pickLang`, read by the shell as `ChunkyBridge.lang`), no
+server involved:
+
+1. `?lang=en` (or `de`, `ja`) in the address - for links in a given
+   language. It is saved like a choice in the selector and removed from the
+   address again, so a later switch is not undone by a reload.
+2. the language chosen last time (`chunky_lang` in localStorage)
+3. the first of the browser's preferred languages (`navigator.languages`,
+   the list it also sends as `Accept-Language`) that the course has;
+   `de-CH`, `de-AT` count as `de`
+4. English
+
+A detected language is not saved - only a choice is. `test/language_test.mjs`
+covers the order; the other browser tests run with a `de-DE` locale because
+they read the German interface.
 
 Cells, per language:
 

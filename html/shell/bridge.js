@@ -76,17 +76,47 @@
     if (kernelStarted) kernelFailed(event.reason && event.reason.message ? event.reason.message : event.reason);
   });
 
+  // The language the page opens in; the shell takes it from ChunkyBridge.lang.
+  //   1. ?lang=xx in the address - a link that picks the language. Kept as
+  //      the learner's choice, like the selector's, and taken out of the
+  //      address again, so it cannot overrule a later switch on reload.
+  //   2. the language chosen last time
+  //   3. the first of the browser's preferred languages the course has
+  //      (navigator.languages: "de-CH" is German, "ja-JP" Japanese)
+  //   4. English, the one most visitors read
+  function pickLang(available) {
+    var has = function (code) { return available.indexOf(code) >= 0; };
+    var base = function (tag) { return String(tag || "").toLowerCase().split("-")[0]; };
+    var params = new URLSearchParams(location.search);
+    if (params.has("lang")) {
+      var asked = base(params.get("lang"));
+      params.delete("lang");
+      var query = params.toString();
+      history.replaceState(history.state, "", location.pathname + (query ? "?" + query : "") + location.hash);
+      if (has(asked)) {
+        try { localStorage.setItem("chunky_lang", asked); } catch (e) { /* storage blocked: this visit only */ }
+        return asked;
+      }
+    }
+    var saved = null;
+    try { saved = localStorage.getItem("chunky_lang"); } catch (e) { /* storage blocked */ }
+    if (has(saved)) return saved;
+    var wanted = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language];
+    for (var i = 0; i < wanted.length; i++) {
+      if (has(base(wanted[i]))) return base(wanted[i]);
+    }
+    return has("en") ? "en" : available[0];
+  }
+
   // The shell draws the page; if it never comes up (a Ruby error at boot, a
   // browser without WebAssembly), say so where the spinner is - in the
-  // language the learner chose last time (lessons.js's ui strings).
+  // page's language (lessons.js's ui strings).
   setTimeout(function () {
     if (shellUp) return;
     var text = document.getElementById("spinnerText");
     if (!text) return;
     var ui = (window.LESSONS && window.LESSONS.ui) || {};
-    var lang = null;
-    try { lang = localStorage.getItem("chunky_lang"); } catch (e) { /* storage blocked */ }
-    text.textContent = ((ui[lang] || ui.de || {}).shellFailed) || "The page could not start - please reload it.";
+    text.textContent = ((ui[bridge.lang] || ui.de || {}).shellFailed) || "The page could not start - please reload it.";
   }, 20000);
   var shellUp = false;
 
@@ -94,6 +124,7 @@
     ready: false,
     failed: false,
     state: state,
+    lang: "de",   // set below by pickLang, once the course is parsed
 
     // ---- called by the shell ----
     // the lesson (or the workshop) on screen, in this language
@@ -172,4 +203,9 @@
   // lessons.js holds the course as one JSON string; the shell reads it as an
   // object, field by field
   window.LESSONS = JSON.parse(window.LESSONS_JSON);
+
+  // the course's languages are its ui sections; <html lang> is right from
+  // the spinner on (screen readers), the shell renders in it
+  bridge.lang = state.lang = pickLang(Object.keys(window.LESSONS.ui));
+  document.documentElement.lang = bridge.lang;
 })();

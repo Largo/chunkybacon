@@ -12,7 +12,9 @@ module ChunkyShell
     def initialize(data = JSG.w.LESSONS, bridge = JSG.w.ChunkyBridge)
       @course = Course.new(data)
       @bridge = bridge
-      @lang = Store.get("chunky_lang", "de")
+      # shell/bridge.js picked it: ?lang=, the last choice, the browser's
+      # languages, English; without a bridge's word, the stored choice
+      @lang = bridge[:lang] || Store.get("chunky_lang", "de")
       @lang = "de" unless @course.lang?(@lang)
       @workshop = workshop_hash?
       @running = {}

@@ -4,7 +4,8 @@ import { chromium } from '/usr/local/lib/node_modules/playwright/index.mjs';
 
 const BASE = process.env.BASE || 'http://127.0.0.1:8011/';
 const browser = await chromium.launch();
-const page = await browser.newPage();
+// a German browser: the checks below read the German interface
+const page = await browser.newPage({ locale: 'de-DE' });
 page.on('console', m => { if (m.type() === 'error') console.log('[console.error]', m.text()); });
 page.on('pageerror', e => console.log('[pageerror]', e.message));
 

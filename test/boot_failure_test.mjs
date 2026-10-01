@@ -10,7 +10,7 @@ let failures = 0;
 const check = (name, cond) => { console.log(`${cond ? 'PASS' : 'FAIL'} ${name}`); if (!cond) failures++; };
 
 {
-  const ctx = await browser.newContext();
+  const ctx = await browser.newContext({ locale: 'de-DE' });   // the German failure texts
   await ctx.route('**/ruby+stdlib.wasm', route => route.abort());
   const page = await ctx.newPage();
   page.on('console', m => { if (m.type() === 'error') console.log('  [console.error]', m.text().slice(0, 160)); });
@@ -26,7 +26,7 @@ const check = (name, cond) => { console.log(`${cond ? 'PASS' : 'FAIL'} ${name}`)
   await ctx.close();
 }
 {
-  const ctx = await browser.newContext();
+  const ctx = await browser.newContext({ locale: 'de-DE' });   // the German failure texts
   await ctx.route('**/picoruby.wasm', route => route.abort());
   const page = await ctx.newPage();
   await page.goto(BASE + '#hallo');
