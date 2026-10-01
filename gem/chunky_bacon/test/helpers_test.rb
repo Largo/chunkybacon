@@ -7,6 +7,12 @@ class HelpersTest < Minitest::Test
 
   PNG = "\x89PNG\r\n\x1A\n".b + "rest of a picture".b
   PDF = "%PDF-1.4\n% a tiny document\n".b
+  JPEG = "\xFF\xD8\xFF\xE0\x00\x10JFIF".b + "rest of a photo".b
+
+  # what PureJPEG.encode returns
+  Encoder = Struct.new(:bytes) do
+    def to_bytes = bytes
+  end
 
   # what a ChunkyPNG image offers
   Picture = Struct.new(:bytes) do
@@ -45,6 +51,17 @@ class HelpersTest < Minitest::Test
     assert_equal 2, files.size
     assert(files.all? { |f| f.match?(/\Achunky-image-\d+\.png\z/) })
     files.each { |f| assert_equal PNG, File.binread(File.join(@dir, f)) }
+  end
+
+  def test_show_image_saves_a_jpeg_as_jpg
+    helper_output do
+      show_image Encoder.new(JPEG)
+      show_image JPEG
+    end
+    files = Dir.children(@dir).sort
+    assert_equal 2, files.size
+    assert(files.all? { |f| f.match?(/\Achunky-image-\d+\.jpg\z/) })
+    files.each { |f| assert_equal JPEG, File.binread(File.join(@dir, f)) }
   end
 
   def test_show_image_with_a_path_saves_nothing_new

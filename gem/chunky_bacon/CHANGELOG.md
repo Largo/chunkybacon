@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3
+
+- `show_image` takes JPEGs, as the course's lesson 22 (pure_jpeg) makes
+  them: what `PureJPEG.encode` returns (anything with `to_bytes`), and the
+  bytes of a JPEG, GIF or WebP, saved with their own extension.
+
 ## 0.1.2
 
 - The homepage is the course itself, https://chunkybacon.idogawa.com (also

@@ -34,6 +34,16 @@ module ChunkyBacon
       path
     end
 
+    IMAGE_SIGNATURES = {
+      "\x89PNG".b => "png", "\xFF\xD8\xFF".b => "jpg", "GIF8".b => "gif", "RIFF".b => "webp"
+    }.freeze
+
+    # "png", "jpg", "gif" or "webp" for a picture's bytes, nil for anything else
+    def image_type(bytes)
+      bytes = bytes.b
+      IMAGE_SIGNATURES.find { |magic, _type| bytes.start_with?(magic) }&.last
+    end
+
     def relative(path)
       path = File.expand_path(path)
       base = File.expand_path(output_dir) + File::SEPARATOR
@@ -82,10 +92,11 @@ module ChunkyBacon
     end
 
     # A picture: a ChunkyPNG image (anything with to_blob or to_data_url),
-    # PNG bytes, or the path of an image file.
+    # what PureJPEG.encode returns (anything with to_bytes), the bytes of a
+    # PNG, JPEG, GIF or WebP, or the path of an image file.
     def show_image(image)
-      # a path: text without the PNG signature or NUL bytes, naming a file
-      if image.is_a?(String) && !image.b.start_with?("\x89PNG".b) && !image.include?("\0") && File.file?(image)
+      # a path: text without a picture's signature or NUL bytes, naming a file
+      if image.is_a?(String) && !ChunkyBacon.image_type(image) && !image.include?("\0") && File.file?(image)
         ChunkyBacon::Opener.open(File.expand_path(image))
         return nil
       end
@@ -93,10 +104,12 @@ module ChunkyBacon
                 image.to_blob
               elsif image.respond_to?(:to_data_url)
                 image.to_data_url.split(",", 2).last.unpack1("m0")
+              elsif image.respond_to?(:to_bytes)
+                image.to_bytes
               else
-                image.to_s.b
-              end
-      path = ChunkyBacon.save(ChunkyBacon.next_file("chunky-image", "png"), bytes)
+                image.to_s
+              end.b
+      path = ChunkyBacon.save(ChunkyBacon.next_file("chunky-image", ChunkyBacon.image_type(bytes) || "png"), bytes)
       ChunkyBacon::Opener.open(path)
       nil
     end

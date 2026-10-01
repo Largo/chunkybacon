@@ -33,7 +33,7 @@ never mix with your program's output.
 | Helper | On your computer |
 |---|---|
 | `install_gem "name"` | installs the gem unless it is there, and activates it |
-| `show_image image` | saves `chunky-image-N.png` (ChunkyPNG image, PNG bytes or a path) and opens it |
+| `show_image image` | saves `chunky-image-N.png` (or `.jpg`, `.gif`, `.webp`: a ChunkyPNG image, a PureJPEG encoder, the bytes or a path) and opens it |
 | `show_pdf pdf` | saves `chunky-document-N.pdf` (Prawn/HexaPDF document, bytes or a path) and opens it |
 | `download_file data, "name"` | saves the data as `name` in the program's folder |
 | `show_browser App, "/path"` | starts the Rack app (Sinatra, Roda, ...) on 127.0.0.1 and opens it; after the program's last line the server runs on until Ctrl+C |
