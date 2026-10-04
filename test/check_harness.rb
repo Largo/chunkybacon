@@ -148,7 +148,7 @@ SOLUTION_LANG = { "ja" => "en" }.freeze
 
 # Lessons that need the browser: PyCall talks to Pyodide (html/pycall.rb),
 # which only a page has - test/browser_test.mjs runs them.
-BROWSER_ONLY = %w[pycall].freeze
+BROWSER_ONLY = %w[pycall sympy].freeze
 
 SOLUTIONS = {
   "hallo" => {

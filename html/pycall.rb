@@ -69,9 +69,14 @@ module PyCall
             if isinstance(value, list): return [self.decode(v) for v in value]
             return value
 
-        # Ruby data: a Series or numpy array as a list, a DataFrame as a dict
+        # Ruby data: a Series or numpy array as a list, a DataFrame as a dict,
+        # a sympy integer or float as a number (a fraction stays its text)
         def plain(self, obj):
             obj = self.scalar(obj)
+            sympy = sys.modules.get("sympy")
+            if sympy is not None and isinstance(obj, sympy.Basic):
+                if obj.is_Integer: return int(obj)
+                if obj.is_Float: return float(obj)
             if hasattr(obj, "tolist") and not isinstance(obj, (str, bytes)): obj = obj.tolist()
             elif hasattr(obj, "to_dict") and not isinstance(obj, dict): obj = obj.to_dict()
             if isinstance(obj, dict): return {str(k): self.plain(v) for k, v in obj.items()}
@@ -113,6 +118,8 @@ module PyCall
                 args = [self.decode(a) for a in req["args"]]
                 if req["op"] == "plain":
                     return json.dumps({"data": self.plain(args[0])}, allow_nan=True)
+                if req["op"] == "box":   # a Ruby value as a Python object, for coerce
+                    return json.dumps({"ok": {"t": "obj", "id": self.keep(args[0])}})
                 return json.dumps({"ok": self.encode(getattr(self, "op_" + req["op"])(*args))})
             except Exception as e:
                 return json.dumps({"error": type(e).__name__, "message": str(e)})
@@ -123,7 +130,18 @@ module PyCall
   SPECIAL_FLOATS = { "nan" => Float::NAN, "inf" => Float::INFINITY, "-inf" => -Float::INFINITY }.freeze
 
   class << self
-    def import_module(name) = request("import", name.to_s)
+    # a module of a package that is vendored but not loaded yet (the
+    # workshop; a lesson asks for its own when it opens): load it, and the
+    # cell is run again
+    def import_module(name)
+      request("import", name.to_s)
+    rescue PyError => e
+      top = name.to_s.split(".").first
+      raise unless e.type == "ModuleNotFoundError" && JS.global[:chunkyPython][:imports][top].typeof == "string"
+
+      JS.global.call(:ensurePython, %(import_module("#{top}")))
+      raise NotReady, ChunkyApp.instance.ui["pythonLoading"].to_s
+    end
     def eval(code) = request("eval", code.to_s)
     def exec(code) = request("exec", code.to_s)
     def builtins = import_module("builtins")
@@ -172,8 +190,11 @@ module PyCall
       return state if state[:ready].to_s == "true"
 
       failed = state[:error].typeof == "string" ? state[:error].to_s : nil
+      ui = ChunkyApp.instance.ui
+      raise NotReady, ui["pythonOffline"].to_s if failed == "offline"
+
       JS.global.call(:ensurePython)
-      raise NotReady, failed ? "Python (Pyodide) could not be loaded: #{failed}" : ChunkyApp.instance.ui["pythonLoading"].to_s
+      raise NotReady, failed ? "Python (Pyodide) could not be loaded: #{failed}" : ui["pythonLoading"].to_s
     end
 
     def bridge
@@ -230,6 +251,9 @@ module PyCall
     end
 
     BINARY.each { |op, name| define_method(op) { |other| PyCall.request("binary", name, self, other) } }
+    # 2 * x: Ruby asks the right-hand side, which makes the 2 a Python
+    # object, and the operation runs in Python (the gem does the same)
+    def coerce(other) = [PyCall.request("box", other), self]
     def ==(other) = other.is_a?(PyObject) ? @id == other.__pyid__ : PyCall.request("binary", "eq", self, other)
     def -@ = PyCall.request("unary", "neg", self)
     def ~ = PyCall.request("unary", "invert", self)

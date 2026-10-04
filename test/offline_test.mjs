@@ -104,6 +104,8 @@ const list = (await (await fetch(SITE + 'offline-files.txt')).text()).split('\n'
 let index = await copyIndex(a);
 check(`the copy holds every listed file and the page (${list.length + 1})`, index && index.count === list.length + 1);
 check('…the 33 MB Ruby among them', index && index.files['ruby+stdlib.wasm'] && index.files['ruby+stdlib.wasm'].size > 30e6);
+check('…and Python, ticked by default', index && Boolean(index.files['assets/pyodide/pyodide.asm.wasm']) &&
+  (await a.isChecked('#progressDialog .pd-check input')));
 await a.keyboard.press('Escape');
 await a.close();
 
@@ -178,6 +180,31 @@ if (permalinks) {
 } else {
   console.log('  (no permalinks here: BASE is the static site)');
 }
+
+// ---------- 5b. Python left out (the checkbox) ----------
+const py = await open();
+await py.click('#progressBtn');
+await py.uncheck('#progressDialog .pd-check input');
+const pythonFiles = list.filter((path) => path.startsWith('assets/pyodide/'));
+for (let tries = 0; tries < 240; tries++) {
+  const now = await copyIndex(py);
+  if (now && !now.files['assets/pyodide/pyodide.asm.wasm']) break;
+  await py.waitForTimeout(250);
+}
+await waitForState(py, 'ready', 60000);
+index = await copyIndex(py);
+check(`unticked, the copy drops Python (${pythonFiles.length} files)`,
+  index.count === list.length + 1 - pythonFiles.length && !Object.keys(index.files).some((path) => path.startsWith('assets/pyodide/')));
+check('…and the files are gone from the cache', !(await py.evaluate(async () =>
+  (await (await caches.open('chunky-offline-1')).keys()).some((r) => r.url.includes('pyodide')))));
+check('…the box stays unticked', !(await py.isChecked('#progressDialog .pd-check input')));
+await py.close();
+goDown();
+const pyOff = await open('#pycall');
+check('offline without Python, a Python lesson says why',
+  (await run(pyOff, 'require "pycall"\nPyCall.import_module("pandas")')).includes('Python ist nicht in deiner Offline-Kopie'));
+await pyOff.close();
+comeBack();
 
 // ---------- 6. turning it off ----------
 const g = await open();

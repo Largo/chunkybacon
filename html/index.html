@@ -260,33 +260,61 @@
       return window.threeLoading;
     };
 
-    // Python for the PyCall lesson (html/pycall.rb): Pyodide - CPython in
-    // WebAssembly - with pandas, about 21 MB from assets/pyodide/
-    // (tools/vendor_pyodide.rb), so only for the lesson that asks: the shell
-    // calls ensurePython when a lesson's code mentions PyCall, and
-    // shell/bridge.js holds a run until chunky:python-ready. What Python
-    // prints is collected here and written into the cell by pycall.rb.
+    // Python for the PyCall lessons (html/pycall.rb): Pyodide - CPython in
+    // WebAssembly, about 9 MB - from assets/pyodide/ (tools/vendor_pyodide.rb),
+    // so only for a lesson that asks: the shell calls ensurePython(code) with
+    // a lesson's PyCall code, and the packages its import_module("...") calls
+    // name come along (pandas ~12 MB, sympy ~5 MB); pycall.rb asks the same
+    // way for a module the workshop imports. shell/bridge.js holds a run
+    // until chunky:python-ready. What Python prints is collected here and
+    // written into the cell by pycall.rb.
     window.chunkyPython = {
       ready: false, loading: null, error: null, pyodide: null, output: [],
+      imports: {},    // import name -> vendored package, from pyodide-lock.json
+      packages: {},   // packages loaded so far
       takeOutput: function () { var text = this.output.join(""); this.output = []; return text; }
     };
-    window.ensurePython = function () {
+    window.ensurePython = function (code) {
       var python = window.chunkyPython;
-      if (python.ready || python.loading) return python.loading || Promise.resolve(true);
+      if (python.loading) return python.loading.then(function () { return window.ensurePython(code); });
+      var modules = [];
+      String(code || "").replace(/import_module\(\s*["']([\w.]+)["']/g, function (all, name) { modules.push(name.split(".")[0]); });
+      var missing = function () {
+        return modules.map(function (m) { return python.imports[m]; })
+          .filter(function (p, i, all) { return p && !python.packages[p] && all.indexOf(p) === i; });
+      };
+      if (python.ready && missing().length === 0) return Promise.resolve(true);
       python.error = null;
+      var copy = window.ChunkyOffline;
       python.loading = (async function () {
+        // a page from an offline copy made without Python: no half a load
+        // (the browser's cache may still have some of its files)
+        if (copy && copy.fromCopy() && !copy.python()) throw new Error("offline");
         var base = new URL("assets/pyodide/", document.baseURI).href;
-        var module = await import(base + "pyodide.mjs");
-        var pyodide = await module.loadPyodide({ indexURL: base });
-        var collect = function (line) { python.output.push(line + "\n"); };
-        pyodide.setStdout({ batched: collect });
-        pyodide.setStderr({ batched: collect });
-        await pyodide.loadPackage(["pandas"], { messageCallback: function () {} });
-        python.pyodide = pyodide;
+        if (!python.pyodide) {
+          var module = await import(base + "pyodide.mjs");
+          var pyodide = await module.loadPyodide({ indexURL: base });
+          var collect = function (line) { python.output.push(line + "\n"); };
+          pyodide.setStdout({ batched: collect });
+          pyodide.setStderr({ batched: collect });
+          var lock = await (await fetch(base + "pyodide-lock.json")).json();
+          Object.keys(lock.packages).forEach(function (name) {
+            (lock.packages[name].imports || []).forEach(function (m) { python.imports[m] = name; });
+          });
+          python.pyodide = pyodide;
+        }
+        var wanted = missing();
+        if (wanted.length) {
+          await python.pyodide.loadPackage(wanted, { messageCallback: function () {} });
+          wanted.forEach(function (p) { python.packages[p] = true; });
+        }
         python.ready = true;
         return true;
       })().catch(function (e) {
-        python.error = String((e && e.message) || e);
+        // a page from the offline copy, made without Python (the checkbox):
+        // pycall.rb says so rather than showing a network error
+        var offline = window.ChunkyOffline && window.ChunkyOffline.fromCopy();
+        python.error = offline ? "offline" : String((e && e.message) || e);
         console.error("Python (Pyodide) failed to load", e);
         return false;
       }).then(function (ok) {

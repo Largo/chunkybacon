@@ -11,7 +11,7 @@ module ChunkyShell
     OPEN_KEY = "chunkyui_ws_open"   # no "chunky_": a view setting, not progress
     # element properties; anything else in node(...) is an attribute
     PROPS = %w[className type id textContent hidden disabled value title placeholder
-               spellcheck accept multiple rows open].freeze
+               spellcheck accept multiple rows open checked].freeze
     RUBY_FILE = /\.rb$|^(Gemfile|Rakefile)$/
     # pictures and PDFs - data: URLs in storage.js - show instead of the
     # editor; matched against the lowercased name
@@ -256,29 +256,32 @@ module ChunkyShell
       @offline_shown = offline_look
       if state == "off"
         out << node("p", {}, [t("offlineExplain")])
-        out << node("div", { className: "pd-actions" }, [
-          action_button("pd-secondary", t("offlineEnable")) { offline_act(@offline.enable) }
-        ])
+        actions = [action_button("pd-secondary", t("offlineEnable")) { offline_act(@offline.enable) }]
       elsif state == "loading"
         out << node("p", { className: "pd-busy" }, [loading_text])
-        out << node("div", { className: "pd-actions" }, [
-          action_button("pd-secondary", t("offlineDisable")) { offline_act(@offline.disable) }
-        ])
+        actions = [action_button("pd-secondary", t("offlineDisable")) { offline_act(@offline.disable) }]
       elsif state == "error"
         out << node("p", { className: "pd-error" }, [t("offlineError", @offline.error)])
-        out << node("div", { className: "pd-actions" }, [
+        actions = [
           action_button("pd-secondary", t("offlineRetry")) { offline_act(@offline.enable) },
           action_button("pd-secondary", t("offlineDisable")) { offline_act(@offline.disable) }
-        ])
+        ]
       else
         out << node("p", { className: "pd-connected" }, ["✓ #{t('offlineReady', @offline.savedAt(@app.lang))}"])
         out << node("p", { className: "pd-busy" }, [t("offlineUpdating")]) if @offline.updating
         out << node("p", {}, [t("offlineFromCopy")]) if @offline.fromCopy
-        out << node("div", { className: "pd-actions" }, [
-          action_button("pd-secondary", "#{t('offlineDisable')} (#{@offline.sizeMb} MB)") { offline_act(@offline.disable) }
-        ])
+        actions = [action_button("pd-secondary", "#{t('offlineDisable')} (#{@offline.sizeMb} MB)") { offline_act(@offline.disable) }]
       end
-      out
+      out << python_choice
+      out << node("div", { className: "pd-actions" }, actions)
+    end
+
+    # whether Python (the PyCall lessons, ~25 MB) goes into the copy; a
+    # change reaches a copy that exists at once (offline.js)
+    def python_choice
+      box = node("input", { type: "checkbox", checked: @offline.python })
+      listen(box, "change", proc { offline_act(@offline.setPython(box.checked)) })
+      node("label", { className: "pd-check" }, [box, t("offlinePython")])
     end
 
     def load_progress(input)
