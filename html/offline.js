@@ -19,7 +19,8 @@
   // kernel fetches gems that way (index.html's fetch*Sync: CRuby cannot wait
   // for a Promise there). So a page from the copy reads those files into
   // memory before the kernel starts (bridge.js waits for kernelReady): the
-  // gem cache and shoes_dom.rb, about 7 MB. fetch() is answered by the copy.
+  // gem cache, shoes_dom.rb, numo_narray.rb and the Rumale lesson's
+  // digits.csv, about 7 MB. fetch() is answered by the copy.
   var syncFiles = null;   // path -> Uint8Array
   var kernelReady = pageFromCopy ? readSyncFiles() : Promise.resolve();
 
@@ -35,7 +36,7 @@
       files["gems/cache/manifest.json"] = manifest;
       var gems = JSON.parse(new TextDecoder().decode(manifest));
       var paths = Object.keys(gems).map(function (name) { return "gems/cache/" + gems[name].file; });
-      paths.push("shoes_dom.rb");
+      paths.push("shoes_dom.rb", "numo_narray.rb", "assets/data/digits.csv");
       return Promise.all(paths.map(function (path) {
         return bytesOf(path).then(function (bytes) { files[path] = bytes; });
       }));

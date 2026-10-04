@@ -127,6 +127,13 @@ check('three.js loads from the copy', await b.evaluate(() => import('./assets/th
 await b.click('#lessonNav a[data-id="methoden"]');
 await b.waitForFunction(() => document.querySelector('#lessonBody').textContent.includes('Methoden'));
 check('another lesson opens offline', true);
+// Rumale: its gems from the cache, Numo's stand-in and digits.csv read
+// synchronously - from memory on a page from the copy (offline.js)
+await b.click('#lessonNav a[data-id="rumale"]');
+await b.waitForFunction(() => document.querySelector('#lessonBody').textContent.includes('Rumale'));
+check('Rumale, Numo and digits.csv offline',
+  (await run(b, 'install_gem "rumale-nearest_neighbors"\nrequire "rumale/nearest_neighbors"\n[File.read("digits.csv").lines.size, Numo::DFloat[[1, 2]].sum]')).includes('=> [1797, 3.0]'));
+check('…and the letter', await b.evaluate(() => typeof window.chunkyLetter === 'function'));
 await b.click('#progressBtn');
 check('the dialog says the page is the saved copy', (await offlineText(b)).includes('Du bist gerade offline'));
 await b.close();

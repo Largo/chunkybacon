@@ -8,20 +8,22 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **44 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **45 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics,
   PowerPoint decks with [ruby_pptx](https://github.com/Largo/ruby_pptx),
   PDFs with Prawn and HexaPDF, JPEG photos with
   [pure_jpeg](https://github.com/peterc/pure_jpeg), pandas, SymPy, NumPy and
   machine learning with scikit-learn from Ruby through
-  [PyCall](https://github.com/mrkn/pycall.rb), a look at the Ruby
+  [PyCall](https://github.com/mrkn/pycall.rb), machine learning in Ruby
+  itself with [Rumale](https://github.com/yoshoku/rumale) (a postcode you
+  write on a letter, read by a nearest-neighbours classifier), a look at the Ruby
   community (RubyKaigi, weird code, how IRB reads code), and
   a project track that builds a small time tracker.
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
   cell shows its last expression as `=> …` — `puts` is never required.
-- **Lesson sidebar**: the 44 lessons in three groups (basics, side trips,
+- **Lesson sidebar**: the 45 lessons in three groups (basics, side trips,
   the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a
   drawer.
@@ -45,8 +47,9 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   roo, caxlsx, reverse_markdown …) install and run too. Other native gems
   fail with a friendly explanation of the wasm limitation that names the
   gem with the C code (often a dependency), unless it is built into the
-  wasm image (json, date, openssl …), has a pure-Ruby stand-in in the
-  cache (`SUBSTITUTES`: a dependency on `bigdecimal` installs
+  wasm image (json, date, openssl …), has a pure-Ruby stand-in (Numo, the
+  arrays under Rumale: `html/numo_narray.rb`; in the
+  cache, `SUBSTITUTES`: a dependency on `bigdecimal` installs
   [bigdecimal-pure](https://github.com/Largo/bigdecimal-pure), which
   unblocks activesupport, liquid, prawn, dry-types …) or the gem that
   wants it can do without it (`OPTIONAL_NATIVE_DEPS`: ruby_pptx falls
@@ -77,9 +80,10 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   multi-line input, and authentic prompts), `show_browser` (a fake
   browser window that speaks Rack directly to your Sinatra/Roda app),
   `show_image` (inline pictures: PNGs from chunky_png, JPEGs from
-  pure_jpeg), and `show_three` (a WebGL stage for scenes built with
+  pure_jpeg), `show_three` (a WebGL stage for scenes built with
   [three-rb](https://github.com/lef237/three-rb), optionally animated per
-  frame and orbitable with the mouse).
+  frame and orbitable with the mouse), and `show_letter` (an envelope to
+  write a postcode on with mouse or finger; a Ruby block reads it).
 - Chunky Bacon, an original cartoon fox, cheers you on.
 
 ## On your own computer: the chunky_bacon gem

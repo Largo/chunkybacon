@@ -12,12 +12,13 @@ require 'fileutils'
 
 # chunky_bacon: the course's own gem (gem/chunky_bacon), lesson 13's first
 GEMS = %w[chunky_bacon chunky_png gammo racc sinatra roda minitest csv benchmark three-rb ruby_pptx lacci nokogiri
-          bigdecimal-pure prawn hexapdf jsg pure_jpeg]
+          bigdecimal-pure prawn hexapdf jsg pure_jpeg rumale-core rumale-nearest_neighbors]
 
 # C extensions compiled into the wasm image: a gem may depend on them (hexapdf
 # on openssl and strscan, jsg on js), the browser finds them built in
-# (BrowserGems NATIVE_GEMS + builtin?), so they are neither downloaded nor cached
-BUILTIN = %w[openssl strscan js]
+# (BrowserGems NATIVE_GEMS + builtin?), so they are neither downloaded nor cached.
+# Numo (Rumale's arrays) is C too; html/numo_narray.rb stands in for it.
+BUILTIN = %w[openssl strscan js numo-narray numo-narray-alt]
 
 # a dependency on the C extension resolves to the pure stand-in, as in
 # BrowserGems::SUBSTITUTES (ttfunk, under prawn, depends on bigdecimal)

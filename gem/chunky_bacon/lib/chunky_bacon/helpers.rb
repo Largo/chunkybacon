@@ -213,6 +213,11 @@ module ChunkyBacon
       raise ChunkyBacon::NotHere, "On your computer, Shoes apps run with Scarpe: gem install scarpe, put " \
                                   "Shoes.app do ... end in a file and start it with: scarpe app.rb"
     end
+
+    def show_letter(**, &)
+      raise ChunkyBacon::NotHere, "show_letter needs the course page - you write on it with the mouse " \
+                                  "or a finger. The model itself runs here: model.predict(Numo::DFloat[...])."
+    end
   end
 end
 

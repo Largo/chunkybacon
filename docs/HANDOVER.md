@@ -2,7 +2,7 @@
 
 Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
-Last updated 2026-10-04 (44 lessons in German, English and Japanese).
+Last updated 2026-10-04 (45 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -58,6 +58,8 @@ html/
   rack_playground.rb    show_browser: talks Rack to Sinatra/Roda apps, mock_get
   shoes_dom.rb          Lacci (Shoes) display service drawing into the page
   pycall.rb             require "pycall": PyCall's API over Pyodide (§6d)
+  numo_narray.rb        require "numo/narray": Numo in pure Ruby, for Rumale (§6e)
+  letter.js             show_letter's envelope: drawing, digits as 8x8 (§6e)
   workshop.rb           the workshop's runs: project files as the virtual FS,
                         require_relative between them, gets, write-back
   autorun.rb            live runs (§6b): what may run by itself, the time
@@ -67,7 +69,8 @@ html/
   offline.js, sw.js     offline mode (§6c): the page's side and the service worker
   offline-files.txt     what the offline copy holds (tools/offline_files.rb)
   assets/               app.css, CodeMirror, three.js (vendored), the fox SVG,
-                        fonts/ (self-hosted web fonts + fonts.css, OFL 1.1)
+                        fonts/ (self-hosted web fonts + fonts.css, OFL 1.1),
+                        data/ (files lessons read: digits.csv)
   gems/cache/           .gem files + manifest.json (instant offline installs)
 nginx/default.conf      static files + same-origin bridges (rubygems, ruby-lang)
 server/                 the optional Roda server (§7a): permalinks, /api, the bridges
@@ -172,6 +175,7 @@ changes and rewrites it; prose edits can be done by hand.
 ```json
 { "id": "html",
   "section": { "de": "Grundkurs", "en": "Basics", "ja": "基礎コース" },   // optional: starts a group in the sidebar
+  "files": { "digits.csv": "assets/data/digits.csv" },   // optional: files next to the code (§6e)
   "de": { "title": "14. HTML parsen", "cells": [ ... ] },
   "en": { "title": "14. Parsing HTML", "cells": [ ... ] },
   "ja": { "title": "14. HTMLのパース", "cells": [ ... ] } }
@@ -181,7 +185,7 @@ A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 19-28), not in a group of one.
+(side trips, 19-29), not in a group of one.
 
 The sidebar itself (`index.html` `#sidebar`, `shell/app.rb`, `app.css`): from
 the top of the window to its foot with its own scroll; head with the course
@@ -237,7 +241,7 @@ Rules that the code and tests rely on:
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
 - Checks accept output OR result; `puts` is never required.
-- `test/browser_test.mjs` asserts the lesson count (`'44 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'45 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -254,7 +258,8 @@ Helpers available in cells (defined in `main.rb`): `install_gem`,
 `show_image` (a ChunkyPNG image, a PureJPEG encoder, PNG/JPEG/GIF/WebP bytes
 or the name of a file the cell wrote), `show_browser(app, path)` + `mock_get`,
 `show_irb`, `show_files`, `show_three(scene, camera, orbit:, &animate)`,
-`show_shoes { ... }`, `download_file(data, name)`, `show_pdf(pdf)` (a file
+`show_shoes { ... }`, `show_letter(boxes:) { |digits| ... }` (§6e),
+`download_file(data, name)`, `show_pdf(pdf)` (a file
 name, PDF bytes, a Prawn or HexaPDF document), `run_tests` (Minitest).
 
 ## 4. Gems
@@ -615,6 +620,56 @@ libpython with Fiddle - so:
 - **Tests**: the lessons need the browser - `check_harness.rb` skips them
   (`BROWSER_ONLY`), `test/browser_test.mjs` runs every cell.
 
+## 6e. Rumale, a pure-Ruby Numo, and the letter
+
+Lesson 27 does machine learning in Ruby itself, with
+[Rumale](https://github.com/yoshoku/rumale): k-nearest neighbours on
+vegetables, then on 1797 handwritten digits, then on a postcode the learner
+writes onto a letter.
+
+- **Numo is C.** Rumale is pure Ruby on Numo::NArray (numo-narray-alt since
+  Rumale 2.x), which ruby.wasm cannot load. `html/numo_narray.rb` is Numo's
+  API in plain Ruby: the dtype classes, broadcasting, indexing (integers,
+  ranges, `true`, index arrays, Bit masks, one index counting flat), axis
+  reductions, `dot`, `NMath`, and Numo's printing (`%g`, `(view)`,
+  truncated lines) - compared against the real gem for every method the
+  lesson and Rumale's kNN, GaussianNB and StandardScaler use. Not there: real
+  views (`a[0, true]` is a copy), complex numbers, NaN options. main.rb serves
+  it for `require "numo/narray"` and `"numo/narray/alt"` (fetched on the first
+  require, like shoes_dom.rb); `numo-narray`/`numo-narray-alt` are in
+  `NATIVE_GEMS`, and `builtin?` then finds the shim, so rumale-core installs.
+  Only rumale-core and rumale-nearest_neighbors are cached: the `rumale`
+  umbrella gem pulls in rumale-tree and numo-optimize (C), so the lesson
+  requires `rumale/nearest_neighbors`.
+- **Speed**: a 100x64 by 64x1500 `dot` takes ~1 s in Chrome (the stand-in
+  skips zeros), and Rumale's own `predict` sorts every row of distances in
+  Ruby (~45 ms a row there, the same with the real Numo). So the lesson
+  trains on 1000 digits and tests on 50 (~2.5 s, 0.96), then refits on all
+  1797 for the letter, which predicts 4 digits in well under a second.
+- **Lesson files**: a lesson's `"files"` (name => path on the site) are put
+  into the virtual filesystem when it opens (`load_lesson_files` in main.rb,
+  sync XHR; `offline.js` preloads `assets/data/digits.csv` and
+  `numo_narray.rb` for the offline copy), so `File.read("digits.csv")` works
+  as next to a program on disk. `check_harness.rb` does the same.
+- **`digits.csv`**: UCI's optdigits (CC BY 4.0, THIRD_PARTY_NOTICES), the
+  1797 digits scikit-learn ships, taken out of the vendored wheel: 64
+  numbers 0..16 (ink in each 4x4 block of a 32x32 bitmap), then the digit.
+- **show_letter** (`letter.js`, `mount_letter` in main.rb): an envelope on a
+  canvas with red postcode boxes. The strokes are kept as points; for each
+  box the segments whose middle lies in it are scaled so the drawing's
+  taller side fills 32 px (as the dataset's digits fill the height), drawn
+  with a 4.2 px pen and counted in 4x4 blocks - the dataset's own recipe.
+  When the pen lifts (250 ms later) the Ruby block gets the boxes with ink
+  as JSON; its answer is written under the boxes with a postmark, an error
+  below the canvas. The ink is kept per lesson/cell, so a re-run reads the
+  same drawing with the new code. `data-answer` on the widget and
+  `chunkyLetter.draw(strokes)` are for the tests. The words come from
+  `ui.letter*`. The gem's `show_letter` raises NotHere.
+- **Tests**: `check_harness.rb` runs the lesson on the stand-in (its
+  `show_letter` feeds the block the dataset's 3, 0, 0, 0 and expects
+  "3000 …"); `browser_test.mjs` writes 3000 on the letter and expects
+  "3000 Bern".
+
 ## 7a. The optional server: permalinks and a backend
 
 The course is a static site and stays one: without `server/` lessons live at
@@ -675,7 +730,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 44 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 45 lessons x 3 languages, starter fails, solutions pass
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof

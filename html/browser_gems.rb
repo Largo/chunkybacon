@@ -23,12 +23,14 @@ module BrowserGems
   # fallback in lib/ - safe to install despite having an extconf.rb
   PURE_FALLBACK_GEMS = %w[racc].freeze
 
-  # well-known native gems: fail fast with a clear error before downloading
+  # well-known native gems: fail fast with a clear error before downloading -
+  # unless builtin? finds them (compiled in, or a shim: main.rb serves
+  # numo/narray in pure Ruby, so Rumale's gems install)
   NATIVE_GEMS = %w[
     sqlite3 pg mysql2 ffi byebug debug bcrypt puma eventmachine
     nio4r websocket-driver msgpack oj yajl-ruby curb typhoeus redcarpet
     commonmarker sassc grpc google-protobuf rmagick vips json-c openssl
-    strscan js
+    strscan js numo-narray numo-narray-alt
   ].freeze
 
   # native runtime dependencies a gem declares but can do without: skipped

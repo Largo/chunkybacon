@@ -101,6 +101,8 @@ noted.
 | rexml | 3.4.4 | BSD-2-Clause | Kouhei Sutou | LICENSE.txt |
 | roda | 3.108.0 | MIT | Jeremy Evans | MIT-LICENSE |
 | ruby_pptx | 0.2.0 | MIT | Andi Idogawa | LICENSE, NOTICE |
+| rumale-core | 2.2.0 | BSD-3-Clause | yoshoku | LICENSE.txt |
+| rumale-nearest_neighbors | 2.2.0 | BSD-3-Clause | yoshoku | LICENSE.txt |
 | rubyzip | 3.7.0 | BSD-2-Clause | Robert Haines, John Lees-Miller, Alexander Simonov | LICENSE.md |
 | scarpe-components | 0.5.0 | MIT | Marco Concetto Rudilosso, Noah Gibbs | none - see below |
 | sinatra | 4.2.1 | MIT | Blake Mizerany, Ryan Tomayko, Simon Rozet, Konstantin Haase | LICENSE |
@@ -145,6 +147,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+Rumale's gems depend on numo-narray-alt, which is C and not cached:
+`html/numo_narray.rb` is the course's own stand-in for it (MIT, like the
+rest of the code), written against numo-narray-alt's documented behaviour.
+
+## Data
+
+| Data | License | Source | Files |
+|---|---|---|---|
+| Optical Recognition of Handwritten Digits (the 1797 digits of its test part, as scikit-learn ships them) | CC BY 4.0 | E. Alpaydin, C. Kaynak, UCI Machine Learning Repository, https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits | `html/assets/data/digits.csv` (unchanged values, integers instead of floats) |
 
 ## Not bundled
 

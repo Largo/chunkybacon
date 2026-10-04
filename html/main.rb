@@ -144,6 +144,20 @@ require_relative "autorun"
 # libpython, which a browser does not have
 require_relative "pycall"
 BrowserGems.files["(shims)"]["pycall.rb"] = ""
+# require "numo/narray" (numo-narray-alt's "numo/narray/alt" too): Numo is
+# written in C, numo_narray.rb is its API in pure Ruby - what Rumale needs
+# (lesson 27). Fetched on the first require, like shoes_dom.rb; BrowserGems
+# counts the numo gems as built in once it is there.
+numo = <<~'RUBY'
+  unless defined?(Numo::NArray)
+    source = JSG.w.fetchTextSync("numo_narray.rb").to_s
+    raise LoadError, "could not fetch numo_narray.rb" if source.start_with?("ERROR ")
+
+    eval(source, TOPLEVEL_BINDING, "numo_narray.rb")
+  end
+RUBY
+BrowserGems.files["(shims)"]["numo/narray.rb"] = numo
+BrowserGems.files["(shims)"]["numo/narray/alt.rb"] = numo
 
 Net::HTTP.transport = lambda do |_method, uri|
   # a live run fetches nothing: it would freeze the typing and ask the
@@ -216,6 +230,21 @@ class ChunkyApp
     fresh_binding
     dispose_three
     dispose_shoes
+    load_lesson_files
+  end
+
+  # Files a lesson's code reads, next to it as on a computer (lessons.js:
+  # "files": { name => path on the site }) - digits.csv for Rumale. Virtual
+  # files, so File.read and File.exist? find them.
+  def load_lesson_files
+    return if workshop?
+
+    (current_lesson["files"] || {}).each do |name, path|
+      next if SandboxFS.exist?(name)
+
+      text = $window.fetchTextSync(path).to_s
+      SandboxFS.write(name, text) unless text.start_with?("ERROR ")
+    end
   end
 
   def installed_json
@@ -523,6 +552,34 @@ class ChunkyApp
       ShoesDom.reset! if defined?(ShoesDom)
     else
       (@shoes_apps.delete(idx) || []).each(&:dispose)
+    end
+  end
+
+  # ---------- the letter (show_letter) ----------
+
+  def add_letter(boxes, block)
+    @run_letters << { boxes: boxes, block: block } if @run_letters
+  end
+
+  LETTER_LABELS = %w[From To Street Value Post Clear Sees Hint].freeze
+
+  # The envelope is letter.js's; when the pen lifts it hands over the boxes'
+  # digits (64 numbers each, as JSON) and writes our block's answer on the
+  # letter - after the cell has run, so an error goes there too.
+  def mount_letter(idx, out_el, spec, number)
+    node = $d.createElement("div")
+    out_el.appendChild(node)
+    labels = LETTER_LABELS.to_h { |key| [key.downcase, ui["letter#{key}"].to_s] }
+    key = "#{current_lesson['id']}-#{idx}-#{number}"
+    letter = nil
+    letter = $window.chunkyLetter(node, spec[:boxes], key, JSON.generate(labels)) do |json|
+      next unless letter
+
+      begin
+        letter.answer(spec[:block].call(JSON.parse(json.to_s)).to_s, false)
+      rescue StandardError, ScriptError => e
+        letter.answer("#{e.class}: #{e.message}", true)
+      end
     end
   end
 
@@ -857,6 +914,7 @@ class ChunkyApp
     @run_files = []
     @run_three = []
     @run_shoes = []
+    @run_letters = []
     @last_shoes_types = []
     dispose_shoes(idx)
     @run_downloads = []
@@ -917,7 +975,7 @@ class ChunkyApp
     out_html = ""
     out_html += "<pre class=\"cell-stdout\">#{escape_html(output)}</pre>" unless output.empty?
     widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any? || @run_three.any? ||
-                      @run_shoes.any? || @run_downloads.any? || @run_pdfs.any?
+                      @run_shoes.any? || @run_downloads.any? || @run_pdfs.any? || @run_letters.any?
     if (hint = live_hint(error))
       out_html += "<div class=\"cell-hint\">#{escape_html(hint)}</div>"
     elsif error
@@ -973,6 +1031,7 @@ class ChunkyApp
     # into out_html, because the display service creates real elements with
     # real event handlers as the app's block runs.
     @run_shoes.each { |spec| out_el.appendChild(build_shoes_stage(idx, spec)) }
+    @run_letters.each_with_index { |spec, n| mount_letter(idx, out_el, spec, n) }
 
     if error
       return :stopped if error.is_a?(AutoRun::Stopped)
@@ -1106,6 +1165,18 @@ module Kernel
     end
 
     ChunkyApp.instance.add_shoes({ width: width, height: height }, block)
+    nil
+  end
+
+  # Shows a letter below the cell, with +boxes+ red boxes for a postcode to
+  # write into, by hand. Whenever the pen lifts, the block gets the digits
+  # written so far - one Array of 64 numbers (8x8, 0..16, like digits.csv)
+  # per box with ink - and its answer is written on the letter:
+  #   show_letter(boxes: 4) { |digits| model.predict(Numo::DFloat[*digits]).to_a.join }
+  def show_letter(boxes: 4, &block)
+    raise ArgumentError, "show_letter needs a block: show_letter { |digits| ... }" unless block
+
+    ChunkyApp.instance.add_letter(boxes.to_i, block)
     nil
   end
 

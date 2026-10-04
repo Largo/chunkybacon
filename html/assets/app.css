@@ -961,6 +961,43 @@ kbd {
   touch-action: none;
 }
 
+/* the letter (show_letter, letter.js): an envelope to write a postcode on,
+   and below it what Ruby gets from each box - 8x8 grey squares */
+.letter-widget { margin: 0.7rem 0; max-width: 480px; }
+.letter-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 480 / 300;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  cursor: crosshair;
+  touch-action: none;   /* the pen draws; the page does not scroll */
+}
+.letter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.7rem;
+  margin-top: 0.45rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.letter-clear { font-size: 0.85rem; padding: 0.2rem 0.7rem; }
+.letter-previews { display: inline-flex; gap: 0.35rem; }
+.letter-preview {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  border: 1px solid var(--rule);
+}
+.letter-error {
+  margin-top: 0.4rem;
+  font-family: var(--font-code);
+  font-size: 0.85rem;
+  color: var(--err);
+  white-space: pre-wrap;
+}
+
 /* IRB terminal */
 .irb-term {
   background: #211a13;

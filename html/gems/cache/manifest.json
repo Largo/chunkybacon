@@ -202,5 +202,21 @@
     "version": "0.4.0",
     "file": "pure_jpeg-0.4.0.gem",
     "deps": []
+  },
+  "rumale-core": {
+    "version": "2.2.0",
+    "file": "rumale-core-2.2.0.gem",
+    "deps": [
+      "csv",
+      "numo-narray-alt"
+    ]
+  },
+  "rumale-nearest_neighbors": {
+    "version": "2.2.0",
+    "file": "rumale-nearest_neighbors-2.2.0.gem",
+    "deps": [
+      "numo-narray-alt",
+      "rumale-core"
+    ]
   }
 }

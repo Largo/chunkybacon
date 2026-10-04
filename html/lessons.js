@@ -116,7 +116,15 @@ window.LESSONS_JSON = JSON.stringify({
       "wsStdin": "Eingabe für gets",
       "wsStdinHint": "Jede Zeile ist die Antwort auf ein gets.",
       "wsNotRuby": "Ausführen lassen sich .rb-Dateien.",
-      "wsStarter": "# Willkommen in der Werkstatt! Das ist dein eigenes Programm.\n# Ändere es, lege weitere Dateien an und starte es mit ▶ Ausführen.\n\nname = gets&.chomp\nname = \"Fuchs\" if name.nil? || name.empty?\nputs \"Hallo, #{name}! 🦊\"\n\n# Was dein Programm schreibt, erscheint links in der Dateiliste.\nFile.write(\"gruss.txt\", \"Chunky Bacon grüsst #{name}!\\n\")\nputs File.read(\"gruss.txt\")\n"
+      "wsStarter": "# Willkommen in der Werkstatt! Das ist dein eigenes Programm.\n# Ändere es, lege weitere Dateien an und starte es mit ▶ Ausführen.\n\nname = gets&.chomp\nname = \"Fuchs\" if name.nil? || name.empty?\nputs \"Hallo, #{name}! 🦊\"\n\n# Was dein Programm schreibt, erscheint links in der Dateiliste.\nFile.write(\"gruss.txt\", \"Chunky Bacon grüsst #{name}!\\n\")\nputs File.read(\"gruss.txt\")\n",
+      "letterFrom": "Absender: ein Fuchs",
+      "letterTo": "Chunky Bacon",
+      "letterStreet": "Speckweg 1",
+      "letterValue": "CHF 1.20",
+      "letterPost": "Chunky Post",
+      "letterClear": "Radieren",
+      "letterSees": "Das bekommt Ruby:",
+      "letterHint": "Schreib die Postleitzahl in die roten Kästchen"
     },
     "en": {
       "title": "Learn Ruby with Chunky Bacon",
@@ -224,7 +232,15 @@ window.LESSONS_JSON = JSON.stringify({
       "wsStdin": "Input for gets",
       "wsStdinHint": "Each line answers one gets.",
       "wsNotRuby": ".rb files can be run.",
-      "wsStarter": "# Welcome to the workshop! This is your own program.\n# Change it, add more files and start it with ▶ Run.\n\nname = gets&.chomp\nname = \"Fox\" if name.nil? || name.empty?\nputs \"Hello, #{name}! 🦊\"\n\n# Whatever your program writes shows up in the file list on the left.\nFile.write(\"greeting.txt\", \"Chunky Bacon greets #{name}!\\n\")\nputs File.read(\"greeting.txt\")\n"
+      "wsStarter": "# Welcome to the workshop! This is your own program.\n# Change it, add more files and start it with ▶ Run.\n\nname = gets&.chomp\nname = \"Fox\" if name.nil? || name.empty?\nputs \"Hello, #{name}! 🦊\"\n\n# Whatever your program writes shows up in the file list on the left.\nFile.write(\"greeting.txt\", \"Chunky Bacon greets #{name}!\\n\")\nputs File.read(\"greeting.txt\")\n",
+      "letterFrom": "From: a fox",
+      "letterTo": "Chunky Bacon",
+      "letterStreet": "1 Bacon Lane",
+      "letterValue": "$1.70",
+      "letterPost": "Chunky Post",
+      "letterClear": "Clear",
+      "letterSees": "What Ruby gets:",
+      "letterHint": "Write the postcode into the red boxes"
     },
     "ja": {
       "title": "Chunky Baconと学ぶRuby",
@@ -332,7 +348,15 @@ window.LESSONS_JSON = JSON.stringify({
       "wsStdin": "getsへの入力",
       "wsStdinHint": "1行が、getsの1回ぶんの答えになります。",
       "wsNotRuby": "実行できるのは.rbファイルです。",
-      "wsStarter": "# 工房へようこそ！これはきみ自身のプログラムだよ。\n# 書き換えたり、ファイルを増やしたりして、▶ 実行で動かしてみよう。\n\nname = gets&.chomp\nname = \"Fox\" if name.nil? || name.empty?\nputs \"Hello, #{name}! 🦊\"\n\n# プログラムが書き出したファイルは、左のファイル一覧に出てくるよ。\nFile.write(\"greeting.txt\", \"Chunky Bacon greets #{name}!\\n\")\nputs File.read(\"greeting.txt\")\n"
+      "wsStarter": "# 工房へようこそ！これはきみ自身のプログラムだよ。\n# 書き換えたり、ファイルを増やしたりして、▶ 実行で動かしてみよう。\n\nname = gets&.chomp\nname = \"Fox\" if name.nil? || name.empty?\nputs \"Hello, #{name}! 🦊\"\n\n# プログラムが書き出したファイルは、左のファイル一覧に出てくるよ。\nFile.write(\"greeting.txt\", \"Chunky Bacon greets #{name}!\\n\")\nputs File.read(\"greeting.txt\")\n",
+      "letterFrom": "差出人：キツネ",
+      "letterTo": "チャンキー・ベーコン 様",
+      "letterStreet": "ベーコン通り1",
+      "letterValue": "110円",
+      "letterPost": "Chunky Post",
+      "letterClear": "消す",
+      "letterSees": "Rubyが受け取るもの：",
+      "letterHint": "赤い枠に郵便番号を書いてね"
     }
   },
   "lessons": [
@@ -2481,7 +2505,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 41). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
+            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 42). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
           },
           {
             "t": "c",
@@ -2528,7 +2552,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 41 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
+            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 42 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
           },
           {
             "t": "c",
@@ -2575,7 +2599,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン41で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
+            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン42で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
           },
           {
             "t": "c",
@@ -3521,7 +3545,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>score</code> ist der Anteil der Testblumen, die er richtig erkannt hat – hier etwa 96 %. <code>max_depth: 3</code> erlaubt höchstens drei Fragen hintereinander, so lernt der Baum das allgemeine Muster, statt jede Blume auswendig zu lernen. Mit versteckten Daten prüfen ist die wichtigste Gewohnheit beim maschinellen Lernen: Ein Modell, das nur seine eigenen Beispiele kennt, nützt wenig.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>pip install scikit-learn</code> und <code>gem install pycall</code>, und der Code dieser Lektion läuft unverändert. Für maschinelles Lernen in Ruby selbst gibt es <a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a>, das ganz ähnlich wie scikit-learn arbeitet. scikit-learn, SciPy und NumPy stehen unter der BSD-Lizenz.</p></div><div class='task'><strong>Aufgabe:</strong> Fünf Schülerinnen haben notiert, wie viele Stunden sie gelernt und wie viele Punkte sie bekommen haben. Bring einer <code>LinearRegression</code> damit etwas bei und sag die Punkte für 6 Stunden voraus. Speichere die Vorhersage in <code>prognose</code>, als Ruby-Zahl.</div>"
+            "html": "<p><code>score</code> ist der Anteil der Testblumen, die er richtig erkannt hat – hier etwa 96 %. <code>max_depth: 3</code> erlaubt höchstens drei Fragen hintereinander, so lernt der Baum das allgemeine Muster, statt jede Blume auswendig zu lernen. Mit versteckten Daten prüfen ist die wichtigste Gewohnheit beim maschinellen Lernen: Ein Modell, das nur seine eigenen Beispiele kennt, nützt wenig.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>pip install scikit-learn</code> und <code>gem install pycall</code>, und der Code dieser Lektion läuft unverändert. Für maschinelles Lernen in Ruby selbst gibt es <a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a>, das ganz ähnlich wie scikit-learn arbeitet – davon handelt die nächste Lektion. scikit-learn, SciPy und NumPy stehen unter der BSD-Lizenz.</p></div><div class='task'><strong>Aufgabe:</strong> Fünf Schülerinnen haben notiert, wie viele Stunden sie gelernt und wie viele Punkte sie bekommen haben. Bring einer <code>LinearRegression</code> damit etwas bei und sag die Punkte für 6 Stunden voraus. Speichere die Vorhersage in <code>prognose</code>, als Ruby-Zahl.</div>"
           },
           {
             "t": "x",
@@ -3584,7 +3608,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>score</code> is the share of test flowers it got right – here about 96%. <code>max_depth: 3</code> allows at most three questions in a row, so the tree learns the general pattern rather than memorising each flower. Testing on hidden data is the most important habit in machine learning: a model that only knows its own examples is not much use.</p><div class='offweb' data-title='On your machine'><p><code>pip install scikit-learn</code> and <code>gem install pycall</code>, and the code of this lesson runs unchanged. For machine learning in Ruby itself, look at <a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a>, which works much like scikit-learn. scikit-learn, SciPy and NumPy come under the BSD licence.</p></div><div class='task'><strong>Task:</strong> Five students wrote down how many hours they studied and how many points they got. Teach a <code>LinearRegression</code> with them and predict the points for 6 hours. Store the prediction in <code>forecast</code>, as a Ruby number.</div>"
+            "html": "<p><code>score</code> is the share of test flowers it got right – here about 96%. <code>max_depth: 3</code> allows at most three questions in a row, so the tree learns the general pattern rather than memorising each flower. Testing on hidden data is the most important habit in machine learning: a model that only knows its own examples is not much use.</p><div class='offweb' data-title='On your machine'><p><code>pip install scikit-learn</code> and <code>gem install pycall</code>, and the code of this lesson runs unchanged. For machine learning in Ruby itself, look at <a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a>, which works much like scikit-learn – it is the next lesson. scikit-learn, SciPy and NumPy come under the BSD licence.</p></div><div class='task'><strong>Task:</strong> Five students wrote down how many hours they studied and how many points they got. Teach a <code>LinearRegression</code> with them and predict the points for 6 hours. Store the prediction in <code>forecast</code>, as a Ruby number.</div>"
           },
           {
             "t": "x",
@@ -3647,7 +3671,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>score</code>は、テストの花のうち正しく当てた割合で、ここでは約96%です。<code>max_depth: 3</code>は続けてする質問を最大3つまでにするので、木は花を1本ずつ丸暗記するのではなく、全体の傾向を学びます。隠しておいたデータでテストするのは、機械学習でいちばん大切な習慣です。自分の例しか知らないモデルは、あまり役に立ちません。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>pip install scikit-learn</code>と<code>gem install pycall</code>をすれば、このレッスンのコードはそのまま動きます。Ruby自身で機械学習をするなら、scikit-learnとよく似た<a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a>があります。scikit-learn、SciPy、NumPyはBSDライセンスです。</p></div><div class='task'><strong>課題：</strong>5人の生徒が、勉強した時間ととれた点数を記録しました。それを使って<code>LinearRegression</code>に学ばせ、6時間勉強したときの点数を予測しましょう。予測をRubyの数値として<code>forecast</code>に入れてください。</div>"
+            "html": "<p><code>score</code>は、テストの花のうち正しく当てた割合で、ここでは約96%です。<code>max_depth: 3</code>は続けてする質問を最大3つまでにするので、木は花を1本ずつ丸暗記するのではなく、全体の傾向を学びます。隠しておいたデータでテストするのは、機械学習でいちばん大切な習慣です。自分の例しか知らないモデルは、あまり役に立ちません。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>pip install scikit-learn</code>と<code>gem install pycall</code>をすれば、このレッスンのコードはそのまま動きます。Ruby自身で機械学習をするなら、scikit-learnとよく似た<a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a>があります。次のレッスンで使います。scikit-learn、SciPy、NumPyはBSDライセンスです。</p></div><div class='task'><strong>課題：</strong>5人の生徒が、勉強した時間ととれた点数を記録しました。それを使って<code>LinearRegression</code>に学ばせ、6時間勉強したときの点数を予測しましょう。予測をRubyの数値として<code>forecast</code>に入れてください。</div>"
           },
           {
             "t": "x",
@@ -3659,9 +3683,204 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "rumale",
+      "files": {
+        "digits.csv": "assets/data/digits.csv"
+      },
+      "de": {
+        "title": "27. Rumale: maschinelles Lernen in Ruby",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Maschinelles Lernen in reinem Ruby</h2><p>In der letzten Lektion hat Python gelernt. <a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a> bringt dieselben Ideen nach Ruby – mit denselben Namen: ein Modell machen, mit <code>fit</code> an Beispiele anpassen, mit <code>predict</code> vorhersagen, mit <code>score</code> prüfen. Geschrieben hat es Atsushi Tatsuma (yoshoku), ganz in Ruby.</p><p>Seine Zahlen hält Rumale in <a href='https://github.com/ruby-numo/numo-narray' target='_blank'>Numo</a>-Arrays, Rubys Gegenstück zu NumPy: <code>Numo::DFloat</code> für Kommazahlen, <code>Numo::Int32</code> für ganze. Das Gem dazu, <a href='https://rubygems.org/gems/numo-narray-alt' target='_blank'>numo-narray-alt</a>, ist in C geschrieben und läuft darum nicht im Browser; hier rechnet an seiner Stelle ein Nachbau in reinem Ruby mit denselben Methoden – nur langsamer.</p><p>Rumale ist in kleine Gems aufgeteilt. Wir brauchen die <strong>nächsten Nachbarn</strong>, und zum Anfang ein Gemüse: Länge und Dicke in Zentimetern.</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rumale-nearest_neighbors\"\nrequire \"rumale/nearest_neighbors\"\n\n# [Länge, Dicke] in cm\ngemuese = Numo::DFloat[[18, 3], [20, 3.5], [16, 2.5],   # Rüebli\n                       [30, 4.5], [28, 5], [33, 5],      # Gurken\n                       [6, 6], [5, 5.5], [7, 7]]         # Tomaten\nsorte = Numo::Int32[0, 0, 0, 1, 1, 1, 2, 2, 2]\nnamen = [\"Rüebli\", \"Gurke\", \"Tomate\"]\ngemuese.shape"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>shape</code> sagt [9, 2]: 9 Zeilen, je 2 Zahlen. Die Antworten muss Rumale als Zahlen bekommen – 0 für Rüebli, 1 für Gurke, 2 für Tomate –, die Namen dazu stehen in einer gewöhnlichen Liste.</p><p>Der <strong>k-nächste-Nachbarn</strong>-Klassifikator ist das einfachste Lernverfahren überhaupt: Um ein neues Gemüse zu beurteilen, sucht er die <code>k</code> ähnlichsten, die er kennt, und lässt sie abstimmen. «Ähnlich» heisst: nahe beieinander, wenn man Länge und Dicke als Punkte aufzeichnet.</p>"
+          },
+          {
+            "t": "c",
+            "code": "nachbarn = Rumale::NearestNeighbors::KNeighborsClassifier.new(n_neighbors: 3)\nnachbarn.fit(gemuese, sorte)\ngeraten = nachbarn.predict(Numo::DFloat[[25, 4], [6, 6.5], [15, 3]])\ngeraten.to_a.map { |s| namen[s] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>25 cm lang und 4 cm dick liegt am nächsten bei den Gurken, das runde Ding bei den Tomaten, das dünne bei den Rüebli. Gelernt hat <code>fit</code> dabei nichts – es merkt sich nur die Beispiele. Die Arbeit kommt bei <code>predict</code>: alle Abstände messen.</p><p>Jetzt etwas Schwierigeres: Handschrift. <code>digits.csv</code> enthält 1797 von Hand geschriebene Ziffern, gesammelt von <a href='https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits' target='_blank'>UCI</a>. Jede ist ein Bild aus 8×8 Feldern, und jedes Feld eine Zahl von 0 bis 16 – wie viel Tinte darin ist. Die Zahl am Ende der Zeile sagt, welche Ziffer es ist. Die Datei liegt neben deinem Code (im Browser legt der Kurs sie dorthin):</p>"
+          },
+          {
+            "t": "c",
+            "code": "zeilen = File.read(\"digits.csv\").lines.map { |zeile| zeile.split(\",\").map(&:to_i) }\nbilder = Numo::DFloat[*zeilen.map { |z| z[0, 64] }]\nziffern = Numo::Int32[*zeilen.map(&:last)]\nbilder.shape"
+          },
+          {
+            "t": "h",
+            "html": "<p>1797 Bilder mit je 64 Zahlen. Mit <code>reshape(8, 8)</code> wird eine Zeile wieder zum Bild – zeichnen wir die erste mit Zeichen, die umso dunkler sind, je mehr Tinte im Feld ist:</p>"
+          },
+          {
+            "t": "c",
+            "code": "bild = bilder[0, true].reshape(8, 8)\nbild.to_a.each do |reihe|\n  puts reihe.map { |wert| \" .:-=+*#%@\"[(wert * 9 / 16).round] }.join(\" \")\nend\nziffern[0]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Eine Null, kein Zweifel. Jetzt lernen und ehrlich prüfen: Die ersten 1000 Bilder bekommt der Klassifikator zum Lernen, an 50 weiteren, die er nie gesehen hat, wird er getestet. (Im Browser rechnet Numo in reinem Ruby – der Test braucht ein paar Sekunden.)</p>"
+          },
+          {
+            "t": "c",
+            "code": "lerner = Rumale::NearestNeighbors::KNeighborsClassifier.new(n_neighbors: 3)\nlerner.fit(bilder[0...1000, true], ziffern[0...1000])     # daraus lernen\nlerner.score(bilder[1000...1050, true], ziffern[1000...1050])  # damit testen"
+          },
+          {
+            "t": "h",
+            "html": "<p>48 von 50 richtig – mit nichts als Abständen zwischen 64 Zahlen. <code>[0...1000, true]</code> heisst: die Zeilen 0 bis 999, alle Spalten.</p><p>Und jetzt du. Für den Brief darf der Klassifikator aus allen 1797 Bildern lernen – je mehr Beispiele, desto besser. Unten erscheint ein Brief an Chunky; schreib mit der Maus oder dem Finger die Postleitzahl in die roten Kästchen, eine Ziffer pro Kästchen. Jedes Mal, wenn du absetzt, bekommt der Block alle geschriebenen Ziffern – je 64 Zahlen, genau wie eine Zeile aus <code>digits.csv</code> – und seine Antwort wird auf den Brief gestempelt. Probier 8000, 3000 oder 6900:</p>"
+          },
+          {
+            "t": "c",
+            "code": "lerner.fit(bilder, ziffern)   # jetzt aus allen 1797\norte = { \"8000\" => \"Zürich\", \"3000\" => \"Bern\", \"4000\" => \"Basel\", \"1200\" => \"Genève\",\n         \"6000\" => \"Luzern\", \"9000\" => \"St. Gallen\", \"7000\" => \"Chur\", \"6900\" => \"Lugano\" }\n\nshow_letter(boxes: 4) do |geschrieben|   # je Kästchen ein Array mit 64 Zahlen\n  plz = lerner.predict(Numo::DFloat[*geschrieben]).to_a.join\n  \"#{plz} #{orte.fetch(plz, \"?\")}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Unter dem Brief siehst du, was Ruby bekommt: deine Ziffern als 8×8-Bilder. Liest der Klassifikator eine falsch, schau dort nach. Die Ziffern in <code>digits.csv</code> wurden in den 1990er-Jahren mit Stift auf Formulare geschrieben; eine Maus schreibt anders. Schreib gross, füll das Kästchen in der Höhe aus – oder ändere den Code: <code>n_neighbors: 1</code> oder <code>5</code>, und der Brief liest deine Ziffern gleich nochmal.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>gem install rumale</code> installiert alles, auch das echte <a href='https://rubygems.org/gems/numo-narray-alt' target='_blank'>numo-narray-alt</a> (es wird dabei kompiliert); danach genügt <code>require \"rumale\"</code>. Der Code dieser Lektion läuft dort unverändert – nur der Brief braucht diese Seite. <code>digits.csv</code> stammt aus dem Datensatz <em>Optical Recognition of Handwritten Digits</em> von E. Alpaydin und C. Kaynak (<a href='https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits' target='_blank'>UCI</a>, CC BY 4.0); <a href='assets/data/digits.csv' download>hier zum Herunterladen</a>. Rumale steht unter der BSD-Lizenz.</p></div><div class='task'><strong>Aufgabe:</strong> Ruby schreibt auch mit Zeichen. Mach aus dem Bild einer Sieben die 64 Zahlen, die der Klassifikator versteht – <code>#</code> ist 16, <code>.</code> ist 0, Zeile für Zeile –, und lass <code>lerner</code> sagen, was er darin sieht. Speichere seine Antwort in <code>ziffer</code>, als Ruby-Zahl.</div>"
+          },
+          {
+            "t": "x",
+            "code": "sieben = <<~BILD\n  .######.\n  ......#.\n  .....#..\n  ....#...\n  ...#....\n  ...#....\n  ..#.....\n  ..#.....\nBILD\n# pixel = ...   (64 Zahlen: # ist 16, . ist 0)\n# ziffer = ...   (was lerner darin sieht, als Ruby-Zahl)\n",
+            "check": "ziffer == 7 && code.include?(\"predict\")",
+            "hint": "<code>sieben.delete(\"\\n\").chars</code> gibt die 64 Zeichen; <code>map { |z| z == \"#\" ? 16 : 0 }</code> macht Zahlen daraus. <code>lerner.predict(Numo::DFloat[pixel])</code> will eine Tabelle mit einer Zeile pro Bild – hier eine Zeile –, und <code>[0]</code> holt die Antwort heraus."
+          }
+        ]
+      },
+      "en": {
+        "title": "27. Rumale: machine learning in Ruby",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Machine learning in plain Ruby</h2><p>In the last lesson Python did the learning. <a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a> brings the same ideas to Ruby – with the same names: make a model, <code>fit</code> it to examples, let it <code>predict</code>, check it with <code>score</code>. Atsushi Tatsuma (yoshoku) wrote it, all in Ruby.</p><p>Rumale keeps its numbers in <a href='https://github.com/ruby-numo/numo-narray' target='_blank'>Numo</a> arrays, Ruby's counterpart to NumPy: <code>Numo::DFloat</code> for decimals, <code>Numo::Int32</code> for whole numbers. Their gem, <a href='https://rubygems.org/gems/numo-narray-alt' target='_blank'>numo-narray-alt</a>, is written in C, so it does not run in a browser; here a stand-in in plain Ruby with the same methods does its job – just slower.</p><p>Rumale comes in small gems. We need the <strong>nearest neighbours</strong>, and to start, some vegetables: length and thickness in centimetres.</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rumale-nearest_neighbors\"\nrequire \"rumale/nearest_neighbors\"\n\n# [length, thickness] in cm\nveggies = Numo::DFloat[[18, 3], [20, 3.5], [16, 2.5],   # carrots\n                       [30, 4.5], [28, 5], [33, 5],      # cucumbers\n                       [6, 6], [5, 5.5], [7, 7]]         # tomatoes\nkind = Numo::Int32[0, 0, 0, 1, 1, 1, 2, 2, 2]\nnames = [\"carrot\", \"cucumber\", \"tomato\"]\nveggies.shape"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>shape</code> says [9, 2]: 9 rows of 2 numbers. Rumale wants the answers as numbers – 0 for carrot, 1 for cucumber, 2 for tomato – and the names go in an ordinary list.</p><p>The <strong>k-nearest-neighbours</strong> classifier is the simplest learning method there is: to judge a new vegetable, it looks for the <code>k</code> most similar ones it knows and lets them vote. \"Similar\" means close together, if you plot length and thickness as points.</p>"
+          },
+          {
+            "t": "c",
+            "code": "neighbours = Rumale::NearestNeighbors::KNeighborsClassifier.new(n_neighbors: 3)\nneighbours.fit(veggies, kind)\nguesses = neighbours.predict(Numo::DFloat[[25, 4], [6, 6.5], [15, 3]])\nguesses.to_a.map { |k| names[k] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>25 cm long and 4 cm thick is closest to the cucumbers, the round one to the tomatoes, the thin one to the carrots. <code>fit</code> did not learn anything here – it only remembers the examples. The work comes in <code>predict</code>: measuring every distance.</p><p>Now something harder: handwriting. <code>digits.csv</code> holds 1797 handwritten digits, collected by <a href='https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits' target='_blank'>UCI</a>. Each is a picture of 8×8 squares, and each square a number from 0 to 16 – how much ink is in it. The number at the end of the line says which digit it is. The file is next to your code (in the browser, the course puts it there):</p>"
+          },
+          {
+            "t": "c",
+            "code": "rows = File.read(\"digits.csv\").lines.map { |line| line.split(\",\").map(&:to_i) }\npictures = Numo::DFloat[*rows.map { |r| r[0, 64] }]\nlabels = Numo::Int32[*rows.map(&:last)]\npictures.shape"
+          },
+          {
+            "t": "h",
+            "html": "<p>1797 pictures of 64 numbers each. <code>reshape(8, 8)</code> turns a row back into a picture – let's draw the first one with characters that get darker the more ink a square has:</p>"
+          },
+          {
+            "t": "c",
+            "code": "picture = pictures[0, true].reshape(8, 8)\npicture.to_a.each do |row|\n  puts row.map { |value| \" .:-=+*#%@\"[(value * 9 / 16).round] }.join(\" \")\nend\nlabels[0]"
+          },
+          {
+            "t": "h",
+            "html": "<p>A zero, no doubt. Now learn and test honestly: the classifier gets the first 1000 pictures to learn from and is tested on 50 more it has never seen. (In the browser Numo is plain Ruby – the test takes a few seconds.)</p>"
+          },
+          {
+            "t": "c",
+            "code": "learner = Rumale::NearestNeighbors::KNeighborsClassifier.new(n_neighbors: 3)\nlearner.fit(pictures[0...1000, true], labels[0...1000])     # learn from these\nlearner.score(pictures[1000...1050, true], labels[1000...1050])  # test on these"
+          },
+          {
+            "t": "h",
+            "html": "<p>48 out of 50 right – with nothing but distances between 64 numbers. <code>[0...1000, true]</code> means rows 0 to 999, all columns.</p><p>Now it's your turn. For the letter, the classifier may learn from all 1797 pictures – the more examples, the better. Below, a letter to Chunky appears; with the mouse or a finger, write the postcode into the red boxes, one digit per box. Every time you lift the pen, the block gets all the digits written so far – 64 numbers each, just like a row of <code>digits.csv</code> – and its answer is stamped on the letter. Four-digit postcodes, as in Australia: try 2000, 3000 or 6000:</p>"
+          },
+          {
+            "t": "c",
+            "code": "learner.fit(pictures, labels)   # now from all 1797\nplaces = { \"2000\" => \"Sydney\", \"3000\" => \"Melbourne\", \"4000\" => \"Brisbane\", \"5000\" => \"Adelaide\",\n           \"6000\" => \"Perth\", \"7000\" => \"Hobart\", \"0800\" => \"Darwin\", \"2600\" => \"Canberra\" }\n\nshow_letter(boxes: 4) do |written|   # one Array of 64 numbers per box\n  postcode = learner.predict(Numo::DFloat[*written]).to_a.join\n  \"#{postcode} #{places.fetch(postcode, \"?\")}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Under the letter you see what Ruby gets: your digits as 8×8 pictures. If the classifier misreads one, look there. The digits in <code>digits.csv</code> were written with pens on forms in the 1990s; a mouse writes differently. Write big, fill the box from top to bottom – or change the code: <code>n_neighbors: 1</code> or <code>5</code>, and the letter reads your digits again straight away.</p><div class='offweb' data-title='On your machine'><p><code>gem install rumale</code> installs everything, the real <a href='https://rubygems.org/gems/numo-narray-alt' target='_blank'>numo-narray-alt</a> too (it gets compiled); then <code>require \"rumale\"</code> is all you need. The code of this lesson runs unchanged – only the letter needs this page. <code>digits.csv</code> comes from the dataset <em>Optical Recognition of Handwritten Digits</em> by E. Alpaydin and C. Kaynak (<a href='https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits' target='_blank'>UCI</a>, CC BY 4.0); <a href='assets/data/digits.csv' download>download it here</a>. Rumale comes under the BSD licence.</p></div><div class='task'><strong>Task:</strong> Ruby can write with characters too. Turn the picture of a seven into the 64 numbers the classifier understands – <code>#</code> is 16, <code>.</code> is 0, row by row – and let <code>learner</code> say what it sees. Store its answer in <code>digit</code>, as a Ruby number.</div>"
+          },
+          {
+            "t": "x",
+            "code": "seven = <<~PICTURE\n  .######.\n  ......#.\n  .....#..\n  ....#...\n  ...#....\n  ...#....\n  ..#.....\n  ..#.....\nPICTURE\n# pixels = ...   (64 numbers: # is 16, . is 0)\n# digit = ...   (what learner sees in it, as a Ruby number)\n",
+            "check": "digit == 7 && code.include?(\"predict\")",
+            "hint": "<code>seven.delete(\"\\n\").chars</code> gives the 64 characters; <code>map { |c| c == \"#\" ? 16 : 0 }</code> makes numbers of them. <code>learner.predict(Numo::DFloat[pixels])</code> wants a table, one row per picture – here one row – and <code>[0]</code> takes out the answer."
+          }
+        ]
+      },
+      "ja": {
+        "title": "27. Rumale：Rubyで機械学習",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Rubyだけで機械学習</h2><p>前のレッスンではPythonが学びました。<a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a>は同じ考え方をRubyに持ってきます。名前も同じです。モデルを作り、<code>fit</code>で例に合わせ、<code>predict</code>で予測させ、<code>score</code>で確かめます。作ったのは巽 敦史さん（yoshoku）で、すべてRubyで書かれています。</p><p>Rumaleは数を<a href='https://github.com/ruby-numo/numo-narray' target='_blank'>Numo</a>の配列に入れます。NumPyにあたるRubyのライブラリで、小数は<code>Numo::DFloat</code>、整数は<code>Numo::Int32</code>です。そのgemの<a href='https://rubygems.org/gems/numo-narray-alt' target='_blank'>numo-narray-alt</a>はCで書かれているので、ブラウザーでは動きません。ここでは同じメソッドを持つRubyだけの代役が代わりに計算します。ただし遅めです。</p><p>Rumaleは小さなgemに分かれています。使うのは<strong>最近傍法</strong>です。まずは野菜から。長さと太さ（cm）です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rumale-nearest_neighbors\"\nrequire \"rumale/nearest_neighbors\"\n\n# [長さ, 太さ] cm\nveggies = Numo::DFloat[[18, 3], [20, 3.5], [16, 2.5],   # ニンジン\n                       [30, 4.5], [28, 5], [33, 5],      # キュウリ\n                       [6, 6], [5, 5.5], [7, 7]]         # トマト\nkind = Numo::Int32[0, 0, 0, 1, 1, 1, 2, 2, 2]\nnames = [\"carrot\", \"cucumber\", \"tomato\"]\nveggies.shape"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>shape</code>は[9, 2]、つまり9行で、それぞれ2つの数です。Rumaleには答えを数で渡します。0がニンジン、1がキュウリ、2がトマトで、名前はふつうのリストに入れておきます。</p><p><strong>k近傍法</strong>は、いちばん簡単な学習方法です。新しい野菜を判定するとき、知っている中からいちばん似ている<code>k</code>個を探し、多数決をとらせます。「似ている」とは、長さと太さを点として描いたときに近いということです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "neighbours = Rumale::NearestNeighbors::KNeighborsClassifier.new(n_neighbors: 3)\nneighbours.fit(veggies, kind)\nguesses = neighbours.predict(Numo::DFloat[[25, 4], [6, 6.5], [15, 3]])\nguesses.to_a.map { |k| names[k] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>長さ25 cm、太さ4 cmはキュウリにいちばん近く、丸いものはトマト、細いものはニンジンに近いです。ここで<code>fit</code>は何も学んでいません。例を覚えるだけです。仕事は<code>predict</code>のときにあります。すべての距離を測るのです。</p><p>次はもっと難しいもの、手書き文字です。<code>digits.csv</code>には、<a href='https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits' target='_blank'>UCI</a>が集めた手書きの数字が1797個入っています。どれも8×8マスの絵で、各マスは0から16の数、つまりインクの量です。行の最後の数が、どの数字かを表します。ファイルはコードの隣にあります（ブラウザーではコースがそこに置きます）：</p>"
+          },
+          {
+            "t": "c",
+            "code": "rows = File.read(\"digits.csv\").lines.map { |line| line.split(\",\").map(&:to_i) }\npictures = Numo::DFloat[*rows.map { |r| r[0, 64] }]\nlabels = Numo::Int32[*rows.map(&:last)]\npictures.shape"
+          },
+          {
+            "t": "h",
+            "html": "<p>64個の数でできた絵が1797枚です。<code>reshape(8, 8)</code>で1行を絵に戻せます。インクが多いマスほど濃い文字を使って、最初の1枚を描いてみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "picture = pictures[0, true].reshape(8, 8)\npicture.to_a.each do |row|\n  puts row.map { |value| \" .:-=+*#%@\"[(value * 9 / 16).round] }.join(\" \")\nend\nlabels[0]"
+          },
+          {
+            "t": "h",
+            "html": "<p>まちがいなく0です。では学ばせて、正直にテストします。最初の1000枚で学ばせ、見たことのない別の50枚でテストします。（ブラウザーではNumoがRubyだけで計算するので、テストに数秒かかります。）</p>"
+          },
+          {
+            "t": "c",
+            "code": "learner = Rumale::NearestNeighbors::KNeighborsClassifier.new(n_neighbors: 3)\nlearner.fit(pictures[0...1000, true], labels[0...1000])     # これで学ぶ\nlearner.score(pictures[1000...1050, true], labels[1000...1050])  # これでテスト"
+          },
+          {
+            "t": "h",
+            "html": "<p>50枚中48枚正解です。使ったのは64個の数どうしの距離だけです。<code>[0...1000, true]</code>は、0行目から999行目まで、すべての列という意味です。</p><p>今度はあなたの番です。封筒のためには、1797枚すべてから学ばせます。例が多いほど、よく当たります。下にチャンキーあての封筒が出てきます。マウスや指で、赤い枠に郵便番号を1枠に1文字ずつ書いてください。ペンを離すたびに、ブロックはそれまでに書いた数字をすべて受け取ります。どれも<code>digits.csv</code>の1行と同じ64個の数です。そしてブロックの答えが封筒にスタンプされます。日本の郵便番号は7桁ですが、ここではオーストラリアと同じ4桁です。2000、3000、6000などを書いてみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "learner.fit(pictures, labels)   # 今度は1797枚すべてから\nplaces = { \"2000\" => \"Sydney\", \"3000\" => \"Melbourne\", \"4000\" => \"Brisbane\", \"5000\" => \"Adelaide\",\n           \"6000\" => \"Perth\", \"7000\" => \"Hobart\", \"0800\" => \"Darwin\", \"2600\" => \"Canberra\" }\n\nshow_letter(boxes: 4) do |written|   # 枠ごとに64個の数の配列\n  postcode = learner.predict(Numo::DFloat[*written]).to_a.join\n  \"#{postcode} #{places.fetch(postcode, \"?\")}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>封筒の下には、Rubyが受け取るもの、つまりあなたの数字の8×8の絵が見えます。読みまちがえたら、そこを見てみましょう。<code>digits.csv</code>の数字は、1990年代にペンで用紙に書かれたものです。マウスで書くと形が変わります。大きく、枠の上から下までいっぱいに書くか、コードを変えてみましょう。<code>n_neighbors: 1</code>や<code>5</code>にすると、封筒はすぐにもう一度あなたの数字を読みます。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>gem install rumale</code>で、本物の<a href='https://rubygems.org/gems/numo-narray-alt' target='_blank'>numo-narray-alt</a>も含めてすべてインストールされます（そのときコンパイルされます）。あとは<code>require \"rumale\"</code>だけです。このレッスンのコードはそのまま動きます。封筒だけはこのページが必要です。<code>digits.csv</code>は、E. AlpaydinとC. Kaynakによるデータセット<em>Optical Recognition of Handwritten Digits</em>（<a href='https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits' target='_blank'>UCI</a>、CC BY 4.0）から取りました。<a href='assets/data/digits.csv' download>ここからダウンロード</a>できます。RumaleはBSDライセンスです。</p></div><div class='task'><strong>課題：</strong>Rubyは文字でも絵を描けます。7の絵を、分類器がわかる64個の数にしましょう。<code>#</code>は16、<code>.</code>は0で、1行ずつ順番です。そして<code>learner</code>に何が見えるか言わせ、その答えをRubyの数値として<code>digit</code>に入れてください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "seven = <<~PICTURE\n  .######.\n  ......#.\n  .....#..\n  ....#...\n  ...#....\n  ...#....\n  ..#.....\n  ..#.....\nPICTURE\n# pixels = ...   （64個の数：#は16、.は0）\n# digit = ...   （learnerに見えたもの。Rubyの数値で）\n",
+            "check": "digit == 7 && code.include?(\"predict\")",
+            "hint": "<code>seven.delete(\"\\n\").chars</code>で64個の文字になるよ。<code>map { |c| c == \"#\" ? 16 : 0 }</code>で数にしてね。<code>learner.predict(Numo::DFloat[pixels])</code>は1枚の絵を1行とする表がほしいから、ここでは1行だけ。<code>[0]</code>で答えを取り出してね。"
+          }
+        ]
+      }
+    },
+    {
       "id": "scarpe",
       "de": {
-        "title": "27. Shoes-Apps mit Scarpe",
+        "title": "28. Shoes-Apps mit Scarpe",
         "cells": [
           {
             "t": "h",
@@ -3708,7 +3927,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "27. Shoes apps with Scarpe",
+        "title": "28. Shoes apps with Scarpe",
         "cells": [
           {
             "t": "h",
@@ -3755,7 +3974,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "27. ScarpeでShoesアプリ",
+        "title": "28. ScarpeでShoesアプリ",
         "cells": [
           {
             "t": "h",
@@ -3805,7 +4024,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "rubykaigi",
       "de": {
-        "title": "28. RubyKaigi & seltsamer Code",
+        "title": "29. RubyKaigi & seltsamer Code",
         "cells": [
           {
             "t": "h",
@@ -3876,7 +4095,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "28. RubyKaigi & weird code",
+        "title": "29. RubyKaigi & weird code",
         "cells": [
           {
             "t": "h",
@@ -3947,7 +4166,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "28. RubyKaigiと変なコード",
+        "title": "29. RubyKaigiと変なコード",
         "cells": [
           {
             "t": "h",
@@ -4026,7 +4245,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "応用コース：timelog"
       },
       "de": {
-        "title": "29. Projekt timelog: Collections",
+        "title": "30. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -4065,7 +4284,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "29. Project timelog: collections",
+        "title": "30. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -4104,7 +4323,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "29. timelogプロジェクト：コレクション",
+        "title": "30. timelogプロジェクト：コレクション",
         "cells": [
           {
             "t": "h",
@@ -4146,7 +4365,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "30. Text parsen: Regex",
+        "title": "31. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -4177,7 +4396,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "30. Parsing text: regex",
+        "title": "31. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -4208,7 +4427,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "30. テキストのパース：正規表現",
+        "title": "31. テキストのパース：正規表現",
         "cells": [
           {
             "t": "h",
@@ -4242,7 +4461,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "31. Methoden richtig bauen",
+        "title": "32. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -4273,7 +4492,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "31. Building methods properly",
+        "title": "32. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -4304,7 +4523,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "31. メソッドをきちんと作る",
+        "title": "32. メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -4338,7 +4557,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "32. Entry & Timesheet",
+        "title": "33. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -4369,7 +4588,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "32. Entry & Timesheet",
+        "title": "33. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -4400,7 +4619,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "32. EntryとTimesheet",
+        "title": "33. EntryとTimesheet",
         "cells": [
           {
             "t": "h",
@@ -4434,7 +4653,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "33. Testen mit Minitest",
+        "title": "34. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -4465,7 +4684,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "33. Testing with Minitest",
+        "title": "34. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -4496,7 +4715,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "33. Minitestでテスト",
+        "title": "34. Minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -4530,7 +4749,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "34. Enumerable & Data",
+        "title": "35. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -4542,7 +4761,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 29, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 30, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -4553,7 +4772,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "34. Enumerable & Data",
+        "title": "35. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -4565,7 +4784,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 29, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 30, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -4576,7 +4795,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "34. EnumerableとData",
+        "title": "35. EnumerableとData",
         "cells": [
           {
             "t": "h",
@@ -4588,7 +4807,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン29で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン30で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
           },
           {
             "t": "x",
@@ -4602,7 +4821,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "35. Blocks, Procs & Lambdas",
+        "title": "36. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -4641,7 +4860,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "35. Blocks, procs & lambdas",
+        "title": "36. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -4680,7 +4899,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "35. ブロック、Proc、lambda",
+        "title": "36. ブロック、Proc、lambda",
         "cells": [
           {
             "t": "h",
@@ -4722,7 +4941,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "36. Fehler behandeln",
+        "title": "37. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -4753,7 +4972,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "36. Handling errors",
+        "title": "37. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -4784,7 +5003,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "36. エラー処理",
+        "title": "37. エラー処理",
         "cells": [
           {
             "t": "h",
@@ -4818,7 +5037,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "37. Daten speichern: Formate",
+        "title": "38. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -4873,7 +5092,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "37. Saving data: formats",
+        "title": "38. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -4928,7 +5147,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "37. データの保存：フォーマット",
+        "title": "38. データの保存：フォーマット",
         "cells": [
           {
             "t": "h",
@@ -4986,7 +5205,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "38. Kommandozeile & Gems",
+        "title": "39. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -5013,7 +5232,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "38. Command line & gems",
+        "title": "39. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -5040,7 +5259,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "38. コマンドラインとgem",
+        "title": "39. コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -5070,7 +5289,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "39. Pattern Matching",
+        "title": "40. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -5101,7 +5320,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "39. Pattern matching",
+        "title": "40. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -5132,7 +5351,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "39. パターンマッチ",
+        "title": "40. パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -5166,7 +5385,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "40. Objektmodell & Metaprogrammierung",
+        "title": "41. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -5197,7 +5416,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "40. Object model & metaprogramming",
+        "title": "41. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -5228,7 +5447,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "40. オブジェクトモデルとメタプログラミング",
+        "title": "41. オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -5262,7 +5481,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "41. Eine eigene DSL",
+        "title": "42. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -5274,7 +5493,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 35 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 36 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -5285,7 +5504,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "41. Your own DSL",
+        "title": "42. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -5297,7 +5516,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 35 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 36 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
@@ -5308,7 +5527,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "41. 自分だけのDSL",
+        "title": "42. 自分だけのDSL",
         "cells": [
           {
             "t": "h",
@@ -5320,7 +5539,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン35のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン36のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
           },
           {
             "t": "x",
@@ -5334,7 +5553,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "42. Codequalität & Debugging",
+        "title": "43. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -5357,7 +5576,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "42. Code quality & debugging",
+        "title": "43. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -5380,7 +5599,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "42. コードの品質とデバッグ",
+        "title": "43. コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -5406,7 +5625,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "43. Performance & Nebenläufigkeit",
+        "title": "44. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -5453,7 +5672,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "43. Performance & concurrency",
+        "title": "44. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -5500,7 +5719,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "43. パフォーマンスと並行処理",
+        "title": "44. パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -5550,7 +5769,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "44. Finale: timelog im Web",
+        "title": "45. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -5572,12 +5791,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 38 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 39 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "en": {
-        "title": "44. Finale: timelog on the web",
+        "title": "45. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
@@ -5599,12 +5818,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 38 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 39 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "ja": {
-        "title": "44. フィナーレ：Webで動くtimelog",
+        "title": "45. フィナーレ：Webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -5626,7 +5845,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン38で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン39で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }

@@ -6,6 +6,7 @@ assets/chunky.svg
 assets/codemirror-ruby.js
 assets/codemirror.css
 assets/codemirror.js
+assets/data/digits.csv
 assets/fonts/OFL-atkinson-hyperlegible-mono.txt
 assets/fonts/OFL-atkinson-hyperlegible-next.txt
 assets/fonts/OFL-shantell-sans.txt
@@ -75,6 +76,8 @@ gems/cache/rexml-3.4.4.gem
 gems/cache/roda-3.108.0.gem
 gems/cache/ruby_pptx-0.2.0.gem
 gems/cache/rubyzip-3.7.0.gem
+gems/cache/rumale-core-2.2.0.gem
+gems/cache/rumale-nearest_neighbors-2.2.0.gem
 gems/cache/scarpe-components-0.5.0.gem
 gems/cache/sinatra-4.2.1.gem
 gems/cache/three-rb-0.2.1.gem
@@ -82,7 +85,9 @@ gems/cache/tilt-2.9.0.gem
 gems/cache/ttfunk-1.8.0.gem
 index.html
 lessons.js
+letter.js
 main.rb
+numo_narray.rb
 offline.js
 pycall.rb
 rack_playground.rb

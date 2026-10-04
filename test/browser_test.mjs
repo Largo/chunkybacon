@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('44 lessons in nav', (await page.$$('#lessonNav a')).length === 44);
+check('45 lessons in nav', (await page.$$('#lessonNav a')).length === 45);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -495,6 +495,41 @@ await setExercise('require "pycall"\nlm = PyCall.import_module("sklearn.linear_m
 await runExercise();
 await page.waitForTimeout(800);
 check('forecast exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// Rumale lesson: pure Ruby on a pure-Ruby Numo (numo_narray.rb), digits.csv
+// next to the code, and a letter to write a postcode on (letter.js)
+await page.click('#lessonNav a[data-id="rumale"]');
+await page.waitForTimeout(300);
+const rumaleCell = async (idx) => {
+  await page.click(`.run-cell[data-idx="${idx}"]`, { noWaitAfter: true });
+  await page.waitForFunction(i => !document.querySelector(`.run-cell[data-idx="${i}"]`).disabled &&
+    document.getElementById('cell-out-' + i).style.display !== 'none', idx, { timeout: 120000 }).catch(() => {});
+  return (await page.textContent(`#cell-out-${idx}`)) || '';
+};
+check('Rumale installs on the Numo stand-in', (await rumaleCell(1)).includes('=> [9, 2]'));
+check('nearest neighbours judge vegetables', (await rumaleCell(3)).includes('=> ["Gurke", "Tomate", "Rüebli"]'));
+check('digits.csv lies next to the code', (await rumaleCell(5)).includes('=> [1797, 64]'));
+check('a digit drawn with characters', (await rumaleCell(7)).includes('=> 0'));
+check('48 of 50 hidden digits', (await rumaleCell(9)).includes('=> 0.96'));
+await rumaleCell(11);
+check('show_letter draws an envelope', await page.isVisible('#cell-out-11 .letter-canvas'));
+// a 3, then three 0s, as pen strokes in the letter's coordinates (box i at x = 52 + 64 i)
+const ring = (x0) => Array.from({ length: 21 }, (_, k) => {
+  const a = -Math.PI / 2 + k * 2 * Math.PI / 20;
+  return [x0 + 27 + 12 * Math.cos(a), 202 + 25 * Math.sin(a)];
+});
+const three = Array.from({ length: 21 }, (_, k) => {
+  const a = k < 11 ? -2.6 + k * 0.42 : -1.6 + (k - 10) * 0.42;
+  return k < 11 ? [79 + 12 * Math.cos(a), 190 + 12 * Math.sin(a)] : [79 + 14 * Math.cos(a), 215 + 13 * Math.sin(a)];
+});
+await page.evaluate(strokes => document.querySelector('#cell-out-11 .letter-widget').chunkyLetter.draw(strokes),
+                    [three, ring(116), ring(180), ring(244)]);
+await page.waitForFunction(() => document.querySelector('#cell-out-11 .letter-widget').getAttribute('data-answer'), null, { timeout: 30000 }).catch(() => {});
+check('the letter reads the postcode', (await page.getAttribute('#cell-out-11 .letter-widget', 'data-answer')) === '3000 Bern');
+await setExercise('sieben = <<~BILD\n  .######.\n  ......#.\n  .....#..\n  ....#...\n  ...#....\n  ...#....\n  ..#.....\n  ..#.....\nBILD\npixel = sieben.delete("\\n").chars.map { |z| z == "#" ? 16 : 0 }\nziffer = lerner.predict(Numo::DFloat[pixel])[0]');
+await runExercise();
+await page.waitForTimeout(800);
+check('the seven exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 
 // RubyKaigi lesson: weird but valid Ruby, and Prism (a C extension built
 // into the wasm) splitting and parsing code the way IRB reads it

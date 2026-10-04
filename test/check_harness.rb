@@ -28,6 +28,11 @@ $shown_images = []
 $shown_scenes = []
 $shown_apps = []
 $explicit_downloads = []
+$letter_answers = []
+# Numo is C; the lessons run on the browser's pure-Ruby stand-in, which
+# main.rb serves for these requires - here even where the real gem is installed
+require_relative "../html/numo_narray"
+$LOADED_FEATURES.push("numo/narray.rb", "numo/narray/alt.rb")
 module Kernel
   def download_file(data, name = nil)
     $explicit_downloads << (name || data).to_s
@@ -64,6 +69,15 @@ module Kernel
   def show_three(scene, _camera, **_options)
     $shown_scenes << scene
     yield 1 if block_given?
+    nil
+  end
+
+  # The letter needs a pen; offline the block gets four digits from
+  # digits.csv, 3, 0, 0, 0 - the postcode both lessons' tables have
+  def show_letter(boxes: 4, &block)
+    rows = File.read(File.expand_path("../html/assets/data/digits.csv", __dir__)).lines.map { |l| l.split(",").map(&:to_i) }
+    written = [3, 0, 0, 0].first(boxes).map { |d| rows.find { |r| r.last == d }.first(64) }
+    $letter_answers << block.call(written).to_s
     nil
   end
 
@@ -149,6 +163,9 @@ SOLUTION_LANG = { "ja" => "en" }.freeze
 # Lessons that need the browser: PyCall talks to Pyodide (html/pycall.rb),
 # which only a page has - test/browser_test.mjs runs them.
 BROWSER_ONLY = %w[pycall sympy numpy sklearn].freeze
+
+# the Rumale exercise's picture of a seven (its starter defines it too)
+RUMALE_SEVEN = "PIC = %w[.######. ......#. .....#.. ....#... ...#.... ...#.... ..#..... ..#.....].join(\"\\n\") + \"\\n\"\n"
 
 SOLUTIONS = {
   "hallo" => {
@@ -791,6 +808,12 @@ end
 
 show_browser TimelogWeb, "/")]
   },
+  "rumale" => {
+    "de" => [%(#{RUMALE_SEVEN.sub("PIC", "sieben")}pixel = sieben.delete("\\n").chars.map { |z| z == "#" ? 16 : 0 }\nziffer = lerner.predict(Numo::DFloat[pixel])[0]),
+             %(#{RUMALE_SEVEN.sub("PIC", "sieben")}ziffer = lerner.predict(Numo::DFloat[sieben.delete("\\n").chars.map { |z| z == "#" ? 16 : 0 }])[0]\nputs ziffer)],
+    "en" => [%(#{RUMALE_SEVEN.sub("PIC", "seven")}pixels = seven.delete("\\n").chars.map { |c| c == "#" ? 16 : 0 }\ndigit = learner.predict(Numo::DFloat[pixels])[0]),
+             %(#{RUMALE_SEVEN.sub("PIC", "seven")}digit = learner.predict(Numo::DFloat[seven.delete("\\n").chars.map { |c| c == "#" ? 16 : 0 }])[0]\nputs digit)]
+  },
   "roda" => {
     "de" => [%(install_gem "roda"\nrequire "roda"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      "<h1>Kiosk</h1>"\n    end\n    r.get "bestellung", Integer do |anzahl|\n      "\#{anzahl} Streifen Speck, kommt sofort!"\n    end\n  end\nend\nshow_browser Kiosk, "/bestellung/5")],
     "en" => [%(install_gem "roda"\nrequire "roda"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      "<h1>Kiosk</h1>"\n    end\n    r.get "order", Integer do |amount|\n      "\#{amount} strips of bacon, coming right up!"\n    end\n  end\nend\nshow_browser Kiosk, "/order/5")]
@@ -813,6 +836,14 @@ def run_in(bind, code)
   [result, buffer.string, error]
 end
 
+# the files a lesson brings (lessons.js "files"), as main.rb puts them next
+# to its code
+def load_lesson_files(lesson)
+  (lesson["files"] || {}).each do |name, path|
+    SandboxFS.write(name, File.read(File.expand_path("../html/#{path}", __dir__)))
+  end
+end
+
 def run_harness(langs)
   data = JSON.parse(File.read(File.expand_path("lessons.json", __dir__)))
   failures = 0
@@ -831,6 +862,8 @@ def run_harness(langs)
 
     variants.each do |label, candidate|
       bind = eval("proc { binding }.call", TOPLEVEL_BINDING)
+      load_lesson_files(lesson)
+      $letter_answers = []
 
       demo_failed = false
       demos.each do |demo|
@@ -843,11 +876,18 @@ def run_harness(langs)
       end
       next if demo_failed
 
+      # the letter's block read 3000 from the digits it got
+      unless $letter_answers.all? { |answer| answer.start_with?("3000 ") }
+        puts "FAIL #{lesson["id"]}/#{lang}: the letter answered #{$letter_answers.inspect}"
+        failures += 1
+      end
+
       $shown_images = []
       $shown_scenes = []
       $shown_apps = []
       $explicit_downloads = []
       SandboxFS.reset!
+      load_lesson_files(lesson)
       watch = FileWatch.snapshot
       result, output, error = run_in(bind, candidate)
       downloads = FileWatch.changes_since(watch).map(&:first) | $explicit_downloads
