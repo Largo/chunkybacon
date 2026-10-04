@@ -46,6 +46,10 @@ against the release's SHA-256.
 | [six](https://github.com/benjaminp/six) | 1.17.0 | MIT | its wheel (`dist-info/LICENSE`) |
 | [SymPy](https://www.sympy.org/) | 1.14.0 | BSD-3-Clause, with bundled parts under their own licenses | `sympy-1.14.0-py3-none-any.whl` (`dist-info/licenses/LICENSE`, `AUTHORS`) |
 | [mpmath](https://mpmath.org/) | 1.4.1 | BSD-3-Clause | its wheel (`dist-info/licenses/LICENSE`) |
+| [scikit-learn](https://scikit-learn.org/) | 1.8.0 | BSD-3-Clause | `scikit_learn-1.8.0-…wasm32.whl` (`dist-info/licenses/COPYING`) |
+| [SciPy](https://scipy.org/) | 1.18.0 | BSD-3-Clause, with bundled parts under their own licenses | `scipy-1.18.0-…wasm32.whl` (`dist-info/LICENSE.txt`, which lists the bundled parts) |
+| [joblib](https://joblib.readthedocs.io/) | 1.5.3 | BSD-3-Clause | its wheel (`dist-info/licenses/LICENSE.txt`) |
+| [threadpoolctl](https://github.com/joblib/threadpoolctl) | 3.6.0 | BSD-3-Clause | its wheel (`dist-info/licenses/LICENSE`) |
 
 ## Editor, 3D and fonts
 

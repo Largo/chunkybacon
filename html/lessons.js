@@ -78,7 +78,7 @@ window.LESSONS_JSON = JSON.stringify({
       "fileUnchanged": "Die Datei enthält nichts, was hier nicht schon ist.",
       "fileInvalid": "Das ist keine Fortschrittsdatei von Chunky Bacon.",
       "offlineTitle": "Offline lernen",
-      "offlineExplain": "Speichere den ganzen Kurs auf diesem Gerät – dann funktioniert er auch ohne Internet, im Zug oder im Flugzeug. Einmalig bis zu 36 MB Download, etwa 67 MB Speicherplatz (ohne Python 18 und 43 MB). Wird der Kurs online geändert, holt sich die Kopie die Änderungen von selbst.",
+      "offlineExplain": "Speichere den ganzen Kurs auf diesem Gerät – dann funktioniert er auch ohne Internet, im Zug oder im Flugzeug. Einmalig bis zu 54 MB Download, etwa 85 MB Speicherplatz (ohne Python 18 und 43 MB). Wird der Kurs online geändert, holt sich die Kopie die Änderungen von selbst.",
       "offlineEnable": "Auf diesem Gerät speichern",
       "offlineLoading": "Wird gespeichert …",
       "offlineReady": "Auf diesem Gerät gespeichert – funktioniert auch offline. Stand: %s",
@@ -87,7 +87,7 @@ window.LESSONS_JSON = JSON.stringify({
       "offlineDisable": "Kopie löschen",
       "offlineError": "Der Kurs konnte nicht gespeichert werden: %s",
       "offlineRetry": "Nochmals versuchen",
-      "offlinePython": "Python mitnehmen – für die Python-Lektionen (pandas, SymPy), rund 25 MB",
+      "offlinePython": "Python mitnehmen – für die Python-Lektionen (pandas, SymPy, NumPy, scikit-learn), rund 43 MB",
       "offlineUnsupported": "Offline lernen geht in diesem Browser nicht (zum Beispiel in einem privaten Fenster).",
       "gemOffline": "Gem „%s“ ist nicht in der Offline-Kopie – zum Installieren brauchst du eine Internetverbindung.",
       "close": "Schliessen",
@@ -186,7 +186,7 @@ window.LESSONS_JSON = JSON.stringify({
       "fileUnchanged": "The file holds nothing that is not here already.",
       "fileInvalid": "That is not a Chunky Bacon progress file.",
       "offlineTitle": "Learn offline",
-      "offlineExplain": "Keep the whole course on this device – then it works without internet too, on a train or a plane. Up to 36 MB to download once, about 67 MB of storage (without Python 18 and 43 MB). When the course changes online, the copy picks up the changes by itself.",
+      "offlineExplain": "Keep the whole course on this device – then it works without internet too, on a train or a plane. Up to 54 MB to download once, about 85 MB of storage (without Python 18 and 43 MB). When the course changes online, the copy picks up the changes by itself.",
       "offlineEnable": "Keep on this device",
       "offlineLoading": "Saving …",
       "offlineReady": "Saved on this device – works offline too. As of %s",
@@ -195,7 +195,7 @@ window.LESSONS_JSON = JSON.stringify({
       "offlineDisable": "Delete the copy",
       "offlineError": "The course could not be saved: %s",
       "offlineRetry": "Try again",
-      "offlinePython": "Include Python – for the Python lessons (pandas, SymPy), about 25 MB",
+      "offlinePython": "Include Python – for the Python lessons (pandas, SymPy, NumPy, scikit-learn), about 43 MB",
       "offlineUnsupported": "Learning offline does not work in this browser (in a private window, for example).",
       "gemOffline": "Gem “%s” is not in the offline copy – installing it needs an internet connection.",
       "close": "Close",
@@ -294,7 +294,7 @@ window.LESSONS_JSON = JSON.stringify({
       "fileUnchanged": "このファイルには、ここにまだないものは含まれていません。",
       "fileInvalid": "これはChunky Baconの進捗ファイルではありません。",
       "offlineTitle": "オフラインで学ぶ",
-      "offlineExplain": "コース全体をこの端末に保存すると、インターネットがなくても（電車や飛行機の中でも）使えます。最初に最大36 MBをダウンロードし、約67 MBの容量を使います（Pythonなしなら18 MBと43 MB）。オンラインのコースが更新されると、コピーも自動で更新されます。",
+      "offlineExplain": "コース全体をこの端末に保存すると、インターネットがなくても（電車や飛行機の中でも）使えます。最初に最大54 MBをダウンロードし、約85 MBの容量を使います（Pythonなしなら18 MBと43 MB）。オンラインのコースが更新されると、コピーも自動で更新されます。",
       "offlineEnable": "この端末に保存",
       "offlineLoading": "保存しています…",
       "offlineReady": "この端末に保存済みです。オフラインでも使えます。（%s 時点）",
@@ -303,7 +303,7 @@ window.LESSONS_JSON = JSON.stringify({
       "offlineDisable": "コピーを削除",
       "offlineError": "コースを保存できませんでした：%s",
       "offlineRetry": "もう一度試す",
-      "offlinePython": "Pythonも保存する（pandas・SymPyのレッスン用、約25 MB）",
+      "offlinePython": "Pythonも保存する（pandas・SymPy・NumPy・scikit-learnのレッスン用、約43 MB）",
       "offlineUnsupported": "このブラウザ（たとえばプライベートウィンドウ）ではオフライン学習を使えません。",
       "gemOffline": "gem「%s」はオフライン用コピーに含まれていません。インストールするにはインターネット接続が必要です。",
       "close": "閉じる",
@@ -2481,7 +2481,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 39). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
+            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 41). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
           },
           {
             "t": "c",
@@ -2528,7 +2528,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 39 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
+            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 41 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
           },
           {
             "t": "c",
@@ -2575,7 +2575,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン39で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
+            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン41で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
           },
           {
             "t": "c",
@@ -3251,9 +3251,417 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "numpy",
+      "de": {
+        "title": "25. NumPy: ganze Arrays auf einmal",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ganze Arrays auf einmal</h2><p>Auf <a href='https://numpy.org' target='_blank'>NumPy</a> steht fast alles, was Python mit Zahlen macht – pandas aus Lektion 23 ist darauf gebaut, und scikit-learn in der nächsten Lektion auch. Die Idee ist einfach: ein <strong>Array</strong> aus Zahlen, mit dem du als Ganzes rechnest. Keine Schleife – die läuft in NumPy, in schnellem kompiliertem Code.</p><p>Wir erreichen es wieder über pycall. Hier fünf Temperaturen in Celsius, in einer Zeile in Fahrenheit umgerechnet:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pycall\"\nnp = PyCall.import_module(\"numpy\")\n\ntemperaturen = np.array([12.5, 15.0, 9.5, 21.0, 18.5])\ntemperaturen * 9 / 5 + 32"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>np.array</code> macht aus einem Ruby-Array ein NumPy-Array. <code>* 9 / 5 + 32</code> wirkt dann auf jede Zahl auf einmal. In reinem Ruby wäre das <code>temperaturen.map { |t| t * 9 / 5 + 32 }</code> – dasselbe Ergebnis, aber NumPy ist viel schneller, sobald es Millionen Zahlen sind.</p><p>Ein Array kann sich auch selbst zusammenfassen. Eine einzelne Zahl kommt als Ruby-Zahl zurück:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts temperaturen.mean\nputs temperaturen.max\ntemperaturen.argmax"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>mean</code> ist der Durchschnitt, <code>max</code> der grösste Wert und <code>argmax</code>, <em>wo</em> er steht: an Index 3, ab 0 gezählt. Werte auswählen geht wie in pandas – eine Frage an jedes Element, ein Array aus <code>True</code>/<code>False</code>, und dieses Array in eckigen Klammern:</p>"
+          },
+          {
+            "t": "c",
+            "code": "temperaturen[temperaturen > 15]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Nur die warmen Tage bleiben übrig. Arrays, ohne sie abzutippen: <code>np.arange</code> zählt wie ein Ruby-Range (das Ende ist nicht dabei), und <code>np.linspace</code> verteilt eine Anzahl Punkte gleichmässig zwischen zwei Werten:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts np.arange(1, 11) ** 2\nnp.linspace(0, 1, 5)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>** 2</code> quadriert alle zehn Zahlen auf einmal.</p><p>Arrays können auch Zeilen und Spalten haben, wie eine Tabelle oder ein Schachbrett. <code>reshape(3, 4)</code> faltet 12 Zahlen in 3 Zeilen zu 4:</p>"
+          },
+          {
+            "t": "c",
+            "code": "brett = np.arange(12).reshape(3, 4)\nputs brett\nputs brett.shape\nbrett.sum(axis: 0)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>shape</code> sagt, wie gross das Array ist: 3 Zeilen, 4 Spalten. <code>sum(axis: 0)</code> zählt jede Spalte zusammen (Achse 0 läuft die Zeilen hinunter); mit <code>axis: 1</code> wäre es jede Zeile.</p><p>NumPy bringt auch Zufallszahlen mit. Würfeln wir 6000-mal und zählen, wie oft jede Augenzahl kam:</p>"
+          },
+          {
+            "t": "c",
+            "code": "rng = np.random.default_rng(42)\nwuerfe = rng.integers(1, 7, size: 6000)\nnp.bincount(wuerfe)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>default_rng(42)</code> ist ein Zufallsgenerator; die 42 (der <em>Seed</em>) sorgt dafür, dass er jedes Mal dieselben Zahlen liefert, so kannst du das Ergebnis prüfen. <code>integers(1, 7, size: 6000)</code> würfelt 6000-mal – die 7 ist nicht dabei. <code>bincount</code> zählt, wie oft jede Zahl vorkommt, ab 0: keine Nullen, und von jeder Augenzahl rund 1000.</p><p>Zurück nach Ruby geht es wie bei pandas: <code>tolist</code> macht eine Python-Liste, <code>to_a</code> ein Ruby-Array.</p>"
+          },
+          {
+            "t": "c",
+            "code": "temperaturen.tolist.to_a.map { |t| t.round }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ab da funktionieren wieder Rubys eigene Methoden – hier <code>map</code> mit <code>round</code>.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>pip install numpy</code> und <code>gem install pycall</code>, und der Code dieser Lektion läuft unverändert. Für Zahlen in Ruby selbst gibt es <a href='https://github.com/ruby-numo/numo-narray' target='_blank'>Numo::NArray</a>, das ganz ähnlich wie NumPy arbeitet. NumPy steht unter der BSD-Lizenz.</p></div><div class='task'><strong>Aufgabe:</strong> Wie viele dieser Prüfungspunkte sind 60 oder mehr? Lass NumPy das machen – ohne Ruby-Schleife – und speichere die Anzahl in <code>bestanden</code>, als Ruby-Zahl.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"pycall\"\nnp = PyCall.import_module(\"numpy\")\n\npunkte = np.array([55, 72, 61, 48, 90, 67, 59])\n# bestanden = ...   (wie viele Punkte sind 60 oder mehr)\n",
+            "check": "bestanden == 4 && bestanden.is_a?(Integer)",
+            "hint": "<code>punkte &gt;= 60</code> ergibt ein Array aus <code>True</code> und <code>False</code>. <code>True</code> zählt als 1 und <code>False</code> als 0 – also ist seine <code>sum</code> die Anzahl."
+          }
+        ]
+      },
+      "en": {
+        "title": "25. NumPy: whole arrays at once",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Whole arrays at once</h2><p><a href='https://numpy.org' target='_blank'>NumPy</a> is the library almost all of Python's number crunching stands on – pandas from lesson 23 is built on it, and so is scikit-learn in the next lesson. Its idea is simple: an <strong>array</strong> of numbers that you calculate with as a whole. No loop – NumPy runs the loop for you, in fast compiled code.</p><p>We reach it through pycall again. Here are five temperatures in Celsius, turned into Fahrenheit in one line:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pycall\"\nnp = PyCall.import_module(\"numpy\")\n\ntemps = np.array([12.5, 15.0, 9.5, 21.0, 18.5])\ntemps * 9 / 5 + 32"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>np.array</code> makes an array from a Ruby array. <code>* 9 / 5 + 32</code> then works on every number at once. In plain Ruby that would be <code>temps.map { |t| t * 9 / 5 + 32 }</code> – the same result, but NumPy is much faster once there are millions of numbers.</p><p>An array also knows how to sum itself up. A single number comes back as a Ruby number:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts temps.mean\nputs temps.max\ntemps.argmax"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>mean</code> is the average, <code>max</code> the largest value, and <code>argmax</code> <em>where</em> it is: at index 3, counting from 0. Picking values works like in pandas – a question for every element, a <code>True</code>/<code>False</code> array, and that array in square brackets:</p>"
+          },
+          {
+            "t": "c",
+            "code": "temps[temps > 15]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Only the warm days are left. To make arrays without typing them: <code>np.arange</code> counts like a Ruby range (the end is not included), and <code>np.linspace</code> spreads a number of points evenly between two values:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts np.arange(1, 11) ** 2\nnp.linspace(0, 1, 5)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>** 2</code> squares all ten numbers at once.</p><p>Arrays can also have rows and columns, like a table or a chessboard. <code>reshape(3, 4)</code> folds 12 numbers into 3 rows of 4:</p>"
+          },
+          {
+            "t": "c",
+            "code": "grid = np.arange(12).reshape(3, 4)\nputs grid\nputs grid.shape\ngrid.sum(axis: 0)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>shape</code> says how big the array is: 3 rows, 4 columns. <code>sum(axis: 0)</code> adds up every column (axis 0 runs down the rows); <code>axis: 1</code> would add up every row instead.</p><p>NumPy also brings random numbers. Let's throw a die 6000 times and count how often each face came up:</p>"
+          },
+          {
+            "t": "c",
+            "code": "rng = np.random.default_rng(42)\ndice = rng.integers(1, 7, size: 6000)\nnp.bincount(dice)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>default_rng(42)</code> is a random-number generator; the 42 (the <em>seed</em>) makes it give the same numbers every time, so you can check the result. <code>integers(1, 7, size: 6000)</code> throws 6000 dice – 7 is not included. <code>bincount</code> counts how often each number appears, starting at 0: no zeros, and about 1000 of each face.</p><p>Back to Ruby, as with pandas: <code>tolist</code> makes a Python list, <code>to_a</code> a Ruby array.</p>"
+          },
+          {
+            "t": "c",
+            "code": "temps.tolist.to_a.map { |t| t.round }"
+          },
+          {
+            "t": "h",
+            "html": "<p>From there on, Ruby's own methods work again – here <code>map</code> with <code>round</code>.</p><div class='offweb' data-title='On your machine'><p><code>pip install numpy</code> and <code>gem install pycall</code>, and the code of this lesson runs unchanged. For numbers in Ruby itself there is <a href='https://github.com/ruby-numo/numo-narray' target='_blank'>Numo::NArray</a>, which works much like NumPy. NumPy comes under the BSD licence.</p></div><div class='task'><strong>Task:</strong> How many of these exam scores are 60 or more? Let NumPy do it – no Ruby loop – and store the count in <code>passed</code>, as a Ruby number.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"pycall\"\nnp = PyCall.import_module(\"numpy\")\n\nscores = np.array([55, 72, 61, 48, 90, 67, 59])\n# passed = ...   (how many scores are 60 or more)\n",
+            "check": "passed == 4 && passed.is_a?(Integer)",
+            "hint": "<code>scores &gt;= 60</code> gives an array of <code>True</code> and <code>False</code>. <code>True</code> counts as 1 and <code>False</code> as 0 – so its <code>sum</code> is the count."
+          }
+        ]
+      },
+      "ja": {
+        "title": "25. NumPy：配列をまるごと計算",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>配列をまるごと計算</h2><p>Pythonの数値計算のほとんどは<a href='https://numpy.org' target='_blank'>NumPy</a>の上に成り立っています。レッスン23のpandasもその上に作られていますし、次のレッスンのscikit-learnもそうです。考え方はかんたんで、数の<strong>配列</strong>を、まるごと計算します。ループはいりません。ループはNumPyの中の速いコンパイル済みのコードが回してくれます。</p><p>今回もpycallを通して使います。5つの摂氏の気温を、1行で華氏に変えてみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pycall\"\nnp = PyCall.import_module(\"numpy\")\n\ntemps = np.array([12.5, 15.0, 9.5, 21.0, 18.5])\ntemps * 9 / 5 + 32"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>np.array</code>はRubyの配列からNumPyの配列を作ります。<code>* 9 / 5 + 32</code>は、すべての数に一度に効きます。ふつうのRubyなら<code>temps.map { |t| t * 9 / 5 + 32 }</code>で、結果は同じですが、数が何百万にもなるとNumPyのほうがずっと速くなります。</p><p>配列は自分自身をまとめることもできます。1つの数値はRubyの数値として返ってきます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts temps.mean\nputs temps.max\ntemps.argmax"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>mean</code>は平均、<code>max</code>はいちばん大きい値、<code>argmax</code>はそれが<em>どこに</em>あるかで、0から数えてインデックス3です。値の選び方はpandasと同じです。すべての要素に質問をして<code>True</code>/<code>False</code>の配列を作り、それを角かっこに入れます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "temps[temps > 15]"
+          },
+          {
+            "t": "h",
+            "html": "<p>暖かい日だけが残りました。配列を手で打たずに作るには、Rubyの範囲のように数える<code>np.arange</code>（終わりの数は含みません）と、2つの値のあいだに点を均等に並べる<code>np.linspace</code>があります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts np.arange(1, 11) ** 2\nnp.linspace(0, 1, 5)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>** 2</code>は10個の数を一度に2乗します。</p><p>配列は、表やチェス盤のように行と列を持つこともできます。<code>reshape(3, 4)</code>は12個の数を、4個ずつ3行に折りたたみます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "grid = np.arange(12).reshape(3, 4)\nputs grid\nputs grid.shape\ngrid.sum(axis: 0)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>shape</code>は配列の大きさを教えてくれます。3行4列です。<code>sum(axis: 0)</code>は列ごとに合計します（軸0は行を下へたどります）。<code>axis: 1</code>なら行ごとの合計です。</p><p>NumPyには乱数もあります。サイコロを6000回振って、それぞれの目が何回出たか数えてみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "rng = np.random.default_rng(42)\ndice = rng.integers(1, 7, size: 6000)\nnp.bincount(dice)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>default_rng(42)</code>は乱数生成器です。42（<em>シード</em>）のおかげで毎回同じ数が出るので、結果を確かめられます。<code>integers(1, 7, size: 6000)</code>はサイコロを6000回振ります。7は含みません。<code>bincount</code>は0から順に、それぞれの数が何回出たかを数えます。0は出ず、どの目もだいたい1000回です。</p><p>Rubyに戻るのはpandasと同じです。<code>tolist</code>でPythonのリストに、<code>to_a</code>でRubyの配列になります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "temps.tolist.to_a.map { |t| t.round }"
+          },
+          {
+            "t": "h",
+            "html": "<p>そこから先は、またRubyのメソッドが使えます。ここでは<code>map</code>と<code>round</code>です。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>pip install numpy</code>と<code>gem install pycall</code>をすれば、このレッスンのコードはそのまま動きます。Ruby自身で数値計算をするなら、NumPyとよく似た<a href='https://github.com/ruby-numo/numo-narray' target='_blank'>Numo::NArray</a>があります。NumPyはBSDライセンスです。</p></div><div class='task'><strong>課題：</strong>この試験の点数のうち、60点以上はいくつあるでしょう？ Rubyのループを使わずにNumPyに数えさせて、その数をRubyの数値として<code>passed</code>に入れましょう。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"pycall\"\nnp = PyCall.import_module(\"numpy\")\n\nscores = np.array([55, 72, 61, 48, 90, 67, 59])\n# passed = ...   （60点以上がいくつあるか）\n",
+            "check": "passed == 4 && passed.is_a?(Integer)",
+            "hint": "<code>scores &gt;= 60</code>は<code>True</code>と<code>False</code>の配列になるよ。<code>True</code>は1、<code>False</code>は0として数えられるから、その<code>sum</code>が個数になるんだ。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sklearn",
+      "de": {
+        "title": "26. scikit-learn: die Maschine lernen lassen",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Die Maschine lernen lassen</h2><p>Normalerweise schreibst du die Regel, und der Computer befolgt sie. Beim <strong>maschinellen Lernen</strong> ist es umgekehrt: Du zeigst dem Computer Beispiele, und er findet die Regel selbst. <a href='https://scikit-learn.org' target='_blank'>scikit-learn</a> ist Pythons Bibliothek dafür – ein paar Dutzend Lernverfahren, alle gleich benutzt: ein <em>Modell</em> machen, mit <code>fit</code> an Beispiele anpassen, mit <code>predict</code> vorhersagen lassen.</p><p>Es steht auf NumPy und SciPy, darum lädt diese Lektion beim ersten Mal rund 19 MB. Erstes Beispiel: ein Glacestand, der an fünf Tagen die Temperatur und die verkauften Glaces notiert hat. Wie viele verkauft er bei 25 Grad?</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pycall\"\nlm = PyCall.import_module(\"sklearn.linear_model\")\n\ntemperatur  = [[14], [18], [22], [26], [30]]   # °C, eine Zeile pro Tag\nverkauft = [21, 33, 46, 60, 71]             # verkaufte Glaces\n\nmodel = lm.LinearRegression.new\nmodel.fit(temperatur, verkauft)\nmodel.predict([[25]])"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Beispiele kommen in zwei Teilen. Die Eingaben sind eine Liste von Zeilen, eine pro Beispiel – hier hat jede Zeile nur einen Wert, die Temperatur, darum <code>[14]</code> und nicht einfach <code>14</code>. Die Antworten sind eine einfache Liste, eine pro Zeile. <code>LinearRegression</code> sucht die Gerade, die am besten durch die Punkte passt; <code>fit</code> lernt sie, <code>predict</code> wendet sie an – für 25 Grad etwa 56 Glaces.</p><p>Die Gerade, die das Modell gelernt hat, sind nur zwei Zahlen, und du kannst danach fragen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"Glaces pro Grad: #{model.coef_[0].round(2)}\"\nputs \"Startwert: #{model.intercept_.round(2)}\""
+          },
+          {
+            "t": "h",
+            "html": "<p><code>coef_</code> ist, wie steil die Gerade ist: pro Grad etwa 3.2 Glaces mehr. <code>intercept_</code> ist, wo die Gerade bei 0 Grad wäre: unter null. Eine Gerade weiss nicht, dass niemand minus 24 Glaces verkauft – ein Modell kennt nur seine Beispiele, und so kalt war keins. Der <code>_</code> am Ende ist scikit-learns Zeichen für «aus den Daten gelernt».</p><p>Jetzt etwas, das keine Zahl ist: Ist ein Tier eine Katze oder ein Fuchs? Wir haben ein paar vermessen – Gewicht in kg und Ohrenlänge in cm – und lassen einen <strong>Entscheidungsbaum</strong> daraus lernen. Das Schöne an einem Baum: Du kannst lesen, was er gelernt hat.</p>"
+          },
+          {
+            "t": "c",
+            "code": "tree = PyCall.import_module(\"sklearn.tree\")\n\ntiere = [[4.0, 6], [3.5, 5], [5.0, 7], [4.5, 6],    # [Gewicht in kg, Ohren in cm]\n           [7.0, 9], [6.5, 10], [8.0, 9], [7.5, 11]]\narten = [\"Katze\"] * 4 + [\"Fuchs\"] * 4\n\nrichter = tree.DecisionTreeClassifier.new(random_state: 0)\nrichter.fit(tiere, arten)\nputs tree.export_text(richter, feature_names: [\"gewicht\", \"ohren\"])"
+          },
+          {
+            "t": "h",
+            "html": "<p>Der Baum stellt eine einzige Frage: Sind die Ohren höchstens 8 cm lang? Dann ist es eine Katze, sonst ein Fuchs. Die Grenze hat er selbst gefunden, genau zwischen den längsten Katzenohren (7 cm) und den kürzesten Fuchsohren (9 cm). Lass ihn Tiere beurteilen, die er noch nie gesehen hat:</p>"
+          },
+          {
+            "t": "c",
+            "code": "richter.predict([[4.2, 6], [7.2, 10], [5.8, 8]]).tolist.to_a"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das dritte ist eine Überraschung: 5.8 kg, schwerer als jede Katze, die wir vermessen haben, und trotzdem sagt der Baum Katze – seine Ohren sind 8 cm lang. Aufs Gewicht hat der Baum nie geschaut, denn die Ohren allein haben all seine Beispiele auseinandergehalten. Ein Modell ist nur so gut wie seine Beispiele: Mit ein paar schweren Katzen und leichten Füchsen darunter hätte er mehr lernen müssen.</p><p>Echte Daten haben mehr als zwei Messwerte. scikit-learn bringt ein paar klassische Datensätze mit; der bekannteste ist <strong>Iris</strong>: 150 Blumen dreier Arten, jede viermal vermessen.</p>"
+          },
+          {
+            "t": "c",
+            "code": "datasets = PyCall.import_module(\"sklearn.datasets\")\nselection = PyCall.import_module(\"sklearn.model_selection\")\n\niris = datasets.load_iris\nputs iris.feature_names\nputs iris.target_names\niris.data.shape"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>shape</code> sagt (150, 4): 150 Zeilen mit je 4 Messwerten. Wie gut kann ein Baum die Arten auseinanderhalten? Um das ehrlich herauszufinden, verstecken wir beim Lernen einen Teil der Daten: <code>train_test_split</code> hält 30 % zurück. Der Baum lernt vom Rest und wird dann an Blumen geprüft, die er nie gesehen hat:</p>"
+          },
+          {
+            "t": "c",
+            "code": "parts = selection.train_test_split(iris.data, iris.target, test_size: 0.3, random_state: 1)\ntrain_x, test_x, train_y, test_y = parts[0], parts[1], parts[2], parts[3]\n\nflowers = tree.DecisionTreeClassifier.new(max_depth: 3, random_state: 0)\nflowers.fit(train_x, train_y)\nflowers.score(test_x, test_y)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>score</code> ist der Anteil der Testblumen, die er richtig erkannt hat – hier etwa 96 %. <code>max_depth: 3</code> erlaubt höchstens drei Fragen hintereinander, so lernt der Baum das allgemeine Muster, statt jede Blume auswendig zu lernen. Mit versteckten Daten prüfen ist die wichtigste Gewohnheit beim maschinellen Lernen: Ein Modell, das nur seine eigenen Beispiele kennt, nützt wenig.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>pip install scikit-learn</code> und <code>gem install pycall</code>, und der Code dieser Lektion läuft unverändert. Für maschinelles Lernen in Ruby selbst gibt es <a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a>, das ganz ähnlich wie scikit-learn arbeitet. scikit-learn, SciPy und NumPy stehen unter der BSD-Lizenz.</p></div><div class='task'><strong>Aufgabe:</strong> Fünf Schülerinnen haben notiert, wie viele Stunden sie gelernt und wie viele Punkte sie bekommen haben. Bring einer <code>LinearRegression</code> damit etwas bei und sag die Punkte für 6 Stunden voraus. Speichere die Vorhersage in <code>prognose</code>, als Ruby-Zahl.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"pycall\"\nlm = PyCall.import_module(\"sklearn.linear_model\")\n\nstunden  = [[1], [2], [3], [4], [5]]\npunkte = [52, 59, 66, 73, 80]\n# prognose = ...   (die vorhergesagten Punkte für 6 Stunden)\n",
+            "check": "prognose.is_a?(Numeric) && (prognose - 87).abs < 0.01 && code.include?(\"fit\")",
+            "hint": "<code>modell = lm.LinearRegression.new</code>, dann <code>modell.fit(stunden, punkte)</code>. <code>modell.predict([[6]])</code> ergibt ein Array mit einer Vorhersage – <code>[0]</code> holt sie als Ruby-Zahl heraus."
+          }
+        ]
+      },
+      "en": {
+        "title": "26. scikit-learn: letting the machine learn",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Letting the machine learn</h2><p>Usually you write the rule and the computer follows it. In <strong>machine learning</strong> it is the other way round: you show the computer examples, and it finds the rule itself. <a href='https://scikit-learn.org' target='_blank'>scikit-learn</a> is Python's library for that – a few dozen learning methods, all used the same way: make a <em>model</em>, <code>fit</code> it to examples, let it <code>predict</code>.</p><p>It stands on NumPy and SciPy, so the first time this lesson loads about 19 MB. First example: an ice cream stand that wrote down, for five days, the temperature and how many ice creams it sold. How many will it sell at 25 degrees?</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pycall\"\nlm = PyCall.import_module(\"sklearn.linear_model\")\n\ntemperature  = [[14], [18], [22], [26], [30]]   # °C, one row per day\nsales = [21, 33, 46, 60, 71]             # ice creams sold\n\nmodel = lm.LinearRegression.new\nmodel.fit(temperature, sales)\nmodel.predict([[25]])"
+          },
+          {
+            "t": "h",
+            "html": "<p>The examples come in two parts. The inputs are a list of rows, one per example – here each row has only one value, the temperature, so it is <code>[14]</code> and not just <code>14</code>. The answers are a plain list, one per row. <code>LinearRegression</code> looks for the straight line that fits the points best; <code>fit</code> learns it, <code>predict</code> uses it – for 25 degrees, about 56 ice creams.</p><p>The line the model learned is just two numbers, and you can ask for them:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"Ice creams per degree: #{model.coef_[0].round(2)}\"\nputs \"Starting point: #{model.intercept_.round(2)}\""
+          },
+          {
+            "t": "h",
+            "html": "<p><code>coef_</code> is how steep the line is: about 3.2 more ice creams for every degree. <code>intercept_</code> is where the line would be at 0 degrees: below zero. A line doesn't know that nobody sells minus 24 ice creams – a model only knows its examples, and none were that cold. The trailing <code>_</code> is scikit-learn's mark for \"learned from the data\".</p><p>Now something that is not a number: is an animal a cat or a fox? We measured a few – weight in kg and ear length in cm – and let a <strong>decision tree</strong> learn from them. The nice thing about a tree: you can read what it learned.</p>"
+          },
+          {
+            "t": "c",
+            "code": "tree = PyCall.import_module(\"sklearn.tree\")\n\nanimals = [[4.0, 6], [3.5, 5], [5.0, 7], [4.5, 6],    # [weight in kg, ears in cm]\n           [7.0, 9], [6.5, 10], [8.0, 9], [7.5, 11]]\nkinds = [\"cat\"] * 4 + [\"fox\"] * 4\n\njudge = tree.DecisionTreeClassifier.new(random_state: 0)\njudge.fit(animals, kinds)\nputs tree.export_text(judge, feature_names: [\"weight\", \"ears\"])"
+          },
+          {
+            "t": "h",
+            "html": "<p>The tree asks one single question: are the ears at most 8 cm long? Then it's a cat, otherwise a fox. It found the boundary itself, halfway between the longest cat ears (7 cm) and the shortest fox ears (9 cm). Let it judge animals it has never seen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "judge.predict([[4.2, 6], [7.2, 10], [5.8, 8]]).tolist.to_a"
+          },
+          {
+            "t": "h",
+            "html": "<p>The third one is a surprise: 5.8 kg, heavier than every cat we measured, and still the tree says cat – its ears are 8 cm. The tree never looked at the weight, because the ears alone told all its examples apart. A model is only as good as its examples: with a few heavy cats and light foxes among them, it would have had to learn more.</p><p>Real data has more than two measurements. scikit-learn comes with a few classic datasets; the best known is <strong>iris</strong>: 150 flowers of three kinds, each measured four times.</p>"
+          },
+          {
+            "t": "c",
+            "code": "datasets = PyCall.import_module(\"sklearn.datasets\")\nselection = PyCall.import_module(\"sklearn.model_selection\")\n\niris = datasets.load_iris\nputs iris.feature_names\nputs iris.target_names\niris.data.shape"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>shape</code> says (150, 4): 150 rows, 4 measurements each. How well can a tree tell the kinds apart? To find out honestly, we hide part of the data while it learns: <code>train_test_split</code> keeps 30% back. The tree learns from the rest and is then tested on flowers it has never seen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "parts = selection.train_test_split(iris.data, iris.target, test_size: 0.3, random_state: 1)\ntrain_x, test_x, train_y, test_y = parts[0], parts[1], parts[2], parts[3]\n\nflowers = tree.DecisionTreeClassifier.new(max_depth: 3, random_state: 0)\nflowers.fit(train_x, train_y)\nflowers.score(test_x, test_y)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>score</code> is the share of test flowers it got right – here about 96%. <code>max_depth: 3</code> allows at most three questions in a row, so the tree learns the general pattern rather than memorising each flower. Testing on hidden data is the most important habit in machine learning: a model that only knows its own examples is not much use.</p><div class='offweb' data-title='On your machine'><p><code>pip install scikit-learn</code> and <code>gem install pycall</code>, and the code of this lesson runs unchanged. For machine learning in Ruby itself, look at <a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a>, which works much like scikit-learn. scikit-learn, SciPy and NumPy come under the BSD licence.</p></div><div class='task'><strong>Task:</strong> Five students wrote down how many hours they studied and how many points they got. Teach a <code>LinearRegression</code> with them and predict the points for 6 hours. Store the prediction in <code>forecast</code>, as a Ruby number.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"pycall\"\nlm = PyCall.import_module(\"sklearn.linear_model\")\n\nhours  = [[1], [2], [3], [4], [5]]\npoints = [52, 59, 66, 73, 80]\n# forecast = ...   (the predicted points for 6 hours)\n",
+            "check": "forecast.is_a?(Numeric) && (forecast - 87).abs < 0.01 && code.include?(\"fit\")",
+            "hint": "<code>model = lm.LinearRegression.new</code>, then <code>model.fit(hours, points)</code>. <code>model.predict([[6]])</code> gives an array with one prediction – <code>[0]</code> takes it out as a Ruby number."
+          }
+        ]
+      },
+      "ja": {
+        "title": "26. scikit-learn：機械に学ばせる",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>機械に学ばせる</h2><p>ふつうは、あなたがルールを書き、コンピューターがそれに従います。<strong>機械学習</strong>ではその逆です。コンピューターに例を見せると、ルールを自分で見つけます。<a href='https://scikit-learn.org' target='_blank'>scikit-learn</a>はそのためのPythonのライブラリで、数十種類の学習方法があり、どれも同じように使います。<em>モデル</em>を作り、<code>fit</code>で例に合わせ、<code>predict</code>で予測させます。</p><p>NumPyとSciPyの上に成り立っているので、このレッスンは初回に約19 MBを読み込みます。最初の例は、5日間の気温と売れたアイスの数を記録したアイス屋さんです。25度ならいくつ売れるでしょう？</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pycall\"\nlm = PyCall.import_module(\"sklearn.linear_model\")\n\ntemperature  = [[14], [18], [22], [26], [30]]   # °C、1日1行\nsales = [21, 33, 46, 60, 71]             # 売れたアイスの数\n\nmodel = lm.LinearRegression.new\nmodel.fit(temperature, sales)\nmodel.predict([[25]])"
+          },
+          {
+            "t": "h",
+            "html": "<p>例は2つの部分からなります。入力は行のリストで、1つの例が1行です。ここでは各行に気温という値が1つだけなので、<code>14</code>ではなく<code>[14]</code>と書きます。答えはふつうのリストで、1行に1つです。<code>LinearRegression</code>は点にいちばんよく合う直線を探します。<code>fit</code>で学び、<code>predict</code>で使います。25度ならアイスは約56個です。</p><p>モデルが学んだ直線はたった2つの数で、聞けば教えてくれます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"Ice creams per degree: #{model.coef_[0].round(2)}\"\nputs \"Starting point: #{model.intercept_.round(2)}\""
+          },
+          {
+            "t": "h",
+            "html": "<p><code>coef_</code>は直線の傾きで、1度ごとにアイスが約3.2個増えます。<code>intercept_</code>は0度のときの直線の位置で、マイナスになります。直線は、アイスがマイナス24個売れることはないと知りません。モデルが知っているのは例だけで、そんなに寒い日の例はなかったからです。最後の<code>_</code>は、scikit-learnの「データから学んだもの」という印です。</p><p>次は数ではないものです。ある動物はネコでしょうか、キツネでしょうか？ 何匹か、体重（kg）と耳の長さ（cm）を測って、<strong>決定木</strong>に学ばせます。木のいいところは、何を学んだのかが読めることです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "tree = PyCall.import_module(\"sklearn.tree\")\n\nanimals = [[4.0, 6], [3.5, 5], [5.0, 7], [4.5, 6],    # [体重kg, 耳cm]\n           [7.0, 9], [6.5, 10], [8.0, 9], [7.5, 11]]\nkinds = [\"cat\"] * 4 + [\"fox\"] * 4\n\njudge = tree.DecisionTreeClassifier.new(random_state: 0)\njudge.fit(animals, kinds)\nputs tree.export_text(judge, feature_names: [\"weight\", \"ears\"])"
+          },
+          {
+            "t": "h",
+            "html": "<p>木はたった1つの質問をします。耳の長さは8 cm以下か？ そうならネコ、ちがえばキツネです。いちばん長いネコの耳（7 cm）といちばん短いキツネの耳（9 cm）のちょうど真ん中に、境界を自分で見つけました。見たことのない動物を判定させてみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "judge.predict([[4.2, 6], [7.2, 10], [5.8, 8]]).tolist.to_a"
+          },
+          {
+            "t": "h",
+            "html": "<p>3匹目は意外な結果です。5.8 kgで、測ったどのネコよりも重いのに、耳が8 cmなので木はネコと答えます。木は体重をまったく見ていません。耳だけで、すべての例を見分けられたからです。モデルは例の質と同じだけの良さしかありません。重いネコや軽いキツネが例に混じっていれば、もっと多くのことを学ばなければならなかったでしょう。</p><p>本物のデータには、2つより多くの測定値があります。scikit-learnにはいくつか古典的なデータセットが入っていて、いちばん有名なのが<strong>アイリス</strong>です。3種類の花150本を、それぞれ4か所測ったものです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "datasets = PyCall.import_module(\"sklearn.datasets\")\nselection = PyCall.import_module(\"sklearn.model_selection\")\n\niris = datasets.load_iris\nputs iris.feature_names\nputs iris.target_names\niris.data.shape"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>shape</code>は(150, 4)、つまり150行で、それぞれ4つの測定値です。木はどれくらい上手に種類を見分けられるでしょう？ 正直に確かめるため、学ぶあいだはデータの一部を隠しておきます。<code>train_test_split</code>が30%を取っておきます。木は残りから学び、そのあと見たことのない花でテストされます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "parts = selection.train_test_split(iris.data, iris.target, test_size: 0.3, random_state: 1)\ntrain_x, test_x, train_y, test_y = parts[0], parts[1], parts[2], parts[3]\n\nflowers = tree.DecisionTreeClassifier.new(max_depth: 3, random_state: 0)\nflowers.fit(train_x, train_y)\nflowers.score(test_x, test_y)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>score</code>は、テストの花のうち正しく当てた割合で、ここでは約96%です。<code>max_depth: 3</code>は続けてする質問を最大3つまでにするので、木は花を1本ずつ丸暗記するのではなく、全体の傾向を学びます。隠しておいたデータでテストするのは、機械学習でいちばん大切な習慣です。自分の例しか知らないモデルは、あまり役に立ちません。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>pip install scikit-learn</code>と<code>gem install pycall</code>をすれば、このレッスンのコードはそのまま動きます。Ruby自身で機械学習をするなら、scikit-learnとよく似た<a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a>があります。scikit-learn、SciPy、NumPyはBSDライセンスです。</p></div><div class='task'><strong>課題：</strong>5人の生徒が、勉強した時間ととれた点数を記録しました。それを使って<code>LinearRegression</code>に学ばせ、6時間勉強したときの点数を予測しましょう。予測をRubyの数値として<code>forecast</code>に入れてください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"pycall\"\nlm = PyCall.import_module(\"sklearn.linear_model\")\n\nhours  = [[1], [2], [3], [4], [5]]\npoints = [52, 59, 66, 73, 80]\n# forecast = ...   （6時間のときの予測点数）\n",
+            "check": "forecast.is_a?(Numeric) && (forecast - 87).abs < 0.01 && code.include?(\"fit\")",
+            "hint": "<code>model = lm.LinearRegression.new</code>のあと、<code>model.fit(hours, points)</code>だよ。<code>model.predict([[6]])</code>は予測が1つ入った配列になるから、<code>[0]</code>でRubyの数値として取り出してね。"
+          }
+        ]
+      }
+    },
+    {
       "id": "scarpe",
       "de": {
-        "title": "25. Shoes-Apps mit Scarpe",
+        "title": "27. Shoes-Apps mit Scarpe",
         "cells": [
           {
             "t": "h",
@@ -3300,7 +3708,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "25. Shoes apps with Scarpe",
+        "title": "27. Shoes apps with Scarpe",
         "cells": [
           {
             "t": "h",
@@ -3347,7 +3755,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "25. ScarpeでShoesアプリ",
+        "title": "27. ScarpeでShoesアプリ",
         "cells": [
           {
             "t": "h",
@@ -3397,7 +3805,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "rubykaigi",
       "de": {
-        "title": "26. RubyKaigi & seltsamer Code",
+        "title": "28. RubyKaigi & seltsamer Code",
         "cells": [
           {
             "t": "h",
@@ -3468,7 +3876,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "26. RubyKaigi & weird code",
+        "title": "28. RubyKaigi & weird code",
         "cells": [
           {
             "t": "h",
@@ -3539,7 +3947,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "26. RubyKaigiと変なコード",
+        "title": "28. RubyKaigiと変なコード",
         "cells": [
           {
             "t": "h",
@@ -3618,7 +4026,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "応用コース：timelog"
       },
       "de": {
-        "title": "27. Projekt timelog: Collections",
+        "title": "29. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -3657,7 +4065,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "27. Project timelog: collections",
+        "title": "29. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -3696,7 +4104,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "27. timelogプロジェクト：コレクション",
+        "title": "29. timelogプロジェクト：コレクション",
         "cells": [
           {
             "t": "h",
@@ -3738,7 +4146,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "28. Text parsen: Regex",
+        "title": "30. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -3769,7 +4177,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "28. Parsing text: regex",
+        "title": "30. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -3800,7 +4208,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "28. テキストのパース：正規表現",
+        "title": "30. テキストのパース：正規表現",
         "cells": [
           {
             "t": "h",
@@ -3834,7 +4242,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "29. Methoden richtig bauen",
+        "title": "31. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -3865,7 +4273,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "29. Building methods properly",
+        "title": "31. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -3896,7 +4304,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "29. メソッドをきちんと作る",
+        "title": "31. メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -3930,7 +4338,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "30. Entry & Timesheet",
+        "title": "32. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -3961,7 +4369,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "30. Entry & Timesheet",
+        "title": "32. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -3992,7 +4400,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "30. EntryとTimesheet",
+        "title": "32. EntryとTimesheet",
         "cells": [
           {
             "t": "h",
@@ -4026,7 +4434,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "31. Testen mit Minitest",
+        "title": "33. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -4057,7 +4465,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "31. Testing with Minitest",
+        "title": "33. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -4088,7 +4496,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "31. Minitestでテスト",
+        "title": "33. Minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -4122,7 +4530,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "32. Enumerable & Data",
+        "title": "34. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -4134,7 +4542,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 27, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 29, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -4145,7 +4553,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "32. Enumerable & Data",
+        "title": "34. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -4157,7 +4565,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 27, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 29, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -4168,7 +4576,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "32. EnumerableとData",
+        "title": "34. EnumerableとData",
         "cells": [
           {
             "t": "h",
@@ -4180,7 +4588,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン27で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン29で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
           },
           {
             "t": "x",
@@ -4194,7 +4602,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "33. Blocks, Procs & Lambdas",
+        "title": "35. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -4233,7 +4641,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "33. Blocks, procs & lambdas",
+        "title": "35. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -4272,7 +4680,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "33. ブロック、Proc、lambda",
+        "title": "35. ブロック、Proc、lambda",
         "cells": [
           {
             "t": "h",
@@ -4314,7 +4722,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "34. Fehler behandeln",
+        "title": "36. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -4345,7 +4753,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "34. Handling errors",
+        "title": "36. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -4376,7 +4784,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "34. エラー処理",
+        "title": "36. エラー処理",
         "cells": [
           {
             "t": "h",
@@ -4410,7 +4818,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "35. Daten speichern: Formate",
+        "title": "37. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -4465,7 +4873,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "35. Saving data: formats",
+        "title": "37. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -4520,7 +4928,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "35. データの保存：フォーマット",
+        "title": "37. データの保存：フォーマット",
         "cells": [
           {
             "t": "h",
@@ -4578,7 +4986,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "36. Kommandozeile & Gems",
+        "title": "38. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -4605,7 +5013,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "36. Command line & gems",
+        "title": "38. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -4632,7 +5040,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "36. コマンドラインとgem",
+        "title": "38. コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -4662,7 +5070,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "37. Pattern Matching",
+        "title": "39. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -4693,7 +5101,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "37. Pattern matching",
+        "title": "39. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -4724,7 +5132,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "37. パターンマッチ",
+        "title": "39. パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -4758,7 +5166,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "38. Objektmodell & Metaprogrammierung",
+        "title": "40. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -4789,7 +5197,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "38. Object model & metaprogramming",
+        "title": "40. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -4820,7 +5228,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "38. オブジェクトモデルとメタプログラミング",
+        "title": "40. オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -4854,7 +5262,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "39. Eine eigene DSL",
+        "title": "41. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -4866,7 +5274,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 33 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 35 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -4877,7 +5285,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "39. Your own DSL",
+        "title": "41. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -4889,7 +5297,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 33 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 35 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
@@ -4900,7 +5308,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "39. 自分だけのDSL",
+        "title": "41. 自分だけのDSL",
         "cells": [
           {
             "t": "h",
@@ -4912,7 +5320,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン33のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン35のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
           },
           {
             "t": "x",
@@ -4926,7 +5334,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "40. Codequalität & Debugging",
+        "title": "42. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -4949,7 +5357,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "40. Code quality & debugging",
+        "title": "42. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -4972,7 +5380,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "40. コードの品質とデバッグ",
+        "title": "42. コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -4998,7 +5406,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "41. Performance & Nebenläufigkeit",
+        "title": "43. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -5045,7 +5453,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "41. Performance & concurrency",
+        "title": "43. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -5092,7 +5500,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "41. パフォーマンスと並行処理",
+        "title": "43. パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -5142,7 +5550,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "42. Finale: timelog im Web",
+        "title": "44. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -5164,12 +5572,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 36 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 38 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "en": {
-        "title": "42. Finale: timelog on the web",
+        "title": "44. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
@@ -5191,12 +5599,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 36 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 38 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "ja": {
-        "title": "42. フィナーレ：Webで動くtimelog",
+        "title": "44. フィナーレ：Webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -5218,7 +5626,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン36で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン38で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }

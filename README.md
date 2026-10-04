@@ -8,13 +8,14 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **42 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **44 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics,
   PowerPoint decks with [ruby_pptx](https://github.com/Largo/ruby_pptx),
   PDFs with Prawn and HexaPDF, JPEG photos with
-  [pure_jpeg](https://github.com/peterc/pure_jpeg), pandas and SymPy from
-  Ruby through [PyCall](https://github.com/mrkn/pycall.rb), a look at the Ruby
+  [pure_jpeg](https://github.com/peterc/pure_jpeg), pandas, SymPy, NumPy and
+  machine learning with scikit-learn from Ruby through
+  [PyCall](https://github.com/mrkn/pycall.rb), a look at the Ruby
   community (RubyKaigi, weird code, how IRB reads code), and
   a project track that builds a small time tracker.
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
@@ -63,10 +64,11 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   file (download, load again, merged key by key) or - in Chrome and Edge over
   https - into a connected folder, where workshop files are real files.
 - **Offline, if you like**: one click keeps the whole course on your device
-  (about 67 MB, or 43 MB with Python left out - a checkbox), and it opens
+  (about 85 MB, or 43 MB with Python left out - a checkbox), and it opens
   and runs without a connection - lessons, cells, the bundled gems, Python.
   Online it always loads the current version, and the copy updates itself.
-- **Python next to Ruby**: the PyCall lessons run real pandas and SymPy -
+- **Python next to Ruby**: the PyCall lessons run real pandas, SymPy, NumPy
+  and scikit-learn -
   [Pyodide](https://pyodide.org), CPython in WebAssembly, loaded only for
   those lessons, each with just the packages it imports - through a small
   bridge with the pycall gem's API (`html/pycall.rb`), so their code runs
