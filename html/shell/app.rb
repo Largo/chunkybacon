@@ -517,7 +517,16 @@ module ChunkyShell
       end
       button.disabled = true
       button.innerHTML = View.running_label(ui.running)
+      # code that uses Sequel loads SQLite first, as its lesson does on
+      # opening - a workshop program, or a cell changed to use it; the
+      # bridge holds the run until it is there
+      JSG.w.ensureSqlite if uses_sqlite?(idx)
       @bridge.run(idx)
+    end
+
+    def uses_sqlite?(idx)
+      editor = JSG.w.cellEditors[idx.to_s]
+      editor ? editor.getValue.to_s.match?(/Sequel|SQLite3/) : false
     end
 
     # the kernel ran cell idx: "ok" | "error" | "pass" | "fail"; a live run

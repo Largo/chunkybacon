@@ -172,6 +172,16 @@ class AppTest < Minitest::Test
     assert_includes bubble, "Chunky", "a queued run says nothing yet"
   end
 
+  def test_code_with_sequel_loads_sqlite_before_it_runs
+    start
+    click(run_button(1))
+    assert_empty calls("ensureSqlite"), "plain Ruby needs no SQLite"
+    fire("chunky:ran", { "idx" => 1, "outcome" => "ok", "elapsed" => 0.1, "auto" => false, "own" => 0.1 })
+    window.props["cellEditors"]["1"].js_setValue('DB = Sequel.sqlite("zeit.db")')
+    click(run_button(1))
+    assert_equal ["ensureSqlite", "run"], window.calls.map(&:first).select { |name| %w[ensureSqlite run].include?(name) }.last(2)
+  end
+
   def test_a_second_click_while_running_is_ignored
     start
     click(run_button(1))

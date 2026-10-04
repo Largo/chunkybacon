@@ -36,7 +36,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveOff": "Live ist aus – klicken, damit der Code beim Tippen von selbst läuft.",
       "liveSlow": "Diese Zelle braucht zu lange für Live – mit ▶ ausführen.",
       "liveStopped": "Nach einer Sekunde angehalten – mit ▶ läuft der Code ganz.",
-      "liveNeedsRun": "Gems installieren und Daten aus dem Netz holen geht nur mit ▶.",
+      "liveNeedsRun": "Gems installieren, Daten aus dem Netz holen und eine Datenbank ändern geht nur mit ▶.",
       "nextLesson": "→ Weiter zur nächsten Lektion",
       "progress": "Lektion %d von %d",
       "allDone": "🎉 Du hast alle Lektionen geschafft! CHUNKY BACON! Als nächsten Schritt empfehle ich dir die <a href='https://koans.idogawa.com'>Ruby Koans im Browser</a> – und auf <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> die nächste Ruby-Konferenz oder ein Meetup.",
@@ -114,6 +114,7 @@ window.LESSONS_JSON = JSON.stringify({
       "wsDeleteConfirm": "„%s“ wirklich löschen?",
       "wsUpload": "Hochladen",
       "wsDownload": "Herunterladen",
+      "wsDatabase": "🗄 Eine SQLite-Datenbank (%s). Dein Programm öffnet sie mit Sequel.sqlite und ihrem Namen. Mit „Herunterladen“ bekommst du die Datei für ein SQLite-Werkzeug wie DB Browser for SQLite.",
       "wsStdin": "Eingabe für gets",
       "wsStdinHint": "Jede Zeile ist die Antwort auf ein gets.",
       "wsNotRuby": "Ausführen lassen sich .rb-Dateien.",
@@ -153,7 +154,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveOff": "Live is off – click to have the code run by itself as you type.",
       "liveSlow": "This cell takes too long for live runs – run it with ▶.",
       "liveStopped": "Stopped after a second – ▶ runs the code all the way.",
-      "liveNeedsRun": "Installing gems and fetching from the web only happen with ▶.",
+      "liveNeedsRun": "Installing gems, fetching from the web and changing a database only happen with ▶.",
       "nextLesson": "→ On to the next lesson",
       "progress": "Lesson %d of %d",
       "allDone": "🎉 You finished all lessons! CHUNKY BACON! As a next step, try the <a href='https://koans.idogawa.com'>Ruby Koans in the browser</a> – and find your next Ruby conference or meetup on <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>.",
@@ -231,6 +232,7 @@ window.LESSONS_JSON = JSON.stringify({
       "wsDeleteConfirm": "Really delete “%s”?",
       "wsUpload": "Upload",
       "wsDownload": "Download",
+      "wsDatabase": "🗄 A SQLite database (%s). Your program opens it with Sequel.sqlite and its name. “Download” gives you the file for a SQLite tool such as DB Browser for SQLite.",
       "wsStdin": "Input for gets",
       "wsStdinHint": "Each line answers one gets.",
       "wsNotRuby": ".rb files can be run.",
@@ -270,7 +272,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveOff": "ライブはオフです。クリックすると、入力中にコードがひとりでに動きます。",
       "liveSlow": "このセルはライブ実行には時間がかかりすぎます。▶ で実行してね。",
       "liveStopped": "1秒で止めました。▶ なら最後まで実行します。",
-      "liveNeedsRun": "gemのインストールやネットからのデータ取得は ▶ のときだけ行います。",
+      "liveNeedsRun": "gemのインストール、ネットからのデータ取得、データベースの変更は ▶ のときだけ行います。",
       "nextLesson": "→ 次のレッスンへ",
       "progress": "レッスン %d / %d",
       "allDone": "🎉 全レッスン制覇！CHUNKY BACON! 次のステップには<a href='https://koans.idogawa.com'>ブラウザで動くRuby Koans</a>がおすすめだよ。次のRubyカンファレンスやミートアップは<a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>で探してみてね。",
@@ -348,6 +350,7 @@ window.LESSONS_JSON = JSON.stringify({
       "wsDeleteConfirm": "「%s」を本当に削除しますか？",
       "wsUpload": "アップロード",
       "wsDownload": "ダウンロード",
+      "wsDatabase": "🗄 SQLiteデータベース（%s）です。プログラムからは、Sequel.sqliteにこのファイル名を渡して開けます。「ダウンロード」で、DB Browser for SQLiteなどのSQLiteツール用にファイルを取り出せます。",
       "wsStdin": "getsへの入力",
       "wsStdinHint": "1行が、getsの1回ぶんの答えになります。",
       "wsNotRuby": "実行できるのは.rbファイルです。",
@@ -3951,7 +3954,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Sequel::Model(:eintraege)</code> liest die Spalten der Tabelle und gibt der Klasse für jede eine Methode, darum funktionieren <code>tag</code>, <code>stunden</code> und <code>projekt</code> in <code>zusammenfassung</code> einfach so. <code>create</code> fügt eine Zeile ein und gibt sie als Objekt zurück.</p><p>Zum Schluss: Die Datenbank wacht selbst über ihre Regeln. Die Projekt-Spalte wurde mit <code>null: false</code> angelegt – versuchen wir, das zu brechen:</p>"
+            "html": "<p><code>Sequel::Model(:eintraege)</code> liest die Spalten der Tabelle und gibt der Klasse für jede eine Methode, darum funktionieren <code>tag</code>, <code>stunden</code> und <code>projekt</code> in <code>zusammenfassung</code> einfach so. <code>create</code> fügt eine Zeile ein und gibt sie als Objekt zurück.</p><p>Noch etwas: Die Datenbank wacht selbst über ihre Regeln. Die Projekt-Spalte wurde mit <code>null: false</code> angelegt – versuchen wir, das zu brechen:</p>"
           },
           {
             "t": "c",
@@ -3959,7 +3962,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>SQLite hat die Zeile abgelehnt, und Sequel hat die Ablehnung in eine Ruby-Exception verwandelt, die du mit <code>rescue</code> fangen kannst. Die Tabelle hat noch ihre vier Zeilen.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>gem install sequel sqlite3</code>. Der Code läuft unverändert, und <code>Sequel.sqlite(\"timelog.db\")</code> hält die Datenbank in einer Datei, so ist sie beim nächsten Mal noch da. Sequel spricht mit demselben Ruby-Code auch mit PostgreSQL und MySQL. Hier im Browser ersetzt ein kleiner Stellvertreter auf <a href='https://sql.js.org' target='_blank'>sql.js</a> – SQLite, nach WebAssembly übersetzt – das sqlite3-Gem, das eine C-Erweiterung ist; Sequel selbst ist das echte Gem. Sequel und sql.js stehen unter der MIT-Lizenz, SQLite ist gemeinfrei.</p></div><div class='task'><strong>Aufgabe:</strong> Hier ist eine frische Datenbank mit fünf Zeiteinträgen. Rechne mit Sequel aus, wie viele Stunden jedes Projekt gebraucht hat, und speichere das in <code>stunden_pro_projekt</code> als Ruby-Hash, etwa <code>{\"Bacon\" =&gt; 1.5, …}</code>.</div>"
+            "html": "<p>SQLite hat die Zeile abgelehnt, und Sequel hat die Ablehnung in eine Ruby-Exception verwandelt, die du mit <code>rescue</code> fangen kannst. Die Tabelle hat noch ihre vier Zeilen.</p><p>Bis jetzt lag die Datenbank im Speicher: Lädst du die Seite neu, ist sie weg. Gib <code>Sequel.sqlite</code> einen Dateinamen, und die Datenbank ist eine echte SQLite-Datei. <code>create_table?</code> – mit Fragezeichen – legt die Tabelle nur an, wenn es sie noch nicht gibt, also kann die Zelle immer wieder laufen. Führe sie ein paarmal aus:</p>"
+          },
+          {
+            "t": "c",
+            "code": "zeiterfassung = Sequel.sqlite(\"zeiterfassung.db\")   # eine Datenbank in einer Datei\nzeiterfassung.create_table?(:eintraege) do\n  primary_key :id\n  String :projekt, null: false\n  Float  :stunden\nend\nzeiterfassung[:eintraege].insert(projekt: \"Chunky\", stunden: 1.5)\nzeiterfassung[:eintraege].count"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jeder Lauf fügt eine Zeile hinzu, und die Zahl wächst: Die Zeilen liegen in <code>zeiterfassung.db</code>, nicht in der Zelle. Unter der Ausgabe gibt es die Datei zum Herunterladen – eine echte SQLite-Datenbank, die jedes SQLite-Werkzeug öffnet, etwa <a href='https://sqlitebrowser.org' target='_blank'>DB Browser for SQLite</a>. In einer Lektion hält die Datei, solange die Seite offen ist; in der <strong>Werkstatt</strong> bleibt die Datenbank eines Programms beim Projekt, und eine hochgeladene <code>.db</code>-Datei öffnest du genauso.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>gem install sequel sqlite3</code>. Der Code läuft unverändert, und <code>zeiterfassung.db</code> ist eine Datei neben deinem Programm. Sequel spricht mit demselben Ruby-Code auch mit PostgreSQL und MySQL. Hier im Browser ersetzt ein kleiner Stellvertreter auf <a href='https://sql.js.org' target='_blank'>sql.js</a> – SQLite, nach WebAssembly übersetzt – das sqlite3-Gem, das eine C-Erweiterung ist; Sequel selbst ist das echte Gem. Sequel und sql.js stehen unter der MIT-Lizenz, SQLite ist gemeinfrei.</p></div><div class='task'><strong>Aufgabe:</strong> Hier ist eine frische Datenbank mit fünf Zeiteinträgen. Rechne mit Sequel aus, wie viele Stunden jedes Projekt gebraucht hat, und speichere das in <code>stunden_pro_projekt</code> als Ruby-Hash, etwa <code>{\"Bacon\" =&gt; 1.5, …}</code>.</div>"
           },
           {
             "t": "x",
@@ -4038,7 +4049,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Sequel::Model(:entries)</code> reads the table's columns and gives the class a method for each, so <code>day</code>, <code>hours</code> and <code>project</code> just work inside <code>summary</code>. <code>create</code> inserts a row and returns it as an object.</p><p>Finally, the database guards its rules itself. The project column was declared <code>null: false</code> – let's try to break it:</p>"
+            "html": "<p><code>Sequel::Model(:entries)</code> reads the table's columns and gives the class a method for each, so <code>day</code>, <code>hours</code> and <code>project</code> just work inside <code>summary</code>. <code>create</code> inserts a row and returns it as an object.</p><p>One more thing: the database guards its rules itself. The project column was declared <code>null: false</code> – let's try to break it:</p>"
           },
           {
             "t": "c",
@@ -4046,7 +4057,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>SQLite refused the row, and Sequel turned the refusal into a Ruby exception you can <code>rescue</code>. The table still has its four rows.</p><div class='offweb' data-title='On your machine'><p><code>gem install sequel sqlite3</code>. The code runs unchanged, and <code>Sequel.sqlite(\"timelog.db\")</code> keeps the database in a file, so it is still there next time. Sequel also talks to PostgreSQL and MySQL with the same Ruby code. Here in the browser the sqlite3 gem – a C extension – is replaced by a small stand-in on <a href='https://sql.js.org' target='_blank'>sql.js</a>, SQLite compiled to WebAssembly; Sequel itself is the real gem. Sequel and sql.js come under the MIT licence; SQLite is in the public domain.</p></div><div class='task'><strong>Task:</strong> Here is a fresh database with five time entries. Use Sequel to work out how many hours each project took, and store it in <code>hours_per_project</code> as a Ruby hash, such as <code>{\"Bacon\" =&gt; 1.5, …}</code>.</div>"
+            "html": "<p>SQLite refused the row, and Sequel turned the refusal into a Ruby exception you can <code>rescue</code>. The table still has its four rows.</p><p>So far the database has lived in memory: reload the page and it is gone. Give <code>Sequel.sqlite</code> a file name, and the database is a real SQLite file. <code>create_table?</code> – with a question mark – creates the table only if it is not there yet, so the cell can run again and again. Run it a few times:</p>"
+          },
+          {
+            "t": "c",
+            "code": "timelog = Sequel.sqlite(\"timelog.db\")   # a database in a file\ntimelog.create_table?(:entries) do\n  primary_key :id\n  String :project, null: false\n  Float  :hours\nend\ntimelog[:entries].insert(project: \"Chunky\", hours: 1.5)\ntimelog[:entries].count"
+          },
+          {
+            "t": "h",
+            "html": "<p>Every run adds a row, and the count grows: the rows are kept in <code>timelog.db</code>, not in the cell. Below the output the file is offered as a download – a real SQLite database that opens in any SQLite tool, such as <a href='https://sqlitebrowser.org' target='_blank'>DB Browser for SQLite</a>. In a lesson the file lasts as long as the page is open; in the <strong>workshop</strong> a program's database is kept with the project, and an uploaded <code>.db</code> file opens the same way.</p><div class='offweb' data-title='On your machine'><p><code>gem install sequel sqlite3</code>. The code runs unchanged, and <code>timelog.db</code> is a file next to your program. Sequel also talks to PostgreSQL and MySQL with the same Ruby code. Here in the browser the sqlite3 gem – a C extension – is replaced by a small stand-in on <a href='https://sql.js.org' target='_blank'>sql.js</a>, SQLite compiled to WebAssembly; Sequel itself is the real gem. Sequel and sql.js come under the MIT licence; SQLite is in the public domain.</p></div><div class='task'><strong>Task:</strong> Here is a fresh database with five time entries. Use Sequel to work out how many hours each project took, and store it in <code>hours_per_project</code> as a Ruby hash, such as <code>{\"Bacon\" =&gt; 1.5, …}</code>.</div>"
           },
           {
             "t": "x",
@@ -4125,7 +4144,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Sequel::Model(:entries)</code>はテーブルの列を読み取り、列ごとのメソッドをクラスに作ります。だから<code>summary</code>の中で<code>day</code>、<code>hours</code>、<code>project</code>がそのまま使えます。<code>create</code>は行を追加し、それをオブジェクトとして返します。</p><p>最後に、データベースは自分のルールを自分で守ります。projectの列は<code>null: false</code>で作りました。それを破ってみましょう：</p>"
+            "html": "<p><code>Sequel::Model(:entries)</code>はテーブルの列を読み取り、列ごとのメソッドをクラスに作ります。だから<code>summary</code>の中で<code>day</code>、<code>hours</code>、<code>project</code>がそのまま使えます。<code>create</code>は行を追加し、それをオブジェクトとして返します。</p><p>もうひとつ、データベースは自分のルールを自分で守ります。projectの列は<code>null: false</code>で作りました。それを破ってみましょう：</p>"
           },
           {
             "t": "c",
@@ -4133,7 +4152,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>SQLiteはその行を拒否し、Sequelはその拒否を、<code>rescue</code>で受け止められるRubyの例外に変えました。テーブルには4行がそのまま残っています。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>gem install sequel sqlite3</code>をすれば、コードはそのまま動きます。<code>Sequel.sqlite(\"timelog.db\")</code>ならデータベースをファイルに保存するので、次に開いたときも残っています。Sequelは同じRubyのコードでPostgreSQLやMySQLとも話せます。このブラウザでは、C拡張であるsqlite3 gemの代わりに、WebAssemblyにコンパイルしたSQLiteである<a href='https://sql.js.org' target='_blank'>sql.js</a>の上に作った小さな代役が動いています。Sequel自体は本物のgemです。Sequelとsql.jsはMITライセンス、SQLiteはパブリックドメインです。</p></div><div class='task'><strong>課題：</strong>5件の時間記録が入った新しいデータベースがあります。Sequelを使って、プロジェクトごとに何時間かかったかを計算し、<code>{\"Bacon\" =&gt; 1.5, …}</code>のようなRubyのハッシュとして<code>hours_per_project</code>に入れましょう。</div>"
+            "html": "<p>SQLiteはその行を拒否し、Sequelはその拒否を、<code>rescue</code>で受け止められるRubyの例外に変えました。テーブルには4行がそのまま残っています。</p><p>ここまで、データベースはメモリ上にありました。ページを再読み込みすると消えてしまいます。<code>Sequel.sqlite</code>にファイル名を渡すと、データベースは本物のSQLiteファイルになります。<code>create_table?</code>（クエスチョンマークつき）は、テーブルがまだないときだけ作るので、このセルは何度でも実行できます。何回か実行してみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "timelog = Sequel.sqlite(\"timelog.db\")   # ファイルの中のデータベース\ntimelog.create_table?(:entries) do\n  primary_key :id\n  String :project, null: false\n  Float  :hours\nend\ntimelog[:entries].insert(project: \"Chunky\", hours: 1.5)\ntimelog[:entries].count"
+          },
+          {
+            "t": "h",
+            "html": "<p>実行するたびに行が増え、数も増えていきます。行はセルではなく<code>timelog.db</code>に保存されているからです。出力の下には、このファイルがダウンロードできるように出ています。本物のSQLiteデータベースなので、<a href='https://sqlitebrowser.org' target='_blank'>DB Browser for SQLite</a>などのSQLiteツールで開けます。レッスンの中では、ファイルはページを開いている間だけ残ります。<strong>工房</strong>では、プログラムのデータベースはプロジェクトと一緒に保存され、アップロードした<code>.db</code>ファイルも同じように開けます。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>gem install sequel sqlite3</code>をすれば、コードはそのまま動きます。<code>timelog.db</code>はプログラムの隣にあるファイルになります。Sequelは同じRubyのコードでPostgreSQLやMySQLとも話せます。このブラウザでは、C拡張であるsqlite3 gemの代わりに、WebAssemblyにコンパイルしたSQLiteである<a href='https://sql.js.org' target='_blank'>sql.js</a>の上に作った小さな代役が動いています。Sequel自体は本物のgemです。Sequelとsql.jsはMITライセンス、SQLiteはパブリックドメインです。</p></div><div class='task'><strong>課題：</strong>5件の時間記録が入った新しいデータベースがあります。Sequelを使って、プロジェクトごとに何時間かかったかを計算し、<code>{\"Bacon\" =&gt; 1.5, …}</code>のようなRubyのハッシュとして<code>hours_per_project</code>に入れましょう。</div>"
           },
           {
             "t": "x",

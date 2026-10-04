@@ -13,12 +13,14 @@ module ChunkyShell
     PROPS = %w[className type id textContent hidden disabled value title placeholder
                spellcheck accept multiple rows open checked].freeze
     RUBY_FILE = /\.rb$|^(Gemfile|Rakefile)$/
-    # pictures and PDFs - data: URLs in storage.js - show instead of the
-    # editor; matched against the lowercased name
-    PICTURE_OR_PDF = /\.(png|jpg|jpeg|gif|webp|pdf)$/
+    # pictures, PDFs and SQLite databases - data: URLs in storage.js - show
+    # instead of the editor (a database as a few words about it); matched
+    # against the lowercased name
+    PICTURE_OR_PDF = /\.(png|jpg|jpeg|gif|webp|pdf|db|sqlite|sqlite3)$/
     PDF_FILE = /\.pdf$/
+    DATABASE_FILE = /\.(db|sqlite|sqlite3)$/
     TEXT_FILES = ".rb,.txt,.csv,.tsv,.json,.md,.yml,.yaml,.erb,.html,.css,.xml"
-    UPLOADS = "#{TEXT_FILES},.png,.jpg,.jpeg,.gif,.webp,.pdf"
+    UPLOADS = "#{TEXT_FILES},.png,.jpg,.jpeg,.gif,.webp,.pdf,.db,.sqlite,.sqlite3"
 
     def initialize(app, storage = JSG.w.ChunkyStorage, bridge = JSG.w.ChunkyBridge, offline = JSG.w.ChunkyOffline)
       @app = app
@@ -332,6 +334,14 @@ module ChunkyShell
     def ruby?(path) = !(path.split("/").last.to_s =~ RUBY_FILE).nil?
     def binary?(path) = !(path.to_s.downcase =~ PICTURE_OR_PDF).nil?
     def pdf?(path) = !(path.to_s.downcase =~ PDF_FILE).nil?
+    def database?(path) = !(path.to_s.downcase =~ DATABASE_FILE).nil?
+
+    # a data: URL's size, as "12 KB"
+    def data_size(value)
+      encoded = value.to_s.split(",", 2).last.to_s
+      bytes = encoded.length * 3 / 4 - (encoded.end_with?("==") ? 2 : (encoded.end_with?("=") ? 1 : 0))
+      bytes < 1024 ? "#{bytes} B" : "#{bytes / 1024} KB"
+    end
     def files = @s.files.list.to_a
 
     def preferred(list)
@@ -382,7 +392,8 @@ module ChunkyShell
 
     # A picture or PDF in place of the editor: the picture from its data:
     # URL, the PDF in the browser's own viewer from a Blob URL. A tiny
-    # picture (ChunkyPNG's 8x8) is drawn bigger, pixel by pixel.
+    # picture (ChunkyPNG's 8x8) is drawn bigger, pixel by pixel. A SQLite
+    # database gets a few words: what it is, how big, how to use it.
     def show_preview(path)
       box = el("wsPreview")
       return unless box
@@ -390,7 +401,9 @@ module ChunkyShell
       editor_box&.classList&.add("is-preview")
       release_preview_url
       value = @s.files.read(path).to_s
-      shown = if pdf?(path)
+      shown = if database?(path)
+                node("p", { className: "ws-database" }, [t("wsDatabase", data_size(value))])
+              elsif pdf?(path)
                 @preview_url = @bridge.objectUrl(value)
                 node("iframe", { className: "ws-pdf", title: path, src: "#{@preview_url}#view=FitH" })
               else

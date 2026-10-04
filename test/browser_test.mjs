@@ -552,6 +552,18 @@ check('NOT NULL becomes Sequel::NotNullConstraintViolation', (await pyCell(17)).
 await page.evaluate(() => window.cellEditors[17].setValue('DB.create_table(:leute) { String :mail, unique: true }\nDB[:leute].insert(mail: "a@b.c")\nbegin\n  DB[:leute].insert(mail: "a@b.c")\nrescue Sequel::UniqueConstraintViolation => e\n  puts e.class\nend\nDB.transaction { DB[:leute].insert(mail: "x@y.z"); raise Sequel::Rollback }\n[DB[:leute].count, DB.get(Sequel.lit("?", 2**40))]'));
 const guarded = await pyCell(17);
 check('UNIQUE, a rollback, and big integers stay exact', guarded.includes('Sequel::UniqueConstraintViolation') && guarded.includes('=> [1, 1099511627776]'));
+// a database in a file: kept across runs, offered as a real SQLite file
+check('a database in a file is created', /=> 1(?!\d)/.test(await pyCell(19)));
+check('... and keeps its rows for the next run', /=> 2(?!\d)/.test(await pyCell(19)));
+const dbLink = await waitForDownload('#cell-out-19', 'zeiterfassung.db');
+const dbHead = dbLink && await page.evaluate(async h => String.fromCharCode(...new Uint8Array(await (await fetch(h)).arrayBuffer()).slice(0, 15)), dbLink.href);
+check('... offered as a download that is a SQLite file', dbHead === 'SQLite format 3');
+await page.evaluate(() => window.cellEditors[17].setValue('class Arbeit < Sequel::Model(zeiterfassung[:eintraege]); end\na = Arbeit.first\na.stunden = 0.25\na.save'));
+await pyCell(17);
+await page.evaluate(() => window.cellEditors[17].setValue('zeiterfassung.run("BEGIN")\nzeiterfassung[:eintraege].insert(projekt: "Halb", stunden: 9)'));
+await pyCell(17);
+await page.evaluate(() => window.cellEditors[19].setValue('Sequel.sqlite("zeiterfassung.db")[:eintraege].map(:stunden)'));
+check('a model saves into the file; an open transaction is not saved half-way', (await pyCell(19)).includes('=> [0.25, 1.5]'));
 await setExercise('install_gem "sequel"\nrequire "sequel"\nzeit = Sequel.sqlite\nzeit.create_table(:arbeit) do\n  primary_key :id\n  String :projekt\n  Float  :stunden\nend\nzeit[:arbeit].import([:projekt, :stunden], [["Chunky", 2.5], ["Speck", 0.5], ["Bacon", 1.5], ["Chunky", 3.0], ["Speck", 1.5]])\nstunden_pro_projekt = zeit[:arbeit].group(:projekt).select(:projekt) { sum(:stunden).as(:total) }.as_hash(:projekt, :total)');
 await runExercise();
 await page.waitForTimeout(800);

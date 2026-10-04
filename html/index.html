@@ -327,9 +327,9 @@
     };
 
     // SQLite for the Sequel lesson: sql.js (SQLite in WebAssembly, ~650 KB,
-    // assets/sqljs/, tools/vendor_sqljs.rb), loaded only for a lesson whose
-    // code uses Sequel or SQLite - the shell calls ensureSqlite, and
-    // shell/bridge.js holds a run until chunky:sqlite-ready. html/sqlite3.rb
+    // assets/sqljs/, tools/vendor_sqljs.rb), loaded only for a lesson or a
+    // run whose code uses Sequel or SQLite - the shell calls ensureSqlite,
+    // and shell/bridge.js holds a run until chunky:sqlite-ready. sqlite3_sqljs.rb
     // is the sqlite3 gem's API on top of the calls below: synchronous, JSON
     // in and out, so integers stay integers (BigInt, as text) and floats
     // floats, which a JavaScript number would blur.
@@ -391,8 +391,34 @@
         if (!state.dbs[id]) throw new Error("database is closed");
         return state.dbs[id];
       };
-      state.open = function () { state.last += 1; state.dbs[state.last] = new state.SQL.Database(); return state.last; };
-      state.close = function (id) { if (state.dbs[id]) state.dbs[id].close(); delete state.dbs[id]; };
+      // The connection's settings ("PRAGMA foreign_keys = 1", what Sequel
+      // sets on connect), by name: export() closes and reopens the database,
+      // which forgets them, so they are set again after it.
+      var pragmas = {};
+      var remember = function (id, sql) {
+        var m = /^\s*PRAGMA\s+([\w.]+)\s*=\s*[^;]*;?\s*$/i.exec(sql);
+        if (m) (pragmas[id] = pragmas[id] || {})[m[1].toLowerCase()] = sql;
+      };
+      // a fresh database, or one from the bytes of a SQLite file (base64)
+      state.open = function (base64) {
+        return guard(function () {
+          state.last += 1;
+          state.dbs[state.last] = new state.SQL.Database(base64 ? fromBase64(base64) : undefined);
+          return state.last;
+        });
+      };
+      state.close = function (id) { if (state.dbs[id]) state.dbs[id].close(); delete state.dbs[id]; delete pragmas[id]; };
+      // the database as the bytes of a SQLite file (base64). sql.js closes
+      // and reopens it for that, so only between transactions - the stand-in
+      // calls it at the end of a run - and with the settings set again.
+      state.exportDb = function (id) {
+        return guard(function () {
+          var bytes = db(id)["export"]();
+          var again = pragmas[id] || {};
+          Object.keys(again).forEach(function (name) { db(id).exec(again[name]); });
+          return toBase64(bytes);
+        });
+      };
       // one statement with its rows: { columns, types, rows }
       state.query = function (id, sql, params) {
         return guard(function () {
@@ -401,6 +427,7 @@
             var args = JSON.parse(params);
             if (!empty(args)) stmt.bind(bindings(args));
             while (stmt.step()) rows.push(stmt.get(null, { useBigInt: true }).map(encode));
+            remember(id, sql);
             var columns = stmt.getColumnNames();
             return { columns: columns, types: declaredTypes(conn, sql, columns), rows: rows };
           } finally {
@@ -413,6 +440,7 @@
         return guard(function () {
           var args = JSON.parse(params);
           if (empty(args)) db(id).exec(sql); else db(id).run(sql, bindings(args));
+          remember(id, sql);
           return db(id).getRowsModified();
         });
       };

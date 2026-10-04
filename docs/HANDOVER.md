@@ -2,6 +2,8 @@
 
 Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
+Work in progress - what is unfinished, and in what state - is in
+`docs/OPEN_WORK.md`.
 Last updated 2026-10-04 (46 lessons in German, English and Japanese).
 
 ## 1. Where it runs
@@ -434,6 +436,13 @@ machine:
   (`ChunkyBridge.objectUrl`, released when the preview goes). The editor
   never holds a picture's data: URL: saving, a run's save and a change from
   storage leave a previewed file alone.
+- **SQLite databases** (db, sqlite, sqlite3 - `application/vnd.sqlite3`) are
+  binary files the same way: `BINARY_TYPES` in `storage.js` and
+  `workshop.rb` (its `PREVIEW_TYPES` stay pictures and PDFs, so a database
+  is kept, not previewed after a run), allowed as uploads in
+  `shell/workspace.rb`. Selected in the file list, a database shows a short
+  card in place of the editor (`.ws-database`, the `wsDatabase` string with
+  its size). How a program reads and writes one: §6f.
 - Dev on this machine: serve on localhost (127.0.0.1 counts), where the
   folder API is available. `test/progress_test.mjs` drives the folder through
   the origin-private file system (same API, no native picker).
@@ -468,7 +477,8 @@ shell does the timing, the kernel the guarding:
   are deleted (`AutoRun.take_back`); in the workshop nothing goes back to
   the project (`workspaceWrite`/`workshopAfterRun` are skipped). Its output,
   previews and downloads still show. **No downloads**: `install_gem` of a
-  gem neither installed nor cached and the Net::HTTP transport raise
+  gem neither installed nor cached, the Net::HTTP transport and a write to
+  a SQLite database opened before the live run (§6f) raise
   `AutoRun::NeedsRun` (outcome `needs`, a hint to press ▶); `require`
   auto-installs cached gems only. **A time limit**:
   `AutoRun.with_time_limit` (TracePoint `:line`, `:b_call`, `:c_call`, the
@@ -700,8 +710,38 @@ is pure Ruby (cached, `sequel-5.109.0.gem`); the sqlite3 gem under it is C.
   `sqlite3_column_decltype`, so `query` reads `PRAGMA table_info` for the
   tables after FROM/JOIN and matches by column name; a computed column
   (`sum(...) AS total`) has no type and keeps SQLite's runtime type.
-- **Limits**: every database is in memory (a path is ignored, each
-  `Database.new` is a fresh one); no SQL functions written in Ruby
+- **Databases in files**: no path (or `":memory:"`) is a database in memory,
+  as before. `Sequel.sqlite("timelog.db")` is a SQLite file: opening reads
+  its bytes (`chunkySqlite.open(base64)`), and at the end of each run
+  main.rb calls `SQLite3::Database.save_all` - right before
+  `FileWatch.changes_since`, so the file counts among the run's files (a
+  lesson offers it as a download, the workshop keeps it with the project,
+  in localStorage or as a real file in a connected folder). A relative path
+  goes through `SandboxFS`, an absolute one to the wasm filesystem. Only a
+  database the run used is saved, only if its bytes changed, never inside
+  an open transaction. Not after every statement: sql.js's `export()` -
+  `exportDb` - closes and reopens the database, which ends a transaction
+  and forgets `last_insert_rowid`; the connection's `PRAGMA x = y`
+  settings are set again after it (index.html). In the workshop every run
+  is a program of its own, so `save_all(close: true)` closes its databases.
+- **Live runs** (§6b): a database opened before the live run may only be
+  read; a writing statement raises `AutoRun::NeedsRun` (the "press ▶" hint,
+  `liveNeedsRun`). A database the live run opened itself may be changed -
+  the rehearsal throws it away with its other files.
+- **Loading**: a lesson loads sql.js when it opens; the shell's
+  `start_cell_run` also calls `ensureSqlite` for any code that mentions
+  `Sequel` or `SQLite3` (a workshop program, a changed cell), and the
+  bridge holds the run until it is there.
+- **Limits**: after a run that used a file database, its temp tables and
+  `last_insert_rowid` are reset (the export reopens it). Two `Database`
+  objects on one file, both used in one run: each saves, the one opened
+  last wins. Transactions are tracked by the SQL's first word (BEGIN,
+  COMMIT, END, ROLLBACK); a bare `SAVEPOINT` outside BEGIN is not. The
+  workshop keeps binary files up to 1 MB (`Workshop::MAX_BINARY`),
+  `storage.js` reads up to 1 MB per file from a folder and localStorage
+  holds a few MB in all - bigger databases stay downloads. In lessons,
+  in-memory databases of re-run cells are never closed (sql.js memory
+  grows a little per re-run). No SQL functions written in Ruby
   (`create_function` raises, so Sequel's `setup_regexp_function` is out);
   errors carry the message but no extended code, and Sequel maps them by
   message (UNIQUE, NOT NULL, CHECK, FOREIGN KEY all come out right).
@@ -710,7 +750,11 @@ is pure Ruby (cached, `sequel-5.109.0.gem`); the sqlite3 gem under it is C.
   for that (sandbox_sim.rb).
 - **Tests**: the lesson needs the browser - `check_harness.rb` skips it
   (`BROWSER_ONLY`); `browser_test.mjs` runs every cell plus UNIQUE, a
-  rollback and a big integer; `offline_test.mjs` runs Sequel from the copy.
+  rollback, a big integer, and the file step (rows kept across runs, the
+  download a SQLite file, a model's save, a transaction left open not
+  saved); `live_test.mjs` the live-run rule and a workshop program's
+  database (first run, re-run, reload, the card); `offline_test.mjs` runs
+  Sequel and a file database from the copy.
 
 ## 7a. The optional server: permalinks and a backend
 
@@ -879,6 +923,8 @@ that license too. Contact in the gemspecs: web@idogawa.com.
   can also be started from the Actions tab.
 
 ## 11. Open ends
+
+Current work in progress has its own file: `docs/OPEN_WORK.md`.
 
 - Lesson 14 could show more Nokogiri (XPath, Builder) now that it works.
 - `NATIVE_GEMS` is a hand-kept list; a gem not on it still gets downloaded

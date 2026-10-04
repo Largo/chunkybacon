@@ -11,12 +11,17 @@ require "fileutils"
 
 module Workshop
   # The binary files a project keeps: storage.js holds them as data: URLs,
-  # a run gets their bytes, the workshop shows them instead of the editor.
-  # Other binary data a program writes is offered as a download only.
+  # a run gets their bytes. Pictures and PDFs show below the editor after a
+  # run; a SQLite database (Sequel.sqlite("x.db"), sqlite3_sqljs.rb) is
+  # kept, not shown. Other binary data a program writes is offered as a
+  # download only.
   PREVIEW_TYPES = {
     ".png" => "image/png", ".jpg" => "image/jpeg", ".jpeg" => "image/jpeg",
     ".gif" => "image/gif", ".webp" => "image/webp", ".pdf" => "application/pdf"
   }.freeze
+  BINARY_TYPES = PREVIEW_TYPES.merge(
+    ".db" => "application/vnd.sqlite3", ".sqlite" => "application/vnd.sqlite3", ".sqlite3" => "application/vnd.sqlite3"
+  ).freeze
   # bigger ones stay downloads: the browser's localStorage holds a few MB
   MAX_BINARY = 1_000_000
 
@@ -64,11 +69,11 @@ module Workshop
 
     # the pictures and PDFs among +changes+, to show below the editor
     def previews(changes)
-      changes.select { |path, bytes| binary?(path) && bytes.bytesize <= MAX_BINARY }
+      changes.select { |path, bytes| PREVIEW_TYPES.key?(File.extname(path.to_s).downcase) && bytes.bytesize <= MAX_BINARY }
     end
 
     def binary?(path)
-      PREVIEW_TYPES.key?(File.extname(path.to_s).downcase)
+      BINARY_TYPES.key?(File.extname(path.to_s).downcase)
     end
 
     def pdf?(path)
@@ -76,7 +81,7 @@ module Workshop
     end
 
     def data_url(path, bytes)
-      "data:#{PREVIEW_TYPES.fetch(File.extname(path).downcase)};base64,#{[bytes].pack('m0')}"
+      "data:#{BINARY_TYPES.fetch(File.extname(path).downcase)};base64,#{[bytes].pack('m0')}"
     end
 
     # require_relative from a project file, for a project file: evaluated

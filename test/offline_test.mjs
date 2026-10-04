@@ -127,6 +127,9 @@ check('three.js loads from the copy', await b.evaluate(() => import('./assets/th
 const sql = await open('#sequel');
 check('Sequel runs offline (sql.js, the sqlite3 stand-in and the gem from the copy)',
   (await run(sql, 'install_gem "sequel"\nrequire "sequel"\nDB = Sequel.sqlite\nDB.get(Sequel.lit("6 * 7"))')).includes('=> 42'));
+const filed = 'f = Sequel.sqlite("offline.db")\nf.create_table?(:t) { Integer :x }\nf[:t].insert(x: 1)\nf[:t].count';
+check('…and a database in a file keeps its rows offline',
+  /=> 1(?!\d)/.test(await run(sql, filed)) && /=> 2(?!\d)/.test(await run(sql, filed)));
 await sql.close();
 await b.click('#lessonNav a[data-id="methoden"]');
 await b.waitForFunction(() => document.querySelector('#lessonBody').textContent.includes('Methoden'));

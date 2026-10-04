@@ -1268,6 +1268,17 @@ button.reset:hover { background: var(--paper); color: var(--ink); border-color: 
 }
 /* ChunkyPNG's 8x8 pixels, drawn big enough to see */
 .ws-preview img.is-tiny { width: 160px; image-rendering: pixelated; }
+/* a SQLite database: a few words in place of the editor */
+.ws-preview p.ws-database {
+  display: inline-block;
+  max-width: 34rem;
+  margin: 1.5rem 0;
+  padding: 0.9rem 1.1rem;
+  text-align: left;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
 .ws-preview iframe.ws-pdf {
   display: block;
   width: 100%;

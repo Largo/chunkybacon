@@ -310,6 +310,28 @@ class WorkspaceTest < Minitest::Test
     assert_empty JS.console_errors
   end
 
+  # 12288 bytes: three SQLite pages of 4096, as base64
+  DATABASE = "data:application/vnd.sqlite3;base64,#{'A' * 16384}"
+
+  def test_a_database_is_described_instead_of_the_editor
+    workshop(files: { "main.rb" => "1", "zeit.db" => DATABASE })
+    click(file_button("zeit.db"))
+    text = find("#wsPreview p.ws-database").text
+    assert_includes text, "SQLite-Datenbank (12 KB)"
+    assert_includes text, "Sequel.sqlite"
+    assert_nil find_all("#wsPreview img").first, "not drawn as a picture"
+    assert_includes find(".ws-editor").attrs["class"], "is-preview"
+    kernel_calls("workshopAfterRun")
+    assert_equal DATABASE, fs.files["zeit.db"], "a run does not save the editor over the database"
+  end
+
+  def test_a_database_can_be_uploaded
+    workshop
+    picker = find_all("#wsFiles input").find { |input| input.props["multiple"] }
+    accept = picker.props["accept"].to_s
+    %w[.db .sqlite .sqlite3].each { |ext| assert_includes accept.split(","), ext }
+  end
+
   def test_a_tiny_picture_is_drawn_bigger
     workshop(files: { "main.rb" => "1", "bild.png" => PNG })
     click(file_button("bild.png"))

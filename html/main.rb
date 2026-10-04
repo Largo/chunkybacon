@@ -438,6 +438,7 @@ class ChunkyApp
     ".png" => "image/png", ".jpg" => "image/jpeg", ".svg" => "image/svg+xml",
     ".csv" => "text/csv", ".json" => "application/json", ".html" => "text/html",
     ".txt" => "text/plain", ".md" => "text/markdown", ".zip" => "application/zip",
+    ".db" => "application/vnd.sqlite3", ".sqlite" => "application/vnd.sqlite3", ".sqlite3" => "application/vnd.sqlite3",
     ".pdf" => "application/pdf"
   }.freeze
 
@@ -950,6 +951,10 @@ class ChunkyApp
     # name replaces its entry
     explicit = @run_downloads
     @run_downloads = []
+    # SQLite databases with a file name go back to their files now, so the
+    # run's files include them (sqlite3_sqljs.rb); a workshop run is a whole
+    # program, so its databases close with it
+    SQLite3::Database.save_all(close: workshop?)
     changes = FileWatch.changes_since(watch)
     changes.each { |path, bytes| add_download(path, bytes) }
     explicit.each { |name, bytes| add_download(name, bytes) }

@@ -1,7 +1,9 @@
 // Headless test for live runs (html/autorun.rb, shell/app.rb): code runs by
 // itself a moment after the last key - only code that parses, as a
 // rehearsal that keeps no file, without downloads, cut off after a second -
-// and the workshop's switch starts off. About a minute.
+// and the workshop's switch starts off. A SQLite database in a file
+// (sqlite3_sqljs.rb): a live run reads it but changes only its own, and the
+// workshop keeps it with the project. About two minutes.
 import { chromium } from '/usr/local/lib/node_modules/playwright/index.mjs';
 
 const BASE = process.env.BASE || 'http://127.0.0.1:8011/';
@@ -157,6 +159,60 @@ const responsive = async page => {
   await page.click('.run-cell[data-idx="0"]');
   await page.waitForFunction(() => window.ChunkyStorage.files.read('live.txt') !== null, null, { timeout: 10000 }).catch(() => {});
   check('▶ keeps what the program writes', (await page.evaluate(() => window.ChunkyStorage.files.read('live.txt'))) === 'Speck');
+  await ctx.close();
+}
+
+// ▶ on a cell, until it has run
+const run = async (page, idx, code) => {
+  if (code !== undefined) await page.evaluate(([i, c]) => window.cellEditors[i].setValue(c), [idx, code]);
+  await page.click(`.run-cell[data-idx="${idx}"]`);
+  await page.waitForTimeout(300);
+  await page.waitForFunction(i => !document.querySelector(`.run-cell[data-idx="${i}"]`).disabled &&
+    document.getElementById('cell-out-' + i).style.display !== 'none', idx, { timeout: 120000 }).catch(() => {});
+  return out(page, idx);
+};
+const outIncludes = (page, idx, text) => page.waitForFunction(([i, t]) =>
+  (document.getElementById('cell-out-' + i).textContent || '').includes(t), [idx, text], { timeout: 8000 }).catch(() => {});
+
+// ---------- a database in a file: a live run reads it, changes only its own ----------
+{
+  const ctx = await browser.newContext({ locale: 'de-DE' });
+  const page = await open(ctx, '#sequel');
+  await run(page, 1);
+  const fileCell = await page.evaluate(() => [...document.querySelectorAll('.run-cell')].map(b => b.dataset.idx)
+    .find(i => window.cellEditors[i].getValue().includes('Sequel.sqlite("zeiterfassung.db")')));
+  check('▶ fills the database file', /=> 1(?!\d)/.test(await run(page, fileCell)));
+  await edit(page, 3, 'zeiterfassung[:eintraege].insert(projekt: "Live", stunden: 1)\nzeiterfassung[:eintraege].count');
+  await outIncludes(page, 3, '▶');
+  check('a live run changes no database opened before it, it says ▶ will', (await out(page, 3)).includes('eine Datenbank ändern geht nur mit ▶'));
+  await edit(page, 5, 'zeiterfassung[:eintraege].where(projekt: "Chunky").count');
+  await outIncludes(page, 5, '=>');
+  check('... but may read it', (await out(page, 5)).includes('=> 1'));
+  await edit(page, 7, 'probe = Sequel.sqlite("probe.db")\nprobe.create_table(:t) { Integer :x }\nprobe[:t].insert(x: 1)\nprobe[:t].count');
+  await outIncludes(page, 7, '=>');
+  check('a database the live run opens itself may be changed', (await out(page, 7)).includes('=> 1'));
+  check('... and is thrown away with it',
+    (await run(page, 9, '[zeiterfassung[:eintraege].count, File.exist?("probe.db")]')).includes('=> [1, false]'));
+  await ctx.close();
+}
+
+// ---------- the workshop keeps a program's database ----------
+{
+  const ctx = await browser.newContext({ locale: 'de-DE' });
+  const page = await open(ctx, '#werkstatt');
+  const stored = () => page.evaluate(() => window.ChunkyStorage.files.read('zeit.db') || '');
+  const program = 'install_gem "sequel"\nrequire "sequel"\nDB = Sequel.sqlite("zeit.db")\nDB.create_table?(:arbeit) do\n  primary_key :id\n  String :projekt\nend\nDB[:arbeit].insert(projekt: "Chunky")\nputs "Zeilen: #{DB[:arbeit].count}"';
+  check('the first run waits for SQLite', (await run(page, 0, program)).includes('Zeilen: 1'));
+  check('... and the database is kept as a SQLite file', (await stored()).startsWith('data:application/vnd.sqlite3;base64,U1FMaXRlIGZvcm1hdCAz'));
+  check('... in the file list', (await page.textContent('#wsFiles')).includes('zeit.db'));
+  check('the next run reads it', (await run(page, 0)).includes('Zeilen: 2'));
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
+  await page.waitForFunction(() => window.ChunkyBridge && window.ChunkyBridge.ready, null, { timeout: 120000 });
+  check('a reload keeps it', (await run(page, 0)).includes('Zeilen: 3'));
+  await page.click('#wsFiles >> text=zeit.db');
+  check('selected, it is described instead of opened in the editor',
+    ((await page.textContent('#wsPreview p.ws-database').catch(() => '')) || '').includes('SQLite-Datenbank'));
   await ctx.close();
 }
 

@@ -51,7 +51,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   wasm image (json, date, openssl …), has a pure-Ruby stand-in (Numo, the
   arrays under Rumale: `html/numo_narray.rb`; sqlite3, on
   [sql.js](https://sql.js.org) - SQLite in WebAssembly, loaded only when
-  needed - so Sequel's own SQLite adapter runs: `html/sqlite3_sqljs.rb`; in the
+  needed - so Sequel's own SQLite adapter runs, and `Sequel.sqlite("x.db")`
+  is a real SQLite file you can download: `html/sqlite3_sqljs.rb`; in the
   cache, `SUBSTITUTES`: a dependency on `bigdecimal` installs
   [bigdecimal-pure](https://github.com/Largo/bigdecimal-pure), which
   unblocks activesupport, liquid, prawn, dry-types …) or the gem that
@@ -64,7 +65,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **Workshop**: beside the lessons, a small IDE for your own multi-file
   programs - `require_relative` between files, `File.read`/`File.write` on
   the project, input for `gets`, pictures and PDFs it writes previewed and
-  kept, files renamable - with every widget below available.
+  kept, SQLite databases kept with the project, files renamable - with every
+  widget below available.
 - **Your progress stays yours**: nothing is stored on a server. Progress,
   code and workshop files live in the browser and can be saved as a progress
   file (download, load again, merged key by key) or - in Chrome and Edge over
