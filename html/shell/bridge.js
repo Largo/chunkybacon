@@ -42,6 +42,13 @@
   // once that frame is drawn, CRuby may block the main thread. This also
   // keeps CRuby from ever running inside one of PicoRuby's handlers.
   function send(item) {
+    // a lesson with PyCall loads Python first (index.html: ensurePython);
+    // a run asked for meanwhile goes out once it is there - or failed
+    var python = window.chunkyPython;
+    if (item.type === "run" && python && python.loading) {
+      python.loading.then(function () { send(item); });
+      return;
+    }
     window.afterPaint(function () {
       if (item.type === "run" || item.type === "autorun") {
         emit("chunky:run", withState({ idx: item.idx, auto: item.type === "autorun" }));
@@ -170,7 +177,8 @@
     // a live run (shell/app.rb, autorun.rb): only once the kernel is up, never
     // queued - while Ruby loads, typing is just typing. true when it went out.
     autorun: function (idx) {
-      if (!bridge.ready) return false;
+      // (while Python loads, typing is just typing too)
+      if (!bridge.ready || (window.chunkyPython && window.chunkyPython.loading)) return false;
       send({ type: "autorun", idx: Number(idx) });
       return true;
     },

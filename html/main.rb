@@ -140,6 +140,10 @@ require_relative "sandbox_sim"
 require_relative "workshop"
 # Live runs: rehearsals a moment after the learner stops typing.
 require_relative "autorun"
+# require "pycall" is the bridge to Pyodide (pycall.rb): the real gem needs
+# libpython, which a browser does not have
+require_relative "pycall"
+BrowserGems.files["(shims)"]["pycall.rb"] = ""
 
 Net::HTTP.transport = lambda do |_method, uri|
   # a live run fetches nothing: it would freeze the typing and ask the
@@ -753,6 +757,19 @@ class ChunkyApp
     match && match.to_i
   end
 
+  # A Python object as a notebook shows it: pandas' own table for a
+  # DataFrame (its HTML escapes the data), Python's repr otherwise - in full,
+  # a Series' repr is several lines
+  def python_result_html(result)
+    html = result.__html__
+    return "<div class=\"cell-result py-table\">#{html}</div>" if html.is_a?(String) && !html.empty?
+
+    text = result.inspect.to_s
+    "<div class=\"cell-result\">=&gt; #{escape_html(text.length > 4000 ? "#{text[0, 4000]}…" : text)}</div>"
+  rescue PyCall::PyError, PyCall::NotReady => e
+    "<div class=\"cell-error\">#{escape_html(e.message)}</div>"
+  end
+
   def inspect_result(value)
     text = begin
       value.inspect
@@ -904,6 +921,8 @@ class ChunkyApp
     elsif error
       out_html += "<div class=\"cell-error\">#{escape_html(error.class)}: #{escape_html(error.message)}" \
                   "#{where ? " (#{escape_html(where)})" : ""}</div>"
+    elsif result.is_a?(PyCall::PyObject)
+      out_html += python_result_html(result)
     elsif !(result.nil? && (!output.empty? || widgets_present))
       out_html += "<div class=\"cell-result\">=&gt; #{escape_html(inspect_result(result))}</div>"
     end

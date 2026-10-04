@@ -260,6 +260,43 @@
       return window.threeLoading;
     };
 
+    // Python for the PyCall lesson (html/pycall.rb): Pyodide - CPython in
+    // WebAssembly - with pandas, about 21 MB from assets/pyodide/
+    // (tools/vendor_pyodide.rb), so only for the lesson that asks: the shell
+    // calls ensurePython when a lesson's code mentions PyCall, and
+    // shell/bridge.js holds a run until chunky:python-ready. What Python
+    // prints is collected here and written into the cell by pycall.rb.
+    window.chunkyPython = {
+      ready: false, loading: null, error: null, pyodide: null, output: [],
+      takeOutput: function () { var text = this.output.join(""); this.output = []; return text; }
+    };
+    window.ensurePython = function () {
+      var python = window.chunkyPython;
+      if (python.ready || python.loading) return python.loading || Promise.resolve(true);
+      python.error = null;
+      python.loading = (async function () {
+        var base = new URL("assets/pyodide/", document.baseURI).href;
+        var module = await import(base + "pyodide.mjs");
+        var pyodide = await module.loadPyodide({ indexURL: base });
+        var collect = function (line) { python.output.push(line + "\n"); };
+        pyodide.setStdout({ batched: collect });
+        pyodide.setStderr({ batched: collect });
+        await pyodide.loadPackage(["pandas"], { messageCallback: function () {} });
+        python.pyodide = pyodide;
+        python.ready = true;
+        return true;
+      })().catch(function (e) {
+        python.error = String((e && e.message) || e);
+        console.error("Python (Pyodide) failed to load", e);
+        return false;
+      }).then(function (ok) {
+        python.loading = null;
+        window.dispatchEvent(new CustomEvent("chunky:python-ready", { detail: { ok: ok } }));
+        return ok;
+      });
+      return python.loading;
+    };
+
     // A Blob URL for bytes handed over from Ruby as base64 - the link a cell
     // offers for a file it wrote. Blob rather than data: URLs, which break
     // down for multi-megabyte files.
