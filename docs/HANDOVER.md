@@ -2,7 +2,7 @@
 
 Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
-Last updated 2026-10-04 (42 lessons in German, English and Japanese).
+Last updated 2026-10-04 (44 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -78,7 +78,7 @@ THIRD_PARTY_NOTICES.md     bundled components and their licenses - update it
 tools/build_gem_cache.rb   regenerates html/gems/cache/
 tools/update_ruby_wasm.rb  updates the wasm + loader from npm
 tools/compress_assets.rb   the .gz copies nginx serves (the wasm runtimes)
-tools/vendor_pyodide.rb    Pyodide + pandas, sympy into html/assets/pyodide/ (§6d)
+tools/vendor_pyodide.rb    Pyodide + pandas, sympy, scikit-learn into html/assets/pyodide/ (§6d)
 tools/offline_files.rb     html/offline-files.txt - rerun after adding/removing a file
 tools/patch_picoruby_loader.rb  PicoRuby's loader: text/ruby -> text/picoruby
 tools/measure_load.mjs, tools/shell_metrics.rb  load times, code size (PICORUBY_SHELL.md)
@@ -181,7 +181,7 @@ A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 19-26), not in a group of one.
+(side trips, 19-28), not in a group of one.
 
 The sidebar itself (`index.html` `#sidebar`, `shell/app.rb`, `app.css`): from
 the top of the window to its foot with its own scroll; head with the course
@@ -237,7 +237,7 @@ Rules that the code and tests rely on:
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
 - Checks accept output OR result; `puts` is never required.
-- `test/browser_test.mjs` asserts the lesson count (`'42 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'44 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -481,12 +481,12 @@ shell does the timing, the kernel the guarding:
 ## 6c. Offline mode
 
 The progress dialog's *Offline lernen* keeps the whole course on the device
-(~67 MB stored, up to ~36 MB to download; Pyodide is 25 / 18 of it): the course then opens and runs
+(~85 MB stored, up to ~54 MB to download; Pyodide is 43 / 36 of it): the course then opens and runs
 without a connection. **Off until the learner turns it on** - before that
 no service worker is registered and nothing changes. The choice is
 `chunkyui_offline` (a view setting, not synced).
 
-- **Python is a checkbox** ("Python mitnehmen", ticked by default):
+- **Python is a checkbox** ("Python mitnehmen", ticked by default; ~43 MB):
   `chunkyui_offline_python` = `off` leaves `assets/pyodide/` out.
   `offline.js` sends the choice with every refresh (`{ python }`), `sw.js`
   filters the list by it (`PYTHON`), so a change takes effect at once and the
@@ -548,12 +548,15 @@ container started with plain `docker run` on the default bridge gets 502s.
 
 ## 6d. Python: Pyodide and the PyCall bridge
 
-The PyCall lessons run real pandas (23) and SymPy (24). The pycall gem
-cannot load in the browser - it opens libpython with Fiddle - so:
+The PyCall lessons run real pandas (23), SymPy (24), NumPy (25) and
+scikit-learn (26). The pycall gem cannot load in the browser - it opens
+libpython with Fiddle - so:
 
 - **Pyodide** (CPython 3.14 in WebAssembly) with pandas, numpy and their
-  three small dependencies, and sympy with mpmath, sits in
-  `html/assets/pyodide/` (~25 MB; `PACKAGES` in the tool):
+  three small dependencies, sympy with mpmath, and scikit-learn with scipy,
+  joblib and threadpoolctl, sits in `html/assets/pyodide/` (~43 MB;
+  `PACKAGES` in the tool). Wheels are zip archives already, so they get no
+  `.gz` (gzip saves under 2%):
   `tools/vendor_pyodide.rb` takes the core from the official GitHub release
   and the wheels from jsDelivr, checks each wheel against the release
   lockfile's SHA-256, and cuts `pyodide-lock.json` down to what is vendored
@@ -564,7 +567,9 @@ cannot load in the browser - it opens libpython with Fiddle - so:
 - **Loading**: index.html's `ensurePython(code)` imports `pyodide.mjs` once
   (~9 MB), maps import names to vendored packages from `pyodide-lock.json`,
   loads the packages the `import_module("...")` calls in `code` name
-  (pandas ~12 MB, sympy ~5 MB) and collects what Python prints
+  (pandas ~12 MB, sympy ~5 MB, scikit-learn ~19 MB with scipy; a dotted
+  name counts by its first part, `sklearn.tree` -> `sklearn`) and
+  collects what Python prints
   (`chunkyPython.takeOutput`). The shell calls it with a lesson's PyCall
   cells (render_lesson, like `ensureThree`; the names are read in JS, as
   PicoRuby has no `scan`); `shell/bridge.js` holds a run until Python is
@@ -595,6 +600,18 @@ cannot load in the browser - it opens libpython with Fiddle - so:
   `use_unicode: false` - the code font has no fixed-width box-drawing
   glyphs, so the unicode drawing falls apart), `solve`, `subs` in a Ruby
   block, `diff`; the exercise finds where a cubic is flat (`diff` + `solve`).
+- **The NumPy lesson**: arithmetic on a whole array, `mean`/`max`/`argmax`,
+  a mask, `arange`/`linspace`, `reshape`/`shape`/`sum(axis:)`, seeded dice
+  (`default_rng(42)`, so `bincount` is the same every run), `tolist.to_a`;
+  the exercise counts scores >= 60 with `(a >= 60).sum`.
+- **The scikit-learn lesson**: `LinearRegression` (ice creams by
+  temperature; `coef_`, `intercept_` - negative, which the text uses),
+  a `DecisionTreeClassifier` cat-or-fox whose `export_text` shows it split
+  on the ears only (the text builds on that: a heavy animal with short ears
+  is a cat), then iris (bundled in the wheel, so offline too) with
+  `train_test_split` and `score` (~0.96). The numbers in the text are what
+  the code prints; check them after a scikit-learn update. The exercise
+  predicts points for 6 study hours (87).
 - **Tests**: the lessons need the browser - `check_harness.rb` skips them
   (`BROWSER_ONLY`), `test/browser_test.mjs` runs every cell.
 
@@ -658,7 +675,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 42 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 44 lessons x 3 languages, starter fails, solutions pass
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof

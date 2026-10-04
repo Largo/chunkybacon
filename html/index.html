@@ -264,9 +264,9 @@
     // WebAssembly, about 9 MB - from assets/pyodide/ (tools/vendor_pyodide.rb),
     // so only for a lesson that asks: the shell calls ensurePython(code) with
     // a lesson's PyCall code, and the packages its import_module("...") calls
-    // name come along (pandas ~12 MB, sympy ~5 MB); pycall.rb asks the same
-    // way for a module the workshop imports. shell/bridge.js holds a run
-    // until chunky:python-ready. What Python prints is collected here and
+    // name come along (pandas ~12 MB, sympy ~5 MB, scikit-learn ~19 MB);
+    // pycall.rb asks the same way for a module the workshop imports.
+    // shell/bridge.js holds a run until chunky:python-ready. What Python prints is collected here and
     // written into the cell by pycall.rb.
     window.chunkyPython = {
       ready: false, loading: null, error: null, pyodide: null, output: [],

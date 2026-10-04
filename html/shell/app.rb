@@ -355,7 +355,8 @@ module ChunkyShell
       # three.js (750 KB) only for the lesson that draws with it
       JSG.w.ensureThree if cells.any? { |cell| code_cell?(cell) && cell.code.to_s.include?("show_three") }
       # Python (Pyodide, ~9 MB) only for a lesson that calls it, with the
-      # packages its import_module calls name (pandas ~12 MB, sympy ~5 MB)
+      # packages its import_module calls name (pandas ~12 MB, sympy ~5 MB,
+      # scikit-learn ~19 MB)
       python = cells.select { |cell| code_cell?(cell) && cell.code.to_s.include?("PyCall") }
       JSG.w.ensurePython(python.map { |cell| cell.code.to_s }.join("\n")) unless python.empty?
       @rendered_lesson_id = id
