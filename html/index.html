@@ -312,8 +312,9 @@
         return true;
       })().catch(function (e) {
         // a page from the offline copy, made without Python (the checkbox):
-        // pycall.rb says so rather than showing a network error
-        var offline = window.ChunkyOffline && window.ChunkyOffline.fromCopy();
+        // pycall.rb says so rather than showing a network error. Any other
+        // failure (a package, the wasm) keeps its own message.
+        var offline = copy && copy.fromCopy() && !copy.python();
         python.error = offline ? "offline" : String((e && e.message) || e);
         console.error("Python (Pyodide) failed to load", e);
         return false;

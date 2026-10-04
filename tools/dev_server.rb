@@ -41,12 +41,13 @@ class SiteHandler < WEBrick::HTTPServlet::FileHandler
   end
 
   # As nginx.conf: the .gz next to the file when there is one (gzip_static),
-  # otherwise compressed on the fly.
+  # otherwise compressed on the fly. A .gz older than its file is stale (the
+  # file was edited since tools/compress_assets.rb), so it is not used.
   def gzip(req, res)
     file = File.expand_path(File.join(ROOT, req.path))
     plain = res.body.respond_to?(:read) ? res.body.read : res.body.to_s
     res.body.close if res.body.respond_to?(:close)
-    packed = file.start_with?(ROOT) && File.file?("#{file}.gz")
+    packed = file.start_with?(ROOT) && File.file?("#{file}.gz") && File.mtime("#{file}.gz") >= File.mtime(file)
     res.body = packed ? File.binread("#{file}.gz") : Zlib.gzip(plain, level: 6)
     res["Content-Encoding"] = "gzip"
     res["Content-Length"] = res.body.bytesize.to_s
@@ -55,17 +56,22 @@ class SiteHandler < WEBrick::HTTPServlet::FileHandler
 end
 
 # GET/HEAD bridge to one hardcoded https host. `strip` is removed from the
-# front of the request path; the rest is forwarded unchanged.
+# front of the request path; the rest is forwarded unchanged. With `shape`,
+# only a request URI matching it is forwarded (WEBrick mounts match by
+# prefix, so /rubygems/gems/x.gem/more would otherwise get through).
 class Bridge < WEBrick::HTTPServlet::AbstractServlet
   PASS_HEADERS = %w[content-type last-modified etag].freeze
 
-  def initialize(server, host, strip)
+  def initialize(server, host, strip, shape = nil)
     super(server)
     @host = host
     @strip = strip
+    @shape = shape
   end
 
   def do_GET(req, res)
+    return Forbidden.new(@server).service(req, res) if @shape && !req.unparsed_uri.match?(@shape)
+
     path = req.unparsed_uri.delete_prefix(@strip)
     path = "/#{path}" unless path.start_with?("/")
     upstream = Net::HTTP.start(@host, 443, use_ssl: true, open_timeout: 10, read_timeout: 60) do |http|
@@ -103,8 +109,10 @@ server = WEBrick::HTTPServer.new(
 server.mount("/", SiteHandler, ROOT)
 server.mount("/proxy/ruby-lang", Bridge, "www.ruby-lang.org", "/proxy/ruby-lang")
 server.mount("/rubygems", Forbidden)
-server.mount("/rubygems/api/v1/gems", Bridge, "rubygems.org", "/rubygems")
-server.mount("/rubygems/gems", Bridge, "rubygems.org", "/rubygems")
+# the two requests the gem installer makes (browser_gems.rb): a gem's
+# info as JSON, and a .gem file
+server.mount("/rubygems/api/v1/gems", Bridge, "rubygems.org", "/rubygems", %r{\A/rubygems/api/v1/gems/[\w.-]+\.json\z})
+server.mount("/rubygems/gems", Bridge, "rubygems.org", "/rubygems", %r{\A/rubygems/gems/[\w.-]+\.gem\z})
 
 trap("INT") { server.shutdown }
 trap("TERM") { server.shutdown }

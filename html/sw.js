@@ -33,6 +33,8 @@ const FILE_PREFIX = new URL("__offline__/f/", base).href;
 let snapshotPromise = null;   // the index of the current copy, or null
 let building = null;          // the running update, a Promise
 let buildingPython = true;    // ... with Python or without
+let latestPython = true;      // the choice the page sent last
+let queued = null;            // one more update after the running one
 let progress = { done: 0, total: 0, bytes: 0 };
 let lastError = null;
 let lastCheck = 0;
@@ -174,8 +176,15 @@ async function update(python) {
 }
 
 function refresh(force, python) {
-  // the box ticked or unticked while a copy is being made: another one after it
-  if (building) return python === buildingPython ? building : building.then(() => refresh(true, python));
+  latestPython = python;
+  // the box ticked or unticked while a copy is being made: one more update
+  // after it, with whatever the box says by then (ticked, unticked and
+  // ticked again ends with Python)
+  if (building) {
+    if (python === buildingPython && !queued) return building;
+    if (!queued) queued = building.then(() => { queued = null; return refresh(true, latestPython); });
+    return queued;
+  }
   if (!force && Date.now() - lastCheck < RECHECK_MS) return Promise.resolve();
   lastCheck = Date.now();
   progress = { done: 0, total: 0, bytes: 0 };
