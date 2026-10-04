@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('41 lessons in nav', (await page.$$('#lessonNav a')).length === 41);
+check('42 lessons in nav', (await page.$$('#lessonNav a')).length === 42);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -418,21 +418,48 @@ const pyCell = async (idx, timeout = 30000) => {
   return (await page.textContent(`#cell-out-${idx}`)) || '';
 };
 check('a run waits for Python, then PyCall imports pandas', (await pyCell(1, 120000)).includes('=> "3.0.2"'));
+check('the Python -> Ruby cheat sheet is a table', (await page.$$('.lessonText table.cheat tbody tr')).length === 6);
 await pyCell(3);
 check('a DataFrame shows as pandas\' table', (await page.$$('#cell-out-3 table.dataframe')).length === 1);
-await pyCell(5);
+check('a single column is a Series', (await pyCell(5)).includes('Name: preis'));
+await pyCell(7);
 check('keyword arguments reach Python (sorted, highest first)',
-  (await page.textContent('#cell-out-5 tbody tr:first-child')).includes('Kaffee'));
-const pyNumbers = await pyCell(7);
-check('a Python float comes back as a Ruby Float', pyNumbers.includes('Gesamt: 30.0 Fr. (Float)'));
-check('filtering and tolist.to_a give a Ruby array', pyNumbers.includes('=> ["Speck", "Kaffee"]'));
-check('value_counts and groupby print', (await pyCell(9)).includes('Speck     3'));
-await page.evaluate(() => window.cellEditors[9].setValue('pd.DataFrame.new({ "a" => [1] })["nope"]'));
-check('a Python exception is a PyCall::PyError', (await pyCell(9)).includes('PyCall::PyError: KeyError'));
+  (await page.textContent('#cell-out-7 tbody tr:first-child')).includes('Kaffee'));
+const pyNumbers = await pyCell(9);
+check('a Python float comes back as a Ruby Float', pyNumbers.includes('Gesamt: 30.0 Fr.') && pyNumbers.includes('=> Float'));
+check('a comparison is a Series of True and False', (await pyCell(11)).includes('True'));
+await pyCell(13);
+check('the mask picks the rows', (await page.$$('#cell-out-13 table.dataframe tbody tr')).length === 2);
+check('tolist.to_a gives a Ruby array', (await pyCell(15)).includes('=> ["Speck", "Kaffee"]'));
+check('value_counts counts', (await pyCell(17)).includes('Speck     3'));
+check('groupby counts per table', /1\s+3/.test(await pyCell(19)));
+await page.evaluate(() => window.cellEditors[19].setValue('pd.DataFrame.new({ "a" => [1] })["nope"]'));
+check('a Python exception is a PyCall::PyError', (await pyCell(19)).includes('PyCall::PyError: KeyError'));
 await setExercise('require "pycall"\npd = PyCall.import_module("pandas")\nrechnung = pd.DataFrame.new({ "gast" => ["Kaz", "Isi", "Kaz", "Isi", "Kaz"], "preis" => [4.5, 2.0, 3.0, 4.5, 3.5] })\nausgaben = rechnung.groupby("gast")["preis"].sum.to_dict.to_h');
 await runExercise();
 await page.waitForTimeout(800);
 check('spending exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// SymPy lesson: the same bridge; opening it loads sympy (+ mpmath, ~5 MB)
+// on top of the Pyodide that is already there
+await page.click('#lessonNav a[data-id="sympy"]');
+await page.waitForTimeout(300);
+const exact = await pyCell(1, 120000);
+check('a float is rounded, a Rational is exact', exact.includes('0.30000000000000004') && exact.includes('=> 3/10'));
+check('opening the lesson loaded sympy', await page.evaluate(() => !!window.chunkyPython.packages.sympy));
+const roots = await pyCell(3);
+check('square roots stay exact, evalf gives 50 digits', roots.includes('2*sqrt(2)') && roots.includes('1.4142135623730950488016887242096980785696718753769'));
+const algebra = await pyCell(5);
+check('expand and factor', algebra.includes('x**2 + 2*x + 1') && algebra.includes('(x - 3)*(x + 3)'));
+const pretty = await pyCell(7);
+check('pretty draws, and 3 * x coerces', pretty.includes('-----') && pretty.includes('3*x') && pretty.includes('\\/'));
+check('solve finds both roots', (await pyCell(9)).includes('=> [2, 3]'));
+check('subs puts numbers in', (await pyCell(11)).includes('=> [0, 0, 2]'));
+check('diff', (await pyCell(13)).includes('3*x**2 + 2'));
+await setExercise('require "pycall"\nsp = PyCall.import_module("sympy")\nx = sp.symbols("x")\nkurve = x ** 3 - 6 * x ** 2 + 9 * x\nflach = sp.solve(sp.diff(kurve, x), x)');
+await runExercise();
+await page.waitForTimeout(800);
+check('flat-curve exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 
 // RubyKaigi lesson: weird but valid Ruby, and Prism (a C extension built
 // into the wasm) splitting and parsing code the way IRB reads it

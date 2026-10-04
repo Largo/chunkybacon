@@ -459,11 +459,12 @@ module JS
   # offline.js: the copy of the course on this device; records what is asked
   class Offline
     attr_reader :listeners, :calls
-    attr_accessor :supported, :state, :done, :total, :updating, :from_copy, :error
+    attr_accessor :supported, :state, :done, :total, :updating, :from_copy, :error, :python
 
     def initialize
       @listeners = Hash.new { |h, k| h[k] = [] }
       @calls = []
+      @python = true
       @supported = true
       @state = "off"
       @done = 0
@@ -484,6 +485,8 @@ module JS
         "done" => proc { @done }, "total" => proc { @total }, "error" => proc { @error },
         "sizeMb" => proc { 44 },
         "savedAt" => proc { |lang| lang == "de" ? "01.10.26, 15:30" : "10/1/26, 3:30 PM" },
+        "python" => proc { @python },
+        "setPython" => proc { |on| @calls << ["setPython", on]; @python = on; JS::Promise.resolve },
         "enable" => proc { @calls << ["enable"]; JS::Promise.resolve },
         "disable" => proc { @calls << ["disable"]; JS::Promise.resolve }
       }

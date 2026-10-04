@@ -581,6 +581,29 @@ nav#lessonNav a.active::before {
   font-size: 0.9rem;
   line-height: 1.5;
 }
+/* a small two-column cheat sheet in the prose (PyCall: Python -> Ruby);
+   on a phone the code wraps, so both columns stay in view */
+.lessonText table.cheat {
+  border-collapse: collapse;
+  margin: 0 0 1.1rem;
+  font-size: 0.92rem;
+}
+.lessonText .cheat th, .lessonText .cheat td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.3rem 1.2rem 0.3rem 0;
+  border-bottom: 1px solid var(--rule);
+  overflow-wrap: anywhere;
+}
+.lessonText .cheat td:last-child, .lessonText .cheat th:last-child { padding-right: 0; }
+.lessonText .cheat thead th { border-bottom: 1.5px solid var(--ink-soft); }
+.lessonText .cheat td > code {
+  background: var(--code-bg);
+  padding: 0.05rem 0.3rem;
+  border-radius: 4px;
+  font-size: 0.88em;
+}
+.lessonText .cheat em { color: var(--ink-soft); }
 kbd {
   font-family: var(--font-code);
   font-size: 0.8em;
@@ -1268,6 +1291,9 @@ button.reset:hover { background: var(--paper); color: var(--ink); border-color: 
 .pd-connected { font-weight: 600; }
 .pd-error, .pd-message.is-error { color: var(--err); }
 .pd-busy { color: var(--ink-soft); font-style: italic; }   /* the offline copy being saved */
+/* Python in the offline copy or not */
+.pd-check { display: flex; align-items: flex-start; gap: 0.5rem; margin: 0.2rem 0 0.8rem; cursor: pointer; }
+.pd-check input { margin: 0.25rem 0 0; accent-color: var(--fox); flex: none; }
 .pd-message { min-height: 1.6em; margin: 1rem 0 0; font-weight: 600; }
 .pd-message.is-ok { color: var(--ok); }
 

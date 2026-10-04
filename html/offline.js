@@ -7,6 +7,8 @@
   "use strict";
 
   var KEY = "chunkyui_offline";
+  // Python (assets/pyodide/, ~25 MB of the copy) is in it unless unticked
+  var PYTHON_KEY = "chunkyui_offline_python";
   var supported = "serviceWorker" in navigator && window.isSecureContext && "caches" in window;
   var listeners = {};
   var status = fresh();
@@ -72,6 +74,18 @@
     } catch (e) { /* a view setting only */ }
   }
 
+  function withPython() {
+    try { return localStorage.getItem(PYTHON_KEY) !== "off"; } catch (e) { return true; }
+  }
+  // every refresh says whether Python belongs in the copy; a change takes
+  // effect at once (a copy without it drops the files it had)
+  function setPython(on) {
+    try {
+      if (on) localStorage.removeItem(PYTHON_KEY); else localStorage.setItem(PYTHON_KEY, "off");
+    } catch (e) { /* a view setting only */ }
+    return wanted() ? send({ type: "refresh", force: true, python: on }) : Promise.resolve();
+  }
+
   // sw.js sits beside index.html; with the server's permalinks the page is
   // at /de/methoden, and <base href="/"> keeps "sw.js" pointing at the root
   function scope() { return new URL("./", document.baseURI).href; }
@@ -110,7 +124,7 @@
     emit("status");
     // ask the browser not to clear the copy when space runs low
     if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(function () {});
-    return register().then(function () { return send({ type: "refresh", force: true }); });
+    return register().then(function () { return send({ type: "refresh", force: true, python: withPython() }); });
   }
 
   function disable() {
@@ -143,7 +157,7 @@
   // after a visit, once the page is up (not competing with its downloads):
   // the worker checks whether the copy is still current
   function check() {
-    if (wanted() && navigator.onLine) send({ type: "refresh" });
+    if (wanted() && navigator.onLine) send({ type: "refresh", python: withPython() });
   }
 
   function init() {
@@ -187,7 +201,10 @@
       }
     },
     enable: enable,
-    disable: disable
+    disable: disable,
+    // Python in the copy (the checkbox): true unless unticked on this device
+    python: withPython,
+    setPython: setPython
   };
 
   init();

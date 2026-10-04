@@ -2,7 +2,7 @@
 
 Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
-Last updated 2026-09-30 (41 lessons in German, English and Japanese).
+Last updated 2026-10-04 (42 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -78,7 +78,7 @@ THIRD_PARTY_NOTICES.md     bundled components and their licenses - update it
 tools/build_gem_cache.rb   regenerates html/gems/cache/
 tools/update_ruby_wasm.rb  updates the wasm + loader from npm
 tools/compress_assets.rb   the .gz copies nginx serves (the wasm runtimes)
-tools/vendor_pyodide.rb    Pyodide + pandas into html/assets/pyodide/ (§6d)
+tools/vendor_pyodide.rb    Pyodide + pandas, sympy into html/assets/pyodide/ (§6d)
 tools/offline_files.rb     html/offline-files.txt - rerun after adding/removing a file
 tools/patch_picoruby_loader.rb  PicoRuby's loader: text/ruby -> text/picoruby
 tools/measure_load.mjs, tools/shell_metrics.rb  load times, code size (PICORUBY_SHELL.md)
@@ -181,7 +181,7 @@ A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 19-24), not in a group of one.
+(side trips, 19-26), not in a group of one.
 
 The sidebar itself (`index.html` `#sidebar`, `shell/app.rb`, `app.css`): from
 the top of the window to its foot with its own scroll; head with the course
@@ -237,7 +237,7 @@ Rules that the code and tests rely on:
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
 - Checks accept output OR result; `puts` is never required.
-- `test/browser_test.mjs` asserts the lesson count (`'41 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'42 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -481,10 +481,18 @@ shell does the timing, the kernel the guarding:
 ## 6c. Offline mode
 
 The progress dialog's *Offline lernen* keeps the whole course on the device
-(~65 MB stored, up to ~35 MB to download; Pyodide is 20 / 14 of it): the course then opens and runs
+(~67 MB stored, up to ~36 MB to download; Pyodide is 25 / 18 of it): the course then opens and runs
 without a connection. **Off until the learner turns it on** - before that
 no service worker is registered and nothing changes. The choice is
 `chunkyui_offline` (a view setting, not synced).
+
+- **Python is a checkbox** ("Python mitnehmen", ticked by default):
+  `chunkyui_offline_python` = `off` leaves `assets/pyodide/` out.
+  `offline.js` sends the choice with every refresh (`{ python }`), `sw.js`
+  filters the list by it (`PYTHON`), so a change takes effect at once and the
+  next index drops the files (a change during a download queues another
+  one). A page from a copy without Python does not try to load it
+  (`ensurePython` stops at once) and a PyCall cell says why (`pythonOffline`).
 
 - **Online nothing changes.** `html/sw.js` sends every request to the
   network as before - a deploy is seen on the next load, just as without it.
@@ -540,11 +548,12 @@ container started with plain `docker run` on the default bridge gets 502s.
 
 ## 6d. Python: Pyodide and the PyCall bridge
 
-The PyCall lesson runs real pandas. The pycall gem cannot load in the
-browser - it opens libpython with Fiddle - so:
+The PyCall lessons run real pandas (23) and SymPy (24). The pycall gem
+cannot load in the browser - it opens libpython with Fiddle - so:
 
 - **Pyodide** (CPython 3.14 in WebAssembly) with pandas, numpy and their
-  three small dependencies sits in `html/assets/pyodide/` (~21 MB):
+  three small dependencies, and sympy with mpmath, sits in
+  `html/assets/pyodide/` (~25 MB; `PACKAGES` in the tool):
   `tools/vendor_pyodide.rb` takes the core from the official GitHub release
   and the wheels from jsDelivr, checks each wheel against the release
   lockfile's SHA-256, and cuts `pyodide-lock.json` down to what is vendored
@@ -552,12 +561,17 @@ browser - it opens libpython with Fiddle - so:
   update; then `ruby tools/compress_assets.rb` (the .gz of the wasm and
   `pyodide.asm.mjs`) and `ruby tools/offline_files.rb`. nginx serves `.mjs`
   as JavaScript (module scripts insist).
-- **Loading**: index.html's `ensurePython` imports `pyodide.mjs`, loads
-  pandas and collects what Python prints (`chunkyPython.takeOutput`). The
-  shell calls it when a lesson's code mentions `PyCall` (render_lesson, like
-  `ensureThree`); `shell/bridge.js` holds a run until Python is there, and
-  live runs skip meanwhile. In the workshop the first `PyCall` call starts
-  the load and asks to run again (`pythonLoading`).
+- **Loading**: index.html's `ensurePython(code)` imports `pyodide.mjs` once
+  (~9 MB), maps import names to vendored packages from `pyodide-lock.json`,
+  loads the packages the `import_module("...")` calls in `code` name
+  (pandas ~12 MB, sympy ~5 MB) and collects what Python prints
+  (`chunkyPython.takeOutput`). The shell calls it with a lesson's PyCall
+  cells (render_lesson, like `ensureThree`; the names are read in JS, as
+  PicoRuby has no `scan`); `shell/bridge.js` holds a run until Python is
+  there, and live runs skip meanwhile. In the workshop the first `PyCall`
+  call starts the core, and importing a vendored module not loaded yet
+  starts loading it (`import_module` on `ModuleNotFoundError`); both ask to
+  run again (`pythonLoading`).
 - **The bridge** (`html/pycall.rb`, loaded by main.rb; `require "pycall"` is
   a shim) has PyCall's API: `PyCall.import_module`, `eval`, `exec`, `.new`
   for classes, `[]`/`[]=`, operators, keyword arguments, `to_a`/`to_h`.
@@ -565,9 +579,23 @@ browser - it opens libpython with Fiddle - so:
   each operation is one JSON request through JavaScript - which keeps
   `int` and `float` apart (JavaScript would merge them), turns numpy scalars
   into numbers and Python exceptions into `PyCall::PyError`. A result with
-  `_repr_html_` (a DataFrame) renders as pandas' table (`.py-table`).
-  Ruby blocks cannot be passed to Python.
-- **Tests**: the lesson needs the browser - `check_harness.rb` skips it
+  `_repr_html_` (a DataFrame) renders as pandas' table (`.py-table`); any
+  other is its repr, a multi-line one (a Series) starting below the `=>`.
+  `coerce` makes `2 * x` work (the 2 becomes a Python object, op `box`, as
+  the gem's SwappedOperationAdapter does), and `to_a` turns sympy integers
+  and floats into Ruby numbers. Ruby blocks cannot be passed to Python.
+- **The lesson** goes in small steps, one idea per cell: a DataFrame, one
+  column (a Series), computing with columns, `sum`, a True/False mask, the
+  rows it picks, back to Ruby with `tolist.to_a`, `value_counts`, `groupby`.
+  A Python -> Ruby cheat sheet (`table.cheat`, app.css) sits after the
+  import, and the plain-Ruby equivalent is shown next to the pandas way.
+  Its code stays what the real gem runs (`tolist.to_a`, `to_dict.to_h`).
+- **The SymPy lesson**: a float vs a `Rational` (a class, so `.new`), exact
+  roots and `evalf(50)`, a symbol, `expand`/`factor`, `pretty` (with
+  `use_unicode: false` - the code font has no fixed-width box-drawing
+  glyphs, so the unicode drawing falls apart), `solve`, `subs` in a Ruby
+  block, `diff`; the exercise finds where a cubic is flat (`diff` + `solve`).
+- **Tests**: the lessons need the browser - `check_harness.rb` skips them
   (`BROWSER_ONLY`), `test/browser_test.mjs` runs every cell.
 
 ## 7a. The optional server: permalinks and a backend
@@ -630,7 +658,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 41 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 42 lessons x 3 languages, starter fails, solutions pass
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof

@@ -759,13 +759,15 @@ class ChunkyApp
 
   # A Python object as a notebook shows it: pandas' own table for a
   # DataFrame (its HTML escapes the data), Python's repr otherwise - in full,
-  # a Series' repr is several lines
+  # a Series' repr is several lines, so it starts below the arrow, where its
+  # first row lines up with the others
   def python_result_html(result)
     html = result.__html__
     return "<div class=\"cell-result py-table\">#{html}</div>" if html.is_a?(String) && !html.empty?
 
     text = result.inspect.to_s
-    "<div class=\"cell-result\">=&gt; #{escape_html(text.length > 4000 ? "#{text[0, 4000]}…" : text)}</div>"
+    text = "#{text[0, 4000]}…" if text.length > 4000
+    "<div class=\"cell-result\">=&gt;#{text.include?("\n") ? "\n" : " "}#{escape_html(text)}</div>"
   rescue PyCall::PyError, PyCall::NotReady => e
     "<div class=\"cell-error\">#{escape_html(e.message)}</div>"
   end

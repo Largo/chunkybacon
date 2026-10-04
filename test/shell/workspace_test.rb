@@ -91,10 +91,25 @@ class WorkspaceTest < Minitest::Test
     click(byid("progressBtn"))
   end
 
+  def test_python_in_the_copy_is_a_checkbox
+    open_dialog { offline.state = "ready" }
+    box = dialog.js_querySelector(".pd-check input")
+    assert_equal true, box.props["checked"], "ticked unless unticked"
+    assert_includes offline_text, "Python mitnehmen"
+    box.props["checked"] = false
+    JS.fire(box.wrap, "change")
+    assert_equal [["setPython", false]], offline.calls
+  end
+
+  def test_python_left_out_stays_unticked
+    open_dialog { offline.python = false }
+    refute dialog.js_querySelector(".pd-check input").props["checked"]
+  end
+
   def test_offline_is_off_until_asked_for
     open_dialog
     assert_includes offline_text, "Offline lernen"
-    assert_includes offline_text, "65 MB Speicherplatz"
+    assert_includes offline_text, "67 MB Speicherplatz (ohne Python 18 und 43 MB)"
     click(button_labelled("Auf diesem Gerät speichern", dialog))
     assert_equal [["enable"]], offline.calls
   end

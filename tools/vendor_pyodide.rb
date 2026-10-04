@@ -1,5 +1,5 @@
 # Puts Pyodide - CPython compiled to WebAssembly - and the Python packages the
-# PyCall lesson uses into html/assets/pyodide/, so the page loads Python from
+# PyCall lessons use into html/assets/pyodide/, so the page loads Python from
 # its own server (index.html: window.ensurePython; html/pycall.rb).
 #
 #   ruby tools/vendor_pyodide.rb
@@ -19,7 +19,7 @@ require "fileutils"
 require "tmpdir"
 
 VERSION = "314.0.7"
-PACKAGES = %w[pandas].freeze   # and what they depend on
+PACKAGES = %w[pandas sympy].freeze   # and what they depend on
 CORE_FILES = %w[pyodide.mjs pyodide.asm.mjs pyodide.asm.wasm python_stdlib.zip package.json].freeze
 CORE = "https://github.com/pyodide/pyodide/releases/download/#{VERSION}/pyodide-core-#{VERSION}.tar.bz2"
 WHEELS = "#{ENV.fetch('PYODIDE_MIRROR', 'https://cdn.jsdelivr.net')}/pyodide/v#{VERSION}/full"

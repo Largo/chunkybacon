@@ -29,7 +29,8 @@ every file are in `html/assets/picoruby/NOTICE.md`; keep it with the runtime.
 
 ## Python in the browser (`html/assets/pyodide/`)
 
-Loaded only by the PyCall lesson (html/pycall.rb); put there by
+Loaded only by the PyCall lessons (html/pycall.rb), each with the packages it
+imports; put there by
 `tools/vendor_pyodide.rb` from the official Pyodide release, the wheels checked
 against the release's SHA-256.
 
@@ -43,6 +44,8 @@ against the release's SHA-256.
 | [python-dateutil](https://github.com/dateutil/dateutil) | 2.9.0.post0 | Apache-2.0 or BSD-3-Clause | its wheel (`dist-info/LICENSE`) |
 | [pytz](https://pythonhosted.org/pytz/) | 2026.1.post1 | MIT | its wheel (`dist-info/LICENSE.txt`) |
 | [six](https://github.com/benjaminp/six) | 1.17.0 | MIT | its wheel (`dist-info/LICENSE`) |
+| [SymPy](https://www.sympy.org/) | 1.14.0 | BSD-3-Clause, with bundled parts under their own licenses | `sympy-1.14.0-py3-none-any.whl` (`dist-info/licenses/LICENSE`, `AUTHORS`) |
+| [mpmath](https://mpmath.org/) | 1.4.1 | BSD-3-Clause | its wheel (`dist-info/licenses/LICENSE`) |
 
 ## Editor, 3D and fonts
 
