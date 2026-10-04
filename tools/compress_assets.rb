@@ -14,7 +14,8 @@ HTML = File.expand_path("../html", __dir__)
 # The PicoRuby runtime (the page shell) arrives with its .gz files from the
 # npm package's bundle (level 6); they count as current as long as they
 # unpack to the file next to them, so they are kept as they are.
-FILES = %w[ruby+stdlib.wasm assets/picoruby/picoruby.wasm assets/picoruby/picoruby.js].freeze
+FILES = %w[ruby+stdlib.wasm assets/picoruby/picoruby.wasm assets/picoruby/picoruby.js
+           assets/pyodide/pyodide.asm.wasm assets/pyodide/pyodide.asm.mjs].freeze
 
 # A .gz is current when it unpacks to exactly the file next to it.
 def current?(path, gz)

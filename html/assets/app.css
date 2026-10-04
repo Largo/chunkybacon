@@ -813,7 +813,20 @@ kbd {
   font-family: var(--font-code);
   color: var(--ok);
   font-size: 0.9rem;
+  white-space: pre-wrap;   /* a Python repr (a pandas Series) has several lines */
 }
+/* a pandas DataFrame, as pandas renders it (pycall.rb): a small ruled table
+   in the code font, numbers right-aligned, scrolling sideways when wide */
+.cell-result.py-table {
+  color: var(--ink);
+  white-space: normal;
+  overflow-x: auto;
+}
+.py-table table { border: 0; border-collapse: collapse; font-size: 0.85rem; }   /* pandas writes border="1" */
+.py-table th, .py-table td { padding: 0.2rem 0.7rem; border: 0; border-bottom: 1px solid var(--rule); text-align: right; }
+.py-table thead th { border-bottom: 1.5px solid var(--ink-soft); }
+.py-table tbody th { color: var(--ink-soft); font-weight: 400; }
+.py-table tbody tr:hover { background: var(--fat); }
 .cell-error {
   font-family: var(--font-code);
   color: var(--err);

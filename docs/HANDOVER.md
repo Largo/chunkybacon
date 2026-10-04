@@ -2,7 +2,7 @@
 
 Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
-Last updated 2026-09-30 (40 lessons in German, English and Japanese).
+Last updated 2026-09-30 (41 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -57,6 +57,7 @@ html/
                         Fiber-based Thread, FileWatch (downloads)
   rack_playground.rb    show_browser: talks Rack to Sinatra/Roda apps, mock_get
   shoes_dom.rb          Lacci (Shoes) display service drawing into the page
+  pycall.rb             require "pycall": PyCall's API over Pyodide (§6d)
   workshop.rb           the workshop's runs: project files as the virtual FS,
                         require_relative between them, gets, write-back
   autorun.rb            live runs (§6b): what may run by itself, the time
@@ -76,7 +77,8 @@ THIRD_PARTY_NOTICES.md     bundled components and their licenses - update it
                            with the gem cache, the wasm or the vendored assets
 tools/build_gem_cache.rb   regenerates html/gems/cache/
 tools/update_ruby_wasm.rb  updates the wasm + loader from npm
-tools/compress_assets.rb   the .gz copies nginx serves (both wasm runtimes)
+tools/compress_assets.rb   the .gz copies nginx serves (the wasm runtimes)
+tools/vendor_pyodide.rb    Pyodide + pandas into html/assets/pyodide/ (§6d)
 tools/offline_files.rb     html/offline-files.txt - rerun after adding/removing a file
 tools/patch_picoruby_loader.rb  PicoRuby's loader: text/ruby -> text/picoruby
 tools/measure_load.mjs, tools/shell_metrics.rb  load times, code size (PICORUBY_SHELL.md)
@@ -235,7 +237,7 @@ Rules that the code and tests rely on:
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
 - Checks accept output OR result; `puts` is never required.
-- `test/browser_test.mjs` asserts the lesson count (`'40 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'41 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -479,7 +481,7 @@ shell does the timing, the kernel the guarding:
 ## 6c. Offline mode
 
 The progress dialog's *Offline lernen* keeps the whole course on the device
-(~45 MB stored, up to ~20 MB to download): the course then opens and runs
+(~65 MB stored, up to ~35 MB to download; Pyodide is 20 / 14 of it): the course then opens and runs
 without a connection. **Off until the learner turns it on** - before that
 no service worker is registered and nothing changes. The choice is
 `chunkyui_offline` (a view setting, not synced).
@@ -535,6 +537,38 @@ requests per dependency), responses disk-cached (gems 60 days). Locations
 are `^~` so the no-cache regex cannot capture proxied `.json`. The resolver
 is Docker's `127.0.0.11`, which only exists on user-defined networks - a
 container started with plain `docker run` on the default bridge gets 502s.
+
+## 6d. Python: Pyodide and the PyCall bridge
+
+The PyCall lesson runs real pandas. The pycall gem cannot load in the
+browser - it opens libpython with Fiddle - so:
+
+- **Pyodide** (CPython 3.14 in WebAssembly) with pandas, numpy and their
+  three small dependencies sits in `html/assets/pyodide/` (~21 MB):
+  `tools/vendor_pyodide.rb` takes the core from the official GitHub release
+  and the wheels from jsDelivr, checks each wheel against the release
+  lockfile's SHA-256, and cuts `pyodide-lock.json` down to what is vendored
+  (asking for another package then fails clearly). Bump `VERSION` there to
+  update; then `ruby tools/compress_assets.rb` (the .gz of the wasm and
+  `pyodide.asm.mjs`) and `ruby tools/offline_files.rb`. nginx serves `.mjs`
+  as JavaScript (module scripts insist).
+- **Loading**: index.html's `ensurePython` imports `pyodide.mjs`, loads
+  pandas and collects what Python prints (`chunkyPython.takeOutput`). The
+  shell calls it when a lesson's code mentions `PyCall` (render_lesson, like
+  `ensureThree`); `shell/bridge.js` holds a run until Python is there, and
+  live runs skip meanwhile. In the workshop the first `PyCall` call starts
+  the load and asks to run again (`pythonLoading`).
+- **The bridge** (`html/pycall.rb`, loaded by main.rb; `require "pycall"` is
+  a shim) has PyCall's API: `PyCall.import_module`, `eval`, `exec`, `.new`
+  for classes, `[]`/`[]=`, operators, keyword arguments, `to_a`/`to_h`.
+  Python objects stay in a registry in Python; Ruby holds their numbers, and
+  each operation is one JSON request through JavaScript - which keeps
+  `int` and `float` apart (JavaScript would merge them), turns numpy scalars
+  into numbers and Python exceptions into `PyCall::PyError`. A result with
+  `_repr_html_` (a DataFrame) renders as pandas' table (`.py-table`).
+  Ruby blocks cannot be passed to Python.
+- **Tests**: the lesson needs the browser - `check_harness.rb` skips it
+  (`BROWSER_ONLY`), `test/browser_test.mjs` runs every cell.
 
 ## 7a. The optional server: permalinks and a backend
 
@@ -596,7 +630,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 40 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 41 lessons x 3 languages, starter fails, solutions pass
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof

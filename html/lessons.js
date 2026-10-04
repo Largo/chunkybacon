@@ -52,6 +52,7 @@ window.LESSONS_JSON = JSON.stringify({
       "irbExitNote": "(Auf deinem Computer wäre IRB jetzt beendet – hier darfst du einfach weitertippen. 🦊)",
       "filesTitle": "Dateien (simuliert)",
       "threeLoading": "Die 3D-Engine (three.js) wird noch geladen – führe die Zelle gleich nochmal aus.",
+      "pythonLoading": "Python (Pyodide mit pandas) wird geladen – einmalig rund 12 MB. Führe die Zelle gleich nochmal aus.",
       "downloadTip": "Dateien, die deine Zelle geschrieben hat – zum Herunterladen anklicken.",
       "footerCredit": "Ein Angebot von <a href='https://idogawa.com'>Andi Idogawa</a>. Läuft komplett in deinem Browser dank <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Schon fertig? Weiter geht's mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
       "footerLicense": "„<a href='https://chunkybacon.dev/glossary/chunky-bacon/'>Chunky Bacon</a>“ stammt aus why's (poignant) guide to Ruby von why the lucky stiff – in liebevoller Erinnerung. Kursinhalte: <a href='https://creativecommons.org/licenses/by-sa/4.0/deed.de'>CC BY-SA 4.0</a>, Code: <a href='https://github.com/Largo/chunkybacon/blob/main/LICENSE'>MIT</a>.",
@@ -76,7 +77,7 @@ window.LESSONS_JSON = JSON.stringify({
       "fileUnchanged": "Die Datei enthält nichts, was hier nicht schon ist.",
       "fileInvalid": "Das ist keine Fortschrittsdatei von Chunky Bacon.",
       "offlineTitle": "Offline lernen",
-      "offlineExplain": "Speichere den ganzen Kurs auf diesem Gerät – dann funktioniert er auch ohne Internet, im Zug oder im Flugzeug. Einmalig bis zu 20 MB Download, etwa 45 MB Speicherplatz. Wird der Kurs online geändert, holt sich die Kopie die Änderungen von selbst.",
+      "offlineExplain": "Speichere den ganzen Kurs auf diesem Gerät – dann funktioniert er auch ohne Internet, im Zug oder im Flugzeug. Einmalig bis zu 35 MB Download, etwa 65 MB Speicherplatz. Wird der Kurs online geändert, holt sich die Kopie die Änderungen von selbst.",
       "offlineEnable": "Auf diesem Gerät speichern",
       "offlineLoading": "Wird gespeichert …",
       "offlineReady": "Auf diesem Gerät gespeichert – funktioniert auch offline. Stand: %s",
@@ -157,6 +158,7 @@ window.LESSONS_JSON = JSON.stringify({
       "irbExitNote": "(On your computer IRB would have quit now – here you can just keep typing. 🦊)",
       "filesTitle": "files (simulated)",
       "threeLoading": "The 3D engine (three.js) is still loading – run the cell again in a moment.",
+      "pythonLoading": "Python (Pyodide with pandas) is loading – once, about 12 MB. Run the cell again in a moment.",
       "downloadTip": "Files your cell wrote – click to download.",
       "footerCredit": "A service by <a href='https://idogawa.com'>Andi Idogawa</a>. Runs entirely in your browser thanks to <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Done here? Continue with the <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
       "footerLicense": "“<a href='https://chunkybacon.dev/glossary/chunky-bacon/'>Chunky Bacon</a>” comes from why's (poignant) guide to Ruby by why the lucky stiff – fondly remembered. Course content: <a href='https://creativecommons.org/licenses/by-sa/4.0/'>CC BY-SA 4.0</a>, code: <a href='https://github.com/Largo/chunkybacon/blob/main/LICENSE'>MIT</a>.",
@@ -181,7 +183,7 @@ window.LESSONS_JSON = JSON.stringify({
       "fileUnchanged": "The file holds nothing that is not here already.",
       "fileInvalid": "That is not a Chunky Bacon progress file.",
       "offlineTitle": "Learn offline",
-      "offlineExplain": "Keep the whole course on this device – then it works without internet too, on a train or a plane. Up to 20 MB to download once, about 45 MB of storage. When the course changes online, the copy picks up the changes by itself.",
+      "offlineExplain": "Keep the whole course on this device – then it works without internet too, on a train or a plane. Up to 35 MB to download once, about 65 MB of storage. When the course changes online, the copy picks up the changes by itself.",
       "offlineEnable": "Keep on this device",
       "offlineLoading": "Saving …",
       "offlineReady": "Saved on this device – works offline too. As of %s",
@@ -262,6 +264,7 @@ window.LESSONS_JSON = JSON.stringify({
       "irbExitNote": "（きみのコンピューターなら、IRBはここで終了しているところ。ここではそのまま入力を続けていいよ。🦊）",
       "filesTitle": "ファイル（シミュレーション）",
       "threeLoading": "3Dエンジン（three.js）をまだ読み込んでいます。少し待ってから、もう一度セルを実行してください。",
+      "pythonLoading": "Python（pandas入りのPyodide）を読み込んでいます（初回のみ約12 MB）。少し待ってから、もう一度セルを実行してください。",
       "downloadTip": "セルが書き出したファイルです。クリックするとダウンロードできます。",
       "footerCredit": "制作：<a href='https://idogawa.com'>Andi Idogawa</a>。<a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>のおかげで、すべてブラウザの中だけで動いています。ひととおり終わったら、次は<a href='https://koans.idogawa.com'>Ruby Koans</a>へどうぞ。",
       "footerLicense": "「<a href='https://chunkybacon.dev/glossary/chunky-bacon/'>Chunky Bacon</a>」は、why the lucky stiffの『why's (poignant) guide to Ruby』に由来します。なつかしい思い出とともに。コースの内容：<a href='https://creativecommons.org/licenses/by-sa/4.0/deed.ja'>CC BY-SA 4.0</a>、コード：<a href='https://github.com/Largo/chunkybacon/blob/main/LICENSE'>MIT</a>。",
@@ -286,7 +289,7 @@ window.LESSONS_JSON = JSON.stringify({
       "fileUnchanged": "このファイルには、ここにまだないものは含まれていません。",
       "fileInvalid": "これはChunky Baconの進捗ファイルではありません。",
       "offlineTitle": "オフラインで学ぶ",
-      "offlineExplain": "コース全体をこの端末に保存すると、インターネットがなくても（電車や飛行機の中でも）使えます。最初に最大20 MBをダウンロードし、約45 MBの容量を使います。オンラインのコースが更新されると、コピーも自動で更新されます。",
+      "offlineExplain": "コース全体をこの端末に保存すると、インターネットがなくても（電車や飛行機の中でも）使えます。最初に最大35 MBをダウンロードし、約65 MBの容量を使います。オンラインのコースが更新されると、コピーも自動で更新されます。",
       "offlineEnable": "この端末に保存",
       "offlineLoading": "保存しています…",
       "offlineReady": "この端末に保存済みです。オフラインでも使えます。（%s 時点）",
@@ -2472,7 +2475,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 37). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
+            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 38). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
           },
           {
             "t": "c",
@@ -2519,7 +2522,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 37 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
+            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 38 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
           },
           {
             "t": "c",
@@ -2566,7 +2569,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン37で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
+            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン38で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
           },
           {
             "t": "c",
@@ -2738,9 +2741,177 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "pycall",
+      "de": {
+        "title": "23. PyCall: pandas aus Ruby",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ruby trifft Python</h2><p>Python hat Bibliotheken, um die andere Sprachen es beneiden – allen voran <strong>pandas</strong> für Tabellen und Datenanalyse, dazu numpy, scikit-learn und matplotlib. Mit dem Gem <a href='https://github.com/mrkn/pycall.rb' target='_blank'>pycall</a> von Kenta Murata benutzt du sie direkt aus Ruby, als wären es Ruby-Objekte.</p><p>Hier im Browser läuft Python als <a href='https://pyodide.org' target='_blank'>Pyodide</a> – CPython in WebAssembly, gleich neben unserem Ruby. Die Seite lädt es, sobald du diese Lektion öffnest (einmalig rund 12 MB, mit pandas); eine Zelle, die du vorher startest, wartet darauf.</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pycall\"\n\npd = PyCall.import_module(\"pandas\")\npd.__version__"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>PyCall.import_module</code> holt ein Python-Modul als Ruby-Objekt, und alles daran erreichst du mit dem Punkt: <code>pd.__version__</code> ist Pythons Versionsangabe – ein Python-String, der als Ruby-String zurückkommt. Jetzt eine Tabelle, ein <strong>DataFrame</strong>, aus einem Ruby-Hash:</p>"
+          },
+          {
+            "t": "c",
+            "code": "fruehstueck = pd.DataFrame.new({\n  \"essen\" => [\"Speck\", \"Eier\", \"Toast\", \"Kaffee\"],\n  \"preis\" => [4.5, 2.0, 1.5, 3.0],\n  \"menge\" => [2, 3, 2, 4]\n})"
+          },
+          {
+            "t": "h",
+            "html": "<p>In Python schreibt man <code>pd.DataFrame(...)</code>; in Ruby heisst ein neues Objekt erzeugen <code>new</code>, also <code>pd.DataFrame.new(...)</code>. Der Ruby-Hash wird ein Python-<code>dict</code>, die Arrays werden Listen, und jeder Schlüssel wird eine Spalte. Unter der Zelle zeigt pandas die Tabelle selbst an.</p><p>Mit Spalten rechnest du am Stück, ganz ohne Schleife – und Rubys Keyword-Argumente werden Pythons Keyword-Argumente:</p>"
+          },
+          {
+            "t": "c",
+            "code": "fruehstueck[\"summe\"] = fruehstueck[\"preis\"] * fruehstueck[\"menge\"]\nfruehstueck.sort_values(\"summe\", ascending: false)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>fruehstueck[\"preis\"]</code> ist eine Spalte, in pandas eine <em>Series</em>. <code>*</code> multipliziert zwei Spalten Zeile für Zeile, und <code>[]=</code> legt die neue Spalte an. <code>sort_values(\"summe\", ascending: false)</code> heisst in Python <code>sort_values(\"summe\", ascending=False)</code>: pycall übersetzt <code>true</code>, <code>false</code>, <code>nil</code>, Zahlen, Strings, Arrays und Hashes hin und zurück.</p>"
+          },
+          {
+            "t": "c",
+            "code": "gesamt = fruehstueck[\"summe\"].sum\nteuer = fruehstueck[fruehstueck[\"preis\"] > 2]\nputs \"Gesamt: #{gesamt} Fr. (#{gesamt.class})\"\nteuer[\"essen\"].tolist.to_a"
+          },
+          {
+            "t": "h",
+            "html": "<p>Eine einzelne Zahl kommt als Ruby-Zahl zurück: <code>gesamt</code> ist ein ganz normales <code>Float</code>. <code>fruehstueck[\"preis\"] &gt; 2</code> ergibt eine Spalte aus <code>True</code> und <code>False</code>, und in eckigen Klammern wählt pandas damit die passenden Zeilen aus. <code>tolist</code> macht daraus eine Python-Liste und <code>to_a</code> ein Ruby-Array – ab da ist alles wieder Ruby.</p><p>Die grosse Stärke von pandas ist das Zählen und Gruppieren:</p>"
+          },
+          {
+            "t": "c",
+            "code": "bestellungen = pd.DataFrame.new({\n  \"tisch\" => [1, 2, 1, 3, 2, 1],\n  \"essen\" => [\"Speck\", \"Eier\", \"Kaffee\", \"Speck\", \"Speck\", \"Toast\"]\n})\nputs bestellungen[\"essen\"].value_counts\nbestellungen.groupby(\"tisch\")[\"essen\"].count"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>value_counts</code> zählt, wie oft jeder Wert vorkommt. <code>groupby(\"tisch\")</code> fasst die Zeilen mit gleichem Tisch zusammen, und <code>[\"essen\"].count</code> zählt pro Gruppe – wie <code>group_by</code> und <code>transform_values</code> in Ruby, nur für ganze Tabellen. Statt <code>count</code> gehen auch <code>sum</code>, <code>mean</code>, <code>max</code> und viele mehr.</p><div class='offweb' data-title='Auf deinem Computer'><p>Du brauchst Python mit pandas (<code>pip install pandas</code>) und das Gem: <code>gem install pycall</code>. Der Code dieser Lektion läuft dann unverändert – pycall lädt die Python-Bibliothek in dein Ruby-Programm, und welches Python es nimmt, bestimmt die Umgebungsvariable <code>PYTHON</code>. Hier im Browser übernimmt eine kleine Brücke diese Rolle und spricht über JavaScript mit Pyodide; Ruby-Blöcke als Python-Funktionen kann sie nicht übergeben.</p><p>Für kleine Tabellen reichen Rubys eigene Mittel – CSV und Hashes – weit. pycall lohnt sich, wenn Python etwas hat, das Ruby fehlt: pandas, scikit-learn, matplotlib. pandas und numpy stehen unter der BSD-Lizenz, Pyodide unter der Mozilla Public License 2.0.</p></div><div class='task'><strong>Aufgabe:</strong> Wie viel hat jeder Gast ausgegeben? Berechne mit <code>groupby</code> die Summe von <code>preis</code> pro <code>gast</code> und mach daraus einen Ruby-Hash <code>ausgaben</code>, etwa <code>{\"Isi\" =&gt; …, \"Kaz\" =&gt; …}</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"pycall\"\npd = PyCall.import_module(\"pandas\")\n\nrechnung = pd.DataFrame.new({\n  \"gast\"  => [\"Kaz\", \"Isi\", \"Kaz\", \"Isi\", \"Kaz\"],\n  \"preis\" => [4.5, 2.0, 3.0, 4.5, 3.5]\n})\n# ausgaben = ...   (ein Ruby-Hash: Gast => Summe)\n",
+            "check": "ausgaben.is_a?(Hash) && ausgaben.transform_values(&:to_f) == { \"Isi\" => 6.5, \"Kaz\" => 11.0 } && code.include?(\"groupby\")",
+            "hint": "<code>rechnung.groupby(\"gast\")[\"preis\"].sum</code> ergibt eine Series mit einer Summe pro Gast. <code>.to_dict</code> macht daraus ein Python-<code>dict</code> und <code>.to_h</code> einen Ruby-Hash."
+          }
+        ]
+      },
+      "en": {
+        "title": "23. PyCall: pandas from Ruby",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ruby meets Python</h2><p>Python has libraries other languages envy – above all <strong>pandas</strong> for tables and data analysis, plus numpy, scikit-learn and matplotlib. With the <a href='https://github.com/mrkn/pycall.rb' target='_blank'>pycall</a> gem by Kenta Murata you use them straight from Ruby, as if they were Ruby objects.</p><p>Here in the browser, Python runs as <a href='https://pyodide.org' target='_blank'>Pyodide</a> – CPython in WebAssembly, right next to our Ruby. The page loads it as soon as you open this lesson (once, about 12 MB with pandas); a cell you start before that waits for it.</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pycall\"\n\npd = PyCall.import_module(\"pandas\")\npd.__version__"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>PyCall.import_module</code> brings in a Python module as a Ruby object, and you reach everything in it with a dot: <code>pd.__version__</code> is Python's version string – a Python string that comes back as a Ruby string. Now a table, a <strong>DataFrame</strong>, from a Ruby hash:</p>"
+          },
+          {
+            "t": "c",
+            "code": "breakfast = pd.DataFrame.new({\n  \"food\"     => [\"Bacon\", \"Eggs\", \"Toast\", \"Coffee\"],\n  \"price\"    => [4.5, 2.0, 1.5, 3.0],\n  \"quantity\" => [2, 3, 2, 4]\n})"
+          },
+          {
+            "t": "h",
+            "html": "<p>In Python you write <code>pd.DataFrame(...)</code>; in Ruby, making a new object is called <code>new</code>, so it's <code>pd.DataFrame.new(...)</code>. The Ruby hash becomes a Python <code>dict</code>, the arrays become lists, and every key becomes a column. Below the cell, pandas shows the table itself.</p><p>You compute with whole columns at once, without a loop – and Ruby's keyword arguments become Python's keyword arguments:</p>"
+          },
+          {
+            "t": "c",
+            "code": "breakfast[\"total\"] = breakfast[\"price\"] * breakfast[\"quantity\"]\nbreakfast.sort_values(\"total\", ascending: false)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>breakfast[\"price\"]</code> is a column, in pandas a <em>Series</em>. <code>*</code> multiplies two columns row by row, and <code>[]=</code> adds the new column. <code>sort_values(\"total\", ascending: false)</code> is <code>sort_values(\"total\", ascending=False)</code> in Python: pycall translates <code>true</code>, <code>false</code>, <code>nil</code>, numbers, strings, arrays and hashes both ways.</p>"
+          },
+          {
+            "t": "c",
+            "code": "total = breakfast[\"total\"].sum\npricey = breakfast[breakfast[\"price\"] > 2]\nputs \"Total: $#{total} (#{total.class})\"\npricey[\"food\"].tolist.to_a"
+          },
+          {
+            "t": "h",
+            "html": "<p>A single number comes back as a Ruby number: <code>total</code> is a plain <code>Float</code>. <code>breakfast[\"price\"] &gt; 2</code> gives a column of <code>True</code> and <code>False</code>, and inside square brackets pandas uses it to pick the matching rows. <code>tolist</code> turns that into a Python list and <code>to_a</code> into a Ruby array – from there on it's all Ruby again.</p><p>Where pandas really shines is counting and grouping:</p>"
+          },
+          {
+            "t": "c",
+            "code": "orders = pd.DataFrame.new({\n  \"table\" => [1, 2, 1, 3, 2, 1],\n  \"food\"  => [\"Bacon\", \"Eggs\", \"Coffee\", \"Bacon\", \"Bacon\", \"Toast\"]\n})\nputs orders[\"food\"].value_counts\norders.groupby(\"table\")[\"food\"].count"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>value_counts</code> counts how often each value occurs. <code>groupby(\"table\")</code> collects the rows of each table, and <code>[\"food\"].count</code> counts per group – like <code>group_by</code> and <code>transform_values</code> in Ruby, but for whole tables. Instead of <code>count</code> there are <code>sum</code>, <code>mean</code>, <code>max</code> and many more.</p><div class='offweb' data-title='On your machine'><p>You need Python with pandas (<code>pip install pandas</code>) and the gem: <code>gem install pycall</code>. This lesson's code then runs unchanged – pycall loads the Python library into your Ruby program, and the <code>PYTHON</code> environment variable decides which Python it uses. Here in the browser a small bridge plays that part and talks to Pyodide through JavaScript; it cannot pass Ruby blocks to Python as functions.</p><p>For small tables, Ruby's own tools – CSV and hashes – go a long way. pycall pays off when Python has something Ruby lacks: pandas, scikit-learn, matplotlib. pandas and numpy come under the BSD licence, Pyodide under the Mozilla Public License 2.0.</p></div><div class='task'><strong>Task:</strong> How much did each guest spend? Use <code>groupby</code> to sum up <code>price</code> per <code>guest</code>, and turn the result into a Ruby hash <code>spending</code>, such as <code>{\"Isi\" =&gt; …, \"Kaz\" =&gt; …}</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"pycall\"\npd = PyCall.import_module(\"pandas\")\n\nbill = pd.DataFrame.new({\n  \"guest\" => [\"Kaz\", \"Isi\", \"Kaz\", \"Isi\", \"Kaz\"],\n  \"price\" => [4.5, 2.0, 3.0, 4.5, 3.5]\n})\n# spending = ...   (a Ruby hash: guest => total)\n",
+            "check": "spending.is_a?(Hash) && spending.transform_values(&:to_f) == { \"Isi\" => 6.5, \"Kaz\" => 11.0 } && code.include?(\"groupby\")",
+            "hint": "<code>bill.groupby(\"guest\")[\"price\"].sum</code> gives a Series with one total per guest. <code>.to_dict</code> turns it into a Python <code>dict</code>, and <code>.to_h</code> into a Ruby hash."
+          }
+        ]
+      },
+      "ja": {
+        "title": "23. PyCall：Rubyからpandas",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>RubyとPythonの出会い</h2><p>Pythonには、ほかの言語がうらやむライブラリがあります。なかでも表やデータ分析のための<strong>pandas</strong>、それにnumpy、scikit-learn、matplotlibです。村田賢太さんの<a href='https://github.com/mrkn/pycall.rb' target='_blank'>pycall</a> gemを使うと、それらをまるでRubyのオブジェクトのように、Rubyから直接使えます。</p><p>このブラウザの中では、Pythonは<a href='https://pyodide.org' target='_blank'>Pyodide</a>として動きます。WebAssemblyで動くCPythonで、私たちのRubyのすぐ隣にいます。このレッスンを開くとページが読み込みを始めます（初回のみ、pandas込みで約12 MB）。その前に実行したセルは、読み込みが終わるのを待ちます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pycall\"\n\npd = PyCall.import_module(\"pandas\")\npd.__version__"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>PyCall.import_module</code>はPythonのモジュールをRubyのオブジェクトとして取り込み、その中のものにはすべてドットで届きます。<code>pd.__version__</code>はPythonのバージョン文字列で、Pythonの文字列がRubyの文字列として返ってきます。次は、Rubyのハッシュから表、つまり<strong>DataFrame</strong>を作ります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "breakfast = pd.DataFrame.new({\n  \"food\"     => [\"Bacon\", \"Eggs\", \"Toast\", \"Coffee\"],\n  \"price\"    => [4.5, 2.0, 1.5, 3.0],\n  \"quantity\" => [2, 3, 2, 4]\n})"
+          },
+          {
+            "t": "h",
+            "html": "<p>Pythonでは<code>pd.DataFrame(...)</code>と書きますが、Rubyで新しいオブジェクトを作るのは<code>new</code>なので、<code>pd.DataFrame.new(...)</code>になります。RubyのハッシュはPythonの<code>dict</code>に、配列はリストになり、キーがそれぞれ列になります。セルの下には、pandas自身が表を表示します。</p><p>列はまとめて計算でき、ループはいりません。そしてRubyのキーワード引数は、Pythonのキーワード引数になります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "breakfast[\"total\"] = breakfast[\"price\"] * breakfast[\"quantity\"]\nbreakfast.sort_values(\"total\", ascending: false)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>breakfast[\"price\"]</code>は列で、pandasでは<em>Series</em>と呼びます。<code>*</code>は2つの列を行ごとに掛け算し、<code>[]=</code>で新しい列を加えます。<code>sort_values(\"total\", ascending: false)</code>はPythonでは<code>sort_values(\"total\", ascending=False)</code>です。pycallは<code>true</code>、<code>false</code>、<code>nil</code>、数値、文字列、配列、ハッシュを、行きも帰りも変換してくれます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "total = breakfast[\"total\"].sum\npricey = breakfast[breakfast[\"price\"] > 2]\nputs \"Total: $#{total} (#{total.class})\"\npricey[\"food\"].tolist.to_a"
+          },
+          {
+            "t": "h",
+            "html": "<p>1つの数値はRubyの数値として返ってきます。<code>total</code>はふつうの<code>Float</code>です。<code>breakfast[\"price\"] &gt; 2</code>は<code>True</code>と<code>False</code>の列になり、それを角かっこに入れると、pandasが条件に合う行を選びます。<code>tolist</code>でPythonのリストに、<code>to_a</code>でRubyの配列になり、そこから先はまたすべてRubyです。</p><p>pandasがいちばん力を発揮するのは、数えることとグループ分けです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "orders = pd.DataFrame.new({\n  \"table\" => [1, 2, 1, 3, 2, 1],\n  \"food\"  => [\"Bacon\", \"Eggs\", \"Coffee\", \"Bacon\", \"Bacon\", \"Toast\"]\n})\nputs orders[\"food\"].value_counts\norders.groupby(\"table\")[\"food\"].count"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>value_counts</code>は、それぞれの値が何回出てくるかを数えます。<code>groupby(\"table\")</code>はテーブルごとに行をまとめ、<code>[\"food\"].count</code>はグループごとに数えます。Rubyの<code>group_by</code>と<code>transform_values</code>のようなものですが、表全体に使えます。<code>count</code>の代わりに<code>sum</code>、<code>mean</code>、<code>max</code>なども使えます。</p><div class='offweb' data-title='自分のコンピューターでは'><p>pandas入りのPython（<code>pip install pandas</code>）とgem（<code>gem install pycall</code>）が必要です。そうすれば、このレッスンのコードはそのまま動きます。pycallはPythonのライブラリをRubyプログラムの中に読み込み、どのPythonを使うかは環境変数<code>PYTHON</code>で決まります。このブラウザでは、小さなブリッジがその役を引き受け、JavaScriptを通してPyodideと話しています。RubyのブロックをPythonの関数として渡すことはできません。</p><p>小さな表なら、Ruby自身の道具、CSVやハッシュでも十分です。pycallが役に立つのは、RubyにないものがPythonにあるとき、つまりpandas、scikit-learn、matplotlibなどです。pandasとnumpyはBSDライセンス、PyodideはMozilla Public License 2.0です。</p></div><div class='task'><strong>課題：</strong>それぞれのお客さんはいくら使ったでしょう？ <code>groupby</code>を使って<code>guest</code>ごとに<code>price</code>を合計し、その結果をRubyのハッシュ<code>spending</code>にしましょう。たとえば<code>{\"Isi\" =&gt; …, \"Kaz\" =&gt; …}</code>のようになります。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"pycall\"\npd = PyCall.import_module(\"pandas\")\n\nbill = pd.DataFrame.new({\n  \"guest\" => [\"Kaz\", \"Isi\", \"Kaz\", \"Isi\", \"Kaz\"],\n  \"price\" => [4.5, 2.0, 3.0, 4.5, 3.5]\n})\n# spending = ...   （Rubyのハッシュ：客 => 合計）\n",
+            "check": "spending.is_a?(Hash) && spending.transform_values(&:to_f) == { \"Isi\" => 6.5, \"Kaz\" => 11.0 } && code.include?(\"groupby\")",
+            "hint": "<code>bill.groupby(\"guest\")[\"price\"].sum</code>で、お客さんごとの合計が入ったSeriesができるよ。<code>.to_dict</code>でPythonの<code>dict</code>に、<code>.to_h</code>でRubyのハッシュになるんだ。"
+          }
+        ]
+      }
+    },
+    {
       "id": "scarpe",
       "de": {
-        "title": "23. Shoes-Apps mit Scarpe",
+        "title": "24. Shoes-Apps mit Scarpe",
         "cells": [
           {
             "t": "h",
@@ -2787,7 +2958,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "23. Shoes apps with Scarpe",
+        "title": "24. Shoes apps with Scarpe",
         "cells": [
           {
             "t": "h",
@@ -2834,7 +3005,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "23. ScarpeでShoesアプリ",
+        "title": "24. ScarpeでShoesアプリ",
         "cells": [
           {
             "t": "h",
@@ -2884,7 +3055,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "rubykaigi",
       "de": {
-        "title": "24. RubyKaigi & seltsamer Code",
+        "title": "25. RubyKaigi & seltsamer Code",
         "cells": [
           {
             "t": "h",
@@ -2955,7 +3126,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "24. RubyKaigi & weird code",
+        "title": "25. RubyKaigi & weird code",
         "cells": [
           {
             "t": "h",
@@ -3026,7 +3197,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "24. RubyKaigiと変なコード",
+        "title": "25. RubyKaigiと変なコード",
         "cells": [
           {
             "t": "h",
@@ -3105,7 +3276,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "応用コース：timelog"
       },
       "de": {
-        "title": "25. Projekt timelog: Collections",
+        "title": "26. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -3144,7 +3315,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "25. Project timelog: collections",
+        "title": "26. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -3183,7 +3354,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "25. timelogプロジェクト：コレクション",
+        "title": "26. timelogプロジェクト：コレクション",
         "cells": [
           {
             "t": "h",
@@ -3225,7 +3396,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "26. Text parsen: Regex",
+        "title": "27. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -3256,7 +3427,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "26. Parsing text: regex",
+        "title": "27. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -3287,7 +3458,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "26. テキストのパース：正規表現",
+        "title": "27. テキストのパース：正規表現",
         "cells": [
           {
             "t": "h",
@@ -3321,7 +3492,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "27. Methoden richtig bauen",
+        "title": "28. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -3352,7 +3523,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "27. Building methods properly",
+        "title": "28. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -3383,7 +3554,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "27. メソッドをきちんと作る",
+        "title": "28. メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -3417,7 +3588,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "28. Entry & Timesheet",
+        "title": "29. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -3448,7 +3619,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "28. Entry & Timesheet",
+        "title": "29. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -3479,7 +3650,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "28. EntryとTimesheet",
+        "title": "29. EntryとTimesheet",
         "cells": [
           {
             "t": "h",
@@ -3513,7 +3684,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "29. Testen mit Minitest",
+        "title": "30. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -3544,7 +3715,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "29. Testing with Minitest",
+        "title": "30. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -3575,7 +3746,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "29. Minitestでテスト",
+        "title": "30. Minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -3609,7 +3780,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "30. Enumerable & Data",
+        "title": "31. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -3621,7 +3792,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 25, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 26, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -3632,7 +3803,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "30. Enumerable & Data",
+        "title": "31. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -3644,7 +3815,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 25, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 26, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -3655,7 +3826,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "30. EnumerableとData",
+        "title": "31. EnumerableとData",
         "cells": [
           {
             "t": "h",
@@ -3667,7 +3838,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン25で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン26で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
           },
           {
             "t": "x",
@@ -3681,7 +3852,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "31. Blocks, Procs & Lambdas",
+        "title": "32. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -3720,7 +3891,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "31. Blocks, procs & lambdas",
+        "title": "32. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -3759,7 +3930,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "31. ブロック、Proc、lambda",
+        "title": "32. ブロック、Proc、lambda",
         "cells": [
           {
             "t": "h",
@@ -3801,7 +3972,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "32. Fehler behandeln",
+        "title": "33. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -3832,7 +4003,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "32. Handling errors",
+        "title": "33. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -3863,7 +4034,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "32. エラー処理",
+        "title": "33. エラー処理",
         "cells": [
           {
             "t": "h",
@@ -3897,7 +4068,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "33. Daten speichern: Formate",
+        "title": "34. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -3952,7 +4123,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "33. Saving data: formats",
+        "title": "34. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -4007,7 +4178,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "33. データの保存：フォーマット",
+        "title": "34. データの保存：フォーマット",
         "cells": [
           {
             "t": "h",
@@ -4065,7 +4236,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "34. Kommandozeile & Gems",
+        "title": "35. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -4092,7 +4263,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "34. Command line & gems",
+        "title": "35. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -4119,7 +4290,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "34. コマンドラインとgem",
+        "title": "35. コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -4149,7 +4320,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "35. Pattern Matching",
+        "title": "36. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -4180,7 +4351,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "35. Pattern matching",
+        "title": "36. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -4211,7 +4382,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "35. パターンマッチ",
+        "title": "36. パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -4245,7 +4416,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "36. Objektmodell & Metaprogrammierung",
+        "title": "37. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -4276,7 +4447,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "36. Object model & metaprogramming",
+        "title": "37. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -4307,7 +4478,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "36. オブジェクトモデルとメタプログラミング",
+        "title": "37. オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -4341,7 +4512,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "37. Eine eigene DSL",
+        "title": "38. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -4353,7 +4524,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 31 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 32 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -4364,7 +4535,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "37. Your own DSL",
+        "title": "38. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -4376,7 +4547,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 31 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 32 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
@@ -4387,7 +4558,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "37. 自分だけのDSL",
+        "title": "38. 自分だけのDSL",
         "cells": [
           {
             "t": "h",
@@ -4399,7 +4570,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン31のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン32のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
           },
           {
             "t": "x",
@@ -4413,7 +4584,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "38. Codequalität & Debugging",
+        "title": "39. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -4436,7 +4607,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "38. Code quality & debugging",
+        "title": "39. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -4459,7 +4630,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "38. コードの品質とデバッグ",
+        "title": "39. コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -4485,7 +4656,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "39. Performance & Nebenläufigkeit",
+        "title": "40. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -4532,7 +4703,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "39. Performance & concurrency",
+        "title": "40. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -4579,7 +4750,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "39. パフォーマンスと並行処理",
+        "title": "40. パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -4629,7 +4800,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "40. Finale: timelog im Web",
+        "title": "41. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -4651,12 +4822,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 34 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 35 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "en": {
-        "title": "40. Finale: timelog on the web",
+        "title": "41. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
@@ -4678,12 +4849,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 34 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 35 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "ja": {
-        "title": "40. フィナーレ：Webで動くtimelog",
+        "title": "41. フィナーレ：Webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -4705,7 +4876,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン34で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン35で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }

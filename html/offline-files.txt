@@ -22,6 +22,17 @@ assets/picoruby/PICORUBY_VERSION.txt
 assets/picoruby/init.iife.js
 assets/picoruby/picoruby.js
 assets/picoruby/picoruby.wasm
+assets/pyodide/numpy-2.4.6-cp314-cp314-pyemscripten_2026_0_wasm32.whl
+assets/pyodide/package.json
+assets/pyodide/pandas-3.0.2-cp314-cp314-pyemscripten_2026_0_wasm32.whl
+assets/pyodide/pyodide-lock.json
+assets/pyodide/pyodide.asm.mjs
+assets/pyodide/pyodide.asm.wasm
+assets/pyodide/pyodide.mjs
+assets/pyodide/python_dateutil-2.9.0.post0-py2.py3-none-any.whl
+assets/pyodide/python_stdlib.zip
+assets/pyodide/pytz-2026.1.post1-py2.py3-none-any.whl
+assets/pyodide/six-1.17.0-py2.py3-none-any.whl
 assets/three/LICENSE
 assets/three/OrbitControls.js
 assets/three/three.core.min.js
@@ -67,6 +78,7 @@ index.html
 lessons.js
 main.rb
 offline.js
+pycall.rb
 rack_playground.rb
 ruby+stdlib.wasm
 sandbox_sim.rb

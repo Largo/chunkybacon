@@ -146,6 +146,10 @@ LANGS = %w[de en ja].freeze
 # translated), so they are checked with the English solutions.
 SOLUTION_LANG = { "ja" => "en" }.freeze
 
+# Lessons that need the browser: PyCall talks to Pyodide (html/pycall.rb),
+# which only a page has - test/browser_test.mjs runs them.
+BROWSER_ONLY = %w[pycall].freeze
+
 SOLUTIONS = {
   "hallo" => {
     "de" => [%(puts "Hallo, Welt!"), %("Hallo, Welt!")],
@@ -815,6 +819,8 @@ def run_harness(langs)
   Dir.chdir(WORKDIR)
 
   data["lessons"].each do |lesson|
+  next if BROWSER_ONLY.include?(lesson["id"])
+
   langs.each do |lang|
     l = lesson.fetch(lang)
     exercise = l["cells"].find { |c| c["t"] == "x" }

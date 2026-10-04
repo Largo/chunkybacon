@@ -94,7 +94,7 @@ class WorkspaceTest < Minitest::Test
   def test_offline_is_off_until_asked_for
     open_dialog
     assert_includes offline_text, "Offline lernen"
-    assert_includes offline_text, "45 MB Speicherplatz"
+    assert_includes offline_text, "65 MB Speicherplatz"
     click(button_labelled("Auf diesem Gerät speichern", dialog))
     assert_equal [["enable"]], offline.calls
   end

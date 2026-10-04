@@ -27,6 +27,23 @@ The page shell (`html/shell/`) runs on a second Ruby:
 The license text, the npm tarball's integrity digest and the SHA-256 of
 every file are in `html/assets/picoruby/NOTICE.md`; keep it with the runtime.
 
+## Python in the browser (`html/assets/pyodide/`)
+
+Loaded only by the PyCall lesson (html/pycall.rb); put there by
+`tools/vendor_pyodide.rb` from the official Pyodide release, the wheels checked
+against the release's SHA-256.
+
+| Component | Version | License | Files |
+|---|---|---|---|
+| [Pyodide](https://pyodide.org/) | 314.0.7 | MPL-2.0 | `pyodide.mjs`, `pyodide.asm.mjs`, `pyodide.asm.wasm` (+ `.gz`), `pyodide-lock.json` (cut down to the vendored packages), `package.json` |
+| [CPython](https://www.python.org/) 3.14 and its standard library, inside Pyodide | 3.14 | PSF License | `pyodide.asm.wasm`, `python_stdlib.zip` |
+| C libraries Pyodide builds in (zlib, bzip2, libffi, sqlite and others) | as built by Pyodide | each its own | `pyodide.asm.wasm` - see Pyodide's repository |
+| [pandas](https://pandas.pydata.org/) | 3.0.2 | BSD-3-Clause | `pandas-3.0.2-…wasm32.whl` (license in its `dist-info/LICENSE`) |
+| [NumPy](https://numpy.org/) | 2.4.6 | BSD-3-Clause, with bundled parts under their own licenses | `numpy-2.4.6-…wasm32.whl` (`dist-info/licenses/`) |
+| [python-dateutil](https://github.com/dateutil/dateutil) | 2.9.0.post0 | Apache-2.0 or BSD-3-Clause | its wheel (`dist-info/LICENSE`) |
+| [pytz](https://pythonhosted.org/pytz/) | 2026.1.post1 | MIT | its wheel (`dist-info/LICENSE.txt`) |
+| [six](https://github.com/benjaminp/six) | 1.17.0 | MIT | its wheel (`dist-info/LICENSE`) |
+
 ## Editor, 3D and fonts
 
 | Component | Version | License | Copyright | License text |

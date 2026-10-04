@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('40 lessons in nav', (await page.$$('#lessonNav a')).length === 40);
+check('41 lessons in nav', (await page.$$('#lessonNav a')).length === 41);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -404,6 +404,35 @@ await runExercise();
 await waitForDownload('.cell.exercise', 'postkarte.jpg');
 await page.waitForTimeout(300);
 check('... and again with the same bytes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// PyCall lesson: pandas in Pyodide (Python in WebAssembly, ~21 MB, loaded
+// when the lesson opens), reached through html/pycall.rb with PyCall's API;
+// a run started while Python loads waits for it (shell/bridge.js)
+await page.click('#lessonNav a[data-id="pycall"]');
+await page.waitForTimeout(300);
+check('opening the lesson starts loading Python', await page.evaluate(() => !!(window.chunkyPython.loading || window.chunkyPython.ready)));
+const pyCell = async (idx, timeout = 30000) => {
+  await page.click(`.run-cell[data-idx="${idx}"]`);
+  await page.waitForFunction(i => !document.querySelector(`.run-cell[data-idx="${i}"]`).disabled &&
+    document.getElementById('cell-out-' + i).style.display !== 'none', idx, { timeout }).catch(() => {});
+  return (await page.textContent(`#cell-out-${idx}`)) || '';
+};
+check('a run waits for Python, then PyCall imports pandas', (await pyCell(1, 120000)).includes('=> "3.0.2"'));
+await pyCell(3);
+check('a DataFrame shows as pandas\' table', (await page.$$('#cell-out-3 table.dataframe')).length === 1);
+await pyCell(5);
+check('keyword arguments reach Python (sorted, highest first)',
+  (await page.textContent('#cell-out-5 tbody tr:first-child')).includes('Kaffee'));
+const pyNumbers = await pyCell(7);
+check('a Python float comes back as a Ruby Float', pyNumbers.includes('Gesamt: 30.0 Fr. (Float)'));
+check('filtering and tolist.to_a give a Ruby array', pyNumbers.includes('=> ["Speck", "Kaffee"]'));
+check('value_counts and groupby print', (await pyCell(9)).includes('Speck     3'));
+await page.evaluate(() => window.cellEditors[9].setValue('pd.DataFrame.new({ "a" => [1] })["nope"]'));
+check('a Python exception is a PyCall::PyError', (await pyCell(9)).includes('PyCall::PyError: KeyError'));
+await setExercise('require "pycall"\npd = PyCall.import_module("pandas")\nrechnung = pd.DataFrame.new({ "gast" => ["Kaz", "Isi", "Kaz", "Isi", "Kaz"], "preis" => [4.5, 2.0, 3.0, 4.5, 3.5] })\nausgaben = rechnung.groupby("gast")["preis"].sum.to_dict.to_h');
+await runExercise();
+await page.waitForTimeout(800);
+check('spending exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 
 // RubyKaigi lesson: weird but valid Ruby, and Prism (a C extension built
 // into the wasm) splitting and parsing code the way IRB reads it
