@@ -456,6 +456,8 @@ check('pretty draws, and 3 * x coerces', pretty.includes('-----') && pretty.incl
 check('solve finds both roots', (await pyCell(9)).includes('=> [2, 3]'));
 check('subs puts numbers in', (await pyCell(11)).includes('=> [0, 0, 2]'));
 check('diff', (await pyCell(13)).includes('3*x**2 + 2'));
+await page.evaluate(() => window.cellEditors[13].setValue('[sp.Rational.new(1, 2) == sp.Rational.new(2, 4), sp.Rational.new(1, 2) == sp.Rational.new(1, 3)]'));
+check('== is Python\'s, between two handles too', (await pyCell(13)).includes('=> [true, false]'));
 await setExercise('require "pycall"\nsp = PyCall.import_module("sympy")\nx = sp.symbols("x")\nkurve = x ** 3 - 6 * x ** 2 + 9 * x\nflach = sp.solve(sp.diff(kurve, x), x)');
 await runExercise();
 await page.waitForTimeout(800);

@@ -254,7 +254,9 @@ module PyCall
     # 2 * x: Ruby asks the right-hand side, which makes the 2 a Python
     # object, and the operation runs in Python (the gem does the same)
     def coerce(other) = [PyCall.request("box", other), self]
-    def ==(other) = other.is_a?(PyObject) ? @id == other.__pyid__ : PyCall.request("binary", "eq", self, other)
+    # Python's ==, as with the gem: two handles to equal objects are equal
+    # (the registry gives every result its own number)
+    def ==(other) = PyCall.request("binary", "eq", self, other)
     def -@ = PyCall.request("unary", "neg", self)
     def ~ = PyCall.request("unary", "invert", self)
 
