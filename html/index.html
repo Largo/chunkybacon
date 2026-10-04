@@ -326,6 +326,131 @@
       return python.loading;
     };
 
+    // SQLite for the Sequel lesson: sql.js (SQLite in WebAssembly, ~650 KB,
+    // assets/sqljs/, tools/vendor_sqljs.rb), loaded only for a lesson whose
+    // code uses Sequel or SQLite - the shell calls ensureSqlite, and
+    // shell/bridge.js holds a run until chunky:sqlite-ready. html/sqlite3.rb
+    // is the sqlite3 gem's API on top of the calls below: synchronous, JSON
+    // in and out, so integers stay integers (BigInt, as text) and floats
+    // floats, which a JavaScript number would blur.
+    window.chunkySqlite = (function () {
+      var state = { ready: false, loading: null, error: null, SQL: null, dbs: {}, last: 0 };
+      var toBase64 = function (bytes) {
+        var s = "";
+        for (var i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+        return btoa(s);
+      };
+      var fromBase64 = function (text) {
+        var raw = atob(text), bytes = new Uint8Array(raw.length);
+        for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+        return bytes;
+      };
+      // a value for Ruby: {i: "12"} an INTEGER, {f: 3} a REAL that looks
+      // whole, {b: base64} a BLOB; text, other numbers and null as they are
+      var encode = function (v) {
+        if (typeof v === "bigint") return { i: v.toString() };
+        if (typeof v === "number") return Number.isInteger(v) ? { f: v } : v;
+        if (v instanceof Uint8Array) return { b: toBase64(v) };
+        return v;
+      };
+      var decode = function (v) {
+        if (v && typeof v === "object") {
+          if ("i" in v) return BigInt(v.i);
+          if ("b" in v) return fromBase64(v.b);
+        }
+        return v;
+      };
+      // sql.js names a parameter with its prefix (":name"), the gem without
+      var bindings = function (params) {
+        if (Array.isArray(params)) return params.map(decode);
+        var out = {};
+        Object.keys(params).forEach(function (k) { out[/^[:@$]/.test(k) ? k : ":" + k] = decode(params[k]); });
+        return out;
+      };
+      var empty = function (params) {
+        return params == null || (Array.isArray(params) ? params.length === 0 : Object.keys(params).length === 0);
+      };
+      // The declared type of each result column (what sqlite3_column_decltype
+      // would say; sql.js does not export it): from PRAGMA table_info of the
+      // tables after FROM and JOIN, by column name. Sequel converts with it
+      // (booleans, dates); a computed column has none.
+      var declaredTypes = function (db, sql, columns) {
+        var types = {}, re = /\b(?:FROM|JOIN)\s+[`"\[]?(\w+)[`"\]]?/gi, m;
+        while ((m = re.exec(sql))) {
+          var info = db.exec("PRAGMA table_info(\"" + m[1].replace(/"/g, "\"\"") + "\")");
+          (info[0] ? info[0].values : []).forEach(function (row) {
+            if (!(row[1] in types)) types[row[1]] = row[2];
+          });
+        }
+        return columns.map(function (c) { return types[c] || null; });
+      };
+      var guard = function (fn) {
+        try { return JSON.stringify({ ok: fn() }); } catch (e) { return JSON.stringify({ error: String((e && e.message) || e) }); }
+      };
+      var db = function (id) {
+        if (!state.dbs[id]) throw new Error("database is closed");
+        return state.dbs[id];
+      };
+      state.open = function () { state.last += 1; state.dbs[state.last] = new state.SQL.Database(); return state.last; };
+      state.close = function (id) { if (state.dbs[id]) state.dbs[id].close(); delete state.dbs[id]; };
+      // one statement with its rows: { columns, types, rows }
+      state.query = function (id, sql, params) {
+        return guard(function () {
+          var conn = db(id), stmt = conn.prepare(sql), rows = [];
+          try {
+            var args = JSON.parse(params);
+            if (!empty(args)) stmt.bind(bindings(args));
+            while (stmt.step()) rows.push(stmt.get(null, { useBigInt: true }).map(encode));
+            var columns = stmt.getColumnNames();
+            return { columns: columns, types: declaredTypes(conn, sql, columns), rows: rows };
+          } finally {
+            stmt.free();
+          }
+        });
+      };
+      // statements without rows, several at once when there are no parameters
+      state.batch = function (id, sql, params) {
+        return guard(function () {
+          var args = JSON.parse(params);
+          if (empty(args)) db(id).exec(sql); else db(id).run(sql, bindings(args));
+          return db(id).getRowsModified();
+        });
+      };
+      state.changes = function (id) { return db(id).getRowsModified(); };
+      state.lastInsertRowId = function (id) {
+        return String(db(id).exec("SELECT last_insert_rowid()")[0].values[0][0]);
+      };
+      return state;
+    })();
+    window.ensureSqlite = function () {
+      var sqlite = window.chunkySqlite;
+      if (sqlite.ready || sqlite.loading) return sqlite.loading || Promise.resolve(true);
+      sqlite.error = null;
+      sqlite.loading = new Promise(function (resolve, reject) {
+        var base = new URL("assets/sqljs/", document.baseURI).href;
+        var script = document.createElement("script");
+        script.src = base + "sql-wasm.js";
+        script.onload = function () {
+          window.initSqlJs({ locateFile: function (file) { return base + file; } }).then(resolve, reject);
+        };
+        script.onerror = function () { reject(new Error("sql-wasm.js could not be loaded")); };
+        document.head.appendChild(script);
+      }).then(function (SQL) {
+        sqlite.SQL = SQL;
+        sqlite.ready = true;
+        return true;
+      }).catch(function (e) {
+        sqlite.error = String((e && e.message) || e);
+        console.error("SQLite (sql.js) failed to load", e);
+        return false;
+      }).then(function (ok) {
+        sqlite.loading = null;
+        window.dispatchEvent(new CustomEvent("chunky:sqlite-ready", { detail: { ok: ok } }));
+        return ok;
+      });
+      return sqlite.loading;
+    };
+
     // A Blob URL for bytes handed over from Ruby as base64 - the link a cell
     // offers for a file it wrote. Blob rather than data: URLs, which break
     // down for multi-megabyte files.

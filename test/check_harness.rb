@@ -162,7 +162,7 @@ SOLUTION_LANG = { "ja" => "en" }.freeze
 
 # Lessons that need the browser: PyCall talks to Pyodide (html/pycall.rb),
 # which only a page has - test/browser_test.mjs runs them.
-BROWSER_ONLY = %w[pycall sympy numpy sklearn].freeze
+BROWSER_ONLY = %w[pycall sympy numpy sklearn sequel].freeze
 
 # the Rumale exercise's picture of a seven (its starter defines it too)
 RUMALE_SEVEN = "PIC = %w[.######. ......#. .....#.. ....#... ...#.... ...#.... ..#..... ..#.....].join(\"\\n\") + \"\\n\"\n"

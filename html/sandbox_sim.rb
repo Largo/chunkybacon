@@ -255,6 +255,15 @@ if defined?(JS)
     def finished? = @finished
     def alive? = !@finished
 
+    # as Thread#status: "run" for the one running now, "sleep" for one
+    # waiting its turn, false once done, nil if it ended with an exception
+    # (Sequel asks Thread.current.status before it commits a transaction)
+    def status
+      return(@error ? nil : false) if @finished
+
+      equal?(SimThread.current) ? "run" : "sleep"
+    end
+
     def resume_once
       previous = SimThread.scheduler_current
       SimThread.scheduler_current = self

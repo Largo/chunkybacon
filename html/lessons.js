@@ -54,6 +54,7 @@ window.LESSONS_JSON = JSON.stringify({
       "threeLoading": "Die 3D-Engine (three.js) wird noch geladen – führe die Zelle gleich nochmal aus.",
       "pythonLoading": "Python (Pyodide) wird geladen – beim ersten Mal ein paar MB. Führe die Zelle gleich nochmal aus.",
       "pythonOffline": "Python ist nicht in deiner Offline-Kopie. Mit Internet läuft diese Zelle – oder setz unter «Dein Fortschritt» das Häkchen bei «Python mitnehmen».",
+      "sqliteLoading": "SQLite wird geladen – beim ersten Mal rund 1 MB. Führe die Zelle gleich nochmal aus.",
       "downloadTip": "Dateien, die deine Zelle geschrieben hat – zum Herunterladen anklicken.",
       "footerCredit": "Ein Angebot von <a href='https://idogawa.com'>Andi Idogawa</a>. Läuft komplett in deinem Browser dank <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Schon fertig? Weiter geht's mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
       "footerLicense": "„<a href='https://chunkybacon.dev/glossary/chunky-bacon/'>Chunky Bacon</a>“ stammt aus why's (poignant) guide to Ruby von why the lucky stiff – in liebevoller Erinnerung. Kursinhalte: <a href='https://creativecommons.org/licenses/by-sa/4.0/deed.de'>CC BY-SA 4.0</a>, Code: <a href='https://github.com/Largo/chunkybacon/blob/main/LICENSE'>MIT</a>.",
@@ -78,7 +79,7 @@ window.LESSONS_JSON = JSON.stringify({
       "fileUnchanged": "Die Datei enthält nichts, was hier nicht schon ist.",
       "fileInvalid": "Das ist keine Fortschrittsdatei von Chunky Bacon.",
       "offlineTitle": "Offline lernen",
-      "offlineExplain": "Speichere den ganzen Kurs auf diesem Gerät – dann funktioniert er auch ohne Internet, im Zug oder im Flugzeug. Einmalig bis zu 54 MB Download, etwa 85 MB Speicherplatz (ohne Python 18 und 43 MB). Wird der Kurs online geändert, holt sich die Kopie die Änderungen von selbst.",
+      "offlineExplain": "Speichere den ganzen Kurs auf diesem Gerät – dann funktioniert er auch ohne Internet, im Zug oder im Flugzeug. Einmalig bis zu 55 MB Download, etwa 87 MB Speicherplatz (ohne Python 20 und 44 MB). Wird der Kurs online geändert, holt sich die Kopie die Änderungen von selbst.",
       "offlineEnable": "Auf diesem Gerät speichern",
       "offlineLoading": "Wird gespeichert …",
       "offlineReady": "Auf diesem Gerät gespeichert – funktioniert auch offline. Stand: %s",
@@ -170,6 +171,7 @@ window.LESSONS_JSON = JSON.stringify({
       "threeLoading": "The 3D engine (three.js) is still loading – run the cell again in a moment.",
       "pythonLoading": "Python (Pyodide) is loading – a few MB, the first time only. Run the cell again in a moment.",
       "pythonOffline": "Python is not in your offline copy. This cell runs with an internet connection – or tick “Include Python” under “Your progress”.",
+      "sqliteLoading": "SQLite is loading – about 1 MB, the first time only. Run the cell again in a moment.",
       "downloadTip": "Files your cell wrote – click to download.",
       "footerCredit": "A service by <a href='https://idogawa.com'>Andi Idogawa</a>. Runs entirely in your browser thanks to <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Done here? Continue with the <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
       "footerLicense": "“<a href='https://chunkybacon.dev/glossary/chunky-bacon/'>Chunky Bacon</a>” comes from why's (poignant) guide to Ruby by why the lucky stiff – fondly remembered. Course content: <a href='https://creativecommons.org/licenses/by-sa/4.0/'>CC BY-SA 4.0</a>, code: <a href='https://github.com/Largo/chunkybacon/blob/main/LICENSE'>MIT</a>.",
@@ -194,7 +196,7 @@ window.LESSONS_JSON = JSON.stringify({
       "fileUnchanged": "The file holds nothing that is not here already.",
       "fileInvalid": "That is not a Chunky Bacon progress file.",
       "offlineTitle": "Learn offline",
-      "offlineExplain": "Keep the whole course on this device – then it works without internet too, on a train or a plane. Up to 54 MB to download once, about 85 MB of storage (without Python 18 and 43 MB). When the course changes online, the copy picks up the changes by itself.",
+      "offlineExplain": "Keep the whole course on this device – then it works without internet too, on a train or a plane. Up to 55 MB to download once, about 87 MB of storage (without Python 20 and 44 MB). When the course changes online, the copy picks up the changes by itself.",
       "offlineEnable": "Keep on this device",
       "offlineLoading": "Saving …",
       "offlineReady": "Saved on this device – works offline too. As of %s",
@@ -286,6 +288,7 @@ window.LESSONS_JSON = JSON.stringify({
       "threeLoading": "3Dエンジン（three.js）をまだ読み込んでいます。少し待ってから、もう一度セルを実行してください。",
       "pythonLoading": "Python（Pyodide）を読み込んでいます（初回のみ数MB）。少し待ってから、もう一度セルを実行してください。",
       "pythonOffline": "Pythonはオフラインコピーに入っていません。インターネットにつながればこのセルは動きます。または「あなたの進捗」で「Pythonも保存する」にチェックを入れてください。",
+      "sqliteLoading": "SQLiteを読み込んでいます（初回のみ約1 MB）。少し待ってから、もう一度セルを実行してください。",
       "downloadTip": "セルが書き出したファイルです。クリックするとダウンロードできます。",
       "footerCredit": "制作：<a href='https://idogawa.com'>Andi Idogawa</a>。<a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>のおかげで、すべてブラウザの中だけで動いています。ひととおり終わったら、次は<a href='https://koans.idogawa.com'>Ruby Koans</a>へどうぞ。",
       "footerLicense": "「<a href='https://chunkybacon.dev/glossary/chunky-bacon/'>Chunky Bacon</a>」は、why the lucky stiffの『why's (poignant) guide to Ruby』に由来します。なつかしい思い出とともに。コースの内容：<a href='https://creativecommons.org/licenses/by-sa/4.0/deed.ja'>CC BY-SA 4.0</a>、コード：<a href='https://github.com/Largo/chunkybacon/blob/main/LICENSE'>MIT</a>。",
@@ -310,7 +313,7 @@ window.LESSONS_JSON = JSON.stringify({
       "fileUnchanged": "このファイルには、ここにまだないものは含まれていません。",
       "fileInvalid": "これはChunky Baconの進捗ファイルではありません。",
       "offlineTitle": "オフラインで学ぶ",
-      "offlineExplain": "コース全体をこの端末に保存すると、インターネットがなくても（電車や飛行機の中でも）使えます。最初に最大54 MBをダウンロードし、約85 MBの容量を使います（Pythonなしなら18 MBと43 MB）。オンラインのコースが更新されると、コピーも自動で更新されます。",
+      "offlineExplain": "コース全体をこの端末に保存すると、インターネットがなくても（電車や飛行機の中でも）使えます。最初に最大55 MBをダウンロードし、約87 MBの容量を使います（Pythonなしなら20 MBと44 MB）。オンラインのコースが更新されると、コピーも自動で更新されます。",
       "offlineEnable": "この端末に保存",
       "offlineLoading": "保存しています…",
       "offlineReady": "この端末に保存済みです。オフラインでも使えます。（%s 時点）",
@@ -2505,7 +2508,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 42). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
+            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 43). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
           },
           {
             "t": "c",
@@ -2552,7 +2555,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 42 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
+            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 43 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
           },
           {
             "t": "c",
@@ -2599,7 +2602,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン42で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
+            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン43で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
           },
           {
             "t": "c",
@@ -3878,9 +3881,273 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "sequel",
+      "de": {
+        "title": "28. Sequel: eine Datenbank aus Ruby",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Eine Datenbank aus Ruby</h2><p>Eine <strong>Datenbank</strong> hält Daten in Tabellen – Zeilen und Spalten, wie eine Tabellenkalkulation – und beantwortet Fragen dazu in <strong>SQL</strong>. Mit <a href='https://sequel.jeremyevans.net' target='_blank'>Sequel</a> von Jeremy Evans (der auch Roda aus Lektion 16 geschrieben hat) machst du das alles in Ruby: Du rufst Methoden auf, und Sequel schreibt das SQL.</p><p>Darunter läuft <strong>SQLite</strong>, die kleine Datenbank, die in jedem Handy und jedem Browser steckt. Hier läuft sie direkt in dieser Seite (rund 1 MB, geladen, sobald du die Lektion öffnest) und hält die Datenbank im Speicher – nach dem Neuladen ist sie leer. Bauen wir eine kleine Zeiterfassung:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"sequel\"\nrequire \"sequel\"\n\nDB = Sequel.sqlite   # eine Datenbank im Speicher\n\nDB.create_table(:eintraege) do\n  primary_key :id\n  String    :projekt, null: false\n  Float     :stunden\n  Date      :tag\n  TrueClass :verrechenbar, default: false\nend\nDB.tables"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Sequel.sqlite</code> öffnet eine Datenbank; <code>DB</code> ist der übliche Name dafür. <code>create_table</code> beschreibt eine Tabelle: <code>primary_key :id</code> nummeriert die Zeilen selbst, und jede Zeile danach ist eine Spalte mit ihrem Typ – Text, Kommazahl, Datum, wahr oder falsch. <code>null: false</code> heisst, dass das Projekt nie leer sein darf.</p><p>Jetzt ein paar Zeilen. <code>DB[:eintraege]</code> ist die Tabelle als <strong>Dataset</strong>, und <code>insert</code> fügt eine Zeile ein:</p>"
+          },
+          {
+            "t": "c",
+            "code": "eintraege = DB[:eintraege]\neintraege.insert(projekt: \"Chunky\", stunden: 2.5, tag: Date.new(2026, 10, 5), verrechenbar: true)\neintraege.insert(projekt: \"Bacon\",  stunden: 1.0, tag: Date.new(2026, 10, 5))\neintraege.insert(projekt: \"Chunky\", stunden: 3.0, tag: Date.new(2026, 10, 6), verrechenbar: true)\neintraege.insert(projekt: \"Speck\",  stunden: 0.5, tag: Date.new(2026, 10, 6))\neintraege.count"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jedes <code>insert</code> bekommt einen Hash, Spalte für Spalte; was du weglässt (<code>verrechenbar</code> bei Bacon), bekommt seinen Standardwert. Zurücklesen geht wie bei einem Array aus Hashes:</p>"
+          },
+          {
+            "t": "c",
+            "code": "eintraege.order(:tag).each do |row|\n  puts \"#{row[:tag]}  #{row[:projekt].ljust(7)} #{row[:stunden]} h #{row[:verrechenbar] ? \"Fr.\" : \"\"}\"\nend\nrow = eintraege.first\n[row.class, row[:tag].class, row[:verrechenbar].class]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jede Zeile ist ein ganz normaler Ruby-Hash, und die Werte haben wieder ihre Ruby-Typen: Der Tag ist ein <code>Date</code>, verrechenbar ist <code>true</code> oder <code>false</code> – obwohl SQLite selbst nur Zahlen und Text kennt.</p><p>Die eigentliche Stärke ist das Fragen. Eine Dataset-Methode gibt ein neues, engeres Dataset zurück, also verkettest du sie wie Ruby-Methoden. <code>sql</code> zeigt, was Sequel schicken wird:</p>"
+          },
+          {
+            "t": "c",
+            "code": "chunky = eintraege.where(projekt: \"Chunky\").order(:tag)\nputs chunky.sql\nchunky.map(:stunden)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Aus <code>where(projekt: \"Chunky\")</code> wurde <code>WHERE (`projekt` = 'Chunky')</code>, aus <code>order</code> wurde <code>ORDER BY</code>. Gefragt wird erst, wenn du die Zeilen willst – hier mit <code>map(:stunden)</code>, das eine Spalte nimmt.</p><p>Für Vergleiche nimmt <code>where</code> einen Block, in dem Spaltennamen einfach Namen sind. Und SQL kann für dich zählen und zusammenzählen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts eintraege.where { stunden > 2 }.count\nputs eintraege.sum(:stunden)\neintraege.group_and_count(:projekt).order(:projekt).all"
+          },
+          {
+            "t": "h",
+            "html": "<p>Zwei Einträge haben mehr als 2 Stunden; 7.0 Stunden insgesamt; <code>group_and_count</code> zählt die Zeilen jedes Projekts. Jetzt die Frage, für die es jede Zeiterfassung gibt – wie viele Stunden pro Projekt? <code>group</code> legt die Zeilen eines Projekts zusammen, und <code>sum</code> zählt jede Gruppe zusammen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "rapport = eintraege.group(:projekt).select(:projekt) { sum(:stunden).as(:total) }.order(:projekt)\nputs rapport.sql\nrapport.all"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das ist ein ganzer Rapport in einer SQL-Abfrage: Die Datenbank rechnet, und Ruby bekommt drei kurze Zeilen. Bei vielen tausend Einträgen ist das viel schneller, als alle nach Ruby zu holen.</p><p>Zeilen ändern und löschen geht auch auf einem Dataset – auf allen seinen Zeilen auf einmal:</p>"
+          },
+          {
+            "t": "c",
+            "code": "eintraege.where(projekt: \"Bacon\").update(verrechenbar: true)\neintraege.where(projekt: \"Speck\").delete\neintraege.where(verrechenbar: true).map(:projekt)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>update</code> hat jede Bacon-Zeile geändert, <code>delete</code> jede Speck-Zeile gelöscht. Vorsicht: <code>DB[:eintraege].delete</code> ohne <code>where</code> leert die ganze Tabelle.</p><p>Für ein richtiges Programm hat Sequel <strong>Models</strong>: eine Klasse pro Tabelle, ein Objekt pro Zeile, mit deinen eigenen Methoden daran:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Eintrag < Sequel::Model(:eintraege)\n  def zusammenfassung\n    \"#{tag}: #{stunden} h für #{projekt}\"\n  end\nend\n\nEintrag.create(projekt: \"Speck\", stunden: 1.5, tag: Date.new(2026, 10, 7))\nEintrag.order(:tag).map(&:zusammenfassung)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Sequel::Model(:eintraege)</code> liest die Spalten der Tabelle und gibt der Klasse für jede eine Methode, darum funktionieren <code>tag</code>, <code>stunden</code> und <code>projekt</code> in <code>zusammenfassung</code> einfach so. <code>create</code> fügt eine Zeile ein und gibt sie als Objekt zurück.</p><p>Zum Schluss: Die Datenbank wacht selbst über ihre Regeln. Die Projekt-Spalte wurde mit <code>null: false</code> angelegt – versuchen wir, das zu brechen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "begin\n  eintraege.insert(stunden: 1.0)   # kein Projekt\nrescue Sequel::NotNullConstraintViolation => error\n  puts \"Abgelehnt: #{error.class}\"\nend\neintraege.count"
+          },
+          {
+            "t": "h",
+            "html": "<p>SQLite hat die Zeile abgelehnt, und Sequel hat die Ablehnung in eine Ruby-Exception verwandelt, die du mit <code>rescue</code> fangen kannst. Die Tabelle hat noch ihre vier Zeilen.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>gem install sequel sqlite3</code>. Der Code läuft unverändert, und <code>Sequel.sqlite(\"timelog.db\")</code> hält die Datenbank in einer Datei, so ist sie beim nächsten Mal noch da. Sequel spricht mit demselben Ruby-Code auch mit PostgreSQL und MySQL. Hier im Browser ersetzt ein kleiner Stellvertreter auf <a href='https://sql.js.org' target='_blank'>sql.js</a> – SQLite, nach WebAssembly übersetzt – das sqlite3-Gem, das eine C-Erweiterung ist; Sequel selbst ist das echte Gem. Sequel und sql.js stehen unter der MIT-Lizenz, SQLite ist gemeinfrei.</p></div><div class='task'><strong>Aufgabe:</strong> Hier ist eine frische Datenbank mit fünf Zeiteinträgen. Rechne mit Sequel aus, wie viele Stunden jedes Projekt gebraucht hat, und speichere das in <code>stunden_pro_projekt</code> als Ruby-Hash, etwa <code>{\"Bacon\" =&gt; 1.5, …}</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "install_gem \"sequel\"\nrequire \"sequel\"\n\nzeit = Sequel.sqlite\nzeit.create_table(:arbeit) do\n  primary_key :id\n  String :projekt\n  Float  :stunden\nend\nzeit[:arbeit].import([:projekt, :stunden],\n  [[\"Chunky\", 2.5], [\"Speck\", 0.5], [\"Bacon\", 1.5], [\"Chunky\", 3.0], [\"Speck\", 1.5]])\n\n# stunden_pro_projekt = ...   (ein Ruby-Hash: Projekt => Stunden)\n",
+            "check": "stunden_pro_projekt.is_a?(Hash) && stunden_pro_projekt.transform_values(&:to_f) == { \"Bacon\" => 1.5, \"Chunky\" => 5.5, \"Speck\" => 2.0 } && code.include?(\"group\")",
+            "hint": "<code>zeit[:arbeit].group(:projekt)</code> legt die Zeilen jedes Projekts zusammen; <code>.select(:projekt) { sum(:stunden).as(:total) }</code> zählt sie zusammen, wie im Rapport oben. <code>.as_hash(:projekt, :total)</code> macht daraus den Ruby-Hash."
+          }
+        ]
+      },
+      "en": {
+        "title": "28. Sequel: a database from Ruby",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>A database from Ruby</h2><p>A <strong>database</strong> keeps data in tables – rows and columns, like a spreadsheet – and answers questions about it in <strong>SQL</strong>. <a href='https://sequel.jeremyevans.net' target='_blank'>Sequel</a>, by Jeremy Evans (who also wrote Roda from lesson 16), lets you do all of that in Ruby: you call methods, and Sequel writes the SQL.</p><p>Underneath runs <strong>SQLite</strong>, the small database that lives in every phone and browser. Here it runs right in this page (about 1 MB, loaded when you open the lesson) and keeps the database in memory – a reload starts empty. Let's build a little time tracker:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"sequel\"\nrequire \"sequel\"\n\nDB = Sequel.sqlite   # a database in memory\n\nDB.create_table(:entries) do\n  primary_key :id\n  String    :project, null: false\n  Float     :hours\n  Date      :day\n  TrueClass :billable, default: false\nend\nDB.tables"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Sequel.sqlite</code> opens a database; <code>DB</code> is the usual name for it. <code>create_table</code> describes a table: <code>primary_key :id</code> numbers the rows by itself, and each line after it is a column with its type – text, a decimal number, a date, true or false. <code>null: false</code> means the project may never be empty.</p><p>Now some rows. <code>DB[:entries]</code> is the table as a <strong>dataset</strong>, and <code>insert</code> adds a row:</p>"
+          },
+          {
+            "t": "c",
+            "code": "entries = DB[:entries]\nentries.insert(project: \"Chunky\", hours: 2.5, day: Date.new(2026, 10, 5), billable: true)\nentries.insert(project: \"Bacon\",  hours: 1.0, day: Date.new(2026, 10, 5))\nentries.insert(project: \"Chunky\", hours: 3.0, day: Date.new(2026, 10, 6), billable: true)\nentries.insert(project: \"Speck\",  hours: 0.5, day: Date.new(2026, 10, 6))\nentries.count"
+          },
+          {
+            "t": "h",
+            "html": "<p>Each <code>insert</code> takes a hash, column by column; what you leave out (<code>billable</code> on the Bacon row) gets its default. Reading back works like an array of hashes:</p>"
+          },
+          {
+            "t": "c",
+            "code": "entries.order(:day).each do |row|\n  puts \"#{row[:day]}  #{row[:project].ljust(7)} #{row[:hours]} h #{row[:billable] ? \"$\" : \"\"}\"\nend\nrow = entries.first\n[row.class, row[:day].class, row[:billable].class]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Every row is a plain Ruby hash, and the values have their Ruby types again: the day is a <code>Date</code>, billable is <code>true</code> or <code>false</code> – even though SQLite itself only knows numbers and text.</p><p>The real power is asking questions. A dataset method returns a new, narrower dataset, so you chain them like Ruby methods. <code>sql</code> shows what Sequel will send:</p>"
+          },
+          {
+            "t": "c",
+            "code": "chunky = entries.where(project: \"Chunky\").order(:day)\nputs chunky.sql\nchunky.map(:hours)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>where(project: \"Chunky\")</code> became <code>WHERE (`project` = 'Chunky')</code>, <code>order</code> became <code>ORDER BY</code>. Nothing is asked until you want the rows – here with <code>map(:hours)</code>, which takes one column.</p><p>For comparisons, <code>where</code> takes a block in which column names are just names. And SQL can count and add up for you:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts entries.where { hours > 2 }.count\nputs entries.sum(:hours)\nentries.group_and_count(:project).order(:project).all"
+          },
+          {
+            "t": "h",
+            "html": "<p>Two entries have more than 2 hours; 7.0 hours in total; <code>group_and_count</code> counts the rows of each project. Now the question every time tracker exists for – how many hours per project? <code>group</code> puts the rows of a project together, and <code>sum</code> adds up each group:</p>"
+          },
+          {
+            "t": "c",
+            "code": "timesheet = entries.group(:project).select(:project) { sum(:hours).as(:total) }.order(:project)\nputs timesheet.sql\ntimesheet.all"
+          },
+          {
+            "t": "h",
+            "html": "<p>That is a whole timesheet in one SQL query: the database does the adding, and Ruby gets three short rows. With many thousands of entries, that is much faster than loading them all into Ruby.</p><p>Changing and removing rows works on a dataset too – on all of its rows at once:</p>"
+          },
+          {
+            "t": "c",
+            "code": "entries.where(project: \"Bacon\").update(billable: true)\nentries.where(project: \"Speck\").delete\nentries.where(billable: true).map(:project)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>update</code> changed every Bacon row, <code>delete</code> removed every Speck row. Careful: <code>DB[:entries].delete</code> without a <code>where</code> empties the whole table.</p><p>For a real program, Sequel has <strong>models</strong>: a class per table, an object per row, with your own methods on it:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Entry < Sequel::Model(:entries)\n  def summary\n    \"#{day}: #{hours} h for #{project}\"\n  end\nend\n\nEntry.create(project: \"Speck\", hours: 1.5, day: Date.new(2026, 10, 7))\nEntry.order(:day).map(&:summary)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Sequel::Model(:entries)</code> reads the table's columns and gives the class a method for each, so <code>day</code>, <code>hours</code> and <code>project</code> just work inside <code>summary</code>. <code>create</code> inserts a row and returns it as an object.</p><p>Finally, the database guards its rules itself. The project column was declared <code>null: false</code> – let's try to break it:</p>"
+          },
+          {
+            "t": "c",
+            "code": "begin\n  entries.insert(hours: 1.0)   # no project\nrescue Sequel::NotNullConstraintViolation => error\n  puts \"Refused: #{error.class}\"\nend\nentries.count"
+          },
+          {
+            "t": "h",
+            "html": "<p>SQLite refused the row, and Sequel turned the refusal into a Ruby exception you can <code>rescue</code>. The table still has its four rows.</p><div class='offweb' data-title='On your machine'><p><code>gem install sequel sqlite3</code>. The code runs unchanged, and <code>Sequel.sqlite(\"timelog.db\")</code> keeps the database in a file, so it is still there next time. Sequel also talks to PostgreSQL and MySQL with the same Ruby code. Here in the browser the sqlite3 gem – a C extension – is replaced by a small stand-in on <a href='https://sql.js.org' target='_blank'>sql.js</a>, SQLite compiled to WebAssembly; Sequel itself is the real gem. Sequel and sql.js come under the MIT licence; SQLite is in the public domain.</p></div><div class='task'><strong>Task:</strong> Here is a fresh database with five time entries. Use Sequel to work out how many hours each project took, and store it in <code>hours_per_project</code> as a Ruby hash, such as <code>{\"Bacon\" =&gt; 1.5, …}</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "install_gem \"sequel\"\nrequire \"sequel\"\n\nlog = Sequel.sqlite\nlog.create_table(:work) do\n  primary_key :id\n  String :project\n  Float  :hours\nend\nlog[:work].import([:project, :hours],\n  [[\"Chunky\", 2.5], [\"Speck\", 0.5], [\"Bacon\", 1.5], [\"Chunky\", 3.0], [\"Speck\", 1.5]])\n\n# hours_per_project = ...   (a Ruby hash: project => hours)\n",
+            "check": "hours_per_project.is_a?(Hash) && hours_per_project.transform_values(&:to_f) == { \"Bacon\" => 1.5, \"Chunky\" => 5.5, \"Speck\" => 2.0 } && code.include?(\"group\")",
+            "hint": "<code>log[:work].group(:project)</code> puts each project's rows together; <code>.select(:project) { sum(:hours).as(:total) }</code> adds them up, as in the timesheet above. <code>.as_hash(:project, :total)</code> then makes the Ruby hash."
+          }
+        ]
+      },
+      "ja": {
+        "title": "28. Sequel：Rubyからデータベース",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Rubyからデータベース</h2><p><strong>データベース</strong>は、表計算のように行と列からなるテーブルにデータを保存し、<strong>SQL</strong>での質問に答えます。Jeremy Evansさん（レッスン16のRodaの作者でもあります）の<a href='https://sequel.jeremyevans.net' target='_blank'>Sequel</a>を使うと、それをすべてRubyでできます。あなたはメソッドを呼ぶだけで、SQLはSequelが書いてくれます。</p><p>その下では、どのスマートフォンにもブラウザにも入っている小さなデータベース、<strong>SQLite</strong>が動いています。ここではこのページの中で動き（約1 MB、レッスンを開くと読み込みます）、データベースはメモリ上にあります。再読み込みすると空に戻ります。小さな時間記録を作ってみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"sequel\"\nrequire \"sequel\"\n\nDB = Sequel.sqlite   # メモリ上のデータベース\n\nDB.create_table(:entries) do\n  primary_key :id\n  String    :project, null: false\n  Float     :hours\n  Date      :day\n  TrueClass :billable, default: false\nend\nDB.tables"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Sequel.sqlite</code>はデータベースを開きます。<code>DB</code>はその定番の名前です。<code>create_table</code>はテーブルを定義します。<code>primary_key :id</code>は行に自動で番号を振り、そのあとの各行は型つきの列です。文字列、小数、日付、真か偽。<code>null: false</code>は、プロジェクトが空になってはいけないという意味です。</p><p>では行を追加しましょう。<code>DB[:entries]</code>はテーブルを<strong>データセット</strong>として表し、<code>insert</code>が1行を追加します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "entries = DB[:entries]\nentries.insert(project: \"Chunky\", hours: 2.5, day: Date.new(2026, 10, 5), billable: true)\nentries.insert(project: \"Bacon\",  hours: 1.0, day: Date.new(2026, 10, 5))\nentries.insert(project: \"Chunky\", hours: 3.0, day: Date.new(2026, 10, 6), billable: true)\nentries.insert(project: \"Speck\",  hours: 0.5, day: Date.new(2026, 10, 6))\nentries.count"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>insert</code>には列ごとのハッシュを渡します。省略した列（Baconの行の<code>billable</code>）にはデフォルト値が入ります。読み出しは、ハッシュの配列と同じように使えます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "entries.order(:day).each do |row|\n  puts \"#{row[:day]}  #{row[:project].ljust(7)} #{row[:hours]} h #{row[:billable] ? \"$\" : \"\"}\"\nend\nrow = entries.first\n[row.class, row[:day].class, row[:billable].class]"
+          },
+          {
+            "t": "h",
+            "html": "<p>各行はふつうのRubyのハッシュで、値はRubyの型に戻っています。日付は<code>Date</code>、billableは<code>true</code>か<code>false</code>です。SQLite自身は数値と文字列しか知らないのに、です。</p><p>本当の力は、質問をすることにあります。データセットのメソッドは、新しく絞り込んだデータセットを返すので、Rubyのメソッドのようにつなげられます。<code>sql</code>は、Sequelが送るSQLを見せてくれます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "chunky = entries.where(project: \"Chunky\").order(:day)\nputs chunky.sql\nchunky.map(:hours)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>where(project: \"Chunky\")</code>は<code>WHERE (`project` = 'Chunky')</code>に、<code>order</code>は<code>ORDER BY</code>になりました。実際に質問するのは、行が必要になったときです。ここでは1つの列を取り出す<code>map(:hours)</code>です。</p><p>比較をするには、<code>where</code>にブロックを渡します。ブロックの中では列名をそのまま書けます。そしてSQLは、数えたり合計したりもしてくれます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts entries.where { hours > 2 }.count\nputs entries.sum(:hours)\nentries.group_and_count(:project).order(:project).all"
+          },
+          {
+            "t": "h",
+            "html": "<p>2時間を超えるエントリーは2つ、合計は7.0時間、<code>group_and_count</code>はプロジェクトごとに行を数えます。では、時間記録がそもそも答えるべき質問です。プロジェクトごとに何時間？ <code>group</code>がプロジェクトごとに行をまとめ、<code>sum</code>がグループごとに合計します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "timesheet = entries.group(:project).select(:project) { sum(:hours).as(:total) }.order(:project)\nputs timesheet.sql\ntimesheet.all"
+          },
+          {
+            "t": "h",
+            "html": "<p>1つのSQLの問い合わせで、作業報告がまるごとできました。計算はデータベースがして、Rubyには短い3行が届きます。エントリーが何千件もあるなら、全部をRubyに読み込むよりずっと速くなります。</p><p>行の変更や削除も、データセットに対して行えます。そのすべての行に一度に効きます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "entries.where(project: \"Bacon\").update(billable: true)\nentries.where(project: \"Speck\").delete\nentries.where(billable: true).map(:project)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>update</code>はBaconの行をすべて変え、<code>delete</code>はSpeckの行をすべて消しました。注意してください。<code>where</code>なしの<code>DB[:entries].delete</code>は、テーブルを空にしてしまいます。</p><p>本格的なプログラムのために、Sequelには<strong>モデル</strong>があります。テーブルごとにクラスを、行ごとにオブジェクトを作り、自分のメソッドを持たせられます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Entry < Sequel::Model(:entries)\n  def summary\n    \"#{day}: #{hours} h for #{project}\"\n  end\nend\n\nEntry.create(project: \"Speck\", hours: 1.5, day: Date.new(2026, 10, 7))\nEntry.order(:day).map(&:summary)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Sequel::Model(:entries)</code>はテーブルの列を読み取り、列ごとのメソッドをクラスに作ります。だから<code>summary</code>の中で<code>day</code>、<code>hours</code>、<code>project</code>がそのまま使えます。<code>create</code>は行を追加し、それをオブジェクトとして返します。</p><p>最後に、データベースは自分のルールを自分で守ります。projectの列は<code>null: false</code>で作りました。それを破ってみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "begin\n  entries.insert(hours: 1.0)   # プロジェクトなし\nrescue Sequel::NotNullConstraintViolation => error\n  puts \"Refused: #{error.class}\"\nend\nentries.count"
+          },
+          {
+            "t": "h",
+            "html": "<p>SQLiteはその行を拒否し、Sequelはその拒否を、<code>rescue</code>で受け止められるRubyの例外に変えました。テーブルには4行がそのまま残っています。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>gem install sequel sqlite3</code>をすれば、コードはそのまま動きます。<code>Sequel.sqlite(\"timelog.db\")</code>ならデータベースをファイルに保存するので、次に開いたときも残っています。Sequelは同じRubyのコードでPostgreSQLやMySQLとも話せます。このブラウザでは、C拡張であるsqlite3 gemの代わりに、WebAssemblyにコンパイルしたSQLiteである<a href='https://sql.js.org' target='_blank'>sql.js</a>の上に作った小さな代役が動いています。Sequel自体は本物のgemです。Sequelとsql.jsはMITライセンス、SQLiteはパブリックドメインです。</p></div><div class='task'><strong>課題：</strong>5件の時間記録が入った新しいデータベースがあります。Sequelを使って、プロジェクトごとに何時間かかったかを計算し、<code>{\"Bacon\" =&gt; 1.5, …}</code>のようなRubyのハッシュとして<code>hours_per_project</code>に入れましょう。</div>"
+          },
+          {
+            "t": "x",
+            "code": "install_gem \"sequel\"\nrequire \"sequel\"\n\nlog = Sequel.sqlite\nlog.create_table(:work) do\n  primary_key :id\n  String :project\n  Float  :hours\nend\nlog[:work].import([:project, :hours],\n  [[\"Chunky\", 2.5], [\"Speck\", 0.5], [\"Bacon\", 1.5], [\"Chunky\", 3.0], [\"Speck\", 1.5]])\n\n# hours_per_project = ...   （Rubyのハッシュ：プロジェクト => 時間）\n",
+            "check": "hours_per_project.is_a?(Hash) && hours_per_project.transform_values(&:to_f) == { \"Bacon\" => 1.5, \"Chunky\" => 5.5, \"Speck\" => 2.0 } && code.include?(\"group\")",
+            "hint": "<code>log[:work].group(:project)</code>でプロジェクトごとに行をまとめて、上の作業報告と同じように<code>.select(:project) { sum(:hours).as(:total) }</code>で合計するんだ。最後に<code>.as_hash(:project, :total)</code>でRubyのハッシュになるよ。"
+          }
+        ]
+      }
+    },
+    {
       "id": "scarpe",
       "de": {
-        "title": "28. Shoes-Apps mit Scarpe",
+        "title": "29. Shoes-Apps mit Scarpe",
         "cells": [
           {
             "t": "h",
@@ -3927,7 +4194,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "28. Shoes apps with Scarpe",
+        "title": "29. Shoes apps with Scarpe",
         "cells": [
           {
             "t": "h",
@@ -3974,7 +4241,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "28. ScarpeでShoesアプリ",
+        "title": "29. ScarpeでShoesアプリ",
         "cells": [
           {
             "t": "h",
@@ -4024,7 +4291,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "rubykaigi",
       "de": {
-        "title": "29. RubyKaigi & seltsamer Code",
+        "title": "30. RubyKaigi & seltsamer Code",
         "cells": [
           {
             "t": "h",
@@ -4095,7 +4362,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "29. RubyKaigi & weird code",
+        "title": "30. RubyKaigi & weird code",
         "cells": [
           {
             "t": "h",
@@ -4166,7 +4433,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "29. RubyKaigiと変なコード",
+        "title": "30. RubyKaigiと変なコード",
         "cells": [
           {
             "t": "h",
@@ -4245,7 +4512,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "応用コース：timelog"
       },
       "de": {
-        "title": "30. Projekt timelog: Collections",
+        "title": "31. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -4284,7 +4551,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "30. Project timelog: collections",
+        "title": "31. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -4323,7 +4590,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "30. timelogプロジェクト：コレクション",
+        "title": "31. timelogプロジェクト：コレクション",
         "cells": [
           {
             "t": "h",
@@ -4365,7 +4632,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "31. Text parsen: Regex",
+        "title": "32. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -4396,7 +4663,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "31. Parsing text: regex",
+        "title": "32. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -4427,7 +4694,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "31. テキストのパース：正規表現",
+        "title": "32. テキストのパース：正規表現",
         "cells": [
           {
             "t": "h",
@@ -4461,7 +4728,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "32. Methoden richtig bauen",
+        "title": "33. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -4492,7 +4759,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "32. Building methods properly",
+        "title": "33. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -4523,7 +4790,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "32. メソッドをきちんと作る",
+        "title": "33. メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -4557,7 +4824,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "33. Entry & Timesheet",
+        "title": "34. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -4588,7 +4855,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "33. Entry & Timesheet",
+        "title": "34. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -4619,7 +4886,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "33. EntryとTimesheet",
+        "title": "34. EntryとTimesheet",
         "cells": [
           {
             "t": "h",
@@ -4653,7 +4920,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "34. Testen mit Minitest",
+        "title": "35. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -4684,7 +4951,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "34. Testing with Minitest",
+        "title": "35. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -4715,7 +4982,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "34. Minitestでテスト",
+        "title": "35. Minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -4749,7 +5016,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "35. Enumerable & Data",
+        "title": "36. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -4761,7 +5028,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 30, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 31, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -4772,7 +5039,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "35. Enumerable & Data",
+        "title": "36. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -4784,7 +5051,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 30, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 31, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -4795,7 +5062,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "35. EnumerableとData",
+        "title": "36. EnumerableとData",
         "cells": [
           {
             "t": "h",
@@ -4807,7 +5074,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン30で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン31で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
           },
           {
             "t": "x",
@@ -4821,7 +5088,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "36. Blocks, Procs & Lambdas",
+        "title": "37. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -4860,7 +5127,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "36. Blocks, procs & lambdas",
+        "title": "37. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -4899,7 +5166,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "36. ブロック、Proc、lambda",
+        "title": "37. ブロック、Proc、lambda",
         "cells": [
           {
             "t": "h",
@@ -4941,7 +5208,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "37. Fehler behandeln",
+        "title": "38. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -4972,7 +5239,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "37. Handling errors",
+        "title": "38. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -5003,7 +5270,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "37. エラー処理",
+        "title": "38. エラー処理",
         "cells": [
           {
             "t": "h",
@@ -5037,7 +5304,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "38. Daten speichern: Formate",
+        "title": "39. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -5092,7 +5359,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "38. Saving data: formats",
+        "title": "39. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -5147,7 +5414,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "38. データの保存：フォーマット",
+        "title": "39. データの保存：フォーマット",
         "cells": [
           {
             "t": "h",
@@ -5205,7 +5472,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "39. Kommandozeile & Gems",
+        "title": "40. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -5232,7 +5499,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "39. Command line & gems",
+        "title": "40. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -5259,7 +5526,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "39. コマンドラインとgem",
+        "title": "40. コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -5289,7 +5556,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "40. Pattern Matching",
+        "title": "41. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -5320,7 +5587,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "40. Pattern matching",
+        "title": "41. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -5351,7 +5618,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "40. パターンマッチ",
+        "title": "41. パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -5385,7 +5652,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "41. Objektmodell & Metaprogrammierung",
+        "title": "42. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -5416,7 +5683,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "41. Object model & metaprogramming",
+        "title": "42. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -5447,7 +5714,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "41. オブジェクトモデルとメタプログラミング",
+        "title": "42. オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -5481,7 +5748,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "42. Eine eigene DSL",
+        "title": "43. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -5493,7 +5760,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 36 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 37 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -5504,7 +5771,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "42. Your own DSL",
+        "title": "43. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -5516,7 +5783,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 36 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 37 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
@@ -5527,7 +5794,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "42. 自分だけのDSL",
+        "title": "43. 自分だけのDSL",
         "cells": [
           {
             "t": "h",
@@ -5539,7 +5806,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン36のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン37のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
           },
           {
             "t": "x",
@@ -5553,7 +5820,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "43. Codequalität & Debugging",
+        "title": "44. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -5576,7 +5843,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "43. Code quality & debugging",
+        "title": "44. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -5599,7 +5866,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "43. コードの品質とデバッグ",
+        "title": "44. コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -5625,7 +5892,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "44. Performance & Nebenläufigkeit",
+        "title": "45. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -5672,7 +5939,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "44. Performance & concurrency",
+        "title": "45. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -5719,7 +5986,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "44. パフォーマンスと並行処理",
+        "title": "45. パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -5769,7 +6036,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "45. Finale: timelog im Web",
+        "title": "46. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -5791,12 +6058,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 39 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 40 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "en": {
-        "title": "45. Finale: timelog on the web",
+        "title": "46. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
@@ -5818,12 +6085,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 39 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 40 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "ja": {
-        "title": "45. フィナーレ：Webで動くtimelog",
+        "title": "46. フィナーレ：Webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -5845,7 +6112,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン39で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン40で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }

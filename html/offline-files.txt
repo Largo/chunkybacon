@@ -40,6 +40,9 @@ assets/pyodide/scipy-1.18.0-cp314-cp314-pyemscripten_2026_0_wasm32.whl
 assets/pyodide/six-1.17.0-py2.py3-none-any.whl
 assets/pyodide/sympy-1.14.0-py3-none-any.whl
 assets/pyodide/threadpoolctl-3.6.0-py3-none-any.whl
+assets/sqljs/LICENSE
+assets/sqljs/sql-wasm.js
+assets/sqljs/sql-wasm.wasm
 assets/three/LICENSE
 assets/three/OrbitControls.js
 assets/three/three.core.min.js
@@ -79,6 +82,7 @@ gems/cache/rubyzip-3.7.0.gem
 gems/cache/rumale-core-2.2.0.gem
 gems/cache/rumale-nearest_neighbors-2.2.0.gem
 gems/cache/scarpe-components-0.5.0.gem
+gems/cache/sequel-5.109.0.gem
 gems/cache/sinatra-4.2.1.gem
 gems/cache/three-rb-0.2.1.gem
 gems/cache/tilt-2.9.0.gem
@@ -106,5 +110,6 @@ shell/support.rb
 shell/view.rb
 shell/workspace.rb
 shoes_dom.rb
+sqlite3_sqljs.rb
 storage.js
 workshop.rb

@@ -2,7 +2,7 @@
 
 Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
-Last updated 2026-10-04 (45 lessons in German, English and Japanese).
+Last updated 2026-10-04 (46 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -59,6 +59,7 @@ html/
   shoes_dom.rb          Lacci (Shoes) display service drawing into the page
   pycall.rb             require "pycall": PyCall's API over Pyodide (§6d)
   numo_narray.rb        require "numo/narray": Numo in pure Ruby, for Rumale (§6e)
+  sqlite3_sqljs.rb      require "sqlite3": the gem's API over sql.js, for Sequel (§6f)
   letter.js             show_letter's envelope: drawing, digits as 8x8 (§6e)
   workshop.rb           the workshop's runs: project files as the virtual FS,
                         require_relative between them, gets, write-back
@@ -82,6 +83,7 @@ tools/build_gem_cache.rb   regenerates html/gems/cache/
 tools/update_ruby_wasm.rb  updates the wasm + loader from npm
 tools/compress_assets.rb   the .gz copies nginx serves (the wasm runtimes)
 tools/vendor_pyodide.rb    Pyodide + pandas, sympy, scikit-learn into html/assets/pyodide/ (§6d)
+tools/vendor_sqljs.rb      sql.js (SQLite in WebAssembly) into html/assets/sqljs/ (§6f)
 tools/offline_files.rb     html/offline-files.txt - rerun after adding/removing a file
 tools/patch_picoruby_loader.rb  PicoRuby's loader: text/ruby -> text/picoruby
 tools/measure_load.mjs, tools/shell_metrics.rb  load times, code size (PICORUBY_SHELL.md)
@@ -185,7 +187,7 @@ A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 19-29), not in a group of one.
+(side trips, 19-30), not in a group of one.
 
 The sidebar itself (`index.html` `#sidebar`, `shell/app.rb`, `app.css`): from
 the top of the window to its foot with its own scroll; head with the course
@@ -241,7 +243,7 @@ Rules that the code and tests rely on:
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
 - Checks accept output OR result; `puts` is never required.
-- `test/browser_test.mjs` asserts the lesson count (`'45 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'46 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -301,6 +303,7 @@ with `/`); stdlib and gems get a plain LoadError.
 |---|---|---|
 | `nokogiri-1.19.4.gem` | [nokogiri-pure](https://github.com/Largo/nokogiri-pure): Nokogiri with C ext, libxml2, libxslt, gumbo ported to Ruby, built from its `nokogiri.gemspec` (name `nokogiri`, so dependents resolve to it) | `tools/build_gem_cache.rb` builds it from a checkout (`NOKOGIRI_PURE=/path`, default `../../../../nokogiri-pure`) |
 | `bigdecimal-pure-0.1.0.gem` | [bigdecimal-pure](https://github.com/Largo/bigdecimal-pure): BigDecimal on Rational, native preferred when present | downloaded from rubygems.org like any other gem |
+| (no gem: a shim) | `sqlite3`: the sqlite3 gem's API on sql.js (`html/sqlite3_sqljs.rb`, §6f), so Sequel's SQLite adapter and other sqlite3 users run | `tools/vendor_sqljs.rb` |
 
 Nokogiri loads in about 2.3 s in Chrome (4 MB of Ruby compiled on the fly);
 nokogiri-pure loads its files in a fresh Fiber because ruby.wasm compiles on
@@ -486,7 +489,7 @@ shell does the timing, the kernel the guarding:
 ## 6c. Offline mode
 
 The progress dialog's *Offline lernen* keeps the whole course on the device
-(~85 MB stored, up to ~54 MB to download; Pyodide is 43 / 36 of it): the course then opens and runs
+(~87 MB stored, up to ~55 MB to download; Pyodide is 43 / 36 of it): the course then opens and runs
 without a connection. **Off until the learner turns it on** - before that
 no service worker is registered and nothing changes. The choice is
 `chunkyui_offline` (a view setting, not synced).
@@ -670,6 +673,45 @@ writes onto a letter.
   "3000 …"); `browser_test.mjs` writes 3000 on the letter and expects
   "3000 Bern".
 
+## 6f. SQLite and Sequel: a sqlite3 stand-in on sql.js
+
+Lesson 28 uses [Sequel](https://sequel.jeremyevans.net) with SQLite. Sequel
+is pure Ruby (cached, `sequel-5.109.0.gem`); the sqlite3 gem under it is C.
+
+- **sql.js** (SQLite 3.49 in WebAssembly, ~650 KB, 0.3 MB gzipped) sits in
+  `html/assets/sqljs/`: `tools/vendor_sqljs.rb` takes the npm package and
+  checks it against the registry's SHA-512; `tools/compress_assets.rb` makes
+  the wasm's `.gz`. index.html's `ensureSqlite` loads it with a `<script>`
+  tag (it defines `initSqlJs`); the shell calls it when a lesson's code
+  mentions `Sequel` or `SQLite3`, and `shell/bridge.js` holds a run until
+  `chunky:sqlite-ready`, as for Python. `window.chunkySqlite` has the calls:
+  `open`, `close`, `query`, `batch`, `changes`, `lastInsertRowId`, JSON in
+  and out (an INTEGER as text so 2**40 stays exact, a whole-looking REAL
+  tagged so 3.0 stays a Float, a BLOB as base64).
+- **The stand-in** (`html/sqlite3_sqljs.rb`, loaded by main.rb and
+  registered as the `sqlite3` shim, so `install_gem "sqlite3"` counts it as
+  built in): `SQLite3::Database` (`execute`, `execute_batch`, `query`,
+  `prepare`, `transaction`, `changes`, `last_insert_row_id`, `quote`),
+  `Statement`, `ResultSet` with `columns`/`types`, the exception classes,
+  and `VERSION = "2.0.0"` (Sequel reads it). That is what Sequel's own
+  `sequel/adapters/sqlite.rb` calls, so `Sequel.sqlite` runs unchanged.
+- **Declared types**: Sequel converts result values by each column's
+  declared type (1 -> true, "2026-10-05" -> Date). sql.js does not export
+  `sqlite3_column_decltype`, so `query` reads `PRAGMA table_info` for the
+  tables after FROM/JOIN and matches by column name; a computed column
+  (`sum(...) AS total`) has no type and keeps SQLite's runtime type.
+- **Limits**: every database is in memory (a path is ignored, each
+  `Database.new` is a fresh one); no SQL functions written in Ruby
+  (`create_function` raises, so Sequel's `setup_regexp_function` is out);
+  errors carry the message but no extended code, and Sequel maps them by
+  message (UNIQUE, NOT NULL, CHECK, FOREIGN KEY all come out right).
+- **Threads**: a model's `save` runs in a transaction, and Sequel asks
+  `Thread.current.status` before committing - `SimThread` has `status`
+  for that (sandbox_sim.rb).
+- **Tests**: the lesson needs the browser - `check_harness.rb` skips it
+  (`BROWSER_ONLY`); `browser_test.mjs` runs every cell plus UNIQUE, a
+  rollback and a big integer; `offline_test.mjs` runs Sequel from the copy.
+
 ## 7a. The optional server: permalinks and a backend
 
 The course is a static site and stays one: without `server/` lessons live at
@@ -730,7 +772,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 45 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 46 lessons x 3 languages, starter fails, solutions pass
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof

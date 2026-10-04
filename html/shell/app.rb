@@ -359,6 +359,8 @@ module ChunkyShell
       # scikit-learn ~19 MB)
       python = cells.select { |cell| code_cell?(cell) && cell.code.to_s.include?("PyCall") }
       JSG.w.ensurePython(python.map { |cell| cell.code.to_s }.join("\n")) unless python.empty?
+      # SQLite (sql.js, ~650 KB) only for a lesson that uses Sequel or sqlite3
+      JSG.w.ensureSqlite if cells.any? { |cell| code_cell?(cell) && cell.code.to_s.match?(/Sequel|SQLite3/) }
       @rendered_lesson_id = id
       # a lesson opened from a link is where the learner left off, too (only
       # a change is written: every write reaches a connected folder)

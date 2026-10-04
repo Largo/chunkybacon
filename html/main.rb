@@ -144,6 +144,11 @@ require_relative "autorun"
 # libpython, which a browser does not have
 require_relative "pycall"
 BrowserGems.files["(shims)"]["pycall.rb"] = ""
+# require "sqlite3" is the gem's API over sql.js (sqlite3_sqljs.rb): the real
+# gem is a C extension. Sequel's SQLite adapter runs on it unchanged, and
+# BrowserGems counts sqlite3 as built in, so install_gem "sqlite3" works.
+require_relative "sqlite3_sqljs"
+BrowserGems.files["(shims)"]["sqlite3.rb"] = ""
 # require "numo/narray" (numo-narray-alt's "numo/narray/alt" too): Numo is
 # written in C, numo_narray.rb is its API in pure Ruby - what Rumale needs
 # (lesson 27). Fetched on the first require, like shoes_dom.rb; BrowserGems

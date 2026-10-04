@@ -1,3 +1,7 @@
 # The PicoRuby runtime is checked byte for byte (NOTICE.md's SHA-256,
 # tools/compress_assets.rb's .gz check): never convert its line endings.
 html/assets/picoruby/** -text
+# Pyodide and sql.js likewise (vendored as released, checked by SHA and by
+# their .gz copies)
+html/assets/pyodide/** -text
+html/assets/sqljs/** -text

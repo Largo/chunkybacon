@@ -218,5 +218,12 @@
       "numo-narray-alt",
       "rumale-core"
     ]
+  },
+  "sequel": {
+    "version": "5.109.0",
+    "file": "sequel-5.109.0.gem",
+    "deps": [
+      "bigdecimal"
+    ]
   }
 }

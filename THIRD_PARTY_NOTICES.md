@@ -57,6 +57,8 @@ against the release's SHA-256.
 |---|---|---|---|---|
 | [CodeMirror](https://codemirror.net/5/) with its Ruby mode | 5.65.16 | MIT | Marijn Haverbeke and others | header of `html/assets/codemirror.js`; https://codemirror.net/5/LICENSE |
 | [three.js](https://threejs.org/) with OrbitControls | r184 | MIT | 2010-2026 three.js authors | `html/assets/three/LICENSE` |
+| [sql.js](https://sql.js.org/) (SQLite in WebAssembly, loaded by the Sequel lesson; `tools/vendor_sqljs.rb`) | 1.14.2 | MIT | 2017 sql.js authors | `html/assets/sqljs/LICENSE` |
+| [SQLite](https://sqlite.org/), inside sql.js | 3.49.1 | public domain | - | https://sqlite.org/copyright.html |
 | [Atkinson Hyperlegible Next](https://github.com/googlefonts/atkinson-hyperlegible-next) | Google Fonts build | SIL OFL 1.1 | 2020-2024 The Atkinson Hyperlegible Next Project Authors | `html/assets/fonts/OFL-atkinson-hyperlegible-next.txt` |
 | [Atkinson Hyperlegible Mono](https://github.com/googlefonts/atkinson-hyperlegible-next-mono) | Google Fonts build | SIL OFL 1.1 | 2020-2024 The Atkinson Hyperlegible Mono Project Authors | `html/assets/fonts/OFL-atkinson-hyperlegible-mono.txt` |
 | [Shantell Sans](https://github.com/arrowtype/shantell-sans) | Google Fonts build | SIL OFL 1.1 | 2022 The Shantell Sans Project Authors | `html/assets/fonts/OFL-shantell-sans.txt` |
@@ -105,6 +107,7 @@ noted.
 | rumale-nearest_neighbors | 2.2.0 | BSD-3-Clause | yoshoku | LICENSE.txt |
 | rubyzip | 3.7.0 | BSD-2-Clause | Robert Haines, John Lees-Miller, Alexander Simonov | LICENSE.md |
 | scarpe-components | 0.5.0 | MIT | Marco Concetto Rudilosso, Noah Gibbs | none - see below |
+| sequel | 5.109.0 | MIT | Sharon Rosner, Jeremy Evans and contributors | MIT-LICENSE |
 | sinatra | 4.2.1 | MIT | Blake Mizerany, Ryan Tomayko, Simon Rozet, Konstantin Haase | LICENSE |
 | three-rb | 0.2.1 | MIT | LEF | LICENSE |
 | tilt | 2.9.0 | MIT | Ryan Tomayko, Magnus Holm, Jeremy Evans | COPYING |

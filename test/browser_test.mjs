@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('45 lessons in nav', (await page.$$('#lessonNav a')).length === 45);
+check('46 lessons in nav', (await page.$$('#lessonNav a')).length === 46);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -530,6 +530,32 @@ await setExercise('sieben = <<~BILD\n  .######.\n  ......#.\n  .....#..\n  ....#
 await runExercise();
 await page.waitForTimeout(800);
 check('the seven exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// Sequel lesson: the real Sequel gem on the sqlite3 stand-in
+// (sqlite3_sqljs.rb over sql.js, loaded when the lesson opens)
+await page.click('#lessonNav a[data-id="sequel"]');
+await page.waitForTimeout(300);
+check('opening the lesson starts loading SQLite', await page.evaluate(() => !!(window.chunkySqlite.loading || window.chunkySqlite.ready)));
+check('Sequel creates a table', (await pyCell(1, 60000)).includes('=> [:eintraege]'));
+check('insert adds rows', (await pyCell(3)).includes('=> 4'));
+const rows = await pyCell(5);
+check('dates, booleans and floats come back as Ruby values',
+  rows.includes('2026-10-05  Chunky  2.5 h Fr.') && rows.includes('=> [Hash, Date, TrueClass]'));
+const chained = await pyCell(7);
+check('a dataset shows its SQL', chained.includes("SELECT * FROM `eintraege` WHERE (`projekt` = 'Chunky') ORDER BY `tag`") && chained.includes('=> [2.5, 3.0]'));
+const counted = await pyCell(9);
+check('where with a block, sum, group_and_count', counted.includes('7.0') && counted.includes('{projekt: "Speck", count: 1}'));
+check('a timesheet in one query', (await pyCell(11)).includes('{projekt: "Chunky", total: 5.5}'));
+check('update and delete', (await pyCell(13)).includes('=> ["Chunky", "Bacon", "Chunky"]'));
+check('a model with its own method (create runs in a transaction)', (await pyCell(15)).includes('"2026-10-07: 1.5 h für Speck"'));
+check('NOT NULL becomes Sequel::NotNullConstraintViolation', (await pyCell(17)).includes('Abgelehnt: Sequel::NotNullConstraintViolation'));
+await page.evaluate(() => window.cellEditors[17].setValue('DB.create_table(:leute) { String :mail, unique: true }\nDB[:leute].insert(mail: "a@b.c")\nbegin\n  DB[:leute].insert(mail: "a@b.c")\nrescue Sequel::UniqueConstraintViolation => e\n  puts e.class\nend\nDB.transaction { DB[:leute].insert(mail: "x@y.z"); raise Sequel::Rollback }\n[DB[:leute].count, DB.get(Sequel.lit("?", 2**40))]'));
+const guarded = await pyCell(17);
+check('UNIQUE, a rollback, and big integers stay exact', guarded.includes('Sequel::UniqueConstraintViolation') && guarded.includes('=> [1, 1099511627776]'));
+await setExercise('install_gem "sequel"\nrequire "sequel"\nzeit = Sequel.sqlite\nzeit.create_table(:arbeit) do\n  primary_key :id\n  String :projekt\n  Float  :stunden\nend\nzeit[:arbeit].import([:projekt, :stunden], [["Chunky", 2.5], ["Speck", 0.5], ["Bacon", 1.5], ["Chunky", 3.0], ["Speck", 1.5]])\nstunden_pro_projekt = zeit[:arbeit].group(:projekt).select(:projekt) { sum(:stunden).as(:total) }.as_hash(:projekt, :total)');
+await runExercise();
+await page.waitForTimeout(800);
+check('hours-per-project exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 
 // RubyKaigi lesson: weird but valid Ruby, and Prism (a C extension built
 // into the wasm) splitting and parsing code the way IRB reads it

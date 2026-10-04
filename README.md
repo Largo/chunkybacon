@@ -8,7 +8,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **45 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **46 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics,
   PowerPoint decks with [ruby_pptx](https://github.com/Largo/ruby_pptx),
@@ -17,13 +17,14 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   machine learning with scikit-learn from Ruby through
   [PyCall](https://github.com/mrkn/pycall.rb), machine learning in Ruby
   itself with [Rumale](https://github.com/yoshoku/rumale) (a postcode you
-  write on a letter, read by a nearest-neighbours classifier), a look at the Ruby
+  write on a letter, read by a nearest-neighbours classifier), a SQLite
+  database with [Sequel](https://sequel.jeremyevans.net), a look at the Ruby
   community (RubyKaigi, weird code, how IRB reads code), and
   a project track that builds a small time tracker.
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
   cell shows its last expression as `=> …` — `puts` is never required.
-- **Lesson sidebar**: the 45 lessons in three groups (basics, side trips,
+- **Lesson sidebar**: the 46 lessons in three groups (basics, side trips,
   the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a
   drawer.
@@ -48,7 +49,9 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   fail with a friendly explanation of the wasm limitation that names the
   gem with the C code (often a dependency), unless it is built into the
   wasm image (json, date, openssl …), has a pure-Ruby stand-in (Numo, the
-  arrays under Rumale: `html/numo_narray.rb`; in the
+  arrays under Rumale: `html/numo_narray.rb`; sqlite3, on
+  [sql.js](https://sql.js.org) - SQLite in WebAssembly, loaded only when
+  needed - so Sequel's own SQLite adapter runs: `html/sqlite3_sqljs.rb`; in the
   cache, `SUBSTITUTES`: a dependency on `bigdecimal` installs
   [bigdecimal-pure](https://github.com/Largo/bigdecimal-pure), which
   unblocks activesupport, liquid, prawn, dry-types …) or the gem that
@@ -67,7 +70,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   file (download, load again, merged key by key) or - in Chrome and Edge over
   https - into a connected folder, where workshop files are real files.
 - **Offline, if you like**: one click keeps the whole course on your device
-  (about 85 MB, or 43 MB with Python left out - a checkbox), and it opens
+  (about 87 MB, or 44 MB with Python left out - a checkbox), and it opens
   and runs without a connection - lessons, cells, the bundled gems, Python.
   Online it always loads the current version, and the copy updates itself.
 - **Python next to Ruby**: the PyCall lessons run real pandas, SymPy, NumPy

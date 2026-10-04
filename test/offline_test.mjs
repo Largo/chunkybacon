@@ -124,6 +124,10 @@ check('Net::HTTP says it is offline',
 // the module files themselves (ensureThree also needs the import map, which
 // Firefox ignores after a modulepreload - a separate matter)
 check('three.js loads from the copy', await b.evaluate(() => import('./assets/three/three.module.min.js').then((m) => Boolean(m.Scene), () => false)));
+const sql = await open('#sequel');
+check('Sequel runs offline (sql.js, the sqlite3 stand-in and the gem from the copy)',
+  (await run(sql, 'install_gem "sequel"\nrequire "sequel"\nDB = Sequel.sqlite\nDB.get(Sequel.lit("6 * 7"))')).includes('=> 42'));
+await sql.close();
 await b.click('#lessonNav a[data-id="methoden"]');
 await b.waitForFunction(() => document.querySelector('#lessonBody').textContent.includes('Methoden'));
 check('another lesson opens offline', true);

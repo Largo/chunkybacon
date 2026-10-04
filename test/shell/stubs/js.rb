@@ -534,7 +534,7 @@ module JS
       props["Object"] = { "keys" => proc { |o| o.is_a?(::Hash) ? o.keys : [] } }
       props["LESSONS"] = JSON.parse(File.read(File.expand_path("../../lessons.json", __dir__)))
       @confirm = true
-      %w[setCellCode refreshAllCells ensureThree ensurePython scrollTo].each do |name|
+      %w[setCellCode refreshAllCells ensureThree ensurePython ensureSqlite scrollTo].each do |name|
         props[name] = proc { |*args| @calls << [name, *args]; nil }
       end
       props["confirm"] = proc { |_msg| @confirm }
