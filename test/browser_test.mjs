@@ -191,6 +191,19 @@ show_image Struct.new(:to_data_url).new("data:image/svg+xml;base64," + [svg].pac
 await runExercise();
 check('an SVG under a cell keeps its own width', (await page.$eval('.cell.exercise .cell-out img.cell-image', img => img.clientWidth)) === 400);
 
+// lesson 7: show_objects draws names and objects as boxes and arrows (an
+// SVG through show_image, object_graph.rb), and says in words what it shows
+await page.click('#lessonNav a[data-id="arrays"]');
+await page.waitForTimeout(300);
+await page.click('.run-cell[data-idx="7"]');
+await page.waitForFunction(() => { const img = document.querySelector('#cell-out-7 img.cell-image[src^="data:image/svg"]'); return img && img.complete && img.naturalWidth > 0; }, null, { timeout: 15000 }).catch(() => {});
+const objects = await page.$eval('#cell-out-7 img.cell-image[src^="data:image/svg"]', img => ({ width: img.naturalWidth, shown: img.clientWidth, alt: img.alt })).catch(() => null);
+check('show_objects draws an SVG below the cell', !!objects);
+check('the object graph keeps its own size, not a 160px thumbnail', objects && objects.width > 160 && objects.shown === objects.width);
+check('its alt text says which names share an array', objects && objects.alt.startsWith('fruehstueck → #1, gleich → #1, kopie → #2. #1 Array:'));
+await page.waitForFunction(() => document.getElementById('runStatus').textContent.includes('gleich → #1'), null, { timeout: 3000 }).catch(() => {});
+check('the status line reads the picture by its alt text', (await page.textContent('#runStatus')).includes('fruehstueck → #1, gleich → #1'));
+
 // lesson 14: HTML parsing with Nokogiri (nokogiri-pure, from the gem cache)
 await page.click('#lessonNav a[data-id="html"]');
 await page.waitForTimeout(300);

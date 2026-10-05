@@ -42,6 +42,9 @@ File.write(File.join(SHIMS_DIR, "processing.rb"),
            "load #{File.expand_path('../html/processing.rb', __dir__).inspect}\n")
 $LOAD_PATH.unshift(SHIMS_DIR)
 $shown_sketches = []
+# show_objects (lessons 7, 8, 10) draws through the show_image below, as in
+# the browser, so a check finds its picture in images
+require_relative "../html/object_graph"
 module Kernel
   def download_file(data, name = nil)
     $explicit_downloads << (name || data).to_s

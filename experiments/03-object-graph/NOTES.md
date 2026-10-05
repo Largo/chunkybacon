@@ -1,5 +1,30 @@
 # 03 - `show_objects`: the object graph as boxes and arrows
 
+**Integrated.** `object_graph.rb` is `html/object_graph.rb`, loaded at boot
+by `main.rb` with `require_relative` (it evaluates in ~10 ms in ruby.wasm,
+so not lazily; offline needs only `offline-files.txt`); the test is
+`test/object_graph_test.rb`, the check harness requires the file, and
+`browser_test.mjs` runs the lesson 7 cell. The CSS rule of step 2 was
+already on main (`.cell-image[src^="data:image/svg+xml"]`, PR #15). The
+three lesson cells are in lessons 7, 8, 10 (de/en/ja), each with a line
+afterwards in front of the task. Differences: the arrays cell appends
+`"Saft"`/`"juice"`, not `"Speck"`, which the exercise asks for; the
+hashes cell is about `kaz`/`klon` (`copy` in English), so it neither uses
+the exercise's `fuchs`/`fox` nor a variable named `clone`. The
+`TOPLEVEL_BINDING` hiding is gone: a cell's binding is
+`TopLevel.binding` now, a scope of its own that never sees `app_path` or
+`numo`, so the hiding would only have hidden a learner's own variables
+of those names. New: `Graph#describe` puts the arrows into words
+(`"a → #1, b → #1. #1 Array: …"`), which becomes the picture's `alt` and
+what the screen-reader status line reads. `Kernel#show_objects` hands the
+picture to whatever `show_image` there is and otherwise returns it; the
+options split moved into `ObjectGraph.picture`. The companion gem has a
+copy (`lib/chunky_bacon/object_graph.rb`, kept equal by the test) and its
+`show_image` saves SVG, so `show_objects` writes `chunky-image-N.svg` there.
+Not done: step 2b (inline SVG), more lesson cells (`freeze`, a linked
+list). `render_examples.rb` loads the html/ file now; `serve.rb` and the
+paths below are the experiment's record.
+
 Python Tutor's picture for Ruby: names on the left, objects as boxes, an
 arrow for every reference. It is meant to make "a variable is a reference",
 `dup` vs `=`, mutation through an alias, shallow copies, cycles and

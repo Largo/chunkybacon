@@ -65,6 +65,7 @@ html/
   sqlite3_sqljs.rb      require "sqlite3": the gem's API over sql.js, for Sequel (§6f)
   letter.js             show_letter's envelope: drawing, digits as 8x8 (§6e)
   ansi.rb               terminal colours in a cell's output: ANSI codes -> spans (§6g)
+  object_graph.rb       show_objects: names and objects as boxes and arrows, an SVG (§6)
   processing.rb         require "processing": the gem's API in pure Ruby, frames recorded (§6h)
   processing.js         a sketch's window: paints the frames, sends mouse and keys (§6h)
   herb_bridge.rb        require "herb/herb": Herb's C parser, handed to its WebAssembly build (§6j)
@@ -117,6 +118,7 @@ test/gems_harness.rb       gem installer offline under CRuby
 test/shell/run.rb          Minitest for the shell, on a stub of PicoRuby's js
 test/autorun_test.rb       live runs under CRuby: runnable?, the time limit
 test/ansi_test.rb          ANSI colours to HTML under CRuby
+test/object_graph_test.rb  show_objects under CRuby: walk, SVG, alt text, the gem's copy
 test/live_test.mjs         Playwright: live runs in a lesson and the workshop
 test/server_test.rb        the optional server under Rack::MockRequest
 test/permalink_test.mjs    Playwright: permalinks, against the server (port 8012)
@@ -282,8 +284,9 @@ Rules that the code and tests rely on:
 
 Helpers available in cells (defined in `main.rb`): `install_gem`,
 `show_image` (a ChunkyPNG image, a PureJPEG encoder, PNG/JPEG/GIF/WebP bytes
-or the name of a file the cell wrote), `show_browser(app, path)` + `mock_get`,
-`show_irb`, `show_files`, `show_three(scene, camera, orbit:, &animate)`,
+or the name of a file the cell wrote), `show_objects(a: a, b: b)` /
+`show_objects(binding)` (boxes and arrows, in `object_graph.rb`, §6),
+`show_browser(app, path)` + `mock_get`, `show_irb`, `show_files`, `show_three(scene, camera, orbit:, &animate)`,
 `show_shoes { ... }`, `show_letter(boxes:) { |digits| ... }` (§6e),
 `download_file(data, name)`, `show_pdf(pdf)` (a file
 name, PDF bytes, a Prawn or HexaPDF document), `run_tests` (Minitest);
@@ -474,6 +477,35 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   ways. And every cell is evaluated as `chunky.rb`: a method from an earlier
   cell reports that cell's line numbers, so the rules check that the line
   in the current cell looks right (a `def name` on it) before quoting it.
+- **show_objects** (`object_graph.rb`, from `experiments/03-object-graph`):
+  `show_objects(a: a, b: b)`, `show_objects(binding)` or
+  `show_objects({ a: a }, max_depth: 2)` draws the names on the left and
+  the objects behind them as boxes, an arrow per reference, in the style
+  of Python Tutor (lessons 7, 8, 10: `dup` is shallow, two names for one
+  object, `equal?`). All Ruby: a breadth-first walk by `__id__` gives a
+  `Graph` (one box per object, however many arrows reach it; numbers,
+  symbols, nil, true, false written inline; caps `max_depth: 6`,
+  `max_nodes: 40`, `max_items: 10`, `max_text: 28`), a heuristic layout
+  and an SVG with inline attributes (an `<img>` sees no page CSS or web
+  fonts). The `Picture` goes through `show_image` (`to_data_url`), and
+  app.css's `.cell-image[src^="data:image/svg+xml"]` keeps it at its
+  own size - without that rule it would be the 160 px pixelated
+  thumbnail meant for ChunkyPNG pictures. It is the one picture with an
+  alt text: `Graph#describe` ("a → #1, b → #1. #1 Array: …") travels
+  as `alt_text` through `show_image` and `add_image(url, alt)`, and
+  `#runStatus` reads it (`App#picture_words`); other pictures keep
+  `alt=""`. Loaded at boot with `require_relative` (17 KB, ~10 ms to
+  evaluate), so offline needs nothing beyond `offline-files.txt`.
+  `show_objects(binding)` shows the cell's own locals and nothing of
+  main.rb: the prototype hid `TOPLEVEL_BINDING.local_variables`
+  (`app_path`, `numo`), but a cell's binding is `TopLevel.binding`, a
+  scope of its own that never saw them - so the hiding is gone (it
+  would have hidden a learner's own `numo`); `hide:` is still an
+  option. The walk asks `Kernel` (`bind_call`) for class, ivars,
+  `frozen?`, so a class overriding them or a `BasicObject` cannot break
+  it. The companion gem ships a copy (`object_graph_test.rb` keeps it
+  equal); the check harness requires the file, so the demo cells run
+  there through its `show_image` stub.
 - CodeMirror cells must not be built while `#app` is `display:none`
   (blank editors after hard reload). Prose `pre/code` CSS stays scoped to
   `.lessonText`, or it bleeds into CodeMirror's internal `<pre>`s.
@@ -1215,6 +1247,10 @@ that license too. Contact in the gemspecs: web@idogawa.com.
   on 127.0.0.1, and keeps the program alive after its last line until
   Ctrl+C. `show_three`/`show_shoes` raise `ChunkyBacon::NotHere` with what
   to do instead. When `main.rb` changes a helper, change the gem's too.
+  `show_objects` comes from `lib/chunky_bacon/object_graph.rb`, a copy of
+  `html/object_graph.rb` (`test/object_graph_test.rb` fails when they
+  differ); its SVG goes through the gem's `show_image` as
+  `chunky-image-N.svg`.
 - Under ruby.wasm (`ChunkyBacon.browser?`) the gem leaves the page's helpers
   alone and only adds the fox. Lesson 13 opens with
   `install_gem "chunky_bacon"` + `ChunkyBacon.shout`, from the gem cache

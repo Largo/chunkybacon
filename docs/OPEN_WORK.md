@@ -68,6 +68,13 @@ Last updated 2026-10-05.
 - A re-run of a cell with `DB = Sequel.sqlite` reassigns a constant; the
   cell shows only its result (`=> [:eintraege]`), no warning (checked
   2026-10-05). The file step uses a local variable.
+- A cell's saved code is keyed by its index (`chunky_cell_<lang>_<id>_<idx>`,
+  `shell/store.rb`), so cells inserted into a lesson shift it: after the
+  `show_objects` cells went into lessons 7, 8 and 10 (step 4 of the
+  experiments' integration), a learner who had run the old exercise
+  finds that code in the new demo cell and the starter in the exercise.
+  Keying by a cell id, or dropping saved code whose cell type changed,
+  would fix it for later inserts too.
 - No CI runs the tests (`.github/workflows/` has only the gem release).
   When a tests workflow exists, run `ruby test/lint_lessons.rb
   --base=origin/${{ github.base_ref || 'main' }}` in it, with

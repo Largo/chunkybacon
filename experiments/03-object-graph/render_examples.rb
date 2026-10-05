@@ -1,6 +1,7 @@
 # Renders the example object graphs into examples/*.svg and a gallery page
-# (examples/index.html). Plain CRuby: ruby render_examples.rb
-require_relative "object_graph"
+# (examples/index.html). Plain CRuby: ruby render_examples.rb (the code is
+# html/object_graph.rb now)
+require_relative "../../html/object_graph"
 
 OUT = File.join(__dir__, "examples")
 Dir.mkdir(OUT) unless Dir.exist?(OUT)
