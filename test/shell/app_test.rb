@@ -38,7 +38,17 @@ class AppTest < Minitest::Test
     codes = calls("setCellCode")
     assert_equal ["setCellCode", "1", "2 + 2"], codes.first
     assert(codes.all? { |_, idx, _code| idx.is_a?(String) }, "a number beside a string with \\n breaks the call")
-    assert_equal ["initCell", 1], calls("initCell").first
+    inits = calls("initCell")
+    assert_equal "1", inits.first[1]
+    assert(inits.all? { |_, idx, _label, _hint| idx.is_a?(String) })
+  end
+
+  def test_editors_are_named_and_say_how_to_leave_them
+    start
+    _, _, label, hint = calls("initCell").first
+    assert_equal "Code, Zelle 1", label, "the first code cell, not cell index 1"
+    assert_includes hint, "Escape, dann Tab"
+    assert_equal "Code, Zelle 2", calls("initCell")[1][2]
   end
 
   def test_gem_chips_come_from_the_cache_manifest
@@ -120,6 +130,7 @@ class AppTest < Minitest::Test
     assert_equal ["setState", "de", "", true], calls("setState").last
     assert_nil find("#lessonNav a.active")
     assert_includes byid("workshopLink").attrs["class"], "active"
+    assert_equal ["initCell", "0", "Werkstatt"], calls("initCell").last[0, 3]
   end
 
   def test_language_switch

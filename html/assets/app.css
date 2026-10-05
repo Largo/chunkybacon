@@ -686,6 +686,9 @@ kbd {
 .cell .CodeMirror-cursor { border-left: 2px solid var(--ink); }
 .cell .CodeMirror-selected, .cell .CodeMirror-focused .CodeMirror-selected { background: #ffe0c8; }
 .cell .CodeMirror pre.CodeMirror-line { padding: 0 0.7rem; }
+/* the editor's input is a hidden textarea: the ring goes on the editor,
+   inset, as the cell clips what sticks out */
+.cell .CodeMirror-focused { outline: 3px solid var(--focus); outline-offset: -3px; }
 
 /* syntax colours: all at least 4.8:1 on paper */
 .cell .cm-s-default .cm-keyword { color: #a8361a; }

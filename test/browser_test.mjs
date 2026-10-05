@@ -47,6 +47,29 @@ check('gems panel shows cached chips', (await page.textContent('#gemsList')).inc
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
 check('exercise cell has task label', (await page.getAttribute('.cell.exercise', 'data-label')) === 'Aufgabe');
 
+// the keyboard: Tab indents in an editor, Escape then Tab (or Shift+Tab)
+// leaves it - no keyboard trap; the editor has a name
+const focusIn = () => page.evaluate(() => {
+  const a = document.activeElement;
+  return a.closest('.CodeMirror') ? 'editor' : a.closest('.cell-toolbar') ? 'toolbar' : a.tagName;
+});
+check('editors are named for screen readers',
+      (await page.evaluate(() => window.cellEditors[1].getInputField().getAttribute('aria-label'))) === 'Code, Zelle 1');
+const code1 = await page.evaluate(() => window.cellEditors[1].getValue());
+await page.evaluate(() => { window.cellEditors[1].focus(); window.cellEditors[1].setCursor(0, 0); });
+await page.keyboard.press('Tab');
+check('Tab indents in an editor',
+      (await focusIn()) === 'editor' && (await page.evaluate(() => window.cellEditors[1].getValue())) !== code1);
+await page.evaluate(c => window.cellEditors[1].setValue(c), code1);
+await page.keyboard.press('Escape');
+await page.keyboard.press('Tab');
+check('Escape, Tab leaves the editor for its toolbar', (await focusIn()) === 'toolbar');
+await page.keyboard.press('Shift+Tab');
+check('Shift+Tab from the toolbar goes back into the editor', (await focusIn()) === 'editor');
+await page.keyboard.press('Escape');
+await page.keyboard.press('Shift+Tab');
+check('Escape, Shift+Tab leaves the editor backwards', !['editor', 'toolbar'].includes(await focusIn()));
+
 // demo cell shows => value without puts
 await page.click('.cell .run-cell');
 await page.waitForTimeout(400);

@@ -370,10 +370,14 @@ module ChunkyShell
       # the lesson in the tab title makes bookmarks and history legible
       JSG.d.title = "#{@course.title(idx, @lang)} – #{ui.title}"
       el("lessonBody").innerHTML = View.lesson_html(cells, ui.taskLabel, ui.runCell, live_toggle_html)
+      number = 0
       cells.each_with_index do |cell, i|
         next unless code_cell?(cell)
 
-        JSG.w.initCell(i)
+        # the editor's name counts code cells only ("Code, cell 2"); all
+        # strings, as in set_code
+        number += 1
+        JSG.w.initCell(i.to_s, format(ui.codeLabel, number), ui.codeHint)
         set_code(i, Store.get(Store.code_key(@lang, id, i), cell.code))
       end
     end
@@ -389,7 +393,7 @@ module ChunkyShell
       @rendered_lesson_id = nil
       JSG.d.title = "#{ui.workshopTitle} – #{ui.title}"
       el("lessonBody").innerHTML = View.workshop_html(ui.workshopTitle, ui.workshopIntro, ui.runCell, live_toggle_html)
-      JSG.w.initCell(0)
+      JSG.w.initCell("0", ui.workshopTitle, ui.codeHint)
       @workspace&.mount
     end
 

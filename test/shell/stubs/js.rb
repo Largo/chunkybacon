@@ -509,8 +509,8 @@ module JS
       props["ChunkyStorage"] = @fs.js
       props["ChunkyOffline"] = @offline.js
       props["cellEditors"] = @editors
-      props["initCell"] = proc do |idx|
-        @calls << ["initCell", idx]
+      props["initCell"] = proc do |idx, label, hint|
+        @calls << ["initCell", idx, label, hint]
         editor = @editors[idx.to_s] = Editor.new
         # index.html: a key in the editor tells the shell (live runs)
         editor.js_on("change", proc do |_cm, change|
