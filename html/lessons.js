@@ -5217,7 +5217,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>parse</code> pflückt die Optionen heraus und gibt zurück, was übrig bleibt – hier das Kommando <code>\"report\"</code>. Gratis dazu: <code>--help</code> mit den Beschreibungstexten.</p></div>"
+            "html": "<p><code>parse</code> pflückt die Optionen heraus und gibt zurück, was übrig bleibt – hier das Kommando <code>\"report\"</code>. Gratis dazu: <code>--help</code> mit den Beschreibungstexten.</p>"
           },
           {
             "t": "h",
