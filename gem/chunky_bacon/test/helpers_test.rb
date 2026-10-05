@@ -125,9 +125,18 @@ class HelpersTest < Minitest::Test
     plt = FakePyplot.new
     fig = FakePyplot::Figure.new("given")
     with_fake_pycall(plt) { helper_output { show_plot fig; show_plot } }
-    assert_equal PNG + "given", File.binread(File.join(@dir, "chunky-plot-1.png"))
-    assert_equal PNG + "current", File.binread(File.join(@dir, "chunky-plot-2.png"))
+    files = Dir.children(@dir).sort_by { |f| f[/\d+/].to_i }
+    assert(files.all? { |f| f.match?(/\Achunky-plot-\d+\.png\z/) })
+    assert_equal [PNG + "given", PNG + "current"], files.map { |f| File.binread(File.join(@dir, f)) }
     assert_equal %w[given current], plt.closed.map(&:label)
+  end
+
+  def test_show_plot_closes_the_figure_when_saving_fails
+    plt = FakePyplot.new
+    broken = FakePyplot::Figure.new("broken")
+    def broken.savefig(_path) = raise(IOError, "disk full")
+    with_fake_pycall(plt) { assert_raises(IOError) { show_plot broken } }
+    assert_equal %w[broken], plt.closed.map(&:label)
   end
 
   def test_show_plot_without_pycall_says_what_to_do

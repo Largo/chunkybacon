@@ -144,8 +144,11 @@ module ChunkyBacon
       plt = PyCall.import_module("matplotlib.pyplot")
       figure ||= plt.gcf
       path = ChunkyBacon.next_file("chunky-plot", "png")
-      figure.savefig(path)
-      plt.close(figure)
+      begin
+        figure.savefig(path)
+      ensure
+        plt.close(figure)
+      end
       ChunkyBacon.say "saved #{ChunkyBacon.relative(path)} (#{File.size(path)} B)"
       ChunkyBacon::Opener.open(path)
       nil
