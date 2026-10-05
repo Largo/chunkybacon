@@ -87,4 +87,11 @@ class ObjectGraphTest < Minitest::Test
     pic = show_objects(a: [1])
     assert pic.to_data_url.start_with?("data:image/svg+xml;base64,")
   end
+
+  def test_show_objects_names_and_options_together
+    deep = [[[["x"]]]]
+    svg = show_objects(d: deep, max_depth: 2).svg
+    refute_includes svg, "max_depth"
+    assert_equal ObjectGraph.svg({ d: deep }, max_depth: 2), svg
+  end
 end

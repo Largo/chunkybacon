@@ -417,7 +417,12 @@ end
 # any other image. Elsewhere (plain CRuby) show_objects returns the picture.
 module Kernel
   def show_objects(roots = nil, **kwargs)
-    roots, options = roots.nil? ? [kwargs, {}] : [roots, kwargs]
+    if roots.nil? # show_objects(a: a, max_depth: 2): max_depth is an option, not a name
+      keys = ObjectGraph::OPTIONS.keys + [:hide]
+      roots, options = kwargs.except(*keys), kwargs.slice(*keys)
+    else
+      options = kwargs
+    end
     in_course = defined?(ChunkyApp) && respond_to?(:show_image, true)
     # a cell's binding is made inside TOPLEVEL_BINDING (main.rb fresh_binding),
     # so it also sees main.rb's own top-level locals (app_path, ...)
