@@ -257,6 +257,96 @@ class AppTest < Minitest::Test
     assert_equal [["run", exercise_idx]], calls("run")
   end
 
+  # ---------- keyboard and screen readers (experiments/10-accessibility) ----------
+
+  def active = doc.js_get("activeElement")
+  def ran_event(idx, outcome, auto: false) = { "idx" => idx, "outcome" => outcome, "elapsed" => 0.1, "auto" => auto, "own" => 0.1 }
+
+  def test_run_from_the_keyboard_gives_the_focus_back_to_run
+    start
+    run_button(1).js_focus
+    click(run_button(1))
+    assert_equal "BODY", active.tag.upcase, "a disabled button loses the focus (the stub does what Chrome does)"
+    fire("chunky:ran", ran_event(1, "ok"))
+    assert active.equal?(run_button(1)), "the next Tab goes on from Run, not from the top"
+  end
+
+  def test_focus_that_moved_on_during_a_run_stays_where_it_went
+    start
+    run_button(1).js_focus
+    click(run_button(1))
+    byid("navSearch").js_focus
+    fire("chunky:ran", ran_event(1, "ok"))
+    assert active.equal?(byid("navSearch"))
+    click(run_button(1))   # a click with the mouse: the focus was not on Run
+    fire("chunky:ran", ran_event(1, "ok"))
+    assert active.equal?(byid("navSearch"))
+  end
+
+  def test_a_run_is_announced_with_its_output_and_chunkys_verdict
+    start
+    click(run_button(1))
+    byid("cell-out-1").js_set("textContent", "=> 2")
+    fire("chunky:ran", ran_event(1, "ok"))
+    assert_equal "Zelle 1 ausgeführt: => 2", byid("runStatus").text
+    idx = exercise_idx
+    byid("cell-out-#{idx}").js_set("textContent", "NameError")
+    fire("chunky:ran", ran_event(idx, "error"))
+    assert_equal "Zelle 3 mit Fehler: NameError #{bubble}", byid("runStatus").text, "the third code cell, whatever its index"
+    fire("chunky:ran", ran_event(idx, "pass"))
+    assert_includes byid("runStatus").text, "Lektion 1 von 51"
+    byid("cell-out-1").js_set("textContent", "x" * 400)
+    fire("chunky:ran", ran_event(1, "ok"))
+    assert_equal "Zelle 1 ausgeführt: #{'x' * 280} …", byid("runStatus").text, "long output is shortened"
+  end
+
+  def test_a_live_run_is_not_announced
+    start
+    fire("chunky:ran", ran_event(1, "ok", auto: true))
+    assert_equal "", byid("runStatus").text
+  end
+
+  def test_run_buttons_are_named_with_their_cell
+    start
+    assert_equal "Zelle 1 ausführen", run_button(1).attrs["aria-label"]
+    assert_equal "Alt+R", run_button(exercise_idx).attrs["aria-keyshortcuts"]
+    assert_nil run_button(1).attrs["aria-keyshortcuts"]
+  end
+
+  def test_a_lesson_change_puts_the_focus_on_its_heading
+    start
+    assert_equal "BODY", active.tag.upcase, "not on the first load"
+    click(find('#lessonNav a[data-id="variablen"]'))
+    assert_equal "h2", active.tag
+    assert_equal "-1", active.attrs["tabindex"]
+    fire("chunky:ran", ran_event(exercise_idx, "pass"))
+    byid("chunkyText").js_focus
+    click(byid("nextLessonLink"))
+    assert_equal "h2", active.tag, "also after the bubble's next-lesson link"
+    click(byid("workshopLink"))
+    assert_equal "Werkstatt", active.text
+  end
+
+  def test_the_skip_link_goes_to_the_lesson
+    start
+    assert_equal "Zur Lektion springen", byid("skipLink").text
+    assert click(byid("skipLink")), "its #lessonBody never reaches the router"
+    assert_equal "Hallo, Welt!", active.text
+    assert_equal "#hallo", window.location["hash"]
+  end
+
+  def test_language_select_mascot_and_skip_link_speak_the_language
+    start
+    assert_equal "Sprache", byid("langLabel").text
+    assert_equal "Chunky Bacon, der Fuchs", byid("mascot").attrs["alt"]
+    switch_to_english
+    assert_equal "Language", byid("langLabel").text
+    assert_equal "Language", byid("langSelect").attrs["title"]
+    assert_equal "Chunky Bacon, the fox", byid("mascot").attrs["alt"]
+    assert_equal "Skip to the lesson", byid("skipLink").text
+    assert_equal "Run cell 1", run_button(1).attrs["aria-label"]
+  end
+
   def test_reset_restores_the_starter_code
     start(storage: { "chunky_cell_de_hallo_1" => "2 + 2" })
     window.calls.clear
@@ -347,6 +437,22 @@ class AppTest < Minitest::Test
     JS.fire(JS.window, "keydown", "key" => "Escape")
     refute_includes body_classes, "sidebar-open"
     assert toggle.props["focused"], "the keyboard goes back to the button"
+  end
+
+  def test_an_open_drawer_is_modal
+    start { window.narrow = true }
+    column = find(".column")
+    refute column.props["inert"]
+    click(toggle)
+    assert column.props["inert"], "the page behind the scrim leaves the tab order"
+    assert doc.js_get("activeElement").equal?(byid("workshopLink")), "the keyboard goes into the drawer"
+    click(find('#lessonNav a[data-id="arrays"]'))
+    refute column.props["inert"]
+    assert_equal "h2", doc.js_get("activeElement").tag
+    click(toggle)
+    assert column.props["inert"]
+    JS.fire(JS.window, "keydown", "key" => "Escape")
+    refute column.props["inert"], "Escape gives the page back"
   end
 
   def test_group_folds_in_place_and_stays_folded

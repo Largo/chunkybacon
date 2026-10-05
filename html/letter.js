@@ -275,9 +275,14 @@
     var message = document.createElement("div");
     message.className = "letter-error";
     message.hidden = true;
+    // the answer is drawn into the canvas; a screen reader hears it from here
+    var spoken = document.createElement("span");
+    spoken.className = "letter-answer sr-only";
+    spoken.setAttribute("aria-live", "polite");
     bar.appendChild(clear);
     bar.appendChild(sees);
     bar.appendChild(strip);
+    bar.appendChild(spoken);
     node.appendChild(canvas);
     node.appendChild(bar);
     node.appendChild(message);
@@ -368,6 +373,7 @@
       answerError = false;
       message.hidden = true;
       node.removeAttribute("data-answer");
+      spoken.textContent = "";
       previews.forEach(function (p) { drawPreview(p, null); });
       render();
     });
@@ -379,6 +385,7 @@
         node.setAttribute("data-answer", answerError ? "" : answer);   // for the tests
         message.hidden = !answerError;
         message.textContent = answerError ? answer : "";
+        spoken.textContent = answer;
         render();
       },
       // for the tests: draw strokes as if with the pen, given in the

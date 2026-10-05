@@ -47,6 +47,8 @@ module ChunkyShell
       @last_outcome = {}    # a live pass celebrates only when it is new
       @nav_closed = Store.get(NAV_CLOSED_KEY, "").split(",")
       @nav_query = ""       # the index's search field
+      @cell_numbers = {}    # cell index => its number among the code cells
+      @refocus = nil        # the cell whose Run button had the keyboard focus
     end
 
     def start
@@ -99,6 +101,7 @@ module ChunkyShell
       # back/forward between permalinks (history.pushState)
       window.addEventListener("popstate", sync: true) { guard("route") { route_from_address } }
       el("workshopLink").addEventListener("click", sync: true) { |event| guard("workshop") { workshop_click(event) } }
+      el("skipLink").addEventListener("click", sync: true) { |event| guard("skip") { skip_click(event) } }
       # a progress file was loaded or a folder reconnected (storage.js)
       window.addEventListener("chunky-progress-loaded", sync: true) { guard("progress") { progress_loaded } }
       # the kernel's answers (shell/bridge.js)
@@ -172,11 +175,15 @@ module ChunkyShell
     def toggle_sidebar
       list = JSG.d.body.classList
       if narrow?
-        list.toggle("sidebar-open")
-      else
-        closed = list.toggle("sidebar-closed") == true
-        Store.set(SIDEBAR_KEY, closed ? "closed" : "open")
+        open = list.toggle("sidebar-open") == true
+        sidebar_expanded
+        # the keyboard goes into the drawer, as into a dialog
+        el("workshopLink").focus if open
+        return
       end
+
+      closed = list.toggle("sidebar-closed") == true
+      Store.set(SIDEBAR_KEY, closed ? "closed" : "open")
       sidebar_expanded
     end
 
@@ -185,6 +192,11 @@ module ChunkyShell
     def sidebar_expanded
       showing = narrow? ? body_class?("sidebar-open") : !body_class?("sidebar-closed")
       el("sidebarToggle").setAttribute("aria-expanded", showing.to_s)
+      # An open drawer is modal: the page behind the scrim leaves the tab
+      # order and the screen reader (inert) - and comes back when the
+      # drawer goes, or when the window grows past NARROW with it out. The
+      # toggle and the skip link sit outside .column and stay reachable.
+      JSG.d.querySelector(".column").inert = narrow? && body_class?("sidebar-open")
     end
 
     # +focus+: hand the keyboard back to the button that opened the drawer
@@ -218,6 +230,14 @@ module ChunkyShell
 
       event.preventDefault
       open_workshop unless workshop?
+    end
+
+    # The skip link, the keyboard's first stop: past the index to the
+    # lesson. Its #lessonBody would reach the router as a lesson id.
+    def skip_click(event)
+      event.preventDefault
+      close_drawer
+      focus_heading
     end
 
     # the "next lesson" link inside the bubble
@@ -305,6 +325,12 @@ module ChunkyShell
       el("footerCredit").innerHTML = ui.footerCredit
       el("footerLicense").innerHTML = ui.footerLicense
       el("langSelect").value = @lang
+      # the select's name (a hidden label) and tooltip, the fox's alt, the
+      # skip link: in the page's language
+      el("langLabel").textContent = ui.langLabel
+      el("langSelect").setAttribute("title", ui.langLabel)
+      el("mascot").setAttribute("alt", ui.mascotAlt)
+      el("skipLink").textContent = ui.skipLink
       render_gems_panel
       render_nav
       render_lesson
@@ -344,6 +370,8 @@ module ChunkyShell
       @view_gen += 1
       @slow = {}
       @last_outcome = {}
+      @cell_numbers = {}
+      @refocus = nil
       JSG.d.body.classList.toggle("in-workshop", workshop?)
       el("reset-code").hidden = workshop?
       @bridge.setState(@lang, workshop? ? "" : current_lesson_id, workshop?)
@@ -369,7 +397,7 @@ module ChunkyShell
       Store.set("chunky_current", id) unless Store.get("chunky_current", "") == id
       # the lesson in the tab title makes bookmarks and history legible
       JSG.d.title = "#{@course.title(idx, @lang)} – #{ui.title}"
-      el("lessonBody").innerHTML = View.lesson_html(cells, ui.taskLabel, ui.runCell, live_toggle_html)
+      el("lessonBody").innerHTML = View.lesson_html(cells, ui.taskLabel, ui.runCell, live_toggle_html, ui.runCellLabel)
       number = 0
       cells.each_with_index do |cell, i|
         next unless code_cell?(cell)
@@ -377,6 +405,7 @@ module ChunkyShell
         # the editor's name counts code cells only ("Code, cell 2"); all
         # strings, as in set_code
         number += 1
+        @cell_numbers[i] = number
         JSG.w.initCell(i.to_s, format(ui.codeLabel, number), ui.codeHint)
         set_code(i, Store.get(Store.code_key(@lang, id, i), cell.code))
       end
@@ -393,6 +422,7 @@ module ChunkyShell
       @rendered_lesson_id = nil
       JSG.d.title = "#{ui.workshopTitle} – #{ui.title}"
       el("lessonBody").innerHTML = View.workshop_html(ui.workshopTitle, ui.workshopIntro, ui.runCell, live_toggle_html)
+      @cell_numbers = { 0 => 1 }
       JSG.w.initCell("0", ui.workshopTitle, ui.codeHint)
       @workspace&.mount
     end
@@ -442,6 +472,20 @@ module ChunkyShell
       show_bubble(ui.welcome, nil)
       # a new lesson starts at its top
       JSG.w.scrollTo(0, 0)
+      focus_heading
+    end
+
+    # The index is drawn anew and the drawer closes, so the link that was
+    # used - in the index, the bubble's "next lesson", the search field's
+    # Enter - is gone, and with it the keyboard focus: it goes to the
+    # lesson's heading, where a screen reader starts reading. Not on the
+    # first load, where it stays at the top of the page.
+    def focus_heading
+      heading = JSG.d.querySelector("#lessonBody h2")
+      return if heading.nil?
+
+      heading.setAttribute("tabindex", "-1")
+      heading.focus
     end
 
     # A lesson reached by "next lesson", back or a link shows in the index
@@ -464,6 +508,7 @@ module ChunkyShell
       render_lesson
       show_bubble(ui.workshopWelcome, nil)
       JSG.w.scrollTo(0, 0)
+      focus_heading
     end
 
     def go_to_next_lesson
@@ -521,6 +566,9 @@ module ChunkyShell
         cell.classList.remove("shake", "celebrate")
         cell.classList.add("running")
       end
+      # a button that turns disabled drops the keyboard focus to <body>, and
+      # the next Tab starts at the top of the page: settle_cell gives it back
+      @refocus = idx if focused_run_button == idx
       button.disabled = true
       button.innerHTML = View.running_label(ui.running)
       # code that uses Sequel loads SQLite first, as its lesson does on
@@ -528,6 +576,14 @@ module ChunkyShell
       # bridge holds the run until it is there
       JSG.w.ensureSqlite if uses_sqlite?(idx)
       @bridge.run(idx)
+    end
+
+    # the cell whose Run button has the keyboard focus, or nil
+    def focused_run_button
+      active = JSG.d.activeElement
+      return nil if active.nil? || !active.className.to_s.include?("run-cell")
+
+      active.getAttribute("data-idx").to_s.to_i
     end
 
     def uses_sqlite?(idx)
@@ -548,10 +604,8 @@ module ChunkyShell
       return settle_live(idx, outcome, before) if detail.auto == true
 
       settle_cell(idx, outcome, detail.elapsed)
-      return if workshop?
-
-      cell = current_cells[idx]
-      return unless cell && cell.t == "x"
+      cell = workshop? ? nil : current_cells[idx]
+      return announce_run(idx, outcome, "") unless cell && cell.t == "x"
 
       if outcome == "error"
         show_bubble(ui.errorIntro, "fail")
@@ -559,6 +613,26 @@ module ChunkyShell
         exercise_passed
       elsif outcome == "fail"
         show_bubble(View.failed_html(ui, cell.hint), "fail")
+      end
+      announce_run(idx, outcome, el("chunkyText").innerText.to_s)
+    end
+
+    # What a run did, for a screen reader: one polite status line (#runStatus)
+    # per run with ▶, Shift+Enter or Alt+R - the cell's output, shortened,
+    # and for an exercise Chunky's verdict. The output itself is no live
+    # region: live runs rewrite it while the learner types. Emptied first,
+    # and the text a moment later, so the same result twice is read twice.
+    def announce_run(idx, outcome, verdict)
+      out = el("cell-out-#{idx}")
+      text = out ? out.innerText.to_s.strip : ""
+      text = "#{text[0, 280]} …" if text.length > 280
+      message = format(outcome == "error" ? ui.ranError : ui.ranOk, @cell_numbers[idx] || idx, text)
+      message = "#{message} #{verdict}" if verdict != ""
+      status = el("runStatus")
+      status.textContent = ""
+      Task.new do
+        sleep_ms 50
+        status.textContent = message
       end
     end
 
@@ -579,6 +653,12 @@ module ChunkyShell
       if button
         button.disabled = false
         button.textContent = ui.runCell
+        # back to where the keyboard was, unless it went elsewhere meanwhile
+        if @refocus == idx
+          @refocus = nil
+          active = JSG.d.activeElement
+          button.focus if active.nil? || active.tagName.to_s == "BODY"
+        end
       end
       return unless cell
 

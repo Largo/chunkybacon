@@ -1,5 +1,48 @@
 # 10 - Accessibility audit (keyboard, screen readers, contrast, motion)
 
+**Integrated.** Fix 1 (PR #16) and Fix 5 (PR #17) were already on `main`;
+the rest is now in the course (HANDOVER §6 "Keyboard and screen readers",
+§3 sidebar): Fix 2 `#runStatus` and `App#announce_run` (a Task with
+`sleep_ms 50` instead of a `setTimeout` lambda, the cell number from
+`@cell_numbers` since PicoRuby has no `count` with a block, `innerText` so
+Chunky's lines stay apart; workshop runs are announced too), Fix 3
+`@refocus` in `start_cell_run`/`settle_cell` (`disabled` kept), Fix 4
+`focus_heading` from `select_lesson` and `open_workshop`, Fix 6 `inert`
+on `.column` in `sidebar_expanded` and the focus into the drawer, Fix 7
+`#skipLink` (it closes the drawer first), Fix 8 (also the spinner's title
+marked `lang="de"` and its fox `alt=""` beside it), Fix 9 in `main.rb`
+and `letter.js` (an animated 3D scene stands still under reduced motion -
+no check counts frames), Fix 10 in `View.cell_html` (and the editors'
+`aria-keyshortcuts="Shift+Enter"` from L3), the five contrast changes, and
+the new `ui` strings in de/en/ja. Tests: `test/shell/app_test.rb` (focus,
+announcements, skip link, modal drawer, names; the stub now keeps
+`document.activeElement` as Chrome does), `course_store_view_test.rb`,
+`browser_test.mjs` (focus back on Run, the status line, the skip link,
+the heading after "next lesson"). Left out: `aria-disabled` instead of
+`disabled`, a typed fallback for the letter, a pause button for 3D, the
+loading screen's German tab title under `?lang=ja`, real screen readers.
+
+Measured on the integrating branch (dev server, `keyboard.mjs`,
+`audit.mjs`), before -> after. `keyboard.mjs` FAIL -> PASS: focus-after-run,
+focus-after-next-lesson, focus-after-nav-link, drawer-pick-lesson, lang-de,
+lang-en, contrast-hallo, contrast-werkstatt, three-canvas-name, irb-widget;
+run-button-names WARN -> PASS, three-reduced-motion WARN -> INFO. Still
+reported, but by the script's own assumptions: codemirror-trap (Tab
+indents on purpose; Escape, then Tab leaves), bypass-blocks (it counts
+Tabs without using the skip link, which is the first stop), output-announced
+(it looks for a live region on `.cell-out`, which is not one on purpose),
+drawer-focus (its first Tab now reaches the skip link, and Enter follows
+it instead of opening the drawer; a separate run with the toggle: focus to
+the workshop link, 90 Tabs stay in the drawer and the toggle, `.column`
+inert, Escape restores it). axe, per language (identical in de/en/ja):
+95 nodes -> 48. Gone: label-title-only (10), color-contrast 42 -> 2 (left:
+Sinatra's own grey 404 page inside the fake browser), and hallo, irb and
+werkstatt have no violations at all. Left: image-alt (Sinatra's 404
+image), scrollable-region-focusable (6, noise, L4), skip-link (36, the
+index's hash routes, L4); new: region (the skip link outside a landmark,
+on the sinatra view only) and landmark-one-main + page-has-heading-one on
+the drawer view - the page behind an open drawer is inert now.
+
 Audited 2026-10-04 against branch `worktree-ideas`, dev server on port 18110,
 Chromium from Playwright 1.62.1 (npx cache), axe-core 4.13.0 (installed into
 this folder). Nothing outside this folder was changed. All fixes below are
