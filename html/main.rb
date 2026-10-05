@@ -133,6 +133,17 @@ Minitest.parallel_executor = Object.new.tap do |stub|
   end
 end
 
+# A binding at the top level with a scope of its own, like a file of its
+# own. Bindings made from TOPLEVEL_BINDING all share one scope: a `using` in
+# a cell (`using Processing`, lesson 31) would switch the refinement on in
+# every lesson after it - `loop`, `text`, `size` would be Processing's - and
+# in the page's own code. One compiled on its own keeps it to itself.
+module TopLevel
+  def self.binding(file = "chunky.rb")
+    RubyVM::InstructionSequence.compile("proc { binding }.call", file).eval
+  end
+end
+
 # Simulations for the sandbox: virtual filesystem behind File/Dir,
 # virtual sleep, cooperative SimThread as Thread.
 require_relative "sandbox_sim"
@@ -165,6 +176,21 @@ numo = <<~'RUBY'
 RUBY
 BrowserGems.files["(shims)"]["numo/narray.rb"] = numo
 BrowserGems.files["(shims)"]["numo/narray/alt.rb"] = numo
+# require "processing": the gem draws through rays and reflexion (C++ on
+# OpenGL); processing.rb is its API in pure Ruby, recording each frame for
+# processing.js to paint (lesson 31). Fetched on the first require, like
+# numo_narray.rb; the gem counts as built in once it is there.
+BrowserGems.files["(shims)"]["processing.rb"] = <<~'RUBY'
+  unless defined?(Processing::Context)
+    source = JSG.w.fetchTextSync("processing.rb").to_s
+    raise LoadError, "could not fetch processing.rb" if source.start_with?("ERROR ")
+
+    eval(source, TOPLEVEL_BINDING, "processing.rb")
+    Processing.measure__ = lambda do |text, size, font|
+      JSG.w.chunkySketchTextWidth(text, size, font.to_s).to_s.to_f
+    end
+  end
+RUBY
 
 Net::HTTP.transport = lambda do |_method, uri|
   # a live run fetches nothing: it would freeze the typing and ask the
@@ -210,6 +236,7 @@ class ChunkyApp
     @irb_sessions = []
     @three_renderers = {}
     @three_seq = 0
+    @sketches = {}
     @shoes_apps = {}
     @seq = nil
     sync_state(bridge.state)
@@ -237,6 +264,7 @@ class ChunkyApp
     fresh_binding
     dispose_three
     dispose_shoes
+    dispose_sketches
     load_lesson_files
   end
 
@@ -303,7 +331,7 @@ class ChunkyApp
   end
 
   def fresh_binding
-    @bind = eval("proc { binding }.call", TOPLEVEL_BINDING)
+    @bind = TopLevel.binding(EVAL_FILE)
   end
 
   # ---------- setup ----------
@@ -589,6 +617,52 @@ class ChunkyApp
         letter.answer("#{e.class}: #{e.message}", true)
       end
     end
+  end
+
+  # ---------- Processing sketches (processing.rb + processing.js) ----------
+
+  # The gem opens its window when the file has run (at_exit); here the cell
+  # is the file. Its sketch starts - setup and the first frame - while the
+  # cell still runs, so an error there is the cell's, and a live run's time
+  # limit covers it. Each cell run starts with a fresh context.
+  def processing? = defined?(Processing::Context) && Processing.respond_to?(:start__)
+
+  def start_sketch
+    sketch = Processing.start__ if processing?
+    @run_sketches << sketch if sketch && @run_sketches
+  end
+
+  # The canvas is processing.js's; it asks for every further frame with the
+  # events since the last one. A frame that fails stops the sketch, its
+  # error below the canvas; what a frame prints goes there too.
+  def mount_sketch(idx, out_el, sketch)
+    node = $d.createElement("div")
+    out_el.appendChild(node)
+    canvas = nil
+    canvas = $window.chunkySketch(node) do |json|
+      next unless canvas
+
+      old_stdout = $stdout
+      $stdout = StringIO.new
+      begin
+        frame = sketch.step__(json.to_s)
+        canvas.paint(frame, sketch.looping__ ? 1 : 0)
+      rescue StandardError, ScriptError => e
+        canvas.error("#{e.class}: #{e.message}")
+      ensure
+        printed = $stdout.string
+        $stdout = old_stdout
+        canvas.print(printed) unless printed.empty?
+      end
+    end
+    (@sketches[idx] ||= []) << canvas
+    canvas.paint(JSON.generate(sketch.takeCommands__), sketch.looping__ ? 1 : 0)
+  end
+
+  def dispose_sketches(idx = nil)
+    keys = idx.nil? ? @sketches.keys : [idx]
+    keys.each { |key| (@sketches.delete(key) || []).each { |canvas| canvas.stop } }
+    Processing.reset__ if idx.nil? && processing?
   end
 
   # ---------- 3D stage (three-rb + three.js) ----------
@@ -923,11 +997,14 @@ class ChunkyApp
     @run_three = []
     @run_shoes = []
     @run_letters = []
+    @run_sketches = []
     @last_shoes_types = []
     dispose_shoes(idx)
     @run_downloads = []
     @download_urls ||= {}
     dispose_three(idx)
+    dispose_sketches(idx)
+    Processing.reset__ if processing?
     watch = FileWatch.snapshot
 
     error = nil
@@ -938,9 +1015,9 @@ class ChunkyApp
     @auto_run = auto
     begin
       result = if auto
-        AutoRun.with_time_limit(workshop? ? Workshop.paths : [file]) { evaluate(code, file) }
+        AutoRun.with_time_limit(workshop? ? Workshop.paths : [file]) { evaluate(code, file).tap { start_sketch } }
       else
-        evaluate(code, file)
+        evaluate(code, file).tap { start_sketch }
       end
     rescue Exception => e
       error = e
@@ -987,7 +1064,8 @@ class ChunkyApp
     out_html = ""
     out_html += "<pre class=\"cell-stdout\">#{AnsiHtml.to_html(output)}</pre>" unless output.empty?
     widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any? || @run_three.any? ||
-                      @run_shoes.any? || @run_downloads.any? || @run_pdfs.any? || @run_letters.any?
+                      @run_shoes.any? || @run_downloads.any? || @run_pdfs.any? || @run_letters.any? ||
+                      @run_sketches.any?
     if (hint = live_hint(error))
       out_html += "<div class=\"cell-hint\">#{escape_html(hint)}</div>"
     elsif error
@@ -995,7 +1073,9 @@ class ChunkyApp
                   "#{where ? " (#{escape_html(where)})" : ""}</div>"
     elsif result.is_a?(PyCall::PyObject)
       out_html += python_result_html(result)
-    elsif !(result.nil? && (!output.empty? || widgets_present))
+    # a sketch's file ends in a block, mousePressed's true or false - what
+    # it shows is the window
+    elsif !((result.nil? || @run_sketches.any?) && (!output.empty? || widgets_present))
       out_html += "<div class=\"cell-result\">=&gt; #{escape_html(inspect_result(result))}</div>"
     end
     @run_images.each do |data_url|
@@ -1012,7 +1092,7 @@ class ChunkyApp
     end
     @run_irbs.each do
       sid = @irb_sessions.length
-      @irb_sessions << { bind: eval("proc { binding }.call", TOPLEVEL_BINDING), line: 1, buffer: "" }
+      @irb_sessions << { bind: TopLevel.binding("(irb)"), line: 1, buffer: "" }
       out_html += irb_widget_html(sid)
     end
     @run_files.each { out_html += files_widget_html }
@@ -1044,6 +1124,7 @@ class ChunkyApp
     # real event handlers as the app's block runs.
     @run_shoes.each { |spec| out_el.appendChild(build_shoes_stage(idx, spec)) }
     @run_letters.each_with_index { |spec, n| mount_letter(idx, out_el, spec, n) }
+    @run_sketches.each { |sketch| mount_sketch(idx, out_el, sketch) }
 
     if error
       return :stopped if error.is_a?(AutoRun::Stopped)
@@ -1087,6 +1168,7 @@ class ChunkyApp
     @bind.local_variable_set(:scenes, (@run_three || []).map { |spec| spec[:scene] })
     @bind.local_variable_set(:apps, (@run_shoes || []).length)
     @bind.local_variable_set(:shoes_types, (@last_shoes_types || []).dup)
+    @bind.local_variable_set(:sketch, (@run_sketches || []).last)
     !!eval(cell["check"], @bind, "check.rb")
   rescue Exception
     false

@@ -169,6 +169,13 @@ Rumale's gems depend on numo-narray-alt, which is C and not cached:
 `html/numo_narray.rb` is the course's own stand-in for it (MIT, like the
 rest of the code), written against numo-narray-alt's documented behaviour.
 
+The processing gem (https://github.com/xord/processing) draws through rays
+and reflexion (C++, OpenGL) and is not cached: `html/processing.rb` is the
+course's stand-in for it. Its constants, the table of colour names,
+`Vector` and the maths helpers (`curvePoint`, `bezierPoint`,
+`randomGaussian` …) are adapted from the gem's source, Copyright (c) 2019
+xord.org, under the MIT License (the text above).
+
 ## Data
 
 | Data | License | Source | Files |

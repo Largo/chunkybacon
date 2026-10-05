@@ -4,7 +4,7 @@ Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
 Work in progress - what is unfinished, and in what state - is in
 `docs/OPEN_WORK.md`.
-Last updated 2026-10-04 (47 lessons in German, English and Japanese).
+Last updated 2026-10-04 (48 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -64,6 +64,8 @@ html/
   sqlite3_sqljs.rb      require "sqlite3": the gem's API over sql.js, for Sequel (§6f)
   letter.js             show_letter's envelope: drawing, digits as 8x8 (§6e)
   ansi.rb               terminal colours in a cell's output: ANSI codes -> spans (§6g)
+  processing.rb         require "processing": the gem's API in pure Ruby, frames recorded (§6h)
+  processing.js         a sketch's window: paints the frames, sends mouse and keys (§6h)
   workshop.rb           the workshop's runs: project files as the virtual FS,
                         require_relative between them, gets, write-back
   autorun.rb            live runs (§6b): what may run by itself, the time
@@ -192,7 +194,7 @@ A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 19-31), not in a group of one.
+(side trips, 19-32), not in a group of one.
 
 The sidebar itself (`index.html` `#sidebar`, `shell/app.rb`, `app.css`): from
 the top of the window to its foot with its own scroll; head with the course
@@ -248,7 +250,7 @@ Rules that the code and tests rely on:
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
 - Checks accept output OR result; `puts` is never required.
-- `test/browser_test.mjs` asserts the lesson count (`'47 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'48 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -365,6 +367,11 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   the file.
 - Real `Module#autoload` works now that gems are files; the loader no longer
   hooks it.
+- Every lesson, IRB widget and workshop file gets its binding from
+  `TopLevel.binding`: compiled on its own, so it has a top-level scope of
+  its own. Bindings made from `TOPLEVEL_BINDING` all share one, and a
+  `using` in one cell then held for every later lesson and for main.rb
+  itself (§6h).
 
 ## 6. Widgets and their traps
 
@@ -792,6 +799,62 @@ tty-spinner, tty-progressbar. tty-reader needs `io/wait`, which must stay
 unloadable (§4), and the others redraw with the cursor; tty-progressbar
 prints nothing when its output is no terminal.
 
+## 6h. Processing: a stand-in that records, a canvas that paints
+
+Lesson 31 is the [processing gem](https://github.com/xord/processing)
+(xord, 1.4.0): `require "processing"`, `using Processing`, `setup do`,
+`draw do`, the Processing names in camelCase. The gem is pure Ruby on
+rays and reflexion, C++ on OpenGL, so it cannot run here.
+`html/processing.rb` has its API (constants, colours and `colorMode`,
+shapes, `beginShape`, text, `push`/`pop` and the 2D transforms, the maths
+helpers, `Vector`, the mouse and key state and blocks,
+`Processing(snake_case: true)`), read off the gem's `context.rb` and
+`graphics_context.rb`; images, shaders, 3D and the camera raise
+`NotImplementedError`.
+
+- **Served like Numo** (§6e): a shim for `require "processing"` fetches
+  and evaluates the file; `processing`, `rays`, `reflexion` and `rucy`
+  are in `NATIVE_GEMS`, so `install_gem "processing"` finds it built in.
+  The offline copy preloads it (`offline.js`).
+- **Recording**: what a frame draws becomes `[name, *args]` commands, a
+  `style` and a `matrix` command only when they changed (the matrix is
+  tracked in Ruby, 2D affine). `processing.js` paints them on a canvas
+  that keeps its pixels between frames, like the gem's window.
+- **The lifecycle** follows the gem's window: the matrix and the stacks
+  reset before every frame and every event, `draw` wrapped in
+  `push`/`pop`, styles set in `setup` lasting. The gem starts its window
+  `at_exit` and only if there is a draw or event block; here
+  `Processing.start__` runs after the cell (inside the live run's time
+  limit), runs `setup` and the first frame and hands the sketch over;
+  every cell run starts with a fresh context. `$processing_context__`,
+  which the refinement calls, is the sketch's own while its blocks run -
+  a page can have several.
+- **Frames** (`mount_sketch`): `requestAnimationFrame` calls the Ruby
+  block with `{dt, events}`; Ruby applies the events (mouse, keys,
+  wheel - each firing its block), runs `draw` unless `noLoop`, and
+  calls `paint` with the next commands. A failing frame stops the sketch
+  and shows its error below the canvas; what a frame prints goes there
+  too. A sketch out of view rests (IntersectionObserver); re-running the
+  cell or leaving the lesson stops it.
+- **`using` must not leak.** A refinement switched on with `using` inside
+  `eval` lands in the binding's top-level scope, and every binding made
+  from `TOPLEVEL_BINDING` shares that one: after lesson 31, `text` in the
+  Scarpe lesson was Processing's, and `loop do` would have been too.
+  Lesson, IRB and workshop bindings now come from `TopLevel.binding`,
+  an instruction sequence compiled on its own (main.rb), which has a
+  scope of its own; `check_harness.rb` does the same.
+- **Checks**: `sketch` is the cell's started sketch;
+  `sketch.simulate__([["move", x, y], ["down", x, y], ...])` plays
+  events frame by frame and returns the shapes drawn, with their
+  colours, and puts the sketch's mouse and keys back afterwards.
+  `check_harness.rb` loads the stand-in for `require "processing"` and
+  starts sketches the same way; `browser_test.mjs` reads pixels, moves
+  the real mouse and paints a line.
+- Differences from the gem worth knowing: `noise` is Perlin noise of the
+  same kind but not the same numbers; text uses the browser's sans-serif;
+  `text(str, x, y)` ignores `textAlign` as the gem does (only the box
+  form aligns).
+
 ## 7a. The optional server: permalinks and a backend
 
 The course is a static site and stays one: without `server/` lessons live at
@@ -852,7 +915,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 47 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 48 lessons x 3 languages, starter fails, solutions pass
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof

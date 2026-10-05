@@ -1042,6 +1042,21 @@ kbd {
   white-space: pre-wrap;
 }
 
+/* A Processing sketch (processing.js): its window's canvas, at the size
+   the sketch asked for, narrower if the column is */
+.sketch-stage { margin: 0.7rem 0; max-width: 100%; }
+.sketch-canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  touch-action: none;
+}
+.sketch-canvas:focus-visible { outline: 3px solid var(--accent, #c8372d); outline-offset: 2px; }
+.sketch-print { max-height: 9rem; overflow-y: auto; margin-top: 0.4rem; }
+.sketch-error { margin-top: 0.4rem; }
+
 /* IRB terminal */
 .irb-term {
   background: #211a13;

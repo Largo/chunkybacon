@@ -8,10 +8,12 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **47 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **48 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics, tables, frames and colours
   for the terminal with the [TTY toolkit](https://ttytoolkit.org),
+  sketches that move and follow the mouse with
+  [Processing](https://github.com/xord/processing),
   PowerPoint decks with [ruby_pptx](https://github.com/Largo/ruby_pptx),
   PDFs with Prawn and HexaPDF, JPEG photos with
   [pure_jpeg](https://github.com/peterc/pure_jpeg), pandas, SymPy, NumPy and
@@ -25,7 +27,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
   cell shows its last expression as `=> …` — `puts` is never required.
-- **Lesson sidebar**: the 47 lessons in three groups (basics, side trips,
+- **Lesson sidebar**: the 48 lessons in three groups (basics, side trips,
   the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a
   drawer.
@@ -53,7 +55,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   arrays under Rumale: `html/numo_narray.rb`; sqlite3, on
   [sql.js](https://sql.js.org) - SQLite in WebAssembly, loaded only when
   needed - so Sequel's own SQLite adapter runs, and `Sequel.sqlite("x.db")`
-  is a real SQLite file you can download: `html/sqlite3_sqljs.rb`; in the
+  is a real SQLite file you can download: `html/sqlite3_sqljs.rb`;
+  Processing, which draws through OpenGL: `html/processing.rb`; in the
   cache, `SUBSTITUTES`: a dependency on `bigdecimal` installs
   [bigdecimal-pure](https://github.com/Largo/bigdecimal-pure), which
   unblocks activesupport, liquid, prawn, dry-types …) or the gem that
@@ -94,6 +97,9 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   test runners) show as colours, and box-drawing characters (`┌─┐`, from
   tty-table, tty-box) are as wide as the code font's letters, so tables
   line up.
+- **Processing sketches**: `setup` and `draw` from the processing gem run
+  below the cell, about 60 frames a second, and hear the mouse and the
+  keys - the gem's API in pure Ruby, painted on a canvas.
 - Chunky Bacon, an original cartoon fox, cheers you on.
 
 ## On your own computer: the chunky_bacon gem

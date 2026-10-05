@@ -93,7 +93,7 @@ module Workshop
       return false if @loaded.include?(target)
 
       @loaded << target
-      eval(SandboxFS.store[target], eval("proc { binding }.call", TOPLEVEL_BINDING), target)
+      eval(SandboxFS.store[target], TopLevel.binding(target), target)
       true
     end
 

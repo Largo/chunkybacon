@@ -33,6 +33,15 @@ $letter_answers = []
 # main.rb serves for these requires - here even where the real gem is installed
 require_relative "../html/numo_narray"
 $LOADED_FEATURES.push("numo/narray.rb", "numo/narray/alt.rb")
+# processing draws through C++ (rays, reflexion); require "processing" finds
+# the browser's stand-in, on the first require as in the browser. A cell's
+# sketch starts after the cell, as main.rb starts it; $shown_sketches has it
+SHIMS_DIR = Dir.mktmpdir("chunky_shims")
+at_exit { FileUtils.rm_rf(SHIMS_DIR) }
+File.write(File.join(SHIMS_DIR, "processing.rb"),
+           "load #{File.expand_path('../html/processing.rb', __dir__).inspect}\n")
+$LOAD_PATH.unshift(SHIMS_DIR)
+$shown_sketches = []
 module Kernel
   def download_file(data, name = nil)
     $explicit_downloads << (name || data).to_s
@@ -814,6 +823,12 @@ show_browser TimelogWeb, "/")]
     "en" => [%(list = TTY::Table.new(header: ["Item", "Qty"], rows: [["Bacon", 3], ["Pretzel", 2]])\nputs list.render(:unicode)),
              %(TTY::Table.new(header: ["Item", "Qty"], rows: [["Bacon", 3], ["Pretzel", 2]]).render(:unicode, padding: [0, 1]))]
   },
+  "processing" => {
+    "de" => [%(require "processing"\nusing Processing\nsetup do\n  size 400, 300\n  background 255\nend\ndraw do\n  line pmouseX, pmouseY, mouseX, mouseY if mousePressed\nend),
+             %(require "processing"\nusing Processing\nsetup do\n  size 400, 300\n  background 255\n  stroke 200, 0, 0\n  strokeWeight 4\nend\ndraw do\nend\nmouseDragged do\n  line pmouseX, pmouseY, mouseX, mouseY\nend)],
+    "en" => [%(require "processing"\nusing Processing\nsetup do\n  size 400, 300\n  background 255\nend\ndraw do\n  if mousePressed\n    line pmouseX, pmouseY, mouseX, mouseY\n  end\nend),
+             %(require "processing"\nusing Processing(snake_case: true)\nsetup do\n  size 400, 300\n  background 255\nend\ndraw do\nend\nmouse_dragged do\n  line pmouse_x, pmouse_y, mouse_x, mouse_y\nend)]
+  },
   "rumale" => {
     "de" => [%(#{RUMALE_SEVEN.sub("PIC", "sieben")}pixel = sieben.delete("\\n").chars.map { |z| z == "#" ? 16 : 0 }\nziffer = lerner.predict(Numo::DFloat[pixel])[0]),
              %(#{RUMALE_SEVEN.sub("PIC", "sieben")}ziffer = lerner.predict(Numo::DFloat[sieben.delete("\\n").chars.map { |z| z == "#" ? 16 : 0 }])[0]\nputs ziffer)],
@@ -833,7 +848,10 @@ def run_in(bind, code)
   error = nil
   result = nil
   begin
+    Processing.reset__ if defined?(Processing::Context)
     result = eval(code, bind, "chunky.rb")
+    sketch = Processing.start__ if defined?(Processing::Context)
+    $shown_sketches << sketch if sketch
   rescue Exception => e
     error = e
   ensure
@@ -867,7 +885,9 @@ def run_harness(langs)
                solutions.each_with_index.map { |s, i| ["solution#{i + 1}", s] }
 
     variants.each do |label, candidate|
-      bind = eval("proc { binding }.call", TOPLEVEL_BINDING)
+      # its own top-level scope, as main.rb's TopLevel.binding: a `using`
+      # stays in its lesson
+      bind = RubyVM::InstructionSequence.compile("proc { binding }.call", "chunky.rb").eval
       load_lesson_files(lesson)
       $letter_answers = []
 
@@ -891,6 +911,7 @@ def run_harness(langs)
       $shown_images = []
       $shown_scenes = []
       $shown_apps = []
+      $shown_sketches = []
       $explicit_downloads = []
       SandboxFS.reset!
       load_lesson_files(lesson)
@@ -911,6 +932,7 @@ def run_harness(langs)
       bind.local_variable_set(:apps, $shown_apps.length)
       bind.local_variable_set(:shoes_types, $shown_apps.last || [])
       bind.local_variable_set(:downloads, downloads)
+      bind.local_variable_set(:sketch, $shown_sketches.last)
       passed = begin
         !!eval(exercise["check"], bind, "check.rb")
       rescue Exception

@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('47 lessons in nav', (await page.$$('#lessonNav a')).length === 47);
+check('48 lessons in nav', (await page.$$('#lessonNav a')).length === 48);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -637,6 +637,90 @@ check('tty starter fails', (await page.getAttribute('#chunkyChat', 'class')).inc
 await setExercise('puts TTY::Table.new(header: ["Artikel", "Menge"], rows: [["Speck", 3], ["Brezel", 2]]).render(:unicode)');
 await runExercise(); await page.waitForTimeout(300);
 check('tty exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// Processing lesson: the processing gem's API on processing.rb, each frame
+// painted by processing.js; the sketch keeps running and hears the mouse
+await page.click('#lessonNav a[data-id="processing"]');
+await page.waitForTimeout(500);
+const runSketch = async idx => {
+  await page.click(`.run-cell[data-idx="${idx}"]`);
+  await page.waitForFunction(i => !document.querySelector(`.run-cell[data-idx="${i}"]`).disabled &&
+    document.querySelector(`#cell-out-${i} .sketch-stage, #cell-out-${i} .cell-error`), idx, { timeout: 60000 }).catch(() => {});
+  await page.locator(`#cell-out-${idx}`).scrollIntoViewIfNeeded();   // out of view, a sketch rests
+};
+const sketchPixel = (idx, x, y) => page.evaluate(([i, px, py]) =>
+  document.querySelector(`#cell-out-${i} .sketch-stage`).chunkySketch.pixel(px, py), [idx, x, y]);
+const near = (got, want) => Array.isArray(got) && want.every((v, k) => Math.abs(got[k] - v) <= 6);
+const sketchFrames = async idx => Number(await page.getAttribute(`#cell-out-${idx} .sketch-stage`, 'data-frames'));
+await runSketch(1);
+check('a sketch opens at the size it asks for', await page.evaluate(() => {
+  const canvas = document.querySelector('#cell-out-1 .sketch-canvas');
+  return Boolean(canvas) && canvas.style.width === '400px' && canvas.style.aspectRatio === '400 / 300';
+}));
+check('the sketch paints its background and an orange circle',
+      near(await sketchPixel(1, 10, 10), [250, 240, 220]) && near(await sketchPixel(1, 200, 130), [230, 120, 40]));
+check('a sketch shows no => line', !(await page.$('#cell-out-1 .cell-result')));
+await runSketch(3);
+const framesBefore = await sketchFrames(3);
+await page.waitForTimeout(600);
+check('draw runs again and again', (await sketchFrames(3)) > framesBefore + 10);
+await runSketch(5);
+const box = await (await page.$('#cell-out-5 .sketch-canvas')).boundingBox();
+await page.mouse.move(box.x + 100 * box.width / 400, box.y + 80 * box.height / 300);
+await page.waitForTimeout(300);
+check('the circle follows the mouse', near(await sketchPixel(5, 100, 80), [255, 160, 0]));
+await page.mouse.down();
+await page.waitForTimeout(300);
+check('mousePressed turns it red', near(await sketchPixel(5, 100, 80), [255, 80, 80]));
+await page.mouse.up();
+await runSketch(7);
+check('push, rotate and HSB colours draw a flower', await page.evaluate(() => {
+  const sketch = document.querySelector('#cell-out-7 .sketch-stage').chunkySketch;
+  const [r, g, b] = sketch.pixel(200, 150);
+  const hues = new Set();
+  for (let k = 0; k < 72; k++) {
+    const [pr, pg, pb] = sketch.pixel(200 + 80 * Math.cos(k * Math.PI / 36), 150 + 80 * Math.sin(k * Math.PI / 36));
+    if (Math.max(pr, pg, pb) - Math.min(pr, pg, pb) > 100) hues.add(`${pr >> 6}${pg >> 6}${pb >> 6}`);
+  }
+  return r < 40 && g < 40 && b < 40 && hues.size >= 6;
+}));
+await runSketch(9);
+const bubbleBox = await (await page.$('#cell-out-9 .sketch-canvas')).boundingBox();
+await page.mouse.click(bubbleBox.x + 200 * bubbleBox.width / 400, bubbleBox.y + 280 * bubbleBox.height / 300);
+await page.waitForTimeout(200);
+check('a click starts a bubble', await page.evaluate(() => {
+  const sketch = document.querySelector('#cell-out-9 .sketch-stage').chunkySketch;
+  for (let y = 200; y < 300; y += 2) for (let x = 150; x < 250; x += 2) {
+    const [r, g, b] = sketch.pixel(x, y);
+    if (r > 80 && b > 150) return true;
+  }
+  return false;
+}));
+await runSketch(9);
+check('a re-run replaces the sketch', (await page.$$('#cell-out-9 .sketch-stage')).length === 1);
+await runExercise();
+check('processing starter fails', (await page.getAttribute('#chunkyChat', 'class')).includes('fail'));
+const sketchIdx = await exerciseIdx();
+await page.locator(`#cell-out-${sketchIdx}`).scrollIntoViewIfNeeded();
+await setExercise('require "processing"\nusing Processing\nsetup do\n  size 400, 300\nend\ndraw do\n  raise "Kaputt im Bild #{frameCount}" if frameCount == 3\nend');
+await runExercise();
+await page.waitForFunction(i => document.querySelector(`#cell-out-${i} .sketch-stage`)?.getAttribute('data-error'), sketchIdx, { timeout: 10000 }).catch(() => {});
+check('an error in a later frame stops the sketch and says so',
+      (await page.getAttribute(`#cell-out-${sketchIdx} .sketch-stage`, 'data-error')) === 'RuntimeError: Kaputt im Bild 3');
+await setExercise('require "processing"\nusing Processing\nsetup do\n  size 400, 300\n  background 255\n  strokeWeight 4\nend\ndraw do\n  line pmouseX, pmouseY, mouseX, mouseY if mousePressed\nend');
+await runExercise(); await page.waitForTimeout(300);
+check('processing exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+await page.locator(`#cell-out-${sketchIdx}`).scrollIntoViewIfNeeded();
+const paintBox = await (await page.$(`#cell-out-${sketchIdx} .sketch-canvas`)).boundingBox();
+const at = (x, y) => [paintBox.x + x * paintBox.width / 400, paintBox.y + y * paintBox.height / 300];
+await page.mouse.move(...at(50, 150));
+await page.waitForTimeout(100);
+await page.mouse.down();
+for (let x = 60; x <= 350; x += 10) { await page.mouse.move(...at(x, 150)); await page.waitForTimeout(20); }
+await page.mouse.up();
+await page.waitForTimeout(200);
+check('... and paints with the mouse after the check', near(await sketchPixel(sketchIdx, 200, 150), [0, 0, 0]) &&
+      near(await sketchPixel(sketchIdx, 200, 100), [255, 255, 255]));
 
 // Scarpe lesson: real Shoes apps from the lacci gem, drawn into the page by a
 // Lacci display service (shoes_dom.rb); several stay live at once

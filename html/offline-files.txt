@@ -107,6 +107,8 @@ letter.js
 main.rb
 numo_narray.rb
 offline.js
+processing.js
+processing.rb
 pycall.rb
 rack_playground.rb
 ruby+stdlib.wasm
