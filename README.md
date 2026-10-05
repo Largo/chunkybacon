@@ -169,6 +169,8 @@ server everything works as before. With Docker:
 cd test
 node make_lessons_json.js # test/lessons.json for the Ruby harnesses
 ruby check_harness.rb     # every lesson: starter fails, solutions pass
+ruby lint_lessons.rb      # lessons.js content: de/en/ja parity, references, Japanese rules, Prism, gems, counts
+ruby lint_lessons_test.rb # the linter's fault-injection tests
 ruby gems_harness.rb      # gem installer, sinatra + roda offline
 ruby shell/run.rb         # the page shell (PicoRuby code) under Minitest
 ruby autorun_test.rb      # live runs: what may run, the time limit

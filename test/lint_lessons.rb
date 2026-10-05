@@ -13,7 +13,7 @@
 #   ruby lint_lessons.rb --net           # also HEAD every external link
 #   ruby lint_lessons.rb --root=PATH     # another checkout
 #
-# Accepted findings go into allow.txt (next to this file): one key glob per
+# Accepted findings go into lint_allow.txt (next to this file): one key glob per
 # line, "# reason" after it. Exit status 1 when an ERROR is not allowed.
 
 require "json"
@@ -1166,14 +1166,14 @@ module LessonLint
       t = SEVERITIES.to_h { |s| [s, live.count { |f| f.severity == s }] }
       allowed = @findings.count(&:allowed)
       puts "#{t["ERROR"]} errors, #{t["WARN"]} warnings, #{t["INFO"]} info" \
-           "#{allowed.positive? ? ", #{allowed} allowed (allow.txt)" : ""}" \
+           "#{allowed.positive? ? ", #{allowed} allowed (lint_allow.txt)" : ""}" \
            "#{@verbose ? "" : " (--verbose shows info)"}"
     end
   end
 
   def self.main(argv)
-    opts = { root: File.expand_path("../..", __dir__), verbose: false, json: false, net: false,
-             only: GROUPS, allow: File.join(__dir__, "allow.txt"), color: $stdout.tty? }
+    opts = { root: File.expand_path("..", __dir__), verbose: false, json: false, net: false,
+             only: GROUPS, allow: File.join(__dir__, "lint_allow.txt"), color: $stdout.tty? }
     OptionParser.new do |o|
       o.on("--root=PATH") { |v| opts[:root] = File.expand_path(v) }
       # a typo must not narrow the run to nothing and still report "0 errors"

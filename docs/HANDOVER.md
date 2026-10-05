@@ -107,6 +107,8 @@ gem/chunky_bacon/          the companion gem: the course's helpers on a computer
                            the fox, `chunkybacon run` (§10a)
 gem/chunkybacon/, gem/chunky-bacon/  its alias gems (like rubyllm -> ruby_llm)
 test/check_harness.rb      every lesson offline under CRuby
+test/lint_lessons.rb       lessons.js content linter (lint_allow.txt: accepted
+                           findings; lint_lessons_test.rb: its tests)
 test/gems_harness.rb       gem installer offline under CRuby
 test/shell/run.rb          Minitest for the shell, on a stub of PicoRuby's js
 test/autorun_test.rb       live runs under CRuby: runnable?, the time limit
@@ -266,6 +268,9 @@ Rules that the code and tests rely on:
   `node test/make_lessons_json.js`.
 - Progress, language and per-cell code persist in `localStorage` - and from
   there in a progress file or a connected folder, see §6a.
+- `test/lint_lessons.rb` checks the mechanical half of these rules; after
+  inserting a lesson run it with `--base=main` - every reference that now
+  points at a different lesson is an error.
 
 Helpers available in cells (defined in `main.rb`): `install_gem`,
 `show_image` (a ChunkyPNG image, a PureJPEG encoder, PNG/JPEG/GIF/WebP bytes
@@ -1064,6 +1069,8 @@ in that regex.
 cd test
 node make_lessons_json.js      # test/lessons.json
 ruby check_harness.rb          # 51 lessons x 3 languages, starter fails, solutions pass
+ruby lint_lessons.rb           # lessons.js content: de/en/ja parity, references, Japanese rules, Prism, gems, counts
+ruby lint_lessons_test.rb      # the linter's fault-injection tests
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof

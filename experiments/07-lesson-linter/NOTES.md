@@ -1,5 +1,15 @@
 # 07 - Lesson linter
 
+**Integrated.** The linter now lives in `test/`: `test/lint_lessons.rb`,
+`test/lint_allow.txt` (was `allow.txt`) and `test/lint_lessons_test.rb`,
+run from `test/` like the other suites (README "Tests", HANDOVER §3 and
+§8). This file stays as the record of what was built and found; the paths
+and lesson numbers below are those of the experiment. Of "Wiring it in":
+steps 1, 2 and 4 are done (the `tl-cli` `</div>` had already been fixed
+on `main`; rubykaigi's punchlines and sequel's 102-column German line are
+allow-listed). Step 3 is open: the repository has no tests workflow yet,
+only `release.yaml` for the gem.
+
 `lint_lessons.rb` is a content linter for `html/lessons.js`. It covers what
 `test/check_harness.rb` does not check (the harness only checks that a
 starter fails and its solutions pass). It is plain Ruby with no gems: Prism,
@@ -153,7 +163,7 @@ syntax-version difference ever matters, pass
 
 ## Files
 
-- `lint_lessons.rb` - the linter (modules `Text`, `Source`, `GemCache`, `Linter`, `Report`)
-- `lint_lessons_test.rb` - fault-injection tests (Minitest)
-- `allow.txt` - accepted findings
-- `demo_renumber.rb` - inserts a lesson without fixing references and shows what is caught
+- `test/lint_lessons.rb` - the linter (modules `Text`, `Source`, `GemCache`, `Linter`, `Report`)
+- `test/lint_lessons_test.rb` - fault-injection tests (Minitest)
+- `test/lint_allow.txt` - accepted findings
+- `demo_renumber.rb` (here) - inserts a lesson without fixing references and shows what is caught
