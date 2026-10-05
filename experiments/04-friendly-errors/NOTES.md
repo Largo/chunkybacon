@@ -27,7 +27,7 @@ instead of `fox["name"]`.
 | `friendly_errors.css` | proposed addition to `html/assets/app.css` |
 | `corpus.rb` | 70 realistic beginner mistakes, mined from the exercises in `html/lessons.js` (lesson id per entry) |
 | `run_corpus.rb` | runs each like a notebook cell, prints all 3 languages + coverage table; `--lang ja`, `--only <id>`, `--summary`, `--html` (writes `preview.html`) |
-| `robustness_check.rb` | 345 `explain` calls with wrong sources, odd languages, other file names: must never raise or leave a `%{…}` |
+| `robustness_check.rb` | 350 `explain` calls with wrong sources, odd languages, other file names: must never raise or leave a `%{…}` |
 | `preview.html`, `preview.png` | the corpus as it would look on the page (4 columns: code, de, en, ja) |
 | `tools/` | `dump_exercises.rb` (lists lesson exercises), `probe*.rb` (what Ruby 4.0 / Prism report), `serve_preview.rb` (port 18104) |
 
@@ -82,8 +82,8 @@ Run: `ruby experiments/04-friendly-errors/run_corpus.rb` (also works with
 
 `run_corpus.rb --summary`: **70 cases, 68 explained, 70 as expected** (the two
 unexplained ones are the intended nils: a JSON parse error and the learner's
-own `raise "…"`). Same result without did_you_mean. Robustness check: 345
-calls, 0 problems.
+own `raise "…"`). Same result without did_you_mean. Robustness check: 350
+calls, 0 problems. Both scripts exit 1 when a check fails.
 
 Honest caveats: the corpus was written alongside the rules, so 100 % here
 says the rules do what they were built for, not that they generalize. I read

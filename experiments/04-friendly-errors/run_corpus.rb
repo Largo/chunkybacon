@@ -113,3 +113,4 @@ if opts[:html]
   File.write(File.join(__dir__, "preview.html"), page)
   puts "wrote #{File.join(__dir__, 'preview.html')}"
 end
+exit 1 unless rows.all? { |r| r[4] } # a MISS fails the run
