@@ -285,7 +285,8 @@ function setLang(l) {
   $('slider').setAttribute('aria-label', t.slider);
   $('legend').textContent = t.legend;
   document.querySelectorAll('#langs button').forEach(b => b.setAttribute('aria-pressed', b.dataset.l === l));
-  if (trace) setSample(sample.id);
+  // setSample jumps to the ?step= of the URL; keep the step the learner is on
+  if (trace) { const keep = step; setSample(sample.id); go(keep); }
 }
 
 function play() {
