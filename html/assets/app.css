@@ -910,6 +910,12 @@ kbd {
   border-radius: 4px;
   background: #fff;
 }
+/* an SVG (a drawing, a chart, a diagram) keeps its own size and stays sharp;
+   the 160px pixelated thumbnail is for small pixel pictures */
+.cell-image[src^="data:image/svg+xml"] {
+  width: auto;
+  image-rendering: auto;
+}
 /* show_pdf: the browser's own PDF viewer, about one page tall */
 .cell-pdf {
   display: block;
