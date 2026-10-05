@@ -55,7 +55,7 @@ DE = {
       def ton(frequenz, sekunden, welle = :sinus, laut = 0.3)
         form = WELLEN.fetch(welle)
         Array.new((sekunden * RATE).round) do |i|
-          laut * form.((frequenz * i / RATE) % 1.0)   # wo in der Schwingung?
+          laut * form.((frequenz * i).fdiv(RATE) % 1.0)   # wo in der Schwingung?
         end
       end
 
@@ -63,7 +63,7 @@ DE = {
       WELLEN.keys
     RUBY
     { "t" => "h", "html" => <<~HTML.strip },
-      <p>Die <strong>Phase</strong> sagt, wo in einer Schwingung du gerade bist: 0.0 am Anfang, 0.5 in der Mitte, kurz vor 1.0 am Ende. <code>(frequenz * i / RATE) % 1.0</code> rechnet sie aus – <code>%</code> wirft die ganzen Schwingungen weg und lässt den Rest. Jede Welle ist ein <strong>Lambda</strong>, das aus der Phase eine Höhe macht, und alle drei stehen in einem Hash. Eine neue Klangfarbe ist eine Zeile mehr.</p><p>Schau in der Lupe: Der Sinus ist rund und klingt weich, Rechteck und Säge haben Ecken und klingen schnarrend wie ein Gameboy – Ecken bestehen aus vielen höheren Tönen, den <em>Obertönen</em>. Darum sind sie auch leiser gerechnet.</p>
+      <p>Die <strong>Phase</strong> sagt, wo in einer Schwingung du gerade bist: 0.0 am Anfang, 0.5 in der Mitte, kurz vor 1.0 am Ende. <code>(frequenz * i).fdiv(RATE) % 1.0</code> rechnet sie aus – <code>%</code> wirft die ganzen Schwingungen weg und lässt den Rest. Jede Welle ist ein <strong>Lambda</strong>, das aus der Phase eine Höhe macht, und alle drei stehen in einem Hash. Eine neue Klangfarbe ist eine Zeile mehr.</p><p>Schau in der Lupe: Der Sinus ist rund und klingt weich, Rechteck und Säge haben Ecken und klingen schnarrend wie ein Gameboy – Ecken bestehen aus vielen höheren Tönen, den <em>Obertönen</em>. Darum sind sie auch leiser gerechnet.</p>
     HTML
     { "t" => "c", "code" => <<~RUBY.strip },
       STUFEN = { "C" => 0, "D" => 2, "E" => 4, "F" => 5, "G" => 7, "A" => 9, "H" => 11 }
@@ -197,7 +197,7 @@ EN = {
       def tone(frequency, seconds, wave = :sine, volume = 0.3)
         shape = WAVES.fetch(wave)
         Array.new((seconds * RATE).round) do |i|
-          volume * shape.((frequency * i / RATE) % 1.0)   # where in the vibration?
+          volume * shape.((frequency * i).fdiv(RATE) % 1.0)   # where in the vibration?
         end
       end
 
@@ -205,7 +205,7 @@ EN = {
       WAVES.keys
     RUBY
     { "t" => "h", "html" => <<~HTML.strip },
-      <p>The <strong>phase</strong> says where in one vibration you are: 0.0 at the start, 0.5 halfway, just under 1.0 at the end. <code>(frequency * i / RATE) % 1.0</code> works it out – <code>%</code> throws away the whole vibrations and keeps the rest. Every wave is a <strong>lambda</strong> that turns the phase into a height, and all three live in a Hash. A new sound colour is one more line.</p><p>Look through the magnifier: the sine is round and sounds soft, square and saw have corners and buzz like a Game Boy – corners are made of many higher tones, the <em>overtones</em>. That is also why they are computed quieter.</p>
+      <p>The <strong>phase</strong> says where in one vibration you are: 0.0 at the start, 0.5 halfway, just under 1.0 at the end. <code>(frequency * i).fdiv(RATE) % 1.0</code> works it out – <code>%</code> throws away the whole vibrations and keeps the rest. Every wave is a <strong>lambda</strong> that turns the phase into a height, and all three live in a Hash. A new sound colour is one more line.</p><p>Look through the magnifier: the sine is round and sounds soft, square and saw have corners and buzz like a Game Boy – corners are made of many higher tones, the <em>overtones</em>. That is also why they are computed quieter.</p>
     HTML
     { "t" => "c", "code" => <<~RUBY.strip },
       STEPS = { "C" => 0, "D" => 2, "E" => 4, "F" => 5, "G" => 7, "A" => 9, "B" => 11 }
@@ -299,8 +299,11 @@ EN = {
 # notes are found with a tiny Fourier transform: amp.(t, f) is how strongly
 # frequency f sounds in the 0.1 s from t on, in sample units. Each of the
 # four notes must be there in its quarter second, and all four at once in
-# the chord - a plain C5 there, or a missing note, fails. Any wave shape
-# passes (a square or saw C4 still has its fundamental at 261.6 Hz).
+# the chord - a plain C5 there, or a missing note, fails. In each quarter
+# second the other notes must be under a quarter of the expected one, so a
+# chord held for 2 s fails too (a relative limit: a loud note leaks ~4% into
+# its neighbours' bins; C5 is not tested during C4, a saw's overtone). Any
+# wave shape passes (a square or saw C4 still has its fundamental at 261.6 Hz).
 # File.read with mode "rb" reads a file from File.write (the virtual store)
 # as well as one from File.binwrite (the real working directory).
 def check_for(name)
@@ -312,8 +315,10 @@ def check_for(name)
     part.each_with_index { |x, n| w = 2 * Math::PI * f * n / 22050; re += x * Math.cos(w); im += x * Math.sin(w) };
     Math.hypot(re, im) * 2 / [part.size, 1].max };
     c4, e4, g4, c5 = 261.63, 329.63, 392.0, 523.25;
+    arpeggio = [[0.07, c4, [e4, g4]], [0.32, e4, [c4, g4, c5]], [0.57, g4, [c4, e4, c5]], [0.82, c5, [c4, e4, g4]]];
     head.values_at(0, 2, 6, 7, 10) == ["RIFF", "WAVE", 1, 22050, 16] && (1.9..2.1).cover?(s.size / 22050.0) &&
-    [[0.07, c4], [0.32, e4], [0.57, g4], [0.82, c5], [1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }
+    arpeggio.all? { |t, f, others| (a = amp.(t, f)) > 1000 && others.all? { |o| amp.(t, o) < a / 4 } } &&
+    [[1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }
   RUBY
 end
 
@@ -351,7 +356,7 @@ JA_HTML = [
     <p><code>pack</code>は配列を<strong>バイト列</strong>に変えます。かっこの中の文字列が変え方を指定します。<code>s&lt;*</code>は「すべての数を符号付き16ビット、下位バイトが先」という意味です。ヘッダーでは1文字が1つの項目を表します。<code>a4</code>は4文字のテキスト、<code>V</code>は32ビットの数、<code>v</code>は16ビットの数です。中身はファイルの長さ、形式（1 = PCM、生の数）、1チャンネル、サンプリングレート、1つの数あたり16ビットです。ヘッダー44バイトと、1つの数につき2バイトで、1秒なら44,144バイトになります。</p><p><code>pack</code>と<code>unpack</code>を使えば、Rubyはほとんどのバイナリ形式を読み書きできます。PNGもZIPもMIDIも同じ考え方です。<code>show_audio</code>はセルの下でファイルを再生し、波形を表示します。左は音全体、右は虫めがねで見た12ミリ秒です。</p>
   HTML
   <<~HTML.strip,
-    <p><strong>位相</strong>は、1回の振動のどこにいるかを表します。始まりが0.0、半分で0.5、終わりの直前が1.0に近い値です。<code>(frequency * i / RATE) % 1.0</code>がそれを計算します。<code>%</code>で振動の回数ぶんを捨て、余りだけを残します。それぞれの波形は位相を高さに変える<strong>ラムダ</strong>で、3つともHashに入っています。新しい音色は1行足すだけです。</p><p>虫めがねで見てみましょう。サイン波は丸く、やわらかく聞こえます。矩形波とのこぎり波には角があり、ゲームボーイのようにビーッと聞こえます。角はたくさんの高い音、つまり<em>倍音</em>でできているからです。そのため、この2つは小さめの音量で計算しています。</p>
+    <p><strong>位相</strong>は、1回の振動のどこにいるかを表します。始まりが0.0、半分で0.5、終わりの直前が1.0に近い値です。<code>(frequency * i).fdiv(RATE) % 1.0</code>がそれを計算します。<code>%</code>で振動の回数ぶんを捨て、余りだけを残します。それぞれの波形は位相を高さに変える<strong>ラムダ</strong>で、3つともHashに入っています。新しい音色は1行足すだけです。</p><p>虫めがねで見てみましょう。サイン波は丸く、やわらかく聞こえます。矩形波とのこぎり波には角があり、ゲームボーイのようにビーッと聞こえます。角はたくさんの高い音、つまり<em>倍音</em>でできているからです。そのため、この2つは小さめの音量で計算しています。</p>
   HTML
   <<~HTML.strip,
     <p>これは<strong>「かえるの歌」</strong>です。もとはドイツの童謡で、日本ではだれもが知っている歌ですね。ここではメロディーは文字列です。<code>split</code>で音名に分け、<code>flat_map</code>ですべての音を1本の長い配列につなげます。</p><p>1オクターブには12の<strong>半音</strong>があり、半音1つごとに周波数は2<sup>1/12</sup> ≈ 1.059倍になります。12段上がるとちょうど2倍で、C5はC4の2倍の速さで振動します。<code>frequency</code>はA4（MIDIと同じく69番）から半音をいくつ数えるかで周波数を求めます。そして<code>envelope</code>は、それぞれの音を短くフェードイン・フェードアウトさせます。振動の途中で波がいきなり0になると、プチッという音が聞こえるからです。一度<code>envelope(…)</code>を消して聞いてみてください。</p>

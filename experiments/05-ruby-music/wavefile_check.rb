@@ -58,3 +58,4 @@ a = ours.byteslice(44..).unpack("s<*")
 b = theirs.byteslice(44..).unpack("s<*")
 diff = a.zip(b).map { |x, y| (x - y).abs }.max
 puts "header identical: #{same_header}; largest sample difference: #{diff} (of 32767)"
+exit(ours == theirs ? 0 : 1)   # the claim is byte-identical files: a nonzero status if not

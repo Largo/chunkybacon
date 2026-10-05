@@ -62,14 +62,16 @@ WRONG = {
     "nur Töne, kein Akkord" => "File.binwrite(\"tusch.wav\", wav(noten(\"C4 E4 G4 C5 C5*4\")))",
     "falsche Reihenfolge" => "akkord = zusammen(*%w[C4 E4 G4 C5].map { |n| huelle(ton(frequenz(n), 1.0, :sinus, 0.2)) })\n" \
                              "File.binwrite(\"tusch.wav\", wav(noten(\"C5 G4 E4 C4\") + akkord))",
-    "falscher Name" => "File.binwrite(\"fanfare.wav\", wav(noten(\"C4 E4 G4 C5 C5*4\")))"
+    "falscher Name" => "File.binwrite(\"fanfare.wav\", wav(noten(\"C4 E4 G4 C5 C5*4\")))",
+    "nur Akkord, 2 s" => "File.binwrite(\"tusch.wav\", wav(zusammen(*%w[C4 E4 G4 C5].map { |n| huelle(ton(frequenz(n), 2.0, :sinus, 0.2)) })))"
   },
   "en" => {
     "notes only, no chord" => "File.binwrite(\"fanfare.wav\", wav(notes(\"C4 E4 G4 C5 C5*4\")))",
     "wrong order" => "chord = mix(*%w[C4 E4 G4 C5].map { |n| envelope(tone(frequency(n), 1.0, :sine, 0.2)) })\n" \
                      "File.binwrite(\"fanfare.wav\", wav(notes(\"C5 G4 E4 C4\") + chord))",
     "chord of three" => "chord = mix(*%w[C4 E4 G4].map { |n| envelope(tone(frequency(n), 1.0, :sine, 0.2)) })\n" \
-                        "File.binwrite(\"fanfare.wav\", wav(notes(\"C4 E4 G4 C5\") + chord))"
+                        "File.binwrite(\"fanfare.wav\", wav(notes(\"C4 E4 G4 C5\") + chord))",
+    "chord only, 2 s" => "File.binwrite(\"fanfare.wav\", wav(mix(*%w[C4 E4 G4 C5].map { |n| envelope(tone(frequency(n), 2.0, :sine, 0.2)) })))"
   }
 }
 WRONG["ja"] = WRONG["en"]

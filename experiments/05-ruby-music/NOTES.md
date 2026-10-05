@@ -20,7 +20,7 @@ time limit, so the lesson should be ▶-only.
 | `examples/` | 9 WAVs, 22,050 Hz 16-bit mono: A440 as sine, square, saw; the frog song (sine, square); a C major chord; the fanfare (the exercise's solution); a beat; frog song with beat (8 s) |
 | `show_audio.rb` | the widget, written as a run-time patch of `ChunkyApp` (prepends `pdfs_html`) so it can be pasted into a cell of the real page; the proper `main.rb` edit is below |
 | `build_lesson.rb` → `lesson.json` | the lesson draft, de/en/ja, in the shape of one `lessons.js` entry |
-| `lesson_check.rb` | offline harness like `test/check_harness.rb`: demo cells in one binding, starter fails, 2 solutions pass, 3 wrong answers fail; times every cell plain and under a live-run TracePoint. `ruby lesson_check.rb de` / `en` / `ja` - all three ALL OK |
+| `lesson_check.rb` | offline harness like `test/check_harness.rb`: demo cells in one binding, starter fails, 2 solutions pass, 4 wrong answers fail; times every cell plain and under a live-run TracePoint. `ruby lesson_check.rb de` / `en` / `ja` - all three ALL OK |
 | `wavefile_check.rb` | installs the `wavefile` gem through `html/browser_gems.rb` from `vendor/`, reads every example with it, compares its writer with ours |
 | `measure_in_page.mjs` | Playwright against the real page (dev server, port 18105): pastes `show_audio.rb` into a cell, runs every demo cell with ▶ and live, runs the exercise check, benchmarks; writes `page_results_de.json` and the screenshots |
 | `screenshot_melody.png`, `screenshot_song.png` | the widget in the page |
@@ -38,9 +38,10 @@ time limit, so the lesson should be ▶-only.
   another, 0.25 s each, then all four together for 1 s) parses the WAV
   header, checks ~2 s of 22,050 Hz 16-bit mono, and finds each note with a
   tiny Fourier transform over 0.1 s windows (`amp.(t, f) > 1000`): every
-  note in its quarter second, all four in the chord. Any wave shape passes;
-  notes without a chord, the wrong order, a three-note chord, the wrong
-  file name all fail. It reads with `File.read(name, mode: "rb")`, so both
+  note in its quarter second (the other notes under a quarter of it), all
+  four in the chord. Any wave shape passes; notes without a chord, the
+  wrong order, a three-note chord, only the chord for 2 s, the wrong file
+  name all fail. It reads with `File.read(name, mode: "rb")`, so both
   `File.binwrite` (real file) and `File.write` (virtual store) work. 50-80 ms
   in wasm.
 - **wavefile gem**: pure Ruby, no dependencies, MIT, 57 KB `.gem` (mostly
@@ -136,8 +137,10 @@ downloads.include?("tusch.wav") && File.read("tusch.wav", mode: "rb").b.then { |
     part.each_with_index { |x, n| w = 2 * Math::PI * f * n / 22050; re += x * Math.cos(w); im += x * Math.sin(w) }
     Math.hypot(re, im) * 2 / [part.size, 1].max }
   c4, e4, g4, c5 = 261.63, 329.63, 392.0, 523.25
+  arpeggio = [[0.07, c4, [e4, g4]], [0.32, e4, [c4, g4, c5]], [0.57, g4, [c4, e4, c5]], [0.82, c5, [c4, e4, g4]]]
   head.values_at(0, 2, 6, 7, 10) == ["RIFF", "WAVE", 1, 22050, 16] && (1.9..2.1).cover?(s.size / 22050.0) &&
-  [[0.07, c4], [0.32, e4], [0.57, g4], [0.82, c5], [1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }
+  arpeggio.all? { |t, f, others| (a = amp.(t, f)) > 1000 && others.all? { |o| amp.(t, o) < a / 4 } } &&
+  [[1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }
 ```
 
 Not done in the draft: a German "lesson 13/22" cross-link in the intro
