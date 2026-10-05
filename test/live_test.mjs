@@ -3,7 +3,9 @@
 // rehearsal that keeps no file, without downloads, cut off after a second -
 // and the workshop's switch starts off. A SQLite database in a file
 // (sqlite3_sqljs.rb): a live run reads it but changes only its own, and the
-// workshop keeps it with the project. About two minutes.
+// workshop keeps it with the project. matplotlib (pycall.rb): no live run
+// while its first import runs, none that imports a module for the first
+// time, a chart redrawn live. About three minutes.
 import { chromium } from '/usr/local/lib/node_modules/playwright/index.mjs';
 
 const BASE = process.env.BASE || 'http://127.0.0.1:8011/';
@@ -120,6 +122,49 @@ const responsive = async page => {
   await page.reload();
   await page.waitForSelector('#app', { state: 'visible' });
   check('the switch is remembered', (await page.getAttribute('.live-toggle', 'aria-pressed')) === 'false');
+  await ctx.close();
+}
+
+// ---------- matplotlib: no live run while its first import runs, a chart redrawn ----------
+{
+  const ctx = await browser.newContext({ locale: 'de-DE' });
+  const page = await open(ctx, '#matplotlib');
+  await countRuns(page);
+  // index.html imports pyplot step by step when the lesson opens; meanwhile
+  // typing is just typing (shell/bridge.js)
+  const whileWarming = await page.waitForFunction(() => window.chunkyPython.warming &&
+    { autorun: window.ChunkyBridge.autorun(1) }, null, { timeout: 180000, polling: 50 }).then(h => h.jsonValue()).catch(() => null);
+  check('no live run while matplotlib is imported ahead', whileWarming !== null && whileWarming.autorun === false);
+  await page.waitForFunction(() => window.chunkyPython.warm, null, { timeout: 120000 }).catch(() => {});
+  check('... which is done a few seconds later', await page.evaluate(() => window.chunkyPython.warm === true));
+
+  const svgText = idx => page.evaluate(i => [...document.querySelectorAll(`#cell-out-${i} img.cell-image`)]
+    .map(img => new TextDecoder().decode(Uint8Array.from(atob(img.src.split(',')[1]), c => c.charCodeAt(0)))), idx);
+  const code1 = await page.evaluate(() => window.cellEditors[1].getValue());
+  // first a run that draws but does not show: closed afterwards (pycall.rb's
+  // end_run), so the next run does not draw over it
+  await edit(page, 1, code1.replace('plt.title("Eine Woche Wetter")', 'plt.xlabel("Rest")').replace('plt.show', '# plt.show'));
+  await page.waitForFunction(() => (document.getElementById('cell-out-1').textContent || '').includes('=>'), null, { timeout: 10000 }).catch(() => {});
+  check('a live run that draws without show shows no chart', !(await page.$('#cell-out-1 img.cell-image')));
+  await edit(page, 1, code1.replace('Eine Woche Wetter', 'Live-Wetter'));
+  await page.waitForFunction(() => document.querySelector('#cell-out-1 img.cell-image'), null, { timeout: 10000 }).catch(() => {});
+  const charts = await svgText(1);
+  check('a live run draws the chart', charts.length === 1 && charts[0].includes('Live-Wetter'));
+  check('... on an empty board (the last run left nothing behind)', charts.length === 1 && !charts[0].includes('Rest'));
+  check('... as a rehearsal', await page.evaluate(() => document.getElementById('cell-out-1').classList.contains('is-rehearsal')));
+  // a chart takes about the 0.3 s after which a cell's live runs pause
+  // (shell/app.rb, LIVE_SLOW) - machine-dependent, so only reported
+  console.log('  (live switch after the chart:', await page.getAttribute('.cell:has(.run-cell[data-idx="1"]) .live-toggle', 'class'),
+    ', the warm-up\'s own chart:', await page.evaluate(() => JSON.stringify(window.chunkyPython.warmSteps.slice(-1))), ')');
+
+  // a module Python has not imported yet: not in a live run (it may take
+  // seconds), the hint asks for ▶ - which imports it
+  await edit(page, 3, 'wave = PyCall.import_module("wave")\nwave.__name__');
+  await page.waitForFunction(() => (document.getElementById('cell-out-3').textContent || '').includes('▶'), null, { timeout: 10000 }).catch(() => {});
+  check('a live run does not import a Python module for the first time', (await out(page, 3)).includes('Python-Modul zum ersten Mal'));
+  await page.click('.run-cell[data-idx="3"]');
+  await page.waitForFunction(() => (document.getElementById('cell-out-3').textContent || '').includes('=>'), null, { timeout: 30000 }).catch(() => {});
+  check('... ▶ does', (await out(page, 3)).includes('=> "wave"'));
   await ctx.close();
 }
 

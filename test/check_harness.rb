@@ -173,7 +173,7 @@ SOLUTION_LANG = { "ja" => "en" }.freeze
 # Sequel's sqlite3 to sql.js (html/sqlite3_sqljs.rb), and Herb's parser is
 # its WebAssembly build (html/herb_bridge.rb) - only a page has them;
 # test/browser_test.mjs runs them.
-BROWSER_ONLY = %w[pycall sympy numpy sklearn sequel erb].freeze
+BROWSER_ONLY = %w[pycall sympy numpy matplotlib sklearn sequel erb].freeze
 
 # the Rumale exercise's picture of a seven (its starter defines it too)
 RUMALE_SEVEN = "PIC = %w[.######. ......#. .....#.. ....#... ...#.... ...#.... ..#..... ..#.....].join(\"\\n\") + \"\\n\"\n"

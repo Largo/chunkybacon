@@ -4,7 +4,7 @@ Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
 Work in progress - what is unfinished, and in what state - is in
 `docs/OPEN_WORK.md`.
-Last updated 2026-10-05 (50 lessons in German, English and Japanese).
+Last updated 2026-10-05 (51 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -59,7 +59,8 @@ html/
                         Fiber-based Thread, FileWatch (downloads)
   rack_playground.rb    show_browser: talks Rack to Sinatra/Roda apps, mock_get
   shoes_dom.rb          Lacci (Shoes) display service drawing into the page
-  pycall.rb             require "pycall": PyCall's API over Pyodide (§6d)
+  pycall.rb             require "pycall": PyCall's API over Pyodide, matplotlib's
+                        backend for charts under the cell (§6d)
   numo_narray.rb        require "numo/narray": Numo in pure Ruby, for Rumale (§6e)
   sqlite3_sqljs.rb      require "sqlite3": the gem's API over sql.js, for Sequel (§6f)
   letter.js             show_letter's envelope: drawing, digits as 8x8 (§6e)
@@ -89,7 +90,7 @@ THIRD_PARTY_NOTICES.md     bundled components and their licenses - update it
 tools/build_gem_cache.rb   regenerates html/gems/cache/
 tools/update_ruby_wasm.rb  updates the wasm + loader from npm
 tools/compress_assets.rb   the .gz copies nginx serves (the wasm runtimes)
-tools/vendor_pyodide.rb    Pyodide + pandas, sympy, scikit-learn into html/assets/pyodide/ (§6d)
+tools/vendor_pyodide.rb    Pyodide + pandas, sympy, scikit-learn, matplotlib into html/assets/pyodide/ (§6d)
 tools/vendor_sqljs.rb      sql.js (SQLite in WebAssembly) into html/assets/sqljs/ (§6f)
 tools/build_box_font.rb    html/assets/fonts/chunky-box-drawing.woff, box drawing for the code font (§6g)
 tools/vendor_herb.rb       Herb's WebAssembly parser into html/assets/herb/ (§6j)
@@ -197,7 +198,7 @@ A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 19-34), not in a group of one.
+(side trips, 19-35), not in a group of one.
 
 The sidebar itself (`index.html` `#sidebar`, `shell/app.rb`, `app.css`): from
 the top of the window to its foot with its own scroll; head with the course
@@ -253,7 +254,7 @@ Rules that the code and tests rely on:
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
 - Checks accept output OR result; `puts` is never required.
-- `test/browser_test.mjs` asserts the lesson count (`'50 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'51 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -272,7 +273,8 @@ or the name of a file the cell wrote), `show_browser(app, path)` + `mock_get`,
 `show_irb`, `show_files`, `show_three(scene, camera, orbit:, &animate)`,
 `show_shoes { ... }`, `show_letter(boxes:) { |digits| ... }` (§6e),
 `download_file(data, name)`, `show_pdf(pdf)` (a file
-name, PDF bytes, a Prawn or HexaPDF document), `run_tests` (Minitest).
+name, PDF bytes, a Prawn or HexaPDF document), `run_tests` (Minitest);
+in `pycall.rb`: `show_plot(fig)` (a matplotlib figure, §6d).
 
 ## 4. Gems
 
@@ -500,7 +502,8 @@ shell does the timing, the kernel the guarding:
   the project (`workspaceWrite`/`workshopAfterRun` are skipped). Its output,
   previews and downloads still show. **No downloads**: `install_gem` of a
   gem neither installed nor cached, the Net::HTTP transport and a write to
-  a SQLite database opened before the live run (§6f) raise
+  a SQLite database opened before the live run (§6f) and importing a
+  Python module Python has not imported yet (§6d) raise
   `AutoRun::NeedsRun` (outcome `needs`, a hint to press ▶); `require`
   auto-installs cached gems only. **A time limit**:
   `AutoRun.with_time_limit` (TracePoint `:line`, `:b_call`, `:c_call`, the
@@ -521,12 +524,12 @@ shell does the timing, the kernel the guarding:
 ## 6c. Offline mode
 
 The progress dialog's *Offline lernen* keeps the whole course on the device
-(~92 MB stored, up to ~59 MB to download; Pyodide is 43 / 36 of it): the course then opens and runs
+(~101 MB stored, up to ~68 MB to download; Pyodide is 52 / 45 of it): the course then opens and runs
 without a connection. **Off until the learner turns it on** - before that
 no service worker is registered and nothing changes. The choice is
 `chunkyui_offline` (a view setting, not synced).
 
-- **Python is a checkbox** ("Python mitnehmen", ticked by default; ~43 MB):
+- **Python is a checkbox** ("Python mitnehmen", ticked by default; ~52 MB):
   `chunkyui_offline_python` = `off` leaves `assets/pyodide/` out.
   `offline.js` sends the choice with every refresh (`{ python }`), `sw.js`
   filters the list by it (`PYTHON`), so a change takes effect at once and the
@@ -588,14 +591,15 @@ container started with plain `docker run` on the default bridge gets 502s.
 
 ## 6d. Python: Pyodide and the PyCall bridge
 
-The PyCall lessons run real pandas (23), SymPy (24), NumPy (25) and
-scikit-learn (26). The pycall gem cannot load in the browser - it opens
+The PyCall lessons run real pandas (23), SymPy (24), NumPy (25), matplotlib
+(26) and scikit-learn (27). The pycall gem cannot load in the browser - it opens
 libpython with Fiddle - so:
 
 - **Pyodide** (CPython 3.14 in WebAssembly) with pandas, numpy and their
-  three small dependencies, sympy with mpmath, and scikit-learn with scipy,
-  joblib and threadpoolctl, sits in `html/assets/pyodide/` (~43 MB;
-  `PACKAGES` in the tool). Wheels are zip archives already, so they get no
+  three small dependencies, sympy with mpmath, scikit-learn with scipy,
+  joblib and threadpoolctl, and matplotlib with contourpy, cycler,
+  fonttools, kiwisolver, packaging, pillow and pyparsing (9.1 MB), sits in
+  `html/assets/pyodide/` (~52 MB; `PACKAGES` in the tool). Wheels are zip archives already, so they get no
   `.gz` (gzip saves under 2%):
   `tools/vendor_pyodide.rb` takes the core from the official GitHub release
   and the wheels from jsDelivr, checks each wheel against the release
@@ -603,11 +607,15 @@ libpython with Fiddle - so:
   (asking for another package then fails clearly). Bump `VERSION` there to
   update; then `ruby tools/compress_assets.rb` (the .gz of the wasm and
   `pyodide.asm.mjs`) and `ruby tools/offline_files.rb`. nginx serves `.mjs`
-  as JavaScript (module scripts insist).
+  as JavaScript (module scripts insist). A slimmer matplotlib wheel (3.6 MB
+  of it are fonts: DejaVu Sans/Serif/Mono, STIX, Computer Modern) would save
+  2.5-3 MB, but it would be a repacked third-party wheel whose SHA-256 is
+  no longer the release's - left as it is.
 - **Loading**: index.html's `ensurePython(code)` imports `pyodide.mjs` once
   (~9 MB), maps import names to vendored packages from `pyodide-lock.json`,
   loads the packages the `import_module("...")` calls in `code` name
-  (pandas ~12 MB, sympy ~5 MB, scikit-learn ~19 MB with scipy; a dotted
+  (pandas ~12 MB, sympy ~5 MB, scikit-learn ~19 MB with scipy, matplotlib
+  ~9 MB with what it needs besides numpy; a dotted
   name counts by its first part, `sklearn.tree` -> `sklearn`) and
   collects what Python prints
   (`chunkyPython.takeOutput`). The shell calls it with a lesson's PyCall
@@ -629,6 +637,54 @@ libpython with Fiddle - so:
   `coerce` makes `2 * x` work (the 2 becomes a Python object, op `box`, as
   the gem's SwappedOperationAdapter does), and `to_a` turns sympy integers
   and floats into Ruby numbers. Ruby blocks cannot be passed to Python.
+- **A tuple is an Array** of its converted items, as the gem's
+  `pycall_pytuple_to_a` makes it (only an exact `tuple`; a namedtuple stays
+  a PyObject there too): `fig, ax = plt.subplots` unpacks, `df.shape` is
+  `[3, 4]`. A NumPy array does not unpack - `fig, (a, b) = plt.subplots(1, 2)`
+  leaves `b` nil, as with the gem, whose PyObjectWrapper has no `to_ary` -
+  so the lesson takes `axes[0]`, `axes[1]`. (`to_a` of a list of objects
+  still gives their `str`, unlike the gem's PyCall::List.)
+- **matplotlib** draws with the bridge's own backend (`BACKEND` in
+  pycall.rb): written as `chunky_backend.py` into Pyodide's file system
+  when the bridge starts, picked by `MPLBACKEND` (Pyodide's matplotlib
+  would choose webagg, whose `show` wants a server), or by `switch_backend`
+  when pyplot was imported first. It is Agg plus a `show` that renders
+  every open figure as SVG and closes it (what matplotlib-inline does in
+  Jupyter); the SVGs go along with that request's answer (`figures`), and
+  `PyCall.request` puts each under the cell through `add_image` - an
+  exercise's check sees it in `images`. `svg.fonttype: none` keeps text as
+  text: smaller, the check can read a title, and the browser draws
+  Japanese, which DejaVu Sans lacks (matplotlib only measures with it; a
+  PNG from `savefig` shows boxes - the ja lesson says so). `savefig` with
+  a relative name is read back and written into `SandboxFS` (`files`), so
+  it is a download in a lesson and a project file in the workshop.
+  `show_plot(fig)` (op `figure`) shows one figure explicitly; the
+  companion gem has it too. After every run main.rb calls
+  `PyCall.end_run`: figures drawn but not shown are closed, so the next
+  run - a live one while typing too - starts with an empty board instead
+  of drawing over the last one (Jupyter's inline backend does the same).
+  Not covered: matplotlib's object API without pyplot
+  (`matplotlib.figure.Figure.new`) never loads the backend, so its
+  `savefig` stays in Pyodide; `File.binread` of a virtual file does not
+  see SandboxFS (`File.read` does). A chart is 12-20 KB of SVG, a
+  2000-point scatter ~225 KB.
+- **matplotlib's first import** (`import matplotlib.pyplot`) takes 4-9 s,
+  all of it Python on the main thread. When a lesson that imports it
+  opens, `ensurePython` starts `warmMatplotlib` (index.html): the
+  imports one module at a time (24 of them, the longest `import matplotlib`
+  itself, ~1 s), with a pause between them so the page stays usable;
+  `chunkyPython.warmSteps` has the times. Runs are not held meanwhile (a
+  ▶ imports the rest itself; other lessons are not slowed), live runs
+  are (bridge.js). In pycall.rb `import_module` runs untraced and counts
+  as library time, like `require`, and a live run never imports a module
+  Python does not have yet (`AutoRun::NeedsRun`, as with Faker, §6i), so
+  typing does not freeze for it in the workshop either. The warm-up's last
+  step draws a small chart off pyplot (the font, the caches - the first real
+  chart would take ~0.3 s longer), and setting up the bridge, once per page,
+  counts as loading a library too. After that a chart takes 0.2-0.5 s
+  (`bbox_inches: "tight"` is about half of it; without it labels can be
+  cut off) - around `LIVE_SLOW`, so a chart cell's live runs may pause
+  after one (§6b) and ▶ draws it. `test/live_test.mjs` covers the rules.
 - **The lesson** goes in small steps, one idea per cell: a DataFrame, one
   column (a Series), computing with columns, `sum`, a True/False mask, the
   rows it picks, back to Ruby with `tolist.to_a`, `value_counts`, `groupby`.
@@ -644,6 +700,15 @@ libpython with Fiddle - so:
   a mask, `arange`/`linspace`, `reshape`/`shape`/`sum(axis:)`, seeded dice
   (`default_rng(42)`, so `bincount` is the same every run), `tolist.to_a`;
   the exercise counts scores >= 60 with `(a >= 60).sum`.
+- **The matplotlib lesson**: `plt.plot` + `plt.show` (a line), `plt.bar`,
+  then `fig, ax = plt.subplots` (the tuple unpacking, with a Python ->
+  Ruby cheat sheet), NumPy's sin and cos with a legend, two panels from
+  `plt.subplots(1, 2)` as `axes[0]`/`axes[1]` (the text says why not
+  `fig, (a, b)`) with `plt.savefig("wetter.png")` before `show`; its
+  scatter of ice creams by temperature leads to scikit-learn. The
+  exercise draws the fox's mice as a bar chart titled `Fuchs-Jagd` /
+  `Fox hunt`: the check wants `.bar` in the code and the title in an SVG
+  under the cell.
 - **The scikit-learn lesson**: `LinearRegression` (ice creams by
   temperature; `coef_`, `intercept_` - negative, which the text uses),
   a `DecisionTreeClassifier` cat-or-fox whose `export_text` shows it split
@@ -653,11 +718,13 @@ libpython with Fiddle - so:
   the code prints; check them after a scikit-learn update. The exercise
   predicts points for 6 study hours (87).
 - **Tests**: the lessons need the browser - `check_harness.rb` skips them
-  (`BROWSER_ONLY`), `test/browser_test.mjs` runs every cell.
+  (`BROWSER_ONLY`), `test/browser_test.mjs` runs every cell (for
+  matplotlib also the SVG, the download, the tuple rules, closing unshown
+  figures, `show_plot`, Japanese text and the exercise's fail/pass).
 
 ## 6e. Rumale, a pure-Ruby Numo, and the letter
 
-Lesson 27 does machine learning in Ruby itself, with
+Lesson 28 does machine learning in Ruby itself, with
 [Rumale](https://github.com/yoshoku/rumale): k-nearest neighbours on
 vegetables, then on 1797 handwritten digits, then on a postcode the learner
 writes onto a letter.
@@ -707,7 +774,7 @@ writes onto a letter.
 
 ## 6f. SQLite and Sequel: a sqlite3 stand-in on sql.js
 
-Lesson 28 uses [Sequel](https://sequel.jeremyevans.net) with SQLite. Sequel
+Lesson 29 uses [Sequel](https://sequel.jeremyevans.net) with SQLite. Sequel
 is pure Ruby (cached, `sequel-5.109.0.gem`); the sqlite3 gem under it is C.
 
 - **sql.js** (SQLite 3.49 in WebAssembly, ~650 KB, 0.3 MB gzipped) sits in
@@ -780,7 +847,7 @@ is pure Ruby (cached, `sequel-5.109.0.gem`); the sqlite3 gem under it is C.
 
 ## 6g. A terminal below the cell: TTY, colours, box drawing
 
-Lesson 30 draws with the [TTY toolkit](https://ttytoolkit.org): pastel,
+Lesson 31 draws with the [TTY toolkit](https://ttytoolkit.org): pastel,
 tty-table, tty-box, tty-tree, tty-font (all cached, with strings,
 tty-screen, tty-color, tty-cursor, unicode-display_width - pinned to 2.6,
 as strings wants < 3 - and unicode_utils). Three things make a cell's
@@ -813,7 +880,7 @@ prints nothing when its output is no terminal.
 
 ## 6h. Processing: a stand-in that records, a canvas that paints
 
-Lesson 31 is the [processing gem](https://github.com/xord/processing)
+Lesson 32 is the [processing gem](https://github.com/xord/processing)
 (xord, 1.4.0): `require "processing"`, `using Processing`, `setup do`,
 `draw do`, the Processing names in camelCase. The gem is pure Ruby on
 rays and reflexion, C++ on OpenGL, so it cannot run here.
@@ -850,7 +917,7 @@ helpers, `Vector`, the mouse and key state and blocks,
   cell or leaving the lesson stops it.
 - **`using` must not leak.** A refinement switched on with `using` inside
   `eval` lands in the binding's top-level scope, and every binding made
-  from `TOPLEVEL_BINDING` shares that one: after lesson 31, `text` in the
+  from `TOPLEVEL_BINDING` shares that one: after lesson 32, `text` in the
   Scarpe lesson was Processing's, and `loop do` would have been too.
   Lesson, IRB and workshop bindings now come from `TopLevel.binding`,
   an instruction sequence compiled on its own (main.rb), which has a
@@ -869,7 +936,7 @@ helpers, `Vector`, the mouse and key state and blocks,
 
 ## 6i. Faker and its six seconds
 
-Lesson 32 is [Faker](https://github.com/faker-ruby/faker) 3.8 (cached with
+Lesson 33 is [Faker](https://github.com/faker-ruby/faker) 3.8 (cached with
 i18n and concurrent-ruby; pure Ruby, psych is in the wasm image). Its
 first lookup has I18n read the whole load path: 318 YAML files, 4.6 MB,
 some 60 languages. In Chrome that is about six seconds - nearly all of it
@@ -895,7 +962,7 @@ the shape of the customers, not their names.
 
 ## 6j. ERB, and Herb's parser as WebAssembly
 
-Lesson 33 is ERB (stdlib: `result_with_hash`, `trim_mode: "-"`,
+Lesson 34 is ERB (stdlib: `result_with_hash`, `trim_mode: "-"`,
 `ERB::Util.h` against XSS, a page through a Rack lambda in the mini
 browser) and then [Herb](https://herb-tools.dev), which parses HTML and
 ERB together and reports what ERB lets through. Herb's gem is Ruby - AST
@@ -996,7 +1063,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 50 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 51 lessons x 3 languages, starter fails, solutions pass
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof
@@ -1055,7 +1122,7 @@ nokogiri-pure's CI has a wasm job for this).
 - [BrowserRubyKoans](https://github.com/Largo/BrowserRubyKoans) - the
   original foundation (koans.idogawa.com), linked as the follow-up course.
 - [three-rb](https://github.com/lef237/three-rb), [lacci / scarpe](https://github.com/scarpe-team/scarpe)
-  - lessons 19 and 22.
+  - lessons 19 and 30.
 - [Prawn](https://github.com/prawnpdf/prawn), [HexaPDF](https://hexapdf.gettalong.org/)
   (AGPL-3.0 or commercial) - lesson 21.
 
