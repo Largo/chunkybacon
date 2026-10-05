@@ -384,6 +384,11 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   its `<style>` cannot restyle the course; its default CSS is
   `MB_PAGE_STYLE` in main.rb, and tests read `.mb-page` (Playwright's
   selectors pierce the shadow root, `textContent` of `.mb-view` is empty).
+  A shadow root has no `<html>`/`<body>`, so `page_styles_scoped` points
+  the page's `html`/`:root` selectors at `:host` and `body` at `.mb-page`
+  (selectors only, not @-rules or values): Sinatra's 404 page is still
+  grey and centred, inside the fake browser. Not handled: `html.x`
+  (would need `:host(.x)`) and attributes on the `<body>` tag itself.
 - **show_three**: one shared `Three::Backends::ThreeJS` for all stages
   (a second backend rebuilds a clean scene as defaults); canvas ids from a
   page-wide counter; contexts disposed on re-run/lesson change.

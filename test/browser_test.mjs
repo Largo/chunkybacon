@@ -229,6 +229,8 @@ await page.waitForTimeout(600);
 check('sinatra 404 in widget', (await page.textContent('#cell-out-1 .mb-status')).trim() === '404');
 // Sinatra's 404 page brings <style>body { color:#888; text-align:center; font-size:22px }</style>
 check('the 404 page\'s style stays inside the mini browser', (await courseStyle()) === courseStyleBefore);
+check('... and still styles the page there (its body rule applies to .mb-page)',
+      (await page.$eval('#cell-out-1 .mb-page', el => { const s = getComputedStyle(el); return [s.color, s.textAlign, s.fontSize].join(' '); })) === 'rgb(136, 136, 136) center 22px');
 await runExercise();
 check('sinatra starter fails (404 on /speck)', (await page.getAttribute('#chunkyChat', 'class')).includes('fail'));
 await setExercise('install_gem "sinatra"\nrequire "sinatra/base"\nclass MeineSeite < Sinatra::Base\n  get "/" do\n    "<h1>Meine Seite</h1>"\n  end\n  get "/speck" do\n    "CHUNKY BACON!"\n  end\nend\nshow_browser MeineSeite, "/speck"');
