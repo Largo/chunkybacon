@@ -817,7 +817,25 @@ class ChunkyApp
       status_el.className = "mb-status err"
       "<pre class=\"mb-error\">#{escape_html("#{e.class}: #{e.message}")}</pre>"
     end
-    browser_page(widget.querySelector(".mb-view")).innerHTML = "#{MB_PAGE_STYLE}<div class=\"mb-page\">#{page}</div>"
+    browser_page(widget.querySelector(".mb-view")).innerHTML = "#{MB_PAGE_STYLE}<div class=\"mb-page\">#{page_styles_scoped(page)}</div>"
+  end
+
+  # In the shadow root there is no <html> or <body> (the fragment parser
+  # drops them), so a page's rules for html, :root and body would match
+  # nothing. Their selectors are pointed at the fake browser's view (:host)
+  # and the page (.mb-page) instead, so Sinatra's 404 page still looks like
+  # Sinatra's 404 page - inside the fake browser. Only selectors change: the
+  # text before each "{" that is not an @-rule.
+  PAGE_ROOTS = { "html" => ":host", ":root" => ":host", "body" => ".mb-page" }.freeze
+
+  def page_styles_scoped(page)
+    page.gsub(%r{(<style\b[^>]*>)(.*?)(</style>)}mi) do
+      tag, css, close = $1, $2, $3
+      css = css.gsub(/(\A|[{}])([^{}@]+)\{/) do
+        "#{$1}#{$2.gsub(/(?<![\w.#:-])(?:html|body)(?![\w-])|:root(?![\w-])/i) { |root| PAGE_ROOTS[root.downcase] }}{"
+      end
+      "#{tag}#{css}#{close}"
+    end
   end
 
   # The app's page goes into a shadow root of .mb-view, so a <style> it
