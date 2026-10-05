@@ -507,7 +507,7 @@ All on this branch, against the prototype on a local server:
 
 | suite | result |
 |---|---|
-| `ruby test/check_harness.rb` | ALL CHECKS OK (37 lessons × de, en, ja) |
+| `ruby test/check_harness.rb` | ALL CHECKS OK (every lesson × de, en, ja; 37 at the time) |
 | `ruby test/gems_harness.rb` | ALL GEM CHECKS OK |
 | `test/browser_test.mjs` | **130/130** (the 128 checks plus two new ones) |
 | `test/progress_test.mjs` | **37/37** - with the progress dialog and file panel in Ruby |

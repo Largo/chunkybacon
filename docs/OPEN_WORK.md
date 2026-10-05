@@ -15,7 +15,7 @@ Last updated 2026-10-05.
 | The page shell on PicoRuby, its portability rules | `docs/PICORUBY_SHELL.md`, `test/shell/portability_test.rb` |
 | Every bundled component and its licence | `THIRD_PARTY_NOTICES.md` |
 | All lesson text, code, checks and UI strings | `html/lessons.js` - the source of truth |
-| Lesson generators (scratch, **not in git**) | `tmp/*_lesson.rb` (pycall_lesson_v2, sympy, numpy, matplotlib, sklearn, sequel) write `tmp/<id>_lesson.json`; `tmp/insert_lesson.js` inserts and renumbers (`tmp/insert_lesson_into.js`: the same for a worktree's `LESSONS_JS`; `tmp/matplotlib_lesson_edits.js`: the edits around the matplotlib lesson), `tmp/replace_lesson.js` swaps one lesson. A hand edit to `lessons.js` is lost if a generator runs again - edit the generator too, or only `lessons.js` |
+| Lesson generators (scratch, **not in git**) | `tmp/*_lesson.rb` (pycall_lesson_v2, sympy, numpy, matplotlib, sklearn, sequel) write `tmp/<id>_lesson.json`; `tmp/insert_lesson.js` inserts and renumbers (`tmp/insert_lesson_into.js`: the same for a worktree's `LESSONS_JS`; `tmp/matplotlib_lesson_edits.js`: the edits around the matplotlib lesson), `tmp/replace_lesson.js` swaps one lesson; afterwards `ruby test/lint_lessons.rb --base=origin/main` catches every lesson reference that now points elsewhere. A hand edit to `lessons.js` is lost if a generator runs again - edit the generator too, or only `lessons.js` |
 | Local Playwright helper (scratch, **not in git**) | `tmp/playwright_redirect.mjs` + `tmp/playwright_resolve_hook.mjs` (see "Working on this machine") |
 | Experiments (prototypes, not on the site) | `experiments/NN-<idea>/NOTES.md` - what was tried, measurements, integration steps |
 | Hosting details | `docs/HOSTING.local.md` - local only, excluded from git |
@@ -68,13 +68,11 @@ Last updated 2026-10-05.
 - A re-run of a cell with `DB = Sequel.sqlite` reassigns a constant; the
   cell shows only its result (`=> [:eintraege]`), no warning (checked
   2026-10-05). The file step uses a local variable.
-- The lesson linter (`ruby experiments/07-lesson-linter/lint_lessons.rb`,
-  on `main`, not in CI) still warns: `rubykaigi` [ja] cells 1 and 7 end
-  in plain form (perhaps on purpose - a talk's punchline), `sequel` [de]
-  cell 5 has a 102-column line, and `docs/PICORUBY_SHELL.md` quotes an
-  old lesson count. Decide, then fix or accept (`allow.txt`). Its
-  `--base=origin/main` run finds every lesson reference pointing at the
-  same lesson as on `main`.
+- No CI runs the tests (`.github/workflows/` has only the gem release).
+  When a tests workflow exists, run `ruby test/lint_lessons.rb
+  --base=origin/${{ github.base_ref || 'main' }}` in it, with
+  `fetch-depth: 0` (`experiments/07-lesson-linter/NOTES.md`, "Wiring it
+  in", step 3).
 - Found by the experiments, in today's code (details in their `NOTES.md`):
   the live-run tracer makes code about 36x slower in ruby.wasm, so a cell
   looping over ~100k elements hits the 1 s limit (#8 suggests a per-lesson

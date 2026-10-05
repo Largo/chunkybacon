@@ -8,7 +8,7 @@ require "minitest/autorun"
 require_relative "lint_lessons"
 
 class LessonLintTest < Minitest::Test
-  ROOT = File.expand_path("../..", __dir__)
+  ROOT = File.expand_path("..", __dir__)
   GEMS = LessonLint::GemCache.new(ROOT)
   BASE = LessonLint::Source.new(ROOT).data.freeze
 
@@ -39,8 +39,6 @@ class LessonLintTest < Minitest::Test
   def test_real_file_has_no_unexpected_errors
     f = lint(data)
     errors = f.select { |x| x.severity == "ERROR" }
-    # the one known bug at the time of writing (see NOTES.md); remove when fixed
-    errors.reject! { |x| x.code == "unbalanced" && x.where == "tl-cli[de] cell 2" }
     assert_empty errors, errors.map { |x| "#{x.code} #{x.where}: #{x.message}" }.join("\n")
   end
 

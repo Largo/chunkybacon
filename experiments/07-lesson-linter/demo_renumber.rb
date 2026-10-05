@@ -1,6 +1,6 @@
 # Demo: insert a lesson at position 5 and renumber titles only (what a
 # careless merge does), then show what the refs group reports.
-require_relative "lint_lessons"
+require_relative "../../test/lint_lessons"
 root = File.expand_path("../..", __dir__)
 d = LessonLint::Source.new(root).data
 extra = Marshal.load(Marshal.dump(d["lessons"][4]))
