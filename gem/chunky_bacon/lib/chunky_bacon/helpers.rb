@@ -35,10 +35,11 @@ module ChunkyBacon
     end
 
     IMAGE_SIGNATURES = {
-      "\x89PNG".b => "png", "\xFF\xD8\xFF".b => "jpg", "GIF8".b => "gif", "RIFF".b => "webp"
+      "\x89PNG".b => "png", "\xFF\xD8\xFF".b => "jpg", "GIF8".b => "gif", "RIFF".b => "webp",
+      "<svg".b => "svg"
     }.freeze
 
-    # "png", "jpg", "gif" or "webp" for a picture's bytes, nil for anything else
+    # "png", "jpg", "gif", "webp" or "svg" for a picture's bytes, nil for anything else
     def image_type(bytes)
       bytes = bytes.b
       IMAGE_SIGNATURES.find { |magic, _type| bytes.start_with?(magic) }&.last
@@ -93,7 +94,8 @@ module ChunkyBacon
 
     # A picture: a ChunkyPNG image (anything with to_blob or to_data_url),
     # what PureJPEG.encode returns (anything with to_bytes), the bytes of a
-    # PNG, JPEG, GIF or WebP, or the path of an image file.
+    # PNG, JPEG, GIF, WebP or SVG, or the path of an image file. show_objects
+    # (object_graph.rb) comes this way too, as an SVG.
     def show_image(image)
       # a path: text without a picture's signature or NUL bytes, naming a file
       if image.is_a?(String) && !ChunkyBacon.image_type(image) && !image.include?("\0") && File.file?(image)

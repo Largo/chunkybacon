@@ -987,7 +987,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Aufgabe:</strong> Häng an das Array unten <code>\"Speck\"</code> an. Bonus: gib alle Elemente mit <code>each</code> aus.</div>"
+            "html": "<p>Ein Variablenname ist ein <strong>Zettel an einem Objekt</strong>, keine Schachtel. <code>gleich = fruehstueck</code> klebt einen zweiten Zettel an <em>dasselbe</em> Array – <code>dup</code> macht ein neues. <code>show_objects</code> zeichnet es mit Pfeilen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "fruehstueck = [\"Ei\", \"Brot\"]\ngleich = fruehstueck        # ein zweiter Zettel am selben Array\nkopie = fruehstueck.dup     # ein neues Array\ngleich << \"Saft\"\nshow_objects(fruehstueck: fruehstueck, gleich: gleich, kopie: kopie)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jetzt hat auch <code>fruehstueck</code> Saft – <code>kopie</code> nicht. Aber schau dir die Strings an: Die Kopie zeigt auf <em>dasselbe</em> <code>\"Ei\"</code>. <code>dup</code> kopiert das Array, nicht seinen Inhalt.</p><div class='task'><strong>Aufgabe:</strong> Häng an das Array unten <code>\"Speck\"</code> an. Bonus: gib alle Elemente mit <code>each</code> aus.</div>"
           },
           {
             "t": "x",
@@ -1026,7 +1034,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Task:</strong> Append <code>\"bacon\"</code> to the array below. Bonus: print every element with <code>each</code>.</div>"
+            "html": "<p>A variable name is a <strong>label stuck on an object</strong>, not a box. <code>same = breakfast</code> sticks a second label on the <em>same</em> array – <code>dup</code> makes a new one. <code>show_objects</code> draws it with arrows:</p>"
+          },
+          {
+            "t": "c",
+            "code": "breakfast = [\"egg\", \"toast\"]\nsame = breakfast            # a second label on the same array\ncopy = breakfast.dup        # a new array\nsame << \"juice\"\nshow_objects(breakfast: breakfast, same: same, copy: copy)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Now <code>breakfast</code> has juice too – and <code>copy</code> does not. But look at the strings: the copy points at the <em>same</em> <code>\"egg\"</code>. <code>dup</code> copies the array, not what is in it.</p><div class='task'><strong>Task:</strong> Append <code>\"bacon\"</code> to the array below. Bonus: print every element with <code>each</code>.</div>"
           },
           {
             "t": "x",
@@ -1065,7 +1081,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>課題：</strong>下の配列に<code>\"bacon\"</code>を追加しましょう。ボーナス：<code>each</code>ですべての要素を出力してみてください。</div>"
+            "html": "<p>変数名は、オブジェクトに貼った<strong>ラベル</strong>です。箱ではありません。<code>same = breakfast</code>は、<em>同じ</em>配列にもう1枚ラベルを貼るだけです。新しい配列を作るのは<code>dup</code>です。<code>show_objects</code>が矢印で描いてくれます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "breakfast = [\"egg\", \"toast\"]\nsame = breakfast            # 同じ配列に2枚目のラベル\ncopy = breakfast.dup        # 新しい配列\nsame << \"juice\"\nshow_objects(breakfast: breakfast, same: same, copy: copy)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>breakfast</code>にもjuiceが入りました。でも<code>copy</code>には入っていません。文字列も見てください。コピーも<em>同じ</em><code>\"egg\"</code>を指しています。<code>dup</code>がコピーするのは配列だけで、中身はコピーしません。</p><div class='task'><strong>課題：</strong>下の配列に<code>\"bacon\"</code>を追加しましょう。ボーナス：<code>each</code>ですべての要素を出力してみてください。</div>"
           },
           {
             "t": "x",
@@ -1091,7 +1115,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Probiere auch <code>tier[:essen]</code> – oder einen Schlüssel, den es nicht gibt: dann bekommst du <code>nil</code>.</p><div class='task'><strong>Aufgabe:</strong> Baue einen Hash <code>fuchs</code> mit den Schlüsseln <code>:name</code> und <code>:essen</code> (Werte darfst du wählen).</div>"
+            "html": "<p>Probiere auch <code>tier[:essen]</code> – oder einen Schlüssel, den es nicht gibt: dann bekommst du <code>nil</code>.</p><p><code>dup</code> kopiert nur die oberste Ebene. Steckt im Hash ein Array, teilen sich Original und Kopie dieses Array:</p>"
+          },
+          {
+            "t": "c",
+            "code": "kaz = { name: \"Kaz\", mag: [\"Speck\"] }\nklon = kaz.dup\nklon[:name] = \"Isi\"      # ein neuer String: nur klon ändert sich\nklon[:mag] << \"Toast\"    # das geteilte Array: beide ändern sich\nshow_objects(kaz: kaz, klon: klon)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>kaz[:name]</code> ist immer noch <code>\"Kaz\"</code>, aber in <code>kaz[:mag]</code> steckt jetzt auch Toast.</p><div class='task'><strong>Aufgabe:</strong> Baue einen Hash <code>fuchs</code> mit den Schlüsseln <code>:name</code> und <code>:essen</code> (Werte darfst du wählen).</div>"
           },
           {
             "t": "x",
@@ -1114,7 +1146,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Also try <code>animal[:food]</code> – or a key that doesn't exist: then you get <code>nil</code>.</p><div class='task'><strong>Task:</strong> Build a hash <code>fox</code> with the keys <code>:name</code> and <code>:food</code> (pick any values).</div>"
+            "html": "<p>Also try <code>animal[:food]</code> – or a key that doesn't exist: then you get <code>nil</code>.</p><p><code>dup</code> only copies the top level. If the hash holds an array, the original and the copy share that array:</p>"
+          },
+          {
+            "t": "c",
+            "code": "kaz = { name: \"Kaz\", likes: [\"bacon\"] }\ncopy = kaz.dup\ncopy[:name] = \"Isi\"      # a new string: only copy changes\ncopy[:likes] << \"toast\"  # the shared array: both change\nshow_objects(kaz: kaz, copy: copy)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>kaz[:name]</code> is still <code>\"Kaz\"</code>, but <code>kaz[:likes]</code> has toast in it now too.</p><div class='task'><strong>Task:</strong> Build a hash <code>fox</code> with the keys <code>:name</code> and <code>:food</code> (pick any values).</div>"
           },
           {
             "t": "x",
@@ -1137,7 +1177,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>animal[:food]</code>も試してみましょう。存在しないキーを指定すると、<code>nil</code>が返ってきます。</p><div class='task'><strong>課題：</strong>キー<code>:name</code>と<code>:food</code>を持つハッシュ<code>fox</code>を作りましょう（値は何でもかまいません）。</div>"
+            "html": "<p><code>animal[:food]</code>も試してみましょう。存在しないキーを指定すると、<code>nil</code>が返ってきます。</p><p><code>dup</code>がコピーするのは、いちばん外側だけです。ハッシュの中に配列があると、元とコピーはその配列を共有します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "kaz = { name: \"Kaz\", likes: [\"bacon\"] }\ncopy = kaz.dup\ncopy[:name] = \"Isi\"      # 新しい文字列：変わるのはcopyだけ\ncopy[:likes] << \"toast\"  # 共有している配列：両方が変わる\nshow_objects(kaz: kaz, copy: copy)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>kaz[:name]</code>は<code>\"Kaz\"</code>のままですが、<code>kaz[:likes]</code>にもtoastが入りました。</p><div class='task'><strong>課題：</strong>キー<code>:name</code>と<code>:food</code>を持つハッシュ<code>fox</code>を作りましょう（値は何でもかまいません）。</div>"
           },
           {
             "t": "x",
@@ -1271,7 +1319,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>initialize</code> läuft bei <code>Katze.new</code>. Variablen mit <code>@</code> gehören zum Objekt, und <code>attr_reader :name</code> macht <code>@name</code> von aussen lesbar – probiere <code>k.name</code>! Und noch ein Aha: <code>attr_reader :name</code> ist kein Spezialbefehl, sondern ein ganz normaler Methodenaufruf ohne Klammern – wie in Lektion 9 gelernt: <code>attr_reader(:name)</code>.</p><div class='task'><strong>Aufgabe:</strong> Schreibe nach diesem Vorbild die Klasse <code>Fuchs</code>: mit <code>initialize(name)</code>, <code>attr_reader :name</code> und einer Methode <code>ruf</code>, die <code>\"Chunky Bacon!\"</code> zurückgibt.</div>"
+            "html": "<p><code>initialize</code> läuft bei <code>Katze.new</code>. Variablen mit <code>@</code> gehören zum Objekt, und <code>attr_reader :name</code> macht <code>@name</code> von aussen lesbar – probiere <code>k.name</code>! Und noch ein Aha: <code>attr_reader :name</code> ist kein Spezialbefehl, sondern ein ganz normaler Methodenaufruf ohne Klammern – wie in Lektion 9 gelernt: <code>attr_reader(:name)</code>.</p><p>Zwei Katzen mit demselben Namen sind trotzdem zwei Objekte. Jede hat ihr eigenes <code>@name</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "mimi = Katze.new(\"Mimi\")\nnoch_mimi = mimi                # dieselbe Katze\nzwilling = Katze.new(\"Mimi\")    # eine andere Katze, gleicher Name\nshow_objects(mimi: mimi, noch_mimi: noch_mimi, zwilling: zwilling)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>mimi.equal?(noch_mimi)</code> ist <code>true</code>, <code>mimi.equal?(zwilling)</code> ist <code>false</code>: ein Pfeilziel oder zwei. <code>equal?</code> fragt, ob es <em>dasselbe</em> Objekt ist.</p><div class='task'><strong>Aufgabe:</strong> Schreibe nach diesem Vorbild die Klasse <code>Fuchs</code>: mit <code>initialize(name)</code>, <code>attr_reader :name</code> und einer Methode <code>ruf</code>, die <code>\"Chunky Bacon!\"</code> zurückgibt.</div>"
           },
           {
             "t": "x",
@@ -1294,7 +1350,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>initialize</code> runs on <code>Cat.new</code>. Variables with <code>@</code> belong to the object, and <code>attr_reader :name</code> makes <code>@name</code> readable from outside – try <code>k.name</code>! And another aha: <code>attr_reader :name</code> is no special keyword but a perfectly normal method call without parentheses – as learned in lesson 9: <code>attr_reader(:name)</code>.</p><div class='task'><strong>Task:</strong> Following this example, write the class <code>Fox</code>: with <code>initialize(name)</code>, <code>attr_reader :name</code> and a method <code>shout</code> that returns <code>\"Chunky Bacon!\"</code>.</div>"
+            "html": "<p><code>initialize</code> runs on <code>Cat.new</code>. Variables with <code>@</code> belong to the object, and <code>attr_reader :name</code> makes <code>@name</code> readable from outside – try <code>k.name</code>! And another aha: <code>attr_reader :name</code> is no special keyword but a perfectly normal method call without parentheses – as learned in lesson 9: <code>attr_reader(:name)</code>.</p><p>Two cats with the same name are still two objects. Each has its own <code>@name</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "mimi = Cat.new(\"Mimi\")\nalso_mimi = mimi           # the same cat\ntwin = Cat.new(\"Mimi\")     # another cat, same name\nshow_objects(mimi: mimi, also_mimi: also_mimi, twin: twin)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>mimi.equal?(also_mimi)</code> is <code>true</code>, <code>mimi.equal?(twin)</code> is <code>false</code>: one arrow target or two. <code>equal?</code> asks whether it is the <em>same</em> object.</p><div class='task'><strong>Task:</strong> Following this example, write the class <code>Fox</code>: with <code>initialize(name)</code>, <code>attr_reader :name</code> and a method <code>shout</code> that returns <code>\"Chunky Bacon!\"</code>.</div>"
           },
           {
             "t": "x",
@@ -1317,7 +1381,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>initialize</code>は<code>Cat.new</code>のときに実行されます。<code>@</code>のついた変数はそのオブジェクトのもので、<code>attr_reader :name</code>と書くと<code>@name</code>を外から読めるようになります。<code>k.name</code>を試してみましょう！もうひとつ、なるほどと思える話があります。<code>attr_reader :name</code>は特別なキーワードではなく、かっこを省いたごくふつうのメソッド呼び出しです。レッスン9で学んだとおり、<code>attr_reader(:name)</code>と同じなのです。</p><div class='task'><strong>課題：</strong>この例にならって、クラス<code>Fox</code>を書きましょう。<code>initialize(name)</code>と<code>attr_reader :name</code>、そして<code>\"Chunky Bacon!\"</code>を返すメソッド<code>shout</code>を用意してください。</div>"
+            "html": "<p><code>initialize</code>は<code>Cat.new</code>のときに実行されます。<code>@</code>のついた変数はそのオブジェクトのもので、<code>attr_reader :name</code>と書くと<code>@name</code>を外から読めるようになります。<code>k.name</code>を試してみましょう！もうひとつ、なるほどと思える話があります。<code>attr_reader :name</code>は特別なキーワードではなく、かっこを省いたごくふつうのメソッド呼び出しです。レッスン9で学んだとおり、<code>attr_reader(:name)</code>と同じなのです。</p><p>同じ名前のネコが2匹いても、オブジェクトは2つです。それぞれが自分の<code>@name</code>を持っています：</p>"
+          },
+          {
+            "t": "c",
+            "code": "mimi = Cat.new(\"Mimi\")\nalso_mimi = mimi           # 同じネコ\ntwin = Cat.new(\"Mimi\")     # 別のネコ（名前は同じ）\nshow_objects(mimi: mimi, also_mimi: also_mimi, twin: twin)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>mimi.equal?(also_mimi)</code>は<code>true</code>、<code>mimi.equal?(twin)</code>は<code>false</code>です。矢印の行き先が1つか2つかの違いです。<code>equal?</code>は、<em>同じ</em>オブジェクトかどうかを調べます。</p><div class='task'><strong>課題：</strong>この例にならって、クラス<code>Fox</code>を書きましょう。<code>initialize(name)</code>と<code>attr_reader :name</code>、そして<code>\"Chunky Bacon!\"</code>を返すメソッド<code>shout</code>を用意してください。</div>"
           },
           {
             "t": "x",

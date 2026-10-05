@@ -153,6 +153,10 @@ require_relative "workshop"
 require_relative "autorun"
 # Terminal colours (pastel, tty-*) in a cell's output, as HTML.
 require_relative "ansi"
+# show_objects: names and objects as boxes and arrows, an SVG through
+# show_image (lessons 7, 8, 10). At boot, unlike shoes_dom.rb: ~17 KB that
+# evaluates in about 10 ms.
+require_relative "object_graph"
 # require "pycall" is the bridge to Pyodide (pycall.rb): the real gem needs
 # libpython, which a browser does not have
 require_relative "pycall"
@@ -434,8 +438,13 @@ class ChunkyApp
     bridge.gems(installed_json)
   end
 
-  def add_image(data_url)
-    @run_images << data_url if @run_images
+  # alt: what the picture shows, in words (show_objects says it); a
+  # picture without one is decorative, alt=""
+  def add_image(data_url, alt = nil)
+    return unless @run_images
+
+    @run_images << data_url
+    @run_image_alts[data_url] = alt.to_s if alt
   end
 
   # the first bytes of the picture formats a browser shows
@@ -1047,6 +1056,7 @@ class ChunkyApp
     lesson_files = SandboxFS.store.transform_values(&:dup) if auto && !workshop?
     $window.clearCellMarks(idx)
     @run_images = []
+    @run_image_alts = {}
     @run_pdfs = []
     @run_browsers = []
     @run_irbs = []
@@ -1147,7 +1157,8 @@ class ChunkyApp
       out_html += "<div class=\"cell-result\">=&gt; #{escape_html(inspect_result(result))}</div>"
     end
     @run_images.each do |data_url|
-      out_html += "<img class=\"cell-image\" alt=\"\" src=\"#{data_url}\">"
+      alt = escape_html(@run_image_alts[data_url]).gsub('"', "&quot;")
+      out_html += "<img class=\"cell-image\" alt=\"#{alt}\" src=\"#{data_url}\">"
     end
     out_html += pdfs_html(idx)
     out_html += downloads_html(idx) if @run_downloads.any?
@@ -1295,7 +1306,7 @@ module Kernel
   #   show_image "sonne.jpg"    # a file the cell wrote
   def show_image(image)
     app = ChunkyApp.instance
-    app.add_image(app.image_data_url(image))
+    app.add_image(app.image_data_url(image), image.respond_to?(:alt_text) ? image.alt_text : nil)
     nil
   end
 

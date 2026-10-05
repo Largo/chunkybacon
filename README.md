@@ -108,6 +108,12 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   [three-rb](https://github.com/lef237/three-rb), optionally animated per
   frame and orbitable with the mouse), and `show_letter` (an envelope to
   write a postcode on with mouse or finger; a Ruby block reads it).
+- **Objects as boxes and arrows**: `show_objects(a: a, b: b)` or
+  `show_objects(binding)` draws the names and the objects behind them, an
+  arrow for every reference, like Python Tutor - so `b = a` vs `a.dup`,
+  a shallow copy of a hash, or two cats with the same name are seen, not
+  just told (lessons 7, 8, 10). Pure Ruby to SVG; a screen reader hears
+  the arrows in words.
 - **A terminal below each cell**: colours from ANSI escape codes (pastel,
   test runners) show as colours, and box-drawing characters (`┌─┐`, from
   tty-table, tty-box) are as wide as the code font's letters, so tables
@@ -120,7 +126,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 ## On your own computer: the chunky_bacon gem
 
 [`gem/chunky_bacon`](gem/chunky_bacon) gives a Ruby program on your own
-computer the course's helpers (`show_image`, `show_browser`,
+computer the course's helpers (`show_image`, `show_objects`, `show_browser`,
 `download_file`, ...), so code from the lessons and the workshop runs
 unchanged. `chunkybacon run` starts a program with them loaded.
 [`gem/chunkybacon`](gem/chunkybacon) and [`gem/chunky-bacon`](gem/chunky-bacon)
@@ -188,6 +194,7 @@ ruby gems_harness.rb      # gem installer, sinatra + roda offline
 ruby shell/run.rb         # the page shell (PicoRuby code) under Minitest
 ruby autorun_test.rb      # live runs: what may run, the time limit
 ruby ansi_test.rb         # terminal colours in a cell's output
+ruby object_graph_test.rb # show_objects: the walk, the SVG, the alt text
 ruby friendly_errors_harness.rb --summary  # 70 beginner mistakes, each explained by the expected rule
 ruby friendly_errors_robustness.rb         # the explanations never raise, never leave a %{...}
 node browser_test.mjs     # Playwright end-to-end against port 8011

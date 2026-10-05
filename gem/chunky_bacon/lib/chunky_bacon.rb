@@ -37,4 +37,6 @@ unless ChunkyBacon.browser?
   require_relative "chunky_bacon/rack_env"
   require_relative "chunky_bacon/server"
   require_relative "chunky_bacon/helpers"
+  # show_objects: html/object_graph.rb of the course, the same file
+  require_relative "chunky_bacon/object_graph"
 end

@@ -312,6 +312,16 @@ class AppTest < Minitest::Test
                  "what it printed, then the headline - not the code frame or Ruby's message"
   end
 
+  def test_a_picture_is_announced_by_its_alt_text
+    start
+    click(run_button(1))
+    byid("cell-out-1").js_set("innerHTML", '<img class="cell-image" alt="a → #1, b → #1." src="data:image/svg+xml;base64,PHN2Zy8+"/>' \
+                                           '<img class="cell-image" alt="" src="data:image/png;base64,iVBORw0K"/>')
+    fire("chunky:ran", ran_event(1, "ok"))
+    assert_equal "Zelle 1 ausgeführt: a → #1, b → #1.", byid("runStatus").text,
+                 "show_objects' words; a plain picture (alt=\"\") adds nothing"
+  end
+
   def test_a_live_run_is_not_announced
     start
     fire("chunky:ran", ran_event(1, "ok", auto: true))

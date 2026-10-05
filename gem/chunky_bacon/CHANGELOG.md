@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- `show_objects a: a, b: b` / `show_objects binding`, as in the course's
+  lessons 7, 8 and 10: the objects behind the names as boxes and arrows
+  (the course's own `object_graph.rb`), saved as `chunky-image-N.svg` and
+  opened. `show_image` takes SVG too.
 - `show_plot` / `show_plot fig`, as in the course's matplotlib lesson: the
   current (or that) matplotlib figure, through the pycall gem, saved as
   `chunky-plot-N.png`, opened and closed.

@@ -71,6 +71,19 @@ class HelpersTest < Minitest::Test
     assert_equal ["fuchs.png"], Dir.children(@dir)
   end
 
+  # the course's boxes and arrows (lessons 7, 8, 10), as an SVG file
+  def test_show_objects_saves_an_svg
+    breakfast = ["egg", "toast"]
+    _, err = helper_output { assert_nil show_objects(breakfast: breakfast, same: breakfast) }
+    files = Dir.children(@dir)
+    assert_equal 1, files.size
+    assert_match(/\Achunky-image-\d+\.svg\z/, files.first)
+    svg = File.read(File.join(@dir, files.first))
+    assert svg.start_with?("<svg")
+    assert_includes svg, "breakfast"
+    assert_includes err, "saved #{files.first}"
+  end
+
   def test_show_pdf_saves_the_document
     helper_output { show_pdf PDF }
     pdfs = Dir.children(@dir).grep(/\Achunky-document-\d+\.pdf\z/)

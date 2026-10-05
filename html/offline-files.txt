@@ -127,6 +127,7 @@ lessons.js
 letter.js
 main.rb
 numo_narray.rb
+object_graph.rb
 offline.js
 processing.js
 processing.rb

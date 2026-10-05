@@ -619,12 +619,13 @@ module ChunkyShell
 
     # What a run did, for a screen reader: one polite status line (#runStatus)
     # per run with ▶, Shift+Enter or Alt+R - the cell's output, shortened,
-    # and for an exercise Chunky's verdict. The output itself is no live
-    # region: live runs rewrite it while the learner types. Emptied first,
-    # and the text a moment later, so the same result twice is read twice.
+    # a picture by its alt text (show_objects says what it draws), and for
+    # an exercise Chunky's verdict. The output itself is no live region:
+    # live runs rewrite it while the learner types. Emptied first, and the
+    # text a moment later, so the same result twice is read twice.
     def announce_run(idx, outcome, verdict)
       out = el("cell-out-#{idx}")
-      text = out ? brief_output(out).strip : ""
+      text = out ? "#{brief_output(out)} #{picture_words(out)}".strip : ""
       text = "#{text[0, 280]} …" if text.length > 280
       message = format(outcome == "error" ? ui.ranError : ui.ranOk, @cell_numbers[idx] || idx, text)
       message = "#{message} #{verdict}" if verdict != ""
@@ -651,6 +652,17 @@ module ChunkyShell
       return headline unless at
 
       text[0, at].to_s + headline + text[at + whole.length, text.length].to_s
+    end
+
+    # what the pictures below a cell show, in words: their alt texts (a
+    # plain picture has alt="" and says nothing)
+    def picture_words(out)
+      words = []
+      out.querySelectorAll("img.cell-image").each do |img|
+        alt = img.getAttribute("alt").to_s
+        words << alt unless alt.empty?
+      end
+      words.join(" ")
     end
 
     def exercise_passed

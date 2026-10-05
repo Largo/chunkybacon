@@ -1,7 +1,8 @@
-# Minitest for the walk and the SVG: ruby object_graph_test.rb
+# Minitest for show_objects (html/object_graph.rb): the walk, the SVG, the
+# words for the alt text: ruby test/object_graph_test.rb
 require "minitest/autorun"
 require "rexml/document"
-require_relative "object_graph"
+require_relative "../html/object_graph"
 
 class ObjectGraphTest < Minitest::Test
   def slot_ref(graph, name) = graph.roots.find { |s| s.label == name }.ref
@@ -76,6 +77,7 @@ class ObjectGraphTest < Minitest::Test
     _y = 2
     g = ObjectGraph.graph(binding)
     assert_includes g.roots.map(&:label), "x"
+    assert_equal x.size, g.nodes[0].slots.size
     refute_includes g.roots.map(&:label), "_y"
   end
 
@@ -93,5 +95,39 @@ class ObjectGraphTest < Minitest::Test
     svg = show_objects(d: deep, max_depth: 2).svg
     refute_includes svg, "max_depth"
     assert_equal ObjectGraph.svg({ d: deep }, max_depth: 2), svg
+  end
+
+  # the alt text: the arrows in words, so a screen reader hears what is shared
+  def test_describe_says_what_the_arrows_show
+    breakfast = ["egg", 1]
+    g = ObjectGraph.graph({ breakfast: breakfast, same: breakfast, copy: breakfast.dup.freeze })
+    assert_equal 'breakfast → #1, same → #1, copy → #2. #1 Array: 0 → #3, 1 → 1. ' \
+                 '#2 Array ❄: 0 → #3, 1 → 1. #3 String "egg".', g.describe
+    assert_equal g.describe, show_objects(breakfast: breakfast, same: breakfast, copy: breakfast.dup.freeze).alt_text
+  end
+
+  def test_describe_counts_what_is_cut
+    g = ObjectGraph.graph({ a: (1..12).to_a }, max_items: 3)
+    assert_equal "a → #1. #1 Array: 0 → 1, 1 → 2, 2 → 3, … 9 more.", g.describe
+  end
+
+  # where there is a show_image (main.rb, the check harness, the gem), the
+  # picture goes there
+  def test_show_objects_goes_through_show_image
+    shown = []
+    host = Object.new
+    host.define_singleton_method(:show_image) { |image| shown << image }
+    assert_nil host.show_objects(a: [1])
+    assert_instance_of ObjectGraph::Picture, shown.first
+    assert_includes shown.first.alt_text, "a → #1"
+  end
+
+  # the companion gem ships its own copy, so a program on a computer draws
+  # the same picture
+  def test_the_gems_copy_is_this_file
+    html = File.expand_path("../html/object_graph.rb", __dir__)
+    gem = File.expand_path("../gem/chunky_bacon/lib/chunky_bacon/object_graph.rb", __dir__)
+    assert File.read(html) == File.read(gem),
+           "gem/chunky_bacon/lib/chunky_bacon/object_graph.rb differs from html/object_graph.rb - copy it over"
   end
 end

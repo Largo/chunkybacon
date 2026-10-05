@@ -16,6 +16,10 @@
 # Symbols, nil, true and false are written into the slot that holds them
 # (they are objects too, but immutable and shared; boxes for them would
 # only be noise).
+#
+# The course page (html/main.rb), the check harness and the companion gem
+# (gem/chunky_bacon/lib/chunky_bacon/object_graph.rb, a copy of this file -
+# test/object_graph_test.rb keeps the two equal) all load this file.
 module ObjectGraph
   OPTIONS = { max_depth: 6, max_nodes: 40, max_items: 10, max_text: 28 }.freeze
 
@@ -29,14 +33,38 @@ module ObjectGraph
 
   Graph = Struct.new(:roots, :nodes) do
     def to_svg = Svg.new(self).render
+
+    # The picture in words, for the <img>'s alt (a screen reader cannot
+    # follow arrows): "a → #1, b → #1. #1 Array: 0 → 1, 1 → #2. #2 String "x"."
+    def describe
+      names = roots.map { |s| "#{s.label} → #{slot_text(s)}" }.join(", ")
+      boxes = nodes.map do |n|
+        head = "##{n.nid + 1} #{n.title}#{n.frozen ? ' ❄' : ''}"
+        rows = n.slots.map { |s| s.label.empty? ? slot_text(s) : "#{s.label} → #{slot_text(s)}" }
+        rows << "… #{n.more} more" if n.more.positive?
+        if rows.any? then "#{head}: #{rows.join(', ')}"
+        elsif n.body then "#{head} #{n.body}"
+        else head
+        end
+      end
+      ([names] + boxes).reject(&:empty?).map { |part| "#{part}." }.join(" ")
+    end
+
+    private
+
+    def slot_text(slot) = slot.ref ? "##{slot.ref + 1}" : slot.text.to_s
   end
 
   # an SVG that show_image takes as it is (ChunkyApp#image_data_url asks
-  # for to_data_url first)
+  # for to_data_url first); alt_text says in words what it shows
   class Picture
-    attr_reader :svg
+    attr_reader :svg, :alt_text
 
-    def initialize(svg) = @svg = svg
+    def initialize(svg, alt_text = "")
+      @svg = svg
+      @alt_text = alt_text
+    end
+
     def to_s = @svg
     def to_data_url = "data:image/svg+xml;base64,#{[@svg.b].pack('m0')}"
     def inspect = "#<ObjectGraph::Picture #{@svg.bytesize} bytes>"
@@ -44,14 +72,23 @@ module ObjectGraph
 
   module_function
 
-  # hide: names a Binding's variables to leave out (the kernel's own
-  # top-level locals, which every cell binding can see)
+  # hide: names of a Binding's variables to leave out
   def graph(roots, hide: [], **options)
     Walker.new(roots_of(roots, hide), **OPTIONS, **options).call
   end
 
   def svg(roots, **options) = graph(roots, **options).to_svg
-  def picture(roots, **options) = Picture.new(svg(roots, **options))
+
+  # picture(a: a, max_depth: 2): without a Hash or Binding first, the
+  # keywords are the names - except the options' own
+  def picture(roots = nil, **options)
+    if roots.nil?
+      keys = OPTIONS.keys + [:hide]
+      roots, options = options.except(*keys), options.slice(*keys)
+    end
+    graph = graph(roots, **options)
+    Picture.new(graph.to_svg, graph.describe)
+  end
 
   def roots_of(roots, hide = [])
     case roots
@@ -413,26 +450,15 @@ module ObjectGraph
   end
 end
 
-# In the course's kernel (html/main.rb) the picture goes below the cell like
-# any other image. Elsewhere (plain CRuby) show_objects returns the picture.
+# Wherever there is a show_image - the course's cells (html/main.rb), the
+# check harness, the companion gem - the picture goes the way of any other
+# image; in plain Ruby show_objects returns it.
 module Kernel
-  def show_objects(roots = nil, **kwargs)
-    if roots.nil? # show_objects(a: a, max_depth: 2): max_depth is an option, not a name
-      keys = ObjectGraph::OPTIONS.keys + [:hide]
-      roots, options = kwargs.except(*keys), kwargs.slice(*keys)
-    else
-      options = kwargs
-    end
-    in_course = defined?(ChunkyApp) && respond_to?(:show_image, true)
-    # a cell's binding is made inside TOPLEVEL_BINDING (main.rb fresh_binding),
-    # so it also sees main.rb's own top-level locals (app_path, ...)
-    options[:hide] ||= TOPLEVEL_BINDING.local_variables if in_course && roots.is_a?(Binding)
+  def show_objects(roots = nil, **options)
     picture = ObjectGraph.picture(roots, **options)
-    if in_course
-      show_image(picture)
-      nil
-    else
-      picture
-    end
+    return picture unless respond_to?(:show_image, true)
+
+    show_image(picture)
+    nil
   end
 end
