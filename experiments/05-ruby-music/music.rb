@@ -62,7 +62,7 @@ module Music
 
   def tone(freq, seconds, wave: :sine, volume: 0.5)
     form = WAVES.fetch(wave)
-    Array.new((seconds * RATE).round) { |i| volume * form.((freq * i / RATE) % 1.0) }
+    Array.new((seconds * RATE).round) { |i| volume * form.((freq * i).fdiv(RATE) % 1.0) }
   end
 
   def sine(freq, seconds = 1.0)   = tone(freq, seconds, wave: :sine)

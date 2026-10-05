@@ -25,11 +25,11 @@
       },
       {
         "t": "c",
-        "code": "WELLEN = {\n  sinus:    ->(phase) { Math.sin(2 * Math::PI * phase) },\n  rechteck: ->(phase) { phase < 0.5 ? 1.0 : -1.0 },\n  saege:    ->(phase) { 2 * phase - 1 }\n}\n\ndef ton(frequenz, sekunden, welle = :sinus, laut = 0.3)\n  form = WELLEN.fetch(welle)\n  Array.new((sekunden * RATE).round) do |i|\n    laut * form.((frequenz * i / RATE) % 1.0)   # wo in der Schwingung?\n  end\nend\n\nWELLEN.each_key { |welle| show_audio wav(ton(220, 0.6, welle)) }\nWELLEN.keys"
+        "code": "WELLEN = {\n  sinus:    ->(phase) { Math.sin(2 * Math::PI * phase) },\n  rechteck: ->(phase) { phase < 0.5 ? 1.0 : -1.0 },\n  saege:    ->(phase) { 2 * phase - 1 }\n}\n\ndef ton(frequenz, sekunden, welle = :sinus, laut = 0.3)\n  form = WELLEN.fetch(welle)\n  Array.new((sekunden * RATE).round) do |i|\n    laut * form.((frequenz * i).fdiv(RATE) % 1.0)   # wo in der Schwingung?\n  end\nend\n\nWELLEN.each_key { |welle| show_audio wav(ton(220, 0.6, welle)) }\nWELLEN.keys"
       },
       {
         "t": "h",
-        "html": "<p>Die <strong>Phase</strong> sagt, wo in einer Schwingung du gerade bist: 0.0 am Anfang, 0.5 in der Mitte, kurz vor 1.0 am Ende. <code>(frequenz * i / RATE) % 1.0</code> rechnet sie aus – <code>%</code> wirft die ganzen Schwingungen weg und lässt den Rest. Jede Welle ist ein <strong>Lambda</strong>, das aus der Phase eine Höhe macht, und alle drei stehen in einem Hash. Eine neue Klangfarbe ist eine Zeile mehr.</p><p>Schau in der Lupe: Der Sinus ist rund und klingt weich, Rechteck und Säge haben Ecken und klingen schnarrend wie ein Gameboy – Ecken bestehen aus vielen höheren Tönen, den <em>Obertönen</em>. Darum sind sie auch leiser gerechnet.</p>"
+        "html": "<p>Die <strong>Phase</strong> sagt, wo in einer Schwingung du gerade bist: 0.0 am Anfang, 0.5 in der Mitte, kurz vor 1.0 am Ende. <code>(frequenz * i).fdiv(RATE) % 1.0</code> rechnet sie aus – <code>%</code> wirft die ganzen Schwingungen weg und lässt den Rest. Jede Welle ist ein <strong>Lambda</strong>, das aus der Phase eine Höhe macht, und alle drei stehen in einem Hash. Eine neue Klangfarbe ist eine Zeile mehr.</p><p>Schau in der Lupe: Der Sinus ist rund und klingt weich, Rechteck und Säge haben Ecken und klingen schnarrend wie ein Gameboy – Ecken bestehen aus vielen höheren Tönen, den <em>Obertönen</em>. Darum sind sie auch leiser gerechnet.</p>"
       },
       {
         "t": "c",
@@ -58,7 +58,7 @@
       {
         "t": "x",
         "code": "# tusch.wav: C4 E4 G4 C5 nacheinander (je 0.25 s), dann alle vier zusammen (1 s)\n",
-        "check": "downloads.include?(\"tusch.wav\") && File.read(\"tusch.wav\", mode: \"rb\").b.then { |bytes| head = bytes.unpack(\"a4Va4a4VvvVVvva4V\"); s = bytes.byteslice(44..).unpack(\"s<*\"); amp = ->(from, f) { part = s[(from * 22050).round, 2205] || []; re = im = 0.0; part.each_with_index { |x, n| w = 2 * Math::PI * f * n / 22050; re += x * Math.cos(w); im += x * Math.sin(w) }; Math.hypot(re, im) * 2 / [part.size, 1].max }; c4, e4, g4, c5 = 261.63, 329.63, 392.0, 523.25; head.values_at(0, 2, 6, 7, 10) == [\"RIFF\", \"WAVE\", 1, 22050, 16] && (1.9..2.1).cover?(s.size / 22050.0) && [[0.07, c4], [0.32, e4], [0.57, g4], [0.82, c5], [1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }",
+        "check": "downloads.include?(\"tusch.wav\") && File.read(\"tusch.wav\", mode: \"rb\").b.then { |bytes| head = bytes.unpack(\"a4Va4a4VvvVVvva4V\"); s = bytes.byteslice(44..).unpack(\"s<*\"); amp = ->(from, f) { part = s[(from * 22050).round, 2205] || []; re = im = 0.0; part.each_with_index { |x, n| w = 2 * Math::PI * f * n / 22050; re += x * Math.cos(w); im += x * Math.sin(w) }; Math.hypot(re, im) * 2 / [part.size, 1].max }; c4, e4, g4, c5 = 261.63, 329.63, 392.0, 523.25; arpeggio = [[0.07, c4, [e4, g4]], [0.32, e4, [c4, g4, c5]], [0.57, g4, [c4, e4, c5]], [0.82, c5, [c4, e4, g4]]]; head.values_at(0, 2, 6, 7, 10) == [\"RIFF\", \"WAVE\", 1, 22050, 16] && (1.9..2.1).cover?(s.size / 22050.0) && arpeggio.all? { |t, f, others| (a = amp.(t, f)) > 1000 && others.all? { |o| amp.(t, o) < a / 4 } } && [[1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }",
         "hint": "<code>noten(\"C4 E4 G4 C5\")</code> gibt dir die vier Töne. Für den Akkord <code>zusammen(*%w[C4 E4 G4 C5].map { |name| huelle(ton(frequenz(name), 1.0, :sinus, 0.2)) })</code> – beides mit <code>+</code> hintereinanderhängen und <code>File.binwrite(\"tusch.wav\", wav(…))</code>."
       }
     ]
@@ -88,11 +88,11 @@
       },
       {
         "t": "c",
-        "code": "WAVES = {\n  sine:   ->(phase) { Math.sin(2 * Math::PI * phase) },\n  square: ->(phase) { phase < 0.5 ? 1.0 : -1.0 },\n  saw:    ->(phase) { 2 * phase - 1 }\n}\n\ndef tone(frequency, seconds, wave = :sine, volume = 0.3)\n  shape = WAVES.fetch(wave)\n  Array.new((seconds * RATE).round) do |i|\n    volume * shape.((frequency * i / RATE) % 1.0)   # where in the vibration?\n  end\nend\n\nWAVES.each_key { |wave| show_audio wav(tone(220, 0.6, wave)) }\nWAVES.keys"
+        "code": "WAVES = {\n  sine:   ->(phase) { Math.sin(2 * Math::PI * phase) },\n  square: ->(phase) { phase < 0.5 ? 1.0 : -1.0 },\n  saw:    ->(phase) { 2 * phase - 1 }\n}\n\ndef tone(frequency, seconds, wave = :sine, volume = 0.3)\n  shape = WAVES.fetch(wave)\n  Array.new((seconds * RATE).round) do |i|\n    volume * shape.((frequency * i).fdiv(RATE) % 1.0)   # where in the vibration?\n  end\nend\n\nWAVES.each_key { |wave| show_audio wav(tone(220, 0.6, wave)) }\nWAVES.keys"
       },
       {
         "t": "h",
-        "html": "<p>The <strong>phase</strong> says where in one vibration you are: 0.0 at the start, 0.5 halfway, just under 1.0 at the end. <code>(frequency * i / RATE) % 1.0</code> works it out – <code>%</code> throws away the whole vibrations and keeps the rest. Every wave is a <strong>lambda</strong> that turns the phase into a height, and all three live in a Hash. A new sound colour is one more line.</p><p>Look through the magnifier: the sine is round and sounds soft, square and saw have corners and buzz like a Game Boy – corners are made of many higher tones, the <em>overtones</em>. That is also why they are computed quieter.</p>"
+        "html": "<p>The <strong>phase</strong> says where in one vibration you are: 0.0 at the start, 0.5 halfway, just under 1.0 at the end. <code>(frequency * i).fdiv(RATE) % 1.0</code> works it out – <code>%</code> throws away the whole vibrations and keeps the rest. Every wave is a <strong>lambda</strong> that turns the phase into a height, and all three live in a Hash. A new sound colour is one more line.</p><p>Look through the magnifier: the sine is round and sounds soft, square and saw have corners and buzz like a Game Boy – corners are made of many higher tones, the <em>overtones</em>. That is also why they are computed quieter.</p>"
       },
       {
         "t": "c",
@@ -121,7 +121,7 @@
       {
         "t": "x",
         "code": "# fanfare.wav: C4 E4 G4 C5 one after another (0.25 s each), then all four together (1 s)\n",
-        "check": "downloads.include?(\"fanfare.wav\") && File.read(\"fanfare.wav\", mode: \"rb\").b.then { |bytes| head = bytes.unpack(\"a4Va4a4VvvVVvva4V\"); s = bytes.byteslice(44..).unpack(\"s<*\"); amp = ->(from, f) { part = s[(from * 22050).round, 2205] || []; re = im = 0.0; part.each_with_index { |x, n| w = 2 * Math::PI * f * n / 22050; re += x * Math.cos(w); im += x * Math.sin(w) }; Math.hypot(re, im) * 2 / [part.size, 1].max }; c4, e4, g4, c5 = 261.63, 329.63, 392.0, 523.25; head.values_at(0, 2, 6, 7, 10) == [\"RIFF\", \"WAVE\", 1, 22050, 16] && (1.9..2.1).cover?(s.size / 22050.0) && [[0.07, c4], [0.32, e4], [0.57, g4], [0.82, c5], [1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }",
+        "check": "downloads.include?(\"fanfare.wav\") && File.read(\"fanfare.wav\", mode: \"rb\").b.then { |bytes| head = bytes.unpack(\"a4Va4a4VvvVVvva4V\"); s = bytes.byteslice(44..).unpack(\"s<*\"); amp = ->(from, f) { part = s[(from * 22050).round, 2205] || []; re = im = 0.0; part.each_with_index { |x, n| w = 2 * Math::PI * f * n / 22050; re += x * Math.cos(w); im += x * Math.sin(w) }; Math.hypot(re, im) * 2 / [part.size, 1].max }; c4, e4, g4, c5 = 261.63, 329.63, 392.0, 523.25; arpeggio = [[0.07, c4, [e4, g4]], [0.32, e4, [c4, g4, c5]], [0.57, g4, [c4, e4, c5]], [0.82, c5, [c4, e4, g4]]]; head.values_at(0, 2, 6, 7, 10) == [\"RIFF\", \"WAVE\", 1, 22050, 16] && (1.9..2.1).cover?(s.size / 22050.0) && arpeggio.all? { |t, f, others| (a = amp.(t, f)) > 1000 && others.all? { |o| amp.(t, o) < a / 4 } } && [[1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }",
         "hint": "<code>notes(\"C4 E4 G4 C5\")</code> gives you the four tones. For the chord, <code>mix(*%w[C4 E4 G4 C5].map { |name| envelope(tone(frequency(name), 1.0, :sine, 0.2)) })</code> – join both with <code>+</code> and <code>File.binwrite(\"fanfare.wav\", wav(…))</code>."
       }
     ]
@@ -151,11 +151,11 @@
       },
       {
         "t": "c",
-        "code": "WAVES = {\n  sine:   ->(phase) { Math.sin(2 * Math::PI * phase) },\n  square: ->(phase) { phase < 0.5 ? 1.0 : -1.0 },\n  saw:    ->(phase) { 2 * phase - 1 }\n}\n\ndef tone(frequency, seconds, wave = :sine, volume = 0.3)\n  shape = WAVES.fetch(wave)\n  Array.new((seconds * RATE).round) do |i|\n    volume * shape.((frequency * i / RATE) % 1.0)   # 振動のどのあたり？\n  end\nend\n\nWAVES.each_key { |wave| show_audio wav(tone(220, 0.6, wave)) }\nWAVES.keys"
+        "code": "WAVES = {\n  sine:   ->(phase) { Math.sin(2 * Math::PI * phase) },\n  square: ->(phase) { phase < 0.5 ? 1.0 : -1.0 },\n  saw:    ->(phase) { 2 * phase - 1 }\n}\n\ndef tone(frequency, seconds, wave = :sine, volume = 0.3)\n  shape = WAVES.fetch(wave)\n  Array.new((seconds * RATE).round) do |i|\n    volume * shape.((frequency * i).fdiv(RATE) % 1.0)   # 振動のどのあたり？\n  end\nend\n\nWAVES.each_key { |wave| show_audio wav(tone(220, 0.6, wave)) }\nWAVES.keys"
       },
       {
         "t": "h",
-        "html": "<p><strong>位相</strong>は、1回の振動のどこにいるかを表します。始まりが0.0、半分で0.5、終わりの直前が1.0に近い値です。<code>(frequency * i / RATE) % 1.0</code>がそれを計算します。<code>%</code>で振動の回数ぶんを捨て、余りだけを残します。それぞれの波形は位相を高さに変える<strong>ラムダ</strong>で、3つともHashに入っています。新しい音色は1行足すだけです。</p><p>虫めがねで見てみましょう。サイン波は丸く、やわらかく聞こえます。矩形波とのこぎり波には角があり、ゲームボーイのようにビーッと聞こえます。角はたくさんの高い音、つまり<em>倍音</em>でできているからです。そのため、この2つは小さめの音量で計算しています。</p>"
+        "html": "<p><strong>位相</strong>は、1回の振動のどこにいるかを表します。始まりが0.0、半分で0.5、終わりの直前が1.0に近い値です。<code>(frequency * i).fdiv(RATE) % 1.0</code>がそれを計算します。<code>%</code>で振動の回数ぶんを捨て、余りだけを残します。それぞれの波形は位相を高さに変える<strong>ラムダ</strong>で、3つともHashに入っています。新しい音色は1行足すだけです。</p><p>虫めがねで見てみましょう。サイン波は丸く、やわらかく聞こえます。矩形波とのこぎり波には角があり、ゲームボーイのようにビーッと聞こえます。角はたくさんの高い音、つまり<em>倍音</em>でできているからです。そのため、この2つは小さめの音量で計算しています。</p>"
       },
       {
         "t": "c",
@@ -184,7 +184,7 @@
       {
         "t": "x",
         "code": "# fanfare.wav：C4 E4 G4 C5を順に（各0.25秒）、そのあと4つ同時に（1秒）\n",
-        "check": "downloads.include?(\"fanfare.wav\") && File.read(\"fanfare.wav\", mode: \"rb\").b.then { |bytes| head = bytes.unpack(\"a4Va4a4VvvVVvva4V\"); s = bytes.byteslice(44..).unpack(\"s<*\"); amp = ->(from, f) { part = s[(from * 22050).round, 2205] || []; re = im = 0.0; part.each_with_index { |x, n| w = 2 * Math::PI * f * n / 22050; re += x * Math.cos(w); im += x * Math.sin(w) }; Math.hypot(re, im) * 2 / [part.size, 1].max }; c4, e4, g4, c5 = 261.63, 329.63, 392.0, 523.25; head.values_at(0, 2, 6, 7, 10) == [\"RIFF\", \"WAVE\", 1, 22050, 16] && (1.9..2.1).cover?(s.size / 22050.0) && [[0.07, c4], [0.32, e4], [0.57, g4], [0.82, c5], [1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }",
+        "check": "downloads.include?(\"fanfare.wav\") && File.read(\"fanfare.wav\", mode: \"rb\").b.then { |bytes| head = bytes.unpack(\"a4Va4a4VvvVVvva4V\"); s = bytes.byteslice(44..).unpack(\"s<*\"); amp = ->(from, f) { part = s[(from * 22050).round, 2205] || []; re = im = 0.0; part.each_with_index { |x, n| w = 2 * Math::PI * f * n / 22050; re += x * Math.cos(w); im += x * Math.sin(w) }; Math.hypot(re, im) * 2 / [part.size, 1].max }; c4, e4, g4, c5 = 261.63, 329.63, 392.0, 523.25; arpeggio = [[0.07, c4, [e4, g4]], [0.32, e4, [c4, g4, c5]], [0.57, g4, [c4, e4, c5]], [0.82, c5, [c4, e4, g4]]]; head.values_at(0, 2, 6, 7, 10) == [\"RIFF\", \"WAVE\", 1, 22050, 16] && (1.9..2.1).cover?(s.size / 22050.0) && arpeggio.all? { |t, f, others| (a = amp.(t, f)) > 1000 && others.all? { |o| amp.(t, o) < a / 4 } } && [[1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }",
         "hint": "<code>notes(\"C4 E4 G4 C5\")</code>で4つの音ができるよ。和音は<code>mix(*%w[C4 E4 G4 C5].map { |name| envelope(tone(frequency(name), 1.0, :sine, 0.2)) })</code>。2つを<code>+</code>でつないで、<code>File.binwrite(\"fanfare.wav\", wav(…))</code>で保存しよう。"
       }
     ]
