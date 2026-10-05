@@ -255,7 +255,7 @@ class LessonLintTest < Minitest::Test
   def test_link_parity_and_stale_ui_count
     d = data
     cell(d, "hallo", "en") { |x| x["t"] == "h" }["html"] += "<p><a href='https://example.org/x'>x</a></p>"
-    d["ui"]["de"]["subtitle"] += " 45 Lektionen."
+    d["ui"]["de"]["subtitle"] += " #{d["lessons"].size + 7} Lektionen." # stale whatever the real count is
     f = lint(d, only: %w[parity counts])
     assert_finds f, "links", "hallo"
     assert_finds f, "ui-count", "ui.subtitle[de]"
