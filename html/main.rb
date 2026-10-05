@@ -375,12 +375,13 @@ class ChunkyApp
       elsif (row = target.closest(".fe-file"))
         widget = row.closest(".file-explorer")
         preview_file(widget, row.getAttribute("data-path")) if widget
-      elsif target.tagName == "A" && target.closest(".mb-view")
-        # links inside the fake browser navigate the fake browser
+      elsif css_class.include?("mb-view") && (link = event.composedPath.first.closest("a"))
+        # links inside the fake browser navigate the fake browser; its page
+        # is in a shadow root, so the click arrives with .mb-view as target
         event.preventDefault
         widget = target.closest(".mini-browser")
         if widget
-          widget.querySelector(".mb-url").value = target.getAttribute("href").to_s
+          widget.querySelector(".mb-url").value = link.getAttribute("href").to_s
           navigate_browser(widget)
         end
       end
@@ -805,18 +806,38 @@ class ChunkyApp
     path = "/" + path unless path.start_with?("/")
     input.value = path
     status_el = widget.querySelector(".mb-status")
-    view = widget.querySelector(".mb-view")
-    begin
+    page = begin
       status, headers, body = RackPlayground.get(app, path)
       content_type = (headers["content-type"] || headers["Content-Type"]).to_s
       status_el.innerText = status.to_s
       status_el.className = "mb-status #{status < 400 ? 'ok' : 'err'}"
-      view.innerHTML = content_type.empty? || content_type.include?("html") ? body : "<pre>#{escape_html(body)}</pre>"
+      content_type.empty? || content_type.include?("html") ? body : "<pre>#{escape_html(body)}</pre>"
     rescue Exception => e
       status_el.innerText = "ERR"
       status_el.className = "mb-status err"
-      view.innerHTML = "<pre class=\"mb-error\">#{escape_html("#{e.class}: #{e.message}")}</pre>"
+      "<pre class=\"mb-error\">#{escape_html("#{e.class}: #{e.message}")}</pre>"
     end
+    browser_page(widget.querySelector(".mb-view")).innerHTML = "#{MB_PAGE_STYLE}<div class=\"mb-page\">#{page}</div>"
+  end
+
+  # The app's page goes into a shadow root of .mb-view, so a <style> it
+  # brings (Sinatra's 404 page sets body { color: #888; text-align: center;
+  # font-size: 22px }) stays in the fake browser instead of restyling the
+  # whole course, and the course's rules stay out of the page; only inherited
+  # properties (font, colour) come in from .mb-view. MB_PAGE_STYLE is the fake
+  # browser's own default sheet: the app's CSS comes later and wins.
+  MB_PAGE_STYLE = <<~HTML.freeze
+    <style>
+    * { box-sizing: border-box; }
+    h1, h2 { margin: 0.2rem 0 0.5rem; }
+    a { color: #1a5dc8; text-decoration: underline; cursor: pointer; }
+    pre { margin: 0; white-space: pre-wrap; font-size: 0.88rem; }
+    .mb-error { color: var(--err); }
+    </style>
+  HTML
+
+  def browser_page(view)
+    view.shadowRoot || view.attachShadow($window.Object.new.tap { |options| options.mode = "open" })
   end
 
   # ---------- IRB terminal widget ----------
