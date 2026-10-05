@@ -1,4 +1,5 @@
-# Realistic beginner mistakes, mined from the exercises of html/lessons.js
+# Realistic beginner mistakes, mined from the exercises of html/lessons.js,
+# for friendly_errors_harness.rb and friendly_errors_robustness.rb
 # (lesson id in +lesson+). Each is what a learner might type into the
 # exercise cell; +setup+ is an earlier cell of the lesson (it runs first, in
 # the same binding), +live+ runs it under the live-run time limit, +expect+

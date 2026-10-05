@@ -1123,10 +1123,21 @@ class ChunkyApp
     widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any? || @run_three.any? ||
                       @run_shoes.any? || @run_downloads.any? || @run_pdfs.any? || @run_letters.any? ||
                       @run_sketches.any?
-    if (hint = live_hint(error))
-      out_html += "<div class=\"cell-hint\">#{escape_html(hint)}</div>"
+    # an error inside another workshop file keeps Ruby's message and its
+    # "(helper.rb:3)": the explanation only sees the open file's code
+    friendly = error && !where && friendly_error(error, code, file)
+    hint = live_hint(error)
+    out_html += "<div class=\"cell-hint\">#{escape_html(hint)}</div>" if hint
+    if friendly
+      # a live run while typing shows just the headline (app.css
+      # .friendly-brief); one the time limit stopped all of it, below the
+      # hint - why the loop would never end
+      out_html += friendly.to_html(brief: auto && !error.is_a?(AutoRun::Stopped))
+    elsif hint
+      # the hint is all there is to say (stopped, or it wants ▶)
     elsif error
-      out_html += "<div class=\"cell-error\">#{escape_html(error.class)}: #{escape_html(error.message)}" \
+      # ansi.rb: ruby.wasm's Prism colours a SyntaxError's code frame
+      out_html += "<div class=\"cell-error\">#{escape_html(error.class)}: #{AnsiHtml.to_html(error.message.to_s)}" \
                   "#{where ? " (#{escape_html(where)})" : ""}</div>"
     elsif result.is_a?(PyCall::PyObject)
       out_html += python_result_html(result)
@@ -1204,6 +1215,45 @@ class ChunkyApp
     else
       eval(code, @bind, file)
     end
+  end
+
+  # The kind explanation of a cell's error in the lesson's language
+  # (friendly_errors.rb: headline, the line with a caret, what to do, Ruby's
+  # own message folded away); nil when no rule knows the error, or loading
+  # failed - the cell then shows Ruby's message as before. ~90 KB of rules
+  # and texts, so fetched on the first error only, like shoes_dom.rb.
+  def friendly_error(error, code, file)
+    return nil if error.is_a?(AutoRun::NeedsRun)
+    return nil unless friendly_errors_loaded?
+
+    FriendlyErrors.explain(error, source: code, lang: @lang, file: file, binding: @bind)
+  rescue StandardError, ScriptError
+    nil
+  end
+
+  FRIENDLY_ERRORS_FILES = %w[friendly_errors_messages.rb friendly_errors.rb friendly_errors_rules.rb].freeze
+
+  # off the clock: a cell is not slow because its first error loaded this
+  def friendly_errors_loaded?
+    return true if defined?(FriendlyErrors::RULES) && FriendlyErrors::RULES.any?
+    return false if @friendly_errors_failed
+
+    AutoRun.untraced do
+      FRIENDLY_ERRORS_FILES.each do |name|
+        source = $window.fetchTextSync(name).to_s
+        raise LoadError, "could not fetch #{name}" if source.start_with?("ERROR ")
+
+        # friendly_errors.rb leaves the rules to us (they come next)
+        FriendlyErrors.const_set(:FETCHED, true) if name == "friendly_errors.rb"
+        eval(source, TOPLEVEL_BINDING, name)
+      end
+    end
+    true
+  rescue StandardError, ScriptError => e
+    # once: offline before the files were cached, it would try on every error
+    @friendly_errors_failed = true
+    $window.console.log("friendly_errors load failed: #{e.class}: #{e.message}")
+    false
   end
 
   # what a live run says instead of an error when it stopped or wants ▶

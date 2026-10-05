@@ -79,7 +79,18 @@ Last updated 2026-10-05.
   `"live": false`); once any time-limit tracer has been on, plain runs stay
   about 40% slower for the rest of the visit (#11); every cell is evaluated
   as `chunky.rb`, so an error in a method from an earlier cell reports that
-  cell's line numbers (#7, #5).
+  cell's line numbers (#7, #5). The friendly error explanations (#4,
+  `html/friendly_errors.rb`) work around it by checking that the line in
+  the current cell looks right before quoting it; evaluating each cell as
+  `chunky-<idx>.rb` would fix it for both (touches `error_line`,
+  `AutoRun`'s paths, `EVAL_FILE`, the explanations' `file:`).
+- Friendly errors, after integrating #4: the corpus was written alongside
+  the rules, so replaying real failing cells (live-run rehearsals produce
+  plenty) would show what they miss; the heuristics are line-based
+  (multi-line expressions, heredocs, `%w[]` fall through to the generic
+  syntax message); per-lesson hints (`tl-pattern`: name the missing
+  `in` branch) and a "Chunky says" line from the headline are ideas in
+  `experiments/04-friendly-errors/NOTES.md`.
 - Accessibility, after integrating the audit (`experiments/10-accessibility`,
   "Integrated"): the letter (Rumale) is pointer-only - a typed-digits
   fallback would make it keyboard-usable; Run buttons still turn

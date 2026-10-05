@@ -73,6 +73,8 @@ html/
                         require_relative between them, gets, write-back
   autorun.rb            live runs (§6b): what may run by itself, the time
                         limit, taking back the files a rehearsal wrote
+  friendly_errors.rb    a failing cell's error explained in de/en/ja (§6);
+                        its rules (_rules.rb) and texts (_messages.rb) apart
   storage.js            where the work lives: localStorage change times, the
                         progress file, a connected folder (File System Access)
   offline.js, sw.js     offline mode (§6c): the page's side and the service worker
@@ -109,6 +111,8 @@ gem/chunkybacon/, gem/chunky-bacon/  its alias gems (like rubyllm -> ruby_llm)
 test/check_harness.rb      every lesson offline under CRuby
 test/lint_lessons.rb       lessons.js content linter (lint_allow.txt: accepted
                            findings; lint_lessons_test.rb: its tests)
+test/friendly_errors_harness.rb  70 beginner mistakes (friendly_errors_corpus.rb)
+                           against the explanations; friendly_errors_robustness.rb
 test/gems_harness.rb       gem installer offline under CRuby
 test/shell/run.rb          Minitest for the shell, on a stub of PicoRuby's js
 test/autorun_test.rb       live runs under CRuby: runnable?, the time limit
@@ -426,7 +430,8 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   the exercise's says `aria-keyshortcuts="Alt+R"`. A run with ▶, Shift+Enter
   or Alt+R writes one line to `#runStatus` (`role=status`, `.sr-only`;
   `App#announce_run`): `ranOk`/`ranError` with the cell's output, cut at
-  280 characters, and for an exercise Chunky's bubble - emptied first, the
+  280 characters (an explained error by its headline only, `brief_output`),
+  and for an exercise Chunky's bubble - emptied first, the
   text 50 ms later, so the same result twice is read twice. Live runs never
   write there, and `.cell-out` is no live region on purpose (live runs
   rewrite it while the learner types). The Run button keeps `disabled`
@@ -446,6 +451,29 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   under `prefers-reduced-motion`, the letter's answer is mirrored into a
   live `.letter-answer`. The shell stub (`test/shell/stubs/js.rb`) keeps
   `document.activeElement` the way Chrome does.
+- **A cell's error, explained** (`friendly_errors.rb`, from
+  `experiments/04-friendly-errors`): below a failing cell a
+  `.friendly-error` box in the lesson's language - a headline, the cell's
+  line with a caret under the culprit (`.friendly-snippet`), what to do,
+  and Ruby's own message folded away in a `<details>`. An ordered rule table
+  (`friendly_errors_rules.rb`, first match wins) over the error, the cell's
+  code and its binding (read with `local_variable_get` only, never `eval`);
+  texts in `friendly_errors_messages.rb`. No rule, no box: the old
+  `.cell-error` line stays (the learner's own `raise "…"`, JSON errors).
+  `ChunkyApp#friendly_error` fetches the three files on the first error
+  (~90 KB, ~55 ms, `fetchTextSync` + `eval` like `shoes_dom.rb`: a cell
+  runs synchronously, where `require_relative` cannot fetch - so
+  friendly_errors.rb only requires the other two when `FETCHED` is unset)
+  and off the clock (`AutoRun.untraced`); an explanation takes 0-30 ms.
+  A live run shows only the headline (`.friendly-brief`); one the time limit
+  stopped shows the hint and below it all of it - why the loop never ends.
+  An error inside another workshop file keeps Ruby's message with its
+  "(helper.rb:3)". Traps: ruby.wasm's Prism **colours** a SyntaxError's
+  code frame with ANSI codes (a Ruby in a pipe does not), so the rules read
+  `Context#message`, stripped - the harness checks every syntax error both
+  ways. And every cell is evaluated as `chunky.rb`: a method from an earlier
+  cell reports that cell's line numbers, so the rules check that the line
+  in the current cell looks right (a `def name` on it) before quoting it.
 - CodeMirror cells must not be built while `#app` is `display:none`
   (blank editors after hard reload). Prose `pre/code` CSS stays scoped to
   `.lessonText`, or it bleeds into CodeMirror's internal `<pre>`s.
@@ -550,7 +578,8 @@ shell does the timing, the kernel the guarding:
   cached gem and every `require` run untraced and off the clock
   (`AutoRun.untraced` moves the deadline by their time). Both exceptions
   descend from `Exception`, so `rescue => e` in learner code cannot swallow
-  them. The output gets `.is-rehearsal` (errors fainter); no line is marked.
+  them. The output gets `.is-rehearsal` (errors fainter, an explained error
+  as its headline only, §6); no line is marked.
 - **▶ has no time limit**: TracePoint costs ~3x on gem-heavy code, so a
   manual run still can hang the page on an endless loop, as before.
   An endless loop that raises no TracePoint event and that `runnable?` does
@@ -596,8 +625,9 @@ no service worker is registered and nothing changes. The choice is
 - **Synchronous XHR does not pass a service worker in Chrome**, and the
   kernel fetches gems that way (`fetch*Sync` in index.html). So `sw.js`
   marks a page it serves from the copy (`<meta name="chunky-offline-copy">`),
-  `offline.js` then reads the gem cache and `shoes_dom.rb` (~7 MB) into
-  memory before the kernel starts (`bridge.js` waits for
+  `offline.js` then reads the gem cache and the `.rb` files the kernel
+  fetches on demand (`shoes_dom.rb`, `numo_narray.rb`, `processing.rb`,
+  `herb_bridge.rb`, the three `friendly_errors*.rb`) into memory before the kernel starts (`bridge.js` waits for
   `ChunkyOffline.kernelReady()`), and the sync helpers answer from there. A
   new file the kernel fetches synchronously must be added there too.
 - **What needs the internet says so**: a gem not in the cache
@@ -1107,6 +1137,8 @@ ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, 
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof
 ruby ansi_test.rb              # terminal colours in a cell's output
+ruby friendly_errors_harness.rb --summary   # 70 beginner mistakes explained by the expected rule, de/en/ja
+ruby friendly_errors_robustness.rb          # explain never raises, never leaves a %{...}
 ruby ../tools/offline_files.rb --check   # the offline copy's file list is current
 BASE=http://127.0.0.1:8011/ node browser_test.mjs   # Playwright, ~5 min
 BASE=http://127.0.0.1:8011/ node offline_test.mjs   # offline mode (§6c), ~1 min

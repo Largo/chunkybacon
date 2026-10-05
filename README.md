@@ -29,6 +29,13 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
   cell shows its last expression as `=> …` — `puts` is never required.
+- **Errors explained kindly**: when a cell fails, a short explanation in
+  the lesson's language (German, English, Japanese) says what went wrong
+  and what to write instead, with the line and a caret under the culprit
+  (`6 x 7` → "Ruby multiplies with `*`"; a missing `end` names the `def`
+  that lost it; `fox["name"]` on a hash with symbol keys suggests
+  `fox[:name]`). Ruby's own message stays one click away. 44 rules,
+  checked against 70 typical beginner mistakes drawn from the exercises.
 - **Lesson sidebar**: the 51 lessons in three groups (basics, side trips,
   the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a
@@ -181,6 +188,8 @@ ruby gems_harness.rb      # gem installer, sinatra + roda offline
 ruby shell/run.rb         # the page shell (PicoRuby code) under Minitest
 ruby autorun_test.rb      # live runs: what may run, the time limit
 ruby ansi_test.rb         # terminal colours in a cell's output
+ruby friendly_errors_harness.rb --summary  # 70 beginner mistakes, each explained by the expected rule
+ruby friendly_errors_robustness.rb         # the explanations never raise, never leave a %{...}
 node browser_test.mjs     # Playwright end-to-end against port 8011
 node progress_test.mjs    # progress file, workshop, connected folder
 node boot_failure_test.mjs # what the page says when a runtime fails

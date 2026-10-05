@@ -934,6 +934,57 @@ kbd {
   white-space: pre-wrap;
   font-size: 0.9rem;
 }
+/* An error explained (friendly_errors.rb, main.rb friendly_error): the
+   headline in red, the cell's line with a caret on a white slip, what to do
+   in print, and Ruby's own message folded away underneath. */
+.friendly-error {
+  border-left: 3px solid var(--err);
+  background: var(--fat);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+.friendly-title {
+  font-weight: 700;
+  color: var(--err);
+  margin-bottom: 0.35rem;
+}
+.friendly-snippet {
+  font-family: var(--font-code);
+  font-size: 0.82rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 0.35rem 0.5rem;
+  margin: 0 0 0.4rem;
+  overflow-x: auto;
+  white-space: pre;
+}
+.friendly-body { margin: 0; line-height: 1.5; }
+.friendly-error code {
+  font-family: var(--font-code);
+  font-size: 0.95em;
+  background: var(--code-bg);
+  padding: 0 0.2em;
+  border-radius: 3px;
+}
+.friendly-original {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+.friendly-original summary { cursor: pointer; }
+.friendly-original pre {
+  font-family: var(--font-code);
+  white-space: pre-wrap;
+  margin: 0.25rem 0 0;
+}
+/* a live run while typing keeps just the headline (main.rb sets
+   .friendly-brief, except when the time limit stopped an endless loop) */
+.cell-out.is-rehearsal .friendly-error { opacity: 0.6; }
+.friendly-brief .friendly-snippet,
+.friendly-brief .friendly-body,
+.friendly-brief .friendly-original { display: none; }
+.friendly-brief .friendly-title { margin-bottom: 0; }
 .cell-image {
   display: block;
   margin: 0.4rem 0;

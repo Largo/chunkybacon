@@ -1,7 +1,8 @@
 // Headless test for live runs (html/autorun.rb, shell/app.rb): code runs by
 // itself a moment after the last key - only code that parses, as a
-// rehearsal that keeps no file, without downloads, cut off after a second -
-// and the workshop's switch starts off. A SQLite database in a file
+// rehearsal that keeps no file, without downloads, cut off after a second
+// (an error shows only its explanation's headline, an endless loop all of
+// it) - and the workshop's switch starts off. A SQLite database in a file
 // (sqlite3_sqljs.rb): a live run reads it but changes only its own, and the
 // workshop keeps it with the project. matplotlib (pycall.rb): no live run
 // while its first import runs, none that imports a module for the first
@@ -97,11 +98,24 @@ const responsive = async page => {
   check('a live miss stays quiet', (await page.textContent('#chunkyText')) === 'still');
   check('... no shake', !(await page.evaluate(i => document.querySelector(`.run-cell[data-idx="${i}"]`).closest('.cell').classList.contains('shake'), ex)));
 
+  // an error while typing is explained by its headline only (friendly_errors.rb)
+  const friendly = () => page.evaluate(() => {
+    const box = document.querySelector('#cell-out-1 .friendly-error');
+    return box ? { brief: box.classList.contains('friendly-brief'), shown: box.innerText.trim() } : null;
+  });
+  await edit(page, 1, 'name = "chunky"\nname.upcse');
+  await page.waitForFunction(() => !!document.querySelector('#cell-out-1 .friendly-error'), null, { timeout: 5000 }).catch(() => {});
+  const typo = await friendly();
+  check('a live error shows just the headline of its explanation', typo && typo.brief && typo.shown === 'Meintest du upcase?');
+
   // endless with a body: stopped after a second, the page lives on
   const before = Date.now();
   await edit(page, 1, 'n = 0\nloop do\n  n += 1\nend');
   await page.waitForFunction(() => (document.getElementById('cell-out-1').textContent || '').includes('angehalten'), null, { timeout: 8000 }).catch(() => {});
   check('an endless loop is stopped after a second', (await out(page, 1)).includes('Nach einer Sekunde angehalten'));
+  const endless = await friendly();
+  check('... and explained in full: no break in the loop', endless && !endless.brief && endless.shown.includes('Diese Schleife hört nie auf') &&
+        endless.shown.includes('break'));
   check('... the page lives on', await responsive(page));
   check('... within a few seconds', Date.now() - before < 6000);
   check('... and the cell waits for ▶ from now on',

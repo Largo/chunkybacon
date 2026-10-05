@@ -1,5 +1,30 @@
 # 04 – Friendly error explanations (de / en / ja)
 
+**Integrated.** The three Ruby files now live in `html/`
+(`friendly_errors.rb`, `_rules.rb`, `_messages.rb`), the CSS in
+`html/assets/app.css` (classes renamed `friendly-title`, `-snippet`,
+`-body`, `-original`, `-brief`: `.fe-title` was already the file
+explorer's), and the corpus in `test/` as `friendly_errors_corpus.rb`,
+`friendly_errors_harness.rb` (was `run_corpus.rb`, without `--html`;
+exits 1 on a MISS) and `friendly_errors_robustness.rb` (README "Tests",
+HANDOVER §6 and §8). Steps 1-5 of "Integration into html/main.rb" are done,
+with these differences: the kernel cannot `require_relative` while a cell
+runs, so `ChunkyApp#friendly_error` fetches and evals the three files like
+`shoes_dom.rb` (and `offline.js` preloads them for the offline copy); a
+run the time limit stopped shows the old hint *and* the full explanation
+below it; an error inside another workshop file keeps Ruby's message with
+its location; `#runStatus` reads only the headline. Tested in ruby.wasm in
+the browser: the one difference was that Prism there **colours** a
+SyntaxError's code frame with ANSI codes, so the diagnostics were not
+found and missing `end`s and unclosed strings fell to the generic message -
+`Context#message` strips them now, and the harness replays every syntax
+error with the colours. Everything else probed (typo, argument count,
+`6 x 7`, String + Integer, endless loop, de/en/ja) matched the CRuby output;
+explain takes 0-30 ms there, loading the files ~55 ms. The
+"all cells are `chunky.rb`" limit stays (`docs/OPEN_WORK.md`).
+`preview.html`/`.png` and `tools/` stay here as the record; paths below are
+the experiment's.
+
 When a cell fails, the learner gets a short, kind explanation in the lesson's
 language, plus a pointer into their own code (Elm/Rust style), instead of only
 Ruby's `NoMethodError: undefined method 'upcase' for nil`. Ruby's own message

@@ -6,6 +6,10 @@
 #                                   file: "chunky.rb", binding: @bind)
 #   result&.to_text  /  result&.to_html
 #
+# The course's kernel loads it on a cell's first error (main.rb,
+# friendly_error); test/friendly_errors_harness.rb runs it over a corpus of
+# beginner mistakes.
+#
 # +explain+ returns nil when no rule knows the error (the cell then shows
 # Ruby's own message as before), and never raises.
 #
@@ -19,7 +23,12 @@
 # Pure Ruby, stdlib only, no Prism needed: syntax errors are read from the
 # SyntaxError's message (Prism's own diagnostics, with line and column),
 # plus a small scanner over the source for strings, brackets and `end`s.
-require_relative "friendly_errors_messages"
+#
+# Three files: this one, the texts and the rules. On a computer this one
+# requires the other two; the kernel fetches and evals all three itself, in
+# the order messages, this, rules (a cell runs synchronously, and
+# require_relative's fetch from the page cannot), and sets FETCHED first.
+require_relative "friendly_errors_messages" unless defined?(FriendlyErrors::MESSAGES)
 
 module FriendlyErrors
   Finding = Struct.new(:msg, :vars, :line, :col, :len, :label, :label_vars, keyword_init: true)
@@ -42,13 +51,13 @@ module FriendlyErrors
       out
     end
 
-    # +brief+: only the headline shows (app.css .fe-brief) - for live runs
+    # +brief+: only the headline shows (app.css .friendly-brief) - for live runs
     def to_html(brief: false)
-      html = +"<div class=\"friendly-error#{brief ? ' fe-brief' : ''}\" lang=\"#{lang}\">"
-      html << "<div class=\"fe-title\">#{FriendlyErrors.inline_html(title)}</div>"
-      html << "<pre class=\"fe-snippet\">#{FriendlyErrors.escape(snippet)}</pre>" if snippet
-      html << "<p class=\"fe-body\">#{FriendlyErrors.inline_html(body)}</p>"
-      html << "<details class=\"fe-original\"><summary>#{FriendlyErrors.escape(FriendlyErrors.t_raw(:w_original, lang))}</summary>" \
+      html = +"<div class=\"friendly-error#{brief ? ' friendly-brief' : ''}\" lang=\"#{lang}\">"
+      html << "<div class=\"friendly-title\">#{FriendlyErrors.inline_html(title)}</div>"
+      html << "<pre class=\"friendly-snippet\">#{FriendlyErrors.escape(snippet)}</pre>" if snippet
+      html << "<p class=\"friendly-body\">#{FriendlyErrors.inline_html(body)}</p>"
+      html << "<details class=\"friendly-original\"><summary>#{FriendlyErrors.escape(FriendlyErrors.t_raw(:w_original, lang))}</summary>" \
               "<pre>#{FriendlyErrors.escape(original)}</pre></details>"
       html << "</div>"
     end
@@ -195,7 +204,14 @@ module FriendlyErrors
     end
 
     def original
-      "#{error.class}: #{error.message}"
+      "#{error.class}: #{message}"
+    end
+
+    # the error's message without terminal colours: ruby.wasm's Prism
+    # colours a SyntaxError's code frame ("\e[1;31m> \e[m\e[2m5 | \e[m"),
+    # which a Ruby in a pipe does not
+    def message
+      @message ||= error.message.to_s.gsub(/\e\[[\d;]*m/, "")
     end
 
     def t(key, vars = {}) = FriendlyErrors.t(key, lang, vars)
@@ -426,14 +442,14 @@ module FriendlyErrors
       @diagnostics ||= begin
         out = []
         current = nil
-        error.message.to_s.each_line do |l|
+        message.each_line do |l|
           if (m = l.match(/^[> ] *(\d+) \| /))
             current = m[1].to_i
           elsif current && (m = l.match(/^ +\| ( *)(\^~*) (.*)$/))
             out << { line: current, col: m[1].length, len: m[2].length, msg: m[3].strip }
           end
         end
-        if out.empty? && (m = error.message.to_s.match(/:(\d+): (.*)/))
+        if out.empty? && (m = message.match(/:(\d+): (.*)/))
           out << { line: m[1].to_i, col: nil, len: nil, msg: m[2] }
         end
         out
@@ -468,4 +484,4 @@ module FriendlyErrors
   end
 end
 
-require_relative "friendly_errors_rules"
+require_relative "friendly_errors_rules" unless FriendlyErrors.const_defined?(:FETCHED, false)
