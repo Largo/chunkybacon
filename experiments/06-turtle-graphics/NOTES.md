@@ -70,7 +70,8 @@ Run: `ruby examples.rb`, `ruby make_lesson.rb && ruby lesson_check.rb`,
   A designer could do better; it is one `<g id="fox">` in `fox_svg`.
 - **Safety nets**: more than 100 000 steps raises `Turtle::TooFar`
   ("Chunky is tired: ... a loop that never ends, or a recursion without a
-  base case?") instead of freezing the tab; colours are validated (they go
+  base case?") instead of freezing the tab, and so do more than 200 000
+  turns ("Chunky is dizzy", for `loop { right 90 }`); colours are validated (they go
   into SVG attributes); `save("x.svg")` writes a still SVG, which the course
   offers as a download like any file a cell writes.
 

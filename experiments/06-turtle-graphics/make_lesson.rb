@@ -231,5 +231,5 @@ ja = lesson("10. Chunkyとお絵かき", [
     "<code>koch(…)</code>、<code>right 120</code>、<code>koch(…)</code>、<code>left 60</code>、<code>koch(…)</code>！")
 ])
 
-File.write("lesson_turtle.json", JSON.pretty_generate({ "id" => "turtle", "de" => de, "en" => en, "ja" => ja }) + "\n")
+File.write(File.join(__dir__, "lesson_turtle.json"), JSON.pretty_generate({ "id" => "turtle", "de" => de, "en" => en, "ja" => ja }) + "\n")
 puts "lesson_turtle.json: #{[de, en, ja].map { |l| l['cells'].size }.inspect} cells"

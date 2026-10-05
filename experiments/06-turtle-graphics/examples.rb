@@ -113,6 +113,12 @@ rescue Turtle::TooFar => e
   expect "endless loop stops: #{e.message[0, 40]}...", true
 end
 begin
+  turtle { loop { right 90 } }
+  expect "endless turning stops", false
+rescue Turtle::TooFar => e
+  expect "endless turning stops: #{e.message[0, 40]}...", true
+end
+begin
   Turtle.new.color("red\" onload=\"x")
   expect "bad colour refused", false
 rescue ArgumentError
