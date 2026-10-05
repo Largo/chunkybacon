@@ -140,6 +140,8 @@ require_relative "sandbox_sim"
 require_relative "workshop"
 # Live runs: rehearsals a moment after the learner stops typing.
 require_relative "autorun"
+# Terminal colours (pastel, tty-*) in a cell's output, as HTML.
+require_relative "ansi"
 # require "pycall" is the bridge to Pyodide (pycall.rb): the real gem needs
 # libpython, which a browser does not have
 require_relative "pycall"
@@ -796,7 +798,7 @@ class ChunkyApp
       unless incomplete
         session[:buffer] = ""
         session[:line] += 1
-        append += "<pre class=\"irb-stdout\">#{escape_html(buffer.string)}</pre>" unless buffer.string.empty?
+        append += "<pre class=\"irb-stdout\">#{AnsiHtml.to_html(buffer.string)}</pre>" unless buffer.string.empty?
         if error
           append += "<div class=\"irb-error\">#{escape_html("#{error.class}: #{error.message.lines.first.to_s.strip}")}</div>"
         else
@@ -983,7 +985,7 @@ class ChunkyApp
     end
 
     out_html = ""
-    out_html += "<pre class=\"cell-stdout\">#{escape_html(output)}</pre>" unless output.empty?
+    out_html += "<pre class=\"cell-stdout\">#{AnsiHtml.to_html(output)}</pre>" unless output.empty?
     widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any? || @run_three.any? ||
                       @run_shoes.any? || @run_downloads.any? || @run_pdfs.any? || @run_letters.any?
     if (hint = live_hint(error))

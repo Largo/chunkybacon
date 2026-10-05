@@ -202,6 +202,19 @@ module Kernel
 end
 
 # ---------------------------------------------------------------------------
+# A cell's output is a StringIO, which is not a terminal - like a program's
+# output piped into a file. A real IO says so when asked for the window size
+# (ENOTTY); StringIO has no ioctl at all, and tty-screen, which checks for
+# ioctl on the real $stderr at load time and then asks $stdout, would stop
+# with a NoMethodError instead of falling back to 80 columns.
+require "stringio"
+class StringIO
+  def ioctl(*)
+    raise Errno::ENOTTY
+  end
+end
+
+# ---------------------------------------------------------------------------
 # Simulated threads (browser only - the harness keeps real ones): each
 # SimThread is a Fiber; a tiny cooperative scheduler interleaves them at
 # their (virtual) sleep points, so "parallel downloads" and interleaved

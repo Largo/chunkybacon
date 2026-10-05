@@ -4,7 +4,7 @@ Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
 Work in progress - what is unfinished, and in what state - is in
 `docs/OPEN_WORK.md`.
-Last updated 2026-10-04 (46 lessons in German, English and Japanese).
+Last updated 2026-10-04 (47 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -63,6 +63,7 @@ html/
   numo_narray.rb        require "numo/narray": Numo in pure Ruby, for Rumale (§6e)
   sqlite3_sqljs.rb      require "sqlite3": the gem's API over sql.js, for Sequel (§6f)
   letter.js             show_letter's envelope: drawing, digits as 8x8 (§6e)
+  ansi.rb               terminal colours in a cell's output: ANSI codes -> spans (§6g)
   workshop.rb           the workshop's runs: project files as the virtual FS,
                         require_relative between them, gets, write-back
   autorun.rb            live runs (§6b): what may run by itself, the time
@@ -86,6 +87,7 @@ tools/update_ruby_wasm.rb  updates the wasm + loader from npm
 tools/compress_assets.rb   the .gz copies nginx serves (the wasm runtimes)
 tools/vendor_pyodide.rb    Pyodide + pandas, sympy, scikit-learn into html/assets/pyodide/ (§6d)
 tools/vendor_sqljs.rb      sql.js (SQLite in WebAssembly) into html/assets/sqljs/ (§6f)
+tools/build_box_font.rb    html/assets/fonts/chunky-box-drawing.woff, box drawing for the code font (§6g)
 tools/offline_files.rb     html/offline-files.txt - rerun after adding/removing a file
 tools/patch_picoruby_loader.rb  PicoRuby's loader: text/ruby -> text/picoruby
 tools/measure_load.mjs, tools/shell_metrics.rb  load times, code size (PICORUBY_SHELL.md)
@@ -102,6 +104,7 @@ test/check_harness.rb      every lesson offline under CRuby
 test/gems_harness.rb       gem installer offline under CRuby
 test/shell/run.rb          Minitest for the shell, on a stub of PicoRuby's js
 test/autorun_test.rb       live runs under CRuby: runnable?, the time limit
+test/ansi_test.rb          ANSI colours to HTML under CRuby
 test/live_test.mjs         Playwright: live runs in a lesson and the workshop
 test/server_test.rb        the optional server under Rack::MockRequest
 test/permalink_test.mjs    Playwright: permalinks, against the server (port 8012)
@@ -189,7 +192,7 @@ A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 19-30), not in a group of one.
+(side trips, 19-31), not in a group of one.
 
 The sidebar itself (`index.html` `#sidebar`, `shell/app.rb`, `app.css`): from
 the top of the window to its foot with its own scroll; head with the course
@@ -245,7 +248,7 @@ Rules that the code and tests rely on:
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
 - Checks accept output OR result; `puts` is never required.
-- `test/browser_test.mjs` asserts the lesson count (`'46 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'47 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -756,6 +759,39 @@ is pure Ruby (cached, `sequel-5.109.0.gem`); the sqlite3 gem under it is C.
   database (first run, re-run, reload, the card); `offline_test.mjs` runs
   Sequel and a file database from the copy.
 
+## 6g. A terminal below the cell: TTY, colours, box drawing
+
+Lesson 30 draws with the [TTY toolkit](https://ttytoolkit.org): pastel,
+tty-table, tty-box, tty-tree, tty-font (all cached, with strings,
+tty-screen, tty-color, tty-cursor, unicode-display_width - pinned to 2.6,
+as strings wants < 3 - and unicode_utils). Three things make a cell's
+output behave like a terminal:
+
+- **Colours** (`html/ansi.rb`, `AnsiHtml.to_html`): the cell's stdout and
+  IRB's go through it - SGR codes (`\e[31m`, bold, background, 256 and
+  RGB colours, inverse) become spans with `ansi-*` classes (app.css: the
+  16 colours as a light-background terminal shows them) or inline styles;
+  cursor movements are dropped. pastel only colours a terminal, and a cell's
+  output is a StringIO, so the lesson says `Pastel.new(enabled: true)`.
+- **Box drawing** (`html/assets/fonts/chunky-box-drawing.woff`, built by
+  `tools/build_box_font.rb`): Atkinson Hyperlegible Mono has no U+2500-259F,
+  and a fallback font's are not as wide as its letters, so tables broke
+  apart. The tool draws the 160 glyphs from rectangles (the arms read off
+  the Unicode names), 0.632 em wide, the vertical strokes reaching the
+  line box's edges at line-height 1.6; fonts.css maps the range onto the
+  code font's family. Strokes thinner than ~1.4 px vanished at some
+  heights in Chromium on Windows. SymPy's `pretty` still asks for ASCII
+  (lesson 24) - its other symbols are not in this font.
+- **No window size**: tty-screen checks for `ioctl` on the real `$stderr`
+  at load time and then calls it on `$stdout` - a StringIO, which had
+  none. `sandbox_sim.rb` gives StringIO an `ioctl` that raises ENOTTY, as
+  an IO redirected to a file does, so it falls back to 80 columns.
+
+Not in the lesson (an offweb box shows them): tty-prompt, tty-reader,
+tty-spinner, tty-progressbar. tty-reader needs `io/wait`, which must stay
+unloadable (§4), and the others redraw with the cursor; tty-progressbar
+prints nothing when its output is no terminal.
+
 ## 7a. The optional server: permalinks and a backend
 
 The course is a static site and stays one: without `server/` lessons live at
@@ -816,10 +852,11 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 46 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 47 lessons x 3 languages, starter fails, solutions pass
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof
+ruby ansi_test.rb              # terminal colours in a cell's output
 ruby ../tools/offline_files.rb --check   # the offline copy's file list is current
 BASE=http://127.0.0.1:8011/ node browser_test.mjs   # Playwright, ~5 min
 BASE=http://127.0.0.1:8011/ node offline_test.mjs   # offline mode (§6c), ~1 min

@@ -1,6 +1,7 @@
 # The files the offline copy holds (html/sw.js): written by
 # tools/offline_files.rb - rerun it after adding, renaming or deleting a
 # file under html/. Paths are relative to this file.
+ansi.rb
 assets/app.css
 assets/chunky.svg
 assets/codemirror-ruby.js
@@ -16,6 +17,7 @@ assets/fonts/atkinson-hyperlegible-next-italic-latin-ext.woff2
 assets/fonts/atkinson-hyperlegible-next-italic-latin.woff2
 assets/fonts/atkinson-hyperlegible-next-latin-ext.woff2
 assets/fonts/atkinson-hyperlegible-next-latin.woff2
+assets/fonts/chunky-box-drawing.woff
 assets/fonts/fonts.css
 assets/fonts/shantell-sans-latin-ext.woff2
 assets/fonts/shantell-sans-latin.woff2
@@ -68,6 +70,7 @@ gems/cache/matrix-0.4.3.gem
 gems/cache/minitest-5.27.0.gem
 gems/cache/mustermann-4.0.0.gem
 gems/cache/nokogiri-1.19.4.gem
+gems/cache/pastel-0.8.0.gem
 gems/cache/pdf-core-0.10.0.gem
 gems/cache/prawn-2.5.0.gem
 gems/cache/pure_jpeg-0.4.0.gem
@@ -84,9 +87,20 @@ gems/cache/rumale-nearest_neighbors-2.2.0.gem
 gems/cache/scarpe-components-0.5.0.gem
 gems/cache/sequel-5.109.0.gem
 gems/cache/sinatra-4.2.1.gem
+gems/cache/strings-0.2.1.gem
+gems/cache/strings-ansi-0.2.0.gem
 gems/cache/three-rb-0.2.1.gem
 gems/cache/tilt-2.9.0.gem
 gems/cache/ttfunk-1.8.0.gem
+gems/cache/tty-box-0.7.0.gem
+gems/cache/tty-color-0.6.0.gem
+gems/cache/tty-cursor-0.7.1.gem
+gems/cache/tty-font-0.5.0.gem
+gems/cache/tty-screen-0.8.2.gem
+gems/cache/tty-table-0.12.0.gem
+gems/cache/tty-tree-0.4.0.gem
+gems/cache/unicode-display_width-2.6.0.gem
+gems/cache/unicode_utils-1.4.0.gem
 index.html
 lessons.js
 letter.js

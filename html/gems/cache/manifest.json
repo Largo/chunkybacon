@@ -225,5 +225,79 @@
     "deps": [
       "bigdecimal"
     ]
+  },
+  "pastel": {
+    "version": "0.8.0",
+    "file": "pastel-0.8.0.gem",
+    "deps": [
+      "tty-color"
+    ]
+  },
+  "tty-table": {
+    "version": "0.12.0",
+    "file": "tty-table-0.12.0.gem",
+    "deps": [
+      "pastel",
+      "strings",
+      "tty-screen"
+    ]
+  },
+  "tty-box": {
+    "version": "0.7.0",
+    "file": "tty-box-0.7.0.gem",
+    "deps": [
+      "pastel",
+      "strings",
+      "tty-cursor"
+    ]
+  },
+  "tty-tree": {
+    "version": "0.4.0",
+    "file": "tty-tree-0.4.0.gem",
+    "deps": []
+  },
+  "tty-font": {
+    "version": "0.5.0",
+    "file": "tty-font-0.5.0.gem",
+    "deps": []
+  },
+  "tty-color": {
+    "version": "0.6.0",
+    "file": "tty-color-0.6.0.gem",
+    "deps": []
+  },
+  "strings": {
+    "version": "0.2.1",
+    "file": "strings-0.2.1.gem",
+    "deps": [
+      "strings-ansi",
+      "unicode-display_width",
+      "unicode_utils"
+    ]
+  },
+  "tty-screen": {
+    "version": "0.8.2",
+    "file": "tty-screen-0.8.2.gem",
+    "deps": []
+  },
+  "tty-cursor": {
+    "version": "0.7.1",
+    "file": "tty-cursor-0.7.1.gem",
+    "deps": []
+  },
+  "strings-ansi": {
+    "version": "0.2.0",
+    "file": "strings-ansi-0.2.0.gem",
+    "deps": []
+  },
+  "unicode-display_width": {
+    "version": "2.6.0",
+    "file": "unicode-display_width-2.6.0.gem",
+    "deps": []
+  },
+  "unicode_utils": {
+    "version": "1.4.0",
+    "file": "unicode_utils-1.4.0.gem",
+    "deps": []
   }
 }

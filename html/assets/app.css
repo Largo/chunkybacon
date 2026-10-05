@@ -832,6 +832,50 @@ kbd {
   margin: 0 0 0.3rem;
   font-size: 0.9rem;
 }
+/* Terminal colours in the output (html/ansi.rb): the 16 standard ones, as
+   a terminal with a light background shows them - "white" is a light grey,
+   backgrounds are pale so the ink stays readable on them. Backgrounds come
+   first, so a colour set as well wins over their text colour. */
+.ansi-bg-0 { background: #1a1208; color: #ffffff; }
+.ansi-bg-1 { background: #f2b8b3; }
+.ansi-bg-2 { background: #b9dfbb; }
+.ansi-bg-3 { background: #f5e08a; }
+.ansi-bg-4 { background: #b7cdf2; }
+.ansi-bg-5 { background: #e3bdea; }
+.ansi-bg-6 { background: #b2e3e6; }
+.ansi-bg-7 { background: #dde2e7; }
+.ansi-bg-8 { background: #5f6670; color: #ffffff; }
+.ansi-bg-9 { background: #f7a399; }
+.ansi-bg-10 { background: #9fd6a2; }
+.ansi-bg-11 { background: #ffe066; }
+.ansi-bg-12 { background: #9cbcf5; }
+.ansi-bg-13 { background: #e0a3eb; }
+.ansi-bg-14 { background: #8fdde3; }
+.ansi-bg-15 { background: #ffffff; }
+.ansi-bg-ink { background: var(--ink); color: var(--paper); }
+.ansi-fg-0 { color: #1a1208; }
+.ansi-fg-1 { color: #b3261e; }
+.ansi-fg-2 { color: #2e7d32; }
+.ansi-fg-3 { color: #8d6e00; }
+.ansi-fg-4 { color: #1f5fbf; }
+.ansi-fg-5 { color: #9b2fae; }
+.ansi-fg-6 { color: #00838f; }
+.ansi-fg-7 { color: #858d95; }
+.ansi-fg-8 { color: #5f6670; }
+.ansi-fg-9 { color: #d93a2b; }
+.ansi-fg-10 { color: #3f9b44; }
+.ansi-fg-11 { color: #a67f00; }
+.ansi-fg-12 { color: #3b7be0; }
+.ansi-fg-13 { color: #c04fd4; }
+.ansi-fg-14 { color: #0a96a3; }
+.ansi-fg-15 { color: #aab1b8; }
+.ansi-fg-paper { color: var(--code-bg); }
+.ansi-bold { font-weight: 700; }
+.ansi-faint { opacity: 0.6; }
+.ansi-italic { font-style: italic; }
+.ansi-underline { text-decoration: underline; }
+.ansi-strike { text-decoration: line-through; }
+.ansi-underline.ansi-strike { text-decoration: underline line-through; }
 .cell-result {
   font-family: var(--font-code);
   color: var(--ok);

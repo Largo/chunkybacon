@@ -8,9 +8,10 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **46 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **47 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
-  routing with Sinatra and Roda, 3D graphics,
+  routing with Sinatra and Roda, 3D graphics, tables, frames and colours
+  for the terminal with the [TTY toolkit](https://ttytoolkit.org),
   PowerPoint decks with [ruby_pptx](https://github.com/Largo/ruby_pptx),
   PDFs with Prawn and HexaPDF, JPEG photos with
   [pure_jpeg](https://github.com/peterc/pure_jpeg), pandas, SymPy, NumPy and
@@ -24,7 +25,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
   cell shows its last expression as `=> …` — `puts` is never required.
-- **Lesson sidebar**: the 46 lessons in three groups (basics, side trips,
+- **Lesson sidebar**: the 47 lessons in three groups (basics, side trips,
   the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a
   drawer.
@@ -89,6 +90,10 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   [three-rb](https://github.com/lef237/three-rb), optionally animated per
   frame and orbitable with the mouse), and `show_letter` (an envelope to
   write a postcode on with mouse or finger; a Ruby block reads it).
+- **A terminal below each cell**: colours from ANSI escape codes (pastel,
+  test runners) show as colours, and box-drawing characters (`┌─┐`, from
+  tty-table, tty-box) are as wide as the code font's letters, so tables
+  line up.
 - Chunky Bacon, an original cartoon fox, cheers you on.
 
 ## On your own computer: the chunky_bacon gem
@@ -159,6 +164,7 @@ ruby check_harness.rb     # every lesson: starter fails, solutions pass
 ruby gems_harness.rb      # gem installer, sinatra + roda offline
 ruby shell/run.rb         # the page shell (PicoRuby code) under Minitest
 ruby autorun_test.rb      # live runs: what may run, the time limit
+ruby ansi_test.rb         # terminal colours in a cell's output
 node browser_test.mjs     # Playwright end-to-end against port 8011
 node progress_test.mjs    # progress file, workshop, connected folder
 node boot_failure_test.mjs # what the page says when a runtime fails

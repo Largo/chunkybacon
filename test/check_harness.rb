@@ -808,6 +808,12 @@ end
 
 show_browser TimelogWeb, "/")]
   },
+  "tty" => {
+    "de" => [%(zettel = TTY::Table.new(header: ["Artikel", "Menge"], rows: [["Speck", 3], ["Brezel", 2]])\nputs zettel.render(:unicode)),
+             %(TTY::Table.new(header: ["Artikel", "Menge"], rows: [["Speck", 3], ["Brezel", 2]]).render(:unicode, padding: [0, 1]))],
+    "en" => [%(list = TTY::Table.new(header: ["Item", "Qty"], rows: [["Bacon", 3], ["Pretzel", 2]])\nputs list.render(:unicode)),
+             %(TTY::Table.new(header: ["Item", "Qty"], rows: [["Bacon", 3], ["Pretzel", 2]]).render(:unicode, padding: [0, 1]))]
+  },
   "rumale" => {
     "de" => [%(#{RUMALE_SEVEN.sub("PIC", "sieben")}pixel = sieben.delete("\\n").chars.map { |z| z == "#" ? 16 : 0 }\nziffer = lerner.predict(Numo::DFloat[pixel])[0]),
              %(#{RUMALE_SEVEN.sub("PIC", "sieben")}ziffer = lerner.predict(Numo::DFloat[sieben.delete("\\n").chars.map { |z| z == "#" ? 16 : 0 }])[0]\nputs ziffer)],

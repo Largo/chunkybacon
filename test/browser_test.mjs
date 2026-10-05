@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('46 lessons in nav', (await page.$$('#lessonNav a')).length === 46);
+check('47 lessons in nav', (await page.$$('#lessonNav a')).length === 47);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -599,6 +599,44 @@ await setExercise('require "prism"\ndef eingaben(zeilen)\n  fertig = []\n  puffe
 await runExercise();
 await page.waitForTimeout(300);
 check('line collector exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// TTY lesson: pastel's ANSI colours become spans (ansi.rb), tty-table and
+// tty-box draw with box-drawing characters as wide as the code font's
+// letters (chunky-box-drawing.woff), so their lines meet
+await page.click('#lessonNav a[data-id="tty"]');
+await page.waitForTimeout(500);
+const runAndWait = async idx => {
+  await page.click(`.run-cell[data-idx="${idx}"]`);
+  await page.waitForFunction(i => !document.querySelector(`.run-cell[data-idx="${i}"]`).disabled &&
+    (document.getElementById(`cell-out-${i}`).textContent || '').trim(), idx, { timeout: 60000 });
+};
+await runAndWait(1);
+check('pastel installs from cache', (await page.textContent('#gemsList')).includes('pastel ✓'));
+check('ANSI green becomes a green span', (await page.textContent('#cell-out-1 .cell-stdout .ansi-fg-2')) === '12 Tests, 0 Fehler');
+check('red and bold together', (await page.$$('#cell-out-1 .ansi-fg-1.ansi-bold')).length === 1);
+check('the result shows the escape codes themselves', (await page.textContent('#cell-out-1 .cell-result')).includes('\\e[31mSpeck\\e[0m'));
+await runAndWait(3);
+check('tty-table draws a unicode table', (await page.textContent('#cell-out-3')).includes('│ Brezel │   2.0 │     30 │'));
+check('box drawing is as wide as letters', await page.evaluate(() => {
+  const width = text => {
+    const span = document.createElement('span');
+    span.textContent = text;
+    document.querySelector('#cell-out-3 .cell-stdout').appendChild(span);
+    const w = span.getBoundingClientRect().width;
+    span.remove();
+    return w;
+  };
+  return Math.abs(width('┌──┬─┐│═╔█░') - width('abcdefghijk')) < 0.5;
+}));
+await runAndWait(5);
+check('tty-box frames with a title', (await page.textContent('#cell-out-5')).includes('┌ Kiosk ─'));
+await runAndWait(7);
+check('tty-tree draws the project', (await page.textContent('#cell-out-7')).includes('└── test'));
+await runExercise();
+check('tty starter fails', (await page.getAttribute('#chunkyChat', 'class')).includes('fail'));
+await setExercise('puts TTY::Table.new(header: ["Artikel", "Menge"], rows: [["Speck", 3], ["Brezel", 2]]).render(:unicode)');
+await runExercise(); await page.waitForTimeout(300);
+check('tty exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 
 // Scarpe lesson: real Shoes apps from the lacci gem, drawn into the page by a
 // Lacci display service (shoes_dom.rb); several stay live at once

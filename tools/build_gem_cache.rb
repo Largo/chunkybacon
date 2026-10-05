@@ -12,7 +12,8 @@ require 'fileutils'
 
 # chunky_bacon: the course's own gem (gem/chunky_bacon), lesson 13's first
 GEMS = %w[chunky_bacon chunky_png gammo racc sinatra roda minitest csv benchmark three-rb ruby_pptx lacci nokogiri
-          bigdecimal-pure prawn hexapdf jsg pure_jpeg rumale-core rumale-nearest_neighbors sequel]
+          bigdecimal-pure prawn hexapdf jsg pure_jpeg rumale-core rumale-nearest_neighbors sequel
+          pastel tty-table tty-box tty-tree tty-font]
 
 # C extensions compiled into the wasm image: a gem may depend on them (hexapdf
 # on openssl and strscan, jsg on js), the browser finds them built in
@@ -25,8 +26,10 @@ BUILTIN = %w[openssl strscan js numo-narray numo-narray-alt]
 SUBSTITUTES = { "bigdecimal" => "bigdecimal-pure" }
 
 # gems pinned below their latest version, when the latest pulls in native
-# dependencies (e.g. minitest 6 depends on prism, a C extension)
-PINNED = { "minitest" => "5.27.0" }
+# dependencies (e.g. minitest 6 depends on prism, a C extension) - or when a
+# gem asks for an older one (strings, under tty-table and tty-box, wants
+# unicode-display_width below 3)
+PINNED = { "minitest" => "5.27.0", "unicode-display_width" => "2.6.0" }
 
 # gems whose C extension is optional (pure-Ruby fallback in lib/)
 ALLOW_EXTENSIONS = %w[racc]

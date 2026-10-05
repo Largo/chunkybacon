@@ -2511,7 +2511,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 43). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
+            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 44). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
           },
           {
             "t": "c",
@@ -2558,7 +2558,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 43 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
+            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 44 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
           },
           {
             "t": "c",
@@ -2605,7 +2605,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン43で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
+            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン44で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
           },
           {
             "t": "c",
@@ -4316,9 +4316,177 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "tty",
+      "de": {
+        "title": "30. TTY: schöne Ausgaben im Terminal",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>TTY – Tabellen, Rahmen und Farben aus Zeichen</h2><p>Die Ausgabe unter einer Zelle ist wie ein Terminal: Text, Zeile für Zeile, in einer Schrift, in der jedes Zeichen gleich breit ist. Programme für die Kommandozeile zeichnen genau damit – Tabellen, Rahmen und Bäume aus Strichen, dazu Farben. Das <a href='https://ttytoolkit.org' target='_blank'>TTY-Toolkit</a> von Piotr Murach ist eine Familie aus rund zwanzig kleinen Gems, jedes für eine Aufgabe: <code>tty-table</code>, <code>tty-box</code>, <code>tty-prompt</code> … und <code>pastel</code> für die Farben. Alles reines Ruby. Fangen wir mit Farbe an:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"pastel\"\nrequire \"pastel\"\n\npastel = Pastel.new(enabled: true)   # hier ist kein Terminal: Farben an\nputs pastel.green(\"12 Tests, 0 Fehler\")\nputs pastel.red.bold(\"2 Fehler!\")\nputs pastel.black.on_yellow(\" Chunky \") + \" \" + pastel.white.on_blue(\" Speck \")\npastel.red(\"Speck\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Farben stehen nicht im Text, es sind <strong>Befehle an das Terminal</strong>. Die Zeile mit <code>=&gt;</code> zeigt, was <code>pastel.red(\"Speck\")</code> wirklich liefert: <code>\"\\e[31mSpeck\\e[0m\"</code>. <code>\\e</code> ist das Escape-Zeichen, <code>[31m</code> heisst „ab hier rot“, <code>[0m</code> „wieder normal“. Diese <em>ANSI-Escape-Codes</em> stammen aus den 1970ern, und jedes Terminal versteht sie – diese Seite übrigens auch.</p><p>Die Methoden lassen sich verketten: <code>red.bold</code> ist rot und fett, <code>on_yellow</code> färbt den Hintergrund. Und <code>enabled: true</code>? pastel schaut normalerweise, ob seine Ausgabe in ein Terminal geht. Leitest du sie in eine Datei um (<code>ruby speck.rb &gt; log.txt</code>), wären die Codes nur Zeichensalat, also lässt pastel sie weg. Die Ausgabe einer Zelle ist kein echtes Terminal, darum schalten wir die Farben selbst ein.</p><p>Als Nächstes eine Tabelle:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"tty-table\"\nrequire \"tty-table\"\n\ntabelle = TTY::Table.new(\n  header: [\"Snack\", \"Preis\", \"Vorrat\"],\n  rows: [[\"Speck\", 4.5, 12], [\"Brezel\", 2.0, 30], [\"Käse\", 6.25, 5]]\n)\n# Linien aus Unicode-Rahmenzeichen, Spalten links- oder rechtsbündig\nputs tabelle.render(:unicode, alignments: [:left, :right, :right], padding: [0, 1])\nputs tabelle.render(:ascii)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>TTY::Table.new</code> bekommt die Kopfzeile und die Zeilen als Arrays. <code>render</code> zeichnet sie, mit einem von drei Stilen: <code>:basic</code> (ohne Linien), <code>:ascii</code> (aus <code>+</code>, <code>-</code> und <code>|</code> – das kann jedes noch so alte Terminal) und <code>:unicode</code> (mit den Rahmenzeichen <code>┌─┐</code>). <code>alignments</code> richtet jede Spalte aus – Zahlen rechtsbündig, damit die Stellen untereinander stehen –, <code>padding: [0, 1]</code> lässt oben und unten keinen, links und rechts ein Zeichen Platz.</p><p>Die Breite jeder Spalte misst tty-table selbst, am längsten Wert. Das ist schwieriger, als es klingt: <code>ä</code> kann ein Zeichen oder zwei sein (a plus Pünktchen), und <code>日本</code> braucht im Terminal doppelt so viel Platz wie <code>ab</code>. Dafür zählt das Gem <code>unicode-display_width</code>, auf dem tty-table aufbaut.</p><p>Rahmen um einen Text zeichnet tty-box:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"tty-box\"\nrequire \"tty-box\"\n\nputs TTY::Box.frame(\"Bestellung erhalten!\", \"3 Streifen Speck\",\n                    title: { top_left: \" Kiosk \" }, padding: [0, 2], align: :center)\nputs TTY::Box.frame(\"Ausverkauft\", border: :thick, padding: [0, 1])"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 32:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"tty-tree\"\nrequire \"tty-tree\"\n\n# ein Ordner ist ein Hash, eine Datei ein String\nbaum = TTY::Tree.new(\"timelog\" => [\n  \"Gemfile\",\n  { \"lib\" => [\"entry.rb\", \"timesheet.rb\"] },\n  { \"test\" => [\"entry_test.rb\"] }\n])\nputs baum.render"
+          },
+          {
+            "t": "h",
+            "html": "<p>Und für einen grossen Auftritt, etwa den Start deines Programms, schreibt tty-font Buchstaben aus Buchstaben (FIGlet-Schriften: <code>:doom</code>, <code>:standard</code>, <code>:block</code>, <code>:straight</code> …):</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"tty-font\"\nrequire \"tty-font\"\n\nputs TTY::Font.new(:doom).write(\"Speck\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Einige TTY-Gems brauchen ein <strong>echtes</strong> Terminal mit Tastatur und einem Cursor, der zurückspringen kann – darum laufen sie hier nicht. <code>tty-prompt</code> stellt Fragen, auch als Menü, in dem du mit den Pfeiltasten wählst:</p><pre>require \"tty-prompt\"\n\nprompt = TTY::Prompt.new\nname  = prompt.ask(\"Wie heisst du?\")\nsnack = prompt.select(\"Was darf es sein?\", %w[Speck Brezel Käse])\nmehr  = prompt.yes?(\"Noch etwas?\")</pre><p><code>tty-spinner</code> dreht ein Rädchen, solange etwas dauert, <code>tty-progressbar</code> zeigt einen Fortschrittsbalken, und <code>tty-screen</code> verrät, wie breit das Terminal ist. Mit <code>gem install tty</code> bekommst du alle auf einmal. Für Tests gibt es <code>TTY::Prompt::Test</code>, das die Eingaben aus einem String liest.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky schreibt einen Einkaufszettel. Gib ihn als Tabelle mit Unicode-Linien aus: Kopfzeile <code>Artikel</code> und <code>Menge</code>, darunter <code>Speck</code> mit <code>3</code> und <code>Brezel</code> mit <code>2</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Einkaufszettel: Artikel | Menge, Speck 3, Brezel 2 – mit Unicode-Linien\n",
+            "check": "[output, result.to_s].join.then { |t| t.include?(\"┌\") && t.match?(/Artikel\\s*│\\s*Menge/) && t.match?(/Speck\\s*│\\s*3/) && t.match?(/Brezel\\s*│\\s*2/) }",
+            "hint": "<code>TTY::Table.new(header: [\"Artikel\", \"Menge\"], rows: [[\"Speck\", 3], [\"Brezel\", 2]])</code> – und dann <code>puts</code> mit <code>.render(:unicode)</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "30. TTY: good-looking terminal output",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>TTY – tables, frames and colours made of characters</h2><p>The output below a cell is like a terminal: text, line by line, in a font where every character is equally wide. Command-line programs draw with exactly that – tables, frames and trees made of lines, plus colours. Piotr Murach's <a href='https://ttytoolkit.org' target='_blank'>TTY toolkit</a> is a family of about twenty small gems, each doing one job: <code>tty-table</code>, <code>tty-box</code>, <code>tty-prompt</code> … and <code>pastel</code> for colours. All pure Ruby. Let's start with colour:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"pastel\"\nrequire \"pastel\"\n\npastel = Pastel.new(enabled: true)   # this is no terminal: colours on\nputs pastel.green(\"12 tests, 0 failures\")\nputs pastel.red.bold(\"2 failures!\")\nputs pastel.black.on_yellow(\" Chunky \") + \" \" + pastel.white.on_blue(\" Bacon \")\npastel.red(\"bacon\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>The colours are not in the text, they are <strong>commands to the terminal</strong>. The <code>=&gt;</code> line shows what <code>pastel.red(\"bacon\")</code> really returns: <code>\"\\e[31mbacon\\e[0m\"</code>. <code>\\e</code> is the escape character, <code>[31m</code> means “red from here on”, <code>[0m</code> “back to normal”. These <em>ANSI escape codes</em> date from the 1970s, and every terminal understands them – so does this page.</p><p>The methods chain: <code>red.bold</code> is red and bold, <code>on_yellow</code> colours the background. And <code>enabled: true</code>? Normally pastel checks whether its output goes to a terminal. Redirect it into a file (<code>ruby bacon.rb &gt; log.txt</code>) and the codes would only be gibberish, so pastel leaves them out. A cell's output is no real terminal, so we switch the colours on ourselves.</p><p>Next, a table:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"tty-table\"\nrequire \"tty-table\"\n\ntable = TTY::Table.new(\n  header: [\"Snack\", \"Price\", \"Stock\"],\n  rows: [[\"Bacon\", 4.5, 12], [\"Pretzel\", 2.0, 30], [\"Cheese\", 6.25, 5]]\n)\n# lines from Unicode box drawing, columns aligned left or right\nputs table.render(:unicode, alignments: [:left, :right, :right], padding: [0, 1])\nputs table.render(:ascii)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>TTY::Table.new</code> gets the header and the rows as arrays. <code>render</code> draws them in one of three styles: <code>:basic</code> (no lines), <code>:ascii</code> (from <code>+</code>, <code>-</code> and <code>|</code> – any terminal, however old, can do that) and <code>:unicode</code> (with the box-drawing characters <code>┌─┐</code>). <code>alignments</code> aligns each column – numbers to the right, so the digits line up –, <code>padding: [0, 1]</code> leaves no room above and below and one character left and right.</p><p>tty-table measures the width of each column itself, by its longest value. That is harder than it sounds: <code>ä</code> can be one character or two (a plus the dots), and <code>日本</code> takes twice as much room in a terminal as <code>ab</code>. The <code>unicode-display_width</code> gem, which tty-table builds on, counts that.</p><p>Frames around a text come from tty-box:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"tty-box\"\nrequire \"tty-box\"\n\nputs TTY::Box.frame(\"Order received!\", \"3 strips of bacon\",\n                    title: { top_left: \" Kiosk \" }, padding: [0, 2], align: :center)\nputs TTY::Box.frame(\"Sold out\", border: :thick, padding: [0, 1])"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 32 on:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"tty-tree\"\nrequire \"tty-tree\"\n\n# a folder is a hash, a file a string\ntree = TTY::Tree.new(\"timelog\" => [\n  \"Gemfile\",\n  { \"lib\" => [\"entry.rb\", \"timesheet.rb\"] },\n  { \"test\" => [\"entry_test.rb\"] }\n])\nputs tree.render"
+          },
+          {
+            "t": "h",
+            "html": "<p>And for a grand entrance, say when your program starts, tty-font writes letters made of letters (FIGlet fonts: <code>:doom</code>, <code>:standard</code>, <code>:block</code>, <code>:straight</code> …):</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"tty-font\"\nrequire \"tty-font\"\n\nputs TTY::Font.new(:doom).write(\"Bacon\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p>Some TTY gems need a <strong>real</strong> terminal, with a keyboard and a cursor that can jump back – which is why they do not run here. <code>tty-prompt</code> asks questions, also as a menu you choose from with the arrow keys:</p><pre>require \"tty-prompt\"\n\nprompt = TTY::Prompt.new\nname  = prompt.ask(\"What's your name?\")\nsnack = prompt.select(\"What would you like?\", %w[Bacon Pretzel Cheese])\nmore  = prompt.yes?(\"Anything else?\")</pre><p><code>tty-spinner</code> spins a little wheel while something takes time, <code>tty-progressbar</code> shows a progress bar, and <code>tty-screen</code> tells you how wide the terminal is. <code>gem install tty</code> gets you all of them at once. For tests there is <code>TTY::Prompt::Test</code>, which reads the answers from a string.</p></div><div class='task'><strong>Task:</strong> Chunky is writing a shopping list. Print it as a table with Unicode lines: header <code>Item</code> and <code>Qty</code>, below it <code>Bacon</code> with <code>3</code> and <code>Pretzel</code> with <code>2</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# shopping list: Item | Qty, Bacon 3, Pretzel 2 – with Unicode lines\n",
+            "check": "[output, result.to_s].join.then { |t| t.include?(\"┌\") && t.match?(/Item\\s*│\\s*Qty/) && t.match?(/Bacon\\s*│\\s*3/) && t.match?(/Pretzel\\s*│\\s*2/) }",
+            "hint": "<code>TTY::Table.new(header: [\"Item\", \"Qty\"], rows: [[\"Bacon\", 3], [\"Pretzel\", 2]])</code> – then <code>puts</code> it with <code>.render(:unicode)</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "30. TTY：ターミナルをきれいに",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>TTY ― 文字でつくる表・枠・色</h2><p>セルの下の出力はターミナルのようなものです。テキストが一行ずつ、どの文字も同じ幅のフォントで並びます。コマンドラインのプログラムは、まさにそれで絵を描きます。線でできた表や枠や木、そして色。Piotr Murachさんの<a href='https://ttytoolkit.org' target='_blank'>TTYツールキット</a>は、20ほどの小さなgemの集まりで、それぞれがひとつの仕事をします：<code>tty-table</code>、<code>tty-box</code>、<code>tty-prompt</code>……そして色のための<code>pastel</code>。すべて純粋なRubyです。まずは色から：</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"pastel\"\nrequire \"pastel\"\n\npastel = Pastel.new(enabled: true)   # ここはターミナルではないので、色をオンに\nputs pastel.green(\"12 tests, 0 failures\")\nputs pastel.red.bold(\"2 failures!\")\nputs pastel.black.on_yellow(\" Chunky \") + \" \" + pastel.white.on_blue(\" Bacon \")\npastel.red(\"bacon\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>色はテキストの中にあるのではなく、<strong>ターミナルへの命令</strong>です。<code>=&gt;</code>の行を見ると、<code>pastel.red(\"bacon\")</code>が本当に返すものがわかります：<code>\"\\e[31mbacon\\e[0m\"</code>。<code>\\e</code>はエスケープ文字、<code>[31m</code>は「ここから赤」、<code>[0m</code>は「元に戻す」という意味です。この<em>ANSIエスケープコード</em>は1970年代からあり、どのターミナルも理解します。このページもです。</p><p>メソッドはつなげられます：<code>red.bold</code>は赤くて太字、<code>on_yellow</code>は背景の色です。では<code>enabled: true</code>は？　pastelはふつう、出力がターミナルに行くかどうかを確かめます。ファイルにリダイレクトする（<code>ruby bacon.rb &gt; log.txt</code>）と、コードはただの文字化けになるので、pastelはそれを省きます。セルの出力は本物のターミナルではないので、ここでは自分で色をオンにしています。</p><p>次は表です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"tty-table\"\nrequire \"tty-table\"\n\ntable = TTY::Table.new(\n  header: [\"Snack\", \"Price\", \"Stock\"],\n  rows: [[\"Bacon\", 4.5, 12], [\"Pretzel\", 2.0, 30], [\"Cheese\", 6.25, 5]]\n)\n# 線はUnicodeの罫線、列ごとに左寄せ・右寄せ\nputs table.render(:unicode, alignments: [:left, :right, :right], padding: [0, 1])\nputs table.render(:ascii)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>TTY::Table.new</code>には、見出しと行を配列で渡します。<code>render</code>は3つのスタイルのどれかで描きます：<code>:basic</code>（線なし）、<code>:ascii</code>（<code>+</code>、<code>-</code>、<code>|</code>で。どんなに古いターミナルでも大丈夫）、そして<code>:unicode</code>（罫線文字<code>┌─┐</code>で）。<code>alignments</code>は列ごとの寄せ方です。数字は右寄せにすると桁がそろいます。<code>padding: [0, 1]</code>は上下に余白なし、左右に1文字ぶんの余白です。</p><p>列の幅は、tty-tableがいちばん長い値から自分で測ります。これは思ったより難しいことです。<code>ä</code>は1文字のことも2文字（aと点々）のこともありますし、<code>日本</code>はターミナルで<code>ab</code>の2倍の幅を取ります。それを数えるのが、tty-tableの土台になっている<code>unicode-display_width</code>というgemです。</p><p>テキストを囲む枠はtty-boxで：</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"tty-box\"\nrequire \"tty-box\"\n\nputs TTY::Box.frame(\"Order received!\", \"3 strips of bacon\",\n                    title: { top_left: \" Kiosk \" }, padding: [0, 2], align: :center)\nputs TTY::Box.frame(\"Sold out\", border: :thick, padding: [0, 1])"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン32からつくるプロジェクトの構成です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"tty-tree\"\nrequire \"tty-tree\"\n\n# フォルダはハッシュ、ファイルは文字列\ntree = TTY::Tree.new(\"timelog\" => [\n  \"Gemfile\",\n  { \"lib\" => [\"entry.rb\", \"timesheet.rb\"] },\n  { \"test\" => [\"entry_test.rb\"] }\n])\nputs tree.render"
+          },
+          {
+            "t": "h",
+            "html": "<p>そして、たとえばプログラムの起動時に派手に登場したいなら、tty-fontが文字でできた文字を書いてくれます（FIGletフォント：<code>:doom</code>、<code>:standard</code>、<code>:block</code>、<code>:straight</code>など）：</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"tty-font\"\nrequire \"tty-font\"\n\nputs TTY::Font.new(:doom).write(\"Bacon\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のパソコンでは'><p>TTYのgemのいくつかは、キーボードと、前に戻れるカーソルのある<strong>本物の</strong>ターミナルが必要です。だからここでは動きません。<code>tty-prompt</code>は質問をします。矢印キーで選ぶメニューにもなります：</p><pre>require \"tty-prompt\"\n\nprompt = TTY::Prompt.new\nname  = prompt.ask(\"What's your name?\")\nsnack = prompt.select(\"What would you like?\", %w[Bacon Pretzel Cheese])\nmore  = prompt.yes?(\"Anything else?\")</pre><p><code>tty-spinner</code>は時間がかかる間くるくる回り、<code>tty-progressbar</code>は進み具合をバーで見せ、<code>tty-screen</code>はターミナルの幅を教えてくれます。<code>gem install tty</code>で全部まとめて入ります。テスト用には、答えを文字列から読む<code>TTY::Prompt::Test</code>があります。</p></div><div class='task'><strong>課題：</strong>Chunkyが買い物メモを書いています。Unicodeの線の表として出力してください：見出しは<code>Item</code>と<code>Qty</code>、その下に<code>Bacon</code>と<code>3</code>、<code>Pretzel</code>と<code>2</code>。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# 買い物メモ：Item | Qty、Bacon 3、Pretzel 2 ― Unicodeの線で\n",
+            "check": "[output, result.to_s].join.then { |t| t.include?(\"┌\") && t.match?(/Item\\s*│\\s*Qty/) && t.match?(/Bacon\\s*│\\s*3/) && t.match?(/Pretzel\\s*│\\s*2/) }",
+            "hint": "<code>TTY::Table.new(header: [\"Item\", \"Qty\"], rows: [[\"Bacon\", 3], [\"Pretzel\", 2]])</code>をつくって、<code>.render(:unicode)</code>を<code>puts</code>してね。"
+          }
+        ]
+      }
+    },
+    {
       "id": "rubykaigi",
       "de": {
-        "title": "30. RubyKaigi & seltsamer Code",
+        "title": "31. RubyKaigi & seltsamer Code",
         "cells": [
           {
             "t": "h",
@@ -4389,7 +4557,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "30. RubyKaigi & weird code",
+        "title": "31. RubyKaigi & weird code",
         "cells": [
           {
             "t": "h",
@@ -4460,7 +4628,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "30. RubyKaigiと変なコード",
+        "title": "31. RubyKaigiと変なコード",
         "cells": [
           {
             "t": "h",
@@ -4539,7 +4707,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "応用コース：timelog"
       },
       "de": {
-        "title": "31. Projekt timelog: Collections",
+        "title": "32. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -4578,7 +4746,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "31. Project timelog: collections",
+        "title": "32. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -4617,7 +4785,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "31. timelogプロジェクト：コレクション",
+        "title": "32. timelogプロジェクト：コレクション",
         "cells": [
           {
             "t": "h",
@@ -4659,7 +4827,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "32. Text parsen: Regex",
+        "title": "33. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -4690,7 +4858,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "32. Parsing text: regex",
+        "title": "33. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -4721,7 +4889,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "32. テキストのパース：正規表現",
+        "title": "33. テキストのパース：正規表現",
         "cells": [
           {
             "t": "h",
@@ -4755,7 +4923,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "33. Methoden richtig bauen",
+        "title": "34. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -4786,7 +4954,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "33. Building methods properly",
+        "title": "34. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -4817,7 +4985,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "33. メソッドをきちんと作る",
+        "title": "34. メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -4851,7 +5019,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "34. Entry & Timesheet",
+        "title": "35. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -4882,7 +5050,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "34. Entry & Timesheet",
+        "title": "35. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -4913,7 +5081,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "34. EntryとTimesheet",
+        "title": "35. EntryとTimesheet",
         "cells": [
           {
             "t": "h",
@@ -4947,7 +5115,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "35. Testen mit Minitest",
+        "title": "36. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -4978,7 +5146,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "35. Testing with Minitest",
+        "title": "36. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -5009,7 +5177,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "35. Minitestでテスト",
+        "title": "36. Minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -5043,7 +5211,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "36. Enumerable & Data",
+        "title": "37. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -5055,7 +5223,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 31, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 32, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -5066,7 +5234,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "36. Enumerable & Data",
+        "title": "37. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -5078,7 +5246,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 31, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 32, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -5089,7 +5257,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "36. EnumerableとData",
+        "title": "37. EnumerableとData",
         "cells": [
           {
             "t": "h",
@@ -5101,7 +5269,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン31で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン32で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
           },
           {
             "t": "x",
@@ -5115,7 +5283,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "37. Blocks, Procs & Lambdas",
+        "title": "38. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -5154,7 +5322,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "37. Blocks, procs & lambdas",
+        "title": "38. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -5193,7 +5361,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "37. ブロック、Proc、lambda",
+        "title": "38. ブロック、Proc、lambda",
         "cells": [
           {
             "t": "h",
@@ -5235,7 +5403,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "38. Fehler behandeln",
+        "title": "39. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -5266,7 +5434,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "38. Handling errors",
+        "title": "39. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -5297,7 +5465,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "38. エラー処理",
+        "title": "39. エラー処理",
         "cells": [
           {
             "t": "h",
@@ -5331,7 +5499,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "39. Daten speichern: Formate",
+        "title": "40. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -5386,7 +5554,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "39. Saving data: formats",
+        "title": "40. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -5441,7 +5609,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "39. データの保存：フォーマット",
+        "title": "40. データの保存：フォーマット",
         "cells": [
           {
             "t": "h",
@@ -5499,7 +5667,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "40. Kommandozeile & Gems",
+        "title": "41. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -5526,7 +5694,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "40. Command line & gems",
+        "title": "41. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -5553,7 +5721,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "40. コマンドラインとgem",
+        "title": "41. コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -5583,7 +5751,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "41. Pattern Matching",
+        "title": "42. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -5614,7 +5782,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "41. Pattern matching",
+        "title": "42. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -5645,7 +5813,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "41. パターンマッチ",
+        "title": "42. パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -5679,7 +5847,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "42. Objektmodell & Metaprogrammierung",
+        "title": "43. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -5710,7 +5878,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "42. Object model & metaprogramming",
+        "title": "43. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -5741,7 +5909,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "42. オブジェクトモデルとメタプログラミング",
+        "title": "43. オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -5775,7 +5943,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "43. Eine eigene DSL",
+        "title": "44. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -5787,7 +5955,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 37 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 38 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -5798,7 +5966,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "43. Your own DSL",
+        "title": "44. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -5810,7 +5978,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 37 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 38 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
@@ -5821,7 +5989,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "43. 自分だけのDSL",
+        "title": "44. 自分だけのDSL",
         "cells": [
           {
             "t": "h",
@@ -5833,7 +6001,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン37のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン38のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
           },
           {
             "t": "x",
@@ -5847,7 +6015,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "44. Codequalität & Debugging",
+        "title": "45. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -5870,7 +6038,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "44. Code quality & debugging",
+        "title": "45. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -5893,7 +6061,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "44. コードの品質とデバッグ",
+        "title": "45. コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -5919,7 +6087,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "45. Performance & Nebenläufigkeit",
+        "title": "46. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -5966,7 +6134,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "45. Performance & concurrency",
+        "title": "46. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -6013,7 +6181,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "45. パフォーマンスと並行処理",
+        "title": "46. パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -6063,7 +6231,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "46. Finale: timelog im Web",
+        "title": "47. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -6085,12 +6253,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 40 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 41 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "en": {
-        "title": "46. Finale: timelog on the web",
+        "title": "47. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
@@ -6112,12 +6280,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 40 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 41 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "ja": {
-        "title": "46. フィナーレ：Webで動くtimelog",
+        "title": "47. フィナーレ：Webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -6139,7 +6307,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン40で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン41で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }
