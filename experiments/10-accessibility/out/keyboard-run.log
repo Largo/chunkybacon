@@ -1,0 +1,26 @@
+FAIL codemirror-trap: Tab inside a CodeMirror cell stays in the editor and inserts indentation; Escape then Tab -> CODEMIRROR(cell-code-1); Shift+Tab -> CODEMIRROR(cell-code-1)
+INFO run-buttons-reachable: 3/3 run buttons reached by Tab - but only because the script pulled focus out of each editor
+FAIL bypass-blocks: 56 Tab presses from the top of the page to the first lesson control (no skip link)
+FAIL focus-after-run: Enter on Run: focus during the run = BODY, after = BODY
+FAIL output-announced: cell output live region: null; Chunky's bubble: null; run time: null; kernel status: p#kernelStatus aria-live=null role=status
+WARN run-button-names: run button names: ["▶ Run","▶ Run","▶ Run"]
+FAIL focus-after-next-lesson: bubble after pass: "pass | Perfect! You are on the path to Ruby enlightenment.Lesson 1 of 46→ On to the nex"; Enter on the next-lesson link -> focus BODY, scrollY 0
+FAIL focus-after-nav-link: Enter on a lesson link in the index -> focus BODY (the index is re-rendered with innerHTML)
+INFO shift-enter: Shift+Enter in an editor runs it; focus afterwards CODEMIRROR(cell-code-1)
+INFO alt-r: Alt+R runs the exercise; focus afterwards BODY (shortcut documented only in lesson text?)
+PASS progress-dialog: opens with focus on dialog:dialog#progressDialog.progress-dialog "Your progress×Finished lessons"; Tab stays inside: true; Escape returns focus to header:button#progressBtn.progress-btn "Progress"
+FAIL lang-de: <html lang> at domcontentloaded=de, after the shell=de; Japanese text in a non-ja element: 3 (p#spinnerText "Einen Moment … / One moment … / 少々お待ちくださ"; option "日本語"; select#langSelect@title "Sprache / Language / 言語"); option langs: de:null en:null ja:null
+FAIL lang-en: <html lang> at domcontentloaded=en, after the shell=en; Japanese text in a non-ja element: 3 (p#spinnerText "Einen Moment … / One moment … / 少々お待ちくださ"; option "日本語"; select#langSelect@title "Sprache / Language / 言語"); option langs: de:null en:null ja:null
+PASS lang-ja: <html lang> at domcontentloaded=ja, after the shell=ja; Japanese text in a non-ja element: 0 (); option langs: de:null en:null ja:null
+WARN spinner-lang: loading screen with ?lang=ja: <html lang="ja">, title "Ruby lernen mit Chunky Bacon", text "Einen Moment … / One moment … / 少々お待ちください …" - the three languages are not marked up
+FAIL drawer-focus: first Tab -> other:button#sidebarToggle.sidebar-toggle "Show or hide the lessons"; Enter opens the drawer (aria-expanded=true, role=null, aria-modal=null, page behind inert=false); focus stays on other:button#sidebarToggle.sidebar-toggle "Show or hide the lessons"; after 53 Tabs focus leaves the drawer to header:button#progressBtn.progress-btn "Progress" (behind the scrim: {"coveredByScrim":true,"inView":true})
+PASS drawer-escape: Escape inside the drawer closes it, focus -> other:button#sidebarToggle.sidebar-toggle "Show or hide the lessons"
+FAIL drawer-pick-lesson: Enter on a lesson in the drawer: the drawer closes, focus -> BODY
+PASS reflow-320: at 320 CSS px: scrollWidth 320 vs 320
+FAIL contrast-hallo: 1 text/background pairs under the AA ratio: div.CodeMirror-linenumber.CodeMirror-gutter-elt "1" #7d8894 on #ffffff 3.61:1; placeholder {"pair":"#5f5247 on #ffffff","ratio":7.54}; focus ring on paper 5.28:1, on fox 1.73:1; fox orange on paper 3.06:1
+FAIL contrast-werkstatt: 4 text/background pairs under the AA ratio: button.ws-ren "✎" #b7b1ac on #ffffff 2.12:1 | button.ws-del "×" #b7b1ac on #ffffff 2.12:1 | div.CodeMirror-linenumber.CodeMirror-gutter-elt "1" #7d8894 on #ffffff 3.61:1 | small "25 B" #d17762 on #ffffff 3.22:1; placeholder {"pair":"#5f5247 on #ffffff","ratio":7.54}; focus ring on paper 5.28:1, on fox 1.73:1; fox orange on paper 3.06:1
+INFO motion-reduce: loading screen: []; a run + pass: []
+WARN three-reduced-motion: animated show_three cell 7: canvas still changing under prefers-reduced-motion: true; pause control present: false
+FAIL three-canvas-name: 3D canvases: [{"role":null,"label":null,"tabindex":null},{"role":null,"label":null,"tabindex":null},{"role":null,"label":null,"tabindex":null}]
+INFO motion-no-preference: loading screen: [wobble@spinner-image(infinite), bacon-slide@load-bar(infinite)]; a run + pass: [bacon-slide@cell, run-fade-in@cell, run-dim@CodeMirror, wobble@run-fox, run-fade-in@run-fox, out-in@run-time, out-in@cell-out, bubble-pop-fail@chat-message]
+FAIL irb-widget: Tab after Run -> main:input.irb-input "" -> CODEMIRROR(cell-code-3) -> CODEMIRROR(cell-code-3); IRB result "irb(main):001:0> 1 + 2=> 3" announced by: null; input named by: irb; focus stays: irb-input

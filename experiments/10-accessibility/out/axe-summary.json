@@ -1,0 +1,104 @@
+{
+  "label-title-only": {
+    "impact": "serious",
+    "help": "Form elements should have a visible label",
+    "pages": {
+      "de-hallo": 1,
+      "de-irb": 2,
+      "de-sinatra": 3,
+      "de-three": 1,
+      "de-rumale": 1,
+      "de-werkstatt": 1,
+      "de-drawer": 1,
+      "en-hallo": 1,
+      "en-irb": 2,
+      "en-sinatra": 3,
+      "en-three": 1,
+      "en-rumale": 1,
+      "en-werkstatt": 1,
+      "en-drawer": 1,
+      "ja-hallo": 1,
+      "ja-irb": 2,
+      "ja-sinatra": 3,
+      "ja-three": 1,
+      "ja-rumale": 1,
+      "ja-werkstatt": 1,
+      "ja-drawer": 1
+    }
+  },
+  "label": {
+    "impact": "critical",
+    "help": "Form elements must have labels",
+    "pages": {
+      "de-hallo": 3,
+      "de-irb": 2,
+      "de-sinatra": 2,
+      "de-three": 5,
+      "de-rumale": 7,
+      "de-werkstatt": 1,
+      "de-drawer": 3,
+      "en-hallo": 3,
+      "en-irb": 2,
+      "en-sinatra": 2,
+      "en-three": 5,
+      "en-rumale": 7,
+      "en-werkstatt": 1,
+      "en-drawer": 3,
+      "ja-hallo": 3,
+      "ja-irb": 2,
+      "ja-sinatra": 2,
+      "ja-three": 5,
+      "ja-rumale": 7,
+      "ja-werkstatt": 1,
+      "ja-drawer": 3
+    }
+  },
+  "color-contrast": {
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "pages": {
+      "de-sinatra": 39,
+      "de-three": 10,
+      "de-rumale": 8,
+      "de-werkstatt": 3,
+      "en-sinatra": 39,
+      "en-three": 10,
+      "en-rumale": 8,
+      "en-werkstatt": 3,
+      "ja-sinatra": 39,
+      "ja-three": 10,
+      "ja-rumale": 8,
+      "ja-werkstatt": 3
+    }
+  },
+  "image-alt": {
+    "impact": "critical",
+    "help": "Images must have alternative text",
+    "pages": {
+      "de-sinatra": 1,
+      "en-sinatra": 1,
+      "ja-sinatra": 1
+    }
+  },
+  "scrollable-region-focusable": {
+    "impact": "serious",
+    "help": "Scrollable region must have keyboard access",
+    "pages": {
+      "de-three": 2,
+      "de-rumale": 4,
+      "en-three": 2,
+      "en-rumale": 4,
+      "ja-three": 2,
+      "ja-rumale": 4
+    }
+  },
+  "skip-link": {
+    "impact": "moderate",
+    "help": "The skip-link target should exist and be focusable",
+    "pages": {
+      "de-drawer": 31,
+      "en-drawer": 31,
+      "ja-drawer": 31
+    }
+  }
+}
