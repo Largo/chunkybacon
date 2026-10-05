@@ -264,7 +264,8 @@
     // WebAssembly, about 9 MB - from assets/pyodide/ (tools/vendor_pyodide.rb),
     // so only for a lesson that asks: the shell calls ensurePython(code) with
     // a lesson's PyCall code, and the packages its import_module("...") calls
-    // name come along (pandas ~12 MB, sympy ~5 MB, scikit-learn ~19 MB);
+    // name come along (pandas ~12 MB, sympy ~5 MB, scikit-learn ~19 MB,
+    // matplotlib ~9 MB, whose first import is warmed up: warmMatplotlib);
     // pycall.rb asks the same way for a module the workshop imports.
     // shell/bridge.js holds a run until chunky:python-ready. What Python prints is collected here and
     // written into the cell by pycall.rb.
@@ -283,7 +284,8 @@
         return modules.map(function (m) { return python.imports[m]; })
           .filter(function (p, i, all) { return p && !python.packages[p] && all.indexOf(p) === i; });
       };
-      if (python.ready && missing().length === 0) return Promise.resolve(true);
+      var warm = function () { if (modules.indexOf("matplotlib") >= 0) window.warmMatplotlib(); };
+      if (python.ready && missing().length === 0) { warm(); return Promise.resolve(true); }
       python.error = null;
       var copy = window.ChunkyOffline;
       python.loading = (async function () {
@@ -321,9 +323,65 @@
       }).then(function (ok) {
         python.loading = null;
         window.dispatchEvent(new CustomEvent("chunky:python-ready", { detail: { ok: ok } }));
+        if (ok) warm();
         return ok;
       });
       return python.loading;
+    };
+    // matplotlib's first `import matplotlib.pyplot` takes 5-9 s, all of it
+    // Python on the main thread. A lesson that imports it starts that import
+    // when it opens, one module at a time with a pause between them - its
+    // dependencies first, then matplotlib's own modules in the order pyplot
+    // needs them - so the page stays usable while the learner reads, and the
+    // first ▶ finds it done. Runs are not held meanwhile (a ▶ imports the
+    // rest itself; other lessons are not slowed); live runs are
+    // (shell/bridge.js), and pycall.rb never starts the import in one.
+    // The last step draws a small chart as SVG, off pyplot, which loads the
+    // font and fills the caches the first real chart would (~0.3 s).
+    // python.warmSteps: how long each step took.
+    var MATPLOTLIB_STEPS = ["numpy", "PIL.Image", "pyparsing", "dateutil.parser", "packaging.version",
+      "cycler", "kiwisolver", "matplotlib", "matplotlib.font_manager", "matplotlib._mathtext",
+      "matplotlib.text", "matplotlib.patches", "matplotlib.collections", "matplotlib.lines",
+      "matplotlib.image", "matplotlib.axis", "matplotlib.legend", "matplotlib.contour", "matplotlib.dates",
+      "matplotlib.axes", "matplotlib.figure", "matplotlib.pyplot",
+      "matplotlib.backends.backend_agg", "matplotlib.backends.backend_svg"
+    ].map(function (name) { return [name, "import " + name]; }).concat([["a first chart", [
+      "def _chunky_warm():",
+      "    import io, matplotlib",
+      "    from matplotlib.figure import Figure",
+      "    figure = Figure()",
+      "    axes = figure.add_subplot()",
+      "    axes.plot([1, 2, 3], [2, 1, 3], marker='o', label='a')",
+      "    axes.set_title('warm')",
+      "    axes.legend()",
+      "    with matplotlib.rc_context({'svg.fonttype': 'none'}):",
+      "        figure.savefig(io.BytesIO(), format='svg', bbox_inches='tight')",
+      "_chunky_warm()",
+      "del _chunky_warm"].join("\n")]]);
+    window.warmMatplotlib = function () {
+      var python = window.chunkyPython;
+      if (python.warming || python.warm || !python.packages.matplotlib) return python.warming;
+      python.warmSteps = [];
+      var pause = function () { return new Promise(function (go) { setTimeout(go, 40); }); };
+      python.warming = MATPLOTLIB_STEPS.reduce(function (chain, step) {
+        return chain.then(pause).then(function () {
+          var started = performance.now(), printed = python.output.length;
+          try {
+            python.pyodide.runPython(step[1]);
+            python.warmSteps.push([step[0], Math.round(performance.now() - started)]);
+          } catch (e) {
+            // the cell's own import says why
+            python.warmSteps.push([step[0], "failed"]);
+            console.error("warming up matplotlib: " + step[0] + " failed", e);
+          } finally {
+            python.output.splice(printed);   // what importing printed is no cell's output
+          }
+        });
+      }, Promise.resolve()).then(function () {
+        python.warm = true;
+        python.warming = null;
+      });
+      return python.warming;
     };
 
     // SQLite for the Sequel lesson: sql.js (SQLite in WebAssembly, ~650 KB,

@@ -996,6 +996,8 @@ class ChunkyApp
       :error
     ensure
       end_rehearsal
+      # matplotlib figures the run drew but did not show (pycall.rb)
+      PyCall.end_run
     end
     elapsed = ($window.performance.now - started) / 1000.0
   ensure
