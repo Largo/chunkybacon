@@ -5,3 +5,6 @@ html/assets/picoruby/** -text
 # their .gz copies)
 html/assets/pyodide/** -text
 html/assets/sqljs/** -text
+# Herb's parser holds its WebAssembly as raw bytes in a string
+# (tools/vendor_herb.rb): vendored as published, never converted.
+html/assets/herb/** -text

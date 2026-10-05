@@ -191,6 +191,17 @@ BrowserGems.files["(shims)"]["processing.rb"] = <<~'RUBY'
     end
   end
 RUBY
+# require "herb": the gem is Ruby around one C extension, its parser
+# ("herb/herb"); herb_bridge.rb is that extension, handing the source to the
+# same parser compiled to WebAssembly (index.html: ensureHerb; lesson 33).
+BrowserGems.files["(shims)"]["herb/herb.rb"] = <<~'RUBY'
+  unless defined?(Herb::Bridge)
+    source = JSG.w.fetchTextSync("herb_bridge.rb").to_s
+    raise LoadError, "could not fetch herb_bridge.rb" if source.start_with?("ERROR ")
+
+    eval(source, TOPLEVEL_BINDING, "herb_bridge.rb")
+  end
+RUBY
 
 Net::HTTP.transport = lambda do |_method, uri|
   # a live run fetches nothing: it would freeze the typing and ask the

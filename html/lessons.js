@@ -2511,7 +2511,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 46). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
+            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 47). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
           },
           {
             "t": "c",
@@ -2558,7 +2558,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 46 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
+            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 47 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
           },
           {
             "t": "c",
@@ -2605,7 +2605,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン46で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
+            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン47で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
           },
           {
             "t": "c",
@@ -4346,7 +4346,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 34:</p>"
+            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 35:</p>"
           },
           {
             "t": "c",
@@ -4401,7 +4401,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 34 on:</p>"
+            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 35 on:</p>"
           },
           {
             "t": "c",
@@ -4456,7 +4456,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン34からつくるプロジェクトの構成です：</p>"
+            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン35からつくるプロジェクトの構成です：</p>"
           },
           {
             "t": "c",
@@ -4698,7 +4698,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install faker</code>, oder im <code>Gemfile</code> in der Gruppe <code>:test</code>. In Minitest-Tests (Lektion 38) nimmst du gern Minitests eigenen Startwert, den jeder Lauf ausgibt (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>So erzeugt <code>ruby test.rb --seed 12345</code> genau die Daten des fehlgeschlagenen Laufs noch einmal. <code>Faker::Config.random = nil</code> macht den Zufall wieder zufällig.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky braucht für seinen Laden Testkunden, bei jedem Lauf dieselben. Leg den Zufall auf <code>Random.new(2024)</code> fest und mach ein Array <code>kunden</code> mit 5 Hashes, jeder mit einem <code>:name</code> und einer <code>:email</code>.</div>"
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install faker</code>, oder im <code>Gemfile</code> in der Gruppe <code>:test</code>. In Minitest-Tests (Lektion 39) nimmst du gern Minitests eigenen Startwert, den jeder Lauf ausgibt (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>So erzeugt <code>ruby test.rb --seed 12345</code> genau die Daten des fehlgeschlagenen Laufs noch einmal. <code>Faker::Config.random = nil</code> macht den Zufall wieder zufällig.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky braucht für seinen Laden Testkunden, bei jedem Lauf dieselben. Leg den Zufall auf <code>Random.new(2024)</code> fest und mach ein Array <code>kunden</code> mit 5 Hashes, jeder mit einem <code>:name</code> und einer <code>:email</code>.</div>"
           },
           {
             "t": "x",
@@ -4753,7 +4753,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install faker</code>, or in the <code>Gemfile</code> in the <code>:test</code> group. In Minitest tests (lesson 38) Minitest's own seed is a good choice; every run prints it (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>Then <code>ruby test.rb --seed 12345</code> makes exactly the data of the failed run again. <code>Faker::Config.random = nil</code> makes randomness random again.</p></div><div class='task'><strong>Task:</strong> Chunky needs test customers for his shop, the same ones on every run. Pin the randomness to <code>Random.new(2024)</code> and make an array <code>customers</code> of 5 hashes, each with a <code>:name</code> and an <code>:email</code>.</div>"
+            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install faker</code>, or in the <code>Gemfile</code> in the <code>:test</code> group. In Minitest tests (lesson 39) Minitest's own seed is a good choice; every run prints it (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>Then <code>ruby test.rb --seed 12345</code> makes exactly the data of the failed run again. <code>Faker::Config.random = nil</code> makes randomness random again.</p></div><div class='task'><strong>Task:</strong> Chunky needs test customers for his shop, the same ones on every run. Pin the randomness to <code>Random.new(2024)</code> and make an array <code>customers</code> of 5 hashes, each with a <code>:name</code> and an <code>:email</code>.</div>"
           },
           {
             "t": "x",
@@ -4808,7 +4808,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='自分のパソコンでは'><p><code>gem install faker</code>、または<code>Gemfile</code>の<code>:test</code>グループに。Minitestのテスト（レッスン38）では、Minitest自身のシードを使うのがおすすめです。毎回の実行で表示されます（<code>Run options: --seed 12345</code>）：</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>すると<code>ruby test.rb --seed 12345</code>で、失敗した実行とまったく同じデータがもう一度つくられます。<code>Faker::Config.random = nil</code>で、乱数はまたランダムに戻ります。</p></div><div class='task'><strong>課題：</strong>Chunkyはお店のためのテスト用のお客さんがほしいのです。毎回同じお客さんで。乱数を<code>Random.new(2024)</code>に固定して、5つのハッシュの配列<code>customers</code>をつくってください。どのハッシュにも<code>:name</code>と<code>:email</code>があります。</div>"
+            "html": "<div class='offweb' data-title='自分のパソコンでは'><p><code>gem install faker</code>、または<code>Gemfile</code>の<code>:test</code>グループに。Minitestのテスト（レッスン39）では、Minitest自身のシードを使うのがおすすめです。毎回の実行で表示されます（<code>Run options: --seed 12345</code>）：</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>すると<code>ruby test.rb --seed 12345</code>で、失敗した実行とまったく同じデータがもう一度つくられます。<code>Faker::Config.random = nil</code>で、乱数はまたランダムに戻ります。</p></div><div class='task'><strong>課題：</strong>Chunkyはお店のためのテスト用のお客さんがほしいのです。毎回同じお客さんで。乱数を<code>Random.new(2024)</code>に固定して、5つのハッシュの配列<code>customers</code>をつくってください。どのハッシュにも<code>:name</code>と<code>:email</code>があります。</div>"
           },
           {
             "t": "x",
@@ -4820,9 +4820,225 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "erb",
+      "de": {
+        "title": "33. ERB: Vorlagen – und Herb, der sie prüft",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>ERB – Text mit Löchern für Ruby</h2><p>Viele Programme schreiben Text, der fast immer gleich aussieht: eine E-Mail, eine Rechnung, eine Webseite. Nur ein paar Stellen ändern sich – der Name, der Betrag, die Liste. Dafür gibt es <em>Vorlagen</em> (englisch <em>templates</em>), und in Ruby ist die bekannteste <strong>ERB</strong>, „Embedded Ruby“: Ruby, eingebettet in Text. ERB gehört zur Standardbibliothek; die meisten Seiten einer Rails-App entstehen aus ERB-Vorlagen.</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"erb\"\n\nvorlage = ERB.new(\"Hallo <%= name %>, hier sind <%= anzahl %> Streifen Speck.\")\nvorlage.result_with_hash(name: \"Chunky\", anzahl: 3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Alles zwischen <code>&lt;%=</code> und <code>%&gt;</code> ist Ruby; ERB rechnet es aus und setzt das Ergebnis an diese Stelle. <code>ERB.new</code> liest die Vorlage einmal, <code>result_with_hash</code> füllt sie mit Werten – so oft du willst, mit immer neuen Werten. (Statt eines Hashes geht auch <code>result(binding)</code>: Dann sieht die Vorlage die lokalen Variablen der Stelle, an der du sie aufrufst.)</p><p>Ohne Gleichheitszeichen, also <code>&lt;% … %&gt;</code>, läuft der Ruby-Code nur und schreibt nichts. Damit baut man Schleifen und Bedingungen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"erb\"\n\nzettel = ERB.new(<<~TEXT, trim_mode: \"-\")\n  Einkaufszettel:\n  <%- artikel.each do |name, menge| -%>\n  - <%= menge %> x <%= name %>\n  <%- end -%>\n  <%- if artikel.empty? -%>\n  (nichts)\n  <%- end -%>\nTEXT\nputs zettel.result_with_hash(artikel: { \"Speck\" => 3, \"Brezel\" => 2 })"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Schleife <code>each … end</code> wiederholt die Zeile dazwischen für jeden Artikel, das <code>if</code> lässt „(nichts)“ weg, solange etwas auf dem Zettel steht. Und die Minuszeichen? Mit <code>trim_mode: \"-\"</code> verschluckt <code>&lt;%-</code> die Einrückung davor und <code>-%&gt;</code> den Zeilenumbruch danach. Ohne sie bliebe von jeder Ruby-Zeile eine leere Textzeile übrig. Probier es aus: Lösch die Minuszeichen.</p><p>Webseiten sind auch Text, nur mit HTML. Aber Vorsicht, wenn darin steht, was jemand anderes geschrieben hat:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"erb\"\n\nkommentar = \"<script>alert('Aller Speck gehört mir!')</script>\"\nputs ERB.new(\"<p><%= kommentar %></p>\").result(binding)\nputs ERB.new(\"<p><%= ERB::Util.h(kommentar) %></p>\").result(binding)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die erste Zeile ist gefährlich. Ein Browser liest darin ein <code>&lt;script&gt;</code> und führt es aus – das Programm einer fremden Person, auf der Seite deines Ladens, mit den Daten deiner Kundschaft. Das heisst <em>Cross-Site-Scripting</em> (XSS) und ist eine der häufigsten Sicherheitslücken im Web. <code>ERB::Util.h</code> (h für HTML) <em>maskiert</em> die Sonderzeichen: Aus <code>&lt;</code> wird <code>&amp;lt;</code>, und der Browser zeigt die Zeichen nur an, statt sie auszuführen. Die Regel: Alles, was nicht von dir selbst stammt, kommt durch <code>h</code>. (Rails tut das von sich aus.)</p><p>Und so wird aus einer ERB-Vorlage eine Seite im Mini-Browser (Lektion 15) – ein Lambda genügt als Rack-App:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"erb\"\n\nseite = ERB.new(<<~HTML)\n  <h1>Chunkys Laden</h1>\n  <ul>\n  <% waren.each do |name, preis| %>\n    <li><%= ERB::Util.h(name) %>: <%= format(\"%.2f\", preis) %> Fr.</li>\n  <% end %>\n  </ul>\nHTML\n\nladen = lambda do |_env|\n  html = seite.result_with_hash(waren: { \"Speck\" => 4.5, \"Brezel\" => 2.0, \"Käse\" => 6.25 })\n  [200, { \"content-type\" => \"text/html\" }, [html]]\nend\nshow_browser laden"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jetzt eine Schwäche von ERB: Es weiss nichts von HTML. Für ERB ist die Vorlage nur Text mit Löchern. Ein falsch geschlossenes Tag, ein vergessenes Anführungszeichen – ERB merkt nichts, und der Browser repariert stillschweigend, irgendwie. Der Fehler fällt erst auf, wenn die Seite seltsam aussieht.</p><p><a href='https://herb-tools.dev' target='_blank'>Herb</a> von Marco Roth liest HTML und ERB <em>zusammen</em>. Es versteht, welches Tag wo aufgeht und wo es zugeht, auch quer durch Ruby-Schleifen und -Bedingungen, und meldet, was nicht passt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"herb\"\nrequire \"herb\"\n\nkaputt = \"<div><%= name %></span>\"\nputs ERB.new(kaputt).result_with_hash(name: \"Chunky\")\n\nergebnis = Herb.parse(kaputt)\nergebnis.errors.each { |fehler| puts fehler.message }\nergebnis.success?"
+          },
+          {
+            "t": "h",
+            "html": "<p>ERB macht aus der kaputten Vorlage ohne Murren <code>&lt;div&gt;Chunky&lt;/span&gt;</code>. Herb dagegen findet zwei Fehler: Das <code>&lt;div&gt;</code> wird nie geschlossen, und zum <code>&lt;/span&gt;</code> gab es kein öffnendes Tag. Jeder Fehler weiss auch, wo er steht (<code>fehler.location</code>).</p><p>Dazu baut Herb aus der Vorlage einen Baum – einen <em>Syntaxbaum</em>, in dem HTML-Elemente und ERB-Stücke Knoten sind:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts Herb.parse(\"<b><%= name %></b>\").value.inspect"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ein <code>HTMLElementNode</code> mit seinem öffnenden und schliessenden Tag, darin ein <code>ERBContentNode</code> mit dem Ruby-Code. Auf diesem Baum bauen Herbs Werkzeuge auf: ein Linter, der Regeln prüft, ein Formatierer, und Hilfe im Editor.</p><p>Am meisten bringt Herb in Tests: Ein Test, der jede Vorlage prüft, fällt um, sobald jemand ein Tag falsch schliesst – lange bevor es jemand im Browser sieht. Mit Minitest aus Lektion 39:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"minitest\"\n\nclass VorlagenTest < Minitest::Test\n  def test_die_liste_ist_heil\n    assert_empty Herb.parse(\"<ul><li><%= ware %></li></ul>\").errors\n  end\n\n  def test_das_bild\n    fehler = Herb.parse('<img src=\"speck.png\"></img>').errors\n    assert_empty fehler.map(&:message)\n  end\nend\nrun_tests"
+          },
+          {
+            "t": "h",
+            "html": "<p>Der erste Test besteht. Der zweite schlägt fehl, und die Meldung sagt, warum: <code>&lt;img&gt;</code> ist ein <em>leeres</em> Element (englisch <em>void</em>), es hat keinen Inhalt und darum auch kein <code>&lt;/img&gt;</code>. <code>assert_empty fehler.map(&amp;:message)</code> zeigt im Fehlerfall die Meldungen selbst, nicht nur, dass etwas nicht leer war.</p><div class='offweb' data-title='Auf deinem Computer'><p>Herbs Parser ist in C geschrieben. Hier im Browser läuft derselbe Parser als WebAssembly, das Gem drumherum ist das echte. Zu Hause: <code>gem install herb</code> (auf Windows scheitert die Installation zurzeit an einer Datei mit einem Fragezeichen im Namen – unter WSL geht es). Das Gem bringt den Befehl <code>herb</code> mit: <code>herb analyze app/views</code> prüft alle Vorlagen eines Projekts, <code>herb parse seite.html.erb</code> zeigt den Baum. Den Linter und den Formatierer gibt es über Node.js (<code>npx @herb-tools/linter</code>, <code>npx @herb-tools/formatter</code>), und mit dem Herb Language Server zeigen VS Code, Zed oder Neovim die Fehler schon beim Tippen.</p></div><div class='task'><strong>Aufgabe:</strong> Chunkys Vorlage für die Warenliste ist kaputt. Schreib einen Minitest-Test <code>LadenTest</code>, der mit <code>Herb.parse(ladenliste)</code> prüft, dass sie keine Fehler hat, und führ ihn mit <code>run_tests</code> aus. Er schlägt fehl – dann repariere <code>ladenliste</code>, bis er besteht.</div>"
+          },
+          {
+            "t": "x",
+            "code": "install_gem \"herb\"\nrequire \"herb\"\nrequire \"minitest\"\n\ndef ladenliste\n  \"<ul><% waren.each do |ware| %><li><%= ware %></span><% end %></ul>\"\nend\n\n# Schreib einen Test LadenTest, der mit Herb prüft, dass ladenliste keine\n# Fehler hat, und führ ihn mit run_tests aus – dann repariere ladenliste.\n",
+            "check": "defined?(LadenTest) && LadenTest.instance_methods.grep(/\\Atest_/).any? && code.match?(/Herb\\.parse\\(\\s*ladenliste/) && output.include?(\"runs,\") && output.include?(\"0 failures\") && output.include?(\"0 errors\") && Herb.parse(ladenliste).success? && ladenliste.include?(\"<li>\")",
+            "hint": "<code>class LadenTest &lt; Minitest::Test</code> mit <code>def test_ladenliste_ist_heil</code> und darin <code>assert_empty Herb.parse(ladenliste).errors</code>; danach <code>run_tests</code>. Und das <code>&lt;/span&gt;</code> gehört zu keinem Tag – das <code>&lt;li&gt;</code> braucht ein <code>&lt;/li&gt;</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "33. ERB: templates – and Herb, which checks them",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>ERB – text with holes for Ruby</h2><p>Many programs write text that looks almost the same every time: an email, an invoice, a web page. Only a few places change – the name, the amount, the list. That is what <em>templates</em> are for, and in Ruby the best known is <strong>ERB</strong>, “Embedded Ruby”: Ruby embedded in text. ERB is part of the standard library; most pages of a Rails app are made from ERB templates.</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"erb\"\n\ntemplate = ERB.new(\"Hello <%= name %>, here are <%= count %> strips of bacon.\")\ntemplate.result_with_hash(name: \"Chunky\", count: 3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Everything between <code>&lt;%=</code> and <code>%&gt;</code> is Ruby; ERB works it out and puts the result in its place. <code>ERB.new</code> reads the template once, <code>result_with_hash</code> fills it with values – as often as you like, with new values each time. (Instead of a hash there is also <code>result(binding)</code>: then the template sees the local variables of the place you call it from.)</p><p>Without the equals sign, <code>&lt;% … %&gt;</code>, the Ruby code only runs and writes nothing. That is how you build loops and conditions:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"erb\"\n\nlist = ERB.new(<<~TEXT, trim_mode: \"-\")\n  Shopping list:\n  <%- items.each do |item, qty| -%>\n  - <%= qty %> x <%= item %>\n  <%- end -%>\n  <%- if items.empty? -%>\n  (nothing)\n  <%- end -%>\nTEXT\nputs list.result_with_hash(items: { \"Bacon\" => 3, \"Pretzel\" => 2 })"
+          },
+          {
+            "t": "h",
+            "html": "<p>The loop <code>each … end</code> repeats the line in between for every item, and the <code>if</code> leaves out “(nothing)” while there is something on the list. And the minus signs? With <code>trim_mode: \"-\"</code>, <code>&lt;%-</code> swallows the indentation before it and <code>-%&gt;</code> the line break after it. Without them every Ruby line would leave an empty line of text behind. Try it: delete the minus signs.</p><p>Web pages are text too, only with HTML. But careful when they contain what somebody else wrote:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"erb\"\n\ncomment = \"<script>alert('All bacon is mine!')</script>\"\nputs ERB.new(\"<p><%= comment %></p>\").result(binding)\nputs ERB.new(\"<p><%= ERB::Util.h(comment) %></p>\").result(binding)"
+          },
+          {
+            "t": "h",
+            "html": "<p>The first line is dangerous. A browser reads a <code>&lt;script&gt;</code> in it and runs it – a stranger's program, on your shop's page, with your customers' data. That is called <em>cross-site scripting</em> (XSS), one of the most common security holes on the web. <code>ERB::Util.h</code> (h for HTML) <em>escapes</em> the special characters: <code>&lt;</code> becomes <code>&amp;lt;</code>, and the browser shows the characters instead of running them. The rule: everything that does not come from you goes through <code>h</code>. (Rails does that by itself.)</p><p>And this is how an ERB template becomes a page in the mini browser (lesson 15) – a lambda will do as a Rack app:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"erb\"\n\npage = ERB.new(<<~HTML)\n  <h1>Chunky's shop</h1>\n  <ul>\n  <% goods.each do |name, price| %>\n    <li><%= ERB::Util.h(name) %>: <%= format(\"%.2f\", price) %></li>\n  <% end %>\n  </ul>\nHTML\n\nshop = lambda do |_env|\n  html = page.result_with_hash(goods: { \"Bacon\" => 4.5, \"Pretzel\" => 2.0, \"Cheese\" => 6.25 })\n  [200, { \"content-type\" => \"text/html\" }, [html]]\nend\nshow_browser shop"
+          },
+          {
+            "t": "h",
+            "html": "<p>Now a weakness of ERB: it knows nothing about HTML. To ERB the template is just text with holes. A tag closed wrongly, a forgotten quote – ERB does not notice, and the browser quietly repairs it, somehow. The mistake only shows when the page looks odd.</p><p><a href='https://herb-tools.dev' target='_blank'>Herb</a> by Marco Roth reads HTML and ERB <em>together</em>. It understands which tag opens where and where it closes, even across Ruby loops and conditions, and reports what does not fit:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"herb\"\nrequire \"herb\"\n\nbroken = \"<div><%= name %></span>\"\nputs ERB.new(broken).result_with_hash(name: \"Chunky\")\n\nresult = Herb.parse(broken)\nresult.errors.each { |error| puts error.message }\nresult.success?"
+          },
+          {
+            "t": "h",
+            "html": "<p>ERB turns the broken template into <code>&lt;div&gt;Chunky&lt;/span&gt;</code> without a murmur. Herb, on the other hand, finds two mistakes: the <code>&lt;div&gt;</code> is never closed, and the <code>&lt;/span&gt;</code> had no opening tag. Each error also knows where it is (<code>error.location</code>).</p><p>On top of that Herb builds a tree from the template – a <em>syntax tree</em>, whose nodes are HTML elements and pieces of ERB:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts Herb.parse(\"<b><%= name %></b>\").value.inspect"
+          },
+          {
+            "t": "h",
+            "html": "<p>An <code>HTMLElementNode</code> with its opening and closing tag, and inside it an <code>ERBContentNode</code> with the Ruby code. Herb's tools build on this tree: a linter that checks rules, a formatter, and help in the editor.</p><p>Herb pays off most in tests: a test that checks every template falls over as soon as somebody closes a tag wrongly – long before anyone sees it in the browser. With Minitest from lesson 39:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"minitest\"\n\nclass TemplatesTest < Minitest::Test\n  def test_the_list_is_whole\n    assert_empty Herb.parse(\"<ul><li><%= item %></li></ul>\").errors\n  end\n\n  def test_the_picture\n    errors = Herb.parse('<img src=\"bacon.png\"></img>').errors\n    assert_empty errors.map(&:message)\n  end\nend\nrun_tests"
+          },
+          {
+            "t": "h",
+            "html": "<p>The first test passes. The second fails, and the message says why: <code>&lt;img&gt;</code> is a <em>void</em> element, it has no content and so no <code>&lt;/img&gt;</code> either. <code>assert_empty errors.map(&amp;:message)</code> shows the messages themselves when it fails, not just that something was not empty.</p><div class='offweb' data-title='On your machine'><p>Herb's parser is written in C. Here in the browser the same parser runs as WebAssembly, and the gem around it is the real one. At home: <code>gem install herb</code> (on Windows the install currently fails on a file with a question mark in its name – under WSL it works). The gem comes with the <code>herb</code> command: <code>herb analyze app/views</code> checks all the templates of a project, <code>herb parse page.html.erb</code> shows the tree. The linter and the formatter come through Node.js (<code>npx @herb-tools/linter</code>, <code>npx @herb-tools/formatter</code>), and with the Herb Language Server VS Code, Zed or Neovim show the mistakes while you type.</p></div><div class='task'><strong>Task:</strong> Chunky's template for the list of goods is broken. Write a Minitest test <code>ShopTest</code> that uses <code>Herb.parse(shop_list)</code> to check that it has no errors, and run it with <code>run_tests</code>. It fails – then repair <code>shop_list</code> until it passes.</div>"
+          },
+          {
+            "t": "x",
+            "code": "install_gem \"herb\"\nrequire \"herb\"\nrequire \"minitest\"\n\ndef shop_list\n  \"<ul><% goods.each do |item| %><li><%= item %></span><% end %></ul>\"\nend\n\n# Write a test ShopTest that checks with Herb that shop_list has no errors,\n# and run it with run_tests - then repair shop_list.\n",
+            "check": "defined?(ShopTest) && ShopTest.instance_methods.grep(/\\Atest_/).any? && code.match?(/Herb\\.parse\\(\\s*shop_list/) && output.include?(\"runs,\") && output.include?(\"0 failures\") && output.include?(\"0 errors\") && Herb.parse(shop_list).success? && shop_list.include?(\"<li>\")",
+            "hint": "<code>class ShopTest &lt; Minitest::Test</code> with <code>def test_shop_list_is_whole</code> and in it <code>assert_empty Herb.parse(shop_list).errors</code>; then <code>run_tests</code>. And the <code>&lt;/span&gt;</code> belongs to no tag – the <code>&lt;li&gt;</code> needs an <code>&lt;/li&gt;</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "33. ERB：テンプレートと、それを確かめるHerb",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>ERB ― Rubyのための穴があいたテキスト</h2><p>多くのプログラムは、毎回ほとんど同じに見えるテキストを書きます。メール、請求書、ウェブページ。変わるのは名前、金額、リストなど、ほんの数か所だけです。そのための<em>テンプレート</em>があり、Rubyでいちばん有名なのが<strong>ERB</strong>、「Embedded Ruby」――テキストに埋め込まれたRubyです。ERBは標準ライブラリの一部で、Railsアプリのページの多くは、ERBテンプレートから生まれます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"erb\"\n\ntemplate = ERB.new(\"Hello <%= name %>, here are <%= count %> strips of bacon.\")\ntemplate.result_with_hash(name: \"Chunky\", count: 3)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>&lt;%=</code>と<code>%&gt;</code>の間はすべてRubyです。ERBがそれを計算して、結果をその場所に入れます。<code>ERB.new</code>はテンプレートを1回読み、<code>result_with_hash</code>がそれに値を入れます。何度でも、毎回ちがう値で。（ハッシュの代わりに<code>result(binding)</code>もあります。その場合、テンプレートは呼び出した場所のローカル変数を見ることができます。）</p><p>イコールのない<code>&lt;% … %&gt;</code>では、Rubyのコードは動くだけで何も書きません。これでループや条件をつくります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"erb\"\n\nlist = ERB.new(<<~TEXT, trim_mode: \"-\")\n  Shopping list:\n  <%- items.each do |item, qty| -%>\n  - <%= qty %> x <%= item %>\n  <%- end -%>\n  <%- if items.empty? -%>\n  (nothing)\n  <%- end -%>\nTEXT\nputs list.result_with_hash(items: { \"Bacon\" => 3, \"Pretzel\" => 2 })"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>each … end</code>のループは、間の行を品物ごとにくり返し、<code>if</code>はメモに何かある間は「(nothing)」を省きます。ではマイナス記号は？　<code>trim_mode: \"-\"</code>を指定すると、<code>&lt;%-</code>はその前のインデントを、<code>-%&gt;</code>はその後の改行を飲み込みます。これがないと、Rubyの行ごとに空のテキスト行が残ってしまいます。マイナス記号を消して試してみてください。</p><p>ウェブページもテキストで、HTMLがあるだけです。でも、ほかの人が書いたものを入れるときは気をつけて：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"erb\"\n\ncomment = \"<script>alert('All bacon is mine!')</script>\"\nputs ERB.new(\"<p><%= comment %></p>\").result(binding)\nputs ERB.new(\"<p><%= ERB::Util.h(comment) %></p>\").result(binding)"
+          },
+          {
+            "t": "h",
+            "html": "<p>1行目は危険です。ブラウザはその中の<code>&lt;script&gt;</code>を読んで実行してしまいます。知らない人のプログラムが、あなたのお店のページで、お客さんのデータといっしょに動くのです。これは<em>クロスサイトスクリプティング</em>（XSS）と呼ばれ、ウェブでもっともよくあるセキュリティホールのひとつです。<code>ERB::Util.h</code>（hはHTMLのh）は特殊な文字を<em>エスケープ</em>します。<code>&lt;</code>は<code>&amp;lt;</code>になり、ブラウザは文字を実行せずに表示します。ルールはこうです：自分で書いたものでないものは、すべて<code>h</code>を通す。（Railsは自動でそうします。）</p><p>そして、ERBテンプレートはこうしてミニブラウザ（レッスン15）のページになります。Rackアプリにはラムダで十分です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"erb\"\n\npage = ERB.new(<<~HTML)\n  <h1>Chunky's shop</h1>\n  <ul>\n  <% goods.each do |name, price| %>\n    <li><%= ERB::Util.h(name) %>: <%= format(\"%.2f\", price) %></li>\n  <% end %>\n  </ul>\nHTML\n\nshop = lambda do |_env|\n  html = page.result_with_hash(goods: { \"Bacon\" => 4.5, \"Pretzel\" => 2.0, \"Cheese\" => 6.25 })\n  [200, { \"content-type\" => \"text/html\" }, [html]]\nend\nshow_browser shop"
+          },
+          {
+            "t": "h",
+            "html": "<p>ここでERBの弱点です。ERBはHTMLのことを何も知りません。ERBにとってテンプレートは、穴のあいたただのテキストです。閉じ方をまちがえたタグ、忘れた引用符――ERBは気づかず、ブラウザがだまってなんとか直してしまいます。まちがいに気づくのは、ページの見た目がおかしくなってからです。</p><p>Marco Rothさんの<a href='https://herb-tools.dev' target='_blank'>Herb</a>は、HTMLとERBを<em>いっしょに</em>読みます。どのタグがどこで開いてどこで閉じるかを、Rubyのループや条件をまたいでも理解し、合わないところを報告します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"herb\"\nrequire \"herb\"\n\nbroken = \"<div><%= name %></span>\"\nputs ERB.new(broken).result_with_hash(name: \"Chunky\")\n\nresult = Herb.parse(broken)\nresult.errors.each { |error| puts error.message }\nresult.success?"
+          },
+          {
+            "t": "h",
+            "html": "<p>ERBは壊れたテンプレートから、文句ひとつ言わずに<code>&lt;div&gt;Chunky&lt;/span&gt;</code>をつくります。一方Herbは2つのまちがいを見つけます。<code>&lt;div&gt;</code>は閉じられておらず、<code>&lt;/span&gt;</code>には開くタグがありませんでした。どのエラーも、それがどこにあるかを知っています（<code>error.location</code>）。</p><p>さらにHerbはテンプレートから木をつくります。HTMLの要素やERBのかけらがノードになった<em>構文木</em>です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts Herb.parse(\"<b><%= name %></b>\").value.inspect"
+          },
+          {
+            "t": "h",
+            "html": "<p>開くタグと閉じるタグを持つ<code>HTMLElementNode</code>、その中にRubyのコードを持つ<code>ERBContentNode</code>。Herbのツールはこの木の上に成り立っています。ルールを確かめるリンター、フォーマッター、そしてエディタでの手助け。</p><p>Herbがいちばん役に立つのはテストです。すべてのテンプレートを確かめるテストは、だれかがタグの閉じ方をまちがえたとたんに失敗します。ブラウザでだれかが気づくずっと前に。レッスン39のMinitestで：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"minitest\"\n\nclass TemplatesTest < Minitest::Test\n  def test_the_list_is_whole\n    assert_empty Herb.parse(\"<ul><li><%= item %></li></ul>\").errors\n  end\n\n  def test_the_picture\n    errors = Herb.parse('<img src=\"bacon.png\"></img>').errors\n    assert_empty errors.map(&:message)\n  end\nend\nrun_tests"
+          },
+          {
+            "t": "h",
+            "html": "<p>1つめのテストは通ります。2つめは失敗し、メッセージがその理由を教えてくれます。<code>&lt;img&gt;</code>は<em>空要素</em>（void）で、中身がないので<code>&lt;/img&gt;</code>もありません。<code>assert_empty errors.map(&amp;:message)</code>なら、失敗したときに、何かが空でなかったことだけでなく、メッセージそのものが表示されます。</p><div class='offweb' data-title='自分のパソコンでは'><p>Herbのパーサーは C で書かれています。ここブラウザでは同じパーサーがWebAssemblyとして動き、そのまわりのgemは本物です。家では<code>gem install herb</code>（Windowsでは今のところ、名前に疑問符のついたファイルのせいでインストールに失敗します。WSLなら大丈夫です）。gemには<code>herb</code>コマンドがついています。<code>herb analyze app/views</code>はプロジェクトのテンプレートをすべて確かめ、<code>herb parse page.html.erb</code>は木を表示します。リンターとフォーマッターはNode.jsで（<code>npx @herb-tools/linter</code>、<code>npx @herb-tools/formatter</code>）、Herb Language Serverを使えば、VS CodeやZedやNeovimが入力中にまちがいを表示してくれます。</p></div><div class='task'><strong>課題：</strong>Chunkyの品物リストのテンプレートが壊れています。<code>Herb.parse(shop_list)</code>でエラーがないことを確かめるMinitestのテスト<code>ShopTest</code>を書いて、<code>run_tests</code>で実行してください。失敗するので、通るまで<code>shop_list</code>を直します。</div>"
+          },
+          {
+            "t": "x",
+            "code": "install_gem \"herb\"\nrequire \"herb\"\nrequire \"minitest\"\n\ndef shop_list\n  \"<ul><% goods.each do |item| %><li><%= item %></span><% end %></ul>\"\nend\n\n# shop_listにエラーがないことをHerbで確かめるテストShopTestを書いて、\n# run_testsで実行してください。それからshop_listを直します。\n",
+            "check": "defined?(ShopTest) && ShopTest.instance_methods.grep(/\\Atest_/).any? && code.match?(/Herb\\.parse\\(\\s*shop_list/) && output.include?(\"runs,\") && output.include?(\"0 failures\") && output.include?(\"0 errors\") && Herb.parse(shop_list).success? && shop_list.include?(\"<li>\")",
+            "hint": "<code>class ShopTest &lt; Minitest::Test</code>の中に<code>def test_shop_list_is_whole</code>、その中に<code>assert_empty Herb.parse(shop_list).errors</code>。それから<code>run_tests</code>。そして<code>&lt;/span&gt;</code>はどのタグのものでもありません。<code>&lt;li&gt;</code>には<code>&lt;/li&gt;</code>が必要です。"
+          }
+        ]
+      }
+    },
+    {
       "id": "rubykaigi",
       "de": {
-        "title": "33. RubyKaigi & seltsamer Code",
+        "title": "34. RubyKaigi & seltsamer Code",
         "cells": [
           {
             "t": "h",
@@ -4893,7 +5109,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "33. RubyKaigi & weird code",
+        "title": "34. RubyKaigi & weird code",
         "cells": [
           {
             "t": "h",
@@ -4964,7 +5180,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "33. RubyKaigiと変なコード",
+        "title": "34. RubyKaigiと変なコード",
         "cells": [
           {
             "t": "h",
@@ -5043,7 +5259,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "応用コース：timelog"
       },
       "de": {
-        "title": "34. Projekt timelog: Collections",
+        "title": "35. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -5082,7 +5298,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "34. Project timelog: collections",
+        "title": "35. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -5121,7 +5337,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "34. timelogプロジェクト：コレクション",
+        "title": "35. timelogプロジェクト：コレクション",
         "cells": [
           {
             "t": "h",
@@ -5163,7 +5379,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "35. Text parsen: Regex",
+        "title": "36. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -5194,7 +5410,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "35. Parsing text: regex",
+        "title": "36. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -5225,7 +5441,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "35. テキストのパース：正規表現",
+        "title": "36. テキストのパース：正規表現",
         "cells": [
           {
             "t": "h",
@@ -5259,7 +5475,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "36. Methoden richtig bauen",
+        "title": "37. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -5290,7 +5506,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "36. Building methods properly",
+        "title": "37. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -5321,7 +5537,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "36. メソッドをきちんと作る",
+        "title": "37. メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -5355,7 +5571,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "37. Entry & Timesheet",
+        "title": "38. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -5386,7 +5602,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "37. Entry & Timesheet",
+        "title": "38. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -5417,7 +5633,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "37. EntryとTimesheet",
+        "title": "38. EntryとTimesheet",
         "cells": [
           {
             "t": "h",
@@ -5451,7 +5667,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "38. Testen mit Minitest",
+        "title": "39. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -5482,7 +5698,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "38. Testing with Minitest",
+        "title": "39. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -5513,7 +5729,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "38. Minitestでテスト",
+        "title": "39. Minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -5547,7 +5763,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "39. Enumerable & Data",
+        "title": "40. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -5559,7 +5775,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 34, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 35, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -5570,7 +5786,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "39. Enumerable & Data",
+        "title": "40. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -5582,7 +5798,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 34, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 35, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -5593,7 +5809,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "39. EnumerableとData",
+        "title": "40. EnumerableとData",
         "cells": [
           {
             "t": "h",
@@ -5605,7 +5821,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン34で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン35で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
           },
           {
             "t": "x",
@@ -5619,7 +5835,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "40. Blocks, Procs & Lambdas",
+        "title": "41. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -5658,7 +5874,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "40. Blocks, procs & lambdas",
+        "title": "41. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -5697,7 +5913,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "40. ブロック、Proc、lambda",
+        "title": "41. ブロック、Proc、lambda",
         "cells": [
           {
             "t": "h",
@@ -5739,7 +5955,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "41. Fehler behandeln",
+        "title": "42. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -5770,7 +5986,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "41. Handling errors",
+        "title": "42. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -5801,7 +6017,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "41. エラー処理",
+        "title": "42. エラー処理",
         "cells": [
           {
             "t": "h",
@@ -5835,7 +6051,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "42. Daten speichern: Formate",
+        "title": "43. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -5890,7 +6106,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "42. Saving data: formats",
+        "title": "43. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -5945,7 +6161,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "42. データの保存：フォーマット",
+        "title": "43. データの保存：フォーマット",
         "cells": [
           {
             "t": "h",
@@ -6003,7 +6219,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "43. Kommandozeile & Gems",
+        "title": "44. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -6030,7 +6246,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "43. Command line & gems",
+        "title": "44. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -6057,7 +6273,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "43. コマンドラインとgem",
+        "title": "44. コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -6087,7 +6303,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "44. Pattern Matching",
+        "title": "45. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -6118,7 +6334,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "44. Pattern matching",
+        "title": "45. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -6149,7 +6365,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "44. パターンマッチ",
+        "title": "45. パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -6183,7 +6399,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "45. Objektmodell & Metaprogrammierung",
+        "title": "46. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -6214,7 +6430,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "45. Object model & metaprogramming",
+        "title": "46. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -6245,7 +6461,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "45. オブジェクトモデルとメタプログラミング",
+        "title": "46. オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -6279,7 +6495,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "46. Eine eigene DSL",
+        "title": "47. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -6291,7 +6507,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 40 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 41 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -6302,7 +6518,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "46. Your own DSL",
+        "title": "47. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -6314,7 +6530,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 40 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 41 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
@@ -6325,7 +6541,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "46. 自分だけのDSL",
+        "title": "47. 自分だけのDSL",
         "cells": [
           {
             "t": "h",
@@ -6337,7 +6553,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン40のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン41のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
           },
           {
             "t": "x",
@@ -6351,7 +6567,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "47. Codequalität & Debugging",
+        "title": "48. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -6374,7 +6590,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "47. Code quality & debugging",
+        "title": "48. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -6397,7 +6613,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "47. コードの品質とデバッグ",
+        "title": "48. コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -6423,7 +6639,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "48. Performance & Nebenläufigkeit",
+        "title": "49. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -6470,7 +6686,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "48. Performance & concurrency",
+        "title": "49. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -6517,7 +6733,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "48. パフォーマンスと並行処理",
+        "title": "49. パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -6567,7 +6783,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "49. Finale: timelog im Web",
+        "title": "50. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -6589,12 +6805,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 43 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 44 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "en": {
-        "title": "49. Finale: timelog on the web",
+        "title": "50. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
@@ -6616,12 +6832,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 43 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 44 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "ja": {
-        "title": "49. フィナーレ：Webで動くtimelog",
+        "title": "50. フィナーレ：Webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -6643,7 +6859,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン43で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン44で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }

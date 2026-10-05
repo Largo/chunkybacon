@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('49 lessons in nav', (await page.$$('#lessonNav a')).length === 49);
+check('50 lessons in nav', (await page.$$('#lessonNav a')).length === 50);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -755,6 +755,42 @@ check('faker starter fails', (await page.getAttribute('#chunkyChat', 'class')).i
 await setExercise('Faker::Config.random = Random.new(2024)\nkunden = 5.times.map { { name: Faker::Name.name, email: Faker::Internet.email } }');
 await runExercise(); await page.waitForTimeout(300);
 check('faker exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// ERB lesson: ERB from the standard library, a page in the mini browser;
+// then Herb - the gem from the cache, its C parser as WebAssembly
+// (herb_bridge.rb, assets/herb/), loaded when the lesson opens
+await page.click('#lessonNav a[data-id="erb"]');
+await page.waitForTimeout(500);
+await runAndWait(1);
+check('ERB fills a template from a hash', (await page.textContent('#cell-out-1')).includes('Hallo Chunky, hier sind 3 Streifen Speck.'));
+await runAndWait(3);
+check('a loop with trim mode leaves no empty lines',
+      (await page.textContent('#cell-out-3 .cell-stdout')).startsWith('Einkaufszettel:\n- 3 x Speck\n- 2 x Brezel\n'));
+await runAndWait(5);
+check('ERB::Util.h escapes a script',
+      (await page.textContent('#cell-out-5 .cell-stdout')).includes('<p>&lt;script&gt;alert(&#39;Aller Speck'));
+await runAndWait(7);
+check('an ERB page in the mini browser', (await page.textContent('#cell-out-7 .mb-view')).includes('Brezel: 2.00 Fr.'));
+await page.waitForFunction(() => window.chunkyHerb && window.chunkyHerb.ready, null, { timeout: 60000 }).catch(() => {});
+check('Herb\'s parser loads when the lesson opens', await page.evaluate(() => window.chunkyHerb.ready === true));
+await runAndWait(9);
+const herbOut = await page.textContent('#cell-out-9');
+check('herb installs from the cache', (await page.textContent('#gemsList')).includes('herb ✓'));
+check('ERB renders the broken template, Herb finds both mistakes',
+      herbOut.includes('<div>Chunky</span>') && herbOut.includes("Opening tag `<div>` at (1:1) doesn't have a matching closing tag") &&
+      herbOut.includes('Found closing tag `</span>`') && herbOut.includes('=> false'));
+await runAndWait(11);
+check('Herb\'s syntax tree, nodes of the gem', /@ HTMLElementNode[\s\S]*@ ERBContentNode/.test(await page.textContent('#cell-out-11')));
+await runAndWait(13);
+const herbTest = await page.textContent('#cell-out-13');
+check('a Minitest test with Herb: one passes, the void element fails with its message',
+      herbTest.includes('2 runs,') && herbTest.includes(' 1 failures, 0 errors') &&
+      herbTest.includes('`img` is a void element and should not be used as a closing tag'));
+await runExercise();
+check('erb starter fails', (await page.getAttribute('#chunkyChat', 'class')).includes('fail'));
+await setExercise('install_gem "herb"\nrequire "herb"\nrequire "minitest"\n\ndef ladenliste\n  "<ul><% waren.each do |ware| %><li><%= ware %></li><% end %></ul>"\nend\n\nclass LadenTest < Minitest::Test\n  def test_ladenliste_ist_heil\n    assert_empty Herb.parse(ladenliste).errors\n  end\nend\nrun_tests');
+await runExercise(); await page.waitForTimeout(300);
+check('erb exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 
 // Scarpe lesson: real Shoes apps from the lacci gem, drawn into the page by a
 // Lacci display service (shoes_dom.rb); several stay live at once

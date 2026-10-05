@@ -4,7 +4,7 @@ Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
 Work in progress - what is unfinished, and in what state - is in
 `docs/OPEN_WORK.md`.
-Last updated 2026-10-04 (49 lessons in German, English and Japanese).
+Last updated 2026-10-04 (50 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -66,6 +66,8 @@ html/
   ansi.rb               terminal colours in a cell's output: ANSI codes -> spans (§6g)
   processing.rb         require "processing": the gem's API in pure Ruby, frames recorded (§6h)
   processing.js         a sketch's window: paints the frames, sends mouse and keys (§6h)
+  herb_bridge.rb        require "herb/herb": Herb's C parser, handed to its WebAssembly build (§6j)
+  assets/herb/          Herb's parser as WebAssembly + 3 files of @ruby/prism (tools/vendor_herb.rb)
   workshop.rb           the workshop's runs: project files as the virtual FS,
                         require_relative between them, gets, write-back
   autorun.rb            live runs (§6b): what may run by itself, the time
@@ -90,6 +92,7 @@ tools/compress_assets.rb   the .gz copies nginx serves (the wasm runtimes)
 tools/vendor_pyodide.rb    Pyodide + pandas, sympy, scikit-learn into html/assets/pyodide/ (§6d)
 tools/vendor_sqljs.rb      sql.js (SQLite in WebAssembly) into html/assets/sqljs/ (§6f)
 tools/build_box_font.rb    html/assets/fonts/chunky-box-drawing.woff, box drawing for the code font (§6g)
+tools/vendor_herb.rb       Herb's WebAssembly parser into html/assets/herb/ (§6j)
 tools/offline_files.rb     html/offline-files.txt - rerun after adding/removing a file
 tools/patch_picoruby_loader.rb  PicoRuby's loader: text/ruby -> text/picoruby
 tools/measure_load.mjs, tools/shell_metrics.rb  load times, code size (PICORUBY_SHELL.md)
@@ -194,7 +197,7 @@ A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 19-33), not in a group of one.
+(side trips, 19-34), not in a group of one.
 
 The sidebar itself (`index.html` `#sidebar`, `shell/app.rb`, `app.css`): from
 the top of the window to its foot with its own scroll; head with the course
@@ -250,7 +253,7 @@ Rules that the code and tests rely on:
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
 - Checks accept output OR result; `puts` is never required.
-- `test/browser_test.mjs` asserts the lesson count (`'49 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'50 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -881,6 +884,49 @@ only because it starts with `Faker::Number.unique.clear` - the lesson
 says why. The exercise checks the seed (`Faker::Config.random.seed`) and
 the shape of the customers, not their names.
 
+## 6j. ERB, and Herb's parser as WebAssembly
+
+Lesson 33 is ERB (stdlib: `result_with_hash`, `trim_mode: "-"`,
+`ERB::Util.h` against XSS, a page through a Rack lambda in the mini
+browser) and then [Herb](https://herb-tools.dev), which parses HTML and
+ERB together and reports what ERB lets through. Herb's gem is Ruby - AST
+nodes, errors, the visitor, `Herb::Engine` - around one C extension,
+`herb/herb`, the parser.
+
+- **The gem** is in the cache, pinned to 0.10.3 (`PINNED`), and installs
+  despite its `extconf.rb` (`PURE_FALLBACK_GEMS` / `ALLOW_EXTENSIONS`).
+  Its archive has `content_security_policy?.yml`, so it cannot be
+  unpacked on Windows (the lesson says so); the wasm filesystem does
+  not mind.
+- **The parser**: `tools/vendor_herb.rb` takes `@herb-tools/browser`
+  0.10.3 (libherb and its prism compiled to WebAssembly, inlined into one
+  ES module as raw bytes - hence `-text` in `.gitattributes`) and the
+  three files of `@ruby/prism` it imports, from the npm registry,
+  checked against its sha512, and points those imports at the copies.
+  No bundler, nothing installed or run. `index.html`'s `ensureHerb`
+  imports it (the shell calls it for a lesson whose code has
+  `require "herb"`; `bridge.js` holds runs until it is there, as for
+  Python), and `chunkyHerbCall(op, json)` answers synchronously with the
+  backend's raw result as JSON.
+- **`herb_bridge.rb`**, served for `require "herb/herb"`, is the C
+  extension's part: `Herb.parse`, `lex`, `extract_ruby`, `extract_html`,
+  `version`. The JSON has the field names of the gem's constructors
+  (`initialize(type, location, errors, <fields...>)`), so a node, an
+  error or a warning is built from its class's parameters, by name; the
+  class comes from the type (`AST_HTML_ELEMENT_NODE` - `HTMLElementNode`).
+  Tokens, ranges, locations and the parser options (timeout in seconds
+  for Ruby, milliseconds for the WebAssembly build) are converted on the
+  way. `diff`, `arena_stats` and `leak_check` raise NotImplementedError.
+  Everything above the parser - `ParseResult#errors`, the tree's
+  `inspect`, `Herb::Engine` - is the gem's own code.
+- **Tests**: `check_harness.rb` cannot run Herb (no WebAssembly under
+  CRuby; the gem does not install on Windows), so the lesson is in
+  `BROWSER_ONLY`; `browser_test.mjs` runs every cell and the exercise (a
+  Minitest test with `assert_empty Herb.parse(...).errors`, then the
+  repaired template).
+- Offline: the copy preloads `herb_bridge.rb` (sync XHR); the module is
+  imported, which the service worker answers.
+
 ## 7a. The optional server: permalinks and a backend
 
 The course is a static site and stays one: without `server/` lessons live at
@@ -941,7 +987,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 49 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 50 lessons x 3 languages, starter fails, solutions pass
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof

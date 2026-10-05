@@ -479,6 +479,59 @@
       return sqlite.loading;
     };
 
+    // Herb's parser for require "herb" (html/herb_bridge.rb): the gem's C
+    // extension, compiled to WebAssembly (assets/herb/, tools/vendor_herb.rb;
+    // 1.7 MB). Loaded only for a lesson that requires herb - the shell calls
+    // ensureHerb when it opens, and bridge.js holds runs until it is there.
+    // chunkyHerbCall is what the kernel calls, synchronously: the backend's
+    // raw answer (the gem's field names) as JSON.
+    window.chunkyHerb = { ready: false, loading: null, error: null, module: null, herb: null };
+    window.ensureHerb = function () {
+      var herb = window.chunkyHerb;
+      if (herb.ready) return Promise.resolve(true);
+      if (herb.loading) return herb.loading;
+      herb.error = null;
+      herb.loading = (async function () {
+        var module = await import(new URL("assets/herb/herb-browser.esm.js", document.baseURI).href);
+        herb.herb = await module.Herb.load();
+        herb.module = module;
+        herb.ready = true;
+        return true;
+      })().catch(function (e) {
+        herb.error = offlinePage() ? "offline" : String((e && e.message) || e);
+        console.error("Herb failed to load", e);
+        return false;
+      }).then(function (ok) {
+        herb.loading = null;
+        return ok;
+      });
+      return herb.loading;
+    };
+    window.chunkyHerbCall = function (op, json) {
+      var herb = window.chunkyHerb;
+      var args = JSON.parse(json);
+      var backend = herb.herb.backend;
+      try {
+        var value;
+        if (op === "parse") {
+          value = backend.parse(args.source, Object.assign({}, herb.module.DEFAULT_PARSER_OPTIONS, args.options));
+        } else if (op === "lex") {
+          value = backend.lex(args.source);
+        } else if (op === "extract_ruby") {
+          value = backend.extractRuby(args.source, Object.assign({}, herb.module.DEFAULT_EXTRACT_RUBY_OPTIONS, args.options));
+        } else if (op === "extract_html") {
+          value = backend.extractHTML(args.source);
+        } else if (op === "version") {
+          value = backend.version();
+        } else {
+          throw new Error("unknown operation " + op);
+        }
+        return JSON.stringify({ ok: value });
+      } catch (e) {
+        return JSON.stringify({ error: String((e && e.message) || e) });
+      }
+    };
+
     // A Blob URL for bytes handed over from Ruby as base64 - the link a cell
     // offers for a file it wrote. Blob rather than data: URLs, which break
     // down for multi-megabyte files.

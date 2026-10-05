@@ -13,7 +13,7 @@ require 'fileutils'
 # chunky_bacon: the course's own gem (gem/chunky_bacon), lesson 13's first
 GEMS = %w[chunky_bacon chunky_png gammo racc sinatra roda minitest csv benchmark three-rb ruby_pptx lacci nokogiri
           bigdecimal-pure prawn hexapdf jsg pure_jpeg rumale-core rumale-nearest_neighbors sequel
-          pastel tty-table tty-box tty-tree tty-font faker]
+          pastel tty-table tty-box tty-tree tty-font faker herb]
 
 # C extensions compiled into the wasm image: a gem may depend on them (hexapdf
 # on openssl and strscan, jsg on js), the browser finds them built in
@@ -29,11 +29,14 @@ SUBSTITUTES = { "bigdecimal" => "bigdecimal-pure" }
 # gems pinned below their latest version, when the latest pulls in native
 # dependencies (e.g. minitest 6 depends on prism, a C extension) - or when a
 # gem asks for an older one (strings, under tty-table and tty-box, wants
-# unicode-display_width below 3)
-PINNED = { "minitest" => "5.27.0", "unicode-display_width" => "2.6.0" }
+# unicode-display_width below 3) - or when the gem has to match a vendored
+# build (herb: the parser in html/assets/herb/, tools/vendor_herb.rb)
+PINNED = { "minitest" => "5.27.0", "unicode-display_width" => "2.6.0", "herb" => "0.10.3" }
 
-# gems whose C extension is optional (pure-Ruby fallback in lib/)
-ALLOW_EXTENSIONS = %w[racc]
+# gems whose C extension is optional (pure-Ruby fallback in lib/) or stood
+# in for (herb's is its parser: html/herb_bridge.rb hands it to Herb's
+# WebAssembly build); keep in sync with BrowserGems::PURE_FALLBACK_GEMS
+ALLOW_EXTENSIONS = %w[racc herb]
 
 # dependencies not declared in the gemspec but needed at runtime in the
 # browser (racc is a default gem locally, absent from the wasm stdlib)

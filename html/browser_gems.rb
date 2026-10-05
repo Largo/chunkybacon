@@ -20,8 +20,10 @@ module BrowserGems
   class NotFoundError < StandardError; end
 
   # gems whose C extension is optional acceleration with a pure-Ruby
-  # fallback in lib/ - safe to install despite having an extconf.rb
-  PURE_FALLBACK_GEMS = %w[racc].freeze
+  # fallback in lib/ - safe to install despite having an extconf.rb - or
+  # stood in for: herb's is its parser, which main.rb serves as
+  # herb_bridge.rb, calling the same parser built for WebAssembly
+  PURE_FALLBACK_GEMS = %w[racc herb].freeze
 
   # well-known native gems: fail fast with a clear error before downloading -
   # unless builtin? finds them (compiled in, or a shim: main.rb serves

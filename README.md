@@ -8,13 +8,14 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **49 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **50 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics, tables, frames and colours
   for the terminal with the [TTY toolkit](https://ttytoolkit.org),
   sketches that move and follow the mouse with
   [Processing](https://github.com/xord/processing), test data that looks
-  real with [Faker](https://github.com/faker-ruby/faker),
+  real with [Faker](https://github.com/faker-ruby/faker), ERB templates
+  checked by [Herb](https://herb-tools.dev) (its C parser as WebAssembly),
   PowerPoint decks with [ruby_pptx](https://github.com/Largo/ruby_pptx),
   PDFs with Prawn and HexaPDF, JPEG photos with
   [pure_jpeg](https://github.com/peterc/pure_jpeg), pandas, SymPy, NumPy and
@@ -28,7 +29,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
   cell shows its last expression as `=> …` — `puts` is never required.
-- **Lesson sidebar**: the 49 lessons in three groups (basics, side trips,
+- **Lesson sidebar**: the 50 lessons in three groups (basics, side trips,
   the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a
   drawer.

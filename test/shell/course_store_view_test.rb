@@ -13,7 +13,7 @@ class CourseStoreViewTest < Minitest::Test
   # ---------- Course ----------
 
   def test_course_has_every_lesson_and_language
-    assert_equal 49, @course.size
+    assert_equal 50, @course.size
     assert_equal "hallo", @course.id(0)
     assert_equal %w[de en ja], @course.langs
     assert_equal 1, @course.index("rechnen")
@@ -77,7 +77,7 @@ class CourseStoreViewTest < Minitest::Test
 
   def test_nav_links_sections_and_marks
     html = ChunkyShell::View.nav_html(@course, "de", "rechnen", ["hallo"], "#", [], "", "keine", "%d von %d fertig")
-    assert_equal 49, html.scan("<a ").length
+    assert_equal 50, html.scan("<a ").length
     assert_equal 3, html.scan("<section ").length
     assert_includes html, %(<span class="nav-group-name">Grundkurs</span>)
     assert_includes html, %(<span class="nav-group-count" title="1 von 18 fertig" aria-label="1 von 18 fertig">1/18</span>)
@@ -88,7 +88,7 @@ class CourseStoreViewTest < Minitest::Test
 
   def test_nav_groups_are_named_by_their_first_lesson
     groups = ChunkyShell::View.nav_groups(@course, "en")
-    assert_equal [["hallo", "Basics", 18], ["three", "Side trips", 15], ["tl-collections", "Advanced: timelog", 16]],
+    assert_equal [["hallo", "Basics", 18], ["three", "Side trips", 16], ["tl-collections", "Advanced: timelog", 16]],
                  groups.map { |key, name, list| [key, name, list.length] }
   end
 
@@ -106,7 +106,7 @@ class CourseStoreViewTest < Minitest::Test
     assert_includes html, %(<section class="nav-group" data-group="tl-collections">), "a hit opens its group"
     # the number is part of the title, and a section's name finds its lessons
     assert_includes ChunkyShell::View.nav_html(@course, "de", "hallo", [], "#", [], "13").to_s, %(data-id="gems")
-    assert_equal 15, ChunkyShell::View.nav_html(@course, "de", "hallo", [], "#", [], "ausflüge").scan("<a ").length
+    assert_equal 16, ChunkyShell::View.nav_html(@course, "de", "hallo", [], "#", [], "ausflüge").scan("<a ").length
     assert_equal %(<p class="nav-none">keine</p>), ChunkyShell::View.nav_html(@course, "de", "hallo", [], "#", [], "zzz", "keine")
   end
 

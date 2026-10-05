@@ -21,6 +21,11 @@ assets/fonts/chunky-box-drawing.woff
 assets/fonts/fonts.css
 assets/fonts/shantell-sans-latin-ext.woff2
 assets/fonts/shantell-sans-latin.woff2
+assets/herb/LICENSE-herb.txt
+assets/herb/herb-browser.esm.js
+assets/herb/prism/deserialize.js
+assets/herb/prism/nodes.js
+assets/herb/prism/visitor.js
 assets/picoruby/PICORUBY_VERSION.txt
 assets/picoruby/init.iife.js
 assets/picoruby/picoruby.js
@@ -63,6 +68,7 @@ gems/cache/csv-3.3.6.gem
 gems/cache/faker-3.8.0.gem
 gems/cache/gammo-0.3.0.gem
 gems/cache/geom2d-0.4.1.gem
+gems/cache/herb-0.10.3.gem
 gems/cache/hexapdf-1.11.0.gem
 gems/cache/i18n-1.15.2.gem
 gems/cache/jsg-0.2.1.gem
@@ -104,6 +110,7 @@ gems/cache/tty-table-0.12.0.gem
 gems/cache/tty-tree-0.4.0.gem
 gems/cache/unicode-display_width-2.6.0.gem
 gems/cache/unicode_utils-1.4.0.gem
+herb_bridge.rb
 index.html
 lessons.js
 letter.js

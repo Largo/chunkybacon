@@ -51,7 +51,7 @@ against the release's SHA-256.
 | [joblib](https://joblib.readthedocs.io/) | 1.5.3 | BSD-3-Clause | its wheel (`dist-info/licenses/LICENSE.txt`) |
 | [threadpoolctl](https://github.com/joblib/threadpoolctl) | 3.6.0 | BSD-3-Clause | its wheel (`dist-info/licenses/LICENSE`) |
 
-## Editor, 3D and fonts
+## Editor, 3D, fonts, sql.js and Herb
 
 | Component | Version | License | Copyright | License text |
 |---|---|---|---|---|
@@ -62,6 +62,8 @@ against the release's SHA-256.
 | [Atkinson Hyperlegible Next](https://github.com/googlefonts/atkinson-hyperlegible-next) | Google Fonts build | SIL OFL 1.1 | 2020-2024 The Atkinson Hyperlegible Next Project Authors | `html/assets/fonts/OFL-atkinson-hyperlegible-next.txt` |
 | [Atkinson Hyperlegible Mono](https://github.com/googlefonts/atkinson-hyperlegible-next-mono) | Google Fonts build | SIL OFL 1.1 | 2020-2024 The Atkinson Hyperlegible Mono Project Authors | `html/assets/fonts/OFL-atkinson-hyperlegible-mono.txt` |
 | [Shantell Sans](https://github.com/arrowtype/shantell-sans) | Google Fonts build | SIL OFL 1.1 | 2022 The Shantell Sans Project Authors | `html/assets/fonts/OFL-shantell-sans.txt` |
+| [Herb](https://herb-tools.dev) for the browser (`@herb-tools/browser`: libherb and its Prism as WebAssembly) | 0.10.3 | MIT | 2024-2025 Marco Roth | `html/assets/herb/LICENSE-herb.txt` |
+| [Prism](https://github.com/ruby/prism) JavaScript files (`@ruby/prism`: deserialize, nodes, visitor) | 1.9.0 | MIT | 2022-present Shopify Inc. | `html/assets/herb/LICENSE-prism.md` |
 
 The fonts are subsets (latin, latin-ext) of the variable fonts Google Fonts
 serves, unmodified otherwise. `chunky-box-drawing.woff` next to them (box
@@ -89,6 +91,7 @@ noted.
 | faker | 3.8.0 | MIT | Benjamin Curtis, Vitor Oliveira | License.txt |
 | gammo | 0.3.0 | MIT | namusyaka | LICENSE.txt |
 | geom2d | 0.4.1 | MIT | Thomas Leitner | LICENSE |
+| herb | 0.10.3 | MIT | Marco Roth | LICENSE.txt |
 | hexapdf | 1.11.0 | AGPL-3.0 (or a commercial licence from its author) | Thomas Leitner | LICENSE, agpl-3.0.txt; data/hexapdf/cmap/LICENSE.txt for its CMap data |
 | i18n | 1.15.2 | MIT | Sven Fuchs, Joshua Harvey, Matt Aimonetti and others | MIT-LICENSE |
 | jsg | 0.2.1 | MIT | Andi Idogawa | LICENSE.txt |

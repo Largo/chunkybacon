@@ -55,6 +55,12 @@
       sqlite.loading.then(function () { send(item); });
       return;
     }
+    // ...and a lesson with Herb its parser (index.html: ensureHerb)
+    var herb = window.chunkyHerb;
+    if (item.type === "run" && herb && herb.loading) {
+      herb.loading.then(function () { send(item); });
+      return;
+    }
     window.afterPaint(function () {
       if (item.type === "run" || item.type === "autorun") {
         emit("chunky:run", withState({ idx: item.idx, auto: item.type === "autorun" }));
