@@ -1,0 +1,1539 @@
+<!doctype html><html><head><meta charset="utf-8"><title>FriendlyErrors corpus</title>
+<style>body{font-family:system-ui,sans-serif;max-width:1500px;margin:2em auto;padding:0 1em}
+section{border-top:2px solid #ddd;padding:1em 0;display:grid;grid-template-columns:repeat(4,1fr);gap:1em}
+section h2{grid-column:1/-1;margin:0;font-size:1rem}.code{background:#f6f3ee;padding:.5em;margin:0;font-size:.8rem}
+.none{color:#888;font-family:monospace;font-size:.8rem}/* FriendlyErrors below a cell (Result#to_html). Proposed addition to
+   html/assets/app.css, next to .cell-error; uses the page's variables, with
+   fallbacks so preview.html renders on its own. */
+.friendly-error {
+  border-left: 3px solid var(--err, #b3261e);
+  background: var(--fat, #fdeee3);
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-print, system-ui, sans-serif);
+  font-size: 0.92rem;
+  color: var(--ink, #1a1208);
+}
+.friendly-error .fe-title {
+  font-weight: 700;
+  color: var(--err, #b3261e);
+  margin-bottom: 0.35rem;
+}
+.friendly-error .fe-snippet {
+  font-family: var(--font-code, ui-monospace, monospace);
+  font-size: 0.82rem;
+  background: var(--paper, #fff);
+  border: 1px solid var(--rule, #d4dbe3);
+  padding: 0.35rem 0.5rem;
+  margin: 0 0 0.4rem;
+  overflow-x: auto;
+  white-space: pre;
+}
+.friendly-error .fe-body { margin: 0; line-height: 1.5; }
+.friendly-error code {
+  font-family: var(--font-code, ui-monospace, monospace);
+  background: var(--code-bg, #eef2f6);
+  padding: 0 0.2em;
+  border-radius: 3px;
+}
+.friendly-error .fe-original {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft, #5f5247);
+}
+.friendly-error .fe-original pre {
+  font-family: var(--font-code, ui-monospace, monospace);
+  white-space: pre-wrap;
+  margin: 0.25rem 0 0;
+}
+/* a live run while typing: fainter; .fe-brief (main.rb sets it for live
+   runs, except an endless loop) keeps just the headline */
+.cell-out.is-rehearsal .friendly-error { opacity: 0.6; }
+.friendly-error.fe-brief .fe-snippet,
+.friendly-error.fe-brief .fe-body,
+.friendly-error.fe-brief .fe-original { display: none; }
+</style></head><body>
+<h1>FriendlyErrors – corpus preview</h1><section><h2>hello-unclosed-string</h2><pre class="code">puts &quot;Hello, World!</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Ein String ist nicht geschlossen</div><pre class="fe-snippet">&gt; 1 | puts &quot;Hello, World!
+    |      ^ hier geöffnet
+</pre><p class="fe-body">Der Text, der in Zeile 1 mit <code>&quot;</code> beginnt, hat kein schließendes <code>&quot;</code>. Dadurch wurde alles danach, bis zum Ende der Zelle, zu Text.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:1: syntax error found
+&gt; 1 | puts &quot;Hello, World!
+    |                    ^ unterminated string meets end of file
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">A string is not closed</div><pre class="fe-snippet">&gt; 1 | puts &quot;Hello, World!
+    |      ^ opened here
+</pre><p class="fe-body">The text that starts with <code>&quot;</code> on line 1 has no closing <code>&quot;</code>. So everything after it, to the end of the cell, became part of the text.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:1: syntax error found
+&gt; 1 | puts &quot;Hello, World!
+    |                    ^ unterminated string meets end of file
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">文字列が閉じられていません</div><pre class="fe-snippet">&gt; 1 | puts &quot;Hello, World!
+    |      ^ ここで開いています
+</pre><p class="fe-body">1行目の <code>&quot;</code> で始まる文字列に、閉じる <code>&quot;</code> がありません。そのため、そこからセルの最後までが全部文字列になってしまいました。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:1: syntax error found
+&gt; 1 | puts &quot;Hello, World!
+    |                    ^ unterminated string meets end of file
+</pre></details></div></div>
+</section>
+<section><h2>hello-no-quotes</h2><pre class="code">puts Hello</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>Hello</code> ist nicht definiert</div><pre class="fe-snippet">&gt; 1 | puts Hello
+    |      ^^^^^ unbekannt
+</pre><p class="fe-body">Es gibt keine Klasse oder Konstante <code>Hello</code>. Steht sie in einer anderen Zelle? Dann führ die zuerst aus (▶). Soll es Text sein, setz es in Anführungszeichen: <code>&quot;Hello&quot;</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NameError: uninitialized constant Hello</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>Hello</code> is not defined</div><pre class="fe-snippet">&gt; 1 | puts Hello
+    |      ^^^^^ unknown here
+</pre><p class="fe-body">There is no class or constant <code>Hello</code>. Is it defined in another cell? Run that one first (▶). If it is meant as text, put it in quotes: <code>&quot;Hello&quot;</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NameError: uninitialized constant Hello</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>Hello</code> が定義されていません</div><pre class="fe-snippet">&gt; 1 | puts Hello
+    |      ^^^^^ 見つかりません
+</pre><p class="fe-body"><code>Hello</code> というクラスや定数はありません。別のセルで定義しているなら、先にそのセルを実行（▶）してください。文字列のつもりなら引用符で囲んでください: <code>&quot;Hello&quot;</code>。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NameError: uninitialized constant Hello</pre></details></div></div>
+</section>
+<section><h2>hello-capital-puts</h2><pre class="code">Puts &quot;Hello, World!&quot;</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Meintest du <code>puts</code>?</div><pre class="fe-snippet">&gt; 1 | Puts &quot;Hello, World!&quot;
+    | ^^^^ unbekannt
+</pre><p class="fe-body">Ruby hat keine Methode <code>Puts</code>, aber <code>puts</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMethodError: undefined method 'Puts' for main</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Did you mean <code>puts</code>?</div><pre class="fe-snippet">&gt; 1 | Puts &quot;Hello, World!&quot;
+    | ^^^^ unknown here
+</pre><p class="fe-body">Ruby has no method <code>Puts</code>, but it has <code>puts</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMethodError: undefined method 'Puts' for main</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>puts</code> のことですか？</div><pre class="fe-snippet">&gt; 1 | Puts &quot;Hello, World!&quot;
+    | ^^^^ 見つかりません
+</pre><p class="fe-body">Ruby には <code>Puts</code> メソッドはありませんが、<code>puts</code> ならあります。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMethodError: undefined method 'Puts' for main</pre></details></div></div>
+</section>
+<section><h2>times-as-x</h2><pre class="code">6 x 7</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Ruby multipliziert mit <code>*</code></div><pre class="fe-snippet">&gt; 1 | 6 x 7
+    |   ^ hier
+</pre><p class="fe-body">Schreib <code>6 * 7</code> – das <code>x</code> liest Ruby als Namen.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:1: syntax error found
+&gt; 1 | 6 x 7
+    |   ^ unexpected local variable or method, expecting end-of-input
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Ruby multiplies with <code>*</code></div><pre class="fe-snippet">&gt; 1 | 6 x 7
+    |   ^ here
+</pre><p class="fe-body">Write <code>6 * 7</code> – Ruby reads the <code>x</code> as a name.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:1: syntax error found
+&gt; 1 | 6 x 7
+    |   ^ unexpected local variable or method, expecting end-of-input
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">Rubyのかけ算は <code>*</code> です</div><pre class="fe-snippet">&gt; 1 | 6 x 7
+    |   ^ ここ
+</pre><p class="fe-body"><code>6 * 7</code> と書いてください。<code>x</code> は名前として読まれてしまいます。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:1: syntax error found
+&gt; 1 | 6 x 7
+    |   ^ unexpected local variable or method, expecting end-of-input
+</pre></details></div></div>
+</section>
+<section><h2>unexpected-paren</h2><pre class="code">puts (6 * 7))</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Ruby kann Zeile 1 nicht lesen</div><pre class="fe-snippet">&gt; 1 | puts (6 * 7))
+    |             ^ hier
+</pre><p class="fe-body">Rubys eigene Worte: „unexpected ')', ignoring it“. Oft steckt der eigentliche Fehler kurz davor: ein fehlendes Komma, Anführungszeichen oder eine Klammer.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:1: syntax errors found
+&gt; 1 | puts (6 * 7))
+    |             ^ unexpected ')', ignoring it
+    |             ^ unexpected ')', expecting end-of-input
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Ruby can't read line 1</div><pre class="fe-snippet">&gt; 1 | puts (6 * 7))
+    |             ^ here
+</pre><p class="fe-body">Ruby's own words: “unexpected ')', ignoring it”. Often the real mistake is just before it: a missing comma, quote or bracket.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:1: syntax errors found
+&gt; 1 | puts (6 * 7))
+    |             ^ unexpected ')', ignoring it
+    |             ^ unexpected ')', expecting end-of-input
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">Rubyが1行目を読めません</div><pre class="fe-snippet">&gt; 1 | puts (6 * 7))
+    |             ^ ここ
+</pre><p class="fe-body">Ruby自身のメッセージ:「unexpected ')', ignoring it」。本当の原因は少し前にあることがよくあります。カンマ・引用符・かっこが抜けていないか確かめてください。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:1: syntax errors found
+&gt; 1 | puts (6 * 7))
+    |             ^ unexpected ')', ignoring it
+    |             ^ unexpected ')', expecting end-of-input
+</pre></details></div></div>
+</section>
+<section><h2>number-times-string</h2><pre class="code">6 * &quot;7&quot;</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Mit Text kann man nicht rechnen</div><pre class="fe-snippet">&gt; 1 | 6 * &quot;7&quot;
+    |     ^^^ das ist String
+</pre><p class="fe-body">In Zeile 1 trifft eine Zahl auf einen String. Steckt im Text eine Zahl, wandle ihn um: <code>&quot;7&quot;.to_i</code>. Willst du Text, nimm <code>to_s</code> oder Interpolation.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>TypeError: String can't be coerced into Integer</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Numbers and text don't mix</div><pre class="fe-snippet">&gt; 1 | 6 * &quot;7&quot;
+    |     ^^^ this is String
+</pre><p class="fe-body">On line 1, a number meets a String. If the text holds a number, convert it: <code>&quot;7&quot;.to_i</code>. If you want text, use <code>to_s</code> or interpolation.</p><details class="fe-original"><summary>Ruby's message</summary><pre>TypeError: String can't be coerced into Integer</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">文字列のままでは計算できません</div><pre class="fe-snippet">&gt; 1 | 6 * &quot;7&quot;
+    |     ^^^ ここは String です
+</pre><p class="fe-body">1行目で、数値と文字列が出会っています。文字列の中身が数値なら <code>&quot;7&quot;.to_i</code> で変換し、文字列がほしいなら <code>to_s</code> か式展開を使ってください。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>TypeError: String can't be coerced into Integer</pre></details></div></div>
+</section>
+<section><h2>string-without-quotes</h2><pre class="code">name = Kaz
+age = 7</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>Kaz</code> ist nicht definiert</div><pre class="fe-snippet">&gt; 1 | name = Kaz
+    |        ^^^ unbekannt
+</pre><p class="fe-body">Es gibt keine Klasse oder Konstante <code>Kaz</code>. Steht sie in einer anderen Zelle? Dann führ die zuerst aus (▶). Soll es Text sein, setz es in Anführungszeichen: <code>&quot;Kaz&quot;</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NameError: uninitialized constant Kaz</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>Kaz</code> is not defined</div><pre class="fe-snippet">&gt; 1 | name = Kaz
+    |        ^^^ unknown here
+</pre><p class="fe-body">There is no class or constant <code>Kaz</code>. Is it defined in another cell? Run that one first (▶). If it is meant as text, put it in quotes: <code>&quot;Kaz&quot;</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NameError: uninitialized constant Kaz</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>Kaz</code> が定義されていません</div><pre class="fe-snippet">&gt; 1 | name = Kaz
+    |        ^^^ 見つかりません
+</pre><p class="fe-body"><code>Kaz</code> というクラスや定数はありません。別のセルで定義しているなら、先にそのセルを実行（▶）してください。文字列のつもりなら引用符で囲んでください: <code>&quot;Kaz&quot;</code>。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NameError: uninitialized constant Kaz</pre></details></div></div>
+</section>
+<section><h2>age-is-text</h2><pre class="code">name = &quot;Kaz&quot;
+age = &quot;7&quot;
+age + 1</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>age</code> ist Text, keine Zahl</div><pre class="fe-snippet">  1 | name = &quot;Kaz&quot;
+  2 | age = &quot;7&quot;
+&gt; 3 | age + 1
+    | ^^^ das ist String
+</pre><p class="fe-body"><code>age</code> ist <code>&quot;7&quot;</code> – die Anführungszeichen machen daraus einen String. Schreib die Zahl ohne Anführungszeichen (<code>age = 7</code>) oder wandle um: <code>age.to_i + 1</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>TypeError: no implicit conversion of Integer into String</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>age</code> is text, not a number</div><pre class="fe-snippet">  1 | name = &quot;Kaz&quot;
+  2 | age = &quot;7&quot;
+&gt; 3 | age + 1
+    | ^^^ this is String
+</pre><p class="fe-body"><code>age</code> is <code>&quot;7&quot;</code> – the quotes make it a String. Write the number without quotes (<code>age = 7</code>), or convert it: <code>age.to_i + 1</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>TypeError: no implicit conversion of Integer into String</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>age</code> は数値ではなく文字列です</div><pre class="fe-snippet">  1 | name = &quot;Kaz&quot;
+  2 | age = &quot;7&quot;
+&gt; 3 | age + 1
+    | ^^^ ここは String です
+</pre><p class="fe-body"><code>age</code> の値は <code>&quot;7&quot;</code> です。引用符で囲むと文字列になります。引用符なしで <code>age = 7</code> と書くか、<code>age.to_i + 1</code> のように変換してください。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>TypeError: no implicit conversion of Integer into String</pre></details></div></div>
+</section>
+<section><h2>name-typo</h2><pre class="code">name = &quot;Kaz&quot;
+age = 7
+nmae.upcase</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Meintest du <code>name</code>?</div><pre class="fe-snippet">  1 | name = &quot;Kaz&quot;
+  2 | age = 7
+&gt; 3 | nmae.upcase
+    | ^^^^ unbekannt
+</pre><p class="fe-body">Ruby kennt <code>nmae</code> hier nicht – aber <code>name</code> gibt es. Ein Tippfehler?</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NameError: undefined local variable or method 'nmae' for main</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Did you mean <code>name</code>?</div><pre class="fe-snippet">  1 | name = &quot;Kaz&quot;
+  2 | age = 7
+&gt; 3 | nmae.upcase
+    | ^^^^ unknown here
+</pre><p class="fe-body">Ruby doesn't know <code>nmae</code> here – but <code>name</code> exists. A typo?</p><details class="fe-original"><summary>Ruby's message</summary><pre>NameError: undefined local variable or method 'nmae' for main</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>name</code> のことですか？</div><pre class="fe-snippet">  1 | name = &quot;Kaz&quot;
+  2 | age = 7
+&gt; 3 | nmae.upcase
+    | ^^^^ 見つかりません
+</pre><p class="fe-body">ここでは <code>nmae</code> という名前が見つかりませんが、<code>name</code> ならあります。打ち間違いではありませんか？</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NameError: undefined local variable or method 'nmae' for main</pre></details></div></div>
+</section>
+<section><h2>de-string-plus-int</h2><pre class="code">name = &quot;Kaz&quot;
+alter = 7
+puts &quot;Ich bin &quot; + alter + &quot; Jahre alt&quot;</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Text und Zahlen lassen sich nicht addieren</div><pre class="fe-snippet">  1 | name = &quot;Kaz&quot;
+  2 | alter = 7
+&gt; 3 | puts &quot;Ich bin &quot; + alter + &quot; Jahre alt&quot;
+    |                   ^^^^^ das ist Integer
+</pre><p class="fe-body">In Zeile 3 trifft ein String mit <code>+</code> auf eine Zahl. Ruby wandelt das nicht von selbst um. Nimm Interpolation: <code>&quot;… #{alter}&quot;</code> – oder <code>alter.to_s</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>TypeError: no implicit conversion of Integer into String</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Text and numbers don't add up</div><pre class="fe-snippet">  1 | name = &quot;Kaz&quot;
+  2 | alter = 7
+&gt; 3 | puts &quot;Ich bin &quot; + alter + &quot; Jahre alt&quot;
+    |                   ^^^^^ this is Integer
+</pre><p class="fe-body">On line 3, a String meets a number with <code>+</code>. Ruby doesn't convert it by itself. Use interpolation: <code>&quot;… #{alter}&quot;</code> – or <code>alter.to_s</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>TypeError: no implicit conversion of Integer into String</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">文字列と数値は足せません</div><pre class="fe-snippet">  1 | name = &quot;Kaz&quot;
+  2 | alter = 7
+&gt; 3 | puts &quot;Ich bin &quot; + alter + &quot; Jahre alt&quot;
+    |                   ^^^^^ ここは Integer です
+</pre><p class="fe-body">3行目で、文字列と数値が <code>+</code> で結ばれています。Rubyは自動では変換しません。式展開 <code>&quot;… #{alter}&quot;</code> か、<code>alter.to_s</code> を使ってください。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>TypeError: no implicit conversion of Integer into String</pre></details></div></div>
+</section>
+<section><h2>used-before-assigned</h2><pre class="code">puts name
+name = &quot;Kaz&quot;</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>name</code> kommt zu spät</div><pre class="fe-snippet">&gt; 1 | puts name
+    |      ^^^^ unbekannt
+</pre><p class="fe-body"><code>name</code> wird in Zeile 1 benutzt, bekommt seinen Wert aber erst in Zeile 2. Ruby führt eine Zelle von oben nach unten aus.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NameError: undefined local variable or method 'name' for main</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>name</code> comes too late</div><pre class="fe-snippet">&gt; 1 | puts name
+    |      ^^^^ unknown here
+</pre><p class="fe-body"><code>name</code> is used on line 1 but only gets its value on line 2. Ruby runs a cell from top to bottom.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NameError: undefined local variable or method 'name' for main</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>name</code> の定義が遅すぎます</div><pre class="fe-snippet">&gt; 1 | puts name
+    |      ^^^^ 見つかりません
+</pre><p class="fe-body"><code>name</code> は1行目で使われていますが、値が入るのは2行目です。Rubyはセルを上から順に実行します。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NameError: undefined local variable or method 'name' for main</pre></details></div></div>
+</section>
+<section><h2>interpolation-unclosed</h2><pre class="code">favorite_food = &quot;Chunky Bacon&quot;
+&quot;I love #{favorite_food!&quot;</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>#{</code> ist nicht geschlossen</div><pre class="fe-snippet">  1 | favorite_food = &quot;Chunky Bacon&quot;
+&gt; 2 | &quot;I love #{favorite_food!&quot;
+    |         ^^ hier geöffnet
+</pre><p class="fe-body">In Zeile 2 beginnt <code>#{</code> ein Stück Ruby im Text. Es braucht ein <code>}</code> vor dem schließenden Anführungszeichen: <code>&quot;Ich mag #{essen}!&quot;</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:2: syntax errors found
+  1 | favorite_food = &quot;Chunky Bacon&quot;
+&gt; 2 | &quot;I love #{favorite_food!&quot;
+    | ^ unterminated string; expected a closing delimiter for the interpolated string
+    |                          ^ expected a `}` to close the embedded expression
+    |                          ^ unexpected end-of-input, assuming it is closing the parent top level context
+    |                          ^ unterminated string meets end of file
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>#{</code> is not closed</div><pre class="fe-snippet">  1 | favorite_food = &quot;Chunky Bacon&quot;
+&gt; 2 | &quot;I love #{favorite_food!&quot;
+    |         ^^ opened here
+</pre><p class="fe-body">On line 2, <code>#{</code> starts a piece of Ruby inside the text. It needs a <code>}</code> before the closing quote: <code>&quot;I love #{food}!&quot;</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:2: syntax errors found
+  1 | favorite_food = &quot;Chunky Bacon&quot;
+&gt; 2 | &quot;I love #{favorite_food!&quot;
+    | ^ unterminated string; expected a closing delimiter for the interpolated string
+    |                          ^ expected a `}` to close the embedded expression
+    |                          ^ unexpected end-of-input, assuming it is closing the parent top level context
+    |                          ^ unterminated string meets end of file
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>#{</code> が閉じられていません</div><pre class="fe-snippet">  1 | favorite_food = &quot;Chunky Bacon&quot;
+&gt; 2 | &quot;I love #{favorite_food!&quot;
+    |         ^^ ここで開いています
+</pre><p class="fe-body">2行目の <code>#{</code> から、文字列の中のRubyコードが始まります。閉じる引用符の前に <code>}</code> が必要です: <code>&quot;I love #{food}!&quot;</code>。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:2: syntax errors found
+  1 | favorite_food = &quot;Chunky Bacon&quot;
+&gt; 2 | &quot;I love #{favorite_food!&quot;
+    | ^ unterminated string; expected a closing delimiter for the interpolated string
+    |                          ^ expected a `}` to close the embedded expression
+    |                          ^ unexpected end-of-input, assuming it is closing the parent top level context
+    |                          ^ unterminated string meets end of file
+</pre></details></div></div>
+</section>
+<section><h2>interpolation-typo</h2><pre class="code">favorite_food = &quot;Chunky Bacon&quot;
+&quot;I love #{favorite_fod}!&quot;</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Meintest du <code>favorite_food</code>?</div><pre class="fe-snippet">  1 | favorite_food = &quot;Chunky Bacon&quot;
+&gt; 2 | &quot;I love #{favorite_fod}!&quot;
+    |           ^^^^^^^^^^^^ unbekannt
+</pre><p class="fe-body">Ruby kennt <code>favorite_fod</code> hier nicht – aber <code>favorite_food</code> gibt es. Ein Tippfehler?</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NameError: undefined local variable or method 'favorite_fod' for main</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Did you mean <code>favorite_food</code>?</div><pre class="fe-snippet">  1 | favorite_food = &quot;Chunky Bacon&quot;
+&gt; 2 | &quot;I love #{favorite_fod}!&quot;
+    |           ^^^^^^^^^^^^ unknown here
+</pre><p class="fe-body">Ruby doesn't know <code>favorite_fod</code> here – but <code>favorite_food</code> exists. A typo?</p><details class="fe-original"><summary>Ruby's message</summary><pre>NameError: undefined local variable or method 'favorite_fod' for main</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>favorite_food</code> のことですか？</div><pre class="fe-snippet">  1 | favorite_food = &quot;Chunky Bacon&quot;
+&gt; 2 | &quot;I love #{favorite_fod}!&quot;
+    |           ^^^^^^^^^^^^ 見つかりません
+</pre><p class="fe-body">ここでは <code>favorite_fod</code> という名前が見つかりませんが、<code>favorite_food</code> ならあります。打ち間違いではありませんか？</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NameError: undefined local variable or method 'favorite_fod' for main</pre></details></div></div>
+</section>
+<section><h2>if-missing-end</h2><pre class="code">number = 7
+if number &gt; 5
+  &quot;big&quot;
+else
+  &quot;small&quot;</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Hier fehlt ein <code>end</code></div><pre class="fe-snippet">  1 | number = 7
+&gt; 2 | if number &gt; 5
+    | ^^ hier geöffnet
+</pre><p class="fe-body">Das <code>if</code> in Zeile 2 ist noch offen – Ruby ist am Ende der Zelle angekommen, ohne sein <code>end</code> zu finden. Jedes <code>def</code>, <code>class</code>, <code>if</code>, <code>do</code> … braucht sein eigenes <code>end</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:5: syntax errors found
+  1 | number = 7
+&gt; 2 | if number &gt; 5
+    | ^~ expected an `end` to close the `else` clause
+  3 |   &quot;big&quot;
+  4 | else
+&gt; 5 |   &quot;small&quot;
+    |          ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">An <code>end</code> is missing</div><pre class="fe-snippet">  1 | number = 7
+&gt; 2 | if number &gt; 5
+    | ^^ opened here
+</pre><p class="fe-body">The <code>if</code> on line 2 is still open – Ruby reached the end of the cell without finding its <code>end</code>. Every <code>def</code>, <code>class</code>, <code>if</code>, <code>do</code> … needs an <code>end</code> of its own.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:5: syntax errors found
+  1 | number = 7
+&gt; 2 | if number &gt; 5
+    | ^~ expected an `end` to close the `else` clause
+  3 |   &quot;big&quot;
+  4 | else
+&gt; 5 |   &quot;small&quot;
+    |          ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>end</code> が足りません</div><pre class="fe-snippet">  1 | number = 7
+&gt; 2 | if number &gt; 5
+    | ^^ ここで開いています
+</pre><p class="fe-body">2行目の <code>if</code> が閉じられていません。Rubyはセルの最後まで読みましたが、対応する <code>end</code> が見つかりませんでした。<code>def</code>・<code>class</code>・<code>if</code>・<code>do</code> などには、それぞれ <code>end</code> が1つずつ必要です。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:5: syntax errors found
+  1 | number = 7
+&gt; 2 | if number &gt; 5
+    | ^~ expected an `end` to close the `else` clause
+  3 |   &quot;big&quot;
+  4 | else
+&gt; 5 |   &quot;small&quot;
+    |          ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+</section>
+<section><h2>if-python-colon</h2><pre class="code">number = 7
+if number &gt; 5:
+  &quot;big&quot;
+else:
+  &quot;small&quot;
+end</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Hier braucht es keinen Doppelpunkt</div><pre class="fe-snippet">  1 | number = 7
+&gt; 2 | if number &gt; 5:
+    |              ^ hier
+</pre><p class="fe-body">Zeile 2 endet mit <code>:</code>. So beginnt in Python ein Block – in Ruby geht es einfach in der nächsten Zeile weiter, und am Schluss steht ein <code>end</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:2: syntax errors found
+  1 | number = 7
+&gt; 2 | if number &gt; 5:
+    |              ^ unexpected ':', ignoring it
+    |              ^ expected `then` or `;` or '\n'
+  3 |   &quot;big&quot;
+&gt; 4 | else:
+    |     ^ unexpected ':', ignoring it
+  5 |   &quot;small&quot;
+  6 | end
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">No colon needed here</div><pre class="fe-snippet">  1 | number = 7
+&gt; 2 | if number &gt; 5:
+    |              ^ here
+</pre><p class="fe-body">Line 2 ends with <code>:</code>. That is how Python opens a block – Ruby simply continues on the next line and closes with an <code>end</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:2: syntax errors found
+  1 | number = 7
+&gt; 2 | if number &gt; 5:
+    |              ^ unexpected ':', ignoring it
+    |              ^ expected `then` or `;` or '\n'
+  3 |   &quot;big&quot;
+&gt; 4 | else:
+    |     ^ unexpected ':', ignoring it
+  5 |   &quot;small&quot;
+  6 | end
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">コロンは要りません</div><pre class="fe-snippet">  1 | number = 7
+&gt; 2 | if number &gt; 5:
+    |              ^ ここ
+</pre><p class="fe-body">2行目が <code>:</code> で終わっています。これはPythonのブロックの書き方です。Rubyでは次の行にそのまま書き、最後を <code>end</code> で閉じます。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:2: syntax errors found
+  1 | number = 7
+&gt; 2 | if number &gt; 5:
+    |              ^ unexpected ':', ignoring it
+    |              ^ expected `then` or `;` or '\n'
+  3 |   &quot;big&quot;
+&gt; 4 | else:
+    |     ^ unexpected ':', ignoring it
+  5 |   &quot;small&quot;
+  6 | end
+</pre></details></div></div>
+</section>
+<section><h2>else-if</h2><pre class="code">number = 7
+if number &gt; 5
+  &quot;big&quot;
+else if number &lt; 0
+  &quot;negative&quot;
+else
+  &quot;small&quot;
+end</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">In Ruby heißt es <code>elsif</code></div><pre class="fe-snippet">  2 | if number &gt; 5
+  3 |   &quot;big&quot;
+&gt; 4 | else if number &lt; 0
+    | ^^^^^^^ hier
+</pre><p class="fe-body">In Zeile 4 steht <code>else if</code>. Ruby liest das als <code>else</code> mit einem ganz neuen <code>if</code> darin – und das bräuchte ein eigenes <code>end</code>. Schreib stattdessen <code>elsif</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:8: syntax errors found
+  1 | number = 7
+&gt; 2 | if number &gt; 5
+    | ^~ expected an `end` to close the `else` clause
+  3 |   &quot;big&quot;
+  4 | else if number &lt; 0
+  ~~~~~
+  6 | else
+  7 |   &quot;small&quot;
+&gt; 8 | end
+    |    ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">In Ruby it is <code>elsif</code></div><pre class="fe-snippet">  2 | if number &gt; 5
+  3 |   &quot;big&quot;
+&gt; 4 | else if number &lt; 0
+    | ^^^^^^^ here
+</pre><p class="fe-body">Line 4 says <code>else if</code>. Ruby reads that as an <code>else</code> with a brand-new <code>if</code> inside, which would need an <code>end</code> of its own. Write <code>elsif</code> instead.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:8: syntax errors found
+  1 | number = 7
+&gt; 2 | if number &gt; 5
+    | ^~ expected an `end` to close the `else` clause
+  3 |   &quot;big&quot;
+  4 | else if number &lt; 0
+  ~~~~~
+  6 | else
+  7 |   &quot;small&quot;
+&gt; 8 | end
+    |    ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">Rubyでは <code>elsif</code> と書きます</div><pre class="fe-snippet">  2 | if number &gt; 5
+  3 |   &quot;big&quot;
+&gt; 4 | else if number &lt; 0
+    | ^^^^^^^ ここ
+</pre><p class="fe-body">4行目に <code>else if</code> とあります。Rubyはこれを「<code>else</code> の中に新しい <code>if</code> がある」と読むので、その <code>if</code> にも <code>end</code> が必要になってしまいます。<code>elsif</code> と書いてください。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:8: syntax errors found
+  1 | number = 7
+&gt; 2 | if number &gt; 5
+    | ^~ expected an `end` to close the `else` clause
+  3 |   &quot;big&quot;
+  4 | else if number &lt; 0
+  ~~~~~
+  6 | else
+  7 |   &quot;small&quot;
+&gt; 8 | end
+    |    ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+</section>
+<section><h2>eq-space-gt</h2><pre class="code">number = 7
+if number = &gt; 5
+  &quot;big&quot;
+end</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Meintest du <code>&gt;=</code>?</div><pre class="fe-snippet">  1 | number = 7
+&gt; 2 | if number = &gt; 5
+    |           ^^^ hier
+</pre><p class="fe-body">In Zeile 2 wurde <code>= &gt;</code> als Zuweisung gelesen. Vergleiche schreibt man ohne Leerzeichen: <code>&gt;=</code>, <code>&lt;=</code>, <code>==</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:2: syntax error found
+  1 | number = 7
+&gt; 2 | if number = &gt; 5
+    |           ^ expected an expression after `=`
+  3 |   &quot;big&quot;
+  4 | end
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Did you mean <code>&gt;=</code>?</div><pre class="fe-snippet">  1 | number = 7
+&gt; 2 | if number = &gt; 5
+    |           ^^^ here
+</pre><p class="fe-body">On line 2, <code>= &gt;</code> was read as an assignment. Comparisons are written without a space: <code>&gt;=</code>, <code>&lt;=</code>, <code>==</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:2: syntax error found
+  1 | number = 7
+&gt; 2 | if number = &gt; 5
+    |           ^ expected an expression after `=`
+  3 |   &quot;big&quot;
+  4 | end
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>&gt;=</code> のことですか？</div><pre class="fe-snippet">  1 | number = 7
+&gt; 2 | if number = &gt; 5
+    |           ^^^ ここ
+</pre><p class="fe-body">2行目の <code>= &gt;</code> は代入として読まれました。比較はスペースを入れずに <code>&gt;=</code>・<code>&lt;=</code>・<code>==</code> と書きます。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:2: syntax error found
+  1 | number = 7
+&gt; 2 | if number = &gt; 5
+    |           ^ expected an expression after `=`
+  3 |   &quot;big&quot;
+  4 | end
+</pre></details></div></div>
+</section>
+<section><h2>if-braces</h2><pre class="code">number = 7
+if number &gt; 5 {
+  &quot;big&quot;
+}</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>if</code> endet mit <code>end</code>, nicht mit Klammern</div><pre class="fe-snippet">  1 | number = 7
+&gt; 2 | if number &gt; 5 {
+    |               ^ hier
+</pre><p class="fe-body">In Ruby: <code>if x &gt; 3</code> … <code>end</code>. Geschweifte Klammern sind für Hashes und Blöcke da.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:2: syntax errors found
+  1 | number = 7
+&gt; 2 | if number &gt; 5 {
+    | ^~ expected an `end` to close the conditional clause
+    |               ^ expected `then` or `;` or '\n'
+&gt; 3 |   &quot;big&quot;
+    |        ^ unexpected newline; expected a value in the hash literal
+    |        ^ expected a `=&gt;` between the hash key and value
+&gt; 4 | }
+    |  ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>if</code> ends with <code>end</code>, not braces</div><pre class="fe-snippet">  1 | number = 7
+&gt; 2 | if number &gt; 5 {
+    |               ^ here
+</pre><p class="fe-body">In Ruby: <code>if x &gt; 3</code> … <code>end</code>. Curly braces are for hashes and blocks.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:2: syntax errors found
+  1 | number = 7
+&gt; 2 | if number &gt; 5 {
+    | ^~ expected an `end` to close the conditional clause
+    |               ^ expected `then` or `;` or '\n'
+&gt; 3 |   &quot;big&quot;
+    |        ^ unexpected newline; expected a value in the hash literal
+    |        ^ expected a `=&gt;` between the hash key and value
+&gt; 4 | }
+    |  ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>if</code> は波かっこではなく <code>end</code> で閉じます</div><pre class="fe-snippet">  1 | number = 7
+&gt; 2 | if number &gt; 5 {
+    |               ^ ここ
+</pre><p class="fe-body">Rubyでは <code>if x &gt; 3</code> … <code>end</code> と書きます。波かっこ <code>{}</code> はハッシュとブロックに使います。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:2: syntax errors found
+  1 | number = 7
+&gt; 2 | if number &gt; 5 {
+    | ^~ expected an `end` to close the conditional clause
+    |               ^ expected `then` or `;` or '\n'
+&gt; 3 |   &quot;big&quot;
+    |        ^ unexpected newline; expected a value in the hash literal
+    |        ^ expected a `=&gt;` between the hash key and value
+&gt; 4 | }
+    |  ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+</section>
+<section><h2>de-elseif</h2><pre class="code">zahl = 7
+if zahl &gt; 5
+  &quot;groß&quot;
+elseif zahl &lt; 0
+  &quot;negativ&quot;
+end</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">In Ruby heißt es <code>elsif</code></div><pre class="fe-snippet">  2 | if zahl &gt; 5
+  3 |   &quot;groß&quot;
+&gt; 4 | elseif zahl &lt; 0
+    | ^^^^^^ unbekannt
+</pre><p class="fe-body"><code>elseif</code> gibt es nicht – Ruby schreibt <code>elsif</code> (ohne e, ohne Leerzeichen).</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMethodError: undefined method 'elseif' for main</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">In Ruby it is <code>elsif</code></div><pre class="fe-snippet">  2 | if zahl &gt; 5
+  3 |   &quot;groß&quot;
+&gt; 4 | elseif zahl &lt; 0
+    | ^^^^^^ unknown here
+</pre><p class="fe-body">There is no <code>elseif</code> – Ruby writes <code>elsif</code> (no e, no space).</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMethodError: undefined method 'elseif' for main</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">Rubyでは <code>elsif</code> と書きます</div><pre class="fe-snippet">  2 | if zahl &gt; 5
+  3 |   &quot;groß&quot;
+&gt; 4 | elseif zahl &lt; 0
+    | ^^^^^^ 見つかりません
+</pre><p class="fe-body"><code>elseif</code> はありません。Rubyでは <code>elsif</code> です（e もスペースも入りません）。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMethodError: undefined method 'elseif' for main</pre></details></div></div>
+</section>
+<section><h2>times-missing-end</h2><pre class="code">5.times do
+  puts &quot;Chunky Bacon!&quot;</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Hier fehlt ein <code>end</code></div><pre class="fe-snippet">&gt; 1 | 5.times do
+    |         ^^ hier geöffnet
+</pre><p class="fe-body">Das <code>do</code> in Zeile 1 ist noch offen – Ruby ist am Ende der Zelle angekommen, ohne sein <code>end</code> zu finden. Jedes <code>def</code>, <code>class</code>, <code>if</code>, <code>do</code> … braucht sein eigenes <code>end</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:2: syntax errors found
+&gt; 1 | 5.times do
+    |         ^~ expected a block beginning with `do` to end with `end`
+&gt; 2 |   puts &quot;Chunky Bacon!&quot;
+    |                       ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">An <code>end</code> is missing</div><pre class="fe-snippet">&gt; 1 | 5.times do
+    |         ^^ opened here
+</pre><p class="fe-body">The <code>do</code> on line 1 is still open – Ruby reached the end of the cell without finding its <code>end</code>. Every <code>def</code>, <code>class</code>, <code>if</code>, <code>do</code> … needs an <code>end</code> of its own.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:2: syntax errors found
+&gt; 1 | 5.times do
+    |         ^~ expected a block beginning with `do` to end with `end`
+&gt; 2 |   puts &quot;Chunky Bacon!&quot;
+    |                       ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>end</code> が足りません</div><pre class="fe-snippet">&gt; 1 | 5.times do
+    |         ^^ ここで開いています
+</pre><p class="fe-body">1行目の <code>do</code> が閉じられていません。Rubyはセルの最後まで読みましたが、対応する <code>end</code> が見つかりませんでした。<code>def</code>・<code>class</code>・<code>if</code>・<code>do</code> などには、それぞれ <code>end</code> が1つずつ必要です。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:2: syntax errors found
+&gt; 1 | 5.times do
+    |         ^~ expected a block beginning with `do` to end with `end`
+&gt; 2 |   puts &quot;Chunky Bacon!&quot;
+    |                       ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+</section>
+<section><h2>python-for-range</h2><pre class="code">for i in range(5):
+  puts &quot;Chunky Bacon!&quot;</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Das ist Python, nicht Ruby</div><pre class="fe-snippet">&gt; 1 | for i in range(5):
+    | ^^^^^^^^^^^^^^^^^
+</pre><p class="fe-body"><code>for i in range(...)</code> gibt es in Ruby so nicht. Für „5-mal“ schreibt man <code>5.times do |i|</code> … <code>end</code>, für eine Liste <code>liste.each do |x|</code> … <code>end</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:1: syntax errors found
+&gt; 1 | for i in range(5):
+    | ^~~ expected an `end` to close the `for` loop
+    |                  ^ unexpected ':', ignoring it
+    |                  ^ unexpected ':'; expected a 'do', newline, or ';' after the 'for' loop collection
+&gt; 2 |   puts &quot;Chunky Bacon!&quot;
+    |                       ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">That's Python, not Ruby</div><pre class="fe-snippet">&gt; 1 | for i in range(5):
+    | ^^^^^^^^^^^^^^^^^
+</pre><p class="fe-body">Ruby has no <code>for i in range(...)</code>. For &quot;5 times&quot; write <code>5.times do |i|</code> … <code>end</code>, for a list <code>list.each do |x|</code> … <code>end</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:1: syntax errors found
+&gt; 1 | for i in range(5):
+    | ^~~ expected an `end` to close the `for` loop
+    |                  ^ unexpected ':', ignoring it
+    |                  ^ unexpected ':'; expected a 'do', newline, or ';' after the 'for' loop collection
+&gt; 2 |   puts &quot;Chunky Bacon!&quot;
+    |                       ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">これはPythonの書き方です</div><pre class="fe-snippet">&gt; 1 | for i in range(5):
+    | ^^^^^^^^^^^^^^^^^
+</pre><p class="fe-body">Rubyには <code>for i in range(...)</code> はありません。「5回」なら <code>5.times do |i|</code> … <code>end</code>、配列なら <code>list.each do |x|</code> … <code>end</code> と書きます。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:1: syntax errors found
+&gt; 1 | for i in range(5):
+    | ^~~ expected an `end` to close the `for` loop
+    |                  ^ unexpected ':', ignoring it
+    |                  ^ unexpected ':'; expected a 'do', newline, or ';' after the 'for' loop collection
+&gt; 2 |   puts &quot;Chunky Bacon!&quot;
+    |                       ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+</section>
+<section><h2>while-never-counts</h2><pre class="code">i = 0
+while i &lt; 5
+  puts &quot;Chunky Bacon!&quot;
+end</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Diese Schleife hört vielleicht nie auf</div><pre class="fe-snippet">  1 | i = 0
+&gt; 2 | while i &lt; 5
+    |       ^ ändert sich nie
+</pre><p class="fe-body">Die <code>while</code>-Schleife in Zeile 2 prüft <code>i</code>, aber <code>i</code> ändert sich darin nie. Mit ▶ würde sie laufen, bis die Seite hängt – zähl <code>i</code> in der Schleife weiter, z. B. <code>i += 1</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>AutoRun::Stopped: AutoRun::Stopped</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">This loop may never stop</div><pre class="fe-snippet">  1 | i = 0
+&gt; 2 | while i &lt; 5
+    |       ^ never changes
+</pre><p class="fe-body">The <code>while</code> loop on line 2 checks <code>i</code>, but <code>i</code> never changes inside it. With ▶ it would run until the page freezes – update <code>i</code> inside the loop, e.g. <code>i += 1</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>AutoRun::Stopped: AutoRun::Stopped</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">このループは終わらないかもしれません</div><pre class="fe-snippet">  1 | i = 0
+&gt; 2 | while i &lt; 5
+    |       ^ 変わりません
+</pre><p class="fe-body">2行目の <code>while</code> ループは <code>i</code> を調べていますが、ループの中で <code>i</code> が変わりません。▶ で実行するとページが固まるまで動き続けます。ループの中で <code>i += 1</code> のように <code>i</code> を更新してください。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>AutoRun::Stopped: AutoRun::Stopped</pre></details></div></div>
+</section>
+<section><h2>plusplus</h2><pre class="code">i = 0
+while i &lt; 5
+  puts &quot;Chunky Bacon!&quot;
+  i++
+end</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Ruby kennt kein <code>++</code></div><pre class="fe-snippet">  2 | while i &lt; 5
+  3 |   puts &quot;Chunky Bacon!&quot;
+&gt; 4 |   i++
+    |    ^^
+</pre><p class="fe-body">Schreib <code>i += 1</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:4: syntax errors found
+  2 | while i &lt; 5
+  3 |   puts &quot;Chunky Bacon!&quot;
+&gt; 4 |   i++
+    |     ^ unexpected 'end', expected a receiver for unary `+`
+&gt; 5 | end
+    | ^~~ unexpected 'end', assuming it is closing the parent while statement
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Ruby has no <code>++</code></div><pre class="fe-snippet">  2 | while i &lt; 5
+  3 |   puts &quot;Chunky Bacon!&quot;
+&gt; 4 |   i++
+    |    ^^
+</pre><p class="fe-body">Write <code>i += 1</code> instead.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:4: syntax errors found
+  2 | while i &lt; 5
+  3 |   puts &quot;Chunky Bacon!&quot;
+&gt; 4 |   i++
+    |     ^ unexpected 'end', expected a receiver for unary `+`
+&gt; 5 | end
+    | ^~~ unexpected 'end', assuming it is closing the parent while statement
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">Rubyには <code>++</code> がありません</div><pre class="fe-snippet">  2 | while i &lt; 5
+  3 |   puts &quot;Chunky Bacon!&quot;
+&gt; 4 |   i++
+    |    ^^
+</pre><p class="fe-body">代わりに <code>i += 1</code> と書いてください。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:4: syntax errors found
+  2 | while i &lt; 5
+  3 |   puts &quot;Chunky Bacon!&quot;
+&gt; 4 |   i++
+    |     ^ unexpected 'end', expected a receiver for unary `+`
+&gt; 5 | end
+    | ^~~ unexpected 'end', assuming it is closing the parent while statement
+</pre></details></div></div>
+</section>
+<section><h2>loop-without-break</h2><pre class="code">loop do
+  puts &quot;Chunky Bacon!&quot;
+end</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Diese Schleife hört nie auf</div><pre class="fe-snippet">&gt; 1 | loop do
+    | ^^^^ hier
+</pre><p class="fe-body"><code>loop do</code> in Zeile 1 läuft, bis ein <code>break</code> kommt – und darin steht keins.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>AutoRun::Stopped: AutoRun::Stopped</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">This loop never stops</div><pre class="fe-snippet">&gt; 1 | loop do
+    | ^^^^ here
+</pre><p class="fe-body"><code>loop do</code> on line 1 runs until it hits a <code>break</code> – and there is none inside.</p><details class="fe-original"><summary>Ruby's message</summary><pre>AutoRun::Stopped: AutoRun::Stopped</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">このループは終わりません</div><pre class="fe-snippet">&gt; 1 | loop do
+    | ^^^^ ここ
+</pre><p class="fe-body">1行目の <code>loop do</code> は <code>break</code> に出会うまで続きますが、中に <code>break</code> がありません。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>AutoRun::Stopped: AutoRun::Stopped</pre></details></div></div>
+</section>
+<section><h2>array-missing-bracket</h2><pre class="code">breakfast = [&quot;egg&quot;, &quot;toast&quot;
+breakfast &lt;&lt; &quot;bacon&quot;</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Ein <code>]</code> fehlt</div><pre class="fe-snippet">&gt; 1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;
+    |             ^ hier geöffnet
+</pre><p class="fe-body">Das <code>[</code> in Zeile 1 wird nie geschlossen. Zu jeder öffnenden Klammer gehört eine schließende.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:2: syntax errors found
+  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;
+&gt; 2 | breakfast &lt;&lt; &quot;bacon&quot;
+    | ^ unexpected local variable or method; expected a `,` separator for the array elements
+    |                     ^ unexpected end-of-input; expected a `]` to close the array
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">A <code>]</code> is missing</div><pre class="fe-snippet">&gt; 1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;
+    |             ^ opened here
+</pre><p class="fe-body">The <code>[</code> on line 1 is never closed. Every opening bracket needs a closing one.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:2: syntax errors found
+  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;
+&gt; 2 | breakfast &lt;&lt; &quot;bacon&quot;
+    | ^ unexpected local variable or method; expected a `,` separator for the array elements
+    |                     ^ unexpected end-of-input; expected a `]` to close the array
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>]</code> が足りません</div><pre class="fe-snippet">&gt; 1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;
+    |             ^ ここで開いています
+</pre><p class="fe-body">1行目の <code>[</code> が閉じられていません。開きかっこには、必ず閉じかっこが必要です。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:2: syntax errors found
+  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;
+&gt; 2 | breakfast &lt;&lt; &quot;bacon&quot;
+    | ^ unexpected local variable or method; expected a `,` separator for the array elements
+    |                     ^ unexpected end-of-input; expected a `]` to close the array
+</pre></details></div></div>
+</section>
+<section><h2>push-missing-paren</h2><pre class="code">breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+breakfast.push(&quot;bacon&quot;
+breakfast</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Ein <code>)</code> fehlt</div><pre class="fe-snippet">  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+&gt; 2 | breakfast.push(&quot;bacon&quot;
+    |               ^ hier geöffnet
+</pre><p class="fe-body">Das <code>(</code> in Zeile 2 wird nie geschlossen. Zu jeder öffnenden Klammer gehört eine schließende.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:3: syntax errors found
+  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+  2 | breakfast.push(&quot;bacon&quot;
+&gt; 3 | breakfast
+    | ^~~~~~~~~ unexpected local variable or method, expecting end-of-input
+    | ^~~~~~~~~ unexpected local variable or method; expected a `)` to close the arguments
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">A <code>)</code> is missing</div><pre class="fe-snippet">  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+&gt; 2 | breakfast.push(&quot;bacon&quot;
+    |               ^ opened here
+</pre><p class="fe-body">The <code>(</code> on line 2 is never closed. Every opening bracket needs a closing one.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:3: syntax errors found
+  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+  2 | breakfast.push(&quot;bacon&quot;
+&gt; 3 | breakfast
+    | ^~~~~~~~~ unexpected local variable or method, expecting end-of-input
+    | ^~~~~~~~~ unexpected local variable or method; expected a `)` to close the arguments
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>)</code> が足りません</div><pre class="fe-snippet">  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+&gt; 2 | breakfast.push(&quot;bacon&quot;
+    |               ^ ここで開いています
+</pre><p class="fe-body">2行目の <code>(</code> が閉じられていません。開きかっこには、必ず閉じかっこが必要です。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:3: syntax errors found
+  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+  2 | breakfast.push(&quot;bacon&quot;
+&gt; 3 | breakfast
+    | ^~~~~~~~~ unexpected local variable or method, expecting end-of-input
+    | ^~~~~~~~~ unexpected local variable or method; expected a `)` to close the arguments
+</pre></details></div></div>
+</section>
+<section><h2>array-upcase</h2><pre class="code">breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+breakfast.upcase</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>upcase</code> gibt es für Strings, nicht für Array</div><pre class="fe-snippet">  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+&gt; 2 | breakfast.upcase
+    | ^^^^^^^^^ das ist Array
+</pre><p class="fe-body"><code>breakfast</code> ist ein Array (<code>[&quot;egg&quot;, &quot;toast&quot;]</code>). Für jedes Element einzeln: <code>breakfast.map(&amp;:upcase)</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMethodError: undefined method 'upcase' for an instance of Array</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>upcase</code> belongs to strings, not to Array</div><pre class="fe-snippet">  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+&gt; 2 | breakfast.upcase
+    | ^^^^^^^^^ this is Array
+</pre><p class="fe-body"><code>breakfast</code> is an Array (<code>[&quot;egg&quot;, &quot;toast&quot;]</code>). To call it on every element: <code>breakfast.map(&amp;:upcase)</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMethodError: undefined method 'upcase' for an instance of Array</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>upcase</code> は Array ではなく String のメソッドです</div><pre class="fe-snippet">  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+&gt; 2 | breakfast.upcase
+    | ^^^^^^^^^ ここは Array です
+</pre><p class="fe-body"><code>breakfast</code> は Array（<code>[&quot;egg&quot;, &quot;toast&quot;]</code>）です。要素ごとに呼ぶなら: <code>breakfast.map(&amp;:upcase)</code>。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMethodError: undefined method 'upcase' for an instance of Array</pre></details></div></div>
+</section>
+<section><h2>array-index-past-end</h2><pre class="code">breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+breakfast[2].upcase</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>breakfast[2]</code> ist nil</div><pre class="fe-snippet">  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+&gt; 2 | breakfast[2].upcase
+    | ^^^^^^^^^^^^ das ist nil
+</pre><p class="fe-body">Die Liste hat kein Element an Position 2 – Arrays zählen ab 0, das letzte ist <code>[-1]</code>. Und nil hat keine Methode <code>upcase</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMethodError: undefined method 'upcase' for nil</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>breakfast[2]</code> is nil</div><pre class="fe-snippet">  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+&gt; 2 | breakfast[2].upcase
+    | ^^^^^^^^^^^^ this is nil
+</pre><p class="fe-body">The list has no element at position 2 – arrays count from 0, the last one is <code>[-1]</code>. And nil has no method <code>upcase</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMethodError: undefined method 'upcase' for nil</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>breakfast[2]</code> が nil です</div><pre class="fe-snippet">  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+&gt; 2 | breakfast[2].upcase
+    | ^^^^^^^^^^^^ ここが nil です
+</pre><p class="fe-body">配列の2番目には要素がありません。配列は0から数え、最後の要素は <code>[-1]</code> です。nil には <code>upcase</code> メソッドがありません。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMethodError: undefined method 'upcase' for nil</pre></details></div></div>
+</section>
+<section><h2>length-typo</h2><pre class="code">breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+breakfast.lenght</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Meintest du <code>length</code>?</div><pre class="fe-snippet">  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+&gt; 2 | breakfast.lenght
+    |           ^^^^^^ unbekannt
+</pre><p class="fe-body">Array hat keine Methode <code>lenght</code>, aber <code>length</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMethodError: undefined method 'lenght' for an instance of Array</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Did you mean <code>length</code>?</div><pre class="fe-snippet">  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+&gt; 2 | breakfast.lenght
+    |           ^^^^^^ unknown here
+</pre><p class="fe-body">Array has no method <code>lenght</code>, but it has <code>length</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMethodError: undefined method 'lenght' for an instance of Array</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>length</code> のことですか？</div><pre class="fe-snippet">  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+&gt; 2 | breakfast.lenght
+    |           ^^^^^^ 見つかりません
+</pre><p class="fe-body">Array には <code>lenght</code> メソッドはありませんが、<code>length</code> ならあります。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMethodError: undefined method 'lenght' for an instance of Array</pre></details></div></div>
+</section>
+<section><h2>block-pipe-open</h2><pre class="code">breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+breakfast.each do |item
+  puts item
+end</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Ein <code>|</code> fehlt</div><pre class="fe-snippet">  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+&gt; 2 | breakfast.each do |item
+    |                   ^ hier geöffnet
+</pre><p class="fe-body">Blockparameter stehen zwischen zwei senkrechten Strichen: <code>do |a, b|</code>. Der Strich in Zeile 2 wird nie geschlossen.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:3: syntax error found
+  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+  2 | breakfast.each do |item
+&gt; 3 |   puts item
+    | ^ expected the block parameters to end with `|`
+  4 | end
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">A <code>|</code> is missing</div><pre class="fe-snippet">  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+&gt; 2 | breakfast.each do |item
+    |                   ^ opened here
+</pre><p class="fe-body">Block parameters stand between two pipes: <code>do |a, b|</code>. The <code>|</code> on line 2 is never closed.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:3: syntax error found
+  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+  2 | breakfast.each do |item
+&gt; 3 |   puts item
+    | ^ expected the block parameters to end with `|`
+  4 | end
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>|</code> が足りません</div><pre class="fe-snippet">  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+&gt; 2 | breakfast.each do |item
+    |                   ^ ここで開いています
+</pre><p class="fe-body">ブロックの引数は2本の縦棒で囲みます: <code>do |a, b|</code>。2行目の <code>|</code> が閉じられていません。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:3: syntax error found
+  1 | breakfast = [&quot;egg&quot;, &quot;toast&quot;]
+  2 | breakfast.each do |item
+&gt; 3 |   puts item
+    | ^ expected the block parameters to end with `|`
+  4 | end
+</pre></details></div></div>
+</section>
+<section><h2>hash-string-key</h2><pre class="code">fox = { name: &quot;Chunky&quot;, food: &quot;bacon&quot; }
+fox[&quot;name&quot;].upcase</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>fox[&quot;name&quot;]</code> ist nil</div><pre class="fe-snippet">  1 | fox = { name: &quot;Chunky&quot;, food: &quot;bacon&quot; }
+&gt; 2 | fox[&quot;name&quot;].upcase
+    | ^^^^^^^^^^^ das ist nil
+</pre><p class="fe-body">Der Hash <code>fox</code> hat keinen Schlüssel &quot;name&quot;, darum liefert <code>fox[&quot;name&quot;]</code> nil – und nil hat keine Methode <code>upcase</code>. Seine Schlüssel sind Symbole (:name, :food) – schreib <code>fox[:name]</code> statt <code>fox[&quot;name&quot;]</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMethodError: undefined method 'upcase' for nil</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>fox[&quot;name&quot;]</code> is nil</div><pre class="fe-snippet">  1 | fox = { name: &quot;Chunky&quot;, food: &quot;bacon&quot; }
+&gt; 2 | fox[&quot;name&quot;].upcase
+    | ^^^^^^^^^^^ this is nil
+</pre><p class="fe-body">The hash <code>fox</code> has no key &quot;name&quot;, so <code>fox[&quot;name&quot;]</code> gives nil – and nil has no method <code>upcase</code>. Its keys are symbols (:name, :food) – write <code>fox[:name]</code> instead of <code>fox[&quot;name&quot;]</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMethodError: undefined method 'upcase' for nil</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>fox[&quot;name&quot;]</code> が nil です</div><pre class="fe-snippet">  1 | fox = { name: &quot;Chunky&quot;, food: &quot;bacon&quot; }
+&gt; 2 | fox[&quot;name&quot;].upcase
+    | ^^^^^^^^^^^ ここが nil です
+</pre><p class="fe-body">ハッシュ <code>fox</code> にキー &quot;name&quot; がないので、<code>fox[&quot;name&quot;]</code> は nil になります。nil には <code>upcase</code> メソッドがありません。キーはシンボルです（:name, :food）。<code>fox[&quot;name&quot;]</code> ではなく <code>fox[:name]</code> と書いてください。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMethodError: undefined method 'upcase' for nil</pre></details></div></div>
+</section>
+<section><h2>hash-key-typo</h2><pre class="code">fox = { name: &quot;Chunky&quot;, food: &quot;bacon&quot; }
+fox[:nmae].upcase</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>fox[:nmae]</code> ist nil</div><pre class="fe-snippet">  1 | fox = { name: &quot;Chunky&quot;, food: &quot;bacon&quot; }
+&gt; 2 | fox[:nmae].upcase
+    | ^^^^^^^^^^ das ist nil
+</pre><p class="fe-body">Der Hash <code>fox</code> hat keinen Schlüssel :nmae, darum liefert <code>fox[:nmae]</code> nil – und nil hat keine Methode <code>upcase</code>. Seine Schlüssel sind: :name, :food.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMethodError: undefined method 'upcase' for nil</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>fox[:nmae]</code> is nil</div><pre class="fe-snippet">  1 | fox = { name: &quot;Chunky&quot;, food: &quot;bacon&quot; }
+&gt; 2 | fox[:nmae].upcase
+    | ^^^^^^^^^^ this is nil
+</pre><p class="fe-body">The hash <code>fox</code> has no key :nmae, so <code>fox[:nmae]</code> gives nil – and nil has no method <code>upcase</code>. Its keys are: :name, :food.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMethodError: undefined method 'upcase' for nil</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>fox[:nmae]</code> が nil です</div><pre class="fe-snippet">  1 | fox = { name: &quot;Chunky&quot;, food: &quot;bacon&quot; }
+&gt; 2 | fox[:nmae].upcase
+    | ^^^^^^^^^^ ここが nil です
+</pre><p class="fe-body">ハッシュ <code>fox</code> にキー :nmae がないので、<code>fox[:nmae]</code> は nil になります。nil には <code>upcase</code> メソッドがありません。このハッシュのキーは :name, :food です。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMethodError: undefined method 'upcase' for nil</pre></details></div></div>
+</section>
+<section><h2>hash-key-other-cell</h2><pre class="code">animal[:age] + 1</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>animal[:age]</code> ist nil</div><pre class="fe-snippet">&gt; 1 | animal[:age] + 1
+    | ^^^^^^^^^^^^ das ist nil
+</pre><p class="fe-body">Der Hash <code>animal</code> hat keinen Schlüssel :age, darum liefert <code>animal[:age]</code> nil – und nil hat keine Methode <code>+</code>. Seine Schlüssel sind: :name, :food.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMethodError: undefined method '+' for nil</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>animal[:age]</code> is nil</div><pre class="fe-snippet">&gt; 1 | animal[:age] + 1
+    | ^^^^^^^^^^^^ this is nil
+</pre><p class="fe-body">The hash <code>animal</code> has no key :age, so <code>animal[:age]</code> gives nil – and nil has no method <code>+</code>. Its keys are: :name, :food.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMethodError: undefined method '+' for nil</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>animal[:age]</code> が nil です</div><pre class="fe-snippet">&gt; 1 | animal[:age] + 1
+    | ^^^^^^^^^^^^ ここが nil です
+</pre><p class="fe-body">ハッシュ <code>animal</code> にキー :age がないので、<code>animal[:age]</code> は nil になります。nil には <code>+</code> メソッドがありません。このハッシュのキーは :name, :food です。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMethodError: undefined method '+' for nil</pre></details></div></div>
+</section>
+<section><h2>hash-no-colon</h2><pre class="code">fox = { name &quot;Chunky&quot;, food: &quot;bacon&quot; }</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Zwischen Schlüssel und Wert fehlt etwas</div><pre class="fe-snippet">&gt; 1 | fox = { name &quot;Chunky&quot;, food: &quot;bacon&quot; }
+    |             ^ hier
+</pre><p class="fe-body">In einem Hash schreibt man <code>name: &quot;Chunky&quot;</code> (oder <code>:name =&gt; &quot;Chunky&quot;</code>). In Zeile 1 steht ein Schlüssel ohne beides.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:1: syntax error found
+&gt; 1 | fox = { name &quot;Chunky&quot;, food: &quot;bacon&quot; }
+    |             ^ expected a `=&gt;` between the hash key and value
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Key and value need something in between</div><pre class="fe-snippet">&gt; 1 | fox = { name &quot;Chunky&quot;, food: &quot;bacon&quot; }
+    |             ^ here
+</pre><p class="fe-body">In a hash, write <code>name: &quot;Chunky&quot;</code> (or <code>:name =&gt; &quot;Chunky&quot;</code>). On line 1 there is a key with neither.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:1: syntax error found
+&gt; 1 | fox = { name &quot;Chunky&quot;, food: &quot;bacon&quot; }
+    |             ^ expected a `=&gt;` between the hash key and value
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">キーと値の間に何かが足りません</div><pre class="fe-snippet">&gt; 1 | fox = { name &quot;Chunky&quot;, food: &quot;bacon&quot; }
+    |             ^ ここ
+</pre><p class="fe-body">ハッシュでは <code>name: &quot;Chunky&quot;</code>（または <code>:name =&gt; &quot;Chunky&quot;</code>）と書きます。1行目のキーには、どちらもありません。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:1: syntax error found
+&gt; 1 | fox = { name &quot;Chunky&quot;, food: &quot;bacon&quot; }
+    |             ^ expected a `=&gt;` between the hash key and value
+</pre></details></div></div>
+</section>
+<section><h2>hash-fetch-missing</h2><pre class="code">fox = { name: &quot;Chunky&quot;, food: &quot;bacon&quot; }
+fox.fetch(:age)</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Den Schlüssel :age gibt es nicht</div><pre class="fe-snippet">  1 | fox = { name: &quot;Chunky&quot;, food: &quot;bacon&quot; }
+&gt; 2 | fox.fetch(:age)
+    |     ^^^^^ hier
+</pre><p class="fe-body"><code>fetch</code> besteht auf vorhandenen Schlüsseln. Seine Schlüssel sind: :name, :food.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>KeyError: key not found: :age</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">The key :age doesn't exist</div><pre class="fe-snippet">  1 | fox = { name: &quot;Chunky&quot;, food: &quot;bacon&quot; }
+&gt; 2 | fox.fetch(:age)
+    |     ^^^^^ here
+</pre><p class="fe-body"><code>fetch</code> insists on keys that exist. Its keys are: :name, :food.</p><details class="fe-original"><summary>Ruby's message</summary><pre>KeyError: key not found: :age</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">キー :age は存在しません</div><pre class="fe-snippet">  1 | fox = { name: &quot;Chunky&quot;, food: &quot;bacon&quot; }
+&gt; 2 | fox.fetch(:age)
+    |     ^^^^^ ここ
+</pre><p class="fe-body"><code>fetch</code> は存在するキーしか受け付けません。このハッシュのキーは :name, :food です。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>KeyError: key not found: :age</pre></details></div></div>
+</section>
+<section><h2>square-two-args</h2><pre class="code">def square(number)
+  number * number
+end
+
+square(9, 2)</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>square</code> will 1 Argument, bekommt aber 2 Argumente</div><pre class="fe-snippet">&gt; 5 | square(9, 2)
+    | ^^^^^^ dieser Aufruf
+</pre><p class="fe-body"><code>def square(number)</code> (Zeile 1) nimmt 1 Argument. Der Aufruf in Zeile 5 gibt 2 Argumente mit.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>ArgumentError: wrong number of arguments (given 2, expected 1)</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>square</code> wants 1 argument but got 2 arguments</div><pre class="fe-snippet">&gt; 5 | square(9, 2)
+    | ^^^^^^ this call
+</pre><p class="fe-body"><code>def square(number)</code> (line 1) takes 1 argument. The call on line 5 passes 2 arguments.</p><details class="fe-original"><summary>Ruby's message</summary><pre>ArgumentError: wrong number of arguments (given 2, expected 1)</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>square</code> には引数1個が必要ですが、引数2個が渡されました</div><pre class="fe-snippet">&gt; 5 | square(9, 2)
+    | ^^^^^^ この呼び出し
+</pre><p class="fe-body"><code>def square(number)</code>（1行目）は引数1個を受け取ります。5行目の呼び出しでは引数2個が渡されています。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>ArgumentError: wrong number of arguments (given 2, expected 1)</pre></details></div></div>
+</section>
+<section><h2>square-called-before-def</h2><pre class="code">square(9)
+
+def square(number)
+  number * number
+end</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>square</code> wird erst später definiert</div><pre class="fe-snippet">&gt; 1 | square(9)
+    | ^^^^^^ unbekannt
+</pre><p class="fe-body">Du rufst <code>square</code> in Zeile 1 auf, das <code>def</code> steht aber erst in Zeile 3. Ruby muss das <code>def</code> zuerst lesen – setz den Aufruf darunter.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMethodError: undefined method 'square' for main</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>square</code> is defined later</div><pre class="fe-snippet">&gt; 1 | square(9)
+    | ^^^^^^ unknown here
+</pre><p class="fe-body">You call <code>square</code> on line 1, but its <code>def</code> is on line 3. Ruby has to read the <code>def</code> first – move the call below it.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMethodError: undefined method 'square' for main</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>square</code> は後で定義されています</div><pre class="fe-snippet">&gt; 1 | square(9)
+    | ^^^^^^ 見つかりません
+</pre><p class="fe-body">1行目で <code>square</code> を呼んでいますが、その <code>def</code> は3行目にあります。Rubyは先に <code>def</code> を読む必要があるので、呼び出しをその下に移してください。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMethodError: undefined method 'square' for main</pre></details></div></div>
+</section>
+<section><h2>param-typo</h2><pre class="code">def square(number)
+  numbr * numbr
+end
+
+square(9)</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Meintest du <code>number</code>?</div><pre class="fe-snippet">  1 | def square(number)
+&gt; 2 |   numbr * numbr
+    |   ^^^^^ unbekannt
+</pre><p class="fe-body">Ruby kennt <code>numbr</code> hier nicht – aber <code>number</code> gibt es. Ein Tippfehler?</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NameError: undefined local variable or method 'numbr' for main</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Did you mean <code>number</code>?</div><pre class="fe-snippet">  1 | def square(number)
+&gt; 2 |   numbr * numbr
+    |   ^^^^^ unknown here
+</pre><p class="fe-body">Ruby doesn't know <code>numbr</code> here – but <code>number</code> exists. A typo?</p><details class="fe-original"><summary>Ruby's message</summary><pre>NameError: undefined local variable or method 'numbr' for main</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>number</code> のことですか？</div><pre class="fe-snippet">  1 | def square(number)
+&gt; 2 |   numbr * numbr
+    |   ^^^^^ 見つかりません
+</pre><p class="fe-body">ここでは <code>numbr</code> という名前が見つかりませんが、<code>number</code> ならあります。打ち間違いではありませんか？</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NameError: undefined local variable or method 'numbr' for main</pre></details></div></div>
+</section>
+<section><h2>outer-variable-in-def</h2><pre class="code">factor = 2
+
+def double(n)
+  n * factor
+end
+
+double(4)</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Methoden sehen keine Variablen von außen</div><pre class="fe-snippet">  3 | def double(n)
+&gt; 4 |   n * factor
+    |       ^^^^^^ unbekannt
+</pre><p class="fe-body"><code>factor</code> ist eine lokale Variable außerhalb der Methode <code>double</code>. In einem <code>def</code> sind nur seine Parameter sichtbar – gib den Wert hinein: <code>def double(factor)</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NameError: undefined local variable or method 'factor' for main</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Methods can't see variables from outside</div><pre class="fe-snippet">  3 | def double(n)
+&gt; 4 |   n * factor
+    |       ^^^^^^ unknown here
+</pre><p class="fe-body"><code>factor</code> is a local variable outside the method <code>double</code>. Inside a <code>def</code>, only its parameters are visible – pass the value in: <code>def double(factor)</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NameError: undefined local variable or method 'factor' for main</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">メソッドの中からは外の変数が見えません</div><pre class="fe-snippet">  3 | def double(n)
+&gt; 4 |   n * factor
+    |       ^^^^^^ 見つかりません
+</pre><p class="fe-body"><code>factor</code> はメソッド <code>double</code> の外にあるローカル変数です。<code>def</code> の中で見えるのは引数だけなので、引数として渡してください: <code>def double(factor)</code>。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NameError: undefined local variable or method 'factor' for main</pre></details></div></div>
+</section>
+<section><h2>def-python-colon</h2><pre class="code">def square(number):
+  number * number
+end</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Hier braucht es keinen Doppelpunkt</div><pre class="fe-snippet">&gt; 1 | def square(number):
+    |                   ^ hier
+</pre><p class="fe-body">Zeile 1 endet mit <code>:</code>. So beginnt in Python ein Block – in Ruby geht es einfach in der nächsten Zeile weiter, und am Schluss steht ein <code>end</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:1: syntax error found
+&gt; 1 | def square(number):
+    |                   ^ unexpected ':', ignoring it
+  2 |   number * number
+  3 | end
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">No colon needed here</div><pre class="fe-snippet">&gt; 1 | def square(number):
+    |                   ^ here
+</pre><p class="fe-body">Line 1 ends with <code>:</code>. That is how Python opens a block – Ruby simply continues on the next line and closes with an <code>end</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:1: syntax error found
+&gt; 1 | def square(number):
+    |                   ^ unexpected ':', ignoring it
+  2 |   number * number
+  3 | end
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">コロンは要りません</div><pre class="fe-snippet">&gt; 1 | def square(number):
+    |                   ^ ここ
+</pre><p class="fe-body">1行目が <code>:</code> で終わっています。これはPythonのブロックの書き方です。Rubyでは次の行にそのまま書き、最後を <code>end</code> で閉じます。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:1: syntax error found
+&gt; 1 | def square(number):
+    |                   ^ unexpected ':', ignoring it
+  2 |   number * number
+  3 | end
+</pre></details></div></div>
+</section>
+<section><h2>recursion-no-base</h2><pre class="code">def countdown(n)
+  puts n
+  countdown(n - 1)
+end
+
+countdown(3)</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>countdown</code> ruft sich endlos selbst auf</div><pre class="fe-snippet">&gt; 1 | def countdown(n)
+    |     ^^^^^^^^^ hier
+</pre><p class="fe-body">Eine Methode, die sich selbst aufruft (Rekursion), braucht einen Fall, in dem sie aufhört – z. B. <code>return 1 if n &lt;= 1</code> ganz oben.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SystemStackError: stack level too deep</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>countdown</code> calls itself forever</div><pre class="fe-snippet">&gt; 1 | def countdown(n)
+    |     ^^^^^^^^^ here
+</pre><p class="fe-body">A method that calls itself (recursion) needs a case where it stops – e.g. <code>return 1 if n &lt;= 1</code> at the top.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SystemStackError: stack level too deep</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>countdown</code> が自分自身を延々と呼び続けています</div><pre class="fe-snippet">&gt; 1 | def countdown(n)
+    |     ^^^^^^^^^ ここ
+</pre><p class="fe-body">自分自身を呼ぶメソッド（再帰）には、止まる条件が必要です。たとえば先頭に <code>return 1 if n &lt;= 1</code> のように書きます。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SystemStackError: stack level too deep</pre></details></div></div>
+</section>
+<section><h2>extra-end</h2><pre class="code">def square(number)
+  number * number
+end
+end</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Ein <code>end</code> zu viel</div><pre class="fe-snippet">  2 |   number * number
+  3 | end
+&gt; 4 | end
+    | ^^^ hier
+</pre><p class="fe-body">Das <code>end</code> in Zeile 4 hat nichts mehr zu schließen. Zähl nach: Jedes <code>def</code>, <code>do</code>, <code>if</code> … hat genau ein <code>end</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:4: syntax error found
+  2 |   number * number
+  3 | end
+&gt; 4 | end
+    | ^~~ unexpected 'end', ignoring it
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">One <code>end</code> too many</div><pre class="fe-snippet">  2 |   number * number
+  3 | end
+&gt; 4 | end
+    | ^^^ here
+</pre><p class="fe-body">The <code>end</code> on line 4 has nothing left to close. Count them: every <code>def</code>, <code>do</code>, <code>if</code> … has exactly one <code>end</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:4: syntax error found
+  2 |   number * number
+  3 | end
+&gt; 4 | end
+    | ^~~ unexpected 'end', ignoring it
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>end</code> が1つ多すぎます</div><pre class="fe-snippet">  2 |   number * number
+  3 | end
+&gt; 4 | end
+    | ^^^ ここ
+</pre><p class="fe-body">4行目の <code>end</code> には、閉じるものが残っていません。<code>def</code>・<code>do</code>・<code>if</code> などと <code>end</code> の数を数えてみてください。それぞれちょうど1つずつです。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:4: syntax error found
+  2 |   number * number
+  3 | end
+&gt; 4 | end
+    | ^~~ unexpected 'end', ignoring it
+</pre></details></div></div>
+</section>
+<section><h2>class-lowercase</h2><pre class="code">class fox
+  def shout
+    &quot;Chunky Bacon!&quot;
+  end
+end</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Klassennamen beginnen mit einem Großbuchstaben</div><pre class="fe-snippet">&gt; 1 | class fox
+    |       ^^^ hier
+</pre><p class="fe-body">Schreib <code>class Fox</code> statt <code>class fox</code>. Namen von Klassen und Modulen sind in Ruby Konstanten – und Konstanten beginnen groß.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:1: syntax errors found
+&gt; 1 | class fox
+    |       ^~~ unexpected constant path after `class`; class/module name must be CONSTANT
+    |       ^~~ unexpected constant path after `class`; class/module name must be CONSTANT
+  2 |   def shout
+  3 |     &quot;Chunky Bacon!&quot;
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Class names start with a capital letter</div><pre class="fe-snippet">&gt; 1 | class fox
+    |       ^^^ here
+</pre><p class="fe-body">Write <code>class Fox</code> instead of <code>class fox</code>. In Ruby, names of classes and modules are constants, and constants begin with an uppercase letter.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:1: syntax errors found
+&gt; 1 | class fox
+    |       ^~~ unexpected constant path after `class`; class/module name must be CONSTANT
+    |       ^~~ unexpected constant path after `class`; class/module name must be CONSTANT
+  2 |   def shout
+  3 |     &quot;Chunky Bacon!&quot;
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">クラス名は大文字で始めます</div><pre class="fe-snippet">&gt; 1 | class fox
+    |       ^^^ ここ
+</pre><p class="fe-body"><code>class fox</code> ではなく <code>class Fox</code> と書いてください。Rubyではクラスやモジュールの名前は定数で、定数は大文字で始まります。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:1: syntax errors found
+&gt; 1 | class fox
+    |       ^~~ unexpected constant path after `class`; class/module name must be CONSTANT
+    |       ^~~ unexpected constant path after `class`; class/module name must be CONSTANT
+  2 |   def shout
+  3 |     &quot;Chunky Bacon!&quot;
+</pre></details></div></div>
+</section>
+<section><h2>class-def-missing-end</h2><pre class="code">class Fox
+  def initialize(name)
+    @name = name
+  end
+
+  def shout
+    &quot;Chunky Bacon!&quot;
+end
+
+Fox.new(&quot;Kaz&quot;).shout</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Hier fehlt ein <code>end</code></div><pre class="fe-snippet">&gt; 6 |   def shout
+    |   ^^^ hier geöffnet
+</pre><p class="fe-body">Das <code>def</code> in Zeile 6 ist noch offen – Ruby ist am Ende der Zelle angekommen, ohne sein <code>end</code> zu finden. Jedes <code>def</code>, <code>class</code>, <code>if</code>, <code>do</code> … braucht sein eigenes <code>end</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:10: syntax errors found
+&gt;  1 | class Fox
+     | ^~~~~ expected an `end` to close the `class` statement
+   2 |   def initialize(name)
+   3 |     @name = name
+  ~~~~~~
+   8 | end
+   9 | 
+&gt; 10 | Fox.new(&quot;Kaz&quot;).shout
+     |                     ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">An <code>end</code> is missing</div><pre class="fe-snippet">&gt; 6 |   def shout
+    |   ^^^ opened here
+</pre><p class="fe-body">The <code>def</code> on line 6 is still open – Ruby reached the end of the cell without finding its <code>end</code>. Every <code>def</code>, <code>class</code>, <code>if</code>, <code>do</code> … needs an <code>end</code> of its own.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:10: syntax errors found
+&gt;  1 | class Fox
+     | ^~~~~ expected an `end` to close the `class` statement
+   2 |   def initialize(name)
+   3 |     @name = name
+  ~~~~~~
+   8 | end
+   9 | 
+&gt; 10 | Fox.new(&quot;Kaz&quot;).shout
+     |                     ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>end</code> が足りません</div><pre class="fe-snippet">&gt; 6 |   def shout
+    |   ^^^ ここで開いています
+</pre><p class="fe-body">6行目の <code>def</code> が閉じられていません。Rubyはセルの最後まで読みましたが、対応する <code>end</code> が見つかりませんでした。<code>def</code>・<code>class</code>・<code>if</code>・<code>do</code> などには、それぞれ <code>end</code> が1つずつ必要です。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:10: syntax errors found
+&gt;  1 | class Fox
+     | ^~~~~ expected an `end` to close the `class` statement
+   2 |   def initialize(name)
+   3 |     @name = name
+  ~~~~~~
+   8 | end
+   9 | 
+&gt; 10 | Fox.new(&quot;Kaz&quot;).shout
+     |                     ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+</section>
+<section><h2>no-attr-reader</h2><pre class="code">class Fox
+  def initialize(name)
+    @name = name
+  end
+end
+
+f = Fox.new(&quot;Kaz&quot;)
+f.name</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>Fox</code> hat kein <code>name</code></div><pre class="fe-snippet">  7 | f = Fox.new(&quot;Kaz&quot;)
+&gt; 8 | f.name
+    |   ^^^^ unbekannt
+</pre><p class="fe-body">Von außen sieht man die Instanzvariable <code>@name</code> erst mit <code>attr_reader :name</code> in der Klasse.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMethodError: undefined method 'name' for an instance of Fox</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>Fox</code> has no <code>name</code></div><pre class="fe-snippet">  7 | f = Fox.new(&quot;Kaz&quot;)
+&gt; 8 | f.name
+    |   ^^^^ unknown here
+</pre><p class="fe-body">The instance variable <code>@name</code> can only be read from outside once the class says <code>attr_reader :name</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMethodError: undefined method 'name' for an instance of Fox</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>Fox</code> には <code>name</code> がありません</div><pre class="fe-snippet">  7 | f = Fox.new(&quot;Kaz&quot;)
+&gt; 8 | f.name
+    |   ^^^^ 見つかりません
+</pre><p class="fe-body">インスタンス変数 <code>@name</code> を外から読むには、クラスに <code>attr_reader :name</code> を書く必要があります。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMethodError: undefined method 'name' for an instance of Fox</pre></details></div></div>
+</section>
+<section><h2>ivar-typo</h2><pre class="code">class Fox
+  def initialize(name)
+    @name = name
+  end
+
+  def shout
+    @nmae.upcase + &quot;!&quot;
+  end
+end
+
+Fox.new(&quot;Kaz&quot;).shout</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>@nmae</code> ist nil – meintest du <code>@name</code>?</div><pre class="fe-snippet">  6 |   def shout
+&gt; 7 |     @nmae.upcase + &quot;!&quot;
+    |     ^^^^^ das ist nil
+</pre><p class="fe-body">Eine Instanzvariable, der nie etwas zugewiesen wurde, ist einfach nil – Ruby meldet keinen Tippfehler. Zugewiesen wird aber <code>@name</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMethodError: undefined method 'upcase' for nil</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>@nmae</code> is nil – did you mean <code>@name</code>?</div><pre class="fe-snippet">  6 |   def shout
+&gt; 7 |     @nmae.upcase + &quot;!&quot;
+    |     ^^^^^ this is nil
+</pre><p class="fe-body">An instance variable that was never assigned is simply nil – Ruby doesn't report the typo. But <code>@name</code> is assigned.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMethodError: undefined method 'upcase' for nil</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>@nmae</code> が nil です。<code>@name</code> のことですか？</div><pre class="fe-snippet">  6 |   def shout
+&gt; 7 |     @nmae.upcase + &quot;!&quot;
+    |     ^^^^^ ここが nil です
+</pre><p class="fe-body">一度も代入されていないインスタンス変数は、エラーにならずに nil になります。代入されているのは <code>@name</code> のほうです。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMethodError: undefined method 'upcase' for nil</pre></details></div></div>
+</section>
+<section><h2>new-without-name</h2><pre class="code">class Fox
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
+  end
+end
+
+Fox.new</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>Fox.new</code> will 1 Argument, bekommt aber kein Argument</div><pre class="fe-snippet">&gt; 9 | Fox.new
+    |     ^^^ dieser Aufruf
+</pre><p class="fe-body"><code>def initialize(name)</code> (Zeile 4) nimmt 1 Argument. Der Aufruf in Zeile 9 gibt kein Argument mit.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>ArgumentError: wrong number of arguments (given 0, expected 1)</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>Fox.new</code> wants 1 argument but got no arguments</div><pre class="fe-snippet">&gt; 9 | Fox.new
+    |     ^^^ this call
+</pre><p class="fe-body"><code>def initialize(name)</code> (line 4) takes 1 argument. The call on line 9 passes no arguments.</p><details class="fe-original"><summary>Ruby's message</summary><pre>ArgumentError: wrong number of arguments (given 0, expected 1)</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>Fox.new</code> には引数1個が必要ですが、引数0個が渡されました</div><pre class="fe-snippet">&gt; 9 | Fox.new
+    |     ^^^ この呼び出し
+</pre><p class="fe-body"><code>def initialize(name)</code>（4行目）は引数1個を受け取ります。9行目の呼び出しでは引数0個が渡されています。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>ArgumentError: wrong number of arguments (given 0, expected 1)</pre></details></div></div>
+</section>
+<section><h2>class-name-typo</h2><pre class="code">Fxo.new(&quot;Kaz&quot;)</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Meintest du <code>Fox</code>?</div><pre class="fe-snippet">&gt; 1 | Fxo.new(&quot;Kaz&quot;)
+    | ^^^ unbekannt
+</pre><p class="fe-body">Es gibt keine Klasse oder Konstante <code>Fxo</code>, aber <code>Fox</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NameError: uninitialized constant Fxo</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Did you mean <code>Fox</code>?</div><pre class="fe-snippet">&gt; 1 | Fxo.new(&quot;Kaz&quot;)
+    | ^^^ unknown here
+</pre><p class="fe-body">There is no class or constant <code>Fxo</code>, but there is <code>Fox</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NameError: uninitialized constant Fxo</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>Fox</code> のことですか？</div><pre class="fe-snippet">&gt; 1 | Fxo.new(&quot;Kaz&quot;)
+    | ^^^ 見つかりません
+</pre><p class="fe-body"><code>Fxo</code> というクラスや定数はありませんが、<code>Fox</code> ならあります。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NameError: uninitialized constant Fxo</pre></details></div></div>
+</section>
+<section><h2>de-class-in-other-cell</h2><pre class="code">f = Fuchs.new(&quot;Kaz&quot;)
+f.ruf</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>Fuchs</code> ist nicht definiert</div><pre class="fe-snippet">&gt; 1 | f = Fuchs.new(&quot;Kaz&quot;)
+    |     ^^^^^ unbekannt
+</pre><p class="fe-body">Es gibt keine Klasse oder Konstante <code>Fuchs</code>. Steht sie in einer anderen Zelle? Dann führ die zuerst aus (▶). Soll es Text sein, setz es in Anführungszeichen: <code>&quot;Fuchs&quot;</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NameError: uninitialized constant Fuchs</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>Fuchs</code> is not defined</div><pre class="fe-snippet">&gt; 1 | f = Fuchs.new(&quot;Kaz&quot;)
+    |     ^^^^^ unknown here
+</pre><p class="fe-body">There is no class or constant <code>Fuchs</code>. Is it defined in another cell? Run that one first (▶). If it is meant as text, put it in quotes: <code>&quot;Fuchs&quot;</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NameError: uninitialized constant Fuchs</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>Fuchs</code> が定義されていません</div><pre class="fe-snippet">&gt; 1 | f = Fuchs.new(&quot;Kaz&quot;)
+    |     ^^^^^ 見つかりません
+</pre><p class="fe-body"><code>Fuchs</code> というクラスや定数はありません。別のセルで定義しているなら、先にそのセルを実行（▶）してください。文字列のつもりなら引用符で囲んでください: <code>&quot;Fuchs&quot;</code>。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NameError: uninitialized constant Fuchs</pre></details></div></div>
+</section>
+<section><h2>module-missing-end</h2><pre class="code">module Loud
+  def shout
+    &quot;CHUNKY BACON!&quot;
+  end
+
+class Badger
+  include Loud
+end</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Hier fehlt ein <code>end</code></div><pre class="fe-snippet">&gt; 1 | module Loud
+    | ^^^^^^ hier geöffnet
+</pre><p class="fe-body">Das <code>module</code> in Zeile 1 ist noch offen – Ruby ist am Ende der Zelle angekommen, ohne sein <code>end</code> zu finden. Jedes <code>def</code>, <code>class</code>, <code>if</code>, <code>do</code> … braucht sein eigenes <code>end</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>SyntaxError: chunky.rb:8: syntax errors found
+&gt; 1 | module Loud
+    | ^~~~~~ expected an `end` to close the `module` statement
+  2 |   def shout
+  3 |     &quot;CHUNKY BACON!&quot;
+  ~~~~~
+  6 | class Badger
+  7 |   include Loud
+&gt; 8 | end
+    |    ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">An <code>end</code> is missing</div><pre class="fe-snippet">&gt; 1 | module Loud
+    | ^^^^^^ opened here
+</pre><p class="fe-body">The <code>module</code> on line 1 is still open – Ruby reached the end of the cell without finding its <code>end</code>. Every <code>def</code>, <code>class</code>, <code>if</code>, <code>do</code> … needs an <code>end</code> of its own.</p><details class="fe-original"><summary>Ruby's message</summary><pre>SyntaxError: chunky.rb:8: syntax errors found
+&gt; 1 | module Loud
+    | ^~~~~~ expected an `end` to close the `module` statement
+  2 |   def shout
+  3 |     &quot;CHUNKY BACON!&quot;
+  ~~~~~
+  6 | class Badger
+  7 |   include Loud
+&gt; 8 | end
+    |    ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>end</code> が足りません</div><pre class="fe-snippet">&gt; 1 | module Loud
+    | ^^^^^^ ここで開いています
+</pre><p class="fe-body">1行目の <code>module</code> が閉じられていません。Rubyはセルの最後まで読みましたが、対応する <code>end</code> が見つかりませんでした。<code>def</code>・<code>class</code>・<code>if</code>・<code>do</code> などには、それぞれ <code>end</code> が1つずつ必要です。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>SyntaxError: chunky.rb:8: syntax errors found
+&gt; 1 | module Loud
+    | ^~~~~~ expected an `end` to close the `module` statement
+  2 |   def shout
+  3 |     &quot;CHUNKY BACON!&quot;
+  ~~~~~
+  6 | class Badger
+  7 |   include Loud
+&gt; 8 | end
+    |    ^ unexpected end-of-input, assuming it is closing the parent top level context
+</pre></details></div></div>
+</section>
+<section><h2>array-of-hashes-key</h2><pre class="code">entries[:project]</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Ein Array ist kein Hash</div><pre class="fe-snippet">&gt; 1 | entries[:project]
+    |        ^^^^^^^^^^ hier
+</pre><p class="fe-body"><code>[:project]</code> fragt ein Array nach einem Schlüssel, aber Arrays kennen nur Positionen (0, 1, 2 …). Ist es eine Liste von Hashes? Dann nimm zuerst einen heraus: <code>entries[0][:project]</code> – oder alle: <code>entries.map { |e| e[:project] }</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>TypeError: no implicit conversion of Symbol into Integer</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">An Array is not a Hash</div><pre class="fe-snippet">&gt; 1 | entries[:project]
+    |        ^^^^^^^^^^ here
+</pre><p class="fe-body"><code>[:project]</code> asks an Array for a key, but arrays only know positions (0, 1, 2 …). Is it a list of hashes? Then pick one first: <code>entries[0][:project]</code> – or all of them: <code>entries.map { |e| e[:project] }</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>TypeError: no implicit conversion of Symbol into Integer</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">配列はハッシュではありません</div><pre class="fe-snippet">&gt; 1 | entries[:project]
+    |        ^^^^^^^^^^ ここ
+</pre><p class="fe-body"><code>[:project]</code> は配列にキーを尋ねていますが、配列が知っているのは位置（0, 1, 2 …）だけです。ハッシュの配列なら、まず1つ取り出すか（<code>entries[0][:project]</code>）、全部に対して <code>entries.map { |e| e[:project] }</code> と書きます。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>TypeError: no implicit conversion of Symbol into Integer</pre></details></div></div>
+</section>
+<section><h2>sum-into-empty-hash</h2><pre class="code">hours = {}
+entries.each { |e| hours[e[:project]] += e[:hours] }
+hours</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>hours[e[:project]]</code> ist beim ersten Mal nil</div><pre class="fe-snippet">  1 | hours = {}
+&gt; 2 | entries.each { |e| hours[e[:project]] += e[:hours] }
+    |                    ^^^^^^^^^^^^^^^^^^ das ist nil
+</pre><p class="fe-body">Ein leerer Hash hat für jeden neuen Schlüssel erst einmal nil – und mit nil kann <code>+</code> nicht rechnen. Gib dem Hash einen Startwert: <code>hours = Hash.new(0)</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMethodError: undefined method '+' for nil</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>hours[e[:project]]</code> is nil the first time</div><pre class="fe-snippet">  1 | hours = {}
+&gt; 2 | entries.each { |e| hours[e[:project]] += e[:hours] }
+    |                    ^^^^^^^^^^^^^^^^^^ this is nil
+</pre><p class="fe-body">An empty hash gives nil for every new key – and <code>+</code> can't work with nil. Give the hash a starting value: <code>hours = Hash.new(0)</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMethodError: undefined method '+' for nil</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">最初は <code>hours[e[:project]]</code> が nil です</div><pre class="fe-snippet">  1 | hours = {}
+&gt; 2 | entries.each { |e| hours[e[:project]] += e[:hours] }
+    |                    ^^^^^^^^^^^^^^^^^^ ここが nil です
+</pre><p class="fe-body">空のハッシュは、新しいキーに対して nil を返します。nil に <code>+</code> は使えません。ハッシュに初期値を指定してください: <code>hours = Hash.new(0)</code>。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMethodError: undefined method '+' for nil</pre></details></div></div>
+</section>
+<section><h2>average-of-empty</h2><pre class="code">def average(list)
+  list.sum / list.length
+end
+
+average([])</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Teilen durch null</div><pre class="fe-snippet">  1 | def average(list)
+&gt; 2 |   list.sum / list.length
+    |              ^^^^^^^^^^^ hier
+</pre><p class="fe-body">In Zeile 2 wird durch 0 geteilt. Ist die Liste leer? Dann ist <code>list.length</code> 0. Fang den Fall ab: <code>return 0 if list.empty?</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>ZeroDivisionError: divided by 0</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Division by zero</div><pre class="fe-snippet">  1 | def average(list)
+&gt; 2 |   list.sum / list.length
+    |              ^^^^^^^^^^^ here
+</pre><p class="fe-body">On line 2 something is divided by 0. Is the list empty? Then <code>list.length</code> is 0. Handle that case: <code>return 0 if list.empty?</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>ZeroDivisionError: divided by 0</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">0で割っています</div><pre class="fe-snippet">  1 | def average(list)
+&gt; 2 |   list.sum / list.length
+    |              ^^^^^^^^^^^ ここ
+</pre><p class="fe-body">2行目で0による割り算が起きています。配列が空ではありませんか？その場合 <code>list.length</code> は0です。<code>return 0 if list.empty?</code> のように、その場合に備えてください。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>ZeroDivisionError: divided by 0</pre></details></div></div>
+</section>
+<section><h2>mixed-max</h2><pre class="code">hours = [3, &quot;2&quot;, 1]
+hours.max</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Integer und String lassen sich nicht vergleichen</div><pre class="fe-snippet">  1 | hours = [3, &quot;2&quot;, 1]
+&gt; 2 | hours.max
+    |       ^^^ hier
+</pre><p class="fe-body">Zum Sortieren (oder für <code>max</code>/<code>min</code>) müssen die Werte von einer Sorte sein. Hier sind Integer und String gemischt – wandle sie zuerst um, z. B. mit <code>to_i</code> oder <code>to_s</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>ArgumentError: comparison of Integer with String failed</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Integer and String can't be compared</div><pre class="fe-snippet">  1 | hours = [3, &quot;2&quot;, 1]
+&gt; 2 | hours.max
+    |       ^^^ here
+</pre><p class="fe-body">Sorting (or <code>max</code>/<code>min</code>) needs values of one kind. Here Integer and String are mixed – convert them first, e.g. with <code>to_i</code> or <code>to_s</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>ArgumentError: comparison of Integer with String failed</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">Integer と String は比較できません</div><pre class="fe-snippet">  1 | hours = [3, &quot;2&quot;, 1]
+&gt; 2 | hours.max
+    |       ^^^ ここ
+</pre><p class="fe-body">並べ替え（や <code>max</code>/<code>min</code>）には同じ種類の値が必要です。ここでは Integer と String が混ざっています。先に <code>to_i</code> や <code>to_s</code> などで変換してください。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>ArgumentError: comparison of Integer with String failed</pre></details></div></div>
+</section>
+<section><h2>match-found-nothing</h2><pre class="code">line = &quot;coffee break&quot;
+hit = line.match(/(?&lt;from&gt;\d{2}:\d{2}) (?&lt;project&gt;\S+)/)
+hit[:project]</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>hit</code> ist nil – das Muster hat nicht gepasst</div><pre class="fe-snippet">  1 | line = &quot;coffee break&quot;
+  2 | hit = line.match(/(?&lt;from&gt;\d{2}:\d{2}) (?&lt;project&gt;\S+)/)
+&gt; 3 | hit[:project]
+    | ^^^ das ist nil
+</pre><p class="fe-body"><code>match</code> gibt nil zurück, wenn der Text nicht zum Muster passt. Fang diesen Fall ab, bevor du <code>hit</code> benutzt: <code>return nil unless hit</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMethodError: undefined method '[]' for nil</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>hit</code> is nil – the pattern didn't match</div><pre class="fe-snippet">  1 | line = &quot;coffee break&quot;
+  2 | hit = line.match(/(?&lt;from&gt;\d{2}:\d{2}) (?&lt;project&gt;\S+)/)
+&gt; 3 | hit[:project]
+    | ^^^ this is nil
+</pre><p class="fe-body"><code>match</code> returns nil when the text doesn't fit the pattern. Handle that case before using <code>hit</code>: <code>return nil unless hit</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMethodError: undefined method '[]' for nil</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">パターンに一致しなかったため、<code>hit</code> が nil です</div><pre class="fe-snippet">  1 | line = &quot;coffee break&quot;
+  2 | hit = line.match(/(?&lt;from&gt;\d{2}:\d{2}) (?&lt;project&gt;\S+)/)
+&gt; 3 | hit[:project]
+    | ^^^ ここが nil です
+</pre><p class="fe-body"><code>match</code> は、文字列がパターンに合わないと nil を返します。<code>hit</code> を使う前に、その場合に備えてください: <code>return nil unless hit</code>。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMethodError: undefined method '[]' for nil</pre></details></div></div>
+</section>
+<section><h2>integer-of-time</h2><pre class="code">Integer(&quot;08:30&quot;)</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">&quot;08:30&quot; ist keine Zahl</div><pre class="fe-snippet">&gt; 1 | Integer(&quot;08:30&quot;)
+    | ^^^^^^^ hier
+</pre><p class="fe-body"><code>Integer()</code> nimmt nur Text, der genau wie eine Zahl aussieht. (<code>.to_i</code> wäre nachsichtiger: es gibt 0 statt eines Fehlers.)</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>ArgumentError: invalid value for Integer(): &quot;08:30&quot;</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">&quot;08:30&quot; is not a number</div><pre class="fe-snippet">&gt; 1 | Integer(&quot;08:30&quot;)
+    | ^^^^^^^ here
+</pre><p class="fe-body"><code>Integer()</code> only accepts text that looks exactly like a number. (<code>.to_i</code> is more forgiving: it gives 0 instead of an error.)</p><details class="fe-original"><summary>Ruby's message</summary><pre>ArgumentError: invalid value for Integer(): &quot;08:30&quot;</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">&quot;08:30&quot; は数値ではありません</div><pre class="fe-snippet">&gt; 1 | Integer(&quot;08:30&quot;)
+    | ^^^^^^^ ここ
+</pre><p class="fe-body"><code>Integer()</code> は、数値そのものに見える文字列しか受け付けません。（<code>.to_i</code> ならエラーにならず 0 を返します。）</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>ArgumentError: invalid value for Integer(): &quot;08:30&quot;</pre></details></div></div>
+</section>
+<section><h2>keyword-missing</h2><pre class="code">def add_entry(project:, from:, to:, note: nil)
+  { project: project, from: from, to: to, note: note }
+end
+
+add_entry(project: &quot;X&quot;, from: &quot;08:30&quot;)</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>add_entry</code> braucht <code>to:</code></div><pre class="fe-snippet">&gt; 5 | add_entry(project: &quot;X&quot;, from: &quot;08:30&quot;)
+    | ^^^^^^^^^ dieser Aufruf
+</pre><p class="fe-body">Schlüsselwort-Argumente schreibt man beim Aufruf mit Namen aus: <code>add_entry(project: …, from: …, to: …)</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>ArgumentError: missing keyword: :to</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>add_entry</code> needs <code>to:</code></div><pre class="fe-snippet">&gt; 5 | add_entry(project: &quot;X&quot;, from: &quot;08:30&quot;)
+    | ^^^^^^^^^ this call
+</pre><p class="fe-body">Keyword arguments are written out by name in the call: <code>add_entry(project: …, from: …, to: …)</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>ArgumentError: missing keyword: :to</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>add_entry</code> には <code>to:</code> が必要です</div><pre class="fe-snippet">&gt; 5 | add_entry(project: &quot;X&quot;, from: &quot;08:30&quot;)
+    | ^^^^^^^^^ この呼び出し
+</pre><p class="fe-body">キーワード引数は、呼び出すときに名前を付けて書きます: <code>add_entry(project: …, from: …, to: …)</code>。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>ArgumentError: missing keyword: :to</pre></details></div></div>
+</section>
+<section><h2>keyword-as-positional</h2><pre class="code">def add_entry(project:, from:, to:, note: nil)
+  { project: project, from: from, to: to, note: note }
+end
+
+add_entry(&quot;X&quot;, &quot;08:30&quot;, &quot;10:00&quot;)</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>add_entry</code> will Schlüsselwörter, keine bloßen Werte</div><pre class="fe-snippet">&gt; 5 | add_entry(&quot;X&quot;, &quot;08:30&quot;, &quot;10:00&quot;)
+    | ^^^^^^^^^ dieser Aufruf
+</pre><p class="fe-body"><code>add_entry</code> nimmt <code>project:</code>, <code>from:</code> und <code>to:</code> – mit Namen. Schreib: <code>add_entry(project: …, from: …, to: …)</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>ArgumentError: wrong number of arguments (given 3, expected 0; required keywords: project, from, to)</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>add_entry</code> wants keywords, not bare values</div><pre class="fe-snippet">&gt; 5 | add_entry(&quot;X&quot;, &quot;08:30&quot;, &quot;10:00&quot;)
+    | ^^^^^^^^^ this call
+</pre><p class="fe-body"><code>add_entry</code> takes <code>project:</code>, <code>from:</code> and <code>to:</code> – by name. Write: <code>add_entry(project: …, from: …, to: …)</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>ArgumentError: wrong number of arguments (given 3, expected 0; required keywords: project, from, to)</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>add_entry</code> には値だけでなくキーワードが必要です</div><pre class="fe-snippet">&gt; 5 | add_entry(&quot;X&quot;, &quot;08:30&quot;, &quot;10:00&quot;)
+    | ^^^^^^^^^ この呼び出し
+</pre><p class="fe-body"><code>add_entry</code> は <code>project:</code>、<code>from:</code>、<code>to:</code> を名前付きで受け取ります。<code>add_entry(project: …, from: …, to: …)</code> と書いてください。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>ArgumentError: wrong number of arguments (given 3, expected 0; required keywords: project, from, to)</pre></details></div></div>
+</section>
+<section><h2>keyword-typo</h2><pre class="code">def add_entry(project:, from:, to:, note: nil)
+  { project: project, from: from, to: to, note: note }
+end
+
+add_entry(project: &quot;X&quot;, from: &quot;08:30&quot;, to: &quot;10:00&quot;, notes: &quot;docs&quot;)</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>add_entry</code> kennt <code>notes:</code> nicht</div><pre class="fe-snippet">&gt; 5 | add_entry(project: &quot;X&quot;, from: &quot;08:30&quot;, to: &quot;10:00&quot;, notes: &quot;docs&quot;)
+    | ^^^^^^^^^ dieser Aufruf
+</pre><p class="fe-body">Seine Schlüsselwörter sind: <code>project:</code>, <code>from:</code>, <code>to:</code> und <code>note:</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>ArgumentError: unknown keyword: :notes</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>add_entry</code> doesn't know <code>notes:</code></div><pre class="fe-snippet">&gt; 5 | add_entry(project: &quot;X&quot;, from: &quot;08:30&quot;, to: &quot;10:00&quot;, notes: &quot;docs&quot;)
+    | ^^^^^^^^^ this call
+</pre><p class="fe-body">Its keywords are: <code>project:</code>, <code>from:</code>, <code>to:</code> and <code>note:</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>ArgumentError: unknown keyword: :notes</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>add_entry</code> は <code>notes:</code> を知りません</div><pre class="fe-snippet">&gt; 5 | add_entry(project: &quot;X&quot;, from: &quot;08:30&quot;, to: &quot;10:00&quot;, notes: &quot;docs&quot;)
+    | ^^^^^^^^^ この呼び出し
+</pre><p class="fe-body">使えるキーワードは <code>project:</code>、<code>from:</code>、<code>to:</code>、<code>note:</code> です。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>ArgumentError: unknown keyword: :notes</pre></details></div></div>
+</section>
+<section><h2>uniq-bang-nil</h2><pre class="code">projects = [&quot;X&quot;, &quot;Intern&quot;]
+unique = projects.uniq!
+unique.length</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>unique</code> ist nil, weil <code>uniq!</code> nil zurückgab</div><pre class="fe-snippet">  1 | projects = [&quot;X&quot;, &quot;Intern&quot;]
+  2 | unique = projects.uniq!
+&gt; 3 | unique.length
+    | ^^^^^^ das ist nil
+</pre><p class="fe-body">Methoden mit <code>!</code> wie <code>uniq!</code> ändern das Objekt selbst und geben nil zurück, wenn sich nichts geändert hat. Nimm <code>uniq</code> (ohne <code>!</code>), um das Ergebnis zu bekommen.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMethodError: undefined method 'length' for nil</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>unique</code> is nil because <code>uniq!</code> returned nil</div><pre class="fe-snippet">  1 | projects = [&quot;X&quot;, &quot;Intern&quot;]
+  2 | unique = projects.uniq!
+&gt; 3 | unique.length
+    | ^^^^^^ this is nil
+</pre><p class="fe-body">Methods with a <code>!</code> like <code>uniq!</code> change the object itself and return nil when nothing changed. Use <code>uniq</code> (without <code>!</code>) to get the result.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMethodError: undefined method 'length' for nil</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>uniq!</code> が nil を返したため、<code>unique</code> が nil です</div><pre class="fe-snippet">  1 | projects = [&quot;X&quot;, &quot;Intern&quot;]
+  2 | unique = projects.uniq!
+&gt; 3 | unique.length
+    | ^^^^^^ ここが nil です
+</pre><p class="fe-body"><code>uniq!</code> のように <code>!</code> が付くメソッドはオブジェクト自体を変更し、何も変わらなかったときは nil を返します。結果がほしいときは <code>!</code> のない <code>uniq</code> を使ってください。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMethodError: undefined method 'length' for nil</pre></details></div></div>
+</section>
+<section><h2>puts-returns-nil</h2><pre class="code">total = puts 3.5 + 2.0
+total.round</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>total</code> ist nil – <code>puts</code> gibt nil zurück</div><pre class="fe-snippet">  1 | total = puts 3.5 + 2.0
+&gt; 2 | total.round
+    | ^^^^^ das ist nil
+</pre><p class="fe-body"><code>puts</code> schreibt seinen Wert hin, gibt aber nil zurück. Speichere den Wert selbst: <code>total = …</code> ohne <code>puts</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMethodError: undefined method 'round' for nil</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>total</code> is nil – <code>puts</code> returns nil</div><pre class="fe-snippet">  1 | total = puts 3.5 + 2.0
+&gt; 2 | total.round
+    | ^^^^^ this is nil
+</pre><p class="fe-body"><code>puts</code> prints its value but gives back nil. Store the value itself: <code>total = …</code> without <code>puts</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMethodError: undefined method 'round' for nil</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>puts</code> は nil を返すので、<code>total</code> が nil です</div><pre class="fe-snippet">  1 | total = puts 3.5 + 2.0
+&gt; 2 | total.round
+    | ^^^^^ ここが nil です
+</pre><p class="fe-body"><code>puts</code> は値を表示しますが、戻り値は nil です。値そのものを保存してください: <code>puts</code> を付けずに <code>total = …</code>。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMethodError: undefined method 'round' for nil</pre></details></div></div>
+</section>
+<section><h2>frozen-constant</h2><pre class="code">PROJECTS = [&quot;ProjectX&quot;, &quot;Intern&quot;].freeze
+PROJECTS &lt;&lt; &quot;Docs&quot;</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>[&quot;ProjectX&quot;, &quot;Intern&quot;]</code> ist eingefroren</div><pre class="fe-snippet">  1 | PROJECTS = [&quot;ProjectX&quot;, &quot;Intern&quot;].freeze
+&gt; 2 | PROJECTS &lt;&lt; &quot;Docs&quot;
+    |          ^^ hier
+</pre><p class="fe-body">Dieses Array-Objekt lässt sich nicht ändern (es ist „frozen“ – z. B. durch <code>.freeze</code>). Arbeite mit einer Kopie (<code>.dup</code>) oder baue einen neuen Wert: <code>+</code> statt <code>&lt;&lt;</code>, <code>map</code> statt <code>map!</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>FrozenError: can't modify frozen Array: [&quot;ProjectX&quot;, &quot;Intern&quot;]</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>[&quot;ProjectX&quot;, &quot;Intern&quot;]</code> is frozen</div><pre class="fe-snippet">  1 | PROJECTS = [&quot;ProjectX&quot;, &quot;Intern&quot;].freeze
+&gt; 2 | PROJECTS &lt;&lt; &quot;Docs&quot;
+    |          ^^ here
+</pre><p class="fe-body">This Array can't be changed (it is frozen – e.g. by <code>.freeze</code>). Work on a copy (<code>.dup</code>) or build a new value: <code>+</code> instead of <code>&lt;&lt;</code>, <code>map</code> instead of <code>map!</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>FrozenError: can't modify frozen Array: [&quot;ProjectX&quot;, &quot;Intern&quot;]</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>[&quot;ProjectX&quot;, &quot;Intern&quot;]</code> は凍結されています</div><pre class="fe-snippet">  1 | PROJECTS = [&quot;ProjectX&quot;, &quot;Intern&quot;].freeze
+&gt; 2 | PROJECTS &lt;&lt; &quot;Docs&quot;
+    |          ^^ ここ
+</pre><p class="fe-body">この Array は変更できません（<code>.freeze</code> などで凍結されています）。コピー（<code>.dup</code>）を使うか、新しい値を作ってください。<code>&lt;&lt;</code> の代わりに <code>+</code>、<code>map!</code> の代わりに <code>map</code> が使えます。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>FrozenError: can't modify frozen Array: [&quot;ProjectX&quot;, &quot;Intern&quot;]</pre></details></div></div>
+</section>
+<section><h2>lambda-two-args</h2><pre class="code">square = -&gt;(x) { x * x }
+square.call(2, 3)</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>square</code> will 1 Argument, bekommt aber 2 Argumente</div><pre class="fe-snippet">  1 | square = -&gt;(x) { x * x }
+&gt; 2 | square.call(2, 3)
+    | ^^^^^^ dieser Aufruf
+</pre><p class="fe-body">Das Lambda in Zeile 1 nimmt 1 Argument; der Aufruf in Zeile 2 gibt 2 Argumente mit. Lambdas sind da so streng wie Methoden.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>ArgumentError: wrong number of arguments (given 2, expected 1)</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>square</code> wants 1 argument but got 2 arguments</div><pre class="fe-snippet">  1 | square = -&gt;(x) { x * x }
+&gt; 2 | square.call(2, 3)
+    | ^^^^^^ this call
+</pre><p class="fe-body">The lambda on line 1 takes 1 argument; the call on line 2 passes 2 arguments. Lambdas are as strict about this as methods.</p><details class="fe-original"><summary>Ruby's message</summary><pre>ArgumentError: wrong number of arguments (given 2, expected 1)</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>square</code> には引数1個が必要ですが、引数2個が渡されました</div><pre class="fe-snippet">  1 | square = -&gt;(x) { x * x }
+&gt; 2 | square.call(2, 3)
+    | ^^^^^^ この呼び出し
+</pre><p class="fe-body">1行目のラムダは引数1個を受け取ります。2行目の呼び出しでは引数2個が渡されています。ラムダは、この点でメソッドと同じくらい厳密です。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>ArgumentError: wrong number of arguments (given 2, expected 1)</pre></details></div></div>
+</section>
+<section><h2>find-nothing</h2><pre class="code">projects = [&quot;ProjectX&quot;, &quot;Intern&quot;]
+projects.find { |p| p.start_with?(&quot;Docs&quot;) }.upcase</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>projects.find { |p| p.start_with?(&quot;Docs&quot;) }</code> hat nichts gefunden</div><pre class="fe-snippet">  1 | projects = [&quot;ProjectX&quot;, &quot;Intern&quot;]
+&gt; 2 | projects.find { |p| p.start_with?(&quot;Docs&quot;) }.upcase
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ das ist nil
+</pre><p class="fe-body"><code>find</code> gibt nil zurück, wenn kein Element passt – und nil hat keine Methode <code>upcase</code>. Prüfe die Bedingung im Block, oder fang den Fall ab: <code>&amp;.upcase</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMethodError: undefined method 'upcase' for nil</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>projects.find { |p| p.start_with?(&quot;Docs&quot;) }</code> found nothing</div><pre class="fe-snippet">  1 | projects = [&quot;ProjectX&quot;, &quot;Intern&quot;]
+&gt; 2 | projects.find { |p| p.start_with?(&quot;Docs&quot;) }.upcase
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this is nil
+</pre><p class="fe-body"><code>find</code> returns nil when no element matches – and nil has no method <code>upcase</code>. Check the condition in the block, or handle the case: <code>&amp;.upcase</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMethodError: undefined method 'upcase' for nil</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>projects.find { |p| p.start_with?(&quot;Docs&quot;) }</code> は何も見つけられませんでした</div><pre class="fe-snippet">  1 | projects = [&quot;ProjectX&quot;, &quot;Intern&quot;]
+&gt; 2 | projects.find { |p| p.start_with?(&quot;Docs&quot;) }.upcase
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ここが nil です
+</pre><p class="fe-body"><code>find</code> は、条件に合う要素がないと nil を返します。nil には <code>upcase</code> メソッドがありません。ブロックの条件を確かめるか、<code>&amp;.upcase</code> でその場合に備えてください。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMethodError: undefined method 'upcase' for nil</pre></details></div></div>
+</section>
+<section><h2>own-error-unrescued</h2><pre class="code">class TimelogError &lt; StandardError; end
+
+def sync
+  raise TimelogError, &quot;network error&quot;
+end
+
+sync</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Dein eigener TimelogError wurde nicht aufgefangen</div><pre class="fe-snippet">  3 | def sync
+&gt; 4 |   raise TimelogError, &quot;network error&quot;
+    |   ^^^^^ hier
+</pre><p class="fe-body">In Zeile 4 wird <code>TimelogError</code> ausgelöst, und kein <code>rescue</code> fängt ihn. Pack den Aufruf in <code>begin</code> … <code>rescue TimelogError</code> … <code>end</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>TimelogError: network error</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">Your own TimelogError was not rescued</div><pre class="fe-snippet">  3 | def sync
+&gt; 4 |   raise TimelogError, &quot;network error&quot;
+    |   ^^^^^ here
+</pre><p class="fe-body">On line 4, <code>TimelogError</code> is raised and no <code>rescue</code> catches it. Wrap the call in <code>begin</code> … <code>rescue TimelogError</code> … <code>end</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>TimelogError: network error</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">自分で定義した TimelogError が捕まえられていません</div><pre class="fe-snippet">  3 | def sync
+&gt; 4 |   raise TimelogError, &quot;network error&quot;
+    |   ^^^^^ ここ
+</pre><p class="fe-body">4行目で <code>TimelogError</code> が発生しましたが、それを受け止める <code>rescue</code> がありません。呼び出しを <code>begin</code> … <code>rescue TimelogError</code> … <code>end</code> で囲んでください。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>TimelogError: network error</pre></details></div></div>
+</section>
+<section><h2>case-in-no-else</h2><pre class="code">def dispatch(command)
+  case command
+  in [&quot;add&quot;, project, hours]
+    &quot;Entry: #{project} (#{hours}h)&quot;
+  in [&quot;report&quot;]
+    &quot;Report&quot;
+  end
+end
+
+dispatch([&quot;dance&quot;])</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">Kein <code>in</code> hat gepasst</div><pre class="fe-snippet">  1 | def dispatch(command)
+&gt; 2 |   case command
+    |   ^^^^ hier
+</pre><p class="fe-body">Der Wert <code>[&quot;dance&quot;]</code> passt auf keines der Muster im <code>case</code> (Zeile 2). Ein <code>else</code>-Zweig fängt alles Übrige auf.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NoMatchingPatternError: [&quot;dance&quot;]</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">No <code>in</code> matched</div><pre class="fe-snippet">  1 | def dispatch(command)
+&gt; 2 |   case command
+    |   ^^^^ here
+</pre><p class="fe-body">The value <code>[&quot;dance&quot;]</code> fits none of the patterns of the <code>case</code> on line 2. An <code>else</code> branch catches everything else.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NoMatchingPatternError: [&quot;dance&quot;]</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">どの <code>in</code> にも一致しませんでした</div><pre class="fe-snippet">  1 | def dispatch(command)
+&gt; 2 |   case command
+    |   ^^^^ ここ
+</pre><p class="fe-body">値 <code>[&quot;dance&quot;]</code> は、2行目の <code>case</code> のどのパターンにも一致しません。<code>else</code> を書けば、残りのすべてを受け止められます。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NoMatchingPatternError: [&quot;dance&quot;]</pre></details></div></div>
+</section>
+<section><h2>require-typo</h2><pre class="code">require &quot;chunky_pgn&quot;</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title"><code>chunky_pgn</code> lässt sich nicht laden</div><pre class="fe-snippet">&gt; 1 | require &quot;chunky_pgn&quot;
+    |          ^^^^^^^^^^ hier
+</pre><p class="fe-body">Es gibt keine Bibliothek namens <code>chunky_pgn</code>. Stimmt die Schreibweise? Der Name im <code>require</code> ist nicht immer der Gem-Name (das Gem <code>chunky_png</code> lädt man mit <code>require &quot;chunky_png&quot;</code>, <code>pure_jpeg</code> mit <code>require &quot;pure_jpeg&quot;</code>).</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>LoadError: cannot load such file -- chunky_pgn</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title"><code>chunky_pgn</code> can't be loaded</div><pre class="fe-snippet">&gt; 1 | require &quot;chunky_pgn&quot;
+    |          ^^^^^^^^^^ here
+</pre><p class="fe-body">There is no library called <code>chunky_pgn</code>. Is it spelled right? The name in <code>require</code> is not always the gem's name.</p><details class="fe-original"><summary>Ruby's message</summary><pre>LoadError: cannot load such file -- chunky_pgn</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title"><code>chunky_pgn</code> を読み込めません</div><pre class="fe-snippet">&gt; 1 | require &quot;chunky_pgn&quot;
+    |          ^^^^^^^^^^ ここ
+</pre><p class="fe-body"><code>chunky_pgn</code> というライブラリはありません。綴りは合っていますか？ <code>require</code> に書く名前は、gemの名前と同じとは限りません。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>LoadError: cannot load such file -- chunky_pgn</pre></details></div></div>
+</section>
+<section><h2>python-true</h2><pre class="code">verbose = True
+puts &quot;on&quot; if verbose</pre>
+<div lang="de"><div class="friendly-error" lang="de"><div class="fe-title">In Ruby heißt das <code>true</code></div><pre class="fe-snippet">&gt; 1 | verbose = True
+    |           ^^^^ unbekannt
+</pre><p class="fe-body"><code>True</code> schreibt man in Ruby klein: <code>true</code>, <code>false</code>, <code>nil</code>.</p><details class="fe-original"><summary>Rubys Meldung</summary><pre>NameError: uninitialized constant True</pre></details></div></div>
+<div lang="en"><div class="friendly-error" lang="en"><div class="fe-title">In Ruby that's <code>true</code></div><pre class="fe-snippet">&gt; 1 | verbose = True
+    |           ^^^^ unknown here
+</pre><p class="fe-body">Ruby spells <code>True</code> in lowercase: <code>true</code>, <code>false</code>, <code>nil</code>.</p><details class="fe-original"><summary>Ruby's message</summary><pre>NameError: uninitialized constant True</pre></details></div></div>
+<div lang="ja"><div class="friendly-error" lang="ja"><div class="fe-title">Rubyでは <code>true</code> と書きます</div><pre class="fe-snippet">&gt; 1 | verbose = True
+    |           ^^^^ 見つかりません
+</pre><p class="fe-body">Rubyでは <code>True</code> を小文字で書きます: <code>true</code>・<code>false</code>・<code>nil</code>。</p><details class="fe-original"><summary>Rubyのメッセージ</summary><pre>NameError: uninitialized constant True</pre></details></div></div>
+</section>
+<section><h2>json-parse-error</h2><pre class="code">require &quot;json&quot;
+JSON.parse(&quot;{name: 1}&quot;)</pre>
+<div lang="de"><p class="none">JSON::ParserError: expected object key, got 'name:' at line 1 column 2</p></div>
+<div lang="en"><p class="none">JSON::ParserError: expected object key, got 'name:' at line 1 column 2</p></div>
+<div lang="ja"><p class="none">JSON::ParserError: expected object key, got 'name:' at line 1 column 2</p></div>
+</section>
+<section><h2>own-raise-string</h2><pre class="code">raise &quot;line 7 is not a time entry&quot;</pre>
+<div lang="de"><p class="none">RuntimeError: line 7 is not a time entry</p></div>
+<div lang="en"><p class="none">RuntimeError: line 7 is not a time entry</p></div>
+<div lang="ja"><p class="none">RuntimeError: line 7 is not a time entry</p></div>
+</section></body></html>

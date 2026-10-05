@@ -1,0 +1,49 @@
+/* FriendlyErrors below a cell (Result#to_html). Proposed addition to
+   html/assets/app.css, next to .cell-error; uses the page's variables, with
+   fallbacks so preview.html renders on its own. */
+.friendly-error {
+  border-left: 3px solid var(--err, #b3261e);
+  background: var(--fat, #fdeee3);
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-print, system-ui, sans-serif);
+  font-size: 0.92rem;
+  color: var(--ink, #1a1208);
+}
+.friendly-error .fe-title {
+  font-weight: 700;
+  color: var(--err, #b3261e);
+  margin-bottom: 0.35rem;
+}
+.friendly-error .fe-snippet {
+  font-family: var(--font-code, ui-monospace, monospace);
+  font-size: 0.82rem;
+  background: var(--paper, #fff);
+  border: 1px solid var(--rule, #d4dbe3);
+  padding: 0.35rem 0.5rem;
+  margin: 0 0 0.4rem;
+  overflow-x: auto;
+  white-space: pre;
+}
+.friendly-error .fe-body { margin: 0; line-height: 1.5; }
+.friendly-error code {
+  font-family: var(--font-code, ui-monospace, monospace);
+  background: var(--code-bg, #eef2f6);
+  padding: 0 0.2em;
+  border-radius: 3px;
+}
+.friendly-error .fe-original {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft, #5f5247);
+}
+.friendly-error .fe-original pre {
+  font-family: var(--font-code, ui-monospace, monospace);
+  white-space: pre-wrap;
+  margin: 0.25rem 0 0;
+}
+/* a live run while typing: fainter; .fe-brief (main.rb sets it for live
+   runs, except an endless loop) keeps just the headline */
+.cell-out.is-rehearsal .friendly-error { opacity: 0.6; }
+.friendly-error.fe-brief .fe-snippet,
+.friendly-error.fe-brief .fe-body,
+.friendly-error.fe-brief .fe-original { display: none; }
