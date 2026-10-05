@@ -4,15 +4,12 @@
 //   node keyboard.mjs            (dev server on 18110)
 //
 // Writes out/keyboard.json and prints PASS/FAIL/INFO lines.
-import { pathToFileURL, fileURLToPath } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { join, dirname } from 'node:path';
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { homedir } from 'node:os';
+import { chromium } from './load_playwright.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const PW = process.env.PLAYWRIGHT_DIR ||
-  join(homedir(), 'AppData/Local/npm-cache/_npx/e41f203b7505f1fb/node_modules/playwright');
-const { chromium } = await import(pathToFileURL(join(PW, 'index.mjs')).href);
 const BASE = process.env.BASE || 'http://127.0.0.1:18110/';
 const OUT = join(HERE, 'out');
 const SHOTS = join(HERE, 'shots');
@@ -98,8 +95,10 @@ const browser = await chromium.launch();
     if (f.startsWith('footer') || (i > 5 && f === stops[0])) break;
   }
   const reached = runButtons.filter(idx => stops.some(s => s.includes(`.run-cell[${idx}]`)));
-  say(traps.length && traps.every(t => t.tabStaysIn) ? 'FAIL' : 'PASS', 'codemirror-trap',
-    `Tab inside a CodeMirror cell ${traps[0]?.tabStaysIn ? 'stays in the editor and inserts indentation' : 'leaves the editor'}; Escape then Tab -> ${traps[0]?.escThenTab}; Shift+Tab -> ${traps[0]?.shiftTab}`, traps);
+  // no editor reached = nothing tested, not a PASS
+  if (!traps.length) say('FAIL', 'codemirror-trap', 'the Tab walk never reached a CodeMirror cell', traps);
+  else say(traps.every(t => t.tabStaysIn) ? 'FAIL' : 'PASS', 'codemirror-trap',
+    `Tab inside a CodeMirror cell ${traps[0].tabStaysIn ? 'stays in the editor and inserts indentation' : 'leaves the editor'}; Escape then Tab -> ${traps[0].escThenTab}; Shift+Tab -> ${traps[0].shiftTab}`, traps);
   say(reached.length === runButtons.length ? 'INFO' : 'FAIL', 'run-buttons-reachable',
     `${reached.length}/${runButtons.length} run buttons reached by Tab - but only because the script pulled focus out of each editor`, { runButtons, reached });
   say(firstMain > 15 ? 'FAIL' : 'PASS', 'bypass-blocks', `${firstMain} Tab presses from the top of the page to the first lesson control (no skip link)`, { firstMain });

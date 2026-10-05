@@ -1,13 +1,10 @@
 // Screenshots of what keyboard focus looks like: an editor reached by Tab,
 // a run button, and a cell while it runs. node focus_shots.mjs
-import { pathToFileURL, fileURLToPath } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { join, dirname } from 'node:path';
-import { homedir } from 'node:os';
+import { chromium } from './load_playwright.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const PW = process.env.PLAYWRIGHT_DIR ||
-  join(homedir(), 'AppData/Local/npm-cache/_npx/e41f203b7505f1fb/node_modules/playwright');
-const { chromium } = await import(pathToFileURL(join(PW, 'index.mjs')).href);
 const BASE = process.env.BASE || 'http://127.0.0.1:18110/';
 
 const browser = await chromium.launch();

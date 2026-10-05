@@ -15,9 +15,14 @@ this folder). Nothing outside this folder was changed. All fixes below are
 | `verify_fixes.mjs` + `cm_escape_tab.js` | Tries fix 1 (editor keyboard) on the live page by script injection. | `out/verify_fixes.json`, `shots/fix-editor-focus-ring.png` |
 | `contrast_details.mjs`, `contrast_calc.mjs`, `lang_scan.mjs`, `show.mjs` | Group axe's contrast failures by colour pair; compute candidate colours; look for Japanese text in the de/en lessons (none found); print one axe file. | console |
 
-Rerun (dev server on 18110 first): `npm install` here, then `node audit.mjs`
-(~2 min), `node keyboard.mjs` (~3 min). `PLAYWRIGHT_DIR` overrides the
-Playwright copy, `BASE` the URL.
+Rerun (dev server on 18110 first): `npm ci` here (axe-core only), then
+`node audit.mjs` (~2 min), `node keyboard.mjs` (~3 min). Playwright is not a
+dependency of this folder: the scripts load it via `load_playwright.mjs` from
+`PLAYWRIGHT_DIR` (a `.../node_modules/playwright` folder, e.g. the npx cache)
+or else `import('playwright')`, and stop with a message if neither works
+(Chromium itself: `npx playwright install chromium`). `BASE` sets the URL.
+`audit.mjs` exits nonzero if a view could not be audited (navigation, run or
+axe failed, or its marker cell is gone).
 
 axe results are identical across de/en/ja (same counts per page), so the
 problems are structural, not translation-specific.
