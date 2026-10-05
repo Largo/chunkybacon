@@ -79,13 +79,17 @@ Last updated 2026-10-05.
   `"live": false`); once any time-limit tracer has been on, plain runs stay
   about 40% slower for the rest of the visit (#11); every cell is evaluated
   as `chunky.rb`, so an error in a method from an earlier cell reports that
-  cell's line numbers (#7, #5); the accessibility audit's other findings -
-  no live region for results, focus lost after a run or a lesson change,
-  the phone drawer not modal, no skip link, five contrasts (#13). Re-run
-  on `main` 2026-10-05: the unnamed editor (axe `label`) is gone and
-  Escape, then Tab leaves a cell (#16); Tab still indents and Shift+Tab
-  stays in the editor, so `keyboard.mjs` still reports the trap; the
-  rest unchanged (Sinatra's contrast findings 39 -> 21).
+  cell's line numbers (#7, #5).
+- Accessibility, after integrating the audit (`experiments/10-accessibility`,
+  "Integrated"): the letter (Rumale) is pointer-only - a typed-digits
+  fallback would make it keyboard-usable; Run buttons still turn
+  `disabled` while running (`aria-disabled` would keep the focus and read
+  "running …", but needs the tests' `.disabled` checks changed); the
+  loading screen's tab title is German under `?lang=ja`; no real screen
+  reader (NVDA, VoiceOver) has been tried. `keyboard.mjs` still reports
+  four FAILs that are its own assumptions (Tab indenting, no Enter on the
+  skip link, a live `.cell-out`, the first Tab opening the drawer) -
+  worth updating if the audit is rerun.
 - The offline dialog's sizes (`offlineExplain`, `offlinePython`, README,
   HANDOVER §6c, `test/shell/workspace_test.rb`) are measured by hand: the
   files of `offline-files.txt` in MiB, a text file without a `.gz` counted

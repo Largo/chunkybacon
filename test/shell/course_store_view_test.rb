@@ -119,6 +119,13 @@ class CourseStoreViewTest < Minitest::Test
     assert_match(/<div class="cell exercise" data-label="Aufgabe">/, html)
   end
 
+  def test_run_buttons_named_by_their_code_cell
+    html = ChunkyShell::View.lesson_html(@course.cells(0, "en"), "Task", "▶ Run", "", "Run cell %d")
+    assert_includes html, %(data-idx="1" aria-label="Run cell 1">▶ Run</button>)
+    assert_match(/aria-label="Run cell 3" aria-keyshortcuts="Alt\+R">/, html, "the exercise, its shortcut")
+    refute_includes html, "Run cell 4"
+  end
+
   def test_workshop_frame
     html = ChunkyShell::View.workshop_html("Werkstatt", "Intro", "Run")
     %w[wsFiles wsTab cell-code-0 wsStdinBox cell-out-0].each { |id| assert_includes html, %(id="#{id}") }

@@ -72,16 +72,23 @@
 <body>
 
     <div class="spinner" id="spinner">
-      <img class="spinner-image" src="assets/chunky.svg" alt="Chunky Bacon Fuchs">
-      <h1 id="spinnerTitle">Ruby lernen mit Chunky Bacon</h1>
-      <p id="spinnerText">Einen Moment … / One moment … / 少々お待ちください …</p>
+      <img class="spinner-image" src="assets/chunky.svg" alt="">
+      <!-- before the shell knows the language: the title in German, the
+           wait in all three, each marked with its language -->
+      <h1 id="spinnerTitle" lang="de">Ruby lernen mit Chunky Bacon</h1>
+      <p id="spinnerText"><span lang="de">Einen Moment …</span> / <span lang="en">One moment …</span> / <span lang="ja">少々お待ちください …</span></p>
       <div class="load-bar" aria-hidden="true"></div>
     </div>
 
     <div id="app" style="display:none">
+      <!-- The keyboard's first stop, shown only when it has the focus: past
+           the 50-odd links of the index to the lesson's heading
+           (shell/app.rb, skip_click) -->
+      <a id="skipLink" class="skip-link" href="#lessonBody"></a>
       <!-- Shows and hides the lessons: fixed top left, the same spot open or
-           closed, wide screen or phone (a drawer there). First in the page,
-           so it is also first for the keyboard. shell/app.rb drives it. -->
+           closed, wide screen or phone (a drawer there, modal while it is
+           out: .column turns inert). Right after the skip link for the
+           keyboard. shell/app.rb drives it. -->
       <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-controls="sidebar" aria-expanded="true">
         <svg viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="3.5" width="13" height="11" rx="2"/><path d="M7 3.5v11"/></svg>
       </button>
@@ -115,7 +122,7 @@
 
         <div class="column">
           <header>
-            <img id="mascot" src="assets/chunky.svg" alt="Chunky Bacon Fuchs">
+            <img id="mascot" src="assets/chunky.svg" alt="Chunky Bacon, der Fuchs">
             <div class="headerText">
               <h1 id="siteTitle">Ruby lernen mit Chunky Bacon</h1>
               <p id="siteSubtitle"></p>
@@ -127,15 +134,21 @@
               <span class="progress-label" id="progressLabel">Fortschritt</span>
               <span class="progress-dot" aria-hidden="true"></span>
             </button>
-            <select id="langSelect" title="Sprache / Language / 言語">
-              <option value="de">Deutsch</option>
-              <option value="en">English</option>
-              <option value="ja">日本語</option>
+            <!-- named by a hidden label, in the page's language (shell/app.rb);
+                 each language's own name is marked as that language -->
+            <label for="langSelect" id="langLabel" class="sr-only">Sprache</label>
+            <select id="langSelect" title="Sprache">
+              <option value="de" lang="de">Deutsch</option>
+              <option value="en" lang="en">English</option>
+              <option value="ja" lang="ja">日本語</option>
             </select>
           </header>
 
           <main>
             <article id="lessonBody"></article>
+            <!-- what a run with ▶ did, for screen readers (shell/app.rb,
+                 announce_run); live runs never write here -->
+            <p id="runStatus" class="sr-only" role="status" aria-live="polite"></p>
 
             <div id="chunkyChat">
               <div class="chat-avatar"><img src="assets/chunky.svg" alt="Chunky"></div>
@@ -665,6 +678,7 @@
         note.textContent = hint;
         cm.getWrapperElement().appendChild(note);
         cm.getInputField().setAttribute("aria-describedby", note.id);
+        cm.getInputField().setAttribute("aria-keyshortcuts", "Shift+Enter");
       }
       // typing - not code the page puts in - tells the shell, for live runs
       // (shell/app.rb); the cell number goes over as a string

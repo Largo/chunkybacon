@@ -33,6 +33,12 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a
   drawer.
+- **Keyboard and screen readers**: a skip link past the index, editors
+  that Escape, then Tab leaves, Run buttons named with their cell that keep
+  the focus, a status line that reads out what a run printed and what
+  Chunky says, the focus on the new lesson's heading after every lesson
+  change, a modal drawer on a phone, named widgets (IRB, mini browser, 3D)
+  and contrast at WCAG AA (audit: `experiments/10-accessibility`).
 - **Live runs**: a cell runs by itself a second after you stop typing, as
   long as the code parses - a rehearsal that keeps no file it writes,
   installs only gems already in the cache, fetches nothing from the web and

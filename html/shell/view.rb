@@ -75,12 +75,17 @@ module ChunkyShell
 
     # +live+: the Live switch for every toolbar (live_html), or "" - not
     # beside an IRB, which never runs live (main.rb's AutoRun)
-    def self.lesson_html(cells, task_label, run_label, live = "")
+    # +run_name+: "Run cell %d", the Run buttons' names for a screen reader,
+    #   which counts code cells only, as the editors' names do
+    def self.lesson_html(cells, task_label, run_label, live = "", run_name = "")
       html = "".dup
+      number = 0
       cells.each_with_index do |cell, idx|
         if code_cell?(cell)
+          number += 1
           switch = cell.code.to_s.include?("show_irb") ? "" : live
-          html << cell_html(idx, cell.t == "x", task_label, run_label, switch)
+          name = run_name == "" ? "" : format(run_name, number)
+          html << cell_html(idx, cell.t == "x", task_label, run_label, switch, name)
         else
           html << %(<div class="lessonText">#{cell.html}</div>)
         end
@@ -88,11 +93,16 @@ module ChunkyShell
       html
     end
 
-    def self.cell_html(idx, exercise, task_label, run_label, live = "")
+    # +name+: "Run cell 2" - a lesson has up to eight buttons that all read
+    # "▶ Run"; the name keeps the visible word (WCAG 2.5.3, Label in Name).
+    # The exercise's button says that Alt+R presses it.
+    def self.cell_html(idx, exercise, task_label, run_label, live = "", name = "")
+      label = name == "" ? "" : %( aria-label="#{escape_html(name)}")
+      keys = exercise ? ' aria-keyshortcuts="Alt+R"' : ""
       <<~HTML
         <div class="cell#{exercise ? ' exercise' : ''}" data-label="#{task_label}">
           <textarea title="code" id="cell-code-#{idx}"></textarea>
-          <div class="cell-toolbar">#{live}<button type="button" class="run-cell" data-idx="#{idx}">#{run_label}</button></div>
+          <div class="cell-toolbar">#{live}<button type="button" class="run-cell" data-idx="#{idx}"#{label}#{keys}>#{run_label}</button></div>
           <div class="cell-out" id="cell-out-#{idx}" style="display:none"></div>
         </div>
       HTML

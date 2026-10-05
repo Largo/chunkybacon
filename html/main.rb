@@ -717,7 +717,7 @@ class ChunkyApp
   def three_widget_html(tid, spec)
     <<~HTML
       <div class="three-stage" data-tid="#{tid}" style="width:#{spec[:width]}px;height:#{spec[:height]}px">
-        <canvas id="three-canvas-#{tid}" width="#{spec[:width]}" height="#{spec[:height]}"></canvas>
+        <canvas id="three-canvas-#{tid}" width="#{spec[:width]}" height="#{spec[:height]}" role="img" aria-label="#{escape_html(ui["threeLabel"])}"></canvas>
       </div>
     HTML
   end
@@ -764,6 +764,9 @@ class ChunkyApp
     end
     (@three_renderers[idx] ||= []) << [renderer, controls]
 
+    # prefers-reduced-motion: an animated scene stands still at its first
+    # frame (orbiting by hand still works - controls do not move by themselves)
+    animate = nil if animate && $window.matchMedia("(prefers-reduced-motion: reduce)")[:matches].to_s == "true"
     if animate || controls
       frame = 0
       renderer.animation_loop do
@@ -789,9 +792,9 @@ class ChunkyApp
         <div class="mb-chrome">
           <span class="mb-dots"><span></span><span></span><span></span></span>
           <span class="mb-scheme">http://localhost</span>
-          <input class="mb-url" value="#{escape_html(path)}" spellcheck="false" title="URL">
+          <input class="mb-url" value="#{escape_html(path)}" spellcheck="false" title="URL" aria-label="#{escape_html(ui["browserUrl"])}">
           <button type="button" class="mb-go">#{ui["browserGo"]}</button>
-          <span class="mb-status"></span>
+          <span class="mb-status" aria-live="polite"></span>
         </div>
         <div class="mb-view"></div>
       </div>
@@ -874,10 +877,10 @@ class ChunkyApp
   def irb_widget_html(sid)
     <<~HTML
       <div class="irb-term" data-sid="#{sid}">
-        <div class="irb-history"></div>
+        <div class="irb-history" role="log" aria-live="polite"></div>
         <div class="irb-line">
-          <span class="irb-prompt">irb(main):001:0&gt;</span>
-          <input class="irb-input" spellcheck="false" autocomplete="off" title="irb">
+          <span class="irb-prompt" aria-hidden="true">irb(main):001:0&gt;</span>
+          <input class="irb-input" spellcheck="false" autocomplete="off" title="irb" aria-label="#{escape_html(ui["irbInput"])}">
         </div>
       </div>
     HTML

@@ -18,6 +18,8 @@
 # The DOM is a small tree: innerHTML is parsed (well-formed markup only),
 # and getElementById / querySelector(All) / closest understand the selectors
 # the shell uses: tag, #id, .class, [attr], [attr='value'], combined.
+# document.activeElement follows focus(); like Chrome, it falls back to
+# <body> when the focused element turns disabled or leaves the tree.
 # storage.js (window.ChunkyStorage) and offline.js (window.ChunkyOffline) are
 # Hash-backed fakes, CodeMirror (window.cellEditors) a fake editor per
 # initCell.
@@ -211,6 +213,7 @@ module JS
     end
 
     def js_set(key, value)
+      root.blur(self) if key == "disabled" && value && root.is_a?(Document)
       case key
       when "id" then attrs["id"] = value
       when "className" then attrs["class"] = value.to_s
@@ -238,6 +241,7 @@ module JS
     end
 
     def descendants = elements.flat_map { |e| [e] + e.descendants }
+    def root = parent ? parent.root : self
 
     # ---- DOM methods (JS functions on the element) ----
     def js_getAttribute(name) = attrs[name.to_s]
@@ -269,7 +273,11 @@ module JS
     end
 
     def js_remove = parent&.children&.delete(self)
-    def js_focus = (props["focused"] = true) && nil
+    def js_focus
+      props["focused"] = true
+      root.focused = self if root.is_a?(Document)
+      nil
+    end
     def js_click = JS.fire(wrap, "click")
     def js_addEventListener(*) = nil
     def js_showModal = (props["open"] = true) && nil
@@ -375,13 +383,21 @@ module JS
       props["title"] = ""
     end
 
+    attr_writer :focused
+
     def js_get(key)
       case key
       when "body" then @body
       when "documentElement" then @html
       when "readyState" then "loading"
+      when "activeElement" then @focused && @focused.root == self ? @focused : @body
       else super
       end
+    end
+
+    # a focused element that turns disabled loses the focus
+    def blur(node)
+      @focused = nil if @focused.equal?(node)
     end
 
     def js_createElement(tag) = Node.new(tag.to_s.downcase)

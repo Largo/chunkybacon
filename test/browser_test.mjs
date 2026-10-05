@@ -70,6 +70,29 @@ await page.keyboard.press('Escape');
 await page.keyboard.press('Shift+Tab');
 check('Escape, Shift+Tab leaves the editor backwards', !['editor', 'toolbar'].includes(await focusIn()));
 
+// a run from the keyboard: the focus comes back to Run (a disabled button
+// drops it), and one polite status line says what came out
+await page.evaluate(() => { document.getElementById('runStatus').textContent = ''; });
+await page.focus('.run-cell[data-idx="1"]');
+await page.keyboard.press('Enter');
+await page.waitForFunction(() => document.getElementById('runStatus').textContent !== '', null, { timeout: 30000 });
+check('Enter on Run: the focus is back on Run afterwards',
+      await page.evaluate(() => document.activeElement.matches('.run-cell[data-idx="1"]')));
+const announced = await page.textContent('#runStatus');
+check('the run is announced in the status line', announced.startsWith('Zelle 1 ausgeführt:') && announced.includes('=> 2'));
+check('run buttons are named with their cell', (await page.getAttribute('.run-cell[data-idx="1"]', 'aria-label')) === 'Zelle 1 ausführen');
+// the skip link: the first Tab stop (Chrome would start a Tab from the
+// last focused element, so it is focused here), past the index to the
+// lesson's heading
+await page.evaluate(() => window.scrollTo(0, 0));
+await page.focus('#skipLink');
+check('the skip link comes first and shows when focused', await page.evaluate(() =>
+  document.querySelector('#app a[href], #app button').id === 'skipLink' &&
+  document.activeElement.getBoundingClientRect().top >= 0));
+await page.keyboard.press('Enter');
+check('the skip link puts the focus on the lesson heading',
+      await page.evaluate(() => document.activeElement.matches('#lessonBody h2') && location.hash === '#hallo'));
+
 // demo cell shows => value without puts
 await page.click('.cell .run-cell');
 await page.waitForTimeout(400);
@@ -90,6 +113,7 @@ check('nav shows done tick class', (await page.getAttribute('#lessonNav a:first-
 await page.click('#nextLessonLink');
 await page.waitForTimeout(300);
 check('advanced to lesson 2', (await page.textContent('#lessonBody')).includes('Taschenrechner'));
+check('the new lesson\'s heading has the focus', await page.evaluate(() => document.activeElement.matches('#lessonBody h2')));
 
 // error handling: broken code shows inline error + fail bubble
 await setExercise('puts nope_not_defined');

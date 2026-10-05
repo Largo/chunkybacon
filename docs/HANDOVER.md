@@ -211,6 +211,10 @@ it), the groups with done counts. The fixed
 `#sidebarToggle` puts it away on a wide screen (`chunkyui_sidebar`, a view
 setting); at 820 px and below (`App::NARROW`, the same width as in app.css)
 it is a drawer that a lesson, a tap beside it or Escape put away again.
+The drawer is modal: opening it moves the focus to the workshop link, and
+while it is out `.column` (header, lesson, footer) is `inert`
+(`App#sidebar_expanded`, also when the window grows past NARROW); the
+toggle and the skip link sit outside `.column` and stay reachable.
 
 A language is whatever `ui` has a key for: the shell takes
 the list from there, `index.html`'s `#langSelect` names them. German has its
@@ -414,6 +418,34 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   bridge hands the run to the kernel after `afterPaint`; compositor-only CSS
   animations keep it moving. CRuby's ~1 s boot freezes the page the same way.
   Respects `prefers-reduced-motion`.
+- **Keyboard and screen readers** (audit and measurements:
+  `experiments/10-accessibility/NOTES.md`). An editor is named "Code,
+  cell 2" (`codeLabel`, counting code cells only) with a hidden hint; Tab
+  indents, Escape then Tab leaves it (`initCell` in index.html). Each Run
+  button is named "Run cell 2" (`runCellLabel`, contains the visible "Run"),
+  the exercise's says `aria-keyshortcuts="Alt+R"`. A run with ▶, Shift+Enter
+  or Alt+R writes one line to `#runStatus` (`role=status`, `.sr-only`;
+  `App#announce_run`): `ranOk`/`ranError` with the cell's output, cut at
+  280 characters, and for an exercise Chunky's bubble - emptied first, the
+  text 50 ms later, so the same result twice is read twice. Live runs never
+  write there, and `.cell-out` is no live region on purpose (live runs
+  rewrite it while the learner types). The Run button keeps `disabled`
+  while it runs (the tests check it), which drops the focus to `<body>`;
+  `settle_cell` hands it back to the button if it was there
+  (`@refocus`). After a lesson change (`select_lesson`, `open_workshop`:
+  index, bubble link, search Enter, back/forward) the focus goes to the
+  lesson's `<h2>` (`focus_heading`, `tabindex="-1"`), not on the first
+  load. `#skipLink` is the first Tab stop (shown only when focused) and
+  does the same; its `href="#lessonBody"` is never followed, as the router
+  would take it for a lesson id. The language select has a hidden label
+  (`langLabel`) and its options their own `lang`; the spinner's three
+  texts are marked up the same way. Widgets (main.rb): the IRB history is a
+  `role=log` live region and its input named (`irbInput`), the mini
+  browser's status is live and its URL field named (`browserUrl`), a 3D
+  canvas is `role=img` (`threeLabel`) and an animated scene stands still
+  under `prefers-reduced-motion`, the letter's answer is mirrored into a
+  live `.letter-answer`. The shell stub (`test/shell/stubs/js.rb`) keeps
+  `document.activeElement` the way Chrome does.
 - CodeMirror cells must not be built while `#app` is `display:none`
   (blank editors after hard reload). Prose `pre/code` CSS stays scoped to
   `.lessonText`, or it bleeds into CodeMirror's internal `<pre>`s.
