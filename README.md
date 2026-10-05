@@ -78,7 +78,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   file (download, load again, merged key by key) or - in Chrome and Edge over
   https - into a connected folder, where workshop files are real files.
 - **Offline, if you like**: one click keeps the whole course on your device
-  (about 87 MB, or 44 MB with Python left out - a checkbox), and it opens
+  (about 92 MB, or 49 MB with Python left out - a checkbox), and it opens
   and runs without a connection - lessons, cells, the bundled gems, Python.
   Online it always loads the current version, and the copy updates itself.
 - **Python next to Ruby**: the PyCall lessons run real pandas, SymPy, NumPy

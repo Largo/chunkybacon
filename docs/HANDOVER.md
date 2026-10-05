@@ -4,7 +4,7 @@ Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
 Work in progress - what is unfinished, and in what state - is in
 `docs/OPEN_WORK.md`.
-Last updated 2026-10-04 (50 lessons in German, English and Japanese).
+Last updated 2026-10-05 (50 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -512,7 +512,7 @@ shell does the timing, the kernel the guarding:
 ## 6c. Offline mode
 
 The progress dialog's *Offline lernen* keeps the whole course on the device
-(~87 MB stored, up to ~55 MB to download; Pyodide is 43 / 36 of it): the course then opens and runs
+(~92 MB stored, up to ~59 MB to download; Pyodide is 43 / 36 of it): the course then opens and runs
 without a connection. **Off until the learner turns it on** - before that
 no service worker is registered and nothing changes. The choice is
 `chunkyui_offline` (a view setting, not synced).

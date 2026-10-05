@@ -79,7 +79,7 @@ window.LESSONS_JSON = JSON.stringify({
       "fileUnchanged": "Die Datei enthält nichts, was hier nicht schon ist.",
       "fileInvalid": "Das ist keine Fortschrittsdatei von Chunky Bacon.",
       "offlineTitle": "Offline lernen",
-      "offlineExplain": "Speichere den ganzen Kurs auf diesem Gerät – dann funktioniert er auch ohne Internet, im Zug oder im Flugzeug. Einmalig bis zu 55 MB Download, etwa 87 MB Speicherplatz (ohne Python 20 und 44 MB). Wird der Kurs online geändert, holt sich die Kopie die Änderungen von selbst.",
+      "offlineExplain": "Speichere den ganzen Kurs auf diesem Gerät – dann funktioniert er auch ohne Internet, im Zug oder im Flugzeug. Einmalig bis zu 59 MB Download, etwa 92 MB Speicherplatz (ohne Python 23 und 49 MB). Wird der Kurs online geändert, holt sich die Kopie die Änderungen von selbst.",
       "offlineEnable": "Auf diesem Gerät speichern",
       "offlineLoading": "Wird gespeichert …",
       "offlineReady": "Auf diesem Gerät gespeichert – funktioniert auch offline. Stand: %s",
@@ -197,7 +197,7 @@ window.LESSONS_JSON = JSON.stringify({
       "fileUnchanged": "The file holds nothing that is not here already.",
       "fileInvalid": "That is not a Chunky Bacon progress file.",
       "offlineTitle": "Learn offline",
-      "offlineExplain": "Keep the whole course on this device – then it works without internet too, on a train or a plane. Up to 55 MB to download once, about 87 MB of storage (without Python 20 and 44 MB). When the course changes online, the copy picks up the changes by itself.",
+      "offlineExplain": "Keep the whole course on this device – then it works without internet too, on a train or a plane. Up to 59 MB to download once, about 92 MB of storage (without Python 23 and 49 MB). When the course changes online, the copy picks up the changes by itself.",
       "offlineEnable": "Keep on this device",
       "offlineLoading": "Saving …",
       "offlineReady": "Saved on this device – works offline too. As of %s",
@@ -315,7 +315,7 @@ window.LESSONS_JSON = JSON.stringify({
       "fileUnchanged": "このファイルには、ここにまだないものは含まれていません。",
       "fileInvalid": "これはChunky Baconの進捗ファイルではありません。",
       "offlineTitle": "オフラインで学ぶ",
-      "offlineExplain": "コース全体をこの端末に保存すると、インターネットがなくても（電車や飛行機の中でも）使えます。最初に最大55 MBをダウンロードし、約87 MBの容量を使います（Pythonなしなら20 MBと44 MB）。オンラインのコースが更新されると、コピーも自動で更新されます。",
+      "offlineExplain": "コース全体をこの端末に保存すると、インターネットがなくても（電車や飛行機の中でも）使えます。最初に最大59 MBをダウンロードし、約92 MBの容量を使います（Pythonなしなら23 MBと49 MB）。オンラインのコースが更新されると、コピーも自動で更新されます。",
       "offlineEnable": "この端末に保存",
       "offlineLoading": "保存しています…",
       "offlineReady": "この端末に保存済みです。オフラインでも使えます。（%s 時点）",
@@ -4534,7 +4534,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "x",
-            "code": "# Chunkys Malprogramm: bei gedrückter Maus eine Linie von (pmouseX, pmouseY) nach (mouseX, mouseY)\nrequire \"processing\"\nusing Processing\n\nsetup do\n  size 400, 300\n  background 255\nend\n\ndraw do\nend\n",
+            "code": "# Chunkys Malprogramm: bei gedrückter Maus\n# eine Linie von (pmouseX, pmouseY) nach (mouseX, mouseY)\nrequire \"processing\"\nusing Processing\n\nsetup do\n  size 400, 300\n  background 255\nend\n\ndraw do\nend\n",
             "check": "sketch && sketch.width == 400 && sketch.height == 300 && sketch.simulate__([[\"move\", 10, 10], [\"move\", 50, 60], [\"down\", 50, 60], [\"move\", 120, 90], [\"move\", 200, 100]]).select { |s| s[:op] == \"line\" && s[:stroke] }.map { |s| s[:args].map(&:round) }.then { |lines| !lines.include?([10, 10, 50, 60]) && lines.include?([50, 60, 120, 90]) && lines.include?([120, 90, 200, 100]) }",
             "hint": "In <code>draw</code>: <code>line pmouseX, pmouseY, mouseX, mouseY if mousePressed</code>"
           }
@@ -4589,7 +4589,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "x",
-            "code": "# Chunky's paint program: while the mouse is pressed, a line from (pmouseX, pmouseY) to (mouseX, mouseY)\nrequire \"processing\"\nusing Processing\n\nsetup do\n  size 400, 300\n  background 255\nend\n\ndraw do\nend\n",
+            "code": "# Chunky's paint program: while the mouse is pressed,\n# a line from (pmouseX, pmouseY) to (mouseX, mouseY)\nrequire \"processing\"\nusing Processing\n\nsetup do\n  size 400, 300\n  background 255\nend\n\ndraw do\nend\n",
             "check": "sketch && sketch.width == 400 && sketch.height == 300 && sketch.simulate__([[\"move\", 10, 10], [\"move\", 50, 60], [\"down\", 50, 60], [\"move\", 120, 90], [\"move\", 200, 100]]).select { |s| s[:op] == \"line\" && s[:stroke] }.map { |s| s[:args].map(&:round) }.then { |lines| !lines.include?([10, 10, 50, 60]) && lines.include?([50, 60, 120, 90]) && lines.include?([120, 90, 200, 100]) }",
             "hint": "In <code>draw</code>: <code>line pmouseX, pmouseY, mouseX, mouseY if mousePressed</code>"
           }
@@ -4644,7 +4644,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "x",
-            "code": "# Chunkyのお絵かき：マウスを押している間、(pmouseX, pmouseY)から(mouseX, mouseY)へ線を引く\nrequire \"processing\"\nusing Processing\n\nsetup do\n  size 400, 300\n  background 255\nend\n\ndraw do\nend\n",
+            "code": "# Chunkyのお絵かき：マウスを押している間、\n# (pmouseX, pmouseY)から(mouseX, mouseY)へ線を引く\nrequire \"processing\"\nusing Processing\n\nsetup do\n  size 400, 300\n  background 255\nend\n\ndraw do\nend\n",
             "check": "sketch && sketch.width == 400 && sketch.height == 300 && sketch.simulate__([[\"move\", 10, 10], [\"move\", 50, 60], [\"down\", 50, 60], [\"move\", 120, 90], [\"move\", 200, 100]]).select { |s| s[:op] == \"line\" && s[:stroke] }.map { |s| s[:args].map(&:round) }.then { |lines| !lines.include?([10, 10, 50, 60]) && lines.include?([50, 60, 120, 90]) && lines.include?([120, 90, 200, 100]) }",
             "hint": "<code>draw</code>の中で：<code>line pmouseX, pmouseY, mouseX, mouseY if mousePressed</code>"
           }
@@ -4784,15 +4784,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Random.new(42)</code>は、<em>シード</em>（種）が42の乱数生成器です。同じシードからは、いつも同じ「乱数」の列が出てきます。つまり同じ名前です。こうして始まるテストは、毎回同じデータを使います。</p><p>Fakerはたくさんの言語を話します。<code>Faker::Config.locale</code>で選びます。ここでは日本語と、オーストラリアの住所と電話番号を持つオーストラリア英語です：</p>"
+            "html": "<p><code>Random.new(42)</code>は、<em>シード</em>（種）が42の乱数生成器です。同じシードからは、いつも同じ「乱数」の列が出てきます。つまり同じ名前です。こうして始まるテストは、毎回同じデータを使います。</p><p>Fakerはたくさんの言語を話します。<code>Faker::Config.locale</code>で選びます。ここでは、オーストラリアの住所と電話番号を持つオーストラリア英語と、日本語です：</p>"
           },
           {
             "t": "c",
-            "code": "Faker::Config.locale = \"ja\"\nputs Faker::Name.name\nputs Faker::Address.city\nputs Faker::Food.dish\n\nFaker::Config.locale = \"en-AU\"\nputs Faker::Name.name\nputs Faker::Address.full_address\n\nFaker::Config.locale = \"en\""
+            "code": "Faker::Config.locale = \"en-AU\"\nputs Faker::Name.name\nputs Faker::Address.full_address\nputs Faker::PhoneNumber.phone_number\n\nFaker::Config.locale = \"ja\"\nputs Faker::Name.name\nputs Faker::Address.city\n\nFaker::Config.locale = \"en\""
           },
           {
             "t": "h",
-            "html": "<p>言語はそのあとのすべての呼び出しに効くので、最後に英語に戻しています。ある言語に辞書がなければ、Fakerは英語の辞書を使います（日本語の料理名がないので、料理は英語になります）。<code>\"de-CH\"</code>（スイスのドイツ語）や<code>\"fr\"</code>も試してみてください。</p><p>何も繰り返してはいけないこともあります。たとえば会員番号や、ひとつしかないはずのメールアドレス。そのための<code>unique</code>です：</p>"
+            "html": "<p>言語はそのあとのすべての呼び出しに効くので、最後に英語に戻しています。ある言語に辞書がなければ、Fakerは英語の辞書を使います。<code>\"de-CH\"</code>（スイスのドイツ語）や<code>\"fr\"</code>も試してみてください。</p><p>何も繰り返してはいけないこともあります。たとえば会員番号や、ひとつしかないはずのメールアドレス。そのための<code>unique</code>です：</p>"
           },
           {
             "t": "c",
@@ -4800,7 +4800,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>unique</code>は、これまでに出たものを覚えていて、同じものを二度と出しません。6回振って、どの数も1回ずつ。7回目はもう無理です。何度か試したあと、Fakerは<code>Faker::UniqueGenerator::RetryLimitExceeded</code>であきらめます。<code>clear</code>は覚えた値を忘れます。最初の行がないと、2回目の実行でセルが失敗します。</p><p>そして、応用コースの時間記録のためのテストデータはこうなります。シードを固定しているので、毎回同じ記録です：</p>"
+            "html": "<p><code>unique</code>は、これまでに出たものを覚えていて、同じものを二度と出しません。6回振ると、どの数も1回ずつ出ます。7回目はもう無理です。何度か試したあと、Fakerは<code>Faker::UniqueGenerator::RetryLimitExceeded</code>であきらめます。<code>clear</code>は覚えた値を忘れます。最初の行がないと、2回目の実行でセルが失敗します。</p><p>そして、応用コースの時間記録のためのテストデータはこうなります。シードを固定しているので、毎回同じ記録です：</p>"
           },
           {
             "t": "c",
@@ -4992,7 +4992,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>1行目は危険です。ブラウザはその中の<code>&lt;script&gt;</code>を読んで実行してしまいます。知らない人のプログラムが、あなたのお店のページで、お客さんのデータといっしょに動くのです。これは<em>クロスサイトスクリプティング</em>（XSS）と呼ばれ、ウェブでもっともよくあるセキュリティホールのひとつです。<code>ERB::Util.h</code>（hはHTMLのh）は特殊な文字を<em>エスケープ</em>します。<code>&lt;</code>は<code>&amp;lt;</code>になり、ブラウザは文字を実行せずに表示します。ルールはこうです：自分で書いたものでないものは、すべて<code>h</code>を通す。（Railsは自動でそうします。）</p><p>そして、ERBテンプレートはこうしてミニブラウザ（レッスン15）のページになります。Rackアプリにはラムダで十分です：</p>"
+            "html": "<p>1行目は危険です。ブラウザはその中の<code>&lt;script&gt;</code>を読んで実行してしまいます。知らない人のプログラムが、あなたのお店のページで、お客さんのデータといっしょに動くのです。これは<em>クロスサイトスクリプティング</em>（XSS）と呼ばれ、ウェブでもっともよくあるセキュリティホールのひとつです。<code>ERB::Util.h</code>（hはHTMLのh）は特殊な文字を<em>エスケープ</em>します。<code>&lt;</code>は<code>&amp;lt;</code>になり、ブラウザは文字を実行せずに表示します。ルールはこうです：自分で書いたものでないものは、すべて<code>h</code>を通します。（Railsは自動でそうします。）</p><p>そして、ERBテンプレートはこうしてミニブラウザ（レッスン15）のページになります。Rackアプリにはラムダで十分です：</p>"
           },
           {
             "t": "c",
@@ -6231,7 +6231,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>parse</code> pflückt die Optionen heraus und gibt zurück, was übrig bleibt – hier das Kommando <code>\"report\"</code>. Gratis dazu: <code>--help</code> mit den Beschreibungstexten.</p></div>"
+            "html": "<p><code>parse</code> pflückt die Optionen heraus und gibt zurück, was übrig bleibt – hier das Kommando <code>\"report\"</code>. Gratis dazu: <code>--help</code> mit den Beschreibungstexten.</p>"
           },
           {
             "t": "h",
