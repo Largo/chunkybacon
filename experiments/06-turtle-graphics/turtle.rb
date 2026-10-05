@@ -68,7 +68,12 @@ class Turtle
 
   def back(distance) = forward(-distance.to_f)
 
+  # turns count too, or loop { right 90 } would never stop; twice the steps,
+  # as circle turns twice per step
   def right(angle)
+    if @turns.size >= 2 * MAX_STEPS
+      raise TooFar, "Chunky is dizzy: more than #{2 * MAX_STEPS} turns. Is there a loop that never ends?"
+    end
     @turns << angle.to_f
     @heading = Turtle.normalize(@heading + angle.to_f)
     self
