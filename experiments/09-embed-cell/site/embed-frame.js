@@ -212,8 +212,6 @@
       setTimeout(function () {
         patchSource.then(function (source) {
           window.rubyVM.eval(source);
-        }).catch(function (e) {
-          console.error("embed-kernel.rb", e);
         }).then(function () {
           bridge.ready = true;
           mark("kernel-ready");
@@ -221,6 +219,9 @@
           var items = waiting;
           waiting = [];
           items.forEach(send);
+        }, function (e) {
+          // without the patch every run would hit the sandbox's localStorage
+          kernelFailed("embed-kernel.rb: " + (e && e.message ? e.message : e));
         });
       }, 0);
     },
