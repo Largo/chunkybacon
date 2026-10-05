@@ -113,6 +113,12 @@ await setExercise('install_gem "chunky_png"\nrequire "chunky_png"\nbild = Chunky
 await runExercise();
 check('bacon flag exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 check('exercise shows the flag image', await page.isVisible('.cell.exercise .cell-out img.cell-image'));
+check('a pixel picture is a 160px thumbnail', (await page.$eval('.cell.exercise .cell-out img.cell-image', img => img.offsetWidth)) === 160);
+// an SVG (anything with to_data_url) keeps its own size instead
+await setExercise(`svg = %(<svg xmlns="http://www.w3.org/2000/svg" width="400" height="60"><rect width="400" height="60" fill="#c14a2e"/></svg>)
+show_image Struct.new(:to_data_url).new("data:image/svg+xml;base64," + [svg].pack("m0"))`);
+await runExercise();
+check('an SVG under a cell keeps its own width', (await page.$eval('.cell.exercise .cell-out img.cell-image', img => img.clientWidth)) === 400);
 
 // lesson 14: HTML parsing with Nokogiri (nokogiri-pure, from the gem cache)
 await page.click('#lessonNav a[data-id="html"]');
