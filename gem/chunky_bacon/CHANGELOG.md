@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- `show_plot` / `show_plot fig`, as in the course's matplotlib lesson: the
+  current (or that) matplotlib figure, through the pycall gem, saved as
+  `chunky-plot-N.png`, opened and closed.
+
 ## 0.1.3
 
 - `show_image` takes JPEGs, as the course's lesson 22 (pure_jpeg) makes

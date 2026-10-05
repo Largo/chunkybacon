@@ -30,7 +30,8 @@ every file are in `html/assets/picoruby/NOTICE.md`; keep it with the runtime.
 ## Python in the browser (`html/assets/pyodide/`)
 
 Loaded only by the PyCall lessons (html/pycall.rb), each with the packages it
-imports; put there by
+imports (matplotlib and the seven wheels after it in the table only by the
+matplotlib lesson, or a workshop program that imports it); put there by
 `tools/vendor_pyodide.rb` from the official Pyodide release, the wheels checked
 against the release's SHA-256.
 
@@ -50,6 +51,19 @@ against the release's SHA-256.
 | [SciPy](https://scipy.org/) | 1.18.0 | BSD-3-Clause, with bundled parts under their own licenses | `scipy-1.18.0-…wasm32.whl` (`dist-info/LICENSE.txt`, which lists the bundled parts) |
 | [joblib](https://joblib.readthedocs.io/) | 1.5.3 | BSD-3-Clause | its wheel (`dist-info/licenses/LICENSE.txt`) |
 | [threadpoolctl](https://github.com/joblib/threadpoolctl) | 3.6.0 | BSD-3-Clause | its wheel (`dist-info/licenses/LICENSE`) |
+| [matplotlib](https://matplotlib.org/) | 3.10.8 | matplotlib License (PSF-based, BSD-compatible), © 2012- Matplotlib Development Team | `matplotlib-3.10.8-…wasm32.whl` (`dist-info/LICENSE`); further bundled parts below |
+| [DejaVu fonts](https://dejavu-fonts.github.io/), inside matplotlib (`mpl-data/fonts/ttf/DejaVu*.ttf`, the default font of every chart) | as bundled | Bitstream Vera Fonts License (© 2003 Bitstream, Inc.; DejaVu changes public domain) and Arev Fonts License (© 2006 Tavmjong Bah) | `mpl-data/fonts/ttf/LICENSE_DEJAVU` in the wheel |
+| [STIX fonts](https://www.stixfonts.org/), inside matplotlib (`mpl-data/fonts/ttf/STIX*.ttf`, converted to TTF by matplotlib) | as bundled | SIL OFL 1.1 (© 2001-2010 the STI Pub Companies; portions © MicroPress, Inc. and Elsevier, Inc.) | `mpl-data/fonts/ttf/LICENSE_STIX` in the wheel |
+| Other fonts and font metrics inside matplotlib: Computer Modern (BaKoMa, `cm*.ttf`, `cm*.afm`), Humor Sans, the Adobe AFM metrics of the 14 PDF core fonts (`pdfcorefonts/`) and further PostScript metrics (`afm/`) | as bundled | each its own (the AFM metrics: Adobe's terms in `pdfcorefonts/readme.txt`) | the wheel's `mpl-data/fonts/`; matplotlib's `LICENSE/` folder in its source lists them |
+| C/C++ libraries matplotlib builds in: [FreeType](https://freetype.org/) (`ft2font`), Agg (Anti-Grain Geometry), Qhull | as built by Pyodide | FreeType License (FTL); Agg's modified BSD license; Qhull license | in its `.so` files - see matplotlib's `LICENSE/` folder. Portions of this software are copyright © The FreeType Project (www.freetype.org). All rights reserved. |
+| [contourpy](https://github.com/contourpy/contourpy) | 1.3.3 | BSD-3-Clause | its wheel (`dist-info/LICENSE`) |
+| [cycler](https://github.com/matplotlib/cycler) | 0.12.1 | BSD-3-Clause | its wheel (`dist-info/LICENSE`) |
+| [fontTools](https://github.com/fonttools/fonttools) | 4.62.1 | MIT, with bundled parts under their own licenses | its wheel (`dist-info/licenses/LICENSE`, `LICENSE.external`) |
+| [kiwisolver](https://github.com/nucleic/kiwi) | 1.5.0 | BSD-3-Clause | its wheel (`dist-info/licenses/LICENSE`) |
+| [packaging](https://github.com/pypa/packaging) | 26.1 | Apache-2.0 or BSD-2-Clause | its wheel (`dist-info/licenses/`) |
+| [Pillow](https://python-pillow.github.io/) | 12.2.0 | MIT-CMU (the PIL license) | its wheel (`dist-info/licenses/LICENSE`) |
+| C libraries Pillow builds in (libjpeg-turbo, libtiff, libwebp, FreeType, zlib) | as built by Pyodide | each its own (BSD-style, libtiff's, BSD-3-Clause, FTL, zlib) | in its `.so` files - see Pyodide's and Pillow's repositories |
+| [pyparsing](https://github.com/pyparsing/pyparsing) | 3.3.2 | MIT | its wheel (`dist-info/licenses/LICENSE`) |
 
 ## Editor, 3D, fonts, sql.js and Herb
 

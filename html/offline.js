@@ -7,7 +7,7 @@
   "use strict";
 
   var KEY = "chunkyui_offline";
-  // Python (assets/pyodide/, ~25 MB of the copy) is in it unless unticked
+  // Python (assets/pyodide/, ~52 MB of the copy) is in it unless unticked
   var PYTHON_KEY = "chunkyui_offline_python";
   var supported = "serviceWorker" in navigator && window.isSecureContext && "caches" in window;
   var listeners = {};

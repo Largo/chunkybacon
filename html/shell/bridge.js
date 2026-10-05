@@ -189,8 +189,9 @@
     // a live run (shell/app.rb, autorun.rb): only once the kernel is up, never
     // queued - while Ruby loads, typing is just typing. true when it went out.
     autorun: function (idx) {
-      // (while Python or SQLite loads, typing is just typing too)
-      if (!bridge.ready || (window.chunkyPython && window.chunkyPython.loading) ||
+      // (while Python or SQLite loads, typing is just typing too - and while
+      // matplotlib's first import runs, index.html's warmMatplotlib)
+      if (!bridge.ready || (window.chunkyPython && (window.chunkyPython.loading || window.chunkyPython.warming)) ||
           (window.chunkySqlite && window.chunkySqlite.loading)) return false;
       send({ type: "autorun", idx: Number(idx) });
       return true;

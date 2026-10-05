@@ -134,6 +134,23 @@ module ChunkyBacon
       nil
     end
 
+    # A matplotlib figure, through the pycall gem (require "pycall" first):
+    # the current one, or the one given. Saved as a PNG and opened, then
+    # closed - as the course page shows it below the cell.
+    def show_plot(figure = nil)
+      raise ChunkyBacon::NotHere, "show_plot draws with matplotlib through pycall: " \
+                                  "pip install matplotlib, gem install pycall, require \"pycall\"" unless defined?(PyCall)
+
+      plt = PyCall.import_module("matplotlib.pyplot")
+      figure ||= plt.gcf
+      path = ChunkyBacon.next_file("chunky-plot", "png")
+      figure.savefig(path)
+      plt.close(figure)
+      ChunkyBacon.say "saved #{ChunkyBacon.relative(path)} (#{File.size(path)} B)"
+      ChunkyBacon::Opener.open(path)
+      nil
+    end
+
     # What the page offered as a download: the data saved as +name+ in the
     # program's folder. download_file "notizen.txt" names a file that is
     # there already.

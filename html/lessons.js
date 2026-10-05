@@ -38,7 +38,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveOff": "Live ist aus – klicken, damit der Code beim Tippen von selbst läuft.",
       "liveSlow": "Diese Zelle braucht zu lange für Live – mit ▶ ausführen.",
       "liveStopped": "Nach einer Sekunde angehalten – mit ▶ läuft der Code ganz.",
-      "liveNeedsRun": "Gems installieren, ihre Daten zum ersten Mal lesen, Daten aus dem Netz holen und eine Datenbank ändern geht nur mit ▶.",
+      "liveNeedsRun": "Gems installieren, ihre Daten zum ersten Mal lesen, ein Python-Modul zum ersten Mal importieren, Daten aus dem Netz holen und eine Datenbank ändern geht nur mit ▶.",
       "nextLesson": "→ Weiter zur nächsten Lektion",
       "progress": "Lektion %d von %d",
       "allDone": "🎉 Du hast alle Lektionen geschafft! CHUNKY BACON! Als nächsten Schritt empfehle ich dir die <a href='https://koans.idogawa.com'>Ruby Koans im Browser</a> – und auf <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> die nächste Ruby-Konferenz oder ein Meetup.",
@@ -81,7 +81,7 @@ window.LESSONS_JSON = JSON.stringify({
       "fileUnchanged": "Die Datei enthält nichts, was hier nicht schon ist.",
       "fileInvalid": "Das ist keine Fortschrittsdatei von Chunky Bacon.",
       "offlineTitle": "Offline lernen",
-      "offlineExplain": "Speichere den ganzen Kurs auf diesem Gerät – dann funktioniert er auch ohne Internet, im Zug oder im Flugzeug. Einmalig bis zu 59 MB Download, etwa 92 MB Speicherplatz (ohne Python 23 und 49 MB). Wird der Kurs online geändert, holt sich die Kopie die Änderungen von selbst.",
+      "offlineExplain": "Speichere den ganzen Kurs auf diesem Gerät – dann funktioniert er auch ohne Internet, im Zug oder im Flugzeug. Einmalig bis zu 68 MB Download, etwa 101 MB Speicherplatz (ohne Python 23 und 49 MB). Wird der Kurs online geändert, holt sich die Kopie die Änderungen von selbst.",
       "offlineEnable": "Auf diesem Gerät speichern",
       "offlineLoading": "Wird gespeichert …",
       "offlineReady": "Auf diesem Gerät gespeichert – funktioniert auch offline. Stand: %s",
@@ -90,7 +90,7 @@ window.LESSONS_JSON = JSON.stringify({
       "offlineDisable": "Kopie löschen",
       "offlineError": "Der Kurs konnte nicht gespeichert werden: %s",
       "offlineRetry": "Nochmals versuchen",
-      "offlinePython": "Python mitnehmen – für die Python-Lektionen (pandas, SymPy, NumPy, scikit-learn), rund 43 MB",
+      "offlinePython": "Python mitnehmen – für die Python-Lektionen (pandas, SymPy, NumPy, matplotlib, scikit-learn), rund 52 MB",
       "offlineUnsupported": "Offline lernen geht in diesem Browser nicht (zum Beispiel in einem privaten Fenster).",
       "gemOffline": "Gem „%s“ ist nicht in der Offline-Kopie – zum Installieren brauchst du eine Internetverbindung.",
       "close": "Schliessen",
@@ -158,7 +158,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveOff": "Live is off – click to have the code run by itself as you type.",
       "liveSlow": "This cell takes too long for live runs – run it with ▶.",
       "liveStopped": "Stopped after a second – ▶ runs the code all the way.",
-      "liveNeedsRun": "Installing gems, reading their data for the first time, fetching from the web and changing a database only happen with ▶.",
+      "liveNeedsRun": "Installing gems, reading their data for the first time, importing a Python module for the first time, fetching from the web and changing a database only happen with ▶.",
       "nextLesson": "→ On to the next lesson",
       "progress": "Lesson %d of %d",
       "allDone": "🎉 You finished all lessons! CHUNKY BACON! As a next step, try the <a href='https://koans.idogawa.com'>Ruby Koans in the browser</a> – and find your next Ruby conference or meetup on <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>.",
@@ -201,7 +201,7 @@ window.LESSONS_JSON = JSON.stringify({
       "fileUnchanged": "The file holds nothing that is not here already.",
       "fileInvalid": "That is not a Chunky Bacon progress file.",
       "offlineTitle": "Learn offline",
-      "offlineExplain": "Keep the whole course on this device – then it works without internet too, on a train or a plane. Up to 59 MB to download once, about 92 MB of storage (without Python 23 and 49 MB). When the course changes online, the copy picks up the changes by itself.",
+      "offlineExplain": "Keep the whole course on this device – then it works without internet too, on a train or a plane. Up to 68 MB to download once, about 101 MB of storage (without Python 23 and 49 MB). When the course changes online, the copy picks up the changes by itself.",
       "offlineEnable": "Keep on this device",
       "offlineLoading": "Saving …",
       "offlineReady": "Saved on this device – works offline too. As of %s",
@@ -210,7 +210,7 @@ window.LESSONS_JSON = JSON.stringify({
       "offlineDisable": "Delete the copy",
       "offlineError": "The course could not be saved: %s",
       "offlineRetry": "Try again",
-      "offlinePython": "Include Python – for the Python lessons (pandas, SymPy, NumPy, scikit-learn), about 43 MB",
+      "offlinePython": "Include Python – for the Python lessons (pandas, SymPy, NumPy, matplotlib, scikit-learn), about 52 MB",
       "offlineUnsupported": "Learning offline does not work in this browser (in a private window, for example).",
       "gemOffline": "Gem “%s” is not in the offline copy – installing it needs an internet connection.",
       "close": "Close",
@@ -278,7 +278,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveOff": "ライブはオフです。クリックすると、入力中にコードがひとりでに動きます。",
       "liveSlow": "このセルはライブ実行には時間がかかりすぎます。▶ で実行してね。",
       "liveStopped": "1秒で止めました。▶ なら最後まで実行します。",
-      "liveNeedsRun": "gemのインストール、gemのデータの初回の読み込み、ネットからのデータ取得、データベースの変更は ▶ のときだけ行います。",
+      "liveNeedsRun": "gemのインストール、gemのデータの初回の読み込み、Pythonモジュールの初回のインポート、ネットからのデータ取得、データベースの変更は ▶ のときだけ行います。",
       "nextLesson": "→ 次のレッスンへ",
       "progress": "レッスン %d / %d",
       "allDone": "🎉 全レッスン制覇！CHUNKY BACON! 次のステップには<a href='https://koans.idogawa.com'>ブラウザで動くRuby Koans</a>がおすすめだよ。次のRubyカンファレンスやミートアップは<a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>で探してみてね。",
@@ -321,7 +321,7 @@ window.LESSONS_JSON = JSON.stringify({
       "fileUnchanged": "このファイルには、ここにまだないものは含まれていません。",
       "fileInvalid": "これはChunky Baconの進捗ファイルではありません。",
       "offlineTitle": "オフラインで学ぶ",
-      "offlineExplain": "コース全体をこの端末に保存すると、インターネットがなくても（電車や飛行機の中でも）使えます。最初に最大59 MBをダウンロードし、約92 MBの容量を使います（Pythonなしなら23 MBと49 MB）。オンラインのコースが更新されると、コピーも自動で更新されます。",
+      "offlineExplain": "コース全体をこの端末に保存すると、インターネットがなくても（電車や飛行機の中でも）使えます。最初に最大68 MBをダウンロードし、約101 MBの容量を使います（Pythonなしなら23 MBと49 MB）。オンラインのコースが更新されると、コピーも自動で更新されます。",
       "offlineEnable": "この端末に保存",
       "offlineLoading": "保存しています…",
       "offlineReady": "この端末に保存済みです。オフラインでも使えます。（%s 時点）",
@@ -330,7 +330,7 @@ window.LESSONS_JSON = JSON.stringify({
       "offlineDisable": "コピーを削除",
       "offlineError": "コースを保存できませんでした：%s",
       "offlineRetry": "もう一度試す",
-      "offlinePython": "Pythonも保存する（pandas・SymPy・NumPy・scikit-learnのレッスン用、約43 MB）",
+      "offlinePython": "Pythonも保存する（pandas・SymPy・NumPy・matplotlib・scikit-learnのレッスン用、約52 MB）",
       "offlineUnsupported": "このブラウザ（たとえばプライベートウィンドウ）ではオフライン学習を使えません。",
       "gemOffline": "gem「%s」はオフライン用コピーに含まれていません。インストールするにはインターネット接続が必要です。",
       "close": "閉じる",
@@ -3329,11 +3329,11 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "brett = np.arange(12).reshape(3, 4)\nputs brett\nputs brett.shape\nbrett.sum(axis: 0)"
+            "code": "brett = np.arange(12).reshape(3, 4)\nputs brett\nputs \"shape: #{brett.shape}\"\nbrett.sum(axis: 0)"
           },
           {
             "t": "h",
-            "html": "<p><code>shape</code> sagt, wie gross das Array ist: 3 Zeilen, 4 Spalten. <code>sum(axis: 0)</code> zählt jede Spalte zusammen (Achse 0 läuft die Zeilen hinunter); mit <code>axis: 1</code> wäre es jede Zeile.</p><p>NumPy bringt auch Zufallszahlen mit. Würfeln wir 6000-mal und zählen, wie oft jede Augenzahl kam:</p>"
+            "html": "<p><code>shape</code> sagt, wie gross das Array ist: 3 Zeilen, 4 Spalten. In Python ist das ein Tupel, <code>(3, 4)</code>; pycall macht daraus ein Ruby-Array. <code>sum(axis: 0)</code> zählt jede Spalte zusammen (Achse 0 läuft die Zeilen hinunter); mit <code>axis: 1</code> wäre es jede Zeile.</p><p>NumPy bringt auch Zufallszahlen mit. Würfeln wir 6000-mal und zählen, wie oft jede Augenzahl kam:</p>"
           },
           {
             "t": "c",
@@ -3400,11 +3400,11 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "grid = np.arange(12).reshape(3, 4)\nputs grid\nputs grid.shape\ngrid.sum(axis: 0)"
+            "code": "grid = np.arange(12).reshape(3, 4)\nputs grid\nputs \"shape: #{grid.shape}\"\ngrid.sum(axis: 0)"
           },
           {
             "t": "h",
-            "html": "<p><code>shape</code> says how big the array is: 3 rows, 4 columns. <code>sum(axis: 0)</code> adds up every column (axis 0 runs down the rows); <code>axis: 1</code> would add up every row instead.</p><p>NumPy also brings random numbers. Let's throw a die 6000 times and count how often each face came up:</p>"
+            "html": "<p><code>shape</code> says how big the array is: 3 rows, 4 columns. In Python that is a tuple, <code>(3, 4)</code>; pycall turns it into a Ruby array. <code>sum(axis: 0)</code> adds up every column (axis 0 runs down the rows); <code>axis: 1</code> would add up every row instead.</p><p>NumPy also brings random numbers. Let's throw a die 6000 times and count how often each face came up:</p>"
           },
           {
             "t": "c",
@@ -3471,11 +3471,11 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "grid = np.arange(12).reshape(3, 4)\nputs grid\nputs grid.shape\ngrid.sum(axis: 0)"
+            "code": "grid = np.arange(12).reshape(3, 4)\nputs grid\nputs \"shape: #{grid.shape}\"\ngrid.sum(axis: 0)"
           },
           {
             "t": "h",
-            "html": "<p><code>shape</code>は配列の大きさを教えてくれます。3行4列です。<code>sum(axis: 0)</code>は列ごとに合計します（軸0は行を下へたどります）。<code>axis: 1</code>なら行ごとの合計です。</p><p>NumPyには乱数もあります。サイコロを6000回振って、それぞれの目が何回出たか数えてみましょう：</p>"
+            "html": "<p><code>shape</code>は配列の大きさを教えてくれます。3行4列です。Pythonではタプル<code>(3, 4)</code>ですが、pycallはRubyの配列にします。<code>sum(axis: 0)</code>は列ごとに合計します（軸0は行を下へたどります）。<code>axis: 1</code>なら行ごとの合計です。</p><p>NumPyには乱数もあります。サイコロを6000回振って、それぞれの目が何回出たか数えてみましょう：</p>"
           },
           {
             "t": "c",
@@ -3549,7 +3549,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>shape</code> sagt (150, 4): 150 Zeilen mit je 4 Messwerten. Wie gut kann ein Baum die Arten auseinanderhalten? Um das ehrlich herauszufinden, verstecken wir beim Lernen einen Teil der Daten: <code>train_test_split</code> hält 30 % zurück. Der Baum lernt vom Rest und wird dann an Blumen geprüft, die er nie gesehen hat:</p>"
+            "html": "<p><code>shape</code> sagt [150, 4]: 150 Zeilen mit je 4 Messwerten. Wie gut kann ein Baum die Arten auseinanderhalten? Um das ehrlich herauszufinden, verstecken wir beim Lernen einen Teil der Daten: <code>train_test_split</code> hält 30 % zurück. Der Baum lernt vom Rest und wird dann an Blumen geprüft, die er nie gesehen hat:</p>"
           },
           {
             "t": "c",
@@ -3612,7 +3612,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>shape</code> says (150, 4): 150 rows, 4 measurements each. How well can a tree tell the kinds apart? To find out honestly, we hide part of the data while it learns: <code>train_test_split</code> keeps 30% back. The tree learns from the rest and is then tested on flowers it has never seen:</p>"
+            "html": "<p><code>shape</code> says [150, 4]: 150 rows, 4 measurements each. How well can a tree tell the kinds apart? To find out honestly, we hide part of the data while it learns: <code>train_test_split</code> keeps 30% back. The tree learns from the rest and is then tested on flowers it has never seen:</p>"
           },
           {
             "t": "c",
@@ -3675,7 +3675,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>shape</code>は(150, 4)、つまり150行で、それぞれ4つの測定値です。木はどれくらい上手に種類を見分けられるでしょう？ 正直に確かめるため、学ぶあいだはデータの一部を隠しておきます。<code>train_test_split</code>が30%を取っておきます。木は残りから学び、そのあと見たことのない花でテストされます：</p>"
+            "html": "<p><code>shape</code>は[150, 4]、つまり150行で、それぞれ4つの測定値です。木はどれくらい上手に種類を見分けられるでしょう？ 正直に確かめるため、学ぶあいだはデータの一部を隠しておきます。<code>train_test_split</code>が30%を取っておきます。木は残りから学び、そのあと見たことのない花でテストされます：</p>"
           },
           {
             "t": "c",

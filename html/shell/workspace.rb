@@ -278,7 +278,7 @@ module ChunkyShell
       out << node("div", { className: "pd-actions" }, actions)
     end
 
-    # whether Python (the PyCall lessons, ~25 MB) goes into the copy; a
+    # whether Python (the PyCall lessons, ~52 MB) goes into the copy; a
     # change reaches a copy that exists at once (offline.js)
     def python_choice
       box = node("input", { type: "checkbox", checked: @offline.python })

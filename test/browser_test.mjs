@@ -510,7 +510,7 @@ check('mean, max, argmax come back as Ruby numbers', stats.includes('15.3') && s
 check('a mask picks values', (await pyCell(5)).includes('=> array([21. , 18.5])'));
 check('arange and linspace', (await pyCell(7)).includes('81 100]'));
 const grid = await pyCell(9);
-check('reshape, shape, sum along an axis', grid.includes('(3, 4)') && grid.includes('array([12, 15, 18, 21])'));
+check('reshape, shape (a tuple, so a Ruby Array), sum along an axis', grid.includes('shape: [3, 4]') && grid.includes('array([12, 15, 18, 21])'));
 check('seeded dice: the same counts every time', (await pyCell(11)).includes('array([   0, 1009, 1013,  998,  993,  984, 1003])'));
 check('tolist.to_a, then Ruby again', (await pyCell(13)).includes('=> [13, 15, 10, 21, 19]'));
 await setExercise('require "pycall"\nnp = PyCall.import_module("numpy")\npunkte = np.array([55, 72, 61, 48, 90, 67, 59])\nbestanden = (punkte >= 60).sum');
@@ -527,7 +527,7 @@ const line = await pyCell(3);
 check('coef_ and intercept_', line.includes('Glaces pro Grad: 3.18') && line.includes('-23.65'));
 check('the tree prints what it learned', (await pyCell(5)).includes('ohren <= 8.00'));
 check('the tree judges new animals', (await pyCell(7)).includes('=> ["Katze", "Fuchs", "Katze"]'));
-check('iris comes with scikit-learn', (await pyCell(9)).includes('=> (150, 4)'));
+check('iris comes with scikit-learn', (await pyCell(9)).includes('=> [150, 4]'));
 check('tested on hidden flowers', (await pyCell(11)).includes('=> 0.955'));
 await setExercise('require "pycall"\nlm = PyCall.import_module("sklearn.linear_model")\nstunden = [[1], [2], [3], [4], [5]]\npunkte = [52, 59, 66, 73, 80]\nmodell = lm.LinearRegression.new\nmodell.fit(stunden, punkte)\nprognose = modell.predict([[6]])[0]');
 await runExercise();

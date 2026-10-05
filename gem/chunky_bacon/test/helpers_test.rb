@@ -100,6 +100,41 @@ class HelpersTest < Minitest::Test
     assert install_gem("minitest")
   end
 
+  # what the pycall gem gives for matplotlib.pyplot, as far as show_plot uses it
+  class FakePyplot
+    attr_reader :closed
+
+    Figure = Struct.new(:label) do
+      def savefig(path) = File.binwrite(path, PNG + label)
+    end
+
+    def initialize = @closed = []
+    def gcf = Figure.new("current")
+    def close(figure) = @closed << figure
+  end
+
+  def with_fake_pycall(plt)
+    pycall = Object.const_set(:PyCall, Module.new)
+    pycall.define_singleton_method(:import_module) { |name| name == "matplotlib.pyplot" ? plt : raise(name) }
+    yield
+  ensure
+    Object.send(:remove_const, :PyCall)
+  end
+
+  def test_show_plot_saves_the_figure_as_a_png_and_closes_it
+    plt = FakePyplot.new
+    fig = FakePyplot::Figure.new("given")
+    with_fake_pycall(plt) { helper_output { show_plot fig; show_plot } }
+    assert_equal PNG + "given", File.binread(File.join(@dir, "chunky-plot-1.png"))
+    assert_equal PNG + "current", File.binread(File.join(@dir, "chunky-plot-2.png"))
+    assert_equal %w[given current], plt.closed.map(&:label)
+  end
+
+  def test_show_plot_without_pycall_says_what_to_do
+    error = assert_raises(ChunkyBacon::NotHere) { show_plot }
+    assert_includes error.message, "gem install pycall"
+  end
+
   def test_show_three_and_show_shoes_say_what_to_do
     error = assert_raises(ChunkyBacon::NotHere) { show_three(:scene, :camera) }
     assert_includes error.message, "three-rb"
