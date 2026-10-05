@@ -829,6 +829,12 @@ show_browser TimelogWeb, "/")]
     "en" => [%(require "processing"\nusing Processing\nsetup do\n  size 400, 300\n  background 255\nend\ndraw do\n  if mousePressed\n    line pmouseX, pmouseY, mouseX, mouseY\n  end\nend),
              %(require "processing"\nusing Processing(snake_case: true)\nsetup do\n  size 400, 300\n  background 255\nend\ndraw do\nend\nmouse_dragged do\n  line pmouse_x, pmouse_y, mouse_x, mouse_y\nend)]
   },
+  "faker" => {
+    "de" => [%(install_gem "faker"\nrequire "faker"\nFaker::Config.random = Random.new(2024)\nkunden = 5.times.map { { name: Faker::Name.name, email: Faker::Internet.email } }),
+             %(Faker::Config.random = Random.new(2024)\nkunden = []\n5.times do\n  name = Faker::Name.name\n  kunden << { name: name, email: Faker::Internet.email(name: name) }\nend\nputs kunden.map { |k| k[:email] })],
+    "en" => [%(install_gem "faker"\nrequire "faker"\nFaker::Config.random = Random.new(2024)\ncustomers = 5.times.map { { name: Faker::Name.name, email: Faker::Internet.email } }),
+             %(Faker::Config.random = Random.new(2024)\nFaker::Name.unique.clear\n5.times.map { { name: Faker::Name.unique.name, email: Faker::Internet.unique.email } })]
+  },
   "rumale" => {
     "de" => [%(#{RUMALE_SEVEN.sub("PIC", "sieben")}pixel = sieben.delete("\\n").chars.map { |z| z == "#" ? 16 : 0 }\nziffer = lerner.predict(Numo::DFloat[pixel])[0]),
              %(#{RUMALE_SEVEN.sub("PIC", "sieben")}ziffer = lerner.predict(Numo::DFloat[sieben.delete("\\n").chars.map { |z| z == "#" ? 16 : 0 }])[0]\nputs ziffer)],

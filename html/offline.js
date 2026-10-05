@@ -20,7 +20,7 @@
   // for a Promise there). So a page from the copy reads those files into
   // memory before the kernel starts (bridge.js waits for kernelReady): the
   // gem cache, shoes_dom.rb, numo_narray.rb, processing.rb and the Rumale lesson's
-  // digits.csv, about 7 MB. fetch() is answered by the copy.
+  // digits.csv, about 10 MB. fetch() is answered by the copy.
   var syncFiles = null;   // path -> Uint8Array
   var kernelReady = pageFromCopy ? readSyncFiles() : Promise.resolve();
 

@@ -16,7 +16,7 @@ class AppTest < Minitest::Test
     assert_equal "none", byid("spinner").props["style"]["display"]
     assert_equal "block", byid("app").props["style"]["display"]
     assert_equal "Ruby lernen mit Chunky Bacon", byid("siteTitle").text
-    assert_equal 48, find_all("#lessonNav a").length
+    assert_equal 49, find_all("#lessonNav a").length
     assert_equal "hallo", find("#lessonNav a.active").attrs["data-id"]
     assert_equal "Hallo, Welt!", find("#lessonBody h2").text
     assert_equal 3, find_all("#lessonBody .cell").length
@@ -285,12 +285,12 @@ class AppTest < Minitest::Test
   def test_sidebar_head_counts_the_course
     start(storage: { "chunky_done" => '["hallo","rechnen"]' })
     assert_equal "Lektionen", byid("navTitle").text
-    assert_equal "2/48", byid("navCount").text
-    assert_equal "2 von 48 fertig", byid("navCount").attrs["title"]
+    assert_equal "2/49", byid("navCount").text
+    assert_equal "2 von 49 fertig", byid("navCount").attrs["title"]
     assert_equal "4%", byid("navBarFill").props["style"]["width"]
     assert_equal "Lektion suchen", byid("navSearch").attrs["placeholder"]
     switch_to_english
-    assert_equal "2 of 48 done", byid("navCount").attrs["title"]
+    assert_equal "2 of 49 done", byid("navCount").attrs["title"]
   end
 
   def switch_to_english
@@ -370,7 +370,7 @@ class AppTest < Minitest::Test
     assert_equal "tl-parsing", find("#lessonNav a.active").attrs["data-id"]
     assert JS.fire(byid("navSearch").wrap, "keydown", "key" => "Escape")
     assert_equal "", byid("navSearch").props["value"]
-    assert_equal 48, find_all("#lessonNav a").length
+    assert_equal 49, find_all("#lessonNav a").length
   end
 
   # ---------- gems ----------

@@ -84,10 +84,13 @@ noted.
 | chunky_bacon | 0.1.0 | MIT; the fox drawing CC BY-SA 4.0 | Andi Idogawa | LICENSE, LICENSE-ASSETS |
 | chunky_png | 1.4.0 | MIT | Willem van Bergen | LICENSE |
 | cmdparse | 3.0.7 | MIT | Thomas Leitner | COPYING |
+| concurrent-ruby | 1.3.8 | MIT | Jerry D'Antonio, Petr Chalupa, the Ruby Concurrency Team | LICENSE.txt |
 | csv | 3.3.6 | Ruby, BSD-2-Clause | James Edward Gray II, Kouhei Sutou | LICENSE.txt |
+| faker | 3.8.0 | MIT | Benjamin Curtis, Vitor Oliveira | License.txt |
 | gammo | 0.3.0 | MIT | namusyaka | LICENSE.txt |
 | geom2d | 0.4.1 | MIT | Thomas Leitner | LICENSE |
 | hexapdf | 1.11.0 | AGPL-3.0 (or a commercial licence from its author) | Thomas Leitner | LICENSE, agpl-3.0.txt; data/hexapdf/cmap/LICENSE.txt for its CMap data |
+| i18n | 1.15.2 | MIT | Sven Fuchs, Joshua Harvey, Matt Aimonetti and others | MIT-LICENSE |
 | jsg | 0.2.1 | MIT | Andi Idogawa | LICENSE.txt |
 | lacci | 0.5.0 | MIT | Marco Concetto Rudilosso, Noah Gibbs | none - see below |
 | logger | 1.7.0 | Ruby, BSD-2-Clause | Naotoshi Seo, SHIBATA Hiroshi | COPYING |

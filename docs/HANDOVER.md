@@ -4,7 +4,7 @@ Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
 Work in progress - what is unfinished, and in what state - is in
 `docs/OPEN_WORK.md`.
-Last updated 2026-10-04 (48 lessons in German, English and Japanese).
+Last updated 2026-10-04 (49 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -194,7 +194,7 @@ A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 19-32), not in a group of one.
+(side trips, 19-33), not in a group of one.
 
 The sidebar itself (`index.html` `#sidebar`, `shell/app.rb`, `app.css`): from
 the top of the window to its foot with its own scroll; head with the course
@@ -250,7 +250,7 @@ Rules that the code and tests rely on:
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
 - Checks accept output OR result; `puts` is never required.
-- `test/browser_test.mjs` asserts the lesson count (`'48 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'49 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -855,6 +855,32 @@ helpers, `Vector`, the mouse and key state and blocks,
   `text(str, x, y)` ignores `textAlign` as the gem does (only the box
   form aligns).
 
+## 6i. Faker and its six seconds
+
+Lesson 32 is [Faker](https://github.com/faker-ruby/faker) 3.8 (cached with
+i18n and concurrent-ruby; pure Ruby, psych is in the wasm image). Its
+first lookup has I18n read the whole load path: 318 YAML files, 4.6 MB,
+some 60 languages. In Chrome that is about six seconds - nearly all of it
+libyaml and Psych building the tree (`Psych.parse` alone takes as long);
+symbolizing and merging take 0.2 s. English is 42% of it, so loading only
+the locales in use would still take seconds, and would make Faker behave
+unlike the gem (`I18n.available_locales`, fallbacks); the lesson says
+instead that the first call takes a few seconds, once per page.
+
+A `POST_INSTALL_PATCHES` entry for i18n (`lib/i18n/backend/simple.rb`)
+makes those seconds what they are, loading a library: `init_translations`
+runs inside `AutoRun.untraced` (off the live run's clock, counted as
+library time), and in a live run it raises `AutoRun::NeedsRun`, so typing
+is never frozen for six seconds - the hint asks for ▶ (`liveNeedsRun`
+names reading a gem's data now). Outside the browser (the harness) the
+patch does nothing.
+
+`Faker::Config.random` and `locale` are global (thread-locals), and so is
+what `unique` remembers: a cell that throws six unique dice runs twice
+only because it starts with `Faker::Number.unique.clear` - the lesson
+says why. The exercise checks the seed (`Faker::Config.random.seed`) and
+the shape of the customers, not their names.
+
 ## 7a. The optional server: permalinks and a backend
 
 The course is a static site and stays one: without `server/` lessons live at
@@ -915,7 +941,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 48 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 49 lessons x 3 languages, starter fails, solutions pass
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof

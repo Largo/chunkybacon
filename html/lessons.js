@@ -36,7 +36,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveOff": "Live ist aus – klicken, damit der Code beim Tippen von selbst läuft.",
       "liveSlow": "Diese Zelle braucht zu lange für Live – mit ▶ ausführen.",
       "liveStopped": "Nach einer Sekunde angehalten – mit ▶ läuft der Code ganz.",
-      "liveNeedsRun": "Gems installieren, Daten aus dem Netz holen und eine Datenbank ändern geht nur mit ▶.",
+      "liveNeedsRun": "Gems installieren, ihre Daten zum ersten Mal lesen, Daten aus dem Netz holen und eine Datenbank ändern geht nur mit ▶.",
       "nextLesson": "→ Weiter zur nächsten Lektion",
       "progress": "Lektion %d von %d",
       "allDone": "🎉 Du hast alle Lektionen geschafft! CHUNKY BACON! Als nächsten Schritt empfehle ich dir die <a href='https://koans.idogawa.com'>Ruby Koans im Browser</a> – und auf <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> die nächste Ruby-Konferenz oder ein Meetup.",
@@ -154,7 +154,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveOff": "Live is off – click to have the code run by itself as you type.",
       "liveSlow": "This cell takes too long for live runs – run it with ▶.",
       "liveStopped": "Stopped after a second – ▶ runs the code all the way.",
-      "liveNeedsRun": "Installing gems, fetching from the web and changing a database only happen with ▶.",
+      "liveNeedsRun": "Installing gems, reading their data for the first time, fetching from the web and changing a database only happen with ▶.",
       "nextLesson": "→ On to the next lesson",
       "progress": "Lesson %d of %d",
       "allDone": "🎉 You finished all lessons! CHUNKY BACON! As a next step, try the <a href='https://koans.idogawa.com'>Ruby Koans in the browser</a> – and find your next Ruby conference or meetup on <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>.",
@@ -272,7 +272,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveOff": "ライブはオフです。クリックすると、入力中にコードがひとりでに動きます。",
       "liveSlow": "このセルはライブ実行には時間がかかりすぎます。▶ で実行してね。",
       "liveStopped": "1秒で止めました。▶ なら最後まで実行します。",
-      "liveNeedsRun": "gemのインストール、ネットからのデータ取得、データベースの変更は ▶ のときだけ行います。",
+      "liveNeedsRun": "gemのインストール、gemのデータの初回の読み込み、ネットからのデータ取得、データベースの変更は ▶ のときだけ行います。",
       "nextLesson": "→ 次のレッスンへ",
       "progress": "レッスン %d / %d",
       "allDone": "🎉 全レッスン制覇！CHUNKY BACON! 次のステップには<a href='https://koans.idogawa.com'>ブラウザで動くRuby Koans</a>がおすすめだよ。次のRubyカンファレンスやミートアップは<a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>で探してみてね。",
@@ -2511,7 +2511,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 45). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
+            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 46). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
           },
           {
             "t": "c",
@@ -2558,7 +2558,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 45 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
+            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 46 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
           },
           {
             "t": "c",
@@ -2605,7 +2605,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン45で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
+            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン46で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
           },
           {
             "t": "c",
@@ -4346,7 +4346,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 33:</p>"
+            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 34:</p>"
           },
           {
             "t": "c",
@@ -4401,7 +4401,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 33 on:</p>"
+            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 34 on:</p>"
           },
           {
             "t": "c",
@@ -4456,7 +4456,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン33からつくるプロジェクトの構成です：</p>"
+            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン34からつくるプロジェクトの構成です：</p>"
           },
           {
             "t": "c",
@@ -4652,9 +4652,177 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "faker",
+      "de": {
+        "title": "32. Faker: Testdaten, die echt aussehen",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Faker – Namen, Adressen und E-Mails auf Knopfdruck</h2><p>Wer ein Programm testet – ein Formular, einen Laden, die Zeiterfassung aus dem Aufbaukurs –, braucht Daten: Namen, Adressen, E-Mail-Adressen, Telefonnummern. Hundertmal „Max Muster“ einzutippen ist langweilig, und echte Kundendaten gehören nicht in Tests. Das Gem <a href='https://github.com/faker-ruby/faker' target='_blank'>Faker</a> erfindet sie: Es hat Wörterbücher mit Vornamen, Strassen, Städten, Gerichten, Firmen und vielem mehr und setzt daraus zusammen, was echt aussieht.</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"faker\"\nrequire \"faker\"\n\nputs Faker::Name.name   # das erste Mal dauert ein paar Sekunden\nputs Faker::Internet.email\nputs Faker::Address.city\nputs Faker::Food.dish\nFaker::Lorem.sentence"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jede Klasse ist ein Thema: <code>Faker::Name</code>, <code>Faker::Internet</code>, <code>Faker::Address</code>, <code>Faker::Food</code>, <code>Faker::Lorem</code> (Blindtext) – es gibt über 200. Führ die Zelle noch einmal aus: Jedes Mal kommt etwas anderes heraus.</p><p>Und warum dauert der erste Aufruf so lange? Faker liest dann seine Wörterbücher: 318 YAML-Dateien mit 4,6 MB, für über 60 Sprachen. Auf deinem Computer ist das in einem Augenblick erledigt, hier im Browser dauert es ein paar Sekunden – einmal, danach geht es schnell. (Beim Live-Lauf während des Tippens liest Faker sie nicht, dafür braucht es ▶.)</p><p>Zufällig ist gut, aber für Tests manchmal unpraktisch: Schlägt ein Test mit einem bestimmten Namen fehl, willst du genau diesen Namen wiedersehen. Darum lässt sich Fakers Zufall festlegen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Faker::Config.random = Random.new(42)\nerste = 3.times.map { Faker::Name.first_name }\n\nFaker::Config.random = Random.new(42)\nnochmal = 3.times.map { Faker::Name.first_name }\n\n[erste, nochmal, erste == nochmal]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Random.new(42)</code> ist ein Zufallsgenerator mit dem <em>Startwert</em> (englisch <em>seed</em>) 42. Aus demselben Startwert kommt immer dieselbe Folge von „Zufallszahlen“ – also auch dieselben Namen. Ein Test, der so beginnt, sieht bei jedem Lauf dieselben Daten.</p><p>Faker spricht viele Sprachen. <code>Faker::Config.locale</code> wählt eine aus – hier Schweizerdeutsch, mit Schweizer Postleitzahlen und Telefonnummern:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Faker::Config.locale = \"de-CH\"\nputs Faker::Name.name\nputs Faker::Address.street_address\nputs \"#{Faker::Address.zip_code} #{Faker::Address.city}\"\nputs Faker::PhoneNumber.phone_number\n\nFaker::Config.locale = \"en\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Sprache gilt für alle weiteren Aufrufe, darum schalten wir am Ende zurück auf Englisch. Fehlt in einer Sprache ein Wörterbuch, nimmt Faker das englische. Probier auch <code>\"ja\"</code> für Japanisch oder <code>\"fr-CH\"</code>.</p><p>Manchmal darf sich nichts wiederholen – etwa Kundennummern oder E-Mail-Adressen, die eindeutig sein müssen. Dafür gibt es <code>unique</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Faker::Number.unique.clear\nwuerfe = 6.times.map { Faker::Number.unique.between(from: 1, to: 6) }"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>unique</code> merkt sich, was schon herauskam, und liefert nie zweimal dasselbe: Sechs Würfe, jede Zahl einmal. Ein siebter Wurf ginge nicht mehr – Faker gibt nach einigen Versuchen mit <code>Faker::UniqueGenerator::RetryLimitExceeded</code> auf. <code>clear</code> vergisst die gemerkten Werte; ohne die erste Zeile scheitert die Zelle beim zweiten Ausführen.</p><p>Und so sehen Testdaten für die Zeiterfassung aus dem Aufbaukurs aus – mit festem Startwert, damit jeder Lauf dieselben Einträge hat:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Faker::Config.random = Random.new(7)\neintraege = 4.times.map do\n  {\n    projekt: Faker::App.name,\n    person: Faker::Name.first_name,\n    stunden: Faker::Number.between(from: 1, to: 8)\n  }\nend\n\neintraege.each do |eintrag|\n  puts \"#{eintrag[:person].ljust(10)} #{eintrag[:projekt].ljust(12)} #{eintrag[:stunden]} h\"\nend\neintraege.sum { |eintrag| eintrag[:stunden] }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install faker</code>, oder im <code>Gemfile</code> in der Gruppe <code>:test</code>. In Minitest-Tests (Lektion 38) nimmst du gern Minitests eigenen Startwert, den jeder Lauf ausgibt (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>So erzeugt <code>ruby test.rb --seed 12345</code> genau die Daten des fehlgeschlagenen Laufs noch einmal. <code>Faker::Config.random = nil</code> macht den Zufall wieder zufällig.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky braucht für seinen Laden Testkunden, bei jedem Lauf dieselben. Leg den Zufall auf <code>Random.new(2024)</code> fest und mach ein Array <code>kunden</code> mit 5 Hashes, jeder mit einem <code>:name</code> und einer <code>:email</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "install_gem \"faker\"\nrequire \"faker\"\n\n# 5 Testkunden mit :name und :email, mit dem Startwert 2024\n",
+            "check": "list = local_variables.include?(:kunden) ? kunden : result\ndefined?(Faker::Config) && Faker::Config.random.respond_to?(:seed) && Faker::Config.random.seed == 2024 &&\n  list.is_a?(Array) && list.size == 5 &&\n  list.all? { |c| c.is_a?(Hash) && c[:name].is_a?(String) && !c[:name].strip.empty? && c[:email].to_s.include?(\"@\") }",
+            "hint": "<code>Faker::Config.random = Random.new(2024)</code>, dann <code>kunden = 5.times.map { { name: Faker::Name.name, email: Faker::Internet.email } }</code>"
+          }
+        ]
+      },
+      "en": {
+        "title": "32. Faker: test data that looks real",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Faker – names, addresses and emails at the push of a button</h2><p>If you test a program – a form, a shop, the time tracker from the advanced course – you need data: names, addresses, email addresses, phone numbers. Typing “John Doe” a hundred times is dull, and real customers' data does not belong in tests. The <a href='https://github.com/faker-ruby/faker' target='_blank'>Faker</a> gem makes it up: it has dictionaries of first names, streets, cities, dishes, companies and much more, and puts together what looks real.</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"faker\"\nrequire \"faker\"\n\nputs Faker::Name.name   # the first time takes a few seconds\nputs Faker::Internet.email\nputs Faker::Address.city\nputs Faker::Food.dish\nFaker::Lorem.sentence"
+          },
+          {
+            "t": "h",
+            "html": "<p>Each class is a topic: <code>Faker::Name</code>, <code>Faker::Internet</code>, <code>Faker::Address</code>, <code>Faker::Food</code>, <code>Faker::Lorem</code> (filler text) – there are over 200. Run the cell again: something different comes out every time.</p><p>And why does the first call take so long? That is when Faker reads its dictionaries: 318 YAML files, 4.6 MB, for over 60 languages. On your computer that is done in a moment; here in the browser it takes a few seconds – once, then it is quick. (A live run while you type does not read them; that needs ▶.)</p><p>Random is good, but sometimes awkward for tests: if a test fails with one particular name, you want to see exactly that name again. So Faker's randomness can be pinned down:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Faker::Config.random = Random.new(42)\nfirst = 3.times.map { Faker::Name.first_name }\n\nFaker::Config.random = Random.new(42)\nagain = 3.times.map { Faker::Name.first_name }\n\n[first, again, first == again]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Random.new(42)</code> is a random number generator with the <em>seed</em> 42. The same seed always gives the same sequence of “random” numbers – and so the same names. A test that starts like this sees the same data on every run.</p><p>Faker speaks many languages. <code>Faker::Config.locale</code> picks one – here Australian English, with Australian addresses and phone numbers, and Japanese:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Faker::Config.locale = \"en-AU\"\nputs Faker::Name.name\nputs Faker::Address.full_address\nputs Faker::PhoneNumber.phone_number\n\nFaker::Config.locale = \"ja\"\nputs Faker::Name.name\nputs Faker::Address.city\n\nFaker::Config.locale = \"en\""
+          },
+          {
+            "t": "h",
+            "html": "<p>The language holds for every later call, so at the end we switch back to English. Where a language lacks a dictionary, Faker uses the English one. Try <code>\"de-CH\"</code> for Swiss German or <code>\"fr\"</code> too.</p><p>Sometimes nothing may repeat – customer numbers, say, or email addresses that must be unique. That is what <code>unique</code> is for:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Faker::Number.unique.clear\ndice = 6.times.map { Faker::Number.unique.between(from: 1, to: 6) }"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>unique</code> remembers what came out and never gives the same thing twice: six throws, each number once. A seventh throw would not work – after a few tries Faker gives up with <code>Faker::UniqueGenerator::RetryLimitExceeded</code>. <code>clear</code> forgets the remembered values; without the first line the cell fails when you run it a second time.</p><p>And this is what test data for the time tracker from the advanced course looks like – with a fixed seed, so every run has the same entries:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Faker::Config.random = Random.new(7)\nentries = 4.times.map do\n  {\n    project: Faker::App.name,\n    person: Faker::Name.first_name,\n    hours: Faker::Number.between(from: 1, to: 8)\n  }\nend\n\nentries.each do |entry|\n  puts \"#{entry[:person].ljust(10)} #{entry[:project].ljust(12)} #{entry[:hours]} h\"\nend\nentries.sum { |entry| entry[:hours] }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install faker</code>, or in the <code>Gemfile</code> in the <code>:test</code> group. In Minitest tests (lesson 38) Minitest's own seed is a good choice; every run prints it (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>Then <code>ruby test.rb --seed 12345</code> makes exactly the data of the failed run again. <code>Faker::Config.random = nil</code> makes randomness random again.</p></div><div class='task'><strong>Task:</strong> Chunky needs test customers for his shop, the same ones on every run. Pin the randomness to <code>Random.new(2024)</code> and make an array <code>customers</code> of 5 hashes, each with a <code>:name</code> and an <code>:email</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "install_gem \"faker\"\nrequire \"faker\"\n\n# 5 test customers with :name and :email, with the seed 2024\n",
+            "check": "list = local_variables.include?(:customers) ? customers : result\ndefined?(Faker::Config) && Faker::Config.random.respond_to?(:seed) && Faker::Config.random.seed == 2024 &&\n  list.is_a?(Array) && list.size == 5 &&\n  list.all? { |c| c.is_a?(Hash) && c[:name].is_a?(String) && !c[:name].strip.empty? && c[:email].to_s.include?(\"@\") }",
+            "hint": "<code>Faker::Config.random = Random.new(2024)</code>, then <code>customers = 5.times.map { { name: Faker::Name.name, email: Faker::Internet.email } }</code>"
+          }
+        ]
+      },
+      "ja": {
+        "title": "32. Faker：本物らしいテストデータ",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Faker ― 名前・住所・メールをボタンひとつで</h2><p>プログラムをテストするとき――フォーム、お店、応用コースの時間記録――データが必要です。名前、住所、メールアドレス、電話番号。「山田太郎」を100回打つのは退屈ですし、本物のお客さんのデータはテストに入れるべきではありません。<a href='https://github.com/faker-ruby/faker' target='_blank'>Faker</a> gemがそれをつくってくれます。名前、通り、町、料理、会社などの辞書を持っていて、それらを組み合わせて本物らしく見えるものをつくります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"faker\"\nrequire \"faker\"\n\nputs Faker::Name.name   # 初回は数秒かかります\nputs Faker::Internet.email\nputs Faker::Address.city\nputs Faker::Food.dish\nFaker::Lorem.sentence"
+          },
+          {
+            "t": "h",
+            "html": "<p>クラスごとにテーマがあります：<code>Faker::Name</code>、<code>Faker::Internet</code>、<code>Faker::Address</code>、<code>Faker::Food</code>、<code>Faker::Lorem</code>（ダミーの文章）。200以上あります。セルをもう一度実行してみてください。毎回ちがうものが出てきます。</p><p>では、なぜ最初の呼び出しはこんなに時間がかかるのでしょう？　そのときFakerは辞書を読んでいるのです。60以上の言語のための、318個のYAMLファイル、4.6 MB。自分のパソコンなら一瞬ですが、ここブラウザでは数秒かかります。最初の1回だけで、そのあとは速いです。（入力中のライブ実行では辞書を読みません。▶ が必要です。）</p><p>ランダムなのはいいことですが、テストでは困ることもあります。ある名前でテストが失敗したら、まさにその名前をもう一度見たいですよね。だからFakerの乱数は固定できます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "Faker::Config.random = Random.new(42)\nfirst = 3.times.map { Faker::Name.first_name }\n\nFaker::Config.random = Random.new(42)\nagain = 3.times.map { Faker::Name.first_name }\n\n[first, again, first == again]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Random.new(42)</code>は、<em>シード</em>（種）が42の乱数生成器です。同じシードからは、いつも同じ「乱数」の列が出てきます。つまり同じ名前です。こうして始まるテストは、毎回同じデータを使います。</p><p>Fakerはたくさんの言語を話します。<code>Faker::Config.locale</code>で選びます。ここでは日本語と、オーストラリアの住所と電話番号を持つオーストラリア英語です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "Faker::Config.locale = \"ja\"\nputs Faker::Name.name\nputs Faker::Address.city\nputs Faker::Food.dish\n\nFaker::Config.locale = \"en-AU\"\nputs Faker::Name.name\nputs Faker::Address.full_address\n\nFaker::Config.locale = \"en\""
+          },
+          {
+            "t": "h",
+            "html": "<p>言語はそのあとのすべての呼び出しに効くので、最後に英語に戻しています。ある言語に辞書がなければ、Fakerは英語の辞書を使います（日本語の料理名がないので、料理は英語になります）。<code>\"de-CH\"</code>（スイスのドイツ語）や<code>\"fr\"</code>も試してみてください。</p><p>何も繰り返してはいけないこともあります。たとえば会員番号や、ひとつしかないはずのメールアドレス。そのための<code>unique</code>です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "Faker::Number.unique.clear\ndice = 6.times.map { Faker::Number.unique.between(from: 1, to: 6) }"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>unique</code>は、これまでに出たものを覚えていて、同じものを二度と出しません。6回振って、どの数も1回ずつ。7回目はもう無理です。何度か試したあと、Fakerは<code>Faker::UniqueGenerator::RetryLimitExceeded</code>であきらめます。<code>clear</code>は覚えた値を忘れます。最初の行がないと、2回目の実行でセルが失敗します。</p><p>そして、応用コースの時間記録のためのテストデータはこうなります。シードを固定しているので、毎回同じ記録です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "Faker::Config.random = Random.new(7)\nentries = 4.times.map do\n  {\n    project: Faker::App.name,\n    person: Faker::Name.first_name,\n    hours: Faker::Number.between(from: 1, to: 8)\n  }\nend\n\nentries.each do |entry|\n  puts \"#{entry[:person].ljust(10)} #{entry[:project].ljust(12)} #{entry[:hours]} h\"\nend\nentries.sum { |entry| entry[:hours] }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のパソコンでは'><p><code>gem install faker</code>、または<code>Gemfile</code>の<code>:test</code>グループに。Minitestのテスト（レッスン38）では、Minitest自身のシードを使うのがおすすめです。毎回の実行で表示されます（<code>Run options: --seed 12345</code>）：</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>すると<code>ruby test.rb --seed 12345</code>で、失敗した実行とまったく同じデータがもう一度つくられます。<code>Faker::Config.random = nil</code>で、乱数はまたランダムに戻ります。</p></div><div class='task'><strong>課題：</strong>Chunkyはお店のためのテスト用のお客さんがほしいのです。毎回同じお客さんで。乱数を<code>Random.new(2024)</code>に固定して、5つのハッシュの配列<code>customers</code>をつくってください。どのハッシュにも<code>:name</code>と<code>:email</code>があります。</div>"
+          },
+          {
+            "t": "x",
+            "code": "install_gem \"faker\"\nrequire \"faker\"\n\n# :nameと:emailを持つテスト用のお客さん5人、シードは2024\n",
+            "check": "list = local_variables.include?(:customers) ? customers : result\ndefined?(Faker::Config) && Faker::Config.random.respond_to?(:seed) && Faker::Config.random.seed == 2024 &&\n  list.is_a?(Array) && list.size == 5 &&\n  list.all? { |c| c.is_a?(Hash) && c[:name].is_a?(String) && !c[:name].strip.empty? && c[:email].to_s.include?(\"@\") }",
+            "hint": "<code>Faker::Config.random = Random.new(2024)</code>のあと、<code>customers = 5.times.map { { name: Faker::Name.name, email: Faker::Internet.email } }</code>"
+          }
+        ]
+      }
+    },
+    {
       "id": "rubykaigi",
       "de": {
-        "title": "32. RubyKaigi & seltsamer Code",
+        "title": "33. RubyKaigi & seltsamer Code",
         "cells": [
           {
             "t": "h",
@@ -4725,7 +4893,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "32. RubyKaigi & weird code",
+        "title": "33. RubyKaigi & weird code",
         "cells": [
           {
             "t": "h",
@@ -4796,7 +4964,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "32. RubyKaigiと変なコード",
+        "title": "33. RubyKaigiと変なコード",
         "cells": [
           {
             "t": "h",
@@ -4875,7 +5043,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "応用コース：timelog"
       },
       "de": {
-        "title": "33. Projekt timelog: Collections",
+        "title": "34. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -4914,7 +5082,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "33. Project timelog: collections",
+        "title": "34. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -4953,7 +5121,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "33. timelogプロジェクト：コレクション",
+        "title": "34. timelogプロジェクト：コレクション",
         "cells": [
           {
             "t": "h",
@@ -4995,7 +5163,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "34. Text parsen: Regex",
+        "title": "35. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -5026,7 +5194,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "34. Parsing text: regex",
+        "title": "35. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -5057,7 +5225,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "34. テキストのパース：正規表現",
+        "title": "35. テキストのパース：正規表現",
         "cells": [
           {
             "t": "h",
@@ -5091,7 +5259,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "35. Methoden richtig bauen",
+        "title": "36. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -5122,7 +5290,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "35. Building methods properly",
+        "title": "36. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -5153,7 +5321,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "35. メソッドをきちんと作る",
+        "title": "36. メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -5187,7 +5355,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "36. Entry & Timesheet",
+        "title": "37. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -5218,7 +5386,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "36. Entry & Timesheet",
+        "title": "37. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -5249,7 +5417,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "36. EntryとTimesheet",
+        "title": "37. EntryとTimesheet",
         "cells": [
           {
             "t": "h",
@@ -5283,7 +5451,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "37. Testen mit Minitest",
+        "title": "38. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -5314,7 +5482,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "37. Testing with Minitest",
+        "title": "38. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -5345,7 +5513,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "37. Minitestでテスト",
+        "title": "38. Minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -5379,7 +5547,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "38. Enumerable & Data",
+        "title": "39. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -5391,7 +5559,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 33, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 34, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -5402,7 +5570,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "38. Enumerable & Data",
+        "title": "39. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -5414,7 +5582,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 33, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 34, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -5425,7 +5593,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "38. EnumerableとData",
+        "title": "39. EnumerableとData",
         "cells": [
           {
             "t": "h",
@@ -5437,7 +5605,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン33で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン34で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
           },
           {
             "t": "x",
@@ -5451,7 +5619,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "39. Blocks, Procs & Lambdas",
+        "title": "40. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -5490,7 +5658,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "39. Blocks, procs & lambdas",
+        "title": "40. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -5529,7 +5697,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "39. ブロック、Proc、lambda",
+        "title": "40. ブロック、Proc、lambda",
         "cells": [
           {
             "t": "h",
@@ -5571,7 +5739,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "40. Fehler behandeln",
+        "title": "41. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -5602,7 +5770,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "40. Handling errors",
+        "title": "41. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -5633,7 +5801,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "40. エラー処理",
+        "title": "41. エラー処理",
         "cells": [
           {
             "t": "h",
@@ -5667,7 +5835,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "41. Daten speichern: Formate",
+        "title": "42. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -5722,7 +5890,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "41. Saving data: formats",
+        "title": "42. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -5777,7 +5945,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "41. データの保存：フォーマット",
+        "title": "42. データの保存：フォーマット",
         "cells": [
           {
             "t": "h",
@@ -5835,7 +6003,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "42. Kommandozeile & Gems",
+        "title": "43. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -5862,7 +6030,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "42. Command line & gems",
+        "title": "43. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -5889,7 +6057,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "42. コマンドラインとgem",
+        "title": "43. コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -5919,7 +6087,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "43. Pattern Matching",
+        "title": "44. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -5950,7 +6118,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "43. Pattern matching",
+        "title": "44. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -5981,7 +6149,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "43. パターンマッチ",
+        "title": "44. パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -6015,7 +6183,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "44. Objektmodell & Metaprogrammierung",
+        "title": "45. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -6046,7 +6214,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "44. Object model & metaprogramming",
+        "title": "45. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -6077,7 +6245,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "44. オブジェクトモデルとメタプログラミング",
+        "title": "45. オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -6111,7 +6279,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "45. Eine eigene DSL",
+        "title": "46. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -6123,7 +6291,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 39 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 40 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -6134,7 +6302,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "45. Your own DSL",
+        "title": "46. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -6146,7 +6314,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 39 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 40 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
@@ -6157,7 +6325,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "45. 自分だけのDSL",
+        "title": "46. 自分だけのDSL",
         "cells": [
           {
             "t": "h",
@@ -6169,7 +6337,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン39のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン40のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
           },
           {
             "t": "x",
@@ -6183,7 +6351,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "46. Codequalität & Debugging",
+        "title": "47. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -6206,7 +6374,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "46. Code quality & debugging",
+        "title": "47. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -6229,7 +6397,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "46. コードの品質とデバッグ",
+        "title": "47. コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -6255,7 +6423,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "47. Performance & Nebenläufigkeit",
+        "title": "48. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -6302,7 +6470,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "47. Performance & concurrency",
+        "title": "48. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -6349,7 +6517,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "47. パフォーマンスと並行処理",
+        "title": "48. パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -6399,7 +6567,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "48. Finale: timelog im Web",
+        "title": "49. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -6421,12 +6589,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 42 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 43 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "en": {
-        "title": "48. Finale: timelog on the web",
+        "title": "49. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
@@ -6448,12 +6616,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 42 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 43 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "ja": {
-        "title": "48. フィナーレ：Webで動くtimelog",
+        "title": "49. フィナーレ：Webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -6475,7 +6643,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン42で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン43で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }

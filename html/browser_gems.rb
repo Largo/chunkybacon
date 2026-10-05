@@ -297,6 +297,33 @@ module BrowserGems
           end
         end
       RUBY
+    },
+    # I18n reads its load path on the first lookup - for Faker 318 YAML files,
+    # 4.6 MB, about six seconds in the browser. That is loading a library:
+    # off a live run's clock (autorun.rb), and not done in a live run at all,
+    # which would freeze the typing that long - it asks for the Run button,
+    # as fetching from the web does.
+    "i18n" => {
+      "lib/i18n/backend/simple.rb" => <<~'RUBY'
+        module I18n
+          module Backend
+            class Simple
+              module Implementation
+                alias_method :chunky_init_translations, :init_translations
+
+                protected
+
+                def init_translations
+                  return chunky_init_translations unless defined?(AutoRun)
+                  raise AutoRun::NeedsRun if defined?(ChunkyApp) && ChunkyApp.instance.auto_run?
+
+                  AutoRun.untraced { chunky_init_translations }
+                end
+              end
+            end
+          end
+        end
+      RUBY
     }
   }.freeze
 

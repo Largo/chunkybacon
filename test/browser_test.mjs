@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('48 lessons in nav', (await page.$$('#lessonNav a')).length === 48);
+check('49 lessons in nav', (await page.$$('#lessonNav a')).length === 49);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -721,6 +721,40 @@ await page.mouse.up();
 await page.waitForTimeout(200);
 check('... and paints with the mouse after the check', near(await sketchPixel(sketchIdx, 200, 150), [0, 0, 0]) &&
       near(await sketchPixel(sketchIdx, 200, 100), [255, 255, 255]));
+
+// Faker lesson: faker, i18n and concurrent-ruby from the cache; the first
+// lookup reads 318 YAML files (seconds), which a live run leaves to ▶
+await page.click('#lessonNav a[data-id="faker"]');
+await page.waitForTimeout(500);
+await page.evaluate(() => {
+  const cm = window.cellEditors[1];
+  cm.replaceRange(cm.getValue() + '\n', { line: 0, ch: 0 }, { line: cm.lineCount(), ch: 0 }, '+input');
+});
+await page.waitForFunction(() => (document.getElementById('cell-out-1').textContent || '').includes('▶'), null, { timeout: 60000 }).catch(() => {});
+check('a live run leaves the dictionaries to ▶', (await page.textContent('#cell-out-1')).includes('ihre Daten zum ersten Mal lesen'));
+await runAndWait(1);
+check('faker installs from cache', (await page.textContent('#gemsList')).includes('faker ✓'));
+check('Faker makes up a name, an email and a sentence', await page.evaluate(() => {
+  const lines = document.querySelector('#cell-out-1 .cell-stdout').textContent.trim().split('\n');
+  return lines.length === 4 && lines[1].includes('@') && /=> ".+\."/.test(document.querySelector('#cell-out-1 .cell-result').textContent);
+}));
+await runAndWait(3);
+check('the same seed, the same names', (await page.textContent('#cell-out-3')).endsWith('true]'));
+await runAndWait(5);
+check('Swiss names and postcodes', /\n\d{4} \S/.test(await page.textContent('#cell-out-5 .cell-stdout')));
+await runAndWait(7);
+await runAndWait(7);
+check('unique throws each number once, again after clear', await page.evaluate(() => {
+  const m = /=> \[([\d, ]+)\]/.exec(document.getElementById('cell-out-7').textContent);
+  return Boolean(m) && m[1].split(', ').map(Number).sort().join() === '1,2,3,4,5,6';
+}));
+await runAndWait(9);
+check('test data for timelog', /\d h\n/.test(await page.textContent('#cell-out-9 .cell-stdout')));
+await runExercise();
+check('faker starter fails', (await page.getAttribute('#chunkyChat', 'class')).includes('fail'));
+await setExercise('Faker::Config.random = Random.new(2024)\nkunden = 5.times.map { { name: Faker::Name.name, email: Faker::Internet.email } }');
+await runExercise(); await page.waitForTimeout(300);
+check('faker exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 
 // Scarpe lesson: real Shoes apps from the lacci gem, drawn into the page by a
 // Lacci display service (shoes_dom.rb); several stay live at once

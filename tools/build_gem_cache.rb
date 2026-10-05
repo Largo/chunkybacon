@@ -13,7 +13,7 @@ require 'fileutils'
 # chunky_bacon: the course's own gem (gem/chunky_bacon), lesson 13's first
 GEMS = %w[chunky_bacon chunky_png gammo racc sinatra roda minitest csv benchmark three-rb ruby_pptx lacci nokogiri
           bigdecimal-pure prawn hexapdf jsg pure_jpeg rumale-core rumale-nearest_neighbors sequel
-          pastel tty-table tty-box tty-tree tty-font]
+          pastel tty-table tty-box tty-tree tty-font faker]
 
 # C extensions compiled into the wasm image: a gem may depend on them (hexapdf
 # on openssl and strscan, jsg on js), the browser finds them built in
