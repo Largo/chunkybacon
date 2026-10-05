@@ -1176,7 +1176,13 @@ module LessonLint
              only: GROUPS, allow: File.join(__dir__, "allow.txt"), color: $stdout.tty? }
     OptionParser.new do |o|
       o.on("--root=PATH") { |v| opts[:root] = File.expand_path(v) }
-      o.on("--only=GROUPS") { |v| opts[:only] = v.split(",") & GROUPS }
+      # a typo must not narrow the run to nothing and still report "0 errors"
+      o.on("--only=GROUPS") do |v|
+        want = v.split(",")
+        unknown = want - GROUPS
+        abort "--only: unknown group(s) #{unknown.join(", ")} (known: #{GROUPS.join(", ")})" if unknown.any? || want.empty?
+        opts[:only] = want
+      end
       o.on("--verbose", "-v") { opts[:verbose] = true }
       o.on("--json") { opts[:json] = true }
       o.on("--net") { opts[:net] = true }
