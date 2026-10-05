@@ -1,0 +1,7 @@
+RUBY_PLATFORM=wasm32-wasi 4.0.0
+3.times  plain    0.90 ms  recorded    6.80 ms  steps    5  trace   0.80 ms  json    0.8 KB in   0.70 ms  traced=true truncated=false err=nil last={event: "end", line: nil, value: "3"}
+map+def  plain    0.20 ms  recorded    6.10 ms  steps   19  trace   0.50 ms  json    2.3 KB in   0.50 ms  traced=true truncated=false err=nil last={event: "end", line: nil, value: "[1, 4, 9]"}
+while200 plain    0.20 ms  recorded   48.60 ms  steps  405  trace   6.60 ms  json   54.0 KB in  10.60 ms  traced=true truncated=false err=nil last={event: "end", line: nil, value: "20100"}
+fib15    plain    0.20 ms  recorded  222.10 ms  steps  601  trace  14.20 ms  json   74.2 KB in  21.10 ms  traced=true truncated=true err=nil last={event: "end", line: nil, value: "610"}
+100k     plain   40.90 ms  recorded  182.80 ms  steps  601  trace  13.20 ms  json  125.1 KB in  36.20 ms  traced=true truncated=true err=nil last={event: "end", line: nil, value: "5000050000"}
+error    plain    1.10 ms  recorded    3.10 ms  steps    7  trace   0.30 ms  json    1.3 KB in   0.30 ms  traced=true truncated=false err="TypeError: nil can't be coerced into Integer" last={event: "error", line: 4, value: "TypeError: nil can't be coerced into Integer"}
