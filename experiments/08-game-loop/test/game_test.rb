@@ -76,6 +76,23 @@ class GameTest < Minitest::Test
     refute g.over?
   end
 
+  def test_advance_runs_every_tick_and_keeps_the_clock
+    g = snake_game
+    g.advance(0.15).advance(0.15)
+    assert_equal 2, g.ticks
+    assert_equal :chunky, g.cell(7, 7)
+    g.press(:up)                        # must not move the clock
+    g.advance(0.15)
+    assert_equal 3, g.ticks
+    assert_equal :chunky, g.cell(7, 6)
+  end
+
+  def test_advance_does_not_cap_long_spans
+    g = ChunkyGame.new { |g| g.every(0.15) {} }
+    g.advance(1.0)
+    assert_equal 6, g.ticks
+  end
+
   def test_puts_goes_to_the_games_log
     g = ChunkyGame.new { |g| g.on_key { |k| puts "key #{k}" } }
     f = JSON.parse(g.step(0, "k:space|k:a"))

@@ -131,12 +131,21 @@ class ChunkyGame
 
   # ---------- headless, for checks and tests ----------
 
-  def press(key) = step(@now, "k:#{key}")
-  def click(x, y) = step(@now, "c:#{x},#{y}")
+  # @now is in seconds, #step takes the page's milliseconds
+  def press(key) = step(@now * 1000.0, "k:#{key}")
+  def click(x, y) = step(@now * 1000.0, "c:#{x},#{y}")
 
-  # runs the timers for +seconds+ of game time
+  # runs the timers for +seconds+ of game time, in steps of the shortest
+  # timer (one #step catches up at most 3 runs per timer)
   def advance(seconds)
-    step(@now + seconds.to_f * 1000.0, "") if seconds.positive?
+    now_ms = @now * 1000.0
+    target_ms = now_ms + seconds.to_f * 1000.0
+    slice_ms = (@timers.map(&:first).min || seconds.to_f) * 1000.0
+    step(now_ms, "") unless @started   # starts the clock here, not at the first slice
+    while now_ms < target_ms && !@over
+      now_ms = [now_ms + slice_ms, target_ms].min
+      step(now_ms, "")
+    end
     self
   end
 

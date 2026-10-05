@@ -3,9 +3,11 @@
 // first cell - once with the per-tick time limit, once without - lets an
 // autopilot steer Chunky to the bacon for a few seconds with real key
 // presses, and reports the cost per Ruby call (game.js's stats), then
-// checks that a re-run of the cell stops the old game.
+// checks that a re-run of the cell stops the old game. Screenshots go to
+// globalThis.SCREENSHOT_DIR, else screenshots/ relative to the repo root
+// (the MCP server's working directory).
 async (page) => {
-  const DIR = "C:/Users/AndreasIdogawa/OneDrive - Alos Solution AG/workspace/chunkybacon/.claude/worktrees/ideas/experiments/08-game-loop/screenshots/";
+  const DIR = globalThis.SCREENSHOT_DIR || "experiments/08-game-loop/screenshots/";
   await page.waitForFunction(() => window.ChunkyBridge && window.ChunkyBridge.ready, null, { timeout: 120000 });
   const snake = await page.evaluate(async () => (await fetch("/examples/snake.rb")).text());
   const sel = "#cell-out-1 .game-widget";

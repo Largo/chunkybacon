@@ -38,7 +38,7 @@ loop in a tick stopped by the time limit.
 | `examples/snake.rb` | the Snake |
 | `examples/endless_snake.rb` | a snake that never dies, 20 steps/s - for measuring |
 | `examples/bench.rb`, `bench_toplevel.rb` | cell code measuring the JS->Ruby call itself |
-| `test/game_test.rb` | Minitest, plain CRuby: Snake driven headless (`ruby experiments/08-game-loop/test/game_test.rb`, 8 runs) |
+| `test/game_test.rb` | Minitest, plain CRuby: Snake driven headless (`ruby experiments/08-game-loop/test/game_test.rb`, 10 runs) |
 | `test/play_snake.js`, `test/measure_guard.js` | Playwright (MCP `browser_run_code` with `filename`) against serve.rb: autopilot plays, re-run/pause/error/endless-loop checks, per-mode costs |
 | `integration.diff` | the exact changes to `html/main.rb` and `html/index.html` |
 
@@ -162,7 +162,7 @@ might be worth a look for AutoRun itself.
 - Endless loop in a tick: stopped after ~1.2 s, message under the grid, page
   usable again; cells run normally afterwards (guard off).
 - Headless: `ChunkyGame#press/#click/#advance` + `step`; `test/game_test.rb`
-  (8 runs) drives Snake under plain CRuby.
+  (10 runs) drives Snake under plain CRuby.
 
 API so far: `cell(x, y, look)` / `cell(x, y)` (`:outside` beyond the edge) /
 `g[x, y] = look`, `clear`, `clear(x, y)`, `inside?`, `free_cells`,
