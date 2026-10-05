@@ -564,6 +564,13 @@ await page.evaluate(() => window.cellEditors[17].setValue('zeiterfassung.run("BE
 await pyCell(17);
 await page.evaluate(() => window.cellEditors[19].setValue('Sequel.sqlite("zeiterfassung.db")[:eintraege].map(:stunden)'));
 check('a model saves into the file; an open transaction is not saved half-way', (await pyCell(19)).includes('=> [0.25, 1.5]'));
+// a write that failed (its folder is missing) is tried again after the next run
+await page.evaluate(() => window.cellEditors[17].setValue('nachher = SQLite3::Database.new("/chunky_nachher/nachher.db")\nnachher.execute("CREATE TABLE t (x INTEGER)")\nnachher.execute("INSERT INTO t VALUES (7)")\nDir.exist?("/chunky_nachher")'));
+await pyCell(17);
+await page.evaluate(() => window.cellEditors[17].setValue('Dir.mkdir("/chunky_nachher")'));
+await pyCell(17);
+await page.evaluate(() => window.cellEditors[17].setValue('SQLite3::Database.new("/chunky_nachher/nachher.db").execute("SELECT x FROM t")'));
+check('a database whose file could not be written is saved on a later run', (await pyCell(17)).includes('=> [[7]]'));
 await setExercise('install_gem "sequel"\nrequire "sequel"\nzeit = Sequel.sqlite\nzeit.create_table(:arbeit) do\n  primary_key :id\n  String :projekt\n  Float  :stunden\nend\nzeit[:arbeit].import([:projekt, :stunden], [["Chunky", 2.5], ["Speck", 0.5], ["Bacon", 1.5], ["Chunky", 3.0], ["Speck", 1.5]])\nstunden_pro_projekt = zeit[:arbeit].group(:projekt).select(:projekt) { sum(:stunden).as(:total) }.as_hash(:projekt, :total)');
 await runExercise();
 await page.waitForTimeout(800);

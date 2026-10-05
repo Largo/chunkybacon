@@ -346,15 +346,17 @@ module SQLite3
 
     # A file database back to its file, if it was used since the last save
     # and its bytes changed. Not inside a transaction: exporting would end it.
+    # It counts as saved only once the file is written, so a failed export or
+    # write is tried again at the end of the next run, or on close.
     def save
       return unless @filename && @used && !@closed && !@readonly && !@in_transaction
 
-      @used = false
       bytes = Bridge.call(:exportDb, @id).unpack1("m0")
-      return if bytes == @saved
-
-      Bridge.write_file(@filename, bytes)
-      @saved = bytes
+      unless bytes == @saved
+        Bridge.write_file(@filename, bytes)
+        @saved = bytes
+      end
+      @used = false
     end
 
     # things the C library does that make no sense in a browser tab
