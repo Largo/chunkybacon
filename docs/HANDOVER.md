@@ -379,7 +379,11 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
 ## 6. Widgets and their traps
 
 - **show_browser**: synthesises a Rack env; Sinatra's default 404 page
-  references an external image (harmless console 404s in tests).
+  references an external image (harmless console 404s in tests). The
+  app's page sits in a shadow root of `.mb-view` (in a `.mb-page` div), so
+  its `<style>` cannot restyle the course; its default CSS is
+  `MB_PAGE_STYLE` in main.rb, and tests read `.mb-page` (Playwright's
+  selectors pierce the shadow root, `textContent` of `.mb-view` is empty).
 - **show_three**: one shared `Three::Backends::ThreeJS` for all stages
   (a second backend rebuilds a clean scene as defaults); canvas ids from a
   page-wide counter; contexts disposed on re-run/lesson change.

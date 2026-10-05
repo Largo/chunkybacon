@@ -236,42 +236,49 @@ check('irb lesson exercise passes', (await page.getAttribute('#chunkyChat', 'cla
 // lesson: Sinatra — mini browser widget, links, params, exercise
 await page.click('#lessonNav a[data-id="sinatra"]');
 await page.waitForTimeout(300);
+const courseStyle = () => page.evaluate(() => {
+  const s = getComputedStyle(document.body);
+  return [s.color, s.textAlign, s.fontSize].join(' ');
+});
+const courseStyleBefore = await courseStyle();
 await page.click('.run-cell[data-idx="1"]');
 await page.waitForTimeout(8000);
-check('sinatra widget renders root page', (await page.textContent('#cell-out-1 .mb-view')).includes('Chunkys Imbiss'));
+check('sinatra widget renders root page', (await page.textContent('#cell-out-1 .mb-page')).includes('Chunkys Imbiss'));
 check('sinatra widget status 200', (await page.textContent('#cell-out-1 .mb-status')).trim() === '200');
-await page.click('#cell-out-1 .mb-view a');
+await page.click('#cell-out-1 .mb-page a');
 await page.waitForTimeout(600);
-check('clicking a link navigates the fake browser', (await page.textContent('#cell-out-1 .mb-view')).includes('Speisekarte'));
+check('clicking a link navigates the fake browser', (await page.textContent('#cell-out-1 .mb-page')).includes('Speisekarte'));
 await page.fill('#cell-out-1 .mb-url', '/hallo/Kaz');
 await page.click('#cell-out-1 .mb-go');
 await page.waitForTimeout(600);
-check('sinatra param route in widget', (await page.textContent('#cell-out-1 .mb-view')).includes('Hallo, Kaz!'));
+check('sinatra param route in widget', (await page.textContent('#cell-out-1 .mb-page')).includes('Hallo, Kaz!'));
 await page.fill('#cell-out-1 .mb-url', '/pizza');
 await page.click('#cell-out-1 .mb-go');
 await page.waitForTimeout(600);
 check('sinatra 404 in widget', (await page.textContent('#cell-out-1 .mb-status')).trim() === '404');
+// Sinatra's 404 page brings <style>body { color:#888; text-align:center; font-size:22px }</style>
+check('the 404 page\'s style stays inside the mini browser', (await courseStyle()) === courseStyleBefore);
 await runExercise();
 check('sinatra starter fails (404 on /speck)', (await page.getAttribute('#chunkyChat', 'class')).includes('fail'));
 await setExercise('install_gem "sinatra"\nrequire "sinatra/base"\nclass MeineSeite < Sinatra::Base\n  get "/" do\n    "<h1>Meine Seite</h1>"\n  end\n  get "/speck" do\n    "CHUNKY BACON!"\n  end\nend\nshow_browser MeineSeite, "/speck"');
 await runExercise();
 check('sinatra exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
-check('sinatra exercise widget shows response', (await page.textContent('.cell.exercise .mb-view')).includes('CHUNKY BACON!'));
+check('sinatra exercise widget shows response', (await page.textContent('.cell.exercise .mb-page')).includes('CHUNKY BACON!'));
 
 // lesson 14: Roda — routing tree, string matcher, 404, exercise
 await page.click('#lessonNav a[data-id="roda"]');
 await page.waitForTimeout(300);
 await page.click('.run-cell[data-idx="1"]');
 await page.waitForTimeout(6000);
-check('roda widget renders root', (await page.textContent('#cell-out-1 .mb-view')).includes('Chunkys Laden'));
+check('roda widget renders root', (await page.textContent('#cell-out-1 .mb-page')).includes('Chunkys Laden'));
 await page.fill('#cell-out-1 .mb-url', '/gruss/Ada');
 await page.click('#cell-out-1 .mb-go');
 await page.waitForTimeout(600);
-check('roda string matcher in widget', (await page.textContent('#cell-out-1 .mb-view')).includes('Hallo, Ada!'));
+check('roda string matcher in widget', (await page.textContent('#cell-out-1 .mb-page')).includes('Hallo, Ada!'));
 await setExercise('install_gem "roda"\nrequire "roda"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      "<h1>Kiosk</h1>"\n    end\n    r.get "bestellung", Integer do |anzahl|\n      "#{anzahl} Streifen Speck, kommt sofort!"\n    end\n  end\nend\nshow_browser Kiosk, "/bestellung/5"');
 await runExercise();
 check('roda exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
-check('roda exercise widget shows order', (await page.textContent('.cell.exercise .mb-view')).includes('5 Streifen Speck'));
+check('roda exercise widget shows order', (await page.textContent('.cell.exercise .mb-page')).includes('5 Streifen Speck'));
 
 // HTTP lesson: Net::HTTP shim through the browser bridge
 await page.click('#lessonNav a[data-id="http"]');
@@ -799,7 +806,7 @@ await runAndWait(5);
 check('ERB::Util.h escapes a script',
       (await page.textContent('#cell-out-5 .cell-stdout')).includes('<p>&lt;script&gt;alert(&#39;Aller Speck'));
 await runAndWait(7);
-check('an ERB page in the mini browser', (await page.textContent('#cell-out-7 .mb-view')).includes('Brezel: 2.00 Fr.'));
+check('an ERB page in the mini browser', (await page.textContent('#cell-out-7 .mb-page')).includes('Brezel: 2.00 Fr.'));
 await page.waitForFunction(() => window.chunkyHerb && window.chunkyHerb.ready, null, { timeout: 60000 }).catch(() => {});
 check('Herb\'s parser loads when the lesson opens', await page.evaluate(() => window.chunkyHerb.ready === true));
 await runAndWait(9);
@@ -937,13 +944,13 @@ await page.click('#lessonNav a[data-id="tl-capstone"]');
 await page.waitForTimeout(300);
 await page.click('.run-cell[data-idx="1"]');
 await page.waitForTimeout(6000);
-check('capstone ERB table renders', (await page.textContent('#cell-out-1 .mb-view')).includes('timelog'));
+check('capstone ERB table renders', (await page.textContent('#cell-out-1 .mb-page')).includes('timelog'));
 await setExercise('install_gem "roda"\nrequire "roda"\nrequire "erb"\n\nEINTRAEGE = [\n  { projekt: "ProjectX", stunden: 3.5 },\n  { projekt: "Intern",   stunden: 2.0 },\n  { projekt: "ProjectX", stunden: 3.0 }\n]\n\nclass TimelogWeb < Roda\n  route do |r|\n    r.root do\n      "<h1>timelog</h1><a href=\'/projekt/ProjectX\'>ProjectX</a>"\n    end\n    r.get "projekt", String do |name|\n      passende = EINTRAEGE.select { |e| e[:projekt] == name }\n      "<h2>#{name}</h2>" + passende.map { |e| "#{e[:stunden]}h" }.join(", ")\n    end\n  end\nend\n\nshow_browser TimelogWeb, "/"');
 await runExercise();
 check('capstone exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
-await page.click('.cell.exercise .mb-view a');
+await page.click('.cell.exercise .mb-page a');
 await page.waitForTimeout(600);
-check('capstone project link navigates', (await page.textContent('.cell.exercise .mb-view')).includes('3.5h'));
+check('capstone project link navigates', (await page.textContent('.cell.exercise .mb-page')).includes('3.5h'));
 
 // gems panel input installs (paint is now already installed → instant);
 // the panel is folded at the foot of the sidebar until opened
