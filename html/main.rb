@@ -825,14 +825,16 @@ class ChunkyApp
   # nothing. Their selectors are pointed at the fake browser's view (:host)
   # and the page (.mb-page) instead, so Sinatra's 404 page still looks like
   # Sinatra's 404 page - inside the fake browser. Only selectors change: the
-  # text before each "{" that is not an @-rule.
+  # text before each "{" that is not an @-rule, and in it not what stands in
+  # [attribute] brackets or quotes (a[href="body"] stays).
   PAGE_ROOTS = { "html" => ":host", ":root" => ":host", "body" => ".mb-page" }.freeze
+  PAGE_ROOT_SELECTOR = /\[[^\]]*\]|"[^"]*"|'[^']*'|(?<![\w.#:-])(?:html|body)(?![\w-])|:root(?![\w-])/i
 
   def page_styles_scoped(page)
     page.gsub(%r{(<style\b[^>]*>)(.*?)(</style>)}mi) do
       tag, css, close = $1, $2, $3
       css = css.gsub(/(\A|[{}])([^{}@]+)\{/) do
-        "#{$1}#{$2.gsub(/(?<![\w.#:-])(?:html|body)(?![\w-])|:root(?![\w-])/i) { |root| PAGE_ROOTS[root.downcase] }}{"
+        "#{$1}#{$2.gsub(PAGE_ROOT_SELECTOR) { |part| PAGE_ROOTS.fetch(part.downcase, part) }}{"
       end
       "#{tag}#{css}#{close}"
     end
