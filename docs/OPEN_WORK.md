@@ -11,11 +11,11 @@ Last updated 2026-10-05.
 | What | Where |
 |---|---|
 | What the site is, its features | `README.md` |
-| How it works, where the traps are | `docs/HANDOVER.md` - §2 layout, §3 lessons (format, renumbering, the Japanese rules), §4 gems and the pure stand-ins, §6a workshop and storage, §6b live runs, §6c offline mode, §6d Python, §6e Rumale, §6f SQLite and Sequel (databases in files too), §6g TTY and terminal colours, §6h Processing, §6i Faker, §6j ERB and Herb, §8 tests, §11 older open ends |
+| How it works, where the traps are | `docs/HANDOVER.md` - §2 layout, §3 lessons (format, renumbering, the Japanese rules), §4 gems and the pure stand-ins, §6a workshop and storage, §6b live runs, §6c offline mode, §6d Python (and matplotlib), §6e Rumale, §6f SQLite and Sequel (databases in files too), §6g TTY and terminal colours, §6h Processing, §6i Faker, §6j ERB and Herb, §8 tests, §11 older open ends |
 | The page shell on PicoRuby, its portability rules | `docs/PICORUBY_SHELL.md`, `test/shell/portability_test.rb` |
 | Every bundled component and its licence | `THIRD_PARTY_NOTICES.md` |
 | All lesson text, code, checks and UI strings | `html/lessons.js` - the source of truth |
-| Lesson generators (scratch, **not in git**) | `tmp/*_lesson.rb` (pycall_lesson_v2, sympy, numpy, sklearn, sequel) write `tmp/<id>_lesson.json`; `tmp/insert_lesson.js` inserts and renumbers, `tmp/replace_lesson.js` swaps one lesson. A hand edit to `lessons.js` is lost if a generator runs again - edit the generator too, or only `lessons.js` |
+| Lesson generators (scratch, **not in git**) | `tmp/*_lesson.rb` (pycall_lesson_v2, sympy, numpy, matplotlib, sklearn, sequel) write `tmp/<id>_lesson.json`; `tmp/insert_lesson.js` inserts and renumbers (`tmp/insert_lesson_into.js`: the same for a worktree's `LESSONS_JS`; `tmp/matplotlib_lesson_edits.js`: the edits around the matplotlib lesson), `tmp/replace_lesson.js` swaps one lesson. A hand edit to `lessons.js` is lost if a generator runs again - edit the generator too, or only `lessons.js` |
 | Local Playwright helper (scratch, **not in git**) | `tmp/playwright_redirect.mjs` + `tmp/playwright_resolve_hook.mjs` (see "Working on this machine") |
 | Hosting details | `docs/HOSTING.local.md` - local only, excluded from git |
 
@@ -47,6 +47,12 @@ Last updated 2026-10-05.
       `<style>` it brings (Sinatra's 404 page) no longer restyles the
       course; the page's `html`/`body`/`:root` rules still style it inside
       the fake browser (HANDOVER §6).
+- PR `matplotlib-lesson` (open, supersedes #4): lesson 26, matplotlib -
+  charts as SVG under the cell, `savefig` as a download, `show_plot`
+  (HANDOVER §6d). It renumbers scikit-learn and every later lesson
+  (51 lessons), turns a Python tuple into a Ruby Array as the pycall gem
+  does (NumPy's and scikit-learn's `shape` text changed with it), and
+  adds 9.1 MB of wheels (offline copy ~101 MB, Python ~52 MB of it).
 - Open experiment PRs #4-#13: each adds only `experiments/NN-<idea>/`
   (prototype, tests, `NOTES.md` with measurements and integration steps),
   nothing under `html/`, so merging them deploys nothing. Built on
@@ -86,9 +92,12 @@ Last updated 2026-10-05.
   cell's line numbers (#7, #5); the accessibility audit's other findings -
   no live region for results, focus lost after a run or a lesson change,
   the phone drawer not modal, no skip link, five contrasts (#13).
-- The offline dialog's sizes (`offlineExplain`, README, HANDOVER §6c) are
-  measured by hand: the files of `offline-files.txt` in MiB, a text file
-  without a `.gz` counted gzipped. Re-measure after adding big files.
+- The offline dialog's sizes (`offlineExplain`, `offlinePython`, README,
+  HANDOVER §6c, `test/shell/workspace_test.rb`) are measured by hand: the
+  files of `offline-files.txt` in MiB, a text file without a `.gz` counted
+  gzipped (`tmp/offline_size.rb`). Re-measure after adding big files.
+  Last measured with matplotlib: 100.8 MB stored, ~67.8 MB to download,
+  Pyodide 51.7 / 44.9 MB of it.
 - sql.js binds an integer beyond 32 bits as text (`BigInt` -> string);
   column affinity makes it an integer in an INTEGER column, not in a bare
   expression.
@@ -103,9 +112,15 @@ Last updated 2026-10-05.
   repository's style); `.gz` copies of Python wheels (zip already, gzip
   saves under 2%); compiling sqlite3 into ruby.wasm (a custom wasm build
   for every ruby.wasm update - revisit if ActiveRecord is wanted).
-- Ideas discussed, not started: matplotlib for the PyCall lessons (charts
-  need an SVG/PNG under the cell); PR #1's description only covers its
-  first commit (merged anyway).
+- matplotlib (HANDOVER §6d), not done: a PNG from `savefig` shows boxes
+  for Japanese (DejaVu Sans has none; a CJK font would add several MB -
+  the SVG on screen is fine); a slimmer wheel without the unused fonts
+  (2.5-3 MB less, but a repacked wheel with its own SHA-256); a Figure as
+  a cell's last value shown as its chart, like a DataFrame's table;
+  `to_a` of a Python list of objects gives their `str` (the gem's
+  PyCall::List keeps the objects); the red-data-tools `matplotlib` gem
+  (`require "matplotlib/pyplot"`) would need its own shim.
+- PR #1's description only covers its first commit (merged anyway).
 
 ## Working on this machine (Windows)
 

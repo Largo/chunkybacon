@@ -141,6 +141,12 @@ await b.waitForFunction(() => document.querySelector('#lessonBody').textContent.
 check('Rumale, Numo and digits.csv offline',
   (await run(b, 'install_gem "rumale-nearest_neighbors"\nrequire "rumale/nearest_neighbors"\n[File.read("digits.csv").lines.size, Numo::DFloat[[1, 2]].sum]')).includes('=> [1797, 3.0]'));
 check('…and the letter', await b.evaluate(() => typeof window.chunkyLetter === 'function'));
+// Python from the copy: Pyodide, numpy and matplotlib's eight wheels
+const mpl = await open('#matplotlib');
+const chart = await run(mpl, 'require "pycall"\nplt = PyCall.import_module("matplotlib.pyplot")\nplt.bar(["a", "b"], [1, 2])\nplt.savefig("offline.png")\nplt.show\n:drawn');
+check('matplotlib draws offline (Pyodide and its wheels from the copy)', chart.includes('=> :drawn') &&
+  (await mpl.$$('.cell-image[src^="data:image/svg+xml"]')).length === 1 && chart.includes('offline.png'));
+await mpl.close();
 await b.click('#progressBtn');
 check('the dialog says the page is the saved copy', (await offlineText(b)).includes('Du bist gerade offline'));
 await b.close();

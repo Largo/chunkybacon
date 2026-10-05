@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('50 lessons in nav', (await page.$$('#lessonNav a')).length === 50);
+check('51 lessons in nav', (await page.$$('#lessonNav a')).length === 51);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -517,6 +517,64 @@ await setExercise('require "pycall"\nnp = PyCall.import_module("numpy")\npunkte 
 await runExercise();
 await page.waitForTimeout(800);
 check('passed-count exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// matplotlib lesson: opening it loads matplotlib (~9 MB) and imports pyplot
+// ahead, step by step (index.html: warmMatplotlib); plt.show() puts the chart
+// under the cell as an SVG (pycall.rb's backend)
+await page.click('#lessonNav a[data-id="matplotlib"]');
+await page.waitForTimeout(300);
+await page.waitForFunction(() => window.chunkyPython.warm, null, { timeout: 180000 }).catch(() => {});
+check('opening the lesson loaded matplotlib and imported pyplot ahead',
+      await page.evaluate(() => !!window.chunkyPython.packages.matplotlib && window.chunkyPython.warm === true));
+const charts = idx => page.$$eval(`#cell-out-${idx} img.cell-image`, imgs => imgs.map(img => ({
+  svg: img.src.startsWith('data:image/svg+xml;base64,') ? new TextDecoder().decode(Uint8Array.from(atob(img.src.split(',')[1]), c => c.charCodeAt(0))) : '',
+  width: img.getBoundingClientRect().width
+})));
+const chartText = async idx => (await charts(idx)).map(c => c.svg).join('\n');
+await pyCell(1, 120000);
+let drawn = await charts(1);
+check('plt.show draws the chart as an SVG under the cell, its text as text',
+      drawn.length === 1 && drawn[0].svg.includes('<svg') && drawn[0].svg.includes('Eine Woche Wetter'));
+check('the chart keeps its own size (not a 160px thumbnail)', drawn.length === 1 && drawn[0].width > 300);
+await pyCell(1);
+check('a second run draws it once', (await charts(1)).length === 1);
+await pyCell(3);
+check('a bar chart with a y label', (await chartText(3)).includes('verkaufte Glaces'));
+await pyCell(5);
+check('fig, ax = plt.subplots unpacks (a tuple is a Ruby Array)', (await chartText(5)).includes('Temperatur'));
+await pyCell(7);
+const curves = await chartText(7);
+check('two curves from NumPy, with a legend', curves.includes('>sin<') && curves.includes('>cos<'));
+await pyCell(9);
+const panels = await chartText(9);
+const weather = await waitForDownload('#cell-out-9', 'wetter.png');
+check('two panels side by side, from axes[0] and axes[1]', panels.includes('Glaces je Temperatur') && panels.includes('Temperatur'));
+check('plt.savefig offers the PNG below the cell', !!weather && (await firstBytes(weather.href)).join(',') === '137,80');
+const pyEval = async code => {
+  await page.evaluate(c => window.cellEditors[9].setValue(c), code);
+  return pyCell(9);
+};
+check('plt.subplots is an Array of two, as with the gem', (await pyEval('pair = plt.subplots\n[pair.class, pair.size]')).includes('=> [Array, 2]'));
+check('fig, (a, b) does not unpack the axes - a NumPy array, as with the gem',
+      (await pyEval('fig, (a, b) = plt.subplots(1, 2)\n[b.nil?, a.shape]')).includes('=> [true, [2]]'));
+check('a figure not shown is closed after the run', (await pyEval('plt.bar(["x"], [1])\nplt.get_fignums.to_a')).includes('=> [1]') &&
+      (await pyEval('plt.get_fignums.to_a')).includes('=> []'));
+await pyEval('fig, ax = plt.subplots\nax.bar(["a", "b"], [3, 4])\nax.set_title("nur eines")\nshow_plot fig\nplt.show');
+check('show_plot shows one figure, which is closed then', (await charts(9)).length === 1 && (await chartText(9)).includes('nur eines'));
+await pyEval('plt.plot([1, 2, 3])\nplt.title("1週間の天気")\nplt.show');
+check('Japanese text in a chart stays text in the SVG', (await chartText(9)).includes('1週間の天気'));
+check('a matplotlib error is a PyCall::PyError', (await pyEval('plt.plot([1, 2], [1, 2, 3])')).includes('PyCall::PyError: ValueError'));
+await runExercise();
+await page.waitForTimeout(800);
+check('matplotlib starter fails', (await page.getAttribute('#chunkyChat', 'class')).includes('fail'));
+await setExercise('require "pycall"\nplt = PyCall.import_module("matplotlib.pyplot")\ntage = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]\nmaeuse = [3, 5, 2, 6, 4, 7, 1]\nfig, ax = plt.subplots\nax.bar(tage, maeuse)\nax.set_title("Fuchs-Jagd")\nplt.show');
+await runExercise();
+await page.waitForTimeout(800);
+check('fox-hunt bar chart exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+await setExercise('require "pycall"\nplt = PyCall.import_module("matplotlib.pyplot")\ntage = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]\nmaeuse = [3, 5, 2, 6, 4, 7, 1]\nplt.plot(tage, maeuse)\nplt.title("Fuchs-Jagd")\nplt.show');
+await runExercise();
+await page.waitForTimeout(800);
+check('a line chart with the title does not pass', (await page.getAttribute('#chunkyChat', 'class')).includes('fail'));
 
 // scikit-learn lesson: opening it loads scikit-learn and SciPy (~19 MB)
 await page.click('#lessonNav a[data-id="sklearn"]');
