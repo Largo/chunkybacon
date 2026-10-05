@@ -168,8 +168,13 @@ module FriendlyErrors
 
   CLOSE_OF = { "(" => ")", "[" => "]", "{" => "}" }.freeze
 
+  # only on a line Prism complains about, so "800x600" or 0x1F next to the
+  # real mistake doesn't take over; hex literals never count
   rule :syn_times_x, SyntaxError do |c|
-    i = c.lines.index { |l| c.strip_comment(l).match?(/\d\s*[xX]\s*\d/) } or next
+    bad = c.diagnostics.map { |d| d[:line] }
+    i = c.lines.each_index.find do |j|
+      bad.include?(j + 1) && c.strip_comment(c.lines[j]).match?(/(?<![\w.])(?!0[xX])\d+\s*[xX]\s*\d/)
+    end or next
     m = c.text(i + 1).match(/([\w.]+)\s*([xX])\s*([\w.]+)/) or next
     find(:syn_times_x, { a: m[1], b: m[3] }, at: [i + 1, m.begin(2), 1], label: :lbl_here)
   end
@@ -441,10 +446,13 @@ module FriendlyErrors
     next unless callee_line
 
     meth = label_name(label)
+    # a method from outside the cell (a gem, another file) has no frame here,
+    # so the first one is the call site: `<main>`, not a method name
+    named = !meth.empty? && !meth.start_with?("<")
     d = c.defs.find { |x| x[:line] == callee_line && x[:name] == meth }
     call_line = c.frames[1]&.first || callee_line
     # add_entry("X", "08:30") for def add_entry(project:, from:)
-    if (kw = c.error.message[/required keywords?: ([^)]+)/, 1])
+    if named && (kw = c.error.message[/required keywords?: ([^)]+)/, 1])
       kws = kw.split(/,\s*/)
       list = list_join(kws.map { |k| "`#{k}:`" }, c.lang)
       next find(:kw_positional, { meth: meth, kws: list, example: kws.map { |k| "#{k}: …" }.join(", ") },
@@ -455,6 +463,8 @@ module FriendlyErrors
       next find(:arity_lambda, { name: cm[1], expected: expected, given: given, def_line: callee_line, line: call_line },
                 at: [call_line, cm.begin(1), cm[1].length], label: :lbl_call)
     end
+    next unless named
+
     if d
       call_line = c.frames[1]&.first || callee_line
       klass = label.to_s[/(\w+)#initialize/, 1]
@@ -472,7 +482,11 @@ module FriendlyErrors
     m = c.error.message.match(/(missing|unknown) keywords?: (.+)/) or next
     kws = m[2].scan(/:?(\w+)/).flatten
     callee_line, label = c.frames.first
+    next unless callee_line
+
     meth = label_name(label)
+    next if meth.empty? || meth.start_with?("<") # see :arity
+
     call_line = c.frames[1]&.first || callee_line
     d = c.defs.find { |x| x[:name] == meth }
     all = d ? d[:params].scan(/(\w+):/).flatten : []

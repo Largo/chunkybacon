@@ -11,6 +11,10 @@ load File.expand_path("../../html/autorun.rb", __dir__)
 
 errors = FriendlyErrors::CORPUS.filter_map do |item|
   bind = eval("proc { binding }.call", TOPLEVEL_BINDING)
+  # each case starts clean, like run_corpus.rb: an earlier case's `def square`
+  # would otherwise let "square-called-before-def" run without an error
+  consts = Object.constants
+  meths = Object.private_instance_methods(false)
   old = $stdout
   $stdout = StringIO.new
   begin
@@ -25,6 +29,8 @@ errors = FriendlyErrors::CORPUS.filter_map do |item|
     [item, e]
   ensure
     $stdout = old
+    (Object.constants - consts).each { |c| Object.send(:remove_const, c) }
+    (Object.private_instance_methods(false) - meths).each { |m| Object.send(:remove_method, m) }
   end
 end
 
@@ -53,3 +59,4 @@ errors.each do |item, e|
 end
 puts "#{checked} explain calls on #{errors.length} errors, #{problems} problems, no exception escaped"
 puts "did_you_mean loaded: #{defined?(DidYouMean) ? 'yes' : 'no'}"
+exit 1 if problems > 0
