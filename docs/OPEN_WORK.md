@@ -17,55 +17,46 @@ Last updated 2026-10-05.
 | All lesson text, code, checks and UI strings | `html/lessons.js` - the source of truth |
 | Lesson generators (scratch, **not in git**) | `tmp/*_lesson.rb` (pycall_lesson_v2, sympy, numpy, matplotlib, sklearn, sequel) write `tmp/<id>_lesson.json`; `tmp/insert_lesson.js` inserts and renumbers (`tmp/insert_lesson_into.js`: the same for a worktree's `LESSONS_JS`; `tmp/matplotlib_lesson_edits.js`: the edits around the matplotlib lesson), `tmp/replace_lesson.js` swaps one lesson. A hand edit to `lessons.js` is lost if a generator runs again - edit the generator too, or only `lessons.js` |
 | Local Playwright helper (scratch, **not in git**) | `tmp/playwright_redirect.mjs` + `tmp/playwright_resolve_hook.mjs` (see "Working on this machine") |
+| Experiments (prototypes, not on the site) | `experiments/NN-<idea>/NOTES.md` - what was tried, measurements, integration steps |
 | Hosting details | `docs/HOSTING.local.md` - local only, excluded from git |
 
 ## State of the repository
 
-- `main` is deployed (2026-10-05), 50 lessons:
-  - PR #2, the Sequel lesson (28) and SQLite databases in files (HANDOVER
-    §6f), merged 2026-10-05 (`4ebafb7`), with the review fix that a file
-    database whose write failed is written again after the next run.
-  - PR #3, four side trips after Scarpe: 30 TTY, 31 Processing, 32 Faker,
-    33 ERB + Herb (HANDOVER §6g-§6j), rebased onto Sequel and merged
-    2026-10-05. Each lesson has its own top-level scope now
-    (`TopLevel.binding`), checked with the Sequel lesson's constants.
-  - Verified before the merge: `check_harness.rb` (50 lessons x de/en/ja),
-    `gems_harness.rb`, shell tests, `autorun_test.rb`, `server_test.rb`,
-    `ansi_test.rb`, `offline_files.rb --check`, `compress_assets.rb
-    --check`, and `browser_test.mjs`, `live_test.mjs`, `offline_test.mjs`,
-    `progress_test.mjs`, `language_test.mjs`, `boot_failure_test.mjs`. Not
-    run: `permalink_test.mjs` (needs the optional Puma server).
-  - Then three fixes the experiments found, merged 2026-10-05 together
-    with this file, tested stacked on top of #3 (`browser_test.mjs`, shell
-    tests):
-    - #15 an SVG under a cell keeps its own size (`.cell-image` is a 160px
-      pixelated thumbnail); needed by #6, #9 and #4.
-    - #16 code cells: Escape, then Tab leaves the editor; editors named for
-      screen readers; a focus ring (the accessibility audit's worst
-      finding, WCAG 2.1.2).
-    - #17 the mini browser draws the app's page in a shadow root, so a
-      `<style>` it brings (Sinatra's 404 page) no longer restyles the
-      course; the page's `html`/`body`/`:root` rules still style it inside
-      the fake browser (HANDOVER §6).
-- PR #19 `matplotlib-lesson` (open, supersedes #4): lesson 26, matplotlib -
-  charts as SVG under the cell, `savefig` as a download, `show_plot`
-  (HANDOVER §6d). It renumbers scikit-learn and every later lesson
-  (51 lessons), turns a Python tuple into a Ruby Array as the pycall gem
-  does (NumPy's and scikit-learn's `shape` text changed with it), and
-  adds 9.1 MB of wheels (offline copy ~101 MB, Python ~52 MB of it).
-- Open experiment PRs #4-#13: each adds only `experiments/NN-<idea>/`
-  (prototype, tests, `NOTES.md` with measurements and integration steps),
-  nothing under `html/`, so merging them deploys nothing. Built on
-  `sequel-lesson` (46 lessons), so lesson and line numbers in their notes
-  are older than `main`. #4 matplotlib charts, #5 stepping through a cell,
-  #6 `show_objects`, #7 friendly error messages, #8 sound synthesis,
-  #9 turtle graphics, #10 the `lessons.js` linter, #11 a game loop (Snake),
-  #12 one runnable cell embedded elsewhere (with a security analysis),
-  #13 the accessibility audit.
+- `main` is deployed (2026-10-05), 51 lessons. Merged that day: PR #2
+  Sequel and SQLite databases in files (HANDOVER §6f); PR #3 the four
+  side trips after Scarpe, TTY, Processing, Faker, ERB + Herb (HANDOVER
+  §6g-§6j), each lesson with its own top-level scope
+  (`TopLevel.binding`); the experiments' fixes #15 (an SVG under a cell
+  keeps its size), #16 (Escape, then Tab leaves a code cell; editors named,
+  focus ring) and #17 (the mini browser draws in a shadow root, HANDOVER
+  §6); PR #19, lesson 26 matplotlib (HANDOVER §6d, supersedes #4), which
+  renumbered scikit-learn and every later lesson and turns a Python tuple
+  into a Ruby Array.
+- The experiments #5-#13 are merged too (2026-10-05, rebased): each is
+  only `experiments/NN-<idea>/` (prototype, tests, `NOTES.md` with
+  measurements and integration steps), nothing under `html/`, so none of
+  them is on the site yet. 02 stepping through a cell, 03 `show_objects`,
+  04 friendly error messages, 05 sound synthesis, 06 turtle graphics,
+  07 the `lessons.js` linter, 08 a game loop (Snake), 09 one runnable cell
+  embedded elsewhere (with a security analysis), 10 the accessibility
+  audit. They were written against `sequel-lesson`, so lesson and line
+  numbers in their notes are older than `main`. Before the merge every
+  CodeRabbit finding was fixed or answered, and all of them were tested
+  together on top of `main`: each experiment's Ruby checks
+  (`test_step_recorder.rb`, `object_graph_test.rb`, `run_corpus.rb`,
+  `robustness_check.rb`, `lesson_check.rb` of 05 and 06, `examples.rb`,
+  `lint_lessons_test.rb`, `lint_lessons.rb`, `game_test.rb`) and the
+  browser checks of 06 (`browser_check.mjs`), 09 (`test_embed.mjs check`)
+  and 10 (`verify_fixes.mjs`, `keyboard.mjs`). Not re-run: the
+  measurement scripts (`wasm_probe.mjs`, `measure_in_page.mjs`,
+  `play_snake.js`, `test_embed.mjs measure`) and 05's `wavefile_check.rb`
+  (needs the wavefile gem in `vendor/`, not in git).
+- Taking an experiment onto the site means following its `NOTES.md`
+  integration steps in `html/` - a normal change with the browser tests.
 - Other sessions work in git worktrees under `.claude/worktrees/`
-  (2026-10-05: `improve-lessons` and `tty-processing-faker-erb-lessons`
-  locked, i.e. in use - the latter now behind `main`, its PR is merged;
-  `ocran-lesson`; `rumale-lesson`; `ideas`). `ocran-lesson` inserts a
+  (2026-10-05: `improve-lessons`, `tty-processing-faker-erb-lessons` -
+  behind `main`, its PR is merged - `ocran-lesson`, `rumale-lesson`,
+  `pyodide-llm-rubyllm-988ed8`, `ideas`). `ocran-lesson` inserts a
   lesson right after Scarpe, so it conflicts with `main` in
   `html/lessons.js`, the count tests, README and HANDOVER: rebase it onto
   `main` and re-run the `tmp/insert_lesson.js`-style renumbering rather
@@ -77,12 +68,13 @@ Last updated 2026-10-05.
 - A re-run of a cell with `DB = Sequel.sqlite` reassigns a constant; the
   cell shows only its result (`=> [:eintraege]`), no warning (checked
   2026-10-05). The file step uses a local variable.
-- The lesson linter (`experiments/07-lesson-linter/lint_lessons.rb`, PR #10,
-  not on `main` yet) still warns: `rubykaigi` [ja]
-  cells 1 and 7 end in plain form (perhaps on purpose - a talk's
-  punchline), and `sequel` [de] cell 5 has a 102-column line. Decide, then
-  fix or accept. Its `--base=origin/main` run finds every lesson reference
-  pointing at the same lesson as on `main`.
+- The lesson linter (`ruby experiments/07-lesson-linter/lint_lessons.rb`,
+  on `main`, not in CI) still warns: `rubykaigi` [ja] cells 1 and 7 end
+  in plain form (perhaps on purpose - a talk's punchline), `sequel` [de]
+  cell 5 has a 102-column line, and `docs/PICORUBY_SHELL.md` quotes an
+  old lesson count. Decide, then fix or accept (`allow.txt`). Its
+  `--base=origin/main` run finds every lesson reference pointing at the
+  same lesson as on `main`.
 - Found by the experiments, in today's code (details in their `NOTES.md`):
   the live-run tracer makes code about 36x slower in ruby.wasm, so a cell
   looping over ~100k elements hits the 1 s limit (#8 suggests a per-lesson
@@ -91,7 +83,11 @@ Last updated 2026-10-05.
   as `chunky.rb`, so an error in a method from an earlier cell reports that
   cell's line numbers (#7, #5); the accessibility audit's other findings -
   no live region for results, focus lost after a run or a lesson change,
-  the phone drawer not modal, no skip link, five contrasts (#13).
+  the phone drawer not modal, no skip link, five contrasts (#13). Re-run
+  on `main` 2026-10-05: the unnamed editor (axe `label`) is gone and
+  Escape, then Tab leaves a cell (#16); Tab still indents and Shift+Tab
+  stays in the editor, so `keyboard.mjs` still reports the trap; the
+  rest unchanged (Sinatra's contrast findings 39 -> 21).
 - The offline dialog's sizes (`offlineExplain`, `offlinePython`, README,
   HANDOVER §6c, `test/shell/workspace_test.rb`) are measured by hand: the
   files of `offline-files.txt` in MiB, a text file without a `.gz` counted
@@ -128,7 +124,9 @@ Last updated 2026-10-05.
   hook (both outside git):
   `PLAYWRIGHT_DIR=~/AppData/Local/npm-cache/_npx/<hash>/node_modules/playwright BASE=http://127.0.0.1:18021/ node --import ./tmp/playwright_redirect.mjs test/browser_test.mjs`
   (1.62.1 matches the installed Chromium). Worth moving the hook into
-  `tools/` if it stays needed.
+  `tools/` if it stays needed. The experiments' scripts take
+  `PLAYWRIGHT_DIR` directly, without the hook; `experiments/10-accessibility`
+  needs `npm ci` there first (axe-core).
 - Dev server: `PORT=18021 ruby tools/dev_server.rb`. Stopping it as a
   background task can leave `ruby.exe` running, and Windows lets two
   servers share a port - the old one may answer. Check with
