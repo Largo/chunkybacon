@@ -5,17 +5,15 @@
 //   node audit.mjs en hallo,irb         # one language, some pages
 //
 // Writes out/axe-<lang>-<page>.json (violations + incomplete), screenshots in
-// shots/, and out/axe-summary.json (rule -> pages). Playwright comes from the
-// npx cache (PLAYWRIGHT_DIR), axe-core from ./node_modules.
-import { pathToFileURL, fileURLToPath } from 'node:url';
+// shots/, and out/axe-summary.json (rule -> pages). Playwright comes from
+// PLAYWRIGHT_DIR or import('playwright') (load_playwright.mjs), axe-core from
+// ./node_modules.
+import { fileURLToPath } from 'node:url';
 import { join, dirname } from 'node:path';
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { homedir } from 'node:os';
+import { chromium } from './load_playwright.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const PW = process.env.PLAYWRIGHT_DIR ||
-  join(homedir(), 'AppData/Local/npm-cache/_npx/e41f203b7505f1fb/node_modules/playwright');
-const { chromium } = await import(pathToFileURL(join(PW, 'index.mjs')).href);
 const BASE = process.env.BASE || 'http://127.0.0.1:18110/';
 const AXE = join(HERE, 'node_modules/axe-core/axe.min.js');
 const OUT = join(HERE, 'out');
@@ -67,6 +65,8 @@ async function runUpTo(page, regex) {
   codes.sort((a, b) => a[0] - b[0]);
   let last = -1;
   codes.forEach(([i, c]) => { if (regex.test(c)) last = i; });
+  // no matching cell = the lesson changed; auditing it without its widget would pass quietly
+  if (last < 0) throw new Error(`no cell matches ${regex}`);
   for (const [i] of codes) {
     if (i > last) break;
     await page.click(`.run-cell[data-idx="${i}"]`);
@@ -84,6 +84,7 @@ async function goto(page, hash) {
 }
 
 const summary = {};
+const failed = [];   // views that could not be audited -> nonzero exit
 const note = (key, res) => {
   for (const v of res.violations) {
     summary[v.id] ||= { impact: v.impact, help: v.help, pages: {} };
@@ -120,6 +121,7 @@ for (const lang of LANGS) {
       log(lang, p.name, 'violations:', res.violations.map(v => `${v.id}(${v.nodes.length})`).join(' ') || 'none');
     } catch (e) {
       log(lang, p.name, 'FAILED', e.message.split('\n')[0]);
+      failed.push(`${lang}-${p.name}`);
     }
   }
 
@@ -159,4 +161,8 @@ writeFileSync(join(OUT, 'axe-summary.json'), JSON.stringify(summary, null, 2));
 log('summary:');
 for (const [id, s] of Object.entries(summary)) {
   log(`  ${s.impact.padEnd(9)} ${id.padEnd(28)} ${Object.entries(s.pages).map(([k, n]) => `${k}:${n}`).join(' ')}`);
+}
+if (failed.length) {
+  log('INCOMPLETE, not audited:', failed.join(' '));
+  process.exitCode = 1;
 }

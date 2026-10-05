@@ -1,13 +1,10 @@
 // Tries the JS/CSS parts of the proposed fixes on the live page, without
 // changing html/: node verify_fixes.mjs (dev server on 18110)
-import { pathToFileURL, fileURLToPath } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { join, dirname } from 'node:path';
-import { homedir } from 'node:os';
+import { chromium } from './load_playwright.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const PW = process.env.PLAYWRIGHT_DIR ||
-  join(homedir(), 'AppData/Local/npm-cache/_npx/e41f203b7505f1fb/node_modules/playwright');
-const { chromium } = await import(pathToFileURL(join(PW, 'index.mjs')).href);
 const BASE = process.env.BASE || 'http://127.0.0.1:18110/';
 
 const browser = await chromium.launch();
