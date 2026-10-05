@@ -1,0 +1,421 @@
+{
+  "codemirror-trap": {
+    "status": "FAIL",
+    "msg": "Tab inside a CodeMirror cell stays in the editor and inserts indentation; Escape then Tab -> CODEMIRROR(cell-code-1); Shift+Tab -> CODEMIRROR(cell-code-1)",
+    "data": [
+      {
+        "editor": "CODEMIRROR(cell-code-1)",
+        "tabStaysIn": true,
+        "tabEditedCode": true,
+        "escThenTab": "CODEMIRROR(cell-code-1)",
+        "shiftTab": "CODEMIRROR(cell-code-1)"
+      },
+      {
+        "editor": "CODEMIRROR(cell-code-3)",
+        "tabStaysIn": true,
+        "tabEditedCode": true,
+        "escThenTab": "CODEMIRROR(cell-code-3)",
+        "shiftTab": "CODEMIRROR(cell-code-3)"
+      },
+      {
+        "editor": "CODEMIRROR(cell-code-5)",
+        "tabStaysIn": true,
+        "tabEditedCode": true,
+        "escThenTab": "CODEMIRROR(cell-code-5)",
+        "shiftTab": "CODEMIRROR(cell-code-5)"
+      }
+    ]
+  },
+  "run-buttons-reachable": {
+    "status": "INFO",
+    "msg": "3/3 run buttons reached by Tab - but only because the script pulled focus out of each editor",
+    "data": {
+      "runButtons": [
+        "1",
+        "3",
+        "5"
+      ],
+      "reached": [
+        "1",
+        "3",
+        "5"
+      ]
+    }
+  },
+  "bypass-blocks": {
+    "status": "FAIL",
+    "msg": "56 Tab presses from the top of the page to the first lesson control (no skip link)",
+    "data": {
+      "firstMain": 56
+    }
+  },
+  "focus-after-run": {
+    "status": "FAIL",
+    "msg": "Enter on Run: focus during the run = BODY, after = BODY",
+    "data": {
+      "during": "BODY",
+      "afterRun": "BODY"
+    }
+  },
+  "output-announced": {
+    "status": "FAIL",
+    "msg": "cell output live region: null; Chunky's bubble: null; run time: null; kernel status: p#kernelStatus aria-live=null role=status",
+    "data": {
+      "cell-out-1": null,
+      "chunkyChat": null,
+      "chunkyText": null,
+      "kernelStatus": "p#kernelStatus aria-live=null role=status",
+      "anyLiveRegions": [
+        "kernelStatus"
+      ],
+      "runTime": null
+    }
+  },
+  "run-button-names": {
+    "status": "WARN",
+    "msg": "run button names: [\"▶ Run\",\"▶ Run\",\"▶ Run\"]",
+    "data": [
+      "▶ Run",
+      "▶ Run",
+      "▶ Run"
+    ]
+  },
+  "focus-after-next-lesson": {
+    "status": "FAIL",
+    "msg": "bubble after pass: \"pass | Perfect! You are on the path to Ruby enlightenment.Lesson 1 of 46→ On to the nex\"; Enter on the next-lesson link -> focus BODY, scrollY 0",
+    "data": {
+      "afterNext": "BODY"
+    }
+  },
+  "focus-after-nav-link": {
+    "status": "FAIL",
+    "msg": "Enter on a lesson link in the index -> focus BODY (the index is re-rendered with innerHTML)",
+    "data": {
+      "afterNav": "BODY"
+    }
+  },
+  "shift-enter": {
+    "status": "INFO",
+    "msg": "Shift+Enter in an editor runs it; focus afterwards CODEMIRROR(cell-code-1)"
+  },
+  "alt-r": {
+    "status": "INFO",
+    "msg": "Alt+R runs the exercise; focus afterwards BODY (shortcut documented only in lesson text?)"
+  },
+  "progress-dialog": {
+    "status": "PASS",
+    "msg": "opens with focus on dialog:dialog#progressDialog.progress-dialog \"Your progress×Finished lessons\"; Tab stays inside: true; Escape returns focus to header:button#progressBtn.progress-btn \"Progress\"",
+    "data": {
+      "inDialog": "dialog:dialog#progressDialog.progress-dialog \"Your progress×Finished lessons\"",
+      "dlgStops": [
+        "dialog:button.pd-close \"Close\"",
+        "dialog:button.pd-primary \"Choose folder\"",
+        "dialog:button.pd-secondary \"Download file\"",
+        "dialog:button.pd-secondary \"Load file\"",
+        "dialog:input \"on\"",
+        "dialog:button.pd-secondary \"Keep on this device\"",
+        "BODY",
+        "dialog:button.pd-close \"Close\"",
+        "dialog:button.pd-primary \"Choose folder\"",
+        "dialog:button.pd-secondary \"Download file\"",
+        "dialog:button.pd-secondary \"Load file\"",
+        "dialog:input \"on\"",
+        "dialog:button.pd-secondary \"Keep on this device\"",
+        "BODY",
+        "dialog:button.pd-close \"Close\"",
+        "dialog:button.pd-primary \"Choose folder\"",
+        "dialog:button.pd-secondary \"Download file\"",
+        "dialog:button.pd-secondary \"Load file\"",
+        "dialog:input \"on\"",
+        "dialog:button.pd-secondary \"Keep on this device\"",
+        "BODY",
+        "dialog:button.pd-close \"Close\"",
+        "dialog:button.pd-primary \"Choose folder\"",
+        "dialog:button.pd-secondary \"Download file\"",
+        "dialog:button.pd-secondary \"Load file\""
+      ],
+      "afterDlg": "header:button#progressBtn.progress-btn \"Progress\""
+    }
+  },
+  "lang-de": {
+    "status": "FAIL",
+    "msg": "<html lang> at domcontentloaded=de, after the shell=de; Japanese text in a non-ja element: 3 (p#spinnerText \"Einen Moment … / One moment … / 少々お待ちくださ\"; option \"日本語\"; select#langSelect@title \"Sprache / Language / 言語\"); option langs: de:null en:null ja:null",
+    "data": {
+      "html": "de",
+      "out": [
+        {
+          "el": "p#spinnerText",
+          "lang": "de",
+          "text": "Einen Moment … / One moment … / 少々お待ちくださ"
+        },
+        {
+          "el": "option",
+          "lang": "de",
+          "text": "日本語"
+        },
+        {
+          "el": "select#langSelect",
+          "attr": "title",
+          "lang": "de",
+          "text": "Sprache / Language / 言語"
+        }
+      ],
+      "options": [
+        "de:null",
+        "en:null",
+        "ja:null"
+      ]
+    }
+  },
+  "lang-en": {
+    "status": "FAIL",
+    "msg": "<html lang> at domcontentloaded=en, after the shell=en; Japanese text in a non-ja element: 3 (p#spinnerText \"Einen Moment … / One moment … / 少々お待ちくださ\"; option \"日本語\"; select#langSelect@title \"Sprache / Language / 言語\"); option langs: de:null en:null ja:null",
+    "data": {
+      "html": "en",
+      "out": [
+        {
+          "el": "p#spinnerText",
+          "lang": "en",
+          "text": "Einen Moment … / One moment … / 少々お待ちくださ"
+        },
+        {
+          "el": "option",
+          "lang": "en",
+          "text": "日本語"
+        },
+        {
+          "el": "select#langSelect",
+          "attr": "title",
+          "lang": "en",
+          "text": "Sprache / Language / 言語"
+        }
+      ],
+      "options": [
+        "de:null",
+        "en:null",
+        "ja:null"
+      ]
+    }
+  },
+  "lang-ja": {
+    "status": "PASS",
+    "msg": "<html lang> at domcontentloaded=ja, after the shell=ja; Japanese text in a non-ja element: 0 (); option langs: de:null en:null ja:null",
+    "data": {
+      "html": "ja",
+      "out": [],
+      "options": [
+        "de:null",
+        "en:null",
+        "ja:null"
+      ]
+    }
+  },
+  "spinner-lang": {
+    "status": "WARN",
+    "msg": "loading screen with ?lang=ja: <html lang=\"ja\">, title \"Ruby lernen mit Chunky Bacon\", text \"Einen Moment … / One moment … / 少々お待ちください …\" - the three languages are not marked up",
+    "data": {
+      "lang": "ja",
+      "text": "Einen Moment … / One moment … / 少々お待ちください …",
+      "title": "Ruby lernen mit Chunky Bacon"
+    }
+  },
+  "drawer-focus": {
+    "status": "FAIL",
+    "msg": "first Tab -> other:button#sidebarToggle.sidebar-toggle \"Show or hide the lessons\"; Enter opens the drawer (aria-expanded=true, role=null, aria-modal=null, page behind inert=false); focus stays on other:button#sidebarToggle.sidebar-toggle \"Show or hide the lessons\"; after 53 Tabs focus leaves the drawer to header:button#progressBtn.progress-btn \"Progress\" (behind the scrim: {\"coveredByScrim\":true,\"inView\":true})",
+    "data": {
+      "first": "other:button#sidebarToggle.sidebar-toggle \"Show or hide the lessons\"",
+      "open": {
+        "cls": "kernel-loading sidebar-open",
+        "exp": "true",
+        "modal": null,
+        "role": null,
+        "inertMain": false
+      },
+      "stops": [
+        "sidebar:a#workshopLink.workshop-link \"🛠 Workshop\"",
+        "sidebar:summary#gemsTitle \"💎 Gems\"",
+        "sidebar:input#navSearch \"Find a lesson\"",
+        "sidebar:button.nav-group-head \"Basics0/18\"",
+        "sidebar:a.lesson \"1Hello, World!\"",
+        "sidebar:a.lesson \"2Arithmetic\"",
+        "sidebar:a.lesson \"3Variables\"",
+        "sidebar:a.lesson \"4String interpolation\"",
+        "sidebar:a.lesson \"5Decisions (if)\"",
+        "sidebar:a.lesson \"6Loops\"",
+        "sidebar:a.lesson \"7Arrays\"",
+        "sidebar:a.lesson \"8Hashes\"",
+        "sidebar:a.lesson \"9Methods\"",
+        "sidebar:a.lesson \"10Classes\"",
+        "sidebar:a.lesson \"11Modules\"",
+        "sidebar:a.lesson \"12IRB – Ruby's playground\"",
+        "sidebar:a.lesson \"13Installing gems\"",
+        "sidebar:a.lesson \"14Parsing HTML\"",
+        "sidebar:a.lesson \"15Sinatra – web server\"",
+        "sidebar:a.lesson \"16Roda – the routing tree\"",
+        "sidebar:a.lesson \"17HTTP – fetching data from th\"",
+        "sidebar:a.lesson \"18Exact arithmetic with BigDec\"",
+        "sidebar:button.nav-group-head \"Side trips0/12\"",
+        "sidebar:a.lesson \"193D with three-rb\"",
+        "sidebar:a.lesson \"20PowerPoint with ruby_pptx\"",
+        "sidebar:a.lesson \"21PDFs with Prawn & HexaPDF\"",
+        "sidebar:a.lesson \"22JPEG photos with pure_jpeg\"",
+        "sidebar:a.lesson \"23PyCall: pandas from Ruby\"",
+        "sidebar:a.lesson \"24SymPy: maths with symbols\"",
+        "sidebar:a.lesson \"25NumPy: whole arrays at once\"",
+        "sidebar:a.lesson \"26scikit-learn: letting the ma\"",
+        "sidebar:a.lesson \"27Rumale: machine learning in \"",
+        "sidebar:a.lesson \"28Sequel: a database from Ruby\"",
+        "sidebar:a.lesson \"29Shoes apps with Scarpe\"",
+        "sidebar:a.lesson \"30RubyKaigi & weird code\"",
+        "sidebar:button.nav-group-head \"Advanced: timelog0/16\"",
+        "sidebar:a.lesson \"31Project timelog: collections\"",
+        "sidebar:a.lesson \"32Parsing text: regex\"",
+        "sidebar:a.lesson \"33Building methods properly\"",
+        "sidebar:a.lesson \"34Entry & Timesheet\"",
+        "sidebar:a.lesson \"35Testing with Minitest\"",
+        "sidebar:a.lesson \"36Enumerable & Data\"",
+        "sidebar:a.lesson \"37Blocks, procs & lambdas\"",
+        "sidebar:a.lesson \"38Handling errors\"",
+        "sidebar:a.lesson \"39Saving data: formats\"",
+        "sidebar:a.lesson \"40Command line & gems\"",
+        "sidebar:a.lesson \"41Pattern matching\"",
+        "sidebar:a.lesson \"42Object model & metaprogrammi\"",
+        "sidebar:a.lesson \"43Your own DSL\"",
+        "sidebar:a.lesson \"44Code quality & debugging\"",
+        "sidebar:a.lesson \"45Performance & concurrency\"",
+        "sidebar:a.lesson \"46Finale: timelog on the web\"",
+        "header:button#progressBtn.progress-btn \"Progress\""
+      ]
+    }
+  },
+  "drawer-escape": {
+    "status": "PASS",
+    "msg": "Escape inside the drawer closes it, focus -> other:button#sidebarToggle.sidebar-toggle \"Show or hide the lessons\""
+  },
+  "drawer-pick-lesson": {
+    "status": "FAIL",
+    "msg": "Enter on a lesson in the drawer: the drawer closes, focus -> BODY"
+  },
+  "reflow-320": {
+    "status": "PASS",
+    "msg": "at 320 CSS px: scrollWidth 320 vs 320"
+  },
+  "contrast-hallo": {
+    "status": "FAIL",
+    "msg": "1 text/background pairs under the AA ratio: div.CodeMirror-linenumber.CodeMirror-gutter-elt \"1\" #7d8894 on #ffffff 3.61:1; placeholder {\"pair\":\"#5f5247 on #ffffff\",\"ratio\":7.54}; focus ring on paper 5.28:1, on fox 1.73:1; fox orange on paper 3.06:1",
+    "data": {
+      "low": [
+        {
+          "pair": "#7d8894 on #ffffff",
+          "ratio": 3.61,
+          "need": 4.5,
+          "sel": "div.CodeMirror-linenumber.CodeMirror-gutter-elt",
+          "text": "1"
+        }
+      ],
+      "placeholder": {
+        "pair": "#5f5247 on #ffffff",
+        "ratio": 7.54
+      },
+      "focusRingOnPaper": 5.28,
+      "focusRingOnFox": 1.73,
+      "foxOnPaper": 3.06
+    }
+  },
+  "contrast-werkstatt": {
+    "status": "FAIL",
+    "msg": "4 text/background pairs under the AA ratio: button.ws-ren \"✎\" #b7b1ac on #ffffff 2.12:1 | button.ws-del \"×\" #b7b1ac on #ffffff 2.12:1 | div.CodeMirror-linenumber.CodeMirror-gutter-elt \"1\" #7d8894 on #ffffff 3.61:1 | small \"25 B\" #d17762 on #ffffff 3.22:1; placeholder {\"pair\":\"#5f5247 on #ffffff\",\"ratio\":7.54}; focus ring on paper 5.28:1, on fox 1.73:1; fox orange on paper 3.06:1",
+    "data": {
+      "low": [
+        {
+          "pair": "#b7b1ac on #ffffff",
+          "ratio": 2.12,
+          "need": 4.5,
+          "sel": "button.ws-ren",
+          "text": "✎"
+        },
+        {
+          "pair": "#b7b1ac on #ffffff",
+          "ratio": 2.12,
+          "need": 4.5,
+          "sel": "button.ws-del",
+          "text": "×"
+        },
+        {
+          "pair": "#7d8894 on #ffffff",
+          "ratio": 3.61,
+          "need": 4.5,
+          "sel": "div.CodeMirror-linenumber.CodeMirror-gutter-elt",
+          "text": "1"
+        },
+        {
+          "pair": "#d17762 on #ffffff",
+          "ratio": 3.22,
+          "need": 4.5,
+          "sel": "small",
+          "text": "25 B"
+        }
+      ],
+      "placeholder": {
+        "pair": "#5f5247 on #ffffff",
+        "ratio": 7.54
+      },
+      "focusRingOnPaper": 5.28,
+      "focusRingOnFox": 1.73,
+      "foxOnPaper": 3.06
+    }
+  },
+  "motion-reduce": {
+    "status": "INFO",
+    "msg": "loading screen: []; a run + pass: []",
+    "data": {
+      "spinner": [],
+      "during": []
+    }
+  },
+  "three-reduced-motion": {
+    "status": "WARN",
+    "msg": "animated show_three cell 7: canvas still changing under prefers-reduced-motion: true; pause control present: false"
+  },
+  "three-canvas-name": {
+    "status": "FAIL",
+    "msg": "3D canvases: [{\"role\":null,\"label\":null,\"tabindex\":null},{\"role\":null,\"label\":null,\"tabindex\":null},{\"role\":null,\"label\":null,\"tabindex\":null}]"
+  },
+  "motion-no-preference": {
+    "status": "INFO",
+    "msg": "loading screen: [wobble@spinner-image(infinite), bacon-slide@load-bar(infinite)]; a run + pass: [bacon-slide@cell, run-fade-in@cell, run-dim@CodeMirror, wobble@run-fox, run-fade-in@run-fox, out-in@run-time, out-in@cell-out, bubble-pop-fail@chat-message]",
+    "data": {
+      "spinner": [
+        "wobble@spinner-image(infinite)",
+        "bacon-slide@load-bar(infinite)"
+      ],
+      "during": [
+        "bacon-slide@cell",
+        "run-fade-in@cell",
+        "run-dim@CodeMirror",
+        "wobble@run-fox",
+        "run-fade-in@run-fox",
+        "out-in@run-time",
+        "out-in@cell-out",
+        "bubble-pop-fail@chat-message"
+      ]
+    }
+  },
+  "irb-widget": {
+    "status": "FAIL",
+    "msg": "Tab after Run -> main:input.irb-input \"\" -> CODEMIRROR(cell-code-3) -> CODEMIRROR(cell-code-3); IRB result \"irb(main):001:0> 1 + 2=> 3\" announced by: null; input named by: irb; focus stays: irb-input",
+    "data": {
+      "order": [
+        "main:input.irb-input \"\"",
+        "CODEMIRROR(cell-code-3)",
+        "CODEMIRROR(cell-code-3)"
+      ],
+      "irbLive": {
+        "text": "irb(main):001:0> 1 + 2=> 3",
+        "live": null,
+        "inputLabel": "irb",
+        "focus": "irb-input"
+      }
+    }
+  }
+}
