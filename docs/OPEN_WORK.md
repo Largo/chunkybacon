@@ -21,52 +21,69 @@ Last updated 2026-10-05.
 
 ## State of the repository
 
-- PR #2 (branch `sequel-lesson`: the Sequel lesson, lesson 28, and SQLite
-  databases in files - HANDOVER §6f) was merged into `main` on 2026-10-05
-  (`4ebafb7`). The site is deployed from it.
-- PR #3 (branch `worktree-tty-processing-faker-erb-lessons`) adds four side
-  trips after Scarpe: 30 TTY, 31 Processing, 32 Faker, 33 ERB + Herb (50
-  lessons; HANDOVER §6g-§6j). It was branched from `a30d2b0` and rebased
-  onto `main` on 2026-10-05: one commit per lesson as before, each
-  inserting its lesson into main's `lessons.js` with the
-  `tmp/insert_lesson.js` renumbering (the PR's numbers from 28 on moved up
-  by one for Sequel; its handover sections 6f-6i became 6g-6j), then one
-  commit with the lesson linter's findings, the offline sizes and this
-  file. Both sides of the gem cache, the offline file list,
-  `.gitattributes`, `compress_assets.rb` and the notices are kept.
-  `TopLevel.binding` (each lesson its own top-level scope) works with the
-  Sequel lesson: `DB = Sequel.sqlite` and a re-run of it, the file step,
-  and Sequel after a lesson that switched `using Processing` on.
-- Verified 2026-10-05 on this machine: `check_harness.rb` (50 lessons x
-  de/en/ja), `gems_harness.rb`, shell tests (150 runs), `autorun_test.rb`,
-  `server_test.rb`, `ansi_test.rb`, `offline_files.rb --check`,
-  `compress_assets.rb --check`, and `browser_test.mjs`, `live_test.mjs`,
-  `offline_test.mjs`, `progress_test.mjs`, `language_test.mjs`,
-  `boot_failure_test.mjs` - all OK. Not run: `permalink_test.mjs` (needs
-  the optional Puma server).
-- [ ] Review and merge PR #3. Merging into `main` deploys the site
-  (HANDOVER §1).
-- Other sessions work in git worktrees under `.claude/worktrees/` (on
-  2026-10-05: `improve-lessons` and `tty-processing-faker-erb-lessons`
-  locked, i.e. in use; `ocran-lesson`; `rumale-lesson`; `ideas`, whose
-  untracked `experiments/` holds the lesson linter). `ocran-lesson` also
-  inserts a lesson right after Scarpe, so it conflicts with PR #3 in
+- `main` is deployed at `dbd5540` (2026-10-05), 50 lessons:
+  - PR #2, the Sequel lesson (28) and SQLite databases in files (HANDOVER
+    §6f), merged 2026-10-05 (`4ebafb7`), with the review fix that a file
+    database whose write failed is written again after the next run.
+  - PR #3, four side trips after Scarpe: 30 TTY, 31 Processing, 32 Faker,
+    33 ERB + Herb (HANDOVER §6g-§6j), rebased onto Sequel and merged
+    2026-10-05. Each lesson has its own top-level scope now
+    (`TopLevel.binding`), checked with the Sequel lesson's constants.
+  - Verified before the merge: `check_harness.rb` (50 lessons x de/en/ja),
+    `gems_harness.rb`, shell tests, `autorun_test.rb`, `server_test.rb`,
+    `ansi_test.rb`, `offline_files.rb --check`, `compress_assets.rb
+    --check`, and `browser_test.mjs`, `live_test.mjs`, `offline_test.mjs`,
+    `progress_test.mjs`, `language_test.mjs`, `boot_failure_test.mjs`. Not
+    run: `permalink_test.mjs` (needs the optional Puma server).
+- Open fix PRs, each rebased onto `dbd5540` and tested there, alone and all
+  three stacked (`browser_test.mjs` 273 checks, shell tests 151 runs):
+  - [ ] #15 an SVG under a cell keeps its own size (`.cell-image` is a
+    160px pixelated thumbnail); needed by #6, #9 and #4.
+  - [ ] #16 code cells: Escape, then Tab leaves the editor; editors named
+    for screen readers; a focus ring (the accessibility audit's worst
+    finding, WCAG 2.1.2).
+  - [ ] #17 the mini browser draws the app's page in a shadow root, so a
+    `<style>` it brings (Sinatra's 404 page) no longer restyles the course.
+  Merging any of them deploys the site (HANDOVER §1).
+- Open experiment PRs #4-#13: each adds only `experiments/NN-<idea>/`
+  (prototype, tests, `NOTES.md` with measurements and integration steps),
+  nothing under `html/`, so merging them deploys nothing. Built on
+  `sequel-lesson` (46 lessons), so lesson and line numbers in their notes
+  are older than `main`. #4 matplotlib charts, #5 stepping through a cell,
+  #6 `show_objects`, #7 friendly error messages, #8 sound synthesis,
+  #9 turtle graphics, #10 the `lessons.js` linter, #11 a game loop (Snake),
+  #12 one runnable cell embedded elsewhere (with a security analysis),
+  #13 the accessibility audit.
+- Other sessions work in git worktrees under `.claude/worktrees/`
+  (2026-10-05: `improve-lessons` and `tty-processing-faker-erb-lessons`
+  locked, i.e. in use - the latter now behind `main`, its PR is merged;
+  `ocran-lesson`; `rumale-lesson`; `ideas`). `ocran-lesson` inserts a
+  lesson right after Scarpe, so it conflicts with `main` in
   `html/lessons.js`, the count tests, README and HANDOVER: rebase it onto
-  `main` once PR #3 is in and re-run the `tmp/insert_lesson.js`-style
-  renumbering rather than hand-merging. (`git` also warns that it cannot
-  delete `.git/worktrees/agent-a88082be1e674fa38`, a stale entry - harmless.)
+  `main` and re-run the `tmp/insert_lesson.js`-style renumbering rather
+  than hand-merging. (`git` also warns that it cannot delete
+  `.git/worktrees/agent-a88082be1e674fa38`, a stale entry - harmless.)
 
 ## Smaller open ends found on the way
 
 - A re-run of a cell with `DB = Sequel.sqlite` reassigns a constant; the
   cell shows only its result (`=> [:eintraege]`), no warning (checked
   2026-10-05). The file step uses a local variable.
-- The lesson linter (`experiments/07-lesson-linter/lint_lessons.rb` in the
-  `ideas` worktree, not in git) still warns, as on `main`: `rubykaigi` [ja]
+- The lesson linter (`experiments/07-lesson-linter/lint_lessons.rb`, PR #10,
+  not on `main` yet) still warns: `rubykaigi` [ja]
   cells 1 and 7 end in plain form (perhaps on purpose - a talk's
   punchline), and `sequel` [de] cell 5 has a 102-column line. Decide, then
   fix or accept. Its `--base=origin/main` run finds every lesson reference
   pointing at the same lesson as on `main`.
+- Found by the experiments, in today's code (details in their `NOTES.md`):
+  the live-run tracer makes code about 36x slower in ruby.wasm, so a cell
+  looping over ~100k elements hits the 1 s limit (#8 suggests a per-lesson
+  `"live": false`); once any time-limit tracer has been on, plain runs stay
+  about 40% slower for the rest of the visit (#11); every cell is evaluated
+  as `chunky.rb`, so an error in a method from an earlier cell reports that
+  cell's line numbers (#7, #5); the accessibility audit's other findings -
+  no live region for results, focus lost after a run or a lesson change,
+  the phone drawer not modal, no skip link, five contrasts (#13).
 - The offline dialog's sizes (`offlineExplain`, README, HANDOVER §6c) are
   measured by hand: the files of `offline-files.txt` in MiB, a text file
   without a `.gz` counted gzipped. Re-measure after adding big files.
