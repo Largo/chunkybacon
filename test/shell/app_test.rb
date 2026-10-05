@@ -300,6 +300,18 @@ class AppTest < Minitest::Test
     assert_equal "Zelle 1 ausgeführt: #{'x' * 280} …", byid("runStatus").text, "long output is shortened"
   end
 
+  def test_an_explained_error_is_announced_by_its_headline
+    start
+    click(run_button(1))
+    byid("cell-out-1").js_set("innerHTML", '<pre class="cell-stdout">こんにちは</pre>' \
+                                           '<div class="friendly-error" lang="de"><div class="friendly-title">Meintest du upcase?</div>' \
+                                           '<pre class="friendly-snippet">&gt; 2 | name.upcse</pre><p class="friendly-body">String hat keine Methode upcse.</p>' \
+                                           '<details class="friendly-original"><summary>Rubys Meldung</summary><pre>NoMethodError</pre></details></div>')
+    fire("chunky:ran", ran_event(1, "error"))
+    assert_equal "Zelle 1 mit Fehler: こんにちはMeintest du upcase?", byid("runStatus").text,
+                 "what it printed, then the headline - not the code frame or Ruby's message"
+  end
+
   def test_a_live_run_is_not_announced
     start
     fire("chunky:ran", ran_event(1, "ok", auto: true))

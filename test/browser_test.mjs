@@ -121,6 +121,30 @@ await runExercise();
 check('inline NameError shown', (await exerciseOut()).includes('NameError'));
 check('error bubble on exercise error', (await page.getAttribute('#chunkyChat', 'class')).includes('fail'));
 
+// ...explained in the lesson's language (friendly_errors.rb, fetched on the
+// first error): a headline, the line with a caret, what to do, and Ruby's
+// own message folded away; the status line reads only the headline
+const friendlyBox = async () => page.evaluate(i => {
+  const box = document.querySelector(`#cell-out-${i} .friendly-error`);
+  return box && {
+    lang: box.getAttribute('lang'),
+    title: box.querySelector('.friendly-title').textContent,
+    snippet: (box.querySelector('.friendly-snippet') || {}).textContent || '',
+    original: box.querySelector('.friendly-original pre').textContent,
+    status: document.getElementById('runStatus').textContent,
+  };
+}, await exerciseIdx());
+await setExercise('6 x 7');
+await runExercise();
+await page.waitForFunction(() => document.getElementById('runStatus').textContent.includes('Fehler'), null, { timeout: 5000 }).catch(() => {});
+let friendly = await friendlyBox();
+check('an error is explained in a friendly box', friendly && friendly.lang === 'de' && friendly.title === 'Ruby multipliziert mit *');
+check('... pointing at the x, Ruby\'s own message underneath',
+      friendly && friendly.snippet.includes('> 1 | 6 x 7') && friendly.snippet.includes('^ hier') &&
+      friendly.original.startsWith('SyntaxError: chunky.rb:1:') && !friendly.original.includes('\u001b'));
+check('... and the status line reads its headline, not the code frame',
+      friendly && /^Zelle \d+ mit Fehler: Ruby multipliziert mit \* /.test(friendly.status) && !friendly.status.includes('^'));
+
 // solve lesson 2 without puts
 await setExercise('6 * 7');
 await runExercise();
@@ -1061,6 +1085,11 @@ check('after reload progress kept', (await page.getAttribute('#lessonNav a:first
 // solve the class lesson (lesson 10) end to end in English
 await page.click('#lessonNav a[data-id="klassen"]');
 await page.waitForTimeout(300);
+await setExercise('6 x 7');
+await runExercise();
+await page.waitForFunction(i => document.querySelector(`#cell-out-${i} .friendly-error`), await exerciseIdx(), { timeout: 5000 }).catch(() => {});
+friendly = await friendlyBox();
+check('the explanation speaks English', friendly && friendly.lang === 'en' && friendly.title === 'Ruby multiplies with *');
 await setExercise('class Fox\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def shout\n    "Chunky Bacon!"\n  end\nend\nFox.new("Kaz").shout');
 await runExercise();
 check('class lesson passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
@@ -1075,6 +1104,11 @@ check('Japanese run button', (await page.textContent('.run-cell')).includes('実
 await setExercise('class Fox\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def shout\n    "Chunky Bacon!"\n  end\nend\nFox.new("Kaz").shout');
 await runExercise();
 check('class lesson passes in Japanese', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+await setExercise('6 x 7');
+await runExercise();
+await page.waitForFunction(i => document.querySelector(`#cell-out-${i} .friendly-error`), await exerciseIdx(), { timeout: 5000 }).catch(() => {});
+friendly = await friendlyBox();
+check('... and the explanation Japanese', friendly && friendly.lang === 'ja' && friendly.title === 'Rubyのかけ算は * です');
 
 await page.screenshot({ path: '/tmp/chunkybacon.png', fullPage: true });
 await browser.close();

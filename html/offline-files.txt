@@ -65,6 +65,9 @@ assets/three/three.module.min.js
 autorun.rb
 browser.script.iife.js
 browser_gems.rb
+friendly_errors.rb
+friendly_errors_messages.rb
+friendly_errors_rules.rb
 gems/cache/base64-0.3.0.gem
 gems/cache/benchmark-0.5.0.gem
 gems/cache/bigdecimal-pure-0.1.0.gem

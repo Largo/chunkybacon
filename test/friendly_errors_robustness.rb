@@ -1,18 +1,20 @@
 # FriendlyErrors must never break a cell's output. Feeds it every corpus
-# error with wrong or missing sources, odd languages, a different file name
-# and no binding, and checks that explain only ever returns nil or a Result
-# whose texts have no unfilled %{...}.
-#   ruby experiments/04-friendly-errors/robustness_check.rb
-#   ruby --disable-did_you_mean experiments/04-friendly-errors/robustness_check.rb
+# error (friendly_errors_corpus.rb) with wrong or missing sources, odd
+# languages, a different file name and no binding, and checks that explain
+# only ever returns nil or a Result whose texts have no unfilled %{...}.
+# Exits 1 on a problem.
+#   ruby friendly_errors_robustness.rb
+#   ruby --disable-did_you_mean friendly_errors_robustness.rb
 require "stringio"
-require_relative "friendly_errors"
-require_relative "corpus"
-load File.expand_path("../../html/autorun.rb", __dir__)
+require_relative "../html/friendly_errors"
+require_relative "friendly_errors_corpus"
+require_relative "../html/autorun"
 
 errors = FriendlyErrors::CORPUS.filter_map do |item|
   bind = eval("proc { binding }.call", TOPLEVEL_BINDING)
-  # each case starts clean, like run_corpus.rb: an earlier case's `def square`
-  # would otherwise let "square-called-before-def" run without an error
+  # each case starts clean, like friendly_errors_harness.rb: an earlier
+  # case's `def square` would otherwise let "square-called-before-def" run
+  # without an error
   consts = Object.constants
   meths = Object.private_instance_methods(false)
   old = $stdout

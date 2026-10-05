@@ -624,7 +624,7 @@ module ChunkyShell
     # and the text a moment later, so the same result twice is read twice.
     def announce_run(idx, outcome, verdict)
       out = el("cell-out-#{idx}")
-      text = out ? out.innerText.to_s.strip : ""
+      text = out ? brief_output(out).strip : ""
       text = "#{text[0, 280]} …" if text.length > 280
       message = format(outcome == "error" ? ui.ranError : ui.ranOk, @cell_numbers[idx] || idx, text)
       message = "#{message} #{verdict}" if verdict != ""
@@ -634,6 +634,23 @@ module ChunkyShell
         sleep_ms 50
         status.textContent = message
       end
+    end
+
+    # The output's text, with an explained error (the kernel's
+    # .friendly-error) read as its headline: its code snippet with carets
+    # makes no sense spoken, and the explanation stays on the page to read
+    def brief_output(out)
+      text = out.innerText.to_s
+      box = out.querySelector(".friendly-error")
+      return text unless box
+
+      title = box.querySelector(".friendly-title")
+      headline = title ? title.innerText.to_s : ""
+      whole = box.innerText.to_s
+      at = text.index(whole)
+      return headline unless at
+
+      text[0, at].to_s + headline + text[at + whole.length, text.length].to_s
     end
 
     def exercise_passed
