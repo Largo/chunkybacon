@@ -47,7 +47,7 @@ Last updated 2026-10-05.
       `<style>` it brings (Sinatra's 404 page) no longer restyles the
       course; the page's `html`/`body`/`:root` rules still style it inside
       the fake browser (HANDOVER §6).
-- PR `matplotlib-lesson` (open, supersedes #4): lesson 26, matplotlib -
+- PR #19 `matplotlib-lesson` (open, supersedes #4): lesson 26, matplotlib -
   charts as SVG under the cell, `savefig` as a download, `show_plot`
   (HANDOVER §6d). It renumbers scikit-learn and every later lesson
   (51 lessons), turns a Python tuple into a Ruby Array as the pycall gem
