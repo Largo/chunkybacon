@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruby lernen mit Chunky Bacon</title>
+    <meta name="theme-color" content="#ffffff">
+    <!-- Atkinson Hyperlegible Next/Mono for everything the learner reads and
+         types, Shantell Sans for Chunky's own voice (see app.css); self-hosted,
+         so a visit makes no third-party requests -->
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    <!-- three.js is vendored locally and only fetched when the 3D lesson
+         needs it (see window.ensureThree below); the import map lets the
+         addon files resolve their "three" import to the same copy. -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./assets/three/three.module.min.js",
+          "three/addons/": "./assets/three/"
+        }
+      }
+    </script>
+    <!-- The page is drawn by Ruby on PicoRuby.wasm (shell/, 0.9 MB), the
+         lessons' code runs on CRuby ruby.wasm (main.rb, 10 MB), which loads
+         once the page is up (shell/bridge.js). The shell's runtime downloads
+         from here on, while the rest of the page loads. -->
+    <link rel="modulepreload" href="assets/picoruby/picoruby.js">
+    <link rel="preload" href="assets/picoruby/picoruby.wasm" as="fetch" type="application/wasm" crossorigin>
+    <link rel="preload" href="assets/picoruby/init.iife.js" as="script">
+    <script>
+      // The Ruby sources (main.rb and what it require_relative's, the
+      // shell's files) are loaded with fetch(), which reuses a cached copy
+      // for as long as the browser deems it fresh - even across a hard
+      // reload. Ask the server every time instead: a 304 when nothing
+      // changed, the new code right after a deploy. Must run before
+      // browser.script.iife.js.
+      (function () {
+        var plainFetch = window.fetch.bind(window);
+        window.fetch = function (resource, init) {
+          // a string, a URL object (what require_relative's loader passes)
+          // or a Request
+          var url = resource instanceof Request ? resource.url : String(resource);
+          if (/\.rb(\?|#|$)/.test(url)) {
+            init = Object.assign({}, init, { cache: "no-cache" });
+          }
+          return plainFetch(resource, init);
+        };
+      })();
+    </script>
+    <meta name="description" content="Lerne die Programmiersprache Ruby direkt im Browser – mit Chunky Bacon. Ein interaktives Notizbuch auf Deutsch, Englisch und Japanisch, kein Setup nötig.">
+    <meta name="author" content="Andi Idogawa">
+    <!-- Link previews (Slack, X, LinkedIn, Discord, messengers): the 2:1 card
+         from docs/social/card.html (tools/render_social_cards.mjs). Scrapers
+         want an absolute URL: GitHub's raw copy until the site has a domain. -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Chunky Bacon">
+    <meta property="og:title" content="Learn Ruby with Chunky Bacon">
+    <meta property="og:description" content="An interactive Ruby notebook in your browser, in German, English and Japanese – from puts to web apps, PDFs and 3D. Nothing to install.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/Largo/chunkybacon/main/docs/social/github-social.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1600">
+    <meta property="og:image:height" content="800">
+    <meta property="og:image:alt" content="Chunky Bacon, a cartoon fox holding a strip of bacon, says hello in German, English and Japanese beside a notebook cell whose Ruby code answers &quot;Chunky Bacon&quot;.">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="stylesheet" href="assets/codemirror.css">
+    <link rel="stylesheet" href="assets/app.css">
+    <script src="assets/codemirror.js"></script>
+    <script src="assets/codemirror-ruby.js"></script>
+    <script src="lessons.js"></script>
+    <link rel="icon" href="assets/chunky.svg">
+</head>
+<body>
+
+    <div class="spinner" id="spinner">
+      <img class="spinner-image" src="assets/chunky.svg" alt="Chunky Bacon Fuchs">
+      <h1 id="spinnerTitle">Ruby lernen mit Chunky Bacon</h1>
+      <p id="spinnerText">Einen Moment … / One moment … / 少々お待ちください …</p>
+      <div class="load-bar" aria-hidden="true"></div>
+    </div>
+
+    <div id="app" style="display:none">
+      <!-- Shows and hides the lessons: fixed top left, the same spot open or
+           closed, wide screen or phone (a drawer there). First in the page,
+           so it is also first for the keyboard. shell/app.rb drives it. -->
+      <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-controls="sidebar" aria-expanded="true">
+        <svg viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="3.5" width="13" height="11" rx="2"/><path d="M7 3.5v11"/></svg>
+      </button>
+
+      <div class="layout">
+        <!-- the lessons, from the top of the window to its foot: their own
+             scroll; the workshop and the gems at the top, then a search and
+             one group per course -->
+        <aside id="sidebar" class="sidebar">
+          <div class="sidebar-head">
+            <span id="navTitle" class="nav-title"></span>
+            <span id="navCount" class="nav-count"></span>
+            <span class="nav-bar" aria-hidden="true"><span id="navBarFill"></span></span>
+          </div>
+          <a id="workshopLink" class="workshop-link" href="#werkstatt"></a>
+          <details id="gemsPanel">
+            <summary id="gemsTitle"></summary>
+            <div id="gemsList"></div>
+            <div class="gemsInstallRow">
+              <input id="gemNameInput" type="text" placeholder="gem">
+              <button id="gemInstallBtn" type="button"></button>
+            </div>
+            <p id="gemsNote"></p>
+          </details>
+          <label class="nav-search">
+            <svg viewBox="0 0 14 14" aria-hidden="true"><circle cx="6" cy="6" r="4.2"/><path d="M9.2 9.2 12.5 12.5"/></svg>
+            <input id="navSearch" type="search" autocomplete="off" spellcheck="false">
+          </label>
+          <nav id="lessonNav"></nav>
+        </aside>
+
+        <div class="column">
+          <header>
+            <img id="mascot" src="assets/chunky.svg" alt="Chunky Bacon Fuchs">
+            <div class="headerText">
+              <h1 id="siteTitle">Ruby lernen mit Chunky Bacon</h1>
+              <p id="siteSubtitle"></p>
+              <!-- until CRuby is up (shell/app.rb): Run waits for it -->
+              <p id="kernelStatus" class="kernel-status" role="status" hidden></p>
+            </div>
+            <button id="progressBtn" class="progress-btn" type="button" aria-haspopup="dialog">
+              <svg class="progress-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7A1.5 1.5 0 0 1 5 5.5h4.2l2 2H19A1.5 1.5 0 0 1 20.5 9v8.5A1.5 1.5 0 0 1 19 19H5a1.5 1.5 0 0 1-1.5-1.5z"/></svg>
+              <span class="progress-label" id="progressLabel">Fortschritt</span>
+              <span class="progress-dot" aria-hidden="true"></span>
+            </button>
+            <select id="langSelect" title="Sprache / Language / 言語">
+              <option value="de">Deutsch</option>
+              <option value="en">English</option>
+              <option value="ja">日本語</option>
+            </select>
+          </header>
+
+          <main>
+            <article id="lessonBody"></article>
+
+            <div id="chunkyChat">
+              <div class="chat-avatar"><img src="assets/chunky.svg" alt="Chunky"></div>
+              <div class="chat-message"><p id="chunkyText"></p></div>
+            </div>
+
+            <div class="buttons">
+              <button id="reset-code" type="button" class="reset"></button>
+            </div>
+          </main>
+
+          <footer>
+            <p id="footerCredit"></p>
+            <p><small id="footerLicense"></small></p>
+          </footer>
+        </div>
+      </div>
+
+      <!-- saving and loading progress: filled by shell/workspace.rb -->
+      <dialog id="progressDialog" class="progress-dialog" aria-labelledby="progressTitle"></dialog>
+    </div>
+
+  <script>
+    // Synchronous fetch helpers for the in-browser gem installer (main.rb).
+    // Sync XHR blocks the main thread, which is fine here: installs are
+    // user-triggered and cached gems resolve in milliseconds.
+    //
+    // Offline mode (offline.js): a page from the offline copy has the files
+    // these fetch in memory, as Chrome does not pass sync XHR through the
+    // service worker. What the copy lacks is then "ERROR offline" - also
+    // when the worker answers it (503, X-Chunky-Offline), as Firefox lets it.
+    function offlineCopy(url) {
+      return window.ChunkyOffline ? window.ChunkyOffline.syncCopy(url) : null;
+    }
+    function offlinePage() {
+      return Boolean(window.ChunkyOffline && window.ChunkyOffline.fromCopy());
+    }
+    function offlineAnswer(xhr) {
+      return xhr.status === 503 && xhr.getResponseHeader("X-Chunky-Offline") === "1";
+    }
+    function toBase64(bytes) {
+      var chunks = [];
+      for (var j = 0; j < bytes.length; j += 0x8000) {
+        chunks.push(String.fromCharCode.apply(null, bytes.subarray(j, j + 0x8000)));
+      }
+      return btoa(chunks.join(""));
+    }
+    window.fetchTextSync = function (url) {
+      var copy = offlineCopy(url);
+      if (copy) return new TextDecoder().decode(copy);
+      try {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, false);
+        xhr.send(null);
+        if (offlineAnswer(xhr)) return "ERROR offline";
+        if (xhr.status !== 200) return "ERROR " + xhr.status;
+        return xhr.responseText;
+      } catch (e) { return offlinePage() ? "ERROR offline" : "ERROR " + e; }
+    };
+    window.fetchBinaryBase64 = function (url) {
+      var copy = offlineCopy(url);
+      if (copy) return toBase64(copy);
+      try {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, false);
+        // classic binary-over-sync-XHR trick: raw bytes survive in the
+        // low byte of each char with this charset override
+        xhr.overrideMimeType("text/plain; charset=x-user-defined");
+        xhr.send(null);
+        if (offlineAnswer(xhr)) return "ERROR offline";
+        if (xhr.status !== 200) return "ERROR " + xhr.status;
+        var text = xhr.responseText;
+        var bytes = new Uint8Array(text.length);
+        for (var i = 0; i < text.length; i++) bytes[i] = text.charCodeAt(i) & 0xff;
+        return toBase64(bytes);
+      } catch (e) { return offlinePage() ? "ERROR offline" : "ERROR " + e; }
+    };
+
+    // Full HTTP fetch (status + content type + body) for the Net::HTTP
+    // shim. Returns a JSON string so only one value crosses the bridge;
+    // status 0 is no connection, with "offline" as the body when offline.
+    window.fetchHttpSync = function (url) {
+      var offline = JSON.stringify({ status: 0, contentType: "", body: "offline" });
+      try {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, false);
+        xhr.send(null);
+        if (offlineAnswer(xhr)) return offline;
+        return JSON.stringify({
+          status: xhr.status,
+          contentType: xhr.getResponseHeader("Content-Type") || "",
+          body: xhr.responseText
+        });
+      } catch (e) {
+        return offlinePage() ? offline : JSON.stringify({ status: 0, contentType: "", body: String(e) });
+      }
+    };
+
+    // Lazy three.js loader for the 3D lesson. three-rb (Ruby) builds the
+    // scene graph and delegates the actual WebGL work to three.js, which it
+    // looks up as globalThis.THREE - so the module has to be imported and
+    // published before any Three::Renderers::ThreeJSRenderer is created.
+    // ~750 KB, so we only pay for it on the lesson that asks (main.rb calls
+    // ensureThree when that lesson is opened) and Ruby checks threeReady
+    // before mounting a canvas.
+    window.threeReady = false;
+    window.threeLoading = null;
+    window.ensureThree = function () {
+      if (window.threeLoading) return window.threeLoading;
+      window.threeLoading = (async function () {
+        var three = await import("./assets/three/three.module.min.js");
+        globalThis.THREE = three;
+        var orbit = await import("./assets/three/OrbitControls.js");
+        globalThis.THREE_ORBIT_CONTROLS = orbit.OrbitControls;
+        window.threeReady = true;
+        return true;
+      })().catch(function (e) {
+        window.threeLoading = null;
+        console.error("three.js failed to load", e);
+        return false;
+      });
+      return window.threeLoading;
+    };
+
+    // Python for the PyCall lessons (html/pycall.rb): Pyodide - CPython in
+    // WebAssembly, about 9 MB - from assets/pyodide/ (tools/vendor_pyodide.rb),
+    // so only for a lesson that asks: the shell calls ensurePython(code) with
+    // a lesson's PyCall code, and the packages its import_module("...") calls
+    // name come along (pandas ~12 MB, sympy ~5 MB, scikit-learn ~19 MB);
+    // pycall.rb asks the same way for a module the workshop imports.
+    // shell/bridge.js holds a run until chunky:python-ready. What Python prints is collected here and
+    // written into the cell by pycall.rb.
+    window.chunkyPython = {
+      ready: false, loading: null, error: null, pyodide: null, output: [],
+      imports: {},    // import name -> vendored package, from pyodide-lock.json
+      packages: {},   // packages loaded so far
+      takeOutput: function () { var text = this.output.join(""); this.output = []; return text; }
+    };
+    window.ensurePython = function (code) {
+      var python = window.chunkyPython;
+      if (python.loading) return python.loading.then(function () { return window.ensurePython(code); });
+      var modules = [];
+      String(code || "").replace(/import_module\(\s*["']([\w.]+)["']/g, function (all, name) { modules.push(name.split(".")[0]); });
+      var missing = function () {
+        return modules.map(function (m) { return python.imports[m]; })
+          .filter(function (p, i, all) { return p && !python.packages[p] && all.indexOf(p) === i; });
+      };
+      if (python.ready && missing().length === 0) return Promise.resolve(true);
+      python.error = null;
+      var copy = window.ChunkyOffline;
+      python.loading = (async function () {
+        // a page from an offline copy made without Python: no half a load
+        // (the browser's cache may still have some of its files)
+        if (copy && copy.fromCopy() && !copy.python()) throw new Error("offline");
+        var base = new URL("assets/pyodide/", document.baseURI).href;
+        if (!python.pyodide) {
+          var module = await import(base + "pyodide.mjs");
+          var pyodide = await module.loadPyodide({ indexURL: base });
+          var collect = function (line) { python.output.push(line + "\n"); };
+          pyodide.setStdout({ batched: collect });
+          pyodide.setStderr({ batched: collect });
+          var lock = await (await fetch(base + "pyodide-lock.json")).json();
+          Object.keys(lock.packages).forEach(function (name) {
+            (lock.packages[name].imports || []).forEach(function (m) { python.imports[m] = name; });
+          });
+          python.pyodide = pyodide;
+        }
+        var wanted = missing();
+        if (wanted.length) {
+          await python.pyodide.loadPackage(wanted, { messageCallback: function () {} });
+          wanted.forEach(function (p) { python.packages[p] = true; });
+        }
+        python.ready = true;
+        return true;
+      })().catch(function (e) {
+        // a page from the offline copy, made without Python (the checkbox):
+        // pycall.rb says so rather than showing a network error. Any other
+        // failure (a package, the wasm) keeps its own message.
+        var offline = copy && copy.fromCopy() && !copy.python();
+        python.error = offline ? "offline" : String((e && e.message) || e);
+        console.error("Python (Pyodide) failed to load", e);
+        return false;
+      }).then(function (ok) {
+        python.loading = null;
+        window.dispatchEvent(new CustomEvent("chunky:python-ready", { detail: { ok: ok } }));
+        return ok;
+      });
+      return python.loading;
+    };
+
+    // SQLite for the Sequel lesson: sql.js (SQLite in WebAssembly, ~650 KB,
+    // assets/sqljs/, tools/vendor_sqljs.rb), loaded only for a lesson or a
+    // run whose code uses Sequel or SQLite - the shell calls ensureSqlite,
+    // and shell/bridge.js holds a run until chunky:sqlite-ready. sqlite3_sqljs.rb
+    // is the sqlite3 gem's API on top of the calls below: synchronous, JSON
+    // in and out, so integers stay integers (BigInt, as text) and floats
+    // floats, which a JavaScript number would blur.
+    window.chunkySqlite = (function () {
+      var state = { ready: false, loading: null, error: null, SQL: null, dbs: {}, last: 0 };
+      var toBase64 = function (bytes) {
+        var s = "";
+        for (var i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+        return btoa(s);
+      };
+      var fromBase64 = function (text) {
+        var raw = atob(text), bytes = new Uint8Array(raw.length);
+        for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+        return bytes;
+      };
+      // a value for Ruby: {i: "12"} an INTEGER, {f: 3} a REAL that looks
+      // whole, {b: base64} a BLOB; text, other numbers and null as they are
+      var encode = function (v) {
+        if (typeof v === "bigint") return { i: v.toString() };
+        if (typeof v === "number") return Number.isInteger(v) ? { f: v } : v;
+        if (v instanceof Uint8Array) return { b: toBase64(v) };
+        return v;
+      };
+      var decode = function (v) {
+        if (v && typeof v === "object") {
+          if ("i" in v) return BigInt(v.i);
+          if ("b" in v) return fromBase64(v.b);
+        }
+        return v;
+      };
+      // sql.js names a parameter with its prefix (":name"), the gem without
+      var bindings = function (params) {
+        if (Array.isArray(params)) return params.map(decode);
+        var out = {};
+        Object.keys(params).forEach(function (k) { out[/^[:@$]/.test(k) ? k : ":" + k] = decode(params[k]); });
+        return out;
+      };
+      var empty = function (params) {
+        return params == null || (Array.isArray(params) ? params.length === 0 : Object.keys(params).length === 0);
+      };
+      // The declared type of each result column (what sqlite3_column_decltype
+      // would say; sql.js does not export it): from PRAGMA table_info of the
+      // tables after FROM and JOIN, by column name. Sequel converts with it
+      // (booleans, dates); a computed column has none.
+      var declaredTypes = function (db, sql, columns) {
+        var types = {}, re = /\b(?:FROM|JOIN)\s+[`"\[]?(\w+)[`"\]]?/gi, m;
+        while ((m = re.exec(sql))) {
+          var info = db.exec("PRAGMA table_info(\"" + m[1].replace(/"/g, "\"\"") + "\")");
+          (info[0] ? info[0].values : []).forEach(function (row) {
+            if (!(row[1] in types)) types[row[1]] = row[2];
+          });
+        }
+        return columns.map(function (c) { return types[c] || null; });
+      };
+      var guard = function (fn) {
+        try { return JSON.stringify({ ok: fn() }); } catch (e) { return JSON.stringify({ error: String((e && e.message) || e) }); }
+      };
+      var db = function (id) {
+        if (!state.dbs[id]) throw new Error("database is closed");
+        return state.dbs[id];
+      };
+      // The connection's settings ("PRAGMA foreign_keys = 1", what Sequel
+      // sets on connect), by name: export() closes and reopens the database,
+      // which forgets them, so they are set again after it.
+      var pragmas = {};
+      var remember = function (id, sql) {
+        var m = /^\s*PRAGMA\s+([\w.]+)\s*=\s*[^;]*;?\s*$/i.exec(sql);
+        if (m) (pragmas[id] = pragmas[id] || {})[m[1].toLowerCase()] = sql;
+      };
+      // a fresh database, or one from the bytes of a SQLite file (base64)
+      state.open = function (base64) {
+        return guard(function () {
+          state.last += 1;
+          state.dbs[state.last] = new state.SQL.Database(base64 ? fromBase64(base64) : undefined);
+          return state.last;
+        });
+      };
+      state.close = function (id) { if (state.dbs[id]) state.dbs[id].close(); delete state.dbs[id]; delete pragmas[id]; };
+      // the database as the bytes of a SQLite file (base64). sql.js closes
+      // and reopens it for that, so only between transactions - the stand-in
+      // calls it at the end of a run - and with the settings set again.
+      state.exportDb = function (id) {
+        return guard(function () {
+          var bytes = db(id)["export"]();
+          var again = pragmas[id] || {};
+          Object.keys(again).forEach(function (name) { db(id).exec(again[name]); });
+          return toBase64(bytes);
+        });
+      };
+      // one statement with its rows: { columns, types, rows }
+      state.query = function (id, sql, params) {
+        return guard(function () {
+          var conn = db(id), stmt = conn.prepare(sql), rows = [];
+          try {
+            var args = JSON.parse(params);
+            if (!empty(args)) stmt.bind(bindings(args));
+            while (stmt.step()) rows.push(stmt.get(null, { useBigInt: true }).map(encode));
+            remember(id, sql);
+            var columns = stmt.getColumnNames();
+            return { columns: columns, types: declaredTypes(conn, sql, columns), rows: rows };
+          } finally {
+            stmt.free();
+          }
+        });
+      };
+      // statements without rows, several at once when there are no parameters
+      state.batch = function (id, sql, params) {
+        return guard(function () {
+          var args = JSON.parse(params);
+          if (empty(args)) db(id).exec(sql); else db(id).run(sql, bindings(args));
+          remember(id, sql);
+          return db(id).getRowsModified();
+        });
+      };
+      state.changes = function (id) { return db(id).getRowsModified(); };
+      state.lastInsertRowId = function (id) {
+        return String(db(id).exec("SELECT last_insert_rowid()")[0].values[0][0]);
+      };
+      return state;
+    })();
+    window.ensureSqlite = function () {
+      var sqlite = window.chunkySqlite;
+      if (sqlite.ready || sqlite.loading) return sqlite.loading || Promise.resolve(true);
+      sqlite.error = null;
+      sqlite.loading = new Promise(function (resolve, reject) {
+        var base = new URL("assets/sqljs/", document.baseURI).href;
+        var script = document.createElement("script");
+        script.src = base + "sql-wasm.js";
+        script.onload = function () {
+          window.initSqlJs({ locateFile: function (file) { return base + file; } }).then(resolve, reject);
+        };
+        script.onerror = function () { reject(new Error("sql-wasm.js could not be loaded")); };
+        document.head.appendChild(script);
+      }).then(function (SQL) {
+        sqlite.SQL = SQL;
+        sqlite.ready = true;
+        return true;
+      }).catch(function (e) {
+        sqlite.error = String((e && e.message) || e);
+        console.error("SQLite (sql.js) failed to load", e);
+        return false;
+      }).then(function (ok) {
+        sqlite.loading = null;
+        window.dispatchEvent(new CustomEvent("chunky:sqlite-ready", { detail: { ok: ok } }));
+        return ok;
+      });
+      return sqlite.loading;
+    };
+
+    // A Blob URL for bytes handed over from Ruby as base64 - the link a cell
+    // offers for a file it wrote. Blob rather than data: URLs, which break
+    // down for multi-megabyte files.
+    window.makeDownloadUrl = function (base64, type) {
+      var raw = atob(base64);
+      var bytes = new Uint8Array(raw.length);
+      for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+      return URL.createObjectURL(new Blob([bytes], { type: type }));
+    };
+
+    // Calls fn once the current state is on screen. Ruby blocks the main
+    // thread while a cell runs, so main.rb shows its running state first and
+    // runs the cell from here: after two frames the first one has been drawn.
+    // Hidden tabs pause requestAnimationFrame, hence the timer fallback.
+    window.afterPaint = function (fn) {
+      var done = false;
+      var go = function () { if (!done) { done = true; fn(); } };
+      requestAnimationFrame(function () { requestAnimationFrame(go); });
+      setTimeout(go, 150);
+    };
+
+    // The lesson index scrolls on its own (app.css), on a wide screen and in
+    // the drawer on a phone. Keep the current lesson in view whenever the
+    // shell re-renders the index - scrolling only the sidebar, never the page.
+    // The sidebar is the offsetParent of every lesson link.
+    new MutationObserver(function () {
+      var bar = document.getElementById("sidebar");
+      var active = document.querySelector("#lessonNav a.active");
+      if (!bar || !active || bar.scrollHeight <= bar.clientHeight) return;
+      var top = active.offsetTop, bottom = top + active.offsetHeight;
+      if (top < bar.scrollTop || bottom > bar.scrollTop + bar.clientHeight) {
+        bar.scrollTop = top - bar.clientHeight / 3;
+      }
+    }).observe(document.getElementById("lessonNav"), { childList: true });
+
+    // Per-cell CodeMirror helpers called from Ruby (shell/app.rb builds the
+    // editors, main.rb reads and marks them)
+    window.cellEditors = {};
+    window.initCell = function (idx) {
+      var ta = document.getElementById("cell-code-" + idx);
+      if (!ta) return;
+      window.cellEditors[idx] = CodeMirror.fromTextArea(ta, {
+        lineNumbers: true,
+        mode: "text/x-ruby",
+        matchBrackets: true,
+        indentUnit: 2,
+        viewportMargin: Infinity,
+        extraKeys: {
+          "Shift-Enter": function () {
+            var btn = document.querySelector('.run-cell[data-idx="' + idx + '"]');
+            if (btn) btn.click();
+          }
+        }
+      });
+      // typing - not code the page puts in - tells the shell, for live runs
+      // (shell/app.rb); the cell number goes over as a string
+      window.cellEditors[idx].on("change", function (cm, change) {
+        if (change.origin !== "setValue" && window.chunkyEdited) window.chunkyEdited(String(idx));
+      });
+    };
+    window.getCellCode = function (idx) {
+      return window.cellEditors[idx] ? window.cellEditors[idx].getValue() : "";
+    };
+    window.setCellCode = function (idx, code) {
+      if (window.cellEditors[idx]) window.cellEditors[idx].setValue(code);
+    };
+    window.refreshAllCells = function () {
+      Object.values(window.cellEditors).forEach(function (ed) { ed.refresh(); });
+    };
+    window.clearCellMarks = function (idx) {
+      var ed = window.cellEditors[idx];
+      if (ed) ed.getAllMarks().forEach(function (m) { m.clear(); });
+    };
+    window.markCellLine = function (idx, lineNo) {
+      var ed = window.cellEditors[idx];
+      if (!ed) return;
+      var line = ed.getLine(lineNo - 1) || "";
+      var start = Math.max(line.search(/\S/), 0);
+      ed.markText(
+        { line: lineNo - 1, ch: start },
+        { line: lineNo - 1, ch: line.length },
+        { className: "marker" }
+      );
+      ed.scrollIntoView({ line: lineNo - 1, ch: 0 }, 200);
+    };
+  </script>
+  <!-- where the learner's work lives (localStorage, a connected folder, a
+       progress file); before both Rubies, which store through it. Its UI is
+       the shell's (shell/workspace.rb) -->
+  <script src="storage.js"></script>
+  <!-- offline mode: the copy of the course on this device (sw.js), off
+       until the learner turns it on in the progress dialog -->
+  <script src="offline.js"></script>
+  <!-- the envelope to write a postcode on (show_letter, the Rumale lesson) -->
+  <script src="letter.js"></script>
+  <!-- the grid for show_game: the game loop runs here, Ruby is called per tick -->
+  <script src="game.js"></script>
+  <!-- the page shell (PicoRuby) and its bridge to the kernel (CRuby);
+       the bridge starts browser.script.iife.js, which runs main.rb -->
+  <script src="shell/bridge.js"></script>
+  <script src="shell/loader.js"></script>
+  <script type="text/ruby" src="main.rb" data-eval="async"></script>
+</body>
+</html>
