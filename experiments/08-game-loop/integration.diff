@@ -1,0 +1,194 @@
+--- ../../html/main.rb	2026-10-04 23:43:36.034791800 +0200
++++ site/main.rb	2026-10-04 23:59:36.749071400 +0200
+@@ -140,6 +140,8 @@
+ require_relative "workshop"
+ # Live runs: rehearsals a moment after the learner stops typing.
+ require_relative "autorun"
++# show_game: a grid game the page drives frame by frame (game.rb, game.js)
++require_relative "game"
+ # require "pycall" is the bridge to Pyodide (pycall.rb): the real gem needs
+ # libpython, which a browser does not have
+ require_relative "pycall"
+@@ -209,6 +211,7 @@
+     @three_renderers = {}
+     @three_seq = 0
+     @shoes_apps = {}
++    @games = {}
+     @seq = nil
+     sync_state(bridge.state)
+     setup_elements
+@@ -235,6 +238,7 @@
+     fresh_binding
+     dispose_three
+     dispose_shoes
++    dispose_games
+     load_lesson_files
+   end
+ 
+@@ -589,6 +593,120 @@
+     end
+   end
+ 
++  # ---------- games (show_game) ----------
++
++  def add_game(game)
++    @run_games << game if @run_games
++  end
++
++  # proposed for lessons.js's ui (here so the prototype needs no lessons.js)
++  GAME_LABELS = {
++    "de" => { "title" => "Spiel", "play" => "Klick zum Spielen", "keys" => "Pfeiltasten, Leertaste - Esc pausiert",
++              "again" => "Klick für eine neue Runde", "hint" => "",
++              "tooLong" => "Ein Schritt des Spiels hat länger als %.1f s gedauert - eine Endlosschleife?" },
++    "en" => { "title" => "Game", "play" => "Click to play", "keys" => "Arrow keys, space - Esc pauses",
++              "again" => "Click to play again", "hint" => "",
++              "tooLong" => "One step of the game took longer than %.1f s - an endless loop?" },
++    "ja" => { "title" => "ゲーム", "play" => "クリックしてスタート", "keys" => "矢印キー・スペース - Escで一時停止",
++              "again" => "クリックしてもう一度", "hint" => "",
++              "tooLong" => "ゲームの1ステップが%.1f秒を超えました。無限ループかもしれません。" }
++  }.freeze
++  # a tick that runs longer than this stops the game (an endless loop in
++  # an every block would freeze the page for good)
++  GAME_TICK_LIMIT = 1.0
++
++  # game.js runs the loop and calls the block once per frame at most, when a
++  # timer is due or keys came in; the game answers with the cells that
++  # changed. A re-run of the cell (or another lesson) stops it here, and
++  # game.js stops by itself once its node has left the page.
++  #
++  # The time limit: enabling a TracePoint costs ~6 ms in the page (CRuby
++  # re-instruments every loaded method), far more than a tick (~0.7 ms). So
++  # the guard is switched on when the game gets the focus ("f:1", game.js)
++  # and off when it loses it ("f:0") or stops - while the game has the focus
++  # nothing else in the kernel runs (▶, a live run, another lesson all take
++  # the focus away first). Each step only moves the deadline.
++  # $game_guard (prototype, for measuring): :focus (default), :tick, false.
++  def mount_game(idx, out_el, game)
++    node = $d.createElement("div")
++    out_el.appendChild(node)
++    opts = { w: game.width, h: game.height, first: game.full_json,
++             labels: GAME_LABELS[@lang] || GAME_LABELS["en"] }
++    guard = GameGuard.new(workshop? ? Workshop.paths : [EVAL_FILE], GAME_TICK_LIMIT)
++    controller = $window.chunkyGame(node, JSON.generate(opts)) do |now, events|
++      events = events.to_s
++      if events.start_with?("f:")
++        mode = $game_guard.nil? ? :focus : $game_guard
++        events == "f:1" && %i[focus lines].include?(mode) ? guard.on(mode == :lines ? %i[line b_call] : %i[line b_call c_call]) : guard.off
++        next nil
++      end
++      begin
++        if $game_guard == :tick
++          AutoRun.with_time_limit(guard.paths, GAME_TICK_LIMIT) { game.step(now.to_f, events) }
++        else
++          guard.step { game.step(now.to_f, events) }
++        end
++      rescue AutoRun::Stopped
++        guard.off
++        game.error_json(format(ui_game("tooLong"), GAME_TICK_LIMIT))
++      end
++    end
++    (@games[idx] ||= []) << [controller, guard]
++  end
++
++  def ui_game(key) = (GAME_LABELS[@lang] || GAME_LABELS["en"])[key]
++
++  # The time limit for a game's steps: one TracePoint, on while the game has
++  # the focus; raises AutoRun::Stopped on a line of the learner's own code
++  # once a step has run longer than +seconds+.
++  class GameGuard
++    attr_reader :paths
++
++    def initialize(paths, seconds)
++      @paths = paths
++      @seconds = seconds
++      @deadline = Float::INFINITY
++    end
++
++    def on(kinds = %i[line b_call c_call])
++      return if @trace
++
++      events = 0
++      @trace = TracePoint.new(*kinds) do |tp|
++        events += 1
++        raise AutoRun::Stopped if (events & 127).zero? && @paths.include?(tp.path) && clock > @deadline
++      end
++      @trace.enable
++    end
++
++    def off
++      @trace&.disable
++      @trace = nil
++    end
++
++    def step
++      @deadline = clock + @seconds
++      yield
++    ensure
++      @deadline = Float::INFINITY
++    end
++
++    private
++
++    def clock = Process.clock_gettime(Process::CLOCK_MONOTONIC)
++  end
++
++  def dispose_games(idx = nil)
++    @games ||= {}
++    list = idx.nil? ? @games.values.flatten.tap { @games.clear } : (@games.delete(idx) || [])
++    list.each do |controller, guard|
++      guard.off
++      controller.stop
++    rescue StandardError
++      nil
++    end
++  end
++
+   # ---------- 3D stage (three-rb + three.js) ----------
+ 
+   # three-rb builds the scene graph in pure Ruby and hands the drawing to
+@@ -921,6 +1039,8 @@
+     @run_three = []
+     @run_shoes = []
+     @run_letters = []
++    @run_games = []
++    dispose_games(idx)
+     @last_shoes_types = []
+     dispose_shoes(idx)
+     @run_downloads = []
+@@ -985,7 +1105,8 @@
+     out_html = ""
+     out_html += "<pre class=\"cell-stdout\">#{escape_html(output)}</pre>" unless output.empty?
+     widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any? || @run_three.any? ||
+-                      @run_shoes.any? || @run_downloads.any? || @run_pdfs.any? || @run_letters.any?
++                      @run_shoes.any? || @run_downloads.any? || @run_pdfs.any? || @run_letters.any? ||
++                      @run_games.any?
+     if (hint = live_hint(error))
+       out_html += "<div class=\"cell-hint\">#{escape_html(hint)}</div>"
+     elsif error
+@@ -1042,6 +1163,7 @@
+     # real event handlers as the app's block runs.
+     @run_shoes.each { |spec| out_el.appendChild(build_shoes_stage(idx, spec)) }
+     @run_letters.each_with_index { |spec, n| mount_letter(idx, out_el, spec, n) }
++    @run_games.each { |game| mount_game(idx, out_el, game) }
+ 
+     if error
+       return :stopped if error.is_a?(AutoRun::Stopped)
+@@ -1085,6 +1207,7 @@
+     @bind.local_variable_set(:scenes, (@run_three || []).map { |spec| spec[:scene] })
+     @bind.local_variable_set(:apps, (@run_shoes || []).length)
+     @bind.local_variable_set(:shoes_types, (@last_shoes_types || []).dup)
++    @bind.local_variable_set(:games, (@run_games || []).dup)
+     !!eval(cell["check"], @bind, "check.rb")
+   rescue Exception
+     false
+--- ../../html/index.html	2026-10-04 23:43:36.022726500 +0200
++++ site/index.html	2026-10-04 23:52:07.501845800 +0200
+@@ -574,6 +574,8 @@
+   <script src="offline.js"></script>
+   <!-- the envelope to write a postcode on (show_letter, the Rumale lesson) -->
+   <script src="letter.js"></script>
++  <!-- the grid for show_game: the game loop runs here, Ruby is called per tick -->
++  <script src="game.js"></script>
+   <!-- the page shell (PicoRuby) and its bridge to the kernel (CRuby);
+        the bridge starts browser.script.iife.js, which runs main.rb -->
+   <script src="shell/bridge.js"></script>
