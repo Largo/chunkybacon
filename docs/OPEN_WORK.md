@@ -21,7 +21,7 @@ Last updated 2026-10-05.
 
 ## State of the repository
 
-- `main` is deployed at `dbd5540` (2026-10-05), 50 lessons:
+- `main` is deployed (2026-10-05), 50 lessons:
   - PR #2, the Sequel lesson (28) and SQLite databases in files (HANDOVER
     §6f), merged 2026-10-05 (`4ebafb7`), with the review fix that a file
     database whose write failed is written again after the next run.
@@ -35,16 +35,18 @@ Last updated 2026-10-05.
     --check`, and `browser_test.mjs`, `live_test.mjs`, `offline_test.mjs`,
     `progress_test.mjs`, `language_test.mjs`, `boot_failure_test.mjs`. Not
     run: `permalink_test.mjs` (needs the optional Puma server).
-- Open fix PRs, each rebased onto `dbd5540` and tested there, alone and all
-  three stacked (`browser_test.mjs` 273 checks, shell tests 151 runs):
-  - [ ] #15 an SVG under a cell keeps its own size (`.cell-image` is a
-    160px pixelated thumbnail); needed by #6, #9 and #4.
-  - [ ] #16 code cells: Escape, then Tab leaves the editor; editors named
-    for screen readers; a focus ring (the accessibility audit's worst
-    finding, WCAG 2.1.2).
-  - [ ] #17 the mini browser draws the app's page in a shadow root, so a
-    `<style>` it brings (Sinatra's 404 page) no longer restyles the course.
-  Merging any of them deploys the site (HANDOVER §1).
+  - Then three fixes the experiments found, merged 2026-10-05 together
+    with this file, tested stacked on top of #3 (`browser_test.mjs`, shell
+    tests):
+    - #15 an SVG under a cell keeps its own size (`.cell-image` is a 160px
+      pixelated thumbnail); needed by #6, #9 and #4.
+    - #16 code cells: Escape, then Tab leaves the editor; editors named for
+      screen readers; a focus ring (the accessibility audit's worst
+      finding, WCAG 2.1.2).
+    - #17 the mini browser draws the app's page in a shadow root, so a
+      `<style>` it brings (Sinatra's 404 page) no longer restyles the
+      course; the page's `html`/`body`/`:root` rules still style it inside
+      the fake browser (HANDOVER §6).
 - Open experiment PRs #4-#13: each adds only `experiments/NN-<idea>/`
   (prototype, tests, `NOTES.md` with measurements and integration steps),
   nothing under `html/`, so merging them deploys nothing. Built on
