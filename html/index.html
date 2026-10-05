@@ -570,15 +570,18 @@
     // Per-cell CodeMirror helpers called from Ruby (shell/app.rb builds the
     // editors, main.rb reads and marks them)
     window.cellEditors = {};
-    window.initCell = function (idx) {
+    // +label+ names the editor for screen readers ("Code, cell 2"), +hint+
+    // says how to run it and how to leave it (shell/app.rb, UI strings)
+    window.initCell = function (idx, label, hint) {
       var ta = document.getElementById("cell-code-" + idx);
       if (!ta) return;
-      window.cellEditors[idx] = CodeMirror.fromTextArea(ta, {
+      var cm = window.cellEditors[idx] = CodeMirror.fromTextArea(ta, {
         lineNumbers: true,
         mode: "text/x-ruby",
         matchBrackets: true,
         indentUnit: 2,
         viewportMargin: Infinity,
+        screenReaderLabel: label || null,
         extraKeys: {
           "Shift-Enter": function () {
             var btn = document.querySelector('.run-cell[data-idx="' + idx + '"]');
@@ -586,6 +589,25 @@
           }
         }
       });
+      // Tab indents, as in any code editor - but Escape, then Tab (or
+      // Shift+Tab) leaves it; without that the keyboard is trapped (WCAG
+      // 2.1.2). CodeMirror.Pass would fall through to the default keymap
+      // and indent anyway; codemirrorIgnore leaves the key to the browser.
+      var leave = false;
+      cm.on("keydown", function (cm, e) {
+        if (e.key === "Escape") { leave = true; return; }
+        if (e.key === "Tab" && leave) { e.codemirrorIgnore = true; leave = false; return; }
+        if (e.key !== "Shift") leave = false;
+      });
+      cm.on("blur", function () { leave = false; });
+      if (hint) {
+        var note = document.createElement("span");
+        note.id = "cell-hint-" + idx;
+        note.hidden = true;
+        note.textContent = hint;
+        cm.getWrapperElement().appendChild(note);
+        cm.getInputField().setAttribute("aria-describedby", note.id);
+      }
       // typing - not code the page puts in - tells the shell, for live runs
       // (shell/app.rb); the cell number goes over as a string
       window.cellEditors[idx].on("change", function (cm, change) {
