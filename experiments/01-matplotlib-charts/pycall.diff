@@ -1,0 +1,190 @@
+--- html/pycall.rb	2026-10-04 23:43:36.045615300 +0200
++++ experiments/01-matplotlib-charts/pycall.rb	2026-10-04 23:59:47.669111600 +0200
+@@ -14,6 +14,18 @@
+ # as JSON - so a Python int comes back as an Integer and a float as a Float
+ # (JavaScript would make both a number), None as nil, a numpy scalar as a
+ # plain number, and lists and dicts stay Python until to_a / to_h.
++#
++# matplotlib draws under the cell (EXPERIMENT, experiments/01-matplotlib-charts):
++#
++#   plt = PyCall.import_module("matplotlib.pyplot")
++#   plt.plot([1, 2, 3], [2, 4, 3])
++#   plt.show()             # the chart as SVG below the cell, as in a notebook
++#   show_plot              # the same, explicitly; show_plot(fig) for one figure
++#
++# Python draws with matplotlib's Agg backend into memory (no window, no
++# canvas): the bridge's own backend (BACKEND below) keeps what plt.show()
++# draws as SVG, the bridge's answer to that request carries it, and the
++# figure goes under the cell like a show_image.
+ require "json"
+ 
+ module PyCall
+@@ -112,21 +124,115 @@
+             html = getattr(obj, "_repr_html_", None)
+             return html() if callable(html) and not isinstance(obj, type) else None
+ 
++        # show_plot: one figure (None: the current one) as SVG; it is closed,
++        # so a later plt.show() does not draw it again
++        def op_figure(self, figure):
++            import chunky_backend
++            pyplot = importlib.import_module("matplotlib.pyplot")
++            figure = pyplot.gcf() if figure is None else figure
++            image = chunky_backend.render(figure)
++            pyplot.close(figure)
++            return image
++
++        # matplotlib's backend for the browser: Agg, whose show() keeps the
++        # figures for Ruby (BACKEND in pycall.rb). Written as a module file,
++        # as matplotlib imports a backend by name; MPLBACKEND picks it before
++        # anything imports matplotlib, and only a script that imports
++        # matplotlib pays for it.
++        def install_backend(self, source):
++            import os
++            folder = "/home/pyodide/.chunky"
++            os.makedirs(folder, exist_ok=True)
++            with open(folder + "/chunky_backend.py", "w") as f:
++                f.write(source)
++            if folder not in sys.path:
++                sys.path.append(folder)
++            # Pyodide's matplotlib would pick webagg, whose show() wants a server
++            os.environ["MPLBACKEND"] = "module://chunky_backend"
++            if "matplotlib.pyplot" in sys.modules:   # imported before the bridge
++                sys.modules["matplotlib.pyplot"].switch_backend("module://chunky_backend")
++
+         def run(self, request):
+             req = json.loads(request)
+             try:
+                 args = [self.decode(a) for a in req["args"]]
+                 if req["op"] == "plain":
+-                    return json.dumps({"data": self.plain(args[0])}, allow_nan=True)
+-                if req["op"] == "box":   # a Ruby value as a Python object, for coerce
+-                    return json.dumps({"ok": {"t": "obj", "id": self.keep(args[0])}})
+-                return json.dumps({"ok": self.encode(getattr(self, "op_" + req["op"])(*args))})
++                    answer = {"data": self.plain(args[0])}
++                elif req["op"] == "box":   # a Ruby value as a Python object, for coerce
++                    answer = {"ok": {"t": "obj", "id": self.keep(args[0])}}
++                else:
++                    answer = {"ok": self.encode(getattr(self, "op_" + req["op"])(*args))}
+             except Exception as e:
+-                return json.dumps({"error": type(e).__name__, "message": str(e)})
++                answer = {"error": type(e).__name__, "message": str(e)}
++            # what plt.show() drew and plt.savefig() wrote during this
++            # request goes along
++            backend = sys.modules.get("chunky_backend")
++            if backend is not None:
++                for key in ("figures", "files"):
++                    if getattr(backend, key):
++                        answer[key] = getattr(backend, key)[:]
++                        del getattr(backend, key)[:]
++            return json.dumps(answer, allow_nan=True)
+ 
+     _chunky_rb_bridge = _ChunkyRubyBridge()
+   PYTHON
+ 
++  # matplotlib's backend in the browser, a module file in Pyodide (written
++  # by install_backend): Agg draws into memory, show() renders every open
++  # figure as SVG for the cell and closes it - what matplotlib-inline does in
++  # Jupyter. Text stays text in the SVG (svg.fonttype "none"): smaller, and
++  # the browser's fonts draw Japanese, which matplotlib's DejaVu Sans lacks.
++  BACKEND = <<~'PYTHON'
++    import base64, io, warnings
++    import matplotlib
++    from matplotlib._pylab_helpers import Gcf
++    from matplotlib.backends.backend_agg import FigureCanvasAgg
++
++    FigureCanvas = FigureCanvasAgg
++    # this Pyodide build warns from Agg's compiled text drawing on every PNG
++    # ("x parameter as float"; backend_agg.py passes round()ed values, the
++    # cause is not traced) - noise in a learner's cell
++    warnings.filterwarnings("ignore", message="The [xy] parameter as float was deprecated",
++                            category=matplotlib.MatplotlibDeprecationWarning)
++    figures = []   # SVG text, taken by the bridge after each request
++
++    def render(figure, fmt="svg"):
++        buffer = io.BytesIO()
++        with matplotlib.rc_context({"svg.fonttype": "none", "svg.hashsalt": "chunky"}), warnings.catch_warnings():
++            # DejaVu Sans has no Japanese; matplotlib only measures the text
++            # with it here, and the browser draws it (a PNG would show boxes)
++            warnings.filterwarnings("ignore", message="Glyph .* missing from font")
++            figure.savefig(buffer, format=fmt, bbox_inches="tight", dpi=100)
++        data = buffer.getvalue()
++        return data.decode("utf-8") if fmt == "svg" else base64.b64encode(data).decode("ascii")
++
++    def show(*args, **kwargs):
++        for manager in Gcf.get_all_fig_managers():
++            figures.append(render(manager.canvas.figure))
++        Gcf.destroy_all()
++
++    # plt.savefig("chart.png") writes into Pyodide's file system, which Ruby
++    # does not see: a relative name also goes to Ruby's files (SandboxFS),
++    # so it is offered below the cell and kept in the workshop like any
++    # file a cell writes - the same code saves a real file on a computer
++    import os
++    from matplotlib.figure import Figure
++    files = []   # [name, base64], taken by the bridge after each request
++    _savefig = Figure.savefig
++
++    def _savefig_for_ruby(self, fname, *args, **kwargs):
++        result = _savefig(self, fname, *args, **kwargs)
++        if isinstance(fname, (str, os.PathLike)) and not os.path.isabs(fname):
++            name = os.fspath(fname)
++            if not os.path.splitext(name)[1]:
++                name += "." + kwargs.get("format", matplotlib.rcParams["savefig.format"])
++            with open(name, "rb") as f:
++                files.append([name, base64.b64encode(f.read()).decode("ascii")])
++        return result
++
++    Figure.savefig = _savefig_for_ruby
++  PYTHON
++
+   SPECIAL_FLOATS = { "nan" => Float::NAN, "inf" => Float::INFINITY, "-inf" => -Float::INFINITY }.freeze
+ 
+   class << self
+@@ -151,12 +257,20 @@
+       json = JSON.generate({ "op" => op, "args" => args.map { |a| encode(a) } }, allow_nan: true)
+       answer = JSON.parse(bridge.call(:run, json).to_s, allow_nan: true)
+       flush_output
++      answer["figures"]&.each { |svg| show_figure(svg) }
++      answer["files"]&.each { |name, data| SandboxFS.write(name, data.unpack1("m0")) }
+       raise PyError.new(answer["error"], answer["message"]) if answer["error"]
+       return answer["data"] if answer.key?("data")
+ 
+       decode(answer["ok"])
+     end
+ 
++    # a matplotlib figure (SVG text) below the cell, as show_image puts a
++    # picture there; app.css gives an SVG its own size
++    def show_figure(svg)
++      ChunkyApp.instance.add_image("data:image/svg+xml;base64,#{[svg.b].pack('m0')}")
++    end
++
+     private
+ 
+     def decode(value)
+@@ -201,7 +315,7 @@
+       @bridge ||= begin
+         pyodide = python[:pyodide]
+         pyodide.call(:runPython, BRIDGE)
+-        pyodide[:globals].call(:get, "_chunky_rb_bridge")
++        pyodide[:globals].call(:get, "_chunky_rb_bridge").tap { |b| b.call(:install_backend, BACKEND) }
+       end
+     end
+ 
+@@ -272,3 +386,17 @@
+     def __html__ = PyCall.request("html", self)
+   end
+ end
++
++# helpers available inside notebook cells
++module Kernel
++  # A matplotlib figure below the cell, as SVG - what plt.show() does with
++  # every open figure:
++  #   show_plot          # the current figure
++  #   show_plot fig      # one figure (plt.figure, fig.add_subplot ...)
++  # A file is plt.savefig("chart.png"): offered below the cell, as on a
++  # computer. (The companion gem could make show_plot savefig + open.)
++  def show_plot(figure = nil)
++    PyCall.show_figure(PyCall.request("figure", figure))
++    nil
++  end
++end

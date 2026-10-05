@@ -1,0 +1,6 @@
+navigation -> Python + packages + kernel ready: 7.5 s
+{"steps": [["numpy", 874], ["PIL", 109], ["matplotlib", 1943], ["font_manager (font cache)", 119], ["pyplot", 2464], ["first figure", 107], ["first savefig svg", 274], ["first savefig png", 337]], "cachedir": "/home/pyodide/.matplotlib", "files": [], "backend": "webagg", "fonts": 39}
+--- cell output ---
+<exec>:15: MatplotlibDeprecationWarning: The x parameter as float was deprecated in Matplotlib 3.10 and will be removed in 3.12. Use int(x) instead.
+<exec>:15: MatplotlibDeprecationWarning: The y parameter as float was deprecated in Matplotlib 3.10 and will be removed in 3.12. Use int(y) instead.
+=> "PNG"⬇ ohne_endung.png 16.3 KB

@@ -1,0 +1,8 @@
+/* matplotlib charts (pycall.rb's show_plot / plt.show()): an SVG under the
+   cell keeps its own size and is drawn smoothly - .cell-image is made for
+   small pixel pictures (160px, pixelated). Proposed addition to app.css. */
+.cell-image[src^="data:image/svg+xml"] {
+  width: auto;
+  image-rendering: auto;
+  padding: 0.3rem;
+}

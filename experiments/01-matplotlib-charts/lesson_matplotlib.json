@@ -1,0 +1,144 @@
+{
+  "id": "matplotlib",
+  "de": {
+    "title": "26. matplotlib: Diagramme",
+    "cells": [
+      {
+        "t": "h",
+        "html": "<h2>Zahlen als Bild</h2><p>Eine Tabelle voller Zahlen sagt wenig – ein Diagramm sagt es auf einen Blick. <a href='https://matplotlib.org' target='_blank'>matplotlib</a> ist die Bibliothek, mit der Python seit über zwanzig Jahren zeichnet. Wir erreichen sie wie pandas und NumPy über pycall. Eine Woche Temperaturen, als Linie:</p>"
+      },
+      {
+        "t": "c",
+        "code": "require \"pycall\"\nplt = PyCall.import_module(\"matplotlib.pyplot\")\n\ntage = [\"Mo\", \"Di\", \"Mi\", \"Do\", \"Fr\", \"Sa\", \"So\"]\ntemperaturen = [12.5, 15.0, 9.5, 21.0, 18.5, 23.0, 19.5]\nplt.plot(tage, temperaturen, marker: \"o\")\nplt.title(\"Eine Woche Wetter\")\nplt.show()"
+      },
+      {
+        "t": "h",
+        "html": "<p><code>plt</code> ist matplotlibs Zeichenbrett, <code>pyplot</code>. <code>plot</code> zieht eine Linie durch die Punkte – Ruby-Arrays gehen direkt hinein, und <code>marker: \"o\"</code> ist ein Python-Schlüsselwortargument, das einen Punkt auf jeden Wert setzt. <code>plt.show()</code> zeigt das Bild: hier unter der Zelle, auf deinem Computer in einem eigenen Fenster.</p><p>Nach <code>show</code> ist das Brett wieder leer. Ein Balkendiagramm, mit Farbe und einer Beschriftung der y-Achse:</p>"
+      },
+      {
+        "t": "c",
+        "code": "glaces = [40, 55, 20, 90, 70, 120, 85]\nplt.bar(tage, glaces, color: \"orange\")\nplt.ylabel(\"verkaufte Glaces\")\nplt.show()"
+      },
+      {
+        "t": "h",
+        "html": "<p>Am Samstag, dem wärmsten Tag, die meisten Glaces – das sieht man sofort.</p><p>Mit NumPy aus Lektion 25 werden es Kurven: <code>linspace</code> macht 100 Punkte zwischen 0 und 2π, und zwei <code>plot</code> vor einem <code>show</code> landen im selben Bild. <code>label:</code> gibt jeder Linie einen Namen für die Legende:</p>"
+      },
+      {
+        "t": "c",
+        "code": "np = PyCall.import_module(\"numpy\")\nx = np.linspace(0, 2 * np.pi, 100)\nplt.plot(x, np.sin(x), label: \"sin\")\nplt.plot(x, np.cos(x), label: \"cos\")\nplt.legend()\nplt.show()"
+      },
+      {
+        "t": "h",
+        "html": "<p>Mehrere Diagramme nebeneinander: <code>plt.figure</code> ist das ganze Bild (<code>figsize</code> in Zoll), <code>add_subplot(1, 2, 1)</code> das erste von zwei Feldern in einer Zeile. Jedes Feld hat seine eigenen Methoden – <code>set_title</code> statt <code>title</code>. Und <code>plt.savefig</code> schreibt das Bild in eine Datei, die du unter der Zelle herunterladen kannst:</p>"
+      },
+      {
+        "t": "c",
+        "code": "fig = plt.figure(figsize: [9, 3])\nlinks = fig.add_subplot(1, 2, 1)\nlinks.plot(tage, temperaturen, color: \"tomato\")\nlinks.set_title(\"Temperatur\")\nrechts = fig.add_subplot(1, 2, 2)\nrechts.scatter(temperaturen, glaces)\nrechts.set_title(\"Glaces je Temperatur\")\nplt.savefig(\"wetter.png\")\nplt.show()"
+      },
+      {
+        "t": "h",
+        "html": "<p>Rechts ein Streudiagramm: je wärmer, desto mehr Glaces – genau das, was scikit-learn in der nächsten Lektion als Gerade lernt.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>pip install matplotlib</code> und <code>gem install pycall</code>, und der Code läuft unverändert – <code>plt.show()</code> öffnet ein Fenster, <code>savefig</code> schreibt die Datei neben dein Programm. matplotlib steht unter einer BSD-artigen Lizenz (PSF-basiert).</p></div><div class='task'><strong>Aufgabe:</strong> Der Fuchs hat diese Woche Mäuse gefangen. Zeichne daraus ein Balkendiagramm mit dem Titel <code>Fuchs-Jagd</code> und zeig es mit <code>plt.show()</code>.</div>"
+      },
+      {
+        "t": "x",
+        "code": "require \"pycall\"\nplt = PyCall.import_module(\"matplotlib.pyplot\")\n\ntage = [\"Mo\", \"Di\", \"Mi\", \"Do\", \"Fr\", \"Sa\", \"So\"]\nmaeuse = [3, 5, 2, 6, 4, 7, 1]\n# ein Balkendiagramm mit dem Titel \"Fuchs-Jagd\", dann plt.show()\n",
+        "check": "code.include?(\".bar\") && images.any? { |url| url.start_with?(\"data:image/svg+xml\") && url.split(\",\", 2).last.unpack1(\"m0\").include?(\"Fuchs-Jagd\") }",
+        "hint": "<code>plt.bar(tage, maeuse)</code> zeichnet die Balken, <code>plt.title(\"Fuchs-Jagd\")</code> setzt den Titel – und erst <code>plt.show()</code> bringt das Bild unter die Zelle."
+      }
+    ]
+  },
+  "en": {
+    "title": "26. matplotlib: charts",
+    "cells": [
+      {
+        "t": "h",
+        "html": "<h2>Numbers as a picture</h2><p>A table full of numbers says little – a chart says it at a glance. <a href='https://matplotlib.org' target='_blank'>matplotlib</a> is the library Python has drawn with for over twenty years. We reach it through pycall, like pandas and NumPy. A week of temperatures, as a line:</p>"
+      },
+      {
+        "t": "c",
+        "code": "require \"pycall\"\nplt = PyCall.import_module(\"matplotlib.pyplot\")\n\ndays = [\"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\", \"Sun\"]\ntemps = [12.5, 15.0, 9.5, 21.0, 18.5, 23.0, 19.5]\nplt.plot(days, temps, marker: \"o\")\nplt.title(\"A week of weather\")\nplt.show()"
+      },
+      {
+        "t": "h",
+        "html": "<p><code>plt</code> is matplotlib's drawing board, <code>pyplot</code>. <code>plot</code> draws a line through the points – Ruby arrays go straight in, and <code>marker: \"o\"</code> is a Python keyword argument that puts a dot on every value. <code>plt.show()</code> shows the picture: here below the cell, on your computer in a window of its own.</p><p>After <code>show</code> the board is empty again. A bar chart, with a colour and a label on the y axis:</p>"
+      },
+      {
+        "t": "c",
+        "code": "ice_creams = [40, 55, 20, 90, 70, 120, 85]\nplt.bar(days, ice_creams, color: \"orange\")\nplt.ylabel(\"ice creams sold\")\nplt.show()"
+      },
+      {
+        "t": "h",
+        "html": "<p>Saturday, the warmest day, sold the most ice creams – you see it at once.</p><p>With NumPy from lesson 25 we get curves: <code>linspace</code> makes 100 points between 0 and 2π, and two <code>plot</code>s before one <code>show</code> end up in the same picture. <code>label:</code> names each line for the legend:</p>"
+      },
+      {
+        "t": "c",
+        "code": "np = PyCall.import_module(\"numpy\")\nx = np.linspace(0, 2 * np.pi, 100)\nplt.plot(x, np.sin(x), label: \"sin\")\nplt.plot(x, np.cos(x), label: \"cos\")\nplt.legend()\nplt.show()"
+      },
+      {
+        "t": "h",
+        "html": "<p>Several charts side by side: <code>plt.figure</code> is the whole picture (<code>figsize</code> in inches), <code>add_subplot(1, 2, 1)</code> the first of two panels in one row. Each panel has methods of its own – <code>set_title</code> instead of <code>title</code>. And <code>plt.savefig</code> writes the picture to a file you can download below the cell:</p>"
+      },
+      {
+        "t": "c",
+        "code": "fig = plt.figure(figsize: [9, 3])\nleft = fig.add_subplot(1, 2, 1)\nleft.plot(days, temps, color: \"tomato\")\nleft.set_title(\"Temperature\")\nright = fig.add_subplot(1, 2, 2)\nright.scatter(temps, ice_creams)\nright.set_title(\"Ice creams by temperature\")\nplt.savefig(\"weather.png\")\nplt.show()"
+      },
+      {
+        "t": "h",
+        "html": "<p>On the right, a scatter plot: the warmer, the more ice creams – exactly what scikit-learn learns as a straight line in the next lesson.</p><div class='offweb' data-title='On your computer'><p><code>pip install matplotlib</code> and <code>gem install pycall</code>, and the code runs unchanged – <code>plt.show()</code> opens a window, <code>savefig</code> writes the file next to your program. matplotlib is under a BSD-style licence (PSF-based).</p></div><div class='task'><strong>Task:</strong> The fox caught some mice this week. Draw them as a bar chart titled <code>Fox hunt</code> and show it with <code>plt.show()</code>.</div>"
+      },
+      {
+        "t": "x",
+        "code": "require \"pycall\"\nplt = PyCall.import_module(\"matplotlib.pyplot\")\n\ndays = [\"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\", \"Sun\"]\nmice = [3, 5, 2, 6, 4, 7, 1]\n# a bar chart titled \"Fox hunt\", then plt.show()\n",
+        "check": "code.include?(\".bar\") && images.any? { |url| url.start_with?(\"data:image/svg+xml\") && url.split(\",\", 2).last.unpack1(\"m0\").include?(\"Fox hunt\") }",
+        "hint": "<code>plt.bar(days, mice)</code> draws the bars, <code>plt.title(\"Fox hunt\")</code> sets the title – and only <code>plt.show()</code> puts the picture below the cell."
+      }
+    ]
+  },
+  "ja": {
+    "title": "26. matplotlib：グラフ",
+    "cells": [
+      {
+        "t": "h",
+        "html": "<h2>数を絵にする</h2><p>数がならんだ表はなかなか読めませんが、グラフならひと目でわかります。<a href='https://matplotlib.org' target='_blank'>matplotlib</a>は、Pythonが20年以上つかってきた描画ライブラリです。pandasやNumPyと同じく、pycallから使います。1週間の気温を線で描いてみましょう。</p>"
+      },
+      {
+        "t": "c",
+        "code": "require \"pycall\"\nplt = PyCall.import_module(\"matplotlib.pyplot\")\n\ndays = [\"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\", \"Sun\"]\ntemps = [12.5, 15.0, 9.5, 21.0, 18.5, 23.0, 19.5]\nplt.plot(days, temps, marker: \"o\")\nplt.title(\"A week of weather\")\nplt.show()"
+      },
+      {
+        "t": "h",
+        "html": "<p><code>plt</code>はmatplotlibの画板、<code>pyplot</code>です。<code>plot</code>は点を線でつなぎます。Rubyの配列はそのまま渡せます。<code>marker: \"o\"</code>はPythonのキーワード引数で、各値に点を打ちます。<code>plt.show()</code>で絵が出ます。ここではセルの下に、あなたのコンピューターでは別のウィンドウに表示されます。</p><p><code>show</code>のあと、画板はまた空になります。色とy軸のラベルをつけた棒グラフです。</p>"
+      },
+      {
+        "t": "c",
+        "code": "ice_creams = [40, 55, 20, 90, 70, 120, 85]\nplt.bar(days, ice_creams, color: \"orange\")\nplt.ylabel(\"ice creams sold\")\nplt.show()"
+      },
+      {
+        "t": "h",
+        "html": "<p>いちばん暑い土曜日に、アイスがいちばん売れました。ひと目でわかりますね。</p><p>レッスン25のNumPyを使うと曲線も描けます。<code>linspace</code>は0から2πまでに100個の点をつくり、<code>show</code>の前に<code>plot</code>を2回呼ぶと、同じ絵に入ります。<code>label:</code>は凡例に出る線の名前です。</p>"
+      },
+      {
+        "t": "c",
+        "code": "np = PyCall.import_module(\"numpy\")\nx = np.linspace(0, 2 * np.pi, 100)\nplt.plot(x, np.sin(x), label: \"sin\")\nplt.plot(x, np.cos(x), label: \"cos\")\nplt.legend()\nplt.show()"
+      },
+      {
+        "t": "h",
+        "html": "<p>グラフを横にならべるには、<code>plt.figure</code>で絵全体をつくり（<code>figsize</code>はインチ）、<code>add_subplot(1, 2, 1)</code>で1行2列の1つ目の枠を取ります。枠には専用のメソッドがあり、<code>title</code>のかわりに<code>set_title</code>を使います。<code>plt.savefig</code>は絵をファイルに書き出し、セルの下からダウンロードできます。</p>"
+      },
+      {
+        "t": "c",
+        "code": "fig = plt.figure(figsize: [9, 3])\nleft = fig.add_subplot(1, 2, 1)\nleft.plot(days, temps, color: \"tomato\")\nleft.set_title(\"Temperature\")\nright = fig.add_subplot(1, 2, 2)\nright.scatter(temps, ice_creams)\nright.set_title(\"Ice creams by temperature\")\nplt.savefig(\"weather.png\")\nplt.show()"
+      },
+      {
+        "t": "h",
+        "html": "<p>右は散布図です。暑いほどアイスが売れる――次のレッスンでscikit-learnが直線として学ぶのは、まさにこれです。</p><div class='offweb' data-title='あなたのコンピューターで'><p><code>pip install matplotlib</code>と<code>gem install pycall</code>で、このコードはそのまま動きます。<code>plt.show()</code>はウィンドウを開き、<code>savefig</code>はプログラムの横にファイルを書きます。matplotlibはBSD系（PSFベース）のライセンスです。</p></div><div class='task'><strong>課題：</strong>キツネが今週つかまえたネズミの数です。タイトル<code>Fox hunt</code>の棒グラフにして、<code>plt.show()</code>で表示してください。</div>"
+      },
+      {
+        "t": "x",
+        "code": "require \"pycall\"\nplt = PyCall.import_module(\"matplotlib.pyplot\")\n\ndays = [\"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\", \"Sun\"]\nmice = [3, 5, 2, 6, 4, 7, 1]\n# タイトル「Fox hunt」の棒グラフをかいて、plt.show()\n",
+        "check": "code.include?(\".bar\") && images.any? { |url| url.start_with?(\"data:image/svg+xml\") && url.split(\",\", 2).last.unpack1(\"m0\").include?(\"Fox hunt\") }",
+        "hint": "<code>plt.bar(days, mice)</code>で棒、<code>plt.title(\"Fox hunt\")</code>でタイトル。<code>plt.show()</code>をよばないと、絵はセルの下に出てこないよ。"
+      }
+    ]
+  }
+}
