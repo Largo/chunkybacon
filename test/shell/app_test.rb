@@ -18,7 +18,7 @@ class AppTest < Minitest::Test
     assert_equal "none", byid("spinner").props["style"]["display"]
     assert_equal "block", byid("app").props["style"]["display"]
     assert_equal "Ruby lernen mit Chunky Bacon", byid("siteTitle").text
-    assert_equal 53, find_all("#lessonNav a").length
+    assert_equal 54, find_all("#lessonNav a").length
     assert_equal "hallo", find("#lessonNav a.active").attrs["data-id"]
     assert_equal "Hallo, Welt!", find("#lessonBody h2").text
     assert_equal 3, find_all("#lessonBody .cell").length
@@ -296,7 +296,7 @@ class AppTest < Minitest::Test
     fire("chunky:ran", ran_event(idx, "error"))
     assert_equal "Zelle 3 mit Fehler: NameError #{bubble}", byid("runStatus").text, "the third code cell, whatever its index"
     fire("chunky:ran", ran_event(idx, "pass"))
-    assert_includes byid("runStatus").text, "Lektion 1 von 53"
+    assert_includes byid("runStatus").text, "Lektion 1 von 54"
     byid("cell-out-1").js_set("textContent", "x" * 400)
     fire("chunky:ran", ran_event(1, "ok"))
     assert_equal "Zelle 1 ausgeführt: #{'x' * 280} …", byid("runStatus").text, "long output is shortened"
@@ -332,6 +332,18 @@ class AppTest < Minitest::Test
     fire("chunky:ran", ran_event(1, "ok"))
     assert_equal "Zelle 1 ausgeführt: Ein Klang, 2,0 Sekunden", byid("runStatus").text,
                  "show_audio's player by its name; the wave's picture (alt=\"\") adds nothing"
+  end
+
+  def test_a_game_is_announced_by_its_name_not_its_grid
+    start
+    click(run_button(1))
+    byid("cell-out-1").js_set("innerHTML", '<pre class="cell-stdout">los</pre>' \
+                                           '<div class="game-widget" role="application" aria-label="Spiel mit 20 × 15 Feldern">' \
+                                           '<div class="game-grid"><div>🦊</div><div>🥓</div></div>' \
+                                           '<div class="game-overlay">Klick oder Leertaste zum Spielen</div></div>')
+    fire("chunky:ran", ran_event(1, "ok"))
+    assert_equal "Zelle 1 ausgeführt: los Spiel mit 20 × 15 Feldern", byid("runStatus").text,
+                 "show_game by its name; its emoji grid and veil are left out"
   end
 
   def test_a_live_run_is_not_announced
@@ -462,12 +474,12 @@ class AppTest < Minitest::Test
   def test_sidebar_head_counts_the_course
     start(storage: { "chunky_done" => '["hallo","rechnen"]' })
     assert_equal "Lektionen", byid("navTitle").text
-    assert_equal "2/53", byid("navCount").text
-    assert_equal "2 von 53 fertig", byid("navCount").attrs["title"]
+    assert_equal "2/54", byid("navCount").text
+    assert_equal "2 von 54 fertig", byid("navCount").attrs["title"]
     assert_equal "3%", byid("navBarFill").props["style"]["width"]
     assert_equal "Lektion suchen", byid("navSearch").attrs["placeholder"]
     switch_to_english
-    assert_equal "2 of 53 done", byid("navCount").attrs["title"]
+    assert_equal "2 of 54 done", byid("navCount").attrs["title"]
   end
 
   def switch_to_english
@@ -563,7 +575,7 @@ class AppTest < Minitest::Test
     assert_equal "tl-parsing", find("#lessonNav a.active").attrs["data-id"]
     assert JS.fire(byid("navSearch").wrap, "keydown", "key" => "Escape")
     assert_equal "", byid("navSearch").props["value"]
-    assert_equal 53, find_all("#lessonNav a").length
+    assert_equal 54, find_all("#lessonNav a").length
   end
 
   # ---------- gems ----------

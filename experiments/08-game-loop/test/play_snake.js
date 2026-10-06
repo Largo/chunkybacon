@@ -6,6 +6,10 @@
 // checks that a re-run of the cell stops the old game. Screenshots go to
 // globalThis.SCREENSHOT_DIR, else screenshots/ relative to the repo root
 // (the MCP server's working directory).
+// (The record of the prototype: game.rb and game.js are in html/ now, and
+// html/main.rb has no $game_guard - serve.rb still serves the prototype's
+// site/main.rb, which has it. test/browser_test.mjs plays the integrated
+// Snake.)
 async (page) => {
   const DIR = globalThis.SCREENSHOT_DIR || "experiments/08-game-loop/screenshots/";
   await page.waitForFunction(() => window.ChunkyBridge && window.ChunkyBridge.ready, null, { timeout: 120000 });

@@ -17,7 +17,11 @@
 # string. The grid itself lives here; game.js only draws what changed.
 #
 # Pure Ruby (no JS in this file), so the same game runs headless under CRuby
-# (#advance, #press, #click) - for exercise checks and the harness.
+# (#advance, #press, #click) - for exercise checks (the `games` local, each a
+# #fresh copy) and the harness. Under the page's time limit (main.rb,
+# GameGuard) every Ruby block here costs TracePoint events, so the internals
+# avoid per-cell blocks: #clear walks only the filled cells.
+# From experiments/08-game-loop; the lesson is "Chunkys Snake".
 class ChunkyGame
   # what a cell can show: a sprite name, a colour, or any String (an emoji)
   SPRITES = {
@@ -131,6 +135,10 @@ class ChunkyGame
 
   # ---------- headless, for checks and tests ----------
 
+  # the same game once more, from its setup block: a check plays this copy,
+  # so the game below the cell still starts from the beginning
+  def fresh = ChunkyGame.new(width: @width, height: @height, &@setup)
+
   # @now is in seconds, #step takes the page's milliseconds
   def press(key) = step(@now * 1000.0, "k:#{key}")
   def click(x, y) = step(@now * 1000.0, "c:#{x},#{y}")
@@ -189,9 +197,11 @@ class ChunkyGame
 
   # back to the start: the setup block runs again with an empty grid
   def restart
+    # what the page still shows of the last round goes, unless the setup
+    # draws it again
+    @dirty = @filled ? @filled.keys : []
     @cells = Array.new(@width * @height)
     @filled = {}   # index => true, for the cells that are not empty
-    @dirty = []
     @key_handlers = []
     @click_handlers = []
     @timers = []

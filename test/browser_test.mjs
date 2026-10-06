@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('53 lessons in nav', (await page.$$('#lessonNav a')).length === 53);
+check('54 lessons in nav', (await page.$$('#lessonNav a')).length === 54);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -821,6 +821,60 @@ const fanfare = await players(await exerciseIdx());
 check('... its WAV plays, 2 s', fanfare.length === 1 && fanfare[0].label === 'Ein Klang, 2,0 Sekunden');
 check('... and downloads as audio/wav', await page.$eval(`#cell-out-${await exerciseIdx()} a.cell-download[download="tusch.wav"]`,
   async a => (await (await fetch(a.href)).blob()).type).catch(() => null) === 'audio/wav');
+
+// Snake lesson: show_game's grid below the cell, named for screen readers;
+// it waits until asked (Tab, then Space), steers with the arrow keys, ends
+// at the wall (data-over, said in its live region), pauses on Esc with the
+// focus kept, Tab leaves it, and a re-run stops the old game for good
+await page.click('#lessonNav a[data-id="snake"]');
+await page.waitForTimeout(300);
+check('Snake lesson renders', (await page.textContent('#lessonBody h2')).includes('Chunkys Snake'));
+const snakeCell = 9;
+const snake = `#cell-out-${snakeCell} .game-widget`;
+await ranCell(snakeCell);
+const widget = await page.$eval(snake, g => ({ role: g.getAttribute('role'), label: g.getAttribute('aria-label'), tab: g.tabIndex,
+  keys: document.getElementById(g.getAttribute('aria-describedby'))?.textContent, state: g.dataset.state, cells: g.querySelectorAll('.game-grid > div').length }));
+check('show_game draws a 20 x 15 grid, paused', widget.cells === 300 && widget.state === 'paused');
+check('... a named, focusable application that says how to play and leave it', widget.role === 'application' && widget.tab === 0 &&
+  widget.label === 'Spiel mit 20 × 15 Feldern' && widget.keys.includes('Leertaste') && widget.keys.includes('Tab verlässt'));
+await page.waitForFunction(() => document.getElementById('runStatus').textContent.includes('Spiel mit'), null, { timeout: 3000 }).catch(() => {});
+check('... and the status line reads its name, not its grid', (await page.textContent('#runStatus')) === 'Zelle 5 ausgeführt: Spiel mit 20 × 15 Feldern');
+await page.focus(`.run-cell[data-idx="${snakeCell}"]`);
+await page.keyboard.press('Tab');
+check('Tab from Run reaches the game, which waits', await page.$eval(snake, g => document.activeElement === g && g.dataset.state === 'paused'));
+await page.keyboard.press('Space');
+await page.waitForTimeout(300);
+check('Space starts it', (await page.getAttribute(snake, 'data-state')) === 'playing');
+await page.keyboard.press('ArrowUp');
+await page.waitForFunction(s => document.querySelector(s).hasAttribute('data-over'), snake, { timeout: 15000 }).catch(() => {});
+check('an arrow key steers Chunky into the wall: game over', (await page.getAttribute(snake, 'data-over')) === 'Autsch! Chunky hat 0 Speck gefressen.');
+await page.waitForTimeout(200);
+check('... said in its live region', (await page.textContent(`${snake} .game-say`)).includes('Autsch!'));
+await page.keyboard.press('Enter');
+await page.waitForTimeout(300);
+check('Enter plays again', (await page.getAttribute(snake, 'data-state')) === 'playing' && !(await page.getAttribute(snake, 'data-over')));
+check('... from the start: one fox', (await page.$$eval(`${snake} .game-grid > div`, cells => cells.filter(c => c.textContent === '🦊').length)) === 1);
+await page.keyboard.press('Escape');
+check('Esc pauses and keeps the focus', await page.$eval(snake, g => document.activeElement === g && g.dataset.state === 'paused'));
+await page.keyboard.press('Space');
+const oldGame = await page.evaluateHandle(s => document.querySelector(s).chunkyGame, snake);
+await page.keyboard.press('Tab');
+check('Tab leaves the game, which pauses', !(await page.$eval(snake, g => document.activeElement === g)) && !(await oldGame.evaluate(g => g.running())));
+await page.click(`${snake} .game-overlay`);
+await page.waitForTimeout(200);
+check('a click plays', await oldGame.evaluate(g => g.running()));
+const oldCalls = JSON.parse(await oldGame.evaluate(g => g.stats())).calls;
+await ranCell(snakeCell);
+await page.waitForTimeout(600);
+check('a re-run stops the old game', JSON.parse(await oldGame.evaluate(g => g.stats())).calls === oldCalls && !(await oldGame.evaluate(g => g.running())));
+await runExercise();
+check('Snake starter fails', (await page.getAttribute('#chunkyChat', 'class')).includes('fail'));
+await setExercise((await page.evaluate(i => window.cellEditors[i].getValue(), await exerciseIdx()))
+  .replace('kopf = [x + kurs[0], y + kurs[1]]', 'kopf = [(x + kurs[0]) % 16, (y + kurs[1]) % 12]').replace('!g.inside?(*kopf) || ', ''));
+await runExercise();
+await page.waitForTimeout(300);
+check('Snake without walls passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+check('... and its game still starts paused', (await page.getAttribute(`#cell-out-${await exerciseIdx()} .game-widget`, 'data-state')) === 'paused');
 
 // TTY lesson: pastel's ANSI colours become spans (ansi.rb), tty-table and
 // tty-box draw with box-drawing characters as wide as the code font's

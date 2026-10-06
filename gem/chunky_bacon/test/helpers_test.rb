@@ -187,4 +187,9 @@ class HelpersTest < Minitest::Test
     error = assert_raises(ChunkyBacon::NotHere) { show_shoes(width: 300) { para "hi" } }
     assert_includes error.message, "scarpe app.rb"
   end
+
+  def test_show_game_says_what_to_do
+    error = assert_raises(ChunkyBacon::NotHere) { show_game(width: 16, height: 12) { |g| g.every(0.15) {} } }
+    assert_includes error.message, "ruby2d"
+  end
 end

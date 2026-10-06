@@ -45,7 +45,7 @@ never mix with your program's output.
 | `show_irb` | an IRB session; `exit` returns to the program |
 | `show_files` | lists the files in the program's folder |
 | `run_tests` | runs the Minitest tests defined so far |
-| `show_three`, `show_shoes` | explain how to do it on a computer (they need the course page for now) |
+| `show_three`, `show_shoes`, `show_game` | explain how to do it on a computer (they need the course page for now; for a game, a gem like ruby2d or gosu) |
 
 `CHUNKYBACON_OPEN=0` stops the viewer and the browser from opening (CI, a
 machine without a desktop); the files are saved either way. Inside the course

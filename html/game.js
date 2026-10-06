@@ -1,5 +1,6 @@
-// The grid for show_game (game.rb, main.rb): the page runs the game loop,
-// because CRuby runs on this thread and must never loop or sleep itself.
+// The grid for show_game (game.rb, main.rb's mount_game): the page runs the
+// game loop, because CRuby runs on this thread and must never loop or sleep
+// itself.
 //
 //   var game = chunkyGame(node, optsJson, function (now, events) { ... return frameJson; });
 //   game.stop();          // a re-run of the cell, another lesson
@@ -9,12 +10,16 @@
 // something to do: a timer of the game is due (the frame says when: "next")
 // or keys, clicks or a restart came in since the last frame. The answer is
 // the cells that changed, as JSON; the grid is a CSS grid of <div>s, and only
-// those cells are touched.
+// those cells are touched. The styles are app.css's (.game-*).
 //
-// The game runs only while it has the focus: a click (or Tab) starts it, and
-// it pauses when the focus goes elsewhere - so the arrow keys never scroll
-// the page or reach the editor, a live run never starts a game nobody looks
-// at, and two games on one page do not both run.
+// The game runs only while it has the focus and is not paused: a click on
+// it, or Space/Enter once Tab has reached it, starts it; Esc pauses it, and
+// Tab (or a click elsewhere) leaves it, which pauses it too. So the arrow
+// keys never scroll the page or reach the editor, a live run never starts a
+// game nobody looks at, two games on one page do not both run, and nothing
+// on the page moves until the learner asks for it. A screen reader hears
+// the score when it changes (at most every 1.5 s), the end of a round and
+// errors, from a polite live region inside the widget.
 (function () {
   "use strict";
 
@@ -22,29 +27,8 @@
     ArrowLeft: "left", ArrowRight: "right", ArrowUp: "up", ArrowDown: "down",
     " ": "space", Enter: "enter", Escape: "escape"
   };
-  var CSS = [
-    ".game-widget { margin: 0.7rem 0; display: inline-block; outline: none; user-select: none; -webkit-user-select: none; }",
-    ".game-board { position: relative; border-radius: 10px; padding: 6px; background: #2a2119; box-shadow: 0 2px 0 rgba(0,0,0,.15); }",
-    ".game-widget:focus-visible .game-board, .game-widget.is-running .game-board { box-shadow: 0 0 0 3px #f2a65a; }",
-    ".game-grid { display: grid; background: #fbf7ee; border-radius: 6px; overflow: hidden; touch-action: none; }",
-    ".game-grid > div { display: flex; align-items: center; justify-content: center; line-height: 1; background-size: 90% 90%; background-position: center; background-repeat: no-repeat; }",
-    ".game-grid > div.alt { box-shadow: inset 0 0 0 100px rgba(80, 60, 30, .045); }",
-    ".game-overlay { position: absolute; inset: 6px; display: flex; flex-direction: column; gap: .4rem; align-items: center; justify-content: center; text-align: center; border-radius: 6px; background: rgba(42, 33, 25, .55); color: #fff; font: 600 1.05rem 'Shantell Sans', 'Segoe Print', sans-serif; cursor: pointer; padding: 1rem; }",
-    ".game-overlay[hidden] { display: none; }",
-    ".game-overlay small { font-weight: 400; font-size: .85rem; opacity: .85; }",
-    ".game-bar { display: flex; justify-content: space-between; gap: 1rem; font-size: .9rem; color: #5f5247; padding: .3rem .2rem 0; min-height: 1.4em; }",
-    ".game-log { margin: .3rem 0 0; max-height: 6.5em; overflow: auto; font-size: .8rem; background: #f4efe4; border-radius: 6px; padding: .3rem .5rem; }",
-    ".game-log:empty { display: none; }",
-    ".game-error { color: #b3261e; font-size: .9rem; padding-top: .3rem; }"
-  ].join("\n");
-
-  function addStyle() {
-    if (document.getElementById("chunky-game-style")) return;
-    var style = document.createElement("style");
-    style.id = "chunky-game-style";
-    style.textContent = CSS;
-    document.head.appendChild(style);
-  }
+  var SAY_EVERY = 1500;   // ms between two spoken score changes
+  var count = 0;          // for the ids of the descriptions
 
   function el(tag, cls, parent) {
     var e = document.createElement(tag);
@@ -54,18 +38,25 @@
   }
 
   window.chunkyGame = function (node, optsJson, step) {
-    addStyle();
     var opts = JSON.parse(String(optsJson));
     var w = opts.w, h = opts.h;
     var labels = opts.labels || {};
-    var size = Math.max(12, Math.min(32, Math.floor((opts.maxWidth || 480) / w)));
+    // cells of 12..32 px, the board at most 480 px or the column's width
+    var room = node.parentNode && node.parentNode.clientWidth ? node.parentNode.clientWidth - 12 : 480;
+    var size = Math.max(12, Math.min(32, Math.floor(Math.min(opts.maxWidth || 480, room) / w)));
 
     node.className = "game-widget";
     node.tabIndex = 0;
+    // the arrow keys belong to the game, not to a screen reader's browsing
     node.setAttribute("role", "application");
     node.setAttribute("aria-label", labels.title || "Game");
+    var described = el("span", "sr-only", node);
+    described.id = "game-keys-" + (++count);
+    described.textContent = [labels.play, labels.keys].filter(Boolean).join(". ");
+    node.setAttribute("aria-describedby", described.id);
     var board = el("div", "game-board", node);
     var grid = el("div", "game-grid", board);
+    grid.setAttribute("aria-hidden", "true");   // emoji by the hundred: the live region speaks instead
     grid.style.gridTemplateColumns = "repeat(" + w + ", " + size + "px)";
     grid.style.gridTemplateRows = "repeat(" + h + ", " + size + "px)";
     grid.style.fontSize = Math.round(size * 0.78) + "px";
@@ -75,19 +66,50 @@
       looks[i] = "";
     }
     var overlay = el("div", "game-overlay", board);
+    overlay.setAttribute("aria-hidden", "true");   // the description and the live region say it
     var bar = el("div", "game-bar", node);
     var statusEl = el("span", "game-status", bar);
     var hintEl = el("span", "game-hint", bar);
-    hintEl.textContent = labels.hint || "";
+    hintEl.textContent = labels.keys || "";
     var log = el("pre", "game-log", node);
     var errorEl = el("div", "game-error", node);
     errorEl.hidden = true;
+    var say = el("p", "sr-only game-say", node);
+    say.setAttribute("aria-live", "polite");
+    say.setAttribute("aria-atomic", "true");
 
     var events = [];
     var next = null;          // when Ruby wants to be called again (ms)
-    var focused = false, over = false, stopped = false, error = false;
+    var focused = false, paused = true, started = false;
+    var over = false, stopped = false, error = false;
     var raf = 0;
     var stats = { calls: 0, total: 0, max: 0, render: 0, recent: [] };
+
+    // ---------- the live region: changes, never every tick ----------
+
+    var spoken = "", saidAt = 0, pending = null, sayTimer = 0;
+
+    function speak(text) {
+      if (sayTimer) { clearTimeout(sayTimer); sayTimer = 0; }
+      pending = null;
+      say.textContent = "";
+      // emptied first, the text a moment later: the same words twice are read twice
+      setTimeout(function () { say.textContent = text; }, 50);
+      saidAt = performance.now();
+    }
+
+    function sayStatus(text) {
+      if (!text || text === spoken) return;
+      spoken = text;
+      pending = text;
+      if (sayTimer) return;
+      sayTimer = setTimeout(function () {
+        sayTimer = 0;
+        if (pending !== null && !over && !error) speak(pending);
+      }, Math.max(0, saidAt + SAY_EVERY - performance.now()));
+    }
+
+    // ---------- drawing ----------
 
     function paint(i, look) {
       if (looks[i] === look) return;
@@ -101,12 +123,15 @@
       else c.textContent = look;
     }
 
-    function apply(json) {
+    function apply(json, quiet) {
       var t = performance.now();
       var f = JSON.parse(json);
       for (var k = 0; k < f.d.length; k++) paint(f.d[k][0], f.d[k][1]);
       next = typeof f.next === "number" ? f.next : null;
-      if (typeof f.status === "string") statusEl.textContent = f.status;
+      if (typeof f.status === "string") {
+        statusEl.textContent = f.status;
+        if (quiet) spoken = f.status; else sayStatus(f.status);
+      }
       if (typeof f.log === "string") {
         log.textContent = (log.textContent + f.log).split("\n").slice(-50).join("\n");
         log.scrollTop = log.scrollHeight;
@@ -116,13 +141,15 @@
         guard(false);
         errorEl.hidden = false;
         errorEl.textContent = f.error;
+        speak(f.error);
       }
       if (typeof f.over === "string") {
         over = true;
         node.setAttribute("data-over", f.over);
+        if (!f.error && !quiet) speak([statusEl.textContent, f.over || labels.over, labels.again].filter(Boolean).join(". "));
       }
       stats.render += performance.now() - t;
-      showOverlay();
+      update();
     }
 
     function call(now) {
@@ -148,8 +175,10 @@
       if (answer != null) apply(String(answer));
     }
 
+    // ---------- the loop ----------
+
     // the game's own clock: it stands still while the game is paused (no
-    // focus, a hidden tab), so timers never have to catch up
+    // focus, Esc, a hidden tab), so timers never have to catch up
     var clock = 0, last = null;
 
     function frame(now) {
@@ -159,22 +188,30 @@
       if (last !== null && !over) clock += Math.min(now - last, 100);
       last = now;
       if (events.length || (!over && next !== null && clock >= next)) call(clock);
-      if (running()) raf = requestAnimationFrame(frame);
-      else last = null;
+      if (!active()) last = null;
+      else if (!raf) raf = requestAnimationFrame(frame);   // apply's update may have asked already
     }
 
-    function running() { return !stopped && focused && !error; }
+    function active() { return !stopped && focused && !paused && !error; }
 
     function wake() {
-      if (!raf && running()) raf = requestAnimationFrame(frame);
+      if (!raf && active()) raf = requestAnimationFrame(frame);
+    }
+
+    function update() {
+      guard(active());
+      showOverlay();
+      wake();
     }
 
     function showOverlay() {
-      node.classList.toggle("is-running", running() && !over);
+      var playing = active() && !over;
+      node.classList.toggle("is-running", playing);
+      node.setAttribute("data-state", error ? "error" : over ? "over" : playing ? "playing" : "paused");
       if (error) { overlay.hidden = true; return; }
       var text = null, small = null;
       if (over) { text = node.getAttribute("data-over") || labels.over || ""; small = labels.again; }
-      else if (!focused) { text = labels.play; small = labels.keys; }
+      else if (!playing) { text = started ? labels.paused : labels.play; small = started ? labels.play : labels.keys; }
       overlay.hidden = text === null;
       if (text !== null) {
         overlay.textContent = "";
@@ -188,6 +225,7 @@
       stopped = true;
       if (raf) cancelAnimationFrame(raf);
       raf = 0;
+      if (sayTimer) clearTimeout(sayTimer);
       node.classList.remove("is-running");
     }
 
@@ -197,8 +235,21 @@
       wake();
     }
 
-    // the kernel's time limit for the steps is on while the game has the
-    // focus (main.rb, GameGuard): told at once, not with the next frame
+    // play (again): a click, Space or Enter
+    function play() {
+      if (stopped || error) return;
+      if (over) {
+        over = false;
+        node.removeAttribute("data-over");
+        push("r");
+      }
+      paused = false;
+      started = true;
+      update();
+    }
+
+    // the kernel's time limit for the steps is on while the game runs
+    // (main.rb, GameGuard): told at once, not with the next frame
     var guarded = false;
     function guard(on) {
       if (on === guarded || stopped) return;
@@ -206,29 +257,31 @@
       try { step(clock, on ? "f:1" : "f:0"); } catch (e) { /* the game goes on unguarded */ }
     }
 
-    node.addEventListener("focus", function () {
-      focused = true;
-      if (!error) guard(true);
-      showOverlay();
-      wake();
-    });
-    node.addEventListener("blur", function () { focused = false; guard(false); showOverlay(); });
+    node.addEventListener("focus", function () { focused = true; update(); });
+    node.addEventListener("blur", function () { focused = false; paused = true; update(); });
     overlay.addEventListener("click", function () {
-      node.focus();
-      if (over && !error) {
-        over = false;
-        node.removeAttribute("data-over");
-        push("r");
-      }
-      showOverlay();
+      node.focus({ preventScroll: true });
+      play();
     });
     node.addEventListener("keydown", function (e) {
-      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.ctrlKey || e.metaKey || e.altKey || e.target !== node) return;
       var key = KEYS[e.key] || (/^[a-zA-Z0-9]$/.test(e.key) ? e.key.toLowerCase() : null);
-      if (!key) return;
-      e.preventDefault();       // no scrolling with the arrows and space
-      if (key === "escape") { node.blur(); return; }
-      if (!over) push("k:" + key);
+      if (!key) return;           // Tab and the rest do what they always do
+      var playing = active() && !over;
+      if (key === "escape") {
+        if (!playing) return;
+        e.preventDefault();
+        paused = true;
+        update();
+        speak(labels.paused || "");
+        return;
+      }
+      if (!playing) {
+        if (key === "space" || key === "enter") { e.preventDefault(); play(); }
+        return;
+      }
+      e.preventDefault();         // no scrolling with the arrows and space
+      push("k:" + key);
     });
 
     // a tap is a click on a cell, a swipe an arrow key (phones)
@@ -240,7 +293,7 @@
       if (!down) return;
       var dx = e.clientX - down[0], dy = e.clientY - down[1];
       down = null;
-      if (!focused || over) return;
+      if (!active() || over) return;
       if (Math.max(Math.abs(dx), Math.abs(dy)) > 24) {
         push("k:" + (Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up")));
         return;
@@ -263,13 +316,13 @@
           renderMs: stats.calls ? stats.render / stats.calls : 0
         });
       },
-      // for the tests: a key as if pressed while the game has the focus
+      // for the tests: a key as if pressed while the game runs
       press: function (key) { push("k:" + key); },
-      running: function () { return running() && !over; }
+      running: function () { return active() && !over; }
     };
     node.chunkyGame = controller;
 
-    if (opts.first) apply(opts.first);
+    if (opts.first) apply(opts.first, true);
     showOverlay();
     return controller;
   };

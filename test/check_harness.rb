@@ -49,6 +49,10 @@ require_relative "../html/object_graph"
 # turtle { } (lesson 10) shows its picture the same way; Turtle.from(images)
 # finds the turtles behind it, which is what the lesson's check grades
 require_relative "../html/turtle"
+# show_game (lesson 38): game.rb runs headless as it is; the stub below
+# records each game, and a check plays copies of them (games), as in main.rb
+require_relative "../html/game"
+$shown_games = []
 module Kernel
   def download_file(data, name = nil)
     $explicit_downloads << (name || data).to_s
@@ -111,6 +115,11 @@ module Kernel
     rows = File.read(File.expand_path("../html/assets/data/digits.csv", __dir__)).lines.map { |l| l.split(",").map(&:to_i) }
     written = [3, 0, 0, 0].first(boxes).map { |d| rows.find { |r| r.last == d }.first(64) }
     $letter_answers << block.call(written).to_s
+    nil
+  end
+
+  def show_game(width: 20, height: 15, &setup)
+    $shown_games << ChunkyGame.new(width: width, height: height, &setup)
     nil
   end
 
@@ -440,6 +449,146 @@ File.binwrite("fanfare.wav", wav(notes("C4 E4 G4 C5") + chord))),
 File.write("fanfare.wav", wav(notes("C4 E4 G4 C5", wave: :saw) + chord))
 show_audio "fanfare.wav")
     ]
+  },
+  # Snake without walls: % (the hint's way), and the edges one by one; the
+  # check plays a copy of the game headless (games, ChunkyGame#fresh)
+  "snake" => {
+    "de" => [%(show_game(width: 16, height: 12) do |g|
+  fuchs = [[4, 6], [3, 6], [2, 6]]
+  kurs = [1, 0]
+  futter = [10, 6]
+  gefressen = 0
+  g.on_key(:left)  { kurs = [-1, 0] unless kurs == [1, 0] }
+  g.on_key(:right) { kurs = [1, 0]  unless kurs == [-1, 0] }
+  g.on_key(:up)    { kurs = [0, -1] unless kurs == [0, 1] }
+  g.on_key(:down)  { kurs = [0, 1]  unless kurs == [0, -1] }
+  g.cell(*futter, :bacon)
+  fuchs.each { |teil| g.cell(*teil, :body) }
+  g.every(0.15) do
+    x, y = fuchs.first
+    kopf = [(x + kurs[0]) % 16, (y + kurs[1]) % 12]
+    if fuchs.include?(kopf)
+      g.game_over("Autsch! \#{gefressen} Speck.")
+      next
+    end
+    fuchs.unshift(kopf)
+    if kopf == futter
+      gefressen += 1
+      futter = g.free_cells.sample
+    else
+      fuchs.pop
+    end
+    g.clear
+    g.cell(*futter, :bacon)
+    fuchs.each { |teil| g.cell(*teil, :body) }
+    g.cell(*kopf, :chunky)
+    g.status("Speck: \#{gefressen}")
+  end
+end),
+             %(show_game(width: 16, height: 12) do |g|
+  fuchs = [[4, 6], [3, 6], [2, 6]]
+  kurs = [1, 0]
+  futter = [10, 6]
+  gefressen = 0
+  g.on_key(:left)  { kurs = [-1, 0] unless kurs == [1, 0] }
+  g.on_key(:right) { kurs = [1, 0]  unless kurs == [-1, 0] }
+  g.on_key(:up)    { kurs = [0, -1] unless kurs == [0, 1] }
+  g.on_key(:down)  { kurs = [0, 1]  unless kurs == [0, -1] }
+  g.cell(*futter, :bacon)
+  fuchs.each { |teil| g.cell(*teil, :body) }
+  g.every(0.15) do
+    x, y = fuchs.first
+    kopf = [x + kurs[0], y + kurs[1]]
+    kopf[0] = 0 if kopf[0] == g.width
+    kopf[0] = g.width - 1 if kopf[0] < 0
+    kopf[1] = 0 if kopf[1] == g.height
+    kopf[1] = g.height - 1 if kopf[1] < 0
+    if fuchs.include?(kopf)
+      g.game_over("Autsch! \#{gefressen} Speck.")
+      next
+    end
+    fuchs.unshift(kopf)
+    if kopf == futter
+      gefressen += 1
+      futter = g.free_cells.sample
+    else
+      fuchs.pop
+    end
+    g.clear
+    g.cell(*futter, :bacon)
+    fuchs.each { |teil| g.cell(*teil, :body) }
+    g.cell(*kopf, :chunky)
+    g.status("Speck: \#{gefressen}")
+  end
+end)],
+    "en" => [%(show_game(width: 16, height: 12) do |g|
+  fox = [[4, 6], [3, 6], [2, 6]]
+  heading = [1, 0]
+  food = [10, 6]
+  eaten = 0
+  g.on_key(:left)  { heading = [-1, 0] unless heading == [1, 0] }
+  g.on_key(:right) { heading = [1, 0]  unless heading == [-1, 0] }
+  g.on_key(:up)    { heading = [0, -1] unless heading == [0, 1] }
+  g.on_key(:down)  { heading = [0, 1]  unless heading == [0, -1] }
+  g.cell(*food, :bacon)
+  fox.each { |part| g.cell(*part, :body) }
+  g.every(0.15) do
+    x, y = fox.first
+    head = [(x + heading[0]) % g.width, (y + heading[1]) % g.height]
+    if fox.include?(head)
+      g.game_over("Ouch! \#{eaten} bacon.")
+      next
+    end
+    fox.unshift(head)
+    if head == food
+      eaten += 1
+      food = g.free_cells.sample
+    else
+      fox.pop
+    end
+    g.clear
+    g.cell(*food, :bacon)
+    fox.each { |part| g.cell(*part, :body) }
+    g.cell(*head, :chunky)
+    g.status("Bacon: \#{eaten}")
+  end
+end),
+             %(show_game(width: 16, height: 12) do |g|
+  fox = [[4, 6], [3, 6], [2, 6]]
+  heading = [1, 0]
+  food = [10, 6]
+  eaten = 0
+  g.on_key(:left)  { heading = [-1, 0] unless heading == [1, 0] }
+  g.on_key(:right) { heading = [1, 0]  unless heading == [-1, 0] }
+  g.on_key(:up)    { heading = [0, -1] unless heading == [0, 1] }
+  g.on_key(:down)  { heading = [0, 1]  unless heading == [0, -1] }
+  g.cell(*food, :bacon)
+  fox.each { |part| g.cell(*part, :body) }
+  g.every(0.15) do
+    x, y = fox.first
+    head = [x + heading[0], y + heading[1]]
+    head[0] = 0 if head[0] == 16
+    head[0] = 15 if head[0] == -1
+    head[1] = 0 if head[1] == 12
+    head[1] = 11 if head[1] == -1
+    if fox.include?(head)
+      g.game_over("Ouch! \#{eaten} bacon.")
+      next
+    end
+    fox.unshift(head)
+    if head == food
+      eaten += 1
+      food = g.free_cells.sample
+    else
+      fox.pop
+    end
+    g.clear
+    g.cell(*food, :bacon)
+    fox.each { |part| g.cell(*part, :body) }
+    g.cell(*head, :chunky)
+    g.status("Bacon: \#{eaten}")
+  end
+end)]
   },
   "tl-collections" => {
     "de" => [%(eintraege = [{ projekt: "ProjectX", stunden: 3.5 }, { projekt: "Intern", stunden: 2.0 }, { projekt: "ProjectX", stunden: 3.0 }]
@@ -971,6 +1120,7 @@ def run_harness(langs)
       $shown_apps = []
       $shown_sketches = []
       $shown_audios = []
+      $shown_games = []
       $explicit_downloads = []
       SandboxFS.reset!
       load_lesson_files(lesson)
@@ -993,6 +1143,7 @@ def run_harness(langs)
       bind.local_variable_set(:downloads, downloads)
       bind.local_variable_set(:sketch, $shown_sketches.last)
       bind.local_variable_set(:audios, $shown_audios.dup)
+      bind.local_variable_set(:games, $shown_games.map(&:fresh))
       passed = begin
         !!eval(exercise["check"], bind, "check.rb")
       rescue Exception

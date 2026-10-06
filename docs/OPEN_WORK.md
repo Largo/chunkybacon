@@ -128,6 +128,16 @@ Last updated 2026-10-05.
   (`experiments/05-ruby-music/NOTES.md`, step 7). The lesson has no
   exercise on `audios` yet (a check can read what was played without a
   file), and `music.rb`'s `C4*2` durations and sharps were left out.
+- Games (lesson 38, `show_game`, `html/game.rb`/`game.js`): `:chunky` is
+  the 🦊 emoji, and emoji look different on every system (headless
+  Chromium draws 🥓 as a small red glyph) - a head-only Chunky sprite and
+  a sprite sheet in `assets/` (`"img:url"` looks work already) would make
+  the grid the same everywhere. Not tried: the workshop (same path, the
+  guard watches `Workshop.paths`) and a real screen reader on the game
+  (its name, description and live region are checked in browser_test).
+  Two arrow keys within one round can still turn Chunky straight back
+  (the classic Snake bug; a queue of turns would fix it). `on_click` has
+  no lesson cell yet.
 - The offline dialog's sizes (`offlineExplain`, `offlinePython`, README,
   HANDOVER §6c, `test/shell/workspace_test.rb`) are measured by hand: the
   files of `offline-files.txt` in MiB, a text file without a `.gz` counted
