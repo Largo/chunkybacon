@@ -1,6 +1,6 @@
 # Spinel in the browser: Ruby -> C -> WebAssembly, the steps `spinel app.rb`
 # takes on a computer, each one WebAssembly here (html/assets/spinel/, built
-# by tools/build_spinel.mjs on deploy). Ruby on PicoRuby.wasm in the
+# by tools/build_spinel.rb on deploy). Ruby on PicoRuby.wasm in the
 # compiler's worker (spinel/compiler_worker.rb):
 #
 #   1. spinel.wasm, the compiler, reads /work/main.rb and writes /work/main.c

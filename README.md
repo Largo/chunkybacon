@@ -164,7 +164,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   compiled with the ones before into a program of its own and run from
   the start, only the new line's output shown (lesson 39, about 27 MB,
   loaded when it opens). Not in git: the deploy builds it
-  (`tools/build_spinel.mjs`, pinned in `tools/spinel.json`).
+  (`tools/build_spinel.rb`, pinned in `tools/spinel.json`).
 - Chunky Bacon, an original cartoon fox, cheers you on.
 
 ## On your own computer: the chunky_bacon gem
@@ -246,8 +246,9 @@ docker compose up -d      # serves on port 8011
 ```
 
 Lesson 39 (Spinel) needs its build in `html/assets/spinel/`, which is not
-in git: `node tools/build_spinel.mjs` (Node 22, a few minutes the first
-time; afterwards a no-op until `tools/spinel.json` changes).
+in git: `ruby tools/build_spinel.rb` (Ruby 3.3+, no C compiler and no
+Node: clang is WebAssembly, run through the wasmtime gem; a few minutes
+the first time, afterwards a no-op until `tools/spinel.json` changes).
 
 Or any static file server over `html/` (the rubygems proxy then needs
 nginx, see `nginx/default.conf`). Lessons then live at `/#methoden`.
@@ -293,7 +294,7 @@ node boot_failure_test.mjs # what the page says when a runtime fails
 node language_test.mjs    # ?lang=, last choice, browser languages, English
 node live_test.mjs        # live runs in a lesson and in the workshop
 node offline_test.mjs     # offline mode: the copy, offline, a deploy, turning it off
-node spinel_test.mjs      # lesson 39 in a browser: Spinel compiling, IRB on it (after tools/build_spinel.mjs)
+node spinel_test.mjs      # lesson 39 in a browser: Spinel compiling, IRB on it (after tools/build_spinel.rb)
 ruby spinel_rb_test.rb    # spinel(code) without the page: CRuby's run, the shell's ui strings
 ruby spinel_build_test.rb # the compiler worker's plain Ruby: --print-build, clang's command line, IRB's verdict
 ruby server_test.rb       # the optional server (server/)

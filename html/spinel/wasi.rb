@@ -134,7 +134,7 @@ module SpinelWasi
       bytes ? JS.global[:TextDecoder].new.decode(bytes) : nil
     end
 
-    # the files of a tar archive (ustar, as tools/build_spinel.mjs writes
+    # the files of a tar archive (ustar, as tools/build_spinel.rb writes
     # it: no long names) under +prefix+, shared with the archive's bytes
     def add_tar(bytes, prefix = "/")
       decoder = JS.global[:TextDecoder].new

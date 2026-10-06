@@ -1,6 +1,6 @@
 # The Spinel lesson's kernel side (lesson 39). Spinel, Matz's ahead-of-time
 # compiler for Ruby, runs in the page as WebAssembly (shell/spinel.rb and its
-# workers, html/spinel/; tools/build_spinel.mjs builds it on deploy). A cell
+# workers, html/spinel/; tools/build_spinel.rb builds it on deploy). A cell
 # hands it a program as a String:
 #
 #   spinel <<~RUBY

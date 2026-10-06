@@ -36,8 +36,8 @@ update, and a single-file mount would keep serving the old one). Consequences:
 - **One thing is built on deploy, not committed**: Spinel for lesson 39
   (`html/assets/spinel/`, §6l). The host's deploy hook runs
   `sh tools/after_deploy.sh` after moving the checkout; it builds only when
-  `tools/spinel.json` or `tools/build_spinel.mjs` changed (minutes, with
-  Node 22 on the host or in a `node:22` container: `docker compose
+  `tools/spinel.json` or `tools/build_spinel.rb` changed (minutes, with
+  Ruby 3.3+ on the host or in a `ruby:4.0` container: `docker compose
   --profile build run --rm spinel-build`), and is a no-op otherwise. Until
   it has run once, lesson 39 says that Spinel could not be loaded; the rest
   of the course does not depend on it.
@@ -87,7 +87,7 @@ html/
   spinel/               the Spinel lesson's workers, Ruby on PicoRuby.wasm too: boot.js (the one JS file:
                         PicoRuby in a worker), manifest.txt, wasi.rb (a WASI host), toolchain.rb
                         (Ruby -> C -> wasm), compiler_worker.rb, run_worker.rb (§6l)
-  assets/spinel/        NOT IN GIT: built on deploy by tools/build_spinel.mjs (§6l)
+  assets/spinel/        NOT IN GIT: built on deploy by tools/build_spinel.rb (§6l)
   workshop.rb           the workshop's runs: project files as the virtual FS,
                         require_relative between them, gets, write-back
   autorun.rb            live runs (§6b): what may run by itself, the time
@@ -124,7 +124,7 @@ tools/vendor_pyodide.rb    Pyodide + pandas, sympy, scikit-learn, matplotlib int
 tools/vendor_sqljs.rb      sql.js (SQLite in WebAssembly) into html/assets/sqljs/ (§6f)
 tools/build_box_font.rb    html/assets/fonts/chunky-box-drawing.woff, box drawing for the code font (§6g)
 tools/vendor_herb.rb       Herb's WebAssembly parser into html/assets/herb/ (§6j)
-tools/build_spinel.mjs     Spinel + clang as WebAssembly into html/assets/spinel/, pinned in tools/spinel.json (§6l)
+tools/build_spinel.rb     Spinel + clang as WebAssembly into html/assets/spinel/, pinned in tools/spinel.json (§6l)
 tools/after_deploy.sh      what the host's deploy hook runs after the checkout moved: the Spinel build (§1)
 tools/offline_files.rb     html/offline-files.txt - rerun after adding/removing a file
 tools/dev_server.rb        nginx's stand-in without Docker: html/, the bridges, the same headers and rules (§7)
@@ -1545,25 +1545,38 @@ cell: spinel <<~'RUBY' ... RUBY          (main.rb -> spinel.rb)
        spinel/boot.js?role=run (one per run, stopped after 10 s): main.wasm  ms
 ```
 
-- **Not in git.** `html/assets/spinel/` is built by `tools/build_spinel.mjs`
+- **Not in git.** `html/assets/spinel/` is built by `tools/build_spinel.rb`
   and gitignored. It is pinned by `tools/spinel.json` (the Spinel commit, the
   prism gem it parses with, the `@yowasp/clang` version and its sha512) and
   stamped with a hash of the pins and the tool: the deploy runs it every
   time (`tools/after_deploy.sh`, §1) and it does nothing while the stamp in
   `html/assets/spinel/manifest.json` is current; `--check` says whether it
-  is. A new Spinel: `node tools/build_spinel.mjs --update` writes the newest
+  is. A new Spinel: `ruby tools/build_spinel.rb --update` writes the newest
   commit of matz/spinel into `tools/spinel.json` and builds it; test the
-  lesson (`node --experimental-wasm-exnref test/spinel_test.mjs`, then the
+  lesson (`BASE=... node test/spinel_test.mjs`, in a browser, or by hand), then the
   page), commit `tools/spinel.json`, push - the host builds the same.
-- **The build** needs Node 22 and the network, no C compiler: clang is
-  `@yowasp/clang`, LLVM compiled to WASI, under Node in worker threads
-  (`--jobs N` or `SPINEL_JOBS`; default cores - 1, at most 8). Everything
+- **The build** needs Ruby (3.3+) and the network - no C compiler, no Node.
+  clang is `@yowasp/clang`, the very LLVM the page runs: its
+  `gen/llvm.core.wasm` is a WASI preview 1 command (every LLVM tool in one,
+  the tool's name the first argument), which the tool runs through the
+  `wasmtime` gem (pinned in `tools/spinel.json`; installed into
+  `.cache/spinel/gems` when it is missing, prebuilt for Linux, macOS and
+  Windows on Ruby 3.3-4.0). Its 75 MB are compiled once (~35 s) and kept as
+  a `.cwasm`. clang's driver cannot start processes in WASI, so it is asked
+  for its plan (`-###`) and each step runs as a tool of its own, as
+  YoWASP's own `runClang` does. The tree clang sees as `/` is
+  `.cache/spinel/fs/` (Spinel's sources, patched, prism, clang's resources
+  at `/usr`). wasmtime holds Ruby's GVL while wasm runs, so the compiles
+  run in child processes of the tool (`--worker`, fed one job at a time
+  over a pipe; `--jobs N` or `SPINEL_JOBS`, default cores - 1, at most 8):
+  a compile is 0.1-0.2 s there, about a fifth of what the same clang takes
+  under Node, and the objects are byte for byte the same. Everything
   is fetched by version and checked (codeload tarball of the commit, the
   prism gem from rubygems.org as `make deps` takes it, the npm tarball
   against its sha512) and kept in `.cache/spinel/` with every compiled
   object, keyed by its source and command line: a rebuild after a change of
   the tool alone takes seconds, a new Spinel commit a few minutes (a cold
-  build was 7 minutes on 8 workers). The Makefile is read for its lists
+  build was 3 minutes on 8 workers). The Makefile is read for its lists
   (`SPINEL_OBJ`, `RT_MEMBERS`, `RE_SRC`, `BUNDLED_NATIVE_OBJS`), so a file
   Spinel adds is picked up; a flag it adds is not - compare with `make
   wasm-rt` (Spinel's own WASI build, the Makefile's wasm32-wasi part) when
@@ -1747,7 +1760,7 @@ BASE=http://127.0.0.1:8011/ node browser_test.mjs   # Playwright, ~5 min
 BASE=http://127.0.0.1:8011/ node offline_test.mjs   # offline mode (§6c), ~1 min
 ruby dev_server_test.rb                  # the bridge rule and the embed's headers, dev server and nginx alike (§7)
 ruby ../tools/build_embed_ui.rb --check  # html/embed-ui.js has the current ui strings
-node ../tools/build_spinel.mjs --check   # html/assets/spinel/ is the pinned build (§6l)
+ruby ../tools/build_spinel.rb --check   # html/assets/spinel/ is the pinned build (§6l)
 BASE=http://127.0.0.1:8011/ node spinel_test.mjs   # lesson 39 in a browser: the cells, IRB, the exercise, ~2 min (§6l)
 ruby spinel_rb_test.rb                   # spinel.rb: the CRuby run, the shell's ui strings (§6l)
 ruby spinel_build_test.rb                # the plain Ruby of the compiler worker: --print-build, clang's line, IRB's verdict

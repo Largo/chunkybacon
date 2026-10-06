@@ -29,17 +29,17 @@ services:
       - serverbundle:/usr/local/bundle
     ports:
       - "127.0.0.1:8012:9292"
-  # Builds Spinel for lesson 39 into html/assets/spinel/ (tools/build_spinel.mjs,
+  # Builds Spinel for lesson 39 into html/assets/spinel/ (tools/build_spinel.rb,
   # docs/HANDOVER.md §6l). Run by the deploy (tools/after_deploy.sh), never
   # started by `up`: docker compose --profile build run --rm spinel-build
   # It does nothing while the build there is the one tools/spinel.json pins.
   spinel-build:
     profiles: ["build"]
-    image: node:22-alpine
+    image: ruby:4.0
     working_dir: /srv/chunkybacon
-    command: node tools/build_spinel.mjs
+    command: ruby tools/build_spinel.rb
     environment:
-      SPINEL_JOBS: "${SPINEL_JOBS:-4}"   # clang workers: each one is a clang of its own in memory
+      SPINEL_JOBS: "${SPINEL_JOBS:-4}"   # clang processes: each one is a clang of its own in memory
     volumes:
       - ./:/srv/chunkybacon
 volumes:

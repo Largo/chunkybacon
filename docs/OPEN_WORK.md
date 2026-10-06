@@ -26,7 +26,7 @@ Last updated 2026-10-06.
   built on deploy rather than committed. **The host's deploy hook has to
   run `sh tools/after_deploy.sh` after it moves the checkout** - that hook
   lives on the host, not in this repository, so this line is still to be
-  added there (with Node 22 on the host, or Docker for the `spinel-build`
+  added there (with Ruby 3.3+ on the host, or Docker for the `spinel-build`
   service). Until it has run once, lesson 39 says Spinel could not be
   loaded. The first build takes a few minutes; it keeps about 175 MB in
   `.cache/spinel/` and about 115 MB per build in `html/assets/spinel/`

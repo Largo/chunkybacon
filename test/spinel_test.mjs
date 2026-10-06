@@ -1,7 +1,7 @@
 // Lesson 39 in a browser: Spinel compiling in the page. The widgets are the
 // shell's (html/shell/spinel.rb), the compiler and the runs are Ruby on
 // PicoRuby.wasm in workers (html/spinel/), Spinel and clang the build in
-// html/assets/spinel/ (node tools/build_spinel.mjs first).
+// html/assets/spinel/ (ruby tools/build_spinel.rb first).
 //
 //   BASE=http://127.0.0.1:8011/ node spinel_test.mjs     (~2 min)
 import { chromium } from '/usr/local/lib/node_modules/playwright/index.mjs';
@@ -9,7 +9,7 @@ import { chromium } from '/usr/local/lib/node_modules/playwright/index.mjs';
 const BASE = process.env.BASE || 'http://127.0.0.1:8011/';
 const manifest = await fetch(new URL('assets/spinel/manifest.json', BASE)).catch(() => null);
 if (!manifest || !manifest.ok) {
-  console.log('SKIP html/assets/spinel/ is not built there: node tools/build_spinel.mjs');
+  console.log('SKIP html/assets/spinel/ is not built there: ruby tools/build_spinel.rb');
   process.exit(0);
 }
 

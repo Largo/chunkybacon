@@ -2,7 +2,7 @@ test/lessons.json
 # built packages of the companion gems (html/gems/cache/*.gem stay tracked)
 /gem/*/*.gem
 /tmp/
-# Spinel for the browser: built on deploy by tools/build_spinel.mjs, never committed
+# Spinel for the browser: built on deploy by tools/build_spinel.rb, never committed
 /html/assets/spinel/
 /html/assets/spinel.new/
 /html/assets/spinel.old/
