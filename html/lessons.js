@@ -139,7 +139,13 @@ window.LESSONS_JSON = JSON.stringify({
       "letterPost": "Chunky Post",
       "letterClear": "Radieren",
       "letterSees": "Das bekommt Ruby:",
-      "letterHint": "Schreib die Postleitzahl in die roten Kästchen"
+      "letterHint": "Schreib die Postleitzahl in die roten Kästchen",
+      "gameTitle": "Spiel mit %d × %d Feldern",
+      "gamePlay": "Klick oder Leertaste zum Spielen",
+      "gameKeys": "Pfeiltasten steuern – Esc pausiert, Tab verlässt das Spiel",
+      "gamePaused": "Pause",
+      "gameAgain": "Klick oder Leertaste für eine neue Runde",
+      "gameTooLong": "Ein Schritt des Spiels hat länger als %.1f s gedauert – eine Endlosschleife?"
     },
     "en": {
       "title": "Learn Ruby with Chunky Bacon",
@@ -270,7 +276,13 @@ window.LESSONS_JSON = JSON.stringify({
       "letterPost": "Chunky Post",
       "letterClear": "Clear",
       "letterSees": "What Ruby gets:",
-      "letterHint": "Write the postcode into the red boxes"
+      "letterHint": "Write the postcode into the red boxes",
+      "gameTitle": "Game with %d × %d cells",
+      "gamePlay": "Click or press Space to play",
+      "gameKeys": "Arrow keys steer – Esc pauses, Tab leaves the game",
+      "gamePaused": "Paused",
+      "gameAgain": "Click or press Space to play again",
+      "gameTooLong": "One step of the game took longer than %.1f s – an endless loop?"
     },
     "ja": {
       "title": "Chunky Baconと学ぶRuby",
@@ -401,7 +413,13 @@ window.LESSONS_JSON = JSON.stringify({
       "letterPost": "Chunky Post",
       "letterClear": "消す",
       "letterSees": "Rubyが受け取るもの：",
-      "letterHint": "赤い枠に郵便番号を書いてね"
+      "letterHint": "赤い枠に郵便番号を書いてね",
+      "gameTitle": "%d×%dマスのゲーム",
+      "gamePlay": "クリックかスペースキーでスタート",
+      "gameKeys": "矢印キーで操作します。Escで一時停止、Tabでゲームから出ます",
+      "gamePaused": "一時停止中",
+      "gameAgain": "クリックかスペースキーでもう一度",
+      "gameTooLong": "ゲームの1ステップに%.1f秒以上かかりました。無限ループかもしれません。"
     }
   },
   "lessons": [
@@ -2742,7 +2760,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 50). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
+            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 51). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
           },
           {
             "t": "c",
@@ -2789,7 +2807,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 50 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
+            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 51 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
           },
           {
             "t": "c",
@@ -2836,7 +2854,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン50で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
+            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン51で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
           },
           {
             "t": "c",
@@ -4745,7 +4763,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 38:</p>"
+            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 39:</p>"
           },
           {
             "t": "c",
@@ -4800,7 +4818,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 38 on:</p>"
+            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 39 on:</p>"
           },
           {
             "t": "c",
@@ -4855,7 +4873,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン38からつくるプロジェクトの構成です：</p>"
+            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン39からつくるプロジェクトの構成です：</p>"
           },
           {
             "t": "c",
@@ -5097,7 +5115,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install faker</code>, oder im <code>Gemfile</code> in der Gruppe <code>:test</code>. In Minitest-Tests (Lektion 42) nimmst du gern Minitests eigenen Startwert, den jeder Lauf ausgibt (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>So erzeugt <code>ruby test.rb --seed 12345</code> genau die Daten des fehlgeschlagenen Laufs noch einmal. <code>Faker::Config.random = nil</code> macht den Zufall wieder zufällig.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky braucht für seinen Laden Testkunden, bei jedem Lauf dieselben. Leg den Zufall auf <code>Random.new(2024)</code> fest und mach ein Array <code>kunden</code> mit 5 Hashes, jeder mit einem <code>:name</code> und einer <code>:email</code>.</div>"
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install faker</code>, oder im <code>Gemfile</code> in der Gruppe <code>:test</code>. In Minitest-Tests (Lektion 43) nimmst du gern Minitests eigenen Startwert, den jeder Lauf ausgibt (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>So erzeugt <code>ruby test.rb --seed 12345</code> genau die Daten des fehlgeschlagenen Laufs noch einmal. <code>Faker::Config.random = nil</code> macht den Zufall wieder zufällig.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky braucht für seinen Laden Testkunden, bei jedem Lauf dieselben. Leg den Zufall auf <code>Random.new(2024)</code> fest und mach ein Array <code>kunden</code> mit 5 Hashes, jeder mit einem <code>:name</code> und einer <code>:email</code>.</div>"
           },
           {
             "t": "x",
@@ -5152,7 +5170,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install faker</code>, or in the <code>Gemfile</code> in the <code>:test</code> group. In Minitest tests (lesson 42) Minitest's own seed is a good choice; every run prints it (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>Then <code>ruby test.rb --seed 12345</code> makes exactly the data of the failed run again. <code>Faker::Config.random = nil</code> makes randomness random again.</p></div><div class='task'><strong>Task:</strong> Chunky needs test customers for his shop, the same ones on every run. Pin the randomness to <code>Random.new(2024)</code> and make an array <code>customers</code> of 5 hashes, each with a <code>:name</code> and an <code>:email</code>.</div>"
+            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install faker</code>, or in the <code>Gemfile</code> in the <code>:test</code> group. In Minitest tests (lesson 43) Minitest's own seed is a good choice; every run prints it (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>Then <code>ruby test.rb --seed 12345</code> makes exactly the data of the failed run again. <code>Faker::Config.random = nil</code> makes randomness random again.</p></div><div class='task'><strong>Task:</strong> Chunky needs test customers for his shop, the same ones on every run. Pin the randomness to <code>Random.new(2024)</code> and make an array <code>customers</code> of 5 hashes, each with a <code>:name</code> and an <code>:email</code>.</div>"
           },
           {
             "t": "x",
@@ -5207,7 +5225,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='自分のパソコンでは'><p><code>gem install faker</code>、または<code>Gemfile</code>の<code>:test</code>グループに。Minitestのテスト（レッスン42）では、Minitest自身のシードを使うのがおすすめです。毎回の実行で表示されます（<code>Run options: --seed 12345</code>）：</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>すると<code>ruby test.rb --seed 12345</code>で、失敗した実行とまったく同じデータがもう一度つくられます。<code>Faker::Config.random = nil</code>で、乱数はまたランダムに戻ります。</p></div><div class='task'><strong>課題：</strong>Chunkyはお店のためのテスト用のお客さんがほしいのです。毎回同じお客さんで。乱数を<code>Random.new(2024)</code>に固定して、5つのハッシュの配列<code>customers</code>をつくってください。どのハッシュにも<code>:name</code>と<code>:email</code>があります。</div>"
+            "html": "<div class='offweb' data-title='自分のパソコンでは'><p><code>gem install faker</code>、または<code>Gemfile</code>の<code>:test</code>グループに。Minitestのテスト（レッスン43）では、Minitest自身のシードを使うのがおすすめです。毎回の実行で表示されます（<code>Run options: --seed 12345</code>）：</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>すると<code>ruby test.rb --seed 12345</code>で、失敗した実行とまったく同じデータがもう一度つくられます。<code>Faker::Config.random = nil</code>で、乱数はまたランダムに戻ります。</p></div><div class='task'><strong>課題：</strong>Chunkyはお店のためのテスト用のお客さんがほしいのです。毎回同じお客さんで。乱数を<code>Random.new(2024)</code>に固定して、5つのハッシュの配列<code>customers</code>をつくってください。どのハッシュにも<code>:name</code>と<code>:email</code>があります。</div>"
           },
           {
             "t": "x",
@@ -5273,7 +5291,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Ein <code>HTMLElementNode</code> mit seinem öffnenden und schliessenden Tag, darin ein <code>ERBContentNode</code> mit dem Ruby-Code. Auf diesem Baum bauen Herbs Werkzeuge auf: ein Linter, der Regeln prüft, ein Formatierer, und Hilfe im Editor.</p><p>Am meisten bringt Herb in Tests: Ein Test, der jede Vorlage prüft, fällt um, sobald jemand ein Tag falsch schliesst – lange bevor es jemand im Browser sieht. Mit Minitest aus Lektion 42:</p>"
+            "html": "<p>Ein <code>HTMLElementNode</code> mit seinem öffnenden und schliessenden Tag, darin ein <code>ERBContentNode</code> mit dem Ruby-Code. Auf diesem Baum bauen Herbs Werkzeuge auf: ein Linter, der Regeln prüft, ein Formatierer, und Hilfe im Editor.</p><p>Am meisten bringt Herb in Tests: Ein Test, der jede Vorlage prüft, fällt um, sobald jemand ein Tag falsch schliesst – lange bevor es jemand im Browser sieht. Mit Minitest aus Lektion 43:</p>"
           },
           {
             "t": "c",
@@ -5344,7 +5362,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>An <code>HTMLElementNode</code> with its opening and closing tag, and inside it an <code>ERBContentNode</code> with the Ruby code. Herb's tools build on this tree: a linter that checks rules, a formatter, and help in the editor.</p><p>Herb pays off most in tests: a test that checks every template falls over as soon as somebody closes a tag wrongly – long before anyone sees it in the browser. With Minitest from lesson 42:</p>"
+            "html": "<p>An <code>HTMLElementNode</code> with its opening and closing tag, and inside it an <code>ERBContentNode</code> with the Ruby code. Herb's tools build on this tree: a linter that checks rules, a formatter, and help in the editor.</p><p>Herb pays off most in tests: a test that checks every template falls over as soon as somebody closes a tag wrongly – long before anyone sees it in the browser. With Minitest from lesson 43:</p>"
           },
           {
             "t": "c",
@@ -5415,7 +5433,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>開くタグと閉じるタグを持つ<code>HTMLElementNode</code>、その中にRubyのコードを持つ<code>ERBContentNode</code>。Herbのツールはこの木の上に成り立っています。ルールを確かめるリンター、フォーマッター、そしてエディタでの手助け。</p><p>Herbがいちばん役に立つのはテストです。すべてのテンプレートを確かめるテストは、だれかがタグの閉じ方をまちがえたとたんに失敗します。ブラウザでだれかが気づくずっと前に。レッスン42のMinitestで：</p>"
+            "html": "<p>開くタグと閉じるタグを持つ<code>HTMLElementNode</code>、その中にRubyのコードを持つ<code>ERBContentNode</code>。Herbのツールはこの木の上に成り立っています。ルールを確かめるリンター、フォーマッター、そしてエディタでの手助け。</p><p>Herbがいちばん役に立つのはテストです。すべてのテンプレートを確かめるテストは、だれかがタグの閉じ方をまちがえたとたんに失敗します。ブラウザでだれかが気づくずっと前に。レッスン43のMinitestで：</p>"
           },
           {
             "t": "c",
@@ -5706,7 +5724,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Ein Schlagzeug ist hier wieder ein String: Jedes Zeichen ist ein Achtel, <code>x</code> die grosse Trommel, <code>h</code> die Hi-Hat, ein Punkt Pause. Die <strong>Kick</strong> ist ein Sinus, dessen Frequenz schnell fällt und der dabei verklingt (<code>Math.exp(-zeit * 15)</code> wird rasch kleiner), die <strong>Hi-Hat</strong> ist Rauschen aus <code>rand</code>. Jeder Klang wird auf seinen Platz zurechtgeschnitten oder mit Stille aufgefüllt, damit der Takt gleichmässig bleibt.</p><p><code>noten</code>, <code>schlagzeug</code>, <code>zusammen</code> – das sind schon die Wörter einer kleinen Sprache für Musik, gebaut aus Arrays, Strings und Blöcken (mehr dazu in Lektion 50, «Eine eigene DSL»). <code>File.binwrite</code> schreibt die Bytes als Datei; sie erscheint unter der Zelle als Download, und <code>show_audio</code> nimmt auch ihren Namen.</p><div class='offweb' data-title='Auf deinem Computer'><p>Dort läuft derselbe Code: <code>File.binwrite(\"lied.wav\", wav(lied))</code> und dann die Datei mit einem beliebigen Player öffnen. Wer WAV-Dateien auch lesen oder in Stereo und 24 Bit schreiben will, nimmt das Gem <code>wavefile</code> (reines Ruby, läuft auch hier mit <code>install_gem \"wavefile\"</code>) – es schreibt für dieses Lied Byte für Byte dieselbe Datei.</p></div><div class='task'><strong>Aufgabe:</strong> Ein Tusch! Schreib die Datei <code>tusch.wav</code>: zuerst die Töne C4, E4, G4 und C5 nacheinander, je 0.25 Sekunden, danach alle vier <strong>zusammen</strong> eine Sekunde lang – insgesamt also 2 Sekunden.</div>"
+            "html": "<p>Ein Schlagzeug ist hier wieder ein String: Jedes Zeichen ist ein Achtel, <code>x</code> die grosse Trommel, <code>h</code> die Hi-Hat, ein Punkt Pause. Die <strong>Kick</strong> ist ein Sinus, dessen Frequenz schnell fällt und der dabei verklingt (<code>Math.exp(-zeit * 15)</code> wird rasch kleiner), die <strong>Hi-Hat</strong> ist Rauschen aus <code>rand</code>. Jeder Klang wird auf seinen Platz zurechtgeschnitten oder mit Stille aufgefüllt, damit der Takt gleichmässig bleibt.</p><p><code>noten</code>, <code>schlagzeug</code>, <code>zusammen</code> – das sind schon die Wörter einer kleinen Sprache für Musik, gebaut aus Arrays, Strings und Blöcken (mehr dazu in Lektion 51, «Eine eigene DSL»). <code>File.binwrite</code> schreibt die Bytes als Datei; sie erscheint unter der Zelle als Download, und <code>show_audio</code> nimmt auch ihren Namen.</p><div class='offweb' data-title='Auf deinem Computer'><p>Dort läuft derselbe Code: <code>File.binwrite(\"lied.wav\", wav(lied))</code> und dann die Datei mit einem beliebigen Player öffnen. Wer WAV-Dateien auch lesen oder in Stereo und 24 Bit schreiben will, nimmt das Gem <code>wavefile</code> (reines Ruby, läuft auch hier mit <code>install_gem \"wavefile\"</code>) – es schreibt für dieses Lied Byte für Byte dieselbe Datei.</p></div><div class='task'><strong>Aufgabe:</strong> Ein Tusch! Schreib die Datei <code>tusch.wav</code>: zuerst die Töne C4, E4, G4 und C5 nacheinander, je 0.25 Sekunden, danach alle vier <strong>zusammen</strong> eine Sekunde lang – insgesamt also 2 Sekunden.</div>"
           },
           {
             "t": "x",
@@ -5769,7 +5787,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>A drum kit is a String again: every character is an eighth note, <code>x</code> the bass drum, <code>h</code> the hi-hat, a dot a rest. The <strong>kick</strong> is a sine whose frequency falls fast while it dies away (<code>Math.exp(-time * 15)</code> shrinks quickly), the <strong>hi-hat</strong> is noise from <code>rand</code>. Every sound is cut to its slot or padded with silence, so the beat stays even.</p><p><code>notes</code>, <code>drums</code>, <code>mix</code> – those are already the words of a small language for music, built from Arrays, Strings and blocks (more in lesson 50, \"Your own DSL\"). <code>File.binwrite</code> writes the bytes as a file; it appears below the cell as a download, and <code>show_audio</code> takes its name too.</p><div class='offweb' data-title='On your machine'><p>The same code runs there: <code>File.binwrite(\"song.wav\", wav(song))</code>, then open the file in any player. To read WAV files as well, or write stereo and 24 bits, use the <code>wavefile</code> gem (pure Ruby, it runs here too with <code>install_gem \"wavefile\"</code>) – for this song it writes the very same file, byte for byte.</p></div><div class='task'><strong>Task:</strong> A fanfare! Write the file <code>fanfare.wav</code>: first the notes C4, E4, G4 and C5 one after another, 0.25 seconds each, then all four <strong>together</strong> for one second – 2 seconds in all.</div>"
+            "html": "<p>A drum kit is a String again: every character is an eighth note, <code>x</code> the bass drum, <code>h</code> the hi-hat, a dot a rest. The <strong>kick</strong> is a sine whose frequency falls fast while it dies away (<code>Math.exp(-time * 15)</code> shrinks quickly), the <strong>hi-hat</strong> is noise from <code>rand</code>. Every sound is cut to its slot or padded with silence, so the beat stays even.</p><p><code>notes</code>, <code>drums</code>, <code>mix</code> – those are already the words of a small language for music, built from Arrays, Strings and blocks (more in lesson 51, \"Your own DSL\"). <code>File.binwrite</code> writes the bytes as a file; it appears below the cell as a download, and <code>show_audio</code> takes its name too.</p><div class='offweb' data-title='On your machine'><p>The same code runs there: <code>File.binwrite(\"song.wav\", wav(song))</code>, then open the file in any player. To read WAV files as well, or write stereo and 24 bits, use the <code>wavefile</code> gem (pure Ruby, it runs here too with <code>install_gem \"wavefile\"</code>) – for this song it writes the very same file, byte for byte.</p></div><div class='task'><strong>Task:</strong> A fanfare! Write the file <code>fanfare.wav</code>: first the notes C4, E4, G4 and C5 one after another, 0.25 seconds each, then all four <strong>together</strong> for one second – 2 seconds in all.</div>"
           },
           {
             "t": "x",
@@ -5832,13 +5850,181 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ドラムもまた文字列です。1文字が8分音符1つ分で、<code>x</code>はバスドラム、<code>h</code>はハイハット、点は休符です。<strong>キック</strong>は、周波数がすばやく下がりながら消えていくサイン波です（<code>Math.exp(-time * 15)</code>はすぐに小さくなります）。<strong>ハイハット</strong>は<code>rand</code>で作ったノイズです。それぞれの音は自分の枠に合わせて切るか無音で埋めるので、リズムがずれません。</p><p><code>notes</code>、<code>drums</code>、<code>mix</code>――これはもう、配列と文字列とブロックでできた、音楽のための小さな言語の単語です（くわしくはレッスン50「自分だけのDSL」で）。<code>File.binwrite</code>はバイト列をファイルに書き出します。ファイルはセルの下にダウンロードとして現れ、<code>show_audio</code>にはファイル名を渡すこともできます。</p><div class='offweb' data-title='自分のコンピューターでは'><p>同じコードがそのまま動きます。<code>File.binwrite(\"song.wav\", wav(song))</code>で書き出し、好きなプレーヤーで開いてください。WAVファイルを読んだり、ステレオや24ビットで書いたりしたいなら、<code>wavefile</code> gemを使います（純粋なRubyなので、ここでも<code>install_gem \"wavefile\"</code>で動きます）。この曲なら、1バイトも違わない同じファイルを書き出します。</p></div><div class='task'><strong>課題：</strong>ファンファーレを作りましょう！<code>fanfare.wav</code>というファイルを書き出してください。まずC4、E4、G4、C5を順に各0.25秒、そのあと4つを<strong>同時に</strong>1秒鳴らします。全部で2秒です。</div>"
+            "html": "<p>ドラムもまた文字列です。1文字が8分音符1つ分で、<code>x</code>はバスドラム、<code>h</code>はハイハット、点は休符です。<strong>キック</strong>は、周波数がすばやく下がりながら消えていくサイン波です（<code>Math.exp(-time * 15)</code>はすぐに小さくなります）。<strong>ハイハット</strong>は<code>rand</code>で作ったノイズです。それぞれの音は自分の枠に合わせて切るか無音で埋めるので、リズムがずれません。</p><p><code>notes</code>、<code>drums</code>、<code>mix</code>――これはもう、配列と文字列とブロックでできた、音楽のための小さな言語の単語です（くわしくはレッスン51「自分だけのDSL」で）。<code>File.binwrite</code>はバイト列をファイルに書き出します。ファイルはセルの下にダウンロードとして現れ、<code>show_audio</code>にはファイル名を渡すこともできます。</p><div class='offweb' data-title='自分のコンピューターでは'><p>同じコードがそのまま動きます。<code>File.binwrite(\"song.wav\", wav(song))</code>で書き出し、好きなプレーヤーで開いてください。WAVファイルを読んだり、ステレオや24ビットで書いたりしたいなら、<code>wavefile</code> gemを使います（純粋なRubyなので、ここでも<code>install_gem \"wavefile\"</code>で動きます）。この曲なら、1バイトも違わない同じファイルを書き出します。</p></div><div class='task'><strong>課題：</strong>ファンファーレを作りましょう！<code>fanfare.wav</code>というファイルを書き出してください。まずC4、E4、G4、C5を順に各0.25秒、そのあと4つを<strong>同時に</strong>1秒鳴らします。全部で2秒です。</div>"
           },
           {
             "t": "x",
             "code": "# fanfare.wav：C4 E4 G4 C5を順に（各0.25秒）、そのあと4つ同時に（1秒）\n",
             "check": "downloads.include?(\"fanfare.wav\") && File.read(\"fanfare.wav\", mode: \"rb\").b.then { |bytes| head = bytes.unpack(\"a4Va4a4VvvVVvva4V\"); s = bytes.byteslice(44..).unpack(\"s<*\"); amp = ->(from, f) { part = s[(from * 22050).round, 2205] || []; re = im = 0.0; part.each_with_index { |x, n| w = 2 * Math::PI * f * n / 22050; re += x * Math.cos(w); im += x * Math.sin(w) }; Math.hypot(re, im) * 2 / [part.size, 1].max }; c4, e4, g4, c5 = 261.63, 329.63, 392.0, 523.25; arpeggio = [[0.07, c4, [e4, g4]], [0.32, e4, [c4, g4, c5]], [0.57, g4, [c4, e4, c5]], [0.82, c5, [c4, e4, g4]]]; head.values_at(0, 2, 6, 7, 10) == [\"RIFF\", \"WAVE\", 1, 22050, 16] && (1.9..2.1).cover?(s.size / 22050.0) && arpeggio.all? { |t, f, others| (a = amp.(t, f)) > 1000 && others.all? { |o| amp.(t, o) < a / 4 } } && [[1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }",
             "hint": "<code>notes(\"C4 E4 G4 C5\")</code>で4つの音ができるよ。和音は<code>mix(*%w[C4 E4 G4 C5].map { |name| envelope(tone(frequency(name), 1.0, :sine, 0.2)) })</code>。2つを<code>+</code>でつないで、<code>File.binwrite(\"fanfare.wav\", wav(…))</code>で保存しよう。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "snake",
+      "de": {
+        "title": "38. Chunkys Snake",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Chunkys Snake</h2><p><em>Snake</em> ist eines der ältesten Computerspiele: Eine Schlange wandert über ein Spielfeld, frisst, was dort liegt, und wird dabei immer länger – bis sie gegen die Wand läuft oder sich in den eigenen Schwanz beisst. Die Idee stammt aus dem Spielautomaten <em>Blockade</em> von 1976; berühmt wurde sie 1997 auf dem Nokia 6110, und bald trugen Millionen Menschen Snake in der Hosentasche herum. In dieser Lektion baust du es in fünf Schritten nach. Die Schlange ist Chunky, und gefressen wird natürlich Speck.</p><p>So ein Spiel ist ein Raster aus Feldern. <code>show_game</code> zeichnet eines unter die Zelle, 20 Felder breit und 15 hoch. Der Block bekommt es als <code>g</code>, und du sagst, was in welchem Feld liegt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_game(width: 20, height: 15) do |g|\n  g.cell(10, 7, :chunky)    # Chunky in der Mitte\n  g.cell(15, 7, :bacon)     # Speck rechts davon\n  g.cell(0, 0, :wall)       # eine Mauer oben links\n  g.cell(19, 14, :green)    # ein grünes Feld unten rechts\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Felder werden gezählt wie die Pixel in Lektion 33: <code>x</code> von links nach rechts, <code>y</code> von oben nach unten, beide ab 0. Das Feld oben links ist <code>0, 0</code>, das unten rechts <code>19, 14</code>. Ein Feld zeigt ein Bild (<code>:chunky</code>, <code>:bacon</code>, <code>:egg</code>, <code>:wall</code>, <code>:star</code> …), eine Farbe (<code>:green</code>, <code>:red</code>, <code>\"#3a8\"</code>) oder ein beliebiges Emoji als String. Ohne drittes Argument fragt <code>g.cell(10, 7)</code>, was dort liegt.</p><p>Noch steht alles still. Ein Spiel muss immer wieder etwas tun – aber eine Schleife mit <code>sleep</code> würde hier die ganze Seite einfrieren, denn Ruby läuft im selben Faden wie der Browser. Darum dreht die Seite die Runden, und du sagst ihr nur, was in einer Runde passiert: <code>g.every(0.15) { … }</code> ruft den Block alle 0,15 Sekunden auf. Klick auf das Spielfeld, dann läuft Chunky los:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_game(width: 20, height: 15) do |g|\n  x = 0\n  schritt = 1                    # +1: nach rechts, -1: nach links\n  g.cell(x, 7, :chunky)\n\n  g.every(0.15) do\n    g.clear(x, 7)                # das alte Feld leeren\n    x += schritt\n    schritt = -schritt if x == 0 || x == 19   # am Rand umkehren\n    g.cell(x, 7, :chunky)\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Seite ruft den Block von <code>every</code> auf, lange nachdem die Zelle fertig gelaufen ist – und trotzdem kennt er <code>x</code> und <code>schritt</code>. Ein Block nimmt die Variablen mit, die es dort gab, wo er geschrieben wurde (man sagt: Er ist eine <em>Closure</em>). So weiss das Spiel von Runde zu Runde, wo Chunky steht. <code>g.clear(x, 7)</code> leert ein Feld, <code>g.clear</code> ohne Argumente das ganze Spielfeld.</p><p>Das Spiel läuft nur, solange es den Fokus hat. <kbd>Esc</kbd> hält es an, <kbd>Tab</kbd> oder ein Klick daneben verlässt es; mit der Tastatur kommst du mit <kbd>Tab</kbd> hinein und startest es mit der Leertaste. So landen die Pfeiltasten nie aus Versehen im Editor – und die brauchen wir jetzt. <code>g.on_key(:left) { … }</code> läuft, wenn jemand ← drückt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_game(width: 20, height: 15) do |g|\n  x, y = 10, 7\n  richtung = [1, 0]                    # [nach rechts, nach unten]\n\n  g.on_key(:left)  { richtung = [-1, 0] }\n  g.on_key(:right) { richtung = [1, 0] }\n  g.on_key(:up)    { richtung = [0, -1] }\n  g.on_key(:down)  { richtung = [0, 1] }\n\n  g.cell(x, y, :chunky)\n  g.every(0.15) do\n    weiter = [x + richtung[0], y + richtung[1]]\n    if g.inside?(*weiter)              # am Rand bleibt Chunky stehen\n      g.clear(x, y)\n      x, y = weiter\n      g.cell(x, y, :chunky)\n    end\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Richtung ist ein Array aus zwei Zahlen: wie viele Felder nach rechts und wie viele nach unten. <code>[0, -1]</code> heisst «keins nach rechts, eins nach oben». Die Tasten ändern nur die Richtung; bewegt wird Chunky weiterhin vom Timer. <code>g.inside?(*weiter)</code> fragt, ob das nächste Feld noch auf dem Spielfeld liegt – der Stern packt das Array aus, das ist dasselbe wie <code>g.inside?(weiter[0], weiter[1])</code>. Und <code>x, y = weiter</code> verteilt die beiden Zahlen auf zwei Variablen.</p><p>Jetzt wird Chunky zur Schlange: nicht mehr ein Feld, sondern ein <strong>Array von Feldern</strong>, der Kopf zuerst. In jeder Runde kommt vorne ein neues Feld dazu (<code>unshift</code>), und hinten fällt eines weg (<code>pop</code>) – so wandert die Schlange. Frisst Chunky Speck, fällt hinten nichts weg, und er wird ein Feld länger:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_game(width: 20, height: 15) do |g|\n  schlange = [[5, 7], [4, 7], [3, 7]]   # der Kopf zuerst\n  richtung = [1, 0]\n  speck = [12, 7]\n  punkte = 0\n\n  g.on_key(:left)  { richtung = [-1, 0] }\n  g.on_key(:right) { richtung = [1, 0] }\n  g.on_key(:up)    { richtung = [0, -1] }\n  g.on_key(:down)  { richtung = [0, 1] }\n\n  g.cell(*speck, :bacon)                # das Bild zu Beginn\n  schlange.each { |teil| g.cell(*teil, :body) }\n\n  g.every(0.15) do\n    x, y = schlange.first\n    kopf = [x + richtung[0], y + richtung[1]]\n    next unless g.inside?(*kopf)        # am Rand: warten\n\n    schlange.unshift(kopf)              # vorne ein Feld dazu\n    if kopf == speck\n      punkte += 1\n      speck = g.free_cells.sample       # neuer Speck auf einem freien Feld\n    else\n      schlange.pop                      # hinten eins weg\n    end\n\n    g.clear\n    g.cell(*speck, :bacon)\n    schlange.each { |teil| g.cell(*teil, :body) }\n    g.cell(*kopf, :chunky)\n    g.status(\"Speck: #{punkte}\")\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>In jeder Runde malt das Spiel alles neu: <code>g.clear</code>, dann den Speck, den Körper in Chunkys Orange (<code>:body</code>) und zuletzt den Kopf. Das ist nicht langsam – die Seite zeichnet danach nur die Felder neu, die sich wirklich geändert haben. <code>g.free_cells</code> ist ein Array aller leeren Felder, und <code>sample</code> nimmt eines davon zufällig: So landet der neue Speck nie in Chunky. <code>next</code> beendet eine Runde vorzeitig, und <code>g.status</code> schreibt eine Zeile unter das Spielfeld.</p><p>Fehlt nur noch das Ende. Läuft Chunky gegen die Wand oder beisst er sich in den eigenen Schwanz, ist das Spiel aus: <code>g.game_over</code> hält es an und zeigt eine Meldung. Ein Klick oder die Leertaste startet eine neue Runde, und der Block von <code>show_game</code> läuft dafür noch einmal von vorn.</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_game(width: 20, height: 15) do |g|\n  schlange = [[5, 7], [4, 7], [3, 7]]\n  richtung = [1, 0]\n  speck = [12, 7]\n  punkte = 0\n\n  # nicht umkehren: sonst beisst sich Chunky mit einem Tastendruck selbst\n  g.on_key(:left)  { richtung = [-1, 0] unless richtung == [1, 0] }\n  g.on_key(:right) { richtung = [1, 0]  unless richtung == [-1, 0] }\n  g.on_key(:up)    { richtung = [0, -1] unless richtung == [0, 1] }\n  g.on_key(:down)  { richtung = [0, 1]  unless richtung == [0, -1] }\n\n  g.cell(*speck, :bacon)\n  schlange.each { |teil| g.cell(*teil, :body) }\n\n  g.every(0.15) do\n    x, y = schlange.first\n    kopf = [x + richtung[0], y + richtung[1]]\n    if !g.inside?(*kopf) || schlange.include?(kopf)\n      g.game_over(\"Autsch! Chunky hat #{punkte} Speck gefressen.\")\n      next\n    end\n\n    schlange.unshift(kopf)\n    if kopf == speck\n      punkte += 1\n      speck = g.free_cells.sample\n    else\n      schlange.pop\n    end\n\n    g.clear\n    g.cell(*speck, :bacon)\n    schlange.each { |teil| g.cell(*teil, :body) }\n    g.cell(*kopf, :chunky)\n    g.status(\"Speck: #{punkte}\")\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das ist das ganze Spiel, rund 35 Zeilen. <code>schlange.include?(kopf)</code> ist wahr, wenn das neue Feld schon zur Schlange gehört – dann hat Chunky sich gebissen. Und weil das <code>unless</code> verbietet, direkt umzukehren, kann das nicht schon mit einem einzigen Tastendruck passieren.</p><p>Zwei Dinge helfen beim Basteln: Was du in einer Runde mit <code>puts</code> ausgibst, erscheint in einem kleinen Protokoll unter dem Spielfeld. Und wirft eine Runde einen Fehler, hält das Spiel an und zeigt ihn mit der Zeilennummer. Eine Endlosschleife in einer Runde stoppt die Seite nach einer Sekunde, damit sie nicht einfriert.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>show_game</code> gibt es nur auf dieser Seite. Auf dem Computer schreibt man Spiele mit Gems wie <code>ruby2d</code> oder <code>gosu</code>: Sie öffnen ein eigenes Fenster und rufen einen Block auf, sooft ein neues Bild fällig ist – bei ruby2d heisst er <code>update do … end</code>, und Tasten kommen mit <code>on :key_down</code>. Die Idee ist dieselbe wie hier: Dein Programm sagt, was in einer Runde passiert, und die Bibliothek dreht die Runden.</p></div><div class='task'><strong>Aufgabe:</strong> Manche Snake-Varianten haben keine Wände: Wer rechts hinausläuft, kommt links wieder herein, und wer oben hinausläuft, unten. Bau das in Chunkys Snake ein – das Spielfeld ist diesmal 16 × 12 Felder gross. Nur der eigene Schwanz beendet das Spiel noch. Ein Werkzeug dafür kennst du vielleicht noch nicht: <code>%</code> rechnet den Rest beim Teilen aus, <code>17 % 16</code> ist 1.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Chunkys Snake ohne Wände: rechts hinaus, links wieder herein;\n# oben hinaus, unten wieder herein. Nur der eigene Schwanz\n# beendet das Spiel noch.\nshow_game(width: 16, height: 12) do |g|\n  fuchs = [[4, 6], [3, 6], [2, 6]]\n  kurs = [1, 0]\n  futter = [10, 6]\n  gefressen = 0\n\n  g.on_key(:left)  { kurs = [-1, 0] unless kurs == [1, 0] }\n  g.on_key(:right) { kurs = [1, 0]  unless kurs == [-1, 0] }\n  g.on_key(:up)    { kurs = [0, -1] unless kurs == [0, 1] }\n  g.on_key(:down)  { kurs = [0, 1]  unless kurs == [0, -1] }\n\n  g.cell(*futter, :bacon)\n  fuchs.each { |teil| g.cell(*teil, :body) }\n\n  g.every(0.15) do\n    x, y = fuchs.first\n    kopf = [x + kurs[0], y + kurs[1]]\n    if !g.inside?(*kopf) || fuchs.include?(kopf)\n      g.game_over(\"Autsch! #{gefressen} Speck.\")\n      next\n    end\n\n    fuchs.unshift(kopf)\n    if kopf == futter\n      gefressen += 1\n      futter = g.free_cells.sample\n    else\n      fuchs.pop\n    end\n\n    g.clear\n    g.cell(*futter, :bacon)\n    fuchs.each { |teil| g.cell(*teil, :body) }\n    g.cell(*kopf, :chunky)\n    g.status(\"Speck: #{gefressen}\")\n  end\nend\n",
+            "check": "games.last && ->(game, x = nil, y = nil, tick = nil) { tick = ->(t = game.ticks) { 100.times { break if game.ticks > t || game.over?; game.advance(0.05) } }; tick.(); x, y = (0...game.width).to_a.product((0...game.height).to_a).find { |a, b| game.cell(a, b) == :chunky }; x && game.width.times.all? { |k| tick.(); !game.over? && game.cell((x + k + 1) % game.width, y) == :chunky } && (game.press(:up); game.height.times.all? { |k| tick.(); !game.over? && game.cell(x, (y - k - 1) % game.height) == :chunky }) }.(games.last)",
+            "hint": "Rechne den Kopf gleich mit <code>%</code> aus: <code>kopf = [(x + kurs[0]) % 16, (y + kurs[1]) % 12]</code>. <code>16 % 16</code> ist 0, und <code>-1 % 16</code> ist in Ruby 15 – genau das andere Ende. Dann braucht die Bedingung nur noch <code>fuchs.include?(kopf)</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "38. Chunky's Snake",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Chunky's Snake</h2><p><em>Snake</em> is one of the oldest computer games: a snake wanders across a field, eats whatever lies there and grows longer with every bite – until it runs into the wall or bites its own tail. The idea comes from the 1976 arcade game <em>Blockade</em>; it became famous in 1997 on the Nokia 6110, and soon millions of people carried Snake around in their pocket. In this lesson you build it in five steps. The snake is Chunky, and what he eats is bacon, of course.</p><p>A game like this is a grid of cells. <code>show_game</code> draws one below the cell, 20 cells wide and 15 high. The block gets it as <code>g</code>, and you say what lies in which cell:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_game(width: 20, height: 15) do |g|\n  g.cell(10, 7, :chunky)    # Chunky in the middle\n  g.cell(15, 7, :bacon)     # bacon to his right\n  g.cell(0, 0, :wall)       # a wall at the top left\n  g.cell(19, 14, :green)    # a green cell at the bottom right\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>The cells are counted like the pixels in lesson 33: <code>x</code> from left to right, <code>y</code> from top to bottom, both from 0. The top left cell is <code>0, 0</code>, the bottom right one <code>19, 14</code>. A cell shows a picture (<code>:chunky</code>, <code>:bacon</code>, <code>:egg</code>, <code>:wall</code>, <code>:star</code> …), a colour (<code>:green</code>, <code>:red</code>, <code>\"#3a8\"</code>) or any emoji as a String. Without a third argument, <code>g.cell(10, 7)</code> asks what lies there.</p><p>So far nothing moves. A game has to do something again and again – but a loop with <code>sleep</code> would freeze the whole page here, because Ruby runs in the same thread as the browser. So the page runs the rounds, and you only tell it what happens in one: <code>g.every(0.15) { … }</code> calls the block every 0.15 seconds. Click the field and Chunky sets off:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_game(width: 20, height: 15) do |g|\n  x = 0\n  step = 1                       # +1: to the right, -1: to the left\n  g.cell(x, 7, :chunky)\n\n  g.every(0.15) do\n    g.clear(x, 7)                # empty the old cell\n    x += step\n    step = -step if x == 0 || x == 19   # turn round at the edge\n    g.cell(x, 7, :chunky)\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>The page calls the <code>every</code> block long after the cell has finished – and still the block knows <code>x</code> and <code>step</code>. A block takes along the variables that existed where it was written (it is a <em>closure</em>). That is how the game knows from round to round where Chunky is. <code>g.clear(x, 7)</code> empties one cell, <code>g.clear</code> without arguments the whole field.</p><p>The game only runs while it has the focus. <kbd>Esc</kbd> pauses it, <kbd>Tab</kbd> or a click elsewhere leaves it; with the keyboard you get in with <kbd>Tab</kbd> and start it with the space bar. That way the arrow keys never end up in the editor by accident – and we need them now. <code>g.on_key(:left) { … }</code> runs when someone presses ←:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_game(width: 20, height: 15) do |g|\n  x, y = 10, 7\n  direction = [1, 0]                   # [to the right, down]\n\n  g.on_key(:left)  { direction = [-1, 0] }\n  g.on_key(:right) { direction = [1, 0] }\n  g.on_key(:up)    { direction = [0, -1] }\n  g.on_key(:down)  { direction = [0, 1] }\n\n  g.cell(x, y, :chunky)\n  g.every(0.15) do\n    ahead = [x + direction[0], y + direction[1]]\n    if g.inside?(*ahead)               # at the edge Chunky stops\n      g.clear(x, y)\n      x, y = ahead\n      g.cell(x, y, :chunky)\n    end\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>The direction is an array of two numbers: how many cells to the right and how many down. <code>[0, -1]</code> means \"none to the right, one up\". The keys only change the direction; the timer still does the moving. <code>g.inside?(*ahead)</code> asks whether the next cell is still on the field – the star unpacks the array, so it is the same as <code>g.inside?(ahead[0], ahead[1])</code>. And <code>x, y = ahead</code> hands the two numbers to two variables.</p><p>Now Chunky becomes a snake: no longer one cell but an <strong>array of cells</strong>, head first. Each round a new cell is added at the front (<code>unshift</code>) and one drops off at the back (<code>pop</code>) – that is how the snake moves. When Chunky eats bacon, nothing drops off at the back, and he grows by one cell:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_game(width: 20, height: 15) do |g|\n  snake = [[5, 7], [4, 7], [3, 7]]      # the head first\n  direction = [1, 0]\n  bacon = [12, 7]\n  score = 0\n\n  g.on_key(:left)  { direction = [-1, 0] }\n  g.on_key(:right) { direction = [1, 0] }\n  g.on_key(:up)    { direction = [0, -1] }\n  g.on_key(:down)  { direction = [0, 1] }\n\n  g.cell(*bacon, :bacon)                # the picture at the start\n  snake.each { |part| g.cell(*part, :body) }\n\n  g.every(0.15) do\n    x, y = snake.first\n    head = [x + direction[0], y + direction[1]]\n    next unless g.inside?(*head)        # at the edge: wait\n\n    snake.unshift(head)                 # one cell more at the front\n    if head == bacon\n      score += 1\n      bacon = g.free_cells.sample       # new bacon on a free cell\n    else\n      snake.pop                         # one less at the back\n    end\n\n    g.clear\n    g.cell(*bacon, :bacon)\n    snake.each { |part| g.cell(*part, :body) }\n    g.cell(*head, :chunky)\n    g.status(\"Bacon: #{score}\")\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Every round the game paints everything afresh: <code>g.clear</code>, then the bacon, the body in Chunky's orange (<code>:body</code>) and the head last. That is not slow – afterwards the page only redraws the cells that really changed. <code>g.free_cells</code> is an array of all empty cells, and <code>sample</code> picks one at random: so the new bacon never lands inside Chunky. <code>next</code> ends a round early, and <code>g.status</code> writes a line below the field.</p><p>Only the end is missing. If Chunky runs into the wall or bites his own tail, the game is over: <code>g.game_over</code> stops it and shows a message. A click or the space bar starts a new round, and for it the <code>show_game</code> block runs once more from the top.</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_game(width: 20, height: 15) do |g|\n  snake = [[5, 7], [4, 7], [3, 7]]\n  direction = [1, 0]\n  bacon = [12, 7]\n  score = 0\n\n  # no turning straight back: Chunky would bite himself with one key press\n  g.on_key(:left)  { direction = [-1, 0] unless direction == [1, 0] }\n  g.on_key(:right) { direction = [1, 0]  unless direction == [-1, 0] }\n  g.on_key(:up)    { direction = [0, -1] unless direction == [0, 1] }\n  g.on_key(:down)  { direction = [0, 1]  unless direction == [0, -1] }\n\n  g.cell(*bacon, :bacon)\n  snake.each { |part| g.cell(*part, :body) }\n\n  g.every(0.15) do\n    x, y = snake.first\n    head = [x + direction[0], y + direction[1]]\n    if !g.inside?(*head) || snake.include?(head)\n      g.game_over(\"Ouch! Chunky ate #{score} bacon.\")\n      next\n    end\n\n    snake.unshift(head)\n    if head == bacon\n      score += 1\n      bacon = g.free_cells.sample\n    else\n      snake.pop\n    end\n\n    g.clear\n    g.cell(*bacon, :bacon)\n    snake.each { |part| g.cell(*part, :body) }\n    g.cell(*head, :chunky)\n    g.status(\"Bacon: #{score}\")\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>That is the whole game, about 35 lines. <code>snake.include?(head)</code> is true when the new cell already belongs to the snake – then Chunky has bitten himself. And since the <code>unless</code> forbids turning straight back, that cannot happen with a single key press.</p><p>Two things help while tinkering: what you print with <code>puts</code> in a round appears in a small log below the field. And if a round raises an error, the game stops and shows it with the line number. An endless loop in a round is stopped by the page after a second, so it does not freeze.</p><div class='offweb' data-title='On your machine'><p><code>show_game</code> only exists on this page. On a computer, games are written with gems like <code>ruby2d</code> or <code>gosu</code>: they open a window of their own and call a block whenever a new picture is due – in ruby2d it is <code>update do … end</code>, and keys come in with <code>on :key_down</code>. The idea is the same as here: your program says what happens in one round, and the library runs the rounds.</p></div><div class='task'><strong>Task:</strong> Some versions of Snake have no walls: run out on the right and you come back in on the left, run out at the top and you come back in at the bottom. Build that into Chunky's Snake – this time the field is 16 × 12 cells. Only his own tail still ends the game. One tool for it you may not know yet: <code>%</code> computes the remainder of a division, <code>17 % 16</code> is 1.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Chunky's Snake without walls: out on the right, back in on the\n# left; out at the top, back in at the bottom. Only his own tail\n# still ends the game.\nshow_game(width: 16, height: 12) do |g|\n  fox = [[4, 6], [3, 6], [2, 6]]\n  heading = [1, 0]\n  food = [10, 6]\n  eaten = 0\n\n  g.on_key(:left)  { heading = [-1, 0] unless heading == [1, 0] }\n  g.on_key(:right) { heading = [1, 0]  unless heading == [-1, 0] }\n  g.on_key(:up)    { heading = [0, -1] unless heading == [0, 1] }\n  g.on_key(:down)  { heading = [0, 1]  unless heading == [0, -1] }\n\n  g.cell(*food, :bacon)\n  fox.each { |part| g.cell(*part, :body) }\n\n  g.every(0.15) do\n    x, y = fox.first\n    head = [x + heading[0], y + heading[1]]\n    if !g.inside?(*head) || fox.include?(head)\n      g.game_over(\"Ouch! #{eaten} bacon.\")\n      next\n    end\n\n    fox.unshift(head)\n    if head == food\n      eaten += 1\n      food = g.free_cells.sample\n    else\n      fox.pop\n    end\n\n    g.clear\n    g.cell(*food, :bacon)\n    fox.each { |part| g.cell(*part, :body) }\n    g.cell(*head, :chunky)\n    g.status(\"Bacon: #{eaten}\")\n  end\nend\n",
+            "check": "games.last && ->(game, x = nil, y = nil, tick = nil) { tick = ->(t = game.ticks) { 100.times { break if game.ticks > t || game.over?; game.advance(0.05) } }; tick.(); x, y = (0...game.width).to_a.product((0...game.height).to_a).find { |a, b| game.cell(a, b) == :chunky }; x && game.width.times.all? { |k| tick.(); !game.over? && game.cell((x + k + 1) % game.width, y) == :chunky } && (game.press(:up); game.height.times.all? { |k| tick.(); !game.over? && game.cell(x, (y - k - 1) % game.height) == :chunky }) }.(games.last)",
+            "hint": "Compute the head with <code>%</code> straight away: <code>head = [(x + heading[0]) % 16, (y + heading[1]) % 12]</code>. <code>16 % 16</code> is 0, and in Ruby <code>-1 % 16</code> is 15 – just the other end. Then the condition only needs <code>fox.include?(head)</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "38. ChunkyのSnake",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>ChunkyのSnake</h2><p><em>Snake</em>（ヘビゲーム）は、とても古いコンピューターゲームのひとつです。ヘビがフィールドを進み、そこにあるものを食べるたびに長くなっていきます。壁にぶつかるか、自分のしっぽをかんだらおしまいです。もとになったのは1976年のアーケードゲーム<em>Blockade</em>で、1997年にNokia 6110に入って有名になり、何百万人もの人がSnakeをポケットに入れて持ち歩くようになりました。このレッスンでは、5つのステップでこのゲームを作ります。ヘビはChunkyで、食べるのはもちろんベーコンです。</p><p>こういうゲームは、マスが並んだ格子でできています。<code>show_game</code>はセルの下に、横20マス・縦15マスのフィールドをかきます。ブロックはそれを<code>g</code>として受け取るので、どのマスに何があるかを指定します。</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_game(width: 20, height: 15) do |g|\n  g.cell(10, 7, :chunky)    # まん中にChunky\n  g.cell(15, 7, :bacon)     # その右にベーコン\n  g.cell(0, 0, :wall)       # 左上に壁\n  g.cell(19, 14, :green)    # 右下に緑のマス\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>マスの数え方は、レッスン33のピクセルと同じです。<code>x</code>は左から右へ、<code>y</code>は上から下へ、どちらも0から数えます。左上のマスが<code>0, 0</code>、右下のマスが<code>19, 14</code>です。マスには絵（<code>:chunky</code>、<code>:bacon</code>、<code>:egg</code>、<code>:wall</code>、<code>:star</code> …）、色（<code>:green</code>、<code>:red</code>、<code>\"#3a8\"</code>）、または好きな絵文字を文字列で置けます。3つ目の引数を付けずに<code>g.cell(10, 7)</code>と書くと、そこに何があるかを調べられます。</p><p>まだ何も動きません。ゲームは同じことを何度もくり返す必要があります。でも、ここで<code>sleep</code>を使ったループを書くと、ページ全体が固まってしまいます。Rubyはブラウザーと同じスレッドで動いているからです。そこで、くり返しはページが受け持ち、あなたは1回分に何が起きるかだけを伝えます。<code>g.every(0.15) { … }</code>は0.15秒ごとにブロックを呼び出します。フィールドをクリックすると、Chunkyが動き出します。</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_game(width: 20, height: 15) do |g|\n  x = 0\n  step = 1                       # +1：右へ、-1：左へ\n  g.cell(x, 7, :chunky)\n\n  g.every(0.15) do\n    g.clear(x, 7)                # 古いマスを空にする\n    x += step\n    step = -step if x == 0 || x == 19   # 端で向きを変える\n    g.cell(x, 7, :chunky)\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>ページが<code>every</code>のブロックを呼び出すのは、セルの実行が終わってずっとあとです。それでもブロックは<code>x</code>と<code>step</code>を知っています。ブロックは、書かれた場所にあった変数をいっしょに持っていくのです（これを<em>クロージャー</em>と呼びます）。こうしてゲームは、Chunkyがどこにいるかを1回ごとに覚えていられます。<code>g.clear(x, 7)</code>は1つのマスを、引数なしの<code>g.clear</code>はフィールド全体を空にします。</p><p>ゲームが動くのは、フォーカスがあるあいだだけです。<kbd>Esc</kbd>で一時停止し、<kbd>Tab</kbd>を押すかほかの場所をクリックするとゲームから出ます。キーボードなら<kbd>Tab</kbd>でゲームに入り、スペースキーで始めます。だから矢印キーがうっかりエディターに入ることはありません。そして、その矢印キーをこれから使います。<code>g.on_key(:left) { … }</code>は、だれかが←を押したときに実行されます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_game(width: 20, height: 15) do |g|\n  x, y = 10, 7\n  direction = [1, 0]                   # [右へいくつ, 下へいくつ]\n\n  g.on_key(:left)  { direction = [-1, 0] }\n  g.on_key(:right) { direction = [1, 0] }\n  g.on_key(:up)    { direction = [0, -1] }\n  g.on_key(:down)  { direction = [0, 1] }\n\n  g.cell(x, y, :chunky)\n  g.every(0.15) do\n    ahead = [x + direction[0], y + direction[1]]\n    if g.inside?(*ahead)               # 端ではChunkyは止まる\n      g.clear(x, y)\n      x, y = ahead\n      g.cell(x, y, :chunky)\n    end\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>向きは2つの数の配列です。右へ何マス、下へ何マス進むかを表します。<code>[0, -1]</code>は「右へ0、上へ1」という意味です。キーが変えるのは向きだけで、Chunkyを動かすのはあくまでタイマーです。<code>g.inside?(*ahead)</code>は、次のマスがまだフィールドの中かどうかを調べます。星印（*）は配列をほどくので、<code>g.inside?(ahead[0], ahead[1])</code>と同じです。そして<code>x, y = ahead</code>は、2つの数を2つの変数に分けて代入します。</p><p>ここからChunkyはヘビになります。1つのマスではなく、頭を先頭にした<strong>マスの配列</strong>です。毎回、前に新しいマスが1つ加わり（<code>unshift</code>）、後ろから1つ消えます（<code>pop</code>）。こうしてヘビが進みます。Chunkyがベーコンを食べたときは後ろが消えないので、1マス長くなります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_game(width: 20, height: 15) do |g|\n  snake = [[5, 7], [4, 7], [3, 7]]      # 頭が先頭\n  direction = [1, 0]\n  bacon = [12, 7]\n  score = 0\n\n  g.on_key(:left)  { direction = [-1, 0] }\n  g.on_key(:right) { direction = [1, 0] }\n  g.on_key(:up)    { direction = [0, -1] }\n  g.on_key(:down)  { direction = [0, 1] }\n\n  g.cell(*bacon, :bacon)                # 始まりの絵\n  snake.each { |part| g.cell(*part, :body) }\n\n  g.every(0.15) do\n    x, y = snake.first\n    head = [x + direction[0], y + direction[1]]\n    next unless g.inside?(*head)        # 端では待つ\n\n    snake.unshift(head)                 # 前に1マス足す\n    if head == bacon\n      score += 1\n      bacon = g.free_cells.sample       # 空いているマスに新しいベーコン\n    else\n      snake.pop                         # 後ろを1マス消す\n    end\n\n    g.clear\n    g.cell(*bacon, :bacon)\n    snake.each { |part| g.cell(*part, :body) }\n    g.cell(*head, :chunky)\n    g.status(\"Bacon: #{score}\")\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>毎回、ゲームはすべてをかき直します。<code>g.clear</code>のあと、ベーコン、Chunkyのオレンジ色の体（<code>:body</code>）、最後に頭です。これでも遅くはありません。ページが実際にかき直すのは、本当に変わったマスだけだからです。<code>g.free_cells</code>は空いているマスすべての配列で、<code>sample</code>はその中から1つをランダムに選びます。だから新しいベーコンがChunkyの中に出てくることはありません。<code>next</code>はその回を途中で終わらせ、<code>g.status</code>はフィールドの下に1行書きます。</p><p>あとは終わり方だけです。Chunkyが壁にぶつかるか、自分のしっぽをかんだら、ゲームオーバーです。<code>g.game_over</code>はゲームを止めてメッセージを出します。クリックかスペースキーで新しいゲームが始まり、そのために<code>show_game</code>のブロックがもう一度最初から実行されます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_game(width: 20, height: 15) do |g|\n  snake = [[5, 7], [4, 7], [3, 7]]\n  direction = [1, 0]\n  bacon = [12, 7]\n  score = 0\n\n  # 真後ろには曲がれない：キー1回でChunkyが自分をかんでしまうから\n  g.on_key(:left)  { direction = [-1, 0] unless direction == [1, 0] }\n  g.on_key(:right) { direction = [1, 0]  unless direction == [-1, 0] }\n  g.on_key(:up)    { direction = [0, -1] unless direction == [0, 1] }\n  g.on_key(:down)  { direction = [0, 1]  unless direction == [0, -1] }\n\n  g.cell(*bacon, :bacon)\n  snake.each { |part| g.cell(*part, :body) }\n\n  g.every(0.15) do\n    x, y = snake.first\n    head = [x + direction[0], y + direction[1]]\n    if !g.inside?(*head) || snake.include?(head)\n      g.game_over(\"Ouch! Chunky ate #{score} bacon.\")\n      next\n    end\n\n    snake.unshift(head)\n    if head == bacon\n      score += 1\n      bacon = g.free_cells.sample\n    else\n      snake.pop\n    end\n\n    g.clear\n    g.cell(*bacon, :bacon)\n    snake.each { |part| g.cell(*part, :body) }\n    g.cell(*head, :chunky)\n    g.status(\"Bacon: #{score}\")\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>これでゲーム全体ができました。だいたい35行です。<code>snake.include?(head)</code>は、新しいマスがすでにヘビの一部なら真になります。つまり、Chunkyが自分をかんだということです。<code>unless</code>で真後ろへの方向転換を禁止しているので、キーを1回押しただけでそうなることはありません。</p><p>いじって遊ぶときに役立つことが2つあります。1回分の中で<code>puts</code>で出力したものは、フィールドの下の小さなログに出ます。そして、ある回でエラーが起きると、ゲームは止まり、行番号つきでエラーを表示します。1回分の中の無限ループは、ページが固まらないように1秒で止められます。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>show_game</code>はこのページにしかありません。コンピューターでは、<code>ruby2d</code>や<code>gosu</code>といったgemでゲームを書きます。これらは自分のウィンドウを開き、新しい画面が必要になるたびにブロックを呼び出します。ruby2dではそれが<code>update do … end</code>で、キーは<code>on :key_down</code>で受け取ります。考え方はここと同じです。プログラムは1回分に何が起きるかを伝え、くり返しはライブラリーが受け持ちます。</p></div><div class='task'><strong>課題：</strong>Snakeには、壁のないバージョンもあります。右から出ると左から戻り、上から出ると下から戻ってきます。これをChunkyのSnakeに組み込んでください。今回のフィールドは16×12マスです。ゲームが終わるのは、自分のしっぽをかんだときだけです。そのための道具をまだ知らないかもしれません。<code>%</code>は割り算の余りを計算します。<code>17 % 16</code>は1です。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# 壁のないChunkyのSnake：右から出たら左から、上から出たら\n# 下から戻ってくる。ゲームが終わるのは、自分のしっぽを\n# かんだときだけ。\nshow_game(width: 16, height: 12) do |g|\n  fox = [[4, 6], [3, 6], [2, 6]]\n  heading = [1, 0]\n  food = [10, 6]\n  eaten = 0\n\n  g.on_key(:left)  { heading = [-1, 0] unless heading == [1, 0] }\n  g.on_key(:right) { heading = [1, 0]  unless heading == [-1, 0] }\n  g.on_key(:up)    { heading = [0, -1] unless heading == [0, 1] }\n  g.on_key(:down)  { heading = [0, 1]  unless heading == [0, -1] }\n\n  g.cell(*food, :bacon)\n  fox.each { |part| g.cell(*part, :body) }\n\n  g.every(0.15) do\n    x, y = fox.first\n    head = [x + heading[0], y + heading[1]]\n    if !g.inside?(*head) || fox.include?(head)\n      g.game_over(\"Ouch! #{eaten} bacon.\")\n      next\n    end\n\n    fox.unshift(head)\n    if head == food\n      eaten += 1\n      food = g.free_cells.sample\n    else\n      fox.pop\n    end\n\n    g.clear\n    g.cell(*food, :bacon)\n    fox.each { |part| g.cell(*part, :body) }\n    g.cell(*head, :chunky)\n    g.status(\"Bacon: #{eaten}\")\n  end\nend\n",
+            "check": "games.last && ->(game, x = nil, y = nil, tick = nil) { tick = ->(t = game.ticks) { 100.times { break if game.ticks > t || game.over?; game.advance(0.05) } }; tick.(); x, y = (0...game.width).to_a.product((0...game.height).to_a).find { |a, b| game.cell(a, b) == :chunky }; x && game.width.times.all? { |k| tick.(); !game.over? && game.cell((x + k + 1) % game.width, y) == :chunky } && (game.press(:up); game.height.times.all? { |k| tick.(); !game.over? && game.cell(x, (y - k - 1) % game.height) == :chunky }) }.(games.last)",
+            "hint": "頭を計算するときに、すぐ<code>%</code>を使おう：<code>head = [(x + heading[0]) % 16, (y + heading[1]) % 12]</code>。<code>16 % 16</code>は0で、Rubyでは<code>-1 % 16</code>は15。ちょうど反対の端だよ。そうすれば、条件は<code>fox.include?(head)</code>だけでいいんだ！"
           }
         ]
       }
@@ -5851,7 +6037,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "応用コース：timelog"
       },
       "de": {
-        "title": "38. Projekt timelog: Collections",
+        "title": "39. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -5890,7 +6076,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "38. Project timelog: collections",
+        "title": "39. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -5929,7 +6115,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "38. timelogプロジェクト：コレクション",
+        "title": "39. timelogプロジェクト：コレクション",
         "cells": [
           {
             "t": "h",
@@ -5971,7 +6157,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "39. Text parsen: Regex",
+        "title": "40. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -6002,7 +6188,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "39. Parsing text: regex",
+        "title": "40. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -6033,7 +6219,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "39. テキストのパース：正規表現",
+        "title": "40. テキストのパース：正規表現",
         "cells": [
           {
             "t": "h",
@@ -6067,7 +6253,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "40. Methoden richtig bauen",
+        "title": "41. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -6098,7 +6284,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "40. Building methods properly",
+        "title": "41. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -6129,7 +6315,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "40. メソッドをきちんと作る",
+        "title": "41. メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -6163,7 +6349,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "41. Entry & Timesheet",
+        "title": "42. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -6194,7 +6380,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "41. Entry & Timesheet",
+        "title": "42. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -6225,7 +6411,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "41. EntryとTimesheet",
+        "title": "42. EntryとTimesheet",
         "cells": [
           {
             "t": "h",
@@ -6259,7 +6445,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "42. Testen mit Minitest",
+        "title": "43. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -6290,7 +6476,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "42. Testing with Minitest",
+        "title": "43. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -6321,7 +6507,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "42. Minitestでテスト",
+        "title": "43. Minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -6355,7 +6541,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "43. Enumerable & Data",
+        "title": "44. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -6367,7 +6553,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 38, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 39, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -6378,7 +6564,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "43. Enumerable & Data",
+        "title": "44. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -6390,7 +6576,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 38, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 39, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -6401,7 +6587,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "43. EnumerableとData",
+        "title": "44. EnumerableとData",
         "cells": [
           {
             "t": "h",
@@ -6413,7 +6599,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン38で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン39で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
           },
           {
             "t": "x",
@@ -6427,7 +6613,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "44. Blocks, Procs & Lambdas",
+        "title": "45. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -6466,7 +6652,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "44. Blocks, procs & lambdas",
+        "title": "45. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -6505,7 +6691,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "44. ブロック、Proc、lambda",
+        "title": "45. ブロック、Proc、lambda",
         "cells": [
           {
             "t": "h",
@@ -6547,7 +6733,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "45. Fehler behandeln",
+        "title": "46. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -6578,7 +6764,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "45. Handling errors",
+        "title": "46. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -6609,7 +6795,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "45. エラー処理",
+        "title": "46. エラー処理",
         "cells": [
           {
             "t": "h",
@@ -6643,7 +6829,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "46. Daten speichern: Formate",
+        "title": "47. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -6698,7 +6884,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "46. Saving data: formats",
+        "title": "47. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -6753,7 +6939,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "46. データの保存：フォーマット",
+        "title": "47. データの保存：フォーマット",
         "cells": [
           {
             "t": "h",
@@ -6811,7 +6997,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "47. Kommandozeile & Gems",
+        "title": "48. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -6838,7 +7024,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "47. Command line & gems",
+        "title": "48. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -6865,7 +7051,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "47. コマンドラインとgem",
+        "title": "48. コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -6895,7 +7081,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "48. Pattern Matching",
+        "title": "49. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -6926,7 +7112,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "48. Pattern matching",
+        "title": "49. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -6957,7 +7143,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "48. パターンマッチ",
+        "title": "49. パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -6991,7 +7177,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "49. Objektmodell & Metaprogrammierung",
+        "title": "50. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -7022,7 +7208,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "49. Object model & metaprogramming",
+        "title": "50. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -7053,7 +7239,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "49. オブジェクトモデルとメタプログラミング",
+        "title": "50. オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -7087,7 +7273,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "50. Eine eigene DSL",
+        "title": "51. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -7099,7 +7285,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 44 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 45 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -7110,7 +7296,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "50. Your own DSL",
+        "title": "51. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -7122,7 +7308,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 44 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 45 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
@@ -7133,7 +7319,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "50. 自分だけのDSL",
+        "title": "51. 自分だけのDSL",
         "cells": [
           {
             "t": "h",
@@ -7145,7 +7331,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン44のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン45のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
           },
           {
             "t": "x",
@@ -7159,7 +7345,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "51. Codequalität & Debugging",
+        "title": "52. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -7182,7 +7368,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "51. Code quality & debugging",
+        "title": "52. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -7205,7 +7391,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "51. コードの品質とデバッグ",
+        "title": "52. コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -7231,7 +7417,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "52. Performance & Nebenläufigkeit",
+        "title": "53. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -7278,7 +7464,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "52. Performance & concurrency",
+        "title": "53. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -7325,7 +7511,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "52. パフォーマンスと並行処理",
+        "title": "53. パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -7375,7 +7561,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "53. Finale: timelog im Web",
+        "title": "54. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -7397,12 +7583,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 47 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 48 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "en": {
-        "title": "53. Finale: timelog on the web",
+        "title": "54. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
@@ -7424,12 +7610,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 47 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 48 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "ja": {
-        "title": "53. フィナーレ：Webで動くtimelog",
+        "title": "54. フィナーレ：Webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -7451,7 +7637,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン47で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン48で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }

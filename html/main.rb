@@ -161,6 +161,9 @@ require_relative "object_graph"
 # through show_image (lesson 10). At boot too: ~15 KB that evaluates in
 # about 6 ms. Its texts follow the lesson's language (sync_state).
 require_relative "turtle"
+# show_game: a grid game the page drives frame by frame (game.rb here, the
+# loop in game.js; lesson 38). At boot too: ~10 KB of plain Ruby.
+require_relative "game"
 # require "pycall" is the bridge to Pyodide (pycall.rb): the real gem needs
 # libpython, which a browser does not have
 require_relative "pycall"
@@ -257,6 +260,7 @@ class ChunkyApp
     @three_seq = 0
     @sketches = {}
     @shoes_apps = {}
+    @games = {}
     @seq = nil
     sync_state(bridge.state)
     setup_elements
@@ -294,6 +298,7 @@ class ChunkyApp
     dispose_three
     dispose_shoes
     dispose_sketches
+    dispose_games
     load_lesson_files
   end
 
@@ -717,6 +722,101 @@ class ChunkyApp
     Processing.reset__ if idx.nil? && processing?
   end
 
+  # ---------- games (show_game: game.rb + game.js) ----------
+
+  def add_game(game)
+    @run_games << game if @run_games
+  end
+
+  # a tick that runs longer than this stops the game (an endless loop in an
+  # every block would freeze the page for good: no ▶ is running to blame)
+  GAME_TICK_LIMIT = 1.0
+  GAME_LABELS = { "play" => "gamePlay", "keys" => "gameKeys", "paused" => "gamePaused",
+                  "again" => "gameAgain" }.freeze
+
+  # game.js runs the loop and calls the block once per frame at most, when a
+  # timer is due or keys came in; the game answers with the cells that
+  # changed. A re-run of the cell (or another lesson) stops it here, and
+  # game.js stops by itself once its node has left the page.
+  #
+  # The time limit: enabling a TracePoint costs ~6 ms in the page (CRuby
+  # re-instruments every loaded method), far more than a tick (~1 ms). So
+  # the guard is switched on when the game starts running ("f:1", game.js:
+  # it has the focus and is not paused) and off when it stops ("f:0") -
+  # while a game runs nothing else in the kernel does (▶, a live run,
+  # another lesson all take the focus away first). Each step only moves
+  # the deadline.
+  def mount_game(idx, out_el, game)
+    node = $d.createElement("div")
+    out_el.appendChild(node)
+    labels = GAME_LABELS.transform_values { |key| ui[key].to_s }
+    labels["title"] = format(ui["gameTitle"].to_s, game.width, game.height)
+    opts = { w: game.width, h: game.height, first: game.full_json, labels: labels }
+    guard = GameGuard.new(workshop? ? Workshop.paths : [EVAL_FILE], GAME_TICK_LIMIT)
+    controller = $window.chunkyGame(node, JSON.generate(opts)) do |now, events|
+      events = events.to_s
+      if events.start_with?("f:")
+        events == "f:1" ? guard.on : guard.off
+        next nil
+      end
+      begin
+        guard.step { game.step(now.to_f, events) }
+      rescue AutoRun::Stopped
+        guard.off
+        game.error_json(format(ui["gameTooLong"].to_s, GAME_TICK_LIMIT))
+      end
+    end
+    (@games[idx] ||= []) << [controller, guard]
+  end
+
+  # The time limit for a game's steps: one TracePoint, on while the game
+  # runs; raises AutoRun::Stopped on a line of the learner's own code once a
+  # step has run longer than +seconds+ (as AutoRun.with_time_limit does).
+  class GameGuard
+    def initialize(paths, seconds)
+      @paths = paths
+      @seconds = seconds
+      @deadline = Float::INFINITY
+    end
+
+    def on
+      return if @trace
+
+      events = 0
+      @trace = TracePoint.new(:line, :b_call, :c_call) do |tp|
+        events += 1
+        raise AutoRun::Stopped if (events & 127).zero? && @paths.include?(tp.path) && clock > @deadline
+      end
+      @trace.enable
+    end
+
+    def off
+      @trace&.disable
+      @trace = nil
+    end
+
+    def step
+      @deadline = clock + @seconds
+      yield
+    ensure
+      @deadline = Float::INFINITY
+    end
+
+    private
+
+    def clock = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+  end
+
+  def dispose_games(idx = nil)
+    list = idx.nil? ? @games.values.flatten(1).tap { @games.clear } : (@games.delete(idx) || [])
+    list.each do |controller, guard|
+      guard.off
+      controller.stop
+    rescue StandardError
+      nil
+    end
+  end
+
   # ---------- 3D stage (three-rb + three.js) ----------
 
   # three-rb builds the scene graph in pure Ruby and hands the drawing to
@@ -1100,6 +1200,8 @@ class ChunkyApp
     @run_shoes = []
     @run_letters = []
     @run_sketches = []
+    @run_games = []
+    dispose_games(idx)
     @last_shoes_types = []
     dispose_shoes(idx)
     @run_downloads = []
@@ -1172,7 +1274,7 @@ class ChunkyApp
     out_html += "<pre class=\"cell-stdout\">#{AnsiHtml.to_html(output)}</pre>" unless output.empty?
     widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any? || @run_three.any? ||
                       @run_shoes.any? || @run_downloads.any? || @run_pdfs.any? || @run_letters.any? ||
-                      @run_sketches.any? || @run_audios.any?
+                      @run_sketches.any? || @run_audios.any? || @run_games.any?
     # an error inside another workshop file keeps Ruby's message and its
     # "(helper.rb:3)": the explanation only sees the open file's code
     friendly = error && !where && friendly_error(error, code, file)
@@ -1245,6 +1347,7 @@ class ChunkyApp
     @run_shoes.each { |spec| out_el.appendChild(build_shoes_stage(idx, spec)) }
     @run_letters.each_with_index { |spec, n| mount_letter(idx, out_el, spec, n) }
     @run_sketches.each { |sketch| mount_sketch(idx, out_el, sketch) }
+    @run_games.each { |game| mount_game(idx, out_el, game) }
 
     if error
       return :stopped if error.is_a?(AutoRun::Stopped)
@@ -1329,7 +1432,17 @@ class ChunkyApp
     @bind.local_variable_set(:shoes_types, (@last_shoes_types || []).dup)
     @bind.local_variable_set(:sketch, (@run_sketches || []).last)
     @bind.local_variable_set(:audios, (@run_audios || []).dup)
-    !!eval(cell["check"], @bind, "check.rb")
+    @bind.local_variable_set(:games, [])
+    return !!eval(cell["check"], @bind, "check.rb") if (@run_games || []).empty?
+
+    # A check that plays a game runs the learner's ticks, here and at once:
+    # an endless loop in one would freeze the page, so it gets a time limit
+    # (a stopped check fails). It plays copies, so the game below the cell
+    # still starts from the beginning.
+    AutoRun.with_time_limit(workshop? ? Workshop.paths : [EVAL_FILE], GAME_TICK_LIMIT * 2) do
+      @bind.local_variable_set(:games, @run_games.map(&:fresh))
+      !!eval(cell["check"], @bind, "check.rb")
+    end
   rescue Exception
     false
   end

@@ -1169,6 +1169,86 @@ kbd {
 .sketch-print { max-height: 9rem; overflow-y: auto; margin-top: 0.4rem; }
 .sketch-error { margin-top: 0.4rem; }
 
+/* A game (show_game, game.js): a grid of cells on a dark board, a veil
+   with "Click to play" while it does not run, the status line below.
+   Nothing here animates; the game itself moves only once the learner
+   starts it, with a click, Space or Enter. */
+.game-widget {
+  display: inline-block;
+  max-width: 100%;
+  margin: 0.7rem 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.game-widget:focus { outline: none; }
+.game-widget:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 12px; }
+.game-board {
+  position: relative;
+  padding: 6px;
+  border-radius: 10px;
+  background: #2a2119;
+  overflow-x: auto;
+}
+.game-widget.is-running .game-board { box-shadow: 0 0 0 3px var(--fox-light); }
+.game-grid {
+  display: grid;
+  background: #fbf7ee;
+  border-radius: 6px;
+  overflow: hidden;
+  touch-action: none;   /* a swipe steers; the page does not scroll */
+}
+.game-grid > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  background-size: 90% 90%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.game-grid > div.alt { box-shadow: inset 0 0 0 100px rgba(80, 60, 30, 0.045); }
+/* white on the veil over the light grid: about 6:1 */
+.game-overlay {
+  position: absolute;
+  inset: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-radius: 6px;
+  background: rgba(42, 33, 25, 0.72);
+  color: #fff;
+  font: 600 1.05rem var(--font-hand);
+  text-align: center;
+  cursor: pointer;
+}
+.game-overlay[hidden] { display: none; }
+.game-overlay small { font: 400 0.85rem var(--font-print); }
+.game-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.2rem 1rem;
+  min-height: 1.4em;
+  padding: 0.3rem 0.2rem 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+.game-hint { font-size: 0.8rem; }
+.game-log {
+  max-height: 6.5em;
+  overflow: auto;
+  margin: 0.3rem 0 0;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  background: var(--code-bg);
+  font-size: 0.8rem;
+}
+.game-log:empty { display: none; }
+.game-error { padding-top: 0.3rem; color: var(--err); font-size: 0.9rem; white-space: pre-wrap; }
+
 /* IRB terminal */
 .irb-term {
   background: #211a13;

@@ -2,6 +2,8 @@
 // game loop under each time-limit mode, each in a FRESH page (TracePoint's
 // cost depends on what ran before), with examples/endless_snake.rb at 20
 // steps a second for 5 s. Also: does a plain cell still run fine afterwards.
+// (The record of the prototype: html/main.rb has only the :focus guard;
+// the other modes live in site/main.rb, which serve.rb still serves.)
 async (page) => {
   const out = {};
   const sel = "#cell-out-1 .game-widget";

@@ -8,7 +8,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **53 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **54 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics, tables, frames and colours
   for the terminal with the [TTY toolkit](https://ttytoolkit.org),
@@ -26,7 +26,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   database with [Sequel](https://sequel.jeremyevans.net), a look at the Ruby
   community (RubyKaigi, weird code, how IRB reads code), music computed in
   plain Ruby (samples as an Array, a WAV file built with `pack`, chords and
-  a drum beat - played below the cell), and
+  a drum beat - played below the cell), Snake built in five steps and
+  played with the arrow keys below the cell, and
   a project track that builds a small time tracker.
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
@@ -38,7 +39,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   that lost it; `fox["name"]` on a hash with symbol keys suggests
   `fox[:name]`). Ruby's own message stays one click away. 44 rules,
   checked against 70 typical beginner mistakes drawn from the exercises.
-- **Lesson sidebar**: the 53 lessons in three groups (basics, side trips,
+- **Lesson sidebar**: the 54 lessons in three groups (basics, side trips,
   the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a
   drawer.
@@ -46,7 +47,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   that Escape, then Tab leaves, Run buttons named with their cell that keep
   the focus, a status line that reads out what a run printed and what
   Chunky says, the focus on the new lesson's heading after every lesson
-  change, a modal drawer on a phone, named widgets (IRB, mini browser, 3D)
+  change, a modal drawer on a phone, named widgets (IRB, mini browser, 3D,
+  a game you can leave with Tab)
   and contrast at WCAG AA (audit: `experiments/10-accessibility`).
 - **Live runs**: a cell runs by itself a second after you stop typing, as
   long as the code parses - a rehearsal that keeps no file it writes,
@@ -131,6 +133,14 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **Processing sketches**: `setup` and `draw` from the processing gem run
   below the cell, about 60 frames a second, and hear the mouse and the
   keys - the gem's API in pure Ruby, painted on a canvas.
+- **Games in a cell**: `show_game(width: 20, height: 15) { |g| ... }`
+  draws a grid of cells below the cell; `g.every(0.15) { ... }` and
+  `g.on_key(:left) { ... }` make it move and steer (Chunky's Snake, lesson
+  38). The page runs the loop and calls Ruby only when a timer is due or a
+  key came in; the game runs only while it has the focus (a click, or Tab
+  and Space; Esc pauses, Tab leaves), a screen reader hears the score and
+  the end of a round, and an endless loop in a round is stopped after a
+  second. Checks play the game headless.
 - Chunky Bacon, an original cartoon fox, cheers you on.
 
 ## On your own computer: the chunky_bacon gem
@@ -206,6 +216,7 @@ ruby autorun_test.rb      # live runs: what may run, the time limit
 ruby ansi_test.rb         # terminal colours in a cell's output
 ruby object_graph_test.rb # show_objects: the walk, the SVG, the alt text
 ruby turtle_test.rb       # turtle graphics: the recorded path, the check helpers, the SVG
+ruby game_test.rb         # show_game headless: the lesson's Snake by timer and keys, the copies checks play
 ruby friendly_errors_harness.rb --summary  # 70 beginner mistakes, each explained by the expected rule
 ruby friendly_errors_robustness.rb         # the explanations never raise, never leave a %{...}
 node browser_test.mjs     # Playwright end-to-end against port 8011

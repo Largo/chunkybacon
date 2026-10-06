@@ -1,5 +1,34 @@
 # 08 - a game loop in a cell: `show_game`
 
+**Integrated.** `game.rb` and `game.js` moved to `html/` (loaded at boot
+and in `offline-files.txt`), `game_test.rb` to `test/` (it plays the
+lesson's Snake from `lessons.json` now). `main.rb` has the hooks of
+`integration.diff` - `add_game`, `mount_game`, `GameGuard`,
+`dispose_games` in `sync_state` and `run_cell`, `@run_games` in
+`widgets_present` - without `$game_guard`: the guard is always the
+`:focus` kind. The labels are `ui.game*` in lessons.js (de/en/ja), the CSS
+is in `app.css`. The lesson is lesson 38, "Chunkys Snake" (`snake`), the
+last side trip, after `musik` (the timelog track moved to 39-54): a grid
+and the fox, moving with `every`, steering with `on_key`, bacon and
+growing, game over; the exercise is Snake without walls (`%`), graded
+headless. It keeps its live runs: a live run mounts the game but never
+starts it. Changes on the way: the game waits to be started (click, or
+Tab then Space/Enter; Esc pauses with the focus kept, Tab leaves) and has
+a name, a description and a polite live region that says score changes
+(at most every 1.5 s), game over and errors - `#runStatus` reads a game
+by its name; a restart now empties what the last round left on the page
+(the prototype kept the old snake on screen); `dispose_games` flattens
+one level (`flatten` took the pairs apart); a check gets `ChunkyGame#fresh`
+copies, so playing them leaves the game below the cell at its start, and
+plays them under `AutoRun.with_time_limit` - an endless loop in a tick of
+the exercise cell froze the page through the check. The companion gem's
+`show_game` raises NotHere (ruby2d or gosu on a computer). Left open
+(docs/OPEN_WORK.md): a head-only Chunky sprite and a sprite sheet instead
+of emoji, the workshop untried, no real screen reader tried. `serve.rb`,
+`site/main.rb`, `site/index.html`, `examples/`, `play_snake.js` and
+`measure_guard.js` are the experiment's record: `serve.rb` now finds
+`game.rb`/`game.js` in `html/` behind the prototype's own `main.rb`.
+
 Snake runs in the real page: a lesson cell, ~35 lines of beginner Ruby
 (`examples/snake.rb`), arrow keys, a game-over screen with "play again", and
 it stops when the cell runs again or the lesson changes.
@@ -30,15 +59,15 @@ loop in a tick stopped by the time limit.
 
 | File | What |
 |---|---|
-| `site/game.rb` | **new** `ChunkyGame` + `Kernel#show_game`. Plain Ruby, no JS: runs headless under CRuby too |
-| `site/game.js` | **new** `window.chunkyGame(node, optsJson, step)`: the loop, the CSS grid, keys, swipes, clicks, overlay, stats |
+| `site/game.rb` (now `html/game.rb`) | **new** `ChunkyGame` + `Kernel#show_game`. Plain Ruby, no JS: runs headless under CRuby too |
+| `site/game.js` (now `html/game.js`) | **new** `window.chunkyGame(node, optsJson, step)`: the loop, the CSS grid, keys, swipes, clicks, overlay, stats |
 | `site/main.rb` | copy of `html/main.rb` + the hooks (see `integration.diff`) |
 | `site/index.html` | copy of `html/index.html` + `<script src="game.js">` |
 | `serve.rb` | dev server for the prototype: `site/` over `html/`, examples too. `PORT=18108 ruby experiments/08-game-loop/serve.rb` |
 | `examples/snake.rb` | the Snake |
 | `examples/endless_snake.rb` | a snake that never dies, 20 steps/s - for measuring |
 | `examples/bench.rb`, `bench_toplevel.rb` | cell code measuring the JS->Ruby call itself |
-| `test/game_test.rb` | Minitest, plain CRuby: Snake driven headless (`ruby experiments/08-game-loop/test/game_test.rb`, 10 runs) |
+| `test/game_test.rb` (now `test/game_test.rb` of the repo) | Minitest, plain CRuby: Snake driven headless (`ruby test/game_test.rb`) |
 | `test/play_snake.js`, `test/measure_guard.js` | Playwright (MCP `browser_run_code` with `filename`) against serve.rb: autopilot plays, re-run/pause/error/endless-loop checks, per-mode costs |
 | `integration.diff` | the exact changes to `html/main.rb` and `html/index.html` |
 

@@ -260,6 +260,14 @@ module ChunkyBacon
       raise ChunkyBacon::NotHere, "show_letter needs the course page - you write on it with the mouse " \
                                   "or a finger. The model itself runs here: model.predict(Numo::DFloat[...])."
     end
+
+    # the page runs a game's loop and reads its keys; a program on a
+    # computer opens a window of its own for that
+    def show_game(**, &)
+      raise ChunkyBacon::NotHere, "show_game needs the course page - the page runs the game's loop and " \
+                                  "reads the arrow keys. On your computer, a game gem does that in a window " \
+                                  "of its own: gem install ruby2d (update do ... end, on :key_down) or gosu."
+    end
   end
 end
 

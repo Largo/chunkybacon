@@ -4,7 +4,7 @@ Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
 Work in progress - what is unfinished, and in what state - is in
 `docs/OPEN_WORK.md`.
-Last updated 2026-10-06 (53 lessons in German, English and Japanese).
+Last updated 2026-10-06 (54 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -70,6 +70,8 @@ html/
   turtle.rb             turtle { forward 100 }: Chunky draws, an animated SVG; checks read the path (§6)
   processing.rb         require "processing": the gem's API in pure Ruby, frames recorded (§6h)
   processing.js         a sketch's window: paints the frames, sends mouse and keys (§6h)
+  game.rb               show_game: ChunkyGame, a grid game's cells, timers and keys in plain Ruby; runs headless for checks (§6)
+  game.js               a game's grid: the loop on requestAnimationFrame, keys, focus, its live region (§6)
   herb_bridge.rb        require "herb/herb": Herb's C parser, handed to its WebAssembly build (§6j)
   assets/herb/          Herb's parser as WebAssembly + 3 files of @ruby/prism (tools/vendor_herb.rb)
   workshop.rb           the workshop's runs: project files as the virtual FS,
@@ -122,6 +124,7 @@ test/autorun_test.rb       live runs under CRuby: runnable?, the time limit
 test/ansi_test.rb          ANSI colours to HTML under CRuby
 test/object_graph_test.rb  show_objects under CRuby: walk, SVG, alt text, the gem's copy
 test/turtle_test.rb        turtle graphics under CRuby: path, check helpers, SVG, texts, the gem's copy
+test/game_test.rb          show_game under CRuby: the lesson's Snake by timer and keys, restart, the copies checks play
 test/live_test.mjs         Playwright: live runs in a lesson and the workshop, a lesson without them
 test/server_test.rb        the optional server under Rack::MockRequest
 test/permalink_test.mjs    Playwright: permalinks, against the server (port 8012)
@@ -210,7 +213,7 @@ A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 20-37), not in a group of one.
+(side trips, 20-38), not in a group of one.
 
 The sidebar itself (`index.html` `#sidebar`, `shell/app.rb`, `app.css`): from
 the top of the window to its foot with its own scroll; head with the course
@@ -258,7 +261,7 @@ Cells, per language:
 |---|---|---|
 | `h` | `html` | prose block; `<div class='task'>` = the exercise text, `<div class='offweb'>` = "on your machine" box |
 | `c` | `code` | runnable demo cell |
-| `x` | `code`, `check`, `hint` | the ONE exercise cell of the lesson; `check` is Ruby evaluated in the lesson binding with locals `output`, `result`, `code`, `images`, `downloads`, `audios` (the WAVs `show_audio` got) |
+| `x` | `code`, `check`, `hint` | the ONE exercise cell of the lesson; `check` is Ruby evaluated in the lesson binding with locals `output`, `result`, `code`, `images`, `downloads`, `audios` (the WAVs `show_audio` got), `games` (copies of the games `show_game` made, to play headless) |
 
 Rules that the code and tests rely on:
 
@@ -270,7 +273,13 @@ Rules that the code and tests rely on:
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
 - Checks accept output OR result; `puts` is never required.
-- `test/browser_test.mjs` asserts the lesson count (`'53 lessons in nav'`) -
+- A local a check assigns lives on in the lesson's binding (an eval in a
+  Binding keeps its new locals), and a block in the learner's next run
+  then writes to it instead of to a variable of its own: the Snake
+  check's `x, y = ...` once broke the learner's `x, y = fox.first`. Name
+  a check's helpers as lambda or block parameters (`->(game, x = nil) {
+  ... }.(games.last)`), as the Snake check does.
+- `test/browser_test.mjs` asserts the lesson count (`'54 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -300,6 +309,8 @@ or the name of a file the cell wrote), `show_objects(a: a, b: b)` /
 `show_objects(binding)` (boxes and arrows, in `object_graph.rb`, §6),
 `turtle { forward 100; right 90 }` (Chunky draws; `Turtle.from(images)` in a
 check, in `turtle.rb`, §6),
+`show_game(width:, height:) { |g| ... }` (a grid game the page drives; a
+check plays `games`, in `game.rb`, §6),
 `show_browser(app, path)` + `mock_get`, `show_irb`, `show_files`, `show_three(scene, camera, orbit:, &animate)`,
 `show_shoes { ... }`, `show_letter(boxes:) { |digits| ... }` (§6e),
 `download_file(data, name)`, `show_pdf(pdf)` (a file
@@ -561,6 +572,74 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   animation would start over at every pause in typing; ▶ animates.
   Loaded at boot (15 KB, ~6 ms to evaluate). The gem ships a copy
   (`turtle_test.rb` keeps it equal).
+- **show_game** (`game.rb` + `game.js`, from `experiments/08-game-loop`,
+  lesson 38, Chunky's Snake): `show_game(width: 20, height: 15) { |g| ... }`
+  builds a `ChunkyGame` and runs the setup block at once, so its errors are
+  the cell's (a block without `|g|` is instance_exec'd). In it:
+  `g.cell(x, y, look)` / `g.cell(x, y)` (`:outside` beyond the edge),
+  `g.clear`, `g.inside?`, `g.free_cells`, `g.on_key(:left) { }`,
+  `g.on_click { |x, y| }`, `g.every(0.15) { }`, `g.status`, `g.game_over`.
+  A look is a sprite name (`:chunky` 🦊, `:bacon` 🥓, `:wall` …), a colour
+  (`:body` is Chunky's orange) or any emoji. Its traps:
+  - **The page owns the loop.** CRuby runs on the page's thread, so a game
+    can neither loop nor `sleep` (sandbox_sim's sleep is virtual: `loop {
+    ...; sleep 0.15 }` would just hang). `mount_game` hands game.js a
+    block, which game.js calls at most once per animation frame and only
+    when a timer is due (the last answer's `next`) or events came in
+    (`"k:left|c:3,4|r"`): one crossing each way, the events in as one
+    string, the changed cells out as one JSON string; game.js touches
+    only those cells. Its clock advances only while the game runs (at
+    most 100 ms a frame), and Ruby catches up at most 3 runs per timer, so
+    a pause or a sleeping tab never fast-forwards the game.
+  - **It runs only while it has the focus and is not paused.** A click,
+    or Tab and then Space/Enter, starts it; Esc pauses it and keeps the
+    focus; Tab or a click elsewhere leaves it, paused. So the arrow keys
+    never scroll the page or reach the editor, a live run mounts a game
+    but never starts it (the lesson keeps its live runs, §6b), two games
+    never both run, and nothing moves until the learner asks - that is
+    its answer to `prefers-reduced-motion` too (nothing in its CSS
+    animates). Role `application`, named "Spiel mit 20 × 15 Feldern"
+    (`gameTitle`), described by `gamePlay` and `gameKeys`; the grid and
+    the veil are `aria-hidden`. A polite live region inside
+    (`.game-say`) says a changed status at most every 1.5 s, the end of a
+    round and errors - never every tick (Snake sets the same status every
+    round). `#runStatus` reads a game by its name, not its emoji
+    (`App#brief_output`, `#picture_words`). `data-state` (paused, playing,
+    over, error) and `data-over` are there for the tests.
+  - **The time limit belongs to the running game.** A tick runs from the
+    event loop, where no ▶ is running, so an endless loop in `every` would
+    freeze the page for good. `GameGuard` (main.rb) is `AutoRun`'s
+    mechanism - TracePoint `:line, :b_call, :c_call`, the clock read
+    every 128 events, `AutoRun::Stopped` only on a line of the learner's
+    file - switched on when the game starts running ("f:1" from game.js)
+    and off when it stops ("f:0"); a step only moves the 1 s deadline
+    (`GAME_TICK_LIMIT`, the message `gameTooLong`). Enabling a TracePoint
+    per step instead costs 4-6 ms a step in ruby.wasm (CRuby
+    re-instruments every loaded iseq); this way a Snake step costs ~2.3 ms
+    with the guard and ~1 ms without (measurements in the experiment's
+    NOTES).
+  - **Keep game.rb's internals event-light**: under the guard the cost is
+    TracePoint events, so no Ruby block per cell in what runs every tick
+    (`clear` walks a Hash of the filled cells; `free_cells` walks all of
+    them, but only when called).
+  - **What stops a game**: a re-run of its cell (`dispose_games(idx)` in
+    `run_cell`), another lesson or a reset (`sync_state`), game.js itself
+    once its node has left the page, game over, an error in a tick (shown
+    under the grid with its line), the time limit. A restart (click or
+    Space after game over) runs the setup block again and empties what
+    the last round left on the page. Each mount keeps the closure behind
+    its JS function alive, as `show_letter` and `show_three` do.
+  - **Checks play copies, under a time limit**: `games` holds
+    `ChunkyGame#fresh` copies (the setup block once more), so a check's
+    `press`/`advance` leaves the game below the cell at its start;
+    `advance` runs every tick, uncapped. The check runs the learner's
+    ticks at once, so `check_exercise` wraps it in
+    `AutoRun.with_time_limit` (2 s) when there are games - without it an
+    endless loop in a tick of the exercise cell froze the page. `puts` in
+    a tick goes into a log under the grid.
+  - The workshop takes the same path (the guard watches `Workshop.paths`)
+    but has not been tried. The companion gem's `show_game` raises NotHere
+    (a game on a computer: ruby2d or gosu, its message says).
 - CodeMirror cells must not be built while `#app` is `display:none`
   (blank editors after hard reload). Prose `pre/code` CSS stays scoped to
   `.lessonText`, or it bleeds into CodeMirror's internal `<pre>`s.
@@ -698,6 +777,10 @@ shell does the timing, the kernel the guarding:
   descend from `Exception`, so `rescue => e` in learner code cannot swallow
   them. The output gets `.is-rehearsal` (errors fainter, an explained error
   as its headline only, §6); no line is marked.
+- **Games** (`show_game`, §6): a live run mounts the game, paused, and
+  never starts it - it runs only with the focus, which the editor keeps -
+  so the Snake lesson keeps its live runs. The exercise's check plays a
+  copy of the game, under its own time limit, on a live run too.
 - **▶ has no time limit**: TracePoint costs ~3x on gem-heavy code, so a
   manual run still can hang the page on an endless loop, as before.
   An endless loop that raises no TracePoint event and that `runnable?` does
@@ -1248,13 +1331,14 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 53 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 54 lessons x 3 languages, starter fails, solutions pass
 ruby lint_lessons.rb           # lessons.js content: de/en/ja parity, references, Japanese rules, Prism, gems, counts
 ruby lint_lessons_test.rb      # the linter's fault-injection tests
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof
 ruby ansi_test.rb              # terminal colours in a cell's output
+ruby game_test.rb              # show_game headless: the lesson's Snake, restart, check copies
 ruby friendly_errors_harness.rb --summary   # 70 beginner mistakes explained by the expected rule, de/en/ja
 ruby friendly_errors_robustness.rb          # explain never raises, never leaves a %{...}
 ruby ../tools/offline_files.rb --check   # the offline copy's file list is current
@@ -1331,7 +1415,7 @@ that license too. Contact in the gemspecs: web@idogawa.com.
   (`ChunkyBacon::Opener`; `CHUNKYBACON_OPEN=0` turns that off). Status lines
   go to stderr. `show_browser` runs `ChunkyBacon::Server`, a tiny HTTP server
   on 127.0.0.1, and keeps the program alive after its last line until
-  Ctrl+C. `show_three`/`show_shoes` raise `ChunkyBacon::NotHere` with what
+  Ctrl+C. `show_three`/`show_shoes`/`show_game` raise `ChunkyBacon::NotHere` with what
   to do instead. When `main.rb` changes a helper, change the gem's too.
   `show_objects` comes from `lib/chunky_bacon/object_graph.rb`, a copy of
   `html/object_graph.rb` (`test/object_graph_test.rb` fails when they

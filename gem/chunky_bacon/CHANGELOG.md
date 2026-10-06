@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- `show_game`, as in the course's lesson 38 (Chunky's Snake), raises
+  `ChunkyBacon::NotHere`: the page runs a game's loop and reads its keys;
+  the message names ruby2d and gosu for a game on a computer.
 - `show_audio wav(samples)` / `show_audio "lied.wav"` / `show_audio samples`,
   as in the course's lesson 37 (Ruby makes music): the sound saved as
   `chunky-sound-N.wav` (an Array of samples written as 16-bit mono) and

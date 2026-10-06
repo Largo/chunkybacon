@@ -7,7 +7,8 @@
 // workshop keeps it with the project. matplotlib (pycall.rb): no live run
 // while its first import runs, none that imports a module for the first
 // time, a chart redrawn live. A turtle drawing is a still while live and
-// animated on ▶. A lesson with "live": false (music) runs nothing live,
+// animated on ▶. A game is mounted by a live run but never started. A
+// lesson with "live": false (music) runs nothing live,
 // and its switch says why. About three minutes.
 import { chromium } from '/usr/local/lib/node_modules/playwright/index.mjs';
 
@@ -191,6 +192,27 @@ const responsive = async page => {
   await page.waitForTimeout(300);
   check('the next lesson runs live again', (await page.getAttribute('.live-toggle', 'aria-pressed')) === 'true' &&
     (await page.getAttribute('.live-toggle', 'aria-disabled')) === null);
+  await ctx.close();
+}
+
+// ---------- a game (show_game, the Snake lesson): mounted live, never started ----------
+{
+  const ctx = await browser.newContext({ locale: 'de-DE' });
+  const page = await open(ctx, '#snake');
+  await countRuns(page);
+  check('the Snake lesson keeps its live runs', (await page.getAttribute('.cell:has(.run-cell[data-idx="3"]) .live-toggle', 'aria-pressed')) === 'true');
+  await page.click('.cell:has(.run-cell[data-idx="3"]) .CodeMirror');
+  await page.keyboard.press('Control+End');
+  await page.keyboard.type('\n# Chunky', { delay: 40 });
+  await page.waitForFunction(() => document.querySelector('#cell-out-3 .game-widget'), null, { timeout: 15000 }).catch(() => {});
+  await page.waitForTimeout(1000);
+  const game = await page.evaluate(() => {
+    const g = document.querySelector('#cell-out-3 .game-widget');
+    return g && { state: g.dataset.state, calls: JSON.parse(g.chunkyGame.stats()).calls,
+                  editor: !!document.activeElement.closest('.CodeMirror') };
+  });
+  check('a live run mounts the game, paused, and calls no Ruby', (await runs(page)) >= 1 && game && game.state === 'paused' && game.calls === 0);
+  check('... and the editor keeps the focus', game && game.editor);
   await ctx.close();
 }
 

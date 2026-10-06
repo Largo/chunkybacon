@@ -1,12 +1,16 @@
-# Headless: game.rb under plain CRuby, the Snake example driven by
-# #press/#advance, no page.   ruby experiments/08-game-loop/test/game_test.rb
+# Minitest for show_game (html/game.rb) under plain CRuby, no page: the
+# Snake of lesson 38 (its last demo cell, from lessons.json) driven by
+# #step, #press and #advance, and the copies a check plays:
+# ruby test/game_test.rb
 require "json"
 require "stringio"
 require "minitest/autorun"
-require_relative "../site/game"
+require_relative "../html/game"
 
 class GameTest < Minitest::Test
-  SNAKE = File.read(File.expand_path("../examples/snake.rb", __dir__))
+  SNAKE = JSON.parse(File.read(File.expand_path("lessons.json", __dir__)))["lessons"]
+              .find { |lesson| lesson["id"] == "snake" }["en"]["cells"]
+              .select { |cell| cell["t"] == "c" }.last["code"]
 
   def snake_game
     srand(1)
@@ -69,8 +73,10 @@ class GameTest < Minitest::Test
     g = snake_game
     frame(g, 0)
     frame(g, 151, "k:up")
-    frame(g, 200, "r")
-    assert_nil g.cell(5, 6)             # setup draws nothing until the first tick
+    f = frame(g, 200, "r")
+    assert_nil g.cell(5, 6)             # setup draws the start again
+    assert_equal :body, g.cell(5, 7)
+    assert_equal "", f["d"].to_h[6 * 20 + 5]   # and the page empties the old head
     frame(g, 351)
     assert_equal :chunky, g.cell(6, 7)  # direction is right again
     refute g.over?
@@ -91,6 +97,21 @@ class GameTest < Minitest::Test
     g = ChunkyGame.new { |g| g.every(0.15) {} }
     g.advance(1.0)
     assert_equal 6, g.ticks
+  end
+
+  # what a check gets as games: the game from its setup again
+  def test_fresh_is_the_game_from_its_start
+    g = snake_game
+    g.press(:up)
+    g.advance(0.45)
+    copy = g.fresh
+    assert_equal :chunky, g.cell(5, 4)
+    assert_equal :body, copy.cell(5, 7)
+    assert_nil copy.cell(5, 4)
+    assert_equal 0, copy.ticks
+    copy.advance(0.15)
+    assert_equal :chunky, copy.cell(6, 7)  # its own direction: right
+    assert_equal :chunky, g.cell(5, 4)     # the original stays where it was
   end
 
   def test_puts_goes_to_the_games_log

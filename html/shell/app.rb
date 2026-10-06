@@ -666,9 +666,16 @@ module ChunkyShell
 
     # The output's text, with an explained error (the kernel's
     # .friendly-error) read as its headline: its code snippet with carets
-    # makes no sense spoken, and the explanation stays on the page to read
+    # makes no sense spoken, and the explanation stays on the page to read.
+    # A game (show_game) says its name instead (picture_words): its grid
+    # is emoji by the hundred.
     def brief_output(out)
       text = out.innerText.to_s
+      out.querySelectorAll(".game-widget").each do |game|
+        whole = game.innerText.to_s
+        at = whole.empty? ? nil : text.index(whole)
+        text = text[0, at].to_s + text[at + whole.length, text.length].to_s if at
+      end
       box = out.querySelector(".friendly-error")
       return text unless box
 
@@ -683,9 +690,14 @@ module ChunkyShell
 
     # what the pictures below a cell show, in words: their alt texts (a
     # plain picture has alt="" and says nothing) - and its sounds by their
-    # players' names ("Ein Klang, 2,0 Sekunden", show_audio)
+    # players' names ("Ein Klang, 2,0 Sekunden", show_audio) and its games
+    # by theirs ("Spiel mit 20 × 15 Feldern", show_game)
     def picture_words(out)
       words = []
+      out.querySelectorAll(".game-widget").each do |game|
+        name = game.getAttribute("aria-label").to_s
+        words << name unless name.empty?
+      end
       out.querySelectorAll("img.cell-image").each do |img|
         alt = img.getAttribute("alt").to_s
         words << alt unless alt.empty?
