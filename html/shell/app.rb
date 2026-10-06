@@ -651,6 +651,11 @@ module ChunkyShell
       text = "#{text[0, 280]} …" if text.length > 280
       message = format(outcome == "error" ? ui.ranError : ui.ranOk, @cell_numbers[idx] || idx, text)
       message = "#{message} #{verdict}" if verdict != ""
+      announce(message)
+    end
+
+    # one line in #runStatus: emptied first, the text a moment later
+    def announce(message)
       status = el("runStatus")
       status.textContent = ""
       Task.new do
@@ -677,12 +682,17 @@ module ChunkyShell
     end
 
     # what the pictures below a cell show, in words: their alt texts (a
-    # plain picture has alt="" and says nothing)
+    # plain picture has alt="" and says nothing) - and its sounds by their
+    # players' names ("Ein Klang, 2,0 Sekunden", show_audio)
     def picture_words(out)
       words = []
       out.querySelectorAll("img.cell-image").each do |img|
         alt = img.getAttribute("alt").to_s
         words << alt unless alt.empty?
+      end
+      out.querySelectorAll(".cell-audio audio").each do |audio|
+        name = audio.getAttribute("aria-label").to_s
+        words << name unless name.empty?
       end
       words.join(" ")
     end
@@ -752,14 +762,27 @@ module ChunkyShell
     # ---------- live runs ----------
 
     # the page's switch: the lessons' is on unless turned off, the
-    # workshop's off unless turned on (a program there may take its time)
+    # workshop's off unless turned on (a program there may take its time) -
+    # and off in a lesson that turns live runs off
     def live?
       return Store.get(LIVE_WORKSHOP_KEY, "off") == "on" if workshop?
 
-      Store.get(LIVE_KEY, "on") != "off"
+      lesson_live? && Store.get(LIVE_KEY, "on") != "off"
     end
 
-    def live_toggle_html = View.live_html(live?, ui.liveLabel, live? ? ui.liveOn : ui.liveOff)
+    # false in a lesson with "live": false (lessons.js): its cells compute
+    # too much to run on every pause in typing - the music lesson's sound
+    # loops take a second and more under the time limit's tracing
+    def lesson_live? = workshop? || @course.live?(current_index)
+
+    # In such a lesson the switch stays in its place, off, and says why:
+    # aria-disabled keeps it focusable, its title is the reason, a click
+    # has Chunky say it.
+    def live_toggle_html
+      return View.live_html(false, ui.liveLabel, ui.liveLesson, true) unless lesson_live?
+
+      View.live_html(live?, ui.liveLabel, live? ? ui.liveOn : ui.liveOff)
+    end
 
     # A key in cell idx (index.html): its live run a moment later, unless
     # another key, a click on ▶ or another page comes first. A Task's
@@ -820,6 +843,8 @@ module ChunkyShell
     end
 
     def toggle_live
+      return explain_no_live unless lesson_live?
+
       Store.set(workshop? ? LIVE_WORKSHOP_KEY : LIVE_KEY, live? ? "off" : "on")
       JSG.q(".run-cell").each { |button| refresh_live_toggle(button.getAttribute("data-idx").to_i) }
     end
@@ -827,12 +852,20 @@ module ChunkyShell
     def refresh_live_toggle(idx)
       cell = cell_parts(idx)[0]
       toggle = cell ? cell.querySelector(".live-toggle") : nil
-      return unless toggle
+      # a lesson without live runs keeps its switch as it was drawn
+      return unless toggle && lesson_live?
 
       on = live?
       toggle.setAttribute("aria-pressed", on.to_s)
       toggle.classList.toggle("is-paused", on && @slow[idx] == true)
       toggle.title = !on ? ui.liveOff : (@slow[idx] ? ui.liveSlow : ui.liveOn)
+    end
+
+    # the switch of a lesson without live runs, clicked: Chunky says why,
+    # and so does the status line
+    def explain_no_live
+      show_bubble(escape_html(ui.liveLesson), nil)
+      announce(ui.liveLesson)
     end
 
     # ---------- the kernel ----------

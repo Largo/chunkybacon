@@ -486,6 +486,31 @@ class ChunkyApp
     @pdf_urls[idx].map { |url| "<iframe class=\"cell-pdf\" title=\"PDF\" src=\"#{url}#view=FitH\"></iframe>" }.join
   end
 
+  # ---------- sounds (show_audio) ----------
+
+  def add_audio(bytes)
+    @run_audios << bytes.to_s.b if @run_audios
+  end
+
+  # A player on a Blob URL, like show_pdf, above it a picture of the wave
+  # (ChunkyAudio.waveform_svg). The player is named "Ein Klang, 2,0
+  # Sekunden" (audioLabel), which #runStatus reads; the picture says
+  # nothing more and is alt="".
+  def audios_html(idx)
+    @audio_urls ||= {}
+    (@audio_urls[idx] || []).each { |url| $window.URL.revokeObjectURL(url) }
+    @audio_urls[idx] = @run_audios.map { |bytes| $window.makeDownloadUrl([bytes].pack("m0"), "audio/wav") }
+    @run_audios.zip(@audio_urls[idx]).map do |bytes, url|
+      samples, rate = ChunkyAudio.pcm(bytes)
+      # "1,5" - and "0,25" for a short sound, not "0,3" (or "0,0")
+      seconds = format(samples.size >= rate ? "%.1f" : "%.2f", samples.size.fdiv(rate))
+      seconds = seconds.tr(".", ",") if @lang == "de"
+      label = escape_html(format(ui["audioLabel"], seconds))
+      picture = samples.empty? ? "" : "<img class=\"cell-wave\" alt=\"\" src=\"data:image/svg+xml;base64,#{[ChunkyAudio.waveform_svg(samples, rate)].pack('m0')}\">"
+      "<div class=\"cell-audio\">#{picture}<audio controls preload=\"auto\" src=\"#{url}\" aria-label=\"#{label}\"></audio></div>"
+    end.join
+  end
+
   # ---------- downloads ----------
 
   DOWNLOAD_TYPES = {
@@ -496,7 +521,7 @@ class ChunkyApp
     ".csv" => "text/csv", ".json" => "application/json", ".html" => "text/html",
     ".txt" => "text/plain", ".md" => "text/markdown", ".zip" => "application/zip",
     ".db" => "application/vnd.sqlite3", ".sqlite" => "application/vnd.sqlite3", ".sqlite3" => "application/vnd.sqlite3",
-    ".pdf" => "application/pdf"
+    ".pdf" => "application/pdf", ".wav" => "audio/wav"
   }.freeze
 
   # A file to offer below the cell. The same name twice keeps the last.
@@ -1046,6 +1071,9 @@ class ChunkyApp
     return unless cell && code_cell?(cell)
     code = $window.getCellCode(idx)
     save_code(idx, code) unless workshop?
+    # a lesson whose cells compute too much for live runs says so
+    # ("live": false, the shell asks for none there either)
+    return :skipped if auto && !workshop? && current_lesson["live"] == false
     # a live run starts only for code that parses - otherwise the output
     # stays as it is (autorun.rb)
     return :skipped if auto && !AutoRun.runnable?(code, workshop? ? [] : @bind.local_variables)
@@ -1064,6 +1092,7 @@ class ChunkyApp
     @run_images = []
     @run_image_alts = {}
     @run_pdfs = []
+    @run_audios = []
     @run_browsers = []
     @run_irbs = []
     @run_files = []
@@ -1118,11 +1147,13 @@ class ChunkyApp
     @rehearsal = [changes, watch, lesson_files] if auto
     if workshop?
       where = error && Workshop.location(error, file)
-      # pictures and PDFs the program wrote show up below the editor - unless
-      # it showed them itself (show_image, show_pdf)
+      # pictures, PDFs and sounds the program wrote show up below the editor -
+      # unless it showed them itself (show_image, show_pdf, show_audio)
       Workshop.previews(changes).each do |path, bytes|
         if Workshop.pdf?(path)
           @run_pdfs << bytes.b unless @run_pdfs.include?(bytes.b)
+        elsif Workshop.audio?(path)
+          @run_audios << bytes.b unless @run_audios.include?(bytes.b)
         else
           url = Workshop.data_url(path, bytes)
           @run_images << url unless @run_images.include?(url)
@@ -1141,7 +1172,7 @@ class ChunkyApp
     out_html += "<pre class=\"cell-stdout\">#{AnsiHtml.to_html(output)}</pre>" unless output.empty?
     widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any? || @run_three.any? ||
                       @run_shoes.any? || @run_downloads.any? || @run_pdfs.any? || @run_letters.any? ||
-                      @run_sketches.any?
+                      @run_sketches.any? || @run_audios.any?
     # an error inside another workshop file keeps Ruby's message and its
     # "(helper.rb:3)": the explanation only sees the open file's code
     friendly = error && !where && friendly_error(error, code, file)
@@ -1170,6 +1201,7 @@ class ChunkyApp
       out_html += "<img class=\"cell-image\" alt=\"#{alt}\" src=\"#{data_url}\">"
     end
     out_html += pdfs_html(idx)
+    out_html += audios_html(idx)
     out_html += downloads_html(idx) if @run_downloads.any?
     new_widgets = []
     @run_browsers.each do |spec|
@@ -1296,9 +1328,80 @@ class ChunkyApp
     @bind.local_variable_set(:apps, (@run_shoes || []).length)
     @bind.local_variable_set(:shoes_types, (@last_shoes_types || []).dup)
     @bind.local_variable_set(:sketch, (@run_sketches || []).last)
+    @bind.local_variable_set(:audios, (@run_audios || []).dup)
     !!eval(cell["check"], @bind, "check.rb")
   rescue Exception
     false
+  end
+end
+
+# show_audio's side of a WAV file (experiments/05-ruby-music): read its
+# samples, draw them, and write sample Arrays as one. An SVG with inline
+# attributes, shown as an <img> like show_objects' pictures (an <img> sees
+# no page CSS); the colours are app.css's fox palette.
+module ChunkyAudio
+  WAVE_W = 360    # the whole sound, one column of pixels per bar
+  ZOOM_W = 140    # the magnifier: 12 ms around the loudest moment
+  WAVE_H = 64
+
+  module_function
+
+  # the first channel's 16-bit samples (-32768..32767) and the sample rate;
+  # the chunks are walked, so a header longer than 44 bytes reads as well
+  def pcm(bytes)
+    bytes = bytes.b
+    pos = 12
+    channels = 1
+    rate = 22_050
+    while pos + 8 <= bytes.bytesize
+      id, size = bytes.byteslice(pos, 8).unpack("a4V")
+      if id == "fmt "
+        _format, channels, rate = bytes.byteslice(pos + 8, 8).unpack("vvV")
+      elsif id == "data"
+        all = bytes.byteslice(pos + 8, size).to_s.unpack("s<*")
+        all = all.each_slice(channels).map(&:first) if channels > 1
+        return [all, rate]
+      end
+      pos += 8 + size + (size & 1)
+    end
+    [[], rate]
+  end
+
+  # The whole sound as bars (each the lowest and highest sample of its
+  # column) and, beside it, 12 ms around the loudest sample as a line - the
+  # shape of the wave: round for a sine, steps for a square, teeth for a saw
+  def waveform_svg(samples, rate)
+    mid = WAVE_H / 2.0
+    y = ->(s) { (mid - s * (mid - 2) / 32_768.0).round(1) }
+    per = samples.size.fdiv(WAVE_W).ceil
+    bars = samples.each_slice(per).with_index.map do |slice, x|
+      lo, hi = slice.minmax
+      "M#{x}.5 #{y.(hi)}V#{[y.(lo), y.(hi) + 0.5].max}"
+    end.join
+    width = [(rate * 0.012).round, 2].max
+    loudest = samples.each_with_index.max_by { |s, _i| s.abs }.last
+    from = (loudest - width / 2).clamp(0, [samples.size - width, 0].max)
+    points = samples[from, width].each_with_index.map { |s, i| "#{(i * ZOOM_W.fdiv(width)).round(1)},#{y.(s)}" }.join(" ")
+    label = ->(x, text) { "<text x=\"#{x}\" y=\"12\" font-size=\"10\" font-family=\"system-ui, sans-serif\" text-anchor=\"end\" fill=\"#5f5247\">#{text}</text>" }
+    <<~SVG.delete("\n")
+      <svg xmlns="http://www.w3.org/2000/svg" width="#{WAVE_W + ZOOM_W + 8}" height="#{WAVE_H}" viewBox="0 0 #{WAVE_W + ZOOM_W + 8} #{WAVE_H}">
+      <rect width="#{WAVE_W}" height="#{WAVE_H}" rx="4" fill="#fdeee3"/>
+      <path d="#{bars}" stroke="#e8722a" stroke-width="1" fill="none"/>
+      #{label.(WAVE_W - 4, format('%.2f s', samples.size.fdiv(rate)))}
+      <g transform="translate(#{WAVE_W + 8} 0)">
+      <rect width="#{ZOOM_W}" height="#{WAVE_H}" rx="4" fill="#fdeee3"/>
+      <line x1="0" x2="#{ZOOM_W}" y1="#{mid}" y2="#{mid}" stroke="#e9c3a6"/>
+      <polyline points="#{points}" stroke="#b3401f" stroke-width="1.5" fill="none"/>
+      #{label.(ZOOM_W - 4, '12 ms')}
+      </g></svg>
+    SVG
+  end
+
+  # an Array of samples (-1.0..1.0) as a WAV file: 16-bit mono PCM
+  def wav(samples, rate)
+    data = samples.map { |s| (s.to_f.clamp(-1.0, 1.0) * 32_767).round }.pack("s<*")
+    ["RIFF", 36 + data.bytesize, "WAVE", "fmt ", 16, 1, 1, rate, rate * 2, 2, 16,
+     "data", data.bytesize].pack("a4Va4a4VvvVVvva4V") + data
   end
 end
 
@@ -1339,6 +1442,27 @@ module Kernel
               StringIO.new("".b).tap { |io| pdf.write(io) }.string
             end
     ChunkyApp.instance.add_pdf(bytes)
+    nil
+  end
+
+  # Plays a sound below the cell, with a picture of its wave:
+  #   show_audio wav(samples)          # a WAV file, as a String
+  #   show_audio "melodie.wav"         # a file the cell wrote
+  #   show_audio samples               # an Array of Floats in -1..1
+  #   show_audio samples, rate: 8000   # (22,050 a second unless said)
+  def show_audio(sound, rate: 22_050)
+    bytes = if sound.is_a?(Array)
+              ChunkyAudio.wav(sound, rate)
+            elsif sound.to_s.b.start_with?("RIFF")
+              sound.to_s
+            elsif SandboxFS.virtual?(sound.to_s) && SandboxFS.exist?(sound.to_s)
+              SandboxFS.read(sound.to_s)
+            else
+              File.binread(sound.to_s)
+            end
+    raise ArgumentError, "show_audio: not a WAV file (it starts with RIFF)" unless bytes.to_s.b.start_with?("RIFF")
+
+    ChunkyApp.instance.add_audio(bytes)
     nil
   end
 

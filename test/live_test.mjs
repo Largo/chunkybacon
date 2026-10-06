@@ -7,7 +7,8 @@
 // workshop keeps it with the project. matplotlib (pycall.rb): no live run
 // while its first import runs, none that imports a module for the first
 // time, a chart redrawn live. A turtle drawing is a still while live and
-// animated on ▶. About three minutes.
+// animated on ▶. A lesson with "live": false (music) runs nothing live,
+// and its switch says why. About three minutes.
 import { chromium } from '/usr/local/lib/node_modules/playwright/index.mjs';
 
 const BASE = process.env.BASE || 'http://127.0.0.1:8011/';
@@ -156,6 +157,40 @@ const responsive = async page => {
   await page.click('.run-cell[data-idx="1"]');
   await page.waitForFunction(() => !document.getElementById('cell-out-1').classList.contains('is-rehearsal'), null, { timeout: 8000 }).catch(() => {});
   check('▶ draws it animated', (await svg()).includes('animateMotion'));
+  await ctx.close();
+}
+
+// ---------- a lesson with "live": false (music): no live run at all ----------
+{
+  const ctx = await browser.newContext({ locale: 'de-DE' });
+  const page = await open(ctx, '#musik');
+  await countRuns(page);
+  const toggle = '.cell:has(.run-cell[data-idx="1"]) .live-toggle';
+  const state = await page.$eval(toggle, b => ({ pressed: b.getAttribute('aria-pressed'), off: b.getAttribute('aria-disabled'), disabled: b.disabled, title: b.title }));
+  check('the music lesson\'s switch is off, focusable, and says why',
+    state.pressed === 'false' && state.off === 'true' && !state.disabled && state.title.includes('In dieser Lektion ist Live aus'));
+  await page.click('.cell:has(.run-cell[data-idx="1"]) .CodeMirror');
+  await page.keyboard.press('Control+A');
+  await page.keyboard.type('[1, 2].sum', { delay: 40 });
+  await page.waitForTimeout(1800);
+  check('typing runs nothing there', (await runs(page)) === 0 && (await out(page, 1)) === '');
+  // the kernel refuses one too (main.rb), should anything ask
+  const outcome = await page.evaluate(() => new Promise(resolve => {
+    window.addEventListener('chunky:ran', e => resolve(e.detail.outcome), { once: true });
+    window.ChunkyBridge.autorun(1);
+  }));
+  check('... and the kernel skips a live run it is asked for', outcome === 'skipped' && (await out(page, 1)) === '');
+  await page.click(toggle, { force: true });   // aria-disabled: Playwright would wait for it to be enabled
+  await page.waitForTimeout(200);
+  check('a click on the switch: Chunky says why', (await page.textContent('#chunkyText')).includes('In dieser Lektion ist Live aus'));
+  check('... and the page\'s switch stays as it was', (await page.evaluate(() => localStorage.getItem('chunkyui_live'))) === null);
+  await page.click('.run-cell[data-idx="1"]');
+  await page.waitForFunction(() => (document.getElementById('cell-out-1').textContent || '').includes('=> 3'), null, { timeout: 10000 }).catch(() => {});
+  check('▶ runs the cell', (await out(page, 1)).includes('=> 3'));
+  await page.click('#lessonNav a[data-id="hallo"]');
+  await page.waitForTimeout(300);
+  check('the next lesson runs live again', (await page.getAttribute('.live-toggle', 'aria-pressed')) === 'true' &&
+    (await page.getAttribute('.live-toggle', 'aria-disabled')) === null);
   await ctx.close();
 }
 

@@ -45,6 +45,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveSlow": "Diese Zelle braucht zu lange für Live – mit ▶ ausführen.",
       "liveStopped": "Nach einer Sekunde angehalten – mit ▶ läuft der Code ganz.",
       "liveNeedsRun": "Gems installieren, ihre Daten zum ersten Mal lesen, ein Python-Modul zum ersten Mal importieren, Daten aus dem Netz holen und eine Datenbank ändern geht nur mit ▶.",
+      "liveLesson": "In dieser Lektion ist Live aus: Für jeden Ton rechnen die Zellen Tausende Zahlen aus, zu viel für einen Lauf bei jeder Tipppause. Mit ▶ ausführen.",
       "nextLesson": "→ Weiter zur nächsten Lektion",
       "progress": "Lektion %d von %d",
       "allDone": "🎉 Du hast alle Lektionen geschafft! CHUNKY BACON! Als nächsten Schritt empfehle ich dir die <a href='https://koans.idogawa.com'>Ruby Koans im Browser</a> – und auf <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> die nächste Ruby-Konferenz oder ein Meetup.",
@@ -60,6 +61,7 @@ window.LESSONS_JSON = JSON.stringify({
       "browserUrl": "Adresse",
       "irbInput": "IRB-Eingabe",
       "threeLabel": "3D-Szene",
+      "audioLabel": "Ein Klang, %s Sekunden",
       "irbExitNote": "(Auf deinem Computer wäre IRB jetzt beendet – hier darfst du einfach weitertippen. 🦊)",
       "filesTitle": "Dateien (simuliert)",
       "threeLoading": "Die 3D-Engine (three.js) wird noch geladen – führe die Zelle gleich nochmal aus.",
@@ -174,6 +176,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveSlow": "This cell takes too long for live runs – run it with ▶.",
       "liveStopped": "Stopped after a second – ▶ runs the code all the way.",
       "liveNeedsRun": "Installing gems, reading their data for the first time, importing a Python module for the first time, fetching from the web and changing a database only happen with ▶.",
+      "liveLesson": "Live is off in this lesson: its cells compute thousands of numbers for every sound – too much for a run at every pause in typing. Run them with ▶.",
       "nextLesson": "→ On to the next lesson",
       "progress": "Lesson %d of %d",
       "allDone": "🎉 You finished all lessons! CHUNKY BACON! As a next step, try the <a href='https://koans.idogawa.com'>Ruby Koans in the browser</a> – and find your next Ruby conference or meetup on <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>.",
@@ -189,6 +192,7 @@ window.LESSONS_JSON = JSON.stringify({
       "browserUrl": "Address",
       "irbInput": "IRB input",
       "threeLabel": "3D scene",
+      "audioLabel": "A sound, %s seconds",
       "irbExitNote": "(On your computer IRB would have quit now – here you can just keep typing. 🦊)",
       "filesTitle": "files (simulated)",
       "threeLoading": "The 3D engine (three.js) is still loading – run the cell again in a moment.",
@@ -303,6 +307,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveSlow": "このセルはライブ実行には時間がかかりすぎます。▶ で実行してね。",
       "liveStopped": "1秒で止めました。▶ なら最後まで実行します。",
       "liveNeedsRun": "gemのインストール、gemのデータの初回の読み込み、Pythonモジュールの初回のインポート、ネットからのデータ取得、データベースの変更は ▶ のときだけ行います。",
+      "liveLesson": "このレッスンではライブはオフです。セルが音ごとに何千もの数を計算するので、入力が止まるたびに実行するには重すぎます。▶ で実行してください。",
       "nextLesson": "→ 次のレッスンへ",
       "progress": "レッスン %d / %d",
       "allDone": "🎉 全レッスン制覇！CHUNKY BACON! 次のステップには<a href='https://koans.idogawa.com'>ブラウザで動くRuby Koans</a>がおすすめだよ。次のRubyカンファレンスやミートアップは<a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>で探してみてね。",
@@ -318,6 +323,7 @@ window.LESSONS_JSON = JSON.stringify({
       "browserUrl": "アドレス",
       "irbInput": "IRBの入力",
       "threeLabel": "3Dシーン",
+      "audioLabel": "音、%s秒",
       "irbExitNote": "（きみのコンピューターなら、IRBはここで終了しているところ。ここではそのまま入力を続けていいよ。🦊）",
       "filesTitle": "ファイル（シミュレーション）",
       "threeLoading": "3Dエンジン（three.js）をまだ読み込んでいます。少し待ってから、もう一度セルを実行してください。",
@@ -2736,7 +2742,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 49). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
+            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 50). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
           },
           {
             "t": "c",
@@ -2783,7 +2789,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 49 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
+            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 50 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
           },
           {
             "t": "c",
@@ -2830,7 +2836,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン49で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
+            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン50で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
           },
           {
             "t": "c",
@@ -4739,7 +4745,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 37:</p>"
+            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 38:</p>"
           },
           {
             "t": "c",
@@ -4794,7 +4800,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 37 on:</p>"
+            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 38 on:</p>"
           },
           {
             "t": "c",
@@ -4849,7 +4855,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン37からつくるプロジェクトの構成です：</p>"
+            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン38からつくるプロジェクトの構成です：</p>"
           },
           {
             "t": "c",
@@ -5091,7 +5097,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install faker</code>, oder im <code>Gemfile</code> in der Gruppe <code>:test</code>. In Minitest-Tests (Lektion 41) nimmst du gern Minitests eigenen Startwert, den jeder Lauf ausgibt (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>So erzeugt <code>ruby test.rb --seed 12345</code> genau die Daten des fehlgeschlagenen Laufs noch einmal. <code>Faker::Config.random = nil</code> macht den Zufall wieder zufällig.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky braucht für seinen Laden Testkunden, bei jedem Lauf dieselben. Leg den Zufall auf <code>Random.new(2024)</code> fest und mach ein Array <code>kunden</code> mit 5 Hashes, jeder mit einem <code>:name</code> und einer <code>:email</code>.</div>"
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install faker</code>, oder im <code>Gemfile</code> in der Gruppe <code>:test</code>. In Minitest-Tests (Lektion 42) nimmst du gern Minitests eigenen Startwert, den jeder Lauf ausgibt (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>So erzeugt <code>ruby test.rb --seed 12345</code> genau die Daten des fehlgeschlagenen Laufs noch einmal. <code>Faker::Config.random = nil</code> macht den Zufall wieder zufällig.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky braucht für seinen Laden Testkunden, bei jedem Lauf dieselben. Leg den Zufall auf <code>Random.new(2024)</code> fest und mach ein Array <code>kunden</code> mit 5 Hashes, jeder mit einem <code>:name</code> und einer <code>:email</code>.</div>"
           },
           {
             "t": "x",
@@ -5146,7 +5152,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install faker</code>, or in the <code>Gemfile</code> in the <code>:test</code> group. In Minitest tests (lesson 41) Minitest's own seed is a good choice; every run prints it (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>Then <code>ruby test.rb --seed 12345</code> makes exactly the data of the failed run again. <code>Faker::Config.random = nil</code> makes randomness random again.</p></div><div class='task'><strong>Task:</strong> Chunky needs test customers for his shop, the same ones on every run. Pin the randomness to <code>Random.new(2024)</code> and make an array <code>customers</code> of 5 hashes, each with a <code>:name</code> and an <code>:email</code>.</div>"
+            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install faker</code>, or in the <code>Gemfile</code> in the <code>:test</code> group. In Minitest tests (lesson 42) Minitest's own seed is a good choice; every run prints it (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>Then <code>ruby test.rb --seed 12345</code> makes exactly the data of the failed run again. <code>Faker::Config.random = nil</code> makes randomness random again.</p></div><div class='task'><strong>Task:</strong> Chunky needs test customers for his shop, the same ones on every run. Pin the randomness to <code>Random.new(2024)</code> and make an array <code>customers</code> of 5 hashes, each with a <code>:name</code> and an <code>:email</code>.</div>"
           },
           {
             "t": "x",
@@ -5201,7 +5207,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='自分のパソコンでは'><p><code>gem install faker</code>、または<code>Gemfile</code>の<code>:test</code>グループに。Minitestのテスト（レッスン41）では、Minitest自身のシードを使うのがおすすめです。毎回の実行で表示されます（<code>Run options: --seed 12345</code>）：</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>すると<code>ruby test.rb --seed 12345</code>で、失敗した実行とまったく同じデータがもう一度つくられます。<code>Faker::Config.random = nil</code>で、乱数はまたランダムに戻ります。</p></div><div class='task'><strong>課題：</strong>Chunkyはお店のためのテスト用のお客さんがほしいのです。毎回同じお客さんで。乱数を<code>Random.new(2024)</code>に固定して、5つのハッシュの配列<code>customers</code>をつくってください。どのハッシュにも<code>:name</code>と<code>:email</code>があります。</div>"
+            "html": "<div class='offweb' data-title='自分のパソコンでは'><p><code>gem install faker</code>、または<code>Gemfile</code>の<code>:test</code>グループに。Minitestのテスト（レッスン42）では、Minitest自身のシードを使うのがおすすめです。毎回の実行で表示されます（<code>Run options: --seed 12345</code>）：</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>すると<code>ruby test.rb --seed 12345</code>で、失敗した実行とまったく同じデータがもう一度つくられます。<code>Faker::Config.random = nil</code>で、乱数はまたランダムに戻ります。</p></div><div class='task'><strong>課題：</strong>Chunkyはお店のためのテスト用のお客さんがほしいのです。毎回同じお客さんで。乱数を<code>Random.new(2024)</code>に固定して、5つのハッシュの配列<code>customers</code>をつくってください。どのハッシュにも<code>:name</code>と<code>:email</code>があります。</div>"
           },
           {
             "t": "x",
@@ -5267,7 +5273,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Ein <code>HTMLElementNode</code> mit seinem öffnenden und schliessenden Tag, darin ein <code>ERBContentNode</code> mit dem Ruby-Code. Auf diesem Baum bauen Herbs Werkzeuge auf: ein Linter, der Regeln prüft, ein Formatierer, und Hilfe im Editor.</p><p>Am meisten bringt Herb in Tests: Ein Test, der jede Vorlage prüft, fällt um, sobald jemand ein Tag falsch schliesst – lange bevor es jemand im Browser sieht. Mit Minitest aus Lektion 41:</p>"
+            "html": "<p>Ein <code>HTMLElementNode</code> mit seinem öffnenden und schliessenden Tag, darin ein <code>ERBContentNode</code> mit dem Ruby-Code. Auf diesem Baum bauen Herbs Werkzeuge auf: ein Linter, der Regeln prüft, ein Formatierer, und Hilfe im Editor.</p><p>Am meisten bringt Herb in Tests: Ein Test, der jede Vorlage prüft, fällt um, sobald jemand ein Tag falsch schliesst – lange bevor es jemand im Browser sieht. Mit Minitest aus Lektion 42:</p>"
           },
           {
             "t": "c",
@@ -5338,7 +5344,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>An <code>HTMLElementNode</code> with its opening and closing tag, and inside it an <code>ERBContentNode</code> with the Ruby code. Herb's tools build on this tree: a linter that checks rules, a formatter, and help in the editor.</p><p>Herb pays off most in tests: a test that checks every template falls over as soon as somebody closes a tag wrongly – long before anyone sees it in the browser. With Minitest from lesson 41:</p>"
+            "html": "<p>An <code>HTMLElementNode</code> with its opening and closing tag, and inside it an <code>ERBContentNode</code> with the Ruby code. Herb's tools build on this tree: a linter that checks rules, a formatter, and help in the editor.</p><p>Herb pays off most in tests: a test that checks every template falls over as soon as somebody closes a tag wrongly – long before anyone sees it in the browser. With Minitest from lesson 42:</p>"
           },
           {
             "t": "c",
@@ -5409,7 +5415,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>開くタグと閉じるタグを持つ<code>HTMLElementNode</code>、その中にRubyのコードを持つ<code>ERBContentNode</code>。Herbのツールはこの木の上に成り立っています。ルールを確かめるリンター、フォーマッター、そしてエディタでの手助け。</p><p>Herbがいちばん役に立つのはテストです。すべてのテンプレートを確かめるテストは、だれかがタグの閉じ方をまちがえたとたんに失敗します。ブラウザでだれかが気づくずっと前に。レッスン41のMinitestで：</p>"
+            "html": "<p>開くタグと閉じるタグを持つ<code>HTMLElementNode</code>、その中にRubyのコードを持つ<code>ERBContentNode</code>。Herbのツールはこの木の上に成り立っています。ルールを確かめるリンター、フォーマッター、そしてエディタでの手助け。</p><p>Herbがいちばん役に立つのはテストです。すべてのテンプレートを確かめるテストは、だれかがタグの閉じ方をまちがえたとたんに失敗します。ブラウザでだれかが気づくずっと前に。レッスン42のMinitestで：</p>"
           },
           {
             "t": "c",
@@ -5645,6 +5651,199 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "musik",
+      "live": false,
+      "de": {
+        "title": "37. Ruby macht Musik",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ruby macht Musik</h2><p>Ton ist Luft, die schwingt. Ein Lautsprecher schiebt seine Membran vor und zurück, und wie schnell er das tut, hörst du als Tonhöhe: <strong>440 Mal pro Sekunde</strong> ist der Kammerton A, nach dem ein Orchester stimmt.</p><p>Ein Computer beschreibt diese Bewegung mit Zahlen: Er misst sie <strong>22 050 Mal pro Sekunde</strong> (die <em>Abtastrate</em>) und schreibt jedes Mal auf, wo die Membran gerade ist – eine Zahl zwischen -1 und 1. Eine Sekunde Ton ist also einfach ein Array mit 22 050 Floats. In dieser Lektion rechnest du dieses Array selbst aus, ganz ohne Gem: erst einen Ton, dann eine Melodie, Akkorde und ein Schlagzeug.</p>"
+          },
+          {
+            "t": "c",
+            "code": "RATE = 22_050                       # Zahlen pro Sekunde\n\nkammerton = Array.new(RATE) do |i|  # eine Sekunde\n  zeit = i.fdiv(RATE)               # in Sekunden\n  0.5 * Math.sin(2 * Math::PI * 440 * zeit)\nend\nkammerton.first(8).map { |s| s.round(3) }"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Array.new(RATE) { |i| … }</code> ruft den Block 22 050 Mal auf und sammelt, was er liefert. <code>i.fdiv(RATE)</code> macht aus der Nummer der Zahl die Zeit in Sekunden, und <code>Math.sin(2 * Math::PI * 440 * zeit)</code> ist eine <strong>Sinuswelle</strong>, die 440 Mal pro Sekunde einmal hoch und wieder herunter geht. Mal <code>0.5</code> macht sie halb so laut.</p><p>Hören kannst du ein Array aber nicht – der Browser will eine <strong>WAV-Datei</strong>. Die ist erstaunlich einfach: 44 Bytes Kopf, danach jede Zahl als ganze Zahl von -32 768 bis 32 767.</p>"
+          },
+          {
+            "t": "c",
+            "code": "def wav(samples)\n  daten = samples.map { |s| (s.clamp(-1.0, 1.0) * 32_767).round }.pack(\"s<*\")\n  kopf = [\"RIFF\", 36 + daten.bytesize, \"WAVE\",\n          \"fmt \", 16, 1, 1, RATE, RATE * 2, 2, 16,   # PCM, 1 Kanal, 16 Bit\n          \"data\", daten.bytesize].pack(\"a4Va4a4VvvVVvva4V\")\n  kopf + daten\nend\n\ndatei = wav(kammerton)\nshow_audio datei\n[datei.bytesize, datei[0, 4], datei[8, 4]]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>pack</code> verwandelt ein Array in <strong>Bytes</strong>, und der Text in Klammern sagt, wie: <code>s&lt;*</code> heisst «jede Zahl als 16-Bit-Zahl mit Vorzeichen, kleines Byte zuerst». Für den Kopf steht jeder Buchstabe für ein Feld: <code>a4</code> sind 4 Zeichen Text, <code>V</code> eine 32-Bit-Zahl, <code>v</code> eine 16-Bit-Zahl. Darin stehen die Länge der Datei, das Format (1 = PCM, rohe Zahlen), 1 Kanal, die Abtastrate und 16 Bit pro Zahl. 44 Bytes Kopf plus 2 Bytes pro Zahl: 44 144 Bytes für eine Sekunde.</p><p>Mit <code>pack</code> und <code>unpack</code> liest und schreibt Ruby fast jedes Binärformat – PNG, ZIP und MIDI funktionieren genauso. <code>show_audio</code> spielt die Datei unter der Zelle ab und zeigt die Welle: links den ganzen Ton, rechts mit der Lupe 12 Millisekunden.</p>"
+          },
+          {
+            "t": "c",
+            "code": "WELLEN = {\n  sinus:    ->(phase) { Math.sin(2 * Math::PI * phase) },\n  rechteck: ->(phase) { phase < 0.5 ? 1.0 : -1.0 },\n  saege:    ->(phase) { 2 * phase - 1 }\n}\n\ndef ton(frequenz, sekunden, welle = :sinus, laut = 0.3)\n  form = WELLEN.fetch(welle)\n  Array.new((sekunden * RATE).round) do |i|\n    laut * form.((frequenz * i).fdiv(RATE) % 1.0)   # wo in der Schwingung?\n  end\nend\n\nWELLEN.each_key { |welle| show_audio wav(ton(220, 0.6, welle)) }\nWELLEN.keys"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die <strong>Phase</strong> sagt, wo in einer Schwingung du gerade bist: 0.0 am Anfang, 0.5 in der Mitte, kurz vor 1.0 am Ende. <code>(frequenz * i).fdiv(RATE) % 1.0</code> rechnet sie aus – <code>%</code> wirft die ganzen Schwingungen weg und lässt den Rest. Jede Welle ist ein <strong>Lambda</strong>, das aus der Phase eine Höhe macht, und alle drei stehen in einem Hash. Eine neue Klangfarbe ist eine Zeile mehr.</p><p>Schau in der Lupe: Der Sinus ist rund und klingt weich, Rechteck und Säge haben Ecken und klingen schnarrend wie ein Gameboy – Ecken bestehen aus vielen höheren Tönen, den <em>Obertönen</em>. Darum sind sie auch leiser gerechnet.</p>"
+          },
+          {
+            "t": "c",
+            "code": "STUFEN = { \"C\" => 0, \"D\" => 2, \"E\" => 4, \"F\" => 5, \"G\" => 7, \"A\" => 9, \"H\" => 11 }\n\ndef frequenz(name)                  # \"A4\" → 440.0\n  halbton = 12 * (name[1].to_i + 1) + STUFEN.fetch(name[0])\n  440 * 2**((halbton - 69) / 12.0)\nend\n\ndef huelle(samples)                 # ein- und ausblenden: kein Knacksen\n  n = samples.size\n  samples.each_with_index.map { |s, i| s * [1.0, i / 200.0, (n - i) / 800.0].min }\nend\n\ndef noten(text, laenge: 0.25, welle: :sinus)\n  text.split.flat_map do |name|\n    if name == \"-\"\n      Array.new((laenge * RATE).round, 0.0)   # eine Pause\n    else\n      huelle(ton(frequenz(name), laenge, welle))\n    end\n  end\nend\n\nfroschgesang = noten(\"C4 D4 E4 F4 E4 D4 C4 - E4 F4 G4 A4 G4 F4 E4 -\", laenge: 0.3)\nshow_audio wav(froschgesang)\n[frequenz(\"A4\"), frequenz(\"C4\").round(1), frequenz(\"C5\").round(1)]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das ist der <strong>Froschgesang</strong> – in Japan kennt jedes Kind das Lied als 「かえるの歌」. Eine Melodie ist hier ein String: <code>split</code> zerlegt ihn in Notennamen, und <code>flat_map</code> hängt die Töne aller Noten zu einem einzigen langen Array zusammen.</p><p>Eine Oktave hat 12 <strong>Halbtöne</strong>, und jeder Halbton ist 2<sup>1/12</sup> ≈ 1.059 Mal höher als der vorige – nach 12 Schritten ist die Frequenz genau doppelt so hoch: C5 schwingt doppelt so schnell wie C4. <code>frequenz</code> zählt die Halbtöne ab dem A4 (Nummer 69, wie bei MIDI) und rechnet so die Frequenz aus. Und <code>huelle</code> blendet jeden Ton kurz ein und aus: Springt eine Welle mitten in der Schwingung auf null, hörst du ein Knacksen. Lösch <code>huelle(…)</code> einmal und hör hin.</p>"
+          },
+          {
+            "t": "c",
+            "code": "def zusammen(*spuren)\n  laengste = spuren.map(&:size).max\n  spuren = spuren.map { |spur| spur + [0] * (laengste - spur.size) }\n  spuren.first.zip(*spuren.drop(1)).map(&:sum)\nend\n\nc_dur = zusammen(*%w[C4 E4 G4].map { |name| huelle(ton(frequenz(name), 1.5, :sinus, 0.2)) })\nshow_audio wav(c_dur)\nzusammen([1, 2, 3], [10, 20], [100])"
+          },
+          {
+            "t": "h",
+            "html": "<p>Klingen mehrere Töne gleichzeitig, <strong>addiert</strong> sich der Luftdruck einfach. <code>zip</code> legt die Arrays nebeneinander – <code>[1, 2].zip([10, 20])</code> ergibt <code>[[1, 10], [2, 20]]</code> – und <code>map(&amp;:sum)</code> zählt jedes Paar zusammen. Kürzere Spuren füllt <code>zusammen</code> vorher mit Stille auf. Der Akkord C-E-G ist <strong>C-Dur</strong>.</p><p>Darum spielt jeder Ton hier nur mit <code>0.2</code>: Drei Töne mit 0.5 ergäben bis zu 1.5, und alles über 1 schneidet <code>clamp</code> ab – das klingt kratzig (<em>Clipping</em>). Probier es aus.</p>"
+          },
+          {
+            "t": "c",
+            "code": "def kick                            # Sinus, der von 120 auf 40 Hz fällt\n  phase = 0.0\n  Array.new(3000) do |i|\n    zeit = i.fdiv(RATE)\n    phase += (40 + 80 * Math.exp(-zeit * 30)) / RATE\n    0.8 * Math.sin(2 * Math::PI * phase) * Math.exp(-zeit * 15)\n  end\nend\n\ndef hihat                           # Rauschen, das schnell verklingt\n  Array.new(1200) { |i| 0.2 * (rand * 2 - 1) * Math.exp(-i / 150.0) }\nend\n\ndef schlagzeug(muster, schritt: 0.125)\n  platz = (schritt * RATE).round\n  muster.chars.flat_map do |zeichen|\n    klang = case zeichen\n            when \"x\" then kick\n            when \"h\" then hihat\n            else []\n            end\n    klang.first(platz) + [0.0] * [platz - klang.size, 0].max\n  end\nend\n\ntakt = schlagzeug(\"x.h.x.h.x.h.xxh.\" * 2)\nmelodie = noten(\"C4 D4 E4 F4 E4 D4 C4 - E4 F4 G4 A4 G4 F4 E4 -\", welle: :rechteck)\nlied = zusammen(melodie, takt)\nFile.binwrite(\"froschgesang.wav\", wav(lied))\nshow_audio \"froschgesang.wav\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Ein Schlagzeug ist hier wieder ein String: Jedes Zeichen ist ein Achtel, <code>x</code> die grosse Trommel, <code>h</code> die Hi-Hat, ein Punkt Pause. Die <strong>Kick</strong> ist ein Sinus, dessen Frequenz schnell fällt und der dabei verklingt (<code>Math.exp(-zeit * 15)</code> wird rasch kleiner), die <strong>Hi-Hat</strong> ist Rauschen aus <code>rand</code>. Jeder Klang wird auf seinen Platz zurechtgeschnitten oder mit Stille aufgefüllt, damit der Takt gleichmässig bleibt.</p><p><code>noten</code>, <code>schlagzeug</code>, <code>zusammen</code> – das sind schon die Wörter einer kleinen Sprache für Musik, gebaut aus Arrays, Strings und Blöcken (mehr dazu in Lektion 50, «Eine eigene DSL»). <code>File.binwrite</code> schreibt die Bytes als Datei; sie erscheint unter der Zelle als Download, und <code>show_audio</code> nimmt auch ihren Namen.</p><div class='offweb' data-title='Auf deinem Computer'><p>Dort läuft derselbe Code: <code>File.binwrite(\"lied.wav\", wav(lied))</code> und dann die Datei mit einem beliebigen Player öffnen. Wer WAV-Dateien auch lesen oder in Stereo und 24 Bit schreiben will, nimmt das Gem <code>wavefile</code> (reines Ruby, läuft auch hier mit <code>install_gem \"wavefile\"</code>) – es schreibt für dieses Lied Byte für Byte dieselbe Datei.</p></div><div class='task'><strong>Aufgabe:</strong> Ein Tusch! Schreib die Datei <code>tusch.wav</code>: zuerst die Töne C4, E4, G4 und C5 nacheinander, je 0.25 Sekunden, danach alle vier <strong>zusammen</strong> eine Sekunde lang – insgesamt also 2 Sekunden.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# tusch.wav: C4 E4 G4 C5 nacheinander (je 0.25 s), dann alle vier zusammen (1 s)\n",
+            "check": "downloads.include?(\"tusch.wav\") && File.read(\"tusch.wav\", mode: \"rb\").b.then { |bytes| head = bytes.unpack(\"a4Va4a4VvvVVvva4V\"); s = bytes.byteslice(44..).unpack(\"s<*\"); amp = ->(from, f) { part = s[(from * 22050).round, 2205] || []; re = im = 0.0; part.each_with_index { |x, n| w = 2 * Math::PI * f * n / 22050; re += x * Math.cos(w); im += x * Math.sin(w) }; Math.hypot(re, im) * 2 / [part.size, 1].max }; c4, e4, g4, c5 = 261.63, 329.63, 392.0, 523.25; arpeggio = [[0.07, c4, [e4, g4]], [0.32, e4, [c4, g4, c5]], [0.57, g4, [c4, e4, c5]], [0.82, c5, [c4, e4, g4]]]; head.values_at(0, 2, 6, 7, 10) == [\"RIFF\", \"WAVE\", 1, 22050, 16] && (1.9..2.1).cover?(s.size / 22050.0) && arpeggio.all? { |t, f, others| (a = amp.(t, f)) > 1000 && others.all? { |o| amp.(t, o) < a / 4 } } && [[1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }",
+            "hint": "<code>noten(\"C4 E4 G4 C5\")</code> gibt dir die vier Töne. Für den Akkord <code>zusammen(*%w[C4 E4 G4 C5].map { |name| huelle(ton(frequenz(name), 1.0, :sinus, 0.2)) })</code> – beides mit <code>+</code> hintereinanderhängen und <code>File.binwrite(\"tusch.wav\", wav(…))</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "37. Ruby makes music",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ruby makes music</h2><p>Sound is air that vibrates. A loudspeaker pushes its cone back and forth, and how fast it does so is what you hear as pitch: <strong>440 times a second</strong> is the concert A an orchestra tunes to.</p><p>A computer describes that movement with numbers: it measures it <strong>22,050 times a second</strong> (the <em>sample rate</em>) and writes down where the cone is each time – a number between -1 and 1. One second of sound is simply an Array of 22,050 Floats. In this lesson you compute that Array yourself, without any gem: first a tone, then a melody, chords and a drum kit.</p>"
+          },
+          {
+            "t": "c",
+            "code": "RATE = 22_050                       # numbers per second\n\nconcert_a = Array.new(RATE) do |i|  # one second\n  time = i.fdiv(RATE)               # in seconds\n  0.5 * Math.sin(2 * Math::PI * 440 * time)\nend\nconcert_a.first(8).map { |s| s.round(3) }"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Array.new(RATE) { |i| … }</code> calls the block 22,050 times and collects what it returns. <code>i.fdiv(RATE)</code> turns the number's position into the time in seconds, and <code>Math.sin(2 * Math::PI * 440 * time)</code> is a <strong>sine wave</strong> that goes up and down once, 440 times a second. Times <code>0.5</code> makes it half as loud.</p><p>But you cannot listen to an Array – the browser wants a <strong>WAV file</strong>. That is surprisingly simple: a 44-byte header, then every number as a whole number from -32,768 to 32,767.</p>"
+          },
+          {
+            "t": "c",
+            "code": "def wav(samples)\n  data = samples.map { |s| (s.clamp(-1.0, 1.0) * 32_767).round }.pack(\"s<*\")\n  header = [\"RIFF\", 36 + data.bytesize, \"WAVE\",\n            \"fmt \", 16, 1, 1, RATE, RATE * 2, 2, 16,   # PCM, 1 channel, 16 bits\n            \"data\", data.bytesize].pack(\"a4Va4a4VvvVVvva4V\")\n  header + data\nend\n\nfile = wav(concert_a)\nshow_audio file\n[file.bytesize, file[0, 4], file[8, 4]]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>pack</code> turns an Array into <strong>bytes</strong>, and the text in brackets says how: <code>s&lt;*</code> means \"every number as a signed 16-bit number, low byte first\". For the header each letter stands for one field: <code>a4</code> is 4 characters of text, <code>V</code> a 32-bit number, <code>v</code> a 16-bit number. They hold the length of the file, the format (1 = PCM, raw numbers), 1 channel, the sample rate and 16 bits per number. 44 bytes of header plus 2 bytes per number: 44,144 bytes for one second.</p><p>With <code>pack</code> and <code>unpack</code> Ruby reads and writes almost any binary format – PNG, ZIP and MIDI work the same way. <code>show_audio</code> plays the file below the cell and shows the wave: the whole sound on the left, 12 milliseconds under the magnifier on the right.</p>"
+          },
+          {
+            "t": "c",
+            "code": "WAVES = {\n  sine:   ->(phase) { Math.sin(2 * Math::PI * phase) },\n  square: ->(phase) { phase < 0.5 ? 1.0 : -1.0 },\n  saw:    ->(phase) { 2 * phase - 1 }\n}\n\ndef tone(frequency, seconds, wave = :sine, volume = 0.3)\n  shape = WAVES.fetch(wave)\n  Array.new((seconds * RATE).round) do |i|\n    volume * shape.((frequency * i).fdiv(RATE) % 1.0)   # where in the vibration?\n  end\nend\n\nWAVES.each_key { |wave| show_audio wav(tone(220, 0.6, wave)) }\nWAVES.keys"
+          },
+          {
+            "t": "h",
+            "html": "<p>The <strong>phase</strong> says where in one vibration you are: 0.0 at the start, 0.5 halfway, just under 1.0 at the end. <code>(frequency * i).fdiv(RATE) % 1.0</code> works it out – <code>%</code> throws away the whole vibrations and keeps the rest. Every wave is a <strong>lambda</strong> that turns the phase into a height, and all three live in a Hash. A new sound colour is one more line.</p><p>Look through the magnifier: the sine is round and sounds soft, square and saw have corners and buzz like a Game Boy – corners are made of many higher tones, the <em>overtones</em>. That is also why they are computed quieter.</p>"
+          },
+          {
+            "t": "c",
+            "code": "STEPS = { \"C\" => 0, \"D\" => 2, \"E\" => 4, \"F\" => 5, \"G\" => 7, \"A\" => 9, \"B\" => 11 }\n\ndef frequency(name)                 # \"A4\" → 440.0\n  semitone = 12 * (name[1].to_i + 1) + STEPS.fetch(name[0])\n  440 * 2**((semitone - 69) / 12.0)\nend\n\ndef envelope(samples)               # fade in and out: no clicks\n  n = samples.size\n  samples.each_with_index.map { |s, i| s * [1.0, i / 200.0, (n - i) / 800.0].min }\nend\n\ndef notes(text, length: 0.25, wave: :sine)\n  text.split.flat_map do |name|\n    if name == \"-\"\n      Array.new((length * RATE).round, 0.0)   # a rest\n    else\n      envelope(tone(frequency(name), length, wave))\n    end\n  end\nend\n\nfrog_song = notes(\"C4 D4 E4 F4 E4 D4 C4 - E4 F4 G4 A4 G4 F4 E4 -\", length: 0.3)\nshow_audio wav(frog_song)\n[frequency(\"A4\"), frequency(\"C4\").round(1), frequency(\"C5\").round(1)]"
+          },
+          {
+            "t": "h",
+            "html": "<p>That is the <strong>frog song</strong>, a German children's song that every child in Japan knows as 「かえるの歌」. A melody is a String here: <code>split</code> cuts it into note names, and <code>flat_map</code> joins the tones of all the notes into one long Array.</p><p>An octave has 12 <strong>semitones</strong>, and each semitone is 2<sup>1/12</sup> ≈ 1.059 times higher than the one before – after 12 steps the frequency has exactly doubled: C5 vibrates twice as fast as C4. <code>frequency</code> counts the semitones from A4 (number 69, as in MIDI) and works out the frequency from that. And <code>envelope</code> fades each tone in and out briefly: when a wave jumps to zero in the middle of a vibration, you hear a click. Delete the <code>envelope(…)</code> once and listen.</p>"
+          },
+          {
+            "t": "c",
+            "code": "def mix(*tracks)\n  longest = tracks.map(&:size).max\n  tracks = tracks.map { |track| track + [0] * (longest - track.size) }\n  tracks.first.zip(*tracks.drop(1)).map(&:sum)\nend\n\nc_major = mix(*%w[C4 E4 G4].map { |name| envelope(tone(frequency(name), 1.5, :sine, 0.2)) })\nshow_audio wav(c_major)\nmix([1, 2, 3], [10, 20], [100])"
+          },
+          {
+            "t": "h",
+            "html": "<p>When several tones sound at once, the air pressure simply <strong>adds up</strong>. <code>zip</code> lays the Arrays side by side – <code>[1, 2].zip([10, 20])</code> gives <code>[[1, 10], [2, 20]]</code> – and <code>map(&amp;:sum)</code> adds up each pair. Before that, <code>mix</code> pads shorter tracks with silence. The chord C-E-G is <strong>C major</strong>.</p><p>That is why every tone here plays at only <code>0.2</code>: three tones at 0.5 would reach 1.5, and <code>clamp</code> cuts off everything above 1 – it sounds harsh (<em>clipping</em>). Try it.</p>"
+          },
+          {
+            "t": "c",
+            "code": "def kick                            # a sine falling from 120 to 40 Hz\n  phase = 0.0\n  Array.new(3000) do |i|\n    time = i.fdiv(RATE)\n    phase += (40 + 80 * Math.exp(-time * 30)) / RATE\n    0.8 * Math.sin(2 * Math::PI * phase) * Math.exp(-time * 15)\n  end\nend\n\ndef hihat                           # noise that dies away fast\n  Array.new(1200) { |i| 0.2 * (rand * 2 - 1) * Math.exp(-i / 150.0) }\nend\n\ndef drums(pattern, step: 0.125)\n  slot = (step * RATE).round\n  pattern.chars.flat_map do |char|\n    sound = case char\n            when \"x\" then kick\n            when \"h\" then hihat\n            else []\n            end\n    sound.first(slot) + [0.0] * [slot - sound.size, 0].max\n  end\nend\n\nbeat = drums(\"x.h.x.h.x.h.xxh.\" * 2)\nmelody = notes(\"C4 D4 E4 F4 E4 D4 C4 - E4 F4 G4 A4 G4 F4 E4 -\", wave: :square)\nsong = mix(melody, beat)\nFile.binwrite(\"frog_song.wav\", wav(song))\nshow_audio \"frog_song.wav\""
+          },
+          {
+            "t": "h",
+            "html": "<p>A drum kit is a String again: every character is an eighth note, <code>x</code> the bass drum, <code>h</code> the hi-hat, a dot a rest. The <strong>kick</strong> is a sine whose frequency falls fast while it dies away (<code>Math.exp(-time * 15)</code> shrinks quickly), the <strong>hi-hat</strong> is noise from <code>rand</code>. Every sound is cut to its slot or padded with silence, so the beat stays even.</p><p><code>notes</code>, <code>drums</code>, <code>mix</code> – those are already the words of a small language for music, built from Arrays, Strings and blocks (more in lesson 50, \"Your own DSL\"). <code>File.binwrite</code> writes the bytes as a file; it appears below the cell as a download, and <code>show_audio</code> takes its name too.</p><div class='offweb' data-title='On your machine'><p>The same code runs there: <code>File.binwrite(\"song.wav\", wav(song))</code>, then open the file in any player. To read WAV files as well, or write stereo and 24 bits, use the <code>wavefile</code> gem (pure Ruby, it runs here too with <code>install_gem \"wavefile\"</code>) – for this song it writes the very same file, byte for byte.</p></div><div class='task'><strong>Task:</strong> A fanfare! Write the file <code>fanfare.wav</code>: first the notes C4, E4, G4 and C5 one after another, 0.25 seconds each, then all four <strong>together</strong> for one second – 2 seconds in all.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# fanfare.wav: C4 E4 G4 C5 one after another (0.25 s each), then all four together (1 s)\n",
+            "check": "downloads.include?(\"fanfare.wav\") && File.read(\"fanfare.wav\", mode: \"rb\").b.then { |bytes| head = bytes.unpack(\"a4Va4a4VvvVVvva4V\"); s = bytes.byteslice(44..).unpack(\"s<*\"); amp = ->(from, f) { part = s[(from * 22050).round, 2205] || []; re = im = 0.0; part.each_with_index { |x, n| w = 2 * Math::PI * f * n / 22050; re += x * Math.cos(w); im += x * Math.sin(w) }; Math.hypot(re, im) * 2 / [part.size, 1].max }; c4, e4, g4, c5 = 261.63, 329.63, 392.0, 523.25; arpeggio = [[0.07, c4, [e4, g4]], [0.32, e4, [c4, g4, c5]], [0.57, g4, [c4, e4, c5]], [0.82, c5, [c4, e4, g4]]]; head.values_at(0, 2, 6, 7, 10) == [\"RIFF\", \"WAVE\", 1, 22050, 16] && (1.9..2.1).cover?(s.size / 22050.0) && arpeggio.all? { |t, f, others| (a = amp.(t, f)) > 1000 && others.all? { |o| amp.(t, o) < a / 4 } } && [[1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }",
+            "hint": "<code>notes(\"C4 E4 G4 C5\")</code> gives you the four tones. For the chord, <code>mix(*%w[C4 E4 G4 C5].map { |name| envelope(tone(frequency(name), 1.0, :sine, 0.2)) })</code> – join both with <code>+</code> and <code>File.binwrite(\"fanfare.wav\", wav(…))</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "37. Rubyで音楽を作る",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Rubyで音楽を作る</h2><p>音とは、振動する空気です。スピーカーは振動板を前後に動かしていて、その速さが音の高さとして聞こえます。<strong>1秒に440回</strong>なら、オーケストラが音合わせに使う「ラ」の音（基準音A）です。</p><p>コンピューターはこの動きを数で表します。<strong>1秒に22,050回</strong>（<em>サンプリングレート</em>）振動板の位置を測り、そのたびに-1から1までの数を書き留めます。つまり1秒の音は、22,050個のFloatが入った配列にすぎません。このレッスンでは、gemを使わずにこの配列を自分で計算します。まず1つの音、次にメロディー、和音、そしてドラムです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "RATE = 22_050                       # 1秒あたりの数\n\nconcert_a = Array.new(RATE) do |i|  # 1秒ぶん\n  time = i.fdiv(RATE)               # 秒単位\n  0.5 * Math.sin(2 * Math::PI * 440 * time)\nend\nconcert_a.first(8).map { |s| s.round(3) }"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Array.new(RATE) { |i| … }</code>はブロックを22,050回呼び出し、返された値を集めます。<code>i.fdiv(RATE)</code>は何番目の数かを秒単位の時間に変え、<code>Math.sin(2 * Math::PI * 440 * time)</code>は1秒に440回上がって下がる<strong>サイン波</strong>です。<code>0.5</code>を掛けると音量が半分になります。</p><p>でも配列のままでは聞けません。ブラウザーが欲しいのは<strong>WAVファイル</strong>です。これは意外と簡単で、44バイトのヘッダーのあとに、それぞれの数を-32,768から32,767までの整数として並べるだけです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "def wav(samples)\n  data = samples.map { |s| (s.clamp(-1.0, 1.0) * 32_767).round }.pack(\"s<*\")\n  header = [\"RIFF\", 36 + data.bytesize, \"WAVE\",\n            \"fmt \", 16, 1, 1, RATE, RATE * 2, 2, 16,   # PCM、1チャンネル、16ビット\n            \"data\", data.bytesize].pack(\"a4Va4a4VvvVVvva4V\")\n  header + data\nend\n\nfile = wav(concert_a)\nshow_audio file\n[file.bytesize, file[0, 4], file[8, 4]]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>pack</code>は配列を<strong>バイト列</strong>に変えます。かっこの中の文字列が変え方を指定します。<code>s&lt;*</code>は「すべての数を符号付き16ビット、下位バイトが先」という意味です。ヘッダーでは1文字が1つの項目を表します。<code>a4</code>は4文字のテキスト、<code>V</code>は32ビットの数、<code>v</code>は16ビットの数です。中身はファイルの長さ、形式（1 = PCM、生の数）、1チャンネル、サンプリングレート、1つの数あたり16ビットです。ヘッダー44バイトと、1つの数につき2バイトで、1秒なら44,144バイトになります。</p><p><code>pack</code>と<code>unpack</code>を使えば、Rubyはほとんどのバイナリ形式を読み書きできます。PNGもZIPもMIDIも同じ考え方です。<code>show_audio</code>はセルの下でファイルを再生し、波形を表示します。左は音全体、右は虫めがねで見た12ミリ秒です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "WAVES = {\n  sine:   ->(phase) { Math.sin(2 * Math::PI * phase) },\n  square: ->(phase) { phase < 0.5 ? 1.0 : -1.0 },\n  saw:    ->(phase) { 2 * phase - 1 }\n}\n\ndef tone(frequency, seconds, wave = :sine, volume = 0.3)\n  shape = WAVES.fetch(wave)\n  Array.new((seconds * RATE).round) do |i|\n    volume * shape.((frequency * i).fdiv(RATE) % 1.0)   # 振動のどのあたり？\n  end\nend\n\nWAVES.each_key { |wave| show_audio wav(tone(220, 0.6, wave)) }\nWAVES.keys"
+          },
+          {
+            "t": "h",
+            "html": "<p><strong>位相</strong>は、1回の振動のどこにいるかを表します。始まりが0.0、半分で0.5、終わりの直前が1.0に近い値です。<code>(frequency * i).fdiv(RATE) % 1.0</code>がそれを計算します。<code>%</code>で振動の回数ぶんを捨て、余りだけを残します。それぞれの波形は位相を高さに変える<strong>ラムダ</strong>で、3つともHashに入っています。新しい音色は1行足すだけです。</p><p>虫めがねで見てみましょう。サイン波は丸く、やわらかく聞こえます。矩形波とのこぎり波には角があり、ゲームボーイのようにビーッと聞こえます。角はたくさんの高い音、つまり<em>倍音</em>でできているからです。そのため、この2つは小さめの音量で計算しています。</p>"
+          },
+          {
+            "t": "c",
+            "code": "STEPS = { \"C\" => 0, \"D\" => 2, \"E\" => 4, \"F\" => 5, \"G\" => 7, \"A\" => 9, \"B\" => 11 }\n\ndef frequency(name)                 # \"A4\" → 440.0\n  semitone = 12 * (name[1].to_i + 1) + STEPS.fetch(name[0])\n  440 * 2**((semitone - 69) / 12.0)\nend\n\ndef envelope(samples)               # フェードイン・アウト：プチッと鳴らない\n  n = samples.size\n  samples.each_with_index.map { |s, i| s * [1.0, i / 200.0, (n - i) / 800.0].min }\nend\n\ndef notes(text, length: 0.25, wave: :sine)\n  text.split.flat_map do |name|\n    if name == \"-\"\n      Array.new((length * RATE).round, 0.0)   # 休符\n    else\n      envelope(tone(frequency(name), length, wave))\n    end\n  end\nend\n\nfrog_song = notes(\"C4 D4 E4 F4 E4 D4 C4 - E4 F4 G4 A4 G4 F4 E4 -\", length: 0.3)\nshow_audio wav(frog_song)\n[frequency(\"A4\"), frequency(\"C4\").round(1), frequency(\"C5\").round(1)]"
+          },
+          {
+            "t": "h",
+            "html": "<p>これは<strong>「かえるの歌」</strong>です。もとはドイツの童謡で、日本ではだれもが知っている歌ですね。ここではメロディーは文字列です。<code>split</code>で音名に分け、<code>flat_map</code>ですべての音を1本の長い配列につなげます。</p><p>1オクターブには12の<strong>半音</strong>があり、半音1つごとに周波数は2<sup>1/12</sup> ≈ 1.059倍になります。12段上がるとちょうど2倍で、C5はC4の2倍の速さで振動します。<code>frequency</code>はA4（MIDIと同じく69番）から半音をいくつ数えるかで周波数を求めます。そして<code>envelope</code>は、それぞれの音を短くフェードイン・フェードアウトさせます。振動の途中で波がいきなり0になると、プチッという音が聞こえるからです。一度<code>envelope(…)</code>を消して聞いてみてください。</p>"
+          },
+          {
+            "t": "c",
+            "code": "def mix(*tracks)\n  longest = tracks.map(&:size).max\n  tracks = tracks.map { |track| track + [0] * (longest - track.size) }\n  tracks.first.zip(*tracks.drop(1)).map(&:sum)\nend\n\nc_major = mix(*%w[C4 E4 G4].map { |name| envelope(tone(frequency(name), 1.5, :sine, 0.2)) })\nshow_audio wav(c_major)\nmix([1, 2, 3], [10, 20], [100])"
+          },
+          {
+            "t": "h",
+            "html": "<p>いくつかの音が同時に鳴るとき、空気の圧力はそのまま<strong>足し算</strong>されます。<code>zip</code>は配列を横に並べます。<code>[1, 2].zip([10, 20])</code>は<code>[[1, 10], [2, 20]]</code>になり、<code>map(&amp;:sum)</code>で組ごとに足します。その前に<code>mix</code>は、短いトラックを無音で埋めて長さをそろえます。C・E・Gの和音は<strong>ハ長調（Cメジャー）</strong>です。</p><p>だからここでは、どの音も<code>0.2</code>の音量で鳴らしています。0.5の音を3つ足すと最大1.5になり、1を超えた部分は<code>clamp</code>で切り落とされて、ガリガリした音になります（<em>クリッピング</em>）。試してみてください。</p>"
+          },
+          {
+            "t": "c",
+            "code": "def kick                            # 120 Hzから40 Hzへ下がるサイン波\n  phase = 0.0\n  Array.new(3000) do |i|\n    time = i.fdiv(RATE)\n    phase += (40 + 80 * Math.exp(-time * 30)) / RATE\n    0.8 * Math.sin(2 * Math::PI * phase) * Math.exp(-time * 15)\n  end\nend\n\ndef hihat                           # すぐに消えるノイズ\n  Array.new(1200) { |i| 0.2 * (rand * 2 - 1) * Math.exp(-i / 150.0) }\nend\n\ndef drums(pattern, step: 0.125)\n  slot = (step * RATE).round\n  pattern.chars.flat_map do |char|\n    sound = case char\n            when \"x\" then kick\n            when \"h\" then hihat\n            else []\n            end\n    sound.first(slot) + [0.0] * [slot - sound.size, 0].max\n  end\nend\n\nbeat = drums(\"x.h.x.h.x.h.xxh.\" * 2)\nmelody = notes(\"C4 D4 E4 F4 E4 D4 C4 - E4 F4 G4 A4 G4 F4 E4 -\", wave: :square)\nsong = mix(melody, beat)\nFile.binwrite(\"frog_song.wav\", wav(song))\nshow_audio \"frog_song.wav\""
+          },
+          {
+            "t": "h",
+            "html": "<p>ドラムもまた文字列です。1文字が8分音符1つ分で、<code>x</code>はバスドラム、<code>h</code>はハイハット、点は休符です。<strong>キック</strong>は、周波数がすばやく下がりながら消えていくサイン波です（<code>Math.exp(-time * 15)</code>はすぐに小さくなります）。<strong>ハイハット</strong>は<code>rand</code>で作ったノイズです。それぞれの音は自分の枠に合わせて切るか無音で埋めるので、リズムがずれません。</p><p><code>notes</code>、<code>drums</code>、<code>mix</code>――これはもう、配列と文字列とブロックでできた、音楽のための小さな言語の単語です（くわしくはレッスン50「自分だけのDSL」で）。<code>File.binwrite</code>はバイト列をファイルに書き出します。ファイルはセルの下にダウンロードとして現れ、<code>show_audio</code>にはファイル名を渡すこともできます。</p><div class='offweb' data-title='自分のコンピューターでは'><p>同じコードがそのまま動きます。<code>File.binwrite(\"song.wav\", wav(song))</code>で書き出し、好きなプレーヤーで開いてください。WAVファイルを読んだり、ステレオや24ビットで書いたりしたいなら、<code>wavefile</code> gemを使います（純粋なRubyなので、ここでも<code>install_gem \"wavefile\"</code>で動きます）。この曲なら、1バイトも違わない同じファイルを書き出します。</p></div><div class='task'><strong>課題：</strong>ファンファーレを作りましょう！<code>fanfare.wav</code>というファイルを書き出してください。まずC4、E4、G4、C5を順に各0.25秒、そのあと4つを<strong>同時に</strong>1秒鳴らします。全部で2秒です。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# fanfare.wav：C4 E4 G4 C5を順に（各0.25秒）、そのあと4つ同時に（1秒）\n",
+            "check": "downloads.include?(\"fanfare.wav\") && File.read(\"fanfare.wav\", mode: \"rb\").b.then { |bytes| head = bytes.unpack(\"a4Va4a4VvvVVvva4V\"); s = bytes.byteslice(44..).unpack(\"s<*\"); amp = ->(from, f) { part = s[(from * 22050).round, 2205] || []; re = im = 0.0; part.each_with_index { |x, n| w = 2 * Math::PI * f * n / 22050; re += x * Math.cos(w); im += x * Math.sin(w) }; Math.hypot(re, im) * 2 / [part.size, 1].max }; c4, e4, g4, c5 = 261.63, 329.63, 392.0, 523.25; arpeggio = [[0.07, c4, [e4, g4]], [0.32, e4, [c4, g4, c5]], [0.57, g4, [c4, e4, c5]], [0.82, c5, [c4, e4, g4]]]; head.values_at(0, 2, 6, 7, 10) == [\"RIFF\", \"WAVE\", 1, 22050, 16] && (1.9..2.1).cover?(s.size / 22050.0) && arpeggio.all? { |t, f, others| (a = amp.(t, f)) > 1000 && others.all? { |o| amp.(t, o) < a / 4 } } && [[1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }",
+            "hint": "<code>notes(\"C4 E4 G4 C5\")</code>で4つの音ができるよ。和音は<code>mix(*%w[C4 E4 G4 C5].map { |name| envelope(tone(frequency(name), 1.0, :sine, 0.2)) })</code>。2つを<code>+</code>でつないで、<code>File.binwrite(\"fanfare.wav\", wav(…))</code>で保存しよう。"
+          }
+        ]
+      }
+    },
+    {
       "id": "tl-collections",
       "section": {
         "de": "Aufbaukurs: timelog",
@@ -5652,7 +5851,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "応用コース：timelog"
       },
       "de": {
-        "title": "37. Projekt timelog: Collections",
+        "title": "38. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -5691,7 +5890,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "37. Project timelog: collections",
+        "title": "38. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -5730,7 +5929,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "37. timelogプロジェクト：コレクション",
+        "title": "38. timelogプロジェクト：コレクション",
         "cells": [
           {
             "t": "h",
@@ -5772,7 +5971,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "38. Text parsen: Regex",
+        "title": "39. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -5803,7 +6002,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "38. Parsing text: regex",
+        "title": "39. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -5834,7 +6033,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "38. テキストのパース：正規表現",
+        "title": "39. テキストのパース：正規表現",
         "cells": [
           {
             "t": "h",
@@ -5868,7 +6067,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "39. Methoden richtig bauen",
+        "title": "40. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -5899,7 +6098,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "39. Building methods properly",
+        "title": "40. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -5930,7 +6129,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "39. メソッドをきちんと作る",
+        "title": "40. メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -5964,7 +6163,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "40. Entry & Timesheet",
+        "title": "41. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -5995,7 +6194,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "40. Entry & Timesheet",
+        "title": "41. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -6026,7 +6225,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "40. EntryとTimesheet",
+        "title": "41. EntryとTimesheet",
         "cells": [
           {
             "t": "h",
@@ -6060,7 +6259,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "41. Testen mit Minitest",
+        "title": "42. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -6091,7 +6290,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "41. Testing with Minitest",
+        "title": "42. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -6122,7 +6321,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "41. Minitestでテスト",
+        "title": "42. Minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -6156,7 +6355,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "42. Enumerable & Data",
+        "title": "43. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -6168,7 +6367,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 37, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 38, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -6179,7 +6378,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "42. Enumerable & Data",
+        "title": "43. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -6191,7 +6390,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 37, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 38, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -6202,7 +6401,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "42. EnumerableとData",
+        "title": "43. EnumerableとData",
         "cells": [
           {
             "t": "h",
@@ -6214,7 +6413,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン37で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン38で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
           },
           {
             "t": "x",
@@ -6228,7 +6427,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "43. Blocks, Procs & Lambdas",
+        "title": "44. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -6267,7 +6466,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "43. Blocks, procs & lambdas",
+        "title": "44. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -6306,7 +6505,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "43. ブロック、Proc、lambda",
+        "title": "44. ブロック、Proc、lambda",
         "cells": [
           {
             "t": "h",
@@ -6348,7 +6547,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "44. Fehler behandeln",
+        "title": "45. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -6379,7 +6578,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "44. Handling errors",
+        "title": "45. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -6410,7 +6609,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "44. エラー処理",
+        "title": "45. エラー処理",
         "cells": [
           {
             "t": "h",
@@ -6444,7 +6643,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "45. Daten speichern: Formate",
+        "title": "46. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -6499,7 +6698,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "45. Saving data: formats",
+        "title": "46. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -6554,7 +6753,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "45. データの保存：フォーマット",
+        "title": "46. データの保存：フォーマット",
         "cells": [
           {
             "t": "h",
@@ -6612,7 +6811,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "46. Kommandozeile & Gems",
+        "title": "47. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -6639,7 +6838,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "46. Command line & gems",
+        "title": "47. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -6666,7 +6865,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "46. コマンドラインとgem",
+        "title": "47. コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -6696,7 +6895,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "47. Pattern Matching",
+        "title": "48. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -6727,7 +6926,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "47. Pattern matching",
+        "title": "48. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -6758,7 +6957,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "47. パターンマッチ",
+        "title": "48. パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -6792,7 +6991,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "48. Objektmodell & Metaprogrammierung",
+        "title": "49. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -6823,7 +7022,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "48. Object model & metaprogramming",
+        "title": "49. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -6854,7 +7053,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "48. オブジェクトモデルとメタプログラミング",
+        "title": "49. オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -6888,7 +7087,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "49. Eine eigene DSL",
+        "title": "50. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -6900,7 +7099,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 43 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 44 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -6911,7 +7110,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "49. Your own DSL",
+        "title": "50. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -6923,7 +7122,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 43 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 44 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
@@ -6934,7 +7133,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "49. 自分だけのDSL",
+        "title": "50. 自分だけのDSL",
         "cells": [
           {
             "t": "h",
@@ -6946,7 +7145,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン43のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン44のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
           },
           {
             "t": "x",
@@ -6960,7 +7159,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "50. Codequalität & Debugging",
+        "title": "51. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -6983,7 +7182,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "50. Code quality & debugging",
+        "title": "51. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -7006,7 +7205,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "50. コードの品質とデバッグ",
+        "title": "51. コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -7032,7 +7231,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "51. Performance & Nebenläufigkeit",
+        "title": "52. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -7079,7 +7278,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "51. Performance & concurrency",
+        "title": "52. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -7126,7 +7325,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "51. パフォーマンスと並行処理",
+        "title": "52. パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -7176,7 +7375,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "52. Finale: timelog im Web",
+        "title": "53. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -7198,12 +7397,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 46 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 47 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "en": {
-        "title": "52. Finale: timelog on the web",
+        "title": "53. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
@@ -7225,12 +7424,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 46 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 47 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "ja": {
-        "title": "52. フィナーレ：Webで動くtimelog",
+        "title": "53. フィナーレ：Webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -7252,7 +7451,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン46で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン47で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }

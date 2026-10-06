@@ -103,6 +103,18 @@ class HelpersTest < Minitest::Test
     assert_equal PDF, File.binread(File.join(@dir, pdfs.first))
   end
 
+  def test_show_audio_saves_a_wav_and_writes_samples_as_one
+    wav = "RIFF".b + "\x24\x00\x00\x00WAVE".b
+    helper_output { show_audio wav }
+    helper_output { show_audio [0.0, 1.0, -1.0, 2.0], rate: 8000 }
+    sounds = Dir.children(@dir).grep(/\Achunky-sound-\d+\.wav\z/).sort
+    assert_equal 2, sounds.size
+    assert_equal wav, File.binread(File.join(@dir, sounds.first))
+    written = File.binread(File.join(@dir, sounds.last))
+    assert_equal ["RIFF", 44, "WAVE", 1, 8000, 16], written.unpack("a4Va4x8vx2Vx6v")
+    assert_equal [0, 32_767, -32_767, 32_767], written.byteslice(44..).unpack("s<*"), "clamped to -1..1"
+  end
+
   def test_mock_get_answers_like_the_course_page
     app = ->(env) { [200, { "content-type" => "text/plain" }, ["#{env["PATH_INFO"]}?#{env["QUERY_STRING"]}"]] }
     assert_equal [200, "/hallo?name=Isi"], mock_get(app, "hallo?name=Isi")

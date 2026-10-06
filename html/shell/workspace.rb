@@ -13,14 +13,15 @@ module ChunkyShell
     PROPS = %w[className type id textContent hidden disabled value title placeholder
                spellcheck accept multiple rows open checked].freeze
     RUBY_FILE = /\.rb$|^(Gemfile|Rakefile)$/
-    # pictures, PDFs and SQLite databases - data: URLs in storage.js - show
-    # instead of the editor (a database as a few words about it); matched
-    # against the lowercased name
-    PICTURE_OR_PDF = /\.(png|jpg|jpeg|gif|webp|pdf|db|sqlite|sqlite3)$/
+    # pictures, PDFs, sounds and SQLite databases - data: URLs in storage.js -
+    # show instead of the editor (a sound as a player, a database as a few
+    # words about it); matched against the lowercased name
+    PICTURE_OR_PDF = /\.(png|jpg|jpeg|gif|webp|pdf|wav|db|sqlite|sqlite3)$/
     PDF_FILE = /\.pdf$/
+    AUDIO_FILE = /\.wav$/
     DATABASE_FILE = /\.(db|sqlite|sqlite3)$/
     TEXT_FILES = ".rb,.txt,.csv,.tsv,.json,.md,.yml,.yaml,.erb,.html,.css,.xml"
-    UPLOADS = "#{TEXT_FILES},.png,.jpg,.jpeg,.gif,.webp,.pdf,.db,.sqlite,.sqlite3"
+    UPLOADS = "#{TEXT_FILES},.png,.jpg,.jpeg,.gif,.webp,.pdf,.wav,.db,.sqlite,.sqlite3"
 
     def initialize(app, storage = JSG.w.ChunkyStorage, bridge = JSG.w.ChunkyBridge, offline = JSG.w.ChunkyOffline)
       @app = app
@@ -334,6 +335,7 @@ module ChunkyShell
     def ruby?(path) = !(path.split("/").last.to_s =~ RUBY_FILE).nil?
     def binary?(path) = !(path.to_s.downcase =~ PICTURE_OR_PDF).nil?
     def pdf?(path) = !(path.to_s.downcase =~ PDF_FILE).nil?
+    def audio?(path) = !(path.to_s.downcase =~ AUDIO_FILE).nil?
     def database?(path) = !(path.to_s.downcase =~ DATABASE_FILE).nil?
 
     # a data: URL's size, as "12 KB"
@@ -391,9 +393,10 @@ module ChunkyShell
     end
 
     # A picture or PDF in place of the editor: the picture from its data:
-    # URL, the PDF in the browser's own viewer from a Blob URL. A tiny
-    # picture (ChunkyPNG's 8x8) is drawn bigger, pixel by pixel. A SQLite
-    # database gets a few words: what it is, how big, how to use it.
+    # URL, the PDF in the browser's own viewer from a Blob URL, a sound in a
+    # player named after its file, from a Blob URL too. A tiny picture
+    # (ChunkyPNG's 8x8) is drawn bigger, pixel by pixel. A SQLite database
+    # gets a few words: what it is, how big, how to use it.
     def show_preview(path)
       box = el("wsPreview")
       return unless box
@@ -406,6 +409,9 @@ module ChunkyShell
               elsif pdf?(path)
                 @preview_url = @bridge.objectUrl(value)
                 node("iframe", { className: "ws-pdf", title: path, src: "#{@preview_url}#view=FitH" })
+              elsif audio?(path)
+                @preview_url = @bridge.objectUrl(value)
+                node("audio", { className: "ws-audio", controls: "", "aria-label": path, src: @preview_url })
               else
                 picture = node("img", { alt: path, src: value })
                 listen(picture, "load", proc { picture.classList.add("is-tiny") if picture.naturalWidth < 160 })

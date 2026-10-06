@@ -1,5 +1,33 @@
 # 05 - Ruby macht Musik (proof of concept)
 
+**Integrated.** The lesson is lesson 37 (`musik`), right after
+`rubykaigi`, the last of the side trips (the timelog track moved to
+38-53, references with it); its DSL reference now names lesson 50
+(`tl-dsl` after the insert), its task blocks start with the course's
+`<strong>Aufgabe:</strong>`, and the Japanese one is in です・ます.
+`show_audio` is in `html/main.rb` (step 1 below, without the prepend):
+`ChunkyAudio.pcm`/`waveform_svg`/`wav`, `add_audio`/`audios_html`,
+`@run_audios` in `widgets_present`, `audios` for checks, `.wav` as
+`audio/wav`, `Kernel#show_audio` (it raises for bytes that are not a
+WAV). Deviations: the wave is an SVG in an `<img class="cell-wave"
+alt="">` (inline attributes, fox palette) instead of an inline `<svg>`, so
+its "2.00 s" stays out of the status line; the `<audio>` is named "Ein
+Klang, 2,0 Sekunden" (`audioLabel`), which `#runStatus` reads; layout CSS
+in `app.css` (the page has no dark mode). The workshop keeps, previews
+and plays WAVs (`workshop.rb`, `storage.js`, `shell/workspace.rb`). Live
+runs: option 1, `"live": false` on the lesson - the shell asks for none
+there and its switch stays, off and `aria-disabled` with the reason as
+its title (a click has Chunky say it), and the kernel skips one too.
+Tests: `check_harness.rb` (`show_audio` stub, `SOLUTIONS["musik"]`, an
+`audios` local), `browser_test.mjs` (players with `duration` > 0, the
+exercise), `live_test.mjs` and `test/shell` (the flag, the announcement,
+the workshop player), the gem's `show_audio` (`chunky-sound-N.wav`).
+`lesson_check.rb` now reads the lesson from `html/lessons.js` and keeps
+its wrong-answer checks, which the harness does not have. Left out:
+`wavefile` in the gem cache (step 7), the pictures → sound cross-link,
+the `C4*2`/sharps syntax of `music.rb`. `lesson.json`, `build_lesson.rb`,
+`show_audio.rb` and `measure_in_page.mjs` are the experiment's record.
+
 A side-trip lesson where learners synthesize sound in pure Ruby: samples as
 an Array of Floats, a WAV file built by hand with `pack`, waveforms as
 lambdas, note names to frequencies, chords with `zip`/`sum`, a drum kit from

@@ -108,9 +108,13 @@ module ChunkyShell
       HTML
     end
 
-    # Live runs on or off - one switch for the page, drawn in every toolbar
-    def self.live_html(on, label, title)
-      %(<button type="button" class="live-toggle" aria-pressed="#{on}" title="#{escape_html(title)}">#{escape_html(label)}</button>)
+    # Live runs on or off - one switch for the page, drawn in every toolbar.
+    # +off_here+: a lesson without live runs - the switch is off for good,
+    # aria-disabled (still focusable, so its title, the reason, is read)
+    def self.live_html(on, label, title, off_here = false)
+      extra = off_here ? ' aria-disabled="true"' : ""
+      css = off_here ? "live-toggle is-off-here" : "live-toggle"
+      %(<button type="button" class="#{css}" aria-pressed="#{on}"#{extra} title="#{escape_html(title)}">#{escape_html(label)}</button>)
     end
 
     # The workshop's frame: workspace.rb fills the file panel (#wsFiles),

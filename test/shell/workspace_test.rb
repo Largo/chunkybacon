@@ -355,6 +355,20 @@ class WorkspaceTest < Minitest::Test
     assert_equal "1", editor.js_getValue
   end
 
+  WAV = "data:audio/wav;base64,UklGRiQAAABXQVZF"
+
+  def test_a_sound_plays_in_a_player_named_after_its_file
+    workshop(files: { "main.rb" => "1", "lied.wav" => WAV })
+    click(file_button("lied.wav"))
+    player = find("#wsPreview audio")
+    assert_match(/\Ablob:preview-\d+\z/, player.attrs["src"])
+    assert_equal WAV, calls("objectUrl").last[1]
+    assert_equal "lied.wav", player.attrs["aria-label"]
+    assert player.attrs.key?("controls")
+    click(file_button("main.rb"))
+    assert_equal player.attrs["src"], calls("revokeUrl").last[1], "the Blob URL is released"
+  end
+
   def test_a_picture_the_program_writes_shows_at_once
     workshop(storage: { "chunkyui_ws_open" => "bild.png" }, files: { "main.rb" => "1", "bild.png" => PNG })
     fresh = "data:image/png;base64,TkVX"

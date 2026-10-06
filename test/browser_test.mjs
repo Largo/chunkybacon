@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('52 lessons in nav', (await page.$$('#lessonNav a')).length === 52);
+check('53 lessons in nav', (await page.$$('#lessonNav a')).length === 53);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -783,6 +783,44 @@ await setExercise('require "prism"\ndef eingaben(zeilen)\n  fertig = []\n  puffe
 await runExercise();
 await page.waitForTimeout(300);
 check('line collector exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// music lesson: sound computed in plain Ruby, a WAV built with pack, and
+// show_audio's player below the cell (a picture of the wave above it); the
+// player is named, and the status line reads that name. "live": false:
+// the switch is off for good, focusable, and says why
+await page.click('#lessonNav a[data-id="musik"]');
+await page.waitForTimeout(300);
+check('music lesson renders', (await page.textContent('#lessonBody h2')).includes('Ruby macht Musik'));
+const musicSwitch = await page.$eval('.live-toggle', b => ({ pressed: b.getAttribute('aria-pressed'), off: b.getAttribute('aria-disabled'), disabled: b.disabled, title: b.title }));
+check('music lesson: live runs are off, the switch says why',
+  musicSwitch.pressed === 'false' && musicSwitch.off === 'true' && !musicSwitch.disabled && musicSwitch.title.includes('Live aus'));
+const players = async idx => page.$$eval(`#cell-out-${idx} .cell-audio`, boxes => boxes.map(box => {
+  const audio = box.querySelector('audio');
+  return { wave: !!box.querySelector('img.cell-wave[src^="data:image/svg+xml"]'), alt: box.querySelector('img.cell-wave')?.alt,
+           label: audio.getAttribute('aria-label'), controls: audio.controls, src: audio.src, duration: audio.duration };
+}));
+await ranCell(1);
+await ranCell(3);
+await page.waitForFunction(() => { const a = document.querySelector('#cell-out-3 audio'); return a && a.duration > 0; }, null, { timeout: 10000 }).catch(() => {});
+const tone = await players(3);
+check('show_audio plays the WAV below the cell', tone.length === 1 && tone[0].controls && tone[0].src.startsWith('blob:') && Math.abs(tone[0].duration - 1) < 0.01);
+check('... with a picture of the wave (alt="") and a named player', tone[0]?.wave && tone[0].alt === '' && tone[0].label === 'Ein Klang, 1,0 Sekunden');
+await page.waitForFunction(() => document.getElementById('runStatus').textContent.includes('Ein Klang'), null, { timeout: 3000 }).catch(() => {});
+check('... which the status line reads', (await page.textContent('#runStatus')).includes('Zelle 2 ausgeführt: => [44144, "RIFF", "WAVE"] Ein Klang, 1,0 Sekunden'));
+await ranCell(5);
+check('three waves, three players', (await players(5)).length === 3);
+await ranCell(7);   // frequenz, huelle, noten - the frog song
+await ranCell(9);   // zusammen - the C major chord
+check('the frog song and the chord play', (await players(7)).length === 1 && (await players(9)).length === 1);
+await setExercise('akkord = zusammen(*%w[C4 E4 G4 C5].map { |name| huelle(ton(frequenz(name), 1.0, :sinus, 0.2)) })\nFile.binwrite("tusch.wav", wav(noten("C4 E4 G4 C5") + akkord))\nshow_audio "tusch.wav"');
+await runExercise();
+await page.waitForFunction(i => !document.querySelector(`.run-cell[data-idx="${i}"]`).disabled, await exerciseIdx(), { timeout: 30000 });
+await page.waitForTimeout(300);
+check('fanfare exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+const fanfare = await players(await exerciseIdx());
+check('... its WAV plays, 2 s', fanfare.length === 1 && fanfare[0].label === 'Ein Klang, 2,0 Sekunden');
+check('... and downloads as audio/wav', await page.$eval(`#cell-out-${await exerciseIdx()} a.cell-download[download="tusch.wav"]`,
+  async a => (await (await fetch(a.href)).blob()).type).catch(() => null) === 'audio/wav');
 
 // TTY lesson: pastel's ANSI colours become spans (ansi.rb), tty-table and
 // tty-box draw with box-drawing characters as wide as the code font's

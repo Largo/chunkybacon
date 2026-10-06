@@ -846,6 +846,12 @@ kbd {
   background: var(--fat);
   text-decoration: line-through;
 }
+/* a lesson without live runs ("live": false): off for good; a click says why */
+.live-toggle.is-off-here {
+  color: var(--ink-soft);
+  text-decoration: line-through;
+  cursor: help;
+}
 /* what a live run printed is a rehearsal: its errors are fainter, its
    notes ("stopped after a second") quieter still */
 .cell-out.is-rehearsal .cell-error { opacity: 0.6; }
@@ -1010,6 +1016,22 @@ kbd {
   border: 1px solid var(--rule);
   border-radius: 4px;
   background: #fff;
+}
+/* show_audio: the wave (an SVG as an <img>: the whole sound, and 12 ms of
+   it magnified) above the browser's own player, both 508px wide */
+.cell-audio { margin: 0.4rem 0; max-width: 100%; }
+.cell-wave {
+  display: block;
+  width: 508px;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 0.25rem;
+}
+.cell-audio audio,
+.ws-audio {
+  display: block;
+  width: 508px;
+  max-width: 100%;
 }
 .marker { background: #ffd9d4; border-bottom: 2px solid var(--err); }
 
