@@ -4,7 +4,7 @@ What is unfinished, what state it is in, and where the context for it lives.
 `docs/HANDOVER.md` explains how everything works; this file lists what is in
 flight. Keep it short and current: tick items off, delete finished sections.
 
-Last updated 2026-10-05.
+Last updated 2026-10-06.
 
 ## Where the context is defined
 
@@ -22,46 +22,52 @@ Last updated 2026-10-05.
 
 ## State of the repository
 
-- `main` is deployed (2026-10-05), 51 lessons. Merged that day: PR #2
-  Sequel and SQLite databases in files (HANDOVER §6f); PR #3 the four
-  side trips after Scarpe, TTY, Processing, Faker, ERB + Herb (HANDOVER
-  §6g-§6j), each lesson with its own top-level scope
-  (`TopLevel.binding`); the experiments' fixes #15 (an SVG under a cell
-  keeps its size), #16 (Escape, then Tab leaves a code cell; editors named,
-  focus ring) and #17 (the mini browser draws in a shadow root, HANDOVER
-  §6); PR #19, lesson 26 matplotlib (HANDOVER §6d, supersedes #4), which
-  renumbered scikit-learn and every later lesson and turns a Python tuple
-  into a Ruby Array.
-- The experiments #5-#13 are merged too (2026-10-05, rebased): each is
-  only `experiments/NN-<idea>/` (prototype, tests, `NOTES.md` with
-  measurements and integration steps), nothing under `html/`, so none of
-  them is on the site yet. 02 stepping through a cell, 03 `show_objects`,
-  04 friendly error messages, 05 sound synthesis, 06 turtle graphics,
-  07 the `lessons.js` linter, 08 a game loop (Snake), 09 one runnable cell
-  embedded elsewhere (with a security analysis), 10 the accessibility
-  audit. They were written against `sequel-lesson`, so lesson and line
-  numbers in their notes are older than `main`. Before the merge every
-  CodeRabbit finding was fixed or answered, and all of them were tested
-  together on top of `main`: each experiment's Ruby checks
-  (`test_step_recorder.rb`, `object_graph_test.rb`, `run_corpus.rb`,
-  `robustness_check.rb`, `lesson_check.rb` of 05 and 06, `examples.rb`,
-  `lint_lessons_test.rb`, `lint_lessons.rb`, `game_test.rb`) and the
-  browser checks of 06 (`browser_check.mjs`), 09 (`test_embed.mjs check`)
-  and 10 (`verify_fixes.mjs`, `keyboard.mjs`). Not re-run: the
-  measurement scripts (`wasm_probe.mjs`, `measure_in_page.mjs`,
-  `play_snake.js`, `test_embed.mjs measure`) and 05's `wavefile_check.rb`
-  (needs the wavefile gem in `vendor/`, not in git).
-- Taking an experiment onto the site means following its `NOTES.md`
-  integration steps in `html/` - a normal change with the browser tests.
+- `main` has 54 lessons (2026-10-06). The site does NOT show it yet: the
+  host's checkout stopped following `main` on 2026-09-30 (the history
+  rewrite; GitHub's push webhook is answered with 202, but the live
+  `lessons.js` is from 2026-09-30). On the host: `git status`, then
+  `git fetch && git reset --hard origin/main` and reload nginx
+  (`docs/HOSTING.local.md`); after that check that a push deploys again.
+- Merged 2026-10-05: PR #2 Sequel (HANDOVER §6f), PR #3 TTY, Processing,
+  Faker, ERB + Herb (§6g-§6j), the experiments' early fixes #15-#17, PR #19
+  matplotlib (§6d), and the experiments #5-#13 as `experiments/NN-<idea>/`.
+- The experiments are on the page since the integration PR (2026-10-06),
+  one commit each; their `NOTES.md` start with an "Integrated" paragraph
+  (what went where, what was left out), the rest of each is the record of
+  the prototype:
+  - 07 the lesson linter: `test/lint_lessons.rb` (no CI runs it yet).
+  - 10 accessibility: results read out (`#runStatus`), focus kept after a
+    run and a lesson change, skip link, modal phone drawer, contrast,
+    names for widgets and run buttons.
+  - 04 friendly errors: a failing cell explains itself in de/en/ja
+    (`html/friendly_errors*.rb`, loaded on the first error).
+  - 03 `show_objects` (`html/object_graph.rb`), demo cells in lessons 7,
+    8 and 11; saved cell code is keyed by the cell's starter since then,
+    with a migration of the old keys (HANDOVER §6a).
+  - 06 turtle graphics, lesson 10 (`html/turtle.rb`).
+  - 05 `show_audio` and "Ruby macht Musik", lesson 37; lessons can turn
+    live runs off (`"live": false`, §6b).
+  - 08 `show_game` and "Chunkys Snake", lesson 38 (`html/game.rb`,
+    `game.js`).
+  - 02 the ⏯ step-through player on lessons 3-12 (`"stepper": true`,
+    `html/step_recorder.rb`, `stepper.js`).
+  - 09 one runnable cell for idogawa.com (`html/embed*`, README
+    "Embedding a cell", HANDOVER §6k); the bridges (`/rubygems/`,
+    `/proxy/ruby-lang/`) answer only the course's own pages: the Referer's
+    host must be the host asked (nginx `map`, the same in
+    `tools/dev_server.rb` and `server/app.rb`, HANDOVER §7). The nginx
+    config was never run through `nginx -t` (no nginx on the dev machine)
+    - check it on the host with the deploy.
 - Other sessions work in git worktrees under `.claude/worktrees/`
   (2026-10-05: `improve-lessons`, `tty-processing-faker-erb-lessons` -
   behind `main`, its PR is merged - `ocran-lesson`, `rumale-lesson`,
-  `pyodide-llm-rubyllm-988ed8`, `ideas`). `ocran-lesson` inserts a
-  lesson right after Scarpe, so it conflicts with `main` in
-  `html/lessons.js`, the count tests, README and HANDOVER: rebase it onto
-  `main` and re-run the `tmp/insert_lesson.js`-style renumbering rather
-  than hand-merging. (`git` also warns that it cannot delete
-  `.git/worktrees/agent-a88082be1e674fa38`, a stale entry - harmless.)
+  `pyodide-llm-rubyllm-988ed8`, `ideas`). Branches that insert lessons
+  conflict with `main` in `html/lessons.js`, the count tests, README and
+  HANDOVER: rebase onto `main`, re-run the `tmp/insert_lesson.js`-style
+  renumbering rather than hand-merging, then
+  `ruby test/lint_lessons.rb --base=origin/main`. (`git` also warns that it
+  cannot delete `.git/worktrees/agent-a88082be1e674fa38`, a stale entry -
+  harmless.)
 
 ## Smaller open ends found on the way
 
