@@ -4,7 +4,7 @@ Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
 Work in progress - what is unfinished, and in what state - is in
 `docs/OPEN_WORK.md`.
-Last updated 2026-10-05 (51 lessons in German, English and Japanese).
+Last updated 2026-10-05 (52 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -66,6 +66,7 @@ html/
   letter.js             show_letter's envelope: drawing, digits as 8x8 (§6e)
   ansi.rb               terminal colours in a cell's output: ANSI codes -> spans (§6g)
   object_graph.rb       show_objects: names and objects as boxes and arrows, an SVG (§6)
+  turtle.rb             turtle { forward 100 }: Chunky draws, an animated SVG; checks read the path (§6)
   processing.rb         require "processing": the gem's API in pure Ruby, frames recorded (§6h)
   processing.js         a sketch's window: paints the frames, sends mouse and keys (§6h)
   herb_bridge.rb        require "herb/herb": Herb's C parser, handed to its WebAssembly build (§6j)
@@ -119,6 +120,7 @@ test/shell/run.rb          Minitest for the shell, on a stub of PicoRuby's js
 test/autorun_test.rb       live runs under CRuby: runnable?, the time limit
 test/ansi_test.rb          ANSI colours to HTML under CRuby
 test/object_graph_test.rb  show_objects under CRuby: walk, SVG, alt text, the gem's copy
+test/turtle_test.rb        turtle graphics under CRuby: path, check helpers, SVG, texts, the gem's copy
 test/live_test.mjs         Playwright: live runs in a lesson and the workshop
 test/server_test.rb        the optional server under Rack::MockRequest
 test/permalink_test.mjs    Playwright: permalinks, against the server (port 8012)
@@ -206,7 +208,7 @@ A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 19-35), not in a group of one.
+(side trips, 20-36), not in a group of one.
 
 The sidebar itself (`index.html` `#sidebar`, `shell/app.rb`, `app.css`): from
 the top of the window to its foot with its own scroll; head with the course
@@ -266,7 +268,7 @@ Rules that the code and tests rely on:
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
 - Checks accept output OR result; `puts` is never required.
-- `test/browser_test.mjs` asserts the lesson count (`'51 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'52 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -294,6 +296,8 @@ Helpers available in cells (defined in `main.rb`): `install_gem`,
 `show_image` (a ChunkyPNG image, a PureJPEG encoder, PNG/JPEG/GIF/WebP bytes
 or the name of a file the cell wrote), `show_objects(a: a, b: b)` /
 `show_objects(binding)` (boxes and arrows, in `object_graph.rb`, §6),
+`turtle { forward 100; right 90 }` (Chunky draws; `Turtle.from(images)` in a
+check, in `turtle.rb`, §6),
 `show_browser(app, path)` + `mock_get`, `show_irb`, `show_files`, `show_three(scene, camera, orbit:, &animate)`,
 `show_shoes { ... }`, `show_letter(boxes:) { |digits| ... }` (§6e),
 `download_file(data, name)`, `show_pdf(pdf)` (a file
@@ -365,7 +369,7 @@ reach the hosts in `NET_HTTP_HOSTS` (ruby-lang.org, rubygems.org,
 api.github.com). What cannot work: anything needing a C extension with no
 pure stand-in (sqlite3, pg, ffi …), threads, sockets, subprocesses.
 
-prawn and hexapdf are in the cache (lesson 21). prawn's ttfunk depends on
+prawn and hexapdf are in the cache (lesson 22). prawn's ttfunk depends on
 bigdecimal (→ bigdecimal-pure); hexapdf depends on openssl and strscan, both
 compiled into the wasm (`NATIVE_GEMS` + `builtin?`; `tools/build_gem_cache.rb`
 skips them as `BUILTIN`). In Chrome: both install from the cache in 0.5 s,
@@ -489,7 +493,7 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   `show_objects(a: a, b: b)`, `show_objects(binding)` or
   `show_objects({ a: a }, max_depth: 2)` draws the names on the left and
   the objects behind them as boxes, an arrow per reference, in the style
-  of Python Tutor (lessons 7, 8, 10: `dup` is shallow, two names for one
+  of Python Tutor (lessons 7, 8, 11: `dup` is shallow, two names for one
   object, `equal?`). All Ruby: a breadth-first walk by `__id__` gives a
   `Graph` (one box per object, however many arrows reach it; numbers,
   symbols, nil, true, false written inline; caps `max_depth: 6`,
@@ -498,8 +502,8 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   fonts). The `Picture` goes through `show_image` (`to_data_url`), and
   app.css's `.cell-image[src^="data:image/svg+xml"]` keeps it at its
   own size - without that rule it would be the 160 px pixelated
-  thumbnail meant for ChunkyPNG pictures. It is the one picture with an
-  alt text: `Graph#describe` ("a → #1, b → #1. #1 Array: …") travels
+  thumbnail meant for ChunkyPNG pictures. Like the turtle's drawings it
+  has an alt text: `Graph#describe` ("a → #1, b → #1. #1 Array: …") travels
   as `alt_text` through `show_image` and `add_image(url, alt)`, and
   `#runStatus` reads it (`App#picture_words`); other pictures keep
   `alt=""`. Loaded at boot with `require_relative` (17 KB, ~10 ms to
@@ -514,6 +518,31 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   it. The companion gem ships a copy (`object_graph_test.rb` keeps it
   equal); the check harness requires the file, so the demo cells run
   there through its `show_image` stub.
+- **Turtle graphics** (`turtle.rb`, from `experiments/06-turtle-graphics`,
+  lesson 10): `turtle { ... }` instance_evals the block on a new `Turtle`,
+  so `forward 100` needs no receiver and a learner's top-level `def`s
+  (private methods of Object) can call it too; `turtle { |t| t.fd 10 }`
+  works as well. Logo conventions: Chunky starts at (0, 0) looking up,
+  headings are compass degrees, `right` turns clockwise, y grows upwards.
+  The turtle **records** every step and turn; the picture is made from
+  the record afterwards (`to_svg`: fitted to 460x400, strokes animated
+  with `stroke-dasharray`, the fox along the path with SMIL
+  `animateMotion`, still under `prefers-reduced-motion`), and so is the
+  grading: `to_data_url` remembers a snapshot of the turtle by its data
+  URL (the last 30), and `Turtle.from(images)` gives a check the turtles
+  this run showed - `lines`, `edges` (straight runs joined), `corners`,
+  `closed?`, `winding`, `regular_polygon?(n, side)`, `area`,
+  `same_shape?`. No kernel change for the picture: it goes through
+  `show_image` like `show_objects`, keeps its size by the same SVG rule,
+  and its `alt_text` ("Chunky hat 4 Striche gezeichnet") is what
+  `#runStatus` reads. `Turtle.lang` (set in `sync_state`) picks the
+  language of that and of its errors (`Turtle::TooFar` after 100 000 steps
+  or 200 000 turns - an endless loop or a recursion without a base case -
+  and a refused colour; colours go into SVG attributes). A live run sets
+  `Turtle.animations = false`: the picture is a still then, as an
+  animation would start over at every pause in typing; ▶ animates.
+  Loaded at boot (15 KB, ~6 ms to evaluate). The gem ships a copy
+  (`turtle_test.rb` keeps it equal).
 - CodeMirror cells must not be built while `#app` is `display:none`
   (blank editors after hard reload). Prose `pre/code` CSS stays scoped to
   `.lessonText`, or it bleeds into CodeMirror's internal `<pre>`s.
@@ -852,7 +881,7 @@ libpython with Fiddle - so:
 
 ## 6e. Rumale, a pure-Ruby Numo, and the letter
 
-Lesson 28 does machine learning in Ruby itself, with
+Lesson 29 does machine learning in Ruby itself, with
 [Rumale](https://github.com/yoshoku/rumale): k-nearest neighbours on
 vegetables, then on 1797 handwritten digits, then on a postcode the learner
 writes onto a letter.
@@ -902,7 +931,7 @@ writes onto a letter.
 
 ## 6f. SQLite and Sequel: a sqlite3 stand-in on sql.js
 
-Lesson 29 uses [Sequel](https://sequel.jeremyevans.net) with SQLite. Sequel
+Lesson 30 uses [Sequel](https://sequel.jeremyevans.net) with SQLite. Sequel
 is pure Ruby (cached, `sequel-5.109.0.gem`); the sqlite3 gem under it is C.
 
 - **sql.js** (SQLite 3.49 in WebAssembly, ~650 KB, 0.3 MB gzipped) sits in
@@ -975,7 +1004,7 @@ is pure Ruby (cached, `sequel-5.109.0.gem`); the sqlite3 gem under it is C.
 
 ## 6g. A terminal below the cell: TTY, colours, box drawing
 
-Lesson 31 draws with the [TTY toolkit](https://ttytoolkit.org): pastel,
+Lesson 32 draws with the [TTY toolkit](https://ttytoolkit.org): pastel,
 tty-table, tty-box, tty-tree, tty-font (all cached, with strings,
 tty-screen, tty-color, tty-cursor, unicode-display_width - pinned to 2.6,
 as strings wants < 3 - and unicode_utils). Three things make a cell's
@@ -995,7 +1024,7 @@ output behave like a terminal:
   line box's edges at line-height 1.6; fonts.css maps the range onto the
   code font's family. Strokes thinner than ~1.4 px vanished at some
   heights in Chromium on Windows. SymPy's `pretty` still asks for ASCII
-  (lesson 24) - its other symbols are not in this font.
+  (lesson 25) - its other symbols are not in this font.
 - **No window size**: tty-screen checks for `ioctl` on the real `$stderr`
   at load time and then calls it on `$stdout` - a StringIO, which had
   none. `sandbox_sim.rb` gives StringIO an `ioctl` that raises ENOTTY, as
@@ -1008,7 +1037,7 @@ prints nothing when its output is no terminal.
 
 ## 6h. Processing: a stand-in that records, a canvas that paints
 
-Lesson 32 is the [processing gem](https://github.com/xord/processing)
+Lesson 33 is the [processing gem](https://github.com/xord/processing)
 (xord, 1.4.0): `require "processing"`, `using Processing`, `setup do`,
 `draw do`, the Processing names in camelCase. The gem is pure Ruby on
 rays and reflexion, C++ on OpenGL, so it cannot run here.
@@ -1045,7 +1074,7 @@ helpers, `Vector`, the mouse and key state and blocks,
   cell or leaving the lesson stops it.
 - **`using` must not leak.** A refinement switched on with `using` inside
   `eval` lands in the binding's top-level scope, and every binding made
-  from `TOPLEVEL_BINDING` shares that one: after lesson 32, `text` in the
+  from `TOPLEVEL_BINDING` shares that one: after lesson 33, `text` in the
   Scarpe lesson was Processing's, and `loop do` would have been too.
   Lesson, IRB and workshop bindings now come from `TopLevel.binding`,
   an instruction sequence compiled on its own (main.rb), which has a
@@ -1064,7 +1093,7 @@ helpers, `Vector`, the mouse and key state and blocks,
 
 ## 6i. Faker and its six seconds
 
-Lesson 33 is [Faker](https://github.com/faker-ruby/faker) 3.8 (cached with
+Lesson 34 is [Faker](https://github.com/faker-ruby/faker) 3.8 (cached with
 i18n and concurrent-ruby; pure Ruby, psych is in the wasm image). Its
 first lookup has I18n read the whole load path: 318 YAML files, 4.6 MB,
 some 60 languages. In Chrome that is about six seconds - nearly all of it
@@ -1090,7 +1119,7 @@ the shape of the customers, not their names.
 
 ## 6j. ERB, and Herb's parser as WebAssembly
 
-Lesson 34 is ERB (stdlib: `result_with_hash`, `trim_mode: "-"`,
+Lesson 35 is ERB (stdlib: `result_with_hash`, `trim_mode: "-"`,
 `ERB::Util.h` against XSS, a page through a Rack lambda in the mini
 browser) and then [Herb](https://herb-tools.dev), which parses HTML and
 ERB together and reports what ERB lets through. Herb's gem is Ruby - AST
@@ -1191,7 +1220,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 51 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 52 lessons x 3 languages, starter fails, solutions pass
 ruby lint_lessons.rb           # lessons.js content: de/en/ja parity, references, Japanese rules, Prism, gems, counts
 ruby lint_lessons_test.rb      # the linter's fault-injection tests
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
@@ -1250,13 +1279,13 @@ nokogiri-pure's CI has a wasm job for this).
 - [bigdecimal-pure](https://github.com/Largo/bigdecimal-pure) - no NaN/
   Infinity, no `BigDecimal.limit/mode`; `BigMath` via Float.
 - [ruby_pptx](https://github.com/Largo/ruby_pptx) - REXML backend
-  (`RUBY_PPTX_XML_BACKEND`) is what runs here; lesson 20.
+  (`RUBY_PPTX_XML_BACKEND`) is what runs here; lesson 21.
 - [BrowserRubyKoans](https://github.com/Largo/BrowserRubyKoans) - the
   original foundation (koans.idogawa.com), linked as the follow-up course.
 - [three-rb](https://github.com/lef237/three-rb), [lacci / scarpe](https://github.com/scarpe-team/scarpe)
-  - lessons 19 and 30.
+  - lessons 20 and 31.
 - [Prawn](https://github.com/prawnpdf/prawn), [HexaPDF](https://hexapdf.gettalong.org/)
-  (AGPL-3.0 or commercial) - lesson 21.
+  (AGPL-3.0 or commercial) - lesson 22.
 
 ## 10a. The companion gem (`gem/`)
 
@@ -1279,9 +1308,10 @@ that license too. Contact in the gemspecs: web@idogawa.com.
   `show_objects` comes from `lib/chunky_bacon/object_graph.rb`, a copy of
   `html/object_graph.rb` (`test/object_graph_test.rb` fails when they
   differ); its SVG goes through the gem's `show_image` as
-  `chunky-image-N.svg`.
+  `chunky-image-N.svg`. `turtle { }` likewise, from
+  `lib/chunky_bacon/turtle.rb` (`test/turtle_test.rb`), an animated SVG.
 - Under ruby.wasm (`ChunkyBacon.browser?`) the gem leaves the page's helpers
-  alone and only adds the fox. Lesson 13 opens with
+  alone and only adds the fox. Lesson 14 opens with
   `install_gem "chunky_bacon"` + `ChunkyBacon.shout`, from the gem cache
   (`html/gems/cache/chunky_bacon-0.1.0.gem`, the published file - same SHA-256
   as on rubygems.org; first in `tools/build_gem_cache.rb`'s list, so its chip
@@ -1310,7 +1340,7 @@ that license too. Contact in the gemspecs: web@idogawa.com.
 
 Current work in progress has its own file: `docs/OPEN_WORK.md`.
 
-- Lesson 14 could show more Nokogiri (XPath, Builder) now that it works.
+- Lesson 15 could show more Nokogiri (XPath, Builder) now that it works.
 - `NATIVE_GEMS` is a hand-kept list; a gem not on it still gets downloaded
   before its `extconf.rb` is noticed (cheap, but the message arrives late).
 - The mascot: Andi wanted _why's original foxes traced; the poignant

@@ -71,7 +71,7 @@ class HelpersTest < Minitest::Test
     assert_equal ["fuchs.png"], Dir.children(@dir)
   end
 
-  # the course's boxes and arrows (lessons 7, 8, 10), as an SVG file
+  # the course's boxes and arrows (lessons 7, 8, 11), as an SVG file
   def test_show_objects_saves_an_svg
     breakfast = ["egg", "toast"]
     _, err = helper_output { assert_nil show_objects(breakfast: breakfast, same: breakfast) }
@@ -81,6 +81,18 @@ class HelpersTest < Minitest::Test
     svg = File.read(File.join(@dir, files.first))
     assert svg.start_with?("<svg")
     assert_includes svg, "breakfast"
+    assert_includes err, "saved #{files.first}"
+  end
+
+  # the course's turtle graphics (lesson 10), as an SVG file
+  def test_turtle_saves_an_svg
+    t = nil
+    _, err = helper_output { t = turtle { 4.times { forward 100; right 90 } } }
+    assert t.regular_polygon?(4, 100)
+    files = Dir.children(@dir)
+    assert_equal 1, files.size
+    assert_match(/\Achunky-image-\d+\.svg\z/, files.first)
+    assert File.read(File.join(@dir, files.first)).start_with?("<svg")
     assert_includes err, "saved #{files.first}"
   end
 

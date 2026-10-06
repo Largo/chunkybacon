@@ -57,7 +57,7 @@ module FriendlyErrors
     { id: "def-python-colon", lesson: "methoden", code: %(def square(number):\n  number * number\nend), expect: :syn_python_colon },
     { id: "recursion-no-base", lesson: "methoden", code: %(def countdown(n)\n  puts n\n  countdown(n - 1)\nend\n\ncountdown(3)), expect: :stack },
     { id: "extra-end", lesson: "methoden", code: %(def square(number)\n  number * number\nend\nend), expect: :syn_extra_end },
-    # ---- 10 klassen
+    # ---- 11 klassen
     { id: "class-lowercase", lesson: "klassen", code: %(class fox\n  def shout\n    "Chunky Bacon!"\n  end\nend), expect: :syn_class_name },
     { id: "class-def-missing-end", lesson: "klassen", code: %(class Fox\n  def initialize(name)\n    @name = name\n  end\n\n  def shout\n    "Chunky Bacon!"\nend\n\nFox.new("Kaz").shout), expect: :syn_missing_end },
     { id: "no-attr-reader", lesson: "klassen", code: %(class Fox\n  def initialize(name)\n    @name = name\n  end\nend\n\nf = Fox.new("Kaz")\nf.name), expect: :attr_missing },
@@ -65,17 +65,17 @@ module FriendlyErrors
     { id: "new-without-name", lesson: "klassen", code: %(class Fox\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\nend\n\nFox.new), expect: :arity },
     { id: "class-name-typo", lesson: "klassen", setup: %(class Fox\n  def initialize(name) = @name = name\nend), code: %(Fxo.new("Kaz")), expect: :constant },
     { id: "de-class-in-other-cell", lesson: "klassen", lang: "de", code: %(f = Fuchs.new("Kaz")\nf.ruf), expect: :constant },
-    # ---- 11 module
+    # ---- 12 module
     { id: "module-missing-end", lesson: "module", code: %(module Loud\n  def shout\n    "CHUNKY BACON!"\n  end\n\nclass Badger\n  include Loud\nend), expect: :syn_missing_end },
-    # ---- 31 tl-collections
+    # ---- 37 tl-collections
     { id: "array-of-hashes-key", lesson: "tl-collections", setup: %(entries = [\n  { project: "ProjectX", hours: 3.5 },\n  { project: "Intern",   hours: 2.0 }\n]), code: %(entries[:project]), expect: :array_key },
     { id: "sum-into-empty-hash", lesson: "tl-collections", setup: %(entries = [\n  { project: "ProjectX", hours: 3.5 },\n  { project: "Intern",   hours: 2.0 }\n]), code: %(hours = {}\nentries.each { |e| hours[e[:project]] += e[:hours] }\nhours), expect: :nil_receiver },
     { id: "average-of-empty", lesson: "tl-collections", code: %(def average(list)\n  list.sum / list.length\nend\n\naverage([])), expect: :zero_div },
     { id: "mixed-max", lesson: "tl-collections", code: %(hours = [3, "2", 1]\nhours.max), expect: :comparison },
-    # ---- 32 tl-parsing
+    # ---- 38 tl-parsing
     { id: "match-found-nothing", lesson: "tl-parsing", code: %(line = "coffee break"\nhit = line.match(/(?<from>\\d{2}:\\d{2}) (?<project>\\S+)/)\nhit[:project]), expect: :nil_receiver },
     { id: "integer-of-time", lesson: "tl-parsing", code: %(Integer("08:30")), expect: :int_parse },
-    # ---- 33 tl-methods
+    # ---- 39 tl-methods
     { id: "keyword-missing", lesson: "tl-methods", code: %(def add_entry(project:, from:, to:, note: nil)\n  { project: project, from: from, to: to, note: note }\nend\n\nadd_entry(project: "X", from: "08:30")), expect: :keywords },
     { id: "keyword-as-positional", lesson: "tl-methods", code: %(def add_entry(project:, from:, to:, note: nil)\n  { project: project, from: from, to: to, note: note }\nend\n\nadd_entry("X", "08:30", "10:00")), expect: :arity },
     { id: "keyword-typo", lesson: "tl-methods", code: %(def add_entry(project:, from:, to:, note: nil)\n  { project: project, from: from, to: to, note: note }\nend\n\nadd_entry(project: "X", from: "08:30", to: "10:00", notes: "docs")), expect: :keywords },
@@ -85,9 +85,9 @@ module FriendlyErrors
     { id: "frozen-constant", lesson: "tl-mixins", code: %(PROJECTS = ["ProjectX", "Intern"].freeze\nPROJECTS << "Docs"), expect: :frozen },
     { id: "lambda-two-args", lesson: "tl-blocks", code: %(square = ->(x) { x * x }\nsquare.call(2, 3)), expect: :arity },
     { id: "find-nothing", lesson: "tl-blocks", code: %(projects = ["ProjectX", "Intern"]\nprojects.find { |p| p.start_with?("Docs") }.upcase), expect: :nil_receiver },
-    # ---- 38 tl-errors
+    # ---- 44 tl-errors
     { id: "own-error-unrescued", lesson: "tl-errors", code: %(class TimelogError < StandardError; end\n\ndef sync\n  raise TimelogError, "network error"\nend\n\nsync), expect: :own_error },
-    # ---- 41 tl-pattern
+    # ---- 47 tl-pattern
     { id: "case-in-no-else", lesson: "tl-pattern", code: %(def dispatch(command)\n  case command\n  in ["add", project, hours]\n    "Entry: \#{project} (\#{hours}h)"\n  in ["report"]\n    "Report"\n  end\nend\n\ndispatch(["dance"])), expect: :no_pattern },
     # ---- 39/40 tl-formats, gems
     { id: "require-typo", lesson: "gems", code: %(require "chunky_pgn"), expect: :load_error },

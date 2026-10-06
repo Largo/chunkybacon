@@ -2,8 +2,11 @@
 
 ## Unreleased
 
+- `turtle { 4.times { forward 100; right 90 } }`, as in the course's lesson
+  10: Chunky draws as the turtle (the course's own `turtle.rb`), the
+  drawing saved as an animated `chunky-image-N.svg` and opened.
 - `show_objects a: a, b: b` / `show_objects binding`, as in the course's
-  lessons 7, 8 and 10: the objects behind the names as boxes and arrows
+  lessons 7, 8 and 11: the objects behind the names as boxes and arrows
   (the course's own `object_graph.rb`), saved as `chunky-image-N.svg` and
   opened. `show_image` takes SVG too.
 - `show_plot` / `show_plot fig`, as in the course's matplotlib lesson: the

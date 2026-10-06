@@ -102,11 +102,11 @@ class LessonLintTest < Minitest::Test
 
   def test_reference_parity
     d = data
-    c = cell(d, "sequel", "en") { |x| x["html"].to_s.include?("lesson 16") }
-    c["html"] = c["html"].sub("lesson 16", "lesson 15")
+    c = cell(d, "sequel", "en") { |x| x["html"].to_s.include?("lesson 17") }
+    c["html"] = c["html"].sub("lesson 17", "lesson 16")
     f = lint(d, only: %w[refs])
     assert_finds f, "ref-parity", "sequel"
-    assert_finds f, "ref-context", "sequel[en]" # the sentence names Roda, 15 is Sinatra
+    assert_finds f, "ref-context", "sequel[en]" # the sentence names Roda, 16 is Sinatra
   end
 
   # the scenario from OPEN_WORK: a lesson inserted, later titles renumbered,

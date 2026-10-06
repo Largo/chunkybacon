@@ -8,7 +8,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **51 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **52 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics, tables, frames and colours
   for the terminal with the [TTY toolkit](https://ttytoolkit.org),
@@ -36,7 +36,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   that lost it; `fox["name"]` on a hash with symbol keys suggests
   `fox[:name]`). Ruby's own message stays one click away. 44 rules,
   checked against 70 typical beginner mistakes drawn from the exercises.
-- **Lesson sidebar**: the 51 lessons in three groups (basics, side trips,
+- **Lesson sidebar**: the 52 lessons in three groups (basics, side trips,
   the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a
   drawer.
@@ -112,8 +112,13 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   `show_objects(binding)` draws the names and the objects behind them, an
   arrow for every reference, like Python Tutor - so `b = a` vs `a.dup`,
   a shallow copy of a hash, or two cats with the same name are seen, not
-  just told (lessons 7, 8, 10). Pure Ruby to SVG; a screen reader hears
+  just told (lessons 7, 8, 11). Pure Ruby to SVG; a screen reader hears
   the arrows in words.
+- **Turtle graphics with Chunky as the turtle**: `turtle { 4.times {
+  forward 100; right 90 } }` draws below the cell, as an SVG that draws
+  itself while Chunky runs along the path (lesson 10: loops, methods with
+  parameters, recursion up to a Koch snowflake). The exercise is graded on
+  what was drawn - edges, corners, closed or not - not on pixels.
 - **A terminal below each cell**: colours from ANSI escape codes (pastel,
   test runners) show as colours, and box-drawing characters (`┌─┐`, from
   tty-table, tty-box) are as wide as the code font's letters, so tables
@@ -126,7 +131,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 ## On your own computer: the chunky_bacon gem
 
 [`gem/chunky_bacon`](gem/chunky_bacon) gives a Ruby program on your own
-computer the course's helpers (`show_image`, `show_objects`, `show_browser`,
+computer the course's helpers (`show_image`, `show_objects`, `turtle`, `show_browser`,
 `download_file`, ...), so code from the lessons and the workshop runs
 unchanged. `chunkybacon run` starts a program with them loaded.
 [`gem/chunkybacon`](gem/chunkybacon) and [`gem/chunky-bacon`](gem/chunky-bacon)
@@ -195,6 +200,7 @@ ruby shell/run.rb         # the page shell (PicoRuby code) under Minitest
 ruby autorun_test.rb      # live runs: what may run, the time limit
 ruby ansi_test.rb         # terminal colours in a cell's output
 ruby object_graph_test.rb # show_objects: the walk, the SVG, the alt text
+ruby turtle_test.rb       # turtle graphics: the recorded path, the check helpers, the SVG
 ruby friendly_errors_harness.rb --summary  # 70 beginner mistakes, each explained by the expected rule
 ruby friendly_errors_robustness.rb         # the explanations never raise, never leave a %{...}
 node browser_test.mjs     # Playwright end-to-end against port 8011

@@ -39,4 +39,6 @@ unless ChunkyBacon.browser?
   require_relative "chunky_bacon/helpers"
   # show_objects: html/object_graph.rb of the course, the same file
   require_relative "chunky_bacon/object_graph"
+  # turtle { forward 100 }: html/turtle.rb of the course, the same file
+  require_relative "chunky_bacon/turtle"
 end

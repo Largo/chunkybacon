@@ -1305,9 +1305,129 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "turtle",
+      "de": {
+        "title": "10. Malen mit Chunky",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Malen mit Chunky</h2><p>In den 1960ern erfanden Seymour Papert und seine Kollegen die Sprache Logo: Kinder steuerten darin eine <em>Schildkröte</em> (englisch <em>turtle</em>), die beim Laufen eine Spur zog. Hier ist Chunky die Schildkröte. Was du in <code>turtle do</code> … <code>end</code> schreibst, sind Befehle an Chunky:</p><ul><li><code>forward 100</code> – 100 Schritte geradeaus, und dabei zeichnen</li><li><code>right 90</code>, <code>left 90</code> – sich um 90 Grad drehen</li><li><code>pen_up</code>, <code>pen_down</code>, <code>color \"red\"</code>, <code>pen_width 5</code></li></ul><p>Chunky startet in der Mitte und schaut nach oben. Ein Quadrat ist viermal „vor und rechts drehen“ – eine Schleife wie in Lektion 6:</p>"
+          },
+          {
+            "t": "c",
+            "code": "turtle do\n  4.times do\n    forward 100\n    right 90\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das <code>=&gt; #&lt;Turtle 4 lines …&gt;</code> darunter ist Chunkys Protokoll: jeder Strich wird mitgeschrieben. Bei einem Vieleck dreht sich Chunky einmal ganz herum, also um 360 Grad – an jeder Ecke um <code>360.0 / ecken</code>. Das wird eine Methode wie in Lektion 9, diesmal mit zwei Parametern – und Methoden, die du selbst schreibst, kennt Chunky im <code>turtle</code>-Block auch. Neu sind zwei Dinge: <code>(3..8).each</code> geht die Zahlen von 3 bis 8 durch (ein <em>Range</em>), und <code>{ … }</code> ist die kurze Schreibweise für <code>do</code> … <code>end</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def vieleck(ecken, seite)\n  ecken.times do\n    forward seite\n    right 360.0 / ecken\n  end\nend\n\nturtle do\n  (3..8).each do |ecken|\n    color \"hsl(#{ecken * 45}, 70%, 45%)\"\n    vieleck(ecken, 60)\n  end\nend\n\n# dreht sich Chunky insgesamt zweimal ganz herum, wird es ein Stern\nturtle { 5.times { forward 150; right 144 } }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jetzt wird es magisch: eine Methode, die sich <strong>selbst aufruft</strong>. Ein Baum ist ein Stamm mit zwei kleineren Bäumen darauf – und jeder davon ist wieder ein Stamm mit zwei noch kleineren Bäumen … Damit das aufhört, braucht die Methode eine <strong>Abbruchbedingung</strong>: <code>return if tiefe == 0</code> beendet sie sofort, wenn die Tiefe 0 ist – dann zeichnet sie nichts mehr. Das heisst <strong>Rekursion</strong>. Am Schluss geht Chunky mit <code>back</code> zurück, damit der Aufrufer dort weitermacht, wo er aufgehört hat.</p>"
+          },
+          {
+            "t": "c",
+            "code": "def baum(laenge, tiefe)\n  return if tiefe == 0   # die Abbruchbedingung\n\n  forward laenge\n  left 25\n  baum(laenge * 0.7, tiefe - 1)   # der linke kleine Baum\n  right 50\n  baum(laenge * 0.7, tiefe - 1)   # der rechte kleine Baum\n  left 25\n  back laenge                     # zurück zum Anfang des Stamms\nend\n\nturtle do\n  color \"#3a8d3a\"\n  baum(80, 7)\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>Aufgabe:</strong> Zeichne die <strong>Koch-Schneeflocke</strong>. Eine Koch-Kurve der Tiefe 0 ist ein gerader Strich. Eine Kurve der Tiefe <code>n</code> besteht aus vier Kurven der Tiefe <code>n - 1</code>, jede ein Drittel so lang, mit <code>left 60</code>, <code>right 120</code> und <code>left 60</code> dazwischen. Ergänze den <code>else</code>-Zweig – drei Kurven der Tiefe 3 ergeben die Flocke.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def koch(laenge, tiefe)\n  if tiefe == 0\n    forward laenge\n  else\n    # viermal koch(laenge / 3.0, tiefe - 1),\n    # dazwischen left 60, right 120, left 60\n  end\nend\n\nturtle do\n  color \"#2a6fb0\"\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend\n",
+            "check": "(t = Turtle.from(images).last) && t.closed? && [48, 192, 768].include?(t.edges.size) && t.edges.map { |e| e.length.round(1) }.uniq.size == 1 && (t.corners.map(&:round) - [60, -60, 120, -120]).empty?",
+            "hint": "Vier Aufrufe, drei Drehungen: <code>koch(laenge / 3.0, tiefe - 1)</code>, <code>left 60</code>, <code>koch(…)</code>, <code>right 120</code>, <code>koch(…)</code>, <code>left 60</code>, <code>koch(…)</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "10. Drawing with Chunky",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Drawing with Chunky</h2><p>In the 1960s Seymour Papert and his colleagues invented the Logo language: children steered a <em>turtle</em> that left a trail wherever it walked. Here Chunky is the turtle. What you write in <code>turtle do</code> … <code>end</code> are commands for Chunky:</p><ul><li><code>forward 100</code> – walk 100 steps straight ahead, drawing as you go</li><li><code>right 90</code>, <code>left 90</code> – turn by 90 degrees</li><li><code>pen_up</code>, <code>pen_down</code>, <code>color \"red\"</code>, <code>pen_width 5</code></li></ul><p>Chunky starts in the middle, looking up. A square is “forward and turn right” four times – a loop, as in lesson 6:</p>"
+          },
+          {
+            "t": "c",
+            "code": "turtle do\n  4.times do\n    forward 100\n    right 90\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>The <code>=&gt; #&lt;Turtle 4 lines …&gt;</code> below is Chunky's log: every line is recorded. Walking round a polygon, Chunky turns all the way round once, 360 degrees – <code>360.0 / corners</code> at each corner. That makes a method as in lesson 9, this time with two parameters – and the methods you write yourself work inside the <code>turtle</code> block too. Two things are new: <code>(3..8).each</code> walks through the numbers 3 to 8 (a <em>range</em>), and <code>{ … }</code> is the short way of writing <code>do</code> … <code>end</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def polygon(corners, side)\n  corners.times do\n    forward side\n    right 360.0 / corners\n  end\nend\n\nturtle do\n  (3..8).each do |corners|\n    color \"hsl(#{corners * 45}, 70%, 45%)\"\n    polygon(corners, 60)\n  end\nend\n\n# turn twice all the way round and it becomes a star\nturtle { 5.times { forward 150; right 144 } }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Now for some magic: a method that <strong>calls itself</strong>. A tree is a trunk with two smaller trees on top – and each of those is a trunk with two even smaller trees … To stop somewhere, the method needs a <strong>base case</strong>: <code>return if depth == 0</code> ends it right away when the depth is 0 – then it draws nothing. This is called <strong>recursion</strong>. At the end Chunky walks <code>back</code>, so the caller carries on where it left off.</p>"
+          },
+          {
+            "t": "c",
+            "code": "def tree(length, depth)\n  return if depth == 0   # the base case\n\n  forward length\n  left 25\n  tree(length * 0.7, depth - 1)   # the small tree on the left\n  right 50\n  tree(length * 0.7, depth - 1)   # the small tree on the right\n  left 25\n  back length                     # back to the foot of the trunk\nend\n\nturtle do\n  color \"#3a8d3a\"\n  tree(80, 7)\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>Task:</strong> Draw the <strong>Koch snowflake</strong>. A Koch curve of depth 0 is a straight line. A curve of depth <code>n</code> is four curves of depth <code>n - 1</code>, each a third as long, with <code>left 60</code>, <code>right 120</code> and <code>left 60</code> in between. Fill in the <code>else</code> branch – three curves of depth 3 make the flake.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def koch(length, depth)\n  if depth == 0\n    forward length\n  else\n    # four times koch(length / 3.0, depth - 1),\n    # with left 60, right 120, left 60 in between\n  end\nend\n\nturtle do\n  color \"#2a6fb0\"\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend\n",
+            "check": "(t = Turtle.from(images).last) && t.closed? && [48, 192, 768].include?(t.edges.size) && t.edges.map { |e| e.length.round(1) }.uniq.size == 1 && (t.corners.map(&:round) - [60, -60, 120, -120]).empty?",
+            "hint": "Four calls, three turns: <code>koch(length / 3.0, depth - 1)</code>, <code>left 60</code>, <code>koch(…)</code>, <code>right 120</code>, <code>koch(…)</code>, <code>left 60</code>, <code>koch(…)</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "10. Chunkyとお絵かき",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Chunkyとお絵かき</h2><p>1960年代、シーモア・パパートたちはLogoという言語を作りました。子どもたちは、歩いたあとに線をのこす<em>カメ</em>（タートル）を動かして絵をかきました。ここではChunkyがそのカメです。<code>turtle do</code> … <code>end</code>の中に書くのは、Chunkyへの命令です：</p><ul><li><code>forward 100</code> – まっすぐ100歩進んで、線をかく</li><li><code>right 90</code>、<code>left 90</code> – 90度向きを変える</li><li><code>pen_up</code>、<code>pen_down</code>、<code>color \"red\"</code>、<code>pen_width 5</code></li></ul><p>Chunkyはまんなかから、上を向いてスタートします。正方形は「進んで右を向く」を4回くり返すだけです。レッスン6のループを使います：</p>"
+          },
+          {
+            "t": "c",
+            "code": "turtle do\n  4.times do\n    forward 100\n    right 90\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>下に出る<code>=&gt; #&lt;Turtle 4 lines …&gt;</code>はChunkyの記録です。かいた線は、ぜんぶ記録されています。多角形をひとまわりすると、Chunkyはちょうど1回転、つまり360度まわります。角ごとに<code>360.0 / corners</code>度です。これをレッスン9のようなメソッドにします。今回は引数が2つです。自分で書いたメソッドも、<code>turtle</code>ブロックの中で使えます。新しいことが2つあります。<code>(3..8).each</code>は3から8までの数を順にたどります（<em>範囲</em>、Range）。<code>{ … }</code>は<code>do</code> … <code>end</code>の短い書き方です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def polygon(corners, side)\n  corners.times do\n    forward side\n    right 360.0 / corners\n  end\nend\n\nturtle do\n  (3..8).each do |corners|\n    color \"hsl(#{corners * 45}, 70%, 45%)\"\n    polygon(corners, 60)\n  end\nend\n\n# ぐるっと2回まわると、星になります\nturtle { 5.times { forward 150; right 144 } }"
+          },
+          {
+            "t": "h",
+            "html": "<p>ここからが魔法です。<strong>自分自身を呼び出す</strong>メソッドです。木は、幹の上に小さな木が2本のったものです。その小さな木も、また幹の上にもっと小さな木が2本……。どこかで止めるために、メソッドには<strong>終了条件</strong>が必要です。<code>return if depth == 0</code>は、深さが0ならメソッドをすぐに終わらせます。そのときは何もかきません。これを<strong>再帰</strong>といいます。最後にChunkyは<code>back</code>でもどるので、呼び出した側は続きからかけます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "def tree(length, depth)\n  return if depth == 0   # 終了条件\n\n  forward length\n  left 25\n  tree(length * 0.7, depth - 1)   # 左の小さな木\n  right 50\n  tree(length * 0.7, depth - 1)   # 右の小さな木\n  left 25\n  back length                     # 幹の根もとへもどる\nend\n\nturtle do\n  color \"#3a8d3a\"\n  tree(80, 7)\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task'><strong>課題：</strong><strong>コッホ雪片</strong>をかきましょう。深さ0のコッホ曲線は、まっすぐな線です。深さ<code>n</code>の曲線は、長さ3分の1の深さ<code>n - 1</code>の曲線4本でできていて、あいだに<code>left 60</code>、<code>right 120</code>、<code>left 60</code>が入ります。<code>else</code>の中を書いてください。深さ3の曲線3本で、雪の結晶になります。</div>"
+          },
+          {
+            "t": "x",
+            "code": "def koch(length, depth)\n  if depth == 0\n    forward length\n  else\n    # koch(length / 3.0, depth - 1) を4回、\n    # あいだに left 60、right 120、left 60\n  end\nend\n\nturtle do\n  color \"#2a6fb0\"\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend\n",
+            "check": "(t = Turtle.from(images).last) && t.closed? && [48, 192, 768].include?(t.edges.size) && t.edges.map { |e| e.length.round(1) }.uniq.size == 1 && (t.corners.map(&:round) - [60, -60, 120, -120]).empty?",
+            "hint": "呼び出し4回に、回転3回だよ：<code>koch(length / 3.0, depth - 1)</code>、<code>left 60</code>、<code>koch(…)</code>、<code>right 120</code>、<code>koch(…)</code>、<code>left 60</code>、<code>koch(…)</code>！"
+          }
+        ]
+      }
+    },
+    {
       "id": "klassen",
       "de": {
-        "title": "10. Klassen",
+        "title": "11. Klassen",
         "cells": [
           {
             "t": "h",
@@ -1338,7 +1458,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "10. Classes",
+        "title": "11. Classes",
         "cells": [
           {
             "t": "h",
@@ -1369,7 +1489,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "10. クラス",
+        "title": "11. クラス",
         "cells": [
           {
             "t": "h",
@@ -1403,7 +1523,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "module",
       "de": {
-        "title": "11. Module",
+        "title": "12. Module",
         "cells": [
           {
             "t": "h",
@@ -1446,7 +1566,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "11. Modules",
+        "title": "12. Modules",
         "cells": [
           {
             "t": "h",
@@ -1489,7 +1609,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "11. モジュール",
+        "title": "12. モジュール",
         "cells": [
           {
             "t": "h",
@@ -1535,7 +1655,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "irb",
       "de": {
-        "title": "12. IRB – Rubys Spielwiese",
+        "title": "13. IRB – Rubys Spielwiese",
         "cells": [
           {
             "t": "h",
@@ -1558,7 +1678,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "12. IRB – Ruby's playground",
+        "title": "13. IRB – Ruby's playground",
         "cells": [
           {
             "t": "h",
@@ -1581,7 +1701,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "12. IRB：Rubyの遊び場",
+        "title": "13. IRB：Rubyの遊び場",
         "cells": [
           {
             "t": "h",
@@ -1607,7 +1727,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "gems",
       "de": {
-        "title": "13. Gems installieren",
+        "title": "14. Gems installieren",
         "cells": [
           {
             "t": "h",
@@ -1638,7 +1758,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "13. Installing gems",
+        "title": "14. Installing gems",
         "cells": [
           {
             "t": "h",
@@ -1669,7 +1789,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "13. gemのインストール",
+        "title": "14. gemのインストール",
         "cells": [
           {
             "t": "h",
@@ -1703,7 +1823,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "html",
       "de": {
-        "title": "14. HTML parsen",
+        "title": "15. HTML parsen",
         "cells": [
           {
             "t": "h",
@@ -1742,7 +1862,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "14. Parsing HTML",
+        "title": "15. Parsing HTML",
         "cells": [
           {
             "t": "h",
@@ -1781,7 +1901,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "14. HTMLのパース",
+        "title": "15. HTMLのパース",
         "cells": [
           {
             "t": "h",
@@ -1823,7 +1943,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "sinatra",
       "de": {
-        "title": "15. Sinatra – Webserver",
+        "title": "16. Sinatra – Webserver",
         "cells": [
           {
             "t": "h",
@@ -1846,7 +1966,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "15. Sinatra – web server",
+        "title": "16. Sinatra – web server",
         "cells": [
           {
             "t": "h",
@@ -1869,7 +1989,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "15. SinatraでWebサーバー",
+        "title": "16. SinatraでWebサーバー",
         "cells": [
           {
             "t": "h",
@@ -1895,7 +2015,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "roda",
       "de": {
-        "title": "16. Roda – der Routing-Baum",
+        "title": "17. Roda – der Routing-Baum",
         "cells": [
           {
             "t": "h",
@@ -1918,7 +2038,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "16. Roda – the routing tree",
+        "title": "17. Roda – the routing tree",
         "cells": [
           {
             "t": "h",
@@ -1941,7 +2061,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "16. Rodaとルーティングツリー",
+        "title": "17. Rodaとルーティングツリー",
         "cells": [
           {
             "t": "h",
@@ -1967,7 +2087,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "http",
       "de": {
-        "title": "17. HTTP – Daten aus dem Netz",
+        "title": "18. HTTP – Daten aus dem Netz",
         "cells": [
           {
             "t": "h",
@@ -2014,7 +2134,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "17. HTTP – fetching data from the web",
+        "title": "18. HTTP – fetching data from the web",
         "cells": [
           {
             "t": "h",
@@ -2061,7 +2181,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "17. HTTPでWebからデータ取得",
+        "title": "18. HTTPでWebからデータ取得",
         "cells": [
           {
             "t": "h",
@@ -2111,7 +2231,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "bigdecimal",
       "de": {
-        "title": "18. Genau rechnen mit BigDecimal",
+        "title": "19. Genau rechnen mit BigDecimal",
         "cells": [
           {
             "t": "h",
@@ -2158,7 +2278,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "18. Exact arithmetic with BigDecimal",
+        "title": "19. Exact arithmetic with BigDecimal",
         "cells": [
           {
             "t": "h",
@@ -2205,7 +2325,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "18. BigDecimalで正確な計算",
+        "title": "19. BigDecimalで正確な計算",
         "cells": [
           {
             "t": "h",
@@ -2260,7 +2380,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "寄り道"
       },
       "de": {
-        "title": "19. 3D mit three-rb",
+        "title": "20. 3D mit three-rb",
         "cells": [
           {
             "t": "h",
@@ -2307,7 +2427,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "19. 3D with three-rb",
+        "title": "20. 3D with three-rb",
         "cells": [
           {
             "t": "h",
@@ -2354,7 +2474,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "19. three-rbで3D",
+        "title": "20. three-rbで3D",
         "cells": [
           {
             "t": "h",
@@ -2404,7 +2524,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "pptx",
       "de": {
-        "title": "20. PowerPoint mit ruby_pptx",
+        "title": "21. PowerPoint mit ruby_pptx",
         "cells": [
           {
             "t": "h",
@@ -2467,7 +2587,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "20. PowerPoint with ruby_pptx",
+        "title": "21. PowerPoint with ruby_pptx",
         "cells": [
           {
             "t": "h",
@@ -2530,7 +2650,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "20. ruby_pptxでPowerPoint",
+        "title": "21. ruby_pptxでPowerPoint",
         "cells": [
           {
             "t": "h",
@@ -2596,7 +2716,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "pdf",
       "de": {
-        "title": "21. PDFs mit Prawn & HexaPDF",
+        "title": "22. PDFs mit Prawn & HexaPDF",
         "cells": [
           {
             "t": "h",
@@ -2616,7 +2736,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 48). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
+            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 49). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
           },
           {
             "t": "c",
@@ -2643,7 +2763,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "21. PDFs with Prawn & HexaPDF",
+        "title": "22. PDFs with Prawn & HexaPDF",
         "cells": [
           {
             "t": "h",
@@ -2663,7 +2783,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 48 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
+            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 49 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
           },
           {
             "t": "c",
@@ -2690,7 +2810,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "21. PrawnとHexaPDFでPDF",
+        "title": "22. PrawnとHexaPDFでPDF",
         "cells": [
           {
             "t": "h",
@@ -2710,7 +2830,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン48で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
+            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン49で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
           },
           {
             "t": "c",
@@ -2740,11 +2860,11 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "jpeg",
       "de": {
-        "title": "22. JPEG-Fotos mit pure_jpeg",
+        "title": "23. JPEG-Fotos mit pure_jpeg",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>JPEG – Fotos aus Ruby</h2><p>In Lektion 13 hast du mit <code>chunky_png</code> PNG-Bilder gemalt. PNG speichert jeden Pixel <strong>exakt</strong> – ideal für Logos, Pixel-Art und Screenshots, für Fotos aber riesig. Darum ist fast jedes Foto ein <strong>JPEG</strong>: Es lässt weg, was das Auge kaum bemerkt, und wird dadurch viel kleiner.</p><p>Normalerweise erledigt das eine Bibliothek in C. <a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a> von Peter Cooper schreibt und liest JPEGs in reinem Ruby – darum läuft es hier im Browser. Malen wir einen Sonnenuntergang, Pixel für Pixel:</p>"
+            "html": "<h2>JPEG – Fotos aus Ruby</h2><p>In Lektion 14 hast du mit <code>chunky_png</code> PNG-Bilder gemalt. PNG speichert jeden Pixel <strong>exakt</strong> – ideal für Logos, Pixel-Art und Screenshots, für Fotos aber riesig. Darum ist fast jedes Foto ein <strong>JPEG</strong>: Es lässt weg, was das Auge kaum bemerkt, und wird dadurch viel kleiner.</p><p>Normalerweise erledigt das eine Bibliothek in C. <a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a> von Peter Cooper schreibt und liest JPEGs in reinem Ruby – darum läuft es hier im Browser. Malen wir einen Sonnenuntergang, Pixel für Pixel:</p>"
           },
           {
             "t": "c",
@@ -2787,11 +2907,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "22. JPEG photos with pure_jpeg",
+        "title": "23. JPEG photos with pure_jpeg",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>JPEG – photos from Ruby</h2><p>In lesson 13 you painted PNG pictures with <code>chunky_png</code>. PNG keeps every pixel <strong>exactly</strong> – ideal for logos, pixel art and screenshots, but huge for photos. That is why almost every photo is a <strong>JPEG</strong>: it leaves out what the eye barely notices, and gets much smaller for it.</p><p>Usually a library written in C does this. <a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a> by Peter Cooper writes and reads JPEGs in pure Ruby – which is why it runs here in your browser. Let's paint a sunset, pixel by pixel:</p>"
+            "html": "<h2>JPEG – photos from Ruby</h2><p>In lesson 14 you painted PNG pictures with <code>chunky_png</code>. PNG keeps every pixel <strong>exactly</strong> – ideal for logos, pixel art and screenshots, but huge for photos. That is why almost every photo is a <strong>JPEG</strong>: it leaves out what the eye barely notices, and gets much smaller for it.</p><p>Usually a library written in C does this. <a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a> by Peter Cooper writes and reads JPEGs in pure Ruby – which is why it runs here in your browser. Let's paint a sunset, pixel by pixel:</p>"
           },
           {
             "t": "c",
@@ -2834,11 +2954,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "22. pure_jpegでJPEG写真",
+        "title": "23. pure_jpegでJPEG写真",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>JPEG – Rubyで写真を作る</h2><p>レッスン13では、<code>chunky_png</code>でPNG画像を描きました。PNGはすべてのピクセルを<strong>正確に</strong>保存します。ロゴやドット絵、スクリーンショットには最適ですが、写真だとファイルがとても大きくなります。そこで、ほとんどの写真は<strong>JPEG</strong>です。JPEGは目にはほとんどわからない部分を省くので、ずっと小さくなります。</p><p>ふつうはC言語で書かれたライブラリがこの仕事をします。Peter Cooperさんの<a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a>は、JPEGの書き出しも読み込みもピュアRubyで行います。だから、このブラウザの中で動くのです。夕焼けを1ピクセルずつ描いてみましょう：</p>"
+            "html": "<h2>JPEG – Rubyで写真を作る</h2><p>レッスン14では、<code>chunky_png</code>でPNG画像を描きました。PNGはすべてのピクセルを<strong>正確に</strong>保存します。ロゴやドット絵、スクリーンショットには最適ですが、写真だとファイルがとても大きくなります。そこで、ほとんどの写真は<strong>JPEG</strong>です。JPEGは目にはほとんどわからない部分を省くので、ずっと小さくなります。</p><p>ふつうはC言語で書かれたライブラリがこの仕事をします。Peter Cooperさんの<a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a>は、JPEGの書き出しも読み込みもピュアRubyで行います。だから、このブラウザの中で動くのです。夕焼けを1ピクセルずつ描いてみましょう：</p>"
           },
           {
             "t": "c",
@@ -2884,7 +3004,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "pycall",
       "de": {
-        "title": "23. PyCall: pandas aus Ruby",
+        "title": "24. PyCall: pandas aus Ruby",
         "cells": [
           {
             "t": "h",
@@ -2979,7 +3099,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "23. PyCall: pandas from Ruby",
+        "title": "24. PyCall: pandas from Ruby",
         "cells": [
           {
             "t": "h",
@@ -3074,7 +3194,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "23. PyCall：Rubyからpandas",
+        "title": "24. PyCall：Rubyからpandas",
         "cells": [
           {
             "t": "h",
@@ -3172,11 +3292,11 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "sympy",
       "de": {
-        "title": "24. SymPy: Mathe mit Symbolen",
+        "title": "25. SymPy: Mathe mit Symbolen",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Mathe mit Symbolen</h2><p>Computer rechnen meist mit Zahlen, und Kommazahlen werden gerundet – probier in Ruby <code>0.1 + 0.2</code>. <a href='https://www.sympy.org' target='_blank'>SymPy</a> rechnet so, wie du auf Papier rechnest: mit Brüchen, Wurzeln und Buchstaben wie <code>x</code>. Es multipliziert Klammern aus, löst Gleichungen und bildet Ableitungen, und jede Antwort ist exakt.</p><p>SymPy ist eine Python-Bibliothek, also benutzen wir es über pycall, genau wie pandas in Lektion 23: <code>PyCall.import_module</code>, ein Punkt für alles darin. Beim ersten Mal lädt es rund 5 MB.</p>"
+            "html": "<h2>Mathe mit Symbolen</h2><p>Computer rechnen meist mit Zahlen, und Kommazahlen werden gerundet – probier in Ruby <code>0.1 + 0.2</code>. <a href='https://www.sympy.org' target='_blank'>SymPy</a> rechnet so, wie du auf Papier rechnest: mit Brüchen, Wurzeln und Buchstaben wie <code>x</code>. Es multipliziert Klammern aus, löst Gleichungen und bildet Ableitungen, und jede Antwort ist exakt.</p><p>SymPy ist eine Python-Bibliothek, also benutzen wir es über pycall, genau wie pandas in Lektion 24: <code>PyCall.import_module</code>, ein Punkt für alles darin. Beim ersten Mal lädt es rund 5 MB.</p>"
           },
           {
             "t": "c",
@@ -3243,11 +3363,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "24. SymPy: maths with symbols",
+        "title": "25. SymPy: maths with symbols",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Maths with symbols</h2><p>Computers usually calculate with numbers, and decimal numbers get rounded – try <code>0.1 + 0.2</code> in Ruby. <a href='https://www.sympy.org' target='_blank'>SymPy</a> calculates the way you do on paper: with fractions, square roots and letters like <code>x</code>. It multiplies out brackets, solves equations and finds derivatives, and every answer is exact.</p><p>SymPy is a Python library, so we use it through pycall, just like pandas in lesson 23: <code>PyCall.import_module</code>, a dot for everything in it. The first time, it loads about 5 MB.</p>"
+            "html": "<h2>Maths with symbols</h2><p>Computers usually calculate with numbers, and decimal numbers get rounded – try <code>0.1 + 0.2</code> in Ruby. <a href='https://www.sympy.org' target='_blank'>SymPy</a> calculates the way you do on paper: with fractions, square roots and letters like <code>x</code>. It multiplies out brackets, solves equations and finds derivatives, and every answer is exact.</p><p>SymPy is a Python library, so we use it through pycall, just like pandas in lesson 24: <code>PyCall.import_module</code>, a dot for everything in it. The first time, it loads about 5 MB.</p>"
           },
           {
             "t": "c",
@@ -3314,11 +3434,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "24. SymPy：記号で数学",
+        "title": "25. SymPy：記号で数学",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>記号で数学</h2><p>コンピューターはふつう数値で計算し、小数は丸められます。Rubyで<code>0.1 + 0.2</code>を試してみてください。<a href='https://www.sympy.org' target='_blank'>SymPy</a>は、紙の上で計算するのと同じように、分数や平方根、<code>x</code>のような文字のまま計算します。かっこを展開し、方程式を解き、微分をして、答えはいつも正確です。</p><p>SymPyはPythonのライブラリなので、レッスン23のpandasと同じようにpycallを通して使います。<code>PyCall.import_module</code>で取り込み、中のものにはドットで届きます。初回は約5 MBを読み込みます。</p>"
+            "html": "<h2>記号で数学</h2><p>コンピューターはふつう数値で計算し、小数は丸められます。Rubyで<code>0.1 + 0.2</code>を試してみてください。<a href='https://www.sympy.org' target='_blank'>SymPy</a>は、紙の上で計算するのと同じように、分数や平方根、<code>x</code>のような文字のまま計算します。かっこを展開し、方程式を解き、微分をして、答えはいつも正確です。</p><p>SymPyはPythonのライブラリなので、レッスン24のpandasと同じようにpycallを通して使います。<code>PyCall.import_module</code>で取り込み、中のものにはドットで届きます。初回は約5 MBを読み込みます。</p>"
           },
           {
             "t": "c",
@@ -3388,11 +3508,11 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "numpy",
       "de": {
-        "title": "25. NumPy: ganze Arrays auf einmal",
+        "title": "26. NumPy: ganze Arrays auf einmal",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Ganze Arrays auf einmal</h2><p>Auf <a href='https://numpy.org' target='_blank'>NumPy</a> steht fast alles, was Python mit Zahlen macht – pandas aus Lektion 23 ist darauf gebaut, und matplotlib und scikit-learn in den nächsten beiden Lektionen auch. Die Idee ist einfach: ein <strong>Array</strong> aus Zahlen, mit dem du als Ganzes rechnest. Keine Schleife – die läuft in NumPy, in schnellem kompiliertem Code.</p><p>Wir erreichen es wieder über pycall. Hier fünf Temperaturen in Celsius, in einer Zeile in Fahrenheit umgerechnet:</p>"
+            "html": "<h2>Ganze Arrays auf einmal</h2><p>Auf <a href='https://numpy.org' target='_blank'>NumPy</a> steht fast alles, was Python mit Zahlen macht – pandas aus Lektion 24 ist darauf gebaut, und matplotlib und scikit-learn in den nächsten beiden Lektionen auch. Die Idee ist einfach: ein <strong>Array</strong> aus Zahlen, mit dem du als Ganzes rechnest. Keine Schleife – die läuft in NumPy, in schnellem kompiliertem Code.</p><p>Wir erreichen es wieder über pycall. Hier fünf Temperaturen in Celsius, in einer Zeile in Fahrenheit umgerechnet:</p>"
           },
           {
             "t": "c",
@@ -3459,11 +3579,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "25. NumPy: whole arrays at once",
+        "title": "26. NumPy: whole arrays at once",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Whole arrays at once</h2><p><a href='https://numpy.org' target='_blank'>NumPy</a> is the library almost all of Python's number crunching stands on – pandas from lesson 23 is built on it, and so are matplotlib and scikit-learn in the next two lessons. Its idea is simple: an <strong>array</strong> of numbers that you calculate with as a whole. No loop – NumPy runs the loop for you, in fast compiled code.</p><p>We reach it through pycall again. Here are five temperatures in Celsius, turned into Fahrenheit in one line:</p>"
+            "html": "<h2>Whole arrays at once</h2><p><a href='https://numpy.org' target='_blank'>NumPy</a> is the library almost all of Python's number crunching stands on – pandas from lesson 24 is built on it, and so are matplotlib and scikit-learn in the next two lessons. Its idea is simple: an <strong>array</strong> of numbers that you calculate with as a whole. No loop – NumPy runs the loop for you, in fast compiled code.</p><p>We reach it through pycall again. Here are five temperatures in Celsius, turned into Fahrenheit in one line:</p>"
           },
           {
             "t": "c",
@@ -3530,11 +3650,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "25. NumPy：配列をまるごと計算",
+        "title": "26. NumPy：配列をまるごと計算",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>配列をまるごと計算</h2><p>Pythonの数値計算のほとんどは<a href='https://numpy.org' target='_blank'>NumPy</a>の上に成り立っています。レッスン23のpandasもその上に作られていますし、次の2つのレッスンのmatplotlibとscikit-learnもそうです。考え方はかんたんで、数の<strong>配列</strong>を、まるごと計算します。ループはいりません。ループはNumPyの中の速いコンパイル済みのコードが回してくれます。</p><p>今回もpycallを通して使います。5つの摂氏の気温を、1行で華氏に変えてみましょう：</p>"
+            "html": "<h2>配列をまるごと計算</h2><p>Pythonの数値計算のほとんどは<a href='https://numpy.org' target='_blank'>NumPy</a>の上に成り立っています。レッスン24のpandasもその上に作られていますし、次の2つのレッスンのmatplotlibとscikit-learnもそうです。考え方はかんたんで、数の<strong>配列</strong>を、まるごと計算します。ループはいりません。ループはNumPyの中の速いコンパイル済みのコードが回してくれます。</p><p>今回もpycallを通して使います。5つの摂氏の気温を、1行で華氏に変えてみましょう：</p>"
           },
           {
             "t": "c",
@@ -3604,11 +3724,11 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "matplotlib",
       "de": {
-        "title": "26. matplotlib: Diagramme",
+        "title": "27. matplotlib: Diagramme",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Zahlen als Bild</h2><p>Eine Tabelle voller Zahlen muss man lesen, ein Diagramm sieht man auf einen Blick. <a href='https://matplotlib.org' target='_blank'>matplotlib</a> ist die Bibliothek, mit der Python seit über zwanzig Jahren zeichnet – auch pandas aus Lektion 23 zeichnet seine Diagramme damit. Wir erreichen sie wie pandas und NumPy über pycall. Eine Woche Temperaturen, als Linie:</p>"
+            "html": "<h2>Zahlen als Bild</h2><p>Eine Tabelle voller Zahlen muss man lesen, ein Diagramm sieht man auf einen Blick. <a href='https://matplotlib.org' target='_blank'>matplotlib</a> ist die Bibliothek, mit der Python seit über zwanzig Jahren zeichnet – auch pandas aus Lektion 24 zeichnet seine Diagramme damit. Wir erreichen sie wie pandas und NumPy über pycall. Eine Woche Temperaturen, als Linie:</p>"
           },
           {
             "t": "c",
@@ -3632,7 +3752,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Die Zeichenfläche hat dieselben Werkzeuge, nur heissen die Beschriftungen mit <code>set_</code> davor: <code>set_title</code>, <code>set_ylabel</code>. <code>figsize: [6, 3]</code> ist die Grösse in Zoll. Wie das in Python aussähe:</p><table class='cheat'><thead><tr><th>Python</th><th>Ruby mit pycall</th></tr></thead><tbody><tr><td><code>fig, ax = plt.subplots()</code></td><td><code>fig, ax = plt.subplots</code></td></tr><tr><td><code>plt.plot(x, y, marker=\"o\")</code></td><td><code>plt.plot(x, y, marker: \"o\")</code></td></tr><tr><td><code>figsize=(6, 3)</code></td><td><code>figsize: [6, 3]</code></td></tr><tr><td><code>ax.legend()</code></td><td><code>ax.legend</code></td></tr></tbody></table><p>Mit NumPy aus Lektion 25 werden es Kurven: <code>linspace</code> macht 100 Punkte zwischen 0 und 2π, zwei <code>plot</code> landen auf derselben Fläche, und <code>label:</code> gibt jeder Linie ihren Namen für die Legende:</p>"
+            "html": "<p>Die Zeichenfläche hat dieselben Werkzeuge, nur heissen die Beschriftungen mit <code>set_</code> davor: <code>set_title</code>, <code>set_ylabel</code>. <code>figsize: [6, 3]</code> ist die Grösse in Zoll. Wie das in Python aussähe:</p><table class='cheat'><thead><tr><th>Python</th><th>Ruby mit pycall</th></tr></thead><tbody><tr><td><code>fig, ax = plt.subplots()</code></td><td><code>fig, ax = plt.subplots</code></td></tr><tr><td><code>plt.plot(x, y, marker=\"o\")</code></td><td><code>plt.plot(x, y, marker: \"o\")</code></td></tr><tr><td><code>figsize=(6, 3)</code></td><td><code>figsize: [6, 3]</code></td></tr><tr><td><code>ax.legend()</code></td><td><code>ax.legend</code></td></tr></tbody></table><p>Mit NumPy aus Lektion 26 werden es Kurven: <code>linspace</code> macht 100 Punkte zwischen 0 und 2π, zwei <code>plot</code> landen auf derselben Fläche, und <code>label:</code> gibt jeder Linie ihren Namen für die Legende:</p>"
           },
           {
             "t": "c",
@@ -3659,11 +3779,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "26. matplotlib: charts",
+        "title": "27. matplotlib: charts",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Numbers as a picture</h2><p>A table full of numbers has to be read; a chart you see at a glance. <a href='https://matplotlib.org' target='_blank'>matplotlib</a> is the library Python has drawn with for over twenty years – pandas from lesson 23 draws its charts with it too. We reach it through pycall, like pandas and NumPy. A week of temperatures, as a line:</p>"
+            "html": "<h2>Numbers as a picture</h2><p>A table full of numbers has to be read; a chart you see at a glance. <a href='https://matplotlib.org' target='_blank'>matplotlib</a> is the library Python has drawn with for over twenty years – pandas from lesson 24 draws its charts with it too. We reach it through pycall, like pandas and NumPy. A week of temperatures, as a line:</p>"
           },
           {
             "t": "c",
@@ -3687,7 +3807,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>The drawing area has the same tools, only the labels have <code>set_</code> in front: <code>set_title</code>, <code>set_ylabel</code>. <code>figsize: [6, 3]</code> is the size in inches. What it would look like in Python:</p><table class='cheat'><thead><tr><th>Python</th><th>Ruby with pycall</th></tr></thead><tbody><tr><td><code>fig, ax = plt.subplots()</code></td><td><code>fig, ax = plt.subplots</code></td></tr><tr><td><code>plt.plot(x, y, marker=\"o\")</code></td><td><code>plt.plot(x, y, marker: \"o\")</code></td></tr><tr><td><code>figsize=(6, 3)</code></td><td><code>figsize: [6, 3]</code></td></tr><tr><td><code>ax.legend()</code></td><td><code>ax.legend</code></td></tr></tbody></table><p>With NumPy from lesson 25 we get curves: <code>linspace</code> makes 100 points between 0 and 2π, two <code>plot</code>s land on the same area, and <code>label:</code> names each line for the legend:</p>"
+            "html": "<p>The drawing area has the same tools, only the labels have <code>set_</code> in front: <code>set_title</code>, <code>set_ylabel</code>. <code>figsize: [6, 3]</code> is the size in inches. What it would look like in Python:</p><table class='cheat'><thead><tr><th>Python</th><th>Ruby with pycall</th></tr></thead><tbody><tr><td><code>fig, ax = plt.subplots()</code></td><td><code>fig, ax = plt.subplots</code></td></tr><tr><td><code>plt.plot(x, y, marker=\"o\")</code></td><td><code>plt.plot(x, y, marker: \"o\")</code></td></tr><tr><td><code>figsize=(6, 3)</code></td><td><code>figsize: [6, 3]</code></td></tr><tr><td><code>ax.legend()</code></td><td><code>ax.legend</code></td></tr></tbody></table><p>With NumPy from lesson 26 we get curves: <code>linspace</code> makes 100 points between 0 and 2π, two <code>plot</code>s land on the same area, and <code>label:</code> names each line for the legend:</p>"
           },
           {
             "t": "c",
@@ -3714,11 +3834,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "26. matplotlib：グラフ",
+        "title": "27. matplotlib：グラフ",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>数を絵にする</h2><p>数がならんだ表は読まなければわかりませんが、グラフはひと目でわかります。<a href='https://matplotlib.org' target='_blank'>matplotlib</a>は、Pythonが20年以上使ってきた描画ライブラリです。レッスン23のpandasも、グラフはこれで描いています。pandasやNumPyと同じく、pycallを通して使います。まずは1週間の気温を折れ線グラフにしてみましょう：</p>"
+            "html": "<h2>数を絵にする</h2><p>数がならんだ表は読まなければわかりませんが、グラフはひと目でわかります。<a href='https://matplotlib.org' target='_blank'>matplotlib</a>は、Pythonが20年以上使ってきた描画ライブラリです。レッスン24のpandasも、グラフはこれで描いています。pandasやNumPyと同じく、pycallを通して使います。まずは1週間の気温を折れ線グラフにしてみましょう：</p>"
           },
           {
             "t": "c",
@@ -3742,7 +3862,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>描画領域にも同じ道具がありますが、ラベルを付けるメソッドには<code>set_</code>が付きます。<code>set_title</code>や<code>set_ylabel</code>です。<code>figsize: [6, 3]</code>は大きさで、単位はインチです。Pythonで書くと、こうなります：</p><table class='cheat'><thead><tr><th>Python</th><th>pycallを使ったRuby</th></tr></thead><tbody><tr><td><code>fig, ax = plt.subplots()</code></td><td><code>fig, ax = plt.subplots</code></td></tr><tr><td><code>plt.plot(x, y, marker=\"o\")</code></td><td><code>plt.plot(x, y, marker: \"o\")</code></td></tr><tr><td><code>figsize=(6, 3)</code></td><td><code>figsize: [6, 3]</code></td></tr><tr><td><code>ax.legend()</code></td><td><code>ax.legend</code></td></tr></tbody></table><p>レッスン25のNumPyを使うと、曲線も描けます。<code>linspace</code>は0から2πまでに100個の点を作ります。同じ領域に<code>plot</code>を2回呼ぶと線が2本になり、<code>label:</code>は凡例に出る線の名前です：</p>"
+            "html": "<p>描画領域にも同じ道具がありますが、ラベルを付けるメソッドには<code>set_</code>が付きます。<code>set_title</code>や<code>set_ylabel</code>です。<code>figsize: [6, 3]</code>は大きさで、単位はインチです。Pythonで書くと、こうなります：</p><table class='cheat'><thead><tr><th>Python</th><th>pycallを使ったRuby</th></tr></thead><tbody><tr><td><code>fig, ax = plt.subplots()</code></td><td><code>fig, ax = plt.subplots</code></td></tr><tr><td><code>plt.plot(x, y, marker=\"o\")</code></td><td><code>plt.plot(x, y, marker: \"o\")</code></td></tr><tr><td><code>figsize=(6, 3)</code></td><td><code>figsize: [6, 3]</code></td></tr><tr><td><code>ax.legend()</code></td><td><code>ax.legend</code></td></tr></tbody></table><p>レッスン26のNumPyを使うと、曲線も描けます。<code>linspace</code>は0から2πまでに100個の点を作ります。同じ領域に<code>plot</code>を2回呼ぶと線が2本になり、<code>label:</code>は凡例に出る線の名前です：</p>"
           },
           {
             "t": "c",
@@ -3772,7 +3892,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "sklearn",
       "de": {
-        "title": "27. scikit-learn: die Maschine lernen lassen",
+        "title": "28. scikit-learn: die Maschine lernen lassen",
         "cells": [
           {
             "t": "h",
@@ -3835,7 +3955,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "27. scikit-learn: letting the machine learn",
+        "title": "28. scikit-learn: letting the machine learn",
         "cells": [
           {
             "t": "h",
@@ -3898,7 +4018,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "27. scikit-learn：機械に学ばせる",
+        "title": "28. scikit-learn：機械に学ばせる",
         "cells": [
           {
             "t": "h",
@@ -3967,7 +4087,7 @@ window.LESSONS_JSON = JSON.stringify({
         "digits.csv": "assets/data/digits.csv"
       },
       "de": {
-        "title": "28. Rumale: maschinelles Lernen in Ruby",
+        "title": "29. Rumale: maschinelles Lernen in Ruby",
         "cells": [
           {
             "t": "h",
@@ -4030,7 +4150,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "28. Rumale: machine learning in Ruby",
+        "title": "29. Rumale: machine learning in Ruby",
         "cells": [
           {
             "t": "h",
@@ -4093,7 +4213,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "28. Rumale：Rubyで機械学習",
+        "title": "29. Rumale：Rubyで機械学習",
         "cells": [
           {
             "t": "h",
@@ -4159,11 +4279,11 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "sequel",
       "de": {
-        "title": "29. Sequel: eine Datenbank aus Ruby",
+        "title": "30. Sequel: eine Datenbank aus Ruby",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Eine Datenbank aus Ruby</h2><p>Eine <strong>Datenbank</strong> hält Daten in Tabellen – Zeilen und Spalten, wie eine Tabellenkalkulation – und beantwortet Fragen dazu in <strong>SQL</strong>. Mit <a href='https://sequel.jeremyevans.net' target='_blank'>Sequel</a> von Jeremy Evans (der auch Roda aus Lektion 16 geschrieben hat) machst du das alles in Ruby: Du rufst Methoden auf, und Sequel schreibt das SQL.</p><p>Darunter läuft <strong>SQLite</strong>, die kleine Datenbank, die in jedem Handy und jedem Browser steckt. Hier läuft sie direkt in dieser Seite (rund 1 MB, geladen, sobald du die Lektion öffnest) und hält die Datenbank im Speicher – nach dem Neuladen ist sie leer. Bauen wir eine kleine Zeiterfassung:</p>"
+            "html": "<h2>Eine Datenbank aus Ruby</h2><p>Eine <strong>Datenbank</strong> hält Daten in Tabellen – Zeilen und Spalten, wie eine Tabellenkalkulation – und beantwortet Fragen dazu in <strong>SQL</strong>. Mit <a href='https://sequel.jeremyevans.net' target='_blank'>Sequel</a> von Jeremy Evans (der auch Roda aus Lektion 17 geschrieben hat) machst du das alles in Ruby: Du rufst Methoden auf, und Sequel schreibt das SQL.</p><p>Darunter läuft <strong>SQLite</strong>, die kleine Datenbank, die in jedem Handy und jedem Browser steckt. Hier läuft sie direkt in dieser Seite (rund 1 MB, geladen, sobald du die Lektion öffnest) und hält die Datenbank im Speicher – nach dem Neuladen ist sie leer. Bauen wir eine kleine Zeiterfassung:</p>"
           },
           {
             "t": "c",
@@ -4254,11 +4374,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "29. Sequel: a database from Ruby",
+        "title": "30. Sequel: a database from Ruby",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>A database from Ruby</h2><p>A <strong>database</strong> keeps data in tables – rows and columns, like a spreadsheet – and answers questions about it in <strong>SQL</strong>. <a href='https://sequel.jeremyevans.net' target='_blank'>Sequel</a>, by Jeremy Evans (who also wrote Roda from lesson 16), lets you do all of that in Ruby: you call methods, and Sequel writes the SQL.</p><p>Underneath runs <strong>SQLite</strong>, the small database that lives in every phone and browser. Here it runs right in this page (about 1 MB, loaded when you open the lesson) and keeps the database in memory – a reload starts empty. Let's build a little time tracker:</p>"
+            "html": "<h2>A database from Ruby</h2><p>A <strong>database</strong> keeps data in tables – rows and columns, like a spreadsheet – and answers questions about it in <strong>SQL</strong>. <a href='https://sequel.jeremyevans.net' target='_blank'>Sequel</a>, by Jeremy Evans (who also wrote Roda from lesson 17), lets you do all of that in Ruby: you call methods, and Sequel writes the SQL.</p><p>Underneath runs <strong>SQLite</strong>, the small database that lives in every phone and browser. Here it runs right in this page (about 1 MB, loaded when you open the lesson) and keeps the database in memory – a reload starts empty. Let's build a little time tracker:</p>"
           },
           {
             "t": "c",
@@ -4349,11 +4469,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "29. Sequel：Rubyからデータベース",
+        "title": "30. Sequel：Rubyからデータベース",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Rubyからデータベース</h2><p><strong>データベース</strong>は、表計算のように行と列からなるテーブルにデータを保存し、<strong>SQL</strong>での質問に答えます。Jeremy Evansさん（レッスン16のRodaの作者でもあります）の<a href='https://sequel.jeremyevans.net' target='_blank'>Sequel</a>を使うと、それをすべてRubyでできます。あなたはメソッドを呼ぶだけで、SQLはSequelが書いてくれます。</p><p>その下では、どのスマートフォンにもブラウザにも入っている小さなデータベース、<strong>SQLite</strong>が動いています。ここではこのページの中で動き（約1 MB、レッスンを開くと読み込みます）、データベースはメモリ上にあります。再読み込みすると空に戻ります。小さな時間記録を作ってみましょう：</p>"
+            "html": "<h2>Rubyからデータベース</h2><p><strong>データベース</strong>は、表計算のように行と列からなるテーブルにデータを保存し、<strong>SQL</strong>での質問に答えます。Jeremy Evansさん（レッスン17のRodaの作者でもあります）の<a href='https://sequel.jeremyevans.net' target='_blank'>Sequel</a>を使うと、それをすべてRubyでできます。あなたはメソッドを呼ぶだけで、SQLはSequelが書いてくれます。</p><p>その下では、どのスマートフォンにもブラウザにも入っている小さなデータベース、<strong>SQLite</strong>が動いています。ここではこのページの中で動き（約1 MB、レッスンを開くと読み込みます）、データベースはメモリ上にあります。再読み込みすると空に戻ります。小さな時間記録を作ってみましょう：</p>"
           },
           {
             "t": "c",
@@ -4447,7 +4567,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "scarpe",
       "de": {
-        "title": "30. Shoes-Apps mit Scarpe",
+        "title": "31. Shoes-Apps mit Scarpe",
         "cells": [
           {
             "t": "h",
@@ -4494,7 +4614,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "30. Shoes apps with Scarpe",
+        "title": "31. Shoes apps with Scarpe",
         "cells": [
           {
             "t": "h",
@@ -4541,7 +4661,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "30. ScarpeでShoesアプリ",
+        "title": "31. ScarpeでShoesアプリ",
         "cells": [
           {
             "t": "h",
@@ -4591,7 +4711,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tty",
       "de": {
-        "title": "31. TTY: schöne Ausgaben im Terminal",
+        "title": "32. TTY: schöne Ausgaben im Terminal",
         "cells": [
           {
             "t": "h",
@@ -4619,7 +4739,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 36:</p>"
+            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 37:</p>"
           },
           {
             "t": "c",
@@ -4646,7 +4766,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "31. TTY: good-looking terminal output",
+        "title": "32. TTY: good-looking terminal output",
         "cells": [
           {
             "t": "h",
@@ -4674,7 +4794,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 36 on:</p>"
+            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 37 on:</p>"
           },
           {
             "t": "c",
@@ -4701,7 +4821,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "31. TTY：ターミナルをきれいに",
+        "title": "32. TTY：ターミナルをきれいに",
         "cells": [
           {
             "t": "h",
@@ -4729,7 +4849,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン36からつくるプロジェクトの構成です：</p>"
+            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン37からつくるプロジェクトの構成です：</p>"
           },
           {
             "t": "c",
@@ -4759,7 +4879,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "processing",
       "de": {
-        "title": "32. Processing: Zeichnen mit Code",
+        "title": "33. Processing: Zeichnen mit Code",
         "cells": [
           {
             "t": "h",
@@ -4771,7 +4891,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Unter der Zelle öffnet sich das Fenster des Sketches. <code>require \"processing\"</code> lädt das Gem, und <code>using Processing</code> schaltet seine Befehle ein – <code>size</code>, <code>ellipse</code>, <code>fill</code> gibt es nur in einer Datei, die das sagt. (Das ist ein <em>Refinement</em> wie <code>Pptx::Lengths</code> in Lektion 20: ein Modul, das Methoden nur dort hinzufügt, wo man es mit <code>using</code> einschaltet.) Darum beginnt hier jede Zelle mit diesen zwei Zeilen: Jede ist ein eigener Sketch, wie eine eigene Datei.</p><p>Die Koordinaten fangen <strong>oben links</strong> bei <code>0, 0</code> an, <code>x</code> geht nach rechts, <code>y</code> nach <em>unten</em>. <code>ellipse 200, 130, 140, 140</code> zeichnet einen Kreis mit der Mitte bei 200/130 und 140 Pixeln Durchmesser, <code>rect</code> ein Rechteck ab seiner Ecke oben links. Farben sind drei Zahlen von 0 bis 255 – Rot, Grün, Blau –, eine einzelne Zahl ist ein Grau. <code>fill</code> setzt die Füllung, <code>stroke</code> den Rand, und beides gilt für alles, was danach kommt.</p><p>Die Methoden heissen wie im Original-Processing: <code>mouseX</code>, nicht <code>mouse_x</code>. So passen die vielen Beispiele aus Büchern und aus dem Netz fast unverändert. Jetzt bewegt sich etwas:</p>"
+            "html": "<p>Unter der Zelle öffnet sich das Fenster des Sketches. <code>require \"processing\"</code> lädt das Gem, und <code>using Processing</code> schaltet seine Befehle ein – <code>size</code>, <code>ellipse</code>, <code>fill</code> gibt es nur in einer Datei, die das sagt. (Das ist ein <em>Refinement</em> wie <code>Pptx::Lengths</code> in Lektion 21: ein Modul, das Methoden nur dort hinzufügt, wo man es mit <code>using</code> einschaltet.) Darum beginnt hier jede Zelle mit diesen zwei Zeilen: Jede ist ein eigener Sketch, wie eine eigene Datei.</p><p>Die Koordinaten fangen <strong>oben links</strong> bei <code>0, 0</code> an, <code>x</code> geht nach rechts, <code>y</code> nach <em>unten</em>. <code>ellipse 200, 130, 140, 140</code> zeichnet einen Kreis mit der Mitte bei 200/130 und 140 Pixeln Durchmesser, <code>rect</code> ein Rechteck ab seiner Ecke oben links. Farben sind drei Zahlen von 0 bis 255 – Rot, Grün, Blau –, eine einzelne Zahl ist ein Grau. <code>fill</code> setzt die Füllung, <code>stroke</code> den Rand, und beides gilt für alles, was danach kommt.</p><p>Die Methoden heissen wie im Original-Processing: <code>mouseX</code>, nicht <code>mouse_x</code>. So passen die vielen Beispiele aus Büchern und aus dem Netz fast unverändert. Jetzt bewegt sich etwas:</p>"
           },
           {
             "t": "c",
@@ -4803,7 +4923,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Jede Blase ist ein Hash mit Ort, Tempo und Grösse. <code>random(-1, 1)</code> ist eine Zufallszahl zwischen -1 und 1, die vierte Zahl in <code>fill</code> die Deckkraft (0 durchsichtig, 255 deckend), und <code>reject!</code> räumt die Blasen weg, die oben hinausgeschwommen sind – sonst würde das Array immer länger.</p><div class='offweb' data-title='Auf deinem Computer'><p>Das echte Gem zeichnet mit OpenGL, über die C++-Bibliotheken <code>rays</code> und <code>reflexion</code> von xord. Die gibt es im Browser nicht – hier läuft ein Ersatz in reinem Ruby mit denselben Befehlen, der in ein <code>&lt;canvas&gt;</code> malt (so wie Numo in Lektion 28). Darum ist jeder Sketch dieser Lektion genau der, den du zu Hause startest:</p><pre>gem install processing\nruby sketch.rb</pre><p>Dann öffnet sich ein eigenes Fenster. Auf Windows braucht die Installation das MSYS2-DevKit von RubyInstaller, weil <code>rays</code> kompiliert wird. Zu Hause kann das Gem mehr: Bilder laden (<code>loadImage</code>), Shader, 3D und die Kamera (<code>createCapture</code>) – hier melden diese Befehle <code>NotImplementedError</code>. Und wer lieber Ruby-Namen mag, schreibt <code>using Processing(snake_case: true)</code> und darf dann auch <code>mouse_x</code> und <code>color_mode</code> sagen.</p><p>Noch etwas, das dich zu Hause überraschen könnte: Das Fenster öffnet sich nur, wenn der Sketch einen <code>draw</code>-Block (oder einen für Maus oder Tastatur) hat. Ein Sketch mit nur <code>setup</code> ist sofort fertig – darum auch hier: kein <code>draw</code>, kein Fenster.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky möchte malen. Schreib ein Malprogramm: 400 × 300 Pixel, in <code>setup</code> ein weisser Hintergrund, und solange die Maustaste gedrückt ist, zeichnet <code>draw</code> eine Linie von dort, wo die Maus eben war (<code>pmouseX</code>, <code>pmouseY</code>), bis dorthin, wo sie jetzt ist. Ohne <code>background</code> in <code>draw</code> bleibt alles stehen.</div>"
+            "html": "<p>Jede Blase ist ein Hash mit Ort, Tempo und Grösse. <code>random(-1, 1)</code> ist eine Zufallszahl zwischen -1 und 1, die vierte Zahl in <code>fill</code> die Deckkraft (0 durchsichtig, 255 deckend), und <code>reject!</code> räumt die Blasen weg, die oben hinausgeschwommen sind – sonst würde das Array immer länger.</p><div class='offweb' data-title='Auf deinem Computer'><p>Das echte Gem zeichnet mit OpenGL, über die C++-Bibliotheken <code>rays</code> und <code>reflexion</code> von xord. Die gibt es im Browser nicht – hier läuft ein Ersatz in reinem Ruby mit denselben Befehlen, der in ein <code>&lt;canvas&gt;</code> malt (so wie Numo in Lektion 29). Darum ist jeder Sketch dieser Lektion genau der, den du zu Hause startest:</p><pre>gem install processing\nruby sketch.rb</pre><p>Dann öffnet sich ein eigenes Fenster. Auf Windows braucht die Installation das MSYS2-DevKit von RubyInstaller, weil <code>rays</code> kompiliert wird. Zu Hause kann das Gem mehr: Bilder laden (<code>loadImage</code>), Shader, 3D und die Kamera (<code>createCapture</code>) – hier melden diese Befehle <code>NotImplementedError</code>. Und wer lieber Ruby-Namen mag, schreibt <code>using Processing(snake_case: true)</code> und darf dann auch <code>mouse_x</code> und <code>color_mode</code> sagen.</p><p>Noch etwas, das dich zu Hause überraschen könnte: Das Fenster öffnet sich nur, wenn der Sketch einen <code>draw</code>-Block (oder einen für Maus oder Tastatur) hat. Ein Sketch mit nur <code>setup</code> ist sofort fertig – darum auch hier: kein <code>draw</code>, kein Fenster.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky möchte malen. Schreib ein Malprogramm: 400 × 300 Pixel, in <code>setup</code> ein weisser Hintergrund, und solange die Maustaste gedrückt ist, zeichnet <code>draw</code> eine Linie von dort, wo die Maus eben war (<code>pmouseX</code>, <code>pmouseY</code>), bis dorthin, wo sie jetzt ist. Ohne <code>background</code> in <code>draw</code> bleibt alles stehen.</div>"
           },
           {
             "t": "x",
@@ -4814,7 +4934,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "32. Processing: drawing with code",
+        "title": "33. Processing: drawing with code",
         "cells": [
           {
             "t": "h",
@@ -4826,7 +4946,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>The sketch's window opens below the cell. <code>require \"processing\"</code> loads the gem, and <code>using Processing</code> switches its commands on – <code>size</code>, <code>ellipse</code>, <code>fill</code> only exist in a file that says so. (That is a <em>refinement</em>, like <code>Pptx::Lengths</code> in lesson 20: a module that adds methods only where you switch it on with <code>using</code>.) So every cell here starts with these two lines: each is a sketch of its own, like a file of its own.</p><p>Coordinates start <strong>top left</strong> at <code>0, 0</code>, <code>x</code> goes right, <code>y</code> goes <em>down</em>. <code>ellipse 200, 130, 140, 140</code> draws a circle centred at 200/130, 140 pixels across, <code>rect</code> a rectangle from its top-left corner. Colours are three numbers from 0 to 255 – red, green, blue –, a single number is a grey. <code>fill</code> sets the fill, <code>stroke</code> the outline, and both hold for everything that comes after.</p><p>The methods are named as in the original Processing: <code>mouseX</code>, not <code>mouse_x</code>. That way the many examples from books and the web fit almost unchanged. Now something moves:</p>"
+            "html": "<p>The sketch's window opens below the cell. <code>require \"processing\"</code> loads the gem, and <code>using Processing</code> switches its commands on – <code>size</code>, <code>ellipse</code>, <code>fill</code> only exist in a file that says so. (That is a <em>refinement</em>, like <code>Pptx::Lengths</code> in lesson 21: a module that adds methods only where you switch it on with <code>using</code>.) So every cell here starts with these two lines: each is a sketch of its own, like a file of its own.</p><p>Coordinates start <strong>top left</strong> at <code>0, 0</code>, <code>x</code> goes right, <code>y</code> goes <em>down</em>. <code>ellipse 200, 130, 140, 140</code> draws a circle centred at 200/130, 140 pixels across, <code>rect</code> a rectangle from its top-left corner. Colours are three numbers from 0 to 255 – red, green, blue –, a single number is a grey. <code>fill</code> sets the fill, <code>stroke</code> the outline, and both hold for everything that comes after.</p><p>The methods are named as in the original Processing: <code>mouseX</code>, not <code>mouse_x</code>. That way the many examples from books and the web fit almost unchanged. Now something moves:</p>"
           },
           {
             "t": "c",
@@ -4858,7 +4978,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Each bubble is a hash with position, speed and size. <code>random(-1, 1)</code> is a random number between -1 and 1, the fourth number in <code>fill</code> the opacity (0 see-through, 255 solid), and <code>reject!</code> clears away the bubbles that floated out at the top – otherwise the array would keep growing.</p><div class='offweb' data-title='On your machine'><p>The real gem draws with OpenGL, through xord's C++ libraries <code>rays</code> and <code>reflexion</code>. A browser does not have them – here a stand-in in pure Ruby with the same commands paints into a <code>&lt;canvas&gt;</code> (just like Numo in lesson 28). So every sketch in this lesson is exactly the one you start at home:</p><pre>gem install processing\nruby sketch.rb</pre><p>Then a window of its own opens. On Windows the install needs RubyInstaller's MSYS2 DevKit, because <code>rays</code> is compiled. At home the gem can do more: load pictures (<code>loadImage</code>), shaders, 3D and the camera (<code>createCapture</code>) – here those commands raise <code>NotImplementedError</code>. And if you prefer Ruby names, write <code>using Processing(snake_case: true)</code> and you may say <code>mouse_x</code> and <code>color_mode</code> as well.</p><p>One more thing that might surprise you at home: the window only opens if the sketch has a <code>draw</code> block (or one for the mouse or the keyboard). A sketch with only <code>setup</code> is done at once – and so here too: no <code>draw</code>, no window.</p></div><div class='task'><strong>Task:</strong> Chunky wants to paint. Write a paint program: 400 × 300 pixels, a white background in <code>setup</code>, and while the mouse button is pressed, <code>draw</code> draws a line from where the mouse just was (<code>pmouseX</code>, <code>pmouseY</code>) to where it is now. Without <code>background</code> in <code>draw</code>, everything stays.</div>"
+            "html": "<p>Each bubble is a hash with position, speed and size. <code>random(-1, 1)</code> is a random number between -1 and 1, the fourth number in <code>fill</code> the opacity (0 see-through, 255 solid), and <code>reject!</code> clears away the bubbles that floated out at the top – otherwise the array would keep growing.</p><div class='offweb' data-title='On your machine'><p>The real gem draws with OpenGL, through xord's C++ libraries <code>rays</code> and <code>reflexion</code>. A browser does not have them – here a stand-in in pure Ruby with the same commands paints into a <code>&lt;canvas&gt;</code> (just like Numo in lesson 29). So every sketch in this lesson is exactly the one you start at home:</p><pre>gem install processing\nruby sketch.rb</pre><p>Then a window of its own opens. On Windows the install needs RubyInstaller's MSYS2 DevKit, because <code>rays</code> is compiled. At home the gem can do more: load pictures (<code>loadImage</code>), shaders, 3D and the camera (<code>createCapture</code>) – here those commands raise <code>NotImplementedError</code>. And if you prefer Ruby names, write <code>using Processing(snake_case: true)</code> and you may say <code>mouse_x</code> and <code>color_mode</code> as well.</p><p>One more thing that might surprise you at home: the window only opens if the sketch has a <code>draw</code> block (or one for the mouse or the keyboard). A sketch with only <code>setup</code> is done at once – and so here too: no <code>draw</code>, no window.</p></div><div class='task'><strong>Task:</strong> Chunky wants to paint. Write a paint program: 400 × 300 pixels, a white background in <code>setup</code>, and while the mouse button is pressed, <code>draw</code> draws a line from where the mouse just was (<code>pmouseX</code>, <code>pmouseY</code>) to where it is now. Without <code>background</code> in <code>draw</code>, everything stays.</div>"
           },
           {
             "t": "x",
@@ -4869,7 +4989,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "32. Processing：コードで描く",
+        "title": "33. Processing：コードで描く",
         "cells": [
           {
             "t": "h",
@@ -4881,7 +5001,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>セルの下にスケッチのウィンドウが開きます。<code>require \"processing\"</code>でgemを読み込み、<code>using Processing</code>でその命令をオンにします。<code>size</code>、<code>ellipse</code>、<code>fill</code>は、そう書いたファイルの中にだけあります。（これはレッスン20の<code>Pptx::Lengths</code>と同じ<em>リファインメント</em>です。<code>using</code>でオンにした場所にだけメソッドを足すモジュールのことです。）だからここでは、どのセルもこの2行で始まります。それぞれが1つのスケッチ、1つのファイルのようなものです。</p><p>座標は<strong>左上</strong>の<code>0, 0</code>から始まり、<code>x</code>は右へ、<code>y</code>は<em>下へ</em>進みます。<code>ellipse 200, 130, 140, 140</code>は中心が200/130、直径140ピクセルの円を、<code>rect</code>は左上の角から長方形を描きます。色は0から255までの3つの数――赤・緑・青――で、数が1つなら灰色です。<code>fill</code>は塗りつぶし、<code>stroke</code>は輪郭の色で、どちらもそのあとに描くものすべてに効きます。</p><p>メソッドの名前は本家のProcessingと同じで、<code>mouse_x</code>ではなく<code>mouseX</code>です。だから本やネットのたくさんの例が、ほぼそのまま使えます。では、動かしてみましょう：</p>"
+            "html": "<p>セルの下にスケッチのウィンドウが開きます。<code>require \"processing\"</code>でgemを読み込み、<code>using Processing</code>でその命令をオンにします。<code>size</code>、<code>ellipse</code>、<code>fill</code>は、そう書いたファイルの中にだけあります。（これはレッスン21の<code>Pptx::Lengths</code>と同じ<em>リファインメント</em>です。<code>using</code>でオンにした場所にだけメソッドを足すモジュールのことです。）だからここでは、どのセルもこの2行で始まります。それぞれが1つのスケッチ、1つのファイルのようなものです。</p><p>座標は<strong>左上</strong>の<code>0, 0</code>から始まり、<code>x</code>は右へ、<code>y</code>は<em>下へ</em>進みます。<code>ellipse 200, 130, 140, 140</code>は中心が200/130、直径140ピクセルの円を、<code>rect</code>は左上の角から長方形を描きます。色は0から255までの3つの数――赤・緑・青――で、数が1つなら灰色です。<code>fill</code>は塗りつぶし、<code>stroke</code>は輪郭の色で、どちらもそのあとに描くものすべてに効きます。</p><p>メソッドの名前は本家のProcessingと同じで、<code>mouse_x</code>ではなく<code>mouseX</code>です。だから本やネットのたくさんの例が、ほぼそのまま使えます。では、動かしてみましょう：</p>"
           },
           {
             "t": "c",
@@ -4913,7 +5033,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>泡はそれぞれ、位置・速さ・大きさを持つハッシュです。<code>random(-1, 1)</code>は-1から1までの乱数、<code>fill</code>の4つめの数は不透明度（0で透明、255で不透明）です。<code>reject!</code>は上から出ていった泡を片づけます。そうしないと配列がどんどん長くなります。</p><div class='offweb' data-title='自分のパソコンでは'><p>本物のgemは、xordのC++ライブラリ<code>rays</code>と<code>reflexion</code>を通してOpenGLで描きます。ブラウザにはそれがないので、ここでは同じ命令を持つ純粋なRubyの代役が<code>&lt;canvas&gt;</code>に描いています（レッスン28のNumoと同じです）。だから、このレッスンのスケッチは、家で動かすものとまったく同じです：</p><pre>gem install processing\nruby sketch.rb</pre><p>すると専用のウィンドウが開きます。Windowsでは<code>rays</code>をコンパイルするので、RubyInstallerのMSYS2 DevKitが必要です。家ではgemはもっといろいろできます。画像の読み込み（<code>loadImage</code>）、シェーダー、3D、カメラ（<code>createCapture</code>）。ここではこれらの命令は<code>NotImplementedError</code>になります。Rubyらしい名前が好きなら<code>using Processing(snake_case: true)</code>と書けば、<code>mouse_x</code>や<code>color_mode</code>も使えます。</p><p>家で驚くかもしれないことがもう1つ：ウィンドウが開くのは、スケッチに<code>draw</code>ブロック（またはマウスやキーボードのブロック）があるときだけです。<code>setup</code>だけのスケッチはすぐに終わります。だからここでも、<code>draw</code>がなければウィンドウは出ません。</p></div><div class='task'><strong>課題：</strong>Chunkyが絵を描きたがっています。お絵かきプログラムをつくってください：400×300ピクセル、<code>setup</code>で白い背景。マウスのボタンを押している間、<code>draw</code>はマウスがさっきいた場所（<code>pmouseX</code>、<code>pmouseY</code>）から今の場所まで線を引きます。<code>draw</code>に<code>background</code>がなければ、描いたものは残ります。</div>"
+            "html": "<p>泡はそれぞれ、位置・速さ・大きさを持つハッシュです。<code>random(-1, 1)</code>は-1から1までの乱数、<code>fill</code>の4つめの数は不透明度（0で透明、255で不透明）です。<code>reject!</code>は上から出ていった泡を片づけます。そうしないと配列がどんどん長くなります。</p><div class='offweb' data-title='自分のパソコンでは'><p>本物のgemは、xordのC++ライブラリ<code>rays</code>と<code>reflexion</code>を通してOpenGLで描きます。ブラウザにはそれがないので、ここでは同じ命令を持つ純粋なRubyの代役が<code>&lt;canvas&gt;</code>に描いています（レッスン29のNumoと同じです）。だから、このレッスンのスケッチは、家で動かすものとまったく同じです：</p><pre>gem install processing\nruby sketch.rb</pre><p>すると専用のウィンドウが開きます。Windowsでは<code>rays</code>をコンパイルするので、RubyInstallerのMSYS2 DevKitが必要です。家ではgemはもっといろいろできます。画像の読み込み（<code>loadImage</code>）、シェーダー、3D、カメラ（<code>createCapture</code>）。ここではこれらの命令は<code>NotImplementedError</code>になります。Rubyらしい名前が好きなら<code>using Processing(snake_case: true)</code>と書けば、<code>mouse_x</code>や<code>color_mode</code>も使えます。</p><p>家で驚くかもしれないことがもう1つ：ウィンドウが開くのは、スケッチに<code>draw</code>ブロック（またはマウスやキーボードのブロック）があるときだけです。<code>setup</code>だけのスケッチはすぐに終わります。だからここでも、<code>draw</code>がなければウィンドウは出ません。</p></div><div class='task'><strong>課題：</strong>Chunkyが絵を描きたがっています。お絵かきプログラムをつくってください：400×300ピクセル、<code>setup</code>で白い背景。マウスのボタンを押している間、<code>draw</code>はマウスがさっきいた場所（<code>pmouseX</code>、<code>pmouseY</code>）から今の場所まで線を引きます。<code>draw</code>に<code>background</code>がなければ、描いたものは残ります。</div>"
           },
           {
             "t": "x",
@@ -4927,7 +5047,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "faker",
       "de": {
-        "title": "33. Faker: Testdaten, die echt aussehen",
+        "title": "34. Faker: Testdaten, die echt aussehen",
         "cells": [
           {
             "t": "h",
@@ -4971,7 +5091,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install faker</code>, oder im <code>Gemfile</code> in der Gruppe <code>:test</code>. In Minitest-Tests (Lektion 40) nimmst du gern Minitests eigenen Startwert, den jeder Lauf ausgibt (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>So erzeugt <code>ruby test.rb --seed 12345</code> genau die Daten des fehlgeschlagenen Laufs noch einmal. <code>Faker::Config.random = nil</code> macht den Zufall wieder zufällig.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky braucht für seinen Laden Testkunden, bei jedem Lauf dieselben. Leg den Zufall auf <code>Random.new(2024)</code> fest und mach ein Array <code>kunden</code> mit 5 Hashes, jeder mit einem <code>:name</code> und einer <code>:email</code>.</div>"
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install faker</code>, oder im <code>Gemfile</code> in der Gruppe <code>:test</code>. In Minitest-Tests (Lektion 41) nimmst du gern Minitests eigenen Startwert, den jeder Lauf ausgibt (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>So erzeugt <code>ruby test.rb --seed 12345</code> genau die Daten des fehlgeschlagenen Laufs noch einmal. <code>Faker::Config.random = nil</code> macht den Zufall wieder zufällig.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky braucht für seinen Laden Testkunden, bei jedem Lauf dieselben. Leg den Zufall auf <code>Random.new(2024)</code> fest und mach ein Array <code>kunden</code> mit 5 Hashes, jeder mit einem <code>:name</code> und einer <code>:email</code>.</div>"
           },
           {
             "t": "x",
@@ -4982,7 +5102,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "33. Faker: test data that looks real",
+        "title": "34. Faker: test data that looks real",
         "cells": [
           {
             "t": "h",
@@ -5026,7 +5146,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install faker</code>, or in the <code>Gemfile</code> in the <code>:test</code> group. In Minitest tests (lesson 40) Minitest's own seed is a good choice; every run prints it (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>Then <code>ruby test.rb --seed 12345</code> makes exactly the data of the failed run again. <code>Faker::Config.random = nil</code> makes randomness random again.</p></div><div class='task'><strong>Task:</strong> Chunky needs test customers for his shop, the same ones on every run. Pin the randomness to <code>Random.new(2024)</code> and make an array <code>customers</code> of 5 hashes, each with a <code>:name</code> and an <code>:email</code>.</div>"
+            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install faker</code>, or in the <code>Gemfile</code> in the <code>:test</code> group. In Minitest tests (lesson 41) Minitest's own seed is a good choice; every run prints it (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>Then <code>ruby test.rb --seed 12345</code> makes exactly the data of the failed run again. <code>Faker::Config.random = nil</code> makes randomness random again.</p></div><div class='task'><strong>Task:</strong> Chunky needs test customers for his shop, the same ones on every run. Pin the randomness to <code>Random.new(2024)</code> and make an array <code>customers</code> of 5 hashes, each with a <code>:name</code> and an <code>:email</code>.</div>"
           },
           {
             "t": "x",
@@ -5037,7 +5157,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "33. Faker：本物らしいテストデータ",
+        "title": "34. Faker：本物らしいテストデータ",
         "cells": [
           {
             "t": "h",
@@ -5081,7 +5201,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='自分のパソコンでは'><p><code>gem install faker</code>、または<code>Gemfile</code>の<code>:test</code>グループに。Minitestのテスト（レッスン40）では、Minitest自身のシードを使うのがおすすめです。毎回の実行で表示されます（<code>Run options: --seed 12345</code>）：</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>すると<code>ruby test.rb --seed 12345</code>で、失敗した実行とまったく同じデータがもう一度つくられます。<code>Faker::Config.random = nil</code>で、乱数はまたランダムに戻ります。</p></div><div class='task'><strong>課題：</strong>Chunkyはお店のためのテスト用のお客さんがほしいのです。毎回同じお客さんで。乱数を<code>Random.new(2024)</code>に固定して、5つのハッシュの配列<code>customers</code>をつくってください。どのハッシュにも<code>:name</code>と<code>:email</code>があります。</div>"
+            "html": "<div class='offweb' data-title='自分のパソコンでは'><p><code>gem install faker</code>、または<code>Gemfile</code>の<code>:test</code>グループに。Minitestのテスト（レッスン41）では、Minitest自身のシードを使うのがおすすめです。毎回の実行で表示されます（<code>Run options: --seed 12345</code>）：</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>すると<code>ruby test.rb --seed 12345</code>で、失敗した実行とまったく同じデータがもう一度つくられます。<code>Faker::Config.random = nil</code>で、乱数はまたランダムに戻ります。</p></div><div class='task'><strong>課題：</strong>Chunkyはお店のためのテスト用のお客さんがほしいのです。毎回同じお客さんで。乱数を<code>Random.new(2024)</code>に固定して、5つのハッシュの配列<code>customers</code>をつくってください。どのハッシュにも<code>:name</code>と<code>:email</code>があります。</div>"
           },
           {
             "t": "x",
@@ -5095,7 +5215,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "erb",
       "de": {
-        "title": "34. ERB: Vorlagen – und Herb, der sie prüft",
+        "title": "35. ERB: Vorlagen – und Herb, der sie prüft",
         "cells": [
           {
             "t": "h",
@@ -5123,7 +5243,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Die erste Zeile ist gefährlich. Ein Browser liest darin ein <code>&lt;script&gt;</code> und führt es aus – das Programm einer fremden Person, auf der Seite deines Ladens, mit den Daten deiner Kundschaft. Das heisst <em>Cross-Site-Scripting</em> (XSS) und ist eine der häufigsten Sicherheitslücken im Web. <code>ERB::Util.h</code> (h für HTML) <em>maskiert</em> die Sonderzeichen: Aus <code>&lt;</code> wird <code>&amp;lt;</code>, und der Browser zeigt die Zeichen nur an, statt sie auszuführen. Die Regel: Alles, was nicht von dir selbst stammt, kommt durch <code>h</code>. (Rails tut das von sich aus.)</p><p>Und so wird aus einer ERB-Vorlage eine Seite im Mini-Browser (Lektion 15) – ein Lambda genügt als Rack-App:</p>"
+            "html": "<p>Die erste Zeile ist gefährlich. Ein Browser liest darin ein <code>&lt;script&gt;</code> und führt es aus – das Programm einer fremden Person, auf der Seite deines Ladens, mit den Daten deiner Kundschaft. Das heisst <em>Cross-Site-Scripting</em> (XSS) und ist eine der häufigsten Sicherheitslücken im Web. <code>ERB::Util.h</code> (h für HTML) <em>maskiert</em> die Sonderzeichen: Aus <code>&lt;</code> wird <code>&amp;lt;</code>, und der Browser zeigt die Zeichen nur an, statt sie auszuführen. Die Regel: Alles, was nicht von dir selbst stammt, kommt durch <code>h</code>. (Rails tut das von sich aus.)</p><p>Und so wird aus einer ERB-Vorlage eine Seite im Mini-Browser (Lektion 16) – ein Lambda genügt als Rack-App:</p>"
           },
           {
             "t": "c",
@@ -5147,7 +5267,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Ein <code>HTMLElementNode</code> mit seinem öffnenden und schliessenden Tag, darin ein <code>ERBContentNode</code> mit dem Ruby-Code. Auf diesem Baum bauen Herbs Werkzeuge auf: ein Linter, der Regeln prüft, ein Formatierer, und Hilfe im Editor.</p><p>Am meisten bringt Herb in Tests: Ein Test, der jede Vorlage prüft, fällt um, sobald jemand ein Tag falsch schliesst – lange bevor es jemand im Browser sieht. Mit Minitest aus Lektion 40:</p>"
+            "html": "<p>Ein <code>HTMLElementNode</code> mit seinem öffnenden und schliessenden Tag, darin ein <code>ERBContentNode</code> mit dem Ruby-Code. Auf diesem Baum bauen Herbs Werkzeuge auf: ein Linter, der Regeln prüft, ein Formatierer, und Hilfe im Editor.</p><p>Am meisten bringt Herb in Tests: Ein Test, der jede Vorlage prüft, fällt um, sobald jemand ein Tag falsch schliesst – lange bevor es jemand im Browser sieht. Mit Minitest aus Lektion 41:</p>"
           },
           {
             "t": "c",
@@ -5166,7 +5286,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "34. ERB: templates – and Herb, which checks them",
+        "title": "35. ERB: templates – and Herb, which checks them",
         "cells": [
           {
             "t": "h",
@@ -5194,7 +5314,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>The first line is dangerous. A browser reads a <code>&lt;script&gt;</code> in it and runs it – a stranger's program, on your shop's page, with your customers' data. That is called <em>cross-site scripting</em> (XSS), one of the most common security holes on the web. <code>ERB::Util.h</code> (h for HTML) <em>escapes</em> the special characters: <code>&lt;</code> becomes <code>&amp;lt;</code>, and the browser shows the characters instead of running them. The rule: everything that does not come from you goes through <code>h</code>. (Rails does that by itself.)</p><p>And this is how an ERB template becomes a page in the mini browser (lesson 15) – a lambda will do as a Rack app:</p>"
+            "html": "<p>The first line is dangerous. A browser reads a <code>&lt;script&gt;</code> in it and runs it – a stranger's program, on your shop's page, with your customers' data. That is called <em>cross-site scripting</em> (XSS), one of the most common security holes on the web. <code>ERB::Util.h</code> (h for HTML) <em>escapes</em> the special characters: <code>&lt;</code> becomes <code>&amp;lt;</code>, and the browser shows the characters instead of running them. The rule: everything that does not come from you goes through <code>h</code>. (Rails does that by itself.)</p><p>And this is how an ERB template becomes a page in the mini browser (lesson 16) – a lambda will do as a Rack app:</p>"
           },
           {
             "t": "c",
@@ -5218,7 +5338,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>An <code>HTMLElementNode</code> with its opening and closing tag, and inside it an <code>ERBContentNode</code> with the Ruby code. Herb's tools build on this tree: a linter that checks rules, a formatter, and help in the editor.</p><p>Herb pays off most in tests: a test that checks every template falls over as soon as somebody closes a tag wrongly – long before anyone sees it in the browser. With Minitest from lesson 40:</p>"
+            "html": "<p>An <code>HTMLElementNode</code> with its opening and closing tag, and inside it an <code>ERBContentNode</code> with the Ruby code. Herb's tools build on this tree: a linter that checks rules, a formatter, and help in the editor.</p><p>Herb pays off most in tests: a test that checks every template falls over as soon as somebody closes a tag wrongly – long before anyone sees it in the browser. With Minitest from lesson 41:</p>"
           },
           {
             "t": "c",
@@ -5237,7 +5357,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "34. ERB：テンプレートと、それを確かめるHerb",
+        "title": "35. ERB：テンプレートと、それを確かめるHerb",
         "cells": [
           {
             "t": "h",
@@ -5265,7 +5385,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>1行目は危険です。ブラウザはその中の<code>&lt;script&gt;</code>を読んで実行してしまいます。知らない人のプログラムが、あなたのお店のページで、お客さんのデータといっしょに動くのです。これは<em>クロスサイトスクリプティング</em>（XSS）と呼ばれ、ウェブでもっともよくあるセキュリティホールのひとつです。<code>ERB::Util.h</code>（hはHTMLのh）は特殊な文字を<em>エスケープ</em>します。<code>&lt;</code>は<code>&amp;lt;</code>になり、ブラウザは文字を実行せずに表示します。ルールはこうです：自分で書いたものでないものは、すべて<code>h</code>を通します。（Railsは自動でそうします。）</p><p>そして、ERBテンプレートはこうしてミニブラウザ（レッスン15）のページになります。Rackアプリにはラムダで十分です：</p>"
+            "html": "<p>1行目は危険です。ブラウザはその中の<code>&lt;script&gt;</code>を読んで実行してしまいます。知らない人のプログラムが、あなたのお店のページで、お客さんのデータといっしょに動くのです。これは<em>クロスサイトスクリプティング</em>（XSS）と呼ばれ、ウェブでもっともよくあるセキュリティホールのひとつです。<code>ERB::Util.h</code>（hはHTMLのh）は特殊な文字を<em>エスケープ</em>します。<code>&lt;</code>は<code>&amp;lt;</code>になり、ブラウザは文字を実行せずに表示します。ルールはこうです：自分で書いたものでないものは、すべて<code>h</code>を通します。（Railsは自動でそうします。）</p><p>そして、ERBテンプレートはこうしてミニブラウザ（レッスン16）のページになります。Rackアプリにはラムダで十分です：</p>"
           },
           {
             "t": "c",
@@ -5289,7 +5409,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>開くタグと閉じるタグを持つ<code>HTMLElementNode</code>、その中にRubyのコードを持つ<code>ERBContentNode</code>。Herbのツールはこの木の上に成り立っています。ルールを確かめるリンター、フォーマッター、そしてエディタでの手助け。</p><p>Herbがいちばん役に立つのはテストです。すべてのテンプレートを確かめるテストは、だれかがタグの閉じ方をまちがえたとたんに失敗します。ブラウザでだれかが気づくずっと前に。レッスン40のMinitestで：</p>"
+            "html": "<p>開くタグと閉じるタグを持つ<code>HTMLElementNode</code>、その中にRubyのコードを持つ<code>ERBContentNode</code>。Herbのツールはこの木の上に成り立っています。ルールを確かめるリンター、フォーマッター、そしてエディタでの手助け。</p><p>Herbがいちばん役に立つのはテストです。すべてのテンプレートを確かめるテストは、だれかがタグの閉じ方をまちがえたとたんに失敗します。ブラウザでだれかが気づくずっと前に。レッスン41のMinitestで：</p>"
           },
           {
             "t": "c",
@@ -5311,11 +5431,11 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "rubykaigi",
       "de": {
-        "title": "35. RubyKaigi & seltsamer Code",
+        "title": "36. RubyKaigi & seltsamer Code",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Ruby ist auch eine Gemeinschaft</h2><p>Hinter Ruby stehen Menschen – und die treffen sich. Die grösste Ruby-Konferenz ist die <a href='https://rubykaigi.org' target='_blank'>RubyKaigi</a> in Japan („Kaigi“ heisst Konferenz): seit 2006, inzwischen jedes Jahr in einer anderen Stadt, drei Tage Vorträge auf Japanisch und Englisch, und mittendrin Matz und die Leute, die Ruby selbst weiterentwickeln. Dazu kommen die RubyConf in den USA, die EuRuKo in Europa, Rails World und Meetups in vielen Städten.</p><p>Nicht dabei gewesen? <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> sammelt die Videos von Tausenden Ruby-Vorträgen, kostenlos und durchsuchbar, und zeigt, welche Konferenzen und Meetups bald stattfinden. In dieser Lektion folgen wir einem Rubyisten durch drei Vorträge: <strong>Tomoya Ishida</strong> (<code>@tompng</code>). Er ist Ruby-Committer und pflegt IRB, das Werkzeug aus Lektion 12.</p>"
+            "html": "<h2>Ruby ist auch eine Gemeinschaft</h2><p>Hinter Ruby stehen Menschen – und die treffen sich. Die grösste Ruby-Konferenz ist die <a href='https://rubykaigi.org' target='_blank'>RubyKaigi</a> in Japan („Kaigi“ heisst Konferenz): seit 2006, inzwischen jedes Jahr in einer anderen Stadt, drei Tage Vorträge auf Japanisch und Englisch, und mittendrin Matz und die Leute, die Ruby selbst weiterentwickeln. Dazu kommen die RubyConf in den USA, die EuRuKo in Europa, Rails World und Meetups in vielen Städten.</p><p>Nicht dabei gewesen? <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> sammelt die Videos von Tausenden Ruby-Vorträgen, kostenlos und durchsuchbar, und zeigt, welche Konferenzen und Meetups bald stattfinden. In dieser Lektion folgen wir einem Rubyisten durch drei Vorträge: <strong>Tomoya Ishida</strong> (<code>@tompng</code>). Er ist Ruby-Committer und pflegt IRB, das Werkzeug aus Lektion 13.</p>"
           },
           {
             "t": "h",
@@ -5382,11 +5502,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "35. RubyKaigi & weird code",
+        "title": "36. RubyKaigi & weird code",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Ruby is a community, too</h2><p>Behind Ruby there are people – and they meet. The biggest Ruby conference is <a href='https://rubykaigi.org' target='_blank'>RubyKaigi</a> in Japan (\"kaigi\" means conference): running since 2006, nowadays in a different city every year, three days of talks in Japanese and English, with Matz and the people who develop Ruby itself right in the middle. There is also RubyConf in the USA, EuRuKo in Europe, Rails World and meetups in many cities.</p><p>Weren't there? <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> collects the videos of thousands of Ruby talks, free and searchable, and shows which conferences and meetups are coming up. In this lesson we follow one Rubyist through three talks: <strong>Tomoya Ishida</strong> (<code>@tompng</code>). He is a Ruby committer and maintains IRB, the tool from lesson 12.</p>"
+            "html": "<h2>Ruby is a community, too</h2><p>Behind Ruby there are people – and they meet. The biggest Ruby conference is <a href='https://rubykaigi.org' target='_blank'>RubyKaigi</a> in Japan (\"kaigi\" means conference): running since 2006, nowadays in a different city every year, three days of talks in Japanese and English, with Matz and the people who develop Ruby itself right in the middle. There is also RubyConf in the USA, EuRuKo in Europe, Rails World and meetups in many cities.</p><p>Weren't there? <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> collects the videos of thousands of Ruby talks, free and searchable, and shows which conferences and meetups are coming up. In this lesson we follow one Rubyist through three talks: <strong>Tomoya Ishida</strong> (<code>@tompng</code>). He is a Ruby committer and maintains IRB, the tool from lesson 13.</p>"
           },
           {
             "t": "h",
@@ -5453,11 +5573,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "35. RubyKaigiと変なコード",
+        "title": "36. RubyKaigiと変なコード",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Rubyはコミュニティでもある</h2><p>Rubyの向こうには人がいて、その人たちは集まります。いちばん大きなRubyのカンファレンスは日本の<a href='https://rubykaigi.org' target='_blank'>RubyKaigi</a>です。2006年から続き、今では毎年ちがう街で開かれます。3日間、日本語と英語のトークがあり、その真ん中にはMatzとRuby自体を開発している人たちがいます。ほかにもアメリカのRubyConf、ヨーロッパのEuRuKo、Rails World、そして多くの街のミートアップがあります。</p><p>参加できなかった？ <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>には何千ものRubyのトーク動画が集められていて、無料で検索して見られます。これから開かれるカンファレンスやミートアップもわかります。このレッスンでは、1人のRubyistの3つのトークをたどります。<strong>石田智也さん</strong>（<code>@tompng</code>）です。Rubyコミッターで、レッスン12で使ったIRBのメンテナーです。</p>"
+            "html": "<h2>Rubyはコミュニティでもある</h2><p>Rubyの向こうには人がいて、その人たちは集まります。いちばん大きなRubyのカンファレンスは日本の<a href='https://rubykaigi.org' target='_blank'>RubyKaigi</a>です。2006年から続き、今では毎年ちがう街で開かれます。3日間、日本語と英語のトークがあり、その真ん中にはMatzとRuby自体を開発している人たちがいます。ほかにもアメリカのRubyConf、ヨーロッパのEuRuKo、Rails World、そして多くの街のミートアップがあります。</p><p>参加できなかった？ <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>には何千ものRubyのトーク動画が集められていて、無料で検索して見られます。これから開かれるカンファレンスやミートアップもわかります。このレッスンでは、1人のRubyistの3つのトークをたどります。<strong>石田智也さん</strong>（<code>@tompng</code>）です。Rubyコミッターで、レッスン13で使ったIRBのメンテナーです。</p>"
           },
           {
             "t": "h",
@@ -5532,7 +5652,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "応用コース：timelog"
       },
       "de": {
-        "title": "36. Projekt timelog: Collections",
+        "title": "37. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -5571,7 +5691,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "36. Project timelog: collections",
+        "title": "37. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -5610,7 +5730,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "36. timelogプロジェクト：コレクション",
+        "title": "37. timelogプロジェクト：コレクション",
         "cells": [
           {
             "t": "h",
@@ -5652,7 +5772,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "37. Text parsen: Regex",
+        "title": "38. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -5683,7 +5803,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "37. Parsing text: regex",
+        "title": "38. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -5714,7 +5834,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "37. テキストのパース：正規表現",
+        "title": "38. テキストのパース：正規表現",
         "cells": [
           {
             "t": "h",
@@ -5748,7 +5868,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "38. Methoden richtig bauen",
+        "title": "39. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -5779,7 +5899,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "38. Building methods properly",
+        "title": "39. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -5810,7 +5930,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "38. メソッドをきちんと作る",
+        "title": "39. メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -5844,7 +5964,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "39. Entry & Timesheet",
+        "title": "40. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -5875,7 +5995,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "39. Entry & Timesheet",
+        "title": "40. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -5906,7 +6026,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "39. EntryとTimesheet",
+        "title": "40. EntryとTimesheet",
         "cells": [
           {
             "t": "h",
@@ -5940,7 +6060,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "40. Testen mit Minitest",
+        "title": "41. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -5971,7 +6091,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "40. Testing with Minitest",
+        "title": "41. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -6002,7 +6122,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "40. Minitestでテスト",
+        "title": "41. Minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -6036,7 +6156,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "41. Enumerable & Data",
+        "title": "42. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -6048,7 +6168,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 36, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 37, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -6059,7 +6179,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "41. Enumerable & Data",
+        "title": "42. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -6071,7 +6191,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 36, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 37, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -6082,7 +6202,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "41. EnumerableとData",
+        "title": "42. EnumerableとData",
         "cells": [
           {
             "t": "h",
@@ -6094,7 +6214,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン36で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン37で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
           },
           {
             "t": "x",
@@ -6108,7 +6228,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "42. Blocks, Procs & Lambdas",
+        "title": "43. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -6147,7 +6267,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "42. Blocks, procs & lambdas",
+        "title": "43. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -6186,7 +6306,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "42. ブロック、Proc、lambda",
+        "title": "43. ブロック、Proc、lambda",
         "cells": [
           {
             "t": "h",
@@ -6228,7 +6348,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "43. Fehler behandeln",
+        "title": "44. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -6259,7 +6379,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "43. Handling errors",
+        "title": "44. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -6290,7 +6410,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "43. エラー処理",
+        "title": "44. エラー処理",
         "cells": [
           {
             "t": "h",
@@ -6324,7 +6444,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "44. Daten speichern: Formate",
+        "title": "45. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -6379,7 +6499,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "44. Saving data: formats",
+        "title": "45. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -6434,7 +6554,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "44. データの保存：フォーマット",
+        "title": "45. データの保存：フォーマット",
         "cells": [
           {
             "t": "h",
@@ -6492,7 +6612,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "45. Kommandozeile & Gems",
+        "title": "46. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -6519,7 +6639,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "45. Command line & gems",
+        "title": "46. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -6546,7 +6666,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "45. コマンドラインとgem",
+        "title": "46. コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -6576,7 +6696,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "46. Pattern Matching",
+        "title": "47. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -6607,7 +6727,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "46. Pattern matching",
+        "title": "47. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -6638,7 +6758,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "46. パターンマッチ",
+        "title": "47. パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -6672,7 +6792,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "47. Objektmodell & Metaprogrammierung",
+        "title": "48. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -6703,7 +6823,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "47. Object model & metaprogramming",
+        "title": "48. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -6734,7 +6854,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "47. オブジェクトモデルとメタプログラミング",
+        "title": "48. オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -6768,7 +6888,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "48. Eine eigene DSL",
+        "title": "49. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -6780,7 +6900,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 42 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 43 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -6791,7 +6911,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "48. Your own DSL",
+        "title": "49. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -6803,7 +6923,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 42 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 43 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
@@ -6814,7 +6934,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "48. 自分だけのDSL",
+        "title": "49. 自分だけのDSL",
         "cells": [
           {
             "t": "h",
@@ -6826,7 +6946,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン42のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン43のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
           },
           {
             "t": "x",
@@ -6840,7 +6960,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "49. Codequalität & Debugging",
+        "title": "50. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -6863,7 +6983,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "49. Code quality & debugging",
+        "title": "50. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -6886,7 +7006,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "49. コードの品質とデバッグ",
+        "title": "50. コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -6912,7 +7032,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "50. Performance & Nebenläufigkeit",
+        "title": "51. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -6959,7 +7079,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "50. Performance & concurrency",
+        "title": "51. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -7006,7 +7126,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "50. パフォーマンスと並行処理",
+        "title": "51. パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -7056,7 +7176,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "51. Finale: timelog im Web",
+        "title": "52. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -7078,12 +7198,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 45 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 46 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "en": {
-        "title": "51. Finale: timelog on the web",
+        "title": "52. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
@@ -7105,12 +7225,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 45 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 46 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "ja": {
-        "title": "51. フィナーレ：Webで動くtimelog",
+        "title": "52. フィナーレ：Webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -7132,7 +7252,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン45で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン46で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }

@@ -1,5 +1,28 @@
 # 06 - Turtle graphics with Chunky the fox
 
+**Integrated.** `turtle.rb` is `html/turtle.rb`, loaded at boot by
+`main.rb` after `object_graph` (fetch ~10 ms, evaluation ~6 ms in
+ruby.wasm, so not lazily); the test is `test/turtle_test.rb` (the 13
+asserts of `examples.rb` and more), the check harness requires the file
+and has `SOLUTIONS["turtle"]` (the snowflake and the inward one), and
+`browser_test.mjs` runs `browser_check.mjs`'s steps in the German course.
+The lesson is lesson 10, right after `methoden` (every later lesson moved
+up by one, references included); the SVG rule of step 3 was on main
+already (PR #15). Changes to the draft lesson: its prose now says what
+lessons 1-9 do not teach - `(3..8).each` is a range, `{ … }` the short
+`do … end`, `return if depth == 0` ends the method - and "a method as in
+lesson 9, this time with two parameters" (lesson 9's have one); two
+Japanese sentences that ended on a noun end in です. New in `turtle.rb`:
+`Turtle.lang` (main.rb sets the lesson's) puts the errors and the new
+`alt_text` ("Chunky hat 4 Striche gezeichnet", which `#runStatus` reads)
+into de/en/ja, and a live run draws stills (`Turtle.animations = false`),
+as the animation would otherwise start over at every pause in typing.
+The companion gem has a copy (`lib/chunky_bacon/turtle.rb`, kept equal by
+the test). Left open (docs/OPEN_WORK.md): a friendly error for `forward`
+outside `turtle { }`, more exercises, `fill`/`write`. `examples.rb` and
+`lesson_check.rb` load the html/ file now; `serve.rb`, `make_lesson.rb`,
+`lesson_turtle.json` and the paths below are the experiment's record.
+
 ```ruby
 turtle { 4.times { forward 100; right 90 } }   # a square, drawn below the cell
 ```

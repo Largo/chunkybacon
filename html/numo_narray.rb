@@ -1,6 +1,6 @@
 # Numo::NArray in pure Ruby, for the browser. Numo (numo-narray-alt) is
 # Ruby's NumPy: n-dimensional arrays of numbers, written in C - which
-# ruby.wasm cannot load. Rumale (lesson 27) is pure Ruby on top of it, so
+# ruby.wasm cannot load. Rumale (lesson 29) is pure Ruby on top of it, so
 # this file stands in for the C: the same classes, methods and printing,
 # for what Rumale's estimators and the lesson use, so that the lesson's code
 # runs unchanged with the real gem on a computer.

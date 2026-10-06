@@ -47,7 +47,7 @@ WRONG = [
 ].freeze
 
 def run_lang(lang)
-  require_relative "turtle"
+  require_relative "../../html/turtle"
   $shown = []
   Kernel.define_method(:show_image) { |image| $shown << image.to_data_url; nil }
   cells = JSON.parse(File.read(File.join(__dir__, "lesson_turtle.json")))[lang]["cells"]

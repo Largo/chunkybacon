@@ -6,7 +6,8 @@
 // (sqlite3_sqljs.rb): a live run reads it but changes only its own, and the
 // workshop keeps it with the project. matplotlib (pycall.rb): no live run
 // while its first import runs, none that imports a module for the first
-// time, a chart redrawn live. About three minutes.
+// time, a chart redrawn live. A turtle drawing is a still while live and
+// animated on ▶. About three minutes.
 import { chromium } from '/usr/local/lib/node_modules/playwright/index.mjs';
 
 const BASE = process.env.BASE || 'http://127.0.0.1:8011/';
@@ -136,6 +137,25 @@ const responsive = async page => {
   await page.reload();
   await page.waitForSelector('#app', { state: 'visible' });
   check('the switch is remembered', (await page.getAttribute('.live-toggle', 'aria-pressed')) === 'false');
+  await ctx.close();
+}
+
+// ---------- turtle graphics: a live run draws a still, ▶ animates ----------
+{
+  const ctx = await browser.newContext({ locale: 'de-DE' });
+  const page = await open(ctx, '#turtle');
+  const svg = () => page.evaluate(() => {
+    const img = document.querySelector('#cell-out-1 img.cell-image');
+    return img ? atob(img.src.split(',')[1]) : '';
+  });
+  await edit(page, 1, 'turtle do\n  3.times do\n    forward 80\n    right 120\n  end\nend');
+  await page.waitForFunction(() => !!document.querySelector('#cell-out-1.is-rehearsal img.cell-image'), null, { timeout: 8000 }).catch(() => {});
+  const still = await svg();
+  check('a live run draws the triangle', still.includes('<svg') && (await page.getAttribute('#cell-out-1 img.cell-image', 'alt')) === 'Chunky hat 3 Striche gezeichnet');
+  check('... as a still, not an animation that restarts at every pause', !still.includes('animateMotion'));
+  await page.click('.run-cell[data-idx="1"]');
+  await page.waitForFunction(() => !document.getElementById('cell-out-1').classList.contains('is-rehearsal'), null, { timeout: 8000 }).catch(() => {});
+  check('▶ draws it animated', (await svg()).includes('animateMotion'));
   await ctx.close();
 }
 
