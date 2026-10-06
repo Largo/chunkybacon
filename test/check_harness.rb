@@ -29,6 +29,7 @@ $shown_scenes = []
 $shown_apps = []
 $explicit_downloads = []
 $letter_answers = []
+$shown_audios = []
 # Numo is C; the lessons run on the browser's pure-Ruby stand-in, which
 # main.rb serves for these requires - here even where the real gem is installed
 require_relative "../html/numo_narray"
@@ -68,6 +69,23 @@ module Kernel
   end
 
   def show_pdf(_pdf)
+    nil
+  end
+
+  # what main.rb's show_audio takes - WAV bytes, a file's name, an Array of
+  # samples - recorded as WAV bytes for a check's `audios`
+  def show_audio(sound, rate: 22_050)
+    bytes = if sound.is_a?(Array)
+              data = sound.map { |s| (s.to_f.clamp(-1.0, 1.0) * 32_767).round }.pack("s<*")
+              ["RIFF", 36 + data.bytesize, "WAVE", "fmt ", 16, 1, 1, rate, rate * 2, 2, 16, "data", data.bytesize]
+                .pack("a4Va4a4VvvVVvva4V") + data
+            elsif sound.to_s.b.start_with?("RIFF") then sound.to_s.b
+            elsif SandboxFS.virtual?(sound.to_s) && SandboxFS.exist?(sound.to_s) then SandboxFS.read(sound.to_s).b
+            else File.binread(sound.to_s)
+            end
+    raise ArgumentError, "show_audio: not a WAV file" unless bytes.start_with?("RIFF")
+
+    $shown_audios << bytes
     nil
   end
 
@@ -403,6 +421,25 @@ end), %(def inputs(lines)
   end
   result
 end)]
+  },
+  # one with File.binwrite (a real file), one with File.write (the virtual
+  # store) and other waves - the check reads either, and finds the notes in
+  # any wave shape
+  "musik" => {
+    "de" => [
+      %(akkord = zusammen(*%w[C4 E4 G4 C5].map { |name| huelle(ton(frequenz(name), 1.0, :sinus, 0.2)) })
+File.binwrite("tusch.wav", wav(noten("C4 E4 G4 C5") + akkord))),
+      %(akkord = zusammen(*%w[C4 E4 G4 C5].map { |n| ton(frequenz(n), 1.0, :rechteck, 0.15) })
+File.write("tusch.wav", wav(noten("C4 E4 G4 C5", welle: :rechteck) + akkord))
+show_audio "tusch.wav")
+    ],
+    "en" => [
+      %(chord = mix(*%w[C4 E4 G4 C5].map { |name| envelope(tone(frequency(name), 1.0, :sine, 0.2)) })
+File.binwrite("fanfare.wav", wav(notes("C4 E4 G4 C5") + chord))),
+      %(chord = mix(*%w[C4 E4 G4 C5].map { |n| tone(frequency(n), 1.0, :saw, 0.15) })
+File.write("fanfare.wav", wav(notes("C4 E4 G4 C5", wave: :saw) + chord))
+show_audio "fanfare.wav")
+    ]
   },
   "tl-collections" => {
     "de" => [%(eintraege = [{ projekt: "ProjectX", stunden: 3.5 }, { projekt: "Intern", stunden: 2.0 }, { projekt: "ProjectX", stunden: 3.0 }]
@@ -933,6 +970,7 @@ def run_harness(langs)
       $shown_scenes = []
       $shown_apps = []
       $shown_sketches = []
+      $shown_audios = []
       $explicit_downloads = []
       SandboxFS.reset!
       load_lesson_files(lesson)
@@ -954,6 +992,7 @@ def run_harness(langs)
       bind.local_variable_set(:shoes_types, $shown_apps.last || [])
       bind.local_variable_set(:downloads, downloads)
       bind.local_variable_set(:sketch, $shown_sketches.last)
+      bind.local_variable_set(:audios, $shown_audios.dup)
       passed = begin
         !!eval(exercise["check"], bind, "check.rb")
       rescue Exception

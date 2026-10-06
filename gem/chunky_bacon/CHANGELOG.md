@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- `show_audio wav(samples)` / `show_audio "lied.wav"` / `show_audio samples`,
+  as in the course's lesson 37 (Ruby makes music): the sound saved as
+  `chunky-sound-N.wav` (an Array of samples written as 16-bit mono) and
+  opened in the computer's player.
 - `turtle { 4.times { forward 100; right 90 } }`, as in the course's lesson
   10: Chunky draws as the turtle (the course's own `turtle.rb`), the
   drawing saved as an animated `chunky-image-N.svg` and opened.

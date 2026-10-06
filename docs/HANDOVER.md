@@ -4,7 +4,7 @@ Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
 Work in progress - what is unfinished, and in what state - is in
 `docs/OPEN_WORK.md`.
-Last updated 2026-10-05 (52 lessons in German, English and Japanese).
+Last updated 2026-10-06 (53 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -52,7 +52,8 @@ html/
   browser.script.iife.js  ruby.wasm browser loader (patched: fetches OUR wasm)
   ruby+stdlib.wasm      Ruby 4.0 (@ruby/4.0-wasm-wasi 2.10.1), 32 MB
   main.rb               THE KERNEL, on CRuby: ChunkyApp runs cells, checks,
-                        gems and widgets; plus browser-environment fixups
+                        gems and widgets; ChunkyAudio (show_audio: a WAV's
+                        samples, the wave as SVG); browser-environment fixups
   lessons.js            ALL lesson content + UI strings, as JSON in JS
   browser_gems.rb       gem installer + stdlib shims (socket, net/http, resolv)
   sandbox_sim.rb        virtual FS for relative paths, virtual sleep,
@@ -121,7 +122,7 @@ test/autorun_test.rb       live runs under CRuby: runnable?, the time limit
 test/ansi_test.rb          ANSI colours to HTML under CRuby
 test/object_graph_test.rb  show_objects under CRuby: walk, SVG, alt text, the gem's copy
 test/turtle_test.rb        turtle graphics under CRuby: path, check helpers, SVG, texts, the gem's copy
-test/live_test.mjs         Playwright: live runs in a lesson and the workshop
+test/live_test.mjs         Playwright: live runs in a lesson and the workshop, a lesson without them
 test/server_test.rb        the optional server under Rack::MockRequest
 test/permalink_test.mjs    Playwright: permalinks, against the server (port 8012)
 test/browser_test.mjs      Playwright end-to-end
@@ -199,6 +200,7 @@ changes and rewrites it; prose edits can be done by hand.
 { "id": "html",
   "section": { "de": "Grundkurs", "en": "Basics", "ja": "基礎コース" },   // optional: starts a group in the sidebar
   "files": { "digits.csv": "assets/data/digits.csv" },   // optional: files next to the code (§6e)
+  "live": false,   // optional: no live runs in this lesson (§6b)
   "de": { "title": "14. HTML parsen", "cells": [ ... ] },
   "en": { "title": "14. Parsing HTML", "cells": [ ... ] },
   "ja": { "title": "14. HTMLのパース", "cells": [ ... ] } }
@@ -208,7 +210,7 @@ A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 20-36), not in a group of one.
+(side trips, 20-37), not in a group of one.
 
 The sidebar itself (`index.html` `#sidebar`, `shell/app.rb`, `app.css`): from
 the top of the window to its foot with its own scroll; head with the course
@@ -256,7 +258,7 @@ Cells, per language:
 |---|---|---|
 | `h` | `html` | prose block; `<div class='task'>` = the exercise text, `<div class='offweb'>` = "on your machine" box |
 | `c` | `code` | runnable demo cell |
-| `x` | `code`, `check`, `hint` | the ONE exercise cell of the lesson; `check` is Ruby evaluated in the lesson binding with locals `output`, `result`, `code`, `images`, `downloads` |
+| `x` | `code`, `check`, `hint` | the ONE exercise cell of the lesson; `check` is Ruby evaluated in the lesson binding with locals `output`, `result`, `code`, `images`, `downloads`, `audios` (the WAVs `show_audio` got) |
 
 Rules that the code and tests rely on:
 
@@ -268,7 +270,7 @@ Rules that the code and tests rely on:
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check.
 - Checks accept output OR result; `puts` is never required.
-- `test/browser_test.mjs` asserts the lesson count (`'52 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'53 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -301,7 +303,8 @@ check, in `turtle.rb`, §6),
 `show_browser(app, path)` + `mock_get`, `show_irb`, `show_files`, `show_three(scene, camera, orbit:, &animate)`,
 `show_shoes { ... }`, `show_letter(boxes:) { |digits| ... }` (§6e),
 `download_file(data, name)`, `show_pdf(pdf)` (a file
-name, PDF bytes, a Prawn or HexaPDF document), `run_tests` (Minitest);
+name, PDF bytes, a Prawn or HexaPDF document), `show_audio(sound, rate:)`
+(WAV bytes, a file name or an Array of samples, §6), `run_tests` (Minitest);
 in `pycall.rb`: `show_plot(fig)` (a matplotlib figure, §6d).
 
 ## 4. Gems
@@ -432,6 +435,21 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
 - **show_pdf**: an `<iframe>` on a Blob URL, so the browser's own viewer
   renders it. Headless Chromium and the Electron preview have no PDF viewer
   and show it blank - the tests check the bytes (`%PDF`), not the picture.
+- **show_audio** (from `experiments/05-ruby-music`, lesson 37): WAV bytes,
+  the name of a file the cell wrote (virtual or real), or an Array of
+  samples in -1..1 (`ChunkyAudio.wav`, 16-bit mono, `rate:` 22,050) -
+  an `<audio controls>` on a Blob URL like `show_pdf` (released on the
+  cell's next run), above it the wave as an SVG `<img class="cell-wave">`:
+  the whole sound as min/max bars and 12 ms around the loudest sample, so
+  a sine, a square and a saw look like what they are. `ChunkyAudio.pcm`
+  walks the RIFF chunks (first channel of a stereo file). The player is
+  named "Ein Klang, 2,0 Sekunden" (`audioLabel`), which `#runStatus`
+  reads (`App#picture_words`); the wave is `alt=""`, and as an `<img>`
+  its "2.00 s" stays out of the status line's text. A check gets the
+  WAVs as `audios`; `.wav` downloads as `audio/wav`; the workshop plays a
+  WAV a program wrote (§6a). Computing sound is slow under the live
+  runs' tracing (~36x in wasm), so the lesson has `"live": false` (§6b).
+  Chromium decodes the WAVs headless too, so the tests read `duration`.
 - **Running a cell** freezes the page (CRuby is synchronous); the shell
   paints the running look (stripe, dimmed editor, wobbling fox) and the
   bridge hands the run to the kernel after `afterPaint`; compositor-only CSS
@@ -602,16 +620,17 @@ machine:
   deletion go back through `workspaceWrite`/`workspaceDelete`, and the
   lesson's demo files return. A run saves the open file. Files can be
   renamed (✎; without an extension typed, the old one stays).
-- **Pictures and PDFs** (png, jpg, gif, webp, pdf - the same list in
-  `workshop.rb`, `storage.js` and `shell/workspace.rb`): kept as `data:`
+- **Pictures, PDFs and sounds** (png, jpg, gif, webp, pdf, wav - the same
+  list in `workshop.rb`, `storage.js` and `shell/workspace.rb`): kept as `data:`
   URLs in localStorage and in a run's snapshot, as real binary files in a
   connected folder; up to 1 MB, bigger ones stay downloads. A run gets their
   bytes in `SandboxFS` *and* as real files (so `File.binread`, ChunkyPNG's
   `from_file` and Prawn's `image` find them). The ones a run writes are
   previewed below the editor (unless the program called
-  `show_image`/`show_pdf` for the same bytes), and selecting one in the file
+  `show_image`/`show_pdf`/`show_audio` for the same bytes), and selecting one in the file
   list shows it in place of the editor - a picture from its data: URL (tiny
-  ones pixelated at 160 px), a PDF in the browser's viewer from a Blob URL
+  ones pixelated at 160 px), a PDF in the browser's viewer and a WAV in a
+  player named after the file, both from a Blob URL
   (`ChunkyBridge.objectUrl`, released when the preview goes). The editor
   never holds a picture's data: URL: saving, a run's save and a change from
   storage leave a previewed file alone.
@@ -645,6 +664,15 @@ shell does the timing, the kernel the guarding:
   a pass that is new (`@last_outcome`) cheers and marks the lesson done.
   Switches: `chunkyui_live` (lessons, on unless "off") and
   `chunkyui_live_ws` (workshop, off unless "on"); view settings, not synced.
+- **A lesson without live runs**: `"live": false` on a lesson in
+  `lessons.js` (the music lesson, 37: its sample loops take a second and
+  more under the tracing, so every cell would be stopped). The shell's
+  `live?` is false there (`App#lesson_live?`, `Course#live?`), so no key
+  asks for a run; the switch stays in every toolbar, off, struck through,
+  `aria-disabled` rather than `disabled` (it stays focusable, so its title,
+  `liveLesson`, is read), and a click has Chunky say why and puts it in
+  `#runStatus` - the page's own switch is left as it was. The kernel
+  answers a live run in such a lesson with `skipped` too (`run_cell`).
 - **Kernel** (`run_cell(idx, auto: true)`, `autorun.rb`): the code is stored
   as on ▶, then `AutoRun.runnable?` - it must compile (with the binding's
   locals declared, so `x /2` parses as on ▶), and IRB cells and loops that
@@ -1220,7 +1248,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 52 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 53 lessons x 3 languages, starter fails, solutions pass
 ruby lint_lessons.rb           # lessons.js content: de/en/ja parity, references, Japanese rules, Prism, gems, counts
 ruby lint_lessons_test.rb      # the linter's fault-injection tests
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
@@ -1310,6 +1338,8 @@ that license too. Contact in the gemspecs: web@idogawa.com.
   differ); its SVG goes through the gem's `show_image` as
   `chunky-image-N.svg`. `turtle { }` likewise, from
   `lib/chunky_bacon/turtle.rb` (`test/turtle_test.rb`), an animated SVG.
+  `show_audio` saves `chunky-sound-N.wav` (samples written as 16-bit mono)
+  and opens it; a path opens that file.
 - Under ruby.wasm (`ChunkyBacon.browser?`) the gem leaves the page's helpers
   alone and only adds the fox. Lesson 14 opens with
   `install_gem "chunky_bacon"` + `ChunkyBacon.shout`, from the gem cache

@@ -34,5 +34,9 @@ module ChunkyShell
       section = @lessons[idx][:section]
       section && (section[lang] || section.de)
     end
+
+    # false for a lesson whose cells compute too much for live runs
+    # ("live": false in lessons.js, the music lesson); read like section
+    def live?(idx) = @lessons[idx][:live] != false
   end
 end

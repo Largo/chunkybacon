@@ -1,6 +1,7 @@
-# Offline check of lesson.json, the way test/check_harness.rb checks a lesson:
-# the demo cells run in one shared binding, the exercise starter must FAIL
-# the check, every solution must PASS, and a few wrong answers must fail.
+# Offline check of the music lesson (html/lessons.js, id "musik"), the way
+# test/check_harness.rb checks a lesson: the demo cells run in one shared
+# binding, the exercise starter must FAIL the check, every solution must
+# PASS - and, which the harness does not do, a few wrong answers must fail.
 # Also times every cell under CRuby, and once more under a TracePoint like
 # the one live runs use (html/autorun.rb), to see what the 1 s limit means.
 #
@@ -16,7 +17,10 @@ require_relative "../../html/sandbox_sim"
 
 LANG = ARGV.fetch(0, "de")
 HERE = __dir__
-LESSON = JSON.parse(File.read(File.join(HERE, "lesson.json")))
+# the lesson as the course has it (lesson 37 in html/lessons.js; lesson.json
+# is the draft it started from)
+COURSE = File.read(File.join(HERE, "../../html/lessons.js"), encoding: "UTF-8")
+LESSON = JSON.parse(COURSE[/JSON\.stringify\((.*)\);\s*\z/m, 1])["lessons"].find { |l| l["id"] == "musik" }
 WORK = File.join(HERE, "tmp_work_#{LANG}")
 FileUtils.rm_rf(WORK)
 FileUtils.mkdir_p(WORK)

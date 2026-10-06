@@ -81,8 +81,10 @@ Last updated 2026-10-05.
   in", step 3).
 - Found by the experiments, in today's code (details in their `NOTES.md`):
   the live-run tracer makes code about 36x slower in ruby.wasm, so a cell
-  looping over ~100k elements hits the 1 s limit (#8 suggests a per-lesson
-  `"live": false`); once any time-limit tracer has been on, plain runs stay
+  looping over ~100k elements hits the 1 s limit (a lesson can now say
+  `"live": false`, HANDOVER §6b - the music lesson does; a cheaper tracer,
+  `experiments/05-ruby-music/NOTES.md` option 3, would help every cell);
+  once any time-limit tracer has been on, plain runs stay
   about 40% slower for the rest of the visit (#11); every cell is evaluated
   as `chunky.rb`, so an error in a method from an earlier cell reports that
   cell's line numbers (#7, #5). The friendly error explanations (#4,
@@ -118,6 +120,14 @@ Last updated 2026-10-05.
   already grade are listed in `experiments/06-turtle-graphics/NOTES.md`
   (a house without lifting the pen, a 7-point star, a spiral); `fill`
   and `write "text"` are not there yet.
+- Music (lesson 37, `show_audio`): the lesson's "on your machine" box
+  names the `wavefile` gem (pure Ruby, `install_gem "wavefile"`), which is
+  not in the gem cache: it installs through the rubygems proxy and writes
+  a WAV that `show_audio` plays (checked 2026-10-06), but fails offline -
+  `tools/build_gem_cache.rb` `GEMS` + THIRD_PARTY_NOTICES would fix that
+  (`experiments/05-ruby-music/NOTES.md`, step 7). The lesson has no
+  exercise on `audios` yet (a check can read what was played without a
+  file), and `music.rb`'s `C4*2` durations and sharps were left out.
 - The offline dialog's sizes (`offlineExplain`, `offlinePython`, README,
   HANDOVER §6c, `test/shell/workspace_test.rb`) are measured by hand: the
   files of `offline-files.txt` in MiB, a text file without a `.gz` counted

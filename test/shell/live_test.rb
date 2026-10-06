@@ -164,6 +164,36 @@ class LiveTest < Minitest::Test
     assert_empty calls("autorun")
   end
 
+  # "live": false in lessons.js (the music lesson): no live runs, the switch
+  # stays off - focusable (aria-disabled, not disabled), its title the reason
+  def test_a_lesson_without_live_runs
+    start_ready(hash: "#musik")
+    Task.held = []
+    type_in(1, "puts 3")
+    Task.release
+    assert_empty calls("autorun")
+    switch = toggle(1)
+    assert_equal "false", switch.attrs["aria-pressed"]
+    assert_equal "true", switch.attrs["aria-disabled"]
+    refute switch.props["disabled"], "reachable with Tab, so the reason is read"
+    assert_includes switch.attrs["class"], "is-off-here"
+    assert_includes switch.attrs["title"], "In dieser Lektion ist Live aus"
+    click(switch)
+    Task.release
+    assert_nil window.storage["chunkyui_live"], "the page's switch is not touched"
+    assert_includes bubble, "In dieser Lektion ist Live aus", "Chunky says why"
+    assert_includes byid("runStatus").text, "In dieser Lektion ist Live aus", "and so does the status line"
+    type_in(1, "puts 4")
+    Task.release
+    assert_empty calls("autorun")
+    fire("chunky:ran", { "idx" => 1, "outcome" => "ok", "elapsed" => 0.8, "auto" => false, "own" => 0.8 })
+    refute_includes toggle(1).attrs["class"], "is-paused", "a slow run changes nothing here"
+    assert_includes toggle(1).attrs["title"], "In dieser Lektion"
+    click(find('#lessonNav a[data-id="hallo"]'))
+    assert_equal "true", toggle(1).attrs["aria-pressed"], "the next lesson runs live again"
+    assert_nil toggle(1).attrs["aria-disabled"]
+  end
+
   def test_the_workshop_starts_with_live_off
     start_ready(hash: "#werkstatt")
     assert_equal "false", toggle(0).attrs["aria-pressed"]

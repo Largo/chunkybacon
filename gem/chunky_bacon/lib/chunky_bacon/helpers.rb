@@ -136,6 +136,26 @@ module ChunkyBacon
       nil
     end
 
+    # A sound, as in the course's music lesson: a WAV file's path, the WAV
+    # itself as a String, or an Array of samples in -1..1 (rate: per second,
+    # written as 16-bit mono). Opened in the computer's player.
+    def show_audio(sound, rate: 22_050)
+      if sound.is_a?(String) && !sound.b.start_with?("RIFF")
+        ChunkyBacon::Opener.open(File.expand_path(sound))
+        return nil
+      end
+      bytes = if sound.is_a?(Array)
+                data = sound.map { |s| (s.to_f.clamp(-1.0, 1.0) * 32_767).round }.pack("s<*")
+                ["RIFF", 36 + data.bytesize, "WAVE", "fmt ", 16, 1, 1, rate, rate * 2, 2, 16,
+                 "data", data.bytesize].pack("a4Va4a4VvvVVvva4V") + data
+              else
+                sound.to_s.b
+              end
+      path = ChunkyBacon.save(ChunkyBacon.next_file("chunky-sound", "wav"), bytes)
+      ChunkyBacon::Opener.open(path)
+      nil
+    end
+
     # A matplotlib figure, through the pycall gem (require "pycall" first):
     # the current one, or the one given. Saved as a PNG and opened, then
     # closed - as the course page shows it below the cell.

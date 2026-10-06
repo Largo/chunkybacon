@@ -8,7 +8,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **52 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **53 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics, tables, frames and colours
   for the terminal with the [TTY toolkit](https://ttytoolkit.org),
@@ -24,7 +24,9 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   itself with [Rumale](https://github.com/yoshoku/rumale) (a postcode you
   write on a letter, read by a nearest-neighbours classifier), a SQLite
   database with [Sequel](https://sequel.jeremyevans.net), a look at the Ruby
-  community (RubyKaigi, weird code, how IRB reads code), and
+  community (RubyKaigi, weird code, how IRB reads code), music computed in
+  plain Ruby (samples as an Array, a WAV file built with `pack`, chords and
+  a drum beat - played below the cell), and
   a project track that builds a small time tracker.
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
@@ -36,7 +38,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   that lost it; `fox["name"]` on a hash with symbol keys suggests
   `fox[:name]`). Ruby's own message stays one click away. 44 rules,
   checked against 70 typical beginner mistakes drawn from the exercises.
-- **Lesson sidebar**: the 52 lessons in three groups (basics, side trips,
+- **Lesson sidebar**: the 53 lessons in three groups (basics, side trips,
   the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a
   drawer.
@@ -51,7 +53,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   installs only gems already in the cache, fetches nothing from the web and
   is stopped after a second; ▶ runs the code for real. Chunky only speaks
   up when an exercise passes. On in the lessons, off in the workshop (the
-  ⚡ Live switch beside ▶).
+  ⚡ Live switch beside ▶); a lesson whose cells compute too much for it
+  (`"live": false`, the music lesson) turns it off and says why.
 - **In-browser gem installer**: pure-Ruby gems install at runtime
   (`install_gem "chunky_png"`), fetched from a local cache or from
   rubygems.org through a same-origin nginx proxy, and unpacked onto the
@@ -80,11 +83,13 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **Downloads**: any file a cell writes - `deck.save("chunky.pptx")`,
   `File.write("notes.txt", …)` - appears below the cell as a download link;
   `download_file(data, "name")` offers data that never went through a file,
-  and `show_pdf` puts a PDF in the browser's own viewer below the cell.
+  `show_pdf` puts a PDF in the browser's own viewer below the cell, and
+  `show_audio` a sound (a WAV, a file or an Array of samples) in the
+  browser's player, with a picture of its wave.
 - **Workshop**: beside the lessons, a small IDE for your own multi-file
   programs - `require_relative` between files, `File.read`/`File.write` on
-  the project, input for `gets`, pictures and PDFs it writes previewed and
-  kept, SQLite databases kept with the project, files renamable - with every
+  the project, input for `gets`, pictures, PDFs and sounds it writes
+  previewed and kept, SQLite databases kept with the project, files renamable - with every
   widget below available.
 - **Your progress stays yours**: nothing is stored on a server. Progress,
   code and workshop files live in the browser and can be saved as a progress
@@ -131,7 +136,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 ## On your own computer: the chunky_bacon gem
 
 [`gem/chunky_bacon`](gem/chunky_bacon) gives a Ruby program on your own
-computer the course's helpers (`show_image`, `show_objects`, `turtle`, `show_browser`,
+computer the course's helpers (`show_image`, `show_objects`, `turtle`, `show_audio`, `show_browser`,
 `download_file`, ...), so code from the lessons and the workshop runs
 unchanged. `chunkybacon run` starts a program with them loaded.
 [`gem/chunkybacon`](gem/chunkybacon) and [`gem/chunky-bacon`](gem/chunky-bacon)

@@ -5,19 +5,20 @@
 # can File.read and File.write its project's files and require_relative its
 # other .rb files, and gets reads what the learner typed as input. Whatever
 # the program wrote or deleted goes back to storage.js afterwards - text as
-# text, pictures and PDFs as data: URLs, which the workshop previews; the
-# lessons get their own virtual files back.
+# text, pictures, PDFs and sounds as data: URLs, which the workshop
+# previews; the lessons get their own virtual files back.
 require "fileutils"
 
 module Workshop
   # The binary files a project keeps: storage.js holds them as data: URLs,
-  # a run gets their bytes. Pictures and PDFs show below the editor after a
-  # run; a SQLite database (Sequel.sqlite("x.db"), sqlite3_sqljs.rb) is
-  # kept, not shown. Other binary data a program writes is offered as a
-  # download only.
+  # a run gets their bytes. Pictures, PDFs and sounds (WAV) show below the
+  # editor after a run; a SQLite database (Sequel.sqlite("x.db"),
+  # sqlite3_sqljs.rb) is kept, not shown. Other binary data a program writes
+  # is offered as a download only.
   PREVIEW_TYPES = {
     ".png" => "image/png", ".jpg" => "image/jpeg", ".jpeg" => "image/jpeg",
-    ".gif" => "image/gif", ".webp" => "image/webp", ".pdf" => "application/pdf"
+    ".gif" => "image/gif", ".webp" => "image/webp", ".pdf" => "application/pdf",
+    ".wav" => "audio/wav"
   }.freeze
   BINARY_TYPES = PREVIEW_TYPES.merge(
     ".db" => "application/vnd.sqlite3", ".sqlite" => "application/vnd.sqlite3", ".sqlite3" => "application/vnd.sqlite3"
@@ -67,7 +68,7 @@ module Workshop
     # the project's files, by name - a live run's time limit counts their lines
     def paths = (@before || {}).keys
 
-    # the pictures and PDFs among +changes+, to show below the editor
+    # the pictures, PDFs and sounds among +changes+, to show below the editor
     def previews(changes)
       changes.select { |path, bytes| PREVIEW_TYPES.key?(File.extname(path.to_s).downcase) && bytes.bytesize <= MAX_BINARY }
     end
@@ -78,6 +79,10 @@ module Workshop
 
     def pdf?(path)
       File.extname(path.to_s).downcase == ".pdf"
+    end
+
+    def audio?(path)
+      File.extname(path.to_s).downcase == ".wav"
     end
 
     def data_url(path, bytes)
