@@ -265,6 +265,15 @@ class ChunkyApp
     $window.ChunkyBridge
   end
 
+  # The shell keeps the code a cell runs, under the fingerprint of the cell
+  # it was written for (shell/store.rb's code_key); a page without the
+  # shell keeps nothing.
+  def save_code(idx, code)
+    return unless $window[:chunkySaveCode].typeof == "function"
+
+    $window.chunkySaveCode(idx.to_s, code)
+  end
+
   # The lesson (or the workshop) the shell shows, in its language. A new seq
   # means a new page or a lesson reset: a fresh binding, old stages gone.
   def sync_state(state)
@@ -307,10 +316,6 @@ class ChunkyApp
     @data["ui"][@lang]
   end
 
-  def store(key, value)
-    $window.localStorage.setItem(key, value)
-  end
-
   # the lesson the shell shows (sync_state)
   def current_index
     @lessons.index { |l| l["id"] == @lesson_id } || 0
@@ -339,10 +344,6 @@ class ChunkyApp
 
   def escape_html(text)
     text.to_s.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;")
-  end
-
-  def code_key(id, idx)
-    "chunky_cell_#{@lang}_#{id}_#{idx}"
   end
 
   def fresh_binding
@@ -1039,7 +1040,7 @@ class ChunkyApp
     cell = workshop? ? { "t" => "c" } : cells[idx]
     return unless cell && code_cell?(cell)
     code = $window.getCellCode(idx)
-    store(code_key(current_lesson["id"], idx), code) unless workshop?
+    save_code(idx, code) unless workshop?
     # a live run starts only for code that parses - otherwise the output
     # stays as it is (autorun.rb)
     return :skipped if auto && !AutoRun.runnable?(code, workshop? ? [] : @bind.local_variables)

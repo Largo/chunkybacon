@@ -98,6 +98,21 @@ await load(a, fileB);
 check('a reset travels: the starter code is back', (await exerciseCode(a)) === '# Dein Code:\n');
 check('finished lessons are united', await isDone(a, 'hallo'));
 
+// a file from before fingerprints (chunky_cell_<lang>_<id>_<idx>): lesson 7
+// has had two more cells before its exercise since, which was cell 7 then
+const oldFile = JSON.stringify({ format: 'chunkybacon-progress', version: 1,
+  entries: { chunky_cell_de_arrays_7: { v: 'fruehstueck = ["Speck"]', t: Date.now() - 60000 } } });
+await b.click('#lessonNav a[data-id="arrays"]');
+await load(b, oldFile);
+check('an old file\'s exercise code lands in the exercise', await exerciseIdx(b) === '9' &&
+  (await exerciseCode(b)) === 'fruehstueck = ["Speck"]');
+check('not in the cell that has its old place', !(await b.evaluate(() => window.cellEditors[7].getValue())).includes('Speck'));
+const moved = JSON.parse(await download(b)).entries;
+check('it travels on under the fingerprinted key, the old key as removed',
+  moved.chunky_cell_de_arrays_7?.v === null &&
+  Object.entries(moved).some(([k, e]) => k.startsWith('chunky_cell_de_arrays_9@') && e.v === 'fruehstueck = ["Speck"]'));
+check('the old file cannot bring the old key back', (await load(b, oldFile)).includes('nichts'));
+
 // ---------- 2. the workshop ----------
 await a.click('#workshopLink');
 await a.waitForSelector('#wsFiles li');

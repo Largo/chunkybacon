@@ -61,6 +61,9 @@ module ChunkyShell
       sidebar_expanded
       el("spinner").style.display = "none"
       el("app").style.display = "block"
+      # code saved before keys had fingerprints moves to its cell's key
+      # (Store.migrate_code_keys; nothing to do once it has)
+      guard("saved code") { Store.migrate_code_keys(@course) }
       render_all
       # a bare URL still names its lesson afterwards, without a history
       # entry; with permalinks an old /#methoden link becomes /de/methoden
@@ -114,6 +117,9 @@ module ChunkyShell
       app = self
       JS::Object.register_callback("chunkyEdited") { |idx| app.edited(idx.to_i) }
       window["chunkyEdited"] = JS.generic_callbacks[:chunkyEdited]
+      # the kernel runs a cell (main.rb's run_cell): its code is kept
+      JS::Object.register_callback("chunkySaveCode") { |idx, code| app.save_code(idx.to_i, code) }
+      window["chunkySaveCode"] = JS.generic_callbacks[:chunkySaveCode]
     end
 
     # Nav entries are real links (#lesson-id): a plain click is handled here,
@@ -407,7 +413,8 @@ module ChunkyShell
         number += 1
         @cell_numbers[i] = number
         JSG.w.initCell(i.to_s, format(ui.codeLabel, number), ui.codeHint)
-        set_code(i, Store.get(Store.code_key(@lang, id, i), cell.code))
+        # saved code only where it was saved for this cell (Store.code_key)
+        set_code(i, Store.get(Store.code_key(@lang, id, i, cell.code), cell.code))
       end
     end
 
@@ -531,7 +538,7 @@ module ChunkyShell
       current_cells.each_with_index do |cell, i|
         next unless code_cell?(cell)
 
-        Store.remove(Store.code_key(@lang, id, i))
+        Store.remove(Store.code_key(@lang, id, i, cell.code))
         set_code(i, cell.code)
         out = el("cell-out-#{i}")
         out.style.display = "none" if out
@@ -544,11 +551,26 @@ module ChunkyShell
     def progress_loaded
       lang = Store.get("chunky_lang", @lang)
       @lang = lang if @course.lang?(lang)
+      # an old progress file or folder may bring keys without fingerprints
+      guard("saved code") { Store.migrate_code_keys(@course) }
       render_all
       @router.show(@lang, current_place, false)
     end
 
     # ---------- running a cell ----------
+
+    # The kernel is running cell idx with this code (main.rb's run_cell,
+    # through the chunkySaveCode callback): kept for the next visit, under
+    # the fingerprint of the cell on screen. Not the workshop's: its files
+    # keep its code.
+    def save_code(idx, code)
+      return if workshop?
+
+      cell = current_cells[idx]
+      return unless cell && code_cell?(cell)
+
+      Store.set(Store.code_key(@lang, current_lesson_id, idx, cell.code), code.to_s)
+    end
 
     # Ruby runs on the page's main thread, so the running look goes on
     # screen first; the bridge hands the run to the kernel after the next
