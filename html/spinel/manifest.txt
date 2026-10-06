@@ -1,0 +1,6 @@
+# The Spinel lesson's workers: Ruby on PicoRuby.wasm (spinel/boot.js), one
+# line per kind of worker - its name, then its files in order. boot.js joins
+# them into ONE task (as shell/loader.js does for the page), and
+# test/shell/portability_test.rb scans them like the shell.
+compiler: wasi.rb toolchain.rb compiler_worker.rb
+run: wasi.rb run_worker.rb

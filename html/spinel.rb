@@ -1,7 +1,7 @@
-# The Spinel lesson's Ruby side (lesson 39). Spinel, Matz's ahead-of-time
-# compiler for Ruby, runs in the page as WebAssembly (spinel.js and its
-# workers; tools/build_spinel.mjs builds it on deploy). A cell hands it a
-# program as a String:
+# The Spinel lesson's kernel side (lesson 39). Spinel, Matz's ahead-of-time
+# compiler for Ruby, runs in the page as WebAssembly (shell/spinel.rb and its
+# workers, html/spinel/; tools/build_spinel.mjs builds it on deploy). A cell
+# hands it a program as a String:
 #
 #   spinel <<~RUBY
 #     def fib(n) = n < 2 ? n : fib(n - 1) + fib(n - 2)
@@ -21,21 +21,6 @@ module ChunkySpinel
     def inspect = "#<Spinel::Program #{source.lines.size} lines>"
     alias_method :to_s, :inspect
   end
-
-  # the texts of the widgets (lessons.js ui), by spinel.js's names
-  LABELS = {
-    "title" => "spinelTitle", "load" => "spinelLoad", "compile" => "spinelCompile", "link" => "spinelLink",
-    "run" => "spinelRun", "showC" => "spinelShowC", "download" => "spinelDownload",
-    "downloadTitle" => "spinelDownloadTitle", "same" => "spinelSame", "differs" => "spinelDiffers",
-    "crubyError" => "spinelCrubyError", "crubyOnly" => "spinelCrubyOnly", "refused" => "spinelRefused", "ccFailed" => "spinelCcFailed",
-    "stopped" => "spinelStopped", "crashed" => "spinelCrashed", "exit" => "spinelExit",
-    "failed" => "spinelFailed", "offline" => "spinelOffline",
-    "irbTitle" => "spinelIrbTitle", "irbInput" => "spinelIrbInput", "irbNote" => "spinelIrbNote",
-    "irbReady" => "spinelIrbReady", "irbBusy" => "spinelIrbBusy", "irbExit" => "irbExitNote"
-  }.freeze
-
-  # the end of the input that IRB waits past (main.rb's INCOMPLETE_RE, in Prism's words)
-  INCOMPLETE = /unexpected end-of-input|expected an? `?end`?|unterminated (string|regexp|list)|expects an expression after|expected a matching `?\)`?|expected a `?\}`?|expected a `?\]`?/i
 
   module_function
 
@@ -61,31 +46,8 @@ module ChunkySpinel
     ms = (Process.clock_gettime(Process::CLOCK_MONOTONIC) - started) * 1000
     Program.new(source, output, error, ms)
   end
-
-  # IRB's question about an input: "ok" (compile it), "more" (an open def,
-  # string, bracket) or "error <message>" (a syntax error: no compile needed)
-  def complete(source)
-    return "ok" if source.strip.empty?
-
-    errors = Prism.parse(source).errors
-    return "ok" if errors.empty?
-    return "more" if errors.any? { |e| e.message.match?(INCOMPLETE) }
-
-    first = errors.first
-    "error (irb):#{first.location.start_line}: #{first.message}"
-  end
-
-  def labels(ui) = LABELS.transform_values { |key| ui[key].to_s }
-
-  # what spinel.js gets for a program
-  def widget_json(program, ui, lang)
-    JSON.generate(source: program.source, lang: lang, labels: labels(ui),
-                  cruby: { output: program.output, error: program.error, ms: program.ms.round(1) })
-  end
 end
 
-require "prism"
-require "json"
 require "stringio"
 
 module Kernel

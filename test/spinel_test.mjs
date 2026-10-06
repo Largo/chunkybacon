@@ -1,19 +1,23 @@
-// The Spinel lesson's toolchain under Node, without a browser: the page's
-// own modules (html/spinel-build.js, spinel-wasi.js) on the build in
+// Lesson 39 in a browser: Spinel compiling in the page. The widgets are the
+// shell's (html/shell/spinel.rb), the compiler and the runs are Ruby on
+// PicoRuby.wasm in workers (html/spinel/), Spinel and clang the build in
 // html/assets/spinel/ (node tools/build_spinel.mjs first).
 //
-//   node --experimental-wasm-exnref spinel_test.mjs
-//
-// (The programs Spinel builds raise with WebAssembly's exception handling,
-// which Node 22 has behind that flag; Chrome, Firefox and Safari have it on.)
-import { readFileSync, existsSync } from 'node:fs';
-import { SpinelToolchain, SpinelIrb, runProgram, parseBuild, clangArgs } from '../html/spinel-build.js';
+//   BASE=http://127.0.0.1:8011/ node spinel_test.mjs     (~2 min)
+import { chromium } from '/usr/local/lib/node_modules/playwright/index.mjs';
 
-const ASSETS = new URL('../html/assets/spinel/', import.meta.url);
-if (!existsSync(new URL('manifest.json', ASSETS))) {
-  console.log('SKIP html/assets/spinel/ is not built: node tools/build_spinel.mjs');
+const BASE = process.env.BASE || 'http://127.0.0.1:8011/';
+const manifest = await fetch(new URL('assets/spinel/manifest.json', BASE)).catch(() => null);
+if (!manifest || !manifest.ok) {
+  console.log('SKIP html/assets/spinel/ is not built there: node tools/build_spinel.mjs');
   process.exit(0);
 }
+
+const browser = await chromium.launch();
+const page = await browser.newPage({ locale: 'en-US' });
+const errors = [];
+page.on('console', (m) => { if (m.type() === 'error') { errors.push(m.text()); console.log('[console.error]', m.text()); } });
+page.on('pageerror', (e) => { errors.push(e.message); console.log('[pageerror]', e.message); });
 
 let failures = 0;
 const check = (name, cond, detail = '') => {
@@ -21,100 +25,79 @@ const check = (name, cond, detail = '') => {
   if (!cond) failures++;
 };
 
-// fetch on file: URLs, as the page fetches over http
-const fileFetch = async (url) => new Response(readFileSync(url), { status: 200 });
+const out = (idx) => page.evaluate((i) => document.getElementById(`cell-out-${i}`).innerText, idx);
+const until = (fn, arg, timeout = 90000) => page.waitForFunction(fn, arg, { timeout }).then(() => true, () => false);
+const codeCells = () => page.$$eval('.run-cell', (buttons) => buttons.map((b) => b.getAttribute('data-idx')));
 
-const started = performance.now();
-const spinel = await new SpinelToolchain(ASSETS, fileFetch).load();
-console.log(`loaded in ${((performance.now() - started) / 1000).toFixed(1)} s, spinel ${spinel.version}`);
+await page.goto(`${BASE}?lang=en#spinel`, { waitUntil: 'domcontentloaded' });
+await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
+check('the lesson opens', (await page.textContent('#lessonBody h2')).includes('Spinel'));
+const [fib, cat, refusal, irbCell] = await codeCells();
 
-const run = async (source) => {
-  const built = await spinel.build(source);
-  if (!built.ok) return { built };
-  return { built, ran: runProgram(built.wasm) };
+// 1. a program: the steps, its output, the C, the module, CRuby beside it
+await page.click(`.run-cell[data-idx="${fib}"]`);
+check('fib: compiled and run',
+      await until((i) => /CRuby prints exactly the same/.test(document.getElementById(`cell-out-${i}`).innerText), fib, 240000),
+      await out(fib));
+let text = await out(fib);
+check('fib: the output', text.includes('832040'), text);
+check('fib: three steps with times', /spinel: Ruby → C\s+\d+ ms/.test(text) && /clang: C → WebAssembly\s+[\d.]+ s/.test(text), text);
+check('fib: the C to read', (await page.$eval(`#cell-out-${fib} .spinel-c pre`, (pre) => pre.textContent)).includes('sp_fib'));
+const download = await page.$eval(`#cell-out-${fib} .spinel-download`, (a) => [a.getAttribute('download'), a.href]);
+check('fib: main.wasm to download', download[0] === 'main.wasm' && download[1].startsWith('blob:'));
+check('fib: no => line for the Program', !text.includes('#<Spinel::Program'));
+
+// 2. a class: Spinel's types, the same output as CRuby
+await page.click(`.run-cell[data-idx="${cat}"]`);
+check('cat: same as CRuby',
+      await until((i) => /CRuby prints exactly the same/.test(document.getElementById(`cell-out-${i}`).innerText), cat),
+      await out(cat));
+check('cat: the output', (await out(cat)).includes("I'm Mimi and 3 years old."));
+
+// 3. what an AOT compiler cannot do: refused with the line, CRuby's answer beside it
+await page.click(`.run-cell[data-idx="${refusal}"]`);
+check('eval: refused', await until((i) => /CRuby runs it and prints/.test(document.getElementById(`cell-out-${i}`).innerText), refusal), await out(refusal));
+text = await out(refusal);
+check('eval: the line and the reason', /main\.rb:2: unsupported eval/.test(text), text);
+check('eval: CRuby\'s 42', /CRuby runs it and prints:\s*42/.test(text), text);
+
+// 4. IRB on Spinel
+await page.click(`.run-cell[data-idx="${irbCell}"]`);
+check('irb: ready', await until((i) => /Spinel .* is ready/.test(document.getElementById(`cell-out-${i}`).innerText), irbCell));
+const history = () => page.$eval(`#cell-out-${irbCell} .spinel-term-history`, (h) => h.innerText);
+const enter = async (line, expect, timeout = 90000) => {
+  await page.fill(`#cell-out-${irbCell} .spinel-term-input`, line);
+  await page.press(`#cell-out-${irbCell} .spinel-term-input`, 'Enter');
+  return until(([i, re]) => new RegExp(re).test(document.querySelector(`#cell-out-${i} .spinel-term-history`).innerText), [irbCell, expect], timeout);
 };
+check('irb: a value', await enter('x = 6 * 7', '=> 42'), await history());
+const prompt = () => page.$eval(`#cell-out-${irbCell} .spinel-term-prompt`, (p) => p.textContent);
+await enter('def double(n)', 'def double\\(n\\)');
+check('irb: an open def waits', await until((i) => document.querySelector(`#cell-out-${i} .spinel-term-prompt`).textContent === 'spinel(main):002:1*' &&
+                                            !document.querySelector(`#cell-out-${i} .spinel-term-input`).disabled, irbCell, 10000), await prompt());
+await enter('  n * 2', 'spinel\\(main\\):002:2\\*');
+check('irb: the def answers its name', await enter('end', '=> :double'), await history());
+check('irb: what a line prints, once', await enter('puts "twice: #{double(x)}"', 'twice: 84\\n=> nil'), await history());
+check('irb: a syntax error without compiling', await enter('1 +* 2', '\\(irb\\):1:6: unexpected integer'), await history());
+check('irb: a refusal', await enter('eval("x")', 'cannot compile this:\\n\\(irb\\):1: unsupported eval'), await history());
+check('irb: an exception', await enter('raise "no"', 'no \\(RuntimeError\\)'), await history());
+check('irb: the failed lines are not kept', await enter('[x, double(x)].sum', '=> 126'), await history());
+check('irb: an endless loop is stopped', await enter('x = (x + 1) % 7 while true', 'Stopped after 10 s', 60000), await history());
+check('irb: and the session goes on', await enter('x', '=> 42'), await history());
 
-// --print-build's lines, and the command line made of them
-{
-  const build = parseBuild('cflag -O2\ninclude /spinel/bin/../lib\nsource /work/main.c\nruntime /spinel/bin/../lib/wasm32-wasi/libspinel_rt.a\nlib -lm\n');
-  check('print-build: paths without ..', build.include[0] === '/spinel/lib' && build.runtime === '/spinel/lib/wasm32-wasi/libspinel_rt.a');
-  const args = clangArgs(build, '/work/main.wasm');
-  check('clang: source before the archive, libraries after', args.indexOf('/work/main.c') < args.indexOf(build.runtime) && args.indexOf(build.runtime) < args.indexOf('-lm'));
-}
+// 5. the exercise: CRuby's run is what the check reads
+const exercise = await page.getAttribute('.cell.exercise .run-cell', 'data-idx');
+await page.evaluate(([i, c]) => window.cellEditors[i].setValue(c), [exercise,
+  "spinel <<~'RUBY'\n  def collatz(n)\n    steps = 0\n    until n == 1\n      n = n.even? ? n / 2 : 3 * n + 1\n      steps += 1\n    end\n    steps\n  end\n\n  puts collatz(27)\nRUBY"]);
+await page.click(`.run-cell[data-idx="${exercise}"]`);
+check('exercise: passes', await until(() => document.querySelector('#chunkyChat').className.includes('celebrate') ||
+                                       /Lesson 39 of 55/.test(document.getElementById('chunkyChat').innerText), null, 60000));
+check('exercise: and Spinel agrees',
+      await until((i) => /111/.test(document.getElementById(`cell-out-${i}`).innerText) &&
+                         /CRuby prints exactly the same/.test(document.getElementById(`cell-out-${i}`).innerText), exercise),
+      await out(exercise));
 
-// a program, compiled and run
-{
-  const { built, ran } = await run('def fib(n)\n  n < 2 ? n : fib(n - 1) + fib(n - 2)\nend\nputs fib(25)\np [1, 2, 3].map { |x| x * 2 }\n');
-  check('fib: builds', built.ok, built.messages);
-  check('fib: the C is C', /int main\s*\(/.test(built.c ?? ''), (built.c ?? '').slice(0, 200));
-  check('fib: runs', ran && ran.code === 0 && ran.stdout === '75025\n[2, 4, 6]\n', JSON.stringify(ran));
-  console.log(`  spinel ${built.ms.spinel.toFixed(0)} ms, clang ${built.ms.clang.toFixed(0)} ms, run ${ran.ms.toFixed(1)} ms, ${built.wasm.length} bytes`);
-}
-
-// classes, strings, hashes, blocks, an exception rescued
-{
-  const source = `class Fox
-  attr_reader :name
-  def initialize(name) = @name = name
-  def greet = "Hallo, #{name}!"
-end
-foxes = %w[Chunky Bacon].map { |n| Fox.new(n) }
-puts foxes.map(&:greet).join(" ")
-count = Hash.new(0)
-"chunky bacon".each_char { |c| count[c] += 1 }
-p count.max_by { |_, v| v }
-begin
-  Integer("zwölf")
-rescue ArgumentError => e
-  puts "rescued: #{e.class}"
-end
-`;
-  const { built, ran } = await run(source);
-  check('objects: build', built.ok, built.messages);
-  check('objects: run as CRuby would', ran && ran.stdout === 'Hallo, Chunky! Hallo, Bacon!\n["c", 2]\nrescued: ArgumentError\n', JSON.stringify(ran && ran.stdout));
-}
-
-// what an AOT compiler cannot do: refused at compile time, with the line
-{
-  const { built } = await run('code = "1 + 2"\nputs eval(code)\n');
-  check('eval: refused', !built.ok && built.stage === 'spinel', JSON.stringify(built));
-  check('eval: the message names the line', /main\.rb:2/.test(built.messages), built.messages);
-}
-
-// an exception nobody rescues: the program says so and fails
-{
-  const { built, ran } = await run('puts "before"\nraise ArgumentError, "kaputt"\n');
-  check('raise: builds', built.ok, built.messages);
-  check('raise: fails at run time', ran.code !== 0 && ran.stdout === 'before\n' && /kaputt/.test(ran.stderr), JSON.stringify(ran));
-}
-
-// Integer is 32 bits on wasm32 (docs/wasm.md): past it, RangeError
-{
-  const { built, ran } = await run('x = 2_000_000_000\nbegin\n  p x + x\nrescue RangeError => e\n  puts "RangeError"\nend\np 2**20\n');
-  check('int32: builds', built.ok, built.messages);
-  check('int32: overflow raises', ran && ran.stdout === 'RangeError\n1048576\n', JSON.stringify(ran && ran.stdout));
-}
-
-// IRB: each line compiled with the ones before it
-{
-  const irb = new SpinelIrb(spinel);
-  const go = (line) => irb.submit(line, async (wasm) => runProgram(wasm));
-  let r = await go('x = 6 * 7');
-  check('irb: a value', r.ok && r.value === '42' && r.output === '', JSON.stringify(r));
-  r = await go('puts "x ist #{x}"');
-  check('irb: what a line prints, once', r.ok && r.output === 'x ist 42\n' && r.value === 'nil', JSON.stringify(r));
-  r = await go('def double(n) = n * 2');
-  check('irb: a method says its name', r.ok && r.value === ':double', JSON.stringify(r));
-  r = await go('double(x)');
-  check('irb: the earlier lines are there', r.ok && r.value === '84' && r.output === '', JSON.stringify(r));
-  r = await go('eval("x")');
-  check('irb: a refusal', !r.ok && r.stage === 'spinel' && /\(irb\):1/.test(r.messages), JSON.stringify(r));
-  r = await go('[x, double(x)].sum');
-  check('irb: a refused line is not kept', r.ok && r.value === '126' && irb.lines.length === 5, JSON.stringify(r));
-  r = await go('raise "nein"');
-  check('irb: an exception', !r.ok && r.stage === 'run' && /nein/.test(r.messages), JSON.stringify(r));
-  check('irb: a failed line is not kept', irb.lines.length === 5);
-}
-
+check('no console errors', errors.length === 0, errors.join(' | '));
+await browser.close();
 console.log(failures ? `${failures} FAILED` : 'all passed');
 process.exit(failures ? 1 : 0);

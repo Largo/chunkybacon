@@ -153,7 +153,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **A compiler in the browser**: `spinel <<~'RUBY' ... RUBY` hands a
   program to [Spinel](https://github.com/matz/spinel), Matz's
   ahead-of-time compiler, which runs in the page as WebAssembly together
-  with clang ([YoWASP](https://yowasp.org)'s, itself WebAssembly): Ruby
+  with clang ([YoWASP](https://yowasp.org)'s, itself WebAssembly), driven
+  by Ruby on PicoRuby.wasm in workers: Ruby
   becomes C, the C becomes a WebAssembly module, and the module runs below
   the cell - with the time of each step, the C to read, the module to
   download (`wasmtime run -W exceptions=y main.wasm`), and CRuby's output
@@ -292,8 +293,9 @@ node boot_failure_test.mjs # what the page says when a runtime fails
 node language_test.mjs    # ?lang=, last choice, browser languages, English
 node live_test.mjs        # live runs in a lesson and in the workshop
 node offline_test.mjs     # offline mode: the copy, offline, a deploy, turning it off
-node --experimental-wasm-exnref spinel_test.mjs   # Spinel's pipeline and IRB under Node (after tools/build_spinel.mjs)
-ruby spinel_rb_test.rb    # spinel(code) without the page: CRuby's run, IRB's Prism check, the labels
+node spinel_test.mjs      # lesson 39 in a browser: Spinel compiling, IRB on it (after tools/build_spinel.mjs)
+ruby spinel_rb_test.rb    # spinel(code) without the page: CRuby's run, the shell's ui strings
+ruby spinel_build_test.rb # the compiler worker's plain Ruby: --print-build, clang's command line, IRB's verdict
 ruby server_test.rb       # the optional server (server/)
 ruby dev_server_test.rb   # the bridges serve only the course's pages, the embed's headers; nginx says the same
 node embed_test.mjs       # an embedded cell on another site (dev server with FRAME_ANCESTORS="http://blog.test:*")

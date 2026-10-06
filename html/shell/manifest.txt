@@ -9,5 +9,6 @@ store.rb
 view.rb
 router.rb
 workspace.rb
+spinel.rb
 app.rb
 boot.rb

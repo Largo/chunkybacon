@@ -281,6 +281,22 @@ blocks called synchronously by JavaScript (also from CRuby's calls, nested),
 half-second save debounce is one), a Task started from a sync handler or a
 callback, `replaceChildren`/`appendChild`/`createTextNode`, `dialog.showModal`.
 
+**Later: PicoRuby in a worker** (lesson 39, Spinel; HANDOVER §6l). The
+same runtime runs in Web Workers (`html/spinel/boot.js`: `picoruby.js` is
+an Emscripten module that knows workers; init.iife.js's scheduler without
+the document). Probed in Chromium: boot ~70-80 ms; a JavaScript -> Ruby
+callback ~4 µs, Ruby -> JavaScript ~1 µs; a WebAssembly module whose
+imports are Ruby callbacks can be started from Ruby and calls back into it
+(re-entrancy works); a trap in it is a rescuable `RuntimeError`; JS
+objects built with `Object.new` and `obj[key] = value` (strings with
+newlines are fine there); bytes through typed arrays (NUL included);
+`import()` of an ES module through a one-line JS helper, awaited in a
+Task; sync `XMLHttpRequest` (PicoRuby's `fetch` wants a block and answers
+Ruby strings). Also there: keyword arguments, `class << self`,
+`attr_accessor`, `send` with a splat, lambdas, 64-bit Integers,
+`String#match(re)[1]`, `gsub` with a block, BigInt -> `JS.global.Number(x)`.
+Callback arguments stay in `globalThis.picorubyRefs` for good.
+
 ## 6. Load-time measurements
 
 `tools/measure_load.mjs`, headless Chromium (Playwright 1.62.1) on the

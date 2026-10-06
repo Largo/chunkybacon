@@ -169,7 +169,8 @@ require_relative "turtle"
 # loop in game.js; lesson 38). At boot too: ~10 KB of plain Ruby.
 require_relative "game"
 # spinel(code), show_spinel_irb: Matz's AOT compiler as WebAssembly in the
-# page (spinel.js); the CRuby run beside it and IRB's parse here (lesson 39)
+# page (the shell's shell/spinel.rb and its workers, html/spinel/); the CRuby
+# run of the program beside it is here (lesson 39)
 require_relative "spinel"
 # require "pycall" is the bridge to Pyodide (pycall.rb): the real gem needs
 # libpython, which a browser does not have
@@ -735,7 +736,7 @@ class ChunkyApp
     @run_games << game if @run_games
   end
 
-  # ---------- Spinel (spinel.rb + spinel.js) ----------
+  # ---------- Spinel (spinel.rb here, shell/spinel.rb on the page) ----------
 
   def add_spinel(program)
     @run_spinels << program if @run_spinels
@@ -745,20 +746,23 @@ class ChunkyApp
     @run_spinels << :irb if @run_spinels
   end
 
-  # the page compiles and runs it, in workers; nothing comes back to Ruby
-  # but IRB's question whether an input is complete (Prism, here)
+  # The page compiles and runs it: the shell (shell/spinel.rb) draws the
+  # widget into the element named here, its workers compile; nothing comes
+  # back to Ruby. Plain strings only - the shell is PicoRuby.
   def mount_spinel(out_el, program)
     node = $d.createElement("div")
+    @spinel_seq = (@spinel_seq || 0) + 1
+    id = "spinel-#{@spinel_seq}"
+    node[:id] = id
     out_el.appendChild(node)
-    # a page without spinel.js (the embedded cell, embed.html) says so
-    if $window[:ChunkySpinel].typeof != "object"
+    # a page without the shell (the embedded cell, embed.html) says so
+    if $window[:chunkySpinelMount].typeof != "function"
       node.className = "cell-error"
-      node.textContent = format(ui["spinelFailed"].to_s, "spinel.js")
+      node.textContent = format(ui["spinelFailed"].to_s, "shell/spinel.rb")
     elsif program == :irb
-      json = JSON.generate(lang: @lang, labels: ChunkySpinel.labels(ui))
-      $window.ChunkySpinel.irb(node, json) { |source| ChunkySpinel.complete(source.to_s) }
+      $window.chunkySpinelIrb(id)
     else
-      $window.ChunkySpinel.mount(node, ChunkySpinel.widget_json(program, ui, @lang))
+      $window.chunkySpinelMount(id, program.source, program.output, program.error.to_s, program.ms.round(1).to_s)
     end
   end
 

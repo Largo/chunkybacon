@@ -8,7 +8,8 @@
 //   node tools/build_spinel.mjs --update   # pin matz/spinel's newest commit, then build
 //   node tools/build_spinel.mjs --jobs 4   # compiler processes (default: cores - 1, at most 8)
 //
-// What the lesson runs (html/spinel.js), all WebAssembly in the learner's tab:
+// What the lesson runs (html/shell/spinel.rb and its workers, html/spinel/:
+// Ruby on PicoRuby.wasm), all WebAssembly in the learner's tab:
 //
 //   Ruby --spinel.wasm--> C --clang (@yowasp/clang)--> app.wasm --> run
 //
@@ -309,7 +310,7 @@ char *mkdtemp(char *template_) { (void)template_; errno = ENOSYS; return NULL; }
 `;
 
 // lib/wasi/sp_page.h, included first into the runtime and into every program
-// (-include; html/spinel-build.js): wasi-libc declares flockfile and
+// (-include; html/spinel/toolchain.rb): wasi-libc declares flockfile and
 // funlockfile only for its threaded build, and the runtime's puts takes the
 // stream lock (spinel_rt.h). A program for wasm32-wasi has one thread, so
 // the lock is nothing. (With the wasi-sdk's own sysroot it builds anyway.)

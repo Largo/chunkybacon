@@ -56,6 +56,8 @@ module ChunkyShell
       wire_events
       # the progress dialog and the workshop's files (storage.js keeps them)
       @workspace = Workspace.new(self).start
+      # the Spinel lesson's widgets and its compiler (shell/spinel.rb, html/spinel/)
+      @spinel = SpinelUI.new(self).start
       # the page before the editors: CodeMirror measures its container when
       # it is built, and inside a display:none #app it measures zero
       JSG.d.body.classList.toggle("sidebar-closed", Store.get(SIDEBAR_KEY, "") == "closed")
@@ -401,7 +403,7 @@ module ChunkyShell
       # Herb's parser (WebAssembly, 1.7 MB) only for a lesson that requires herb
       JSG.w.ensureHerb if cells.any? { |cell| code_cell?(cell) && cell.code.to_s.include?('require "herb"') }
       # Spinel and clang (WebAssembly, ~27 MB) only for the lesson that compiles with it
-      JSG.w.ensureSpinel if cells.any? { |cell| code_cell?(cell) && cell.code.to_s.include?("spinel") }
+      @spinel.preload if cells.any? { |cell| code_cell?(cell) && cell.code.to_s.include?("spinel") }
       @rendered_lesson_id = id
       # a lesson opened from a link is where the learner left off, too (only
       # a change is written: every write reaches a connected folder)

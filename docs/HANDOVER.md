@@ -81,11 +81,13 @@ html/
   game.rb               show_game: ChunkyGame, a grid game's cells, timers and keys in plain Ruby; runs headless for checks (§6)
   game.js               a game's grid: the loop on requestAnimationFrame, keys, focus, its live region (§6)
   herb_bridge.rb        require "herb/herb": Herb's C parser, handed to its WebAssembly build (§6j)
-assets/herb/          Herb's parser as WebAssembly + 3 files of @ruby/prism (tools/vendor_herb.rb)
-spinel.rb             spinel(code), show_spinel_irb: CRuby's run of the program (the oracle), IRB's Prism check (§6l)
-spinel.js             their widgets below the cell; spinel-worker.js (the compiler and clang), spinel-run-worker.js (one run)
-spinel-build.js       Ruby -> spinel.wasm -> C -> clang -> wasm, and SpinelIrb; spinel-wasi.js its WASI host (§6l)
-assets/spinel/        NOT IN GIT: built on deploy by tools/build_spinel.mjs (§6l)
+  assets/herb/          Herb's parser as WebAssembly + 3 files of @ruby/prism (tools/vendor_herb.rb)
+  spinel.rb             spinel(code), show_spinel_irb: CRuby's run of the program (the oracle), on the kernel (§6l)
+  shell/spinel.rb       their widgets below the cell and IRB on Spinel, in the shell (PicoRuby) (§6l)
+  spinel/               the Spinel lesson's workers, Ruby on PicoRuby.wasm too: boot.js (the one JS file:
+                        PicoRuby in a worker), manifest.txt, wasi.rb (a WASI host), toolchain.rb
+                        (Ruby -> C -> wasm), compiler_worker.rb, run_worker.rb (§6l)
+  assets/spinel/        NOT IN GIT: built on deploy by tools/build_spinel.mjs (§6l)
   workshop.rb           the workshop's runs: project files as the virtual FS,
                         require_relative between them, gets, write-back
   autorun.rb            live runs (§6b): what may run by itself, the time
@@ -1536,11 +1538,11 @@ runs all of it in the learner's tab, as WebAssembly:
 cell: spinel <<~'RUBY' ... RUBY          (main.rb -> spinel.rb)
   CRuby runs the program here first: ChunkySpinel.oracle, its output captured
   -> what the check reads (result.output), and what the page compares with
-  -> ChunkySpinel.mount(node, json)       (spinel.js, the page)
-       spinel-worker.js (module worker, one for the page):
-         spinel.wasm -c --print-build  /work/main.rb -> /work/main.c   ~0.1-0.3 s
+  -> chunkySpinelMount(id, ...)           (shell/spinel.rb, the page: PicoRuby)
+       spinel/boot.js?role=compiler (PicoRuby in a worker, one for the page):
+         spinel.wasm -c --print-build  /work/main.rb -> /work/main.c   ~10-300 ms
          clang (@yowasp/clang)  main.c + libspinel_rt.a -> main.wasm   ~2-4 s
-       spinel-run-worker.js (one per run, stopped after 10 s): main.wasm  ms
+       spinel/boot.js?role=run (one per run, stopped after 10 s): main.wasm  ms
 ```
 
 - **Not in git.** `html/assets/spinel/` is built by `tools/build_spinel.mjs`
@@ -1588,33 +1590,80 @@ cell: spinel <<~'RUBY' ... RUBY          (main.rb -> spinel.rb)
   program link with `--fatal-warnings`, so the next such mismatch is a
   build error, not a trap in the lesson. A patch whose anchor is gone stops
   the build; one Spinel made unnecessary is skipped.
-- **The page's half**: `spinel-build.js` (an ES module, shared with the
-  test): `SpinelToolchain` loads the three parts, `compile` runs spinel.wasm
-  on a copy-on-write filesystem in memory (`spinel-wasi.js`, a WASI
-  preview 1 host: files, stdio, clocks, random, exit; ENOSYS otherwise) with
-  `--target=wasm32-wasi --cc=clang -c --print-build`, and `link` gives what
-  `--print-build` listed to clang, with the `..` taken out of its paths
-  (YoWASP's filesystem has none). The programs need WebAssembly exception
-  handling with exnref (setjmp/longjmp: Ruby's raise), which current
-  Chrome, Firefox and Safari have; Node 22 only with `--experimental-wasm-exnref`.
+- **The page's half is Ruby, on PicoRuby.wasm** - the widgets on the page
+  and the compiler in workers:
+  - `shell/spinel.rb` (in the shell's manifest): `SpinelUI` draws the
+    widgets into the element the kernel names
+    (`chunkySpinelMount(id, source, output, error, ms)`,
+    `chunkySpinelIrb(id)` - plain strings, the shell's rule), starts the
+    compiler's worker when the lesson opens (`preload`, from `App`'s
+    render) and a worker per run, stopped by a Task after `RUN_LIMIT`
+    (10 s). Everything is callbacks on `sync: true` listeners; nothing
+    suspends in a handler. `SpinelSession` is IRB (below), plain Ruby.
+  - `spinel/boot.js`, the one JavaScript file: PicoRuby.wasm in a worker
+    (`?role=compiler` | `run`), the role's files from `spinel/manifest.txt`
+    joined into one task as `shell/loader.js` does, init.iife.js's
+    scheduler, and `self.importModule(url)` - Ruby has no `import()`, and
+    clang's `bundle.js` is an ES module.
+  - `spinel/wasi.rb`: a WASI preview 1 host on a filesystem in memory
+    (copy-on-write; files, stdio, clocks, random, exit; ENOSYS otherwise).
+    The bytes stay JavaScript's Uint8Arrays - a Ruby String would end at
+    the first NUL on its way to JavaScript; Ruby keeps the references.
+    The imports are Ruby callbacks, registered once per worker; the
+    module calls them synchronously inside the Ruby call that started it
+    (PicoRuby re-enters fine). `proc_exit` notes the code and returns: the
+    module traps right after (wasi-libc's `_Exit`), and the trap arrives
+    in Ruby as a `RuntimeError`, which `SpinelWasi.run` takes for the end.
+    64-bit arguments arrive as BigInts (`Number()` makes them Integers),
+    64-bit results are written as two 32-bit halves.
+  - `spinel/toolchain.rb`: `SpinelToolchain` loads the three parts
+    (synchronous XMLHttpRequest in the worker: PicoRuby's own fetch
+    answers Ruby strings, not bytes), runs spinel.wasm with
+    `--target=wasm32-wasi --cc=clang -c --print-build`, and gives what
+    `--print-build` listed to clang (`runClang`, a promise awaited in a
+    Task), the `..` taken out of its paths (YoWASP's filesystem has none).
+    `SpinelBuild` is the plain-Ruby part (`test/spinel_build_test.rb`).
+  - `spinel/compiler_worker.rb` serves `load`, `build` and `parse` one
+    after the other from one Task; `spinel/run_worker.rb` runs one module
+    and sends its output as it is printed.
+  - Measured in Chromium: PicoRuby boots in a worker in ~70-80 ms, a
+    callback from JavaScript into Ruby costs ~4 µs, a DataView call from
+    Ruby ~1 µs; a WASI call is a few µs, far below what clang takes.
+    PicoRuby keeps every callback argument in `picorubyRefs` for good,
+    which a run worker (gone after its run) never notices; the compiler's
+    worker grows by some KB per build.
+  - The programs need WebAssembly exception handling with exnref
+    (setjmp/longjmp: Ruby's raise), which current Chrome, Firefox and
+    Safari have.
 - **Limits a learner meets**: `Integer` is 32-bit on wasm32 (`RangeError`
   past 2**31 - 1); no Thread, Fiber, `Enumerator#next`; no `gets` (stdin is
-  empty); a program runs at most 10 s (`RUN_LIMIT`, spinel.js); what an AOT
+  empty); a program runs at most 10 s (`RUN_LIMIT`, shell/spinel.rb); what an AOT
   compiler cannot do (eval of a String, `method_missing`, ...) is refused
   with the line, and the widget then shows what CRuby made of the code.
   `docs/limitations.md` in Spinel's repository is the full list.
-- **IRB** (`show_spinel_irb`, `SpinelIrb` in spinel-build.js): a compiled
-  program has no eval, so each input is compiled *with all accepted inputs
-  before it* into a program of its own and run from the start; the output
-  before a marker (`\u0001`) is the earlier lines' again and is dropped,
-  after the second marker (`\u0002`) comes `p` of the input's value (a
-  `def` answers its name, `class`/`module` nil, anything else is wrapped in
-  parentheses - no new scope, so a local it assigns stays the program's).
-  A line that is refused or raises is not kept. Whether an input is
-  complete is Prism's answer, in the kernel (`ChunkySpinel.complete`, the
-  block mount_spinel gives spinel.js), so `def` ... `end` waits like IRB.
-  Earlier lines run again on every line: `rand`, `Time.now` or a slow loop
-  in the history show it. A line takes 1.5-2 s, nearly all of it clang.
+  Integers overflow fast at 32 bits: `x += 1 while true` is a `RangeError`
+  within milliseconds, not an endless loop. CRuby's run of a cell has no
+  time limit, as no ▶ run has (a TracePoint, AutoRun's way, makes fib 5-13
+  times slower - the time beside Spinel's would be wrong): an endless loop
+  in a cell freezes the tab there, before Spinel sees it; in IRB, which is
+  Spinel's alone, it is stopped after 10 s.
+- **IRB** (`show_spinel_irb`, `SpinelSession` in shell/spinel.rb): a
+  compiled program has no eval, so each input is compiled *with all
+  accepted inputs before it* into a program of its own and run from the
+  start; the output before a marker (`\u0001`) is the earlier lines' again
+  and is dropped, after the second marker (`\u0002`) comes `p` of the
+  input's value (a `def` answers its name, `class`/`module` nil - decided
+  by the input's first line, since `^` means a line's start in CRuby and
+  the input's in PicoRuby, whose regexps are JavaScript's; anything else
+  is wrapped in parentheses - no new scope, so a local it assigns stays the
+  program's). A line that is refused or raises is not kept. Whether an
+  input is complete is Spinel's own parser's answer (`spinel --dump-ast`,
+  1-2 ms; "unexpected end-of-input" or "meets end of file": wait for the
+  next line), so `def` ... `end` waits like IRB and a syntax error shows
+  without a compile - no CRuby involved (the bridge's rule: CRuby never
+  runs inside a PicoRuby handler). Earlier lines run again on every line:
+  `rand`, `Time.now` or a slow loop in the history show it. A line takes
+  1.5-2 s, nearly all of it clang.
 - **Offline**: not part of the offline copy (`tools/offline_files.rb` lists
   only files git knows), and the lesson says so when the toolchain cannot
   be fetched (`spinelOffline`).
@@ -1699,8 +1748,9 @@ BASE=http://127.0.0.1:8011/ node offline_test.mjs   # offline mode (§6c), ~1 mi
 ruby dev_server_test.rb                  # the bridge rule and the embed's headers, dev server and nginx alike (§7)
 ruby ../tools/build_embed_ui.rb --check  # html/embed-ui.js has the current ui strings
 node ../tools/build_spinel.mjs --check   # html/assets/spinel/ is the pinned build (§6l)
-node --experimental-wasm-exnref spinel_test.mjs   # Spinel's pipeline and IRB under Node, ~1 min (§6l)
-ruby spinel_rb_test.rb                   # spinel.rb: the CRuby run, IRB's completeness check, the labels (§6l)
+BASE=http://127.0.0.1:8011/ node spinel_test.mjs   # lesson 39 in a browser: the cells, IRB, the exercise, ~2 min (§6l)
+ruby spinel_rb_test.rb                   # spinel.rb: the CRuby run, the shell's ui strings (§6l)
+ruby spinel_build_test.rb                # the plain Ruby of the compiler worker: --print-build, clang's line, IRB's verdict
 # with the dev server started as FRAME_ANCESTORS="http://blog.test:*" ruby tools/dev_server.rb:
 BASE=http://127.0.0.1:8011/ node embed_test.mjs     # the embedded cell (§6k), ~1 min
 ```
