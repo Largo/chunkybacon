@@ -176,7 +176,31 @@ window.LESSONS_JSON = JSON.stringify({
       "stepChanged": "neu",
       "stepTruncated": "Nach %d Schritten habe ich aufgehört mitzuschreiben. Die Zelle lief trotzdem zu Ende.",
       "stepNone": "Diese Zelle ist nicht losgelaufen – es gibt keine Schritte zum Ansehen.",
-      "stepLegend": "⟲ = Variable aus einer früheren Zelle (alle Zellen einer Lektion teilen sich ihre Variablen). Gelb = hat sich in diesem Schritt geändert. Tasten auf dem Regler: ← → Pos1 Ende."
+      "stepLegend": "⟲ = Variable aus einer früheren Zelle (alle Zellen einer Lektion teilen sich ihre Variablen). Gelb = hat sich in diesem Schritt geändert. Tasten auf dem Regler: ← → Pos1 Ende.",
+      "spinelTitle": "Spinel: Ruby → C → WebAssembly",
+      "spinelLoad": "Spinel und clang laden (rund 27 MB)",
+      "spinelCompile": "spinel: Ruby → C",
+      "spinelLink": "clang: C → WebAssembly",
+      "spinelRun": "Ausführen",
+      "spinelShowC": "Das C, das Spinel geschrieben hat (%s)",
+      "spinelDownload": "main.wasm herunterladen (%s)",
+      "spinelDownloadTitle": "Das fertige Programm. Auf deinem Computer: wasmtime run -W exceptions=y main.wasm",
+      "spinelSame": "CRuby gibt genau dasselbe aus (in %s).",
+      "spinelDiffers": "CRuby gibt etwas anderes aus (in %s):",
+      "spinelCrubyError": "Unter CRuby endet das Programm mit einem Fehler: %s",
+      "spinelCrubyOnly": "CRuby führt es aus und gibt aus:",
+      "spinelRefused": "Spinel kann das nicht übersetzen:",
+      "spinelCcFailed": "clang konnte das C nicht übersetzen:",
+      "spinelStopped": "Nach %s s angehalten – eine Endlosschleife?",
+      "spinelCrashed": "Das Programm ist abgestürzt: %s",
+      "spinelExit": "Das Programm endet mit Status %s:",
+      "spinelFailed": "Spinel konnte nicht geladen werden: %s",
+      "spinelOffline": "Spinel braucht eine Internetverbindung – es gehört nicht zur Offline-Kopie des Kurses.",
+      "spinelIrbTitle": "IRB auf Spinel",
+      "spinelIrbInput": "Eingabe für IRB auf Spinel",
+      "spinelIrbNote": "Jede Zeile wird mit allen vorigen neu übersetzt und von vorn ausgeführt.",
+      "spinelIrbReady": "Spinel %s ist bereit.",
+      "spinelIrbBusy": "übersetzt …"
     },
     "en": {
       "title": "Learn Ruby with Chunky Bacon",
@@ -344,7 +368,31 @@ window.LESSONS_JSON = JSON.stringify({
       "stepChanged": "new",
       "stepTruncated": "I stopped taking notes after %d steps. The cell still ran to the end.",
       "stepNone": "This cell did not get going – there are no steps to look at.",
-      "stepLegend": "⟲ = a variable from an earlier cell (all cells of a lesson share their variables). Yellow = changed in this step. Keys on the slider: ← → Home End."
+      "stepLegend": "⟲ = a variable from an earlier cell (all cells of a lesson share their variables). Yellow = changed in this step. Keys on the slider: ← → Home End.",
+      "spinelTitle": "Spinel: Ruby → C → WebAssembly",
+      "spinelLoad": "Loading Spinel and clang (about 27 MB)",
+      "spinelCompile": "spinel: Ruby → C",
+      "spinelLink": "clang: C → WebAssembly",
+      "spinelRun": "Running it",
+      "spinelShowC": "The C that Spinel wrote (%s)",
+      "spinelDownload": "Download main.wasm (%s)",
+      "spinelDownloadTitle": "The finished program. On your machine: wasmtime run -W exceptions=y main.wasm",
+      "spinelSame": "CRuby prints exactly the same (in %s).",
+      "spinelDiffers": "CRuby prints something else (in %s):",
+      "spinelCrubyError": "Under CRuby the program ends with an error: %s",
+      "spinelCrubyOnly": "CRuby runs it and prints:",
+      "spinelRefused": "Spinel cannot compile this:",
+      "spinelCcFailed": "clang could not compile the C:",
+      "spinelStopped": "Stopped after %s s – an endless loop?",
+      "spinelCrashed": "The program crashed: %s",
+      "spinelExit": "The program ends with status %s:",
+      "spinelFailed": "Spinel could not be loaded: %s",
+      "spinelOffline": "Spinel needs a connection – it is not part of the course’s offline copy.",
+      "spinelIrbTitle": "IRB on Spinel",
+      "spinelIrbInput": "Input for IRB on Spinel",
+      "spinelIrbNote": "Every line is compiled again with all the lines before it and run from the start.",
+      "spinelIrbReady": "Spinel %s is ready.",
+      "spinelIrbBusy": "compiling …"
     },
     "ja": {
       "title": "Chunky Baconと学ぶRuby",
@@ -512,7 +560,31 @@ window.LESSONS_JSON = JSON.stringify({
       "stepChanged": "変化",
       "stepTruncated": "%d ステップで記録をやめました。セルは最後まで実行されています。",
       "stepNone": "このセルは動き出しませんでした。見られるステップはありません。",
-      "stepLegend": "⟲ = 前のセルの変数です（レッスンのセルはすべて変数を共有します）。黄色 = このステップで変わった値です。スライダーのキー: ← → Home End"
+      "stepLegend": "⟲ = 前のセルの変数です（レッスンのセルはすべて変数を共有します）。黄色 = このステップで変わった値です。スライダーのキー: ← → Home End",
+      "spinelTitle": "Spinel：Ruby → C → WebAssembly",
+      "spinelLoad": "Spinelとclangを読み込み中（約27 MB）",
+      "spinelCompile": "spinel：Ruby → C",
+      "spinelLink": "clang：C → WebAssembly",
+      "spinelRun": "実行",
+      "spinelShowC": "Spinelが書いたC（%s）",
+      "spinelDownload": "main.wasmをダウンロード（%s）",
+      "spinelDownloadTitle": "できあがったプログラムです。自分のコンピューターでは：wasmtime run -W exceptions=y main.wasm",
+      "spinelSame": "CRubyもまったく同じものを出力します（%s）。",
+      "spinelDiffers": "CRubyは違うものを出力します（%s）：",
+      "spinelCrubyError": "CRubyでは、このプログラムはエラーで終わります：%s",
+      "spinelCrubyOnly": "CRubyなら実行でき、こう出力します：",
+      "spinelRefused": "Spinelはこれをコンパイルできません：",
+      "spinelCcFailed": "clangがCをコンパイルできませんでした：",
+      "spinelStopped": "%s秒で止めました。無限ループかもしれません。",
+      "spinelCrashed": "プログラムがクラッシュしました：%s",
+      "spinelExit": "プログラムはステータス%sで終わりました：",
+      "spinelFailed": "Spinelを読み込めませんでした：%s",
+      "spinelOffline": "Spinelにはインターネット接続が必要です。コースのオフライン版には含まれていません。",
+      "spinelIrbTitle": "Spinel上のIRB",
+      "spinelIrbInput": "Spinel上のIRBへの入力",
+      "spinelIrbNote": "1行ごとに、それまでの行と一緒にコンパイルし直して、最初から実行します。",
+      "spinelIrbReady": "Spinel %s の準備ができました。",
+      "spinelIrbBusy": "コンパイル中…"
     }
   },
   "lessons": [
@@ -2863,7 +2935,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 51). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
+            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 52). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
           },
           {
             "t": "c",
@@ -2910,7 +2982,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 51 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
+            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 52 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
           },
           {
             "t": "c",
@@ -2957,7 +3029,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン51で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
+            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン52で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
           },
           {
             "t": "c",
@@ -4866,7 +4938,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 39:</p>"
+            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 40:</p>"
           },
           {
             "t": "c",
@@ -4921,7 +4993,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 39 on:</p>"
+            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 40 on:</p>"
           },
           {
             "t": "c",
@@ -4976,7 +5048,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン39からつくるプロジェクトの構成です：</p>"
+            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン40からつくるプロジェクトの構成です：</p>"
           },
           {
             "t": "c",
@@ -5218,7 +5290,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install faker</code>, oder im <code>Gemfile</code> in der Gruppe <code>:test</code>. In Minitest-Tests (Lektion 43) nimmst du gern Minitests eigenen Startwert, den jeder Lauf ausgibt (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>So erzeugt <code>ruby test.rb --seed 12345</code> genau die Daten des fehlgeschlagenen Laufs noch einmal. <code>Faker::Config.random = nil</code> macht den Zufall wieder zufällig.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky braucht für seinen Laden Testkunden, bei jedem Lauf dieselben. Leg den Zufall auf <code>Random.new(2024)</code> fest und mach ein Array <code>kunden</code> mit 5 Hashes, jeder mit einem <code>:name</code> und einer <code>:email</code>.</div>"
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install faker</code>, oder im <code>Gemfile</code> in der Gruppe <code>:test</code>. In Minitest-Tests (Lektion 44) nimmst du gern Minitests eigenen Startwert, den jeder Lauf ausgibt (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>So erzeugt <code>ruby test.rb --seed 12345</code> genau die Daten des fehlgeschlagenen Laufs noch einmal. <code>Faker::Config.random = nil</code> macht den Zufall wieder zufällig.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky braucht für seinen Laden Testkunden, bei jedem Lauf dieselben. Leg den Zufall auf <code>Random.new(2024)</code> fest und mach ein Array <code>kunden</code> mit 5 Hashes, jeder mit einem <code>:name</code> und einer <code>:email</code>.</div>"
           },
           {
             "t": "x",
@@ -5273,7 +5345,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install faker</code>, or in the <code>Gemfile</code> in the <code>:test</code> group. In Minitest tests (lesson 43) Minitest's own seed is a good choice; every run prints it (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>Then <code>ruby test.rb --seed 12345</code> makes exactly the data of the failed run again. <code>Faker::Config.random = nil</code> makes randomness random again.</p></div><div class='task'><strong>Task:</strong> Chunky needs test customers for his shop, the same ones on every run. Pin the randomness to <code>Random.new(2024)</code> and make an array <code>customers</code> of 5 hashes, each with a <code>:name</code> and an <code>:email</code>.</div>"
+            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install faker</code>, or in the <code>Gemfile</code> in the <code>:test</code> group. In Minitest tests (lesson 44) Minitest's own seed is a good choice; every run prints it (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>Then <code>ruby test.rb --seed 12345</code> makes exactly the data of the failed run again. <code>Faker::Config.random = nil</code> makes randomness random again.</p></div><div class='task'><strong>Task:</strong> Chunky needs test customers for his shop, the same ones on every run. Pin the randomness to <code>Random.new(2024)</code> and make an array <code>customers</code> of 5 hashes, each with a <code>:name</code> and an <code>:email</code>.</div>"
           },
           {
             "t": "x",
@@ -5328,7 +5400,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='自分のパソコンでは'><p><code>gem install faker</code>、または<code>Gemfile</code>の<code>:test</code>グループに。Minitestのテスト（レッスン43）では、Minitest自身のシードを使うのがおすすめです。毎回の実行で表示されます（<code>Run options: --seed 12345</code>）：</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>すると<code>ruby test.rb --seed 12345</code>で、失敗した実行とまったく同じデータがもう一度つくられます。<code>Faker::Config.random = nil</code>で、乱数はまたランダムに戻ります。</p></div><div class='task'><strong>課題：</strong>Chunkyはお店のためのテスト用のお客さんがほしいのです。毎回同じお客さんで。乱数を<code>Random.new(2024)</code>に固定して、5つのハッシュの配列<code>customers</code>をつくってください。どのハッシュにも<code>:name</code>と<code>:email</code>があります。</div>"
+            "html": "<div class='offweb' data-title='自分のパソコンでは'><p><code>gem install faker</code>、または<code>Gemfile</code>の<code>:test</code>グループに。Minitestのテスト（レッスン44）では、Minitest自身のシードを使うのがおすすめです。毎回の実行で表示されます（<code>Run options: --seed 12345</code>）：</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>すると<code>ruby test.rb --seed 12345</code>で、失敗した実行とまったく同じデータがもう一度つくられます。<code>Faker::Config.random = nil</code>で、乱数はまたランダムに戻ります。</p></div><div class='task'><strong>課題：</strong>Chunkyはお店のためのテスト用のお客さんがほしいのです。毎回同じお客さんで。乱数を<code>Random.new(2024)</code>に固定して、5つのハッシュの配列<code>customers</code>をつくってください。どのハッシュにも<code>:name</code>と<code>:email</code>があります。</div>"
           },
           {
             "t": "x",
@@ -5394,7 +5466,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Ein <code>HTMLElementNode</code> mit seinem öffnenden und schliessenden Tag, darin ein <code>ERBContentNode</code> mit dem Ruby-Code. Auf diesem Baum bauen Herbs Werkzeuge auf: ein Linter, der Regeln prüft, ein Formatierer, und Hilfe im Editor.</p><p>Am meisten bringt Herb in Tests: Ein Test, der jede Vorlage prüft, fällt um, sobald jemand ein Tag falsch schliesst – lange bevor es jemand im Browser sieht. Mit Minitest aus Lektion 43:</p>"
+            "html": "<p>Ein <code>HTMLElementNode</code> mit seinem öffnenden und schliessenden Tag, darin ein <code>ERBContentNode</code> mit dem Ruby-Code. Auf diesem Baum bauen Herbs Werkzeuge auf: ein Linter, der Regeln prüft, ein Formatierer, und Hilfe im Editor.</p><p>Am meisten bringt Herb in Tests: Ein Test, der jede Vorlage prüft, fällt um, sobald jemand ein Tag falsch schliesst – lange bevor es jemand im Browser sieht. Mit Minitest aus Lektion 44:</p>"
           },
           {
             "t": "c",
@@ -5465,7 +5537,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>An <code>HTMLElementNode</code> with its opening and closing tag, and inside it an <code>ERBContentNode</code> with the Ruby code. Herb's tools build on this tree: a linter that checks rules, a formatter, and help in the editor.</p><p>Herb pays off most in tests: a test that checks every template falls over as soon as somebody closes a tag wrongly – long before anyone sees it in the browser. With Minitest from lesson 43:</p>"
+            "html": "<p>An <code>HTMLElementNode</code> with its opening and closing tag, and inside it an <code>ERBContentNode</code> with the Ruby code. Herb's tools build on this tree: a linter that checks rules, a formatter, and help in the editor.</p><p>Herb pays off most in tests: a test that checks every template falls over as soon as somebody closes a tag wrongly – long before anyone sees it in the browser. With Minitest from lesson 44:</p>"
           },
           {
             "t": "c",
@@ -5536,7 +5608,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>開くタグと閉じるタグを持つ<code>HTMLElementNode</code>、その中にRubyのコードを持つ<code>ERBContentNode</code>。Herbのツールはこの木の上に成り立っています。ルールを確かめるリンター、フォーマッター、そしてエディタでの手助け。</p><p>Herbがいちばん役に立つのはテストです。すべてのテンプレートを確かめるテストは、だれかがタグの閉じ方をまちがえたとたんに失敗します。ブラウザでだれかが気づくずっと前に。レッスン43のMinitestで：</p>"
+            "html": "<p>開くタグと閉じるタグを持つ<code>HTMLElementNode</code>、その中にRubyのコードを持つ<code>ERBContentNode</code>。Herbのツールはこの木の上に成り立っています。ルールを確かめるリンター、フォーマッター、そしてエディタでの手助け。</p><p>Herbがいちばん役に立つのはテストです。すべてのテンプレートを確かめるテストは、だれかがタグの閉じ方をまちがえたとたんに失敗します。ブラウザでだれかが気づくずっと前に。レッスン44のMinitestで：</p>"
           },
           {
             "t": "c",
@@ -5827,7 +5899,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Ein Schlagzeug ist hier wieder ein String: Jedes Zeichen ist ein Achtel, <code>x</code> die grosse Trommel, <code>h</code> die Hi-Hat, ein Punkt Pause. Die <strong>Kick</strong> ist ein Sinus, dessen Frequenz schnell fällt und der dabei verklingt (<code>Math.exp(-zeit * 15)</code> wird rasch kleiner), die <strong>Hi-Hat</strong> ist Rauschen aus <code>rand</code>. Jeder Klang wird auf seinen Platz zurechtgeschnitten oder mit Stille aufgefüllt, damit der Takt gleichmässig bleibt.</p><p><code>noten</code>, <code>schlagzeug</code>, <code>zusammen</code> – das sind schon die Wörter einer kleinen Sprache für Musik, gebaut aus Arrays, Strings und Blöcken (mehr dazu in Lektion 51, «Eine eigene DSL»). <code>File.binwrite</code> schreibt die Bytes als Datei; sie erscheint unter der Zelle als Download, und <code>show_audio</code> nimmt auch ihren Namen.</p><div class='offweb' data-title='Auf deinem Computer'><p>Dort läuft derselbe Code: <code>File.binwrite(\"lied.wav\", wav(lied))</code> und dann die Datei mit einem beliebigen Player öffnen. Wer WAV-Dateien auch lesen oder in Stereo und 24 Bit schreiben will, nimmt das Gem <code>wavefile</code> (reines Ruby, läuft auch hier mit <code>install_gem \"wavefile\"</code>) – es schreibt für dieses Lied Byte für Byte dieselbe Datei.</p></div><div class='task'><strong>Aufgabe:</strong> Ein Tusch! Schreib die Datei <code>tusch.wav</code>: zuerst die Töne C4, E4, G4 und C5 nacheinander, je 0.25 Sekunden, danach alle vier <strong>zusammen</strong> eine Sekunde lang – insgesamt also 2 Sekunden.</div>"
+            "html": "<p>Ein Schlagzeug ist hier wieder ein String: Jedes Zeichen ist ein Achtel, <code>x</code> die grosse Trommel, <code>h</code> die Hi-Hat, ein Punkt Pause. Die <strong>Kick</strong> ist ein Sinus, dessen Frequenz schnell fällt und der dabei verklingt (<code>Math.exp(-zeit * 15)</code> wird rasch kleiner), die <strong>Hi-Hat</strong> ist Rauschen aus <code>rand</code>. Jeder Klang wird auf seinen Platz zurechtgeschnitten oder mit Stille aufgefüllt, damit der Takt gleichmässig bleibt.</p><p><code>noten</code>, <code>schlagzeug</code>, <code>zusammen</code> – das sind schon die Wörter einer kleinen Sprache für Musik, gebaut aus Arrays, Strings und Blöcken (mehr dazu in Lektion 52, «Eine eigene DSL»). <code>File.binwrite</code> schreibt die Bytes als Datei; sie erscheint unter der Zelle als Download, und <code>show_audio</code> nimmt auch ihren Namen.</p><div class='offweb' data-title='Auf deinem Computer'><p>Dort läuft derselbe Code: <code>File.binwrite(\"lied.wav\", wav(lied))</code> und dann die Datei mit einem beliebigen Player öffnen. Wer WAV-Dateien auch lesen oder in Stereo und 24 Bit schreiben will, nimmt das Gem <code>wavefile</code> (reines Ruby, läuft auch hier mit <code>install_gem \"wavefile\"</code>) – es schreibt für dieses Lied Byte für Byte dieselbe Datei.</p></div><div class='task'><strong>Aufgabe:</strong> Ein Tusch! Schreib die Datei <code>tusch.wav</code>: zuerst die Töne C4, E4, G4 und C5 nacheinander, je 0.25 Sekunden, danach alle vier <strong>zusammen</strong> eine Sekunde lang – insgesamt also 2 Sekunden.</div>"
           },
           {
             "t": "x",
@@ -5890,7 +5962,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>A drum kit is a String again: every character is an eighth note, <code>x</code> the bass drum, <code>h</code> the hi-hat, a dot a rest. The <strong>kick</strong> is a sine whose frequency falls fast while it dies away (<code>Math.exp(-time * 15)</code> shrinks quickly), the <strong>hi-hat</strong> is noise from <code>rand</code>. Every sound is cut to its slot or padded with silence, so the beat stays even.</p><p><code>notes</code>, <code>drums</code>, <code>mix</code> – those are already the words of a small language for music, built from Arrays, Strings and blocks (more in lesson 51, \"Your own DSL\"). <code>File.binwrite</code> writes the bytes as a file; it appears below the cell as a download, and <code>show_audio</code> takes its name too.</p><div class='offweb' data-title='On your machine'><p>The same code runs there: <code>File.binwrite(\"song.wav\", wav(song))</code>, then open the file in any player. To read WAV files as well, or write stereo and 24 bits, use the <code>wavefile</code> gem (pure Ruby, it runs here too with <code>install_gem \"wavefile\"</code>) – for this song it writes the very same file, byte for byte.</p></div><div class='task'><strong>Task:</strong> A fanfare! Write the file <code>fanfare.wav</code>: first the notes C4, E4, G4 and C5 one after another, 0.25 seconds each, then all four <strong>together</strong> for one second – 2 seconds in all.</div>"
+            "html": "<p>A drum kit is a String again: every character is an eighth note, <code>x</code> the bass drum, <code>h</code> the hi-hat, a dot a rest. The <strong>kick</strong> is a sine whose frequency falls fast while it dies away (<code>Math.exp(-time * 15)</code> shrinks quickly), the <strong>hi-hat</strong> is noise from <code>rand</code>. Every sound is cut to its slot or padded with silence, so the beat stays even.</p><p><code>notes</code>, <code>drums</code>, <code>mix</code> – those are already the words of a small language for music, built from Arrays, Strings and blocks (more in lesson 52, \"Your own DSL\"). <code>File.binwrite</code> writes the bytes as a file; it appears below the cell as a download, and <code>show_audio</code> takes its name too.</p><div class='offweb' data-title='On your machine'><p>The same code runs there: <code>File.binwrite(\"song.wav\", wav(song))</code>, then open the file in any player. To read WAV files as well, or write stereo and 24 bits, use the <code>wavefile</code> gem (pure Ruby, it runs here too with <code>install_gem \"wavefile\"</code>) – for this song it writes the very same file, byte for byte.</p></div><div class='task'><strong>Task:</strong> A fanfare! Write the file <code>fanfare.wav</code>: first the notes C4, E4, G4 and C5 one after another, 0.25 seconds each, then all four <strong>together</strong> for one second – 2 seconds in all.</div>"
           },
           {
             "t": "x",
@@ -5953,7 +6025,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ドラムもまた文字列です。1文字が8分音符1つ分で、<code>x</code>はバスドラム、<code>h</code>はハイハット、点は休符です。<strong>キック</strong>は、周波数がすばやく下がりながら消えていくサイン波です（<code>Math.exp(-time * 15)</code>はすぐに小さくなります）。<strong>ハイハット</strong>は<code>rand</code>で作ったノイズです。それぞれの音は自分の枠に合わせて切るか無音で埋めるので、リズムがずれません。</p><p><code>notes</code>、<code>drums</code>、<code>mix</code>――これはもう、配列と文字列とブロックでできた、音楽のための小さな言語の単語です（くわしくはレッスン51「自分だけのDSL」で）。<code>File.binwrite</code>はバイト列をファイルに書き出します。ファイルはセルの下にダウンロードとして現れ、<code>show_audio</code>にはファイル名を渡すこともできます。</p><div class='offweb' data-title='自分のコンピューターでは'><p>同じコードがそのまま動きます。<code>File.binwrite(\"song.wav\", wav(song))</code>で書き出し、好きなプレーヤーで開いてください。WAVファイルを読んだり、ステレオや24ビットで書いたりしたいなら、<code>wavefile</code> gemを使います（純粋なRubyなので、ここでも<code>install_gem \"wavefile\"</code>で動きます）。この曲なら、1バイトも違わない同じファイルを書き出します。</p></div><div class='task'><strong>課題：</strong>ファンファーレを作りましょう！<code>fanfare.wav</code>というファイルを書き出してください。まずC4、E4、G4、C5を順に各0.25秒、そのあと4つを<strong>同時に</strong>1秒鳴らします。全部で2秒です。</div>"
+            "html": "<p>ドラムもまた文字列です。1文字が8分音符1つ分で、<code>x</code>はバスドラム、<code>h</code>はハイハット、点は休符です。<strong>キック</strong>は、周波数がすばやく下がりながら消えていくサイン波です（<code>Math.exp(-time * 15)</code>はすぐに小さくなります）。<strong>ハイハット</strong>は<code>rand</code>で作ったノイズです。それぞれの音は自分の枠に合わせて切るか無音で埋めるので、リズムがずれません。</p><p><code>notes</code>、<code>drums</code>、<code>mix</code>――これはもう、配列と文字列とブロックでできた、音楽のための小さな言語の単語です（くわしくはレッスン52「自分だけのDSL」で）。<code>File.binwrite</code>はバイト列をファイルに書き出します。ファイルはセルの下にダウンロードとして現れ、<code>show_audio</code>にはファイル名を渡すこともできます。</p><div class='offweb' data-title='自分のコンピューターでは'><p>同じコードがそのまま動きます。<code>File.binwrite(\"song.wav\", wav(song))</code>で書き出し、好きなプレーヤーで開いてください。WAVファイルを読んだり、ステレオや24ビットで書いたりしたいなら、<code>wavefile</code> gemを使います（純粋なRubyなので、ここでも<code>install_gem \"wavefile\"</code>で動きます）。この曲なら、1バイトも違わない同じファイルを書き出します。</p></div><div class='task'><strong>課題：</strong>ファンファーレを作りましょう！<code>fanfare.wav</code>というファイルを書き出してください。まずC4、E4、G4、C5を順に各0.25秒、そのあと4つを<strong>同時に</strong>1秒鳴らします。全部で2秒です。</div>"
           },
           {
             "t": "x",
@@ -6133,6 +6205,151 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "spinel",
+      "live": false,
+      "de": {
+        "title": "39. Spinel: Ruby wird kompiliert",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Spinel: Ruby wird kompiliert</h2><p>Jede Zelle bisher lief auf <strong>CRuby</strong>, dem Ruby, das Matz 1993 begonnen hat. CRuby ist ein <em>Interpreter</em>: Er liest dein Programm, übersetzt es in Befehle für seine virtuelle Maschine und führt sie einen nach dem anderen aus. Weil er beim Ausführen immer da ist, darf sich ein Programm unterwegs selbst ändern – mit <code>eval</code>, <code>define_method</code> oder <code>method_missing</code>.</p><p>Seit 2024 schreibt Matz an etwas ganz anderem: <a href='https://github.com/matz/spinel'>Spinel</a>, einem <strong>Ahead-of-time-Compiler</strong> (die erste Version erschien im September 2026). Spinel liest das <em>ganze</em> Programm, bevor es läuft, findet für jeden Wert heraus, welchen Typ er hat, und schreibt daraus <strong>C</strong>. Ein C-Compiler macht daraus Maschinencode: ein Programm, in dem kein Ruby mehr steckt und das oft viel schneller läuft.</p><p>In dieser Lektion passiert das alles in deinem Browser, als WebAssembly:</p><ol><li><strong>spinel</strong> übersetzt Ruby in C,</li><li><strong>clang</strong>, ein C-Compiler, übersetzt das C in WebAssembly,</li><li>das fertige Programm läuft.</li></ol><p>Spinel und clang sind zusammen rund 27 MB groß und werden geladen, sobald du die Lektion öffnest. Darum laufen die Zellen hier nicht schon beim Tippen: Ein Compilerlauf dauert ein paar Sekunden. Drück ▶.</p>"
+          },
+          {
+            "t": "c",
+            "code": "spinel <<~RUBY\n  def fib(n)\n    n < 2 ? n : fib(n - 1) + fib(n - 2)\n  end\n\n  puts fib(30)\nRUBY"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>spinel</code> bekommt das Programm als String – <code>&lt;&lt;~RUBY … RUBY</code> ist ein <em>Heredoc</em>, ein String über mehrere Zeilen. Unter der Zelle siehst du, was damit passiert: die drei Schritte mit ihren Zeiten, was das fertige Programm ausgibt, und darunter, was CRuby mit demselben Code ausgibt. CRuby ist die Messlatte: Spinel soll genau dasselbe herausbekommen.</p><p>Vergleich die Zeiten. Das Übersetzen dauert Sekunden, das fertige Programm ist in ein paar Millisekunden durch – schau, wie lange CRuby für <code>fib(30)</code> braucht. Ein Compiler arbeitet <em>einmal vorher</em>, damit das Programm danach schnell ist. Klapp auch das C auf: Aus <code>fib</code> ist die C-Funktion <code>sp_fib</code> geworden, und <code>n</code> ist ein <code>sp_int</code>, eine Zahl, mit der der Prozessor direkt rechnet – Spinel hat gesehen, dass hier nur Integer ankommen. <code>main.wasm</code> ist das fertige Programm zum Herunterladen.</p>"
+          },
+          {
+            "t": "c",
+            "code": "spinel <<~'RUBY'\n  class Katze\n    attr_reader :name\n\n    def initialize(name, alter)\n      @name = name\n      @alter = alter\n    end\n\n    def vorstellen\n      \"Ich bin #{@name} und #{@alter} Jahre alt.\"\n    end\n  end\n\n  katzen = [Katze.new(\"Mimi\", 3), Katze.new(\"Felix\", 7)]\n  katzen.each { |katze| puts katze.vorstellen }\n  p katzen.map(&:name).sort\nRUBY"
+          },
+          {
+            "t": "h",
+            "html": "<p>Diesmal steht da <code>&lt;&lt;~'RUBY'</code> mit Anführungszeichen. Ohne sie würde schon CRuby das <code>#{@name}</code> im Heredoc ausfüllen, bevor Spinel das Programm sieht; mit Anführungszeichen bleibt es im Programm stehen, und Spinel macht daraus C.</p><p>Spinel hat herausgefunden, dass <code>@name</code> immer ein String und <code>@alter</code> immer ein Integer ist. Im C ist eine Katze darum ein <code>struct sp_Katze_s</code> mit genau diesen zwei Feldern. Das heißt <strong>Typinferenz</strong>: Du schreibst keine Typen hin, Spinel liest sie aus dem ganzen Programm ab.</p><p>Was man erst beim Ausführen wissen kann, lehnt Spinel ab: <code>eval</code> mit einem String (darin könnte ja alles stehen), <code>method_missing</code>, <code>define_method</code> mit einem ausgerechneten Namen, <code>ObjectSpace</code>, <code>binding</code> als Objekt. Das sagt Spinel beim Übersetzen, mit der Zeile:</p>"
+          },
+          {
+            "t": "c",
+            "code": "spinel <<~'RUBY'\n  rechnung = \"6 * 7\"\n  puts eval(rechnung)\nRUBY"
+          },
+          {
+            "t": "h",
+            "html": "<p>CRuby rechnet <code>42</code> aus, Spinel weigert sich. Eine Besonderheit kommt von WebAssembly: Hier ist ein <code>Integer</code> nur 32 Bit groß, also höchstens 2 147 483 647. Darüber wirft Spinel einen <code>RangeError</code>, wo CRuby einfach zu einer großen Zahl wechselt; auf deinem Computer rechnet Spinel mit 64 Bit. Threads und Fibers gibt es in WebAssembly auch nicht.</p><p>Und IRB? Aus Lektion 13 kennst du IRB: Es nimmt eine Zeile, führt sie aus, zeigt <code>=&gt;</code> und wartet auf die nächste. Das geht, weil CRuby beim Ausführen da ist. Ein kompiliertes Programm hat kein <code>eval</code> – ein IRB für Spinel gibt es also eigentlich nicht. Das IRB unten schummelt ehrlich: Jede Zeile wird <strong>zusammen mit allen vorigen</strong> zu einem neuen Programm übersetzt und von vorn ausgeführt, und gezeigt wird nur, was die neue Zeile ausgibt. Darum dauert jede Zeile ein paar Sekunden. Probier <code>x = 6 * 7</code>, dann <code>def doppelt(n) = n * 2</code>, dann <code>doppelt(x)</code>.</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_spinel_irb"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Spinel ist ein C-Programm: <code>git clone https://github.com/matz/spinel</code>, darin <code>make deps</code> und <code>make</code>. Danach übersetzt <code>./spinel app.rb</code> eine Datei in ein Programm <code>./app</code>, das ohne Ruby läuft. Für größere Projekte gibt es <code>spin</code>: <code>spin new meinprojekt</code>, <code>spin run</code> und <code>spin test</code>, das wie hier CRuby als Messlatte nimmt. Das <code>main.wasm</code> von oben läuft mit <a href='https://wasmtime.dev'>wasmtime</a>: <code>wasmtime run -W exceptions=y main.wasm</code>.</p></div><div class='task'><strong>Aufgabe:</strong> Die <em>Collatz-Folge</em>: Ist eine Zahl gerade, halbiere sie, sonst nimm sie mal 3 und zähl 1 dazu – so lange, bis 1 herauskommt. Schreib die Methode <code>collatz(n)</code>, die zählt, wie viele Schritte es bis zur 1 sind, und lass Spinel <code>collatz(27)</code> ausgeben. (Es sind 111 – und unterwegs wird die Zahl bis zu 9232 groß.)</div>"
+          },
+          {
+            "t": "x",
+            "code": "# gerade: n / 2, ungerade: 3 * n + 1 - so lange, bis n == 1 ist\nspinel <<~'RUBY'\n  def collatz(n)\n    schritte = 0\n\n    schritte\n  end\n\n  puts collatz(27)\nRUBY",
+            "check": "result.is_a?(ChunkySpinel::Program) && result.ok? && result.output.split.last == \"111\" && code.include?(\"def collatz\")",
+            "hint": "Eine Schleife: <code>while n != 1</code> … <code>end</code>. Darin <code>n = n.even? ? n / 2 : 3 * n + 1</code> und <code>schritte += 1</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "39. Spinel: Ruby, compiled",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Spinel: Ruby, compiled</h2><p>Every cell so far ran on <strong>CRuby</strong>, the Ruby Matz started in 1993. CRuby is an <em>interpreter</em>: it reads your program, translates it into instructions for its virtual machine and carries them out one by one. Because it is always there while the program runs, a program may change itself on the way – with <code>eval</code>, <code>define_method</code> or <code>method_missing</code>.</p><p>Since 2024 Matz has been writing something quite different: <a href='https://github.com/matz/spinel'>Spinel</a>, an <strong>ahead-of-time compiler</strong> (its first version came out in September 2026). Spinel reads the <em>whole</em> program before it runs, works out which type every value has, and writes <strong>C</strong> from it. A C compiler turns that into machine code: a program with no Ruby left in it, which often runs much faster.</p><p>In this lesson all of that happens in your browser, as WebAssembly:</p><ol><li><strong>spinel</strong> translates Ruby into C,</li><li><strong>clang</strong>, a C compiler, translates the C into WebAssembly,</li><li>the finished program runs.</li></ol><p>Spinel and clang are about 27 MB together and are loaded as soon as you open the lesson. That is why the cells here do not run while you type: one run of the compiler takes a few seconds. Press ▶.</p>"
+          },
+          {
+            "t": "c",
+            "code": "spinel <<~RUBY\n  def fib(n)\n    n < 2 ? n : fib(n - 1) + fib(n - 2)\n  end\n\n  puts fib(30)\nRUBY"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>spinel</code> gets the program as a String – <code>&lt;&lt;~RUBY … RUBY</code> is a <em>heredoc</em>, a String over several lines. Below the cell you see what happens to it: the three steps with their times, what the finished program prints, and below that what CRuby prints for the same code. CRuby is the yardstick: Spinel should come out with exactly the same.</p><p>Compare the times. Compiling takes seconds; the finished program is done in a few milliseconds – look how long CRuby takes for <code>fib(30)</code>. A compiler does its work <em>once, beforehand</em>, so that the program is fast afterwards. Open the C as well: <code>fib</code> has become the C function <code>sp_fib</code>, and <code>n</code> is an <code>sp_int</code>, a number the processor computes with directly – Spinel saw that only Integers arrive here. <code>main.wasm</code> is the finished program, to download.</p>"
+          },
+          {
+            "t": "c",
+            "code": "spinel <<~'RUBY'\n  class Cat\n    attr_reader :name\n\n    def initialize(name, age)\n      @name = name\n      @age = age\n    end\n\n    def introduce\n      \"I'm #{@name} and #{@age} years old.\"\n    end\n  end\n\n  cats = [Cat.new(\"Mimi\", 3), Cat.new(\"Felix\", 7)]\n  cats.each { |cat| puts cat.introduce }\n  p cats.map(&:name).sort\nRUBY"
+          },
+          {
+            "t": "h",
+            "html": "<p>This time it says <code>&lt;&lt;~'RUBY'</code>, with quotes. Without them CRuby itself would fill in the <code>#{@name}</code> in the heredoc before Spinel ever sees the program; with quotes it stays in the program, and Spinel turns it into C.</p><p>Spinel worked out that <code>@name</code> is always a String and <code>@age</code> always an Integer. In the C a cat is therefore a <code>struct sp_Cat_s</code> with exactly these two fields. This is called <strong>type inference</strong>: you write no types down, Spinel reads them off the whole program.</p><p>What can only be known while the program runs, Spinel refuses: <code>eval</code> with a String (it could contain anything), <code>method_missing</code>, <code>define_method</code> with a computed name, <code>ObjectSpace</code>, <code>binding</code> as an object. Spinel says so while compiling, with the line:</p>"
+          },
+          {
+            "t": "c",
+            "code": "spinel <<~'RUBY'\n  sum = \"6 * 7\"\n  puts eval(sum)\nRUBY"
+          },
+          {
+            "t": "h",
+            "html": "<p>CRuby works out <code>42</code>, Spinel refuses. One peculiarity comes from WebAssembly: here an <code>Integer</code> has only 32 bits, so at most 2,147,483,647. Past that Spinel raises a <code>RangeError</code> where CRuby simply switches to a big number; on your computer Spinel computes with 64 bits. Threads and fibers do not exist in WebAssembly either.</p><p>And IRB? You know IRB from lesson 13: it takes a line, runs it, shows <code>=&gt;</code> and waits for the next one. That works because CRuby is there while the code runs. A compiled program has no <code>eval</code> – so there is really no IRB for Spinel. The IRB below cheats honestly: every line is compiled <strong>together with all the lines before it</strong> into a new program and run from the start, and only what the new line prints is shown. That is why every line takes a few seconds. Try <code>x = 6 * 7</code>, then <code>def double(n) = n * 2</code>, then <code>double(x)</code>.</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_spinel_irb"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p>Spinel is a C program: <code>git clone https://github.com/matz/spinel</code>, then <code>make deps</code> and <code>make</code> in it. After that <code>./spinel app.rb</code> compiles a file into a program <code>./app</code> that runs without Ruby. For bigger projects there is <code>spin</code>: <code>spin new myproject</code>, <code>spin run</code> and <code>spin test</code>, which takes CRuby as the yardstick, as here. The <code>main.wasm</code> from above runs with <a href='https://wasmtime.dev'>wasmtime</a>: <code>wasmtime run -W exceptions=y main.wasm</code>.</p></div><div class='task'><strong>Task:</strong> The <em>Collatz sequence</em>: if a number is even, halve it, otherwise multiply it by 3 and add 1 – until 1 comes out. Write the method <code>collatz(n)</code> that counts how many steps it takes to reach 1, and let Spinel print <code>collatz(27)</code>. (It is 111 – and on the way the number grows as big as 9232.)</div>"
+          },
+          {
+            "t": "x",
+            "code": "# even: n / 2, odd: 3 * n + 1 - until n == 1\nspinel <<~'RUBY'\n  def collatz(n)\n    steps = 0\n\n    steps\n  end\n\n  puts collatz(27)\nRUBY",
+            "check": "result.is_a?(ChunkySpinel::Program) && result.ok? && result.output.split.last == \"111\" && code.include?(\"def collatz\")",
+            "hint": "A loop: <code>while n != 1</code> … <code>end</code>. Inside it <code>n = n.even? ? n / 2 : 3 * n + 1</code> and <code>steps += 1</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "39. Spinel：Rubyをコンパイルする",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Spinel：Rubyをコンパイルする</h2><p>これまでのセルはすべて、Matzが1993年に作り始めたRuby、<strong>CRuby</strong>で動いていました。CRubyは<em>インタプリタ</em>です。プログラムを読み、自分の仮想マシン用の命令に翻訳して、それを1つずつ実行します。実行中もずっとそこにいるので、プログラムは途中で自分自身を変えることができます。<code>eval</code>、<code>define_method</code>、<code>method_missing</code>がそうです。</p><p>Matzは2024年から、まったく違うものを書いています。<a href='https://github.com/matz/spinel'>Spinel</a>という<strong>AOT（事前）コンパイラ</strong>です（最初のバージョンは2026年9月に出ました）。Spinelはプログラムが動く前に<em>全体</em>を読み、すべての値の型を突き止めて、そこから<strong>C</strong>を書きます。それをCコンパイラが機械語にします。Rubyがもう入っていない、たいていずっと速く動くプログラムのできあがりです。</p><p>このレッスンでは、そのすべてがブラウザの中で、WebAssemblyとして起こります。</p><ol><li><strong>spinel</strong>がRubyをCに翻訳し、</li><li>Cコンパイラの<strong>clang</strong>がCをWebAssemblyに翻訳し、</li><li>できあがったプログラムが動きます。</li></ol><p>Spinelとclangは合わせて約27 MBあり、レッスンを開いたときに読み込みが始まります。そのため、このレッスンのセルは入力中には自動で動きません。コンパイラを1回動かすのに数秒かかるからです。▶を押してください。</p>"
+          },
+          {
+            "t": "c",
+            "code": "spinel <<~RUBY\n  def fib(n)\n    n < 2 ? n : fib(n - 1) + fib(n - 2)\n  end\n\n  puts fib(30)\nRUBY"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>spinel</code>はプログラムを文字列として受け取ります。<code>&lt;&lt;~RUBY … RUBY</code>は<em>ヒアドキュメント</em>、つまり複数行にわたる文字列です。セルの下には、それがどうなるかが表示されます。3つのステップとそれぞれの時間、できあがったプログラムの出力、そしてその下に、同じコードをCRubyで動かしたときの出力です。CRubyが基準です。Spinelはまったく同じ結果を出さなければなりません。</p><p>時間を比べてみましょう。コンパイルには数秒かかりますが、できあがったプログラムは数ミリ秒で終わります。CRubyが<code>fib(30)</code>にどれだけかかるかも見てください。コンパイラは<em>前もって一度だけ</em>働き、そのおかげでプログラムはあとで速く動くのです。Cも開いてみましょう。<code>fib</code>はC関数<code>sp_fib</code>になり、<code>n</code>は<code>sp_int</code>、つまりプロセッサーが直接計算できる数になっています。ここには整数しか来ないことを、Spinelが見抜いたからです。<code>main.wasm</code>はできあがったプログラムで、ダウンロードできます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "spinel <<~'RUBY'\n  class Cat\n    attr_reader :name\n\n    def initialize(name, age)\n      @name = name\n      @age = age\n    end\n\n    def introduce\n      \"I'm #{@name} and #{@age} years old.\"\n    end\n  end\n\n  cats = [Cat.new(\"Mimi\", 3), Cat.new(\"Felix\", 7)]\n  cats.each { |cat| puts cat.introduce }\n  p cats.map(&:name).sort\nRUBY"
+          },
+          {
+            "t": "h",
+            "html": "<p>今回は引用符つきの<code>&lt;&lt;~'RUBY'</code>です。引用符がないと、Spinelがプログラムを見る前に、CRubyがヒアドキュメントの中の<code>#{@name}</code>を埋めてしまいます。引用符があれば、それはプログラムの中に残り、SpinelがCにします。</p><p>Spinelは、<code>@name</code>がいつも文字列で、<code>@age</code>がいつも整数だと突き止めました。そのためCの中では、猫はちょうどこの2つのフィールドを持つ<code>struct sp_Cat_s</code>になっています。これを<strong>型推論</strong>といいます。型は書かなくても、Spinelがプログラム全体から読み取るのです。</p><p>実行してみないとわからないことは、Spinelは断ります。文字列を渡す<code>eval</code>（中に何が入っているかわかりません）、<code>method_missing</code>、計算した名前を使う<code>define_method</code>、<code>ObjectSpace</code>、オブジェクトとしての<code>binding</code>です。Spinelはコンパイルのときに、行番号つきでそう伝えます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "spinel <<~'RUBY'\n  sum = \"6 * 7\"\n  puts eval(sum)\nRUBY"
+          },
+          {
+            "t": "h",
+            "html": "<p>CRubyは<code>42</code>を計算し、Spinelは断ります。WebAssemblyならではの点もあります。ここでは<code>Integer</code>は32ビットしかなく、最大で2,147,483,647です。それを超えると、CRubyなら大きな数に切り替えるところで、Spinelは<code>RangeError</code>を発生させます。自分のコンピューターでは、Spinelは64ビットで計算します。また、WebAssemblyにはスレッドもファイバーもありません。</p><p>では、IRBは？　IRBはレッスン13で使いましたね。1行受け取って実行し、<code>=&gt;</code>を表示して、次の行を待ちます。これができるのは、実行中にCRubyがいるからです。コンパイルされたプログラムには<code>eval</code>がありません。ですから、SpinelのためのIRBは本来ありえないのです。下のIRBは正直にずるをしています。1行ごとに<strong>それまでのすべての行と一緒に</strong>新しいプログラムにコンパイルし、最初から実行して、新しい行が出力したものだけを見せます。そのため、1行ごとに数秒かかります。<code>x = 6 * 7</code>、次に<code>def double(n) = n * 2</code>、そして<code>double(x)</code>を試してみてください。</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_spinel_irb"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>SpinelはCのプログラムです。<code>git clone https://github.com/matz/spinel</code>のあと、その中で<code>make deps</code>と<code>make</code>を実行します。すると<code>./spinel app.rb</code>で、Rubyなしで動くプログラム<code>./app</code>にファイルをコンパイルできます。大きなプロジェクトには<code>spin</code>があります。<code>spin new myproject</code>、<code>spin run</code>、そしてここと同じようにCRubyを基準にする<code>spin test</code>です。上の<code>main.wasm</code>は<a href='https://wasmtime.dev'>wasmtime</a>で動きます。<code>wasmtime run -W exceptions=y main.wasm</code>です。</p></div><div class='task'><strong>課題：</strong><em>コラッツ数列</em>です。数が偶数なら半分にし、奇数なら3倍して1を足します。これを1になるまで続けます。1になるまでに何ステップかかるかを数えるメソッド<code>collatz(n)</code>を書いて、Spinelに<code>collatz(27)</code>を出力させましょう（答えは111です。途中で数は9232まで大きくなります）。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# 偶数なら n / 2、奇数なら 3 * n + 1 - n == 1 になるまで\nspinel <<~'RUBY'\n  def collatz(n)\n    steps = 0\n\n    steps\n  end\n\n  puts collatz(27)\nRUBY",
+            "check": "result.is_a?(ChunkySpinel::Program) && result.ok? && result.output.split.last == \"111\" && code.include?(\"def collatz\")",
+            "hint": "ループを使おう。<code>while n != 1</code> … <code>end</code>の中で、<code>n = n.even? ? n / 2 : 3 * n + 1</code>と<code>steps += 1</code>。"
+          }
+        ]
+      }
+    },
+    {
       "id": "tl-collections",
       "section": {
         "de": "Aufbaukurs: timelog",
@@ -6140,7 +6357,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "応用コース：timelog"
       },
       "de": {
-        "title": "39. Projekt timelog: Collections",
+        "title": "40. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -6179,7 +6396,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "39. Project timelog: collections",
+        "title": "40. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -6218,7 +6435,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "39. timelogプロジェクト：コレクション",
+        "title": "40. timelogプロジェクト：コレクション",
         "cells": [
           {
             "t": "h",
@@ -6260,7 +6477,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "40. Text parsen: Regex",
+        "title": "41. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -6291,7 +6508,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "40. Parsing text: regex",
+        "title": "41. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -6322,7 +6539,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "40. テキストのパース：正規表現",
+        "title": "41. テキストのパース：正規表現",
         "cells": [
           {
             "t": "h",
@@ -6356,7 +6573,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "41. Methoden richtig bauen",
+        "title": "42. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -6387,7 +6604,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "41. Building methods properly",
+        "title": "42. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -6418,7 +6635,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "41. メソッドをきちんと作る",
+        "title": "42. メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -6452,7 +6669,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "42. Entry & Timesheet",
+        "title": "43. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -6483,7 +6700,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "42. Entry & Timesheet",
+        "title": "43. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -6514,7 +6731,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "42. EntryとTimesheet",
+        "title": "43. EntryとTimesheet",
         "cells": [
           {
             "t": "h",
@@ -6548,7 +6765,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "43. Testen mit Minitest",
+        "title": "44. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -6579,7 +6796,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "43. Testing with Minitest",
+        "title": "44. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -6610,7 +6827,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "43. Minitestでテスト",
+        "title": "44. Minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -6644,7 +6861,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "44. Enumerable & Data",
+        "title": "45. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -6656,7 +6873,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 39, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 40, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -6667,7 +6884,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "44. Enumerable & Data",
+        "title": "45. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -6679,7 +6896,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 39, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 40, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -6690,7 +6907,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "44. EnumerableとData",
+        "title": "45. EnumerableとData",
         "cells": [
           {
             "t": "h",
@@ -6702,7 +6919,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン39で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン40で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
           },
           {
             "t": "x",
@@ -6716,7 +6933,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "45. Blocks, Procs & Lambdas",
+        "title": "46. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -6755,7 +6972,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "45. Blocks, procs & lambdas",
+        "title": "46. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -6794,7 +7011,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "45. ブロック、Proc、lambda",
+        "title": "46. ブロック、Proc、lambda",
         "cells": [
           {
             "t": "h",
@@ -6836,7 +7053,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "46. Fehler behandeln",
+        "title": "47. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -6867,7 +7084,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "46. Handling errors",
+        "title": "47. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -6898,7 +7115,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "46. エラー処理",
+        "title": "47. エラー処理",
         "cells": [
           {
             "t": "h",
@@ -6932,7 +7149,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "47. Daten speichern: Formate",
+        "title": "48. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -6987,7 +7204,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "47. Saving data: formats",
+        "title": "48. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -7042,7 +7259,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "47. データの保存：フォーマット",
+        "title": "48. データの保存：フォーマット",
         "cells": [
           {
             "t": "h",
@@ -7100,7 +7317,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "48. Kommandozeile & Gems",
+        "title": "49. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -7127,7 +7344,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "48. Command line & gems",
+        "title": "49. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -7154,7 +7371,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "48. コマンドラインとgem",
+        "title": "49. コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -7184,7 +7401,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "49. Pattern Matching",
+        "title": "50. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -7215,7 +7432,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "49. Pattern matching",
+        "title": "50. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -7246,7 +7463,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "49. パターンマッチ",
+        "title": "50. パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -7280,7 +7497,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "50. Objektmodell & Metaprogrammierung",
+        "title": "51. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -7311,7 +7528,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "50. Object model & metaprogramming",
+        "title": "51. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -7342,7 +7559,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "50. オブジェクトモデルとメタプログラミング",
+        "title": "51. オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -7376,7 +7593,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "51. Eine eigene DSL",
+        "title": "52. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -7388,7 +7605,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 45 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 46 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -7399,7 +7616,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "51. Your own DSL",
+        "title": "52. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -7411,7 +7628,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 45 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 46 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
@@ -7422,7 +7639,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "51. 自分だけのDSL",
+        "title": "52. 自分だけのDSL",
         "cells": [
           {
             "t": "h",
@@ -7434,7 +7651,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン45のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン46のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
           },
           {
             "t": "x",
@@ -7448,7 +7665,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "52. Codequalität & Debugging",
+        "title": "53. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -7471,7 +7688,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "52. Code quality & debugging",
+        "title": "53. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -7494,7 +7711,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "52. コードの品質とデバッグ",
+        "title": "53. コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -7520,7 +7737,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "53. Performance & Nebenläufigkeit",
+        "title": "54. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -7567,7 +7784,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "53. Performance & concurrency",
+        "title": "54. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -7614,7 +7831,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "53. パフォーマンスと並行処理",
+        "title": "54. パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -7664,7 +7881,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "54. Finale: timelog im Web",
+        "title": "55. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -7686,12 +7903,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 48 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 49 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "en": {
-        "title": "54. Finale: timelog on the web",
+        "title": "55. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
@@ -7713,12 +7930,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 48 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 49 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "ja": {
-        "title": "54. フィナーレ：Webで動くtimelog",
+        "title": "55. フィナーレ：Webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -7740,7 +7957,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン48で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン49で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }

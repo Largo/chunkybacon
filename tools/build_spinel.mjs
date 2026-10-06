@@ -36,7 +36,7 @@ import { Worker, isMainThread, parentPort, workerData } from 'node:worker_thread
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const PINS_FILE = join(ROOT, 'tools', 'spinel.json');
 const CACHE = join(ROOT, '.cache', 'spinel');
-const TARGET = join(ROOT, 'html', 'assets', 'spinel');
+const TARGET = join(ROOT, 'html', 'assets', 'spinel');   // <stamp>/ and manifest.json
 const SELF = fileURLToPath(import.meta.url);
 
 // ---------------------------------------------------------------- tar files
@@ -157,7 +157,30 @@ async function prismSource(version) {
   const gem = await cached(`prism-${version}.gem`, `https://rubygems.org/gems/prism-${version}.gem`);
   const data = untar(gem).find(([path]) => path === 'data.tar.gz');
   if (!data) throw new Error(`prism-${version}.gem has no data.tar.gz`);
-  return new Map(untar(gunzipSync(data[1])).filter(([path]) => /^(src|include)\//.test(path)));
+  return new Map(untar(gunzipSync(data[1])).filter(([path]) => /^(src|include)\//.test(path) || path === 'LICENSE.md'));
+}
+
+// the license texts the pins name (tools/spinel.json "notices"), by file name
+async function noticeFiles(notices) {
+  const entries = await Promise.all(Object.entries(notices).map(async ([name, url]) =>
+    [name, await cached(`notice-${createHash('sha256').update(url).digest('hex').slice(0, 12)}-${name}`, url)]));
+  return new Map(entries);
+}
+
+// NOTICE.md: what html/assets/spinel/<stamp>/ holds, and under which licenses
+function noticeText(pins, names) {
+  return `# Spinel for the course (lesson 39)
+
+Built by tools/build_spinel.mjs from tools/spinel.json; not in git. Each
+component keeps its own license; the texts are next to this file.
+
+| Component | Version | License | Files | License text |
+|---|---|---|---|---|
+| [Spinel](https://github.com/${pins.spinel.repo}) | ${pins.spinel.commit} (${pins.spinel.date}) | MIT, (c) Yukihiro Matsumoto | spinel.wasm, spinel-files.tar | LICENSE-spinel.txt |
+| [Prism](https://github.com/ruby/prism), compiled into spinel.wasm | ${pins.prism} | MIT | spinel.wasm | LICENSE-prism.md |
+| [YoWASP Clang/LLD](https://yowasp.org) (${pins.clang.package}) | ${pins.clang.version} | ISC (the package), LLVM: Apache-2.0 WITH LLVM-exception | clang/ | LICENSE-llvm.txt, clang/README.md |
+| wasi-libc, in clang's sysroot (llvm-resources.tar) and linked into every program | as in ${pins.clang.package} ${pins.clang.version} | Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT; parts musl (MIT), cloudlibc (BSD-2-Clause), dlmalloc (CC0) | clang/llvm-resources.tar | ${names.filter((n) => /wasi-libc|musl|cloudlibc/.test(n)).join(', ')} |
+`.replace(/^  /gm, '');
 }
 
 // -------------------------------------------------------------- the stamp
@@ -166,8 +189,14 @@ function stamp(pins) {
   return createHash('sha256').update(JSON.stringify(pins)).update(readFileSync(SELF)).digest('hex').slice(0, 16);
 }
 
+function currentManifest() {
+  try { return JSON.parse(readFileSync(join(TARGET, 'manifest.json'), 'utf8')); } catch { return null; }
+}
+
+// current: the manifest names this stamp, and its build is there
 function currentStamp() {
-  try { return JSON.parse(readFileSync(join(TARGET, 'manifest.json'), 'utf8')).stamp; } catch { return null; }
+  const manifest = currentManifest();
+  return manifest && existsSync(join(TARGET, manifest.dir ?? '', 'spinel.wasm')) ? manifest.stamp : null;
 }
 
 // --------------------------------------------------------- a clang worker
@@ -327,7 +356,8 @@ function rtNames(source) {
 
 async function build(pins, jobs) {
   const t0 = Date.now();
-  const [source, prism, clang] = await Promise.all([spinelSource(pins.spinel), prismSource(pins.prism), npmPackage(pins.clang)]);
+  const [source, prism, clang, notices] = await Promise.all([spinelSource(pins.spinel), prismSource(pins.prism), npmPackage(pins.clang),
+                                                         noticeFiles(pins.notices ?? {})]);
   const makefile = source.get('Makefile').toString();
 
   // clang's package, unpacked for Node to import (and copied to the page below)
@@ -342,7 +372,7 @@ async function build(pins, jobs) {
   const rev = `#define SPINEL_BUILD_REV "${pins.spinel.commit.slice(0, 7)}"\n` +
               `#define SPINEL_RELEASE "${pins.spinel.date}"\n#define SPINEL_OPENSSL_LIBDIR ""\n`;
   const files = new Map([...source].filter(([path]) => /^(src|lib|packages)\//.test(path)));
-  for (const [path, body] of prism) files.set(`vendor/prism/${path}`, body);
+  for (const [path, body] of prism) if (path !== 'LICENSE.md') files.set(`vendor/prism/${path}`, body);
   files.set('build/csrc/spinel_rev.h', Buffer.from(rev));
   files.set('build/csrc/sp_rt_names.h', Buffer.from(rtNames(source)));
   files.set('build/csrc/sp_page_host.c', Buffer.from(PAGE_HOST_C));
@@ -467,6 +497,9 @@ async function build(pins, jobs) {
     }
     output.set('clang/llvm-resources.tar', trimSysroot(clang.get('gen/llvm-resources.tar')));
     output.set('clang/README.md', clang.get('README.md'));
+    output.set('LICENSE-prism.md', prism.get('LICENSE.md'));
+    for (const [name, body] of notices) output.set(name, body);
+    output.set('NOTICE.md', Buffer.from(noticeText(pins, [...notices.keys()])));
     console.log(`built in ${((Date.now() - t0) / 1000).toFixed(0)} s`);
     return output;
   } finally {
@@ -487,8 +520,14 @@ function trimSysroot(tarball) {
   return tar(keep);
 }
 
+// html/assets/spinel/<stamp>/ holds a build, manifest.json beside it names the
+// current one. nginx lets browsers cache the .wasm and .tar files as they
+// like and revalidates only .js and .json (nginx/default.conf), so a new
+// build gets new addresses instead of new contents under old ones. The
+// build before stays, for a tab still open on it; older ones go.
 function write(output, pins, stampValue) {
-  const staging = `${TARGET}.new`;
+  const dir = join(TARGET, stampValue);
+  const staging = `${dir}.new`;
   rmSync(staging, { recursive: true, force: true });
   const sizes = {};
   for (const [path, body] of output) {
@@ -499,16 +538,20 @@ function write(output, pins, stampValue) {
     // nginx serves the .gz in its place (gzip_static)
     if (body.length > 256 * 1024) writeFileSync(`${full}.gz`, gzipSync(body, { level: zlibConstants.Z_BEST_COMPRESSION }));
   }
-  const manifest = { stamp: stampValue, spinel: pins.spinel, prism: pins.prism, clang: pins.clang.version,
+  rmSync(dir, { recursive: true, force: true });
+  renameSync(staging, dir);
+  const previous = currentManifest();
+  const manifest = { stamp: stampValue, dir: stampValue, spinel: pins.spinel, prism: pins.prism, clang: pins.clang.version,
                      built: new Date().toISOString(), sizes };
-  writeFileSync(join(staging, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
-  rmSync(`${TARGET}.old`, { recursive: true, force: true });
-  if (existsSync(TARGET)) renameSync(TARGET, `${TARGET}.old`);
-  renameSync(staging, TARGET);
-  rmSync(`${TARGET}.old`, { recursive: true, force: true });
+  writeFileSync(join(TARGET, 'manifest.json.tmp'), JSON.stringify(manifest, null, 2) + '\n');
+  renameSync(join(TARGET, 'manifest.json.tmp'), join(TARGET, 'manifest.json'));
+  const keep = new Set([stampValue, previous?.dir].filter(Boolean));
+  for (const entry of readdirSync(TARGET, { withFileTypes: true })) {
+    if (entry.isDirectory() && !keep.has(entry.name)) rmSync(join(TARGET, entry.name), { recursive: true, force: true });
+  }
   for (const [path, size] of Object.entries(sizes)) {
-    const gz = join(TARGET, `${path}.gz`);
-    console.log(`  html/assets/spinel/${path.padEnd(28)} ${(size / 1e6).toFixed(1).padStart(6)} MB` +
+    const gz = join(dir, `${path}.gz`);
+    console.log(`  html/assets/spinel/${stampValue}/${path.padEnd(26)} ${(size / 1e6).toFixed(1).padStart(6)} MB` +
                 (existsSync(gz) ? ` -> ${(statSync(gz).size / 1e6).toFixed(1).padStart(5)} MB gz` : ''));
   }
 }
@@ -523,7 +566,7 @@ async function newestCommit(repo) {
 async function main() {
   const argv = process.argv.slice(2);
   const jobsAt = argv.indexOf('--jobs');
-  const jobs = jobsAt >= 0 ? Number(argv[jobsAt + 1]) : null;
+  const jobs = jobsAt >= 0 ? Number(argv[jobsAt + 1]) : process.env.SPINEL_JOBS ? Number(process.env.SPINEL_JOBS) : null;
   let pins = JSON.parse(readFileSync(PINS_FILE, 'utf8'));
   if (argv.includes('--update')) {
     const { sha, date } = await newestCommit(pins.spinel.repo);

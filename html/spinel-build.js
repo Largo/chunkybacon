@@ -56,7 +56,7 @@ export const tidy = (text) => text.replace(/\/work\//g, '').replace(/^spinel: /g
 
 export class SpinelToolchain {
   // base: where html/assets/spinel/ is (a URL); fetchFn as fetch
-  constructor(base, fetchFn = fetch) {
+  constructor(base, fetchFn = (url, init) => fetch(url, init)) {   // a bare fetch, called as a method, throws "Illegal invocation"
     this.base = base;
     this.fetch = fetchFn;
   }
@@ -68,8 +68,11 @@ export class SpinelToolchain {
       if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
       return response;
     };
+    // the current build is the folder manifest.json names (tools/build_spinel.mjs)
     const manifest = await (await get('manifest.json')).json();
     this.manifest = manifest;
+    const root = this.base;
+    this.base = new URL(`${manifest.dir}/`, root);
     const [compiler, files, clang] = await Promise.all([
       get('spinel.wasm').then((r) => r.arrayBuffer()).then((bytes) => { progress({ part: 'spinel' }); return WebAssembly.compile(bytes); }),
       get('spinel-files.tar').then((r) => r.arrayBuffer()),

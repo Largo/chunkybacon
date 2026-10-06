@@ -53,6 +53,9 @@ require_relative "../html/turtle"
 # records each game, and a check plays copies of them (games), as in main.rb
 require_relative "../html/game"
 $shown_games = []
+# spinel(code) (lesson 39): without the page, spinel.rb is CRuby's run of the
+# program, which is what the lesson's check reads (result.output)
+require_relative "../html/spinel"
 module Kernel
   def download_file(data, name = nil)
     $explicit_downloads << (name || data).to_s
@@ -589,6 +592,45 @@ end),
     g.status("Bacon: \#{eaten}")
   end
 end)]
+  },
+  "spinel" => {
+    "de" => [
+      %(spinel <<~'RUBY'
+  def collatz(n)
+    schritte = 0
+    while n != 1
+      n = n.even? ? n / 2 : 3 * n + 1
+      schritte += 1
+    end
+    schritte
+  end
+
+  puts collatz(27)
+RUBY),
+      %(spinel <<~'RUBY'
+  def collatz(n)
+    return 0 if n == 1
+
+    1 + collatz(n.even? ? n / 2 : 3 * n + 1)
+  end
+
+  puts collatz(27)
+RUBY)
+    ],
+    "en" => [
+      %(spinel <<~'RUBY'
+  def collatz(n)
+    steps = 0
+    until n == 1
+      n = n.even? ? n / 2 : 3 * n + 1
+      steps += 1
+    end
+    steps
+  end
+
+  puts collatz(27)
+RUBY)
+    ]
   },
   "tl-collections" => {
     "de" => [%(eintraege = [{ projekt: "ProjectX", stunden: 3.5 }, { projekt: "Intern", stunden: 2.0 }, { projekt: "ProjectX", stunden: 3.0 }]

@@ -8,7 +8,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **54 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **55 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics, tables, frames and colours
   for the terminal with the [TTY toolkit](https://ttytoolkit.org),
@@ -27,7 +27,9 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   community (RubyKaigi, weird code, how IRB reads code), music computed in
   plain Ruby (samples as an Array, a WAV file built with `pack`, chords and
   a drum beat - played below the cell), Snake built in five steps and
-  played with the arrow keys below the cell, and
+  played with the arrow keys below the cell, Ruby compiled ahead of time
+  by Matz's [Spinel](https://github.com/matz/spinel) - to C, then to
+  WebAssembly, in the browser - and
   a project track that builds a small time tracker.
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
@@ -39,7 +41,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   that lost it; `fox["name"]` on a hash with symbol keys suggests
   `fox[:name]`). Ruby's own message stays one click away. 44 rules,
   checked against 70 typical beginner mistakes drawn from the exercises.
-- **Lesson sidebar**: the 54 lessons in three groups (basics, side trips,
+- **Lesson sidebar**: the 55 lessons in three groups (basics, side trips,
   the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a
   drawer.
@@ -148,6 +150,20 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   and Space; Esc pauses, Tab leaves), a screen reader hears the score and
   the end of a round, and an endless loop in a round is stopped after a
   second. Checks play the game headless.
+- **A compiler in the browser**: `spinel <<~'RUBY' ... RUBY` hands a
+  program to [Spinel](https://github.com/matz/spinel), Matz's
+  ahead-of-time compiler, which runs in the page as WebAssembly together
+  with clang ([YoWASP](https://yowasp.org)'s, itself WebAssembly): Ruby
+  becomes C, the C becomes a WebAssembly module, and the module runs below
+  the cell - with the time of each step, the C to read, the module to
+  download (`wasmtime run -W exceptions=y main.wasm`), and CRuby's output
+  of the same code beside it, as the oracle `spin test` takes too.
+  What an AOT compiler cannot do (`eval` of a String, `method_missing`)
+  is refused with the line. `show_spinel_irb` is IRB on it: every line
+  compiled with the ones before into a program of its own and run from
+  the start, only the new line's output shown (lesson 39, about 27 MB,
+  loaded when it opens). Not in git: the deploy builds it
+  (`tools/build_spinel.mjs`, pinned in `tools/spinel.json`).
 - Chunky Bacon, an original cartoon fox, cheers you on.
 
 ## On your own computer: the chunky_bacon gem
@@ -228,6 +244,10 @@ rebuild an already-clean scene as bare defaults.
 docker compose up -d      # serves on port 8011
 ```
 
+Lesson 39 (Spinel) needs its build in `html/assets/spinel/`, which is not
+in git: `node tools/build_spinel.mjs` (Node 22, a few minutes the first
+time; afterwards a no-op until `tools/spinel.json` changes).
+
 Or any static file server over `html/` (the rubygems proxy then needs
 nginx, see `nginx/default.conf`). Lessons then live at `/#methoden`.
 Without Docker, `ruby tools/dev_server.rb` (port 8011) serves `html/` with
@@ -272,6 +292,8 @@ node boot_failure_test.mjs # what the page says when a runtime fails
 node language_test.mjs    # ?lang=, last choice, browser languages, English
 node live_test.mjs        # live runs in a lesson and in the workshop
 node offline_test.mjs     # offline mode: the copy, offline, a deploy, turning it off
+node --experimental-wasm-exnref spinel_test.mjs   # Spinel's pipeline and IRB under Node (after tools/build_spinel.mjs)
+ruby spinel_rb_test.rb    # spinel(code) without the page: CRuby's run, IRB's Prism check, the labels
 ruby server_test.rb       # the optional server (server/)
 ruby dev_server_test.rb   # the bridges serve only the course's pages, the embed's headers; nginx says the same
 node embed_test.mjs       # an embedded cell on another site (dev server with FRAME_ANCESTORS="http://blog.test:*")

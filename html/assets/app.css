@@ -1380,6 +1380,89 @@ kbd {
 }
 .irb-term:focus-within { outline: 3px solid var(--focus); outline-offset: 2px; }
 
+/* Spinel (spinel.js): a program's way through the compiler, and IRB on it */
+.spinel-box {
+  margin: 0.7rem 0;
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  background: var(--paper);
+  font-size: 0.9rem;
+}
+.spinel-head { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.35rem; }
+.spinel-name { font-weight: 700; }
+.spinel-version { color: var(--ink-soft); font-size: 0.8rem; }
+.spinel-steps { list-style: none; margin: 0 0 0.4rem; padding: 0; }
+.spinel-step {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.15rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.spinel-step::before { content: "○"; margin-right: 0.45rem; color: var(--ink-soft); }
+.spinel-step.is-busy::before { content: "◌"; color: var(--fox); }
+.spinel-step.is-done::before { content: "✓"; color: var(--ok); }
+.spinel-step.is-failed::before { content: "✗"; color: var(--err); }
+.spinel-step-name { flex: 1; }
+.spinel-step-time { font-family: var(--font-code); color: var(--ink-soft); white-space: nowrap; }
+.spinel-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.spinel-out { margin: 0.45rem 0; padding: 0.4rem 0.55rem; background: var(--code-bg); border-radius: 4px; }
+.spinel-problem { margin: 0.45rem 0; padding-left: 0.6rem; border-left: 3px solid var(--err); color: var(--err); }
+.spinel-problem pre { margin: 0.25rem 0 0; white-space: pre-wrap; font-family: var(--font-code); font-size: 0.82rem; color: var(--ink); }
+.spinel-c { margin: 0.45rem 0; }
+.spinel-c summary { cursor: pointer; color: var(--bacon); }
+.spinel-c pre {
+  max-height: 320px;
+  overflow: auto;
+  margin: 0.35rem 0 0;
+  padding: 0.5rem 0.6rem;
+  background: var(--code-bg);
+  font-family: var(--font-code);
+  font-size: 0.75rem;
+  white-space: pre;
+}
+.spinel-download { display: inline-block; margin: 0.3rem 0; }
+.spinel-compare { margin: 0.4rem 0 0; }
+.spinel-compare.is-same::before { content: "✓ "; color: var(--ok); }
+.spinel-compare.is-different::before { content: "≠ "; color: var(--err); }
+.spinel-compare.is-cruby { color: var(--ink-soft); }
+.spinel-compare pre { margin: 0.25rem 0 0; }
+
+.spinel-term {
+  margin: 0.7rem 0;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  background: #211a13;
+  padding: 0.75rem 0.95rem;
+  font-family: var(--font-code);
+  font-size: 0.9rem;
+  color: #f2e8da;
+}
+.spinel-term-history { max-height: 320px; overflow-y: auto; margin-bottom: 0.2rem; }
+.spinel-term-echo { white-space: pre-wrap; }
+.spinel-term-out { margin: 0; color: #cfe3ff; white-space: pre-wrap; font-family: inherit; }
+.spinel-term-result { color: #8ee08f; white-space: pre-wrap; }
+.spinel-term-error { color: #ff9d94; white-space: pre-wrap; }
+.spinel-term-note { color: #f5bf4f; font-style: italic; }
+.spinel-term-time { color: #a89a8a; font-size: 0.78rem; }
+.spinel-term-line { display: flex; align-items: center; gap: 0.45rem; }
+.spinel-term-prompt { color: #f5bf4f; white-space: nowrap; }
+.spinel-term-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-family: inherit;
+  font-size: inherit;
+  caret-color: #8ee08f;
+}
+.spinel-term-input:disabled { opacity: 0.5; }
+.spinel-term:focus-within { outline: 3px solid var(--focus); outline-offset: 2px; }
+:lang(ja) .spinel-term-note { font-style: normal; }
+
 /* mini browser */
 .mini-browser {
   overflow: hidden;

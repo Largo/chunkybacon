@@ -22,7 +22,16 @@ Last updated 2026-10-06.
 
 ## State of the repository
 
-- `main` has 54 lessons (2026-10-06). The site does NOT show it yet: the
+- Lesson 39, Spinel (HANDOVER §6l), is the first part of the site that is
+  built on deploy rather than committed. **The host's deploy hook has to
+  run `sh tools/after_deploy.sh` after it moves the checkout** - that hook
+  lives on the host, not in this repository, so this line is still to be
+  added there (with Node 22 on the host, or Docker for the `spinel-build`
+  service). Until it has run once, lesson 39 says Spinel could not be
+  loaded. The first build takes a few minutes; it keeps about 175 MB in
+  `.cache/spinel/` and about 115 MB per build in `html/assets/spinel/`
+  (the current one and the one before).
+- `main` has 55 lessons (2026-10-06). The site does NOT show it yet: the
   host's checkout stopped following `main` on 2026-09-30 (the history
   rewrite; GitHub's push webhook is answered with 202, but the live
   `lessons.js` is from 2026-09-30). On the host: `git status`, then

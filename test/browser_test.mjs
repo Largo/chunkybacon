@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('54 lessons in nav', (await page.$$('#lessonNav a')).length === 54);
+check('55 lessons in nav', (await page.$$('#lessonNav a')).length === 55);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);

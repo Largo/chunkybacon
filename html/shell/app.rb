@@ -400,6 +400,8 @@ module ChunkyShell
       JSG.w.ensureSqlite if cells.any? { |cell| code_cell?(cell) && cell.code.to_s.match?(/Sequel|SQLite3/) }
       # Herb's parser (WebAssembly, 1.7 MB) only for a lesson that requires herb
       JSG.w.ensureHerb if cells.any? { |cell| code_cell?(cell) && cell.code.to_s.include?('require "herb"') }
+      # Spinel and clang (WebAssembly, ~27 MB) only for the lesson that compiles with it
+      JSG.w.ensureSpinel if cells.any? { |cell| code_cell?(cell) && cell.code.to_s.include?("spinel") }
       @rendered_lesson_id = id
       # a lesson opened from a link is where the learner left off, too (only
       # a change is written: every write reaches a connected folder)

@@ -4,7 +4,7 @@ Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
 Work in progress - what is unfinished, and in what state - is in
 `docs/OPEN_WORK.md`.
-Last updated 2026-10-06 (54 lessons in German, English and Japanese).
+Last updated 2026-10-06 (55 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -33,6 +33,14 @@ update, and a single-file mount would keep serving the old one). Consequences:
   `.gz` must match the wasm: `ruby tools/compress_assets.rb --check`
   (`tools/update_ruby_wasm.rb` rewrites it).
 - The gem proxy's disk cache lives in the named volume `gemcache`.
+- **One thing is built on deploy, not committed**: Spinel for lesson 39
+  (`html/assets/spinel/`, §6l). The host's deploy hook runs
+  `sh tools/after_deploy.sh` after moving the checkout; it builds only when
+  `tools/spinel.json` or `tools/build_spinel.mjs` changed (minutes, with
+  Node 22 on the host or in a `node:22` container: `docker compose
+  --profile build run --rm spinel-build`), and is a no-op otherwise. Until
+  it has run once, lesson 39 says that Spinel could not be loaded; the rest
+  of the course does not depend on it.
 
 The upstream test `cd test && node browser_test.mjs` runs against the live
 port by default; see §8 for a private dev copy.
@@ -73,7 +81,11 @@ html/
   game.rb               show_game: ChunkyGame, a grid game's cells, timers and keys in plain Ruby; runs headless for checks (§6)
   game.js               a game's grid: the loop on requestAnimationFrame, keys, focus, its live region (§6)
   herb_bridge.rb        require "herb/herb": Herb's C parser, handed to its WebAssembly build (§6j)
-  assets/herb/          Herb's parser as WebAssembly + 3 files of @ruby/prism (tools/vendor_herb.rb)
+assets/herb/          Herb's parser as WebAssembly + 3 files of @ruby/prism (tools/vendor_herb.rb)
+spinel.rb             spinel(code), show_spinel_irb: CRuby's run of the program (the oracle), IRB's Prism check (§6l)
+spinel.js             their widgets below the cell; spinel-worker.js (the compiler and clang), spinel-run-worker.js (one run)
+spinel-build.js       Ruby -> spinel.wasm -> C -> clang -> wasm, and SpinelIrb; spinel-wasi.js its WASI host (§6l)
+assets/spinel/        NOT IN GIT: built on deploy by tools/build_spinel.mjs (§6l)
   workshop.rb           the workshop's runs: project files as the virtual FS,
                         require_relative between them, gets, write-back
   autorun.rb            live runs (§6b): what may run by itself, the time
@@ -110,6 +122,8 @@ tools/vendor_pyodide.rb    Pyodide + pandas, sympy, scikit-learn, matplotlib int
 tools/vendor_sqljs.rb      sql.js (SQLite in WebAssembly) into html/assets/sqljs/ (§6f)
 tools/build_box_font.rb    html/assets/fonts/chunky-box-drawing.woff, box drawing for the code font (§6g)
 tools/vendor_herb.rb       Herb's WebAssembly parser into html/assets/herb/ (§6j)
+tools/build_spinel.mjs     Spinel + clang as WebAssembly into html/assets/spinel/, pinned in tools/spinel.json (§6l)
+tools/after_deploy.sh      what the host's deploy hook runs after the checkout moved: the Spinel build (§1)
 tools/offline_files.rb     html/offline-files.txt - rerun after adding/removing a file
 tools/dev_server.rb        nginx's stand-in without Docker: html/, the bridges, the same headers and rules (§7)
 tools/build_embed_ui.rb    html/embed-ui.js from lessons.js's ui strings (--check: current?)
@@ -229,7 +243,7 @@ A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 20-38), not in a group of one.
+(side trips, 20-39), not in a group of one.
 
 `"stepper": true` puts ⏯ (step through) beside every ▶ of the lesson but an
 IRB's (`View.lesson_html`, `Course#stepper?`). It is on the Basics whose
@@ -307,7 +321,7 @@ Rules that the code and tests rely on:
   check's `x, y = ...` once broke the learner's `x, y = fox.first`. Name
   a check's helpers as lambda or block parameters (`->(game, x = nil) {
   ... }.(games.last)`), as the Snake check does.
-- `test/browser_test.mjs` asserts the lesson count (`'54 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'55 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -341,6 +355,7 @@ check, in `turtle.rb`, §6),
 check plays `games`, in `game.rb`, §6),
 `show_browser(app, path)` + `mock_get`, `show_irb`, `show_files`, `show_three(scene, camera, orbit:, &animate)`,
 `show_shoes { ... }`, `show_letter(boxes:) { |digits| ... }` (§6e),
+`spinel(code)` / `show_spinel_irb` (Spinel, in `spinel.rb`, §6l),
 `download_file(data, name)`, `show_pdf(pdf)` (a file
 name, PDF bytes, a Prawn or HexaPDF document), `show_audio(sound, rate:)`
 (WAV bytes, a file name or an Array of samples, §6), `run_tests` (Minitest);
@@ -1511,6 +1526,102 @@ analysis it started from).
   out of reach, a plain link, the bridge refused, evil.test not allowed to
   frame it, and the page without its header running nothing.
 
+## 6l. Spinel: a compiler in the page (lesson 39)
+
+[Spinel](https://github.com/matz/spinel) is Matz's ahead-of-time compiler:
+whole-program type inference, C out, a C compiler for the rest. Lesson 39
+runs all of it in the learner's tab, as WebAssembly:
+
+```
+cell: spinel <<~'RUBY' ... RUBY          (main.rb -> spinel.rb)
+  CRuby runs the program here first: ChunkySpinel.oracle, its output captured
+  -> what the check reads (result.output), and what the page compares with
+  -> ChunkySpinel.mount(node, json)       (spinel.js, the page)
+       spinel-worker.js (module worker, one for the page):
+         spinel.wasm -c --print-build  /work/main.rb -> /work/main.c   ~0.1-0.3 s
+         clang (@yowasp/clang)  main.c + libspinel_rt.a -> main.wasm   ~2-4 s
+       spinel-run-worker.js (one per run, stopped after 10 s): main.wasm  ms
+```
+
+- **Not in git.** `html/assets/spinel/` is built by `tools/build_spinel.mjs`
+  and gitignored. It is pinned by `tools/spinel.json` (the Spinel commit, the
+  prism gem it parses with, the `@yowasp/clang` version and its sha512) and
+  stamped with a hash of the pins and the tool: the deploy runs it every
+  time (`tools/after_deploy.sh`, §1) and it does nothing while the stamp in
+  `html/assets/spinel/manifest.json` is current; `--check` says whether it
+  is. A new Spinel: `node tools/build_spinel.mjs --update` writes the newest
+  commit of matz/spinel into `tools/spinel.json` and builds it; test the
+  lesson (`node --experimental-wasm-exnref test/spinel_test.mjs`, then the
+  page), commit `tools/spinel.json`, push - the host builds the same.
+- **The build** needs Node 22 and the network, no C compiler: clang is
+  `@yowasp/clang`, LLVM compiled to WASI, under Node in worker threads
+  (`--jobs N` or `SPINEL_JOBS`; default cores - 1, at most 8). Everything
+  is fetched by version and checked (codeload tarball of the commit, the
+  prism gem from rubygems.org as `make deps` takes it, the npm tarball
+  against its sha512) and kept in `.cache/spinel/` with every compiled
+  object, keyed by its source and command line: a rebuild after a change of
+  the tool alone takes seconds, a new Spinel commit a few minutes (a cold
+  build was 7 minutes on 8 workers). The Makefile is read for its lists
+  (`SPINEL_OBJ`, `RT_MEMBERS`, `RE_SRC`, `BUNDLED_NATIVE_OBJS`), so a file
+  Spinel adds is picked up; a flag it adds is not - compare with `make
+  wasm-rt` (Spinel's own WASI build, the Makefile's wasm32-wasi part) when
+  one breaks.
+- **What the build makes**, in `html/assets/spinel/<stamp>/` (a folder per
+  build: nginx lets browsers cache .wasm/.tar files heuristically, so new
+  contents get a new address; `manifest.json` beside it, revalidated like
+  all .json, names the current one; the previous folder stays for open
+  tabs): `spinel.wasm` (the compiler: src/, libprism, the regexp engine,
+  9.6 MB, 2.3 MB gzipped), `spinel-files.tar` (what it and clang read:
+  `builtins/`, `packages/*.rb`, `lib/` headers, the runtime archive
+  `lib/wasm32-wasi/libspinel_rt.a`, the bundled packages' `*_wasi.o`;
+  1.3 MB gz), `clang/` (YoWASP's bundle.js and LLVM as WebAssembly, 75 MB,
+  22.8 MB gz; `llvm-resources.tar` cut down to the wasm32-wasip1 C sysroot,
+  1 MB gz). Each file over 256 KB has its `.gz` for gzip_static.
+- **Three fixes for wasm32**, in the tool: `system`/`mkdtemp` stubs for the
+  compiler (`PAGE_HOST_C`; it calls them only to drive cc, which the page
+  never asks of it); `lib/wasi/sp_page.h`, force-included into the runtime
+  and every program (`-include`), which makes `flockfile`/`funlockfile`
+  nothing (wasi-libc declares them only for its threaded build; one thread
+  here); and a prototype for `emit_int_flt_rel` in `codegen_stmt.c`
+  (`PATCHES`: called undeclared, so as `int`, but defined `void` - native
+  builds shrug, wasm-ld links a stub that traps). The compiler and every
+  program link with `--fatal-warnings`, so the next such mismatch is a
+  build error, not a trap in the lesson. A patch whose anchor is gone stops
+  the build; one Spinel made unnecessary is skipped.
+- **The page's half**: `spinel-build.js` (an ES module, shared with the
+  test): `SpinelToolchain` loads the three parts, `compile` runs spinel.wasm
+  on a copy-on-write filesystem in memory (`spinel-wasi.js`, a WASI
+  preview 1 host: files, stdio, clocks, random, exit; ENOSYS otherwise) with
+  `--target=wasm32-wasi --cc=clang -c --print-build`, and `link` gives what
+  `--print-build` listed to clang, with the `..` taken out of its paths
+  (YoWASP's filesystem has none). The programs need WebAssembly exception
+  handling with exnref (setjmp/longjmp: Ruby's raise), which current
+  Chrome, Firefox and Safari have; Node 22 only with `--experimental-wasm-exnref`.
+- **Limits a learner meets**: `Integer` is 32-bit on wasm32 (`RangeError`
+  past 2**31 - 1); no Thread, Fiber, `Enumerator#next`; no `gets` (stdin is
+  empty); a program runs at most 10 s (`RUN_LIMIT`, spinel.js); what an AOT
+  compiler cannot do (eval of a String, `method_missing`, ...) is refused
+  with the line, and the widget then shows what CRuby made of the code.
+  `docs/limitations.md` in Spinel's repository is the full list.
+- **IRB** (`show_spinel_irb`, `SpinelIrb` in spinel-build.js): a compiled
+  program has no eval, so each input is compiled *with all accepted inputs
+  before it* into a program of its own and run from the start; the output
+  before a marker (`\u0001`) is the earlier lines' again and is dropped,
+  after the second marker (`\u0002`) comes `p` of the input's value (a
+  `def` answers its name, `class`/`module` nil, anything else is wrapped in
+  parentheses - no new scope, so a local it assigns stays the program's).
+  A line that is refused or raises is not kept. Whether an input is
+  complete is Prism's answer, in the kernel (`ChunkySpinel.complete`, the
+  block mount_spinel gives spinel.js), so `def` ... `end` waits like IRB.
+  Earlier lines run again on every line: `rand`, `Time.now` or a slow loop
+  in the history show it. A line takes 1.5-2 s, nearly all of it clang.
+- **Offline**: not part of the offline copy (`tools/offline_files.rb` lists
+  only files git knows), and the lesson says so when the toolchain cannot
+  be fetched (`spinelOffline`).
+- **Ideas not done**: a precompiled header of `spinel_rt.h` for clang
+  (about half of a compile is parsing it, by a rough measurement); caching
+  the module of an unchanged program; `gets` through a prompt.
+
 ## 7a. The optional server: permalinks and a backend
 
 The course is a static site and stays one: without `server/` lessons live at
@@ -1571,7 +1682,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 54 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 55 lessons x 3 languages, starter fails, solutions pass
 ruby lint_lessons.rb           # lessons.js content: de/en/ja parity, references, Japanese rules, Prism, gems, counts
 ruby lint_lessons_test.rb      # the linter's fault-injection tests
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
@@ -1587,6 +1698,9 @@ BASE=http://127.0.0.1:8011/ node browser_test.mjs   # Playwright, ~5 min
 BASE=http://127.0.0.1:8011/ node offline_test.mjs   # offline mode (§6c), ~1 min
 ruby dev_server_test.rb                  # the bridge rule and the embed's headers, dev server and nginx alike (§7)
 ruby ../tools/build_embed_ui.rb --check  # html/embed-ui.js has the current ui strings
+node ../tools/build_spinel.mjs --check   # html/assets/spinel/ is the pinned build (§6l)
+node --experimental-wasm-exnref spinel_test.mjs   # Spinel's pipeline and IRB under Node, ~1 min (§6l)
+ruby spinel_rb_test.rb                   # spinel.rb: the CRuby run, IRB's completeness check, the labels (§6l)
 # with the dev server started as FRAME_ANCESTORS="http://blog.test:*" ruby tools/dev_server.rb:
 BASE=http://127.0.0.1:8011/ node embed_test.mjs     # the embedded cell (§6k), ~1 min
 ```

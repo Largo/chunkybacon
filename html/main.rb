@@ -168,6 +168,9 @@ require_relative "turtle"
 # show_game: a grid game the page drives frame by frame (game.rb here, the
 # loop in game.js; lesson 38). At boot too: ~10 KB of plain Ruby.
 require_relative "game"
+# spinel(code), show_spinel_irb: Matz's AOT compiler as WebAssembly in the
+# page (spinel.js); the CRuby run beside it and IRB's parse here (lesson 39)
+require_relative "spinel"
 # require "pycall" is the bridge to Pyodide (pycall.rb): the real gem needs
 # libpython, which a browser does not have
 require_relative "pycall"
@@ -732,6 +735,33 @@ class ChunkyApp
     @run_games << game if @run_games
   end
 
+  # ---------- Spinel (spinel.rb + spinel.js) ----------
+
+  def add_spinel(program)
+    @run_spinels << program if @run_spinels
+  end
+
+  def add_spinel_irb
+    @run_spinels << :irb if @run_spinels
+  end
+
+  # the page compiles and runs it, in workers; nothing comes back to Ruby
+  # but IRB's question whether an input is complete (Prism, here)
+  def mount_spinel(out_el, program)
+    node = $d.createElement("div")
+    out_el.appendChild(node)
+    # a page without spinel.js (the embedded cell, embed.html) says so
+    if $window[:ChunkySpinel].typeof != "object"
+      node.className = "cell-error"
+      node.textContent = format(ui["spinelFailed"].to_s, "spinel.js")
+    elsif program == :irb
+      json = JSON.generate(lang: @lang, labels: ChunkySpinel.labels(ui))
+      $window.ChunkySpinel.irb(node, json) { |source| ChunkySpinel.complete(source.to_s) }
+    else
+      $window.ChunkySpinel.mount(node, ChunkySpinel.widget_json(program, ui, @lang))
+    end
+  end
+
   # a tick that runs longer than this stops the game (an endless loop in an
   # every block would freeze the page for good: no ▶ is running to blame)
   GAME_TICK_LIMIT = 1.0
@@ -1206,6 +1236,7 @@ class ChunkyApp
     @run_letters = []
     @run_sketches = []
     @run_games = []
+    @run_spinels = []
     dispose_games(idx)
     @last_shoes_types = []
     dispose_shoes(idx)
@@ -1285,7 +1316,8 @@ class ChunkyApp
     out_html += "<pre class=\"cell-stdout\">#{AnsiHtml.to_html(output)}</pre>" unless output.empty?
     widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any? || @run_three.any? ||
                       @run_shoes.any? || @run_downloads.any? || @run_pdfs.any? || @run_letters.any? ||
-                      @run_sketches.any? || @run_audios.any? || @run_games.any?
+                      @run_sketches.any? || @run_audios.any? || @run_games.any? ||
+                      @run_spinels.any?
     # an error inside another workshop file keeps Ruby's message and its
     # "(helper.rb:3)": the explanation only sees the open file's code
     friendly = error && !where && friendly_error(error, code, file)
@@ -1306,7 +1338,8 @@ class ChunkyApp
       out_html += python_result_html(result)
     # a sketch's file ends in a block, mousePressed's true or false - what
     # it shows is the window
-    elsif !((result.nil? || @run_sketches.any?) && (!output.empty? || widgets_present))
+    # spinel(...) answers how CRuby ran the program: the widget shows it
+    elsif !((result.nil? || @run_sketches.any? || result.is_a?(ChunkySpinel::Program)) && (!output.empty? || widgets_present))
       out_html += "<div class=\"cell-result\">=&gt; #{escape_html(inspect_result(result))}</div>"
     end
     @run_images.each do |data_url|
@@ -1359,6 +1392,7 @@ class ChunkyApp
     @run_letters.each_with_index { |spec, n| mount_letter(idx, out_el, spec, n) }
     @run_sketches.each { |sketch| mount_sketch(idx, out_el, sketch) }
     @run_games.each { |game| mount_game(idx, out_el, game) }
+    @run_spinels.each { |program| mount_spinel(out_el, program) }
     # the stepper goes on top of the output; the JSON is parsed in JS
     # (bridge.js), PicoRuby would take ages
     show_steps(idx, recorder) if recorder
