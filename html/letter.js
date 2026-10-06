@@ -1,4 +1,4 @@
-// The letter for show_letter (main.rb, lesson 27): an envelope drawn into a
+// The letter for show_letter (main.rb, lessons 28 and 29): an envelope drawn into a
 // canvas, with red boxes for the postcode. The learner writes a digit into
 // each box; when the pen lifts, every box with ink becomes 64 numbers the
 // way the digits in digits.csv were made (the drawing scaled to the full

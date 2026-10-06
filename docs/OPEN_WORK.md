@@ -107,6 +107,17 @@ Last updated 2026-10-05.
   four FAILs that are its own assumptions (Tab indenting, no Enter on the
   skip link, a live `.cell-out`, the first Tab opening the drawer) -
   worth updating if the audit is rerun.
+- Turtle graphics (lesson 10, `html/turtle.rb`): `forward 100` outside
+  `turtle { }` is a plain NoMethodError for main, which the friendly
+  errors explain as "defined in another cell? run that one first" - a
+  rule for the turtle's commands (`forward`, `right`, `pen_up` …) saying
+  "only inside `turtle do … end`" would fit (`friendly_errors_rules.rb`,
+  before `name_lower`; a corpus entry needs the harness to require
+  turtle.rb). Defining the commands on main was rejected: it would
+  shadow a learner's own `def right`. More exercises the check helpers
+  already grade are listed in `experiments/06-turtle-graphics/NOTES.md`
+  (a house without lifting the pen, a 7-point star, a spiral); `fill`
+  and `write "text"` are not there yet.
 - The offline dialog's sizes (`offlineExplain`, `offlinePython`, README,
   HANDOVER §6c, `test/shell/workspace_test.rb`) are measured by hand: the
   files of `offline-files.txt` in MiB, a text file without a `.gz` counted

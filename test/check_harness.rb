@@ -42,9 +42,12 @@ File.write(File.join(SHIMS_DIR, "processing.rb"),
            "load #{File.expand_path('../html/processing.rb', __dir__).inspect}\n")
 $LOAD_PATH.unshift(SHIMS_DIR)
 $shown_sketches = []
-# show_objects (lessons 7, 8, 10) draws through the show_image below, as in
+# show_objects (lessons 7, 8, 11) draws through the show_image below, as in
 # the browser, so a check finds its picture in images
 require_relative "../html/object_graph"
+# turtle { } (lesson 10) shows its picture the same way; Turtle.from(images)
+# finds the turtles behind it, which is what the lesson's check grades
+require_relative "../html/turtle"
 module Kernel
   def download_file(data, name = nil)
     $explicit_downloads << (name || data).to_s
@@ -217,6 +220,13 @@ SOLUTIONS = {
   "methoden" => {
     "de" => [%(def quadrat(zahl)\n  zahl * zahl\nend\n\nquadrat(9))],
     "en" => [%(def square(number)\n  number * number\nend\n\nsquare(9))]
+  },
+  # the snowflake, and the inward one ("anti-snowflake"): both are the recursion
+  "turtle" => {
+    "de" => [%(def koch(laenge, tiefe)\n  if tiefe == 0\n    forward laenge\n  else\n    koch(laenge / 3.0, tiefe - 1)\n    left 60\n    koch(laenge / 3.0, tiefe - 1)\n    right 120\n    koch(laenge / 3.0, tiefe - 1)\n    left 60\n    koch(laenge / 3.0, tiefe - 1)\n  end\nend\n\nturtle do\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend),
+             %(def koch(laenge, tiefe)\n  if tiefe == 0\n    forward laenge\n  else\n    koch(laenge / 3.0, tiefe - 1)\n    right 60\n    koch(laenge / 3.0, tiefe - 1)\n    left 120\n    koch(laenge / 3.0, tiefe - 1)\n    right 60\n    koch(laenge / 3.0, tiefe - 1)\n  end\nend\n\nturtle do\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend)],
+    "en" => [%(def koch(length, depth)\n  if depth == 0\n    forward length\n  else\n    koch(length / 3.0, depth - 1)\n    left 60\n    koch(length / 3.0, depth - 1)\n    right 120\n    koch(length / 3.0, depth - 1)\n    left 60\n    koch(length / 3.0, depth - 1)\n  end\nend\n\nturtle do\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend),
+             %(def koch(length, depth)\n  if depth == 0\n    forward length\n  else\n    koch(length / 3.0, depth - 1)\n    right 60\n    koch(length / 3.0, depth - 1)\n    left 120\n    koch(length / 3.0, depth - 1)\n    right 60\n    koch(length / 3.0, depth - 1)\n  end\nend\n\nturtle do\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend)]
   },
   "klassen" => {
     "de" => [%(class Fuchs\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def ruf\n    "Chunky Bacon!"\n  end\nend\nf = Fuchs.new("Kaz")\nf.ruf)],

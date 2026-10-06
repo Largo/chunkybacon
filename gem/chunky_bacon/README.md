@@ -36,6 +36,7 @@ never mix with your program's output.
 | `show_image image` | saves `chunky-image-N.png` (or `.jpg`, `.gif`, `.webp`, `.svg`: a ChunkyPNG image, a PureJPEG encoder, the bytes or a path) and opens it |
 | `show_pdf pdf` | saves `chunky-document-N.pdf` (Prawn/HexaPDF document, bytes or a path) and opens it |
 | `show_objects a: a, b: b`, `show_objects binding` | draws the objects behind the names as boxes and arrows, as the course does, and saves and opens them like `show_image` (`chunky-image-N.svg`) |
+| `turtle { forward 100; right 90 }` | draws with Chunky as the turtle, as the course's lesson 10 does, and saves and opens the drawing like `show_image` (`chunky-image-N.svg`, animated); returns the `Turtle` |
 | `show_plot`, `show_plot fig` | saves the current (or that) matplotlib figure as `chunky-plot-N.png`, opens it and closes the figure (needs the pycall gem and matplotlib) |
 | `download_file data, "name"` | saves the data as `name` in the program's folder |
 | `show_browser App, "/path"` | starts the Rack app (Sinatra, Roda, ...) on 127.0.0.1 and opens it; after the program's last line the server runs on until Ctrl+C |

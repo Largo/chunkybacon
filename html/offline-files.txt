@@ -150,4 +150,5 @@ shell/workspace.rb
 shoes_dom.rb
 sqlite3_sqljs.rb
 storage.js
+turtle.rb
 workshop.rb

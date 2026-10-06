@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('51 lessons in nav', (await page.$$('#lessonNav a')).length === 51);
+check('52 lessons in nav', (await page.$$('#lessonNav a')).length === 52);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -167,7 +167,7 @@ const cell1 = await page.evaluate(() => window.cellEditors[1].getValue());
 check('reset restores demo cell code', cell1.includes('essen = "Speck"'));
 check('reset hides cell output', !(await page.isVisible('#cell-out-3')));
 
-// lesson 13: gems — the course's own gem from the local cache, then
+// lesson 14: gems — the course's own gem from the local cache, then
 // chunky_png drawing an image
 await page.click('#lessonNav a[data-id="gems"]');
 await page.waitForTimeout(300);
@@ -204,7 +204,34 @@ check('its alt text says which names share an array', objects && objects.alt.sta
 await page.waitForFunction(() => document.getElementById('runStatus').textContent.includes('gleich → #1'), null, { timeout: 3000 }).catch(() => {});
 check('the status line reads the picture by its alt text', (await page.textContent('#runStatus')).includes('fruehstueck → #1, gleich → #1'));
 
-// lesson 14: HTML parsing with Nokogiri (nokogiri-pure, from the gem cache)
+// lesson 10: turtle graphics (turtle.rb) - the demo cells draw animated
+// SVGs, the alt text and the status line say how many lines Chunky drew,
+// the starter's empty else fails and the Koch snowflake passes
+await page.click('#lessonNav a[data-id="turtle"]');
+await page.waitForTimeout(300);
+check('turtle lesson renders', (await page.textContent('#lessonBody h2')).includes('Malen mit Chunky'));
+for (const idx of [1, 3, 5]) {
+  await page.click(`.run-cell[data-idx="${idx}"]`);
+  await page.waitForFunction(i => { const imgs = [...document.querySelectorAll(`#cell-out-${i} img.cell-image`)]; return imgs.length > 0 && imgs.every(img => img.complete && img.naturalWidth > 0); }, idx, { timeout: 15000 }).catch(() => {});
+  const pictures = await page.$$eval(`#cell-out-${idx} img.cell-image`, els => els.map(img => ({ svg: img.src.startsWith('data:image/svg+xml;base64,'), width: img.naturalWidth, shown: img.clientWidth })));
+  check(`turtle cell ${idx} draws ${pictures.length} SVG picture(s) at their own size`,
+        pictures.length > 0 && pictures.every(p => p.svg && p.width > 160 && p.shown === p.width));
+}
+check('the turtle picture is animated', (await page.$eval('#cell-out-5 img.cell-image', img => atob(img.src.split(',')[1]))).includes('animateMotion'));
+check('the square says what Chunky drew', (await page.getAttribute('#cell-out-1 img.cell-image', 'alt')) === 'Chunky hat 4 Striche gezeichnet');
+await page.click('.run-cell[data-idx="1"]');
+await page.waitForFunction(() => document.getElementById('runStatus').textContent.includes('Chunky hat 4 Striche gezeichnet'), null, { timeout: 3000 }).catch(() => {});
+check('the status line reads the drawing', (await page.textContent('#runStatus')).includes('Chunky hat 4 Striche gezeichnet'));
+await runExercise();
+await page.waitForTimeout(600);
+check('turtle starter (empty else) fails', (await page.getAttribute('#chunkyChat', 'class')).includes('fail'));
+await setExercise('def koch(laenge, tiefe)\n  if tiefe == 0\n    forward laenge\n  else\n    koch(laenge / 3.0, tiefe - 1)\n    left 60\n    koch(laenge / 3.0, tiefe - 1)\n    right 120\n    koch(laenge / 3.0, tiefe - 1)\n    left 60\n    koch(laenge / 3.0, tiefe - 1)\n  end\nend\n\nturtle do\n  color "#2a6fb0"\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend\n');
+await runExercise();
+await page.waitForFunction(() => (document.getElementById('chunkyChat').className || '').includes('pass'), null, { timeout: 15000 }).catch(() => {});
+check('Koch snowflake exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+check('... drawing 192 lines', (await page.getAttribute('.cell.exercise .cell-out img.cell-image', 'alt')) === 'Chunky hat 192 Striche gezeichnet');
+
+// lesson 15: HTML parsing with Nokogiri (nokogiri-pure, from the gem cache)
 await page.click('#lessonNav a[data-id="html"]');
 await page.waitForTimeout(300);
 await page.click('.run-cell[data-idx="1"]');
@@ -328,7 +355,7 @@ await runExercise();
 check('sinatra exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 check('sinatra exercise widget shows response', (await page.textContent('.cell.exercise .mb-page')).includes('CHUNKY BACON!'));
 
-// lesson 14: Roda — routing tree, string matcher, 404, exercise
+// lesson 17: Roda — routing tree, string matcher, 404, exercise
 await page.click('#lessonNav a[data-id="roda"]');
 await page.waitForTimeout(300);
 await page.click('.run-cell[data-idx="1"]');
@@ -1095,7 +1122,7 @@ await kernelReady(page);
 check('after reload still English', (await page.textContent('#siteTitle')).includes('Learn Ruby'));
 check('after reload progress kept', (await page.getAttribute('#lessonNav a:first-of-type', 'class')).includes('done'));
 
-// solve the class lesson (lesson 10) end to end in English
+// solve the class lesson (lesson 11) end to end in English
 await page.click('#lessonNav a[data-id="klassen"]');
 await page.waitForTimeout(300);
 await setExercise('6 x 7');

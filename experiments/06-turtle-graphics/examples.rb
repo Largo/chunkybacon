@@ -1,7 +1,7 @@
 # Renders the example drawings into examples/*.svg (animated) and
 # examples/*-still.svg, and checks what the check helpers say about them.
-#   ruby examples.rb
-require_relative "turtle"
+#   ruby examples.rb (the code is html/turtle.rb now)
+require_relative "../../html/turtle"
 
 $shown = []
 module Kernel

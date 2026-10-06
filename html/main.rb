@@ -135,7 +135,7 @@ end
 
 # A binding at the top level with a scope of its own, like a file of its
 # own. Bindings made from TOPLEVEL_BINDING all share one scope: a `using` in
-# a cell (`using Processing`, lesson 31) would switch the refinement on in
+# a cell (`using Processing`, lesson 33) would switch the refinement on in
 # every lesson after it - `loop`, `text`, `size` would be Processing's - and
 # in the page's own code. One compiled on its own keeps it to itself.
 module TopLevel
@@ -154,9 +154,13 @@ require_relative "autorun"
 # Terminal colours (pastel, tty-*) in a cell's output, as HTML.
 require_relative "ansi"
 # show_objects: names and objects as boxes and arrows, an SVG through
-# show_image (lessons 7, 8, 10). At boot, unlike shoes_dom.rb: ~17 KB that
+# show_image (lessons 7, 8, 11). At boot, unlike shoes_dom.rb: ~17 KB that
 # evaluates in about 10 ms.
 require_relative "object_graph"
+# turtle { forward 100 }: drawings with Chunky as the turtle, an animated SVG
+# through show_image (lesson 10). At boot too: ~15 KB that evaluates in
+# about 6 ms. Its texts follow the lesson's language (sync_state).
+require_relative "turtle"
 # require "pycall" is the bridge to Pyodide (pycall.rb): the real gem needs
 # libpython, which a browser does not have
 require_relative "pycall"
@@ -168,7 +172,7 @@ require_relative "sqlite3_sqljs"
 BrowserGems.files["(shims)"]["sqlite3.rb"] = ""
 # require "numo/narray" (numo-narray-alt's "numo/narray/alt" too): Numo is
 # written in C, numo_narray.rb is its API in pure Ruby - what Rumale needs
-# (lesson 27). Fetched on the first require, like shoes_dom.rb; BrowserGems
+# (lesson 29). Fetched on the first require, like shoes_dom.rb; BrowserGems
 # counts the numo gems as built in once it is there.
 numo = <<~'RUBY'
   unless defined?(Numo::NArray)
@@ -182,7 +186,7 @@ BrowserGems.files["(shims)"]["numo/narray.rb"] = numo
 BrowserGems.files["(shims)"]["numo/narray/alt.rb"] = numo
 # require "processing": the gem draws through rays and reflexion (C++ on
 # OpenGL); processing.rb is its API in pure Ruby, recording each frame for
-# processing.js to paint (lesson 31). Fetched on the first require, like
+# processing.js to paint (lesson 33). Fetched on the first require, like
 # numo_narray.rb; the gem counts as built in once it is there.
 BrowserGems.files["(shims)"]["processing.rb"] = <<~'RUBY'
   unless defined?(Processing::Context)
@@ -197,7 +201,7 @@ BrowserGems.files["(shims)"]["processing.rb"] = <<~'RUBY'
 RUBY
 # require "herb": the gem is Ruby around one C extension, its parser
 # ("herb/herb"); herb_bridge.rb is that extension, handing the source to the
-# same parser compiled to WebAssembly (index.html: ensureHerb; lesson 33).
+# same parser compiled to WebAssembly (index.html: ensureHerb; lesson 35).
 BrowserGems.files["(shims)"]["herb/herb.rb"] = <<~'RUBY'
   unless defined?(Herb::Bridge)
     source = JSG.w.fetchTextSync("herb_bridge.rb").to_s
@@ -279,6 +283,7 @@ class ChunkyApp
   def sync_state(state)
     @lang = state.lang
     @lang = "de" unless @data["ui"].key?(@lang)
+    Turtle.lang = @lang   # its errors and the picture's alt text
     @lesson_id = state.lesson
     @workshop = state.workshop
     seq = state.seq.to_i
@@ -1081,6 +1086,8 @@ class ChunkyApp
     buffer = StringIO.new
     $stdout = buffer
     @auto_run = auto
+    # a live run draws stills: an animation would start over at every pause
+    Turtle.animations = !auto
     begin
       result = if auto
         AutoRun.with_time_limit(workshop? ? Workshop.paths : [file]) { evaluate(code, file).tap { start_sketch } }
@@ -1092,6 +1099,7 @@ class ChunkyApp
     ensure
       $stdout = old_stdout
       @auto_run = false
+      Turtle.animations = true
     end
     output = buffer.string
     # files the code wrote come first; an explicit download_file of the same

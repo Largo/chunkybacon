@@ -16,6 +16,10 @@
 # The picture is an SVG (Turtle#to_svg) that draws itself in the order it was
 # walked, with Chunky running along the path. show_image takes it as it is
 # (it answers to_data_url). Pure Ruby, no gem.
+#
+# The course page (html/main.rb, lesson 10), the check harness and the
+# companion gem (gem/chunky_bacon/lib/chunky_bacon/turtle.rb, a copy of this
+# file - test/turtle_test.rb keeps the two equal) all load this file.
 class Turtle
   # one step, drawn (pen down) or not: from (x1, y1) to (x2, y2)
   Step = Struct.new(:x1, :y1, :x2, :y2, :pen, :color, :width) do
@@ -41,6 +45,31 @@ class Turtle
   INK = "#1a1208"
   BACON = "#c14a2e"
   COLOR = /\A(#\h{3,8}|[a-zA-Z]{3,20}|(rgb|hsl)a?\([\d\s.,%+-]+\))\z/
+
+  # what Chunky says - errors and the picture's alt text - in the course's
+  # languages; Turtle.lang picks one (the course sets the lesson's)
+  TEXTS = {
+    "de" => {
+      tired: "Chunky ist müde: mehr als %{max} Schritte. Gibt es eine Schleife, die nie aufhört, " \
+             "oder eine Rekursion ohne Abbruchbedingung?",
+      dizzy: "Chunky ist schwindlig: mehr als %{max} Drehungen. Gibt es eine Schleife, die nie aufhört?",
+      color: "%{name} ist keine Farbe – versuch \"red\" oder \"#c14a2e\"",
+      drew_one: "Chunky hat 1 Strich gezeichnet", drew: "Chunky hat %{n} Striche gezeichnet"
+    },
+    "en" => {
+      tired: "Chunky is tired: more than %{max} steps. Is there a loop that never ends, " \
+             "or a recursion without a base case?",
+      dizzy: "Chunky is dizzy: more than %{max} turns. Is there a loop that never ends?",
+      color: "%{name} is not a colour - try \"red\" or \"#c14a2e\"",
+      drew_one: "Chunky drew 1 line", drew: "Chunky drew %{n} lines"
+    },
+    "ja" => {
+      tired: "Chunkyは疲れてしまいました：%{max}歩を超えました。終わらないループや、終了条件のない再帰になっていませんか？",
+      dizzy: "Chunkyは目が回ってしまいました：%{max}回を超えて回転しました。終わらないループになっていませんか？",
+      color: "%{name} は色ではありません。\"red\" や \"#c14a2e\" のように書いてください",
+      drew_one: "Chunkyが線を1本かきました", drew: "Chunkyが線を%{n}本かきました"
+    }
+  }.freeze
 
   attr_reader :x, :y, :heading, :steps, :turns
   attr_accessor :animate, :duration
@@ -72,7 +101,7 @@ class Turtle
   # as circle turns twice per step
   def right(angle)
     if @turns.size >= 2 * MAX_STEPS
-      raise TooFar, "Chunky is dizzy: more than #{2 * MAX_STEPS} turns. Is there a loop that never ends?"
+      raise TooFar, Turtle.say(:dizzy, max: 2 * MAX_STEPS)
     end
     @turns << angle.to_f
     @heading = Turtle.normalize(@heading + angle.to_f)
@@ -129,7 +158,7 @@ class Turtle
     return @color if name.nil?
 
     name = name.to_s
-    raise ArgumentError, "#{name.inspect} is not a colour - try \"red\" or \"#c14a2e\"" unless name.match?(COLOR)
+    raise ArgumentError, Turtle.say(:color, name: name.inspect) unless name.match?(COLOR)
 
     @color = name
     self
@@ -270,7 +299,7 @@ class Turtle
     out = +""
     out << %(<svg xmlns="http://www.w3.org/2000/svg" width="#{(vb_w * scale).round}" height="#{(vb_h * scale).round}" )
     out << %(viewBox="#{f(vb_x)} #{f(vb_y)} #{f(vb_w)} #{f(vb_h)}">)
-    out << "<title>#{lines.size} lines drawn by Chunky</title>"
+    out << "<title>#{alt_text}</title>"
     if animate
       out << "<style>@keyframes d{to{stroke-dashoffset:0}}@keyframes h{to{opacity:0}}@keyframes s{to{opacity:1}}" \
              ".end{opacity:0;animation:s .001s #{f(secs)}s forwards}.run{animation:h .001s #{f(secs)}s forwards}" \
@@ -306,6 +335,13 @@ class Turtle
     out << "</svg>"
   end
 
+  # the picture in words, for its alt: "Chunky drew 4 lines" (show_image
+  # asks for it), in Turtle.lang
+  def alt_text
+    n = lines.size
+    n == 1 ? Turtle.say(:drew_one) : Turtle.say(:drew, n: n)
+  end
+
   def to_data_url
     url = "data:image/svg+xml;base64,#{[to_svg].pack('m0')}"
     Turtle.remember(url, snapshot)
@@ -321,6 +357,20 @@ class Turtle
   # ---------- class side ----------
 
   class << self
+    # "de", "en" or "ja": the language of the errors and the alt text
+    # (main.rb sets the lesson's)
+    attr_writer :lang
+
+    def lang = TEXTS.key?(@lang) ? @lang : "en"
+
+    def say(key, **values) = format(TEXTS[lang][key], **values)
+
+    # false while main.rb runs a cell live: an animation would start over
+    # at every pause in typing, so the picture is a still then
+    attr_writer :animations
+
+    def animations? = @animations != false
+
     # the turtles behind some of show_image's data: URLs - in a check,
     # Turtle.from(images) is what this run of the cell showed
     def from(images)
@@ -363,8 +413,7 @@ class Turtle
 
   def walk_to(x, y)
     if @steps.size >= MAX_STEPS
-      raise TooFar, "Chunky is tired: more than #{MAX_STEPS} steps. Is there a loop that never ends, " \
-                    "or a recursion without a base case?"
+      raise TooFar, Turtle.say(:tired, max: MAX_STEPS)
     end
     x = Turtle.round(x)
     y = Turtle.round(y)
@@ -431,7 +480,7 @@ module Kernel
   # Methods you define yourself work inside the block too (def polygon ...).
   # Returns the Turtle, for a closer look: t = turtle { ... }; t.lines
   def turtle(animate: true, duration: nil, &block)
-    t = Turtle.new(animate: animate, duration: duration)
+    t = Turtle.new(animate: animate && Turtle.animations?, duration: duration)
     if block
       block.arity == 1 ? block.call(t) : t.instance_eval(&block)
     end
