@@ -148,6 +148,17 @@ Last updated 2026-10-05.
   Not in the workshop (each `require_relative`'d file would need its own
   `:script_compiled` match). No real screen reader tried on the slider
   and its live region.
+- The embedded cell (`html/embed.html`, HANDOVER §6k): three.js, Python,
+  SQLite, exercise checks and live runs are not wired up (copies of
+  `index.html`'s `ensure*`); gems outside the cache and `Net::HTTP` do not
+  work in it, as a sandboxed page sends no Referer and the bridges refuse
+  it - opening them to `Origin: null` would open them to every sandboxed
+  frame. Tested in Chromium only (Firefox and WebKit: the sandbox, the
+  missing Referer, `frame-ancestors`). Once chunkybacon.idogawa.com is
+  live: check that the host's reverse proxy passes `Host` on (else every
+  bridge request is 403), pin the bridge map to the domain (HANDOVER §7),
+  and try an embed from a real idogawa.com page. An "Open in the
+  workshop" link would need the course to import code from a fragment.
 - The offline dialog's sizes (`offlineExplain`, `offlinePython`, README,
   HANDOVER §6c, `test/shell/workspace_test.rb`) are measured by hand: the
   files of `offline-files.txt` in MiB, a text file without a `.gz` counted

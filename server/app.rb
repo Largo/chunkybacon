@@ -26,6 +26,9 @@ class ChunkyServer < Roda
   # the code revalidates on every load, as with nginx; a 304 is cheap
   STATIC_HEADERS = { "Cache-Control" => "no-cache" }.freeze
   BRIDGE_HEADERS = %w[content-type last-modified etag].freeze
+  # nginx/default.conf's $chunky_bridge_ok: "<Referer>|<host asked>" - the
+  # bridges serve only pages on the host they were asked on
+  BRIDGE_REFERER = %r{^https?://([^/:|]+)(:[0-9]+)?/[^|]*\|\1$}i
 
   plugin :public, root: HTML, gzip: true, headers: STATIC_HEADERS
   plugin :head
@@ -48,8 +51,9 @@ class ChunkyServer < Roda
       r.get("lessons") { course.index }
     end
 
-    # nginx/default.conf's bridges: hardcoded hosts, GET and HEAD only, and
-    # on rubygems.org only the two kinds of path the gem installer asks for
+    # nginx/default.conf's bridges: hardcoded hosts, GET and HEAD only, on
+    # rubygems.org only the two kinds of path the gem installer asks for,
+    # and only for the course's own pages (bridge)
     r.on "rubygems" do
       r.get("api", "v1", "gems", String) { |name| bridge("rubygems.org", "/api/v1/gems/#{name}") }
       r.get("gems", String) { |file| bridge("rubygems.org", "/gems/#{file}") }
@@ -104,7 +108,17 @@ class ChunkyServer < Roda
     html.sub(/(<meta #{attribute}="#{Regexp.escape(name)}" content=")[^"]*(")/) { "#{$1}#{h value}#{$2}" }
   end
 
+  # As nginx: refused unless the Referer is a page on the host asked (its
+  # Host header without the port, as nginx's $host - not Rack's host, which
+  # would believe an X-Forwarded-Host), and never loadable by another site
+  # (Cross-Origin-Resource-Policy).
   def bridge(host, path)
+    response["cross-origin-resource-policy"] = "same-origin"
+    asked = request.get_header("HTTP_HOST").to_s.sub(/:[0-9]*\z/, "")
+    unless "#{request.referer}|#{asked}".match?(BRIDGE_REFERER)
+      response.status = 403
+      return "403 Forbidden"
+    end
     query = request.query_string
     path = "#{path}?#{query}" unless query.empty?
     upstream = Net::HTTP.start(host, 443, use_ssl: true, open_timeout: 10, read_timeout: 60) do |http|

@@ -26,10 +26,12 @@ const check = (name, cond) => {
 let down = false;
 const overrides = new Map();   // path -> { body, etag }
 const requests = [];           // "GET /main.rb", ...
+const bridgeReferers = [];     // the Referer of each request to a bridge
 const sockets = new Set();
 const proxy = http.createServer((req, res) => {
   if (down) { req.socket.destroy(); return; }
   requests.push(`${req.method} ${req.url}`);
+  if (/^\/(rubygems|proxy)\//.test(req.url)) bridgeReferers.push(req.headers.referer || '');
   const override = overrides.get(req.url.split('?')[0]);
   if (override && (req.method === 'GET' || req.method === 'HEAD')) {
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'ETag': override.etag, 'Cache-Control': 'no-cache' });
@@ -161,6 +163,13 @@ const c = await open();
 check('online, a deploy shows at once (not the copy)',
   (await c.evaluate(() => document.querySelector('meta[name=deploy]')?.content)) === '2' &&
   !(await c.evaluate(() => window.ChunkyOffline.fromCopy())));
+// the bridges serve only pages of the host they are asked on (a same-host
+// Referer, nginx/default.conf): one the worker passes on keeps the page's
+bridgeReferers.length = 0;
+const bridged = await c.evaluate(() => fetch('rubygems/api/v1/gems/rake.json').then((r) => r.status, () => 0));
+const viaWorker = await c.evaluate(() => Boolean(navigator.serviceWorker.controller));
+check(`online, a bridge request through the service worker keeps the page's Referer (${bridged}, ${bridgeReferers.join(' ')})`,
+  bridged === 200 && viaWorker && bridgeReferers.length === 1 && bridgeReferers[0].startsWith(SITE));
 requests.length = 0;
 await c.evaluate(() => navigator.serviceWorker.controller.postMessage({ type: 'refresh', force: true }));
 // done when the copy's index names the deployed version (polled from here:

@@ -16,7 +16,13 @@
 //
 // The kernel is the course's own main.rb, unchanged: this file stands in for
 // what index.html and shell/bridge.js give it - a lesson (one cell), the
-// interface strings, the bridge, the editor helpers, the sync fetches.
+// interface strings, the bridge, the editor helpers, the sync fetches. The
+// kernel keeps no code here: that is the shell's chunkySaveCode, which an
+// embed does not have (its code lives in the address).
+//
+// The page is served sandboxed (Content-Security-Policy: sandbox, nginx and
+// tools/dev_server.rb), so it runs in an opaque origin: no storage, and
+// every file it loads from the course's host is a cross-origin request.
 (function () {
   "use strict";
 
@@ -153,7 +159,8 @@
     var line = editor.getLine(lineNo - 1) || "";
     editor.markText({ line: lineNo - 1, ch: Math.max(line.search(/\S/), 0) }, { line: lineNo - 1, ch: line.length }, { className: "marker" });
   };
-  // three.js, Python and SQLite are not part of the embed (yet): see NOTES.md
+  // three.js, Python and SQLite are not part of the embed (yet): see
+  // experiments/09-embed-cell/NOTES.md
   window.threeReady = false;
   window.ensureThree = function () { return Promise.resolve(false); };
 
@@ -167,26 +174,39 @@
   var state = { lang: lang, lesson: "embed", workshop: false, seq: 1 };
   var waiting = [];
   var kernelStarted = false;
-  var patchSource = null;
   function emit(name, detail) { window.dispatchEvent(new CustomEvent(name, { detail: detail })); }
   function withState(detail) { return Object.assign({}, state, detail); }
   function send(item) {
     window.afterPaint(function () {
-      if (item.type === "run") emit("chunky:run", withState({ idx: 0, auto: false }));
+      if (item.type === "run") emit("chunky:run", withState({ idx: 0, auto: false, step: false }));
       else emit("chunky:install", withState({ name: item.name }));
     });
   }
+  // The code comes from a link anyone can make, so it runs only in an
+  // opaque origin (the server's CSP sandbox, or an iframe's sandbox
+  // attribute), never with the course's storage: a server that lost the
+  // header gets a cell that says so instead of one that runs.
+  var sandboxed = self.origin === "null";
   function startKernel() {
     if (kernelStarted) return;
+    if (!sandboxed) {
+      setStatus(ui.embedNoSandbox || "This cell runs only sandboxed.");
+      bridge.failed = true;
+      return;
+    }
     kernelStarted = true;
     mark("kernel-start");
     setStatus(ui.loading || "Loading Ruby …");
-    // the kernel's embed patch (a tiny Ruby file), fetched beside ruby.wasm
-    patchSource = fetch("embed-kernel.rb").then(function (r) { return r.text(); });
-    var script = document.createElement("script");
-    script.src = "browser.script.iife.js";
-    script.onerror = function () { kernelFailed("browser.script.iife.js could not be loaded"); };
-    document.head.appendChild(script);
+    // the widgets' scripts the kernel calls (show_letter, processing,
+    // show_game; ~12 KB gzipped), then ruby.wasm's loader
+    Promise.all(["letter.js", "processing.js", "game.js"].map(loadScript)).catch(function (e) {
+      console.error("a widget's script did not load", e);
+    }).then(function () {
+      var script = document.createElement("script");
+      script.src = "browser.script.iife.js";
+      script.onerror = function () { kernelFailed("browser.script.iife.js could not be loaded"); };
+      document.head.appendChild(script);
+    });
   }
   function kernelFailed(reason) {
     if (bridge.ready || bridge.failed) return;
@@ -207,36 +227,31 @@
     lang: lang,
     permalinks: null,
     kernelReady: function () {
-      // main.rb calls this from inside ChunkyApp#initialize: patch and go on
-      // once it has returned
+      // main.rb calls this from inside ChunkyApp#initialize: go on once it
+      // has returned
       setTimeout(function () {
-        patchSource.then(function (source) {
-          window.rubyVM.eval(source);
-        }).then(function () {
-          bridge.ready = true;
-          mark("kernel-ready");
-          setStatus("");
-          var items = waiting;
-          waiting = [];
-          items.forEach(send);
-        }, function (e) {
-          // without the patch every run would hit the sandbox's localStorage
-          kernelFailed("embed-kernel.rb: " + (e && e.message ? e.message : e));
-        });
+        bridge.ready = true;
+        mark("kernel-ready");
+        setStatus("");
+        var items = waiting;
+        waiting = [];
+        items.forEach(send);
       }, 0);
     },
-    ran: function (idx, outcome) {
-      setRunning(false, outcome);
+    ran: function (idx, outcome, elapsed) {
+      setRunning(false, String(outcome), Number(elapsed));
       mark("first-result");
       postSize();
     },
     gems: function () {},
+    steps: function () {},   // ⏯ is the course's (stepper.js), not the embed's
     installed: function (name, ok, message) {
       if (!ok) setStatus(String(message));
     }
   };
 
   function run() {
+    if (!sandboxed) return startKernel();
     if (bridge.failed) return;
     setRunning(true);
     var items = (gemsInstalled ? [] : gems.map(function (name) { return { type: "install", name: name }; }))
@@ -249,22 +264,47 @@
 
   // ---------- the page ----------
   var els = {};
-  var started = 0;
+  var refocus = false;
   function setStatus(text) { if (els.status) els.status.textContent = text; postSize(); }
-  function setRunning(on, outcome) {
+  // "1.4 s", German "1,4 s" (as the course's shell/view.rb)
+  function runTime(seconds) {
+    var text = seconds < 0.1 ? "< 0.1 s" : seconds.toFixed(1) + " s";
+    return lang === "de" ? text.replace(".", ",") : text;
+  }
+  function setRunning(on, outcome, elapsed) {
     if (!els.cell) return;
+    // a disabled button loses the keyboard focus: it comes back after the
+    // run, as in the course (shell/app.rb)
+    if (on) refocus = document.activeElement === els.run;
     els.cell.classList.toggle("running", on);
     els.run.disabled = on;
     els.run.innerHTML = on
       ? '<img class="run-fox" src="assets/chunky.svg" alt="">' + (ui.running || "running …")
       : (ui.runCell || "▶ Run");
-    if (on) { started = performance.now(); return; }
+    if (on) return;
+    if (refocus) { refocus = false; els.run.focus(); }
     if (outcome) {
-      els.time.textContent = ((performance.now() - started) / 1000).toFixed(2) + " s";
+      if (elapsed >= 0) els.time.textContent = runTime(elapsed);
       els.cell.classList.toggle("shake", outcome === "error");
       var out = document.getElementById("cell-out-0");
       out.classList.remove("reveal"); void out.offsetWidth; out.classList.add("reveal");
+      announce(outcome, out);
     }
+  }
+  // What the run did, for a screen reader: one polite status line, like the
+  // course's #runStatus - the output's text, shortened, and pictures, games
+  // and sounds by their names. Emptied first, so the same result twice is
+  // read twice.
+  function announce(outcome, out) {
+    var words = [out.innerText.replace(/\s+/g, " ").trim()];
+    Array.prototype.forEach.call(out.querySelectorAll("img.cell-image[alt], .game-widget[aria-label], .cell-audio audio[aria-label]"), function (el) {
+      words.push(el.getAttribute("alt") || el.getAttribute("aria-label"));
+    });
+    var text = words.join(" ").trim();
+    if (text.length > 280) text = text.slice(0, 280) + " …";
+    var format = outcome === "error" ? (ui.embedRanError || "Failed: %s") : (ui.embedRanOk || "Ran: %s");
+    els.said.textContent = "";
+    setTimeout(function () { els.said.textContent = format.replace("%s", text); }, 50);
   }
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -273,6 +313,8 @@
     els.status = document.getElementById("embedStatus");
     els.time = document.getElementById("runTime");
     els.plain = document.getElementById("cell-plain");
+    els.said = document.getElementById("runStatus");
+    els.plain.setAttribute("aria-label", ui.embedCode || "Ruby code you can run");
     els.run.textContent = ui.runCell || "▶ Run";
     els.run.addEventListener("click", run);
     document.addEventListener("keydown", function (e) {
@@ -321,9 +363,29 @@
     ta.value = plainCode;
     editor = window.CodeMirror.fromTextArea(ta, {
       lineNumbers: true, mode: "text/x-ruby", matchBrackets: true, indentUnit: 2,
-      viewportMargin: Infinity, extraKeys: { "Shift-Enter": run }
+      viewportMargin: Infinity, extraKeys: { "Shift-Enter": run },
+      screenReaderLabel: ui.embedCode || "Ruby code you can run"
     });
     window.cellEditors[0] = editor;
+    // as the course's editors (index.html: initCell): Tab indents, but
+    // Escape, then Tab leaves the editor - no keyboard trap (WCAG 2.1.2);
+    // the hint says so and names Shift+Enter
+    var leave = false;
+    editor.on("keydown", function (cm, e) {
+      if (e.key === "Escape") { leave = true; return; }
+      if (e.key === "Tab" && leave) { e.codemirrorIgnore = true; leave = false; return; }
+      if (e.key !== "Shift") leave = false;
+    });
+    editor.on("blur", function () { leave = false; });
+    if (ui.codeHint) {
+      var note = document.createElement("span");
+      note.id = "cell-hint-0";
+      note.hidden = true;
+      note.textContent = ui.codeHint;
+      editor.getWrapperElement().appendChild(note);
+      editor.getInputField().setAttribute("aria-describedby", note.id);
+      editor.getInputField().setAttribute("aria-keyshortcuts", "Shift+Enter");
+    }
     els.plain.remove();
     mark("editor");
     postSize();
