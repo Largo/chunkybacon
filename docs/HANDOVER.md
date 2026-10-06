@@ -4,7 +4,7 @@ Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
 Work in progress - what is unfinished, and in what state - is in
 `docs/OPEN_WORK.md`.
-Last updated 2026-10-06 (54 lessons in German, English and Japanese).
+Last updated 2026-10-06 (56 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -48,7 +48,9 @@ html/
                         (progress dialog, workshop file panel), jsg.rb,
                         support.rb, boot.rb;
                         manifest.txt (load order), loader.js, bridge.js
-  assets/picoruby/      PicoRuby.wasm 4.0.3 (loader patched to text/picoruby)
+  assets/picoruby/      PicoRuby.wasm 4.0.3 (loader patched to text/picoruby;
+                        tools/vendor_picoruby.rb) - the shell's, and the
+                        PicoRuby lesson's second instance (§6l)
   browser.script.iife.js  ruby.wasm browser loader (patched: fetches OUR wasm)
   ruby+stdlib.wasm      Ruby 4.0 (@ruby/4.0-wasm-wasi 2.10.1), 32 MB
   main.rb               THE KERNEL, on CRuby: ChunkyApp runs cells, checks,
@@ -73,6 +75,11 @@ html/
   game.rb               show_game: ChunkyGame, a grid game's cells, timers and keys in plain Ruby; runs headless for checks (§6)
   game.js               a game's grid: the loop on requestAnimationFrame, keys, focus, its live region (§6)
   herb_bridge.rb        require "herb/herb": Herb's C parser, handed to its WebAssembly build (§6j)
+  picoruby_lab.js       a lesson with "engine": "picoruby" (lesson 40): its runs and
+                        IRB lines to a Web Worker, the time limits, chunky:picoruby (§6l)
+  picoruby_worker.js    that worker: a second PicoRuby.wasm, its scheduler turned per request
+  picoruby_lab.rb       the Ruby in the worker: a Task serving requests, a Sandbox per session
+  picoruby_cells.rb     the kernel's side: PicoRuby's answers as values, errors, Prism's syntax errors
   assets/herb/          Herb's parser as WebAssembly + 3 files of @ruby/prism (tools/vendor_herb.rb)
   workshop.rb           the workshop's runs: project files as the virtual FS,
                         require_relative between them, gets, write-back
@@ -115,6 +122,8 @@ tools/dev_server.rb        nginx's stand-in without Docker: html/, the bridges, 
 tools/build_embed_ui.rb    html/embed-ui.js from lessons.js's ui strings (--check: current?)
 tools/make_embed_url.rb    a cell's address for some code: the URL, an <iframe>, a "▶ Run" link (§6k)
 tools/patch_picoruby_loader.rb  PicoRuby's loader: text/ruby -> text/picoruby
+tools/vendor_picoruby.rb   PicoRuby.wasm from npm into html/assets/picoruby/ (checksums,
+                           loader patch, .gz, NOTICE.md); --check: offline, files as recorded
 tools/measure_load.mjs, tools/shell_metrics.rb  load times, code size (PICORUBY_SHELL.md)
 tools/render_social_cards.mjs  docs/social/card.html -> twitter-card.png (1600x900: X,
                            Bluesky, Mastodon, README) and github-social.png (1600x800:
@@ -147,6 +156,7 @@ test/boot_failure_test.mjs Playwright: what the page says when a runtime fails
 test/language_test.mjs     Playwright: which language a visitor gets (11 checks)
 test/offline_test.mjs      Playwright: offline mode, behind a proxy it takes down
 test/embed_test.mjs        Playwright: an embedded cell on another (made-up) site (§6k)
+test/picoruby_test.mjs     Playwright: the PicoRuby lesson - cells, IRB, exercise, live runs, the stop (§6l)
 test/dev_server_test.rb    the dev server's bridge rule and embed headers, and that nginx/default.conf says the same
 test/make_lessons_json.js  writes test/lessons.json for the harnesses
 docs/HANDOVER.md           this file
@@ -220,6 +230,7 @@ changes and rewrites it; prose edits can be done by hand.
   "files": { "digits.csv": "assets/data/digits.csv" },   // optional: files next to the code (§6e)
   "live": false,   // optional: no live runs in this lesson (§6b)
   "stepper": true, // optional: ⏯ beside ▶ on its code cells (§6)
+  "engine": "picoruby", // optional: cells and IRBs run on PicoRuby.wasm, not CRuby (§6l)
   "de": { "title": "14. HTML parsen", "cells": [ ... ] },
   "en": { "title": "14. Parsing HTML", "cells": [ ... ] },
   "ja": { "title": "14. HTMLのパース", "cells": [ ... ] } }
@@ -229,7 +240,7 @@ A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 20-38), not in a group of one.
+(side trips, 20-40), not in a group of one.
 
 `"stepper": true` puts ⏯ (step through) beside every ▶ of the lesson but an
 IRB's (`View.lesson_html`, `Course#stepper?`). It is on the Basics whose
@@ -307,7 +318,7 @@ Rules that the code and tests rely on:
   check's `x, y = ...` once broke the learner's `x, y = fox.first`. Name
   a check's helpers as lambda or block parameters (`->(game, x = nil) {
   ... }.(games.last)`), as the Snake check does.
-- `test/browser_test.mjs` asserts the lesson count (`'54 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'56 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -1511,6 +1522,88 @@ analysis it started from).
   out of reach, a plain link, the bridge refused, evil.test not allowed to
   frame it, and the page without its header running nothing.
 
+## 6l. Other Rubies, and a lesson on PicoRuby
+
+Lesson 39 (`rubies`) is plain CRuby: what an implementation is,
+`RUBY_ENGINE`/`RUBY_PLATFORM` (`wasm32-wasi`, no YJIT in the browser),
+JRuby, TruffleRuby, mruby, mruby/c, PicoRuby, IronRuby (with a link to
+[Largo/ironruby](https://github.com/Largo/ironruby), the author's fork for
+Ruby 4.0 on .NET), RubyMotion, DragonRuby and the rest, and an exercise
+that maps engine names. Its version numbers were checked on 2026-10-06 -
+JRuby 10.1 targets Ruby 4.0, TruffleRuby 40.0.0 is Ruby 4.0.2, mruby 4.0.0
+(2026-04-20) has build configurations for Emscripten and WASI, IronRuby
+4.0.1 (2026-10-02) runs on .NET 8 and 10, Artichoke's repository is
+archived - and go stale with the next releases, in three languages.
+
+Lesson 40 (`picoruby`, `"engine": "picoruby"`) runs its cells and its IRB
+on **PicoRuby.wasm** instead of CRuby:
+
+- **Nothing new to download.** It is the shell's runtime
+  (`html/assets/picoruby/`, 0.9 MB gzipped, cached by then), a second
+  instance - not in the page's window and not on its thread. PicoRuby keeps
+  its JavaScript references and handlers in globals
+  (`globalThis.picorubyRefs`, `picorubyEventHandlers`,
+  `picorubyGenericCallbacks`), which two instances in one window would
+  share; and it counts its time slices in ticks that only JavaScript
+  advances, so `loop {}` never returns from `_mrb_run_step_status` - it
+  would freeze the page. So it runs in a module **Web Worker**, which the
+  page can end.
+- `picoruby_lab.js` (the page): `ensurePicoRuby` (the shell calls it when
+  the lesson opens, `Course#picoruby?`), `chunkyPicoRuby.run / irb /
+  reset`, one request at a time, the time limits (a live run 1 s, ▶ and an
+  IRB line 10 s), the answers as `chunky:picoruby` events.
+  `picoruby_worker.js` boots the runtime (~0.3 s) and, per request, turns
+  PicoRuby's scheduler itself (the tick and `_mrb_run_step_status`, what
+  `init.iife.js` does on timers) until `picoruby_lab.rb` has answered.
+  That file is a PicoRuby Task: it takes requests (`PicoLab.take`) and runs
+  each in a `Sandbox` (picoruby-sandbox, what PicoRuby's own IRB uses) - one
+  for the cells, one per IRB. Not `register_callback` blocks: a Sandbox
+  starts a Task, and PicoRuby refuses the Task API inside a callback
+  JavaScript calls synchronously ("Cannot use asynchronous Task API during
+  synchronous execution").
+- **A notebook**: a Sandbox compiles the next code with the local variables
+  of its last run (picoruby-sandbox's `result` rebuilds the scope). The code
+  is wrapped as in PicoRuby's IRB, `begin; _ = (code\n); rescue Exception
+  => _; end; _`, so `_` is the last answer in cells and IRB alike, and an
+  exception comes back as the value: its class, its message and the line
+  from its backtrace. What the run printed comes from `Module.print`
+  (the "Exception in task: ..." lines the Task machinery adds dropped; a
+  marker line flushes a `print` without a newline, which Emscripten holds
+  back otherwise).
+- **The kernel's side** (`main.rb`, `picoruby_cells.rb`): `run_cell` hands
+  the code over (`start_picoruby_run`) and returns `:pending`, so
+  `finish_cell_run` leaves `ran` to `picoruby_answer`, which writes the
+  output as `run_cell` does for CRuby (`show_picoruby_run`) and checks the
+  exercise. Code that does not parse never goes out: CRuby's Prism says why
+  and where (`RubyVM::InstructionSequence.compile`) - PicoRuby parses with
+  Prism too, but its compiler answers only `false` - and the friendly
+  explanation applies. A runtime error becomes CRuby's exception of the same
+  name (`NoMethodError`, `RangeError`, ...) at `chunky.rb:<line>`, so the
+  explanations and the line mark work; one CRuby lacks is a
+  `PicoRubyCells::Error`. A check's `result` is a `PicoRubyCells::Value`,
+  equal to an object with the same `inspect` (`result == {"a" => 1}`
+  works, `{"a" => 1} == result` does not); `nil`, `true`, `false` come as
+  themselves. The IRB is `show_irb`'s widget with `pico: true` in its
+  session: Prism decides "unfinished" (`INCOMPLETE_RE`, as for CRuby), the
+  line goes to the worker, the answer is appended when it comes.
+- **Past the time limit** the worker is ended and a new one started: every
+  variable of the cells and the IRBs is gone, and the message says so
+  (`picoStopped`, `picoRestarted`; a live run says `liveStopped` first). A
+  new page or a reset drops the sessions (`sync_state`), and answers for
+  an earlier page are ignored (`seq`).
+- PicoRuby is not CRuby, and the lesson says so: `RUBY_ENGINE` is
+  `"mruby"` (PicoRuby 4 runs on mruby's VM; `PICORUBY_VERSION` is its own),
+  no `sum`/`tally`/`sort_by`/`group_by`/`zip`/`each_slice`, no `Struct`,
+  `Set` or blockless enumerators, 64-bit integers that raise `RangeError`;
+  but `Task`, `sleep_ms`, JSON, YAML, Markdown and SQLite3. An unknown name
+  says "undefined method 'x' for Class". `gets` answers nil (the worker has
+  no `window.prompt`, which PicoRuby's would wait for). A Task that is not
+  joined keeps running whenever the scheduler turns - in later runs.
+- Not in the workshop, the embedded cell or ⏯. Tests:
+  `test/check_harness.rb` runs the exercise under CRuby with the result
+  handed over as a `Value` (the demos need PicoRuby and are skipped);
+  `test/picoruby_test.mjs` the rest, in a browser.
+
 ## 7a. The optional server: permalinks and a backend
 
 The course is a static site and stays one: without `server/` lessons live at
@@ -1571,7 +1664,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 54 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 56 lessons x 3 languages, starter fails, solutions pass
 ruby lint_lessons.rb           # lessons.js content: de/en/ja parity, references, Japanese rules, Prism, gems, counts
 ruby lint_lessons_test.rb      # the linter's fault-injection tests
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
@@ -1589,6 +1682,8 @@ ruby dev_server_test.rb                  # the bridge rule and the embed's heade
 ruby ../tools/build_embed_ui.rb --check  # html/embed-ui.js has the current ui strings
 # with the dev server started as FRAME_ANCESTORS="http://blog.test:*" ruby tools/dev_server.rb:
 BASE=http://127.0.0.1:8011/ node embed_test.mjs     # the embedded cell (§6k), ~1 min
+BASE=http://127.0.0.1:8011/ node picoruby_test.mjs  # the PicoRuby lesson (§6l), ~30 s
+ruby ../tools/vendor_picoruby.rb --check            # the PicoRuby runtime is what PICORUBY_VERSION.txt records
 ```
 
 The CRuby harnesses exercise the real `browser_gems.rb` with `File.read`
@@ -1627,6 +1722,37 @@ an update re-check: `io/wait` still absent (else the net/http shim loses),
 `csv`/`benchmark` still not bundled (they auto-install from the cache),
 Minitest, and the nokogiri load (deep-AST stack limits differ per build;
 nokogiri-pure's CI has a wasm job for this).
+
+## 9a. Vendored runtimes: each has a tool
+
+The page loads its runtimes and libraries from its own server, and a push
+to `main` is the deploy (§1) - so what it loads is in the repository. Each
+part is written by a tool that downloads a pinned version from its
+registry, checks it against the registry's checksum before unpacking, and
+is rerun to update it:
+
+| What | Where | Size | Tool | Check |
+|---|---|---|---|---|
+| CRuby (ruby.wasm) | `html/ruby+stdlib.wasm` | 32 MB (10 MB .gz) | `tools/update_ruby_wasm.rb` | `tools/compress_assets.rb --check` |
+| PicoRuby.wasm | `html/assets/picoruby/` | 2 MB (0.9 MB .gz) | `tools/vendor_picoruby.rb [version]` | `tools/vendor_picoruby.rb --check` |
+| Pyodide + packages | `html/assets/pyodide/` | 56 MB | `tools/vendor_pyodide.rb` | SHA-256 per wheel |
+| sql.js | `html/assets/sqljs/` | 1 MB | `tools/vendor_sqljs.rb` | |
+| Herb's parser | `html/assets/herb/` | 2 MB | `tools/vendor_herb.rb` | |
+| the gem cache | `html/gems/cache/` | 11 MB | `tools/build_gem_cache.rb` | |
+
+Afterwards `tools/compress_assets.rb` (the `.gz` copies) and
+`tools/offline_files.rb` (the offline copy's list). The PicoRuby lesson
+(§6l) added no file to this: it runs a second instance of the shell's
+runtime. Re-running `tools/vendor_picoruby.rb` for the pinned version
+writes the same bytes; only `PICORUBY_VERSION.txt` and `NOTICE.md` are its
+own record.
+
+Leaving these out of git and generating them on the host would keep the
+repository smaller (Pyodide is most of it), but needs a build step on
+every deploy and the network on the host - and history keeps every
+version committed so far either way. Worth it only together with a change
+to how the host deploys; until then, update a runtime only when there is a
+reason to, since every version stays in the history.
 
 ## 10. Related repositories
 

@@ -22,7 +22,7 @@ Last updated 2026-10-06.
 
 ## State of the repository
 
-- `main` has 54 lessons (2026-10-06). The site does NOT show it yet: the
+- `main` has 56 lessons (2026-10-06). The site does NOT show it yet: the
   host's checkout stopped following `main` on 2026-09-30 (the history
   rewrite; GitHub's push webhook is answered with 202, but the live
   `lessons.js` is from 2026-09-30). On the host: `git status`, then
