@@ -1207,6 +1207,15 @@ kbd {
   background-repeat: no-repeat;
 }
 .game-grid > div.alt { box-shadow: inset 0 0 0 100px rgba(80, 60, 30, 0.045); }
+/* a ruby2d window (ruby2d.rb): its canvas, at the window's size or the
+   column's width */
+.game-canvas {
+  display: block;
+  max-width: 100%;
+  border-radius: 6px;
+  background: #000;
+  touch-action: none;   /* the pointer is the program's */
+}
 /* white on the veil over the light grid: about 6:1 */
 .game-overlay {
   position: absolute;

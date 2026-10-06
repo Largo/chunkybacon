@@ -214,11 +214,12 @@ fetched with `cache: "no-cache"` by the loader.
 ## 4. Running, testing, measuring
 
 ```sh
-# the runtime (bundled with the create-jobrouter-custom-application skill,
-# checksum-verified, no download), then the loader patch
-ruby <skill dir>/scripts/install_picoruby.rb html
-cp <skill dir>/assets/picoruby/NOTICE.md html/assets/picoruby/
-ruby tools/patch_picoruby_loader.rb            # --check to verify
+# the runtime from npm, checked against the registry's SHA-512; the tool
+# also patches the loader, writes the .gz copies and NOTICE.md (it was
+# first installed with the create-jobrouter-custom-application skill's
+# installer - the same bytes)
+ruby tools/vendor_picoruby.rb                  # --check: offline, the recorded files
+ruby tools/patch_picoruby_loader.rb --check    # the loader reads text/picoruby
 ruby tools/compress_assets.rb --check          # the .gz copies match
 
 node test/make_lessons_json.js
@@ -281,7 +282,7 @@ blocks called synchronously by JavaScript (also from CRuby's calls, nested),
 half-second save debounce is one), a Task started from a sync handler or a
 callback, `replaceChildren`/`appendChild`/`createTextNode`, `dialog.showModal`.
 
-**Later: PicoRuby in a worker** (lesson 39, Spinel; HANDOVER §6l). The
+**Later: PicoRuby in a worker** (lesson 42, Spinel; HANDOVER §6n). The
 same runtime runs in Web Workers (`html/spinel/boot.js`: `picoruby.js` is
 an Emscripten module that knows workers; init.iife.js's scheduler without
 the document). Probed in Chromium: boot ~70-80 ms; a JavaScript -> Ruby

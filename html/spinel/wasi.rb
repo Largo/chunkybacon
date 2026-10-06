@@ -1,4 +1,4 @@
-# WASI preview 1 for the Spinel lesson (lesson 39), in Ruby on PicoRuby.wasm
+# WASI preview 1 for the Spinel lesson (lesson 42), in Ruby on PicoRuby.wasm
 # in a worker (spinel/boot.js): it runs spinel.wasm, the compiler, and the
 # programs it builds, each on a filesystem in memory. Only what those two
 # ask of a host is here - files and directories under one preopened "/",

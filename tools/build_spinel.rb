@@ -570,7 +570,7 @@ module BuildSpinel
     spinel = pins["spinel"]
     clang = pins["clang"]
     <<~MD
-      # Spinel for the course (lesson 39)
+      # Spinel for the course (lesson 42)
 
       Built by tools/build_spinel.rb from tools/spinel.json; not in git. Each
       component keeps its own license; the texts are next to this file.

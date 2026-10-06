@@ -48,11 +48,16 @@ module AutoRun
     def with_time_limit(paths, seconds = LIMIT)
       @deadline = clock + seconds
       events = 0
+      @late = false
       # c_call too: a one-line `while true do x += 1 end` makes no line
-      # events, but its Integer#+ does
+      # events, but its Integer#+ does. The clock is read every 128 events
+      # of any code, the stop waits for the next one in the learner's own:
+      # `loop { }` makes two events a round, one in <internal:kernel>, and
+      # sampling both at once (every 128th, in chunky.rb) could miss forever
       @trace = TracePoint.new(:line, :b_call, :c_call) do |tp|
         events += 1
-        raise Stopped if (events & 127).zero? && paths.include?(tp.path) && clock > @deadline
+        @late = clock > @deadline if (events & 127).zero?
+        raise Stopped if @late && paths.include?(tp.path)
       end
       @trace.enable { yield }
     ensure
@@ -73,6 +78,7 @@ module AutoRun
       ensure
         spent = clock - started
         @deadline += spent if @trace
+        @late = false   # the next sample decides against the moved deadline
         @library_time = library_time + spent
         @untraced = false
       end

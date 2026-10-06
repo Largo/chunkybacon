@@ -4,7 +4,7 @@ Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
 Work in progress - what is unfinished, and in what state - is in
 `docs/OPEN_WORK.md`.
-Last updated 2026-10-06 (55 lessons in German, English and Japanese).
+Last updated 2026-10-06 (58 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -33,13 +33,13 @@ update, and a single-file mount would keep serving the old one). Consequences:
   `.gz` must match the wasm: `ruby tools/compress_assets.rb --check`
   (`tools/update_ruby_wasm.rb` rewrites it).
 - The gem proxy's disk cache lives in the named volume `gemcache`.
-- **One thing is built on deploy, not committed**: Spinel for lesson 39
-  (`html/assets/spinel/`, §6l). The host's deploy hook runs
+- **One thing is built on deploy, not committed**: Spinel for lesson 42
+  (`html/assets/spinel/`, §6n). The host's deploy hook runs
   `sh tools/after_deploy.sh` after moving the checkout; it builds only when
   `tools/spinel.json` or `tools/build_spinel.rb` changed (minutes, with
   Ruby 3.3+ on the host or in a `ruby:4.0` container: `docker compose
   --profile build run --rm spinel-build`), and is a no-op otherwise. Until
-  it has run once, lesson 39 says that Spinel could not be loaded; the rest
+  it has run once, lesson 42 says that Spinel could not be loaded; the rest
   of the course does not depend on it.
 
 The upstream test `cd test && node browser_test.mjs` runs against the live
@@ -56,7 +56,9 @@ html/
                         (progress dialog, workshop file panel), jsg.rb,
                         support.rb, boot.rb;
                         manifest.txt (load order), loader.js, bridge.js
-  assets/picoruby/      PicoRuby.wasm 4.0.3 (loader patched to text/picoruby)
+  assets/picoruby/      PicoRuby.wasm 4.0.3 (loader patched to text/picoruby;
+                        tools/vendor_picoruby.rb) - the shell's, and the
+                        PicoRuby lesson's second instance (§6m)
   browser.script.iife.js  ruby.wasm browser loader (patched: fetches OUR wasm)
   ruby+stdlib.wasm      Ruby 4.0 (@ruby/4.0-wasm-wasi 2.10.1), 32 MB
   main.rb               THE KERNEL, on CRuby: ChunkyApp runs cells, checks,
@@ -79,15 +81,24 @@ html/
   processing.rb         require "processing": the gem's API in pure Ruby, frames recorded (§6h)
   processing.js         a sketch's window: paints the frames, sends mouse and keys (§6h)
   game.rb               show_game: ChunkyGame, a grid game's cells, timers and keys in plain Ruby; runs headless for checks (§6)
-  game.js               a game's grid: the loop on requestAnimationFrame, keys, focus, its live region (§6)
+  game.js               a game's grid: the loop on requestAnimationFrame, keys, focus, its live region (§6);
+                        a ruby2d window's canvas (the same loop, draw commands, SDL key names)
+  ruby2d.rb             require "ruby2d": ruby2d's C extension in Ruby (draw calls -> commands),
+                        show handing the window to the page, the top-level mixing taken back (§6l)
+  assets/ruby2d/        ruby2d 1.0.0's own Ruby files, joined unchanged (tools/vendor_ruby2d.rb), + LICENSE.md
   herb_bridge.rb        require "herb/herb": Herb's C parser, handed to its WebAssembly build (§6j)
+  picoruby_lab.js       a lesson with "engine": "picoruby" (lesson 41): its runs and
+                        IRB lines to a Web Worker, the time limits, chunky:picoruby (§6m)
+  picoruby_worker.js    that worker: a second PicoRuby.wasm, its scheduler turned per request
+  picoruby_lab.rb       the Ruby in the worker: a Task serving requests, a Sandbox per session
+  picoruby_cells.rb     the kernel's side: PicoRuby's answers as values, errors, Prism's syntax errors
   assets/herb/          Herb's parser as WebAssembly + 3 files of @ruby/prism (tools/vendor_herb.rb)
-  spinel.rb             spinel(code), show_spinel_irb: CRuby's run of the program (the oracle), on the kernel (§6l)
-  shell/spinel.rb       their widgets below the cell and IRB on Spinel, in the shell (PicoRuby) (§6l)
+  spinel.rb             spinel(code), show_spinel_irb: CRuby's run of the program (the oracle), on the kernel (§6n)
+  shell/spinel.rb       their widgets below the cell and IRB on Spinel, in the shell (PicoRuby) (§6n)
   spinel/               the Spinel lesson's workers, Ruby on PicoRuby.wasm too: boot.js (the one JS file:
                         PicoRuby in a worker), manifest.txt, wasi.rb (a WASI host), toolchain.rb
-                        (Ruby -> C -> wasm), compiler_worker.rb, run_worker.rb (§6l)
-  assets/spinel/        NOT IN GIT: built on deploy by tools/build_spinel.rb (§6l)
+                        (Ruby -> C -> wasm), compiler_worker.rb, run_worker.rb (§6n)
+  assets/spinel/        NOT IN GIT: built on deploy by tools/build_spinel.rb (§6n)
   workshop.rb           the workshop's runs: project files as the virtual FS,
                         require_relative between them, gets, write-back
   autorun.rb            live runs (§6b): what may run by itself, the time
@@ -124,13 +135,16 @@ tools/vendor_pyodide.rb    Pyodide + pandas, sympy, scikit-learn, matplotlib int
 tools/vendor_sqljs.rb      sql.js (SQLite in WebAssembly) into html/assets/sqljs/ (§6f)
 tools/build_box_font.rb    html/assets/fonts/chunky-box-drawing.woff, box drawing for the code font (§6g)
 tools/vendor_herb.rb       Herb's WebAssembly parser into html/assets/herb/ (§6j)
-tools/build_spinel.rb     Spinel + clang as WebAssembly into html/assets/spinel/, pinned in tools/spinel.json (§6l)
+tools/vendor_ruby2d.rb     ruby2d's Ruby files into html/assets/ruby2d/ruby2d.rb, the .gem checked against rubygems.org's SHA-256 (§6l)
+tools/build_spinel.rb     Spinel + clang as WebAssembly into html/assets/spinel/, pinned in tools/spinel.json (§6n)
 tools/after_deploy.sh      what the host's deploy hook runs after the checkout moved: the Spinel build (§1)
 tools/offline_files.rb     html/offline-files.txt - rerun after adding/removing a file
 tools/dev_server.rb        nginx's stand-in without Docker: html/, the bridges, the same headers and rules (§7)
 tools/build_embed_ui.rb    html/embed-ui.js from lessons.js's ui strings (--check: current?)
 tools/make_embed_url.rb    a cell's address for some code: the URL, an <iframe>, a "▶ Run" link (§6k)
 tools/patch_picoruby_loader.rb  PicoRuby's loader: text/ruby -> text/picoruby
+tools/vendor_picoruby.rb   PicoRuby.wasm from npm into html/assets/picoruby/ (checksums,
+                           loader patch, .gz, NOTICE.md); --check: offline, files as recorded
 tools/measure_load.mjs, tools/shell_metrics.rb  load times, code size (PICORUBY_SHELL.md)
 tools/render_social_cards.mjs  docs/social/card.html -> twitter-card.png (1600x900: X,
                            Bluesky, Mastodon, README) and github-social.png (1600x800:
@@ -153,6 +167,7 @@ test/ansi_test.rb          ANSI colours to HTML under CRuby
 test/object_graph_test.rb  show_objects under CRuby: walk, SVG, alt text, the gem's copy
 test/turtle_test.rb        turtle graphics under CRuby: path, check helpers, SVG, texts, the gem's copy
 test/game_test.rb          show_game under CRuby: the lesson's Snake by timer and keys, restart, the copies checks play
+test/ruby2d_test.rb        ruby2d under CRuby: windows frame by frame, draw commands, keys, mouse, replayed copies, mixing, every cell of lesson 39
 test/step_recorder_test.rb ⏯'s recorder under CRuby: steps, frames, hidden locals, caps, every cell of the stepper lessons
 test/live_test.mjs         Playwright: live runs in a lesson and the workshop, a lesson without them
 test/server_test.rb        the optional server under Rack::MockRequest
@@ -163,6 +178,7 @@ test/boot_failure_test.mjs Playwright: what the page says when a runtime fails
 test/language_test.mjs     Playwright: which language a visitor gets (11 checks)
 test/offline_test.mjs      Playwright: offline mode, behind a proxy it takes down
 test/embed_test.mjs        Playwright: an embedded cell on another (made-up) site (§6k)
+test/picoruby_test.mjs     Playwright: the PicoRuby lesson - cells, IRB, exercise, live runs, the stop (§6m)
 test/dev_server_test.rb    the dev server's bridge rule and embed headers, and that nginx/default.conf says the same
 test/make_lessons_json.js  writes test/lessons.json for the harnesses
 docs/HANDOVER.md           this file
@@ -236,6 +252,7 @@ changes and rewrites it; prose edits can be done by hand.
   "files": { "digits.csv": "assets/data/digits.csv" },   // optional: files next to the code (§6e)
   "live": false,   // optional: no live runs in this lesson (§6b)
   "stepper": true, // optional: ⏯ beside ▶ on its code cells (§6)
+  "engine": "picoruby", // optional: cells and IRBs run on PicoRuby.wasm, not CRuby (§6m)
   "de": { "title": "14. HTML parsen", "cells": [ ... ] },
   "en": { "title": "14. Parsing HTML", "cells": [ ... ] },
   "ja": { "title": "14. HTMLのパース", "cells": [ ... ] } }
@@ -245,7 +262,7 @@ A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 20-39), not in a group of one.
+(side trips, 20-42), not in a group of one.
 
 `"stepper": true` puts ⏯ (step through) beside every ▶ of the lesson but an
 IRB's (`View.lesson_html`, `Course#stepper?`). It is on the Basics whose
@@ -323,7 +340,7 @@ Rules that the code and tests rely on:
   check's `x, y = ...` once broke the learner's `x, y = fox.first`. Name
   a check's helpers as lambda or block parameters (`->(game, x = nil) {
   ... }.(games.last)`), as the Snake check does.
-- `test/browser_test.mjs` asserts the lesson count (`'55 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'58 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -357,7 +374,7 @@ check, in `turtle.rb`, §6),
 check plays `games`, in `game.rb`, §6),
 `show_browser(app, path)` + `mock_get`, `show_irb`, `show_files`, `show_three(scene, camera, orbit:, &animate)`,
 `show_shoes { ... }`, `show_letter(boxes:) { |digits| ... }` (§6e),
-`spinel(code)` / `show_spinel_irb` (Spinel, in `spinel.rb`, §6l),
+`spinel(code)` / `show_spinel_irb` (Spinel, in `spinel.rb`, §6n),
 `download_file(data, name)`, `show_pdf(pdf)` (a file
 name, PDF bytes, a Prawn or HexaPDF document), `show_audio(sound, rate:)`
 (WAV bytes, a file name or an Array of samples, §6), `run_tests` (Minitest);
@@ -403,6 +420,7 @@ with `/`); stdlib and gems get a plain LoadError.
 | `nokogiri-1.19.4.gem` | [nokogiri-pure](https://github.com/Largo/nokogiri-pure): Nokogiri with C ext, libxml2, libxslt, gumbo ported to Ruby, built from its `nokogiri.gemspec` (name `nokogiri`, so dependents resolve to it) | `tools/build_gem_cache.rb` builds it from a checkout (`NOKOGIRI_PURE=/path`, default `../../../../nokogiri-pure`) |
 | `bigdecimal-pure-0.1.0.gem` | [bigdecimal-pure](https://github.com/Largo/bigdecimal-pure): BigDecimal on Rational, native preferred when present | downloaded from rubygems.org like any other gem |
 | (no gem: a shim) | `sqlite3`: the sqlite3 gem's API on sql.js (`html/sqlite3_sqljs.rb`, §6f), so Sequel's SQLite adapter and other sqlite3 users run | `tools/vendor_sqljs.rb` |
+| (no gem: a shim) | `ruby2d`: the gem's own Ruby (`html/assets/ruby2d/ruby2d.rb`) with its C extension stood in for by `html/ruby2d.rb` (§6l); `ruby2d` is in `NATIVE_GEMS`, so `install_gem "ruby2d"` finds it built in | `tools/vendor_ruby2d.rb` |
 
 Nokogiri loads in about 2.3 s in Chrome (4 MB of Ruby compiled on the fly);
 nokogiri-pure loads its files in a fresh Fiber because ruby.wasm compiles on
@@ -655,8 +673,8 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
     event loop, where no ▶ is running, so an endless loop in `every` would
     freeze the page for good. `GameGuard` (main.rb) is `AutoRun`'s
     mechanism - TracePoint `:line, :b_call, :c_call`, the clock read
-    every 128 events, `AutoRun::Stopped` only on a line of the learner's
-    file - switched on when the game starts running ("f:1" from game.js)
+    every 128 events, `AutoRun::Stopped` on the next event in the
+    learner's file once it is late - switched on when the game starts running ("f:1" from game.js)
     and off when it stops ("f:0"); a step only moves the 1 s deadline
     (`GAME_TICK_LIMIT`, the message `gameTooLong`). Enabling a TracePoint
     per step instead costs 4-6 ms a step in ruby.wasm (CRuby
@@ -685,6 +703,11 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   - The workshop takes the same path (the guard watches `Workshop.paths`)
     but has not been tried. The companion gem's `show_game` raises NotHere
     (a game on a computer: ruby2d or gosu, its message says).
+- **ruby2d** (§6l, lesson 39): a ruby2d window is a game to the page -
+  `show` hands a `Ruby2D::Page::Runner` to `add_game`, `mount_game` sees
+  `canvas?` and gives game.js `canvas: true` (a `<canvas>` instead of the
+  grid, the `r2d*` labels, no restart after `close`). Everything above
+  holds for it: focus, pause, the guard, stop on re-run and lesson change.
 - **Step through a cell, ⏯** (`step_recorder.rb` + `stepper.js`, from
   `experiments/02-time-travel-tracer`; lessons with `"stepper": true`, §3).
   ⏯ sends `ChunkyBridge.step(idx)`: the same run as ▶ (`chunky:run` with
@@ -892,7 +915,13 @@ shell does the timing, the kernel the guarding:
   `AutoRun.with_time_limit` (TracePoint `:line`, `:b_call`, `:c_call`, the
   clock read every 128 events) raises `AutoRun::Stopped` after `LIMIT`
   (1 s), but only on a line of the learner's own file(s) - never inside a
-  gem being loaded or the app (outcome `stopped`, a hint). Installing a
+  gem being loaded or the app (outcome `stopped`, a hint). The sample and
+  the stop are apart (`@late`): tied together - "every 128th event, if it
+  is the learner's" - `loop { }`, two events a round (its block, a line in
+  `<internal:kernel>`), was never stopped when the events before it had
+  the wrong parity; a live run earlier on the page was enough to freeze a
+  game for good (found 2026-10-06 with the ruby2d lesson;
+  `autorun_test.rb` runs `loop { }` after four prefixes). Installing a
   cached gem and every `require` run untraced and off the clock
   (`AutoRun.untraced` moves the deadline by their time). Both exceptions
   descend from `Exception`, so `rescue => e` in learner code cannot swallow
@@ -900,7 +929,8 @@ shell does the timing, the kernel the guarding:
   as its headline only, §6); no line is marked.
 - **Games** (`show_game`, §6): a live run mounts the game, paused, and
   never starts it - it runs only with the focus, which the editor keeps -
-  so the Snake lesson keeps its live runs. The exercise's check plays a
+  so the Snake lesson keeps its live runs, and so does the ruby2d lesson
+  (§6l): its windows are games to the page. The exercise's check plays a
   copy of the game, under its own time limit, on a live run too.
 - **⏯ never runs live**: a live run is never recorded (`run_cell` ignores
   `step` with `auto`, and the shell asks for live runs from keys only). A
@@ -955,7 +985,7 @@ no service worker is registered and nothing changes. The choice is
   marks a page it serves from the copy (`<meta name="chunky-offline-copy">`),
   `offline.js` then reads the gem cache and the `.rb` files the kernel
   fetches on demand (`shoes_dom.rb`, `numo_narray.rb`, `processing.rb`,
-  `herb_bridge.rb`, the three `friendly_errors*.rb`) into memory before the kernel starts (`bridge.js` waits for
+  `herb_bridge.rb`, `ruby2d.rb` with `assets/ruby2d/ruby2d.rb`, the three `friendly_errors*.rb`) into memory before the kernel starts (`bridge.js` waits for
   `ChunkyOffline.kernelReady()`), and the sync helpers answer from there. A
   new file the kernel fetches synchronously must be added there too.
 - **What needs the internet says so**: a gem not in the cache
@@ -1528,10 +1558,175 @@ analysis it started from).
   out of reach, a plain link, the bridge refused, evil.test not allowed to
   frame it, and the page without its header running nothing.
 
-## 6l. Spinel: a compiler in the page (lesson 39)
+## 6l. ruby2d: the gem's own Ruby, its C extension in Ruby
+
+Lesson 39 runs [ruby2d](https://www.ruby2d.com) 1.0.0 programs as they are
+(the try-it tutorial on ruby2d.com uses the same API). The gem is Ruby -
+`Window`, events, `Renderable`, `Color`, every shape, `Text`, the DSL -
+around a C extension on SDL3 (`Ruby2D::Ext`, ~90 functions), which a
+browser cannot load.
+
+- **Its Ruby, unchanged**: `tools/vendor_ruby2d.rb` downloads the .gem,
+  checks it against the SHA-256 rubygems.org lists, and joins 27 of its
+  `lib/ruby2d/*.rb` - in the order its `ruby2d/core.rb` requires them -
+  into `html/assets/ruby2d/ruby2d.rb` (~200 KB), with its LICENSE.md.
+  Left out: the CLI and `cli/colorize.rb` (it adds `#bold`, `#error` … to
+  every String of the page), sprites, sprite sheets, tilesets, the pixel
+  canvas, bitmap text, buttons. A new ruby2d: bump `VERSION`, rerun, run
+  `test/ruby2d_test.rb` and the lesson.
+- **`html/ruby2d.rb`** is what the page adds: `Ruby2D::Ext` in Ruby - every
+  draw call of a frame appends a command (`["q", 4 corners, rgba]`,
+  `["c", x, y, r, sectors, rgba]`, `["x", text, ...]`, the list is at its
+  top) that game.js paints; a Text's size comes from the page's canvas
+  (`Ruby2D.measure__`, `chunkyCanvasTextWidth`; height 1.26 em, the gem's
+  Outfit), drawn in Atkinson Hyperlegible Next. Images and `Audio` exist
+  (the gem's classes) but `Ext.image_create`/`audio_load` raise
+  `Ruby2D::Error` "not on this page" in the lesson's language
+  (`Ruby2D.lang__`), and so do the left-out classes and any other `Ext`
+  function (`method_missing`); `Font.default` need not exist on disk.
+  Per-corner colours (`color: ["red", "yellow", "lime", "blue"]`) are
+  drawn as 8 × 8 pieces of the blended colour; a polygon's are averaged.
+- **`show` does not block.** The gem's CRuby `show` runs `tick until
+  @close`. Here `Window#show` hands a `Page::Runner` to
+  `Ruby2D.on_show__` (main.rb: `add_game`) and returns; the cell ends and
+  `mount_game` mounts it like a `show_game` (§6). game.js calls
+  `Runner#step(now, events)` every animation frame at most 60 a second
+  (`next`; `set fps_cap: 30` halves it) with the events since the last:
+  `k:left`/`u:left` (keys by SDL's scancode names, lowercased, from
+  `e.code` - physical keys, as SDL gives them), `d:x,y,left`/`p:...`
+  (mouse buttons), `m:x,y,dx,dy` (one move a frame), `w:dx,dy`. A step is
+  the gem's tick: the events (`key_callback`, `mouse_callback`, which also
+  fire per-object `on(:click)`), a held event for every key and button
+  still down (SDL reports them every frame), `update_callback` (dt from
+  the page's game clock, `Ext.now`), the scene (`render_objects`,
+  `Window.frames` + 1). Its answer: `{"bg", "c": [commands], "next",
+  "log", "over", "error"}`; the whole scene every frame. Code after `show`
+  runs before the first frame - on a computer it runs after the window
+  closed. `close` ends the frames (`over`; no restart: ▶ runs the cell
+  again); the gem's web build ignores `close`, its desktop build quits.
+- **One window per program**: the gem allows one (`DSL.window`,
+  `Window.shown?`). Each cell run is a program: `run_cell` calls
+  `Ruby2D.reset__`. Windows of other cells keep running, so while a
+  frame runs `DSL.window` is that window (`Runner#current`) - a
+  `Circle.new` in an `update` lands in its own window.
+- **`require "ruby2d"`** is a shim in main.rb (like `processing`, §6h):
+  the first fetches both files (sync XHR, untraced, library time; the
+  offline copy preloads them) and evaluates them; then `Ruby2D.mix__`
+  does what the gem's `ruby2d.rb` does with `include Ruby2D` and `extend
+  Ruby2D::DSL`, in a way that can be undone: Ruby2D's constants set on
+  Object, the DSL's methods as singleton methods of main. **All lessons
+  share one Ruby**, so `sync_state` (another lesson, a reset) calls
+  `unmix__` and forgets the shim ran (`BrowserGems.loaded`), and the next
+  `require "ruby2d"` mixes again. `require "ruby2d/core"` loads without
+  mixing, as in the gem. A learner's own `include Ruby2D` at the top level
+  stays, as it would in any program.
+- **Checks** get `games` as for Snake: `Runner#fresh` replays the cell's
+  code (`source`, set by `run_cell`) in a binding of its own
+  (`Ruby2D.replay__`: `TopLevel.binding`, `chunky.rb`), output dropped,
+  under the check's time limit - so the window below the cell keeps its
+  state. A check drives the copy with `press(key, frames:)`, `click(x,
+  y)`, `move_mouse`, `tick(n)`, `advance(seconds)` and reads `objects`
+  (the scene, the gem's own shape objects), `width`, `height`, `over?`.
+  The replay sees no locals of earlier cells: exercise cells must stand
+  alone (every cell of the lesson does). The lesson's check holds → and
+  ← until Chunky must have reached both edges.
+- **Speed**: a frame of the keys demo costs ~3-4 ms with the guard on
+  (Chrome, headless); the first `require` ~0.3-0.5 s.
+- **Tests**: `test/ruby2d_test.rb` (CRuby, no page), `check_harness.rb`
+  (the same shim through `SHIMS_DIR`; `unmix_ruby2d` before every
+  lesson), `browser_test.mjs` (the canvas's pixels, keys and the mouse via
+  the log, error with line, time limit, `close`, a sprite refused, the
+  exercise, the next lesson unmixed). The real gem was not run here: it
+  needs SDL3 with SDL3_mixer, which Debian 13 does not package; the
+  lesson's programs are checked against the gem's own Ruby instead.
+
+## 6m. Other Rubies, and a lesson on PicoRuby
+
+Lesson 40 (`rubies`) is plain CRuby: what an implementation is,
+`RUBY_ENGINE`/`RUBY_PLATFORM` (`wasm32-wasi`, no YJIT in the browser),
+JRuby, TruffleRuby, mruby, mruby/c, PicoRuby, IronRuby (with a link to
+[Largo/ironruby](https://github.com/Largo/ironruby), the author's fork for
+Ruby 4.0 on .NET), RubyMotion, DragonRuby and the rest, and an exercise
+that maps engine names. Its version numbers were checked on 2026-10-06 -
+JRuby 10.1 targets Ruby 4.0, TruffleRuby 40.0.0 is Ruby 4.0.2, mruby 4.0.0
+(2026-04-20) has build configurations for Emscripten and WASI, IronRuby
+4.0.1 (2026-10-02) runs on .NET 8 and 10, Artichoke's repository is
+archived - and go stale with the next releases, in three languages.
+
+Lesson 41 (`picoruby`, `"engine": "picoruby"`) runs its cells and its IRB
+on **PicoRuby.wasm** instead of CRuby:
+
+- **Nothing new to download.** It is the shell's runtime
+  (`html/assets/picoruby/`, 0.9 MB gzipped, cached by then), a second
+  instance - not in the page's window and not on its thread. PicoRuby keeps
+  its JavaScript references and handlers in globals
+  (`globalThis.picorubyRefs`, `picorubyEventHandlers`,
+  `picorubyGenericCallbacks`), which two instances in one window would
+  share; and it counts its time slices in ticks that only JavaScript
+  advances, so `loop {}` never returns from `_mrb_run_step_status` - it
+  would freeze the page. So it runs in a module **Web Worker**, which the
+  page can end.
+- `picoruby_lab.js` (the page): `ensurePicoRuby` (the shell calls it when
+  the lesson opens, `Course#picoruby?`), `chunkyPicoRuby.run / irb /
+  reset`, one request at a time, the time limits (a live run 1 s, ▶ and an
+  IRB line 10 s), the answers as `chunky:picoruby` events.
+  `picoruby_worker.js` boots the runtime (~0.3 s) and, per request, turns
+  PicoRuby's scheduler itself (the tick and `_mrb_run_step_status`, what
+  `init.iife.js` does on timers) until `picoruby_lab.rb` has answered.
+  That file is a PicoRuby Task: it takes requests (`PicoLab.take`) and runs
+  each in a `Sandbox` (picoruby-sandbox, what PicoRuby's own IRB uses) - one
+  for the cells, one per IRB. Not `register_callback` blocks: a Sandbox
+  starts a Task, and PicoRuby refuses the Task API inside a callback
+  JavaScript calls synchronously ("Cannot use asynchronous Task API during
+  synchronous execution").
+- **A notebook**: a Sandbox compiles the next code with the local variables
+  of its last run (picoruby-sandbox's `result` rebuilds the scope). The code
+  is wrapped as in PicoRuby's IRB, `begin; _ = (code\n); rescue Exception
+  => _; end; _`, so `_` is the last answer in cells and IRB alike, and an
+  exception comes back as the value: its class, its message and the line
+  from its backtrace. What the run printed comes from `Module.print`
+  (the "Exception in task: ..." lines the Task machinery adds dropped; a
+  marker line flushes a `print` without a newline, which Emscripten holds
+  back otherwise).
+- **The kernel's side** (`main.rb`, `picoruby_cells.rb`): `run_cell` hands
+  the code over (`start_picoruby_run`) and returns `:pending`, so
+  `finish_cell_run` leaves `ran` to `picoruby_answer`, which writes the
+  output as `run_cell` does for CRuby (`show_picoruby_run`) and checks the
+  exercise. Code that does not parse never goes out: CRuby's Prism says why
+  and where (`RubyVM::InstructionSequence.compile`) - PicoRuby parses with
+  Prism too, but its compiler answers only `false` - and the friendly
+  explanation applies. A runtime error becomes CRuby's exception of the same
+  name (`NoMethodError`, `RangeError`, ...) at `chunky.rb:<line>`, so the
+  explanations and the line mark work; one CRuby lacks is a
+  `PicoRubyCells::Error`. A check's `result` is a `PicoRubyCells::Value`,
+  equal to an object with the same `inspect` (`result == {"a" => 1}`
+  works, `{"a" => 1} == result` does not); `nil`, `true`, `false` come as
+  themselves. The IRB is `show_irb`'s widget with `pico: true` in its
+  session: Prism decides "unfinished" (`INCOMPLETE_RE`, as for CRuby), the
+  line goes to the worker, the answer is appended when it comes.
+- **Past the time limit** the worker is ended and a new one started: every
+  variable of the cells and the IRBs is gone, and the message says so
+  (`picoStopped`, `picoRestarted`; a live run says `liveStopped` first). A
+  new page or a reset drops the sessions (`sync_state`) - or the whole
+  worker, when a run is still going, so it does not hold up the new page's
+  runs - and answers for an earlier page are ignored (`seq`).
+- PicoRuby is not CRuby, and the lesson says so: `RUBY_ENGINE` is
+  `"mruby"` (PicoRuby 4 runs on mruby's VM; `PICORUBY_VERSION` is its own),
+  no `sum`/`tally`/`sort_by`/`group_by`/`zip`/`each_slice`, no `Struct`,
+  `Set` or blockless enumerators, 64-bit integers that raise `RangeError`;
+  but `Task`, `sleep_ms`, JSON, YAML, Markdown and SQLite3. An unknown name
+  says "undefined method 'x' for Class". `gets` answers nil (the worker has
+  no `window.prompt`, which PicoRuby's would wait for). A Task that is not
+  joined keeps running whenever the scheduler turns - in later runs.
+- Not in the workshop, the embedded cell or ⏯. Tests:
+  `test/check_harness.rb` runs the exercise under CRuby with the result
+  handed over as a `Value` (the demos need PicoRuby and are skipped);
+  `test/picoruby_test.mjs` the rest, in a browser.
+
+## 6n. Spinel: a compiler in the page (lesson 42)
 
 [Spinel](https://github.com/matz/spinel) is Matz's ahead-of-time compiler:
-whole-program type inference, C out, a C compiler for the rest. Lesson 39
+whole-program type inference, C out, a C compiler for the rest. Lesson 42
 runs all of it in the learner's tab, as WebAssembly:
 
 ```
@@ -1744,7 +1939,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 55 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 58 lessons x 3 languages, starter fails, solutions pass
 ruby lint_lessons.rb           # lessons.js content: de/en/ja parity, references, Japanese rules, Prism, gems, counts
 ruby lint_lessons_test.rb      # the linter's fault-injection tests
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
@@ -1752,6 +1947,7 @@ ruby shell/run.rb              # the shell under Minitest, with PicoRuby portabi
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof
 ruby ansi_test.rb              # terminal colours in a cell's output
 ruby game_test.rb              # show_game headless: the lesson's Snake, restart, check copies
+ruby ruby2d_test.rb            # ruby2d headless: frames, draw commands, keys, mouse, replayed copies, mixing, lesson 39's cells
 ruby step_recorder_test.rb     # ⏯'s recorder: steps, frames, hidden locals, caps, the stepper lessons' cells
 ruby friendly_errors_harness.rb --summary   # 70 beginner mistakes explained by the expected rule, de/en/ja
 ruby friendly_errors_robustness.rb          # explain never raises, never leaves a %{...}
@@ -1760,12 +1956,14 @@ BASE=http://127.0.0.1:8011/ node browser_test.mjs   # Playwright, ~5 min
 BASE=http://127.0.0.1:8011/ node offline_test.mjs   # offline mode (§6c), ~1 min
 ruby dev_server_test.rb                  # the bridge rule and the embed's headers, dev server and nginx alike (§7)
 ruby ../tools/build_embed_ui.rb --check  # html/embed-ui.js has the current ui strings
-ruby ../tools/build_spinel.rb --check   # html/assets/spinel/ is the pinned build (§6l)
-BASE=http://127.0.0.1:8011/ node spinel_test.mjs   # lesson 39 in a browser: the cells, IRB, the exercise, ~2 min (§6l)
-ruby spinel_rb_test.rb                   # spinel.rb: the CRuby run, the shell's ui strings (§6l)
+ruby ../tools/build_spinel.rb --check   # html/assets/spinel/ is the pinned build (§6n)
+BASE=http://127.0.0.1:8011/ node spinel_test.mjs   # lesson 42 in a browser: the cells, IRB, the exercise, ~2 min (§6n)
+ruby spinel_rb_test.rb                   # spinel.rb: the CRuby run, the shell's ui strings (§6n)
 ruby spinel_build_test.rb                # the plain Ruby of the compiler worker: --print-build, clang's line, IRB's verdict
 # with the dev server started as FRAME_ANCESTORS="http://blog.test:*" ruby tools/dev_server.rb:
 BASE=http://127.0.0.1:8011/ node embed_test.mjs     # the embedded cell (§6k), ~1 min
+BASE=http://127.0.0.1:8011/ node picoruby_test.mjs  # the PicoRuby lesson (§6m), ~30 s
+ruby ../tools/vendor_picoruby.rb --check            # the PicoRuby runtime is what PICORUBY_VERSION.txt records
 ```
 
 The CRuby harnesses exercise the real `browser_gems.rb` with `File.read`
@@ -1804,6 +2002,38 @@ an update re-check: `io/wait` still absent (else the net/http shim loses),
 `csv`/`benchmark` still not bundled (they auto-install from the cache),
 Minitest, and the nokogiri load (deep-AST stack limits differ per build;
 nokogiri-pure's CI has a wasm job for this).
+
+## 9a. Vendored runtimes: each has a tool
+
+The page loads its runtimes and libraries from its own server, and a push
+to `main` is the deploy (§1) - so what it loads is in the repository. Each
+part is written by a tool that downloads a pinned version from its
+registry, checks it against the registry's checksum before unpacking, and
+is rerun to update it:
+
+| What | Where | Size | Tool | Check |
+|---|---|---|---|---|
+| CRuby (ruby.wasm) | `html/ruby+stdlib.wasm` | 32 MB (10 MB .gz) | `tools/update_ruby_wasm.rb` | `tools/compress_assets.rb --check` |
+| PicoRuby.wasm | `html/assets/picoruby/` | 2 MB (0.9 MB .gz) | `tools/vendor_picoruby.rb [version]` | `tools/vendor_picoruby.rb --check` |
+| Pyodide + packages | `html/assets/pyodide/` | 56 MB | `tools/vendor_pyodide.rb` | SHA-256 per wheel |
+| sql.js | `html/assets/sqljs/` | 1 MB | `tools/vendor_sqljs.rb` | |
+| Herb's parser | `html/assets/herb/` | 2 MB | `tools/vendor_herb.rb` | |
+| ruby2d's Ruby | `html/assets/ruby2d/` | 0.2 MB | `tools/vendor_ruby2d.rb` | SHA-256 from rubygems.org |
+| the gem cache | `html/gems/cache/` | 11 MB | `tools/build_gem_cache.rb` | |
+
+Afterwards `tools/compress_assets.rb` (the `.gz` copies) and
+`tools/offline_files.rb` (the offline copy's list). The PicoRuby lesson
+(§6m) added no file to this: it runs a second instance of the shell's
+runtime. Re-running `tools/vendor_picoruby.rb` for the pinned version
+writes the same bytes; only `PICORUBY_VERSION.txt` and `NOTICE.md` are its
+own record.
+
+Leaving these out of git and generating them on the host would keep the
+repository smaller (Pyodide is most of it), but needs a build step on
+every deploy and the network on the host - and history keeps every
+version committed so far either way. Worth it only together with a change
+to how the host deploys; until then, update a runtime only when there is a
+reason to, since every version stays in the history.
 
 ## 10. Related repositories
 

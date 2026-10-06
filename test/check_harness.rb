@@ -52,10 +52,28 @@ require_relative "../html/turtle"
 # show_game (lesson 38): game.rb runs headless as it is; the stub below
 # records each game, and a check plays copies of them (games), as in main.rb
 require_relative "../html/game"
+# a lesson with "engine": "picoruby" runs on PicoRuby.wasm in the browser;
+# here its exercise runs under CRuby, and the check gets the result as the
+# page hands it over - a PicoRubyCells::Value, PicoRuby's inspect text
+require_relative "../html/picoruby_cells"
 $shown_games = []
-# spinel(code) (lesson 39): without the page, spinel.rb is CRuby's run of the
+# spinel(code) (lesson 42): without the page, spinel.rb is CRuby's run of the
 # program, which is what the lesson's check reads (result.output)
 require_relative "../html/spinel"
+# require "ruby2d" finds the browser's stand-in (html/ruby2d.rb over the
+# gem's own Ruby, assets/ruby2d/), mixed into the top level as in main.rb;
+# a shown window goes to $shown_games, and a check plays a replayed copy
+File.write(File.join(SHIMS_DIR, "ruby2d.rb"),
+           "load #{File.expand_path('../html/ruby2d.rb', __dir__).inspect} unless defined?(Ruby2D::Page)\n" \
+           "Ruby2D.on_show__ = ->(runner) { $shown_games << runner }\nRuby2D.mix__\n")
+# a lesson after the ruby2d one must not find `show` or `Square` at the top
+# level, as in main.rb (sync_state); the next require mixes again
+def unmix_ruby2d
+  return unless defined?(Ruby2D::Page)
+
+  Ruby2D.unmix__
+  $LOADED_FEATURES.delete_if { |f| f.start_with?(SHIMS_DIR) && f.end_with?("/ruby2d.rb") }
+end
 module Kernel
   def download_file(data, name = nil)
     $explicit_downloads << (name || data).to_s
@@ -632,6 +650,108 @@ RUBY)
 RUBY)
     ]
   },
+  # the ruby2d window (ruby2d.rb): the check replays the cell and holds the
+  # arrow keys on that copy until Chunky reaches both edges
+  "ruby2d" => {
+    "de" => [%(require "ruby2d"
+set title: "Chunky bleibt da", width: 400, height: 300
+fuchs = Rectangle.new(x: 170, y: 240, width: 60, height: 40, color: "orange")
+on :key_held do |event|
+  fuchs.x -= 5 if event.key?(:left)
+  fuchs.x += 5 if event.key?(:right)
+  fuchs.x = fuchs.x.clamp(0, Window.width - fuchs.width)
+end
+show),
+             %(require "ruby2d"
+set title: "Chunky bleibt da", width: 400, height: 300
+fuchs = Rectangle.new(x: 170, y: 240, width: 60, height: 40, color: "orange")
+on :key_held do |event|
+  fuchs.x -= 5 if event.key?(:left) && fuchs.x > 0
+  fuchs.x += 5 if event.key?(:right) && fuchs.x + fuchs.width < Window.width
+end
+show)],
+    "en" => [%(require "ruby2d"
+set title: "Chunky stays", width: 400, height: 300
+fox = Rectangle.new(x: 170, y: 240, width: 60, height: 40, color: "orange")
+on :key_held do |event|
+  fox.x -= 5 if event.key?(:left)
+  fox.x += 5 if event.key?(:right)
+  fox.x = fox.x.clamp(0, Window.width - fox.width)
+end
+show),
+             %(require "ruby2d"
+set title: "Chunky stays", width: 400, height: 300
+fox = Rectangle.new(x: 170, y: 240, width: 60, height: 40, color: "orange")
+on :key_held do |event|
+  fox.x -= 5 if event.key?(:left)
+  fox.x += 5 if event.key?(:right)
+end
+update do
+  fox.x = 0 if fox.x < 0
+  fox.x = Window.width - fox.width if fox.x + fox.width > Window.width
+end
+show)]
+  },
+  # a case and a Hash with a default
+  "rubies" => {
+    "de" => [%(def welches_ruby(engine)
+  case engine
+  when "ruby" then "CRuby"
+  when "jruby" then "JRuby"
+  when "truffleruby" then "TruffleRuby"
+  else engine
+  end
+end
+
+welches_ruby(RUBY_ENGINE)),
+             %(NAMEN = { "ruby" => "CRuby", "jruby" => "JRuby", "truffleruby" => "TruffleRuby", "mruby" => "mruby" }
+def welches_ruby(engine) = NAMEN.fetch(engine, engine)
+puts welches_ruby(RUBY_ENGINE))],
+    "en" => [%(def which_ruby(engine)
+  case engine
+  when "ruby" then "CRuby"
+  when "jruby" then "JRuby"
+  when "truffleruby" then "TruffleRuby"
+  else engine
+  end
+end
+
+which_ruby(RUBY_ENGINE)),
+             %(NAMES = { "ruby" => "CRuby", "jruby" => "JRuby", "truffleruby" => "TruffleRuby", "mruby" => "mruby" }
+def which_ruby(engine) = NAMES.fetch(engine, engine)
+puts which_ruby(RUBY_ENGINE))]
+  },
+  # PicoRuby has no tally: by hand, with || and with Hash.new(0)
+  "picoruby" => {
+    "de" => [%(def woerter_zaehlen(woerter)
+  anzahl = {}
+  woerter.each { |wort| anzahl[wort] = (anzahl[wort] || 0) + 1 }
+  anzahl
+end
+
+woerter_zaehlen(%w[chunky bacon chunky fuchs chunky])),
+             %(def woerter_zaehlen(woerter)
+  anzahl = Hash.new(0)
+  woerter.each { |wort| anzahl[wort] += 1 }
+  anzahl
+end
+
+woerter_zaehlen(%w[chunky bacon chunky fuchs chunky]))],
+    "en" => [%(def count_words(words)
+  counts = {}
+  words.each { |word| counts[word] = (counts[word] || 0) + 1 }
+  counts
+end
+
+count_words(%w[chunky bacon chunky fox chunky])),
+             %(def count_words(words)
+  counts = Hash.new(0)
+  words.each { |word| counts[word] += 1 }
+  counts
+end
+
+count_words(%w[chunky bacon chunky fox chunky]))]
+  },
   "tl-collections" => {
     "de" => [%(eintraege = [{ projekt: "ProjectX", stunden: 3.5 }, { projekt: "Intern", stunden: 2.0 }, { projekt: "ProjectX", stunden: 3.0 }]
 stunden = eintraege.group_by { |e| e[:projekt] }.transform_values { |l| l.sum { |e| e[:stunden] } })],
@@ -1098,7 +1218,10 @@ def run_in(bind, code)
   result = nil
   begin
     Processing.reset__ if defined?(Processing::Context)
+    Ruby2D.reset__ if defined?(Ruby2D::Page)
+    shown = $shown_games.length
     result = eval(code, bind, "chunky.rb")
+    $shown_games.drop(shown).each { |game| game.source = code if game.respond_to?(:source=) }
     sketch = Processing.start__ if defined?(Processing::Context)
     $shown_sketches << sketch if sketch
   rescue Exception => e
@@ -1137,10 +1260,14 @@ def run_harness(langs)
       # its own top-level scope, as main.rb's TopLevel.binding: a `using`
       # stays in its lesson
       bind = RubyVM::InstructionSequence.compile("proc { binding }.call", "chunky.rb").eval
+      unmix_ruby2d
       load_lesson_files(lesson)
       $letter_answers = []
 
       demo_failed = false
+      # a PicoRuby lesson's demos use what only PicoRuby has (Task,
+      # sleep_ms, PICORUBY_VERSION): test/picoruby_test.mjs runs them
+      demos = [] if lesson["engine"] == "picoruby"
       demos.each do |demo|
         _, _, err = run_in(bind, demo["code"])
         if err
@@ -1176,6 +1303,8 @@ def run_harness(langs)
       end
 
       bind.local_variable_set(:output, output)
+      # the page hands a PicoRuby lesson's check the value's inspect text
+      result = PicoRubyCells.value(result.inspect) if lesson["engine"] == "picoruby"
       bind.local_variable_set(:result, result)
       bind.local_variable_set(:code, candidate)
       bind.local_variable_set(:images, $shown_images.dup)

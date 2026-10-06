@@ -1,6 +1,7 @@
 test/lessons.json
 # built packages of the companion gems (html/gems/cache/*.gem stay tracked)
 /gem/*/*.gem
+# one-off helper scripts (EDR-friendly: scripts live in the repo, not in %TEMP%)
 /tmp/
 # Spinel for the browser: built on deploy by tools/build_spinel.rb, never committed
 /html/assets/spinel/

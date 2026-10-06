@@ -1,4 +1,4 @@
-# The Spinel lesson below the cell (lesson 39): what happens to a program
+# The Spinel lesson below the cell (lesson 42): what happens to a program
 # that main.rb's spinel(code) hands over - the steps with their times, its
 # output, the C it was compiled through, the module to download, CRuby's
 # output of the same code beside it - and IRB on Spinel (show_spinel_irb).

@@ -170,8 +170,12 @@ require_relative "turtle"
 require_relative "game"
 # spinel(code), show_spinel_irb: Matz's AOT compiler as WebAssembly in the
 # page (the shell's shell/spinel.rb and its workers, html/spinel/); the CRuby
-# run of the program beside it is here (lesson 39)
+# run of the program beside it is here (lesson 42)
 require_relative "spinel"
+# A lesson with "engine": "picoruby" runs on PicoRuby.wasm in a Web Worker
+# (picoruby_lab.js); this turns its answers into values, errors and CRuby's
+# syntax messages. ~3 KB at boot.
+require_relative "picoruby_cells"
 # require "pycall" is the bridge to Pyodide (pycall.rb): the real gem needs
 # libpython, which a browser does not have
 require_relative "pycall"
@@ -210,6 +214,37 @@ BrowserGems.files["(shims)"]["processing.rb"] = <<~'RUBY'
     end
   end
 RUBY
+# require "ruby2d": the gem is Ruby around a C extension on SDL3. Its Ruby
+# comes as it is (assets/ruby2d/ruby2d.rb, tools/vendor_ruby2d.rb), ruby2d.rb
+# is the extension in Ruby: draw calls become commands game.js paints, and
+# show hands the window to the page, which runs its frames like a show_game
+# (mount_game; lesson 39). Fetched on the first require, ~210 KB; the gem
+# counts as built in once it is there. The mixing into the top level is taken
+# back when the lesson changes (sync_state), so later lessons do not find
+# `show` or `Square` there; unmix__ also forgets this shim ran, so the next
+# require "ruby2d" mixes again.
+RUBY2D_FILES = %w[assets/ruby2d/ruby2d.rb ruby2d.rb].freeze
+ruby2d_load = <<~'RUBY'
+  unless defined?(Ruby2D::Page)
+    AutoRun.untraced do
+      ENV["HOME"] ||= "/"   # the gem's gamepad_events.rb reads ~ when it loads
+      RUBY2D_FILES.each do |name|
+        source = JSG.w.fetchTextSync(name).to_s
+        raise LoadError, "could not fetch #{name}" if source.start_with?("ERROR ")
+
+        eval(source, TOPLEVEL_BINDING, name)
+      end
+    end
+    Ruby2D.measure__ = lambda do |text, size, style|
+      JSG.w.chunkyCanvasTextWidth(text, size, style.to_i).to_s.to_f
+    end
+    Ruby2D.on_show__ = ->(runner) { ChunkyApp.instance.add_game(runner) }
+    Ruby2D.lang__ = ChunkyApp.instance.lang
+    Ruby2D.replay__ = ->(code) { eval(code, TopLevel.binding, ChunkyApp::EVAL_FILE) }
+  end
+RUBY
+BrowserGems.files["(shims)"]["ruby2d.rb"] = ruby2d_load + "Ruby2D.mix__\n"
+BrowserGems.files["(shims)"]["ruby2d/core.rb"] = ruby2d_load
 # require "herb": the gem is Ruby around one C extension, its parser
 # ("herb/herb"); herb_bridge.rb is that extension, handing the source to the
 # same parser compiled to WebAssembly (index.html: ensureHerb; lesson 35).
@@ -296,6 +331,7 @@ class ChunkyApp
     @lang = state.lang
     @lang = "de" unless @data["ui"].key?(@lang)
     Turtle.lang = @lang   # its errors and the picture's alt text
+    Ruby2D.lang__ = @lang if ruby2d?
     @lesson_id = state.lesson
     @workshop = state.workshop
     seq = state.seq.to_i
@@ -303,10 +339,13 @@ class ChunkyApp
 
     @seq = seq
     fresh_binding
+    # (not in the embedded cell: embed.html has no PicoRuby)
+    $window.chunkyPicoRuby.reset if $window[:chunkyPicoRuby].typeof == "object"
     dispose_three
     dispose_shoes
     dispose_sketches
     dispose_games
+    unmix_ruby2d
     load_lesson_files
   end
 
@@ -379,6 +418,8 @@ class ChunkyApp
       finish_cell_run(event.detail.idx.to_i, event.detail.auto.to_s == "true", event.detail.step.to_s == "true")
     end
     $window.addEventListener("chunky:lesson") { |event| sync_state(event.detail) }
+    # a PicoRuby lesson's cells and IRBs answer later (picoruby_lab.js)
+    $window.addEventListener("chunky:picoruby") { |event| picoruby_answer(event.detail) }
     $window.addEventListener("chunky:install") do |event|
       sync_state(event.detail)
       panel_install(event.detail.name)
@@ -730,6 +771,21 @@ class ChunkyApp
     Processing.reset__ if idx.nil? && processing?
   end
 
+  # ---------- ruby2d (ruby2d.rb: its windows are games, below) ----------
+
+  def ruby2d? = defined?(Ruby2D::Page) && Ruby2D.respond_to?(:reset__)
+
+  def lang = @lang
+
+  # require "ruby2d" mixed Ruby2D into the top level, as the gem does; the
+  # next lesson starts without it, and its own require mixes it in again
+  def unmix_ruby2d
+    return unless ruby2d?
+
+    Ruby2D.unmix__
+    BrowserGems.loaded.delete("(shims):ruby2d.rb")
+  end
+
   # ---------- games (show_game: game.rb + game.js) ----------
 
   def add_game(game)
@@ -771,6 +827,8 @@ class ChunkyApp
   GAME_TICK_LIMIT = 1.0
   GAME_LABELS = { "play" => "gamePlay", "keys" => "gameKeys", "paused" => "gamePaused",
                   "again" => "gameAgain" }.freeze
+  R2D_LABELS = { "play" => "gamePlay", "keys" => "r2dKeys", "paused" => "gamePaused",
+                 "over" => "r2dClosed", "again" => "r2dAgain" }.freeze
 
   # game.js runs the loop and calls the block once per frame at most, when a
   # timer is due or keys came in; the game answers with the cells that
@@ -787,9 +845,13 @@ class ChunkyApp
   def mount_game(idx, out_el, game)
     node = $d.createElement("div")
     out_el.appendChild(node)
-    labels = GAME_LABELS.transform_values { |key| ui[key].to_s }
-    labels["title"] = format(ui["gameTitle"].to_s, game.width, game.height)
-    opts = { w: game.width, h: game.height, first: game.full_json, labels: labels }
+    # a ruby2d window (ruby2d.rb's Page::Runner) is a canvas, not a grid;
+    # closed, it does not start again - the cell runs it anew
+    canvas = game.respond_to?(:canvas?) && game.canvas?
+    labels = (canvas ? R2D_LABELS : GAME_LABELS).transform_values { |key| ui[key].to_s }
+    labels["title"] = canvas ? format(ui["r2dTitle"].to_s, game.title, game.width, game.height)
+                             : format(ui["gameTitle"].to_s, game.width, game.height)
+    opts = { w: game.width, h: game.height, first: game.full_json, labels: labels, canvas: canvas }
     guard = GameGuard.new(workshop? ? Workshop.paths : [EVAL_FILE], GAME_TICK_LIMIT)
     controller = $window.chunkyGame(node, JSON.generate(opts)) do |now, events|
       events = events.to_s
@@ -821,9 +883,14 @@ class ChunkyApp
       return if @trace
 
       events = 0
+      @late = false
+      # as in AutoRun.with_time_limit: the clock every 128 events, the stop
+      # on the next event of the learner's code (sampling both at once
+      # missed `loop { }` forever, depending on how many events came before)
       @trace = TracePoint.new(:line, :b_call, :c_call) do |tp|
         events += 1
-        raise AutoRun::Stopped if (events & 127).zero? && @paths.include?(tp.path) && clock > @deadline
+        @late = clock > @deadline if (events & 127).zero?
+        raise AutoRun::Stopped if @late && @paths.include?(tp.path)
       end
       @trace.enable
     end
@@ -835,9 +902,11 @@ class ChunkyApp
 
     def step
       @deadline = clock + @seconds
+      @late = false
       yield
     ensure
       @deadline = Float::INFINITY
+      @late = false
     end
 
     private
@@ -1048,6 +1117,10 @@ class ChunkyApp
   end
 
   def irb_prompt(session)
+    # a PicoRuby IRB (the PicoRuby lesson) has a prompt of its own, so it
+    # does not pass for CRuby's
+    return session[:buffer].empty? ? "irb>" : "irb*" if session[:pico]
+
     depth = session[:buffer].empty? ? 0 : session[:buffer].lines.length
     format("irb(main):%03d:%d%s", session[:line], depth, depth.positive? ? "*" : ">")
   end
@@ -1057,7 +1130,7 @@ class ChunkyApp
       <div class="irb-term" data-sid="#{sid}">
         <div class="irb-history" role="log" aria-live="polite"></div>
         <div class="irb-line">
-          <span class="irb-prompt" aria-hidden="true">irb(main):001:0&gt;</span>
+          <span class="irb-prompt" aria-hidden="true">#{escape_html(irb_prompt(@irb_sessions[sid]))}</span>
           <input class="irb-input" spellcheck="false" autocomplete="off" title="irb" aria-label="#{escape_html(ui["irbInput"])}">
         </div>
       </div>
@@ -1080,6 +1153,8 @@ class ChunkyApp
     if line.strip == "exit" || line.strip == "quit"
       session[:buffer] = ""
       append += "<div class=\"irb-note\">#{ui["irbExitNote"]}</div>"
+    elsif session[:pico]
+      return picoruby_irb_line(term, session, line, append)
     else
       session[:buffer] = session[:buffer].empty? ? line : session[:buffer] + "\n" + line
       old_stdout = $stdout
@@ -1119,6 +1194,145 @@ class ChunkyApp
     term.querySelector(".irb-prompt").innerText = irb_prompt(session)
     history.scrollTop = history.scrollHeight
     input_el.focus
+  end
+
+  # ---------- PicoRuby (a lesson with "engine": "picoruby") ----------
+
+  # The lesson's cells and IRBs run on PicoRuby.wasm in a Web Worker
+  # (picoruby_lab.js): a run goes out and settles when the answer comes
+  # back, as a chunky:picoruby event - picoruby_answer shows it, checks an
+  # exercise and tells the shell (ran), as finish_cell_run does for CRuby.
+  # Code that does not parse never goes out: CRuby's Prism says why, with
+  # the line - PicoRuby's compiler would only say no.
+  def picoruby? = !workshop? && current_lesson && current_lesson["engine"] == "picoruby"
+
+  def start_picoruby_run(idx, code, auto)
+    $window.clearCellMarks(idx)
+    syntax = PicoRubyCells.syntax_error(code, EVAL_FILE)
+    return show_picoruby_run(idx, code, auto, error: syntax) if syntax
+
+    @picoruby_codes ||= {}
+    @picoruby_codes[idx] = code
+    $window.chunkyPicoRuby.run(idx.to_s, code, auto, @seq.to_s)
+    :pending
+  end
+
+  def picoruby_answer(detail)
+    return unless detail.seq.to_i == @seq   # another page by now
+
+    return picoruby_irb_answer(detail) if detail.kind == "irb"
+
+    idx = detail.idx.to_i
+    auto = detail.auto == true
+    code = (@picoruby_codes || {}).delete(idx) || $window.getCellCode(idx).to_s
+    status = detail.status.to_s
+    message = detail.message.to_s
+    error = case status
+            when "error" then PicoRubyCells.error(detail.errorClass.to_s, message, detail.line.to_i, EVAL_FILE)
+            when "syntax" then SyntaxError.new(ui["picoSyntax"])
+            when "stopped" then auto ? AutoRun::Stopped.new : PicoRubyCells::Stopped.new("#{ui['picoStopped']} #{ui['picoRestarted']}")
+            when "failed" then PicoRubyCells::Unavailable.new("#{ui['picoFailed']} (#{message})")
+            end
+    outcome = begin
+      show_picoruby_run(idx, code, auto, output: detail.output.to_s, error: error, irbs: detail.irbs.to_i,
+                        result: status == "ok" ? PicoRubyCells.value(detail.value.to_s) : nil)
+    rescue Exception => e
+      $window.console.error("picoruby #{idx}: #{e.class}: #{e.message}")
+      :error
+    end
+    elapsed = detail.elapsed.to_f
+    bridge.ran(idx, outcome.to_s, elapsed, auto, elapsed)
+  end
+
+  # the cell's output as run_cell writes it for CRuby: what was printed,
+  # the error (explained where a rule knows it) or "=> value", IRBs
+  def show_picoruby_run(idx, code, auto, output: "", result: nil, error: nil, irbs: 0)
+    # what an exercise's check sees besides output and result: nothing
+    @run_images = []
+    @run_downloads = []
+    @run_three = []
+    @run_shoes = []
+    @last_shoes_types = []
+    @run_sketches = []
+    @run_audios = []
+    @run_games = []
+    out_html = ""
+    out_html += "<pre class=\"cell-stdout\">#{AnsiHtml.to_html(output)}</pre>" unless output.empty?
+    hint = live_hint(error)
+    # a run past the time limit took the worker, and the variables, with it
+    hint = "#{hint} #{ui['picoRestarted']}" if error.is_a?(AutoRun::Stopped)
+    hint ||= error.message if error.is_a?(PicoRubyCells::Stopped) || error.is_a?(PicoRubyCells::Unavailable)
+    friendly = error && !hint && friendly_error(error, code, EVAL_FILE)
+    if hint
+      out_html += "<div class=\"cell-hint\">#{escape_html(hint)}</div>"
+    elsif friendly
+      out_html += friendly.to_html(brief: auto)
+    elsif error
+      out_html += "<div class=\"cell-error\">#{escape_html(PicoRubyCells.class_name(error))}: " \
+                  "#{AnsiHtml.to_html(error.message.to_s)}</div>"
+    elsif !(result.nil? && (!output.empty? || irbs.positive?))
+      out_html += "<div class=\"cell-result\">=&gt; #{escape_html(inspect_result(result))}</div>"
+    end
+    irbs.times do
+      sid = @irb_sessions.length
+      @irb_sessions << { pico: true, line: 1, buffer: "" }
+      out_html += irb_widget_html(sid)
+    end
+    out_el = $d.getElementById("cell-out-#{idx}")
+    out_el.innerHTML = out_html
+    out_el.style.display = "block"
+    out_el.classList.toggle("is-rehearsal", auto)
+    if error
+      return :stopped if error.is_a?(AutoRun::Stopped)
+
+      line = !auto && error_line(error)
+      $window.markCellLine(idx, line) if line
+      return :error
+    end
+    cell = cells[idx]
+    return :ok unless cell && cell["t"] == "x"
+
+    check_exercise(cell, code, output, result) ? :pass : :fail
+  end
+
+  # A line in a PicoRuby IRB: an unfinished input waits for more (Prism
+  # decides, as for CRuby's IRB), a finished one goes to the worker; the
+  # answer is added below the echo by picoruby_irb_answer.
+  def picoruby_irb_line(term, session, line, append)
+    sid = term.getAttribute("data-sid").to_i
+    history = term.querySelector(".irb-history")
+    session[:buffer] = session[:buffer].empty? ? line : session[:buffer] + "\n" + line
+    syntax = PicoRubyCells.syntax_error(session[:buffer], "(irb)")
+    if syntax && syntax.message =~ INCOMPLETE_RE
+      # the prompt changes below
+    elsif syntax
+      session[:buffer] = ""
+      append += "<div class=\"irb-error\">#{escape_html("SyntaxError: #{syntax.message.lines.first.to_s.strip}")}</div>"
+    else
+      $window.chunkyPicoRuby.irb(sid.to_s, session[:buffer], @seq.to_s)
+      session[:buffer] = ""
+    end
+    history.innerHTML += append
+    term.querySelector(".irb-prompt").innerText = irb_prompt(session)
+    history.scrollTop = history.scrollHeight
+    term.querySelector(".irb-input").focus
+  end
+
+  def picoruby_irb_answer(detail)
+    term = $d.querySelector(".irb-term[data-sid='#{detail.sid.to_i}']")
+    return unless term
+
+    history = term.querySelector(".irb-history")
+    output = detail.output.to_s
+    append = output.empty? ? "" : "<pre class=\"irb-stdout\">#{AnsiHtml.to_html(output)}</pre>"
+    append += case detail.status.to_s
+              when "ok" then "<div class=\"irb-result\">=&gt; #{escape_html(inspect_result(PicoRubyCells.value(detail.value.to_s)))}</div>"
+              when "error" then "<div class=\"irb-error\">#{escape_html("#{detail.errorClass}: #{detail.message}")}</div>"
+              when "stopped" then "<div class=\"irb-note\">#{escape_html("#{ui['picoStopped']} #{ui['picoRestarted']}")}</div>"
+              else "<div class=\"irb-error\">#{escape_html(ui['picoFailed'])}</div>"
+              end
+    history.innerHTML += append
+    history.scrollTop = history.scrollHeight
   end
 
   # ---------- running cells ----------
@@ -1186,8 +1400,11 @@ class ChunkyApp
     # +own+: without installing and loading gems, for the shell's "too slow
     # for live runs"
     own = elapsed ? [elapsed - AutoRun.library_time, 0.0].max : -1
-    bridge.ran(idx, (outcome || :error).to_s, elapsed || -1, auto, own)
-    bridge.gems(installed_json)
+    # a PicoRuby lesson's run went to the worker: picoruby_answer settles it
+    unless outcome == :pending
+      bridge.ran(idx, (outcome || :error).to_s, elapsed || -1, auto, own)
+      bridge.gems(installed_json)
+    end
   end
 
   # A live run keeps nothing it wrote: its new files on the real filesystem
@@ -1216,6 +1433,8 @@ class ChunkyApp
     # a live run starts only for code that parses - otherwise the output
     # stays as it is (autorun.rb)
     return :skipped if auto && !AutoRun.runnable?(code, workshop? ? [] : @bind.local_variables)
+    # a lesson on PicoRuby: the worker runs it, picoruby_answer shows it
+    return start_picoruby_run(idx, code, auto) if picoruby?
 
     if workshop?
       # the shell's callbacks (shell/workspace.rb), across the two Rubies
@@ -1249,6 +1468,7 @@ class ChunkyApp
     dispose_three(idx)
     dispose_sketches(idx)
     Processing.reset__ if processing?
+    Ruby2D.reset__ if ruby2d?   # each run a program of its own: a new window
     watch = FileWatch.snapshot
 
     error = nil
@@ -1279,6 +1499,8 @@ class ChunkyApp
       Turtle.animations = true
     end
     output = buffer.string
+    # a check plays a copy of a ruby2d window: the cell's code once more
+    @run_games.each { |game| game.source = code if game.respond_to?(:source=) }
     # files the code wrote come first; an explicit download_file of the same
     # name replaces its entry
     explicit = @run_downloads

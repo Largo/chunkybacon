@@ -150,6 +150,10 @@ window.LESSONS_JSON = JSON.stringify({
       "gamePaused": "Pause",
       "gameAgain": "Klick oder Leertaste für eine neue Runde",
       "gameTooLong": "Ein Schritt des Spiels hat länger als %.1f s gedauert – eine Endlosschleife?",
+      "r2dTitle": "ruby2d-Fenster «%s», %d × %d Pixel",
+      "r2dKeys": "Tastatur und Maus gehen ans Programm – Esc pausiert, Tab verlässt das Fenster",
+      "r2dClosed": "Das Fenster ist geschlossen",
+      "r2dAgain": "▶ führt die Zelle noch einmal aus",
       "stepButton": "⏯ Schritt für Schritt",
       "stepCellLabel": "Schritt für Schritt durch Zelle %d",
       "stepSlider": "Schritt wählen",
@@ -177,6 +181,10 @@ window.LESSONS_JSON = JSON.stringify({
       "stepTruncated": "Nach %d Schritten habe ich aufgehört mitzuschreiben. Die Zelle lief trotzdem zu Ende.",
       "stepNone": "Diese Zelle ist nicht losgelaufen – es gibt keine Schritte zum Ansehen.",
       "stepLegend": "⟲ = Variable aus einer früheren Zelle (alle Zellen einer Lektion teilen sich ihre Variablen). Gelb = hat sich in diesem Schritt geändert. Tasten auf dem Regler: ← → Pos1 Ende.",
+      "picoSyntax": "PicoRuby konnte diesen Code nicht übersetzen.",
+      "picoStopped": "Nach 10 Sekunden angehalten.",
+      "picoRestarted": "PicoRuby lässt sich nicht unterbrechen und wurde neu gestartet: Die Variablen der Zellen davor sind weg – führe sie noch einmal aus.",
+      "picoFailed": "PicoRuby konnte nicht geladen werden – bitte lade die Seite neu.",
       "spinelTitle": "Spinel: Ruby → C → WebAssembly",
       "spinelLoad": "Spinel und clang laden (rund 27 MB)",
       "spinelCompile": "spinel: Ruby → C",
@@ -342,6 +350,10 @@ window.LESSONS_JSON = JSON.stringify({
       "gamePaused": "Paused",
       "gameAgain": "Click or press Space to play again",
       "gameTooLong": "One step of the game took longer than %.1f s – an endless loop?",
+      "r2dTitle": "ruby2d window “%s”, %d × %d pixels",
+      "r2dKeys": "Keyboard and mouse go to the program – Esc pauses, Tab leaves the window",
+      "r2dClosed": "The window is closed",
+      "r2dAgain": "▶ runs the cell again",
       "stepButton": "⏯ Step through",
       "stepCellLabel": "Step through cell %d",
       "stepSlider": "Choose a step",
@@ -369,6 +381,10 @@ window.LESSONS_JSON = JSON.stringify({
       "stepTruncated": "I stopped taking notes after %d steps. The cell still ran to the end.",
       "stepNone": "This cell did not get going – there are no steps to look at.",
       "stepLegend": "⟲ = a variable from an earlier cell (all cells of a lesson share their variables). Yellow = changed in this step. Keys on the slider: ← → Home End.",
+      "picoSyntax": "PicoRuby could not compile this code.",
+      "picoStopped": "Stopped after 10 seconds.",
+      "picoRestarted": "PicoRuby cannot be interrupted, so it was started anew: the variables of the cells before are gone – run them again.",
+      "picoFailed": "PicoRuby could not be loaded – please reload the page.",
       "spinelTitle": "Spinel: Ruby → C → WebAssembly",
       "spinelLoad": "Loading Spinel and clang (about 27 MB)",
       "spinelCompile": "spinel: Ruby → C",
@@ -534,6 +550,10 @@ window.LESSONS_JSON = JSON.stringify({
       "gamePaused": "一時停止中",
       "gameAgain": "クリックかスペースキーでもう一度",
       "gameTooLong": "ゲームの1ステップに%.1f秒以上かかりました。無限ループかもしれません。",
+      "r2dTitle": "ruby2dのウィンドウ「%s」（%d×%dピクセル）",
+      "r2dKeys": "キーボードとマウスはプログラムに届きます。Escで一時停止、Tabでウィンドウから出ます",
+      "r2dClosed": "ウィンドウは閉じました",
+      "r2dAgain": "▶でセルをもう一度実行します",
       "stepButton": "⏯ 1ステップずつ",
       "stepCellLabel": "セル%dを1ステップずつ",
       "stepSlider": "ステップを選ぶ",
@@ -561,6 +581,10 @@ window.LESSONS_JSON = JSON.stringify({
       "stepTruncated": "%d ステップで記録をやめました。セルは最後まで実行されています。",
       "stepNone": "このセルは動き出しませんでした。見られるステップはありません。",
       "stepLegend": "⟲ = 前のセルの変数です（レッスンのセルはすべて変数を共有します）。黄色 = このステップで変わった値です。スライダーのキー: ← → Home End",
+      "picoSyntax": "PicoRubyはこのコードをコンパイルできませんでした。",
+      "picoStopped": "10秒で止めました。",
+      "picoRestarted": "PicoRubyは途中で止められないため、起動し直しました。前のセルの変数は消えたので、もう一度実行してください。",
+      "picoFailed": "PicoRubyを読み込めませんでした。ページを再読み込みしてください。",
       "spinelTitle": "Spinel：Ruby → C → WebAssembly",
       "spinelLoad": "Spinelとclangを読み込み中（約27 MB）",
       "spinelCompile": "spinel：Ruby → C",
@@ -2935,7 +2959,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 52). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
+            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 55). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
           },
           {
             "t": "c",
@@ -2982,7 +3006,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 52 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
+            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 55 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
           },
           {
             "t": "c",
@@ -3029,7 +3053,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン52で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
+            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン55で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
           },
           {
             "t": "c",
@@ -4938,7 +4962,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 40:</p>"
+            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 43:</p>"
           },
           {
             "t": "c",
@@ -4993,7 +5017,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 40 on:</p>"
+            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 43 on:</p>"
           },
           {
             "t": "c",
@@ -5048,7 +5072,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン40からつくるプロジェクトの構成です：</p>"
+            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン43からつくるプロジェクトの構成です：</p>"
           },
           {
             "t": "c",
@@ -5290,7 +5314,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install faker</code>, oder im <code>Gemfile</code> in der Gruppe <code>:test</code>. In Minitest-Tests (Lektion 44) nimmst du gern Minitests eigenen Startwert, den jeder Lauf ausgibt (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>So erzeugt <code>ruby test.rb --seed 12345</code> genau die Daten des fehlgeschlagenen Laufs noch einmal. <code>Faker::Config.random = nil</code> macht den Zufall wieder zufällig.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky braucht für seinen Laden Testkunden, bei jedem Lauf dieselben. Leg den Zufall auf <code>Random.new(2024)</code> fest und mach ein Array <code>kunden</code> mit 5 Hashes, jeder mit einem <code>:name</code> und einer <code>:email</code>.</div>"
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install faker</code>, oder im <code>Gemfile</code> in der Gruppe <code>:test</code>. In Minitest-Tests (Lektion 47) nimmst du gern Minitests eigenen Startwert, den jeder Lauf ausgibt (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>So erzeugt <code>ruby test.rb --seed 12345</code> genau die Daten des fehlgeschlagenen Laufs noch einmal. <code>Faker::Config.random = nil</code> macht den Zufall wieder zufällig.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky braucht für seinen Laden Testkunden, bei jedem Lauf dieselben. Leg den Zufall auf <code>Random.new(2024)</code> fest und mach ein Array <code>kunden</code> mit 5 Hashes, jeder mit einem <code>:name</code> und einer <code>:email</code>.</div>"
           },
           {
             "t": "x",
@@ -5345,7 +5369,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install faker</code>, or in the <code>Gemfile</code> in the <code>:test</code> group. In Minitest tests (lesson 44) Minitest's own seed is a good choice; every run prints it (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>Then <code>ruby test.rb --seed 12345</code> makes exactly the data of the failed run again. <code>Faker::Config.random = nil</code> makes randomness random again.</p></div><div class='task'><strong>Task:</strong> Chunky needs test customers for his shop, the same ones on every run. Pin the randomness to <code>Random.new(2024)</code> and make an array <code>customers</code> of 5 hashes, each with a <code>:name</code> and an <code>:email</code>.</div>"
+            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install faker</code>, or in the <code>Gemfile</code> in the <code>:test</code> group. In Minitest tests (lesson 47) Minitest's own seed is a good choice; every run prints it (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>Then <code>ruby test.rb --seed 12345</code> makes exactly the data of the failed run again. <code>Faker::Config.random = nil</code> makes randomness random again.</p></div><div class='task'><strong>Task:</strong> Chunky needs test customers for his shop, the same ones on every run. Pin the randomness to <code>Random.new(2024)</code> and make an array <code>customers</code> of 5 hashes, each with a <code>:name</code> and an <code>:email</code>.</div>"
           },
           {
             "t": "x",
@@ -5400,7 +5424,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='自分のパソコンでは'><p><code>gem install faker</code>、または<code>Gemfile</code>の<code>:test</code>グループに。Minitestのテスト（レッスン44）では、Minitest自身のシードを使うのがおすすめです。毎回の実行で表示されます（<code>Run options: --seed 12345</code>）：</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>すると<code>ruby test.rb --seed 12345</code>で、失敗した実行とまったく同じデータがもう一度つくられます。<code>Faker::Config.random = nil</code>で、乱数はまたランダムに戻ります。</p></div><div class='task'><strong>課題：</strong>Chunkyはお店のためのテスト用のお客さんがほしいのです。毎回同じお客さんで。乱数を<code>Random.new(2024)</code>に固定して、5つのハッシュの配列<code>customers</code>をつくってください。どのハッシュにも<code>:name</code>と<code>:email</code>があります。</div>"
+            "html": "<div class='offweb' data-title='自分のパソコンでは'><p><code>gem install faker</code>、または<code>Gemfile</code>の<code>:test</code>グループに。Minitestのテスト（レッスン47）では、Minitest自身のシードを使うのがおすすめです。毎回の実行で表示されます（<code>Run options: --seed 12345</code>）：</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>すると<code>ruby test.rb --seed 12345</code>で、失敗した実行とまったく同じデータがもう一度つくられます。<code>Faker::Config.random = nil</code>で、乱数はまたランダムに戻ります。</p></div><div class='task'><strong>課題：</strong>Chunkyはお店のためのテスト用のお客さんがほしいのです。毎回同じお客さんで。乱数を<code>Random.new(2024)</code>に固定して、5つのハッシュの配列<code>customers</code>をつくってください。どのハッシュにも<code>:name</code>と<code>:email</code>があります。</div>"
           },
           {
             "t": "x",
@@ -5466,7 +5490,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Ein <code>HTMLElementNode</code> mit seinem öffnenden und schliessenden Tag, darin ein <code>ERBContentNode</code> mit dem Ruby-Code. Auf diesem Baum bauen Herbs Werkzeuge auf: ein Linter, der Regeln prüft, ein Formatierer, und Hilfe im Editor.</p><p>Am meisten bringt Herb in Tests: Ein Test, der jede Vorlage prüft, fällt um, sobald jemand ein Tag falsch schliesst – lange bevor es jemand im Browser sieht. Mit Minitest aus Lektion 44:</p>"
+            "html": "<p>Ein <code>HTMLElementNode</code> mit seinem öffnenden und schliessenden Tag, darin ein <code>ERBContentNode</code> mit dem Ruby-Code. Auf diesem Baum bauen Herbs Werkzeuge auf: ein Linter, der Regeln prüft, ein Formatierer, und Hilfe im Editor.</p><p>Am meisten bringt Herb in Tests: Ein Test, der jede Vorlage prüft, fällt um, sobald jemand ein Tag falsch schliesst – lange bevor es jemand im Browser sieht. Mit Minitest aus Lektion 47:</p>"
           },
           {
             "t": "c",
@@ -5537,7 +5561,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>An <code>HTMLElementNode</code> with its opening and closing tag, and inside it an <code>ERBContentNode</code> with the Ruby code. Herb's tools build on this tree: a linter that checks rules, a formatter, and help in the editor.</p><p>Herb pays off most in tests: a test that checks every template falls over as soon as somebody closes a tag wrongly – long before anyone sees it in the browser. With Minitest from lesson 44:</p>"
+            "html": "<p>An <code>HTMLElementNode</code> with its opening and closing tag, and inside it an <code>ERBContentNode</code> with the Ruby code. Herb's tools build on this tree: a linter that checks rules, a formatter, and help in the editor.</p><p>Herb pays off most in tests: a test that checks every template falls over as soon as somebody closes a tag wrongly – long before anyone sees it in the browser. With Minitest from lesson 47:</p>"
           },
           {
             "t": "c",
@@ -5608,7 +5632,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>開くタグと閉じるタグを持つ<code>HTMLElementNode</code>、その中にRubyのコードを持つ<code>ERBContentNode</code>。Herbのツールはこの木の上に成り立っています。ルールを確かめるリンター、フォーマッター、そしてエディタでの手助け。</p><p>Herbがいちばん役に立つのはテストです。すべてのテンプレートを確かめるテストは、だれかがタグの閉じ方をまちがえたとたんに失敗します。ブラウザでだれかが気づくずっと前に。レッスン44のMinitestで：</p>"
+            "html": "<p>開くタグと閉じるタグを持つ<code>HTMLElementNode</code>、その中にRubyのコードを持つ<code>ERBContentNode</code>。Herbのツールはこの木の上に成り立っています。ルールを確かめるリンター、フォーマッター、そしてエディタでの手助け。</p><p>Herbがいちばん役に立つのはテストです。すべてのテンプレートを確かめるテストは、だれかがタグの閉じ方をまちがえたとたんに失敗します。ブラウザでだれかが気づくずっと前に。レッスン47のMinitestで：</p>"
           },
           {
             "t": "c",
@@ -5899,7 +5923,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Ein Schlagzeug ist hier wieder ein String: Jedes Zeichen ist ein Achtel, <code>x</code> die grosse Trommel, <code>h</code> die Hi-Hat, ein Punkt Pause. Die <strong>Kick</strong> ist ein Sinus, dessen Frequenz schnell fällt und der dabei verklingt (<code>Math.exp(-zeit * 15)</code> wird rasch kleiner), die <strong>Hi-Hat</strong> ist Rauschen aus <code>rand</code>. Jeder Klang wird auf seinen Platz zurechtgeschnitten oder mit Stille aufgefüllt, damit der Takt gleichmässig bleibt.</p><p><code>noten</code>, <code>schlagzeug</code>, <code>zusammen</code> – das sind schon die Wörter einer kleinen Sprache für Musik, gebaut aus Arrays, Strings und Blöcken (mehr dazu in Lektion 52, «Eine eigene DSL»). <code>File.binwrite</code> schreibt die Bytes als Datei; sie erscheint unter der Zelle als Download, und <code>show_audio</code> nimmt auch ihren Namen.</p><div class='offweb' data-title='Auf deinem Computer'><p>Dort läuft derselbe Code: <code>File.binwrite(\"lied.wav\", wav(lied))</code> und dann die Datei mit einem beliebigen Player öffnen. Wer WAV-Dateien auch lesen oder in Stereo und 24 Bit schreiben will, nimmt das Gem <code>wavefile</code> (reines Ruby, läuft auch hier mit <code>install_gem \"wavefile\"</code>) – es schreibt für dieses Lied Byte für Byte dieselbe Datei.</p></div><div class='task'><strong>Aufgabe:</strong> Ein Tusch! Schreib die Datei <code>tusch.wav</code>: zuerst die Töne C4, E4, G4 und C5 nacheinander, je 0.25 Sekunden, danach alle vier <strong>zusammen</strong> eine Sekunde lang – insgesamt also 2 Sekunden.</div>"
+            "html": "<p>Ein Schlagzeug ist hier wieder ein String: Jedes Zeichen ist ein Achtel, <code>x</code> die grosse Trommel, <code>h</code> die Hi-Hat, ein Punkt Pause. Die <strong>Kick</strong> ist ein Sinus, dessen Frequenz schnell fällt und der dabei verklingt (<code>Math.exp(-zeit * 15)</code> wird rasch kleiner), die <strong>Hi-Hat</strong> ist Rauschen aus <code>rand</code>. Jeder Klang wird auf seinen Platz zurechtgeschnitten oder mit Stille aufgefüllt, damit der Takt gleichmässig bleibt.</p><p><code>noten</code>, <code>schlagzeug</code>, <code>zusammen</code> – das sind schon die Wörter einer kleinen Sprache für Musik, gebaut aus Arrays, Strings und Blöcken (mehr dazu in Lektion 55, «Eine eigene DSL»). <code>File.binwrite</code> schreibt die Bytes als Datei; sie erscheint unter der Zelle als Download, und <code>show_audio</code> nimmt auch ihren Namen.</p><div class='offweb' data-title='Auf deinem Computer'><p>Dort läuft derselbe Code: <code>File.binwrite(\"lied.wav\", wav(lied))</code> und dann die Datei mit einem beliebigen Player öffnen. Wer WAV-Dateien auch lesen oder in Stereo und 24 Bit schreiben will, nimmt das Gem <code>wavefile</code> (reines Ruby, läuft auch hier mit <code>install_gem \"wavefile\"</code>) – es schreibt für dieses Lied Byte für Byte dieselbe Datei.</p></div><div class='task'><strong>Aufgabe:</strong> Ein Tusch! Schreib die Datei <code>tusch.wav</code>: zuerst die Töne C4, E4, G4 und C5 nacheinander, je 0.25 Sekunden, danach alle vier <strong>zusammen</strong> eine Sekunde lang – insgesamt also 2 Sekunden.</div>"
           },
           {
             "t": "x",
@@ -5962,7 +5986,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>A drum kit is a String again: every character is an eighth note, <code>x</code> the bass drum, <code>h</code> the hi-hat, a dot a rest. The <strong>kick</strong> is a sine whose frequency falls fast while it dies away (<code>Math.exp(-time * 15)</code> shrinks quickly), the <strong>hi-hat</strong> is noise from <code>rand</code>. Every sound is cut to its slot or padded with silence, so the beat stays even.</p><p><code>notes</code>, <code>drums</code>, <code>mix</code> – those are already the words of a small language for music, built from Arrays, Strings and blocks (more in lesson 52, \"Your own DSL\"). <code>File.binwrite</code> writes the bytes as a file; it appears below the cell as a download, and <code>show_audio</code> takes its name too.</p><div class='offweb' data-title='On your machine'><p>The same code runs there: <code>File.binwrite(\"song.wav\", wav(song))</code>, then open the file in any player. To read WAV files as well, or write stereo and 24 bits, use the <code>wavefile</code> gem (pure Ruby, it runs here too with <code>install_gem \"wavefile\"</code>) – for this song it writes the very same file, byte for byte.</p></div><div class='task'><strong>Task:</strong> A fanfare! Write the file <code>fanfare.wav</code>: first the notes C4, E4, G4 and C5 one after another, 0.25 seconds each, then all four <strong>together</strong> for one second – 2 seconds in all.</div>"
+            "html": "<p>A drum kit is a String again: every character is an eighth note, <code>x</code> the bass drum, <code>h</code> the hi-hat, a dot a rest. The <strong>kick</strong> is a sine whose frequency falls fast while it dies away (<code>Math.exp(-time * 15)</code> shrinks quickly), the <strong>hi-hat</strong> is noise from <code>rand</code>. Every sound is cut to its slot or padded with silence, so the beat stays even.</p><p><code>notes</code>, <code>drums</code>, <code>mix</code> – those are already the words of a small language for music, built from Arrays, Strings and blocks (more in lesson 55, \"Your own DSL\"). <code>File.binwrite</code> writes the bytes as a file; it appears below the cell as a download, and <code>show_audio</code> takes its name too.</p><div class='offweb' data-title='On your machine'><p>The same code runs there: <code>File.binwrite(\"song.wav\", wav(song))</code>, then open the file in any player. To read WAV files as well, or write stereo and 24 bits, use the <code>wavefile</code> gem (pure Ruby, it runs here too with <code>install_gem \"wavefile\"</code>) – for this song it writes the very same file, byte for byte.</p></div><div class='task'><strong>Task:</strong> A fanfare! Write the file <code>fanfare.wav</code>: first the notes C4, E4, G4 and C5 one after another, 0.25 seconds each, then all four <strong>together</strong> for one second – 2 seconds in all.</div>"
           },
           {
             "t": "x",
@@ -6025,7 +6049,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ドラムもまた文字列です。1文字が8分音符1つ分で、<code>x</code>はバスドラム、<code>h</code>はハイハット、点は休符です。<strong>キック</strong>は、周波数がすばやく下がりながら消えていくサイン波です（<code>Math.exp(-time * 15)</code>はすぐに小さくなります）。<strong>ハイハット</strong>は<code>rand</code>で作ったノイズです。それぞれの音は自分の枠に合わせて切るか無音で埋めるので、リズムがずれません。</p><p><code>notes</code>、<code>drums</code>、<code>mix</code>――これはもう、配列と文字列とブロックでできた、音楽のための小さな言語の単語です（くわしくはレッスン52「自分だけのDSL」で）。<code>File.binwrite</code>はバイト列をファイルに書き出します。ファイルはセルの下にダウンロードとして現れ、<code>show_audio</code>にはファイル名を渡すこともできます。</p><div class='offweb' data-title='自分のコンピューターでは'><p>同じコードがそのまま動きます。<code>File.binwrite(\"song.wav\", wav(song))</code>で書き出し、好きなプレーヤーで開いてください。WAVファイルを読んだり、ステレオや24ビットで書いたりしたいなら、<code>wavefile</code> gemを使います（純粋なRubyなので、ここでも<code>install_gem \"wavefile\"</code>で動きます）。この曲なら、1バイトも違わない同じファイルを書き出します。</p></div><div class='task'><strong>課題：</strong>ファンファーレを作りましょう！<code>fanfare.wav</code>というファイルを書き出してください。まずC4、E4、G4、C5を順に各0.25秒、そのあと4つを<strong>同時に</strong>1秒鳴らします。全部で2秒です。</div>"
+            "html": "<p>ドラムもまた文字列です。1文字が8分音符1つ分で、<code>x</code>はバスドラム、<code>h</code>はハイハット、点は休符です。<strong>キック</strong>は、周波数がすばやく下がりながら消えていくサイン波です（<code>Math.exp(-time * 15)</code>はすぐに小さくなります）。<strong>ハイハット</strong>は<code>rand</code>で作ったノイズです。それぞれの音は自分の枠に合わせて切るか無音で埋めるので、リズムがずれません。</p><p><code>notes</code>、<code>drums</code>、<code>mix</code>――これはもう、配列と文字列とブロックでできた、音楽のための小さな言語の単語です（くわしくはレッスン55「自分だけのDSL」で）。<code>File.binwrite</code>はバイト列をファイルに書き出します。ファイルはセルの下にダウンロードとして現れ、<code>show_audio</code>にはファイル名を渡すこともできます。</p><div class='offweb' data-title='自分のコンピューターでは'><p>同じコードがそのまま動きます。<code>File.binwrite(\"song.wav\", wav(song))</code>で書き出し、好きなプレーヤーで開いてください。WAVファイルを読んだり、ステレオや24ビットで書いたりしたいなら、<code>wavefile</code> gemを使います（純粋なRubyなので、ここでも<code>install_gem \"wavefile\"</code>で動きます）。この曲なら、1バイトも違わない同じファイルを書き出します。</p></div><div class='task'><strong>課題：</strong>ファンファーレを作りましょう！<code>fanfare.wav</code>というファイルを書き出してください。まずC4、E4、G4、C5を順に各0.25秒、そのあと4つを<strong>同時に</strong>1秒鳴らします。全部で2秒です。</div>"
           },
           {
             "t": "x",
@@ -6083,7 +6107,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Das ist das ganze Spiel, rund 35 Zeilen. <code>schlange.include?(kopf)</code> ist wahr, wenn das neue Feld schon zur Schlange gehört – dann hat Chunky sich gebissen. Und weil das <code>unless</code> verbietet, direkt umzukehren, kann das nicht schon mit einem einzigen Tastendruck passieren.</p><p>Zwei Dinge helfen beim Basteln: Was du in einer Runde mit <code>puts</code> ausgibst, erscheint in einem kleinen Protokoll unter dem Spielfeld. Und wirft eine Runde einen Fehler, hält das Spiel an und zeigt ihn mit der Zeilennummer. Eine Endlosschleife in einer Runde stoppt die Seite nach einer Sekunde, damit sie nicht einfriert.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>show_game</code> gibt es nur auf dieser Seite. Auf dem Computer schreibt man Spiele mit Gems wie <code>ruby2d</code> oder <code>gosu</code>: Sie öffnen ein eigenes Fenster und rufen einen Block auf, sooft ein neues Bild fällig ist – bei ruby2d heisst er <code>update do … end</code>, und Tasten kommen mit <code>on :key_down</code>. Die Idee ist dieselbe wie hier: Dein Programm sagt, was in einer Runde passiert, und die Bibliothek dreht die Runden.</p></div><div class='task'><strong>Aufgabe:</strong> Manche Snake-Varianten haben keine Wände: Wer rechts hinausläuft, kommt links wieder herein, und wer oben hinausläuft, unten. Bau das in Chunkys Snake ein – das Spielfeld ist diesmal 16 × 12 Felder gross. Nur der eigene Schwanz beendet das Spiel noch. Ein Werkzeug dafür kennst du vielleicht noch nicht: <code>%</code> rechnet den Rest beim Teilen aus, <code>17 % 16</code> ist 1.</div>"
+            "html": "<p>Das ist das ganze Spiel, rund 35 Zeilen. <code>schlange.include?(kopf)</code> ist wahr, wenn das neue Feld schon zur Schlange gehört – dann hat Chunky sich gebissen. Und weil das <code>unless</code> verbietet, direkt umzukehren, kann das nicht schon mit einem einzigen Tastendruck passieren.</p><p>Zwei Dinge helfen beim Basteln: Was du in einer Runde mit <code>puts</code> ausgibst, erscheint in einem kleinen Protokoll unter dem Spielfeld. Und wirft eine Runde einen Fehler, hält das Spiel an und zeigt ihn mit der Zeilennummer. Eine Endlosschleife in einer Runde stoppt die Seite nach einer Sekunde, damit sie nicht einfriert.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>show_game</code> gibt es nur auf dieser Seite. Auf dem Computer schreibt man Spiele mit Gems wie <code>ruby2d</code> oder <code>gosu</code>: Sie öffnen ein eigenes Fenster und rufen einen Block auf, sooft ein neues Bild fällig ist – bei ruby2d heisst er <code>update do … end</code>, und Tasten kommen mit <code>on :key_down</code>. Die Idee ist dieselbe wie hier: Dein Programm sagt, was in einer Runde passiert, und die Bibliothek dreht die Runden. Wie das mit ruby2d aussieht, zeigt Lektion 39 – mit Programmen, die hier und auf deinem Computer gleich laufen.</p></div><div class='task'><strong>Aufgabe:</strong> Manche Snake-Varianten haben keine Wände: Wer rechts hinausläuft, kommt links wieder herein, und wer oben hinausläuft, unten. Bau das in Chunkys Snake ein – das Spielfeld ist diesmal 16 × 12 Felder gross. Nur der eigene Schwanz beendet das Spiel noch. Ein Werkzeug dafür kennst du vielleicht noch nicht: <code>%</code> rechnet den Rest beim Teilen aus, <code>17 % 16</code> ist 1.</div>"
           },
           {
             "t": "x",
@@ -6138,7 +6162,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>That is the whole game, about 35 lines. <code>snake.include?(head)</code> is true when the new cell already belongs to the snake – then Chunky has bitten himself. And since the <code>unless</code> forbids turning straight back, that cannot happen with a single key press.</p><p>Two things help while tinkering: what you print with <code>puts</code> in a round appears in a small log below the field. And if a round raises an error, the game stops and shows it with the line number. An endless loop in a round is stopped by the page after a second, so it does not freeze.</p><div class='offweb' data-title='On your machine'><p><code>show_game</code> only exists on this page. On a computer, games are written with gems like <code>ruby2d</code> or <code>gosu</code>: they open a window of their own and call a block whenever a new picture is due – in ruby2d it is <code>update do … end</code>, and keys come in with <code>on :key_down</code>. The idea is the same as here: your program says what happens in one round, and the library runs the rounds.</p></div><div class='task'><strong>Task:</strong> Some versions of Snake have no walls: run out on the right and you come back in on the left, run out at the top and you come back in at the bottom. Build that into Chunky's Snake – this time the field is 16 × 12 cells. Only his own tail still ends the game. One tool for it you may not know yet: <code>%</code> computes the remainder of a division, <code>17 % 16</code> is 1.</div>"
+            "html": "<p>That is the whole game, about 35 lines. <code>snake.include?(head)</code> is true when the new cell already belongs to the snake – then Chunky has bitten himself. And since the <code>unless</code> forbids turning straight back, that cannot happen with a single key press.</p><p>Two things help while tinkering: what you print with <code>puts</code> in a round appears in a small log below the field. And if a round raises an error, the game stops and shows it with the line number. An endless loop in a round is stopped by the page after a second, so it does not freeze.</p><div class='offweb' data-title='On your machine'><p><code>show_game</code> only exists on this page. On a computer, games are written with gems like <code>ruby2d</code> or <code>gosu</code>: they open a window of their own and call a block whenever a new picture is due – in ruby2d it is <code>update do … end</code>, and keys come in with <code>on :key_down</code>. The idea is the same as here: your program says what happens in one round, and the library runs the rounds. Lesson 39 shows what that looks like with ruby2d – with programs that run the same here and on your computer.</p></div><div class='task'><strong>Task:</strong> Some versions of Snake have no walls: run out on the right and you come back in on the left, run out at the top and you come back in at the bottom. Build that into Chunky's Snake – this time the field is 16 × 12 cells. Only his own tail still ends the game. One tool for it you may not know yet: <code>%</code> computes the remainder of a division, <code>17 % 16</code> is 1.</div>"
           },
           {
             "t": "x",
@@ -6193,7 +6217,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>これでゲーム全体ができました。だいたい35行です。<code>snake.include?(head)</code>は、新しいマスがすでにヘビの一部なら真になります。つまり、Chunkyが自分をかんだということです。<code>unless</code>で真後ろへの方向転換を禁止しているので、キーを1回押しただけでそうなることはありません。</p><p>いじって遊ぶときに役立つことが2つあります。1回分の中で<code>puts</code>で出力したものは、フィールドの下の小さなログに出ます。そして、ある回でエラーが起きると、ゲームは止まり、行番号つきでエラーを表示します。1回分の中の無限ループは、ページが固まらないように1秒で止められます。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>show_game</code>はこのページにしかありません。コンピューターでは、<code>ruby2d</code>や<code>gosu</code>といったgemでゲームを書きます。これらは自分のウィンドウを開き、新しい画面が必要になるたびにブロックを呼び出します。ruby2dではそれが<code>update do … end</code>で、キーは<code>on :key_down</code>で受け取ります。考え方はここと同じです。プログラムは1回分に何が起きるかを伝え、くり返しはライブラリーが受け持ちます。</p></div><div class='task'><strong>課題：</strong>Snakeには、壁のないバージョンもあります。右から出ると左から戻り、上から出ると下から戻ってきます。これをChunkyのSnakeに組み込んでください。今回のフィールドは16×12マスです。ゲームが終わるのは、自分のしっぽをかんだときだけです。そのための道具をまだ知らないかもしれません。<code>%</code>は割り算の余りを計算します。<code>17 % 16</code>は1です。</div>"
+            "html": "<p>これでゲーム全体ができました。だいたい35行です。<code>snake.include?(head)</code>は、新しいマスがすでにヘビの一部なら真になります。つまり、Chunkyが自分をかんだということです。<code>unless</code>で真後ろへの方向転換を禁止しているので、キーを1回押しただけでそうなることはありません。</p><p>いじって遊ぶときに役立つことが2つあります。1回分の中で<code>puts</code>で出力したものは、フィールドの下の小さなログに出ます。そして、ある回でエラーが起きると、ゲームは止まり、行番号つきでエラーを表示します。1回分の中の無限ループは、ページが固まらないように1秒で止められます。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>show_game</code>はこのページにしかありません。コンピューターでは、<code>ruby2d</code>や<code>gosu</code>といったgemでゲームを書きます。これらは自分のウィンドウを開き、新しい画面が必要になるたびにブロックを呼び出します。ruby2dではそれが<code>update do … end</code>で、キーは<code>on :key_down</code>で受け取ります。考え方はここと同じです。プログラムは1回分に何が起きるかを伝え、くり返しはライブラリーが受け持ちます。ruby2dで書くとどうなるかは、次のレッスン39で見ていきます。ここでも自分のコンピューターでも同じように動くプログラムです。</p></div><div class='task'><strong>課題：</strong>Snakeには、壁のないバージョンもあります。右から出ると左から戻り、上から出ると下から戻ってきます。これをChunkyのSnakeに組み込んでください。今回のフィールドは16×12マスです。ゲームが終わるのは、自分のしっぽをかんだときだけです。そのための道具をまだ知らないかもしれません。<code>%</code>は割り算の余りを計算します。<code>17 % 16</code>は1です。</div>"
           },
           {
             "t": "x",
@@ -6205,10 +6229,563 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "ruby2d",
+      "de": {
+        "title": "39. Spiele mit ruby2d",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Spiele mit ruby2d</h2><p>In Lektion 38 hat die Seite Chunkys Snake mit <code>show_game</code> laufen lassen, einem Helfer, den es nur hier gibt. Richtige Ruby-Spiele auf dem Computer schreibt man mit einem Gem, und eines der freundlichsten ist <a href=\"https://www.ruby2d.com\" target=\"_blank\" rel=\"noopener\">ruby2d</a>: Es öffnet ein Fenster, zeichnet Formen, Text und Bilder hinein und meldet deinem Programm jede Taste und jeden Klick. Darunter arbeitet SDL, eine C-Bibliothek, auf der auch viele kommerzielle Spiele aufbauen.</p><p>Eine C-Bibliothek kann in diesem Browser nicht laufen. Darum bringt die Seite einen Ersatz mit: den Ruby-Code von ruby2d selbst, unverändert, und dort, wo das Gem SDL aufrufen würde, ein kleines Stück in Ruby. Der Sinn davon: <strong>Jedes Programm dieser Lektion läuft genauso mit dem echten Gem auf deinem Computer.</strong> Hier ist ein vollständiges ruby2d-Programm. Führ es aus, dann erscheint unter der Zelle ein Fenster:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset title: \"Hallo, Chunky!\", background: \"navy\"\n\nSquare.new(x: 270, y: 190, size: 100, color: \"orange\")\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>Zeile für Zeile: <code>require \"ruby2d\"</code> lädt das Gem, und ab dann sind <code>set</code>, <code>Square</code>, <code>show</code> und Co. einfach da. <code>set</code> verändert das Fenster: seinen Titel (<code>title</code>), seinen Hintergrund (<code>background</code>) und mit <code>width:</code> und <code>height:</code> auch seine Grösse – ohne sie ist es 640 × 480 Pixel gross. <code>Square.new</code> macht ein Quadrat und legt es gleich ins Fenster. <code>show</code> öffnet schliesslich das Fenster.</p><p>Gezählt wird wie bei Processing (Lektion 33): <code>x</code> vom linken Rand, <code>y</code> vom oberen Rand, in Pixeln. Das Quadrat beginnt bei 270, 190 und ist 100 Pixel breit, also sitzt es in der Mitte. Neben <code>Square</code> gibt es <code>Rectangle</code> (<code>width:</code>, <code>height:</code>), <code>Circle</code> (<code>x:</code> und <code>y:</code> sind sein Mittelpunkt, dazu <code>radius:</code>), <code>Triangle</code> (drei Ecken <code>x1:</code> … <code>y3:</code>), <code>Line</code> und <code>Text</code>. Eine Farbe ist ein Name wie <code>\"orange\"</code> oder <code>\"navy\"</code>, ein Hex-Code wie <code>\"#d35400\"</code> oder <code>\"random\"</code>, das eine zufällig auswählt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset background: \"#87ceeb\"    # himmelblau\n\n# eine Wiese\nRectangle.new(x: 0, y: 360, width: 640, height: 120, color: \"green\")\n\n# eine Wolke: vor der Sonne geschrieben, aber vor ihr gezeichnet (z: 1)\nCircle.new(x: 530, y: 100, radius: 35, color: \"white\", opacity: 0.8, z: 1)\nCircle.new(x: 560, y: 80, radius: 40, color: \"yellow\")        # die Sonne\n\n# Chunkys Kopf: zwei Ohren, das Gesicht, zwei Augen und eine Nase\nTriangle.new(x1: 250, y1: 120, x2: 300, y2: 200, x3: 230, y3: 210,\n             color: \"#d35400\")\nTriangle.new(x1: 390, y1: 120, x2: 410, y2: 210, x3: 340, y3: 200,\n             color: \"#d35400\")\nTriangle.new(x1: 220, y1: 190, x2: 420, y2: 190, x3: 320, y3: 330,\n             color: \"orange\")\nCircle.new(x: 285, y: 230, radius: 9, color: \"black\")\nCircle.new(x: 355, y: 230, radius: 9, color: \"black\")\nCircle.new(x: 320, y: 310, radius: 8, color: \"black\")\n\nText.new(\"Chunky\", x: 265, y: 380, size: 36, color: \"white\")\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>Formen werden in der Reihenfolge gezeichnet, in der sie entstanden sind – spätere obendrauf. <code>z:</code> ändert das: Eine Form mit grösserem <code>z</code> liegt weiter vorn, darum verdeckt die Wolke die Sonne, obwohl sie zuerst geschrieben wurde. <code>opacity:</code> geht von 0 (unsichtbar) bis 1 (deckend); bei 0,8 scheint die Sonne ein wenig durch die Wolke.</p><p>Jetzt kommt Bewegung hinein. Ein Spiel zeichnet immer wieder ein neues Bild, etwa 60-mal in der Sekunde – jedes davon ist ein <em>Frame</em>. Vor jedem Bild ruft ruby2d den Block auf, den du <code>update</code> gibst. Darin veränderst du deine Formen, und das nächste Bild zeigt sie am neuen Ort:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset background: \"navy\"\n\nspeck = Rectangle.new(x: 0, y: 220, width: 90, height: 30, color: \"#e74c3c\")\ntempo = 4\nzaehler = Text.new(\"Bild 0\", x: 10, y: 10, size: 20)\n\nupdate do\n  speck.x += tempo\n  if speck.x + speck.width >= Window.width || speck.x <= 0\n    tempo = -tempo                     # am Rand umkehren\n  end\n  zaehler.content = \"Bild #{Window.frames}\"\nend\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>Klick ins Fenster, um es zu starten; <kbd>Esc</kbd> pausiert es, <kbd>Tab</kbd> oder ein Klick daneben verlässt es – genau wie beim Snake. <code>speck.x += tempo</code> schiebt den Speck um ein paar Pixel pro Bild weiter; <code>x</code>, <code>y</code>, <code>color</code>, <code>width</code> oder <code>radius</code> einer Form lassen sich jederzeit ändern. <code>Window.width</code> ist die Breite des Fensters, <code>Window.frames</code> zählt die bisher gezeichneten Bilder, und <code>zaehler.content = …</code> gibt einem <code>Text</code> neue Worte. Der <code>update</code>-Block kennt <code>tempo</code> aus der Zeile darüber, wie beim Snake die <code>every</code>-Blöcke: Er ist eine Closure.</p><p>Tasten kommen mit <code>on</code> herein. <code>on :key_down</code> ruft seinen Block einmal auf, wenn eine Taste hinuntergeht, <code>on :key_up</code>, wenn sie wieder hochkommt, und <code>on :key_held</code> in jedem Bild, solange sie unten bleibt – genau richtig zum Laufen. Der Block bekommt ein <code>event</code>: <code>event.key</code> ist der Name der Taste als String – <code>\"left\"</code>, <code>\"up\"</code>, <code>\"space\"</code>, <code>\"return\"</code>, <code>\"a\"</code> – und <code>event.key?(:left)</code> fragt nach einer bestimmten:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset background: \"navy\"\n\nchunky = Square.new(x: 300, y: 220, size: 40, color: \"orange\")\nText.new(\"Pfeile: laufen   Leertaste: neue Farbe\", x: 10, y: 10, size: 18)\n\n# jedes Bild, solange eine Taste unten ist\non :key_held do |event|\n  chunky.x -= 4 if event.key?(:left)\n  chunky.x += 4 if event.key?(:right)\n  chunky.y -= 4 if event.key?(:up)\n  chunky.y += 4 if event.key?(:down)\nend\n\n# einmal pro Druck\non :key_down do |event|\n  chunky.color = \"random\" if event.key == \"space\"\nend\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Maus funktioniert genauso: <code>on :mouse_down</code> (und <code>:mouse_up</code>, <code>:mouse_move</code>) liefert ein Event mit <code>event.x</code> und <code>event.y</code>, der Stelle im Fenster, und <code>event.button</code>, <code>:left</code> oder <code>:right</code>. Jede Form kann <code>contains?(x, y)</code> beantworten: Liegt dieser Punkt auf mir? Mehr braucht ein Klickspiel nicht:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset background: \"white\"\n\nziel = Circle.new(x: 320, y: 240, radius: 40, color: \"red\")\ntreffer = 0\nanzeige = Text.new(\"Treffer: 0\", x: 10, y: 10, size: 24, color: \"black\")\n\non :mouse_down do |event|\n  if ziel.contains?(event.x, event.y)\n    treffer += 1\n    anzeige.content = \"Treffer: #{treffer}\"\n    ziel.x = rand(40..600)\n    ziel.y = rand(40..440)\n    ziel.radius = [ziel.radius - 3, 10].max   # mit jedem Treffer kleiner\n  end\nend\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>Damit lässt sich ein kleines Spiel bauen. Chunky wartet unten im Fenster und läuft nach links und rechts; vom Himmel fällt Speck. Fängt er ihn, zählt das, und das nächste Stück fällt ein bisschen schneller. Drei verpasste Stücke, und das Spiel ist vorbei:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset title: \"Fang den Speck\", background: \"#1d2b53\"\n\nchunky = Rectangle.new(x: 280, y: 440, width: 80, height: 24,\n                       color: \"orange\")\nspeck  = Rectangle.new(x: rand(0..600), y: 0, width: 40, height: 14,\n                       color: \"#e74c3c\")\ntafel  = Text.new(\"Speck: 0  Verpasst: 0\", x: 10, y: 10, size: 20)\ngefangen = 0\nverpasst = 0\n\non :key_held do |event|\n  chunky.x -= 7 if event.key?(:left)\n  chunky.x += 7 if event.key?(:right)\nend\n\nupdate do\n  # Spiel vorbei: nichts bewegt sich mehr\n  next if verpasst >= 3\n\n  speck.y += 3 + gefangen * 0.5        # mit jedem Fang schneller\n  if chunky.contains?(speck.x + speck.width / 2, speck.y + speck.height)\n    gefangen += 1\n    speck.y = 0\n    speck.x = rand(0..600)\n  elsif speck.y > Window.height\n    verpasst += 1\n    speck.y = 0\n    speck.x = rand(0..600)\n  end\n\n  tafel.content = \"Speck: #{gefangen}  Verpasst: #{verpasst}\"\n  tafel.content = \"Spiel vorbei! #{gefangen} Speck\" if verpasst >= 3\nend\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>Alles passiert in <code>update</code>, Bild für Bild: Der Speck fällt ein paar Pixel, dann kommen zwei Fragen. Liegt die Mitte seiner Unterkante auf Chunky (<code>contains?</code>)? Dann ist er gefangen und beginnt oben an einer neuen Stelle. Ist er aus dem Fenster gefallen (<code>speck.y &gt; Window.height</code>)? Dann war er verpasst. <code>next</code> beendet den Block eines Bildes vorzeitig – nach drei verpassten sofort, und nichts bewegt sich mehr.</p><p>Ein paar Dinge sind auf dieser Seite anders. Auf dem Computer lässt <code>show</code> das Fenster laufen, bis du es schliesst, und erst dann geht das Programm nach <code>show</code> weiter; hier dreht die Seite die Bilder, und <code>show</code> kehrt sofort zurück. Was du mit <code>puts</code> ausgibst, erscheint unter dem Fenster. Wirft ein Bild einen Fehler, hält das Fenster an und zeigt ihn mit der Zeilennummer, und eine Endlosschleife in einem Bild wird nach einer Sekunde gestoppt. <code>close</code> schliesst das Fenster; ▶ startet die Zelle neu. Und der Ersatz zeichnet nur Formen und Text: Bilder (<code>Image</code>, <code>Sprite</code>), Klänge (<code>Audio</code>) und Gamepads brauchen das echte Gem.</p><div class='offweb' data-title='Auf deinem Computer'><p>Installiere das Gem mit <code>gem install ruby2d</code>. Auf einem Mac mit Apple-Chip und unter Windows (RubyInstaller) bringt es SDL gleich mit. Unter Linux und auf älteren Macs installierst du zuerst SDL 3 – zum Beispiel mit <code>sudo apt install libsdl3-dev libsdl3-image-dev libsdl3-mixer-dev libsdl3-ttf-dev</code> (Debian, Ubuntu) oder <code>brew install sdl3 sdl3_image sdl3_mixer sdl3_ttf</code> – und dann <code>gem pristine ruby2d</code>; <code>ruby2d setup</code> kann SDL auch selbst bauen. Speichere eines der Programme oben als <code>spiel.rb</code> und starte es mit <code>ruby spiel.rb</code>: Derselbe Code öffnet ein echtes Fenster. Dort gehen auch Bilder und Klänge, etwa <code>Image.new(\"chunky.png\", x: 10, y: 10)</code>. Und <a href=\"https://www.ruby2d.com/try\" target=\"_blank\" rel=\"noopener\">ruby2d.com/try</a> lässt ruby2d ebenfalls im Browser laufen, mit der echten C-Bibliothek, fürs Web übersetzt.</p></div><div class='task'><strong>Aufgabe:</strong> In diesem kleinen Fenster (400 × 300) läuft Chunky seitlich hinaus und verschwindet. Halte ihn drin: Am linken Rand bleibt sein <code>x</code> bei 0, am rechten Rand bleibt seine rechte Seite bei <code>Window.width</code>. Ein Werkzeug dafür: <code>clamp</code> hält eine Zahl zwischen zwei Grenzen – <code>12.clamp(0, 10)</code> ist 10, <code>-3.clamp(0, 10)</code> ist 0.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Chunky läuft aus dem Fenster hinaus. Halte ihn drin:\n# am linken und am rechten Rand bleibt er stehen.\nrequire \"ruby2d\"\n\nset title: \"Chunky bleibt da\", width: 400, height: 300\n\nfuchs = Rectangle.new(x: 170, y: 240, width: 60, height: 40,\n                      color: \"orange\")\n\non :key_held do |event|\n  fuchs.x -= 5 if event.key?(:left)\n  fuchs.x += 5 if event.key?(:right)\nend\n\nshow\n",
+            "check": "games.last && ->(w, before = nil, mover = nil) { w.tick; before = w.objects.map(&:x); w.press(:right, frames: 2); mover = w.objects.zip(before).find { |o, x0| o.x > x0 }&.first; !mover.nil? && (w.press(:right, frames: 200); mover.x + mover.width <= w.width && mover.x + mover.width > w.width - 8) && (w.press(:left, frames: 300); mover.x >= 0 && mover.x < 8) }.(games.last)",
+            "hint": "Seine rechte Seite liegt bei <code>fuchs.x + fuchs.width</code>, also darf sein <code>x</code> von 0 bis <code>Window.width - fuchs.width</code> gehen. Nach dem Bewegen setzt du ihn zwischen diese Grenzen zurück: <code>fuchs.x = fuchs.x.clamp(0, Window.width - fuchs.width)</code> – im <code>on :key_held</code>-Block, unter den zwei Zeilen, die ihn bewegen."
+          }
+        ]
+      },
+      "en": {
+        "title": "39. Games with ruby2d",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Games with ruby2d</h2><p>In lesson 38 the page ran Chunky's Snake with <code>show_game</code>, a helper that only exists here. Real Ruby games on a computer are written with a gem, and one of the friendliest is <a href=\"https://www.ruby2d.com\" target=\"_blank\" rel=\"noopener\">ruby2d</a>: it opens a window, draws shapes, text and pictures in it, and tells your program about every key and every click. Under the hood it uses SDL, a C library that many commercial games are built on too.</p><p>A C library cannot run in this browser. So the page brings a stand-in: ruby2d's own Ruby code, unchanged, with a small piece written in Ruby where the gem would call SDL. The point of it: <strong>every program in this lesson runs just the same with the real gem on your computer.</strong> Here is a complete ruby2d program. Run it, and a window appears below the cell:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset title: \"Hello, Chunky!\", background: \"navy\"\n\nSquare.new(x: 270, y: 190, size: 100, color: \"orange\")\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>Line by line: <code>require \"ruby2d\"</code> loads the gem, and from then on <code>set</code>, <code>Square</code>, <code>show</code> and friends are simply there. <code>set</code> changes the window: its <code>title</code>, its <code>background</code>, and also its size with <code>width:</code> and <code>height:</code> – without them it is 640 × 480 pixels. <code>Square.new</code> makes a square and puts it into the window straight away. <code>show</code> finally opens the window.</p><p>Positions are counted as in Processing (lesson 33): <code>x</code> from the left edge, <code>y</code> from the top edge, in pixels. The square starts at 270, 190 and is 100 pixels wide, so it sits in the middle. Besides <code>Square</code> there are <code>Rectangle</code> (<code>width:</code>, <code>height:</code>), <code>Circle</code> (<code>x:</code> and <code>y:</code> are its centre, plus <code>radius:</code>), <code>Triangle</code> (three corners <code>x1:</code> … <code>y3:</code>), <code>Line</code> and <code>Text</code>. A colour is a name such as <code>\"orange\"</code> or <code>\"navy\"</code>, a hex code like <code>\"#d35400\"</code>, or <code>\"random\"</code>, which picks one by chance:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset background: \"#87ceeb\"    # sky blue\n\n# a meadow\nRectangle.new(x: 0, y: 360, width: 640, height: 120, color: \"green\")\n\n# a cloud: written before the sun, but drawn in front of it (z: 1)\nCircle.new(x: 530, y: 100, radius: 35, color: \"white\", opacity: 0.8, z: 1)\nCircle.new(x: 560, y: 80, radius: 40, color: \"yellow\")        # the sun\n\n# Chunky's head: two ears, the face, two eyes and a nose\nTriangle.new(x1: 250, y1: 120, x2: 300, y2: 200, x3: 230, y3: 210,\n             color: \"#d35400\")\nTriangle.new(x1: 390, y1: 120, x2: 410, y2: 210, x3: 340, y3: 200,\n             color: \"#d35400\")\nTriangle.new(x1: 220, y1: 190, x2: 420, y2: 190, x3: 320, y3: 330,\n             color: \"orange\")\nCircle.new(x: 285, y: 230, radius: 9, color: \"black\")\nCircle.new(x: 355, y: 230, radius: 9, color: \"black\")\nCircle.new(x: 320, y: 310, radius: 8, color: \"black\")\n\nText.new(\"Chunky\", x: 265, y: 380, size: 36, color: \"white\")\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>Shapes are drawn in the order they were made – later ones on top. <code>z:</code> changes that: a shape with a higher <code>z</code> lies in front, which is why the cloud covers the sun although it was written first. <code>opacity:</code> goes from 0 (invisible) to 1 (solid); at 0.8 the sun shines through the cloud a little.</p><p>Now for movement. A game draws a new picture again and again, about 60 times a second – each one is a <em>frame</em>. Before each frame ruby2d calls the block you give to <code>update</code>. In it you change your shapes, and the next frame shows them in their new place:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset background: \"navy\"\n\nbacon = Rectangle.new(x: 0, y: 220, width: 90, height: 30, color: \"#e74c3c\")\nspeed = 4\ncounter = Text.new(\"Frame 0\", x: 10, y: 10, size: 20)\n\nupdate do\n  bacon.x += speed\n  if bacon.x + bacon.width >= Window.width || bacon.x <= 0\n    speed = -speed                     # turn round at the edge\n  end\n  counter.content = \"Frame #{Window.frames}\"\nend\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>Click the window to start it; <kbd>Esc</kbd> pauses it, <kbd>Tab</kbd> or a click elsewhere leaves it – just like the Snake. <code>bacon.x += speed</code> moves the bacon a few pixels per frame; a shape's <code>x</code>, <code>y</code>, <code>color</code>, <code>width</code> or <code>radius</code> can be changed at any time. <code>Window.width</code> is the window's width, <code>Window.frames</code> counts the frames drawn so far, and <code>counter.content = …</code> gives a <code>Text</code> new words. The <code>update</code> block remembers <code>speed</code> from the line above it, as the <code>every</code> blocks did in the Snake: it is a closure.</p><p>Keys arrive with <code>on</code>. <code>on :key_down</code> calls its block once when a key goes down, <code>on :key_up</code> when it comes up again, and <code>on :key_held</code> in every frame while it stays down – just right for walking. The block gets an <code>event</code>: <code>event.key</code> is the key's name as a String – <code>\"left\"</code>, <code>\"up\"</code>, <code>\"space\"</code>, <code>\"return\"</code>, <code>\"a\"</code> – and <code>event.key?(:left)</code> asks for one:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset background: \"navy\"\n\nchunky = Square.new(x: 300, y: 220, size: 40, color: \"orange\")\nText.new(\"Arrow keys: walk   Space: new colour\", x: 10, y: 10, size: 18)\n\n# every frame while a key is down\non :key_held do |event|\n  chunky.x -= 4 if event.key?(:left)\n  chunky.x += 4 if event.key?(:right)\n  chunky.y -= 4 if event.key?(:up)\n  chunky.y += 4 if event.key?(:down)\nend\n\n# once per press\non :key_down do |event|\n  chunky.color = \"random\" if event.key == \"space\"\nend\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>The mouse works the same way: <code>on :mouse_down</code> (and <code>:mouse_up</code>, <code>:mouse_move</code>) gives an event with <code>event.x</code> and <code>event.y</code>, the place in the window, and <code>event.button</code>, <code>:left</code> or <code>:right</code>. Every shape can answer <code>contains?(x, y)</code>: is this point on me? That is all a click game needs:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset background: \"white\"\n\ntarget = Circle.new(x: 320, y: 240, radius: 40, color: \"red\")\nhits = 0\nlabel = Text.new(\"Hits: 0\", x: 10, y: 10, size: 24, color: \"black\")\n\non :mouse_down do |event|\n  if target.contains?(event.x, event.y)\n    hits += 1\n    label.content = \"Hits: #{hits}\"\n    target.x = rand(40..600)\n    target.y = rand(40..440)\n    target.radius = [target.radius - 3, 10].max   # smaller with every hit\n  end\nend\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>With that you can build a small game. Chunky waits at the bottom of the window and runs left and right; bacon falls from the sky. If he catches it, it counts, and the next piece falls a little faster. Three pieces missed and the game is over:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset title: \"Catch the bacon\", background: \"#1d2b53\"\n\nchunky = Rectangle.new(x: 280, y: 440, width: 80, height: 24,\n                       color: \"orange\")\nbacon  = Rectangle.new(x: rand(0..600), y: 0, width: 40, height: 14,\n                       color: \"#e74c3c\")\nboard  = Text.new(\"Bacon: 0  Missed: 0\", x: 10, y: 10, size: 20)\ncaught = 0\nmissed = 0\n\non :key_held do |event|\n  chunky.x -= 7 if event.key?(:left)\n  chunky.x += 7 if event.key?(:right)\nend\n\nupdate do\n  # game over: nothing moves any more\n  next if missed >= 3\n\n  bacon.y += 3 + caught * 0.5          # faster with every catch\n  if chunky.contains?(bacon.x + bacon.width / 2, bacon.y + bacon.height)\n    caught += 1\n    bacon.y = 0\n    bacon.x = rand(0..600)\n  elsif bacon.y > Window.height\n    missed += 1\n    bacon.y = 0\n    bacon.x = rand(0..600)\n  end\n\n  board.content = \"Bacon: #{caught}  Missed: #{missed}\"\n  board.content = \"Game over! #{caught} bacon\" if missed >= 3\nend\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>Everything happens in <code>update</code>, frame after frame: the bacon falls by a few pixels, and then two questions are asked. Is the middle of its lower edge on Chunky (<code>contains?</code>)? Then it is caught and starts again at the top, somewhere new. Has it fallen out of the window (<code>bacon.y &gt; Window.height</code>)? Then it was missed. <code>next</code> ends a frame's block early – after three misses it ends straight away, and nothing moves any more.</p><p>A few things are different on this page. On a computer, <code>show</code> runs the window until you close it, and only then does the program carry on after <code>show</code>; here the page runs the frames, and <code>show</code> returns at once. What you print with <code>puts</code> appears below the window. If a frame raises an error, the window stops and shows it with the line number, and an endless loop in a frame is stopped after a second. <code>close</code> closes the window; ▶ starts the cell again. And the stand-in draws shapes and text only: pictures (<code>Image</code>, <code>Sprite</code>), sound (<code>Audio</code>) and gamepads need the real gem.</p><div class='offweb' data-title='On your machine'><p>Install the gem with <code>gem install ruby2d</code>. On a Mac with Apple silicon and on Windows (RubyInstaller) it brings SDL along. On Linux, and on older Macs, install SDL 3 first – for example <code>sudo apt install libsdl3-dev libsdl3-image-dev libsdl3-mixer-dev libsdl3-ttf-dev</code> (Debian, Ubuntu) or <code>brew install sdl3 sdl3_image sdl3_mixer sdl3_ttf</code> – and then run <code>gem pristine ruby2d</code>; <code>ruby2d setup</code> can also build SDL for you. Save one of the programs above as <code>game.rb</code> and start it with <code>ruby game.rb</code>: the very same code opens a real window. There you can also use pictures and sounds, for instance <code>Image.new(\"chunky.png\", x: 10, y: 10)</code>. And <a href=\"https://www.ruby2d.com/try\" target=\"_blank\" rel=\"noopener\">ruby2d.com/try</a> runs ruby2d in the browser as well, with the real C library compiled for the web.</p></div><div class='task'><strong>Task:</strong> In this small window (400 × 300) Chunky walks out at the sides and disappears. Keep him inside: at the left edge his <code>x</code> stays at 0, and at the right edge his right side stays at <code>Window.width</code>. One tool for it: <code>clamp</code> keeps a number between two limits – <code>12.clamp(0, 10)</code> is 10, <code>-3.clamp(0, 10)</code> is 0.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Chunky walks out of the window. Keep him inside:\n# at the left and at the right edge he stops.\nrequire \"ruby2d\"\n\nset title: \"Chunky stays\", width: 400, height: 300\n\nfox = Rectangle.new(x: 170, y: 240, width: 60, height: 40,\n                    color: \"orange\")\n\non :key_held do |event|\n  fox.x -= 5 if event.key?(:left)\n  fox.x += 5 if event.key?(:right)\nend\n\nshow\n",
+            "check": "games.last && ->(w, before = nil, mover = nil) { w.tick; before = w.objects.map(&:x); w.press(:right, frames: 2); mover = w.objects.zip(before).find { |o, x0| o.x > x0 }&.first; !mover.nil? && (w.press(:right, frames: 200); mover.x + mover.width <= w.width && mover.x + mover.width > w.width - 8) && (w.press(:left, frames: 300); mover.x >= 0 && mover.x < 8) }.(games.last)",
+            "hint": "His right side is at <code>fox.x + fox.width</code>, so his <code>x</code> may go from 0 up to <code>Window.width - fox.width</code>. After moving, put him back between those limits: <code>fox.x = fox.x.clamp(0, Window.width - fox.width)</code> – in the <code>on :key_held</code> block, below the two lines that move him."
+          }
+        ]
+      },
+      "ja": {
+        "title": "39. ruby2dでゲーム",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>ruby2dでゲーム</h2><p>レッスン38では、このページにしかない道具<code>show_game</code>を使って、ChunkyのSnakeを動かしました。コンピューターで本物のRubyのゲームを書くときはgemを使います。中でも親しみやすいのが<a href=\"https://www.ruby2d.com\" target=\"_blank\" rel=\"noopener\">ruby2d</a>です。ウィンドウを開き、その中に図形や文字や画像をかき、キーやクリックのたびにプログラムに知らせてくれます。内側ではSDLというCのライブラリーが動いています。多くの市販のゲームもSDLの上に作られています。</p><p>Cのライブラリーはこのブラウザーでは動きません。そこでこのページは代わりのものを用意しています。ruby2dのRubyのコードはそのまま使い、gemがSDLを呼ぶところだけを小さなRubyのコードで置きかえたものです。大事なのは、<strong>このレッスンのプログラムはどれも、自分のコンピューターで本物のgemを使ってもそのまま動く</strong>ということです。これが完全なruby2dのプログラムです。実行すると、セルの下にウィンドウが現れます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset title: \"Hello, Chunky!\", background: \"navy\"\n\nSquare.new(x: 270, y: 190, size: 100, color: \"orange\")\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>1行ずつ見ていきましょう。<code>require \"ruby2d\"</code>でgemを読み込むと、そこから先は<code>set</code>や<code>Square</code>や<code>show</code>などがそのまま使えます。<code>set</code>はウィンドウを変えます。タイトル（<code>title</code>）、背景（<code>background</code>）、そして<code>width:</code>と<code>height:</code>で大きさも変えられます。指定しなければ640×480ピクセルです。<code>Square.new</code>は正方形を作り、すぐにウィンドウに置きます。最後に<code>show</code>がウィンドウを開きます。</p><p>位置の数え方はProcessing（レッスン33）と同じです。<code>x</code>は左の端から、<code>y</code>は上の端から、ピクセルで数えます。正方形は270, 190から始まり、幅が100ピクセルなので、まん中にあります。<code>Square</code>のほかに、<code>Rectangle</code>（<code>width:</code>、<code>height:</code>）、<code>Circle</code>（<code>x:</code>と<code>y:</code>が中心で、<code>radius:</code>が半径）、<code>Triangle</code>（3つの角<code>x1:</code> … <code>y3:</code>）、<code>Line</code>、<code>Text</code>があります。色は<code>\"orange\"</code>や<code>\"navy\"</code>のような名前、<code>\"#d35400\"</code>のような16進数のコード、またはランダムに選ぶ<code>\"random\"</code>で指定します。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset background: \"#87ceeb\"    # 空色\n\n# 草原\nRectangle.new(x: 0, y: 360, width: 640, height: 120, color: \"green\")\n\n# 雲：太陽より先に書いたけれど、太陽の手前にかく（z: 1）\nCircle.new(x: 530, y: 100, radius: 35, color: \"white\", opacity: 0.8, z: 1)\nCircle.new(x: 560, y: 80, radius: 40, color: \"yellow\")        # 太陽\n\n# Chunkyの頭：耳が2つ、顔、目が2つ、鼻\nTriangle.new(x1: 250, y1: 120, x2: 300, y2: 200, x3: 230, y3: 210,\n             color: \"#d35400\")\nTriangle.new(x1: 390, y1: 120, x2: 410, y2: 210, x3: 340, y3: 200,\n             color: \"#d35400\")\nTriangle.new(x1: 220, y1: 190, x2: 420, y2: 190, x3: 320, y3: 330,\n             color: \"orange\")\nCircle.new(x: 285, y: 230, radius: 9, color: \"black\")\nCircle.new(x: 355, y: 230, radius: 9, color: \"black\")\nCircle.new(x: 320, y: 310, radius: 8, color: \"black\")\n\nText.new(\"Chunky\", x: 265, y: 380, size: 36, color: \"white\")\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>図形は作られた順にかかれ、あとのものが上に重なります。<code>z:</code>でこれを変えられます。<code>z</code>が大きい図形ほど手前に来るので、雲は先に書いたのに太陽をおおっています。<code>opacity:</code>は0（見えない）から1（不透明）までで、0.8なら雲の向こうに太陽が少し透けて見えます。</p><p>次は動きです。ゲームは1秒に60回ほど、何度も新しい絵をかきます。その1枚1枚を<em>フレーム</em>と呼びます。ruby2dは各フレームの前に、<code>update</code>に渡したブロックを呼び出します。その中で図形を変えると、次のフレームでは新しい場所に表示されます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset background: \"navy\"\n\nbacon = Rectangle.new(x: 0, y: 220, width: 90, height: 30, color: \"#e74c3c\")\nspeed = 4\ncounter = Text.new(\"Frame 0\", x: 10, y: 10, size: 20)\n\nupdate do\n  bacon.x += speed\n  if bacon.x + bacon.width >= Window.width || bacon.x <= 0\n    speed = -speed                     # 端で向きを変える\n  end\n  counter.content = \"Frame #{Window.frames}\"\nend\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>ウィンドウをクリックすると動き出します。<kbd>Esc</kbd>で一時停止し、<kbd>Tab</kbd>かほかの場所をクリックするとウィンドウから出ます。Snakeと同じです。<code>bacon.x += speed</code>は、フレームごとにベーコンを数ピクセルずつ動かします。図形の<code>x</code>、<code>y</code>、<code>color</code>、<code>width</code>、<code>radius</code>はいつでも変えられます。<code>Window.width</code>はウィンドウの幅、<code>Window.frames</code>はこれまでにかいたフレームの数です。<code>counter.content = …</code>で<code>Text</code>の文字を変えられます。<code>update</code>のブロックは、Snakeの<code>every</code>のブロックと同じように、すぐ上の行の<code>speed</code>を覚えています。クロージャーだからです。</p><p>キーは<code>on</code>で受け取ります。<code>on :key_down</code>はキーが押されたときに1回、<code>on :key_up</code>はキーが離されたときに、<code>on :key_held</code>はキーが押されているあいだ毎フレーム、ブロックを呼び出します。歩かせるにはこれがぴったりです。ブロックは<code>event</code>を受け取ります。<code>event.key</code>はキーの名前の文字列で、<code>\"left\"</code>、<code>\"up\"</code>、<code>\"space\"</code>、<code>\"return\"</code>、<code>\"a\"</code>などです。<code>event.key?(:left)</code>で特定のキーかどうかを調べられます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset background: \"navy\"\n\nchunky = Square.new(x: 300, y: 220, size: 40, color: \"orange\")\nText.new(\"Arrow keys: walk   Space: new colour\", x: 10, y: 10, size: 18)\n\n# キーが押されているあいだ、毎フレーム\non :key_held do |event|\n  chunky.x -= 4 if event.key?(:left)\n  chunky.x += 4 if event.key?(:right)\n  chunky.y -= 4 if event.key?(:up)\n  chunky.y += 4 if event.key?(:down)\nend\n\n# 1回押すごとに1回\non :key_down do |event|\n  chunky.color = \"random\" if event.key == \"space\"\nend\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>マウスも同じしくみです。<code>on :mouse_down</code>（それに<code>:mouse_up</code>、<code>:mouse_move</code>）は、ウィンドウの中の場所<code>event.x</code>と<code>event.y</code>、そしてボタン<code>event.button</code>（<code>:left</code>か<code>:right</code>）を持つイベントを渡します。どの図形も<code>contains?(x, y)</code>に答えられます。この点は自分の上にあるか、という質問です。クリックゲームに必要なのはこれだけです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset background: \"white\"\n\ntarget = Circle.new(x: 320, y: 240, radius: 40, color: \"red\")\nhits = 0\nlabel = Text.new(\"Hits: 0\", x: 10, y: 10, size: 24, color: \"black\")\n\non :mouse_down do |event|\n  if target.contains?(event.x, event.y)\n    hits += 1\n    label.content = \"Hits: #{hits}\"\n    target.x = rand(40..600)\n    target.y = rand(40..440)\n    target.radius = [target.radius - 3, 10].max   # 当たるたびに小さくなる\n  end\nend\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>これで小さなゲームが作れます。Chunkyはウィンドウの下で待っていて、左右に走ります。空からベーコンが落ちてきます。キャッチすると点が入り、次のベーコンは少し速く落ちてきます。3つ取りのがすとゲームオーバーです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ruby2d\"\n\nset title: \"Catch the bacon\", background: \"#1d2b53\"\n\nchunky = Rectangle.new(x: 280, y: 440, width: 80, height: 24,\n                       color: \"orange\")\nbacon  = Rectangle.new(x: rand(0..600), y: 0, width: 40, height: 14,\n                       color: \"#e74c3c\")\nboard  = Text.new(\"Bacon: 0  Missed: 0\", x: 10, y: 10, size: 20)\ncaught = 0\nmissed = 0\n\non :key_held do |event|\n  chunky.x -= 7 if event.key?(:left)\n  chunky.x += 7 if event.key?(:right)\nend\n\nupdate do\n  # ゲームオーバー：もう何も動かない\n  next if missed >= 3\n\n  bacon.y += 3 + caught * 0.5          # キャッチするたびに速くなる\n  if chunky.contains?(bacon.x + bacon.width / 2, bacon.y + bacon.height)\n    caught += 1\n    bacon.y = 0\n    bacon.x = rand(0..600)\n  elsif bacon.y > Window.height\n    missed += 1\n    bacon.y = 0\n    bacon.x = rand(0..600)\n  end\n\n  board.content = \"Bacon: #{caught}  Missed: #{missed}\"\n  board.content = \"Game over! #{caught} bacon\" if missed >= 3\nend\n\nshow\n"
+          },
+          {
+            "t": "h",
+            "html": "<p>すべては<code>update</code>の中で、1フレームずつ起こります。ベーコンが数ピクセル落ち、それから2つの質問をします。ベーコンの下の辺のまん中がChunkyの上にあるか（<code>contains?</code>）？　それならキャッチしたので、上の別の場所からまた落ちてきます。ウィンドウの外まで落ちたか（<code>bacon.y &gt; Window.height</code>）？　それなら取りのがしです。<code>next</code>はフレームのブロックを途中で終わらせます。3回取りのがしたあとはすぐに終わるので、もう何も動きません。</p><p>このページではいくつか違うところがあります。コンピューターでは<code>show</code>はウィンドウを閉じるまで動き続け、そのあとで<code>show</code>の次の行に進みます。ここではフレームをページが進めるので、<code>show</code>はすぐに戻ります。<code>puts</code>で出力したものはウィンドウの下に出ます。あるフレームでエラーが起きるとウィンドウは止まり、行番号つきでエラーを表示します。フレームの中の無限ループは1秒で止められます。<code>close</code>はウィンドウを閉じます。▶でセルをもう一度実行できます。それから、この代わりのものがかけるのは図形と文字だけです。画像（<code>Image</code>、<code>Sprite</code>）、音（<code>Audio</code>）、ゲームパッドには本物のgemが必要です。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>gem install ruby2d</code>でgemをインストールします。Appleシリコンを積んだMacとWindows（RubyInstaller）では、SDLもいっしょに入ります。Linuxや古いMacでは、先にSDL 3をインストールしてください。たとえば<code>sudo apt install libsdl3-dev libsdl3-image-dev libsdl3-mixer-dev libsdl3-ttf-dev</code>（Debian、Ubuntu）や<code>brew install sdl3 sdl3_image sdl3_mixer sdl3_ttf</code>です。そのあと<code>gem pristine ruby2d</code>を実行します。<code>ruby2d setup</code>でSDLを自分でビルドすることもできます。上のプログラムのどれかを<code>game.rb</code>として保存し、<code>ruby game.rb</code>で起動すると、まったく同じコードで本物のウィンドウが開きます。そこでは画像や音も使えます。たとえば<code>Image.new(\"chunky.png\", x: 10, y: 10)</code>です。<a href=\"https://www.ruby2d.com/try\" target=\"_blank\" rel=\"noopener\">ruby2d.com/try</a>でも、Web向けにコンパイルした本物のCライブラリーで、ruby2dをブラウザーで動かせます。</p></div><div class='task'><strong>課題：</strong>この小さなウィンドウ（400×300）では、Chunkyが横から外へ出て見えなくなってしまいます。ウィンドウの中にとどめてください。左の端では<code>x</code>が0のまま、右の端では右側が<code>Window.width</code>のままになるようにします。そのための道具があります。<code>clamp</code>は数を2つの限界のあいだに収めます。<code>12.clamp(0, 10)</code>は10、<code>-3.clamp(0, 10)</code>は0です。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Chunkyがウィンドウの外へ歩いていってしまう。中にとどめよう：\n# 左の端でも右の端でも止まるように。\nrequire \"ruby2d\"\n\nset title: \"Chunky stays\", width: 400, height: 300\n\nfox = Rectangle.new(x: 170, y: 240, width: 60, height: 40,\n                    color: \"orange\")\n\non :key_held do |event|\n  fox.x -= 5 if event.key?(:left)\n  fox.x += 5 if event.key?(:right)\nend\n\nshow\n",
+            "check": "games.last && ->(w, before = nil, mover = nil) { w.tick; before = w.objects.map(&:x); w.press(:right, frames: 2); mover = w.objects.zip(before).find { |o, x0| o.x > x0 }&.first; !mover.nil? && (w.press(:right, frames: 200); mover.x + mover.width <= w.width && mover.x + mover.width > w.width - 8) && (w.press(:left, frames: 300); mover.x >= 0 && mover.x < 8) }.(games.last)",
+            "hint": "右側は<code>fox.x + fox.width</code>だから、<code>x</code>は0から<code>Window.width - fox.width</code>までならいいんだ。動かしたあとで、その範囲に戻そう：<code>fox.x = fox.x.clamp(0, Window.width - fox.width)</code>。<code>on :key_held</code>のブロックの中、動かす2行の下に書けばいいよ！"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rubies",
+      "de": {
+        "title": "40. Andere Rubys: JRuby, TruffleRuby, mruby & Co.",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Eine Sprache, viele Rubys</h2><p>«Ruby» ist zuerst eine Sprache – die Regeln dafür, was <code>3.times { puts \"Speck\" }</code> bedeutet. Das Programm, das solchen Code ausführt, ist eine <strong>Implementierung</strong> von Ruby, und davon gibt es mehrere. Die, die fast alle meinen, ist <strong>CRuby</strong>, auch MRI genannt («Matz's Ruby Interpreter»): in C geschrieben, von Matz und dem Ruby-Kernteam entwickelt und das Vorbild für alle anderen – eine neue Ruby-Version ist ein neues CRuby. Es führt auch diesen Kurs aus: <a href='https://github.com/ruby/ruby.wasm' target='_blank'>ruby.wasm</a> ist CRuby, übersetzt nach WebAssembly. Drei Konstanten verraten, wo dein Code gerade läuft:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts RUBY_ENGINE    # welche Implementierung\nputs RUBY_VERSION   # welche Version der Sprache\nputs RUBY_PLATFORM  # auf was für einer Maschine\nRUBY_DESCRIPTION"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>ruby</code> ist CRubys Name für sich selbst. <code>wasm32-wasi</code> heisst: kein Windows, kein Linux, kein Mac – eine WebAssembly-Maschine mit WASI, einem Standard, über den WebAssembly-Programme an Dateien und die Uhr kommen. Auf deinem Computer stünde dort etwa <code>x86_64-linux</code> oder <code>arm64-darwin24</code>.</p><p>Auf einem Computer bringt CRuby ausserdem <strong>JIT-Compiler</strong> mit, die Ruby-Code, der oft läuft, noch während das Programm läuft in Maschinencode übersetzen: <strong>YJIT</strong> (seit Ruby 3.1, von Shopify, in Rust geschrieben) und, neu in Ruby 4.0, <strong>ZJIT</strong>, sein experimenteller Nachfolger. Im Browser gibt es keinen von beiden – WebAssembly kann während des Laufs keinen neuen Maschinencode erzeugen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "if defined?(RubyVM::YJIT)\n  \"YJIT ist da, eingeschaltet: #{RubyVM::YJIT.enabled?}\"\nelse\n  \"kein YJIT in diesem Ruby\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<h3>JRuby und TruffleRuby: Ruby auf der VM von Java</h3><p><strong><a href='https://www.jruby.org' target='_blank'>JRuby</a></strong> (seit 2001, viele Jahre geleitet von Charles Nutter und Thomas Enebo) führt Ruby auf der Java Virtual Machine aus. Das bringt den JIT und die Garbage Collectors der JVM, Threads, die wirklich gleichzeitig laufen – CRuby lässt immer nur einen Thread auf einmal Ruby-Code ausführen (die GVL, der globale VM-Lock) – und jede Java-Bibliothek: Nach <code>require \"java\"</code> ist <code>java.util.ArrayList.new</code> ein Objekt wie jedes andere. JRuby 10.1 ist kompatibel zu Ruby 4.0; sein <code>RUBY_ENGINE</code> ist <code>\"jruby\"</code>.</p><p><strong><a href='https://github.com/truffleruby/truffleruby' target='_blank'>TruffleRuby</a></strong> begann 2013 als Forschungsprojekt bei Oracle Labs. Es ist mit dem Truffle-Framework von GraalVM gebaut: ein Interpreter in Java, den der Graal-Compiler in sehr schnellen Maschinencode verwandelt – in vielen Benchmarks das schnellste Ruby überhaupt. Es führt auch C-Erweiterungen aus und kann andere GraalVM-Sprachen wie Python oder JavaScript einbinden. TruffleRuby 40 ist kompatibel zu Ruby 4.0; <code>RUBY_ENGINE</code> ist <code>\"truffleruby\"</code>.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Kleine Rubys: mruby, mruby/c und PicoRuby</h3><p><strong><a href='https://mruby.org' target='_blank'>mruby</a></strong> ist das zweite Ruby von Matz (seit 2012): ein leichtgewichtiges, das man <em>in</em> andere Programme einbaut, so wie viele Spiele die Skriptsprache Lua mitbringen. Ein C-Programm bindet mruby ein und führt darin Ruby-Code aus – auf Wunsch vorher zu kompaktem Bytecode übersetzt (<code>mrbc</code>). Sein Kern folgt dem ISO-Standard für Ruby (ISO/IEC 30170, 2012); alles andere, sogar reguläre Ausdrücke oder <code>Time</code>, kommt als <em>mrbgem</em> dazu, ausgewählt, wenn mruby gebaut wird. Es steckt unter anderem im <a href='https://dragonruby.org' target='_blank'>DragonRuby Game Toolkit</a>, und seine Build-Konfigurationen reichen von der Nintendo Switch bis zum Game Boy Advance – und bis WebAssembly: mruby 4.0 bringt Konfigurationen für Emscripten und WASI mit, also läuft auch mruby im Browser.</p><p><strong>mruby/c</strong> (vom Shimane IT Open-Innovation Center und dem Kyushu Institute of Technology) ist eine VM, noch kleiner als die von mruby, für Mikrocontroller mit ein paar Dutzend Kilobyte Speicher; sie führt den Bytecode von mruby aus. Und <strong><a href='https://github.com/picoruby/picoruby' target='_blank'>PicoRuby</a></strong> (von HASUMI Hitoshi) ist ein ganzes Ruby für Ein-Chip-Mikrocontroller wie den Raspberry Pi Pico: Compiler und VM auf dem Chip, eine Shell namens R2P2, ein IRB, Bibliotheken für LEDs, Sensoren und WLAN. Seit Version 4 läuft es auf der VM von mruby.</p><p>Auch PicoRuby gibt es als WebAssembly – <strong>PicoRuby.wasm</strong> –, und es steckt schon in dieser Seite: Das Inhaltsverzeichnis, den Lektionstext und die Editoren, die du siehst, zeichnet Ruby-Code auf PicoRuby.wasm (0,9 MB). Es ist einen Sekundenbruchteil nach dem Aufruf der Seite bereit, während CRuby (10 MB) im Hintergrund noch lädt. Die nächste Lektion führt deinen Code darauf aus.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>IronRuby, RubyMotion und DragonRuby</h3><p><strong>IronRuby</strong> brachte Ruby auf Microsofts .NET: 2007 bei Microsoft begonnen, 2010 in Version 1.0 erschienen – und bald darauf liegen gelassen, bei Ruby 1.9 (die letzte Version, 1.1.3, stammt von 2011). Jetzt ist es zurück: <a href='https://github.com/Largo/ironruby' target='_blank'>Largo/ironruby</a>, ein Fork vom Autor dieses Kurses, läuft auf .NET 8 und 10 und liest Ruby mit Prism – dem Parser von CRuby selbst –, darum spricht es Ruby 4.0: IronRuby 4.0 ist Ruby 4.0, mit Pattern Matching, <code>it</code> und Endless-Methoden, IRB, RubyGems und Bundler – und mit <code>require \"System.Windows.Forms\"</code> entstehen Windows-Programme in Ruby.</p><p><strong><a href='https://www.rubymotion.com' target='_blank'>RubyMotion</a></strong> übersetzt Ruby im Voraus in native Apps für iPhone, iPad, Mac und Android. Laurent Sansonetti baute es, nachdem er bei Apple MacRuby geleitet hatte, und brachte es 2012 mit seiner Firma HipByte heraus; eine der bekanntesten Apps damit ist das Spiel <em>A Dark Room</em> von Amir Rajan. Heute gehört RubyMotion zu DragonRuby, dessen <strong><a href='https://dragonruby.org' target='_blank'>DragonRuby Game Toolkit</a></strong> (von Amir Rajan und Ryan C. Gordon) auf mruby gebaut ist: eine Engine für 2D-Spiele in Ruby, die dasselbe Spiel für Windows, macOS, Linux, den Browser und Smartphones exportiert.</p><h3>Und noch viele mehr</h3><ul><li><strong>Opal</strong> übersetzt Ruby nach JavaScript: keine Ruby-VM im Browser – das Ruby wird zu JavaScript.</li><li><strong>Natalie</strong> übersetzt Ruby nach C++ und von dort in ein Programm; noch in Arbeit.</li><li><strong>monoruby</strong> ist ein Ruby mit einem eigenen JIT-Compiler, in Rust geschrieben.</li><li><strong>Artichoke</strong> (ein Ruby in Rust) wurde 2025 archiviert, und <strong>Rubinius</strong> (Ruby, grösstenteils in Ruby geschrieben), <strong>MacRuby</strong> (Ruby für den Mac, der Vorläufer von RubyMotion), <strong>MagLev</strong> und <strong>Topaz</strong> sind Geschichte.</li></ul><p>Was sie alle kompatibel hält, sind gemeinsame Tests: <a href='https://github.com/ruby/spec' target='_blank'>ruby/spec</a>, begonnen vom Rubinius-Team, beschreibt in Tausenden Beispielen, wie sich Ruby verhält, und jede Implementierung führt sie aus. Code, der überall laufen soll, fragt <code>RUBY_ENGINE</code>, wo ein Unterschied zählt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def echt_parallel?\n  # JRuby und TruffleRuby lassen Threads wirklich gleichzeitig laufen,\n  # CRuby immer nur einen auf einmal Ruby ausführen (die GVL)\n  %w[jruby truffleruby].include?(RUBY_ENGINE)\nend\n\necht_parallel?"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Die üblichen Ruby-Versionsmanager installieren auch die anderen Rubys: <code>rbenv install --list</code> (aus ruby-build) zeigt neben den CRuby-Versionen <code>jruby-…</code>, <code>truffleruby-…</code> und <code>mruby-…</code>, und auch <code>ruby-install</code> und <code>mise</code> kennen sie. JRuby 10 braucht eine Java-Laufzeit, Version 21 oder neuer.</p></div><div class='task'><strong>Aufgabe:</strong> Schreibe <code>welches_ruby(engine)</code>: Es bekommt ein <code>RUBY_ENGINE</code> und gibt den üblichen Namen der Implementierung zurück – <code>\"ruby\"</code> → <code>\"CRuby\"</code>, <code>\"jruby\"</code> → <code>\"JRuby\"</code>, <code>\"truffleruby\"</code> → <code>\"TruffleRuby\"</code>, <code>\"mruby\"</code> → <code>\"mruby\"</code> – und jeden anderen Namen so, wie er ist.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def welches_ruby(engine)\n  # \"ruby\" -> \"CRuby\", \"jruby\" -> \"JRuby\", ...\nend\n\nwelches_ruby(RUBY_ENGINE)",
+            "check": "welches_ruby(\"ruby\") == \"CRuby\" && welches_ruby(\"jruby\") == \"JRuby\" && welches_ruby(\"truffleruby\") == \"TruffleRuby\" && welches_ruby(\"mruby\") == \"mruby\" && welches_ruby(\"opal\") == \"opal\"",
+            "hint": "<code>case engine</code> mit einem <code>when</code> pro Name und <code>else engine</code> am Schluss – oder ein Hash: <code>{ \"ruby\" => \"CRuby\", … }.fetch(engine, engine)</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "40. Other Rubies: JRuby, TruffleRuby, mruby & co.",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>One language, many Rubies</h2><p>\"Ruby\" is first of all a language – the rules for what <code>3.times { puts \"bacon\" }</code> means. The program that runs such code is a Ruby <strong>implementation</strong>, and there is more than one. The one almost everybody means is <strong>CRuby</strong>, also called MRI (\"Matz's Ruby Interpreter\"): written in C, developed by Matz and the Ruby core team, and the reference for all the others – a new Ruby version is a new CRuby. It runs this course too: <a href='https://github.com/ruby/ruby.wasm' target='_blank'>ruby.wasm</a> is CRuby compiled to WebAssembly. Three constants tell you where your code is running:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts RUBY_ENGINE    # which implementation\nputs RUBY_VERSION   # which version of the language\nputs RUBY_PLATFORM  # which kind of machine\nRUBY_DESCRIPTION"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>ruby</code> is CRuby's name for itself. <code>wasm32-wasi</code> means: not Windows, not Linux, not a Mac – a WebAssembly machine with WASI, a standard way for WebAssembly programs to reach files and the clock. On your computer it would say something like <code>x86_64-linux</code> or <code>arm64-darwin24</code>.</p><p>On a computer, CRuby also brings <strong>JIT compilers</strong>, which turn Ruby code that runs often into machine code while the program runs: <strong>YJIT</strong> (since Ruby 3.1, from Shopify, written in Rust) and, new in Ruby 4.0, <strong>ZJIT</strong>, its experimental successor. In the browser there is neither – WebAssembly cannot create new machine code while it runs:</p>"
+          },
+          {
+            "t": "c",
+            "code": "if defined?(RubyVM::YJIT)\n  \"YJIT is here, enabled: #{RubyVM::YJIT.enabled?}\"\nelse\n  \"no YJIT in this Ruby\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<h3>JRuby and TruffleRuby: Ruby on Java's VM</h3><p><strong><a href='https://www.jruby.org' target='_blank'>JRuby</a></strong> (since 2001, led for many years by Charles Nutter and Thomas Enebo) runs Ruby on the Java Virtual Machine. That brings the JVM's JIT and garbage collectors, threads that really run in parallel – CRuby lets only one thread at a time run Ruby code (the GVL, the global VM lock) – and every Java library: after <code>require \"java\"</code>, <code>java.util.ArrayList.new</code> is an object like any other. JRuby 10.1 is compatible with Ruby 4.0; its <code>RUBY_ENGINE</code> is <code>\"jruby\"</code>.</p><p><strong><a href='https://github.com/truffleruby/truffleruby' target='_blank'>TruffleRuby</a></strong> started in 2013 as a research project at Oracle Labs. It is built with GraalVM's Truffle framework: an interpreter written in Java, which the Graal compiler turns into very fast machine code – in many benchmarks the fastest Ruby there is. It runs C extensions too, and can mix in other GraalVM languages such as Python or JavaScript. TruffleRuby 40 is compatible with Ruby 4.0; <code>RUBY_ENGINE</code> is <code>\"truffleruby\"</code>.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Small Rubies: mruby, mruby/c and PicoRuby</h3><p><strong><a href='https://mruby.org' target='_blank'>mruby</a></strong> is Matz's second Ruby (since 2012): a lightweight one to build <em>into</em> other programs, the way many games carry the scripting language Lua. A C program links mruby and runs Ruby code inside – compiled beforehand to compact bytecode, if you like (<code>mrbc</code>). Its core follows the ISO standard for Ruby (ISO/IEC 30170, 2012); everything else, even regular expressions or <code>Time</code>, comes as an <em>mrbgem</em> chosen when mruby is built. It powers the <a href='https://dragonruby.org' target='_blank'>DragonRuby Game Toolkit</a>, among others, and its build configurations reach from the Nintendo Switch to the Game Boy Advance – and to WebAssembly: mruby 4.0 comes with configurations for Emscripten and WASI, so mruby runs in a browser, too.</p><p><strong>mruby/c</strong> (from the Shimane IT Open-Innovation Center and the Kyushu Institute of Technology) is a VM even smaller than mruby's own, for microcontrollers with a few dozen kilobytes of memory; it runs mruby's bytecode. And <strong><a href='https://github.com/picoruby/picoruby' target='_blank'>PicoRuby</a></strong> (by HASUMI Hitoshi) is a whole Ruby for one-chip microcontrollers such as the Raspberry Pi Pico: compiler and VM on the chip, a shell called R2P2, an IRB, libraries for LEDs, sensors and Wi-Fi. Since version 4 it runs on mruby's VM.</p><p>PicoRuby runs as WebAssembly as well – <strong>PicoRuby.wasm</strong> – and it is in this page already: the index, the lesson text and the editors you see are drawn by Ruby code on PicoRuby.wasm (0.9 MB), which is up a fraction of a second after the page is requested, while CRuby (10 MB) is still loading in the background. The next lesson runs your code on it.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>IronRuby, RubyMotion and DragonRuby</h3><p><strong>IronRuby</strong> brought Ruby to Microsoft's .NET: started at Microsoft in 2007, 1.0 in 2010 – and left behind soon after, at Ruby 1.9 (its last release, 1.1.3, is from 2011). Now it is back: <a href='https://github.com/Largo/ironruby' target='_blank'>Largo/ironruby</a>, a fork by the author of this course, runs on .NET 8 and 10 and reads Ruby with Prism – CRuby's own parser – so it speaks Ruby 4.0: IronRuby 4.0 is Ruby 4.0, with pattern matching, <code>it</code> and endless methods, IRB, RubyGems and Bundler – and <code>require \"System.Windows.Forms\"</code> builds Windows programs in Ruby.</p><p><strong><a href='https://www.rubymotion.com' target='_blank'>RubyMotion</a></strong> compiles Ruby ahead of time into native apps for iPhone, iPad, the Mac and Android. Laurent Sansonetti built it after leading MacRuby at Apple and released it in 2012 with his company HipByte; one of the best-known apps made with it is the game <em>A Dark Room</em> by Amir Rajan. Today RubyMotion belongs to DragonRuby, whose <strong><a href='https://dragonruby.org' target='_blank'>DragonRuby Game Toolkit</a></strong> (by Amir Rajan and Ryan C. Gordon) is built on mruby: an engine for 2D games in Ruby that exports the same game to Windows, macOS, Linux, the browser and phones.</p><h3>And many more</h3><ul><li><strong>Opal</strong> compiles Ruby to JavaScript: no Ruby VM in the browser – the Ruby becomes JavaScript.</li><li><strong>Natalie</strong> compiles Ruby to C++, and from there to a program; still work in progress.</li><li><strong>monoruby</strong> is a Ruby with a JIT compiler of its own, written in Rust.</li><li><strong>Artichoke</strong> (a Ruby in Rust) was archived in 2025, and <strong>Rubinius</strong> (Ruby largely written in Ruby), <strong>MacRuby</strong> (Ruby for the Mac, RubyMotion's ancestor), <strong>MagLev</strong> and <strong>Topaz</strong> are history.</li></ul><p>What keeps them all compatible are shared tests: <a href='https://github.com/ruby/spec' target='_blank'>ruby/spec</a>, started by the Rubinius team, describes how Ruby behaves in thousands of examples, and every implementation runs it. Code that wants to work everywhere asks <code>RUBY_ENGINE</code> where a difference matters:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def threads_in_parallel?\n  # JRuby and TruffleRuby run threads truly in parallel,\n  # CRuby lets one thread at a time run Ruby (the GVL)\n  %w[jruby truffleruby].include?(RUBY_ENGINE)\nend\n\nthreads_in_parallel?"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p>The usual Ruby version managers install the other Rubies, too: <code>rbenv install --list</code> (from ruby-build) shows <code>jruby-…</code>, <code>truffleruby-…</code> and <code>mruby-…</code> next to the CRuby versions, and <code>ruby-install</code> and <code>mise</code> know them as well. JRuby 10 needs a Java runtime, version 21 or newer.</p></div><div class='task'><strong>Task:</strong> Write <code>which_ruby(engine)</code>: it gets a <code>RUBY_ENGINE</code> and returns the implementation's usual name – <code>\"ruby\"</code> → <code>\"CRuby\"</code>, <code>\"jruby\"</code> → <code>\"JRuby\"</code>, <code>\"truffleruby\"</code> → <code>\"TruffleRuby\"</code>, <code>\"mruby\"</code> → <code>\"mruby\"</code> – and any other name as it is.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def which_ruby(engine)\n  # \"ruby\" -> \"CRuby\", \"jruby\" -> \"JRuby\", ...\nend\n\nwhich_ruby(RUBY_ENGINE)",
+            "check": "which_ruby(\"ruby\") == \"CRuby\" && which_ruby(\"jruby\") == \"JRuby\" && which_ruby(\"truffleruby\") == \"TruffleRuby\" && which_ruby(\"mruby\") == \"mruby\" && which_ruby(\"opal\") == \"opal\"",
+            "hint": "<code>case engine</code> with a <code>when</code> for each name and <code>else engine</code> at the end – or a hash: <code>{ \"ruby\" => \"CRuby\", … }.fetch(engine, engine)</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "40. いろいろなRuby：JRuby、TruffleRuby、mrubyなど",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>ひとつの言語、たくさんのRuby</h2><p>「Ruby」はまず言語です。<code>3.times { puts \"bacon\" }</code> が何を意味するかという決まりのことです。そのコードを実行するプログラムをRubyの<strong>処理系</strong>（実装）と呼び、処理系はひとつではありません。ほとんどの人が思い浮かべるのは<strong>CRuby</strong>で、MRI（Matz's Ruby Interpreter）とも呼ばれます。C言語で書かれ、まつもとゆきひろさん（Matz）とRubyコアチームが開発していて、ほかのすべての処理系のお手本です。新しいRubyのバージョンとは、新しいCRubyのことです。このコースを動かしているのもCRubyです。<a href='https://github.com/ruby/ruby.wasm' target='_blank'>ruby.wasm</a> は、CRubyをWebAssemblyにコンパイルしたものです。コードがどこで動いているかは、3つの定数でわかります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts RUBY_ENGINE    # どの処理系か\nputs RUBY_VERSION   # 言語のどのバージョンか\nputs RUBY_PLATFORM  # どんなマシンか\nRUBY_DESCRIPTION"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>ruby</code> はCRubyが自分につけている名前です。<code>wasm32-wasi</code> は、WindowsでもLinuxでもMacでもなく、WASIつきのWebAssemblyマシンという意味です。WASIは、WebAssemblyのプログラムがファイルや時計を使うための標準です。あなたのコンピューターなら <code>x86_64-linux</code> や <code>arm64-darwin24</code> のように表示されます。</p><p>コンピューター上のCRubyには<strong>JITコンパイラー</strong>もあります。よく実行されるRubyのコードを、プログラムの実行中に機械語へ変換するしくみです。Ruby 3.1からの<strong>YJIT</strong>（Shopify製、Rustで書かれています）と、Ruby 4.0で新しく入った、その実験的な後継の<strong>ZJIT</strong>です。ブラウザーではどちらも使えません。WebAssemblyは、実行中に新しい機械語を作れないからです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "if defined?(RubyVM::YJIT)\n  \"YJIT is here, enabled: #{RubyVM::YJIT.enabled?}\"\nelse\n  \"no YJIT in this Ruby\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<h3>JRubyとTruffleRuby：JavaのVMで動くRuby</h3><p><strong><a href='https://www.jruby.org' target='_blank'>JRuby</a></strong>（2001年から。長年Charles NutterさんとThomas Eneboさんが中心です）は、RubyをJava仮想マシン（JVM）の上で動かします。JVMのJITやガベージコレクター、本当に並列に動くスレッド、そしてあらゆるJavaライブラリーが使えます。CRubyでは、Rubyのコードを実行できるスレッドは一度にひとつだけです（GVL、グローバルVMロック）。<code>require \"java\"</code> のあとは、<code>java.util.ArrayList.new</code> もふつうのオブジェクトです。JRuby 10.1はRuby 4.0と互換で、<code>RUBY_ENGINE</code> は <code>\"jruby\"</code> です。</p><p><strong><a href='https://github.com/truffleruby/truffleruby' target='_blank'>TruffleRuby</a></strong> は、2013年にOracle Labsの研究プロジェクトとして始まりました。GraalVMのTruffleフレームワークで作られています。Javaで書かれたインタープリターを、Graalコンパイラーがとても速い機械語に変えるしくみで、多くのベンチマークでいちばん速いRubyです。C拡張も動き、PythonやJavaScriptなど、GraalVMのほかの言語と組み合わせることもできます。TruffleRuby 40はRuby 4.0と互換で、<code>RUBY_ENGINE</code> は <code>\"truffleruby\"</code> です。</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>小さなRuby：mruby、mruby/c、PicoRuby</h3><p><strong><a href='https://mruby.org' target='_blank'>mruby</a></strong> は、Matzさんの2つめのRubyです（2012年から）。ほかのプログラムに<em>組み込む</em>ための軽量なRubyで、多くのゲームがスクリプト言語Luaを内蔵しているのと同じ使い方をします。C言語のプログラムがmrubyをリンクして、その中でRubyのコードを実行します。前もってコンパクトなバイトコードにコンパイルしておくこともできます（<code>mrbc</code>）。コア部分はRubyのISO規格（ISO/IEC 30170、2012年）にしたがっていて、それ以外は正規表現や <code>Time</code> でさえ、mrubyをビルドするときに選ぶ<em>mrbgem</em>として追加します。<a href='https://dragonruby.org' target='_blank'>DragonRuby Game Toolkit</a> などの土台になっていて、ビルド設定はNintendo Switchからゲームボーイアドバンスまでそろっていて、WebAssemblyもそのひとつです。mruby 4.0にはEmscriptenとWASI向けの設定があるので、mrubyもブラウザーで動きます。</p><p><strong>mruby/c</strong>（しまねソフト研究開発センターと九州工業大学による）は、mrubyのVMよりさらに小さなVMで、メモリーが数十キロバイトしかないマイコン向けです。mrubyのバイトコードを実行します。そして<strong><a href='https://github.com/picoruby/picoruby' target='_blank'>PicoRuby</a></strong>（羽角均さん作）は、Raspberry Pi Picoのようなワンチップマイコンのための、まるごとひとつのRubyです。チップの上にコンパイラーとVMがあり、R2P2というシェル、IRB、LEDやセンサーやWi-Fiのためのライブラリーもそろっています。バージョン4からは、mrubyのVMの上で動いています。</p><p>PicoRubyにもWebAssembly版があります。<strong>PicoRuby.wasm</strong>です。じつはこのページにもう入っています。いま見ている目次やレッスンの文章、エディターを描いているのは、PicoRuby.wasm（0.9 MB）の上のRubyコードです。ページを開いてから一瞬で準備ができ、そのあいだにCRuby（10 MB）が裏で読み込まれます。次のレッスンでは、あなたのコードをPicoRuby.wasmで実行します。</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>IronRuby、RubyMotion、DragonRuby</h3><p><strong>IronRuby</strong> は、RubyをMicrosoftの.NETに持ちこみました。2007年にMicrosoftで始まり、2010年に1.0が出ましたが、まもなく開発が止まり、Ruby 1.9のまま残されました（最後のリリースは2011年の1.1.3です）。そのIronRubyが帰ってきました。このコースの作者によるフォーク <a href='https://github.com/Largo/ironruby' target='_blank'>Largo/ironruby</a> は.NET 8と10で動き、CRuby自身のパーサーであるPrismでRubyを読むので、Ruby 4.0を話します。IronRuby 4.0はRuby 4.0で、パターンマッチ、<code>it</code>、endlessメソッド、IRB、RubyGems、Bundlerが使えます。<code>require \"System.Windows.Forms\"</code> で、WindowsのプログラムもRubyで作れます。</p><p><strong><a href='https://www.rubymotion.com' target='_blank'>RubyMotion</a></strong> は、Rubyを前もってコンパイルし、iPhone、iPad、Mac、Androidのネイティブアプリにします。AppleでMacRubyの開発を率いたLaurent Sansonettiさんが作り、2012年に自分の会社HipByteから公開しました。これで作られた有名なアプリのひとつが、Amir Rajanさんのゲーム<em>A Dark Room</em>です。いまRubyMotionはDragonRubyのものです。DragonRubyの<strong><a href='https://dragonruby.org' target='_blank'>DragonRuby Game Toolkit</a></strong>（Amir RajanさんとRyan C. Gordonさん）はmrubyの上に作られた、Rubyで2Dゲームを作るためのエンジンで、同じゲームをWindows、macOS、Linux、ブラウザー、スマートフォン向けに書き出せます。</p><h3>ほかにもたくさん</h3><ul><li><strong>Opal</strong> はRubyをJavaScriptに変換します。ブラウザーにRubyのVMはなく、RubyがJavaScriptになります。</li><li><strong>Natalie</strong> はRubyをC++に変換し、そこからプログラムを作ります。まだ開発中です。</li><li><strong>monoruby</strong> は、独自のJITコンパイラーを持つRubyで、Rustで書かれています。</li><li><strong>Artichoke</strong>（RustによるRuby）は2025年にアーカイブされました。<strong>Rubinius</strong>（大部分をRubyで書いたRuby）、<strong>MacRuby</strong>（Mac向けのRuby。RubyMotionの前身です）、<strong>MagLev</strong>、<strong>Topaz</strong> は、いまでは歴史の一部です。</li></ul><p>これらの互換性を支えているのは共通のテストです。Rubiniusのチームが始めた <a href='https://github.com/ruby/spec' target='_blank'>ruby/spec</a> は、Rubyのふるまいを何千もの例で記述していて、どの処理系もこれを実行します。どこでも動かしたいコードは、違いが問題になるところで <code>RUBY_ENGINE</code> を確かめます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "def threads_in_parallel?\n  # JRubyとTruffleRubyではスレッドが本当に並列に動く。\n  # CRubyでは一度にひとつのスレッドだけがRubyを実行する（GVL）\n  %w[jruby truffleruby].include?(RUBY_ENGINE)\nend\n\nthreads_in_parallel?"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>いつものRubyのバージョン管理ツールで、ほかのRubyもインストールできます。<code>rbenv install --list</code>（ruby-build）を実行すると、CRubyのバージョンと並んで <code>jruby-…</code>、<code>truffleruby-…</code>、<code>mruby-…</code> が表示されます。<code>ruby-install</code> や <code>mise</code> でも使えます。JRuby 10には、バージョン21以上のJava実行環境が必要です。</p></div><div class='task'><strong>課題：</strong> <code>which_ruby(engine)</code> を書いてください。<code>RUBY_ENGINE</code> の値を受け取り、処理系のふつうの名前を返します。<code>\"ruby\"</code> → <code>\"CRuby\"</code>、<code>\"jruby\"</code> → <code>\"JRuby\"</code>、<code>\"truffleruby\"</code> → <code>\"TruffleRuby\"</code>、<code>\"mruby\"</code> → <code>\"mruby\"</code>、それ以外の名前はそのまま返します。</div>"
+          },
+          {
+            "t": "x",
+            "code": "def which_ruby(engine)\n  # \"ruby\" -> \"CRuby\", \"jruby\" -> \"JRuby\", ...\nend\n\nwhich_ruby(RUBY_ENGINE)",
+            "check": "which_ruby(\"ruby\") == \"CRuby\" && which_ruby(\"jruby\") == \"JRuby\" && which_ruby(\"truffleruby\") == \"TruffleRuby\" && which_ruby(\"mruby\") == \"mruby\" && which_ruby(\"opal\") == \"opal\"",
+            "hint": "名前ごとに <code>when</code> を書いた <code>case engine</code> に、最後は <code>else engine</code>。ハッシュでもいけるよ：<code>{ \"ruby\" => \"CRuby\", … }.fetch(engine, engine)</code>。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "picoruby",
+      "engine": "picoruby",
+      "de": {
+        "title": "41. PicoRuby: Ruby auf einem Chip",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>PicoRuby: das kleinste Ruby</h2><p>In dieser Lektion läuft dein Code nicht auf CRuby. Jede Zelle geht an <strong>PicoRuby.wasm</strong> – das Ruby für Mikrocontroller aus der letzten Lektion, hier als WebAssembly in einem eigenen Web Worker, einem Hintergrund-Thread des Browsers. Frag es, wer es ist:</p>"
+          },
+          {
+            "t": "c",
+            "code": "[RUBY_ENGINE, PICORUBY_VERSION, RUBY_PLATFORM]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>\"mruby\"</code>: Seit Version 4 ist PicoRuby auf der VM von mruby gebaut und sagt das auch. <code>PICORUBY_VERSION</code> ist seine eigene Version, und <code>wasm32-Emscripten</code> heisst: mit Emscripten nach WebAssembly übersetzt (ruby.wasm nimmt WASI). Dieses ganze Ruby ist 2 MB gross, komprimiert 0,9 MB – CRubys ruby.wasm hat 32 MB, komprimiert 10 MB. Auf einem Raspberry Pi Pico kommt PicoRuby mit 264 KB Speicher aus.</p><p>Gewöhnliches Ruby funktioniert, wie du es kennst – Klassen, Blöcke, Strings mit <code>#{}</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Fuchs\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def gruss = \"#{name} sagt: Chunky Bacon!\"\nend\n\n%w[Chunky Bacon].map { |name| Fuchs.new(name).gruss }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Um so klein zu bleiben, lässt PicoRuby einiges weg. Eine Methode, die du von CRuby kennst, ist vielleicht einfach nicht da – <code>respond_to?</code> verrät es:</p>"
+          },
+          {
+            "t": "c",
+            "code": "%i[sum tally sort_by group_by zip each_slice inject min max].map do |name|\n  [name, [3, 1, 2].respond_to?(name)]\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Kein <code>sum</code>, <code>tally</code>, <code>sort_by</code>, <code>group_by</code>, <code>zip</code> oder <code>each_slice</code> – aber <code>inject</code>, <code>min</code> und <code>max</code> sind da. Auch <code>Struct</code> und <code>Set</code> fehlen, ebenso Enumeratoren ohne Block (<code>each_with_index.map</code>). Und ganze Zahlen haben 64 Bit und hören dort auf: Wo CRuby von selbst zu grossen Zahlen übergeht, meldet PicoRuby einen Fehler:</p>"
+          },
+          {
+            "t": "c",
+            "code": "gross = 2 ** 62\nbegin\n  gross * 4\nrescue RangeError => e\n  \"RangeError: #{e.message}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dafür hat PicoRuby Dinge, die CRuby fehlen. Ein Mikrocontroller hat kein Betriebssystem mit Threads, also bringt PicoRuby seine eigenen mit: <code>Task</code>. Tasks wechseln sich ab – sobald einer wartet (<code>sleep_ms</code>, in Millisekunden), kommt der nächste dran. Hier blinkt einer eine LED, während das Hauptprogramm einen Sensor liest:</p>"
+          },
+          {
+            "t": "c",
+            "code": "blinken = Task.new do\n  3.times do |i|\n    puts \"LED #{i.even? ? 'an' : 'aus'}\"\n    sleep_ms 100\n  end\nend\n\n3.times do |i|\n  puts \"Sensor: #{20 + i} °C\"\n  sleep_ms 100\nend\nblinken.join"
+          },
+          {
+            "t": "h",
+            "html": "<p>Auf einem echten Pico würde die LED leuchten: <code>led = GPIO.new(25, GPIO::OUT)</code>, dann <code>led.write(1)</code>. Und ein kleines Ruby muss kein armes sein – dieses PicoRuby bringt <code>JSON</code>, <code>YAML</code>, <code>Markdown</code> und sogar <code>SQLite3</code> mit:</p>"
+          },
+          {
+            "t": "c",
+            "code": "fuchs = { name: \"Chunky\", mag: [\"Speck\", \"Ruby\"] }\nputs JSON.generate(fuchs)\n\ndb = SQLite3::Database.new(\":memory:\")\ndb.execute(\"CREATE TABLE snacks (name TEXT)\")\ndb.execute(\"INSERT INTO snacks VALUES ('Speck')\")\ndb.execute(\"SELECT name FROM snacks\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Das IRB von PicoRuby</h3><p>Mit einem Pico sprichst du über ein USB-Kabel und ein Terminalprogramm: Seine Shell R2P2 kennt <code>ls</code>, <code>cat</code>, <code>vim</code> – und <code>irb</code>. Hier ist ein IRB auf diesem PicoRuby: Tippe eine Zeile und drücke <kbd>Enter</kbd>. Versuch <code>[1, 2, 3].sum</code>, <code>2 ** 70</code> oder ein <code>def</code> über mehrere Zeilen – und <code>_</code>, die letzte Antwort:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_irb"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>PicoRuby.wasm muss man nicht installieren: Ein <code>&lt;script&gt;</code>-Tag holt es in jede Webseite, und <code>&lt;script type=\"text/ruby\"&gt;</code> enthält den Code. <code>JS</code> führt zum JavaScript der Seite:</p><pre><code>&lt;p id=\"hello\"&gt;&lt;/p&gt;\n&lt;script src=\"https://cdn.jsdelivr.net/npm/@picoruby/wasm-wasi@latest/dist/init.iife.js\"&gt;&lt;/script&gt;\n&lt;script type=\"text/ruby\"&gt;\n  JS.document.getElementById(\"hello\")[:textContent] = \"Chunky bacon!\"\n&lt;/script&gt;</code></pre><p>Für einen Raspberry Pi Pico gibt es R2P2, eine Firmware-Datei, die du auf das Board ziehst; danach ist das Board ein kleiner Ruby-Computer, mit dem ein Terminalprogramm spricht. Wie man sie baut und aufspielt, steht auf <a href='https://github.com/picoruby/picoruby' target='_blank'>GitHub</a>.</p></div><div class='task'><strong>Aufgabe:</strong> PicoRuby hat kein <code>tally</code> – also schreib es selbst. <code>woerter_zaehlen(woerter)</code> bekommt ein Array von Wörtern und gibt einen Hash zurück: jedes Wort mit seiner Anzahl. Die letzte Zeile der Zelle, <code>woerter_zaehlen(%w[chunky bacon chunky fuchs chunky])</code>, soll <code>{\"chunky\" => 3, \"bacon\" => 1, \"fuchs\" => 1}</code> ergeben.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def woerter_zaehlen(woerter)\n  anzahl = {}\n  # jedes Wort zählen\n  anzahl\nend\n\nwoerter_zaehlen(%w[chunky bacon chunky fuchs chunky])",
+            "check": "result == {\"chunky\" => 3, \"bacon\" => 1, \"fuchs\" => 1} && code.include?(\"def woerter_zaehlen\") && !code.include?(\".tally\")",
+            "hint": "Geh mit <code>each</code> durch die Wörter und zähl hoch: <code>anzahl[wort] = (anzahl[wort] || 0) + 1</code>. <code>Hash.new(0)</code> geht in PicoRuby auch."
+          }
+        ]
+      },
+      "en": {
+        "title": "41. PicoRuby: Ruby on a chip",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>PicoRuby: the smallest Ruby</h2><p>In this lesson your code does not run on CRuby. Every cell goes to <strong>PicoRuby.wasm</strong> – the Ruby for microcontrollers from the last lesson, here as WebAssembly in a Web Worker of its own, a background thread of the browser. Ask it who it is:</p>"
+          },
+          {
+            "t": "c",
+            "code": "[RUBY_ENGINE, PICORUBY_VERSION, RUBY_PLATFORM]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>\"mruby\"</code>: since version 4, PicoRuby is built on mruby's VM, and says so. <code>PICORUBY_VERSION</code> is its own version, and <code>wasm32-Emscripten</code> means it was compiled to WebAssembly with Emscripten (ruby.wasm uses WASI). This whole Ruby is 2 MB, 0.9 MB compressed – CRuby's ruby.wasm is 32 MB, 10 MB compressed. On a Raspberry Pi Pico, PicoRuby makes do with 264 KB of memory.</p><p>Plain Ruby works as you know it – classes, blocks, string interpolation:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Fox\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def greet = \"#{name} says: Chunky bacon!\"\nend\n\n%w[Chunky Bacon].map { |name| Fox.new(name).greet }"
+          },
+          {
+            "t": "h",
+            "html": "<p>To stay that small, PicoRuby leaves things out. A method you know from CRuby may simply not be there – <code>respond_to?</code> tells you:</p>"
+          },
+          {
+            "t": "c",
+            "code": "%i[sum tally sort_by group_by zip each_slice inject min max].map do |name|\n  [name, [3, 1, 2].respond_to?(name)]\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>No <code>sum</code>, <code>tally</code>, <code>sort_by</code>, <code>group_by</code>, <code>zip</code> or <code>each_slice</code> – but <code>inject</code>, <code>min</code> and <code>max</code> are there. <code>Struct</code> and <code>Set</code> are missing, and so are enumerators without a block (<code>each_with_index.map</code>). And integers have 64 bits and stop there: where CRuby moves on to big numbers by itself, PicoRuby raises an error:</p>"
+          },
+          {
+            "t": "c",
+            "code": "big = 2 ** 62\nbegin\n  big * 4\nrescue RangeError => e\n  \"RangeError: #{e.message}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>In return, PicoRuby has things CRuby lacks. A microcontroller has no operating system with threads, so PicoRuby brings its own: <code>Task</code>. Tasks take turns – whenever one waits (<code>sleep_ms</code>, in milliseconds), the next one runs. Here one blinks an LED while the main program reads a sensor:</p>"
+          },
+          {
+            "t": "c",
+            "code": "blink = Task.new do\n  3.times do |i|\n    puts \"LED #{i.even? ? 'on' : 'off'}\"\n    sleep_ms 100\n  end\nend\n\n3.times do |i|\n  puts \"sensor: #{20 + i} °C\"\n  sleep_ms 100\nend\nblink.join"
+          },
+          {
+            "t": "h",
+            "html": "<p>On a real Pico the LED would light up: <code>led = GPIO.new(25, GPIO::OUT)</code>, then <code>led.write(1)</code>. And a small Ruby need not be a poor one – this PicoRuby brings <code>JSON</code>, <code>YAML</code>, <code>Markdown</code> and even <code>SQLite3</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "fox = { name: \"Chunky\", likes: [\"bacon\", \"Ruby\"] }\nputs JSON.generate(fox)\n\ndb = SQLite3::Database.new(\":memory:\")\ndb.execute(\"CREATE TABLE snacks (name TEXT)\")\ndb.execute(\"INSERT INTO snacks VALUES ('bacon')\")\ndb.execute(\"SELECT name FROM snacks\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>PicoRuby's IRB</h3><p>On a Pico you talk to PicoRuby through a USB cable and a terminal program: its shell R2P2 knows <code>ls</code>, <code>cat</code>, <code>vim</code> – and <code>irb</code>. Here is an IRB on this PicoRuby: type a line and press <kbd>Enter</kbd>. Try <code>[1, 2, 3].sum</code>, <code>2 ** 70</code> or a <code>def</code> over several lines – and <code>_</code>, the last answer:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_irb"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p>PicoRuby.wasm needs no installation: one <code>&lt;script&gt;</code> tag puts it into any web page, and <code>&lt;script type=\"text/ruby\"&gt;</code> holds the code. <code>JS</code> leads to the page's JavaScript:</p><pre><code>&lt;p id=\"hello\"&gt;&lt;/p&gt;\n&lt;script src=\"https://cdn.jsdelivr.net/npm/@picoruby/wasm-wasi@latest/dist/init.iife.js\"&gt;&lt;/script&gt;\n&lt;script type=\"text/ruby\"&gt;\n  JS.document.getElementById(\"hello\")[:textContent] = \"Chunky bacon!\"\n&lt;/script&gt;</code></pre><p>For a Raspberry Pi Pico there is R2P2, a firmware file you drag onto the board; afterwards the board is a small Ruby computer that a terminal program talks to. How to build and install it is on <a href='https://github.com/picoruby/picoruby' target='_blank'>GitHub</a>.</p></div><div class='task'><strong>Task:</strong> PicoRuby has no <code>tally</code> – so write it yourself. <code>count_words(words)</code> gets an array of words and returns a hash with each word and how often it occurs. The last line of the cell, <code>count_words(%w[chunky bacon chunky fox chunky])</code>, should give <code>{\"chunky\" => 3, \"bacon\" => 1, \"fox\" => 1}</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def count_words(words)\n  counts = {}\n  # count each word\n  counts\nend\n\ncount_words(%w[chunky bacon chunky fox chunky])",
+            "check": "result == {\"chunky\" => 3, \"bacon\" => 1, \"fox\" => 1} && code.include?(\"def count_words\") && !code.include?(\".tally\")",
+            "hint": "Go through the words with <code>each</code> and count up: <code>counts[word] = (counts[word] || 0) + 1</code>. <code>Hash.new(0)</code> works in PicoRuby, too."
+          }
+        ]
+      },
+      "ja": {
+        "title": "41. PicoRuby：チップの上のRuby",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>PicoRuby：いちばん小さなRuby</h2><p>このレッスンでは、あなたのコードはCRubyでは動きません。どのセルも<strong>PicoRuby.wasm</strong>に送られます。前のレッスンで紹介したマイコン向けのRubyを、WebAssemblyにして、専用のWeb Worker（ブラウザーの裏で動くスレッド）で動かしています。まず、名前を聞いてみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "[RUBY_ENGINE, PICORUBY_VERSION, RUBY_PLATFORM]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>\"mruby\"</code> と答えるのは、バージョン4からPicoRubyがmrubyのVMの上に作られているからです。<code>PICORUBY_VERSION</code> はPicoRuby自身のバージョンで、<code>wasm32-Emscripten</code> は、EmscriptenでWebAssemblyにコンパイルされたという意味です（ruby.wasmはWASIを使います）。このRubyはまるごとで2 MB、圧縮すると0.9 MBです。CRubyのruby.wasmは32 MB、圧縮しても10 MBあります。Raspberry Pi Picoの上では、PicoRubyは264 KBのメモリーで動きます。</p><p>ふつうのRubyは、知っているとおりに動きます。クラスも、ブロックも、文字列の式展開も使えます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Fox\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def greet = \"#{name} says: Chunky bacon!\"\nend\n\n%w[Chunky Bacon].map { |name| Fox.new(name).greet }"
+          },
+          {
+            "t": "h",
+            "html": "<p>小さくあるために、PicoRubyにはないものもあります。CRubyで知っているメソッドが、ここにはないかもしれません。<code>respond_to?</code> で確かめられます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "%i[sum tally sort_by group_by zip each_slice inject min max].map do |name|\n  [name, [3, 1, 2].respond_to?(name)]\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>sum</code>、<code>tally</code>、<code>sort_by</code>、<code>group_by</code>、<code>zip</code>、<code>each_slice</code> はありませんが、<code>inject</code>、<code>min</code>、<code>max</code> はあります。<code>Struct</code> と <code>Set</code> もなく、ブロックなしのEnumerator（<code>each_with_index.map</code>）も使えません。整数は64ビットまでです。CRubyなら自動で大きな整数に切り替わるところで、PicoRubyはエラーを出します。</p>"
+          },
+          {
+            "t": "c",
+            "code": "big = 2 ** 62\nbegin\n  big * 4\nrescue RangeError => e\n  \"RangeError: #{e.message}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>そのかわり、CRubyにはないものもあります。マイコンにはスレッドを持つOSがないので、PicoRubyは自前の <code>Task</code> を持っています。Taskは順番に動きます。どれかが待つと（<code>sleep_ms</code>、ミリ秒単位）、次のTaskが動きます。ここでは、ひとつのTaskがLEDを点滅させ、そのあいだにメインのプログラムがセンサーを読みます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "blink = Task.new do\n  3.times do |i|\n    puts \"LED #{i.even? ? 'on' : 'off'}\"\n    sleep_ms 100\n  end\nend\n\n3.times do |i|\n  puts \"sensor: #{20 + i} °C\"\n  sleep_ms 100\nend\nblink.join"
+          },
+          {
+            "t": "h",
+            "html": "<p>本物のPicoなら、LEDが光ります。<code>led = GPIO.new(25, GPIO::OUT)</code> のあとに <code>led.write(1)</code> です。そして、小さなRubyだからといって、機能が少ないとはかぎりません。このPicoRubyには <code>JSON</code>、<code>YAML</code>、<code>Markdown</code>、さらに <code>SQLite3</code> まであります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "fox = { name: \"Chunky\", likes: [\"bacon\", \"Ruby\"] }\nputs JSON.generate(fox)\n\ndb = SQLite3::Database.new(\":memory:\")\ndb.execute(\"CREATE TABLE snacks (name TEXT)\")\ndb.execute(\"INSERT INTO snacks VALUES ('bacon')\")\ndb.execute(\"SELECT name FROM snacks\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>PicoRubyのIRB</h3><p>Picoとは、USBケーブルとターミナルソフトでやりとりします。PicoRubyのシェルR2P2には <code>ls</code>、<code>cat</code>、<code>vim</code>、そして <code>irb</code> があります。下は、このPicoRubyで動くIRBです。1行入力して <kbd>Enter</kbd> を押してください。<code>[1, 2, 3].sum</code> や <code>2 ** 70</code>、複数行の <code>def</code>、直前の答えを表す <code>_</code> を試してみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_irb"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>PicoRuby.wasmはインストール不要です。<code>&lt;script&gt;</code> タグひとつでどんなWebページにも入れられて、<code>&lt;script type=\"text/ruby\"&gt;</code> の中にコードを書きます。<code>JS</code> からページのJavaScriptを使えます。</p><pre><code>&lt;p id=\"hello\"&gt;&lt;/p&gt;\n&lt;script src=\"https://cdn.jsdelivr.net/npm/@picoruby/wasm-wasi@latest/dist/init.iife.js\"&gt;&lt;/script&gt;\n&lt;script type=\"text/ruby\"&gt;\n  JS.document.getElementById(\"hello\")[:textContent] = \"Chunky bacon!\"\n&lt;/script&gt;</code></pre><p>Raspberry Pi Pico向けには、R2P2というファームウェアのファイルがあり、ボードにドラッグするだけで書き込めます。書き込んだボードは、ターミナルソフトから話しかけられる小さなRubyコンピューターになります。ビルドと書き込みの方法は <a href='https://github.com/picoruby/picoruby' target='_blank'>GitHub</a> にあります。</p></div><div class='task'><strong>課題：</strong> PicoRubyには <code>tally</code> がないので、自分で書きましょう。<code>count_words(words)</code> は単語の配列を受け取り、それぞれの単語と出てきた回数のハッシュを返します。セルの最後の行 <code>count_words(%w[chunky bacon chunky fox chunky])</code> が <code>{\"chunky\" => 3, \"bacon\" => 1, \"fox\" => 1}</code> になるようにしてください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "def count_words(words)\n  counts = {}\n  # 単語をひとつずつ数える\n  counts\nend\n\ncount_words(%w[chunky bacon chunky fox chunky])",
+            "check": "result == {\"chunky\" => 3, \"bacon\" => 1, \"fox\" => 1} && code.include?(\"def count_words\") && !code.include?(\".tally\")",
+            "hint": "<code>each</code> で単語をたどって数を足していこう：<code>counts[word] = (counts[word] || 0) + 1</code>。<code>Hash.new(0)</code> もPicoRubyで使えるよ。"
+          }
+        ]
+      }
+    },
+    {
       "id": "spinel",
       "live": false,
       "de": {
-        "title": "39. Spinel: Ruby wird kompiliert",
+        "title": "42. Spinel: Ruby wird kompiliert",
         "cells": [
           {
             "t": "h",
@@ -6255,7 +6832,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "39. Spinel: Ruby, compiled",
+        "title": "42. Spinel: Ruby, compiled",
         "cells": [
           {
             "t": "h",
@@ -6302,7 +6879,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "39. Spinel：Rubyをコンパイルする",
+        "title": "42. Spinel：Rubyをコンパイルする",
         "cells": [
           {
             "t": "h",
@@ -6357,7 +6934,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "応用コース：timelog"
       },
       "de": {
-        "title": "40. Projekt timelog: Collections",
+        "title": "43. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -6396,7 +6973,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "40. Project timelog: collections",
+        "title": "43. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -6435,7 +7012,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "40. timelogプロジェクト：コレクション",
+        "title": "43. timelogプロジェクト：コレクション",
         "cells": [
           {
             "t": "h",
@@ -6477,7 +7054,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "41. Text parsen: Regex",
+        "title": "44. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -6508,7 +7085,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "41. Parsing text: regex",
+        "title": "44. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -6539,7 +7116,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "41. テキストのパース：正規表現",
+        "title": "44. テキストのパース：正規表現",
         "cells": [
           {
             "t": "h",
@@ -6573,7 +7150,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "42. Methoden richtig bauen",
+        "title": "45. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -6604,7 +7181,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "42. Building methods properly",
+        "title": "45. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -6635,7 +7212,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "42. メソッドをきちんと作る",
+        "title": "45. メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -6669,7 +7246,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "43. Entry & Timesheet",
+        "title": "46. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -6700,7 +7277,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "43. Entry & Timesheet",
+        "title": "46. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -6731,7 +7308,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "43. EntryとTimesheet",
+        "title": "46. EntryとTimesheet",
         "cells": [
           {
             "t": "h",
@@ -6765,7 +7342,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-minitest",
       "de": {
-        "title": "44. Testen mit Minitest",
+        "title": "47. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -6796,7 +7373,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "44. Testing with Minitest",
+        "title": "47. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -6827,7 +7404,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "44. Minitestでテスト",
+        "title": "47. Minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -6861,7 +7438,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "45. Enumerable & Data",
+        "title": "48. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -6873,7 +7450,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 40, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 43, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -6884,7 +7461,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "45. Enumerable & Data",
+        "title": "48. Enumerable & Data",
         "cells": [
           {
             "t": "h",
@@ -6896,7 +7473,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 40, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 43, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -6907,7 +7484,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "45. EnumerableとData",
+        "title": "48. EnumerableとData",
         "cells": [
           {
             "t": "h",
@@ -6919,7 +7496,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン40で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン43で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
           },
           {
             "t": "x",
@@ -6933,7 +7510,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "46. Blocks, Procs & Lambdas",
+        "title": "49. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -6972,7 +7549,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "46. Blocks, procs & lambdas",
+        "title": "49. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -7011,7 +7588,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "46. ブロック、Proc、lambda",
+        "title": "49. ブロック、Proc、lambda",
         "cells": [
           {
             "t": "h",
@@ -7053,7 +7630,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "47. Fehler behandeln",
+        "title": "50. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -7084,7 +7661,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "47. Handling errors",
+        "title": "50. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -7115,7 +7692,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "47. エラー処理",
+        "title": "50. エラー処理",
         "cells": [
           {
             "t": "h",
@@ -7149,7 +7726,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "48. Daten speichern: Formate",
+        "title": "51. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -7204,7 +7781,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "48. Saving data: formats",
+        "title": "51. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -7259,7 +7836,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "48. データの保存：フォーマット",
+        "title": "51. データの保存：フォーマット",
         "cells": [
           {
             "t": "h",
@@ -7317,7 +7894,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "49. Kommandozeile & Gems",
+        "title": "52. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -7344,7 +7921,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "49. Command line & gems",
+        "title": "52. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -7371,7 +7948,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "49. コマンドラインとgem",
+        "title": "52. コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -7401,7 +7978,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "50. Pattern Matching",
+        "title": "53. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -7432,7 +8009,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "50. Pattern matching",
+        "title": "53. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -7463,7 +8040,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "50. パターンマッチ",
+        "title": "53. パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -7497,7 +8074,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "51. Objektmodell & Metaprogrammierung",
+        "title": "54. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -7528,7 +8105,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "51. Object model & metaprogramming",
+        "title": "54. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -7559,7 +8136,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "51. オブジェクトモデルとメタプログラミング",
+        "title": "54. オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -7593,7 +8170,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "52. Eine eigene DSL",
+        "title": "55. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -7605,7 +8182,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 46 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 49 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -7616,7 +8193,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "52. Your own DSL",
+        "title": "55. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -7628,7 +8205,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 46 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 49 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
@@ -7639,7 +8216,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "52. 自分だけのDSL",
+        "title": "55. 自分だけのDSL",
         "cells": [
           {
             "t": "h",
@@ -7651,7 +8228,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン46のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン49のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
           },
           {
             "t": "x",
@@ -7665,7 +8242,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "53. Codequalität & Debugging",
+        "title": "56. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -7688,7 +8265,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "53. Code quality & debugging",
+        "title": "56. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -7711,7 +8288,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "53. コードの品質とデバッグ",
+        "title": "56. コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -7737,7 +8314,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "54. Performance & Nebenläufigkeit",
+        "title": "57. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -7784,7 +8361,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "54. Performance & concurrency",
+        "title": "57. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -7831,7 +8408,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "54. パフォーマンスと並行処理",
+        "title": "57. パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -7881,7 +8458,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "55. Finale: timelog im Web",
+        "title": "58. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -7903,12 +8480,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 49 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 52 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "en": {
-        "title": "55. Finale: timelog on the web",
+        "title": "58. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
@@ -7930,12 +8507,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 49 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 52 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "ja": {
-        "title": "55. フィナーレ：Webで動くtimelog",
+        "title": "58. フィナーレ：Webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -7957,7 +8534,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン49で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン52で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }
