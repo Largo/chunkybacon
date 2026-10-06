@@ -1,0 +1,13 @@
+{
+  "spinel": {
+    "repo": "matz/spinel",
+    "commit": "9d197f231ee3407449eb3e322baff4807d62583e",
+    "date": "2026-10-06"
+  },
+  "prism": "1.9.0",
+  "clang": {
+    "package": "@yowasp/clang",
+    "version": "22.0.0-git20542-10",
+    "integrity": "sha512-V31/z9GrJECKeACTDUyvg2llbEUiFi3bxtL5HSg7H/6sydSxdI/AoVAD9F5ozrfLjotWl0B9rghR87m+DUM/zg=="
+  }
+}
