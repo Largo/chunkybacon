@@ -206,6 +206,37 @@ BrowserGems.files["(shims)"]["processing.rb"] = <<~'RUBY'
     end
   end
 RUBY
+# require "ruby2d": the gem is Ruby around a C extension on SDL3. Its Ruby
+# comes as it is (assets/ruby2d/ruby2d.rb, tools/vendor_ruby2d.rb), ruby2d.rb
+# is the extension in Ruby: draw calls become commands game.js paints, and
+# show hands the window to the page, which runs its frames like a show_game
+# (mount_game; lesson 39). Fetched on the first require, ~210 KB; the gem
+# counts as built in once it is there. The mixing into the top level is taken
+# back when the lesson changes (sync_state), so later lessons do not find
+# `show` or `Square` there; unmix__ also forgets this shim ran, so the next
+# require "ruby2d" mixes again.
+RUBY2D_FILES = %w[assets/ruby2d/ruby2d.rb ruby2d.rb].freeze
+ruby2d_load = <<~'RUBY'
+  unless defined?(Ruby2D::Page)
+    AutoRun.untraced do
+      ENV["HOME"] ||= "/"   # the gem's gamepad_events.rb reads ~ when it loads
+      RUBY2D_FILES.each do |name|
+        source = JSG.w.fetchTextSync(name).to_s
+        raise LoadError, "could not fetch #{name}" if source.start_with?("ERROR ")
+
+        eval(source, TOPLEVEL_BINDING, name)
+      end
+    end
+    Ruby2D.measure__ = lambda do |text, size, style|
+      JSG.w.chunkyCanvasTextWidth(text, size, style.to_i).to_s.to_f
+    end
+    Ruby2D.on_show__ = ->(runner) { ChunkyApp.instance.add_game(runner) }
+    Ruby2D.lang__ = ChunkyApp.instance.lang
+    Ruby2D.replay__ = ->(code) { eval(code, TopLevel.binding, ChunkyApp::EVAL_FILE) }
+  end
+RUBY
+BrowserGems.files["(shims)"]["ruby2d.rb"] = ruby2d_load + "Ruby2D.mix__\n"
+BrowserGems.files["(shims)"]["ruby2d/core.rb"] = ruby2d_load
 # require "herb": the gem is Ruby around one C extension, its parser
 # ("herb/herb"); herb_bridge.rb is that extension, handing the source to the
 # same parser compiled to WebAssembly (index.html: ensureHerb; lesson 35).
@@ -292,6 +323,7 @@ class ChunkyApp
     @lang = state.lang
     @lang = "de" unless @data["ui"].key?(@lang)
     Turtle.lang = @lang   # its errors and the picture's alt text
+    Ruby2D.lang__ = @lang if ruby2d?
     @lesson_id = state.lesson
     @workshop = state.workshop
     seq = state.seq.to_i
@@ -303,6 +335,7 @@ class ChunkyApp
     dispose_shoes
     dispose_sketches
     dispose_games
+    unmix_ruby2d
     load_lesson_files
   end
 
@@ -726,6 +759,21 @@ class ChunkyApp
     Processing.reset__ if idx.nil? && processing?
   end
 
+  # ---------- ruby2d (ruby2d.rb: its windows are games, below) ----------
+
+  def ruby2d? = defined?(Ruby2D::Page) && Ruby2D.respond_to?(:reset__)
+
+  def lang = @lang
+
+  # require "ruby2d" mixed Ruby2D into the top level, as the gem does; the
+  # next lesson starts without it, and its own require mixes it in again
+  def unmix_ruby2d
+    return unless ruby2d?
+
+    Ruby2D.unmix__
+    BrowserGems.loaded.delete("(shims):ruby2d.rb")
+  end
+
   # ---------- games (show_game: game.rb + game.js) ----------
 
   def add_game(game)
@@ -737,6 +785,8 @@ class ChunkyApp
   GAME_TICK_LIMIT = 1.0
   GAME_LABELS = { "play" => "gamePlay", "keys" => "gameKeys", "paused" => "gamePaused",
                   "again" => "gameAgain" }.freeze
+  R2D_LABELS = { "play" => "gamePlay", "keys" => "r2dKeys", "paused" => "gamePaused",
+                 "over" => "r2dClosed", "again" => "r2dAgain" }.freeze
 
   # game.js runs the loop and calls the block once per frame at most, when a
   # timer is due or keys came in; the game answers with the cells that
@@ -753,9 +803,13 @@ class ChunkyApp
   def mount_game(idx, out_el, game)
     node = $d.createElement("div")
     out_el.appendChild(node)
-    labels = GAME_LABELS.transform_values { |key| ui[key].to_s }
-    labels["title"] = format(ui["gameTitle"].to_s, game.width, game.height)
-    opts = { w: game.width, h: game.height, first: game.full_json, labels: labels }
+    # a ruby2d window (ruby2d.rb's Page::Runner) is a canvas, not a grid;
+    # closed, it does not start again - the cell runs it anew
+    canvas = game.respond_to?(:canvas?) && game.canvas?
+    labels = (canvas ? R2D_LABELS : GAME_LABELS).transform_values { |key| ui[key].to_s }
+    labels["title"] = canvas ? format(ui["r2dTitle"].to_s, game.title, game.width, game.height)
+                             : format(ui["gameTitle"].to_s, game.width, game.height)
+    opts = { w: game.width, h: game.height, first: game.full_json, labels: labels, canvas: canvas }
     guard = GameGuard.new(workshop? ? Workshop.paths : [EVAL_FILE], GAME_TICK_LIMIT)
     controller = $window.chunkyGame(node, JSON.generate(opts)) do |now, events|
       events = events.to_s
@@ -787,9 +841,14 @@ class ChunkyApp
       return if @trace
 
       events = 0
+      @late = false
+      # as in AutoRun.with_time_limit: the clock every 128 events, the stop
+      # on the next event of the learner's code (sampling both at once
+      # missed `loop { }` forever, depending on how many events came before)
       @trace = TracePoint.new(:line, :b_call, :c_call) do |tp|
         events += 1
-        raise AutoRun::Stopped if (events & 127).zero? && @paths.include?(tp.path) && clock > @deadline
+        @late = clock > @deadline if (events & 127).zero?
+        raise AutoRun::Stopped if @late && @paths.include?(tp.path)
       end
       @trace.enable
     end
@@ -801,9 +860,11 @@ class ChunkyApp
 
     def step
       @deadline = clock + @seconds
+      @late = false
       yield
     ensure
       @deadline = Float::INFINITY
+      @late = false
     end
 
     private
@@ -1214,6 +1275,7 @@ class ChunkyApp
     dispose_three(idx)
     dispose_sketches(idx)
     Processing.reset__ if processing?
+    Ruby2D.reset__ if ruby2d?   # each run a program of its own: a new window
     watch = FileWatch.snapshot
 
     error = nil
@@ -1244,6 +1306,8 @@ class ChunkyApp
       Turtle.animations = true
     end
     output = buffer.string
+    # a check plays a copy of a ruby2d window: the cell's code once more
+    @run_games.each { |game| game.source = code if game.respond_to?(:source=) }
     # files the code wrote come first; an explicit download_file of the same
     # name replaces its entry
     explicit = @run_downloads

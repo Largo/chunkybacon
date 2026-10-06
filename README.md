@@ -8,7 +8,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **54 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **55 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics, tables, frames and colours
   for the terminal with the [TTY toolkit](https://ttytoolkit.org),
@@ -27,7 +27,9 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   community (RubyKaigi, weird code, how IRB reads code), music computed in
   plain Ruby (samples as an Array, a WAV file built with `pack`, chords and
   a drum beat - played below the cell), Snake built in five steps and
-  played with the arrow keys below the cell, and
+  played with the arrow keys below the cell, games with
+  [ruby2d](https://www.ruby2d.com) whose code opens a real window on your
+  computer too, and
   a project track that builds a small time tracker.
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
@@ -39,7 +41,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   that lost it; `fox["name"]` on a hash with symbol keys suggests
   `fox[:name]`). Ruby's own message stays one click away. 44 rules,
   checked against 70 typical beginner mistakes drawn from the exercises.
-- **Lesson sidebar**: the 54 lessons in three groups (basics, side trips,
+- **Lesson sidebar**: the 55 lessons in three groups (basics, side trips,
   the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a
   drawer.
@@ -76,7 +78,9 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   [sql.js](https://sql.js.org) - SQLite in WebAssembly, loaded only when
   needed - so Sequel's own SQLite adapter runs, and `Sequel.sqlite("x.db")`
   is a real SQLite file you can download: `html/sqlite3_sqljs.rb`;
-  Processing, which draws through OpenGL: `html/processing.rb`; in the
+  Processing, which draws through OpenGL: `html/processing.rb`; ruby2d,
+  whose own Ruby runs here with its C extension on SDL3 written in Ruby:
+  `html/ruby2d.rb`; in the
   cache, `SUBSTITUTES`: a dependency on `bigdecimal` installs
   [bigdecimal-pure](https://github.com/Largo/bigdecimal-pure), which
   unblocks activesupport, liquid, prawn, dry-types …) or the gem that
@@ -148,6 +152,14 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   and Space; Esc pauses, Tab leaves), a screen reader hears the score and
   the end of a round, and an endless loop in a round is stopped after a
   second. Checks play the game headless.
+- **ruby2d games, unchanged**: `require "ruby2d"`, shapes, `update do`,
+  `on :key_held`, `show` - lesson 39 runs real
+  [ruby2d](https://www.ruby2d.com) 1.0 programs: the gem's own Ruby
+  (vendored as it is, `tools/vendor_ruby2d.rb`) with the part it writes in
+  C on SDL3 stood in for by `html/ruby2d.rb`, the window a canvas below the
+  cell that the page drives like a game. The same file opens a real window
+  with `ruby game.rb` on a computer. Shapes, colours, text, keys, mouse;
+  not images, sprites, sound or gamepads.
 - Chunky Bacon, an original cartoon fox, cheers you on.
 
 ## On your own computer: the chunky_bacon gem

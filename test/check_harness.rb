@@ -53,6 +53,20 @@ require_relative "../html/turtle"
 # records each game, and a check plays copies of them (games), as in main.rb
 require_relative "../html/game"
 $shown_games = []
+# require "ruby2d" finds the browser's stand-in (html/ruby2d.rb over the
+# gem's own Ruby, assets/ruby2d/), mixed into the top level as in main.rb;
+# a shown window goes to $shown_games, and a check plays a replayed copy
+File.write(File.join(SHIMS_DIR, "ruby2d.rb"),
+           "load #{File.expand_path('../html/ruby2d.rb', __dir__).inspect} unless defined?(Ruby2D::Page)\n" \
+           "Ruby2D.on_show__ = ->(runner) { $shown_games << runner }\nRuby2D.mix__\n")
+# a lesson after the ruby2d one must not find `show` or `Square` at the top
+# level, as in main.rb (sync_state); the next require mixes again
+def unmix_ruby2d
+  return unless defined?(Ruby2D::Page)
+
+  Ruby2D.unmix__
+  $LOADED_FEATURES.delete_if { |f| f.start_with?(SHIMS_DIR) && f.end_with?("/ruby2d.rb") }
+end
 module Kernel
   def download_file(data, name = nil)
     $explicit_downloads << (name || data).to_s
@@ -590,6 +604,48 @@ end),
   end
 end)]
   },
+  # the ruby2d window (ruby2d.rb): the check replays the cell and holds the
+  # arrow keys on that copy until Chunky reaches both edges
+  "ruby2d" => {
+    "de" => [%(require "ruby2d"
+set title: "Chunky bleibt da", width: 400, height: 300
+fuchs = Rectangle.new(x: 170, y: 240, width: 60, height: 40, color: "orange")
+on :key_held do |event|
+  fuchs.x -= 5 if event.key?(:left)
+  fuchs.x += 5 if event.key?(:right)
+  fuchs.x = fuchs.x.clamp(0, Window.width - fuchs.width)
+end
+show),
+             %(require "ruby2d"
+set title: "Chunky bleibt da", width: 400, height: 300
+fuchs = Rectangle.new(x: 170, y: 240, width: 60, height: 40, color: "orange")
+on :key_held do |event|
+  fuchs.x -= 5 if event.key?(:left) && fuchs.x > 0
+  fuchs.x += 5 if event.key?(:right) && fuchs.x + fuchs.width < Window.width
+end
+show)],
+    "en" => [%(require "ruby2d"
+set title: "Chunky stays", width: 400, height: 300
+fox = Rectangle.new(x: 170, y: 240, width: 60, height: 40, color: "orange")
+on :key_held do |event|
+  fox.x -= 5 if event.key?(:left)
+  fox.x += 5 if event.key?(:right)
+  fox.x = fox.x.clamp(0, Window.width - fox.width)
+end
+show),
+             %(require "ruby2d"
+set title: "Chunky stays", width: 400, height: 300
+fox = Rectangle.new(x: 170, y: 240, width: 60, height: 40, color: "orange")
+on :key_held do |event|
+  fox.x -= 5 if event.key?(:left)
+  fox.x += 5 if event.key?(:right)
+end
+update do
+  fox.x = 0 if fox.x < 0
+  fox.x = Window.width - fox.width if fox.x + fox.width > Window.width
+end
+show)]
+  },
   "tl-collections" => {
     "de" => [%(eintraege = [{ projekt: "ProjectX", stunden: 3.5 }, { projekt: "Intern", stunden: 2.0 }, { projekt: "ProjectX", stunden: 3.0 }]
 stunden = eintraege.group_by { |e| e[:projekt] }.transform_values { |l| l.sum { |e| e[:stunden] } })],
@@ -1056,7 +1112,10 @@ def run_in(bind, code)
   result = nil
   begin
     Processing.reset__ if defined?(Processing::Context)
+    Ruby2D.reset__ if defined?(Ruby2D::Page)
+    shown = $shown_games.length
     result = eval(code, bind, "chunky.rb")
+    $shown_games.drop(shown).each { |game| game.source = code if game.respond_to?(:source=) }
     sketch = Processing.start__ if defined?(Processing::Context)
     $shown_sketches << sketch if sketch
   rescue Exception => e
@@ -1095,6 +1154,7 @@ def run_harness(langs)
       # its own top-level scope, as main.rb's TopLevel.binding: a `using`
       # stays in its lesson
       bind = RubyVM::InstructionSequence.compile("proc { binding }.call", "chunky.rb").eval
+      unmix_ruby2d
       load_lesson_files(lesson)
       $letter_answers = []
 

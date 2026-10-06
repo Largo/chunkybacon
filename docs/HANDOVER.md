@@ -4,7 +4,7 @@ Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
 Work in progress - what is unfinished, and in what state - is in
 `docs/OPEN_WORK.md`.
-Last updated 2026-10-06 (54 lessons in German, English and Japanese).
+Last updated 2026-10-06 (55 lessons in German, English and Japanese).
 
 ## 1. Where it runs
 
@@ -71,7 +71,11 @@ html/
   processing.rb         require "processing": the gem's API in pure Ruby, frames recorded (§6h)
   processing.js         a sketch's window: paints the frames, sends mouse and keys (§6h)
   game.rb               show_game: ChunkyGame, a grid game's cells, timers and keys in plain Ruby; runs headless for checks (§6)
-  game.js               a game's grid: the loop on requestAnimationFrame, keys, focus, its live region (§6)
+  game.js               a game's grid: the loop on requestAnimationFrame, keys, focus, its live region (§6);
+                        a ruby2d window's canvas (the same loop, draw commands, SDL key names)
+  ruby2d.rb             require "ruby2d": ruby2d's C extension in Ruby (draw calls -> commands),
+                        show handing the window to the page, the top-level mixing taken back (§6l)
+  assets/ruby2d/        ruby2d 1.0.0's own Ruby files, joined unchanged (tools/vendor_ruby2d.rb), + LICENSE.md
   herb_bridge.rb        require "herb/herb": Herb's C parser, handed to its WebAssembly build (§6j)
   assets/herb/          Herb's parser as WebAssembly + 3 files of @ruby/prism (tools/vendor_herb.rb)
   workshop.rb           the workshop's runs: project files as the virtual FS,
@@ -110,6 +114,7 @@ tools/vendor_pyodide.rb    Pyodide + pandas, sympy, scikit-learn, matplotlib int
 tools/vendor_sqljs.rb      sql.js (SQLite in WebAssembly) into html/assets/sqljs/ (§6f)
 tools/build_box_font.rb    html/assets/fonts/chunky-box-drawing.woff, box drawing for the code font (§6g)
 tools/vendor_herb.rb       Herb's WebAssembly parser into html/assets/herb/ (§6j)
+tools/vendor_ruby2d.rb     ruby2d's Ruby files into html/assets/ruby2d/ruby2d.rb, the .gem checked against rubygems.org's SHA-256 (§6l)
 tools/offline_files.rb     html/offline-files.txt - rerun after adding/removing a file
 tools/dev_server.rb        nginx's stand-in without Docker: html/, the bridges, the same headers and rules (§7)
 tools/build_embed_ui.rb    html/embed-ui.js from lessons.js's ui strings (--check: current?)
@@ -137,6 +142,7 @@ test/ansi_test.rb          ANSI colours to HTML under CRuby
 test/object_graph_test.rb  show_objects under CRuby: walk, SVG, alt text, the gem's copy
 test/turtle_test.rb        turtle graphics under CRuby: path, check helpers, SVG, texts, the gem's copy
 test/game_test.rb          show_game under CRuby: the lesson's Snake by timer and keys, restart, the copies checks play
+test/ruby2d_test.rb        ruby2d under CRuby: windows frame by frame, draw commands, keys, mouse, replayed copies, mixing, every cell of lesson 39
 test/step_recorder_test.rb ⏯'s recorder under CRuby: steps, frames, hidden locals, caps, every cell of the stepper lessons
 test/live_test.mjs         Playwright: live runs in a lesson and the workshop, a lesson without them
 test/server_test.rb        the optional server under Rack::MockRequest
@@ -229,7 +235,7 @@ A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 20-38), not in a group of one.
+(side trips, 20-39), not in a group of one.
 
 `"stepper": true` puts ⏯ (step through) beside every ▶ of the lesson but an
 IRB's (`View.lesson_html`, `Course#stepper?`). It is on the Basics whose
@@ -307,7 +313,7 @@ Rules that the code and tests rely on:
   check's `x, y = ...` once broke the learner's `x, y = fox.first`. Name
   a check's helpers as lambda or block parameters (`->(game, x = nil) {
   ... }.(games.last)`), as the Snake check does.
-- `test/browser_test.mjs` asserts the lesson count (`'54 lessons in nav'`) -
+- `test/browser_test.mjs` asserts the lesson count (`'55 lessons in nav'`) -
   update it when adding one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
@@ -386,6 +392,7 @@ with `/`); stdlib and gems get a plain LoadError.
 | `nokogiri-1.19.4.gem` | [nokogiri-pure](https://github.com/Largo/nokogiri-pure): Nokogiri with C ext, libxml2, libxslt, gumbo ported to Ruby, built from its `nokogiri.gemspec` (name `nokogiri`, so dependents resolve to it) | `tools/build_gem_cache.rb` builds it from a checkout (`NOKOGIRI_PURE=/path`, default `../../../../nokogiri-pure`) |
 | `bigdecimal-pure-0.1.0.gem` | [bigdecimal-pure](https://github.com/Largo/bigdecimal-pure): BigDecimal on Rational, native preferred when present | downloaded from rubygems.org like any other gem |
 | (no gem: a shim) | `sqlite3`: the sqlite3 gem's API on sql.js (`html/sqlite3_sqljs.rb`, §6f), so Sequel's SQLite adapter and other sqlite3 users run | `tools/vendor_sqljs.rb` |
+| (no gem: a shim) | `ruby2d`: the gem's own Ruby (`html/assets/ruby2d/ruby2d.rb`) with its C extension stood in for by `html/ruby2d.rb` (§6l); `ruby2d` is in `NATIVE_GEMS`, so `install_gem "ruby2d"` finds it built in | `tools/vendor_ruby2d.rb` |
 
 Nokogiri loads in about 2.3 s in Chrome (4 MB of Ruby compiled on the fly);
 nokogiri-pure loads its files in a fresh Fiber because ruby.wasm compiles on
@@ -638,8 +645,8 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
     event loop, where no ▶ is running, so an endless loop in `every` would
     freeze the page for good. `GameGuard` (main.rb) is `AutoRun`'s
     mechanism - TracePoint `:line, :b_call, :c_call`, the clock read
-    every 128 events, `AutoRun::Stopped` only on a line of the learner's
-    file - switched on when the game starts running ("f:1" from game.js)
+    every 128 events, `AutoRun::Stopped` on the next event in the
+    learner's file once it is late - switched on when the game starts running ("f:1" from game.js)
     and off when it stops ("f:0"); a step only moves the 1 s deadline
     (`GAME_TICK_LIMIT`, the message `gameTooLong`). Enabling a TracePoint
     per step instead costs 4-6 ms a step in ruby.wasm (CRuby
@@ -668,6 +675,11 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   - The workshop takes the same path (the guard watches `Workshop.paths`)
     but has not been tried. The companion gem's `show_game` raises NotHere
     (a game on a computer: ruby2d or gosu, its message says).
+- **ruby2d** (§6l, lesson 39): a ruby2d window is a game to the page -
+  `show` hands a `Ruby2D::Page::Runner` to `add_game`, `mount_game` sees
+  `canvas?` and gives game.js `canvas: true` (a `<canvas>` instead of the
+  grid, the `r2d*` labels, no restart after `close`). Everything above
+  holds for it: focus, pause, the guard, stop on re-run and lesson change.
 - **Step through a cell, ⏯** (`step_recorder.rb` + `stepper.js`, from
   `experiments/02-time-travel-tracer`; lessons with `"stepper": true`, §3).
   ⏯ sends `ChunkyBridge.step(idx)`: the same run as ▶ (`chunky:run` with
@@ -875,7 +887,13 @@ shell does the timing, the kernel the guarding:
   `AutoRun.with_time_limit` (TracePoint `:line`, `:b_call`, `:c_call`, the
   clock read every 128 events) raises `AutoRun::Stopped` after `LIMIT`
   (1 s), but only on a line of the learner's own file(s) - never inside a
-  gem being loaded or the app (outcome `stopped`, a hint). Installing a
+  gem being loaded or the app (outcome `stopped`, a hint). The sample and
+  the stop are apart (`@late`): tied together - "every 128th event, if it
+  is the learner's" - `loop { }`, two events a round (its block, a line in
+  `<internal:kernel>`), was never stopped when the events before it had
+  the wrong parity; a live run earlier on the page was enough to freeze a
+  game for good (found 2026-10-06 with the ruby2d lesson;
+  `autorun_test.rb` runs `loop { }` after four prefixes). Installing a
   cached gem and every `require` run untraced and off the clock
   (`AutoRun.untraced` moves the deadline by their time). Both exceptions
   descend from `Exception`, so `rescue => e` in learner code cannot swallow
@@ -883,7 +901,8 @@ shell does the timing, the kernel the guarding:
   as its headline only, §6); no line is marked.
 - **Games** (`show_game`, §6): a live run mounts the game, paused, and
   never starts it - it runs only with the focus, which the editor keeps -
-  so the Snake lesson keeps its live runs. The exercise's check plays a
+  so the Snake lesson keeps its live runs, and so does the ruby2d lesson
+  (§6l): its windows are games to the page. The exercise's check plays a
   copy of the game, under its own time limit, on a live run too.
 - **⏯ never runs live**: a live run is never recorded (`run_cell` ignores
   `step` with `auto`, and the shell asks for live runs from keys only). A
@@ -938,7 +957,7 @@ no service worker is registered and nothing changes. The choice is
   marks a page it serves from the copy (`<meta name="chunky-offline-copy">`),
   `offline.js` then reads the gem cache and the `.rb` files the kernel
   fetches on demand (`shoes_dom.rb`, `numo_narray.rb`, `processing.rb`,
-  `herb_bridge.rb`, the three `friendly_errors*.rb`) into memory before the kernel starts (`bridge.js` waits for
+  `herb_bridge.rb`, `ruby2d.rb` with `assets/ruby2d/ruby2d.rb`, the three `friendly_errors*.rb`) into memory before the kernel starts (`bridge.js` waits for
   `ChunkyOffline.kernelReady()`), and the sync helpers answer from there. A
   new file the kernel fetches synchronously must be added there too.
 - **What needs the internet says so**: a gem not in the cache
@@ -1511,6 +1530,88 @@ analysis it started from).
   out of reach, a plain link, the bridge refused, evil.test not allowed to
   frame it, and the page without its header running nothing.
 
+## 6l. ruby2d: the gem's own Ruby, its C extension in Ruby
+
+Lesson 39 runs [ruby2d](https://www.ruby2d.com) 1.0.0 programs as they are
+(the try-it tutorial on ruby2d.com uses the same API). The gem is Ruby -
+`Window`, events, `Renderable`, `Color`, every shape, `Text`, the DSL -
+around a C extension on SDL3 (`Ruby2D::Ext`, ~90 functions), which a
+browser cannot load.
+
+- **Its Ruby, unchanged**: `tools/vendor_ruby2d.rb` downloads the .gem,
+  checks it against the SHA-256 rubygems.org lists, and joins 27 of its
+  `lib/ruby2d/*.rb` - in the order its `ruby2d/core.rb` requires them -
+  into `html/assets/ruby2d/ruby2d.rb` (~200 KB), with its LICENSE.md.
+  Left out: the CLI and `cli/colorize.rb` (it adds `#bold`, `#error` … to
+  every String of the page), sprites, sprite sheets, tilesets, the pixel
+  canvas, bitmap text, buttons. A new ruby2d: bump `VERSION`, rerun, run
+  `test/ruby2d_test.rb` and the lesson.
+- **`html/ruby2d.rb`** is what the page adds: `Ruby2D::Ext` in Ruby - every
+  draw call of a frame appends a command (`["q", 4 corners, rgba]`,
+  `["c", x, y, r, sectors, rgba]`, `["x", text, ...]`, the list is at its
+  top) that game.js paints; a Text's size comes from the page's canvas
+  (`Ruby2D.measure__`, `chunkyCanvasTextWidth`; height 1.26 em, the gem's
+  Outfit), drawn in Atkinson Hyperlegible Next. Images and `Audio` exist
+  (the gem's classes) but `Ext.image_create`/`audio_load` raise
+  `Ruby2D::Error` "not on this page" in the lesson's language
+  (`Ruby2D.lang__`), and so do the left-out classes and any other `Ext`
+  function (`method_missing`); `Font.default` need not exist on disk.
+  Per-corner colours (`color: ["red", "yellow", "lime", "blue"]`) are
+  drawn as 8 × 8 pieces of the blended colour; a polygon's are averaged.
+- **`show` does not block.** The gem's CRuby `show` runs `tick until
+  @close`. Here `Window#show` hands a `Page::Runner` to
+  `Ruby2D.on_show__` (main.rb: `add_game`) and returns; the cell ends and
+  `mount_game` mounts it like a `show_game` (§6). game.js calls
+  `Runner#step(now, events)` every animation frame at most 60 a second
+  (`next`; `set fps_cap: 30` halves it) with the events since the last:
+  `k:left`/`u:left` (keys by SDL's scancode names, lowercased, from
+  `e.code` - physical keys, as SDL gives them), `d:x,y,left`/`p:...`
+  (mouse buttons), `m:x,y,dx,dy` (one move a frame), `w:dx,dy`. A step is
+  the gem's tick: the events (`key_callback`, `mouse_callback`, which also
+  fire per-object `on(:click)`), a held event for every key and button
+  still down (SDL reports them every frame), `update_callback` (dt from
+  the page's game clock, `Ext.now`), the scene (`render_objects`,
+  `Window.frames` + 1). Its answer: `{"bg", "c": [commands], "next",
+  "log", "over", "error"}`; the whole scene every frame. Code after `show`
+  runs before the first frame - on a computer it runs after the window
+  closed. `close` ends the frames (`over`; no restart: ▶ runs the cell
+  again); the gem's web build ignores `close`, its desktop build quits.
+- **One window per program**: the gem allows one (`DSL.window`,
+  `Window.shown?`). Each cell run is a program: `run_cell` calls
+  `Ruby2D.reset__`. Windows of other cells keep running, so while a
+  frame runs `DSL.window` is that window (`Runner#current`) - a
+  `Circle.new` in an `update` lands in its own window.
+- **`require "ruby2d"`** is a shim in main.rb (like `processing`, §6h):
+  the first fetches both files (sync XHR, untraced, library time; the
+  offline copy preloads them) and evaluates them; then `Ruby2D.mix__`
+  does what the gem's `ruby2d.rb` does with `include Ruby2D` and `extend
+  Ruby2D::DSL`, in a way that can be undone: Ruby2D's constants set on
+  Object, the DSL's methods as singleton methods of main. **All lessons
+  share one Ruby**, so `sync_state` (another lesson, a reset) calls
+  `unmix__` and forgets the shim ran (`BrowserGems.loaded`), and the next
+  `require "ruby2d"` mixes again. `require "ruby2d/core"` loads without
+  mixing, as in the gem. A learner's own `include Ruby2D` at the top level
+  stays, as it would in any program.
+- **Checks** get `games` as for Snake: `Runner#fresh` replays the cell's
+  code (`source`, set by `run_cell`) in a binding of its own
+  (`Ruby2D.replay__`: `TopLevel.binding`, `chunky.rb`), output dropped,
+  under the check's time limit - so the window below the cell keeps its
+  state. A check drives the copy with `press(key, frames:)`, `click(x,
+  y)`, `move_mouse`, `tick(n)`, `advance(seconds)` and reads `objects`
+  (the scene, the gem's own shape objects), `width`, `height`, `over?`.
+  The replay sees no locals of earlier cells: exercise cells must stand
+  alone (every cell of the lesson does). The lesson's check holds → and
+  ← until Chunky must have reached both edges.
+- **Speed**: a frame of the keys demo costs ~3-4 ms with the guard on
+  (Chrome, headless); the first `require` ~0.3-0.5 s.
+- **Tests**: `test/ruby2d_test.rb` (CRuby, no page), `check_harness.rb`
+  (the same shim through `SHIMS_DIR`; `unmix_ruby2d` before every
+  lesson), `browser_test.mjs` (the canvas's pixels, keys and the mouse via
+  the log, error with line, time limit, `close`, a sprite refused, the
+  exercise, the next lesson unmixed). The real gem was not run here: it
+  needs SDL3 with SDL3_mixer, which Debian 13 does not package; the
+  lesson's programs are checked against the gem's own Ruby instead.
+
 ## 7a. The optional server: permalinks and a backend
 
 The course is a static site and stays one: without `server/` lessons live at
@@ -1571,7 +1672,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 54 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # 55 lessons x 3 languages, starter fails, solutions pass
 ruby lint_lessons.rb           # lessons.js content: de/en/ja parity, references, Japanese rules, Prism, gems, counts
 ruby lint_lessons_test.rb      # the linter's fault-injection tests
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
@@ -1579,6 +1680,7 @@ ruby shell/run.rb              # the shell under Minitest, with PicoRuby portabi
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof
 ruby ansi_test.rb              # terminal colours in a cell's output
 ruby game_test.rb              # show_game headless: the lesson's Snake, restart, check copies
+ruby ruby2d_test.rb            # ruby2d headless: frames, draw commands, keys, mouse, replayed copies, mixing, lesson 39's cells
 ruby step_recorder_test.rb     # ⏯'s recorder: steps, frames, hidden locals, caps, the stepper lessons' cells
 ruby friendly_errors_harness.rb --summary   # 70 beginner mistakes explained by the expected rule, de/en/ja
 ruby friendly_errors_robustness.rb          # explain never raises, never leaves a %{...}
