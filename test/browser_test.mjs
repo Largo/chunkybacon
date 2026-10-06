@@ -891,6 +891,12 @@ const fanfare = await players(await exerciseIdx());
 check('... its WAV plays, 2 s', fanfare.length === 1 && fanfare[0].label === 'Ein Klang, 2,0 Sekunden');
 check('... and downloads as audio/wav', await page.$eval(`#cell-out-${await exerciseIdx()} a.cell-download[download="tusch.wav"]`,
   async a => (await (await fetch(a.href)).blob()).type).catch(() => null) === 'audio/wav');
+// a hand-packed header that ends in a too short fmt chunk (no channels, no
+// rate) still gets a player instead of failing silently below the cell
+await setExercise('show_audio "RIFF" + [14].pack("V") + "WAVEfmt " + [2].pack("V") + "\\x01\\x00"');
+await runExercise();
+await page.waitForFunction(i => !document.querySelector(`.run-cell[data-idx="${i}"]`).disabled, await exerciseIdx(), { timeout: 30000 });
+check('a malformed WAV header still gets a player', (await players(await exerciseIdx())).length === 1);
 
 // Snake lesson: show_game's grid below the cell, named for screen readers;
 // it waits until asked (Tab, then Space), steers with the arrow keys, ends

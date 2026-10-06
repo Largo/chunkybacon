@@ -1489,7 +1489,11 @@ module ChunkyAudio
     while pos + 8 <= bytes.bytesize
       id, size = bytes.byteslice(pos, 8).unpack("a4V")
       if id == "fmt "
-        _format, channels, rate = bytes.byteslice(pos + 8, 8).unpack("vvV")
+        # a header built by hand (lesson 37 packs its own) may be short or
+        # say 0 channels or 0 Hz: fall back rather than fail below the cell
+        _format, channels, rate = bytes.byteslice(pos + 8, [size, 8].min).unpack("vvV")
+        channels = 1 unless channels.is_a?(Integer) && channels.positive?
+        rate = 22_050 unless rate.is_a?(Integer) && rate.positive?
       elsif id == "data"
         all = bytes.byteslice(pos + 8, size).to_s.unpack("s<*")
         all = all.each_slice(channels).map(&:first) if channels > 1
@@ -1593,7 +1597,7 @@ module Kernel
             else
               File.binread(sound.to_s)
             end
-    raise ArgumentError, "show_audio: not a WAV file (it starts with RIFF)" unless bytes.to_s.b.start_with?("RIFF")
+    raise ArgumentError, "show_audio: not a WAV file (a WAV file starts with RIFF)" unless bytes.to_s.b.start_with?("RIFF")
 
     ChunkyApp.instance.add_audio(bytes)
     nil

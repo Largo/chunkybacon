@@ -119,7 +119,8 @@ const wasm = [];
 page.on('request', (r) => { if (r.url().includes('ruby+stdlib.wasm')) wasm.push(r.frame().url()); });
 await page.goto(`${BLOG}post.html`);
 await page.waitForFunction(() => document.querySelectorAll('pre[data-chunky]').length === 0, null, { timeout: 30000 });
-check('embed.js turns the <pre data-chunky> blocks into iframes', (await page.$$('iframe[data-chunky-id^="chunky-"]')).length === 3);
+// (the hand-written iframe gets a chunky-N id too once it talks: not counted)
+check('embed.js turns the <pre data-chunky> blocks into iframes', (await page.$$('iframe[data-chunky-id^="chunky-"]:not(#handwritten)')).length === 3);
 
 async function frameOf(selector) {
   const handle = await page.waitForSelector(selector, { timeout: 30000 });
@@ -200,6 +201,20 @@ await probe.handle.scrollIntoViewIfNeeded();
 const out4 = (await runAndWait(probe.frame)).replace(/\s+/g, ' ');
 check('embedded code cannot read the course\'s storage on the same host',
   out4.includes('local_storage: "blocked') && out4.includes('indexed_db: "blocked') && !out4.includes('methoden'), out4.slice(0, 240));
+// another child frame on the blog (an ad, a video) that sends embed.js the
+// embed's messages: ignored - no size, no id of its choosing, and a timing
+// keyed "__proto__" does not reach the blog's Object.prototype
+const stranger = await page.evaluate(() => new Promise((done) => {
+  const frame = document.createElement('iframe');
+  frame.id = 'stranger';
+  frame.style.height = '150px';
+  frame.srcdoc = '<script>parent.postMessage({ chunkyEmbed: "timing", id: "__proto__", name: "polluted", ms: 1 }, "*");' +
+    'parent.postMessage({ chunkyEmbed: "size", height: 5 }, "*");</' + 'script>';
+  document.body.appendChild(frame);
+  setTimeout(() => done({ polluted: ({}).polluted, height: frame.style.height, id: frame.dataset.chunkyId || null }), 800);
+}));
+check('a child frame that is not a cell is ignored (no size, no id, no prototype pollution)',
+  stranger.polluted === undefined && stranger.height === '150px' && stranger.id === null, JSON.stringify(stranger));
 check('no console errors on the blog post', errors.length === 0, errors.slice(0, 3).join(' | '));
 
 // ---------- the other ways in ----------
