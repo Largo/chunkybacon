@@ -88,11 +88,16 @@ html/
                         progress file, a connected folder (File System Access)
   offline.js, sw.js     offline mode (§6c): the page's side and the service worker
   offline-files.txt     what the offline copy holds (tools/offline_files.rb)
+  embed.html            one runnable cell for other sites' pages (§6k), served
+                        sandboxed; embed-frame.js its inside (the kernel's
+                        stand-ins), embed.css, embed-ui.js (generated: the ui
+                        strings); embed.js turns <pre data-chunky> into it
   assets/               app.css, CodeMirror, three.js (vendored), the fox SVG,
                         fonts/ (self-hosted web fonts + fonts.css, OFL 1.1),
                         data/ (files lessons read: digits.csv)
   gems/cache/           .gem files + manifest.json (instant offline installs)
-nginx/default.conf      static files + same-origin bridges (rubygems, ruby-lang)
+nginx/default.conf      static files + same-origin bridges (rubygems, ruby-lang),
+                        the embed's sandbox (§7)
 server/                 the optional Roda server (§7a): permalinks, /api, the bridges
 docker-compose.yml
 LICENSE                    MIT for the code; course content is CC BY-SA 4.0 (README)
@@ -106,6 +111,9 @@ tools/vendor_sqljs.rb      sql.js (SQLite in WebAssembly) into html/assets/sqljs
 tools/build_box_font.rb    html/assets/fonts/chunky-box-drawing.woff, box drawing for the code font (§6g)
 tools/vendor_herb.rb       Herb's WebAssembly parser into html/assets/herb/ (§6j)
 tools/offline_files.rb     html/offline-files.txt - rerun after adding/removing a file
+tools/dev_server.rb        nginx's stand-in without Docker: html/, the bridges, the same headers and rules (§7)
+tools/build_embed_ui.rb    html/embed-ui.js from lessons.js's ui strings (--check: current?)
+tools/make_embed_url.rb    a cell's address for some code: the URL, an <iframe>, a "▶ Run" link (§6k)
 tools/patch_picoruby_loader.rb  PicoRuby's loader: text/ruby -> text/picoruby
 tools/measure_load.mjs, tools/shell_metrics.rb  load times, code size (PICORUBY_SHELL.md)
 tools/render_social_cards.mjs  docs/social/card.html -> twitter-card.png (1600x900: X,
@@ -138,6 +146,8 @@ test/progress_test.mjs     Playwright: progress file, workshop, folder (52 check
 test/boot_failure_test.mjs Playwright: what the page says when a runtime fails
 test/language_test.mjs     Playwright: which language a visitor gets (11 checks)
 test/offline_test.mjs      Playwright: offline mode, behind a proxy it takes down
+test/embed_test.mjs        Playwright: an embedded cell on another (made-up) site (§6k)
+test/dev_server_test.rb    the dev server's bridge rule and embed headers, and that nginx/default.conf says the same
 test/make_lessons_json.js  writes test/lessons.json for the harnesses
 docs/HANDOVER.md           this file
 docs/PICORUBY_SHELL.md     the shell/kernel split in depth: bridge API,
@@ -957,6 +967,49 @@ are `^~` so the no-cache regex cannot capture proxied `.json`. The resolver
 is Docker's `127.0.0.11`, which only exists on user-defined networks - a
 container started with plain `docker run` on the default bridge gets 502s.
 
+**The bridges serve the course's own pages only.** `map "$http_referer|$host"
+$chunky_bridge_ok` (http context, top of `default.conf`) matches
+`~*^https?://([^/:|]+)(:[0-9]+)?/[^|]*\|\1$`: the Referer's host name -
+port and path left aside - must be the host the request was sent to (`\1`
+is a PCRE backreference). Nothing is hard-coded, so it holds at the
+server's address today and at the domain later, and the server's address
+never appears in the repository. Each bridge location starts with
+`if ($chunky_bridge_ok = 0) { return 403; }` (an `if` with only a `return`
+is safe), and answers with `Cross-Origin-Resource-Policy: same-origin`
+(another site's `<img>`/`<script>` cannot load it) - and no CORS header
+(`proxy_hide_header` drops one rubygems.org might send).
+The rate limit stays. No Referer means 403: the course's pages always send
+one (default policy `strict-origin-when-cross-origin`, same-origin: the full
+URL); `offline_test.mjs` checks that a request the service worker passes
+on keeps it. The embed sends none (§6k). A script outside a browser can
+send any Referer - that is what the rate limit is for; the rule stops
+other sites using the bridges through their visitors' browsers.
+
+- **Pinning it to the domain** once chunkybacon.idogawa.com is live is one
+  line: in that map, replace the pattern line with
+  `"~*^https://chunkybacon\.idogawa\.com/" 1;` (the comment above the map
+  says so).
+- **The host's reverse proxy must pass the `Host` header on** (as for the
+  permalinks' canonical links). If it sent the container's address as Host,
+  every bridge request from the domain would be 403.
+- Same rule in `tools/dev_server.rb` (`CourseRules`, the same pattern) and
+  in `server/app.rb`'s bridges; `test/dev_server_test.rb` checks the dev
+  server over HTTP and reads the pattern and the headers out of
+  `default.conf` to compare (no nginx on a dev machine to run `nginx -t`).
+
+**Headers for the embed.** `add_header Access-Control-Allow-Origin "*"` at
+server level for the static files, repeated in the app-code location
+(a location with an `add_header` of its own inherits none of the
+server's). `*`, not `null`: the files are public, nothing goes with
+credentials, and `null` would not be narrower - every sandboxed frame and
+`data:` page on any site is `null`. The bridges have their own
+`add_header`s, so they do not get it. `location = /embed.html` (exact, so
+the app-code regex does not take it) sends `Cache-Control: no-cache` and
+the `Content-Security-Policy` of §6k with `always`. The embed lives on the
+course's own host: no second server block or host name.
+`tools/dev_server.rb` sends the same; `FRAME_ANCESTORS=...` replaces
+https://idogawa.com there, for tests (`http://blog.test:*`).
+
 ## 6d. Python: Pyodide and the PyCall bridge
 
 The PyCall lessons run real pandas (23), SymPy (24), NumPy (25), matplotlib
@@ -1371,6 +1424,86 @@ nodes, errors, the visitor, `Herb::Engine` - around one C extension,
 - Offline: the copy preloads `herb_bridge.rb` (sync XHR); the module is
   imported, which the service worker answers.
 
+## 6k. The embedded cell (embed.html)
+
+One runnable cell on someone else's page (README "Embedding a cell";
+experiments/09-embed-cell/NOTES.md has the measurements and the security
+analysis it started from).
+
+- **The pieces.** `embed.js`, on the host page, turns every
+  `pre[data-chunky]` into an iframe of `embed.html`: the code without its
+  shared indentation, deflate-raw and base64url into the fragment
+  (`#code=…&gems=…&lang=…&load=…&run=1&id=…`; `src=` takes plain text for
+  hand-made links), `loading="lazy"`, and the `sandbox` attribute as a
+  second line of defence. The frame posts `{chunkyEmbed: "size", height}`
+  and timings with `"*"`; the host page matches them by `event.source`
+  (a sandboxed frame's origin is `"null"`) and follows the height.
+  `tools/make_embed_url.rb` writes the same address from Ruby (Zlib with
+  window bits -15, `urlsafe_encode64(padding: false)`).
+- **Inside** (`embed-frame.js`): the code is on screen as plain text at
+  once, CodeMirror takes over when it has loaded. Ruby loads when the cell
+  is in view (IntersectionObserver, which in a frame measures against the
+  top page), on the first ▶ (`load=click`) or at once (`eager`). It stands
+  in for what `index.html` and `shell/bridge.js` give the kernel: a
+  one-lesson, one-cell `LESSONS_JSON` (`id: "embed"`), the ui strings from
+  `embed-ui.js` (generated by `tools/build_embed_ui.rb`, 38 KB instead of
+  lessons.js's 800; `--check` in the test run, as it goes stale with every
+  ui string), the bridge subset main.rb calls (`kernelReady`, `ran`,
+  `gems`, `installed`, `steps`), `getCellCode`/`markCellLine`, the sync
+  fetch helpers, `afterPaint`, and before the kernel `letter.js`,
+  `processing.js` and `game.js`. main.rb itself is unchanged: it keeps a
+  cell's code only through the shell's `chunkySaveCode`, which the embed
+  does not register.
+- **Accessibility**: the editor is named (`ui.embedCode`) and described
+  (`ui.codeHint`: Shift+Enter, and Escape then Tab leaves it - no keyboard
+  trap); ▶ keeps the focus through a run (disabled while it runs, focused
+  again after); a polite `#runStatus` says what the run did
+  (`ui.embedRanOk` / `embedRanError`: the output, shortened, pictures,
+  games and sounds by their names).
+- **Security model.** The code comes from whoever made the link, and the
+  page is on the course's host. So `embed.html` is served with
+  `Content-Security-Policy: sandbox allow-scripts allow-popups
+  allow-popups-to-escape-sandbox allow-downloads; frame-ancestors
+  https://idogawa.com; …` (§7): it runs in an **opaque origin** however it
+  is opened (iframe or plain link), with no localStorage, IndexedDB, Cache
+  Storage, service worker or cookies - none of the learner's progress,
+  workshop files, connected folder or offline copy (the experiment showed
+  code reading the progress without it). No `allow-same-origin`, no
+  `allow-top-navigation`, no `allow-forms`. `frame-ancestors` lets only
+  https://idogawa.com frame it (not www., not http); a link opens it
+  anywhere. The rest of the policy is hardening: scripts, styles, fonts,
+  media and connections from its own host only (`'unsafe-eval'`: the js
+  gem calls `JS.eval` while it boots; `'wasm-unsafe-eval'` for ruby.wasm).
+  As the frame's origin is opaque, every file it loads from the course's
+  host is cross-origin: static files carry `Access-Control-Allow-Origin:
+  *` (§7). And if the header ever goes missing (`self.origin` is not
+  `"null"`), `embed-frame.js` runs nothing and says so
+  (`ui.embedNoSandbox`) - the optional server (§7a) serves the file
+  without it, so there the cell only says that.
+- **No bridges for the embed.** A page in an opaque origin sends **no
+  Referer** (Referrer Policy: "if document's origin is opaque, no
+  referrer"; checked in Chromium), so its requests to `/rubygems/` and
+  `/proxy/ruby-lang/` look like any other site's sandboxed frame and are
+  refused (§7). Gems come from the course's cache (`data-gems="chunky_png"`
+  works), `Net::HTTP` and gems outside the cache do not. Letting them
+  through would mean allowing `Origin: null` without a Referer - every
+  sandboxed frame on every site.
+- **Not here (yet)**: three.js (`ensureThree` is a stub), Python/PyCall
+  and SQLite/Sequel (their `ensure*` from index.html), exercise checks,
+  live runs, ⏯. Each is a copy of existing code, not new design.
+- **Costs**: every iframe is its own ruby.wasm VM (about 1 s of compile and
+  boot and tens of MB); Chrome partitions the HTTP cache by top-level
+  site, so a reader with the course cached downloads the 10 MB once more
+  per blog. `load=click` for a page with many cells.
+- Not in the offline copy (`tools/offline_files.rb` leaves `embed*` out).
+- Tests: `test/embed_test.mjs` against the dev server started with
+  `FRAME_ANCESTORS="http://blog.test:*"` - a made-up blog (blog.test, a
+  server in the test) embeds cells from course.test: the code, the opaque
+  origin, ▶ by keyboard (result, focus, what is read out), the height,
+  chunky_png from the cache, `load=click`/`visible`, the course's storage
+  out of reach, a plain link, the bridge refused, evil.test not allowed to
+  frame it, and the page without its header running nothing.
+
 ## 7a. The optional server: permalinks and a backend
 
 The course is a static site and stays one: without `server/` lessons live at
@@ -1445,6 +1578,10 @@ ruby friendly_errors_robustness.rb          # explain never raises, never leaves
 ruby ../tools/offline_files.rb --check   # the offline copy's file list is current
 BASE=http://127.0.0.1:8011/ node browser_test.mjs   # Playwright, ~5 min
 BASE=http://127.0.0.1:8011/ node offline_test.mjs   # offline mode (§6c), ~1 min
+ruby dev_server_test.rb                  # the bridge rule and the embed's headers, dev server and nginx alike (§7)
+ruby ../tools/build_embed_ui.rb --check  # html/embed-ui.js has the current ui strings
+# with the dev server started as FRAME_ANCESTORS="http://blog.test:*" ruby tools/dev_server.rb:
+BASE=http://127.0.0.1:8011/ node embed_test.mjs     # the embedded cell (§6k), ~1 min
 ```
 
 The CRuby harnesses exercise the real `browser_gems.rb` with `File.read`

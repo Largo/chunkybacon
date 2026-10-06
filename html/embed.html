@@ -11,7 +11,12 @@
        it never reaches the server. Nothing of the course's page is here: no
        PicoRuby shell, no lessons.js, no storage.js, no offline worker - just
        the editor, and the course's kernel (main.rb on ruby.wasm), loaded when
-       the cell scrolls into view or on the first Run. -->
+       the cell scrolls into view or on the first Run.
+       The server sends it with Content-Security-Policy: sandbox ... and
+       frame-ancestors (nginx/default.conf, tools/dev_server.rb): it runs in
+       an opaque origin, with none of the course's storage, though it is
+       on the course's host. Without that header (self.origin is not
+       "null") embed-frame.js runs nothing. -->
   <link rel="stylesheet" href="assets/fonts/fonts.css">
   <link rel="stylesheet" href="assets/codemirror.css">
   <link rel="stylesheet" href="assets/app.css">
@@ -33,7 +38,7 @@
       <div class="cell-toolbar">
         <span class="embed-status" id="embedStatus" role="status"></span>
         <span class="run-time" id="runTime"></span>
-        <a class="embed-brand" id="embedBrand" href="https://chunkybacon.idogawa.com/" target="_blank" rel="noopener">
+        <a class="embed-brand" id="embedBrand" href="./" target="_blank" rel="noopener">
           <img src="assets/chunky.svg" alt=""> Chunky Bacon
         </a>
         <button type="button" class="run-cell" id="runBtn" data-idx="0"></button>
@@ -41,6 +46,8 @@
       <div class="cell-out" id="cell-out-0" style="display:none"></div>
     </div>
   </article>
+  <!-- what a run did, for screen readers (embed-frame.js: announce) -->
+  <p id="runStatus" class="sr-only" role="status" aria-live="polite"></p>
   <!-- the kernel: inert until embed-frame.js adds browser.script.iife.js -->
   <script type="text/ruby" src="main.rb" data-eval="async"></script>
 </body>

@@ -159,6 +159,43 @@ unchanged. `chunkybacon run` starts a program with them loaded.
 [`gem/chunkybacon`](gem/chunkybacon) and [`gem/chunky-bacon`](gem/chunky-bacon)
 are aliases: all three names install the same gem.
 
+## Embedding a cell
+
+One runnable cell on another page - a blog post, a slide - with the
+course's Ruby, its output and its widgets:
+
+```html
+<pre data-chunky data-gems="chunky_png" data-lang="en">
+  words = %w[chunky bacon is chunky]
+  words.tally
+</pre>
+<script src="https://chunkybacon.idogawa.com/embed.js" defer></script>
+```
+
+`embed.js` turns every `pre[data-chunky]` into an iframe of the course's
+`embed.html`, as tall as the cell. Options on the `<pre>`: `data-gems`,
+`data-lang` (`de`, `en`, `ja`; else the page's language), `data-load`
+(`visible`, the default: Ruby loads when the cell scrolls into view;
+`click`: on the first ▶; `eager`), `data-run="1"` and `aria-label` (the
+iframe's title). The script's own `data-base` names the course's address;
+without it, it is where `embed.js` came from.
+
+The code goes into the address's fragment (`#code=…`, compressed), so it
+never reaches the server. For an `<iframe>` by hand, or a "▶ Run" link in a
+README (GitHub drops iframes; the link opens the cell as a page of its own):
+
+```sh
+ruby tools/make_embed_url.rb example.rb --gems chunky_png --lang en   # --load click, --run, --base URL
+```
+
+Only pages on **https://idogawa.com** may put a cell in an iframe
+(`frame-ancestors`, `nginx/default.conf`); a plain link works from
+anywhere. The cell runs sandboxed, in an origin of its own: code from a
+link sees none of the course's progress, files or offline copy, although
+it comes from the course's host. Gems come from the course's cache only
+(the rubygems bridge serves the course's own pages). How it works:
+[docs/HANDOVER.md](docs/HANDOVER.md) §6k.
+
 ## Architecture
 
 For operations, internals and traps see [docs/HANDOVER.md](docs/HANDOVER.md).
@@ -193,6 +230,8 @@ docker compose up -d      # serves on port 8011
 
 Or any static file server over `html/` (the rubygems proxy then needs
 nginx, see `nginx/default.conf`). Lessons then live at `/#methoden`.
+Without Docker, `ruby tools/dev_server.rb` (port 8011) serves `html/` with
+nginx's bridges, headers and rules.
 
 ### Permalinks and a backend (optional)
 
@@ -234,6 +273,9 @@ node language_test.mjs    # ?lang=, last choice, browser languages, English
 node live_test.mjs        # live runs in a lesson and in the workshop
 node offline_test.mjs     # offline mode: the copy, offline, a deploy, turning it off
 ruby server_test.rb       # the optional server (server/)
+ruby dev_server_test.rb   # the bridges serve only the course's pages, the embed's headers; nginx says the same
+node embed_test.mjs       # an embedded cell on another site (dev server with FRAME_ANCESTORS="http://blog.test:*")
+ruby ../tools/build_embed_ui.rb --check   # html/embed-ui.js has lessons.js's ui strings
 BASE=http://127.0.0.1:8012/ node permalink_test.mjs   # permalinks, against the server
 cd ../gem/chunky_bacon && rake test   # the companion gem
 ```

@@ -1,9 +1,11 @@
-# The address of an embedded Chunky Bacon cell for a piece of Ruby code -
-# for an <iframe> in a blog post or a slide, or a "Run it" link in a README
-# (GitHub drops iframes, a link opens the cell as a page of its own).
+# The address of an embedded Chunky Bacon cell (html/embed.html) for a
+# piece of Ruby code - for an <iframe> in a blog post or a slide, or a
+# "Run it" link in a README (GitHub drops iframes, a link opens the cell as
+# a page of its own). Only pages on https://idogawa.com may frame it
+# (nginx/default.conf); a link works anywhere.
 #
-#   ruby make_embed_url.rb example.rb [--gems chunky_png] [--lang en]
-#        [--load visible|click|eager] [--base https://chunkybacon.idogawa.com/]
+#   ruby tools/make_embed_url.rb example.rb [--gems chunky_png] [--lang en]
+#        [--load visible|click|eager] [--run] [--base https://chunkybacon.idogawa.com/]
 #
 # Prints the address, an <iframe> and a Markdown link. The code is
 # deflate-raw (zlib window bits -15, as the browser's CompressionStream
@@ -15,7 +17,7 @@ require "optparse"
 
 options = { base: "https://chunkybacon.idogawa.com/" }
 OptionParser.new do |o|
-  o.banner = "usage: ruby make_embed_url.rb FILE [options]   (FILE - for stdin)"
+  o.banner = "usage: ruby tools/make_embed_url.rb FILE [options]   (FILE - for stdin)"
   o.on("--gems LIST") { |v| options[:gems] = v }
   o.on("--lang LANG") { |v| options[:lang] = v }
   o.on("--load WHEN") { |v| options[:load] = v }

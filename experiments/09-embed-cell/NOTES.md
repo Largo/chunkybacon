@@ -1,5 +1,31 @@
 # 09 - Embeddable runnable Ruby (one Chunky cell on any page)
 
+**Integrated.** `site/embed.html`, `embed.js`, `embed-frame.js`,
+`embed.css` and the generated `embed-ui.js` are in `html/`;
+`build_embed_ui.mjs` became `tools/build_embed_ui.rb` (Ruby, `--check` in
+the test run), `make_embed_url.rb` is `tools/make_embed_url.rb`, and
+`test_embed.mjs` is `test/embed_test.mjs` (the checks only, against
+`tools/dev_server.rb`; the measurements stay here). `embed-kernel.rb` is
+gone: the kernel keeps a cell's code only through the shell's
+`chunkySaveCode`, which the embed does not register. `serve_embed.rb` is
+gone too: `tools/dev_server.rb` and nginx send the headers. Deviations
+from the plan below: the embed is **not** on a host of its own and the
+course does not deny `/embed.html` - the owner decided to serve it from
+the course's host with the sandbox header plus `frame-ancestors
+https://idogawa.com` (only that site may frame it), the strict policy on
+top; static files carry `Access-Control-Allow-Origin: *`. As a second
+line, `embed-frame.js` runs nothing when its origin is not opaque. The
+bridges now serve only pages on their own host (a same-host Referer); a
+sandboxed page sends no Referer at all (checked in Chromium, as the
+Referrer Policy spec says), so the embed gets gems from the cache only -
+the "rubygems proxy for gems that are not cached" below stays out. New:
+the widgets' scripts (letter, processing, game) load before the kernel,
+and the accessibility of the course's cells (editor name and hint, no
+keyboard trap, focus kept on ▶, results read out). Still not wired:
+three.js, Python, SQLite, exercise checks, live runs. HANDOVER §6k, §7.
+`site/demo/`, `examples/`, `screenshots/` and `measurements.json` stay
+here as the record; the paths below are those of the experiment.
+
 Prototype, 2026-10-05. Nothing outside this folder was changed.
 
 **In one paragraph.** `embed.html` shows one runnable Chunky Bacon cell, and

@@ -82,4 +82,17 @@ class ServerTest < Minitest::Test
     assert_equal 403, get("/rubygems/").status
     assert_equal 403, get("/rubygems/gems/chunky_png-1.4.0.gem", method: "POST").status
   end
+
+  # as nginx/default.conf: only for the course's own pages (a page on the
+  # host asked); asked without one, they answer before going out
+  def test_the_bridges_refuse_requests_from_other_pages
+    [nil, "http://evil.test/", "http://example.org.evil.test/"].each do |referer|
+      env = referer ? { "HTTP_REFERER" => referer } : {}
+      %w[/rubygems/gems/chunky_png-1.4.0.gem /rubygems/api/v1/gems/rake.json /proxy/ruby-lang/en/].each do |path|
+        res = Rack::MockRequest.new(APP).get(path, env)
+        assert_equal 403, res.status, "#{path} from #{referer.inspect}"
+        assert_equal "same-origin", res["cross-origin-resource-policy"]
+      end
+    end
+  end
 end

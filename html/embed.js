@@ -6,7 +6,12 @@
 //
 // Attributes (all optional): data-gems="a,b", data-lang="de|en|ja",
 // data-load="visible|click|eager" (when ruby.wasm loads, default visible),
-// data-run="1" (run once loaded).
+// data-run="1" (run once loaded), aria-label (the iframe's title).
+//
+// The cells come from the course's host: where this script came from, or
+// the script tag's data-base="https://chunkybacon.idogawa.com/". Only pages
+// that host allows may frame them (Content-Security-Policy frame-ancestors,
+// nginx/default.conf: https://idogawa.com); elsewhere the iframe stays empty.
 //
 // The code goes into the iframe's fragment (deflate-raw, base64url), so the
 // embed's server never sees it. The iframe tells this page its height
@@ -17,7 +22,9 @@
   if (window.ChunkyEmbed) return;
 
   var script = document.currentScript;
-  var base = new URL(".", script ? script.src : location.href).href;
+  var configured = script && script.getAttribute("data-base");
+  var base = new URL(configured || ".", script ? script.src : location.href).href;
+  if (!/\/$/.test(base)) base += "/";
 
   function bytesToBase64url(bytes) {
     var chunks = [];
