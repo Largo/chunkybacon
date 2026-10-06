@@ -55,6 +55,7 @@ assets/pyodide/scipy-1.18.0-cp314-cp314-pyemscripten_2026_0_wasm32.whl
 assets/pyodide/six-1.17.0-py2.py3-none-any.whl
 assets/pyodide/sympy-1.14.0-py3-none-any.whl
 assets/pyodide/threadpoolctl-3.6.0-py3-none-any.whl
+assets/ruby2d/ruby2d.rb
 assets/sqljs/LICENSE
 assets/sqljs/sql-wasm.js
 assets/sqljs/sql-wasm.wasm
@@ -140,6 +141,7 @@ processing.rb
 pycall.rb
 rack_playground.rb
 ruby+stdlib.wasm
+ruby2d.rb
 sandbox_sim.rb
 shell/app.rb
 shell/boot.rb

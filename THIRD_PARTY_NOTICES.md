@@ -67,7 +67,7 @@ against the release's SHA-256.
 | C libraries Pillow builds in (libjpeg-turbo, libtiff, libwebp, FreeType, zlib) | as built by Pyodide | each its own (BSD-style, libtiff's, BSD-3-Clause, FTL, zlib) | in its `.so` files - see Pyodide's and Pillow's repositories |
 | [pyparsing](https://github.com/pyparsing/pyparsing) | 3.3.2 | MIT | its wheel (`dist-info/licenses/LICENSE`) |
 
-## Editor, 3D, fonts, sql.js and Herb
+## Editor, 3D, fonts, sql.js, Herb and ruby2d
 
 | Component | Version | License | Copyright | License text |
 |---|---|---|---|---|
@@ -80,6 +80,7 @@ against the release's SHA-256.
 | [Shantell Sans](https://github.com/arrowtype/shantell-sans) | Google Fonts build | SIL OFL 1.1 | 2022 The Shantell Sans Project Authors | `html/assets/fonts/OFL-shantell-sans.txt` |
 | [Herb](https://herb-tools.dev) for the browser (`@herb-tools/browser`: libherb and its Prism as WebAssembly) | 0.10.3 | MIT | 2024-2025 Marco Roth | `html/assets/herb/LICENSE-herb.txt` |
 | [Prism](https://github.com/ruby/prism) JavaScript files (`@ruby/prism`: deserialize, nodes, visitor) | 1.9.0 | MIT | 2022-present Shopify Inc. | `html/assets/herb/LICENSE-prism.md` |
+| [ruby2d](https://www.ruby2d.com) - the gem's Ruby files (window, events, shapes, colours, text), joined unchanged into `html/assets/ruby2d/ruby2d.rb` by `tools/vendor_ruby2d.rb` (the lesson's `require "ruby2d"`; `html/ruby2d.rb`, the course's own code, stands in for its C extension) | 1.0.0 | MIT | 2026 Tom Black | `html/assets/ruby2d/LICENSE.md` |
 
 The fonts are subsets (latin, latin-ext) of the variable fonts Google Fonts
 serves, unmodified otherwise. `chunky-box-drawing.woff` next to them (box

@@ -1,4 +1,4 @@
-// PicoRuby for the PicoRuby lesson (docs/HANDOVER.md §6l): a lesson with
+// PicoRuby for the PicoRuby lesson (docs/HANDOVER.md §6m): a lesson with
 // "engine": "picoruby" runs its cells and its IRBs on PicoRuby.wasm instead
 // of CRuby. PicoRuby runs in a Web Worker (picoruby_worker.js); this is the
 // page's side of it.

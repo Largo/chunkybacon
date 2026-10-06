@@ -20,7 +20,7 @@
   // for a Promise there). So a page from the copy reads those files into
   // memory before the kernel starts (bridge.js waits for kernelReady): the
   // gem cache, shoes_dom.rb, numo_narray.rb, processing.rb, herb_bridge.rb,
-  // the friendly error explanations (friendly_errors*.rb) and the Rumale
+  // ruby2d (its gem's Ruby and ruby2d.rb), the friendly error explanations (friendly_errors*.rb) and the Rumale
   // lesson's digits.csv, about 10 MB. fetch() is answered by the copy.
   var syncFiles = null;   // path -> Uint8Array
   var kernelReady = pageFromCopy ? readSyncFiles() : Promise.resolve();
@@ -38,6 +38,7 @@
       var gems = JSON.parse(new TextDecoder().decode(manifest));
       var paths = Object.keys(gems).map(function (name) { return "gems/cache/" + gems[name].file; });
       paths.push("shoes_dom.rb", "numo_narray.rb", "processing.rb", "herb_bridge.rb",
+                 "assets/ruby2d/ruby2d.rb", "ruby2d.rb",
                  "friendly_errors_messages.rb", "friendly_errors.rb", "friendly_errors_rules.rb",
                  "assets/data/digits.csv");
       return Promise.all(paths.map(function (path) {

@@ -1,4 +1,4 @@
-# The PicoRuby lesson's Ruby (docs/HANDOVER.md §6l): runs on a PicoRuby.wasm
+# The PicoRuby lesson's Ruby (docs/HANDOVER.md §6m): runs on a PicoRuby.wasm
 # of its own, in a Web Worker (picoruby_worker.js) - not the page's shell.
 # Each session is a Sandbox (picoruby-sandbox, what PicoRuby's own IRB uses):
 # the lesson's cells share one, every IRB below a cell has its own. A

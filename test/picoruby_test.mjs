@@ -1,5 +1,5 @@
-// Headless test for the PicoRuby lesson (lesson 40, "engine": "picoruby";
-// docs/HANDOVER.md §6l): its cells and its IRB run on PicoRuby.wasm in a
+// Headless test for the PicoRuby lesson (lesson 41, "engine": "picoruby";
+// docs/HANDOVER.md §6m): its cells and its IRB run on PicoRuby.wasm in a
 // Web Worker (picoruby_worker.js), not on CRuby - the demos' output, the
 // IRB with _ and a def over several lines, the exercise's check on what
 // PicoRuby answered, CRuby's explanation of a syntax error, a line mark for
@@ -117,7 +117,7 @@ check('a runtime error comes from PicoRuby', runtime.includes("undefined method 
 check('...and marks its line', await page.evaluate(i => window.cellEditors[i].getAllMarks().some(m => m.find().from.line === 1), ex));
 await run(page, ex, 'def woerter_zaehlen(woerter)\n  anzahl = Hash.new(0)\n  woerter.each { |w| anzahl[w] += 1 }\n  anzahl\nend\n\nwoerter_zaehlen(%w[chunky bacon chunky fuchs chunky])');
 check('a solution passes the check', (await page.getAttribute('.cell.exercise', 'class')).includes('celebrate'));
-check('...and the lesson is done', (await page.textContent('#chunkyChat')).includes('Lektion 40 von'));
+check('...and the lesson is done', (await page.textContent('#chunkyChat')).includes('Lektion 41 von'));
 
 // ---------- live runs ----------
 await edit(page, ex, 'y = 20\ny * 2 + 2');
@@ -139,9 +139,9 @@ check('...and the variables are gone', gone.includes('NoMethodError') || gone.in
 // ---------- a new page starts from scratch ----------
 await run(page, ex, 'merk = 5');
 await page.evaluate(() => { location.hash = '#rubies'; });
-await page.waitForFunction(() => document.title.startsWith('39.'), null, { timeout: 10000 });
-await page.evaluate(() => { location.hash = '#picoruby'; });
 await page.waitForFunction(() => document.title.startsWith('40.'), null, { timeout: 10000 });
+await page.evaluate(() => { location.hash = '#picoruby'; });
+await page.waitForFunction(() => document.title.startsWith('41.'), null, { timeout: 10000 });
 const fresh = await run(page, ex, 'merk');
 check('after another lesson the variables are gone', !fresh.includes('=> 5'));
 await page.evaluate(([i, t]) => window.setCellCode(i, t), [ex, starter]);

@@ -1,5 +1,5 @@
 // A Web Worker with a PicoRuby.wasm of its own, for the PicoRuby lesson
-// (docs/HANDOVER.md §6l). The same runtime the page's shell runs on
+// (docs/HANDOVER.md §6m). The same runtime the page's shell runs on
 // (assets/picoruby/, tools/vendor_picoruby.rb), but a second instance, and
 // off the page's thread:
 //

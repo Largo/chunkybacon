@@ -2,6 +2,7 @@
 #   ruby test/autorun_test.rb
 require "minitest/autorun"
 require "tmpdir"
+require "rbconfig"
 require_relative "../html/autorun"
 
 class AutoRunTest < Minitest::Test
@@ -54,6 +55,27 @@ class AutoRunTest < Minitest::Test
   def test_a_one_line_loop_with_a_call_is_stopped_too
     assert_raises(AutoRun::Stopped) do
       AutoRun.with_time_limit(["chunky.rb"], 0.2) { eval("x = 0\nwhile true do x += 1 end", binding, "chunky.rb") }
+    end
+  end
+
+  # `loop { }` makes two events a round (its block in chunky.rb, a line in
+  # <internal:kernel>): the clock read every 128 events used to be tied to
+  # the event being the learner's, so with one parity of the events before
+  # it the loop was never stopped (found by the ruby2d lesson's test; the
+  # same in main.rb's GameGuard). Each prefix shifts that parity.
+  def test_an_empty_loop_block_is_stopped_whatever_came_before
+    ["", "a = 1\n", "a = 1\nb = 2\n", "3.times { }\n"].each do |before|
+      child = Process.spawn(RbConfig.ruby, "-r", File.expand_path("../html/autorun", __dir__), "-e",
+                            "begin; AutoRun.with_time_limit(['chunky.rb'], 0.2) { eval(#{(before + "loop { }").inspect}, binding, 'chunky.rb') }; " \
+                            "rescue AutoRun::Stopped; exit 0; end; exit 1")
+      deadline = Process.clock_gettime(Process::CLOCK_MONOTONIC) + 10
+      status = nil
+      sleep 0.05 until (status = Process.wait2(child, Process::WNOHANG)&.last) || Process.clock_gettime(Process::CLOCK_MONOTONIC) > deadline
+      unless status
+        Process.kill(:KILL, child)
+        Process.wait(child)
+      end
+      assert status&.success?, "loop { } after #{before.inspect} was not stopped"
     end
   end
 

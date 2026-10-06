@@ -2,7 +2,7 @@
 # html/assets/picoruby/. One runtime, two uses: the page's shell runs on it
 # (html/shell/, docs/PICORUBY_SHELL.md), and the PicoRuby lesson runs its
 # cells and IRBs on a second instance of it in a Web Worker
-# (html/picoruby_worker.js, docs/HANDOVER.md §6l). Nothing else is
+# (html/picoruby_worker.js, docs/HANDOVER.md §6m). Nothing else is
 # downloaded for that lesson.
 #
 #   ruby tools/vendor_picoruby.rb            # the pinned VERSION, again (same bytes)

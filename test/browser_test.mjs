@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('56 lessons in nav', (await page.$$('#lessonNav a')).length === 56);
+check('57 lessons in nav', (await page.$$('#lessonNav a')).length === 57);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -951,6 +951,107 @@ await runExercise();
 await page.waitForTimeout(300);
 check('Snake without walls passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 check('... and its game still starts paused', (await page.getAttribute(`#cell-out-${await exerciseIdx()} .game-widget`, 'data-state')) === 'paused');
+
+// ruby2d lesson: require "ruby2d" runs the gem's own Ruby with ruby2d.rb as
+// its C extension; show hands the window to the page (game.js's canvas
+// mode): a named canvas, paused until asked, keys by SDL's names, the mouse
+// in window coordinates, an error with its line, the time limit, a re-run
+// stopping the old loop, the exercise's check on a replayed copy, and the
+// next lesson without Ruby2D at its top level
+await page.click('#lessonNav a[data-id="ruby2d"]');
+await page.waitForTimeout(300);
+check('ruby2d lesson renders', (await page.textContent('#lessonBody h2')).includes('Spiele mit ruby2d'));
+const r2d = idx => `#cell-out-${idx} .game-widget`;
+const pixel = (idx, x, y) => page.$eval(`${r2d(idx)} canvas`, (c, [x, y]) => {
+  const k = c.width / 640;   // the windows read here are 640 wide
+  return Array.from(c.getContext('2d').getImageData(Math.round(x * k), Math.round(y * k), 1, 1).data);
+}, [x, y]);
+const orange = p => p[0] > 220 && p[1] > 100 && p[1] < 190 && p[2] < 80;
+await ranCell(1);
+const win = await page.$eval(r2d(1), g => ({ label: g.getAttribute('aria-label'), state: g.dataset.state,
+  role: g.getAttribute('role'), w: g.querySelector('canvas').width }));
+check('a ruby2d window: a canvas below the cell, named, paused', win.label === 'ruby2d-Fenster «Hallo, Chunky!», 640 × 480 Pixel' &&
+  win.role === 'application' && win.state === 'paused' && win.w >= 640);
+check('... the square is drawn on the navy background', orange(await pixel(1, 320, 240)) && (await pixel(1, 100, 100)).join() === '0,31,63,255');
+// the keys: a ruby2d program of our own in the keys cell, printing the names it gets
+const r2dKeys = 7;
+const keysCode = await page.evaluate(i => window.cellEditors[i].getValue(), r2dKeys);
+await page.evaluate(i => window.cellEditors[i].setValue(
+  'require "ruby2d"\nbox = Square.new(x: 300, y: 220, size: 40, color: "orange")\n' +
+  'on :key_down do |event|\n  puts event.key\nend\non :key_held do |event|\n  box.x += 6 if event.key?(:right)\nend\n' +
+  'on :mouse_down do |event|\n  puts "#{event.button} #{event.x},#{event.y}"\nend\nshow'), r2dKeys);
+await ranCell(r2dKeys);
+check('the window waits: nothing moves before it is started', orange(await pixel(r2dKeys, 320, 240)));
+await page.click(`${r2d(r2dKeys)} .game-overlay`);
+await page.waitForTimeout(200);
+check('a click starts it', (await page.getAttribute(r2d(r2dKeys), 'data-state')) === 'playing');
+await page.keyboard.down('ArrowRight');
+await page.waitForTimeout(700);
+await page.keyboard.up('ArrowRight');
+await page.waitForTimeout(100);
+const leftmostOrange = idx => page.$eval(`${r2d(idx)} canvas`, c => {
+  const k = c.width / 640, row = c.getContext('2d').getImageData(0, Math.round(240 * k), c.width, 1).data;
+  for (let x = 0; x < c.width; x++) if (row[x * 4] > 220 && row[x * 4 + 1] > 100 && row[x * 4 + 1] < 190 && row[x * 4 + 2] < 80) return x / k;
+  return -1;
+});
+check('holding → moves the square (key_held every frame)', (await leftmostOrange(r2dKeys)) > 360);
+for (const key of ['a', 'Space', 'Enter', 'ArrowLeft']) await page.keyboard.press(key);
+const r2dBox = await page.$eval(`${r2d(r2dKeys)} canvas`, c => { const r = c.getBoundingClientRect(); return [r.left, r.top, r.width]; });
+await page.mouse.click(r2dBox[0] + 100 * r2dBox[2] / 640, r2dBox[1] + 50 * r2dBox[2] / 640);
+await page.waitForTimeout(300);
+const r2dLog = await page.textContent(`${r2d(r2dKeys)} .game-log`);
+check('keys arrive by SDL\'s names, the mouse in window pixels', r2dLog.includes('right\na\nspace\nreturn\nleft\nleft 100,50'));
+const oldWindow = await page.evaluateHandle(s => document.querySelector(s).chunkyGame, r2d(r2dKeys));
+const calls2d = async () => JSON.parse(await oldWindow.evaluate(g => g.stats())).calls;
+check('... it runs a frame each animation frame', (await calls2d()) > 20);
+await ranCell(r2dKeys);
+const oldCalls2d = await calls2d();
+await page.waitForTimeout(500);
+check('a re-run stops the old window', (await calls2d()) === oldCalls2d && !(await oldWindow.evaluate(g => g.running())));
+// an error in a frame, with its line; an endless loop stopped by the time limit
+await page.evaluate(i => window.cellEditors[i].setValue('require "ruby2d"\nupdate do\n  nil.grow\nend\nshow'), r2dKeys);
+await ranCell(r2dKeys);
+await page.click(`${r2d(r2dKeys)} .game-overlay`);
+await page.waitForFunction(s => document.querySelector(s).dataset.state === 'error', r2d(r2dKeys), { timeout: 5000 }).catch(() => {});
+check('an error in update stops the window and names its line', (await page.textContent(`${r2d(r2dKeys)} .game-error`)).includes('NoMethodError') &&
+  (await page.textContent(`${r2d(r2dKeys)} .game-error`)).includes('line 3'));
+await page.evaluate(i => window.cellEditors[i].setValue('require "ruby2d"\nupdate do\n  loop { }\nend\nshow'), r2dKeys);
+await ranCell(r2dKeys);
+await page.click(`${r2d(r2dKeys)} .game-overlay`);
+await page.waitForFunction(s => document.querySelector(s).dataset.state === 'error', r2d(r2dKeys), { timeout: 8000 }).catch(() => {});
+check('an endless loop in update is stopped after a second', (await page.textContent(`${r2d(r2dKeys)} .game-error`)).includes('Endlosschleife'));
+await page.evaluate(i => window.cellEditors[i].setValue('require "ruby2d"\non :key_down do |event|\n  close\nend\nshow'), r2dKeys);
+await ranCell(r2dKeys);
+await page.click(`${r2d(r2dKeys)} .game-overlay`);
+await page.keyboard.press('x');
+await page.waitForTimeout(300);
+check('close closes the window; it says how to start again', (await page.getAttribute(r2d(r2dKeys), 'data-state')) === 'over' &&
+  (await page.textContent(`${r2d(r2dKeys)} .game-overlay`)).includes('▶ führt die Zelle noch einmal aus'));
+const notHere = await (async () => {
+  await page.evaluate(i => window.cellEditors[i].setValue('require "ruby2d"\nSprite.new("chunky.png")'), r2dKeys);
+  return ranCell(r2dKeys);
+})();
+check('a sprite says it needs the real gem', notHere.includes('Sprite gibt es auf dieser Seite nicht'));
+await page.evaluate(([i, c]) => window.cellEditors[i].setValue(c), [r2dKeys, keysCode]);
+// the game cell runs; the exercise
+await ranCell(11);
+check('the bacon game mounts', (await page.getAttribute(r2d(11), 'aria-label')).includes('Fang den Speck'));
+await runExercise();
+check('ruby2d starter fails', (await page.getAttribute('#chunkyChat', 'class')).includes('fail'));
+await setExercise((await page.evaluate(i => window.cellEditors[i].getValue(), await exerciseIdx()))
+  .replace('  fuchs.x += 5 if event.key?(:right)\n', '  fuchs.x += 5 if event.key?(:right)\n  fuchs.x = fuchs.x.clamp(0, Window.width - fuchs.width)\n'));
+await runExercise();
+await page.waitForTimeout(300);
+check('Chunky kept in the window passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+check('... and its window is 400 × 300, paused', (await page.getAttribute(r2d(await exerciseIdx()), 'aria-label')).includes('400 × 300') &&
+  (await page.getAttribute(r2d(await exerciseIdx()), 'data-state')) === 'paused');
+// the next lesson finds no Square, no show at the top level
+await page.click('#lessonNav a[data-id="snake"]');
+await page.waitForTimeout(300);
+const snakeFirst = await page.evaluate(() => window.cellEditors[1].getValue());
+await page.evaluate(() => window.cellEditors[1].setValue('[defined?(Square), respond_to?(:show)]'));
+check('another lesson: Ruby2D is no longer mixed into the top level', (await ranCell(1)).includes('=> [nil, false]'));
+await page.evaluate(c => window.cellEditors[1].setValue(c), snakeFirst);
 
 // TTY lesson: pastel's ANSI colours become spans (ansi.rb), tty-table and
 // tty-box draw with box-drawing characters as wide as the code font's

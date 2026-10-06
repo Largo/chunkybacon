@@ -11,7 +11,7 @@ Last updated 2026-10-06.
 | What | Where |
 |---|---|
 | What the site is, its features | `README.md` |
-| How it works, where the traps are | `docs/HANDOVER.md` - §2 layout, §3 lessons (format, renumbering, the Japanese rules), §4 gems and the pure stand-ins, §6a workshop and storage, §6b live runs, §6c offline mode, §6d Python (and matplotlib), §6e Rumale, §6f SQLite and Sequel (databases in files too), §6g TTY and terminal colours, §6h Processing, §6i Faker, §6j ERB and Herb, §8 tests, §11 older open ends |
+| How it works, where the traps are | `docs/HANDOVER.md` - §2 layout, §3 lessons (format, renumbering, the Japanese rules), §4 gems and the pure stand-ins, §6a workshop and storage, §6b live runs, §6c offline mode, §6d Python (and matplotlib), §6e Rumale, §6f SQLite and Sequel (databases in files too), §6g TTY and terminal colours, §6h Processing, §6i Faker, §6j ERB and Herb, §6l ruby2d, §8 tests, §11 older open ends |
 | The page shell on PicoRuby, its portability rules | `docs/PICORUBY_SHELL.md`, `test/shell/portability_test.rb` |
 | Every bundled component and its licence | `THIRD_PARTY_NOTICES.md` |
 | All lesson text, code, checks and UI strings | `html/lessons.js` - the source of truth |
@@ -22,7 +22,7 @@ Last updated 2026-10-06.
 
 ## State of the repository
 
-- `main` has 56 lessons (2026-10-06). The site does NOT show it yet: the
+- `main` has 57 lessons (2026-10-06; lesson 39, ruby2d, then 40-41, other Rubies and PicoRuby, came last). The site does NOT show it yet: the
   host's checkout stopped following `main` on 2026-09-30 (the history
   rewrite; GitHub's push webhook is answered with 202, but the live
   `lessons.js` is from 2026-09-30). On the host: `git status`, then
@@ -144,6 +144,21 @@ Last updated 2026-10-06.
   Two arrow keys within one round can still turn Chunky straight back
   (the classic Snake bug; a queue of turns would fix it). `on_click` has
   no lesson cell yet.
+- ruby2d (lesson 39, `html/ruby2d.rb` over the gem's own Ruby, HANDOVER
+  §6l): the lesson's programs were never run with the real gem - its SDL3
+  build needs SDL3_mixer, which Debian 13 does not package (`ruby2d setup`
+  would build it; or a Mac). They run on the gem's own Ruby, so names and
+  keyword arguments are the gem's, but a look at them in a real window is
+  owed. Not here: `Image`/`Sprite`/`Tileset` (a PNG or JPEG the cell wrote
+  or a course asset could be a data URL drawn on the canvas - the sizes
+  would have to come from the file's header, as `Ext.image_create` must
+  answer synchronously), `Audio` (could go through `show_audio`'s player),
+  the pixel `Canvas`, `BitmapText`, `Button`, gamepads. Text is drawn in
+  the page's sans serif, not Outfit, so `Text#width` differs a little from
+  the real window's. Per-corner colours are approximated (8 × 8 pieces); a
+  polygon's are averaged. `close` ends the window here, while the gem's own
+  web build ignores it. Not tried: the workshop, the embedded cell, a real
+  screen reader on the canvas.
 - Stepping through a cell (⏯, lessons 3-12, `html/step_recorder.rb`,
   `html/stepper.js`): no lesson text mentions ⏯ yet - a sentence in
   schleifen's prose ("watch the loop with ⏯") would point learners at it.

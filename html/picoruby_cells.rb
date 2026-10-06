@@ -1,5 +1,5 @@
 # The kernel's side of a lesson with "engine": "picoruby" (the PicoRuby
-# lesson, docs/HANDOVER.md §6l). Its cells and IRBs run on PicoRuby.wasm in
+# lesson, docs/HANDOVER.md §6m). Its cells and IRBs run on PicoRuby.wasm in
 # a Web Worker (picoruby_lab.js, picoruby_worker.js, picoruby_lab.rb); what
 # comes back is text - what the run printed, the inspect of its value, an
 # error's class, line and message. This turns that text into what main.rb
