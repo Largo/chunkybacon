@@ -151,6 +151,10 @@ require_relative "sandbox_sim"
 require_relative "workshop"
 # Live runs: rehearsals a moment after the learner stops typing.
 require_relative "autorun"
+# ⏯ beside ▶ (a lesson with "stepper": true): a run recorded line by line,
+# for the page's stepper (stepper.js). At boot: ~14 KB that evaluates in
+# about 6 ms.
+require_relative "step_recorder"
 # Terminal colours (pastel, tty-*) in a cell's output, as HTML.
 require_relative "ansi"
 # show_objects: names and objects as boxes and arrows, an SVG through
@@ -368,7 +372,7 @@ class ChunkyApp
   def setup_elements
     $window.addEventListener("chunky:run") do |event|
       sync_state(event.detail)
-      finish_cell_run(event.detail.idx.to_i, event.detail.auto.to_s == "true")
+      finish_cell_run(event.detail.idx.to_i, event.detail.auto.to_s == "true", event.detail.step.to_s == "true")
     end
     $window.addEventListener("chunky:lesson") { |event| sync_state(event.detail) }
     $window.addEventListener("chunky:install") do |event|
@@ -1129,11 +1133,12 @@ class ChunkyApp
   # Afterwards the shell settles the cell: "ok" | "error" | "pass" | "fail",
   # and for a live run (+auto+) also "skipped" (nothing ran, the output
   # stays) | "stopped" (time limit) | "needs" (wants the Run button).
-  def finish_cell_run(idx, auto = false)
+  # +step+: ⏯, the run recorded for the stepper.
+  def finish_cell_run(idx, auto = false, step = false)
     started = $window.performance.now
     AutoRun.library_time = 0.0
     outcome = begin
-      run_cell(idx, auto: auto)
+      run_cell(idx, auto: auto, step: step)
     rescue Exception => e
       $window.console.error("run_cell #{idx}: #{e.class}: #{e.message}")
       :error
@@ -1165,7 +1170,7 @@ class ChunkyApp
 
   def auto_run? = @auto_run == true
 
-  def run_cell(idx, auto: false)
+  def run_cell(idx, auto: false, step: false)
     # the workshop's editor holds a whole program: one plain code cell
     cell = workshop? ? { "t" => "c" } : cells[idx]
     return unless cell && code_cell?(cell)
@@ -1219,9 +1224,15 @@ class ChunkyApp
     @auto_run = auto
     # a live run draws stills: an animation would start over at every pause
     Turtle.animations = !auto
+    # ⏯: the same run, recorded line by line (step_recorder.rb) - the eval in
+    # the lesson's binding as on ▶, so the next cell sees what it left.
+    # Never a live run (recording costs up to 0.25 s), never the workshop.
+    recorder = StepRecorder.new(code, file: file) if step && !auto && !workshop?
     begin
       result = if auto
         AutoRun.with_time_limit(workshop? ? Workshop.paths : [file]) { evaluate(code, file).tap { start_sketch } }
+      elsif recorder
+        recorder.run { evaluate(code, file) }.tap { start_sketch }
       else
         evaluate(code, file).tap { start_sketch }
       end
@@ -1348,6 +1359,9 @@ class ChunkyApp
     @run_letters.each_with_index { |spec, n| mount_letter(idx, out_el, spec, n) }
     @run_sketches.each { |sketch| mount_sketch(idx, out_el, sketch) }
     @run_games.each { |game| mount_game(idx, out_el, game) }
+    # the stepper goes on top of the output; the JSON is parsed in JS
+    # (bridge.js), PicoRuby would take ages
+    show_steps(idx, recorder) if recorder
 
     if error
       return :stopped if error.is_a?(AutoRun::Stopped)
@@ -1362,6 +1376,12 @@ class ChunkyApp
     return :ok unless cell["t"] == "x"
 
     check_exercise(cell, code, output, result) ? :pass : :fail
+  end
+
+  def show_steps(idx, recorder)
+    bridge.steps(idx, recorder.to_json)
+  rescue StandardError => e
+    $window.console.error("steps #{idx}: #{e.class}: #{e.message}")
   end
 
   def evaluate(code, file)

@@ -151,6 +151,8 @@ shell/view.rb
 shell/workspace.rb
 shoes_dom.rb
 sqlite3_sqljs.rb
+step_recorder.rb
+stepper.js
 storage.js
 turtle.rb
 workshop.rb

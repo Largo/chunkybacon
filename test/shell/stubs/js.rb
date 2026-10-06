@@ -593,6 +593,8 @@ module JS
         "setState" => proc { |*a| requests << ["setState", *a]; nil },
         "reset" => proc { requests << ["reset"]; nil },
         "run" => proc { |idx| requests << ["run", idx]; props["ChunkyBridge"]["ready"] },
+        # ⏯: the same run, recorded for the stepper
+        "step" => proc { |idx| requests << ["step", idx]; props["ChunkyBridge"]["ready"] },
         # a live run goes out only once the kernel is up, never queued
         "autorun" => proc { |idx| props["ChunkyBridge"]["ready"] && (requests << ["autorun", idx]) && true },
         "install" => proc { |name| requests << ["install", name]; props["ChunkyBridge"]["ready"] },

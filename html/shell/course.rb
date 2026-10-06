@@ -38,5 +38,9 @@ module ChunkyShell
     # false for a lesson whose cells compute too much for live runs
     # ("live": false in lessons.js, the music lesson); read like section
     def live?(idx) = @lessons[idx][:live] != false
+
+    # true for a lesson whose code cells get ⏯ beside ▶ ("stepper": true,
+    # the Basics with plain Ruby: a run recorded line by line, stepper.js)
+    def stepper?(idx) = @lessons[idx][:stepper] == true
   end
 end

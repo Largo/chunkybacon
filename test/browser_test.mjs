@@ -167,10 +167,80 @@ const cell1 = await page.evaluate(() => window.cellEditors[1].getValue());
 check('reset restores demo cell code', cell1.includes('essen = "Speck"'));
 check('reset hides cell output', !(await page.isVisible('#cell-out-3')));
 
+// lesson 6: ⏯ step through (lessons with "stepper": true; step_recorder.rb
+// records, stepper.js shows) - cell 3's loop in 5 steps, the slider by
+// keyboard, the line marked in the editor itself, the variables and the
+// output so far; a language change keeps the step where the cell's code is
+// the same (cell 1 is the same in every language) and drops it where it is
+// not (cell 3: German strings); an edit clears it
+await page.click('#lessonNav a[data-id="schleifen"]');
+await page.waitForTimeout(300);
+check('⏯ beside every Run in the loops lesson', (await page.$$('.step-cell')).length === (await page.$$('.run-cell')).length);
+check('⏯ is named with its cell', (await page.getAttribute('.step-cell[data-idx="3"]', 'aria-label')) === 'Schritt für Schritt durch Zelle 2');
+const stepCell = async idx => {
+  await page.evaluate(() => { document.getElementById('runStatus').textContent = ''; });
+  await page.click(`.step-cell[data-idx="${idx}"]`);
+  await page.waitForFunction(i => !document.querySelector(`.run-cell[data-idx="${i}"]`).disabled &&
+    document.getElementById('runStatus').textContent !== '', idx, { timeout: 30000 });
+};
+const stepper = idx => page.evaluate(i => {
+  const root = document.querySelector(`#cell-out-${i} .stepper`);
+  const slider = root && root.querySelector('.step-slider');
+  const cm = window.cellEditors[i];
+  const marked = [];
+  for (let n = 0; cm && n < cm.lineCount(); n++) if ((cm.lineInfo(n).bgClass || '').includes('step-now')) marked.push(n + 1);
+  return {
+    state: window.ChunkyStepper.state(i), marked,
+    say: root ? root.querySelector('.step-say').textContent : null,
+    vars: root ? Object.fromEntries([...root.querySelectorAll('.step-vars tr')].map(r => [r.querySelector('th').textContent, r.querySelector('td').firstChild.textContent.trim()])) : {},
+    out: root ? root.querySelector('.step-out').textContent : null,
+    slider: slider && { name: slider.getAttribute('aria-label'), value: slider.getAttribute('aria-valuetext'), focused: document.activeElement === slider },
+    live: root ? root.querySelector('.step-live').textContent : null
+  };
+}, idx);
+await stepCell(3);
+let st = await stepper(3);
+check('⏯ on the loop: 5 steps, the first line marked in the editor', st.state && st.state.steps === 5 && st.marked.join() === '1');
+check('... the slider has the focus, named, "Schritt 1 von 5"',
+      st.slider && st.slider.focused && st.slider.name === 'Schritt wählen' && st.slider.value === 'Schritt 1 von 5');
+check('... the status line reads the run, not the stepper',
+      (await page.textContent('#runStatus')).startsWith('Zelle 2 ausgeführt: Streifen Nummer 1') && !(await page.textContent('#runStatus')).includes('Schritt'));
+for (let n = 0; n < 3; n++) await page.keyboard.press('ArrowRight');
+await page.waitForTimeout(150);
+st = await stepper(3);
+check('three arrow keys on: step 4, line 2, i = 2, two lines of output so far',
+      st.state.step === 3 && st.marked.join() === '2' && st.vars.i === '2' && st.out === 'Streifen Nummer 1\nStreifen Nummer 2\n');
+check('... Chunky says so', st.say === 'Zeile 2 ist dran – zum 3. Mal.');
+check('... and so does the live region, with what changed', st.live === 'Zeile 2 ist dran – zum 3. Mal. i = 2');
+await page.keyboard.press('End');
+st = await stepper(3);
+check('End: the cell\'s result, no line marked', st.say === 'Fertig! Das Ergebnis der Zelle: => 3' && st.marked.length === 0);
+await page.keyboard.press('Home');
+check('Home: back to the start', (await stepper(3)).state.step === 0);
+await stepCell(1);
+await page.click('#cell-out-1 .step-next');
+await page.click('#cell-out-1 .step-next');
+check('the buttons step too', (await stepper(1)).state.step === 2);
+await page.selectOption('#langSelect', 'en');
+await page.waitForFunction(() => window.ChunkyStepper.state(1) && document.querySelector('#cell-out-1 .stepper'), null, { timeout: 5000 }).catch(() => {});
+st = await stepper(1);
+check('a language change keeps the step where the code is the same',
+      st.state && st.state.step === 2 && st.say === 'Line 2 is next – for the 2nd time.' && st.slider.value === 'Step 3 of 5' && st.marked.join() === '2');
+check('... and drops it where the code differs', !(await stepper(3)).state && !(await page.$('#cell-out-3 .stepper')));
+await page.selectOption('#langSelect', 'de');
+await page.waitForFunction(() => document.querySelector('#cell-out-1 .stepper'), null, { timeout: 5000 }).catch(() => {});
+check('... and back in German, still at that step', ((await stepper(1)).say || '') === 'Zeile 2 ist dran – zum 2. Mal.');
+await page.click('.cell:has(.run-cell[data-idx="1"]) .CodeMirror');
+await page.keyboard.press('Control+End');
+await page.keyboard.type(' ');
+st = await stepper(1);
+check('an edit clears the recording and the marked line', !st.state && !st.say && st.marked.length === 0);
+
 // lesson 14: gems — the course's own gem from the local cache, then
 // chunky_png drawing an image
 await page.click('#lessonNav a[data-id="gems"]');
 await page.waitForTimeout(300);
+check('no ⏯ in a lesson without the flag (gems install, nothing to step through)', (await page.$$('.step-cell')).length === 0);
 await page.click('.run-cell[data-idx="1"]');
 await page.waitForTimeout(1500);
 check('chunky_bacon installs from cache and Chunky shouts', (await page.textContent('#cell-out-1')).includes('CHUNKY BACON!'));

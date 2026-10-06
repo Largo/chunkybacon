@@ -5,7 +5,7 @@
 #   ruby record_samples.rb
 require "json"
 require "stringio"
-require_relative "step_recorder"
+require_relative "../../html/step_recorder"   # (moved there when it was integrated)
 
 # a kernel in miniature: what ChunkyApp#run_cell does around the eval
 class MiniKernel

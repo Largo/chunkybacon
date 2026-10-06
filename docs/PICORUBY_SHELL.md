@@ -103,10 +103,11 @@ kernel listens for `chunky:*` events on `window` and answers through
 
 | call | by | does |
 |---|---|---|
-| `setState(lang, lesson, workshop)` | shell, on every lesson render | stores `state`, `seq += 1`, drops queued runs, sends `chunky:lesson` |
-| `reset()` | shell, lesson reset | `seq += 1`, sends `chunky:lesson` |
+| `setState(lang, lesson, workshop)` | shell, on every lesson render | stores `state`, `seq += 1`, drops queued runs, sends `chunky:lesson`; after the paint tells `stepper.js` (`ChunkyStepper.page`: a recording survives a language change where the code is the same) |
+| `reset()` | shell, lesson reset | `seq += 1`, sends `chunky:lesson`, drops the stepper's recordings |
 | `run(idx)` → `true` / `false` | shell, Run / Shift+Enter / Alt+R | kernel up: `chunky:run` after the next paint (`afterPaint`); else queued. Returns whether it went now |
 | `autorun(idx)` → `true` / `false` | shell, a second after the last key (live runs, HANDOVER §6b) | kernel up: `chunky:run {auto: true}` after the next paint; else `false` - never queued |
+| `step(idx)` → `true` / `false` | shell, ⏯ (a lesson with `"stepper": true`, HANDOVER §6) | as `run`, with `chunky:run {step: true}`: the run is recorded |
 | `install(name)` → `true` / `false` | shell, gem chip / button | `chunky:install` after the next paint, or queued |
 | `shellReady()` | shell, after the first render | `chunky:shell-ready`, starts the kernel |
 | `kernelReady(installedJson)` | kernel, end of `ChunkyApp#initialize` | `ready = true`, `chunky:kernel-ready`, `chunky:gems`, then the queue |
@@ -114,6 +115,7 @@ kernel listens for `chunky:*` events on `window` and answers through
 | `ran(idx, outcome, elapsed, auto, own)` | kernel, after every run | `chunky:ran {idx, outcome: ok/error/pass/fail (a live run also skipped/stopped/needs), elapsed, auto, own}` - `own`: elapsed without installing and loading gems |
 | `gems(installedJson)` | kernel, after runs and installs | `chunky:gems {installed}` |
 | `installed(name, ok, message)` | kernel, panel install | `chunky:installed {name, ok, message}` |
+| `steps(idx, json)` | kernel, after a ⏯ run (`show_steps`) | parses the recording here (never in PicoRuby) and hands it to `ChunkyStepper.show` (`stepper.js`); no event |
 | `ready`, `state` | both | `state = {lang, lesson, workshop, seq}`; the kernel reads it at boot |
 | `settle(promise)` → promise of `{ok, value, name, message}` | shell (workspace.rb) | never rejects; PicoRuby's `await` would raise and lose the error's name |
 | `saveText(name, text)` | shell (workspace.rb) | a text file to the downloads (a Blob needs an array argument) |
@@ -130,7 +132,7 @@ code)` is the kernel's again: the code a run uses, which the shell keeps
 
 | event | to | detail |
 |---|---|---|
-| `chunky:run` | kernel | `{idx, auto, lang, lesson, workshop, seq}` - `auto`: a live run |
+| `chunky:run` | kernel | `{idx, auto, step, lang, lesson, workshop, seq}` - `auto`: a live run; `step`: ⏯, recorded |
 | `chunky:lesson` | kernel | `{lang, lesson, workshop, seq}` - a new `seq` means a fresh binding, old 3D/Shoes stages disposed (`sync_state`) |
 | `chunky:install` | kernel | `{name, ...state}` |
 | `chunky:ran`, `chunky:gems`, `chunky:installed`, `chunky:kernel-ready`, `chunky:kernel-failed` | shell | as above |

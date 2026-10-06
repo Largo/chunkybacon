@@ -359,6 +359,66 @@ class AppTest < Minitest::Test
     assert_nil run_button(1).attrs["aria-keyshortcuts"]
   end
 
+  # ---------- ⏯ step through ("stepper": true, stepper.js) ----------
+
+  def step_button(idx) = find(".step-cell[data-idx='#{idx}']")
+
+  def test_step_buttons_only_where_the_lesson_asks_for_them
+    start(hash: "#schleifen")
+    assert_equal %w[1 3 5], find_all(".step-cell").map { |b| b.attrs["data-idx"] }, "every code cell, the exercise too"
+    assert_equal "⏯ Schritt für Schritt", step_button(3).text
+    assert_equal "Schritt für Schritt durch Zelle 2", step_button(3).attrs["aria-label"], "the visible words, and the cell"
+    assert step_button(3).js_closest(".cell-toolbar"), "in the toolbar, beside ▶"
+    click(find('#lessonNav a[data-id="hallo"]'))
+    assert_empty find_all(".step-cell"), "not in a lesson without the flag"
+    click(byid("workshopLink"))
+    assert_empty find_all(".step-cell"), "nor in the workshop"
+    assert_empty JS.console_errors
+  end
+
+  def test_step_buttons_speak_the_language
+    start(hash: "#schleifen", storage: { "chunky_lang" => "en" })
+    assert_equal "⏯ Step through", step_button(1).text
+    assert_equal "Step through cell 1", step_button(1).attrs["aria-label"]
+  end
+
+  def test_step_asks_the_bridge_for_a_recorded_run
+    start(hash: "#schleifen")
+    click(step_button(3))
+    assert_equal [["step", 3]], calls("step")
+    assert_empty calls("run"), "one run, the recorded one"
+    assert_includes cell(3).attrs["class"], "running"
+    assert run_button(3).props["disabled"]
+    assert step_button(3).props["disabled"], "no second ⏯ while it runs"
+    click(run_button(3))
+    assert_empty calls("run"), "nor ▶"
+    fire("chunky:ran", ran_event(3, "ok"))
+    refute step_button(3).props["disabled"]
+    refute run_button(3).props["disabled"]
+  end
+
+  # stepper.js puts the stepper on top of the output before the kernel
+  # answers; the keyboard goes to its slider, and the status line reads the
+  # run's output without it
+  def test_after_step_the_focus_is_on_the_slider
+    start(hash: "#schleifen")
+    step_button(3).js_focus
+    click(step_button(3))
+    byid("cell-out-3").js_set("innerHTML", '<div class="stepper" role="group"><p class="step-say">Zeile 1 ist dran.</p>' \
+                                           '<input class="step-slider" type="range"></div>' \
+                                           '<pre class="cell-stdout">Streifen Nummer 1</pre>')
+    fire("chunky:ran", ran_event(3, "ok"))
+    assert active.equal?(find("#cell-out-3 .step-slider")), "the arrow keys walk the run at once"
+    assert_equal "Zelle 2 ausgeführt: Streifen Nummer 1", byid("runStatus").text
+  end
+
+  def test_step_without_a_recording_gives_the_focus_back_to_step
+    start(hash: "#schleifen")
+    click(step_button(1))
+    fire("chunky:ran", ran_event(1, "error"))   # nothing on the page: a syntax error
+    assert active.equal?(step_button(1))
+  end
+
   def test_a_lesson_change_puts_the_focus_on_its_heading
     start
     assert_equal "BODY", active.tag.upcase, "not on the first load"

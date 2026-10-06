@@ -1,5 +1,43 @@
 # 02 - Time-travel tracer: step through a cell
 
+**Integrated.** `step_recorder.rb` moved to `html/` (loaded at boot like
+`autorun.rb`: 14 KB, ~6 ms to evaluate in ruby.wasm; in
+`offline-files.txt`), `test_step_recorder.rb` to
+`test/step_recorder_test.rb` (now with the course's binding, a check that
+`HIDDEN` covers every local `check_exercise` sets, schleifen's loop, a
+turtle block, and every code cell of the flagged lessons in de and en).
+The button is ⏯ beside ▶, only in lessons with `"stepper": true` - the
+user's decision: the Basics 3-12 (variablen, strings, wenn, schleifen,
+arrays, hashes, methoden, turtle, klassen, module); not hallo/rechnen
+(one-liners), the IRB, or 14-19 (gems, servers, the network). It sends
+`ChunkyBridge.step(idx)`, `run_cell(idx, step: true)` wraps the eval in
+the recorder, and `show_steps` hands the JSON to `ChunkyBridge.steps`,
+which parses it in JS. The widget is plain JS, `html/stepper.js` (not
+the shell: it re-renders on every move), built from `scrubber.html`'s
+`render()`: the current line marked in the CodeMirror editor itself
+(`addLineClass`), Chunky's sentence, the frames, the output so far and
+the controls in `#cell-out-<idx>` above the run's output; its strings are
+`ui.step*` in lessons.js (from the mock's `T`), its CSS in `app.css`.
+Changes on the way: **a cell of comments only** (an exercise's starter)
+made `TracePoint#enable(target:)` raise - and after that no targeted
+TracePoint in the process saw an event again; `events?` now checks the
+iseqs first and such a cell records just its end. The hide list grew by
+`sketch`, `audios`, `games`, and the `hide: TOPLEVEL_BINDING...` argument
+went (a cell's binding is `TopLevel.binding`, it never saw main.rb's
+locals). Accessibility: ⏯ named "Schritt für Schritt durch Zelle 2", the
+focus to the slider after a run (a native range: arrows, Home, End), its
+value "Schritt 3 von 5", ◀ ▶ aria-disabled at the ends, a polite live
+region with the sentence and what changed on the learner's moves only,
+⏵ with its word on it (alone it looked like ▶) and slower under
+`prefers-reduced-motion`. A language change keeps the step where the
+cell's code is the same apart from comments (en ↔ ja, German cells with
+the English code) and drops it otherwise (German names); any edit or run
+of the cell ends it; live runs never record. Left out: the tick strip
+(thin past ~200 steps), stepping in the workshop, `show_steps` as a cell
+helper; the companion gem needs nothing. `record_samples.rb`,
+`measure_overhead.rb` and `wasm_probe.mjs` now load the recorder from
+`html/`; `scrubber.html` and its samples are the experiment's record.
+
 Idea: run a cell under TracePoint, record every step (line about to run plus
 the local variables of each frame, inspected and truncated), and let the
 learner scrub back and forth: the current line highlighted, the variables
@@ -14,8 +52,8 @@ measurements. Nothing outside this folder was changed.
 
 | File | What |
 |---|---|
-| `step_recorder.rb` | **The recorder** (`StepRecorder`), about 380 lines, stdlib `json` only |
-| `test_step_recorder.rb` | Minitest, 13 tests / 48 assertions: shared binding, hoisting, earlier-cell methods, `_1`/`it`, odd values (raising `inspect`, BasicObject, big objects), cap, errors, syntax errors, output offsets, deep recursion, nesting under `AutoRun.with_time_limit` |
+| `step_recorder.rb` (now `html/step_recorder.rb`) | **The recorder** (`StepRecorder`), about 380 lines, stdlib `json` only |
+| `test_step_recorder.rb` (now `test/step_recorder_test.rb`) | Minitest, 13 tests / 48 assertions: shared binding, hoisting, earlier-cell methods, `_1`/`it`, odd values (raising `inspect`, BasicObject, big objects), cap, errors, syntax errors, output offsets, deep recursion, nesting under `AutoRun.with_time_limit` |
 | `record_samples.rb` | Mini kernel (one binding, `eval(code, bind, "chunky.rb")`, `$stdout` as a StringIO, like `run_cell`). Records 9 samples from schleifen/arrays/methoden plus recursion, an error, and a long loop → `samples.js` / `samples.json` |
 | `scrubber.html` | Static mock of the widget: reads `samples.js`, works from `file://`, has de/en/ja strings. `?sample=<id>&step=<n>&lang=<l>` |
 | `shots/*.png` | Playwright screenshots of the mock (`screenshots.mjs`) |

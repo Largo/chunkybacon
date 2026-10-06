@@ -6,7 +6,7 @@
 require "json"
 require "stringio"
 require "csv"
-require_relative "step_recorder"
+require_relative "../../html/step_recorder"   # (moved there when it was integrated)
 
 def clock = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
