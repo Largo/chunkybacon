@@ -1690,8 +1690,9 @@ on **PicoRuby.wasm** instead of CRuby:
 - **Past the time limit** the worker is ended and a new one started: every
   variable of the cells and the IRBs is gone, and the message says so
   (`picoStopped`, `picoRestarted`; a live run says `liveStopped` first). A
-  new page or a reset drops the sessions (`sync_state`), and answers for
-  an earlier page are ignored (`seq`).
+  new page or a reset drops the sessions (`sync_state`) - or the whole
+  worker, when a run is still going, so it does not hold up the new page's
+  runs - and answers for an earlier page are ignored (`seq`).
 - PicoRuby is not CRuby, and the lesson says so: `RUBY_ENGINE` is
   `"mruby"` (PicoRuby 4 runs on mruby's VM; `PICORUBY_VERSION` is its own),
   no `sum`/`tally`/`sort_by`/`group_by`/`zip`/`each_slice`, no `Struct`,

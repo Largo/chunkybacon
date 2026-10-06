@@ -51,7 +51,11 @@ def sha256(name) = Digest::SHA256.file(File.join(TARGET, name)).hexdigest
 if ARGV.include?("--check")
   abort "no #{RECORD} - run ruby tools/vendor_picoruby.rb" unless File.file?(RECORD)
   recorded = File.read(RECORD).scan(/^file=(\S+) (\d+) (\h{64})$/)
-  abort "#{RECORD} lists no files" if recorded.empty?
+  # every file of the runtime, no more: a record with a line missing would
+  # leave that file unchecked
+  unless recorded.map(&:first).sort == FILES.sort
+    abort "#{RECORD} must list exactly #{FILES.join(', ')} (lists #{recorded.map(&:first).join(', ')})"
+  end
   bad = recorded.reject do |name, bytes, digest|
     path = File.join(TARGET, name)
     File.file?(path) && File.size(path) == bytes.to_i && sha256(name) == digest

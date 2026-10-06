@@ -37,9 +37,17 @@
       sessions["irb" + sid] = true;
       enqueue({ kind: "irb", sid: "irb" + sid, irbSid: Number(sid), code: String(code), seq: Number(seq) });
     },
-    // a new lesson or a reset: the cells' and the IRBs' variables go
+    // a new lesson or a reset: the cells' and the IRBs' variables go. A run
+    // still going would hold up the new page's runs (up to its 10 s): the
+    // worker goes with it - its answer was for the page that went away
     reset: function () {
       queue = queue.filter(function (item) { return item.kind === "drop"; });
+      if (current) {
+        clearTimeout(current.timer);
+        current = null;
+        endWorker();
+        return;
+      }
       if (!pico.worker) return;
       enqueue({ kind: "drop", sid: "cells" });
       Object.keys(sessions).forEach(function (sid) { enqueue({ kind: "drop", sid: sid }); });
@@ -52,7 +60,14 @@
     if (pico.loading) return pico.loading;
     pico.error = null;
     pico.loading = new Promise(function (resolve) {
-      var worker = new Worker(new URL("picoruby_worker.js", document.baseURI).href, { type: "module" });
+      var worker;
+      try {
+        worker = new Worker(new URL("picoruby_worker.js", document.baseURI).href, { type: "module" });
+      } catch (e) {
+        // no module workers here (or blocked): the same answer as a failed start
+        fail(null, (e && e.message) || e, resolve);
+        return;
+      }
       worker.onmessage = function (event) {
         var data = event.data;
         if (data.ready) {
@@ -78,7 +93,7 @@
   };
 
   function fail(worker, message, resolve) {
-    worker.terminate();
+    if (worker) worker.terminate();
     pico.error = String(message);
     console.error("PicoRuby (lesson) failed to load:", message);
     // what was waiting gets an answer, so no cell stays "running"
@@ -120,14 +135,19 @@
     if (!current || current.id !== id) return;
     var done = current;
     current = null;
+    endWorker();
+    reply(done.item, { status: "stopped", output: "" }, performance.now() - done.started);
+    if (queue.length) window.ensurePicoRuby();
+  }
+
+  // the worker and every variable in it go; the next request starts a new one
+  function endWorker() {
     pico.worker.terminate();
     pico.worker = null;
     pico.ready = false;
     sessions = {};
     // drops for the old worker mean nothing to a new one
     queue = queue.filter(function (item) { return item.kind !== "drop"; });
-    reply(done.item, { status: "stopped", output: "" }, performance.now() - done.started);
-    if (queue.length) window.ensurePicoRuby();
   }
 
   // every field is there (main.rb reads them with dots, jsg raises on a

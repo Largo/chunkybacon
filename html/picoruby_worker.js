@@ -67,10 +67,18 @@ function parse(text) {
 function run(kind, sid, code) {
   output = [];
   const result = parse(ask(kind === "run" ? `run\t${sid}\t${code}` : `drop\t${sid}`));
-  // a raised error is also reported by the Task machinery - once is enough;
   // the mark ended a line a `print` left open (picoruby_lab.rb)
-  result.output = output.join("").replace(/^Exception in task: .*\n/gm, "").replace(/\u0001\n$/, "");
+  let text = output.join("").replace(/\u0001\n$/, "");
   output = [];
+  // a raised error is also reported by the Task machinery, as its last line
+  // with that error - once is enough; a cell's own line that looks the same
+  // stays (only the last one goes, and only for the error raised)
+  if (result.status === "error") {
+    const line = `Exception in task: #<${result.errorClass}: ${result.message}>\n`;
+    const at = text.lastIndexOf(line);
+    if (at >= 0 && (at === 0 || text[at - 1] === "\n")) text = text.slice(0, at) + text.slice(at + line.length);
+  }
+  result.output = text;
   return result;
 }
 

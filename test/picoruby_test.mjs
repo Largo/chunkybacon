@@ -114,6 +114,7 @@ const syntax = await run(page, ex, 'def woerter_zaehlen(woerter)\n  anzahl = {\n
 check('a syntax error is explained (CRuby\'s Prism, before PicoRuby)', syntax.includes('Zeile 2') || syntax.includes('2 |'));
 const runtime = await run(page, ex, 'woerter = %w[a b]\nwoerter.tally');
 check('a runtime error comes from PicoRuby', runtime.includes("undefined method 'tally' for Array"));
+check('...once, without the Task machinery\'s own report of it', !runtime.includes('Exception in task'));
 check('...and marks its line', await page.evaluate(i => window.cellEditors[i].getAllMarks().some(m => m.find().from.line === 1), ex));
 await run(page, ex, 'def woerter_zaehlen(woerter)\n  anzahl = Hash.new(0)\n  woerter.each { |w| anzahl[w] += 1 }\n  anzahl\nend\n\nwoerter_zaehlen(%w[chunky bacon chunky fuchs chunky])');
 check('a solution passes the check', (await page.getAttribute('.cell.exercise', 'class')).includes('celebrate'));
@@ -144,6 +145,20 @@ await page.evaluate(() => { location.hash = '#picoruby'; });
 await page.waitForFunction(() => document.title.startsWith('41.'), null, { timeout: 10000 });
 const fresh = await run(page, ex, 'merk');
 check('after another lesson the variables are gone', !fresh.includes('=> 5'));
+const ownLine = await run(page, ex, 'puts "Exception in task: nur ein Text"\n:ok');
+check('a cell\'s own "Exception in task:" line stays', ownLine.includes('Exception in task: nur ein Text'));
+
+// ---------- leaving while a run goes on ----------
+await page.evaluate(([i, t]) => window.setCellCode(i, t), [ex, 'loop { }']);
+await page.click(`.run-cell[data-idx="${ex}"]`);
+await page.waitForTimeout(300);
+await page.evaluate(() => { location.hash = '#rubies'; });
+await page.waitForFunction(() => document.title.startsWith('40.'), null, { timeout: 10000 });
+await page.evaluate(() => { location.hash = '#picoruby'; });
+await page.waitForFunction(() => document.title.startsWith('41.'), null, { timeout: 10000 });
+const quick = Date.now();
+const after = await run(page, ex, '6 * 7');
+check('a run left running does not hold up the next page', after.includes('=> 42') && Date.now() - quick < 5000);
 await page.evaluate(([i, t]) => window.setCellCode(i, t), [ex, starter]);
 
 check('no page errors', errors.length === 0);
