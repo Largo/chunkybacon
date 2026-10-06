@@ -22,7 +22,7 @@ Last updated 2026-10-06.
 
 ## State of the repository
 
-- `main` has 55 lessons (2026-10-06; lesson 39, ruby2d, came last). The site does NOT show it yet: the
+- `main` has 57 lessons (2026-10-06; lesson 39, ruby2d, then 40-41, other Rubies and PicoRuby, came last). The site does NOT show it yet: the
   host's checkout stopped following `main` on 2026-09-30 (the history
   rewrite; GitHub's push webhook is answered with 202, but the live
   `lessons.js` is from 2026-09-30). On the host: `git status`, then

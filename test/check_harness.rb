@@ -52,6 +52,10 @@ require_relative "../html/turtle"
 # show_game (lesson 38): game.rb runs headless as it is; the stub below
 # records each game, and a check plays copies of them (games), as in main.rb
 require_relative "../html/game"
+# a lesson with "engine": "picoruby" runs on PicoRuby.wasm in the browser;
+# here its exercise runs under CRuby, and the check gets the result as the
+# page hands it over - a PicoRubyCells::Value, PicoRuby's inspect text
+require_relative "../html/picoruby_cells"
 $shown_games = []
 # require "ruby2d" finds the browser's stand-in (html/ruby2d.rb over the
 # gem's own Ruby, assets/ruby2d/), mixed into the top level as in main.rb;
@@ -646,6 +650,66 @@ update do
 end
 show)]
   },
+  # a case and a Hash with a default
+  "rubies" => {
+    "de" => [%(def welches_ruby(engine)
+  case engine
+  when "ruby" then "CRuby"
+  when "jruby" then "JRuby"
+  when "truffleruby" then "TruffleRuby"
+  else engine
+  end
+end
+
+welches_ruby(RUBY_ENGINE)),
+             %(NAMEN = { "ruby" => "CRuby", "jruby" => "JRuby", "truffleruby" => "TruffleRuby", "mruby" => "mruby" }
+def welches_ruby(engine) = NAMEN.fetch(engine, engine)
+puts welches_ruby(RUBY_ENGINE))],
+    "en" => [%(def which_ruby(engine)
+  case engine
+  when "ruby" then "CRuby"
+  when "jruby" then "JRuby"
+  when "truffleruby" then "TruffleRuby"
+  else engine
+  end
+end
+
+which_ruby(RUBY_ENGINE)),
+             %(NAMES = { "ruby" => "CRuby", "jruby" => "JRuby", "truffleruby" => "TruffleRuby", "mruby" => "mruby" }
+def which_ruby(engine) = NAMES.fetch(engine, engine)
+puts which_ruby(RUBY_ENGINE))]
+  },
+  # PicoRuby has no tally: by hand, with || and with Hash.new(0)
+  "picoruby" => {
+    "de" => [%(def woerter_zaehlen(woerter)
+  anzahl = {}
+  woerter.each { |wort| anzahl[wort] = (anzahl[wort] || 0) + 1 }
+  anzahl
+end
+
+woerter_zaehlen(%w[chunky bacon chunky fuchs chunky])),
+             %(def woerter_zaehlen(woerter)
+  anzahl = Hash.new(0)
+  woerter.each { |wort| anzahl[wort] += 1 }
+  anzahl
+end
+
+woerter_zaehlen(%w[chunky bacon chunky fuchs chunky]))],
+    "en" => [%(def count_words(words)
+  counts = {}
+  words.each { |word| counts[word] = (counts[word] || 0) + 1 }
+  counts
+end
+
+count_words(%w[chunky bacon chunky fox chunky])),
+             %(def count_words(words)
+  counts = Hash.new(0)
+  words.each { |word| counts[word] += 1 }
+  counts
+end
+
+count_words(%w[chunky bacon chunky fox chunky]))]
+  },
   "tl-collections" => {
     "de" => [%(eintraege = [{ projekt: "ProjectX", stunden: 3.5 }, { projekt: "Intern", stunden: 2.0 }, { projekt: "ProjectX", stunden: 3.0 }]
 stunden = eintraege.group_by { |e| e[:projekt] }.transform_values { |l| l.sum { |e| e[:stunden] } })],
@@ -1159,6 +1223,9 @@ def run_harness(langs)
       $letter_answers = []
 
       demo_failed = false
+      # a PicoRuby lesson's demos use what only PicoRuby has (Task,
+      # sleep_ms, PICORUBY_VERSION): test/picoruby_test.mjs runs them
+      demos = [] if lesson["engine"] == "picoruby"
       demos.each do |demo|
         _, _, err = run_in(bind, demo["code"])
         if err
@@ -1194,6 +1261,8 @@ def run_harness(langs)
       end
 
       bind.local_variable_set(:output, output)
+      # the page hands a PicoRuby lesson's check the value's inspect text
+      result = PicoRubyCells.value(result.inspect) if lesson["engine"] == "picoruby"
       bind.local_variable_set(:result, result)
       bind.local_variable_set(:code, candidate)
       bind.local_variable_set(:images, $shown_images.dup)

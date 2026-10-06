@@ -168,6 +168,10 @@ require_relative "turtle"
 # show_game: a grid game the page drives frame by frame (game.rb here, the
 # loop in game.js; lesson 38). At boot too: ~10 KB of plain Ruby.
 require_relative "game"
+# A lesson with "engine": "picoruby" runs on PicoRuby.wasm in a Web Worker
+# (picoruby_lab.js); this turns its answers into values, errors and CRuby's
+# syntax messages. ~3 KB at boot.
+require_relative "picoruby_cells"
 # require "pycall" is the bridge to Pyodide (pycall.rb): the real gem needs
 # libpython, which a browser does not have
 require_relative "pycall"
@@ -331,6 +335,8 @@ class ChunkyApp
 
     @seq = seq
     fresh_binding
+    # (not in the embedded cell: embed.html has no PicoRuby)
+    $window.chunkyPicoRuby.reset if $window[:chunkyPicoRuby].typeof == "object"
     dispose_three
     dispose_shoes
     dispose_sketches
@@ -408,6 +414,8 @@ class ChunkyApp
       finish_cell_run(event.detail.idx.to_i, event.detail.auto.to_s == "true", event.detail.step.to_s == "true")
     end
     $window.addEventListener("chunky:lesson") { |event| sync_state(event.detail) }
+    # a PicoRuby lesson's cells and IRBs answer later (picoruby_lab.js)
+    $window.addEventListener("chunky:picoruby") { |event| picoruby_answer(event.detail) }
     $window.addEventListener("chunky:install") do |event|
       sync_state(event.detail)
       panel_install(event.detail.name)
@@ -1075,6 +1083,10 @@ class ChunkyApp
   end
 
   def irb_prompt(session)
+    # a PicoRuby IRB (the PicoRuby lesson) has a prompt of its own, so it
+    # does not pass for CRuby's
+    return session[:buffer].empty? ? "irb>" : "irb*" if session[:pico]
+
     depth = session[:buffer].empty? ? 0 : session[:buffer].lines.length
     format("irb(main):%03d:%d%s", session[:line], depth, depth.positive? ? "*" : ">")
   end
@@ -1084,7 +1096,7 @@ class ChunkyApp
       <div class="irb-term" data-sid="#{sid}">
         <div class="irb-history" role="log" aria-live="polite"></div>
         <div class="irb-line">
-          <span class="irb-prompt" aria-hidden="true">irb(main):001:0&gt;</span>
+          <span class="irb-prompt" aria-hidden="true">#{escape_html(irb_prompt(@irb_sessions[sid]))}</span>
           <input class="irb-input" spellcheck="false" autocomplete="off" title="irb" aria-label="#{escape_html(ui["irbInput"])}">
         </div>
       </div>
@@ -1107,6 +1119,8 @@ class ChunkyApp
     if line.strip == "exit" || line.strip == "quit"
       session[:buffer] = ""
       append += "<div class=\"irb-note\">#{ui["irbExitNote"]}</div>"
+    elsif session[:pico]
+      return picoruby_irb_line(term, session, line, append)
     else
       session[:buffer] = session[:buffer].empty? ? line : session[:buffer] + "\n" + line
       old_stdout = $stdout
@@ -1146,6 +1160,145 @@ class ChunkyApp
     term.querySelector(".irb-prompt").innerText = irb_prompt(session)
     history.scrollTop = history.scrollHeight
     input_el.focus
+  end
+
+  # ---------- PicoRuby (a lesson with "engine": "picoruby") ----------
+
+  # The lesson's cells and IRBs run on PicoRuby.wasm in a Web Worker
+  # (picoruby_lab.js): a run goes out and settles when the answer comes
+  # back, as a chunky:picoruby event - picoruby_answer shows it, checks an
+  # exercise and tells the shell (ran), as finish_cell_run does for CRuby.
+  # Code that does not parse never goes out: CRuby's Prism says why, with
+  # the line - PicoRuby's compiler would only say no.
+  def picoruby? = !workshop? && current_lesson && current_lesson["engine"] == "picoruby"
+
+  def start_picoruby_run(idx, code, auto)
+    $window.clearCellMarks(idx)
+    syntax = PicoRubyCells.syntax_error(code, EVAL_FILE)
+    return show_picoruby_run(idx, code, auto, error: syntax) if syntax
+
+    @picoruby_codes ||= {}
+    @picoruby_codes[idx] = code
+    $window.chunkyPicoRuby.run(idx.to_s, code, auto, @seq.to_s)
+    :pending
+  end
+
+  def picoruby_answer(detail)
+    return unless detail.seq.to_i == @seq   # another page by now
+
+    return picoruby_irb_answer(detail) if detail.kind == "irb"
+
+    idx = detail.idx.to_i
+    auto = detail.auto == true
+    code = (@picoruby_codes || {}).delete(idx) || $window.getCellCode(idx).to_s
+    status = detail.status.to_s
+    message = detail.message.to_s
+    error = case status
+            when "error" then PicoRubyCells.error(detail.errorClass.to_s, message, detail.line.to_i, EVAL_FILE)
+            when "syntax" then SyntaxError.new(ui["picoSyntax"])
+            when "stopped" then auto ? AutoRun::Stopped.new : PicoRubyCells::Stopped.new("#{ui['picoStopped']} #{ui['picoRestarted']}")
+            when "failed" then PicoRubyCells::Unavailable.new("#{ui['picoFailed']} (#{message})")
+            end
+    outcome = begin
+      show_picoruby_run(idx, code, auto, output: detail.output.to_s, error: error, irbs: detail.irbs.to_i,
+                        result: status == "ok" ? PicoRubyCells.value(detail.value.to_s) : nil)
+    rescue Exception => e
+      $window.console.error("picoruby #{idx}: #{e.class}: #{e.message}")
+      :error
+    end
+    elapsed = detail.elapsed.to_f
+    bridge.ran(idx, outcome.to_s, elapsed, auto, elapsed)
+  end
+
+  # the cell's output as run_cell writes it for CRuby: what was printed,
+  # the error (explained where a rule knows it) or "=> value", IRBs
+  def show_picoruby_run(idx, code, auto, output: "", result: nil, error: nil, irbs: 0)
+    # what an exercise's check sees besides output and result: nothing
+    @run_images = []
+    @run_downloads = []
+    @run_three = []
+    @run_shoes = []
+    @last_shoes_types = []
+    @run_sketches = []
+    @run_audios = []
+    @run_games = []
+    out_html = ""
+    out_html += "<pre class=\"cell-stdout\">#{AnsiHtml.to_html(output)}</pre>" unless output.empty?
+    hint = live_hint(error)
+    # a run past the time limit took the worker, and the variables, with it
+    hint = "#{hint} #{ui['picoRestarted']}" if error.is_a?(AutoRun::Stopped)
+    hint ||= error.message if error.is_a?(PicoRubyCells::Stopped) || error.is_a?(PicoRubyCells::Unavailable)
+    friendly = error && !hint && friendly_error(error, code, EVAL_FILE)
+    if hint
+      out_html += "<div class=\"cell-hint\">#{escape_html(hint)}</div>"
+    elsif friendly
+      out_html += friendly.to_html(brief: auto)
+    elsif error
+      out_html += "<div class=\"cell-error\">#{escape_html(PicoRubyCells.class_name(error))}: " \
+                  "#{AnsiHtml.to_html(error.message.to_s)}</div>"
+    elsif !(result.nil? && (!output.empty? || irbs.positive?))
+      out_html += "<div class=\"cell-result\">=&gt; #{escape_html(inspect_result(result))}</div>"
+    end
+    irbs.times do
+      sid = @irb_sessions.length
+      @irb_sessions << { pico: true, line: 1, buffer: "" }
+      out_html += irb_widget_html(sid)
+    end
+    out_el = $d.getElementById("cell-out-#{idx}")
+    out_el.innerHTML = out_html
+    out_el.style.display = "block"
+    out_el.classList.toggle("is-rehearsal", auto)
+    if error
+      return :stopped if error.is_a?(AutoRun::Stopped)
+
+      line = !auto && error_line(error)
+      $window.markCellLine(idx, line) if line
+      return :error
+    end
+    cell = cells[idx]
+    return :ok unless cell && cell["t"] == "x"
+
+    check_exercise(cell, code, output, result) ? :pass : :fail
+  end
+
+  # A line in a PicoRuby IRB: an unfinished input waits for more (Prism
+  # decides, as for CRuby's IRB), a finished one goes to the worker; the
+  # answer is added below the echo by picoruby_irb_answer.
+  def picoruby_irb_line(term, session, line, append)
+    sid = term.getAttribute("data-sid").to_i
+    history = term.querySelector(".irb-history")
+    session[:buffer] = session[:buffer].empty? ? line : session[:buffer] + "\n" + line
+    syntax = PicoRubyCells.syntax_error(session[:buffer], "(irb)")
+    if syntax && syntax.message =~ INCOMPLETE_RE
+      # the prompt changes below
+    elsif syntax
+      session[:buffer] = ""
+      append += "<div class=\"irb-error\">#{escape_html("SyntaxError: #{syntax.message.lines.first.to_s.strip}")}</div>"
+    else
+      $window.chunkyPicoRuby.irb(sid.to_s, session[:buffer], @seq.to_s)
+      session[:buffer] = ""
+    end
+    history.innerHTML += append
+    term.querySelector(".irb-prompt").innerText = irb_prompt(session)
+    history.scrollTop = history.scrollHeight
+    term.querySelector(".irb-input").focus
+  end
+
+  def picoruby_irb_answer(detail)
+    term = $d.querySelector(".irb-term[data-sid='#{detail.sid.to_i}']")
+    return unless term
+
+    history = term.querySelector(".irb-history")
+    output = detail.output.to_s
+    append = output.empty? ? "" : "<pre class=\"irb-stdout\">#{AnsiHtml.to_html(output)}</pre>"
+    append += case detail.status.to_s
+              when "ok" then "<div class=\"irb-result\">=&gt; #{escape_html(inspect_result(PicoRubyCells.value(detail.value.to_s)))}</div>"
+              when "error" then "<div class=\"irb-error\">#{escape_html("#{detail.errorClass}: #{detail.message}")}</div>"
+              when "stopped" then "<div class=\"irb-note\">#{escape_html("#{ui['picoStopped']} #{ui['picoRestarted']}")}</div>"
+              else "<div class=\"irb-error\">#{escape_html(ui['picoFailed'])}</div>"
+              end
+    history.innerHTML += append
+    history.scrollTop = history.scrollHeight
   end
 
   # ---------- running cells ----------
@@ -1213,8 +1366,11 @@ class ChunkyApp
     # +own+: without installing and loading gems, for the shell's "too slow
     # for live runs"
     own = elapsed ? [elapsed - AutoRun.library_time, 0.0].max : -1
-    bridge.ran(idx, (outcome || :error).to_s, elapsed || -1, auto, own)
-    bridge.gems(installed_json)
+    # a PicoRuby lesson's run went to the worker: picoruby_answer settles it
+    unless outcome == :pending
+      bridge.ran(idx, (outcome || :error).to_s, elapsed || -1, auto, own)
+      bridge.gems(installed_json)
+    end
   end
 
   # A live run keeps nothing it wrote: its new files on the real filesystem
@@ -1243,6 +1399,8 @@ class ChunkyApp
     # a live run starts only for code that parses - otherwise the output
     # stays as it is (autorun.rb)
     return :skipped if auto && !AutoRun.runnable?(code, workshop? ? [] : @bind.local_variables)
+    # a lesson on PicoRuby: the worker runs it, picoruby_answer shows it
+    return start_picoruby_run(idx, code, auto) if picoruby?
 
     if workshop?
       # the shell's callbacks (shell/workspace.rb), across the two Rubies

@@ -42,5 +42,9 @@ module ChunkyShell
     # true for a lesson whose code cells get ⏯ beside ▶ ("stepper": true,
     # the Basics with plain Ruby: a run recorded line by line, stepper.js)
     def stepper?(idx) = @lessons[idx][:stepper] == true
+
+    # true for a lesson whose cells run on PicoRuby.wasm instead of CRuby
+    # ("engine": "picoruby", the PicoRuby lesson: html/picoruby_lab.js)
+    def picoruby?(idx) = @lessons[idx][:engine] == "picoruby"
   end
 end

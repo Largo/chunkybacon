@@ -72,7 +72,7 @@ class ServerTest < Minitest::Test
     res = get("/api/lessons")
     assert_equal 200, res.status
     lessons = JSON.parse(res.body)
-    assert_equal 55, lessons.length
+    assert_equal 57, lessons.length
     methoden = lessons.find { |lesson| lesson["id"] == "methoden" }
     assert_equal "9. Methods", methoden["titles"]["en"]
   end

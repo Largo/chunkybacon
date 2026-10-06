@@ -8,7 +8,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **55 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **57 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics, tables, frames and colours
   for the terminal with the [TTY toolkit](https://ttytoolkit.org),
@@ -29,8 +29,11 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   a drum beat - played below the cell), Snake built in five steps and
   played with the arrow keys below the cell, games with
   [ruby2d](https://www.ruby2d.com) whose code opens a real window on your
-  computer too, and
-  a project track that builds a small time tracker.
+  computer too, the other Rubies (JRuby, TruffleRuby, mruby, PicoRuby,
+  [IronRuby](https://github.com/Largo/ironruby) on .NET, RubyMotion,
+  DragonRuby and more), a lesson whose cells and IRB run on
+  [PicoRuby.wasm](https://github.com/picoruby/picoruby) instead of CRuby,
+  and a project track that builds a small time tracker.
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
   cell shows its last expression as `=> …` — `puts` is never required.
@@ -41,7 +44,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   that lost it; `fox["name"]` on a hash with symbol keys suggests
   `fox[:name]`). Ruby's own message stays one click away. 44 rules,
   checked against 70 typical beginner mistakes drawn from the exercises.
-- **Lesson sidebar**: the 55 lessons in three groups (basics, side trips,
+- **Lesson sidebar**: the 57 lessons in three groups (basics, side trips,
   the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a
   drawer.
@@ -215,7 +218,16 @@ For operations, internals and traps see [docs/HANDOVER.md](docs/HANDOVER.md).
 The page runs on two Rubies: [PicoRuby.wasm](https://github.com/picoruby/picoruby)
 (0.9 MB) draws everything you read within a fraction of a second, while
 CRuby's ruby.wasm (10 MB) loads behind it and runs the code - see
-[docs/PICORUBY_SHELL.md](docs/PICORUBY_SHELL.md).
+[docs/PICORUBY_SHELL.md](docs/PICORUBY_SHELL.md). The PicoRuby lesson
+(41) runs its cells on a second PicoRuby.wasm, in a Web Worker - the
+same runtime, nothing more to download ([docs/HANDOVER.md](docs/HANDOVER.md) §6m).
+
+The runtimes and libraries the page loads from its own server
+(ruby.wasm, PicoRuby.wasm, Pyodide, sql.js, Herb, the gem cache) are
+kept in the repository, because a push is the deploy; each is written
+by a tool under `tools/` that downloads a pinned version, checks it
+against the registry's checksum and can say whether the files on disk
+are still those (`--check`) - §9a of the handover.
 
 Built on the same foundation as
 [BrowserRubyKoans](https://github.com/Largo/BrowserRubyKoans)
@@ -287,6 +299,8 @@ node offline_test.mjs     # offline mode: the copy, offline, a deploy, turning i
 ruby server_test.rb       # the optional server (server/)
 ruby dev_server_test.rb   # the bridges serve only the course's pages, the embed's headers; nginx says the same
 node embed_test.mjs       # an embedded cell on another site (dev server with FRAME_ANCESTORS="http://blog.test:*")
+node picoruby_test.mjs    # the PicoRuby lesson: cells and IRB on PicoRuby.wasm in a worker
+ruby ../tools/vendor_picoruby.rb --check # the PicoRuby runtime is the one PICORUBY_VERSION.txt records
 ruby ../tools/build_embed_ui.rb --check   # html/embed-ui.js has lessons.js's ui strings
 BASE=http://127.0.0.1:8012/ node permalink_test.mjs   # permalinks, against the server
 cd ../gem/chunky_bacon && rake test   # the companion gem

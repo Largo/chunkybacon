@@ -214,11 +214,12 @@ fetched with `cache: "no-cache"` by the loader.
 ## 4. Running, testing, measuring
 
 ```sh
-# the runtime (bundled with the create-jobrouter-custom-application skill,
-# checksum-verified, no download), then the loader patch
-ruby <skill dir>/scripts/install_picoruby.rb html
-cp <skill dir>/assets/picoruby/NOTICE.md html/assets/picoruby/
-ruby tools/patch_picoruby_loader.rb            # --check to verify
+# the runtime from npm, checked against the registry's SHA-512; the tool
+# also patches the loader, writes the .gz copies and NOTICE.md (it was
+# first installed with the create-jobrouter-custom-application skill's
+# installer - the same bytes)
+ruby tools/vendor_picoruby.rb                  # --check: offline, the recorded files
+ruby tools/patch_picoruby_loader.rb --check    # the loader reads text/picoruby
 ruby tools/compress_assets.rb --check          # the .gz copies match
 
 node test/make_lessons_json.js

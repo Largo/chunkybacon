@@ -732,6 +732,9 @@
   <!-- ⏯ beside ▶ (a lesson with "stepper": true): a recorded run, step by
        step - the line in the editor, the variables, the output so far -->
   <script src="stepper.js"></script>
+  <!-- a second PicoRuby, in a Web Worker, for a lesson whose cells run on it
+       ("engine": "picoruby", the PicoRuby lesson): picoruby_lab.js -->
+  <script src="picoruby_lab.js"></script>
   <!-- the page shell (PicoRuby) and its bridge to the kernel (CRuby);
        the bridge starts browser.script.iife.js, which runs main.rb -->
   <script src="shell/bridge.js"></script>

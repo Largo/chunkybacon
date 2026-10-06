@@ -132,6 +132,10 @@ main.rb
 numo_narray.rb
 object_graph.rb
 offline.js
+picoruby_cells.rb
+picoruby_lab.js
+picoruby_lab.rb
+picoruby_worker.js
 processing.js
 processing.rb
 pycall.rb

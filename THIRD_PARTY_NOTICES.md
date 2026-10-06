@@ -18,14 +18,16 @@ itself - are the comment at the top of `html/browser.script.iife.js`, as
 ruby.wasm distributes them. Keep that comment when updating the loader
 (`tools/update_ruby_wasm.rb`).
 
-The page shell (`html/shell/`) runs on a second Ruby:
+The page shell (`html/shell/`) runs on a second Ruby, and the PicoRuby lesson on a
+second instance of it (`html/picoruby_worker.js`):
 
 | Component | Version | License | Copyright | Files |
 |---|---|---|---|---|
 | [PicoRuby](https://github.com/picoruby/picoruby).wasm (`@picoruby/wasm-wasi`) | 4.0.3 | MIT | 2020 HASUMI Hitoshi | `html/assets/picoruby/`: `init.iife.js` (loader, patched to read `text/picoruby`, `tools/patch_picoruby_loader.rb`), `picoruby.js`, `picoruby.wasm` and their `.gz` copies |
 
 The license text, the npm tarball's integrity digest and the SHA-256 of
-every file are in `html/assets/picoruby/NOTICE.md`; keep it with the runtime.
+every file are in `html/assets/picoruby/NOTICE.md`, written by `tools/vendor_picoruby.rb`
+with the runtime.
 
 ## Python in the browser (`html/assets/pyodide/`)
 
