@@ -547,7 +547,10 @@ module JS
       }
       props["console"] = { "error" => proc { |*a| JS.console_errors << a.join(" "); nil } }
       props["JSON"] = { "parse" => proc { |text| JSON.parse(text.to_s) }, "stringify" => proc { |o| JSON.generate(o) } }
-      props["Object"] = { "keys" => proc { |o| o.is_a?(::Hash) ? o.keys : [] } }
+      # Object.keys(localStorage), as in a browser: the stored keys
+      props["Object"] = {
+        "keys" => proc { |o| o.equal?(props["localStorage"]) ? @storage.keys : (o.is_a?(::Hash) ? o.keys : []) }
+      }
       props["LESSONS"] = JSON.parse(File.read(File.expand_path("../../lessons.json", __dir__)))
       @confirm = true
       %w[setCellCode refreshAllCells ensureThree ensurePython ensureSqlite ensureHerb scrollTo].each do |name|

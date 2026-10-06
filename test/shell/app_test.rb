@@ -8,6 +8,8 @@ class AppTest < Minitest::Test
   def run_button(idx) = find(".run-cell[data-idx='#{idx}']")
   def cell(idx) = run_button(idx).js_closest(".cell")
   def exercise_idx = find(".cell.exercise .run-cell").attrs["data-idx"].to_i
+  # where the code of cell idx (lesson hallo's "1 + 1" by default) is saved
+  def saved_key(idx = 1, starter = "1 + 1", id = "hallo") = ChunkyShell::Store.code_key("de", id, idx, starter)
 
   # ---------- boot ----------
 
@@ -34,7 +36,7 @@ class AppTest < Minitest::Test
   end
 
   def test_editors_get_their_code_as_strings
-    start(storage: { "chunky_cell_de_hallo_1" => "2 + 2" })
+    start(storage: { saved_key => "2 + 2" })
     codes = calls("setCellCode")
     assert_equal ["setCellCode", "1", "2 + 2"], codes.first
     assert(codes.all? { |_, idx, _code| idx.is_a?(String) }, "a number beside a string with \\n breaks the call")
@@ -370,21 +372,63 @@ class AppTest < Minitest::Test
   end
 
   def test_reset_restores_the_starter_code
-    start(storage: { "chunky_cell_de_hallo_1" => "2 + 2" })
+    start(storage: { saved_key => "2 + 2" })
     window.calls.clear
     byid("cell-out-1").props["style"] = { "display" => "block" }
     click(byid("reset-code"))
-    assert_nil window.storage["chunky_cell_de_hallo_1"]
+    assert_nil window.storage[saved_key]
     assert_equal ["setCellCode", "1", "1 + 1"], calls("setCellCode").first
     assert_equal "none", byid("cell-out-1").props["style"]["display"]
     assert_equal 1, calls("reset").length
   end
 
   def test_reset_asks_first
-    start(storage: { "chunky_cell_de_hallo_1" => "2 + 2" })
+    start(storage: { saved_key => "2 + 2" })
     window.confirm = false
     click(byid("reset-code"))
-    assert_equal "2 + 2", window.storage["chunky_cell_de_hallo_1"]
+    assert_equal "2 + 2", window.storage[saved_key]
+  end
+
+  # ---------- saved code ----------
+
+  def test_a_run_saves_the_code_under_the_cells_fingerprint
+    start
+    window.props["chunkySaveCode"].call("1", "3 + 3\n")   # main.rb's run_cell
+    assert_equal "3 + 3\n", window.storage[saved_key]
+    window.props["chunkySaveCode"].call("0", "prose")      # not a code cell
+    assert_equal 1, window.storage.keys.grep(/^chunky_cell_/).length
+  end
+
+  def test_the_workshop_saves_no_cell_code
+    start(hash: "#werkstatt")
+    window.props["chunkySaveCode"].call("0", "puts 1")
+    assert_empty window.storage.keys.grep(/^chunky_cell_/)
+  end
+
+  def test_code_saved_for_another_cell_is_not_shown
+    # a cell moved to index 1, or its starter changed: another fingerprint
+    start(storage: { saved_key(1, "puts 'the old cell'") => "2 + 2" })
+    assert_equal ["setCellCode", "1", "1 + 1"], calls("setCellCode").first
+  end
+
+  def test_code_saved_before_fingerprints_is_shown_in_its_cell
+    exercise = "x = 1"
+    start(hash: "#hashes", storage: { "chunky_cell_de_hashes_3" => exercise, "chunky_cell_de_hashes_1" => "demo" })
+    assert_equal 5, exercise_idx
+    shown = calls("setCellCode").to_h { |_, idx, code| [idx, code] }
+    assert_equal exercise, shown["5"], "the old exercise code, in the exercise"
+    assert_equal "demo", shown["1"]
+    refute_equal exercise, shown["3"], "not in the new demo cell"
+    refute window.storage.key?("chunky_cell_de_hashes_3")
+  end
+
+  def test_a_loaded_progress_file_with_old_keys_lands_in_the_right_cells
+    start(hash: "#arrays")
+    window.calls.clear
+    window.storage["chunky_cell_de_arrays_7"] = "fruechte = []"   # an old file's exercise code
+    fire("chunky-progress-loaded")
+    assert_equal ["setCellCode", "9", "fruechte = []"], calls("setCellCode").find { |_, idx, _| idx == "9" }
+    refute_equal "fruechte = []", calls("setCellCode").find { |_, idx, _| idx == "7" }[2]
   end
 
   def test_a_new_lesson_forgets_running_cells

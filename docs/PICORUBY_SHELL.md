@@ -61,8 +61,8 @@ Who owns what:
 | language (de/en/ja), routing (`location.hash`, back/forward, bad ids), reset | yes | follows the shell's state | |
 | Chunky's bubble (welcome, praise, next-lesson link, hints, errors, gem messages) | yes | composes gem error texts | |
 | Run button look (running, fox, shake/celebrate, run time), Alt+R, Shift+Enter | yes | | Shift+Enter in `initCell` |
-| lesson done list (`chunky_done`), `chunky_lang`, `chunky_current` | yes | | |
-| running cells, checks (`check_exercise`), `=>` output, cell code keys | | yes | |
+| lesson done list (`chunky_done`), `chunky_lang`, `chunky_current`, a cell's saved code (`Store.code_key`, HANDOVER §6a) | yes | hands over the code it runs (`chunkySaveCode`) | |
+| running cells, checks (`check_exercise`), `=>` output | | yes | |
 | gems: installing, installed list | chips, button, bubble | `BrowserGems` | |
 | IRB, mini browser, 3D, Shoes, file explorer, downloads, workshop runs | | yes | |
 | progress dialog, workshop file panel (`shell/workspace.rb`, formerly `workspace_ui.js`) | yes | asks for the project's files during a run | |
@@ -124,7 +124,9 @@ registers (`JS::Object.register_callback`): `workshopOpenPath`,
 `workspaceDelete(path)`, `workshopAfterRun` - the same names
 `workspace_ui.js` had, so `run_cell` did not change. One more such
 function, `chunkyEdited(idx)`, is for index.html's editors: a key in a
-cell, which starts the shell's live-run timer.
+cell, which starts the shell's live-run timer; and `chunkySaveCode(idx,
+code)` is the kernel's again: the code a run uses, which the shell keeps
+(later than this report: HANDOVER §6a).
 
 | event | to | detail |
 |---|---|---|

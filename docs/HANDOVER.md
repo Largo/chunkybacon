@@ -123,7 +123,7 @@ test/live_test.mjs         Playwright: live runs in a lesson and the workshop
 test/server_test.rb        the optional server under Rack::MockRequest
 test/permalink_test.mjs    Playwright: permalinks, against the server (port 8012)
 test/browser_test.mjs      Playwright end-to-end
-test/progress_test.mjs     Playwright: progress file, workshop, folder (48 checks)
+test/progress_test.mjs     Playwright: progress file, workshop, folder (52 checks)
 test/boot_failure_test.mjs Playwright: what the page says when a runtime fails
 test/language_test.mjs     Playwright: which language a visitor gets (11 checks)
 test/offline_test.mjs      Playwright: offline mode, behind a proxy it takes down
@@ -278,6 +278,14 @@ Rules that the code and tests rely on:
   `node test/make_lessons_json.js`.
 - Progress, language and per-cell code persist in `localStorage` - and from
   there in a progress file or a connected folder, see §6a.
+- **Inserting, removing or moving cells** in a lesson, and rewriting a
+  starter, is safe for learners' saved code: it is keyed by the cell's
+  index and its starter's fingerprint (§6a), so it never lands in another
+  cell. The price: a code cell whose index or starter changes opens with its
+  starter, and the learner's version of it stays hidden in storage - and any
+  cell inserted before a code cell, prose too, changes its index. So where
+  the lesson reads as well either way, add cells after the code cells
+  learners will have worked on, and leave starters alone for cosmetic fixes.
 - `test/lint_lessons.rb` checks the mechanical half of these rules; after
   inserting a lesson run it with `--base=main` - every reference that now
   points at a different lesson is an error.
@@ -532,6 +540,27 @@ machine:
   context**: https or localhost. The live site is https, so it works there;
   on a plain `http://<ip>` the browser hides the API and the dialog offers
   only the file.
+- **A cell's saved code** is the key `chunky_cell_<lang>_<id>_<idx>@<fp>`:
+  the cell's index in the lesson and a fingerprint of its starter code
+  (`shell/store.rb`: a polynomial hash of the bytes, base 36, at most six
+  characters). The kernel's `run_cell` hands the code it runs to the shell
+  (`chunkySaveCode(idx, code)`, a callback from `App#wire_events`), which
+  files it under the cell on screen; `render_lesson` shows saved code only
+  under the key of the cell now at that index, and a reset removes that key.
+  So when a lesson's cells change, saved code never shows in another cell: a
+  cell whose index or starter changed opens with its starter, and what was
+  saved for it before stays in storage, unused. `Store.fingerprint` must
+  never change (a test pins it) - that would hide every learner's code.
+- Keys from before the fingerprint (`chunky_cell_<lang>_<id>_<idx>`, until
+  2026-10) are moved by `Store.migrate_code_keys`, at boot and after a
+  progress file or folder was merged in (`chunky-progress-loaded`), so an
+  old progress file lands right too: to the fingerprinted key of the cell
+  they were saved for - in `arrays`, `hashes` and `klassen` shifted by two
+  (`Store::LEGACY_SHIFTS`: the `show_objects` cells went in before their
+  exercises, 7 → 9, 3 → 5, 3 → 5, in all three languages). Where both keys
+  exist the newer wins (`chunkysync_times`); the old key is removed, so the
+  removal travels and an old copy cannot bring it back. A key this course
+  has no code cell for is left alone.
 - **Workshop** (`#werkstatt`, link above the lessons): the learner's own
   programs. Without a folder the files are `chunky_file:<path>` keys (so they
   travel in the progress file); with a folder they are real files in it
