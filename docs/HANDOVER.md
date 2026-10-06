@@ -1437,7 +1437,14 @@ analysis it started from).
   hand-made links), `loading="lazy"`, and the `sandbox` attribute as a
   second line of defence. The frame posts `{chunkyEmbed: "size", height}`
   and timings with `"*"`; the host page matches them by `event.source`
-  (a sandboxed frame's origin is `"null"`) and follows the height.
+  (a sandboxed frame's origin is `"null"`) and follows the height. It
+  listens only to its own cells (the frames it made, and hand-written
+  iframes of the course's `embed.html`), names them itself (`chunky-N`,
+  never an id a frame sends), checks that height and `ms` are finite
+  numbers and a timing name is a short word, and keeps `timings` in
+  prototype-less objects - another child frame on the host page (an ad,
+  a video) could otherwise write onto the page's `Object.prototype` with
+  an id `"__proto__"` (CodeRabbit, PR #21; `embed_test.mjs` checks it).
   `tools/make_embed_url.rb` writes the same address from Ruby (Zlib with
   window bits -15, `urlsafe_encode64(padding: false)`).
 - **Inside** (`embed-frame.js`): the code is on screen as plain text at

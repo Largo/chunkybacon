@@ -61,7 +61,9 @@
   }
 
   var frames = [];
-  var timings = {};
+  // keyed by ids and names a frame sends: no prototype, so "__proto__" is
+  // just a key and can't reach this page's Object.prototype
+  var timings = Object.create(null);
   var count = 0;
 
   function upgrade(pre) {
@@ -93,17 +95,24 @@
   window.addEventListener("message", function (event) {
     var data = event.data;
     if (!data || typeof data !== "object" || !data.chunkyEmbed) return;
-    // a sandboxed embed's origin is "null": who sent it is the frame itself
-    // (hand-written <iframe>s of embed.html follow too)
+    // a sandboxed embed's origin is "null": who sent it is the frame itself.
+    // Only our cells count - the ones upgrade made, and hand-written
+    // <iframe>s of this course's embed.html - not any other child frame
     var frame = Array.prototype.filter.call(document.getElementsByTagName("iframe"),
       function (f) { return f.contentWindow === event.source; })[0];
     if (!frame) return;
-    if (!frame.dataset.chunkyId) frame.dataset.chunkyId = data.id || "chunky-" + (++count);
-    if (data.chunkyEmbed === "size" && data.height > 0 && data.height < 20000) {
+    if (frames.indexOf(frame) < 0 && frame.src.indexOf(base + "embed.html") !== 0) return;
+    // the id is this page's, never one the frame names
+    if (!frame.dataset.chunkyId) frame.dataset.chunkyId = "chunky-" + (++count);
+    var number = function (value) { return typeof value === "number" && isFinite(value); };
+    if (data.chunkyEmbed === "size" && number(data.height) && data.height > 0 && data.height < 20000) {
       frame.style.height = data.height + "px";
-    } else if (data.chunkyEmbed === "timing") {
-      (timings[frame.dataset.chunkyId] = timings[frame.dataset.chunkyId] || {})[data.name] = data.ms;
-      frame.dispatchEvent(new CustomEvent("chunky-embed:timing", { bubbles: true, detail: data }));
+    } else if (data.chunkyEmbed === "timing" && typeof data.name === "string" &&
+               /^[\w-]{1,40}$/.test(data.name) && number(data.ms)) {
+      var id = frame.dataset.chunkyId;
+      (timings[id] = timings[id] || Object.create(null))[data.name] = data.ms;
+      frame.dispatchEvent(new CustomEvent("chunky-embed:timing",
+        { bubbles: true, detail: { id: id, name: data.name, ms: data.ms } }));
     }
   });
 
