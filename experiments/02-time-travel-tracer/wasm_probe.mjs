@@ -1,4 +1,4 @@
-// Runs step_recorder.rb inside a lesson cell on ruby.wasm (the real page,
+// Runs html/step_recorder.rb inside a lesson cell on ruby.wasm (the real page,
 // from the dev server) and prints what wasm_probe_tail.rb reports: does the
 // targeted TracePoint work there, and what does recording cost.
 //   PLAYWRIGHT_DIR=.../node_modules/playwright BASE=http://127.0.0.1:18102/ node wasm_probe.mjs
@@ -10,7 +10,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const { chromium } = await import(pathToFileURL(join(process.env.PLAYWRIGHT_DIR, 'index.mjs')).href);
 const BASE = process.env.BASE || 'http://127.0.0.1:18102/';
 
-const code = readFileSync(join(here, 'step_recorder.rb'), 'utf8') + readFileSync(join(here, 'wasm_probe_tail.rb'), 'utf8');
+const code = readFileSync(join(here, '..', '..', 'html', 'step_recorder.rb'), 'utf8') + readFileSync(join(here, 'wasm_probe_tail.rb'), 'utf8');
 const browser = await chromium.launch();
 const page = await (await browser.newContext({ locale: 'de-DE' })).newPage();
 page.on('pageerror', e => console.log('[pageerror]', e.message));

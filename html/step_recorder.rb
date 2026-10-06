@@ -1,8 +1,9 @@
-# StepRecorder - "time travel" for a notebook cell.
+# StepRecorder - "time travel" for a notebook cell (experiments/02-time-travel-tracer).
 #
 # Runs a cell under a TracePoint and records, for every step, the line about
-# to run and the local variables of each frame (inspect, truncated). A widget
-# then lets the learner scrub through the run (mock: scrubber.html).
+# to run and the local variables of each frame (inspect, truncated). The
+# stepper (stepper.js) then lets the learner scrub through the run: ⏯ beside
+# ▶ in a lesson with "stepper": true, main.rb's run_cell(idx, step: true).
 #
 #   rec = StepRecorder.new(code, file: "chunky.rb")
 #   value = rec.run { eval(code, bind, "chunky.rb") }   # the cell's own eval
@@ -35,9 +36,12 @@ class StepRecorder
   MAX_FRAMES = 5
   MAX_VARS = 16
   MAX_ITEMS = 12
+  # a line, a method of this cell called and returning, a block entered and left
+  TRACED_EVENTS = %i[line call return b_call b_return].freeze
 
-  # what the kernel itself puts into the binding (check_exercise) - never shown
-  HIDDEN = %i[output result code images downloads scenes apps shoes_types _].freeze
+  # what the kernel itself puts into the binding (main.rb's check_exercise;
+  # test/step_recorder_test.rb keeps the two lists equal) - never shown
+  HIDDEN = %i[output result code images downloads scenes apps shoes_types sketch audios games _].freeze
 
   Frame = Struct.new(:kind, :name, :line, :binding, :own, :seen, :last_line, :iter, :id, :shot)
 
@@ -65,16 +69,23 @@ class StepRecorder
     out = $stdout
     @out = out.respond_to?(:string) ? out : nil
     @out_start = @out ? @out.string.bytesize : 0
-    @tracer = TracePoint.new(:line, :call, :return, :b_call, :b_return) { |tp| on_event(tp) }
+    @tracer = TracePoint.new(*TRACED_EVENTS) { |tp| on_event(tp) }
     @compiled = TracePoint.new(:script_compiled) do |tp|
       # (tp.path is the file that called eval; the iseq knows the eval's own)
       root = tp.instruction_sequence
       next unless tp.eval_script == @code && root.path == @file
 
-      index_blocks(root)
-      @tracer.enable(target: root)
-      @started = true
       @compiled.disable
+      @started = true
+      # Code with no line to stop at (only comments: an exercise before the
+      # learner wrote anything) runs as it is; its trace is just the end.
+      # Asking anyway is worse than useless: enable(target:) raises "can not
+      # enable any hooks", and after that no targeted TracePoint in the
+      # process sees an event again (CRuby 4.0).
+      if events?(root)
+        index_blocks(root)
+        @tracer.enable(target: root)
+      end
     end
     @compiled.enable
     begin
@@ -118,6 +129,14 @@ class StepRecorder
   def to_json(*args) = JSON.generate(trace, *args)
 
   private
+
+  # does this cell's code, or a method or block in it, have an event?
+  def events?(iseq)
+    return true if iseq.trace_points.any? { |_, event| TRACED_EVENTS.include?(event) }
+
+    iseq.each_child { |child| return true if events?(child) }
+    false
+  end
 
   # the own locals of every block of this cell, by its first line (exact:
   # from the instruction sequences, not from guessing at bindings)

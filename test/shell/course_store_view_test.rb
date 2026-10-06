@@ -197,6 +197,26 @@ class CourseStoreViewTest < Minitest::Test
     assert_match(/<div class="cell exercise" data-label="Aufgabe">/, html)
   end
 
+  # ⏯ is for the Basics lessons whose cells are plain Ruby (lessons.js
+  # "stepper": true) - not gems, servers or the network, not the IRB
+  def test_the_lessons_with_a_stepper
+    flagged = @course.ids.each_index.select { |idx| @course.stepper?(idx) }.map { |idx| @course.id(idx) }
+    assert_equal %w[variablen strings wenn schleifen arrays hashes methoden turtle klassen module], flagged
+    side_trips = @course.ids.each_index.find { |idx| idx.positive? && @course.section(idx, "de") }
+    assert(flagged.all? { |id| @course.index(id) < side_trips }, "the Basics only")
+  end
+
+  def test_step_buttons_beside_run_but_not_beside_an_irb
+    step = ["⏯ Step through", "Step through cell %d"]
+    html = ChunkyShell::View.lesson_html(@course.cells(@course.index("schleifen"), "en"), "Task", "▶ Run", "", "Run cell %d", step)
+    assert_includes html, %(<button type="button" class="step-cell" data-idx="3" aria-label="Step through cell 2">⏯ Step through</button>) +
+                          %(<button type="button" class="run-cell" data-idx="3" aria-label="Run cell 2">▶ Run</button>)
+    assert_equal 3, html.scan("step-cell").length
+    irb = ChunkyShell::View.lesson_html(@course.cells(@course.index("irb"), "en"), "Task", "▶ Run", "", "Run cell %d", step)
+    assert_equal 1, irb.scan("step-cell").length, "the exercise, not show_irb's cell"
+    refute_includes ChunkyShell::View.lesson_html(@course.cells(0, "en"), "Task", "▶ Run"), "step-cell"
+  end
+
   def test_run_buttons_named_by_their_code_cell
     html = ChunkyShell::View.lesson_html(@course.cells(0, "en"), "Task", "▶ Run", "", "Run cell %d")
     assert_includes html, %(data-idx="1" aria-label="Run cell 1">▶ Run</button>)

@@ -9,7 +9,8 @@
 // time, a chart redrawn live. A turtle drawing is a still while live and
 // animated on ▶. A game is mounted by a live run but never started. A
 // lesson with "live": false (music) runs nothing live,
-// and its switch says why. About three minutes.
+// and its switch says why. ⏯'s recording ends with the next key, and the
+// live run that follows records nothing. About three minutes.
 import { chromium } from '/usr/local/lib/node_modules/playwright/index.mjs';
 
 const BASE = process.env.BASE || 'http://127.0.0.1:8011/';
@@ -39,7 +40,7 @@ const runs = page => page.evaluate(() => window.__runs.length);
 // what the shell asked the kernel for (shell/bridge.js)
 const countRuns = page => page.evaluate(() => {
   window.__runs = [];
-  window.addEventListener('chunky:run', e => window.__runs.push(e.detail.auto ? 'auto' : 'run'));
+  window.addEventListener('chunky:run', e => window.__runs.push(e.detail.auto ? 'auto' : e.detail.step ? 'step' : 'run'));
 });
 const responsive = async page => {
   const started = Date.now();
@@ -158,6 +159,33 @@ const responsive = async page => {
   await page.click('.run-cell[data-idx="1"]');
   await page.waitForFunction(() => !document.getElementById('cell-out-1').classList.contains('is-rehearsal'), null, { timeout: 8000 }).catch(() => {});
   check('▶ draws it animated', (await svg()).includes('animateMotion'));
+  await ctx.close();
+}
+
+// ---------- ⏯ step through: an edit ends the recording, a live run makes none ----------
+{
+  const ctx = await browser.newContext({ locale: 'de-DE' });
+  const page = await open(ctx, '#schleifen');
+  await countRuns(page);
+  const recorded = () => page.evaluate(() => ({
+    state: window.ChunkyStepper.state(3),
+    widget: !!document.querySelector('#cell-out-3 .stepper'),
+    marked: !!document.querySelector('.cell:has(.run-cell[data-idx="3"]) .CodeMirror .step-now')
+  }));
+  await page.click('.step-cell[data-idx="3"]');
+  await page.waitForSelector('#cell-out-3 .stepper .step-slider', { timeout: 15000 }).catch(() => {});
+  let rec = await recorded();
+  check('⏯ runs the cell once, recorded', JSON.stringify(await page.evaluate(() => window.__runs)) === '["step"]' &&
+    rec.state && rec.state.steps === 5 && rec.widget && rec.marked);
+  await page.click('.cell:has(.run-cell[data-idx="3"]) .CodeMirror');
+  await page.keyboard.press('Control+End');
+  await page.keyboard.type('\n# fertig', { delay: 40 });
+  rec = await recorded();
+  check('a key ends the recording at once', !rec.state && !rec.widget && !rec.marked);
+  await page.waitForFunction(() => window.__runs.includes('auto') && document.getElementById('cell-out-3').classList.contains('is-rehearsal'), null, { timeout: 8000 }).catch(() => {});
+  rec = await recorded();
+  check('the live run that follows records nothing', JSON.stringify(await page.evaluate(() => window.__runs)) === '["step","auto"]' &&
+    !rec.state && !rec.widget && (await out(page, 3)).includes('Streifen Nummer 3'));
   await ctx.close();
 }
 

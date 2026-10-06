@@ -78,6 +78,10 @@ html/
                         require_relative between them, gets, write-back
   autorun.rb            live runs (§6b): what may run by itself, the time
                         limit, taking back the files a rehearsal wrote
+  step_recorder.rb      ⏯ step through (§6): a cell's run recorded line by
+                        line - the line, each frame's variables, the output
+  stepper.js            ⏯'s stepper below the cell: Chunky's sentence, the
+                        variables, a slider; the line marked in the editor (§6)
   friendly_errors.rb    a failing cell's error explained in de/en/ja (§6);
                         its rules (_rules.rb) and texts (_messages.rb) apart
   storage.js            where the work lives: localStorage change times, the
@@ -125,6 +129,7 @@ test/ansi_test.rb          ANSI colours to HTML under CRuby
 test/object_graph_test.rb  show_objects under CRuby: walk, SVG, alt text, the gem's copy
 test/turtle_test.rb        turtle graphics under CRuby: path, check helpers, SVG, texts, the gem's copy
 test/game_test.rb          show_game under CRuby: the lesson's Snake by timer and keys, restart, the copies checks play
+test/step_recorder_test.rb ⏯'s recorder under CRuby: steps, frames, hidden locals, caps, every cell of the stepper lessons
 test/live_test.mjs         Playwright: live runs in a lesson and the workshop, a lesson without them
 test/server_test.rb        the optional server under Rack::MockRequest
 test/permalink_test.mjs    Playwright: permalinks, against the server (port 8012)
@@ -204,6 +209,7 @@ changes and rewrites it; prose edits can be done by hand.
   "section": { "de": "Grundkurs", "en": "Basics", "ja": "基礎コース" },   // optional: starts a group in the sidebar
   "files": { "digits.csv": "assets/data/digits.csv" },   // optional: files next to the code (§6e)
   "live": false,   // optional: no live runs in this lesson (§6b)
+  "stepper": true, // optional: ⏯ beside ▶ on its code cells (§6)
   "de": { "title": "14. HTML parsen", "cells": [ ... ] },
   "en": { "title": "14. Parsing HTML", "cells": [ ... ] },
   "ja": { "title": "14. HTMLのパース", "cells": [ ... ] } }
@@ -214,6 +220,18 @@ A section opens a group in the sidebar's index and runs until the next one
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
 (side trips, 20-38), not in a group of one.
+
+`"stepper": true` puts ⏯ (step through) beside every ▶ of the lesson but an
+IRB's (`View.lesson_html`, `Course#stepper?`). It is on the Basics whose
+cells are plain Ruby and short, where watching a run teaches something:
+lessons 3-12 (variablen, strings, wenn, schleifen, arrays, hashes, methoden,
+turtle, klassen, module) - assignments, a branch taken, a loop's passes,
+a block's variable, a method called and returning, recursion. Not on
+hallo and rechnen (one-line cells: one step), the IRB, nor on 14-19,
+whose cells install gems, start servers or fetch from the web - nothing of
+the learner's own to step through there. `test/step_recorder_test.rb`
+records every code cell of the flagged lessons (de and en) and requires
+them to be Basics; run it after flagging another.
 
 The sidebar itself (`index.html` `#sidebar`, `shell/app.rb`, `app.css`): from
 the top of the window to its foot with its own scroll; head with the course
@@ -640,6 +658,82 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   - The workshop takes the same path (the guard watches `Workshop.paths`)
     but has not been tried. The companion gem's `show_game` raises NotHere
     (a game on a computer: ruby2d or gosu, its message says).
+- **Step through a cell, ⏯** (`step_recorder.rb` + `stepper.js`, from
+  `experiments/02-time-travel-tracer`; lessons with `"stepper": true`, §3).
+  ⏯ sends `ChunkyBridge.step(idx)`: the same run as ▶ (`chunky:run` with
+  `step: true`, `run_cell(idx, step: true)`), with the eval wrapped in
+  `StepRecorder#run`. After the output is written, `show_steps` hands the
+  trace to `ChunkyBridge.steps(idx, json)`; bridge.js parses it (never
+  PicoRuby) and `ChunkyStepper.show` puts the stepper on top of
+  `#cell-out-<idx>`, above the run's own output: Chunky's sentence ("Zeile
+  2 ist dran - zum 3. Mal."), the frames (the cell, a method with its
+  arguments, a block with its pass; a value that changed in yellow, one
+  from an earlier cell with ⟲), the output so far, ⏮ ◀ slider ▶ ⏭, "⏵
+  Abspielen". The line about to run is marked in the cell's own editor
+  (`addLineClass(.., "background", "step-now")`; `step-call`,
+  `step-return`, `step-error` colour it). Its traps:
+  - **The recorder is a targeted TracePoint.** A `:script_compiled` hook
+    waits for the eval of exactly this code (`eval_script == code`, the
+    iseq's path `chunky.rb`) and enables `:line, :call, :return, :b_call,
+    :b_return` on that iseq only, which covers its methods and blocks: gems,
+    the stdlib, the page's Ruby and **methods an earlier cell defined**
+    (same file name) raise no events and are one step. A block given to
+    `turtle` is this cell's code, so it is stepped (instance_eval'd or
+    not). The eval is the normal one in the lesson's binding, so what the
+    cell leaves behind is what ▶ leaves.
+  - **A cell of comments only has no event to enable**, and
+    `enable(target:)` then raises "can not enable any hooks" - and after
+    that no targeted TracePoint in the process sees an event again (CRuby
+    4.0.1; found while integrating). `events?` asks the iseqs first; such a
+    cell records just its end ("=> nil"). An exercise before the learner
+    wrote anything is exactly that.
+  - **Hidden variables**: eval hoists every local of the cell (nil before
+    its line ran), so a variable shows once it is non-nil, came from an
+    earlier cell, or a line assigning it ran (a regex). The locals
+    `check_exercise` sets live on in the binding and would show as ⟲ in
+    the next cell: `StepRecorder::HIDDEN` lists them, and the test keeps it
+    equal to `check_exercise`'s `local_variable_set`s - **add a new check
+    local there too**.
+  - **Caps**: 600 steps (then the tracing stops and the cell runs on at full
+    speed; the stepper says it stopped taking notes), values cut at 60
+    characters, big Arrays/Hashes summarised, 5 frames (recursion: the
+    innermost), 16 variables; objects with Ruby's own `inspect` get a
+    shallow one. Costs in ruby.wasm: about 0.1 ms a step, a Basics cell
+    under 10 ms, the cap about 0.25 s with its JSON (the tree in lesson 10
+    hits it: ~360 ms per ⏯ there, ~130 ms for the others, two paints
+    included). Loaded at boot: 14 KB, ~6 ms to evaluate.
+  - **Errors**: a targeted TracePoint never sees `:raise` (it happens in a C
+    frame), so the last recorded line becomes the error step, with the
+    state as it began; the friendly explanation (above) shows below the
+    stepper as on ▶, and the line keeps its `.marker`.
+  - **What ends a recording**: any change to the cell's code (the editor's
+    `change`, setValue too: a reset), any run of the cell (`clearCellMarks`,
+    which `run_cell` calls first), another lesson. **A language change
+    keeps it** at its step where the cell's code is the same apart from
+    comments (`ChunkyStepper.page`, called by `setState` after the paint:
+    en ↔ ja, and German cells whose code is the English one, like
+    schleifen's first) and drops it where it is not - the German code has
+    other names. The binding is fresh then; the stepper is a recording.
+  - **Keyboard and screen readers**: ⏯ is named "Schritt für Schritt
+    durch Zelle 2" (`stepCellLabel`, the visible words plus the cell, like
+    Run); after it the focus goes to the slider (`settle_cell`,
+    `@refocus_step`; back to ⏯ when nothing was recorded), a native range
+    input: arrows, Home, End, Page Up/Down; named `stepSlider`, its
+    `aria-valuetext` "Schritt 3 von 12". ◀ ▶ ⏮ ⏭ are `aria-disabled` at
+    the ends, never `disabled`, so the focus stays on them. A polite live
+    region in the stepper says the step's sentence and what changed ("i =
+    2") after a move of the learner's - not on ⏵'s ticks, and not on the
+    first step (the slider's name and the run's status line are said
+    then). `#runStatus` reads the run's output without the stepper
+    (`App#brief_output`). ⏵ steps every 0.7 s, every 1.5 s under
+    `prefers-reduced-motion`; nothing in the stepper animates. The group
+    is named like ⏯.
+  - Limits (the experiment's NOTES): steps are lines, not expressions; a
+    one-line block shares its line with the statement around it; `_1` and
+    `it` cannot be read from a binding; a `while` condition raises no
+    event after its first pass; no object identity (that is
+    `show_objects`). Not in the workshop: only the open file would be
+    traced (`require_relative`'d files are iseqs of their own).
 - CodeMirror cells must not be built while `#app` is `display:none`
   (blank editors after hard reload). Prose `pre/code` CSS stays scoped to
   `.lessonText`, or it bleeds into CodeMirror's internal `<pre>`s.
@@ -781,6 +875,12 @@ shell does the timing, the kernel the guarding:
   never starts it - it runs only with the focus, which the editor keeps -
   so the Snake lesson keeps its live runs. The exercise's check plays a
   copy of the game, under its own time limit, on a live run too.
+- **⏯ never runs live**: a live run is never recorded (`run_cell` ignores
+  `step` with `auto`, and the shell asks for live runs from keys only). A
+  key in a stepped cell ends its recording at once, before the live run a
+  second later, which then writes its output without a stepper. Recording
+  on every pause would cost up to 0.25 s a run (the cap), and the line
+  numbers of a half-typed cell move under the slider.
 - **▶ has no time limit**: TracePoint costs ~3x on gem-heavy code, so a
   manual run still can hang the page on an endless loop, as before.
   An endless loop that raises no TracePoint event and that `runnable?` does
@@ -1339,6 +1439,7 @@ ruby shell/run.rb              # the shell under Minitest, with PicoRuby portabi
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof
 ruby ansi_test.rb              # terminal colours in a cell's output
 ruby game_test.rb              # show_game headless: the lesson's Snake, restart, check copies
+ruby step_recorder_test.rb     # ⏯'s recorder: steps, frames, hidden locals, caps, the stepper lessons' cells
 ruby friendly_errors_harness.rb --summary   # 70 beginner mistakes explained by the expected rule, de/en/ja
 ruby friendly_errors_robustness.rb          # explain never raises, never leaves a %{...}
 ruby ../tools/offline_files.rb --check   # the offline copy's file list is current

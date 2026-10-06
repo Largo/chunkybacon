@@ -48,7 +48,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   the focus, a status line that reads out what a run printed and what
   Chunky says, the focus on the new lesson's heading after every lesson
   change, a modal drawer on a phone, named widgets (IRB, mini browser, 3D,
-  a game you can leave with Tab)
+  a game you can leave with Tab, the step-by-step slider)
   and contrast at WCAG AA (audit: `experiments/10-accessibility`).
 - **Live runs**: a cell runs by itself a second after you stop typing, as
   long as the code parses - a rehearsal that keeps no file it writes,
@@ -121,6 +121,13 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   a shallow copy of a hash, or two cats with the same name are seen, not
   just told (lessons 7, 8, 11). Pure Ruby to SVG; a screen reader hears
   the arrows in words.
+- **Step by step through a cell**: in the basics lessons with plain Ruby
+  (3-12), ⏯ beside ▶ runs a cell and records it line by line - then a
+  slider walks through the run: the line about to run marked in the
+  editor, the variables of the cell, a method or a loop's pass (what just
+  changed in yellow), the output so far, and Chunky saying what happens
+  ("Line 2 is next - for the 3rd time"). The arrow keys walk it, a screen
+  reader hears each step; an edit clears it.
 - **Turtle graphics with Chunky as the turtle**: `turtle { 4.times {
   forward 100; right 90 } }` draws below the cell, as an SVG that draws
   itself while Chunky runs along the path (lesson 10: loops, methods with
@@ -217,6 +224,7 @@ ruby ansi_test.rb         # terminal colours in a cell's output
 ruby object_graph_test.rb # show_objects: the walk, the SVG, the alt text
 ruby turtle_test.rb       # turtle graphics: the recorded path, the check helpers, the SVG
 ruby game_test.rb         # show_game headless: the lesson's Snake by timer and keys, the copies checks play
+ruby step_recorder_test.rb # ⏯'s recorder: steps, frames, hidden locals, caps, every cell of the stepper lessons
 ruby friendly_errors_harness.rb --summary  # 70 beginner mistakes, each explained by the expected rule
 ruby friendly_errors_robustness.rb         # the explanations never raise, never leave a %{...}
 node browser_test.mjs     # Playwright end-to-end against port 8011

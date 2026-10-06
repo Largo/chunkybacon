@@ -138,6 +138,16 @@ Last updated 2026-10-05.
   Two arrow keys within one round can still turn Chunky straight back
   (the classic Snake bug; a queue of turns would fix it). `on_click` has
   no lesson cell yet.
+- Stepping through a cell (⏯, lessons 3-12, `html/step_recorder.rb`,
+  `html/stepper.js`): no lesson text mentions ⏯ yet - a sentence in
+  schleifen's prose ("watch the loop with ⏯") would point learners at it.
+  Past ~200 steps the slider moves in slivers; the experiment's tick
+  strip, grouped by passes, was left out. Steps are lines, not
+  expressions (a one-line block shares its line; `_1`/`it` show no
+  variables); the "assigned" detection is a regex (Prism would be exact).
+  Not in the workshop (each `require_relative`'d file would need its own
+  `:script_compiled` match). No real screen reader tried on the slider
+  and its live region.
 - The offline dialog's sizes (`offlineExplain`, `offlinePython`, README,
   HANDOVER §6c, `test/shell/workspace_test.rb`) are measured by hand: the
   files of `offline-files.txt` in MiB, a text file without a `.gz` counted

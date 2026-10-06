@@ -145,7 +145,34 @@ window.LESSONS_JSON = JSON.stringify({
       "gameKeys": "Pfeiltasten steuern – Esc pausiert, Tab verlässt das Spiel",
       "gamePaused": "Pause",
       "gameAgain": "Klick oder Leertaste für eine neue Runde",
-      "gameTooLong": "Ein Schritt des Spiels hat länger als %.1f s gedauert – eine Endlosschleife?"
+      "gameTooLong": "Ein Schritt des Spiels hat länger als %.1f s gedauert – eine Endlosschleife?",
+      "stepButton": "⏯ Schritt für Schritt",
+      "stepCellLabel": "Schritt für Schritt durch Zelle %d",
+      "stepSlider": "Schritt wählen",
+      "stepCount": "Schritt %d von %d",
+      "stepFirst": "Zum Anfang",
+      "stepPrev": "Einen Schritt zurück",
+      "stepNext": "Einen Schritt vor",
+      "stepLast": "Zum Ende",
+      "stepPlay": "Abspielen",
+      "stepPause": "Anhalten",
+      "stepOutput": "Ausgabe bis hier",
+      "stepLine": "Zeile %d ist dran.",
+      "stepLineAgain": "Zeile %d ist dran – zum %s. Mal.",
+      "stepCall": "Ruby springt in die Methode %s(%s).",
+      "stepReturn": "%s ist fertig und gibt %s zurück.",
+      "stepEnd": "Fertig! Das Ergebnis der Zelle: => %s",
+      "stepError": "Hier geht es schief, in Zeile %s: %s",
+      "stepPass": "Durchlauf %d",
+      "stepMain": "Zelle",
+      "stepMethod": "Methode %s",
+      "stepBlock": "Block: %s",
+      "stepNoVars": "noch keine Variablen",
+      "stepMore": "%s weitere Aufrufe darunter",
+      "stepChanged": "neu",
+      "stepTruncated": "Nach %d Schritten habe ich aufgehört mitzuschreiben. Die Zelle lief trotzdem zu Ende.",
+      "stepNone": "Diese Zelle ist nicht losgelaufen – es gibt keine Schritte zum Ansehen.",
+      "stepLegend": "⟲ = Variable aus einer früheren Zelle (alle Zellen einer Lektion teilen sich ihre Variablen). Gelb = hat sich in diesem Schritt geändert. Tasten auf dem Regler: ← → Pos1 Ende."
     },
     "en": {
       "title": "Learn Ruby with Chunky Bacon",
@@ -282,7 +309,34 @@ window.LESSONS_JSON = JSON.stringify({
       "gameKeys": "Arrow keys steer – Esc pauses, Tab leaves the game",
       "gamePaused": "Paused",
       "gameAgain": "Click or press Space to play again",
-      "gameTooLong": "One step of the game took longer than %.1f s – an endless loop?"
+      "gameTooLong": "One step of the game took longer than %.1f s – an endless loop?",
+      "stepButton": "⏯ Step through",
+      "stepCellLabel": "Step through cell %d",
+      "stepSlider": "Choose a step",
+      "stepCount": "Step %d of %d",
+      "stepFirst": "To the start",
+      "stepPrev": "One step back",
+      "stepNext": "One step forward",
+      "stepLast": "To the end",
+      "stepPlay": "Play",
+      "stepPause": "Pause",
+      "stepOutput": "Output so far",
+      "stepLine": "Line %d is next.",
+      "stepLineAgain": "Line %d is next – for the %s time.",
+      "stepCall": "Ruby jumps into the method %s(%s).",
+      "stepReturn": "%s is done and returns %s.",
+      "stepEnd": "Done! The cell's result: => %s",
+      "stepError": "This is where it goes wrong, in line %s: %s",
+      "stepPass": "pass %d",
+      "stepMain": "cell",
+      "stepMethod": "method %s",
+      "stepBlock": "block: %s",
+      "stepNoVars": "no variables yet",
+      "stepMore": "%s more calls below",
+      "stepChanged": "new",
+      "stepTruncated": "I stopped taking notes after %d steps. The cell still ran to the end.",
+      "stepNone": "This cell did not get going – there are no steps to look at.",
+      "stepLegend": "⟲ = a variable from an earlier cell (all cells of a lesson share their variables). Yellow = changed in this step. Keys on the slider: ← → Home End."
     },
     "ja": {
       "title": "Chunky Baconと学ぶRuby",
@@ -419,7 +473,34 @@ window.LESSONS_JSON = JSON.stringify({
       "gameKeys": "矢印キーで操作します。Escで一時停止、Tabでゲームから出ます",
       "gamePaused": "一時停止中",
       "gameAgain": "クリックかスペースキーでもう一度",
-      "gameTooLong": "ゲームの1ステップに%.1f秒以上かかりました。無限ループかもしれません。"
+      "gameTooLong": "ゲームの1ステップに%.1f秒以上かかりました。無限ループかもしれません。",
+      "stepButton": "⏯ 1ステップずつ",
+      "stepCellLabel": "セル%dを1ステップずつ",
+      "stepSlider": "ステップを選ぶ",
+      "stepCount": "ステップ %d / %d",
+      "stepFirst": "最初へ",
+      "stepPrev": "1つ戻る",
+      "stepNext": "1つ進む",
+      "stepLast": "最後へ",
+      "stepPlay": "再生",
+      "stepPause": "一時停止",
+      "stepOutput": "ここまでの出力",
+      "stepLine": "次は %d 行目です。",
+      "stepLineAgain": "次は %d 行目（%s 回目）です。",
+      "stepCall": "メソッド %s(%s) の中へ入ります。",
+      "stepReturn": "%s が終わり、%s を返します。",
+      "stepEnd": "おしまい！セルの結果: => %s",
+      "stepError": "%s 行目でうまくいきません: %s",
+      "stepPass": "%d 回目",
+      "stepMain": "セル",
+      "stepMethod": "メソッド %s",
+      "stepBlock": "ブロック: %s",
+      "stepNoVars": "まだ変数はありません",
+      "stepMore": "下にあと %s 個の呼び出し",
+      "stepChanged": "変化",
+      "stepTruncated": "%d ステップで記録をやめました。セルは最後まで実行されています。",
+      "stepNone": "このセルは動き出しませんでした。見られるステップはありません。",
+      "stepLegend": "⟲ = 前のセルの変数です（レッスンのセルはすべて変数を共有します）。黄色 = このステップで変わった値です。スライダーのキー: ← → Home End"
     }
   },
   "lessons": [
@@ -622,6 +703,7 @@ window.LESSONS_JSON = JSON.stringify({
     },
     {
       "id": "variablen",
+      "stepper": true,
       "de": {
         "title": "3. Variablen",
         "cells": [
@@ -718,6 +800,7 @@ window.LESSONS_JSON = JSON.stringify({
     },
     {
       "id": "strings",
+      "stepper": true,
       "de": {
         "title": "4. Strings verketten",
         "cells": [
@@ -814,6 +897,7 @@ window.LESSONS_JSON = JSON.stringify({
     },
     {
       "id": "wenn",
+      "stepper": true,
       "de": {
         "title": "5. Entscheidungen (if)",
         "cells": [
@@ -886,6 +970,7 @@ window.LESSONS_JSON = JSON.stringify({
     },
     {
       "id": "schleifen",
+      "stepper": true,
       "de": {
         "title": "6. Schleifen",
         "cells": [
@@ -982,6 +1067,7 @@ window.LESSONS_JSON = JSON.stringify({
     },
     {
       "id": "arrays",
+      "stepper": true,
       "de": {
         "title": "7. Arrays",
         "cells": [
@@ -1126,6 +1212,7 @@ window.LESSONS_JSON = JSON.stringify({
     },
     {
       "id": "hashes",
+      "stepper": true,
       "de": {
         "title": "8. Hashes",
         "cells": [
@@ -1222,6 +1309,7 @@ window.LESSONS_JSON = JSON.stringify({
     },
     {
       "id": "methoden",
+      "stepper": true,
       "de": {
         "title": "9. Methoden",
         "cells": [
@@ -1330,6 +1418,7 @@ window.LESSONS_JSON = JSON.stringify({
     },
     {
       "id": "turtle",
+      "stepper": true,
       "de": {
         "title": "10. Malen mit Chunky",
         "cells": [
@@ -1450,6 +1539,7 @@ window.LESSONS_JSON = JSON.stringify({
     },
     {
       "id": "klassen",
+      "stepper": true,
       "de": {
         "title": "11. Klassen",
         "cells": [
@@ -1546,6 +1636,7 @@ window.LESSONS_JSON = JSON.stringify({
     },
     {
       "id": "module",
+      "stepper": true,
       "de": {
         "title": "12. Module",
         "cells": [

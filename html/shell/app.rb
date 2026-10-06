@@ -49,6 +49,7 @@ module ChunkyShell
       @nav_query = ""       # the index's search field
       @cell_numbers = {}    # cell index => its number among the code cells
       @refocus = nil        # the cell whose Run button had the keyboard focus
+      @refocus_step = false # ... after ⏯: the focus goes to the stepper
     end
 
     def start
@@ -223,11 +224,13 @@ module ChunkyShell
 
     def body_click(event)
       target = event.target
-      return toggle_live if target.className.to_s.include?("live-toggle")
-      return unless target.className.to_s.include?("run-cell")
+      css_class = target.className.to_s
+      return toggle_live if css_class.include?("live-toggle")
+      step = css_class.include?("step-cell")
+      return unless step || css_class.include?("run-cell")
 
       idx = target.getAttribute("data-idx")
-      start_cell_run(idx.to_i) unless idx.nil? || idx == ""
+      start_cell_run(idx.to_i, step) unless idx.nil? || idx == ""
     end
 
     # the workshop link above the index: a plain click opens it in place
@@ -403,7 +406,9 @@ module ChunkyShell
       Store.set("chunky_current", id) unless Store.get("chunky_current", "") == id
       # the lesson in the tab title makes bookmarks and history legible
       JSG.d.title = "#{@course.title(idx, @lang)} – #{ui.title}"
-      el("lessonBody").innerHTML = View.lesson_html(cells, ui.taskLabel, ui.runCell, live_toggle_html, ui.runCellLabel)
+      # ⏯ only in the lessons that ask for it ("stepper": true)
+      step = @course.stepper?(idx) ? [ui.stepButton, ui.stepCellLabel] : nil
+      el("lessonBody").innerHTML = View.lesson_html(cells, ui.taskLabel, ui.runCell, live_toggle_html, ui.runCellLabel, step)
       number = 0
       cells.each_with_index do |cell, i|
         next unless code_cell?(cell)
@@ -575,7 +580,8 @@ module ChunkyShell
     # Ruby runs on the page's main thread, so the running look goes on
     # screen first; the bridge hands the run to the kernel after the next
     # paint - or keeps it until the kernel has loaded.
-    def start_cell_run(idx)
+    # +step+: ⏯ - the same run, recorded for the stepper (stepper.js)
+    def start_cell_run(idx, step = false)
       return show_bubble(kernel_failed_text, "fail") if @kernel_failed
       return if @running[idx]
 
@@ -590,15 +596,21 @@ module ChunkyShell
       end
       # a button that turns disabled drops the keyboard focus to <body>, and
       # the next Tab starts at the top of the page: settle_cell gives it back
-      @refocus = idx if focused_run_button == idx
+      # - after ⏯ to the stepper's slider, where the arrow keys walk the run
+      @refocus = idx if step || focused_run_button == idx
+      @refocus_step = step
       button.disabled = true
       button.innerHTML = View.running_label(ui.running)
+      stepper = step_button(cell)
+      stepper.disabled = true if stepper
       # code that uses Sequel loads SQLite first, as its lesson does on
       # opening - a workshop program, or a cell changed to use it; the
       # bridge holds the run until it is there
       JSG.w.ensureSqlite if uses_sqlite?(idx)
-      @bridge.run(idx)
+      step ? @bridge.step(idx) : @bridge.run(idx)
     end
+
+    def step_button(cell) = cell ? cell.querySelector(".step-cell") : nil
 
     # the cell whose Run button has the keyboard focus, or nil
     def focused_run_button
@@ -668,13 +680,16 @@ module ChunkyShell
     # .friendly-error) read as its headline: its code snippet with carets
     # makes no sense spoken, and the explanation stays on the page to read.
     # A game (show_game) says its name instead (picture_words): its grid
-    # is emoji by the hundred.
+    # is emoji by the hundred. The stepper (⏯) is left out: its slider
+    # gets the focus and speaks for itself.
     def brief_output(out)
       text = out.innerText.to_s
-      out.querySelectorAll(".game-widget").each do |game|
-        whole = game.innerText.to_s
-        at = whole.empty? ? nil : text.index(whole)
-        text = text[0, at].to_s + text[at + whole.length, text.length].to_s if at
+      %w[.game-widget .stepper].each do |selector|
+        out.querySelectorAll(selector).each do |widget|
+          whole = widget.innerText.to_s
+          at = whole.empty? ? nil : text.index(whole)
+          text = text[0, at].to_s + text[at + whole.length, text.length].to_s if at
+        end
       end
       box = out.querySelector(".friendly-error")
       return text unless box
@@ -723,14 +738,20 @@ module ChunkyShell
 
     def settle_cell(idx, outcome, elapsed)
       cell, button = cell_parts(idx)
+      stepper = step_button(cell)
+      stepper.disabled = false if stepper
       if button
         button.disabled = false
         button.textContent = ui.runCell
-        # back to where the keyboard was, unless it went elsewhere meanwhile
+        # back to where the keyboard was, unless it went elsewhere meanwhile;
+        # after ⏯ to the stepper's slider (or ⏯, when nothing was recorded)
         if @refocus == idx
           @refocus = nil
           active = JSG.d.activeElement
-          button.focus if active.nil? || active.tagName.to_s == "BODY"
+          if active.nil? || active.tagName.to_s == "BODY"
+            slider = @refocus_step ? JSG.d.querySelector("#cell-out-#{idx} .step-slider") : nil
+            (slider || (@refocus_step && stepper) || button).focus
+          end
         end
       end
       return unless cell

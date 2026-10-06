@@ -695,9 +695,12 @@
     window.refreshAllCells = function () {
       Object.values(window.cellEditors).forEach(function (ed) { ed.refresh(); });
     };
+    // a run of the cell starts: the error line's mark goes, and so does the
+    // stepper's recording of the last ⏯ (stepper.js)
     window.clearCellMarks = function (idx) {
       var ed = window.cellEditors[idx];
       if (ed) ed.getAllMarks().forEach(function (m) { m.clear(); });
+      if (window.ChunkyStepper) window.ChunkyStepper.clear(idx);
     };
     window.markCellLine = function (idx, lineNo) {
       var ed = window.cellEditors[idx];
@@ -726,6 +729,9 @@
   <!-- the grid of show_game (game.rb, Chunky's Snake): the game loop runs
        here, Ruby is called when a timer is due or a key came in -->
   <script src="game.js"></script>
+  <!-- ⏯ beside ▶ (a lesson with "stepper": true): a recorded run, step by
+       step - the line in the editor, the variables, the output so far -->
+  <script src="stepper.js"></script>
   <!-- the page shell (PicoRuby) and its bridge to the kernel (CRuby);
        the bridge starts browser.script.iife.js, which runs main.rb -->
   <script src="shell/bridge.js"></script>
