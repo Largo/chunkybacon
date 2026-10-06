@@ -203,18 +203,30 @@ check('embedded code cannot read the course\'s storage on the same host',
   out4.includes('local_storage: "blocked') && out4.includes('indexed_db: "blocked') && !out4.includes('methoden'), out4.slice(0, 240));
 // another child frame on the blog (an ad, a video) that sends embed.js the
 // embed's messages: ignored - no size, no id of its choosing, and a timing
-// keyed "__proto__" does not reach the blog's Object.prototype
+// keyed "__proto__" does not reach the blog's Object.prototype. Sandboxed,
+// so it has an opaque origin like a real cell: only the source window tells
+// them apart. Its last message is a marker; messages arrive in order, so
+// when the marker is here embed.js has seen (and ignored) the two before it
 const stranger = await page.evaluate(() => new Promise((done) => {
   const frame = document.createElement('iframe');
   frame.id = 'stranger';
+  frame.setAttribute('sandbox', 'allow-scripts');
   frame.style.height = '150px';
+  const result = (sent) => ({ sent, polluted: ({}).polluted, height: frame.style.height, id: frame.dataset.chunkyId || null });
+  const timeout = setTimeout(() => done(result(false)), 10000);
+  window.addEventListener('message', function marker(event) {
+    if (event.source !== frame.contentWindow || !event.data || !event.data.strangerDone) return;
+    window.removeEventListener('message', marker);
+    clearTimeout(timeout);
+    setTimeout(() => done(result(true)), 0);
+  });
   frame.srcdoc = '<script>parent.postMessage({ chunkyEmbed: "timing", id: "__proto__", name: "polluted", ms: 1 }, "*");' +
-    'parent.postMessage({ chunkyEmbed: "size", height: 5 }, "*");</' + 'script>';
+    'parent.postMessage({ chunkyEmbed: "size", height: 5 }, "*");' +
+    'parent.postMessage({ strangerDone: true }, "*");</' + 'script>';
   document.body.appendChild(frame);
-  setTimeout(() => done({ polluted: ({}).polluted, height: frame.style.height, id: frame.dataset.chunkyId || null }), 800);
 }));
 check('a child frame that is not a cell is ignored (no size, no id, no prototype pollution)',
-  stranger.polluted === undefined && stranger.height === '150px' && stranger.id === null, JSON.stringify(stranger));
+  stranger.sent && stranger.polluted === undefined && stranger.height === '150px' && stranger.id === null, JSON.stringify(stranger));
 check('no console errors on the blog post', errors.length === 0, errors.slice(0, 3).join(' | '));
 
 // ---------- the other ways in ----------
