@@ -503,6 +503,61 @@ no service worker is registered and nothing changes. The choice is
   puts a proxy in front of `BASE` and takes that down instead. To look at it
   in a browser: DevTools → Application → Service workers / Cache storage.
 
+## 6d. The 📦 Program button (Spinel in the browser)
+
+Every cell's toolbar has a 📦 Program button that opens a small panel: the
+cell's Ruby becomes a standalone **Windows `.exe`** or **Linux x86_64**
+program (static, musl), built inside the tab - nothing is uploaded.
+
+- `html/compile/compile.js` (plain JS, loaded by `index.html`) adds the
+  button to each `.cell-toolbar` as lessons are drawn (a MutationObserver on
+  `#lessonBody`) and talks to `html/compile/worker.js`. The three languages'
+  texts are at the top of `compile.js`.
+- The worker runs three WebAssembly programs in turn: **Spinel**
+  ([matz/spinel](https://github.com/matz/spinel), built with wasi-sdk; Ruby
+  to C, run through `compile/wasi-shim/`, a vendored
+  `@bjorn3/browser_wasi_shim` 0.4.2), then **clang 20** (`-cc1`, x86 backend)
+  and **lld 20** (`ld.lld`), both built from LLVM with Emscripten.
+  `pkg/{win,linux}.tar.gz` hold, per target, Spinel's runtime archive (built
+  for it), its headers, mingw-w64 (UCRT) or musl and the libraries of the
+  link line; `res` is clang's own headers; `spinel` is the Ruby part of
+  Spinel's core library. They are unpacked into the wasm file systems.
+- **The toolchain is not in git** (about 130 MB, 45 MB over the wire):
+  `tools/compile/build.sh` builds it into `html/compile/toolchain/`
+  (docker, ~30 min, ~10 GB; every step is skipped when done, `WORK=` moves
+  the scratch folder, `SPINEL_REF=` pins Spinel). **No
+  `toolchain/ready.json`, no button** - a checkout without the build is the
+  course as before. The build writes `.gz` beside every wasm file for nginx's
+  `gzip_static`; production must run the script once after deploying.
+- **Pins** (`tools/compile/build.sh`, `Dockerfile`, `build-llvm.sh`): Spinel
+  by full commit, LLVM by the commit its tag points to, wasi-sdk and
+  llvm-mingw by the SHA-256 of their release tarball, the Alpine image and
+  the Ubuntu base image by digest, emsdk by commit and Emscripten by
+  version (emsdk brings its own node; no nvm). Alpine's musl/libgcc files
+  are checked against recorded hashes, because an image digest does not pin
+  `apk`. A changed upstream stops the build with a message; to update a pin,
+  change version and hash together after reading what changed. Not pinned:
+  Ubuntu's apt packages in the builder image, and what emsdk downloads
+  (it checks its own archives). `toolchain/ready.json` lists the SHA-256 of
+  every shipped file; the wasm files themselves are not bit-for-bit
+  reproducible. The vendored shim's provenance is in
+  `html/compile/wasi-shim/NOTICE.md`.
+- The toolchain is **not** part of the offline copy (`tools/offline_files.rb`
+  skips `compile/toolchain/`): offline, the button reports an error.
+- Traps: `Emscripten`'s `callMain` mutates the array it is given (pass a
+  copy); the wasm lld has no zlib, so every ELF input must be stripped of
+  compressed debug sections (build.sh does); Spinel-wasm finds its
+  `builtins/` through `argv[0]`, so the worker passes `/sp/bin/spinel`; the
+  mingw headers are trimmed to what Spinel's C includes - a program whose
+  generated C needs more (FFI) fails to compile and shows clang's message.
+- Limits: Spinel compiles part of Ruby (docs/limitations.md in its repo);
+  the page's helpers (`show_image` ...) do not exist in a program; only the
+  cell's code is built, so no `require_relative` of other workshop files.
+  The Windows port of Spinel is community-maintained.
+- Verified: Hello World-class programs (class, Range, Hash, blocks) built in
+  Chromium; the Linux binary runs, the `.exe` runs under Wine with the same
+  output as Spinel on the host.
+
 ## 7. nginx and the proxy
 
 Compression: `gzip on` for text (html, rb - typed `text/plain` in the app-code

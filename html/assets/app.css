@@ -464,6 +464,32 @@ kbd {
   padding: 0.3rem 0.95rem;
 }
 
+/* ---------- 📦 Program (html/compile/compile.js) ---------- */
+.cell-toolbar .compile-cell {
+  font-size: 0.85rem;
+  padding: 0.3rem 0.7rem;
+  margin-right: 0.5rem;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.compile-panel {
+  padding: 0.6rem 0.9rem 0.8rem;
+  border-top: 1px solid var(--rule);
+  background: var(--paper);
+  font-size: 0.9rem;
+}
+.compile-panel[hidden] { display: none; }
+.compile-panel p { margin: 0.3rem 0; }
+.compile-targets { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.5rem 0; }
+.compile-targets button { font-size: 0.9rem; padding: 0.3rem 0.9rem; }
+.compile-panel.busy .compile-targets button { opacity: 0.5; pointer-events: none; }
+.compile-detail { max-height: 12rem; overflow: auto; white-space: pre-wrap; font-size: 0.8rem; margin: 0.3rem 0; }
+.compile-detail:empty { display: none; }
+.compile-note { color: #6f655d; font-size: 0.8rem; }
+
 /* ---------- running a cell ----------
    Ruby blocks the main thread while a cell runs, so everything that moves
    here animates only transform or opacity: the browser runs those off the

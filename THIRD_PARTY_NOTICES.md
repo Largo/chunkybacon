@@ -127,3 +127,19 @@ SOFTWARE.
 Gems installed at runtime from rubygems.org, and pages fetched through the
 same-origin bridges (`nginx/default.conf`), go straight from their source to the
 learner's browser; the site only relays and caches them.
+
+## The 📦 Program button (optional, `html/compile/`)
+
+The toolchain that turns a cell into a Windows or Linux program is built by
+`tools/compile/build.sh` into `html/compile/toolchain/` and is not part of the
+repository; a deployment that builds it ships these:
+
+| Component | Version | License | Where |
+|---|---|---|---|
+| [Spinel](https://github.com/matz/spinel) (compiler as wasm, runtime archives and headers inside every program) | master 84f5b50 | MIT | `toolchain/spinel.wasm`, `toolchain/pkg/` |
+| [LLVM](https://llvm.org/) clang and lld as wasm | 20.1.2 | Apache-2.0 WITH LLVM-exception | `toolchain/clang.*`, `toolchain/lld.*` |
+| [llvm-mingw](https://github.com/mstorsjo/llvm-mingw) / [mingw-w64](https://www.mingw-w64.org/) headers and libraries (linked into every `.exe`) | 20261006 | ZPL-2.1 and public domain (headers, import libraries), BSD/MIT parts | `toolchain/pkg/win.tar.gz` |
+| [musl libc](https://musl.libc.org/) (linked statically into every Linux program) | Alpine's | MIT | `toolchain/pkg/linux.tar.gz` |
+| libgcc, libgcc_eh (Alpine's gcc) | Alpine's | GPL-3.0 WITH GCC-exception | `toolchain/pkg/linux.tar.gz` |
+| [wasi-sdk](https://github.com/WebAssembly/wasi-sdk) (builds Spinel's wasm) | 34 | Apache-2.0 WITH LLVM-exception, wasi-libc MIT/BSD | not shipped |
+| [@bjorn3/browser_wasi_shim](https://github.com/bjorn3/browser_wasi_shim) | 0.4.2 | MIT OR Apache-2.0 | `html/compile/wasi-shim/` (licenses beside it) |

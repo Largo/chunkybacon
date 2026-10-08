@@ -61,6 +61,11 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   (about 45 MB), and it opens and runs without a connection - lessons,
   cells, the bundled gems. Online it always loads the current version, and
   the copy updates itself.
+- **Programs from a cell** (optional): a 📦 button builds a cell's Ruby as a
+  standalone Windows `.exe` or Linux program with
+  [Spinel](https://github.com/matz/spinel), compiled in the browser tab by
+  clang and lld running as WebAssembly. The toolchain (45 MB) is built
+  apart: `tools/compile/build.sh`, see docs/HANDOVER.md §6d.
 - **Interactive widgets**: `show_irb` (a real IRB terminal with `_`,
   multi-line input, and authentic prompts), `show_browser` (a fake
   browser window that speaks Rack directly to your Sinatra/Roda app),

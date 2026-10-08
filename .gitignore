@@ -1,3 +1,6 @@
 test/lessons.json
 # built packages of the companion gems (html/gems/cache/*.gem stay tracked)
 /gem/*/*.gem
+# the in-browser Spinel toolchain (tools/compile/build.sh): about 100 MB, built, not tracked
+/html/compile/toolchain/
+/tools/compile/.work/

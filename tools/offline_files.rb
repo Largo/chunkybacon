@@ -8,7 +8,7 @@
 #   ruby tools/offline_files.rb --check   # exit 1 if it is out of date
 HTML = File.expand_path("../html", __dir__)
 LIST = File.join(HTML, "offline-files.txt")
-SKIP = /\.(gz|md)$|^(sw\.js|offline-files\.txt)$/
+SKIP = /\.(gz|md)$|^(sw\.js|offline-files\.txt)$|^compile\/toolchain\//
 
 HEADER = <<~TEXT
   # The files the offline copy holds (html/sw.js): written by
