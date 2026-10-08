@@ -1065,8 +1065,8 @@ a plain program to try it on.
   mingw headers are trimmed to what Spinel's C includes - a program whose
   generated C needs more (FFI) fails to compile and shows clang's message.
 - Limits: Spinel compiles part of Ruby (docs/limitations.md in its repo);
-  the page's helpers (`show_image` ...) do not exist in a program; only the
-  cell is built alone, so no `require_relative`.
+  the page's helpers (`show_image` ...) do not exist in a program; a cell is
+  built alone, so no `require_relative`.
   The Windows port of Spinel is community-maintained.
 - Verified: Hello World-class programs (class, Range, Hash, blocks) built in
   Chromium; the Linux binary runs, the `.exe` runs under Wine with the same
