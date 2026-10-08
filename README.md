@@ -178,8 +178,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   cell that the page drives like a game. The same file opens a real window
   with `ruby game.rb` on a computer. Shapes, colours, text, keys, mouse;
   not images, sprites, sound or gamepads.
-- **A compiler in the browser**: `spinel <<~'RUBY' ... RUBY` hands a
-  program to [Spinel](https://github.com/matz/spinel), Matz's
+- **A compiler in the browser**: in lesson 45 a cell's plain Ruby is a
+  program for [Spinel](https://github.com/matz/spinel), Matz's
   ahead-of-time compiler, which runs in the page as WebAssembly together
   with clang ([YoWASP](https://yowasp.org)'s, itself WebAssembly), driven
   by Ruby on PicoRuby.wasm in workers: Ruby

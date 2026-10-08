@@ -1,7 +1,9 @@
 # The Spinel lesson's kernel side (lesson 45). Spinel, Matz's ahead-of-time
 # compiler for Ruby, runs in the page as WebAssembly (shell/spinel.rb and its
-# workers, html/spinel/; tools/build_spinel.rb builds it on deploy). A cell
-# hands it a program as a String:
+# workers, html/spinel/; tools/build_spinel.rb builds it on deploy). In the
+# lesson ("spinel": true in lessons.js) a cell's code is the program as it
+# stands; ChunkySpinel.cell_source wraps it in the call below. Anywhere else
+# a cell hands the program over as a String:
 #
 #   spinel <<~RUBY
 #     def fib(n) = n < 2 ? n : fib(n - 1) + fib(n - 2)
@@ -23,6 +25,16 @@ module ChunkySpinel
   end
 
   module_function
+
+  # What a cell of a lesson with "spinel": true runs: its code IS the
+  # program, so ▶ hands it to spinel(...) as a String - no heredoc to write.
+  # The IRB cell stays as it is, and a cell that already calls spinel
+  # itself (the older form) is not wrapped twice.
+  def cell_source(code)
+    return code if code.match?(/\A\s*show_spinel_irb\s*\z/) || code.match?(/\bspinel\s*(<<|\()/)
+
+    "spinel(#{code.inspect})"
+  end
 
   # CRuby runs the program in a scope of its own, its output captured
   def oracle(source, file: "(spinel)")

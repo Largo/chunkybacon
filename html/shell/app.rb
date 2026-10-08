@@ -403,7 +403,7 @@ module ChunkyShell
       # Herb's parser (WebAssembly, 1.7 MB) only for a lesson that requires herb
       JSG.w.ensureHerb if cells.any? { |cell| code_cell?(cell) && cell.code.to_s.include?('require "herb"') }
       # Spinel and clang (WebAssembly, ~27 MB) only for the lesson that compiles with it
-      @spinel.preload if cells.any? { |cell| code_cell?(cell) && cell.code.to_s.include?("spinel") }
+      @spinel.preload if @course.spinel?(idx) || cells.any? { |cell| code_cell?(cell) && cell.code.to_s.include?("spinel") }
       # a second PicoRuby (the same 0.9 MB, cached) in a Web Worker, only for
       # a lesson whose cells run on it (html/picoruby_lab.js)
       JSG.w.ensurePicoRuby if @course.picoruby?(idx)

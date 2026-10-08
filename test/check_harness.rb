@@ -618,41 +618,35 @@ end)]
   },
   "spinel" => {
     "de" => [
-      %(spinel <<~'RUBY'
-  def collatz(n)
-    schritte = 0
-    while n != 1
-      n = n.even? ? n / 2 : 3 * n + 1
-      schritte += 1
-    end
-    schritte
+      %(def collatz(n)
+  schritte = 0
+  while n != 1
+    n = n.even? ? n / 2 : 3 * n + 1
+    schritte += 1
   end
+  schritte
+end
 
-  puts collatz(27)
-RUBY),
-      %(spinel <<~'RUBY'
-  def collatz(n)
-    return 0 if n == 1
+puts collatz(27)),
+      %(def collatz(n)
+  return 0 if n == 1
 
-    1 + collatz(n.even? ? n / 2 : 3 * n + 1)
-  end
+  1 + collatz(n.even? ? n / 2 : 3 * n + 1)
+end
 
-  puts collatz(27)
-RUBY)
+puts collatz(27))
     ],
     "en" => [
-      %(spinel <<~'RUBY'
-  def collatz(n)
-    steps = 0
-    until n == 1
-      n = n.even? ? n / 2 : 3 * n + 1
-      steps += 1
-    end
-    steps
+      %(def collatz(n)
+  steps = 0
+  until n == 1
+    n = n.even? ? n / 2 : 3 * n + 1
+    steps += 1
   end
+  steps
+end
 
-  puts collatz(27)
-RUBY)
+puts collatz(27))
     ]
   },
   # the ruby2d window (ruby2d.rb): the check replays the cell and holds the
@@ -1292,7 +1286,7 @@ def run_harness(langs)
       # sleep_ms, PICORUBY_VERSION): test/picoruby_test.mjs runs them
       demos = [] if lesson["engine"] == "picoruby"
       demos.each do |demo|
-        _, _, err = run_in(bind, demo["code"])
+        _, _, err = run_in(bind, lesson["spinel"] ? ChunkySpinel.cell_source(demo["code"]) : demo["code"])
         if err
           puts "FAIL #{lesson["id"]}/#{lang}: demo cell raised #{err.class}: #{err.message}"
           failures += 1
@@ -1317,7 +1311,8 @@ def run_harness(langs)
       SandboxFS.reset!
       load_lesson_files(lesson)
       watch = FileWatch.snapshot
-      result, output, error = run_in(bind, candidate)
+      # a lesson with "spinel": true runs each cell's code as a program for Spinel (main.rb)
+      result, output, error = run_in(bind, lesson["spinel"] ? ChunkySpinel.cell_source(candidate) : candidate)
       downloads = FileWatch.changes_since(watch).map(&:first) | $explicit_downloads
       if error && label != "starter"
         puts "FAIL #{lesson["id"]}/#{lang} (#{label}): raised #{error.class}: #{error.message}"

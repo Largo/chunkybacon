@@ -379,7 +379,7 @@ check, in `turtle.rb`, §6),
 check plays `games`, in `game.rb`, §6),
 `show_browser(app, path)` + `mock_get`, `show_irb`, `show_files`, `show_three(scene, camera, orbit:, &animate)`,
 `show_shoes { ... }`, `show_letter(boxes:) { |digits| ... }` (§6e),
-`spinel(code)` / `show_spinel_irb` (Spinel, in `spinel.rb`, §6n),
+`spinel(code)` / `show_spinel_irb` (Spinel, in `spinel.rb`, §6n; in a lesson with `"spinel": true` every cell is run as `spinel(its code)` - `ChunkySpinel.cell_source`, `Course#spinel?`),
 `download_file(data, name)`, `show_pdf(pdf)` (a file
 name, PDF bytes, a Prawn or HexaPDF document), `show_audio(sound, rate:)`
 (WAV bytes, a file name or an Array of samples, §6), `run_tests` (Minitest);
@@ -1010,12 +1010,14 @@ no service worker is registered and nothing changes. The choice is
 The Spinel lesson (45, §6n) compiles to WebAssembly and runs the result in
 the page. Its cells also have a 📦 Program button: the cell's Ruby becomes a
 standalone **Windows `.exe`** or **Linux x86_64** program (static, musl),
-built inside the tab - nothing is uploaded. A heredoc is not needed: a cell
-is built as it stands, and one that hands its program to `spinel <<~RUBY ...
-RUBY` gets the program inside built. **Only lesson 45** has the button
-(`compile.js` looks for the active lesson id `spinel`; the IRB cell has none),
-and the lesson explains it in three cells after the IRB cell, the middle one
-a plain program to try it on.
+built inside the tab - nothing is uploaded. The lesson's cells are plain Ruby
+(`"spinel": true` in lessons.js: `main.rb` runs each as `spinel(its code)`,
+so there is no heredoc to write), and the button builds the cell as it
+stands; a cell that still hands its program to `spinel <<~RUBY ... RUBY`
+gets the program inside built. **Only lesson 45** has the button (`compile.js`
+looks for the active lesson id `spinel`; the IRB cell has none), and the
+lesson explains it in three cells after the IRB cell, the middle one a plain
+program to try it on.
 
 - `html/compile/compile.js` (plain JS, loaded by `index.html`) adds the
   button to the cells' `.cell-toolbar` as the lesson is drawn (a
@@ -1807,7 +1809,7 @@ whole-program type inference, C out, a C compiler for the rest. Lesson 45
 runs all of it in the learner's tab, as WebAssembly:
 
 ```
-cell: spinel <<~'RUBY' ... RUBY          (main.rb -> spinel.rb)
+cell: plain Ruby ("spinel": true)       (main.rb wraps it: spinel(code) -> spinel.rb)
   CRuby runs the program here first: ChunkySpinel.oracle, its output captured
   -> what the check reads (result.output), and what the page compares with
   -> chunkySpinelMount(id, ...)           (shell/spinel.rb, the page: PicoRuby)

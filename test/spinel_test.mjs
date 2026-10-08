@@ -88,7 +88,7 @@ check('irb: and the session goes on', await enter('x', '=> 42'), await history()
 // 5. the exercise: CRuby's run is what the check reads
 const exercise = await page.getAttribute('.cell.exercise .run-cell', 'data-idx');
 await page.evaluate(([i, c]) => window.cellEditors[i].setValue(c), [exercise,
-  "spinel <<~'RUBY'\n  def collatz(n)\n    steps = 0\n    until n == 1\n      n = n.even? ? n / 2 : 3 * n + 1\n      steps += 1\n    end\n    steps\n  end\n\n  puts collatz(27)\nRUBY"]);
+  "def collatz(n)\n  steps = 0\n  until n == 1\n    n = n.even? ? n / 2 : 3 * n + 1\n    steps += 1\n  end\n  steps\nend\n\nputs collatz(27)"]);
 await page.click(`.run-cell[data-idx="${exercise}"]`);
 check('exercise: passes', await until(() => document.querySelector('#chunkyChat').className.includes('celebrate') ||
                                        /Lesson 45 of 61/.test(document.getElementById('chunkyChat').innerText), null, 60000));

@@ -1216,6 +1216,10 @@ class ChunkyApp
   # the line - PicoRuby's compiler would only say no.
   def picoruby? = !workshop? && current_lesson && current_lesson["engine"] == "picoruby"
 
+  # a lesson with "spinel": true (lesson 45): every cell's code is a program
+  # for Spinel (spinel.rb's cell_source), no heredoc to write
+  def spinel_lesson? = !workshop? && current_lesson && current_lesson["spinel"] == true
+
   def start_picoruby_run(idx, code, auto)
     $window.clearCellMarks(idx)
     syntax = PicoRubyCells.syntax_error(code, EVAL_FILE)
@@ -1512,6 +1516,7 @@ class ChunkyApp
     Processing.reset__ if processing?
     Ruby2D.reset__ if ruby2d?   # each run a program of its own: a new window
     watch = FileWatch.snapshot
+    source = spinel_lesson? ? ChunkySpinel.cell_source(code) : code
 
     error = nil
     result = nil
@@ -1527,11 +1532,11 @@ class ChunkyApp
     recorder = StepRecorder.new(code, file: file) if step && !auto && !workshop?
     begin
       result = if auto
-        AutoRun.with_time_limit(workshop? ? Workshop.paths : [file]) { evaluate(code, file).tap { start_sketch } }
+        AutoRun.with_time_limit(workshop? ? Workshop.paths : [file]) { evaluate(source, file).tap { start_sketch } }
       elsif recorder
-        recorder.run { evaluate(code, file) }.tap { start_sketch }
+        recorder.run { evaluate(source, file) }.tap { start_sketch }
       else
-        evaluate(code, file).tap { start_sketch }
+        evaluate(source, file).tap { start_sketch }
       end
     rescue Exception => e
       error = e

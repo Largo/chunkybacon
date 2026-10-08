@@ -43,6 +43,10 @@ module ChunkyShell
     # the Basics with plain Ruby: a run recorded line by line, stepper.js)
     def stepper?(idx) = @lessons[idx][:stepper] == true
 
+    # true for a lesson whose every cell is a program for Spinel ("spinel":
+    # true, lesson 45: the page compiles the cell's code, spinel.rb runs it)
+    def spinel?(idx) = @lessons[idx][:spinel] == true
+
     # true for a lesson whose cells run on PicoRuby.wasm instead of CRuby
     # ("engine": "picoruby", the PicoRuby lesson: html/picoruby_lab.js)
     def picoruby?(idx) = @lessons[idx][:engine] == "picoruby"

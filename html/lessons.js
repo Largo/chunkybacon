@@ -7576,6 +7576,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "spinel",
       "live": false,
+      "spinel": true,
       "de": {
         "title": "45. Spinel: Ruby wird kompiliert",
         "cells": [
@@ -7585,23 +7586,23 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "spinel <<~RUBY\n  def fib(n)\n    n < 2 ? n : fib(n - 1) + fib(n - 2)\n  end\n\n  puts fib(30)\nRUBY"
+            "code": "def fib(n)\n  n < 2 ? n : fib(n - 1) + fib(n - 2)\nend\n\nputs fib(30)"
           },
           {
             "t": "h",
-            "html": "<p><code>spinel</code> bekommt das Programm als String – <code>&lt;&lt;~RUBY … RUBY</code> ist ein <em>Heredoc</em>, ein String über mehrere Zeilen. Unter der Zelle siehst du, was damit passiert: die drei Schritte mit ihren Zeiten, was das fertige Programm ausgibt, und darunter, was CRuby mit demselben Code ausgibt. CRuby ist die Messlatte: Spinel soll genau dasselbe herausbekommen.</p><p>Vergleich die Zeiten. Das Übersetzen dauert Sekunden, das fertige Programm ist in ein paar Millisekunden durch – schau, wie lange CRuby für <code>fib(30)</code> braucht. Ein Compiler arbeitet <em>einmal vorher</em>, damit das Programm danach schnell ist. Klapp auch das C auf: Aus <code>fib</code> ist die C-Funktion <code>sp_fib</code> geworden, und <code>n</code> ist ein <code>sp_int</code>, eine Zahl, mit der der Prozessor direkt rechnet – Spinel hat gesehen, dass hier nur Integer ankommen. <code>main.wasm</code> ist das fertige Programm zum Herunterladen.</p>"
+            "html": "<p>In dieser Lektion ist der Code einer Zelle ein Programm für Spinel – du schreibst ganz normales Ruby, ohne etwas Besonderes drumherum. Unter der Zelle siehst du, was damit passiert: die drei Schritte mit ihren Zeiten, was das fertige Programm ausgibt, und darunter, was CRuby mit demselben Code ausgibt. CRuby ist die Messlatte: Spinel soll genau dasselbe herausbekommen.</p><p>Vergleich die Zeiten. Das Übersetzen dauert Sekunden, das fertige Programm ist in ein paar Millisekunden durch – schau, wie lange CRuby für <code>fib(30)</code> braucht. Ein Compiler arbeitet <em>einmal vorher</em>, damit das Programm danach schnell ist. Klapp auch das C auf: Aus <code>fib</code> ist die C-Funktion <code>sp_fib</code> geworden, und <code>n</code> ist ein <code>sp_int</code>, eine Zahl, mit der der Prozessor direkt rechnet – Spinel hat gesehen, dass hier nur Integer ankommen. <code>main.wasm</code> ist das fertige Programm zum Herunterladen.</p>"
           },
           {
             "t": "c",
-            "code": "spinel <<~'RUBY'\n  class Katze\n    attr_reader :name\n\n    def initialize(name, alter)\n      @name = name\n      @alter = alter\n    end\n\n    def vorstellen\n      \"Ich bin #{@name} und #{@alter} Jahre alt.\"\n    end\n  end\n\n  katzen = [Katze.new(\"Mimi\", 3), Katze.new(\"Felix\", 7)]\n  katzen.each { |katze| puts katze.vorstellen }\n  p katzen.map(&:name).sort\nRUBY"
+            "code": "class Katze\n  attr_reader :name\n\n  def initialize(name, alter)\n    @name = name\n    @alter = alter\n  end\n\n  def vorstellen\n    \"Ich bin #{@name} und #{@alter} Jahre alt.\"\n  end\nend\n\nkatzen = [Katze.new(\"Mimi\", 3), Katze.new(\"Felix\", 7)]\nkatzen.each { |katze| puts katze.vorstellen }\np katzen.map(&:name).sort"
           },
           {
             "t": "h",
-            "html": "<p>Diesmal steht da <code>&lt;&lt;~'RUBY'</code> mit Anführungszeichen. Ohne sie würde schon CRuby das <code>#{@name}</code> im Heredoc ausfüllen, bevor Spinel das Programm sieht; mit Anführungszeichen bleibt es im Programm stehen, und Spinel macht daraus C.</p><p>Spinel hat herausgefunden, dass <code>@name</code> immer ein String und <code>@alter</code> immer ein Integer ist. Im C ist eine Katze darum ein <code>struct sp_Katze_s</code> mit genau diesen zwei Feldern. Das heißt <strong>Typinferenz</strong>: Du schreibst keine Typen hin, Spinel liest sie aus dem ganzen Programm ab.</p><p>Was man erst beim Ausführen wissen kann, lehnt Spinel ab: <code>eval</code> mit einem String (darin könnte ja alles stehen), <code>method_missing</code>, <code>define_method</code> mit einem ausgerechneten Namen, <code>ObjectSpace</code>, <code>binding</code> als Objekt. Das sagt Spinel beim Übersetzen, mit der Zeile:</p>"
+            "html": "<p>Spinel hat herausgefunden, dass <code>@name</code> immer ein String und <code>@alter</code> immer ein Integer ist. Im C ist eine Katze darum ein <code>struct sp_Katze_s</code> mit genau diesen zwei Feldern. Das heißt <strong>Typinferenz</strong>: Du schreibst keine Typen hin, Spinel liest sie aus dem ganzen Programm ab.</p><p>Was man erst beim Ausführen wissen kann, lehnt Spinel ab: <code>eval</code> mit einem String (darin könnte ja alles stehen), <code>method_missing</code>, <code>define_method</code> mit einem ausgerechneten Namen, <code>ObjectSpace</code>, <code>binding</code> als Objekt. Das sagt Spinel beim Übersetzen, mit der Zeile:</p>"
           },
           {
             "t": "c",
-            "code": "spinel <<~'RUBY'\n  rechnung = \"6 * 7\"\n  puts eval(rechnung)\nRUBY"
+            "code": "rechnung = \"6 * 7\"\nputs eval(rechnung)"
           },
           {
             "t": "h",
@@ -7613,11 +7614,11 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>Als Programm für deinen Computer</h2><p>Bisher hat Spinel die Programme <em>in dieser Seite</em> übersetzt und laufen lassen. Der eigentliche Zweck eines Compilers ist aber ein <strong>eigenständiges Programm</strong>: eine Datei, die du weitergeben kannst und die ohne Ruby läuft. Das kann der Knopf <strong>📦 Programm</strong> unter den Zellen dieser Lektion: Er baut den Code der Zelle als <strong>Windows-<code>.exe</code></strong> oder als <strong>Linux-Programm</strong>. Auch das geschieht hier im Browser: Spinel, clang und der Linker laufen als WebAssembly in deinem Tab, es wird nichts hochgeladen. Beim ersten Mal lädt die Seite dafür den Compiler (etwa 45 MB), danach liegt er im Cache.</p><p>Der Code muss dafür <em>nicht</em> in einem Heredoc stehen. Das <code>spinel &lt;&lt;~RUBY</code> weiter oben ist nur der Weg, ein Programm als String an die Zelle zu geben, damit die Seite es vergleichen kann. Der Knopf baut auch eine ganz normale Zelle; steht in einer Zelle ein <code>spinel &lt;&lt;~RUBY</code>, baut er das Programm darin. Probier es mit dieser Zelle: ▶ lässt CRuby sie laufen, 📦 macht ein Programm daraus.</p>"
+            "html": "<h2>Als Programm für deinen Computer</h2><p>Bisher hat Spinel die Programme <em>in dieser Seite</em> übersetzt und laufen lassen. Der eigentliche Zweck eines Compilers ist aber ein <strong>eigenständiges Programm</strong>: eine Datei, die du weitergeben kannst und die ohne Ruby läuft. Das kann der Knopf <strong>📦 Programm</strong> unter den Zellen dieser Lektion: Er baut den Code der Zelle als <strong>Windows-<code>.exe</code></strong> oder als <strong>Linux-Programm</strong>. Auch das geschieht hier im Browser: Spinel, clang und der Linker laufen als WebAssembly in deinem Tab, es wird nichts hochgeladen. Beim ersten Mal lädt die Seite dafür den Compiler (etwa 45 MB), danach liegt er im Cache.</p><p>Dafür musst du nichts Besonderes schreiben: Jede Zelle dieser Lektion hat den Knopf, und gebaut wird der Code so, wie er in der Zelle steht – dasselbe Programm, das ▶ oben von Spinel übersetzen lässt. Probier es mit dieser Zelle: ▶ lässt Spinel und CRuby sie laufen, 📦 macht ein Programm daraus.</p>"
           },
           {
             "t": "c",
-            "code": "# Ein ganz normales Programm - ohne spinel, ohne Heredoc\ndef primzahl?(n)\n  return false if n < 2\n  i = 2\n  while i * i <= n\n    return false if n % i == 0\n    i += 1\n  end\n  true\nend\n\nputs (1..50).select { |n| primzahl?(n) }.join(\" \")"
+            "code": "# Ein ganz normales Programm: die Primzahlen bis 50\ndef primzahl?(n)\n  return false if n < 2\n  i = 2\n  while i * i <= n\n    return false if n % i == 0\n    i += 1\n  end\n  true\nend\n\nputs (1..50).select { |n| primzahl?(n) }.join(\" \")"
           },
           {
             "t": "h",
@@ -7629,7 +7630,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "x",
-            "code": "# gerade: n / 2, ungerade: 3 * n + 1 - so lange, bis n == 1 ist\nspinel <<~'RUBY'\n  def collatz(n)\n    schritte = 0\n\n    schritte\n  end\n\n  puts collatz(27)\nRUBY",
+            "code": "# gerade: n / 2, ungerade: 3 * n + 1 - so lange, bis n == 1 ist\ndef collatz(n)\n  schritte = 0\n\n  schritte\nend\n\nputs collatz(27)",
             "check": "result.is_a?(ChunkySpinel::Program) && result.ok? && result.output.split.last == \"111\" && code.include?(\"def collatz\")",
             "hint": "Eine Schleife: <code>while n != 1</code> … <code>end</code>. Darin <code>n = n.even? ? n / 2 : 3 * n + 1</code> und <code>schritte += 1</code>."
           }
@@ -7644,23 +7645,23 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "spinel <<~RUBY\n  def fib(n)\n    n < 2 ? n : fib(n - 1) + fib(n - 2)\n  end\n\n  puts fib(30)\nRUBY"
+            "code": "def fib(n)\n  n < 2 ? n : fib(n - 1) + fib(n - 2)\nend\n\nputs fib(30)"
           },
           {
             "t": "h",
-            "html": "<p><code>spinel</code> gets the program as a String – <code>&lt;&lt;~RUBY … RUBY</code> is a <em>heredoc</em>, a String over several lines. Below the cell you see what happens to it: the three steps with their times, what the finished program prints, and below that what CRuby prints for the same code. CRuby is the yardstick: Spinel should come out with exactly the same.</p><p>Compare the times. Compiling takes seconds; the finished program is done in a few milliseconds – look how long CRuby takes for <code>fib(30)</code>. A compiler does its work <em>once, beforehand</em>, so that the program is fast afterwards. Open the C as well: <code>fib</code> has become the C function <code>sp_fib</code>, and <code>n</code> is an <code>sp_int</code>, a number the processor computes with directly – Spinel saw that only Integers arrive here. <code>main.wasm</code> is the finished program, to download.</p>"
+            "html": "<p>In this lesson the code of a cell is a program for Spinel – you write perfectly ordinary Ruby, with nothing special around it. Below the cell you see what happens to it: the three steps with their times, what the finished program prints, and below that what CRuby prints for the same code. CRuby is the yardstick: Spinel should come out with exactly the same.</p><p>Compare the times. Compiling takes seconds; the finished program is done in a few milliseconds – look how long CRuby takes for <code>fib(30)</code>. A compiler does its work <em>once, beforehand</em>, so that the program is fast afterwards. Open the C as well: <code>fib</code> has become the C function <code>sp_fib</code>, and <code>n</code> is an <code>sp_int</code>, a number the processor computes with directly – Spinel saw that only Integers arrive here. <code>main.wasm</code> is the finished program, to download.</p>"
           },
           {
             "t": "c",
-            "code": "spinel <<~'RUBY'\n  class Cat\n    attr_reader :name\n\n    def initialize(name, age)\n      @name = name\n      @age = age\n    end\n\n    def introduce\n      \"I'm #{@name} and #{@age} years old.\"\n    end\n  end\n\n  cats = [Cat.new(\"Mimi\", 3), Cat.new(\"Felix\", 7)]\n  cats.each { |cat| puts cat.introduce }\n  p cats.map(&:name).sort\nRUBY"
+            "code": "class Cat\n  attr_reader :name\n\n  def initialize(name, age)\n    @name = name\n    @age = age\n  end\n\n  def introduce\n    \"I'm #{@name} and #{@age} years old.\"\n  end\nend\n\ncats = [Cat.new(\"Mimi\", 3), Cat.new(\"Felix\", 7)]\ncats.each { |cat| puts cat.introduce }\np cats.map(&:name).sort"
           },
           {
             "t": "h",
-            "html": "<p>This time it says <code>&lt;&lt;~'RUBY'</code>, with quotes. Without them CRuby itself would fill in the <code>#{@name}</code> in the heredoc before Spinel ever sees the program; with quotes it stays in the program, and Spinel turns it into C.</p><p>Spinel worked out that <code>@name</code> is always a String and <code>@age</code> always an Integer. In the C a cat is therefore a <code>struct sp_Cat_s</code> with exactly these two fields. This is called <strong>type inference</strong>: you write no types down, Spinel reads them off the whole program.</p><p>What can only be known while the program runs, Spinel refuses: <code>eval</code> with a String (it could contain anything), <code>method_missing</code>, <code>define_method</code> with a computed name, <code>ObjectSpace</code>, <code>binding</code> as an object. Spinel says so while compiling, with the line:</p>"
+            "html": "<p>Spinel worked out that <code>@name</code> is always a String and <code>@age</code> always an Integer. In the C a cat is therefore a <code>struct sp_Cat_s</code> with exactly these two fields. This is called <strong>type inference</strong>: you write no types down, Spinel reads them off the whole program.</p><p>What can only be known while the program runs, Spinel refuses: <code>eval</code> with a String (it could contain anything), <code>method_missing</code>, <code>define_method</code> with a computed name, <code>ObjectSpace</code>, <code>binding</code> as an object. Spinel says so while compiling, with the line:</p>"
           },
           {
             "t": "c",
-            "code": "spinel <<~'RUBY'\n  sum = \"6 * 7\"\n  puts eval(sum)\nRUBY"
+            "code": "sum = \"6 * 7\"\nputs eval(sum)"
           },
           {
             "t": "h",
@@ -7672,11 +7673,11 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>As a program for your computer</h2><p>So far Spinel compiled and ran the programs <em>inside this page</em>. But the real point of a compiler is a <strong>standalone program</strong>: a file you can hand to someone, which runs without Ruby. That is what the <strong>📦 Program</strong> button under this lesson's cells does: it builds the cell's code as a <strong>Windows <code>.exe</code></strong> or as a <strong>Linux program</strong>. That also happens right here in the browser: Spinel, clang and the linker run as WebAssembly in your tab, nothing is uploaded. The first time, the page loads the compiler for it (about 45 MB); after that it is cached.</p><p>The code does <em>not</em> have to sit in a heredoc for this. The <code>spinel &lt;&lt;~RUBY</code> further up is only the way to hand a program to the cell as a String, so the page can compare the runs. The button builds a perfectly ordinary cell too; if a cell contains a <code>spinel &lt;&lt;~RUBY</code>, it builds the program inside. Try it with this cell: ▶ lets CRuby run it, 📦 turns it into a program.</p>"
+            "html": "<h2>As a program for your computer</h2><p>So far Spinel compiled and ran the programs <em>inside this page</em>. But the real point of a compiler is a <strong>standalone program</strong>: a file you can hand to someone, which runs without Ruby. That is what the <strong>📦 Program</strong> button under this lesson's cells does: it builds the cell's code as a <strong>Windows <code>.exe</code></strong> or as a <strong>Linux program</strong>. That also happens right here in the browser: Spinel, clang and the linker run as WebAssembly in your tab, nothing is uploaded. The first time, the page loads the compiler for it (about 45 MB); after that it is cached.</p><p>You do not have to write anything special for this: every cell of this lesson has the button, and the code is built just as it stands in the cell – the same program that ▶ has Spinel translate above. Try it with this cell: ▶ lets Spinel and CRuby run it, 📦 turns it into a program.</p>"
           },
           {
             "t": "c",
-            "code": "# A perfectly ordinary program - no spinel, no heredoc\ndef prime?(n)\n  return false if n < 2\n  i = 2\n  while i * i <= n\n    return false if n % i == 0\n    i += 1\n  end\n  true\nend\n\nputs (1..50).select { |n| prime?(n) }.join(\" \")"
+            "code": "# A perfectly ordinary program: the primes up to 50\ndef prime?(n)\n  return false if n < 2\n  i = 2\n  while i * i <= n\n    return false if n % i == 0\n    i += 1\n  end\n  true\nend\n\nputs (1..50).select { |n| prime?(n) }.join(\" \")"
           },
           {
             "t": "h",
@@ -7688,7 +7689,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "x",
-            "code": "# even: n / 2, odd: 3 * n + 1 - until n == 1\nspinel <<~'RUBY'\n  def collatz(n)\n    steps = 0\n\n    steps\n  end\n\n  puts collatz(27)\nRUBY",
+            "code": "# even: n / 2, odd: 3 * n + 1 - until n == 1\ndef collatz(n)\n  steps = 0\n\n  steps\nend\n\nputs collatz(27)",
             "check": "result.is_a?(ChunkySpinel::Program) && result.ok? && result.output.split.last == \"111\" && code.include?(\"def collatz\")",
             "hint": "A loop: <code>while n != 1</code> … <code>end</code>. Inside it <code>n = n.even? ? n / 2 : 3 * n + 1</code> and <code>steps += 1</code>."
           }
@@ -7703,23 +7704,23 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "spinel <<~RUBY\n  def fib(n)\n    n < 2 ? n : fib(n - 1) + fib(n - 2)\n  end\n\n  puts fib(30)\nRUBY"
+            "code": "def fib(n)\n  n < 2 ? n : fib(n - 1) + fib(n - 2)\nend\n\nputs fib(30)"
           },
           {
             "t": "h",
-            "html": "<p><code>spinel</code>はプログラムを文字列として受け取ります。<code>&lt;&lt;~RUBY … RUBY</code>は<em>ヒアドキュメント</em>、つまり複数行にわたる文字列です。セルの下には、それがどうなるかが表示されます。3つのステップとそれぞれの時間、できあがったプログラムの出力、そしてその下に、同じコードをCRubyで動かしたときの出力です。CRubyが基準です。Spinelはまったく同じ結果を出さなければなりません。</p><p>時間を比べてみましょう。コンパイルには数秒かかりますが、できあがったプログラムは数ミリ秒で終わります。CRubyが<code>fib(30)</code>にどれだけかかるかも見てください。コンパイラは<em>前もって一度だけ</em>働き、そのおかげでプログラムはあとで速く動くのです。Cも開いてみましょう。<code>fib</code>はC関数<code>sp_fib</code>になり、<code>n</code>は<code>sp_int</code>、つまりプロセッサーが直接計算できる数になっています。ここには整数しか来ないことを、Spinelが見抜いたからです。<code>main.wasm</code>はできあがったプログラムで、ダウンロードできます。</p>"
+            "html": "<p>このレッスンでは、セルのコードがそのままSpinelに渡すプログラムになります。特別な書き方は要らず、ごく普通のRubyを書くだけです。セルの下には、それがどうなるかが表示されます。3つのステップとそれぞれの時間、できあがったプログラムの出力、そしてその下に、同じコードをCRubyで動かしたときの出力です。CRubyが基準です。Spinelはまったく同じ結果を出さなければなりません。</p><p>時間を比べてみましょう。コンパイルには数秒かかりますが、できあがったプログラムは数ミリ秒で終わります。CRubyが<code>fib(30)</code>にどれだけかかるかも見てください。コンパイラは<em>前もって一度だけ</em>働き、そのおかげでプログラムはあとで速く動くのです。Cも開いてみましょう。<code>fib</code>はC関数<code>sp_fib</code>になり、<code>n</code>は<code>sp_int</code>、つまりプロセッサーが直接計算できる数になっています。ここには整数しか来ないことを、Spinelが見抜いたからです。<code>main.wasm</code>はできあがったプログラムで、ダウンロードできます。</p>"
           },
           {
             "t": "c",
-            "code": "spinel <<~'RUBY'\n  class Cat\n    attr_reader :name\n\n    def initialize(name, age)\n      @name = name\n      @age = age\n    end\n\n    def introduce\n      \"I'm #{@name} and #{@age} years old.\"\n    end\n  end\n\n  cats = [Cat.new(\"Mimi\", 3), Cat.new(\"Felix\", 7)]\n  cats.each { |cat| puts cat.introduce }\n  p cats.map(&:name).sort\nRUBY"
+            "code": "class Cat\n  attr_reader :name\n\n  def initialize(name, age)\n    @name = name\n    @age = age\n  end\n\n  def introduce\n    \"I'm #{@name} and #{@age} years old.\"\n  end\nend\n\ncats = [Cat.new(\"Mimi\", 3), Cat.new(\"Felix\", 7)]\ncats.each { |cat| puts cat.introduce }\np cats.map(&:name).sort"
           },
           {
             "t": "h",
-            "html": "<p>今回は引用符つきの<code>&lt;&lt;~'RUBY'</code>です。引用符がないと、Spinelがプログラムを見る前に、CRubyがヒアドキュメントの中の<code>#{@name}</code>を埋めてしまいます。引用符があれば、それはプログラムの中に残り、SpinelがCにします。</p><p>Spinelは、<code>@name</code>がいつも文字列で、<code>@age</code>がいつも整数だと突き止めました。そのためCの中では、猫はちょうどこの2つのフィールドを持つ<code>struct sp_Cat_s</code>になっています。これを<strong>型推論</strong>といいます。型は書かなくても、Spinelがプログラム全体から読み取るのです。</p><p>実行してみないとわからないことは、Spinelは断ります。文字列を渡す<code>eval</code>（中に何が入っているかわかりません）、<code>method_missing</code>、計算した名前を使う<code>define_method</code>、<code>ObjectSpace</code>、オブジェクトとしての<code>binding</code>です。Spinelはコンパイルのときに、行番号つきでそう伝えます。</p>"
+            "html": "<p>Spinelは、<code>@name</code>がいつも文字列で、<code>@age</code>がいつも整数だと突き止めました。そのためCの中では、猫はちょうどこの2つのフィールドを持つ<code>struct sp_Cat_s</code>になっています。これを<strong>型推論</strong>といいます。型は書かなくても、Spinelがプログラム全体から読み取るのです。</p><p>実行してみないとわからないことは、Spinelは断ります。文字列を渡す<code>eval</code>（中に何が入っているかわかりません）、<code>method_missing</code>、計算した名前を使う<code>define_method</code>、<code>ObjectSpace</code>、オブジェクトとしての<code>binding</code>です。Spinelはコンパイルのときに、行番号つきでそう伝えます。</p>"
           },
           {
             "t": "c",
-            "code": "spinel <<~'RUBY'\n  sum = \"6 * 7\"\n  puts eval(sum)\nRUBY"
+            "code": "sum = \"6 * 7\"\nputs eval(sum)"
           },
           {
             "t": "h",
@@ -7731,11 +7732,11 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>自分のコンピューター用のプログラムとして</h2><p>ここまでは、Spinelが<em>このページの中で</em>プログラムをコンパイルして動かしていました。でもコンパイラ本来の目的は、<strong>単体で動くプログラム</strong>を作ることです。Rubyなしで動き、人に渡せる1つのファイルです。このレッスンのセルの下にある<strong>📦 プログラム</strong>ボタンがそれをします。セルのコードを<strong>Windowsの<code>.exe</code></strong>または<strong>Linuxのプログラム</strong>としてビルドします。これもブラウザの中で行われます。Spinel、clang、リンカがWebAssemblyとしてあなたのタブで動き、何もアップロードされません。初回はそのためにコンパイラ（約45 MB）を読み込み、あとはキャッシュされます。</p><p>そのためにコードをヒアドキュメントに入れる必要は<em>ありません</em>。上にある<code>spinel &lt;&lt;~RUBY</code>は、ページが実行結果を比べられるように、プログラムを文字列としてセルに渡す方法にすぎません。ボタンはごく普通のセルもビルドします。セルに<code>spinel &lt;&lt;~RUBY</code>があるときは、その中のプログラムをビルドします。このセルで試しましょう。▶はCRubyで実行し、📦はプログラムにします。</p>"
+            "html": "<h2>自分のコンピューター用のプログラムとして</h2><p>ここまでは、Spinelが<em>このページの中で</em>プログラムをコンパイルして動かしていました。でもコンパイラ本来の目的は、<strong>単体で動くプログラム</strong>を作ることです。Rubyなしで動き、人に渡せる1つのファイルです。このレッスンのセルの下にある<strong>📦 プログラム</strong>ボタンがそれをします。セルのコードを<strong>Windowsの<code>.exe</code></strong>または<strong>Linuxのプログラム</strong>としてビルドします。これもブラウザの中で行われます。Spinel、clang、リンカがWebAssemblyとしてあなたのタブで動き、何もアップロードされません。初回はそのためにコンパイラ（約45 MB）を読み込み、あとはキャッシュされます。</p><p>そのために特別な書き方は要りません。このレッスンのどのセルにもボタンがあり、コードはセルに書かれたとおりにビルドされます。上で▶がSpinelに変換させるのと同じプログラムです。このセルで試しましょう。▶はSpinelとCRubyで実行し、📦はプログラムにします。</p>"
           },
           {
             "t": "c",
-            "code": "# ごく普通のプログラム - spinelも、ヒアドキュメントもなし\ndef prime?(n)\n  return false if n < 2\n  i = 2\n  while i * i <= n\n    return false if n % i == 0\n    i += 1\n  end\n  true\nend\n\nputs (1..50).select { |n| prime?(n) }.join(\" \")"
+            "code": "# ごく普通のプログラム：50までの素数\ndef prime?(n)\n  return false if n < 2\n  i = 2\n  while i * i <= n\n    return false if n % i == 0\n    i += 1\n  end\n  true\nend\n\nputs (1..50).select { |n| prime?(n) }.join(\" \")"
           },
           {
             "t": "h",
@@ -7747,7 +7748,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "x",
-            "code": "# 偶数なら n / 2、奇数なら 3 * n + 1 - n == 1 になるまで\nspinel <<~'RUBY'\n  def collatz(n)\n    steps = 0\n\n    steps\n  end\n\n  puts collatz(27)\nRUBY",
+            "code": "# 偶数なら n / 2、奇数なら 3 * n + 1 - n == 1 になるまで\ndef collatz(n)\n  steps = 0\n\n  steps\nend\n\nputs collatz(27)",
             "check": "result.is_a?(ChunkySpinel::Program) && result.ok? && result.output.split.last == \"111\" && code.include?(\"def collatz\")",
             "hint": "ループを使おう。<code>while n != 1</code> … <code>end</code>の中で、<code>n = n.even? ? n / 2 : 3 * n + 1</code>と<code>steps += 1</code>。"
           }
