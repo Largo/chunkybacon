@@ -1008,11 +1008,14 @@ no service worker is registered and nothing changes. The choice is
 ## 6d. The 📦 Program button (lesson 45: Windows and Linux programs)
 
 The Spinel lesson (45, §6n) compiles to WebAssembly and runs the result in
-the page. Its program cells also have a 📦 Program button: the Ruby inside
-the cell's `spinel <<~RUBY ... RUBY` becomes a standalone **Windows `.exe`**
-or **Linux x86_64** program (static, musl), built inside the tab - nothing
-is uploaded. **Only lesson 45** has it (`compile.js` looks for the active
-lesson id `spinel` and a `spinel <<` in the cell; the IRB cell has none).
+the page. Its cells also have a 📦 Program button: the cell's Ruby becomes a
+standalone **Windows `.exe`** or **Linux x86_64** program (static, musl),
+built inside the tab - nothing is uploaded. A heredoc is not needed: a cell
+is built as it stands, and one that hands its program to `spinel <<~RUBY ...
+RUBY` gets the program inside built. **Only lesson 45** has the button
+(`compile.js` looks for the active lesson id `spinel`; the IRB cell has none),
+and the lesson explains it in three cells after the IRB cell, the middle one
+a plain program to try it on.
 
 - `html/compile/compile.js` (plain JS, loaded by `index.html`) adds the
   button to the cells' `.cell-toolbar` as the lesson is drawn (a
@@ -1063,7 +1066,7 @@ lesson id `spinel` and a `spinel <<` in the cell; the IRB cell has none).
   generated C needs more (FFI) fails to compile and shows clang's message.
 - Limits: Spinel compiles part of Ruby (docs/limitations.md in its repo);
   the page's helpers (`show_image` ...) do not exist in a program; only the
-  program inside the heredoc is built, so no `require_relative`.
+  cell is built alone, so no `require_relative`.
   The Windows port of Spinel is community-maintained.
 - Verified: Hello World-class programs (class, Range, Hash, blocks) built in
   Chromium; the Linux binary runs, the `.exe` runs under Wine with the same

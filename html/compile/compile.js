@@ -1,7 +1,7 @@
 // "📦 Program": the Ruby of a Spinel lesson cell as a program for Windows or
 // Linux, built in this browser tab. Only the Spinel lesson (45) has the
-// button, and only the program inside the cell's `spinel <<~RUBY ... RUBY`
-// is built. Spinel (Matz's Ruby-to-C compiler) and clang/lld, all
+// button. A cell is built as it stands; one that hands its program to
+// `spinel <<~RUBY ... RUBY` gets the program inside the heredoc built. Spinel (Matz's Ruby-to-C compiler) and clang/lld, all
 // compiled to WebAssembly, run in compile/worker.js; nothing is sent
 // anywhere. The toolchain (compile/toolchain/, about 45 MB, built by
 // tools/compile/build.sh) is optional: without compile/toolchain/ready.json
@@ -14,7 +14,6 @@
 
   var TEXT = {
     de: {
-      noProgram: "In dieser Zelle steht kein Programm: Es muss in spinel <<~RUBY … RUBY stehen.",
       button: "📦 Programm", title: "Diesen Code als eigenständiges Programm bauen (Spinel)",
       win: "Windows (.exe)", linux: "Linux (x86_64)",
       intro: "Baut aus dem Code ein Programm, das ohne Ruby läuft – hier im Browser, nichts wird hochgeladen.",
@@ -23,7 +22,6 @@
       done: "Fertig: ", error: "Das ging nicht:", note: "Spinel kennt nur einen Teil von Ruby, und die Hilfen der Seite (show_image, show_irb …) gibt es im Programm nicht."
     },
     en: {
-      noProgram: "There is no program in this cell: it has to be inside spinel <<~RUBY … RUBY.",
       button: "📦 Program", title: "Build this code as a standalone program (Spinel)",
       win: "Windows (.exe)", linux: "Linux (x86_64)",
       intro: "Turns the code into a program that runs without Ruby - right here in the browser, nothing is uploaded.",
@@ -32,7 +30,6 @@
       done: "Done: ", error: "That did not work:", note: "Spinel supports only part of Ruby, and the page's helpers (show_image, show_irb …) do not exist in the program."
     },
     ja: {
-      noProgram: "このセルにはプログラムがありません。spinel <<~RUBY … RUBY の中に書いてください。",
       button: "📦 プログラム", title: "このコードを単体のプログラムとしてビルド（Spinel）",
       win: "Windows (.exe)", linux: "Linux (x86_64)",
       intro: "Ruby なしで動くプログラムにします。ブラウザの中で完結し、何も送信されません。",
@@ -45,11 +42,11 @@
 
   var worker = null, job = 0, busy = null, available = false;
 
-  // the program inside `spinel <<~RUBY ... RUBY` (any delimiter, quoted or not,
-  // <<~ dedented as Ruby does); null when the cell has none
+  // the program a cell stands for: what is inside `spinel <<~RUBY ... RUBY`
+  // (any delimiter, quoted or not, <<~ dedented as Ruby does), else the cell
   function programOf(code) {
     var m = /<<([~-]?)(['"]?)(\w+)\2[^\n]*\n([\s\S]*?)\n[ \t]*\3[ \t]*(?:\n|$)/.exec(code);
-    if (!m || !/\bspinel\b[^\n]*<</.test(code.slice(0, m.index + 2))) return null;
+    if (!m || !/\bspinel\b[^\n]*<</.test(code.slice(0, m.index + 2))) return code;
     var lines = m[4].split("\n");
     if (m[1] === "~") {
       var indent = Math.min.apply(null, lines.filter(function (l) { return l.trim(); })
@@ -108,8 +105,7 @@
 
   function build(panel, target) {
     if (busy) return;
-    var code = typeof window.getCellCode === "function" ? programOf(window.getCellCode(panel.idx)) : null;
-    if (code === null) { panel.status.textContent = t().noProgram; return; }
+    var code = typeof window.getCellCode === "function" ? programOf(window.getCellCode(panel.idx)) : "";
     if (!code.trim()) return;
     busy = panel;
     panel.el.classList.add("busy");
@@ -148,9 +144,9 @@
       var run = toolbar.querySelector(".run-cell");
       if (!run) return;
       var idx = run.getAttribute("data-idx");
-      // a cell that is not a spinel program (the IRB cell) has no button; an editor not drawn yet counts as one
+      // the IRB cell is no program
       var shown = typeof window.getCellCode === "function" ? window.getCellCode(idx) : "";
-      if (shown && !/\bspinel\s*<</.test(shown)) return;
+      if (/show_spinel_irb/.test(shown)) return;
       var button = document.createElement("button");
       button.type = "button";
       button.className = "compile-cell";

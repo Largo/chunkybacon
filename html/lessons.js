@@ -7613,6 +7613,18 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
+            "html": "<h2>Als Programm für deinen Computer</h2><p>Bisher hat Spinel die Programme <em>in dieser Seite</em> übersetzt und laufen lassen. Der eigentliche Zweck eines Compilers ist aber ein <strong>eigenständiges Programm</strong>: eine Datei, die du weitergeben kannst und die ohne Ruby läuft. Das kann der Knopf <strong>📦 Programm</strong> unter den Zellen dieser Lektion: Er baut den Code der Zelle als <strong>Windows-<code>.exe</code></strong> oder als <strong>Linux-Programm</strong>. Auch das geschieht hier im Browser: Spinel, clang und der Linker laufen als WebAssembly in deinem Tab, es wird nichts hochgeladen. Beim ersten Mal lädt die Seite dafür den Compiler (etwa 45 MB), danach liegt er im Cache.</p><p>Der Code muss dafür <em>nicht</em> in einem Heredoc stehen. Das <code>spinel &lt;&lt;~RUBY</code> weiter oben ist nur der Weg, ein Programm als String an die Zelle zu geben, damit die Seite es vergleichen kann. Der Knopf baut auch eine ganz normale Zelle; steht in einer Zelle ein <code>spinel &lt;&lt;~RUBY</code>, baut er das Programm darin. Probier es mit dieser Zelle: ▶ lässt CRuby sie laufen, 📦 macht ein Programm daraus.</p>"
+          },
+          {
+            "t": "c",
+            "code": "# Ein ganz normales Programm - ohne spinel, ohne Heredoc\ndef primzahl?(n)\n  return false if n < 2\n  i = 2\n  while i * i <= n\n    return false if n % i == 0\n    i += 1\n  end\n  true\nend\n\nputs (1..50).select { |n| primzahl?(n) }.join(\" \")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Datei ist <em>statisch</em> gelinkt und braucht nichts weiter. Unter Linux: <code>chmod +x programm</code> und <code>./programm</code>. Unter Windows: Doppelklick oder <code>programm.exe</code> in der Eingabeaufforderung (bei einer unbekannten <code>.exe</code> kann Windows warnen – du hast sie ja gerade selbst gebaut). Es gelten dieselben Grenzen wie für jedes Spinel-Programm: nur ein Teil von Ruby, und die Helfer dieser Seite wie <code>show_image</code> gibt es darin nicht. Siehst du den Knopf nicht, bietet dieser Server den Compiler nicht an.</p>"
+          },
+          {
+            "t": "h",
             "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Spinel ist ein C-Programm: <code>git clone https://github.com/matz/spinel</code>, darin <code>make deps</code> und <code>make</code>. Danach übersetzt <code>./spinel app.rb</code> eine Datei in ein Programm <code>./app</code>, das ohne Ruby läuft. Für größere Projekte gibt es <code>spin</code>: <code>spin new meinprojekt</code>, <code>spin run</code> und <code>spin test</code>, das wie hier CRuby als Messlatte nimmt. Das <code>main.wasm</code> von oben läuft mit <a href='https://wasmtime.dev'>wasmtime</a>: <code>wasmtime run -W exceptions=y main.wasm</code>.</p></div><div class='task'><strong>Aufgabe:</strong> Die <em>Collatz-Folge</em>: Ist eine Zahl gerade, halbiere sie, sonst nimm sie mal 3 und zähl 1 dazu – so lange, bis 1 herauskommt. Schreib die Methode <code>collatz(n)</code>, die zählt, wie viele Schritte es bis zur 1 sind, und lass Spinel <code>collatz(27)</code> ausgeben. (Es sind 111 – und unterwegs wird die Zahl bis zu 9232 groß.)</div>"
           },
           {
@@ -7660,6 +7672,18 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
+            "html": "<h2>As a program for your computer</h2><p>So far Spinel compiled and ran the programs <em>inside this page</em>. But the real point of a compiler is a <strong>standalone program</strong>: a file you can hand to someone, which runs without Ruby. That is what the <strong>📦 Program</strong> button under this lesson's cells does: it builds the cell's code as a <strong>Windows <code>.exe</code></strong> or as a <strong>Linux program</strong>. That also happens right here in the browser: Spinel, clang and the linker run as WebAssembly in your tab, nothing is uploaded. The first time, the page loads the compiler for it (about 45 MB); after that it is cached.</p><p>The code does <em>not</em> have to sit in a heredoc for this. The <code>spinel &lt;&lt;~RUBY</code> further up is only the way to hand a program to the cell as a String, so the page can compare the runs. The button builds a perfectly ordinary cell too; if a cell contains a <code>spinel &lt;&lt;~RUBY</code>, it builds the program inside. Try it with this cell: ▶ lets CRuby run it, 📦 turns it into a program.</p>"
+          },
+          {
+            "t": "c",
+            "code": "# A perfectly ordinary program - no spinel, no heredoc\ndef prime?(n)\n  return false if n < 2\n  i = 2\n  while i * i <= n\n    return false if n % i == 0\n    i += 1\n  end\n  true\nend\n\nputs (1..50).select { |n| prime?(n) }.join(\" \")"
+          },
+          {
+            "t": "h",
+            "html": "<p>The file is linked <em>statically</em> and needs nothing else. On Linux: <code>chmod +x program</code> and <code>./program</code>. On Windows: double-click it, or run <code>program.exe</code> in a terminal (Windows may warn about an unknown <code>.exe</code> – but you just built it yourself). The same limits apply as to any Spinel program: only part of Ruby, and this page's helpers like <code>show_image</code> do not exist in it. If you do not see the button, this server does not offer the compiler.</p>"
+          },
+          {
+            "t": "h",
             "html": "<div class='offweb' data-title='On your machine'><p>Spinel is a C program: <code>git clone https://github.com/matz/spinel</code>, then <code>make deps</code> and <code>make</code> in it. After that <code>./spinel app.rb</code> compiles a file into a program <code>./app</code> that runs without Ruby. For bigger projects there is <code>spin</code>: <code>spin new myproject</code>, <code>spin run</code> and <code>spin test</code>, which takes CRuby as the yardstick, as here. The <code>main.wasm</code> from above runs with <a href='https://wasmtime.dev'>wasmtime</a>: <code>wasmtime run -W exceptions=y main.wasm</code>.</p></div><div class='task'><strong>Task:</strong> The <em>Collatz sequence</em>: if a number is even, halve it, otherwise multiply it by 3 and add 1 – until 1 comes out. Write the method <code>collatz(n)</code> that counts how many steps it takes to reach 1, and let Spinel print <code>collatz(27)</code>. (It is 111 – and on the way the number grows as big as 9232.)</div>"
           },
           {
@@ -7704,6 +7728,18 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "c",
             "code": "show_spinel_irb"
+          },
+          {
+            "t": "h",
+            "html": "<h2>自分のコンピューター用のプログラムとして</h2><p>ここまでは、Spinelが<em>このページの中で</em>プログラムをコンパイルして動かしていました。でもコンパイラ本来の目的は、<strong>単体で動くプログラム</strong>を作ることです。Rubyなしで動き、人に渡せる1つのファイルです。このレッスンのセルの下にある<strong>📦 プログラム</strong>ボタンがそれをします。セルのコードを<strong>Windowsの<code>.exe</code></strong>または<strong>Linuxのプログラム</strong>としてビルドします。これもブラウザの中で行われます。Spinel、clang、リンカがWebAssemblyとしてあなたのタブで動き、何もアップロードされません。初回はそのためにコンパイラ（約45 MB）を読み込み、あとはキャッシュされます。</p><p>そのためにコードをヒアドキュメントに入れる必要は<em>ありません</em>。上にある<code>spinel &lt;&lt;~RUBY</code>は、ページが実行結果を比べられるように、プログラムを文字列としてセルに渡す方法にすぎません。ボタンはごく普通のセルもビルドします。セルに<code>spinel &lt;&lt;~RUBY</code>があるときは、その中のプログラムをビルドします。このセルで試しましょう。▶はCRubyで実行し、📦はプログラムにします。</p>"
+          },
+          {
+            "t": "c",
+            "code": "# ごく普通のプログラム - spinelも、ヒアドキュメントもなし\ndef prime?(n)\n  return false if n < 2\n  i = 2\n  while i * i <= n\n    return false if n % i == 0\n    i += 1\n  end\n  true\nend\n\nputs (1..50).select { |n| prime?(n) }.join(\" \")"
+          },
+          {
+            "t": "h",
+            "html": "<p>ファイルは<em>静的</em>にリンクされていて、ほかに何も要りません。Linuxでは<code>chmod +x program</code>のあと<code>./program</code>。Windowsではダブルクリックか、ターミナルで<code>program.exe</code>です（知らない<code>.exe</code>にはWindowsが警告を出すことがありますが、あなたがいま自分で作ったものです）。どのSpinelプログラムとも同じ制限があります。Rubyの一部にしか対応せず、<code>show_image</code>のようなこのページの補助は使えません。ボタンが見えないときは、このサーバーはコンパイラを提供していません。</p>"
           },
           {
             "t": "h",
