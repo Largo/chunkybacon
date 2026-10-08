@@ -1,4 +1,4 @@
-// The window of a Processing sketch (html/processing.rb, lesson 33), as a
+// The window of a Processing sketch (html/processing.rb, lesson 36), as a
 // canvas below the cell. Ruby records what a frame draws - a list of
 // commands, styles and matrix included only when they change - and this
 // paints them; the mouse and the keys go back with the next frame:

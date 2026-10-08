@@ -29,7 +29,7 @@ services:
       - serverbundle:/usr/local/bundle
     ports:
       - "127.0.0.1:8012:9292"
-  # Builds Spinel for lesson 42 into html/assets/spinel/ (tools/build_spinel.rb,
+  # Builds Spinel for lesson 45 into html/assets/spinel/ (tools/build_spinel.rb,
   # docs/HANDOVER.md §6n). Run by the deploy (tools/after_deploy.sh), never
   # started by `up`: docker compose --profile build run --rm spinel-build
   # It does nothing while the build there is the one tools/spinel.json pins.

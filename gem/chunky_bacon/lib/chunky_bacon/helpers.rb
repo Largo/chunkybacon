@@ -94,9 +94,15 @@ module ChunkyBacon
 
     # A picture: a ChunkyPNG image (anything with to_blob or to_data_url),
     # what PureJPEG.encode returns (anything with to_bytes), the bytes of a
-    # PNG, JPEG, GIF, WebP or SVG, or the path of an image file. show_objects
-    # (object_graph.rb) comes this way too, as an SVG.
-    def show_image(image)
+    # PNG, JPEG, GIF, WebP or SVG, a chart that writes SVG (a Rubyvis panel,
+    # rendered here), or the path of an image file. show_objects
+    # (object_graph.rb) comes this way too, as an SVG. alt: is what the
+    # course's page tells a screen reader; a file has no place for it.
+    def show_image(image, alt: nil)
+      if image.respond_to?(:to_svg) && !image.respond_to?(:to_data_url)
+        image.render if image.respond_to?(:render)
+        image = image.to_svg
+      end
       # a path: text without a picture's signature or NUL bytes, naming a file
       if image.is_a?(String) && !ChunkyBacon.image_type(image) && !image.include?("\0") && File.file?(image)
         ChunkyBacon::Opener.open(File.expand_path(image))

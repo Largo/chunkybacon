@@ -41,7 +41,7 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('58 lessons in nav', (await page.$$('#lessonNav a')).length === 58);
+check('61 lessons in nav', (await page.$$('#lessonNav a')).length === 61);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
@@ -784,6 +784,75 @@ await setExercise('sieben = <<~BILD\n  .######.\n  ......#.\n  .....#..\n  ....#
 await runExercise();
 await page.waitForTimeout(800);
 check('the seven exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// SciRuby lessons (30-32): Daru's frames as tables (main.rb daru_result_html),
+// a CSV written with File.write read back by from_csv (Kernel#open on the
+// virtual store), Rubyvis charts through show_image as SVG, networkx.rb on a
+// map. (rumaleCell runs any cell and returns its output.)
+const tableRows = idx => page.evaluate(i => [...document.querySelectorAll(`#cell-out-${i} .py-table tbody tr`)]
+  .map(tr => [...tr.children].map(c => c.textContent).join('|')), idx);
+const svgOf = idx => page.evaluate(i => {
+  const img = document.querySelector(`#cell-out-${i} img.cell-image`);
+  return img && img.src.startsWith('data:image/svg+xml;base64,')
+    ? { alt: img.alt, svg: new TextDecoder().decode(Uint8Array.from(atob(img.src.split(',')[1]), c => c.charCodeAt(0))) }
+    : null;
+}, idx);
+await page.click('#lessonNav a[data-id="daru"]');
+await page.waitForTimeout(300);
+await rumaleCell(1);
+check('daru installs from cache', (await page.textContent('#gemsList')).includes('daru ✓'));
+check('a DataFrame shows as a table', await page.evaluate(() => {
+  const t = document.querySelector('#cell-out-1 .py-table table');
+  return Boolean(t) && t.querySelector('caption').textContent === 'Daru::DataFrame(4x3)' &&
+    [...t.querySelectorAll('thead th')].map(th => th.textContent).join() === ',essen,preis,menge';
+}));
+check('a Vector does statistics', (await rumaleCell(5)).includes('=> [11.0, 2.75, 4.5]'));
+await rumaleCell(7);
+check('a computed column, sorted', (await tableRows(7))[0] === '3|Kaffee|3.0|4|12.0');
+await rumaleCell(9);
+check('where keeps the rows that answer yes', (await rumaleCell(11)).includes('=> ["Speck", "Kaffee"]'));
+await rumaleCell(13);
+await rumaleCell(15);
+check('group_by sums per table', (await tableRows(15)).join() === '1|9.0,2|6.5,3|4.5');
+await rumaleCell(17);
+check('from_csv reads what File.write wrote', (await tableRows(17)).length === 7);
+await rumaleCell(19);
+await rumaleCell(21);
+check('corr: the warmer, the more ice cream', (await tableRows(21))[1] === 'kugeln|0.993685|1.0');
+await setExercise('install_gem "daru"\nrequire "daru"\nsnacks = Daru::DataFrame.new({ tag: ["Mo", "Mo", "Di", "Mi", "Mi", "Mi"], snack: ["Speck", "Beeren", "Speck", "Ei", "Speck", "Beeren"], gramm: [120, 80, 150, 60, 90, 40] })\npro_snack = snacks.group_by(:snack).sum[:gramm].to_h');
+await runExercise();
+await page.waitForTimeout(800);
+check('daru exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+await page.click('#lessonNav a[data-id="statistik"]');
+await page.waitForTimeout(300);
+check('the binomial distribution', (await rumaleCell(1)).includes('=> 0.24609375'));
+check('500 heights from a seeded die', (await rumaleCell(7)).includes('=> [169.8, 8.5, 142.6, 198.6]'));
+await rumaleCell(9);
+const histogram = await svgOf(9);
+check('Rubyvis draws the bars as SVG, with their alt', Boolean(histogram) && histogram.svg.includes('<rect') && histogram.alt.startsWith('Säulen'));
+await rumaleCell(11);
+const bell = await svgOf(11);
+check('... and the bell curve over them', Boolean(bell) && bell.svg.includes('<path'));
+check('the integral is the cdf', (await rumaleCell(15)).includes('=> 0.0303963'));
+check('the minimum of the squares is the mean', (await rumaleCell(17)).includes('=> [169.79, 169.79]'));
+await setExercise('install_gem "distribution"\nrequire "distribution"\nchance = 1 - Distribution::Binomial.cdf(4, 20, 1 / 6.0)');
+await runExercise();
+await page.waitForTimeout(800);
+check('statistics exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+await page.click('#lessonNav a[data-id="networkx"]');
+await page.waitForTimeout(300);
+check('networkx: 10 towns, 14 lines', (await rumaleCell(1)).includes('=> [10, 14]'));
+check('Dijkstra finds the fastest way', (await rumaleCell(5)).includes('=> [["Genève", "Lausanne", "Bern", "Zürich", "St. Gallen"], 222]'));
+await rumaleCell(7);
+const map = await svgOf(7);
+check('the map draws the way in orange', Boolean(map) && (map.svg.match(/rgb\(232,114,42\)/g) || []).length === 4);
+check('a closed line, a detour', (await rumaleCell(11)).includes('"Brig", "Bern", "Zürich", "St. Gallen"], 310]'));
+await setExercise('install_gem "networkx"\nrequire "networkx"\nwald = NetworkX::Graph.new\n[["Fuchsbau", "Bach", 4], ["Fuchsbau", "Lichtung", 7], ["Bach", "Lichtung", 2], ["Bach", "Hühnerstall", 9], ["Lichtung", "Hühnerstall", 5]].each { |a, b, m| wald.add_edge(a, b, weight: m) }\nweg = NetworkX.dijkstra_path(wald, "Fuchsbau", "Hühnerstall")\nminuten = NetworkX.dijkstra_path_length(wald, "Fuchsbau", "Hühnerstall")');
+await runExercise();
+await page.waitForTimeout(800);
+check('networkx exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 
 // Sequel lesson: the real Sequel gem on the sqlite3 stand-in
 // (sqlite3_sqljs.rb over sql.js, loaded when the lesson opens)

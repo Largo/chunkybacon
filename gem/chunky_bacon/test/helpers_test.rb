@@ -71,6 +71,20 @@ class HelpersTest < Minitest::Test
     assert_equal ["fuchs.png"], Dir.children(@dir)
   end
 
+  # what a Rubyvis panel does (the course's lessons 31 and 32): SVG once rendered
+  class Chart
+    def render = @rendered = true
+    def to_svg = @rendered ? %(<svg xmlns="http://www.w3.org/2000/svg"></svg>) : ""
+  end
+
+  def test_show_image_renders_a_chart_and_saves_its_svg
+    helper_output { show_image Chart.new, alt: "a chart" }
+    files = Dir.children(@dir)
+    assert_equal 1, files.size
+    assert_match(/\Achunky-image-\d+\.svg\z/, files.first)
+    assert File.binread(File.join(@dir, files.first)).start_with?("<svg")
+  end
+
   # the course's boxes and arrows (lessons 7, 8, 11), as an SVG file
   def test_show_objects_saves_an_svg
     breakfast = ["egg", "toast"]

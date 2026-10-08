@@ -301,11 +301,16 @@ module Ruby2D
       # Ruby2D as the gem's ruby2d.rb mixes it in (include Ruby2D, extend
       # Ruby2D::DSL), so that it can be taken back: constants set on Object,
       # the DSL as singleton methods of main.
+      # A top-level constant of the same name that another lesson's gem left
+      # behind (Text: text-table's module, under minimization and
+      # integration) steps aside while ruby2d is mixed in, and comes back.
       def mix(main)
-        @mixed ||= { consts: [], methods: [] }
+        @mixed ||= { consts: [], methods: [], hidden: {} }
         Ruby2D.constants.each do |name|
-          next if name == :Page || Object.const_defined?(name, false)
+          next if name == :Page
+          next if Object.const_defined?(name, false) && Object.const_get(name).equal?(Ruby2D.const_get(name))
 
+          @mixed[:hidden][name] = Object.send(:remove_const, name) if Object.const_defined?(name, false)
           Object.const_set(name, Ruby2D.const_get(name))
           @mixed[:consts] << name
         end
@@ -324,6 +329,7 @@ module Ruby2D
         @mixed[:consts].each do |name|
           Object.send(:remove_const, name) if Object.const_defined?(name, false) && Object.const_get(name).equal?(Ruby2D.const_get(name))
         end
+        @mixed[:hidden].each { |name, value| Object.const_set(name, value) unless Object.const_defined?(name, false) }
         @mixed[:methods].each do |name|
           @main.singleton_class.send(:remove_method, name) if @main.singleton_class.method_defined?(name, false)
         end

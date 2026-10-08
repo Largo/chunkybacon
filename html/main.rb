@@ -135,7 +135,7 @@ end
 
 # A binding at the top level with a scope of its own, like a file of its
 # own. Bindings made from TOPLEVEL_BINDING all share one scope: a `using` in
-# a cell (`using Processing`, lesson 33) would switch the refinement on in
+# a cell (`using Processing`, lesson 36) would switch the refinement on in
 # every lesson after it - `loop`, `text`, `size` would be Processing's - and
 # in the page's own code. One compiled on its own keeps it to itself.
 module TopLevel
@@ -166,11 +166,11 @@ require_relative "object_graph"
 # about 6 ms. Its texts follow the lesson's language (sync_state).
 require_relative "turtle"
 # show_game: a grid game the page drives frame by frame (game.rb here, the
-# loop in game.js; lesson 38). At boot too: ~10 KB of plain Ruby.
+# loop in game.js; lesson 41). At boot too: ~10 KB of plain Ruby.
 require_relative "game"
 # spinel(code), show_spinel_irb: Matz's AOT compiler as WebAssembly in the
 # page (the shell's shell/spinel.rb and its workers, html/spinel/); the CRuby
-# run of the program beside it is here (lesson 42)
+# run of the program beside it is here (lesson 45)
 require_relative "spinel"
 # A lesson with "engine": "picoruby" runs on PicoRuby.wasm in a Web Worker
 # (picoruby_lab.js); this turns its answers into values, errors and CRuby's
@@ -201,7 +201,7 @@ BrowserGems.files["(shims)"]["numo/narray.rb"] = numo
 BrowserGems.files["(shims)"]["numo/narray/alt.rb"] = numo
 # require "processing": the gem draws through rays and reflexion (C++ on
 # OpenGL); processing.rb is its API in pure Ruby, recording each frame for
-# processing.js to paint (lesson 33). Fetched on the first require, like
+# processing.js to paint (lesson 36). Fetched on the first require, like
 # numo_narray.rb; the gem counts as built in once it is there.
 BrowserGems.files["(shims)"]["processing.rb"] = <<~'RUBY'
   unless defined?(Processing::Context)
@@ -218,7 +218,7 @@ RUBY
 # comes as it is (assets/ruby2d/ruby2d.rb, tools/vendor_ruby2d.rb), ruby2d.rb
 # is the extension in Ruby: draw calls become commands game.js paints, and
 # show hands the window to the page, which runs its frames like a show_game
-# (mount_game; lesson 39). Fetched on the first require, ~210 KB; the gem
+# (mount_game; lesson 42). Fetched on the first require, ~210 KB; the gem
 # counts as built in once it is there. The mixing into the top level is taken
 # back when the lesson changes (sync_state), so later lessons do not find
 # `show` or `Square` there; unmix__ also forgets this shim ran, so the next
@@ -247,7 +247,7 @@ BrowserGems.files["(shims)"]["ruby2d.rb"] = ruby2d_load + "Ruby2D.mix__\n"
 BrowserGems.files["(shims)"]["ruby2d/core.rb"] = ruby2d_load
 # require "herb": the gem is Ruby around one C extension, its parser
 # ("herb/herb"); herb_bridge.rb is that extension, handing the source to the
-# same parser compiled to WebAssembly (index.html: ensureHerb; lesson 35).
+# same parser compiled to WebAssembly (index.html: ensureHerb; lesson 38).
 BrowserGems.files["(shims)"]["herb/herb.rb"] = <<~'RUBY'
   unless defined?(Herb::Bridge)
     source = JSG.w.fetchTextSync("herb_bridge.rb").to_s
@@ -513,17 +513,27 @@ class ChunkyApp
     "GIF8".b => "image/gif", "RIFF".b => "image/webp"
   }.freeze
 
-  # show_image's argument as a data: URL - a picture's bytes, or the name of
-  # a file the cell wrote (virtual, or real: File.binwrite, ChunkyPNG#save)
+  # an SVG's text: <svg first, perhaps after an XML declaration and comments
+  SVG_START = /\A\s*(?:<\?xml[^>]*>\s*)?(?:<!--.*?-->\s*)*<svg[\s>]/m
+
+  # show_image's argument as a data: URL - a picture's bytes, an SVG's text,
+  # a chart that writes SVG (a Rubyvis panel: drawn here, so a cell need not
+  # call render), or the name of a file the cell wrote (virtual, or real:
+  # File.binwrite, ChunkyPNG#save)
   def image_data_url(image)
     return image.to_data_url if image.respond_to?(:to_data_url)
 
+    if image.respond_to?(:to_svg)
+      image.render if image.respond_to?(:render)
+      image = image.to_svg
+    end
     bytes = image.respond_to?(:to_bytes) ? image.to_bytes.b : image.to_s.b
-    unless IMAGE_SIGNATURES.any? { |magic, _type| bytes.start_with?(magic) }
+    unless IMAGE_SIGNATURES.any? { |magic, _type| bytes.start_with?(magic) } || bytes.match?(SVG_START)
       name = image.to_s
       bytes = (SandboxFS.virtual?(name) && SandboxFS.exist?(name) ? SandboxFS.read(name) : File.binread(name)).b
     end
-    type = IMAGE_SIGNATURES.find { |magic, _type| bytes.start_with?(magic) }&.last || "image/png"
+    type = IMAGE_SIGNATURES.find { |magic, _type| bytes.start_with?(magic) }&.last
+    type ||= bytes.match?(SVG_START) ? "image/svg+xml" : "image/png"
     "data:#{type};base64,#{[bytes].pack('m0')}"
   end
 
@@ -1358,6 +1368,38 @@ class ChunkyApp
     "<div class=\"cell-error\">#{escape_html(e.message)}</div>"
   end
 
+  DARU_ROWS = 30
+
+  def daru_table?(result)
+    defined?(Daru::DataFrame) && (result.is_a?(Daru::DataFrame) || result.is_a?(Daru::Vector))
+  end
+
+  # A Daru::DataFrame or Daru::Vector as a table, like pandas' above: the
+  # index down the left, a column per vector, the first DARU_ROWS rows.
+  # (Daru's own to_html, for IRuby, leaves the data unescaped.) Its inspect
+  # is a text table too wide and too long for the arrow's 200 characters.
+  def daru_result_html(result)
+    vector = result.is_a?(Daru::Vector)
+    names = vector ? [result.name] : result.vectors.to_a
+    columns = vector ? [result.to_a] : names.map { |name| result[name].to_a }
+    index = result.index.to_a
+    label = ->(value) { escape_html(Array(value).join(" ")) }
+    cell = lambda do |value|
+      value = value.round(6) if value.is_a?(Float) && value.finite?
+      escape_html(value.nil? ? "nil" : value)
+    end
+    rows = index.first(DARU_ROWS).each_with_index.map do |key, i|
+      "<tr><th>#{label.(key)}</th>#{columns.map { |column| "<td>#{cell.(column[i])}</td>" }.join}</tr>"
+    end
+    rows << "<tr><th>…</th>#{"<td>…</td>" * columns.size}</tr>" if index.size > DARU_ROWS
+    size = vector ? index.size : "#{index.size}x#{names.size}"
+    "<div class=\"cell-result py-table\"><table><caption>#{escape_html(result.class)}(#{size})</caption>" \
+      "<thead><tr><th></th>#{names.map { |name| "<th>#{label.(name)}</th>" }.join}</tr></thead>" \
+      "<tbody>#{rows.join}</tbody></table></div>"
+  rescue StandardError
+    "<div class=\"cell-result\">=&gt; #{escape_html(inspect_result(result))}</div>"
+  end
+
   def inspect_result(value)
     text = begin
       value.inspect
@@ -1562,6 +1604,8 @@ class ChunkyApp
                   "#{where ? " (#{escape_html(where)})" : ""}</div>"
     elsif result.is_a?(PyCall::PyObject)
       out_html += python_result_html(result)
+    elsif daru_table?(result)
+      out_html += daru_result_html(result)
     # a sketch's file ends in a block, mousePressed's true or false - what
     # it shows is the window
     # spinel(...) answers how CRuby ran the program: the widget shows it
@@ -1749,7 +1793,7 @@ module ChunkyAudio
     while pos + 8 <= bytes.bytesize
       id, size = bytes.byteslice(pos, 8).unpack("a4V")
       if id == "fmt "
-        # a header built by hand (lesson 37 packs its own) may be short or
+        # a header built by hand (lesson 40 packs its own) may be short or
         # say 0 channels or 0 Hz: fall back rather than fail below the cell
         _format, channels, rate = bytes.byteslice(pos + 8, [size, 8].min).unpack("vvV")
         channels = 1 unless channels.is_a?(Integer) && channels.positive?
@@ -1812,10 +1856,13 @@ module Kernel
   #   show_image png            # a ChunkyPNG::Image
   #   show_image jpeg           # what PureJPEG.encode returns (anything with to_bytes)
   #   show_image bytes          # a PNG, JPEG, GIF or WebP, as a String
+  #   show_image svg            # an SVG's text
+  #   show_image vis            # a Rubyvis chart (anything with to_svg)
   #   show_image "sonne.jpg"    # a file the cell wrote
-  def show_image(image)
+  #   show_image vis, alt: "…"  # what a screen reader says for it
+  def show_image(image, alt: nil)
     app = ChunkyApp.instance
-    app.add_image(app.image_data_url(image), image.respond_to?(:alt_text) ? image.alt_text : nil)
+    app.add_image(app.image_data_url(image), alt || (image.respond_to?(:alt_text) ? image.alt_text : nil))
     nil
   end
 

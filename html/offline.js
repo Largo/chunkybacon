@@ -21,7 +21,7 @@
   // memory before the kernel starts (bridge.js waits for kernelReady): the
   // gem cache, shoes_dom.rb, numo_narray.rb, processing.rb, herb_bridge.rb,
   // ruby2d (its gem's Ruby and ruby2d.rb), the friendly error explanations (friendly_errors*.rb) and the Rumale
-  // lesson's digits.csv, about 10 MB. fetch() is answered by the copy.
+  // lesson's digits.csv, about 13 MB. fetch() is answered by the copy.
   var syncFiles = null;   // path -> Uint8Array
   var kernelReady = pageFromCopy ? readSyncFiles() : Promise.resolve();
 

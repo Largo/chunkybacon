@@ -2,11 +2,14 @@
 
 ## Unreleased
 
-- `show_game`, as in the course's lesson 38 (Chunky's Snake), raises
+- `show_image vis`, as in the course's lessons 31 and 32 (SciRuby): a chart
+  that writes SVG - a Rubyvis panel, rendered first - saved as
+  `chunky-image-N.svg` and opened. `show_image` takes `alt:`, as on the page.
+- `show_game`, as in the course's lesson 41 (Chunky's Snake), raises
   `ChunkyBacon::NotHere`: the page runs a game's loop and reads its keys;
   the message names ruby2d and gosu for a game on a computer.
 - `show_audio wav(samples)` / `show_audio "lied.wav"` / `show_audio samples`,
-  as in the course's lesson 37 (Ruby makes music): the sound saved as
+  as in the course's lesson 40 (Ruby makes music): the sound saved as
   `chunky-sound-N.wav` (an Array of samples written as 16-bit mono) and
   opened in the computer's player.
 - `turtle { 4.times { forward 100; right 90 } }`, as in the course's lesson

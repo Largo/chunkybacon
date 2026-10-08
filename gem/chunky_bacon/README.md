@@ -33,7 +33,7 @@ never mix with your program's output.
 | Helper | On your computer |
 |---|---|
 | `install_gem "name"` | installs the gem unless it is there, and activates it |
-| `show_image image` | saves `chunky-image-N.png` (or `.jpg`, `.gif`, `.webp`, `.svg`: a ChunkyPNG image, a PureJPEG encoder, the bytes or a path) and opens it |
+| `show_image image` | saves `chunky-image-N.png` (or `.jpg`, `.gif`, `.webp`, `.svg`: a ChunkyPNG image, a PureJPEG encoder, a Rubyvis chart, the bytes or a path) and opens it; `alt:` is accepted and ignored |
 | `show_pdf pdf` | saves `chunky-document-N.pdf` (Prawn/HexaPDF document, bytes or a path) and opens it |
 | `show_audio sound` | saves `chunky-sound-N.wav` (WAV bytes, or an Array of samples in -1..1, `rate:` 22,050) and opens it; a path opens that file |
 | `show_objects a: a, b: b`, `show_objects binding` | draws the objects behind the names as boxes and arrows, as the course does, and saves and opens them like `show_image` (`chunky-image-N.svg`) |

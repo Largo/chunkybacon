@@ -1,4 +1,4 @@
-// Headless test for the PicoRuby lesson (lesson 41, "engine": "picoruby";
+// Headless test for the PicoRuby lesson (lesson 44, "engine": "picoruby";
 // docs/HANDOVER.md §6m): its cells and its IRB run on PicoRuby.wasm in a
 // Web Worker (picoruby_worker.js), not on CRuby - the demos' output, the
 // IRB with _ and a def over several lines, the exercise's check on what
@@ -118,7 +118,7 @@ check('...once, without the Task machinery\'s own report of it', !runtime.includ
 check('...and marks its line', await page.evaluate(i => window.cellEditors[i].getAllMarks().some(m => m.find().from.line === 1), ex));
 await run(page, ex, 'def woerter_zaehlen(woerter)\n  anzahl = Hash.new(0)\n  woerter.each { |w| anzahl[w] += 1 }\n  anzahl\nend\n\nwoerter_zaehlen(%w[chunky bacon chunky fuchs chunky])');
 check('a solution passes the check', (await page.getAttribute('.cell.exercise', 'class')).includes('celebrate'));
-check('...and the lesson is done', (await page.textContent('#chunkyChat')).includes('Lektion 41 von'));
+check('...and the lesson is done', (await page.textContent('#chunkyChat')).includes('Lektion 44 von'));
 
 // ---------- live runs ----------
 await edit(page, ex, 'y = 20\ny * 2 + 2');

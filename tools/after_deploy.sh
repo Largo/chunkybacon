@@ -4,7 +4,7 @@
 #
 #   sh tools/after_deploy.sh
 #
-# Today that is Spinel for lesson 42 (tools/build_spinel.rb into
+# Today that is Spinel for lesson 45 (tools/build_spinel.rb into
 # html/assets/spinel/): a no-op while tools/spinel.json and the tool are
 # unchanged, a few minutes when they changed (downloads, the wasmtime gem and
 # compiled objects are kept in .cache/spinel/). With Ruby 3.3 or later on the
@@ -12,7 +12,7 @@
 # profile "build").
 #
 # A failed build does not undo the deploy: the rest of the course is served
-# as it is, and lesson 42 says that Spinel could not be loaded - so this
+# as it is, and lesson 45 says that Spinel could not be loaded - so this
 # exits with the build's status, for the hook's log, and changes nothing else.
 set -u
 cd "$(dirname "$0")/.." || exit 1
@@ -25,5 +25,5 @@ else
   docker compose --profile build run --rm spinel-build
 fi
 status=$?
-[ "$status" -eq 0 ] || echo "after_deploy: the Spinel build failed (status $status); lesson 42 cannot compile until it succeeds" >&2
+[ "$status" -eq 0 ] || echo "after_deploy: the Spinel build failed (status $status); lesson 45 cannot compile until it succeeds" >&2
 exit "$status"

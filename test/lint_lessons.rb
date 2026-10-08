@@ -140,6 +140,10 @@ module LessonLint
       loader = File.read(File.join(root, "html", "browser_gems.rb"))
       @substitutes = loader[/SUBSTITUTES = (\{[^}]*\})/, 1].to_s.scan(/"([^"]+)" => "([^"]+)"/).to_h
       @native = loader[/NATIVE_GEMS = %w\[(.*?)\]/m, 1].to_s.split
+      # what the image has built in and the cache leaves out (default gems
+      # such as forwardable, under prime): tools/build_gem_cache.rb's BUILTIN
+      builder = File.join(root, "tools", "build_gem_cache.rb")
+      @native |= File.read(builder)[/^BUILTIN = %w\[(.*?)\]/m, 1].to_s.split if File.exist?(builder)
       @optional = loader[/OPTIONAL_NATIVE_DEPS = (\{[^}]*\})/, 1].to_s
                         .scan(/"([^"]+)" => %w\[([^\]]*)\]/).to_h { |k, v| [k, v.split] }
       @provides = {} # "sinatra/base" => "sinatra"

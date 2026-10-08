@@ -49,7 +49,7 @@ require_relative "../html/object_graph"
 # turtle { } (lesson 10) shows its picture the same way; Turtle.from(images)
 # finds the turtles behind it, which is what the lesson's check grades
 require_relative "../html/turtle"
-# show_game (lesson 38): game.rb runs headless as it is; the stub below
+# show_game (lesson 41): game.rb runs headless as it is; the stub below
 # records each game, and a check plays copies of them (games), as in main.rb
 require_relative "../html/game"
 # a lesson with "engine": "picoruby" runs on PicoRuby.wasm in the browser;
@@ -57,7 +57,7 @@ require_relative "../html/game"
 # page hands it over - a PicoRubyCells::Value, PicoRuby's inspect text
 require_relative "../html/picoruby_cells"
 $shown_games = []
-# spinel(code) (lesson 42): without the page, spinel.rb is CRuby's run of the
+# spinel(code) (lesson 45): without the page, spinel.rb is CRuby's run of the
 # program, which is what the lesson's check reads (result.output)
 require_relative "../html/spinel"
 # require "ruby2d" finds the browser's stand-in (html/ruby2d.rb over the
@@ -84,7 +84,12 @@ module Kernel
     "#{name} #{BrowserGems.install(name)}"
   end
 
-  def show_image(image)
+  # a Rubyvis chart (lessons 31, 32) is drawn and kept as its SVG, as main.rb does
+  def show_image(image, alt: nil)
+    if image.respond_to?(:to_svg) && !image.respond_to?(:to_data_url)
+      image.render if image.respond_to?(:render)
+      image = image.to_svg
+    end
     $shown_images << (image.respond_to?(:to_data_url) ? image.to_data_url : image.to_s)
     nil
   end
@@ -1203,6 +1208,24 @@ show_browser TimelogWeb, "/")]
              %(#{RUMALE_SEVEN.sub("PIC", "sieben")}ziffer = lerner.predict(Numo::DFloat[sieben.delete("\\n").chars.map { |z| z == "#" ? 16 : 0 }])[0]\nputs ziffer)],
     "en" => [%(#{RUMALE_SEVEN.sub("PIC", "seven")}pixels = seven.delete("\\n").chars.map { |c| c == "#" ? 16 : 0 }\ndigit = learner.predict(Numo::DFloat[pixels])[0]),
              %(#{RUMALE_SEVEN.sub("PIC", "seven")}digit = learner.predict(Numo::DFloat[seven.delete("\\n").chars.map { |c| c == "#" ? 16 : 0 }])[0]\nputs digit)]
+  },
+  "daru" => {
+    "de" => [%(install_gem "daru"\nrequire "daru"\nsnacks = Daru::DataFrame.new({ tag: ["Mo", "Mo", "Di", "Mi", "Mi", "Mi"], snack: ["Speck", "Beeren", "Speck", "Ei", "Speck", "Beeren"], gramm: [120, 80, 150, 60, 90, 40] })\npro_snack = snacks.group_by(:snack).sum[:gramm].to_h),
+             %(require "daru"\nsnacks = Daru::DataFrame.new({ tag: ["Mo", "Mo", "Di", "Mi", "Mi", "Mi"], snack: ["Speck", "Beeren", "Speck", "Ei", "Speck", "Beeren"], gramm: [120, 80, 150, 60, 90, 40] })\npro_snack = snacks[:snack].to_a.zip(snacks[:gramm].to_a).group_by(&:first).transform_values { |paare| paare.sum(&:last) }\nputs pro_snack)],
+    "en" => [%(install_gem "daru"\nrequire "daru"\nsnacks = Daru::DataFrame.new({ day: ["Mon", "Mon", "Tue", "Wed", "Wed", "Wed"], snack: ["bacon", "berries", "bacon", "egg", "bacon", "berries"], grams: [120, 80, 150, 60, 90, 40] })\nper_snack = snacks.group_by(:snack).sum[:grams].to_h),
+             %(require "daru"\nsnacks = Daru::DataFrame.new({ day: ["Mon", "Mon", "Tue", "Wed", "Wed", "Wed"], snack: ["bacon", "berries", "bacon", "egg", "bacon", "berries"], grams: [120, 80, 150, 60, 90, 40] })\nper_snack = snacks.group_by(:snack).sum[:grams].to_h\nputs per_snack)]
+  },
+  "statistik" => {
+    "de" => [%(install_gem "distribution"\nrequire "distribution"\nchance = 1 - Distribution::Binomial.cdf(4, 20, 1 / 6.0)),
+             %(require "distribution"\nchance = (5..20).sum { |sechsen| Distribution::Binomial.pdf(sechsen, 20, 1 / 6.0) }\nputs chance)],
+    "en" => [%(install_gem "distribution"\nrequire "distribution"\nchance = 1 - Distribution::Binomial.cdf(4, 20, 1 / 6.0)),
+             %(require "distribution"\nchance = (5..20).sum { |sixes| Distribution::Binomial.pdf(sixes, 20, 1 / 6.0) }\nputs chance)]
+  },
+  "networkx" => {
+    "de" => [%(install_gem "networkx"\nrequire "networkx"\nwald = NetworkX::Graph.new\n[["Fuchsbau", "Bach", 4], ["Fuchsbau", "Lichtung", 7], ["Bach", "Lichtung", 2], ["Bach", "Hühnerstall", 9], ["Lichtung", "Hühnerstall", 5]].each { |a, b, m| wald.add_edge(a, b, weight: m) }\nweg = NetworkX.dijkstra_path(wald, "Fuchsbau", "Hühnerstall")\nminuten = NetworkX.dijkstra_path_length(wald, "Fuchsbau", "Hühnerstall")),
+             %(require "networkx"\nwald = NetworkX::Graph.new\nwald.add_edge("Fuchsbau", "Bach", weight: 4)\nwald.add_edge("Fuchsbau", "Lichtung", weight: 7)\nwald.add_edge("Bach", "Lichtung", weight: 2)\nwald.add_edge("Bach", "Hühnerstall", weight: 9)\nwald.add_edge("Lichtung", "Hühnerstall", weight: 5)\nweg = NetworkX.dijkstra_path(wald, "Fuchsbau", "Hühnerstall")\nminuten = NetworkX.dijkstra_path_length(wald, "Fuchsbau", "Hühnerstall")\nputs weg.join(" -> "))],
+    "en" => [%(install_gem "networkx"\nrequire "networkx"\nwood = NetworkX::Graph.new\n[["den", "stream", 4], ["den", "clearing", 7], ["stream", "clearing", 2], ["stream", "henhouse", 9], ["clearing", "henhouse", 5]].each { |a, b, m| wood.add_edge(a, b, weight: m) }\npath = NetworkX.dijkstra_path(wood, "den", "henhouse")\nminutes = NetworkX.dijkstra_path_length(wood, "den", "henhouse")),
+             %(require "networkx"\nwood = NetworkX::Graph.new\nwood.add_edge("den", "stream", weight: 4)\nwood.add_edge("den", "clearing", weight: 7)\nwood.add_edge("stream", "clearing", weight: 2)\nwood.add_edge("stream", "henhouse", weight: 9)\nwood.add_edge("clearing", "henhouse", weight: 5)\npath = NetworkX.dijkstra_path(wood, "den", "henhouse")\nminutes = NetworkX.dijkstra_path_length(wood, "den", "henhouse")\nputs path.join(" -> "))]
   },
   "roda" => {
     "de" => [%(install_gem "roda"\nrequire "roda"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      "<h1>Kiosk</h1>"\n    end\n    r.get "bestellung", Integer do |anzahl|\n      "\#{anzahl} Streifen Speck, kommt sofort!"\n    end\n  end\nend\nshow_browser Kiosk, "/bestellung/5")],
