@@ -1,7 +1,7 @@
 # Minitest for ruby2d on the page (html/ruby2d.rb over the gem's own Ruby in
 # html/assets/ruby2d/) under plain CRuby, no page: windows shown headless and
 # driven frame by frame (Page::Runner#step, #press, #click, #tick), the draw
-# commands game.js paints, every code cell of lesson 39 in de/en/ja, the
+# commands game.js paints, every code cell of lesson 42 in de/en/ja, the
 # copy a check plays, the top-level mixing taken back, what is not here:
 # ruby test/ruby2d_test.rb
 require "json"
@@ -229,6 +229,22 @@ class Ruby2DTest < Minitest::Test
     refute "".respond_to?(:warning), "the gem's String colours stay out"
     Ruby2D.mix__(MAIN)
     assert MAIN.respond_to?(:set)
+  end
+
+  # text-table (under minimization, lesson 31) defines a top-level Text
+  # module; in the ruby2d lesson Text is ruby2d's, and afterwards text-table's again
+  def test_a_top_level_constant_of_another_gem_steps_aside
+    Ruby2D.unmix__
+    other = Object.const_set(:Text, Module.new)
+    Ruby2D.mix__(MAIN)
+    assert_equal Ruby2D::Text, Object.const_get(:Text)
+    assert run_program(%(Text.new("Hallo")\nshow)), "Text.new is ruby2d's"
+    Ruby2D.unmix__
+    assert_same other, Object.const_get(:Text)
+  ensure
+    Ruby2D.unmix__
+    Object.send(:remove_const, :Text) if Object.const_defined?(:Text, false)
+    Ruby2D.mix__(MAIN)
   end
 
   # every code cell of the lesson runs and shows one window; the exercise's

@@ -282,7 +282,7 @@ blocks called synchronously by JavaScript (also from CRuby's calls, nested),
 half-second save debounce is one), a Task started from a sync handler or a
 callback, `replaceChildren`/`appendChild`/`createTextNode`, `dialog.showModal`.
 
-**Later: PicoRuby in a worker** (lesson 42, Spinel; HANDOVER §6n). The
+**Later: PicoRuby in a worker** (lesson 45, Spinel; HANDOVER §6n). The
 same runtime runs in Web Workers (`html/spinel/boot.js`: `picoruby.js` is
 an Emscripten module that knows workers; init.iife.js's scheduler without
 the document). Probed in Chromium: boot ~70-80 ms; a JavaScript -> Ruby

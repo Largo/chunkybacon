@@ -8,7 +8,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **58 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **61 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics, tables, frames and colours
   for the terminal with the [TTY toolkit](https://ttytoolkit.org),
@@ -22,7 +22,12 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   charts with matplotlib and machine learning with scikit-learn from Ruby through
   [PyCall](https://github.com/mrkn/pycall.rb), machine learning in Ruby
   itself with [Rumale](https://github.com/yoshoku/rumale) (a postcode you
-  write on a letter, read by a nearest-neighbours classifier), a SQLite
+  write on a letter, read by a nearest-neighbours classifier), tables,
+  statistics and networks with [SciRuby](https://sciruby.com)'s gems (data
+  frames with [Daru](https://github.com/SciRuby/daru), the bell curve with
+  distribution, integration and minimization, charts drawn by
+  [Rubyvis](https://github.com/clbustos/rubyvis), the fastest train across
+  Switzerland with [networkx.rb](https://github.com/SciRuby/networkx.rb)), a SQLite
   database with [Sequel](https://sequel.jeremyevans.net), a look at the Ruby
   community (RubyKaigi, weird code, how IRB reads code), music computed in
   plain Ruby (samples as an Array, a WAV file built with `pack`, chords and
@@ -45,7 +50,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   that lost it; `fox["name"]` on a hash with symbol keys suggests
   `fox[:name]`). Ruby's own message stays one click away. 44 rules,
   checked against 70 typical beginner mistakes drawn from the exercises.
-- **Lesson sidebar**: the 58 lessons in three groups (basics, side trips,
+- **Lesson sidebar**: the 61 lessons in three groups (basics, side trips,
   the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a
   drawer.
@@ -106,7 +111,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   file (download, load again, merged key by key) or - in Chrome and Edge over
   https - into a connected folder, where workshop files are real files.
 - **Offline, if you like**: one click keeps the whole course on your device
-  (about 101 MB, or 49 MB with Python left out - a checkbox), and it opens
+  (about 104 MB, or 52 MB with Python left out - a checkbox), and it opens
   and runs without a connection - lessons, cells, the bundled gems, Python.
   Online it always loads the current version, and the copy updates itself.
 - **Python next to Ruby**: the PyCall lessons run real pandas, SymPy, NumPy,
@@ -115,11 +120,15 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   those lessons, each with just the packages it imports - through a small
   bridge with the pycall gem's API (`html/pycall.rb`), so their code runs
   unchanged with the real gem.
+- **Data frames as tables**: a cell that ends with a Daru `DataFrame` or
+  `Vector` shows it as a table, the way a pandas DataFrame shows (lesson
+  30) - the first 30 rows, numbers to six places.
 - **Interactive widgets**: `show_irb` (a real IRB terminal with `_`,
   multi-line input, and authentic prompts), `show_browser` (a fake
   browser window that speaks Rack directly to your Sinatra/Roda app),
   `show_image` (inline pictures: PNGs from chunky_png, JPEGs from
-  pure_jpeg), `show_three` (a WebGL stage for scenes built with
+  pure_jpeg, SVG, charts from Rubyvis; `alt:` says what they show),
+  `show_three` (a WebGL stage for scenes built with
   [three-rb](https://github.com/lef237/three-rb), optionally animated per
   frame and orbitable with the mouse), and `show_letter` (an envelope to
   write a postcode on with mouse or finger; a Ruby block reads it).
@@ -151,13 +160,13 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **Games in a cell**: `show_game(width: 20, height: 15) { |g| ... }`
   draws a grid of cells below the cell; `g.every(0.15) { ... }` and
   `g.on_key(:left) { ... }` make it move and steer (Chunky's Snake, lesson
-  38). The page runs the loop and calls Ruby only when a timer is due or a
+  41). The page runs the loop and calls Ruby only when a timer is due or a
   key came in; the game runs only while it has the focus (a click, or Tab
   and Space; Esc pauses, Tab leaves), a screen reader hears the score and
   the end of a round, and an endless loop in a round is stopped after a
   second. Checks play the game headless.
 - **ruby2d games, unchanged**: `require "ruby2d"`, shapes, `update do`,
-  `on :key_held`, `show` - lesson 39 runs real
+  `on :key_held`, `show` - lesson 42 runs real
   [ruby2d](https://www.ruby2d.com) 1.0 programs: the gem's own Ruby
   (vendored as it is, `tools/vendor_ruby2d.rb`) with the part it writes in
   C on SDL3 stood in for by `html/ruby2d.rb`, the window a canvas below the
@@ -176,7 +185,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   What an AOT compiler cannot do (`eval` of a String, `method_missing`)
   is refused with the line. `show_spinel_irb` is IRB on it: every line
   compiled with the ones before into a program of its own and run from
-  the start, only the new line's output shown (lesson 42, about 27 MB,
+  the start, only the new line's output shown (lesson 45, about 27 MB,
   loaded when it opens). Not in git: the deploy builds it
   (`tools/build_spinel.rb`, pinned in `tools/spinel.json`).
 - Chunky Bacon, an original cartoon fox, cheers you on.
@@ -268,7 +277,7 @@ rebuild an already-clean scene as bare defaults.
 docker compose up -d      # serves on port 8011
 ```
 
-Lesson 42 (Spinel) needs its build in `html/assets/spinel/`, which is not
+Lesson 45 (Spinel) needs its build in `html/assets/spinel/`, which is not
 in git: `ruby tools/build_spinel.rb` (Ruby 3.3+, no C compiler and no
 Node: clang is WebAssembly, run through the wasmtime gem; a few minutes
 the first time, afterwards a no-op until `tools/spinel.json` changes).
@@ -317,7 +326,7 @@ node boot_failure_test.mjs # what the page says when a runtime fails
 node language_test.mjs    # ?lang=, last choice, browser languages, English
 node live_test.mjs        # live runs in a lesson and in the workshop
 node offline_test.mjs     # offline mode: the copy, offline, a deploy, turning it off
-node spinel_test.mjs      # lesson 42 in a browser: Spinel compiling, IRB on it (after tools/build_spinel.rb)
+node spinel_test.mjs      # lesson 45 in a browser: Spinel compiling, IRB on it (after tools/build_spinel.rb)
 ruby spinel_rb_test.rb    # spinel(code) without the page: CRuby's run, the shell's ui strings
 ruby spinel_build_test.rb # the compiler worker's plain Ruby: --print-build, clang's command line, IRB's verdict
 ruby server_test.rb       # the optional server (server/)

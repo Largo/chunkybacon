@@ -22,16 +22,16 @@ Last updated 2026-10-06.
 
 ## State of the repository
 
-- Lesson 42, Spinel (HANDOVER §6n), is the first part of the site that is
+- Lesson 45, Spinel (HANDOVER §6n), is the first part of the site that is
   built on deploy rather than committed. **The host's deploy hook has to
   run `sh tools/after_deploy.sh` after it moves the checkout** - that hook
   lives on the host, not in this repository, so this line is still to be
   added there (with Ruby 3.3+ on the host, or Docker for the `spinel-build`
-  service). Until it has run once, lesson 42 says Spinel could not be
+  service). Until it has run once, lesson 45 says Spinel could not be
   loaded. The first build takes a few minutes; it keeps about 175 MB in
   `.cache/spinel/` and about 115 MB per build in `html/assets/spinel/`
   (the current one and the one before).
-- `main` has 58 lessons (2026-10-06; lesson 39, ruby2d, then 40-41, other Rubies and PicoRuby, and 42, Spinel, came last). The site does NOT show it yet: the
+- `main` has 61 lessons (2026-10-08; the SciRuby lessons 30-32 - Daru, statistics, networkx.rb - came last, after ruby2d (42), the other Rubies and PicoRuby (43-44) and Spinel (45)). The site does NOT show it yet: the
   host's checkout stopped following `main` on 2026-09-30 (the history
   rewrite; GitHub's push webhook is answered with 202, but the live
   `lessons.js` is from 2026-09-30). On the host: `git status`, then
@@ -54,9 +54,9 @@ Last updated 2026-10-06.
     8 and 11; saved cell code is keyed by the cell's starter since then,
     with a migration of the old keys (HANDOVER §6a).
   - 06 turtle graphics, lesson 10 (`html/turtle.rb`).
-  - 05 `show_audio` and "Ruby macht Musik", lesson 37; lessons can turn
+  - 05 `show_audio` and "Ruby macht Musik", lesson 40; lessons can turn
     live runs off (`"live": false`, §6b).
-  - 08 `show_game` and "Chunkys Snake", lesson 38 (`html/game.rb`,
+  - 08 `show_game` and "Chunkys Snake", lesson 41 (`html/game.rb`,
     `game.js`).
   - 02 the ⏯ step-through player on lessons 3-12 (`"stepper": true`,
     `html/step_recorder.rb`, `stepper.js`).
@@ -79,6 +79,11 @@ Last updated 2026-10-06.
   harmless.)
 
 ## Smaller open ends found on the way
+
+- browser_test's "a re-run stops the old game" (Snake) is flaky: it reads
+  the old game's call count while the game still runs, so a timer tick
+  before the re-run fails it (1 run in 2 on 2026-10-08; it passed on the
+  next). Pause the game first, or compare after the re-run settles.
 
 - A re-run of a cell with `DB = Sequel.sqlite` reassigns a constant; the
   cell shows only its result (`=> [:eintraege]`), no warning (checked
@@ -135,7 +140,7 @@ Last updated 2026-10-06.
   already grade are listed in `experiments/06-turtle-graphics/NOTES.md`
   (a house without lifting the pen, a 7-point star, a spiral); `fill`
   and `write "text"` are not there yet.
-- Music (lesson 37, `show_audio`): the lesson's "on your machine" box
+- Music (lesson 40, `show_audio`): the lesson's "on your machine" box
   names the `wavefile` gem (pure Ruby, `install_gem "wavefile"`), which is
   not in the gem cache: it installs through the rubygems proxy and writes
   a WAV that `show_audio` plays (checked 2026-10-06), but fails offline -
@@ -143,7 +148,7 @@ Last updated 2026-10-06.
   (`experiments/05-ruby-music/NOTES.md`, step 7). The lesson has no
   exercise on `audios` yet (a check can read what was played without a
   file), and `music.rb`'s `C4*2` durations and sharps were left out.
-- Games (lesson 38, `show_game`, `html/game.rb`/`game.js`): `:chunky` is
+- Games (lesson 41, `show_game`, `html/game.rb`/`game.js`): `:chunky` is
   the 🦊 emoji, and emoji look different on every system (headless
   Chromium draws 🥓 as a small red glyph) - a head-only Chunky sprite and
   a sprite sheet in `assets/` (`"img:url"` looks work already) would make
@@ -153,7 +158,7 @@ Last updated 2026-10-06.
   Two arrow keys within one round can still turn Chunky straight back
   (the classic Snake bug; a queue of turns would fix it). `on_click` has
   no lesson cell yet.
-- ruby2d (lesson 39, `html/ruby2d.rb` over the gem's own Ruby, HANDOVER
+- ruby2d (lesson 42, `html/ruby2d.rb` over the gem's own Ruby, HANDOVER
   §6l): the lesson's programs were never run with the real gem - its SDL3
   build needs SDL3_mixer, which Debian 13 does not package (`ruby2d setup`
   would build it; or a Mac). They run on the gem's own Ruby, so names and

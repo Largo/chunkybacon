@@ -4,7 +4,7 @@
 #
 # Without it the browser takes them from some other monospace font, whose
 # letters are narrower or wider: a table drawn by tty-table or tty-box
-# (lesson 32) then has its right edge out of line, and the vertical lines
+# (lesson 35) then has its right edge out of line, and the vertical lines
 # have gaps, because the cells' output runs at line-height 1.6. Here every
 # glyph is 0.632 em wide, like the code font's, and the vertical strokes
 # reach 0.8 em above and below the middle of the line, so they join.

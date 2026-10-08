@@ -323,5 +323,78 @@
     "version": "0.10.3",
     "file": "herb-0.10.3.gem",
     "deps": []
+  },
+  "daru": {
+    "version": "0.3",
+    "file": "daru-0.3.gem",
+    "deps": [
+      "packable",
+      "matrix"
+    ]
+  },
+  "distribution": {
+    "version": "0.8.0",
+    "file": "distribution-0.8.0.gem",
+    "deps": [
+      "prime"
+    ]
+  },
+  "minimization": {
+    "version": "0.2.5",
+    "file": "minimization-0.2.5.gem",
+    "deps": [
+      "text-table"
+    ]
+  },
+  "integration": {
+    "version": "0.1.4",
+    "file": "integration-0.1.4.gem",
+    "deps": [
+      "text-table"
+    ]
+  },
+  "networkx": {
+    "version": "0.4.0",
+    "file": "networkx-0.4.0.gem",
+    "deps": [
+      "matrix",
+      "rb_heap"
+    ]
+  },
+  "rubyvis": {
+    "version": "0.7.0",
+    "file": "rubyvis-0.7.0.gem",
+    "deps": [
+      "ostruct",
+      "rexml"
+    ]
+  },
+  "packable": {
+    "version": "1.3.18",
+    "file": "packable-1.3.18.gem",
+    "deps": []
+  },
+  "prime": {
+    "version": "0.1.4",
+    "file": "prime-0.1.4.gem",
+    "deps": [
+      "forwardable",
+      "singleton"
+    ]
+  },
+  "text-table": {
+    "version": "1.2.4",
+    "file": "text-table-1.2.4.gem",
+    "deps": []
+  },
+  "rb_heap": {
+    "version": "1.1.0",
+    "file": "rb_heap-1.1.0.gem",
+    "deps": []
+  },
+  "ostruct": {
+    "version": "0.6.3",
+    "file": "ostruct-0.6.3.gem",
+    "deps": []
   }
 }

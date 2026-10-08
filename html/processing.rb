@@ -1,7 +1,7 @@
 # Processing in the browser: the API of the processing gem (xord, 1.4.0,
 # MIT) in pure Ruby. The real gem draws through rays and reflexion, C++ on
 # OpenGL, which a browser does not have; main.rb serves this file for
-# require "processing" (lesson 33), so a sketch in a cell is the one that
+# require "processing" (lesson 36), so a sketch in a cell is the one that
 # runs with the gem on a computer:
 #
 #   require "processing"

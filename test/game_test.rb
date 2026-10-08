@@ -1,5 +1,5 @@
 # Minitest for show_game (html/game.rb) under plain CRuby, no page: the
-# Snake of lesson 38 (its last demo cell, from lessons.json) driven by
+# Snake of lesson 41 (its last demo cell, from lessons.json) driven by
 # #step, #press and #advance, and the copies a check plays:
 # ruby test/game_test.rb
 require "json"

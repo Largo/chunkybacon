@@ -166,6 +166,32 @@ begin
   end
 end
 
+# --- SciRuby (lessons 30-32), before nokogiri too: prime names forwardable
+# and singleton, default gems of the image, so distribution installs from
+# the cache alone; Rubyvis draws with REXML rather than installing
+# nokogiri-pure to find out whether it could use it ---
+remote = []
+cache_text = BrowserGems.fetch_text
+BrowserGems.fetch_text = ->(url) { remote << url if url.start_with?("remote/"); cache_text.call(url) }
+BrowserGems.install("distribution")
+BrowserGems.fetch_text = cache_text
+check.call "distribution installs from the cache alone",
+           remote.empty? && BrowserGems.installed["prime"] && BrowserGems.installed["forwardable"] == "builtin"
+require "distribution"
+check.call "distribution computes a normal distribution", (Distribution::Normal.cdf(1.96) - 0.975).abs < 0.001
+BrowserGems.install("rubyvis")
+require "rubyvis"
+chart = Rubyvis::Panel.new { width 20; height 10; bar { data [1]; width 5; height 5; bottom 0 } }
+chart.render
+# (Rubyvis reopens Nokogiri::XML::Node for its own use, so that name exists
+# anyway; nokogiri-pure, below, loads over it)
+check.call "rubyvis draws its SVG with REXML, without installing nokogiri",
+           chart.to_svg.start_with?("<svg") && Rubyvis.xml_engine == :rexml && !BrowserGems.installed.key?("nokogiri")
+BrowserGems.install("daru")
+require "daru"
+frame = Daru::DataFrame.new({ fox: %w[Chunky Bacon], age: [3, 5] })
+check.call "daru groups and sums", frame.group_by(:fox).sum[:age].to_h == { "Bacon" => 5, "Chunky" => 3 }
+
 # --- nokogiri: nokogiri-pure from the cache, real files on $LOAD_PATH ---
 # (after ruby_pptx, whose checks need nokogiri not installed yet)
 BrowserGems.install("nokogiri")

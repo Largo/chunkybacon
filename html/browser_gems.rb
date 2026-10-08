@@ -43,6 +43,11 @@ module BrowserGems
   # build tool) only for its `jsg` command, not in the browser.
   OPTIONAL_NATIVE_DEPS = { "ruby_pptx" => %w[nokogiri], "jsg" => %w[ruby_wasm] }.freeze
 
+  # default gems of the wasm image that a gem names as dependencies (prime
+  # names forwardable and singleton): already there, as on disk - no
+  # download, and offline too. (tools/build_gem_cache.rb leaves them out.)
+  DEFAULT_GEMS = %w[forwardable singleton].freeze
+
   # gems replaced by a pure-Ruby stand-in providing the same require: a
   # dependency on bigdecimal (C extension, absent from the wasm image)
   # installs bigdecimal-pure, whose lib/bigdecimal.rb is BigDecimal on
@@ -327,6 +332,22 @@ module BrowserGems
           end
         end
       RUBY
+    },
+    # Rubyvis draws its SVG with Nokogiri when `require "nokogiri"` works,
+    # with REXML otherwise. Here that require would install nokogiri-pure
+    # from the cache - seconds, for a chart REXML draws just as well - so
+    # Nokogiri is only used when a cell has loaded it already. The answer is
+    # kept, as the gem keeps its own: a panel drawn with one engine is
+    # written out with the same.
+    "rubyvis" => {
+      "lib/rubyvis.rb" => <<~'RUBY'
+        module Rubyvis
+          def self.has_nokogiri?
+            @@nokogiri = defined?(::Nokogiri::XML::Document) ? true : false if @@nokogiri.nil?
+            @@nokogiri
+          end
+        end
+      RUBY
     }
   }.freeze
 
@@ -373,6 +394,7 @@ module BrowserGems
       if (substitute = SUBSTITUTES[name])
         return installed[name] = install(substitute, seen)
       end
+      return installed[name] = "builtin" if DEFAULT_GEMS.include?(name) && builtin?(name)
       if NATIVE_GEMS.include?(name)
         return installed[name] = "builtin" if builtin?(name)
         raise NativeGemError, name
