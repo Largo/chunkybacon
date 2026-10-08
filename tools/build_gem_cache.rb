@@ -10,29 +10,42 @@ require 'net/http'
 require 'rubygems/package'
 require 'fileutils'
 
-# chunky_bacon: the course's own gem (gem/chunky_bacon), lesson 13's first
+# chunky_bacon: the course's own gem (gem/chunky_bacon), lesson 14's first
 GEMS = %w[chunky_bacon chunky_png gammo racc sinatra roda minitest csv benchmark three-rb ruby_pptx lacci nokogiri
-          bigdecimal-pure prawn hexapdf jsg pure_jpeg]
+          bigdecimal-pure prawn hexapdf jsg pure_jpeg rumale-core rumale-nearest_neighbors sequel
+          pastel tty-table tty-box tty-tree tty-font faker herb
+          daru distribution minimization integration networkx rubyvis]
 
 # C extensions compiled into the wasm image: a gem may depend on them (hexapdf
 # on openssl and strscan, jsg on js), the browser finds them built in
-# (BrowserGems NATIVE_GEMS + builtin?), so they are neither downloaded nor cached
-BUILTIN = %w[openssl strscan js]
+# (BrowserGems NATIVE_GEMS + builtin?), so they are neither downloaded nor cached.
+# Numo (Rumale's arrays) is C too; html/numo_narray.rb stands in for it, and
+# html/processing.rb for processing (rays and reflexion are C++).
+# forwardable and singleton (under prime) are default gems: plain Ruby, in the
+# image too, so BrowserGems.install finds them there (DEFAULT_GEMS).
+BUILTIN = %w[openssl strscan js numo-narray numo-narray-alt processing forwardable singleton]
 
 # a dependency on the C extension resolves to the pure stand-in, as in
 # BrowserGems::SUBSTITUTES (ttfunk, under prawn, depends on bigdecimal)
 SUBSTITUTES = { "bigdecimal" => "bigdecimal-pure" }
 
 # gems pinned below their latest version, when the latest pulls in native
-# dependencies (e.g. minitest 6 depends on prism, a C extension)
-PINNED = { "minitest" => "5.27.0" }
+# dependencies (e.g. minitest 6 depends on prism, a C extension) - or when a
+# gem asks for an older one (strings, under tty-table and tty-box, wants
+# unicode-display_width below 3) - or when the gem has to match a vendored
+# build (herb: the parser in html/assets/herb/, tools/vendor_herb.rb)
+PINNED = { "minitest" => "5.27.0", "unicode-display_width" => "2.6.0", "herb" => "0.10.3" }
 
-# gems whose C extension is optional (pure-Ruby fallback in lib/)
-ALLOW_EXTENSIONS = %w[racc]
+# gems whose C extension is optional (pure-Ruby fallback in lib/) or stood
+# in for (herb's is its parser: html/herb_bridge.rb hands it to Herb's
+# WebAssembly build); keep in sync with BrowserGems::PURE_FALLBACK_GEMS
+ALLOW_EXTENSIONS = %w[racc herb]
 
 # dependencies not declared in the gemspec but needed at runtime in the
-# browser (racc is a default gem locally, absent from the wasm stdlib)
-EXTRA_DEPS = { "gammo" => %w[racc] }
+# browser (racc is a default gem locally, absent from the wasm stdlib; matrix,
+# prime and ostruct left the default gems, and SciRuby's gems are older than that)
+EXTRA_DEPS = { "gammo" => %w[racc], "daru" => %w[matrix], "distribution" => %w[prime],
+               "rubyvis" => %w[ostruct rexml] }
 
 # native dependencies a gem declares but falls back from (ruby_pptx uses
 # Nokogiri when it loads, REXML otherwise) - left out of the cache and the

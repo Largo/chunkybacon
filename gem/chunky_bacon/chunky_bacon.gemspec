@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = <<~TEXT.tr("\n", " ").strip
     The companion gem of "Learn Ruby with Chunky Bacon", an interactive Ruby course
     that runs in the browser. require "chunky_bacon" gives a program the course's
-    helpers - show_image, show_pdf, show_browser, download_file, mock_get, show_irb,
+    helpers - show_image, show_objects, turtle, show_pdf, show_browser, download_file, mock_get, show_irb,
     show_files, run_tests, install_gem - so code written in the course runs unchanged
     with plain Ruby; `chunkybacon run` starts a program with them loaded. Pure Ruby,
     no dependencies.

@@ -15,12 +15,15 @@
 // outcome in the same task as the run (the shell's listeners are sync).
 // Requests made while the kernel is still loading wait here, in order.
 //
-//   shell -> kernel   chunky:run {idx, auto, lang, lesson, workshop, seq}   (auto: a live run)
+//   shell -> kernel   chunky:run {idx, auto, step, lang, lesson, workshop, seq}
+//                       (auto: a live run; step: ⏯, recorded for the stepper)
 //                     chunky:lesson {lang, lesson, workshop, seq}   (seq: a new binding)
 //                     chunky:install {name, ...}
 //   kernel -> shell   chunky:kernel-ready, chunky:ran {idx, outcome, elapsed, auto, own},
 //                     chunky:gems {installed: JSON}, chunky:installed {name, ok, message}
 //   bridge -> shell   chunky:kernel-failed {reason}   (CRuby did not come up)
+//   kernel -> page    ChunkyBridge.steps(idx, json): a recorded run, parsed
+//                     here and handed to stepper.js (window.ChunkyStepper)
 (function () {
   "use strict";
 
@@ -42,9 +45,28 @@
   // once that frame is drawn, CRuby may block the main thread. This also
   // keeps CRuby from ever running inside one of PicoRuby's handlers.
   function send(item) {
+    // a lesson with PyCall loads Python first (index.html: ensurePython),
+    // one with Sequel SQLite (ensureSqlite); a run asked for meanwhile goes
+    // out once it is there - or failed
+    var python = window.chunkyPython;
+    if (item.type === "run" && python && python.loading) {
+      python.loading.then(function () { send(item); });
+      return;
+    }
+    var sqlite = window.chunkySqlite;
+    if (item.type === "run" && sqlite && sqlite.loading) {
+      sqlite.loading.then(function () { send(item); });
+      return;
+    }
+    // ...and a lesson with Herb its parser (index.html: ensureHerb)
+    var herb = window.chunkyHerb;
+    if (item.type === "run" && herb && herb.loading) {
+      herb.loading.then(function () { send(item); });
+      return;
+    }
     window.afterPaint(function () {
       if (item.type === "run" || item.type === "autorun") {
-        emit("chunky:run", withState({ idx: item.idx, auto: item.type === "autorun" }));
+        emit("chunky:run", withState({ idx: item.idx, auto: item.type === "autorun", step: !!item.step }));
       }
       else emit("chunky:install", withState({ name: item.name }));
     });
@@ -159,18 +181,31 @@
       // runs asked for on the page that just went away
       waiting = waiting.filter(function (item) { return item.type !== "run"; });
       if (bridge.ready) soon("chunky:lesson", withState({}));
+      // the stepper keeps a recorded run across a language change, where
+      // the cell's code is the same (stepper.js) - once the shell has drawn
+      // the new editors
+      if (window.ChunkyStepper) {
+        var page = { lang: state.lang, lesson: state.lesson, workshop: state.workshop };
+        window.afterPaint(function () { window.ChunkyStepper.page(page.lang, page.lesson, page.workshop); });
+      }
     },
     // the same lesson from scratch: a fresh binding
     reset: function () {
       state.seq += 1;
       if (bridge.ready) soon("chunky:lesson", withState({}));
+      if (window.ChunkyStepper) window.ChunkyStepper.clearAll();
     },
     // true when the kernel takes it now, false when it waits for the kernel
     run: function (idx) { return request({ type: "run", idx: Number(idx) }); },
+    // ⏯: the same run, recorded line by line for the stepper (step_recorder.rb)
+    step: function (idx) { return request({ type: "run", idx: Number(idx), step: true }); },
     // a live run (shell/app.rb, autorun.rb): only once the kernel is up, never
     // queued - while Ruby loads, typing is just typing. true when it went out.
     autorun: function (idx) {
-      if (!bridge.ready) return false;
+      // (while Python or SQLite loads, typing is just typing too - and while
+      // matplotlib's first import runs, index.html's warmMatplotlib)
+      if (!bridge.ready || (window.chunkyPython && (window.chunkyPython.loading || window.chunkyPython.warming)) ||
+          (window.chunkySqlite && window.chunkySqlite.loading)) return false;
       send({ type: "autorun", idx: Number(idx) });
       return true;
     },
@@ -200,6 +235,13 @@
                            own: own === undefined ? Number(elapsed) : Number(own) });
     },
     gems: function (installed) { emit("chunky:gems", { installed: String(installed || "{}") }); },
+    // ⏯'s recording (main.rb's show_steps): up to ~125 KB of JSON, parsed
+    // here - JSON.parse in PicoRuby would take seconds
+    steps: function (idx, json) {
+      var trace;
+      try { trace = JSON.parse(String(json)); } catch (e) { console.error("steps:", e); return; }
+      if (window.ChunkyStepper) window.ChunkyStepper.show(Number(idx), trace);
+    },
     installed: function (name, ok, message) {
       emit("chunky:installed", { name: String(name), ok: !!ok, message: String(message) });
     },

@@ -1,0 +1,44 @@
+/* An embedded cell (embed.html): the course's cell (app.css), alone on a
+   transparent page whose height the host page follows. */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  min-height: 0;
+}
+body { padding: 2px; }
+#lessonBody { margin: 0; padding: 0; max-width: none; }
+.cell { margin: 0; }
+.embed-plain {
+  /* the code before CodeMirror has loaded: the same box as the editor, so
+     nothing jumps when it takes over */
+  margin: 0;
+  padding: 0.3rem 0.7rem 0.3rem 2.6rem;
+  font-family: var(--font-code);
+  font-size: 15px;
+  line-height: 1.55;
+  white-space: pre;
+  overflow-x: auto;
+  color: var(--ink);
+  background: var(--paper);
+}
+.embed-status {
+  margin-right: auto;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+.embed-status:empty { display: none; }
+.cell-toolbar .run-time { margin-right: 0.6rem; }
+.embed-status:not(:empty) + .run-time { margin-right: 0.6rem; }
+.embed-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  margin-right: 0.6rem;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+.embed-status:empty ~ .embed-brand { margin-left: auto; }
+.embed-brand img { width: 1.3em; height: 1.3em; }
+.embed-brand:hover { color: var(--ink); }

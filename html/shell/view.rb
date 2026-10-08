@@ -6,28 +6,91 @@ module ChunkyShell
   module View
     extend Support
 
+    # The index: one group per section, each with a head that folds it and
+    # says how much of it is done. A group is named by the id of the lesson
+    # that opens it, the same in every language.
     # +prefix+: what goes before a lesson id in its link (Router#prefix)
-    def self.nav_html(course, lang, active_id, done, prefix = "#")
+    # +closed+: the groups folded away (App keeps them)
+    # +query+: what the search field holds; only the lessons it matches show,
+    #   in open groups, or +none+ when there are none
+    # +done_text+: "%d of %d done", for the head's count
+    def self.nav_html(course, lang, active_id, done, prefix = "#", closed = [], query = "", none = "", done_text = "%d/%d")
+      needle = query.to_s.strip.downcase
       html = "".dup
+      nav_groups(course, lang).each do |group|
+        key, name, indexes = group
+        shown = needle == "" ? indexes : indexes.select { |idx| nav_match?(course, idx, lang, name, needle) }
+        next if shown.empty?
+
+        finished = indexes.select { |idx| done.include?(course.id(idx)) }.length
+        open = needle != "" || !closed.include?(key)
+        css = "nav-group"
+        css += " closed" unless open
+        css += " complete" if finished == indexes.length
+        html << %(<section class="#{css}" data-group="#{key}">)
+        if name
+          count = format(done_text, finished, indexes.length)
+          html << %(<button type="button" class="nav-group-head" data-group="#{key}" aria-expanded="#{open}" aria-controls="nav-#{key}">)
+          html << %(<span class="nav-group-name">#{escape_html(name)}</span>)
+          html << %(<span class="nav-group-count" title="#{escape_html(count)}" aria-label="#{escape_html(count)}">#{finished}/#{indexes.length}</span>)
+          html << %(<svg class="nav-chevron" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></button>)
+        end
+        html << %(<div class="nav-group-items" id="nav-#{key}">)
+        shown.each { |idx| html << nav_link(course, idx, lang, active_id, done, prefix) }
+        html << "</div></section>"
+      end
+      html << %(<p class="nav-none">#{escape_html(none)}</p>) if html == ""
+      html
+    end
+
+    # [[key, section name or nil, [lesson indexes]], ...] in course order
+    def self.nav_groups(course, lang)
+      groups = []
       course.ids.each_with_index do |id, idx|
         section = course.section(idx, lang)
-        html << %(<div class="nav-section">#{section}</div>) if section
-        classes = []
-        classes << "active" if id == active_id
-        classes << "done" if done.include?(id)
-        html << %(<a class="#{classes.join(' ')}" href="#{prefix}#{id}" data-id="#{id}">#{course.title(idx, lang)}</a>)
+        groups << [id, section, []] if section || groups.empty?
+        groups.last[2] << idx
       end
-      html
+      groups
+    end
+
+    def self.nav_match?(course, idx, lang, section, needle)
+      course.title(idx, lang).downcase.include?(needle) || section.to_s.downcase.include?(needle)
+    end
+
+    # "13. Gems installieren" as a numbered row: the number in a badge,
+    # which turns into a tick once the lesson is done
+    def self.nav_link(course, idx, lang, active_id, done, prefix)
+      id = course.id(idx)
+      title = course.title(idx, lang)
+      number = (idx + 1).to_s
+      name = title.start_with?("#{number}. ") ? title[number.length + 2, title.length] : title
+      classes = ["lesson"]
+      classes << "active" if id == active_id
+      classes << "done" if done.include?(id)
+      current = id == active_id ? ' aria-current="page"' : ""
+      %(<a class="#{classes.join(' ')}" href="#{prefix}#{id}" data-id="#{id}"#{current}>) +
+        %(<span class="num">#{number}</span><span class="name">#{escape_html(name)}</span></a>)
     end
 
     # +live+: the Live switch for every toolbar (live_html), or "" - not
     # beside an IRB, which never runs live (main.rb's AutoRun)
-    def self.lesson_html(cells, task_label, run_label, live = "")
+    # +run_name+: "Run cell %d", the Run buttons' names for a screen reader,
+    #   which counts code cells only, as the editors' names do
+    # +step+: [label, name] of ⏯ in a lesson with "stepper": true ("⏯
+    #   Schritt für Schritt", "Schritt für Schritt durch Zelle %d"), or nil.
+    #   Not beside an IRB either: what it runs is typed later, in the widget.
+    def self.lesson_html(cells, task_label, run_label, live = "", run_name = "", step = nil)
       html = "".dup
+      number = 0
       cells.each_with_index do |cell, idx|
         if code_cell?(cell)
-          switch = cell.code.to_s.include?("show_irb") ? "" : live
-          html << cell_html(idx, cell.t == "x", task_label, run_label, switch)
+          number += 1
+          irb = cell.code.to_s.include?("show_irb")
+          switch = irb ? "" : live
+          name = run_name == "" ? "" : format(run_name, number)
+          stepper = step.nil? || irb ? "" : step_html(idx, step[0], format(step[1], number))
+          html << cell_html(idx, cell.t == "x", task_label, run_label, switch, name, stepper)
         else
           html << %(<div class="lessonText">#{cell.html}</div>)
         end
@@ -35,19 +98,36 @@ module ChunkyShell
       html
     end
 
-    def self.cell_html(idx, exercise, task_label, run_label, live = "")
+    # +name+: "Run cell 2" - a lesson has up to eight buttons that all read
+    # "▶ Run"; the name keeps the visible word (WCAG 2.5.3, Label in Name).
+    # The exercise's button says that Alt+R presses it.
+    # +step+: step_html's ⏯, left of ▶
+    def self.cell_html(idx, exercise, task_label, run_label, live = "", name = "", step = "")
+      label = name == "" ? "" : %( aria-label="#{escape_html(name)}")
+      keys = exercise ? ' aria-keyshortcuts="Alt+R"' : ""
       <<~HTML
         <div class="cell#{exercise ? ' exercise' : ''}" data-label="#{task_label}">
           <textarea title="code" id="cell-code-#{idx}"></textarea>
-          <div class="cell-toolbar">#{live}<button type="button" class="run-cell" data-idx="#{idx}">#{run_label}</button></div>
+          <div class="cell-toolbar">#{live}#{step}<button type="button" class="run-cell" data-idx="#{idx}"#{label}#{keys}>#{run_label}</button></div>
           <div class="cell-out" id="cell-out-#{idx}" style="display:none"></div>
         </div>
       HTML
     end
 
-    # Live runs on or off - one switch for the page, drawn in every toolbar
-    def self.live_html(on, label, title)
-      %(<button type="button" class="live-toggle" aria-pressed="#{on}" title="#{escape_html(title)}">#{escape_html(label)}</button>)
+    # ⏯: runs the cell recorded, and the stepper below it walks through the
+    # run (stepper.js). +name+ ("Schritt für Schritt durch Zelle 2") keeps
+    # the visible words, like the Run button's.
+    def self.step_html(idx, label, name)
+      %(<button type="button" class="step-cell" data-idx="#{idx}" aria-label="#{escape_html(name)}">#{escape_html(label)}</button>)
+    end
+
+    # Live runs on or off - one switch for the page, drawn in every toolbar.
+    # +off_here+: a lesson without live runs - the switch is off for good,
+    # aria-disabled (still focusable, so its title, the reason, is read)
+    def self.live_html(on, label, title, off_here = false)
+      extra = off_here ? ' aria-disabled="true"' : ""
+      css = off_here ? "live-toggle is-off-here" : "live-toggle"
+      %(<button type="button" class="#{css}" aria-pressed="#{on}"#{extra} title="#{escape_html(title)}">#{escape_html(label)}</button>)
     end
 
     # The workshop's frame: workspace.rb fills the file panel (#wsFiles),

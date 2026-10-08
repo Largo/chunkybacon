@@ -26,10 +26,12 @@ const check = (name, cond) => {
 let down = false;
 const overrides = new Map();   // path -> { body, etag }
 const requests = [];           // "GET /main.rb", ...
+const bridgeReferers = [];     // the Referer of each request to a bridge
 const sockets = new Set();
 const proxy = http.createServer((req, res) => {
   if (down) { req.socket.destroy(); return; }
   requests.push(`${req.method} ${req.url}`);
+  if (/^\/(rubygems|proxy)\//.test(req.url)) bridgeReferers.push(req.headers.referer || '');
   const override = overrides.get(req.url.split('?')[0]);
   if (override && (req.method === 'GET' || req.method === 'HEAD')) {
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'ETag': override.etag, 'Cache-Control': 'no-cache' });
@@ -104,6 +106,8 @@ const list = (await (await fetch(SITE + 'offline-files.txt')).text()).split('\n'
 let index = await copyIndex(a);
 check(`the copy holds every listed file and the page (${list.length + 1})`, index && index.count === list.length + 1);
 check('…the 33 MB Ruby among them', index && index.files['ruby+stdlib.wasm'] && index.files['ruby+stdlib.wasm'].size > 30e6);
+check('…and Python, ticked by default', index && Boolean(index.files['assets/pyodide/pyodide.asm.wasm']) &&
+  (await a.isChecked('#progressDialog .pd-check input')));
 await a.keyboard.press('Escape');
 await a.close();
 
@@ -122,9 +126,29 @@ check('Net::HTTP says it is offline',
 // the module files themselves (ensureThree also needs the import map, which
 // Firefox ignores after a modulepreload - a separate matter)
 check('three.js loads from the copy', await b.evaluate(() => import('./assets/three/three.module.min.js').then((m) => Boolean(m.Scene), () => false)));
+const sql = await open('#sequel');
+check('Sequel runs offline (sql.js, the sqlite3 stand-in and the gem from the copy)',
+  (await run(sql, 'install_gem "sequel"\nrequire "sequel"\nDB = Sequel.sqlite\nDB.get(Sequel.lit("6 * 7"))')).includes('=> 42'));
+const filed = 'f = Sequel.sqlite("offline.db")\nf.create_table?(:t) { Integer :x }\nf[:t].insert(x: 1)\nf[:t].count';
+check('…and a database in a file keeps its rows offline',
+  /=> 1(?!\d)/.test(await run(sql, filed)) && /=> 2(?!\d)/.test(await run(sql, filed)));
+await sql.close();
 await b.click('#lessonNav a[data-id="methoden"]');
 await b.waitForFunction(() => document.querySelector('#lessonBody').textContent.includes('Methoden'));
 check('another lesson opens offline', true);
+// Rumale: its gems from the cache, Numo's stand-in and digits.csv read
+// synchronously - from memory on a page from the copy (offline.js)
+await b.click('#lessonNav a[data-id="rumale"]');
+await b.waitForFunction(() => document.querySelector('#lessonBody').textContent.includes('Rumale'));
+check('Rumale, Numo and digits.csv offline',
+  (await run(b, 'install_gem "rumale-nearest_neighbors"\nrequire "rumale/nearest_neighbors"\n[File.read("digits.csv").lines.size, Numo::DFloat[[1, 2]].sum]')).includes('=> [1797, 3.0]'));
+check('…and the letter', await b.evaluate(() => typeof window.chunkyLetter === 'function'));
+// Python from the copy: Pyodide, numpy and matplotlib's eight wheels
+const mpl = await open('#matplotlib');
+const chart = await run(mpl, 'require "pycall"\nplt = PyCall.import_module("matplotlib.pyplot")\nplt.bar(["a", "b"], [1, 2])\nplt.savefig("offline.png")\nplt.show\n:drawn');
+check('matplotlib draws offline (Pyodide and its wheels from the copy)', chart.includes('=> :drawn') &&
+  (await mpl.$$('.cell-image[src^="data:image/svg+xml"]')).length === 1 && chart.includes('offline.png'));
+await mpl.close();
 await b.click('#progressBtn');
 check('the dialog says the page is the saved copy', (await offlineText(b)).includes('Du bist gerade offline'));
 await b.close();
@@ -139,6 +163,13 @@ const c = await open();
 check('online, a deploy shows at once (not the copy)',
   (await c.evaluate(() => document.querySelector('meta[name=deploy]')?.content)) === '2' &&
   !(await c.evaluate(() => window.ChunkyOffline.fromCopy())));
+// the bridges serve only pages of the host they are asked on (a same-host
+// Referer, nginx/default.conf): one the worker passes on keeps the page's
+bridgeReferers.length = 0;
+const bridged = await c.evaluate(() => fetch('rubygems/api/v1/gems/rake.json').then((r) => r.status, () => 0));
+const viaWorker = await c.evaluate(() => Boolean(navigator.serviceWorker.controller));
+check(`online, a bridge request through the service worker keeps the page's Referer (${bridged}, ${bridgeReferers.join(' ')})`,
+  bridged === 200 && viaWorker && bridgeReferers.length === 1 && bridgeReferers[0].startsWith(SITE));
 requests.length = 0;
 await c.evaluate(() => navigator.serviceWorker.controller.postMessage({ type: 'refresh', force: true }));
 // done when the copy's index names the deployed version (polled from here:
@@ -178,6 +209,31 @@ if (permalinks) {
 } else {
   console.log('  (no permalinks here: BASE is the static site)');
 }
+
+// ---------- 5b. Python left out (the checkbox) ----------
+const py = await open();
+await py.click('#progressBtn');
+await py.uncheck('#progressDialog .pd-check input');
+const pythonFiles = list.filter((path) => path.startsWith('assets/pyodide/'));
+for (let tries = 0; tries < 240; tries++) {
+  const now = await copyIndex(py);
+  if (now && !now.files['assets/pyodide/pyodide.asm.wasm']) break;
+  await py.waitForTimeout(250);
+}
+await waitForState(py, 'ready', 60000);
+index = await copyIndex(py);
+check(`unticked, the copy drops Python (${pythonFiles.length} files)`,
+  index.count === list.length + 1 - pythonFiles.length && !Object.keys(index.files).some((path) => path.startsWith('assets/pyodide/')));
+check('…and the files are gone from the cache', !(await py.evaluate(async () =>
+  (await (await caches.open('chunky-offline-1')).keys()).some((r) => r.url.includes('pyodide')))));
+check('…the box stays unticked', !(await py.isChecked('#progressDialog .pd-check input')));
+await py.close();
+goDown();
+const pyOff = await open('#pycall');
+check('offline without Python, a Python lesson says why',
+  (await run(pyOff, 'require "pycall"\nPyCall.import_module("pandas")')).includes('Python ist nicht in deiner Offline-Kopie'));
+await pyOff.close();
+comeBack();
 
 // ---------- 6. turning it off ----------
 const g = await open();

@@ -72,67 +72,100 @@
 <body>
 
     <div class="spinner" id="spinner">
-      <img class="spinner-image" src="assets/chunky.svg" alt="Chunky Bacon Fuchs">
-      <h1 id="spinnerTitle">Ruby lernen mit Chunky Bacon</h1>
-      <p id="spinnerText">Einen Moment … / One moment … / 少々お待ちください …</p>
+      <img class="spinner-image" src="assets/chunky.svg" alt="">
+      <!-- before the shell knows the language: the title in German, the
+           wait in all three, each marked with its language -->
+      <h1 id="spinnerTitle" lang="de">Ruby lernen mit Chunky Bacon</h1>
+      <p id="spinnerText"><span lang="de">Einen Moment …</span> / <span lang="en">One moment …</span> / <span lang="ja">少々お待ちください …</span></p>
       <div class="load-bar" aria-hidden="true"></div>
     </div>
 
     <div id="app" style="display:none">
-      <header>
-        <img id="mascot" src="assets/chunky.svg" alt="Chunky Bacon Fuchs">
-        <div class="headerText">
-          <h1 id="siteTitle">Ruby lernen mit Chunky Bacon</h1>
-          <p id="siteSubtitle"></p>
-          <!-- until CRuby is up (shell/app.rb): Run waits for it -->
-          <p id="kernelStatus" class="kernel-status" role="status" hidden></p>
-        </div>
-        <button id="progressBtn" class="progress-btn" type="button" aria-haspopup="dialog">
-          <svg class="progress-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7A1.5 1.5 0 0 1 5 5.5h4.2l2 2H19A1.5 1.5 0 0 1 20.5 9v8.5A1.5 1.5 0 0 1 19 19H5a1.5 1.5 0 0 1-1.5-1.5z"/></svg>
-          <span class="progress-label" id="progressLabel">Fortschritt</span>
-          <span class="progress-dot" aria-hidden="true"></span>
-        </button>
-        <button id="navJump" class="nav-jump" type="button" title="Lektionen / Lessons / レッスン" aria-label="Lektionen / Lessons / レッスン">☰</button>
-        <select id="langSelect" title="Sprache / Language / 言語">
-          <option value="de">Deutsch</option>
-          <option value="en">English</option>
-          <option value="ja">日本語</option>
-        </select>
-      </header>
+      <!-- The keyboard's first stop, shown only when it has the focus: past
+           the 50-odd links of the index to the lesson's heading
+           (shell/app.rb, skip_click) -->
+      <a id="skipLink" class="skip-link" href="#lessonBody"></a>
+      <!-- Shows and hides the lessons: fixed top left, the same spot open or
+           closed, wide screen or phone (a drawer there, modal while it is
+           out: .column turns inert). Right after the skip link for the
+           keyboard. shell/app.rb drives it. -->
+      <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-controls="sidebar" aria-expanded="true">
+        <svg viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="3.5" width="13" height="11" rx="2"/><path d="M7 3.5v11"/></svg>
+      </button>
 
       <div class="layout">
-        <div class="sidebar">
+        <!-- the lessons, from the top of the window to its foot: their own
+             scroll; the workshop and the gems at the top, then a search and
+             one group per course -->
+        <aside id="sidebar" class="sidebar">
+          <div class="sidebar-head">
+            <span id="navTitle" class="nav-title"></span>
+            <span id="navCount" class="nav-count"></span>
+            <span class="nav-bar" aria-hidden="true"><span id="navBarFill"></span></span>
+          </div>
           <a id="workshopLink" class="workshop-link" href="#werkstatt"></a>
-          <nav id="lessonNav"></nav>
-          <div id="gemsPanel">
-            <h3 id="gemsTitle"></h3>
+          <details id="gemsPanel">
+            <summary id="gemsTitle"></summary>
             <div id="gemsList"></div>
             <div class="gemsInstallRow">
               <input id="gemNameInput" type="text" placeholder="gem">
               <button id="gemInstallBtn" type="button"></button>
             </div>
             <p id="gemsNote"></p>
-          </div>
+          </details>
+          <label class="nav-search">
+            <svg viewBox="0 0 14 14" aria-hidden="true"><circle cx="6" cy="6" r="4.2"/><path d="M9.2 9.2 12.5 12.5"/></svg>
+            <input id="navSearch" type="search" autocomplete="off" spellcheck="false">
+          </label>
+          <nav id="lessonNav"></nav>
+        </aside>
+
+        <div class="column">
+          <header>
+            <img id="mascot" src="assets/chunky.svg" alt="Chunky Bacon, der Fuchs">
+            <div class="headerText">
+              <h1 id="siteTitle">Ruby lernen mit Chunky Bacon</h1>
+              <p id="siteSubtitle"></p>
+              <!-- until CRuby is up (shell/app.rb): Run waits for it -->
+              <p id="kernelStatus" class="kernel-status" role="status" hidden></p>
+            </div>
+            <button id="progressBtn" class="progress-btn" type="button" aria-haspopup="dialog">
+              <svg class="progress-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7A1.5 1.5 0 0 1 5 5.5h4.2l2 2H19A1.5 1.5 0 0 1 20.5 9v8.5A1.5 1.5 0 0 1 19 19H5a1.5 1.5 0 0 1-1.5-1.5z"/></svg>
+              <span class="progress-label" id="progressLabel">Fortschritt</span>
+              <span class="progress-dot" aria-hidden="true"></span>
+            </button>
+            <!-- named by a hidden label, in the page's language (shell/app.rb);
+                 each language's own name is marked as that language -->
+            <label for="langSelect" id="langLabel" class="sr-only">Sprache</label>
+            <select id="langSelect" title="Sprache">
+              <option value="de" lang="de">Deutsch</option>
+              <option value="en" lang="en">English</option>
+              <option value="ja" lang="ja">日本語</option>
+            </select>
+          </header>
+
+          <main>
+            <article id="lessonBody"></article>
+            <!-- what a run with ▶ did, for screen readers (shell/app.rb,
+                 announce_run); live runs never write here -->
+            <p id="runStatus" class="sr-only" role="status" aria-live="polite"></p>
+
+            <div id="chunkyChat">
+              <div class="chat-avatar"><img src="assets/chunky.svg" alt="Chunky"></div>
+              <div class="chat-message"><p id="chunkyText"></p></div>
+            </div>
+
+            <div class="buttons">
+              <button id="reset-code" type="button" class="reset"></button>
+            </div>
+          </main>
+
+          <footer>
+            <p id="footerCredit"></p>
+            <p><small id="footerLicense"></small></p>
+          </footer>
         </div>
-
-        <main>
-          <article id="lessonBody"></article>
-
-          <div id="chunkyChat">
-            <div class="chat-avatar"><img src="assets/chunky.svg" alt="Chunky"></div>
-            <div class="chat-message"><p id="chunkyText"></p></div>
-          </div>
-
-          <div class="buttons">
-            <button id="reset-code" type="button" class="reset"></button>
-          </div>
-        </main>
       </div>
-
-      <footer>
-        <p id="footerCredit"></p>
-        <p><small id="footerLicense"></small></p>
-      </footer>
 
       <!-- saving and loading progress: filled by shell/workspace.rb -->
       <dialog id="progressDialog" class="progress-dialog" aria-labelledby="progressTitle"></dialog>
@@ -240,6 +273,336 @@
       return window.threeLoading;
     };
 
+    // Python for the PyCall lessons (html/pycall.rb): Pyodide - CPython in
+    // WebAssembly, about 9 MB - from assets/pyodide/ (tools/vendor_pyodide.rb),
+    // so only for a lesson that asks: the shell calls ensurePython(code) with
+    // a lesson's PyCall code, and the packages its import_module("...") calls
+    // name come along (pandas ~12 MB, sympy ~5 MB, scikit-learn ~19 MB,
+    // matplotlib ~9 MB, whose first import is warmed up: warmMatplotlib);
+    // pycall.rb asks the same way for a module the workshop imports.
+    // shell/bridge.js holds a run until chunky:python-ready. What Python prints is collected here and
+    // written into the cell by pycall.rb.
+    window.chunkyPython = {
+      ready: false, loading: null, error: null, pyodide: null, output: [],
+      imports: {},    // import name -> vendored package, from pyodide-lock.json
+      packages: {},   // packages loaded so far
+      takeOutput: function () { var text = this.output.join(""); this.output = []; return text; }
+    };
+    window.ensurePython = function (code) {
+      var python = window.chunkyPython;
+      if (python.loading) return python.loading.then(function () { return window.ensurePython(code); });
+      var modules = [];
+      String(code || "").replace(/import_module\(\s*["']([\w.]+)["']/g, function (all, name) { modules.push(name.split(".")[0]); });
+      var missing = function () {
+        return modules.map(function (m) { return python.imports[m]; })
+          .filter(function (p, i, all) { return p && !python.packages[p] && all.indexOf(p) === i; });
+      };
+      var warm = function () { if (modules.indexOf("matplotlib") >= 0) window.warmMatplotlib(); };
+      if (python.ready && missing().length === 0) { warm(); return Promise.resolve(true); }
+      python.error = null;
+      var copy = window.ChunkyOffline;
+      python.loading = (async function () {
+        // a page from an offline copy made without Python: no half a load
+        // (the browser's cache may still have some of its files)
+        if (copy && copy.fromCopy() && !copy.python()) throw new Error("offline");
+        var base = new URL("assets/pyodide/", document.baseURI).href;
+        if (!python.pyodide) {
+          var module = await import(base + "pyodide.mjs");
+          var pyodide = await module.loadPyodide({ indexURL: base });
+          var collect = function (line) { python.output.push(line + "\n"); };
+          pyodide.setStdout({ batched: collect });
+          pyodide.setStderr({ batched: collect });
+          var lock = await (await fetch(base + "pyodide-lock.json")).json();
+          Object.keys(lock.packages).forEach(function (name) {
+            (lock.packages[name].imports || []).forEach(function (m) { python.imports[m] = name; });
+          });
+          python.pyodide = pyodide;
+        }
+        var wanted = missing();
+        if (wanted.length) {
+          await python.pyodide.loadPackage(wanted, { messageCallback: function () {} });
+          wanted.forEach(function (p) { python.packages[p] = true; });
+        }
+        python.ready = true;
+        return true;
+      })().catch(function (e) {
+        // a page from the offline copy, made without Python (the checkbox):
+        // pycall.rb says so rather than showing a network error. Any other
+        // failure (a package, the wasm) keeps its own message.
+        var offline = copy && copy.fromCopy() && !copy.python();
+        python.error = offline ? "offline" : String((e && e.message) || e);
+        console.error("Python (Pyodide) failed to load", e);
+        return false;
+      }).then(function (ok) {
+        python.loading = null;
+        window.dispatchEvent(new CustomEvent("chunky:python-ready", { detail: { ok: ok } }));
+        if (ok) warm();
+        return ok;
+      });
+      return python.loading;
+    };
+    // matplotlib's first `import matplotlib.pyplot` takes 5-9 s, all of it
+    // Python on the main thread. A lesson that imports it starts that import
+    // when it opens, one module at a time with a pause between them - its
+    // dependencies first, then matplotlib's own modules in the order pyplot
+    // needs them - so the page stays usable while the learner reads, and the
+    // first ▶ finds it done. Runs are not held meanwhile (a ▶ imports the
+    // rest itself; other lessons are not slowed); live runs are
+    // (shell/bridge.js), and pycall.rb never starts the import in one.
+    // The last step draws a small chart as SVG, off pyplot, which loads the
+    // font and fills the caches the first real chart would (~0.3 s).
+    // python.warmSteps: how long each step took.
+    var MATPLOTLIB_STEPS = ["numpy", "PIL.Image", "pyparsing", "dateutil.parser", "packaging.version",
+      "cycler", "kiwisolver", "matplotlib", "matplotlib.font_manager", "matplotlib._mathtext",
+      "matplotlib.text", "matplotlib.patches", "matplotlib.collections", "matplotlib.lines",
+      "matplotlib.image", "matplotlib.axis", "matplotlib.legend", "matplotlib.contour", "matplotlib.dates",
+      "matplotlib.axes", "matplotlib.figure", "matplotlib.pyplot",
+      "matplotlib.backends.backend_agg", "matplotlib.backends.backend_svg"
+    ].map(function (name) { return [name, "import " + name]; }).concat([["a first chart", [
+      "def _chunky_warm():",
+      "    import io, matplotlib",
+      "    from matplotlib.figure import Figure",
+      "    figure = Figure()",
+      "    axes = figure.add_subplot()",
+      "    axes.plot([1, 2, 3], [2, 1, 3], marker='o', label='a')",
+      "    axes.set_title('warm')",
+      "    axes.legend()",
+      "    with matplotlib.rc_context({'svg.fonttype': 'none'}):",
+      "        figure.savefig(io.BytesIO(), format='svg', bbox_inches='tight')",
+      "_chunky_warm()",
+      "del _chunky_warm"].join("\n")]]);
+    window.warmMatplotlib = function () {
+      var python = window.chunkyPython;
+      if (python.warming || python.warm || !python.packages.matplotlib) return python.warming;
+      python.warmSteps = [];
+      var pause = function () { return new Promise(function (go) { setTimeout(go, 40); }); };
+      python.warming = MATPLOTLIB_STEPS.reduce(function (chain, step) {
+        return chain.then(pause).then(function () {
+          var started = performance.now(), printed = python.output.length;
+          try {
+            python.pyodide.runPython(step[1]);
+            python.warmSteps.push([step[0], Math.round(performance.now() - started)]);
+          } catch (e) {
+            // the cell's own import says why
+            python.warmSteps.push([step[0], "failed"]);
+            console.error("warming up matplotlib: " + step[0] + " failed", e);
+          } finally {
+            python.output.splice(printed);   // what importing printed is no cell's output
+          }
+        });
+      }, Promise.resolve()).then(function () {
+        python.warm = true;
+        python.warming = null;
+      });
+      return python.warming;
+    };
+
+    // SQLite for the Sequel lesson: sql.js (SQLite in WebAssembly, ~650 KB,
+    // assets/sqljs/, tools/vendor_sqljs.rb), loaded only for a lesson or a
+    // run whose code uses Sequel or SQLite - the shell calls ensureSqlite,
+    // and shell/bridge.js holds a run until chunky:sqlite-ready. sqlite3_sqljs.rb
+    // is the sqlite3 gem's API on top of the calls below: synchronous, JSON
+    // in and out, so integers stay integers (BigInt, as text) and floats
+    // floats, which a JavaScript number would blur.
+    window.chunkySqlite = (function () {
+      var state = { ready: false, loading: null, error: null, SQL: null, dbs: {}, last: 0 };
+      var toBase64 = function (bytes) {
+        var s = "";
+        for (var i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+        return btoa(s);
+      };
+      var fromBase64 = function (text) {
+        var raw = atob(text), bytes = new Uint8Array(raw.length);
+        for (var i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+        return bytes;
+      };
+      // a value for Ruby: {i: "12"} an INTEGER, {f: 3} a REAL that looks
+      // whole, {b: base64} a BLOB; text, other numbers and null as they are
+      var encode = function (v) {
+        if (typeof v === "bigint") return { i: v.toString() };
+        if (typeof v === "number") return Number.isInteger(v) ? { f: v } : v;
+        if (v instanceof Uint8Array) return { b: toBase64(v) };
+        return v;
+      };
+      var decode = function (v) {
+        if (v && typeof v === "object") {
+          if ("i" in v) return BigInt(v.i);
+          if ("b" in v) return fromBase64(v.b);
+        }
+        return v;
+      };
+      // sql.js names a parameter with its prefix (":name"), the gem without
+      var bindings = function (params) {
+        if (Array.isArray(params)) return params.map(decode);
+        var out = {};
+        Object.keys(params).forEach(function (k) { out[/^[:@$]/.test(k) ? k : ":" + k] = decode(params[k]); });
+        return out;
+      };
+      var empty = function (params) {
+        return params == null || (Array.isArray(params) ? params.length === 0 : Object.keys(params).length === 0);
+      };
+      // The declared type of each result column (what sqlite3_column_decltype
+      // would say; sql.js does not export it): from PRAGMA table_info of the
+      // tables after FROM and JOIN, by column name. Sequel converts with it
+      // (booleans, dates); a computed column has none.
+      var declaredTypes = function (db, sql, columns) {
+        var types = {}, re = /\b(?:FROM|JOIN)\s+[`"\[]?(\w+)[`"\]]?/gi, m;
+        while ((m = re.exec(sql))) {
+          var info = db.exec("PRAGMA table_info(\"" + m[1].replace(/"/g, "\"\"") + "\")");
+          (info[0] ? info[0].values : []).forEach(function (row) {
+            if (!(row[1] in types)) types[row[1]] = row[2];
+          });
+        }
+        return columns.map(function (c) { return types[c] || null; });
+      };
+      var guard = function (fn) {
+        try { return JSON.stringify({ ok: fn() }); } catch (e) { return JSON.stringify({ error: String((e && e.message) || e) }); }
+      };
+      var db = function (id) {
+        if (!state.dbs[id]) throw new Error("database is closed");
+        return state.dbs[id];
+      };
+      // The connection's settings ("PRAGMA foreign_keys = 1", what Sequel
+      // sets on connect), by name: export() closes and reopens the database,
+      // which forgets them, so they are set again after it.
+      var pragmas = {};
+      var remember = function (id, sql) {
+        var m = /^\s*PRAGMA\s+([\w.]+)\s*=\s*[^;]*;?\s*$/i.exec(sql);
+        if (m) (pragmas[id] = pragmas[id] || {})[m[1].toLowerCase()] = sql;
+      };
+      // a fresh database, or one from the bytes of a SQLite file (base64)
+      state.open = function (base64) {
+        return guard(function () {
+          state.last += 1;
+          state.dbs[state.last] = new state.SQL.Database(base64 ? fromBase64(base64) : undefined);
+          return state.last;
+        });
+      };
+      state.close = function (id) { if (state.dbs[id]) state.dbs[id].close(); delete state.dbs[id]; delete pragmas[id]; };
+      // the database as the bytes of a SQLite file (base64). sql.js closes
+      // and reopens it for that, so only between transactions - the stand-in
+      // calls it at the end of a run - and with the settings set again.
+      state.exportDb = function (id) {
+        return guard(function () {
+          var bytes = db(id)["export"]();
+          var again = pragmas[id] || {};
+          Object.keys(again).forEach(function (name) { db(id).exec(again[name]); });
+          return toBase64(bytes);
+        });
+      };
+      // one statement with its rows: { columns, types, rows }
+      state.query = function (id, sql, params) {
+        return guard(function () {
+          var conn = db(id), stmt = conn.prepare(sql), rows = [];
+          try {
+            var args = JSON.parse(params);
+            if (!empty(args)) stmt.bind(bindings(args));
+            while (stmt.step()) rows.push(stmt.get(null, { useBigInt: true }).map(encode));
+            remember(id, sql);
+            var columns = stmt.getColumnNames();
+            return { columns: columns, types: declaredTypes(conn, sql, columns), rows: rows };
+          } finally {
+            stmt.free();
+          }
+        });
+      };
+      // statements without rows, several at once when there are no parameters
+      state.batch = function (id, sql, params) {
+        return guard(function () {
+          var args = JSON.parse(params);
+          if (empty(args)) db(id).exec(sql); else db(id).run(sql, bindings(args));
+          remember(id, sql);
+          return db(id).getRowsModified();
+        });
+      };
+      state.changes = function (id) { return db(id).getRowsModified(); };
+      state.lastInsertRowId = function (id) {
+        return String(db(id).exec("SELECT last_insert_rowid()")[0].values[0][0]);
+      };
+      return state;
+    })();
+    window.ensureSqlite = function () {
+      var sqlite = window.chunkySqlite;
+      if (sqlite.ready || sqlite.loading) return sqlite.loading || Promise.resolve(true);
+      sqlite.error = null;
+      sqlite.loading = new Promise(function (resolve, reject) {
+        var base = new URL("assets/sqljs/", document.baseURI).href;
+        var script = document.createElement("script");
+        script.src = base + "sql-wasm.js";
+        script.onload = function () {
+          window.initSqlJs({ locateFile: function (file) { return base + file; } }).then(resolve, reject);
+        };
+        script.onerror = function () { reject(new Error("sql-wasm.js could not be loaded")); };
+        document.head.appendChild(script);
+      }).then(function (SQL) {
+        sqlite.SQL = SQL;
+        sqlite.ready = true;
+        return true;
+      }).catch(function (e) {
+        sqlite.error = String((e && e.message) || e);
+        console.error("SQLite (sql.js) failed to load", e);
+        return false;
+      }).then(function (ok) {
+        sqlite.loading = null;
+        window.dispatchEvent(new CustomEvent("chunky:sqlite-ready", { detail: { ok: ok } }));
+        return ok;
+      });
+      return sqlite.loading;
+    };
+
+    // Herb's parser for require "herb" (html/herb_bridge.rb): the gem's C
+    // extension, compiled to WebAssembly (assets/herb/, tools/vendor_herb.rb;
+    // 1.7 MB). Loaded only for a lesson that requires herb - the shell calls
+    // ensureHerb when it opens, and bridge.js holds runs until it is there.
+    // chunkyHerbCall is what the kernel calls, synchronously: the backend's
+    // raw answer (the gem's field names) as JSON.
+    window.chunkyHerb = { ready: false, loading: null, error: null, module: null, herb: null };
+    window.ensureHerb = function () {
+      var herb = window.chunkyHerb;
+      if (herb.ready) return Promise.resolve(true);
+      if (herb.loading) return herb.loading;
+      herb.error = null;
+      herb.loading = (async function () {
+        var module = await import(new URL("assets/herb/herb-browser.esm.js", document.baseURI).href);
+        herb.herb = await module.Herb.load();
+        herb.module = module;
+        herb.ready = true;
+        return true;
+      })().catch(function (e) {
+        herb.error = offlinePage() ? "offline" : String((e && e.message) || e);
+        console.error("Herb failed to load", e);
+        return false;
+      }).then(function (ok) {
+        herb.loading = null;
+        return ok;
+      });
+      return herb.loading;
+    };
+    window.chunkyHerbCall = function (op, json) {
+      var herb = window.chunkyHerb;
+      var args = JSON.parse(json);
+      var backend = herb.herb.backend;
+      try {
+        var value;
+        if (op === "parse") {
+          value = backend.parse(args.source, Object.assign({}, herb.module.DEFAULT_PARSER_OPTIONS, args.options));
+        } else if (op === "lex") {
+          value = backend.lex(args.source);
+        } else if (op === "extract_ruby") {
+          value = backend.extractRuby(args.source, Object.assign({}, herb.module.DEFAULT_EXTRACT_RUBY_OPTIONS, args.options));
+        } else if (op === "extract_html") {
+          value = backend.extractHTML(args.source);
+        } else if (op === "version") {
+          value = backend.version();
+        } else {
+          throw new Error("unknown operation " + op);
+        }
+        return JSON.stringify({ ok: value });
+      } catch (e) {
+        return JSON.stringify({ error: String((e && e.message) || e) });
+      }
+    };
+
     // A Blob URL for bytes handed over from Ruby as base64 - the link a cell
     // offers for a file it wrote. Blob rather than data: URLs, which break
     // down for multi-megabyte files.
@@ -261,12 +624,12 @@
       setTimeout(go, 150);
     };
 
-    // On wide screens the lesson index scrolls on its own (app.css). Keep the
-    // current lesson in view there whenever main.rb re-renders the index -
-    // scrolling only the sidebar, never the page (on phones the index sits
-    // below the lesson and does not scroll by itself).
+    // The lesson index scrolls on its own (app.css), on a wide screen and in
+    // the drawer on a phone. Keep the current lesson in view whenever the
+    // shell re-renders the index - scrolling only the sidebar, never the page.
+    // The sidebar is the offsetParent of every lesson link.
     new MutationObserver(function () {
-      var bar = document.querySelector(".sidebar");
+      var bar = document.getElementById("sidebar");
       var active = document.querySelector("#lessonNav a.active");
       if (!bar || !active || bar.scrollHeight <= bar.clientHeight) return;
       var top = active.offsetTop, bottom = top + active.offsetHeight;
@@ -275,24 +638,21 @@
       }
     }).observe(document.getElementById("lessonNav"), { childList: true });
 
-    // phones only (app.css): the header button jumps down to the index
-    document.getElementById("navJump").addEventListener("click", function () {
-      var calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      document.querySelector(".sidebar").scrollIntoView({ behavior: calm ? "auto" : "smooth" });
-    });
-
     // Per-cell CodeMirror helpers called from Ruby (shell/app.rb builds the
     // editors, main.rb reads and marks them)
     window.cellEditors = {};
-    window.initCell = function (idx) {
+    // +label+ names the editor for screen readers ("Code, cell 2"), +hint+
+    // says how to run it and how to leave it (shell/app.rb, UI strings)
+    window.initCell = function (idx, label, hint) {
       var ta = document.getElementById("cell-code-" + idx);
       if (!ta) return;
-      window.cellEditors[idx] = CodeMirror.fromTextArea(ta, {
+      var cm = window.cellEditors[idx] = CodeMirror.fromTextArea(ta, {
         lineNumbers: true,
         mode: "text/x-ruby",
         matchBrackets: true,
         indentUnit: 2,
         viewportMargin: Infinity,
+        screenReaderLabel: label || null,
         extraKeys: {
           "Shift-Enter": function () {
             var btn = document.querySelector('.run-cell[data-idx="' + idx + '"]');
@@ -300,6 +660,26 @@
           }
         }
       });
+      // Tab indents, as in any code editor - but Escape, then Tab (or
+      // Shift+Tab) leaves it; without that the keyboard is trapped (WCAG
+      // 2.1.2). CodeMirror.Pass would fall through to the default keymap
+      // and indent anyway; codemirrorIgnore leaves the key to the browser.
+      var leave = false;
+      cm.on("keydown", function (cm, e) {
+        if (e.key === "Escape") { leave = true; return; }
+        if (e.key === "Tab" && leave) { e.codemirrorIgnore = true; leave = false; return; }
+        if (e.key !== "Shift") leave = false;
+      });
+      cm.on("blur", function () { leave = false; });
+      if (hint) {
+        var note = document.createElement("span");
+        note.id = "cell-hint-" + idx;
+        note.hidden = true;
+        note.textContent = hint;
+        cm.getWrapperElement().appendChild(note);
+        cm.getInputField().setAttribute("aria-describedby", note.id);
+        cm.getInputField().setAttribute("aria-keyshortcuts", "Shift+Enter");
+      }
       // typing - not code the page puts in - tells the shell, for live runs
       // (shell/app.rb); the cell number goes over as a string
       window.cellEditors[idx].on("change", function (cm, change) {
@@ -315,9 +695,12 @@
     window.refreshAllCells = function () {
       Object.values(window.cellEditors).forEach(function (ed) { ed.refresh(); });
     };
+    // a run of the cell starts: the error line's mark goes, and so does the
+    // stepper's recording of the last ⏯ (stepper.js)
     window.clearCellMarks = function (idx) {
       var ed = window.cellEditors[idx];
       if (ed) ed.getAllMarks().forEach(function (m) { m.clear(); });
+      if (window.ChunkyStepper) window.ChunkyStepper.clear(idx);
     };
     window.markCellLine = function (idx, lineNo) {
       var ed = window.cellEditors[idx];
@@ -339,6 +722,19 @@
   <!-- offline mode: the copy of the course on this device (sw.js), off
        until the learner turns it on in the progress dialog -->
   <script src="offline.js"></script>
+  <!-- the envelope to write a postcode on (show_letter, the Rumale lesson) -->
+  <script src="letter.js"></script>
+  <!-- the window of a Processing sketch (processing.rb, the Processing lesson) -->
+  <script src="processing.js"></script>
+  <!-- the grid of show_game (game.rb, Chunky's Snake): the game loop runs
+       here, Ruby is called when a timer is due or a key came in -->
+  <script src="game.js"></script>
+  <!-- ⏯ beside ▶ (a lesson with "stepper": true): a recorded run, step by
+       step - the line in the editor, the variables, the output so far -->
+  <script src="stepper.js"></script>
+  <!-- a second PicoRuby, in a Web Worker, for a lesson whose cells run on it
+       ("engine": "picoruby", the PicoRuby lesson): picoruby_lab.js -->
+  <script src="picoruby_lab.js"></script>
   <script src="compile/compile.js" defer></script>
   <!-- the page shell (PicoRuby) and its bridge to the kernel (CRuby);
        the bridge starts browser.script.iife.js, which runs main.rb -->

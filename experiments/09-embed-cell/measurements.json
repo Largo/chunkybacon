@@ -1,0 +1,102 @@
+{
+  "runs": 3,
+  "date": "2026-10-04T22:08:26.906Z",
+  "rows": [
+    {
+      "profile": "fast, cold",
+      "code-visible": 107,
+      "editor": 143,
+      "kernel-start": 120,
+      "kernel-ready": 1543,
+      "first-result": 1585,
+      "rerun": 26,
+      "KB before Ruby": 132,
+      "wasm KB": 9813,
+      "transfer KB": 10163
+    },
+    {
+      "profile": "fast, warm",
+      "code-visible": 62,
+      "editor": 90,
+      "kernel-start": 63,
+      "kernel-ready": 1016,
+      "first-result": 1037,
+      "rerun": 25,
+      "KB before Ruby": 2,
+      "wasm KB": 0,
+      "transfer KB": 6
+    },
+    {
+      "profile": "fast, warm, no sandbox",
+      "code-visible": 74,
+      "editor": 123,
+      "kernel-start": 75,
+      "kernel-ready": 1230,
+      "first-result": 1262,
+      "rerun": 26,
+      "KB before Ruby": 2,
+      "wasm KB": 0,
+      "transfer KB": 6
+    },
+    {
+      "profile": "20 Mbit/s, cold",
+      "code-visible": 213,
+      "editor": 250,
+      "kernel-start": 228,
+      "kernel-ready": 6688,
+      "first-result": 6708,
+      "rerun": 23,
+      "KB before Ruby": 132,
+      "wasm KB": 9813,
+      "transfer KB": 10163
+    },
+    {
+      "profile": "20 Mbit/s, warm",
+      "code-visible": 160,
+      "editor": 234,
+      "kernel-start": 161,
+      "kernel-ready": 1730,
+      "first-result": 1757,
+      "rerun": 27,
+      "KB before Ruby": 2,
+      "wasm KB": 0,
+      "transfer KB": 6
+    },
+    {
+      "profile": "20 Mbit/s, warm, no sandbox",
+      "code-visible": 213,
+      "editor": 226,
+      "kernel-start": 213,
+      "kernel-ready": 1417,
+      "first-result": 1445,
+      "rerun": 28,
+      "KB before Ruby": 2,
+      "wasm KB": 0,
+      "transfer KB": 6
+    },
+    {
+      "profile": "host page, fast, cold",
+      "code-visible": 267,
+      "editor": 287,
+      "kernel-start": 271,
+      "kernel-ready": 1352,
+      "first-result": 1378
+    },
+    {
+      "profile": "host page, fast, warm",
+      "code-visible": 248,
+      "editor": 271,
+      "kernel-start": 254,
+      "kernel-ready": 941,
+      "first-result": 966
+    },
+    {
+      "profile": "host page, 20 Mbit/s, cold",
+      "code-visible": 409,
+      "editor": 430,
+      "kernel-start": 411,
+      "kernel-ready": 6366,
+      "first-result": 6401
+    }
+  ]
+}

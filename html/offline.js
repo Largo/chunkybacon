@@ -7,6 +7,8 @@
   "use strict";
 
   var KEY = "chunkyui_offline";
+  // Python (assets/pyodide/, ~52 MB of the copy) is in it unless unticked
+  var PYTHON_KEY = "chunkyui_offline_python";
   var supported = "serviceWorker" in navigator && window.isSecureContext && "caches" in window;
   var listeners = {};
   var status = fresh();
@@ -17,7 +19,9 @@
   // kernel fetches gems that way (index.html's fetch*Sync: CRuby cannot wait
   // for a Promise there). So a page from the copy reads those files into
   // memory before the kernel starts (bridge.js waits for kernelReady): the
-  // gem cache and shoes_dom.rb, about 7 MB. fetch() is answered by the copy.
+  // gem cache, shoes_dom.rb, numo_narray.rb, processing.rb, herb_bridge.rb,
+  // ruby2d (its gem's Ruby and ruby2d.rb), the friendly error explanations (friendly_errors*.rb) and the Rumale
+  // lesson's digits.csv, about 13 MB. fetch() is answered by the copy.
   var syncFiles = null;   // path -> Uint8Array
   var kernelReady = pageFromCopy ? readSyncFiles() : Promise.resolve();
 
@@ -33,7 +37,10 @@
       files["gems/cache/manifest.json"] = manifest;
       var gems = JSON.parse(new TextDecoder().decode(manifest));
       var paths = Object.keys(gems).map(function (name) { return "gems/cache/" + gems[name].file; });
-      paths.push("shoes_dom.rb");
+      paths.push("shoes_dom.rb", "numo_narray.rb", "processing.rb", "herb_bridge.rb",
+                 "assets/ruby2d/ruby2d.rb", "ruby2d.rb",
+                 "friendly_errors_messages.rb", "friendly_errors.rb", "friendly_errors_rules.rb",
+                 "assets/data/digits.csv");
       return Promise.all(paths.map(function (path) {
         return bytesOf(path).then(function (bytes) { files[path] = bytes; });
       }));
@@ -70,6 +77,18 @@
     try {
       if (on) localStorage.setItem(KEY, "on"); else localStorage.removeItem(KEY);
     } catch (e) { /* a view setting only */ }
+  }
+
+  function withPython() {
+    try { return localStorage.getItem(PYTHON_KEY) !== "off"; } catch (e) { return true; }
+  }
+  // every refresh says whether Python belongs in the copy; a change takes
+  // effect at once (a copy without it drops the files it had)
+  function setPython(on) {
+    try {
+      if (on) localStorage.removeItem(PYTHON_KEY); else localStorage.setItem(PYTHON_KEY, "off");
+    } catch (e) { /* a view setting only */ }
+    return wanted() ? send({ type: "refresh", force: true, python: on }) : Promise.resolve();
   }
 
   // sw.js sits beside index.html; with the server's permalinks the page is
@@ -110,7 +129,7 @@
     emit("status");
     // ask the browser not to clear the copy when space runs low
     if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(function () {});
-    return register().then(function () { return send({ type: "refresh", force: true }); });
+    return register().then(function () { return send({ type: "refresh", force: true, python: withPython() }); });
   }
 
   function disable() {
@@ -143,7 +162,7 @@
   // after a visit, once the page is up (not competing with its downloads):
   // the worker checks whether the copy is still current
   function check() {
-    if (wanted() && navigator.onLine) send({ type: "refresh" });
+    if (wanted() && navigator.onLine) send({ type: "refresh", python: withPython() });
   }
 
   function init() {
@@ -187,7 +206,10 @@
       }
     },
     enable: enable,
-    disable: disable
+    disable: disable,
+    // Python in the copy (the checkbox): true unless unticked on this device
+    python: withPython,
+    setPython: setPython
   };
 
   init();

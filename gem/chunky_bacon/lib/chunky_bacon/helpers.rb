@@ -35,10 +35,11 @@ module ChunkyBacon
     end
 
     IMAGE_SIGNATURES = {
-      "\x89PNG".b => "png", "\xFF\xD8\xFF".b => "jpg", "GIF8".b => "gif", "RIFF".b => "webp"
+      "\x89PNG".b => "png", "\xFF\xD8\xFF".b => "jpg", "GIF8".b => "gif", "RIFF".b => "webp",
+      "<svg".b => "svg"
     }.freeze
 
-    # "png", "jpg", "gif" or "webp" for a picture's bytes, nil for anything else
+    # "png", "jpg", "gif", "webp" or "svg" for a picture's bytes, nil for anything else
     def image_type(bytes)
       bytes = bytes.b
       IMAGE_SIGNATURES.find { |magic, _type| bytes.start_with?(magic) }&.last
@@ -93,8 +94,15 @@ module ChunkyBacon
 
     # A picture: a ChunkyPNG image (anything with to_blob or to_data_url),
     # what PureJPEG.encode returns (anything with to_bytes), the bytes of a
-    # PNG, JPEG, GIF or WebP, or the path of an image file.
-    def show_image(image)
+    # PNG, JPEG, GIF, WebP or SVG, a chart that writes SVG (a Rubyvis panel,
+    # rendered here), or the path of an image file. show_objects
+    # (object_graph.rb) comes this way too, as an SVG. alt: is what the
+    # course's page tells a screen reader; a file has no place for it.
+    def show_image(image, alt: nil)
+      if image.respond_to?(:to_svg) && !image.respond_to?(:to_data_url)
+        image.render if image.respond_to?(:render)
+        image = image.to_svg
+      end
       # a path: text without a picture's signature or NUL bytes, naming a file
       if image.is_a?(String) && !ChunkyBacon.image_type(image) && !image.include?("\0") && File.file?(image)
         ChunkyBacon::Opener.open(File.expand_path(image))
@@ -130,6 +138,46 @@ module ChunkyBacon
                 StringIO.new("".b).tap { |io| pdf.write(io) }.string
               end
       path = ChunkyBacon.save(ChunkyBacon.next_file("chunky-document", "pdf"), bytes)
+      ChunkyBacon::Opener.open(path)
+      nil
+    end
+
+    # A sound, as in the course's music lesson: a WAV file's path, the WAV
+    # itself as a String, or an Array of samples in -1..1 (rate: per second,
+    # written as 16-bit mono). Opened in the computer's player.
+    def show_audio(sound, rate: 22_050)
+      if sound.is_a?(String) && !sound.b.start_with?("RIFF")
+        ChunkyBacon::Opener.open(File.expand_path(sound))
+        return nil
+      end
+      bytes = if sound.is_a?(Array)
+                data = sound.map { |s| (s.to_f.clamp(-1.0, 1.0) * 32_767).round }.pack("s<*")
+                ["RIFF", 36 + data.bytesize, "WAVE", "fmt ", 16, 1, 1, rate, rate * 2, 2, 16,
+                 "data", data.bytesize].pack("a4Va4a4VvvVVvva4V") + data
+              else
+                sound.to_s.b
+              end
+      path = ChunkyBacon.save(ChunkyBacon.next_file("chunky-sound", "wav"), bytes)
+      ChunkyBacon::Opener.open(path)
+      nil
+    end
+
+    # A matplotlib figure, through the pycall gem (require "pycall" first):
+    # the current one, or the one given. Saved as a PNG and opened, then
+    # closed - as the course page shows it below the cell.
+    def show_plot(figure = nil)
+      raise ChunkyBacon::NotHere, "show_plot draws with matplotlib through pycall: " \
+                                  "pip install matplotlib, gem install pycall, require \"pycall\"" unless defined?(PyCall)
+
+      plt = PyCall.import_module("matplotlib.pyplot")
+      figure ||= plt.gcf
+      path = ChunkyBacon.next_file("chunky-plot", "png")
+      begin
+        figure.savefig(path)
+      ensure
+        plt.close(figure)
+      end
+      ChunkyBacon.say "saved #{ChunkyBacon.relative(path)} (#{File.size(path)} B)"
       ChunkyBacon::Opener.open(path)
       nil
     end
@@ -212,6 +260,19 @@ module ChunkyBacon
     def show_shoes(**, &)
       raise ChunkyBacon::NotHere, "On your computer, Shoes apps run with Scarpe: gem install scarpe, put " \
                                   "Shoes.app do ... end in a file and start it with: scarpe app.rb"
+    end
+
+    def show_letter(**, &)
+      raise ChunkyBacon::NotHere, "show_letter needs the course page - you write on it with the mouse " \
+                                  "or a finger. The model itself runs here: model.predict(Numo::DFloat[...])."
+    end
+
+    # the page runs a game's loop and reads its keys; a program on a
+    # computer opens a window of its own for that
+    def show_game(**, &)
+      raise ChunkyBacon::NotHere, "show_game needs the course page - the page runs the game's loop and " \
+                                  "reads the arrow keys. On your computer, a game gem does that in a window " \
+                                  "of its own: gem install ruby2d (update do ... end, on :key_down) or gosu."
     end
   end
 end

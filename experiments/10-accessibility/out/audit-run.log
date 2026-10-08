@@ -1,0 +1,34 @@
+21:48:48 de kernel ready
+21:48:51 de hallo violations: label-title-only(1) label(3)
+21:48:53 de irb violations: label-title-only(2) label(2)
+21:48:58 de sinatra violations: color-contrast(39) image-alt(1) label-title-only(3) label(2)
+21:49:02 de three violations: color-contrast(10) label-title-only(1) label(5) scrollable-region-focusable(2)
+21:49:13 de rumale violations: color-contrast(8) label-title-only(1) label(7) scrollable-region-focusable(4)
+21:49:15 de werkstatt violations: color-contrast(3) label-title-only(1) label(1)
+21:49:16 de progress violations: none
+21:49:21 de drawer violations: label-title-only(1) label(3) skip-link(31)
+21:49:24 en kernel ready
+21:49:28 en hallo violations: label-title-only(1) label(3)
+21:49:31 en irb violations: label-title-only(2) label(2)
+21:49:34 en sinatra violations: color-contrast(39) image-alt(1) label-title-only(3) label(2)
+21:49:39 en three violations: color-contrast(10) label-title-only(1) label(5) scrollable-region-focusable(2)
+21:49:48 en rumale violations: color-contrast(8) label-title-only(1) label(7) scrollable-region-focusable(4)
+21:49:50 en werkstatt violations: color-contrast(3) label-title-only(1) label(1)
+21:49:52 en progress violations: none
+21:49:56 en drawer violations: label-title-only(1) label(3) skip-link(31)
+21:50:02 ja kernel ready
+21:50:05 ja hallo violations: label-title-only(1) label(3)
+21:50:08 ja irb violations: label-title-only(2) label(2)
+21:50:12 ja sinatra violations: color-contrast(39) image-alt(1) label-title-only(3) label(2)
+21:50:17 ja three violations: color-contrast(10) label-title-only(1) label(5) scrollable-region-focusable(2)
+21:50:26 ja rumale violations: color-contrast(8) label-title-only(1) label(7) scrollable-region-focusable(4)
+21:50:28 ja werkstatt violations: color-contrast(3) label-title-only(1) label(1)
+21:50:30 ja progress violations: none
+21:50:34 ja drawer violations: label-title-only(1) label(3) skip-link(31)
+21:50:34 summary:
+21:50:34   serious   label-title-only             de-hallo:1 de-irb:2 de-sinatra:3 de-three:1 de-rumale:1 de-werkstatt:1 de-drawer:1 en-hallo:1 en-irb:2 en-sinatra:3 en-three:1 en-rumale:1 en-werkstatt:1 en-drawer:1 ja-hallo:1 ja-irb:2 ja-sinatra:3 ja-three:1 ja-rumale:1 ja-werkstatt:1 ja-drawer:1
+21:50:34   critical  label                        de-hallo:3 de-irb:2 de-sinatra:2 de-three:5 de-rumale:7 de-werkstatt:1 de-drawer:3 en-hallo:3 en-irb:2 en-sinatra:2 en-three:5 en-rumale:7 en-werkstatt:1 en-drawer:3 ja-hallo:3 ja-irb:2 ja-sinatra:2 ja-three:5 ja-rumale:7 ja-werkstatt:1 ja-drawer:3
+21:50:34   serious   color-contrast               de-sinatra:39 de-three:10 de-rumale:8 de-werkstatt:3 en-sinatra:39 en-three:10 en-rumale:8 en-werkstatt:3 ja-sinatra:39 ja-three:10 ja-rumale:8 ja-werkstatt:3
+21:50:34   critical  image-alt                    de-sinatra:1 en-sinatra:1 ja-sinatra:1
+21:50:34   serious   scrollable-region-focusable  de-three:2 de-rumale:4 en-three:2 en-rumale:4 ja-three:2 ja-rumale:4
+21:50:34   moderate  skip-link                    de-drawer:31 en-drawer:31 ja-drawer:31

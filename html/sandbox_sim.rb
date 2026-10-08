@@ -90,6 +90,26 @@ class File
   end
 end
 
+# Kernel#open reads what File.write put in the store: Daru's from_csv opens
+# its file this way (lesson 30), after a cell wrote it with File.write. Only
+# for reading, and only a relative path the store has and the disk does not.
+module Kernel
+  alias_method :sandbox_orig_open, :open
+  private :sandbox_orig_open
+
+  private
+
+  def open(path, *args, **kw, &block)
+    mode = kw.fetch(:mode) { args.first || "r" }
+    unless path.is_a?(String) && mode.is_a?(String) && mode.start_with?("r") && File.send(:sandboxed?, path)
+      return sandbox_orig_open(path, *args, **kw, &block)
+    end
+
+    io = StringIO.new(SandboxFS.read(path))
+    block ? yield(io) : io
+  end
+end
+
 class Dir
   class << self
     alias_method :sandbox_orig_glob, :glob
@@ -202,6 +222,19 @@ module Kernel
 end
 
 # ---------------------------------------------------------------------------
+# A cell's output is a StringIO, which is not a terminal - like a program's
+# output piped into a file. A real IO says so when asked for the window size
+# (ENOTTY); StringIO has no ioctl at all, and tty-screen, which checks for
+# ioctl on the real $stderr at load time and then asks $stdout, would stop
+# with a NoMethodError instead of falling back to 80 columns.
+require "stringio"
+class StringIO
+  def ioctl(*)
+    raise Errno::ENOTTY
+  end
+end
+
+# ---------------------------------------------------------------------------
 # Simulated threads (browser only - the harness keeps real ones): each
 # SimThread is a Fiber; a tiny cooperative scheduler interleaves them at
 # their (virtual) sleep points, so "parallel downloads" and interleaved
@@ -254,6 +287,15 @@ if defined?(JS)
 
     def finished? = @finished
     def alive? = !@finished
+
+    # as Thread#status: "run" for the one running now, "sleep" for one
+    # waiting its turn, false once done, nil if it ended with an exception
+    # (Sequel asks Thread.current.status before it commits a transaction)
+    def status
+      return(@error ? nil : false) if @finished
+
+      equal?(SimThread.current) ? "run" : "sleep"
+    end
 
     def resume_once
       previous = SimThread.scheduler_current

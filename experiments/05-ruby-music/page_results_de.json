@@ -1,0 +1,102 @@
+{
+  "lang": "de",
+  "cells": [
+    {
+      "cell": 1,
+      "outcome": "ok",
+      "elapsed_ms": 184,
+      "wall_ms": 277,
+      "audios": 0,
+      "text": "=> [0.0, 0.063, 0.124, 0.184, 0.24, 0.293, 0.342, 0.385]"
+    },
+    {
+      "cell": 2,
+      "outcome": "ok",
+      "elapsed_ms": 141,
+      "wall_ms": 277,
+      "audios": 1,
+      "text": "=> [44144, \"RIFF\", \"WAVE\"]12 ms1.00 s"
+    },
+    {
+      "cell": 3,
+      "outcome": "ok",
+      "elapsed_ms": 321,
+      "wall_ms": 402,
+      "audios": 3,
+      "text": "=> [:sinus, :rechteck, :saege]12 ms0.60 s12 ms0.60 s12 ms0.60 s"
+    },
+    {
+      "cell": 4,
+      "outcome": "ok",
+      "elapsed_ms": 1342,
+      "wall_ms": 1417,
+      "audios": 1,
+      "text": "=> [440.0, 261.6, 523.3]12 ms4.80 s"
+    },
+    {
+      "cell": 5,
+      "outcome": "ok",
+      "elapsed_ms": 1393,
+      "wall_ms": 1515,
+      "audios": 1,
+      "text": "=> [111, 22, 3]12 ms1.50 s"
+    },
+    {
+      "cell": 6,
+      "outcome": "ok",
+      "elapsed_ms": 1614,
+      "wall_ms": 1839,
+      "audios": 1,
+      "text": "12 ms4.00 s⬇ froschgesang.wav 172.3 KB"
+    }
+  ],
+  "live": [
+    {
+      "cell": 1,
+      "outcome": "stopped",
+      "elapsed_ms": 1030,
+      "own_ms": 1030
+    },
+    {
+      "cell": 2,
+      "outcome": "stopped",
+      "elapsed_ms": 1023,
+      "own_ms": 1023
+    },
+    {
+      "cell": 3,
+      "outcome": "stopped",
+      "elapsed_ms": 1032,
+      "own_ms": 1032
+    },
+    {
+      "cell": 4,
+      "outcome": "stopped",
+      "elapsed_ms": 1015,
+      "own_ms": 1015
+    },
+    {
+      "cell": 5,
+      "outcome": "stopped",
+      "elapsed_ms": 1013,
+      "own_ms": 1013
+    },
+    {
+      "cell": 6,
+      "outcome": "stopped",
+      "elapsed_ms": 1006,
+      "own_ms": 1006
+    }
+  ],
+  "notes": [],
+  "audio_metadata": {
+    "duration": 1,
+    "readyState": 1,
+    "error": null
+  },
+  "exercise": {
+    "solution_ms": 745,
+    "check": "=> [true, 48]"
+  },
+  "bench": "{1 => {samples: 48, wav: 35, svg: 31, base64: 0, bytes: 44144}, 5 => {samples: 257, wav: 246, svg: 146, base64: 1, bytes: 220544}, melody_4_8s: 729, one_second: {ton: 88, huelle: 71, zusammen_3: 17}, sine_1s_traced: {ms: 2224, events: 176404}, sine_1s_plain: 61}"
+}

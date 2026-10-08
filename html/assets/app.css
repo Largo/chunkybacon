@@ -18,11 +18,11 @@
   --rule: #d4dbe3;        /* hairlines inside cells and widgets */
   --fox: #e8722a;         /* actions and the active lesson; ink on it is 6:1 */
   --fox-light: #f39a60;
-  --bacon: #c14a2e;       /* links; 4.9:1 on paper */
+  --bacon: #b3401f;       /* links; 5.7:1 on paper, 5.1:1 on code-bg and fat */
   --fat: #fdeee3;         /* bacon fat: task boxes */
   --highlight: #ffc9a1;   /* highlighter marking the current lesson */
   --code-bg: #eef2f6;     /* inline code, printed examples, output */
-  --ok: #2e7d32;
+  --ok: #276d2b;          /* 5.5:1 on the light green status chips */
   --err: #b3261e;
   --focus: #2f6db5;
 
@@ -80,6 +80,37 @@ body {
 a { color: var(--bacon); text-underline-offset: 0.15em; }
 a:hover { color: var(--ink); }
 
+/* for screen readers only: the run status line, the language select's label */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* "Skip to the lesson": out of sight until the keyboard reaches it, then
+   beside the sidebar toggle, above the drawer */
+.skip-link {
+  position: fixed;
+  top: -4rem;
+  left: 3.5rem;
+  z-index: 60;
+  padding: 0.4rem 0.8rem;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.skip-link:focus { top: 0.6rem; }
+/* the heading takes the focus after a lesson change (shell/app.rb): a ring
+   for the keyboard, none after a click */
+#lessonBody h2[tabindex="-1"]:focus:not(:focus-visible) { outline: none; }
+
 /* ---------- loading screen: the first thing everyone sees ---------- */
 .spinner {
   min-height: 100vh;
@@ -133,14 +164,16 @@ a:hover { color: var(--ink); }
 }
 
 /* ---------- masthead ---------- */
+/* the column's head; with the sidebar put away it leaves the toggle its place */
 header {
   display: flex;
   align-items: center;
   gap: 0.9rem;
-  padding: 0.9rem max(1.5rem, calc((100% - var(--page)) / 2 + 1.5rem));
+  padding: 0.9rem 1.5rem 0.9rem 2.5rem;
   background: var(--paper);
   border-bottom: 2px solid var(--ink);
 }
+body.sidebar-closed header { padding-left: 4.25rem; }
 header #mascot { width: 58px; height: 58px; flex: none; }
 header .headerText { flex: 1; min-width: 0; }
 header h1 {
@@ -168,7 +201,7 @@ header .kernel-status::before {
 header .kernel-status.is-failed { color: var(--err); }
 header .kernel-status.is-failed::before { background: var(--err); animation: none; }
 @media (prefers-reduced-motion: reduce) { header .kernel-status::before { animation: none; } }
-header select, header .nav-jump {
+header select {
   font: 600 0.95rem/1.2 var(--font-print);
   color: var(--ink);
   padding: 0.4rem 0.6rem;
@@ -177,8 +210,6 @@ header select, header .nav-jump {
   background: var(--paper);
   cursor: pointer;
 }
-header .nav-jump { display: none; font-size: 1.1rem; }
-header .nav-jump:hover { background: var(--fat); }
 
 /* progress: where the work is saved; the dot says whether a folder is on */
 header .progress-btn {
@@ -215,39 +246,134 @@ header .progress-btn:hover { background: var(--fat); }
 .progress-btn.is-connected .progress-dot { display: block; background: var(--ok); }
 .progress-btn.needs-attention .progress-dot { display: block; background: var(--fox); }
 
-/* ---------- layout: the index in the margin, the lesson on the page ---------- */
+/* ---------- layout: the index in the margin, the lesson on the page ----------
+   The sidebar runs from the top of the window to its foot and scrolls on its
+   own; the red margin line runs down the page beside it, as in the exercise
+   book. Everything else - head, lesson, footer - is the column. */
 .layout {
-  display: grid;
-  grid-template-columns: 15rem minmax(0, 1fr);
-  column-gap: 2rem;
-  max-width: var(--page);
-  margin: 0 auto;
-  padding: 0 1.5rem;
+  display: flex;
+  align-items: stretch;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
-
-/* 37 lessons do not fit a screen: the index scrolls on its own */
-.sidebar {
-  position: sticky;
-  top: 0;
-  align-self: start;
-  max-height: 100vh;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
-  padding: 1.6rem 0.4rem 2.5rem 0;
+.column {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 2px solid var(--margin-line);
 }
 
 main {
+  flex: 1;
   min-width: 0;
-  border-left: 2px solid var(--margin-line);
-  padding: 2rem 0 3rem 2.5rem;
+  padding: 2rem 1.5rem 3rem 2.5rem;
 }
 main > * { max-width: var(--column); }
 
+/* ---------- the sidebar ---------- */
+.sidebar {
+  width: 17rem;
+  flex: none;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule) transparent;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0.75rem 2rem;
+  background: var(--paper);
+}
+body.sidebar-closed .sidebar { display: none; }
+
+/* Fixed, top left, above the drawer and its scrim: the same spot open or
+   closed, wide screen or phone. Whatever sits there makes room - the
+   sidebar's head when it shows, the column's head when it does not. */
+.sidebar-toggle {
+  position: fixed;
+  top: 1.1rem;
+  left: 0.75rem;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 1.5px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink);
+}
+.sidebar-toggle:hover { background: var(--fat); }
+.sidebar-toggle svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+/* on the squared paper it needs an edge of its own */
+body.sidebar-closed .sidebar-toggle { top: 1.6rem; background: var(--paper); border-color: var(--ink); }
+body.sidebar-closed .sidebar-toggle:hover { background: var(--fat); }
+
+/* how far the whole course is: a strip of bacon that grows. Sticky, so the
+   list scrolls under it and not under the toggle. */
+.sidebar-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  column-gap: 0.5rem;
+  row-gap: 0.45rem;
+  margin: 0 -0.75rem;
+  padding: 1.15rem 1rem 0.9rem 3.6rem;
+  background: var(--paper);
+}
+.nav-title {
+  font-family: var(--font-hand);
+  font-weight: 700;
+  font-variation-settings: "INFM" 50, "BNCE" 15;
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+.nav-count {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+.nav-bar {
+  grid-column: 1 / -1;
+  display: block;
+  height: 8px;
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--paper);
+}
+#navBarFill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: repeating-linear-gradient(90deg,
+    var(--fox) 0 18px, var(--bacon) 18px 30px, #f6c9a8 30px 42px);
+  transition: width 0.4s ease;
+}
+
 /* ---------- the workshop's entry, above the lessons ---------- */
 .workshop-link {
-  display: block;
-  margin: 0 0 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  flex: none;
+  margin: 0.2rem 0 0.7rem;
   padding: 0.45rem 0.7rem;
   border: 1.5px solid var(--ink);
   border-radius: 6px;
@@ -260,43 +386,176 @@ main > * { max-width: var(--column); }
 .workshop-link:hover { background: var(--fat); color: var(--ink); }
 .workshop-link.active { background: var(--highlight); }
 
-/* ---------- lesson index ---------- */
-nav#lessonNav { display: flex; flex-direction: column; }
-.nav-section {
-  font-weight: 700;
-  font-size: 0.95rem;
-  line-height: 1.3;
-  padding: 1.3rem 0.5rem 0.35rem;
+/* ---------- search ---------- */
+/* The magnifier is drawn, not a background image, so it takes the
+   placeholder's colour */
+.nav-search { position: relative; display: block; flex: none; margin: 0 0 0.3rem; }
+.nav-search svg {
+  position: absolute;
+  left: 0.65rem;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translateY(-50%);
+  fill: none;
+  stroke: var(--ink-soft);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  pointer-events: none;
 }
-.nav-section:first-child { padding-top: 0; }
-nav#lessonNav a {
-  display: block;
-  padding: 0.28rem 0.5rem;
+#navSearch {
+  width: 100%;
+  font: 0.9rem/1.3 var(--font-print);
+  padding: 0.45rem 0.6rem 0.45rem 2rem;
+  border: 1.5px solid var(--rule);
+  border-radius: 6px;
+  background: var(--code-bg);
+  color: var(--ink);
+}
+#navSearch:hover { border-color: var(--ink-soft); }
+#navSearch:focus { background: var(--paper); border-color: var(--ink); }
+#navSearch::placeholder { color: var(--ink-soft); opacity: 1; }
+
+/* ---------- lesson index: one group per course ---------- */
+nav#lessonNav { display: flex; flex-direction: column; }
+.nav-group-head {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  margin: 0;
+  padding: 1rem 0.5rem 0.35rem;
+  border: 0;
   border-radius: 4px;
+  background: transparent;
+  color: var(--ink-soft);
+  font: 700 0.74rem/1.25 var(--font-print);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: left;
+}
+.nav-group-head:hover { background: transparent; color: var(--ink); }
+.nav-group-head:active { transform: none; }
+.nav-group-name { flex: 1; min-width: 0; }
+.nav-group-count {
+  flex: none;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: var(--code-bg);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+.nav-group.complete .nav-group-count { background: #e3f2e4; color: #1f5d23; }
+.nav-chevron {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.15s;
+}
+.nav-group.closed .nav-chevron { transform: rotate(-90deg); }
+.nav-group.closed .nav-group-items { display: none; }
+
+/* a row: the lesson's number in a badge, which turns into a tick once done */
+nav#lessonNav a.lesson {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1px 0;
+  padding: 0.28rem 0.5rem 0.28rem 0.35rem;
+  border-radius: 6px;
   color: var(--ink);
   text-decoration: none;
-  font-size: 0.94rem;
-  line-height: 1.35;
-  cursor: pointer;
+  font-size: 0.93rem;
+  line-height: 1.3;
 }
-nav#lessonNav a:hover { background: var(--code-bg); }
-/* the current lesson is marked like with a highlighter: slanted ends */
-nav#lessonNav a.active {
+nav#lessonNav a.lesson:hover { background: var(--code-bg); }
+nav#lessonNav .num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border: 1.5px solid var(--rule);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-size: 0.72rem;
   font-weight: 700;
-  background: linear-gradient(100deg,
-    transparent 0.2rem, var(--highlight) 0.2rem,
-    var(--highlight) calc(100% - 0.2rem), transparent calc(100% - 0.2rem));
+  font-variant-numeric: tabular-nums;
 }
-nav#lessonNav a.done::after { content: " ✓"; color: var(--ok); font-weight: 700; }
+nav#lessonNav .name { min-width: 0; }
+nav#lessonNav a.done .num { font-size: 0; background: var(--ok); border-color: var(--ok); }
+nav#lessonNav a.done .num::after { content: "✓"; font-size: 0.8rem; color: #fff; }
+/* the current lesson is marked like with a highlighter, and carries the
+   fox's orange in the margin beside it */
+nav#lessonNav a.active { background: var(--highlight); font-weight: 700; }
+nav#lessonNav a.active .num { border-color: var(--ink); color: var(--ink); }
+nav#lessonNav a.active::before {
+  content: "";
+  position: absolute;
+  left: -0.75rem;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  width: 4px;
+  border-radius: 0 3px 3px 0;
+  background: var(--fox);
+}
+.nav-none { margin: 1rem 0.5rem; font-size: 0.9rem; color: var(--ink-soft); }
 
-/* ---------- gems panel ---------- */
+/* ---------- gems panel, under the workshop: folded, it is a button like
+   the workshop's; open, the chips scroll inside it ---------- */
 #gemsPanel {
-  margin-top: 1.8rem;
-  padding: 1rem 0.5rem 0;
-  border-top: 1.5px solid var(--ink);
+  flex: none;
+  margin: 0 0 0.7rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  background: var(--paper);
 }
-#gemsPanel h3 { margin: 0 0 0.6rem; font-size: 0.95rem; font-weight: 700; }
-#gemsList { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.7rem; }
+#gemsPanel summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+#gemsPanel summary::-webkit-details-marker { display: none; }
+#gemsPanel summary::after {
+  content: "";
+  width: 0.4em;
+  height: 0.4em;
+  margin-left: 0.15rem;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  transform: translateY(-0.1em) rotate(45deg);
+  transition: transform 0.15s;
+}
+#gemsPanel[open] summary::after { transform: translateY(0.1em) rotate(-135deg); }
+#gemsPanel summary:hover { background: var(--fat); }
+#gemsPanel[open] summary { border-bottom: 1.5px solid var(--rule); border-radius: 4px 4px 0 0; }
+#gemsPanel[open] > :not(summary) { margin-left: 0.6rem; margin-right: 0.6rem; }
+#gemsPanel[open] > #gemsList { margin-top: 0.6rem; }
+#gemsPanel[open] > #gemsNote { margin-bottom: 0.6rem; }
+#gemsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  max-height: 11rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  margin-bottom: 0.7rem;
+}
 #gemsList .gem-chip {
   font: 400 0.8rem/1.3 var(--font-code);
   padding: 0.15rem 0.55rem;
@@ -353,6 +612,29 @@ nav#lessonNav a.done::after { content: " ✓"; color: var(--ok); font-weight: 70
   font-size: 0.9rem;
   line-height: 1.5;
 }
+/* a small two-column cheat sheet in the prose (PyCall: Python -> Ruby);
+   on a phone the code wraps, so both columns stay in view */
+.lessonText table.cheat {
+  border-collapse: collapse;
+  margin: 0 0 1.1rem;
+  font-size: 0.92rem;
+}
+.lessonText .cheat th, .lessonText .cheat td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.3rem 1.2rem 0.3rem 0;
+  border-bottom: 1px solid var(--rule);
+  overflow-wrap: anywhere;
+}
+.lessonText .cheat td:last-child, .lessonText .cheat th:last-child { padding-right: 0; }
+.lessonText .cheat thead th { border-bottom: 1.5px solid var(--ink-soft); }
+.lessonText .cheat td > code {
+  background: var(--code-bg);
+  padding: 0.05rem 0.3rem;
+  border-radius: 4px;
+  font-size: 0.88em;
+}
+.lessonText .cheat em { color: var(--ink-soft); }
 kbd {
   font-family: var(--font-code);
   font-size: 0.8em;
@@ -431,10 +713,13 @@ kbd {
 }
 .cell .CodeMirror-scroll { min-height: 2.2em; }
 .cell .CodeMirror-gutters { background: var(--paper); border-right: 1px solid var(--rule); }
-.cell .CodeMirror-linenumber { color: #7d8894; padding: 0 0.5rem 0 0.4rem; }
+.cell .CodeMirror-linenumber { color: #5f6b78; padding: 0 0.5rem 0 0.4rem; }   /* 5.4:1 */
 .cell .CodeMirror-cursor { border-left: 2px solid var(--ink); }
 .cell .CodeMirror-selected, .cell .CodeMirror-focused .CodeMirror-selected { background: #ffe0c8; }
 .cell .CodeMirror pre.CodeMirror-line { padding: 0 0.7rem; }
+/* the editor's input is a hidden textarea: the ring goes on the editor,
+   inset, as the cell clips what sticks out */
+.cell .CodeMirror-focused { outline: 3px solid var(--focus); outline-offset: -3px; }
 
 /* syntax colours: all at least 4.8:1 on paper */
 .cell .cm-s-default .cm-keyword { color: #a8361a; }
@@ -587,6 +872,12 @@ kbd {
   background: var(--fat);
   text-decoration: line-through;
 }
+/* a lesson without live runs ("live": false): off for good; a click says why */
+.live-toggle.is-off-here {
+  color: var(--ink-soft);
+  text-decoration: line-through;
+  cursor: help;
+}
 /* what a live run printed is a rehearsal: its errors are fainter, its
    notes ("stopped after a second") quieter still */
 .cell-out.is-rehearsal .cell-error { opacity: 0.6; }
@@ -607,17 +898,127 @@ kbd {
   margin: 0 0 0.3rem;
   font-size: 0.9rem;
 }
+/* Terminal colours in the output (html/ansi.rb): the 16 standard ones, as
+   a terminal with a light background shows them - "white" is a light grey,
+   backgrounds are pale so the ink stays readable on them. Backgrounds come
+   first, so a colour set as well wins over their text colour. */
+.ansi-bg-0 { background: #1a1208; color: #ffffff; }
+.ansi-bg-1 { background: #f2b8b3; }
+.ansi-bg-2 { background: #b9dfbb; }
+.ansi-bg-3 { background: #f5e08a; }
+.ansi-bg-4 { background: #b7cdf2; }
+.ansi-bg-5 { background: #e3bdea; }
+.ansi-bg-6 { background: #b2e3e6; }
+.ansi-bg-7 { background: #dde2e7; }
+.ansi-bg-8 { background: #5f6670; color: #ffffff; }
+.ansi-bg-9 { background: #f7a399; }
+.ansi-bg-10 { background: #9fd6a2; }
+.ansi-bg-11 { background: #ffe066; }
+.ansi-bg-12 { background: #9cbcf5; }
+.ansi-bg-13 { background: #e0a3eb; }
+.ansi-bg-14 { background: #8fdde3; }
+.ansi-bg-15 { background: #ffffff; }
+.ansi-bg-ink { background: var(--ink); color: var(--paper); }
+.ansi-fg-0 { color: #1a1208; }
+.ansi-fg-1 { color: #b3261e; }
+.ansi-fg-2 { color: #2e7d32; }
+.ansi-fg-3 { color: #8d6e00; }
+.ansi-fg-4 { color: #1f5fbf; }
+.ansi-fg-5 { color: #9b2fae; }
+.ansi-fg-6 { color: #00838f; }
+.ansi-fg-7 { color: #858d95; }
+.ansi-fg-8 { color: #5f6670; }
+.ansi-fg-9 { color: #d93a2b; }
+.ansi-fg-10 { color: #3f9b44; }
+.ansi-fg-11 { color: #a67f00; }
+.ansi-fg-12 { color: #3b7be0; }
+.ansi-fg-13 { color: #c04fd4; }
+.ansi-fg-14 { color: #0a96a3; }
+.ansi-fg-15 { color: #aab1b8; }
+.ansi-fg-paper { color: var(--code-bg); }
+.ansi-bold { font-weight: 700; }
+.ansi-faint { opacity: 0.6; }
+.ansi-italic { font-style: italic; }
+.ansi-underline { text-decoration: underline; }
+.ansi-strike { text-decoration: line-through; }
+.ansi-underline.ansi-strike { text-decoration: underline line-through; }
 .cell-result {
   font-family: var(--font-code);
   color: var(--ok);
   font-size: 0.9rem;
+  white-space: pre-wrap;   /* a Python repr (a pandas Series) has several lines */
 }
+/* a pandas DataFrame, as pandas renders it (pycall.rb): a small ruled table
+   in the code font, numbers right-aligned, scrolling sideways when wide */
+.cell-result.py-table {
+  color: var(--ink);
+  white-space: normal;
+  overflow-x: auto;
+}
+.py-table table { border: 0; border-collapse: collapse; font-size: 0.85rem; }   /* pandas writes border="1" */
+.py-table th, .py-table td { padding: 0.2rem 0.7rem; border: 0; border-bottom: 1px solid var(--rule); text-align: right; }
+.py-table thead th { border-bottom: 1.5px solid var(--ink-soft); }
+.py-table tbody th { color: var(--ink-soft); font-weight: 400; }
+.py-table tbody tr:hover { background: var(--fat); }
+/* a Daru table (main.rb daru_result_html) says what it is above, as its inspect does */
+.py-table caption { text-align: left; color: var(--ink-soft); padding-bottom: 0.2rem; }
 .cell-error {
   font-family: var(--font-code);
   color: var(--err);
   white-space: pre-wrap;
   font-size: 0.9rem;
 }
+/* An error explained (friendly_errors.rb, main.rb friendly_error): the
+   headline in red, the cell's line with a caret on a white slip, what to do
+   in print, and Ruby's own message folded away underneath. */
+.friendly-error {
+  border-left: 3px solid var(--err);
+  background: var(--fat);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+.friendly-title {
+  font-weight: 700;
+  color: var(--err);
+  margin-bottom: 0.35rem;
+}
+.friendly-snippet {
+  font-family: var(--font-code);
+  font-size: 0.82rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 0.35rem 0.5rem;
+  margin: 0 0 0.4rem;
+  overflow-x: auto;
+  white-space: pre;
+}
+.friendly-body { margin: 0; line-height: 1.5; }
+.friendly-error code {
+  font-family: var(--font-code);
+  font-size: 0.95em;
+  background: var(--code-bg);
+  padding: 0 0.2em;
+  border-radius: 3px;
+}
+.friendly-original {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+.friendly-original summary { cursor: pointer; }
+.friendly-original pre {
+  font-family: var(--font-code);
+  white-space: pre-wrap;
+  margin: 0.25rem 0 0;
+}
+/* a live run while typing keeps just the headline (main.rb sets
+   .friendly-brief, except when the time limit stopped an endless loop) */
+.cell-out.is-rehearsal .friendly-error { opacity: 0.6; }
+.friendly-brief .friendly-snippet,
+.friendly-brief .friendly-body,
+.friendly-brief .friendly-original { display: none; }
+.friendly-brief .friendly-title { margin-bottom: 0; }
 .cell-image {
   display: block;
   margin: 0.4rem 0;
@@ -628,6 +1029,12 @@ kbd {
   border-radius: 4px;
   background: #fff;
 }
+/* an SVG (a drawing, a chart, a diagram) keeps its own size and stays sharp;
+   the 160px pixelated thumbnail is for small pixel pictures */
+.cell-image[src^="data:image/svg+xml"] {
+  width: auto;
+  image-rendering: auto;
+}
 /* show_pdf: the browser's own PDF viewer, about one page tall */
 .cell-pdf {
   display: block;
@@ -637,6 +1044,22 @@ kbd {
   border: 1px solid var(--rule);
   border-radius: 4px;
   background: #fff;
+}
+/* show_audio: the wave (an SVG as an <img>: the whole sound, and 12 ms of
+   it magnified) above the browser's own player, both 508px wide */
+.cell-audio { margin: 0.4rem 0; max-width: 100%; }
+.cell-wave {
+  display: block;
+  width: 508px;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 0.25rem;
+}
+.cell-audio audio,
+.ws-audio {
+  display: block;
+  width: 508px;
+  max-width: 100%;
 }
 .marker { background: #ffd9d4; border-bottom: 2px solid var(--err); }
 
@@ -661,7 +1084,6 @@ kbd {
   text-decoration: none;
 }
 .cell-download:hover { background: var(--bacon); color: #fff; }
-.cell-download small { opacity: 0.75; }
 
 /* ---------- widgets: windows drawn in the same ink as the cells ---------- */
 .shoes-app, .three-stage, .irb-term, .mini-browser, .file-explorer {
@@ -723,6 +1145,245 @@ kbd {
   touch-action: none;
 }
 
+/* the letter (show_letter, letter.js): an envelope to write a postcode on,
+   and below it what Ruby gets from each box - 8x8 grey squares */
+.letter-widget { margin: 0.7rem 0; max-width: 480px; }
+.letter-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 480 / 300;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  cursor: crosshair;
+  touch-action: none;   /* the pen draws; the page does not scroll */
+}
+.letter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.7rem;
+  margin-top: 0.45rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.letter-clear { font-size: 0.85rem; padding: 0.2rem 0.7rem; }
+.letter-previews { display: inline-flex; gap: 0.35rem; }
+.letter-preview {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  border: 1px solid var(--rule);
+}
+.letter-error {
+  margin-top: 0.4rem;
+  font-family: var(--font-code);
+  font-size: 0.85rem;
+  color: var(--err);
+  white-space: pre-wrap;
+}
+
+/* A Processing sketch (processing.js): its window's canvas, at the size
+   the sketch asked for, narrower if the column is */
+.sketch-stage { margin: 0.7rem 0; max-width: 100%; }
+.sketch-canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  touch-action: none;
+}
+.sketch-canvas:focus-visible { outline: 3px solid var(--accent, #c8372d); outline-offset: 2px; }
+.sketch-print { max-height: 9rem; overflow-y: auto; margin-top: 0.4rem; }
+.sketch-error { margin-top: 0.4rem; }
+
+/* A game (show_game, game.js): a grid of cells on a dark board, a veil
+   with "Click to play" while it does not run, the status line below.
+   Nothing here animates; the game itself moves only once the learner
+   starts it, with a click, Space or Enter. */
+.game-widget {
+  display: inline-block;
+  max-width: 100%;
+  margin: 0.7rem 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.game-widget:focus { outline: none; }
+.game-widget:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 12px; }
+.game-board {
+  position: relative;
+  padding: 6px;
+  border-radius: 10px;
+  background: #2a2119;
+  overflow-x: auto;
+}
+.game-widget.is-running .game-board { box-shadow: 0 0 0 3px var(--fox-light); }
+.game-grid {
+  display: grid;
+  background: #fbf7ee;
+  border-radius: 6px;
+  overflow: hidden;
+  touch-action: none;   /* a swipe steers; the page does not scroll */
+}
+.game-grid > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  background-size: 90% 90%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.game-grid > div.alt { box-shadow: inset 0 0 0 100px rgba(80, 60, 30, 0.045); }
+/* a ruby2d window (ruby2d.rb): its canvas, at the window's size or the
+   column's width */
+.game-canvas {
+  display: block;
+  max-width: 100%;
+  border-radius: 6px;
+  background: #000;
+  touch-action: none;   /* the pointer is the program's */
+}
+/* white on the veil over the light grid: about 6:1 */
+.game-overlay {
+  position: absolute;
+  inset: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-radius: 6px;
+  background: rgba(42, 33, 25, 0.72);
+  color: #fff;
+  font: 600 1.05rem var(--font-hand);
+  text-align: center;
+  cursor: pointer;
+}
+.game-overlay[hidden] { display: none; }
+.game-overlay small { font: 400 0.85rem var(--font-print); }
+.game-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.2rem 1rem;
+  min-height: 1.4em;
+  padding: 0.3rem 0.2rem 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+.game-hint { font-size: 0.8rem; }
+.game-log {
+  max-height: 6.5em;
+  overflow: auto;
+  margin: 0.3rem 0 0;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  background: var(--code-bg);
+  font-size: 0.8rem;
+}
+.game-log:empty { display: none; }
+.game-error { padding-top: 0.3rem; color: var(--err); font-size: 0.9rem; white-space: pre-wrap; }
+
+/* ⏯ Step through (stepper.js, a lesson with "stepper": true): a quieter
+   button than ▶ beside it; below the cell the recorded run - Chunky's
+   sentence, the variables of each frame beside the output so far, a
+   slider with buttons. The line about to run is marked in the editor
+   itself, as the highlighter marks the current lesson. */
+.cell-toolbar .step-cell {
+  margin-right: 0.5rem;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--paper);
+}
+.cell-toolbar .step-cell:hover { background: var(--fat); }
+.cell-toolbar .step-cell[disabled] { opacity: 0.45; cursor: progress; }
+.cell .CodeMirror .step-now { background: var(--highlight); box-shadow: inset 3px 0 0 var(--bacon); }
+.cell .CodeMirror .step-now.step-call { background: #dbe8f7; box-shadow: inset 3px 0 0 #2f6db5; }
+.cell .CodeMirror .step-now.step-return { background: #dcefdc; box-shadow: inset 3px 0 0 var(--ok); }
+.cell .CodeMirror .step-now.step-error { background: #f9d2cf; box-shadow: inset 3px 0 0 var(--err); }
+.stepper {
+  margin: 0 0 0.7rem;
+  padding: 0.6rem 0.7rem 0.4rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 8px;
+  background: var(--paper);
+}
+.step-say {
+  margin: 0 0 0.6rem;
+  padding: 0.4rem 0.7rem;
+  font: 1rem/1.35 var(--font-hand);
+  background: var(--fat);
+  border: 1.5px solid var(--ink);
+  border-radius: 10px;
+}
+.step-say.is-error { background: #fbe3e1; }
+.step-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.7rem;
+  align-items: start;
+}
+.step-frames { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
+.step-frame { border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.step-frame.is-top { border-color: var(--ink-soft); }
+.step-frame-head {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: var(--code-bg);
+}
+.step-pass { margin-left: auto; color: var(--bacon); }
+.step-vars { width: 100%; border-collapse: collapse; font: 0.85rem/1.4 var(--font-code); }
+.step-vars th, .step-vars td { padding: 0.1rem 0.5rem; border-top: 1px solid #edf0f3; vertical-align: top; text-align: left; }
+.step-vars th { width: 1%; white-space: nowrap; font-weight: 400; color: var(--ink-soft); }
+.step-vars td { word-break: break-all; }
+.step-vars tr.changed td { background: #fff2b8; }
+.step-vars tr.earlier th::after { content: " ⟲"; color: var(--ink-soft); }
+.step-empty { margin: 0; padding: 0.2rem 0.5rem; font-size: 0.8rem; font-style: italic; color: var(--ink-soft); }
+.step-output { min-width: 0; }
+.step-out-label { margin: 0 0 0.15rem; font-size: 0.75rem; font-weight: 700; color: var(--ink-soft); }
+.step-out {
+  margin: 0;
+  min-height: 2.2em;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  background: var(--code-bg);
+  font: 0.85rem/1.4 var(--font-code);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.step-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.6rem;
+  margin-top: 0.6rem;
+}
+.step-btns { display: flex; gap: 0.25rem; }
+.step-controls button {
+  min-width: 2.2rem;
+  padding: 0.2rem 0.45rem;
+  font-size: 0.95rem;
+  background: var(--paper);
+}
+.step-controls button:hover { background: var(--fat); }
+.step-controls button[aria-disabled="true"] { opacity: 0.35; cursor: default; background: var(--paper); }
+.step-controls .step-play { padding: 0.2rem 0.7rem; font-size: 0.85rem; white-space: nowrap; }
+.step-slider { flex: 1 1 8rem; min-width: 6rem; margin: 0; accent-color: var(--fox); }
+.step-count { font-size: 0.85rem; font-weight: 600; color: var(--ink-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.step-note { margin: 0.4rem 0 0; font-size: 0.85rem; color: var(--ink-soft); }
+.step-note.is-warn { color: var(--bacon); }
+.step-legend { margin: 0.4rem 0 0; font-size: 0.75rem; color: var(--ink-soft); }
+@media (max-width: 620px) {
+  .step-body { grid-template-columns: minmax(0, 1fr); }
+}
+
 /* IRB terminal */
 .irb-term {
   background: #211a13;
@@ -755,6 +1416,89 @@ kbd {
   caret-color: #8ee08f;
 }
 .irb-term:focus-within { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* Spinel (spinel.js): a program's way through the compiler, and IRB on it */
+.spinel-box {
+  margin: 0.7rem 0;
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  background: var(--paper);
+  font-size: 0.9rem;
+}
+.spinel-head { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.35rem; }
+.spinel-name { font-weight: 700; }
+.spinel-version { color: var(--ink-soft); font-size: 0.8rem; }
+.spinel-steps { list-style: none; margin: 0 0 0.4rem; padding: 0; }
+.spinel-step {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.15rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.spinel-step::before { content: "○"; margin-right: 0.45rem; color: var(--ink-soft); }
+.spinel-step.is-busy::before { content: "◌"; color: var(--fox); }
+.spinel-step.is-done::before { content: "✓"; color: var(--ok); }
+.spinel-step.is-failed::before { content: "✗"; color: var(--err); }
+.spinel-step-name { flex: 1; }
+.spinel-step-time { font-family: var(--font-code); color: var(--ink-soft); white-space: nowrap; }
+.spinel-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.spinel-out { margin: 0.45rem 0; padding: 0.4rem 0.55rem; background: var(--code-bg); border-radius: 4px; }
+.spinel-problem { margin: 0.45rem 0; padding-left: 0.6rem; border-left: 3px solid var(--err); color: var(--err); }
+.spinel-problem pre { margin: 0.25rem 0 0; white-space: pre-wrap; font-family: var(--font-code); font-size: 0.82rem; color: var(--ink); }
+.spinel-c { margin: 0.45rem 0; }
+.spinel-c summary { cursor: pointer; color: var(--bacon); }
+.spinel-c pre {
+  max-height: 320px;
+  overflow: auto;
+  margin: 0.35rem 0 0;
+  padding: 0.5rem 0.6rem;
+  background: var(--code-bg);
+  font-family: var(--font-code);
+  font-size: 0.75rem;
+  white-space: pre;
+}
+.spinel-download { display: inline-block; margin: 0.3rem 0; }
+.spinel-compare { margin: 0.4rem 0 0; }
+.spinel-compare.is-same::before { content: "✓ "; color: var(--ok); }
+.spinel-compare.is-different::before { content: "≠ "; color: var(--err); }
+.spinel-compare.is-cruby { color: var(--ink-soft); }
+.spinel-compare pre { margin: 0.25rem 0 0; }
+
+.spinel-term {
+  margin: 0.7rem 0;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  background: #211a13;
+  padding: 0.75rem 0.95rem;
+  font-family: var(--font-code);
+  font-size: 0.9rem;
+  color: #f2e8da;
+}
+.spinel-term-history { max-height: 320px; overflow-y: auto; margin-bottom: 0.2rem; }
+.spinel-term-echo { white-space: pre-wrap; }
+.spinel-term-out { margin: 0; color: #cfe3ff; white-space: pre-wrap; font-family: inherit; }
+.spinel-term-result { color: #8ee08f; white-space: pre-wrap; }
+.spinel-term-error { color: #ff9d94; white-space: pre-wrap; }
+.spinel-term-note { color: #f5bf4f; font-style: italic; }
+.spinel-term-time { color: #a89a8a; font-size: 0.78rem; }
+.spinel-term-line { display: flex; align-items: center; gap: 0.45rem; }
+.spinel-term-prompt { color: #f5bf4f; white-space: nowrap; }
+.spinel-term-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-family: inherit;
+  font-size: inherit;
+  caret-color: #8ee08f;
+}
+.spinel-term-input:disabled { opacity: 0.5; }
+.spinel-term:focus-within { outline: 3px solid var(--focus); outline-offset: 2px; }
+:lang(ja) .spinel-term-note { font-style: normal; }
 
 /* mini browser */
 .mini-browser {
@@ -817,10 +1561,8 @@ button.mb-go {
   min-height: 60px;
   background: var(--paper);
 }
-.mb-view h1, .mb-view h2 { margin: 0.2rem 0 0.5rem; }
-.mb-view a { color: #1a5dc8; text-decoration: underline; cursor: pointer; }
-.mb-view pre { margin: 0; white-space: pre-wrap; font-size: 0.88rem; }
-.mb-error { color: var(--err); }
+/* the page inside .mb-view is in a shadow root: its styles are
+   MB_PAGE_STYLE in main.rb */
 
 /* file explorer (simulated filesystem) */
 .file-explorer {
@@ -940,7 +1682,7 @@ button.reset:hover { background: var(--paper); color: var(--ink); border-color: 
   background: transparent;
   border: 0;
   color: var(--ink-soft);
-  opacity: 0.45;
+  opacity: 0.8;           /* 4.5:1; full at hover and focus */
 }
 .ws-list li:hover button.ws-del, .ws-files button.ws-del:focus-visible,
 .ws-list li:hover button.ws-ren, .ws-files button.ws-ren:focus-visible { opacity: 1; }
@@ -993,6 +1735,17 @@ button.reset:hover { background: var(--paper); color: var(--ink); border-color: 
 }
 /* ChunkyPNG's 8x8 pixels, drawn big enough to see */
 .ws-preview img.is-tiny { width: 160px; image-rendering: pixelated; }
+/* a SQLite database: a few words in place of the editor */
+.ws-preview p.ws-database {
+  display: inline-block;
+  max-width: 34rem;
+  margin: 1.5rem 0;
+  padding: 0.9rem 1.1rem;
+  text-align: left;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
 .ws-preview iframe.ws-pdf {
   display: block;
   width: 100%;
@@ -1053,6 +1806,9 @@ button.reset:hover { background: var(--paper); color: var(--ink); border-color: 
 .pd-connected { font-weight: 600; }
 .pd-error, .pd-message.is-error { color: var(--err); }
 .pd-busy { color: var(--ink-soft); font-style: italic; }   /* the offline copy being saved */
+/* Python in the offline copy or not */
+.pd-check { display: flex; align-items: flex-start; gap: 0.5rem; margin: 0.2rem 0 0.8rem; cursor: pointer; }
+.pd-check input { margin: 0.25rem 0 0; accent-color: var(--fox); flex: none; }
 .pd-message { min-height: 1.6em; margin: 1rem 0 0; font-weight: 600; }
 .pd-message.is-ok { color: var(--ok); }
 
@@ -1129,25 +1885,52 @@ footer {
 footer p { margin: 0.4rem 0; }
 footer a { color: var(--ink); }
 
-/* ---------- small screens: the lesson first, the index after it ---------- */
+/* ---------- small screens: the lesson fills the page, the index is a drawer
+   that slides in over it (shell/app.rb: App::NARROW is this width) ---------- */
 @media (max-width: 820px) {
-  header { gap: 0.6rem; padding: 0.6rem 1rem; }
+  header, body.sidebar-closed header { gap: 0.6rem; padding: 0.6rem 1rem 0.6rem 3.5rem; }
   header #mascot { width: 44px; height: 44px; }
   header h1 { font-size: 1.3rem; }
   header p { font-size: 0.85rem; }
-  header .nav-jump { display: block; }
-  header select, header .nav-jump { padding: 0.35rem 0.5rem; }
+  header select { padding: 0.35rem 0.5rem; }
 
-  .layout { grid-template-columns: minmax(0, 1fr); padding: 0 1rem 0 0.5rem; }
-  main { padding: 1.4rem 0 2rem 1rem; }
-  .sidebar {
-    order: 2;
-    position: static;
-    max-height: none;
-    overflow: visible;
-    padding: 1.5rem 0 1rem 0.5rem;
-    border-top: 2px solid var(--ink);
+  .column { margin-left: 0.5rem; }
+  main { padding: 1.4rem 1rem 2rem 1rem; }
+  .sidebar-toggle { top: 0.85rem; left: 0.6rem; }
+  body.sidebar-closed .sidebar-toggle { background: transparent; border-color: transparent; }
+  /* visibility follows the slide, so a closed drawer leaves the tab order
+     instead of taking the keyboard somewhere nobody can see */
+  .sidebar,
+  body.sidebar-closed .sidebar {
+    display: flex;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 30;
+    width: min(19rem, 86vw);
+    height: auto;
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition: transform 0.18s, visibility 0s 0.18s;
   }
+  body.sidebar-open .sidebar {
+    transform: none;
+    visibility: visible;
+    transition: transform 0.18s;
+    border-right: 2px solid var(--ink);
+    box-shadow: 0 0 28px rgba(26, 18, 8, 0.25);
+  }
+  .sidebar-head { padding-top: 0.95rem; }
+  /* the page behind an open drawer steps back; a tap on it closes the drawer */
+  body.sidebar-open::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 25;
+    background: rgba(26, 18, 8, 0.35);
+  }
+  nav#lessonNav a.lesson { padding-top: 0.42rem; padding-bottom: 0.42rem; }
   .lessonText h2 { font-size: 1.7rem; }
   .cell .CodeMirror { font-size: 14px; }
   .workshop { grid-template-columns: minmax(0, 1fr); }
@@ -1183,4 +1966,5 @@ footer a { color: var(--ink); }
   #chunkyChat .chat-message { animation: none; }
   .cell.running .CodeMirror { animation: none; opacity: 0.55; }
   button:active { transform: none; }
+  .sidebar, body.sidebar-open .sidebar, #navBarFill, .nav-chevron, #gemsPanel summary::after { transition: none; }
 }

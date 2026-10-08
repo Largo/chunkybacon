@@ -1,14 +1,16 @@
 # Writes html/offline-files.txt: what the offline copy holds (html/sw.js,
 # docs/HANDOVER.md §6c) - every file the page may load, i.e. everything
 # under html/ but the .gz copies (nginx serves them in place of the file),
-# notices and the worker's own files. Only adding, renaming or deleting a
-# file changes the list; an edited file is noticed by its ETag.
+# notices, the worker's own files and the embedded cell's (embed.html and
+# its embed*.js/css: other sites' pages load it, never the offline course).
+# Only adding, renaming or deleting a file changes the list; an edited file
+# is noticed by its ETag.
 #
 #   ruby tools/offline_files.rb           # rewrite the list
 #   ruby tools/offline_files.rb --check   # exit 1 if it is out of date
 HTML = File.expand_path("../html", __dir__)
 LIST = File.join(HTML, "offline-files.txt")
-SKIP = /\.(gz|md)$|^(sw\.js|offline-files\.txt)$|^compile\/toolchain\//
+SKIP = /\.(gz|md)$|^(sw\.js|offline-files\.txt)$|^embed[-.]|^compile\/toolchain\//
 
 HEADER = <<~TEXT
   # The files the offline copy holds (html/sw.js): written by

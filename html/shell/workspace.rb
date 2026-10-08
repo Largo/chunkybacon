@@ -11,14 +11,17 @@ module ChunkyShell
     OPEN_KEY = "chunkyui_ws_open"   # no "chunky_": a view setting, not progress
     # element properties; anything else in node(...) is an attribute
     PROPS = %w[className type id textContent hidden disabled value title placeholder
-               spellcheck accept multiple rows open].freeze
+               spellcheck accept multiple rows open checked].freeze
     RUBY_FILE = /\.rb$|^(Gemfile|Rakefile)$/
-    # pictures and PDFs - data: URLs in storage.js - show instead of the
-    # editor; matched against the lowercased name
-    PICTURE_OR_PDF = /\.(png|jpg|jpeg|gif|webp|pdf)$/
+    # pictures, PDFs, sounds and SQLite databases - data: URLs in storage.js -
+    # show instead of the editor (a sound as a player, a database as a few
+    # words about it); matched against the lowercased name
+    PICTURE_OR_PDF = /\.(png|jpg|jpeg|gif|webp|pdf|wav|db|sqlite|sqlite3)$/
     PDF_FILE = /\.pdf$/
+    AUDIO_FILE = /\.wav$/
+    DATABASE_FILE = /\.(db|sqlite|sqlite3)$/
     TEXT_FILES = ".rb,.txt,.csv,.tsv,.json,.md,.yml,.yaml,.erb,.html,.css,.xml"
-    UPLOADS = "#{TEXT_FILES},.png,.jpg,.jpeg,.gif,.webp,.pdf"
+    UPLOADS = "#{TEXT_FILES},.png,.jpg,.jpeg,.gif,.webp,.pdf,.wav,.db,.sqlite,.sqlite3"
 
     def initialize(app, storage = JSG.w.ChunkyStorage, bridge = JSG.w.ChunkyBridge, offline = JSG.w.ChunkyOffline)
       @app = app
@@ -256,29 +259,32 @@ module ChunkyShell
       @offline_shown = offline_look
       if state == "off"
         out << node("p", {}, [t("offlineExplain")])
-        out << node("div", { className: "pd-actions" }, [
-          action_button("pd-secondary", t("offlineEnable")) { offline_act(@offline.enable) }
-        ])
+        actions = [action_button("pd-secondary", t("offlineEnable")) { offline_act(@offline.enable) }]
       elsif state == "loading"
         out << node("p", { className: "pd-busy" }, [loading_text])
-        out << node("div", { className: "pd-actions" }, [
-          action_button("pd-secondary", t("offlineDisable")) { offline_act(@offline.disable) }
-        ])
+        actions = [action_button("pd-secondary", t("offlineDisable")) { offline_act(@offline.disable) }]
       elsif state == "error"
         out << node("p", { className: "pd-error" }, [t("offlineError", @offline.error)])
-        out << node("div", { className: "pd-actions" }, [
+        actions = [
           action_button("pd-secondary", t("offlineRetry")) { offline_act(@offline.enable) },
           action_button("pd-secondary", t("offlineDisable")) { offline_act(@offline.disable) }
-        ])
+        ]
       else
         out << node("p", { className: "pd-connected" }, ["✓ #{t('offlineReady', @offline.savedAt(@app.lang))}"])
         out << node("p", { className: "pd-busy" }, [t("offlineUpdating")]) if @offline.updating
         out << node("p", {}, [t("offlineFromCopy")]) if @offline.fromCopy
-        out << node("div", { className: "pd-actions" }, [
-          action_button("pd-secondary", "#{t('offlineDisable')} (#{@offline.sizeMb} MB)") { offline_act(@offline.disable) }
-        ])
+        actions = [action_button("pd-secondary", "#{t('offlineDisable')} (#{@offline.sizeMb} MB)") { offline_act(@offline.disable) }]
       end
-      out
+      out << python_choice
+      out << node("div", { className: "pd-actions" }, actions)
+    end
+
+    # whether Python (the PyCall lessons, ~52 MB) goes into the copy; a
+    # change reaches a copy that exists at once (offline.js)
+    def python_choice
+      box = node("input", { type: "checkbox", checked: @offline.python })
+      listen(box, "change", proc { offline_act(@offline.setPython(box.checked)) })
+      node("label", { className: "pd-check" }, [box, t("offlinePython")])
     end
 
     def load_progress(input)
@@ -329,6 +335,15 @@ module ChunkyShell
     def ruby?(path) = !(path.split("/").last.to_s =~ RUBY_FILE).nil?
     def binary?(path) = !(path.to_s.downcase =~ PICTURE_OR_PDF).nil?
     def pdf?(path) = !(path.to_s.downcase =~ PDF_FILE).nil?
+    def audio?(path) = !(path.to_s.downcase =~ AUDIO_FILE).nil?
+    def database?(path) = !(path.to_s.downcase =~ DATABASE_FILE).nil?
+
+    # a data: URL's size, as "12 KB"
+    def data_size(value)
+      encoded = value.to_s.split(",", 2).last.to_s
+      bytes = encoded.length * 3 / 4 - (encoded.end_with?("==") ? 2 : (encoded.end_with?("=") ? 1 : 0))
+      bytes < 1024 ? "#{bytes} B" : "#{bytes / 1024} KB"
+    end
     def files = @s.files.list.to_a
 
     def preferred(list)
@@ -378,8 +393,10 @@ module ChunkyShell
     end
 
     # A picture or PDF in place of the editor: the picture from its data:
-    # URL, the PDF in the browser's own viewer from a Blob URL. A tiny
-    # picture (ChunkyPNG's 8x8) is drawn bigger, pixel by pixel.
+    # URL, the PDF in the browser's own viewer from a Blob URL, a sound in a
+    # player named after its file, from a Blob URL too. A tiny picture
+    # (ChunkyPNG's 8x8) is drawn bigger, pixel by pixel. A SQLite database
+    # gets a few words: what it is, how big, how to use it.
     def show_preview(path)
       box = el("wsPreview")
       return unless box
@@ -387,9 +404,14 @@ module ChunkyShell
       editor_box&.classList&.add("is-preview")
       release_preview_url
       value = @s.files.read(path).to_s
-      shown = if pdf?(path)
+      shown = if database?(path)
+                node("p", { className: "ws-database" }, [t("wsDatabase", data_size(value))])
+              elsif pdf?(path)
                 @preview_url = @bridge.objectUrl(value)
                 node("iframe", { className: "ws-pdf", title: path, src: "#{@preview_url}#view=FitH" })
+              elsif audio?(path)
+                @preview_url = @bridge.objectUrl(value)
+                node("audio", { className: "ws-audio", controls: "", "aria-label": path, src: @preview_url })
               else
                 picture = node("img", { alt: path, src: value })
                 listen(picture, "load", proc { picture.classList.add("is-tiny") if picture.naturalWidth < 160 })

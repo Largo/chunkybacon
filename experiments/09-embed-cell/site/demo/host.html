@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A blog post with runnable Ruby (Chunky Bacon embed demo)</title>
+  <style>
+    body { font: 17px/1.6 Georgia, serif; max-width: 42rem; margin: 2rem auto; padding: 0 1rem; color: #222; background: #fbfaf7; }
+    h1 { font-size: 1.8rem; line-height: 1.2; }
+    pre { background: #eee; padding: 0.8rem; border-radius: 4px; overflow-x: auto; }
+    .spacer { height: 140vh; border-left: 3px dotted #ccc; padding-left: 1rem; color: #888; }
+  </style>
+</head>
+<body>
+  <h1>Ruby blocks, in five minutes</h1>
+  <p>This page stands in for anyone's blog post. It lives on another site
+     (<code>blog.test</code>); the cells below come from the course's
+     (<code>embed.test</code>), through one script tag.</p>
+
+  <p>The smallest one - a <code>&lt;pre data-chunky&gt;</code>:</p>
+  <pre data-chunky>
+    words = %w[chunky bacon is chunky]
+    words.tally
+  </pre>
+
+  <p>A gem, and a picture below the cell (<code>data-gems="chunky_png"</code>):</p>
+  <pre data-chunky data-gems="chunky_png">
+    require "chunky_png"
+
+    image = ChunkyPNG::Image.new(16, 16, ChunkyPNG::Color::WHITE)
+    16.times { |i| image[i, i] = image[15 - i, i] = ChunkyPNG::Color.rgb(232, 114, 42) }
+    show_image image
+  </pre>
+
+  <p>A hand-written iframe (<code>make_embed_url.rb examples/fizzbuzz.rb --load click</code>) - Ruby
+     loads only when you press Run:</p>
+  <iframe id="handwritten" src="http://embed.test:18109/embed.html#code=U1Zwy6yqciqtqtJRKMlIVQgqTapUKE-s5NIw1NMzNNXUy00sUEjJV6jJq-FSUMhMU8hTUFUwNFWwtVUwAGnIU1CCGaAEVJCaUwxVY4yuBFUaxQQk3akKeSBGXgoXEAMA&lang=en&load=click&id=handwritten" title="Ruby code you can run" loading="lazy" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox allow-downloads" style="width:100%;border:0;height:246px"></iframe>
+
+  <div class="spacer">(a long stretch of prose: the cell below is out of view, so its frame and its Ruby wait)</div>
+
+  <p>What can embedded code see of the course? (Spoiler: nothing - it runs in an origin of its own.)</p>
+  <pre data-chunky id="probe">
+    require "js"
+    def peek
+      yield
+    rescue Exception => e
+      "blocked (#{e.class}: #{e.message[0, 60]})"
+    end
+    {
+      origin: JS.global[:origin].to_s,
+      local_storage: peek { JS.global[:localStorage].getItem("chunky_done").to_s },
+      indexed_db: peek { JS.global[:indexedDB].open("probe"); "open" },
+      cookie: peek { JS.global[:document][:cookie].to_s }
+    }
+  </pre>
+
+  <script>
+    // the course's address: ?embed=http://127.0.0.1:18109/ when browsing
+    // by hand, embed.test under Playwright (host-resolver rules)
+    (function () {
+      var base = new URLSearchParams(location.search).get("embed") || "http://embed.test:18109/";
+      var s = document.createElement("script");
+      s.src = base + "embed.js";
+      document.head.appendChild(s);
+    })();
+  </script>
+</body>
+</html>

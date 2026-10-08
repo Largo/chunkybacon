@@ -1,0 +1,19 @@
+# Accepted findings of lint_lessons.rb. One key glob per line (File.fnmatch;
+# "[" starts a character class, so match brackets with "*"); --verbose prints
+# each finding's key. Keep a reason after "#".
+
+# the capstone's HTML string is one line on purpose (it is the page body)
+long-line@tl-capstone*cell3@L14
+
+# rubykaigi's "Join in" box is not an "on your machine" box
+offweb-label@rubykaigi*cell14@*
+
+# rubykaigi [ja]: the talk's message after "言いたいことはこうです：" and the
+# verdict on the prime regex are punchlines - plain form on purpose
+plain-form@rubykaigi*ja*cell1@*
+plain-form@rubykaigi*ja*cell7@*
+
+# sequel [de]: the German column names push the puts line to 102 columns; a
+# shorter line would need a different idiom than en or different output, and
+# at 98 it would still scroll sideways like the 77-100 column lines do
+long-line@sequel*de*cell5@L2

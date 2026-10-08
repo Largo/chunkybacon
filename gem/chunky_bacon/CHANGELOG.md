@@ -1,5 +1,28 @@
 # Changelog
 
+## Unreleased
+
+- `show_image vis`, as in the course's lessons 31 and 32 (SciRuby): a chart
+  that writes SVG - a Rubyvis panel, rendered first - saved as
+  `chunky-image-N.svg` and opened. `show_image` takes `alt:`, as on the page.
+- `show_game`, as in the course's lesson 41 (Chunky's Snake), raises
+  `ChunkyBacon::NotHere`: the page runs a game's loop and reads its keys;
+  the message names ruby2d and gosu for a game on a computer.
+- `show_audio wav(samples)` / `show_audio "lied.wav"` / `show_audio samples`,
+  as in the course's lesson 40 (Ruby makes music): the sound saved as
+  `chunky-sound-N.wav` (an Array of samples written as 16-bit mono) and
+  opened in the computer's player.
+- `turtle { 4.times { forward 100; right 90 } }`, as in the course's lesson
+  10: Chunky draws as the turtle (the course's own `turtle.rb`), the
+  drawing saved as an animated `chunky-image-N.svg` and opened.
+- `show_objects a: a, b: b` / `show_objects binding`, as in the course's
+  lessons 7, 8 and 11: the objects behind the names as boxes and arrows
+  (the course's own `object_graph.rb`), saved as `chunky-image-N.svg` and
+  opened. `show_image` takes SVG too.
+- `show_plot` / `show_plot fig`, as in the course's matplotlib lesson: the
+  current (or that) matplotlib figure, through the pycall gem, saved as
+  `chunky-plot-N.png`, opened and closed.
+
 ## 0.1.3
 
 - `show_image` takes JPEGs, as the course's lesson 22 (pure_jpeg) makes

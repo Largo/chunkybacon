@@ -1,0 +1,9 @@
+{
+  "name": "chunkybacon-a11y-audit",
+  "private": true,
+  "type": "module",
+  "description": "Accessibility audit (axe-core + scripted keyboard checks) for the Chunky Bacon course",
+  "dependencies": {
+    "axe-core": "^4.13.0"
+  }
+}

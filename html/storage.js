@@ -22,11 +22,14 @@
   var MAX_FILE_BYTES = 1000000;            // workshop files read from a folder
   var MAX_FILES = 300;
   var TEXT_NAME = /\.(rb|txt|csv|tsv|json|md|ya?ml|erb|html?|css|js|xml|svg|ini|toml|rake|gemspec|log)$|^(Gemfile|Rakefile)$/i;
-  // pictures and PDFs: data: URLs in localStorage and in a run's snapshot,
-  // real binary files in a folder; the workshop previews them (workshop.rb
-  // has the same list)
+  // pictures, PDFs, sounds (WAV) and SQLite databases: data: URLs in
+  // localStorage and in a run's snapshot, real binary files in a folder; the
+  // workshop previews the pictures and PDFs, plays a sound and describes a
+  // database (workshop.rb has the same list)
+  var SQLITE = "application/vnd.sqlite3";
   var BINARY_TYPES = { png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg", gif: "image/gif",
-                       webp: "image/webp", pdf: "application/pdf" };
+                       webp: "image/webp", pdf: "application/pdf", wav: "audio/wav",
+                       db: SQLITE, sqlite: SQLITE, sqlite3: SQLITE };
   function binaryType(path) {
     var m = /\.([A-Za-z0-9]+)$/.exec(String(path));
     return (m && BINARY_TYPES[m[1].toLowerCase()]) || null;

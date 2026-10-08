@@ -4,3 +4,10 @@ test/lessons.json
 # the in-browser Spinel toolchain (tools/compile/build.sh): about 100 MB, built, not tracked
 /html/compile/toolchain/
 /tools/compile/.work/
+# one-off helper scripts (EDR-friendly: scripts live in the repo, not in %TEMP%)
+/tmp/
+# Spinel for the browser: built on deploy by tools/build_spinel.rb, never committed
+/html/assets/spinel/
+/html/assets/spinel.new/
+/html/assets/spinel.old/
+/.cache/

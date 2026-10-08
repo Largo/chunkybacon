@@ -71,11 +71,62 @@ class HelpersTest < Minitest::Test
     assert_equal ["fuchs.png"], Dir.children(@dir)
   end
 
+  # what a Rubyvis panel does (the course's lessons 31 and 32): SVG once rendered
+  class Chart
+    def render = @rendered = true
+    def to_svg = @rendered ? %(<svg xmlns="http://www.w3.org/2000/svg"></svg>) : ""
+  end
+
+  def test_show_image_renders_a_chart_and_saves_its_svg
+    helper_output { show_image Chart.new, alt: "a chart" }
+    files = Dir.children(@dir)
+    assert_equal 1, files.size
+    assert_match(/\Achunky-image-\d+\.svg\z/, files.first)
+    assert File.binread(File.join(@dir, files.first)).start_with?("<svg")
+  end
+
+  # the course's boxes and arrows (lessons 7, 8, 11), as an SVG file
+  def test_show_objects_saves_an_svg
+    breakfast = ["egg", "toast"]
+    _, err = helper_output { assert_nil show_objects(breakfast: breakfast, same: breakfast) }
+    files = Dir.children(@dir)
+    assert_equal 1, files.size
+    assert_match(/\Achunky-image-\d+\.svg\z/, files.first)
+    svg = File.read(File.join(@dir, files.first))
+    assert svg.start_with?("<svg")
+    assert_includes svg, "breakfast"
+    assert_includes err, "saved #{files.first}"
+  end
+
+  # the course's turtle graphics (lesson 10), as an SVG file
+  def test_turtle_saves_an_svg
+    t = nil
+    _, err = helper_output { t = turtle { 4.times { forward 100; right 90 } } }
+    assert t.regular_polygon?(4, 100)
+    files = Dir.children(@dir)
+    assert_equal 1, files.size
+    assert_match(/\Achunky-image-\d+\.svg\z/, files.first)
+    assert File.read(File.join(@dir, files.first)).start_with?("<svg")
+    assert_includes err, "saved #{files.first}"
+  end
+
   def test_show_pdf_saves_the_document
     helper_output { show_pdf PDF }
     pdfs = Dir.children(@dir).grep(/\Achunky-document-\d+\.pdf\z/)
     assert_equal 1, pdfs.size
     assert_equal PDF, File.binread(File.join(@dir, pdfs.first))
+  end
+
+  def test_show_audio_saves_a_wav_and_writes_samples_as_one
+    wav = "RIFF".b + "\x24\x00\x00\x00WAVE".b
+    helper_output { show_audio wav }
+    helper_output { show_audio [0.0, 1.0, -1.0, 2.0], rate: 8000 }
+    sounds = Dir.children(@dir).grep(/\Achunky-sound-\d+\.wav\z/).sort
+    assert_equal 2, sounds.size
+    assert_equal wav, File.binread(File.join(@dir, sounds.first))
+    written = File.binread(File.join(@dir, sounds.last))
+    assert_equal ["RIFF", 44, "WAVE", 1, 8000, 16], written.unpack("a4Va4x8vx2Vx6v")
+    assert_equal [0, 32_767, -32_767, 32_767], written.byteslice(44..).unpack("s<*"), "clamped to -1..1"
   end
 
   def test_mock_get_answers_like_the_course_page
@@ -100,10 +151,59 @@ class HelpersTest < Minitest::Test
     assert install_gem("minitest")
   end
 
+  # what the pycall gem gives for matplotlib.pyplot, as far as show_plot uses it
+  class FakePyplot
+    attr_reader :closed
+
+    Figure = Struct.new(:label) do
+      def savefig(path) = File.binwrite(path, PNG + label)
+    end
+
+    def initialize = @closed = []
+    def gcf = Figure.new("current")
+    def close(figure) = @closed << figure
+  end
+
+  def with_fake_pycall(plt)
+    pycall = Object.const_set(:PyCall, Module.new)
+    pycall.define_singleton_method(:import_module) { |name| name == "matplotlib.pyplot" ? plt : raise(name) }
+    yield
+  ensure
+    Object.send(:remove_const, :PyCall)
+  end
+
+  def test_show_plot_saves_the_figure_as_a_png_and_closes_it
+    plt = FakePyplot.new
+    fig = FakePyplot::Figure.new("given")
+    with_fake_pycall(plt) { helper_output { show_plot fig; show_plot } }
+    files = Dir.children(@dir).sort_by { |f| f[/\d+/].to_i }
+    assert(files.all? { |f| f.match?(/\Achunky-plot-\d+\.png\z/) })
+    assert_equal [PNG + "given", PNG + "current"], files.map { |f| File.binread(File.join(@dir, f)) }
+    assert_equal %w[given current], plt.closed.map(&:label)
+  end
+
+  def test_show_plot_closes_the_figure_when_saving_fails
+    plt = FakePyplot.new
+    broken = FakePyplot::Figure.new("broken")
+    def broken.savefig(_path) = raise(IOError, "disk full")
+    with_fake_pycall(plt) { assert_raises(IOError) { show_plot broken } }
+    assert_equal %w[broken], plt.closed.map(&:label)
+  end
+
+  def test_show_plot_without_pycall_says_what_to_do
+    error = assert_raises(ChunkyBacon::NotHere) { show_plot }
+    assert_includes error.message, "gem install pycall"
+  end
+
   def test_show_three_and_show_shoes_say_what_to_do
     error = assert_raises(ChunkyBacon::NotHere) { show_three(:scene, :camera) }
     assert_includes error.message, "three-rb"
     error = assert_raises(ChunkyBacon::NotHere) { show_shoes(width: 300) { para "hi" } }
     assert_includes error.message, "scarpe app.rb"
+  end
+
+  def test_show_game_says_what_to_do
+    error = assert_raises(ChunkyBacon::NotHere) { show_game(width: 16, height: 12) { |g| g.every(0.15) {} } }
+    assert_includes error.message, "ruby2d"
   end
 end

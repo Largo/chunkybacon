@@ -18,6 +18,8 @@
 # The DOM is a small tree: innerHTML is parsed (well-formed markup only),
 # and getElementById / querySelector(All) / closest understand the selectors
 # the shell uses: tag, #id, .class, [attr], [attr='value'], combined.
+# document.activeElement follows focus(); like Chrome, it falls back to
+# <body> when the focused element turns disabled or leaves the tree.
 # storage.js (window.ChunkyStorage) and offline.js (window.ChunkyOffline) are
 # Hash-backed fakes, CodeMirror (window.cellEditors) a fake editor per
 # initCell.
@@ -211,6 +213,7 @@ module JS
     end
 
     def js_set(key, value)
+      root.blur(self) if key == "disabled" && value && root.is_a?(Document)
       case key
       when "id" then attrs["id"] = value
       when "className" then attrs["class"] = value.to_s
@@ -238,6 +241,7 @@ module JS
     end
 
     def descendants = elements.flat_map { |e| [e] + e.descendants }
+    def root = parent ? parent.root : self
 
     # ---- DOM methods (JS functions on the element) ----
     def js_getAttribute(name) = attrs[name.to_s]
@@ -269,7 +273,11 @@ module JS
     end
 
     def js_remove = parent&.children&.delete(self)
-    def js_focus = (props["focused"] = true) && nil
+    def js_focus
+      props["focused"] = true
+      root.focused = self if root.is_a?(Document)
+      nil
+    end
     def js_click = JS.fire(wrap, "click")
     def js_addEventListener(*) = nil
     def js_showModal = (props["open"] = true) && nil
@@ -375,13 +383,21 @@ module JS
       props["title"] = ""
     end
 
+    attr_writer :focused
+
     def js_get(key)
       case key
       when "body" then @body
       when "documentElement" then @html
       when "readyState" then "loading"
+      when "activeElement" then @focused && @focused.root == self ? @focused : @body
       else super
       end
+    end
+
+    # a focused element that turns disabled loses the focus
+    def blur(node)
+      @focused = nil if @focused.equal?(node)
     end
 
     def js_createElement(tag) = Node.new(tag.to_s.downcase)
@@ -459,11 +475,12 @@ module JS
   # offline.js: the copy of the course on this device; records what is asked
   class Offline
     attr_reader :listeners, :calls
-    attr_accessor :supported, :state, :done, :total, :updating, :from_copy, :error
+    attr_accessor :supported, :state, :done, :total, :updating, :from_copy, :error, :python
 
     def initialize
       @listeners = Hash.new { |h, k| h[k] = [] }
       @calls = []
+      @python = true
       @supported = true
       @state = "off"
       @done = 0
@@ -484,6 +501,8 @@ module JS
         "done" => proc { @done }, "total" => proc { @total }, "error" => proc { @error },
         "sizeMb" => proc { 44 },
         "savedAt" => proc { |lang| lang == "de" ? "01.10.26, 15:30" : "10/1/26, 3:30 PM" },
+        "python" => proc { @python },
+        "setPython" => proc { |on| @calls << ["setPython", on]; @python = on; JS::Promise.resolve },
         "enable" => proc { @calls << ["enable"]; JS::Promise.resolve },
         "disable" => proc { @calls << ["disable"]; JS::Promise.resolve }
       }
@@ -506,8 +525,8 @@ module JS
       props["ChunkyStorage"] = @fs.js
       props["ChunkyOffline"] = @offline.js
       props["cellEditors"] = @editors
-      props["initCell"] = proc do |idx|
-        @calls << ["initCell", idx]
+      props["initCell"] = proc do |idx, label, hint|
+        @calls << ["initCell", idx, label, hint]
         editor = @editors[idx.to_s] = Editor.new
         # index.html: a key in the editor tells the shell (live runs)
         editor.js_on("change", proc do |_cm, change|
@@ -528,17 +547,22 @@ module JS
       }
       props["console"] = { "error" => proc { |*a| JS.console_errors << a.join(" "); nil } }
       props["JSON"] = { "parse" => proc { |text| JSON.parse(text.to_s) }, "stringify" => proc { |o| JSON.generate(o) } }
-      props["Object"] = { "keys" => proc { |o| o.is_a?(::Hash) ? o.keys : [] } }
+      # Object.keys(localStorage), as in a browser: the stored keys
+      props["Object"] = {
+        "keys" => proc { |o| o.equal?(props["localStorage"]) ? @storage.keys : (o.is_a?(::Hash) ? o.keys : []) }
+      }
       props["LESSONS"] = JSON.parse(File.read(File.expand_path("../../lessons.json", __dir__)))
       @confirm = true
-      %w[setCellCode refreshAllCells ensureThree scrollTo].each do |name|
+      %w[setCellCode refreshAllCells ensureThree ensurePython ensureSqlite ensureHerb ensurePicoRuby scrollTo].each do |name|
         props[name] = proc { |*args| @calls << [name, *args]; nil }
       end
       props["confirm"] = proc { |_msg| @confirm }
+      # a phone-sized window once a test sets narrow = true
+      props["matchMedia"] = proc { |query| { "matches" => @narrow == true, "media" => query.to_s } }
       props["ChunkyBridge"] = bridge
     end
 
-    attr_writer :confirm
+    attr_writer :confirm, :narrow
 
     def location = props["location"]
 
@@ -569,6 +593,8 @@ module JS
         "setState" => proc { |*a| requests << ["setState", *a]; nil },
         "reset" => proc { requests << ["reset"]; nil },
         "run" => proc { |idx| requests << ["run", idx]; props["ChunkyBridge"]["ready"] },
+        # ⏯: the same run, recorded for the stepper
+        "step" => proc { |idx| requests << ["step", idx]; props["ChunkyBridge"]["ready"] },
         # a live run goes out only once the kernel is up, never queued
         "autorun" => proc { |idx| props["ChunkyBridge"]["ready"] && (requests << ["autorun", idx]) && true },
         "install" => proc { |name| requests << ["install", name]; props["ChunkyBridge"]["ready"] },

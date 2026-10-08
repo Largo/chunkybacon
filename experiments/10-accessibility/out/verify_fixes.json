@@ -1,0 +1,12 @@
+{
+ "start": "editor",
+ "afterTab": "editor",
+ "indentedStill": true,
+ "afterEscTab": "button.live-toggle \"⚡ Live\"",
+ "back": "editor",
+ "afterEscShiftTab": "select. \"Deutsch\n              English\n              日本語\"",
+ "name": {
+  "label": "Code, cell 2",
+  "described": "Shift+Enter runs. Escape, then Tab, leaves the editor."
+ }
+}

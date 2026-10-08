@@ -91,10 +91,25 @@ class WorkspaceTest < Minitest::Test
     click(byid("progressBtn"))
   end
 
+  def test_python_in_the_copy_is_a_checkbox
+    open_dialog { offline.state = "ready" }
+    box = dialog.js_querySelector(".pd-check input")
+    assert_equal true, box.props["checked"], "ticked unless unticked"
+    assert_includes offline_text, "Python mitnehmen"
+    box.props["checked"] = false
+    JS.fire(box.wrap, "change")
+    assert_equal [["setPython", false]], offline.calls
+  end
+
+  def test_python_left_out_stays_unticked
+    open_dialog { offline.python = false }
+    refute dialog.js_querySelector(".pd-check input").props["checked"]
+  end
+
   def test_offline_is_off_until_asked_for
     open_dialog
     assert_includes offline_text, "Offline lernen"
-    assert_includes offline_text, "45 MB Speicherplatz"
+    assert_includes offline_text, "101 MB Speicherplatz (ohne Python 23 und 49 MB)"
     click(button_labelled("Auf diesem Gerät speichern", dialog))
     assert_equal [["enable"]], offline.calls
   end
@@ -295,6 +310,28 @@ class WorkspaceTest < Minitest::Test
     assert_empty JS.console_errors
   end
 
+  # 12288 bytes: three SQLite pages of 4096, as base64
+  DATABASE = "data:application/vnd.sqlite3;base64,#{'A' * 16384}"
+
+  def test_a_database_is_described_instead_of_the_editor
+    workshop(files: { "main.rb" => "1", "zeit.db" => DATABASE })
+    click(file_button("zeit.db"))
+    text = find("#wsPreview p.ws-database").text
+    assert_includes text, "SQLite-Datenbank (12 KB)"
+    assert_includes text, "Sequel.sqlite"
+    assert_nil find_all("#wsPreview img").first, "not drawn as a picture"
+    assert_includes find(".ws-editor").attrs["class"], "is-preview"
+    kernel_calls("workshopAfterRun")
+    assert_equal DATABASE, fs.files["zeit.db"], "a run does not save the editor over the database"
+  end
+
+  def test_a_database_can_be_uploaded
+    workshop
+    picker = find_all("#wsFiles input").find { |input| input.props["multiple"] }
+    accept = picker.props["accept"].to_s
+    %w[.db .sqlite .sqlite3].each { |ext| assert_includes accept.split(","), ext }
+  end
+
   def test_a_tiny_picture_is_drawn_bigger
     workshop(files: { "main.rb" => "1", "bild.png" => PNG })
     click(file_button("bild.png"))
@@ -316,6 +353,20 @@ class WorkspaceTest < Minitest::Test
     assert_equal src.delete_suffix("#view=FitH"), calls("revokeUrl").last[1], "the Blob URL is released"
     assert editor.props["refreshed"], "CodeMirror redraws after being hidden"
     assert_equal "1", editor.js_getValue
+  end
+
+  WAV = "data:audio/wav;base64,UklGRiQAAABXQVZF"
+
+  def test_a_sound_plays_in_a_player_named_after_its_file
+    workshop(files: { "main.rb" => "1", "lied.wav" => WAV })
+    click(file_button("lied.wav"))
+    player = find("#wsPreview audio")
+    assert_match(/\Ablob:preview-\d+\z/, player.attrs["src"])
+    assert_equal WAV, calls("objectUrl").last[1]
+    assert_equal "lied.wav", player.attrs["aria-label"]
+    assert player.attrs.key?("controls")
+    click(file_button("main.rb"))
+    assert_equal player.attrs["src"], calls("revokeUrl").last[1], "the Blob URL is released"
   end
 
   def test_a_picture_the_program_writes_shows_at_once

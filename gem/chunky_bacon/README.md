@@ -33,15 +33,19 @@ never mix with your program's output.
 | Helper | On your computer |
 |---|---|
 | `install_gem "name"` | installs the gem unless it is there, and activates it |
-| `show_image image` | saves `chunky-image-N.png` (or `.jpg`, `.gif`, `.webp`: a ChunkyPNG image, a PureJPEG encoder, the bytes or a path) and opens it |
+| `show_image image` | saves `chunky-image-N.png` (or `.jpg`, `.gif`, `.webp`, `.svg`: a ChunkyPNG image, a PureJPEG encoder, a Rubyvis chart, the bytes or a path) and opens it; `alt:` is accepted and ignored |
 | `show_pdf pdf` | saves `chunky-document-N.pdf` (Prawn/HexaPDF document, bytes or a path) and opens it |
+| `show_audio sound` | saves `chunky-sound-N.wav` (WAV bytes, or an Array of samples in -1..1, `rate:` 22,050) and opens it; a path opens that file |
+| `show_objects a: a, b: b`, `show_objects binding` | draws the objects behind the names as boxes and arrows, as the course does, and saves and opens them like `show_image` (`chunky-image-N.svg`) |
+| `turtle { forward 100; right 90 }` | draws with Chunky as the turtle, as the course's lesson 10 does, and saves and opens the drawing like `show_image` (`chunky-image-N.svg`, animated); returns the `Turtle` |
+| `show_plot`, `show_plot fig` | saves the current (or that) matplotlib figure as `chunky-plot-N.png`, opens it and closes the figure (needs the pycall gem and matplotlib) |
 | `download_file data, "name"` | saves the data as `name` in the program's folder |
 | `show_browser App, "/path"` | starts the Rack app (Sinatra, Roda, ...) on 127.0.0.1 and opens it; after the program's last line the server runs on until Ctrl+C |
 | `mock_get App, "/path"` | `[status, body]` without any server |
 | `show_irb` | an IRB session; `exit` returns to the program |
 | `show_files` | lists the files in the program's folder |
 | `run_tests` | runs the Minitest tests defined so far |
-| `show_three`, `show_shoes` | explain how to do it on a computer (they need the course page for now) |
+| `show_three`, `show_shoes`, `show_game` | explain how to do it on a computer (they need the course page for now; for a game, a gem like ruby2d or gosu) |
 
 `CHUNKYBACON_OPEN=0` stops the viewer and the browser from opening (CI, a
 machine without a desktop); the files are saved either way. Inside the course

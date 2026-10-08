@@ -8,6 +8,8 @@ require "prism"
 # seeing anything would fail too.
 class PortabilityTest < Minitest::Test
   SHELL_DIR = ENV.fetch("SHELL_DIR", File.expand_path("../../html/shell", __dir__))
+  # the Spinel lesson's workers run on PicoRuby.wasm as well (html/spinel/boot.js)
+  WORKER_DIR = File.expand_path("../../html/spinel", __dir__)
 
   # NoMethodError in PicoRuby (CRuby has them)
   MISSING_METHODS = %i[
@@ -41,6 +43,10 @@ class PortabilityTest < Minitest::Test
 
   def shell_sources
     Dir[File.join(SHELL_DIR, "*.rb")].sort.map { |f| [File.basename(f), File.read(f)] }
+  end
+
+  def worker_sources
+    Dir[File.join(WORKER_DIR, "*.rb")].sort.map { |f| ["spinel/#{File.basename(f)}", File.read(f)] }
   end
 
   def each_node(node, &block)
@@ -151,6 +157,11 @@ class PortabilityTest < Minitest::Test
       assert_empty found, found.join("\n")
     end
 
+    define_method("test_spinel_workers_pass_#{scan}") do
+      found = offenses(worker_sources) { |node| send(scan, node) }
+      assert_empty found, found.join("\n")
+    end
+
     define_method("test_#{scan}_finds_bad_code") do
       found = offenses([["sample.rb", BAD_SAMPLE]]) { |node| send(scan, node) }
       refute_empty found, "#{scan} no longer finds anything in the bad sample"
@@ -164,5 +175,19 @@ class PortabilityTest < Minitest::Test
     assert_equal shell_sources.map(&:first).sort, listed.sort
     assert_equal "jsg.rb", listed.first, "the sugar comes before its first use" if listed.include?("jsg.rb")
     assert_equal "boot.rb", listed.last, "boot.rb starts the page: last"
+  end
+
+  # spinel/manifest.txt: "role: files..." - every worker file in some role,
+  # the host first, the role's worker (which starts serving) last
+  def test_the_worker_manifest_lists_every_worker_file
+    roles = File.readlines(File.join(WORKER_DIR, "manifest.txt"), chomp: true)
+                .map(&:strip).reject { |l| l.empty? || l.start_with?("#") }
+                .to_h { |l| name, files = l.split(":", 2); [name, files.split] }
+    assert_equal %w[compiler run], roles.keys.sort
+    assert_equal worker_sources.map { |name, _| name.delete_prefix("spinel/") }.sort, roles.values.flatten.uniq.sort
+    roles.each do |role, files|
+      assert_equal "wasi.rb", files.first, "#{role}: the host first"
+      assert_equal "#{role}_worker.rb", files.last, "#{role}: its worker last"
+    end
   end
 end

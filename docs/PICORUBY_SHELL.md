@@ -61,8 +61,8 @@ Who owns what:
 | language (de/en/ja), routing (`location.hash`, back/forward, bad ids), reset | yes | follows the shell's state | |
 | Chunky's bubble (welcome, praise, next-lesson link, hints, errors, gem messages) | yes | composes gem error texts | |
 | Run button look (running, fox, shake/celebrate, run time), Alt+R, Shift+Enter | yes | | Shift+Enter in `initCell` |
-| lesson done list (`chunky_done`), `chunky_lang`, `chunky_current` | yes | | |
-| running cells, checks (`check_exercise`), `=>` output, cell code keys | | yes | |
+| lesson done list (`chunky_done`), `chunky_lang`, `chunky_current`, a cell's saved code (`Store.code_key`, HANDOVER §6a) | yes | hands over the code it runs (`chunkySaveCode`) | |
+| running cells, checks (`check_exercise`), `=>` output | | yes | |
 | gems: installing, installed list | chips, button, bubble | `BrowserGems` | |
 | IRB, mini browser, 3D, Shoes, file explorer, downloads, workshop runs | | yes | |
 | progress dialog, workshop file panel (`shell/workspace.rb`, formerly `workspace_ui.js`) | yes | asks for the project's files during a run | |
@@ -103,10 +103,11 @@ kernel listens for `chunky:*` events on `window` and answers through
 
 | call | by | does |
 |---|---|---|
-| `setState(lang, lesson, workshop)` | shell, on every lesson render | stores `state`, `seq += 1`, drops queued runs, sends `chunky:lesson` |
-| `reset()` | shell, lesson reset | `seq += 1`, sends `chunky:lesson` |
+| `setState(lang, lesson, workshop)` | shell, on every lesson render | stores `state`, `seq += 1`, drops queued runs, sends `chunky:lesson`; after the paint tells `stepper.js` (`ChunkyStepper.page`: a recording survives a language change where the code is the same) |
+| `reset()` | shell, lesson reset | `seq += 1`, sends `chunky:lesson`, drops the stepper's recordings |
 | `run(idx)` → `true` / `false` | shell, Run / Shift+Enter / Alt+R | kernel up: `chunky:run` after the next paint (`afterPaint`); else queued. Returns whether it went now |
 | `autorun(idx)` → `true` / `false` | shell, a second after the last key (live runs, HANDOVER §6b) | kernel up: `chunky:run {auto: true}` after the next paint; else `false` - never queued |
+| `step(idx)` → `true` / `false` | shell, ⏯ (a lesson with `"stepper": true`, HANDOVER §6) | as `run`, with `chunky:run {step: true}`: the run is recorded |
 | `install(name)` → `true` / `false` | shell, gem chip / button | `chunky:install` after the next paint, or queued |
 | `shellReady()` | shell, after the first render | `chunky:shell-ready`, starts the kernel |
 | `kernelReady(installedJson)` | kernel, end of `ChunkyApp#initialize` | `ready = true`, `chunky:kernel-ready`, `chunky:gems`, then the queue |
@@ -114,6 +115,7 @@ kernel listens for `chunky:*` events on `window` and answers through
 | `ran(idx, outcome, elapsed, auto, own)` | kernel, after every run | `chunky:ran {idx, outcome: ok/error/pass/fail (a live run also skipped/stopped/needs), elapsed, auto, own}` - `own`: elapsed without installing and loading gems |
 | `gems(installedJson)` | kernel, after runs and installs | `chunky:gems {installed}` |
 | `installed(name, ok, message)` | kernel, panel install | `chunky:installed {name, ok, message}` |
+| `steps(idx, json)` | kernel, after a ⏯ run (`show_steps`) | parses the recording here (never in PicoRuby) and hands it to `ChunkyStepper.show` (`stepper.js`); no event |
 | `ready`, `state` | both | `state = {lang, lesson, workshop, seq}`; the kernel reads it at boot |
 | `settle(promise)` → promise of `{ok, value, name, message}` | shell (workspace.rb) | never rejects; PicoRuby's `await` would raise and lose the error's name |
 | `saveText(name, text)` | shell (workspace.rb) | a text file to the downloads (a Blob needs an array argument) |
@@ -124,11 +126,13 @@ registers (`JS::Object.register_callback`): `workshopOpenPath`,
 `workspaceDelete(path)`, `workshopAfterRun` - the same names
 `workspace_ui.js` had, so `run_cell` did not change. One more such
 function, `chunkyEdited(idx)`, is for index.html's editors: a key in a
-cell, which starts the shell's live-run timer.
+cell, which starts the shell's live-run timer; and `chunkySaveCode(idx,
+code)` is the kernel's again: the code a run uses, which the shell keeps
+(later than this report: HANDOVER §6a).
 
 | event | to | detail |
 |---|---|---|
-| `chunky:run` | kernel | `{idx, auto, lang, lesson, workshop, seq}` - `auto`: a live run |
+| `chunky:run` | kernel | `{idx, auto, step, lang, lesson, workshop, seq}` - `auto`: a live run; `step`: ⏯, recorded |
 | `chunky:lesson` | kernel | `{lang, lesson, workshop, seq}` - a new `seq` means a fresh binding, old 3D/Shoes stages disposed (`sync_state`) |
 | `chunky:install` | kernel | `{name, ...state}` |
 | `chunky:ran`, `chunky:gems`, `chunky:installed`, `chunky:kernel-ready`, `chunky:kernel-failed` | shell | as above |
@@ -210,11 +214,12 @@ fetched with `cache: "no-cache"` by the loader.
 ## 4. Running, testing, measuring
 
 ```sh
-# the runtime (bundled with the create-jobrouter-custom-application skill,
-# checksum-verified, no download), then the loader patch
-ruby <skill dir>/scripts/install_picoruby.rb html
-cp <skill dir>/assets/picoruby/NOTICE.md html/assets/picoruby/
-ruby tools/patch_picoruby_loader.rb            # --check to verify
+# the runtime from npm, checked against the registry's SHA-512; the tool
+# also patches the loader, writes the .gz copies and NOTICE.md (it was
+# first installed with the create-jobrouter-custom-application skill's
+# installer - the same bytes)
+ruby tools/vendor_picoruby.rb                  # --check: offline, the recorded files
+ruby tools/patch_picoruby_loader.rb --check    # the loader reads text/picoruby
 ruby tools/compress_assets.rb --check          # the .gz copies match
 
 node test/make_lessons_json.js
@@ -276,6 +281,22 @@ blocks called synchronously by JavaScript (also from CRuby's calls, nested),
 `promise.await` and `sleep_ms` in a Task (0 ms ≈ 5 ms; the workshop's
 half-second save debounce is one), a Task started from a sync handler or a
 callback, `replaceChildren`/`appendChild`/`createTextNode`, `dialog.showModal`.
+
+**Later: PicoRuby in a worker** (lesson 45, Spinel; HANDOVER §6n). The
+same runtime runs in Web Workers (`html/spinel/boot.js`: `picoruby.js` is
+an Emscripten module that knows workers; init.iife.js's scheduler without
+the document). Probed in Chromium: boot ~70-80 ms; a JavaScript -> Ruby
+callback ~4 µs, Ruby -> JavaScript ~1 µs; a WebAssembly module whose
+imports are Ruby callbacks can be started from Ruby and calls back into it
+(re-entrancy works); a trap in it is a rescuable `RuntimeError`; JS
+objects built with `Object.new` and `obj[key] = value` (strings with
+newlines are fine there); bytes through typed arrays (NUL included);
+`import()` of an ES module through a one-line JS helper, awaited in a
+Task; sync `XMLHttpRequest` (PicoRuby's `fetch` wants a block and answers
+Ruby strings). Also there: keyword arguments, `class << self`,
+`attr_accessor`, `send` with a splat, lambdas, 64-bit Integers,
+`String#match(re)[1]`, `gsub` with a block, BigInt -> `JS.global.Number(x)`.
+Callback arguments stay in `globalThis.picorubyRefs` for good.
 
 ## 6. Load-time measurements
 
@@ -507,7 +528,7 @@ All on this branch, against the prototype on a local server:
 
 | suite | result |
 |---|---|
-| `ruby test/check_harness.rb` | ALL CHECKS OK (37 lessons × de, en, ja) |
+| `ruby test/check_harness.rb` | ALL CHECKS OK (every lesson × de, en, ja; 37 at the time) |
 | `ruby test/gems_harness.rb` | ALL GEM CHECKS OK |
 | `test/browser_test.mjs` | **130/130** (the 128 checks plus two new ones) |
 | `test/progress_test.mjs` | **37/37** - with the progress dialog and file panel in Ruby |

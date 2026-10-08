@@ -20,15 +20,21 @@ module BrowserGems
   class NotFoundError < StandardError; end
 
   # gems whose C extension is optional acceleration with a pure-Ruby
-  # fallback in lib/ - safe to install despite having an extconf.rb
-  PURE_FALLBACK_GEMS = %w[racc].freeze
+  # fallback in lib/ - safe to install despite having an extconf.rb - or
+  # stood in for: herb's is its parser, which main.rb serves as
+  # herb_bridge.rb, calling the same parser built for WebAssembly
+  PURE_FALLBACK_GEMS = %w[racc herb].freeze
 
-  # well-known native gems: fail fast with a clear error before downloading
+  # well-known native gems: fail fast with a clear error before downloading -
+  # unless builtin? finds them (compiled in, or a shim: main.rb serves
+  # numo/narray in pure Ruby, so Rumale's gems install, and processing.rb
+  # stands in for the processing gem, which draws through rays and reflexion,
+  # ruby2d.rb for ruby2d's C extension on SDL3)
   NATIVE_GEMS = %w[
     sqlite3 pg mysql2 ffi byebug debug bcrypt puma eventmachine
     nio4r websocket-driver msgpack oj yajl-ruby curb typhoeus redcarpet
     commonmarker sassc grpc google-protobuf rmagick vips json-c openssl
-    strscan js
+    strscan js numo-narray numo-narray-alt processing rays reflexion rucy ruby2d
   ].freeze
 
   # native runtime dependencies a gem declares but can do without: skipped
@@ -36,6 +42,11 @@ module BrowserGems
   # uses Nokogiri when it loads and REXML otherwise; jsg needs ruby_wasm (the
   # build tool) only for its `jsg` command, not in the browser.
   OPTIONAL_NATIVE_DEPS = { "ruby_pptx" => %w[nokogiri], "jsg" => %w[ruby_wasm] }.freeze
+
+  # default gems of the wasm image that a gem names as dependencies (prime
+  # names forwardable and singleton): already there, as on disk - no
+  # download, and offline too. (tools/build_gem_cache.rb leaves them out.)
+  DEFAULT_GEMS = %w[forwardable singleton].freeze
 
   # gems replaced by a pure-Ruby stand-in providing the same require: a
   # dependency on bigdecimal (C extension, absent from the wasm image)
@@ -294,6 +305,49 @@ module BrowserGems
           end
         end
       RUBY
+    },
+    # I18n reads its load path on the first lookup - for Faker 318 YAML files,
+    # 4.6 MB, about six seconds in the browser. That is loading a library:
+    # off a live run's clock (autorun.rb), and not done in a live run at all,
+    # which would freeze the typing that long - it asks for the Run button,
+    # as fetching from the web does.
+    "i18n" => {
+      "lib/i18n/backend/simple.rb" => <<~'RUBY'
+        module I18n
+          module Backend
+            class Simple
+              module Implementation
+                alias_method :chunky_init_translations, :init_translations
+
+                protected
+
+                def init_translations
+                  return chunky_init_translations unless defined?(AutoRun)
+                  raise AutoRun::NeedsRun if defined?(ChunkyApp) && ChunkyApp.instance.auto_run?
+
+                  AutoRun.untraced { chunky_init_translations }
+                end
+              end
+            end
+          end
+        end
+      RUBY
+    },
+    # Rubyvis draws its SVG with Nokogiri when `require "nokogiri"` works,
+    # with REXML otherwise. Here that require would install nokogiri-pure
+    # from the cache - seconds, for a chart REXML draws just as well - so
+    # Nokogiri is only used when a cell has loaded it already. The answer is
+    # kept, as the gem keeps its own: a panel drawn with one engine is
+    # written out with the same.
+    "rubyvis" => {
+      "lib/rubyvis.rb" => <<~'RUBY'
+        module Rubyvis
+          def self.has_nokogiri?
+            @@nokogiri = defined?(::Nokogiri::XML::Document) ? true : false if @@nokogiri.nil?
+            @@nokogiri
+          end
+        end
+      RUBY
     }
   }.freeze
 
@@ -340,6 +394,7 @@ module BrowserGems
       if (substitute = SUBSTITUTES[name])
         return installed[name] = install(substitute, seen)
       end
+      return installed[name] = "builtin" if DEFAULT_GEMS.include?(name) && builtin?(name)
       if NATIVE_GEMS.include?(name)
         return installed[name] = "builtin" if builtin?(name)
         raise NativeGemError, name

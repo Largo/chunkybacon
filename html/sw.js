@@ -22,6 +22,9 @@ const RECHECK_MS = 10 * 60 * 1000;
 const NAV_TIMEOUT_MS = 6000;                 // a page from the copy rather than a hanging one
 // answered by the network or not at all: the backend, the bridges, the webhook
 const NETWORK_ONLY = /^(api|rubygems|proxy|_deploy)(\/|$)/;
+// Python for the PyCall lessons: in the copy unless the learner unticked it
+// (offline.js sends the choice with every refresh)
+const PYTHON = /^assets\/pyodide\//;
 
 const base = new URL(self.registration.scope);
 const INDEX_URL = new URL("__offline__/index.json", base).href;
@@ -29,6 +32,9 @@ const FILE_PREFIX = new URL("__offline__/f/", base).href;
 
 let snapshotPromise = null;   // the index of the current copy, or null
 let building = null;          // the running update, a Promise
+let buildingPython = true;    // ... with Python or without
+let latestPython = true;      // the choice the page sent last
+let queued = null;            // one more update after the running one
 let progress = { done: 0, total: 0, bytes: 0 };
 let lastError = null;
 let lastCheck = 0;
@@ -76,11 +82,11 @@ async function copyOf(path) {
   return (await caches.open(STORE)).match(keyFor(path, entry.v));
 }
 
-async function fetchList() {
+async function fetchList(python) {
   const response = await fetch(urlFor(LIST), { cache: "no-cache" });
   if (!response.ok) throw new Error(LIST + ": HTTP " + response.status);
   const files = (await response.text()).split("\n").map((line) => line.trim())
-    .filter((line) => line !== "" && !line.startsWith("#"));
+    .filter((line) => line !== "" && !line.startsWith("#") && (python || !PYTHON.test(line)));
   return [""].concat(files);   // "" is the page as the site answers "./"
 }
 
@@ -124,8 +130,8 @@ async function store(cache, path) {
   return { v: version, size: blob.size };
 }
 
-async function update() {
-  const list = await fetchList();
+async function update(python) {
+  const list = await fetchList(python);
   const cache = await caches.open(STORE);
   const old = await loadSnapshot();
   let files = {};
@@ -169,12 +175,21 @@ async function update() {
   }
 }
 
-function refresh(force) {
-  if (building) return building;
+function refresh(force, python) {
+  latestPython = python;
+  // the box ticked or unticked while a copy is being made: one more update
+  // after it, with whatever the box says by then (ticked, unticked and
+  // ticked again ends with Python)
+  if (building) {
+    if (python === buildingPython && !queued) return building;
+    if (!queued) queued = building.then(() => { queued = null; return refresh(true, latestPython); });
+    return queued;
+  }
   if (!force && Date.now() - lastCheck < RECHECK_MS) return Promise.resolve();
   lastCheck = Date.now();
   progress = { done: 0, total: 0, bytes: 0 };
-  building = update().then(() => { lastError = null; }, (error) => {
+  buildingPython = python;
+  building = update(python).then(() => { lastError = null; }, (error) => {
     lastError = error && error.message ? error.message : String(error);
     console.warn("offline copy not updated:", lastError);
   }).finally(() => {
@@ -223,7 +238,7 @@ self.addEventListener("message", (event) => {
   const data = event.data || {};
   const source = event.source;
   let work = Promise.resolve();
-  if (data.type === "refresh") work = refresh(Boolean(data.force));
+  if (data.type === "refresh") work = refresh(Boolean(data.force), data.python !== false);
   if (data.type === "disable") work = stop().then(() => source.postMessage({ type: "disabled" }));
   if (data.type === "status") work = status(source.id).then((s) => source.postMessage(s));
   event.waitUntil(work);
