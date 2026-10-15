@@ -2,11 +2,18 @@
 <!-- Social card. Screenshot the page at its exact size (tools/render_social_cards.mjs):
        card.html                 1600x900 (16:9) -> twitter-card.png  (X, Bluesky, Mastodon, README)
        card.html?format=github   1600x800 (2:1)  -> github-social.png (GitHub social preview, og:image)
-     A page of the squared exercise book the site is drawn as, with a notebook
-     cell on it whose answer is the course's name, and Chunky saying hello in
-     the course's three languages. ?lessons=N fills in the lesson count. The
-     page is laid out on a 1200-unit stage scaled to 1600 pixels; it needs a
-     server (the fonts are blocked on file://). -->
+     The site in the 2 CV look (docs/HANDOVER.md §10b), the tokens copied from
+     html/assets/app.css: the course's name on the pale page beside a
+     notebook cell whose answer is that name, and on one big Infra Red field
+     _why's two foxes shouting "Chunky bacon!!" over the footer's tartan
+     strip, under the dark cap with who made it. The foxes are
+     html/assets/why-foxes/chunky-bacon.svg, put inline and held still (both
+     balloons out, as under prefers-reduced-motion): by why the lucky stiff,
+     from why's (poignant) guide to Ruby, CC BY-SA 2.5 - the card credits
+     them, keep that line. No Citroen marks.
+     ?lessons=N fills in the lesson count. The page is laid out on a
+     1200-unit stage scaled to 1600 pixels; it needs a server (file:// blocks
+     the fonts and the fetch), and sets html.ready once the foxes are in. -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -17,33 +24,38 @@
 <link rel="stylesheet" href="/html/assets/fonts/fonts.css">
 <style>
   :root {
-    --paper: #ffffff;
-    --karo: #e3eaf1;
-    --margin-line: #e9a393;
-    --ink: #1a1208;
-    --ink-soft: #5f5247;
-    --rule: #d4dbe3;
-    --fox: #e8722a;
-    --highlight: #ffc9a1;
-    --ok: #2e7d32;
-    --grid: 24px;
+    /* from html/assets/app.css */
+    --infra: #ee3f24;       /* big fields only, never text */
+    --glow: #ff7131;
+    --cap: #1e2229;
+    --mustard: #e2b034;
+    --clip: #e4e943;        /* tiny accents on dark only */
+    --cap-text: #d3ccb9;
+    --bakelite: #ede5d0;
+    --paper: #f5f1e8;
+    --sheet: #fbf9f4;
+    --ink: #1e2229;
+    --ink-soft: #4e5560;
+    --bacon: #bd2d00;
+    --code-bg: #ece6d8;
+    --ok: #276d2b;
+    --font-print: "Atkinson Hyperlegible Next", sans-serif;
+    --font-code: "Atkinson Hyperlegible Mono", monospace;
+    --font-display: "Outfit", sans-serif;
+
     /* the stage: 1200 units wide, scaled to 1600 pixels */
     --stage-h: 675px;
-    --word-top: 30px;  --word-size: 144px;
-    --tag-top: 348px;
-    --cell-top: 460px;
-    --by-top: 603px;
-    --fox-top: 252px;  --fox-size: 410px;
-    --bubble-top: 64px;
+    --word-top: 34px;  --word-size: 140px;
+    --tag-top: 298px;  --tag-size: 30px;
+    --cell-top: 398px;
+    --band-top: 583px;  /* the tartan; the cap below it */
   }
   html.github {
     --stage-h: 600px;
-    --word-top: 22px;  --word-size: 124px;
-    --tag-top: 272px;
-    --cell-top: 374px;
-    --by-top: 524px;
-    --fox-top: 196px;  --fox-size: 392px;
-    --bubble-top: 30px;
+    --word-top: 22px;  --word-size: 120px;
+    --tag-top: 250px;  --tag-size: 28px;
+    --cell-top: 336px;
+    --band-top: 514px;
   }
   * { box-sizing: border-box; margin: 0; }
   html, body { width: 1600px; height: 900px; overflow: hidden; background: var(--paper); }
@@ -56,174 +68,157 @@
     transform: scale(1.3333333);
     transform-origin: 0 0;
     color: var(--ink);
-    font-family: "Atkinson Hyperlegible Next", sans-serif;
-    background-color: var(--paper);
-    background-image:
-      linear-gradient(var(--karo) 1px, transparent 1px),
-      linear-gradient(90deg, var(--karo) 1px, transparent 1px);
-    background-size: var(--grid) var(--grid);
-    background-position: -1px -1px;
+    font-family: var(--font-print);
+    background: var(--paper);
     overflow: hidden;
-  }
-  /* the exercise book's red margin */
-  .stage::before {
-    content: "";
-    position: absolute;
-    left: 108px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: var(--margin-line);
   }
 
   .wordmark {
     position: absolute;
-    left: 142px;
+    left: 60px;
     top: var(--word-top);
-    font-family: "Shantell Sans", sans-serif;
+    font-family: var(--font-display);
     font-weight: 800;
-    font-variation-settings: "INFM" 70, "BNCE" 45;
     font-size: var(--word-size);
     line-height: 0.9;
-    letter-spacing: -0.01em;
-    transform: rotate(-2.5deg);
-    transform-origin: 0 50%;
+    letter-spacing: -0.035em;
   }
 
   .tagline {
     position: absolute;
-    left: 150px;
+    left: 64px;
     top: var(--tag-top);
-    font-size: 31px;
-    line-height: 1.24;
-    font-weight: 600;
+    font-size: var(--tag-size);
+    line-height: 1.25;
+    font-weight: 700;
   }
   .tagline .sub { display: block; color: var(--ink-soft); font-weight: 500; }
 
-  /* a notebook cell as the site draws it: the task's orange border, the
-     code, the Run button, and its answer - marked with the highlighter
-     the index uses for the current lesson */
+  /* a notebook cell as the site draws it: the code on the dark cap, the
+     toolbar with ⚡ Live and the one deep-red ▶ Run, and the answer below */
   .cell {
     position: absolute;
-    left: 150px;
+    left: 64px;
     top: var(--cell-top);
-    width: 716px;
-    border: 2.5px solid var(--fox);
-    border-radius: 6px;
-    background: var(--paper);
-    transform: rotate(-1deg);
-    transform-origin: 0 0;
-    overflow: hidden;
+    width: 604px;
+    border: 2px solid var(--ink);
+    background: var(--sheet);
   }
   .code {
     display: flex;
-    font-family: "Atkinson Hyperlegible Mono", monospace;
-    font-size: 20px;
-    line-height: 1.55;
-    padding: 7px 0;
+    font-family: var(--font-code);
+    font-size: 18px;
+    line-height: 1.6;
+    padding: 8px 0;
+    color: var(--bakelite);
+    background: var(--cap);
   }
   .gutter {
-    color: #7d8894;
+    color: #8c9095;
     padding: 0 10px 0 12px;
-    border-right: 1px solid var(--rule);
+    border-right: 1px solid #3a404a;
   }
-  .line { padding: 0 14px; white-space: pre; }
-  .s { color: #1f7a3f; }
-  .y { color: #7b3fa0; }
+  .line { padding: 0 12px; white-space: pre; }
+  .s { color: var(--mustard); }
+  .y { color: #c9a7f0; }
   .toolbar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 8px 10px 8px 16px;
-    border-top: 1px solid var(--rule);
+    gap: 9px;
+    padding: 7px 8px 7px 14px;
+    border-top: 2px solid var(--ink);
   }
-  .result {
-    font-family: "Atkinson Hyperlegible Mono", monospace;
-    font-size: 20px;
-    color: var(--ok);
-    padding: 1px 12px;
-    background: linear-gradient(100deg,
-      transparent 5px, var(--highlight) 5px,
-      var(--highlight) calc(100% - 5px), transparent calc(100% - 5px));
+  .time { margin-right: auto; font-size: 14px; color: var(--ink-soft); }
+  .live {
+    font-size: 14px;
+    padding: 4px 11px;
+    border-radius: 999px;
+    color: var(--clip);
+    background: var(--cap);
   }
   .run {
+    font-family: var(--font-display);
     font-weight: 700;
-    font-size: 19px;
-    padding: 6px 18px;
-    border-radius: 6px;
-    border: 1.5px solid var(--ink);
-    background: var(--fox);
-  }
-
-  /* who made it and where it lives, along the bottom of the page - where
-     you sign an exercise book */
-  .byline {
-    position: absolute;
-    left: 150px;
-    top: var(--by-top);
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-  .byline img {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
+    font-size: 16px;
+    line-height: 1.25;
+    padding: 5px 16px;
+    border-radius: 999px;
     border: 2px solid var(--ink);
-    object-fit: cover;
+    box-shadow: 0 2px 0 var(--ink);
+    background: var(--bacon);
+    color: #fff;
   }
-  .byline .name { font-weight: 700; font-size: 20px; line-height: 1.2; }
-  .byline .handle { font-weight: 500; color: var(--ink-soft); margin-left: 4px; }
-  .byline .repo { font-family: "Atkinson Hyperlegible Mono", monospace; font-size: 17px; color: var(--ink-soft); }
-
-  .fox {
-    position: absolute;
-    left: 800px;
-    top: var(--fox-top);
-    width: var(--fox-size);
-    height: var(--fox-size);
-    transform: rotate(4deg);
+  .out {
+    padding: 7px 14px;
+    border-top: 1px solid #d8d1c1;
+    background: var(--code-bg);
+    font-family: var(--font-code);
+    font-size: 17px;
+    color: var(--ok);
   }
 
-  /* Chunky's speech bubble, uneven like the site's */
-  .bubble {
+  /* the one warm field, the foxes standing on the tartan at its foot */
+  .field {
     position: absolute;
-    left: 900px;
-    top: var(--bubble-top);
-    padding: 18px 30px 20px;
-    border: 3px solid var(--ink);
-    border-radius: 34px 26px 32px 22px / 26px 32px 24px 34px;
-    background: var(--paper);
-    font-family: "Shantell Sans", sans-serif;
-    font-weight: 700;
-    font-variation-settings: "INFM" 60, "BNCE" 30;
-    font-size: 38px;
-    line-height: 1.18;
-    transform: rotate(3deg);
+    left: 700px;
+    right: 0;
+    top: 0;
+    height: var(--band-top);
+    background: var(--infra);
+    border-left: 2px solid var(--ink);
   }
-  /* UD Digi Kyokasho: a Japanese schoolbook face, for the exercise book */
-  .bubble .ja { font-family: "UD Digi Kyokasho N-B", "BIZ UDPGothic", sans-serif; font-size: 35px; }
-  /* the tail, down to his open mouth: ink triangle, paper inside */
-  .bubble::before, .bubble::after {
+  .foxes svg {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 500px;
+    height: auto;
+    display: block;
+  }
+  .foxes svg * { animation: none !important; }
+
+  /* the site's footer: a strip of the seats' tartan, then the dark cap */
+  .band {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: var(--band-top);
+    bottom: 0;
+    padding-top: 24px;
+    background: var(--cap);
+    color: var(--cap-text);
+  }
+  .band::before {
     content: "";
     position: absolute;
-    border-style: solid;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 24px;
+    background-color: var(--mustard);
+    background-image:
+      repeating-linear-gradient(0deg, transparent 0 11px, rgba(255, 250, 235, 0.6) 11px 12.5px, transparent 12.5px 17px, rgba(153, 140, 96, 0.5) 17px 23px, transparent 23px 34px),
+      repeating-linear-gradient(90deg, transparent 0 11px, rgba(255, 250, 235, 0.6) 11px 12.5px, transparent 12.5px 17px, rgba(153, 140, 96, 0.5) 17px 23px, transparent 23px 34px);
+    border-top: 2px solid var(--ink);
   }
-  .bubble::before {
-    left: 58px;
-    bottom: -34px;
-    border-width: 34px 30px 0 0;
-    border-color: var(--ink) transparent transparent transparent;
-    transform: skewX(12deg);
+  .band-row {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 26px 0 64px;
+    gap: 13px;
   }
-  .bubble::after {
-    left: 62px;
-    bottom: -25px;
-    border-width: 26px 22px 0 0;
-    border-color: var(--paper) transparent transparent transparent;
-    transform: skewX(12deg);
+  .band img {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 2px solid #adb0b3;
+    object-fit: cover;
   }
+  .band .name { font-weight: 700; font-size: 17px; line-height: 1.2; color: var(--bakelite); }
+  .band .handle { font-weight: 500; color: var(--cap-text); margin-left: 4px; }
+  .band .repo { font-family: var(--font-code); font-size: 14px; }
+  .band .credit { margin-left: auto; font-size: 13px; text-align: right; line-height: 1.3; }
 </style>
 </head>
 <body>
@@ -234,20 +229,27 @@
 
   <div class="cell">
     <div class="code"><span class="gutter">1</span><span class="line"><span class="s">"chunky bacon"</span>.split.map(<span class="y">&amp;:capitalize</span>).join(<span class="s">" "</span>)</span></div>
-    <div class="toolbar"><span class="result">=&gt; "Chunky Bacon"</span><span class="run">▶ Run</span></div>
+    <div class="toolbar"><span class="time">&lt; 0.1 s</span><span class="live">⚡ Live</span><span class="run">▶ Run</span></div>
+    <div class="out">=&gt; "Chunky Bacon"</div>
   </div>
 
-  <div class="byline">
+  <div class="field"><div class="foxes" id="foxes"></div></div>
+
+  <div class="band"><div class="band-row">
     <img src="avatar.jpg" alt="">
     <div><div class="name">Andi Idogawa<span class="handle">@largo</span></div><div class="repo">github.com/Largo/chunkybacon</div></div>
-  </div>
-
-  <div class="bubble">Hallo!<br>Hi!<br><span class="ja">こんにちは!</span></div>
-  <img class="fox" src="/html/assets/chunky.svg" alt="">
+    <div class="credit">Foxes by why the lucky stiff, from<br>why's (poignant) guide to Ruby · CC BY-SA 2.5</div>
+  </div></div>
 </div>
 <script>
   var n = new URLSearchParams(location.search).get("lessons");
   if (n) document.getElementById("lessons").textContent = n;
+  fetch("/html/assets/why-foxes/chunky-bacon.svg")
+    .then(function (r) { return r.text(); })
+    .then(function (svg) {
+      document.getElementById("foxes").innerHTML = svg;
+      document.documentElement.classList.add("ready");
+    });
 </script>
 </body>
 </html>

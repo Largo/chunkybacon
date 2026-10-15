@@ -365,7 +365,7 @@ Both licenses allow commercial use.
 The phrase "[Chunky Bacon](https://chunkybacon.dev/glossary/chunky-bacon/)" is
 an homage to _why's (poignant) guide to Ruby_ by why the lucky stiff — fondly
 remembered. The foxes on the page are his, from chapter 3 of the guide
-(CC BY-SA 2.5), traced to SVG in `html/assets/why-foxes/`; the original
-Chunky drawing (`html/assets/chunky.svg`) stays with the companion gem and the
-social cards. The look borrows the design language of Citroën's 2 CV Concept
+(CC BY-SA 2.5), traced to SVG in `html/assets/why-foxes/`, and on the social
+cards; the original Chunky drawing (`html/assets/chunky.svg`) stays with the
+companion gem. The look borrows the design language of Citroën's 2 CV Concept
 (redrawn, no Citroën marks): see docs/HANDOVER.md §10b.

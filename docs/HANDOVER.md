@@ -2278,7 +2278,9 @@ of the foxes from why's guide", never "I'm Chunky Bacon". The files in
 `html/assets/why-foxes/`: `chunky-bacon.svg` (both foxes shout, an animated SVG
 that holds still under prefers-reduced-motion: the loading screen and a
 passed exercise), `fox-tall.svg` (the masthead and the speech bubble),
-`fox-head.svg` (favicon, the running Run button), `fox-small.svg`. A passed
+`fox-head.svg` (favicon, the running Run button), `fox-small.svg`. The
+social cards (`docs/social/card.html`) put `chunky-bacon.svg` inline, held
+still with both balloons out, and credit it in their footer. A passed
 exercise swaps the bubble's fox for the shouting pair; `cheer_again` in
 `shell/app.rb` gives the SVG a fresh `#n` fragment so it plays again.
 
@@ -2297,5 +2299,6 @@ Current work in progress has its own file: `docs/OPEN_WORK.md`.
 - Lesson 15 could show more Nokogiri (XPath, Builder) now that it works.
 - `NATIVE_GEMS` is a hand-kept list; a gem not on it still gets downloaded
   before its `extconf.rb` is noticed (cheap, but the message arrives late).
-- The social cards (`docs/social/`) and the gem still show the original
-  Chunky drawing; the page now shows _why's foxes (§10b).
+- The gem still shows the original Chunky drawing (so do the embed and
+  show_letter's envelope); the page and the social cards show _why's
+  foxes (§10b).

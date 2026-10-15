@@ -33,9 +33,10 @@ for (const format of FORMATS) {
     return route.fulfill({ path: file });
   });
   await page.goto(`${ORIGIN}/docs/social/card.html?lessons=${lessons}${format.query}`);
+  await page.waitForSelector('html.ready', { state: 'attached' }); // the foxes are in
   await page.evaluate(() => document.fonts.ready);
   const missing = await page.evaluate(() =>
-    ['Shantell Sans', 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible Mono']
+    ['Outfit', 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible Mono']
       .filter((f) => !document.fonts.check(`700 20px "${f}"`)));
   if (missing.length) throw new Error(`fonts not loaded: ${missing.join(', ')}`);
   const out = path.join(ROOT, 'docs/social', format.file);
