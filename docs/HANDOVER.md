@@ -2251,6 +2251,43 @@ that license too. Contact in the gemspecs: web@idogawa.com.
   the aliases stay at 0.1.0 until their own version is bumped. The workflow
   can also be started from the Actions tab.
 
+## 10b. The look: the 2 CV palette and _why's foxes
+
+The page borrows the design language of Citroën's 2 CV Concept (Paris, 2026),
+redrawn - no Citroën logo, wordmark or typeface. The tokens are at the top of
+`html/assets/app.css`:
+
+- **One warm field, one dark cap.** `--cap` (#1e2229) for the masthead, the
+  code editors and the footer; Infra Red (`--infra`, #ee3f24) only for big
+  fields and lines, never for text (white on it is 3.9:1). Links and Run use
+  `--bacon` (#bd2d00, 5.2:1 on the page).
+- **Cream means pressable.** Every button is a `--bakelite` pill with an ink
+  outline; Run is the one deep-red action.
+- **Light is a line.** The current lesson has an Infra Red edge; a focused or
+  running cell lights both side edges in `--glow`.
+- **Tasks are cane mustard** (`--fat`, `--mustard`); the footer sits under a
+  strip of the seats' tartan.
+- **Type:** Outfit (self-hosted, `fonts.css`) for headings, the masthead and
+  buttons; Atkinson stays for reading and code; Shantell Sans for the foxes'
+  bubbles.
+
+The foxes are why the lucky stiff's, from the chunky bacon strip in chapter 3
+of the poignant guide (CC BY-SA 2.5, as poignantguide.net states). The files in
+`html/assets/why-foxes/`: `chunky-bacon.svg` (both foxes shout, an animated SVG
+that holds still under prefers-reduced-motion: the loading screen and a
+passed exercise), `fox-tall.svg` (the masthead and the speech bubble),
+`fox-head.svg` (favicon, the running Run button), `fox-small.svg`. A passed
+exercise swaps the bubble's fox for the shouting pair; `cheer_again` in
+`shell/app.rb` gives the SVG a fresh `#n` fragment so it plays again.
+
+To rebuild them: `tools/why_foxes/trace.py` splits the panel into parts
+(`spec-4c.json`: boxes per part, a `grab` box for the "k" drawn into a balloon
+line) and traces each with potracer; `build.py` writes the SVGs. They need a
+venv with `potracer numpy pillow scipy`:
+
+    python3 tools/why_foxes/trace.py the.foxes-4c.png 4c.json 11 9 275 233 tools/why_foxes/spec-4c.json
+    python3 tools/why_foxes/build.py 4c.json /tmp/fox-layers html/assets/why-foxes
+
 ## 11. Open ends
 
 Current work in progress has its own file: `docs/OPEN_WORK.md`.
@@ -2258,5 +2295,5 @@ Current work in progress has its own file: `docs/OPEN_WORK.md`.
 - Lesson 15 could show more Nokogiri (XPath, Builder) now that it works.
 - `NATIVE_GEMS` is a hand-kept list; a gem not on it still gets downloaded
   before its `extconf.rb` is noticed (cheap, but the message arrives late).
-- The mascot: Andi wanted _why's original foxes traced; the poignant
-  guide's licence could not be verified, so the fox is an original drawing.
+- The social cards (`docs/social/`) and the gem still show the original
+  Chunky drawing; the page now shows _why's foxes (§10b).

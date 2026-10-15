@@ -193,7 +193,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   the start, only the new line's output shown (lesson 45, about 27 MB,
   loaded when it opens). Not in git: the deploy builds it
   (`tools/build_spinel.rb`, pinned in `tools/spinel.json`).
-- Chunky Bacon, an original cartoon fox, cheers you on.
+- _why's own cartoon foxes, from the poignant guide, cheer you on (CC BY-SA 2.5,
+  traced to SVG and animated).
 
 ## On your own computer: the chunky_bacon gem
 
@@ -363,5 +364,8 @@ Both licenses allow commercial use.
 
 The phrase "[Chunky Bacon](https://chunkybacon.dev/glossary/chunky-bacon/)" is
 an homage to _why's (poignant) guide to Ruby_ by why the lucky stiff — fondly
-remembered. The mascot is an
-original character, not a copy of _why's foxes.
+remembered. The foxes on the page are his, from chapter 3 of the guide
+(CC BY-SA 2.5), traced to SVG in `html/assets/why-foxes/`; the original
+Chunky drawing (`html/assets/chunky.svg`) stays with the companion gem and the
+social cards. The look borrows the design language of Citroën's 2 CV Concept
+(redrawn, no Citroën marks): see docs/HANDOVER.md §10b.

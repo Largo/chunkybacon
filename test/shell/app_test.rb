@@ -444,11 +444,11 @@ class AppTest < Minitest::Test
   def test_language_select_mascot_and_skip_link_speak_the_language
     start
     assert_equal "Sprache", byid("langLabel").text
-    assert_equal "Chunky Bacon, der Fuchs", byid("mascot").attrs["alt"]
+    assert_equal "Einer von _whys Comic-Füchsen", byid("mascot").attrs["alt"]
     switch_to_english
     assert_equal "Language", byid("langLabel").text
     assert_equal "Language", byid("langSelect").attrs["title"]
-    assert_equal "Chunky Bacon, the fox", byid("mascot").attrs["alt"]
+    assert_equal "One of _why's cartoon foxes", byid("mascot").attrs["alt"]
     assert_equal "Skip to the lesson", byid("skipLink").text
     assert_equal "Run cell 1", run_button(1).attrs["aria-label"]
   end

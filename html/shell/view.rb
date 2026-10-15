@@ -163,7 +163,7 @@ module ChunkyShell
     end
 
     def self.running_label(text)
-      %(<img class="run-fox" src="assets/chunky.svg" alt="">#{text})
+      %(<img class="run-fox" src="assets/why-foxes/fox-head.svg" alt="">#{text})
     end
 
     # "1.4 s"; German writes "1,4 s"

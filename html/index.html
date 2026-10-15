@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ruby lernen mit Chunky Bacon</title>
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#1e2229">
     <!-- Atkinson Hyperlegible Next/Mono for everything the learner reads and
          types, Shantell Sans for Chunky's own voice (see app.css); self-hosted,
          so a visit makes no third-party requests -->
@@ -67,12 +67,12 @@
     <script src="assets/codemirror.js"></script>
     <script src="assets/codemirror-ruby.js"></script>
     <script src="lessons.js"></script>
-    <link rel="icon" href="assets/chunky.svg">
+    <link rel="icon" href="assets/why-foxes/fox-head.svg">
 </head>
 <body>
 
     <div class="spinner" id="spinner">
-      <img class="spinner-image" src="assets/chunky.svg" alt="">
+      <img class="spinner-image" src="assets/why-foxes/chunky-bacon.svg" alt="">
       <!-- before the shell knows the language: the title in German, the
            wait in all three, each marked with its language -->
       <h1 id="spinnerTitle" lang="de">Ruby lernen mit Chunky Bacon</h1>
@@ -122,7 +122,7 @@
 
         <div class="column">
           <header>
-            <img id="mascot" src="assets/chunky.svg" alt="Chunky Bacon, der Fuchs">
+            <img id="mascot" src="assets/why-foxes/fox-tall.svg" alt="Einer von _whys Comic-Füchsen">
             <div class="headerText">
               <h1 id="siteTitle">Ruby lernen mit Chunky Bacon</h1>
               <p id="siteSubtitle"></p>
@@ -151,7 +151,8 @@
             <p id="runStatus" class="sr-only" role="status" aria-live="polite"></p>
 
             <div id="chunkyChat">
-              <div class="chat-avatar"><img src="assets/chunky.svg" alt="Chunky"></div>
+              <!-- a pass: the cheering pair, an animated SVG (shell/app.rb restarts it) -->
+              <div class="chat-avatar"><img class="chat-fox" src="assets/why-foxes/fox-tall.svg" alt=""><img class="chat-cheer" src="assets/why-foxes/chunky-bacon.svg" alt=""></div>
               <div class="chat-message"><p id="chunkyText"></p></div>
             </div>
 

@@ -1,27 +1,43 @@
-/* Chunky Bacon - a Ruby exercise book.
+/* Chunky Bacon - a Ruby notebook in the 2 CV look.
 
-   Two voices. Chunky speaks in hand lettering (Shantell Sans): the title,
-   his speech bubbles, the loading screen. Everything the learner reads and
-   types is print: Atkinson Hyperlegible Next, and its Mono for code, which
-   keeps 0/O and 1/l/I apart for people typing their first programs.
+   The look borrows the design language of Citroen's 2 CV Concept (Paris,
+   2026) and redraws it: one warm Infra Red field under a dark cap (the
+   masthead, the code, the footer), cream for everything you can press,
+   cane-mustard for tasks, light drawn as lines along an edge (the current
+   lesson, a focused or running cell). No Citroen marks are used.
 
-   The page is a squared school exercise book (Rechenheft) with a red margin
-   line; code cells are white worksheets on it. Colours come from the fox
-   drawing itself: its outline ink, its orange, the bacon and the fat. */
+   Type: Outfit, heavy and tight, for headings, the masthead and buttons;
+   Atkinson Hyperlegible Next for everything the learner reads, and its Mono
+   for code, which keeps 0/O and 1/l/I apart for people typing their first
+   programs; Shantell Sans for the foxes' speech bubbles.
+
+   The foxes are why the lucky stiff's, from why's (poignant) guide to Ruby
+   (CC BY-SA 2.5), traced to SVG in assets/why-foxes/. */
 
 :root {
-  --paper: #ffffff;
-  --karo: #e3eaf1;        /* grid lines of the exercise book */
-  --margin-line: #e9a393; /* the red margin line */
-  --ink: #1a1208;         /* the fox's outline ink */
-  --ink-soft: #5f5247;    /* secondary text, 6.6:1 on paper */
-  --rule: #d4dbe3;        /* hairlines inside cells and widgets */
-  --fox: #e8722a;         /* actions and the active lesson; ink on it is 6:1 */
-  --fox-light: #f39a60;
-  --bacon: #b3401f;       /* links; 5.7:1 on paper, 5.1:1 on code-bg and fat */
-  --fat: #fdeee3;         /* bacon fat: task boxes */
-  --highlight: #ffc9a1;   /* highlighter marking the current lesson */
-  --code-bg: #eef2f6;     /* inline code, printed examples, output */
+  /* the 2 CV palette (hex values sampled from press photos) */
+  --infra: #ee3f24;       /* Infra Red body paint: big fields only, never text */
+  --glow: #ff7131;        /* where the paint flips to orange: light on dark */
+  --cap: #1e2229;         /* the black roof and tailgate: masthead, code, footer */
+  --bakelite: #ede5d0;    /* the cream of everything you touch: buttons */
+  --mustard: #e2b034;     /* the cane-weave door cards: tasks, the tartan */
+  --clip: #e4e943;        /* the yellow hub clips: tiny accents on dark only */
+  --olive: #998c60;       /* the tartan's dark band: pattern lines only */
+  --cap-text: #d3ccb9;    /* secondary text on the cap, 10:1 */
+
+  --paper: #f5f1e8;       /* the pale floor: the page */
+  --sheet: #fbf9f4;       /* cells, panels, the bits that sit on the page */
+  --karo: transparent;    /* (the exercise book's grid, retired) */
+  --margin-line: var(--ink);
+  --ink: #1e2229;
+  --ink-soft: #4e5560;    /* secondary text, 6.9:1 on paper */
+  --rule: #d8d1c1;        /* hairlines inside cells and widgets */
+  --fox: var(--infra);    /* the active lesson's edge, the task frame */
+  --fox-light: var(--glow);
+  --bacon: #bd2d00;       /* links and the run button; 5.2:1 on paper, 4.8:1 on fat */
+  --fat: #f6e7be;         /* pale mustard: task boxes */
+  --highlight: var(--bakelite); /* the current lesson */
+  --code-bg: #ece6d8;     /* inline code, printed examples, output */
   --ok: #276d2b;          /* 5.5:1 on the light green status chips */
   --err: #b3261e;
   --focus: #2f6db5;
@@ -29,6 +45,7 @@
   --font-print: "Atkinson Hyperlegible Next", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-code: "Atkinson Hyperlegible Mono", ui-monospace, "Cascadia Code", Menlo, monospace;
   --font-hand: "Shantell Sans", "Segoe Print", "Comic Sans MS", system-ui, sans-serif;
+  --font-display: "Outfit", "Avenir Next", "Futura", system-ui, sans-serif;
 
   --grid: 24px;
   --page: 74rem;
@@ -44,6 +61,7 @@
   --font-print: "Atkinson Hyperlegible Next", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", "Yu Gothic UI", "Yu Gothic", Meiryo, "Noto Sans JP", sans-serif;
   --font-code: "Atkinson Hyperlegible Mono", "BIZ UDGothic", "Osaka-Mono", "MS Gothic", "Noto Sans Mono CJK JP", ui-monospace, monospace;
   --font-hand: "Shantell Sans", "Hiragino Maru Gothic ProN", "BIZ UDPGothic", "Yu Gothic UI", "Yu Gothic", Meiryo, "Noto Sans JP", sans-serif;
+  --font-display: "Outfit", "Hiragino Maru Gothic ProN", "BIZ UDPGothic", "Yu Gothic UI", "Yu Gothic", Meiryo, "Noto Sans JP", sans-serif;
 }
 
 /* Slanted kana and kanji are only a faked oblique; Japanese type marks
@@ -63,11 +81,6 @@ body {
   line-height: 1.6;
   color: var(--ink);
   background-color: var(--paper);
-  background-image:
-    linear-gradient(var(--karo) 1px, transparent 1px),
-    linear-gradient(90deg, var(--karo) 1px, transparent 1px);
-  background-size: var(--grid) var(--grid);
-  background-position: -1px -1px;
 }
 
 ::selection { background: var(--highlight); }
@@ -121,16 +134,13 @@ a:hover { color: var(--ink); }
   text-align: center;
   padding: 2rem 1rem;
 }
-.spinner-image {
-  width: 150px;
-  animation: wobble 1.6s ease-in-out infinite;
-}
+.spinner-image { width: min(260px, 70vw); }   /* animates itself */
 .spinner h1 {
-  font-family: var(--font-hand);
-  font-weight: 700;
-  font-variation-settings: "INFM" 60, "BNCE" 25;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.035em;
   font-size: clamp(2rem, 6vw, 3.25rem);
-  line-height: 1.05;
+  line-height: 1.02;
   margin: 0.8rem 0 0.6rem;
   text-wrap: balance;
 }
@@ -146,7 +156,7 @@ a:hover { color: var(--ink); }
   border: 2px solid var(--ink);
   border-radius: 5px;
   overflow: hidden;
-  background: var(--paper);
+  background: var(--cap);
 }
 .load-bar::before {
   content: "";
@@ -154,7 +164,7 @@ a:hover { color: var(--ink); }
   width: calc(100% + 84px);
   height: 100%;
   background: repeating-linear-gradient(90deg,
-    var(--fox) 0 18px, var(--bacon) 18px 30px, #f6c9a8 30px 42px);
+    var(--infra) 0 18px, var(--glow) 18px 30px, var(--clip) 30px 42px);
   animation: bacon-slide 0.8s linear infinite;
   will-change: transform;
 }
@@ -169,22 +179,34 @@ header {
   display: flex;
   align-items: center;
   gap: 0.9rem;
-  padding: 0.9rem 1.5rem 0.9rem 2.5rem;
-  background: var(--paper);
+  padding: 0.8rem 1.5rem 0.8rem 2.5rem;
+  background: var(--cap);
+  color: var(--bakelite);
   border-bottom: 2px solid var(--ink);
 }
 body.sidebar-closed header { padding-left: 4.25rem; }
-header #mascot { width: 58px; height: 58px; flex: none; }
+/* the fox in an oval badge, like the one centred on that car's blank nose */
+header #mascot {
+  width: 50px;
+  height: 60px;
+  flex: none;
+  border-radius: 50%;
+  border: 3px solid #adb0b3;
+  background: var(--bakelite);
+  object-fit: cover;
+  object-position: 50% 0;
+  padding-top: 6px;
+}
 header .headerText { flex: 1; min-width: 0; }
 header h1 {
   margin: 0;
-  font-family: var(--font-hand);
-  font-weight: 700;
-  font-variation-settings: "INFM" 50, "BNCE" 15;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
   font-size: 1.75rem;
-  line-height: 1.1;
+  line-height: 1.05;
 }
-header p { margin: 0.2rem 0 0; color: var(--ink-soft); font-size: 0.95rem; }
+header p { margin: 0.2rem 0 0; color: var(--cap-text); font-size: 0.95rem; }
 /* the lessons are readable before CRuby has loaded; this says it is coming */
 header .kernel-status { font-size: 0.85rem; }
 header .kernel-status::before {
@@ -198,16 +220,16 @@ header .kernel-status::before {
   animation: kernel-pulse 1.2s ease-in-out infinite;
 }
 @keyframes kernel-pulse { 50% { opacity: 0.25; } }
-header .kernel-status.is-failed { color: var(--err); }
+header .kernel-status.is-failed { color: #ff9b8a; }   /* 7.7:1 on the cap */
 header .kernel-status.is-failed::before { background: var(--err); animation: none; }
 @media (prefers-reduced-motion: reduce) { header .kernel-status::before { animation: none; } }
 header select {
-  font: 600 0.95rem/1.2 var(--font-print);
+  font: 700 0.95rem/1.2 var(--font-display);
   color: var(--ink);
-  padding: 0.4rem 0.6rem;
-  border: 1.5px solid var(--ink);
-  border-radius: 6px;
-  background: var(--paper);
+  padding: 0.45rem 0.8rem;
+  border: 2px solid var(--bakelite);
+  border-radius: 999px;
+  background: var(--bakelite);
   cursor: pointer;
 }
 
@@ -217,14 +239,15 @@ header .progress-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font: 600 0.95rem/1.2 var(--font-print);
+  font: 700 0.95rem/1.2 var(--font-display);
   color: var(--ink);
-  padding: 0.4rem 0.7rem;
-  border: 1.5px solid var(--ink);
-  border-radius: 6px;
-  background: var(--paper);
+  padding: 0.45rem 0.85rem;
+  border: 2px solid var(--bakelite);
+  border-radius: 999px;
+  background: var(--bakelite);
+  box-shadow: none;
 }
-header .progress-btn:hover { background: var(--fat); }
+header .progress-btn:hover { background: #fff; border-color: #fff; }
 .progress-icon {
   width: 1.15em;
   height: 1.15em;
@@ -241,7 +264,7 @@ header .progress-btn:hover { background: var(--fat); }
   width: 11px;
   height: 11px;
   border-radius: 50%;
-  border: 2px solid var(--paper);
+  border: 2px solid var(--cap);
 }
 .progress-btn.is-connected .progress-dot { display: block; background: var(--ok); }
 .progress-btn.needs-attention .progress-dot { display: block; background: var(--fox); }
@@ -336,9 +359,9 @@ body.sidebar-closed .sidebar-toggle:hover { background: var(--fat); }
   background: var(--paper);
 }
 .nav-title {
-  font-family: var(--font-hand);
-  font-weight: 700;
-  font-variation-settings: "INFM" 50, "BNCE" 15;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
   font-size: 1.25rem;
   line-height: 1.2;
 }
@@ -348,21 +371,20 @@ body.sidebar-closed .sidebar-toggle:hover { background: var(--fat); }
   color: var(--ink-soft);
   font-variant-numeric: tabular-nums;
 }
+/* how far the course is: a row of slots, like the slotted wheel discs,
+   filled in Infra Red */
 .nav-bar {
   grid-column: 1 / -1;
   display: block;
-  height: 8px;
-  border: 1.5px solid var(--ink);
-  border-radius: 4px;
+  height: 10px;
   overflow: hidden;
-  background: var(--paper);
+  background: repeating-linear-gradient(90deg, #c9c2b2 0 5px, transparent 5px 8px);
 }
 #navBarFill {
   display: block;
   height: 100%;
   width: 0;
-  background: repeating-linear-gradient(90deg,
-    var(--fox) 0 18px, var(--bacon) 18px 30px, #f6c9a8 30px 42px);
+  background: repeating-linear-gradient(90deg, var(--infra) 0 5px, transparent 5px 8px);
   transition: width 0.4s ease;
 }
 
@@ -374,17 +396,19 @@ body.sidebar-closed .sidebar-toggle:hover { background: var(--fat); }
   gap: 0.4rem;
   flex: none;
   margin: 0.2rem 0 0.7rem;
-  padding: 0.45rem 0.7rem;
-  border: 1.5px solid var(--ink);
-  border-radius: 6px;
-  background: var(--paper);
+  padding: 0.5rem 0.8rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--bakelite);
   color: var(--ink);
-  font-weight: 700;
-  font-size: 0.95rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.98rem;
   text-decoration: none;
+  box-shadow: 0 2px 0 var(--ink);
 }
-.workshop-link:hover { background: var(--fat); color: var(--ink); }
-.workshop-link.active { background: var(--highlight); }
+.workshop-link:hover { background: #fff; color: var(--ink); }
+.workshop-link.active { background: var(--cap); color: var(--bakelite); }
 
 /* ---------- search ---------- */
 /* The magnifier is drawn, not a background image, so it takes the
@@ -583,14 +607,15 @@ nav#lessonNav a.active::before {
 
 /* ---------- lesson text ---------- */
 .lessonText h2 {
-  font-size: 2.1rem;
-  font-weight: 800;
-  line-height: 1.12;
-  letter-spacing: -0.015em;
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
   margin: 0 0 1.1rem;
   text-wrap: balance;
 }
-.lessonText h3 { font-size: 1.3rem; font-weight: 700; line-height: 1.25; margin: 1.8rem 0 0.5rem; }
+.lessonText h3 { font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; line-height: 1.25; margin: 1.8rem 0 0.5rem; }
 .lessonText p, .lessonText ul, .lessonText ol { max-width: 65ch; }
 .lessonText p { margin: 0 0 0.9rem; }
 .lessonText li { margin: 0.2rem 0; }
@@ -647,10 +672,10 @@ kbd {
 }
 
 .task {
-  border-left: 4px solid var(--fox);
+  border-left: 4px solid var(--mustard);
   background: var(--fat);
   padding: 0.75rem 1rem;
-  border-radius: 0 6px 6px 0;
+  border-radius: 0;
   margin: 1.4rem 0 0.5rem;
 }
 /* A task statement right above its exercise cell joins it: one orange
@@ -658,14 +683,14 @@ kbd {
    starts with "Aufgabe:", so the cell drops its own label. */
 .lessonText:has(+ .cell.exercise) > .task:last-child {
   margin-bottom: 0;
-  border: 2.5px solid var(--fox);
+  border: 2px solid var(--ink);
   border-bottom: 0;
-  border-radius: 6px 6px 0 0;
+  border-radius: 0;
   padding: 0.85rem 1rem 0.8rem;
 }
 .lessonText:has(> .task:last-child) + .cell.exercise {
   margin-top: 0;
-  border-top: 1px solid var(--fox-light);
+  border-top: 2px solid var(--ink);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
@@ -685,69 +710,78 @@ kbd {
 /* ---------- notebook cells: worksheets on the page ---------- */
 .cell {
   margin: 1rem 0 1.5rem;
-  border: 1.5px solid var(--ink);
-  border-radius: 6px;
-  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: var(--sheet);
   overflow: hidden;
   position: relative;
 }
-.cell.exercise { border: 2.5px solid var(--fox); }
+.cell:focus-within, .cell.running { border-left-color: var(--glow); border-right-color: var(--glow); }
+.cell.exercise { border: 2px solid var(--ink); border-left-width: 4px; border-right-width: 4px; }
+.cell.exercise:focus-within, .cell.exercise.running { border-left-color: var(--glow); border-right-color: var(--glow); }
 .cell.exercise::before {
   content: attr(data-label);
   display: block;
-  background: var(--fox);
-  color: var(--ink);
+  background: var(--cap);
+  color: var(--clip);
+  font-family: var(--font-hand);
   font-weight: 700;
-  font-size: 0.85rem;
-  padding: 0.2rem 0.9rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.9rem 0.1rem;
 }
 /* beat codemirror.css's fixed 300px height regardless of load order */
 .cell .CodeMirror {
   height: auto;
   font-family: var(--font-code);
   font-size: 15px;
-  line-height: 1.55;
-  color: var(--ink);
-  background: var(--paper);
-  padding: 0.3rem 0;
+  line-height: 1.6;
+  color: var(--bakelite);
+  background: var(--cap);
+  padding: 0.45rem 0;
 }
 .cell .CodeMirror-scroll { min-height: 2.2em; }
-.cell .CodeMirror-gutters { background: var(--paper); border-right: 1px solid var(--rule); }
-.cell .CodeMirror-linenumber { color: #5f6b78; padding: 0 0.5rem 0 0.4rem; }   /* 5.4:1 */
-.cell .CodeMirror-cursor { border-left: 2px solid var(--ink); }
-.cell .CodeMirror-selected, .cell .CodeMirror-focused .CodeMirror-selected { background: #ffe0c8; }
+.cell .CodeMirror-gutters { background: var(--cap); border-right: 1px solid #3a404a; }
+.cell .CodeMirror-linenumber { color: #8c9095; padding: 0 0.5rem 0 0.4rem; }   /* 5.1:1 */
+.cell .CodeMirror-cursor { border-left: 2px solid var(--glow); }
+.cell .CodeMirror-selected, .cell .CodeMirror-focused .CodeMirror-selected { background: #3a404a; }
 .cell .CodeMirror pre.CodeMirror-line { padding: 0 0.7rem; }
 /* the editor's input is a hidden textarea: the ring goes on the editor,
    inset, as the cell clips what sticks out */
-.cell .CodeMirror-focused { outline: 3px solid var(--focus); outline-offset: -3px; }
+.cell .CodeMirror-focused { outline: 3px solid var(--clip); outline-offset: -3px; }
 
-/* syntax colours: all at least 4.8:1 on paper */
-.cell .cm-s-default .cm-keyword { color: #a8361a; }
-.cell .cm-s-default .cm-def { color: var(--ink); font-weight: 700; }
-.cell .cm-s-default .cm-string { color: #1f7a3f; }
-.cell .cm-s-default .cm-string-2 { color: #9a4d00; }
-.cell .cm-s-default .cm-number { color: #2f5f9e; }
+/* syntax colours on the cap: all at least 5:1 */
+.cell .cm-s-default .cm-keyword { color: var(--glow); }
+.cell .cm-s-default .cm-def { color: #fff; font-weight: 700; }
+.cell .cm-s-default .cm-string { color: var(--mustard); }
+.cell .cm-s-default .cm-string-2 { color: #f0a35e; }
+.cell .cm-s-default .cm-number { color: #9db8f7; }
 .cell .cm-s-default .cm-atom,
-.cell .cm-s-default .cm-builtin { color: #7b3fa0; }
-.cell .cm-s-default .cm-variable-2 { color: #0e6a75; }
+.cell .cm-s-default .cm-builtin { color: #c9a7f0; }
+.cell .cm-s-default .cm-variable-2 { color: #7fd1c7; }
 .cell .cm-s-default .cm-variable-3,
-.cell .cm-s-default .cm-type { color: #0e6a75; }
-.cell .cm-s-default .cm-comment { color: #6f655d; font-style: italic; }
-.cell .cm-s-default .cm-bracket { color: #6f655d; }
-.cell .CodeMirror-matchingbracket { color: var(--ink) !important; background: #ffe0c8; }
+.cell .cm-s-default .cm-type { color: #7fd1c7; }
+.cell .cm-s-default .cm-comment { color: #9aa0a8; font-style: italic; }
+.cell .cm-s-default .cm-bracket { color: #9aa0a8; }
+.cell .CodeMirror-matchingbracket { color: #fff !important; background: #3a404a; }
 
 .cell-toolbar {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 0.4rem 0.5rem 0.4rem 0.9rem;
-  border-top: 1px solid var(--rule);
-  background: var(--paper);
+  padding: 0.45rem 0.55rem 0.45rem 0.9rem;
+  border-top: 2px solid var(--ink);
+  background: var(--sheet);
 }
+/* the one strong button: Run, in deep Infra Red */
 .cell-toolbar .run-cell {
-  font-size: 0.9rem;
-  padding: 0.3rem 0.95rem;
+  font-size: 0.92rem;
+  padding: 0.35rem 1.05rem;
+  background: var(--bacon);
+  color: #fff;
 }
+.cell-toolbar .run-cell:hover { background: #9e2500; }
 
 /* ---------- 📦 Program (html/compile/compile.js) ---------- */
 .cell-toolbar .compile-cell {
@@ -788,7 +822,7 @@ kbd {
   width: calc(100% + 84px);
   height: 4px;
   background: repeating-linear-gradient(90deg,
-    var(--fox) 0 18px, var(--bacon) 18px 30px, #f6c9a8 30px 42px);
+    var(--infra) 0 18px, var(--glow) 18px 30px, var(--clip) 30px 42px);
   animation: bacon-slide 0.8s linear infinite, run-fade-in 0.2s ease-out 0.12s backwards;
   will-change: transform, opacity;
   pointer-events: none;
@@ -852,21 +886,23 @@ kbd {
    paused (a cell too slow for live runs) it is struck through */
 .live-toggle {
   margin-right: 0.5rem;
-  padding: 0.2rem 0.6rem;
+  padding: 0.25rem 0.7rem;
   font: inherit;
   font-size: 0.8rem;
   color: var(--ink-soft);
   background: transparent;
-  border: 1px dashed var(--rule);
+  border: 1.5px dashed var(--ink-soft);
   border-radius: 999px;
+  box-shadow: none;
   cursor: pointer;
 }
-.live-toggle:hover { color: var(--ink); background: transparent; border-color: var(--ink-soft); }
+.live-toggle:hover { color: var(--ink); background: transparent; border-color: var(--ink); }
 .live-toggle[aria-pressed="true"] {
-  color: var(--ink);
-  background: var(--highlight);
-  border: 1px solid transparent;
+  color: var(--clip);
+  background: var(--cap);
+  border: 1.5px solid var(--cap);
 }
+.live-toggle[aria-pressed="true"]:hover { background: #2c323c; color: var(--clip); }
 .live-toggle.is-paused {
   color: var(--ink-soft);
   background: var(--fat);
@@ -1605,22 +1641,24 @@ button.fe-refresh:hover { background: var(--fat); }
   overflow-y: auto;
 }
 
-/* ---------- buttons: ink on fox orange, outlined like the drawing ---------- */
+/* ---------- buttons: cream means pressable, like every control in that car
+   (Bakelite cream); the one strong action is deep Infra Red ---------- */
 .buttons { margin: 0.7rem 0; display: flex; gap: 0.6rem; }
 button {
-  font-family: var(--font-print);
+  font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.25;
   padding: 0.5rem 1.2rem;
-  border-radius: 6px;
-  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  border: 2px solid var(--ink);
   cursor: pointer;
-  background: var(--fox);
+  background: var(--bakelite);
   color: var(--ink);
+  box-shadow: 0 2px 0 var(--ink);
 }
-button:hover { background: var(--fox-light); }
-button:active { transform: translateY(1px); }
+button:hover { background: #fff; }
+button:active { transform: translateY(1px); box-shadow: 0 1px 0 var(--ink); }
 button.reset {
   background: transparent;
   font-weight: 600;
@@ -1628,6 +1666,7 @@ button.reset {
   padding: 0.4rem 0.95rem;
   border-color: var(--ink-soft);
   color: var(--ink-soft);
+  box-shadow: none;
 }
 button.reset:hover { background: var(--paper); color: var(--ink); border-color: var(--ink); }
 
@@ -1823,7 +1862,11 @@ button.reset:hover { background: var(--paper); color: var(--ink); border-color: 
 #chunkyChat.pass { --bubble: #e6f4e7; }
 #chunkyChat.fail { --bubble: #fde6dc; }
 #chunkyChat .chat-avatar { flex: none; }
-#chunkyChat .chat-avatar img { width: 96px; display: block; }
+#chunkyChat .chat-avatar img { width: 84px; display: block; }
+/* a pass: both foxes shout it (why's chunky bacon strip, animated) */
+#chunkyChat .chat-avatar .chat-cheer { display: none; }
+#chunkyChat.pass .chat-avatar .chat-fox { display: none; }
+#chunkyChat.pass .chat-avatar .chat-cheer { display: block; width: 190px; }
 #chunkyChat .chat-message {
   position: relative;
   flex: 1;
@@ -1874,22 +1917,36 @@ button.reset:hover { background: var(--paper); color: var(--ink); border-color: 
 #chunkyChat .chat-message a { color: var(--ink); font-weight: 700; text-decoration-color: var(--fox); text-decoration-thickness: 3px; }
 #chunkyChat kbd { font-size: 0.78em; }
 
+/* the dark tail, under a strip of the seats' yellow tartan */
 footer {
-  max-width: 40rem;
-  margin: 0 auto;
+  position: relative;
+  margin-top: 3rem;
   text-align: center;
-  padding: 2rem 1.5rem 3rem;
-  color: var(--ink-soft);
+  padding: 4.5rem 1.5rem 3rem;
+  background: var(--cap);
+  color: var(--cap-text);
   font-size: 0.88rem;
 }
-footer p { margin: 0.4rem 0; }
-footer a { color: var(--ink); }
+footer::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2.5rem;
+  background-color: var(--mustard);
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 14px, rgba(255, 250, 235, 0.6) 14px 16px, transparent 16px 22px, rgba(153, 140, 96, 0.5) 22px 30px, transparent 30px 44px),
+    repeating-linear-gradient(90deg, transparent 0 14px, rgba(255, 250, 235, 0.6) 14px 16px, transparent 16px 22px, rgba(153, 140, 96, 0.5) 22px 30px, transparent 30px 44px);
+}
+footer p { margin: 0.4rem auto; max-width: 40rem; }
+footer a { color: var(--bakelite); }
 
 /* ---------- small screens: the lesson fills the page, the index is a drawer
    that slides in over it (shell/app.rb: App::NARROW is this width) ---------- */
 @media (max-width: 820px) {
   header, body.sidebar-closed header { gap: 0.6rem; padding: 0.6rem 1rem 0.6rem 3.5rem; }
-  header #mascot { width: 44px; height: 44px; }
+  header #mascot { width: 40px; height: 48px; padding-top: 4px; }
   header h1 { font-size: 1.3rem; }
   header p { font-size: 0.85rem; }
   header select { padding: 0.35rem 0.5rem; }
@@ -1898,6 +1955,11 @@ footer a { color: var(--ink); }
   main { padding: 1.4rem 1rem 2rem 1rem; }
   .sidebar-toggle { top: 0.85rem; left: 0.6rem; }
   body.sidebar-closed .sidebar-toggle { background: transparent; border-color: transparent; }
+  /* here the toggle sits on the dark masthead, or on the drawer when it is out */
+  .sidebar-toggle, body.sidebar-closed .sidebar-toggle { color: var(--bakelite); }
+  .sidebar-toggle:hover, body.sidebar-closed .sidebar-toggle:hover { background: #2c323c; }
+  body.sidebar-open .sidebar-toggle { color: var(--ink); }
+  body.sidebar-open .sidebar-toggle:hover { background: var(--fat); }
   /* visibility follows the slide, so a closed drawer leaves the tab order
      instead of taking the keyboard somewhere nobody can see */
   .sidebar,
@@ -1936,12 +1998,13 @@ footer a { color: var(--ink); }
   .workshop { grid-template-columns: minmax(0, 1fr); }
   .ws-editor .CodeMirror-scroll { min-height: 14em; }
   #chunkyChat { gap: 0.9rem; }
-  #chunkyChat .chat-avatar img { width: 64px; }
+  #chunkyChat .chat-avatar img { width: 60px; }
+  #chunkyChat.pass .chat-avatar .chat-cheer { width: 130px; }
 }
 /* phones: the title is the brand, the subtitle is the first thing to go */
 @media (max-width: 520px) {
   header { gap: 0.5rem; }
-  header #mascot { width: 40px; height: 40px; }
+  header #mascot { width: 36px; height: 44px; }
   header p { display: none; }
   header h1 { font-size: 1.05rem; }
   header .progress-btn { padding: 0.35rem 0.5rem; }

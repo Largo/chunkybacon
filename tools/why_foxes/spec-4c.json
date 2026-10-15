@@ -1,0 +1,95 @@
+{
+ "tallMouth": {
+  "boxes": [
+   [
+    36,
+    136,
+    70,
+    172
+   ]
+  ],
+  "minpx": 200,
+  "maxpx": 600
+ },
+ "smallMouth": {
+  "boxes": [
+   [
+    208,
+    186,
+    254,
+    224
+   ]
+  ],
+  "minpx": 300,
+  "maxpx": 900
+ },
+ "tall": {
+  "boxes": [
+   [
+    16,
+    90,
+    112,
+    224
+   ]
+  ],
+  "fill": true,
+  "with": [
+   "tallMouth"
+  ]
+ },
+ "small": {
+  "boxes": [
+   [
+    164,
+    140,
+    264,
+    224
+   ]
+  ],
+  "fill": true,
+  "with": [
+   "smallMouth"
+  ]
+ },
+ "balloons": {
+  "boxes": [
+   [
+    0,
+    0,
+    264,
+    160
+   ]
+  ],
+  "minpx": 1000
+ },
+ "textBig": {
+  "boxes": [
+   [
+    30,
+    0,
+    230,
+    40
+   ]
+  ],
+  "maxpx": 400
+ },
+ "textSmall": {
+  "boxes": [
+   [
+    120,
+    70,
+    250,
+    130
+   ]
+  ],
+  "maxpx": 400,
+  "grab": [
+   [
+    182,
+    79,
+    198,
+    99
+   ]
+  ]
+ }
+}

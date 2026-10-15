@@ -459,6 +459,17 @@ module ChunkyShell
       chat.className = state.to_s
       el("chunkyText").innerHTML = html
       chat.style.display = "flex"
+      cheer_again if state.to_s == "pass"
+    end
+
+    # The foxes' shout is an animated SVG, which plays once it is shown; a
+    # fresh fragment makes it a new image, so every pass starts it again.
+    def cheer_again
+      cheer = el("chunkyChat").querySelector(".chat-cheer")
+      return unless cheer
+
+      @cheers = (@cheers || 0) + 1
+      cheer.setAttribute("src", "assets/why-foxes/chunky-bacon.svg##{@cheers}")
     end
 
     # "Ruby wird geladen ..." in the header until the kernel is up - or

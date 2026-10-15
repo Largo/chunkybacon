@@ -10,6 +10,7 @@ assets/codemirror.js
 assets/data/digits.csv
 assets/fonts/OFL-atkinson-hyperlegible-mono.txt
 assets/fonts/OFL-atkinson-hyperlegible-next.txt
+assets/fonts/OFL-outfit.txt
 assets/fonts/OFL-shantell-sans.txt
 assets/fonts/atkinson-hyperlegible-mono-latin-ext.woff2
 assets/fonts/atkinson-hyperlegible-mono-latin.woff2
@@ -19,6 +20,8 @@ assets/fonts/atkinson-hyperlegible-next-latin-ext.woff2
 assets/fonts/atkinson-hyperlegible-next-latin.woff2
 assets/fonts/chunky-box-drawing.woff
 assets/fonts/fonts.css
+assets/fonts/outfit-latin-ext.woff2
+assets/fonts/outfit-latin.woff2
 assets/fonts/shantell-sans-latin-ext.woff2
 assets/fonts/shantell-sans-latin.woff2
 assets/herb/LICENSE-herb.txt
@@ -63,6 +66,10 @@ assets/three/LICENSE
 assets/three/OrbitControls.js
 assets/three/three.core.min.js
 assets/three/three.module.min.js
+assets/why-foxes/chunky-bacon.svg
+assets/why-foxes/fox-head.svg
+assets/why-foxes/fox-small.svg
+assets/why-foxes/fox-tall.svg
 autorun.rb
 browser.script.iife.js
 browser_gems.rb
