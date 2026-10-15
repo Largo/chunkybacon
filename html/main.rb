@@ -666,12 +666,21 @@ class ChunkyApp
   end
 
   # ShoesDom subclasses Shoes::DisplayService, so it can only be defined once
-  # the lesson has required Shoes -- which happens inside a cell. Cells run
-  # synchronously, and JS::RequireRemote needs an async context, so the
-  # source is fetched with the same synchronous XHR the gem installer uses.
+  # Shoes is loaded. The lesson's first cell installs lacci and requires it;
+  # a later Shoes cell run before it - or its live run while the learner
+  # types - loads it here, from the cache. Evaluated without Shoes,
+  # shoes_dom.rb stopped half way and left a ShoesDom without its classes,
+  # which broke every Shoes cell until a reload: so it counts as loaded only
+  # once its last class is there. Cells run synchronously, and
+  # JS::RequireRemote needs an async context, so the source is fetched with
+  # the same synchronous XHR the gem installer uses.
   def shoes_dom_loaded?
-    return true if defined?(ShoesDom)
+    return true if defined?(ShoesDom::DisplayService)
 
+    unless defined?(Shoes::DisplayService)
+      install_gem_ui("lacci")
+      require "shoes"
+    end
     source = $window.fetchTextSync("shoes_dom.rb")
     raise LoadError, "could not fetch shoes_dom.rb" if source.start_with?("ERROR ")
 

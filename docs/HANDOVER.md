@@ -511,7 +511,11 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   unless the display service claims multi-app support (it does); its
   `destroy` shuts down every app, so cells dispose only their own;
   `unsub_all_shoes_events` between lessons. Apps size to content unless
-  `height:` is given.
+  `height:` is given. `shoes_dom.rb` can only be evaluated once Shoes is
+  loaded, so `show_shoes` installs and requires lacci itself when a cell
+  (or its live run) comes before the lesson's first; evaluated without it,
+  the file stopped half way and the half-defined `ShoesDom` broke every
+  Shoes cell until a reload.
 - **show_irb**: continuation lines via a SyntaxError heuristic
   (`INCOMPLETE_RE`), `_` supported.
 - **show_pdf**: an `<iframe>` on a Blob URL, so the browser's own viewer

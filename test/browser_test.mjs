@@ -1318,6 +1318,11 @@ check('erb exercise passes', (await page.getAttribute('#chunkyChat', 'class')).i
 // Lacci display service (shoes_dom.rb); several stay live at once
 await page.click('#lessonNav a[data-id="scarpe"]');
 await page.waitForTimeout(500);
+// a Shoes cell run before the one that installs lacci loads it itself (it
+// used to leave a half-loaded renderer that broke every Shoes cell)
+await page.click('.run-cell[data-idx="3"]');
+await page.waitForFunction(() => !document.querySelector('.run-cell[data-idx="3"]').disabled, null, { timeout: 90000 });
+check('a Shoes cell run before the install cell renders', (await page.$$('#cell-out-3 .shoes-flow .shoes-button')).length === 3);
 await page.click('.run-cell[data-idx="1"]');
 await page.waitForFunction(() => !document.querySelector('.run-cell[data-idx="1"]').disabled, null, { timeout: 90000 });
 check('lacci installs from cache', (await page.textContent('#gemsList')).includes('lacci ✓'));
