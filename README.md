@@ -57,14 +57,14 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **Keyboard and screen readers**: a skip link past the index, editors
   that Escape, then Tab leaves, Run buttons named with their cell that keep
   the focus, a status line that reads out what a run printed and what
-  Chunky says, the focus on the new lesson's heading after every lesson
+  the fox says, the focus on the new lesson's heading after every lesson
   change, a modal drawer on a phone, named widgets (IRB, mini browser, 3D,
   a game you can leave with Tab, the step-by-step slider)
   and contrast at WCAG AA (audit: `experiments/10-accessibility`).
 - **Live runs**: a cell runs by itself a second after you stop typing, as
   long as the code parses - a rehearsal that keeps no file it writes,
   installs only gems already in the cache, fetches nothing from the web and
-  is stopped after a second; ▶ runs the code for real. Chunky only speaks
+  is stopped after a second; ▶ runs the code for real. The foxes only speak
   up when an exercise passes. On in the lessons, off in the workshop (the
   ⚡ Live switch beside ▶); a lesson whose cells compute too much for it
   (`"live": false`, the music lesson) turns it off and says why.

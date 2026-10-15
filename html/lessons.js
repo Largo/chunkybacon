@@ -32,7 +32,7 @@ window.LESSONS_JSON = JSON.stringify({
       "loading": "Ruby wird geladen … (einmalig ca. 10 MB)",
       "kernelFailed": "Ruby konnte nicht geladen werden – bitte lade die Seite neu.",
       "shellFailed": "Die Seite konnte nicht starten – bitte lade sie neu.",
-      "welcome": "Hallo! Ich bin <strong>Chunky Bacon</strong>, dein Fuchs-Begleiter. 🦊🥓 Diese Seite ist ein <strong>Notizbuch</strong>: Führe jede Code-Zelle mit <em>▶ Ausführen</em> oder <kbd>Shift</kbd>+<kbd>Enter</kbd> aus – den Wert der letzten Zeile zeigt Ruby automatisch als <code>=&gt;</code>. Die Zelle unter dem gelben Kasten ist deine Aufgabe. Los geht's!",
+      "welcome": "Hallo! Ich bin einer der Füchse aus <em>why's (poignant) guide to Ruby</em> – die beiden, die immer „Chunky Bacon!“ rufen. 🦊🥓 Diese Seite ist ein <strong>Notizbuch</strong>: Führe jede Code-Zelle mit <em>▶ Ausführen</em> oder <kbd>Shift</kbd>+<kbd>Enter</kbd> aus – den Wert der letzten Zeile zeigt Ruby automatisch als <code>=&gt;</code>. Die Zelle unter dem gelben Kasten ist deine Aufgabe. Los geht's!",
       "resetConfirm": "Alle Zellen dieser Lektion zurücksetzen?",
       "praise": [
         "CHUNKY BACON! 🥓 Genau so!",
@@ -232,7 +232,7 @@ window.LESSONS_JSON = JSON.stringify({
       "loading": "Loading Ruby … (one-time, about 10 MB)",
       "kernelFailed": "Ruby could not be loaded – please reload the page.",
       "shellFailed": "The page could not start – please reload it.",
-      "welcome": "Hi! I'm <strong>Chunky Bacon</strong>, your fox companion. 🦊🥓 This page is a <strong>notebook</strong>: run every code cell with <em>▶ Run</em> or <kbd>Shift</kbd>+<kbd>Enter</kbd> – Ruby automatically shows the value of the last line as <code>=&gt;</code>. The cell under the yellow box is your task. Let's go!",
+      "welcome": "Hi! I'm one of the foxes from <em>why's (poignant) guide to Ruby</em> – the two who keep shouting “chunky bacon!” 🦊🥓 This page is a <strong>notebook</strong>: run every code cell with <em>▶ Run</em> or <kbd>Shift</kbd>+<kbd>Enter</kbd> – Ruby automatically shows the value of the last line as <code>=&gt;</code>. The cell under the yellow box is your task. Let's go!",
       "resetConfirm": "Reset all cells of this lesson?",
       "praise": [
         "CHUNKY BACON! 🥓 That's it!",
@@ -432,7 +432,7 @@ window.LESSONS_JSON = JSON.stringify({
       "loading": "Rubyを読み込み中 …（初回のみ、約10 MB）",
       "kernelFailed": "Rubyを読み込めませんでした。ページを再読み込みしてください。",
       "shellFailed": "ページを開始できませんでした。再読み込みしてください。",
-      "welcome": "こんにちは！ぼくは<strong>Chunky Bacon</strong>、きみの相棒のキツネだよ。🦊🥓 このページは<strong>ノートブック</strong>になっていて、どのコードセルも<em>▶ 実行</em>か<kbd>Shift</kbd>+<kbd>Enter</kbd>で動かせるよ。最後の行の値は、Rubyが自動で<code>=&gt;</code>のあとに見せてくれる。黄色いボックスの下のセルがきみの課題だよ。さあ、始めよう！",
+      "welcome": "こんにちは！ぼくは『<em>why's (poignant) guide to Ruby</em>』のキツネ。「Chunky bacon!」って叫んでる、あの二匹の片方だよ。🦊🥓 このページは<strong>ノートブック</strong>になっていて、どのコードセルも<em>▶ 実行</em>か<kbd>Shift</kbd>+<kbd>Enter</kbd>で動かせるよ。最後の行の値は、Rubyが自動で<code>=&gt;</code>のあとに見せてくれる。黄色いボックスの下のセルがきみの課題だよ。さあ、始めよう！",
       "resetConfirm": "このレッスンのセルをすべて元に戻しますか？",
       "praise": [
         "CHUNKY BACON! 🥓 そのとおり！",

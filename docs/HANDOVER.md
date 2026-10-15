@@ -109,7 +109,7 @@ html/
                         limit, taking back the files a rehearsal wrote
   step_recorder.rb      ⏯ step through (§6): a cell's run recorded line by
                         line - the line, each frame's variables, the output
-  stepper.js            ⏯'s stepper below the cell: Chunky's sentence, the
+  stepper.js            ⏯'s stepper below the cell: the fox's sentence, the
                         variables, a slider; the line marked in the editor (§6)
   friendly_errors.rb    a failing cell's error explained in de/en/ja (§6);
                         its rules (_rules.rb) and texts (_messages.rb) apart
@@ -194,7 +194,7 @@ docs/PICORUBY_SHELL.md     the shell/kernel split in depth: bridge API,
 
 The page runs two Ruby VMs. **The shell** (`html/shell/*.rb`, PicoRuby.wasm,
 0.9 MB gzipped, up in ~0.3 s) draws everything the learner reads: header,
-index, lesson text and editors, language, routing, Chunky's bubble, the gems
+index, lesson text and editors, language, routing, the foxes' bubble, the gems
 panel, the progress dialog and the workshop's file panel. **The kernel**
 (`html/main.rb`, CRuby's ruby.wasm, 10 MB gzipped) starts only after the
 shell has drawn the page, and runs cells, checks, gems and widgets. A lesson
@@ -550,7 +550,7 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   or Alt+R writes one line to `#runStatus` (`role=status`, `.sr-only`;
   `App#announce_run`): `ranOk`/`ranError` with the cell's output, cut at
   280 characters (an explained error by its headline only, `brief_output`),
-  and for an exercise Chunky's bubble - emptied first, the
+  and for an exercise the foxes' bubble - emptied first, the
   text 50 ms later, so the same result twice is read twice. Live runs never
   write there, and `.cell-out` is no live region on purpose (live runs
   rewrite it while the learner types). The Run button keeps `disabled`
@@ -727,7 +727,7 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   `StepRecorder#run`. After the output is written, `show_steps` hands the
   trace to `ChunkyBridge.steps(idx, json)`; bridge.js parses it (never
   PicoRuby) and `ChunkyStepper.show` puts the stepper on top of
-  `#cell-out-<idx>`, above the run's own output: Chunky's sentence ("Zeile
+  `#cell-out-<idx>`, above the run's own output: the fox's sentence ("Zeile
   2 ist dran - zum 3. Mal."), the frames (the cell, a method with its
   arguments, a block with its pass; a value that changed in yellow, one
   from an earlier cell with ⟲), the output so far, ⏮ ◀ slider ▶ ⏭, "⏵
@@ -2272,7 +2272,9 @@ redrawn - no Citroën logo, wordmark or typeface. The tokens are at the top of
   bubbles.
 
 The foxes are why the lucky stiff's, from the chunky bacon strip in chapter 3
-of the poignant guide (CC BY-SA 2.5, as poignantguide.net states). The files in
+of the poignant guide (CC BY-SA 2.5, as poignantguide.net states). They have
+no names - "chunky bacon" is what they shout, so the welcome bubble says "one
+of the foxes from why's guide", never "I'm Chunky Bacon". The files in
 `html/assets/why-foxes/`: `chunky-bacon.svg` (both foxes shout, an animated SVG
 that holds still under prefers-reduced-motion: the loading screen and a
 passed exercise), `fox-tall.svg` (the masthead and the speech bubble),

@@ -1323,7 +1323,7 @@ kbd {
 .game-error { padding-top: 0.3rem; color: var(--err); font-size: 0.9rem; white-space: pre-wrap; }
 
 /* ⏯ Step through (stepper.js, a lesson with "stepper": true): a quieter
-   button than ▶ beside it; below the cell the recorded run - Chunky's
+   button than ▶ beside it; below the cell the recorded run - the fox's
    sentence, the variables of each frame beside the output so far, a
    slider with buttons. The line about to run is marked in the editor
    itself, as the highlighter marks the current lesson. */
@@ -1851,7 +1851,8 @@ button.reset:hover { background: var(--paper); color: var(--ink); border-color: 
 .pd-message { min-height: 1.6em; margin: 1rem 0 0; font-weight: 600; }
 .pd-message.is-ok { color: var(--ok); }
 
-/* ---------- Chunky speaks: a comic speech bubble, hand-lettered ---------- */
+/* ---------- the foxes speak: a comic speech bubble, hand-lettered.
+   The foxes have no names; "chunky bacon" is what they shout. ---------- */
 #chunkyChat {
   --bubble: var(--paper);
   display: none;
@@ -1890,7 +1891,7 @@ button.reset:hover { background: var(--paper); color: var(--ink); border-color: 
 @keyframes bubble-pop { from { opacity: 0; transform: scale(0.9); } }
 @keyframes bubble-pop-pass { from { opacity: 0; transform: scale(0.9); } }
 @keyframes bubble-pop-fail { from { opacity: 0; transform: scale(0.9); } }
-/* the tail, pointing down to Chunky's mouth: ink triangle, bubble inside */
+/* the tail, pointing down to the fox's mouth: ink triangle, bubble inside */
 #chunkyChat .chat-message::before,
 #chunkyChat .chat-message::after {
   content: "";
@@ -2010,8 +2011,8 @@ footer a { color: var(--bakelite); }
   header .progress-btn { padding: 0.35rem 0.5rem; }
   header .progress-label { display: none; }
 }
-/* narrow phones: three buttons need the room, Chunky still waves from his
-   speech bubble below */
+/* narrow phones: three buttons need the room, the fox still waves from
+   the speech bubble below */
 @media (max-width: 420px) {
   header #mascot { display: none; }
   header h1 { font-size: 1rem; }
