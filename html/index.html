@@ -50,13 +50,14 @@
     <meta name="description" content="Lerne die Programmiersprache Ruby direkt im Browser – mit Chunky Bacon. Ein interaktives Notizbuch auf Deutsch, Englisch und Japanisch, kein Setup nötig.">
     <meta name="author" content="Andi Idogawa">
     <!-- Link previews (Slack, X, LinkedIn, Discord, messengers): the 2:1 card
-         from docs/social/card.html (tools/render_social_cards.mjs). Scrapers
-         want an absolute URL: GitHub's raw copy until the site has a domain. -->
+         from docs/social/card.html (tools/render_social_cards.mjs), served
+         by the site itself from social/ (not in the offline copy). Scrapers
+         want an absolute URL, so it names the domain; X takes og:image too. -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Chunky Bacon">
     <meta property="og:title" content="Learn Ruby with Chunky Bacon">
     <meta property="og:description" content="An interactive Ruby notebook in your browser, in German, English and Japanese – from puts to web apps, PDFs and 3D. Nothing to install.">
-    <meta property="og:image" content="https://raw.githubusercontent.com/Largo/chunkybacon/main/docs/social/github-social.png">
+    <meta property="og:image" content="https://chunkybacon.idogawa.com/social/github-social.png">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1600">
     <meta property="og:image:height" content="800">

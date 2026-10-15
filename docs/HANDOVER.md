@@ -121,6 +121,8 @@ html/
                         sandboxed; embed-frame.js its inside (the kernel's
                         stand-ins), embed.css, embed-ui.js (generated: the ui
                         strings); embed.js turns <pre data-chunky> into it
+  social/               github-social.png, the link-preview card (og:image),
+                        written by tools/render_social_cards.mjs; not offline
   assets/               app.css, CodeMirror, three.js (vendored), the fox SVG,
                         fonts/ (self-hosted web fonts + fonts.css, OFL 1.1),
                         data/ (files lessons read: digits.csv)
@@ -150,12 +152,13 @@ tools/patch_picoruby_loader.rb  PicoRuby's loader: text/ruby -> text/picoruby
 tools/vendor_picoruby.rb   PicoRuby.wasm from npm into html/assets/picoruby/ (checksums,
                            loader patch, .gz, NOTICE.md); --check: offline, files as recorded
 tools/measure_load.mjs, tools/shell_metrics.rb  load times, code size (PICORUBY_SHELL.md)
-tools/render_social_cards.mjs  docs/social/card.html -> twitter-card.png (1600x900: X,
-                           Bluesky, Mastodon, README) and github-social.png (1600x800:
-                           GitHub social preview, og:image); fills in the lesson count,
-                           so rerun it when that changes. og:image points at GitHub's
-                           raw copy - switch it to the site's own URL once a domain is bound
-docs/social/               the social cards: card.html (source) and the two PNGs
+tools/render_social_cards.mjs  docs/social/card.html -> docs/social/twitter-card.png
+                           (1600x900: X, Bluesky, Mastodon, README) and
+                           html/social/github-social.png (1600x800: GitHub social
+                           preview, og:image); fills in the lesson count, so rerun it
+                           when that changes. og:image is the site's own copy,
+                           https://chunkybacon.idogawa.com/social/github-social.png
+docs/social/               the social cards: card.html (source) and twitter-card.png
 gem/chunky_bacon/          the companion gem: the course's helpers on a computer,
                            the fox, `chunkybacon run` (§10a)
 gem/chunkybacon/, gem/chunky-bacon/  its alias gems (like rubyllm -> ruby_llm)
