@@ -653,11 +653,12 @@ module ChunkyShell
       note_speed(idx, outcome, detail.own)
       before = @last_outcome[idx]
       @last_outcome[idx] = outcome unless outcome == "skipped"
+      first = show_earlier(idx, detail)
       return settle_live(idx, outcome, before) if detail.auto == true
 
       settle_cell(idx, outcome, detail.elapsed)
       cell = workshop? ? nil : current_cells[idx]
-      return announce_run(idx, outcome, "") unless cell && cell.t == "x"
+      return announce_run(idx, outcome, "", first) unless cell && cell.t == "x"
 
       if outcome == "error"
         show_bubble(ui.errorIntro, "fail")
@@ -666,20 +667,74 @@ module ChunkyShell
       elsif outcome == "fail"
         show_bubble(View.failed_html(ui, cell.hint), "fail")
       end
-      announce_run(idx, outcome, el("chunkyText").innerText.to_s)
+      announce_run(idx, outcome, el("chunkyText").innerText.to_s, first)
+    end
+
+    # The cells above that the kernel ran first, because this one needs what
+    # they make (main.rb's run_earlier, earlier_cells.rb): "Ran cells 1–3
+    # above first." at the top of the output - a live run's too, or which
+    # cells above a live run left for ▶ - and the same in words for the
+    # status line ("cells 1 to 3"), which it returns.
+    def show_earlier(idx, detail)
+      first = cell_numbers_of(detail[:before])
+      failed = cell_numbers_of(detail[:failed])
+      waiting = cell_numbers_of(detail[:waiting])
+      return "" if first.empty? && waiting.empty?
+
+      out = el("cell-out-#{idx}")
+      if out
+        note = JSG.d.createElement("div")
+        note.className = "cell-earlier"
+        note.textContent = earlier_words(first, failed, waiting, ui.cellRange)
+        out.insertBefore(note, out.firstChild)
+      end
+      earlier_words(first, failed, waiting, ui.cellRangeSpoken)
+    end
+
+    def earlier_words(first, failed, waiting, range)
+      sentences = []
+      sentences << format(first.length == 1 ? ui.ranFirstOne : ui.ranFirstMany, cell_ranges(first, range)) unless first.empty?
+      sentences << format(failed.length == 1 ? ui.ranFirstFailedOne : ui.ranFirstFailedMany, cell_ranges(failed, range)) unless failed.empty?
+      sentences << format(waiting.length == 1 ? ui.cellsWaitingOne : ui.cellsWaitingMany, cell_ranges(waiting, range)) unless waiting.empty?
+      # no space after a Japanese full stop
+      text = ""
+      sentences.each { |sentence| text += (text.empty? || text.end_with?("。") ? "" : " ") + sentence }
+      text
+    end
+
+    # "2,4,6" (the kernel's cell indices) -> [1, 2, 3], the numbers the
+    # cells go by on the page ("Run cell 2")
+    def cell_numbers_of(list)
+      list.to_s.split(",").map { |i| @cell_numbers[i.to_i] || i.to_i }
+    end
+
+    # [1, 2, 3, 5] -> "1–3, 5" (+range+: ui.cellRange, or the spoken
+    # "1 bis 3")
+    def cell_ranges(numbers, range)
+      parts = []
+      i = 0
+      while i < numbers.length
+        j = i
+        j += 1 while j + 1 < numbers.length && numbers[j + 1] == numbers[j] + 1
+        parts << (j > i ? format(range, numbers[i].to_s, numbers[j].to_s) : numbers[i].to_s)
+        i = j + 1
+      end
+      parts.join(ui.cellListSep)
     end
 
     # What a run did, for a screen reader: one polite status line (#runStatus)
-    # per run with ▶, Shift+Enter or Alt+R - the cell's output, shortened,
-    # a picture by its alt text (show_objects says what it draws), and for
-    # an exercise Chunky's verdict. The output itself is no live region:
-    # live runs rewrite it while the learner types. Emptied first, and the
-    # text a moment later, so the same result twice is read twice.
-    def announce_run(idx, outcome, verdict)
+    # per run with ▶, Shift+Enter or Alt+R - the cells above that ran first,
+    # the cell's output, shortened, a picture by its alt text (show_objects
+    # says what it draws), and for an exercise Chunky's verdict. The output
+    # itself is no live region: live runs rewrite it while the learner
+    # types. Emptied first, and the text a moment later, so the same result
+    # twice is read twice.
+    def announce_run(idx, outcome, verdict, first = "")
       out = el("cell-out-#{idx}")
       text = out ? "#{brief_output(out)} #{picture_words(out)}".strip : ""
       text = "#{text[0, 280]} …" if text.length > 280
       message = format(outcome == "error" ? ui.ranError : ui.ranOk, @cell_numbers[idx] || idx, text)
+      message = "#{first} #{message}" if first != ""
       message = "#{message} #{verdict}" if verdict != ""
       announce(message)
     end
@@ -699,10 +754,11 @@ module ChunkyShell
     # makes no sense spoken, and the explanation stays on the page to read.
     # A game (show_game) says its name instead (picture_words): its grid
     # is emoji by the hundred. The stepper (⏯) is left out: its slider
-    # gets the focus and speaks for itself.
+    # gets the focus and speaks for itself; so is the note on the cells
+    # above that ran first, which announce_run says in words.
     def brief_output(out)
       text = out.innerText.to_s
-      %w[.game-widget .stepper].each do |selector|
+      %w[.game-widget .stepper .cell-earlier].each do |selector|
         out.querySelectorAll(selector).each do |widget|
           whole = widget.innerText.to_s
           at = whole.empty? ? nil : text.index(whole)

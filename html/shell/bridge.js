@@ -19,7 +19,7 @@
 //                       (auto: a live run; step: ⏯, recorded for the stepper)
 //                     chunky:lesson {lang, lesson, workshop, seq}   (seq: a new binding)
 //                     chunky:install {name, ...}
-//   kernel -> shell   chunky:kernel-ready, chunky:ran {idx, outcome, elapsed, auto, own},
+//   kernel -> shell   chunky:kernel-ready, chunky:ran {idx, outcome, elapsed, auto, own, before, failed, waiting},
 //                     chunky:gems {installed: JSON}, chunky:installed {name, ok, message}
 //   bridge -> shell   chunky:kernel-failed {reason}   (CRuby did not come up)
 //   kernel -> page    ChunkyBridge.steps(idx, json): a recorded run, parsed
@@ -229,10 +229,13 @@
         items.forEach(send);
       }, 0);
     },
-    // own: elapsed without installing and loading gems
-    ran: function (idx, outcome, elapsed, auto, own) {
+    // own: elapsed without installing and loading gems; before: the cells
+    // above that ran first ("1,3", indices), failed: those of them that
+    // raised, waiting: those a live run left for ▶ (main.rb's run_earlier)
+    ran: function (idx, outcome, elapsed, auto, own, before, failed, waiting) {
       emit("chunky:ran", { idx: Number(idx), outcome: String(outcome), elapsed: Number(elapsed), auto: !!auto,
-                           own: own === undefined ? Number(elapsed) : Number(own) });
+                           own: own === undefined ? Number(elapsed) : Number(own),
+                           before: String(before || ""), failed: String(failed || ""), waiting: String(waiting || "") });
     },
     gems: function (installed) { emit("chunky:gems", { installed: String(installed || "{}") }); },
     // ⏯'s recording (main.rb's show_steps): up to ~125 KB of JSON, parsed

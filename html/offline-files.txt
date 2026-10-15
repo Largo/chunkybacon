@@ -85,6 +85,7 @@ compile/wasi-shim/strace.js
 compile/wasi-shim/wasi.js
 compile/wasi-shim/wasi_defs.js
 compile/worker.js
+earlier_cells.rb
 friendly_errors.rb
 friendly_errors_messages.rb
 friendly_errors_rules.rb

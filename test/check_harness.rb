@@ -2,11 +2,15 @@
 # demo cells in a shared binding (like the browser kernel), then verifies that
 # the exercise starter does NOT pass the check while every known-good solution
 # (puts-style and no-puts-style) DOES pass. Mirrors main.rb's eval mechanics.
+# The demo cells are the ones ▶ on the exercise runs first on a fresh page
+# (html/earlier_cells.rb), so each lesson also shows that any of its cells
+# can be the first one a learner runs.
 require 'json'
 require 'stringio'
 require_relative "../html/browser_gems"
 require_relative "../html/rack_playground"
 require_relative "../html/sandbox_sim"
+require_relative "../html/earlier_cells"
 require "tmpdir"
 require "fileutils"
 
@@ -1267,8 +1271,33 @@ def run_harness(langs)
 
   langs.each do |lang|
     l = lesson.fetch(lang)
-    exercise = l["cells"].find { |c| c["t"] == "x" }
-    demos = l["cells"].select { |c| c["t"] == "c" }
+    cells = l["cells"]
+    exercise_at = cells.index { |c| c["t"] == "x" }
+    exercise = cells[exercise_at]
+    # A fresh page, where the learner's first ▶ is the exercise's: the cells
+    # above it that the page runs first, in order (html/earlier_cells.rb).
+    # The cells above any demo cell are the first of these, so every demo
+    # cell is a first run here too - a cell that needs what one above it
+    # makes, a local above all (top-level methods and constants outlive a
+    # binding in this process), finds it.
+    demos = EarlierCells.before(exercise_at, cells, {}) { |i| cells[i]["code"] }.map { |_, code| { "code" => code } }
+    # a demo cell below the exercise (none yet) runs first on a fresh page
+    # without it: the exercise is left out while it holds its starter
+    last = cells.rindex { |c| c["t"] == "c" }
+    if last && last > exercise_at && lesson["engine"] != "picoruby"
+      bind = RubyVM::InstructionSequence.compile("proc { binding }.call", "chunky.rb").eval
+      unmix_ruby2d
+      load_lesson_files(lesson)
+      above = EarlierCells.before(last, cells, {}) { |i| cells[i]["code"] }.map(&:last)
+      (above + [cells[last]["code"]]).each do |code|
+        _, _, err = run_in(bind, lesson["spinel"] ? ChunkySpinel.cell_source(code) : code)
+        next unless err
+
+        puts "FAIL #{lesson["id"]}/#{lang}: cell #{last}, run first on a fresh page, raised #{err.class}: #{err.message}"
+        failures += 1
+        break
+      end
+    end
     solutions = SOLUTIONS.fetch(lesson["id"]).fetch(SOLUTION_LANG.fetch(lang, lang))
     variants = [["starter", exercise["code"]]] +
                solutions.each_with_index.map { |s, i| ["solution#{i + 1}", s] }

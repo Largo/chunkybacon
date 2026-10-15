@@ -22,6 +22,9 @@ module AutoRun
   # must not swallow them.
   class Stopped < Exception; end
   class NeedsRun < Exception; end
+  # the cells above, rehearsed first (main.rb's run_earlier), took up the
+  # second: ▶ runs them
+  class NeedsEarlier < NeedsRun; end
 
   # "while x < 3\nend", "until done; end", "while true do end",
   # "while x\n  # wait\nend"

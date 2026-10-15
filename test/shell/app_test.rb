@@ -352,6 +352,82 @@ class AppTest < Minitest::Test
     assert_equal "", byid("runStatus").text
   end
 
+  # ---------- the cells above, run first (main.rb's run_earlier) ----------
+
+  # lesson arrays: code cells at 1, 3, 5, 7 and the exercise at 9 - on the
+  # page cells 1 to 5
+  def earlier_note(idx) = byid("cell-out-#{idx}").js_querySelector(".cell-earlier")
+
+  def test_the_cells_that_ran_first_are_named_above_the_output
+    start(hash: "#arrays")
+    click(run_button(7))
+    byid("cell-out-7").js_set("textContent", "=> 4")
+    fire("chunky:ran", ran_event(7, "ok").merge("before" => "1,3,5", "failed" => ""))
+    note = earlier_note(7)
+    refute_nil note
+    assert_equal "Zuerst liefen die Zellen 1–3 darüber.", note.text
+    assert byid("cell-out-7").children.first.equal?(note), "at the top, above what the cell printed"
+    assert_equal "Zuerst liefen die Zellen 1 bis 3 darüber. Zelle 4 ausgeführt: => 4", byid("runStatus").text,
+                 "said in words first, and not read twice with the output"
+  end
+
+  def test_one_cell_first_a_range_and_gaps
+    start(hash: "#arrays")
+    fire("chunky:ran", ran_event(3, "ok").merge("before" => "1"))
+    assert_equal "Zuerst lief Zelle 1 darüber.", earlier_note(3).text
+    fire("chunky:ran", ran_event(5, "ok").merge("before" => "1,3"))
+    assert_equal "Zuerst liefen die Zellen 1–2 darüber.", earlier_note(5).text
+    fire("chunky:ran", ran_event(9, "ok").merge("before" => "1,5,7"))
+    assert_equal "Zuerst liefen die Zellen 1, 3–4 darüber.", earlier_note(9).text
+    fire("chunky:ran", ran_event(9, "ok").merge("before" => "1,5"))
+    assert_equal "Zuerst liefen die Zellen 1, 3 darüber.", earlier_note(9).text
+    fire("chunky:ran", ran_event(9, "ok").merge("before" => "1,3,5,7"))
+    assert_equal "Zuerst liefen die Zellen 1–4 darüber.", earlier_note(9).text
+  end
+
+  def test_a_cell_above_that_failed_is_named
+    start(hash: "#arrays")
+    click(run_button(7))
+    fire("chunky:ran", ran_event(7, "error").merge("before" => "1,3,5", "failed" => "3"))
+    assert_equal "Zuerst liefen die Zellen 1–3 darüber. Zelle 2 hatte einen Fehler – ▶ dort zeigt ihn.", earlier_note(7).text
+    assert byid("runStatus").text.start_with?("Zuerst liefen die Zellen 1 bis 3 darüber. Zelle 2 hatte einen Fehler")
+  end
+
+  def test_no_note_when_nothing_ran_first
+    start(hash: "#arrays")
+    fire("chunky:ran", ran_event(3, "ok"))
+    fire("chunky:ran", ran_event(5, "ok").merge("before" => "", "failed" => ""))
+    assert_nil earlier_note(3)
+    assert_nil earlier_note(5)
+  end
+
+  def test_cells_a_live_run_left_for_run_are_named
+    start(hash: "#arrays")
+    fire("chunky:ran", ran_event(7, "error", auto: true).merge("before" => "", "failed" => "", "waiting" => "1,3,5"))
+    assert_equal "Die Zellen 1–3 darüber sind noch nicht gelaufen – ▶ führt sie zuerst aus.", earlier_note(7).text
+    fire("chunky:ran", ran_event(3, "ok", auto: true).merge("waiting" => "1"))
+    assert_equal "Zelle 1 darüber ist noch nicht gelaufen – ▶ führt sie zuerst aus.", earlier_note(3).text
+    assert_equal "", byid("runStatus").text
+  end
+
+  def test_a_live_run_shows_the_note_but_says_nothing
+    start(hash: "#arrays")
+    fire("chunky:ran", ran_event(7, "ok", auto: true).merge("before" => "1,3,5"))
+    assert_equal "Zuerst liefen die Zellen 1–3 darüber.", earlier_note(7).text
+    assert_equal "", byid("runStatus").text
+  end
+
+  def test_the_note_in_japanese_and_english
+    start(hash: "#arrays", storage: { "chunky_lang" => "ja" })
+    fire("chunky:ran", ran_event(9, "ok").merge("before" => "1,3,5,7", "failed" => "3,7"))
+    assert_equal "先に上のセル1〜4を実行しました。セル2、4でエラーが起きました。それぞれの ▶ で理由がわかります。", earlier_note(9).text
+    assert byid("runStatus").text.start_with?("先に上のセル1から4を実行しました。")
+    start(hash: "#arrays", storage: { "chunky_lang" => "en" })
+    fire("chunky:ran", ran_event(7, "ok").merge("before" => "1,3,5"))
+    assert_equal "Ran cells 1–3 above first.", earlier_note(7).text
+    assert byid("runStatus").text.start_with?("Ran cells 1 to 3 above first. Cell 4 ran:")
+  end
+
   def test_run_buttons_are_named_with_their_cell
     start
     assert_equal "Zelle 1 ausführen", run_button(1).attrs["aria-label"]

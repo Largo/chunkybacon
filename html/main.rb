@@ -151,6 +151,8 @@ require_relative "sandbox_sim"
 require_relative "workshop"
 # Live runs: rehearsals a moment after the learner stops typing.
 require_relative "autorun"
+# The cells above a cell that have not run yet: ▶ runs them first.
+require_relative "earlier_cells"
 # ⏯ beside ▶ (a lesson with "stepper": true): a run recorded line by line,
 # for the page's stepper (stepper.js). At boot: ~14 KB that evaluates in
 # about 6 ms.
@@ -274,6 +276,30 @@ Net::HTTP.transport = lambda do |_method, uri|
   end
   [data["status"].to_i, { "content-type" => data["contentType"].to_s }, data["body"].to_s]
 end
+
+# A live run rehearsing the cells above (ChunkyApp#run_earlier) installs no
+# gem for them, not even from the cache: installing and loading one takes
+# seconds, which would freeze the typing in a cell further down. The cell
+# then runs on its own; ▶ installs. (What the wasm image has built in is
+# no install.)
+module EarlierCells
+  class << self
+    attr_accessor :rehearsing
+  end
+
+  module NoInstalls
+    def install(name, seen = {})
+      name = name.to_s.strip
+      if EarlierCells.rehearsing && !installed[name] &&
+         !BrowserGems::NATIVE_GEMS.include?(name) && !BrowserGems::DEFAULT_GEMS.include?(name)
+        raise AutoRun::NeedsRun
+      end
+
+      super
+    end
+  end
+end
+BrowserGems.singleton_class.prepend(EarlierCells::NoInstalls)
 
 # "Ruby lernen mit Chunky Bacon" - a notebook-style browser Ruby course built
 # on the same ruby.wasm setup as BrowserRubyKoans (koans.idogawa.com).
@@ -403,8 +429,10 @@ class ChunkyApp
     text.to_s.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;")
   end
 
+  # a new binding has run none of the lesson's cells (earlier_cells.rb)
   def fresh_binding
     @bind = TopLevel.binding(EVAL_FILE)
+    @ran = {}
   end
 
   # ---------- setup ----------
@@ -1440,6 +1468,7 @@ class ChunkyApp
   def finish_cell_run(idx, auto = false, step = false)
     started = $window.performance.now
     AutoRun.library_time = 0.0
+    @earlier = nil
     outcome = begin
       run_cell(idx, auto: auto, step: step)
     rescue Exception => e
@@ -1452,14 +1481,112 @@ class ChunkyApp
     end
     elapsed = ($window.performance.now - started) / 1000.0
   ensure
+    # the cells above that ran first (run_earlier): ▶ shows and measures the
+    # cell's own run without them; a live run's time is all of it, as every
+    # live run of the cell rehearses them again
+    earlier = @earlier || {}
+    library = AutoRun.library_time
+    if earlier[:seconds] && elapsed && !auto
+      elapsed = [elapsed - earlier[:seconds], 0.0].max
+      library -= earlier[:library]
+    end
     # +own+: without installing and loading gems, for the shell's "too slow
     # for live runs"
-    own = elapsed ? [elapsed - AutoRun.library_time, 0.0].max : -1
+    own = elapsed ? [elapsed - library, 0.0].max : -1
     # a PicoRuby lesson's run went to the worker: picoruby_answer settles it
     unless outcome == :pending
-      bridge.ran(idx, (outcome || :error).to_s, elapsed || -1, auto, own)
+      lists = %i[ran failed waiting].map { |key| (earlier[key] || []).join(",") }
+      bridge.ran(idx, (outcome || :error).to_s, elapsed || -1, auto, own, *lists)
       bridge.gems(installed_json)
     end
+  end
+
+  # What a cell's run collects for its output, nil while the cells above run
+  # quietly: the helpers (show_image, show_browser, show_shoes, ...) collect
+  # nothing then.
+  RUN_LISTS = %i[@run_images @run_image_alts @run_pdfs @run_audios @run_browsers @run_irbs @run_files
+                 @run_three @run_shoes @run_letters @run_sketches @run_games @run_spinels @run_downloads].freeze
+
+  # The cells above +idx+ that have not run in this binding yet, with the
+  # code their editors show (earlier_cells.rb). Not in the workshop (one
+  # program, run from scratch), a PicoRuby lesson (its cells run in a
+  # worker, and stand alone) or the Spinel lesson (each cell a program of
+  # its own).
+  def earlier_cells(idx)
+    return [] if workshop? || picoruby? || spinel_lesson?
+
+    EarlierCells.before(idx, cells, @ran) { |i| $window.getCellCode(i).to_s }
+  end
+
+  # Runs them, top to bottom, quietly: no output, no widgets, no check -
+  # what they leave is the binding (and the files they write). ▶ records
+  # each that ran without an error, so the next run skips it; one that
+  # failed is named and runs again next time. What ran first goes to the
+  # shell with the run (finish_cell_run): @earlier.
+  #
+  # A live run (+live+) rehearses them inside its own time limit and records
+  # nothing. It installs no gem for them (EarlierCells::NoInstalls:
+  # installing and loading Rumale takes seconds, and the typing would freeze
+  # that long), fetches nothing, imports no new Python module: when one of them
+  # wants that, the cell runs on its own, as it did before there were cells
+  # above to run, and the shell says which still wait for ▶ (+waiting+). One
+  # that takes the second up ends the run with a hint (AutoRun::NeedsEarlier).
+  def run_earlier(list, live: false)
+    started = $window.performance.now
+    library = AutoRun.library_time
+    ran = []
+    failed = []
+    EarlierCells.rehearsing = live
+    list.each do |i, code|
+      error = run_quietly(code)
+      ran << i
+      if error
+        failed << i
+      elsif !live
+        @ran[i] = code
+      end
+    end
+  rescue AutoRun::NeedsEarlier
+    stopped = true
+    raise
+  rescue AutoRun::NeedsRun
+    ran = []
+    failed = []
+    waiting = list.map(&:first)
+  ensure
+    EarlierCells.rehearsing = false
+    # a file database they wrote goes back to its file now, not among the
+    # downloads of the cell below (a rehearsal throws it away with the rest)
+    SQLite3::Database.save_all(close: false) unless live
+    unless stopped
+      @earlier = { ran: ran, failed: failed, waiting: waiting, seconds: ($window.performance.now - started) / 1000.0,
+                   library: AutoRun.library_time - library }
+    end
+  end
+
+  # one cell above, as a run of its own (a fresh sketch, window and
+  # matplotlib board): its error, or nil
+  def run_quietly(code)
+    lists = RUN_LISTS.map { |name| instance_variable_get(name) }
+    RUN_LISTS.each { |name| instance_variable_set(name, nil) }
+    Processing.reset__ if processing?
+    Ruby2D.reset__ if ruby2d?
+    old_stdout = $stdout
+    $stdout = StringIO.new
+    evaluate(code, EVAL_FILE)
+    nil
+  rescue AutoRun::Stopped
+    raise AutoRun::NeedsEarlier
+  rescue AutoRun::NeedsRun
+    raise
+  rescue Exception => e
+    e
+  ensure
+    $stdout = old_stdout if old_stdout
+    RUN_LISTS.zip(lists).each { |name, list| instance_variable_set(name, list) } if lists
+    Processing.reset__ if processing?
+    Ruby2D.reset__ if ruby2d?
+    PyCall.end_run
   end
 
   # A live run keeps nothing it wrote: its new files on the real filesystem
@@ -1499,6 +1626,11 @@ class ChunkyApp
     else
       file = EVAL_FILE
     end
+    # what the cells above make, first (earlier_cells.rb): ▶ runs them now,
+    # before this cell's files are watched; a live run rehearses them with
+    # this cell, below
+    earlier = earlier_cells(idx)
+    run_earlier(earlier) unless auto || earlier.empty?
     # a live run keeps no file it writes: the lesson's virtual ones come back
     lesson_files = SandboxFS.store.transform_values(&:dup) if auto && !workshop?
     $window.clearCellMarks(idx)
@@ -1541,7 +1673,11 @@ class ChunkyApp
     recorder = StepRecorder.new(code, file: file) if step && !auto && !workshop?
     begin
       result = if auto
-        AutoRun.with_time_limit(workshop? ? Workshop.paths : [file]) { evaluate(source, file).tap { start_sketch } }
+        # one time limit for the cells above and this one
+        AutoRun.with_time_limit(workshop? ? Workshop.paths : [file]) do
+          run_earlier(earlier, live: true) unless earlier.empty?
+          evaluate(source, file).tap { start_sketch }
+        end
       elsif recorder
         recorder.run { evaluate(source, file) }.tap { start_sketch }
       else
@@ -1555,6 +1691,9 @@ class ChunkyApp
       Turtle.animations = true
     end
     output = buffer.string
+    # this code ran in the binding: a cell below needs not run it again
+    # (earlier_cells.rb) - a live run was a rehearsal
+    @ran[idx] = code unless auto || workshop? || error
     # a check plays a copy of a ruby2d window: the cell's code once more
     @run_games.each { |game| game.source = code if game.respond_to?(:source=) }
     # files the code wrote come first; an explicit download_file of the same
@@ -1751,6 +1890,7 @@ class ChunkyApp
 
   # what a live run says instead of an error when it stopped or wants ▶
   def live_hint(error)
+    return ui["liveNeedsEarlier"] if error.is_a?(AutoRun::NeedsEarlier)
     return ui["liveStopped"] if error.is_a?(AutoRun::Stopped)
     return ui["liveNeedsRun"] if error.is_a?(AutoRun::NeedsRun)
 

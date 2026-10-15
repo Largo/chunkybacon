@@ -107,6 +107,8 @@ html/
                         require_relative between them, gets, write-back
   autorun.rb            live runs (§6b): what may run by itself, the time
                         limit, taking back the files a rehearsal wrote
+  earlier_cells.rb      the cells above a cell that have not run yet, which
+                        ▶ runs first (§6p)
   step_recorder.rb      ⏯ step through (§6): a cell's run recorded line by
                         line - the line, each frame's variables, the output
   stepper.js            ⏯'s stepper below the cell: the fox's sentence, the
@@ -170,6 +172,7 @@ test/friendly_errors_harness.rb  70 beginner mistakes (friendly_errors_corpus.rb
 test/gems_harness.rb       gem installer offline under CRuby
 test/shell/run.rb          Minitest for the shell, on a stub of PicoRuby's js
 test/autorun_test.rb       live runs under CRuby: runnable?, the time limit
+test/earlier_cells_test.rb which cells above ▶ runs first (§6p)
 test/ansi_test.rb          ANSI colours to HTML under CRuby
 test/object_graph_test.rb  show_objects under CRuby: walk, SVG, alt text, the gem's copy
 test/turtle_test.rb        turtle graphics under CRuby: path, check helpers, SVG, texts, the gem's copy
@@ -339,7 +342,10 @@ Rules that the code and tests rely on:
   and the prose references like "lesson 22" / "Lektion 22" / 「レッスン22」.
 - All cells of a lesson share one binding (notebook kernel). Demo and
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
-  satisfy the check.
+  satisfy the check. A cell run before the cells above it gets them run
+  first (§6p), so a demo cell may use what any cell above it makes - but
+  not the exercise's names: the exercise is left out while it holds its
+  starter.
 - Checks accept output OR result; `puts` is never required.
 - A local a check assigns lives on in the lesson's binding (an eval in a
   Binding keeps its new locals), and a block in the learner's next run
@@ -947,6 +953,9 @@ shell does the timing, the kernel the guarding:
   so the Snake lesson keeps its live runs, and so does the ruby2d lesson
   (§6l): its windows are games to the page. The exercise's check plays a
   copy of the game, under its own time limit, on a live run too.
+- **The cells above** that have not run yet are rehearsed with the cell,
+  inside its time limit; when one of them would install a gem, fetch or
+  import, the cell runs alone and says which wait for ▶ (§6p).
 - **⏯ never runs live**: a live run is never recorded (`run_cell` ignores
   `step` with `auto`, and the shell asks for live runs from keys only). A
   key in a stepped cell ends its recording at once, before the live run a
@@ -2031,6 +2040,101 @@ plotting), IRuby (a Jupyter kernel - the course is its own notebook).
   `Text` put aside), browser_test (a table, a CSV from `File.write`, the
   histogram and the curve, the map's orange way, the three exercises).
 
+## 6p. The cells above: ▶ runs them first
+
+All cells of a lesson share one binding (§3), so a cell needs what the cells
+above it made - variables, methods, classes, required gems. A learner who
+opened a lesson and ran its fourth cell first got a NameError for each of
+them: on 2026-10-16, run alone, later cells failed in two dozen lessons
+(arrays, methoden, klassen, html, http, three, pptx, pdf, jpeg, rumale,
+daru, statistik, networkx, scarpe, tty, musik, tl-collections, tl-classes,
+tl-formats; Sequel and the Python lessons alike). `show_shoes` loading
+lacci itself (§6) was the first case of it, fixed for Shoes alone.
+
+- **What runs first**: `EarlierCells.before` (`earlier_cells.rb`): the code
+  cells above that have not run in this binding with the code their editors
+  show now, top to bottom. "Ran" means run for real - ▶, ⏯ or as one of
+  these - without an error; `ChunkyApp`'s `@ran` (index => code) keeps it,
+  and `fresh_binding` empties it. `run_cell` calls `run_earlier` before it
+  watches the cell's files (▶) or inside the time limit (a live run).
+- **Quietly** (`run_quietly`): what they print goes nowhere, the `RUN_LISTS`
+  are nil so the helpers collect nothing (no picture, widget, download), a
+  sketch, a ruby2d window and matplotlib's board are reset after each, no
+  check runs. Their own outputs stay as they were; the cell's output, run
+  time and "too slow for live runs" are its own (`finish_cell_run`
+  subtracts their time). What they write stays (▶), but is not offered
+  under the cell: they run before its `FileWatch.snapshot`, and their file
+  databases are saved after them.
+- **On the page**: `chunky:ran` brings `before`, `failed` and `waiting`
+  (cell indices). `App#show_earlier` puts "Ran cells 1–3 above first." at
+  the top of the cell's output (`.cell-earlier`, a live run's too), and
+  `announce_run` says it first in `#runStatus`, in words ("cells 1 to 3":
+  `cellRangeSpoken`); `brief_output` leaves the note out. Strings:
+  `ranFirstOne/Many`, `ranFirstFailedOne/Many`, `cellsWaitingOne/Many`,
+  `cellRange`, `cellRangeSpoken`, `cellListSep`, `liveNeedsEarlier`.
+
+What was decided:
+
+- **The exercise, still holding its starter**, is left out (`starter?`,
+  blank lines and indentation aside): nothing of the learner's is in it, a
+  starter is meant to fail, and demo cells never use the exercise's names.
+  With the learner's code in it, it runs like any cell (its check does
+  not). Today the exercise is every lesson's last code cell, so this only
+  matters for a demo cell put below one - `check_harness.rb` runs such a
+  cell first on a fresh page.
+- **A cell above that fails**: the others still run, and so does the cell
+  - one broken cell above should not stop a cell that does not need it.
+  The note names it ("Cell 2 failed – its ▶ shows why."); it is not
+  recorded, so it runs again next time.
+- **Side effects**: ▶ runs the cells above for real, only quietly:
+  `install_gem` installs (as their own ▶ would), files are written,
+  `sleep` is virtual anyway; `show_irb`, `show_browser`, `show_shoes`,
+  `show_three`, `show_game`, `turtle`, `show_audio` show nothing - their
+  widgets come with their own ▶ - and a Processing sketch never starts.
+  `show_shoes` still loads lacci, so the binding gets what the cell below
+  needs. A cell above with an endless loop hangs ▶ as its own ▶ would (▶
+  has no time limit, §6b).
+- **Live runs** rehearse the cells above together with the cell: one time
+  limit for all, their files taken back, nothing recorded - so every live
+  run of the cell rehearses them again until a ▶, and their time counts as
+  the cell's (a heavy rehearsal pauses the cell's live runs, §6b). A
+  rehearsal installs no gem for them, not even a cached one
+  (`EarlierCells::NoInstalls` around `BrowserGems.install`; what the image
+  has built in passes): installing and loading Rumale froze the typing for
+  ten seconds. When one of them wants a gem, the web, a new Python module
+  or a change to a database opened before (`AutoRun::NeedsRun`), the
+  rehearsal stops and the cell runs alone, as before there were cells above
+  to run, with "Cells 1–5 above have not run yet – ▶ runs them first." -
+  a cell that installs its own gem (the Sinatra exercise) still works live.
+  When they take up the second (`Stopped`), the run ends with
+  `liveNeedsEarlier` (outcome `needs`) and the cell's live runs pause.
+- **A reset, another lesson, a language switch**: a fresh binding, nothing
+  has run. **A cell edited after it ran** counts as not run: its new code
+  runs - only it, not the cells below it that ran with its old code (as in
+  a notebook; a reset starts from the top). A live run of the edited cell
+  does not count: it was a rehearsal.
+- **Not here**: the workshop (one program, run from scratch), a PicoRuby
+  lesson (its cells run in a worker and stand alone), the Spinel lesson
+  (each cell a program of its own), the embedded cell (one cell).
+- **Limits**: top-level methods and constants outlive a binding (§3), and a
+  reset does not take them back. In the Sequel lesson `class Entry <
+  Sequel::Model(:entries)` keeps the model of the first database after a
+  reset (the count below is one short), and fails with "superclass
+  mismatch" after tl-classes defined another `Entry` - with or without the
+  cells above, run in order. A cell above that is not idempotent (an
+  insert) inserts again when it runs again, as with its own ▶.
+- **Tests**: `earlier_cells_test.rb` (the choice), `check_harness.rb` (the
+  cells before the exercise are the ones `EarlierCells` picks on a fresh
+  page; each lesson alone in a fresh process ran top to bottom on
+  2026-10-16), the shell's `app_test.rb` (the note, the words, Japanese,
+  live). In the browser by hand (built-in browser, dev server, 2026-10-16):
+  a later cell first in arrays, variablen, methoden, klassen, gems, html,
+  sinatra, roda, http, three, pptx, pdf, jpeg, pycall, matplotlib, rumale,
+  daru, statistik, networkx, sequel, scarpe, tty, processing, faker, erb,
+  musik, snake, ruby2d and the timelog lessons; an edit, a reset, ⏯, live
+  runs (rehearsed, a gem left for ▶, the time limit), the PicoRuby lesson
+  and the workshop unchanged. Not yet in `browser_test.mjs`/`live_test.mjs`.
+
 ## 7a. The optional server: permalinks and a backend
 
 The course is a static site and stays one: without `server/` lessons live at
@@ -2097,6 +2201,7 @@ ruby lint_lessons_test.rb      # the linter's fault-injection tests
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof
+ruby earlier_cells_test.rb     # which cells above ▶ runs first (§6p)
 ruby ansi_test.rb              # terminal colours in a cell's output
 ruby game_test.rb              # show_game headless: the lesson's Snake, restart, check copies
 ruby ruby2d_test.rb            # ruby2d headless: frames, draw commands, keys, mouse, replayed copies, mixing, lesson 42's cells

@@ -922,6 +922,14 @@ kbd {
   font-style: italic;
   color: var(--ink-soft);
 }
+/* "Ran cells 1–3 above first": the cells above that ▶ (or a live run) ran
+   before this one, at the top of its output (shell/app.rb) */
+.cell-earlier {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+.cell-earlier::before { content: "↑ " / ""; }
 
 .cell-out {
   border-top: 1px solid var(--rule);

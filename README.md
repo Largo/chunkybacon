@@ -43,6 +43,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
   cell shows its last expression as `=> …` — `puts` is never required.
+  Run a cell first and the cells above it that have not run yet run before
+  it, quietly ("Ran cells 1–3 above first").
 - **Errors explained kindly**: when a cell fails, a short explanation in
   the lesson's language (German, English, Japanese) says what went wrong
   and what to write instead, with the line and a caret under the culprit
@@ -319,6 +321,7 @@ ruby lint_lessons_test.rb # the linter's fault-injection tests
 ruby gems_harness.rb      # gem installer, sinatra + roda offline
 ruby shell/run.rb         # the page shell (PicoRuby code) under Minitest
 ruby autorun_test.rb      # live runs: what may run, the time limit
+ruby earlier_cells_test.rb # which cells above a cell run first
 ruby ansi_test.rb         # terminal colours in a cell's output
 ruby object_graph_test.rb # show_objects: the walk, the SVG, the alt text
 ruby turtle_test.rb       # turtle graphics: the recorded path, the check helpers, the SVG
