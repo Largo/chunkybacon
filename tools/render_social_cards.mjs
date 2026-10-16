@@ -1,5 +1,4 @@
-// Renders the social cards from docs/social/card.html, with the current
-// lesson count from html/lessons.js:
+// Renders the social cards from docs/social/card.html:
 //   docs/social/twitter-card.png  1600x900 (16:9)  X, Bluesky, Mastodon, the README
 //   html/social/github-social.png 1600x800 (2:1)   GitHub social preview, og:image
 // The 2:1 card is under html/ so the site serves it itself: index.html's
@@ -11,7 +10,6 @@
 //   (locally: PLAYWRIGHT_DIR=... node --import ./tmp/playwright_redirect.mjs tools/render_social_cards.mjs)
 import { chromium } from '/usr/local/lib/node_modules/playwright/index.mjs';
 import { existsSync, statSync } from 'node:fs';
-import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -19,12 +17,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ORIGIN = 'http://card.local';
 const FORMATS = [
   { file: 'docs/social/twitter-card.png', width: 1600, height: 900, query: '' },
-  { file: 'html/social/github-social.png', width: 1600, height: 800, query: '&format=github' },
+  { file: 'html/social/github-social.png', width: 1600, height: 800, query: '?format=github' },
 ];
-
-globalThis.window = {};
-createRequire(import.meta.url)(path.join(ROOT, 'html/lessons.js'));
-const lessons = JSON.parse(globalThis.window.LESSONS_JSON).lessons.length;
 
 const browser = await chromium.launch();
 for (const format of FORMATS) {
@@ -34,7 +28,7 @@ for (const format of FORMATS) {
     if (!file.startsWith(ROOT + path.sep) || !existsSync(file)) return route.fulfill({ status: 404 });
     return route.fulfill({ path: file });
   });
-  await page.goto(`${ORIGIN}/docs/social/card.html?lessons=${lessons}${format.query}`);
+  await page.goto(`${ORIGIN}/docs/social/card.html${format.query}`);
   await page.waitForSelector('html.ready', { state: 'attached' }); // the foxes are in
   await page.evaluate(() => document.fonts.ready);
   const missing = await page.evaluate(() =>
@@ -47,4 +41,3 @@ for (const format of FORMATS) {
   console.log(`wrote ${format.file} (${format.width}x${format.height}, ${Math.round(statSync(out).size / 1024)} KB)`);
 }
 await browser.close();
-console.log(`${lessons} lessons`);

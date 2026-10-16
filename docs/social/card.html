@@ -11,7 +11,7 @@
      balloons out, as under prefers-reduced-motion): by why the lucky stiff,
      from why's (poignant) guide to Ruby, CC BY-SA 2.5 - the card credits
      them, keep that line. No Citroen marks.
-     ?lessons=N fills in the lesson count. The page is laid out on a
+     The page is laid out on a
      1200-unit stage scaled to 1600 pixels; it needs a server (file:// blocks
      the fonts and the fetch), and sets html.ready once the foxes are in. -->
 <html lang="en">
@@ -225,7 +225,7 @@
 <div class="stage">
   <div class="wordmark">Chunky<br>Bacon</div>
 
-  <p class="tagline">Learn Ruby right in your browser.<span class="sub"><span id="lessons">41</span> lessons, nothing to install.</span></p>
+  <p class="tagline">Learn Ruby right in your browser.<span class="sub">Nothing to install.</span></p>
 
   <div class="cell">
     <div class="code"><span class="gutter">1</span><span class="line"><span class="s">"chunky bacon"</span>.split.map(<span class="y">&amp;:capitalize</span>).join(<span class="s">" "</span>)</span></div>
@@ -242,8 +242,6 @@
   </div></div>
 </div>
 <script>
-  var n = new URLSearchParams(location.search).get("lessons");
-  if (n) document.getElementById("lessons").textContent = n;
   fetch("/html/assets/why-foxes/chunky-bacon.svg")
     .then(function (r) { return r.text(); })
     .then(function (svg) {
