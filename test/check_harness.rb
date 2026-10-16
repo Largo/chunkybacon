@@ -1225,6 +1225,12 @@ show_browser TimelogWeb, "/")]
     "en" => [%(install_gem "networkx"\nrequire "networkx"\nwood = NetworkX::Graph.new\n[["den", "stream", 4], ["den", "clearing", 7], ["stream", "clearing", 2], ["stream", "henhouse", 9], ["clearing", "henhouse", 5]].each { |a, b, m| wood.add_edge(a, b, weight: m) }\npath = NetworkX.dijkstra_path(wood, "den", "henhouse")\nminutes = NetworkX.dijkstra_path_length(wood, "den", "henhouse")),
              %(require "networkx"\nwood = NetworkX::Graph.new\nwood.add_edge("den", "stream", weight: 4)\nwood.add_edge("den", "clearing", weight: 7)\nwood.add_edge("stream", "clearing", weight: 2)\nwood.add_edge("stream", "henhouse", weight: 9)\nwood.add_edge("clearing", "henhouse", weight: 5)\npath = NetworkX.dijkstra_path(wood, "den", "henhouse")\nminutes = NetworkX.dijkstra_path_length(wood, "den", "henhouse")\nputs path.join(" -> "))]
   },
+  "ocran" => {
+    "de" => [%(def rechnungspfad\n  File.join(programmordner, "rechnung.txt")\nend),
+             %(def rechnungspfad\n  ordner = ENV["OCRAN_EXECUTABLE"] ? File.dirname(ENV["OCRAN_EXECUTABLE"]) : __dir__\n  File.join(ordner, "rechnung.txt")\nend\nputs rechnungspfad)],
+    "en" => [%(def receipt_path\n  File.join(app_folder, "receipt.txt")\nend),
+             %(def receipt_path\n  folder = ENV["OCRAN_EXECUTABLE"] ? File.dirname(ENV["OCRAN_EXECUTABLE"]) : __dir__\n  File.join(folder, "receipt.txt")\nend\nputs receipt_path)]
+  },
   "roda" => {
     "de" => [%(install_gem "roda"\nrequire "roda"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      "<h1>Kiosk</h1>"\n    end\n    r.get "bestellung", Integer do |anzahl|\n      "\#{anzahl} Streifen Speck, kommt sofort!"\n    end\n  end\nend\nshow_browser Kiosk, "/bestellung/5")],
     "en" => [%(install_gem "roda"\nrequire "roda"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      "<h1>Kiosk</h1>"\n    end\n    r.get "order", Integer do |amount|\n      "\#{amount} strips of bacon, coming right up!"\n    end\n  end\nend\nshow_browser Kiosk, "/order/5")]

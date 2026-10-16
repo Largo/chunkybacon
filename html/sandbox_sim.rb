@@ -29,21 +29,28 @@ module SandboxFS
       !(path.to_s.start_with?("/") || File.absolute_path?(path.to_s))
     end
 
+    # "./notizen.txt" is "notizen.txt", as on a disk - File.join(__dir__, name)
+    # makes the first, since __dir__ of a cell is "."
+    def key(path)
+      path.to_s.sub(%r{\A(?:\./)+}, "")
+    end
+
     def write(path, content)
-      store[path.to_s] = content.to_s
+      store[key(path)] = content.to_s
+      FileWatch.written_virtual << key(path) if defined?(FileWatch)
       content.to_s.length
     end
 
     def read(path)
-      store.fetch(path.to_s) { raise Errno::ENOENT.new(path.to_s) }
+      store.fetch(key(path)) { raise Errno::ENOENT.new(path.to_s) }
     end
 
     def exist?(path)
-      store.key?(path.to_s)
+      store.key?(key(path))
     end
 
     def delete(path)
-      store.delete(path.to_s) { raise Errno::ENOENT.new(path.to_s) }
+      store.delete(key(path)) { raise Errno::ENOENT.new(path.to_s) }
       1
     end
 
@@ -136,21 +143,29 @@ module FileWatch
     # [virtual, real] path => content fingerprint, before the run
     def snapshot
       written.clear
+      written_virtual.clear
       [SandboxFS.store.transform_values(&:hash), real_files.transform_values(&:hash)]
     end
 
     # [[path, bytes], ...] for every file new or changed since +snapshot+ -
-    # or opened for writing: a run that writes the same bytes again (Prawn's
-    # PDFs are deterministic) still offers its file
+    # or written to: a run that writes the same bytes again (Prawn's PDFs are
+    # deterministic, a program writes its data file again) still offers it
     def changes_since(snapshot)
       virtual, real = snapshot
-      changed = SandboxFS.store.filter_map { |path, data| [path, data] if virtual[path] != data.hash }
+      changed = SandboxFS.store.filter_map do |path, data|
+        [path, data] if virtual[path] != data.hash || written_virtual.include?(path)
+      end
       changed + real_files.filter_map { |path, data| [path, data] if real[path] != data.hash || written.include?(path) }
     end
 
     # names (relative, as real_files has them) File.open opened for writing
     def written
       @written ||= []
+    end
+
+    # virtual files SandboxFS.write wrote since the snapshot
+    def written_virtual
+      @written_virtual ||= []
     end
 
     def note_open(path, mode)
