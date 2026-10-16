@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 # Content linter for html/lessons.js - catches what test/check_harness.rb
-# does not: translation drift between de/en/ja, stale "lesson N" references
-# after renumbering, the mechanical half of the Japanese rules (HANDOVER §3),
+# does not: translation drift between de/en/ja, lesson references that are
+# not written by id ("lesson {{nr:methoden}}", html/lesson_refs.rb) or name
+# the wrong lesson, the mechanical half of the Japanese rules (HANDOVER §3),
 # Ruby that does not parse or warns, gems the cache does not have, and
 # lesson counts in the docs that went stale.
 #
@@ -21,6 +22,7 @@ require "prism"
 require "rubygems/package"
 require "optparse"
 require "set"
+require_relative "../html/lesson_refs"
 
 module LessonLint
   LANGS = %w[de en ja].freeze
@@ -76,7 +78,7 @@ module LessonLint
   # Loads html/lessons.js (JSON inside JSON.stringify(...)) and maps every
   # lesson/lang/cell and ui key to its line number.
   class Source
-    attr_reader :root, :data, :path
+    attr_reader :root, :data, :raw, :path
 
     # text: the contents of a lessons.js (tests pass a mutated one)
     def initialize(root, text: nil)
@@ -84,7 +86,10 @@ module LessonLint
       @path = File.join(root, "html", "lessons.js")
       text ||= File.read(@path, encoding: "UTF-8")
       json = text[/JSON\.stringify\((.*)\);\s*\z/m, 1] or abort "lessons.js: no JSON.stringify(...) found"
-      @data = JSON.parse(json)
+      # raw: as written, {{nr:id}} and all; data: as the page reads it, the
+      # numbers filled in - what every check of the prose looks at
+      @raw = JSON.parse(json)
+      @data = LessonRefs.resolve(@raw)
       index_lines(text)
     end
 
@@ -183,11 +188,9 @@ module LessonLint
                  makes one two only all each its our same more than into out up down get gets just
                  like when which there they them their how why first last next new also but].to_set
 
-    # base_text: an older lessons.js (--base=GITREF) to check references against
-    def initialize(root, allow_path:, net: false, text: nil, gems: nil, base_text: nil)
+    def initialize(root, allow_path:, net: false, text: nil, gems: nil)
       @root = root
       @src = Source.new(root, text: text)
-      @base = base_text && Source.new(root, text: base_text).data
       @gems = gems || GemCache.new(root)
       @net = net
       @findings = []
@@ -261,17 +264,16 @@ module LessonLint
     def check_structure
       ids = lessons.map { |l| l["id"] }
       ids.tally.each { |id, n| add("structure", "ERROR", "dup-id", where: id, message: "id used #{n} times") if n > 1 }
-      lessons.each_with_index do |lesson, li|
+      lessons.each do |lesson|
         LANGS.each do |lang|
           unless lesson[lang].is_a?(Hash)
             add("structure", "ERROR", "missing-lang", where: where(lesson, lang), message: "no #{lang} version")
             next
           end
           title = lesson[lang]["title"].to_s
-          num = title[/\A(\d+)\. /, 1]&.to_i
-          if num != li + 1
+          if title.match?(/\A\d+\.\s/)
             add("structure", "ERROR", "title-number", where: where(lesson, lang), line: line_of(lesson),
-                message: "title #{title.inspect} but the lesson is number #{li + 1}")
+                message: "title #{title.inspect} has a number - a lesson's number is its place (html/lesson_refs.rb)")
           end
           (lesson[lang].keys - %w[title cells]).each do |k|
             add("structure", "WARN", "unknown-key", where: where(lesson, lang), message: "unknown key #{k.inspect}")
@@ -626,6 +628,7 @@ module LessonLint
     }.freeze
 
     def check_refs
+      check_ref_tokens
       count = lessons.size
       keywords = distinctive_keywords
       all_refs = {}
@@ -682,41 +685,31 @@ module LessonLint
         add("refs", "INFO", "ref-table-#{status}", where: "(all)", message: "#{rows.size} references #{status}", detail: rows)
       end
       check_anchors
-      check_against_base if @base
     end
 
-    # numbers referenced in one cell, in order
-    def cell_refs(lang, cell)
-      text = [cell["html"], cell["hint"]].compact.map { |h| Text.plain(h) }.join("\n")
-      text += "\n" + comments(cell["code"]).join("\n") if cell["code"]
-      text.scan(REF[lang]).flat_map { |a, b| [a.to_i, b&.to_i].compact }
-    end
-
-    # --base=GITREF: a reference that pointed at lesson X in the base version
-    # must still point at X. Catches renumbering exactly (no keywords needed).
-    def check_against_base
-      base_lessons = @base["lessons"]
-      base_by_id = base_lessons.to_h { |l| [l["id"], l] }
-      base_num = base_lessons.each_with_index.to_h { |l, i| [i + 1, l["id"]] }
-      cur_num = lessons.each_with_index.to_h { |l, i| [i + 1, l["id"]] }
-      moved = base_num.select { |n, id| cur_num[n] != id }
-      add("refs", "INFO", "base-moved", where: "(all)", message: "#{moved.size} lesson numbers changed since the base",
-          detail: moved.map { |n, id| "#{n}: was #{id}, now #{cur_num[n] || "-"}" }) if moved.any?
-      lessons.each do |lesson|
-        old = base_by_id[lesson["id"]] or next
+    # In the file as written, a reference names the lesson's id where its
+    # number goes: a literal "lesson 9" goes stale with the next lesson put in
+    # between, and a {{nr:id}} without such a lesson shows as it is.
+    def check_ref_tokens
+      ids = @src.raw["lessons"].map { |l| l["id"] }.to_set
+      @src.raw["lessons"].each do |lesson|
         LANGS.each do |lang|
           cells(lesson, lang).each_with_index do |cell, ci|
-            ocell = old.dig(lang, "cells", ci) or next
-            now = cell_refs(lang, cell)
-            before = cell_refs(lang, ocell)
-            next if now.empty? || now.size != before.size # edited: the keyword check covers it
-            now.zip(before).each do |n, b|
-              was = base_num[b]
-              is = cur_num[n]
-              next if was == is
-              add("refs", "ERROR", "ref-moved", where: where(lesson, lang, ci), line: line_of(lesson, lang, ci),
-                  message: "reference #{n} now points at #{is.inspect}, it meant #{was.inspect} (lesson #{b} in the base; now #{cur_num.key(was) || "gone"})",
-                  extra: "#{n}")
+            loc = where(lesson, lang, ci)
+            %w[html hint code].each do |field|
+              text = cell[field].to_s
+              text.scan(LessonRefs::TOKEN) do |(id)|
+                next if ids.include?(id)
+                add("refs", "ERROR", "ref-unknown", where: loc, line: line_of(lesson, lang, ci),
+                    message: "{{nr:#{id}}} - there is no lesson #{id.inspect}", extra: id)
+              end
+              plain = field == "code" ? comments(text).join("\n") : Text.plain(text)
+              plain.scan(REF[lang]) do
+                found = Regexp.last_match[0]
+                add("refs", "ERROR", "ref-literal", where: loc, line: line_of(lesson, lang, ci),
+                    message: "#{found.inspect} - write the lesson's id where its number goes: " \
+                             "#{found.sub(/\d.*/m, "")}{{nr:id}} (html/lesson_refs.rb)", extra: found)
+              end
             end
           end
         end
@@ -818,6 +811,13 @@ module LessonLint
             next if routes.include?(target)
             add("refs", "WARN", "doc-anchor", where: doc, line: "#{doc}:#{n + 1}",
                 message: "/##{target} is no lesson id", extra: target)
+          end
+          # "lesson 45" goes stale with the next lesson put in between: the
+          # docs name a lesson by its id (`spinel`)
+          line.scan(/\b[Ll]essons? \d+(?:\s*[-–]\s*\d+)?\b/) do
+            found = Regexp.last_match[0]
+            add("refs", "WARN", "doc-lesson-number", where: doc, line: "#{doc}:#{n + 1}",
+                message: "#{found.inspect} - name the lesson by its id, numbers move", extra: found)
           end
         end
       end
@@ -1190,21 +1190,12 @@ module LessonLint
       o.on("--verbose", "-v") { opts[:verbose] = true }
       o.on("--json") { opts[:json] = true }
       o.on("--net") { opts[:net] = true }
-      o.on("--base=GITREF", "compare references with lessons.js at GITREF (e.g. origin/main)") { |v| opts[:base] = v }
       o.on("--allow=FILE") { |v| opts[:allow] = v }
       o.on("--no-allow") { opts[:allow] = nil }
       o.on("--[no-]color") { |v| opts[:color] = v }
     end.parse!(argv)
     $stdout.set_encoding("UTF-8")
-    base_text = nil
-    if opts[:base]
-      require "open3"
-      # read-only: git show prints the file at that revision
-      base_text, status = Open3.capture2("git", "-C", opts[:root], "show", "#{opts[:base]}:html/lessons.js")
-      abort "--base: git show #{opts[:base]}:html/lessons.js failed" unless status.success?
-      base_text.force_encoding("UTF-8")
-    end
-    linter = Linter.new(opts[:root], allow_path: opts[:allow], net: opts[:net], base_text: base_text)
+    linter = Linter.new(opts[:root], allow_path: opts[:allow], net: opts[:net])
     findings = linter.run(opts[:only])
     if opts[:json]
       puts JSON.pretty_generate(findings.map(&:to_h))

@@ -26,7 +26,7 @@ await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 check('it opens its lesson', await shown('methoden'));
 check('in its language', (await page.getAttribute('html', 'lang')) === 'de' && (await page.textContent('#lessonBody h2')).includes('Methoden'));
 check('the address stays', (await path()) === '/de/methoden');
-check('the tab is titled for the lesson', (await page.title()).startsWith('9. Methoden'));
+check('the tab is titled for the lesson', /^\d+\. Methoden – /.test(await page.title()));
 check('index links are permalinks', (await page.getAttribute('#lessonNav a[data-id="klassen"]', 'href')) === '/de/klassen');
 
 // navigating within the page: no reload, a history entry

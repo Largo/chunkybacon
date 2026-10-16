@@ -41,7 +41,18 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('61 lessons in nav', (await page.$$('#lessonNav a')).length === 61);
+const lessonCount = await page.evaluate(() => window.LESSONS.lessons.length);
+check('every lesson in nav', lessonCount > 40 && (await page.$$('#lessonNav a')).length === lessonCount);
+// lessons are numbered by their place (html/lesson_refs.rb): bridge.js
+// fills in "lesson {{nr:methoden}}", the shell numbers the titles
+const numbering = await page.evaluate(() => {
+  const methoden = window.LESSONS.lessons.findIndex(l => l.id === 'methoden') + 1;
+  const klassen = window.LESSONS.lessons.find(l => l.id === 'klassen').en.cells.map(c => c.html || '').join(' ');
+  return { tokens: JSON.stringify(window.LESSONS.lessons).includes('{{nr:'), filled: klassen.includes(`lesson ${methoden}`),
+           title: document.title, row: document.querySelector('#lessonNav a[data-id="hallo"]').textContent };
+});
+check('lesson numbers are filled in', !numbering.tokens && numbering.filled);
+check('titles are numbered where they are shown', numbering.title.startsWith('1. Hallo, Welt!') && numbering.row === '1Hallo, Welt!');
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
 check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);

@@ -55,16 +55,15 @@ module ChunkyShell
     end
 
     def self.nav_match?(course, idx, lang, section, needle)
-      course.title(idx, lang).downcase.include?(needle) || section.to_s.downcase.include?(needle)
+      course.numbered_title(idx, lang).downcase.include?(needle) || section.to_s.downcase.include?(needle)
     end
 
-    # "13. Gems installieren" as a numbered row: the number in a badge,
+    # "Gems installieren" as row 13: the number in a badge,
     # which turns into a tick once the lesson is done
     def self.nav_link(course, idx, lang, active_id, done, prefix)
       id = course.id(idx)
-      title = course.title(idx, lang)
       number = (idx + 1).to_s
-      name = title.start_with?("#{number}. ") ? title[number.length + 2, title.length] : title
+      name = course.title(idx, lang)
       classes = ["lesson"]
       classes << "active" if id == active_id
       classes << "done" if done.include?(id)

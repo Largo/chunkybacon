@@ -91,7 +91,7 @@ await page.evaluate(([i, c]) => window.cellEditors[i].setValue(c), [exercise,
   "def collatz(n)\n  steps = 0\n  until n == 1\n    n = n.even? ? n / 2 : 3 * n + 1\n    steps += 1\n  end\n  steps\nend\n\nputs collatz(27)"]);
 await page.click(`.run-cell[data-idx="${exercise}"]`);
 check('exercise: passes', await until(() => document.querySelector('#chunkyChat').className.includes('celebrate') ||
-                                       /Lesson 45 of 61/.test(document.getElementById('chunkyChat').innerText), null, 60000));
+                                       /Lesson \d+ of \d+/.test(document.getElementById('chunkyChat').innerText), null, 60000));
 check('exercise: and Spinel agrees',
       await until((i) => /111/.test(document.getElementById(`cell-out-${i}`).innerText) &&
                          /CRuby prints exactly the same/.test(document.getElementById(`cell-out-${i}`).innerText), exercise),

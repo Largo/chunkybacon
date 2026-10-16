@@ -24,7 +24,10 @@ module ChunkyShell
       lesson[lang] || lesson.de
     end
 
+    # lessons.js titles have no number: a lesson's number is its place
+    # (html/lesson_refs.rb)
     def title(idx, lang) = l10n(idx, lang).title
+    def numbered_title(idx, lang) = "#{idx + 1}. #{title(idx, lang)}"
     def cells(idx, lang) = l10n(idx, lang).cells.to_a
 
     # The heading a lesson opens in the index with, if any. An optional

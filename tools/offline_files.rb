@@ -3,7 +3,9 @@
 # under html/ but the .gz copies (nginx serves them in place of the file),
 # notices, the worker's own files, the embedded cell's (embed.html and
 # its embed*.js/css: other sites' pages load it, never the offline course)
-# and the link-preview card in social/ (scrapers fetch it, the page never does).
+# the link-preview card in social/ (scrapers fetch it, the page never does)
+# and lesson_refs.rb (the server's and the tests' twin of shell/bridge.js's
+# resolveLessonNumbers; the page never loads it).
 # Only adding, renaming or deleting a file changes the list; an edited file
 # is noticed by its ETag.
 #
@@ -11,7 +13,7 @@
 #   ruby tools/offline_files.rb --check   # exit 1 if it is out of date
 HTML = File.expand_path("../html", __dir__)
 LIST = File.join(HTML, "offline-files.txt")
-SKIP = /\.(gz|md)$|^(sw\.js|offline-files\.txt)$|^embed[-.]|^compile\/toolchain\/|^social\//
+SKIP = /\.(gz|md)$|^(sw\.js|offline-files\.txt)$|^embed[-.]|^compile\/toolchain\/|^social\/|^lesson_refs\.rb$/
 
 HEADER = <<~TEXT
   # The files the offline copy holds (html/sw.js): written by

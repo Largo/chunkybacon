@@ -8,6 +8,9 @@ require_relative "../server/app"
 
 class ServerTest < Minitest::Test
   APP = ChunkyServer.freeze.app
+  # what moves when a lesson is put in between: the count, a lesson's place
+  IDS = Course.load(File.expand_path("../html/lessons.js", __dir__)).ids
+  METHODEN = IDS.index("methoden") + 1
 
   def get(path, method: "GET") = Rack::MockRequest.new(APP).request(method, path)
 
@@ -23,8 +26,8 @@ class ServerTest < Minitest::Test
     res = get("/de/methoden")
     assert_equal 200, res.status
     assert_includes res.body, '<html lang="de">'
-    assert_includes res.body, "<title>9. Methoden – Ruby lernen mit Chunky Bacon</title>"
-    assert_includes res.body, '<meta property="og:title" content="9. Methoden – Ruby lernen mit Chunky Bacon">'
+    assert_includes res.body, "<title>#{METHODEN}. Methoden – Ruby lernen mit Chunky Bacon</title>"
+    assert_includes res.body, %(<meta property="og:title" content="#{METHODEN}. Methoden – Ruby lernen mit Chunky Bacon">)
     assert_includes res.body, '<link rel="canonical" href="http://example.org/de/methoden">'
     assert_includes res.body, '<link rel="alternate" hreflang="ja" href="http://example.org/ja/methoden">'
     assert_includes res.body, '<meta name="chunky-permalinks" content="/">'
@@ -35,6 +38,13 @@ class ServerTest < Minitest::Test
     refute_includes description, "<"
     refute_includes description, "Lerne die Programmiersprache", "not the German default"
     assert_operator description.length, :<=, 160
+  end
+
+  # "lesson {{nr:gems}}" in lessons.js: the preview says the number
+  def test_a_reference_in_the_description_is_numbered
+    gems = JSON.parse(get("/api/lessons").body).index { |lesson| lesson["id"] == "gems" } + 1
+    description = get("/en/jpeg").body[/<meta name="description" content="([^"]*)"/, 1]
+    assert_includes description, "In lesson #{gems} you painted"
   end
 
   def test_the_workshop_and_a_bare_language
@@ -72,9 +82,9 @@ class ServerTest < Minitest::Test
     res = get("/api/lessons")
     assert_equal 200, res.status
     lessons = JSON.parse(res.body)
-    assert_equal 61, lessons.length
+    assert_equal IDS.size, lessons.length
     methoden = lessons.find { |lesson| lesson["id"] == "methoden" }
-    assert_equal "9. Methods", methoden["titles"]["en"]
+    assert_equal "#{METHODEN}. Methods", methoden["titles"]["en"]
   end
 
   def test_the_bridges_refuse_other_paths_and_methods

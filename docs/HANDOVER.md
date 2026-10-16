@@ -33,16 +33,16 @@ update, and a single-file mount would keep serving the old one). Consequences:
   `.gz` must match the wasm: `ruby tools/compress_assets.rb --check`
   (`tools/update_ruby_wasm.rb` rewrites it).
 - The gem proxy's disk cache lives in the named volume `gemcache`.
-- **One thing is built on deploy, not committed**: Spinel for lesson 45
+- **One thing is built on deploy, not committed**: Spinel for lesson `spinel`
   (`html/assets/spinel/`, §6n). The host's deploy hook runs
   `sh tools/after_deploy.sh` after moving the checkout; it builds only when
   `tools/spinel.json` or `tools/build_spinel.rb` changed (minutes, with
   Ruby 3.3+ on the host or in a `ruby:4.0` container: `docker compose
   --profile build run --rm spinel-build`), and is a no-op otherwise. Until
-  it has run once, lesson 45 says that Spinel could not be loaded; the rest
+  it has run once, lesson `spinel` says that Spinel could not be loaded; the rest
   of the course does not depend on it.
 - **One thing is built on a laptop and copied**: the 📦 Program toolchain for
-  lesson 45 (`html/compile/toolchain/`, §6d): `tools/compile/build.sh`, then
+  lesson `spinel` (`html/compile/toolchain/`, §6d): `tools/compile/build.sh`, then
   `tools/compile/publish.sh`. The host never builds it, and a push does not
   carry it.
 
@@ -91,7 +91,7 @@ html/
                         show handing the window to the page, the top-level mixing taken back (§6l)
   assets/ruby2d/        ruby2d 1.0.0's own Ruby files, joined unchanged (tools/vendor_ruby2d.rb), + LICENSE.md
   herb_bridge.rb        require "herb/herb": Herb's C parser, handed to its WebAssembly build (§6j)
-  picoruby_lab.js       a lesson with "engine": "picoruby" (lesson 44): its runs and
+  picoruby_lab.js       a lesson with "engine": "picoruby" (lesson `picoruby`): its runs and
                         IRB lines to a Web Worker, the time limits, chunky:picoruby (§6m)
   picoruby_worker.js    that worker: a second PicoRuby.wasm, its scheduler turned per request
   picoruby_lab.rb       the Ruby in the worker: a Task serving requests, a Sandbox per session
@@ -109,6 +109,9 @@ html/
                         limit, taking back the files a rehearsal wrote
   earlier_cells.rb      the cells above a cell that have not run yet, which
                         ▶ runs first (§6p)
+  lesson_refs.rb        lesson numbers filled in from the place: "lesson
+                        {{nr:id}}" (§3); for the server, the linter and the
+                        shell tests - the page has its twin in shell/bridge.js
   step_recorder.rb      ⏯ step through (§6): a cell's run recorded line by
                         line - the line, each frame's variables, the output
   stepper.js            ⏯'s stepper below the cell: the fox's sentence, the
@@ -155,6 +158,7 @@ tools/vendor_picoruby.rb   PicoRuby.wasm from npm into html/assets/picoruby/ (ch
                            loader patch, .gz, NOTICE.md); --check: offline, files as recorded
 tools/measure_load.mjs, tools/shell_metrics.rb  load times, code size (PICORUBY_SHELL.md)
 tools/render_social_cards.mjs  docs/social/card.html -> docs/social/twitter-card.png
+tools/lesson_numbers_to_ids.rb  a lessons.js from before 2026-10-16 to lessons numbered by place (§3)
                            (1600x900: X, Bluesky, Mastodon, README) and
                            html/social/github-social.png (1600x800: GitHub social
                            preview, og:image); fills in the lesson count, so rerun it
@@ -177,7 +181,7 @@ test/ansi_test.rb          ANSI colours to HTML under CRuby
 test/object_graph_test.rb  show_objects under CRuby: walk, SVG, alt text, the gem's copy
 test/turtle_test.rb        turtle graphics under CRuby: path, check helpers, SVG, texts, the gem's copy
 test/game_test.rb          show_game under CRuby: the lesson's Snake by timer and keys, restart, the copies checks play
-test/ruby2d_test.rb        ruby2d under CRuby: windows frame by frame, draw commands, keys, mouse, replayed copies, mixing, every cell of lesson 42
+test/ruby2d_test.rb        ruby2d under CRuby: windows frame by frame, draw commands, keys, mouse, replayed copies, mixing, every cell of lesson `ruby2d`
 test/step_recorder_test.rb ⏯'s recorder under CRuby: steps, frames, hidden locals, caps, every cell of the stepper lessons
 test/live_test.mjs         Playwright: live runs in a lesson and the workshop, a lesson without them
 test/server_test.rb        the optional server under Rack::MockRequest
@@ -253,8 +257,8 @@ install it), so they keep the plain style with `.to_s`.
 `html/lessons.js` is `window.LESSONS_JSON = JSON.stringify({ ui, lessons })`,
 pretty-printed with two spaces. It round-trips through `JSON.parse` /
 `JSON.stringify(d, null, 2)` byte-identically, so the safest way to edit
-structure (insert a lesson, renumber) is a small node script that parses,
-changes and rewrites it; prose edits can be done by hand.
+structure (insert or move a lesson, add a cell) is a small node script that
+parses, changes and rewrites it; prose edits can be done by hand.
 
 ```json
 { "id": "html",
@@ -277,7 +281,7 @@ lessons that start a real course - a lesson on its own belongs in "Ausflüge"
 `"stepper": true` puts ⏯ (step through) beside every ▶ of the lesson but an
 IRB's (`View.lesson_html`, `Course#stepper?`). It is on the Basics whose
 cells are plain Ruby and short, where watching a run teaches something:
-lessons 3-12 (variablen, strings, wenn, schleifen, arrays, hashes, methoden,
+lessons `variablen` to `module` (variablen, strings, wenn, schleifen, arrays, hashes, methoden,
 turtle, klassen, module) - assignments, a branch taken, a loop's passes,
 a block's variable, a method called and returning, recursion. Not on
 hallo and rechnen (one-line cells: one step), the IRB, nor on 14-19,
@@ -336,10 +340,20 @@ Cells, per language:
 
 Rules that the code and tests rely on:
 
-- `id` is stable and is the URL (`/#bigdecimal`); titles carry the number, so
-  **inserting a lesson means renumbering every later title in all three
-  languages** (see the script pattern in git history of lessons 18 and 21) -
-  and the prose references like "lesson 22" / "Lektion 22" / 「レッスン22」.
+- `id` is stable and is the URL (`/#bigdecimal`). **A lesson's number is
+  its place in `lessons`**, nowhere in its text: a title has none
+  ("Methoden"; the sidebar, the tab and link previews number it), and a
+  reference to another lesson puts the lesson's id where the number goes -
+  "lesson {{nr:methoden}}", "aus Lektion {{nr:methoden}}",
+  "レッスン{{nr:methoden}}" - so the words, plurals and Japanese grammar stay
+  the author's. The numbers are filled in when the course is loaded:
+  `resolveLessonNumbers` in `shell/bridge.js` for the page,
+  `html/lesson_refs.rb` for the server, the linter and the shell tests. So
+  **inserting, moving or removing a lesson is one change to the `lessons`
+  array** - no title, reference, doc or test to renumber. (Until
+  2026-10-16 titles and references carried numbers;
+  `tools/lesson_numbers_to_ids.rb` converts a lessons.js from then, e.g.
+  on an old branch.)
 - All cells of a lesson share one binding (notebook kernel). Demo and
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check. A cell run before the cells above it gets them run
@@ -353,8 +367,12 @@ Rules that the code and tests rely on:
   check's `x, y = ...` once broke the learner's `x, y = fox.first`. Name
   a check's helpers as lambda or block parameters (`->(game, x = nil) {
   ... }.(games.last)`), as the Snake check does.
-- `test/browser_test.mjs` asserts the lesson count (`'61 lessons in nav'`) -
-  update it when adding one.
+- Tests and docs name lessons by id, never by number: the tests read the
+  count and a lesson's place from the course (`lesson_count`,
+  `lesson_number(id)` in `test/shell/harness.rb`; `window.LESSONS` in the
+  browser tests), the docs write "lesson `spinel`". The README's lesson
+  count and the social cards (`tools/render_social_cards.mjs`) are the
+  only numbers that change with a new lesson; the linter flags a stale one.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
   a method because lesson bindings capture top-level locals, and each
@@ -373,9 +391,10 @@ Rules that the code and tests rely on:
   cell inserted before a code cell, prose too, changes its index. So where
   the lesson reads as well either way, add cells after the code cells
   learners will have worked on, and leave starters alone for cosmetic fixes.
-- `test/lint_lessons.rb` checks the mechanical half of these rules; after
-  inserting a lesson run it with `--base=main` - every reference that now
-  points at a different lesson is an error.
+- `test/lint_lessons.rb` checks the mechanical half of these rules: a
+  title with a number, a reference written as a number ("Lektion 9") or
+  naming no lesson (`{{nr:nope}}`), a doc that names a lesson by number, and
+  whether the sentence around a reference is about the lesson it names.
 
 Helpers available in cells (defined in `main.rb`): `install_gem`,
 `show_image` (a ChunkyPNG image, a PureJPEG encoder, PNG/JPEG/GIF/WebP bytes,
@@ -462,7 +481,7 @@ reach the hosts in `NET_HTTP_HOSTS` (ruby-lang.org, rubygems.org,
 api.github.com). What cannot work: anything needing a C extension with no
 pure stand-in (sqlite3, pg, ffi …), threads, sockets, subprocesses.
 
-prawn and hexapdf are in the cache (lesson 22). prawn's ttfunk depends on
+prawn and hexapdf are in the cache (lesson `pdf`). prawn's ttfunk depends on
 bigdecimal (→ bigdecimal-pure); hexapdf depends on openssl and strscan, both
 compiled into the wasm (`NATIVE_GEMS` + `builtin?`; `tools/build_gem_cache.rb`
 skips them as `BUILTIN`). In Chrome: both install from the cache in 0.5 s,
@@ -530,7 +549,7 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
 - **show_pdf**: an `<iframe>` on a Blob URL, so the browser's own viewer
   renders it. Headless Chromium and the Electron preview have no PDF viewer
   and show it blank - the tests check the bytes (`%PDF`), not the picture.
-- **show_audio** (from `experiments/05-ruby-music`, lesson 40): WAV bytes,
+- **show_audio** (from `experiments/05-ruby-music`, lesson `musik`): WAV bytes,
   the name of a file the cell wrote (virtual or real), or an Array of
   samples in -1..1 (`ChunkyAudio.wav`, 16-bit mono, `rate:` 22,050) -
   an `<audio controls>` on a Blob URL like `show_pdf` (released on the
@@ -606,7 +625,7 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   `show_objects(a: a, b: b)`, `show_objects(binding)` or
   `show_objects({ a: a }, max_depth: 2)` draws the names on the left and
   the objects behind them as boxes, an arrow per reference, in the style
-  of Python Tutor (lessons 7, 8, 11: `dup` is shallow, two names for one
+  of Python Tutor (lessons `arrays`, `hashes`, `klassen`: `dup` is shallow, two names for one
   object, `equal?`). All Ruby: a breadth-first walk by `__id__` gives a
   `Graph` (one box per object, however many arrows reach it; numbers,
   symbols, nil, true, false written inline; caps `max_depth: 6`,
@@ -632,7 +651,7 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   equal); the check harness requires the file, so the demo cells run
   there through its `show_image` stub.
 - **Turtle graphics** (`turtle.rb`, from `experiments/06-turtle-graphics`,
-  lesson 10): `turtle { ... }` instance_evals the block on a new `Turtle`,
+  lesson `turtle`): `turtle { ... }` instance_evals the block on a new `Turtle`,
   so `forward 100` needs no receiver and a learner's top-level `def`s
   (private methods of Object) can call it too; `turtle { |t| t.fd 10 }`
   works as well. Logo conventions: Chunky starts at (0, 0) looking up,
@@ -657,7 +676,7 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   Loaded at boot (15 KB, ~6 ms to evaluate). The gem ships a copy
   (`turtle_test.rb` keeps it equal).
 - **show_game** (`game.rb` + `game.js`, from `experiments/08-game-loop`,
-  lesson 41, Chunky's Snake): `show_game(width: 20, height: 15) { |g| ... }`
+  lesson `snake`, Chunky's Snake): `show_game(width: 20, height: 15) { |g| ... }`
   builds a `ChunkyGame` and runs the setup block at once, so its errors are
   the cell's (a block without `|g|` is instance_exec'd). In it:
   `g.cell(x, y, look)` / `g.cell(x, y)` (`:outside` beyond the edge),
@@ -724,7 +743,7 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   - The workshop takes the same path (the guard watches `Workshop.paths`)
     but has not been tried. The companion gem's `show_game` raises NotHere
     (a game on a computer: ruby2d or gosu, its message says).
-- **ruby2d** (§6l, lesson 42): a ruby2d window is a game to the page -
+- **ruby2d** (§6l, lesson `ruby2d`): a ruby2d window is a game to the page -
   `show` hands a `Ruby2D::Page::Runner` to `add_game`, `mount_game` sees
   `canvas?` and gives game.js `canvas: true` (a `<canvas>` instead of the
   grid, the `r2d*` labels, no restart after `close`). Everything above
@@ -770,7 +789,7 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
     characters, big Arrays/Hashes summarised, 5 frames (recursion: the
     innermost), 16 variables; objects with Ruby's own `inspect` get a
     shallow one. Costs in ruby.wasm: about 0.1 ms a step, a Basics cell
-    under 10 ms, the cap about 0.25 s with its JSON (the tree in lesson 10
+    under 10 ms, the cap about 0.25 s with its JSON (the tree in lesson `turtle`
     hits it: ~360 ms per ⏯ there, ~130 ms for the others, two paints
     included). Loaded at boot: 14 KB, ~6 ms to evaluate.
   - **Errors**: a targeted TracePoint never sees `:raise` (it happens in a C
@@ -1021,7 +1040,7 @@ no service worker is registered and nothing changes. The choice is
   puts a proxy in front of `BASE` and takes that down instead. To look at it
   in a browser: DevTools → Application → Service workers / Cache storage.
 
-## 6d. The 📦 Program button (lesson 45: Windows and Linux programs)
+## 6d. The 📦 Program button (lesson `spinel`: Windows and Linux programs)
 
 The Spinel lesson (45, §6n) compiles to WebAssembly and runs the result in
 the page. Its cells also have a 📦 Program button: the cell's Ruby becomes a
@@ -1030,7 +1049,7 @@ built inside the tab - nothing is uploaded. The lesson's cells are plain Ruby
 (`"spinel": true` in lessons.js: `main.rb` runs each as `spinel(its code)`,
 so there is no heredoc to write), and the button builds the cell as it
 stands; a cell that still hands its program to `spinel <<~RUBY ... RUBY`
-gets the program inside built. **Only lesson 45** has the button (`compile.js`
+gets the program inside built. **Only lesson `spinel`** has the button (`compile.js`
 looks for the active lesson id `spinel`; the IRB cell has none), and the
 lesson explains it in three cells after the IRB cell, the middle one a plain
 program to try it on.
@@ -1058,7 +1077,7 @@ program to try it on.
   (`tools/after_deploy.sh`) neither builds nor deletes it; a push to `main`
   does not carry it, so publish again whenever `build.sh` made new files.
   **No `toolchain/ready.json`, no button** - a checkout or a host without
-  the toolchain is the course as before, and lesson 45's own WebAssembly
+  the toolchain is the course as before, and lesson `spinel`'s own WebAssembly
   programs do not depend on it. The build writes `.gz` beside every wasm
   file for nginx's `gzip_static`.
 - **Pins** (`tools/compile/build.sh`, `Dockerfile`, `build-llvm.sh`): Spinel
@@ -1285,7 +1304,7 @@ libpython with Fiddle - so:
 
 ## 6e. Rumale, a pure-Ruby Numo, and the letter
 
-Lesson 29 does machine learning in Ruby itself, with
+Lesson `rumale` does machine learning in Ruby itself, with
 [Rumale](https://github.com/yoshoku/rumale): k-nearest neighbours on
 vegetables, then on 1797 handwritten digits, then on a postcode the learner
 writes onto a letter.
@@ -1335,7 +1354,7 @@ writes onto a letter.
 
 ## 6f. SQLite and Sequel: a sqlite3 stand-in on sql.js
 
-Lesson 33 uses [Sequel](https://sequel.jeremyevans.net) with SQLite. Sequel
+Lesson `sequel` uses [Sequel](https://sequel.jeremyevans.net) with SQLite. Sequel
 is pure Ruby (cached, `sequel-5.109.0.gem`); the sqlite3 gem under it is C.
 
 - **sql.js** (SQLite 3.49 in WebAssembly, ~650 KB, 0.3 MB gzipped) sits in
@@ -1408,7 +1427,7 @@ is pure Ruby (cached, `sequel-5.109.0.gem`); the sqlite3 gem under it is C.
 
 ## 6g. A terminal below the cell: TTY, colours, box drawing
 
-Lesson 35 draws with the [TTY toolkit](https://ttytoolkit.org): pastel,
+Lesson `tty` draws with the [TTY toolkit](https://ttytoolkit.org): pastel,
 tty-table, tty-box, tty-tree, tty-font (all cached, with strings,
 tty-screen, tty-color, tty-cursor, unicode-display_width - pinned to 2.6,
 as strings wants < 3 - and unicode_utils). Three things make a cell's
@@ -1428,7 +1447,7 @@ output behave like a terminal:
   line box's edges at line-height 1.6; fonts.css maps the range onto the
   code font's family. Strokes thinner than ~1.4 px vanished at some
   heights in Chromium on Windows. SymPy's `pretty` still asks for ASCII
-  (lesson 25) - its other symbols are not in this font.
+  (lesson `sympy`) - its other symbols are not in this font.
 - **No window size**: tty-screen checks for `ioctl` on the real `$stderr`
   at load time and then calls it on `$stdout` - a StringIO, which had
   none. `sandbox_sim.rb` gives StringIO an `ioctl` that raises ENOTTY, as
@@ -1441,7 +1460,7 @@ prints nothing when its output is no terminal.
 
 ## 6h. Processing: a stand-in that records, a canvas that paints
 
-Lesson 36 is the [processing gem](https://github.com/xord/processing)
+Lesson `processing` is the [processing gem](https://github.com/xord/processing)
 (xord, 1.4.0): `require "processing"`, `using Processing`, `setup do`,
 `draw do`, the Processing names in camelCase. The gem is pure Ruby on
 rays and reflexion, C++ on OpenGL, so it cannot run here.
@@ -1478,7 +1497,7 @@ helpers, `Vector`, the mouse and key state and blocks,
   cell or leaving the lesson stops it.
 - **`using` must not leak.** A refinement switched on with `using` inside
   `eval` lands in the binding's top-level scope, and every binding made
-  from `TOPLEVEL_BINDING` shares that one: after lesson 36, `text` in the
+  from `TOPLEVEL_BINDING` shares that one: after lesson `processing`, `text` in the
   Scarpe lesson was Processing's, and `loop do` would have been too.
   Lesson, IRB and workshop bindings now come from `TopLevel.binding`,
   an instruction sequence compiled on its own (main.rb), which has a
@@ -1497,7 +1516,7 @@ helpers, `Vector`, the mouse and key state and blocks,
 
 ## 6i. Faker and its six seconds
 
-Lesson 37 is [Faker](https://github.com/faker-ruby/faker) 3.8 (cached with
+Lesson `faker` is [Faker](https://github.com/faker-ruby/faker) 3.8 (cached with
 i18n and concurrent-ruby; pure Ruby, psych is in the wasm image). Its
 first lookup has I18n read the whole load path: 318 YAML files, 4.6 MB,
 some 60 languages. In Chrome that is about six seconds - nearly all of it
@@ -1523,7 +1542,7 @@ the shape of the customers, not their names.
 
 ## 6j. ERB, and Herb's parser as WebAssembly
 
-Lesson 38 is ERB (stdlib: `result_with_hash`, `trim_mode: "-"`,
+Lesson `erb` is ERB (stdlib: `result_with_hash`, `trim_mode: "-"`,
 `ERB::Util.h` against XSS, a page through a Rack lambda in the mini
 browser) and then [Herb](https://herb-tools.dev), which parses HTML and
 ERB together and reports what ERB lets through. Herb's gem is Ruby - AST
@@ -1653,7 +1672,7 @@ analysis it started from).
 
 ## 6l. ruby2d: the gem's own Ruby, its C extension in Ruby
 
-Lesson 42 runs [ruby2d](https://www.ruby2d.com) 1.0.0 programs as they are
+Lesson `ruby2d` runs [ruby2d](https://www.ruby2d.com) 1.0.0 programs as they are
 (the try-it tutorial on ruby2d.com uses the same API). The gem is Ruby -
 `Window`, events, `Renderable`, `Color`, every shape, `Text`, the DSL -
 around a C extension on SDL3 (`Ruby2D::Ext`, ~90 functions), which a
@@ -1737,7 +1756,7 @@ browser cannot load.
 
 ## 6m. Other Rubies, and a lesson on PicoRuby
 
-Lesson 43 (`rubies`) is plain CRuby: what an implementation is,
+Lesson `rubies` (`rubies`) is plain CRuby: what an implementation is,
 `RUBY_ENGINE`/`RUBY_PLATFORM` (`wasm32-wasi`, no YJIT in the browser),
 JRuby, TruffleRuby, mruby, mruby/c, PicoRuby, IronRuby (with a link to
 [Largo/ironruby](https://github.com/Largo/ironruby), the author's fork for
@@ -1748,7 +1767,7 @@ JRuby 10.1 targets Ruby 4.0, TruffleRuby 40.0.0 is Ruby 4.0.2, mruby 4.0.0
 4.0.1 (2026-10-02) runs on .NET 8 and 10, Artichoke's repository is
 archived - and go stale with the next releases, in three languages.
 
-Lesson 44 (`picoruby`, `"engine": "picoruby"`) runs its cells and its IRB
+Lesson `picoruby` (`picoruby`, `"engine": "picoruby"`) runs its cells and its IRB
 on **PicoRuby.wasm** instead of CRuby:
 
 - **Nothing new to download.** It is the shell's runtime
@@ -1818,10 +1837,10 @@ on **PicoRuby.wasm** instead of CRuby:
   handed over as a `Value` (the demos need PicoRuby and are skipped);
   `test/picoruby_test.mjs` the rest, in a browser.
 
-## 6n. Spinel: a compiler in the page (lesson 45)
+## 6n. Spinel: a compiler in the page (lesson `spinel`)
 
 [Spinel](https://github.com/matz/spinel) is Matz's ahead-of-time compiler:
-whole-program type inference, C out, a C compiler for the rest. Lesson 45
+whole-program type inference, C out, a C compiler for the rest. Lesson `spinel`
 runs all of it in the learner's tab, as WebAssembly:
 
 ```
@@ -1974,7 +1993,7 @@ cell: plain Ruby ("spinel": true)       (main.rb wraps it: spinel(code) -> spine
   (about half of a compile is parsing it, by a rough measurement); caching
   the module of an unchanged program; `gets` through a prompt.
 
-## 6o. SciRuby: Daru, statistics, Rubyvis, networkx.rb (lessons 30-32)
+## 6o. SciRuby: Daru, statistics, Rubyvis, networkx.rb (lessons `daru` to `networkx`)
 
 Three side trips with gems of [SciRuby](https://github.com/SciRuby), right
 after Rumale: Daru data frames (30); the binomial and normal distributions
@@ -2028,7 +2047,7 @@ plotting), IRuby (a Jupyter kernel - the course is its own notebook).
 - **text-table and ruby2d.** minimization and integration require
   text-table, which defines a top-level `Text` module - and the kernel keeps
   it for every later lesson, where ruby2d's `Text.new` then failed (the
-  check harness found it in lesson 42). `Ruby2D.mix__` now puts a top-level
+  check harness found it in lesson `ruby2d`). `Ruby2D.mix__` now puts a top-level
   constant of the same name aside while ruby2d is mixed in and back on
   `unmix__` (ruby2d_test). On a computer the two gems would clash in one
   program too; here they only meet because all lessons share one Ruby.
@@ -2204,7 +2223,7 @@ ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-pr
 ruby earlier_cells_test.rb     # which cells above ▶ runs first (§6p)
 ruby ansi_test.rb              # terminal colours in a cell's output
 ruby game_test.rb              # show_game headless: the lesson's Snake, restart, check copies
-ruby ruby2d_test.rb            # ruby2d headless: frames, draw commands, keys, mouse, replayed copies, mixing, lesson 42's cells
+ruby ruby2d_test.rb            # ruby2d headless: frames, draw commands, keys, mouse, replayed copies, mixing, lesson `ruby2d`'s cells
 ruby step_recorder_test.rb     # ⏯'s recorder: steps, frames, hidden locals, caps, the stepper lessons' cells
 ruby friendly_errors_harness.rb --summary   # 70 beginner mistakes explained by the expected rule, de/en/ja
 ruby friendly_errors_robustness.rb          # explain never raises, never leaves a %{...}
@@ -2214,7 +2233,7 @@ BASE=http://127.0.0.1:8011/ node offline_test.mjs   # offline mode (§6c), ~1 mi
 ruby dev_server_test.rb                  # the bridge rule and the embed's headers, dev server and nginx alike (§7)
 ruby ../tools/build_embed_ui.rb --check  # html/embed-ui.js has the current ui strings
 ruby ../tools/build_spinel.rb --check   # html/assets/spinel/ is the pinned build (§6n)
-BASE=http://127.0.0.1:8011/ node spinel_test.mjs   # lesson 45 in a browser: the cells, IRB, the exercise, ~2 min (§6n)
+BASE=http://127.0.0.1:8011/ node spinel_test.mjs   # lesson `spinel` in a browser: the cells, IRB, the exercise, ~2 min (§6n)
 ruby spinel_rb_test.rb                   # spinel.rb: the CRuby run, the shell's ui strings (§6n)
 ruby spinel_build_test.rb                # the plain Ruby of the compiler worker: --print-build, clang's line, IRB's verdict
 # with the dev server started as FRAME_ANCESTORS="http://blog.test:*" ruby tools/dev_server.rb:
@@ -2300,13 +2319,13 @@ reason to, since every version stays in the history.
 - [bigdecimal-pure](https://github.com/Largo/bigdecimal-pure) - no NaN/
   Infinity, no `BigDecimal.limit/mode`; `BigMath` via Float.
 - [ruby_pptx](https://github.com/Largo/ruby_pptx) - REXML backend
-  (`RUBY_PPTX_XML_BACKEND`) is what runs here; lesson 21.
+  (`RUBY_PPTX_XML_BACKEND`) is what runs here; lesson `pptx`.
 - [BrowserRubyKoans](https://github.com/Largo/BrowserRubyKoans) - the
   original foundation (koans.idogawa.com), linked as the follow-up course.
 - [three-rb](https://github.com/lef237/three-rb), [lacci / scarpe](https://github.com/scarpe-team/scarpe)
-  - lessons 20 and 31.
+  - lessons `three` and `scarpe`.
 - [Prawn](https://github.com/prawnpdf/prawn), [HexaPDF](https://hexapdf.gettalong.org/)
-  (AGPL-3.0 or commercial) - lesson 22.
+  (AGPL-3.0 or commercial) - lesson `pdf`.
 
 ## 10a. The companion gem (`gem/`)
 
@@ -2334,7 +2353,7 @@ that license too. Contact in the gemspecs: web@idogawa.com.
   `show_audio` saves `chunky-sound-N.wav` (samples written as 16-bit mono)
   and opens it; a path opens that file.
 - Under ruby.wasm (`ChunkyBacon.browser?`) the gem leaves the page's helpers
-  alone and only adds the fox. Lesson 14 opens with
+  alone and only adds the fox. Lesson `gems` opens with
   `install_gem "chunky_bacon"` + `ChunkyBacon.shout`, from the gem cache
   (`html/gems/cache/chunky_bacon-0.1.0.gem`, the published file - same SHA-256
   as on rubygems.org; first in `tools/build_gem_cache.rb`'s list, so its chip
@@ -2404,7 +2423,7 @@ venv with `potracer numpy pillow scipy`:
 
 Current work in progress has its own file: `docs/OPEN_WORK.md`.
 
-- Lesson 15 could show more Nokogiri (XPath, Builder) now that it works.
+- Lesson `html` could show more Nokogiri (XPath, Builder) now that it works.
 - `NATIVE_GEMS` is a hand-kept list; a gem not on it still gets downloaded
   before its `extconf.rb` is noticed (cheap, but the message arrives late).
 - The gem still shows the original Chunky drawing (so do the embed and
