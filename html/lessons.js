@@ -9737,6 +9737,174 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "qr-rechnung",
+      "de": {
+        "title": "QR-Rechnungen schreiben und lesen",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Die Schweizer QR-Rechnung</h2><p>In der Schweiz liegt einer Rechnung ein Einzahlungsschein bei, unten auf der Seite – und seit 2020 ist das die <strong>QR-Rechnung</strong> (die alten orangen und roten Scheine gibt es seit Herbst 2022 nicht mehr). Ihr QR-Code enthält alles, was eine Bank braucht: auf welches Konto, wie viel, in welcher Währung, von wem, und eine Referenz, an der die Firma erkennt, welche Rechnung bezahlt wurde. Die Banking-App scannt ihn, und niemand tippt mehr eine 27-stellige Nummer ab.</p><p>Zwei Gems, beide reines Ruby: <a href='https://github.com/damoiser/qr-bills' target='_blank'>qr-bills</a> schreibt QR-Rechnungen, <a href='https://github.com/largo/swiss_qr' target='_blank'>swiss_qr</a> liest sie wieder und prüft jede Regel des Standards; den Code in einem Bild oder PDF findet es mit <a href='https://github.com/largo/qr_reader' target='_blank'>qr_reader</a>. Die Velowerkstatt und ihre Kundin sind erfunden, und die Kontonummern sind die Testnummern aus der Spezifikation der QR-Rechnung – hier fliesst kein Geld.</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"qr-bills\"\nrequire \"qr-bills\"\n\nangaben = QRBills.get_qr_params\nangaben[:bill_type] = QRBills.get_qrbill_with_qr_reference_type\nangaben[:output_params][:format] = \"qrcode\"   # nur der Code, kein HTML\nangaben[:qrcode_format] = \"svg\"\n\nrechnung = angaben[:bill_params]\nrechnung[:amount] = 84.50\nrechnung[:currency] = \"CHF\"\nrechnung[:reference_type] = \"QRR\"\nrechnung[:reference] = \"21 00000 00003 13947 14300 09017\"\nrechnung[:additionally_information] = \"Rechnung 2026-042, Kette und Bremsbeläge\"\nrechnung[:creditor][:iban] = \"CH44 3199 9123 0008 8901 2\"\nrechnung[:creditor][:address].merge!(\n  name: \"Velo Speck GmbH\", street_name: \"Musterstrasse\", building_number: \"1\",\n  postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\"\n)\nrechnung[:debtor][:address].merge!(\n  name: \"Pia Muster\", street_name: \"Beispielweg\", building_number: \"7\",\n  postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\"\n)\n\nsvg = QRBills.generate(angaben)[:output]\nshow_image svg, alt: \"Der QR-Code der Rechnung, mit dem Schweizerkreuz in der Mitte\"\ndownload_file svg, \"qr-code.svg\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Was ist passiert?</p><ul><li><code>QRBills.get_qr_params</code> gibt einen Hash mit allen Feldern, die meisten leer; wir füllen sie aus. <code>rechnung</code> ist der innere Teil, <code>angaben[:bill_params]</code> – wer ihn ändert, ändert auch <code>angaben</code>, es ist derselbe Hash.</li><li>Der <strong>Rechnungstyp</strong>: mit QR-Referenz (<code>QRR</code>), mit Creditor Reference (<code>SCOR</code>, beginnt mit RF) oder ohne Referenz (<code>NON</code>).</li><li>Eine <strong>QR-IBAN</strong> – die 5. bis 9. Stelle liegt zwischen 30000 und 31999 – ist das Konto für Rechnungen mit QR-Referenz. Die Referenz hat 27 Ziffern, die letzte ist eine Prüfziffer, aus den anderen berechnet. Daran erkennt die Firma, welche Rechnung bezahlt wurde.</li><li>Die IBAN gehört in <code>rechnung[:creditor][:iban]</code>: Die Adresse hat zwar auch ein Feld dafür, aber das Gem liest sie hier.</li><li><code>QRBills.generate</code> gibt einen Hash zurück; unter <code>:output</code> steht das SVG als String. <code>show_image</code> zeigt es, <code>download_file</code> bietet es als Datei an.</li></ul><p>Und was steht im Code? Gewöhnlicher Text, ein Feld pro Zeile:</p>"
+          },
+          {
+            "t": "c",
+            "code": "inhalt = QRGenerator.build_payload(rechnung)\nputs inhalt"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das ist das ganze Geheimnis: <code>SPC</code> (Swiss Payments Code), Version <code>0200</code>, Zeichensatz 1 (UTF-8), dann das Konto, die Empfängerin mit Adresstyp <code>S</code> (strukturiert: Strasse und Hausnummer in eigenen Feldern), sieben leere Zeilen (reserviert für einen «endgültigen Zahlungsempfänger», der noch nicht erlaubt ist), Betrag, Währung, die Zahlerin, Referenztyp und Referenz, die Mitteilung und <code>EPD</code> – End Payment Data. Die Zeilen trennt CR LF, wie in E-Mails.</p><p>Auf Papier steht der QR-Code in einem Zahlteil fester Grösse: die untersten 105 mm einer A4-Seite, links der <em>Empfangsschein</em>, den die Zahlerin behält, rechts der <em>Zahlteil</em> mit dem 46 mm grossen Code. Prawn (Lektion {{nr:pdf}}) zeichnet ihn:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"prawn\"\nrequire \"prawn\"\n\nangaben[:qrcode_format] = \"png\"\nFile.binwrite(\"qr.png\", QRBills.generate(angaben)[:output].to_blob)\n\nmm = 72 / 25.4   # PDF misst in Punkten: 1 mm sind 2,83 Punkte\nan = rechnung[:creditor][:address]\nvon = rechnung[:debtor][:address]\nzahlbar_an = [rechnung[:creditor][:iban], an[:name], \"#{an[:street_name]} #{an[:building_number]}\",\n              \"#{an[:postal_code]} #{an[:town]}\"]\nzahlbar_durch = [von[:name], \"#{von[:street_name]} #{von[:building_number]}\",\n                 \"#{von[:postal_code]} #{von[:town]}\"]\nbetrag = format(\"%.2f\", rechnung[:amount])\n\nPrawn::Document.generate(\"rechnung.pdf\", page_size: \"A4\", margin: 0) do\n  text_box \"Velo Speck GmbH\\nRechnung 2026-042\", at: [20 * mm, 277 * mm], size: 14\n  dash(3)\n  stroke_horizontal_line 0, bounds.width, at: 105 * mm   # der Zahlteil: die untersten 105 mm\n  stroke_vertical_line 0, 105 * mm, at: 62 * mm          # Empfangsschein | Zahlteil\n  undash\n\n  feld = lambda do |x, y, titel, zeilen|\n    text_box titel, at: [x * mm, y * mm], size: 6, style: :bold\n    text_box zeilen.join(\"\\n\"), at: [x * mm, (y - 3) * mm], size: 8\n  end\n\n  text_box \"Empfangsschein\", at: [5 * mm, 100 * mm], size: 11, style: :bold\n  feld.(5, 93, \"Konto / Zahlbar an\", zahlbar_an)\n  feld.(5, 70, \"Referenz\", [rechnung[:reference]])\n  feld.(5, 60, \"Zahlbar durch\", zahlbar_durch)\n\n  text_box \"Zahlteil\", at: [67 * mm, 100 * mm], size: 11, style: :bold\n  image \"qr.png\", at: [67 * mm, 88 * mm], width: 46 * mm\n  feld.(118, 100, \"Konto / Zahlbar an\", zahlbar_an)\n  feld.(118, 77, \"Referenz\", [rechnung[:reference]])\n  feld.(118, 67, \"Zusätzliche Informationen\", [rechnung[:additionally_information]])\n  feld.(118, 55, \"Zahlbar durch\", zahlbar_durch)\n\n  [5, 67].each do |x|   # Währung und Betrag stehen auf beiden Teilen\n    feld.(x, 37, \"Währung\", [rechnung[:currency]])\n    feld.(x + 15, 37, \"Betrag\", [betrag])\n  end\nend\nshow_pdf \"rechnung.pdf\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Koordinaten sind Millimeter mal <code>mm</code>; y zählt in PDF von der unteren Kante aufwärts, <code>105 * mm</code> ist also die Linie zum Abtrennen. <code>feld</code> ist ein kleines Lambda: ein Titel fett in 6 Punkt, darunter die Zeilen in 8 Punkt – die Grössen, die der Standard verlangt. Diesmal liefert qr-bills den Code als PNG, denn Prawn setzt PNG- und JPEG-Bilder. Es ist ein <code>ChunkyPNG::Image</code> wie in Lektion {{nr:gems}}. Der echte Standard hat noch mehr Regeln – Schriften, Eckmarken für einen leeren Betrag, das Scherensymbol –, und qr-bills kann die ganze Rechnung auch als HTML schreiben (<code>output_params[:format] = \"html\"</code>).</p><p>Jetzt andersherum: Jemand bekommt <code>rechnung.pdf</code> und will wissen, was zu zahlen ist. <strong>swiss_qr</strong> findet den Code mit qr_reader, entziffert ihn und zerlegt den Text:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"swiss_qr\"\ninstall_gem \"qr_reader\"   # findet den QR-Code und entziffert ihn\nrequire \"swiss_qr\"\n\ngelesen = SwissQr.read(\"rechnung.pdf\")\nputs gelesen.creditor.lines\nputs gelesen.formatted_iban, gelesen.qr_iban?\nputs \"#{gelesen.currency} #{gelesen.formatted_amount}\"\nputs gelesen.formatted_reference\nputs gelesen.unstructured_message\ngelesen.debtor.name"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>SwissQr.read</code> nimmt einen Dateinamen, ein IO wie <code>StringIO.new(bytes)</code> oder ein Bild wie das von ChunkyPNG und gibt die erste QR-Rechnung, die es findet, als <code>SwissQr::Bill</code> zurück: ein unveränderliches Objekt (ein <code>Data</code>, Lektion {{nr:tl-mixins}}) mit dem Betrag als <code>BigDecimal</code> (Lektion {{nr:bigdecimal}}) und den Adressen als eigene Objekte. Andere QR-Codes auf der Seite – etwa ein Link zum Webshop – überspringt es.</p><p>swiss_qr liest nicht nur, es prüft auch jede Regel: die Prüfziffern der IBAN und der Referenz, die Längen, den Zeichensatz. Ein Tippfehler in der Referenz fällt auf:</p>"
+          },
+          {
+            "t": "c",
+            "code": "tippfehler = inhalt.sub(\"09017\", \"09071\")   # zwei Ziffern vertauscht\nbegin\n  SwissQr.parse(tippfehler)\nrescue SwissQr::InvalidPayload => e\n  puts e.message\nend\nSwissQr.valid?(inhalt)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install qr-bills swiss_qr qr_reader</code>. swiss_qr bringt auch einen Befehl mit: <code>swiss_qr rechnung.pdf</code> gibt die Rechnung als JSON aus. Für echte Rechnungen brauchst du eine eigene (QR-)IBAN von deiner Bank; die QR-Referenz baut die Buchhaltung meist aus Kunden- und Rechnungsnummer, <code>QRBills.create_creditor_reference</code> macht aus einer eigenen Nummer eine RF-Referenz.</p></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://github.com/damoiser/qr-bills#readme' target='_blank'>qr-bills</a> · <a href='https://github.com/largo/swiss_qr#readme' target='_blank'>swiss_qr</a> · <a href='https://www.six-group.com/en/products-services/banking-services/payment-standardization/standards/qr-bill.html' target='_blank'>SIX: Standards zur QR-Rechnung</a></div><div class='task'><strong>Aufgabe:</strong> Glace Fuchs, ein (erfundener) Glacestand am Seeweg 3, 8000 Seldwyla, hat ein gewöhnliches Konto: IBAN <code>CH58 0079 1123 0008 8901 2</code>. Zu einer gewöhnlichen IBAN gehört keine QR-Referenz, also nimm den Rechnungstyp ohne Referenz (<code>QRBills.get_qrbill_without_reference_type</code>, <code>reference_type</code> <code>\"NON\"</code>, die Referenz bleibt leer). Erstelle eine QR-Rechnung über <strong>CHF 12.30</strong> an Kaz Muster, Bahnhofstrasse 2, 8000 Seldwyla, zeig den QR-Code als PNG mit <code>show_image</code> und lies ihn mit <code>SwissQr.read</code> wieder ein. Lass die gelesene Rechnung als letzten Wert stehen oder gib ihre IBAN und ihren Betrag aus.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Glace Fuchs: QR-Rechnung ohne Referenz über CHF 12.30,\n# als PNG zeigen und mit SwissQr.read wieder einlesen\n",
+            "check": "code.include?(\"SwissQr.read\") && images.any? && ->(bill, text) { bill.respond_to?(:iban) ? bill.iban == \"CH5800791123000889012\" && bill.formatted_amount == \"12.30\" && bill.reference_type == :non : text.delete(\" \").include?(\"CH5800791123000889012\") && text.match?(/12\\.30?(?!\\d)|0\\.123e2/) }.(result, output)",
+            "hint": "Kopier die erste Zelle und ändere sie: <code>get_qrbill_without_reference_type</code>, <code>reference_type = \"NON\"</code>, <code>qrcode_format = \"png\"</code>. <code>QRBills.generate(…)[:output]</code> ist dann ein ChunkyPNG-Bild, das du direkt an <code>show_image</code> und <code>SwissQr.read</code> geben kannst. Meldet SwissQr, der Name der Zahlerin fehle: Füll auch <code>[:debtor][:address]</code> aus."
+          }
+        ]
+      },
+      "en": {
+        "title": "Writing and reading QR-bills",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>The Swiss QR-bill</h2><p>In Switzerland a bill comes with a payment slip at the bottom of the page – and since 2020 that slip is the <strong>QR-bill</strong> (the old orange and red slips have been gone since autumn 2022). Its QR code holds everything a bank needs: which account, how much, in which currency, from whom, and a reference that tells the business which invoice was paid. A banking app scans it, and nobody types a 27-digit number any more.</p><p>Two gems, both pure Ruby: <a href='https://github.com/damoiser/qr-bills' target='_blank'>qr-bills</a> writes QR-bills, <a href='https://github.com/largo/swiss_qr' target='_blank'>swiss_qr</a> reads them back and checks every rule of the standard; it finds the code in an image or a PDF with <a href='https://github.com/largo/qr_reader' target='_blank'>qr_reader</a>. The bike shop and its customer are made up, and the account numbers are the test numbers from the QR-bill's specification – no money moves here.</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"qr-bills\"\nrequire \"qr-bills\"\n\nparams = QRBills.get_qr_params\nparams[:bill_type] = QRBills.get_qrbill_with_qr_reference_type\nparams[:output_params][:format] = \"qrcode\"   # just the code, no HTML\nparams[:qrcode_format] = \"svg\"\n\nbill = params[:bill_params]\nbill[:amount] = 84.50\nbill[:currency] = \"CHF\"\nbill[:reference_type] = \"QRR\"\nbill[:reference] = \"21 00000 00003 13947 14300 09017\"\nbill[:additionally_information] = \"Invoice 2026-042, chain and brake pads\"\nbill[:creditor][:iban] = \"CH44 3199 9123 0008 8901 2\"\nbill[:creditor][:address].merge!(\n  name: \"Velo Speck GmbH\", street_name: \"Musterstrasse\", building_number: \"1\",\n  postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\"\n)\nbill[:debtor][:address].merge!(\n  name: \"Pia Muster\", street_name: \"Beispielweg\", building_number: \"7\",\n  postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\"\n)\n\nsvg = QRBills.generate(params)[:output]\nshow_image svg, alt: \"The bill's QR code, with a Swiss cross in the middle\"\ndownload_file svg, \"qr-code.svg\""
+          },
+          {
+            "t": "h",
+            "html": "<p>What happened?</p><ul><li><code>QRBills.get_qr_params</code> hands out a Hash with every field, most of them empty; we fill them in. <code>bill</code> is the part inside, <code>params[:bill_params]</code> – changing it changes <code>params</code> too, it is the same Hash.</li><li>The <strong>bill type</strong>: with a QR reference (<code>QRR</code>), with a creditor reference (<code>SCOR</code>, starts with RF) or without a reference (<code>NON</code>).</li><li>A <strong>QR-IBAN</strong> – its 5th to 9th digits are between 30000 and 31999 – is the account for bills with a QR reference. The reference has 27 digits, the last one a check digit worked out from the others. It tells the business which invoice was paid.</li><li>The IBAN goes in <code>bill[:creditor][:iban]</code>: the address has a field for it as well, but the gem reads it from here.</li><li><code>QRBills.generate</code> returns a Hash; its <code>:output</code> is the SVG as a String. <code>show_image</code> shows it, <code>download_file</code> offers it as a file.</li></ul><p>And what is in the code? Plain text, one field per line:</p>"
+          },
+          {
+            "t": "c",
+            "code": "payload = QRGenerator.build_payload(bill)\nputs payload"
+          },
+          {
+            "t": "h",
+            "html": "<p>That is the whole secret: <code>SPC</code> (Swiss Payments Code), version <code>0200</code>, character set 1 (UTF-8), then the account, the creditor with address type <code>S</code> (structured: street and number in fields of their own), seven empty lines (kept for an \"ultimate creditor\" that is not allowed yet), amount, currency, the debtor, reference type and reference, the message and <code>EPD</code> – End Payment Data. The lines are separated by CR LF, as in e-mails.</p><p>On paper the QR code sits in a payment slip of a fixed size: the bottom 105 mm of an A4 page, on the left the <em>receipt</em> that the payer keeps, on the right the <em>payment part</em> with the code, 46 mm square. Prawn (lesson {{nr:pdf}}) draws it:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"prawn\"\nrequire \"prawn\"\n\nparams[:qrcode_format] = \"png\"\nFile.binwrite(\"qr.png\", QRBills.generate(params)[:output].to_blob)\n\nmm = 72 / 25.4   # PDF counts in points: 1 mm is 2.83 points\nto = bill[:creditor][:address]\nby = bill[:debtor][:address]\npayable_to = [bill[:creditor][:iban], to[:name], \"#{to[:street_name]} #{to[:building_number]}\",\n              \"#{to[:postal_code]} #{to[:town]}\"]\npayable_by = [by[:name], \"#{by[:street_name]} #{by[:building_number]}\",\n              \"#{by[:postal_code]} #{by[:town]}\"]\namount = format(\"%.2f\", bill[:amount])\n\nPrawn::Document.generate(\"invoice.pdf\", page_size: \"A4\", margin: 0) do\n  text_box \"Velo Speck GmbH\\nInvoice 2026-042\", at: [20 * mm, 277 * mm], size: 14\n  dash(3)\n  stroke_horizontal_line 0, bounds.width, at: 105 * mm   # the bill: the bottom 105 mm\n  stroke_vertical_line 0, 105 * mm, at: 62 * mm          # receipt | payment part\n  undash\n\n  field = lambda do |x, y, heading, lines|\n    text_box heading, at: [x * mm, y * mm], size: 6, style: :bold\n    text_box lines.join(\"\\n\"), at: [x * mm, (y - 3) * mm], size: 8\n  end\n\n  text_box \"Receipt\", at: [5 * mm, 100 * mm], size: 11, style: :bold\n  field.(5, 93, \"Account / Payable to\", payable_to)\n  field.(5, 70, \"Reference\", [bill[:reference]])\n  field.(5, 60, \"Payable by\", payable_by)\n\n  text_box \"Payment part\", at: [67 * mm, 100 * mm], size: 11, style: :bold\n  image \"qr.png\", at: [67 * mm, 88 * mm], width: 46 * mm\n  field.(118, 100, \"Account / Payable to\", payable_to)\n  field.(118, 77, \"Reference\", [bill[:reference]])\n  field.(118, 67, \"Additional information\", [bill[:additionally_information]])\n  field.(118, 55, \"Payable by\", payable_by)\n\n  [5, 67].each do |x|   # currency and amount are on both parts\n    field.(x, 37, \"Currency\", [bill[:currency]])\n    field.(x + 15, 37, \"Amount\", [amount])\n  end\nend\nshow_pdf \"invoice.pdf\""
+          },
+          {
+            "t": "h",
+            "html": "<p>The coordinates are millimetres times <code>mm</code>; in PDF, y counts up from the bottom edge, so <code>105 * mm</code> is the line to tear along. <code>field</code> is a small lambda: a heading in bold 6 point, the lines in 8 point below it – the sizes the standard asks for. This time qr-bills hands out the code as a PNG, because Prawn places PNG and JPEG images. It is a <code>ChunkyPNG::Image</code> as in lesson {{nr:gems}}. The real standard has more rules – fonts, corner marks for an empty amount, the scissors symbol – and qr-bills can also write the whole bill as HTML (<code>output_params[:format] = \"html\"</code>).</p><p>Now the other way round: someone receives <code>invoice.pdf</code> and wants to know what to pay. <strong>swiss_qr</strong> finds the code with qr_reader, decodes it and takes the text apart:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"swiss_qr\"\ninstall_gem \"qr_reader\"   # finds and decodes the QR code\nrequire \"swiss_qr\"\n\npaid = SwissQr.read(\"invoice.pdf\")\nputs paid.creditor.lines\nputs paid.formatted_iban, paid.qr_iban?\nputs \"#{paid.currency} #{paid.formatted_amount}\"\nputs paid.formatted_reference\nputs paid.unstructured_message\npaid.debtor.name"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>SwissQr.read</code> takes a file name, an IO such as <code>StringIO.new(bytes)</code> or an image like ChunkyPNG's, and returns the first QR-bill it finds as a <code>SwissQr::Bill</code>: an immutable object (a <code>Data</code>, lesson {{nr:tl-mixins}}) with the amount as a <code>BigDecimal</code> (lesson {{nr:bigdecimal}}) and the addresses as objects of their own. Other QR codes on the page – a link to a web shop, say – are skipped.</p><p>swiss_qr does not just read, it checks every rule too: the check digits of the IBAN and of the reference, the lengths, the character set. A typo in the reference is caught:</p>"
+          },
+          {
+            "t": "c",
+            "code": "typo = payload.sub(\"09017\", \"09071\")   # two digits swapped\nbegin\n  SwissQr.parse(typo)\nrescue SwissQr::InvalidPayload => e\n  puts e.message\nend\nSwissQr.valid?(payload)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install qr-bills swiss_qr qr_reader</code>. swiss_qr comes with a command as well: <code>swiss_qr invoice.pdf</code> prints the bill as JSON. For real bills you need an IBAN or QR-IBAN of your own from your bank; accounting software usually builds the QR reference from a customer and an invoice number, and <code>QRBills.create_creditor_reference</code> turns a number of your own into an RF reference.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://github.com/damoiser/qr-bills#readme' target='_blank'>qr-bills</a> · <a href='https://github.com/largo/swiss_qr#readme' target='_blank'>swiss_qr</a> · <a href='https://www.six-group.com/en/products-services/banking-services/payment-standardization/standards/qr-bill.html' target='_blank'>SIX: the QR-bill standards</a></div><div class='task'><strong>Task:</strong> Glace Fuchs, a (made-up) ice-cream stand at Seeweg 3, 8000 Seldwyla, has an ordinary account: IBAN <code>CH58 0079 1123 0008 8901 2</code>. An ordinary IBAN goes without a QR reference, so take the bill type without a reference (<code>QRBills.get_qrbill_without_reference_type</code>, <code>reference_type</code> <code>\"NON\"</code>, the reference stays empty). Make a QR-bill for <strong>CHF 12.30</strong> to Kaz Muster, Bahnhofstrasse 2, 8000 Seldwyla, show its QR code as a PNG with <code>show_image</code> and read it back with <code>SwissQr.read</code>. Leave the bill you read as the last value, or print its IBAN and amount.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Glace Fuchs: a QR-bill without a reference for CHF 12.30,\n# shown as a PNG and read back with SwissQr.read\n",
+            "check": "code.include?(\"SwissQr.read\") && images.any? && ->(bill, text) { bill.respond_to?(:iban) ? bill.iban == \"CH5800791123000889012\" && bill.formatted_amount == \"12.30\" && bill.reference_type == :non : text.delete(\" \").include?(\"CH5800791123000889012\") && text.match?(/12\\.30?(?!\\d)|0\\.123e2/) }.(result, output)",
+            "hint": "Copy the first cell and change it: <code>get_qrbill_without_reference_type</code>, <code>reference_type = \"NON\"</code>, <code>qrcode_format = \"png\"</code>. <code>QRBills.generate(…)[:output]</code> is then a ChunkyPNG image that you can hand straight to <code>show_image</code> and <code>SwissQr.read</code>. If SwissQr says the debtor's name is missing, fill in <code>[:debtor][:address]</code> too."
+          }
+        ]
+      },
+      "ja": {
+        "title": "QR請求書を書いて読む",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>スイスのQR請求書</h2><p>スイスでは、請求書のページの下に払込票が付いています。2020年からは、それが<strong>QR請求書</strong>（QR-bill）です（昔のオレンジと赤の払込票は2022年の秋になくなりました）。そのQRコードには、銀行が必要なものが全部入っています。どの口座に、いくら、どの通貨で、だれから。そして、どの請求書が支払われたかを会社が知るための参照番号です。バンキングアプリがそれをスキャンするので、27桁の番号を打ち込む人はもういません。</p><p>gemは2つで、どちらもピュアRubyです。<a href='https://github.com/damoiser/qr-bills' target='_blank'>qr-bills</a>はQR請求書を書き、<a href='https://github.com/largo/swiss_qr' target='_blank'>swiss_qr</a>はそれを読み戻して、規格のすべてのルールをチェックします。画像やPDFの中のコードは<a href='https://github.com/largo/qr_reader' target='_blank'>qr_reader</a>で見つけます。自転車屋さんとお客さんは架空のもので、口座番号はQR請求書の仕様書にあるテスト用の番号です。ここでお金は動きません。</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"qr-bills\"\nrequire \"qr-bills\"\n\nparams = QRBills.get_qr_params\nparams[:bill_type] = QRBills.get_qrbill_with_qr_reference_type\nparams[:output_params][:format] = \"qrcode\"   # HTMLではなく、コードだけ\nparams[:qrcode_format] = \"svg\"\n\nbill = params[:bill_params]\nbill[:amount] = 84.50\nbill[:currency] = \"CHF\"\nbill[:reference_type] = \"QRR\"\nbill[:reference] = \"21 00000 00003 13947 14300 09017\"\nbill[:additionally_information] = \"Invoice 2026-042, chain and brake pads\"\nbill[:creditor][:iban] = \"CH44 3199 9123 0008 8901 2\"\nbill[:creditor][:address].merge!(\n  name: \"Velo Speck GmbH\", street_name: \"Musterstrasse\", building_number: \"1\",\n  postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\"\n)\nbill[:debtor][:address].merge!(\n  name: \"Pia Muster\", street_name: \"Beispielweg\", building_number: \"7\",\n  postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\"\n)\n\nsvg = QRBills.generate(params)[:output]\nshow_image svg, alt: \"The bill's QR code, with a Swiss cross in the middle\"\ndownload_file svg, \"qr-code.svg\""
+          },
+          {
+            "t": "h",
+            "html": "<p>何が起きたのでしょう？</p><ul><li><code>QRBills.get_qr_params</code>は、すべての項目が入ったハッシュを返します。ほとんどは空なので、それを埋めていきます。<code>bill</code>は内側の部分<code>params[:bill_params]</code>です。これを変えると<code>params</code>も変わります。同じハッシュだからです。</li><li><strong>請求書の種類</strong>：QR参照番号つき（<code>QRR</code>）、クレジター参照番号つき（<code>SCOR</code>、RFで始まる）、参照番号なし（<code>NON</code>）。</li><li><strong>QR-IBAN</strong>（5桁目から9桁目が30000から31999のあいだ）は、QR参照番号つきの請求書のための口座です。参照番号は27桁で、最後の1桁はほかの桁から計算したチェックディジットです。これで会社は、どの請求書が支払われたかがわかります。</li><li>IBANは<code>bill[:creditor][:iban]</code>に入れます。住所にもIBANの項目がありますが、gemが読むのはこちらです。</li><li><code>QRBills.generate</code>はハッシュを返し、その<code>:output</code>がSVGの文字列です。<code>show_image</code>で表示し、<code>download_file</code>でファイルとしてダウンロードできるようにします。</li></ul><p>では、コードの中には何が入っているのでしょう？　ふつうのテキストで、1行に1項目です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "payload = QRGenerator.build_payload(bill)\nputs payload"
+          },
+          {
+            "t": "h",
+            "html": "<p>秘密はこれで全部です。<code>SPC</code>（Swiss Payments Code）、バージョン<code>0200</code>、文字セット1（UTF-8）。そのあとに口座、住所の種類<code>S</code>（構造化：通りと番地が別々の項目）の受取人、7つの空行（まだ使えない「最終受取人」のために取ってある）、金額、通貨、支払人、参照番号の種類と参照番号、メッセージ、そして<code>EPD</code>（End Payment Data）。行と行はメールと同じようにCR LFで区切られています。</p><p>紙の上では、QRコードは決まった大きさの払込票の中にあります。A4のページの下の105 mmで、左は支払った人が取っておく<em>受領証</em>、右は46 mm四方のコードがある<em>支払部分</em>です。Prawn（レッスン{{nr:pdf}}）で描いてみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"prawn\"\nrequire \"prawn\"\n\nparams[:qrcode_format] = \"png\"\nFile.binwrite(\"qr.png\", QRBills.generate(params)[:output].to_blob)\n\nmm = 72 / 25.4   # PDFの単位はポイント：1 mmは2.83ポイント\nto = bill[:creditor][:address]\nby = bill[:debtor][:address]\npayable_to = [bill[:creditor][:iban], to[:name], \"#{to[:street_name]} #{to[:building_number]}\",\n              \"#{to[:postal_code]} #{to[:town]}\"]\npayable_by = [by[:name], \"#{by[:street_name]} #{by[:building_number]}\",\n              \"#{by[:postal_code]} #{by[:town]}\"]\namount = format(\"%.2f\", bill[:amount])\n\nPrawn::Document.generate(\"invoice.pdf\", page_size: \"A4\", margin: 0) do\n  text_box \"Velo Speck GmbH\\nInvoice 2026-042\", at: [20 * mm, 277 * mm], size: 14\n  dash(3)\n  stroke_horizontal_line 0, bounds.width, at: 105 * mm   # 払込票：下の105 mm\n  stroke_vertical_line 0, 105 * mm, at: 62 * mm          # 受領証 | 支払部分\n  undash\n\n  field = lambda do |x, y, heading, lines|\n    text_box heading, at: [x * mm, y * mm], size: 6, style: :bold\n    text_box lines.join(\"\\n\"), at: [x * mm, (y - 3) * mm], size: 8\n  end\n\n  text_box \"Receipt\", at: [5 * mm, 100 * mm], size: 11, style: :bold\n  field.(5, 93, \"Account / Payable to\", payable_to)\n  field.(5, 70, \"Reference\", [bill[:reference]])\n  field.(5, 60, \"Payable by\", payable_by)\n\n  text_box \"Payment part\", at: [67 * mm, 100 * mm], size: 11, style: :bold\n  image \"qr.png\", at: [67 * mm, 88 * mm], width: 46 * mm\n  field.(118, 100, \"Account / Payable to\", payable_to)\n  field.(118, 77, \"Reference\", [bill[:reference]])\n  field.(118, 67, \"Additional information\", [bill[:additionally_information]])\n  field.(118, 55, \"Payable by\", payable_by)\n\n  [5, 67].each do |x|   # 通貨と金額は両方に入る\n    field.(x, 37, \"Currency\", [bill[:currency]])\n    field.(x + 15, 37, \"Amount\", [amount])\n  end\nend\nshow_pdf \"invoice.pdf\""
+          },
+          {
+            "t": "h",
+            "html": "<p>座標はミリメートルに<code>mm</code>を掛けたものです。PDFではyが下の端から上に数えるので、<code>105 * mm</code>は切り取り線です。<code>field</code>は小さなラムダで、太字6ポイントの見出しと、その下に8ポイントの行を書きます。規格が求める大きさです。今回はqr-billsが、レッスン{{nr:gems}}で使った<code>ChunkyPNG::Image</code>としてコードを返します。PNG画像なら、Prawnが配置できるからです。本物の規格にはもっとルールがあります（フォント、金額が空のときのコーナーマーク、はさみの記号など）。qr-billsは請求書全体をHTMLで書くこともできます（<code>output_params[:format] = \"html\"</code>）。</p><p>今度は逆です。だれかが<code>invoice.pdf</code>を受け取って、いくら払えばいいか知りたいとします。<strong>swiss_qr</strong>はqr_readerでコードを見つけ、読み取って、テキストを分解します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"swiss_qr\"\ninstall_gem \"qr_reader\"   # QRコードを見つけて読み取る\nrequire \"swiss_qr\"\n\npaid = SwissQr.read(\"invoice.pdf\")\nputs paid.creditor.lines\nputs paid.formatted_iban, paid.qr_iban?\nputs \"#{paid.currency} #{paid.formatted_amount}\"\nputs paid.formatted_reference\nputs paid.unstructured_message\npaid.debtor.name"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>SwissQr.read</code>は、ファイル名、<code>StringIO.new(bytes)</code>のようなIO、またはChunkyPNGのような画像を受け取り、最初に見つけたQR請求書を<code>SwissQr::Bill</code>として返します。金額は<code>BigDecimal</code>（レッスン{{nr:bigdecimal}}）で、住所はそれぞれ独自のオブジェクトです。全体は変更できないオブジェクト、つまり<code>Data</code>（レッスン{{nr:tl-mixins}}）です。ページの上のほかのQRコード（たとえばウェブショップへのリンク）は飛ばします。</p><p>swiss_qrは読むだけでなく、すべてのルールをチェックします。IBANと参照番号のチェックディジット、長さ、文字セット。参照番号の打ち間違いも見つかります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "typo = payload.sub(\"09017\", \"09071\")   # 2つの数字が入れ替わった\nbegin\n  SwissQr.parse(typo)\nrescue SwissQr::InvalidPayload => e\n  puts e.message\nend\nSwissQr.valid?(payload)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p><code>gem install qr-bills swiss_qr qr_reader</code>。swiss_qrにはコマンドも付いています。<code>swiss_qr invoice.pdf</code>で請求書をJSONとして表示します。本物の請求書には、銀行からもらう自分のIBANかQR-IBANが必要です。QR参照番号はふつう会計ソフトが顧客番号と請求書番号からつくります。<code>QRBills.create_creditor_reference</code>は、自分の番号をRF参照番号にします。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://github.com/damoiser/qr-bills#readme' target='_blank'>qr-bills（英語）</a>・<a href='https://github.com/largo/swiss_qr#readme' target='_blank'>swiss_qr（英語）</a>・<a href='https://www.six-group.com/en/products-services/banking-services/payment-standardization/standards/qr-bill.html' target='_blank'>SIX：QR請求書の規格（英語）</a></div><div class='task'><strong>課題：</strong>Glace Fuchsは、Seeweg 3, 8000 Seldwylaにある（架空の）アイスクリーム屋さんで、ふつうの口座を持っています。IBANは<code>CH58 0079 1123 0008 8901 2</code>です。ふつうのIBANにはQR参照番号を付けないので、参照番号なしの種類にします（<code>QRBills.get_qrbill_without_reference_type</code>、<code>reference_type</code>は<code>\"NON\"</code>、参照番号は空のまま）。Kaz Muster, Bahnhofstrasse 2, 8000 Seldwyla宛てに<strong>CHF 12.30</strong>のQR請求書をつくり、そのQRコードをPNGとして<code>show_image</code>で表示して、<code>SwissQr.read</code>で読み戻してください。読んだ請求書を最後の値として残すか、そのIBANと金額を出力します。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Glace Fuchs：参照番号なしのQR請求書（CHF 12.30）を\n# PNGで表示して、SwissQr.readで読み戻す\n",
+            "check": "code.include?(\"SwissQr.read\") && images.any? && ->(bill, text) { bill.respond_to?(:iban) ? bill.iban == \"CH5800791123000889012\" && bill.formatted_amount == \"12.30\" && bill.reference_type == :non : text.delete(\" \").include?(\"CH5800791123000889012\") && text.match?(/12\\.30?(?!\\d)|0\\.123e2/) }.(result, output)",
+            "hint": "最初のセルをコピーして変えてみて：<code>get_qrbill_without_reference_type</code>、<code>reference_type = \"NON\"</code>、<code>qrcode_format = \"png\"</code>。そうすると<code>QRBills.generate(…)[:output]</code>はChunkyPNGの画像になるから、そのまま<code>show_image</code>と<code>SwissQr.read</code>に渡せるよ。支払人の名前がないってSwissQrに言われたら、<code>[:debtor][:address]</code>も埋めてね。"
+          }
+        ]
+      }
+    },
+    {
       "id": "tl-collections",
       "section": {
         "de": "Aufbaukurs: timelog",

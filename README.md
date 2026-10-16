@@ -42,7 +42,10 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   DragonRuby and more), a lesson whose cells and IRB run on
   [PicoRuby.wasm](https://github.com/picoruby/picoruby) instead of CRuby,
   Ruby compiled ahead of time by Matz's [Spinel](https://github.com/matz/spinel)
-  - to C, then to WebAssembly, in the browser - and a project track that
+  - to C, then to WebAssembly, in the browser - Swiss QR-bills written with
+  [qr-bills](https://github.com/damoiser/qr-bills) into a PDF and read back
+  from it with [swiss_qr](https://github.com/largo/swiss_qr) and
+  [qr_reader](https://github.com/largo/qr_reader), and a project track that
   builds a small time tracker (with Time and Date, objects and copies,
   tests, pattern matching, a DSL and a web front end).
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
