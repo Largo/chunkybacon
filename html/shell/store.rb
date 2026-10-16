@@ -8,11 +8,34 @@ module ChunkyShell
     CODE_PREFIX = "chunky_cell_"
     # the key a cell's code had before fingerprints: chunky_cell_<lang>_<id>_<idx>
     LEGACY_CODE_KEY = /^chunky_cell_([a-z]+)_(.+)_([0-9]+)$/
-    # Lessons whose cells moved while the keys had no fingerprint: id =>
-    # [the first old index that moved, by how many]. The show_objects demo
-    # and its prose went in before the exercise, in de, en and ja alike
-    # (2026-10). A later change to a lesson's cells needs no entry here.
-    LEGACY_SHIFTS = { "arrays" => [7, 2], "hashes" => [3, 2], "klassen" => [3, 2] }.freeze
+    # Where the code cells of the lessons from before fingerprints sit now:
+    # id => { old index => index now }, the same in de, en and ja. The
+    # show_objects demos went in before the exercises of arrays, hashes and
+    # klassen (2026-10), then new demo cells before the exercises of most
+    # lessons (2026-10-16). A change that moves code cells again updates
+    # this table: node tools/legacy_cell_moves.js prints it (and
+    # test/shell/course_store_view_test.rb checks it); a lesson not in it
+    # kept its indices.
+    LEGACY_MOVES = {
+      "hallo" => { 5 => 7 },
+      "rechnen" => { 5 => 13 },
+      "variablen" => { 5 => 9 },
+      "strings" => { 5 => 13 },
+      "wenn" => { 3 => 13 },
+      "schleifen" => { 5 => 13 },
+      "arrays" => { 7 => 16 },
+      "hashes" => { 3 => 14 },
+      "methoden" => { 6 => 11 },
+      "klassen" => { 3 => 12 },
+      "module" => { 8 => 12 },
+      "html" => { 7 => 13 },
+      "bigdecimal" => { 9 => 11 },
+      "tl-mixins" => { 3 => 5 },
+      "tl-cli" => { 4 => 5 },
+      "tl-pattern" => { 5 => 7 },
+      "tl-meta" => { 5 => 7 },
+      "tl-quality" => { 3 => 5 }
+    }.freeze
 
     def self.get(key, default = "")
       value = JSG.w.localStorage.getItem(key)
@@ -41,7 +64,7 @@ module ChunkyShell
 
     # Saved code under a key without a fingerprint - this browser's from
     # before, or one that an old progress file or a folder brings in - moves
-    # to the fingerprinted key of the cell it was saved for (LEGACY_SHIFTS).
+    # to the fingerprinted key of the cell it was saved for (LEGACY_MOVES).
     # Where that key exists already, the newer of the two stays (storage.js's
     # change times). The old key is removed, so storage.js sends its removal
     # along and an old copy cannot bring it back. A key this course has no
@@ -73,8 +96,8 @@ module ChunkyShell
       return nil if lesson.nil?
 
       idx = m[3].to_i
-      shift = LEGACY_SHIFTS[id]
-      idx += shift[1] if shift && idx >= shift[0]
+      moves = LEGACY_MOVES[id]
+      idx = moves[idx] || idx if moves
       cell = course.cells(lesson, m[1])[idx]
       return nil if cell.nil? || !%w[c x].include?(cell.t)
 

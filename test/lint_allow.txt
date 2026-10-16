@@ -17,3 +17,37 @@ plain-form@rubykaigi*ja*cell7@*
 # shorter line would need a different idiom than en or different output, and
 # at 98 it would still scroll sideways like the 77-100 column lines do
 long-line@sequel*de*cell5@L2
+
+# doku [ja]: the doc excerpts and signatures come from the Japanese reference
+# manual (docs.ruby-lang.org/ja), not translated from the English rdoc
+code-spans-ja@doku*ja*cell4@*
+code-spans-ja@doku*ja*cell6@*
+code-spans-ja@doku*ja*cell11hint@*
+pre-block@doku*ja*cell4
+
+# Japanese word order names <=>, method_missing and Time.new(...) once more or
+# once less than en; the same code is shown
+code-spans-ja@module*ja*cell9@*
+code-spans-ja@tl-meta*ja*cell4@*
+code-spans-ja@tl-time*ja*cell10@*
+
+# module [ja]: Enumerable's map/select are met in lesson 9 (iteratoren), as
+# in de and en
+ref-context@module*ja*cell9@*
+
+# html: //a[@href='/ei'] is XPath in <code>, matching each language's page
+links@htmlcell6
+
+# ja links to the Japanese reference manual where en links the English one
+links@irbcell2
+links@tl-formatscell10
+links@tl-performancecell8
+
+# doku: the detective task is named on purpose ("Aufgabe – Detektivarbeit:",
+# "課題：探偵になろう" as a title)
+task-label@doku*de*cell10@*
+task-label@doku*en*cell10@*
+plain-form@doku*ja*cell10@*
+
+# vererbung [ja]: 犬は動物<em>である</em> quotes the "〜は〜である" test
+plain-form@vererbung*ja*cell6@*

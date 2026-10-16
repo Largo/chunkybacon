@@ -15,6 +15,9 @@
 # - The exercise, while it still holds its starter code, is left out: there
 #   is nothing of the learner's in it yet, a starter is meant to fail, and
 #   demo cells never use the exercise's names (they differ on purpose).
+# - So is a cell that shows an error on purpose ("raises" in lessons.js),
+#   while it holds the lesson's code: it would fail every time, and no
+#   cell below needs what it makes.
 module EarlierCells
   module_function
 
@@ -31,6 +34,7 @@ module EarlierCells
       code = yield(i).to_s
       next if ran[i] == code
       next if cell["t"] == "x" && starter?(cell, code)
+      next if cell["raises"] && starter?(cell, code)
 
       list << [i, code]
     end

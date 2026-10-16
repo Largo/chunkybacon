@@ -1,4 +1,4 @@
-// Lesson 45 in a browser: Spinel compiling in the page. The widgets are the
+// Lesson 49 in a browser: Spinel compiling in the page. The widgets are the
 // shell's (html/shell/spinel.rb), the compiler and the runs are Ruby on
 // PicoRuby.wasm in workers (html/spinel/), Spinel and clang the build in
 // html/assets/spinel/ (ruby tools/build_spinel.rb first).

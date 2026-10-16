@@ -10,5 +10,6 @@ view.rb
 router.rb
 workspace.rb
 spinel.rb
+cheatsheet.rb
 app.rb
 boot.rb

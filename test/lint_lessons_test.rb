@@ -15,9 +15,12 @@ class LessonLintTest < Minitest::Test
 
   def data = Marshal.load(Marshal.dump(BASE))
 
-  def lint(d, only: LessonLint::GROUPS - %w[links])
+  # +allowed+: leave out what lint_allow.txt accepts, as the real run does
+  def lint(d, only: LessonLint::GROUPS - %w[links], allowed: false)
     text = LessonLint::Source.dump(d)
-    LessonLint::Linter.new(ROOT, allow_path: nil, text: text, gems: GEMS).run(only)
+    allow = allowed ? File.join(ROOT, "test", "lint_allow.txt") : nil
+    findings = LessonLint::Linter.new(ROOT, allow_path: allow, text: text, gems: GEMS).run(only)
+    allowed ? findings.reject(&:allowed) : findings
   end
 
   def lesson(d, id) = d["lessons"].find { |l| l["id"] == id }
@@ -128,7 +131,7 @@ class LessonLintTest < Minitest::Test
     extra = Marshal.load(Marshal.dump(lesson(d, "wenn")))
     extra["id"] = "neu"
     d["lessons"].insert(4, extra)
-    f = lint(d, only: %w[refs structure])
+    f = lint(d, only: %w[refs structure], allowed: true)
     %w[title-number ref-context ref-parity ref-unknown ref-literal ref-range].each { |code| refute_finds f, code }
     resolved = LessonLint::Source.new(ROOT, text: LessonLint::Source.dump(d)).data
     roda = resolved["lessons"].index { |l| l["id"] == "roda" } + 1
