@@ -247,32 +247,52 @@ SOLUTIONS = {
     "en" => [%(puts "Hello, World!"), %("Hello, World!")]
   },
   "rechnen" => {
-    "de" => [%(puts 6 * 7), %(6 * 7)],
-    "en" => [%(puts 6 * 7), %(6 * 7)]
+    "de" => [%(puts 3 * 17 / 4.0), %(3 * 17 / 4.0), %((3 * 17).fdiv(4))],
+    "en" => [%(puts 3 * 17 / 4.0), %(3 * 17 / 4.0), %((3 * 17).fdiv(4))]
   },
   "variablen" => {
     "de" => [%(name = "Kaz"\nalter = 7)],
     "en" => [%(name = "Kaz"\nage = 7)]
   },
   "strings" => {
-    "de" => [%(lieblingsessen = "Chunky Bacon"\nputs "Ich mag \#{lieblingsessen}!"), %(lieblingsessen = "Chunky Bacon"\n"Ich mag \#{lieblingsessen}!")],
-    "en" => [%(favorite_food = "Chunky Bacon"\nputs "I love \#{favorite_food}!"), %(favorite_food = "Chunky Bacon"\n"I love \#{favorite_food}!")]
+    "de" => [%(lieblingsessen = "Chunky Bacon"\nputs "Ich mag \#{lieblingsessen.upcase}!"), %(lieblingsessen = "Chunky Bacon"\n"Ich mag \#{lieblingsessen.upcase}!")],
+    "en" => [%(favorite_food = "Chunky Bacon"\nputs "I love \#{favorite_food.upcase}!"), %(favorite_food = "Chunky Bacon"\n"I love \#{favorite_food.upcase}!")]
   },
   "wenn" => {
-    "de" => [%(zahl = 7\nif zahl > 5\n  puts "gross"\nelse\n  puts "klein"\nend), %(zahl = 7\nif zahl > 5\n  "gross"\nelse\n  "klein"\nend)],
-    "en" => [%(number = 7\nif number > 5\n  puts "big"\nelse\n  puts "small"\nend), %(number = 7\nif number > 5\n  "big"\nelse\n  "small"\nend)]
+    "de" => [%(zahl = 7\nif zahl > 10\n  puts "gross"\nelsif zahl > 5\n  puts "mittel"\nelse\n  puts "klein"\nend), %(zahl = 7\nif zahl > 10\n  "gross"\nelsif zahl > 5\n  "mittel"\nelse\n  "klein"\nend)],
+    "en" => [%(number = 7\nif number > 10\n  puts "big"\nelsif number > 5\n  puts "medium"\nelse\n  puts "small"\nend), %(number = 7\nif number > 10\n  "big"\nelsif number > 5\n  "medium"\nelse\n  "small"\nend)]
   },
   "schleifen" => {
     "de" => [%(5.times do\n  puts "Chunky Bacon!"\nend), %(5.times.map { "Chunky Bacon!" })],
     "en" => [%(5.times do\n  puts "Chunky Bacon!"\nend), %(5.times.map { "Chunky Bacon!" })]
   },
   "arrays" => {
-    "de" => [%(fruehstueck = ["Ei", "Brot"]\nfruehstueck << "Speck"\nfruehstueck.each do |sache|\n  puts sache\nend), %(fruehstueck = ["Ei", "Brot"]\nfruehstueck << "Speck")],
-    "en" => [%(breakfast = ["egg", "toast"]\nbreakfast << "bacon"\nbreakfast.each do |item|\n  puts item\nend), %(breakfast = ["egg", "toast"]\nbreakfast << "bacon")]
+    "de" => [%(fruehstueck = ["Ei", "Brot"]\nfruehstueck << "Speck"\nputs fruehstueck.sort.join(", ")), %(fruehstueck = ["Ei", "Brot"]\nfruehstueck << "Speck"\nfruehstueck.sort.join(", "))],
+    "en" => [%(breakfast = ["egg", "toast"]\nbreakfast << "bacon"\nputs breakfast.sort.join(", ")), %(breakfast = ["egg", "toast"]\nbreakfast << "bacon"\nbreakfast.sort.join(", "))]
   },
   "hashes" => {
-    "de" => [%(fuchs = { name: "Chunky", essen: "Speck" }\nfuchs[:name])],
-    "en" => [%(fox = { name: "Chunky", food: "bacon" }\nfox[:name])]
+    "de" => [%(fuchs = { name: "Chunky", essen: "Speck" }\nfuchs[:alter] = 3\nfuchs)],
+    "en" => [%(fox = { name: "Chunky", food: "bacon" }\nfox[:age] = 3\nfox)]
+  },
+  "iteratoren" => {
+    "de" => [%(punkte = [72, 45, 88, 91, 30, 60]\nbestanden = punkte.select { |punkt| punkt >= 60 }\nmit_bonus = bestanden.map { |punkt| punkt + 5 }),
+             %(punkte = [72, 45, 88, 91, 30, 60]\nbestanden = punkte.select { _1 >= 60 }\nmit_bonus = bestanden.map { |p| p + 5 }\np mit_bonus)],
+    "en" => [%(scores = [72, 45, 88, 91, 30, 60]\npassed = scores.select { |score| score >= 60 }\nwith_bonus = passed.map { |score| score + 5 }),
+             %(scores = [72, 45, 88, 91, 30, 60]\npassed = scores.select { _1 >= 60 }\nwith_bonus = passed.map { |s| s + 5 }\np with_bonus)]
+  },
+  "fehler" => {
+    "de" => [%(fuchs = { name: "Chunky", streifen: 3 }\n\ndef satz(tier)\n  "\#{tier[:name]} isst \#{tier[:streifen]} Streifen Speck."\nend\n\nsatz(fuchs)),
+             %(fuchs = { name: "Chunky", streifen: 3 }\n\ndef satz(tier)\n  "\#{tier[:name]} isst " + tier[:streifen].to_s + " Streifen Speck."\nend\n\nputs satz(fuchs))],
+    "en" => [%(fox = { name: "Chunky", strips: 3 }\n\ndef sentence(animal)\n  "\#{animal[:name]} eats \#{animal[:strips]} strips of bacon."\nend\n\nsentence(fox)),
+             %(fox = { name: "Chunky", strips: 3 }\n\ndef sentence(animal)\n  "\#{animal[:name]} eats " + animal[:strips].to_s + " strips of bacon."\nend\n\nputs sentence(fox))]
+  },
+  "vererbung" => {
+    "de" => [%(class Waldtier\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def laut\n    "..."\n  end\n  def vorstellen\n    "Ich bin \#{name} und sage \#{laut}"\n  end\nend\n\nclass Rotfuchs < Waldtier\n  def laut\n    "Chunky Bacon!"\n  end\nend\n\nRotfuchs.new("Chunky").vorstellen)],
+    "en" => [%(class ForestAnimal\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def sound\n    "..."\n  end\n  def introduce\n    "I am \#{name} and I say \#{sound}"\n  end\nend\n\nclass RedFox < ForestAnimal\n  def sound\n    "Chunky Bacon!"\n  end\nend\n\nRedFox.new("Chunky").introduce)]
+  },
+  "doku" => {
+    "de" => [%(quersumme = 2026.digits.sum\npaare = [1, 2, 3, 4, 5, 6].each_slice(2).to_a)],
+    "en" => [%(digit_sum = 2026.digits.sum\npairs = [1, 2, 3, 4, 5, 6].each_slice(2).to_a)]
   },
   "methoden" => {
     "de" => [%(def quadrat(zahl)\n  zahl * zahl\nend\n\nquadrat(9))],
@@ -823,6 +843,90 @@ end)],
   end
 end)]
   },
+  "tl-time" => {
+    "de" => [%(require "time"
+
+def dauer_in_stunden(datum, von, bis)
+  anfang = Time.strptime("\#{datum} \#{von}", "%Y-%m-%d %H:%M")
+  ende = Time.strptime("\#{datum} \#{bis}", "%Y-%m-%d %H:%M")
+  ende += 24 * 3600 if ende < anfang
+  (ende - anfang) / 3600
+end
+
+dauer_in_stunden("2026-09-15", "22:00", "01:30"))],
+    "en" => [%(require "time"
+
+def duration_in_hours(date, from, to)
+  begins = Time.strptime("\#{date} \#{from}", "%Y-%m-%d %H:%M")
+  ends = Time.strptime("\#{date} \#{to}", "%Y-%m-%d %H:%M")
+  ends += 24 * 3600 if ends < begins
+  (ends - begins) / 3600
+end
+
+duration_in_hours("2026-09-15", "22:00", "01:30"))]
+  },
+  "tl-objects" => {
+    "de" => [%(class Stundenblatt
+  def initialize
+    @eintraege = []
+  end
+
+  def add(projekt, stunden)
+    @eintraege << { projekt: projekt, stunden: stunden }
+    self
+  end
+
+  def eintraege
+    @eintraege.dup.freeze
+  end
+end
+
+blatt = Stundenblatt.new.add("ProjectX", 3.5)
+blatt.eintraege.frozen?), %(class Stundenblatt
+  def initialize
+    @eintraege = []
+  end
+
+  def add(projekt, stunden)
+    @eintraege << { projekt: projekt, stunden: stunden }
+    self
+  end
+
+  def eintraege
+    @eintraege.map(&:dup).freeze
+  end
+end)],
+    "en" => [%(class Logbook
+  def initialize
+    @entries = []
+  end
+
+  def add(project, hours)
+    @entries << { project: project, hours: hours }
+    self
+  end
+
+  def entries
+    @entries.dup.freeze
+  end
+end
+
+log = Logbook.new.add("ProjectX", 3.5)
+log.entries.frozen?), %(class Logbook
+  def initialize
+    @entries = []
+  end
+
+  def add(project, hours)
+    @entries << { project: project, hours: hours }
+    self
+  end
+
+  def entries
+    @entries.map(&:dup).freeze
+  end
+end)]
+  },
   "tl-minitest" => {
     "de" => [%(class Eintrag
   attr_reader :projekt, :stunden
@@ -1267,13 +1371,29 @@ def load_lesson_files(lesson)
   end
 end
 
+# While working on a few lessons: HARNESS_JSON=other/lessons.json runs another
+# build of the course, HARNESS_ONLY=id,id only those lessons, and
+# HARNESS_SOLUTIONS=file.rb (a file whose last expression is a Hash like
+# SOLUTIONS) adds or replaces solutions - for a changed exercise.
 def run_harness(langs)
-  data = JSON.parse(File.read(File.expand_path("lessons.json", __dir__)))
+  data = JSON.parse(File.read(ENV.fetch("HARNESS_JSON", File.expand_path("lessons.json", __dir__))))
+  only = ENV["HARNESS_ONLY"].to_s.split(",").map(&:strip)
+  if (extra = ENV["HARNESS_SOLUTIONS"])
+    SOLUTIONS.merge!(eval(File.read(extra), TOPLEVEL_BINDING, extra))
+  end
+  # the lessons to check: all but the browser-only ones, or those named - a
+  # name that is no such lesson, or a browser-only one, is a mistake that
+  # would otherwise end in "ALL CHECKS OK" with nothing checked
+  selected = data["lessons"].reject { |lesson| BROWSER_ONLY.include?(lesson["id"]) }
+  unless only.empty?
+    unknown = only - selected.map { |lesson| lesson["id"] }
+    abort "HARNESS_ONLY: #{unknown.join(", ")} - no such lesson, or one only the browser tests run (BROWSER_ONLY)" if unknown.any?
+    selected = selected.select { |lesson| only.include?(lesson["id"]) }
+  end
   failures = 0
   Dir.chdir(WORKDIR)
 
-  data["lessons"].each do |lesson|
-  next if BROWSER_ONLY.include?(lesson["id"])
+  selected.each do |lesson|
 
   langs.each do |lang|
     l = lesson.fetch(lang)
@@ -1286,7 +1406,11 @@ def run_harness(langs)
     # cell is a first run here too - a cell that needs what one above it
     # makes, a local above all (top-level methods and constants outlive a
     # binding in this process), finds it.
-    demos = EarlierCells.before(exercise_at, cells, {}) { |i| cells[i]["code"] }.map { |_, code| { "code" => code } }
+    # A cell that shows an error on purpose is not among them; it runs here
+    # in its place too, to check it raises what it says.
+    earlier = EarlierCells.before(exercise_at, cells, {}) { |i| cells[i]["code"] }.to_h
+    demos = (0...exercise_at).select { |i| earlier.key?(i) || cells[i]["raises"] }
+                             .map { |i| { "code" => cells[i]["code"], "raises" => cells[i]["raises"] } }
     # a demo cell below the exercise (none yet) runs first on a fresh page
     # without it: the exercise is left out while it holds its starter
     last = cells.rindex { |c| c["t"] == "c" }
@@ -1322,7 +1446,15 @@ def run_harness(langs)
       demos = [] if lesson["engine"] == "picoruby"
       demos.each do |demo|
         _, _, err = run_in(bind, lesson["spinel"] ? ChunkySpinel.cell_source(demo["code"]) : demo["code"])
-        if err
+        # a cell that shows an error on purpose names it ("raises"), and
+        # must raise exactly that one
+        expected = demo["raises"]
+        if expected && err&.class&.name != expected
+          puts "FAIL #{lesson["id"]}/#{lang}: demo cell should raise #{expected}, " \
+               "#{err ? "raised #{err.class}: #{err.message}" : "ran without error"}"
+          failures += 1
+          demo_failed = true
+        elsif err && !expected
           puts "FAIL #{lesson["id"]}/#{lang}: demo cell raised #{err.class}: #{err.message}"
           failures += 1
           demo_failed = true
@@ -1385,7 +1517,7 @@ def run_harness(langs)
   end
 end
 
-  puts failures.zero? ? "ALL CHECKS OK (#{data["lessons"].length} lessons x #{langs.join("+")}, puts + no-puts variants)" : "#{failures} failures (#{langs.join("+")})"
+  puts failures.zero? ? "ALL CHECKS OK (#{selected.size} lessons x #{langs.join("+")}, puts + no-puts variants)" : "#{failures} failures (#{langs.join("+")})"
   failures.zero?
 end
 

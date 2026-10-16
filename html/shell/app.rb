@@ -58,6 +58,8 @@ module ChunkyShell
       @workspace = Workspace.new(self).start
       # the Spinel lesson's widgets and its compiler (shell/spinel.rb, html/spinel/)
       @spinel = SpinelUI.new(self).start
+      # the cheat sheet beside the lesson (lessons.js "cheatsheet")
+      @cheatsheet = Cheatsheet.new(self).start
       # the page before the editors: CodeMirror measures its container when
       # it is built, and inside a display:none #app it measures zero
       JSG.d.body.classList.toggle("sidebar-closed", Store.get(SIDEBAR_KEY, "") == "closed")
@@ -80,6 +82,9 @@ module ChunkyShell
 
     def ui = @course.ui(@lang)
     def workshop? = @workshop
+
+    # a lesson's link in this language: #methoden, or /de/methoden
+    def href(id) = @router.href(@lang, id)
 
     # ---------- events ----------
 
@@ -227,6 +232,9 @@ module ChunkyShell
     def body_click(event)
       target = event.target
       css_class = target.className.to_s
+      # a "📋 cheat sheet" button in a lesson's text (data-cheat: a section)
+      cheat = target.closest(".cheat-link")
+      return @cheatsheet&.open_at(cheat.getAttribute("data-cheat")) unless cheat.nil?
       return toggle_live if css_class.include?("live-toggle")
       step = css_class.include?("step-cell")
       return unless step || css_class.include?("run-cell")
@@ -259,9 +267,13 @@ module ChunkyShell
       go_to_next_lesson
     end
 
-    # Alt+R runs the exercise; Escape puts the drawer away
+    # Alt+R runs the exercise; Escape puts the cheat sheet or the drawer away
     def hotkey(event)
-      return close_drawer(true) if event.key == "Escape"
+      if event.key == "Escape"
+        return if @cheatsheet&.escape
+
+        return close_drawer(true)
+      end
       return unless event.altKey && event.key == "r"
 
       event.preventDefault
@@ -347,6 +359,7 @@ module ChunkyShell
       render_lesson
       kernel_status
       @workspace&.language_changed
+      @cheatsheet&.render
     end
 
     def render_nav

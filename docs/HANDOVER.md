@@ -4,7 +4,7 @@ Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
 Work in progress - what is unfinished, and in what state - is in
 `docs/OPEN_WORK.md`.
-Last updated 2026-10-16. The course is in German, English and Japanese.
+Last updated 2026-10-16. The course is in German, English and Japanese, with a cheat sheet.
 
 ## 1. Where it runs
 
@@ -57,8 +57,8 @@ html/
                         ensureThree, afterPaint, cell editors), import map
   shell/                THE PAGE, on PicoRuby (§2a): app.rb, course.rb,
                         view.rb, router.rb (addresses), store.rb, workspace.rb
-                        (progress dialog, workshop file panel), jsg.rb,
-                        support.rb, boot.rb;
+                        (progress dialog, workshop file panel), cheatsheet.rb
+                        (the cheat sheet, §3a), jsg.rb, support.rb, boot.rb;
                         manifest.txt (load order), loader.js, bridge.js
   assets/picoruby/      PicoRuby.wasm 4.0.3 (loader patched to text/picoruby;
                         tools/vendor_picoruby.rb) - the shell's, and the
@@ -68,7 +68,7 @@ html/
   main.rb               THE KERNEL, on CRuby: ChunkyApp runs cells, checks,
                         gems and widgets; ChunkyAudio (show_audio: a WAV's
                         samples, the wave as SVG); browser-environment fixups
-  lessons.js            ALL lesson content + UI strings, as JSON in JS
+  lessons.js            ALL lesson content, the cheat sheet + UI strings, as JSON in JS
   browser_gems.rb       gem installer + stdlib shims (socket, net/http, resolv)
   sandbox_sim.rb        virtual FS for relative paths, virtual sleep,
                         Fiber-based Thread, FileWatch (downloads)
@@ -205,7 +205,7 @@ docs/PICORUBY_SHELL.md     the shell/kernel split in depth: bridge API,
 The page runs two Ruby VMs. **The shell** (`html/shell/*.rb`, PicoRuby.wasm,
 0.9 MB gzipped, up in ~0.3 s) draws everything the learner reads: header,
 index, lesson text and editors, language, routing, the foxes' bubble, the gems
-panel, the progress dialog and the workshop's file panel. **The kernel**
+panel, the cheat sheet, the progress dialog and the workshop's file panel. **The kernel**
 (`html/main.rb`, CRuby's ruby.wasm, 10 MB gzipped) starts only after the
 shell has drawn the page, and runs cells, checks, gems and widgets. A lesson
 is readable in 0.4 s (1.0 s on a 20 Mbit/s line) instead of 1.2 s (5.8 s);
@@ -254,7 +254,7 @@ install it), so they keep the plain style with `.to_s`.
 
 ## 3. Lessons
 
-`html/lessons.js` is `window.LESSONS_JSON = JSON.stringify({ ui, lessons })`,
+`html/lessons.js` is `window.LESSONS_JSON = JSON.stringify({ ui, lessons, cheatsheet })`,
 pretty-printed with two spaces. It round-trips through `JSON.parse` /
 `JSON.stringify(d, null, 2)` byte-identically, so the safest way to edit
 structure (insert or move a lesson, add a cell) is a small node script that
@@ -311,7 +311,8 @@ only the Ruby comments are translated, `check` is byte-identical to `en`, and
 the harness checks `ja` with the English solutions. So a change to an English
 code cell or check must be made in `ja` too (same cell, same code, comments
 in Japanese). Japanese prose is です・ます体, hints are Chunky speaking
-(casual); app.css adds Japanese fallback fonts under `:lang(ja)`.
+(casual); app.css adds Japanese fallback fonts under `:lang(ja)`. German is
+written the Swiss way: `ss`, never `ß` ("heisst", "gross").
 
 Which language a visitor gets is decided in the browser, by
 `shell/bridge.js` (`pickLang`, read by the shell as `ChunkyBridge.lang`), no
@@ -334,8 +335,9 @@ Cells, per language:
 
 | `t` | fields | meaning |
 |---|---|---|
-| `h` | `html` | prose block; `<div class='task'>` = the exercise text, `<div class='offweb'>` = "on your machine" box |
+| `h` | `html` | prose block; `<div class='task'>` = the exercise text, `<div class='offweb'>` = "on your machine" box, `<div class='docs'>` = "look it up": links into the official docs (one per lesson, right before the task), `<button type='button' class='cheat-link' data-cheat='strings'>` = opens the cheat sheet (at a section if named) |
 | `c` | `code` | runnable demo cell |
+| `c` | `code`, `raises` | a demo that fails on purpose (the errors lesson): `raises` names the error class, and the harness checks the cell raises exactly that |
 | `x` | `code`, `check`, `hint` | the ONE exercise cell of the lesson; `check` is Ruby evaluated in the lesson binding with locals `output`, `result`, `code`, `images`, `downloads`, `audios` (the WAVs `show_audio` got), `games` (copies of the games `show_game` made, to play headless) |
 
 Rules that the code and tests rely on:
@@ -354,6 +356,10 @@ Rules that the code and tests rely on:
   2026-10-16 titles and references carried numbers;
   `tools/lesson_numbers_to_ids.rb` converts a lessons.js from then, e.g.
   on an old branch.)
+- A class a lesson defines lives as long as the page: a later lesson that
+  reopens `Katze` with `< Tier` would hit "superclass mismatch". New lessons
+  name their classes anew (the inheritance lesson: Tier, Hund, Waldtier,
+  Rotfuchs).
 - All cells of a lesson share one binding (notebook kernel). Demo and
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
   satisfy the check. A cell run before the cells above it gets them run
@@ -413,6 +419,51 @@ check plays `games`, in `game.rb`, §6),
 name, PDF bytes, a Prawn or HexaPDF document), `show_audio(sound, rate:)`
 (WAV bytes, a file name or an Array of samples, §6), `run_tests` (Minitest);
 in `pycall.rb`: `show_plot(fig)` (a matplotlib figure, §6d).
+
+## 3a. The cheat sheet and the documentation
+
+**The cheat sheet** is `lessons.js` `cheatsheet`: an array of sections,
+`{id, lessons: [lesson ids], title: {de, en, ja}, docs: [{de, en, ja, url,
+urlJa}], rows: [{c: code, de, en, ja}]}`. The code (`c`) is shared by all
+languages and shown as escaped text; the explanations are the course's own
+html (`<code>` inside). The header's `#cheatBtn` opens it as `#cheatsheet`,
+an aside beside the layout (`shell/cheatsheet.rb`, the CSS under "the cheat
+sheet" in app.css):
+
+- From 1280 px on (`Cheatsheet::OVERLAY` is `max-width: 1279px`) it stands
+  to the right of the lesson column and `.layout` makes room; below that it
+  lies over the page (over the index's toggle, too). It is a panel, not a
+  page: opening it keeps the lesson and its cells' binding.
+- Open or shut is a view setting (`chunkyui_cheat`), brought back at start on
+  a wide screen only. Escape empties its search, then closes it - a docked
+  sheet only when the keyboard is in it (`App#hotkey` asks
+  `Cheatsheet#escape` first).
+- Drawn only when shown, again only when the language or the search changed;
+  each language's rows are read through the bridge once and kept as Ruby
+  values, so searching filters plain arrays. A search that finds a
+  section's name shows all its rows. A row whose code has a line break or
+  more than 20 characters stands above its explanation (`.cheat-wide`).
+- A section's lesson numbers link to the lessons (`App#href`, so `/de/...`
+  with permalinks); a click opens the lesson and, on a phone, closes the sheet.
+- `<button class='cheat-link' data-cheat='id'>` in a lesson's text opens it
+  (at that section); lessons `hallo`, `doku` and `tl-capstone` have one.
+- Tests: `test/shell/cheatsheet_test.rb`; `browser_test.mjs` opens, searches
+  and follows a lesson link. The draft sources it was written from are not in
+  the repository: edit the JSON (a node or Ruby script, as for lessons).
+
+**Docs boxes**: every lesson has one `<div class='docs'>` right before its
+task: English pages on docs.ruby-lang.org/en/4.0 for de and en (German says
+"(englisch)"), Rurima (docs.ruby-lang.org/ja/latest) for ja where it has
+the page, else the English one marked 英語; gems link their own docs. All
+links answered 200 when written (2026-10). Lesson `doku` (`doku`) teaches
+reading the docs: the signature line, `#` versus `.`, return values
+(`upcase!` → nil), `method(:x).owner` for the right page, gems'
+docs, `ri`/`show_doc`.
+
+**did_you_mean**: ruby.wasm boots without it (no gem_prelude), so `main.rb`
+requires it; `suggestion_html` puts `error.corrections` below a cell's error
+or an IRB line's (`ui.didYouMean`, `ui.didYouMeanJoin`). The errors lesson
+(11, `fehler`) relies on it ("💡 Meintest du name?").
 
 ## 4. Gems
 
@@ -868,12 +919,14 @@ machine:
   2026-10) are moved by `Store.migrate_code_keys`, at boot and after a
   progress file or folder was merged in (`chunky-progress-loaded`), so an
   old progress file lands right too: to the fingerprinted key of the cell
-  they were saved for - in `arrays`, `hashes` and `klassen` shifted by two
-  (`Store::LEGACY_SHIFTS`: the `show_objects` cells went in before their
-  exercises, 7 → 9, 3 → 5, 3 → 5, in all three languages). Where both keys
-  exist the newer wins (`chunkysync_times`); the old key is removed, so the
-  removal travels and an old copy cannot bring it back. A key this course
-  has no code cell for is left alone.
+  they were saved for, by `Store::LEGACY_MOVES` (id => old index => index
+  now, the same in all three languages: the `show_objects` cells, then the
+  demo cells added before most exercises, moved them - `arrays` 7 → 16,
+  `hashes` 3 → 14, ...). A change that moves code cells again must update
+  that table: `node tools/legacy_cell_moves.js` prints it from lessons.js.
+  Where both keys exist the newer wins (`chunkysync_times`); the old key is
+  removed, so the removal travels and an old copy cannot bring it back. A
+  key this course has no code cell for is left alone.
 - **Workshop** (`#werkstatt`, link above the lessons): the learner's own
   programs. Without a folder the files are `chunky_file:<path>` keys (so they
   travel in the progress file); with a folder they are real files in it
@@ -1196,8 +1249,8 @@ https://idogawa.com there, for tests (`http://blog.test:*`).
 
 ## 6d. Python: Pyodide and the PyCall bridge
 
-The PyCall lessons run real pandas (23), SymPy (24), NumPy (25), matplotlib
-(26) and scikit-learn (27). The pycall gem cannot load in the browser - it opens
+The PyCall lessons run real pandas (27), SymPy (28), NumPy (29), matplotlib
+(26) and scikit-learn (31). The pycall gem cannot load in the browser - it opens
 libpython with Fiddle - so:
 
 - **Pyodide** (CPython 3.14 in WebAssembly) with pandas, numpy and their
@@ -2126,6 +2179,11 @@ What was decided:
   not). Today the exercise is every lesson's last code cell, so this only
   matters for a demo cell put below one - `check_harness.rb` runs such a
   cell first on a fresh page.
+- **A cell that fails on purpose** (`"raises": "NameError"` in lessons.js:
+  the error-messages lesson, a few demos of what goes wrong) is left out
+  too while it holds the lesson's code: it would fail on every ▶ below it,
+  and nothing below needs it. `check_harness.rb` still runs it in its place
+  and checks that it raises exactly that error.
 - **A cell above that fails**: the others still run, and so does the cell
   - one broken cell above should not stop a cell that does not need it.
   The note names it ("Cell 2 failed – its ▶ shows why."); it is not
@@ -2239,7 +2297,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # every lesson x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # every lesson but the browser-only ones x 3 languages, starter fails, solutions pass (HARNESS_ONLY=id,id: those)
 ruby lint_lessons.rb           # lessons.js content: de/en/ja parity, references, Japanese rules, Prism, gems, counts
 ruby lint_lessons_test.rb      # the linter's fault-injection tests
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
@@ -2448,7 +2506,6 @@ venv with `potracer numpy pillow scipy`:
 
 Current work in progress has its own file: `docs/OPEN_WORK.md`.
 
-- Lesson `html` could show more Nokogiri (XPath, Builder) now that it works.
 - `NATIVE_GEMS` is a hand-kept list; a gem not on it still gets downloaded
   before its `extconf.rb` is noticed (cheap, but the message arrives late).
 - The gem still shows the original Chunky drawing (so do the embed and

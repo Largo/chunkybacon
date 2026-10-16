@@ -21,7 +21,7 @@ class AppTest < Minitest::Test
     assert_equal lesson_count, find_all("#lessonNav a").length
     assert_equal "hallo", find("#lessonNav a.active").attrs["data-id"]
     assert_equal "Hallo, Welt!", find("#lessonBody h2").text
-    assert_equal 3, find_all("#lessonBody .cell").length
+    assert_equal 4, find_all("#lessonBody .cell").length
     assert_equal "Aufgabe", find(".cell.exercise").attrs["data-label"]
     assert_equal "1. Hallo, Welt! – Ruby lernen mit Chunky Bacon", doc.props["title"]
     assert_includes bubble, "Chunky Bacon"
@@ -294,7 +294,7 @@ class AppTest < Minitest::Test
     idx = exercise_idx
     byid("cell-out-#{idx}").js_set("textContent", "NameError")
     fire("chunky:ran", ran_event(idx, "error"))
-    assert_equal "Zelle 3 mit Fehler: NameError #{bubble}", byid("runStatus").text, "the third code cell, whatever its index"
+    assert_equal "Zelle 4 mit Fehler: NameError #{bubble}", byid("runStatus").text, "the fourth code cell, whatever its index"
     fire("chunky:ran", ran_event(idx, "pass"))
     assert_includes byid("runStatus").text, "Lektion 1 von #{lesson_count}"
     byid("cell-out-1").js_set("textContent", "x" * 400)
@@ -441,7 +441,7 @@ class AppTest < Minitest::Test
 
   def test_step_buttons_only_where_the_lesson_asks_for_them
     start(hash: "#schleifen")
-    assert_equal %w[1 3 5], find_all(".step-cell").map { |b| b.attrs["data-idx"] }, "every code cell, the exercise too"
+    assert_equal %w[1 3 5 7 9 11 13], find_all(".step-cell").map { |b| b.attrs["data-idx"] }, "every code cell, the exercise too"
     assert_equal "⏯ Schritt für Schritt", step_button(3).text
     assert_equal "Schritt für Schritt durch Zelle 2", step_button(3).attrs["aria-label"], "the visible words, and the cell"
     assert step_button(3).js_closest(".cell-toolbar"), "in the toolbar, beside ▶"
@@ -572,9 +572,9 @@ class AppTest < Minitest::Test
   def test_code_saved_before_fingerprints_is_shown_in_its_cell
     exercise = "x = 1"
     start(hash: "#hashes", storage: { "chunky_cell_de_hashes_3" => exercise, "chunky_cell_de_hashes_1" => "demo" })
-    assert_equal 5, exercise_idx
+    assert_equal 14, exercise_idx
     shown = calls("setCellCode").to_h { |_, idx, code| [idx, code] }
-    assert_equal exercise, shown["5"], "the old exercise code, in the exercise"
+    assert_equal exercise, shown["14"], "the old exercise code, in the exercise"
     assert_equal "demo", shown["1"]
     refute_equal exercise, shown["3"], "not in the new demo cell"
     refute window.storage.key?("chunky_cell_de_hashes_3")
@@ -585,7 +585,7 @@ class AppTest < Minitest::Test
     window.calls.clear
     window.storage["chunky_cell_de_arrays_7"] = "fruechte = []"   # an old file's exercise code
     fire("chunky-progress-loaded")
-    assert_equal ["setCellCode", "9", "fruechte = []"], calls("setCellCode").find { |_, idx, _| idx == "9" }
+    assert_equal ["setCellCode", "16", "fruechte = []"], calls("setCellCode").find { |_, idx, _| idx == "16" }
     refute_equal "fruechte = []", calls("setCellCode").find { |_, idx, _| idx == "7" }[2]
   end
 

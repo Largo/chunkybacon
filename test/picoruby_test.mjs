@@ -1,4 +1,4 @@
-// Headless test for the PicoRuby lesson (lesson 44, "engine": "picoruby";
+// Headless test for the PicoRuby lesson (lesson 48, "engine": "picoruby";
 // docs/HANDOVER.md §6m): its cells and its IRB run on PicoRuby.wasm in a
 // Web Worker (picoruby_worker.js), not on CRuby - the demos' output, the
 // IRB with _ and a def over several lines, the exercise's check on what

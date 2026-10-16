@@ -8,7 +8,9 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **Lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **Lessons** from `puts "Hallo, Welt!"` through strings, `map` and
+  `select`, methods, reading error messages, classes, inheritance, modules,
+  IRB and reading the Ruby documentation, to
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics, tables, frames and colours
   for the terminal with the [TTY toolkit](https://ttytoolkit.org),
@@ -20,7 +22,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   PDFs with Prawn and HexaPDF, JPEG photos with
   [pure_jpeg](https://github.com/peterc/pure_jpeg), pandas, SymPy, NumPy,
   charts with matplotlib and machine learning with scikit-learn from Ruby through
-  [PyCall](https://github.com/mrkn/pycall.rb), machine learning in Ruby
+  [PyCall](https://github.com/red-data-tools/pycall.rb), machine learning in Ruby
   itself with [Rumale](https://github.com/yoshoku/rumale) (a postcode you
   write on a letter, read by a nearest-neighbours classifier), tables,
   statistics and networks with [SciRuby](https://sciruby.com)'s gems (data
@@ -40,7 +42,9 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   DragonRuby and more), a lesson whose cells and IRB run on
   [PicoRuby.wasm](https://github.com/picoruby/picoruby) instead of CRuby,
   Ruby compiled ahead of time by Matz's [Spinel](https://github.com/matz/spinel)
-  - to C, then to WebAssembly, in the browser - and a project track that builds a small time tracker.
+  - to C, then to WebAssembly, in the browser - and a project track that
+  builds a small time tracker (with Time and Date, objects and copies,
+  tests, pattern matching, a DSL and a web front end).
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
   cell shows its last expression as `=> …` — `puts` is never required.
@@ -53,6 +57,16 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   that lost it; `fox["name"]` on a hash with symbol keys suggests
   `fox[:name]`). Ruby's own message stays one click away. 44 rules,
   checked against 70 typical beginner mistakes drawn from the exercises.
+  A misspelt name also gets Ruby's own suggestion ("💡 Did you mean
+  name?"), in the learner's language.
+- **Ruby cheat sheet**: one click in the header opens the course's Ruby on
+  one page - 17 topics, each with the lessons that teach it and links into
+  the official documentation, searchable. On a wide screen it stands beside
+  the lesson, so you read it while typing; on a phone it slides over the page.
+- **The documentation, everywhere**: every lesson ends with a "📖 Look it
+  up" box linking the official docs of what it used (docs.ruby-lang.org;
+  Rurima, the Japanese reference, for Japanese), and lesson `doku` teaches how
+  to read them.
 - **Lesson sidebar**: the lessons in three groups (basics, side trips,
   the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a

@@ -73,7 +73,7 @@ check('the bare address names the lesson left off at', (await path()) === '/en/h
 check('an unknown lesson is a 404', (await page.goto(BASE + '/de/gibts-nicht')).status() === 404);
 check('an unknown language too', (await page.goto(BASE + '/xx/methoden')).status() === 404);
 const meta = await (await page.request.get(BASE + '/ja/methoden')).text();
-check('a permalink carries its own title for link previews', meta.includes('<meta property="og:title" content="9. メソッド'));
+check('a permalink carries its own title for link previews', meta.includes('<meta property="og:title" content="10. メソッド'));
 
 await browser.close();
 console.log(failures ? `${failures} FAILURES` : 'ALL PERMALINK TESTS OK');

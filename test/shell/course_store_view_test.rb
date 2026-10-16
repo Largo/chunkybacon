@@ -108,28 +108,29 @@ class CourseStoreViewTest < Minitest::Test
     assert_empty window.storage.keys.grep(/^chunky_cell_.*_[0-9]+$/), "the old keys are removed"
   end
 
-  def test_old_keys_of_the_three_lessons_that_gained_cells_shift_by_two
-    # id => [the exercise's old index, its index now, a demo before the new cells]
-    moved = { "arrays" => [7, 9, 5], "hashes" => [3, 5, 1], "klassen" => [3, 5, 1] }
-    moved.each do |id, (old, _now, before)|
-      %w[de en ja].each do |lang|
-        window.storage["chunky_cell_#{lang}_#{id}_#{old}"] = "exercise #{id} #{lang}"
-        window.storage["chunky_cell_#{lang}_#{id}_#{before}"] = "demo #{id} #{lang}"
-      end
-    end
-    store.migrate_code_keys(@course)
-    moved.each do |id, (_old, now, before)|
-      %w[de en ja].each do |lang|
-        cells = @course.cells(@course.index(id), lang)
-        assert_equal "x", cells[now].t, "#{id} #{lang}: the exercise is cell #{now}"
-        assert_equal "exercise #{id} #{lang}", window.storage[saved_key(id, now, lang)], "#{id} #{lang}"
-        assert_equal "demo #{id} #{lang}", window.storage[saved_key(id, before, lang)], "#{id} #{lang}: before the new cells"
-        assert_equal "c", cells[now - 2].t
-        assert_nil window.storage[saved_key(id, now - 2, lang)], "#{id} #{lang}: the new demo starts empty"
-      end
-    end
-    assert_equal 18, window.storage.keys.length
+def test_old_keys_of_cells_that_moved_go_to_where_the_cells_are_now
+  moves = store::LEGACY_MOVES
+  moves.each do |id, list|
+    list.each_key { |old| %w[de en ja].each { |lang| window.storage["chunky_cell_#{lang}_#{id}_#{old}"] = "#{id} #{old} #{lang}" } }
   end
+  window.storage["chunky_cell_de_arrays_1"] = "demo arrays de"
+  store.migrate_code_keys(@course)
+  moves.each do |id, list|
+    list.each do |old, now|
+      %w[de en ja].each do |lang|
+        assert_includes %w[c x], @course.cells(@course.index(id), lang)[now].t, "#{id} #{lang}: cell #{now} is a code cell"
+        assert_equal "#{id} #{old} #{lang}", window.storage[saved_key(id, now, lang)], "#{id} #{lang}: #{old} -> #{now}"
+      end
+    end
+  end
+  # the exercises (id => old index), and a cell above the new ones stays
+  { "hallo" => 5, "arrays" => 7, "hashes" => 3, "klassen" => 3, "wenn" => 3 }.each do |id, old|
+    %w[de en ja].each { |lang| assert_equal "x", @course.cells(@course.index(id), lang)[moves[id][old]].t, "#{id} #{lang}" }
+  end
+  assert_equal "demo arrays de", window.storage[saved_key("arrays", 1)]
+  assert_nil window.storage[saved_key("arrays", 7)], "arrays: the cell now at the old index starts empty"
+  assert_equal moves.sum { |_, list| list.size } * 3 + 1, window.storage.keys.length
+end
 
   def test_old_keys_without_a_cell_stay_as_they_are
     keys = %w[chunky_cell_de_nonsense_1 chunky_cell_xx_hallo_1 chunky_cell_de_hallo_0 chunky_cell_de_hallo_99]
@@ -223,7 +224,7 @@ class CourseStoreViewTest < Minitest::Test
     html = ChunkyShell::View.lesson_html(@course.cells(@course.index("schleifen"), "en"), "Task", "▶ Run", "", "Run cell %d", step)
     assert_includes html, %(<button type="button" class="step-cell" data-idx="3" aria-label="Step through cell 2">⏯ Step through</button>) +
                           %(<button type="button" class="run-cell" data-idx="3" aria-label="Run cell 2">▶ Run</button>)
-    assert_equal 3, html.scan("step-cell").length
+    assert_equal 7, html.scan("step-cell").length
     irb = ChunkyShell::View.lesson_html(@course.cells(@course.index("irb"), "en"), "Task", "▶ Run", "", "Run cell %d", step)
     assert_equal 1, irb.scan("step-cell").length, "the exercise, not show_irb's cell"
     refute_includes ChunkyShell::View.lesson_html(@course.cells(0, "en"), "Task", "▶ Run"), "step-cell"
@@ -232,8 +233,8 @@ class CourseStoreViewTest < Minitest::Test
   def test_run_buttons_named_by_their_code_cell
     html = ChunkyShell::View.lesson_html(@course.cells(0, "en"), "Task", "▶ Run", "", "Run cell %d")
     assert_includes html, %(data-idx="1" aria-label="Run cell 1">▶ Run</button>)
-    assert_match(/aria-label="Run cell 3" aria-keyshortcuts="Alt\+R">/, html, "the exercise, its shortcut")
-    refute_includes html, "Run cell 4"
+    assert_match(/aria-label="Run cell 4" aria-keyshortcuts="Alt\+R">/, html, "the exercise, its shortcut")
+    refute_includes html, "Run cell 5"
   end
 
   def test_workshop_frame

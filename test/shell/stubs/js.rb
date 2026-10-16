@@ -279,6 +279,7 @@ module JS
       root.focused = self if root.is_a?(Document)
       nil
     end
+    def js_scrollIntoView(*) = (props["scrolledTo"] = true) && nil
     def js_click = JS.fire(wrap, "click")
     def js_addEventListener(*) = nil
     def js_showModal = (props["open"] = true) && nil

@@ -31,7 +31,7 @@ Last updated 2026-10-06.
   loaded. The first build takes a few minutes; it keeps about 175 MB in
   `.cache/spinel/` and about 115 MB per build in `html/assets/spinel/`
   (the current one and the one before).
-- `main` (2026-10-08: the SciRuby lessons `daru` to `networkx` - Daru, statistics, networkx.rb - came last, after `ruby2d`, the other Rubies and PicoRuby (`rubies`, `picoruby`) and Spinel (`spinel`)). The site does NOT show it yet: the
+- `main` (2026-10-16: iterators, error messages, inheritance and docs in the basics, time and objects in the timelog track; on 2026-10-08 the SciRuby lessons `daru` to `networkx` - Daru, statistics, networkx.rb - came last, after `ruby2d`, the other Rubies and PicoRuby (`rubies`, `picoruby`) and Spinel (`spinel`)). The site does NOT show it yet: the
   host's checkout stopped following `main` on 2026-09-30 (the history
   rewrite; GitHub's push webhook is answered with 202, but the live
   `lessons.js` is from 2026-09-30). On the host: `git status`, then
