@@ -910,6 +910,22 @@ await runExercise();
 await page.waitForTimeout(800);
 check('hours-per-project exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 
+// OCRAN lesson: the dry run (defined?(Ocran)), OCRAN_EXECUTABLE, the program to download
+await page.click('#lessonNav a[data-id="ocran"]');
+await page.waitForTimeout(300);
+check('the menu is read from its file', (await rumaleCell(1)).includes('=> {"Speck" => 2.5, "Ei" => 1.2, "Kaffee" => 3.0}'));
+check('not building: the main program runs', (await rumaleCell(3)).includes('Willkommen in Chunkys Imbiss!'));
+const dryRun = await rumaleCell(5);
+check('the dry run prints nothing', dryRun.includes('=> nil') && !dryRun.includes('Willkommen'));
+check('without an .exe: the script\'s folder', (await rumaleCell(7)).includes('=> "."'));
+check('as an .exe: the folder of the .exe', (await rumaleCell(9)).includes('C:/Users/Ida/Desktop/speisekarte.txt'));
+check('speck.rb and the menu to download', (await rumaleCell(11)).includes('speck.rb') &&
+  (await page.textContent('#cell-out-11 .cell-downloads')).includes('speisekarte.txt'));
+await setExercise('def rechnungspfad\n  File.join(programmordner, "rechnung.txt")\nend');
+await runExercise();
+await page.waitForTimeout(800);
+check('the receipt-path exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
 // RubyKaigi lesson: weird but valid Ruby, and Prism (a C extension built
 // into the wasm) splitting and parsing code the way IRB reads it
 await page.click('#lessonNav a[data-id="rubykaigi"]');

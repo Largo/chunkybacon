@@ -5754,6 +5754,198 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "ocran",
+      "de": {
+        "title": "OCRAN: Programme als .exe verschicken",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Programme verschicken mit OCRAN</h2><p>Dein Programm läuft. Jetzt soll Ida es bekommen – sie hat Windows, aber kein Ruby, und will auch keins installieren. <a href='https://github.com/largo/ocran' target='_blank'>OCRAN</a> (<em>One-Click Ruby Application Next</em>) packt dein Skript, den Ruby-Interpreter und alle Gems, die es braucht, in <strong>eine einzige .exe</strong>. Ida klickt doppelt darauf, und es läuft.</p><p>Gebaut wird auf deinem Computer, nicht im Browser: OCRAN packt das Ruby ein, das dort installiert ist. Damit das Paket funktioniert, muss dein Programm aber ein paar Dinge wissen – und die üben wir hier. Unser Programm: Chunkys Imbiss, mit der Speisekarte in einer Textdatei.</p>"
+          },
+          {
+            "t": "c",
+            "code": "File.write(\"speisekarte.txt\", \"Speck: 2.50\\nEi: 1.20\\nKaffee: 3.00\\n\")\n\ndef speisekarte(datei)\n  File.read(datei).lines.to_h do |zeile|\n    name, preis = zeile.split(\":\")\n    [name.strip, preis.to_f]\n  end\nend\n\nspeisekarte(\"speisekarte.txt\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Speisekarte ist ein Hash. Jetzt das Hauptprogramm – und eine Zeile, die in fast jedem OCRAN-Programm steht:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def hauptprogramm\n  karte = speisekarte(\"speisekarte.txt\")\n  puts \"Willkommen in Chunkys Imbiss!\"\n  karte.each { |name, preis| puts format(\"%-8s %5.2f Fr.\", name, preis) }\n  puts \"Guten Appetit!\"\nend\n\nhauptprogramm unless defined?(Ocran)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Warum <code>unless defined?(Ocran)</code>? Um herauszufinden, welche Dateien und Gems dein Programm braucht, <strong>startet OCRAN es beim Bauen einmal</strong> und schaut zu, was es lädt. Während dieses Probelaufs gibt es die Konstante <code>Ocran</code>. Dein Programm lädt also alles, was es braucht – die <code>require</code>s laufen –, aber das Hauptprogramm, das vielleicht ein Fenster öffnet oder auf eine Eingabe wartet, bleibt still. So sieht der Probelauf aus:</p>"
+          },
+          {
+            "t": "c",
+            "code": "module Ocran; end                     # das tut OCRAN, während es baut\nhauptprogramm unless defined?(Ocran)  # -> nichts passiert\nObject.send(:remove_const, :Ocran)    # und wieder weg\ndefined?(Ocran)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Nichts gedruckt – genau richtig. Hier im Browser gibt es kein <code>Ocran</code>, darum lief das Hauptprogramm eine Zelle weiter oben.</p><p>Die zweite Falle sind <strong>Dateien</strong>. Eine .exe von OCRAN ist ein Archiv, das sich selbst entpackt: Beim Start legt sie dein Skript in einen temporären Ordner und startet es dort. <code>__dir__</code> zeigt also in diesen Ordner, der nach dem Beenden wieder gelöscht wird – nicht dorthin, wo die .exe liegt. Wo sie liegt, steht in <code>ENV[\"OCRAN_EXECUTABLE\"]</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def programmordner\n  if ENV[\"OCRAN_EXECUTABLE\"]\n    File.dirname(ENV[\"OCRAN_EXECUTABLE\"])\n  else\n    __dir__\n  end\nend\n\nprogrammordner"
+          },
+          {
+            "t": "h",
+            "html": "<p>Im Browser gibt es keine .exe, also nimmt die Methode <code>__dir__</code>, den Ordner des Skripts: <code>\".\"</code>. Spielen wir die .exe nach – OCRAN setzt die Umgebungsvariable beim Start, wir setzen sie von Hand und löschen sie danach wieder. (Ruby unter Windows versteht <code>/</code> genauso wie <code>\\</code>.)</p>"
+          },
+          {
+            "t": "c",
+            "code": "ENV[\"OCRAN_EXECUTABLE\"] = \"C:/Users/Ida/Desktop/Speckrechner.exe\"   # so sieht es in der .exe aus\nputs programmordner\nputs File.join(programmordner, \"speisekarte.txt\")\nENV.delete(\"OCRAN_EXECUTABLE\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Damit gilt: Was Ida ändern oder behalten soll – die Speisekarte, gespeicherte Rechnungen –, gehört <strong>neben die .exe</strong> und wird über <code>OCRAN_EXECUTABLE</code> gefunden. Was nur dein Programm braucht, Bilder etwa, gibst du OCRAN beim Bauen mit; das liegt beim Start neben dem Skript, unter <code>__dir__</code>.</p><p>Alles zusammen ergibt <code>speck.rb</code>. Am Ende wartet es auf Enter – sonst schliesst sich das Konsolenfenster nach dem Doppelklick, bevor Ida etwas lesen kann. Unter der Zelle kannst du beide Dateien herunterladen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "programm = <<~'PROGRAMM'\n  # speck.rb – Chunkys Imbiss, zum Mitnehmen\n  def programmordner\n    if ENV[\"OCRAN_EXECUTABLE\"]\n      File.dirname(ENV[\"OCRAN_EXECUTABLE\"])\n    else\n      __dir__\n    end\n  end\n\n  def speisekarte(datei)\n    File.read(datei).lines.to_h do |zeile|\n      name, preis = zeile.split(\":\")\n      [name.strip, preis.to_f]\n    end\n  end\n\n  def hauptprogramm\n    karte = speisekarte(File.join(programmordner, \"speisekarte.txt\"))\n    puts \"Willkommen in Chunkys Imbiss!\"\n    karte.each { |name, preis| puts format(\"%-8s %5.2f Fr.\", name, preis) }\n    puts \"Guten Appetit!\"\n    puts\n    puts \"Enter drücken zum Beenden.\"\n    $stdin.gets\n  end\n\n  hauptprogramm unless defined?(Ocran)\nPROGRAMM\n\nFile.write(\"speck.rb\", programm)\nFile.write(\"speisekarte.txt\", \"Speck: 2.50\\nEi: 1.20\\nKaffee: 3.00\\n\")\nprogramm.lines.size"
+          },
+          {
+            "t": "h",
+            "html": "<p>Schau dir die letzte Zeile noch einmal an: Ohne <code>unless defined?(Ocran)</code> würde der Probelauf beim Bauen auf das Enter warten – und OCRAN mit ihm.</p><div class='offweb' data-title='Auf deinem Computer'><p>Unter Windows mit <a href='https://rubyinstaller.org' target='_blank'>RubyInstaller</a> (samt DevKit), im Ordner mit den beiden Dateien:</p><pre>gem install ocran\nocran speck.rb --output Speckrechner.exe</pre><p>Dann <code>Speckrechner.exe</code> und <code>speisekarte.txt</code> in einen Ordner legen und Ida schicken. Nützliche Optionen: <code>--icon fuchs.ico</code> für ein eigenes Symbol, <code>--windows</code> für Programme mit Fenster und ohne Konsole (oder die Datei <code>.rbw</code> nennen), <code>--gemfile Gemfile</code> für Projekte mit Bundler, <code>--chdir-exe-dir</code>, damit relative Pfade im Ordner der .exe beginnen. Weitere Dateien hängst du an: <code>ocran speck.rb bilder/*.png</code>. OCRAN ist kein Cross-Compiler: Eine .exe baust du unter Windows, ein Programm für Linux oder macOS dort. Experimentell kann es Programme sogar als WebAssembly ausgeben (<code>--wasm</code>) – so, wie dieser Kurs Ruby im Browser laufen lässt. OCRAN steht unter der MIT-Lizenz.</p></div><div class='task'><strong>Aufgabe:</strong> Die nächste Version von Chunkys Programm soll jede Rechnung in <code>rechnung.txt</code> speichern, und Ida soll sie wiederfinden – neben der .exe, nicht im temporären Ordner. Schreib die Methode <code>rechnungspfad</code>: Sie gibt den Pfad von <code>rechnung.txt</code> neben der .exe zurück, wenn das Programm als .exe läuft, und sonst neben dem Skript.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def rechnungspfad\n  # neben der .exe, wenn es eine gibt - sonst neben dem Skript\nend\n",
+            "check": "begin\n  ENV[\"OCRAN_EXECUTABLE\"] = \"D:/Apps/Imbiss.exe\"\n  as_exe = rechnungspfad\nensure\n  ENV.delete(\"OCRAN_EXECUTABLE\")\nend\nas_exe == \"D:/Apps/rechnung.txt\" && rechnungspfad.to_s.end_with?(\"rechnung.txt\") && !rechnungspfad.to_s.include?(\"Apps\")",
+            "hint": "<code>File.join(programmordner, \"rechnung.txt\")</code> – <code>programmordner</code> von oben weiss schon, wo die .exe liegt."
+          }
+        ]
+      },
+      "en": {
+        "title": "OCRAN: shipping programs as an .exe",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Shipping programs with OCRAN</h2><p>Your program works. Now Ida should get it – she has Windows, but no Ruby, and doesn't want to install it. <a href='https://github.com/largo/ocran' target='_blank'>OCRAN</a> (<em>One-Click Ruby Application Next</em>) packs your script, the Ruby interpreter and every gem it needs into <strong>one single .exe</strong>. Ida double-clicks it, and it runs.</p><p>The building happens on your computer, not in the browser: OCRAN packs the Ruby installed there. For the package to work, though, your program has to know a few things – and those we can practise here. Our program: Chunky's diner, with the menu in a text file.</p>"
+          },
+          {
+            "t": "c",
+            "code": "File.write(\"menu.txt\", \"Bacon: 2.50\\nEgg: 1.20\\nCoffee: 3.00\\n\")\n\ndef menu(file)\n  File.read(file).lines.to_h do |line|\n    name, price = line.split(\":\")\n    [name.strip, price.to_f]\n  end\nend\n\nmenu(\"menu.txt\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>The menu is a Hash. Now the main program – and a line you find in almost every OCRAN program:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def main\n  dishes = menu(\"menu.txt\")\n  puts \"Welcome to Chunky's diner!\"\n  dishes.each { |name, price| puts format(\"%-8s $%5.2f\", name, price) }\n  puts \"Enjoy your meal!\"\nend\n\nmain unless defined?(Ocran)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Why <code>unless defined?(Ocran)</code>? To find out which files and gems your program needs, <strong>OCRAN starts it once while building</strong> and watches what it loads. During this dry run the constant <code>Ocran</code> exists. So your program loads everything it needs – the <code>require</code>s run – but the main program, which might open a window or wait for input, stays quiet. This is what the dry run looks like:</p>"
+          },
+          {
+            "t": "c",
+            "code": "module Ocran; end                     # what OCRAN does while it builds\nmain unless defined?(Ocran)           # -> nothing happens\nObject.send(:remove_const, :Ocran)    # and gone again\ndefined?(Ocran)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Nothing printed – just right. Here in the browser there is no <code>Ocran</code>, which is why the main program ran one cell up.</p><p>The second trap is <strong>files</strong>. An .exe from OCRAN is an archive that unpacks itself: when it starts, it puts your script in a temporary folder and runs it there. So <code>__dir__</code> points into that folder, which is deleted again when the program ends – not to where the .exe is. Where it is, <code>ENV[\"OCRAN_EXECUTABLE\"]</code> says:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def app_folder\n  if ENV[\"OCRAN_EXECUTABLE\"]\n    File.dirname(ENV[\"OCRAN_EXECUTABLE\"])\n  else\n    __dir__\n  end\nend\n\napp_folder"
+          },
+          {
+            "t": "h",
+            "html": "<p>In the browser there is no .exe, so the method takes <code>__dir__</code>, the script's folder: <code>\".\"</code>. Let's play the .exe – OCRAN sets the environment variable when it starts, we set it by hand and delete it afterwards. (Ruby on Windows understands <code>/</code> just as well as <code>\\</code>.)</p>"
+          },
+          {
+            "t": "c",
+            "code": "ENV[\"OCRAN_EXECUTABLE\"] = \"C:/Users/Ida/Desktop/BaconCalc.exe\"   # what it looks like in the .exe\nputs app_folder\nputs File.join(app_folder, \"menu.txt\")\nENV.delete(\"OCRAN_EXECUTABLE\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>So: whatever Ida should change or keep – the menu, saved receipts – goes <strong>next to the .exe</strong> and is found through <code>OCRAN_EXECUTABLE</code>. What only your program needs, pictures for example, you give OCRAN when building; at the start it lies next to the script, under <code>__dir__</code>.</p><p>All together this makes <code>bacon.rb</code>. At the end it waits for Enter – otherwise the console window closes right after the double-click, before Ida can read anything. Below the cell you can download both files:</p>"
+          },
+          {
+            "t": "c",
+            "code": "program = <<~'PROGRAM'\n  # bacon.rb – Chunky's diner, to go\n  def app_folder\n    if ENV[\"OCRAN_EXECUTABLE\"]\n      File.dirname(ENV[\"OCRAN_EXECUTABLE\"])\n    else\n      __dir__\n    end\n  end\n\n  def menu(file)\n    File.read(file).lines.to_h do |line|\n      name, price = line.split(\":\")\n      [name.strip, price.to_f]\n    end\n  end\n\n  def main\n    dishes = menu(File.join(app_folder, \"menu.txt\"))\n    puts \"Welcome to Chunky's diner!\"\n    dishes.each { |name, price| puts format(\"%-8s $%5.2f\", name, price) }\n    puts \"Enjoy your meal!\"\n    puts\n    puts \"Press Enter to quit.\"\n    $stdin.gets\n  end\n\n  main unless defined?(Ocran)\nPROGRAM\n\nFile.write(\"bacon.rb\", program)\nFile.write(\"menu.txt\", \"Bacon: 2.50\\nEgg: 1.20\\nCoffee: 3.00\\n\")\nprogram.lines.size"
+          },
+          {
+            "t": "h",
+            "html": "<p>Look at the last line once more: without <code>unless defined?(Ocran)</code>, the dry run would wait for Enter while building – and OCRAN with it.</p><div class='offweb' data-title='On your machine'><p>On Windows with <a href='https://rubyinstaller.org' target='_blank'>RubyInstaller</a> (with the DevKit), in the folder with both files:</p><pre>gem install ocran\nocran bacon.rb --output BaconCalc.exe</pre><p>Then put <code>BaconCalc.exe</code> and <code>menu.txt</code> in a folder and send it to Ida. Useful options: <code>--icon fox.ico</code> for an icon of your own, <code>--windows</code> for programs with a window and no console (or name the file <code>.rbw</code>), <code>--gemfile Gemfile</code> for projects with Bundler, <code>--chdir-exe-dir</code> so that relative paths start in the .exe's folder. More files go on the end: <code>ocran bacon.rb images/*.png</code>. OCRAN is not a cross-compiler: you build an .exe on Windows, a program for Linux or macOS there. Experimentally it can even put out programs as WebAssembly (<code>--wasm</code>) – the way this course runs Ruby in the browser. OCRAN comes under the MIT licence.</p></div><div class='task'><strong>Task:</strong> The next version of Chunky's program should save every receipt in <code>receipt.txt</code>, and Ida should find it again – next to the .exe, not in the temporary folder. Write the method <code>receipt_path</code>: it returns the path of <code>receipt.txt</code> next to the .exe when the program runs as an .exe, and next to the script otherwise.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def receipt_path\n  # next to the .exe when there is one - next to the script otherwise\nend\n",
+            "check": "begin\n  ENV[\"OCRAN_EXECUTABLE\"] = \"D:/Apps/Imbiss.exe\"\n  as_exe = receipt_path\nensure\n  ENV.delete(\"OCRAN_EXECUTABLE\")\nend\nas_exe == \"D:/Apps/receipt.txt\" && receipt_path.to_s.end_with?(\"receipt.txt\") && !receipt_path.to_s.include?(\"Apps\")",
+            "hint": "<code>File.join(app_folder, \"receipt.txt\")</code> – <code>app_folder</code> from above already knows where the .exe is."
+          }
+        ]
+      },
+      "ja": {
+        "title": "OCRAN：プログラムを.exeで配る",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>OCRANでプログラムを配る</h2><p>プログラムができました。これをIdaさんに渡したいのですが、彼女のパソコンはWindowsで、Rubyは入っていませんし、入れるつもりもありません。<a href='https://github.com/largo/ocran' target='_blank'>OCRAN</a>（<em>One-Click Ruby Application Next</em>）は、スクリプトとRubyのインタープリター、必要なgemをすべて<strong>1つの.exe</strong>にまとめます。Idaさんがダブルクリックすれば、そのまま動きます。</p><p>ビルドはブラウザーではなく、あなたのコンピューターで行います。OCRANは、そこにインストールされているRubyをまとめるからです。ただし、パッケージがきちんと動くには、プログラムのほうがいくつかのことを知っている必要があります。それをここで練習しましょう。題材は、メニューをテキストファイルに入れたチャンキーの食堂です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "File.write(\"menu.txt\", \"Bacon: 2.50\\nEgg: 1.20\\nCoffee: 3.00\\n\")\n\ndef menu(file)\n  File.read(file).lines.to_h do |line|\n    name, price = line.split(\":\")\n    [name.strip, price.to_f]\n  end\nend\n\nmenu(\"menu.txt\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>メニューはハッシュになりました。次はメインプログラムです。そして、ほとんどどのOCRANプログラムにもある1行です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def main\n  dishes = menu(\"menu.txt\")\n  puts \"Welcome to Chunky's diner!\"\n  dishes.each { |name, price| puts format(\"%-8s $%5.2f\", name, price) }\n  puts \"Enjoy your meal!\"\nend\n\nmain unless defined?(Ocran)"
+          },
+          {
+            "t": "h",
+            "html": "<p>なぜ<code>unless defined?(Ocran)</code>なのでしょう？ プログラムが必要とするファイルとgemを調べるため、<strong>OCRANはビルドのときにプログラムを1回起動して</strong>、何が読み込まれるかを見ています。この試運転のあいだは、<code>Ocran</code>という定数があります。つまりプログラムは必要なものをすべて読み込み（<code>require</code>は実行されます）、ウィンドウを開いたり入力を待ったりするかもしれないメインプログラムだけはおとなしくしています。試運転はこんな様子です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "module Ocran; end                     # ビルド中にOCRANがすること\nmain unless defined?(Ocran)           # → 何も起きない\nObject.send(:remove_const, :Ocran)    # そして片付ける\ndefined?(Ocran)"
+          },
+          {
+            "t": "h",
+            "html": "<p>何も表示されません。これで正解です。このブラウザーには<code>Ocran</code>がないので、1つ上のセルではメインプログラムが動きました。</p><p>2つ目の落とし穴は<strong>ファイル</strong>です。OCRANの.exeは、自分で自分を展開するアーカイブです。起動するとスクリプトを一時フォルダーに置き、そこで実行します。ですから<code>__dir__</code>が指すのはその一時フォルダーで、プログラムが終わると消されてしまいます。.exeのある場所ではありません。.exeの場所は<code>ENV[\"OCRAN_EXECUTABLE\"]</code>に入っています：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def app_folder\n  if ENV[\"OCRAN_EXECUTABLE\"]\n    File.dirname(ENV[\"OCRAN_EXECUTABLE\"])\n  else\n    __dir__\n  end\nend\n\napp_folder"
+          },
+          {
+            "t": "h",
+            "html": "<p>ブラウザーには.exeがないので、メソッドはスクリプトのフォルダーである<code>__dir__</code>、つまり<code>\".\"</code>を返します。.exeのふりをしてみましょう。OCRANは起動時にこの環境変数を設定しますが、ここでは手で設定し、あとで消します。（Windowsの Rubyは<code>\\</code>と同じように<code>/</code>も理解します。）</p>"
+          },
+          {
+            "t": "c",
+            "code": "ENV[\"OCRAN_EXECUTABLE\"] = \"C:/Users/Ida/Desktop/BaconCalc.exe\"   # .exeの中ではこうなる\nputs app_folder\nputs File.join(app_folder, \"menu.txt\")\nENV.delete(\"OCRAN_EXECUTABLE\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>つまり、Idaさんが変更したり残したりするもの（メニューや保存したレシート）は<strong>.exeの隣</strong>に置き、<code>OCRAN_EXECUTABLE</code>で見つけます。画像のようにプログラムだけが使うものは、ビルドのときにOCRANに渡します。起動時にはスクリプトの隣、<code>__dir__</code>の下にあります。</p><p>全部まとめると<code>bacon.rb</code>になります。最後にEnterを待つのは、そうしないとダブルクリックしたコンソールウィンドウが、Idaさんが読む前に閉じてしまうからです。セルの下から2つのファイルをダウンロードできます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "program = <<~'PROGRAM'\n  # bacon.rb – Chunky's diner, to go\n  def app_folder\n    if ENV[\"OCRAN_EXECUTABLE\"]\n      File.dirname(ENV[\"OCRAN_EXECUTABLE\"])\n    else\n      __dir__\n    end\n  end\n\n  def menu(file)\n    File.read(file).lines.to_h do |line|\n      name, price = line.split(\":\")\n      [name.strip, price.to_f]\n    end\n  end\n\n  def main\n    dishes = menu(File.join(app_folder, \"menu.txt\"))\n    puts \"Welcome to Chunky's diner!\"\n    dishes.each { |name, price| puts format(\"%-8s $%5.2f\", name, price) }\n    puts \"Enjoy your meal!\"\n    puts\n    puts \"Press Enter to quit.\"\n    $stdin.gets\n  end\n\n  main unless defined?(Ocran)\nPROGRAM\n\nFile.write(\"bacon.rb\", program)\nFile.write(\"menu.txt\", \"Bacon: 2.50\\nEgg: 1.20\\nCoffee: 3.00\\n\")\nprogram.lines.size"
+          },
+          {
+            "t": "h",
+            "html": "<p>最後の行をもう一度見てください。<code>unless defined?(Ocran)</code>がなければ、ビルド中の試運転がEnterを待ってしまい、OCRANも止まってしまいます。</p><div class='offweb' data-title='自分のコンピューターでは'><p>Windowsで<a href='https://rubyinstaller.org' target='_blank'>RubyInstaller</a>（DevKit付き）を使い、2つのファイルがあるフォルダーで：</p><pre>gem install ocran\nocran bacon.rb --output BaconCalc.exe</pre><p>あとは<code>BaconCalc.exe</code>と<code>menu.txt</code>を1つのフォルダーに入れて、Idaさんに送ります。便利なオプション：<code>--icon fox.ico</code>で自分のアイコン、<code>--windows</code>でコンソールのないウィンドウアプリ（ファイル名を<code>.rbw</code>にしても同じ）、<code>--gemfile Gemfile</code>でBundlerを使うプロジェクト、<code>--chdir-exe-dir</code>で相対パスを.exeのフォルダーから始めます。ほかのファイルは後ろに付け足します：<code>ocran bacon.rb images/*.png</code>。OCRANはクロスコンパイラーではありません。.exeはWindowsで、LinuxやmacOS用のプログラムはそれぞれのOSでビルドします。実験的な機能として、プログラムをWebAssemblyとして書き出すこともできます（<code>--wasm</code>）。このコースがブラウザーでRubyを動かしているのと同じしくみです。OCRANはMITライセンスです。</p></div><div class='task'><strong>課題：</strong>チャンキーのプログラムの次のバージョンでは、レシートを毎回<code>receipt.txt</code>に保存します。Idaさんがあとで見つけられるよう、一時フォルダーではなく.exeの隣に置きたいのです。メソッド<code>receipt_path</code>を書きましょう。.exeとして動いているときは.exeの隣の<code>receipt.txt</code>のパスを、そうでなければスクリプトの隣のパスを返します。</div>"
+          },
+          {
+            "t": "x",
+            "code": "def receipt_path\n  # .exeがあればその隣、なければスクリプトの隣\nend\n",
+            "check": "begin\n  ENV[\"OCRAN_EXECUTABLE\"] = \"D:/Apps/Imbiss.exe\"\n  as_exe = receipt_path\nensure\n  ENV.delete(\"OCRAN_EXECUTABLE\")\nend\nas_exe == \"D:/Apps/receipt.txt\" && receipt_path.to_s.end_with?(\"receipt.txt\") && !receipt_path.to_s.include?(\"Apps\")",
+            "hint": "<code>File.join(app_folder, \"receipt.txt\")</code>だよ。上の<code>app_folder</code>が、.exeの場所をもう知ってるからね。"
+          }
+        ]
+      }
+    },
+    {
       "id": "tty",
       "de": {
         "title": "TTY: schöne Ausgaben im Terminal",
