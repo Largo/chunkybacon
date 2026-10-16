@@ -52,12 +52,13 @@ module FriendlyErrors
     end
 
     # +brief+: only the headline shows (app.css .friendly-brief) - for live runs
-    def to_html(brief: false)
+    # +original_open+: Ruby's own message unfolded (a lesson that teaches it)
+    def to_html(brief: false, original_open: false)
       html = +"<div class=\"friendly-error#{brief ? ' friendly-brief' : ''}\" lang=\"#{lang}\">"
       html << "<div class=\"friendly-title\">#{FriendlyErrors.inline_html(title)}</div>"
       html << "<pre class=\"friendly-snippet\">#{FriendlyErrors.escape(snippet)}</pre>" if snippet
       html << "<p class=\"friendly-body\">#{FriendlyErrors.inline_html(body)}</p>"
-      html << "<details class=\"friendly-original\"><summary>#{FriendlyErrors.escape(FriendlyErrors.t_raw(:w_original, lang))}</summary>" \
+      html << "<details class=\"friendly-original\"#{original_open ? " open" : ""}><summary>#{FriendlyErrors.escape(FriendlyErrors.t_raw(:w_original, lang))}</summary>" \
               "<pre>#{FriendlyErrors.escape(original)}</pre></details>"
       html << "</div>"
     end

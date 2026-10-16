@@ -26,7 +26,7 @@ await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 check('it opens its lesson', await shown('methoden'));
 check('in its language', (await page.getAttribute('html', 'lang')) === 'de' && (await page.textContent('#lessonBody h2')).includes('Methoden'));
 check('the address stays', (await path()) === '/de/methoden');
-check('the tab is titled for the lesson', (await page.title()).startsWith('9. Methoden'));
+check('the tab is titled for the lesson', (await page.title()).startsWith('10. Methoden'));
 check('index links are permalinks', (await page.getAttribute('#lessonNav a[data-id="klassen"]', 'href')) === '/de/klassen');
 
 // navigating within the page: no reload, a history entry
@@ -73,7 +73,7 @@ check('the bare address names the lesson left off at', (await path()) === '/en/h
 check('an unknown lesson is a 404', (await page.goto(BASE + '/de/gibts-nicht')).status() === 404);
 check('an unknown language too', (await page.goto(BASE + '/xx/methoden')).status() === 404);
 const meta = await (await page.request.get(BASE + '/ja/methoden')).text();
-check('a permalink carries its own title for link previews', meta.includes('<meta property="og:title" content="9. メソッド'));
+check('a permalink carries its own title for link previews', meta.includes('<meta property="og:title" content="10. メソッド'));
 
 await browser.close();
 console.log(failures ? `${failures} FAILURES` : 'ALL PERMALINK TESTS OK');

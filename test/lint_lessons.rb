@@ -930,6 +930,7 @@ module LessonLint
             if (code = cell["code"])
               res = Prism.parse(code, scopes: [locals.dup])
               res.errors.each do |e|
+                next if cell["raises"] == "SyntaxError" # the cell shows the error on purpose
                 add("ruby", "ERROR", "syntax", where: loc, line: line,
                     message: "code line #{e.location.start_line}: #{e.message}", extra: e.message)
               end

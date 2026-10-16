@@ -44,6 +44,12 @@ class EarlierCellsTest < Minitest::Test
     assert_equal [1, 3, 4, 5], before(6, {}, { 5 => "# your code\nshout = \"CHUNKY\"" }), "the learner's code runs"
   end
 
+  def test_a_cell_that_fails_on_purpose_is_left_out_until_it_is_edited
+    cells = [CELLS[1], { "t" => "c", "code" => "fox.upcase!(3)", "raises" => "ArgumentError" }, CELLS[4]]
+    assert_equal [0], EarlierCells.before(2, cells, {}) { |i| cells[i]["code"] }.map(&:first)
+    assert_equal [0, 1], EarlierCells.before(2, cells, {}) { |i| i == 1 ? "fox.upcase!" : cells[i]["code"] }.map(&:first)
+  end
+
   def test_the_code_comes_from_the_editor
     list = EarlierCells.before(4, CELLS, {}) { |i| "edited #{i}" }
     assert_equal [[1, "edited 1"], [3, "edited 3"]], list

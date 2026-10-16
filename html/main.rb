@@ -10,6 +10,14 @@ JS::RequireRemote.instance.base_url = JS.global[:document][:baseURI].to_s
 require 'json'
 require 'stringio'
 require 'singleton'
+# did_you_mean comes with Ruby, but ruby.wasm boots without it (no
+# gem_prelude). Loaded, a misspelt name in a cell gets a suggestion below
+# the error (ChunkyApp#suggestion_html): nmae -> name.
+begin
+  require 'did_you_mean'
+rescue LoadError
+  nil
+end
 
 # require_relative bridge (pattern from BrowserRubyKoans): files on the
 # wasm filesystem first (stdlib, installed gems), remote URL fetch for our
@@ -1230,6 +1238,7 @@ class ChunkyApp
         append += "<pre class=\"irb-stdout\">#{AnsiHtml.to_html(buffer.string)}</pre>" unless buffer.string.empty?
         if error
           append += "<div class=\"irb-error\">#{escape_html("#{error.class}: #{error.message.lines.first.to_s.strip}")}</div>"
+          append += suggestion_html(error, "irb-suggest")
         else
           session[:bind].local_variable_set(:_, result)
           append += "<div class=\"irb-result\">=&gt; #{escape_html(inspect_result(result))}</div>"
@@ -1748,13 +1757,17 @@ class ChunkyApp
       # a live run while typing shows just the headline (app.css
       # .friendly-brief); one the time limit stopped all of it, below the
       # hint - why the loop would never end
-      out_html += friendly.to_html(brief: auto && !error.is_a?(AutoRun::Stopped))
+      # a lesson about reading Ruby's messages ("rubyMessage") shows Ruby's own
+      # message unfolded under the explanation
+      out_html += friendly.to_html(brief: auto && !error.is_a?(AutoRun::Stopped),
+                                   original_open: !workshop? && current_lesson["rubyMessage"] == true)
     elsif hint
       # the hint is all there is to say (stopped, or it wants ▶)
     elsif error
       # ansi.rb: ruby.wasm's Prism colours a SyntaxError's code frame
       out_html += "<div class=\"cell-error\">#{escape_html(error.class)}: #{AnsiHtml.to_html(error.message.to_s)}" \
                   "#{where ? " (#{escape_html(where)})" : ""}</div>"
+      out_html += suggestion_html(error)
     elsif result.is_a?(PyCall::PyObject)
       out_html += python_result_html(result)
     elsif daru_table?(result)
@@ -1895,6 +1908,21 @@ class ChunkyApp
     return ui["liveNeedsRun"] if error.is_a?(AutoRun::NeedsRun)
 
     nil
+  end
+
+  # Ruby's did_you_mean knows what a misspelt name probably meant (nmae ->
+  # name, frist -> first, fetch(:esen) -> :essen); the page says it below
+  # the error, in the learner's language. Ruby puts it into
+  # detailed_message, not into the message the cell shows.
+  def suggestion_html(error, css = "cell-suggest")
+    template = ui["didYouMean"]
+    words = template && error.respond_to?(:corrections) ? error.corrections.first(3).map(&:to_s) : []
+    return "" if words.empty?
+
+    names = words.map { |word| "<code>#{escape_html(word)}</code>" }.join(ui["didYouMeanJoin"] || ", ")
+    "<div class=\"#{css}\">#{escape_html(template).sub("%s", names)}</div>"
+  rescue StandardError
+    ""
   end
 
   # true when the exercise's check passes; the shell marks the lesson done

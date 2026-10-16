@@ -17,27 +17,6 @@ window.LESSONS_JSON = JSON.stringify({
       "running": "läuft …",
       "reset": "Lektion zurücksetzen",
       "taskLabel": "Aufgabe",
-      "codeLabel": "Code, Zelle %d",
-      "codeHint": "Shift+Enter führt den Code aus. Escape, dann Tab verlässt den Editor.",
-      "embedCode": "Ruby-Code zum Ausführen",
-      "embedRanOk": "Ausgeführt: %s",
-      "embedRanError": "Fehler: %s",
-      "embedNoSandbox": "Diese Zelle läuft nur abgeschirmt – der Server hat sie ohne ihre Sicherheitsregel geschickt.",
-      "ranOk": "Zelle %d ausgeführt: %s",
-      "ranError": "Zelle %d mit Fehler: %s",
-      "ranFirstOne": "Zuerst lief Zelle %s darüber.",
-      "ranFirstMany": "Zuerst liefen die Zellen %s darüber.",
-      "ranFirstFailedOne": "Zelle %s hatte einen Fehler – ▶ dort zeigt ihn.",
-      "ranFirstFailedMany": "Die Zellen %s hatten Fehler – ▶ dort zeigt sie.",
-      "cellsWaitingOne": "Zelle %s darüber ist noch nicht gelaufen – ▶ führt sie zuerst aus.",
-      "cellsWaitingMany": "Die Zellen %s darüber sind noch nicht gelaufen – ▶ führt sie zuerst aus.",
-      "cellRange": "%s–%s",
-      "cellRangeSpoken": "%s bis %s",
-      "cellListSep": ", ",
-      "runCellLabel": "Zelle %d ausführen",
-      "skipLink": "Zur Lektion springen",
-      "langLabel": "Sprache",
-      "mascotAlt": "Einer von _whys Comic-Füchsen",
       "loading": "Ruby wird geladen … (einmalig ca. 10 MB)",
       "kernelFailed": "Ruby konnte nicht geladen werden – bitte lade die Seite neu.",
       "shellFailed": "Die Seite konnte nicht starten – bitte lade sie neu.",
@@ -58,8 +37,6 @@ window.LESSONS_JSON = JSON.stringify({
       "liveSlow": "Diese Zelle braucht zu lange für Live – mit ▶ ausführen.",
       "liveStopped": "Nach einer Sekunde angehalten – mit ▶ läuft der Code ganz.",
       "liveNeedsRun": "Gems installieren, ihre Daten zum ersten Mal lesen, ein Python-Modul zum ersten Mal importieren, Daten aus dem Netz holen und eine Datenbank ändern geht nur mit ▶.",
-      "liveNeedsEarlier": "Die Zellen darüber sind noch nicht gelaufen und brauchen länger, als ein Live-Lauf darf – ▶ führt sie zuerst aus.",
-      "liveLesson": "In dieser Lektion ist Live aus: Für jeden Ton rechnen die Zellen Tausende Zahlen aus, zu viel für einen Lauf bei jeder Tipppause. Mit ▶ ausführen.",
       "nextLesson": "→ Weiter zur nächsten Lektion",
       "progress": "Lektion %d von %d",
       "allDone": "🎉 Du hast alle Lektionen geschafft! CHUNKY BACON! Als nächsten Schritt empfehle ich dir die <a href='https://koans.idogawa.com'>Ruby Koans im Browser</a> – und auf <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> die nächste Ruby-Konferenz oder ein Meetup.",
@@ -72,16 +49,11 @@ window.LESSONS_JSON = JSON.stringify({
       "nativeGem": "%s enthält C-Code (eine „native extension“) und kann nicht zur Laufzeit im Browser installiert werden. Solche Gems müssen beim Bauen der ruby.wasm-Datei fest einkompiliert werden – so macht es z. B. Evil Martians' TutorialKit.rb.",
       "gemNotFound": "Gem „%s“ wurde nicht gefunden (oder der Download schlug fehl).",
       "browserGo": "Los",
-      "browserUrl": "Adresse",
-      "irbInput": "IRB-Eingabe",
-      "threeLabel": "3D-Szene",
-      "audioLabel": "Ein Klang, %s Sekunden",
       "irbExitNote": "(Auf deinem Computer wäre IRB jetzt beendet – hier darfst du einfach weitertippen. 🦊)",
       "filesTitle": "Dateien (simuliert)",
       "threeLoading": "Die 3D-Engine (three.js) wird noch geladen – führe die Zelle gleich nochmal aus.",
       "pythonLoading": "Python (Pyodide) wird geladen – beim ersten Mal ein paar MB. Führe die Zelle gleich nochmal aus.",
       "pythonOffline": "Python ist nicht in deiner Offline-Kopie. Mit Internet läuft diese Zelle – oder setz unter «Dein Fortschritt» das Häkchen bei «Python mitnehmen».",
-      "sqliteLoading": "SQLite wird geladen – beim ersten Mal rund 1 MB. Führe die Zelle gleich nochmal aus.",
       "downloadTip": "Dateien, die deine Zelle geschrieben hat – zum Herunterladen anklicken.",
       "footerCredit": "Ein Angebot von <a href='https://idogawa.com'>Andi Idogawa</a>. Läuft komplett in deinem Browser dank <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Schon fertig? Weiter geht's mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
       "footerLicense": "„<a href='https://chunkybacon.dev/glossary/chunky-bacon/'>Chunky Bacon</a>“ stammt aus why's (poignant) guide to Ruby von why the lucky stiff – in liebevoller Erinnerung. Die Füchse sind seine Zeichnungen (<a href='https://creativecommons.org/licenses/by-sa/2.5/deed.de'>CC BY-SA 2.5</a>), hier nachgezeichnet. Kursinhalte: <a href='https://creativecommons.org/licenses/by-sa/4.0/deed.de'>CC BY-SA 4.0</a>, Code: <a href='https://github.com/Largo/chunkybacon/blob/main/LICENSE'>MIT</a>.",
@@ -141,7 +113,6 @@ window.LESSONS_JSON = JSON.stringify({
       "wsDeleteConfirm": "„%s“ wirklich löschen?",
       "wsUpload": "Hochladen",
       "wsDownload": "Herunterladen",
-      "wsDatabase": "🗄 Eine SQLite-Datenbank (%s). Dein Programm öffnet sie mit Sequel.sqlite und ihrem Namen. Mit „Herunterladen“ bekommst du die Datei für ein SQLite-Werkzeug wie DB Browser for SQLite.",
       "wsStdin": "Eingabe für gets",
       "wsStdinHint": "Jede Zeile ist die Antwort auf ein gets.",
       "wsNotRuby": "Ausführen lassen sich .rb-Dateien.",
@@ -154,6 +125,35 @@ window.LESSONS_JSON = JSON.stringify({
       "letterClear": "Radieren",
       "letterSees": "Das bekommt Ruby:",
       "letterHint": "Schreib die Postleitzahl in die roten Kästchen",
+      "codeLabel": "Code, Zelle %d",
+      "codeHint": "Shift+Enter führt den Code aus. Escape, dann Tab verlässt den Editor.",
+      "embedCode": "Ruby-Code zum Ausführen",
+      "embedRanOk": "Ausgeführt: %s",
+      "embedRanError": "Fehler: %s",
+      "embedNoSandbox": "Diese Zelle läuft nur abgeschirmt – der Server hat sie ohne ihre Sicherheitsregel geschickt.",
+      "ranOk": "Zelle %d ausgeführt: %s",
+      "ranError": "Zelle %d mit Fehler: %s",
+      "ranFirstOne": "Zuerst lief Zelle %s darüber.",
+      "ranFirstMany": "Zuerst liefen die Zellen %s darüber.",
+      "ranFirstFailedOne": "Zelle %s hatte einen Fehler – ▶ dort zeigt ihn.",
+      "ranFirstFailedMany": "Die Zellen %s hatten Fehler – ▶ dort zeigt sie.",
+      "cellsWaitingOne": "Zelle %s darüber ist noch nicht gelaufen – ▶ führt sie zuerst aus.",
+      "cellsWaitingMany": "Die Zellen %s darüber sind noch nicht gelaufen – ▶ führt sie zuerst aus.",
+      "cellRange": "%s–%s",
+      "cellRangeSpoken": "%s bis %s",
+      "cellListSep": ", ",
+      "runCellLabel": "Zelle %d ausführen",
+      "skipLink": "Zur Lektion springen",
+      "langLabel": "Sprache",
+      "mascotAlt": "Einer von _whys Comic-Füchsen",
+      "liveNeedsEarlier": "Die Zellen darüber sind noch nicht gelaufen und brauchen länger, als ein Live-Lauf darf – ▶ führt sie zuerst aus.",
+      "liveLesson": "In dieser Lektion ist Live aus: Für jeden Ton rechnen die Zellen Tausende Zahlen aus, zu viel für einen Lauf bei jeder Tipppause. Mit ▶ ausführen.",
+      "browserUrl": "Adresse",
+      "irbInput": "IRB-Eingabe",
+      "threeLabel": "3D-Szene",
+      "audioLabel": "Ein Klang, %s Sekunden",
+      "sqliteLoading": "SQLite wird geladen – beim ersten Mal rund 1 MB. Führe die Zelle gleich nochmal aus.",
+      "wsDatabase": "🗄 Eine SQLite-Datenbank (%s). Dein Programm öffnet sie mit Sequel.sqlite und ihrem Namen. Mit „Herunterladen“ bekommst du die Datei für ein SQLite-Werkzeug wie DB Browser for SQLite.",
       "gameTitle": "Spiel mit %d × %d Feldern",
       "gamePlay": "Klick oder Leertaste zum Spielen",
       "gameKeys": "Pfeiltasten steuern – Esc pausiert, Tab verlässt das Spiel",
@@ -218,7 +218,17 @@ window.LESSONS_JSON = JSON.stringify({
       "spinelIrbInput": "Eingabe für IRB auf Spinel",
       "spinelIrbNote": "Jede Zeile wird mit allen vorigen neu übersetzt und von vorn ausgeführt.",
       "spinelIrbReady": "Spinel %s ist bereit.",
-      "spinelIrbBusy": "übersetzt …"
+      "spinelIrbBusy": "übersetzt …",
+      "didYouMean": "💡 Meintest du %s?",
+      "didYouMeanJoin": " oder ",
+      "cheatButton": "Spickzettel",
+      "cheatTitle": "Ruby-Spickzettel",
+      "cheatIntro": "Das Wichtigste aus dem Kurs auf einen Blick. Jedes Thema führt zu seinen Lektionen und zur offiziellen Ruby-Dokumentation.",
+      "cheatSearch": "Spickzettel durchsuchen",
+      "cheatNone": "Nichts gefunden.",
+      "cheatClose": "Spickzettel schliessen",
+      "cheatLessons": "Lektion",
+      "cheatDocs": "Doku"
     },
     "en": {
       "title": "Learn Ruby with Chunky Bacon",
@@ -227,27 +237,6 @@ window.LESSONS_JSON = JSON.stringify({
       "running": "running …",
       "reset": "Reset lesson",
       "taskLabel": "Task",
-      "codeLabel": "Code, cell %d",
-      "codeHint": "Shift+Enter runs the code. Escape, then Tab, leaves the editor.",
-      "embedCode": "Ruby code you can run",
-      "embedRanOk": "Ran: %s",
-      "embedRanError": "Failed: %s",
-      "embedNoSandbox": "This cell runs only sandboxed – the server sent it without its security header.",
-      "ranOk": "Cell %d ran: %s",
-      "ranError": "Cell %d failed: %s",
-      "ranFirstOne": "Ran cell %s above first.",
-      "ranFirstMany": "Ran cells %s above first.",
-      "ranFirstFailedOne": "Cell %s failed – its ▶ shows why.",
-      "ranFirstFailedMany": "Cells %s failed – their ▶ shows why.",
-      "cellsWaitingOne": "Cell %s above has not run yet – ▶ runs it first.",
-      "cellsWaitingMany": "Cells %s above have not run yet – ▶ runs them first.",
-      "cellRange": "%s–%s",
-      "cellRangeSpoken": "%s to %s",
-      "cellListSep": ", ",
-      "runCellLabel": "Run cell %d",
-      "skipLink": "Skip to the lesson",
-      "langLabel": "Language",
-      "mascotAlt": "One of _why's cartoon foxes",
       "loading": "Loading Ruby … (one-time, about 10 MB)",
       "kernelFailed": "Ruby could not be loaded – please reload the page.",
       "shellFailed": "The page could not start – please reload it.",
@@ -268,8 +257,6 @@ window.LESSONS_JSON = JSON.stringify({
       "liveSlow": "This cell takes too long for live runs – run it with ▶.",
       "liveStopped": "Stopped after a second – ▶ runs the code all the way.",
       "liveNeedsRun": "Installing gems, reading their data for the first time, importing a Python module for the first time, fetching from the web and changing a database only happen with ▶.",
-      "liveNeedsEarlier": "The cells above have not run yet and take longer than a live run may – ▶ runs them first.",
-      "liveLesson": "Live is off in this lesson: its cells compute thousands of numbers for every sound – too much for a run at every pause in typing. Run them with ▶.",
       "nextLesson": "→ On to the next lesson",
       "progress": "Lesson %d of %d",
       "allDone": "🎉 You finished all lessons! CHUNKY BACON! As a next step, try the <a href='https://koans.idogawa.com'>Ruby Koans in the browser</a> – and find your next Ruby conference or meetup on <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>.",
@@ -282,16 +269,11 @@ window.LESSONS_JSON = JSON.stringify({
       "nativeGem": "%s contains C code (a “native extension”) and cannot be installed at runtime in the browser. Such gems must be compiled into the ruby.wasm binary itself – that is how Evil Martians' TutorialKit.rb does it.",
       "gemNotFound": "Gem “%s” was not found (or the download failed).",
       "browserGo": "Go",
-      "browserUrl": "Address",
-      "irbInput": "IRB input",
-      "threeLabel": "3D scene",
-      "audioLabel": "A sound, %s seconds",
       "irbExitNote": "(On your computer IRB would have quit now – here you can just keep typing. 🦊)",
       "filesTitle": "files (simulated)",
       "threeLoading": "The 3D engine (three.js) is still loading – run the cell again in a moment.",
       "pythonLoading": "Python (Pyodide) is loading – a few MB, the first time only. Run the cell again in a moment.",
       "pythonOffline": "Python is not in your offline copy. This cell runs with an internet connection – or tick “Include Python” under “Your progress”.",
-      "sqliteLoading": "SQLite is loading – about 1 MB, the first time only. Run the cell again in a moment.",
       "downloadTip": "Files your cell wrote – click to download.",
       "footerCredit": "A service by <a href='https://idogawa.com'>Andi Idogawa</a>. Runs entirely in your browser thanks to <a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>. Done here? Continue with the <a href='https://koans.idogawa.com'>Ruby Koans</a>.",
       "footerLicense": "“<a href='https://chunkybacon.dev/glossary/chunky-bacon/'>Chunky Bacon</a>” comes from why's (poignant) guide to Ruby by why the lucky stiff – fondly remembered. The foxes are his drawings (<a href='https://creativecommons.org/licenses/by-sa/2.5/'>CC BY-SA 2.5</a>), traced here. Course content: <a href='https://creativecommons.org/licenses/by-sa/4.0/'>CC BY-SA 4.0</a>, code: <a href='https://github.com/Largo/chunkybacon/blob/main/LICENSE'>MIT</a>.",
@@ -351,7 +333,6 @@ window.LESSONS_JSON = JSON.stringify({
       "wsDeleteConfirm": "Really delete “%s”?",
       "wsUpload": "Upload",
       "wsDownload": "Download",
-      "wsDatabase": "🗄 A SQLite database (%s). Your program opens it with Sequel.sqlite and its name. “Download” gives you the file for a SQLite tool such as DB Browser for SQLite.",
       "wsStdin": "Input for gets",
       "wsStdinHint": "Each line answers one gets.",
       "wsNotRuby": ".rb files can be run.",
@@ -364,6 +345,35 @@ window.LESSONS_JSON = JSON.stringify({
       "letterClear": "Clear",
       "letterSees": "What Ruby gets:",
       "letterHint": "Write the postcode into the red boxes",
+      "codeLabel": "Code, cell %d",
+      "codeHint": "Shift+Enter runs the code. Escape, then Tab, leaves the editor.",
+      "embedCode": "Ruby code you can run",
+      "embedRanOk": "Ran: %s",
+      "embedRanError": "Failed: %s",
+      "embedNoSandbox": "This cell runs only sandboxed – the server sent it without its security header.",
+      "ranOk": "Cell %d ran: %s",
+      "ranError": "Cell %d failed: %s",
+      "ranFirstOne": "Ran cell %s above first.",
+      "ranFirstMany": "Ran cells %s above first.",
+      "ranFirstFailedOne": "Cell %s failed – its ▶ shows why.",
+      "ranFirstFailedMany": "Cells %s failed – their ▶ shows why.",
+      "cellsWaitingOne": "Cell %s above has not run yet – ▶ runs it first.",
+      "cellsWaitingMany": "Cells %s above have not run yet – ▶ runs them first.",
+      "cellRange": "%s–%s",
+      "cellRangeSpoken": "%s to %s",
+      "cellListSep": ", ",
+      "runCellLabel": "Run cell %d",
+      "skipLink": "Skip to the lesson",
+      "langLabel": "Language",
+      "mascotAlt": "One of _why's cartoon foxes",
+      "liveNeedsEarlier": "The cells above have not run yet and take longer than a live run may – ▶ runs them first.",
+      "liveLesson": "Live is off in this lesson: its cells compute thousands of numbers for every sound – too much for a run at every pause in typing. Run them with ▶.",
+      "browserUrl": "Address",
+      "irbInput": "IRB input",
+      "threeLabel": "3D scene",
+      "audioLabel": "A sound, %s seconds",
+      "sqliteLoading": "SQLite is loading – about 1 MB, the first time only. Run the cell again in a moment.",
+      "wsDatabase": "🗄 A SQLite database (%s). Your program opens it with Sequel.sqlite and its name. “Download” gives you the file for a SQLite tool such as DB Browser for SQLite.",
       "gameTitle": "Game with %d × %d cells",
       "gamePlay": "Click or press Space to play",
       "gameKeys": "Arrow keys steer – Esc pauses, Tab leaves the game",
@@ -428,7 +438,17 @@ window.LESSONS_JSON = JSON.stringify({
       "spinelIrbInput": "Input for IRB on Spinel",
       "spinelIrbNote": "Every line is compiled again with all the lines before it and run from the start.",
       "spinelIrbReady": "Spinel %s is ready.",
-      "spinelIrbBusy": "compiling …"
+      "spinelIrbBusy": "compiling …",
+      "didYouMean": "💡 Did you mean %s?",
+      "didYouMeanJoin": " or ",
+      "cheatButton": "Cheat sheet",
+      "cheatTitle": "Ruby cheat sheet",
+      "cheatIntro": "The essentials of the course at a glance. Every topic leads to its lessons and to the official Ruby documentation.",
+      "cheatSearch": "Search the cheat sheet",
+      "cheatNone": "Nothing found.",
+      "cheatClose": "Close the cheat sheet",
+      "cheatLessons": "Lesson",
+      "cheatDocs": "Docs"
     },
     "ja": {
       "title": "Chunky Baconと学ぶRuby",
@@ -437,27 +457,6 @@ window.LESSONS_JSON = JSON.stringify({
       "running": "実行中 …",
       "reset": "レッスンをリセット",
       "taskLabel": "課題",
-      "codeLabel": "コード（セル%d）",
-      "codeHint": "Shift+Enterで実行。Escapeの後にTabでエディタを離れます。",
-      "embedCode": "実行できるRubyコード",
-      "embedRanOk": "実行しました：%s",
-      "embedRanError": "エラー：%s",
-      "embedNoSandbox": "このセルはサンドボックスの中でしか実行されません。サーバーがセキュリティヘッダーなしで送りました。",
-      "ranOk": "セル%dを実行しました：%s",
-      "ranError": "セル%dでエラー：%s",
-      "ranFirstOne": "先に上のセル%sを実行しました。",
-      "ranFirstMany": "先に上のセル%sを実行しました。",
-      "ranFirstFailedOne": "セル%sでエラーが起きました。そのセルの ▶ で理由がわかります。",
-      "ranFirstFailedMany": "セル%sでエラーが起きました。それぞれの ▶ で理由がわかります。",
-      "cellsWaitingOne": "上のセル%sはまだ実行されていません。▶ を押すと先に実行します。",
-      "cellsWaitingMany": "上のセル%sはまだ実行されていません。▶ を押すと先に実行します。",
-      "cellRange": "%s〜%s",
-      "cellRangeSpoken": "%sから%s",
-      "cellListSep": "、",
-      "runCellLabel": "セル%dを実行",
-      "skipLink": "レッスンへ移動",
-      "langLabel": "言語",
-      "mascotAlt": "_whyの漫画のキツネ",
       "loading": "Rubyを読み込み中 …（初回のみ、約10 MB）",
       "kernelFailed": "Rubyを読み込めませんでした。ページを再読み込みしてください。",
       "shellFailed": "ページを開始できませんでした。再読み込みしてください。",
@@ -478,8 +477,6 @@ window.LESSONS_JSON = JSON.stringify({
       "liveSlow": "このセルはライブ実行には時間がかかりすぎます。▶ で実行してね。",
       "liveStopped": "1秒で止めました。▶ なら最後まで実行します。",
       "liveNeedsRun": "gemのインストール、gemのデータの初回の読み込み、Pythonモジュールの初回のインポート、ネットからのデータ取得、データベースの変更は ▶ のときだけ行います。",
-      "liveNeedsEarlier": "上のセルがまだ実行されていません。ライブ実行には時間がかかりすぎるので、▶ を押すと上のセルから順に実行します。",
-      "liveLesson": "このレッスンではライブはオフです。セルが音ごとに何千もの数を計算するので、入力が止まるたびに実行するには重すぎます。▶ で実行してください。",
       "nextLesson": "→ 次のレッスンへ",
       "progress": "レッスン %d / %d",
       "allDone": "🎉 全レッスン制覇！CHUNKY BACON! 次のステップには<a href='https://koans.idogawa.com'>ブラウザで動くRuby Koans</a>がおすすめだよ。次のRubyカンファレンスやミートアップは<a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>で探してみてね。",
@@ -492,16 +489,11 @@ window.LESSONS_JSON = JSON.stringify({
       "nativeGem": "%sにはCのコード（「ネイティブ拡張」）が含まれているため、ブラウザの中で実行時にインストールすることはできません。こうしたgemは、ruby.wasmのバイナリをビルドするときに組み込んでおく必要があります。Evil MartiansのTutorialKit.rbもこの方法をとっています。",
       "gemNotFound": "gem「%s」が見つかりませんでした（またはダウンロードに失敗しました）。",
       "browserGo": "移動",
-      "browserUrl": "アドレス",
-      "irbInput": "IRBの入力",
-      "threeLabel": "3Dシーン",
-      "audioLabel": "音、%s秒",
       "irbExitNote": "（きみのコンピューターなら、IRBはここで終了しているところ。ここではそのまま入力を続けていいよ。🦊）",
       "filesTitle": "ファイル（シミュレーション）",
       "threeLoading": "3Dエンジン（three.js）をまだ読み込んでいます。少し待ってから、もう一度セルを実行してください。",
       "pythonLoading": "Python（Pyodide）を読み込んでいます（初回のみ数MB）。少し待ってから、もう一度セルを実行してください。",
       "pythonOffline": "Pythonはオフラインコピーに入っていません。インターネットにつながればこのセルは動きます。または「あなたの進捗」で「Pythonも保存する」にチェックを入れてください。",
-      "sqliteLoading": "SQLiteを読み込んでいます（初回のみ約1 MB）。少し待ってから、もう一度セルを実行してください。",
       "downloadTip": "セルが書き出したファイルです。クリックするとダウンロードできます。",
       "footerCredit": "制作：<a href='https://idogawa.com'>Andi Idogawa</a>。<a href='https://github.com/ruby/ruby.wasm'>ruby.wasm</a>のおかげで、すべてブラウザの中だけで動いています。ひととおり終わったら、次は<a href='https://koans.idogawa.com'>Ruby Koans</a>へどうぞ。",
       "footerLicense": "「<a href='https://chunkybacon.dev/glossary/chunky-bacon/'>Chunky Bacon</a>」は、why the lucky stiffの『why's (poignant) guide to Ruby』に由来します。なつかしい思い出とともに。キツネの絵も彼のものです（<a href='https://creativecommons.org/licenses/by-sa/2.5/deed.ja'>CC BY-SA 2.5</a>、トレースして使用）。コースの内容：<a href='https://creativecommons.org/licenses/by-sa/4.0/deed.ja'>CC BY-SA 4.0</a>、コード：<a href='https://github.com/Largo/chunkybacon/blob/main/LICENSE'>MIT</a>。",
@@ -561,7 +553,6 @@ window.LESSONS_JSON = JSON.stringify({
       "wsDeleteConfirm": "「%s」を本当に削除しますか？",
       "wsUpload": "アップロード",
       "wsDownload": "ダウンロード",
-      "wsDatabase": "🗄 SQLiteデータベース（%s）です。プログラムからは、Sequel.sqliteにこのファイル名を渡して開けます。「ダウンロード」で、DB Browser for SQLiteなどのSQLiteツール用にファイルを取り出せます。",
       "wsStdin": "getsへの入力",
       "wsStdinHint": "1行が、getsの1回ぶんの答えになります。",
       "wsNotRuby": "実行できるのは.rbファイルです。",
@@ -574,6 +565,35 @@ window.LESSONS_JSON = JSON.stringify({
       "letterClear": "消す",
       "letterSees": "Rubyが受け取るもの：",
       "letterHint": "赤い枠に郵便番号を書いてね",
+      "codeLabel": "コード（セル%d）",
+      "codeHint": "Shift+Enterで実行。Escapeの後にTabでエディタを離れます。",
+      "embedCode": "実行できるRubyコード",
+      "embedRanOk": "実行しました：%s",
+      "embedRanError": "エラー：%s",
+      "embedNoSandbox": "このセルはサンドボックスの中でしか実行されません。サーバーがセキュリティヘッダーなしで送りました。",
+      "ranOk": "セル%dを実行しました：%s",
+      "ranError": "セル%dでエラー：%s",
+      "ranFirstOne": "先に上のセル%sを実行しました。",
+      "ranFirstMany": "先に上のセル%sを実行しました。",
+      "ranFirstFailedOne": "セル%sでエラーが起きました。そのセルの ▶ で理由がわかります。",
+      "ranFirstFailedMany": "セル%sでエラーが起きました。それぞれの ▶ で理由がわかります。",
+      "cellsWaitingOne": "上のセル%sはまだ実行されていません。▶ を押すと先に実行します。",
+      "cellsWaitingMany": "上のセル%sはまだ実行されていません。▶ を押すと先に実行します。",
+      "cellRange": "%s〜%s",
+      "cellRangeSpoken": "%sから%s",
+      "cellListSep": "、",
+      "runCellLabel": "セル%dを実行",
+      "skipLink": "レッスンへ移動",
+      "langLabel": "言語",
+      "mascotAlt": "_whyの漫画のキツネ",
+      "liveNeedsEarlier": "上のセルがまだ実行されていません。ライブ実行には時間がかかりすぎるので、▶ を押すと上のセルから順に実行します。",
+      "liveLesson": "このレッスンではライブはオフです。セルが音ごとに何千もの数を計算するので、入力が止まるたびに実行するには重すぎます。▶ で実行してください。",
+      "browserUrl": "アドレス",
+      "irbInput": "IRBの入力",
+      "threeLabel": "3Dシーン",
+      "audioLabel": "音、%s秒",
+      "sqliteLoading": "SQLiteを読み込んでいます（初回のみ約1 MB）。少し待ってから、もう一度セルを実行してください。",
+      "wsDatabase": "🗄 SQLiteデータベース（%s）です。プログラムからは、Sequel.sqliteにこのファイル名を渡して開けます。「ダウンロード」で、DB Browser for SQLiteなどのSQLiteツール用にファイルを取り出せます。",
       "gameTitle": "%d×%dマスのゲーム",
       "gamePlay": "クリックかスペースキーでスタート",
       "gameKeys": "矢印キーで操作します。Escで一時停止、Tabでゲームから出ます",
@@ -638,7 +658,17 @@ window.LESSONS_JSON = JSON.stringify({
       "spinelIrbInput": "Spinel上のIRBへの入力",
       "spinelIrbNote": "1行ごとに、それまでの行と一緒にコンパイルし直して、最初から実行します。",
       "spinelIrbReady": "Spinel %s の準備ができました。",
-      "spinelIrbBusy": "コンパイル中…"
+      "spinelIrbBusy": "コンパイル中…",
+      "didYouMean": "💡 もしかして %s？",
+      "didYouMeanJoin": "、",
+      "cheatButton": "チートシート",
+      "cheatTitle": "Rubyチートシート",
+      "cheatIntro": "この講座の大事なところをひと目で。テーマごとに、そのレッスンとRubyの公式ドキュメントへ進めます。",
+      "cheatSearch": "チートシートを検索",
+      "cheatNone": "見つかりませんでした。",
+      "cheatClose": "チートシートを閉じる",
+      "cheatLessons": "レッスン",
+      "cheatDocs": "ドキュメント"
     }
   },
   "lessons": [
@@ -670,7 +700,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Der Text zwischen den Anführungszeichen heisst <strong>String</strong> (Zeichenkette). <code>puts</code> schreibt ihn in die Ausgabe. Übrigens: <code>puts</code> selbst hat den Wert <code>nil</code> – „nichts“ – darum siehst du hier keine <code>=&gt;</code>-Zeile.</p><div class='task'><strong>Aufgabe:</strong> Bring die Zelle unten dazu, <code>Hallo, Welt!</code> zu zeigen – mit <code>puts</code> oder einfach als Wert der letzten Zeile.</div>"
+            "html": "<p>Der Text zwischen den Anführungszeichen heisst <strong>String</strong> (Zeichenkette). <code>puts</code> schreibt ihn in die Ausgabe. Übrigens: <code>puts</code> selbst hat den Wert <code>nil</code> – „nichts“ – darum siehst du hier keine <code>=&gt;</code>-Zeile.</p><p>Eine Zelle darf beliebig viele Zeilen haben. Ruby führt sie von oben nach unten aus: Jedes <code>puts</code> schreibt eine Zeile in die Ausgabe, und das <code>=&gt;</code> zeigt am Schluss den Wert der letzten Zeile:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"Chunky\"\nputs \"Bacon\"\n6 * 7"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ändere ruhig etwas und schau, was passiert – kaputt machen kannst du nichts. Der Schalter <em>⚡ Live</em> neben <em>▶ Ausführen</em> lässt den Code sogar von selbst laufen, eine Sekunde nachdem du aufgehört hast zu tippen. Und wird etwas rot: keine Panik! Fehlermeldungen sind Hinweise, keine Strafe – in Lektion 11 lernst du, sie zu lesen.</p><p>Alles, was du lernst, steht kurz und knapp auch auf dem <button type='button' class='cheat-link'>📋 Spickzettel</button> – du kannst ihn jederzeit oben aufklappen, er hat Links zur offiziellen Ruby-Dokumentation.</p><div class='docs'><strong>Nachschlagen:</strong> <a href='https://www.ruby-lang.org/de/documentation/quickstart/' target='_blank'>Ruby in zwanzig Minuten</a> · <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-puts' target='_blank'>puts in der Ruby-Doku</a> (englisch)</div><div class='task'><strong>Aufgabe:</strong> Bring die Zelle unten dazu, <code>Hallo, Welt!</code> zu zeigen – mit <code>puts</code> oder einfach als Wert der letzten Zeile.</div>"
           },
           {
             "t": "x",
@@ -701,7 +739,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>The text between the quotes is called a <strong>string</strong>. <code>puts</code> writes it to the output. By the way: <code>puts</code> itself has the value <code>nil</code> – “nothing” – which is why there is no <code>=&gt;</code> line here.</p><div class='task'><strong>Task:</strong> Make the cell below show <code>Hello, World!</code> – with <code>puts</code> or simply as the value of the last line.</div>"
+            "html": "<p>The text between the quotes is called a <strong>string</strong>. <code>puts</code> writes it to the output. By the way: <code>puts</code> itself has the value <code>nil</code> – “nothing” – which is why there is no <code>=&gt;</code> line here.</p><p>A cell may have as many lines as you like. Ruby runs them from top to bottom: every <code>puts</code> writes a line to the output, and at the end the <code>=&gt;</code> shows the value of the last line:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"Chunky\"\nputs \"Bacon\"\n6 * 7"
+          },
+          {
+            "t": "h",
+            "html": "<p>Go ahead and change things to see what happens – you can't break anything. The <em>⚡ Live</em> switch next to <em>▶ Run</em> even runs the code by itself, a second after you stop typing. And if something turns red: don't panic! Error messages are hints, not punishment – lesson 11 teaches you to read them.</p><p>Everything you learn is also on the <button type='button' class='cheat-link'>📋 Cheat sheet</button>, short and sweet – open it at the top whenever you like; it links to the official Ruby documentation.</p><div class='docs'><strong>Look it up:</strong> <a href='https://www.ruby-lang.org/en/documentation/quickstart/' target='_blank'>Ruby in Twenty Minutes</a> · <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-puts' target='_blank'>puts in the Ruby docs</a></div><div class='task'><strong>Task:</strong> Make the cell below show <code>Hello, World!</code> – with <code>puts</code> or simply as the value of the last line.</div>"
           },
           {
             "t": "x",
@@ -732,7 +778,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>引用符で囲まれたテキストを<strong>文字列</strong>といいます。<code>puts</code>は、それを出力に書き出します。ちなみに<code>puts</code>そのものの値は<code>nil</code>、つまり「何もない」です。だから、ここには<code>=&gt;</code>の行が出ないのです。</p><div class='task'><strong>課題：</strong>下のセルに<code>Hello, World!</code>と表示させましょう。<code>puts</code>を使っても、単に最後の行の値にしてもかまいません。</div>"
+            "html": "<p>引用符で囲まれたテキストを<strong>文字列</strong>といいます。<code>puts</code>は、それを出力に書き出します。ちなみに<code>puts</code>そのものの値は<code>nil</code>、つまり「何もない」です。だから、ここには<code>=&gt;</code>の行が出ないのです。</p><p>1つのセルには何行でも書けます。Rubyは上から順に実行します。<code>puts</code>のたびに出力が1行ずつ増え、最後に<code>=&gt;</code>が最後の行の値を示します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"Chunky\"\nputs \"Bacon\"\n6 * 7"
+          },
+          {
+            "t": "h",
+            "html": "<p>どんどん書き換えて、何が起きるか見てみてください。壊れるものは何もありません。<em>▶ 実行</em>の横の<em>⚡ Live</em>スイッチを使えば、入力をやめて1秒たつとコードがひとりでに動きます。もし赤い表示が出ても、あわてないで。エラーメッセージは罰ではなくヒントです。読み方はレッスン11で学びます。</p><p>学んだことは<button type='button' class='cheat-link'>📋 チートシート</button>にも短くまとめてあります。画面の上からいつでも開けて、Rubyの公式ドキュメントへのリンクもついています。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://www.ruby-lang.org/ja/documentation/quickstart/' target='_blank'>20分ではじめるRuby</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Kernel/m/puts.html' target='_blank'>リファレンスマニュアルのputs</a></div><div class='task'><strong>課題：</strong>下のセルに<code>Hello, World!</code>と表示させましょう。<code>puts</code>を使っても、単に最後の行の値にしてもかまいません。</div>"
           },
           {
             "t": "x",
@@ -766,13 +820,45 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Aufgabe:</strong> Wie viel ist 6 mal 7? Lass Ruby rechnen: Die Zelle soll das Ergebnis von <code>6 * 7</code> zeigen. (Nicht selbst rechnen – das ist ja der Witz!)</div>"
+            "html": "<p>Es gilt <strong>Punkt vor Strich</strong>, wie in der Schule, und Klammern werden zuerst ausgerechnet. Dazu kommen zwei neue Zeichen: <code>**</code> heisst „hoch“, und <code>%</code> gibt den <strong>Rest</strong> einer Division (17 geteilt durch 5 ist 3, Rest 2):</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts 3 * 10 - 2     # Punkt vor Strich: 28\nputs 3 * (10 - 2)   # Klammern zuerst: 24\nputs 2 ** 10        # 2 hoch 10\nputs 17 % 5         # der Rest von 17 / 5"
+          },
+          {
+            "t": "h",
+            "html": "<p>Und jetzt eine Überraschung, über die fast alle einmal stolpern:</p>"
+          },
+          {
+            "t": "c",
+            "code": "7 / 2"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>=&gt; 3</code>? Ruby kennt zwei Arten von Zahlen: <strong>ganze Zahlen</strong> (<code>Integer</code>) wie <code>7</code> und <strong>Kommazahlen</strong> (<code>Float</code>) wie <code>3.5</code> – mit einem Punkt geschrieben, nicht mit einem Komma. Teilst du eine ganze Zahl durch eine ganze Zahl, rechnet Ruby ganzzahlig und lässt den Rest einfach weg. Sobald eine der beiden Zahlen ein Float ist, kommt das genaue Ergebnis:</p>"
+          },
+          {
+            "t": "c",
+            "code": "7 / 2.0"
+          },
+          {
+            "t": "h",
+            "html": "<p>In Ruby sind Zahlen <strong>Objekte</strong>, und Objekte haben <strong>Methoden</strong>: Fähigkeiten, die du mit einem Punkt aufrufst. Ein paar nützliche – und weil eine Zahl in Ruby so gross sein darf, wie sie eben wird, rechnet <code>2 ** 100</code> genau bis zur letzten Stelle:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts 3.7.round        # runden: 4\nputs 7.fdiv(2)        # teilen mit Komma: 3.5\nputs 10.even?         # gerade Zahl? true\nputs 2 ** 100         # keine Obergrenze\n1_000_000 + 1         # _ macht grosse Zahlen lesbar"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>round</code> nimmt auch Stellen hinter dem Komma: <code>(10 / 3.0).round(2)</code> ergibt <code>3.33</code>. Probier es oben aus! Und falls dir mal ein Ergebnis wie <code>0.30000000000000004</code> begegnet: Kommazahlen sind im Computer nicht ganz exakt – warum, und was man bei Geldbeträgen stattdessen tut, zeigt Lektion 23.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Integer.html' target='_blank'>Integer</a> · <a href='https://docs.ruby-lang.org/en/4.0/Float.html' target='_blank'>Float</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/operators_rdoc.html' target='_blank'>Operatoren</a></div><div class='task'><strong>Aufgabe:</strong> Drei Pizzas zu je 17 Franken – vier Freunde teilen sich die Rechnung. Lass Ruby ausrechnen, wie viel jede Person bezahlt, und zwar genau, mit Rappen: <code>12.75</code>. (Nicht selbst rechnen – das ist ja der Witz! Und denk an <code>7 / 2</code>…)</div>"
           },
           {
             "t": "x",
             "code": "",
-            "check": "(output.include?(\"42\") || result == 42) && code.include?(\"*\")",
-            "hint": "Schreibe einfach <code>6 * 7</code> in die Zelle. Der Stern <code>*</code> bedeutet „mal“."
+            "check": "(result == 12.75 || output.include?(\"12.75\")) && (code.include?(\"/\") || code.include?(\"fdiv\"))",
+            "hint": "Mit <code>3 * 17 / 4</code> kommt <code>12</code> heraus – der Rest fällt weg! Mach eine der Zahlen zum Float: <code>3 * 17 / 4.0</code>."
           }
         ]
       },
@@ -797,13 +883,45 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Task:</strong> What is 6 times 7? Let Ruby do the math: the cell should show the result of <code>6 * 7</code>. (Don't compute it yourself – that's the whole point!)</div>"
+            "html": "<p>Multiplication and division come <strong>before</strong> addition and subtraction, just like at school, and parentheses go first. Two new signs join in: <code>**</code> means “to the power of”, and <code>%</code> gives the <strong>remainder</strong> of a division (17 divided by 5 is 3, remainder 2):</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts 3 * 10 - 2     # times before minus: 28\nputs 3 * (10 - 2)   # parentheses first: 24\nputs 2 ** 10        # 2 to the power of 10\nputs 17 % 5         # the remainder of 17 / 5"
+          },
+          {
+            "t": "h",
+            "html": "<p>And now a surprise that trips up almost everyone once:</p>"
+          },
+          {
+            "t": "c",
+            "code": "7 / 2"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>=&gt; 3</code>? Ruby knows two kinds of numbers: <strong>whole numbers</strong> (<code>Integer</code>) like <code>7</code> and <strong>decimal numbers</strong> (<code>Float</code>) like <code>3.5</code> – written with a point. Divide a whole number by a whole number and Ruby divides whole numbers too: the remainder is simply dropped. As soon as one of the two is a Float, you get the exact result:</p>"
+          },
+          {
+            "t": "c",
+            "code": "7 / 2.0"
+          },
+          {
+            "t": "h",
+            "html": "<p>In Ruby numbers are <strong>objects</strong>, and objects have <strong>methods</strong>: abilities you call with a dot. A few useful ones – and since a number in Ruby may grow as large as it needs to, <code>2 ** 100</code> is exact down to the last digit:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts 3.7.round        # rounding: 4\nputs 7.fdiv(2)        # dividing with decimals: 3.5\nputs 10.even?         # an even number? true\nputs 2 ** 100         # no upper limit\n1_000_000 + 1         # _ makes big numbers readable"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>round</code> also takes decimal places: <code>(10 / 3.0).round(2)</code> gives <code>3.33</code>. Try it above! And should you ever meet a result like <code>0.30000000000000004</code>: decimal numbers are not quite exact inside a computer – why, and what to do about money instead, is shown in lesson 23.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Integer.html' target='_blank'>Integer</a> · <a href='https://docs.ruby-lang.org/en/4.0/Float.html' target='_blank'>Float</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/operators_rdoc.html' target='_blank'>Operators</a></div><div class='task'><strong>Task:</strong> Three pizzas at 17 francs each – four friends split the bill. Let Ruby work out how much each person pays, exactly, cents included: <code>12.75</code>. (Don't compute it yourself – that's the whole point! And remember <code>7 / 2</code>…)</div>"
           },
           {
             "t": "x",
             "code": "",
-            "check": "(output.include?(\"42\") || result == 42) && code.include?(\"*\")",
-            "hint": "Simply write <code>6 * 7</code> into the cell. The star <code>*</code> means “times”."
+            "check": "(result == 12.75 || output.include?(\"12.75\")) && (code.include?(\"/\") || code.include?(\"fdiv\"))",
+            "hint": "<code>3 * 17 / 4</code> gives <code>12</code> – the remainder is dropped! Make one of the numbers a Float: <code>3 * 17 / 4.0</code>."
           }
         ]
       },
@@ -828,20 +946,51 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>課題：</strong>6かける7はいくつでしょう？計算はRubyにまかせて、セルに<code>6 * 7</code>の結果が表示されるようにしてください。（自分で計算してはいけませんよ。それでは意味がありませんからね！）</div>"
+            "html": "<p>学校で習ったとおり、<strong>かけ算とわり算はたし算とひき算より先</strong>に計算され、かっこの中がいちばん先です。新しい記号も2つあります。<code>**</code>は「〜乗」、<code>%</code>はわり算の<strong>余り</strong>です（17わる5は3余り2）：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts 3 * 10 - 2     # かけ算が先：28\nputs 3 * (10 - 2)   # かっこが先：24\nputs 2 ** 10        # 2の10乗\nputs 17 % 5         # 17 / 5 の余り"
+          },
+          {
+            "t": "h",
+            "html": "<p>さて、ほとんどの人が一度はつまずく、ちょっとした驚きです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "7 / 2"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>=&gt; 3</code>？ Rubyには2種類の数があります。<code>7</code>のような<strong>整数</strong>（<code>Integer</code>）と、<code>3.5</code>のように小数点のついた<strong>小数</strong>（<code>Float</code>）です。整数を整数でわると、Rubyは整数どうしのわり算をして、余りは捨ててしまいます。どちらか一方でもFloatなら、正確な答えが出ます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "7 / 2.0"
+          },
+          {
+            "t": "h",
+            "html": "<p>Rubyでは数も<strong>オブジェクト</strong>で、オブジェクトは<strong>メソッド</strong>を持っています。メソッドとは、ドットをつけて呼び出す「できること」です。便利なものをいくつか紹介します。Rubyの整数は必要なだけいくらでも大きくなれるので、<code>2 ** 100</code>も最後の桁まで正確に計算されます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts 3.7.round        # 四捨五入：4\nputs 7.fdiv(2)        # 小数でわり算：3.5\nputs 10.even?         # 偶数かな？ true\nputs 2 ** 100         # 上限なし\n1_000_000 + 1         # _ で大きな数が読みやすくなる"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>round</code>には小数点以下の桁数も渡せます。<code>(10 / 3.0).round(2)</code>は<code>3.33</code>になります。上のセルで試してみてください！ もし<code>0.30000000000000004</code>のような結果に出会っても驚かないでください。コンピューターの中の小数は完全には正確ではないのです。その理由と、お金を扱うときにどうすればよいかは、レッスン23で紹介します。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/Integer.html' target='_blank'>Integer</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Float.html' target='_blank'>Float</a>・<a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2foperator.html' target='_blank'>演算子式</a></div><div class='task'><strong>課題：</strong>1枚17フランのピザを3枚、4人で割り勘します。1人あたりいくら払うのか、Rubyに計算させましょう。ラッペン（スイスのお金の単位で、1フランの100分の1）まで正確に、<code>12.75</code>と出るようにします。（自分で計算してはいけませんよ。それでは意味がありませんからね！ それと、<code>7 / 2</code>のことを思い出して…）</div>"
           },
           {
             "t": "x",
             "code": "",
-            "check": "(output.include?(\"42\") || result == 42) && code.include?(\"*\")",
-            "hint": "セルに<code>6 * 7</code>って書くだけでいいよ。星印の<code>*</code>は「かける」って意味なんだ。"
+            "check": "(result == 12.75 || output.include?(\"12.75\")) && (code.include?(\"/\") || code.include?(\"fdiv\"))",
+            "hint": "<code>3 * 17 / 4</code>だと<code>12</code>になっちゃう。余りが捨てられるからね！ どれか1つの数をFloatにしよう：<code>3 * 17 / 4.0</code>。"
           }
         ]
       }
     },
     {
       "id": "variablen",
-      "stepper": true,
       "de": {
         "title": "3. Variablen",
         "cells": [
@@ -863,7 +1012,23 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Aufgabe:</strong> Lege zwei Variablen an: <code>name</code> mit deinem Namen (ein String) und <code>alter</code> mit einer Zahl.</div>"
+            "html": "<p>Eine Variable kann jederzeit einen neuen Wert bekommen. <code>menge = menge + 1</code> sieht für Mathematiker seltsam aus – aber <code>=</code> heisst in Ruby nicht „ist gleich“, sondern „bekommt den Wert“: Erst wird rechts gerechnet, dann landet das Ergebnis links in der Variable. Dafür gibt es auch eine Kurzform, <code>+=</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "menge = menge + 1\nmenge += 10\nmenge"
+          },
+          {
+            "t": "h",
+            "html": "<p>Führ die Zelle ein zweites Mal aus – was passiert? Jede Ausführung rechnet mit dem Wert weiter, den <code>menge</code> gerade hat. Genauso gibt es <code>-=</code>, <code>*=</code> und <code>/=</code>.</p><p>Jeder Wert gehört zu einer <strong>Klasse</strong> – so nennt Ruby seine Art. <code>.class</code> verrät sie: Text ist ein <code>String</code>, ganze Zahlen sind <code>Integer</code>, Kommazahlen <code>Float</code>. Umwandeln kannst du mit <code>to_s</code> (zu Text), <code>to_i</code> (zu ganzer Zahl) und <code>to_f</code> (zu Kommazahl):</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts essen.class\nputs menge.class\nputs 3.5.class\n\"42\".to_i + 8"
+          },
+          {
+            "t": "h",
+            "html": "<p>Warum das wichtig ist? <code>\"42\"</code> ist Text, keine Zahl – <code>\"42\" + 8</code> klappt darum nicht. Was Ruby dazu sagt und wie du solche Meldungen liest, zeigt Lektion 11.</p><p>Zwei Variablen auf einmal? Auch das geht: <code>breite, hoehe = 4, 3</code> gibt <code>breite</code> den Wert 4 und <code>hoehe</code> den Wert 3.</p><p>Und noch ein paar Regeln für Namen: Sie beginnen mit einem Kleinbuchstaben oder <code>_</code>, nie mit einer Ziffer, und enthalten keine Leerzeichen. Gross- und Kleinschreibung zählt: <code>menge</code> und <code>Menge</code> sind zwei verschiedene Namen – und ein Name mit grossem Anfangsbuchstaben ist in Ruby sogar etwas anderes, eine <strong>Konstante</strong>. Gute Namen sind die halbe Miete: <code>preis_in_franken</code> verrät viel mehr als <code>p</code> oder <code>x</code>.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/syntax/assignment_rdoc.html' target='_blank'>Zuweisung</a> · <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-class' target='_blank'>class</a></div><div class='task'><strong>Aufgabe:</strong> Lege zwei Variablen an: <code>name</code> mit deinem Namen (ein String) und <code>alter</code> mit einer Zahl.</div>"
           },
           {
             "t": "x",
@@ -894,7 +1059,23 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Task:</strong> Create two variables: <code>name</code> with your name (a string) and <code>age</code> with a number.</div>"
+            "html": "<p>A variable can get a new value at any time. <code>amount = amount + 1</code> looks odd to a mathematician – but in Ruby <code>=</code> does not mean “is equal to”, it means “gets the value”: the right side is computed first, then the result lands in the variable on the left. There's a shorthand for it, too: <code>+=</code>.</p>"
+          },
+          {
+            "t": "c",
+            "code": "amount = amount + 1\namount += 10\namount"
+          },
+          {
+            "t": "h",
+            "html": "<p>Run the cell a second time – what happens? Every run keeps computing with the value <code>amount</code> has right now. In the same way there are <code>-=</code>, <code>*=</code> and <code>/=</code>.</p><p>Every value belongs to a <strong>class</strong> – that's what Ruby calls its kind. <code>.class</code> tells you which: text is a <code>String</code>, whole numbers are <code>Integer</code>s, decimal numbers <code>Float</code>s. You convert with <code>to_s</code> (to text), <code>to_i</code> (to a whole number) and <code>to_f</code> (to a decimal number):</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts food.class\nputs amount.class\nputs 3.5.class\n\"42\".to_i + 8"
+          },
+          {
+            "t": "h",
+            "html": "<p>Why this matters: <code>\"42\"</code> is text, not a number – so <code>\"42\" + 8</code> doesn't work. What Ruby says about it, and how to read such messages, is shown in lesson 11.</p><p>Two variables at once? That works too: <code>width, height = 4, 3</code> gives <code>width</code> the value 4 and <code>height</code> the value 3.</p><p>And a few rules for names: they start with a lowercase letter or <code>_</code>, never with a digit, and contain no spaces. Case matters: <code>amount</code> and <code>Amount</code> are two different names – and a name with a capital first letter is even something else in Ruby, a <strong>constant</strong>. Good names are half the battle: <code>price_in_francs</code> tells you far more than <code>p</code> or <code>x</code>.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/assignment_rdoc.html' target='_blank'>Assignment</a> · <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-class' target='_blank'>class</a></div><div class='task'><strong>Task:</strong> Create two variables: <code>name</code> with your name (a string) and <code>age</code> with a number.</div>"
           },
           {
             "t": "x",
@@ -925,7 +1106,23 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>課題：</strong>変数を2つ作りましょう。<code>name</code>には自分の名前（文字列）を、<code>age</code>には数を入れてください。</div>"
+            "html": "<p>変数にはいつでも新しい値を入れられます。<code>amount = amount + 1</code>は数学の式として見ると奇妙ですが、Rubyの<code>=</code>は「等しい」ではなく「値を受け取る」という意味です。まず右側が計算され、その結果が左側の変数に入るのです。これには<code>+=</code>という短い書き方もあります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "amount = amount + 1\namount += 10\namount"
+          },
+          {
+            "t": "h",
+            "html": "<p>このセルをもう一度実行してみてください。どうなりましたか？ 実行するたびに、<code>amount</code>にそのとき入っている値をもとに計算が続きます。同じように<code>-=</code>、<code>*=</code>、<code>/=</code>もあります。</p><p>どの値も、ある<strong>クラス</strong>に属しています。クラスとは、Rubyでいう値の「種類」のことです。<code>.class</code>で調べられます。テキストは<code>String</code>、整数は<code>Integer</code>、小数は<code>Float</code>です。<code>to_s</code>（文字列へ）、<code>to_i</code>（整数へ）、<code>to_f</code>（小数へ）で変換できます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts food.class\nputs amount.class\nputs 3.5.class\n\"42\".to_i + 8"
+          },
+          {
+            "t": "h",
+            "html": "<p>なぜこれが大事なのでしょう？ <code>\"42\"</code>は数ではなくテキストなので、<code>\"42\" + 8</code>はうまくいきません。そのときRubyが何と言うか、そしてそのメッセージの読み方は、レッスン11で紹介します。</p><p>変数を2つ同時に作ることもできます。<code>width, height = 4, 3</code>と書くと、<code>width</code>は4、<code>height</code>は3になります。</p><p>名前のルールも少し覚えておきましょう。名前は小文字か<code>_</code>で始め、数字では始めません。空白も入れられません。大文字と小文字は区別されるので、<code>amount</code>と<code>Amount</code>は別の名前です。しかもRubyでは、大文字で始まる名前は<strong>定数</strong>という別のものになります。よい名前は大きな助けになります。<code>price_in_francs</code>のほうが、<code>p</code>や<code>x</code>よりずっと多くを語ってくれますね。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fvariables.html' target='_blank'>変数と定数</a>・<a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2foperator.html#assign' target='_blank'>代入</a></div><div class='task'><strong>課題：</strong>変数を2つ作りましょう。<code>name</code>には自分の名前（文字列）を、<code>age</code>には数を入れてください。</div>"
           },
           {
             "t": "x",
@@ -934,13 +1131,13 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "たとえば<code>name = \"Kaz\"</code>と<code>age = 7</code>みたいにね。"
           }
         ]
-      }
+      },
+      "stepper": true
     },
     {
       "id": "strings",
-      "stepper": true,
       "de": {
-        "title": "4. Strings verketten",
+        "title": "4. Strings – mit Text arbeiten",
         "cells": [
           {
             "t": "h",
@@ -960,18 +1157,50 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Aufgabe:</strong> Unten ist die Variable <code>lieblingsessen</code> vorbereitet. Baue mit Interpolation den Satz <code>Ich mag Chunky Bacon!</code> – die Variable gehört mit <code>#{}</code> in den String.</div>"
+            "html": "<p>Wichtig: Interpolation gibt es nur in <strong>doppelten</strong> Anführungszeichen. In einfachen Anführungszeichen bleibt der Text genau so stehen, wie er geschrieben ist – auch das <code>#{}</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"Der #{tier} ruft!\"\nputs 'Der #{tier} ruft!'"
+          },
+          {
+            "t": "h",
+            "html": "<p>Strings lassen sich auch zusammensetzen: <code>+</code> hängt zwei Strings aneinander, <code>*</code> wiederholt einen. Und <code>\\n</code> in doppelten Anführungszeichen ist ein Zeilenumbruch:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"Chunky\" + \" \" + \"Bacon\"\nputs \"Speck! \" * 3\nputs \"Erste Zeile\\nZweite Zeile\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Strings sind Objekte mit Dutzenden von Methoden. Ein paar Lieblinge – jede gibt ein neues Ergebnis zurück, der String selbst bleibt, wie er ist:</p>"
+          },
+          {
+            "t": "c",
+            "code": "gruss = \"chunky bacon\"\nputs gruss.upcase                 # GROSSBUCHSTABEN\nputs gruss.capitalize             # erster Buchstabe gross\nputs gruss.length                 # Anzahl Zeichen\nputs gruss.reverse                # rückwärts\nputs gruss.include?(\"bacon\")      # kommt \"bacon\" darin vor?\ngruss.sub(\"bacon\", \"Fuchs\")       # ersetzen"
+          },
+          {
+            "t": "h",
+            "html": "<p>Methoden lassen sich <strong>verketten</strong>: <code>gruss.upcase.reverse</code> macht erst Grossbuchstaben und dreht das Ergebnis dann um. Methoden, die mit <code>?</code> enden, beantworten eine Ja-Nein-Frage mit <code>true</code> oder <code>false</code>.</p><p>Mit eckigen Klammern holst du einzelne Zeichen heraus. Gezählt wird ab 0, und negative Zahlen zählen von hinten: <code>[-1]</code> ist das letzte Zeichen. <code>[0, 6]</code> heisst „ab Stelle 0, sechs Zeichen“:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts gruss[0]\nputs gruss[-1]\ngruss[0, 6]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Noch mehr gute Bekannte: <code>strip</code> entfernt Leerzeichen am Anfang und Ende, <code>start_with?</code> und <code>end_with?</code> prüfen Anfang und Ende, <code>gsub</code> ersetzt <em>alle</em> Vorkommen statt nur des ersten, und <code>center(20, \"*\")</code> zentriert einen Text in einer Zeile aus Sternchen. Probier sie in der Zelle oben aus! Was es sonst noch gibt, verrät die Doku – wie man sie liest, zeigt Lektion 17.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/String.html' target='_blank'>String</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/literals_rdoc.html' target='_blank'>Literale (Schreibweisen)</a></div><div class='task'><strong>Aufgabe:</strong> Unten ist die Variable <code>lieblingsessen</code> vorbereitet. Baue mit Interpolation den Satz <code>Ich mag CHUNKY BACON!</code> – die Variable gehört mit <code>#{}</code> in den String, und eine der Methoden von oben macht sie laut.</div>"
           },
           {
             "t": "x",
             "code": "lieblingsessen = \"Chunky Bacon\"\n# \"Ich mag ...!\"\n",
-            "check": "(output.include?(\"Ich mag Chunky Bacon!\") || result == \"Ich mag Chunky Bacon!\") && code.include?('#{')",
-            "hint": "Schreibe <code>\"Ich mag #{lieblingsessen}!\"</code> als letzte Zeile – mit doppelten Anführungszeichen."
+            "check": "(output.include?(\"Ich mag CHUNKY BACON!\") || result == \"Ich mag CHUNKY BACON!\") && code.include?('#{')",
+            "hint": "Methoden funktionieren auch innerhalb von <code>#{}</code>: <code>\"Ich mag #{lieblingsessen.upcase}!\"</code> – mit doppelten Anführungszeichen."
           }
         ]
       },
       "en": {
-        "title": "4. String interpolation",
+        "title": "4. Strings – working with text",
         "cells": [
           {
             "t": "h",
@@ -991,18 +1220,50 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Task:</strong> The variable <code>favorite_food</code> is prepared below. Use interpolation to build the sentence <code>I love Chunky Bacon!</code> – the variable goes into the string with <code>#{}</code>.</div>"
+            "html": "<p>Important: interpolation only happens inside <strong>double</strong> quotes. Inside single quotes the text stays exactly as written – <code>#{}</code> included:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"The #{animal} shouts!\"\nputs 'The #{animal} shouts!'"
+          },
+          {
+            "t": "h",
+            "html": "<p>Strings can be put together, too: <code>+</code> joins two strings, <code>*</code> repeats one. And <code>\\n</code> inside double quotes is a line break:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"Chunky\" + \" \" + \"Bacon\"\nputs \"Bacon! \" * 3\nputs \"First line\\nSecond line\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Strings are objects with dozens of methods. A few favorites – each returns a new result, while the string itself stays as it is:</p>"
+          },
+          {
+            "t": "c",
+            "code": "greeting = \"chunky bacon\"\nputs greeting.upcase                 # CAPITAL LETTERS\nputs greeting.capitalize             # first letter capitalized\nputs greeting.length                 # number of characters\nputs greeting.reverse                # backwards\nputs greeting.include?(\"bacon\")      # does \"bacon\" occur in it?\ngreeting.sub(\"bacon\", \"fox\")         # replace"
+          },
+          {
+            "t": "h",
+            "html": "<p>Methods can be <strong>chained</strong>: <code>greeting.upcase.reverse</code> first capitalizes, then reverses the result. Methods ending in <code>?</code> answer a yes-or-no question with <code>true</code> or <code>false</code>.</p><p>Square brackets pick single characters out. Counting starts at 0, and negative numbers count from the end: <code>[-1]</code> is the last character. <code>[0, 6]</code> means “from position 0, six characters”:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts greeting[0]\nputs greeting[-1]\ngreeting[0, 6]"
+          },
+          {
+            "t": "h",
+            "html": "<p>More good friends: <code>strip</code> removes spaces at the start and end, <code>start_with?</code> and <code>end_with?</code> check the beginning and the end, <code>gsub</code> replaces <em>every</em> occurrence instead of only the first, and <code>center(20, \"*\")</code> centers a text in a line of stars. Try them in the cell above! What else there is, the docs tell you – lesson 17 shows how to read them.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/String.html' target='_blank'>String</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/literals_rdoc.html' target='_blank'>Literals (how to write values)</a></div><div class='task'><strong>Task:</strong> The variable <code>favorite_food</code> is prepared below. Use interpolation to build the sentence <code>I love CHUNKY BACON!</code> – the variable goes into the string with <code>#{}</code>, and one of the methods above makes it loud.</div>"
           },
           {
             "t": "x",
             "code": "favorite_food = \"Chunky Bacon\"\n# \"I love ...!\"\n",
-            "check": "(output.include?(\"I love Chunky Bacon!\") || result == \"I love Chunky Bacon!\") && code.include?('#{')",
-            "hint": "Write <code>\"I love #{favorite_food}!\"</code> as the last line – with double quotes."
+            "check": "(output.include?(\"I love CHUNKY BACON!\") || result == \"I love CHUNKY BACON!\") && code.include?('#{')",
+            "hint": "Methods work inside <code>#{}</code> too: <code>\"I love #{favorite_food.upcase}!\"</code> – with double quotes."
           }
         ]
       },
       "ja": {
-        "title": "4. 文字列の式展開",
+        "title": "4. 文字列：テキストを扱う",
         "cells": [
           {
             "t": "h",
@@ -1022,26 +1283,58 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>課題：</strong>下に変数<code>favorite_food</code>を用意しました。式展開を使って、<code>I love Chunky Bacon!</code>という文を作りましょう。変数は<code>#{}</code>で文字列の中に入れます。</div>"
+            "html": "<p>大事な注意点です。式展開が働くのは<strong>ダブル</strong>クォートの中だけです。シングルクォートの中では、<code>#{}</code>も含めて、書いたとおりの文字がそのまま残ります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"The #{animal} shouts!\"\nputs 'The #{animal} shouts!'"
+          },
+          {
+            "t": "h",
+            "html": "<p>文字列はつなげることもできます。<code>+</code>は2つの文字列をつなぎ、<code>*</code>は文字列をくり返します。また、ダブルクォートの中の<code>\\n</code>は改行です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"Chunky\" + \" \" + \"Bacon\"\nputs \"Bacon! \" * 3\nputs \"First line\\nSecond line\""
+          },
+          {
+            "t": "h",
+            "html": "<p>文字列はオブジェクトで、メソッドを何十個も持っています。よく使うものを少し紹介しましょう。どれも新しい結果を返し、もとの文字列はそのまま変わりません：</p>"
+          },
+          {
+            "t": "c",
+            "code": "greeting = \"chunky bacon\"\nputs greeting.upcase                 # 大文字にする\nputs greeting.capitalize             # 先頭だけ大文字\nputs greeting.length                 # 文字数\nputs greeting.reverse                # 逆順\nputs greeting.include?(\"bacon\")      # \"bacon\" を含む？\ngreeting.sub(\"bacon\", \"fox\")         # 置き換え"
+          },
+          {
+            "t": "h",
+            "html": "<p>メソッドは<strong>つなげて</strong>呼び出せます。<code>greeting.upcase.reverse</code>は、まず大文字にして、その結果を逆順にします。<code>?</code>で終わるメソッドは、はい・いいえで答える質問で、<code>true</code>か<code>false</code>を返します。</p><p>角かっこを使うと、1文字ずつ取り出せます。数えはじめは0で、マイナスの数は後ろから数えます。<code>[-1]</code>は最後の文字です。<code>[0, 6]</code>は「0番目から6文字」という意味です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts greeting[0]\nputs greeting[-1]\ngreeting[0, 6]"
+          },
+          {
+            "t": "h",
+            "html": "<p>ほかにもよく使うメソッドがあります。<code>strip</code>は前後の空白を取りのぞき、<code>start_with?</code>と<code>end_with?</code>は始まりと終わりを調べ、<code>gsub</code>は最初の1つだけでなく<em>すべて</em>を置き換えます。<code>center(20, \"*\")</code>は、テキストを星印の並びの真ん中に置きます。上のセルで試してみてください！ ほかにどんなメソッドがあるかはドキュメントに載っています。その読み方はレッスン17で紹介します。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/String.html' target='_blank'>String</a>・<a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fliteral.html' target='_blank'>リテラル（値の書き方）</a></div><div class='task'><strong>課題：</strong>下に変数<code>favorite_food</code>を用意しました。式展開を使って、<code>I love CHUNKY BACON!</code>という文を作りましょう。変数は<code>#{}</code>で文字列の中に入れ、上で紹介したメソッドの1つで大文字にします。</div>"
           },
           {
             "t": "x",
             "code": "favorite_food = \"Chunky Bacon\"\n# \"I love ...!\"\n",
-            "check": "(output.include?(\"I love Chunky Bacon!\") || result == \"I love Chunky Bacon!\") && code.include?('#{')",
-            "hint": "最後の行に<code>\"I love #{favorite_food}!\"</code>って書いてみて。ダブルクォートを使うのを忘れずにね。"
+            "check": "(output.include?(\"I love CHUNKY BACON!\") || result == \"I love CHUNKY BACON!\") && code.include?('#{')",
+            "hint": "<code>#{}</code>の中でもメソッドは使えるよ：<code>\"I love #{favorite_food.upcase}!\"</code>。ダブルクォートを使ってね。"
           }
         ]
-      }
+      },
+      "stepper": true
     },
     {
       "id": "wenn",
-      "stepper": true,
       "de": {
         "title": "5. Entscheidungen (if)",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Wenn … dann … sonst</h2><p>Mit <code>if</code> trifft dein Programm Entscheidungen. Vergleiche: <code>&gt;</code> grösser, <code>&lt;</code> kleiner, <code>==</code> gleich (zwei Gleichheitszeichen!), <code>!=</code> ungleich. Jeder <code>if</code>-Block endet mit <code>end</code>.</p>"
+            "html": "<h2>Wenn … dann … sonst</h2><p>Mit <code>if</code> trifft dein Programm Entscheidungen. Vergleiche: <code>&gt;</code> grösser, <code>&lt;</code> kleiner, <code>&gt;=</code> grösser oder gleich, <code>&lt;=</code> kleiner oder gleich, <code>==</code> gleich (zwei Gleichheitszeichen!), <code>!=</code> ungleich. Jeder <code>if</code>-Block endet mit <code>end</code>.</p>"
           },
           {
             "t": "c",
@@ -1049,13 +1342,53 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Sogar <code>if</code> hat in Ruby einen Wert: den Zweig, der gewonnen hat. Ändere <code>hunger</code> auf <code>3</code> und führ die Zelle nochmal aus!</p><div class='task'><strong>Aufgabe:</strong> Unten steht <code>zahl = 7</code>. Die Zelle soll <code>gross</code> ergeben, wenn die Zahl grösser als 5 ist, sonst <code>klein</code> – als Wert oder mit <code>puts</code>.</div>"
+            "html": "<p>Sogar <code>if</code> hat in Ruby einen Wert: den Zweig, der gewonnen hat. Ändere <code>hunger</code> auf <code>3</code> und führ die Zelle nochmal aus!</p><p>Mehr als zwei Fälle? <code>elsif</code> (ohne e in der Mitte!) prüft eine weitere Bedingung. Ruby geht die Bedingungen von oben nach unten durch – die erste, die stimmt, gewinnt, alle anderen werden übersprungen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "temperatur = 18\nif temperatur > 25\n  \"Ab an den See!\"\nelsif temperatur > 15\n  \"T-Shirt-Wetter\"\nelse\n  \"Pulli an!\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Bedingungen lassen sich verknüpfen: <code>&amp;&amp;</code> heisst „und“ (beide müssen stimmen), <code>||</code> heisst „oder“ (eine genügt), und <code>!</code> dreht eine Bedingung um:</p>"
+          },
+          {
+            "t": "c",
+            "code": "hungrig = true\nmuede = false\nputs hungrig && muede\nputs hungrig || muede\nputs !muede\nputs 3 > 2 && 2 > 1"
+          },
+          {
+            "t": "h",
+            "html": "<p>Und nun eine Ruby-Eigenheit, die dich vielleicht überrascht: Für <code>if</code> gilt <em>alles</em> als wahr – ausser <code>false</code> und <code>nil</code>. Auch die Zahl <code>0</code> und der leere String <code>\"\"</code> zählen als wahr! Probier es aus: Setz für <code>wert</code> nacheinander <code>nil</code>, <code>\"\"</code> und <code>false</code> ein.</p>"
+          },
+          {
+            "t": "c",
+            "code": "wert = 0\nif wert\n  \"#{wert.inspect} zählt als wahr\"\nelse\n  \"#{wert.inspect} zählt als falsch\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>(<code>inspect</code> zeigt einen Wert so, wie du ihn in Ruby schreiben würdest – mit Anführungszeichen bei Strings.)</p><p>Für kurze Fälle hat Ruby Kurzformen: Ein <code>if</code> darf <em>hinter</em> einer Zeile stehen, <code>unless</code> ist das Gegenteil von <code>if</code> („ausser wenn“), und <code>bedingung ? ja : nein</code> ist ein ganzes <code>if</code>/<code>else</code> in einer Zeile:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"Speck her!\" if hunger > 7\nputs \"Ich bin satt.\" unless hunger > 7\nhunger > 7 ? \"hungrig\" : \"satt\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Vergleichst du einen Wert mit vielen Möglichkeiten, ist <code>case</code>/<code>when</code> übersichtlicher als eine lange <code>elsif</code>-Kette. <code>when</code> versteht auch Bereiche: <code>90..100</code> heisst „von 90 bis 100“:</p>"
+          },
+          {
+            "t": "c",
+            "code": "punkte = 72\ncase punkte\nwhen 90..100 then \"Ausgezeichnet!\"\nwhen 50..89  then \"Bestanden\"\nelse              \"Nochmal üben\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/syntax/control_expressions_rdoc.html' target='_blank'>Kontrollstrukturen: if, unless, case</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/operators_rdoc.html' target='_blank'>Operatoren</a></div><div class='task'><strong>Aufgabe:</strong> Unten steht <code>zahl = 7</code>. Die Zelle soll <code>gross</code> ergeben, wenn die Zahl grösser als 10 ist, <code>mittel</code>, wenn sie grösser als 5 ist, und sonst <code>klein</code> – als Wert oder mit <code>puts</code>. Benutze <code>if</code>, <code>elsif</code> und <code>else</code>. (Probier danach andere Zahlen aus!)</div>"
           },
           {
             "t": "x",
             "code": "zahl = 7\n# if ...\n",
-            "check": "((output + result.to_s).include?(\"gross\") && !(output + result.to_s).include?(\"klein\")) && code.include?(\"if\")",
-            "hint": "So geht's: <code>if zahl > 5</code>, dann <code>\"gross\"</code>, dann <code>else</code>, <code>\"klein\"</code> und zum Schluss <code>end</code>."
+            "check": "text = output + result.to_s; text.include?(\"mittel\") && !text.include?(\"gross\") && !text.include?(\"klein\") && code.include?(\"elsif\")",
+            "hint": "So geht's: <code>if zahl &gt; 10</code> → <code>\"gross\"</code>, dann <code>elsif zahl &gt; 5</code> → <code>\"mittel\"</code>, dann <code>else</code> → <code>\"klein\"</code> und zum Schluss <code>end</code>."
           }
         ]
       },
@@ -1064,7 +1397,7 @@ window.LESSONS_JSON = JSON.stringify({
         "cells": [
           {
             "t": "h",
-            "html": "<h2>If … then … else</h2><p>With <code>if</code> your program makes decisions. Comparisons: <code>&gt;</code> greater, <code>&lt;</code> less, <code>==</code> equal (two equals signs!), <code>!=</code> not equal. Every <code>if</code> block ends with <code>end</code>.</p>"
+            "html": "<h2>If … then … else</h2><p>With <code>if</code> your program makes decisions. Comparisons: <code>&gt;</code> greater, <code>&lt;</code> less, <code>&gt;=</code> greater or equal, <code>&lt;=</code> less or equal, <code>==</code> equal (two equals signs!), <code>!=</code> not equal. Every <code>if</code> block ends with <code>end</code>.</p>"
           },
           {
             "t": "c",
@@ -1072,13 +1405,53 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Even <code>if</code> has a value in Ruby: the branch that won. Change <code>hunger</code> to <code>3</code> and run the cell again!</p><div class='task'><strong>Task:</strong> Below you have <code>number = 7</code>. The cell should yield <code>big</code> if the number is greater than 5, otherwise <code>small</code> – as a value or with <code>puts</code>.</div>"
+            "html": "<p>Even <code>if</code> has a value in Ruby: the branch that won. Change <code>hunger</code> to <code>3</code> and run the cell again!</p><p>More than two cases? <code>elsif</code> (no e in the middle!) checks another condition. Ruby goes through the conditions from top to bottom – the first one that holds wins, all others are skipped:</p>"
+          },
+          {
+            "t": "c",
+            "code": "temperature = 18\nif temperature > 25\n  \"Off to the lake!\"\nelsif temperature > 15\n  \"T-shirt weather\"\nelse\n  \"Grab a sweater!\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Conditions can be combined: <code>&amp;&amp;</code> means “and” (both must hold), <code>||</code> means “or” (one is enough), and <code>!</code> turns a condition around:</p>"
+          },
+          {
+            "t": "c",
+            "code": "hungry = true\ntired = false\nputs hungry && tired\nputs hungry || tired\nputs !tired\nputs 3 > 2 && 2 > 1"
+          },
+          {
+            "t": "h",
+            "html": "<p>And now a Ruby peculiarity that may surprise you: for <code>if</code>, <em>everything</em> counts as true – except <code>false</code> and <code>nil</code>. Even the number <code>0</code> and the empty string <code>\"\"</code> count as true! Try it: put <code>nil</code>, <code>\"\"</code> and <code>false</code> into <code>value</code>, one after the other.</p>"
+          },
+          {
+            "t": "c",
+            "code": "value = 0\nif value\n  \"#{value.inspect} counts as true\"\nelse\n  \"#{value.inspect} counts as false\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>(<code>inspect</code> shows a value the way you would write it in Ruby – with quotes around strings.)</p><p>For short cases Ruby has shorthands: an <code>if</code> may stand <em>after</em> a line, <code>unless</code> is the opposite of <code>if</code>, and <code>condition ? yes : no</code> is a whole <code>if</code>/<code>else</code> in one line:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"Bacon, please!\" if hunger > 7\nputs \"I'm full.\" unless hunger > 7\nhunger > 7 ? \"hungry\" : \"full\""
+          },
+          {
+            "t": "h",
+            "html": "<p>When you compare one value with many possibilities, <code>case</code>/<code>when</code> is tidier than a long <code>elsif</code> chain. <code>when</code> understands ranges, too: <code>90..100</code> means “from 90 to 100”:</p>"
+          },
+          {
+            "t": "c",
+            "code": "points = 72\ncase points\nwhen 90..100 then \"Excellent!\"\nwhen 50..89  then \"Passed\"\nelse              \"Keep practicing\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/control_expressions_rdoc.html' target='_blank'>Control expressions: if, unless, case</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/operators_rdoc.html' target='_blank'>Operators</a></div><div class='task'><strong>Task:</strong> Below you have <code>number = 7</code>. The cell should yield <code>big</code> if the number is greater than 10, <code>medium</code> if it is greater than 5, and <code>small</code> otherwise – as a value or with <code>puts</code>. Use <code>if</code>, <code>elsif</code> and <code>else</code>. (Then try other numbers!)</div>"
           },
           {
             "t": "x",
             "code": "number = 7\n# if ...\n",
-            "check": "((output + result.to_s).include?(\"big\") && !(output + result.to_s).include?(\"small\")) && code.include?(\"if\")",
-            "hint": "Like this: <code>if number > 5</code>, then <code>\"big\"</code>, then <code>else</code>, <code>\"small\"</code> and finally <code>end</code>."
+            "check": "text = output + result.to_s; text.include?(\"medium\") && !text.include?(\"big\") && !text.include?(\"small\") && code.include?(\"elsif\")",
+            "hint": "Like this: <code>if number &gt; 10</code> → <code>\"big\"</code>, then <code>elsif number &gt; 5</code> → <code>\"medium\"</code>, then <code>else</code> → <code>\"small\"</code> and finally <code>end</code>."
           }
         ]
       },
@@ -1087,7 +1460,7 @@ window.LESSONS_JSON = JSON.stringify({
         "cells": [
           {
             "t": "h",
-            "html": "<h2>もし〜なら、そうでなければ</h2><p><code>if</code>を使うと、プログラムが判断を下せるようになります。比較には次の記号を使います：<code>&gt;</code>（より大きい）、<code>&lt;</code>（より小さい）、<code>==</code>（等しい。イコールを2つ！）、<code>!=</code>（等しくない）。<code>if</code>のブロックは、どれも<code>end</code>で終わります。</p>"
+            "html": "<h2>もし〜なら、そうでなければ</h2><p><code>if</code>を使うと、プログラムに判断をさせられます。比較には次の記号を使います。<code>&gt;</code>より大きい、<code>&lt;</code>より小さい、<code>&gt;=</code>以上、<code>&lt;=</code>以下、<code>==</code>等しい（イコールを2つ！）、<code>!=</code>等しくない。<code>if</code>のブロックは必ず<code>end</code>で終わります。</p>"
           },
           {
             "t": "c",
@@ -1095,26 +1468,66 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Rubyでは<code>if</code>にも値があります。選ばれたほうの分岐の値です。<code>hunger</code>を<code>3</code>に変えて、もう一度セルを実行してみましょう！</p><div class='task'><strong>課題：</strong>下に<code>number = 7</code>があります。数が5より大きければ<code>big</code>、そうでなければ<code>small</code>になるようにしてください。値として返しても、<code>puts</code>で出力してもかまいません。</div>"
+            "html": "<p>Rubyでは<code>if</code>にさえ値があります。選ばれた側の値です。<code>hunger</code>を<code>3</code>に変えて、もう一度セルを実行してみましょう！</p><p>場合分けが3つ以上あるときは？ <code>elsif</code>（途中にeは入りません！）で、別の条件を調べます。Rubyは条件を上から順に調べ、最初に当てはまったものが選ばれます。残りはすべて飛ばされます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "temperature = 18\nif temperature > 25\n  \"Off to the lake!\"\nelsif temperature > 15\n  \"T-shirt weather\"\nelse\n  \"Grab a sweater!\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>条件は組み合わせられます。<code>&amp;&amp;</code>は「かつ」（両方とも成り立つ）、<code>||</code>は「または」（どちらか1つでよい）、<code>!</code>は条件を反対にします：</p>"
+          },
+          {
+            "t": "c",
+            "code": "hungry = true\ntired = false\nputs hungry && tired\nputs hungry || tired\nputs !tired\nputs 3 > 2 && 2 > 1"
+          },
+          {
+            "t": "h",
+            "html": "<p>ここで、ちょっと驚くかもしれないRubyの特徴を紹介します。<code>if</code>にとっては、<code>false</code>と<code>nil</code>以外の<em>すべて</em>が「真」です。数の<code>0</code>や空の文字列<code>\"\"</code>でさえ真になります！ 試してみましょう。<code>value</code>に<code>nil</code>、<code>\"\"</code>、<code>false</code>を順番に入れてみてください。</p>"
+          },
+          {
+            "t": "c",
+            "code": "value = 0\nif value\n  \"#{value.inspect} counts as true\"\nelse\n  \"#{value.inspect} counts as false\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>（<code>inspect</code>は、値をRubyで書くときと同じ形で見せてくれます。文字列なら引用符つきです。）</p><p>短く書くための書き方もあります。<code>if</code>は行の<em>後ろ</em>に置くこともでき、<code>unless</code>は<code>if</code>の反対（「〜でなければ」）です。そして<code>条件 ? はい : いいえ</code>は、<code>if</code>/<code>else</code>全体を1行で書く方法です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"Bacon, please!\" if hunger > 7\nputs \"I'm full.\" unless hunger > 7\nhunger > 7 ? \"hungry\" : \"full\""
+          },
+          {
+            "t": "h",
+            "html": "<p>1つの値をたくさんの候補と比べるときは、長い<code>elsif</code>の連続より<code>case</code>/<code>when</code>のほうがすっきりします。<code>when</code>は範囲も理解します。<code>90..100</code>は「90から100まで」という意味です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "points = 72\ncase points\nwhen 90..100 then \"Excellent!\"\nwhen 50..89  then \"Passed\"\nelse              \"Keep practicing\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fcontrol.html' target='_blank'>制御構造：if、unless、case</a>・<a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2foperator.html' target='_blank'>演算子式</a></div><div class='task'><strong>課題：</strong>下に<code>number = 7</code>があります。数が10より大きければ<code>big</code>、5より大きければ<code>medium</code>、そうでなければ<code>small</code>になるようにしてください。値として出しても、<code>puts</code>を使ってもかまいません。<code>if</code>、<code>elsif</code>、<code>else</code>を使いましょう。（できたら、ほかの数でも試してみてください！）</div>"
           },
           {
             "t": "x",
             "code": "number = 7\n# if ...\n",
-            "check": "((output + result.to_s).include?(\"big\") && !(output + result.to_s).include?(\"small\")) && code.include?(\"if\")",
-            "hint": "こんなふうに書くよ：<code>if number > 5</code>、次に<code>\"big\"</code>、それから<code>else</code>と<code>\"small\"</code>、最後に<code>end</code>。"
+            "check": "text = output + result.to_s; text.include?(\"medium\") && !text.include?(\"big\") && !text.include?(\"small\") && code.include?(\"elsif\")",
+            "hint": "こう書くよ：<code>if number &gt; 10</code>なら<code>\"big\"</code>、<code>elsif number &gt; 5</code>なら<code>\"medium\"</code>、<code>else</code>なら<code>\"small\"</code>、最後に<code>end</code>。"
           }
         ]
-      }
+      },
+      "stepper": true
     },
     {
       "id": "schleifen",
-      "stepper": true,
       "de": {
         "title": "6. Schleifen",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Schleifen – Dinge wiederholen</h2><p>In why's legendärem Ruby-Buch rufen zwei Comic-Füchse immer wieder: <a href='https://chunkybacon.dev/glossary/chunky-bacon/' target='_blank'><em>„Chunky Bacon!“</em></a> – Wiederholung ist in Ruby wunderbar einfach:</p>"
+            "html": "<h2>Schleifen – Dinge wiederholen</h2><p>Im legendären Ruby-Buch von why rufen zwei Comic-Füchse immer wieder: <a href='https://chunkybacon.dev/glossary/chunky-bacon/' target='_blank'><em>„Chunky Bacon!“</em></a> – Wiederholung ist in Ruby herrlich einfach:</p>"
           },
           {
             "t": "c",
@@ -1122,7 +1535,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Der Code zwischen <code>do</code> und <code>end</code> heisst <strong>Block</strong> und wird hier dreimal ausgeführt. (Das <code>=&gt; 3</code> darunter ist der Wert von <code>3.times</code> selbst.) Mit Zähler geht es auch:</p>"
+            "html": "<p>Der Code zwischen <code>do</code> und <code>end</code> heisst <strong>Block</strong> und läuft hier dreimal. (Das <code>=&gt; 3</code> darunter ist der Wert von <code>3.times</code> selbst.) Mit Zähler sieht das so aus:</p>"
           },
           {
             "t": "c",
@@ -1130,7 +1543,39 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Aufgabe:</strong> Gib <code>Chunky Bacon!</code> genau fünfmal aus – mit einer Schleife, nicht mit fünf <code>puts</code>-Zeilen.</div>"
+            "html": "<p>Das <code>|i|</code> ist ein <strong>Blockparameter</strong>: Bei jeder Runde steckt Ruby die aktuelle Zahl hinein – beginnend bei 0, darum das <code>+ 1</code>. Für kurze Blöcke schreibt man statt <code>do</code> … <code>end</code> meist geschweifte Klammern; das bedeutet genau dasselbe: <code>3.times { |i| puts i }</code>.</p><p>Zum Zählen gibt es <strong>Bereiche</strong> (Ranges): <code>1..5</code> sind die Zahlen von 1 bis 5. Mit <code>each</code> läufst du durch alle hindurch:</p>"
+          },
+          {
+            "t": "c",
+            "code": "(1..5).each { |zahl| puts \"#{zahl} mal #{zahl} ist #{zahl * zahl}\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Mit zwei Punkten ist das Ende dabei, mit drei Punkten nicht: <code>1...5</code> geht nur bis 4. Wer lieber in Worten zählt, nimmt <code>upto</code>, <code>downto</code> oder <code>step</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "1.upto(3) { |i| puts \"hoch: #{i}\" }\n3.downto(1) { |i| puts \"runter: #{i}\" }\n0.step(10, 5) { |i| puts \"in Fünferschritten: #{i}\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Manchmal weisst du vorher nicht, wie oft etwas laufen soll. Dann hilft <code>while</code>: Es wiederholt, <em>solange</em> die Bedingung stimmt. Sorge dafür, dass sie irgendwann falsch wird – sonst läuft die Schleife ewig. (⚡ Live hält so eine Endlosschleife nach einer Sekunde an, ▶ nicht – dann hilft nur noch Neuladen.)</p>"
+          },
+          {
+            "t": "c",
+            "code": "speck = 10\nbissen = 0\nwhile speck > 0\n  speck -= 3\n  bissen += 1\nend\n\"#{bissen} Bissen, und der Speck ist weg\""
+          },
+          {
+            "t": "h",
+            "html": "<p>In jeder Schleife verlässt <code>break</code> die Schleife sofort, und <code>next</code> springt gleich zur nächsten Runde. Und oft braucht es gar keine Schleife: Ruby kann viele Dinge direkt – <code>(1..100).sum</code> rechnet die Summe aller Zahlen von 1 bis 100 aus.</p>"
+          },
+          {
+            "t": "c",
+            "code": "(1..10).each do |i|\n  next if i.odd?     # ungerade Zahlen überspringen\n  break if i > 6     # ab 7 aufhören\n  puts i\nend\n(1..100).sum"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-times' target='_blank'>Integer#times</a> · <a href='https://docs.ruby-lang.org/en/4.0/Range.html' target='_blank'>Range</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/control_expressions_rdoc.html' target='_blank'>while, break, next</a></div><div class='task'><strong>Aufgabe:</strong> Gib <code>Chunky Bacon!</code> genau fünfmal aus – mit einer Schleife, nicht mit fünf <code>puts</code>-Zeilen.</div>"
           },
           {
             "t": "x",
@@ -1161,7 +1606,39 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Task:</strong> Print <code>Chunky Bacon!</code> exactly five times – with a loop, not with five <code>puts</code> lines.</div>"
+            "html": "<p>The <code>|i|</code> is a <strong>block parameter</strong>: on every round Ruby puts the current number into it – starting at 0, hence the <code>+ 1</code>. For short blocks people usually write curly braces instead of <code>do</code> … <code>end</code>; it means exactly the same: <code>3.times { |i| puts i }</code>.</p><p>For counting there are <strong>ranges</strong>: <code>1..5</code> are the numbers from 1 to 5. <code>each</code> walks through all of them:</p>"
+          },
+          {
+            "t": "c",
+            "code": "(1..5).each { |number| puts \"#{number} times #{number} is #{number * number}\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>With two dots the end is included, with three it is not: <code>1...5</code> only goes up to 4. If you'd rather count in words, use <code>upto</code>, <code>downto</code> or <code>step</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "1.upto(3) { |i| puts \"up: #{i}\" }\n3.downto(1) { |i| puts \"down: #{i}\" }\n0.step(10, 5) { |i| puts \"in steps of five: #{i}\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Sometimes you don't know in advance how often something should run. That's what <code>while</code> is for: it repeats <em>as long as</em> the condition holds. Make sure it turns false at some point – or the loop runs forever. (⚡ Live stops such an endless loop after a second, ▶ does not – then only a reload helps.)</p>"
+          },
+          {
+            "t": "c",
+            "code": "bacon = 10\nbites = 0\nwhile bacon > 0\n  bacon -= 3\n  bites += 1\nend\n\"#{bites} bites, and the bacon is gone\""
+          },
+          {
+            "t": "h",
+            "html": "<p>In any loop, <code>break</code> leaves the loop at once, and <code>next</code> jumps straight to the next round. And often you need no loop at all: Ruby can do many things directly – <code>(1..100).sum</code> adds up all the numbers from 1 to 100.</p>"
+          },
+          {
+            "t": "c",
+            "code": "(1..10).each do |i|\n  next if i.odd?     # skip odd numbers\n  break if i > 6     # stop from 7 on\n  puts i\nend\n(1..100).sum"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-times' target='_blank'>Integer#times</a> · <a href='https://docs.ruby-lang.org/en/4.0/Range.html' target='_blank'>Range</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/control_expressions_rdoc.html' target='_blank'>while, break, next</a></div><div class='task'><strong>Task:</strong> Print <code>Chunky Bacon!</code> exactly five times – with a loop, not with five <code>puts</code> lines.</div>"
           },
           {
             "t": "x",
@@ -1176,7 +1653,7 @@ window.LESSONS_JSON = JSON.stringify({
         "cells": [
           {
             "t": "h",
-            "html": "<h2>ループ：くり返し</h2><p>why the lucky stiffの伝説のRuby本『why's (poignant) guide to Ruby』では、マンガのキツネ2匹が何度も<a href='https://chunkybacon.dev/glossary/chunky-bacon/' target='_blank'><em>「Chunky Bacon!」</em></a>と叫びます。Rubyなら、くり返しも驚くほど簡単です：</p>"
+            "html": "<h2>ループ：同じことをくり返す</h2><p>whyが書いた伝説のRuby本では、2匹のマンガのキツネがくり返し叫んでいます：<a href='https://chunkybacon.dev/glossary/chunky-bacon/' target='_blank'><em>「Chunky Bacon!」</em></a> Rubyなら、くり返しはとても簡単です：</p>"
           },
           {
             "t": "c",
@@ -1184,7 +1661,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>do</code>と<code>end</code>のあいだのコードを<strong>ブロック</strong>といい、ここでは3回実行されます。（下に出る<code>=&gt; 3</code>は、<code>3.times</code>そのものの値です。）カウンターを使うと、こうなります：</p>"
+            "html": "<p><code>do</code>と<code>end</code>のあいだのコードを<strong>ブロック</strong>といいます。ここでは3回実行されます。（下の<code>=&gt; 3</code>は、<code>3.times</code>そのものの値です。）カウンターを使うと、こうなります：</p>"
           },
           {
             "t": "c",
@@ -1192,26 +1669,58 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>課題：</strong><code>Chunky Bacon!</code>をちょうど5回出力しましょう。<code>puts</code>を5行並べるのではなく、ループを使ってくださいね。</div>"
+            "html": "<p><code>|i|</code>は<strong>ブロック引数</strong>です。1周するたびに、Rubyがそのときの数をここに入れてくれます。数えはじめは0なので、<code>+ 1</code>しているのです。短いブロックは、<code>do</code> … <code>end</code>の代わりに波かっこで書くのがふつうです。意味はまったく同じです：<code>3.times { |i| puts i }</code>。</p><p>数えるときには<strong>範囲</strong>（Range）も使えます。<code>1..5</code>は1から5までの数です。<code>each</code>で1つずつ順に処理できます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "(1..5).each { |number| puts \"#{number} times #{number} is #{number * number}\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>点が2つなら終わりの数を含み、3つなら含みません。<code>1...5</code>は4までです。言葉で数えたいなら<code>upto</code>、<code>downto</code>、<code>step</code>を使います：</p>"
+          },
+          {
+            "t": "c",
+            "code": "1.upto(3) { |i| puts \"up: #{i}\" }\n3.downto(1) { |i| puts \"down: #{i}\" }\n0.step(10, 5) { |i| puts \"in steps of five: #{i}\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>何回くり返せばよいか、前もってわからないこともあります。そんなときは<code>while</code>です。条件が成り立っている<em>あいだ</em>、くり返します。いつかは条件が偽になるようにしておきましょう。そうしないとループは永遠に終わりません。（⚡ Liveならそんな無限ループも1秒で止めてくれますが、▶では止まりません。そうなったらページを再読み込みするしかありません。）</p>"
+          },
+          {
+            "t": "c",
+            "code": "bacon = 10\nbites = 0\nwhile bacon > 0\n  bacon -= 3\n  bites += 1\nend\n\"#{bites} bites, and the bacon is gone\""
+          },
+          {
+            "t": "h",
+            "html": "<p>どんなループでも、<code>break</code>はすぐにループを抜け、<code>next</code>はすぐに次の周に進みます。それに、ループがまったくいらないこともよくあります。Rubyは多くのことを直接できるのです。<code>(1..100).sum</code>は、1から100までのすべての数の合計を計算します。</p>"
+          },
+          {
+            "t": "c",
+            "code": "(1..10).each do |i|\n  next if i.odd?     # 奇数は飛ばす\n  break if i > 6     # 7からは終わり\n  puts i\nend\n(1..100).sum"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/method/Integer/i/times.html' target='_blank'>Integer#times</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Range.html' target='_blank'>Range</a>・<a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fcontrol.html' target='_blank'>while、break、next</a></div><div class='task'><strong>課題：</strong><code>Chunky Bacon!</code>をちょうど5回出力しましょう。<code>puts</code>を5行書くのではなく、ループを使ってください。</div>"
           },
           {
             "t": "x",
             "code": "# Chunky Baconを5回、お願い！\n",
             "check": "((output + result.inspect).scan(\"Chunky Bacon!\").length >= 5) && (code.include?(\"times\") || code.include?(\"each\") || code.include?(\"while\") || code.include?(\"upto\") || code.include?(\"for \"))",
-            "hint": "<code>5.times do</code>、<code>puts \"Chunky Bacon!\"</code>、<code>end</code>の3行を書いてみて。"
+            "hint": "<code>5.times do</code> … <code>puts \"Chunky Bacon!\"</code> … <code>end</code>って書いてみて。"
           }
         ]
-      }
+      },
+      "stepper": true
     },
     {
       "id": "arrays",
-      "stepper": true,
       "de": {
         "title": "7. Arrays",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Arrays – Listen von Dingen</h2><p>Ein <strong>Array</strong> ist eine Liste. Es wird mit eckigen Klammern geschrieben:</p>"
+            "html": "<h2>Arrays – Listen von Dingen</h2><p>Ein <strong>Array</strong> ist eine Liste. Es wird mit eckigen Klammern geschrieben, die Elemente durch Kommas getrennt:</p>"
           },
           {
             "t": "c",
@@ -1219,11 +1728,11 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Mit eckigen Klammern greifst du auf ein Element zu – die Zählung beginnt bei 0!</p>"
+            "html": "<p>Mit eckigen Klammern greifst du auf ein Element zu – die Zählung beginnt bei 0! Negative Zahlen zählen von hinten, und wer nach einer Stelle fragt, die es nicht gibt, bekommt <code>nil</code>:</p>"
           },
           {
             "t": "c",
-            "code": "fruehstueck[0]"
+            "code": "puts fruehstueck[0]\nputs fruehstueck[-1]\nfruehstueck[5]"
           },
           {
             "t": "h",
@@ -1235,6 +1744,30 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
+            "html": "<p>Arrays haben viele nützliche Methoden. Um ihre Ergebnisse anzuschauen, nimm <code>p</code> statt <code>puts</code>: <code>puts</code> würde jedes Element auf eine eigene Zeile schreiben, <code>p</code> zeigt das Array so, wie Ruby es sieht – mit Klammern und Kommas:</p>"
+          },
+          {
+            "t": "c",
+            "code": "zahlen = [5, 3, 8, 1, 3]\np zahlen.sort          # sortiert\np zahlen.reverse       # umgedreht\np zahlen.uniq          # ohne Doppelte\np zahlen.include?(8)   # enthalten?\np zahlen.sum           # Summe\np zahlen.max           # das Grösste\nzahlen.first(2)        # die ersten zwei"
+          },
+          {
+            "t": "h",
+            "html": "<p>Keine dieser Methoden verändert <code>zahlen</code> – jede gibt ein neues Ergebnis zurück. Prüf es nach: <code>zahlen</code> ist danach immer noch <code>[5, 3, 8, 1, 3]</code>. Willst du das Array selbst sortieren, gibt es <code>sort!</code> mit Ausrufezeichen. Das Ausrufezeichen ist in Ruby eine Warnung: „Achtung, diese Methode verändert das Objekt.“</p><p>Zwei praktische Helfer arbeiten Hand in Hand: <code>join</code> klebt die Elemente zu einem String zusammen, <code>split</code> zerlegt einen String in ein Array. Und <code>%w[...]</code> ist eine Kurzschrift für ein Array aus Wörtern:</p>"
+          },
+          {
+            "t": "c",
+            "code": "tiere = %w[Fuchs Katze Igel]\nputs tiere.join(\", \")\n\"Speck,Ei,Brot\".split(\",\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Brauchst du beim Durchlaufen auch die Position, nimm <code>each_with_index</code>: Der Block bekommt dann zwei Parameter, das Element und seine Nummer:</p>"
+          },
+          {
+            "t": "c",
+            "code": "tiere.each_with_index do |tier, i|\n  puts \"#{i + 1}. #{tier}\"\nend"
+          },
+          {
+            "t": "h",
             "html": "<p>Ein Variablenname ist ein <strong>Zettel an einem Objekt</strong>, keine Schachtel. <code>gleich = fruehstueck</code> klebt einen zweiten Zettel an <em>dasselbe</em> Array – <code>dup</code> macht ein neues. <code>show_objects</code> zeichnet es mit Pfeilen:</p>"
           },
           {
@@ -1243,13 +1776,17 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Jetzt hat auch <code>fruehstueck</code> Saft – <code>kopie</code> nicht. Aber schau dir die Strings an: Die Kopie zeigt auf <em>dasselbe</em> <code>\"Ei\"</code>. <code>dup</code> kopiert das Array, nicht seinen Inhalt.</p><div class='task'><strong>Aufgabe:</strong> Häng an das Array unten <code>\"Speck\"</code> an. Bonus: gib alle Elemente mit <code>each</code> aus.</div>"
+            "html": "<p>Jetzt hat auch <code>fruehstueck</code> Saft – <code>kopie</code> nicht. Aber schau dir die Strings an: Die Kopie zeigt auf <em>dasselbe</em> <code>\"Ei\"</code>. <code>dup</code> kopiert das Array, nicht seinen Inhalt.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ein Array darf übrigens alles enthalten, auch gemischt: Zahlen, Strings, <code>nil</code> – sogar andere Arrays: <code>[[1, 2], [3, 4]]</code> ist eine kleine Tabelle mit zwei Zeilen.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Array.html' target='_blank'>Array</a> · <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-p' target='_blank'>p</a></div><div class='task'><strong>Aufgabe:</strong> Häng an das Array unten <code>\"Speck\"</code> an. Dann soll die Zelle das Frühstück <strong>sortiert</strong> und mit Komma verbunden zeigen: <code>Brot, Ei, Speck</code>.</div>"
           },
           {
             "t": "x",
             "code": "fruehstueck = [\"Ei\", \"Brot\"]\n# ...\n",
-            "check": "fruehstueck.is_a?(Array) && fruehstueck.include?(\"Speck\") && fruehstueck.include?(\"Ei\")",
-            "hint": "Schreibe <code>fruehstueck << \"Speck\"</code> unter die erste Zeile."
+            "check": "fruehstueck.is_a?(Array) && fruehstueck.include?(\"Speck\") && fruehstueck.include?(\"Ei\") && (output.include?(\"Brot, Ei, Speck\") || result == \"Brot, Ei, Speck\")",
+            "hint": "Erst <code>fruehstueck &lt;&lt; \"Speck\"</code>, dann als letzte Zeile <code>fruehstueck.sort.join(\", \")</code> – Methoden lassen sich verketten."
           }
         ]
       },
@@ -1258,7 +1795,7 @@ window.LESSONS_JSON = JSON.stringify({
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Arrays – lists of things</h2><p>An <strong>array</strong> is a list. You write it with square brackets:</p>"
+            "html": "<h2>Arrays – lists of things</h2><p>An <strong>array</strong> is a list. You write it with square brackets, the elements separated by commas:</p>"
           },
           {
             "t": "c",
@@ -1266,11 +1803,11 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>With square brackets you access an element – counting starts at 0!</p>"
+            "html": "<p>With square brackets you access an element – counting starts at 0! Negative numbers count from the end, and asking for a position that doesn't exist gives you <code>nil</code>:</p>"
           },
           {
             "t": "c",
-            "code": "breakfast[0]"
+            "code": "puts breakfast[0]\nputs breakfast[-1]\nbreakfast[5]"
           },
           {
             "t": "h",
@@ -1282,6 +1819,30 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
+            "html": "<p>Arrays have lots of useful methods. To look at their results, use <code>p</code> instead of <code>puts</code>: <code>puts</code> would write every element on a line of its own, while <code>p</code> shows the array the way Ruby sees it – with brackets and commas:</p>"
+          },
+          {
+            "t": "c",
+            "code": "numbers = [5, 3, 8, 1, 3]\np numbers.sort          # sorted\np numbers.reverse       # reversed\np numbers.uniq          # without duplicates\np numbers.include?(8)   # in there?\np numbers.sum           # the sum\np numbers.max           # the largest\nnumbers.first(2)        # the first two"
+          },
+          {
+            "t": "h",
+            "html": "<p>None of these methods changes <code>numbers</code> – each returns a new result. Check it: afterwards <code>numbers</code> is still <code>[5, 3, 8, 1, 3]</code>. If you want to sort the array itself, there's <code>sort!</code> with an exclamation mark. In Ruby the exclamation mark is a warning: “careful, this method changes the object.”</p><p>Two handy helpers work hand in hand: <code>join</code> glues the elements into one string, <code>split</code> cuts a string into an array. And <code>%w[...]</code> is shorthand for an array of words:</p>"
+          },
+          {
+            "t": "c",
+            "code": "animals = %w[fox cat hedgehog]\nputs animals.join(\", \")\n\"bacon,egg,toast\".split(\",\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>If you also need the position while walking through, use <code>each_with_index</code>: the block then gets two parameters, the element and its number:</p>"
+          },
+          {
+            "t": "c",
+            "code": "animals.each_with_index do |animal, i|\n  puts \"#{i + 1}. #{animal}\"\nend"
+          },
+          {
+            "t": "h",
             "html": "<p>A variable name is a <strong>label stuck on an object</strong>, not a box. <code>same = breakfast</code> sticks a second label on the <em>same</em> array – <code>dup</code> makes a new one. <code>show_objects</code> draws it with arrows:</p>"
           },
           {
@@ -1290,13 +1851,17 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Now <code>breakfast</code> has juice too – and <code>copy</code> does not. But look at the strings: the copy points at the <em>same</em> <code>\"egg\"</code>. <code>dup</code> copies the array, not what is in it.</p><div class='task'><strong>Task:</strong> Append <code>\"bacon\"</code> to the array below. Bonus: print every element with <code>each</code>.</div>"
+            "html": "<p>Now <code>breakfast</code> has juice too – and <code>copy</code> does not. But look at the strings: the copy points at the <em>same</em> <code>\"egg\"</code>. <code>dup</code> copies the array, not what is in it.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<p>By the way, an array may hold anything, mixed too: numbers, strings, <code>nil</code> – even other arrays: <code>[[1, 2], [3, 4]]</code> is a little table with two rows.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html' target='_blank'>Array</a> · <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-p' target='_blank'>p</a></div><div class='task'><strong>Task:</strong> Append <code>\"bacon\"</code> to the array below. Then the cell should show the breakfast <strong>sorted</strong> and joined with commas: <code>bacon, egg, toast</code>.</div>"
           },
           {
             "t": "x",
             "code": "breakfast = [\"egg\", \"toast\"]\n# ...\n",
-            "check": "breakfast.is_a?(Array) && breakfast.include?(\"bacon\") && breakfast.include?(\"egg\")",
-            "hint": "Write <code>breakfast << \"bacon\"</code> below the first line."
+            "check": "breakfast.is_a?(Array) && breakfast.include?(\"bacon\") && breakfast.include?(\"egg\") && (output.include?(\"bacon, egg, toast\") || result == \"bacon, egg, toast\")",
+            "hint": "First <code>breakfast &lt;&lt; \"bacon\"</code>, then as the last line <code>breakfast.sort.join(\", \")</code> – methods can be chained."
           }
         ]
       },
@@ -1305,7 +1870,7 @@ window.LESSONS_JSON = JSON.stringify({
         "cells": [
           {
             "t": "h",
-            "html": "<h2>配列：ものを並べたリスト</h2><p><strong>配列</strong>はリストです。角かっこで囲んで書きます：</p>"
+            "html": "<h2>配列：ものを並べたリスト</h2><p><strong>配列</strong>はリストです。角かっこで囲み、要素をカンマで区切って書きます：</p>"
           },
           {
             "t": "c",
@@ -1313,11 +1878,11 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>要素を取り出すときも角かっこを使います。数えはじめは0からですよ！</p>"
+            "html": "<p>要素を取り出すときも角かっこを使います。数えはじめは0からですよ！ マイナスの数は後ろから数え、存在しない位置を指定すると<code>nil</code>が返ってきます：</p>"
           },
           {
             "t": "c",
-            "code": "breakfast[0]"
+            "code": "puts breakfast[0]\nputs breakfast[-1]\nbreakfast[5]"
           },
           {
             "t": "h",
@@ -1329,6 +1894,30 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
+            "html": "<p>配列には便利なメソッドがたくさんあります。結果を見るには、<code>puts</code>の代わりに<code>p</code>を使いましょう。<code>puts</code>は要素を1行ずつ書き出してしまいますが、<code>p</code>は配列をRubyから見たとおり、かっことカンマつきで表示します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "numbers = [5, 3, 8, 1, 3]\np numbers.sort          # 並べかえ\np numbers.reverse       # 逆順\np numbers.uniq          # 重複を取りのぞく\np numbers.include?(8)   # 含まれている？\np numbers.sum           # 合計\np numbers.max           # いちばん大きい数\nnumbers.first(2)        # 最初の2つ"
+          },
+          {
+            "t": "h",
+            "html": "<p>これらのメソッドは、どれも<code>numbers</code>そのものを変えません。新しい結果を返すだけです。確かめてみましょう。実行したあとも<code>numbers</code>は<code>[5, 3, 8, 1, 3]</code>のままです。配列そのものを並べかえたいときは、感嘆符のついた<code>sort!</code>を使います。Rubyでは感嘆符は「注意、このメソッドはオブジェクトを変更します」という警告なのです。</p><p>2つの便利なメソッドが、いいコンビになっています。<code>join</code>は要素をつなげて1つの文字列にし、<code>split</code>は文字列を切り分けて配列にします。また<code>%w[...]</code>は、単語の配列を短く書く方法です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "animals = %w[fox cat hedgehog]\nputs animals.join(\", \")\n\"bacon,egg,toast\".split(\",\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>たどりながら位置も知りたいときは、<code>each_with_index</code>を使います。ブロックは2つの引数、要素とその番号を受け取ります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "animals.each_with_index do |animal, i|\n  puts \"#{i + 1}. #{animal}\"\nend"
+          },
+          {
+            "t": "h",
             "html": "<p>変数名は、オブジェクトに貼った<strong>ラベル</strong>です。箱ではありません。<code>same = breakfast</code>は、<em>同じ</em>配列にもう1枚ラベルを貼るだけです。新しい配列を作るのは<code>dup</code>です。<code>show_objects</code>が矢印で描いてくれます：</p>"
           },
           {
@@ -1337,20 +1926,24 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>breakfast</code>にもjuiceが入りました。でも<code>copy</code>には入っていません。文字列も見てください。コピーも<em>同じ</em><code>\"egg\"</code>を指しています。<code>dup</code>がコピーするのは配列だけで、中身はコピーしません。</p><div class='task'><strong>課題：</strong>下の配列に<code>\"bacon\"</code>を追加しましょう。ボーナス：<code>each</code>ですべての要素を出力してみてください。</div>"
+            "html": "<p><code>breakfast</code>にもjuiceが入りました。でも<code>copy</code>には入っていません。文字列も見てください。コピーも<em>同じ</em><code>\"egg\"</code>を指しています。<code>dup</code>がコピーするのは配列だけで、中身はコピーしません。</p>"
+          },
+          {
+            "t": "h",
+            "html": "<p>ちなみに配列には何でも、混ぜて入れられます。数、文字列、<code>nil</code>、さらには別の配列も入ります。<code>[[1, 2], [3, 4]]</code>は、2行の小さな表です。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/Array.html' target='_blank'>Array</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Kernel/m/p.html' target='_blank'>p</a></div><div class='task'><strong>課題：</strong>下の配列に<code>\"bacon\"</code>を追加しましょう。そのうえで、朝ごはんを<strong>並べかえて</strong>カンマでつないだ<code>bacon, egg, toast</code>がセルに表示されるようにしてください。</div>"
           },
           {
             "t": "x",
             "code": "breakfast = [\"egg\", \"toast\"]\n# ...\n",
-            "check": "breakfast.is_a?(Array) && breakfast.include?(\"bacon\") && breakfast.include?(\"egg\")",
-            "hint": "1行目の下に<code>breakfast << \"bacon\"</code>って書いてみて。"
+            "check": "breakfast.is_a?(Array) && breakfast.include?(\"bacon\") && breakfast.include?(\"egg\") && (output.include?(\"bacon, egg, toast\") || result == \"bacon, egg, toast\")",
+            "hint": "まず<code>breakfast &lt;&lt; \"bacon\"</code>、それから最後の行に<code>breakfast.sort.join(\", \")</code>だよ。メソッドはつなげて呼べるんだ。"
           }
         ]
-      }
+      },
+      "stepper": true
     },
     {
       "id": "hashes",
-      "stepper": true,
       "de": {
         "title": "8. Hashes",
         "cells": [
@@ -1364,7 +1957,39 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Probiere auch <code>tier[:essen]</code> – oder einen Schlüssel, den es nicht gibt: dann bekommst du <code>nil</code>.</p><p><code>dup</code> kopiert nur die oberste Ebene. Steckt im Hash ein Array, teilen sich Original und Kopie dieses Array:</p>"
+            "html": "<p>Probiere auch <code>tier[:essen]</code> – oder einen Schlüssel, den es nicht gibt: dann bekommst du <code>nil</code>.</p><p>Ein Hash lässt sich jederzeit ändern: <code>tier[:alter] = 3</code> legt einen neuen Eintrag an, und dieselbe Schreibweise überschreibt einen vorhandenen. Mit <code>each</code> gehst du alle Paare durch – der Block bekommt Schlüssel <em>und</em> Wert:</p>"
+          },
+          {
+            "t": "c",
+            "code": "tier[:alter] = 3\ntier[:essen] = \"noch mehr Speck\"\ntier.each do |schluessel, wert|\n  puts \"#{schluessel}: #{wert}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ein paar nützliche Hash-Methoden. <code>fetch</code> ist die strenge Schwester von <code>[]</code>: Gibt es den Schlüssel nicht, nimmt sie den Ersatzwert, den du ihr mitgibst (ohne Ersatzwert meldet sie einen Fehler – oft besser als ein stilles <code>nil</code>):</p>"
+          },
+          {
+            "t": "c",
+            "code": "p tier.keys              # alle Schlüssel\np tier.values            # alle Werte\np tier.key?(:name)       # gibt es den Schlüssel?\np tier.length            # wie viele Paare?\ntier.fetch(:farbe, \"orange\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Symbole wie <code>:name</code> sind beliebte Schlüssel, weil sie kurz und schnell sind: Das gleiche Symbol ist immer dasselbe Objekt. Schlüssel dürfen aber alles sein – oft sind es Strings, zum Beispiel bei Daten aus dem Internet (Lektion 22). Dann schreibt man einen Pfeil <code>=&gt;</code> zwischen Schlüssel und Wert:</p>"
+          },
+          {
+            "t": "c",
+            "code": "preise = { \"Speck\" => 4.5, \"Ei\" => 1.2, \"Kaffee\" => 3.0 }\nputs preise[\"Ei\"]\np preise[:Ei]      # Achtung: ein Symbol ist kein String!"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>preise[:Ei]</code> ergibt <code>nil</code>, denn der Schlüssel heisst <code>\"Ei\"</code>, nicht <code>:Ei</code> – eine klassische Stolperfalle.</p><p>Zum Schluss ein Klassiker: Dinge zählen. <code>Hash.new(0)</code> baut einen Hash, der für fehlende Schlüssel <code>0</code> liefert statt <code>nil</code>. So kannst du einfach hochzählen, ohne vorher zu prüfen, ob es den Schlüssel schon gibt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "zaehler = Hash.new(0)\n\"chunky bacon\".delete(\" \").each_char do |buchstabe|\n  zaehler[buchstabe] += 1\nend\nzaehler"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>dup</code> kopiert nur die oberste Ebene. Steckt im Hash ein Array, teilen sich Original und Kopie dieses Array:</p>"
           },
           {
             "t": "c",
@@ -1372,13 +1997,17 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>kaz[:name]</code> ist immer noch <code>\"Kaz\"</code>, aber in <code>kaz[:mag]</code> steckt jetzt auch Toast.</p><div class='task'><strong>Aufgabe:</strong> Baue einen Hash <code>fuchs</code> mit den Schlüsseln <code>:name</code> und <code>:essen</code> (Werte darfst du wählen).</div>"
+            "html": "<p><code>kaz[:name]</code> ist immer noch <code>\"Kaz\"</code>, aber in <code>kaz[:mag]</code> steckt jetzt auch Toast.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Hash.html' target='_blank'>Hash</a> · <a href='https://docs.ruby-lang.org/en/4.0/Symbol.html' target='_blank'>Symbol</a></div><div class='task'><strong>Aufgabe:</strong> Baue einen Hash <code>fuchs</code> mit den Schlüsseln <code>:name</code> und <code>:essen</code> (Werte darfst du wählen). Füge danach mit <code>fuchs[:alter] = …</code> noch das Alter hinzu – eine Zahl.</div>"
           },
           {
             "t": "x",
             "code": "# fuchs = { ... }\n",
-            "check": "fuchs.is_a?(Hash) && fuchs[:name].to_s.length > 0 && fuchs[:essen].to_s.length > 0",
-            "hint": "Zum Beispiel: <code>fuchs = { name: \"Chunky\", essen: \"Speck\" }</code>."
+            "check": "fuchs.is_a?(Hash) && fuchs[:name].to_s.length > 0 && fuchs[:essen].to_s.length > 0 && fuchs[:alter].is_a?(Integer) && code.include?(\"fuchs[:alter]\")",
+            "hint": "Zum Beispiel: <code>fuchs = { name: \"Chunky\", essen: \"Speck\" }</code> und darunter <code>fuchs[:alter] = 3</code>."
           }
         ]
       },
@@ -1395,7 +2024,39 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Also try <code>animal[:food]</code> – or a key that doesn't exist: then you get <code>nil</code>.</p><p><code>dup</code> only copies the top level. If the hash holds an array, the original and the copy share that array:</p>"
+            "html": "<p>Also try <code>animal[:food]</code> – or a key that doesn't exist: then you get <code>nil</code>.</p><p>A hash can be changed at any time: <code>animal[:age] = 3</code> adds a new entry, and the same notation overwrites an existing one. <code>each</code> walks through all pairs – the block gets the key <em>and</em> the value:</p>"
+          },
+          {
+            "t": "c",
+            "code": "animal[:age] = 3\nanimal[:food] = \"even more bacon\"\nanimal.each do |key, value|\n  puts \"#{key}: #{value}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>A few useful hash methods. <code>fetch</code> is the strict sister of <code>[]</code>: if the key doesn't exist, it takes the fallback value you hand it (without a fallback it reports an error – often better than a silent <code>nil</code>):</p>"
+          },
+          {
+            "t": "c",
+            "code": "p animal.keys              # all keys\np animal.values            # all values\np animal.key?(:name)       # is the key there?\np animal.length            # how many pairs?\nanimal.fetch(:color, \"orange\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Symbols like <code>:name</code> are popular keys because they are short and fast: the same symbol is always the very same object. But keys may be anything – often they are strings, for example in data from the internet (lesson 22). Then you write an arrow <code>=&gt;</code> between key and value:</p>"
+          },
+          {
+            "t": "c",
+            "code": "prices = { \"bacon\" => 4.5, \"egg\" => 1.2, \"coffee\" => 3.0 }\nputs prices[\"egg\"]\np prices[:egg]      # careful: a symbol is not a string!"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>prices[:egg]</code> gives <code>nil</code>, because the key is <code>\"egg\"</code>, not <code>:egg</code> – a classic stumbling block.</p><p>To finish, a classic: counting things. <code>Hash.new(0)</code> builds a hash that answers <code>0</code> instead of <code>nil</code> for missing keys. That way you can simply count up without checking first whether the key already exists:</p>"
+          },
+          {
+            "t": "c",
+            "code": "counter = Hash.new(0)\n\"chunky bacon\".delete(\" \").each_char do |letter|\n  counter[letter] += 1\nend\ncounter"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>dup</code> only copies the top level. If the hash holds an array, the original and the copy share that array:</p>"
           },
           {
             "t": "c",
@@ -1403,13 +2064,17 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>kaz[:name]</code> is still <code>\"Kaz\"</code>, but <code>kaz[:likes]</code> has toast in it now too.</p><div class='task'><strong>Task:</strong> Build a hash <code>fox</code> with the keys <code>:name</code> and <code>:food</code> (pick any values).</div>"
+            "html": "<p><code>kaz[:name]</code> is still <code>\"Kaz\"</code>, but <code>kaz[:likes]</code> has toast in it now too.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Hash.html' target='_blank'>Hash</a> · <a href='https://docs.ruby-lang.org/en/4.0/Symbol.html' target='_blank'>Symbol</a></div><div class='task'><strong>Task:</strong> Build a hash <code>fox</code> with the keys <code>:name</code> and <code>:food</code> (pick any values). Then add the age with <code>fox[:age] = …</code> – a number.</div>"
           },
           {
             "t": "x",
             "code": "# fox = { ... }\n",
-            "check": "fox.is_a?(Hash) && fox[:name].to_s.length > 0 && fox[:food].to_s.length > 0",
-            "hint": "For example: <code>fox = { name: \"Chunky\", food: \"bacon\" }</code>."
+            "check": "fox.is_a?(Hash) && fox[:name].to_s.length > 0 && fox[:food].to_s.length > 0 && fox[:age].is_a?(Integer) && code.include?(\"fox[:age]\")",
+            "hint": "For example: <code>fox = { name: \"Chunky\", food: \"bacon\" }</code> and below it <code>fox[:age] = 3</code>."
           }
         ]
       },
@@ -1426,7 +2091,39 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>animal[:food]</code>も試してみましょう。存在しないキーを指定すると、<code>nil</code>が返ってきます。</p><p><code>dup</code>がコピーするのは、いちばん外側だけです。ハッシュの中に配列があると、元とコピーはその配列を共有します：</p>"
+            "html": "<p><code>animal[:food]</code>も試してみましょう。存在しないキーを指定すると、<code>nil</code>が返ってきます。</p><p>ハッシュはいつでも変更できます。<code>animal[:age] = 3</code>で新しい項目が加わり、同じ書き方ですでにある項目を上書きすることもできます。<code>each</code>ですべての組をたどれます。ブロックはキー<em>と</em>値を受け取ります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "animal[:age] = 3\nanimal[:food] = \"even more bacon\"\nanimal.each do |key, value|\n  puts \"#{key}: #{value}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>ハッシュの便利なメソッドをいくつか紹介します。<code>fetch</code>は<code>[]</code>の厳しい姉妹です。キーがなければ、渡しておいた代わりの値を使います（代わりの値がなければエラーを知らせます。黙って<code>nil</code>を返されるより、そのほうがよいことも多いのです）：</p>"
+          },
+          {
+            "t": "c",
+            "code": "p animal.keys              # すべてのキー\np animal.values            # すべての値\np animal.key?(:name)       # そのキーはある？\np animal.length            # 組はいくつ？\nanimal.fetch(:color, \"orange\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>:name</code>のようなシンボルは、短くて速いのでキーとしてよく使われます。同じシンボルはいつでもまったく同じオブジェクトなのです。でも、キーには何を使ってもかまいません。インターネットから取ってきたデータ（レッスン22）のように、文字列がキーになっていることもよくあります。その場合は、キーと値のあいだに矢印<code>=&gt;</code>を書きます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "prices = { \"bacon\" => 4.5, \"egg\" => 1.2, \"coffee\" => 3.0 }\nputs prices[\"egg\"]\np prices[:egg]      # 注意：シンボルは文字列ではない！"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>prices[:egg]</code>は<code>nil</code>になります。キーは<code>:egg</code>ではなく<code>\"egg\"</code>だからです。よくあるつまずきポイントです。</p><p>最後に定番の使い方、「数を数える」です。<code>Hash.new(0)</code>で作ったハッシュは、存在しないキーに対して<code>nil</code>ではなく<code>0</code>を返します。だから、キーがもうあるかどうかを確かめなくても、そのまま数を増やしていけます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "counter = Hash.new(0)\n\"chunky bacon\".delete(\" \").each_char do |letter|\n  counter[letter] += 1\nend\ncounter"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>dup</code>がコピーするのは、いちばん外側だけです。ハッシュの中に配列があると、元とコピーはその配列を共有します：</p>"
           },
           {
             "t": "c",
@@ -1434,22 +2131,242 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>kaz[:name]</code>は<code>\"Kaz\"</code>のままですが、<code>kaz[:likes]</code>にもtoastが入りました。</p><div class='task'><strong>課題：</strong>キー<code>:name</code>と<code>:food</code>を持つハッシュ<code>fox</code>を作りましょう（値は何でもかまいません）。</div>"
+            "html": "<p><code>kaz[:name]</code>は<code>\"Kaz\"</code>のままですが、<code>kaz[:likes]</code>にもtoastが入りました。</p>"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/Hash.html' target='_blank'>Hash</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Symbol.html' target='_blank'>Symbol</a></div><div class='task'><strong>課題：</strong>キー<code>:name</code>と<code>:food</code>を持つハッシュ<code>fox</code>を作りましょう（値は何でもかまいません）。そのあと、<code>fox[:age] = …</code>で年齢（数）も追加してください。</div>"
           },
           {
             "t": "x",
             "code": "# fox = { ... }\n",
-            "check": "fox.is_a?(Hash) && fox[:name].to_s.length > 0 && fox[:food].to_s.length > 0",
-            "hint": "たとえば<code>fox = { name: \"Chunky\", food: \"bacon\" }</code>みたいにね。"
+            "check": "fox.is_a?(Hash) && fox[:name].to_s.length > 0 && fox[:food].to_s.length > 0 && fox[:age].is_a?(Integer) && code.include?(\"fox[:age]\")",
+            "hint": "たとえば<code>fox = { name: \"Chunky\", food: \"bacon\" }</code>と書いて、その下に<code>fox[:age] = 3</code>だよ。"
+          }
+        ]
+      },
+      "stepper": true
+    },
+    {
+      "id": "iteratoren",
+      "de": {
+        "title": "9. map, select & Co.",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Listen verwandeln: map, select &amp; Co.</h2><p>Mit <code>each</code> gehst du durch eine Liste und tust etwas mit jedem Element. Meistens willst du aber ein <em>Ergebnis</em>: eine neue Liste, eine Auswahl, eine Summe. Dafür hat Ruby eine ganze Werkzeugkiste voller Methoden, die alle einen Block nehmen. Die wichtigste heisst <code>map</code>: Sie ruft den Block für jedes Element auf und sammelt die Ergebnisse in einem <strong>neuen</strong> Array:</p>"
+          },
+          {
+            "t": "c",
+            "code": "preise = [4.5, 1.2, 3.0, 2.8]\npreise.map { |preis| preis * 2 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das Original bleibt, wie es ist – <code>map</code> baut ein neues Array, gleich lang wie das alte. Im Block darf stehen, was du willst:</p>"
+          },
+          {
+            "t": "c",
+            "code": "tiere = [\"fuchs\", \"katze\", \"igel\"]\ntiere.map { |tier| \"#{tier.capitalize} sagt hallo\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Zum Aussieben gibt es <code>select</code>: Es behält nur die Elemente, für die der Block <code>true</code> ergibt. <code>reject</code> macht das Gegenteil und wirft sie hinaus. <code>find</code> sucht das <em>erste</em> passende Element:</p>"
+          },
+          {
+            "t": "c",
+            "code": "zahlen = [3, 8, 12, 5, 7, 10]\np zahlen.select { |zahl| zahl.even? }\np zahlen.reject { |zahl| zahl > 6 }\nzahlen.find { |zahl| zahl > 6 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Auch zum Auswerten nehmen viele Methoden einen Block, der sagt, <em>worauf</em> es ankommt: <code>count</code> zählt, <code>sum</code> zählt zusammen, <code>max_by</code> und <code>min_by</code> finden den Spitzenreiter, <code>sort_by</code> sortiert:</p>"
+          },
+          {
+            "t": "c",
+            "code": "woerter = [\"Speck\", \"Ei\", \"Kaffee\", \"Brot\"]\np woerter.count { |wort| wort.length > 3 }\np woerter.sum { |wort| wort.length }\np woerter.max_by { |wort| wort.length }\nwoerter.sort_by { |wort| wort.length }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Weil jede dieser Methoden ein neues Ergebnis liefert, kannst du sie <strong>verketten</strong> – wie an einem Fliessband:</p>"
+          },
+          {
+            "t": "c",
+            "code": "zahlen.select { |zahl| zahl.even? }.map { |zahl| zahl * 10 }.sum"
+          },
+          {
+            "t": "h",
+            "html": "<p>Lies die Kette von links nach rechts: „Nimm die geraden Zahlen, verzehnfache jede, zähl alles zusammen.“ Ruft der Block nur eine einzige Methode auf, gibt es eine Kurzschrift: <code>map(&amp;:upcase)</code> bedeutet dasselbe wie <code>map { |wort| wort.upcase }</code>. Und Fragen an die ganze Liste stellen <code>any?</code> („mindestens eins?“) und <code>all?</code> („alle?“):</p>"
+          },
+          {
+            "t": "c",
+            "code": "p woerter.map(&:upcase)\np woerter.any? { |wort| wort.start_with?(\"K\") }\nwoerter.all? { |wort| wort.length > 1 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Hashes können das alles auch. Der Block bekommt dann zwei Parameter, Schlüssel und Wert – und <code>select</code> liefert wieder einen Hash:</p>"
+          },
+          {
+            "t": "c",
+            "code": "karte = { \"Speck\" => 4.5, \"Ei\" => 1.2, \"Kaffee\" => 3.0, \"Toast\" => 2.0 }\np karte.select { |essen, preis| preis < 3 }\np karte.map { |essen, preis| \"#{essen}: #{preis} Fr.\" }\nkarte.sum { |essen, preis| preis }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Eine Faustregel zum Merken: <code>each</code> zum Tun, <code>map</code> zum Verwandeln, <code>select</code> und <code>reject</code> zum Aussieben, <code>sum</code>, <code>count</code> und <code>max_by</code> zum Auswerten. Alle diese Methoden stammen aus dem Modul <code>Enumerable</code> – was ein Modul ist, erfährst du in Lektion 15. In seiner Doku findest du noch Dutzende mehr, etwa <code>group_by</code>, <code>tally</code> oder <code>each_slice</code>.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html' target='_blank'>Enumerable</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-map' target='_blank'>Array#map</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-select' target='_blank'>Array#select</a></div><div class='task'><strong>Aufgabe:</strong> Unten stehen die Punktzahlen eines Tests. Lege zwei Variablen an: <code>bestanden</code> – alle Punktzahlen ab 60 (mit <code>select</code>) – und <code>mit_bonus</code> – jede bestandene Punktzahl plus 5 (mit <code>map</code>). Erwartet sind <code>[72, 88, 91, 60]</code> und <code>[77, 93, 96, 65]</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "punkte = [72, 45, 88, 91, 30, 60]\n# bestanden = punkte.select { ... }\n# mit_bonus = ...\n",
+            "check": "bestanden == [72, 88, 91, 60] && mit_bonus == [77, 93, 96, 65] && code.include?(\"select\") && code.include?(\"map\")",
+            "hint": "<code>bestanden = punkte.select { |punkt| punkt &gt;= 60 }</code> und danach <code>mit_bonus = bestanden.map { |punkt| punkt + 5 }</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "9. map, select & co.",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Transforming lists: map, select &amp; co.</h2><p>With <code>each</code> you walk through a list and do something with every element. Most of the time, though, you want a <em>result</em>: a new list, a selection, a sum. For that, Ruby has a whole toolbox of methods that all take a block. The most important one is called <code>map</code>: it calls the block for every element and collects the results in a <strong>new</strong> array:</p>"
+          },
+          {
+            "t": "c",
+            "code": "prices = [4.5, 1.2, 3.0, 2.8]\nprices.map { |price| price * 2 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>The original stays as it is – <code>map</code> builds a new array, just as long as the old one. The block may contain whatever you like:</p>"
+          },
+          {
+            "t": "c",
+            "code": "animals = [\"fox\", \"cat\", \"hedgehog\"]\nanimals.map { |animal| \"#{animal.capitalize} says hello\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>For sifting there's <code>select</code>: it keeps only the elements for which the block gives <code>true</code>. <code>reject</code> does the opposite and throws them out. <code>find</code> looks for the <em>first</em> matching element:</p>"
+          },
+          {
+            "t": "c",
+            "code": "numbers = [3, 8, 12, 5, 7, 10]\np numbers.select { |number| number.even? }\np numbers.reject { |number| number > 6 }\nnumbers.find { |number| number > 6 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Many methods for evaluating a list take a block, too – it says <em>what</em> matters: <code>count</code> counts, <code>sum</code> adds up, <code>max_by</code> and <code>min_by</code> find the champion, <code>sort_by</code> sorts:</p>"
+          },
+          {
+            "t": "c",
+            "code": "words = [\"bacon\", \"egg\", \"coffee\", \"milk\"]\np words.count { |word| word.length > 3 }\np words.sum { |word| word.length }\np words.max_by { |word| word.length }\nwords.sort_by { |word| word.length }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Because every one of these methods returns a new result, you can <strong>chain</strong> them – like on a conveyor belt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "numbers.select { |number| number.even? }.map { |number| number * 10 }.sum"
+          },
+          {
+            "t": "h",
+            "html": "<p>Read the chain from left to right: “take the even numbers, multiply each by ten, add everything up.” If the block calls just a single method, there's a shorthand: <code>map(&amp;:upcase)</code> means the same as <code>map { |word| word.upcase }</code>. And questions about the whole list are asked with <code>any?</code> (“at least one?”) and <code>all?</code> (“every one?”):</p>"
+          },
+          {
+            "t": "c",
+            "code": "p words.map(&:upcase)\np words.any? { |word| word.start_with?(\"c\") }\nwords.all? { |word| word.length > 1 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Hashes can do all of this, too. The block then gets two parameters, key and value – and <code>select</code> returns a hash again:</p>"
+          },
+          {
+            "t": "c",
+            "code": "menu = { \"bacon\" => 4.5, \"egg\" => 1.2, \"coffee\" => 3.0, \"toast\" => 2.0 }\np menu.select { |dish, price| price < 3 }\np menu.map { |dish, price| \"#{dish}: #{price} francs\" }\nmenu.sum { |dish, price| price }"
+          },
+          {
+            "t": "h",
+            "html": "<p>A rule of thumb to remember: <code>each</code> for doing, <code>map</code> for transforming, <code>select</code> and <code>reject</code> for sifting, <code>sum</code>, <code>count</code> and <code>max_by</code> for evaluating. All of these methods come from the module <code>Enumerable</code> – what a module is, you'll learn in lesson 15. Its documentation lists dozens more, such as <code>group_by</code>, <code>tally</code> or <code>each_slice</code>.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html' target='_blank'>Enumerable</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-map' target='_blank'>Array#map</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-select' target='_blank'>Array#select</a></div><div class='task'><strong>Task:</strong> Below are the scores of a test. Create two variables: <code>passed</code> – all scores of 60 or more (with <code>select</code>) – and <code>with_bonus</code> – every passed score plus 5 (with <code>map</code>). Expected are <code>[72, 88, 91, 60]</code> and <code>[77, 93, 96, 65]</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "scores = [72, 45, 88, 91, 30, 60]\n# passed = scores.select { ... }\n# with_bonus = ...\n",
+            "check": "passed == [72, 88, 91, 60] && with_bonus == [77, 93, 96, 65] && code.include?(\"select\") && code.include?(\"map\")",
+            "hint": "<code>passed = scores.select { |score| score &gt;= 60 }</code> and then <code>with_bonus = passed.map { |score| score + 5 }</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "9. mapとselectの仲間たち",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>リストを変身させる：map、selectとその仲間たち</h2><p><code>each</code>を使えば、リストをたどりながら要素の1つ1つに何かができます。でもたいていの場合、ほしいのは<em>結果</em>です。新しいリスト、選び出したもの、合計…。そのためにRubyには、ブロックを受け取るメソッドが道具箱いっぱいにそろっています。いちばん大事なのが<code>map</code>です。要素ごとにブロックを呼び出し、その結果を<strong>新しい</strong>配列に集めます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "prices = [4.5, 1.2, 3.0, 2.8]\nprices.map { |price| price * 2 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>もとの配列はそのままです。<code>map</code>は、もとと同じ長さの新しい配列を作ります。ブロックの中には何を書いてもかまいません：</p>"
+          },
+          {
+            "t": "c",
+            "code": "animals = [\"fox\", \"cat\", \"hedgehog\"]\nanimals.map { |animal| \"#{animal.capitalize} says hello\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>ふるい分けには<code>select</code>を使います。ブロックが<code>true</code>になった要素だけを残します。<code>reject</code>はその反対で、そういう要素を取りのぞきます。<code>find</code>は、条件に合う<em>最初の</em>要素を探します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "numbers = [3, 8, 12, 5, 7, 10]\np numbers.select { |number| number.even? }\np numbers.reject { |number| number > 6 }\nnumbers.find { |number| number > 6 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>リストを評価するメソッドの多くも、ブロックを受け取ります。ブロックで、<em>何に注目するか</em>を伝えるのです。<code>count</code>は数え、<code>sum</code>は合計し、<code>max_by</code>と<code>min_by</code>はいちばんのものを見つけ、<code>sort_by</code>は並べかえます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "words = [\"bacon\", \"egg\", \"coffee\", \"milk\"]\np words.count { |word| word.length > 3 }\np words.sum { |word| word.length }\np words.max_by { |word| word.length }\nwords.sort_by { |word| word.length }"
+          },
+          {
+            "t": "h",
+            "html": "<p>どのメソッドも新しい結果を返すので、<strong>つなげて</strong>呼び出せます。まるでベルトコンベアのようです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "numbers.select { |number| number.even? }.map { |number| number * 10 }.sum"
+          },
+          {
+            "t": "h",
+            "html": "<p>左から右へ読んでみましょう。「偶数を取り出し、それぞれ10倍して、全部たす」。ブロックの中でメソッドを1つ呼ぶだけなら、短い書き方があります。<code>map(&amp;:upcase)</code>は<code>map { |word| word.upcase }</code>と同じ意味です。また、リスト全体への質問には<code>any?</code>（「1つでも？」）と<code>all?</code>（「全部？」）を使います：</p>"
+          },
+          {
+            "t": "c",
+            "code": "p words.map(&:upcase)\np words.any? { |word| word.start_with?(\"c\") }\nwords.all? { |word| word.length > 1 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>ハッシュでも同じことができます。その場合、ブロックはキーと値の2つの引数を受け取ります。そして<code>select</code>は、またハッシュを返します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "menu = { \"bacon\" => 4.5, \"egg\" => 1.2, \"coffee\" => 3.0, \"toast\" => 2.0 }\np menu.select { |dish, price| price < 3 }\np menu.map { |dish, price| \"#{dish}: #{price} francs\" }\nmenu.sum { |dish, price| price }"
+          },
+          {
+            "t": "h",
+            "html": "<p>覚えやすい目安です。<code>each</code>は何かをするため、<code>map</code>は変換するため、<code>select</code>と<code>reject</code>はふるい分けるため、<code>sum</code>、<code>count</code>、<code>max_by</code>は評価するため。これらのメソッドはすべて<code>Enumerable</code>というモジュールから来ています。モジュールとは何かは、レッスン15で学びます。ドキュメントには、<code>group_by</code>、<code>tally</code>、<code>each_slice</code>など、まだ何十ものメソッドが載っています。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/Enumerable.html' target='_blank'>Enumerable</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Array/i/map.html' target='_blank'>Array#map</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Array/i/select.html' target='_blank'>Array#select</a></div><div class='task'><strong>課題：</strong>下にテストの点数があります。変数を2つ作りましょう。<code>passed</code>には60点以上の点数をすべて（<code>select</code>で）、<code>with_bonus</code>には合格した点数それぞれに5点たしたものを（<code>map</code>で）入れます。答えは<code>[72, 88, 91, 60]</code>と<code>[77, 93, 96, 65]</code>になるはずです。</div>"
+          },
+          {
+            "t": "x",
+            "code": "scores = [72, 45, 88, 91, 30, 60]\n# passed = scores.select { ... }\n# with_bonus = ...\n",
+            "check": "passed == [72, 88, 91, 60] && with_bonus == [77, 93, 96, 65] && code.include?(\"select\") && code.include?(\"map\")",
+            "hint": "<code>passed = scores.select { |score| score &gt;= 60 }</code>、それから<code>with_bonus = passed.map { |score| score + 5 }</code>だよ。"
           }
         ]
       }
     },
     {
       "id": "methoden",
-      "stepper": true,
       "de": {
-        "title": "9. Methoden",
+        "title": "10. Methoden",
         "cells": [
           {
             "t": "h",
@@ -1469,11 +2386,32 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Genau deshalb lesen sich viele Ruby-Zeilen wie normale Sprache. Die Faustregel der Rubyisten: Klammern <em>weglassen</em>, wenn der Aufruf wie eine Anweisung wirkt (<code>puts \"…\"</code>, <code>require \"csv\"</code>) – Klammern <em>setzen</em>, wenn du mit dem Ergebnis weiterrechnest (<code>begruessung(\"Kaz\").upcase</code>). Bei Aufrufen ganz ohne Argumente lässt man sie fast immer weg: <code>name.upcase</code> statt <code>name.upcase()</code>.</p>"
+            "html": "<p>Genau deshalb lesen sich viele Ruby-Zeilen wie normale Sprache. Die Faustregel der Rubyisten: Klammern <em>weglassen</em>, wenn der Aufruf wie eine Anweisung wirkt (<code>puts \"…\"</code>, <code>require \"csv\"</code>) – Klammern <em>setzen</em>, wenn du mit dem Ergebnis weiterrechnest (<code>begruessung(\"Kaz\").upcase</code>). Bei Aufrufen ganz ohne Argumente lässt man sie fast immer weg: <code>name.upcase</code> statt <code>name.upcase()</code>.</p><p>Der Wert der <em>letzten Zeile</em> einer Methode ist automatisch ihr Rückgabewert – ein <code>return</code> ist meist unnötig. Das ist sehr rubyisch.</p><p>Eine Methode darf mehrere Parameter haben, und Parameter dürfen einen <strong>Standardwert</strong> bekommen: Lässt du das Argument beim Aufruf weg, nimmt Ruby den Standardwert:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def gruss(name, wort = \"Hallo\")\n  \"#{wort}, #{name}!\"\nend\n\nputs gruss(\"Kaz\")\nputs gruss(\"Kaz\", \"Grüezi\")"
           },
           {
             "t": "h",
-            "html": "<p>Der Wert der <em>letzten Zeile</em> einer Methode ist automatisch ihr Rückgabewert – ein <code>return</code> ist meist unnötig. Das ist sehr rubyisch.</p><div class='task'><strong>Aufgabe:</strong> Schreibe eine Methode <code>quadrat(zahl)</code>, die die Zahl mit sich selbst multipliziert zurückgibt. Teste sie: <code>quadrat(9)</code> als letzte Zeile.</div>"
+            "html": "<p>Methoden, die eine Ja-Nein-Frage beantworten, enden in Ruby mit einem <code>?</code> – wie <code>even?</code> oder <code>include?</code> – und geben <code>true</code> oder <code>false</code> zurück. Und mit <code>return</code> verlässt du eine Methode vorzeitig, zum Beispiel, wenn es gar nichts zu rechnen gibt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def satt?(streifen)\n  streifen >= 3\nend\n\ndef speck_teilen(streifen, personen)\n  return \"Niemand da!\" if personen == 0\n\n  \"Jede Person bekommt #{streifen / personen} Streifen.\"\nend\n\nputs satt?(5)\nputs speck_teilen(12, 4)\nputs speck_teilen(12, 0)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jetzt eine typische Stolperfalle: Eine Methode ist ein eigener kleiner Raum. Variablen von draussen sieht sie <em>nicht</em> – was sie braucht, bekommt sie als Argument. Führ die Zelle aus:</p>"
+          },
+          {
+            "t": "c",
+            "code": "essen = \"Speck\"\n\ndef was_gibts\n  \"Heute gibt es #{essen}.\"\nend\n\nwas_gibts",
+            "raises": "NameError"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ruby meldet einen <code>NameError</code>: Innerhalb von <code>was_gibts</code> gibt es kein <code>essen</code>. Die Lösung ist ein Parameter – <code>def was_gibts(essen)</code>, aufgerufen mit <code>was_gibts(essen)</code>. Umgekehrt gilt dasselbe: Variablen, die in einer Methode entstehen, bleiben drinnen. Das ist Absicht: So kann eine Methode nichts kaputt machen, was ihr nicht gehört.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/syntax/methods_rdoc.html' target='_blank'>Methoden definieren</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/calling_methods_rdoc.html' target='_blank'>Methoden aufrufen</a></div><div class='task'><strong>Aufgabe:</strong> Schreibe eine Methode <code>quadrat(zahl)</code>, die die Zahl mit sich selbst multipliziert zurückgibt. Teste sie: <code>quadrat(9)</code> als letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -1484,7 +2422,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "9. Methods",
+        "title": "10. Methods",
         "cells": [
           {
             "t": "h",
@@ -1504,11 +2442,32 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>That's exactly why so many Ruby lines read like plain language. The Rubyists' rule of thumb: <em>omit</em> the parentheses when the call reads like a statement (<code>puts \"…\"</code>, <code>require \"csv\"</code>) – <em>use</em> them when you keep computing with the result (<code>greeting(\"Kaz\").upcase</code>). For calls with no arguments at all they're almost always omitted: <code>name.upcase</code> instead of <code>name.upcase()</code>.</p>"
+            "html": "<p>That's exactly why so many Ruby lines read like plain language. The Rubyists' rule of thumb: <em>omit</em> the parentheses when the call reads like a statement (<code>puts \"…\"</code>, <code>require \"csv\"</code>) – <em>use</em> them when you keep computing with the result (<code>greeting(\"Kaz\").upcase</code>). For calls with no arguments at all they're almost always omitted: <code>name.upcase</code> instead of <code>name.upcase()</code>.</p><p>The value of a method's <em>last line</em> is automatically its return value – an explicit <code>return</code> is usually unnecessary. Very Ruby.</p><p>A method may have several parameters, and parameters may get a <strong>default value</strong>: leave the argument out when calling, and Ruby takes the default:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def greet(name, word = \"Hello\")\n  \"#{word}, #{name}!\"\nend\n\nputs greet(\"Kaz\")\nputs greet(\"Kaz\", \"Howdy\")"
           },
           {
             "t": "h",
-            "html": "<p>The value of a method's <em>last line</em> is automatically its return value – an explicit <code>return</code> is usually unnecessary. Very Ruby.</p><div class='task'><strong>Task:</strong> Write a method <code>square(number)</code> that returns the number multiplied by itself. Test it: <code>square(9)</code> as the last line.</div>"
+            "html": "<p>Methods that answer a yes-or-no question end in <code>?</code> in Ruby – like <code>even?</code> or <code>include?</code> – and return <code>true</code> or <code>false</code>. And <code>return</code> leaves a method early, for example when there is nothing to compute:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def full?(strips)\n  strips >= 3\nend\n\ndef share_bacon(strips, people)\n  return \"Nobody here!\" if people == 0\n\n  \"Everyone gets #{strips / people} strips.\"\nend\n\nputs full?(5)\nputs share_bacon(12, 4)\nputs share_bacon(12, 0)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Now a typical stumbling block: a method is a little room of its own. It does <em>not</em> see variables from outside – what it needs, it gets as an argument. Run the cell:</p>"
+          },
+          {
+            "t": "c",
+            "code": "food = \"bacon\"\n\ndef whats_cooking\n  \"Today we have #{food}.\"\nend\n\nwhats_cooking",
+            "raises": "NameError"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ruby reports a <code>NameError</code>: inside <code>whats_cooking</code> there is no <code>food</code>. The fix is a parameter – <code>def whats_cooking(food)</code>, called as <code>whats_cooking(food)</code>. The same holds the other way round: variables created inside a method stay inside. That's on purpose: this way a method cannot break anything that isn't its own.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/methods_rdoc.html' target='_blank'>Defining methods</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/calling_methods_rdoc.html' target='_blank'>Calling methods</a></div><div class='task'><strong>Task:</strong> Write a method <code>square(number)</code> that returns the number multiplied by itself. Test it: <code>square(9)</code> as the last line.</div>"
           },
           {
             "t": "x",
@@ -1519,7 +2478,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "9. メソッド",
+        "title": "10. メソッド",
         "cells": [
           {
             "t": "h",
@@ -1539,11 +2498,32 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Rubyのコードの多くがふつうの英文のように読めるのは、まさにこのおかげです。Rubyistの目安はこうです：呼び出しが命令文のように読めるとき（<code>puts \"…\"</code>、<code>require \"csv\"</code>）はかっこを<em>省き</em>、結果を使ってさらに計算を続けるとき（<code>greeting(\"Kaz\").upcase</code>）はかっこを<em>つけます</em>。引数がひとつもない呼び出しでは、ほぼ必ず省略します。<code>name.upcase()</code>ではなく<code>name.upcase</code>と書きます。</p>"
+            "html": "<p>Rubyのコードの多くがふつうの英文のように読めるのは、まさにこのおかげです。Rubyistの目安はこうです：呼び出しが命令文のように読めるとき（<code>puts \"…\"</code>、<code>require \"csv\"</code>）はかっこを<em>省き</em>、結果を使ってさらに計算を続けるとき（<code>greeting(\"Kaz\").upcase</code>）はかっこを<em>つけます</em>。引数がひとつもない呼び出しでは、ほぼ必ず省略します。<code>name.upcase()</code>ではなく<code>name.upcase</code>と書きます。</p><p>メソッドの<em>最後の行</em>の値は、自動的にそのメソッドの戻り値になります。わざわざ<code>return</code>と書く必要は、たいていありません。いかにもRubyらしいところです。</p><p>メソッドには引数をいくつでも持たせられ、引数には<strong>デフォルト値</strong>もつけられます。呼び出すときにその引数を省くと、Rubyはデフォルト値を使います：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def greet(name, word = \"Hello\")\n  \"#{word}, #{name}!\"\nend\n\nputs greet(\"Kaz\")\nputs greet(\"Kaz\", \"Howdy\")"
           },
           {
             "t": "h",
-            "html": "<p>メソッドの<em>最後の行</em>の値は、自動的にそのメソッドの戻り値になります。わざわざ<code>return</code>と書く必要は、たいていありません。いかにもRubyらしいところです。</p><div class='task'><strong>課題：</strong>数をそれ自身とかけ合わせた値を返すメソッド<code>square(number)</code>を書きましょう。最後の行を<code>square(9)</code>にして試してください。</div>"
+            "html": "<p>はい・いいえで答えるメソッドは、Rubyでは<code>?</code>で終わる名前にします。<code>even?</code>や<code>include?</code>のように、<code>true</code>か<code>false</code>を返すのです。また<code>return</code>を使うと、途中でメソッドを抜けられます。たとえば、計算することが何もないときです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def full?(strips)\n  strips >= 3\nend\n\ndef share_bacon(strips, people)\n  return \"Nobody here!\" if people == 0\n\n  \"Everyone gets #{strips / people} strips.\"\nend\n\nputs full?(5)\nputs share_bacon(12, 4)\nputs share_bacon(12, 0)"
+          },
+          {
+            "t": "h",
+            "html": "<p>ここで、よくあるつまずきポイントです。メソッドは、それぞれが小さな独立した部屋です。外の変数は<em>見えません</em>。必要なものは引数として受け取ります。セルを実行してみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "food = \"bacon\"\n\ndef whats_cooking\n  \"Today we have #{food}.\"\nend\n\nwhats_cooking",
+            "raises": "NameError"
+          },
+          {
+            "t": "h",
+            "html": "<p>Rubyは<code>NameError</code>を報告します。<code>whats_cooking</code>の中には<code>food</code>がないからです。解決策は引数です。<code>def whats_cooking(food)</code>と定義して、<code>whats_cooking(food)</code>と呼び出します。逆も同じで、メソッドの中で作った変数は中にとどまります。これはわざとそうなっているのです。こうしておけば、メソッドが自分のものでないものを壊すことはありません。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fdef.html' target='_blank'>メソッド定義</a>・<a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fcall.html' target='_blank'>メソッド呼び出し</a></div><div class='task'><strong>課題：</strong>数をそれ自身とかけ合わせた値を返すメソッド<code>square(number)</code>を書きましょう。最後の行を<code>square(9)</code>にして試してください。</div>"
           },
           {
             "t": "x",
@@ -1552,13 +2532,276 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "こんなふうに書くよ：<code>def square(number)</code>、その下に<code>number * number</code>、最後に<code>end</code>。"
           }
         ]
-      }
+      },
+      "stepper": true
+    },
+    {
+      "id": "fehler",
+      "de": {
+        "title": "11. Fehlermeldungen lesen",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Fehlermeldungen lesen</h2><p>Fehler gehören zum Programmieren wie Kleckse zum Malen – auch Profis sehen jeden Tag Dutzende davon. Der Unterschied: Sie <strong>lesen</strong> die Meldung. Denn Ruby sagt erstaunlich genau, was los ist. Eine Fehlermeldung hat drei Teile: die <strong>Art</strong> des Fehlers (eine Klasse wie <code>NameError</code>), eine <strong>Beschreibung</strong> und die <strong>Zeile</strong>, in der es passiert ist – im Notizbuch markiert Ruby sie rot.</p><p>Die meisten Zellen dieser Lektion gehen absichtlich schief. Der häufigste Fehler überhaupt ist ein Tippfehler:</p>"
+          },
+          {
+            "t": "c",
+            "code": "name = \"Chunky\"\nnmae.upcase",
+            "raises": "NameError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>NameError: undefined local variable or method 'nmae' for main</code> heisst: Ruby kennt den Namen <code>nmae</code> nicht – weder als Variable noch als Methode. Meistens ist es ein Tippfehler, und Ruby schlägt unter der Meldung gleich vor, was du gemeint haben könntest. Der zweite häufige Grund im Notizbuch: Die Variable stammt aus einer Zelle weiter oben, die du noch nicht ausgeführt hast.</p>"
+          },
+          {
+            "t": "c",
+            "code": "42.upcase",
+            "raises": "NoMethodError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>NoMethodError: undefined method 'upcase' for an instance of Integer</code> – die Methode gibt es zwar, aber nicht für diese Art von Objekt: Eine Zahl kann man nicht grossschreiben. Die Frage ist dann: Was für ein Objekt habe ich hier eigentlich? <code>.class</code> verrät es.</p><p>Die tückischste Variante dieses Fehlers nennt <code>nil</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "tier = { name: \"Chunky\", essen: \"Speck\" }\ntier[:esen].upcase",
+            "raises": "NoMethodError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>undefined method 'upcase' for nil</code> – hier ist nicht <code>upcase</code> das Problem, sondern das <code>nil</code>: <code>tier[:esen]</code> hat nichts gefunden, weil der Schlüssel einen Tippfehler hat. Steht <code>nil</code> in einer Meldung, frag dich: <strong>Woher kommt das <code>nil</code>?</strong> Ein <code>p</code> zeigt dir, was wirklich in einem Wert steckt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p tier[:esen]\np tier[:essen]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Noch besser: Lass den Fehler gar nicht erst weiterwandern. <code>fetch</code> meldet einen fehlenden Schlüssel sofort – dort, wo er fehlt, statt drei Zeilen später als rätselhaftes <code>nil</code>. Und auch hier gibt es einen Vorschlag:</p>"
+          },
+          {
+            "t": "c",
+            "code": "tier.fetch(:esen)",
+            "raises": "KeyError"
+          },
+          {
+            "t": "h",
+            "html": "<p>Weiter mit einem Fehler, der Text und Zahl verwechselt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "menge = 3\n\"Speck: \" + menge",
+            "raises": "TypeError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>TypeError: no implicit conversion of Integer into String</code> – Ruby verwandelt eine Zahl nicht heimlich in Text, um sie an einen String zu hängen. Sag es ausdrücklich: mit Interpolation <code>\"Speck: #{menge}\"</code> oder mit <code>menge.to_s</code>.</p>"
+          },
+          {
+            "t": "c",
+            "code": "def quadrat(zahl)\n  zahl * zahl\nend\n\nquadrat(3, 4)",
+            "raises": "ArgumentError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>ArgumentError: wrong number of arguments (given 2, expected 1)</code> – die Methode will ein Argument, bekommen hat sie zwei. Schau nach, wie die Methode definiert ist.</p><p>Und dann gibt es Fehler, bei denen Ruby den Code gar nicht erst versteht – den <code>SyntaxError</code>. Hier fehlt ein <code>end</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "if 3 > 2\n  puts \"Speck!\"",
+            "raises": "SyntaxError"
+          },
+          {
+            "t": "h",
+            "html": "<p>Bei einem Syntaxfehler läuft keine einzige Zeile. Ruby zeigt mit <code>^</code> auf die Stellen, an denen es nicht weiterwusste: beim <code>if</code>, das kein <code>end</code> bekommt, und am Ende des Codes, wo das <code>end</code> spätestens hätte kommen müssen. Saubere Einrückung hilft, so etwas sofort zu sehen. Die wichtigsten Fehler auf einen Blick:</p><table class='cheat'><thead><tr><th>Fehler</th><th>Was meistens dahintersteckt</th></tr></thead><tbody><tr><td><code>NameError</code></td><td>ein Tippfehler im Namen, oder die Zelle, die den Namen anlegt, lief noch nicht</td></tr><tr><td><code>NoMethodError</code></td><td>die Methode gibt es für dieses Objekt nicht – oft ist es unerwartet <code>nil</code></td></tr><tr><td><code>TypeError</code></td><td>zwei Arten von Werten passen nicht zusammen, etwa String und Zahl</td></tr><tr><td><code>ArgumentError</code></td><td>zu viele oder zu wenige Argumente, oder ein Wert, mit dem die Methode nichts anfangen kann</td></tr><tr><td><code>ZeroDivisionError</code></td><td>eine ganze Zahl wurde durch 0 geteilt</td></tr><tr><td><code>KeyError</code></td><td><code>fetch</code> mit einem Schlüssel, den es nicht gibt</td></tr><tr><td><code>SyntaxError</code></td><td>Ruby versteht den Code nicht: ein fehlendes <code>end</code>, eine Klammer oder ein Anführungszeichen</td></tr></tbody></table><p>Wenn es kracht: 1. Lies die Meldung ganz – Fehlerklasse und Text. 2. Geh zur markierten Zeile. 3. Schau mit <code>p</code> nach, was die Werte dort wirklich sind. Und wenn alles nichts hilft, kopiere die Meldung in eine Suchmaschine – du bist garantiert nicht die erste Person mit diesem Fehler. Wie deine eigenen Programme Fehler abfangen, statt abzustürzen, zeigt später Lektion 59.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Exception.html' target='_blank'>Exception – alle Fehlerklassen</a> · <a href='https://docs.ruby-lang.org/en/4.0/NoMethodError.html' target='_blank'>NoMethodError</a></div><div class='task'><strong>Aufgabe:</strong> Die Zelle unten soll den Satz <code>Chunky isst 3 Streifen Speck.</code> ergeben – aber sie hat drei Fehler. Führ sie aus, lies die Meldung, repariere die markierte Stelle, und wiederhole das, bis alles läuft.</div>"
+          },
+          {
+            "t": "x",
+            "code": "fuchs = { name: \"Chunky\", streifen: 3 }\n\ndef satz(tier)\n  \"#{tier[:name]} isst \" + tier[:streifen] + \" Streifen Speck.\"\nend\n\nsatz(fuchss, 3)\n",
+            "check": "output.include?(\"Chunky isst 3 Streifen Speck.\") || result == \"Chunky isst 3 Streifen Speck.\"",
+            "hint": "Der Reihe nach: <code>fuchss</code> heisst <code>fuchs</code>, <code>satz</code> will nur ein Argument, und die Zahl gehört per Interpolation in den Text: <code>\"#{tier[:name]} isst #{tier[:streifen]} Streifen Speck.\"</code>"
+          }
+        ]
+      },
+      "en": {
+        "title": "11. Reading error messages",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Reading error messages</h2><p>Errors belong to programming like splashes belong to painting – even professionals see dozens of them every day. The difference: they <strong>read</strong> the message. Because Ruby tells you surprisingly precisely what's wrong. An error message has three parts: the <strong>kind</strong> of error (a class like <code>NameError</code>), a <strong>description</strong> and the <strong>line</strong> where it happened – in the notebook Ruby marks it red.</p><p>Most cells of this lesson go wrong on purpose. The most common error of all is a typo:</p>"
+          },
+          {
+            "t": "c",
+            "code": "name = \"Chunky\"\nnmae.upcase",
+            "raises": "NameError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>NameError: undefined local variable or method 'nmae' for main</code> means: Ruby doesn't know the name <code>nmae</code> – neither as a variable nor as a method. Most of the time it's a typo, and right under the message Ruby suggests what you might have meant. The second common cause in the notebook: the variable comes from a cell further up that you haven't run yet.</p>"
+          },
+          {
+            "t": "c",
+            "code": "42.upcase",
+            "raises": "NoMethodError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>NoMethodError: undefined method 'upcase' for an instance of Integer</code> – the method exists, just not for this kind of object: you can't capitalize a number. The question then is: what kind of object do I actually have here? <code>.class</code> tells you.</p><p>The trickiest variant of this error mentions <code>nil</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "animal = { name: \"Chunky\", food: \"bacon\" }\nanimal[:fod].upcase",
+            "raises": "NoMethodError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>undefined method 'upcase' for nil</code> – the problem isn't <code>upcase</code> but the <code>nil</code>: <code>animal[:fod]</code> found nothing, because the key has a typo. Whenever a message mentions <code>nil</code>, ask yourself: <strong>where does that <code>nil</code> come from?</strong> A <code>p</code> shows you what's really in a value:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p animal[:fod]\np animal[:food]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Even better: don't let the error travel in the first place. <code>fetch</code> reports a missing key at once – right where it's missing, instead of three lines later as a puzzling <code>nil</code>. And here, too, you get a suggestion:</p>"
+          },
+          {
+            "t": "c",
+            "code": "animal.fetch(:fod)",
+            "raises": "KeyError"
+          },
+          {
+            "t": "h",
+            "html": "<p>On to an error that mixes up text and numbers:</p>"
+          },
+          {
+            "t": "c",
+            "code": "amount = 3\n\"Bacon: \" + amount",
+            "raises": "TypeError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>TypeError: no implicit conversion of Integer into String</code> – Ruby won't secretly turn a number into text to attach it to a string. Say so explicitly: with interpolation <code>\"Bacon: #{amount}\"</code> or with <code>amount.to_s</code>.</p>"
+          },
+          {
+            "t": "c",
+            "code": "def square(number)\n  number * number\nend\n\nsquare(3, 4)",
+            "raises": "ArgumentError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>ArgumentError: wrong number of arguments (given 2, expected 1)</code> – the method wants one argument, it got two. Look up how the method is defined.</p><p>And then there are errors where Ruby doesn't even understand the code – the <code>SyntaxError</code>. An <code>end</code> is missing here:</p>"
+          },
+          {
+            "t": "c",
+            "code": "if 3 > 2\n  puts \"Bacon!\"",
+            "raises": "SyntaxError"
+          },
+          {
+            "t": "h",
+            "html": "<p>With a syntax error not a single line runs. Ruby points with <code>^</code> at the places where it got stuck: at the <code>if</code> that never gets its <code>end</code>, and at the end of the code, where the <code>end</code> should have come at the latest. Tidy indentation helps you spot this at once. The most important errors at a glance:</p><table class='cheat'><thead><tr><th>Error</th><th>What's usually behind it</th></tr></thead><tbody><tr><td><code>NameError</code></td><td>a typo in the name, or the cell that creates the name hasn't run yet</td></tr><tr><td><code>NoMethodError</code></td><td>the method doesn't exist for this object – often it's an unexpected <code>nil</code></td></tr><tr><td><code>TypeError</code></td><td>two kinds of values don't fit together, such as a string and a number</td></tr><tr><td><code>ArgumentError</code></td><td>too many or too few arguments, or a value the method can't work with</td></tr><tr><td><code>ZeroDivisionError</code></td><td>a whole number was divided by 0</td></tr><tr><td><code>KeyError</code></td><td><code>fetch</code> with a key that doesn't exist</td></tr><tr><td><code>SyntaxError</code></td><td>Ruby doesn't understand the code: a missing <code>end</code>, bracket or quote</td></tr></tbody></table><p>When things blow up: 1. Read the whole message – error class and text. 2. Go to the marked line. 3. Use <code>p</code> to check what the values there really are. And if nothing helps, paste the message into a search engine – you are guaranteed not to be the first person with this error. How your own programs catch errors instead of crashing is shown later in lesson 59.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Exception.html' target='_blank'>Exception – all error classes</a> · <a href='https://docs.ruby-lang.org/en/4.0/NoMethodError.html' target='_blank'>NoMethodError</a></div><div class='task'><strong>Task:</strong> The cell below should produce the sentence <code>Chunky eats 3 strips of bacon.</code> – but it has three bugs. Run it, read the message, repair the marked spot, and repeat until everything runs.</div>"
+          },
+          {
+            "t": "x",
+            "code": "fox = { name: \"Chunky\", strips: 3 }\n\ndef sentence(animal)\n  \"#{animal[:name]} eats \" + animal[:strips] + \" strips of bacon.\"\nend\n\nsentence(foxx, 3)\n",
+            "check": "output.include?(\"Chunky eats 3 strips of bacon.\") || result == \"Chunky eats 3 strips of bacon.\"",
+            "hint": "One by one: <code>foxx</code> is called <code>fox</code>, <code>sentence</code> wants only one argument, and the number goes into the text by interpolation: <code>\"#{animal[:name]} eats #{animal[:strips]} strips of bacon.\"</code>"
+          }
+        ]
+      },
+      "ja": {
+        "title": "11. エラーメッセージを読む",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>エラーメッセージを読む</h2><p>絵を描けば絵の具がはねるように、プログラミングにエラーはつきものです。プロでも毎日何十回もエラーに出会います。違いは、プロはメッセージを<strong>読む</strong>ということです。Rubyは何が起きたのかを、驚くほど正確に教えてくれるのです。エラーメッセージは3つの部分からできています。エラーの<strong>種類</strong>（<code>NameError</code>のようなクラス）、<strong>説明</strong>、そしてエラーが起きた<strong>行</strong>です。ノートブックでは、その行が赤く示されます。</p><p>このレッスンのセルのほとんどは、わざと失敗するようにしてあります。いちばんよくあるエラーは、打ち間違いです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "name = \"Chunky\"\nnmae.upcase",
+            "raises": "NameError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>NameError: undefined local variable or method 'nmae' for main</code>は、「<code>nmae</code>という名前は、変数としてもメソッドとしても知りません」という意味です。たいていは打ち間違いで、Rubyはメッセージのすぐ下に、もしかしてこれのことでは、と候補を出してくれます。ノートブックでよくあるもう1つの原因は、その変数を作るセルをまだ実行していないことです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "42.upcase",
+            "raises": "NoMethodError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>NoMethodError: undefined method 'upcase' for an instance of Integer</code>は、「そのメソッドは、この種類のオブジェクトにはありません」という意味です。数を大文字にすることはできませんよね。そんなときは、「ここにあるのはいったい何のオブジェクトだろう？」と考えましょう。<code>.class</code>で調べられます。</p><p>このエラーでいちばんやっかいなのは、<code>nil</code>が出てくる場合です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "animal = { name: \"Chunky\", food: \"bacon\" }\nanimal[:fod].upcase",
+            "raises": "NoMethodError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>undefined method 'upcase' for nil</code>の問題は<code>upcase</code>ではなく、<code>nil</code>のほうです。キーに打ち間違いがあるので、<code>animal[:fod]</code>は何も見つけられなかったのです。メッセージに<code>nil</code>が出てきたら、<strong>その<code>nil</code>はどこから来たのか？</strong>と考えましょう。<code>p</code>を使えば、値に本当は何が入っているのかがわかります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "p animal[:fod]\np animal[:food]"
+          },
+          {
+            "t": "h",
+            "html": "<p>もっとよいのは、エラーをそもそも先へ流さないことです。<code>fetch</code>は、キーがないことを、3行あとで謎の<code>nil</code>として気づくのではなく、その場ですぐに知らせてくれます。ここでも候補が出ますよ：</p>"
+          },
+          {
+            "t": "c",
+            "code": "animal.fetch(:fod)",
+            "raises": "KeyError"
+          },
+          {
+            "t": "h",
+            "html": "<p>次は、テキストと数を取り違えたときのエラーです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "amount = 3\n\"Bacon: \" + amount",
+            "raises": "TypeError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>TypeError: no implicit conversion of Integer into String</code>。Rubyは、文字列につなげるためだからといって、数をこっそりテキストに変えたりはしません。式展開<code>\"Bacon: #{amount}\"</code>か、<code>amount.to_s</code>で、はっきり指示しましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "def square(number)\n  number * number\nend\n\nsquare(3, 4)",
+            "raises": "ArgumentError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>ArgumentError: wrong number of arguments (given 2, expected 1)</code>は、「このメソッドがほしい引数は1つなのに、2つ渡された」という意味です。メソッドがどう定義されているかを確かめましょう。</p><p>そして、Rubyがコードをそもそも理解できないエラーもあります。<code>SyntaxError</code>（文法エラー）です。ここでは<code>end</code>が足りません：</p>"
+          },
+          {
+            "t": "c",
+            "code": "if 3 > 2\n  puts \"Bacon!\"",
+            "raises": "SyntaxError"
+          },
+          {
+            "t": "h",
+            "html": "<p>文法エラーがあると、1行も実行されません。Rubyは<code>^</code>で、先へ進めなくなった場所を指し示します。<code>end</code>がもらえなかった<code>if</code>と、遅くともそこまでに<code>end</code>が来るはずだったコードの終わりです。きちんとインデントしておけば、こういう問題はすぐに見つかります。主なエラーをまとめておきましょう：</p><table class='cheat'><thead><tr><th>エラー</th><th>たいていの原因</th></tr></thead><tbody><tr><td><code>NameError</code></td><td>名前の打ち間違い、またはその名前を作るセルがまだ実行されていない</td></tr><tr><td><code>NoMethodError</code></td><td>そのオブジェクトにはそのメソッドがない。思いがけず<code>nil</code>になっていることが多い</td></tr><tr><td><code>TypeError</code></td><td>文字列と数のように、2種類の値の組み合わせが合わない</td></tr><tr><td><code>ArgumentError</code></td><td>引数が多すぎる・少なすぎる、またはメソッドが扱えない値</td></tr><tr><td><code>ZeroDivisionError</code></td><td>整数を0でわった</td></tr><tr><td><code>KeyError</code></td><td>存在しないキーで<code>fetch</code>した</td></tr><tr><td><code>SyntaxError</code></td><td>Rubyがコードを理解できない。<code>end</code>、かっこ、引用符の書き忘れなど</td></tr></tbody></table><p>エラーが出たら、1. メッセージ（エラーのクラスと説明）を最後まで読む。2. 示された行へ行く。3. <code>p</code>で、そこの値が本当は何なのかを確かめる。それでもだめなら、メッセージを検索エンジンに貼りつけてみましょう。そのエラーに出会ったのは、まちがいなくあなたが初めてではありません。自分のプログラムでエラーを受け止めて、止まらないようにする方法は、あとのレッスン59で紹介します。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/Exception.html' target='_blank'>Exception：すべてのエラークラス</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/NoMethodError.html' target='_blank'>NoMethodError</a></div><div class='task'><strong>課題：</strong>下のセルは<code>Chunky eats 3 strips of bacon.</code>という文になるはずですが、まちがいが3つあります。実行して、メッセージを読み、示された場所を直します。これを、すべてうまく動くまでくり返しましょう。</div>"
+          },
+          {
+            "t": "x",
+            "code": "fox = { name: \"Chunky\", strips: 3 }\n\ndef sentence(animal)\n  \"#{animal[:name]} eats \" + animal[:strips] + \" strips of bacon.\"\nend\n\nsentence(foxx, 3)\n",
+            "check": "output.include?(\"Chunky eats 3 strips of bacon.\") || result == \"Chunky eats 3 strips of bacon.\"",
+            "hint": "1つずつ直そう：<code>foxx</code>は<code>fox</code>のまちがい、<code>sentence</code>がほしい引数は1つだけ、そして数は式展開で文に入れよう：<code>\"#{animal[:name]} eats #{animal[:strips]} strips of bacon.\"</code>"
+          }
+        ]
+      },
+      "rubyMessage": true
     },
     {
       "id": "turtle",
       "stepper": true,
       "de": {
-        "title": "10. Malen mit Chunky",
+        "title": "12. Malen mit Chunky",
         "cells": [
           {
             "t": "h",
@@ -1570,7 +2813,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Das <code>=&gt; #&lt;Turtle 4 lines …&gt;</code> darunter ist Chunkys Protokoll: jeder Strich wird mitgeschrieben. Bei einem Vieleck dreht sich Chunky einmal ganz herum, also um 360 Grad – an jeder Ecke um <code>360.0 / ecken</code>. Das wird eine Methode wie in Lektion 9, diesmal mit zwei Parametern – und Methoden, die du selbst schreibst, kennt Chunky im <code>turtle</code>-Block auch. Neu sind zwei Dinge: <code>(3..8).each</code> geht die Zahlen von 3 bis 8 durch (ein <em>Range</em>), und <code>{ … }</code> ist die kurze Schreibweise für <code>do</code> … <code>end</code>:</p>"
+            "html": "<p>Das <code>=&gt; #&lt;Turtle 4 lines …&gt;</code> darunter ist Chunkys Protokoll: jeder Strich wird mitgeschrieben. Bei einem Vieleck dreht sich Chunky einmal ganz herum, also um 360 Grad – an jeder Ecke um <code>360.0 / ecken</code>. Das wird eine Methode wie in Lektion 10, diesmal mit zwei Parametern – und Methoden, die du selbst schreibst, kennt Chunky im <code>turtle</code>-Block auch. Neu sind zwei Dinge: <code>(3..8).each</code> geht die Zahlen von 3 bis 8 durch (ein <em>Range</em>), und <code>{ … }</code> ist die kurze Schreibweise für <code>do</code> … <code>end</code>:</p>"
           },
           {
             "t": "c",
@@ -1597,7 +2840,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "10. Drawing with Chunky",
+        "title": "12. Drawing with Chunky",
         "cells": [
           {
             "t": "h",
@@ -1609,7 +2852,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>The <code>=&gt; #&lt;Turtle 4 lines …&gt;</code> below is Chunky's log: every line is recorded. Walking round a polygon, Chunky turns all the way round once, 360 degrees – <code>360.0 / corners</code> at each corner. That makes a method as in lesson 9, this time with two parameters – and the methods you write yourself work inside the <code>turtle</code> block too. Two things are new: <code>(3..8).each</code> walks through the numbers 3 to 8 (a <em>range</em>), and <code>{ … }</code> is the short way of writing <code>do</code> … <code>end</code>:</p>"
+            "html": "<p>The <code>=&gt; #&lt;Turtle 4 lines …&gt;</code> below is Chunky's log: every line is recorded. Walking round a polygon, Chunky turns all the way round once, 360 degrees – <code>360.0 / corners</code> at each corner. That makes a method as in lesson 10, this time with two parameters – and the methods you write yourself work inside the <code>turtle</code> block too. Two things are new: <code>(3..8).each</code> walks through the numbers 3 to 8 (a <em>range</em>), and <code>{ … }</code> is the short way of writing <code>do</code> … <code>end</code>:</p>"
           },
           {
             "t": "c",
@@ -1636,7 +2879,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "10. Chunkyとお絵かき",
+        "title": "12. Chunkyとお絵かき",
         "cells": [
           {
             "t": "h",
@@ -1648,7 +2891,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>下に出る<code>=&gt; #&lt;Turtle 4 lines …&gt;</code>はChunkyの記録です。かいた線は、ぜんぶ記録されています。多角形をひとまわりすると、Chunkyはちょうど1回転、つまり360度まわります。角ごとに<code>360.0 / corners</code>度です。これをレッスン9のようなメソッドにします。今回は引数が2つです。自分で書いたメソッドも、<code>turtle</code>ブロックの中で使えます。新しいことが2つあります。<code>(3..8).each</code>は3から8までの数を順にたどります（<em>範囲</em>、Range）。<code>{ … }</code>は<code>do</code> … <code>end</code>の短い書き方です：</p>"
+            "html": "<p>下に出る<code>=&gt; #&lt;Turtle 4 lines …&gt;</code>はChunkyの記録です。かいた線は、ぜんぶ記録されています。多角形をひとまわりすると、Chunkyはちょうど1回転、つまり360度まわります。角ごとに<code>360.0 / corners</code>度です。これをレッスン10のようなメソッドにします。今回は引数が2つです。自分で書いたメソッドも、<code>turtle</code>ブロックの中で使えます。新しいことが2つあります。<code>(3..8).each</code>は3から8までの数を順にたどります（<em>範囲</em>、Range）。<code>{ … }</code>は<code>do</code> … <code>end</code>の短い書き方です：</p>"
           },
           {
             "t": "c",
@@ -1677,13 +2920,12 @@ window.LESSONS_JSON = JSON.stringify({
     },
     {
       "id": "klassen",
-      "stepper": true,
       "de": {
-        "title": "11. Klassen",
+        "title": "13. Klassen",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Klassen – eigene Dinge erschaffen</h2><p>In Ruby ist <em>alles</em> ein Objekt. Mit einer <strong>Klasse</strong> baust du deine eigenen Objekte:</p>"
+            "html": "<h2>Klassen – eigene Dinge erschaffen</h2><p>In Ruby ist <em>alles</em> ein Objekt. Mit einer <strong>Klasse</strong> baust du deine eigenen Objekte. Eine Klasse ist wie ein Bauplan: Sie beschreibt, was ihre Objekte wissen und können. Mit <code>new</code> baust du nach diesem Plan ein Objekt – so viele du willst:</p>"
           },
           {
             "t": "c",
@@ -1691,7 +2933,31 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>initialize</code> läuft bei <code>Katze.new</code>. Variablen mit <code>@</code> gehören zum Objekt, und <code>attr_reader :name</code> macht <code>@name</code> von aussen lesbar – probiere <code>k.name</code>! Und noch ein Aha: <code>attr_reader :name</code> ist kein Spezialbefehl, sondern ein ganz normaler Methodenaufruf ohne Klammern – wie in Lektion 9 gelernt: <code>attr_reader(:name)</code>.</p><p>Zwei Katzen mit demselben Namen sind trotzdem zwei Objekte. Jede hat ihr eigenes <code>@name</code>:</p>"
+            "html": "<p><code>initialize</code> läuft bei <code>Katze.new</code>. Variablen mit <code>@</code> heissen <strong>Instanzvariablen</strong> und gehören zum Objekt, und <code>attr_reader :name</code> macht <code>@name</code> von aussen lesbar – probiere <code>k.name</code>! Und noch ein Aha: <code>attr_reader :name</code> ist kein Spezialbefehl, sondern ein ganz normaler Methodenaufruf ohne Klammern – wie in Lektion 10 gelernt: <code>attr_reader(:name)</code>.</p><p>Jedes Objekt hat seine eigenen Instanzvariablen. Zwei Katzen aus demselben Bauplan wissen nichts voneinander:</p>"
+          },
+          {
+            "t": "c",
+            "code": "mimi = Katze.new(\"Mimi\")\nfelix = Katze.new(\"Felix\")\n[mimi.name, felix.name, felix.ruf]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>attr_reader</code> macht einen Wert nur lesbar. Soll er sich auch von aussen ändern lassen, nimm <code>attr_accessor</code> – lesen <em>und</em> schreiben. Die Methoden einer Klasse dürfen die Instanzvariablen lesen und ändern; so merkt sich jedes Objekt seinen Zustand. Und eine Methode namens <code>to_s</code> bestimmt, wie das Objekt als Text aussieht – <code>puts</code> und die Interpolation fragen danach:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Hamster\n  attr_accessor :name\n  attr_reader :hunger\n\n  def initialize(name)\n    @name = name\n    @hunger = 5\n  end\n\n  def fuettern(koerner)\n    @hunger = [@hunger - koerner, 0].max\n  end\n\n  def to_s\n    \"#{@name} (Hunger: #{@hunger})\"\n  end\nend\n\nkruemel = Hamster.new(\"Krümel\")\nkruemel.fuettern(2)\nputs kruemel\nkruemel.name = \"Krümel der Grosse\"\nputs \"Neuer Name: #{kruemel}\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Füttere Krümel ruhig weiter: <code>kruemel.fuettern(10)</code> – weiter als bis 0 sinkt der Hunger nicht, dafür sorgt <code>max</code>. Ohne <code>to_s</code> würde <code>puts</code> übrigens nur etwas wie <code>#&lt;Hamster:0x000…&gt;</code> ausgeben – woher soll Ruby auch wissen, wie man einen Hamster beschreibt?</p><p>Auch Zahlen und Strings sind Objekte aus Klassen. Und sogar jede Klasse ist selbst ein Objekt – eines der Klasse <code>Class</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "[5.class, \"Speck\".class, kruemel.class, Hamster.class]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Zwei Katzen mit demselben Namen sind trotzdem zwei Objekte. Jede hat ihr eigenes <code>@name</code>:</p>"
           },
           {
             "t": "c",
@@ -1699,7 +2965,11 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>mimi.equal?(noch_mimi)</code> ist <code>true</code>, <code>mimi.equal?(zwilling)</code> ist <code>false</code>: ein Pfeilziel oder zwei. <code>equal?</code> fragt, ob es <em>dasselbe</em> Objekt ist.</p><div class='task'><strong>Aufgabe:</strong> Schreibe nach diesem Vorbild die Klasse <code>Fuchs</code>: mit <code>initialize(name)</code>, <code>attr_reader :name</code> und einer Methode <code>ruf</code>, die <code>\"Chunky Bacon!\"</code> zurückgibt.</div>"
+            "html": "<p><code>mimi.equal?(noch_mimi)</code> ist <code>true</code>, <code>mimi.equal?(zwilling)</code> ist <code>false</code>: ein Pfeilziel oder zwei. <code>equal?</code> fragt, ob es <em>dasselbe</em> Objekt ist.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/syntax/modules_and_classes_rdoc.html' target='_blank'>Module und Klassen</a> · <a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-attr_accessor' target='_blank'>attr_accessor</a> · <a href='https://docs.ruby-lang.org/en/4.0/Object.html' target='_blank'>Object</a></div><div class='task'><strong>Aufgabe:</strong> Schreibe nach dem Vorbild der Katze die Klasse <code>Fuchs</code>: mit <code>initialize(name)</code>, <code>attr_reader :name</code> und einer Methode <code>ruf</code>, die <code>\"Chunky Bacon!\"</code> zurückgibt.</div>"
           },
           {
             "t": "x",
@@ -1710,11 +2980,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "11. Classes",
+        "title": "13. Classes",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Classes – creating your own things</h2><p>In Ruby, <em>everything</em> is an object. With a <strong>class</strong> you build objects of your own:</p>"
+            "html": "<h2>Classes – creating your own things</h2><p>In Ruby, <em>everything</em> is an object. With a <strong>class</strong> you build objects of your own. A class is like a blueprint: it describes what its objects know and can do. With <code>new</code> you build an object from the blueprint – as many as you like:</p>"
           },
           {
             "t": "c",
@@ -1722,7 +2992,31 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>initialize</code> runs on <code>Cat.new</code>. Variables with <code>@</code> belong to the object, and <code>attr_reader :name</code> makes <code>@name</code> readable from outside – try <code>k.name</code>! And another aha: <code>attr_reader :name</code> is no special keyword but a perfectly normal method call without parentheses – as learned in lesson 9: <code>attr_reader(:name)</code>.</p><p>Two cats with the same name are still two objects. Each has its own <code>@name</code>:</p>"
+            "html": "<p><code>initialize</code> runs on <code>Cat.new</code>. Variables with <code>@</code> are called <strong>instance variables</strong> and belong to the object, and <code>attr_reader :name</code> makes <code>@name</code> readable from outside – try <code>k.name</code>! And another aha: <code>attr_reader :name</code> is no special keyword but a perfectly normal method call without parentheses – as learned in lesson 10: <code>attr_reader(:name)</code>.</p><p>Every object has instance variables of its own. Two cats from the same blueprint know nothing about each other:</p>"
+          },
+          {
+            "t": "c",
+            "code": "mimi = Cat.new(\"Mimi\")\nfelix = Cat.new(\"Felix\")\n[mimi.name, felix.name, felix.shout]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>attr_reader</code> makes a value readable only. If it should be changeable from outside too, use <code>attr_accessor</code> – reading <em>and</em> writing. A class's methods may read and change the instance variables; that's how every object remembers its state. And a method called <code>to_s</code> decides how the object looks as text – <code>puts</code> and interpolation ask for it:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Hamster\n  attr_accessor :name\n  attr_reader :hunger\n\n  def initialize(name)\n    @name = name\n    @hunger = 5\n  end\n\n  def feed(seeds)\n    @hunger = [@hunger - seeds, 0].max\n  end\n\n  def to_s\n    \"#{@name} (hunger: #{@hunger})\"\n  end\nend\n\nnibbles = Hamster.new(\"Nibbles\")\nnibbles.feed(2)\nputs nibbles\nnibbles.name = \"Nibbles the Great\"\nputs \"New name: #{nibbles}\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Go on feeding Nibbles: <code>nibbles.feed(10)</code> – the hunger never drops below 0, <code>max</code> takes care of that. Without <code>to_s</code>, by the way, <code>puts</code> would only print something like <code>#&lt;Hamster:0x000…&gt;</code> – how should Ruby know how to describe a hamster?</p><p>Numbers and strings are objects of classes, too. And even every class is an object itself – one of the class <code>Class</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "[5.class, \"bacon\".class, nibbles.class, Hamster.class]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Two cats with the same name are still two objects. Each has its own <code>@name</code>:</p>"
           },
           {
             "t": "c",
@@ -1730,7 +3024,11 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>mimi.equal?(also_mimi)</code> is <code>true</code>, <code>mimi.equal?(twin)</code> is <code>false</code>: one arrow target or two. <code>equal?</code> asks whether it is the <em>same</em> object.</p><div class='task'><strong>Task:</strong> Following this example, write the class <code>Fox</code>: with <code>initialize(name)</code>, <code>attr_reader :name</code> and a method <code>shout</code> that returns <code>\"Chunky Bacon!\"</code>.</div>"
+            "html": "<p><code>mimi.equal?(also_mimi)</code> is <code>true</code>, <code>mimi.equal?(twin)</code> is <code>false</code>: one arrow target or two. <code>equal?</code> asks whether it is the <em>same</em> object.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/modules_and_classes_rdoc.html' target='_blank'>Modules and classes</a> · <a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-attr_accessor' target='_blank'>attr_accessor</a> · <a href='https://docs.ruby-lang.org/en/4.0/Object.html' target='_blank'>Object</a></div><div class='task'><strong>Task:</strong> Following the cat example, write the class <code>Fox</code>: with <code>initialize(name)</code>, <code>attr_reader :name</code> and a method <code>shout</code> that returns <code>\"Chunky Bacon!\"</code>.</div>"
           },
           {
             "t": "x",
@@ -1741,11 +3039,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "11. クラス",
+        "title": "13. クラス",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>クラス：自分だけのものを作る</h2><p>Rubyでは<em>すべて</em>がオブジェクトです。<strong>クラス</strong>を使えば、自分だけのオブジェクトを作れます：</p>"
+            "html": "<h2>クラス：自分だけのものを作る</h2><p>Rubyでは<em>すべて</em>がオブジェクトです。<strong>クラス</strong>を使うと、自分だけのオブジェクトを作れます。クラスは設計図のようなもので、そのオブジェクトが何を知っていて何ができるかを書いておきます。<code>new</code>を使えば、設計図からオブジェクトをいくつでも作れます：</p>"
           },
           {
             "t": "c",
@@ -1753,7 +3051,31 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>initialize</code>は<code>Cat.new</code>のときに実行されます。<code>@</code>のついた変数はそのオブジェクトのもので、<code>attr_reader :name</code>と書くと<code>@name</code>を外から読めるようになります。<code>k.name</code>を試してみましょう！もうひとつ、なるほどと思える話があります。<code>attr_reader :name</code>は特別なキーワードではなく、かっこを省いたごくふつうのメソッド呼び出しです。レッスン9で学んだとおり、<code>attr_reader(:name)</code>と同じなのです。</p><p>同じ名前のネコが2匹いても、オブジェクトは2つです。それぞれが自分の<code>@name</code>を持っています：</p>"
+            "html": "<p><code>initialize</code>は<code>Cat.new</code>のときに実行されます。<code>@</code>のついた変数は<strong>インスタンス変数</strong>といって、そのオブジェクトのものです。<code>attr_reader :name</code>を書くと、<code>@name</code>を外から読めるようになります。<code>k.name</code>を試してみましょう！ もう1つ「なるほど」があります。<code>attr_reader :name</code>は特別なキーワードではなく、かっこを省いたふつうのメソッド呼び出しなのです。レッスン10で学んだように、<code>attr_reader(:name)</code>と同じです。</p><p>オブジェクトはそれぞれ自分のインスタンス変数を持っています。同じ設計図から作った2匹の猫も、おたがいのことは何も知りません：</p>"
+          },
+          {
+            "t": "c",
+            "code": "mimi = Cat.new(\"Mimi\")\nfelix = Cat.new(\"Felix\")\n[mimi.name, felix.name, felix.shout]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>attr_reader</code>は値を読めるようにするだけです。外から変更もできるようにしたいなら、<code>attr_accessor</code>を使います。読み<em>書き</em>の両方ができます。クラスのメソッドはインスタンス変数を読んだり変えたりできるので、オブジェクトはそれぞれ自分の状態を覚えていられます。そして<code>to_s</code>という名前のメソッドは、オブジェクトをテキストにしたときの見え方を決めます。<code>puts</code>や式展開は、このメソッドに問い合わせるのです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Hamster\n  attr_accessor :name\n  attr_reader :hunger\n\n  def initialize(name)\n    @name = name\n    @hunger = 5\n  end\n\n  def feed(seeds)\n    @hunger = [@hunger - seeds, 0].max\n  end\n\n  def to_s\n    \"#{@name} (hunger: #{@hunger})\"\n  end\nend\n\nnibbles = Hamster.new(\"Nibbles\")\nnibbles.feed(2)\nputs nibbles\nnibbles.name = \"Nibbles the Great\"\nputs \"New name: #{nibbles}\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Nibblesにもっとえさをあげてみましょう：<code>nibbles.feed(10)</code>。おなかのすき具合が0より下がることはありません。<code>max</code>がそうしてくれているのです。ちなみに<code>to_s</code>がなければ、<code>puts</code>は<code>#&lt;Hamster:0x000…&gt;</code>のようなものしか表示しません。ハムスターをどう説明すればいいのか、Rubyにはわからないですからね。</p><p>数や文字列も、クラスから作られたオブジェクトです。さらに、どのクラスもそれ自体がオブジェクトで、<code>Class</code>というクラスに属しています：</p>"
+          },
+          {
+            "t": "c",
+            "code": "[5.class, \"bacon\".class, nibbles.class, Hamster.class]"
+          },
+          {
+            "t": "h",
+            "html": "<p>同じ名前のネコが2匹いても、オブジェクトは2つです。それぞれが自分の<code>@name</code>を持っています：</p>"
           },
           {
             "t": "c",
@@ -1761,22 +3083,146 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>mimi.equal?(also_mimi)</code>は<code>true</code>、<code>mimi.equal?(twin)</code>は<code>false</code>です。矢印の行き先が1つか2つかの違いです。<code>equal?</code>は、<em>同じ</em>オブジェクトかどうかを調べます。</p><div class='task'><strong>課題：</strong>この例にならって、クラス<code>Fox</code>を書きましょう。<code>initialize(name)</code>と<code>attr_reader :name</code>、そして<code>\"Chunky Bacon!\"</code>を返すメソッド<code>shout</code>を用意してください。</div>"
+            "html": "<p><code>mimi.equal?(also_mimi)</code>は<code>true</code>、<code>mimi.equal?(twin)</code>は<code>false</code>です。矢印の行き先が1つか2つかの違いです。<code>equal?</code>は、<em>同じ</em>オブジェクトかどうかを調べます。</p>"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fdef.html#class' target='_blank'>クラス定義</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Module/i/attr_accessor.html' target='_blank'>attr_accessor</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Object.html' target='_blank'>Object</a></div><div class='task'><strong>課題：</strong>猫の例をお手本にして、クラス<code>Fox</code>を書きましょう。<code>initialize(name)</code>と<code>attr_reader :name</code>、そして<code>\"Chunky Bacon!\"</code>を返すメソッド<code>shout</code>を持たせてください。</div>"
           },
           {
             "t": "x",
             "code": "# class Fox\n#   ...\n# end\n",
             "check": "f = Fox.new(\"Kaz\"); f.name == \"Kaz\" && f.shout == \"Chunky Bacon!\" && code.include?(\"class Fox\")",
-            "hint": "猫の例をコピーして書き換えてみて。クラス名は<code>Fox</code>、<code>shout</code>はぴったり<code>\"Chunky Bacon!\"</code>を返すようにね。"
+            "hint": "猫の例をコピーして書きかえてみて。クラス名は<code>Fox</code>、<code>shout</code>はぴったり<code>\"Chunky Bacon!\"</code>を返すようにね。"
+          }
+        ]
+      },
+      "stepper": true
+    },
+    {
+      "id": "vererbung",
+      "de": {
+        "title": "14. Vererbung",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Vererbung – Klassen bauen aufeinander auf</h2><p>Hunde, Kühe und Eulen haben vieles gemeinsam: einen Namen, einen Laut, sie stellen sich vor. Statt alles dreimal zu schreiben, baust du eine allgemeine Klasse <code>Tier</code> und lässt speziellere Klassen davon <strong>erben</strong>. Das kleine <code>&lt;</code> heisst „erbt von“:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Tier\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def laut\n    \"...\"\n  end\n\n  def vorstellen\n    \"Ich bin #{name} und sage #{laut}\"\n  end\nend\n\nclass Kuh < Tier\n  def laut\n    \"Muh!\"\n  end\nend\n\nclass Eule < Tier\nend\n\nputs Kuh.new(\"Berta\").vorstellen\nputs Eule.new(\"Uhu\").vorstellen"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Kuh</code> und <code>Eule</code> bekommen alles von <code>Tier</code>: <code>initialize</code>, <code>name</code> und <code>vorstellen</code>. Die Kuh <strong>überschreibt</strong> nur <code>laut</code> – sie definiert die Methode neu, und ihre Version gewinnt. Die Eule überschreibt nichts und sagt darum <code>...</code>. Das Schöne: <code>vorstellen</code> steht nur einmal da, in <code>Tier</code>, und ruft trotzdem den richtigen <code>laut</code> auf.</p><p>Will eine Unterklasse die Methode der Elternklasse nicht ersetzen, sondern <em>erweitern</em>, ruft sie mit <code>super</code> die Version der Elternklasse auf:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Hund < Tier\n  def initialize(name, rasse)\n    super(name)\n    @rasse = rasse\n  end\n\n  def laut\n    \"Wuff!\"\n  end\n\n  def vorstellen\n    super + \" – ich bin ein #{@rasse}\"\n  end\nend\n\nbello = Hund.new(\"Bello\", \"Dackel\")\nbello.vorstellen"
+          },
+          {
+            "t": "h",
+            "html": "<p>In <code>initialize</code> reicht der Hund den Namen mit <code>super(name)</code> an <code>Tier</code> weiter und merkt sich zusätzlich seine Rasse. In <code>vorstellen</code> nimmt er den Satz, den <code>Tier</code> baut, und hängt etwas an.</p><p>Ruby verrät dir jederzeit, wie Klassen verwandt sind. <code>is_a?</code> fragt „ist das (auch) ein …?“, <code>superclass</code> nennt die Elternklasse, und <code>ancestors</code> zeigt die ganze Ahnenreihe:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p bello.is_a?(Hund)\np bello.is_a?(Tier)\np bello.is_a?(Kuh)\np Hund.superclass\np Tier.superclass\nHund.ancestors.first(3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jede Klasse hat eine Elternklasse – bis hinauf zu <code>Object</code> (und dahinter <code>BasicObject</code>). Darum kann jedes Objekt Dinge wie <code>to_s</code>, <code>inspect</code> oder <code>class</code>: Es erbt sie von <code>Object</code>.</p><p>Vererbung begegnet dir in diesem Kurs noch oft: <code>class MeineSeite &lt; Sinatra::Base</code> (Lektion 20), <code>class TestEintrag &lt; Minitest::Test</code> (Lektion 56) oder <code>class TimelogError &lt; StandardError</code> (Lektion 59) – jedes Mal erbst du von einer fertigen Klasse eine Menge Fähigkeiten und fügst nur deine eigenen hinzu.</p><p>Ein Rat zum Schluss: Vererbung passt, wenn du „ist ein“ sagen kannst – ein Hund <em>ist ein</em> Tier. Sollen dagegen ganz verschiedene Klassen nur eine Fähigkeit teilen (sich vergleichen lassen, gezählt werden), sind Module die bessere Wahl. Darum geht es in der nächsten Lektion.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/syntax/modules_and_classes_rdoc.html#label-Inheritance' target='_blank'>Vererbung</a> · <a href='https://docs.ruby-lang.org/en/4.0/Class.html#method-i-superclass' target='_blank'>superclass</a> · <a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-ancestors' target='_blank'>ancestors</a></div><div class='task'><strong>Aufgabe:</strong> Unten steht die Elternklasse <code>Waldtier</code>. Schreibe die Klasse <code>Rotfuchs</code>, die von <code>Waldtier</code> erbt und deren <code>laut</code> <code>\"Chunky Bacon!\"</code> ist. <code>vorstellen</code> soll sie nicht selbst schreiben, sondern erben. Teste mit <code>Rotfuchs.new(\"Chunky\").vorstellen</code>. (Meldet Ruby <code>superclass mismatch</code>, hast du <code>Rotfuchs</code> vorher schon ohne <code>&lt; Waldtier</code> angelegt: Eine Klasse kann ihre Elternklasse nicht wechseln. Lade dann die Seite neu.)</div>"
+          },
+          {
+            "t": "x",
+            "code": "class Waldtier\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def laut\n    \"...\"\n  end\n\n  def vorstellen\n    \"Ich bin #{name} und sage #{laut}\"\n  end\nend\n\n# class Rotfuchs < Waldtier\n#   ...\n# end\n\n# Rotfuchs.new(\"Chunky\").vorstellen\n",
+            "check": "Rotfuchs.superclass == Waldtier && Rotfuchs.new(\"Kaz\").vorstellen == \"Ich bin Kaz und sage Chunky Bacon!\" && !Rotfuchs.instance_methods(false).include?(:vorstellen)",
+            "hint": "<code>class Rotfuchs &lt; Waldtier</code>, darin nur <code>def laut</code> mit <code>\"Chunky Bacon!\"</code> – und <code>end</code>, <code>end</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "14. Inheritance",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Inheritance – classes build on each other</h2><p>Dogs, cows and owls have a lot in common: a name, a sound, they introduce themselves. Instead of writing everything three times, you build a general class <code>Animal</code> and let more specific classes <strong>inherit</strong> from it. The little <code>&lt;</code> means “inherits from”:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Animal\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def sound\n    \"...\"\n  end\n\n  def introduce\n    \"I am #{name} and I say #{sound}\"\n  end\nend\n\nclass Cow < Animal\n  def sound\n    \"Moo!\"\n  end\nend\n\nclass Owl < Animal\nend\n\nputs Cow.new(\"Bertha\").introduce\nputs Owl.new(\"Hoot\").introduce"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Cow</code> and <code>Owl</code> get everything from <code>Animal</code>: <code>initialize</code>, <code>name</code> and <code>introduce</code>. The cow only <strong>overrides</strong> <code>sound</code> – it defines the method anew, and its version wins. The owl overrides nothing and therefore says <code>...</code>. The beauty of it: <code>introduce</code> is written only once, in <code>Animal</code>, and still calls the right <code>sound</code>.</p><p>If a subclass wants to <em>extend</em> the parent's method rather than replace it, it calls the parent's version with <code>super</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Dog < Animal\n  def initialize(name, breed)\n    super(name)\n    @breed = breed\n  end\n\n  def sound\n    \"Woof!\"\n  end\n\n  def introduce\n    super + \" – I'm a #{@breed}\"\n  end\nend\n\nrex = Dog.new(\"Rex\", \"dachshund\")\nrex.introduce"
+          },
+          {
+            "t": "h",
+            "html": "<p>In <code>initialize</code> the dog passes the name on to <code>Animal</code> with <code>super(name)</code> and also remembers its breed. In <code>introduce</code> it takes the sentence <code>Animal</code> builds and appends something.</p><p>Ruby tells you at any time how classes are related. <code>is_a?</code> asks “is this (also) a …?”, <code>superclass</code> names the parent class, and <code>ancestors</code> shows the whole family line:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p rex.is_a?(Dog)\np rex.is_a?(Animal)\np rex.is_a?(Cow)\np Dog.superclass\np Animal.superclass\nDog.ancestors.first(3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Every class has a parent class – all the way up to <code>Object</code> (and behind it <code>BasicObject</code>). That's why every object can do things like <code>to_s</code>, <code>inspect</code> or <code>class</code>: it inherits them from <code>Object</code>.</p><p>You'll meet inheritance often in this course: <code>class MySite &lt; Sinatra::Base</code> (lesson 20), <code>class TestEntry &lt; Minitest::Test</code> (lesson 56) or <code>class TimelogError &lt; StandardError</code> (lesson 59) – each time you inherit a pile of abilities from a finished class and only add your own.</p><p>One last piece of advice: inheritance fits when you can say “is a” – a dog <em>is an</em> animal. If quite different classes should merely share one ability (being comparable, being countable), modules are the better choice. That's what the next lesson is about.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/modules_and_classes_rdoc.html#label-Inheritance' target='_blank'>Inheritance</a> · <a href='https://docs.ruby-lang.org/en/4.0/Class.html#method-i-superclass' target='_blank'>superclass</a> · <a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-ancestors' target='_blank'>ancestors</a></div><div class='task'><strong>Task:</strong> Below is the parent class <code>ForestAnimal</code>. Write the class <code>RedFox</code>, which inherits from <code>ForestAnimal</code> and whose <code>sound</code> is <code>\"Chunky Bacon!\"</code>. It should not write <code>introduce</code> itself but inherit it. Test it with <code>RedFox.new(\"Chunky\").introduce</code>. (If Ruby reports <code>superclass mismatch</code>, you created <code>RedFox</code> before without <code>&lt; ForestAnimal</code>: a class cannot change its parent. Reload the page then.)</div>"
+          },
+          {
+            "t": "x",
+            "code": "class ForestAnimal\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def sound\n    \"...\"\n  end\n\n  def introduce\n    \"I am #{name} and I say #{sound}\"\n  end\nend\n\n# class RedFox < ForestAnimal\n#   ...\n# end\n\n# RedFox.new(\"Chunky\").introduce\n",
+            "check": "RedFox.superclass == ForestAnimal && RedFox.new(\"Kaz\").introduce == \"I am Kaz and I say Chunky Bacon!\" && !RedFox.instance_methods(false).include?(:introduce)",
+            "hint": "<code>class RedFox &lt; ForestAnimal</code>, inside it only <code>def sound</code> with <code>\"Chunky Bacon!\"</code> – and <code>end</code>, <code>end</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "14. 継承",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>継承：クラスを積み重ねる</h2><p>犬、牛、フクロウには共通点がたくさんあります。名前があり、鳴き声があり、自己紹介ができます。同じことを3回書くかわりに、一般的なクラス<code>Animal</code>を作り、もっと具体的なクラスにそこから<strong>継承</strong>させましょう。小さな<code>&lt;</code>は「〜を継承する」という意味です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Animal\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def sound\n    \"...\"\n  end\n\n  def introduce\n    \"I am #{name} and I say #{sound}\"\n  end\nend\n\nclass Cow < Animal\n  def sound\n    \"Moo!\"\n  end\nend\n\nclass Owl < Animal\nend\n\nputs Cow.new(\"Bertha\").introduce\nputs Owl.new(\"Hoot\").introduce"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Cow</code>も<code>Owl</code>も、<code>initialize</code>、<code>name</code>、<code>introduce</code>のすべてを<code>Animal</code>から受け継ぎます。牛は<code>sound</code>だけを<strong>オーバーライド</strong>（上書き）します。メソッドを定義しなおすと、そちらが優先されるのです。フクロウは何も上書きしていないので、<code>...</code>と鳴きます。すばらしいのは、<code>introduce</code>は<code>Animal</code>に一度書いてあるだけなのに、ちゃんと正しい<code>sound</code>を呼び出してくれることです。</p><p>サブクラスが親クラスのメソッドを置き換えるのではなく<em>付け足し</em>たいときは、<code>super</code>で親クラスのほうのメソッドを呼び出します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Dog < Animal\n  def initialize(name, breed)\n    super(name)\n    @breed = breed\n  end\n\n  def sound\n    \"Woof!\"\n  end\n\n  def introduce\n    super + \" – I'm a #{@breed}\"\n  end\nend\n\nrex = Dog.new(\"Rex\", \"dachshund\")\nrex.introduce"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>initialize</code>では、犬は<code>super(name)</code>で名前を<code>Animal</code>に渡し、さらに自分の犬種を覚えます。<code>introduce</code>では、<code>Animal</code>が作った文を受け取って、後ろに付け足しています。</p><p>クラスどうしがどんな関係にあるかは、いつでもRubyに聞けます。<code>is_a?</code>は「これは〜（でも）ある？」とたずね、<code>superclass</code>は親クラスを答え、<code>ancestors</code>は先祖の列をまるごと見せてくれます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "p rex.is_a?(Dog)\np rex.is_a?(Animal)\np rex.is_a?(Cow)\np Dog.superclass\np Animal.superclass\nDog.ancestors.first(3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>どのクラスにも親クラスがあり、たどっていくと<code>Object</code>（その奥に<code>BasicObject</code>）に行き着きます。どんなオブジェクトでも<code>to_s</code>、<code>inspect</code>、<code>class</code>などが使えるのはそのためです。<code>Object</code>から受け継いでいるのです。</p><p>この講座では、これからも継承によく出会います。<code>class MySite &lt; Sinatra::Base</code>（レッスン20）、<code>class TestEntry &lt; Minitest::Test</code>（レッスン56）、<code>class TimelogError &lt; StandardError</code>（レッスン59）。どれも、できあがったクラスからたくさんの能力を受け継ぎ、自分の分だけを付け足しています。</p><p>最後にひとつアドバイスです。継承がぴったりなのは、「〜は〜である」と言えるときです。犬は動物<em>である</em>。一方、まったく違うクラスどうしが1つの能力（比べられる、数えられる）を共有したいだけなら、モジュールのほうが向いています。それが次のレッスンのテーマです。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fdef.html#class' target='_blank'>クラス定義と継承</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Class/i/superclass.html' target='_blank'>superclass</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Module/i/ancestors.html' target='_blank'>ancestors</a></div><div class='task'><strong>課題：</strong>下に親クラス<code>ForestAnimal</code>があります。<code>ForestAnimal</code>を継承し、<code>sound</code>が<code>\"Chunky Bacon!\"</code>になるクラス<code>RedFox</code>を書きましょう。<code>introduce</code>は自分で書かずに、継承してください。<code>RedFox.new(\"Chunky\").introduce</code>で試しましょう。（Rubyが<code>superclass mismatch</code>と言ってきたら、その前に<code>&lt; ForestAnimal</code>なしで<code>RedFox</code>を作ってしまっています。クラスはあとから親クラスを変えられないのです。その場合はページを再読み込みしてください。）</div>"
+          },
+          {
+            "t": "x",
+            "code": "class ForestAnimal\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def sound\n    \"...\"\n  end\n\n  def introduce\n    \"I am #{name} and I say #{sound}\"\n  end\nend\n\n# class RedFox < ForestAnimal\n#   ...\n# end\n\n# RedFox.new(\"Chunky\").introduce\n",
+            "check": "RedFox.superclass == ForestAnimal && RedFox.new(\"Kaz\").introduce == \"I am Kaz and I say Chunky Bacon!\" && !RedFox.instance_methods(false).include?(:introduce)",
+            "hint": "<code>class RedFox &lt; ForestAnimal</code>の中に<code>def sound</code>だけ書いて、<code>\"Chunky Bacon!\"</code>を返そう。最後は<code>end</code>、<code>end</code>だよ。"
           }
         ]
       }
     },
     {
       "id": "module",
-      "stepper": true,
       "de": {
-        "title": "12. Module",
+        "title": "15. Module",
         "cells": [
           {
             "t": "h",
@@ -1808,7 +3254,23 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>So funktionieren auch Rubys berühmteste Mixins: <code>Comparable</code> schenkt einer Klasse <code>&lt;</code>, <code>&gt;</code> und <code>between?</code>, sobald sie <code>&lt;=&gt;</code> kann, und <code>Enumerable</code> schenkt ihr <code>map</code>, <code>select</code> &amp; Co., sobald sie <code>each</code> kann.</p><div class='task'><strong>Aufgabe:</strong> Schreibe ein Modul <code>Laut</code> mit einer Methode <code>ruf</code>, die <code>CHUNKY BACON!</code> zurückgibt. Mische es mit <code>include</code> in eine neue Klasse <code>Dachs</code> und probiere <code>Dachs.new.ruf</code> als letzte Zeile.</div>"
+            "html": "<p>Wo steckt das Modul jetzt? <code>ancestors</code> aus Lektion 14 verrät es. Ruby sucht eine Methode genau in dieser Reihenfolge: zuerst in der Klasse selbst, dann in den eingemischten Modulen, dann in der Elternklasse:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Igel.ancestors.first(3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>So funktionieren auch Rubys berühmteste Mixins. <code>Enumerable</code> kennst du schon aus Lektion 9: Es schenkt einer Klasse <code>map</code>, <code>select</code> &amp; Co., sobald sie <code>each</code> kann – Arrays, Hashes und Bereiche haben es eingemischt. <code>Comparable</code> schenkt einer Klasse <code>&lt;</code>, <code>&gt;</code>, <code>between?</code> und <code>clamp</code>, sobald sie <code>&lt;=&gt;</code> kann – den „Raumschiff-Operator“, der <code>-1</code>, <code>0</code> oder <code>1</code> liefert, je nachdem, ob ein Objekt kleiner, gleich oder grösser ist als ein anderes:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Paket\n  include Comparable\n\n  attr_reader :gewicht\n\n  def initialize(gewicht)\n    @gewicht = gewicht\n  end\n\n  def <=>(anderes)\n    gewicht <=> anderes.gewicht\n  end\nend\n\nleicht = Paket.new(2)\nschwer = Paket.new(5)\n[leicht < schwer, Paket.new(3).between?(leicht, schwer), [schwer, leicht].min.gewicht]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Eine einzige Methode, <code>&lt;=&gt;</code> – und Ruby schenkt dir dafür sechs Vergleiche, dazu <code>sort</code>, <code>min</code> und <code>max</code> für Listen deiner Objekte. Das ist die Stärke von Mixins.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/syntax/modules_and_classes_rdoc.html' target='_blank'>Module und Klassen</a> · <a href='https://docs.ruby-lang.org/en/4.0/Comparable.html' target='_blank'>Comparable</a> · <a href='https://docs.ruby-lang.org/en/4.0/Math.html' target='_blank'>Math</a></div><div class='task'><strong>Aufgabe:</strong> Schreibe ein Modul <code>Laut</code> mit einer Methode <code>ruf</code>, die <code>CHUNKY BACON!</code> zurückgibt. Mische es mit <code>include</code> in eine neue Klasse <code>Dachs</code> und probiere <code>Dachs.new.ruf</code> als letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -1819,7 +3281,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "12. Modules",
+        "title": "15. Modules",
         "cells": [
           {
             "t": "h",
@@ -1851,7 +3313,23 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Ruby's most famous mixins work the same way: <code>Comparable</code> gives a class <code>&lt;</code>, <code>&gt;</code> and <code>between?</code> as soon as it can <code>&lt;=&gt;</code>, and <code>Enumerable</code> gives it <code>map</code>, <code>select</code> &amp; co. as soon as it can <code>each</code>.</p><div class='task'><strong>Task:</strong> Write a module <code>Loud</code> with a method <code>shout</code> that returns <code>CHUNKY BACON!</code>. Mix it into a new class <code>Badger</code> with <code>include</code> and try <code>Badger.new.shout</code> as the last line.</div>"
+            "html": "<p>Where does the module sit now? <code>ancestors</code> from lesson 14 tells you. Ruby looks for a method in exactly this order: first in the class itself, then in the mixed-in modules, then in the parent class:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Hedgehog.ancestors.first(3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ruby's most famous mixins work the same way. You know <code>Enumerable</code> from lesson 9 already: it gives a class <code>map</code>, <code>select</code> &amp; co. as soon as it can <code>each</code> – arrays, hashes and ranges have it mixed in. <code>Comparable</code> gives a class <code>&lt;</code>, <code>&gt;</code>, <code>between?</code> and <code>clamp</code> as soon as it can <code>&lt;=&gt;</code> – the “spaceship operator”, which returns <code>-1</code>, <code>0</code> or <code>1</code> depending on whether an object is smaller than, equal to or greater than another:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Parcel\n  include Comparable\n\n  attr_reader :weight\n\n  def initialize(weight)\n    @weight = weight\n  end\n\n  def <=>(other)\n    weight <=> other.weight\n  end\nend\n\nlight = Parcel.new(2)\nheavy = Parcel.new(5)\n[light < heavy, Parcel.new(3).between?(light, heavy), [heavy, light].min.weight]"
+          },
+          {
+            "t": "h",
+            "html": "<p>One single method, <code>&lt;=&gt;</code> – and in return Ruby gives you six comparisons, plus <code>sort</code>, <code>min</code> and <code>max</code> for lists of your objects. That's the power of mixins.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/modules_and_classes_rdoc.html' target='_blank'>Modules and classes</a> · <a href='https://docs.ruby-lang.org/en/4.0/Comparable.html' target='_blank'>Comparable</a> · <a href='https://docs.ruby-lang.org/en/4.0/Math.html' target='_blank'>Math</a></div><div class='task'><strong>Task:</strong> Write a module <code>Loud</code> with a method <code>shout</code> that returns <code>CHUNKY BACON!</code>. Mix it into a new class <code>Badger</code> with <code>include</code> and try <code>Badger.new.shout</code> as the last line.</div>"
           },
           {
             "t": "x",
@@ -1862,7 +3340,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "12. モジュール",
+        "title": "15. モジュール",
         "cells": [
           {
             "t": "h",
@@ -1894,7 +3372,23 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Rubyでいちばん有名なMix-inも、同じしくみで動いています。<code>Comparable</code>は、<code>&lt;=&gt;</code>が使えるクラスに<code>&lt;</code>、<code>&gt;</code>、<code>between?</code>を与えます。<code>Enumerable</code>は、<code>each</code>が使えるクラスに<code>map</code>や<code>select</code>などを与えます。</p><div class='task'><strong>課題：</strong><code>CHUNKY BACON!</code>を返すメソッド<code>shout</code>を持つモジュール<code>Loud</code>を書きましょう。それを<code>include</code>で新しいクラス<code>Badger</code>に混ぜ込み、最後の行で<code>Badger.new.shout</code>を試してください。</div>"
+            "html": "<p>モジュールは今どこにいるのでしょう？ レッスン14で出てきた<code>ancestors</code>が教えてくれます。Rubyはメソッドを、まさにこの順番で探します。まずクラスそのもの、次に混ぜ込まれたモジュール、それから親クラスです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "Hedgehog.ancestors.first(3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Rubyでいちばん有名なMix-inも、同じしくみで動いています。<code>Enumerable</code>はレッスン9ですでに出会いましたね。<code>each</code>が使えるクラスに、<code>map</code>や<code>select</code>などを与えます。配列もハッシュも範囲も、これを混ぜ込んでいます。<code>Comparable</code>は、<code>&lt;=&gt;</code>が使えるクラスに<code>&lt;</code>、<code>&gt;</code>、<code>between?</code>、<code>clamp</code>を与えます。<code>&lt;=&gt;</code>は「宇宙船演算子」と呼ばれ、あるオブジェクトがもう一方より小さいか、等しいか、大きいかに応じて<code>-1</code>、<code>0</code>、<code>1</code>を返します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Parcel\n  include Comparable\n\n  attr_reader :weight\n\n  def initialize(weight)\n    @weight = weight\n  end\n\n  def <=>(other)\n    weight <=> other.weight\n  end\nend\n\nlight = Parcel.new(2)\nheavy = Parcel.new(5)\n[light < heavy, Parcel.new(3).between?(light, heavy), [heavy, light].min.weight]"
+          },
+          {
+            "t": "h",
+            "html": "<p>たった1つのメソッド<code>&lt;=&gt;</code>を書くだけで、Rubyは比較を6つも与えてくれます。さらに、自分のオブジェクトのリストに<code>sort</code>、<code>min</code>、<code>max</code>も使えるようになります。これがMix-inの力です。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fdef.html#module' target='_blank'>モジュール定義</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Comparable.html' target='_blank'>Comparable</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Math.html' target='_blank'>Math</a></div><div class='task'><strong>課題：</strong><code>CHUNKY BACON!</code>を返すメソッド<code>shout</code>を持つモジュール<code>Loud</code>を書きましょう。それを<code>include</code>で新しいクラス<code>Badger</code>に混ぜ込み、最後の行で<code>Badger.new.shout</code>を試してください。</div>"
           },
           {
             "t": "x",
@@ -1903,12 +3397,13 @@ window.LESSONS_JSON = JSON.stringify({
             "hint": "<code>module Loud</code>の中に<code>def shout</code>を書いて、<code>\"CHUNKY BACON!\"</code>を返すようにしよう。それから<code>class Badger</code>を作って、その中に<code>include Loud</code>と書くんだよ。"
           }
         ]
-      }
+      },
+      "stepper": true
     },
     {
       "id": "irb",
       "de": {
-        "title": "13. IRB – Rubys Spielwiese",
+        "title": "16. IRB – Rubys Spielwiese",
         "cells": [
           {
             "t": "h",
@@ -1920,7 +3415,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Drei Tricks, die jeder IRB-Profi kennt – probier sie oben aus:</p><ul><li><code>_</code> (Unterstrich) ist immer die <strong>letzte Antwort</strong>: erst <code>6 * 7</code>, dann <code>_ + 1</code>.</li><li>IRB versteht <strong>mehrzeilige Eingaben</strong>: Tippe <code>def verdoppeln(x)</code> – der Prompt bekommt ein <code>*</code> und wartet, bis du <code>x * 2</code> und <code>end</code> nachgeliefert hast.</li><li><code>exit</code> beendet IRB (auf deinem Rechner … hier bleibt der Fuchs stur).</li></ul><div class='task'><strong>Aufgabe:</strong> Benutze die Zelle unten wie eine IRB-Zeile: Verdreifache jede Zahl im Array <code>[4, 8, 15]</code> mit <code>map</code> – der Wert soll <code>[12, 24, 45]</code> sein. (Erst oben im Terminal ausprobieren!)</div>"
+            "html": "<p>Drei Tricks, die jeder IRB-Profi kennt – probier sie oben aus:</p><ul><li><code>_</code> (Unterstrich) ist immer die <strong>letzte Antwort</strong>: erst <code>6 * 7</code>, dann <code>_ + 1</code>.</li><li>IRB versteht <strong>mehrzeilige Eingaben</strong>: Tippe <code>def verdoppeln(x)</code> – der Prompt bekommt ein <code>*</code> und wartet, bis du <code>x * 2</code> und <code>end</code> nachgeliefert hast.</li><li><code>exit</code> beendet IRB (auf deinem Rechner … hier bleibt der Fuchs stur).</li></ul><div class='offweb'><strong>Auf deinem Rechner</strong> kann IRB noch mehr. Ein paar Befehle zum Ausprobieren:<ul><li><code>help</code> zeigt alle Befehle.</li><li><code>ls \"Speck\"</code> listet, was ein Objekt kann: seine Methoden, nach Klassen geordnet.</li><li><code>show_doc String#center</code> zeigt die Dokumentation einer Methode – wie man Dokumentation liest, zeigt die nächste Lektion.</li><li><code>show_source</code> zeigt den Quellcode einer Methode, die in Ruby geschrieben ist.</li><li>Während du tippst, schlägt IRB passende Methoden vor; mit <kbd>Tab</kbd> übernimmst du einen Vorschlag.</li></ul></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://ruby.github.io/irb/' target='_blank'>Die Anleitung zu IRB</a></div><div class='task'><strong>Aufgabe:</strong> Benutze die Zelle unten wie eine IRB-Zeile: Verdreifache jede Zahl im Array <code>[4, 8, 15]</code> mit <code>map</code> – der Wert soll <code>[12, 24, 45]</code> sein. (Erst oben im Terminal ausprobieren!)</div>"
           },
           {
             "t": "x",
@@ -1931,7 +3426,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "13. IRB – Ruby's playground",
+        "title": "16. IRB – Ruby's playground",
         "cells": [
           {
             "t": "h",
@@ -1943,7 +3438,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Three tricks every IRB pro knows – try them above:</p><ul><li><code>_</code> (underscore) is always the <strong>last answer</strong>: first <code>6 * 7</code>, then <code>_ + 1</code>.</li><li>IRB understands <strong>multi-line input</strong>: type <code>def double(x)</code> – the prompt gets a <code>*</code> and waits until you deliver <code>x * 2</code> and <code>end</code>.</li><li><code>exit</code> quits IRB (on your machine … here the fox refuses to leave).</li></ul><div class='task'><strong>Task:</strong> Use the cell below like an IRB line: triple every number in the array <code>[4, 8, 15]</code> using <code>map</code> – the value should be <code>[12, 24, 45]</code>. (Experiment in the terminal above first!)</div>"
+            "html": "<p>Three tricks every IRB pro knows – try them above:</p><ul><li><code>_</code> (underscore) is always the <strong>last answer</strong>: first <code>6 * 7</code>, then <code>_ + 1</code>.</li><li>IRB understands <strong>multi-line input</strong>: type <code>def double(x)</code> – the prompt gets a <code>*</code> and waits until you deliver <code>x * 2</code> and <code>end</code>.</li><li><code>exit</code> quits IRB (on your machine … here the fox refuses to leave).</li></ul><div class='offweb'><strong>On your machine</strong> IRB can do even more. A few commands to try:<ul><li><code>help</code> lists all commands.</li><li><code>ls \"bacon\"</code> lists what an object can do: its methods, sorted by class.</li><li><code>show_doc String#center</code> shows a method's documentation – how to read documentation is the topic of the next lesson.</li><li><code>show_source</code> shows the source code of a method written in Ruby.</li><li>While you type, IRB suggests matching methods; <kbd>Tab</kbd> accepts a suggestion.</li></ul></div><div class='docs'><strong>Look it up:</strong> <a href='https://ruby.github.io/irb/' target='_blank'>The IRB guide</a></div><div class='task'><strong>Task:</strong> Use the cell below like an IRB line: triple every number in the array <code>[4, 8, 15]</code> using <code>map</code> – the value should be <code>[12, 24, 45]</code>. (Experiment in the terminal above first!)</div>"
           },
           {
             "t": "x",
@@ -1954,7 +3449,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "13. IRB：Rubyの遊び場",
+        "title": "16. IRB：Rubyの遊び場",
         "cells": [
           {
             "t": "h",
@@ -1966,7 +3461,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>IRBの達人ならだれでも知っている3つの技です。上で試してみましょう：</p><ul><li><code>_</code>（アンダースコア）には、いつも<strong>直前の答え</strong>が入っています。まず<code>6 * 7</code>、次に<code>_ + 1</code>と入力してみてください。</li><li>IRBは<strong>複数行の入力</strong>も理解します。<code>def double(x)</code>と入力すると、プロンプトに<code>*</code>がついて、<code>x * 2</code>と<code>end</code>が入力されるまで待ってくれます。</li><li><code>exit</code>でIRBを終了します（自分のコンピューターでは、の話です……ここではキツネが帰ろうとしません）。</li></ul><div class='task'><strong>課題：</strong>下のセルをIRBの1行のように使ってみましょう。<code>map</code>を使って、配列<code>[4, 8, 15]</code>のすべての数を3倍にしてください。値が<code>[12, 24, 45]</code>になれば正解です。（まずは上のターミナルで試してみましょう！）</div>"
+            "html": "<p>IRBの達人ならだれでも知っている3つの技です。上で試してみましょう：</p><ul><li><code>_</code>（アンダースコア）には、いつも<strong>直前の答え</strong>が入っています。まず<code>6 * 7</code>、次に<code>_ + 1</code>と入力してみてください。</li><li>IRBは<strong>複数行の入力</strong>も理解します。<code>def double(x)</code>と入力すると、プロンプトに<code>*</code>がついて、<code>x * 2</code>と<code>end</code>が入力されるまで待ってくれます。</li><li><code>exit</code>でIRBを終了します（自分のコンピューターでは、の話です……ここではキツネが帰ろうとしません）。</li></ul><div class='offweb'><strong>自分のコンピューターでは</strong>、IRBはもっといろいろなことができます。試してみたいコマンドをいくつか紹介します：<ul><li><code>help</code>は、すべてのコマンドを表示します。</li><li><code>ls \"bacon\"</code>は、そのオブジェクトにできること、つまりメソッドを、クラスごとに分けて一覧にします。</li><li><code>show_doc String#center</code>は、メソッドのドキュメントを表示します。ドキュメントの読み方は、次のレッスンのテーマです。</li><li><code>show_source</code>は、Rubyで書かれたメソッドのソースコードを表示します。</li><li>入力している最中にも、IRBは合いそうなメソッドを提案してくれます。<kbd>Tab</kbd>を押すと、その候補を使えます。</li></ul></div><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/library/irb.html' target='_blank'>irbライブラリ</a>・<a href='https://ruby.github.io/irb/' target='_blank'>IRBのガイド（英語）</a></div><div class='task'><strong>課題：</strong>下のセルをIRBの1行のように使ってみましょう。<code>map</code>を使って、配列<code>[4, 8, 15]</code>のすべての数を3倍にしてください。値が<code>[12, 24, 45]</code>になれば正解です。（まずは上のターミナルで試してみましょう！）</div>"
           },
           {
             "t": "x",
@@ -1978,13 +3473,181 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
-      "id": "gems",
+      "id": "doku",
       "de": {
-        "title": "14. Gems installieren",
+        "title": "17. Die Doku lesen",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Gems – Rubys Bausteine</h2><p>Eine <strong>Gem</strong> ist ein fertiges Ruby-Paket, das du in dein Programm laden kannst. Die zentrale Sammelstelle ist <a href='https://rubygems.org' target='_blank'>rubygems.org</a> – über 180&nbsp;000 Gems für alles Mögliche.</p><p>Auf deinem eigenen Computer installierst du eine Gem im Terminal mit <code>gem install</code> und lädst sie danach in IRB oder deinem Programm mit <code>require</code>:</p><pre><code>$ gem install chunky_png\nSuccessfully installed chunky_png-1.4.0\n$ irb\nirb(main):001:0&gt; require \"chunky_png\"\n=&gt; true</code></pre><p>In richtigen Projekten listet man alle Gems in einer Datei namens <code>Gemfile</code> (eine Zeile pro Gem: <code>gem \"chunky_png\"</code>) und holt sie mit <code>bundle install</code> auf einen Schlag – das erledigt <a href='https://bundler.io' target='_blank'>Bundler</a>.</p><p>Auf dieser Seite übernimmt <code>install_gem</code> diesen Job für <em>pure-Ruby</em>-Gems, direkt im Browser (oder du nutzt das 💎-Panel links). Häufig gebrauchte Gems sind lokal zwischengespeichert (⚡) und installieren blitzschnell:</p>"
+            "html": "<h2>Die Ruby-Dokumentation lesen</h2><p>Niemand kennt alle Methoden auswendig – auch Matz nicht. Profis unterscheidet nicht, wie viel sie im Kopf haben, sondern wie schnell sie <strong>nachschlagen</strong>. Die offizielle Dokumentation zu Ruby steht auf <a href='https://docs.ruby-lang.org/en/4.0/' target='_blank'>docs.ruby-lang.org</a>: für jede Klasse eine Seite mit allen Methoden, mit Erklärungen und vielen Beispielen. Sie ist auf Englisch – aber die Beispiele verstehst du auch so. (Auf Japanisch gibt es zusätzlich das Referenzhandbuch <a href='https://docs.ruby-lang.org/ja/latest/doc/index.html' target='_blank'>„Rurima“</a>.)</p><p>Wie viele Methoden hat ein String eigentlich? Frag Ruby selbst:</p>"
+          },
+          {
+            "t": "c",
+            "code": "\"Speck\".methods.length"
+          },
+          {
+            "t": "h",
+            "html": "<p>Rund 200 – viel zu viele zum Auswendiglernen. Aber du kannst gezielt suchen: <code>grep</code> filtert die Liste nach einem Muster (mehr zu solchen Mustern in Lektion 51). Welche Methoden haben etwas mit Gross- und Kleinschreibung zu tun, auf Englisch <em>case</em>?</p>"
+          },
+          {
+            "t": "c",
+            "code": "\"Speck\".methods.grep(/case/)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jetzt weisst du, wonach du suchen musst. Auf der Doku-Seite von <code>String</code> sieht zum Beispiel der Eintrag zu <code>center</code> so aus (gekürzt):</p><pre><code>center(size, pad_string = ' ') → new_string\n\nReturns a centered copy of self.\n\nIf integer argument size is greater than the size (in characters)\nof self, returns a new string of length size that is a copy of self,\ncentered and padded on one or both ends with pad_string:\n\n  'hello'.center(6)          # =&gt; \"hello \"\n  'hello'.center(20, '-|')   # =&gt; \"-|-|-|-hello-|-|-|-|\"\n\nIf size is less than or equal to the size of self, returns an\nunpadded copy of self.</code></pre><p>Die erste Zeile ist die wichtigste. <code>center</code> ist der Name, in den Klammern stehen die Argumente: <code>size</code> musst du angeben. <code>pad_string = ' '</code> hat einen Standardwert, ein Leerzeichen, und darf darum fehlen. Der Pfeil <code>→</code> sagt, was zurückkommt: ein neuer String. Darunter stehen die Erklärung und Beispiele – mit <code># =&gt;</code> zeigt die Doku, was herauskommt, genau wie das Notizbuch. Probier es aus:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"[\" + \"Speck\".center(15) + \"]\"\nputs \"Speck\".center(15, \"*\")\n\"Speck\".center(3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Auch die Zeichen in den Namen verraten etwas. <code>String#center</code> mit Raute ist eine <strong>Instanzmethode</strong>: Du rufst sie auf einem String auf, <code>\"Speck\".center(15)</code>. <code>File.read</code> mit Punkt (manchmal <code>File::read</code> geschrieben) ist eine <strong>Klassenmethode</strong>: Du rufst sie auf der Klasse selbst auf. Und <code>Math::PI</code> ist eine Konstante.</p><p>Lies immer auch, was eine Methode <em>zurückgibt</em> – dort stecken die Überraschungen. Der Eintrag zu <code>upcase!</code> lautet <code>upcase!(mapping) → self or nil</code> und erklärt: „Returns self if any changes are made, nil otherwise.“ Also <code>nil</code>, wenn sich nichts ändert:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"speck\".upcase!\np \"SPECK\".upcase!"
+          },
+          {
+            "t": "h",
+            "html": "<p>Wer sich darauf verlässt, dass <code>upcase!</code> immer einen String liefert, bekommt manchmal <code>nil</code> – ein Kandidat für den <code>NoMethodError</code> aus Lektion 11. Die Doku hätte es verraten.</p><p>Bleibt die Frage: Auf welcher Seite steht eine Methode? Nicht jede Methode, die ein Array kann, steht auf der Seite von <code>Array</code>! Viele stammen aus eingemischten Modulen oder einer Elternklasse (Lektionen 14 und 15). Ruby verrät es dir: <code>method(:name).owner</code> nennt die Klasse oder das Modul, das die Methode definiert – und damit die richtige Doku-Seite:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p [1, 2, 3].method(:map).owner\np [1, 2, 3].method(:each_slice).owner\np \"Speck\".method(:between?).owner\n5.method(:puts).owner"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>map</code> steht also bei <code>Array</code>, <code>each_slice</code> bei <code>Enumerable</code>, <code>between?</code> bei <code>Comparable</code> und <code>puts</code> bei <code>Kernel</code>. Und <code>\"Speck\".respond_to?(:upcase)</code> fragt einfach, ob ein Objekt eine Methode kennt – <code>true</code> oder <code>false</code>.</p><p>Und die Gems? Ihre Seite auf <a href='https://rubygems.org' target='_blank'>rubygems.org</a> verlinkt Dokumentation und Quellcode. Viele Gems erklären sich in ihrer README auf GitHub, und die Methoden-Doku fast aller Gems steht auf <a href='https://www.rubydoc.info/gems/nokogiri' target='_blank'>rubydoc.info</a>.</p><div class='offweb'><strong>Auf deinem Rechner</strong> gibt es die Doku je nach Installation auch ohne Internet. Im Terminal zeigt sie <code>ri</code>, in IRB der Befehl <code>show_doc</code>:<pre><code>$ ri String#center\n$ ri Enumerable\n$ irb\nirb(main):001&gt; show_doc Integer#digits</code></pre>Findet <code>ri</code> nichts, ist die Doku dort nicht mitinstalliert – dann bleibt die Webseite.</div><p>Für den Alltag gibt es eine Abkürzung: Der <button type='button' class='cheat-link'>📋 Spickzettel</button> fasst jedes Thema dieses Kurses zusammen und verlinkt bei jedem auf die passende Seite der Doku.</p><div class='docs'><strong>Nachschlagen:</strong> <a href='https://docs.ruby-lang.org/en/4.0/' target='_blank'>docs.ruby-lang.org</a> (englisch) · <a href='https://rubyapi.org/' target='_blank'>rubyapi.org</a> (dieselbe Doku mit Suchfeld) · <a href='https://www.rubydoc.info/' target='_blank'>rubydoc.info</a> (Gems)</div><div class='task'><strong>Aufgabe – Detektivarbeit:</strong> Finde in der Doku zwei Methoden, die du noch nicht kennst. 1. Die Seite von <code>Integer</code> hat eine Methode, die eine Zahl in ihre Ziffern zerlegt – damit berechnest du die Quersumme von 2026 (2 + 0 + 2 + 6) als <code>quersumme</code>. 2. In <code>Enumerable</code> steht eine Methode, die eine Liste in gleich grosse Stücke schneidet – damit wird <code>[1, 2, 3, 4, 5, 6]</code> zu <code>paare</code>, also <code>[[1, 2], [3, 4], [5, 6]]</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# 1. Die Quersumme von 2026\n# quersumme = ...\n\n# 2. Die Liste in Paaren\n# paare = ...\n",
+            "check": "quersumme == 10 && paare == [[1, 2], [3, 4], [5, 6]] && code.include?(\"digits\") && code.include?(\"each_slice\")",
+            "hint": "Gesucht sind <code>digits</code> und <code>each_slice</code>: <code>2026.digits.sum</code>. Und Achtung, die Doku sagt <code>each_slice(n) → enumerator</code> – ohne Block kommt ein Enumerator heraus, erst <code>.to_a</code> macht daraus ein Array: <code>[1, 2, 3, 4, 5, 6].each_slice(2).to_a</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "17. Reading the docs",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Reading the Ruby documentation</h2><p>Nobody knows every method by heart – not even Matz. What sets professionals apart is not how much they keep in their heads but how quickly they <strong>look things up</strong>. Ruby's official documentation lives at <a href='https://docs.ruby-lang.org/en/4.0/' target='_blank'>docs.ruby-lang.org</a>: a page for every class with all its methods, explanations and plenty of examples. (In Japanese there is also the reference manual <a href='https://docs.ruby-lang.org/ja/latest/doc/index.html' target='_blank'>“Rurima”</a>.)</p><p>How many methods does a string actually have? Ask Ruby itself:</p>"
+          },
+          {
+            "t": "c",
+            "code": "\"bacon\".methods.length"
+          },
+          {
+            "t": "h",
+            "html": "<p>Around 200 – far too many to learn by heart. But you can search on purpose: <code>grep</code> filters the list by a pattern (more about such patterns in lesson 51). Which methods have to do with upper and lower <em>case</em>?</p>"
+          },
+          {
+            "t": "c",
+            "code": "\"bacon\".methods.grep(/case/)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Now you know what to look for. On the documentation page of <code>String</code>, for example, the entry for <code>center</code> looks like this (shortened):</p><pre><code>center(size, pad_string = ' ') → new_string\n\nReturns a centered copy of self.\n\nIf integer argument size is greater than the size (in characters)\nof self, returns a new string of length size that is a copy of self,\ncentered and padded on one or both ends with pad_string:\n\n  'hello'.center(6)          # =&gt; \"hello \"\n  'hello'.center(20, '-|')   # =&gt; \"-|-|-|-hello-|-|-|-|\"\n\nIf size is less than or equal to the size of self, returns an\nunpadded copy of self.</code></pre><p>The first line matters most. <code>center</code> is the name, the parentheses hold the arguments: <code>size</code> is required. <code>pad_string = ' '</code> has a default value, a space, so you may leave it out. The arrow <code>→</code> tells you what comes back: a new string. Below come the explanation and examples – with <code># =&gt;</code> the docs show the result, just like the notebook does. Try it:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"[\" + \"bacon\".center(15) + \"]\"\nputs \"bacon\".center(15, \"*\")\n\"bacon\".center(3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>The signs in the names tell you something, too. <code>String#center</code> with a hash sign is an <strong>instance method</strong>: you call it on a string, <code>\"bacon\".center(15)</code>. <code>File.read</code> with a dot (sometimes written <code>File::read</code>) is a <strong>class method</strong>: you call it on the class itself. And <code>Math::PI</code> is a constant.</p><p>Always read what a method <em>returns</em>, too – that's where the surprises hide. The entry for <code>upcase!</code> says <code>upcase!(mapping) → self or nil</code> and explains: “Returns self if any changes are made, nil otherwise.” So <code>nil</code> when nothing changes:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"bacon\".upcase!\np \"BACON\".upcase!"
+          },
+          {
+            "t": "h",
+            "html": "<p>If you rely on <code>upcase!</code> always handing back a string, you'll sometimes get <code>nil</code> – a candidate for the <code>NoMethodError</code> from lesson 11. The docs would have told you.</p><p>One question remains: on which page is a method? Not every method an array can do is on the <code>Array</code> page! Many come from mixed-in modules or a parent class (lessons 14 and 15). Ruby tells you: <code>method(:name).owner</code> names the class or module that defines the method – and with it the right page of the docs:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p [1, 2, 3].method(:map).owner\np [1, 2, 3].method(:each_slice).owner\np \"bacon\".method(:between?).owner\n5.method(:puts).owner"
+          },
+          {
+            "t": "h",
+            "html": "<p>So <code>map</code> is on the <code>Array</code> page, <code>each_slice</code> on <code>Enumerable</code>, <code>between?</code> on <code>Comparable</code> and <code>puts</code> on <code>Kernel</code>. And <code>\"bacon\".respond_to?(:upcase)</code> simply asks whether an object knows a method – <code>true</code> or <code>false</code>.</p><p>And gems? Their page on <a href='https://rubygems.org' target='_blank'>rubygems.org</a> links to documentation and source code. Many gems explain themselves in their README on GitHub, and the method docs of nearly every gem are on <a href='https://www.rubydoc.info/gems/nokogiri' target='_blank'>rubydoc.info</a>.</p><div class='offweb'><strong>On your machine</strong> the docs may be available without internet, depending on how Ruby was installed. In the terminal <code>ri</code> shows them, in IRB the command <code>show_doc</code>:<pre><code>$ ri String#center\n$ ri Enumerable\n$ irb\nirb(main):001&gt; show_doc Integer#digits</code></pre>If <code>ri</code> finds nothing, the docs weren't installed there – then use the website.</div><p>For everyday use there's a shortcut: the <button type='button' class='cheat-link'>📋 Cheat sheet</button> sums up every topic of this course and links each one to the matching page of the docs.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/' target='_blank'>docs.ruby-lang.org</a> · <a href='https://rubyapi.org/' target='_blank'>rubyapi.org</a> (the same docs with a search box) · <a href='https://www.rubydoc.info/' target='_blank'>rubydoc.info</a> (gems)</div><div class='task'><strong>Task – detective work:</strong> Find two methods in the docs that you don't know yet. 1. The <code>Integer</code> page has a method that splits a number into its digits – use it to compute the digit sum of 2026 (2 + 0 + 2 + 6) as <code>digit_sum</code>. 2. <code>Enumerable</code> has a method that cuts a list into pieces of equal size – with it, <code>[1, 2, 3, 4, 5, 6]</code> becomes <code>pairs</code>, that is <code>[[1, 2], [3, 4], [5, 6]]</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# 1. The digit sum of 2026\n# digit_sum = ...\n\n# 2. The list in pairs\n# pairs = ...\n",
+            "check": "digit_sum == 10 && pairs == [[1, 2], [3, 4], [5, 6]] && code.include?(\"digits\") && code.include?(\"each_slice\")",
+            "hint": "You are looking for <code>digits</code> and <code>each_slice</code>: <code>2026.digits.sum</code>. And careful, the docs say <code>each_slice(n) → enumerator</code> – without a block you get an Enumerator, and only <code>.to_a</code> turns it into an array: <code>[1, 2, 3, 4, 5, 6].each_slice(2).to_a</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "17. ドキュメントを読む",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Rubyのドキュメントを読む</h2><p>すべてのメソッドを暗記している人はいません。Matzだって覚えていません。プロとそうでない人の違いは、頭の中にどれだけ入っているかではなく、どれだけすばやく<strong>調べられるか</strong>です。Rubyの公式ドキュメントは<a href='https://docs.ruby-lang.org/ja/latest/doc/index.html' target='_blank'>docs.ruby-lang.org</a>にあります。日本語版は「るりま」の愛称で呼ばれるリファレンスマニュアルで、クラスごとにページがあり、すべてのメソッドが説明と例つきで載っています。英語版の<a href='https://docs.ruby-lang.org/en/4.0/' target='_blank'>ドキュメント</a>もあり、例が豊富です。</p><p>文字列には、いったいいくつのメソッドがあるのでしょう？ Ruby自身に聞いてみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "\"bacon\".methods.length"
+          },
+          {
+            "t": "h",
+            "html": "<p>200個ほど。とても暗記できる数ではありません。でも、ねらいをつけて探すことはできます。<code>grep</code>は、パターンでリストを絞りこみます（パターンについてはレッスン51でくわしく紹介します）。大文字・小文字（英語で<em>case</em>）に関係するメソッドはどれでしょう？</p>"
+          },
+          {
+            "t": "c",
+            "code": "\"bacon\".methods.grep(/case/)"
+          },
+          {
+            "t": "h",
+            "html": "<p>これで、何を探せばいいかがわかりました。たとえば、るりまで<code>String#center</code>を開くと、こう書かれています（一部省略）：</p><pre><code>center(width, padding = ' ') -&gt; String\n\n長さ width の文字列に self を中央寄せした文字列を返します。\nself の長さが width より長い時には元の文字列の複製を返します。\nまた、第 2 引数 padding を指定したときは空白文字の代わりに\npadding を詰めます。\n\np \"foo\".center(10)       # =&gt; \"   foo    \"\np \"foo\".center(10, \"*\")  # =&gt; \"***foo****\"</code></pre><p>いちばん大事なのは1行目です。<code>center</code>がメソッドの名前で、かっこの中が引数です。<code>width</code>は必ず渡します。<code>padding = ' '</code>にはデフォルト値（空白1つ）があるので、省略できます。矢印<code>-&gt;</code>の右は、何が返ってくるかを示しています。<code>String</code>、つまり新しい文字列です。その下に説明と例が続きます。ドキュメントは<code># =&gt;</code>で結果を見せてくれます。このノートブックと同じですね。英語版でも同じ形で<code>center(size, pad_string = ' ') → new_string</code>と書かれています。試してみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"[\" + \"bacon\".center(15) + \"]\"\nputs \"bacon\".center(15, \"*\")\n\"bacon\".center(3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>名前の書き方にも意味があります。シャープのついた<code>String#center</code>は<strong>インスタンスメソッド</strong>で、<code>\"bacon\".center(15)</code>のように文字列に対して呼び出します。ドットのついた<code>File.read</code>（<code>File::read</code>と書かれることもあります）は<strong>クラスメソッド</strong>で、クラスそのものに対して呼び出します。そして<code>Math::PI</code>は定数です。</p><p>メソッドが<em>何を返すか</em>も、必ず読みましょう。思わぬ落とし穴があるのはそこです。るりまの<code>upcase!</code>の項目は<code>upcase!(*options) -&gt; self | nil</code>となっています。返ってくるのは<code>self</code>か<code>nil</code>です。英語版のドキュメントには「変更があればselfを、なければnilを返す」とはっきり書かれています。何も変わらなければ<code>nil</code>なのです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"bacon\".upcase!\np \"BACON\".upcase!"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>upcase!</code>がいつも文字列を返すと思いこんでいると、ときどき<code>nil</code>を受け取ることになります。レッスン11の<code>NoMethodError</code>の候補ですね。ドキュメントを読んでいれば、気づけたはずです。</p><p>残る疑問は、「そのメソッドはどのページに載っているのか」です。配列にできることが、すべて<code>Array</code>のページに載っているわけではありません！ 多くは混ぜ込まれたモジュールや親クラスから来ています（レッスン14と15）。Rubyに聞けばわかります。<code>method(:name).owner</code>は、そのメソッドを定義しているクラスやモジュール、つまり見るべきドキュメントのページを教えてくれます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "p [1, 2, 3].method(:map).owner\np [1, 2, 3].method(:each_slice).owner\np \"bacon\".method(:between?).owner\n5.method(:puts).owner"
+          },
+          {
+            "t": "h",
+            "html": "<p>つまり<code>map</code>は<code>Array</code>のページに、<code>each_slice</code>は<code>Enumerable</code>に、<code>between?</code>は<code>Comparable</code>に、<code>puts</code>は<code>Kernel</code>に載っています。また<code>\"bacon\".respond_to?(:upcase)</code>は、オブジェクトがそのメソッドを知っているかどうかを<code>true</code>か<code>false</code>で答えてくれます。</p><p>gemはどうでしょう？ <a href='https://rubygems.org' target='_blank'>rubygems.org</a>のgemのページには、ドキュメントとソースコードへのリンクがあります。多くのgemはGitHubのREADMEで使い方を説明していて、ほとんどのgemのメソッドのドキュメントは<a href='https://www.rubydoc.info/gems/nokogiri' target='_blank'>rubydoc.info</a>で読めます。</p><div class='offweb'><strong>自分のコンピューターでは</strong>、インストールのしかたによっては、インターネットがなくてもドキュメントを読めます。ターミナルでは<code>ri</code>、IRBでは<code>show_doc</code>コマンドを使います：<pre><code>$ ri String#center\n$ ri Enumerable\n$ irb\nirb(main):001&gt; show_doc Integer#digits</code></pre><code>ri</code>が何も見つけられないときは、ドキュメントがいっしょにインストールされていません。その場合はWebサイトを使いましょう。</div><p>ふだん使いには近道もあります。<button type='button' class='cheat-link'>📋 チートシート</button>は、この講座のテーマをひとつずつまとめ、それぞれドキュメントの該当ページにリンクしています。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/doc/index.html' target='_blank'>るりま（日本語）</a>・<a href='https://docs.ruby-lang.org/en/4.0/' target='_blank'>docs.ruby-lang.org（英語）</a>・<a href='https://rubyapi.org/' target='_blank'>rubyapi.org</a>（検索しやすい英語版）・<a href='https://www.rubydoc.info/' target='_blank'>rubydoc.info</a>（gem）</div><div class='task'><strong>課題：探偵になろう。</strong>まだ知らないメソッドを、ドキュメントから2つ見つけましょう。1. <code>Integer</code>のページには、数を桁ごとの数字に分けるメソッドがあります。それを使って、2026の各桁の和（2 + 0 + 2 + 6）を<code>digit_sum</code>に入れてください。2. <code>Enumerable</code>には、リストを同じ大きさのかたまりに切り分けるメソッドがあります。それを使って、<code>[1, 2, 3, 4, 5, 6]</code>を<code>pairs</code>、つまり<code>[[1, 2], [3, 4], [5, 6]]</code>にしてください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# 1. 2026の各桁の和\n# digit_sum = ...\n\n# 2. ペアに分けたリスト\n# pairs = ...\n",
+            "check": "digit_sum == 10 && pairs == [[1, 2], [3, 4], [5, 6]] && code.include?(\"digits\") && code.include?(\"each_slice\")",
+            "hint": "探しているのは<code>digits</code>と<code>each_slice</code>だよ：<code>2026.digits.sum</code>。それと気をつけて。るりまには<code>each_slice(n) -&gt; Enumerator</code>とあるよね。ブロックなしだとEnumeratorが返ってくるから、<code>.to_a</code>で配列にしよう：<code>[1, 2, 3, 4, 5, 6].each_slice(2).to_a</code>。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "gems",
+      "de": {
+        "title": "18. Gems installieren",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Gems – Rubys Bausteine</h2><p>Eine <strong>Gem</strong> ist ein fertiges Ruby-Paket, das du in dein Programm laden kannst. Die zentrale Sammelstelle ist <a href='https://rubygems.org' target='_blank'>rubygems.org</a> – fast 200&nbsp;000 Gems für alles Mögliche.</p><p>Auf deinem eigenen Computer installierst du eine Gem im Terminal mit <code>gem install</code> und lädst sie danach in IRB oder deinem Programm mit <code>require</code>:</p><pre><code>$ gem install chunky_png\nSuccessfully installed chunky_png-1.4.0\n$ irb\nirb(main):001:0&gt; require \"chunky_png\"\n=&gt; true</code></pre><p>In richtigen Projekten listet man alle Gems in einer Datei namens <code>Gemfile</code> (eine Zeile pro Gem: <code>gem \"chunky_png\"</code>) und holt sie mit <code>bundle install</code> auf einen Schlag – das erledigt <a href='https://bundler.io' target='_blank'>Bundler</a>.</p><p>Auf dieser Seite übernimmt <code>install_gem</code> diesen Job für <em>pure-Ruby</em>-Gems, direkt im Browser (oder du nutzt das 💎-Panel links). Häufig gebrauchte Gems sind lokal zwischengespeichert (⚡) und installieren blitzschnell:</p>"
           },
           {
             "t": "c",
@@ -2000,7 +3663,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Jeder Pixel ist ansprechbar: <code>bild[x, y] = farbe</code>. Farben baust du mit <code>ChunkyPNG::Color.rgb(rot, gruen, blau)</code>.</p><div class='task'><strong>Aufgabe:</strong> Male die Speck-Fahne! Erzeuge ein Bild <code>bild</code> (mindestens 8×8) und färbe die geraden Zeilen speckrot – <code>ChunkyPNG::Color.rgb(193, 74, 46)</code> –, die ungeraden lässt du weiss. Zeig dein Werk mit <code>show_image bild</code>.</div>"
+            "html": "<p>Jeder Pixel ist ansprechbar: <code>bild[x, y] = farbe</code>. Farben baust du mit <code>ChunkyPNG::Color.rgb(rot, gruen, blau)</code>.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://guides.rubygems.org/' target='_blank'>RubyGems-Leitfäden</a> · <a href='https://bundler.io/guides/getting_started.html' target='_blank'>Bundler: erste Schritte</a> · <a href='https://www.rubydoc.info/gems/chunky_png' target='_blank'>ChunkyPNG</a></div><div class='task'><strong>Aufgabe:</strong> Male die Speck-Fahne! Erzeuge ein Bild <code>bild</code> (mindestens 8×8) und färbe die geraden Zeilen speckrot – <code>ChunkyPNG::Color.rgb(193, 74, 46)</code> –, die ungeraden lässt du weiss. Zeig dein Werk mit <code>show_image bild</code>.</div>"
           },
           {
             "t": "x",
@@ -2011,11 +3674,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "14. Installing gems",
+        "title": "18. Installing gems",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Gems – Ruby's building blocks</h2><p>A <strong>gem</strong> is a ready-made Ruby package you can load into your program. The central collection is <a href='https://rubygems.org' target='_blank'>rubygems.org</a> – over 180,000 gems for everything imaginable.</p><p>On your own computer you install a gem in the terminal with <code>gem install</code>, then load it in IRB or your program with <code>require</code>:</p><pre><code>$ gem install chunky_png\nSuccessfully installed chunky_png-1.4.0\n$ irb\nirb(main):001:0&gt; require \"chunky_png\"\n=&gt; true</code></pre><p>In real projects you list all gems in a file called <code>Gemfile</code> (one line per gem: <code>gem \"chunky_png\"</code>) and fetch them in one go with <code>bundle install</code> – that's <a href='https://bundler.io' target='_blank'>Bundler</a>'s job.</p><p>On this site, <code>install_gem</code> does that job for <em>pure-Ruby</em> gems, right in your browser (or use the 💎 panel on the left). Frequently used gems are cached locally (⚡) and install instantly:</p>"
+            "html": "<h2>Gems – Ruby's building blocks</h2><p>A <strong>gem</strong> is a ready-made Ruby package you can load into your program. The central collection is <a href='https://rubygems.org' target='_blank'>rubygems.org</a> – almost 200,000 gems for everything imaginable.</p><p>On your own computer you install a gem in the terminal with <code>gem install</code>, then load it in IRB or your program with <code>require</code>:</p><pre><code>$ gem install chunky_png\nSuccessfully installed chunky_png-1.4.0\n$ irb\nirb(main):001:0&gt; require \"chunky_png\"\n=&gt; true</code></pre><p>In real projects you list all gems in a file called <code>Gemfile</code> (one line per gem: <code>gem \"chunky_png\"</code>) and fetch them in one go with <code>bundle install</code> – that's <a href='https://bundler.io' target='_blank'>Bundler</a>'s job.</p><p>On this site, <code>install_gem</code> does that job for <em>pure-Ruby</em> gems, right in your browser (or use the 💎 panel on the left). Frequently used gems are cached locally (⚡) and install instantly:</p>"
           },
           {
             "t": "c",
@@ -2031,7 +3694,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Every pixel is addressable: <code>image[x, y] = color</code>. You build colors with <code>ChunkyPNG::Color.rgb(red, green, blue)</code>.</p><div class='task'><strong>Task:</strong> Paint the bacon flag! Create an image <code>image</code> (at least 8×8) and color the even rows bacon-red – <code>ChunkyPNG::Color.rgb(193, 74, 46)</code> – leaving the odd rows white. Show your work with <code>show_image image</code>.</div>"
+            "html": "<p>Every pixel is addressable: <code>image[x, y] = color</code>. You build colors with <code>ChunkyPNG::Color.rgb(red, green, blue)</code>.</p><div class='docs'><strong>Look it up:</strong> <a href='https://guides.rubygems.org/' target='_blank'>RubyGems guides</a> · <a href='https://bundler.io/guides/getting_started.html' target='_blank'>Bundler: getting started</a> · <a href='https://www.rubydoc.info/gems/chunky_png' target='_blank'>ChunkyPNG</a></div><div class='task'><strong>Task:</strong> Paint the bacon flag! Create an image <code>image</code> (at least 8×8) and color the even rows bacon-red – <code>ChunkyPNG::Color.rgb(193, 74, 46)</code> – leaving the odd rows white. Show your work with <code>show_image image</code>.</div>"
           },
           {
             "t": "x",
@@ -2042,11 +3705,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "14. gemのインストール",
+        "title": "18. gemのインストール",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>gem：Rubyの部品</h2><p><strong>gem</strong>は、プログラムに読み込んで使える、できあいのRubyパッケージです。gemが集まる中心地が<a href='https://rubygems.org' target='_blank'>rubygems.org</a>で、思いつくかぎりのあらゆる用途に180,000を超えるgemがそろっています。</p><p>自分のコンピューターでは、ターミナルで<code>gem install</code>を実行してgemをインストールし、IRBやプログラムの中で<code>require</code>して読み込みます：</p><pre><code>$ gem install chunky_png\nSuccessfully installed chunky_png-1.4.0\n$ irb\nirb(main):001:0&gt; require \"chunky_png\"\n=&gt; true</code></pre><p>本格的なプロジェクトでは、使うgemをすべて<code>Gemfile</code>というファイルに書き（1つのgemにつき1行：<code>gem \"chunky_png\"</code>）、<code>bundle install</code>でまとめて取ってきます。これは<a href='https://bundler.io' target='_blank'>Bundler</a>の仕事です。</p><p>このサイトでは、<em>ピュアRuby</em>のgemに限り、<code>install_gem</code>がその仕事をブラウザの中で直接引き受けます（左の💎パネルを使ってもかまいません）。よく使われるgemはローカルにキャッシュされていて（⚡）、一瞬でインストールできます：</p>"
+            "html": "<h2>gem：Rubyの部品</h2><p><strong>gem</strong>は、プログラムに読み込んで使える、できあいのRubyパッケージです。gemが集まる中心地が<a href='https://rubygems.org' target='_blank'>rubygems.org</a>で、思いつくかぎりのあらゆる用途に、20万近いgemがそろっています。</p><p>自分のコンピューターでは、ターミナルで<code>gem install</code>を実行してgemをインストールし、IRBやプログラムの中で<code>require</code>して読み込みます：</p><pre><code>$ gem install chunky_png\nSuccessfully installed chunky_png-1.4.0\n$ irb\nirb(main):001:0&gt; require \"chunky_png\"\n=&gt; true</code></pre><p>本格的なプロジェクトでは、使うgemをすべて<code>Gemfile</code>というファイルに書き（1つのgemにつき1行：<code>gem \"chunky_png\"</code>）、<code>bundle install</code>でまとめて取ってきます。これは<a href='https://bundler.io' target='_blank'>Bundler</a>の仕事です。</p><p>このサイトでは、<em>ピュアRuby</em>のgemに限り、<code>install_gem</code>がその仕事をブラウザの中で直接引き受けます（左の💎パネルを使ってもかまいません）。よく使われるgemはローカルにキャッシュされていて（⚡）、一瞬でインストールできます：</p>"
           },
           {
             "t": "c",
@@ -2062,7 +3725,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ピクセルは1つずつ指定できます：<code>image[x, y] = color</code>。色は<code>ChunkyPNG::Color.rgb(red, green, blue)</code>で作ります。</p><div class='task'><strong>課題：</strong>ベーコンの旗を描きましょう！画像<code>image</code>（8×8以上）を作り、偶数行をベーコンの赤（<code>ChunkyPNG::Color.rgb(193, 74, 46)</code>）で塗って、奇数行は白のままにします。できあがったら<code>show_image image</code>で見せてください。</div>"
+            "html": "<p>ピクセルは1つずつ指定できます：<code>image[x, y] = color</code>。色は<code>ChunkyPNG::Color.rgb(red, green, blue)</code>で作ります。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://guides.rubygems.org/' target='_blank'>RubyGemsガイド（英語）</a>・<a href='https://bundler.io/guides/getting_started.html' target='_blank'>Bundler入門（英語）</a>・<a href='https://www.rubydoc.info/gems/chunky_png' target='_blank'>ChunkyPNG（英語）</a></div><div class='task'><strong>課題：</strong>ベーコンの旗を描きましょう！画像<code>image</code>（8×8以上）を作り、偶数行をベーコンの赤（<code>ChunkyPNG::Color.rgb(193, 74, 46)</code>）で塗って、奇数行は白のままにします。できあがったら<code>show_image image</code>で見せてください。</div>"
           },
           {
             "t": "x",
@@ -2076,7 +3739,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "html",
       "de": {
-        "title": "15. HTML parsen",
+        "title": "19. HTML parsen",
         "cells": [
           {
             "t": "h",
@@ -2104,7 +3767,31 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Aufgabe:</strong> Sammle alle <strong>Link-Adressen</strong> aus dem Dokument: Baue mit <code>map</code> ein Array <code>links</code> aller <code>href</code>-Werte. An ein Attribut kommst du mit <code>link[\"href\"]</code>. Ergebnis: <code>[\"/speck\", \"/ei\", \"/kaffee\"]</code>. (Führe zuerst die Zellen oben aus, damit <code>doc</code> existiert.)</div>"
+            "html": "<p><code>css</code> findet alle Treffer, <code>at_css</code> nur den ersten – praktisch, wenn es ein Element sowieso nur einmal gibt. Neben CSS versteht Nokogiri auch <strong>XPath</strong>, eine eigene Abfragesprache für solche Bäume: <code>//a[@href='/ei']</code> heisst „irgendwo ein <code>a</code>, dessen <code>href</code> gleich <code>/ei</code> ist“:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts doc.at_css(\"h1\").text\ndoc.xpath(\"//a[@href='/ei']\").text"
+          },
+          {
+            "t": "h",
+            "html": "<p>Nokogiri kann den Baum auch verändern und wieder als HTML ausgeben – hier sollen alle Links in einem neuen Tab aufgehen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "doc.css(\"a\").each { |link| link[\"target\"] = \"_blank\" }\nputs doc.at_css(\"ul\").to_html"
+          },
+          {
+            "t": "h",
+            "html": "<p>Und umgekehrt baut ein <strong>Builder</strong> neues HTML aus Ruby-Code: Jeder Methodenaufruf im Block wird zu einem Element, ein Block darunter zu seinem Inhalt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "seite = Nokogiri::HTML5::Builder.new do |b|\n  b.ul do\n    %w[Speck Ei Kaffee].each { |essen| b.li essen }\n  end\nend\nputs seite.to_html"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://nokogiri.org/tutorials/parsing_an_html_xml_document.html' target='_blank'>Nokogiri: parsen</a> · <a href='https://nokogiri.org/tutorials/searching_a_xml_html_document.html' target='_blank'>Nokogiri: suchen mit CSS und XPath</a> · <a href='https://nokogiri.org/rdoc/Nokogiri/XML/Builder.html' target='_blank'>Builder</a></div><div class='task'><strong>Aufgabe:</strong> Sammle alle <strong>Link-Adressen</strong> aus dem Dokument: Baue mit <code>map</code> ein Array <code>links</code> aller <code>href</code>-Werte. An ein Attribut kommst du mit <code>link[\"href\"]</code>. Ergebnis: <code>[\"/speck\", \"/ei\", \"/kaffee\"]</code>. (Führe zuerst die Zellen oben aus, damit <code>doc</code> existiert.)</div>"
           },
           {
             "t": "x",
@@ -2115,7 +3802,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "15. Parsing HTML",
+        "title": "19. Parsing HTML",
         "cells": [
           {
             "t": "h",
@@ -2143,7 +3830,31 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Task:</strong> Collect all <strong>link addresses</strong> from the document: use <code>map</code> to build an array <code>links</code> of all <code>href</code> values. You reach an attribute via <code>link[\"href\"]</code>. Expected result: <code>[\"/bacon\", \"/egg\", \"/coffee\"]</code>. (Run the cells above first so <code>doc</code> exists.)</div>"
+            "html": "<p><code>css</code> finds every match, <code>at_css</code> only the first one – handy when an element exists only once anyway. Besides CSS, Nokogiri also understands <strong>XPath</strong>, a query language of its own for such trees: <code>//a[@href='/egg']</code> means “an <code>a</code> anywhere whose <code>href</code> equals <code>/egg</code>”:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts doc.at_css(\"h1\").text\ndoc.xpath(\"//a[@href='/egg']\").text"
+          },
+          {
+            "t": "h",
+            "html": "<p>Nokogiri can also change the tree and write it out as HTML again – here every link should open in a new tab:</p>"
+          },
+          {
+            "t": "c",
+            "code": "doc.css(\"a\").each { |link| link[\"target\"] = \"_blank\" }\nputs doc.at_css(\"ul\").to_html"
+          },
+          {
+            "t": "h",
+            "html": "<p>And the other way round, a <strong>builder</strong> makes new HTML from Ruby code: every method call in the block becomes an element, a block below it becomes its content:</p>"
+          },
+          {
+            "t": "c",
+            "code": "page = Nokogiri::HTML5::Builder.new do |b|\n  b.ul do\n    %w[Bacon Egg Coffee].each { |dish| b.li dish }\n  end\nend\nputs page.to_html"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>Look it up:</strong> <a href='https://nokogiri.org/tutorials/parsing_an_html_xml_document.html' target='_blank'>Nokogiri: parsing</a> · <a href='https://nokogiri.org/tutorials/searching_a_xml_html_document.html' target='_blank'>Nokogiri: searching with CSS and XPath</a> · <a href='https://nokogiri.org/rdoc/Nokogiri/XML/Builder.html' target='_blank'>Builder</a></div><div class='task'><strong>Task:</strong> Collect all <strong>link addresses</strong> from the document: use <code>map</code> to build an array <code>links</code> of all <code>href</code> values. You reach an attribute via <code>link[\"href\"]</code>. Expected result: <code>[\"/bacon\", \"/egg\", \"/coffee\"]</code>. (Run the cells above first so <code>doc</code> exists.)</div>"
           },
           {
             "t": "x",
@@ -2154,7 +3865,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "15. HTMLのパース",
+        "title": "19. HTMLのパース",
         "cells": [
           {
             "t": "h",
@@ -2182,7 +3893,31 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>課題：</strong>ドキュメントから<strong>リンク先のアドレス</strong>をすべて集めましょう。<code>map</code>を使って、<code>href</code>の値をすべて集めた配列<code>links</code>を作ってください。属性は<code>link[\"href\"]</code>で取り出せます。結果は<code>[\"/bacon\", \"/egg\", \"/coffee\"]</code>になるはずです。（先に上のセルを実行して、<code>doc</code>を作っておいてください。）</div>"
+            "html": "<p><code>css</code>は一致するものをすべて、<code>at_css</code>は最初の1つだけを見つけます。もともと1つしかない要素を探すときに便利です。NokogiriはCSSのほかに、木構造のための問い合わせ言語<strong>XPath</strong>も理解します。<code>//a[@href='/egg']</code>は「どこかにある<code>a</code>で、<code>href</code>が<code>/egg</code>のもの」という意味です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts doc.at_css(\"h1\").text\ndoc.xpath(\"//a[@href='/egg']\").text"
+          },
+          {
+            "t": "h",
+            "html": "<p>Nokogiriは木を書きかえて、もう一度HTMLとして書き出すこともできます。ここでは、すべてのリンクが新しいタブで開くようにしてみます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "doc.css(\"a\").each { |link| link[\"target\"] = \"_blank\" }\nputs doc.at_css(\"ul\").to_html"
+          },
+          {
+            "t": "h",
+            "html": "<p>逆に<strong>ビルダー</strong>を使うと、Rubyのコードから新しいHTMLを組み立てられます。ブロックの中のメソッド呼び出しが1つずつ要素になり、その下のブロックが要素の中身になります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "page = Nokogiri::HTML5::Builder.new do |b|\n  b.ul do\n    %w[Bacon Egg Coffee].each { |dish| b.li dish }\n  end\nend\nputs page.to_html"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>調べてみよう：</strong><a href='https://nokogiri.org/tutorials/parsing_an_html_xml_document.html' target='_blank'>Nokogiri：パース（英語）</a>・<a href='https://nokogiri.org/tutorials/searching_a_xml_html_document.html' target='_blank'>Nokogiri：CSSとXPathで探す（英語）</a>・<a href='https://nokogiri.org/rdoc/Nokogiri/XML/Builder.html' target='_blank'>Builder（英語）</a></div><div class='task'><strong>課題：</strong>ドキュメントから<strong>リンク先のアドレス</strong>をすべて集めましょう。<code>map</code>を使って、<code>href</code>の値をすべて集めた配列<code>links</code>を作ってください。属性は<code>link[\"href\"]</code>で取り出せます。結果は<code>[\"/bacon\", \"/egg\", \"/coffee\"]</code>になるはずです。（先に上のセルを実行して、<code>doc</code>を作っておいてください。）</div>"
           },
           {
             "t": "x",
@@ -2196,7 +3931,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "sinatra",
       "de": {
-        "title": "16. Sinatra – Webserver",
+        "title": "20. Sinatra – Webserver",
         "cells": [
           {
             "t": "h",
@@ -2208,7 +3943,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Der Mini-Browser spricht direkt mit deiner App: Klick auf die Links, oder tipp einen Pfad in die Adressleiste – probier <code>/hallo/Kaz</code> oder auch <code>/pizza</code> (ergibt 404!).</p><p>So funktioniert es: <code>get \"/pfad\" do … end</code> registriert eine Route, der <strong>Rückgabewert des Blocks</strong> wird die Antwort. Teile mit Doppelpunkt wie <code>:name</code> sind Platzhalter und landen in <code>params</code>. Auf einem richtigen Server startest du so eine App mit <code>ruby app.rb</code> und besuchst <code>localhost:4567</code> – hier ruft der Mini-Browser die App direkt auf (beide sprechen <em>Rack</em>, Rubys Web-Standard).</p><div class='task'><strong>Aufgabe:</strong> Ergänze die Route <code>get \"/speck\"</code>, die <code>CHUNKY BACON!</code> zurückgibt. Der Mini-Browser unten zeigt <code>/speck</code> – im Moment noch ein 404.</div>"
+            "html": "<p>Der Mini-Browser spricht direkt mit deiner App: Klick auf die Links, oder tipp einen Pfad in die Adressleiste – probier <code>/hallo/Kaz</code> oder auch <code>/pizza</code> (ergibt 404!).</p><p>So funktioniert es: <code>get \"/pfad\" do … end</code> registriert eine Route, der <strong>Rückgabewert des Blocks</strong> wird die Antwort. Teile mit Doppelpunkt wie <code>:name</code> sind Platzhalter und landen in <code>params</code>. Auf einem richtigen Server startest du so eine App mit <code>ruby app.rb</code> und besuchst <code>localhost:4567</code> – hier ruft der Mini-Browser die App direkt auf (beide sprechen <em>Rack</em>, Rubys Web-Standard).</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://sinatrarb.com/intro.html' target='_blank'>Sinatra-Einführung</a> · <a href='https://github.com/rack/rack' target='_blank'>Rack</a></div><div class='task'><strong>Aufgabe:</strong> Ergänze die Route <code>get \"/speck\"</code>, die <code>CHUNKY BACON!</code> zurückgibt. Der Mini-Browser unten zeigt <code>/speck</code> – im Moment noch ein 404.</div>"
           },
           {
             "t": "x",
@@ -2219,7 +3954,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "16. Sinatra – web server",
+        "title": "20. Sinatra – web server",
         "cells": [
           {
             "t": "h",
@@ -2231,7 +3966,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>The mini browser talks directly to your app: click the links, or type a path into the address bar – try <code>/hello/Kaz</code> or even <code>/pizza</code> (a 404!).</p><p>How it works: <code>get \"/path\" do … end</code> registers a route, and the <strong>block's return value</strong> becomes the response. Parts with a colon like <code>:name</code> are placeholders and end up in <code>params</code>. On a real server you'd start such an app with <code>ruby app.rb</code> and visit <code>localhost:4567</code> – here the mini browser calls the app directly (both speak <em>Rack</em>, Ruby's web standard).</p><div class='task'><strong>Task:</strong> Add the route <code>get \"/bacon\"</code> returning <code>CHUNKY BACON!</code>. The mini browser below shows <code>/bacon</code> – a 404 for now.</div>"
+            "html": "<p>The mini browser talks directly to your app: click the links, or type a path into the address bar – try <code>/hello/Kaz</code> or even <code>/pizza</code> (a 404!).</p><p>How it works: <code>get \"/path\" do … end</code> registers a route, and the <strong>block's return value</strong> becomes the response. Parts with a colon like <code>:name</code> are placeholders and end up in <code>params</code>. On a real server you'd start such an app with <code>ruby app.rb</code> and visit <code>localhost:4567</code> – here the mini browser calls the app directly (both speak <em>Rack</em>, Ruby's web standard).</p><div class='docs'><strong>Look it up:</strong> <a href='https://sinatrarb.com/intro.html' target='_blank'>Sinatra intro</a> · <a href='https://github.com/rack/rack' target='_blank'>Rack</a></div><div class='task'><strong>Task:</strong> Add the route <code>get \"/bacon\"</code> returning <code>CHUNKY BACON!</code>. The mini browser below shows <code>/bacon</code> – a 404 for now.</div>"
           },
           {
             "t": "x",
@@ -2242,7 +3977,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "16. SinatraでWebサーバー",
+        "title": "20. SinatraでWebサーバー",
         "cells": [
           {
             "t": "h",
@@ -2254,7 +3989,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>このミニブラウザは、あなたのアプリと直接やりとりします。リンクをクリックしたり、アドレスバーにパスを入力したりしてみましょう。<code>/hello/Kaz</code>や、あえて<code>/pizza</code>（404になります！）も試してみてください。</p><p>しくみはこうです。<code>get \"/path\" do … end</code>でルートを登録すると、<strong>ブロックの戻り値</strong>がレスポンスになります。<code>:name</code>のようにコロンで始まる部分はプレースホルダーで、実際の値は<code>params</code>に入ります。本物のサーバーなら、このアプリは<code>ruby app.rb</code>で起動して、ブラウザで<code>localhost:4567</code>を開きます。ここでは、ミニブラウザがアプリを直接呼び出しています（ミニブラウザもアプリも、RubyのWeb標準である<em>Rack</em>に従っているからです）。</p><div class='task'><strong>課題：</strong><code>CHUNKY BACON!</code>を返すルート<code>get \"/bacon\"</code>を追加しましょう。下のミニブラウザは<code>/bacon</code>を表示していますが、今はまだ404です。</div>"
+            "html": "<p>このミニブラウザは、あなたのアプリと直接やりとりします。リンクをクリックしたり、アドレスバーにパスを入力したりしてみましょう。<code>/hello/Kaz</code>や、あえて<code>/pizza</code>（404になります！）も試してみてください。</p><p>しくみはこうです。<code>get \"/path\" do … end</code>でルートを登録すると、<strong>ブロックの戻り値</strong>がレスポンスになります。<code>:name</code>のようにコロンで始まる部分はプレースホルダーで、実際の値は<code>params</code>に入ります。本物のサーバーなら、このアプリは<code>ruby app.rb</code>で起動して、ブラウザで<code>localhost:4567</code>を開きます。ここでは、ミニブラウザがアプリを直接呼び出しています（ミニブラウザもアプリも、RubyのWeb標準である<em>Rack</em>に従っているからです）。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://sinatrarb.com/intro.html' target='_blank'>Sinatra入門（英語）</a>・<a href='https://github.com/rack/rack' target='_blank'>Rack（英語）</a></div><div class='task'><strong>課題：</strong><code>CHUNKY BACON!</code>を返すルート<code>get \"/bacon\"</code>を追加しましょう。下のミニブラウザは<code>/bacon</code>を表示していますが、今はまだ404です。</div>"
           },
           {
             "t": "x",
@@ -2268,7 +4003,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "roda",
       "de": {
-        "title": "17. Roda – der Routing-Baum",
+        "title": "21. Roda – der Routing-Baum",
         "cells": [
           {
             "t": "h",
@@ -2280,7 +4015,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Lies den Baum von oben: <code>r.root</code> fängt <code>/</code>, <code>r.get \"speck\"</code> fängt <code>GET /speck</code>. Spannend wird's bei <code>r.get \"gruss\", String</code>: Das matcht <code>/gruss/&lt;irgendwas&gt;</code>, und das Pfadstück landet als Block-Parameter in <code>name</code> – probier <code>/gruss/Ada</code> im Mini-Browser! Passt gar nichts, antwortet Roda automatisch mit <strong>404</strong>.</p><div class='task'><strong>Aufgabe:</strong> Ergänze im Kiosk die Route <code>r.get \"bestellung\", Integer do |anzahl| … end</code>, die z.&nbsp;B. für <code>/bestellung/5</code> den Text <code>5 Streifen Speck, kommt sofort!</code> zurückgibt (nutze Interpolation). Der Mini-Browser unten zeigt aktuell noch 404.</div>"
+            "html": "<p>Lies den Baum von oben: <code>r.root</code> fängt <code>/</code>, <code>r.get \"speck\"</code> fängt <code>GET /speck</code>. Spannend wird's bei <code>r.get \"gruss\", String</code>: Das matcht <code>/gruss/&lt;irgendwas&gt;</code>, und das Pfadstück landet als Block-Parameter in <code>name</code> – probier <code>/gruss/Ada</code> im Mini-Browser! Passt gar nichts, antwortet Roda automatisch mit <strong>404</strong>.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://roda.jeremyevans.net/documentation.html' target='_blank'>Roda-Dokumentation</a> · <a href='https://roda.jeremyevans.net/rdoc/files/doc/conventions_rdoc.html' target='_blank'>Konventionen für grössere Apps</a></div><div class='task'><strong>Aufgabe:</strong> Ergänze im Kiosk die Route <code>r.get \"bestellung\", Integer do |anzahl| … end</code>, die z.&nbsp;B. für <code>/bestellung/5</code> den Text <code>5 Streifen Speck, kommt sofort!</code> zurückgibt (nutze Interpolation). Der Mini-Browser unten zeigt aktuell noch 404.</div>"
           },
           {
             "t": "x",
@@ -2291,7 +4026,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "17. Roda – the routing tree",
+        "title": "21. Roda – the routing tree",
         "cells": [
           {
             "t": "h",
@@ -2303,7 +4038,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Read the tree top to bottom: <code>r.root</code> catches <code>/</code>, <code>r.get \"bacon\"</code> catches <code>GET /bacon</code>. It gets interesting with <code>r.get \"greet\", String</code>: that matches <code>/greet/&lt;anything&gt;</code>, and the path segment arrives as the block parameter <code>name</code> – try <code>/greet/Ada</code> in the mini browser! If nothing matches, Roda automatically answers with <strong>404</strong>.</p><div class='task'><strong>Task:</strong> Add the route <code>r.get \"order\", Integer do |amount| … end</code> to the kiosk so that e.g. <code>/order/5</code> returns <code>5 strips of bacon, coming right up!</code> (use interpolation). The mini browser below still shows a 404.</div>"
+            "html": "<p>Read the tree top to bottom: <code>r.root</code> catches <code>/</code>, <code>r.get \"bacon\"</code> catches <code>GET /bacon</code>. It gets interesting with <code>r.get \"greet\", String</code>: that matches <code>/greet/&lt;anything&gt;</code>, and the path segment arrives as the block parameter <code>name</code> – try <code>/greet/Ada</code> in the mini browser! If nothing matches, Roda automatically answers with <strong>404</strong>.</p><div class='docs'><strong>Look it up:</strong> <a href='https://roda.jeremyevans.net/documentation.html' target='_blank'>Roda documentation</a> · <a href='https://roda.jeremyevans.net/rdoc/files/doc/conventions_rdoc.html' target='_blank'>Conventions for bigger apps</a></div><div class='task'><strong>Task:</strong> Add the route <code>r.get \"order\", Integer do |amount| … end</code> to the kiosk so that e.g. <code>/order/5</code> returns <code>5 strips of bacon, coming right up!</code> (use interpolation). The mini browser below still shows a 404.</div>"
           },
           {
             "t": "x",
@@ -2314,7 +4049,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "17. Rodaとルーティングツリー",
+        "title": "21. Rodaとルーティングツリー",
         "cells": [
           {
             "t": "h",
@@ -2326,7 +4061,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ツリーは上から順に読みます。<code>r.root</code>は<code>/</code>を、<code>r.get \"bacon\"</code>は<code>GET /bacon</code>を受け止めます。おもしろくなるのは<code>r.get \"greet\", String</code>からです。これは<code>/greet/&lt;anything&gt;</code>にマッチし、パスのその部分がブロック引数<code>name</code>として渡されます。ミニブラウザで<code>/greet/Ada</code>を試してみてください！どれにもマッチしなければ、Rodaが自動で<strong>404</strong>を返します。</p><div class='task'><strong>課題：</strong>Kioskアプリにルート<code>r.get \"order\", Integer do |amount| … end</code>を追加して、たとえば<code>/order/5</code>が<code>5 strips of bacon, coming right up!</code>を返すようにしましょう（文字列の式展開を使います）。下のミニブラウザは、まだ404を表示しています。</div>"
+            "html": "<p>ツリーは上から順に読みます。<code>r.root</code>は<code>/</code>を、<code>r.get \"bacon\"</code>は<code>GET /bacon</code>を受け止めます。おもしろくなるのは<code>r.get \"greet\", String</code>からです。これは<code>/greet/&lt;anything&gt;</code>にマッチし、パスのその部分がブロック引数<code>name</code>として渡されます。ミニブラウザで<code>/greet/Ada</code>を試してみてください！どれにもマッチしなければ、Rodaが自動で<strong>404</strong>を返します。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://roda.jeremyevans.net/documentation.html' target='_blank'>Rodaのドキュメント（英語）</a>・<a href='https://roda.jeremyevans.net/rdoc/files/doc/conventions_rdoc.html' target='_blank'>大きなアプリの書き方（英語）</a></div><div class='task'><strong>課題：</strong>Kioskアプリにルート<code>r.get \"order\", Integer do |amount| … end</code>を追加して、たとえば<code>/order/5</code>が<code>5 strips of bacon, coming right up!</code>を返すようにしましょう（文字列の式展開を使います）。下のミニブラウザは、まだ404を表示しています。</div>"
           },
           {
             "t": "x",
@@ -2340,7 +4075,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "http",
       "de": {
-        "title": "18. HTTP – Daten aus dem Netz",
+        "title": "22. HTTP – Daten aus dem Netz",
         "cells": [
           {
             "t": "h",
@@ -2376,7 +4111,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><strong>Ehrliche Fussnote:</strong> Im Browser sitzt Ruby in einer Sandbox und darf nicht beliebige Server ansprechen. Diese Seite stellt deshalb eine kleine Brücke bereit – erreichbar sind <code>www.ruby-lang.org</code>, <code>rubygems.org</code> und <code>api.github.com</code>; andere Adressen ergeben einen <code>SocketError</code>. Auf deinem eigenen Computer funktioniert <code>net/http</code> mit jeder URL.</p><div class='task'><strong>Aufgabe:</strong> Frag die rubygems-API nach der Gem <code>sinatra</code>: Parse <code>https://rubygems.org/api/v1/gems/sinatra.json</code> in eine Variable <code>info</code> und lass die Zelle die Zahl der Downloads (<code>info[\"downloads\"]</code>) ergeben.</div>"
+            "html": "<p><strong>Ehrliche Fussnote:</strong> Im Browser sitzt Ruby in einer Sandbox und darf nicht beliebige Server ansprechen. Diese Seite stellt deshalb eine kleine Brücke bereit – erreichbar sind <code>www.ruby-lang.org</code>, <code>rubygems.org</code> und <code>api.github.com</code>; andere Adressen ergeben einen <code>SocketError</code>. Auf deinem eigenen Computer funktioniert <code>net/http</code> mit jeder URL.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Net/HTTP.html' target='_blank'>Net::HTTP</a> · <a href='https://docs.ruby-lang.org/en/4.0/JSON.html' target='_blank'>JSON</a> · <a href='https://docs.ruby-lang.org/en/4.0/URI.html' target='_blank'>URI</a></div><div class='task'><strong>Aufgabe:</strong> Frag die rubygems-API nach der Gem <code>sinatra</code>: Parse <code>https://rubygems.org/api/v1/gems/sinatra.json</code> in eine Variable <code>info</code> und lass die Zelle die Zahl der Downloads (<code>info[\"downloads\"]</code>) ergeben.</div>"
           },
           {
             "t": "x",
@@ -2387,7 +4122,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "18. HTTP – fetching data from the web",
+        "title": "22. HTTP – fetching data from the web",
         "cells": [
           {
             "t": "h",
@@ -2423,7 +4158,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><strong>Honest footnote:</strong> in the browser Ruby sits in a sandbox and may not talk to arbitrary servers. This site therefore provides a little bridge – reachable are <code>www.ruby-lang.org</code>, <code>rubygems.org</code> and <code>api.github.com</code>; other addresses raise a <code>SocketError</code>. On your own computer <code>net/http</code> works with any URL.</p><div class='task'><strong>Task:</strong> Ask the rubygems API about the gem <code>sinatra</code>: parse <code>https://rubygems.org/api/v1/gems/sinatra.json</code> into a variable <code>info</code> and make the cell yield the number of downloads (<code>info[\"downloads\"]</code>).</div>"
+            "html": "<p><strong>Honest footnote:</strong> in the browser Ruby sits in a sandbox and may not talk to arbitrary servers. This site therefore provides a little bridge – reachable are <code>www.ruby-lang.org</code>, <code>rubygems.org</code> and <code>api.github.com</code>; other addresses raise a <code>SocketError</code>. On your own computer <code>net/http</code> works with any URL.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Net/HTTP.html' target='_blank'>Net::HTTP</a> · <a href='https://docs.ruby-lang.org/en/4.0/JSON.html' target='_blank'>JSON</a> · <a href='https://docs.ruby-lang.org/en/4.0/URI.html' target='_blank'>URI</a></div><div class='task'><strong>Task:</strong> Ask the rubygems API about the gem <code>sinatra</code>: parse <code>https://rubygems.org/api/v1/gems/sinatra.json</code> into a variable <code>info</code> and make the cell yield the number of downloads (<code>info[\"downloads\"]</code>).</div>"
           },
           {
             "t": "x",
@@ -2434,7 +4169,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "18. HTTPでWebからデータ取得",
+        "title": "22. HTTPでWebからデータ取得",
         "cells": [
           {
             "t": "h",
@@ -2470,7 +4205,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><strong>正直なところ：</strong>ブラウザの中のRubyはサンドボックスに入っていて、好きなサーバーと自由に通信できるわけではありません。そこでこのサイトでは、小さな橋渡しの仕組みを用意しています。つながるのは<code>www.ruby-lang.org</code>、<code>rubygems.org</code>、<code>api.github.com</code>だけで、それ以外のアドレスでは<code>SocketError</code>が発生します。自分のコンピューターでは、<code>net/http</code>はどんなURLにも使えます。</p><div class='task'><strong>課題：</strong>rubygemsのAPIに、<code>sinatra</code>というgemについて聞いてみましょう。<code>https://rubygems.org/api/v1/gems/sinatra.json</code>をパースして変数<code>info</code>に入れ、セルの最後の行の値がダウンロード数（<code>info[\"downloads\"]</code>）になるようにしてください。</div>"
+            "html": "<p><strong>正直なところ：</strong>ブラウザの中のRubyはサンドボックスに入っていて、好きなサーバーと自由に通信できるわけではありません。そこでこのサイトでは、小さな橋渡しの仕組みを用意しています。つながるのは<code>www.ruby-lang.org</code>、<code>rubygems.org</code>、<code>api.github.com</code>だけで、それ以外のアドレスでは<code>SocketError</code>が発生します。自分のコンピューターでは、<code>net/http</code>はどんなURLにも使えます。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/Net=3a=3aHTTP.html' target='_blank'>Net::HTTP</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/JSON.html' target='_blank'>JSON</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/URI.html' target='_blank'>URI</a></div><div class='task'><strong>課題：</strong>rubygemsのAPIに、<code>sinatra</code>というgemについて聞いてみましょう。<code>https://rubygems.org/api/v1/gems/sinatra.json</code>をパースして変数<code>info</code>に入れ、セルの最後の行の値がダウンロード数（<code>info[\"downloads\"]</code>）になるようにしてください。</div>"
           },
           {
             "t": "x",
@@ -2484,7 +4219,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "bigdecimal",
       "de": {
-        "title": "19. Genau rechnen mit BigDecimal",
+        "title": "23. Genau rechnen mit BigDecimal",
         "cells": [
           {
             "t": "h",
@@ -2520,7 +4255,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb'><strong>Auf deinem Rechner:</strong> BigDecimal ist eine C-Erweiterung, die bei Ruby dabei ist (seit Ruby 3.4 als eigene Gem – mit Bundler gehört <code>gem \"bigdecimal\"</code> ins Gemfile). Hier im Browser gibt es keine C-Erweiterungen; du rechnest gerade mit <a href='https://github.com/Largo/bigdecimal-pure'>bigdecimal-pure</a>, das dieselbe Klasse in reinem Ruby nachbaut – innen aus Brüchen (<code>Rational</code>). Gleiche API, gleiche Ergebnisse.</div><div class='task'><strong>Aufgabe:</strong> Die Frühstücksrechnung: 3 × Speck zu 4.20, 2 × Ei zu 1.15 und 1 × Kaffee zu 3.80. Rechne die Summe mit BigDecimal aus (nicht mit Floats!) und speichere sie in <code>total</code>. Die Zelle soll <code>total</code> ergeben – erwartet: <code>0.187e2</code>, also 18.70.</div>"
+            "html": "<p>Ruby hat übrigens schon ab Werk einen zweiten exakten Zahlentyp: <strong>Brüche</strong> (<code>Rational</code>). Ein <code>r</code> hinter einer Zahl macht einen Bruch daraus, und Brüche rechnen ohne jede Rundung – ein Drittel bleibt ein Drittel:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts 1/3r + 1/6r\nputs 0.1r + 0.2r == 0.3r\n(1/3r).to_f"
+          },
+          {
+            "t": "h",
+            "html": "<p>Faustregel: <code>BigDecimal</code> für Geld (feste Nachkommastellen, Runden nach Regeln), <code>Rational</code> für Brüche, die nie aufgehen sollen – und der gute alte <code>Float</code> für alles, was sowieso gemessen ist, wie Temperatur oder Distanz: Er ist schnell und dort genau genug.</p><div class='offweb'><strong>Auf deinem Rechner:</strong> BigDecimal ist eine C-Erweiterung, die bei Ruby dabei ist (seit Ruby 3.4 als eigene Gem – mit Bundler gehört <code>gem \"bigdecimal\"</code> ins Gemfile). Hier im Browser gibt es keine C-Erweiterungen; du rechnest gerade mit <a href='https://github.com/Largo/bigdecimal-pure'>bigdecimal-pure</a>, das dieselbe Klasse in reinem Ruby nachbaut – innen aus Brüchen (<code>Rational</code>). Gleiche API, gleiche Ergebnisse.</div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/BigDecimal.html' target='_blank'>BigDecimal</a> · <a href='https://docs.ruby-lang.org/en/4.0/Rational.html' target='_blank'>Rational</a> · <a href='https://docs.ruby-lang.org/en/4.0/Float.html' target='_blank'>Float</a></div><div class='task'><strong>Aufgabe:</strong> Die Frühstücksrechnung: 3 × Speck zu 4.20, 2 × Ei zu 1.15 und 1 × Kaffee zu 3.80. Rechne die Summe mit BigDecimal aus (nicht mit Floats!) und speichere sie in <code>total</code>. Die Zelle soll <code>total</code> ergeben – erwartet: <code>0.187e2</code>, also 18.70.</div>"
           },
           {
             "t": "x",
@@ -2531,7 +4274,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "19. Exact arithmetic with BigDecimal",
+        "title": "23. Exact arithmetic with BigDecimal",
         "cells": [
           {
             "t": "h",
@@ -2567,7 +4310,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb'><strong>On your machine:</strong> BigDecimal is a C extension that comes with Ruby (since Ruby 3.4 as a gem of its own – with Bundler, <code>gem \"bigdecimal\"</code> belongs in the Gemfile). The browser has no C extensions; you are calculating with <a href='https://github.com/Largo/bigdecimal-pure'>bigdecimal-pure</a>, which rebuilds the same class in pure Ruby – out of fractions (<code>Rational</code>) inside. Same API, same results.</div><div class='task'><strong>Task:</strong> The breakfast bill: 3 × bacon at 4.20, 2 × egg at 1.15 and 1 × coffee at 3.80. Add it up with BigDecimal (not with floats!) and store the sum in <code>total</code>. The cell should evaluate to <code>total</code> – expected: <code>0.187e2</code>, that is 18.70.</div>"
+            "html": "<p>By the way, Ruby has a second exact kind of number built in: <strong>fractions</strong> (<code>Rational</code>). An <code>r</code> after a number makes it a fraction, and fractions compute without any rounding – a third stays a third:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts 1/3r + 1/6r\nputs 0.1r + 0.2r == 0.3r\n(1/3r).to_f"
+          },
+          {
+            "t": "h",
+            "html": "<p>Rule of thumb: <code>BigDecimal</code> for money (fixed decimal places, rounding by the rules), <code>Rational</code> for fractions that should never come out uneven – and good old <code>Float</code> for anything that is measured anyway, such as temperature or distance: it's fast and exact enough there.</p><div class='offweb'><strong>On your machine:</strong> BigDecimal is a C extension that comes with Ruby (since Ruby 3.4 as a gem of its own – with Bundler, <code>gem \"bigdecimal\"</code> belongs in the Gemfile). The browser has no C extensions; you are calculating with <a href='https://github.com/Largo/bigdecimal-pure'>bigdecimal-pure</a>, which rebuilds the same class in pure Ruby – out of fractions (<code>Rational</code>) inside. Same API, same results.</div><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/BigDecimal.html' target='_blank'>BigDecimal</a> · <a href='https://docs.ruby-lang.org/en/4.0/Rational.html' target='_blank'>Rational</a> · <a href='https://docs.ruby-lang.org/en/4.0/Float.html' target='_blank'>Float</a></div><div class='task'><strong>Task:</strong> The breakfast bill: 3 × bacon at 4.20, 2 × egg at 1.15 and 1 × coffee at 3.80. Add it up with BigDecimal (not with floats!) and store the sum in <code>total</code>. The cell should evaluate to <code>total</code> – expected: <code>0.187e2</code>, that is 18.70.</div>"
           },
           {
             "t": "x",
@@ -2578,7 +4329,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "19. BigDecimalで正確な計算",
+        "title": "23. BigDecimalで正確な計算",
         "cells": [
           {
             "t": "h",
@@ -2614,7 +4365,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb'><strong>自分のコンピューターでは：</strong>BigDecimalはRubyに付属しているC拡張です（Ruby 3.4からは独立したgemになったので、Bundlerを使う場合は<code>gem \"bigdecimal\"</code>をGemfileに書きます）。ブラウザではC拡張が使えないため、ここでは<a href='https://github.com/Largo/bigdecimal-pure'>bigdecimal-pure</a>で計算しています。同じクラスをピュアRubyで作り直したもので、内部では分数（<code>Rational</code>）を使っています。APIも結果も同じです。</div><div class='task'><strong>課題：</strong>海外のカフェで朝ごはんのお会計です（単位はドル）。ベーコン4.20 × 3、卵1.15 × 2、コーヒー3.80 × 1。浮動小数点数ではなくBigDecimalで合計を計算して（ここが大事！）、<code>total</code>に入れてください。セルの最後の行の値は<code>total</code>にします。期待される値は<code>0.187e2</code>、つまり18.70です。</div>"
+            "html": "<p>ちなみにRubyには、最初からもう1つ、正確な数の種類があります。<strong>分数</strong>（<code>Rational</code>）です。数の後ろに<code>r</code>をつけると分数になります。分数はまったく丸めずに計算するので、3分の1はずっと3分の1のままです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts 1/3r + 1/6r\nputs 0.1r + 0.2r == 0.3r\n(1/3r).to_f"
+          },
+          {
+            "t": "h",
+            "html": "<p>使い分けの目安です。お金には<code>BigDecimal</code>（小数点以下の桁数が決まっていて、ルールどおりに丸める）、割り切れない分数を正確に扱いたいときは<code>Rational</code>、そして温度や距離のように、そもそも測った値にはおなじみの<code>Float</code>。速いうえに、そういう用途には十分正確です。</p><div class='offweb'><strong>自分のコンピューターでは：</strong>BigDecimalはRubyに付属しているC拡張です（Ruby 3.4からは独立したgemになったので、Bundlerを使う場合は<code>gem \"bigdecimal\"</code>をGemfileに書きます）。ブラウザではC拡張が使えないため、ここでは<a href='https://github.com/Largo/bigdecimal-pure'>bigdecimal-pure</a>で計算しています。同じクラスをピュアRubyで作り直したもので、内部では分数（<code>Rational</code>）を使っています。APIも結果も同じです。</div><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/BigDecimal.html' target='_blank'>BigDecimal</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Rational.html' target='_blank'>Rational</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Float.html' target='_blank'>Float</a></div><div class='task'><strong>課題：</strong>海外のカフェで朝ごはんのお会計です（単位はドル）。ベーコン4.20 × 3、卵1.15 × 2、コーヒー3.80 × 1。浮動小数点数ではなくBigDecimalで合計を計算して（ここが大事！）、<code>total</code>に入れてください。セルの最後の行の値は<code>total</code>にします。期待される値は<code>0.187e2</code>、つまり18.70です。</div>"
           },
           {
             "t": "x",
@@ -2633,7 +4392,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "寄り道"
       },
       "de": {
-        "title": "20. 3D mit three-rb",
+        "title": "24. 3D mit three-rb",
         "cells": [
           {
             "t": "h",
@@ -2669,7 +4428,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Auf deinem eigenen Rechner ist der Aufbau derselbe, nur hängst du den Renderer selbst an ein <code>&lt;canvas&gt;</code>:</p><pre><code>renderer = Three::Renderers::ThreeJSRenderer.new(canvas: \"#scene\")\nrenderer.set_size(640, 480)\nrenderer.render(szene, kamera)</code></pre><p>Genau das nimmt dir <code>show_three</code> hier ab.</p><div class='task'><strong>Aufgabe:</strong> Bau einen Turm! Lege eine Szene <code>turm</code> an, gib ihr Licht, und stapel <strong>mindestens drei</strong> Würfel übereinander – über <code>position.y</code> auf verschiedene Höhen. Zeig ihn mit <code>show_three turm, kamera</code> und lass ihn sich im Block langsam drehen.</div>"
+            "html": "<p>Auf deinem eigenen Rechner ist der Aufbau derselbe, nur hängst du den Renderer selbst an ein <code>&lt;canvas&gt;</code>:</p><pre><code>renderer = Three::Renderers::ThreeJSRenderer.new(canvas: \"#scene\")\nrenderer.set_size(640, 480)\nrenderer.render(szene, kamera)</code></pre><p>Genau das nimmt dir <code>show_three</code> hier ab.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://github.com/lef237/three-rb' target='_blank'>three-rb</a> · <a href='https://threejs.org/docs/' target='_blank'>three.js-Doku</a></div><div class='task'><strong>Aufgabe:</strong> Bau einen Turm! Lege eine Szene <code>turm</code> an, gib ihr Licht, und stapel <strong>mindestens drei</strong> Würfel übereinander – über <code>position.y</code> auf verschiedene Höhen. Zeig ihn mit <code>show_three turm, kamera</code> und lass ihn sich im Block langsam drehen.</div>"
           },
           {
             "t": "x",
@@ -2680,7 +4439,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "20. 3D with three-rb",
+        "title": "24. 3D with three-rb",
         "cells": [
           {
             "t": "h",
@@ -2716,7 +4475,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>On your own machine the setup is the same, except that you attach the renderer to a <code>&lt;canvas&gt;</code> yourself:</p><pre><code>renderer = Three::Renderers::ThreeJSRenderer.new(canvas: \"#scene\")\nrenderer.set_size(640, 480)\nrenderer.render(scene, camera)</code></pre><p>That is exactly what <code>show_three</code> does for you here.</p><div class='task'><strong>Task:</strong> Build a tower! Create a scene <code>tower</code>, give it light, and stack <strong>at least three</strong> cubes on top of each other – at different heights via <code>position.y</code>. Show it with <code>show_three tower, camera</code> and let it turn slowly in the block.</div>"
+            "html": "<p>On your own machine the setup is the same, except that you attach the renderer to a <code>&lt;canvas&gt;</code> yourself:</p><pre><code>renderer = Three::Renderers::ThreeJSRenderer.new(canvas: \"#scene\")\nrenderer.set_size(640, 480)\nrenderer.render(scene, camera)</code></pre><p>That is exactly what <code>show_three</code> does for you here.</p><div class='docs'><strong>Look it up:</strong> <a href='https://github.com/lef237/three-rb' target='_blank'>three-rb</a> · <a href='https://threejs.org/docs/' target='_blank'>three.js docs</a></div><div class='task'><strong>Task:</strong> Build a tower! Create a scene <code>tower</code>, give it light, and stack <strong>at least three</strong> cubes on top of each other – at different heights via <code>position.y</code>. Show it with <code>show_three tower, camera</code> and let it turn slowly in the block.</div>"
           },
           {
             "t": "x",
@@ -2727,7 +4486,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "20. three-rbで3D",
+        "title": "24. three-rbで3D",
         "cells": [
           {
             "t": "h",
@@ -2763,7 +4522,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>自分のコンピューターでも組み立て方は同じです。ただし、レンダラーを<code>&lt;canvas&gt;</code>に取り付ける作業は自分で行います。</p><pre><code>renderer = Three::Renderers::ThreeJSRenderer.new(canvas: \"#scene\")\nrenderer.set_size(640, 480)\nrenderer.render(scene, camera)</code></pre><p>ここでは、この部分を<code>show_three</code>が代わりにやってくれています。</p><div class='task'><strong>課題：</strong>タワーを建てましょう！シーン<code>tower</code>を作って光を当て、立方体を<strong>3つ以上</strong>積み重ねてください。<code>position.y</code>で、それぞれの高さを変えます。<code>show_three tower, camera</code>で表示し、ブロックを渡してゆっくり回転させましょう。</div>"
+            "html": "<p>自分のコンピューターでも組み立て方は同じです。ただし、レンダラーを<code>&lt;canvas&gt;</code>に取り付ける作業は自分で行います。</p><pre><code>renderer = Three::Renderers::ThreeJSRenderer.new(canvas: \"#scene\")\nrenderer.set_size(640, 480)\nrenderer.render(scene, camera)</code></pre><p>ここでは、この部分を<code>show_three</code>が代わりにやってくれています。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://github.com/lef237/three-rb' target='_blank'>three-rb（英語）</a>・<a href='https://threejs.org/docs/' target='_blank'>three.jsのドキュメント（英語）</a></div><div class='task'><strong>課題：</strong>タワーを建てましょう！シーン<code>tower</code>を作って光を当て、立方体を<strong>3つ以上</strong>積み重ねてください。<code>position.y</code>で、それぞれの高さを変えます。<code>show_three tower, camera</code>で表示し、ブロックを渡してゆっくり回転させましょう。</div>"
           },
           {
             "t": "x",
@@ -2777,7 +4536,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "pptx",
       "de": {
-        "title": "21. PowerPoint mit ruby_pptx",
+        "title": "25. PowerPoint mit ruby_pptx",
         "cells": [
           {
             "t": "h",
@@ -2829,7 +4588,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb'><strong>Auf deinem Rechner:</strong> <code>gem install ruby_pptx</code> – oder <code>gem \"ruby_pptx\"</code> im Gemfile. Dort liest und schreibt die Gem XML mit <em>Nokogiri</em>, einer schnellen C-Erweiterung. Hier im Browser gibt es keine C-Erweiterungen, also nimmt sie automatisch <em>REXML</em>, das in reinem Ruby geschrieben ist: langsamer, aber mit genau derselben Datei als Ergebnis. Speichern kannst du dort überall hin, z. B. <code>praesi.save(\"~/Desktop/chunky.pptx\")</code>.</div><div class='task'><strong>Aufgabe:</strong> Bau eine <strong>Speisekarte</strong>! Lege eine neue Präsentation <code>karte</code> an, mit einer Titelfolie und <strong>mindestens zwei</strong> weiteren Folien – jede mit einem Titel, z. B. „Vorspeisen“ und „Hauptgänge“ mit ein paar Gerichten als Aufzählung. Speichere sie als <code>karte.pptx</code>.</div>"
+            "html": "<div class='offweb'><strong>Auf deinem Rechner:</strong> <code>gem install ruby_pptx</code> – oder <code>gem \"ruby_pptx\"</code> im Gemfile. Dort liest und schreibt die Gem XML mit <em>Nokogiri</em>, einer schnellen C-Erweiterung. Hier im Browser gibt es keine C-Erweiterungen, also nimmt sie automatisch <em>REXML</em>, das in reinem Ruby geschrieben ist: langsamer, aber mit genau derselben Datei als Ergebnis. Speichern kannst du dort überall hin, z. B. <code>praesi.save(\"~/Desktop/chunky.pptx\")</code>.</div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://github.com/Largo/ruby_pptx' target='_blank'>ruby_pptx</a> · <a href='https://python-pptx.readthedocs.io/en/latest/' target='_blank'>python-pptx, das Vorbild</a></div><div class='task'><strong>Aufgabe:</strong> Bau eine <strong>Speisekarte</strong>! Lege eine neue Präsentation <code>karte</code> an, mit einer Titelfolie und <strong>mindestens zwei</strong> weiteren Folien – jede mit einem Titel, z. B. „Vorspeisen“ und „Hauptgänge“ mit ein paar Gerichten als Aufzählung. Speichere sie als <code>karte.pptx</code>.</div>"
           },
           {
             "t": "x",
@@ -2840,7 +4599,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "21. PowerPoint with ruby_pptx",
+        "title": "25. PowerPoint with ruby_pptx",
         "cells": [
           {
             "t": "h",
@@ -2892,7 +4651,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb'><strong>On your machine:</strong> <code>gem install ruby_pptx</code> – or <code>gem \"ruby_pptx\"</code> in your Gemfile. There the gem reads and writes XML with <em>Nokogiri</em>, a fast C extension. The browser has no C extensions, so here it automatically uses <em>REXML</em>, written in pure Ruby: slower, but producing exactly the same file. On your machine you can save anywhere, e.g. <code>deck.save(\"~/Desktop/chunky.pptx\")</code>.</div><div class='task'><strong>Task:</strong> Build a <strong>menu</strong>! Create a new presentation <code>menu</code> with a title slide and <strong>at least two</strong> more slides – each with a title, e.g. “Starters” and “Mains” with a few dishes as bullet points. Save it as <code>menu.pptx</code>.</div>"
+            "html": "<div class='offweb'><strong>On your machine:</strong> <code>gem install ruby_pptx</code> – or <code>gem \"ruby_pptx\"</code> in your Gemfile. There the gem reads and writes XML with <em>Nokogiri</em>, a fast C extension. The browser has no C extensions, so here it automatically uses <em>REXML</em>, written in pure Ruby: slower, but producing exactly the same file. On your machine you can save anywhere, e.g. <code>deck.save(\"~/Desktop/chunky.pptx\")</code>.</div><div class='docs'><strong>Look it up:</strong> <a href='https://github.com/Largo/ruby_pptx' target='_blank'>ruby_pptx</a> · <a href='https://python-pptx.readthedocs.io/en/latest/' target='_blank'>python-pptx, the model it follows</a></div><div class='task'><strong>Task:</strong> Build a <strong>menu</strong>! Create a new presentation <code>menu</code> with a title slide and <strong>at least two</strong> more slides – each with a title, e.g. “Starters” and “Mains” with a few dishes as bullet points. Save it as <code>menu.pptx</code>.</div>"
           },
           {
             "t": "x",
@@ -2903,7 +4662,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "21. ruby_pptxでPowerPoint",
+        "title": "25. ruby_pptxでPowerPoint",
         "cells": [
           {
             "t": "h",
@@ -2955,7 +4714,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb'><strong>自分のコンピューターでは：</strong><code>gem install ruby_pptx</code>でインストールします。Gemfileに<code>gem \"ruby_pptx\"</code>と書いてもかまいません。そこでは、gemは高速なC拡張である<em>Nokogiri</em>を使ってXMLを読み書きします。ブラウザにはC拡張がないので、ここでは自動的に、ピュアRubyで書かれた<em>REXML</em>が使われます。速度は落ちますが、できあがるファイルはまったく同じです。自分のコンピューターなら保存先も自由で、たとえば<code>deck.save(\"~/Desktop/chunky.pptx\")</code>とすればデスクトップに保存されます。</div><div class='task'><strong>課題：</strong><strong>メニュー</strong>を作りましょう！新しいプレゼンテーション<code>menu</code>を作り、タイトルスライドに加えて、<strong>2枚以上</strong>のスライドを追加してください。どのスライドにもタイトルを付けます。たとえば「前菜」と「メイン」のスライドを作り、料理をいくつか箇条書きにします。最後に<code>menu.pptx</code>として保存してください。</div>"
+            "html": "<div class='offweb'><strong>自分のコンピューターでは：</strong><code>gem install ruby_pptx</code>でインストールします。Gemfileに<code>gem \"ruby_pptx\"</code>と書いてもかまいません。そこでは、gemは高速なC拡張である<em>Nokogiri</em>を使ってXMLを読み書きします。ブラウザにはC拡張がないので、ここでは自動的に、ピュアRubyで書かれた<em>REXML</em>が使われます。速度は落ちますが、できあがるファイルはまったく同じです。自分のコンピューターなら保存先も自由で、たとえば<code>deck.save(\"~/Desktop/chunky.pptx\")</code>とすればデスクトップに保存されます。</div><div class='docs'><strong>調べてみよう：</strong><a href='https://github.com/Largo/ruby_pptx' target='_blank'>ruby_pptx（英語）</a>・<a href='https://python-pptx.readthedocs.io/en/latest/' target='_blank'>お手本のpython-pptx（英語）</a></div><div class='task'><strong>課題：</strong><strong>メニュー</strong>を作りましょう！新しいプレゼンテーション<code>menu</code>を作り、タイトルスライドに加えて、<strong>2枚以上</strong>のスライドを追加してください。どのスライドにもタイトルを付けます。たとえば「前菜」と「メイン」のスライドを作り、料理をいくつか箇条書きにします。最後に<code>menu.pptx</code>として保存してください。</div>"
           },
           {
             "t": "x",
@@ -2969,7 +4728,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "pdf",
       "de": {
-        "title": "22. PDFs mit Prawn & HexaPDF",
+        "title": "26. PDFs mit Prawn & HexaPDF",
         "cells": [
           {
             "t": "h",
@@ -2989,7 +4748,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 58). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
+            "html": "<p>Im Block funktioniert <code>text</code> ohne <code>pdf.</code>: Prawn führt den Block <em>im</em> Dokument aus (wie der Trick geht, zeigt Lektion 64). <code>float</code> schreibt das Gericht und springt wieder hoch, so landet der Preis rechtsbündig auf derselben Zeile. <code>number_pages</code> setzt am Schluss die Seitenzahlen – <code>&lt;page&gt;</code> und <code>&lt;total&gt;</code> werden pro Seite ausgefüllt. Die Datei <code>speisekarte.pdf</code> erscheint als Download unter der Zelle, und <code>show_pdf</code> nimmt auch ihren Namen.</p><p>Jetzt <strong>HexaPDF</strong>. Es liest PDFs – unsere oder fremde – und schreibt sie wieder. Stempeln wir jede Seite der Speisekarte:</p>"
           },
           {
             "t": "c",
@@ -3005,7 +4764,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install prawn hexapdf</code>, und <code>render_file</code> und <code>write</code> speichern echte Dateien. HexaPDF bringt auch ein Kommandozeilen-Werkzeug mit: <code>hexapdf info speisekarte.pdf</code>, <code>hexapdf merge</code>, <code>hexapdf optimize</code>.</p><p><strong>Schriften:</strong> Die 14 Standardschriften von PDF (Helvetica, Times, Courier …) kennen nur westeuropäische Buchstaben. Für andere Schriften – etwa Japanisch – bettest du eine TrueType-Schrift ein: <code>pdf.font \"NotoSansJP-Regular.ttf\"</code> in Prawn, <code>canvas.font(\"NotoSansJP-Regular.ttf\")</code> in HexaPDF.</p><p><strong>Lizenzen:</strong> Prawn steht unter der Ruby-Lizenz oder der GPL. HexaPDF steht unter der <strong>AGPL</strong>: Gibst du ein Programm weiter, das HexaPDF benutzt, oder bietest es als Webdienst an, verlangt die AGPL in aller Regel, dass du auch dessen Quellcode unter der AGPL veröffentlichst – ausser du kaufst die kommerzielle Lizenz von HexaPDF.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky hat sich eine Urkunde verdient. Schreibe mit Prawn <code>urkunde.pdf</code> mit genau <strong>3 Seiten</strong>: <code>Stufe 1</code> auf der ersten, <code>Stufe 2</code> auf der zweiten, <code>Stufe 3</code> auf der dritten.</div>"
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install prawn hexapdf</code>, und <code>render_file</code> und <code>write</code> speichern echte Dateien. HexaPDF bringt auch ein Kommandozeilen-Werkzeug mit: <code>hexapdf info speisekarte.pdf</code>, <code>hexapdf merge</code>, <code>hexapdf optimize</code>.</p><p><strong>Schriften:</strong> Die 14 Standardschriften von PDF (Helvetica, Times, Courier …) kennen nur westeuropäische Buchstaben. Für andere Schriften – etwa Japanisch – bettest du eine TrueType-Schrift ein: <code>pdf.font \"NotoSansJP-Regular.ttf\"</code> in Prawn, <code>canvas.font(\"NotoSansJP-Regular.ttf\")</code> in HexaPDF.</p><p><strong>Lizenzen:</strong> Prawn steht unter der Ruby-Lizenz oder der GPL. HexaPDF steht unter der <strong>AGPL</strong>: Gibst du ein Programm weiter, das HexaPDF benutzt, oder bietest es als Webdienst an, verlangt die AGPL in aller Regel, dass du auch dessen Quellcode unter der AGPL veröffentlichst – ausser du kaufst die kommerzielle Lizenz von HexaPDF.</p></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://prawnpdf.org/manual.pdf' target='_blank'>Prawn-Handbuch (PDF)</a> · <a href='https://hexapdf.gettalong.org/documentation/' target='_blank'>HexaPDF-Dokumentation</a></div><div class='task'><strong>Aufgabe:</strong> Chunky hat sich eine Urkunde verdient. Schreibe mit Prawn <code>urkunde.pdf</code> mit genau <strong>3 Seiten</strong>: <code>Stufe 1</code> auf der ersten, <code>Stufe 2</code> auf der zweiten, <code>Stufe 3</code> auf der dritten.</div>"
           },
           {
             "t": "x",
@@ -3016,7 +4775,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "22. PDFs with Prawn & HexaPDF",
+        "title": "26. PDFs with Prawn & HexaPDF",
         "cells": [
           {
             "t": "h",
@@ -3036,7 +4795,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 58 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
+            "html": "<p>Inside the block, <code>text</code> works without <code>pdf.</code>: Prawn runs the block <em>inside</em> the document (lesson 64 shows how that trick works). <code>float</code> writes the dish and jumps back up, so the price lands on the same line, aligned right. <code>number_pages</code> stamps the page numbers at the end – <code>&lt;page&gt;</code> and <code>&lt;total&gt;</code> are filled in per page. The file <code>menu.pdf</code> appears as a download below the cell, and <code>show_pdf</code> takes its name too.</p><p>Now <strong>HexaPDF</strong>. It reads PDFs – ours or anybody's – and writes them back. Let's stamp every page of the menu:</p>"
           },
           {
             "t": "c",
@@ -3052,7 +4811,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install prawn hexapdf</code>, and <code>render_file</code> and <code>write</code> save real files. HexaPDF also comes with a command line tool: <code>hexapdf info menu.pdf</code>, <code>hexapdf merge</code>, <code>hexapdf optimize</code>.</p><p><strong>Fonts:</strong> the 14 standard PDF fonts (Helvetica, Times, Courier …) only know Western European letters. For other scripts – Japanese, say – embed a TrueType font: <code>pdf.font \"NotoSansJP-Regular.ttf\"</code> in Prawn, <code>canvas.font(\"NotoSansJP-Regular.ttf\")</code> in HexaPDF.</p><p><strong>Licences:</strong> Prawn comes under Ruby's licence or the GPL. HexaPDF comes under the <strong>AGPL</strong>: if you pass on a program that uses it, or offer one as a web service, the AGPL generally requires you to publish that program's source under the AGPL too – unless you buy HexaPDF's commercial licence.</p></div><div class='task'><strong>Task:</strong> Chunky has earned a certificate. Use Prawn to write <code>certificate.pdf</code> with exactly <strong>3 pages</strong>: <code>Level 1</code> on the first, <code>Level 2</code> on the second, <code>Level 3</code> on the third.</div>"
+            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install prawn hexapdf</code>, and <code>render_file</code> and <code>write</code> save real files. HexaPDF also comes with a command line tool: <code>hexapdf info menu.pdf</code>, <code>hexapdf merge</code>, <code>hexapdf optimize</code>.</p><p><strong>Fonts:</strong> the 14 standard PDF fonts (Helvetica, Times, Courier …) only know Western European letters. For other scripts – Japanese, say – embed a TrueType font: <code>pdf.font \"NotoSansJP-Regular.ttf\"</code> in Prawn, <code>canvas.font(\"NotoSansJP-Regular.ttf\")</code> in HexaPDF.</p><p><strong>Licences:</strong> Prawn comes under Ruby's licence or the GPL. HexaPDF comes under the <strong>AGPL</strong>: if you pass on a program that uses it, or offer one as a web service, the AGPL generally requires you to publish that program's source under the AGPL too – unless you buy HexaPDF's commercial licence.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://prawnpdf.org/manual.pdf' target='_blank'>Prawn manual (PDF)</a> · <a href='https://hexapdf.gettalong.org/documentation/' target='_blank'>HexaPDF documentation</a></div><div class='task'><strong>Task:</strong> Chunky has earned a certificate. Use Prawn to write <code>certificate.pdf</code> with exactly <strong>3 pages</strong>: <code>Level 1</code> on the first, <code>Level 2</code> on the second, <code>Level 3</code> on the third.</div>"
           },
           {
             "t": "x",
@@ -3063,7 +4822,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "22. PrawnとHexaPDFでPDF",
+        "title": "26. PrawnとHexaPDFでPDF",
         "cells": [
           {
             "t": "h",
@@ -3083,7 +4842,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン58で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
+            "html": "<p>ブロックの中では、<code>pdf.</code>を付けなくても<code>text</code>が使えます。Prawnがブロックをドキュメントの<em>中で</em>実行するからです（この仕掛けはレッスン64で紹介します）。<code>float</code>は料理名を書いたあと元の高さに戻るので、値段が同じ行の右端に並びます。<code>number_pages</code>は最後にページ番号を入れます。<code>&lt;page&gt;</code>と<code>&lt;total&gt;</code>はページごとに埋められます。ファイル<code>menu.pdf</code>はセルの下にダウンロードとして現れ、<code>show_pdf</code>にはファイル名を渡すこともできます。</p><p>次は<strong>HexaPDF</strong>です。自分のPDFでもほかの人のPDFでも読み込んで、また書き出せます。メニューの全ページにスタンプを押してみましょう：</p>"
           },
           {
             "t": "c",
@@ -3099,7 +4858,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p><code>gem install prawn hexapdf</code>を実行すれば、<code>render_file</code>や<code>write</code>で本物のファイルとして保存できます。HexaPDFにはコマンドラインツールも付いています：<code>hexapdf info menu.pdf</code>、<code>hexapdf merge</code>、<code>hexapdf optimize</code>。</p><p><strong>フォント：</strong>PDFの14の標準フォント（Helvetica、Times、Courierなど）が扱えるのは、西ヨーロッパの文字だけです。日本語などほかの文字を使うには、TrueTypeフォントを埋め込みます。Prawnでは<code>pdf.font \"NotoSansJP-Regular.ttf\"</code>、HexaPDFでは<code>canvas.font(\"NotoSansJP-Regular.ttf\")</code>です。このノートブックにはフォントファイルがないので、ここでは英語の文字列を使っています。</p><p><strong>ライセンス：</strong>PrawnはRubyライセンスまたはGPLです。HexaPDFは<strong>AGPL</strong>です。HexaPDFを使ったプログラムを配布したり、Webサービスとして提供したりする場合、AGPLでは原則として、そのプログラムのソースコードもAGPLで公開する必要があります。そうしたくない場合は、HexaPDFの商用ライセンスを購入します。</p></div><div class='task'><strong>課題：</strong>Chunkyが修了証をもらいました。Prawnを使って、ちょうど<strong>3ページ</strong>の<code>certificate.pdf</code>を書き出しましょう。1ページ目に<code>Level 1</code>、2ページ目に<code>Level 2</code>、3ページ目に<code>Level 3</code>と書きます。</div>"
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p><code>gem install prawn hexapdf</code>を実行すれば、<code>render_file</code>や<code>write</code>で本物のファイルとして保存できます。HexaPDFにはコマンドラインツールも付いています：<code>hexapdf info menu.pdf</code>、<code>hexapdf merge</code>、<code>hexapdf optimize</code>。</p><p><strong>フォント：</strong>PDFの14の標準フォント（Helvetica、Times、Courierなど）が扱えるのは、西ヨーロッパの文字だけです。日本語などほかの文字を使うには、TrueTypeフォントを埋め込みます。Prawnでは<code>pdf.font \"NotoSansJP-Regular.ttf\"</code>、HexaPDFでは<code>canvas.font(\"NotoSansJP-Regular.ttf\")</code>です。このノートブックにはフォントファイルがないので、ここでは英語の文字列を使っています。</p><p><strong>ライセンス：</strong>PrawnはRubyライセンスまたはGPLです。HexaPDFは<strong>AGPL</strong>です。HexaPDFを使ったプログラムを配布したり、Webサービスとして提供したりする場合、AGPLでは原則として、そのプログラムのソースコードもAGPLで公開する必要があります。そうしたくない場合は、HexaPDFの商用ライセンスを購入します。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://prawnpdf.org/manual.pdf' target='_blank'>Prawnのマニュアル（PDF）（英語）</a>・<a href='https://hexapdf.gettalong.org/documentation/' target='_blank'>HexaPDFのドキュメント（英語）</a></div><div class='task'><strong>課題：</strong>Chunkyが修了証をもらいました。Prawnを使って、ちょうど<strong>3ページ</strong>の<code>certificate.pdf</code>を書き出しましょう。1ページ目に<code>Level 1</code>、2ページ目に<code>Level 2</code>、3ページ目に<code>Level 3</code>と書きます。</div>"
           },
           {
             "t": "x",
@@ -3113,11 +4872,11 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "jpeg",
       "de": {
-        "title": "23. JPEG-Fotos mit pure_jpeg",
+        "title": "27. JPEG-Fotos mit pure_jpeg",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>JPEG – Fotos aus Ruby</h2><p>In Lektion 14 hast du mit <code>chunky_png</code> PNG-Bilder gemalt. PNG speichert jeden Pixel <strong>exakt</strong> – ideal für Logos, Pixel-Art und Screenshots, für Fotos aber riesig. Darum ist fast jedes Foto ein <strong>JPEG</strong>: Es lässt weg, was das Auge kaum bemerkt, und wird dadurch viel kleiner.</p><p>Normalerweise erledigt das eine Bibliothek in C. <a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a> von Peter Cooper schreibt und liest JPEGs in reinem Ruby – darum läuft es hier im Browser. Malen wir einen Sonnenuntergang, Pixel für Pixel:</p>"
+            "html": "<h2>JPEG – Fotos aus Ruby</h2><p>In Lektion 18 hast du mit <code>chunky_png</code> PNG-Bilder gemalt. PNG speichert jeden Pixel <strong>exakt</strong> – ideal für Logos, Pixel-Art und Screenshots, für Fotos aber riesig. Darum ist fast jedes Foto ein <strong>JPEG</strong>: Es lässt weg, was das Auge kaum bemerkt, und wird dadurch viel kleiner.</p><p>Normalerweise erledigt das eine Bibliothek in C. <a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a> von Peter Cooper schreibt und liest JPEGs in reinem Ruby – darum läuft es hier im Browser. Malen wir einen Sonnenuntergang, Pixel für Pixel:</p>"
           },
           {
             "t": "c",
@@ -3149,7 +4908,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>write</code> speichert das JPEG als Datei – sie erscheint als Download unter der Zelle, und <code>show_image</code> nimmt auch ihren Namen. <code>PureJPEG.info</code> liest nur den Kopf der Datei, ohne die Pixel zu entpacken: die Grösse und <code>component_count</code>, 1 Kanal für Graustufen, 3 für Farbe.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>gem install pure_jpeg</code>, und <code>write</code> legt eine echte Datei an. Fotos aus der Kamera liest <code>PureJPEG.read(\"ferien.jpg\")</code> genauso, auch progressive JPEGs. Mit chunky_png geht es in beide Richtungen: <code>PureJPEG.from_chunky_png(png, quality: 80)</code> macht aus einem PNG ein JPEG, und mit <code>foto.each_pixel { |x, y, punkt| … }</code> malst du ein JPEG Pixel für Pixel in ein <code>ChunkyPNG::Image</code>.</p><p>Grenzen: EXIF-Daten (Kamera, Datum, GPS) gehen beim Neu-Speichern verloren, und Ruby rechnet die Wellen langsamer als C – für grosse Fotos nimmst du lieber eine C-Bibliothek wie libvips (Gem <code>ruby-vips</code>). Dafür läuft pure_jpeg überall, wo Ruby läuft, sogar hier. Peter Cooper hat es unter der MIT-Lizenz veröffentlicht.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky schickt eine Postkarte aus den Ferien. Schreibe <code>postkarte.jpg</code>, 80 × 60 Pixel: die obere Hälfte himmelblau <code>[100, 160, 230]</code>, die untere Hälfte grasgrün <code>[60, 160, 60]</code>.</div>"
+            "html": "<p><code>write</code> speichert das JPEG als Datei – sie erscheint als Download unter der Zelle, und <code>show_image</code> nimmt auch ihren Namen. <code>PureJPEG.info</code> liest nur den Kopf der Datei, ohne die Pixel zu entpacken: die Grösse und <code>component_count</code>, 1 Kanal für Graustufen, 3 für Farbe.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>gem install pure_jpeg</code>, und <code>write</code> legt eine echte Datei an. Fotos aus der Kamera liest <code>PureJPEG.read(\"ferien.jpg\")</code> genauso, auch progressive JPEGs. Mit chunky_png geht es in beide Richtungen: <code>PureJPEG.from_chunky_png(png, quality: 80)</code> macht aus einem PNG ein JPEG, und mit <code>foto.each_pixel { |x, y, punkt| … }</code> malst du ein JPEG Pixel für Pixel in ein <code>ChunkyPNG::Image</code>.</p><p>Grenzen: EXIF-Daten (Kamera, Datum, GPS) gehen beim Neu-Speichern verloren, und Ruby rechnet die Wellen langsamer als C – für grosse Fotos nimmst du lieber eine C-Bibliothek wie libvips (Gem <code>ruby-vips</code>). Dafür läuft pure_jpeg überall, wo Ruby läuft, sogar hier. Peter Cooper hat es unter der MIT-Lizenz veröffentlicht.</p></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a></div><div class='task'><strong>Aufgabe:</strong> Chunky schickt eine Postkarte aus den Ferien. Schreibe <code>postkarte.jpg</code>, 80 × 60 Pixel: die obere Hälfte himmelblau <code>[100, 160, 230]</code>, die untere Hälfte grasgrün <code>[60, 160, 60]</code>.</div>"
           },
           {
             "t": "x",
@@ -3160,11 +4919,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "23. JPEG photos with pure_jpeg",
+        "title": "27. JPEG photos with pure_jpeg",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>JPEG – photos from Ruby</h2><p>In lesson 14 you painted PNG pictures with <code>chunky_png</code>. PNG keeps every pixel <strong>exactly</strong> – ideal for logos, pixel art and screenshots, but huge for photos. That is why almost every photo is a <strong>JPEG</strong>: it leaves out what the eye barely notices, and gets much smaller for it.</p><p>Usually a library written in C does this. <a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a> by Peter Cooper writes and reads JPEGs in pure Ruby – which is why it runs here in your browser. Let's paint a sunset, pixel by pixel:</p>"
+            "html": "<h2>JPEG – photos from Ruby</h2><p>In lesson 18 you painted PNG pictures with <code>chunky_png</code>. PNG keeps every pixel <strong>exactly</strong> – ideal for logos, pixel art and screenshots, but huge for photos. That is why almost every photo is a <strong>JPEG</strong>: it leaves out what the eye barely notices, and gets much smaller for it.</p><p>Usually a library written in C does this. <a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a> by Peter Cooper writes and reads JPEGs in pure Ruby – which is why it runs here in your browser. Let's paint a sunset, pixel by pixel:</p>"
           },
           {
             "t": "c",
@@ -3196,7 +4955,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>write</code> saves the JPEG as a file – it appears as a download below the cell, and <code>show_image</code> takes its name too. <code>PureJPEG.info</code> only reads the file's header, without unpacking the pixels: the size, and <code>component_count</code> – 1 channel for greyscale, 3 for colour.</p><div class='offweb' data-title='On your machine'><p><code>gem install pure_jpeg</code>, and <code>write</code> creates a real file. <code>PureJPEG.read(\"holiday.jpg\")</code> reads photos from your camera just the same, progressive JPEGs included. With chunky_png it works both ways: <code>PureJPEG.from_chunky_png(png, quality: 80)</code> turns a PNG into a JPEG, and <code>photo.each_pixel { |x, y, pixel| … }</code> lets you paint a JPEG into a <code>ChunkyPNG::Image</code> pixel by pixel.</p><p>Limits: EXIF data (camera, date, GPS) is lost when you save again, and Ruby computes the waves more slowly than C – for big photos, reach for a C library such as libvips (the <code>ruby-vips</code> gem). In return, pure_jpeg runs wherever Ruby runs, even here. Peter Cooper published it under the MIT licence.</p></div><div class='task'><strong>Task:</strong> Chunky is sending a postcard from the holidays. Write <code>postcard.jpg</code>, 80 × 60 pixels: the top half sky blue <code>[100, 160, 230]</code>, the bottom half grass green <code>[60, 160, 60]</code>.</div>"
+            "html": "<p><code>write</code> saves the JPEG as a file – it appears as a download below the cell, and <code>show_image</code> takes its name too. <code>PureJPEG.info</code> only reads the file's header, without unpacking the pixels: the size, and <code>component_count</code> – 1 channel for greyscale, 3 for colour.</p><div class='offweb' data-title='On your machine'><p><code>gem install pure_jpeg</code>, and <code>write</code> creates a real file. <code>PureJPEG.read(\"holiday.jpg\")</code> reads photos from your camera just the same, progressive JPEGs included. With chunky_png it works both ways: <code>PureJPEG.from_chunky_png(png, quality: 80)</code> turns a PNG into a JPEG, and <code>photo.each_pixel { |x, y, pixel| … }</code> lets you paint a JPEG into a <code>ChunkyPNG::Image</code> pixel by pixel.</p><p>Limits: EXIF data (camera, date, GPS) is lost when you save again, and Ruby computes the waves more slowly than C – for big photos, reach for a C library such as libvips (the <code>ruby-vips</code> gem). In return, pure_jpeg runs wherever Ruby runs, even here. Peter Cooper published it under the MIT licence.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a></div><div class='task'><strong>Task:</strong> Chunky is sending a postcard from the holidays. Write <code>postcard.jpg</code>, 80 × 60 pixels: the top half sky blue <code>[100, 160, 230]</code>, the bottom half grass green <code>[60, 160, 60]</code>.</div>"
           },
           {
             "t": "x",
@@ -3207,11 +4966,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "23. pure_jpegでJPEG写真",
+        "title": "27. pure_jpegでJPEG写真",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>JPEG – Rubyで写真を作る</h2><p>レッスン14では、<code>chunky_png</code>でPNG画像を描きました。PNGはすべてのピクセルを<strong>正確に</strong>保存します。ロゴやドット絵、スクリーンショットには最適ですが、写真だとファイルがとても大きくなります。そこで、ほとんどの写真は<strong>JPEG</strong>です。JPEGは目にはほとんどわからない部分を省くので、ずっと小さくなります。</p><p>ふつうはC言語で書かれたライブラリがこの仕事をします。Peter Cooperさんの<a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a>は、JPEGの書き出しも読み込みもピュアRubyで行います。だから、このブラウザの中で動くのです。夕焼けを1ピクセルずつ描いてみましょう：</p>"
+            "html": "<h2>JPEG – Rubyで写真を作る</h2><p>レッスン18では、<code>chunky_png</code>でPNG画像を描きました。PNGはすべてのピクセルを<strong>正確に</strong>保存します。ロゴやドット絵、スクリーンショットには最適ですが、写真だとファイルがとても大きくなります。そこで、ほとんどの写真は<strong>JPEG</strong>です。JPEGは目にはほとんどわからない部分を省くので、ずっと小さくなります。</p><p>ふつうはC言語で書かれたライブラリがこの仕事をします。Peter Cooperさんの<a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg</a>は、JPEGの書き出しも読み込みもピュアRubyで行います。だから、このブラウザの中で動くのです。夕焼けを1ピクセルずつ描いてみましょう：</p>"
           },
           {
             "t": "c",
@@ -3243,7 +5002,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>write</code>はJPEGをファイルに保存します。ファイルはセルの下にダウンロードとして現れ、<code>show_image</code>にはファイル名を渡すこともできます。<code>PureJPEG.info</code>はピクセルを展開せずに、ファイルの先頭部分だけを読みます。サイズと<code>component_count</code>、つまりグレースケールなら1チャンネル、カラーなら3チャンネルです。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>gem install pure_jpeg</code>を実行すれば、<code>write</code>で本物のファイルが作られます。カメラで撮った写真も<code>PureJPEG.read(\"holiday.jpg\")</code>で同じように読めます。プログレッシブJPEGも大丈夫です。chunky_pngとは両方向に変換できます。<code>PureJPEG.from_chunky_png(png, quality: 80)</code>はPNGからJPEGを作り、<code>photo.each_pixel { |x, y, pixel| … }</code>を使えばJPEGを1ピクセルずつ<code>ChunkyPNG::Image</code>に描き写せます。</p><p>限界もあります。保存し直すとEXIFデータ（カメラ、日付、GPS）は失われますし、RubyはCより波の計算が遅いので、大きな写真にはlibvips（gemは<code>ruby-vips</code>）のようなCのライブラリが向いています。そのかわり、pure_jpegはRubyが動くところならどこでも、ここでさえ動きます。Peter CooperさんがMITライセンスで公開しています。</p></div><div class='task'><strong>課題：</strong>Chunkyが旅先からポストカードを送ります。80 × 60ピクセルの<code>postcard.jpg</code>を書き出しましょう。上半分は空色<code>[100, 160, 230]</code>、下半分は草色<code>[60, 160, 60]</code>です。</div>"
+            "html": "<p><code>write</code>はJPEGをファイルに保存します。ファイルはセルの下にダウンロードとして現れ、<code>show_image</code>にはファイル名を渡すこともできます。<code>PureJPEG.info</code>はピクセルを展開せずに、ファイルの先頭部分だけを読みます。サイズと<code>component_count</code>、つまりグレースケールなら1チャンネル、カラーなら3チャンネルです。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>gem install pure_jpeg</code>を実行すれば、<code>write</code>で本物のファイルが作られます。カメラで撮った写真も<code>PureJPEG.read(\"holiday.jpg\")</code>で同じように読めます。プログレッシブJPEGも大丈夫です。chunky_pngとは両方向に変換できます。<code>PureJPEG.from_chunky_png(png, quality: 80)</code>はPNGからJPEGを作り、<code>photo.each_pixel { |x, y, pixel| … }</code>を使えばJPEGを1ピクセルずつ<code>ChunkyPNG::Image</code>に描き写せます。</p><p>限界もあります。保存し直すとEXIFデータ（カメラ、日付、GPS）は失われますし、RubyはCより波の計算が遅いので、大きな写真にはlibvips（gemは<code>ruby-vips</code>）のようなCのライブラリが向いています。そのかわり、pure_jpegはRubyが動くところならどこでも、ここでさえ動きます。Peter CooperさんがMITライセンスで公開しています。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://github.com/peterc/pure_jpeg' target='_blank'>pure_jpeg（英語）</a></div><div class='task'><strong>課題：</strong>Chunkyが旅先からポストカードを送ります。80 × 60ピクセルの<code>postcard.jpg</code>を書き出しましょう。上半分は空色<code>[100, 160, 230]</code>、下半分は草色<code>[60, 160, 60]</code>です。</div>"
           },
           {
             "t": "x",
@@ -3257,11 +5016,11 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "pycall",
       "de": {
-        "title": "24. PyCall: pandas aus Ruby",
+        "title": "28. PyCall: pandas aus Ruby",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Ruby trifft Python</h2><p>Python hat ein paar Bibliotheken, die alle gern benutzen. Die bekannteste ist <strong>pandas</strong>: eine Tabellenkalkulation, die du mit Code steuerst. Du legst Daten in eine Tabelle, und mit einer Zeile sortierst du sie, zählst eine Spalte zusammen, behältst nur einen Teil der Zeilen oder zählst nach.</p><p>Mit dem Gem <a href='https://github.com/mrkn/pycall.rb' target='_blank'>pycall</a> von Kenta Murata benutzt Ruby Python-Bibliotheken, als wären es Ruby-Objekte. Du schreibst Ruby; pycall reicht jeden Aufruf an Python weiter und bringt die Antwort zurück.</p><p>Hier im Browser läuft Python als <a href='https://pyodide.org' target='_blank'>Pyodide</a> – CPython in WebAssembly, gleich neben unserem Ruby. Es wird geladen, sobald du diese Lektion öffnest (einmalig rund 12 MB). Eine Zelle, die du vorher startest, wartet einfach darauf.</p>"
+            "html": "<h2>Ruby trifft Python</h2><p>Python hat ein paar Bibliotheken, die alle gern benutzen. Die bekannteste ist <strong>pandas</strong>: eine Tabellenkalkulation, die du mit Code steuerst. Du legst Daten in eine Tabelle, und mit einer Zeile sortierst du sie, zählst eine Spalte zusammen, behältst nur einen Teil der Zeilen oder zählst nach.</p><p>Mit dem Gem <a href='https://github.com/red-data-tools/pycall.rb' target='_blank'>pycall</a> von Kenta Murata benutzt Ruby Python-Bibliotheken, als wären es Ruby-Objekte. Du schreibst Ruby; pycall reicht jeden Aufruf an Python weiter und bringt die Antwort zurück.</p><p>Hier im Browser läuft Python als <a href='https://pyodide.org' target='_blank'>Pyodide</a> – CPython in WebAssembly, gleich neben unserem Ruby. Es wird geladen, sobald du diese Lektion öffnest (einmalig rund 12 MB). Eine Zelle, die du vorher startest, wartet einfach darauf.</p>"
           },
           {
             "t": "c",
@@ -3341,7 +5100,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Tisch 1 hat drei Sachen bestellt, Tisch 2 zwei, Tisch 3 eine. In reinem Ruby, mit einem Array aus Hashes, schriebst du:</p><pre>bestellungen.group_by { |b| b[:tisch] }.transform_values(&amp;:size)</pre><p>pandas macht das für eine ganze Tabelle, und statt <code>count</code> gehen auch <code>sum</code>, <code>mean</code> (der Durchschnitt), <code>max</code> und viele mehr.</p><div class='offweb' data-title='Auf deinem Computer'><p>Du brauchst Python mit pandas (<code>pip install pandas</code>) und das Gem: <code>gem install pycall</code>. Der Code dieser Lektion läuft dann unverändert – pycall lädt die Python-Bibliothek in dein Ruby-Programm, und welches Python es nimmt, bestimmt die Umgebungsvariable <code>PYTHON</code>. Hier im Browser übernimmt eine kleine Brücke diese Rolle und spricht über JavaScript mit Pyodide; Ruby-Blöcke als Python-Funktionen kann sie nicht übergeben.</p><p>Für kleine Tabellen reichen Rubys eigene Mittel – CSV und Hashes – weit. pycall lohnt sich, wenn Python etwas hat, das Ruby fehlt: pandas, scikit-learn, matplotlib. pandas und numpy stehen unter der BSD-Lizenz, Pyodide unter der Mozilla Public License 2.0.</p></div><div class='task'><strong>Aufgabe:</strong> Wie viel hat jeder Gast ausgegeben? Zähle mit <code>groupby</code> den <code>preis</code> pro <code>gast</code> zusammen und mach daraus einen Ruby-Hash <code>ausgaben</code>, etwa <code>{\"Isi\" =&gt; …, \"Kaz\" =&gt; …}</code>.</div>"
+            "html": "<p>Tisch 1 hat drei Sachen bestellt, Tisch 2 zwei, Tisch 3 eine. In reinem Ruby, mit einem Array aus Hashes, schriebst du:</p><pre>bestellungen.group_by { |b| b[:tisch] }.transform_values(&amp;:size)</pre><p>pandas macht das für eine ganze Tabelle, und statt <code>count</code> gehen auch <code>sum</code>, <code>mean</code> (der Durchschnitt), <code>max</code> und viele mehr.</p><div class='offweb' data-title='Auf deinem Computer'><p>Du brauchst Python mit pandas (<code>pip install pandas</code>) und das Gem: <code>gem install pycall</code>. Der Code dieser Lektion läuft dann unverändert – pycall lädt die Python-Bibliothek in dein Ruby-Programm, und welches Python es nimmt, bestimmt die Umgebungsvariable <code>PYTHON</code>. Hier im Browser übernimmt eine kleine Brücke diese Rolle und spricht über JavaScript mit Pyodide; Ruby-Blöcke als Python-Funktionen kann sie nicht übergeben.</p><p>Für kleine Tabellen reichen Rubys eigene Mittel – CSV und Hashes – weit. pycall lohnt sich, wenn Python etwas hat, das Ruby fehlt: pandas, scikit-learn, matplotlib. pandas und numpy stehen unter der BSD-Lizenz, Pyodide unter der Mozilla Public License 2.0.</p></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://github.com/red-data-tools/pycall.rb' target='_blank'>pycall.rb</a> · <a href='https://pandas.pydata.org/docs/' target='_blank'>pandas-Dokumentation</a></div><div class='task'><strong>Aufgabe:</strong> Wie viel hat jeder Gast ausgegeben? Zähle mit <code>groupby</code> den <code>preis</code> pro <code>gast</code> zusammen und mach daraus einen Ruby-Hash <code>ausgaben</code>, etwa <code>{\"Isi\" =&gt; …, \"Kaz\" =&gt; …}</code>.</div>"
           },
           {
             "t": "x",
@@ -3352,11 +5111,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "24. PyCall: pandas from Ruby",
+        "title": "28. PyCall: pandas from Ruby",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Ruby meets Python</h2><p>Python has a few libraries that everybody wants to use. The best known is <strong>pandas</strong>: think of a spreadsheet you drive with code. You put data into a table, and with one line you sort it, add up a column, keep only some of the rows or count things.</p><p>The <a href='https://github.com/mrkn/pycall.rb' target='_blank'>pycall</a> gem by Kenta Murata lets Ruby use Python libraries as if they were Ruby objects. You write Ruby; pycall hands every call to Python and brings the answer back.</p><p>Here in the browser, Python runs as <a href='https://pyodide.org' target='_blank'>Pyodide</a> – CPython in WebAssembly, right next to our Ruby. It starts loading when you open this lesson (once, about 12 MB). A cell you run before it is ready simply waits.</p>"
+            "html": "<h2>Ruby meets Python</h2><p>Python has a few libraries that everybody wants to use. The best known is <strong>pandas</strong>: think of a spreadsheet you drive with code. You put data into a table, and with one line you sort it, add up a column, keep only some of the rows or count things.</p><p>The <a href='https://github.com/red-data-tools/pycall.rb' target='_blank'>pycall</a> gem by Kenta Murata lets Ruby use Python libraries as if they were Ruby objects. You write Ruby; pycall hands every call to Python and brings the answer back.</p><p>Here in the browser, Python runs as <a href='https://pyodide.org' target='_blank'>Pyodide</a> – CPython in WebAssembly, right next to our Ruby. It starts loading when you open this lesson (once, about 12 MB). A cell you run before it is ready simply waits.</p>"
           },
           {
             "t": "c",
@@ -3436,7 +5195,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Table 1 ordered three things, table 2 two, table 3 one. In plain Ruby, with an array of hashes, you would write:</p><pre>orders.group_by { |o| o[:table] }.transform_values(&amp;:size)</pre><p>pandas does it for a whole table, and instead of <code>count</code> you can use <code>sum</code>, <code>mean</code> (the average), <code>max</code> and many more.</p><div class='offweb' data-title='On your machine'><p>You need Python with pandas (<code>pip install pandas</code>) and the gem: <code>gem install pycall</code>. This lesson's code then runs unchanged – pycall loads the Python library into your Ruby program, and the <code>PYTHON</code> environment variable decides which Python it uses. Here in the browser a small bridge plays that part and talks to Pyodide through JavaScript; it cannot pass Ruby blocks to Python as functions.</p><p>For small tables, Ruby's own tools – CSV and hashes – go a long way. pycall pays off when Python has something Ruby lacks: pandas, scikit-learn, matplotlib. pandas and numpy come under the BSD licence, Pyodide under the Mozilla Public License 2.0.</p></div><div class='task'><strong>Task:</strong> How much did each guest spend? Use <code>groupby</code> to add up <code>price</code> per <code>guest</code>, and turn the result into a Ruby hash <code>spending</code>, such as <code>{\"Isi\" =&gt; …, \"Kaz\" =&gt; …}</code>.</div>"
+            "html": "<p>Table 1 ordered three things, table 2 two, table 3 one. In plain Ruby, with an array of hashes, you would write:</p><pre>orders.group_by { |o| o[:table] }.transform_values(&amp;:size)</pre><p>pandas does it for a whole table, and instead of <code>count</code> you can use <code>sum</code>, <code>mean</code> (the average), <code>max</code> and many more.</p><div class='offweb' data-title='On your machine'><p>You need Python with pandas (<code>pip install pandas</code>) and the gem: <code>gem install pycall</code>. This lesson's code then runs unchanged – pycall loads the Python library into your Ruby program, and the <code>PYTHON</code> environment variable decides which Python it uses. Here in the browser a small bridge plays that part and talks to Pyodide through JavaScript; it cannot pass Ruby blocks to Python as functions.</p><p>For small tables, Ruby's own tools – CSV and hashes – go a long way. pycall pays off when Python has something Ruby lacks: pandas, scikit-learn, matplotlib. pandas and numpy come under the BSD licence, Pyodide under the Mozilla Public License 2.0.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://github.com/red-data-tools/pycall.rb' target='_blank'>pycall.rb</a> · <a href='https://pandas.pydata.org/docs/' target='_blank'>pandas documentation</a></div><div class='task'><strong>Task:</strong> How much did each guest spend? Use <code>groupby</code> to add up <code>price</code> per <code>guest</code>, and turn the result into a Ruby hash <code>spending</code>, such as <code>{\"Isi\" =&gt; …, \"Kaz\" =&gt; …}</code>.</div>"
           },
           {
             "t": "x",
@@ -3447,11 +5206,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "24. PyCall：Rubyからpandas",
+        "title": "28. PyCall：Rubyからpandas",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>RubyとPythonの出会い</h2><p>Pythonには、みんなが使いたがるライブラリがいくつかあります。いちばん有名なのが<strong>pandas</strong>です。コードで操作する表計算ソフトだと思ってください。データを表に入れれば、1行で並べ替えたり、列を合計したり、一部の行だけを残したり、数を数えたりできます。</p><p>村田賢太さんの<a href='https://github.com/mrkn/pycall.rb' target='_blank'>pycall</a> gemを使うと、RubyからPythonのライブラリを、まるでRubyのオブジェクトのように使えます。あなたが書くのはRubyです。pycallが呼び出しをひとつずつPythonに渡し、答えを持ち帰ります。</p><p>このブラウザの中では、Pythonは<a href='https://pyodide.org' target='_blank'>Pyodide</a>として動きます。WebAssemblyで動くCPythonで、私たちのRubyのすぐ隣にいます。このレッスンを開くと読み込みが始まります（初回のみ約12 MB）。準備ができる前に実行したセルは、そのまま待ちます。</p>"
+            "html": "<h2>RubyとPythonの出会い</h2><p>Pythonには、みんなが使いたがるライブラリがいくつかあります。いちばん有名なのが<strong>pandas</strong>です。コードで操作する表計算ソフトだと思ってください。データを表に入れれば、1行で並べ替えたり、列を合計したり、一部の行だけを残したり、数を数えたりできます。</p><p>村田賢太さんの<a href='https://github.com/red-data-tools/pycall.rb' target='_blank'>pycall</a> gemを使うと、RubyからPythonのライブラリを、まるでRubyのオブジェクトのように使えます。あなたが書くのはRubyです。pycallが呼び出しをひとつずつPythonに渡し、答えを持ち帰ります。</p><p>このブラウザの中では、Pythonは<a href='https://pyodide.org' target='_blank'>Pyodide</a>として動きます。WebAssemblyで動くCPythonで、私たちのRubyのすぐ隣にいます。このレッスンを開くと読み込みが始まります（初回のみ約12 MB）。準備ができる前に実行したセルは、そのまま待ちます。</p>"
           },
           {
             "t": "c",
@@ -3531,7 +5290,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>テーブル1は3品、テーブル2は2品、テーブル3は1品を頼みました。ふつうのRubyで、ハッシュの配列なら、こう書きます：</p><pre>orders.group_by { |o| o[:table] }.transform_values(&amp;:size)</pre><p>pandasはこれを表全体に対して行います。<code>count</code>の代わりに<code>sum</code>、<code>mean</code>（平均）、<code>max</code>なども使えます。</p><div class='offweb' data-title='自分のコンピューターでは'><p>pandas入りのPython（<code>pip install pandas</code>）とgem（<code>gem install pycall</code>）が必要です。そうすれば、このレッスンのコードはそのまま動きます。pycallはPythonのライブラリをRubyプログラムの中に読み込み、どのPythonを使うかは環境変数<code>PYTHON</code>で決まります。このブラウザでは、小さなブリッジがその役を引き受け、JavaScriptを通してPyodideと話しています。RubyのブロックをPythonの関数として渡すことはできません。</p><p>小さな表なら、Ruby自身の道具、CSVやハッシュでも十分です。pycallが役に立つのは、RubyにないものがPythonにあるとき、つまりpandas、scikit-learn、matplotlibなどです。pandasとnumpyはBSDライセンス、PyodideはMozilla Public License 2.0です。</p></div><div class='task'><strong>課題：</strong>それぞれのお客さんはいくら使ったでしょう？ <code>groupby</code>を使って<code>guest</code>ごとに<code>price</code>を合計し、その結果をRubyのハッシュ<code>spending</code>にしましょう。たとえば<code>{\"Isi\" =&gt; …, \"Kaz\" =&gt; …}</code>のようになります。</div>"
+            "html": "<p>テーブル1は3品、テーブル2は2品、テーブル3は1品を頼みました。ふつうのRubyで、ハッシュの配列なら、こう書きます：</p><pre>orders.group_by { |o| o[:table] }.transform_values(&amp;:size)</pre><p>pandasはこれを表全体に対して行います。<code>count</code>の代わりに<code>sum</code>、<code>mean</code>（平均）、<code>max</code>なども使えます。</p><div class='offweb' data-title='自分のコンピューターでは'><p>pandas入りのPython（<code>pip install pandas</code>）とgem（<code>gem install pycall</code>）が必要です。そうすれば、このレッスンのコードはそのまま動きます。pycallはPythonのライブラリをRubyプログラムの中に読み込み、どのPythonを使うかは環境変数<code>PYTHON</code>で決まります。このブラウザでは、小さなブリッジがその役を引き受け、JavaScriptを通してPyodideと話しています。RubyのブロックをPythonの関数として渡すことはできません。</p><p>小さな表なら、Ruby自身の道具、CSVやハッシュでも十分です。pycallが役に立つのは、RubyにないものがPythonにあるとき、つまりpandas、scikit-learn、matplotlibなどです。pandasとnumpyはBSDライセンス、PyodideはMozilla Public License 2.0です。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://github.com/red-data-tools/pycall.rb' target='_blank'>pycall.rb（英語）</a>・<a href='https://pandas.pydata.org/docs/' target='_blank'>pandasのドキュメント（英語）</a></div><div class='task'><strong>課題：</strong>それぞれのお客さんはいくら使ったでしょう？ <code>groupby</code>を使って<code>guest</code>ごとに<code>price</code>を合計し、その結果をRubyのハッシュ<code>spending</code>にしましょう。たとえば<code>{\"Isi\" =&gt; …, \"Kaz\" =&gt; …}</code>のようになります。</div>"
           },
           {
             "t": "x",
@@ -3545,11 +5304,11 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "sympy",
       "de": {
-        "title": "25. SymPy: Mathe mit Symbolen",
+        "title": "29. SymPy: Mathe mit Symbolen",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Mathe mit Symbolen</h2><p>Computer rechnen meist mit Zahlen, und Kommazahlen werden gerundet – probier in Ruby <code>0.1 + 0.2</code>. <a href='https://www.sympy.org' target='_blank'>SymPy</a> rechnet so, wie du auf Papier rechnest: mit Brüchen, Wurzeln und Buchstaben wie <code>x</code>. Es multipliziert Klammern aus, löst Gleichungen und bildet Ableitungen, und jede Antwort ist exakt.</p><p>SymPy ist eine Python-Bibliothek, also benutzen wir es über pycall, genau wie pandas in Lektion 24: <code>PyCall.import_module</code>, ein Punkt für alles darin. Beim ersten Mal lädt es rund 5 MB.</p>"
+            "html": "<h2>Mathe mit Symbolen</h2><p>Computer rechnen meist mit Zahlen, und Kommazahlen werden gerundet – probier in Ruby <code>0.1 + 0.2</code>. <a href='https://www.sympy.org' target='_blank'>SymPy</a> rechnet so, wie du auf Papier rechnest: mit Brüchen, Wurzeln und Buchstaben wie <code>x</code>. Es multipliziert Klammern aus, löst Gleichungen und bildet Ableitungen, und jede Antwort ist exakt.</p><p>SymPy ist eine Python-Bibliothek, also benutzen wir es über pycall, genau wie pandas in Lektion 28: <code>PyCall.import_module</code>, ein Punkt für alles darin. Beim ersten Mal lädt es rund 5 MB.</p>"
           },
           {
             "t": "c",
@@ -3605,7 +5364,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Die Ableitung von x³ + 2x ist 3x² + 2. Wo die Ableitung 0 ist, ist die Kurve einen Moment lang flach – oben auf einem Hügel oder unten in einem Tal. <code>diff</code> und <code>solve</code> zusammen finden also die Hügel und Täler einer Kurve.</p><div class='offweb' data-title='Auf deinem Computer'><p>Du brauchst Python mit SymPy (<code>pip install sympy</code>) und das Gem: <code>gem install pycall</code>; der Code dieser Lektion läuft dann unverändert. SymPy und mpmath, mit dem es seine Kommazahlen rechnet, stehen unter der BSD-Lizenz.</p></div><div class='task'><strong>Aufgabe:</strong> Wo ist die Kurve x³ − 6x² + 9x flach? Bilde mit <code>sp.diff</code> ihre Ableitung, finde mit <code>sp.solve</code>, wo diese 0 ist, und speichere die Antwort in <code>flach</code>.</div>"
+            "html": "<p>Die Ableitung von x³ + 2x ist 3x² + 2. Wo die Ableitung 0 ist, ist die Kurve einen Moment lang flach – oben auf einem Hügel oder unten in einem Tal. <code>diff</code> und <code>solve</code> zusammen finden also die Hügel und Täler einer Kurve.</p><div class='offweb' data-title='Auf deinem Computer'><p>Du brauchst Python mit SymPy (<code>pip install sympy</code>) und das Gem: <code>gem install pycall</code>; der Code dieser Lektion läuft dann unverändert. SymPy und mpmath, mit dem es seine Kommazahlen rechnet, stehen unter der BSD-Lizenz.</p></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.sympy.org/latest/index.html' target='_blank'>SymPy-Dokumentation</a> · <a href='https://github.com/red-data-tools/pycall.rb' target='_blank'>pycall.rb</a></div><div class='task'><strong>Aufgabe:</strong> Wo ist die Kurve x³ − 6x² + 9x flach? Bilde mit <code>sp.diff</code> ihre Ableitung, finde mit <code>sp.solve</code>, wo diese 0 ist, und speichere die Antwort in <code>flach</code>.</div>"
           },
           {
             "t": "x",
@@ -3616,11 +5375,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "25. SymPy: maths with symbols",
+        "title": "29. SymPy: maths with symbols",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Maths with symbols</h2><p>Computers usually calculate with numbers, and decimal numbers get rounded – try <code>0.1 + 0.2</code> in Ruby. <a href='https://www.sympy.org' target='_blank'>SymPy</a> calculates the way you do on paper: with fractions, square roots and letters like <code>x</code>. It multiplies out brackets, solves equations and finds derivatives, and every answer is exact.</p><p>SymPy is a Python library, so we use it through pycall, just like pandas in lesson 24: <code>PyCall.import_module</code>, a dot for everything in it. The first time, it loads about 5 MB.</p>"
+            "html": "<h2>Maths with symbols</h2><p>Computers usually calculate with numbers, and decimal numbers get rounded – try <code>0.1 + 0.2</code> in Ruby. <a href='https://www.sympy.org' target='_blank'>SymPy</a> calculates the way you do on paper: with fractions, square roots and letters like <code>x</code>. It multiplies out brackets, solves equations and finds derivatives, and every answer is exact.</p><p>SymPy is a Python library, so we use it through pycall, just like pandas in lesson 28: <code>PyCall.import_module</code>, a dot for everything in it. The first time, it loads about 5 MB.</p>"
           },
           {
             "t": "c",
@@ -3676,7 +5435,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>The derivative of x³ + 2x is 3x² + 2. Where the derivative is 0, the curve is flat for a moment – at the top of a hill or the bottom of a valley. So <code>diff</code> and <code>solve</code> together find a curve's hills and valleys.</p><div class='offweb' data-title='On your machine'><p>You need Python with SymPy (<code>pip install sympy</code>) and the gem: <code>gem install pycall</code>; the code of this lesson then runs unchanged. SymPy and mpmath, which it computes its decimals with, come under the BSD licence.</p></div><div class='task'><strong>Task:</strong> Where is the curve x³ − 6x² + 9x flat? Take its derivative with <code>sp.diff</code>, find where that is 0 with <code>sp.solve</code>, and store the answer in <code>flat</code>.</div>"
+            "html": "<p>The derivative of x³ + 2x is 3x² + 2. Where the derivative is 0, the curve is flat for a moment – at the top of a hill or the bottom of a valley. So <code>diff</code> and <code>solve</code> together find a curve's hills and valleys.</p><div class='offweb' data-title='On your machine'><p>You need Python with SymPy (<code>pip install sympy</code>) and the gem: <code>gem install pycall</code>; the code of this lesson then runs unchanged. SymPy and mpmath, which it computes its decimals with, come under the BSD licence.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://docs.sympy.org/latest/index.html' target='_blank'>SymPy documentation</a> · <a href='https://github.com/red-data-tools/pycall.rb' target='_blank'>pycall.rb</a></div><div class='task'><strong>Task:</strong> Where is the curve x³ − 6x² + 9x flat? Take its derivative with <code>sp.diff</code>, find where that is 0 with <code>sp.solve</code>, and store the answer in <code>flat</code>.</div>"
           },
           {
             "t": "x",
@@ -3687,11 +5446,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "25. SymPy：記号で数学",
+        "title": "29. SymPy：記号で数学",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>記号で数学</h2><p>コンピューターはふつう数値で計算し、小数は丸められます。Rubyで<code>0.1 + 0.2</code>を試してみてください。<a href='https://www.sympy.org' target='_blank'>SymPy</a>は、紙の上で計算するのと同じように、分数や平方根、<code>x</code>のような文字のまま計算します。かっこを展開し、方程式を解き、微分をして、答えはいつも正確です。</p><p>SymPyはPythonのライブラリなので、レッスン24のpandasと同じようにpycallを通して使います。<code>PyCall.import_module</code>で取り込み、中のものにはドットで届きます。初回は約5 MBを読み込みます。</p>"
+            "html": "<h2>記号で数学</h2><p>コンピューターはふつう数値で計算し、小数は丸められます。Rubyで<code>0.1 + 0.2</code>を試してみてください。<a href='https://www.sympy.org' target='_blank'>SymPy</a>は、紙の上で計算するのと同じように、分数や平方根、<code>x</code>のような文字のまま計算します。かっこを展開し、方程式を解き、微分をして、答えはいつも正確です。</p><p>SymPyはPythonのライブラリなので、レッスン28のpandasと同じようにpycallを通して使います。<code>PyCall.import_module</code>で取り込み、中のものにはドットで届きます。初回は約5 MBを読み込みます。</p>"
           },
           {
             "t": "c",
@@ -3747,7 +5506,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>x³ + 2xの導関数は3x² + 2です。導関数が0のところでは、曲線が一瞬だけ平らになります。山のてっぺんか、谷の底です。つまり<code>diff</code>と<code>solve</code>を組み合わせると、曲線の山と谷が見つかります。</p><div class='offweb' data-title='自分のコンピューターでは'><p>SymPy入りのPython（<code>pip install sympy</code>）とgem（<code>gem install pycall</code>）が必要です。そうすれば、このレッスンのコードはそのまま動きます。SymPyと、SymPyが小数の計算に使うmpmathは、BSDライセンスです。</p></div><div class='task'><strong>課題：</strong>曲線x³ − 6x² + 9xが平らになるのはどこでしょう？ <code>sp.diff</code>で導関数を求め、<code>sp.solve</code>でそれが0になるところを見つけて、答えを<code>flat</code>に入れましょう。</div>"
+            "html": "<p>x³ + 2xの導関数は3x² + 2です。導関数が0のところでは、曲線が一瞬だけ平らになります。山のてっぺんか、谷の底です。つまり<code>diff</code>と<code>solve</code>を組み合わせると、曲線の山と谷が見つかります。</p><div class='offweb' data-title='自分のコンピューターでは'><p>SymPy入りのPython（<code>pip install sympy</code>）とgem（<code>gem install pycall</code>）が必要です。そうすれば、このレッスンのコードはそのまま動きます。SymPyと、SymPyが小数の計算に使うmpmathは、BSDライセンスです。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.sympy.org/latest/index.html' target='_blank'>SymPyのドキュメント（英語）</a>・<a href='https://github.com/red-data-tools/pycall.rb' target='_blank'>pycall.rb（英語）</a></div><div class='task'><strong>課題：</strong>曲線x³ − 6x² + 9xが平らになるのはどこでしょう？ <code>sp.diff</code>で導関数を求め、<code>sp.solve</code>でそれが0になるところを見つけて、答えを<code>flat</code>に入れましょう。</div>"
           },
           {
             "t": "x",
@@ -3761,11 +5520,11 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "numpy",
       "de": {
-        "title": "26. NumPy: ganze Arrays auf einmal",
+        "title": "30. NumPy: ganze Arrays auf einmal",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Ganze Arrays auf einmal</h2><p>Auf <a href='https://numpy.org' target='_blank'>NumPy</a> steht fast alles, was Python mit Zahlen macht – pandas aus Lektion 24 ist darauf gebaut, und matplotlib und scikit-learn in den nächsten beiden Lektionen auch. Die Idee ist einfach: ein <strong>Array</strong> aus Zahlen, mit dem du als Ganzes rechnest. Keine Schleife – die läuft in NumPy, in schnellem kompiliertem Code.</p><p>Wir erreichen es wieder über pycall. Hier fünf Temperaturen in Celsius, in einer Zeile in Fahrenheit umgerechnet:</p>"
+            "html": "<h2>Ganze Arrays auf einmal</h2><p>Auf <a href='https://numpy.org' target='_blank'>NumPy</a> steht fast alles, was Python mit Zahlen macht – pandas aus Lektion 28 ist darauf gebaut, und matplotlib und scikit-learn in den nächsten beiden Lektionen auch. Die Idee ist einfach: ein <strong>Array</strong> aus Zahlen, mit dem du als Ganzes rechnest. Keine Schleife – die läuft in NumPy, in schnellem kompiliertem Code.</p><p>Wir erreichen es wieder über pycall. Hier fünf Temperaturen in Celsius, in einer Zeile in Fahrenheit umgerechnet:</p>"
           },
           {
             "t": "c",
@@ -3821,7 +5580,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Ab da funktionieren wieder Rubys eigene Methoden – hier <code>map</code> mit <code>round</code>.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>pip install numpy</code> und <code>gem install pycall</code>, und der Code dieser Lektion läuft unverändert. Für Zahlen in Ruby selbst gibt es <a href='https://github.com/ruby-numo/numo-narray' target='_blank'>Numo::NArray</a>, das ganz ähnlich wie NumPy arbeitet. NumPy steht unter der BSD-Lizenz.</p></div><div class='task'><strong>Aufgabe:</strong> Wie viele dieser Prüfungspunkte sind 60 oder mehr? Lass NumPy das machen – ohne Ruby-Schleife – und speichere die Anzahl in <code>bestanden</code>, als Ruby-Zahl.</div>"
+            "html": "<p>Ab da funktionieren wieder Rubys eigene Methoden – hier <code>map</code> mit <code>round</code>.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>pip install numpy</code> und <code>gem install pycall</code>, und der Code dieser Lektion läuft unverändert. Für Zahlen in Ruby selbst gibt es <a href='https://github.com/ruby-numo/numo-narray' target='_blank'>Numo::NArray</a>, das ganz ähnlich wie NumPy arbeitet. NumPy steht unter der BSD-Lizenz.</p></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://numpy.org/doc/stable/' target='_blank'>NumPy-Dokumentation</a></div><div class='task'><strong>Aufgabe:</strong> Wie viele dieser Prüfungspunkte sind 60 oder mehr? Lass NumPy das machen – ohne Ruby-Schleife – und speichere die Anzahl in <code>bestanden</code>, als Ruby-Zahl.</div>"
           },
           {
             "t": "x",
@@ -3832,11 +5591,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "26. NumPy: whole arrays at once",
+        "title": "30. NumPy: whole arrays at once",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Whole arrays at once</h2><p><a href='https://numpy.org' target='_blank'>NumPy</a> is the library almost all of Python's number crunching stands on – pandas from lesson 24 is built on it, and so are matplotlib and scikit-learn in the next two lessons. Its idea is simple: an <strong>array</strong> of numbers that you calculate with as a whole. No loop – NumPy runs the loop for you, in fast compiled code.</p><p>We reach it through pycall again. Here are five temperatures in Celsius, turned into Fahrenheit in one line:</p>"
+            "html": "<h2>Whole arrays at once</h2><p><a href='https://numpy.org' target='_blank'>NumPy</a> is the library almost all of Python's number crunching stands on – pandas from lesson 28 is built on it, and so are matplotlib and scikit-learn in the next two lessons. Its idea is simple: an <strong>array</strong> of numbers that you calculate with as a whole. No loop – NumPy runs the loop for you, in fast compiled code.</p><p>We reach it through pycall again. Here are five temperatures in Celsius, turned into Fahrenheit in one line:</p>"
           },
           {
             "t": "c",
@@ -3892,7 +5651,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>From there on, Ruby's own methods work again – here <code>map</code> with <code>round</code>.</p><div class='offweb' data-title='On your machine'><p><code>pip install numpy</code> and <code>gem install pycall</code>, and the code of this lesson runs unchanged. For numbers in Ruby itself there is <a href='https://github.com/ruby-numo/numo-narray' target='_blank'>Numo::NArray</a>, which works much like NumPy. NumPy comes under the BSD licence.</p></div><div class='task'><strong>Task:</strong> How many of these exam scores are 60 or more? Let NumPy do it – no Ruby loop – and store the count in <code>passed</code>, as a Ruby number.</div>"
+            "html": "<p>From there on, Ruby's own methods work again – here <code>map</code> with <code>round</code>.</p><div class='offweb' data-title='On your machine'><p><code>pip install numpy</code> and <code>gem install pycall</code>, and the code of this lesson runs unchanged. For numbers in Ruby itself there is <a href='https://github.com/ruby-numo/numo-narray' target='_blank'>Numo::NArray</a>, which works much like NumPy. NumPy comes under the BSD licence.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://numpy.org/doc/stable/' target='_blank'>NumPy documentation</a></div><div class='task'><strong>Task:</strong> How many of these exam scores are 60 or more? Let NumPy do it – no Ruby loop – and store the count in <code>passed</code>, as a Ruby number.</div>"
           },
           {
             "t": "x",
@@ -3903,11 +5662,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "26. NumPy：配列をまるごと計算",
+        "title": "30. NumPy：配列をまるごと計算",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>配列をまるごと計算</h2><p>Pythonの数値計算のほとんどは<a href='https://numpy.org' target='_blank'>NumPy</a>の上に成り立っています。レッスン24のpandasもその上に作られていますし、次の2つのレッスンのmatplotlibとscikit-learnもそうです。考え方はかんたんで、数の<strong>配列</strong>を、まるごと計算します。ループはいりません。ループはNumPyの中の速いコンパイル済みのコードが回してくれます。</p><p>今回もpycallを通して使います。5つの摂氏の気温を、1行で華氏に変えてみましょう：</p>"
+            "html": "<h2>配列をまるごと計算</h2><p>Pythonの数値計算のほとんどは<a href='https://numpy.org' target='_blank'>NumPy</a>の上に成り立っています。レッスン28のpandasもその上に作られていますし、次の2つのレッスンのmatplotlibとscikit-learnもそうです。考え方はかんたんで、数の<strong>配列</strong>を、まるごと計算します。ループはいりません。ループはNumPyの中の速いコンパイル済みのコードが回してくれます。</p><p>今回もpycallを通して使います。5つの摂氏の気温を、1行で華氏に変えてみましょう：</p>"
           },
           {
             "t": "c",
@@ -3963,7 +5722,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>そこから先は、またRubyのメソッドが使えます。ここでは<code>map</code>と<code>round</code>です。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>pip install numpy</code>と<code>gem install pycall</code>をすれば、このレッスンのコードはそのまま動きます。Ruby自身で数値計算をするなら、NumPyとよく似た<a href='https://github.com/ruby-numo/numo-narray' target='_blank'>Numo::NArray</a>があります。NumPyはBSDライセンスです。</p></div><div class='task'><strong>課題：</strong>この試験の点数のうち、60点以上はいくつあるでしょう？ Rubyのループを使わずにNumPyに数えさせて、その数をRubyの数値として<code>passed</code>に入れましょう。</div>"
+            "html": "<p>そこから先は、またRubyのメソッドが使えます。ここでは<code>map</code>と<code>round</code>です。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>pip install numpy</code>と<code>gem install pycall</code>をすれば、このレッスンのコードはそのまま動きます。Ruby自身で数値計算をするなら、NumPyとよく似た<a href='https://github.com/ruby-numo/numo-narray' target='_blank'>Numo::NArray</a>があります。NumPyはBSDライセンスです。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://numpy.org/doc/stable/' target='_blank'>NumPyのドキュメント（英語）</a></div><div class='task'><strong>課題：</strong>この試験の点数のうち、60点以上はいくつあるでしょう？ Rubyのループを使わずにNumPyに数えさせて、その数をRubyの数値として<code>passed</code>に入れましょう。</div>"
           },
           {
             "t": "x",
@@ -3977,11 +5736,11 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "matplotlib",
       "de": {
-        "title": "27. matplotlib: Diagramme",
+        "title": "31. matplotlib: Diagramme",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Zahlen als Bild</h2><p>Eine Tabelle voller Zahlen muss man lesen, ein Diagramm sieht man auf einen Blick. <a href='https://matplotlib.org' target='_blank'>matplotlib</a> ist die Bibliothek, mit der Python seit über zwanzig Jahren zeichnet – auch pandas aus Lektion 24 zeichnet seine Diagramme damit. Wir erreichen sie wie pandas und NumPy über pycall. Eine Woche Temperaturen, als Linie:</p>"
+            "html": "<h2>Zahlen als Bild</h2><p>Eine Tabelle voller Zahlen muss man lesen, ein Diagramm sieht man auf einen Blick. <a href='https://matplotlib.org' target='_blank'>matplotlib</a> ist die Bibliothek, mit der Python seit über zwanzig Jahren zeichnet – auch pandas aus Lektion 28 zeichnet seine Diagramme damit. Wir erreichen sie wie pandas und NumPy über pycall. Eine Woche Temperaturen, als Linie:</p>"
           },
           {
             "t": "c",
@@ -4005,7 +5764,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Die Zeichenfläche hat dieselben Werkzeuge, nur heissen die Beschriftungen mit <code>set_</code> davor: <code>set_title</code>, <code>set_ylabel</code>. <code>figsize: [6, 3]</code> ist die Grösse in Zoll. Wie das in Python aussähe:</p><table class='cheat'><thead><tr><th>Python</th><th>Ruby mit pycall</th></tr></thead><tbody><tr><td><code>fig, ax = plt.subplots()</code></td><td><code>fig, ax = plt.subplots</code></td></tr><tr><td><code>plt.plot(x, y, marker=\"o\")</code></td><td><code>plt.plot(x, y, marker: \"o\")</code></td></tr><tr><td><code>figsize=(6, 3)</code></td><td><code>figsize: [6, 3]</code></td></tr><tr><td><code>ax.legend()</code></td><td><code>ax.legend</code></td></tr></tbody></table><p>Mit NumPy aus Lektion 26 werden es Kurven: <code>linspace</code> macht 100 Punkte zwischen 0 und 2π, zwei <code>plot</code> landen auf derselben Fläche, und <code>label:</code> gibt jeder Linie ihren Namen für die Legende:</p>"
+            "html": "<p>Die Zeichenfläche hat dieselben Werkzeuge, nur heissen die Beschriftungen mit <code>set_</code> davor: <code>set_title</code>, <code>set_ylabel</code>. <code>figsize: [6, 3]</code> ist die Grösse in Zoll. Wie das in Python aussähe:</p><table class='cheat'><thead><tr><th>Python</th><th>Ruby mit pycall</th></tr></thead><tbody><tr><td><code>fig, ax = plt.subplots()</code></td><td><code>fig, ax = plt.subplots</code></td></tr><tr><td><code>plt.plot(x, y, marker=\"o\")</code></td><td><code>plt.plot(x, y, marker: \"o\")</code></td></tr><tr><td><code>figsize=(6, 3)</code></td><td><code>figsize: [6, 3]</code></td></tr><tr><td><code>ax.legend()</code></td><td><code>ax.legend</code></td></tr></tbody></table><p>Mit NumPy aus Lektion 30 werden es Kurven: <code>linspace</code> macht 100 Punkte zwischen 0 und 2π, zwei <code>plot</code> landen auf derselben Fläche, und <code>label:</code> gibt jeder Linie ihren Namen für die Legende:</p>"
           },
           {
             "t": "c",
@@ -4032,11 +5791,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "27. matplotlib: charts",
+        "title": "31. matplotlib: charts",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Numbers as a picture</h2><p>A table full of numbers has to be read; a chart you see at a glance. <a href='https://matplotlib.org' target='_blank'>matplotlib</a> is the library Python has drawn with for over twenty years – pandas from lesson 24 draws its charts with it too. We reach it through pycall, like pandas and NumPy. A week of temperatures, as a line:</p>"
+            "html": "<h2>Numbers as a picture</h2><p>A table full of numbers has to be read; a chart you see at a glance. <a href='https://matplotlib.org' target='_blank'>matplotlib</a> is the library Python has drawn with for over twenty years – pandas from lesson 28 draws its charts with it too. We reach it through pycall, like pandas and NumPy. A week of temperatures, as a line:</p>"
           },
           {
             "t": "c",
@@ -4060,7 +5819,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>The drawing area has the same tools, only the labels have <code>set_</code> in front: <code>set_title</code>, <code>set_ylabel</code>. <code>figsize: [6, 3]</code> is the size in inches. What it would look like in Python:</p><table class='cheat'><thead><tr><th>Python</th><th>Ruby with pycall</th></tr></thead><tbody><tr><td><code>fig, ax = plt.subplots()</code></td><td><code>fig, ax = plt.subplots</code></td></tr><tr><td><code>plt.plot(x, y, marker=\"o\")</code></td><td><code>plt.plot(x, y, marker: \"o\")</code></td></tr><tr><td><code>figsize=(6, 3)</code></td><td><code>figsize: [6, 3]</code></td></tr><tr><td><code>ax.legend()</code></td><td><code>ax.legend</code></td></tr></tbody></table><p>With NumPy from lesson 26 we get curves: <code>linspace</code> makes 100 points between 0 and 2π, two <code>plot</code>s land on the same area, and <code>label:</code> names each line for the legend:</p>"
+            "html": "<p>The drawing area has the same tools, only the labels have <code>set_</code> in front: <code>set_title</code>, <code>set_ylabel</code>. <code>figsize: [6, 3]</code> is the size in inches. What it would look like in Python:</p><table class='cheat'><thead><tr><th>Python</th><th>Ruby with pycall</th></tr></thead><tbody><tr><td><code>fig, ax = plt.subplots()</code></td><td><code>fig, ax = plt.subplots</code></td></tr><tr><td><code>plt.plot(x, y, marker=\"o\")</code></td><td><code>plt.plot(x, y, marker: \"o\")</code></td></tr><tr><td><code>figsize=(6, 3)</code></td><td><code>figsize: [6, 3]</code></td></tr><tr><td><code>ax.legend()</code></td><td><code>ax.legend</code></td></tr></tbody></table><p>With NumPy from lesson 30 we get curves: <code>linspace</code> makes 100 points between 0 and 2π, two <code>plot</code>s land on the same area, and <code>label:</code> names each line for the legend:</p>"
           },
           {
             "t": "c",
@@ -4087,11 +5846,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "27. matplotlib：グラフ",
+        "title": "31. matplotlib：グラフ",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>数を絵にする</h2><p>数がならんだ表は読まなければわかりませんが、グラフはひと目でわかります。<a href='https://matplotlib.org' target='_blank'>matplotlib</a>は、Pythonが20年以上使ってきた描画ライブラリです。レッスン24のpandasも、グラフはこれで描いています。pandasやNumPyと同じく、pycallを通して使います。まずは1週間の気温を折れ線グラフにしてみましょう：</p>"
+            "html": "<h2>数を絵にする</h2><p>数がならんだ表は読まなければわかりませんが、グラフはひと目でわかります。<a href='https://matplotlib.org' target='_blank'>matplotlib</a>は、Pythonが20年以上使ってきた描画ライブラリです。レッスン28のpandasも、グラフはこれで描いています。pandasやNumPyと同じく、pycallを通して使います。まずは1週間の気温を折れ線グラフにしてみましょう：</p>"
           },
           {
             "t": "c",
@@ -4115,7 +5874,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>描画領域にも同じ道具がありますが、ラベルを付けるメソッドには<code>set_</code>が付きます。<code>set_title</code>や<code>set_ylabel</code>です。<code>figsize: [6, 3]</code>は大きさで、単位はインチです。Pythonで書くと、こうなります：</p><table class='cheat'><thead><tr><th>Python</th><th>pycallを使ったRuby</th></tr></thead><tbody><tr><td><code>fig, ax = plt.subplots()</code></td><td><code>fig, ax = plt.subplots</code></td></tr><tr><td><code>plt.plot(x, y, marker=\"o\")</code></td><td><code>plt.plot(x, y, marker: \"o\")</code></td></tr><tr><td><code>figsize=(6, 3)</code></td><td><code>figsize: [6, 3]</code></td></tr><tr><td><code>ax.legend()</code></td><td><code>ax.legend</code></td></tr></tbody></table><p>レッスン26のNumPyを使うと、曲線も描けます。<code>linspace</code>は0から2πまでに100個の点を作ります。同じ領域に<code>plot</code>を2回呼ぶと線が2本になり、<code>label:</code>は凡例に出る線の名前です：</p>"
+            "html": "<p>描画領域にも同じ道具がありますが、ラベルを付けるメソッドには<code>set_</code>が付きます。<code>set_title</code>や<code>set_ylabel</code>です。<code>figsize: [6, 3]</code>は大きさで、単位はインチです。Pythonで書くと、こうなります：</p><table class='cheat'><thead><tr><th>Python</th><th>pycallを使ったRuby</th></tr></thead><tbody><tr><td><code>fig, ax = plt.subplots()</code></td><td><code>fig, ax = plt.subplots</code></td></tr><tr><td><code>plt.plot(x, y, marker=\"o\")</code></td><td><code>plt.plot(x, y, marker: \"o\")</code></td></tr><tr><td><code>figsize=(6, 3)</code></td><td><code>figsize: [6, 3]</code></td></tr><tr><td><code>ax.legend()</code></td><td><code>ax.legend</code></td></tr></tbody></table><p>レッスン30のNumPyを使うと、曲線も描けます。<code>linspace</code>は0から2πまでに100個の点を作ります。同じ領域に<code>plot</code>を2回呼ぶと線が2本になり、<code>label:</code>は凡例に出る線の名前です：</p>"
           },
           {
             "t": "c",
@@ -4145,7 +5904,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "sklearn",
       "de": {
-        "title": "28. scikit-learn: die Maschine lernen lassen",
+        "title": "32. scikit-learn: die Maschine lernen lassen",
         "cells": [
           {
             "t": "h",
@@ -4197,7 +5956,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>score</code> ist der Anteil der Testblumen, die er richtig erkannt hat – hier etwa 96 %. <code>max_depth: 3</code> erlaubt höchstens drei Fragen hintereinander, so lernt der Baum das allgemeine Muster, statt jede Blume auswendig zu lernen. Mit versteckten Daten prüfen ist die wichtigste Gewohnheit beim maschinellen Lernen: Ein Modell, das nur seine eigenen Beispiele kennt, nützt wenig.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>pip install scikit-learn</code> und <code>gem install pycall</code>, und der Code dieser Lektion läuft unverändert. Für maschinelles Lernen in Ruby selbst gibt es <a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a>, das ganz ähnlich wie scikit-learn arbeitet – davon handelt die nächste Lektion. scikit-learn, SciPy und NumPy stehen unter der BSD-Lizenz.</p></div><div class='task'><strong>Aufgabe:</strong> Fünf Schülerinnen haben notiert, wie viele Stunden sie gelernt und wie viele Punkte sie bekommen haben. Bring einer <code>LinearRegression</code> damit etwas bei und sag die Punkte für 6 Stunden voraus. Speichere die Vorhersage in <code>prognose</code>, als Ruby-Zahl.</div>"
+            "html": "<p><code>score</code> ist der Anteil der Testblumen, die er richtig erkannt hat – hier etwa 96 %. <code>max_depth: 3</code> erlaubt höchstens drei Fragen hintereinander, so lernt der Baum das allgemeine Muster, statt jede Blume auswendig zu lernen. Mit versteckten Daten prüfen ist die wichtigste Gewohnheit beim maschinellen Lernen: Ein Modell, das nur seine eigenen Beispiele kennt, nützt wenig.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>pip install scikit-learn</code> und <code>gem install pycall</code>, und der Code dieser Lektion läuft unverändert. Für maschinelles Lernen in Ruby selbst gibt es <a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a>, das ganz ähnlich wie scikit-learn arbeitet – davon handelt die nächste Lektion. scikit-learn, SciPy und NumPy stehen unter der BSD-Lizenz.</p></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://scikit-learn.org/stable/user_guide.html' target='_blank'>scikit-learn: User Guide</a></div><div class='task'><strong>Aufgabe:</strong> Fünf Schülerinnen haben notiert, wie viele Stunden sie gelernt und wie viele Punkte sie bekommen haben. Bring einer <code>LinearRegression</code> damit etwas bei und sag die Punkte für 6 Stunden voraus. Speichere die Vorhersage in <code>prognose</code>, als Ruby-Zahl.</div>"
           },
           {
             "t": "x",
@@ -4208,7 +5967,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "28. scikit-learn: letting the machine learn",
+        "title": "32. scikit-learn: letting the machine learn",
         "cells": [
           {
             "t": "h",
@@ -4260,7 +6019,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>score</code> is the share of test flowers it got right – here about 96%. <code>max_depth: 3</code> allows at most three questions in a row, so the tree learns the general pattern rather than memorising each flower. Testing on hidden data is the most important habit in machine learning: a model that only knows its own examples is not much use.</p><div class='offweb' data-title='On your machine'><p><code>pip install scikit-learn</code> and <code>gem install pycall</code>, and the code of this lesson runs unchanged. For machine learning in Ruby itself, look at <a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a>, which works much like scikit-learn – it is the next lesson. scikit-learn, SciPy and NumPy come under the BSD licence.</p></div><div class='task'><strong>Task:</strong> Five students wrote down how many hours they studied and how many points they got. Teach a <code>LinearRegression</code> with them and predict the points for 6 hours. Store the prediction in <code>forecast</code>, as a Ruby number.</div>"
+            "html": "<p><code>score</code> is the share of test flowers it got right – here about 96%. <code>max_depth: 3</code> allows at most three questions in a row, so the tree learns the general pattern rather than memorising each flower. Testing on hidden data is the most important habit in machine learning: a model that only knows its own examples is not much use.</p><div class='offweb' data-title='On your machine'><p><code>pip install scikit-learn</code> and <code>gem install pycall</code>, and the code of this lesson runs unchanged. For machine learning in Ruby itself, look at <a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a>, which works much like scikit-learn – it is the next lesson. scikit-learn, SciPy and NumPy come under the BSD licence.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://scikit-learn.org/stable/user_guide.html' target='_blank'>scikit-learn user guide</a></div><div class='task'><strong>Task:</strong> Five students wrote down how many hours they studied and how many points they got. Teach a <code>LinearRegression</code> with them and predict the points for 6 hours. Store the prediction in <code>forecast</code>, as a Ruby number.</div>"
           },
           {
             "t": "x",
@@ -4271,7 +6030,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "28. scikit-learn：機械に学ばせる",
+        "title": "32. scikit-learn：機械に学ばせる",
         "cells": [
           {
             "t": "h",
@@ -4323,7 +6082,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>score</code>は、テストの花のうち正しく当てた割合で、ここでは約96%です。<code>max_depth: 3</code>は続けてする質問を最大3つまでにするので、木は花を1本ずつ丸暗記するのではなく、全体の傾向を学びます。隠しておいたデータでテストするのは、機械学習でいちばん大切な習慣です。自分の例しか知らないモデルは、あまり役に立ちません。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>pip install scikit-learn</code>と<code>gem install pycall</code>をすれば、このレッスンのコードはそのまま動きます。Ruby自身で機械学習をするなら、scikit-learnとよく似た<a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a>があります。次のレッスンで使います。scikit-learn、SciPy、NumPyはBSDライセンスです。</p></div><div class='task'><strong>課題：</strong>5人の生徒が、勉強した時間ととれた点数を記録しました。それを使って<code>LinearRegression</code>に学ばせ、6時間勉強したときの点数を予測しましょう。予測をRubyの数値として<code>forecast</code>に入れてください。</div>"
+            "html": "<p><code>score</code>は、テストの花のうち正しく当てた割合で、ここでは約96%です。<code>max_depth: 3</code>は続けてする質問を最大3つまでにするので、木は花を1本ずつ丸暗記するのではなく、全体の傾向を学びます。隠しておいたデータでテストするのは、機械学習でいちばん大切な習慣です。自分の例しか知らないモデルは、あまり役に立ちません。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>pip install scikit-learn</code>と<code>gem install pycall</code>をすれば、このレッスンのコードはそのまま動きます。Ruby自身で機械学習をするなら、scikit-learnとよく似た<a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale</a>があります。次のレッスンで使います。scikit-learn、SciPy、NumPyはBSDライセンスです。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://scikit-learn.org/stable/user_guide.html' target='_blank'>scikit-learnユーザーガイド（英語）</a></div><div class='task'><strong>課題：</strong>5人の生徒が、勉強した時間ととれた点数を記録しました。それを使って<code>LinearRegression</code>に学ばせ、6時間勉強したときの点数を予測しましょう。予測をRubyの数値として<code>forecast</code>に入れてください。</div>"
           },
           {
             "t": "x",
@@ -4340,7 +6099,7 @@ window.LESSONS_JSON = JSON.stringify({
         "digits.csv": "assets/data/digits.csv"
       },
       "de": {
-        "title": "29. Rumale: maschinelles Lernen in Ruby",
+        "title": "33. Rumale: maschinelles Lernen in Ruby",
         "cells": [
           {
             "t": "h",
@@ -4392,7 +6151,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Unter dem Brief siehst du, was Ruby bekommt: deine Ziffern als 8×8-Bilder. Liest der Klassifikator eine falsch, schau dort nach. Die Ziffern in <code>digits.csv</code> wurden in den 1990er-Jahren mit Stift auf Formulare geschrieben; eine Maus schreibt anders. Schreib gross, füll das Kästchen in der Höhe aus – oder ändere den Code: <code>n_neighbors: 1</code> oder <code>5</code>, und der Brief liest deine Ziffern gleich nochmal.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>gem install rumale</code> installiert alles, auch das echte <a href='https://rubygems.org/gems/numo-narray-alt' target='_blank'>numo-narray-alt</a> (es wird dabei kompiliert); danach genügt <code>require \"rumale\"</code>. Der Code dieser Lektion läuft dort unverändert – nur der Brief braucht diese Seite. <code>digits.csv</code> stammt aus dem Datensatz <em>Optical Recognition of Handwritten Digits</em> von E. Alpaydin und C. Kaynak (<a href='https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits' target='_blank'>UCI</a>, CC BY 4.0); <a href='assets/data/digits.csv' download>hier zum Herunterladen</a>. Rumale steht unter der BSD-Lizenz.</p></div><div class='task'><strong>Aufgabe:</strong> Ruby schreibt auch mit Zeichen. Mach aus dem Bild einer Sieben die 64 Zahlen, die der Klassifikator versteht – <code>#</code> ist 16, <code>.</code> ist 0, Zeile für Zeile –, und lass <code>lerner</code> sagen, was er darin sieht. Speichere seine Antwort in <code>ziffer</code>, als Ruby-Zahl.</div>"
+            "html": "<p>Unter dem Brief siehst du, was Ruby bekommt: deine Ziffern als 8×8-Bilder. Liest der Klassifikator eine falsch, schau dort nach. Die Ziffern in <code>digits.csv</code> wurden in den 1990er-Jahren mit Stift auf Formulare geschrieben; eine Maus schreibt anders. Schreib gross, füll das Kästchen in der Höhe aus – oder ändere den Code: <code>n_neighbors: 1</code> oder <code>5</code>, und der Brief liest deine Ziffern gleich nochmal.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>gem install rumale</code> installiert alles, auch das echte <a href='https://rubygems.org/gems/numo-narray-alt' target='_blank'>numo-narray-alt</a> (es wird dabei kompiliert); danach genügt <code>require \"rumale\"</code>. Der Code dieser Lektion läuft dort unverändert – nur der Brief braucht diese Seite. <code>digits.csv</code> stammt aus dem Datensatz <em>Optical Recognition of Handwritten Digits</em> von E. Alpaydin und C. Kaynak (<a href='https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits' target='_blank'>UCI</a>, CC BY 4.0); <a href='assets/data/digits.csv' download>hier zum Herunterladen</a>. Rumale steht unter der BSD-Lizenz.</p></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://yoshoku.github.io/rumale/doc/' target='_blank'>Rumale-Dokumentation</a> · <a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale auf GitHub</a></div><div class='task'><strong>Aufgabe:</strong> Ruby schreibt auch mit Zeichen. Mach aus dem Bild einer Sieben die 64 Zahlen, die der Klassifikator versteht – <code>#</code> ist 16, <code>.</code> ist 0, Zeile für Zeile –, und lass <code>lerner</code> sagen, was er darin sieht. Speichere seine Antwort in <code>ziffer</code>, als Ruby-Zahl.</div>"
           },
           {
             "t": "x",
@@ -4403,7 +6162,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "29. Rumale: machine learning in Ruby",
+        "title": "33. Rumale: machine learning in Ruby",
         "cells": [
           {
             "t": "h",
@@ -4455,7 +6214,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Under the letter you see what Ruby gets: your digits as 8×8 pictures. If the classifier misreads one, look there. The digits in <code>digits.csv</code> were written with pens on forms in the 1990s; a mouse writes differently. Write big, fill the box from top to bottom – or change the code: <code>n_neighbors: 1</code> or <code>5</code>, and the letter reads your digits again straight away.</p><div class='offweb' data-title='On your machine'><p><code>gem install rumale</code> installs everything, the real <a href='https://rubygems.org/gems/numo-narray-alt' target='_blank'>numo-narray-alt</a> too (it gets compiled); then <code>require \"rumale\"</code> is all you need. The code of this lesson runs unchanged – only the letter needs this page. <code>digits.csv</code> comes from the dataset <em>Optical Recognition of Handwritten Digits</em> by E. Alpaydin and C. Kaynak (<a href='https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits' target='_blank'>UCI</a>, CC BY 4.0); <a href='assets/data/digits.csv' download>download it here</a>. Rumale comes under the BSD licence.</p></div><div class='task'><strong>Task:</strong> Ruby can write with characters too. Turn the picture of a seven into the 64 numbers the classifier understands – <code>#</code> is 16, <code>.</code> is 0, row by row – and let <code>learner</code> say what it sees. Store its answer in <code>digit</code>, as a Ruby number.</div>"
+            "html": "<p>Under the letter you see what Ruby gets: your digits as 8×8 pictures. If the classifier misreads one, look there. The digits in <code>digits.csv</code> were written with pens on forms in the 1990s; a mouse writes differently. Write big, fill the box from top to bottom – or change the code: <code>n_neighbors: 1</code> or <code>5</code>, and the letter reads your digits again straight away.</p><div class='offweb' data-title='On your machine'><p><code>gem install rumale</code> installs everything, the real <a href='https://rubygems.org/gems/numo-narray-alt' target='_blank'>numo-narray-alt</a> too (it gets compiled); then <code>require \"rumale\"</code> is all you need. The code of this lesson runs unchanged – only the letter needs this page. <code>digits.csv</code> comes from the dataset <em>Optical Recognition of Handwritten Digits</em> by E. Alpaydin and C. Kaynak (<a href='https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits' target='_blank'>UCI</a>, CC BY 4.0); <a href='assets/data/digits.csv' download>download it here</a>. Rumale comes under the BSD licence.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://yoshoku.github.io/rumale/doc/' target='_blank'>Rumale documentation</a> · <a href='https://github.com/yoshoku/rumale' target='_blank'>Rumale on GitHub</a></div><div class='task'><strong>Task:</strong> Ruby can write with characters too. Turn the picture of a seven into the 64 numbers the classifier understands – <code>#</code> is 16, <code>.</code> is 0, row by row – and let <code>learner</code> say what it sees. Store its answer in <code>digit</code>, as a Ruby number.</div>"
           },
           {
             "t": "x",
@@ -4466,7 +6225,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "29. Rumale：Rubyで機械学習",
+        "title": "33. Rumale：Rubyで機械学習",
         "cells": [
           {
             "t": "h",
@@ -4518,7 +6277,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>封筒の下には、Rubyが受け取るもの、つまりあなたの数字の8×8の絵が見えます。読みまちがえたら、そこを見てみましょう。<code>digits.csv</code>の数字は、1990年代にペンで用紙に書かれたものです。マウスで書くと形が変わります。大きく、枠の上から下までいっぱいに書くか、コードを変えてみましょう。<code>n_neighbors: 1</code>や<code>5</code>にすると、封筒はすぐにもう一度あなたの数字を読みます。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>gem install rumale</code>で、本物の<a href='https://rubygems.org/gems/numo-narray-alt' target='_blank'>numo-narray-alt</a>も含めてすべてインストールされます（そのときコンパイルされます）。あとは<code>require \"rumale\"</code>だけです。このレッスンのコードはそのまま動きます。封筒だけはこのページが必要です。<code>digits.csv</code>は、E. AlpaydinとC. Kaynakによるデータセット<em>Optical Recognition of Handwritten Digits</em>（<a href='https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits' target='_blank'>UCI</a>、CC BY 4.0）から取りました。<a href='assets/data/digits.csv' download>ここからダウンロード</a>できます。RumaleはBSDライセンスです。</p></div><div class='task'><strong>課題：</strong>Rubyは文字でも絵を描けます。7の絵を、分類器がわかる64個の数にしましょう。<code>#</code>は16、<code>.</code>は0で、1行ずつ順番です。そして<code>learner</code>に何が見えるか言わせ、その答えをRubyの数値として<code>digit</code>に入れてください。</div>"
+            "html": "<p>封筒の下には、Rubyが受け取るもの、つまりあなたの数字の8×8の絵が見えます。読みまちがえたら、そこを見てみましょう。<code>digits.csv</code>の数字は、1990年代にペンで用紙に書かれたものです。マウスで書くと形が変わります。大きく、枠の上から下までいっぱいに書くか、コードを変えてみましょう。<code>n_neighbors: 1</code>や<code>5</code>にすると、封筒はすぐにもう一度あなたの数字を読みます。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>gem install rumale</code>で、本物の<a href='https://rubygems.org/gems/numo-narray-alt' target='_blank'>numo-narray-alt</a>も含めてすべてインストールされます（そのときコンパイルされます）。あとは<code>require \"rumale\"</code>だけです。このレッスンのコードはそのまま動きます。封筒だけはこのページが必要です。<code>digits.csv</code>は、E. AlpaydinとC. Kaynakによるデータセット<em>Optical Recognition of Handwritten Digits</em>（<a href='https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits' target='_blank'>UCI</a>、CC BY 4.0）から取りました。<a href='assets/data/digits.csv' download>ここからダウンロード</a>できます。RumaleはBSDライセンスです。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://yoshoku.github.io/rumale/doc/' target='_blank'>Rumaleのドキュメント（英語）</a>・<a href='https://github.com/yoshoku/rumale' target='_blank'>GitHubのRumale（英語）</a></div><div class='task'><strong>課題：</strong>Rubyは文字でも絵を描けます。7の絵を、分類器がわかる64個の数にしましょう。<code>#</code>は16、<code>.</code>は0で、1行ずつ順番です。そして<code>learner</code>に何が見えるか言わせ、その答えをRubyの数値として<code>digit</code>に入れてください。</div>"
           },
           {
             "t": "x",
@@ -4532,11 +6291,11 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "daru",
       "de": {
-        "title": "30. Daru: Tabellen in reinem Ruby",
+        "title": "34. Daru: Tabellen in reinem Ruby",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Datenanalyse in Ruby: Daru</h2><p>Ruby für die Wissenschaft – darum kümmert sich <a href='https://sciruby.com' target='_blank'>SciRuby</a>, eine Gemeinschaft, die Gems für Zahlen, Statistik und Daten baut (<a href='https://github.com/SciRuby' target='_blank'>github.com/SciRuby</a>); zu ihr gehört auch IRuby, mit dem Ruby in Jupyter-Notebooks läuft. Diese und die nächsten zwei Lektionen stellen drei ihrer Gems vor: Tabellen, Statistik und Netze.</p><p>In Lektion 24 hat pandas Tabellen gerechnet, in Python. <a href='https://github.com/SciRuby/daru' target='_blank'>Daru</a> (<em>Data Analysis in RUby</em>) macht dasselbe in Ruby selbst, ganz ohne Python. Angefangen hat es Sameer Deshmukh, und eine Tabelle heisst auch hier <strong>DataFrame</strong>. Nehmen wir das Frühstück von damals:</p>"
+            "html": "<h2>Datenanalyse in Ruby: Daru</h2><p>Ruby für die Wissenschaft – darum kümmert sich <a href='https://sciruby.com' target='_blank'>SciRuby</a>, eine Gemeinschaft, die Gems für Zahlen, Statistik und Daten baut (<a href='https://github.com/SciRuby' target='_blank'>github.com/SciRuby</a>); zu ihr gehört auch IRuby, mit dem Ruby in Jupyter-Notebooks läuft. Diese und die nächsten zwei Lektionen stellen drei ihrer Gems vor: Tabellen, Statistik und Netze.</p><p>In Lektion 28 hat pandas Tabellen gerechnet, in Python. <a href='https://github.com/SciRuby/daru' target='_blank'>Daru</a> (<em>Data Analysis in RUby</em>) macht dasselbe in Ruby selbst, ganz ohne Python. Angefangen hat es Sameer Deshmukh, und eine Tabelle heisst auch hier <strong>DataFrame</strong>. Nehmen wir das Frühstück von damals:</p>"
           },
           {
             "t": "c",
@@ -4635,11 +6394,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "30. Daru: data frames in plain Ruby",
+        "title": "34. Daru: data frames in plain Ruby",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Data analysis in Ruby: Daru</h2><p>Ruby for science – that is what <a href='https://sciruby.com' target='_blank'>SciRuby</a> is about, a community that builds gems for numbers, statistics and data (<a href='https://github.com/SciRuby' target='_blank'>github.com/SciRuby</a>); IRuby, which runs Ruby in Jupyter notebooks, belongs to it too. This lesson and the next two introduce three of their gems: tables, statistics and networks.</p><p>In lesson 24 pandas did tables, in Python. <a href='https://github.com/SciRuby/daru' target='_blank'>Daru</a> (<em>Data Analysis in RUby</em>) does the same in Ruby itself, no Python needed. Sameer Deshmukh started it, and here too a table is called a <strong>DataFrame</strong>. Let's take the breakfast from back then:</p>"
+            "html": "<h2>Data analysis in Ruby: Daru</h2><p>Ruby for science – that is what <a href='https://sciruby.com' target='_blank'>SciRuby</a> is about, a community that builds gems for numbers, statistics and data (<a href='https://github.com/SciRuby' target='_blank'>github.com/SciRuby</a>); IRuby, which runs Ruby in Jupyter notebooks, belongs to it too. This lesson and the next two introduce three of their gems: tables, statistics and networks.</p><p>In lesson 28 pandas did tables, in Python. <a href='https://github.com/SciRuby/daru' target='_blank'>Daru</a> (<em>Data Analysis in RUby</em>) does the same in Ruby itself, no Python needed. Sameer Deshmukh started it, and here too a table is called a <strong>DataFrame</strong>. Let's take the breakfast from back then:</p>"
           },
           {
             "t": "c",
@@ -4738,11 +6497,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "30. Daru：Rubyだけでデータフレーム",
+        "title": "34. Daru：Rubyだけでデータフレーム",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Rubyでデータ分析：Daru</h2><p>科学のためのRuby。それに取り組んでいるのが<a href='https://sciruby.com' target='_blank'>SciRuby</a>です。数値、統計、データのためのgemを作っているコミュニティで（<a href='https://github.com/SciRuby' target='_blank'>github.com/SciRuby</a>）、RubyをJupyterノートブックで動かすIRubyも、SciRubyの仲間です。このレッスンと次の2つのレッスンでは、その中から3つのgemを紹介します。表、統計、ネットワークです。</p><p>レッスン24では、Pythonのpandasが表を計算しました。<a href='https://github.com/SciRuby/daru' target='_blank'>Daru</a>（<em>Data Analysis in RUby</em>）は同じことをRubyそのものでやります。Pythonはいりません。始めたのはSameer Deshmukhさんで、ここでも表は<strong>DataFrame</strong>と呼びます。あのときの朝ごはんを使いましょう：</p>"
+            "html": "<h2>Rubyでデータ分析：Daru</h2><p>科学のためのRuby。それに取り組んでいるのが<a href='https://sciruby.com' target='_blank'>SciRuby</a>です。数値、統計、データのためのgemを作っているコミュニティで（<a href='https://github.com/SciRuby' target='_blank'>github.com/SciRuby</a>）、RubyをJupyterノートブックで動かすIRubyも、SciRubyの仲間です。このレッスンと次の2つのレッスンでは、その中から3つのgemを紹介します。表、統計、ネットワークです。</p><p>レッスン28では、Pythonのpandasが表を計算しました。<a href='https://github.com/SciRuby/daru' target='_blank'>Daru</a>（<em>Data Analysis in RUby</em>）は同じことをRubyそのものでやります。Pythonはいりません。始めたのはSameer Deshmukhさんで、ここでも表は<strong>DataFrame</strong>と呼びます。あのときの朝ごはんを使いましょう：</p>"
           },
           {
             "t": "c",
@@ -4844,7 +6603,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "statistik",
       "de": {
-        "title": "31. Statistik: Zufall und die Glockenkurve",
+        "title": "35. Statistik: Zufall und die Glockenkurve",
         "cells": [
           {
             "t": "h",
@@ -4872,7 +6631,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>17.2 % gerechnet, und ausprobiert etwa ebenso viel – bei jedem Lauf ein wenig anders, denn <code>rand</code> würfelt jedes Mal neu.</p><p>Viele Messungen sehen anders aus: Körpergrössen, Gewichte, Messfehler. Sie häufen sich um einen Mittelwert und werden nach beiden Seiten seltener – die <strong>Normalverteilung</strong>, auch Glockenkurve genannt. <code>Normal.rng</code> baut dafür einen Würfel: Jeder Aufruf gibt eine zufällige Zahl, hier eine Körpergrösse um 170 cm, die meist nicht mehr als 8 cm danebenliegt. Mit dem Startwert 2024 kommen bei jedem Lauf dieselben 500 Grössen heraus. In einem <code>Daru::Vector</code> (Lektion 30) rechnen sie gleich ihre Statistik:</p>"
+            "html": "<p>17.2 % gerechnet, und ausprobiert etwa ebenso viel – bei jedem Lauf ein wenig anders, denn <code>rand</code> würfelt jedes Mal neu.</p><p>Viele Messungen sehen anders aus: Körpergrössen, Gewichte, Messfehler. Sie häufen sich um einen Mittelwert und werden nach beiden Seiten seltener – die <strong>Normalverteilung</strong>, auch Glockenkurve genannt. <code>Normal.rng</code> baut dafür einen Würfel: Jeder Aufruf gibt eine zufällige Zahl, hier eine Körpergrösse um 170 cm, die meist nicht mehr als 8 cm danebenliegt. Mit dem Startwert 2024 kommen bei jedem Lauf dieselben 500 Grössen heraus. In einem <code>Daru::Vector</code> (Lektion 34) rechnen sie gleich ihre Statistik:</p>"
           },
           {
             "t": "c",
@@ -4931,7 +6690,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "31. Statistics: chance and the bell curve",
+        "title": "35. Statistics: chance and the bell curve",
         "cells": [
           {
             "t": "h",
@@ -4959,7 +6718,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>17.2 % worked out, and about as much tried out – a little different on every run, because <code>rand</code> throws anew each time.</p><p>Many measurements look different: heights, weights, measuring errors. They cluster around an average and get rarer to both sides – the <strong>normal distribution</strong>, also called the bell curve. <code>Normal.rng</code> builds a die for it: each call gives a random number, here a height around 170 cm, mostly no more than 8 cm off. With the seed 2024, every run brings the same 500 heights. In a <code>Daru::Vector</code> (lesson 30) they do their statistics at once:</p>"
+            "html": "<p>17.2 % worked out, and about as much tried out – a little different on every run, because <code>rand</code> throws anew each time.</p><p>Many measurements look different: heights, weights, measuring errors. They cluster around an average and get rarer to both sides – the <strong>normal distribution</strong>, also called the bell curve. <code>Normal.rng</code> builds a die for it: each call gives a random number, here a height around 170 cm, mostly no more than 8 cm off. With the seed 2024, every run brings the same 500 heights. In a <code>Daru::Vector</code> (lesson 34) they do their statistics at once:</p>"
           },
           {
             "t": "c",
@@ -5018,7 +6777,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "31. 統計：偶然と釣鐘型の曲線",
+        "title": "35. 統計：偶然と釣鐘型の曲線",
         "cells": [
           {
             "t": "h",
@@ -5046,7 +6805,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>計算では17.2 %、試してもほぼ同じです。<code>rand</code>は毎回新しく投げるので、実行するたびに少しずつ違います。</p><p>多くの測定値は違う形をしています。身長、体重、測定の誤差などです。平均のまわりに集まり、両側へいくほど少なくなります。これが<strong>正規分布</strong>で、釣鐘型の曲線とも呼ばれます。<code>Normal.rng</code>は、そのためのサイコロを作ります。呼ぶたびに乱数をひとつ返します。ここでは170 cm前後の身長で、たいていは8 cm以上離れません。シードを2024にすると、毎回同じ500人の身長が出てきます。<code>Daru::Vector</code>（レッスン30）に入れれば、すぐに統計が計算できます：</p>"
+            "html": "<p>計算では17.2 %、試してもほぼ同じです。<code>rand</code>は毎回新しく投げるので、実行するたびに少しずつ違います。</p><p>多くの測定値は違う形をしています。身長、体重、測定の誤差などです。平均のまわりに集まり、両側へいくほど少なくなります。これが<strong>正規分布</strong>で、釣鐘型の曲線とも呼ばれます。<code>Normal.rng</code>は、そのためのサイコロを作ります。呼ぶたびに乱数をひとつ返します。ここでは170 cm前後の身長で、たいていは8 cm以上離れません。シードを2024にすると、毎回同じ500人の身長が出てきます。<code>Daru::Vector</code>（レッスン34）に入れれば、すぐに統計が計算できます：</p>"
           },
           {
             "t": "c",
@@ -5108,7 +6867,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "networkx",
       "de": {
-        "title": "32. networkx.rb: Netze und kürzeste Wege",
+        "title": "36. networkx.rb: Netze und kürzeste Wege",
         "cells": [
           {
             "t": "h",
@@ -5179,7 +6938,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "32. networkx.rb: networks and shortest paths",
+        "title": "36. networkx.rb: networks and shortest paths",
         "cells": [
           {
             "t": "h",
@@ -5250,7 +7009,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "32. networkx.rb：ネットワークと最短経路",
+        "title": "36. networkx.rb：ネットワークと最短経路",
         "cells": [
           {
             "t": "h",
@@ -5324,11 +7083,11 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "sequel",
       "de": {
-        "title": "33. Sequel: eine Datenbank aus Ruby",
+        "title": "37. Sequel: eine Datenbank aus Ruby",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Eine Datenbank aus Ruby</h2><p>Eine <strong>Datenbank</strong> hält Daten in Tabellen – Zeilen und Spalten, wie eine Tabellenkalkulation – und beantwortet Fragen dazu in <strong>SQL</strong>. Mit <a href='https://sequel.jeremyevans.net' target='_blank'>Sequel</a> von Jeremy Evans (der auch Roda aus Lektion 17 geschrieben hat) machst du das alles in Ruby: Du rufst Methoden auf, und Sequel schreibt das SQL.</p><p>Darunter läuft <strong>SQLite</strong>, die kleine Datenbank, die in jedem Handy und jedem Browser steckt. Hier läuft sie direkt in dieser Seite (rund 1 MB, geladen, sobald du die Lektion öffnest) und hält die Datenbank im Speicher – nach dem Neuladen ist sie leer. Bauen wir eine kleine Zeiterfassung:</p>"
+            "html": "<h2>Eine Datenbank aus Ruby</h2><p>Eine <strong>Datenbank</strong> hält Daten in Tabellen – Zeilen und Spalten, wie eine Tabellenkalkulation – und beantwortet Fragen dazu in <strong>SQL</strong>. Mit <a href='https://sequel.jeremyevans.net' target='_blank'>Sequel</a> von Jeremy Evans (der auch Roda aus Lektion 21 geschrieben hat) machst du das alles in Ruby: Du rufst Methoden auf, und Sequel schreibt das SQL.</p><p>Darunter läuft <strong>SQLite</strong>, die kleine Datenbank, die in jedem Handy und jedem Browser steckt. Hier läuft sie direkt in dieser Seite (rund 1 MB, geladen, sobald du die Lektion öffnest) und hält die Datenbank im Speicher – nach dem Neuladen ist sie leer. Bauen wir eine kleine Zeiterfassung:</p>"
           },
           {
             "t": "c",
@@ -5419,11 +7178,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "33. Sequel: a database from Ruby",
+        "title": "37. Sequel: a database from Ruby",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>A database from Ruby</h2><p>A <strong>database</strong> keeps data in tables – rows and columns, like a spreadsheet – and answers questions about it in <strong>SQL</strong>. <a href='https://sequel.jeremyevans.net' target='_blank'>Sequel</a>, by Jeremy Evans (who also wrote Roda from lesson 17), lets you do all of that in Ruby: you call methods, and Sequel writes the SQL.</p><p>Underneath runs <strong>SQLite</strong>, the small database that lives in every phone and browser. Here it runs right in this page (about 1 MB, loaded when you open the lesson) and keeps the database in memory – a reload starts empty. Let's build a little time tracker:</p>"
+            "html": "<h2>A database from Ruby</h2><p>A <strong>database</strong> keeps data in tables – rows and columns, like a spreadsheet – and answers questions about it in <strong>SQL</strong>. <a href='https://sequel.jeremyevans.net' target='_blank'>Sequel</a>, by Jeremy Evans (who also wrote Roda from lesson 21), lets you do all of that in Ruby: you call methods, and Sequel writes the SQL.</p><p>Underneath runs <strong>SQLite</strong>, the small database that lives in every phone and browser. Here it runs right in this page (about 1 MB, loaded when you open the lesson) and keeps the database in memory – a reload starts empty. Let's build a little time tracker:</p>"
           },
           {
             "t": "c",
@@ -5514,11 +7273,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "33. Sequel：Rubyからデータベース",
+        "title": "37. Sequel：Rubyからデータベース",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Rubyからデータベース</h2><p><strong>データベース</strong>は、表計算のように行と列からなるテーブルにデータを保存し、<strong>SQL</strong>での質問に答えます。Jeremy Evansさん（レッスン17のRodaの作者でもあります）の<a href='https://sequel.jeremyevans.net' target='_blank'>Sequel</a>を使うと、それをすべてRubyでできます。あなたはメソッドを呼ぶだけで、SQLはSequelが書いてくれます。</p><p>その下では、どのスマートフォンにもブラウザにも入っている小さなデータベース、<strong>SQLite</strong>が動いています。ここではこのページの中で動き（約1 MB、レッスンを開くと読み込みます）、データベースはメモリ上にあります。再読み込みすると空に戻ります。小さな時間記録を作ってみましょう：</p>"
+            "html": "<h2>Rubyからデータベース</h2><p><strong>データベース</strong>は、表計算のように行と列からなるテーブルにデータを保存し、<strong>SQL</strong>での質問に答えます。Jeremy Evansさん（レッスン21のRodaの作者でもあります）の<a href='https://sequel.jeremyevans.net' target='_blank'>Sequel</a>を使うと、それをすべてRubyでできます。あなたはメソッドを呼ぶだけで、SQLはSequelが書いてくれます。</p><p>その下では、どのスマートフォンにもブラウザにも入っている小さなデータベース、<strong>SQLite</strong>が動いています。ここではこのページの中で動き（約1 MB、レッスンを開くと読み込みます）、データベースはメモリ上にあります。再読み込みすると空に戻ります。小さな時間記録を作ってみましょう：</p>"
           },
           {
             "t": "c",
@@ -5612,7 +7371,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "scarpe",
       "de": {
-        "title": "34. Shoes-Apps mit Scarpe",
+        "title": "38. Shoes-Apps mit Scarpe",
         "cells": [
           {
             "t": "h",
@@ -5648,7 +7407,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Auf deinem eigenen Rechner installierst du <code>scarpe</code> statt <code>lacci</code>, schreibst <code>Shoes.app do … end</code> in eine Datei und startest sie mit <code>scarpe meine_app.rb</code> – dann geht ein echtes Fenster auf. Die App selbst bleibt Zeile für Zeile dieselbe.</p><p>Der Display-Service, der hier zeichnet, ist übrigens kein Spezialfall der Seite, sondern ein ganz normaler: rund 250 Zeilen Ruby in <code>shoes_dom.rb</code>. Nach demselben Muster ist auch <a href='https://github.com/Largo/hacketyhack' target='_blank'>Clogs</a> gebaut, ein Shoes auf libui.</p><div class='task'><strong>Aufgabe:</strong> Bau eine Gruss-App. Sie braucht einen <code>title</code>, ein <code>edit_line</code>, einen <code>button</code> und einen weiteren <code>para</code>, der beim Klick den Namen aus dem Eingabefeld begrüsst. Halte das Eingabefeld dafür in einer Variablen fest – <code>@feld.text</code> gibt dir, was drinsteht.</div>"
+            "html": "<p>Auf deinem eigenen Rechner installierst du <code>scarpe</code> statt <code>lacci</code>, schreibst <code>Shoes.app do … end</code> in eine Datei und startest sie mit <code>scarpe meine_app.rb</code> – dann geht ein echtes Fenster auf. Die App selbst bleibt Zeile für Zeile dieselbe.</p><p>Der Display-Service, der hier zeichnet, ist übrigens kein Spezialfall der Seite, sondern ein ganz normaler: rund 250 Zeilen Ruby in <code>shoes_dom.rb</code>. Nach demselben Muster ist auch <a href='https://github.com/Largo/hacketyhack' target='_blank'>Clogs</a> gebaut, ein Shoes auf libui.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://github.com/scarpe-team/scarpe' target='_blank'>Scarpe</a></div><div class='task'><strong>Aufgabe:</strong> Bau eine Gruss-App. Sie braucht einen <code>title</code>, ein <code>edit_line</code>, einen <code>button</code> und einen weiteren <code>para</code>, der beim Klick den Namen aus dem Eingabefeld begrüsst. Halte das Eingabefeld dafür in einer Variablen fest – <code>@feld.text</code> gibt dir, was drinsteht.</div>"
           },
           {
             "t": "x",
@@ -5659,7 +7418,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "34. Shoes apps with Scarpe",
+        "title": "38. Shoes apps with Scarpe",
         "cells": [
           {
             "t": "h",
@@ -5695,7 +7454,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>On your own machine you install <code>scarpe</code> instead of <code>lacci</code>, write <code>Shoes.app do … end</code> in a file and start it with <code>scarpe my_app.rb</code> – and a real window opens. The app itself stays the same, line for line.</p><p>The display service drawing here is not a special case of this site either, but an ordinary one: about 250 lines of Ruby in <code>shoes_dom.rb</code>. <a href='https://github.com/Largo/hacketyhack' target='_blank'>Clogs</a>, a Shoes on libui, is built to the same pattern.</p><div class='task'><strong>Task:</strong> Build a greeting app. It needs a <code>title</code>, an <code>edit_line</code>, a <code>button</code> and one more <code>para</code> that greets the name from the field when clicked. Keep the field in a variable – <code>@field.text</code> gives you what is in it.</div>"
+            "html": "<p>On your own machine you install <code>scarpe</code> instead of <code>lacci</code>, write <code>Shoes.app do … end</code> in a file and start it with <code>scarpe my_app.rb</code> – and a real window opens. The app itself stays the same, line for line.</p><p>The display service drawing here is not a special case of this site either, but an ordinary one: about 250 lines of Ruby in <code>shoes_dom.rb</code>. <a href='https://github.com/Largo/hacketyhack' target='_blank'>Clogs</a>, a Shoes on libui, is built to the same pattern.</p><div class='docs'><strong>Look it up:</strong> <a href='https://github.com/scarpe-team/scarpe' target='_blank'>Scarpe</a></div><div class='task'><strong>Task:</strong> Build a greeting app. It needs a <code>title</code>, an <code>edit_line</code>, a <code>button</code> and one more <code>para</code> that greets the name from the field when clicked. Keep the field in a variable – <code>@field.text</code> gives you what is in it.</div>"
           },
           {
             "t": "x",
@@ -5706,7 +7465,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "34. ScarpeでShoesアプリ",
+        "title": "38. ScarpeでShoesアプリ",
         "cells": [
           {
             "t": "h",
@@ -5742,7 +7501,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>自分のコンピューターでは、<code>lacci</code>の代わりに<code>scarpe</code>をインストールし、ファイルに<code>Shoes.app do … end</code>と書いて、<code>scarpe my_app.rb</code>で起動します。すると本物のウィンドウが開きます。アプリのコードは1行も変わりません。</p><p>ちなみに、ここで描画しているディスプレイサービスも、このサイトだけの特別なしかけではなく、ごく普通のものです。<code>shoes_dom.rb</code>に書かれた、250行ほどのRubyにすぎません。libuiの上で動くShoesである<a href='https://github.com/Largo/hacketyhack' target='_blank'>Clogs</a>も、同じパターンで作られています。</p><div class='task'><strong>課題：</strong>あいさつアプリを作りましょう。<code>title</code>、<code>edit_line</code>、<code>button</code>に加えて、ボタンがクリックされたら入力欄の名前にあいさつする<code>para</code>をもう1つ用意してください。入力欄は変数に入れておきましょう。<code>@field.text</code>で中身を取り出せます。</div>"
+            "html": "<p>自分のコンピューターでは、<code>lacci</code>の代わりに<code>scarpe</code>をインストールし、ファイルに<code>Shoes.app do … end</code>と書いて、<code>scarpe my_app.rb</code>で起動します。すると本物のウィンドウが開きます。アプリのコードは1行も変わりません。</p><p>ちなみに、ここで描画しているディスプレイサービスも、このサイトだけの特別なしかけではなく、ごく普通のものです。<code>shoes_dom.rb</code>に書かれた、250行ほどのRubyにすぎません。libuiの上で動くShoesである<a href='https://github.com/Largo/hacketyhack' target='_blank'>Clogs</a>も、同じパターンで作られています。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://github.com/scarpe-team/scarpe' target='_blank'>Scarpe（英語）</a></div><div class='task'><strong>課題：</strong>あいさつアプリを作りましょう。<code>title</code>、<code>edit_line</code>、<code>button</code>に加えて、ボタンがクリックされたら入力欄の名前にあいさつする<code>para</code>をもう1つ用意してください。入力欄は変数に入れておきましょう。<code>@field.text</code>で中身を取り出せます。</div>"
           },
           {
             "t": "x",
@@ -5756,7 +7515,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tty",
       "de": {
-        "title": "35. TTY: schöne Ausgaben im Terminal",
+        "title": "39. TTY: schöne Ausgaben im Terminal",
         "cells": [
           {
             "t": "h",
@@ -5784,7 +7543,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 46:</p>"
+            "html": "<p><code>frame</code> nimmt eine oder mehrere Zeilen, <code>title</code> setzt eine Überschrift in den Rahmen (auch <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> wählt die Linie – <code>:light</code>, <code>:thick</code> oder <code>:ascii</code>. Ganze Ordnerbäume zeichnet tty-tree, wie der Befehl <code>tree</code> – hier der Aufbau deines Projekts ab Lektion 50:</p>"
           },
           {
             "t": "c",
@@ -5811,7 +7570,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "35. TTY: good-looking terminal output",
+        "title": "39. TTY: good-looking terminal output",
         "cells": [
           {
             "t": "h",
@@ -5839,7 +7598,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 46 on:</p>"
+            "html": "<p><code>frame</code> takes one or more lines, <code>title</code> puts a heading into the frame (also <code>top_right</code>, <code>bottom_left</code> …), <code>border:</code> picks the line – <code>:light</code>, <code>:thick</code> or <code>:ascii</code>. Whole folder trees come from tty-tree, like the <code>tree</code> command – here the layout of your project from lesson 50 on:</p>"
           },
           {
             "t": "c",
@@ -5866,7 +7625,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "35. TTY：ターミナルをきれいに",
+        "title": "39. TTY：ターミナルをきれいに",
         "cells": [
           {
             "t": "h",
@@ -5894,7 +7653,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン46からつくるプロジェクトの構成です：</p>"
+            "html": "<p><code>frame</code>は1行でも複数行でも受け取ります。<code>title</code>は枠に見出しを入れ（<code>top_right</code>、<code>bottom_left</code>なども）、<code>border:</code>で線を選びます：<code>:light</code>、<code>:thick</code>、<code>:ascii</code>。フォルダの木は、<code>tree</code>コマンドのようにtty-treeで描けます。これはレッスン50からつくるプロジェクトの構成です：</p>"
           },
           {
             "t": "c",
@@ -5924,7 +7683,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "processing",
       "de": {
-        "title": "36. Processing: Zeichnen mit Code",
+        "title": "40. Processing: Zeichnen mit Code",
         "cells": [
           {
             "t": "h",
@@ -5936,7 +7695,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Unter der Zelle öffnet sich das Fenster des Sketches. <code>require \"processing\"</code> lädt das Gem, und <code>using Processing</code> schaltet seine Befehle ein – <code>size</code>, <code>ellipse</code>, <code>fill</code> gibt es nur in einer Datei, die das sagt. (Das ist ein <em>Refinement</em> wie <code>Pptx::Lengths</code> in Lektion 21: ein Modul, das Methoden nur dort hinzufügt, wo man es mit <code>using</code> einschaltet.) Darum beginnt hier jede Zelle mit diesen zwei Zeilen: Jede ist ein eigener Sketch, wie eine eigene Datei.</p><p>Die Koordinaten fangen <strong>oben links</strong> bei <code>0, 0</code> an, <code>x</code> geht nach rechts, <code>y</code> nach <em>unten</em>. <code>ellipse 200, 130, 140, 140</code> zeichnet einen Kreis mit der Mitte bei 200/130 und 140 Pixeln Durchmesser, <code>rect</code> ein Rechteck ab seiner Ecke oben links. Farben sind drei Zahlen von 0 bis 255 – Rot, Grün, Blau –, eine einzelne Zahl ist ein Grau. <code>fill</code> setzt die Füllung, <code>stroke</code> den Rand, und beides gilt für alles, was danach kommt.</p><p>Die Methoden heissen wie im Original-Processing: <code>mouseX</code>, nicht <code>mouse_x</code>. So passen die vielen Beispiele aus Büchern und aus dem Netz fast unverändert. Jetzt bewegt sich etwas:</p>"
+            "html": "<p>Unter der Zelle öffnet sich das Fenster des Sketches. <code>require \"processing\"</code> lädt das Gem, und <code>using Processing</code> schaltet seine Befehle ein – <code>size</code>, <code>ellipse</code>, <code>fill</code> gibt es nur in einer Datei, die das sagt. (Das ist ein <em>Refinement</em> wie <code>Pptx::Lengths</code> in Lektion 25: ein Modul, das Methoden nur dort hinzufügt, wo man es mit <code>using</code> einschaltet.) Darum beginnt hier jede Zelle mit diesen zwei Zeilen: Jede ist ein eigener Sketch, wie eine eigene Datei.</p><p>Die Koordinaten fangen <strong>oben links</strong> bei <code>0, 0</code> an, <code>x</code> geht nach rechts, <code>y</code> nach <em>unten</em>. <code>ellipse 200, 130, 140, 140</code> zeichnet einen Kreis mit der Mitte bei 200/130 und 140 Pixeln Durchmesser, <code>rect</code> ein Rechteck ab seiner Ecke oben links. Farben sind drei Zahlen von 0 bis 255 – Rot, Grün, Blau –, eine einzelne Zahl ist ein Grau. <code>fill</code> setzt die Füllung, <code>stroke</code> den Rand, und beides gilt für alles, was danach kommt.</p><p>Die Methoden heissen wie im Original-Processing: <code>mouseX</code>, nicht <code>mouse_x</code>. So passen die vielen Beispiele aus Büchern und aus dem Netz fast unverändert. Jetzt bewegt sich etwas:</p>"
           },
           {
             "t": "c",
@@ -5968,7 +7727,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Jede Blase ist ein Hash mit Ort, Tempo und Grösse. <code>random(-1, 1)</code> ist eine Zufallszahl zwischen -1 und 1, die vierte Zahl in <code>fill</code> die Deckkraft (0 durchsichtig, 255 deckend), und <code>reject!</code> räumt die Blasen weg, die oben hinausgeschwommen sind – sonst würde das Array immer länger.</p><div class='offweb' data-title='Auf deinem Computer'><p>Das echte Gem zeichnet mit OpenGL, über die C++-Bibliotheken <code>rays</code> und <code>reflexion</code> von xord. Die gibt es im Browser nicht – hier läuft ein Ersatz in reinem Ruby mit denselben Befehlen, der in ein <code>&lt;canvas&gt;</code> malt (so wie Numo in Lektion 29). Darum ist jeder Sketch dieser Lektion genau der, den du zu Hause startest:</p><pre>gem install processing\nruby sketch.rb</pre><p>Dann öffnet sich ein eigenes Fenster. Auf Windows braucht die Installation das MSYS2-DevKit von RubyInstaller, weil <code>rays</code> kompiliert wird. Zu Hause kann das Gem mehr: Bilder laden (<code>loadImage</code>), Shader, 3D und die Kamera (<code>createCapture</code>) – hier melden diese Befehle <code>NotImplementedError</code>. Und wer lieber Ruby-Namen mag, schreibt <code>using Processing(snake_case: true)</code> und darf dann auch <code>mouse_x</code> und <code>color_mode</code> sagen.</p><p>Noch etwas, das dich zu Hause überraschen könnte: Das Fenster öffnet sich nur, wenn der Sketch einen <code>draw</code>-Block (oder einen für Maus oder Tastatur) hat. Ein Sketch mit nur <code>setup</code> ist sofort fertig – darum auch hier: kein <code>draw</code>, kein Fenster.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky möchte malen. Schreib ein Malprogramm: 400 × 300 Pixel, in <code>setup</code> ein weisser Hintergrund, und solange die Maustaste gedrückt ist, zeichnet <code>draw</code> eine Linie von dort, wo die Maus eben war (<code>pmouseX</code>, <code>pmouseY</code>), bis dorthin, wo sie jetzt ist. Ohne <code>background</code> in <code>draw</code> bleibt alles stehen.</div>"
+            "html": "<p>Jede Blase ist ein Hash mit Ort, Tempo und Grösse. <code>random(-1, 1)</code> ist eine Zufallszahl zwischen -1 und 1, die vierte Zahl in <code>fill</code> die Deckkraft (0 durchsichtig, 255 deckend), und <code>reject!</code> räumt die Blasen weg, die oben hinausgeschwommen sind – sonst würde das Array immer länger.</p><div class='offweb' data-title='Auf deinem Computer'><p>Das echte Gem zeichnet mit OpenGL, über die C++-Bibliotheken <code>rays</code> und <code>reflexion</code> von xord. Die gibt es im Browser nicht – hier läuft ein Ersatz in reinem Ruby mit denselben Befehlen, der in ein <code>&lt;canvas&gt;</code> malt (so wie Numo in Lektion 33). Darum ist jeder Sketch dieser Lektion genau der, den du zu Hause startest:</p><pre>gem install processing\nruby sketch.rb</pre><p>Dann öffnet sich ein eigenes Fenster. Auf Windows braucht die Installation das MSYS2-DevKit von RubyInstaller, weil <code>rays</code> kompiliert wird. Zu Hause kann das Gem mehr: Bilder laden (<code>loadImage</code>), Shader, 3D und die Kamera (<code>createCapture</code>) – hier melden diese Befehle <code>NotImplementedError</code>. Und wer lieber Ruby-Namen mag, schreibt <code>using Processing(snake_case: true)</code> und darf dann auch <code>mouse_x</code> und <code>color_mode</code> sagen.</p><p>Noch etwas, das dich zu Hause überraschen könnte: Das Fenster öffnet sich nur, wenn der Sketch einen <code>draw</code>-Block (oder einen für Maus oder Tastatur) hat. Ein Sketch mit nur <code>setup</code> ist sofort fertig – darum auch hier: kein <code>draw</code>, kein Fenster.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky möchte malen. Schreib ein Malprogramm: 400 × 300 Pixel, in <code>setup</code> ein weisser Hintergrund, und solange die Maustaste gedrückt ist, zeichnet <code>draw</code> eine Linie von dort, wo die Maus eben war (<code>pmouseX</code>, <code>pmouseY</code>), bis dorthin, wo sie jetzt ist. Ohne <code>background</code> in <code>draw</code> bleibt alles stehen.</div>"
           },
           {
             "t": "x",
@@ -5979,7 +7738,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "36. Processing: drawing with code",
+        "title": "40. Processing: drawing with code",
         "cells": [
           {
             "t": "h",
@@ -5991,7 +7750,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>The sketch's window opens below the cell. <code>require \"processing\"</code> loads the gem, and <code>using Processing</code> switches its commands on – <code>size</code>, <code>ellipse</code>, <code>fill</code> only exist in a file that says so. (That is a <em>refinement</em>, like <code>Pptx::Lengths</code> in lesson 21: a module that adds methods only where you switch it on with <code>using</code>.) So every cell here starts with these two lines: each is a sketch of its own, like a file of its own.</p><p>Coordinates start <strong>top left</strong> at <code>0, 0</code>, <code>x</code> goes right, <code>y</code> goes <em>down</em>. <code>ellipse 200, 130, 140, 140</code> draws a circle centred at 200/130, 140 pixels across, <code>rect</code> a rectangle from its top-left corner. Colours are three numbers from 0 to 255 – red, green, blue –, a single number is a grey. <code>fill</code> sets the fill, <code>stroke</code> the outline, and both hold for everything that comes after.</p><p>The methods are named as in the original Processing: <code>mouseX</code>, not <code>mouse_x</code>. That way the many examples from books and the web fit almost unchanged. Now something moves:</p>"
+            "html": "<p>The sketch's window opens below the cell. <code>require \"processing\"</code> loads the gem, and <code>using Processing</code> switches its commands on – <code>size</code>, <code>ellipse</code>, <code>fill</code> only exist in a file that says so. (That is a <em>refinement</em>, like <code>Pptx::Lengths</code> in lesson 25: a module that adds methods only where you switch it on with <code>using</code>.) So every cell here starts with these two lines: each is a sketch of its own, like a file of its own.</p><p>Coordinates start <strong>top left</strong> at <code>0, 0</code>, <code>x</code> goes right, <code>y</code> goes <em>down</em>. <code>ellipse 200, 130, 140, 140</code> draws a circle centred at 200/130, 140 pixels across, <code>rect</code> a rectangle from its top-left corner. Colours are three numbers from 0 to 255 – red, green, blue –, a single number is a grey. <code>fill</code> sets the fill, <code>stroke</code> the outline, and both hold for everything that comes after.</p><p>The methods are named as in the original Processing: <code>mouseX</code>, not <code>mouse_x</code>. That way the many examples from books and the web fit almost unchanged. Now something moves:</p>"
           },
           {
             "t": "c",
@@ -6023,7 +7782,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Each bubble is a hash with position, speed and size. <code>random(-1, 1)</code> is a random number between -1 and 1, the fourth number in <code>fill</code> the opacity (0 see-through, 255 solid), and <code>reject!</code> clears away the bubbles that floated out at the top – otherwise the array would keep growing.</p><div class='offweb' data-title='On your machine'><p>The real gem draws with OpenGL, through xord's C++ libraries <code>rays</code> and <code>reflexion</code>. A browser does not have them – here a stand-in in pure Ruby with the same commands paints into a <code>&lt;canvas&gt;</code> (just like Numo in lesson 29). So every sketch in this lesson is exactly the one you start at home:</p><pre>gem install processing\nruby sketch.rb</pre><p>Then a window of its own opens. On Windows the install needs RubyInstaller's MSYS2 DevKit, because <code>rays</code> is compiled. At home the gem can do more: load pictures (<code>loadImage</code>), shaders, 3D and the camera (<code>createCapture</code>) – here those commands raise <code>NotImplementedError</code>. And if you prefer Ruby names, write <code>using Processing(snake_case: true)</code> and you may say <code>mouse_x</code> and <code>color_mode</code> as well.</p><p>One more thing that might surprise you at home: the window only opens if the sketch has a <code>draw</code> block (or one for the mouse or the keyboard). A sketch with only <code>setup</code> is done at once – and so here too: no <code>draw</code>, no window.</p></div><div class='task'><strong>Task:</strong> Chunky wants to paint. Write a paint program: 400 × 300 pixels, a white background in <code>setup</code>, and while the mouse button is pressed, <code>draw</code> draws a line from where the mouse just was (<code>pmouseX</code>, <code>pmouseY</code>) to where it is now. Without <code>background</code> in <code>draw</code>, everything stays.</div>"
+            "html": "<p>Each bubble is a hash with position, speed and size. <code>random(-1, 1)</code> is a random number between -1 and 1, the fourth number in <code>fill</code> the opacity (0 see-through, 255 solid), and <code>reject!</code> clears away the bubbles that floated out at the top – otherwise the array would keep growing.</p><div class='offweb' data-title='On your machine'><p>The real gem draws with OpenGL, through xord's C++ libraries <code>rays</code> and <code>reflexion</code>. A browser does not have them – here a stand-in in pure Ruby with the same commands paints into a <code>&lt;canvas&gt;</code> (just like Numo in lesson 33). So every sketch in this lesson is exactly the one you start at home:</p><pre>gem install processing\nruby sketch.rb</pre><p>Then a window of its own opens. On Windows the install needs RubyInstaller's MSYS2 DevKit, because <code>rays</code> is compiled. At home the gem can do more: load pictures (<code>loadImage</code>), shaders, 3D and the camera (<code>createCapture</code>) – here those commands raise <code>NotImplementedError</code>. And if you prefer Ruby names, write <code>using Processing(snake_case: true)</code> and you may say <code>mouse_x</code> and <code>color_mode</code> as well.</p><p>One more thing that might surprise you at home: the window only opens if the sketch has a <code>draw</code> block (or one for the mouse or the keyboard). A sketch with only <code>setup</code> is done at once – and so here too: no <code>draw</code>, no window.</p></div><div class='task'><strong>Task:</strong> Chunky wants to paint. Write a paint program: 400 × 300 pixels, a white background in <code>setup</code>, and while the mouse button is pressed, <code>draw</code> draws a line from where the mouse just was (<code>pmouseX</code>, <code>pmouseY</code>) to where it is now. Without <code>background</code> in <code>draw</code>, everything stays.</div>"
           },
           {
             "t": "x",
@@ -6034,7 +7793,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "36. Processing：コードで描く",
+        "title": "40. Processing：コードで描く",
         "cells": [
           {
             "t": "h",
@@ -6046,7 +7805,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>セルの下にスケッチのウィンドウが開きます。<code>require \"processing\"</code>でgemを読み込み、<code>using Processing</code>でその命令をオンにします。<code>size</code>、<code>ellipse</code>、<code>fill</code>は、そう書いたファイルの中にだけあります。（これはレッスン21の<code>Pptx::Lengths</code>と同じ<em>リファインメント</em>です。<code>using</code>でオンにした場所にだけメソッドを足すモジュールのことです。）だからここでは、どのセルもこの2行で始まります。それぞれが1つのスケッチ、1つのファイルのようなものです。</p><p>座標は<strong>左上</strong>の<code>0, 0</code>から始まり、<code>x</code>は右へ、<code>y</code>は<em>下へ</em>進みます。<code>ellipse 200, 130, 140, 140</code>は中心が200/130、直径140ピクセルの円を、<code>rect</code>は左上の角から長方形を描きます。色は0から255までの3つの数――赤・緑・青――で、数が1つなら灰色です。<code>fill</code>は塗りつぶし、<code>stroke</code>は輪郭の色で、どちらもそのあとに描くものすべてに効きます。</p><p>メソッドの名前は本家のProcessingと同じで、<code>mouse_x</code>ではなく<code>mouseX</code>です。だから本やネットのたくさんの例が、ほぼそのまま使えます。では、動かしてみましょう：</p>"
+            "html": "<p>セルの下にスケッチのウィンドウが開きます。<code>require \"processing\"</code>でgemを読み込み、<code>using Processing</code>でその命令をオンにします。<code>size</code>、<code>ellipse</code>、<code>fill</code>は、そう書いたファイルの中にだけあります。（これはレッスン25の<code>Pptx::Lengths</code>と同じ<em>リファインメント</em>です。<code>using</code>でオンにした場所にだけメソッドを足すモジュールのことです。）だからここでは、どのセルもこの2行で始まります。それぞれが1つのスケッチ、1つのファイルのようなものです。</p><p>座標は<strong>左上</strong>の<code>0, 0</code>から始まり、<code>x</code>は右へ、<code>y</code>は<em>下へ</em>進みます。<code>ellipse 200, 130, 140, 140</code>は中心が200/130、直径140ピクセルの円を、<code>rect</code>は左上の角から長方形を描きます。色は0から255までの3つの数――赤・緑・青――で、数が1つなら灰色です。<code>fill</code>は塗りつぶし、<code>stroke</code>は輪郭の色で、どちらもそのあとに描くものすべてに効きます。</p><p>メソッドの名前は本家のProcessingと同じで、<code>mouse_x</code>ではなく<code>mouseX</code>です。だから本やネットのたくさんの例が、ほぼそのまま使えます。では、動かしてみましょう：</p>"
           },
           {
             "t": "c",
@@ -6078,7 +7837,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>泡はそれぞれ、位置・速さ・大きさを持つハッシュです。<code>random(-1, 1)</code>は-1から1までの乱数、<code>fill</code>の4つめの数は不透明度（0で透明、255で不透明）です。<code>reject!</code>は上から出ていった泡を片づけます。そうしないと配列がどんどん長くなります。</p><div class='offweb' data-title='自分のパソコンでは'><p>本物のgemは、xordのC++ライブラリ<code>rays</code>と<code>reflexion</code>を通してOpenGLで描きます。ブラウザにはそれがないので、ここでは同じ命令を持つ純粋なRubyの代役が<code>&lt;canvas&gt;</code>に描いています（レッスン29のNumoと同じです）。だから、このレッスンのスケッチは、家で動かすものとまったく同じです：</p><pre>gem install processing\nruby sketch.rb</pre><p>すると専用のウィンドウが開きます。Windowsでは<code>rays</code>をコンパイルするので、RubyInstallerのMSYS2 DevKitが必要です。家ではgemはもっといろいろできます。画像の読み込み（<code>loadImage</code>）、シェーダー、3D、カメラ（<code>createCapture</code>）。ここではこれらの命令は<code>NotImplementedError</code>になります。Rubyらしい名前が好きなら<code>using Processing(snake_case: true)</code>と書けば、<code>mouse_x</code>や<code>color_mode</code>も使えます。</p><p>家で驚くかもしれないことがもう1つ：ウィンドウが開くのは、スケッチに<code>draw</code>ブロック（またはマウスやキーボードのブロック）があるときだけです。<code>setup</code>だけのスケッチはすぐに終わります。だからここでも、<code>draw</code>がなければウィンドウは出ません。</p></div><div class='task'><strong>課題：</strong>Chunkyが絵を描きたがっています。お絵かきプログラムをつくってください：400×300ピクセル、<code>setup</code>で白い背景。マウスのボタンを押している間、<code>draw</code>はマウスがさっきいた場所（<code>pmouseX</code>、<code>pmouseY</code>）から今の場所まで線を引きます。<code>draw</code>に<code>background</code>がなければ、描いたものは残ります。</div>"
+            "html": "<p>泡はそれぞれ、位置・速さ・大きさを持つハッシュです。<code>random(-1, 1)</code>は-1から1までの乱数、<code>fill</code>の4つめの数は不透明度（0で透明、255で不透明）です。<code>reject!</code>は上から出ていった泡を片づけます。そうしないと配列がどんどん長くなります。</p><div class='offweb' data-title='自分のパソコンでは'><p>本物のgemは、xordのC++ライブラリ<code>rays</code>と<code>reflexion</code>を通してOpenGLで描きます。ブラウザにはそれがないので、ここでは同じ命令を持つ純粋なRubyの代役が<code>&lt;canvas&gt;</code>に描いています（レッスン33のNumoと同じです）。だから、このレッスンのスケッチは、家で動かすものとまったく同じです：</p><pre>gem install processing\nruby sketch.rb</pre><p>すると専用のウィンドウが開きます。Windowsでは<code>rays</code>をコンパイルするので、RubyInstallerのMSYS2 DevKitが必要です。家ではgemはもっといろいろできます。画像の読み込み（<code>loadImage</code>）、シェーダー、3D、カメラ（<code>createCapture</code>）。ここではこれらの命令は<code>NotImplementedError</code>になります。Rubyらしい名前が好きなら<code>using Processing(snake_case: true)</code>と書けば、<code>mouse_x</code>や<code>color_mode</code>も使えます。</p><p>家で驚くかもしれないことがもう1つ：ウィンドウが開くのは、スケッチに<code>draw</code>ブロック（またはマウスやキーボードのブロック）があるときだけです。<code>setup</code>だけのスケッチはすぐに終わります。だからここでも、<code>draw</code>がなければウィンドウは出ません。</p></div><div class='task'><strong>課題：</strong>Chunkyが絵を描きたがっています。お絵かきプログラムをつくってください：400×300ピクセル、<code>setup</code>で白い背景。マウスのボタンを押している間、<code>draw</code>はマウスがさっきいた場所（<code>pmouseX</code>、<code>pmouseY</code>）から今の場所まで線を引きます。<code>draw</code>に<code>background</code>がなければ、描いたものは残ります。</div>"
           },
           {
             "t": "x",
@@ -6092,7 +7851,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "faker",
       "de": {
-        "title": "37. Faker: Testdaten, die echt aussehen",
+        "title": "41. Faker: Testdaten, die echt aussehen",
         "cells": [
           {
             "t": "h",
@@ -6136,7 +7895,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install faker</code>, oder im <code>Gemfile</code> in der Gruppe <code>:test</code>. In Minitest-Tests (Lektion 50) nimmst du gern Minitests eigenen Startwert, den jeder Lauf ausgibt (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>So erzeugt <code>ruby test.rb --seed 12345</code> genau die Daten des fehlgeschlagenen Laufs noch einmal. <code>Faker::Config.random = nil</code> macht den Zufall wieder zufällig.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky braucht für seinen Laden Testkunden, bei jedem Lauf dieselben. Leg den Zufall auf <code>Random.new(2024)</code> fest und mach ein Array <code>kunden</code> mit 5 Hashes, jeder mit einem <code>:name</code> und einer <code>:email</code>.</div>"
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install faker</code>, oder im <code>Gemfile</code> in der Gruppe <code>:test</code>. In Minitest-Tests (Lektion 56) nimmst du gern Minitests eigenen Startwert, den jeder Lauf ausgibt (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>So erzeugt <code>ruby test.rb --seed 12345</code> genau die Daten des fehlgeschlagenen Laufs noch einmal. <code>Faker::Config.random = nil</code> macht den Zufall wieder zufällig.</p></div><div class='task'><strong>Aufgabe:</strong> Chunky braucht für seinen Laden Testkunden, bei jedem Lauf dieselben. Leg den Zufall auf <code>Random.new(2024)</code> fest und mach ein Array <code>kunden</code> mit 5 Hashes, jeder mit einem <code>:name</code> und einer <code>:email</code>.</div>"
           },
           {
             "t": "x",
@@ -6147,7 +7906,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "37. Faker: test data that looks real",
+        "title": "41. Faker: test data that looks real",
         "cells": [
           {
             "t": "h",
@@ -6191,7 +7950,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install faker</code>, or in the <code>Gemfile</code> in the <code>:test</code> group. In Minitest tests (lesson 50) Minitest's own seed is a good choice; every run prints it (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>Then <code>ruby test.rb --seed 12345</code> makes exactly the data of the failed run again. <code>Faker::Config.random = nil</code> makes randomness random again.</p></div><div class='task'><strong>Task:</strong> Chunky needs test customers for his shop, the same ones on every run. Pin the randomness to <code>Random.new(2024)</code> and make an array <code>customers</code> of 5 hashes, each with a <code>:name</code> and an <code>:email</code>.</div>"
+            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install faker</code>, or in the <code>Gemfile</code> in the <code>:test</code> group. In Minitest tests (lesson 56) Minitest's own seed is a good choice; every run prints it (<code>Run options: --seed 12345</code>):</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>Then <code>ruby test.rb --seed 12345</code> makes exactly the data of the failed run again. <code>Faker::Config.random = nil</code> makes randomness random again.</p></div><div class='task'><strong>Task:</strong> Chunky needs test customers for his shop, the same ones on every run. Pin the randomness to <code>Random.new(2024)</code> and make an array <code>customers</code> of 5 hashes, each with a <code>:name</code> and an <code>:email</code>.</div>"
           },
           {
             "t": "x",
@@ -6202,7 +7961,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "37. Faker：本物らしいテストデータ",
+        "title": "41. Faker：本物らしいテストデータ",
         "cells": [
           {
             "t": "h",
@@ -6246,7 +8005,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='自分のパソコンでは'><p><code>gem install faker</code>、または<code>Gemfile</code>の<code>:test</code>グループに。Minitestのテスト（レッスン50）では、Minitest自身のシードを使うのがおすすめです。毎回の実行で表示されます（<code>Run options: --seed 12345</code>）：</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>すると<code>ruby test.rb --seed 12345</code>で、失敗した実行とまったく同じデータがもう一度つくられます。<code>Faker::Config.random = nil</code>で、乱数はまたランダムに戻ります。</p></div><div class='task'><strong>課題：</strong>Chunkyはお店のためのテスト用のお客さんがほしいのです。毎回同じお客さんで。乱数を<code>Random.new(2024)</code>に固定して、5つのハッシュの配列<code>customers</code>をつくってください。どのハッシュにも<code>:name</code>と<code>:email</code>があります。</div>"
+            "html": "<div class='offweb' data-title='自分のパソコンでは'><p><code>gem install faker</code>、または<code>Gemfile</code>の<code>:test</code>グループに。Minitestのテスト（レッスン56）では、Minitest自身のシードを使うのがおすすめです。毎回の実行で表示されます（<code>Run options: --seed 12345</code>）：</p><pre>Faker::Config.random = Random.new(Minitest.seed)</pre><p>すると<code>ruby test.rb --seed 12345</code>で、失敗した実行とまったく同じデータがもう一度つくられます。<code>Faker::Config.random = nil</code>で、乱数はまたランダムに戻ります。</p></div><div class='task'><strong>課題：</strong>Chunkyはお店のためのテスト用のお客さんがほしいのです。毎回同じお客さんで。乱数を<code>Random.new(2024)</code>に固定して、5つのハッシュの配列<code>customers</code>をつくってください。どのハッシュにも<code>:name</code>と<code>:email</code>があります。</div>"
           },
           {
             "t": "x",
@@ -6260,7 +8019,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "erb",
       "de": {
-        "title": "38. ERB: Vorlagen – und Herb, der sie prüft",
+        "title": "42. ERB: Vorlagen – und Herb, der sie prüft",
         "cells": [
           {
             "t": "h",
@@ -6288,7 +8047,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Die erste Zeile ist gefährlich. Ein Browser liest darin ein <code>&lt;script&gt;</code> und führt es aus – das Programm einer fremden Person, auf der Seite deines Ladens, mit den Daten deiner Kundschaft. Das heisst <em>Cross-Site-Scripting</em> (XSS) und ist eine der häufigsten Sicherheitslücken im Web. <code>ERB::Util.h</code> (h für HTML) <em>maskiert</em> die Sonderzeichen: Aus <code>&lt;</code> wird <code>&amp;lt;</code>, und der Browser zeigt die Zeichen nur an, statt sie auszuführen. Die Regel: Alles, was nicht von dir selbst stammt, kommt durch <code>h</code>. (Rails tut das von sich aus.)</p><p>Und so wird aus einer ERB-Vorlage eine Seite im Mini-Browser (Lektion 16) – ein Lambda genügt als Rack-App:</p>"
+            "html": "<p>Die erste Zeile ist gefährlich. Ein Browser liest darin ein <code>&lt;script&gt;</code> und führt es aus – das Programm einer fremden Person, auf der Seite deines Ladens, mit den Daten deiner Kundschaft. Das heisst <em>Cross-Site-Scripting</em> (XSS) und ist eine der häufigsten Sicherheitslücken im Web. <code>ERB::Util.h</code> (h für HTML) <em>maskiert</em> die Sonderzeichen: Aus <code>&lt;</code> wird <code>&amp;lt;</code>, und der Browser zeigt die Zeichen nur an, statt sie auszuführen. Die Regel: Alles, was nicht von dir selbst stammt, kommt durch <code>h</code>. (Rails tut das von sich aus.)</p><p>Und so wird aus einer ERB-Vorlage eine Seite im Mini-Browser (Lektion 20) – ein Lambda genügt als Rack-App:</p>"
           },
           {
             "t": "c",
@@ -6312,7 +8071,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Ein <code>HTMLElementNode</code> mit seinem öffnenden und schliessenden Tag, darin ein <code>ERBContentNode</code> mit dem Ruby-Code. Auf diesem Baum bauen Herbs Werkzeuge auf: ein Linter, der Regeln prüft, ein Formatierer, und Hilfe im Editor.</p><p>Am meisten bringt Herb in Tests: Ein Test, der jede Vorlage prüft, fällt um, sobald jemand ein Tag falsch schliesst – lange bevor es jemand im Browser sieht. Mit Minitest aus Lektion 50:</p>"
+            "html": "<p>Ein <code>HTMLElementNode</code> mit seinem öffnenden und schliessenden Tag, darin ein <code>ERBContentNode</code> mit dem Ruby-Code. Auf diesem Baum bauen Herbs Werkzeuge auf: ein Linter, der Regeln prüft, ein Formatierer, und Hilfe im Editor.</p><p>Am meisten bringt Herb in Tests: Ein Test, der jede Vorlage prüft, fällt um, sobald jemand ein Tag falsch schliesst – lange bevor es jemand im Browser sieht. Mit Minitest aus Lektion 56:</p>"
           },
           {
             "t": "c",
@@ -6331,7 +8090,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "38. ERB: templates – and Herb, which checks them",
+        "title": "42. ERB: templates – and Herb, which checks them",
         "cells": [
           {
             "t": "h",
@@ -6359,7 +8118,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>The first line is dangerous. A browser reads a <code>&lt;script&gt;</code> in it and runs it – a stranger's program, on your shop's page, with your customers' data. That is called <em>cross-site scripting</em> (XSS), one of the most common security holes on the web. <code>ERB::Util.h</code> (h for HTML) <em>escapes</em> the special characters: <code>&lt;</code> becomes <code>&amp;lt;</code>, and the browser shows the characters instead of running them. The rule: everything that does not come from you goes through <code>h</code>. (Rails does that by itself.)</p><p>And this is how an ERB template becomes a page in the mini browser (lesson 16) – a lambda will do as a Rack app:</p>"
+            "html": "<p>The first line is dangerous. A browser reads a <code>&lt;script&gt;</code> in it and runs it – a stranger's program, on your shop's page, with your customers' data. That is called <em>cross-site scripting</em> (XSS), one of the most common security holes on the web. <code>ERB::Util.h</code> (h for HTML) <em>escapes</em> the special characters: <code>&lt;</code> becomes <code>&amp;lt;</code>, and the browser shows the characters instead of running them. The rule: everything that does not come from you goes through <code>h</code>. (Rails does that by itself.)</p><p>And this is how an ERB template becomes a page in the mini browser (lesson 20) – a lambda will do as a Rack app:</p>"
           },
           {
             "t": "c",
@@ -6383,7 +8142,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>An <code>HTMLElementNode</code> with its opening and closing tag, and inside it an <code>ERBContentNode</code> with the Ruby code. Herb's tools build on this tree: a linter that checks rules, a formatter, and help in the editor.</p><p>Herb pays off most in tests: a test that checks every template falls over as soon as somebody closes a tag wrongly – long before anyone sees it in the browser. With Minitest from lesson 50:</p>"
+            "html": "<p>An <code>HTMLElementNode</code> with its opening and closing tag, and inside it an <code>ERBContentNode</code> with the Ruby code. Herb's tools build on this tree: a linter that checks rules, a formatter, and help in the editor.</p><p>Herb pays off most in tests: a test that checks every template falls over as soon as somebody closes a tag wrongly – long before anyone sees it in the browser. With Minitest from lesson 56:</p>"
           },
           {
             "t": "c",
@@ -6402,7 +8161,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "38. ERB：テンプレートと、それを確かめるHerb",
+        "title": "42. ERB：テンプレートと、それを確かめるHerb",
         "cells": [
           {
             "t": "h",
@@ -6430,7 +8189,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>1行目は危険です。ブラウザはその中の<code>&lt;script&gt;</code>を読んで実行してしまいます。知らない人のプログラムが、あなたのお店のページで、お客さんのデータといっしょに動くのです。これは<em>クロスサイトスクリプティング</em>（XSS）と呼ばれ、ウェブでもっともよくあるセキュリティホールのひとつです。<code>ERB::Util.h</code>（hはHTMLのh）は特殊な文字を<em>エスケープ</em>します。<code>&lt;</code>は<code>&amp;lt;</code>になり、ブラウザは文字を実行せずに表示します。ルールはこうです：自分で書いたものでないものは、すべて<code>h</code>を通します。（Railsは自動でそうします。）</p><p>そして、ERBテンプレートはこうしてミニブラウザ（レッスン16）のページになります。Rackアプリにはラムダで十分です：</p>"
+            "html": "<p>1行目は危険です。ブラウザはその中の<code>&lt;script&gt;</code>を読んで実行してしまいます。知らない人のプログラムが、あなたのお店のページで、お客さんのデータといっしょに動くのです。これは<em>クロスサイトスクリプティング</em>（XSS）と呼ばれ、ウェブでもっともよくあるセキュリティホールのひとつです。<code>ERB::Util.h</code>（hはHTMLのh）は特殊な文字を<em>エスケープ</em>します。<code>&lt;</code>は<code>&amp;lt;</code>になり、ブラウザは文字を実行せずに表示します。ルールはこうです：自分で書いたものでないものは、すべて<code>h</code>を通します。（Railsは自動でそうします。）</p><p>そして、ERBテンプレートはこうしてミニブラウザ（レッスン20）のページになります。Rackアプリにはラムダで十分です：</p>"
           },
           {
             "t": "c",
@@ -6454,7 +8213,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>開くタグと閉じるタグを持つ<code>HTMLElementNode</code>、その中にRubyのコードを持つ<code>ERBContentNode</code>。Herbのツールはこの木の上に成り立っています。ルールを確かめるリンター、フォーマッター、そしてエディタでの手助け。</p><p>Herbがいちばん役に立つのはテストです。すべてのテンプレートを確かめるテストは、だれかがタグの閉じ方をまちがえたとたんに失敗します。ブラウザでだれかが気づくずっと前に。レッスン50のMinitestで：</p>"
+            "html": "<p>開くタグと閉じるタグを持つ<code>HTMLElementNode</code>、その中にRubyのコードを持つ<code>ERBContentNode</code>。Herbのツールはこの木の上に成り立っています。ルールを確かめるリンター、フォーマッター、そしてエディタでの手助け。</p><p>Herbがいちばん役に立つのはテストです。すべてのテンプレートを確かめるテストは、だれかがタグの閉じ方をまちがえたとたんに失敗します。ブラウザでだれかが気づくずっと前に。レッスン56のMinitestで：</p>"
           },
           {
             "t": "c",
@@ -6476,11 +8235,11 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "rubykaigi",
       "de": {
-        "title": "39. RubyKaigi & seltsamer Code",
+        "title": "43. RubyKaigi & seltsamer Code",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Ruby ist auch eine Gemeinschaft</h2><p>Hinter Ruby stehen Menschen – und die treffen sich. Die grösste Ruby-Konferenz ist die <a href='https://rubykaigi.org' target='_blank'>RubyKaigi</a> in Japan („Kaigi“ heisst Konferenz): seit 2006, inzwischen jedes Jahr in einer anderen Stadt, drei Tage Vorträge auf Japanisch und Englisch, und mittendrin Matz und die Leute, die Ruby selbst weiterentwickeln. Dazu kommen die RubyConf in den USA, die EuRuKo in Europa, Rails World und Meetups in vielen Städten.</p><p>Nicht dabei gewesen? <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> sammelt die Videos von Tausenden Ruby-Vorträgen, kostenlos und durchsuchbar, und zeigt, welche Konferenzen und Meetups bald stattfinden. In dieser Lektion folgen wir einem Rubyisten durch drei Vorträge: <strong>Tomoya Ishida</strong> (<code>@tompng</code>). Er ist Ruby-Committer und pflegt IRB, das Werkzeug aus Lektion 13.</p>"
+            "html": "<h2>Ruby ist auch eine Gemeinschaft</h2><p>Hinter Ruby stehen Menschen – und die treffen sich. Die grösste Ruby-Konferenz ist die <a href='https://rubykaigi.org' target='_blank'>RubyKaigi</a> in Japan („Kaigi“ heisst Konferenz): seit 2006, inzwischen jedes Jahr in einer anderen Stadt, drei Tage Vorträge auf Japanisch und Englisch, und mittendrin Matz und die Leute, die Ruby selbst weiterentwickeln. Dazu kommen die RubyConf in den USA, die EuRuKo in Europa, Rails World und Meetups in vielen Städten.</p><p>Nicht dabei gewesen? <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> sammelt die Videos von Tausenden Ruby-Vorträgen, kostenlos und durchsuchbar, und zeigt, welche Konferenzen und Meetups bald stattfinden. In dieser Lektion folgen wir einem Rubyisten durch drei Vorträge: <strong>Tomoya Ishida</strong> (<code>@tompng</code>). Er ist Ruby-Committer und pflegt IRB, das Werkzeug aus Lektion 16.</p>"
           },
           {
             "t": "h",
@@ -6536,7 +8295,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Bei <code>def fuchs</code> fehlt das <code>end</code>, bei <code>[1, 2,</code> die Klammer, bei <code>\"Speck</code> das Anführungszeichen: Hier wartet IRB auf die nächste Zeile. Echtes IRB unterscheidet zusätzlich, ob Code nur <em>unfertig</em> ist oder schon <em>falsch</em> – auch darum ging es im Vortrag. Diese Seite nutzt dieselbe Idee: ⚡ Live startet deinen Code erst, wenn er sich parsen lässt.</p><div class='offweb' data-title='Mach mit'><p>Auf <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> findest du Vorträge zu fast jedem Thema dieses Kurses – such einmal nach „IRB“, „Prism“ oder „TRICK“. Viele RubyKaigi-Vorträge sind auf Japanisch, ihre Folien aber meist auf Englisch; die Seite des Vortrags auf <a href='https://rubykaigi.org' target='_blank'>rubykaigi.org</a> verlinkt sie. RubyEvents zeigt auch, welche Konferenzen und Meetups bald stattfinden und welche gerade Vorträge suchen. Ruby-Konferenzen freuen sich über neue Gesichter – im Publikum und auf der Bühne.</p></div><div class='task'><strong>Aufgabe:</strong> Bau IRBs Zeilensammler: <code>eingaben(zeilen)</code> bekommt die Zeilen, die jemand nacheinander tippt, und gibt die fertigen Eingaben zurück, so wie IRB sie ausführen würde – die Zeilen einer Eingabe mit <code>\"\\n\"</code> verbunden. <code>eingaben([\"x = 1\", \"def doppelt(n)\", \"  n * 2\", \"end\"])</code> ergibt <code>[\"x = 1\", \"def doppelt(n)\\n  n * 2\\nend\"]</code>.</div>"
+            "html": "<p>Bei <code>def fuchs</code> fehlt das <code>end</code>, bei <code>[1, 2,</code> die Klammer, bei <code>\"Speck</code> das Anführungszeichen: Hier wartet IRB auf die nächste Zeile. Echtes IRB unterscheidet zusätzlich, ob Code nur <em>unfertig</em> ist oder schon <em>falsch</em> – auch darum ging es im Vortrag. Diese Seite nutzt dieselbe Idee: ⚡ Live startet deinen Code erst, wenn er sich parsen lässt.</p><div class='offweb' data-title='Mach mit'><p>Auf <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> findest du Vorträge zu fast jedem Thema dieses Kurses – such einmal nach „IRB“, „Prism“ oder „TRICK“. Viele RubyKaigi-Vorträge sind auf Japanisch, ihre Folien aber meist auf Englisch; die Seite des Vortrags auf <a href='https://rubykaigi.org' target='_blank'>rubykaigi.org</a> verlinkt sie. RubyEvents zeigt auch, welche Konferenzen und Meetups bald stattfinden und welche gerade Vorträge suchen. Ruby-Konferenzen freuen sich über neue Gesichter – im Publikum und auf der Bühne.</p></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> · <a href='https://ruby.github.io/prism/' target='_blank'>Prism</a> · <a href='https://docs.ruby-lang.org/en/4.0/Prism.html' target='_blank'>Prism in der Ruby-Doku</a></div><div class='task'><strong>Aufgabe:</strong> Bau IRBs Zeilensammler: <code>eingaben(zeilen)</code> bekommt die Zeilen, die jemand nacheinander tippt, und gibt die fertigen Eingaben zurück, so wie IRB sie ausführen würde – die Zeilen einer Eingabe mit <code>\"\\n\"</code> verbunden. <code>eingaben([\"x = 1\", \"def doppelt(n)\", \"  n * 2\", \"end\"])</code> ergibt <code>[\"x = 1\", \"def doppelt(n)\\n  n * 2\\nend\"]</code>.</div>"
           },
           {
             "t": "x",
@@ -6547,11 +8306,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "39. RubyKaigi & weird code",
+        "title": "43. RubyKaigi & weird code",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Ruby is a community, too</h2><p>Behind Ruby there are people – and they meet. The biggest Ruby conference is <a href='https://rubykaigi.org' target='_blank'>RubyKaigi</a> in Japan (\"kaigi\" means conference): running since 2006, nowadays in a different city every year, three days of talks in Japanese and English, with Matz and the people who develop Ruby itself right in the middle. There is also RubyConf in the USA, EuRuKo in Europe, Rails World and meetups in many cities.</p><p>Weren't there? <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> collects the videos of thousands of Ruby talks, free and searchable, and shows which conferences and meetups are coming up. In this lesson we follow one Rubyist through three talks: <strong>Tomoya Ishida</strong> (<code>@tompng</code>). He is a Ruby committer and maintains IRB, the tool from lesson 13.</p>"
+            "html": "<h2>Ruby is a community, too</h2><p>Behind Ruby there are people – and they meet. The biggest Ruby conference is <a href='https://rubykaigi.org' target='_blank'>RubyKaigi</a> in Japan (\"kaigi\" means conference): running since 2006, nowadays in a different city every year, three days of talks in Japanese and English, with Matz and the people who develop Ruby itself right in the middle. There is also RubyConf in the USA, EuRuKo in Europe, Rails World and meetups in many cities.</p><p>Weren't there? <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> collects the videos of thousands of Ruby talks, free and searchable, and shows which conferences and meetups are coming up. In this lesson we follow one Rubyist through three talks: <strong>Tomoya Ishida</strong> (<code>@tompng</code>). He is a Ruby committer and maintains IRB, the tool from lesson 16.</p>"
           },
           {
             "t": "h",
@@ -6607,7 +8366,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>def fox</code> lacks its <code>end</code>, <code>[1, 2,</code> its bracket, <code>\"bacon</code> its quote: here IRB waits for the next line. Real IRB also tells code that is merely <em>unfinished</em> from code that is already <em>wrong</em> – that was part of the talk, too. This page uses the same idea: ⚡ Live only starts your code once it parses.</p><div class='offweb' data-title='Join in'><p>On <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> you'll find talks on almost every topic of this course – try searching for \"IRB\", \"Prism\" or \"TRICK\". Many RubyKaigi talks are in Japanese, but their slides are mostly in English; the talk's page on <a href='https://rubykaigi.org' target='_blank'>rubykaigi.org</a> links them. RubyEvents also shows which conferences and meetups are coming up and which are looking for talks. Ruby conferences are glad to see new faces – in the audience and on stage.</p></div><div class='task'><strong>Task:</strong> Build IRB's line collector: <code>inputs(lines)</code> gets the lines someone types one after the other and returns the finished inputs, the way IRB would run them – the lines of one input joined with <code>\"\\n\"</code>. <code>inputs([\"x = 1\", \"def double(n)\", \"  n * 2\", \"end\"])</code> gives <code>[\"x = 1\", \"def double(n)\\n  n * 2\\nend\"]</code>.</div>"
+            "html": "<p><code>def fox</code> lacks its <code>end</code>, <code>[1, 2,</code> its bracket, <code>\"bacon</code> its quote: here IRB waits for the next line. Real IRB also tells code that is merely <em>unfinished</em> from code that is already <em>wrong</em> – that was part of the talk, too. This page uses the same idea: ⚡ Live only starts your code once it parses.</p><div class='offweb' data-title='Join in'><p>On <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> you'll find talks on almost every topic of this course – try searching for \"IRB\", \"Prism\" or \"TRICK\". Many RubyKaigi talks are in Japanese, but their slides are mostly in English; the talk's page on <a href='https://rubykaigi.org' target='_blank'>rubykaigi.org</a> links them. RubyEvents also shows which conferences and meetups are coming up and which are looking for talks. Ruby conferences are glad to see new faces – in the audience and on stage.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a> · <a href='https://ruby.github.io/prism/' target='_blank'>Prism</a> · <a href='https://docs.ruby-lang.org/en/4.0/Prism.html' target='_blank'>Prism in the Ruby docs</a></div><div class='task'><strong>Task:</strong> Build IRB's line collector: <code>inputs(lines)</code> gets the lines someone types one after the other and returns the finished inputs, the way IRB would run them – the lines of one input joined with <code>\"\\n\"</code>. <code>inputs([\"x = 1\", \"def double(n)\", \"  n * 2\", \"end\"])</code> gives <code>[\"x = 1\", \"def double(n)\\n  n * 2\\nend\"]</code>.</div>"
           },
           {
             "t": "x",
@@ -6618,11 +8377,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "39. RubyKaigiと変なコード",
+        "title": "43. RubyKaigiと変なコード",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Rubyはコミュニティでもある</h2><p>Rubyの向こうには人がいて、その人たちは集まります。いちばん大きなRubyのカンファレンスは日本の<a href='https://rubykaigi.org' target='_blank'>RubyKaigi</a>です。2006年から続き、今では毎年ちがう街で開かれます。3日間、日本語と英語のトークがあり、その真ん中にはMatzとRuby自体を開発している人たちがいます。ほかにもアメリカのRubyConf、ヨーロッパのEuRuKo、Rails World、そして多くの街のミートアップがあります。</p><p>参加できなかった？ <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>には何千ものRubyのトーク動画が集められていて、無料で検索して見られます。これから開かれるカンファレンスやミートアップもわかります。このレッスンでは、1人のRubyistの3つのトークをたどります。<strong>石田智也さん</strong>（<code>@tompng</code>）です。Rubyコミッターで、レッスン13で使ったIRBのメンテナーです。</p>"
+            "html": "<h2>Rubyはコミュニティでもある</h2><p>Rubyの向こうには人がいて、その人たちは集まります。いちばん大きなRubyのカンファレンスは日本の<a href='https://rubykaigi.org' target='_blank'>RubyKaigi</a>です。2006年から続き、今では毎年ちがう街で開かれます。3日間、日本語と英語のトークがあり、その真ん中にはMatzとRuby自体を開発している人たちがいます。ほかにもアメリカのRubyConf、ヨーロッパのEuRuKo、Rails World、そして多くの街のミートアップがあります。</p><p>参加できなかった？ <a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>には何千ものRubyのトーク動画が集められていて、無料で検索して見られます。これから開かれるカンファレンスやミートアップもわかります。このレッスンでは、1人のRubyistの3つのトークをたどります。<strong>石田智也さん</strong>（<code>@tompng</code>）です。Rubyコミッターで、レッスン16で使ったIRBのメンテナーです。</p>"
           },
           {
             "t": "h",
@@ -6678,7 +8437,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>def fox</code>には<code>end</code>が、<code>[1, 2,</code>にはかっこが、<code>\"bacon</code>には引用符が足りません。こういうとき、IRBは次の行を待ちます。本物のIRBはさらに、コードがただ<em>途中</em>なのか、もう<em>まちがっている</em>のかも区別します。それもトークのテーマでした。このページも同じ考え方を使っています。⚡ ライブは、コードがパースできるようになってから実行します。</p><div class='offweb' data-title='参加してみよう'><p><a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>には、このコースのほとんどのテーマについてのトークがあります。「IRB」「Prism」「TRICK」で検索してみましょう。RubyKaigiのトークの多くは日本語ですが、スライドはたいてい英語で、<a href='https://rubykaigi.org' target='_blank'>rubykaigi.org</a>のトークのページからリンクされています。RubyEventsでは、これから開かれるカンファレンスやミートアップ、トークを募集中のイベントもわかります。Rubyのカンファレンスは新しい顔を歓迎しています。客席でも、ステージの上でも。</p></div><div class='task'><strong>課題：</strong>IRBの行集めを作りましょう。<code>inputs(lines)</code>は、だれかが1行ずつ入力した行を受け取り、IRBが実行するのと同じように、完成した入力を返します。1つの入力の行は<code>\"\\n\"</code>でつなげます。<code>inputs([\"x = 1\", \"def double(n)\", \"  n * 2\", \"end\"])</code>は<code>[\"x = 1\", \"def double(n)\\n  n * 2\\nend\"]</code>になります。</div>"
+            "html": "<p><code>def fox</code>には<code>end</code>が、<code>[1, 2,</code>にはかっこが、<code>\"bacon</code>には引用符が足りません。こういうとき、IRBは次の行を待ちます。本物のIRBはさらに、コードがただ<em>途中</em>なのか、もう<em>まちがっている</em>のかも区別します。それもトークのテーマでした。このページも同じ考え方を使っています。⚡ ライブは、コードがパースできるようになってから実行します。</p><div class='offweb' data-title='参加してみよう'><p><a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org</a>には、このコースのほとんどのテーマについてのトークがあります。「IRB」「Prism」「TRICK」で検索してみましょう。RubyKaigiのトークの多くは日本語ですが、スライドはたいてい英語で、<a href='https://rubykaigi.org' target='_blank'>rubykaigi.org</a>のトークのページからリンクされています。RubyEventsでは、これから開かれるカンファレンスやミートアップ、トークを募集中のイベントもわかります。Rubyのカンファレンスは新しい顔を歓迎しています。客席でも、ステージの上でも。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://www.rubyevents.org' target='_blank'>RubyEvents.org（英語）</a>・<a href='https://ruby.github.io/prism/' target='_blank'>Prism（英語）</a>・<a href='https://docs.ruby-lang.org/en/4.0/Prism.html' target='_blank'>RubyドキュメントのPrism（英語）</a></div><div class='task'><strong>課題：</strong>IRBの行集めを作りましょう。<code>inputs(lines)</code>は、だれかが1行ずつ入力した行を受け取り、IRBが実行するのと同じように、完成した入力を返します。1つの入力の行は<code>\"\\n\"</code>でつなげます。<code>inputs([\"x = 1\", \"def double(n)\", \"  n * 2\", \"end\"])</code>は<code>[\"x = 1\", \"def double(n)\\n  n * 2\\nend\"]</code>になります。</div>"
           },
           {
             "t": "x",
@@ -6693,7 +8452,7 @@ window.LESSONS_JSON = JSON.stringify({
       "id": "musik",
       "live": false,
       "de": {
-        "title": "40. Ruby macht Musik",
+        "title": "44. Ruby macht Musik",
         "cells": [
           {
             "t": "h",
@@ -6745,7 +8504,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Ein Schlagzeug ist hier wieder ein String: Jedes Zeichen ist ein Achtel, <code>x</code> die grosse Trommel, <code>h</code> die Hi-Hat, ein Punkt Pause. Die <strong>Kick</strong> ist ein Sinus, dessen Frequenz schnell fällt und der dabei verklingt (<code>Math.exp(-zeit * 15)</code> wird rasch kleiner), die <strong>Hi-Hat</strong> ist Rauschen aus <code>rand</code>. Jeder Klang wird auf seinen Platz zurechtgeschnitten oder mit Stille aufgefüllt, damit der Takt gleichmässig bleibt.</p><p><code>noten</code>, <code>schlagzeug</code>, <code>zusammen</code> – das sind schon die Wörter einer kleinen Sprache für Musik, gebaut aus Arrays, Strings und Blöcken (mehr dazu in Lektion 58, «Eine eigene DSL»). <code>File.binwrite</code> schreibt die Bytes als Datei; sie erscheint unter der Zelle als Download, und <code>show_audio</code> nimmt auch ihren Namen.</p><div class='offweb' data-title='Auf deinem Computer'><p>Dort läuft derselbe Code: <code>File.binwrite(\"lied.wav\", wav(lied))</code> und dann die Datei mit einem beliebigen Player öffnen. Wer WAV-Dateien auch lesen oder in Stereo und 24 Bit schreiben will, nimmt das Gem <code>wavefile</code> (reines Ruby, läuft auch hier mit <code>install_gem \"wavefile\"</code>) – es schreibt für dieses Lied Byte für Byte dieselbe Datei.</p></div><div class='task'><strong>Aufgabe:</strong> Ein Tusch! Schreib die Datei <code>tusch.wav</code>: zuerst die Töne C4, E4, G4 und C5 nacheinander, je 0.25 Sekunden, danach alle vier <strong>zusammen</strong> eine Sekunde lang – insgesamt also 2 Sekunden.</div>"
+            "html": "<p>Ein Schlagzeug ist hier wieder ein String: Jedes Zeichen ist ein Achtel, <code>x</code> die grosse Trommel, <code>h</code> die Hi-Hat, ein Punkt Pause. Die <strong>Kick</strong> ist ein Sinus, dessen Frequenz schnell fällt und der dabei verklingt (<code>Math.exp(-zeit * 15)</code> wird rasch kleiner), die <strong>Hi-Hat</strong> ist Rauschen aus <code>rand</code>. Jeder Klang wird auf seinen Platz zurechtgeschnitten oder mit Stille aufgefüllt, damit der Takt gleichmässig bleibt.</p><p><code>noten</code>, <code>schlagzeug</code>, <code>zusammen</code> – das sind schon die Wörter einer kleinen Sprache für Musik, gebaut aus Arrays, Strings und Blöcken (mehr dazu in Lektion 64, «Eine eigene DSL»). <code>File.binwrite</code> schreibt die Bytes als Datei; sie erscheint unter der Zelle als Download, und <code>show_audio</code> nimmt auch ihren Namen.</p><div class='offweb' data-title='Auf deinem Computer'><p>Dort läuft derselbe Code: <code>File.binwrite(\"lied.wav\", wav(lied))</code> und dann die Datei mit einem beliebigen Player öffnen. Wer WAV-Dateien auch lesen oder in Stereo und 24 Bit schreiben will, nimmt das Gem <code>wavefile</code> (reines Ruby, läuft auch hier mit <code>install_gem \"wavefile\"</code>) – es schreibt für dieses Lied Byte für Byte dieselbe Datei.</p></div><div class='task'><strong>Aufgabe:</strong> Ein Tusch! Schreib die Datei <code>tusch.wav</code>: zuerst die Töne C4, E4, G4 und C5 nacheinander, je 0.25 Sekunden, danach alle vier <strong>zusammen</strong> eine Sekunde lang – insgesamt also 2 Sekunden.</div>"
           },
           {
             "t": "x",
@@ -6756,7 +8515,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "40. Ruby makes music",
+        "title": "44. Ruby makes music",
         "cells": [
           {
             "t": "h",
@@ -6808,7 +8567,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>A drum kit is a String again: every character is an eighth note, <code>x</code> the bass drum, <code>h</code> the hi-hat, a dot a rest. The <strong>kick</strong> is a sine whose frequency falls fast while it dies away (<code>Math.exp(-time * 15)</code> shrinks quickly), the <strong>hi-hat</strong> is noise from <code>rand</code>. Every sound is cut to its slot or padded with silence, so the beat stays even.</p><p><code>notes</code>, <code>drums</code>, <code>mix</code> – those are already the words of a small language for music, built from Arrays, Strings and blocks (more in lesson 58, \"Your own DSL\"). <code>File.binwrite</code> writes the bytes as a file; it appears below the cell as a download, and <code>show_audio</code> takes its name too.</p><div class='offweb' data-title='On your machine'><p>The same code runs there: <code>File.binwrite(\"song.wav\", wav(song))</code>, then open the file in any player. To read WAV files as well, or write stereo and 24 bits, use the <code>wavefile</code> gem (pure Ruby, it runs here too with <code>install_gem \"wavefile\"</code>) – for this song it writes the very same file, byte for byte.</p></div><div class='task'><strong>Task:</strong> A fanfare! Write the file <code>fanfare.wav</code>: first the notes C4, E4, G4 and C5 one after another, 0.25 seconds each, then all four <strong>together</strong> for one second – 2 seconds in all.</div>"
+            "html": "<p>A drum kit is a String again: every character is an eighth note, <code>x</code> the bass drum, <code>h</code> the hi-hat, a dot a rest. The <strong>kick</strong> is a sine whose frequency falls fast while it dies away (<code>Math.exp(-time * 15)</code> shrinks quickly), the <strong>hi-hat</strong> is noise from <code>rand</code>. Every sound is cut to its slot or padded with silence, so the beat stays even.</p><p><code>notes</code>, <code>drums</code>, <code>mix</code> – those are already the words of a small language for music, built from Arrays, Strings and blocks (more in lesson 64, \"Your own DSL\"). <code>File.binwrite</code> writes the bytes as a file; it appears below the cell as a download, and <code>show_audio</code> takes its name too.</p><div class='offweb' data-title='On your machine'><p>The same code runs there: <code>File.binwrite(\"song.wav\", wav(song))</code>, then open the file in any player. To read WAV files as well, or write stereo and 24 bits, use the <code>wavefile</code> gem (pure Ruby, it runs here too with <code>install_gem \"wavefile\"</code>) – for this song it writes the very same file, byte for byte.</p></div><div class='task'><strong>Task:</strong> A fanfare! Write the file <code>fanfare.wav</code>: first the notes C4, E4, G4 and C5 one after another, 0.25 seconds each, then all four <strong>together</strong> for one second – 2 seconds in all.</div>"
           },
           {
             "t": "x",
@@ -6819,7 +8578,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "40. Rubyで音楽を作る",
+        "title": "44. Rubyで音楽を作る",
         "cells": [
           {
             "t": "h",
@@ -6871,7 +8630,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ドラムもまた文字列です。1文字が8分音符1つ分で、<code>x</code>はバスドラム、<code>h</code>はハイハット、点は休符です。<strong>キック</strong>は、周波数がすばやく下がりながら消えていくサイン波です（<code>Math.exp(-time * 15)</code>はすぐに小さくなります）。<strong>ハイハット</strong>は<code>rand</code>で作ったノイズです。それぞれの音は自分の枠に合わせて切るか無音で埋めるので、リズムがずれません。</p><p><code>notes</code>、<code>drums</code>、<code>mix</code>――これはもう、配列と文字列とブロックでできた、音楽のための小さな言語の単語です（くわしくはレッスン58「自分だけのDSL」で）。<code>File.binwrite</code>はバイト列をファイルに書き出します。ファイルはセルの下にダウンロードとして現れ、<code>show_audio</code>にはファイル名を渡すこともできます。</p><div class='offweb' data-title='自分のコンピューターでは'><p>同じコードがそのまま動きます。<code>File.binwrite(\"song.wav\", wav(song))</code>で書き出し、好きなプレーヤーで開いてください。WAVファイルを読んだり、ステレオや24ビットで書いたりしたいなら、<code>wavefile</code> gemを使います（純粋なRubyなので、ここでも<code>install_gem \"wavefile\"</code>で動きます）。この曲なら、1バイトも違わない同じファイルを書き出します。</p></div><div class='task'><strong>課題：</strong>ファンファーレを作りましょう！<code>fanfare.wav</code>というファイルを書き出してください。まずC4、E4、G4、C5を順に各0.25秒、そのあと4つを<strong>同時に</strong>1秒鳴らします。全部で2秒です。</div>"
+            "html": "<p>ドラムもまた文字列です。1文字が8分音符1つ分で、<code>x</code>はバスドラム、<code>h</code>はハイハット、点は休符です。<strong>キック</strong>は、周波数がすばやく下がりながら消えていくサイン波です（<code>Math.exp(-time * 15)</code>はすぐに小さくなります）。<strong>ハイハット</strong>は<code>rand</code>で作ったノイズです。それぞれの音は自分の枠に合わせて切るか無音で埋めるので、リズムがずれません。</p><p><code>notes</code>、<code>drums</code>、<code>mix</code>――これはもう、配列と文字列とブロックでできた、音楽のための小さな言語の単語です（くわしくはレッスン64「自分だけのDSL」で）。<code>File.binwrite</code>はバイト列をファイルに書き出します。ファイルはセルの下にダウンロードとして現れ、<code>show_audio</code>にはファイル名を渡すこともできます。</p><div class='offweb' data-title='自分のコンピューターでは'><p>同じコードがそのまま動きます。<code>File.binwrite(\"song.wav\", wav(song))</code>で書き出し、好きなプレーヤーで開いてください。WAVファイルを読んだり、ステレオや24ビットで書いたりしたいなら、<code>wavefile</code> gemを使います（純粋なRubyなので、ここでも<code>install_gem \"wavefile\"</code>で動きます）。この曲なら、1バイトも違わない同じファイルを書き出します。</p></div><div class='task'><strong>課題：</strong>ファンファーレを作りましょう！<code>fanfare.wav</code>というファイルを書き出してください。まずC4、E4、G4、C5を順に各0.25秒、そのあと4つを<strong>同時に</strong>1秒鳴らします。全部で2秒です。</div>"
           },
           {
             "t": "x",
@@ -6885,7 +8644,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "snake",
       "de": {
-        "title": "41. Chunkys Snake",
+        "title": "45. Chunkys Snake",
         "cells": [
           {
             "t": "h",
@@ -6897,7 +8656,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Die Felder werden gezählt wie die Pixel in Lektion 36: <code>x</code> von links nach rechts, <code>y</code> von oben nach unten, beide ab 0. Das Feld oben links ist <code>0, 0</code>, das unten rechts <code>19, 14</code>. Ein Feld zeigt ein Bild (<code>:chunky</code>, <code>:bacon</code>, <code>:egg</code>, <code>:wall</code>, <code>:star</code> …), eine Farbe (<code>:green</code>, <code>:red</code>, <code>\"#3a8\"</code>) oder ein beliebiges Emoji als String. Ohne drittes Argument fragt <code>g.cell(10, 7)</code>, was dort liegt.</p><p>Noch steht alles still. Ein Spiel muss immer wieder etwas tun – aber eine Schleife mit <code>sleep</code> würde hier die ganze Seite einfrieren, denn Ruby läuft im selben Faden wie der Browser. Darum dreht die Seite die Runden, und du sagst ihr nur, was in einer Runde passiert: <code>g.every(0.15) { … }</code> ruft den Block alle 0,15 Sekunden auf. Klick auf das Spielfeld, dann läuft Chunky los:</p>"
+            "html": "<p>Die Felder werden gezählt wie die Pixel in Lektion 40: <code>x</code> von links nach rechts, <code>y</code> von oben nach unten, beide ab 0. Das Feld oben links ist <code>0, 0</code>, das unten rechts <code>19, 14</code>. Ein Feld zeigt ein Bild (<code>:chunky</code>, <code>:bacon</code>, <code>:egg</code>, <code>:wall</code>, <code>:star</code> …), eine Farbe (<code>:green</code>, <code>:red</code>, <code>\"#3a8\"</code>) oder ein beliebiges Emoji als String. Ohne drittes Argument fragt <code>g.cell(10, 7)</code>, was dort liegt.</p><p>Noch steht alles still. Ein Spiel muss immer wieder etwas tun – aber eine Schleife mit <code>sleep</code> würde hier die ganze Seite einfrieren, denn Ruby läuft im selben Faden wie der Browser. Darum dreht die Seite die Runden, und du sagst ihr nur, was in einer Runde passiert: <code>g.every(0.15) { … }</code> ruft den Block alle 0,15 Sekunden auf. Klick auf das Spielfeld, dann läuft Chunky los:</p>"
           },
           {
             "t": "c",
@@ -6929,7 +8688,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Das ist das ganze Spiel, rund 35 Zeilen. <code>schlange.include?(kopf)</code> ist wahr, wenn das neue Feld schon zur Schlange gehört – dann hat Chunky sich gebissen. Und weil das <code>unless</code> verbietet, direkt umzukehren, kann das nicht schon mit einem einzigen Tastendruck passieren.</p><p>Zwei Dinge helfen beim Basteln: Was du in einer Runde mit <code>puts</code> ausgibst, erscheint in einem kleinen Protokoll unter dem Spielfeld. Und wirft eine Runde einen Fehler, hält das Spiel an und zeigt ihn mit der Zeilennummer. Eine Endlosschleife in einer Runde stoppt die Seite nach einer Sekunde, damit sie nicht einfriert.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>show_game</code> gibt es nur auf dieser Seite. Auf dem Computer schreibt man Spiele mit Gems wie <code>ruby2d</code> oder <code>gosu</code>: Sie öffnen ein eigenes Fenster und rufen einen Block auf, sooft ein neues Bild fällig ist – bei ruby2d heisst er <code>update do … end</code>, und Tasten kommen mit <code>on :key_down</code>. Die Idee ist dieselbe wie hier: Dein Programm sagt, was in einer Runde passiert, und die Bibliothek dreht die Runden. Wie das mit ruby2d aussieht, zeigt Lektion 42 – mit Programmen, die hier und auf deinem Computer gleich laufen.</p></div><div class='task'><strong>Aufgabe:</strong> Manche Snake-Varianten haben keine Wände: Wer rechts hinausläuft, kommt links wieder herein, und wer oben hinausläuft, unten. Bau das in Chunkys Snake ein – das Spielfeld ist diesmal 16 × 12 Felder gross. Nur der eigene Schwanz beendet das Spiel noch. Ein Werkzeug dafür kennst du vielleicht noch nicht: <code>%</code> rechnet den Rest beim Teilen aus, <code>17 % 16</code> ist 1.</div>"
+            "html": "<p>Das ist das ganze Spiel, rund 35 Zeilen. <code>schlange.include?(kopf)</code> ist wahr, wenn das neue Feld schon zur Schlange gehört – dann hat Chunky sich gebissen. Und weil das <code>unless</code> verbietet, direkt umzukehren, kann das nicht schon mit einem einzigen Tastendruck passieren.</p><p>Zwei Dinge helfen beim Basteln: Was du in einer Runde mit <code>puts</code> ausgibst, erscheint in einem kleinen Protokoll unter dem Spielfeld. Und wirft eine Runde einen Fehler, hält das Spiel an und zeigt ihn mit der Zeilennummer. Eine Endlosschleife in einer Runde stoppt die Seite nach einer Sekunde, damit sie nicht einfriert.</p><div class='offweb' data-title='Auf deinem Computer'><p><code>show_game</code> gibt es nur auf dieser Seite. Auf dem Computer schreibt man Spiele mit Gems wie <code>ruby2d</code> oder <code>gosu</code>: Sie öffnen ein eigenes Fenster und rufen einen Block auf, sooft ein neues Bild fällig ist – bei ruby2d heisst er <code>update do … end</code>, und Tasten kommen mit <code>on :key_down</code>. Die Idee ist dieselbe wie hier: Dein Programm sagt, was in einer Runde passiert, und die Bibliothek dreht die Runden. Wie das mit ruby2d aussieht, zeigt Lektion 46 – mit Programmen, die hier und auf deinem Computer gleich laufen.</p></div><div class='task'><strong>Aufgabe:</strong> Manche Snake-Varianten haben keine Wände: Wer rechts hinausläuft, kommt links wieder herein, und wer oben hinausläuft, unten. Bau das in Chunkys Snake ein – das Spielfeld ist diesmal 16 × 12 Felder gross. Nur der eigene Schwanz beendet das Spiel noch. Ein Werkzeug dafür kennst du vielleicht noch nicht: <code>%</code> rechnet den Rest beim Teilen aus, <code>17 % 16</code> ist 1.</div>"
           },
           {
             "t": "x",
@@ -6940,7 +8699,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "41. Chunky's Snake",
+        "title": "45. Chunky's Snake",
         "cells": [
           {
             "t": "h",
@@ -6952,7 +8711,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>The cells are counted like the pixels in lesson 36: <code>x</code> from left to right, <code>y</code> from top to bottom, both from 0. The top left cell is <code>0, 0</code>, the bottom right one <code>19, 14</code>. A cell shows a picture (<code>:chunky</code>, <code>:bacon</code>, <code>:egg</code>, <code>:wall</code>, <code>:star</code> …), a colour (<code>:green</code>, <code>:red</code>, <code>\"#3a8\"</code>) or any emoji as a String. Without a third argument, <code>g.cell(10, 7)</code> asks what lies there.</p><p>So far nothing moves. A game has to do something again and again – but a loop with <code>sleep</code> would freeze the whole page here, because Ruby runs in the same thread as the browser. So the page runs the rounds, and you only tell it what happens in one: <code>g.every(0.15) { … }</code> calls the block every 0.15 seconds. Click the field and Chunky sets off:</p>"
+            "html": "<p>The cells are counted like the pixels in lesson 40: <code>x</code> from left to right, <code>y</code> from top to bottom, both from 0. The top left cell is <code>0, 0</code>, the bottom right one <code>19, 14</code>. A cell shows a picture (<code>:chunky</code>, <code>:bacon</code>, <code>:egg</code>, <code>:wall</code>, <code>:star</code> …), a colour (<code>:green</code>, <code>:red</code>, <code>\"#3a8\"</code>) or any emoji as a String. Without a third argument, <code>g.cell(10, 7)</code> asks what lies there.</p><p>So far nothing moves. A game has to do something again and again – but a loop with <code>sleep</code> would freeze the whole page here, because Ruby runs in the same thread as the browser. So the page runs the rounds, and you only tell it what happens in one: <code>g.every(0.15) { … }</code> calls the block every 0.15 seconds. Click the field and Chunky sets off:</p>"
           },
           {
             "t": "c",
@@ -6984,7 +8743,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>That is the whole game, about 35 lines. <code>snake.include?(head)</code> is true when the new cell already belongs to the snake – then Chunky has bitten himself. And since the <code>unless</code> forbids turning straight back, that cannot happen with a single key press.</p><p>Two things help while tinkering: what you print with <code>puts</code> in a round appears in a small log below the field. And if a round raises an error, the game stops and shows it with the line number. An endless loop in a round is stopped by the page after a second, so it does not freeze.</p><div class='offweb' data-title='On your machine'><p><code>show_game</code> only exists on this page. On a computer, games are written with gems like <code>ruby2d</code> or <code>gosu</code>: they open a window of their own and call a block whenever a new picture is due – in ruby2d it is <code>update do … end</code>, and keys come in with <code>on :key_down</code>. The idea is the same as here: your program says what happens in one round, and the library runs the rounds. Lesson 42 shows what that looks like with ruby2d – with programs that run the same here and on your computer.</p></div><div class='task'><strong>Task:</strong> Some versions of Snake have no walls: run out on the right and you come back in on the left, run out at the top and you come back in at the bottom. Build that into Chunky's Snake – this time the field is 16 × 12 cells. Only his own tail still ends the game. One tool for it you may not know yet: <code>%</code> computes the remainder of a division, <code>17 % 16</code> is 1.</div>"
+            "html": "<p>That is the whole game, about 35 lines. <code>snake.include?(head)</code> is true when the new cell already belongs to the snake – then Chunky has bitten himself. And since the <code>unless</code> forbids turning straight back, that cannot happen with a single key press.</p><p>Two things help while tinkering: what you print with <code>puts</code> in a round appears in a small log below the field. And if a round raises an error, the game stops and shows it with the line number. An endless loop in a round is stopped by the page after a second, so it does not freeze.</p><div class='offweb' data-title='On your machine'><p><code>show_game</code> only exists on this page. On a computer, games are written with gems like <code>ruby2d</code> or <code>gosu</code>: they open a window of their own and call a block whenever a new picture is due – in ruby2d it is <code>update do … end</code>, and keys come in with <code>on :key_down</code>. The idea is the same as here: your program says what happens in one round, and the library runs the rounds. Lesson 46 shows what that looks like with ruby2d – with programs that run the same here and on your computer.</p></div><div class='task'><strong>Task:</strong> Some versions of Snake have no walls: run out on the right and you come back in on the left, run out at the top and you come back in at the bottom. Build that into Chunky's Snake – this time the field is 16 × 12 cells. Only his own tail still ends the game. One tool for it you may not know yet: <code>%</code> computes the remainder of a division, <code>17 % 16</code> is 1.</div>"
           },
           {
             "t": "x",
@@ -6995,7 +8754,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "41. ChunkyのSnake",
+        "title": "45. ChunkyのSnake",
         "cells": [
           {
             "t": "h",
@@ -7007,7 +8766,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>マスの数え方は、レッスン36のピクセルと同じです。<code>x</code>は左から右へ、<code>y</code>は上から下へ、どちらも0から数えます。左上のマスが<code>0, 0</code>、右下のマスが<code>19, 14</code>です。マスには絵（<code>:chunky</code>、<code>:bacon</code>、<code>:egg</code>、<code>:wall</code>、<code>:star</code> …）、色（<code>:green</code>、<code>:red</code>、<code>\"#3a8\"</code>）、または好きな絵文字を文字列で置けます。3つ目の引数を付けずに<code>g.cell(10, 7)</code>と書くと、そこに何があるかを調べられます。</p><p>まだ何も動きません。ゲームは同じことを何度もくり返す必要があります。でも、ここで<code>sleep</code>を使ったループを書くと、ページ全体が固まってしまいます。Rubyはブラウザーと同じスレッドで動いているからです。そこで、くり返しはページが受け持ち、あなたは1回分に何が起きるかだけを伝えます。<code>g.every(0.15) { … }</code>は0.15秒ごとにブロックを呼び出します。フィールドをクリックすると、Chunkyが動き出します。</p>"
+            "html": "<p>マスの数え方は、レッスン40のピクセルと同じです。<code>x</code>は左から右へ、<code>y</code>は上から下へ、どちらも0から数えます。左上のマスが<code>0, 0</code>、右下のマスが<code>19, 14</code>です。マスには絵（<code>:chunky</code>、<code>:bacon</code>、<code>:egg</code>、<code>:wall</code>、<code>:star</code> …）、色（<code>:green</code>、<code>:red</code>、<code>\"#3a8\"</code>）、または好きな絵文字を文字列で置けます。3つ目の引数を付けずに<code>g.cell(10, 7)</code>と書くと、そこに何があるかを調べられます。</p><p>まだ何も動きません。ゲームは同じことを何度もくり返す必要があります。でも、ここで<code>sleep</code>を使ったループを書くと、ページ全体が固まってしまいます。Rubyはブラウザーと同じスレッドで動いているからです。そこで、くり返しはページが受け持ち、あなたは1回分に何が起きるかだけを伝えます。<code>g.every(0.15) { … }</code>は0.15秒ごとにブロックを呼び出します。フィールドをクリックすると、Chunkyが動き出します。</p>"
           },
           {
             "t": "c",
@@ -7039,7 +8798,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>これでゲーム全体ができました。だいたい35行です。<code>snake.include?(head)</code>は、新しいマスがすでにヘビの一部なら真になります。つまり、Chunkyが自分をかんだということです。<code>unless</code>で真後ろへの方向転換を禁止しているので、キーを1回押しただけでそうなることはありません。</p><p>いじって遊ぶときに役立つことが2つあります。1回分の中で<code>puts</code>で出力したものは、フィールドの下の小さなログに出ます。そして、ある回でエラーが起きると、ゲームは止まり、行番号つきでエラーを表示します。1回分の中の無限ループは、ページが固まらないように1秒で止められます。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>show_game</code>はこのページにしかありません。コンピューターでは、<code>ruby2d</code>や<code>gosu</code>といったgemでゲームを書きます。これらは自分のウィンドウを開き、新しい画面が必要になるたびにブロックを呼び出します。ruby2dではそれが<code>update do … end</code>で、キーは<code>on :key_down</code>で受け取ります。考え方はここと同じです。プログラムは1回分に何が起きるかを伝え、くり返しはライブラリーが受け持ちます。ruby2dで書くとどうなるかは、次のレッスン42で見ていきます。ここでも自分のコンピューターでも同じように動くプログラムです。</p></div><div class='task'><strong>課題：</strong>Snakeには、壁のないバージョンもあります。右から出ると左から戻り、上から出ると下から戻ってきます。これをChunkyのSnakeに組み込んでください。今回のフィールドは16×12マスです。ゲームが終わるのは、自分のしっぽをかんだときだけです。そのための道具をまだ知らないかもしれません。<code>%</code>は割り算の余りを計算します。<code>17 % 16</code>は1です。</div>"
+            "html": "<p>これでゲーム全体ができました。だいたい35行です。<code>snake.include?(head)</code>は、新しいマスがすでにヘビの一部なら真になります。つまり、Chunkyが自分をかんだということです。<code>unless</code>で真後ろへの方向転換を禁止しているので、キーを1回押しただけでそうなることはありません。</p><p>いじって遊ぶときに役立つことが2つあります。1回分の中で<code>puts</code>で出力したものは、フィールドの下の小さなログに出ます。そして、ある回でエラーが起きると、ゲームは止まり、行番号つきでエラーを表示します。1回分の中の無限ループは、ページが固まらないように1秒で止められます。</p><div class='offweb' data-title='自分のコンピューターでは'><p><code>show_game</code>はこのページにしかありません。コンピューターでは、<code>ruby2d</code>や<code>gosu</code>といったgemでゲームを書きます。これらは自分のウィンドウを開き、新しい画面が必要になるたびにブロックを呼び出します。ruby2dではそれが<code>update do … end</code>で、キーは<code>on :key_down</code>で受け取ります。考え方はここと同じです。プログラムは1回分に何が起きるかを伝え、くり返しはライブラリーが受け持ちます。ruby2dで書くとどうなるかは、次のレッスン46で見ていきます。ここでも自分のコンピューターでも同じように動くプログラムです。</p></div><div class='task'><strong>課題：</strong>Snakeには、壁のないバージョンもあります。右から出ると左から戻り、上から出ると下から戻ってきます。これをChunkyのSnakeに組み込んでください。今回のフィールドは16×12マスです。ゲームが終わるのは、自分のしっぽをかんだときだけです。そのための道具をまだ知らないかもしれません。<code>%</code>は割り算の余りを計算します。<code>17 % 16</code>は1です。</div>"
           },
           {
             "t": "x",
@@ -7053,11 +8812,11 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "ruby2d",
       "de": {
-        "title": "42. Spiele mit ruby2d",
+        "title": "46. Spiele mit ruby2d",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Spiele mit ruby2d</h2><p>In Lektion 41 hat die Seite Chunkys Snake mit <code>show_game</code> laufen lassen, einem Helfer, den es nur hier gibt. Richtige Ruby-Spiele auf dem Computer schreibt man mit einem Gem, und eines der freundlichsten ist <a href=\"https://www.ruby2d.com\" target=\"_blank\" rel=\"noopener\">ruby2d</a>: Es öffnet ein Fenster, zeichnet Formen, Text und Bilder hinein und meldet deinem Programm jede Taste und jeden Klick. Darunter arbeitet SDL, eine C-Bibliothek, auf der auch viele kommerzielle Spiele aufbauen.</p><p>Eine C-Bibliothek kann in diesem Browser nicht laufen. Darum bringt die Seite einen Ersatz mit: den Ruby-Code von ruby2d selbst, unverändert, und dort, wo das Gem SDL aufrufen würde, ein kleines Stück in Ruby. Der Sinn davon: <strong>Jedes Programm dieser Lektion läuft genauso mit dem echten Gem auf deinem Computer.</strong> Hier ist ein vollständiges ruby2d-Programm. Führ es aus, dann erscheint unter der Zelle ein Fenster:</p>"
+            "html": "<h2>Spiele mit ruby2d</h2><p>In Lektion 45 hat die Seite Chunkys Snake mit <code>show_game</code> laufen lassen, einem Helfer, den es nur hier gibt. Richtige Ruby-Spiele auf dem Computer schreibt man mit einem Gem, und eines der freundlichsten ist <a href=\"https://www.ruby2d.com\" target=\"_blank\" rel=\"noopener\">ruby2d</a>: Es öffnet ein Fenster, zeichnet Formen, Text und Bilder hinein und meldet deinem Programm jede Taste und jeden Klick. Darunter arbeitet SDL, eine C-Bibliothek, auf der auch viele kommerzielle Spiele aufbauen.</p><p>Eine C-Bibliothek kann in diesem Browser nicht laufen. Darum bringt die Seite einen Ersatz mit: den Ruby-Code von ruby2d selbst, unverändert, und dort, wo das Gem SDL aufrufen würde, ein kleines Stück in Ruby. Der Sinn davon: <strong>Jedes Programm dieser Lektion läuft genauso mit dem echten Gem auf deinem Computer.</strong> Hier ist ein vollständiges ruby2d-Programm. Führ es aus, dann erscheint unter der Zelle ein Fenster:</p>"
           },
           {
             "t": "c",
@@ -7065,7 +8824,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Zeile für Zeile: <code>require \"ruby2d\"</code> lädt das Gem, und ab dann sind <code>set</code>, <code>Square</code>, <code>show</code> und Co. einfach da. <code>set</code> verändert das Fenster: seinen Titel (<code>title</code>), seinen Hintergrund (<code>background</code>) und mit <code>width:</code> und <code>height:</code> auch seine Grösse – ohne sie ist es 640 × 480 Pixel gross. <code>Square.new</code> macht ein Quadrat und legt es gleich ins Fenster. <code>show</code> öffnet schliesslich das Fenster.</p><p>Gezählt wird wie bei Processing (Lektion 36): <code>x</code> vom linken Rand, <code>y</code> vom oberen Rand, in Pixeln. Das Quadrat beginnt bei 270, 190 und ist 100 Pixel breit, also sitzt es in der Mitte. Neben <code>Square</code> gibt es <code>Rectangle</code> (<code>width:</code>, <code>height:</code>), <code>Circle</code> (<code>x:</code> und <code>y:</code> sind sein Mittelpunkt, dazu <code>radius:</code>), <code>Triangle</code> (drei Ecken <code>x1:</code> … <code>y3:</code>), <code>Line</code> und <code>Text</code>. Eine Farbe ist ein Name wie <code>\"orange\"</code> oder <code>\"navy\"</code>, ein Hex-Code wie <code>\"#d35400\"</code> oder <code>\"random\"</code>, das eine zufällig auswählt:</p>"
+            "html": "<p>Zeile für Zeile: <code>require \"ruby2d\"</code> lädt das Gem, und ab dann sind <code>set</code>, <code>Square</code>, <code>show</code> und Co. einfach da. <code>set</code> verändert das Fenster: seinen Titel (<code>title</code>), seinen Hintergrund (<code>background</code>) und mit <code>width:</code> und <code>height:</code> auch seine Grösse – ohne sie ist es 640 × 480 Pixel gross. <code>Square.new</code> macht ein Quadrat und legt es gleich ins Fenster. <code>show</code> öffnet schliesslich das Fenster.</p><p>Gezählt wird wie bei Processing (Lektion 40): <code>x</code> vom linken Rand, <code>y</code> vom oberen Rand, in Pixeln. Das Quadrat beginnt bei 270, 190 und ist 100 Pixel breit, also sitzt es in der Mitte. Neben <code>Square</code> gibt es <code>Rectangle</code> (<code>width:</code>, <code>height:</code>), <code>Circle</code> (<code>x:</code> und <code>y:</code> sind sein Mittelpunkt, dazu <code>radius:</code>), <code>Triangle</code> (drei Ecken <code>x1:</code> … <code>y3:</code>), <code>Line</code> und <code>Text</code>. Eine Farbe ist ein Name wie <code>\"orange\"</code> oder <code>\"navy\"</code>, ein Hex-Code wie <code>\"#d35400\"</code> oder <code>\"random\"</code>, das eine zufällig auswählt:</p>"
           },
           {
             "t": "c",
@@ -7116,11 +8875,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "42. Games with ruby2d",
+        "title": "46. Games with ruby2d",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Games with ruby2d</h2><p>In lesson 41 the page ran Chunky's Snake with <code>show_game</code>, a helper that only exists here. Real Ruby games on a computer are written with a gem, and one of the friendliest is <a href=\"https://www.ruby2d.com\" target=\"_blank\" rel=\"noopener\">ruby2d</a>: it opens a window, draws shapes, text and pictures in it, and tells your program about every key and every click. Under the hood it uses SDL, a C library that many commercial games are built on too.</p><p>A C library cannot run in this browser. So the page brings a stand-in: ruby2d's own Ruby code, unchanged, with a small piece written in Ruby where the gem would call SDL. The point of it: <strong>every program in this lesson runs just the same with the real gem on your computer.</strong> Here is a complete ruby2d program. Run it, and a window appears below the cell:</p>"
+            "html": "<h2>Games with ruby2d</h2><p>In lesson 45 the page ran Chunky's Snake with <code>show_game</code>, a helper that only exists here. Real Ruby games on a computer are written with a gem, and one of the friendliest is <a href=\"https://www.ruby2d.com\" target=\"_blank\" rel=\"noopener\">ruby2d</a>: it opens a window, draws shapes, text and pictures in it, and tells your program about every key and every click. Under the hood it uses SDL, a C library that many commercial games are built on too.</p><p>A C library cannot run in this browser. So the page brings a stand-in: ruby2d's own Ruby code, unchanged, with a small piece written in Ruby where the gem would call SDL. The point of it: <strong>every program in this lesson runs just the same with the real gem on your computer.</strong> Here is a complete ruby2d program. Run it, and a window appears below the cell:</p>"
           },
           {
             "t": "c",
@@ -7128,7 +8887,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Line by line: <code>require \"ruby2d\"</code> loads the gem, and from then on <code>set</code>, <code>Square</code>, <code>show</code> and friends are simply there. <code>set</code> changes the window: its <code>title</code>, its <code>background</code>, and also its size with <code>width:</code> and <code>height:</code> – without them it is 640 × 480 pixels. <code>Square.new</code> makes a square and puts it into the window straight away. <code>show</code> finally opens the window.</p><p>Positions are counted as in Processing (lesson 36): <code>x</code> from the left edge, <code>y</code> from the top edge, in pixels. The square starts at 270, 190 and is 100 pixels wide, so it sits in the middle. Besides <code>Square</code> there are <code>Rectangle</code> (<code>width:</code>, <code>height:</code>), <code>Circle</code> (<code>x:</code> and <code>y:</code> are its centre, plus <code>radius:</code>), <code>Triangle</code> (three corners <code>x1:</code> … <code>y3:</code>), <code>Line</code> and <code>Text</code>. A colour is a name such as <code>\"orange\"</code> or <code>\"navy\"</code>, a hex code like <code>\"#d35400\"</code>, or <code>\"random\"</code>, which picks one by chance:</p>"
+            "html": "<p>Line by line: <code>require \"ruby2d\"</code> loads the gem, and from then on <code>set</code>, <code>Square</code>, <code>show</code> and friends are simply there. <code>set</code> changes the window: its <code>title</code>, its <code>background</code>, and also its size with <code>width:</code> and <code>height:</code> – without them it is 640 × 480 pixels. <code>Square.new</code> makes a square and puts it into the window straight away. <code>show</code> finally opens the window.</p><p>Positions are counted as in Processing (lesson 40): <code>x</code> from the left edge, <code>y</code> from the top edge, in pixels. The square starts at 270, 190 and is 100 pixels wide, so it sits in the middle. Besides <code>Square</code> there are <code>Rectangle</code> (<code>width:</code>, <code>height:</code>), <code>Circle</code> (<code>x:</code> and <code>y:</code> are its centre, plus <code>radius:</code>), <code>Triangle</code> (three corners <code>x1:</code> … <code>y3:</code>), <code>Line</code> and <code>Text</code>. A colour is a name such as <code>\"orange\"</code> or <code>\"navy\"</code>, a hex code like <code>\"#d35400\"</code>, or <code>\"random\"</code>, which picks one by chance:</p>"
           },
           {
             "t": "c",
@@ -7179,11 +8938,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "42. ruby2dでゲーム",
+        "title": "46. ruby2dでゲーム",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>ruby2dでゲーム</h2><p>レッスン41では、このページにしかない道具<code>show_game</code>を使って、ChunkyのSnakeを動かしました。コンピューターで本物のRubyのゲームを書くときはgemを使います。中でも親しみやすいのが<a href=\"https://www.ruby2d.com\" target=\"_blank\" rel=\"noopener\">ruby2d</a>です。ウィンドウを開き、その中に図形や文字や画像をかき、キーやクリックのたびにプログラムに知らせてくれます。内側ではSDLというCのライブラリーが動いています。多くの市販のゲームもSDLの上に作られています。</p><p>Cのライブラリーはこのブラウザーでは動きません。そこでこのページは代わりのものを用意しています。ruby2dのRubyのコードはそのまま使い、gemがSDLを呼ぶところだけを小さなRubyのコードで置きかえたものです。大事なのは、<strong>このレッスンのプログラムはどれも、自分のコンピューターで本物のgemを使ってもそのまま動く</strong>ということです。これが完全なruby2dのプログラムです。実行すると、セルの下にウィンドウが現れます。</p>"
+            "html": "<h2>ruby2dでゲーム</h2><p>レッスン45では、このページにしかない道具<code>show_game</code>を使って、ChunkyのSnakeを動かしました。コンピューターで本物のRubyのゲームを書くときはgemを使います。中でも親しみやすいのが<a href=\"https://www.ruby2d.com\" target=\"_blank\" rel=\"noopener\">ruby2d</a>です。ウィンドウを開き、その中に図形や文字や画像をかき、キーやクリックのたびにプログラムに知らせてくれます。内側ではSDLというCのライブラリーが動いています。多くの市販のゲームもSDLの上に作られています。</p><p>Cのライブラリーはこのブラウザーでは動きません。そこでこのページは代わりのものを用意しています。ruby2dのRubyのコードはそのまま使い、gemがSDLを呼ぶところだけを小さなRubyのコードで置きかえたものです。大事なのは、<strong>このレッスンのプログラムはどれも、自分のコンピューターで本物のgemを使ってもそのまま動く</strong>ということです。これが完全なruby2dのプログラムです。実行すると、セルの下にウィンドウが現れます。</p>"
           },
           {
             "t": "c",
@@ -7191,7 +8950,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>1行ずつ見ていきましょう。<code>require \"ruby2d\"</code>でgemを読み込むと、そこから先は<code>set</code>や<code>Square</code>や<code>show</code>などがそのまま使えます。<code>set</code>はウィンドウを変えます。タイトル（<code>title</code>）、背景（<code>background</code>）、そして<code>width:</code>と<code>height:</code>で大きさも変えられます。指定しなければ640×480ピクセルです。<code>Square.new</code>は正方形を作り、すぐにウィンドウに置きます。最後に<code>show</code>がウィンドウを開きます。</p><p>位置の数え方はProcessing（レッスン36）と同じです。<code>x</code>は左の端から、<code>y</code>は上の端から、ピクセルで数えます。正方形は270, 190から始まり、幅が100ピクセルなので、まん中にあります。<code>Square</code>のほかに、<code>Rectangle</code>（<code>width:</code>、<code>height:</code>）、<code>Circle</code>（<code>x:</code>と<code>y:</code>が中心で、<code>radius:</code>が半径）、<code>Triangle</code>（3つの角<code>x1:</code> … <code>y3:</code>）、<code>Line</code>、<code>Text</code>があります。色は<code>\"orange\"</code>や<code>\"navy\"</code>のような名前、<code>\"#d35400\"</code>のような16進数のコード、またはランダムに選ぶ<code>\"random\"</code>で指定します。</p>"
+            "html": "<p>1行ずつ見ていきましょう。<code>require \"ruby2d\"</code>でgemを読み込むと、そこから先は<code>set</code>や<code>Square</code>や<code>show</code>などがそのまま使えます。<code>set</code>はウィンドウを変えます。タイトル（<code>title</code>）、背景（<code>background</code>）、そして<code>width:</code>と<code>height:</code>で大きさも変えられます。指定しなければ640×480ピクセルです。<code>Square.new</code>は正方形を作り、すぐにウィンドウに置きます。最後に<code>show</code>がウィンドウを開きます。</p><p>位置の数え方はProcessing（レッスン40）と同じです。<code>x</code>は左の端から、<code>y</code>は上の端から、ピクセルで数えます。正方形は270, 190から始まり、幅が100ピクセルなので、まん中にあります。<code>Square</code>のほかに、<code>Rectangle</code>（<code>width:</code>、<code>height:</code>）、<code>Circle</code>（<code>x:</code>と<code>y:</code>が中心で、<code>radius:</code>が半径）、<code>Triangle</code>（3つの角<code>x1:</code> … <code>y3:</code>）、<code>Line</code>、<code>Text</code>があります。色は<code>\"orange\"</code>や<code>\"navy\"</code>のような名前、<code>\"#d35400\"</code>のような16進数のコード、またはランダムに選ぶ<code>\"random\"</code>で指定します。</p>"
           },
           {
             "t": "c",
@@ -7245,7 +9004,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "rubies",
       "de": {
-        "title": "43. Andere Rubys: JRuby, TruffleRuby, mruby & Co.",
+        "title": "47. Andere Rubys: JRuby, TruffleRuby, mruby & Co.",
         "cells": [
           {
             "t": "h",
@@ -7292,7 +9051,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "43. Other Rubies: JRuby, TruffleRuby, mruby & co.",
+        "title": "47. Other Rubies: JRuby, TruffleRuby, mruby & co.",
         "cells": [
           {
             "t": "h",
@@ -7339,7 +9098,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "43. いろいろなRuby：JRuby、TruffleRuby、mrubyなど",
+        "title": "47. いろいろなRuby：JRuby、TruffleRuby、mrubyなど",
         "cells": [
           {
             "t": "h",
@@ -7390,7 +9149,7 @@ window.LESSONS_JSON = JSON.stringify({
       "id": "picoruby",
       "engine": "picoruby",
       "de": {
-        "title": "44. PicoRuby: Ruby auf einem Chip",
+        "title": "48. PicoRuby: Ruby auf einem Chip",
         "cells": [
           {
             "t": "h",
@@ -7461,7 +9220,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "44. PicoRuby: Ruby on a chip",
+        "title": "48. PicoRuby: Ruby on a chip",
         "cells": [
           {
             "t": "h",
@@ -7532,7 +9291,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "44. PicoRuby：チップの上のRuby",
+        "title": "48. PicoRuby：チップの上のRuby",
         "cells": [
           {
             "t": "h",
@@ -7608,7 +9367,7 @@ window.LESSONS_JSON = JSON.stringify({
       "live": false,
       "spinel": true,
       "de": {
-        "title": "45. Spinel: Ruby wird kompiliert",
+        "title": "49. Spinel: Ruby wird kompiliert",
         "cells": [
           {
             "t": "h",
@@ -7636,7 +9395,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>CRuby rechnet <code>42</code> aus, Spinel weigert sich. Eine Besonderheit kommt von WebAssembly: Hier ist ein <code>Integer</code> nur 32 Bit groß, also höchstens 2 147 483 647. Darüber wirft Spinel einen <code>RangeError</code>, wo CRuby einfach zu einer großen Zahl wechselt; auf deinem Computer rechnet Spinel mit 64 Bit. Threads und Fibers gibt es in WebAssembly auch nicht.</p><p>Und IRB? Aus Lektion 13 kennst du IRB: Es nimmt eine Zeile, führt sie aus, zeigt <code>=&gt;</code> und wartet auf die nächste. Das geht, weil CRuby beim Ausführen da ist. Ein kompiliertes Programm hat kein <code>eval</code> – ein IRB für Spinel gibt es also eigentlich nicht. Das IRB unten schummelt ehrlich: Jede Zeile wird <strong>zusammen mit allen vorigen</strong> zu einem neuen Programm übersetzt und von vorn ausgeführt, und gezeigt wird nur, was die neue Zeile ausgibt. Darum dauert jede Zeile ein paar Sekunden. Probier <code>x = 6 * 7</code>, dann <code>def doppelt(n) = n * 2</code>, dann <code>doppelt(x)</code>.</p>"
+            "html": "<p>CRuby rechnet <code>42</code> aus, Spinel weigert sich. Eine Besonderheit kommt von WebAssembly: Hier ist ein <code>Integer</code> nur 32 Bit groß, also höchstens 2 147 483 647. Darüber wirft Spinel einen <code>RangeError</code>, wo CRuby einfach zu einer großen Zahl wechselt; auf deinem Computer rechnet Spinel mit 64 Bit. Threads und Fibers gibt es in WebAssembly auch nicht.</p><p>Und IRB? Aus Lektion 16 kennst du IRB: Es nimmt eine Zeile, führt sie aus, zeigt <code>=&gt;</code> und wartet auf die nächste. Das geht, weil CRuby beim Ausführen da ist. Ein kompiliertes Programm hat kein <code>eval</code> – ein IRB für Spinel gibt es also eigentlich nicht. Das IRB unten schummelt ehrlich: Jede Zeile wird <strong>zusammen mit allen vorigen</strong> zu einem neuen Programm übersetzt und von vorn ausgeführt, und gezeigt wird nur, was die neue Zeile ausgibt. Darum dauert jede Zeile ein paar Sekunden. Probier <code>x = 6 * 7</code>, dann <code>def doppelt(n) = n * 2</code>, dann <code>doppelt(x)</code>.</p>"
           },
           {
             "t": "c",
@@ -7667,7 +9426,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "45. Spinel: Ruby, compiled",
+        "title": "49. Spinel: Ruby, compiled",
         "cells": [
           {
             "t": "h",
@@ -7695,7 +9454,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>CRuby works out <code>42</code>, Spinel refuses. One peculiarity comes from WebAssembly: here an <code>Integer</code> has only 32 bits, so at most 2,147,483,647. Past that Spinel raises a <code>RangeError</code> where CRuby simply switches to a big number; on your computer Spinel computes with 64 bits. Threads and fibers do not exist in WebAssembly either.</p><p>And IRB? You know IRB from lesson 13: it takes a line, runs it, shows <code>=&gt;</code> and waits for the next one. That works because CRuby is there while the code runs. A compiled program has no <code>eval</code> – so there is really no IRB for Spinel. The IRB below cheats honestly: every line is compiled <strong>together with all the lines before it</strong> into a new program and run from the start, and only what the new line prints is shown. That is why every line takes a few seconds. Try <code>x = 6 * 7</code>, then <code>def double(n) = n * 2</code>, then <code>double(x)</code>.</p>"
+            "html": "<p>CRuby works out <code>42</code>, Spinel refuses. One peculiarity comes from WebAssembly: here an <code>Integer</code> has only 32 bits, so at most 2,147,483,647. Past that Spinel raises a <code>RangeError</code> where CRuby simply switches to a big number; on your computer Spinel computes with 64 bits. Threads and fibers do not exist in WebAssembly either.</p><p>And IRB? You know IRB from lesson 16: it takes a line, runs it, shows <code>=&gt;</code> and waits for the next one. That works because CRuby is there while the code runs. A compiled program has no <code>eval</code> – so there is really no IRB for Spinel. The IRB below cheats honestly: every line is compiled <strong>together with all the lines before it</strong> into a new program and run from the start, and only what the new line prints is shown. That is why every line takes a few seconds. Try <code>x = 6 * 7</code>, then <code>def double(n) = n * 2</code>, then <code>double(x)</code>.</p>"
           },
           {
             "t": "c",
@@ -7726,7 +9485,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "45. Spinel：Rubyをコンパイルする",
+        "title": "49. Spinel：Rubyをコンパイルする",
         "cells": [
           {
             "t": "h",
@@ -7754,7 +9513,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>CRubyは<code>42</code>を計算し、Spinelは断ります。WebAssemblyならではの点もあります。ここでは<code>Integer</code>は32ビットしかなく、最大で2,147,483,647です。それを超えると、CRubyなら大きな数に切り替えるところで、Spinelは<code>RangeError</code>を発生させます。自分のコンピューターでは、Spinelは64ビットで計算します。また、WebAssemblyにはスレッドもファイバーもありません。</p><p>では、IRBは？　IRBはレッスン13で使いましたね。1行受け取って実行し、<code>=&gt;</code>を表示して、次の行を待ちます。これができるのは、実行中にCRubyがいるからです。コンパイルされたプログラムには<code>eval</code>がありません。ですから、SpinelのためのIRBは本来ありえないのです。下のIRBは正直にずるをしています。1行ごとに<strong>それまでのすべての行と一緒に</strong>新しいプログラムにコンパイルし、最初から実行して、新しい行が出力したものだけを見せます。そのため、1行ごとに数秒かかります。<code>x = 6 * 7</code>、次に<code>def double(n) = n * 2</code>、そして<code>double(x)</code>を試してみてください。</p>"
+            "html": "<p>CRubyは<code>42</code>を計算し、Spinelは断ります。WebAssemblyならではの点もあります。ここでは<code>Integer</code>は32ビットしかなく、最大で2,147,483,647です。それを超えると、CRubyなら大きな数に切り替えるところで、Spinelは<code>RangeError</code>を発生させます。自分のコンピューターでは、Spinelは64ビットで計算します。また、WebAssemblyにはスレッドもファイバーもありません。</p><p>では、IRBは？　IRBはレッスン16で使いましたね。1行受け取って実行し、<code>=&gt;</code>を表示して、次の行を待ちます。これができるのは、実行中にCRubyがいるからです。コンパイルされたプログラムには<code>eval</code>がありません。ですから、SpinelのためのIRBは本来ありえないのです。下のIRBは正直にずるをしています。1行ごとに<strong>それまでのすべての行と一緒に</strong>新しいプログラムにコンパイルし、最初から実行して、新しい行が出力したものだけを見せます。そのため、1行ごとに数秒かかります。<code>x = 6 * 7</code>、次に<code>def double(n) = n * 2</code>、そして<code>double(x)</code>を試してみてください。</p>"
           },
           {
             "t": "c",
@@ -7793,7 +9552,7 @@ window.LESSONS_JSON = JSON.stringify({
         "ja": "応用コース：timelog"
       },
       "de": {
-        "title": "46. Projekt timelog: Collections",
+        "title": "50. Projekt timelog: Collections",
         "cells": [
           {
             "t": "h",
@@ -7821,7 +9580,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Auch nützlich: <code>tally</code> zählt Vorkommen, <code>sort_by</code> sortiert, <code>each_with_object</code> baut beliebige Strukturen auf.</p><div class='task'><strong>Aufgabe:</strong> Baue aus <code>eintraege</code> einen Hash <code>stunden</code>, der jedem Projekt die <strong>Gesamtstunden</strong> zuordnet: <code>{\"ProjectX\"=>6.5, \"Intern\"=>2.0}</code>. Tipp: <code>group_by</code> + <code>transform_values</code>.</div>"
+            "html": "<p>Auch nützlich: <code>tally</code> zählt Vorkommen, <code>sort_by</code> sortiert, <code>each_with_object</code> baut beliebige Strukturen auf.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-group_by' target='_blank'>group_by</a> · <a href='https://docs.ruby-lang.org/en/4.0/Hash.html#method-i-transform_values' target='_blank'>transform_values</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-tally' target='_blank'>tally</a></div><div class='task'><strong>Aufgabe:</strong> Baue aus <code>eintraege</code> einen Hash <code>stunden</code>, der jedem Projekt die <strong>Gesamtstunden</strong> zuordnet: <code>{\"ProjectX\"=>6.5, \"Intern\"=>2.0}</code>. Tipp: <code>group_by</code> + <code>transform_values</code>.</div>"
           },
           {
             "t": "x",
@@ -7832,7 +9591,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "46. Project timelog: collections",
+        "title": "50. Project timelog: collections",
         "cells": [
           {
             "t": "h",
@@ -7860,7 +9619,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Also useful: <code>tally</code> counts occurrences, <code>sort_by</code> sorts, <code>each_with_object</code> builds arbitrary structures.</p><div class='task'><strong>Task:</strong> Build a hash <code>hours</code> from <code>entries</code> that maps each project to its <strong>total hours</strong>: <code>{\"ProjectX\"=>6.5, \"Intern\"=>2.0}</code>. Hint: <code>group_by</code> + <code>transform_values</code>.</div>"
+            "html": "<p>Also useful: <code>tally</code> counts occurrences, <code>sort_by</code> sorts, <code>each_with_object</code> builds arbitrary structures.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-group_by' target='_blank'>group_by</a> · <a href='https://docs.ruby-lang.org/en/4.0/Hash.html#method-i-transform_values' target='_blank'>transform_values</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-tally' target='_blank'>tally</a></div><div class='task'><strong>Task:</strong> Build a hash <code>hours</code> from <code>entries</code> that maps each project to its <strong>total hours</strong>: <code>{\"ProjectX\"=>6.5, \"Intern\"=>2.0}</code>. Hint: <code>group_by</code> + <code>transform_values</code>.</div>"
           },
           {
             "t": "x",
@@ -7871,7 +9630,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "46. timelogプロジェクト：コレクション",
+        "title": "50. timelogプロジェクト：コレクション",
         "cells": [
           {
             "t": "h",
@@ -7899,7 +9658,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ほかにも便利なメソッドがあります。<code>tally</code>は出現回数を数え、<code>sort_by</code>は並べ替え、<code>each_with_object</code>は好きな構造を組み立てます。</p><div class='task'><strong>課題：</strong><code>entries</code>から、各プロジェクトにその<strong>合計時間</strong>を対応させたハッシュ<code>hours</code>を作ってください：<code>{\"ProjectX\"=>6.5, \"Intern\"=>2.0}</code>。ヒント：<code>group_by</code>と<code>transform_values</code>を組み合わせます。</div>"
+            "html": "<p>ほかにも便利なメソッドがあります。<code>tally</code>は出現回数を数え、<code>sort_by</code>は並べ替え、<code>each_with_object</code>は好きな構造を組み立てます。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/method/Enumerable/i/group_by.html' target='_blank'>group_by</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Hash/i/transform_values.html' target='_blank'>transform_values</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Enumerable/i/tally.html' target='_blank'>tally</a></div><div class='task'><strong>課題：</strong><code>entries</code>から、各プロジェクトにその<strong>合計時間</strong>を対応させたハッシュ<code>hours</code>を作ってください：<code>{\"ProjectX\"=>6.5, \"Intern\"=>2.0}</code>。ヒント：<code>group_by</code>と<code>transform_values</code>を組み合わせます。</div>"
           },
           {
             "t": "x",
@@ -7913,7 +9672,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-parsing",
       "de": {
-        "title": "47. Text parsen: Regex",
+        "title": "51. Text parsen: Regex",
         "cells": [
           {
             "t": "h",
@@ -7933,7 +9692,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Aufgabe:</strong> Schreibe <code>parse_zeile(zeile)</code>: Sie zerlegt eine timelog-Zeile mit benannten Gruppen und gibt <code>{ projekt:, von:, bis: }</code> zurück – bei unpassenden Zeilen <code>nil</code>. Teste mit der Beispielzeile als letzter Zeile: <code>parse_zeile(\"2026-09-15 08:30-12:00 ProjectX Meeting\")</code>.</div>"
+            "html": "<div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Regexp.html' target='_blank'>Regexp: Muster</a> · <a href='https://docs.ruby-lang.org/en/4.0/MatchData.html' target='_blank'>MatchData</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/control_expressions_rdoc.html' target='_blank'>case/when</a></div><div class='task'><strong>Aufgabe:</strong> Schreibe <code>parse_zeile(zeile)</code>: Sie zerlegt eine timelog-Zeile mit benannten Gruppen und gibt <code>{ projekt:, von:, bis: }</code> zurück – bei unpassenden Zeilen <code>nil</code>. Teste mit der Beispielzeile als letzter Zeile: <code>parse_zeile(\"2026-09-15 08:30-12:00 ProjectX Meeting\")</code>.</div>"
           },
           {
             "t": "x",
@@ -7944,7 +9703,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "47. Parsing text: regex",
+        "title": "51. Parsing text: regex",
         "cells": [
           {
             "t": "h",
@@ -7964,7 +9723,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Task:</strong> Write <code>parse_line(line)</code>: it splits a timelog line using named groups and returns <code>{ project:, from:, to: }</code> – or <code>nil</code> for lines that don't match. Test it as the last line: <code>parse_line(\"2026-09-15 08:30-12:00 ProjectX meeting\")</code>.</div>"
+            "html": "<div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Regexp.html' target='_blank'>Regexp: patterns</a> · <a href='https://docs.ruby-lang.org/en/4.0/MatchData.html' target='_blank'>MatchData</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/control_expressions_rdoc.html' target='_blank'>case/when</a></div><div class='task'><strong>Task:</strong> Write <code>parse_line(line)</code>: it splits a timelog line using named groups and returns <code>{ project:, from:, to: }</code> – or <code>nil</code> for lines that don't match. Test it as the last line: <code>parse_line(\"2026-09-15 08:30-12:00 ProjectX meeting\")</code>.</div>"
           },
           {
             "t": "x",
@@ -7975,7 +9734,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "47. テキストのパース：正規表現",
+        "title": "51. テキストのパース：正規表現",
         "cells": [
           {
             "t": "h",
@@ -7995,7 +9754,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>課題：</strong><code>parse_line(line)</code>を書いてください。このメソッドは、名前付きグループを使ってtimelogの行を分解し、<code>{ project:, from:, to: }</code>を返します。マッチしない行には<code>nil</code>を返します。最後の行に<code>parse_line(\"2026-09-15 08:30-12:00 ProjectX meeting\")</code>と書いて試してみましょう。</div>"
+            "html": "<div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fregexp.html' target='_blank'>正規表現</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/MatchData.html' target='_blank'>MatchData</a>・<a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fcontrol.html' target='_blank'>case/when</a></div><div class='task'><strong>課題：</strong><code>parse_line(line)</code>を書いてください。このメソッドは、名前付きグループを使ってtimelogの行を分解し、<code>{ project:, from:, to: }</code>を返します。マッチしない行には<code>nil</code>を返します。最後の行に<code>parse_line(\"2026-09-15 08:30-12:00 ProjectX meeting\")</code>と書いて試してみましょう。</div>"
           },
           {
             "t": "x",
@@ -8009,7 +9768,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-methods",
       "de": {
-        "title": "48. Methoden richtig bauen",
+        "title": "52. Methoden richtig bauen",
         "cells": [
           {
             "t": "h",
@@ -8021,7 +9780,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Vergleiche <code>gruss(name: \"Kaz\")</code> mit einem anonymen <code>gruss(\"Kaz\", true)</code> – bei mehreren Argumenten gewinnt die Keyword-Variante klar an Lesbarkeit. Weitere Konventionen: <code>*rest</code> sammelt beliebig viele Argumente ein, Methoden mit <code>?</code> geben wahr/falsch zurück, Methoden mit <code>!</code> sind die „gefährliche“ Variante. Und: Der Wert der letzten Zeile ist automatisch der Rückgabewert.</p><p>Zur Erinnerung aus Lektion 9: Klammern sind optional. Zusammen mit Keyword-Argumenten entsteht so der deklarative Ruby-Stil, den du aus <code>attr_reader :name</code> kennst – <code>add_entry projekt: \"X\", von: \"08:30\", bis: \"10:00\"</code> liest sich fast wie Konfiguration. In verschachtelten Ausdrücken gehören die Klammern aber wieder hin.</p><p>Für timelog brauchen wir Zeitrechnung – <code>\"08:30\"</code> in Stunden seit Mitternacht:</p>"
+            "html": "<p>Vergleiche <code>gruss(name: \"Kaz\")</code> mit einem anonymen <code>gruss(\"Kaz\", true)</code> – bei mehreren Argumenten gewinnt die Keyword-Variante klar an Lesbarkeit. Weitere Konventionen: <code>*rest</code> sammelt beliebig viele Argumente ein, Methoden mit <code>?</code> geben wahr/falsch zurück, Methoden mit <code>!</code> sind die „gefährliche“ Variante. Und: Der Wert der letzten Zeile ist automatisch der Rückgabewert.</p><p>Zur Erinnerung aus Lektion 10: Klammern sind optional. Zusammen mit Keyword-Argumenten entsteht so der deklarative Ruby-Stil, den du aus <code>attr_reader :name</code> kennst – <code>add_entry projekt: \"X\", von: \"08:30\", bis: \"10:00\"</code> liest sich fast wie Konfiguration. In verschachtelten Ausdrücken gehören die Klammern aber wieder hin.</p><p>Für timelog brauchen wir Zeitrechnung – <code>\"08:30\"</code> in Stunden seit Mitternacht:</p>"
           },
           {
             "t": "c",
@@ -8029,7 +9788,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Aufgabe:</strong> Schreibe <code>add_entry(projekt:, von:, bis:, notiz: nil)</code>. Sie gibt einen Hash zurück: <code>{ projekt:, von:, bis:, notiz:, stunden: }</code>, wobei <code>stunden</code> die Differenz aus <code>als_stunden(bis)</code> und <code>als_stunden(von)</code> ist. <code>add_entry(projekt: \"X\", von: \"08:30\", bis: \"10:00\")</code> soll also <code>stunden: 1.5</code> enthalten.</div>"
+            "html": "<div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/syntax/methods_rdoc.html#label-Keyword+Arguments' target='_blank'>Keyword-Argumente</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/calling_methods_rdoc.html' target='_blank'>Methoden aufrufen</a></div><div class='task'><strong>Aufgabe:</strong> Schreibe <code>add_entry(projekt:, von:, bis:, notiz: nil)</code>. Sie gibt einen Hash zurück: <code>{ projekt:, von:, bis:, notiz:, stunden: }</code>, wobei <code>stunden</code> die Differenz aus <code>als_stunden(bis)</code> und <code>als_stunden(von)</code> ist. <code>add_entry(projekt: \"X\", von: \"08:30\", bis: \"10:00\")</code> soll also <code>stunden: 1.5</code> enthalten.</div>"
           },
           {
             "t": "x",
@@ -8040,7 +9799,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "48. Building methods properly",
+        "title": "52. Building methods properly",
         "cells": [
           {
             "t": "h",
@@ -8052,7 +9811,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Compare <code>greet(name: \"Kaz\")</code> with an anonymous <code>greet(\"Kaz\", true)</code> – with several arguments the keyword variant clearly wins on readability. More conventions: <code>*rest</code> collects any number of arguments, methods ending in <code>?</code> return true/false, methods ending in <code>!</code> are the “dangerous” variant. And: the value of the last line is automatically the return value.</p><p>Remember lesson 9: parentheses are optional. Combined with keyword arguments this creates the declarative Ruby style you know from <code>attr_reader :name</code> – <code>add_entry project: \"X\", from: \"08:30\", to: \"10:00\"</code> reads almost like configuration. In nested expressions, though, the parentheses go back in.</p><p>timelog needs time math – <code>\"08:30\"</code> as hours since midnight:</p>"
+            "html": "<p>Compare <code>greet(name: \"Kaz\")</code> with an anonymous <code>greet(\"Kaz\", true)</code> – with several arguments the keyword variant clearly wins on readability. More conventions: <code>*rest</code> collects any number of arguments, methods ending in <code>?</code> return true/false, methods ending in <code>!</code> are the “dangerous” variant. And: the value of the last line is automatically the return value.</p><p>Remember lesson 10: parentheses are optional. Combined with keyword arguments this creates the declarative Ruby style you know from <code>attr_reader :name</code> – <code>add_entry project: \"X\", from: \"08:30\", to: \"10:00\"</code> reads almost like configuration. In nested expressions, though, the parentheses go back in.</p><p>timelog needs time math – <code>\"08:30\"</code> as hours since midnight:</p>"
           },
           {
             "t": "c",
@@ -8060,7 +9819,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Task:</strong> Write <code>add_entry(project:, from:, to:, note: nil)</code>. It returns a hash: <code>{ project:, from:, to:, note:, hours: }</code>, where <code>hours</code> is the difference of <code>as_hours(to)</code> and <code>as_hours(from)</code>. So <code>add_entry(project: \"X\", from: \"08:30\", to: \"10:00\")</code> should contain <code>hours: 1.5</code>.</div>"
+            "html": "<div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/methods_rdoc.html#label-Keyword+Arguments' target='_blank'>Keyword arguments</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/calling_methods_rdoc.html' target='_blank'>Calling methods</a></div><div class='task'><strong>Task:</strong> Write <code>add_entry(project:, from:, to:, note: nil)</code>. It returns a hash: <code>{ project:, from:, to:, note:, hours: }</code>, where <code>hours</code> is the difference of <code>as_hours(to)</code> and <code>as_hours(from)</code>. So <code>add_entry(project: \"X\", from: \"08:30\", to: \"10:00\")</code> should contain <code>hours: 1.5</code>.</div>"
           },
           {
             "t": "x",
@@ -8071,7 +9830,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "48. メソッドをきちんと作る",
+        "title": "52. メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -8083,7 +9842,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>greet(name: \"Kaz\")</code>と、何を渡しているのかわからない<code>greet(\"Kaz\", true)</code>を比べてみてください。引数がいくつもあるときは、読みやすさの点でキーワード引数のほうがはっきり有利です。ほかにも決まりごとがあります。<code>*rest</code>は任意の数の引数をまとめて受け取ります。<code>?</code>で終わるメソッドはtrueかfalseを返し、<code>!</code>で終わるメソッドは「危険な」バージョンです。そして、最後の行の値が自動的に戻り値になります。</p><p>レッスン9を思い出してください。メソッド呼び出しのかっこは省略できるのでした。これをキーワード引数と組み合わせると、<code>attr_reader :name</code>でおなじみの、宣言的なRubyのスタイルになります。<code>add_entry project: \"X\", from: \"08:30\", to: \"10:00\"</code>は、まるで設定ファイルのように読めます。ただし、式が入れ子になるときは、かっこを付けましょう。</p><p>timelogには時刻の計算が必要です。<code>\"08:30\"</code>を、午前0時から数えて何時間かという数値に直します：</p>"
+            "html": "<p><code>greet(name: \"Kaz\")</code>と、何を渡しているのかわからない<code>greet(\"Kaz\", true)</code>を比べてみてください。引数がいくつもあるときは、読みやすさの点でキーワード引数のほうがはっきり有利です。ほかにも決まりごとがあります。<code>*rest</code>は任意の数の引数をまとめて受け取ります。<code>?</code>で終わるメソッドはtrueかfalseを返し、<code>!</code>で終わるメソッドは「危険な」バージョンです。そして、最後の行の値が自動的に戻り値になります。</p><p>レッスン10を思い出してください。メソッド呼び出しのかっこは省略できるのでした。これをキーワード引数と組み合わせると、<code>attr_reader :name</code>でおなじみの、宣言的なRubyのスタイルになります。<code>add_entry project: \"X\", from: \"08:30\", to: \"10:00\"</code>は、まるで設定ファイルのように読めます。ただし、式が入れ子になるときは、かっこを付けましょう。</p><p>timelogには時刻の計算が必要です。<code>\"08:30\"</code>を、午前0時から数えて何時間かという数値に直します：</p>"
           },
           {
             "t": "c",
@@ -8091,7 +9850,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>課題：</strong><code>add_entry(project:, from:, to:, note: nil)</code>を書いてください。戻り値はハッシュ<code>{ project:, from:, to:, note:, hours: }</code>で、<code>hours</code>は<code>as_hours(to)</code>と<code>as_hours(from)</code>の差です。つまり<code>add_entry(project: \"X\", from: \"08:30\", to: \"10:00\")</code>の結果には、<code>hours: 1.5</code>が含まれるはずです。</div>"
+            "html": "<div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fdef.html' target='_blank'>キーワード引数</a>・<a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fcall.html' target='_blank'>メソッド呼び出し</a></div><div class='task'><strong>課題：</strong><code>add_entry(project:, from:, to:, note: nil)</code>を書いてください。戻り値はハッシュ<code>{ project:, from:, to:, note:, hours: }</code>で、<code>hours</code>は<code>as_hours(to)</code>と<code>as_hours(from)</code>の差です。つまり<code>add_entry(project: \"X\", from: \"08:30\", to: \"10:00\")</code>の結果には、<code>hours: 1.5</code>が含まれるはずです。</div>"
           },
           {
             "t": "x",
@@ -8105,7 +9864,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-classes",
       "de": {
-        "title": "49. Entry & Timesheet",
+        "title": "53. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -8125,7 +9884,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Das <code>self</code> am Ende von <code>add</code> erlaubt Verkettung: <code>blatt.add(a).add(b)</code>.</p><div class='task'><strong>Aufgabe:</strong> Ergänze <code>Timesheet</code> um <code>total_for(projekt)</code>: die Gesamtstunden aller Einträge dieses Projekts. Nutze <code>select</code> und <code>sum</code> auf <code>@eintraege</code>.</div>"
+            "html": "<p>Das <code>self</code> am Ende von <code>add</code> erlaubt Verkettung: <code>blatt.add(a).add(b)</code>.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/syntax/modules_and_classes_rdoc.html#label-Visibility' target='_blank'>Sichtbarkeit: private</a> · <a href='https://docs.ruby-lang.org/en/4.0/Object.html#method-i-to_s' target='_blank'>to_s</a></div><div class='task'><strong>Aufgabe:</strong> Ergänze <code>Timesheet</code> um <code>total_for(projekt)</code>: die Gesamtstunden aller Einträge dieses Projekts. Nutze <code>select</code> und <code>sum</code> auf <code>@eintraege</code>.</div>"
           },
           {
             "t": "x",
@@ -8136,7 +9895,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "49. Entry & Timesheet",
+        "title": "53. Entry & Timesheet",
         "cells": [
           {
             "t": "h",
@@ -8156,7 +9915,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>The <code>self</code> at the end of <code>add</code> enables chaining: <code>sheet.add(a).add(b)</code>.</p><div class='task'><strong>Task:</strong> Extend <code>Timesheet</code> with <code>total_for(project)</code>: the total hours of all entries for that project. Use <code>select</code> and <code>sum</code> on <code>@entries</code>.</div>"
+            "html": "<p>The <code>self</code> at the end of <code>add</code> enables chaining: <code>sheet.add(a).add(b)</code>.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/modules_and_classes_rdoc.html#label-Visibility' target='_blank'>Visibility: private</a> · <a href='https://docs.ruby-lang.org/en/4.0/Object.html#method-i-to_s' target='_blank'>to_s</a></div><div class='task'><strong>Task:</strong> Extend <code>Timesheet</code> with <code>total_for(project)</code>: the total hours of all entries for that project. Use <code>select</code> and <code>sum</code> on <code>@entries</code>.</div>"
           },
           {
             "t": "x",
@@ -8167,7 +9926,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "49. EntryとTimesheet",
+        "title": "53. EntryとTimesheet",
         "cells": [
           {
             "t": "h",
@@ -8187,7 +9946,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>add</code>の最後で<code>self</code>を返しているので、<code>sheet.add(a).add(b)</code>のように呼び出しをつなげられます（メソッドチェーン）。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>に<code>total_for(project)</code>を追加しましょう。指定したプロジェクトのエントリをすべて集めて、時間を合計するメソッドです。<code>@entries</code>に<code>select</code>と<code>sum</code>を使います。</div>"
+            "html": "<p><code>add</code>の最後で<code>self</code>を返しているので、<code>sheet.add(a).add(b)</code>のように呼び出しをつなげられます（メソッドチェーン）。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fdef.html' target='_blank'>可視性：private</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Object/i/to_s.html' target='_blank'>to_s</a></div><div class='task'><strong>課題：</strong><code>Timesheet</code>に<code>total_for(project)</code>を追加しましょう。指定したプロジェクトのエントリをすべて集めて、時間を合計するメソッドです。<code>@entries</code>に<code>select</code>と<code>sum</code>を使います。</div>"
           },
           {
             "t": "x",
@@ -8199,9 +9958,396 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "tl-time",
+      "de": {
+        "title": "54. Rechnen mit Zeit",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Uhrzeiten richtig: Time und Date</h2><p>Bisher rechnet timelog mit Strings: <code>\"08:30\"</code> wird von Hand zerlegt, und <code>als_stunden</code> macht eine Zahl daraus. Das geht gut – bis ein Eintrag über Mitternacht geht oder du wissen willst, auf welchen Wochentag der 15. September fällt. Ruby hat dafür zwei Klassen: <code>Time</code> für einen <strong>Zeitpunkt</strong> (Datum und Uhrzeit) und <code>Date</code> für einen <strong>Kalendertag</strong>.</p>"
+          },
+          {
+            "t": "c",
+            "code": "anfang = Time.new(2026, 9, 15, 8, 30)\nende = Time.new(2026, 9, 15, 12, 0)\nsekunden = ende - anfang\nsekunden / 3600"
+          },
+          {
+            "t": "h",
+            "html": "<p>Zieht man zwei Zeitpunkte voneinander ab, kommen die Sekunden dazwischen heraus, als <code>Float</code>; durch 3600 geteilt sind es Stunden. Umgekehrt zählst du Sekunden zu einem Zeitpunkt dazu – zum Beispiel eine Mittagspause von 45 Minuten:</p>"
+          },
+          {
+            "t": "c",
+            "code": "weiter = ende + 45 * 60\nweiter.strftime(\"%H:%M\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>strftime</code> („string format time“) macht aus einem Zeitpunkt Text, mit Platzhaltern: <code>%Y</code> Jahr, <code>%m</code> Monat, <code>%d</code> Tag, <code>%H</code> Stunde, <code>%M</code> Minute, <code>%A</code> Wochentag (auf Englisch). Was nicht mit <code>%</code> anfängt, bleibt stehen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts anfang.strftime(\"%d.%m.%Y\")\nputs anfang.strftime(\"%Y-%m-%d %H:%M\")\nputs anfang.strftime(\"%A\")\nanfang.wday   # Wochentag als Zahl: Sonntag = 0, Montag = 1 ..."
+          },
+          {
+            "t": "h",
+            "html": "<p>Den umgekehrten Weg, von Text zum Zeitpunkt, geht <code>Time.strptime</code> („string parse time“) – mit denselben Platzhaltern. Es kommt aus der Bibliothek <code>time</code>. So wird aus einer timelog-Zeile eine echte Dauer:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"time\"\n\nzeile = \"2026-09-15 08:30-12:00 ProjectX\"\ndatum, zeiten = zeile.split(\" \")\nvon, bis = zeiten.split(\"-\")\nstart = Time.strptime(\"#{datum} #{von}\", \"%Y-%m-%d %H:%M\")\nschluss = Time.strptime(\"#{datum} #{bis}\", \"%Y-%m-%d %H:%M\")\n(schluss - start) / 3600"
+          },
+          {
+            "t": "h",
+            "html": "<p>Für ganze Tage ohne Uhrzeit gibt es <code>Date</code> aus der Bibliothek <code>date</code>. <code>Date</code> rechnet direkt in Tagen: <code>+ 1</code> ist morgen, und zwei Daten voneinander abgezogen ergeben die Tage dazwischen (als Bruch – <code>to_i</code> macht eine ganze Zahl daraus). Und einen Bereich von Daten kannst du durchlaufen wie einen Zahlenbereich:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\n\ntag = Date.new(2026, 9, 15)\nputs tag + 1\nbis_weihnachten = (Date.new(2026, 12, 24) - tag).to_i\nputs \"Noch #{bis_weihnachten} Tage bis Weihnachten\"\n\nwoche = tag..(tag + 6)\nwoche.count { |d| d.saturday? || d.sunday? }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Weitere Helfer für Berichte: <code>Date.parse(\"2026-09-15\")</code> liest ein Datum aus Text, <code>tag.cweek</code> nennt die Kalenderwoche, <code>Date.today</code> und <code>Time.now</code> den heutigen Tag und den Moment jetzt. Die beiden letzten sind in Tests allerdings unpraktisch: Sie liefern bei jedem Lauf etwas anderes. Gib einer Methode darum lieber die Zeit als Argument, statt sie drinnen nach <code>Time.now</code> fragen zu lassen.</p><p>Und ein Wort zu Zeitzonen: <code>Time.new</code> ohne Angabe nimmt die Zeitzone des Rechners – hier im Browser ist das immer UTC. Läuft ein Programm auf Servern in verschiedenen Ländern, gibt man die Zone ausdrücklich an: <code>Time.new(2026, 9, 15, 8, 30, 0, \"+02:00\")</code>.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Time.html' target='_blank'>Time</a> · <a href='https://docs.ruby-lang.org/en/4.0/Date.html' target='_blank'>Date</a> · <a href='https://docs.ruby-lang.org/en/4.0/language/strftime_formatting_rdoc.html' target='_blank'>alle Platzhalter von strftime</a></div><div class='task'><strong>Aufgabe:</strong> Schreibe <code>dauer_in_stunden(datum, von, bis)</code>: Die Methode macht aus Datum und den beiden Uhrzeiten zwei <code>Time</code>-Objekte und gibt die Stunden dazwischen zurück. Geht ein Eintrag über Mitternacht (<code>bis</code> liegt früher als <code>von</code>), endet er am nächsten Tag – dann zählst du einen Tag dazu, also <code>24 * 3600</code> Sekunden. <code>dauer_in_stunden(\"2026-09-15\", \"22:00\", \"01:30\")</code> ergibt <code>3.5</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"time\"\n\n# def dauer_in_stunden(datum, von, bis)\n#   anfang = Time.strptime(...)\n#   ...\n# end\n\n# dauer_in_stunden(\"2026-09-15\", \"22:00\", \"01:30\")\n",
+            "check": "dauer_in_stunden(\"2026-09-15\", \"08:30\", \"12:00\") == 3.5 && dauer_in_stunden(\"2026-09-15\", \"22:00\", \"01:30\") == 3.5 && dauer_in_stunden(\"2026-09-15\", \"09:15\", \"10:00\") == 0.75 && code.include?(\"Time\")",
+            "hint": "<code>anfang = Time.strptime(\"#{datum} #{von}\", \"%Y-%m-%d %H:%M\")</code>, genauso <code>ende</code>. Dann <code>ende += 24 * 3600 if ende &lt; anfang</code> und zum Schluss <code>(ende - anfang) / 3600</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "54. Calculating with time",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Times done right: Time and Date</h2><p>So far timelog computes with strings: <code>\"08:30\"</code> is taken apart by hand, and <code>as_hours</code> turns it into a number. That works well – until an entry runs past midnight or you want to know which weekday September 15 falls on. Ruby has two classes for this: <code>Time</code> for a <strong>point in time</strong> (date and time of day) and <code>Date</code> for a <strong>calendar day</strong>.</p>"
+          },
+          {
+            "t": "c",
+            "code": "start = Time.new(2026, 9, 15, 8, 30)\nfinish = Time.new(2026, 9, 15, 12, 0)\nseconds = finish - start\nseconds / 3600"
+          },
+          {
+            "t": "h",
+            "html": "<p>Subtracting two points in time gives the seconds between them, as a <code>Float</code>; divided by 3600 that's hours. The other way round, you add seconds to a point in time – a 45-minute lunch break, for example:</p>"
+          },
+          {
+            "t": "c",
+            "code": "back = finish + 45 * 60\nback.strftime(\"%H:%M\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>strftime</code> (“string format time”) turns a point in time into text, using placeholders: <code>%Y</code> year, <code>%m</code> month, <code>%d</code> day, <code>%H</code> hour, <code>%M</code> minute, <code>%A</code> weekday. Anything that doesn't start with <code>%</code> stays as it is:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts start.strftime(\"%d.%m.%Y\")\nputs start.strftime(\"%Y-%m-%d %H:%M\")\nputs start.strftime(\"%A\")\nstart.wday   # the weekday as a number: Sunday = 0, Monday = 1 ..."
+          },
+          {
+            "t": "h",
+            "html": "<p>The opposite way, from text to a point in time, is <code>Time.strptime</code> (“string parse time”) – with the same placeholders. It comes from the library <code>time</code>. This is how a timelog line becomes a real duration:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"time\"\n\nline = \"2026-09-15 08:30-12:00 ProjectX\"\ndate, times = line.split(\" \")\nfrom, to = times.split(\"-\")\nbegins = Time.strptime(\"#{date} #{from}\", \"%Y-%m-%d %H:%M\")\nends = Time.strptime(\"#{date} #{to}\", \"%Y-%m-%d %H:%M\")\n(ends - begins) / 3600"
+          },
+          {
+            "t": "h",
+            "html": "<p>For whole days without a time of day there's <code>Date</code> from the library <code>date</code>. <code>Date</code> computes in days directly: <code>+ 1</code> is tomorrow, and subtracting two dates gives the days between them (as a fraction – <code>to_i</code> makes a whole number of it). And you can walk through a range of dates just like a range of numbers:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\n\nday = Date.new(2026, 9, 15)\nputs day + 1\nuntil_christmas = (Date.new(2026, 12, 24) - day).to_i\nputs \"#{until_christmas} days until Christmas\"\n\nweek = day..(day + 6)\nweek.count { |d| d.saturday? || d.sunday? }"
+          },
+          {
+            "t": "h",
+            "html": "<p>More helpers for reports: <code>Date.parse(\"2026-09-15\")</code> reads a date from text, <code>day.cweek</code> gives the calendar week, <code>Date.today</code> and <code>Time.now</code> today's date and this very moment. Those last two are awkward in tests, though: they return something different on every run. So rather hand a method the time as an argument than let it ask <code>Time.now</code> inside.</p><p>And a word on time zones: <code>Time.new</code> without one takes the computer's time zone – here in the browser that's always UTC. If a program runs on servers in different countries, you state the zone explicitly: <code>Time.new(2026, 9, 15, 8, 30, 0, \"+02:00\")</code>.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Time.html' target='_blank'>Time</a> · <a href='https://docs.ruby-lang.org/en/4.0/Date.html' target='_blank'>Date</a> · <a href='https://docs.ruby-lang.org/en/4.0/language/strftime_formatting_rdoc.html' target='_blank'>all strftime placeholders</a></div><div class='task'><strong>Task:</strong> Write <code>duration_in_hours(date, from, to)</code>: the method turns the date and the two times of day into two <code>Time</code> objects and returns the hours between them. If an entry runs past midnight (<code>to</code> is earlier than <code>from</code>), it ends on the next day – then you add a day, that is <code>24 * 3600</code> seconds. <code>duration_in_hours(\"2026-09-15\", \"22:00\", \"01:30\")</code> gives <code>3.5</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"time\"\n\n# def duration_in_hours(date, from, to)\n#   begins = Time.strptime(...)\n#   ...\n# end\n\n# duration_in_hours(\"2026-09-15\", \"22:00\", \"01:30\")\n",
+            "check": "duration_in_hours(\"2026-09-15\", \"08:30\", \"12:00\") == 3.5 && duration_in_hours(\"2026-09-15\", \"22:00\", \"01:30\") == 3.5 && duration_in_hours(\"2026-09-15\", \"09:15\", \"10:00\") == 0.75 && code.include?(\"Time\")",
+            "hint": "<code>begins = Time.strptime(\"#{date} #{from}\", \"%Y-%m-%d %H:%M\")</code>, the same for <code>ends</code>. Then <code>ends += 24 * 3600 if ends &lt; begins</code> and finally <code>(ends - begins) / 3600</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "54. 時間を計算する",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>時刻を正しく扱う：TimeとDate</h2><p>これまでtimelogは文字列で計算してきました。<code>\"08:30\"</code>を手作業で分解し、<code>as_hours</code>で数に変えていたのです。それでもうまくいきます。ただし、記録が真夜中をまたいだり、9月15日が何曜日かを知りたくなったりするまでは。Rubyにはそのためのクラスが2つあります。<strong>時点</strong>（日付と時刻）を表す<code>Time</code>と、<strong>暦の上の1日</strong>を表す<code>Date</code>です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "start = Time.new(2026, 9, 15, 8, 30)\nfinish = Time.new(2026, 9, 15, 12, 0)\nseconds = finish - start\nseconds / 3600"
+          },
+          {
+            "t": "h",
+            "html": "<p>2つの時点を引き算すると、そのあいだの秒数が<code>Float</code>で得られます。3600でわれば時間です。逆に、時点に秒数をたすこともできます。たとえば45分の昼休み：</p>"
+          },
+          {
+            "t": "c",
+            "code": "back = finish + 45 * 60\nback.strftime(\"%H:%M\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>strftime</code>（「string format time」）は、時点を文字列にします。プレースホルダーは<code>%Y</code>年、<code>%m</code>月、<code>%d</code>日、<code>%H</code>時、<code>%M</code>分、<code>%A</code>曜日（英語）です。<code>%</code>で始まらない部分は、そのまま残ります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts start.strftime(\"%d.%m.%Y\")\nputs start.strftime(\"%Y-%m-%d %H:%M\")\nputs start.strftime(\"%A\")\nstart.wday   # 曜日を数で：日曜 = 0、月曜 = 1 ..."
+          },
+          {
+            "t": "h",
+            "html": "<p>反対に、文字列から時点を作るのが<code>Time.strptime</code>（「string parse time」）で、同じプレースホルダーを使います。ライブラリ<code>time</code>に入っています。こうすれば、timelogの行から本物の長さが求められます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"time\"\n\nline = \"2026-09-15 08:30-12:00 ProjectX\"\ndate, times = line.split(\" \")\nfrom, to = times.split(\"-\")\nbegins = Time.strptime(\"#{date} #{from}\", \"%Y-%m-%d %H:%M\")\nends = Time.strptime(\"#{date} #{to}\", \"%Y-%m-%d %H:%M\")\n(ends - begins) / 3600"
+          },
+          {
+            "t": "h",
+            "html": "<p>時刻のない、まる1日を扱うには、ライブラリ<code>date</code>の<code>Date</code>を使います。<code>Date</code>は日単位で計算します。<code>+ 1</code>は明日で、2つの日付を引き算すると、そのあいだの日数になります（分数で返るので、<code>to_i</code>で整数にします）。日付の範囲も、数の範囲と同じようにたどれます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\n\nday = Date.new(2026, 9, 15)\nputs day + 1\nuntil_christmas = (Date.new(2026, 12, 24) - day).to_i\nputs \"#{until_christmas} days until Christmas\"\n\nweek = day..(day + 6)\nweek.count { |d| d.saturday? || d.sunday? }"
+          },
+          {
+            "t": "h",
+            "html": "<p>レポートに役立つメソッドはほかにもあります。<code>Date.parse(\"2026-09-15\")</code>は文字列から日付を読み取り、<code>day.cweek</code>は暦の上の週番号を、<code>Date.today</code>と<code>Time.now</code>は今日の日付と現在の時点を返します。ただし最後の2つは、テストでは扱いにくいものです。実行するたびに違う値を返すからです。メソッドの中で<code>Time.now</code>をたずねるより、時刻を引数として渡すほうがよいでしょう。</p><p>タイムゾーンについても一言。タイムゾーンを指定しない<code>Time.new</code>は、コンピューターのタイムゾーンを使います。このブラウザの中では、いつもUTCです。いろいろな国のサーバーで動くプログラムなら、<code>Time.new(2026, 9, 15, 8, 30, 0, \"+09:00\")</code>のようにゾーンをはっきり書きましょう。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/Time.html' target='_blank'>Time</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Date.html' target='_blank'>Date</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Time/i/strftime.html' target='_blank'>strftimeのプレースホルダー</a></div><div class='task'><strong>課題：</strong><code>duration_in_hours(date, from, to)</code>を書きましょう。このメソッドは、日付と2つの時刻から<code>Time</code>オブジェクトを2つ作り、そのあいだの時間数を返します。記録が真夜中をまたぐ場合（<code>to</code>が<code>from</code>より早い場合）は、次の日に終わったということなので、1日分、つまり<code>24 * 3600</code>秒をたします。<code>duration_in_hours(\"2026-09-15\", \"22:00\", \"01:30\")</code>は<code>3.5</code>になります。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"time\"\n\n# def duration_in_hours(date, from, to)\n#   begins = Time.strptime(...)\n#   ...\n# end\n\n# duration_in_hours(\"2026-09-15\", \"22:00\", \"01:30\")\n",
+            "check": "duration_in_hours(\"2026-09-15\", \"08:30\", \"12:00\") == 3.5 && duration_in_hours(\"2026-09-15\", \"22:00\", \"01:30\") == 3.5 && duration_in_hours(\"2026-09-15\", \"09:15\", \"10:00\") == 0.75 && code.include?(\"Time\")",
+            "hint": "<code>begins = Time.strptime(\"#{date} #{from}\", \"%Y-%m-%d %H:%M\")</code>、<code>ends</code>も同じように作ろう。それから<code>ends += 24 * 3600 if ends &lt; begins</code>、最後に<code>(ends - begins) / 3600</code>だよ。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tl-objects",
+      "de": {
+        "title": "55. Objekte teilen: dup & freeze",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Wer zeigt worauf?</h2><p>Eine Variable enthält in Ruby nicht das Objekt selbst – sie <strong>zeigt</strong> nur darauf, wie ein Namensschild an einer Kiste. Weist du sie einer zweiten Variable zu, bekommt dieselbe Kiste ein zweites Schild. Das überrascht fast alle irgendwann:</p>"
+          },
+          {
+            "t": "c",
+            "code": "montag = [\"ProjectX\"]\ndienstag = montag\ndienstag << \"Intern\"\nmontag"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>montag</code> hat sich verändert, obwohl wir nur an <code>dienstag</code> gearbeitet haben – es ist ein und dasselbe Array. <code>equal?</code> prüft, ob zwei Namen auf <em>dasselbe</em> Objekt zeigen; <code>==</code> prüft nur, ob die Inhalte gleich sind. Und <code>object_id</code> ist sozusagen die Nummer der Kiste:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p dienstag.equal?(montag)\np dienstag == [\"ProjectX\", \"Intern\"]\np dienstag.equal?([\"ProjectX\", \"Intern\"])\nmontag.object_id == dienstag.object_id"
+          },
+          {
+            "t": "h",
+            "html": "<p>Willst du eine echte Kopie, sag es: <code>dup</code> baut ein neues Objekt mit demselben Inhalt. Danach sind die beiden unabhängig voneinander:</p>"
+          },
+          {
+            "t": "c",
+            "code": "mittwoch = montag.dup\nmittwoch << \"Support\"\n[montag, mittwoch]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Aber Achtung: <code>dup</code> kopiert nur die äusserste Schicht – eine <em>flache</em> Kopie. Stecken im Array Hashes, teilen sich Original und Kopie dieselben Hashes:</p>"
+          },
+          {
+            "t": "c",
+            "code": "eintraege = [{ projekt: \"A\", stunden: 2.0 }]\nkopie = eintraege.dup\nkopie.first[:stunden] = 99\neintraege.first[:stunden]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Für eine tiefe Kopie kopierst du jede Ebene selbst, etwa mit <code>eintraege.map(&amp;:dup)</code>.</p><p>Dieselbe Falle steckt in einem Klassiker: <code>Hash.new</code> mit einem Array als Standardwert. Alle fehlenden Schlüssel bekommen <em>dasselbe</em> Array:</p>"
+          },
+          {
+            "t": "c",
+            "code": "nach_projekt = Hash.new([])\nnach_projekt[\"A\"] << 2.0\nnach_projekt[\"B\"] << 1.5\n[nach_projekt[\"C\"], nach_projekt.keys]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Gleich zwei Überraschungen: Der „leere“ Standardwert ist längst nicht mehr leer, und der Hash hat überhaupt keine Schlüssel – <code>&lt;&lt;</code> hat ja nur das gemeinsame Standard-Array verändert, nie etwas im Hash gespeichert. Die Lösung ist ein Block: Er läuft für jeden fehlenden Schlüssel neu, legt ein eigenes Array an und speichert es:</p>"
+          },
+          {
+            "t": "c",
+            "code": "nach_projekt = Hash.new { |hash, schluessel| hash[schluessel] = [] }\nnach_projekt[\"A\"] << 2.0\nnach_projekt[\"B\"] << 1.5\nnach_projekt"
+          },
+          {
+            "t": "h",
+            "html": "<p>Der sicherste Schutz gegen ungewollte Änderungen: Objekte <strong>einfrieren</strong>. <code>freeze</code> macht ein Objekt unveränderlich. Wer es trotzdem versucht, bekommt einen <code>FrozenError</code> – sofort und genau dort, wo es passiert, statt irgendwann später als rätselhaft falsche Daten:</p>"
+          },
+          {
+            "t": "c",
+            "code": "projekte = [\"ProjectX\", \"Intern\"].freeze\np projekte.frozen?\nprojekte << \"Geheim\"",
+            "raises": "FrozenError"
+          },
+          {
+            "t": "h",
+            "html": "<p>Eingefrorene Objekte lassen sich gefahrlos teilen. Zahlen und Symbole sind darum immer eingefroren, und <code>Data</code> (Lektion 57) friert seine Objekte von selbst ein. Viele Ruby-Dateien beginnen mit dem magischen Kommentar <code># frozen_string_literal: true</code>: Dann ist jeder String, der im Code in Anführungszeichen steht, eingefroren.</p><p>Drei Faustregeln zum Mitnehmen: Methoden mit <code>!</code> (<code>sort!</code>, <code>upcase!</code>) verändern das Objekt, Methoden ohne geben ein neues zurück. Gib Objekte, die andere nicht verändern sollen, eingefroren oder als Kopie heraus. Und wenn sich etwas „von selbst“ ändert: Frag dich, wer noch auf dieselbe Kiste zeigt.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Object.html#method-i-dup' target='_blank'>dup</a> · <a href='https://docs.ruby-lang.org/en/4.0/Object.html#method-i-freeze' target='_blank'>freeze</a> · <a href='https://docs.ruby-lang.org/en/4.0/BasicObject.html#method-i-equal-3F' target='_blank'>equal?</a> · <a href='https://docs.ruby-lang.org/en/4.0/Hash.html#class-Hash-label-Hash+Default' target='_blank'>Standardwerte von Hash</a></div><div class='task'><strong>Aufgabe:</strong> Das <code>Stundenblatt</code> unten hat ein Leck: <code>eintraege</code> gibt die interne Liste heraus, und wer sie verändert, verändert das Stundenblatt mit. Repariere <code>eintraege</code> so, dass es eine <strong>eingefrorene Kopie</strong> zurückgibt. Dann kann niemand mehr von aussen Einträge hineinschmuggeln – <code>add</code> muss aber weiter funktionieren.</div>"
+          },
+          {
+            "t": "x",
+            "code": "class Stundenblatt\n  def initialize\n    @eintraege = []\n  end\n\n  def add(projekt, stunden)\n    @eintraege << { projekt: projekt, stunden: stunden }\n    self\n  end\n\n  def eintraege\n    @eintraege   # das Leck: die interne Liste selbst\n  end\nend\n\nblatt = Stundenblatt.new.add(\"ProjectX\", 3.5)\nblatt.eintraege.frozen?\n",
+            "check": "b = Stundenblatt.new.add(\"A\", 1.0); liste = b.eintraege; liste.frozen? && (begin; liste << 1; false; rescue FrozenError; true; end) && b.eintraege.length == 1 && b.add(\"B\", 2.0).eintraege.length == 2",
+            "hint": "Zwei Methoden, eine Zeile: <code>@eintraege.dup.freeze</code> – erst kopieren, dann die Kopie einfrieren. Friere nicht <code>@eintraege</code> selbst ein, sonst klappt <code>add</code> nicht mehr."
+          }
+        ]
+      },
+      "en": {
+        "title": "55. Sharing objects: dup & freeze",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Who points at what?</h2><p>In Ruby a variable doesn't contain the object itself – it only <strong>points</strong> at it, like a name tag on a box. Assign it to a second variable and the same box gets a second tag. That surprises almost everyone at some point:</p>"
+          },
+          {
+            "t": "c",
+            "code": "monday = [\"ProjectX\"]\ntuesday = monday\ntuesday << \"Intern\"\nmonday"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>monday</code> changed although we only worked on <code>tuesday</code> – it's one and the same array. <code>equal?</code> checks whether two names point at the <em>same</em> object; <code>==</code> only checks whether the contents are equal. And <code>object_id</code> is, so to speak, the number of the box:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p tuesday.equal?(monday)\np tuesday == [\"ProjectX\", \"Intern\"]\np tuesday.equal?([\"ProjectX\", \"Intern\"])\nmonday.object_id == tuesday.object_id"
+          },
+          {
+            "t": "h",
+            "html": "<p>If you want a real copy, say so: <code>dup</code> builds a new object with the same content. Afterwards the two are independent of each other:</p>"
+          },
+          {
+            "t": "c",
+            "code": "wednesday = monday.dup\nwednesday << \"Support\"\n[monday, wednesday]"
+          },
+          {
+            "t": "h",
+            "html": "<p>But careful: <code>dup</code> only copies the outermost layer – a <em>shallow</em> copy. If the array holds hashes, original and copy share the very same hashes:</p>"
+          },
+          {
+            "t": "c",
+            "code": "entries = [{ project: \"A\", hours: 2.0 }]\ncopy = entries.dup\ncopy.first[:hours] = 99\nentries.first[:hours]"
+          },
+          {
+            "t": "h",
+            "html": "<p>For a deep copy you copy every level yourself, for instance with <code>entries.map(&amp;:dup)</code>.</p><p>The same trap hides in a classic: <code>Hash.new</code> with an array as the default value. Every missing key gets the <em>same</em> array:</p>"
+          },
+          {
+            "t": "c",
+            "code": "by_project = Hash.new([])\nby_project[\"A\"] << 2.0\nby_project[\"B\"] << 1.5\n[by_project[\"C\"], by_project.keys]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Two surprises at once: the “empty” default value is no longer empty at all, and the hash has no keys whatsoever – <code>&lt;&lt;</code> only changed the shared default array and never stored anything in the hash. The fix is a block: it runs anew for every missing key, creates an array of its own and stores it:</p>"
+          },
+          {
+            "t": "c",
+            "code": "by_project = Hash.new { |hash, key| hash[key] = [] }\nby_project[\"A\"] << 2.0\nby_project[\"B\"] << 1.5\nby_project"
+          },
+          {
+            "t": "h",
+            "html": "<p>The safest protection against unwanted changes: <strong>freeze</strong> objects. <code>freeze</code> makes an object unchangeable. Anyone who tries anyway gets a <code>FrozenError</code> – at once and right where it happens, instead of as puzzlingly wrong data at some later point:</p>"
+          },
+          {
+            "t": "c",
+            "code": "projects = [\"ProjectX\", \"Intern\"].freeze\np projects.frozen?\nprojects << \"Secret\"",
+            "raises": "FrozenError"
+          },
+          {
+            "t": "h",
+            "html": "<p>Frozen objects can be shared without danger. That's why numbers and symbols are always frozen, and <code>Data</code> (lesson 57) freezes its objects by itself. Many Ruby files start with the magic comment <code># frozen_string_literal: true</code>: then every string written in quotes in that file's code is frozen.</p><p>Three rules of thumb to take along: methods with <code>!</code> (<code>sort!</code>, <code>upcase!</code>) change the object, methods without return a new one. Hand out objects that others must not change frozen or as a copy. And when something changes “all by itself”: ask yourself who else points at the same box.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Object.html#method-i-dup' target='_blank'>dup</a> · <a href='https://docs.ruby-lang.org/en/4.0/Object.html#method-i-freeze' target='_blank'>freeze</a> · <a href='https://docs.ruby-lang.org/en/4.0/BasicObject.html#method-i-equal-3F' target='_blank'>equal?</a> · <a href='https://docs.ruby-lang.org/en/4.0/Hash.html#class-Hash-label-Hash+Default' target='_blank'>Hash default values</a></div><div class='task'><strong>Task:</strong> The <code>Logbook</code> below has a leak: <code>entries</code> hands out the internal list, and whoever changes it changes the logbook too. Repair <code>entries</code> so that it returns a <strong>frozen copy</strong>. Then nobody can smuggle entries in from outside anymore – but <code>add</code> must keep working.</div>"
+          },
+          {
+            "t": "x",
+            "code": "class Logbook\n  def initialize\n    @entries = []\n  end\n\n  def add(project, hours)\n    @entries << { project: project, hours: hours }\n    self\n  end\n\n  def entries\n    @entries   # the leak: the internal list itself\n  end\nend\n\nlog = Logbook.new.add(\"ProjectX\", 3.5)\nlog.entries.frozen?\n",
+            "check": "b = Logbook.new.add(\"A\", 1.0); list = b.entries; list.frozen? && (begin; list << 1; false; rescue FrozenError; true; end) && b.entries.length == 1 && b.add(\"B\", 2.0).entries.length == 2",
+            "hint": "Two methods, one line: <code>@entries.dup.freeze</code> – copy first, then freeze the copy. Don't freeze <code>@entries</code> itself, or <code>add</code> stops working."
+          }
+        ]
+      },
+      "ja": {
+        "title": "55. オブジェクトの共有：dupとfreeze",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>だれが何を指している？</h2><p>Rubyの変数は、オブジェクトそのものを入れているわけではありません。箱につけた名札のように、オブジェクトを<strong>指している</strong>だけです。それを2つ目の変数に代入すると、同じ箱に2枚目の名札がつきます。これには、ほとんどだれもが一度は驚かされます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "monday = [\"ProjectX\"]\ntuesday = monday\ntuesday << \"Intern\"\nmonday"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>tuesday</code>しかいじっていないのに、<code>monday</code>が変わってしまいました。2つはまったく同じ配列なのです。<code>equal?</code>は2つの名前が<em>同じ</em>オブジェクトを指しているかを調べ、<code>==</code>は中身が等しいかどうかだけを調べます。そして<code>object_id</code>は、いわば箱の番号です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "p tuesday.equal?(monday)\np tuesday == [\"ProjectX\", \"Intern\"]\np tuesday.equal?([\"ProjectX\", \"Intern\"])\nmonday.object_id == tuesday.object_id"
+          },
+          {
+            "t": "h",
+            "html": "<p>本当のコピーがほしいなら、そう伝えましょう。<code>dup</code>は、同じ中身を持つ新しいオブジェクトを作ります。そのあとは、2つはおたがいに無関係です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "wednesday = monday.dup\nwednesday << \"Support\"\n[monday, wednesday]"
+          },
+          {
+            "t": "h",
+            "html": "<p>ただし注意してください。<code>dup</code>がコピーするのはいちばん外側の層だけです。これを<em>浅い</em>コピーといいます。配列の中にハッシュが入っていると、もとの配列とコピーは同じハッシュを共有します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "entries = [{ project: \"A\", hours: 2.0 }]\ncopy = entries.dup\ncopy.first[:hours] = 99\nentries.first[:hours]"
+          },
+          {
+            "t": "h",
+            "html": "<p>深いコピーがほしいときは、<code>entries.map(&amp;:dup)</code>のように、それぞれの層を自分でコピーします。</p><p>同じ落とし穴が、定番の書き方にもひそんでいます。デフォルト値に配列を渡した<code>Hash.new</code>です。存在しないキーはどれも<em>同じ</em>配列を受け取ります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "by_project = Hash.new([])\nby_project[\"A\"] << 2.0\nby_project[\"B\"] << 1.5\n[by_project[\"C\"], by_project.keys]"
+          },
+          {
+            "t": "h",
+            "html": "<p>驚きが2つ同時にやってきました。「空」だったはずのデフォルト値はもう空ではなく、しかもハッシュにはキーが1つもありません。<code>&lt;&lt;</code>は共有されたデフォルトの配列を変えただけで、ハッシュには何も保存していないのです。解決策はブロックです。存在しないキーのたびに新しく実行され、そのキー専用の配列を作って保存します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "by_project = Hash.new { |hash, key| hash[key] = [] }\nby_project[\"A\"] << 2.0\nby_project[\"B\"] << 1.5\nby_project"
+          },
+          {
+            "t": "h",
+            "html": "<p>意図しない変更を防ぐいちばん確実な方法は、オブジェクトを<strong>凍結</strong>することです。<code>freeze</code>はオブジェクトを変更できなくします。それでも変えようとすると<code>FrozenError</code>が発生します。あとになってから謎のおかしなデータとして気づくのではなく、その場ですぐにわかるのです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "projects = [\"ProjectX\", \"Intern\"].freeze\np projects.frozen?\nprojects << \"Secret\"",
+            "raises": "FrozenError"
+          },
+          {
+            "t": "h",
+            "html": "<p>凍結されたオブジェクトなら、安心して共有できます。数やシンボルがいつも凍結されているのはそのためですし、<code>Data</code>（レッスン57）も自分のオブジェクトを自動で凍結します。多くのRubyファイルは<code># frozen_string_literal: true</code>というマジックコメントで始まります。こう書くと、そのファイルのコードで引用符に囲まれた文字列は、すべて凍結されます。</p><p>持ち帰ってほしい目安が3つあります。<code>!</code>のついたメソッド（<code>sort!</code>、<code>upcase!</code>）はオブジェクトそのものを変え、ついていないメソッドは新しいオブジェクトを返します。ほかの人に変えられては困るオブジェクトは、凍結するかコピーにして渡します。そして何かが「ひとりでに」変わったときは、同じ箱をほかにだれが指しているかを考えましょう。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/method/Object/i/dup.html' target='_blank'>dup</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Object/i/freeze.html' target='_blank'>freeze</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/BasicObject/i/equal=3f.html' target='_blank'>equal?</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Hash/s/new.html' target='_blank'>Hash.newとデフォルト値</a></div><div class='task'><strong>課題：</strong>下の<code>Logbook</code>には漏れがあります。<code>entries</code>が内部のリストをそのまま渡してしまうので、それを変えた人は、ログブックまで変えてしまうのです。<code>entries</code>が<strong>凍結したコピー</strong>を返すように直してください。そうすれば、もうだれも外から記録をこっそり入れられません。ただし、<code>add</code>はこれまでどおり使えるようにしておきます。</div>"
+          },
+          {
+            "t": "x",
+            "code": "class Logbook\n  def initialize\n    @entries = []\n  end\n\n  def add(project, hours)\n    @entries << { project: project, hours: hours }\n    self\n  end\n\n  def entries\n    @entries   # 漏れ：内部のリストそのもの\n  end\nend\n\nlog = Logbook.new.add(\"ProjectX\", 3.5)\nlog.entries.frozen?\n",
+            "check": "b = Logbook.new.add(\"A\", 1.0); list = b.entries; list.frozen? && (begin; list << 1; false; rescue FrozenError; true; end) && b.entries.length == 1 && b.add(\"B\", 2.0).entries.length == 2",
+            "hint": "メソッド2つで1行だよ：<code>@entries.dup.freeze</code>。まずコピーして、そのコピーを凍結するんだ。<code>@entries</code>そのものを凍結しちゃだめだよ。<code>add</code>が動かなくなるからね。"
+          }
+        ]
+      }
+    },
+    {
       "id": "tl-minitest",
       "de": {
-        "title": "50. Testen mit Minitest",
+        "title": "56. Testen mit Minitest",
         "cells": [
           {
             "t": "h",
@@ -8221,7 +10367,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Dort schreibst du Tests in eigene Dateien und startest sie direkt – <code>minitest/autorun</code> sorgt dafür, dass sie am Programmende automatisch laufen:</p><pre><code># test/test_dauer.rb\nrequire \"minitest/autorun\"\nrequire_relative \"../lib/dauer\"\n\nclass TestDauer < Minitest::Test\n  def test_in_stunden\n    assert_equal 1.5, Dauer.new(90).in_stunden\n  end\nend</code></pre><pre><code>$ ruby test/test_dauer.rb\n2 runs, 2 assertions, 0 failures, 0 errors, 0 skips</code></pre><p>Weitere Helfer: <code>assert</code>, <code>refute</code>, <code>assert_nil</code>, <code>assert_raises</code>, und <code>setup</code> für gemeinsame Vorbereitung. RSpec ist die bekannteste Alternative mit eigener Sprache (<code>expect(x).to eq(y)</code>).</p></div><div class='task'><strong>Aufgabe:</strong> Unten steht die Klasse <code>Eintrag</code>. Schreibe <code>TestEintrag</code> mit <strong>mindestens zwei</strong> Tests: einer für einen gültigen Eintrag, einer für ungültige Fälle (negative Stunden oder leeres Projekt). Starte mit <code>run_tests</code> – alles muss grün sein. Ab jetzt gilt: <em>Keine Aufgabe ohne Tests!</em></div>"
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Dort schreibst du Tests in eigene Dateien und startest sie direkt – <code>minitest/autorun</code> sorgt dafür, dass sie am Programmende automatisch laufen:</p><pre><code># test/test_dauer.rb\nrequire \"minitest/autorun\"\nrequire_relative \"../lib/dauer\"\n\nclass TestDauer < Minitest::Test\n  def test_in_stunden\n    assert_equal 1.5, Dauer.new(90).in_stunden\n  end\nend</code></pre><pre><code>$ ruby test/test_dauer.rb\n2 runs, 2 assertions, 0 failures, 0 errors, 0 skips</code></pre><p>Weitere Helfer: <code>assert</code>, <code>refute</code>, <code>assert_nil</code>, <code>assert_raises</code>, und <code>setup</code> für gemeinsame Vorbereitung. RSpec ist die bekannteste Alternative mit eigener Sprache (<code>expect(x).to eq(y)</code>).</p></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.seattlerb.org/minitest/' target='_blank'>Minitest</a> · <a href='https://docs.seattlerb.org/minitest/Minitest/Assertions.html' target='_blank'>alle assert-Methoden</a></div><div class='task'><strong>Aufgabe:</strong> Unten steht die Klasse <code>Eintrag</code>. Schreibe <code>TestEintrag</code> mit <strong>mindestens zwei</strong> Tests: einer für einen gültigen Eintrag, einer für ungültige Fälle (negative Stunden oder leeres Projekt). Starte mit <code>run_tests</code> – alles muss grün sein. Ab jetzt gilt: <em>Keine Aufgabe ohne Tests!</em></div>"
           },
           {
             "t": "x",
@@ -8232,7 +10378,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "50. Testing with Minitest",
+        "title": "56. Testing with Minitest",
         "cells": [
           {
             "t": "h",
@@ -8252,7 +10398,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='On your machine'><p>There you put tests into their own files and run them directly – <code>minitest/autorun</code> makes them run automatically when the program ends:</p><pre><code># test/test_duration.rb\nrequire \"minitest/autorun\"\nrequire_relative \"../lib/duration\"\n\nclass TestDuration < Minitest::Test\n  def test_in_hours\n    assert_equal 1.5, Duration.new(90).in_hours\n  end\nend</code></pre><pre><code>$ ruby test/test_duration.rb\n2 runs, 2 assertions, 0 failures, 0 errors, 0 skips</code></pre><p>More helpers: <code>assert</code>, <code>refute</code>, <code>assert_nil</code>, <code>assert_raises</code>, and <code>setup</code> for shared preparation. RSpec is the best-known alternative with its own language (<code>expect(x).to eq(y)</code>).</p></div><div class='task'><strong>Task:</strong> Below is the class <code>Entry</code>. Write <code>TestEntry</code> with <strong>at least two</strong> tests: one for a valid entry, one for invalid cases (negative hours or empty project). Finish with <code>run_tests</code> – everything must be green. From now on: <em>no exercise without tests!</em></div>"
+            "html": "<div class='offweb' data-title='On your machine'><p>There you put tests into their own files and run them directly – <code>minitest/autorun</code> makes them run automatically when the program ends:</p><pre><code># test/test_duration.rb\nrequire \"minitest/autorun\"\nrequire_relative \"../lib/duration\"\n\nclass TestDuration < Minitest::Test\n  def test_in_hours\n    assert_equal 1.5, Duration.new(90).in_hours\n  end\nend</code></pre><pre><code>$ ruby test/test_duration.rb\n2 runs, 2 assertions, 0 failures, 0 errors, 0 skips</code></pre><p>More helpers: <code>assert</code>, <code>refute</code>, <code>assert_nil</code>, <code>assert_raises</code>, and <code>setup</code> for shared preparation. RSpec is the best-known alternative with its own language (<code>expect(x).to eq(y)</code>).</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://docs.seattlerb.org/minitest/' target='_blank'>Minitest</a> · <a href='https://docs.seattlerb.org/minitest/Minitest/Assertions.html' target='_blank'>all assert methods</a></div><div class='task'><strong>Task:</strong> Below is the class <code>Entry</code>. Write <code>TestEntry</code> with <strong>at least two</strong> tests: one for a valid entry, one for invalid cases (negative hours or empty project). Finish with <code>run_tests</code> – everything must be green. From now on: <em>no exercise without tests!</em></div>"
           },
           {
             "t": "x",
@@ -8263,7 +10409,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "50. Minitestでテスト",
+        "title": "56. Minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -8283,7 +10429,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>テストは専用のファイルに書いて、そのファイルを直接実行します。<code>minitest/autorun</code>を読み込んでおくと、プログラムの最後にテストが自動で実行されます。</p><pre><code># test/test_duration.rb\nrequire \"minitest/autorun\"\nrequire_relative \"../lib/duration\"\n\nclass TestDuration < Minitest::Test\n  def test_in_hours\n    assert_equal 1.5, Duration.new(90).in_hours\n  end\nend</code></pre><pre><code>$ ruby test/test_duration.rb\n2 runs, 2 assertions, 0 failures, 0 errors, 0 skips</code></pre><p>ほかにも便利なメソッドがあります。<code>assert</code>、<code>refute</code>、<code>assert_nil</code>、<code>assert_raises</code>、そして共通の準備をまとめて書ける<code>setup</code>です。Minitestのほかにいちばんよく知られているのはRSpecで、独自の書き方（<code>expect(x).to eq(y)</code>）をします。</p></div><div class='task'><strong>課題：</strong>下にあるのはクラス<code>Entry</code>です。<strong>2つ以上</strong>のテストを持つ<code>TestEntry</code>を書きましょう。1つは正しいエントリのテスト、もう1つは正しくないケース（時間がマイナス、またはプロジェクトが空）のテストです。最後に<code>run_tests</code>を実行して、すべて成功させてください。これからは<em>テストのない課題はなし！</em>です。</div>"
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>テストは専用のファイルに書いて、そのファイルを直接実行します。<code>minitest/autorun</code>を読み込んでおくと、プログラムの最後にテストが自動で実行されます。</p><pre><code># test/test_duration.rb\nrequire \"minitest/autorun\"\nrequire_relative \"../lib/duration\"\n\nclass TestDuration < Minitest::Test\n  def test_in_hours\n    assert_equal 1.5, Duration.new(90).in_hours\n  end\nend</code></pre><pre><code>$ ruby test/test_duration.rb\n2 runs, 2 assertions, 0 failures, 0 errors, 0 skips</code></pre><p>ほかにも便利なメソッドがあります。<code>assert</code>、<code>refute</code>、<code>assert_nil</code>、<code>assert_raises</code>、そして共通の準備をまとめて書ける<code>setup</code>です。Minitestのほかにいちばんよく知られているのはRSpecで、独自の書き方（<code>expect(x).to eq(y)</code>）をします。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.seattlerb.org/minitest/' target='_blank'>Minitest（英語）</a>・<a href='https://docs.seattlerb.org/minitest/Minitest/Assertions.html' target='_blank'>assertメソッド一覧（英語）</a></div><div class='task'><strong>課題：</strong>下にあるのはクラス<code>Entry</code>です。<strong>2つ以上</strong>のテストを持つ<code>TestEntry</code>を書きましょう。1つは正しいエントリのテスト、もう1つは正しくないケース（時間がマイナス、またはプロジェクトが空）のテストです。最後に<code>run_tests</code>を実行して、すべて成功させてください。これからは<em>テストのない課題はなし！</em>です。</div>"
           },
           {
             "t": "x",
@@ -8297,11 +10443,11 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-mixins",
       "de": {
-        "title": "51. Enumerable & Data",
+        "title": "57. Enumerable & Data",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Zwei Superkräfte zum Einmischen</h2><p>In der Modul-Lektion hast du Mixins kennengelernt – jetzt kommen die zwei berühmtesten im Einsatz für timelog. <strong>Comparable</strong>: Sobald deine Klasse <code>&lt;=&gt;</code> kann (den „Raumschiff-Operator“: -1, 0 oder 1), schenkt dir das Mixin <code>&lt;</code>, <code>&gt;</code>, <code>==</code>, <code>between?</code> und mehr.</p><p>Gleichzeitig lernst du <code>Data</code> kennen – Rubys Klasse für unveränderliche Wertobjekte:</p>"
+            "html": "<h2>Zwei Superkräfte zum Einmischen</h2><p>In Lektion 15 hat <code>Comparable</code> einem Paket sechs Vergleiche geschenkt – jetzt setzen wir die zwei berühmtesten Mixins für timelog ein. <strong>Comparable</strong>: Sobald deine Klasse <code>&lt;=&gt;</code> kann (den „Raumschiff-Operator“: -1, 0 oder 1), schenkt dir das Mixin <code>&lt;</code>, <code>&gt;</code>, <code>==</code>, <code>between?</code> und mehr.</p><p>Gleichzeitig lernst du <code>Data</code> kennen – Rubys Klasse für unveränderliche Wertobjekte:</p>"
           },
           {
             "t": "c",
@@ -8309,7 +10455,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern). Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 46, jetzt auf deiner eigenen Klasse.</p><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
+            "html": "<p><code>Data.define</code> erzeugt eine Klasse mit fixen Feldern, Gleichheit und <code>inspect</code> geschenkt – und die Objekte sind eingefroren (kein versehentliches Ändern, siehe Lektion 55). Wer einen anderen Wert braucht, ändert darum nicht das Objekt, sondern lässt sich mit <code>with</code> ein neues geben:</p>"
+          },
+          {
+            "t": "c",
+            "code": "kurz = Dauer.new(minuten: 30)\nlang = kurz.with(minuten: 90)\n[kurz.to_s, lang.to_s, kurz.frozen?, kurz == Dauer.new(minuten: 30)]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Zwei Data-Objekte mit gleichem Inhalt sind gleich (<code>==</code>) – darum passen sie für Werte wie eine Dauer, einen Geldbetrag oder einen Zeitraum. Für veränderliche Fälle gibt es das ältere <code>Struct</code>.</p><p>Die zweite Superkraft: <strong>Enumerable</strong>. Deine Klasse liefert nur <code>each</code> – und bekommt dafür die GESAMTE Collection-Werkzeugkiste: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … genau die Methoden aus Lektion 50, jetzt auf deiner eigenen Klasse.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Data.html' target='_blank'>Data</a> · <a href='https://docs.ruby-lang.org/en/4.0/Comparable.html' target='_blank'>Comparable</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html' target='_blank'>Enumerable</a> · <a href='https://docs.ruby-lang.org/en/4.0/Struct.html' target='_blank'>Struct</a></div><div class='task'><strong>Aufgabe:</strong> Mach <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus eine Methode <code>each</code>, die den Block an <code>@eintraege.each</code> weiterreicht. Danach funktioniert die letzte Zeile.</div>"
           },
           {
             "t": "x",
@@ -8320,11 +10474,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "51. Enumerable & Data",
+        "title": "57. Enumerable & Data",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Two superpowers to mix in</h2><p>You met mixins in the modules lesson – now come the two most famous ones, deployed for timelog. <strong>Comparable</strong>: as soon as your class can <code>&lt;=&gt;</code> (the “spaceship operator”: -1, 0 or 1), the mixin gives you <code>&lt;</code>, <code>&gt;</code>, <code>==</code>, <code>between?</code> and more.</p><p>At the same time, meet <code>Data</code> – Ruby's class for immutable value objects:</p>"
+            "html": "<h2>Two superpowers to mix in</h2><p>In lesson 15, <code>Comparable</code> gave a parcel six comparisons – now the two most famous mixins go to work for timelog. <strong>Comparable</strong>: as soon as your class can <code>&lt;=&gt;</code> (the “spaceship operator”: -1, 0 or 1), the mixin gives you <code>&lt;</code>, <code>&gt;</code>, <code>==</code>, <code>between?</code> and more.</p><p>At the same time, meet <code>Data</code> – Ruby's class for immutable value objects:</p>"
           },
           {
             "t": "c",
@@ -8332,7 +10486,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation). For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 46, now on your own class.</p><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
+            "html": "<p><code>Data.define</code> creates a class with fixed fields, equality and <code>inspect</code> for free – and the objects are frozen (no accidental mutation, see lesson 55). So whoever needs a different value doesn't change the object but asks <code>with</code> for a new one:</p>"
+          },
+          {
+            "t": "c",
+            "code": "short = Duration.new(minutes: 30)\nlong = short.with(minutes: 90)\n[short.to_s, long.to_s, short.frozen?, short == Duration.new(minutes: 30)]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Two Data objects with the same content are equal (<code>==</code>) – which makes them a good fit for values such as a duration, an amount of money or a period of time. For mutable cases there's the older <code>Struct</code>.</p><p>The second superpower: <strong>Enumerable</strong>. Your class provides just <code>each</code> – and receives the ENTIRE collection toolbox in return: <code>map</code>, <code>select</code>, <code>sum</code>, <code>sort_by</code>, <code>group_by</code> … exactly the methods from lesson 50, now on your own class.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Data.html' target='_blank'>Data</a> · <a href='https://docs.ruby-lang.org/en/4.0/Comparable.html' target='_blank'>Comparable</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html' target='_blank'>Enumerable</a> · <a href='https://docs.ruby-lang.org/en/4.0/Struct.html' target='_blank'>Struct</a></div><div class='task'><strong>Task:</strong> Make <code>Timesheet</code> enumerable: <code>include Enumerable</code> plus an <code>each</code> method that forwards the block to <code>@entries.each</code>. Then the last line works.</div>"
           },
           {
             "t": "x",
@@ -8343,11 +10505,11 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "51. EnumerableとData",
+        "title": "57. EnumerableとData",
         "cells": [
           {
             "t": "h",
-            "html": "<h2>Mix-inで手に入る2つの超能力</h2><p>Mix-inにはモジュールのレッスンで出会いましたね。今回は、なかでも特に有名な2つをtimelogで活躍させます。まずは<strong>Comparable</strong>。クラスに<code>&lt;=&gt;</code>（「宇宙船演算子」。-1、0、1のどれかを返す）を用意するだけで、このMix-inが<code>&lt;</code>、<code>&gt;</code>、<code>==</code>、<code>between?</code>などを使えるようにしてくれます。</p><p>あわせて<code>Data</code>も紹介します。変更できない値オブジェクトを作るための、Rubyのクラスです。</p>"
+            "html": "<h2>Mix-inで手に入る2つの超能力</h2><p>レッスン15では、<code>Comparable</code>が小包に比較を6つも与えてくれました。今回は、とりわけ有名な2つのMix-inをtimelogで活躍させます。まずは<strong>Comparable</strong>。クラスに<code>&lt;=&gt;</code>（「宇宙船演算子」。-1、0、1のどれかを返す）を用意するだけで、このMix-inが<code>&lt;</code>、<code>&gt;</code>、<code>==</code>、<code>between?</code>などを使えるようにしてくれます。</p><p>あわせて<code>Data</code>も紹介します。変更できない値オブジェクトを作るための、Rubyのクラスです。</p>"
           },
           {
             "t": "c",
@@ -8355,7 +10517,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン46で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
+            "html": "<p><code>Data.define</code>は、決まったフィールドを持つクラスを作ります。等しいかどうかの比較や<code>inspect</code>も自動で付いてきます。しかも、できたオブジェクトは凍結（freeze）されているので、うっかり書き換えてしまう心配もありません（レッスン55）。別の値がほしいときは、オブジェクトを変えるのではなく、<code>with</code>で新しいオブジェクトをもらいます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "short = Duration.new(minutes: 30)\nlong = short.with(minutes: 90)\n[short.to_s, long.to_s, short.frozen?, short == Duration.new(minutes: 30)]"
+          },
+          {
+            "t": "h",
+            "html": "<p>中身が同じDataオブジェクトどうしは等しい（<code>==</code>）ので、時間の長さや金額、期間のような「値」を表すのにぴったりです。値を書き換えたいときは、昔からある<code>Struct</code>を使います。</p><p>2つ目の超能力は<strong>Enumerable</strong>です。クラスが用意するのは<code>each</code>だけ。それだけで、コレクションの道具箱がまるごと手に入ります。<code>map</code>、<code>select</code>、<code>sum</code>、<code>sort_by</code>、<code>group_by</code>……レッスン50で使ったメソッドが、今度は自分のクラスで使えるのです。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/Data.html' target='_blank'>Data</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Comparable.html' target='_blank'>Comparable</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Enumerable.html' target='_blank'>Enumerable</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Struct.html' target='_blank'>Struct</a></div><div class='task'><strong>課題：</strong><code>Timesheet</code>でEnumerableのメソッドを使えるようにしましょう。<code>include Enumerable</code>を書き、受け取ったブロックを<code>@entries.each</code>にそのまま渡す<code>each</code>メソッドを定義します。そうすれば、最後の行が動くようになります。</div>"
           },
           {
             "t": "x",
@@ -8369,7 +10539,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-blocks",
       "de": {
-        "title": "52. Blocks, Procs & Lambdas",
+        "title": "58. Blocks, Procs & Lambdas",
         "cells": [
           {
             "t": "h",
@@ -8397,7 +10567,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Aufgabe:</strong> Schreibe <code>each_projekt(eintraege)</code>: Die Methode gruppiert die Einträge nach Projekt und übergibt <strong>per <code>yield</code></strong> jedes Paar <code>(projekt, liste)</code> an den Block – wie <code>each</code>, nur eine Etage höher.</div>"
+            "html": "<div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/syntax/methods_rdoc.html#label-Block+Argument' target='_blank'>Blöcke als Argument</a> · <a href='https://docs.ruby-lang.org/en/4.0/Proc.html' target='_blank'>Proc</a> · <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-lambda' target='_blank'>lambda</a></div><div class='task'><strong>Aufgabe:</strong> Schreibe <code>each_projekt(eintraege)</code>: Die Methode gruppiert die Einträge nach Projekt und übergibt <strong>per <code>yield</code></strong> jedes Paar <code>(projekt, liste)</code> an den Block – wie <code>each</code>, nur eine Etage höher.</div>"
           },
           {
             "t": "x",
@@ -8408,7 +10578,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "52. Blocks, procs & lambdas",
+        "title": "58. Blocks, procs & lambdas",
         "cells": [
           {
             "t": "h",
@@ -8436,7 +10606,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Task:</strong> Write <code>each_project(entries)</code>: the method groups the entries by project and hands <strong>via <code>yield</code></strong> each pair <code>(project, list)</code> to the block – like <code>each</code>, one floor up.</div>"
+            "html": "<div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/methods_rdoc.html#label-Block+Argument' target='_blank'>Block arguments</a> · <a href='https://docs.ruby-lang.org/en/4.0/Proc.html' target='_blank'>Proc</a> · <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-lambda' target='_blank'>lambda</a></div><div class='task'><strong>Task:</strong> Write <code>each_project(entries)</code>: the method groups the entries by project and hands <strong>via <code>yield</code></strong> each pair <code>(project, list)</code> to the block – like <code>each</code>, one floor up.</div>"
           },
           {
             "t": "x",
@@ -8447,7 +10617,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "52. ブロック、Proc、lambda",
+        "title": "58. ブロック、Proc、lambda",
         "cells": [
           {
             "t": "h",
@@ -8475,7 +10645,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>課題：</strong><code>each_project(entries)</code>を書きましょう。このメソッドはエントリをプロジェクトごとにグループ分けし、<code>(project, list)</code>の組をひとつずつ<strong><code>yield</code>で</strong>ブロックに渡します。いわば、1段上のレベルの<code>each</code>です。</div>"
+            "html": "<div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fcall.html' target='_blank'>ブロック引数</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Proc.html' target='_blank'>Proc</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Kernel/m/lambda.html' target='_blank'>lambda</a></div><div class='task'><strong>課題：</strong><code>each_project(entries)</code>を書きましょう。このメソッドはエントリをプロジェクトごとにグループ分けし、<code>(project, list)</code>の組をひとつずつ<strong><code>yield</code>で</strong>ブロックに渡します。いわば、1段上のレベルの<code>each</code>です。</div>"
           },
           {
             "t": "x",
@@ -8489,7 +10659,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-errors",
       "de": {
-        "title": "53. Fehler behandeln",
+        "title": "59. Fehler behandeln",
         "cells": [
           {
             "t": "h",
@@ -8509,7 +10679,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Echter Retry-Code wartet zwischen den Versuchen immer länger (<em>Backoff</em>) – <code>sleep</code> gibt es im Browser nicht:</p><pre><code>rescue TimelogError\n  wartezeit = 2 ** versuch   # 1s, 2s, 4s, 8s ...\n  sleep(wartezeit)\n  retry if versuch < 5</code></pre></div><div class='task'><strong>Aufgabe:</strong> Schreibe <code>sync_mit_retry(dienst, max:)</code>: Sie ruft <code>dienst.call</code> auf. Wirft der Dienst einen <code>TimelogError</code>, wird bis zu <code>max</code>-mal insgesamt versucht – danach fliegt der Fehler weiter (einfach nicht mehr <code>retry</code> aufrufen). Bei Erfolg gibt sie das Ergebnis zurück.</div>"
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Echter Retry-Code wartet zwischen den Versuchen immer länger (<em>Backoff</em>) – <code>sleep</code> gibt es im Browser nicht:</p><pre><code>rescue TimelogError\n  wartezeit = 2 ** versuch   # 1s, 2s, 4s, 8s ...\n  sleep(wartezeit)\n  retry if versuch < 5</code></pre></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/syntax/exceptions_rdoc.html' target='_blank'>Exceptions: begin, rescue, ensure</a> · <a href='https://docs.ruby-lang.org/en/4.0/Exception.html' target='_blank'>Exception</a></div><div class='task'><strong>Aufgabe:</strong> Schreibe <code>sync_mit_retry(dienst, max:)</code>: Sie ruft <code>dienst.call</code> auf. Wirft der Dienst einen <code>TimelogError</code>, wird bis zu <code>max</code>-mal insgesamt versucht – danach fliegt der Fehler weiter (einfach nicht mehr <code>retry</code> aufrufen). Bei Erfolg gibt sie das Ergebnis zurück.</div>"
           },
           {
             "t": "x",
@@ -8520,7 +10690,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "53. Handling errors",
+        "title": "59. Handling errors",
         "cells": [
           {
             "t": "h",
@@ -8540,7 +10710,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='On your machine'><p>Real retry code waits longer between attempts (<em>backoff</em>) – there is no <code>sleep</code> in the browser:</p><pre><code>rescue TimelogError\n  wait = 2 ** attempt   # 1s, 2s, 4s, 8s ...\n  sleep(wait)\n  retry if attempt < 5</code></pre></div><div class='task'><strong>Task:</strong> Write <code>sync_with_retry(service, max:)</code>: it calls <code>service.call</code>. If the service raises a <code>TimelogError</code>, it tries up to <code>max</code> times in total – after that the error propagates (simply don't <code>retry</code> anymore). On success it returns the result.</div>"
+            "html": "<div class='offweb' data-title='On your machine'><p>Real retry code waits longer between attempts (<em>backoff</em>) – there is no <code>sleep</code> in the browser:</p><pre><code>rescue TimelogError\n  wait = 2 ** attempt   # 1s, 2s, 4s, 8s ...\n  sleep(wait)\n  retry if attempt < 5</code></pre></div><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/exceptions_rdoc.html' target='_blank'>Exceptions: begin, rescue, ensure</a> · <a href='https://docs.ruby-lang.org/en/4.0/Exception.html' target='_blank'>Exception</a></div><div class='task'><strong>Task:</strong> Write <code>sync_with_retry(service, max:)</code>: it calls <code>service.call</code>. If the service raises a <code>TimelogError</code>, it tries up to <code>max</code> times in total – after that the error propagates (simply don't <code>retry</code> anymore). On success it returns the result.</div>"
           },
           {
             "t": "x",
@@ -8551,7 +10721,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "53. エラー処理",
+        "title": "59. エラー処理",
         "cells": [
           {
             "t": "h",
@@ -8571,7 +10741,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>実際のリトライ処理では、試すたびに待ち時間を長くしていきます（<em>バックオフ</em>）。ブラウザの中には<code>sleep</code>がないため、上の例では待ち時間を入れていません。</p><pre><code>rescue TimelogError\n  wait = 2 ** attempt   # 1s, 2s, 4s, 8s ...\n  sleep(wait)\n  retry if attempt < 5</code></pre></div><div class='task'><strong>課題：</strong><code>sync_with_retry(service, max:)</code>を書きましょう。このメソッドは<code>service.call</code>を呼び出します。サービスが<code>TimelogError</code>を発生させたら、合計で<code>max</code>回まで試します。それでもだめなら、エラーをそのまま外に伝えます（もう<code>retry</code>しなければいいだけです）。成功したら、その結果を返します。</div>"
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>実際のリトライ処理では、試すたびに待ち時間を長くしていきます（<em>バックオフ</em>）。ブラウザの中には<code>sleep</code>がないため、上の例では待ち時間を入れていません。</p><pre><code>rescue TimelogError\n  wait = 2 ** attempt   # 1s, 2s, 4s, 8s ...\n  sleep(wait)\n  retry if attempt < 5</code></pre></div><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fcontrol.html#begin' target='_blank'>例外処理：begin、rescue、ensure</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Exception.html' target='_blank'>Exception</a></div><div class='task'><strong>課題：</strong><code>sync_with_retry(service, max:)</code>を書きましょう。このメソッドは<code>service.call</code>を呼び出します。サービスが<code>TimelogError</code>を発生させたら、合計で<code>max</code>回まで試します。それでもだめなら、エラーをそのまま外に伝えます（もう<code>retry</code>しなければいいだけです）。成功したら、その結果を返します。</div>"
           },
           {
             "t": "x",
@@ -8585,7 +10755,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-formats",
       "de": {
-        "title": "54. Daten speichern: Formate",
+        "title": "60. Daten speichern: Formate",
         "cells": [
           {
             "t": "h",
@@ -8629,7 +10799,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Unser Dateifenster ist eine Simulation – bei dir sind es echte Dateien auf der Platte, mit denselben Befehlen. Dort gibt es noch mehr Komfort:</p><pre><code># Block-Form schliesst die Datei automatisch:\nFile.open(\"log.txt\", \"a\") { |f| f.puts \"neuer Eintrag\" }\n\nPathname.new(\"a/b.json\")    # Pfade als Objekte\nTempfile.create(\"test\")     # Wegwerf-Dateien fuer Tests\nStringIO.new(\"...\")         # \"Datei\" im Speicher</code></pre></div><div class='task'><strong>Aufgabe:</strong> Schreibe <code>nach_csv(eintraege)</code> (CSV-Text mit Kopfzeile <code>projekt,stunden</code>) und <code>aus_csv(text)</code> (zurück zu Hashes mit Symbol-Schlüsseln und <code>Float</code>-Stunden). Speichere dann <code>daten</code> mit <code>File.write</code> in <code>eintraege.csv</code> und lies sie mit <code>aus_csv(File.read(…))</code> zurück – verlustfrei. Wirf danach einen Blick ins Datei-Fenster oben (⟳)!</div>"
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Unser Dateifenster ist eine Simulation – bei dir sind es echte Dateien auf der Platte, mit denselben Befehlen. Dort gibt es noch mehr Komfort:</p><pre><code># Block-Form schliesst die Datei automatisch:\nFile.open(\"log.txt\", \"a\") { |f| f.puts \"neuer Eintrag\" }\n\nPathname.new(\"a/b.json\")    # Pfade als Objekte\nTempfile.create(\"test\")     # Wegwerf-Dateien fuer Tests\nStringIO.new(\"...\")         # \"Datei\" im Speicher</code></pre></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/JSON.html' target='_blank'>JSON</a> · <a href='https://ruby.github.io/csv/' target='_blank'>CSV</a> · <a href='https://docs.ruby-lang.org/en/4.0/Psych.html' target='_blank'>YAML (Psych)</a> · <a href='https://docs.ruby-lang.org/en/4.0/File.html' target='_blank'>File</a></div><div class='task'><strong>Aufgabe:</strong> Schreibe <code>nach_csv(eintraege)</code> (CSV-Text mit Kopfzeile <code>projekt,stunden</code>) und <code>aus_csv(text)</code> (zurück zu Hashes mit Symbol-Schlüsseln und <code>Float</code>-Stunden). Speichere dann <code>daten</code> mit <code>File.write</code> in <code>eintraege.csv</code> und lies sie mit <code>aus_csv(File.read(…))</code> zurück – verlustfrei. Wirf danach einen Blick ins Datei-Fenster oben (⟳)!</div>"
           },
           {
             "t": "x",
@@ -8640,7 +10810,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "54. Saving data: formats",
+        "title": "60. Saving data: formats",
         "cells": [
           {
             "t": "h",
@@ -8684,7 +10854,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='On your machine'><p>Our file window is a simulation – on your machine these are real files on disk, with the same commands. There you also get extra comfort:</p><pre><code># Block form closes the file automatically:\nFile.open(\"log.txt\", \"a\") { |f| f.puts \"new entry\" }\n\nPathname.new(\"a/b.json\")    # paths as objects\nTempfile.create(\"test\")     # throwaway files for tests\nStringIO.new(\"...\")         # in-memory \"file\"</code></pre></div><div class='task'><strong>Task:</strong> Write <code>to_csv(entries)</code> (CSV text with header <code>project,hours</code>) and <code>from_csv(text)</code> (back to hashes with symbol keys and <code>Float</code> hours). Then save <code>data</code> with <code>File.write</code> into <code>entries.csv</code> and read it back with <code>from_csv(File.read(…))</code> – losslessly. Afterwards take a look at the file window above (⟳)!</div>"
+            "html": "<div class='offweb' data-title='On your machine'><p>Our file window is a simulation – on your machine these are real files on disk, with the same commands. There you also get extra comfort:</p><pre><code># Block form closes the file automatically:\nFile.open(\"log.txt\", \"a\") { |f| f.puts \"new entry\" }\n\nPathname.new(\"a/b.json\")    # paths as objects\nTempfile.create(\"test\")     # throwaway files for tests\nStringIO.new(\"...\")         # in-memory \"file\"</code></pre></div><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/JSON.html' target='_blank'>JSON</a> · <a href='https://ruby.github.io/csv/' target='_blank'>CSV</a> · <a href='https://docs.ruby-lang.org/en/4.0/Psych.html' target='_blank'>YAML (Psych)</a> · <a href='https://docs.ruby-lang.org/en/4.0/File.html' target='_blank'>File</a></div><div class='task'><strong>Task:</strong> Write <code>to_csv(entries)</code> (CSV text with header <code>project,hours</code>) and <code>from_csv(text)</code> (back to hashes with symbol keys and <code>Float</code> hours). Then save <code>data</code> with <code>File.write</code> into <code>entries.csv</code> and read it back with <code>from_csv(File.read(…))</code> – losslessly. Afterwards take a look at the file window above (⟳)!</div>"
           },
           {
             "t": "x",
@@ -8695,7 +10865,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "54. データの保存：フォーマット",
+        "title": "60. データの保存：フォーマット",
         "cells": [
           {
             "t": "h",
@@ -8739,7 +10909,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>このファイルウィンドウはシミュレーションです。自分のコンピューターでは、同じコードのままディスク上の本物のファイルを扱えます。さらに、便利な道具も使えます。</p><pre><code># Block form closes the file automatically:\nFile.open(\"log.txt\", \"a\") { |f| f.puts \"new entry\" }\n\nPathname.new(\"a/b.json\")    # paths as objects\nTempfile.create(\"test\")     # throwaway files for tests\nStringIO.new(\"...\")         # in-memory \"file\"</code></pre></div><div class='task'><strong>課題：</strong><code>to_csv(entries)</code>（ヘッダー行が<code>project,hours</code>のCSVテキストを返す）と、<code>from_csv(text)</code>（キーがシンボルで、時間の値が<code>Float</code>のハッシュに戻す）を書きましょう。次に、<code>data</code>を<code>File.write</code>で<code>entries.csv</code>に保存し、<code>from_csv(File.read(…))</code>で読み戻します。データが1つも失われずに元どおりになれば成功です。終わったら、上のファイルウィンドウ（⟳）ものぞいてみてください！</div>"
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>このファイルウィンドウはシミュレーションです。自分のコンピューターでは、同じコードのままディスク上の本物のファイルを扱えます。さらに、便利な道具も使えます。</p><pre><code># Block form closes the file automatically:\nFile.open(\"log.txt\", \"a\") { |f| f.puts \"new entry\" }\n\nPathname.new(\"a/b.json\")    # paths as objects\nTempfile.create(\"test\")     # throwaway files for tests\nStringIO.new(\"...\")         # in-memory \"file\"</code></pre></div><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/JSON.html' target='_blank'>JSON</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/CSV.html' target='_blank'>CSV</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Psych.html' target='_blank'>YAML（Psych）</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/File.html' target='_blank'>File</a></div><div class='task'><strong>課題：</strong><code>to_csv(entries)</code>（ヘッダー行が<code>project,hours</code>のCSVテキストを返す）と、<code>from_csv(text)</code>（キーがシンボルで、時間の値が<code>Float</code>のハッシュに戻す）を書きましょう。次に、<code>data</code>を<code>File.write</code>で<code>entries.csv</code>に保存し、<code>from_csv(File.read(…))</code>で読み戻します。データが1つも失われずに元どおりになれば成功です。終わったら、上のファイルウィンドウ（⟳）ものぞいてみてください！</div>"
           },
           {
             "t": "x",
@@ -8753,7 +10923,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-cli",
       "de": {
-        "title": "55. Kommandozeile & Gems",
+        "title": "61. Kommandozeile & Gems",
         "cells": [
           {
             "t": "h",
@@ -8761,15 +10931,19 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "require \"optparse\"\n\nargv = [\"report\", \"--week\", \"--format\", \"csv\"]\n\noptionen = { format: \"text\", woche: false }\nparser = OptionParser.new do |p|\n  p.on(\"--week\", \"nur diese Woche\")        { optionen[:woche] = true }\n  p.on(\"--format FORMAT\", \"text oder csv\") { |f| optionen[:format] = f }\nend\n\nrest = parser.parse(argv)\n[optionen, rest]"
+            "code": "require \"optparse\"\n\nargv = [\"report\", \"--week\", \"--format\", \"csv\"]\n\noptionen = { format: \"text\", woche: false }\nparser = OptionParser.new do |p|\n  p.banner = \"Aufruf: timelog KOMMANDO [Optionen]\"\n  p.on(\"--week\", \"nur diese Woche\")        { optionen[:woche] = true }\n  p.on(\"--format FORMAT\", \"text oder csv\") { |f| optionen[:format] = f }\nend\n\nrest = parser.parse(argv)\n[optionen, rest]"
           },
           {
             "t": "h",
-            "html": "<p><code>parse</code> pflückt die Optionen heraus und gibt zurück, was übrig bleibt – hier das Kommando <code>\"report\"</code>. Gratis dazu: <code>--help</code> mit den Beschreibungstexten.</p>"
+            "html": "<p><code>parse</code> pflückt die Optionen heraus und gibt zurück, was übrig bleibt – hier das Kommando <code>\"report\"</code>. Gratis dazu gibt es eine Hilfe, gebaut aus den Beschreibungstexten: Ruft jemand <code>timelog --help</code> auf, zeigt OptionParser genau das hier an und beendet das Programm:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts parser.help"
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='Auf deinem Computer: vom Skript zur Gem'><p>Ein installierbares Werkzeug hat eine feste Struktur und eine <code>.gemspec</code>-Datei:</p><pre><code>timelog/\n├── lib/timelog.rb        # der Code\n├── bin/timelog           # das Kommando (#!/usr/bin/env ruby)\n├── test/test_timelog.rb\n├── timelog.gemspec       # Name, Version, Autor, Dateien\n├── Gemfile               # Abhaengigkeiten (Bundler)\n└── Rakefile              # Aufgaben: rake test</code></pre><pre><code>$ bundle install          # holt Abhaengigkeiten, schreibt Gemfile.lock\n$ rake test               # laesst die Tests laufen\n$ gem build timelog.gemspec\n$ gem install timelog-0.1.0.gem\n$ timelog report --week   # dein Werkzeug, ueberall!</code></pre><p>Exit-Codes nicht vergessen: <code>exit 1</code> bei Fehlern, damit Skripte deine Fehlschläge bemerken.</p></div><div class='task'><strong>Aufgabe:</strong> Schreibe <code>parse_argv(argv)</code> mit OptionParser: Unterstützt werden <code>--week</code> und <code>--format FORMAT</code> (Default <code>\"text\"</code>). Zurück kommt ein Hash <code>{ befehl:, woche:, format: }</code>, wobei <code>befehl</code> das erste übrige Argument ist.</div>"
+            "html": "<div class='offweb' data-title='Auf deinem Computer: vom Skript zur Gem'><p>Ein installierbares Werkzeug hat eine feste Struktur und eine <code>.gemspec</code>-Datei:</p><pre><code>timelog/\n├── lib/timelog.rb        # der Code\n├── bin/timelog           # das Kommando (#!/usr/bin/env ruby)\n├── test/test_timelog.rb\n├── timelog.gemspec       # Name, Version, Autor, Dateien\n├── Gemfile               # Abhaengigkeiten (Bundler)\n└── Rakefile              # Aufgaben: rake test</code></pre><pre><code>$ bundle install          # holt Abhaengigkeiten, schreibt Gemfile.lock\n$ rake test               # laesst die Tests laufen\n$ gem build timelog.gemspec\n$ gem install timelog-0.1.0.gem\n$ timelog report --week   # dein Werkzeug, ueberall!</code></pre><p>Exit-Codes nicht vergessen: <code>exit 1</code> bei Fehlern, damit Skripte deine Fehlschläge bemerken.</p></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/OptionParser.html' target='_blank'>OptionParser</a> · <a href='https://docs.ruby-lang.org/en/4.0/optparse/tutorial_rdoc.html' target='_blank'>OptionParser-Tutorial</a></div><div class='task'><strong>Aufgabe:</strong> Schreibe <code>parse_argv(argv)</code> mit OptionParser: Unterstützt werden <code>--week</code> und <code>--format FORMAT</code> (Default <code>\"text\"</code>). Zurück kommt ein Hash <code>{ befehl:, woche:, format: }</code>, wobei <code>befehl</code> das erste übrige Argument ist.</div>"
           },
           {
             "t": "x",
@@ -8780,7 +10954,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "55. Command line & gems",
+        "title": "61. Command line & gems",
         "cells": [
           {
             "t": "h",
@@ -8788,15 +10962,19 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "require \"optparse\"\n\nargv = [\"report\", \"--week\", \"--format\", \"csv\"]\n\noptions = { format: \"text\", week: false }\nparser = OptionParser.new do |p|\n  p.on(\"--week\", \"this week only\")        { options[:week] = true }\n  p.on(\"--format FORMAT\", \"text or csv\")  { |f| options[:format] = f }\nend\n\nrest = parser.parse(argv)\n[options, rest]"
+            "code": "require \"optparse\"\n\nargv = [\"report\", \"--week\", \"--format\", \"csv\"]\n\noptions = { format: \"text\", week: false }\nparser = OptionParser.new do |p|\n  p.banner = \"Usage: timelog COMMAND [options]\"\n  p.on(\"--week\", \"this week only\")        { options[:week] = true }\n  p.on(\"--format FORMAT\", \"text or csv\")  { |f| options[:format] = f }\nend\n\nrest = parser.parse(argv)\n[options, rest]"
           },
           {
             "t": "h",
-            "html": "<p><code>parse</code> plucks out the options and returns what remains – here the command <code>\"report\"</code>. For free on top: <code>--help</code> with the description texts.</p>"
+            "html": "<p><code>parse</code> plucks out the options and returns what remains – here the command <code>\"report\"</code>. On top of that you get help for free, built from the descriptions: if someone runs <code>timelog --help</code>, OptionParser prints exactly this and ends the program:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts parser.help"
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='On your machine: from script to gem'><p>An installable tool has a fixed structure and a <code>.gemspec</code> file:</p><pre><code>timelog/\n├── lib/timelog.rb        # the code\n├── bin/timelog           # the command (#!/usr/bin/env ruby)\n├── test/test_timelog.rb\n├── timelog.gemspec       # name, version, author, files\n├── Gemfile               # dependencies (Bundler)\n└── Rakefile              # tasks: rake test</code></pre><pre><code>$ bundle install          # fetches deps, writes Gemfile.lock\n$ rake test               # runs the tests\n$ gem build timelog.gemspec\n$ gem install timelog-0.1.0.gem\n$ timelog report --week   # your tool, everywhere!</code></pre><p>Don't forget exit codes: <code>exit 1</code> on failure, so scripts notice your errors.</p></div><div class='task'><strong>Task:</strong> Write <code>parse_argv(argv)</code> with OptionParser: it supports <code>--week</code> and <code>--format FORMAT</code> (default <code>\"text\"</code>). It returns a hash <code>{ command:, week:, format: }</code>, where <code>command</code> is the first remaining argument.</div>"
+            "html": "<div class='offweb' data-title='On your machine: from script to gem'><p>An installable tool has a fixed structure and a <code>.gemspec</code> file:</p><pre><code>timelog/\n├── lib/timelog.rb        # the code\n├── bin/timelog           # the command (#!/usr/bin/env ruby)\n├── test/test_timelog.rb\n├── timelog.gemspec       # name, version, author, files\n├── Gemfile               # dependencies (Bundler)\n└── Rakefile              # tasks: rake test</code></pre><pre><code>$ bundle install          # fetches deps, writes Gemfile.lock\n$ rake test               # runs the tests\n$ gem build timelog.gemspec\n$ gem install timelog-0.1.0.gem\n$ timelog report --week   # your tool, everywhere!</code></pre><p>Don't forget exit codes: <code>exit 1</code> on failure, so scripts notice your errors.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/OptionParser.html' target='_blank'>OptionParser</a> · <a href='https://docs.ruby-lang.org/en/4.0/optparse/tutorial_rdoc.html' target='_blank'>OptionParser tutorial</a></div><div class='task'><strong>Task:</strong> Write <code>parse_argv(argv)</code> with OptionParser: it supports <code>--week</code> and <code>--format FORMAT</code> (default <code>\"text\"</code>). It returns a hash <code>{ command:, week:, format: }</code>, where <code>command</code> is the first remaining argument.</div>"
           },
           {
             "t": "x",
@@ -8807,7 +10985,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "55. コマンドラインとgem",
+        "title": "61. コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -8815,15 +10993,19 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "require \"optparse\"\n\nargv = [\"report\", \"--week\", \"--format\", \"csv\"]\n\noptions = { format: \"text\", week: false }\nparser = OptionParser.new do |p|\n  p.on(\"--week\", \"this week only\")        { options[:week] = true }\n  p.on(\"--format FORMAT\", \"text or csv\")  { |f| options[:format] = f }\nend\n\nrest = parser.parse(argv)\n[options, rest]"
+            "code": "require \"optparse\"\n\nargv = [\"report\", \"--week\", \"--format\", \"csv\"]\n\noptions = { format: \"text\", week: false }\nparser = OptionParser.new do |p|\n  p.banner = \"Usage: timelog COMMAND [options]\"\n  p.on(\"--week\", \"this week only\")        { options[:week] = true }\n  p.on(\"--format FORMAT\", \"text or csv\")  { |f| options[:format] = f }\nend\n\nrest = parser.parse(argv)\n[options, rest]"
           },
           {
             "t": "h",
-            "html": "<p><code>parse</code>はオプションを抜き出して、残ったものを返します。ここではコマンドの<code>\"report\"</code>です。おまけに、説明文つきの<code>--help</code>も自動で使えるようになります。</p>"
+            "html": "<p><code>parse</code>はオプションを抜き出して、残ったものを返します。ここではコマンドの<code>\"report\"</code>です。おまけに、説明文からヘルプも自動で作られます。だれかが<code>timelog --help</code>と実行すると、OptionParserはちょうど次のように表示して、プログラムを終了します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts parser.help"
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='自分のコンピューターでは：スクリプトからgemへ'><p>インストールできるツールには、決まったフォルダー構成と<code>.gemspec</code>ファイルがあります：</p><pre><code>timelog/\n├── lib/timelog.rb        # the code\n├── bin/timelog           # the command (#!/usr/bin/env ruby)\n├── test/test_timelog.rb\n├── timelog.gemspec       # name, version, author, files\n├── Gemfile               # dependencies (Bundler)\n└── Rakefile              # tasks: rake test</code></pre><pre><code>$ bundle install          # fetches deps, writes Gemfile.lock\n$ rake test               # runs the tests\n$ gem build timelog.gemspec\n$ gem install timelog-0.1.0.gem\n$ timelog report --week   # your tool, everywhere!</code></pre><p>終了コードも忘れずに。失敗したときは<code>exit 1</code>で終わらせれば、ツールを呼び出したスクリプトがエラーに気づけます。</p></div><div class='task'><strong>課題：</strong>OptionParserを使って<code>parse_argv(argv)</code>を書きましょう。対応するのは<code>--week</code>と<code>--format FORMAT</code>（デフォルトは<code>\"text\"</code>）です。戻り値はハッシュ<code>{ command:, week:, format: }</code>で、<code>command</code>には残った引数の最初のものが入ります。</div>"
+            "html": "<div class='offweb' data-title='自分のコンピューターでは：スクリプトからgemへ'><p>インストールできるツールには、決まったフォルダー構成と<code>.gemspec</code>ファイルがあります：</p><pre><code>timelog/\n├── lib/timelog.rb        # the code\n├── bin/timelog           # the command (#!/usr/bin/env ruby)\n├── test/test_timelog.rb\n├── timelog.gemspec       # name, version, author, files\n├── Gemfile               # dependencies (Bundler)\n└── Rakefile              # tasks: rake test</code></pre><pre><code>$ bundle install          # fetches deps, writes Gemfile.lock\n$ rake test               # runs the tests\n$ gem build timelog.gemspec\n$ gem install timelog-0.1.0.gem\n$ timelog report --week   # your tool, everywhere!</code></pre><p>終了コードも忘れずに。失敗したときは<code>exit 1</code>で終わらせれば、ツールを呼び出したスクリプトがエラーに気づけます。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/OptionParser.html' target='_blank'>OptionParser</a>・<a href='https://docs.ruby-lang.org/en/4.0/optparse/tutorial_rdoc.html' target='_blank'>OptionParserチュートリアル（英語）</a></div><div class='task'><strong>課題：</strong>OptionParserを使って<code>parse_argv(argv)</code>を書きましょう。対応するのは<code>--week</code>と<code>--format FORMAT</code>（デフォルトは<code>\"text\"</code>）です。戻り値はハッシュ<code>{ command:, week:, format: }</code>で、<code>command</code>には残った引数の最初のものが入ります。</div>"
           },
           {
             "t": "x",
@@ -8837,7 +11019,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-pattern",
       "de": {
-        "title": "56. Pattern Matching",
+        "title": "62. Pattern Matching",
         "cells": [
           {
             "t": "h",
@@ -8857,7 +11039,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Dazu passt der Rest des modernen Rubys: <em>endless methods</em> für Einzeiler (<code>def quadrat(x) = x * x</code>), die Hash-Kurzform <code>{ projekt:, stunden: }</code> wenn Variable und Schlüssel gleich heissen, und <code>daten => { projekt: }</code> als Zerlege-Zuweisung ausserhalb von <code>case</code>.</p><div class='task'><strong>Aufgabe:</strong> Schreibe <code>dispatch(befehl)</code> mit <code>case/in</code>: <code>[\"add\", projekt, stunden]</code> → <code>\"Eintrag: &lt;projekt&gt; (&lt;stunden&gt;h)\"</code>, <code>[\"report\"]</code> → <code>\"Bericht\"</code>, <code>[\"export\", format]</code> → <code>\"Export als &lt;format&gt;\"</code>, alles andere (<code>else</code>) → <code>\"Unbekanntes Kommando\"</code>.</div>"
+            "html": "<p>Ein Muster kann auch einfach Ja oder Nein sagen: <code>wert in muster</code> ergibt <code>true</code> oder <code>false</code> – praktisch in einem <code>if</code>. Mit <code>[*, \"meeting\", *]</code>, dem <em>Find-Pattern</em>, suchst du ein Element irgendwo in einem Array. Und <code>=&gt;</code> zerlegt einen Wert ganz ohne <code>case</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "eintrag = { projekt: \"ProjectX\", stunden: 3.5, tags: [\"planung\", \"meeting\"] }\n\nif eintrag in { stunden: Float => stunden }\n  puts \"#{stunden} Stunden, als Float\"\nend\nputs \"ein Meeting!\" if eintrag in { tags: [*, \"meeting\", *] }\n\neintrag => { projekt:, tags: [erster_tag, *] }\n[projekt, erster_tag]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dazu passt der Rest des modernen Rubys: <em>endless methods</em> für Einzeiler (<code>def quadrat(x) = x * x</code>) und die Hash-Kurzform <code>{ projekt:, stunden: }</code>, wenn Variable und Schlüssel gleich heissen.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/syntax/pattern_matching_rdoc.html' target='_blank'>Pattern Matching</a></div><div class='task'><strong>Aufgabe:</strong> Schreibe <code>dispatch(befehl)</code> mit <code>case/in</code>: <code>[\"add\", projekt, stunden]</code> → <code>\"Eintrag: &lt;projekt&gt; (&lt;stunden&gt;h)\"</code>, <code>[\"report\"]</code> → <code>\"Bericht\"</code>, <code>[\"export\", format]</code> → <code>\"Export als &lt;format&gt;\"</code>, alles andere (<code>else</code>) → <code>\"Unbekanntes Kommando\"</code>.</div>"
           },
           {
             "t": "x",
@@ -8868,7 +11058,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "56. Pattern matching",
+        "title": "62. Pattern matching",
         "cells": [
           {
             "t": "h",
@@ -8888,7 +11078,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>The rest of modern Ruby fits right in: <em>endless methods</em> for one-liners (<code>def square(x) = x * x</code>), the hash shorthand <code>{ project:, hours: }</code> when variable and key share a name, and <code>data => { project: }</code> as a deconstructing assignment outside of <code>case</code>.</p><div class='task'><strong>Task:</strong> Write <code>dispatch(command)</code> with <code>case/in</code>: <code>[\"add\", project, hours]</code> → <code>\"Entry: &lt;project&gt; (&lt;hours&gt;h)\"</code>, <code>[\"report\"]</code> → <code>\"Report\"</code>, <code>[\"export\", format]</code> → <code>\"Export as &lt;format&gt;\"</code>, anything else (<code>else</code>) → <code>\"Unknown command\"</code>.</div>"
+            "html": "<p>A pattern can also just say yes or no: <code>value in pattern</code> gives <code>true</code> or <code>false</code> – handy inside an <code>if</code>. With <code>[*, \"meeting\", *]</code>, the <em>find pattern</em>, you look for an element anywhere in an array. And <code>=&gt;</code> takes a value apart without any <code>case</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "entry = { project: \"ProjectX\", hours: 3.5, tags: [\"planning\", \"meeting\"] }\n\nif entry in { hours: Float => hours }\n  puts \"#{hours} hours, as a Float\"\nend\nputs \"a meeting!\" if entry in { tags: [*, \"meeting\", *] }\n\nentry => { project:, tags: [first_tag, *] }\n[project, first_tag]"
+          },
+          {
+            "t": "h",
+            "html": "<p>The rest of modern Ruby fits right in: <em>endless methods</em> for one-liners (<code>def square(x) = x * x</code>) and the hash shorthand <code>{ project:, hours: }</code> when variable and key share a name.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/pattern_matching_rdoc.html' target='_blank'>Pattern matching</a></div><div class='task'><strong>Task:</strong> Write <code>dispatch(command)</code> with <code>case/in</code>: <code>[\"add\", project, hours]</code> → <code>\"Entry: &lt;project&gt; (&lt;hours&gt;h)\"</code>, <code>[\"report\"]</code> → <code>\"Report\"</code>, <code>[\"export\", format]</code> → <code>\"Export as &lt;format&gt;\"</code>, anything else (<code>else</code>) → <code>\"Unknown command\"</code>.</div>"
           },
           {
             "t": "x",
@@ -8899,7 +11097,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "56. パターンマッチ",
+        "title": "62. パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -8919,7 +11117,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>モダンなRubyのほかの機能も、これとよくなじみます。1行で書ける<em>エンドレスメソッド</em>（<code>def square(x) = x * x</code>）、変数とキーが同じ名前のときのハッシュの省略記法<code>{ project:, hours: }</code>、そして<code>case</code>の外で分解しながら代入する<code>data => { project: }</code>です。</p><div class='task'><strong>課題：</strong><code>case/in</code>を使って、次のように値を返す<code>dispatch(command)</code>を書きましょう：<code>[\"add\", project, hours]</code> → <code>\"Entry: &lt;project&gt; (&lt;hours&gt;h)\"</code>、<code>[\"report\"]</code> → <code>\"Report\"</code>、<code>[\"export\", format]</code> → <code>\"Export as &lt;format&gt;\"</code>、それ以外（<code>else</code>）→ <code>\"Unknown command\"</code>。</div>"
+            "html": "<p>パターンは、はい・いいえを答えるだけにも使えます。<code>値 in パターン</code>は<code>true</code>か<code>false</code>になるので、<code>if</code>の中で便利です。<code>[*, \"meeting\", *]</code>という<em>findパターン</em>を使えば、配列のどこかにある要素を探せます。そして<code>=&gt;</code>を使えば、<code>case</code>なしで値を分解できます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "entry = { project: \"ProjectX\", hours: 3.5, tags: [\"planning\", \"meeting\"] }\n\nif entry in { hours: Float => hours }\n  puts \"#{hours} hours, as a Float\"\nend\nputs \"a meeting!\" if entry in { tags: [*, \"meeting\", *] }\n\nentry => { project:, tags: [first_tag, *] }\n[project, first_tag]"
+          },
+          {
+            "t": "h",
+            "html": "<p>モダンなRubyのほかの機能も、これとよくなじみます。1行で書ける<em>エンドレスメソッド</em>（<code>def square(x) = x * x</code>）、そして変数とキーが同じ名前のときのハッシュの省略記法<code>{ project:, hours: }</code>です。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fpattern_matching.html' target='_blank'>パターンマッチ</a></div><div class='task'><strong>課題：</strong><code>case/in</code>を使って、次のように値を返す<code>dispatch(command)</code>を書きましょう：<code>[\"add\", project, hours]</code> → <code>\"Entry: &lt;project&gt; (&lt;hours&gt;h)\"</code>、<code>[\"report\"]</code> → <code>\"Report\"</code>、<code>[\"export\", format]</code> → <code>\"Export as &lt;format&gt;\"</code>、それ以外（<code>else</code>）→ <code>\"Unknown command\"</code>。</div>"
           },
           {
             "t": "x",
@@ -8933,7 +11139,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-meta",
       "de": {
-        "title": "57. Objektmodell & Metaprogrammierung",
+        "title": "63. Objektmodell & Metaprogrammierung",
         "cells": [
           {
             "t": "h",
@@ -8953,7 +11159,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Genau so bauen Rails &amp; Co. ihre Makros wie <code>has_many</code> oder <code>validates</code>. Wichtige Warnung eines weisen Fuchses: <em>Der cleverste Code ist oft das Erste, was man später löscht.</em> Auch <code>method_missing</code> existiert (fängt alle unbekannten Aufrufe – immer zusammen mit <code>respond_to_missing?</code>), aber ein explizites <code>define_method</code> ist fast immer klarer.</p><div class='task'><strong>Aufgabe:</strong> Baue dein eigenes Rails-Makro: <code>Modell.validates_presence_of(*felder)</code> soll per <code>define_method</code> eine Methode <code>valid?</code> erzeugen, die prüft, dass keines der Felder <code>nil</code> oder <code>\"\"</code> ist. Die Klasse <code>Buchung</code> unten benutzt es dann wie in Rails.</div>"
+            "html": "<p>Genau so bauen Rails &amp; Co. ihre Makros wie <code>has_many</code> oder <code>validates</code>. Wichtige Warnung eines weisen Fuchses: <em>Der cleverste Code ist oft das Erste, was man später löscht.</em> Es gibt noch einen zweiten Weg: <code>method_missing</code> fängt jeden Aufruf ab, für den Ruby keine Methode findet. Wer <code>method_missing</code> benutzt, schreibt immer auch <code>respond_to_missing?</code> – sonst behauptet <code>respond_to?</code> etwas Falsches – und reicht alles, was die Klasse nicht kennt, mit <code>super</code> weiter:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Einstellungen\n  def initialize(werte)\n    @werte = werte\n  end\n\n  def method_missing(name, *args)\n    schluessel = name.to_s\n    return @werte[schluessel] if @werte.key?(schluessel)\n\n    super\n  end\n\n  def respond_to_missing?(name, include_private = false)\n    @werte.key?(name.to_s) || super\n  end\nend\n\ne = Einstellungen.new(\"thema\" => \"Fuchs\", \"sprache\" => \"de\")\n[e.thema, e.respond_to?(:thema), e.respond_to?(:farbe)]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Probier <code>e.farbe</code>: <code>super</code> macht daraus einen ganz normalen <code>NoMethodError</code>. Das funktioniert – aber solche Methoden sieht niemand in der Klasse stehen, keine Doku kennt sie, und ein Tippfehler landet stillschweigend in <code>method_missing</code>. Ein explizites <code>define_method</code> ist darum fast immer die klarere Wahl.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-define_method' target='_blank'>define_method</a> · <a href='https://docs.ruby-lang.org/en/4.0/Object.html#method-i-send' target='_blank'>send</a> · <a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-ancestors' target='_blank'>ancestors</a></div><div class='task'><strong>Aufgabe:</strong> Baue dein eigenes Rails-Makro: <code>Modell.validates_presence_of(*felder)</code> soll per <code>define_method</code> eine Methode <code>valid?</code> erzeugen, die prüft, dass keines der Felder <code>nil</code> oder <code>\"\"</code> ist. Die Klasse <code>Buchung</code> unten benutzt es dann wie in Rails.</div>"
           },
           {
             "t": "x",
@@ -8964,7 +11178,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "57. Object model & metaprogramming",
+        "title": "63. Object model & metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -8984,7 +11198,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>That's exactly how Rails &amp; co. build their macros like <code>has_many</code> or <code>validates</code>. An important warning from a wise fox: <em>the cleverest code is often the first thing you delete later.</em> <code>method_missing</code> exists too (catches all unknown calls – always pair it with <code>respond_to_missing?</code>), but an explicit <code>define_method</code> is almost always clearer.</p><div class='task'><strong>Task:</strong> Build your own Rails macro: <code>BaseModel.validates_presence_of(*fields)</code> should use <code>define_method</code> to create a <code>valid?</code> method checking that none of the fields is <code>nil</code> or <code>\"\"</code>. The class <code>Booking</code> below then uses it Rails-style.</div>"
+            "html": "<p>That's exactly how Rails &amp; co. build their macros like <code>has_many</code> or <code>validates</code>. An important warning from a wise fox: <em>the cleverest code is often the first thing you delete later.</em> There is a second way, too: <code>method_missing</code> catches every call for which Ruby finds no method. Whoever uses <code>method_missing</code> always writes <code>respond_to_missing?</code> as well – otherwise <code>respond_to?</code> tells lies – and passes everything the class doesn't know on with <code>super</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Settings\n  def initialize(values)\n    @values = values\n  end\n\n  def method_missing(name, *args)\n    key = name.to_s\n    return @values[key] if @values.key?(key)\n\n    super\n  end\n\n  def respond_to_missing?(name, include_private = false)\n    @values.key?(name.to_s) || super\n  end\nend\n\ns = Settings.new(\"theme\" => \"fox\", \"language\" => \"en\")\n[s.theme, s.respond_to?(:theme), s.respond_to?(:color)]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Try <code>s.color</code>: <code>super</code> turns it into a perfectly ordinary <code>NoMethodError</code>. It works – but nobody sees such methods in the class, no documentation knows them, and a typo lands silently in <code>method_missing</code>. That's why an explicit <code>define_method</code> is almost always the clearer choice.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-define_method' target='_blank'>define_method</a> · <a href='https://docs.ruby-lang.org/en/4.0/Object.html#method-i-send' target='_blank'>send</a> · <a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-ancestors' target='_blank'>ancestors</a></div><div class='task'><strong>Task:</strong> Build your own Rails macro: <code>BaseModel.validates_presence_of(*fields)</code> should use <code>define_method</code> to create a <code>valid?</code> method checking that none of the fields is <code>nil</code> or <code>\"\"</code>. The class <code>Booking</code> below then uses it Rails-style.</div>"
           },
           {
             "t": "x",
@@ -8995,7 +11217,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "57. オブジェクトモデルとメタプログラミング",
+        "title": "63. オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -9015,7 +11237,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Railsなどのフレームワークも、<code>has_many</code>や<code>validates</code>のようなマクロをまさにこうやって作っています。ただし、賢いキツネから大事な忠告をひとつ：<em>凝りに凝ったコードほど、あとで真っ先に消すことになりがちです。</em><code>method_missing</code>というしくみもあります（知らない呼び出しをすべて受け止めます。使うときは必ず<code>respond_to_missing?</code>とセットで）。それでも、はっきり書いた<code>define_method</code>のほうが、ほとんどの場合わかりやすいです。</p><div class='task'><strong>課題：</strong>自分だけのRailsマクロを作りましょう。<code>BaseModel.validates_presence_of(*fields)</code>は、<code>define_method</code>で<code>valid?</code>メソッドを作ります。このメソッドは、指定したフィールドのどれも<code>nil</code>や<code>\"\"</code>でないことを確かめます。下の<code>Booking</code>クラスでは、それをRails風に使います。</div>"
+            "html": "<p>Railsなどのフレームワークも、<code>has_many</code>や<code>validates</code>のようなマクロをまさにこうやって作っています。ただし、賢いキツネから大事な忠告をひとつ：<em>凝りに凝ったコードほど、あとで真っ先に消すことになりがちです。</em>もう1つの方法もあります。<code>method_missing</code>は、Rubyがメソッドを見つけられなかった呼び出しをすべて受け止めます。使うときは、必ず<code>respond_to_missing?</code>も書きます（そうしないと<code>respond_to?</code>がまちがった答えを返します）。そして知らない呼び出しは<code>super</code>で先へ回します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Settings\n  def initialize(values)\n    @values = values\n  end\n\n  def method_missing(name, *args)\n    key = name.to_s\n    return @values[key] if @values.key?(key)\n\n    super\n  end\n\n  def respond_to_missing?(name, include_private = false)\n    @values.key?(name.to_s) || super\n  end\nend\n\ns = Settings.new(\"theme\" => \"fox\", \"language\" => \"en\")\n[s.theme, s.respond_to?(:theme), s.respond_to?(:color)]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>s.color</code>も試してみましょう。<code>super</code>のおかげで、ごくふつうの<code>NoMethodError</code>になります。これでも動きます。でも、こうしたメソッドはクラスのどこにも書かれていないので、だれの目にも見えず、ドキュメントにも載らず、打ち間違いはこっそり<code>method_missing</code>に吸いこまれてしまいます。だからこそ、はっきり書いた<code>define_method</code>のほうが、ほとんどの場合わかりやすいのです。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/method/Module/i/define_method.html' target='_blank'>define_method</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Object/i/send.html' target='_blank'>send</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Module/i/ancestors.html' target='_blank'>ancestors</a></div><div class='task'><strong>課題：</strong>自分だけのRailsマクロを作りましょう。<code>BaseModel.validates_presence_of(*fields)</code>は、<code>define_method</code>で<code>valid?</code>メソッドを作ります。このメソッドは、指定したフィールドのどれも<code>nil</code>や<code>\"\"</code>でないことを確かめます。下の<code>Booking</code>クラスでは、それをRails風に使います。</div>"
           },
           {
             "t": "x",
@@ -9029,7 +11259,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-dsl",
       "de": {
-        "title": "58. Eine eigene DSL",
+        "title": "64. Eine eigene DSL",
         "cells": [
           {
             "t": "h",
@@ -9041,7 +11271,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 52 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
+            "html": "<p>Im Block ruft <code>gericht \"Speck\", preis: 8</code> in Wahrheit eine Methode der <code>Speisekarte</code> auf – ganz ohne Empfänger davor. Das liest sich wie eine Mini-Sprache. (<code>instance_exec</code> ist die Schwester, die zusätzlich Argumente in den Block reicht.)</p><p><strong>Ehrliche Warnung:</strong> Eine DSL lohnt sich nur, wenn viele Menschen sie oft lesen – sonst tut es ein schlichter Hash genauso gut und ist leichter zu debuggen. Verwandte Bausteine aus der Werkzeugkiste: unsere Formatter-Lambdas aus Lektion 58 waren das <em>Strategy</em>-Muster, und ein <em>Null-Objekt</em> (z. B. ein GastNutzer statt <code>nil</code>) erspart tausend <code>if</code>-Abfragen.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/BasicObject.html#method-i-instance_eval' target='_blank'>instance_eval</a> · <a href='https://docs.ruby-lang.org/en/4.0/BasicObject.html#method-i-instance_exec' target='_blank'>instance_exec</a></div><div class='task'><strong>Aufgabe:</strong> Baue die timelog-Konfiguration: <code>Timelog.configure { … }</code> führt den Block per <code>instance_eval</code> auf einer neuen <code>Konfiguration</code> aus, <code>Timelog.config</code> gibt sie zurück. Im Block sollen <code>projekt \"Name\", satz: 120</code> und <code>runde_auf 15</code> funktionieren.</div>"
           },
           {
             "t": "x",
@@ -9052,7 +11282,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "58. Your own DSL",
+        "title": "64. Your own DSL",
         "cells": [
           {
             "t": "h",
@@ -9064,7 +11294,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 52 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
+            "html": "<p>Inside the block, <code>dish \"Bacon\", price: 8</code> really calls a method of the <code>Menu</code> – with no receiver in front. It reads like a mini language. (<code>instance_exec</code> is the sibling that additionally passes arguments into the block.)</p><p><strong>Honest warning:</strong> a DSL only pays off when many people read it often – otherwise a plain hash does the job and is easier to debug. Related building blocks: our formatter lambdas from lesson 58 were the <em>Strategy</em> pattern, and a <em>null object</em> (e.g. a GuestUser instead of <code>nil</code>) saves a thousand <code>if</code> checks.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/BasicObject.html#method-i-instance_eval' target='_blank'>instance_eval</a> · <a href='https://docs.ruby-lang.org/en/4.0/BasicObject.html#method-i-instance_exec' target='_blank'>instance_exec</a></div><div class='task'><strong>Task:</strong> Build the timelog configuration: <code>Timelog.configure { … }</code> runs the block via <code>instance_eval</code> on a fresh <code>Configuration</code>, <code>Timelog.config</code> returns it. Inside the block, <code>project \"Name\", rate: 120</code> and <code>round_to 15</code> must work.</div>"
           },
           {
             "t": "x",
@@ -9075,7 +11305,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "58. 自分だけのDSL",
+        "title": "64. 自分だけのDSL",
         "cells": [
           {
             "t": "h",
@@ -9087,7 +11317,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン52のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
+            "html": "<p>ブロックの中の<code>dish \"Bacon\", price: 8</code>は、前にレシーバーを書いていないのに、実は<code>Menu</code>のメソッドを呼び出しています。まるで小さな言語のように読めますね。（<code>instance_exec</code>はその兄弟分で、ブロックに引数も渡せます。）</p><p><strong>正直に言っておくと：</strong>DSLが割に合うのは、たくさんの人が何度も読む場合だけです。そうでなければ、ただのハッシュで十分ですし、そのほうがデバッグも簡単です。関連する道具もあります。レッスン58のフォーマッター用ラムダは、じつは<em>Strategy</em>パターンでした。また<em>ヌルオブジェクト</em>（たとえば<code>nil</code>の代わりにGuestUserを使う）を使えば、山ほどの<code>if</code>チェックを書かずに済みます。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/method/BasicObject/i/instance_eval.html' target='_blank'>instance_eval</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/BasicObject/i/instance_exec.html' target='_blank'>instance_exec</a></div><div class='task'><strong>課題：</strong>timelogの設定のしくみを作りましょう。<code>Timelog.configure { … }</code>は、新しく作った<code>Configuration</code>の上で<code>instance_eval</code>を使ってブロックを実行し、<code>Timelog.config</code>はその設定を返します。ブロックの中では<code>project \"Name\", rate: 120</code>と<code>round_to 15</code>が使えるようにします。</div>"
           },
           {
             "t": "x",
@@ -9101,7 +11331,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-quality",
       "de": {
-        "title": "59. Codequalität & Debugging",
+        "title": "65. Codequalität & Debugging",
         "cells": [
           {
             "t": "h",
@@ -9113,7 +11343,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Verwandte Helfer: <code>pp</code> für hübsche Hashes, <code>obj.inspect</code> für die ehrliche Darstellung, <code>caller</code> zeigt, wer die aktuelle Methode aufgerufen hat.</p><div class='task'><strong>Aufgabe:</strong> In der Zelle unten steckt ein klassischer Bug: <code>runde</code> soll Minuten auf das <strong>nächste</strong> Raster runden (<code>runde(38, 15)</code> → <code>45</code>), schneidet aber immer ab. Finde den Fehler (probier <code>p</code>!) und repariere die Methode.</div>"
+            "html": "<p>Warum <code>p</code> und nicht <code>puts</code>? Weil <code>puts</code> nicht alles zeigt: <code>nil</code> und ein leerer String werden zu leeren Zeilen, und ein Array zerfällt in einzelne Zeilen. <code>p</code> zeigt die ehrliche Darstellung, die von <code>inspect</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "werte = [\"Speck\", nil, \"\", 42]\nputs werte\np werte"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ist ein Wert seltsam leer, frag also <code>p</code> statt <code>puts</code>. Verwandte Helfer: <code>pp</code> bricht verschachtelte Daten hübsch um, und <code>caller</code> zeigt, wer die aktuelle Methode aufgerufen hat.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.rubocop.org/rubocop/' target='_blank'>RuboCop</a> · <a href='https://github.com/standardrb/standard' target='_blank'>Standard</a> · <a href='https://github.com/ruby/debug' target='_blank'>debug</a></div><div class='task'><strong>Aufgabe:</strong> In der Zelle unten steckt ein klassischer Bug: <code>runde</code> soll Minuten auf das <strong>nächste</strong> Raster runden (<code>runde(38, 15)</code> → <code>45</code>), schneidet aber immer ab. Finde den Fehler (probier <code>p</code>!) und repariere die Methode.</div>"
           },
           {
             "t": "x",
@@ -9124,7 +11362,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "59. Code quality & debugging",
+        "title": "65. Code quality & debugging",
         "cells": [
           {
             "t": "h",
@@ -9136,7 +11374,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Related helpers: <code>pp</code> for pretty hashes, <code>obj.inspect</code> for the honest representation, <code>caller</code> shows who called the current method.</p><div class='task'><strong>Task:</strong> The cell below hides a classic bug: <code>round_to</code> should round minutes to the <strong>nearest</strong> grid (<code>round_to(38, 15)</code> → <code>45</code>), but it always truncates. Find the bug (try <code>p</code>!) and repair the method.</div>"
+            "html": "<p>Why <code>p</code> and not <code>puts</code>? Because <code>puts</code> doesn't show everything: <code>nil</code> and an empty string turn into empty lines, and an array falls apart into single lines. <code>p</code> shows the honest representation, the one from <code>inspect</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "values = [\"bacon\", nil, \"\", 42]\nputs values\np values"
+          },
+          {
+            "t": "h",
+            "html": "<p>So when a value looks strangely empty, ask <code>p</code> rather than <code>puts</code>. Related helpers: <code>pp</code> wraps nested data nicely, and <code>caller</code> shows who called the current method.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.rubocop.org/rubocop/' target='_blank'>RuboCop</a> · <a href='https://github.com/standardrb/standard' target='_blank'>Standard</a> · <a href='https://github.com/ruby/debug' target='_blank'>debug</a></div><div class='task'><strong>Task:</strong> The cell below hides a classic bug: <code>round_to</code> should round minutes to the <strong>nearest</strong> grid (<code>round_to(38, 15)</code> → <code>45</code>), but it always truncates. Find the bug (try <code>p</code>!) and repair the method.</div>"
           },
           {
             "t": "x",
@@ -9147,7 +11393,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "59. コードの品質とデバッグ",
+        "title": "65. コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -9159,7 +11405,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>ほかにも便利な道具があります。ハッシュを見やすく表示する<code>pp</code>、オブジェクトのありのままの姿を見せる<code>obj.inspect</code>、そして今のメソッドを誰が呼び出したかを教えてくれる<code>caller</code>です。</p><div class='task'><strong>課題：</strong>下のセルには、よくあるバグが隠れています。<code>round_to</code>は分を<strong>いちばん近い</strong>刻みに丸めるはずなのに（<code>round_to(38, 15)</code> → <code>45</code>）、いつも切り捨ててしまいます。バグを見つけて（<code>p</code>を使ってみましょう！）、メソッドを直してください。</div>"
+            "html": "<p>なぜ<code>puts</code>ではなく<code>p</code>なのでしょう？ <code>puts</code>はすべてを見せてくれるわけではないからです。<code>nil</code>や空の文字列は空行になってしまい、配列はばらばらの行に分かれてしまいます。<code>p</code>は、<code>inspect</code>が返すありのままの姿を見せてくれます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "values = [\"bacon\", nil, \"\", 42]\nputs values\np values"
+          },
+          {
+            "t": "h",
+            "html": "<p>値がなぜか空っぽに見えるときは、<code>puts</code>ではなく<code>p</code>に聞きましょう。ほかにも便利な道具があります。入れ子になったデータをきれいに折り返して表示する<code>pp</code>、そして今のメソッドを誰が呼び出したかを教えてくれる<code>caller</code>です。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.rubocop.org/rubocop/' target='_blank'>RuboCop（英語）</a>・<a href='https://github.com/standardrb/standard' target='_blank'>Standard（英語）</a>・<a href='https://github.com/ruby/debug' target='_blank'>debug（英語）</a></div><div class='task'><strong>課題：</strong>下のセルには、よくあるバグが隠れています。<code>round_to</code>は分を<strong>いちばん近い</strong>刻みに丸めるはずなのに（<code>round_to(38, 15)</code> → <code>45</code>）、いつも切り捨ててしまいます。バグを見つけて（<code>p</code>を使ってみましょう！）、メソッドを直してください。</div>"
           },
           {
             "t": "x",
@@ -9173,7 +11427,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-performance",
       "de": {
-        "title": "60. Performance & Nebenläufigkeit",
+        "title": "66. Performance & Nebenläufigkeit",
         "cells": [
           {
             "t": "h",
@@ -9209,7 +11463,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Aufgabe:</strong> <code>langsamer_bericht</code> unten durchsucht die Einträge <strong>einmal pro Projekt</strong> – bei vielen Projekten wird das quadratisch langsam. Schreibe <code>schneller_bericht</code>, der mit <strong>einem einzigen</strong> <code>group_by</code>-Durchlauf dasselbe Ergebnis liefert. Miss den Unterschied mit Benchmark!</div>"
+            "html": "<div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://github.com/ruby/benchmark' target='_blank'>Benchmark</a> · <a href='https://docs.ruby-lang.org/en/4.0/Thread.html' target='_blank'>Thread</a> · <a href='https://docs.ruby-lang.org/en/4.0/Fiber.html' target='_blank'>Fiber</a> · <a href='https://docs.ruby-lang.org/en/4.0/Ractor.html' target='_blank'>Ractor</a></div><div class='task'><strong>Aufgabe:</strong> <code>langsamer_bericht</code> unten durchsucht die Einträge <strong>einmal pro Projekt</strong> – bei vielen Projekten wird das quadratisch langsam. Schreibe <code>schneller_bericht</code>, der mit <strong>einem einzigen</strong> <code>group_by</code>-Durchlauf dasselbe Ergebnis liefert. Miss den Unterschied mit Benchmark!</div>"
           },
           {
             "t": "x",
@@ -9220,7 +11474,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "en": {
-        "title": "60. Performance & concurrency",
+        "title": "66. Performance & concurrency",
         "cells": [
           {
             "t": "h",
@@ -9256,7 +11510,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>Task:</strong> <code>slow_report</code> below scans the entries <strong>once per project</strong> – with many projects that turns quadratic. Write <code>fast_report</code> producing the same result with a <strong>single</strong> <code>group_by</code> pass. Measure the difference with Benchmark!</div>"
+            "html": "<div class='docs'><strong>Look it up:</strong> <a href='https://github.com/ruby/benchmark' target='_blank'>Benchmark</a> · <a href='https://docs.ruby-lang.org/en/4.0/Thread.html' target='_blank'>Thread</a> · <a href='https://docs.ruby-lang.org/en/4.0/Fiber.html' target='_blank'>Fiber</a> · <a href='https://docs.ruby-lang.org/en/4.0/Ractor.html' target='_blank'>Ractor</a></div><div class='task'><strong>Task:</strong> <code>slow_report</code> below scans the entries <strong>once per project</strong> – with many projects that turns quadratic. Write <code>fast_report</code> producing the same result with a <strong>single</strong> <code>group_by</code> pass. Measure the difference with Benchmark!</div>"
           },
           {
             "t": "x",
@@ -9267,7 +11521,7 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "ja": {
-        "title": "60. パフォーマンスと並行処理",
+        "title": "66. パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -9303,7 +11557,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='task'><strong>課題：</strong>下の<code>slow_report</code>は、エントリを<strong>プロジェクトごとに1回ずつ</strong>調べ直しています。プロジェクトが多いと、処理量は2乗のペースで増えてしまいます。<code>group_by</code>で<strong>1回だけ</strong>走査して同じ結果を返す<code>fast_report</code>を書きましょう。違いをBenchmarkで測ってみてください！</div>"
+            "html": "<div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/library/benchmark.html' target='_blank'>Benchmark</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Thread.html' target='_blank'>Thread</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Fiber.html' target='_blank'>Fiber</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Ractor.html' target='_blank'>Ractor</a></div><div class='task'><strong>課題：</strong>下の<code>slow_report</code>は、エントリを<strong>プロジェクトごとに1回ずつ</strong>調べ直しています。プロジェクトが多いと、処理量は2乗のペースで増えてしまいます。<code>group_by</code>で<strong>1回だけ</strong>走査して同じ結果を返す<code>fast_report</code>を書きましょう。違いをBenchmarkで測ってみてください！</div>"
           },
           {
             "t": "x",
@@ -9317,7 +11571,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "tl-capstone",
       "de": {
-        "title": "61. Finale: timelog im Web",
+        "title": "67. Finale: timelog im Web",
         "cells": [
           {
             "t": "h",
@@ -9329,7 +11583,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>VORLAGE.result(binding)</code> gibt der Vorlage Zugriff auf die lokalen Variablen der Route – so kommt <code>bericht</code> ins HTML. Genau so funktionieren die Views in Rails, Sinatra und Roda (dort mit Komfort-Helfern drumherum).</p><div class='task'><strong>Aufgabe:</strong> Die Projektnamen sind schon Links! Ergänze die Route <code>r.get \"projekt\", String do |name| … end</code>: Sie zeigt eine Detailseite mit dem Projektnamen als Überschrift und allen Stunden-Werten des Projekts (z.&nbsp;B. per <code>map</code>/<code>join</code>). Unbekannte Pfade sollen 404 bleiben. Damit ist timelog komplett – klick dich durch!</div>"
+            "html": "<p><code>VORLAGE.result(binding)</code> gibt der Vorlage Zugriff auf die lokalen Variablen der Route – so kommt <code>bericht</code> ins HTML. Genau so funktionieren die Views in Rails, Sinatra und Roda (dort mit Komfort-Helfern drumherum).</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/ERB.html' target='_blank'>ERB</a> · <a href='https://roda.jeremyevans.net/documentation.html' target='_blank'>Roda-Dokumentation</a></div><div class='task'><strong>Aufgabe:</strong> Die Projektnamen sind schon Links! Ergänze die Route <code>r.get \"projekt\", String do |name| … end</code>: Sie zeigt eine Detailseite mit dem Projektnamen als Überschrift und allen Stunden-Werten des Projekts (z.&nbsp;B. per <code>map</code>/<code>join</code>). Unbekannte Pfade sollen 404 bleiben. Damit ist timelog komplett – klick dich durch!</div>"
           },
           {
             "t": "x",
@@ -9339,12 +11593,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 55 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 Geschafft!</h2><p>Du hast timelog von der ersten Collection bis zur Weboberfläche gebaut – mit Tests, Fehlerbehandlung, eigener DSL und Metaprogrammierung. Das ist kein Spielzeug-Wissen: Genau diese Bausteine stecken in jedem echten Ruby-Projekt.</p><p><strong>Wie weiter?</strong> Übe mit den <a href='https://koans.idogawa.com'>Ruby Koans</a>, bau timelog auf deinem eigenen Rechner als richtige Gem nach (Lektion 61 zeigt die Struktur) – und wenn du tiefer graben willst: Die Bücher <em>Programming Ruby</em> („Pickaxe“) und <em>Polished Ruby Programming</em> begleiten dich vom Handwerk zur Meisterschaft. Und was du unterwegs vergisst, steht auf dem <button type='button' class='cheat-link'>📋 Spickzettel</button> und in der Ruby-Doku (Lektion 17). CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "en": {
-        "title": "61. Finale: timelog on the web",
+        "title": "67. Finale: timelog on the web",
         "cells": [
           {
             "t": "h",
@@ -9356,7 +11610,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>TEMPLATE.result(binding)</code> gives the template access to the route's local variables – that's how <code>report</code> reaches the HTML. Views in Rails, Sinatra and Roda work exactly like this (with comfort helpers wrapped around).</p><div class='task'><strong>Task:</strong> The project names are already links! Add the route <code>r.get \"project\", String do |name| … end</code>: it shows a detail page with the project name as heading and all the project's hour values (e.g. via <code>map</code>/<code>join</code>). Unknown paths stay 404. With that, timelog is complete – click around!</div>"
+            "html": "<p><code>TEMPLATE.result(binding)</code> gives the template access to the route's local variables – that's how <code>report</code> reaches the HTML. Views in Rails, Sinatra and Roda work exactly like this (with comfort helpers wrapped around).</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/ERB.html' target='_blank'>ERB</a> · <a href='https://roda.jeremyevans.net/documentation.html' target='_blank'>Roda documentation</a></div><div class='task'><strong>Task:</strong> The project names are already links! Add the route <code>r.get \"project\", String do |name| … end</code>: it shows a detail page with the project name as heading and all the project's hour values (e.g. via <code>map</code>/<code>join</code>). Unknown paths stay 404. With that, timelog is complete – click around!</div>"
           },
           {
             "t": "x",
@@ -9366,12 +11620,12 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 55 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 You made it!</h2><p>You built timelog from the first collection to a web interface – with tests, error handling, your own DSL and metaprogramming. That's not toy knowledge: exactly these building blocks sit inside every real Ruby project.</p><p><strong>Where next?</strong> Practice with the <a href='https://koans.idogawa.com'>Ruby Koans</a>, rebuild timelog on your own machine as a proper gem (lesson 61 shows the structure) – and if you want to dig deeper: the books <em>Programming Ruby</em> (“the Pickaxe”) and <em>Polished Ruby Programming</em> take you from craft to mastery. And whatever you forget along the way is on the <button type='button' class='cheat-link'>📋 Cheat sheet</button> and in the Ruby docs (lesson 17). CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       },
       "ja": {
-        "title": "61. フィナーレ：Webで動くtimelog",
+        "title": "67. フィナーレ：Webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -9383,7 +11637,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>TEMPLATE.result(binding)</code>は、テンプレートからルートのローカル変数を使えるようにします。こうして<code>report</code>がHTMLまで届くのです。Rails、Sinatra、Rodaのビューも、まさにこの仕組みで動いています（実際には、便利なヘルパーがいろいろ用意されていますが）。</p><div class='task'><strong>課題：</strong>プロジェクト名はもうリンクになっています！ルート<code>r.get \"project\", String do |name| … end</code>を追加しましょう。プロジェクト名を見出しにして、そのプロジェクトの時間をすべて並べた詳細ページを表示します（たとえば<code>map</code>/<code>join</code>を使って）。知らないパスは404のままにしておきます。これでtimelogは完成です。あちこちクリックしてみてください！</div>"
+            "html": "<p><code>TEMPLATE.result(binding)</code>は、テンプレートからルートのローカル変数を使えるようにします。こうして<code>report</code>がHTMLまで届くのです。Rails、Sinatra、Rodaのビューも、まさにこの仕組みで動いています（実際には、便利なヘルパーがいろいろ用意されていますが）。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/ERB.html' target='_blank'>ERB</a>・<a href='https://roda.jeremyevans.net/documentation.html' target='_blank'>Rodaのドキュメント（英語）</a></div><div class='task'><strong>課題：</strong>プロジェクト名はもうリンクになっています！ルート<code>r.get \"project\", String do |name| … end</code>を追加しましょう。プロジェクト名を見出しにして、そのプロジェクトの時間をすべて並べた詳細ページを表示します（たとえば<code>map</code>/<code>join</code>を使って）。知らないパスは404のままにしておきます。これでtimelogは完成です。あちこちクリックしてみてください！</div>"
           },
           {
             "t": "x",
@@ -9393,10 +11647,1677 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン55で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。CHUNKY BACON! 🦊🥓</p>"
+            "html": "<h2>🎓 完走、おめでとうございます！</h2><p>最初のコレクションからWebインターフェースまで、timelogを自分の手で作り上げました。テストも、エラー処理も、自分だけのDSLも、メタプログラミングも使いこなしました。これはおもちゃの知識ではありません。本物のRubyプロジェクトの中には、どれもまさにこの部品が詰まっています。</p><p><strong>次はどこへ？</strong><a href='https://koans.idogawa.com'>Ruby Koans</a>で腕を磨いたり、自分のコンピューターでtimelogをちゃんとしたgemとして作り直したり（構成はレッスン61で紹介しました）してみてください。もっと深く学びたくなったら、『<em>Programming Ruby</em>』（通称「Pickaxe（つるはし）本」）や『<em>Polished Ruby Programming</em>』といった本が、職人の技から達人の域へと導いてくれるでしょう。ここまで一緒に歩いてくれて、本当にありがとうございました。あなたのRubyの旅は、ここからが本番です。楽しいコードを、たくさん書いてくださいね。途中で忘れたことは、<button type='button' class='cheat-link'>📋 チートシート</button>とRubyのドキュメント（レッスン17）で確かめられます。CHUNKY BACON! 🦊🥓</p>"
           }
         ]
       }
+    }
+  ],
+  "cheatsheet": [
+    {
+      "id": "basics",
+      "lessons": [
+        "hallo",
+        "variablen"
+      ],
+      "title": {
+        "de": "Grundlagen",
+        "en": "Basics",
+        "ja": "基本"
+      },
+      "docs": [
+        {
+          "de": "puts",
+          "en": "puts",
+          "ja": "puts",
+          "url": "https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-puts",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/method/Kernel/m/puts.html"
+        },
+        {
+          "de": "p",
+          "en": "p",
+          "ja": "p",
+          "url": "https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-p",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/method/Kernel/m/p.html"
+        },
+        {
+          "de": "Zuweisung",
+          "en": "Assignment",
+          "ja": "代入",
+          "url": "https://docs.ruby-lang.org/en/4.0/syntax/assignment_rdoc.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/doc/spec=2foperator.html#assign"
+        }
+      ],
+      "rows": [
+        {
+          "c": "puts \"Hallo!\"",
+          "de": "Text ausgeben, mit Zeilenumbruch",
+          "en": "print text, with a line break",
+          "ja": "テキストを改行つきで出力"
+        },
+        {
+          "c": "p value",
+          "de": "einen Wert so zeigen, wie Ruby ihn sieht – mit Anführungszeichen, Klammern, <code>nil</code>",
+          "en": "show a value the way Ruby sees it – with quotes, brackets, <code>nil</code>",
+          "ja": "値をRubyから見た形で表示（引用符、かっこ、<code>nil</code>も）"
+        },
+        {
+          "c": "# a comment",
+          "de": "Kommentar: Ruby ignoriert den Rest der Zeile",
+          "en": "comment: Ruby ignores the rest of the line",
+          "ja": "コメント：行の残りをRubyは無視する"
+        },
+        {
+          "c": "x = 5",
+          "de": "Variable anlegen oder ändern",
+          "en": "create or change a variable",
+          "ja": "変数を作る・変える"
+        },
+        {
+          "c": "x += 1",
+          "de": "Kurzform für <code>x = x + 1</code> (auch <code>-=</code>, <code>*=</code>, <code>/=</code>)",
+          "en": "short for <code>x = x + 1</code> (also <code>-=</code>, <code>*=</code>, <code>/=</code>)",
+          "ja": "<code>x = x + 1</code>の短縮形（<code>-=</code>、<code>*=</code>、<code>/=</code>も）"
+        },
+        {
+          "c": "a, b = 1, 2",
+          "de": "zwei Variablen auf einmal",
+          "en": "two variables at once",
+          "ja": "2つの変数に一度に代入"
+        },
+        {
+          "c": "MAX = 10",
+          "de": "Konstante: Name mit Grossbuchstaben am Anfang",
+          "en": "constant: a name starting with a capital letter",
+          "ja": "定数：大文字で始まる名前"
+        },
+        {
+          "c": "x.class",
+          "de": "die Klasse eines Werts: <code>Integer</code>, <code>String</code> …",
+          "en": "the class of a value: <code>Integer</code>, <code>String</code> …",
+          "ja": "値のクラス：<code>Integer</code>、<code>String</code>など"
+        },
+        {
+          "c": "nil",
+          "de": "„nichts“ – zum Beispiel ein Wert, den es nicht gibt",
+          "en": "“nothing” – a value that isn't there, for example",
+          "ja": "「何もない」。たとえば存在しない値"
+        }
+      ]
+    },
+    {
+      "id": "numbers",
+      "lessons": [
+        "rechnen",
+        "bigdecimal"
+      ],
+      "title": {
+        "de": "Zahlen",
+        "en": "Numbers",
+        "ja": "数"
+      },
+      "docs": [
+        {
+          "de": "Integer",
+          "en": "Integer",
+          "ja": "Integer",
+          "url": "https://docs.ruby-lang.org/en/4.0/Integer.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/Integer.html"
+        },
+        {
+          "de": "Float",
+          "en": "Float",
+          "ja": "Float",
+          "url": "https://docs.ruby-lang.org/en/4.0/Float.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/Float.html"
+        },
+        {
+          "de": "BigDecimal",
+          "en": "BigDecimal",
+          "ja": "BigDecimal",
+          "url": "https://docs.ruby-lang.org/en/4.0/BigDecimal.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/BigDecimal.html"
+        }
+      ],
+      "rows": [
+        {
+          "c": "+  -  *  /",
+          "de": "rechnen – Punkt vor Strich, Klammern zuerst",
+          "en": "arithmetic – times and divide first, parentheses before all",
+          "ja": "四則演算。かけ算・わり算が先、かっこが最優先"
+        },
+        {
+          "c": "7 / 2",
+          "de": "→ <code>3</code>: zwei ganze Zahlen teilen ganzzahlig",
+          "en": "→ <code>3</code>: two whole numbers divide as whole numbers",
+          "ja": "→ <code>3</code>：整数どうしのわり算は整数"
+        },
+        {
+          "c": "7 / 2.0",
+          "de": "→ <code>3.5</code>: mit einem Float genau (oder <code>7.fdiv(2)</code>)",
+          "en": "→ <code>3.5</code>: exact with a Float (or <code>7.fdiv(2)</code>)",
+          "ja": "→ <code>3.5</code>：Floatがあれば正確（<code>7.fdiv(2)</code>でも）"
+        },
+        {
+          "c": "17 % 5",
+          "de": "→ <code>2</code>: der Rest einer Division",
+          "en": "→ <code>2</code>: the remainder of a division",
+          "ja": "→ <code>2</code>：わり算の余り"
+        },
+        {
+          "c": "2 ** 10",
+          "de": "→ <code>1024</code>: hoch",
+          "en": "→ <code>1024</code>: to the power of",
+          "ja": "→ <code>1024</code>：べき乗"
+        },
+        {
+          "c": "3.14159.round(2)",
+          "de": "→ <code>3.14</code>: runden (ohne Argument: auf eine ganze Zahl)",
+          "en": "→ <code>3.14</code>: round (without an argument: to a whole number)",
+          "ja": "→ <code>3.14</code>：四捨五入（引数なしなら整数に）"
+        },
+        {
+          "c": "\"42\".to_i",
+          "de": "→ <code>42</code>: Text zu ganzer Zahl (<code>to_f</code>: zu Kommazahl)",
+          "en": "→ <code>42</code>: text to a whole number (<code>to_f</code>: to a decimal)",
+          "ja": "→ <code>42</code>：文字列を整数に（<code>to_f</code>なら小数に）"
+        },
+        {
+          "c": "42.to_s",
+          "de": "→ <code>\"42\"</code>: Zahl zu Text",
+          "en": "→ <code>\"42\"</code>: number to text",
+          "ja": "→ <code>\"42\"</code>：数を文字列に"
+        },
+        {
+          "c": "10.even?",
+          "de": "gerade? (auch <code>odd?</code>, <code>zero?</code>, <code>positive?</code>)",
+          "en": "even? (also <code>odd?</code>, <code>zero?</code>, <code>positive?</code>)",
+          "ja": "偶数？（<code>odd?</code>、<code>zero?</code>、<code>positive?</code>も）"
+        },
+        {
+          "c": "rand(1..6)",
+          "de": "eine Zufallszahl von 1 bis 6",
+          "en": "a random number from 1 to 6",
+          "ja": "1から6までの乱数"
+        },
+        {
+          "c": "1_000_000",
+          "de": "Unterstriche machen grosse Zahlen lesbar",
+          "en": "underscores make big numbers readable",
+          "ja": "アンダースコアで大きな数を読みやすく"
+        },
+        {
+          "c": "1/3r",
+          "de": "ein exakter Bruch (<code>Rational</code>)",
+          "en": "an exact fraction (<code>Rational</code>)",
+          "ja": "正確な分数（<code>Rational</code>）"
+        },
+        {
+          "c": "BigDecimal(\"0.1\")",
+          "de": "exakte Dezimalzahl – für Geld (<code>require \"bigdecimal\"</code>)",
+          "en": "an exact decimal – for money (<code>require \"bigdecimal\"</code>)",
+          "ja": "正確な10進小数。お金に（<code>require \"bigdecimal\"</code>）"
+        }
+      ]
+    },
+    {
+      "id": "strings",
+      "lessons": [
+        "strings"
+      ],
+      "title": {
+        "de": "Strings (Text)",
+        "en": "Strings (text)",
+        "ja": "文字列"
+      },
+      "docs": [
+        {
+          "de": "String",
+          "en": "String",
+          "ja": "String",
+          "url": "https://docs.ruby-lang.org/en/4.0/String.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/String.html"
+        },
+        {
+          "de": "Literale",
+          "en": "Literals",
+          "ja": "リテラル",
+          "url": "https://docs.ruby-lang.org/en/4.0/syntax/literals_rdoc.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/doc/spec=2fliteral.html"
+        },
+        {
+          "de": "format",
+          "en": "format",
+          "ja": "format",
+          "url": "https://docs.ruby-lang.org/en/4.0/language/format_specifications_rdoc.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/method/Kernel/m/format.html"
+        }
+      ],
+      "rows": [
+        {
+          "c": "\"Hi, #{name}!\"",
+          "de": "Interpolation: Ruby setzt den Wert ein – nur in doppelten Anführungszeichen",
+          "en": "interpolation: Ruby inserts the value – double quotes only",
+          "ja": "式展開：値を埋め込む（ダブルクォートのみ）"
+        },
+        {
+          "c": "'Hi, #{name}!'",
+          "de": "einfache Anführungszeichen: der Text bleibt, wie er ist",
+          "en": "single quotes: the text stays exactly as written",
+          "ja": "シングルクォート：書いたとおりのまま"
+        },
+        {
+          "c": "\"a\" + \"b\"",
+          "de": "zusammenfügen → <code>\"ab\"</code> (<code>\"ab\" * 3</code> wiederholt)",
+          "en": "join → <code>\"ab\"</code> (<code>\"ab\" * 3</code> repeats)",
+          "ja": "連結 → <code>\"ab\"</code>（<code>\"ab\" * 3</code>でくり返し）"
+        },
+        {
+          "c": "\"line 1\\nline 2\"",
+          "de": "<code>\\n</code> ist ein Zeilenumbruch, <code>\\t</code> ein Tabulator",
+          "en": "<code>\\n</code> is a line break, <code>\\t</code> a tab",
+          "ja": "<code>\\n</code>は改行、<code>\\t</code>はタブ"
+        },
+        {
+          "c": "s.length",
+          "de": "Anzahl Zeichen",
+          "en": "number of characters",
+          "ja": "文字数"
+        },
+        {
+          "c": "s.upcase",
+          "de": "GROSS (auch <code>downcase</code>, <code>capitalize</code>, <code>swapcase</code>)",
+          "en": "UPPER CASE (also <code>downcase</code>, <code>capitalize</code>, <code>swapcase</code>)",
+          "ja": "大文字に（<code>downcase</code>、<code>capitalize</code>、<code>swapcase</code>も）"
+        },
+        {
+          "c": "s.strip",
+          "de": "Leerzeichen am Anfang und Ende entfernen",
+          "en": "remove spaces at the start and end",
+          "ja": "前後の空白を取りのぞく"
+        },
+        {
+          "c": "s.include?(\"ab\")",
+          "de": "kommt das vor? (auch <code>start_with?</code>, <code>end_with?</code>)",
+          "en": "does it occur? (also <code>start_with?</code>, <code>end_with?</code>)",
+          "ja": "含む？（<code>start_with?</code>、<code>end_with?</code>も）"
+        },
+        {
+          "c": "s.sub(\"a\", \"b\")",
+          "de": "das erste Vorkommen ersetzen (<code>gsub</code>: alle)",
+          "en": "replace the first occurrence (<code>gsub</code>: all of them)",
+          "ja": "最初の1つを置き換え（<code>gsub</code>はすべて）"
+        },
+        {
+          "c": "s.split(\",\")",
+          "de": "zerlegen → Array (<code>split</code> ohne Argument: an Leerzeichen)",
+          "en": "cut → array (<code>split</code> without an argument: at spaces)",
+          "ja": "分割して配列に（引数なしなら空白で）"
+        },
+        {
+          "c": "s[0]   s[-1]   s[0, 3]",
+          "de": "erstes Zeichen, letztes, drei ab Stelle 0",
+          "en": "first character, last one, three from position 0",
+          "ja": "最初の文字、最後の文字、0番目から3文字"
+        },
+        {
+          "c": "s.reverse",
+          "de": "rückwärts",
+          "en": "backwards",
+          "ja": "逆順"
+        },
+        {
+          "c": "s.chars",
+          "de": "→ Array der einzelnen Zeichen",
+          "en": "→ array of the single characters",
+          "ja": "→ 1文字ずつの配列"
+        },
+        {
+          "c": "s.center(20, \"*\")",
+          "de": "zentrieren (auch <code>ljust</code>, <code>rjust</code>)",
+          "en": "center (also <code>ljust</code>, <code>rjust</code>)",
+          "ja": "中央寄せ（<code>ljust</code>、<code>rjust</code>も）"
+        },
+        {
+          "c": "format(\"%.2f\", 3.14159)",
+          "de": "→ <code>\"3.14\"</code>: Zahlen formatieren",
+          "en": "→ <code>\"3.14\"</code>: formatting numbers",
+          "ja": "→ <code>\"3.14\"</code>：数を整形"
+        },
+        {
+          "c": "text = <<~TEXT\n  several\n  lines\nTEXT",
+          "de": "Heredoc: Text über mehrere Zeilen",
+          "en": "heredoc: text over several lines",
+          "ja": "ヒアドキュメント：複数行の文字列"
+        }
+      ]
+    },
+    {
+      "id": "conditions",
+      "lessons": [
+        "wenn"
+      ],
+      "title": {
+        "de": "Vergleiche & Entscheidungen",
+        "en": "Comparisons & decisions",
+        "ja": "比較と条件分岐"
+      },
+      "docs": [
+        {
+          "de": "if, unless, case",
+          "en": "if, unless, case",
+          "ja": "if、unless、case",
+          "url": "https://docs.ruby-lang.org/en/4.0/syntax/control_expressions_rdoc.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/doc/spec=2fcontrol.html"
+        },
+        {
+          "de": "Operatoren",
+          "en": "Operators",
+          "ja": "演算子",
+          "url": "https://docs.ruby-lang.org/en/4.0/syntax/operators_rdoc.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/doc/spec=2foperator.html"
+        }
+      ],
+      "rows": [
+        {
+          "c": "==   !=   <   >   <=   >=",
+          "de": "gleich, ungleich, kleiner, grösser, kleiner/grösser oder gleich",
+          "en": "equal, not equal, less, greater, less/greater or equal",
+          "ja": "等しい、等しくない、小さい、大きい、以下、以上"
+        },
+        {
+          "c": "&&   ||   !",
+          "de": "und, oder, nicht",
+          "en": "and, or, not",
+          "ja": "かつ、または、否定"
+        },
+        {
+          "c": "if x > 10\n  \"big\"\nelsif x > 5\n  \"medium\"\nelse\n  \"small\"\nend",
+          "de": "Entscheidung mit mehreren Fällen – die erste passende Bedingung gewinnt",
+          "en": "a decision with several cases – the first condition that holds wins",
+          "ja": "複数の場合分け。最初に当てはまった条件が選ばれる"
+        },
+        {
+          "c": "puts \"hi\" if x > 5",
+          "de": "<code>if</code> hinter der Zeile (auch mit <code>unless</code>)",
+          "en": "<code>if</code> after the line (also with <code>unless</code>)",
+          "ja": "行の後ろの<code>if</code>（<code>unless</code>も）"
+        },
+        {
+          "c": "x > 5 ? \"big\" : \"small\"",
+          "de": "<code>if</code>/<code>else</code> in einer Zeile",
+          "en": "<code>if</code>/<code>else</code> in one line",
+          "ja": "<code>if</code>/<code>else</code>を1行で"
+        },
+        {
+          "c": "case points\nwhen 90..100 then \"top\"\nwhen 50..89 then \"pass\"\nelse \"again\"\nend",
+          "de": "einen Wert mit vielen Möglichkeiten vergleichen – auch mit Bereichen und Klassen",
+          "en": "compare one value with many possibilities – ranges and classes too",
+          "ja": "1つの値をたくさんの候補と比べる。範囲やクラスも使える"
+        },
+        {
+          "c": "nil   false",
+          "de": "das einzig Falsche – <code>0</code> und <code>\"\"</code> sind wahr!",
+          "en": "the only false things – <code>0</code> and <code>\"\"</code> are true!",
+          "ja": "偽になるのはこの2つだけ。<code>0</code>や<code>\"\"</code>は真！"
+        },
+        {
+          "c": "x.nil?",
+          "de": "ist es <code>nil</code>? (auch <code>empty?</code> für leere Strings, Arrays, Hashes)",
+          "en": "is it <code>nil</code>? (also <code>empty?</code> for empty strings, arrays, hashes)",
+          "ja": "<code>nil</code>か？（空の文字列・配列・ハッシュには<code>empty?</code>）"
+        },
+        {
+          "c": "x ||= 5",
+          "de": "setzt <code>x</code> nur, wenn es noch <code>nil</code> oder <code>false</code> ist",
+          "en": "sets <code>x</code> only if it's still <code>nil</code> or <code>false</code>",
+          "ja": "<code>x</code>が<code>nil</code>か<code>false</code>のときだけ代入"
+        },
+        {
+          "c": "fox&.name",
+          "de": "ruft <code>name</code> nur auf, wenn <code>fox</code> nicht <code>nil</code> ist",
+          "en": "calls <code>name</code> only if <code>fox</code> isn't <code>nil</code>",
+          "ja": "<code>fox</code>が<code>nil</code>でないときだけ<code>name</code>を呼ぶ"
+        },
+        {
+          "c": "a <=> b",
+          "de": "der Raumschiff-Operator: <code>-1</code>, <code>0</code> oder <code>1</code> – kleiner, gleich, grösser",
+          "en": "the spaceship operator: <code>-1</code>, <code>0</code> or <code>1</code> – smaller, equal, greater",
+          "ja": "宇宙船演算子：<code>-1</code>、<code>0</code>、<code>1</code>（小さい・等しい・大きい）"
+        }
+      ]
+    },
+    {
+      "id": "loops",
+      "lessons": [
+        "schleifen"
+      ],
+      "title": {
+        "de": "Schleifen",
+        "en": "Loops",
+        "ja": "ループ"
+      },
+      "docs": [
+        {
+          "de": "Integer#times",
+          "en": "Integer#times",
+          "ja": "Integer#times",
+          "url": "https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-times",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/method/Integer/i/times.html"
+        },
+        {
+          "de": "Range",
+          "en": "Range",
+          "ja": "Range",
+          "url": "https://docs.ruby-lang.org/en/4.0/Range.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/Range.html"
+        },
+        {
+          "de": "while, loop",
+          "en": "while, loop",
+          "ja": "while、loop",
+          "url": "https://docs.ruby-lang.org/en/4.0/syntax/control_expressions_rdoc.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/doc/spec=2fcontrol.html"
+        }
+      ],
+      "rows": [
+        {
+          "c": "3.times { |i| puts i }",
+          "de": "dreimal; <code>i</code> ist 0, 1, 2",
+          "en": "three times; <code>i</code> is 0, 1, 2",
+          "ja": "3回。<code>i</code>は0、1、2"
+        },
+        {
+          "c": "3.times do |i|\n  puts i\nend",
+          "de": "dasselbe als <code>do</code> … <code>end</code> – für Blöcke über mehrere Zeilen",
+          "en": "the same with <code>do</code> … <code>end</code> – for blocks over several lines",
+          "ja": "同じことを<code>do</code> … <code>end</code>で。複数行のブロック向き"
+        },
+        {
+          "c": "(1..5).each { |n| puts n }",
+          "de": "1 bis 5 (<code>1...5</code>: ohne die 5)",
+          "en": "1 to 5 (<code>1...5</code>: without the 5)",
+          "ja": "1から5まで（<code>1...5</code>なら5を含まない）"
+        },
+        {
+          "c": "1.upto(3) { |n| puts n }",
+          "de": "hochzählen (auch <code>3.downto(1)</code>)",
+          "en": "count up (also <code>3.downto(1)</code>)",
+          "ja": "数え上げる（<code>3.downto(1)</code>も）"
+        },
+        {
+          "c": "0.step(10, 5) { |n| puts n }",
+          "de": "in Schritten: 0, 5, 10",
+          "en": "in steps: 0, 5, 10",
+          "ja": "ステップごと：0、5、10"
+        },
+        {
+          "c": "while x < 10\n  x += 3\nend",
+          "de": "wiederholen, solange die Bedingung stimmt (auch <code>until</code>)",
+          "en": "repeat as long as the condition holds (also <code>until</code>)",
+          "ja": "条件が成り立つあいだくり返す（<code>until</code>も）"
+        },
+        {
+          "c": "loop do\n  break if done?\nend",
+          "de": "endlos – bis <code>break</code>",
+          "en": "endless – until <code>break</code>",
+          "ja": "<code>break</code>するまで無限にくり返す"
+        },
+        {
+          "c": "next   break",
+          "de": "zur nächsten Runde springen / die Schleife verlassen",
+          "en": "jump to the next round / leave the loop",
+          "ja": "次の周へ進む／ループを抜ける"
+        }
+      ]
+    },
+    {
+      "id": "arrays",
+      "lessons": [
+        "arrays"
+      ],
+      "title": {
+        "de": "Arrays (Listen)",
+        "en": "Arrays (lists)",
+        "ja": "配列"
+      },
+      "docs": [
+        {
+          "de": "Array",
+          "en": "Array",
+          "ja": "Array",
+          "url": "https://docs.ruby-lang.org/en/4.0/Array.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/Array.html"
+        }
+      ],
+      "rows": [
+        {
+          "c": "a = [1, 2, 3]",
+          "de": "ein Array",
+          "en": "an array",
+          "ja": "配列"
+        },
+        {
+          "c": "%w[fox cat owl]",
+          "de": "→ <code>[\"fox\", \"cat\", \"owl\"]</code>: Array aus Wörtern",
+          "en": "→ <code>[\"fox\", \"cat\", \"owl\"]</code>: an array of words",
+          "ja": "→ <code>[\"fox\", \"cat\", \"owl\"]</code>：単語の配列"
+        },
+        {
+          "c": "a[0]   a[-1]   a.first(2)",
+          "de": "erstes Element, letztes, die ersten zwei (gezählt ab 0)",
+          "en": "first element, last one, the first two (counting from 0)",
+          "ja": "最初の要素、最後の要素、最初の2つ（0から数える）"
+        },
+        {
+          "c": "a << 4",
+          "de": "hinten anhängen (auch <code>push</code>; <code>unshift</code>: vorne)",
+          "en": "append at the end (also <code>push</code>; <code>unshift</code>: at the front)",
+          "ja": "末尾に追加（<code>push</code>も。先頭は<code>unshift</code>）"
+        },
+        {
+          "c": "a.pop   a.shift",
+          "de": "letztes / erstes Element herausnehmen",
+          "en": "take out the last / first element",
+          "ja": "最後／最初の要素を取り出す"
+        },
+        {
+          "c": "a.delete(2)",
+          "de": "alle Elemente mit diesem Wert entfernen",
+          "en": "remove all elements with this value",
+          "ja": "その値の要素をすべて削除"
+        },
+        {
+          "c": "a.length",
+          "de": "Anzahl Elemente (auch <code>size</code>, <code>count</code>)",
+          "en": "number of elements (also <code>size</code>, <code>count</code>)",
+          "ja": "要素の数（<code>size</code>、<code>count</code>も）"
+        },
+        {
+          "c": "a.include?(2)",
+          "de": "enthalten?",
+          "en": "in there?",
+          "ja": "含まれている？"
+        },
+        {
+          "c": "a.sort   a.reverse   a.uniq",
+          "de": "sortiert, umgedreht, ohne Doppelte – neue Arrays (mit <code>!</code>: ändert <code>a</code> selbst)",
+          "en": "sorted, reversed, without duplicates – new arrays (with <code>!</code>: changes <code>a</code> itself)",
+          "ja": "並べかえ、逆順、重複なし。新しい配列を返す（<code>!</code>つきは<code>a</code>そのものを変更）"
+        },
+        {
+          "c": "a.sum   a.min   a.max",
+          "de": "Summe, kleinstes, grösstes",
+          "en": "sum, smallest, largest",
+          "ja": "合計、最小、最大"
+        },
+        {
+          "c": "a.join(\", \")",
+          "de": "zu einem String verbinden",
+          "en": "join into one string",
+          "ja": "つなげて1つの文字列に"
+        },
+        {
+          "c": "a.each_with_index { |x, i| }",
+          "de": "durchlaufen, mit Position",
+          "en": "walk through, with the position",
+          "ja": "位置つきでたどる"
+        },
+        {
+          "c": "[[1, 2], [3]].flatten",
+          "de": "→ <code>[1, 2, 3]</code>: verschachtelte Arrays glätten",
+          "en": "→ <code>[1, 2, 3]</code>: flatten nested arrays",
+          "ja": "→ <code>[1, 2, 3]</code>：入れ子を平らに"
+        },
+        {
+          "c": "[1, 2].zip([3, 4])",
+          "de": "→ <code>[[1, 3], [2, 4]]</code>: paarweise zusammenfügen",
+          "en": "→ <code>[[1, 3], [2, 4]]</code>: pair up",
+          "ja": "→ <code>[[1, 3], [2, 4]]</code>：ペアにする"
+        }
+      ]
+    },
+    {
+      "id": "enumerable",
+      "lessons": [
+        "iteratoren",
+        "tl-collections"
+      ],
+      "title": {
+        "de": "map, select & Co.",
+        "en": "map, select & co.",
+        "ja": "map、selectとその仲間"
+      },
+      "docs": [
+        {
+          "de": "Enumerable",
+          "en": "Enumerable",
+          "ja": "Enumerable",
+          "url": "https://docs.ruby-lang.org/en/4.0/Enumerable.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/Enumerable.html"
+        }
+      ],
+      "rows": [
+        {
+          "c": "a.map { |x| x * 2 }",
+          "de": "jedes Element umwandeln → neues Array",
+          "en": "transform every element → a new array",
+          "ja": "要素をすべて変換して新しい配列に"
+        },
+        {
+          "c": "a.select { |x| x > 2 }",
+          "de": "behalten, was passt (auch <code>filter</code>; <code>reject</code>: das Gegenteil)",
+          "en": "keep what matches (also <code>filter</code>; <code>reject</code>: the opposite)",
+          "ja": "条件に合うものを残す（<code>filter</code>も。反対は<code>reject</code>）"
+        },
+        {
+          "c": "a.find { |x| x > 2 }",
+          "de": "das erste passende Element",
+          "en": "the first matching element",
+          "ja": "条件に合う最初の要素"
+        },
+        {
+          "c": "a.count { |x| x.even? }",
+          "de": "zählen, wie viele passen",
+          "en": "count how many match",
+          "ja": "条件に合う数を数える"
+        },
+        {
+          "c": "a.sum { |x| x.price }",
+          "de": "zusammenzählen, was der Block liefert",
+          "en": "add up what the block returns",
+          "ja": "ブロックの値を合計"
+        },
+        {
+          "c": "a.sort_by { |w| w.length }",
+          "de": "sortieren nach (auch <code>min_by</code>, <code>max_by</code>)",
+          "en": "sort by (also <code>min_by</code>, <code>max_by</code>)",
+          "ja": "〜で並べかえ（<code>min_by</code>、<code>max_by</code>も）"
+        },
+        {
+          "c": "a.any? { |x| x > 2 }",
+          "de": "mindestens eins? (<code>all?</code>: alle? <code>none?</code>: keins?)",
+          "en": "at least one? (<code>all?</code>: every one? <code>none?</code>: none?)",
+          "ja": "1つでも？（<code>all?</code>は全部？、<code>none?</code>は1つもない？）"
+        },
+        {
+          "c": "a.group_by { |w| w.length }",
+          "de": "in Gruppen sortieren → Hash",
+          "en": "sort into groups → a hash",
+          "ja": "グループに分けてハッシュに"
+        },
+        {
+          "c": "a.tally",
+          "de": "Vorkommen zählen → Hash: <code>{\"a\" =&gt; 2, \"b\" =&gt; 1}</code>",
+          "en": "count occurrences → a hash: <code>{\"a\" =&gt; 2, \"b\" =&gt; 1}</code>",
+          "ja": "出現回数を数えてハッシュに：<code>{\"a\" =&gt; 2, \"b\" =&gt; 1}</code>"
+        },
+        {
+          "c": "a.partition(&:even?)",
+          "de": "→ <code>[gerade, ungerade]</code>: in zwei Arrays teilen",
+          "en": "→ <code>[even, odd]</code>: split into two arrays",
+          "ja": "→ <code>[偶数, 奇数]</code>：2つの配列に分ける"
+        },
+        {
+          "c": "a.each_slice(2).to_a",
+          "de": "in Stücke zu 2 schneiden",
+          "en": "cut into pieces of 2",
+          "ja": "2つずつに切り分ける"
+        },
+        {
+          "c": "a.reduce(:+)",
+          "de": "alles zu einem Wert zusammenfassen (auch <code>inject</code>)",
+          "en": "combine everything into one value (also <code>inject</code>)",
+          "ja": "すべてを1つの値にまとめる（<code>inject</code>も）"
+        },
+        {
+          "c": "a.map(&:upcase)",
+          "de": "Kurzform für <code>map { |x| x.upcase }</code>",
+          "en": "short for <code>map { |x| x.upcase }</code>",
+          "ja": "<code>map { |x| x.upcase }</code>の短縮形"
+        },
+        {
+          "c": "a.select { |x| x.even? }.map { |x| x * 10 }.sum",
+          "de": "verketten – von links nach rechts lesen",
+          "en": "chaining – read from left to right",
+          "ja": "つなげて呼ぶ。左から右へ読む"
+        }
+      ]
+    },
+    {
+      "id": "hashes",
+      "lessons": [
+        "hashes"
+      ],
+      "title": {
+        "de": "Hashes",
+        "en": "Hashes",
+        "ja": "ハッシュ"
+      },
+      "docs": [
+        {
+          "de": "Hash",
+          "en": "Hash",
+          "ja": "Hash",
+          "url": "https://docs.ruby-lang.org/en/4.0/Hash.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/Hash.html"
+        },
+        {
+          "de": "Symbol",
+          "en": "Symbol",
+          "ja": "Symbol",
+          "url": "https://docs.ruby-lang.org/en/4.0/Symbol.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/Symbol.html"
+        }
+      ],
+      "rows": [
+        {
+          "c": "h = { name: \"Chunky\", age: 3 }",
+          "de": "ein Hash mit Symbolen als Schlüssel",
+          "en": "a hash with symbols as keys",
+          "ja": "シンボルをキーにしたハッシュ"
+        },
+        {
+          "c": "{ \"egg\" => 1.2 }",
+          "de": "andere Schlüssel, etwa Strings, mit <code>=&gt;</code>",
+          "en": "other keys, strings for example, with <code>=&gt;</code>",
+          "ja": "文字列などほかのキーは<code>=&gt;</code>で"
+        },
+        {
+          "c": "h[:name]",
+          "de": "lesen – <code>nil</code>, wenn es den Schlüssel nicht gibt",
+          "en": "read – <code>nil</code> if the key doesn't exist",
+          "ja": "読む（キーがなければ<code>nil</code>）"
+        },
+        {
+          "c": "h[:color] = \"orange\"",
+          "de": "setzen oder ändern",
+          "en": "set or change",
+          "ja": "設定・変更"
+        },
+        {
+          "c": "h.fetch(:name, \"?\")",
+          "de": "lesen mit Ersatzwert – ohne Ersatzwert ein <code>KeyError</code>, wenn er fehlt",
+          "en": "read with a fallback – without one, a <code>KeyError</code> if missing",
+          "ja": "代わりの値つきで読む（なければ<code>KeyError</code>）"
+        },
+        {
+          "c": "h.key?(:name)",
+          "de": "gibt es den Schlüssel?",
+          "en": "is the key there?",
+          "ja": "そのキーはある？"
+        },
+        {
+          "c": "h.keys   h.values",
+          "de": "alle Schlüssel / alle Werte",
+          "en": "all keys / all values",
+          "ja": "すべてのキー／すべての値"
+        },
+        {
+          "c": "h.each { |key, value| }",
+          "de": "alle Paare durchlaufen",
+          "en": "walk through all pairs",
+          "ja": "すべての組をたどる"
+        },
+        {
+          "c": "h.delete(:age)",
+          "de": "Eintrag entfernen",
+          "en": "remove an entry",
+          "ja": "項目を削除"
+        },
+        {
+          "c": "h.select { |k, v| v > 1 }",
+          "de": "Paare auswählen → wieder ein Hash",
+          "en": "pick pairs → a hash again",
+          "ja": "組を選ぶ。結果もハッシュ"
+        },
+        {
+          "c": "h.transform_values { |v| v * 2 }",
+          "de": "alle Werte umwandeln",
+          "en": "transform every value",
+          "ja": "すべての値を変換"
+        },
+        {
+          "c": "h.sort_by { |k, v| v }",
+          "de": "nach Werten sortieren → Array von Paaren (<code>.to_h</code> macht wieder einen Hash)",
+          "en": "sort by value → array of pairs (<code>.to_h</code> makes a hash again)",
+          "ja": "値で並べかえて組の配列に（<code>.to_h</code>でハッシュに戻る）"
+        },
+        {
+          "c": "Hash.new(0)",
+          "de": "zum Zählen: fehlende Schlüssel liefern <code>0</code>",
+          "en": "for counting: missing keys give <code>0</code>",
+          "ja": "数える用：ないキーは<code>0</code>"
+        },
+        {
+          "c": "Hash.new { |h, k| h[k] = [] }",
+          "de": "jeder neue Schlüssel bekommt ein eigenes leeres Array",
+          "en": "every new key gets an empty array of its own",
+          "ja": "新しいキーごとに専用の空配列"
+        },
+        {
+          "c": "h.dig(:a, :b)",
+          "de": "verschachtelt lesen, ohne Fehler bei <code>nil</code>",
+          "en": "read nested, without an error on <code>nil</code>",
+          "ja": "入れ子を読む（途中が<code>nil</code>でもエラーにならない）"
+        },
+        {
+          "c": "h.merge(other)",
+          "de": "zwei Hashes zusammenführen",
+          "en": "merge two hashes",
+          "ja": "2つのハッシュを合わせる"
+        }
+      ]
+    },
+    {
+      "id": "methods",
+      "lessons": [
+        "methoden",
+        "tl-methods",
+        "tl-blocks"
+      ],
+      "title": {
+        "de": "Methoden & Blöcke",
+        "en": "Methods & blocks",
+        "ja": "メソッドとブロック"
+      },
+      "docs": [
+        {
+          "de": "Methoden definieren",
+          "en": "Defining methods",
+          "ja": "メソッド定義",
+          "url": "https://docs.ruby-lang.org/en/4.0/syntax/methods_rdoc.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/doc/spec=2fdef.html"
+        },
+        {
+          "de": "Methoden aufrufen",
+          "en": "Calling methods",
+          "ja": "メソッド呼び出し",
+          "url": "https://docs.ruby-lang.org/en/4.0/syntax/calling_methods_rdoc.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/doc/spec=2fcall.html"
+        },
+        {
+          "de": "Proc",
+          "en": "Proc",
+          "ja": "Proc",
+          "url": "https://docs.ruby-lang.org/en/4.0/Proc.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/Proc.html"
+        }
+      ],
+      "rows": [
+        {
+          "c": "def greet(name)\n  \"Hi, #{name}!\"\nend",
+          "de": "eine Methode – die letzte Zeile ist der Rückgabewert",
+          "en": "a method – the last line is the return value",
+          "ja": "メソッド。最後の行が戻り値"
+        },
+        {
+          "c": "def greet(name, word = \"Hi\")",
+          "de": "Parameter mit Standardwert",
+          "en": "a parameter with a default value",
+          "ja": "デフォルト値つきの引数"
+        },
+        {
+          "c": "def add(project:, hours: 0)",
+          "de": "Keyword-Argumente: <code>add(project: \"X\")</code>",
+          "en": "keyword arguments: <code>add(project: \"X\")</code>",
+          "ja": "キーワード引数：<code>add(project: \"X\")</code>"
+        },
+        {
+          "c": "def total(*numbers)",
+          "de": "beliebig viele Argumente, als Array",
+          "en": "any number of arguments, as an array",
+          "ja": "任意の数の引数を配列で"
+        },
+        {
+          "c": "return \"none\" if list.empty?",
+          "de": "eine Methode vorzeitig verlassen",
+          "en": "leave a method early",
+          "ja": "途中でメソッドを抜ける"
+        },
+        {
+          "c": "def square(x) = x * x",
+          "de": "einzeilige Methode",
+          "en": "a one-line method",
+          "ja": "1行メソッド"
+        },
+        {
+          "c": "empty?   sort!",
+          "de": "Konvention: <code>?</code> beantwortet eine Frage, <code>!</code> verändert das Objekt (oder ist sonst gefährlich)",
+          "en": "convention: <code>?</code> answers a question, <code>!</code> changes the object (or is risky otherwise)",
+          "ja": "慣習：<code>?</code>は質問に答え、<code>!</code>はオブジェクトを変える（または危険）"
+        },
+        {
+          "c": "def twice\n  yield\n  yield\nend",
+          "de": "<code>yield</code> ruft den Block auf, den die Methode bekommt (<code>block_given?</code>: gibt es einen?)",
+          "en": "<code>yield</code> calls the block the method was given (<code>block_given?</code>: is there one?)",
+          "ja": "<code>yield</code>は受け取ったブロックを呼ぶ（<code>block_given?</code>：ブロックはある？）"
+        },
+        {
+          "c": "double = ->(x) { x * 2 }",
+          "de": "ein Lambda – aufrufen mit <code>double.call(3)</code> oder <code>double.(3)</code>",
+          "en": "a lambda – call it with <code>double.call(3)</code> or <code>double.(3)</code>",
+          "ja": "ラムダ。<code>double.call(3)</code>か<code>double.(3)</code>で呼ぶ"
+        }
+      ]
+    },
+    {
+      "id": "classes",
+      "lessons": [
+        "klassen",
+        "vererbung",
+        "module",
+        "tl-classes",
+        "tl-mixins"
+      ],
+      "title": {
+        "de": "Klassen & Module",
+        "en": "Classes & modules",
+        "ja": "クラスとモジュール"
+      },
+      "docs": [
+        {
+          "de": "Module und Klassen",
+          "en": "Modules and classes",
+          "ja": "クラス・モジュール定義",
+          "url": "https://docs.ruby-lang.org/en/4.0/syntax/modules_and_classes_rdoc.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/doc/spec=2fdef.html#class"
+        },
+        {
+          "de": "Comparable",
+          "en": "Comparable",
+          "ja": "Comparable",
+          "url": "https://docs.ruby-lang.org/en/4.0/Comparable.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/Comparable.html"
+        },
+        {
+          "de": "Data",
+          "en": "Data",
+          "ja": "Data",
+          "url": "https://docs.ruby-lang.org/en/4.0/Data.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/Data.html"
+        }
+      ],
+      "rows": [
+        {
+          "c": "class Fox\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\nend",
+          "de": "eine Klasse: <code>initialize</code> läuft bei <code>Fox.new(\"Kaz\")</code>",
+          "en": "a class: <code>initialize</code> runs on <code>Fox.new(\"Kaz\")</code>",
+          "ja": "クラス。<code>Fox.new(\"Kaz\")</code>で<code>initialize</code>が動く"
+        },
+        {
+          "c": "@name",
+          "de": "Instanzvariable: gehört zum einzelnen Objekt",
+          "en": "instance variable: belongs to the single object",
+          "ja": "インスタンス変数：個々のオブジェクトのもの"
+        },
+        {
+          "c": "attr_reader   attr_writer   attr_accessor",
+          "de": "von aussen lesbar / schreibbar / beides",
+          "en": "readable / writable / both from outside",
+          "ja": "外から読める／書ける／両方"
+        },
+        {
+          "c": "def to_s",
+          "de": "so sieht das Objekt als Text aus (<code>puts</code>, Interpolation)",
+          "en": "how the object looks as text (<code>puts</code>, interpolation)",
+          "ja": "テキストにしたときの見え方（<code>puts</code>、式展開）"
+        },
+        {
+          "c": "def self.create",
+          "de": "Klassenmethode: <code>Fox.create</code>",
+          "en": "class method: <code>Fox.create</code>",
+          "ja": "クラスメソッド：<code>Fox.create</code>"
+        },
+        {
+          "c": "private",
+          "de": "die Methoden darunter sind nur von innen aufrufbar",
+          "en": "the methods below it can only be called from inside",
+          "ja": "これより下のメソッドは内側からだけ呼べる"
+        },
+        {
+          "c": "class RedFox < Fox",
+          "de": "Vererbung: <code>RedFox</code> erbt alles von <code>Fox</code>",
+          "en": "inheritance: <code>RedFox</code> inherits everything from <code>Fox</code>",
+          "ja": "継承：<code>RedFox</code>は<code>Fox</code>のすべてを受け継ぐ"
+        },
+        {
+          "c": "super",
+          "de": "dieselbe Methode der Elternklasse aufrufen",
+          "en": "call the same method of the parent class",
+          "ja": "親クラスの同じメソッドを呼ぶ"
+        },
+        {
+          "c": "module Loud\n  def shout = \"HEY\"\nend",
+          "de": "ein Modul: Methoden zum Einmischen (oder ein Namensraum)",
+          "en": "a module: methods to mix in (or a namespace)",
+          "ja": "モジュール：混ぜ込むメソッド（または名前空間）"
+        },
+        {
+          "c": "include Loud",
+          "de": "das Modul in eine Klasse einmischen",
+          "en": "mix the module into a class",
+          "ja": "モジュールをクラスに混ぜ込む"
+        },
+        {
+          "c": "include Comparable",
+          "de": "+ <code>def &lt;=&gt;(other)</code> → <code>&lt;</code>, <code>&gt;</code>, <code>between?</code>, <code>clamp</code> geschenkt",
+          "en": "+ <code>def &lt;=&gt;(other)</code> → <code>&lt;</code>, <code>&gt;</code>, <code>between?</code>, <code>clamp</code> for free",
+          "ja": "+ <code>def &lt;=&gt;(other)</code>で<code>&lt;</code>、<code>&gt;</code>、<code>between?</code>、<code>clamp</code>がもらえる"
+        },
+        {
+          "c": "include Enumerable",
+          "de": "+ <code>def each</code> → <code>map</code>, <code>select</code> &amp; Co. geschenkt",
+          "en": "+ <code>def each</code> → <code>map</code>, <code>select</code> &amp; co. for free",
+          "ja": "+ <code>def each</code>で<code>map</code>、<code>select</code>などがもらえる"
+        },
+        {
+          "c": "Point = Data.define(:x, :y)",
+          "de": "unveränderliches Wertobjekt: <code>Point.new(x: 1, y: 2)</code> (veränderlich: <code>Struct</code>)",
+          "en": "an immutable value object: <code>Point.new(x: 1, y: 2)</code> (mutable: <code>Struct</code>)",
+          "ja": "変更できない値オブジェクト：<code>Point.new(x: 1, y: 2)</code>（変更できるのは<code>Struct</code>）"
+        },
+        {
+          "c": "fox.is_a?(Fox)   Fox.ancestors",
+          "de": "gehört das Objekt zu dieser Klasse? / die ganze Ahnenreihe",
+          "en": "is the object of this class? / the whole family line",
+          "ja": "このクラスのオブジェクト？／先祖の列"
+        }
+      ]
+    },
+    {
+      "id": "errors",
+      "lessons": [
+        "fehler",
+        "tl-errors"
+      ],
+      "title": {
+        "de": "Fehler",
+        "en": "Errors",
+        "ja": "エラー"
+      },
+      "docs": [
+        {
+          "de": "Exceptions",
+          "en": "Exceptions",
+          "ja": "例外処理",
+          "url": "https://docs.ruby-lang.org/en/4.0/syntax/exceptions_rdoc.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/doc/spec=2fcontrol.html#begin"
+        },
+        {
+          "de": "Exception",
+          "en": "Exception",
+          "ja": "Exception",
+          "url": "https://docs.ruby-lang.org/en/4.0/Exception.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/Exception.html"
+        }
+      ],
+      "rows": [
+        {
+          "c": "begin\n  10 / 0\nrescue ZeroDivisionError => e\n  puts e.message\nensure\n  puts \"always\"\nend",
+          "de": "einen Fehler abfangen; <code>ensure</code> läuft immer",
+          "en": "catch an error; <code>ensure</code> always runs",
+          "ja": "エラーを受け止める。<code>ensure</code>は必ず実行"
+        },
+        {
+          "c": "raise ArgumentError, \"too big\"",
+          "de": "selbst einen Fehler auslösen",
+          "en": "raise an error yourself",
+          "ja": "自分でエラーを発生させる"
+        },
+        {
+          "c": "class TimelogError < StandardError; end",
+          "de": "eine eigene Fehlerklasse – immer von <code>StandardError</code> erben",
+          "en": "an error class of your own – always inherit from <code>StandardError</code>",
+          "ja": "自分のエラークラス。必ず<code>StandardError</code>を継承"
+        },
+        {
+          "c": "retry",
+          "de": "in <code>rescue</code>: den <code>begin</code>-Block nochmal versuchen",
+          "en": "inside <code>rescue</code>: try the <code>begin</code> block again",
+          "ja": "<code>rescue</code>の中で<code>begin</code>ブロックをやり直す"
+        },
+        {
+          "c": "NameError",
+          "de": "unbekannter Name – Tippfehler? Zelle nicht ausgeführt?",
+          "en": "unknown name – a typo? a cell not run yet?",
+          "ja": "知らない名前。打ち間違い？ セルを実行していない？"
+        },
+        {
+          "c": "NoMethodError",
+          "de": "die Methode gibt es für dieses Objekt nicht – oft ist es <code>nil</code>",
+          "en": "the method doesn't exist for this object – often it's <code>nil</code>",
+          "ja": "そのオブジェクトにメソッドがない。<code>nil</code>のことが多い"
+        },
+        {
+          "c": "TypeError",
+          "de": "falsche Art von Wert, etwa String + Zahl",
+          "en": "the wrong kind of value, string + number for example",
+          "ja": "値の種類が違う。文字列 + 数など"
+        },
+        {
+          "c": "ArgumentError",
+          "de": "zu viele oder zu wenige Argumente, oder ein unbrauchbarer Wert",
+          "en": "too many or too few arguments, or an unusable value",
+          "ja": "引数が多すぎる・少なすぎる、または使えない値"
+        },
+        {
+          "c": "ZeroDivisionError",
+          "de": "eine ganze Zahl durch 0 geteilt",
+          "en": "a whole number divided by 0",
+          "ja": "整数を0でわった"
+        },
+        {
+          "c": "KeyError",
+          "de": "<code>fetch</code> mit einem fehlenden Schlüssel",
+          "en": "<code>fetch</code> with a missing key",
+          "ja": "ないキーで<code>fetch</code>した"
+        },
+        {
+          "c": "FrozenError",
+          "de": "ein eingefrorenes Objekt verändert",
+          "en": "changed a frozen object",
+          "ja": "凍結されたオブジェクトを変えようとした"
+        },
+        {
+          "c": "SyntaxError",
+          "de": "Ruby versteht den Code nicht – fehlt ein <code>end</code>, eine Klammer, ein Anführungszeichen?",
+          "en": "Ruby doesn't understand the code – a missing <code>end</code>, bracket or quote?",
+          "ja": "Rubyがコードを理解できない。<code>end</code>、かっこ、引用符の書き忘れ？"
+        }
+      ]
+    },
+    {
+      "id": "objects",
+      "lessons": [
+        "tl-objects"
+      ],
+      "title": {
+        "de": "Objekte & Kopien",
+        "en": "Objects & copies",
+        "ja": "オブジェクトとコピー"
+      },
+      "docs": [
+        {
+          "de": "dup",
+          "en": "dup",
+          "ja": "dup",
+          "url": "https://docs.ruby-lang.org/en/4.0/Object.html#method-i-dup",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/method/Object/i/dup.html"
+        },
+        {
+          "de": "freeze",
+          "en": "freeze",
+          "ja": "freeze",
+          "url": "https://docs.ruby-lang.org/en/4.0/Object.html#method-i-freeze",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/method/Object/i/freeze.html"
+        }
+      ],
+      "rows": [
+        {
+          "c": "b = a",
+          "de": "kein Kopieren: <code>b</code> zeigt auf dasselbe Objekt wie <code>a</code>",
+          "en": "no copying: <code>b</code> points at the same object as <code>a</code>",
+          "ja": "コピーではない。<code>b</code>は<code>a</code>と同じオブジェクトを指す"
+        },
+        {
+          "c": "b = a.dup",
+          "de": "eine (flache) Kopie",
+          "en": "a (shallow) copy",
+          "ja": "（浅い）コピー"
+        },
+        {
+          "c": "a.equal?(b)   a == b",
+          "de": "dasselbe Objekt? / gleicher Inhalt?",
+          "en": "the same object? / equal content?",
+          "ja": "同じオブジェクト？／中身が等しい？"
+        },
+        {
+          "c": "a.freeze   a.frozen?",
+          "de": "unveränderlich machen / ist es eingefroren?",
+          "en": "make unchangeable / is it frozen?",
+          "ja": "変更できなくする／凍結されている？"
+        },
+        {
+          "c": "# frozen_string_literal: true",
+          "de": "magischer Kommentar: alle String-Literale der Datei eingefroren",
+          "en": "magic comment: all string literals of the file are frozen",
+          "ja": "マジックコメント：ファイル内の文字列リテラルをすべて凍結"
+        }
+      ]
+    },
+    {
+      "id": "files",
+      "lessons": [
+        "tl-formats"
+      ],
+      "title": {
+        "de": "Dateien & Formate",
+        "en": "Files & formats",
+        "ja": "ファイルとデータ形式"
+      },
+      "docs": [
+        {
+          "de": "File",
+          "en": "File",
+          "ja": "File",
+          "url": "https://docs.ruby-lang.org/en/4.0/File.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/File.html"
+        },
+        {
+          "de": "JSON",
+          "en": "JSON",
+          "ja": "JSON",
+          "url": "https://docs.ruby-lang.org/en/4.0/JSON.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/JSON.html"
+        },
+        {
+          "de": "CSV",
+          "en": "CSV",
+          "ja": "CSV",
+          "url": "https://ruby.github.io/csv/",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/CSV.html"
+        }
+      ],
+      "rows": [
+        {
+          "c": "File.write(\"notes.txt\", text)",
+          "de": "Datei schreiben (überschreibt)",
+          "en": "write a file (overwrites)",
+          "ja": "ファイルに書き込む（上書き）"
+        },
+        {
+          "c": "File.read(\"notes.txt\")",
+          "de": "ganze Datei lesen → String",
+          "en": "read a whole file → string",
+          "ja": "ファイル全体を読んで文字列に"
+        },
+        {
+          "c": "File.readlines(\"notes.txt\", chomp: true)",
+          "de": "Zeilen als Array",
+          "en": "lines as an array",
+          "ja": "行の配列"
+        },
+        {
+          "c": "File.exist?(\"notes.txt\")",
+          "de": "gibt es die Datei?",
+          "en": "does the file exist?",
+          "ja": "ファイルはある？"
+        },
+        {
+          "c": "File.open(\"log.txt\", \"a\") { |f| f.puts \"new\" }",
+          "de": "anhängen; der Block schliesst die Datei wieder",
+          "en": "append; the block closes the file again",
+          "ja": "追記。ブロックが終わるとファイルを閉じる"
+        },
+        {
+          "c": "Dir.glob(\"**/*.rb\")",
+          "de": "Dateien nach Muster finden",
+          "en": "find files by pattern",
+          "ja": "パターンでファイルを探す"
+        },
+        {
+          "c": "JSON.generate(data)   JSON.pretty_generate(data)",
+          "de": "zu JSON (<code>require \"json\"</code>)",
+          "en": "to JSON (<code>require \"json\"</code>)",
+          "ja": "JSONに（<code>require \"json\"</code>）"
+        },
+        {
+          "c": "JSON.parse(text, symbolize_names: true)",
+          "de": "JSON lesen, Schlüssel als Symbole",
+          "en": "read JSON, keys as symbols",
+          "ja": "JSONを読む。キーはシンボルに"
+        },
+        {
+          "c": "CSV.parse(text, headers: true)",
+          "de": "CSV lesen, erste Zeile als Überschriften (<code>require \"csv\"</code>)",
+          "en": "read CSV, first line as headers (<code>require \"csv\"</code>)",
+          "ja": "CSVを読む。1行目を見出しに（<code>require \"csv\"</code>）"
+        },
+        {
+          "c": "YAML.safe_load(text)",
+          "de": "YAML lesen (<code>require \"yaml\"</code>)",
+          "en": "read YAML (<code>require \"yaml\"</code>)",
+          "ja": "YAMLを読む（<code>require \"yaml\"</code>）"
+        }
+      ]
+    },
+    {
+      "id": "time",
+      "lessons": [
+        "tl-time"
+      ],
+      "title": {
+        "de": "Zeit & Datum",
+        "en": "Time & date",
+        "ja": "時刻と日付"
+      },
+      "docs": [
+        {
+          "de": "Time",
+          "en": "Time",
+          "ja": "Time",
+          "url": "https://docs.ruby-lang.org/en/4.0/Time.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/Time.html"
+        },
+        {
+          "de": "Date",
+          "en": "Date",
+          "ja": "Date",
+          "url": "https://docs.ruby-lang.org/en/4.0/Date.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/Date.html"
+        },
+        {
+          "de": "strftime-Platzhalter",
+          "en": "strftime placeholders",
+          "ja": "strftimeの書式",
+          "url": "https://docs.ruby-lang.org/en/4.0/language/strftime_formatting_rdoc.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/method/Time/i/strftime.html"
+        }
+      ],
+      "rows": [
+        {
+          "c": "Time.now",
+          "de": "jetzt",
+          "en": "now",
+          "ja": "現在"
+        },
+        {
+          "c": "Time.new(2026, 9, 15, 8, 30)",
+          "de": "ein bestimmter Zeitpunkt",
+          "en": "a particular point in time",
+          "ja": "特定の時点"
+        },
+        {
+          "c": "t2 - t1",
+          "de": "Sekunden dazwischen, als Float (durch 3600: Stunden)",
+          "en": "seconds between, as a Float (divided by 3600: hours)",
+          "ja": "あいだの秒数をFloatで（3600でわると時間）"
+        },
+        {
+          "c": "t + 30 * 60",
+          "de": "30 Minuten später",
+          "en": "30 minutes later",
+          "ja": "30分後"
+        },
+        {
+          "c": "t.strftime(\"%d.%m.%Y %H:%M\")",
+          "de": "Zeitpunkt als Text formatieren",
+          "en": "format a point in time as text",
+          "ja": "時点を文字列に整形"
+        },
+        {
+          "c": "Time.strptime(s, \"%Y-%m-%d %H:%M\")",
+          "de": "Text zu Zeitpunkt (<code>require \"time\"</code>)",
+          "en": "text to a point in time (<code>require \"time\"</code>)",
+          "ja": "文字列を時点に（<code>require \"time\"</code>）"
+        },
+        {
+          "c": "Date.today   Date.new(2026, 9, 15)",
+          "de": "ein Kalendertag (<code>require \"date\"</code>)",
+          "en": "a calendar day (<code>require \"date\"</code>)",
+          "ja": "暦の上の1日（<code>require \"date\"</code>）"
+        },
+        {
+          "c": "d + 1   (d2 - d1).to_i",
+          "de": "morgen / Tage dazwischen",
+          "en": "tomorrow / days between",
+          "ja": "明日／あいだの日数"
+        },
+        {
+          "c": "d.saturday?   d.wday   d.cweek",
+          "de": "Samstag? / Wochentag als Zahl / Kalenderwoche",
+          "en": "Saturday? / weekday as a number / calendar week",
+          "ja": "土曜？／曜日の数／週番号"
+        }
+      ]
+    },
+    {
+      "id": "regexp",
+      "lessons": [
+        "tl-parsing"
+      ],
+      "title": {
+        "de": "Reguläre Ausdrücke",
+        "en": "Regular expressions",
+        "ja": "正規表現"
+      },
+      "docs": [
+        {
+          "de": "Regexp",
+          "en": "Regexp",
+          "ja": "正規表現",
+          "url": "https://docs.ruby-lang.org/en/4.0/Regexp.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/doc/spec=2fregexp.html"
+        },
+        {
+          "de": "MatchData",
+          "en": "MatchData",
+          "ja": "MatchData",
+          "url": "https://docs.ruby-lang.org/en/4.0/MatchData.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/class/MatchData.html"
+        }
+      ],
+      "rows": [
+        {
+          "c": "/\\d+/",
+          "de": "ein Muster: eine oder mehr Ziffern",
+          "en": "a pattern: one or more digits",
+          "ja": "パターン：1つ以上の数字"
+        },
+        {
+          "c": "\\d  \\w  \\s  .",
+          "de": "Ziffer, Wortzeichen, Leerraum, beliebiges Zeichen",
+          "en": "digit, word character, whitespace, any character",
+          "ja": "数字、単語の文字、空白、任意の1文字"
+        },
+        {
+          "c": "+  *  ?  {2}",
+          "de": "mindestens eins, beliebig viele, keins oder eins, genau zwei",
+          "en": "one or more, any number, zero or one, exactly two",
+          "ja": "1回以上、0回以上、0か1回、ちょうど2回"
+        },
+        {
+          "c": "[aeiou]   [^0-9]   ^  $",
+          "de": "eins aus der Gruppe, alles ausser, Zeilenanfang, Zeilenende",
+          "en": "one of the group, anything but, start of line, end of line",
+          "ja": "グループのどれか、それ以外、行頭、行末"
+        },
+        {
+          "c": "s.match?(/fox/i)",
+          "de": "passt das Muster? (<code>i</code>: Gross/klein egal)",
+          "en": "does the pattern match? (<code>i</code>: ignore case)",
+          "ja": "パターンに合う？（<code>i</code>で大文字・小文字を区別しない）"
+        },
+        {
+          "c": "m = s.match(/(?<h>\\d+):(?<m>\\d+)/)",
+          "de": "benannte Gruppen: danach <code>m[:h]</code> – <code>nil</code>, wenn nichts passt",
+          "en": "named groups: then <code>m[:h]</code> – <code>nil</code> if nothing matches",
+          "ja": "名前つきグループ：<code>m[:h]</code>で取り出す（合わなければ<code>nil</code>）"
+        },
+        {
+          "c": "s.scan(/\\d+/)",
+          "de": "alle Treffer → Array",
+          "en": "all matches → an array",
+          "ja": "すべての一致を配列に"
+        },
+        {
+          "c": "s.gsub(/\\s+/, \" \")",
+          "de": "per Muster ersetzen",
+          "en": "replace by pattern",
+          "ja": "パターンで置き換え"
+        }
+      ]
+    },
+    {
+      "id": "patterns",
+      "lessons": [
+        "tl-pattern"
+      ],
+      "title": {
+        "de": "Pattern Matching",
+        "en": "Pattern matching",
+        "ja": "パターンマッチ"
+      },
+      "docs": [
+        {
+          "de": "Pattern Matching",
+          "en": "Pattern matching",
+          "ja": "パターンマッチ",
+          "url": "https://docs.ruby-lang.org/en/4.0/syntax/pattern_matching_rdoc.html",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/doc/spec=2fpattern_matching.html"
+        }
+      ],
+      "rows": [
+        {
+          "c": "case command\nin [\"add\", project, hours]\n  \"#{project}: #{hours}h\"\nin [\"report\"]\n  \"report\"\nelse\n  \"unknown\"\nend",
+          "de": "die Form prüfen und zugleich zerlegen",
+          "en": "check the shape and take it apart in one step",
+          "ja": "形を調べて、同時に分解する"
+        },
+        {
+          "c": "in { name: String => name }",
+          "de": "Hash zerlegen und den Typ prüfen",
+          "en": "take a hash apart and check the type",
+          "ja": "ハッシュを分解して型を調べる"
+        },
+        {
+          "c": "in [first, *rest]",
+          "de": "das erste Element und den Rest",
+          "en": "the first element and the rest",
+          "ja": "最初の要素と残り"
+        },
+        {
+          "c": "in Integer | Float",
+          "de": "eins von beidem",
+          "en": "either of the two",
+          "ja": "どちらか一方"
+        },
+        {
+          "c": "in { hours: } if hours > 0",
+          "de": "mit Bedingung (Guard)",
+          "en": "with a condition (guard)",
+          "ja": "条件つき（ガード）"
+        },
+        {
+          "c": "data => { name: }",
+          "de": "zerlegende Zuweisung ausserhalb von <code>case</code>",
+          "en": "deconstructing assignment outside <code>case</code>",
+          "ja": "<code>case</code>の外での分解代入"
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "lessons": [
+        "irb",
+        "doku",
+        "gems",
+        "tl-minitest",
+        "tl-quality"
+      ],
+      "title": {
+        "de": "Werkzeuge & Nachschlagen",
+        "en": "Tools & looking things up",
+        "ja": "道具と調べ方"
+      },
+      "docs": [
+        {
+          "de": "Ruby-Doku",
+          "en": "Ruby docs",
+          "ja": "るりま",
+          "url": "https://docs.ruby-lang.org/en/4.0/",
+          "urlJa": "https://docs.ruby-lang.org/ja/latest/doc/index.html"
+        },
+        {
+          "de": "rubygems.org",
+          "en": "rubygems.org",
+          "ja": "rubygems.org（英語）",
+          "url": "https://rubygems.org",
+          "urlJa": "https://rubygems.org"
+        },
+        {
+          "de": "Minitest",
+          "en": "Minitest",
+          "ja": "Minitest（英語）",
+          "url": "https://docs.seattlerb.org/minitest/",
+          "urlJa": "https://docs.seattlerb.org/minitest/"
+        }
+      ],
+      "rows": [
+        {
+          "c": "obj.methods.grep(/case/)",
+          "de": "Methoden eines Objekts suchen",
+          "en": "search an object's methods",
+          "ja": "オブジェクトのメソッドを探す"
+        },
+        {
+          "c": "obj.method(:map).owner",
+          "de": "wer definiert die Methode? – die richtige Doku-Seite",
+          "en": "who defines the method? – the right page of the docs",
+          "ja": "メソッドを定義しているのは？ 見るべきドキュメントのページ"
+        },
+        {
+          "c": "obj.respond_to?(:upcase)",
+          "de": "kennt das Objekt die Methode?",
+          "en": "does the object know the method?",
+          "ja": "そのメソッドを知っている？"
+        },
+        {
+          "c": "ri String#center",
+          "de": "Doku im Terminal (in IRB: <code>show_doc String#center</code>)",
+          "en": "docs in the terminal (in IRB: <code>show_doc String#center</code>)",
+          "ja": "ターミナルでドキュメント（IRBでは<code>show_doc String#center</code>）"
+        },
+        {
+          "c": "irb",
+          "de": "interaktives Ruby im Terminal (<code>_</code>: letztes Ergebnis)",
+          "en": "interactive Ruby in the terminal (<code>_</code>: the last result)",
+          "ja": "ターミナルで対話的にRuby（<code>_</code>は直前の結果）"
+        },
+        {
+          "c": "ruby main.rb",
+          "de": "ein Programm starten",
+          "en": "run a program",
+          "ja": "プログラムを実行"
+        },
+        {
+          "c": "gem install chunky_png",
+          "de": "eine Gem installieren – hier im Kurs: <code>install_gem \"chunky_png\"</code>",
+          "en": "install a gem – here in the course: <code>install_gem \"chunky_png\"</code>",
+          "ja": "gemをインストール（この講座では<code>install_gem \"chunky_png\"</code>）"
+        },
+        {
+          "c": "require \"json\"",
+          "de": "eine Gem oder Bibliothek laden",
+          "en": "load a gem or library",
+          "ja": "gemやライブラリを読み込む"
+        },
+        {
+          "c": "require_relative \"helper\"",
+          "de": "eine eigene Datei laden, relativ zur aktuellen",
+          "en": "load a file of your own, relative to the current one",
+          "ja": "自分のファイルを、今のファイルからの相対パスで読み込む"
+        },
+        {
+          "c": "bundle install",
+          "de": "alle Gems aus dem <code>Gemfile</code> holen",
+          "en": "fetch all gems from the <code>Gemfile</code>",
+          "ja": "<code>Gemfile</code>のgemをすべて入れる"
+        },
+        {
+          "c": "assert_equal 4, 2 + 2",
+          "de": "Minitest: erwartet, tatsächlich",
+          "en": "Minitest: expected, actual",
+          "ja": "Minitest：期待値、実際の値"
+        },
+        {
+          "c": "binding.irb",
+          "de": "ein Programm anhalten und hineinschauen (auf deinem Rechner)",
+          "en": "pause a program and look inside (on your machine)",
+          "ja": "プログラムを止めて中をのぞく（自分のコンピューターで）"
+        }
+      ]
     }
   ]
 });

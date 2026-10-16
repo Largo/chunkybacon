@@ -23,8 +23,8 @@ class ServerTest < Minitest::Test
     res = get("/de/methoden")
     assert_equal 200, res.status
     assert_includes res.body, '<html lang="de">'
-    assert_includes res.body, "<title>9. Methoden – Ruby lernen mit Chunky Bacon</title>"
-    assert_includes res.body, '<meta property="og:title" content="9. Methoden – Ruby lernen mit Chunky Bacon">'
+    assert_includes res.body, "<title>10. Methoden – Ruby lernen mit Chunky Bacon</title>"
+    assert_includes res.body, '<meta property="og:title" content="10. Methoden – Ruby lernen mit Chunky Bacon">'
     assert_includes res.body, '<link rel="canonical" href="http://example.org/de/methoden">'
     assert_includes res.body, '<link rel="alternate" hreflang="ja" href="http://example.org/ja/methoden">'
     assert_includes res.body, '<meta name="chunky-permalinks" content="/">'
@@ -72,9 +72,9 @@ class ServerTest < Minitest::Test
     res = get("/api/lessons")
     assert_equal 200, res.status
     lessons = JSON.parse(res.body)
-    assert_equal 61, lessons.length
+    assert_equal 67, lessons.length
     methoden = lessons.find { |lesson| lesson["id"] == "methoden" }
-    assert_equal "9. Methods", methoden["titles"]["en"]
+    assert_equal "10. Methods", methoden["titles"]["en"]
   end
 
   def test_the_bridges_refuse_other_paths_and_methods

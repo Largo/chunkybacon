@@ -8,7 +8,9 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **61 lessons** from `puts "Hallo, Welt!"` to classes, modules, IRB,
+- **67 lessons** from `puts "Hallo, Welt!"` through strings, `map` and
+  `select`, methods, reading error messages, classes, inheritance, modules,
+  IRB and reading the Ruby documentation, to
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, 3D graphics, tables, frames and colours
   for the terminal with the [TTY toolkit](https://ttytoolkit.org),
@@ -20,7 +22,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   PDFs with Prawn and HexaPDF, JPEG photos with
   [pure_jpeg](https://github.com/peterc/pure_jpeg), pandas, SymPy, NumPy,
   charts with matplotlib and machine learning with scikit-learn from Ruby through
-  [PyCall](https://github.com/mrkn/pycall.rb), machine learning in Ruby
+  [PyCall](https://github.com/red-data-tools/pycall.rb), machine learning in Ruby
   itself with [Rumale](https://github.com/yoshoku/rumale) (a postcode you
   write on a letter, read by a nearest-neighbours classifier), tables,
   statistics and networks with [SciRuby](https://sciruby.com)'s gems (data
@@ -39,7 +41,9 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   DragonRuby and more), a lesson whose cells and IRB run on
   [PicoRuby.wasm](https://github.com/picoruby/picoruby) instead of CRuby,
   Ruby compiled ahead of time by Matz's [Spinel](https://github.com/matz/spinel)
-  - to C, then to WebAssembly, in the browser - and a project track that builds a small time tracker.
+  - to C, then to WebAssembly, in the browser - and a project track that
+  builds a small time tracker (with Time and Date, objects and copies,
+  tests, pattern matching, a DSL and a web front end).
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
   cell shows its last expression as `=> …` — `puts` is never required.
@@ -52,7 +56,17 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   that lost it; `fox["name"]` on a hash with symbol keys suggests
   `fox[:name]`). Ruby's own message stays one click away. 44 rules,
   checked against 70 typical beginner mistakes drawn from the exercises.
-- **Lesson sidebar**: the 61 lessons in three groups (basics, side trips,
+  A misspelt name also gets Ruby's own suggestion ("💡 Did you mean
+  name?"), in the learner's language.
+- **Ruby cheat sheet**: one click in the header opens the course's Ruby on
+  one page - 17 topics, each with the lessons that teach it and links into
+  the official documentation, searchable. On a wide screen it stands beside
+  the lesson, so you read it while typing; on a phone it slides over the page.
+- **The documentation, everywhere**: every lesson ends with a "📖 Look it
+  up" box linking the official docs of what it used (docs.ruby-lang.org;
+  Rurima, the Japanese reference, for Japanese), and lesson 17 teaches how
+  to read them.
+- **Lesson sidebar**: the 67 lessons in three groups (basics, side trips,
   the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a
   drawer.
@@ -154,7 +168,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   reader hears each step; an edit clears it.
 - **Turtle graphics with Chunky as the turtle**: `turtle { 4.times {
   forward 100; right 90 } }` draws below the cell, as an SVG that draws
-  itself while Chunky runs along the path (lesson 10: loops, methods with
+  itself while Chunky runs along the path (lesson 12: loops, methods with
   parameters, recursion up to a Koch snowflake). The exercise is graded on
   what was drawn - edges, corners, closed or not - not on pixels.
 - **A terminal below each cell**: colours from ANSI escape codes (pastel,
@@ -173,14 +187,14 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   the end of a round, and an endless loop in a round is stopped after a
   second. Checks play the game headless.
 - **ruby2d games, unchanged**: `require "ruby2d"`, shapes, `update do`,
-  `on :key_held`, `show` - lesson 42 runs real
+  `on :key_held`, `show` - lesson 46 runs real
   [ruby2d](https://www.ruby2d.com) 1.0 programs: the gem's own Ruby
   (vendored as it is, `tools/vendor_ruby2d.rb`) with the part it writes in
   C on SDL3 stood in for by `html/ruby2d.rb`, the window a canvas below the
   cell that the page drives like a game. The same file opens a real window
   with `ruby game.rb` on a computer. Shapes, colours, text, keys, mouse;
   not images, sprites, sound or gamepads.
-- **A compiler in the browser**: in lesson 45 a cell's plain Ruby is a
+- **A compiler in the browser**: in lesson 49 a cell's plain Ruby is a
   program for [Spinel](https://github.com/matz/spinel), Matz's
   ahead-of-time compiler, which runs in the page as WebAssembly together
   with clang ([YoWASP](https://yowasp.org)'s, itself WebAssembly), driven
@@ -192,7 +206,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   What an AOT compiler cannot do (`eval` of a String, `method_missing`)
   is refused with the line. `show_spinel_irb` is IRB on it: every line
   compiled with the ones before into a program of its own and run from
-  the start, only the new line's output shown (lesson 45, about 27 MB,
+  the start, only the new line's output shown (lesson 49, about 27 MB,
   loaded when it opens). Not in git: the deploy builds it
   (`tools/build_spinel.rb`, pinned in `tools/spinel.json`).
 - _why's own cartoon foxes, from the poignant guide, cheer you on (CC BY-SA 2.5,
@@ -285,7 +299,7 @@ rebuild an already-clean scene as bare defaults.
 docker compose up -d      # serves on port 8011
 ```
 
-Lesson 45 (Spinel) needs its build in `html/assets/spinel/`, which is not
+Lesson 49 (Spinel) needs its build in `html/assets/spinel/`, which is not
 in git: `ruby tools/build_spinel.rb` (Ruby 3.3+, no C compiler and no
 Node: clang is WebAssembly, run through the wasmtime gem; a few minutes
 the first time, afterwards a no-op until `tools/spinel.json` changes).
@@ -335,7 +349,7 @@ node boot_failure_test.mjs # what the page says when a runtime fails
 node language_test.mjs    # ?lang=, last choice, browser languages, English
 node live_test.mjs        # live runs in a lesson and in the workshop
 node offline_test.mjs     # offline mode: the copy, offline, a deploy, turning it off
-node spinel_test.mjs      # lesson 45 in a browser: Spinel compiling, IRB on it (after tools/build_spinel.rb)
+node spinel_test.mjs      # lesson 49 in a browser: Spinel compiling, IRB on it (after tools/build_spinel.rb)
 ruby spinel_rb_test.rb    # spinel(code) without the page: CRuby's run, the shell's ui strings
 ruby spinel_build_test.rb # the compiler worker's plain Ruby: --print-build, clang's command line, IRB's verdict
 ruby server_test.rb       # the optional server (server/)

@@ -41,10 +41,11 @@ await page.waitForFunction(() => document.getElementById('cell-out-1').textConte
 check('a run clicked while the kernel loads runs once it is up', true);
 
 check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
-check('61 lessons in nav', (await page.$$('#lessonNav a')).length === 61);
+check('67 lessons in nav', (await page.$$('#lessonNav a')).length === 67);
 check('nav has course sections', (await page.textContent('#lessonNav')).includes('Aufbaukurs'));
 check('gems panel shows cached chips', (await page.textContent('#gemsList')).includes('chunky_png'));
-check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 3);
+check('lesson 1 has demo + exercise cells', (await page.$$('#lessonBody .cell')).length === 4);
+check('lesson 1 links the Ruby docs', (await page.$$('#lessonBody .docs a[target="_blank"]')).length >= 2);
 check('exercise cell has task label', (await page.getAttribute('.cell.exercise', 'data-label')) === 'Aufgabe');
 
 // the keyboard: Tab indents in an editor, Escape then Tab (or Shift+Tab)
@@ -146,9 +147,39 @@ check('... and the status line reads its headline, not the code frame',
       friendly && /^Zelle \d+ mit Fehler: Ruby multipliziert mit \* /.test(friendly.status) && !friendly.status.includes('^'));
 
 // solve lesson 2 without puts
-await setExercise('6 * 7');
+await setExercise('3 * 17 / 4.0');
 await runExercise();
 check('lesson 2 passes without puts', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+
+// the errors lesson: did_you_mean's suggestion in the explanation, in
+// German, and Ruby's own message unfolded below it - the lesson reads it
+await page.click('#lessonNav a[data-id="fehler"]');
+await page.waitForTimeout(300);
+await page.click('.run-cell[data-idx="1"]');
+await page.waitForSelector('#cell-out-1 .friendly-error', { timeout: 15000 });
+const fehlerBox = await page.$eval('#cell-out-1 .friendly-error', box => ({
+  title: box.querySelector('.friendly-title').textContent,
+  open: box.querySelector('.friendly-original').open,
+  original: box.querySelector('.friendly-original pre').textContent,
+  suggestLines: document.querySelectorAll('#cell-out-1 .cell-suggest').length,
+}));
+check('a misspelt name gets a suggestion', fehlerBox.title.includes('Meintest du') && fehlerBox.title.includes('name'));
+check("...once, and Ruby's own message is unfolded in this lesson", fehlerBox.suggestLines === 0 && fehlerBox.open && fehlerBox.original.includes('nmae'));
+
+// the cheat sheet: beside the lesson, searchable, its lesson numbers link
+await page.click('#cheatBtn');
+await page.waitForTimeout(400);
+check('the cheat sheet opens with its sections', (await page.$$('#cheatBody .cheat-section')).length >= 15);
+await page.fill('#cheatSearch', 'gsub');
+await page.waitForTimeout(300);
+check('the cheat sheet search filters', (await page.$$('#cheatBody .cheat-section')).length === 2);
+await page.fill('#cheatSearch', '');
+await page.click('#cheat-hashes a.cheat-lesson');
+await page.waitForTimeout(400);
+check('a lesson number in the cheat sheet opens the lesson', (await page.getAttribute('#lessonNav a.active', 'data-id')) === 'hashes');
+await page.click('#cheatClose');
+await page.waitForTimeout(200);
+check('the cheat sheet closes', !(await page.evaluate(() => document.body.classList.contains('cheat-open'))));
 
 // lesson 3: cells share one binding (notebook kernel)
 await page.click('#lessonNav a[data-id="variablen"]');
@@ -265,16 +296,16 @@ check('an SVG under a cell keeps its own width', (await page.$eval('.cell.exerci
 // SVG through show_image, object_graph.rb), and says in words what it shows
 await page.click('#lessonNav a[data-id="arrays"]');
 await page.waitForTimeout(300);
-await page.click('.run-cell[data-idx="7"]');
-await page.waitForFunction(() => { const img = document.querySelector('#cell-out-7 img.cell-image[src^="data:image/svg"]'); return img && img.complete && img.naturalWidth > 0; }, null, { timeout: 15000 }).catch(() => {});
-const objects = await page.$eval('#cell-out-7 img.cell-image[src^="data:image/svg"]', img => ({ width: img.naturalWidth, shown: img.clientWidth, alt: img.alt })).catch(() => null);
+await page.click('.run-cell[data-idx="13"]');
+await page.waitForFunction(() => { const img = document.querySelector('#cell-out-13 img.cell-image[src^="data:image/svg"]'); return img && img.complete && img.naturalWidth > 0; }, null, { timeout: 15000 }).catch(() => {});
+const objects = await page.$eval('#cell-out-13 img.cell-image[src^="data:image/svg"]', img => ({ width: img.naturalWidth, shown: img.clientWidth, alt: img.alt })).catch(() => null);
 check('show_objects draws an SVG below the cell', !!objects);
 check('the object graph keeps its own size, not a 160px thumbnail', objects && objects.width > 160 && objects.shown === objects.width);
 check('its alt text says which names share an array', objects && objects.alt.startsWith('fruehstueck → #1, gleich → #1, kopie → #2. #1 Array:'));
 await page.waitForFunction(() => document.getElementById('runStatus').textContent.includes('gleich → #1'), null, { timeout: 3000 }).catch(() => {});
 check('the status line reads the picture by its alt text', (await page.textContent('#runStatus')).includes('fruehstueck → #1, gleich → #1'));
 
-// lesson 10: turtle graphics (turtle.rb) - the demo cells draw animated
+// lesson 12: turtle graphics (turtle.rb) - the demo cells draw animated
 // SVGs, the alt text and the status line say how many lines Chunky drew,
 // the starter's empty else fails and the Koch snowflake passes
 await page.click('#lessonNav a[data-id="turtle"]');
@@ -301,7 +332,7 @@ await page.waitForFunction(() => (document.getElementById('chunkyChat').classNam
 check('Koch snowflake exercise passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
 check('... drawing 192 lines', (await page.getAttribute('.cell.exercise .cell-out img.cell-image', 'alt')) === 'Chunky hat 192 Striche gezeichnet');
 
-// lesson 15: HTML parsing with Nokogiri (nokogiri-pure, from the gem cache)
+// lesson 19: HTML parsing with Nokogiri (nokogiri-pure, from the gem cache)
 await page.click('#lessonNav a[data-id="html"]');
 await page.waitForTimeout(300);
 await page.click('.run-cell[data-idx="1"]');
@@ -1465,7 +1496,7 @@ await kernelReady(page);
 check('after reload still English', (await page.textContent('#siteTitle')).includes('Learn Ruby'));
 check('after reload progress kept', (await page.getAttribute('#lessonNav a:first-of-type', 'class')).includes('done'));
 
-// solve the class lesson (lesson 11) end to end in English
+// solve the class lesson (lesson 13) end to end in English
 await page.click('#lessonNav a[data-id="klassen"]');
 await page.waitForTimeout(300);
 await setExercise('6 x 7');

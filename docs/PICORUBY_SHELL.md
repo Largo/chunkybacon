@@ -186,6 +186,7 @@ New:
 | `html/shell/view.rb` | `View`: the HTML strings (nav, lesson, cell, workshop, chips, bubble texts) |
 | `html/shell/router.rb` | `Router`: the address - `/#methoden`, or `/de/methoden` when the optional server announces permalinks (HANDOVER §7a) |
 | `html/shell/workspace.rb` | `Workspace`: the progress dialog and the workshop's file panel (the port of `workspace_ui.js`, which is gone) |
+| `html/shell/cheatsheet.rb` | `Cheatsheet`: the Ruby cheat sheet beside the lesson (added later; HANDOVER §3a) |
 | `html/shell/app.rb` | `App`: state, events, routing, rendering, the run cycle, gems panel |
 | `html/shell/boot.rb` | starts the page |
 | `html/shell/bridge.js`, `html/shell/loader.js` | section 2, boot step 3 |

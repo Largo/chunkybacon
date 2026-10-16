@@ -22,16 +22,16 @@ Last updated 2026-10-06.
 
 ## State of the repository
 
-- Lesson 45, Spinel (HANDOVER §6n), is the first part of the site that is
+- Lesson 49, Spinel (HANDOVER §6n), is the first part of the site that is
   built on deploy rather than committed. **The host's deploy hook has to
   run `sh tools/after_deploy.sh` after it moves the checkout** - that hook
   lives on the host, not in this repository, so this line is still to be
   added there (with Ruby 3.3+ on the host, or Docker for the `spinel-build`
-  service). Until it has run once, lesson 45 says Spinel could not be
+  service). Until it has run once, lesson 49 says Spinel could not be
   loaded. The first build takes a few minutes; it keeps about 175 MB in
   `.cache/spinel/` and about 115 MB per build in `html/assets/spinel/`
   (the current one and the one before).
-- `main` has 61 lessons (2026-10-08; the SciRuby lessons 30-32 - Daru, statistics, networkx.rb - came last, after ruby2d (42), the other Rubies and PicoRuby (43-44) and Spinel (45)). The site does NOT show it yet: the
+- `main` has 67 lessons (2026-10-16: iterators, error messages, inheritance and docs in the basics, time and objects in the timelog track; on 2026-10-08 the SciRuby lessons, now 34-36 - Daru, statistics, networkx.rb - came last, after ruby2d (46), the other Rubies and PicoRuby (47-48) and Spinel (49)). The site does NOT show it yet: the
   host's checkout stopped following `main` on 2026-09-30 (the history
   rewrite; GitHub's push webhook is answered with 202, but the live
   `lessons.js` is from 2026-09-30). On the host: `git status`, then
@@ -51,14 +51,14 @@ Last updated 2026-10-06.
   - 04 friendly errors: a failing cell explains itself in de/en/ja
     (`html/friendly_errors*.rb`, loaded on the first error).
   - 03 `show_objects` (`html/object_graph.rb`), demo cells in lessons 7,
-    8 and 11; saved cell code is keyed by the cell's starter since then,
+    8 and 13; saved cell code is keyed by the cell's starter since then,
     with a migration of the old keys (HANDOVER §6a).
-  - 06 turtle graphics, lesson 10 (`html/turtle.rb`).
-  - 05 `show_audio` and "Ruby macht Musik", lesson 40; lessons can turn
+  - 06 turtle graphics, lesson 12 (`html/turtle.rb`).
+  - 05 `show_audio` and "Ruby macht Musik", lesson 44; lessons can turn
     live runs off (`"live": false`, §6b).
-  - 08 `show_game` and "Chunkys Snake", lesson 41 (`html/game.rb`,
+  - 08 `show_game` and "Chunkys Snake", lesson 45 (`html/game.rb`,
     `game.js`).
-  - 02 the ⏯ step-through player on lessons 3-12 (`"stepper": true`,
+  - 02 the ⏯ step-through player on lessons 3-15 (`"stepper": true`,
     `html/step_recorder.rb`, `stepper.js`).
   - 09 one runnable cell for idogawa.com (`html/embed*`, README
     "Embedding a cell", HANDOVER §6k); the bridges (`/rubygems/`,
@@ -129,7 +129,7 @@ Last updated 2026-10-06.
   four FAILs that are its own assumptions (Tab indenting, no Enter on the
   skip link, a live `.cell-out`, the first Tab opening the drawer) -
   worth updating if the audit is rerun.
-- Turtle graphics (lesson 10, `html/turtle.rb`): `forward 100` outside
+- Turtle graphics (lesson 12, `html/turtle.rb`): `forward 100` outside
   `turtle { }` is a plain NoMethodError for main, which the friendly
   errors explain as "defined in another cell? run that one first" - a
   rule for the turtle's commands (`forward`, `right`, `pen_up` …) saying
@@ -140,7 +140,7 @@ Last updated 2026-10-06.
   already grade are listed in `experiments/06-turtle-graphics/NOTES.md`
   (a house without lifting the pen, a 7-point star, a spiral); `fill`
   and `write "text"` are not there yet.
-- Music (lesson 40, `show_audio`): the lesson's "on your machine" box
+- Music (lesson 44, `show_audio`): the lesson's "on your machine" box
   names the `wavefile` gem (pure Ruby, `install_gem "wavefile"`), which is
   not in the gem cache: it installs through the rubygems proxy and writes
   a WAV that `show_audio` plays (checked 2026-10-06), but fails offline -
@@ -148,7 +148,7 @@ Last updated 2026-10-06.
   (`experiments/05-ruby-music/NOTES.md`, step 7). The lesson has no
   exercise on `audios` yet (a check can read what was played without a
   file), and `music.rb`'s `C4*2` durations and sharps were left out.
-- Games (lesson 41, `show_game`, `html/game.rb`/`game.js`): `:chunky` is
+- Games (lesson 45, `show_game`, `html/game.rb`/`game.js`): `:chunky` is
   the 🦊 emoji, and emoji look different on every system (headless
   Chromium draws 🥓 as a small red glyph) - a head-only Chunky sprite and
   a sprite sheet in `assets/` (`"img:url"` looks work already) would make
@@ -158,7 +158,7 @@ Last updated 2026-10-06.
   Two arrow keys within one round can still turn Chunky straight back
   (the classic Snake bug; a queue of turns would fix it). `on_click` has
   no lesson cell yet.
-- ruby2d (lesson 42, `html/ruby2d.rb` over the gem's own Ruby, HANDOVER
+- ruby2d (lesson 46, `html/ruby2d.rb` over the gem's own Ruby, HANDOVER
   §6l): the lesson's programs were never run with the real gem - its SDL3
   build needs SDL3_mixer, which Debian 13 does not package (`ruby2d setup`
   would build it; or a Mac). They run on the gem's own Ruby, so names and
@@ -173,7 +173,7 @@ Last updated 2026-10-06.
   polygon's are averaged. `close` ends the window here, while the gem's own
   web build ignores it. Not tried: the workshop, the embedded cell, a real
   screen reader on the canvas.
-- Stepping through a cell (⏯, lessons 3-12, `html/step_recorder.rb`,
+- Stepping through a cell (⏯, lessons 3-15, `html/step_recorder.rb`,
   `html/stepper.js`): no lesson text mentions ⏯ yet - a sentence in
   schleifen's prose ("watch the loop with ⏯") would point learners at it.
   Past ~200 steps the slider moves in slivers; the experiment's tick

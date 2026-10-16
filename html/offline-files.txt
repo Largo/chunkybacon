@@ -177,6 +177,7 @@ sandbox_sim.rb
 shell/app.rb
 shell/boot.rb
 shell/bridge.js
+shell/cheatsheet.rb
 shell/course.rb
 shell/jsg.rb
 shell/loader.js
