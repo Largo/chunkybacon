@@ -500,7 +500,9 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   not make Minitest pick up the image's bundled Minitest 6 over cached 5.x.
 - Minitest 5.x from the cache with a serial `parallel_executor`.
 - `sandbox_sim.rb`: relative paths go to an in-memory store behind
-  `File`/`Dir`; absolute paths pass through. `File.binwrite` and
+  `File`/`Dir`; absolute paths pass through. `./x` is `x` there (a cell's
+  `__dir__` is `"."`, so `File.join(__dir__, name)` makes the first; the
+  OCRAN lesson does). `File.binwrite` and
   `File.open`, what gems write with, are not redirected: their files land in
   the real working directory, so `File.read`/`exist?`/`delete` of a relative
   path fall back to a real file when the store does not have it (pure_jpeg
@@ -1109,6 +1111,28 @@ program to try it on.
 - Verified: Hello World-class programs (class, Range, Hash, blocks) built in
   Chromium; the Linux binary runs, the `.exe` runs under Wine with the same
   output as Spinel on the host.
+
+## 6q. The OCRAN lesson
+
+The `ocran` lesson (after `scarpe`) packs a program into an .exe with
+[OCRAN](https://github.com/largo/ocran). OCRAN cannot run in a browser (it
+packs the Ruby installed on the building machine), so the cells practise
+what the program itself must do, and the last cell writes the finished
+program and its data file for download, to build at home:
+
+- `unless defined?(Ocran)`: OCRAN runs the script once while building, with
+  the constant defined. A cell defines `Ocran`, shows the main program stay
+  quiet, and removes the constant again (`Object.send(:remove_const, ...)`)
+  - it would otherwise outlive the lesson, as top-level constants do.
+- `ENV["OCRAN_EXECUTABLE"]`: the .exe unpacks the script to a temporary
+  folder, so `__dir__` is not where the .exe is. A cell sets the variable by
+  hand and deletes it again. Paths use `/`: ruby.wasm's `File.dirname` is
+  POSIX and does not split at `\` (Ruby on Windows takes both).
+- The exercise's check sets and deletes `OCRAN_EXECUTABLE` itself
+  (`D:/Apps/Imbiss.exe`).
+- The downloadable program was run with a real Ruby (plain, with
+  `OCRAN_EXECUTABLE` pointing elsewhere, and with `Ocran` defined); the .exe
+  itself was not built here.
 
 ## 7. nginx and the proxy
 

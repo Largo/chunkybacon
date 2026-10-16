@@ -28,7 +28,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   distribution, integration and minimization, charts drawn by
   [Rubyvis](https://github.com/clbustos/rubyvis), the fastest train across
   Switzerland with [networkx.rb](https://github.com/SciRuby/networkx.rb)), a SQLite
-  database with [Sequel](https://sequel.jeremyevans.net), a look at the Ruby
+  database with [Sequel](https://sequel.jeremyevans.net), shipping a program as
+  an .exe with [OCRAN](https://github.com/largo/ocran), a look at the Ruby
   community (RubyKaigi, weird code, how IRB reads code), music computed in
   plain Ruby (samples as an Array, a WAV file built with `pack`, chords and
   a drum beat - played below the cell), Snake built in five steps and
