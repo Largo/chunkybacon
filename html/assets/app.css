@@ -1143,7 +1143,10 @@ kbd {
   width: 508px;
   max-width: 100%;
 }
-.marker { background: #ffd9d4; border-bottom: 2px solid var(--err); }
+/* the line an error points at, in the dark editor: a dark red tint keeps the
+   code readable (cream 10:1, every syntax colour 4.7:1 or more), a bright
+   underline says where */
+.marker { background: #45272a; border-bottom: 2px solid #ff7a6b; }
 
 /* ---------- downloads: files a cell wrote ---------- */
 .cell-downloads {
@@ -1382,10 +1385,13 @@ kbd {
 }
 .cell-toolbar .step-cell:hover { background: var(--fat); }
 .cell-toolbar .step-cell[disabled] { opacity: 0.45; cursor: progress; }
-.cell .CodeMirror .step-now { background: var(--highlight); box-shadow: inset 3px 0 0 var(--bacon); }
-.cell .CodeMirror .step-now.step-call { background: #dbe8f7; box-shadow: inset 3px 0 0 #2f6db5; }
-.cell .CodeMirror .step-now.step-return { background: #dcefdc; box-shadow: inset 3px 0 0 var(--ok); }
-.cell .CodeMirror .step-now.step-error { background: #f9d2cf; box-shadow: inset 3px 0 0 var(--err); }
+/* the stepper's line, on the dark editor: dark tints under the code
+   (cream 10:1, every syntax colour 4.7:1 or more), the kind of step in the
+   bar on the left */
+.cell .CodeMirror .step-now { background: #3e2d1f; box-shadow: inset 3px 0 0 var(--glow); }
+.cell .CodeMirror .step-now.step-call { background: #213149; box-shadow: inset 3px 0 0 #7fa8f0; }
+.cell .CodeMirror .step-now.step-return { background: #1f3626; box-shadow: inset 3px 0 0 #6fcf7a; }
+.cell .CodeMirror .step-now.step-error { background: #45272a; box-shadow: inset 3px 0 0 #ff7a6b; }
 .stepper {
   margin: 0 0 0.7rem;
   padding: 0.6rem 0.7rem 0.4rem;
