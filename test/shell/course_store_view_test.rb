@@ -29,11 +29,11 @@ class CourseStoreViewTest < Minitest::Test
     refute_match(/Ad/, @course.title(0, "ja"))
   end
 
-  # "lesson {{nr:methoden}}" in lessons.js reaches the shell as "lesson 9"
+  # "lesson {{nr:methoden}}" in lessons.js reaches the shell with its number
   # (bridge.js; the stub does the same with html/lesson_refs.rb)
   def test_references_arrive_numbered
     html = @course.cells(@course.index("klassen"), "en").map { |c| c.html.to_s }.join
-    assert_includes html, "as learned in lesson 9:"
+    assert_includes html, "as learned in lesson #{lesson_number("methoden")}:"
     refute_includes html, "{{nr:"
   end
 
