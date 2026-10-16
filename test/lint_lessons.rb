@@ -5,7 +5,7 @@
 # not written by id ("lesson {{nr:methoden}}", html/lesson_refs.rb) or name
 # the wrong lesson, the mechanical half of the Japanese rules (HANDOVER §3),
 # Ruby that does not parse or warns, gems the cache does not have, and
-# lesson counts in the docs that went stale.
+# a lesson count in the docs (they leave it out: it goes stale).
 #
 #   ruby lint_lessons.rb                 # errors + warnings, grouped
 #   ruby lint_lessons.rb --verbose       # also INFO (reference table, ...)
@@ -1034,6 +1034,9 @@ module LessonLint
     COUNT_FILES = %w[README.md docs/*.md test/*.mjs test/*.rb test/shell/**/*.rb html/index.html
                      html/shell/**/*.{rb,js,html} server/**/*.rb gem/**/README.md].freeze
 
+    # Nothing states how many lessons there are: a count in the docs, the
+    # tests or on a card goes stale with the next lesson and blocks merges
+    # that are otherwise independent. The tests read it from the course.
     def check_counts
       count = lessons.size
       files = COUNT_FILES.flat_map { |g| Dir.glob(File.join(@root, g)) }.uniq
@@ -1041,15 +1044,10 @@ module LessonLint
         rel = path.delete_prefix("#{@root}/")
         File.readlines(path, encoding: "UTF-8").each_with_index do |text, n|
           text.scan(/(?<![§\d.])(\d+)\s*(lessons|Lektionen|レッスン)(?!\s*\d)/) do |num, word|
-            k = num.to_i
-            next if k == count || k < 5 # "3 lessons" style small numbers are rarely the total
-            add("counts", "WARN", "stale-count", where: rel, line: "#{rel}:#{n + 1}",
-                message: "\"#{num} #{word}\" but there are #{count} lessons", detail: [Text.snippet(text, 120)], extra: "#{num}#{word}")
-          end
-          text.scan(/(\d+)\s*(?:lessons|Lektionen)\s*[x×]\s*3/) do |(num)|
-            next if num.to_i == count
-            add("counts", "WARN", "stale-count", where: rel, line: "#{rel}:#{n + 1}",
-                message: "\"#{num} lessons × 3\" but there are #{count} lessons", extra: "#{num}x3")
+            next if num.to_i < 5 # "3 lessons" style small numbers are rarely the total
+            add("counts", "WARN", "doc-count", where: rel, line: "#{rel}:#{n + 1}",
+                message: "\"#{num} #{word}\" - leave the lesson count out (there are #{count} now; it goes stale)",
+                detail: [Text.snippet(text, 120)], extra: "#{num}#{word}")
           end
         end
       end

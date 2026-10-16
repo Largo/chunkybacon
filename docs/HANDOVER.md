@@ -4,7 +4,7 @@ Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
 Work in progress - what is unfinished, and in what state - is in
 `docs/OPEN_WORK.md`.
-Last updated 2026-10-08 (61 lessons in German, English and Japanese).
+Last updated 2026-10-16. The course is in German, English and Japanese.
 
 ## 1. Where it runs
 
@@ -161,8 +161,8 @@ tools/render_social_cards.mjs  docs/social/card.html -> docs/social/twitter-card
 tools/lesson_numbers_to_ids.rb  a lessons.js from before 2026-10-16 to lessons numbered by place (§3)
                            (1600x900: X, Bluesky, Mastodon, README) and
                            html/social/github-social.png (1600x800: GitHub social
-                           preview, og:image); fills in the lesson count, so rerun it
-                           when that changes. og:image is the site's own copy,
+                           preview, og:image); rerun it after changing card.html.
+                           og:image is the site's own copy,
                            https://chunkybacon.idogawa.com/social/github-social.png
 docs/social/               the social cards: card.html (source) and twitter-card.png
 gem/chunky_bacon/          the companion gem: the course's helpers on a computer,
@@ -370,9 +370,10 @@ Rules that the code and tests rely on:
 - Tests and docs name lessons by id, never by number: the tests read the
   count and a lesson's place from the course (`lesson_count`,
   `lesson_number(id)` in `test/shell/harness.rb`; `window.LESSONS` in the
-  browser tests), the docs write "lesson `spinel`". The README's lesson
-  count and the social cards (`tools/render_social_cards.mjs`) are the
-  only numbers that change with a new lesson; the linter flags a stale one.
+  browser tests), the docs write "lesson `spinel`". Nothing states how
+  many lessons there are - not the README, the docs or the social cards -
+  so a new lesson changes no other file; the linter flags a count in the
+  docs.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
   snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
   a method because lesson bindings capture top-level locals, and each
@@ -2214,7 +2215,7 @@ in that regex.
 ```sh
 cd test
 node make_lessons_json.js      # test/lessons.json
-ruby check_harness.rb          # 61 lessons x 3 languages, starter fails, solutions pass
+ruby check_harness.rb          # every lesson x 3 languages, starter fails, solutions pass
 ruby lint_lessons.rb           # lessons.js content: de/en/ja parity, references, Japanese rules, Prism, gems, counts
 ruby lint_lessons_test.rb      # the linter's fault-injection tests
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
