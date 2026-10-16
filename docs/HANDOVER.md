@@ -267,16 +267,16 @@ parses, changes and rewrites it; prose edits can be done by hand.
   "live": false,   // optional: no live runs in this lesson (§6b)
   "stepper": true, // optional: ⏯ beside ▶ on its code cells (§6)
   "engine": "picoruby", // optional: cells and IRBs run on PicoRuby.wasm, not CRuby (§6m)
-  "de": { "title": "14. HTML parsen", "cells": [ ... ] },
-  "en": { "title": "14. Parsing HTML", "cells": [ ... ] },
-  "ja": { "title": "14. HTMLのパース", "cells": [ ... ] } }
+  "de": { "title": "HTML parsen", "cells": [ ... ] },   // no number: it is the lesson's place (§3)
+  "en": { "title": "Parsing HTML", "cells": [ ... ] },
+  "ja": { "title": "HTMLのパース", "cells": [ ... ] } }
 ```
 
 A section opens a group in the sidebar's index and runs until the next one
 (`View.nav_groups`); the group is named by its first lesson's id, which is
 what `chunkyui_nav_closed` stores for a folded group. Give a section only to
 lessons that start a real course - a lesson on its own belongs in "Ausflüge"
-(side trips, 20-45), not in a group of one.
+(side trips), not in a group of one.
 
 `"stepper": true` puts ⏯ (step through) beside every ▶ of the lesson but an
 IRB's (`View.lesson_html`, `Course#stepper?`). It is on the Basics whose

@@ -1064,7 +1064,8 @@ module LessonLint
       check_section_ranges
     end
 
-    # "side trips, 19-30" in the docs vs the sections in lessons.js
+    # "side trips, 19-30" in the docs: numbers that move with every lesson put
+    # in between, like a count - name the group, leave its range out
     def check_section_ranges
       starts = lessons.each_index.select { |i| lessons[i]["section"] }
       ranges = starts.each_with_index.map do |s, k|
@@ -1079,9 +1080,9 @@ module LessonLint
             pat = names.values.map { |v| Regexp.escape(v) }.join("|")
             pat += "|side trips" if names["de"] == "Ausflüge"
             line.scan(/(?:#{pat})[^0-9\n]{0,25}(\d+)\s*[-–]\s*(\d+)/i) do |a, b|
-              next if [a.to_i, b.to_i] == [first, last]
               add("counts", "WARN", "section-range", where: doc, line: "#{doc}:#{n + 1}",
-                  message: "#{names["en"]} is given as #{a}-#{b}, lessons.js has #{first}-#{last}", extra: "#{a}-#{b}")
+                  message: "#{names["en"]} is given as #{a}-#{b} (now #{first}-#{last}) - leave the range out, it moves",
+                  extra: "#{a}-#{b}")
             end
           end
         end
