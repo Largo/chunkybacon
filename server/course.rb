@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 require "json"
+require_relative "../html/lesson_refs"
 
 # The course as the server sees it: html/lessons.js, the same file the page
 # loads (window.LESSONS_JSON = JSON.stringify({ui, lessons})), read again
-# whenever it changes on disk.
+# whenever it changes on disk. Lesson numbers are filled in as on the page
+# (html/lesson_refs.rb): a title has none, a reference names an id.
 class Course
   WORKSHOP_ID = "werkstatt"   # html/shell/support.rb
 
@@ -23,7 +25,9 @@ class Course
 
   def initialize(data)
     @ui = data.fetch("ui")
+    data = LessonRefs.resolve(data)
     @lessons = data.fetch("lessons")
+    @numbers = LessonRefs.numbers(@lessons)
     @by_id = @lessons.to_h { |lesson| [lesson["id"], lesson] }
   end
 
@@ -42,8 +46,11 @@ class Course
     return site unless id
     return "#{ui(lang, 'workshopTitle')} – #{site}" if id == WORKSHOP_ID
 
-    "#{@by_id.dig(id, lang, 'title')} – #{site}"
+    "#{numbered_title(lang, id)} – #{site}"
   end
+
+  # "9. Methoden"
+  def numbered_title(lang, id) = LessonRefs.numbered(@numbers.fetch(id), @by_id.dig(id, lang, "title"))
 
   # The lesson's first paragraph as plain text, shortened for a link
   # preview; the course's subtitle for anything else.
@@ -59,7 +66,7 @@ class Course
   # every lesson with its titles, for /api/lessons
   def index
     @lessons.map do |lesson|
-      { "id" => lesson["id"], "titles" => langs.to_h { |lang| [lang, lesson.dig(lang, "title")] } }
+      { "id" => lesson["id"], "titles" => langs.to_h { |lang| [lang, numbered_title(lang, lesson["id"])] } }
     end
   end
 end
