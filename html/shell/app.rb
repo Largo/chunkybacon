@@ -412,7 +412,7 @@ module ChunkyShell
       # a change is written: every write reaches a connected folder)
       Store.set("chunky_current", id) unless Store.get("chunky_current", "") == id
       # the lesson in the tab title makes bookmarks and history legible
-      JSG.d.title = "#{@course.title(idx, @lang)} – #{ui.title}"
+      JSG.d.title = "#{@course.numbered_title(idx, @lang)} – #{ui.title}"
       # ⏯ only in the lessons that ask for it ("stepper": true)
       step = @course.stepper?(idx) ? [ui.stepButton, ui.stepCellLabel] : nil
       el("lessonBody").innerHTML = View.lesson_html(cells, ui.taskLabel, ui.runCell, live_toggle_html, ui.runCellLabel, step)

@@ -15,6 +15,19 @@ SHELL_FILES = File.readlines(File.join(SHELL_DIR, "manifest.txt"), chomp: true)
                   .map(&:strip).reject { |line| line.empty? || line.start_with?("#") }
 SHELL_FILES.each { |file| load File.join(SHELL_DIR, file) }
 
+# The course the tests run on, for what moves when a lesson is put in
+# between: how many there are, and the place (number) of a lesson.
+COURSE_IDS = JSON.parse(File.read(LESSONS_JSON))["lessons"].map { |lesson| lesson["id"] }.freeze
+def lesson_count = COURSE_IDS.size
+def lesson_number(id) = COURSE_IDS.index(id) + 1
+# the lessons of the sidebar group that starts at +first+, up to the next
+# lesson with a "section"
+def group_size(first, sections = %w[hallo three tl-collections])
+  starts = sections.map { |id| COURSE_IDS.index(id) } + [COURSE_IDS.size]
+  at = sections.index(first)
+  starts[at + 1] - starts[at]
+end
+
 # A fresh page for every test: DOM from index.html, empty localStorage,
 # the course from test/lessons.json, a recording ChunkyBridge.
 module ShellTest

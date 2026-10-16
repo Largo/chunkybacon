@@ -11,27 +11,27 @@ Last updated 2026-10-06.
 | What | Where |
 |---|---|
 | What the site is, its features | `README.md` |
-| How it works, where the traps are | `docs/HANDOVER.md` - §2 layout, §3 lessons (format, renumbering, the Japanese rules), §4 gems and the pure stand-ins, §6a workshop and storage, §6b live runs, §6c offline mode, §6d Python (and matplotlib), §6e Rumale, §6f SQLite and Sequel (databases in files too), §6g TTY and terminal colours, §6h Processing, §6i Faker, §6j ERB and Herb, §6l ruby2d, §8 tests, §11 older open ends |
+| How it works, where the traps are | `docs/HANDOVER.md` - §2 layout, §3 lessons (format, numbers by place, the Japanese rules), §4 gems and the pure stand-ins, §6a workshop and storage, §6b live runs, §6c offline mode, §6d Python (and matplotlib), §6e Rumale, §6f SQLite and Sequel (databases in files too), §6g TTY and terminal colours, §6h Processing, §6i Faker, §6j ERB and Herb, §6l ruby2d, §8 tests, §11 older open ends |
 | The page shell on PicoRuby, its portability rules | `docs/PICORUBY_SHELL.md`, `test/shell/portability_test.rb` |
 | Every bundled component and its licence | `THIRD_PARTY_NOTICES.md` |
 | All lesson text, code, checks and UI strings | `html/lessons.js` - the source of truth |
-| Lesson generators (scratch, **not in git**) | `tmp/*_lesson.rb` (pycall_lesson_v2, sympy, numpy, matplotlib, sklearn, sequel) write `tmp/<id>_lesson.json`; `tmp/insert_lesson.js` inserts and renumbers (`tmp/insert_lesson_into.js`: the same for a worktree's `LESSONS_JS`; `tmp/matplotlib_lesson_edits.js`: the edits around the matplotlib lesson), `tmp/replace_lesson.js` swaps one lesson; afterwards `ruby test/lint_lessons.rb --base=origin/main` catches every lesson reference that now points elsewhere. A hand edit to `lessons.js` is lost if a generator runs again - edit the generator too, or only `lessons.js` |
+| Lesson generators (scratch, **not in git**) | `tmp/*_lesson.rb` (pycall_lesson_v2, sympy, numpy, matplotlib, sklearn, sequel) write `tmp/<id>_lesson.json`; `tmp/insert_lesson.js` inserts (`tmp/insert_lesson_into.js`: the same for a worktree's `LESSONS_JS`; `tmp/matplotlib_lesson_edits.js`: the edits around the matplotlib lesson), `tmp/replace_lesson.js` swaps one lesson. Since lessons are numbered by their place (HANDOVER §3), inserting renumbers nothing; a generator that still writes numbered titles or "Lektion 23" needs `ruby tools/lesson_numbers_to_ids.rb` afterwards. A hand edit to `lessons.js` is lost if a generator runs again - edit the generator too, or only `lessons.js` |
 | Local Playwright helper (scratch, **not in git**) | `tmp/playwright_redirect.mjs` + `tmp/playwright_resolve_hook.mjs` (see "Working on this machine") |
 | Experiments (prototypes, not on the site) | `experiments/NN-<idea>/NOTES.md` - what was tried, measurements, integration steps |
 | Hosting details | `docs/HOSTING.local.md` - local only, excluded from git |
 
 ## State of the repository
 
-- Lesson 45, Spinel (HANDOVER §6n), is the first part of the site that is
+- Lesson `spinel`, Spinel (HANDOVER §6n), is the first part of the site that is
   built on deploy rather than committed. **The host's deploy hook has to
   run `sh tools/after_deploy.sh` after it moves the checkout** - that hook
   lives on the host, not in this repository, so this line is still to be
   added there (with Ruby 3.3+ on the host, or Docker for the `spinel-build`
-  service). Until it has run once, lesson 45 says Spinel could not be
+  service). Until it has run once, lesson `spinel` says Spinel could not be
   loaded. The first build takes a few minutes; it keeps about 175 MB in
   `.cache/spinel/` and about 115 MB per build in `html/assets/spinel/`
   (the current one and the one before).
-- `main` has 61 lessons (2026-10-08; the SciRuby lessons 30-32 - Daru, statistics, networkx.rb - came last, after ruby2d (42), the other Rubies and PicoRuby (43-44) and Spinel (45)). The site does NOT show it yet: the
+- `main` has 61 lessons (2026-10-08; the SciRuby lessons `daru` to `networkx` - Daru, statistics, networkx.rb - came last, after ruby2d (42), the other Rubies and PicoRuby (43-44) and Spinel (45)). The site does NOT show it yet: the
   host's checkout stopped following `main` on 2026-09-30 (the history
   rewrite; GitHub's push webhook is answered with 202, but the live
   `lessons.js` is from 2026-09-30). On the host: `git status`, then
@@ -50,15 +50,15 @@ Last updated 2026-10-06.
     names for widgets and run buttons.
   - 04 friendly errors: a failing cell explains itself in de/en/ja
     (`html/friendly_errors*.rb`, loaded on the first error).
-  - 03 `show_objects` (`html/object_graph.rb`), demo cells in lessons 7,
-    8 and 11; saved cell code is keyed by the cell's starter since then,
+  - 03 `show_objects` (`html/object_graph.rb`), demo cells in lessons `arrays`,
+    `hashes` and `klassen`; saved cell code is keyed by the cell's starter since then,
     with a migration of the old keys (HANDOVER §6a).
-  - 06 turtle graphics, lesson 10 (`html/turtle.rb`).
-  - 05 `show_audio` and "Ruby macht Musik", lesson 40; lessons can turn
+  - 06 turtle graphics, lesson `turtle` (`html/turtle.rb`).
+  - 05 `show_audio` and "Ruby macht Musik", lesson `musik`; lessons can turn
     live runs off (`"live": false`, §6b).
-  - 08 `show_game` and "Chunkys Snake", lesson 41 (`html/game.rb`,
+  - 08 `show_game` and "Chunkys Snake", lesson `snake` (`html/game.rb`,
     `game.js`).
-  - 02 the ⏯ step-through player on lessons 3-12 (`"stepper": true`,
+  - 02 the ⏯ step-through player on lessons `variablen` to `module` (`"stepper": true`,
     `html/step_recorder.rb`, `stepper.js`).
   - 09 one runnable cell for idogawa.com (`html/embed*`, README
     "Embedding a cell", HANDOVER §6k); the bridges (`/rubygems/`,
@@ -72,9 +72,10 @@ Last updated 2026-10-06.
   behind `main`, its PR is merged - `ocran-lesson`, `rumale-lesson`,
   `pyodide-llm-rubyllm-988ed8`, `ideas`). Branches that insert lessons
   conflict with `main` in `html/lessons.js`, the count tests, README and
-  HANDOVER: rebase onto `main`, re-run the `tmp/insert_lesson.js`-style
-  renumbering rather than hand-merging, then
-  `ruby test/lint_lessons.rb --base=origin/main`. (`git` also warns that it
+  HANDOVER: rebase onto `main`; a branch from before lessons were numbered
+  by place (2026-10-16) first runs `ruby tools/lesson_numbers_to_ids.rb` on
+  its own lessons.js, then its new lesson is one entry in the array.
+  Then `ruby test/lint_lessons.rb`. (`git` also warns that it
   cannot delete `.git/worktrees/agent-a88082be1e674fa38`, a stale entry -
   harmless.)
 
@@ -95,10 +96,9 @@ Last updated 2026-10-06.
   nothing saved could take a key of the same lesson with its fingerprint
   whose own index now holds another cell.
 - No CI runs the tests (`.github/workflows/` has only the gem release).
-  When a tests workflow exists, run `ruby test/lint_lessons.rb
-  --base=origin/${{ github.base_ref || 'main' }}` in it, with
-  `fetch-depth: 0` (`experiments/07-lesson-linter/NOTES.md`, "Wiring it
-  in", step 3).
+  When a tests workflow exists, run `ruby test/lint_lessons.rb` in it
+  (`experiments/07-lesson-linter/NOTES.md`, "Wiring it in"; its `--base`
+  step is gone - references are written by id since 2026-10-16).
 - Found by the experiments, in today's code (details in their `NOTES.md`):
   the live-run tracer makes code about 36x slower in ruby.wasm, so a cell
   looping over ~100k elements hits the 1 s limit (a lesson can now say
@@ -129,7 +129,7 @@ Last updated 2026-10-06.
   four FAILs that are its own assumptions (Tab indenting, no Enter on the
   skip link, a live `.cell-out`, the first Tab opening the drawer) -
   worth updating if the audit is rerun.
-- Turtle graphics (lesson 10, `html/turtle.rb`): `forward 100` outside
+- Turtle graphics (lesson `turtle`, `html/turtle.rb`): `forward 100` outside
   `turtle { }` is a plain NoMethodError for main, which the friendly
   errors explain as "defined in another cell? run that one first" - a
   rule for the turtle's commands (`forward`, `right`, `pen_up` …) saying
@@ -140,7 +140,7 @@ Last updated 2026-10-06.
   already grade are listed in `experiments/06-turtle-graphics/NOTES.md`
   (a house without lifting the pen, a 7-point star, a spiral); `fill`
   and `write "text"` are not there yet.
-- Music (lesson 40, `show_audio`): the lesson's "on your machine" box
+- Music (lesson `musik`, `show_audio`): the lesson's "on your machine" box
   names the `wavefile` gem (pure Ruby, `install_gem "wavefile"`), which is
   not in the gem cache: it installs through the rubygems proxy and writes
   a WAV that `show_audio` plays (checked 2026-10-06), but fails offline -
@@ -148,7 +148,7 @@ Last updated 2026-10-06.
   (`experiments/05-ruby-music/NOTES.md`, step 7). The lesson has no
   exercise on `audios` yet (a check can read what was played without a
   file), and `music.rb`'s `C4*2` durations and sharps were left out.
-- Games (lesson 41, `show_game`, `html/game.rb`/`game.js`): `:chunky` is
+- Games (lesson `snake`, `show_game`, `html/game.rb`/`game.js`): `:chunky` is
   the 🦊 emoji, and emoji look different on every system (headless
   Chromium draws 🥓 as a small red glyph) - a head-only Chunky sprite and
   a sprite sheet in `assets/` (`"img:url"` looks work already) would make
@@ -158,7 +158,7 @@ Last updated 2026-10-06.
   Two arrow keys within one round can still turn Chunky straight back
   (the classic Snake bug; a queue of turns would fix it). `on_click` has
   no lesson cell yet.
-- ruby2d (lesson 42, `html/ruby2d.rb` over the gem's own Ruby, HANDOVER
+- ruby2d (lesson `ruby2d`, `html/ruby2d.rb` over the gem's own Ruby, HANDOVER
   §6l): the lesson's programs were never run with the real gem - its SDL3
   build needs SDL3_mixer, which Debian 13 does not package (`ruby2d setup`
   would build it; or a Mac). They run on the gem's own Ruby, so names and
@@ -173,7 +173,7 @@ Last updated 2026-10-06.
   polygon's are averaged. `close` ends the window here, while the gem's own
   web build ignores it. Not tried: the workshop, the embedded cell, a real
   screen reader on the canvas.
-- Stepping through a cell (⏯, lessons 3-12, `html/step_recorder.rb`,
+- Stepping through a cell (⏯, lessons `variablen` to `module`, `html/step_recorder.rb`,
   `html/stepper.js`): no lesson text mentions ⏯ yet - a sentence in
   schleifen's prose ("watch the loop with ⏯") would point learners at it.
   Past ~200 steps the slider moves in slivers; the experiment's tick

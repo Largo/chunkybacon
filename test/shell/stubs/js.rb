@@ -24,6 +24,7 @@
 # Hash-backed fakes, CodeMirror (window.cellEditors) a fake editor per
 # initCell.
 require "json"
+require_relative "../../../html/lesson_refs"
 
 module JS
   class << self
@@ -551,7 +552,8 @@ module JS
       props["Object"] = {
         "keys" => proc { |o| o.equal?(props["localStorage"]) ? @storage.keys : (o.is_a?(::Hash) ? o.keys : []) }
       }
-      props["LESSONS"] = JSON.parse(File.read(File.expand_path("../../lessons.json", __dir__)))
+      # the course as bridge.js hands it over: lesson numbers filled in
+      props["LESSONS"] = LessonRefs.resolve(JSON.parse(File.read(File.expand_path("../../lessons.json", __dir__))))
       @confirm = true
       %w[setCellCode refreshAllCells ensureThree ensurePython ensureSqlite ensureHerb ensurePicoRuby scrollTo].each do |name|
         props[name] = proc { |*args| @calls << [name, *args]; nil }

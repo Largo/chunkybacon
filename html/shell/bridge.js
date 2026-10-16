@@ -294,9 +294,32 @@
   // ?kernel=eager starts CRuby at once, beside the shell (for comparison)
   if (/[?&]kernel=eager(&|$)/.test(location.search)) startKernel();
 
+  // Lessons are numbered by their place, not in their text: a reference
+  // names the lesson's id where its number goes ("lesson {{nr:methoden}}"),
+  // filled in here - html/lesson_refs.rb does the same for the server, the
+  // linter and the shell tests. An unknown id stays as written.
+  function resolveLessonNumbers(data) {
+    var numbers = {};
+    data.lessons.forEach(function (lesson, idx) { numbers[lesson.id] = idx + 1; });
+    var walk = function (value) {
+      if (typeof value === "string") {
+        return value.indexOf("{{nr:") < 0 ? value : value.replace(/\{\{nr:([\w-]+)\}\}/g, function (token, id) {
+          return numbers[id] ? String(numbers[id]) : token;
+        });
+      }
+      if (Array.isArray(value)) return value.map(walk);
+      if (value && typeof value === "object") {
+        Object.keys(value).forEach(function (key) { value[key] = walk(value[key]); });
+      }
+      return value;
+    };
+    data.lessons = walk(data.lessons);
+    return data;
+  }
+
   // lessons.js holds the course as one JSON string; the shell reads it as an
   // object, field by field
-  window.LESSONS = JSON.parse(window.LESSONS_JSON);
+  window.LESSONS = resolveLessonNumbers(JSON.parse(window.LESSONS_JSON));
 
   // the course's languages are its ui sections; <html lang> is right from
   // the spinner on (screen readers), the shell renders in it
