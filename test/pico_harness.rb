@@ -46,6 +46,7 @@ module PicoHarness
       case arg
       when "--demos" then opts[:demos] = true
       when "--stdin" then opts[:stdin] = true
+      when "--eval-checks" then nil
       when /\A--lang=(.+)\z/ then opts[:langs] = Regexp.last_match(1).split(",")
       when /\A--only=(.+)\z/ then opts[:only] = Regexp.last_match(1).split(",")
       when /\A--/ then abort "unknown option #{arg}"
@@ -198,7 +199,8 @@ module PicoHarness
   def check(source, run, code)
     bind = RubyVM::InstructionSequence.compile("proc { binding }.call", "check.rb").eval
     bind.local_variable_set(:output, run[:output])
-    bind.local_variable_set(:result, run[:error] ? nil : PicoRubyCells.value(run[:result].inspect))
+    value = run.key?(:inspect) ? run[:inspect] : run[:result].inspect
+    bind.local_variable_set(:result, run[:error] ? nil : PicoRubyCells.value(value))
     bind.local_variable_set(:code, code)
     bind.local_variable_set(:board, PicoRubyCells.board(run[:summary]))
     !!eval(source, bind, "check.rb")
@@ -246,7 +248,24 @@ module PicoHarness
     errors
   end
 
+  # test/pico_wasm_test.mjs: checks of runs PicoRuby.wasm made - stdin a
+  # JSON Array of {check, output, inspect, error, code, summary}, stdout a
+  # JSON Array of true/false
+  def eval_checks
+    require_relative "../html/picoruby_cells"
+    PicoRubyCells.font_source = -> { File.read(File.join(HTML, "pico/lib/font5x7.rb")) }
+    runs = JSON.parse($stdin.read)
+    results = runs.map do |r|
+      run = { output: r["output"].to_s, error: r["error"] ? RuntimeError.new(r["error"]) : nil,
+              summary: r["summary"].to_s, inspect: r["inspect"].to_s }
+      check(r["check"].to_s, run, r["code"].to_s)
+    end
+    puts JSON.generate(results)
+  end
+
   def main(argv)
+    return eval_checks if argv.include?("--eval-checks")
+
     opts = options(argv)
     if (lang = ENV["PICO_HARNESS_LANG"])
       items = Marshal.load($stdin.read) # rubocop:disable Security/MarshalLoad - our own parent process
