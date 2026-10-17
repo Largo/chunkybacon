@@ -2167,6 +2167,72 @@ browser. 127.0.0.1, localhost and https are secure contexts; a plain-http
 address such as `http://88.99.151.170:8011` is not - there the button only
 says why not.
 
+**A real Pico** (opt-in, DESIGN N6; `html/pico_real.js`, loaded by
+index.html's `ensurePicoBoard` before pico_board.js, which calls
+`chunkyPicoReal.attach(figure, bench, t)` for every bench it builds). Two
+folded `<details>` under the controls, on the page's main thread:
+
+- **🔌 A real Pico (USB)** on every bench: Web Serial to a Pico running
+  R2P2. `requestPort` filtered to R2P2's USB vendor 0x16C0 (a box lists
+  every port), opened at 115200 (meaningless for USB CDC; the Web
+  Terminal's default). One connection for the page, shown in every open
+  panel. `Term` is as much VT100 as R2P2's line editor uses (CR, LF as
+  CRLF like the Web Terminal's `convertEol`, BS, CUU/CUD/CUF/CUB/CNL/CPL/
+  CHA/CUP, ED, EL, SU/SD, SGR and ?25 ignored, OSC skipped, 24 x 80, 400
+  lines above) and **answers the editor's queries** (ESC[5n -> ESC[0n,
+  ESC[6n -> the cursor; unanswered, each query waits 500 ms, and a shell
+  that got no answer at boot takes the terminal as dumb). A line field types (+ CR), Ctrl-C.
+  **Send this cell** (`Link#sendCell`): Ctrl-C, Ctrl-D (leaves irb; only
+  prints ^D at the shell), wait for `$> ` on the cursor's line (else irb's
+  prompt -> Ctrl-D again, else Ctrl-C, else Enter); then per file one
+  **PicoModem** session - capture raw bytes, Ctrl-B, skip to the ACK, wait
+  200 ms, FILE_WRITE (size + path), FILE_ACK, CHUNKs of 480 each answered
+  by CHUNK_ACK, DONE_ACK with the CRC-32 compared; writes in 32-byte pieces
+  20 ms apart; 5 s per answer; ABORT if it fails inside the session - then
+  wait for the shell's "[PicoModem] write <path>" and the prompt (the
+  editor drops what came before it); the tabs to `/lib/<name>`, the code to
+  `/home/chunky.rb` (or `/home/app.rb`, a box: R2P2 starts it at power-up),
+  then the path + CR typed, which runs it as a job. With tabs, the main file
+  gets one first line `["/lib/x.rb"].each { |f| $LOADED_FEATURES.delete(f)
+  }` (R2P2's require remembers the full path; the simulator clears its
+  features per run too); a `show_irb` line (the page's) becomes a comment.
+  Every one of these facts is cited by file and line in pico_real.js's head
+  and in `tmp/pico-research/PROGRESS.md` (PicoRuby 4.0.3: shell.rb,
+  editor.rb, io-console.rb, picomodem.rb, crc.c, require.rb, sandbox.rb,
+  machine.c, usb_descriptors.c; picoruby.org's `pages/r2p2/terminal.rb`;
+  master's `tools/picomodem.rb`).
+- **📶 A real Pico 2 W (Bluetooth)** on benches with the `laptop`: Web
+  Bluetooth, `requestDevice({filters: [{services: [NUS]}]})` (BLE::UART
+  advertises its 128-bit service UUID), RX ...0002 written without response
+  in 20-byte pieces, TX ...0003 notifications put together into lines.
+  While it is connected `chunkyPicoBoard.ble()` reports it (`real: true`,
+  its advertised name), so `require "ble"`'s `BLE::Adapter#devices` in the
+  CRuby cell finds it; `sendLine` goes to it instead of the simulator;
+  each line it sends is one `chunky:pico-ble` event (`realBle`) and shows
+  on every laptop's screen. Not PicoRuby.wasm's `JS::BLE::UART`: the cells'
+  PicoRuby is in a worker, which has no Web Bluetooth.
+- **Degrades**: not `isSecureContext` (plain http such as
+  `http://88.99.151.170:8011`) -> a note naming https and localhost; no
+  `navigator.serial` / `.bluetooth` (Firefox, Safari, phones) -> a note
+  naming the browsers that have it. No button then. The panels' strings are
+  `boardReal*` (de/en/ja; `chunkyPicoReal.lib.EN` is the English fallback,
+  kept equal to `ui.en` by the test). pico-deploy's last cell explains it
+  all to the learner (and the safety: only a device picked in the
+  browser's chooser, only while the tab is open), pico-ble's Web Bluetooth
+  item points to it.
+- **Untested on hardware.** The tests: `node test/pico_real_test.mjs`
+  (CRC vectors, frames, Term, `Link` against `test/pico_real_fakes.js`'s
+  FakeR2P2 and against PicoModem's own device code - `test/vendor/
+  picomodem.rb`, 4.0.3 unchanged, SHA-256 checked, run under CRuby by
+  `test/pico_real_device.rb` with stdin/stdout as the port -, BleLink
+  against a FakeBluetooth) and `test/pico_real_ui_test.mjs` (the panels
+  per capability in de/en/ja, connect, Send with and without tabs, irb,
+  app.rb, unplugging, disconnect; Bluetooth with the CRuby cell; with the
+  fakes injected by `addInitScript`). Open on hardware: whether Chrome's
+  Web Serial needs DTR set for TinyUSB to send (the Web Terminal does not
+  set it), whether 32-byte pieces are needed on the RP2350, whether
+  `$LOADED_FEATURES` is shared between the shell's jobs.
+
 **The bench script** (`"bench"` on a cell) applies inputs at fixed times
 in the Ruby world - presses, slider values, BLE lines, the arena's layout,
 Wi-Fi off - on the page and in the harness alike, so an exercise with input
@@ -2224,8 +2290,8 @@ address, chunk sizes, the camera (PicoRuby has no camera driver; the
 pictures are our own drawings), error messages the C source has no literal
 for, the WS2812's 550 ns threshold, the PicoGo's LED order, which way the
 LCD's glass sits in its controller's RAM, and that PIO is measured, not
-run. **Nothing has been tried on a real Pico** yet (the ST7789 driver and
-the WS2812 gem included): the drivers follow the
+run. **Nothing has been tried on a real Pico** yet (the ST7789 driver,
+the WS2812 gem and the page's USB and Bluetooth links included): the drivers follow the
 datasheets and Waveshare's demos and are tested in the simulator only. A
 hidden browser tab throttles timers, which stretches `sleep_ms`; the
 checks' tolerances are wide, the harness is exact.
@@ -2247,7 +2313,8 @@ test/pico_wasm_test.mjs` (probes, parts and every demo cell on real
 PicoRuby.wasm, ~2 min), and against a dev server `node
 test/pico_lessons_test.mjs [de] [en] [ja]` (every lesson in a browser,
 ~2 min per language; `SHOTS=dir` saves screenshots),
-`test/pico_board_test.mjs` and `test/pico_bench_shots.mjs` (on the lesson
+`node test/pico_real_test.mjs` and `test/pico_real_ui_test.mjs` (a real Pico,
+above), `test/pico_board_test.mjs` and `test/pico_bench_shots.mjs` (on the lesson
 files in `tmp/pico-lessons/`; the shots include the LCD with a key held,
 the matrix and the PicoGo's LEDs, also narrow and dark), `test/pico_extras_test.mjs` (pico-deploy's
 tables at 360 px and desktop, the static previews, the webcam with
