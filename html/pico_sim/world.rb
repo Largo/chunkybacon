@@ -115,6 +115,8 @@ module PicoSim
       @spi = []
       @adc = {}
       @adc_on = {}
+      @pio_used = {}
+      @pio_watchers = {}
       @onboard = 0
       @last_state = nil
     end
@@ -157,6 +159,8 @@ module PicoSim
       @spi = []
       @adc = {}
       @adc_on = {}
+      @pio_used = {}
+      @pio_watchers = {}
       @onboard = 0
       @radio = Radio.new
       @wifi = WifiState.new
@@ -209,7 +213,9 @@ module PicoSim
     end
 
     def finish
-      advance(now)
+      t = advance(now)
+      # what is still on its way (a WS2812 frame) arrives
+      @parts.each { |part| part.flush(self, t) }
       @last_state = nil
       tick
       PicoSim.host.summary(summary_json)
@@ -260,6 +266,11 @@ module PicoSim
 
     def adc_source(input, part)
       @adc[input] = part
+    end
+
+    # a part that reads what a PIO state machine sends on +pin+ (on_pio)
+    def pio_watch(pin, part)
+      (@pio_watchers[pin] ||= []) << part
     end
 
     def part(id)
@@ -456,11 +467,20 @@ module PicoSim
     end
 
     # the bytes go to the device whose chip select is low at this moment
+    # (+bytes+: an Array of Integers, or a String - a part that takes
+    # Strings gets it as it is, the others its bytes)
     def spi_write(unit, bytes)
       advance
       @spi.each do |entry|
         next unless entry[0] == unit && out_level(entry[1]) == 0
-        entry[2].spi_write(self, bytes)
+        device = entry[2]
+        if bytes.is_a?(String) && !device.takes_string?
+          list = []
+          bytes.each_byte { |b| list << b }
+          device.spi_write(self, list)
+        else
+          device.spi_write(self, bytes)
+        end
       end
     end
 
@@ -472,6 +492,71 @@ module PicoSim
     def spi_transfer(unit, bytes)
       spi_write(unit, bytes)
       Array.new(bytes.size, 0)
+    end
+
+    # ---------- PIO (devices/pio.rb) ----------
+
+    # the program into the block's 32 slots: false when it does not fit
+    def pio_init(sm)
+      used = @pio_used[sm.pio] || 0
+      return false if used + sm.instructions.size > Pio::SLOTS
+      @pio_used[sm.pio] = used + sm.instructions.size
+      [sm.pin].each { |pin| (@pins[pin].mode = :pio; @pins[pin].function = :pio) if pin >= 0 && pin < 30 }
+      true
+    end
+
+    def pio_enable(sm, on)
+      sm.enabled = on
+      return unless on && sm.backlog.size > 0
+      words = sm.backlog
+      sm.backlog = []
+      pio_send(sm, words, advance)
+    end
+
+    # words into the TX FIFO: a running state machine shifts them out on its
+    # pin; a stopped one keeps them until the FIFO is full - and then the
+    # put waits, as on the chip, for ever
+    def pio_put(sm, words)
+      PicoSim.breathe_out
+      t = advance
+      unless sm.enabled
+        sm.backlog.concat(words)
+        pio_stall(sm, "put: the TX FIFO is full and the state machine does not run (sm.start)") if sm.backlog.size > sm.fifo_depth
+        return
+      end
+      pio_send(sm, words, t)
+    end
+
+    def pio_send(sm, words, t)
+      start = sm.busy_until > t ? sm.busy_until : t
+      sm.busy_until = start + sm.words_ms(words.size, @board)
+      list = @pio_watchers[sm.pin]
+      list.each { |part| part.on_pio(self, sm, words, t) } if list
+    end
+
+    # words still waiting in the TX FIFO
+    def pio_tx_level(sm)
+      return (sm.backlog.size > sm.fifo_depth ? sm.fifo_depth : sm.backlog.size) unless sm.enabled
+      left = sm.busy_until - now
+      return 0 if left <= 0
+      n = (left / sm.words_ms(1, @board)).to_i
+      n > sm.fifo_depth ? sm.fifo_depth : n
+    end
+
+    def pio_clear(sm)
+      sm.backlog = []
+    end
+
+    def pio_drain(sm)
+      left = sm.busy_until - now
+      sleep_ms(left.ceil) if left > 0
+    end
+
+    def pio_stall(sm, why)
+      event("log", "PIO#{sm.pio} SM#{sm.sm}: #{why}")
+      while true
+        sleep_ms 100
+      end
     end
 
     # ---------- the board's own LED, Wi-Fi, HTTP ----------
@@ -531,8 +616,23 @@ module PicoSim
       out
     end
 
+    # PicoRuby's JSON.generate escapes a String char by char - a second for
+    # the LCD's 129 600 hex digits - so a part's big hex goes in afterwards,
+    # in place of its mark (#raw_mark)
     def summary_json
-      JSON.generate(summary)
+      @raw = {}
+      text = JSON.generate(summary)
+      @raw.each { |mark, hex| text = text.sub("\"#{mark}\"", "\"#{hex}\"") }
+      @raw = {}
+      text
+    end
+
+    # a String that needs no escaping (hex digits), for the summary: its mark
+    def raw_mark(name, hex)
+      return hex unless @raw
+      mark = "@raw:#{name}@"
+      @raw[mark] = hex
+      mark
     end
   end
 

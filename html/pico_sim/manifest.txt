@@ -8,6 +8,8 @@ vendor/pwm.rb
 vendor/adc.rb
 vendor/i2c.rb
 vendor/spi.rb
+vendor/pio.rb
+vendor/pio_state_machine.rb
 vendor/cyw43.rb
 stand_ins/cyw43.rb
 stand_ins/network.rb
@@ -25,5 +27,8 @@ devices/epd213.rb
 devices/bme280.rb
 devices/picogo.rb
 devices/radio.rb
+devices/pio.rb
+devices/ws2812.rb
+devices/st7789.rb
 host_js.rb
 boot.rb

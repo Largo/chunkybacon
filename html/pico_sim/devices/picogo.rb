@@ -7,6 +7,8 @@
 #   IR obstacle sensors: GP2 right, GP3 left, 0 = an obstacle
 #   ultrasonic (stand_ins/hcsr04.rb): trig GP14, echo GP15
 #   buzzer (active): GP4      battery: GP26 (ADC0), 3.9 V / 2
+#   4 WS2812 LEDs underneath: GP22 (devices/ws2812.rb), 0 front left,
+#   then clockwise (sim choice: Waveshare's demo does not say)
 #
 # Forward is AIN2 = 1, AIN1 = 0 and BIN2 = 1, BIN1 = 0 (Motor.py); both
 # low or both high stops a wheel. Sim choices, which the lesson calls "in
@@ -32,7 +34,7 @@ module PicoSim
     }
     DEG = 3.141592653589793 / 180.0
 
-    def pins = [2, 3, 4, 14, 15, 16, 17, 18, 19, 20, 21, 26]
+    def pins = [2, 3, 4, 14, 15, 16, 17, 18, 19, 20, 21, 22, 26]
 
     def attach(world)
       @x, @y, @h = START
@@ -48,7 +50,12 @@ module PicoSim
       world.adc_source(0, self)
       world.watch(4, self)
       [16, 17, 18, 19, 20, 21].each { |pin| world.watch(pin, self) }
+      @leds = Ws2812Chain.new(22, 4)
+      world.pio_watch(22, self)
     end
+
+    def on_pio(world, sm, words, t) = @leds.on_pio(world, sm, words, t)
+    def flush(world, t) = @leds.flush(world, t)
 
     def layout(world, name)
       @layout = LAYOUTS[name] ? name : "open"
@@ -78,6 +85,7 @@ module PicoSim
     end
 
     def advance(world, t)
+      @leds.advance(world, t)
       @t ||= t
       while @t < t
         dt = t - @t
@@ -206,7 +214,8 @@ module PicoSim
       { "x" => @x.round(1), "y" => @y.round(1), "h" => (@h / DEG).round(1), "l" => left.round(1),
         "r" => right.round(1), "hit" => @hit, "layout" => @layout,
         "ir" => [ir_distance(world, 1) <= IR_RANGE ? 0 : 1, ir_distance(world, -1) <= IR_RANGE ? 0 : 1],
-        "sonar" => sonar(world).round(1), "box" => world.input("arena.box"), "bacon" => world.input("arena.bacon") }
+        "sonar" => sonar(world).round(1), "box" => world.input("arena.box"), "bacon" => world.input("arena.bacon"),
+        "leds" => @leds.hex }
     end
 
     def summary(world, out)
@@ -215,6 +224,7 @@ module PicoSim
                        "traveled" => @traveled.round(1), "gap" => gap(world).round(1), "hit" => @hit,
                        "moving" => moving?(world), "duty" => [world.pwm_duty(16), world.pwm_duty(21)],
                        "speed" => [left.round(1), right.round(1)], "layout" => @layout }
+      (out["ws2812"] ||= {})["22"] = @leds.summary
     end
   end
   PARTS["picogo"] = PicoGo

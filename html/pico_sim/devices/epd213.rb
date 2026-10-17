@@ -213,7 +213,7 @@ module PicoSim
     end
 
     def summary(world, out)
-      out["epd"] = { "refreshes" => @refreshes, "frame" => hex(world.epd_store["panel"]),
+      out["epd"] = { "refreshes" => @refreshes, "frame" => world.raw_mark("epd", hex(world.epd_store["panel"])),
                      "sleeping" => @sleeping, "unknown" => @unknown }
     end
   end

@@ -34,7 +34,7 @@ const STATE_EVERY = 33;  // ms: "state" snapshots are coalesced to the latest
 
 // the require stubs: `require "gpio"` succeeds as on R2P2, the classes are
 // already there (html/pico_sim/boot.rb loaded them)
-export const STUBS = ["gpio", "pwm", "adc", "i2c", "spi", "cyw43", "network", "ble",
+export const STUBS = ["gpio", "pwm", "adc", "i2c", "spi", "pio", "cyw43", "network", "ble",
   "hcsr04", "camera", "socket", "net/http", "env"];
 
 // a zero-delay turn of the event loop: setTimeout(0) is clamped to 4 ms

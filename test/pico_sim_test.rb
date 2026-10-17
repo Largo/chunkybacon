@@ -12,6 +12,8 @@ require_relative "../html/picoruby_cells"
 
 PicoCRuby.load_sim
 $LOAD_PATH.unshift(File.expand_path("../html/pico/lib/en", __dir__), File.expand_path("../html/pico/lib", __dir__))
+require "pio"
+require "ws2812"
 PicoRubyCells.font_source = -> { File.read(File.expand_path("../html/pico/lib/font5x7.rb", __dir__)) }
 require "gpio"
 require "pwm"
@@ -469,6 +471,223 @@ class PicoSimTest < Minitest::Test
     assert_equal [[0, 0], [0, 1], [100, 0]], board.writes(15)
   end
 
+  # ---------- PIO and WS2812 ----------
+
+  def ws2812(num, pin)
+    require "ws2812"
+    WS2812.new(pin: pin, num: num)
+  end
+
+  # ksbmyk/picoruby-ws2812 (html/pico/lib/ws2812.rb, unchanged) on
+  # PicoRuby's own PIO assembler: the PicoGo's four LEDs
+  def test_ws2812_gem_drives_the_picogo_leds_through_pio
+    board = run_board(parts: ["picogo"]) do
+      led = ws2812(4, 22)
+      led.set_rgb(0, 255, 0, 0)
+      led.set_hex(1, 0x00FF00)
+      led.set_hsb(2, 240, 100, 100)
+      led.show
+      sleep_ms 10
+      led.brightness = 100
+      led.show
+    end
+    leds = board.leds(22)
+    assert_equal 4, leds.count
+    assert_equal 2, leds.frames
+    assert_equal [255, 0, 0], leds.rgb(0)
+    assert_equal [0, 255, 0], leds.rgb(1)
+    assert_equal [0, 0, 255], leds.rgb(2)
+    assert_equal [0, 1, 2], leds.lit
+    # 10 cycles a bit at 8 MHz: T1H 7 cycles, T0H 2
+    assert_equal [875, 250], leds.timing
+    assert_nil leds.note
+    assert_equal "pio", board.mode(22)
+    assert_equal leds.colors, board.leds.colors
+  end
+
+  def test_ws2812_brightness_is_applied_at_show
+    board = run_board(parts: ["picogo"]) do
+      led = ws2812(4, 22)
+      led.fill(255, 100, 0)
+      led.show
+    end
+    # the gem's default brightness: 5 %
+    assert_equal [[12, 5, 0]] * 4, board.leds.colors
+  end
+
+  def test_pio_at_the_default_clock_is_too_fast_for_ws2812
+    require "pio"
+    out = nil
+    board = run_board(parts: ["picogo"]) do
+      prog = WS2812.pio_program
+      sm = PIO::StateMachine.new(pio: PIO::PIO0, sm: 0, program: prog, sideset_pins: 22,
+                                 out_shift_right: false, out_shift_autopull: true, out_shift_threshold: 24,
+                                 fifo_join: PIO::FIFO_JOIN_TX)
+      sm.start
+      sm.put_buffer([0xFF0000 << 8] * 4)
+      out = sm.freq
+    end
+    assert_equal 125_000_000, out
+    assert_equal "too_fast", board.leds.note
+    assert_equal [], board.leds.lit
+    assert board.events.any? { |e| e[1] == "log" && e[2].include?("too short") }
+  end
+
+  def test_pio_program_by_hand_grb_left_aligned
+    require "pio"
+    board = run_board(parts: ["rgbled"]) do
+      prog = PIO.asm(side_set: 1) do
+        wrap_target
+        label :bitloop
+        out :x, 1, side: 0, delay: 2
+        jmp :do_zero, cond: :not_x, side: 1, delay: 1
+        label :do_one
+        jmp :bitloop, side: 1, delay: 4
+        label :do_zero
+        nop side: 0, delay: 4
+        wrap
+      end
+      sm = PIO::StateMachine.new(pio: PIO::PIO0, sm: 0, program: prog, freq: 8_000_000, sideset_pins: 6,
+                                 out_shift_right: false, out_shift_autopull: true, out_shift_threshold: 24,
+                                 fifo_join: PIO::FIFO_JOIN_TX)
+      sm.start
+      # GRB: green, red, blue
+      sm.put_buffer([0x00FF00 << 8, 0xFF0000 << 8, 0x0000FF << 8])
+      assert_operator sm.tx_level, :<=, 8
+      sm.drain_tx
+      assert_equal 0, sm.tx_level
+      assert sm.tx_empty?
+      assert_nil sm.get_nonblocking
+    end
+    leds = board.leds(6)
+    assert_equal 160, leds.count
+    assert_equal [[255, 0, 0], [0, 255, 0], [0, 0, 255]], leds.colors.first(3)
+    assert_equal [0, 1, 2], leds.lit
+  end
+
+  def test_pio_errors_and_a_put_that_waits_for_ever
+    require "pio"
+    prog = nil
+    run_board(parts: ["rgbled"]) do
+      prog = PIO.asm { set :x, 1 }
+      assert_raises(IOError) { PIO::StateMachine.new(pio: 2, sm: 0, program: prog) }
+      assert_raises(IOError) { PIO::StateMachine.new(pio: PIO::PIO0, sm: 4, program: prog) }
+      big = PIO.asm { 8.times { set :x, 1 } }
+      4.times { PIO::StateMachine.new(pio: PIO::PIO1, sm: 0, program: big) }
+      error = assert_raises(IOError) { PIO::StateMachine.new(pio: PIO::PIO1, sm: 1, program: prog) }
+      assert_equal "No space in PIO instruction memory", error.message
+      sm = PIO::StateMachine.new(pio: PIO::PIO0, sm: 1, program: prog)
+      assert_equal true, sm.put_nonblocking(1)
+      assert_equal 1, sm.tx_level
+      sm.clear_fifos
+      assert_equal 0, sm.tx_level
+    end
+    assert_raises(PicoCRuby::Timeout) do
+      run_board(parts: ["rgbled"]) do
+        sm = PIO::StateMachine.new(pio: PIO::PIO0, sm: 0, program: WS2812.pio_program, freq: 8_000_000, sideset_pins: 6)
+        sm.put_buffer([0] * 9)   # never started: the FIFO fills, the 9th waits
+      end
+    end
+  end
+
+  # the community gem is shown as it is: an unchanged copy
+  def test_ws2812_gem_is_the_unchanged_upstream_file
+    require "digest"
+    path = File.expand_path("../html/pico/lib/ws2812.rb", __dir__)
+    assert_equal "a2c8588eb24a453f364f5ef12bbbdf3f5575971a62139478debb9b8d0c8ccf6c", Digest::SHA256.file(path).hexdigest
+  end
+
+  # ---------- the Pico-LCD-1.14 ----------
+
+  def lcd
+    require "st7789"
+    ST7789.new(spi: SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000, sck_pin: 10, copi_pin: 11))
+  end
+
+  def test_lcd_fill_rect_and_text_through_the_lesson_driver
+    board = run_board(parts: ["lcd114"]) do
+      d = lcd
+      d.fill(ST7789::BLUE)
+      d.fill_rect(10, 10, 20, 5, ST7789::RED)
+      d.fill_rect(230, 130, 50, 50, ST7789.rgb(0, 255, 0))
+      d.text("Hi Pico", 60, 60, ST7789::YELLOW, bg: ST7789::BLUE, scale: 2)
+    end
+    l = board.lcd
+    assert l.on?
+    assert l.inverted?
+    assert l.visible?
+    assert_in_delta 90, l.backlight, 0.01
+    assert_equal 0x70, l.madctl
+    assert_equal [], l.unknown
+    assert_equal ST7789::BLUE, l.color(0, 0)
+    assert_equal ST7789::BLUE, l.color(229, 129)
+    assert_equal [255, 0, 0], l.rgb(10, 10)
+    assert_equal [255, 0, 0], l.rgb(29, 14)
+    assert_equal [0, 0, 255], l.rgb(30, 15)
+    # cut off at the edge: 10 x 5 of the 50 x 50
+    assert_equal ST7789::GREEN, l.color(239, 134)
+    assert_equal 50, l.count(ST7789::GREEN)
+    assert_equal 100, l.count(ST7789::RED)
+    assert_equal ST7789::BLUE, l.background
+    assert l.text?("Hi Pico")
+    refute l.text?("Hi Fox")
+    assert PicoCRuby.posted.any? { |kind, text| kind == "lcd" && text.start_with?("0,0,240,135|") }
+  end
+
+  def test_lcd_dark_before_init_inverted_without_invon_and_keeps_its_ram
+    board = run_board(parts: ["lcd114"]) { sleep_ms 5 }
+    refute board.lcd.on?
+    refute board.lcd.visible?
+    assert_equal [0, 0, 0], board.lcd.rgb(0, 0)
+    # the init without 0x21: true RGB565 in the RAM, inverted on the glass
+    board = run_board(parts: ["lcd114"]) do
+      d = lcd
+      d.fill(ST7789::WHITE)
+      d.send(:command, 0x20)
+    end
+    assert_equal [0, 0, 0], board.lcd.rgb(5, 5)
+    # a new run: the RAM keeps the picture, the display is off until init
+    board = run_board(parts: ["lcd114"]) { sleep_ms 5 }
+    refute board.lcd.on?
+    assert_equal ST7789::WHITE, board.lcd.color(5, 5)
+  end
+
+  def test_lcd_portrait_madctl_turns_the_picture
+    board = run_board(parts: ["lcd114"]) do
+      d = lcd
+      d.fill(ST7789::BLACK)
+      # portrait (MADCTL 0x00): Waveshare's offsets are 52 and 40
+      d.send(:command, 0x36, 0x00)
+      d.send(:command, 0x2A, 0, 52, 0, 52)
+      d.send(:command, 0x2B, 0, 40, 0, 40)
+      d.send(:command, 0x2C)
+      d.send(:data, 0xF8, 0x00)
+    end
+    # portrait (0, 0) is the landscape glass's bottom left
+    assert_equal ST7789::RED, board.lcd.color(0, 134)
+    assert_equal 1, board.lcd.count(ST7789::RED)
+  end
+
+  def test_lcd_keys_are_active_low_with_the_pull_up
+    a_seen = nil
+    board = run_board(parts: ["lcd114"], bench: [{ "at" => 100, "press" => 15 }, { "at" => 200, "release" => 15 },
+                                                 { "at" => 300, "press" => 20 }]) do
+      a = GPIO.new(15, GPIO::IN | GPIO::PULL_UP)
+      right = GPIO.new(20, GPIO::IN | GPIO::PULL_UP)
+      b = GPIO.new(17, GPIO::IN)   # no pull-up: the pad's pull-down reads 0
+      assert_equal 1, a.read
+      assert_equal 0, b.read
+      sleep_ms 150
+      a_seen = a.low?
+      sleep_ms 100
+      assert a.high?
+      sleep_ms 100
+      assert right.low?
+    end
+    assert a_seen
+    assert_equal "in_pull_up", board.mode(15)
+  end
+
   # test/pico_lint.rb's table of parts is the simulator's
   def test_lint_knows_the_parts_and_their_pins
     require_relative "pico_lint"
@@ -489,6 +708,12 @@ class PicoSimTest < Minitest::Test
     refute board.robot.hit?
     assert_equal [], board.ble.lines
     assert_nil board.http_json("x")
+    refute board.lcd.on?
+    assert_nil board.lcd.color(0, 0)
+    assert_equal [0, 0, 0], board.lcd.rgb(0, 0)
+    refute board.lcd.text?("x")
+    assert_equal [], board.leds.colors
+    assert_equal [0, 0, 0], board.leds(22).rgb(0)
     assert_nil PicoRubyCells.board("")
   end
 end

@@ -371,6 +371,12 @@ class SPI
   end
 
   def write(*outputs)
+    # one String (a display's pixels): handed on as it is, not byte by byte
+    if outputs.size == 1 && outputs[0].is_a?(String)
+      raise IOError.new("SPI write failed") if outputs[0].empty?
+      PicoSim.world.spi_write(@unit_num__, outputs[0])
+      return outputs[0].bytesize
+    end
     bytes = PicoSim.flatten_bytes(outputs, ArgumentError)
     raise IOError.new("SPI write failed") if bytes.empty?
     PicoSim.world.spi_write(@unit_num__, bytes)
@@ -391,4 +397,114 @@ class SPI
   def cipo_pin = @info__[2]
   def copi_pin = @info__[3]
   def cs_pin = @info__[4]
+end
+
+# picoruby-pio's C half (src/mruby/pio.c, ports/rp2040/pio.c of 4.0.3) on
+# the simulated PIO (devices/pio.rb). PIO::StateMachine.new (vendored
+# pio_state_machine.rb) calls init with the program and 21 settings.
+module PIO
+  class StateMachine
+    def self.init(*args)
+      raise ArgumentError.new("wrong number of arguments (given #{args.size}, expected 23)") if args.size != 23
+      args.each_with_index do |a, i|
+        next if i == 2
+        raise TypeError.new("wrong argument type #{a.class} (expected Integer)") unless a.is_a?(Integer)
+      end
+      raise TypeError.new("wrong argument type #{args[2].class} (expected Array)") unless args[2].is_a?(Array)
+      # pio_instance knows PIO0 and PIO1; sm_num is a uint8_t
+      raise IOError.new("Invalid PIO number") if args[0] != 0 && args[0] != 1
+      raise IOError.new("Invalid state machine number") if args[1] < 0 || args[1] > 3
+      instructions = []
+      i = 0
+      while i < args[3]
+        instructions << ((args[2][i] || 0) & 0xFFFF)
+        i += 1
+      end
+      config = args.dup
+      config[2] = instructions
+      sm = PicoSim::PioSm.new(config)
+      raise IOError.new("No space in PIO instruction memory") unless PicoSim.world.pio_init(sm)
+      obj = allocate
+      obj.init__(sm)
+      obj
+    end
+
+    def init__(sm)
+      @sm__ = sm
+    end
+
+    def start
+      PicoSim.world.pio_enable(@sm__, true)
+      nil
+    end
+
+    def stop
+      PicoSim.world.pio_enable(@sm__, false)
+      nil
+    end
+
+    def restart
+      nil
+    end
+
+    def put_buffer(ary)
+      raise TypeError.new("wrong argument type #{ary.class} (expected Array)") unless ary.is_a?(Array)
+      ary.each { |w| raise TypeError.new("wrong argument type #{w.class} (expected Integer)") unless w.is_a?(Integer) }
+      PicoSim.world.pio_put(@sm__, ary)
+      nil
+    end
+
+    def put_bytes(str)
+      raise TypeError.new("wrong argument type #{str.class} (expected String)") unless str.is_a?(String)
+      words = []
+      str.each_byte { |b| words << b }
+      PicoSim.world.pio_put(@sm__, words)
+      nil
+    end
+
+    def put_nonblocking(value)
+      raise TypeError.new("wrong argument type #{value.class} (expected Integer)") unless value.is_a?(Integer)
+      return false if PicoSim.world.pio_tx_level(@sm__) >= @sm__.fifo_depth
+      PicoSim.world.pio_put(@sm__, [value])
+      true
+    end
+
+    # nothing in these programs pushes: a blocking get waits for ever
+    def get
+      PicoSim.world.pio_stall(@sm__, "get: the RX FIFO stays empty")
+      0
+    end
+
+    def get_nonblocking = nil
+    def tx_level = PicoSim.world.pio_tx_level(@sm__)
+    def rx_level = 0
+    def tx_full = PicoSim.world.pio_tx_level(@sm__) >= @sm__.fifo_depth ? 1 : 0
+    def tx_empty = PicoSim.world.pio_tx_level(@sm__) == 0 ? 1 : 0
+    def rx_full = 0
+    def rx_empty = 1
+
+    def clear_fifos
+      PicoSim.world.pio_clear(@sm__)
+      nil
+    end
+
+    def drain_tx
+      PicoSim.world.pio_drain(@sm__)
+      nil
+    end
+
+    def exec(instr)
+      raise TypeError.new("wrong argument type") unless instr.is_a?(Integer)
+      nil
+    end
+
+    def freq = @sm__.freq
+
+    def freq=(freq)
+      raise TypeError.new("wrong argument type") unless freq.is_a?(Integer)
+      raise ArgumentError.new("freq must be positive") if freq <= 0
+      @sm__.freq = freq
+      freq
+    end
+  end
 end

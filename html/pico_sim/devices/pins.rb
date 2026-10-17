@@ -8,6 +8,8 @@
 #   on_write(world, pin, level, t)   an output pin it watches changed
 #   adc_voltage(world, input, t)     the volts on an ADC input
 #   advance(world, t)      time passed
+#   flush(world, t)        the run ends: what is on its way arrives
+#   on_pio(world, sm, words, t)  a PIO state machine sends words on its pin
 #   state(world)           a Hash for the bench on the page (or nil)
 #   summary(world, out)    adds its part of the summary (the check's board)
 
@@ -28,11 +30,14 @@ module PicoSim
     end
 
     def pins = []
+    def takes_string? = false
     def attach(world) = nil
     def drive(world, pin, t) = nil
     def on_write(world, pin, level, t) = nil
     def adc_voltage(world, input, t) = 0.0
     def advance(world, t) = nil
+    def flush(world, t) = nil
+    def on_pio(world, sm, words, t) = nil
     def state(world) = nil
     def summary(world, out) = nil
   end

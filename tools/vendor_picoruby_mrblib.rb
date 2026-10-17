@@ -1,7 +1,8 @@
 # Puts PicoRuby's own Ruby for the peripherals into html/pico_sim/vendor/:
-# the mrblib/*.rb of picoruby-gpio, -pwm, -adc, -i2c, -spi, -cyw43 and
-# -net-http, unchanged, at the tag of the PicoRuby.wasm the course runs
-# (html/assets/picoruby/PICORUBY_VERSION.txt). The Pico simulator
+# the mrblib/*.rb of picoruby-gpio, -pwm, -adc, -i2c, -spi, -cyw43,
+# -net-http and -pio (its assembler is pure Ruby), unchanged, at the tag
+# of the PicoRuby.wasm the course runs (html/assets/picoruby/
+# PICORUBY_VERSION.txt). The Pico simulator
 # (docs/HANDOVER.md §6r) runs them on top of html/pico_sim/prims.rb, its
 # Ruby version of their C primitives - so GPIO's flag checks, I2C#scan's
 # output and Net::HTTP's reading of a response are PicoRuby's.
@@ -36,7 +37,9 @@ FILES = [
   %w[picoruby-cyw43 cyw43.rb cyw43.rb],
   %w[picoruby-net-http http_request.rb net-http/http_request.rb],
   %w[picoruby-net-http http_response.rb net-http/http_response.rb],
-  %w[picoruby-net-http http_client.rb net-http/http_client.rb]
+  %w[picoruby-net-http http_client.rb net-http/http_client.rb],
+  %w[picoruby-pio pio.rb pio.rb],
+  %w[picoruby-pio pio_state_machine.rb pio_state_machine.rb]
 ].freeze
 
 def wasm_version

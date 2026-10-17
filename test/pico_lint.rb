@@ -18,14 +18,15 @@ module PicoLint
   PART_PINS = {
     "led15" => [15], "button14" => [14], "light26" => [26], "temp" => [], "buzzer16" => [16],
     "envsensor" => [20, 21], "epd213" => [8, 9, 10, 11, 12, 13],
-    "picogo" => [2, 3, 4, 14, 15, 16, 17, 18, 19, 20, 21, 26], "camera" => [], "wifi" => [], "laptop" => []
+    "picogo" => [2, 3, 4, 14, 15, 16, 17, 18, 19, 20, 21, 22, 26], "camera" => [], "wifi" => [], "laptop" => [],
+    "rgbled" => [6], "lcd114" => [2, 3, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 20]
   }.freeze
   # parts whose inputs an exercise's check depends on: it needs a bench
-  INPUT_PARTS = %w[button14 light26 envsensor picogo laptop camera].freeze
+  INPUT_PARTS = %w[button14 light26 envsensor picogo laptop camera lcd114].freeze
   ARENAS = %w[open wall60 box].freeze
   BENCH_ACTIONS = %w[set press release arena ble wifi].freeze
   # what the worker writes to /lib itself (picoruby_worker_core.js STUBS)
-  STUBS = %w[gpio pwm adc i2c spi cyw43 network ble hcsr04 camera socket net/http env].freeze
+  STUBS = %w[gpio pwm adc i2c spi pio cyw43 network ble hcsr04 camera socket net/http env].freeze
   TAB_NAME = %r{\A[a-z0-9_][a-z0-9_/.-]*\.rb\z}
 
   module_function

@@ -303,16 +303,18 @@ xord.org, under the MIT License (the text above).
 
 | Component | Version | License | Copyright | Files |
 |---|---|---|---|---|
-| PicoRuby's peripheral mrblib: `picoruby-gpio`, `-pwm`, `-adc`, `-i2c`, `-spi`, `-cyw43`, `-net-http` (`mrbgems/<gem>/mrblib/`) | 4.0.3 (tag) | MIT (the text in `html/assets/picoruby/NOTICE.md`) | HASUMI Hitoshi and the PicoRuby contributors | `html/pico_sim/vendor/`: `gpio.rb`, `pwm.rb`, `adc.rb`, `i2c.rb`, `spi.rb`, `cyw43.rb`, `net-http/http_request.rb`, `net-http/http_response.rb`, `net-http/http_client.rb` - unchanged copies; sizes and SHA-256 in `vendor/VENDOR.txt` (`tools/vendor_picoruby_mrblib.rb`) |
+| PicoRuby's peripheral mrblib: `picoruby-gpio`, `-pwm`, `-adc`, `-i2c`, `-spi`, `-cyw43`, `-net-http`, `-pio` (`mrbgems/<gem>/mrblib/`) | 4.0.3 (tag) | MIT (the text in `html/assets/picoruby/NOTICE.md`) | HASUMI Hitoshi and the PicoRuby contributors | `html/pico_sim/vendor/`: `gpio.rb`, `pwm.rb`, `adc.rb`, `i2c.rb`, `spi.rb`, `cyw43.rb`, `net-http/http_request.rb`, `net-http/http_response.rb`, `net-http/http_client.rb`, `pio.rb`, `pio_state_machine.rb` - unchanged copies; sizes and SHA-256 in `vendor/VENDOR.txt` (`tools/vendor_picoruby_mrblib.rb`) |
+| [picoruby-ws2812](https://github.com/ksbmyk/picoruby-ws2812) (community gem, a pure-Ruby WS2812 driver over `picoruby-pio`), `mrblib/ws2812.rb` | commit 6f0b6d2 (2026-03-28) | MIT | 2025 ksbmyk (Miyuki Koshiba) | `html/pico/lib/ws2812.rb` - an unchanged copy (SHA-256 checked by `test/pico_sim_test.rb`); shown read-only as a tab in lesson `pico-robot` |
 | The 5×7 font, derived from X11 misc-fixed `5x7.bdf` | - | public domain ("Public domain font. Share and enjoy.") | - | `html/pico/lib/font5x7.rb` (`tools/build_font5x7.rb`) |
 
 The rest of the simulator (`prims.rb`, the devices and stand-ins) is our own
 code, written from the PicoRuby 4.0.3 C sources' behaviour and the parts'
-datasheets (Bosch BME280, Solomon Systech SSD16xx/UC8151, Toshiba TB6612).
+datasheets (Bosch BME280, Solomon Systech SSD16xx/UC8151, Toshiba TB6612,
+Sitronix ST7789V, Worldsemi WS2812B, the RP2040/RP2350 PIO chapters).
 The drivers in `html/pico/lib/{de,en,ja}/` are our own; the e-paper's command
 sequence and the PicoGo's pins and motor direction table follow Waveshare's
-MicroPython/C demo code (`EPD_2in13_V4`, `Motor.py`) as facts - no code was
-copied. The board, breadboard and part drawings in `html/pico_board.js` and
+MicroPython/C demo code (`EPD_2in13_V4`, `Motor.py`, `Pico-LCD-1.14.py`,
+`Pico-RGB-LED.py`) as facts - no code was copied. The board, breadboard and part drawings in `html/pico_board.js` and
 `html/assets/pico/prremote-sequence.svg` are our own. "Raspberry Pi" and
 "Pico" are trademarks of Raspberry Pi Ltd, "Waveshare" and "PicoGo" of
 Waveshare Electronics; they are named to identify the hardware only.

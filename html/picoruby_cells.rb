@@ -133,6 +133,14 @@ module PicoRubyCells
     def i2c = @data["i2c"].is_a?(Hash) ? @data["i2c"] : {}
 
     def epd = Epd.new(@data["epd"])
+    def lcd = Lcd.new(@data["lcd"])
+
+    # the WS2812 chain on +pin+ (22: the PicoGo's four, 6: the Pico-RGB-LED);
+    # without a pin the first there is
+    def leds(pin = nil)
+      all = @data["ws2812"].is_a?(Hash) ? @data["ws2812"] : {}
+      Leds.new(pin ? all[pin.to_s] : all.values.first)
+    end
     def robot = Robot.new(@data["robot"])
     def ble = Ble.new(@data["ble"])
 
@@ -151,6 +159,65 @@ module PicoRubyCells
     def wifi_connected? = (@data["wifi"] || {})["connected"] == true
 
     def events = @data["events"].is_a?(Array) ? @data["events"] : []
+
+    # Text in the 5 x 7 font on a picture: the including class answers
+    # blank?, black?(x, y) (ink there?) and black_pixels ([[x, y], ...]).
+    module InkText
+      # +str+ drawn in the 5 x 7 font (html/pico/lib/font5x7.rb) at scale
+      # 1, 2 or 3, black on white, anywhere on the picture
+      def text?(str)
+        str = str.to_s
+        return false if str.empty? || blank?
+
+        font = PicoRubyCells.font
+        (1..3).any? { |scale| find_text(str, scale, font) }
+      rescue StandardError
+        false
+      end
+
+      def find_text(str, scale, font)
+        glyphs = str.chars.map { |c| font[0][(c.ord.between?(32, 126) ? c.ord : 63) - 32] }
+        advance = font[1]
+        # where the first glyph's first black pixel could be
+        first = nil
+        glyphs.each_with_index do |rows, i|
+          rows.each_with_index do |bits, r|
+            col = (0..4).find { |cc| bits & (0x10 >> cc) != 0 }
+            if col
+              first = [i * advance + col, r]
+              break
+            end
+          end
+          break if first
+        end
+        return false unless first
+
+        black_pixels.any? do |bx, by|
+          ox = bx - first[0] * scale
+          oy = by - first[1] * scale
+          glyphs_at?(glyphs, ox, oy, scale, advance)
+        end
+      end
+
+      def glyphs_at?(glyphs, ox, oy, scale, advance)
+        glyphs.each_with_index do |rows, i|
+          gx = ox + i * advance * scale
+          rows.each_with_index do |bits, r|
+            5.times do |c|
+              ink = bits & (0x10 >> c) != 0
+              # a glyph's last column may be its built-in gap: white is
+              # required only where the font has ink in that column somewhere
+              next if !ink && c == 4 && rows.none? { |b| b & 1 != 0 }
+
+              px = gx + c * scale
+              py = oy + r * scale
+              return false if black?(px, py) != ink
+            end
+          end
+        end
+        true
+      end
+    end
 
     class Epd
       def initialize(data)
@@ -202,60 +269,105 @@ module PicoRubyCells
         end
       end
 
-      # +str+ drawn in the 5 x 7 font (html/pico/lib/font5x7.rb) at scale
-      # 1, 2 or 3, black on white, anywhere on the picture
-      def text?(str)
-        str = str.to_s
-        return false if str.empty? || @bytes.nil?
+      include InkText
+    end
 
-        font = PicoRubyCells.font
-        (1..3).any? { |scale| find_text(str, scale, font) }
-      rescue StandardError
-        false
+    # The Pico-LCD-1.14's glass (html/pico_sim/devices/st7789.rb): 240 x
+    # 135, x left to right, y top to bottom; the frame is the controller's
+    # RAM there, RGB565, 4 hex digits a pixel.
+    class Lcd
+      include InkText
+
+      WIDTH = 240
+      HEIGHT = 135
+
+      def initialize(data)
+        @data = data.is_a?(Hash) ? data : {}
+        hex = @data["frame"].to_s
+        @px = hex.size >= WIDTH * HEIGHT * 4 ? hex.scan(/\h{4}/).map { |h| h.to_i(16) } : nil
       end
 
-      def find_text(str, scale, font)
-        glyphs = str.chars.map { |c| font[0][(c.ord.between?(32, 126) ? c.ord : 63) - 32] }
-        advance = font[1]
-        # where the first glyph's first black pixel could be
-        first = nil
-        glyphs.each_with_index do |rows, i|
-          rows.each_with_index do |bits, r|
-            col = (0..4).find { |cc| bits & (0x10 >> cc) != 0 }
-            if col
-              first = [i * advance + col, r]
-              break
-            end
-          end
-          break if first
-        end
-        return false unless first
+      def there? = !@data.empty?
+      def blank? = @px.nil?
+      # display on and out of sleep
+      def on? = @data["lit"] == true
+      def inverted? = @data["inverted"] == true
+      def backlight = @data["backlight"].to_f
+      # something to see: on, and the backlight not dark
+      def visible? = on? && backlight.positive?
+      def writes = @data["writes"].to_i
+      def pixels_written = @data["pixels"].to_i
+      def madctl = @data["madctl"].to_i
+      def unknown = @data["unknown"].is_a?(Array) ? @data["unknown"] : []
 
-        black_pixels.any? do |bx, by|
-          ox = bx - first[0] * scale
-          oy = by - first[1] * scale
-          glyphs_at?(glyphs, ox, oy, scale, advance)
-        end
+      # the RGB565 number in the RAM at (x, y); nil outside or without a frame
+      def color(x, y)
+        return nil if @px.nil? || x.negative? || y.negative? || x >= WIDTH || y >= HEIGHT
+
+        @px[y * WIDTH + x]
       end
 
-      def glyphs_at?(glyphs, ox, oy, scale, advance)
-        glyphs.each_with_index do |rows, i|
-          gx = ox + i * advance * scale
-          rows.each_with_index do |bits, r|
-            5.times do |c|
-              ink = bits & (0x10 >> c) != 0
-              # a glyph's last column may be its built-in gap: white is
-              # required only where the font has ink in that column somewhere
-              next if !ink && c == 4 && rows.none? { |b| b & 1 != 0 }
+      # [r, g, b] (0..255) as the glass shows the pixel: dark when the
+      # display is off, inverted without INVON (the IPS glass needs it)
+      def rgb(x, y)
+        c = color(x, y)
+        return [0, 0, 0] if c.nil? || !on?
 
-              px = gx + c * scale
-              py = oy + r * scale
-              return false if black?(px, py) != ink
-            end
-          end
-        end
-        true
+        c ^= 0xFFFF unless inverted?
+        [(c >> 11) * 255 / 31, ((c >> 5) & 63) * 255 / 63, (c & 31) * 255 / 31]
       end
+
+      # how many pixels hold +c+ (an RGB565 number)
+      def count(c) = @px ? @px.count(c) : 0
+
+      # the colour most of the glass holds
+      def background
+        return nil if @px.nil?
+
+        @background ||= @px.tally.max_by { |_c, n| n }[0]
+      end
+
+      # ink for text?: every pixel that is not the background
+      def black?(x, y)
+        c = color(x, y)
+        !c.nil? && c != background
+      end
+
+      def black_pixels
+        return [] if @px.nil?
+
+        @black_pixels ||= begin
+          bg = background
+          out = []
+          @px.each_with_index { |c, i| out << [i % WIDTH, i / WIDTH] if c != bg }
+          out
+        end
+      end
+    end
+
+    # A WS2812 chain (html/pico_sim/devices/ws2812.rb): the colours the
+    # chips got, [r, g, b] 0..255 each, LED 0 first.
+    class Leds
+      def initialize(data)
+        @data = data.is_a?(Hash) ? data : {}
+      end
+
+      def there? = !@data.empty?
+      def count = @data["count"].to_i
+      def frames = @data["frames"].to_i
+      # nil, or why the chips saw nothing ("too_fast", "unknown", "one_level")
+      def note = @data["note"]
+      # [T1H, T0H] in ns, as the PIO program sent them
+      def timing = @data["timing"]
+
+      def colors
+        hex = @data["leds"].to_s
+        (0...(hex.size / 6)).map { |i| [hex[i * 6, 2].to_i(16), hex[i * 6 + 2, 2].to_i(16), hex[i * 6 + 4, 2].to_i(16)] }
+      end
+
+      def rgb(i) = colors[i] || [0, 0, 0]
+      def lit?(i) = rgb(i).any?(&:positive?)
+      def lit = colors.each_index.select { |i| lit?(i) }
     end
 
     class Robot

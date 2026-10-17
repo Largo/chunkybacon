@@ -27,7 +27,7 @@ module PicoCRuby
   SIM = File.join(HTML, "pico_sim")
   LIMIT_MS = 60_000.0
   # the require stubs the worker writes to /lib (picoruby_worker_core.js)
-  STUBS = %w[gpio pwm adc i2c spi cyw43 network ble hcsr04 camera socket net/http env].freeze
+  STUBS = %w[gpio pwm adc i2c spi pio cyw43 network ble hcsr04 camera socket net/http env].freeze
 
   class Timeout < StandardError; end
 
