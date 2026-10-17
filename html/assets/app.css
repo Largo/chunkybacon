@@ -626,6 +626,10 @@ nav#lessonNav a.active::before {
 .lessonText li { margin: 0.2rem 0; }
 .lessonText strong { font-weight: 700; }
 .lessonText code, .task code, #chunkyChat code { font-family: var(--font-code); }
+/* a long call (DRbObject.new_with_uri(...)) or a URL in the prose wraps
+   on a phone instead of widening the page */
+.lessonText :not(pre) > code, .lessonText a, .task code { overflow-wrap: anywhere; }
+.lessonText img { max-width: 100%; height: auto; }
 .lessonText :not(pre) > code { font-size: 0.88em; }
 .lessonText p > code, .lessonText li > code, .task code, #chunkyChat code {
   background: var(--code-bg);
@@ -866,7 +870,8 @@ kbd {
 .pico-moves { display: inline-flex; align-items: center; gap: 0.2rem; }
 .pico-moves-name { font-weight: 600; margin-right: 0.2rem; }
 .pico-move { min-width: 2rem; padding: 0.15rem 0.4rem; font-size: 0.85rem; }
-.pico-line input { width: 11rem; font: inherit; font-family: var(--font-code); padding: 0.2rem 0.4rem; border: 1px solid var(--ink-soft); border-radius: 4px; background: var(--pb-board); color: var(--pb-ink); }
+.pico-line { max-width: 100%; min-width: 0; }
+.pico-line input { box-sizing: border-box; max-width: 100%; min-width: 0; width: 11rem; font: inherit; font-family: var(--font-code); padding: 0.2rem 0.4rem; border: 1px solid var(--ink-soft); border-radius: 4px; background: var(--pb-board); color: var(--pb-ink); }
 .pico-say { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* the drawing */
@@ -1049,7 +1054,7 @@ kbd {
 @media (max-width: 620px) {
   .pico-controls { flex-direction: column; align-items: stretch; }
   .pico-slider input[type="range"] { flex: 1; width: auto; min-width: 6rem; }
-  .pico-line input { width: auto; flex: 1; min-width: 6rem; }
+  .pico-line input { width: auto; flex: 1; min-width: 4rem; }
   .pico-line { flex: 1; }
 }
 

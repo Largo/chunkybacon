@@ -1592,6 +1592,11 @@
     b.key = old.key; b.idx = old.idx; b.state = old.state; b.log = old.log; b.http = old.http; b.ble = old.ble;
     b.status = old.status; b.spoken = old.spoken; b.badge.textContent = old.badge.textContent; b.badge.className = old.badge.className;
     b.lastState = old.lastState; b.lastReset = old.lastReset; b.sound = false;
+    // a message the old bench's live region was still waiting to say goes
+    // to the new one
+    if (old.sayTimer) clearTimeout(old.sayTimer);
+    b.lastSay = old.lastSay;
+    if (old.pendingSay) say(b, old.pendingSay);
     if (old.el.parentNode) old.el.parentNode.replaceChild(b.el, old.el);
     render();
   }
@@ -1636,6 +1641,7 @@
         bench.layout = "open";
         bench.spoken = {};
         bench.ble = [];
+        bench.log = [];
         onBle(bench, "");
       }
       if (slot) attach(bench, slot);
