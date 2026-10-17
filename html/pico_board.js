@@ -1088,20 +1088,42 @@
       box.appendChild(arena);
     }
     if (parts.indexOf("camera") >= 0) {
-      var cam = el("label", "pico-slider");
-      cam.appendChild(el("span", "pico-slider-name", t("boardPicture")));
+      var chooser = el("label", "pico-slider");
+      chooser.appendChild(el("span", "pico-slider-name", t("boardPicture")));
       var pick = el("select");
       ["chunky", "bacon"].forEach(function (n) {
         var o = el("option", null, n);
         o.value = n;
         pick.appendChild(o);
       });
-      pick.value = values.camera || "chunky";
-      pick.addEventListener("change", function () { api.input("camera", pick.value); showPhoto(b, pick.value, false); });
-      cam.appendChild(pick);
-      box.appendChild(cam);
+      pick.value = values.camera && values.camera !== "webcam" ? values.camera : "chunky";
+      // a drawn picture chosen: the webcam (if on) stops
+      pick.addEventListener("change", function () {
+        var name = pick.value;
+        if (cam.stream) { cam.before = name; stopWebcam(); }
+        api.input("camera", name);
+        benches.forEach(function (o) { if (o.refs.camera) showPhoto(o, name, false); });
+      });
+      chooser.appendChild(pick);
+      var camRow = el("div", "pico-row pico-cam");
+      camRow.appendChild(chooser);
+      var web = el("button", "pico-webcam", "📷 " + t("boardWebcam"));
+      web.type = "button";
+      web.setAttribute("aria-pressed", "false");
+      web.addEventListener("click", function () { if (cam.stream) stopWebcam(); else startWebcam(); });
+      camRow.appendChild(web);
+      var note = el("p", "pico-cam-note");
+      note.setAttribute("role", "status");
+      note.hidden = true;
+      camRow.appendChild(note);
+      box.appendChild(camRow);
       b.controls.camera = { select: pick };
-      showPhoto(b, pick.value, false);
+      b.controls.webcam = { button: web, note: note };
+      web.setAttribute("aria-pressed", cam.stream ? "true" : "false");
+      note.textContent = cam.note;
+      note.hidden = !cam.note;
+      if (cam.stream && cam.url) { b.refs.camera.photo.setAttribute("href", cam.url); b.refs.camera.photo.classList.add("is-preview", "is-live"); }
+      else showPhoto(b, pick.value, false);
     }
     if (parts.indexOf("wifi") >= 0) {
       var off = el("label", "pico-check");
@@ -1355,10 +1377,16 @@
   function showPhoto(b, name, captured) {
     var r = b.refs.camera;
     if (!r) return;
-    photo(name, function (url) {
+    // a capture holds the card's picture for a moment, then the webcam's
+    // frames show again
+    r.captured = !!captured && name === "webcam";
+    if (r.captured) setTimeout(function () { r.captured = false; }, 1500);
+    var got = name === "webcam" ? function (done) { done(cam.url); } : function (done) { photo(name, done); };
+    got(function (url) {
       if (!url || b.dead) return;
       r.photo.setAttribute("href", url);
       r.photo.classList.toggle("is-preview", !captured);
+      r.photo.classList.toggle("is-live", !captured && name === "webcam");
       r.caption.textContent = captured ? name + ".pgm" : "";
       if (captured && !REDUCED) {
         r.flash.classList.remove("is-flashing");
@@ -1580,6 +1608,120 @@
       });
       say(b, m[1] + " " + url.split("/")[0] + " " + m[3] + ".");
     }
+  }
+
+  // ---------- the webcam (opt-in, under the camera card) ----------
+  //
+  // "Use my webcam" swaps the drawn pictures for the learner's own camera:
+  // getUserMedia here on the page, each frame cut to 4:3, scaled to the
+  // Camera stand-in's 160 x 120 greys and handed to the worker as a PGM in
+  // hex (input "camera.frame", with "camera" = "webcam"; stand_ins/
+  // camera.rb). Frames go to the worker only, nothing leaves the browser.
+  // No permission, no camera or no secure context: the drawn pictures stay.
+  // The stream stops on the second click, when a drawn picture is chosen,
+  // when the camera's track ends and with the page (unmount).
+  var CAM_W = 160, CAM_H = 120, CAM_EVERY = 250;
+  var CAM_HEAD = "P5\n" + CAM_W + " " + CAM_H + "\n255\n";
+  var HEX = [];
+  for (var hx = 0; hx < 256; hx++) HEX.push((hx < 16 ? "0" : "") + hx.toString(16));
+  var camHead = CAM_HEAD.split("").map(function (c) { return HEX[c.charCodeAt(0)]; }).join("");
+  var cam = { stream: null, video: null, canvas: null, timer: 0, url: "", starting: false, note: "", before: "" };
+
+  function webcamUsable() {
+    return !!(window.isSecureContext && navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+  }
+
+  function startWebcam() {
+    if (cam.stream || cam.starting) return;
+    if (!webcamUsable()) { webcamNote(t("boardWebcamNo")); return; }
+    cam.starting = true;
+    var my = gen;
+    webcamShow();
+    navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 320 }, height: { ideal: 240 } }, audio: false }).then(function (stream) {
+      cam.starting = false;
+      // the page went while the browser asked
+      if (my !== gen) { stream.getTracks().forEach(function (tr) { tr.stop(); }); return; }
+      cam.stream = stream;
+      var video = cam.video = document.createElement("video");
+      video.muted = true;
+      video.playsInline = true;
+      video.srcObject = stream;
+      var played = video.play();
+      if (played && played.catch) played.catch(function () {});
+      stream.getVideoTracks().forEach(function (tr) { tr.addEventListener("ended", function () { stopWebcam(); }); });
+      cam.before = values.camera && values.camera !== "webcam" ? values.camera : "chunky";
+      values.camera = "webcam";
+      if (window.chunkyPicoRuby && window.chunkyPicoRuby.input) window.chunkyPicoRuby.input("camera", "webcam");
+      cam.timer = setInterval(grabFrame, CAM_EVERY);
+      webcamNote(t("boardWebcamOn"));
+    }, function () {
+      cam.starting = false;
+      if (my === gen) webcamNote(t("boardWebcamNo"));
+    });
+  }
+
+  // +quiet+: the page goes (unmount) - nothing to say, no bench to update
+  function stopWebcam(quiet) {
+    if (cam.timer) clearInterval(cam.timer);
+    if (cam.stream) cam.stream.getTracks().forEach(function (tr) { tr.stop(); });
+    if (cam.video) cam.video.srcObject = null;
+    var was = !!cam.stream, before = cam.before || "chunky";
+    cam = { stream: null, video: null, canvas: null, timer: 0, url: "", starting: false, note: "", before: "" };
+    if (quiet || !was) { if (!quiet) webcamShow(); return; }
+    delete values["camera.frame"];
+    values.camera = before;
+    if (window.chunkyPicoRuby && window.chunkyPicoRuby.input) window.chunkyPicoRuby.input("camera", before);
+    webcamShow();
+    benches.forEach(function (b) { if (b.refs.camera) showPhoto(b, before, false); });
+  }
+
+  // the newest frame: grey bytes (Rec. 601 luma) as PGM hex for the
+  // worker, and a picture of it for the camera card
+  function grabFrame() {
+    var v = cam.video;
+    if (!v || v.readyState < 2 || !v.videoWidth) return;
+    var c = cam.canvas || (cam.canvas = document.createElement("canvas"));
+    c.width = CAM_W;
+    c.height = CAM_H;
+    var ctx = c.getContext("2d", { willReadFrequently: true });
+    var vw = v.videoWidth, vh = v.videoHeight, sw = vw, sh = vw * CAM_H / CAM_W;
+    if (sh > vh) { sh = vh; sw = vh * CAM_W / CAM_H; }
+    ctx.drawImage(v, (vw - sw) / 2, (vh - sh) / 2, sw, sh, 0, 0, CAM_W, CAM_H);
+    var img = ctx.getImageData(0, 0, CAM_W, CAM_H), d = img.data;
+    var hex = new Array(CAM_W * CAM_H);
+    for (var i = 0, o = 0; i < hex.length; i++, o += 4) {
+      var g = (d[o] * 77 + d[o + 1] * 150 + d[o + 2] * 29) >> 8;
+      d[o] = d[o + 1] = d[o + 2] = g;
+      hex[i] = HEX[g];
+    }
+    ctx.putImageData(img, 0, 0);
+    cam.url = c.toDataURL();
+    values["camera.frame"] = camHead + hex.join("");
+    if (window.chunkyPicoRuby && window.chunkyPicoRuby.input) window.chunkyPicoRuby.input("camera.frame", values["camera.frame"]);
+    benches.forEach(function (b) {
+      var r = b.refs.camera;
+      if (!r || r.captured) return;
+      r.photo.setAttribute("href", cam.url);
+      r.photo.classList.add("is-preview", "is-live");
+    });
+  }
+
+  function webcamNote(text) {
+    cam.note = text;
+    webcamShow();
+  }
+
+  // every camera card's button and note follow the one stream
+  function webcamShow() {
+    benches.forEach(function (b) {
+      var c = b.controls.webcam;
+      if (!c) return;
+      c.button.setAttribute("aria-pressed", cam.stream ? "true" : "false");
+      c.button.disabled = cam.starting;
+      if (c.note.textContent !== cam.note) c.note.textContent = cam.note;
+      c.note.hidden = !cam.note;
+      b.controls.camera.select.value = cam.stream ? (cam.before || "chunky") : (values.camera || "chunky");
+    });
   }
 
   // ---------- mounting ----------
@@ -1839,6 +1981,7 @@
       values = {};
       epd = { frames: 0, hex: "", url: "", black: 0 };
       if (audio && audio.osc) { audio.osc.stop(); audio.osc = null; }
+      stopWebcam(true);
       api.previews();
     },
     // for tests: what the live bench holds now (null before the first ▶)
@@ -1852,6 +1995,11 @@
       return benches.map(function (b) {
         return { idx: b.idx, live: b === bench, parts: b.parts.slice(), badge: b.badge.textContent, inPage: !!(b.slot && b.slot.isConnected) };
       });
+    },
+    // for tests: the webcam's state
+    webcam: function () {
+      return { on: !!cam.stream, starting: cam.starting, note: cam.note, frame: (values["camera.frame"] || "").length,
+               camera: values.camera || "", tracks: cam.stream ? cam.stream.getTracks().filter(function (tr) { return tr.readyState === "live"; }).length : 0 };
     }
   };
 

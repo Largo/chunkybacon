@@ -284,6 +284,9 @@ window.LESSONS_JSON = JSON.stringify({
       "boardBleGot": "Der Laptop hat bekommen",
       "boardBleLink": "Laptop verbunden",
       "boardIdle": "wartet – ▶ Ausführen startet ihn",
+      "boardWebcam": "Meine Webcam benutzen",
+      "boardWebcamOn": "Webcam an – ihre Bilder bleiben in diesem Browser.",
+      "boardWebcamNo": "Keine Webcam verfügbar (keine Erlaubnis, keine Kamera oder die Seite ist nicht auf https) – es bleibt bei den gezeichneten Bildern.",
       "boardAdvertising": "sichtbar",
       "boardAlone": "nur der Pico mit seiner LED auf dem Board",
       "ironStopped": "Nach 30 Sekunden angehalten.",
@@ -564,6 +567,9 @@ window.LESSONS_JSON = JSON.stringify({
       "boardBleGot": "The laptop got",
       "boardBleLink": "Laptop connected",
       "boardIdle": "idle – ▶ Run starts it",
+      "boardWebcam": "Use my webcam",
+      "boardWebcamOn": "Webcam on – its pictures stay in this browser.",
+      "boardWebcamNo": "No webcam here (no permission, no camera, or the page is not on https) – the drawn pictures stay.",
       "boardAdvertising": "advertising",
       "boardAlone": "only the Pico, with its onboard LED",
       "ironStopped": "Stopped after 30 seconds.",
@@ -844,6 +850,9 @@ window.LESSONS_JSON = JSON.stringify({
       "boardBleGot": "ノートPCが受信",
       "boardBleLink": "ノートPCを接続",
       "boardIdle": "待機中（▶ 実行で動き出します）",
+      "boardWebcam": "自分のWebカメラを使う",
+      "boardWebcamOn": "Webカメラはオンです。映像はこのブラウザーの外に出ません。",
+      "boardWebcamNo": "Webカメラを使えません（許可がない、カメラがない、またはページがhttpsではない）。描いた絵をそのまま使います。",
       "boardAdvertising": "アドバタイズ中",
       "boardAlone": "Picoだけ（基板のLED）",
       "ironStopped": "30秒で止めました。",
@@ -11258,7 +11267,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h3>Eine Kamera liefert Zahlen</h3><p>Eine Kamera ist ein Gitter aus winzigen Lichtsensoren, und heraus kommt eine Zahl pro Pixel: 0 für schwarz bis 255 für weiss. <code>Camera.new.capture</code> gibt dir 160 × 120 davon in einem String, ein Byte pro Pixel, Zeile um Zeile: Byte <code>y * 160 + x</code> ist das Pixel bei (x, y). Das E-Paper kennt nur schwarz und weiss, also wird jede Zahl zu einer Entscheidung. Führ die Zelle aus, wähl dann unter der Werkbank ein anderes Bild und führ sie noch einmal aus:</p>"
+            "html": "<h3>Eine Kamera liefert Zahlen</h3><p>Eine Kamera ist ein Gitter aus winzigen Lichtsensoren, und heraus kommt eine Zahl pro Pixel: 0 für schwarz bis 255 für weiss. <code>Camera.new.capture</code> gibt dir 160 × 120 davon in einem String, ein Byte pro Pixel, Zeile um Zeile: Byte <code>y * 160 + x</code> ist das Pixel bei (x, y). Das E-Paper kennt nur schwarz und weiss, also wird jede Zahl zu einer Entscheidung. Führ die Zelle aus, wähl dann unter der Werkbank ein anderes Bild und führ sie noch einmal aus:</p><p>Oder drück unter der Werkbank auf <strong>Meine Webcam benutzen</strong>: Dann nimmt die Kamera dein eigenes Bild. Das ist freiwillig und passiert erst nach dem Klick; dein Browser fragt vorher, und die Bilder bleiben in diesem Browser – die Seite verkleinert sie auf 160 × 120 Grauwerte und gibt sie dem simulierten Pico, hochgeladen wird nichts. Ohne Webcam oder ohne Erlaubnis bleibt es bei den gezeichneten Bildern.</p>"
           },
           {
             "t": "c",
@@ -11385,7 +11394,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h3>A camera gives you numbers</h3><p>A camera is a grid of tiny light sensors, and what comes out of it is one number per pixel: 0 for black up to 255 for white. <code>Camera.new.capture</code> gives you 160 × 120 of them in a String, one byte each, row after row: byte <code>y * 160 + x</code> is the pixel at (x, y). The e-paper only knows black and white, so every number becomes a decision. Run the cell, then choose another picture under the bench and run it again:</p>"
+            "html": "<h3>A camera gives you numbers</h3><p>A camera is a grid of tiny light sensors, and what comes out of it is one number per pixel: 0 for black up to 255 for white. <code>Camera.new.capture</code> gives you 160 × 120 of them in a String, one byte each, row after row: byte <code>y * 160 + x</code> is the pixel at (x, y). The e-paper only knows black and white, so every number becomes a decision. Run the cell, then choose another picture under the bench and run it again:</p><p>Or press <strong>Use my webcam</strong> under the bench, and the camera takes your own picture. That is optional and happens only after the click: your browser asks first, and the pictures stay in this browser – the page scales them down to 160 × 120 greys and hands them to the simulated Pico, nothing is uploaded. Without a webcam, or without permission, the drawn pictures stay.</p>"
           },
           {
             "t": "c",
@@ -11512,7 +11521,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h3>カメラがくれるのは数</h3><p>カメラは小さな光センサーを格子状に並べたもので、出てくるのはピクセルごとの数です。0が黒、255が白です。 <code>Camera.new.capture</code>はその数を160 × 120個、1ピクセル1バイトで1行ずつ並べたStringで返します。 <code>y * 160 + x</code>番目のバイトが(x, y)のピクセルです。電子ペーパーは白と黒しか知らないので、数ごとに白か黒かを決めます。 セルを実行したら、作業台の下で別の写真を選んで、もう一度実行してみましょう。</p>"
+            "html": "<h3>カメラがくれるのは数</h3><p>カメラは小さな光センサーを格子状に並べたもので、出てくるのはピクセルごとの数です。0が黒、255が白です。 <code>Camera.new.capture</code>はその数を160 × 120個、1ピクセル1バイトで1行ずつ並べたStringで返します。 <code>y * 160 + x</code>番目のバイトが(x, y)のピクセルです。電子ペーパーは白と黒しか知らないので、数ごとに白か黒かを決めます。 セルを実行したら、作業台の下で別の写真を選んで、もう一度実行してみましょう。</p><p>作業台の下の<strong>自分のWebカメラを使う</strong>を押すと、カメラが自分の映像を撮るようになります。これは任意で、クリックしたときだけ動きます。先にブラウザーが許可を求め、映像はこのブラウザーの外に出ません。ページが160 × 120の灰色の値に縮めてシミュレーションのPicoに渡すだけで、どこにもアップロードしません。Webカメラがないときや許可しなかったときは、描いた絵のままです。</p>"
           },
           {
             "t": "c",

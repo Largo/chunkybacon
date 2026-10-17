@@ -2,7 +2,10 @@
 # lesson says so, docs/HANDOVER.md §6r): Camera.new.capture answers
 # width x height grey bytes (0 black .. 255 white), row after row, from a
 # 160 x 120 picture of assets/data/pico/camera/ - the one the bench's
-# chooser names (input "camera"), "chunky" by default.
+# chooser names (input "camera"), "chunky" by default. With the bench's
+# "Use my webcam" on, "camera" is "webcam" and the page hands over its
+# latest frame, already a 160 x 120 PGM, as hex (input "camera.frame");
+# without a frame yet the drawn picture "chunky" stands in.
 class Camera
   def initialize(**options)
     @options = options
@@ -10,7 +13,12 @@ class Camera
 
   def capture(width: 160, height: 120)
     name = PicoSim.world.input("camera") || "chunky"
-    w, h, pixels = Camera.decode__(PicoSim.host.camera_hex(name).to_s)
+    hex = name == "webcam" ? PicoSim.world.input("camera.frame").to_s : ""
+    if hex == ""
+      name = "chunky" if name == "webcam"
+      hex = PicoSim.host.camera_hex(name).to_s
+    end
+    w, h, pixels = Camera.decode__(hex)
     raise IOError.new("camera: no picture #{name}") if pixels.nil?
     PicoSim.world.event("log", "camera #{name}")
     out = ""

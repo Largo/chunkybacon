@@ -442,6 +442,27 @@ class PicoSimTest < Minitest::Test
     end
   end
 
+  # the bench's "Use my webcam": the page's frame (a 160 x 120 PGM as hex)
+  # instead of a drawn picture; no frame yet, and the drawn "chunky" stands in
+  def test_camera_takes_the_webcams_frame
+    pixels = (0...120).flat_map { |y| (0...160).map { |x| x < 80 ? 10 : 240 } }
+    hex = ("P5\n160 120\n255\n".bytes + pixels).map { |b| format("%02x", b) }.join
+    log = nil
+    run_board(parts: ["camera"], inputs: { "camera" => "webcam", "camera.frame" => hex }) do
+      bytes = Camera.new.capture
+      assert_equal 19_200, bytes.bytesize
+      assert_equal [10, 240], [bytes.getbyte(0), bytes.getbyte(159)]
+      assert_equal 240, bytes.getbyte(119 * 160 + 100)
+      log = PicoSim.world.instance_variable_get(:@events).map(&:last)
+    end
+    assert_includes log, "camera webcam"
+    run_board(parts: ["camera"], inputs: { "camera" => "webcam" }) do
+      drawn = Camera.new.capture
+      PicoCRuby.start({ "camera" => "chunky" })
+      assert_equal Camera.new.capture, drawn
+    end
+  end
+
   def test_irb_line_carries_on_without_a_reset
     run_board(parts: ["led15"]) { GPIO.new(15, GPIO::OUT).write(1); sleep_ms 100 }
     board = run_board(parts: ["led15"], reset: false) { GPIO.write_at(15, 0) }

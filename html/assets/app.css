@@ -883,6 +883,8 @@ kbd {
 .pico-badge.is-running { color: var(--ok); font-weight: 600; }
 .pico-badge.is-reset { color: var(--err); font-weight: 600; }
 .pico-bar button:disabled { opacity: 0.55; cursor: default; }
+.pico-webcam[aria-pressed="true"] { background: var(--fat); }
+.pico-cam-note { flex-basis: 100%; font-size: 0.8rem; color: var(--pb-soft); margin: 0; }
 .pico-svg { display: block; width: 100%; height: auto; margin: 0 auto; user-select: none; -webkit-user-select: none; }
 .pico-parts { font-size: 0.8rem; color: var(--pb-soft); margin: 0.35rem 0 0.2rem; }
 .pico-controls { display: flex; flex-wrap: wrap; gap: 0.35rem 1.2rem; align-items: center; margin-top: 0.35rem; font-size: 0.9rem; }
@@ -1033,6 +1035,8 @@ kbd {
 .pb-photo-frame { fill: #1e2229; }
 .pb-photo { image-rendering: pixelated; }
 .pb-photo.is-preview { opacity: 0.35; }
+/* the webcam's view before a capture: dimmed less, it is a viewfinder */
+.pb-photo.is-preview.is-live { opacity: 0.75; }
 .pb-photo-flash { fill: #fff; opacity: 0; pointer-events: none; }
 .pb-photo-flash.is-flashing { animation: pb-photo-flash 400ms ease-out 1; }
 @keyframes pb-photo-flash { 0% { opacity: 0.95; } 100% { opacity: 0; } }
