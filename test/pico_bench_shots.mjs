@@ -77,7 +77,7 @@ for (const [label, opts] of [["", { viewport: { width: 1280, height: 1000 } }],
                              ["-dark", { viewport: { width: 1280, height: 1000 }, colorScheme: "dark" }]]) {
   const ctx = await context(opts);
   const page = await open(ctx, "#" + bench.id);
-  const only = label === "" ? null : ["desk", "robot", "epd"];
+  const only = label === "" ? null : ["desk", "robot", "epd", "lcd", "matrix"];
   const want = n => !only || only.includes(n);
 
   if (want("desk")) {
@@ -156,6 +156,44 @@ for (const [label, opts] of [["", { viewport: { width: 1280, height: 1000 } }],
       check("robot: the box is in the arena (input arena.box)", await page.evaluate(() => JSON.parse(window.chunkyPicoBoard.inputs())["arena.box"] === "135,60"));
       await shot(page, robot, "robot-box");
     }
+  }
+  if (want("lcd")) {
+    const lcd = cellIdx(bench, has("lcd114"));
+    await run(page, lcd);
+    await page.waitForFunction(() => /"lit":true/.test(window.chunkyPicoBoard.debug().state), null, { timeout: 15000 }).catch(() => {});
+    const key = page.locator(`#pico-slot-${lcd} .pico-lcd-keys button`).nth(3);
+    await key.dispatchEvent("pointerdown", { pointerId: 1 });
+    await page.waitForTimeout(600);
+    const st = JSON.parse((await dbg(page)).state || "{}");
+    const l = (st.parts || {}).lcd114 || {};
+    check(`lcd${label}: the joystick's right reaches the loop`, (l.keys || []).includes("right"), JSON.stringify(l));
+    check(`lcd${label}: the glass is lit, inverted as the init asks, backlight 90 %`, l.lit === true && l.inv === true && l.bl === 90, JSON.stringify(l));
+    const glass = await page.evaluate(i => { const im = document.querySelector(`#pico-slot-${i} .pb-lcd-image`); return [im.getAttribute("href") || "", im.style.opacity]; }, lcd);
+    check(`lcd${label}: the frames are drawn on the glass`, (await dbg(page)).lcd > 0 && /^data:image\/png/.test(glass[0]) && Number(glass[1]) > 0.8, glass[1]);
+    check(`lcd${label}: the key shows pressed`, await page.locator(`#pico-slot-${lcd} .pb-key-cap.is-pressed`).count() === 1);
+    await shot(page, lcd, "lcd" + label);
+    await key.dispatchEvent("pointerup", { pointerId: 1 });
+    await page.waitForFunction(() => window.__ran, null, { timeout: 30000 });
+  }
+  if (want("matrix")) {
+    const mx = cellIdx(bench, has("rgbled"));
+    await run(page, mx, true);
+    await page.waitForTimeout(300);
+    check(`matrix${label}: all 160 LEDs lit`, await page.locator(`#pico-slot-${mx} .pb-rgb-led.is-on`).count() === 160);
+    check(`matrix${label}: LED 0 is red, LED 15 (top right) violet`, await page.evaluate(i => {
+      const leds = document.querySelectorAll(`#pico-slot-${i} .pb-rgb-led`);
+      const rgb = n => (leds[n].style.fill.match(/\d+/g) || []).map(Number);
+      const a = rgb(0), b = rgb(15);
+      return a[0] > 100 && a[1] < 30 && a[2] < 30 && b[0] > 100 && b[2] > 60 && b[1] < 30;
+    }, mx));
+    await shot(page, mx, "matrix" + label);
+  }
+  if (!only) {
+    const leds = bench.en.cells.findIndex(c => c.board && c.board.parts.includes("picogo") && /ws2812/.test(c.code));
+    await run(page, leds, true);
+    await page.waitForTimeout(300);
+    check("robot leds: the PicoGo's four WS2812 lit", await page.locator(`#pico-slot-${leds} .pb-robot-led.is-on`).count() === 4);
+    await shot(page, leds, "robot-leds");
   }
   if (!only) {
     const cam = cellIdx(bench, has("camera"));

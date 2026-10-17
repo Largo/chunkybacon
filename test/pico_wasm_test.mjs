@@ -131,6 +131,20 @@ await scenario("PWM: a melody on the buzzer",
   'require "pwm"\np = PWM.new(16, frequency: 440, duty: 50)\nsleep_ms 100\np.frequency(880)\nsleep_ms 100\np.duty(0)',
   boardOf(["buzzer16"]), "board.buzz.map(&:last) == [440, 880, 0] && board.buzz[1][0].between?(90, 130)");
 
+const lcdTabs = [tab("st7789.rb", "pico/lib/en/st7789.rb"), tab("font5x7.rb", "pico/lib/font5x7.rb")];
+const wsTabs = [tab("ws2812.rb", "pico/lib/ws2812.rb")];
+await scenario("WS2812: the community gem on PicoRuby's PIO assembler lights the PicoGo",
+  'require "ws2812"\nleds = WS2812.new(pin: 22, num: 4)\nleds.brightness = 100\nleds.set_rgb(0, 255, 0, 0)\nleds.set_hex(1, 0x00FF00)\nleds.set_hsb(2, 240, 100, 100)\nleds.show',
+  boardOf(["picogo"]), "board.leds(22).colors.first(3) == [[255, 0, 0], [0, 255, 0], [0, 0, 255]] && board.leds.timing == [875, 250] && board.mode(22) == \"pio\"", wsTabs);
+await scenario("PIO at the default 125 MHz: the WS2812s see nothing",
+  'require "ws2812"\nsm = PIO::StateMachine.new(pio: PIO::PIO0, sm: 0, program: WS2812.pio_program, sideset_pins: 6, out_shift_right: false, out_shift_autopull: true, out_shift_threshold: 24)\nsm.start\nsm.put_buffer([0xFF0000 << 8] * 3)\nsm.freq',
+  boardOf(["rgbled"]), "board.leds(6).note == \"too_fast\" && board.leds(6).frames == 0 && result.inspect == \"125000000\"", wsTabs);
+await scenario("LCD: the driver tab fills, writes and reads a joystick key",
+  'require "spi"\nrequire "st7789"\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000, sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLUE)\nlcd.text("Hi Pico", 40, 40, ST7789::YELLOW, bg: ST7789::BLUE, scale: 3)\nright = GPIO.new(20, GPIO::IN | GPIO::PULL_UP)\nsleep_ms 200\nright.low?',
+  boardOf(["lcd114"], [{ at: 0, press: 20 }]),
+  "board.lcd.visible? && board.lcd.inverted? && board.lcd.color(0, 0) == 0x001F && board.lcd.text?(\"Hi Pico\") && result == true", lcdTabs);
+check("LCD: the page got the glass as rectangles", core.posted.board.some(b => b.kind === "lcd" && /^0,0,240,135\|/.test(b.text) && b.text.length === 12 + 129600));
+
 // ---------- 3. the lessons' cells ----------
 function lessonsFromCourse() {
   global.window = {};

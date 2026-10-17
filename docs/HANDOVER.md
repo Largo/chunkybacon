@@ -1973,12 +1973,15 @@ on **PicoRuby.wasm** instead of CRuby:
 
 ## 6r. The Pico bench: hardware lessons (`pico-blink` to `pico-deploy`)
 
-Seven lessons in the section "Ruby auf dem Pico" / "Ruby on a Pico" /
+Eight lessons in the section "Ruby auf dem Pico" / "Ruby on a Pico" /
 "PicoでRuby", after `spinel`: `pico-blink` (GPIO, the onboard LED, Task,
 an IRB on the board), `pico-sensors` (button, pull-up, ADC, the chip's
 thermometer, I2C and the BME280), `pico-robot` (PWM, buzzer, the Waveshare
-PicoGo with IR sensors and sonar), `pico-epaper` (SPI, the Waveshare
-2.13" e-paper, a camera picture in black and white), `pico-wifi` (CYW43,
+PicoGo with IR sensors and sonar; after its exercise the PicoGo's four
+WS2812 LEDs, PIO), `pico-epaper` (SPI, the Waveshare
+2.13" e-paper, a camera picture in black and white), `pico-lcd` (the
+Waveshare Pico-LCD-1.14: ST7789 over SPI, RGB565, joystick and keys, the
+backlight, the Pico-RGB-LED matrix), `pico-wifi` (CYW43,
 `Net::HTTP` to rubygems and Open-Meteo, chunked bodies, a dashboard),
 `pico-ble` (BLE::UART, a CRuby laptop cell), `pico-deploy` (boards, R2P2,
 prremote). Lesson `picoruby` ends with a cell pointing to `pico-blink`.
@@ -1988,7 +1991,7 @@ branch's worktree (not in git); this section is what was built.
 **The hardware is Ruby, in the lesson's worker.** The lessons are
 `"engine": "picoruby"` (§6m) with `"pico": {"board": "pico2w"}`, so cells
 run on PicoRuby.wasm 4.0.3. The API classes (`GPIO`, `PWM`, `ADC`, `I2C`,
-`SPI`, `CYW43`, `Net::HTTP`) are **PicoRuby's own mrblib, vendored
+`SPI`, `PIO`, `CYW43`, `Net::HTTP`) are **PicoRuby's own mrblib, vendored
 unchanged** (`html/pico_sim/vendor/`, `tools/vendor_picoruby_mrblib.rb
 --check` ties them to the wasm's version). Only their C primitives are
 written anew, in Ruby, against a simulated world (`pico_sim/prims.rb`,
@@ -2068,10 +2071,83 @@ every 1.5 s; the SVG's `<desc>` follows the state. Dark-mode tokens for the
 bench only (the site has no dark theme). Parts (`board.parts`), wiring
 fixed per part: `led15`, `button14`, `light26`, `temp`, `buzzer16`,
 `envsensor` (I2C0 on GP20/21), `epd213` (SPI1, GP8-13), `picogo`
-(GP2-4, 14-21, 26 - not with `envsensor`), `camera`, `wifi`, `laptop`. The
-linter refuses unknown parts and two parts on one pin. API, for tests too:
+(GP2-4, 14-22, 26 - not with `envsensor`), `lcd114` (SPI1 GP8-12, the
+backlight GP13, keys GP15/17, joystick GP2/3/16/18/20 - not with `epd213`
+or `picogo`: one display at a time), `rgbled` (GP6), `camera`, `wifi`,
+`laptop`. The linter refuses unknown parts and two parts on one pin; a
+bench script may `press` GP14 (`button14`) and the LCD's seven keys. API, for tests too:
 `chunkyPicoBoard.previews/mount/receive/inputs/input/sendLine/ble/started/
 reset/unmount/debug/benches/webcam` (the head of the file).
+
+**PIO and WS2812** (DESIGN N2). How PicoRuby really drives a WS2812 on
+an RP2040/RP2350: not RMT (`picoruby-rmt` and `picoruby-adafruit_sk6812`
+have an ESP32 port only) but **PIO** - `picoruby-pio`, in R2P2's builds for
+the Pico boards, whose assembler `PIO.asm { out :x, 1, side: 0, delay: 2 ...
+}` is pure Ruby. Both of its mrblib files are vendored (`vendor/pio.rb`,
+`pio_state_machine.rb`); `prims.rb` is the C half of 4.0.3
+(`PIO::StateMachine.init` with its 23 arguments, `start`, `put_buffer`,
+`put_nonblocking`, `tx_level`, `drain_tx`, `freq`/`freq=`, the IOErrors
+"Invalid PIO number", "Invalid state machine number", "No space in PIO
+instruction memory" - 32 slots per block). `devices/pio.rb`: a state
+machine is **not** run cycle by cycle; when its words arrive, its program
+has been run once by a small interpreter on an all-ones and an all-zeros
+word (OUT, JMP with its conditions, SET, MOV, PULL, side-set with delay,
+wrap), which yields the high time and period of a 1 and a 0 on the
+side-set (or OUT/SET) pin, at clk_sys / divider (150 MHz on a Pico 2). The
+words then become bits (`out_shift_threshold` of each, from the top when
+`out_shift_right: false`). `devices/ws2812.rb` decodes them as the chips:
+high 150-550 ns a 0, 550 ns-5 us a 1 (sim choice, the datasheet's middle),
+shorter is not seen - a state machine left at the default 125 MHz makes
+pulses of 16/56 ns, the LEDs show nothing and the bench says so (`ws2812
+too_fast GP22 56 16` in the log, worded by pico_board.js); each LED takes
+24 bits G-R-B, a line low > 50 us (the end of the burst, or 50 us of world
+time after it) latches. A stopped state machine's FIFO fills and the ninth
+`put_buffer` word waits for ever, as on the chip (`pio stall put` in the
+log). The colours outlast the Pico's reset (World#epd_store, the chips have
+power) until `clear`. On top runs the **community gem
+[ksbmyk/picoruby-ws2812](https://github.com/ksbmyk/picoruby-ws2812)**
+(MIT, commit 6f0b6d2, a RuntimeGem): `html/pico/lib/ws2812.rb`, unchanged
+(SHA-256 in `test/pico_sim_test.rb`), a read-only tab of its cells, one copy
+for all languages (like `font5x7.rb`); its `require 'rmt'` fails and
+`RMT.new` raises NameError, so it takes its PIO path, as on a Pico. The
+PicoGo's four LEDs are on GP22 (Waveshare's `ws2812.py`), LED 0 front left
+then clockwise (sim choice); the Pico-RGB-LED's 160 on GP6 (Waveshare's
+demo; GP7 and GP22 are solder options), LED 0 top left, row-major - the
+demo's pattern only reads upright that way. Checks: `board.leds(pin)` -
+`colors`, `rgb(i)`, `lit`, `frames`, `note`, `timing` ([T1H, T0H] ns).
+
+**The Pico-LCD-1.14** (DESIGN N1, `devices/st7789.rb`, part `lcd114`): an
+ST7789VW as its datasheet has it - commands with DC low while CS is low,
+CASET/RASET windows, RAMWR (and RAMWRC) streaming RGB565 high byte first
+(COLMOD x6: RGB666), MADCTL: MV exchanges rows and columns, then MX
+mirrors the 240 columns and MY the 320 rows (this order makes Waveshare's
+landscape `0x70` with its 40/53 offsets and portrait `0x00` with 52/40
+land on the same glass, columns 52..186 and rows 40..279 of the RAM; it
+also matches Adafruit's 1.14" offsets), BGR, INVON/INVOFF (the IPS glass
+shows colours inverted without INVON, as both vendors' init code says),
+sleep in/out, display on/off, SWRESET and RST low (back to sleep, display
+off; the RAM stays). Sim choice: the glass is drawn so that `0x70` reads
+upright. The backlight is GP13's duty (a GPIO high is 100 %). The RAM
+survives the Pico's reset (World#epd_store; after power-up: seeded noise);
+the backlight pin does not, so after ■ Stop the glass is dark. Keys: A
+GP15, B GP17, joystick up 2, centre 3, left 16, down 18, right 20 (V2,
+Waveshare's `Pico-LCD-1.14.py`), to GND: inputs `pin<n>` = "1" pressed,
+`PULL_UP` needed. The page gets `lcd` posts of the changed rectangle at
+most every 33 ms, "x,y,w,h|<4 hex digits a pixel>" in glass coordinates
+(the first after a part is attached is the whole glass, so a new page's
+copy is complete); `SPI#write` with one String hands it on as it is (a
+part says `takes_string?`), no 64 800-element Array. The driver tab
+`st7789.rb` (de/en/ja comments) keeps no buffer (a screen is 64 800 bytes):
+`fill`, `fill_rect` (clipped; one window and the colour's two bytes
+repeated), `pixel`, `rect`, `text(str, x, y, color, bg:, scale:)` (one
+window per character), `backlight(percent)`, `ST7789.rgb(r, g, b)`. Checks:
+`board.lcd` - `on?`, `visible?` (and a backlight), `inverted?`,
+`backlight`, `color(x, y)` (RGB565 in the RAM), `rgb(x, y)` (as the glass
+shows it), `count(c)`, `background`, `text?(str, scales = 1..5)` (ink = not
+the background), `madctl`, `writes`, `unknown`. PicoRuby's
+`JSON.generate` escapes a String char by char - a second for the LCD's
+129 600 hex digits - so `World#summary_json` puts big hex in after it
+(`raw_mark`; the e-paper's frame too).
 
 **The webcam** (opt-in, DESIGN N4): "📷 Use my webcam" on the camera card
 calls `getUserMedia` on the page (video only, 320×240 asked for); every
@@ -2146,13 +2222,17 @@ simulation": robot speed (a quarter turn ≈ 390 ms at speed 50) and IR
 range (≈ 12 cm), the ADC noise (±2 LSB), the Wi-Fi access point and its
 address, chunk sizes, the camera (PicoRuby has no camera driver; the
 pictures are our own drawings), error messages the C source has no literal
-for. **Nothing has been tried on a real Pico** yet: the drivers follow the
+for, the WS2812's 550 ns threshold, the PicoGo's LED order, which way the
+LCD's glass sits in its controller's RAM, and that PIO is measured, not
+run. **Nothing has been tried on a real Pico** yet (the ST7789 driver and
+the WS2812 gem included): the drivers follow the
 datasheets and Waveshare's demos and are tested in the simulator only. A
 hidden browser tab throttles timers, which stretches `sleep_ms`; the
 checks' tolerances are wide, the harness is exact.
 
 **How to add a part:** a device class in `pico_sim/devices/` (its `state`
-for the bench, its summary for `board`), registered in `PARTS` with its
+for the bench, its summary for `board`; `flush` for what is still on
+its way when the run ends, `on_pio` for a PIO pin), registered in `PARTS` with its
 pins; the pins in `test/pico_lint.rb`'s `PART_PINS` (and `INPUT_PARTS` if a learner can change it); its drawing, wiring and
 controls in `pico_board.js` (`PARTS`, `buildControls`, `render`), ui
 strings `board*` in all three languages (main.rb hands every `board*` key
@@ -2168,7 +2248,8 @@ PicoRuby.wasm, ~2 min), and against a dev server `node
 test/pico_lessons_test.mjs [de] [en] [ja]` (every lesson in a browser,
 ~2 min per language; `SHOTS=dir` saves screenshots),
 `test/pico_board_test.mjs` and `test/pico_bench_shots.mjs` (on the lesson
-files in `tmp/pico-lessons/`), `test/pico_extras_test.mjs` (pico-deploy's
+files in `tmp/pico-lessons/`; the shots include the LCD with a key held,
+the matrix and the PicoGo's LEDs, also narrow and dark), `test/pico_extras_test.mjs` (pico-deploy's
 tables at 360 px and desktop, the static previews, the webcam with
 Chromium's fake camera and its fallbacks; `SHOTS=dir`). Lesson files are written by generators
 there (`gen_group1.rb` .. `gen_group3.rb`) and put into lessons.js by
