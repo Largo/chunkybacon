@@ -29,6 +29,7 @@
 const TICK = 4;       // ms, MRB_TICK_UNIT of the wasm build (init.iife.js)
 const BATCH = 16;     // ms of Ruby before the event loop gets a turn
 const IDLE = 4;       // ms to wait when every Task sleeps
+const ALIVE_EVERY = 500; // ms between "still alive" messages of a run
 const STATE_EVERY = 33;  // ms: "state" snapshots are coalesced to the latest
 
 // the require stubs: `require "gpio"` succeeds as on R2P2, the classes are
@@ -59,6 +60,7 @@ export async function bootCore({ createModule, moduleArgs = {}, labCode, host })
   let current = null;   // the request being run
   let summary = "";
   let lastYield = performance.now();
+  let lastAlive = 0;
   const inputs = {};
   let pendingState = null;
   let lastState = 0;
@@ -136,6 +138,12 @@ export async function bootCore({ createModule, moduleArgs = {}, labCode, host })
       }
       if (answer !== null) break;
       flush(false);
+      // the page's quiet limit (picoruby_lab.js): a run that gives the event
+      // loop a turn is alive, one stuck in a loop without a sleep is not
+      if (current && host.alive && performance.now() - lastAlive >= ALIVE_EVERY) {
+        lastAlive = performance.now();
+        host.alive(current.id);
+      }
       await yieldNow(idle ? IDLE : 0);
       lastYield = performance.now();
     }
@@ -212,7 +220,13 @@ export async function bootCore({ createModule, moduleArgs = {}, labCode, host })
     try {
       if (kind === "run") {
         writeTabs(req.tabs);
+        // loading the simulator's files (first board run) is no loop
+        if (current.board && host.alive) host.alive(id);
         if (current.board) current.simFiles = await ensureSim();
+        if (current.board && host.alive) host.alive(id);
+        // each run's inputs are the page's full set: a key the page has
+        // dropped (unmount, a ble.line already seen) must not linger here
+        for (const k of Object.keys(inputs)) delete inputs[k];
         Object.assign(inputs, req.inputs || {});
       }
       current.started = performance.now();
