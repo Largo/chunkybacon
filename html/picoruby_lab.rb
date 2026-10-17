@@ -19,6 +19,17 @@
 #   "drop\t<sid>"         -> "dropped"
 #
 # Plain strings only: PicoRuby hands JavaScript no Hash or Array.
+#
+# The Pico lessons (§6r): a cell's tabs are files in /lib, written by
+# picoruby_worker_core.js before the run, and `require "epd2in13"` finds
+# them as on R2P2 ($LOAD_PATH below). A run with a board (PicoBoard.config,
+# the cell's "board") first loads the simulator (html/pico_sim/, written to
+# /sim) once, sets the world up for the cell's parts, and lets a ticker Task
+# hand the bench its state while the cell runs; the world's summary goes
+# back with the answer (PicoBoard.summary), for the exercise's check.
+
+# libraries of the cells' tabs (and the require stubs) live here, as on R2P2
+$LOAD_PATH = ["/lib"]
 
 # what a cell may call besides plain Ruby: an IRB below it (main.rb draws it)
 $chunky_irbs = 0
@@ -41,9 +52,12 @@ class ChunkyLab
   WRAP_TAIL = "\n); rescue Exception => _; end; _"
   END_MARK = "\x01"
 
-  def initialize(pico)
+  def initialize(pico, board)
     @pico = pico
+    @board = board
     @boxes = {}
+    @sim = false
+    @stubs = nil
   end
 
   def serve
@@ -74,6 +88,8 @@ class ChunkyLab
     sandbox = (@boxes[sid] ||= Sandbox.new("lab#{sid}"))
     return "syntax\t" unless sandbox.compile(WRAP_HEAD + code + WRAP_TAIL, filename: "picoruby.rb")
 
+    reload_tabs
+    ticker = start_board
     sandbox.execute
     sleep_ms 1 until finished?(sandbox)
     # stdout reaches JavaScript a line at a time: this ends the line a
@@ -82,6 +98,36 @@ class ChunkyLab
     value = sandbox.result
     sandbox.suspend
     "#{describe(value)}\t#{$chunky_irbs}"
+  ensure
+    stop_board(ticker) if ticker
+  end
+
+  # A tab edited since the last run is loaded again: require loads a file
+  # once, so its entry goes - not the stubs' ("require 'gpio'" stays cheap)
+  def reload_tabs
+    @stubs ||= @board.stubs.to_s.split("\n").map { |name| "/lib/#{name}.rb" }
+    stubs = @stubs
+    $LOADED_FEATURES.delete_if { |path| path.to_s.start_with?("/lib/") && !stubs.include?(path.to_s) }
+  end
+
+  # A run with a board: the simulator once (the files picoruby_worker_core
+  # wrote to /sim, in manifest order), the world for this cell's parts, and
+  # a Task that hands the bench the world's state every 33 ms. nil without.
+  def start_board
+    config = @board.config.to_s
+    return nil if config == ""
+
+    unless @sim
+      @board.simFiles.to_s.split("\n").each { |path| require path }
+      @sim = true
+    end
+    PicoSim.setup(JSON.parse(config))
+    Task.new(name: "pico-board", priority: 200) { PicoSim.tick_loop }
+  end
+
+  def stop_board(ticker)
+    ticker.terminate
+    PicoSim.finish
   end
 
   def finished?(sandbox)
@@ -99,13 +145,22 @@ class ChunkyLab
     end
   end
 
-  # the cell's line the error came from, "" when unknown
+  # the cell's line the error came from, "" when unknown; "epd2in13.rb:12"
+  # when it came from a tab (/lib/epd2in13.rb) - the first frame in either
   def line_of(error)
     trace = error.backtrace
     return "" unless trace
     trace.each do |frame|
       at = frame.index("picoruby.rb:")
       return frame[(at + 12)..-1].to_i.to_s if at
+      at = frame.index("/lib/")
+      next unless at
+      rest = frame[(at + 5)..-1]
+      colon = rest.index(".rb:")
+      next unless colon
+      name = rest[0, colon + 3]
+      next if (@stubs || []).include?("/lib/#{name}")
+      return "#{name}:#{rest[(colon + 4)..-1].to_i}"
     end
     ""
   end
@@ -116,4 +171,4 @@ class ChunkyLab
   end
 end
 
-ChunkyLab.new(JS.global[:PicoLab]).serve
+ChunkyLab.new(JS.global[:PicoLab], JS.global[:PicoBoard]).serve
