@@ -237,10 +237,31 @@ course's stand-in for it. Its constants, the table of colour names,
 `randomGaussian` …) are adapted from the gem's source, Copyright (c) 2019
 xord.org, under the MIT License (the text above).
 
+## The Pico lessons (`html/pico_sim/`, `html/pico/lib/`)
+
+| Component | Version | License | Copyright | Files |
+|---|---|---|---|---|
+| PicoRuby's peripheral mrblib: `picoruby-gpio`, `-pwm`, `-adc`, `-i2c`, `-spi`, `-cyw43`, `-net-http` (`mrbgems/<gem>/mrblib/`) | 4.0.3 (tag) | MIT (the text in `html/assets/picoruby/NOTICE.md`) | HASUMI Hitoshi and the PicoRuby contributors | `html/pico_sim/vendor/`: `gpio.rb`, `pwm.rb`, `adc.rb`, `i2c.rb`, `spi.rb`, `cyw43.rb`, `net-http/http_request.rb`, `net-http/http_response.rb`, `net-http/http_client.rb` - unchanged copies; sizes and SHA-256 in `vendor/VENDOR.txt` (`tools/vendor_picoruby_mrblib.rb`) |
+| The 5×7 font, derived from X11 misc-fixed `5x7.bdf` | - | public domain ("Public domain font. Share and enjoy.") | - | `html/pico/lib/font5x7.rb` (`tools/build_font5x7.rb`) |
+
+The rest of the simulator (`prims.rb`, the devices and stand-ins) is our own
+code, written from the PicoRuby 4.0.3 C sources' behaviour and the parts'
+datasheets (Bosch BME280, Solomon Systech SSD16xx/UC8151, Toshiba TB6612).
+The drivers in `html/pico/lib/{de,en,ja}/` are our own; the e-paper's command
+sequence and the PicoGo's pins and motor direction table follow Waveshare's
+MicroPython/C demo code (`EPD_2in13_V4`, `Motor.py`) as facts - no code was
+copied. The board, breadboard and part drawings in `html/pico_board.js` and
+`html/assets/pico/prremote-sequence.svg` are our own. "Raspberry Pi" and
+"Pico" are trademarks of Raspberry Pi Ltd, "Waveshare" and "PicoGo" of
+Waveshare Electronics; they are named to identify the hardware only.
+
 ## Data
 
 | Data | License | Source | Files |
 |---|---|---|---|
+| Weather in Zurich, one answer of the Open-Meteo forecast API (fetched 2026-10-17), the Pico lessons' canned fallback | CC BY 4.0 | Weather data by [Open-Meteo.com](https://open-meteo.com/) | `html/assets/data/pico/http/api.open-meteo.com__*.json` |
+| The gem `rake`'s entry in the rubygems.org API (fetched 2026-10-17), the same | facts about a gem (its own metadata) | https://rubygems.org/api/v1/gems/rake.json | `html/assets/data/pico/http/rubygems.org__*.json` |
+| The camera's two pictures | our own (procedural drawings, `tools/make_pico_fixtures.rb`) | - | `html/assets/data/pico/camera/{chunky,bacon}.pgm` |
 | Optical Recognition of Handwritten Digits (the 1797 digits of its test part, as scikit-learn ships them) | CC BY 4.0 | E. Alpaydin, C. Kaynak, UCI Machine Learning Repository, https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits | `html/assets/data/digits.csv` (unchanged values, integers instead of floats) |
 
 ## Not bundled

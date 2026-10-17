@@ -4,18 +4,18 @@ What is unfinished, what state it is in, and where the context for it lives.
 `docs/HANDOVER.md` explains how everything works; this file lists what is in
 flight. Keep it short and current: tick items off, delete finished sections.
 
-Last updated 2026-10-06.
+Last updated 2026-10-17.
 
 ## Where the context is defined
 
 | What | Where |
 |---|---|
 | What the site is, its features | `README.md` |
-| How it works, where the traps are | `docs/HANDOVER.md` - §2 layout, §3 lessons (format, numbers by place, the Japanese rules), §4 gems and the pure stand-ins, §6a workshop and storage, §6b live runs, §6c offline mode, §6d Python (and matplotlib), §6e Rumale, §6f SQLite and Sequel (databases in files too), §6g TTY and terminal colours, §6h Processing, §6i Faker, §6j ERB and Herb, §6l ruby2d, §8 tests, §11 older open ends |
+| How it works, where the traps are | `docs/HANDOVER.md` - §2 layout, §3 lessons (format, numbers by place, the Japanese rules), §4 gems and the pure stand-ins, §6a workshop and storage, §6b live runs, §6c offline mode, §6d Python (and matplotlib), §6e Rumale, §6f SQLite and Sequel (databases in files too), §6g TTY and terminal colours, §6h Processing, §6i Faker, §6j ERB and Herb, §6l ruby2d, §6r the Pico bench, §8 tests, §11 older open ends |
 | The page shell on PicoRuby, its portability rules | `docs/PICORUBY_SHELL.md`, `test/shell/portability_test.rb` |
 | Every bundled component and its licence | `THIRD_PARTY_NOTICES.md` |
 | All lesson text, code, checks and UI strings | `html/lessons.js` - the source of truth |
-| Lesson generators (scratch, **not in git**) | `tmp/*_lesson.rb` (pycall_lesson_v2, sympy, numpy, matplotlib, sklearn, sequel) write `tmp/<id>_lesson.json`; `tmp/insert_lesson.js` inserts (`tmp/insert_lesson_into.js`: the same for a worktree's `LESSONS_JS`; `tmp/matplotlib_lesson_edits.js`: the edits around the matplotlib lesson), `tmp/replace_lesson.js` swaps one lesson. Since lessons are numbered by their place (HANDOVER §3), inserting renumbers nothing; a generator that still writes numbered titles or "Lektion 23" needs `ruby tools/lesson_numbers_to_ids.rb` afterwards. A hand edit to `lessons.js` is lost if a generator runs again - edit the generator too, or only `lessons.js` |
+| Lesson generators (scratch, **not in git**) | the Pico lessons: `tmp/pico-lessons/gen_group{1,2,3}.rb` write `tmp/pico-lessons/pico-*.json`, `tmp/insert_pico.js` and `tmp/insert_solutions.rb` put them and their SOLUTIONS in (re-runnable); `tmp/*_lesson.rb` (pycall_lesson_v2, sympy, numpy, matplotlib, sklearn, sequel) write `tmp/<id>_lesson.json`; `tmp/insert_lesson.js` inserts (`tmp/insert_lesson_into.js`: the same for a worktree's `LESSONS_JS`; `tmp/matplotlib_lesson_edits.js`: the edits around the matplotlib lesson), `tmp/replace_lesson.js` swaps one lesson. Since lessons are numbered by their place (HANDOVER §3), inserting renumbers nothing; a generator that still writes numbered titles or "Lektion 23" needs `ruby tools/lesson_numbers_to_ids.rb` afterwards. A hand edit to `lessons.js` is lost if a generator runs again - edit the generator too, or only `lessons.js` |
 | Local Playwright helper (scratch, **not in git**) | `tmp/playwright_redirect.mjs` + `tmp/playwright_resolve_hook.mjs` (see "Working on this machine") |
 | Experiments (prototypes, not on the site) | `experiments/NN-<idea>/NOTES.md` - what was tried, measurements, integration steps |
 | Hosting details | `docs/HOSTING.local.md` - local only, excluded from git |
@@ -31,6 +31,18 @@ Last updated 2026-10-06.
   loaded. The first build takes a few minutes; it keeps about 175 MB in
   `.cache/spinel/` and about 115 MB per build in `html/assets/spinel/`
   (the current one and the one before).
+- Branch `picoruby-hardware` (2026-10-17, not merged): the seven Pico
+  lessons `pico-blink` to `pico-deploy` with the simulator, the bench, tabs
+  and the BLE laptop cell (HANDOVER §6r). Open there:
+  - the bench exists only after a board cell's first ▶, so a slider or
+    picture cannot be set before the first run (a bench mounted at page
+    load under the first board cell would fix it);
+  - nothing has been tried on a real Pico 2 W (drivers, timing, the PicoGo
+    on a Pico 2) - say "tested in the simulator" until someone has;
+  - an e-paper and the LED/button in one cell: their wires cross (no
+    lesson does it yet);
+  - the design's nice-to-haves (LCD, WS2812, IRQ, a webcam for the camera,
+    a board switch, Web Serial to a real Pico): `tmp/pico-research/DESIGN.md` §7.
 - `main` (2026-10-16: iterators, error messages, inheritance and docs in the basics, time and objects in the timelog track; on 2026-10-08 the SciRuby lessons `daru` to `networkx` - Daru, statistics, networkx.rb - came last, after `ruby2d`, the other Rubies and PicoRuby (`rubies`, `picoruby`) and Spinel (`spinel`)). The site does NOT show it yet: the
   host's checkout stopped following `main` on 2026-09-30 (the history
   rewrite; GitHub's push webhook is answered with 202, but the live

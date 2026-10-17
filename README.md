@@ -41,6 +41,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   [IronRuby](https://github.com/Largo/ironruby) on .NET, RubyMotion,
   DragonRuby and more), a lesson whose cells and IRB run on
   [PicoRuby.wasm](https://github.com/picoruby/picoruby) instead of CRuby,
+  Ruby on a simulated Raspberry Pi Pico 2 W (LEDs, buttons, sensors, a
+  robot, an e-paper display, Wi-Fi and Bluetooth, then a real board),
   Ruby compiled ahead of time by Matz's [Spinel](https://github.com/matz/spinel)
   - to C, then to WebAssembly, in the browser - and a project track that
   builds a small time tracker (with Time and Date, objects and copies,
@@ -67,8 +69,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   up" box linking the official docs of what it used (docs.ruby-lang.org;
   Rurima, the Japanese reference, for Japanese), and lesson `doku` teaches how
   to read them.
-- **Lesson sidebar**: the lessons in three groups (basics, side trips,
-  the timelog track) with done counts, ticks and a bacon progress strip,
+- **Lesson sidebar**: the lessons in four groups (basics, side trips,
+  Ruby on a Pico, the timelog track) with done counts, ticks and a bacon progress strip,
   searchable and foldable; it can be put away, and on a phone it is a
   drawer.
 - **Keyboard and screen readers**: a skip link past the index, editors
@@ -210,6 +212,13 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   the start, only the new line's output shown (lesson `spinel`, about 27 MB,
   loaded when it opens). Not in git: the deploy builds it
   (`tools/build_spinel.rb`, pinned in `tools/spinel.json`).
+- **A Pico on the page**: the hardware lessons run on PicoRuby.wasm with
+  PicoRuby's own GPIO, PWM, ADC, I2C, SPI and `Net::HTTP` code over a
+  simulated board, drawn below the cell as a Pico 2 W on a breadboard with
+  the parts wired to it - press its button, move the light or the robot's
+  box, read the e-paper, type to it over Bluetooth, or ■ reset it. Drivers
+  sit in read-only tabs beside the code, as files in `/lib` do on a real
+  Pico, and exercises are checked against what the board did.
 - _why's own cartoon foxes, from the poignant guide, cheer you on (CC BY-SA 2.5,
   traced to SVG and animated).
 

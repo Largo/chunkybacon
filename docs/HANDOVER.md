@@ -95,7 +95,22 @@ html/
                         IRB lines to a Web Worker, the time limits, chunky:picoruby (§6m)
   picoruby_worker.js    that worker: a second PicoRuby.wasm, its scheduler turned per request
   picoruby_lab.rb       the Ruby in the worker: a Task serving requests, a Sandbox per session
-  picoruby_cells.rb     the kernel's side: PicoRuby's answers as values, errors, Prism's syntax errors
+  picoruby_cells.rb     the kernel's side: PicoRuby's answers as values, errors, Prism's syntax errors;
+                        PicoRubyCells::Board, the `board` of a Pico lesson's check (§6r)
+  picoruby_worker_core.js  the worker's logic, importable by node (test/pico_wasm_test.mjs): the
+                        scheduler in 16 ms turns, inputs mid-run, streamed output, tabs in /lib (§6r)
+  pico_sim/             the Pico lessons' simulator, plain Ruby run in the lesson's worker (and
+                        under CRuby by the harness): prims.rb (the C side of GPIO/PWM/ADC/I2C/SPI),
+                        world.rb, bench.rb, devices/, stand_ins/ (CYW43, Net::HTTP sockets, BLE,
+                        camera), vendor/ (PicoRuby 4.0.3's own mrblib, unchanged), manifest.txt (§6r)
+  pico/lib/             the lessons' drivers, shown in read-only tabs: {de,en,ja}/epd2in13.rb,
+                        bme280.rb, picogo.rb (the code identical, the comments translated), font5x7.rb
+  pico_board.js         the bench: an SVG Pico 2 W on a breadboard, the cell's parts wired to it,
+                        cards (robot arena, camera, Wi-Fi, laptop), the controls below (§6r)
+  pico_laptop.rb        require "ble" in a Pico lesson's CRuby cell: the `ble` gem's API over
+                        the bench's simulated radio (lesson pico-ble, §6r)
+  assets/pico/          prremote-sequence.svg (lesson pico-deploy); assets/data/pico/: canned
+                        HTTP answers and the camera's two pictures (tools/make_pico_fixtures.rb)
   assets/herb/          Herb's parser as WebAssembly + 3 files of @ruby/prism (tools/vendor_herb.rb)
   spinel.rb             spinel(code), show_spinel_irb: CRuby's run of the program (the oracle), on the kernel (§6n)
   shell/spinel.rb       their widgets below the cell and IRB on Spinel, in the shell (PicoRuby) (§6n)
@@ -154,6 +169,10 @@ tools/dev_server.rb        nginx's stand-in without Docker: html/, the bridges, 
 tools/build_embed_ui.rb    html/embed-ui.js from lessons.js's ui strings (--check: current?)
 tools/make_embed_url.rb    a cell's address for some code: the URL, an <iframe>, a "▶ Run" link (§6k)
 tools/patch_picoruby_loader.rb  PicoRuby's loader: text/ruby -> text/picoruby
+tools/vendor_picoruby_mrblib.rb  PicoRuby 4.0.3's peripheral mrblib into html/pico_sim/vendor/
+                           (--check: unchanged, and the wasm's version) (§6r)
+tools/make_pico_fixtures.rb  html/assets/data/pico/: the canned HTTP answers (--http: fetch anew), the camera PGMs
+tools/build_font5x7.rb     html/pico/lib/font5x7.rb from X11 misc-fixed's 5x7.bdf (public domain)
 tools/vendor_picoruby.rb   PicoRuby.wasm from npm into html/assets/picoruby/ (checksums,
                            loader patch, .gz, NOTICE.md); --check: offline, files as recorded
 tools/measure_load.mjs, tools/shell_metrics.rb  load times, code size (PICORUBY_SHELL.md)
@@ -193,6 +212,15 @@ test/language_test.mjs     Playwright: which language a visitor gets (11 checks)
 test/offline_test.mjs      Playwright: offline mode, behind a proxy it takes down
 test/embed_test.mjs        Playwright: an embedded cell on another (made-up) site (§6k)
 test/picoruby_test.mjs     Playwright: the PicoRuby lesson - cells, IRB, exercise, live runs, the stop (§6m)
+test/pico_sim_test.rb      the Pico simulator under CRuby: prims, vendored mrblib, devices, Net::HTTP, BLE, Board API (§6r)
+test/pico_cruby_host.rb    the worker's host for CRuby: a virtual clock, Tasks as Fibers, canned HTTP
+test/pico_harness.rb       the Pico lessons' exercises on the simulator under CRuby (check_harness.rb delegates)
+test/pico_lint.rb          the linter's rules for tabs, board, bench (group `pico`)
+test/pico_laptop_test.rb   pico_laptop.rb against a fake bench; pico-ble's laptop cell in 3 languages
+test/pico_wasm_test.mjs    node: the probes, every part and every Pico demo cell on real PicoRuby.wasm
+test/pico_lessons_test.mjs Playwright: the seven Pico lessons - every cell, the bench, tabs, Stop, BLE, exercises
+test/pico_board_test.mjs   Playwright: the same machinery on a lesson file (tmp/pico-lessons/_demo.json)
+test/pico_bench_shots.mjs  Playwright: screenshots and checks of every bench part (wide, mobile, dark)
 test/dev_server_test.rb    the dev server's bridge rule and embed headers, and that nginx/default.conf says the same
 test/make_lessons_json.js  writes test/lessons.json for the harnesses
 docs/HANDOVER.md           this file
@@ -267,6 +295,7 @@ parses, changes and rewrites it; prose edits can be done by hand.
   "live": false,   // optional: no live runs in this lesson (§6b)
   "stepper": true, // optional: ⏯ beside ▶ on its code cells (§6)
   "engine": "picoruby", // optional: cells and IRBs run on PicoRuby.wasm, not CRuby (§6m)
+  "pico": { "board": "pico2w" }, // optional: a Pico lesson - cells with "board" get the bench (§6r)
   "de": { "title": "HTML parsen", "cells": [ ... ] },   // no number: it is the lesson's place (§3)
   "en": { "title": "Parsing HTML", "cells": [ ... ] },
   "ja": { "title": "HTMLのパース", "cells": [ ... ] } }
@@ -339,6 +368,9 @@ Cells, per language:
 | `c` | `code` | runnable demo cell |
 | `c` | `code`, `raises` | a demo that fails on purpose (the errors lesson): `raises` names the error class, and the harness checks the cell raises exactly that |
 | `x` | `code`, `check`, `hint` | the ONE exercise cell of the lesson; `check` is Ruby evaluated in the lesson binding with locals `output`, `result`, `code`, `images`, `downloads`, `audios` (the WAVs `show_audio` got), `games` (copies of the games `show_game` made, to play headless) |
+| `c`/`x` | `tabs` | Pico lessons (§6r): more files of the cell, each a tab beside `code` (the main file, `app.rb`, or `main` if given). `{"name": "epd2in13.rb", "src": "pico/lib/en/epd2in13.rb"}` is fetched and read-only; `{"name": "dechunk.rb", "code": "...", "readonly": false}` is inline and editable (saved per learner). The worker writes them to `/lib`, the code says `require "epd2in13"` |
+| `c`/`x` | `board`, `bench` | Pico lessons: `board: {"parts": [...]}` runs the cell on the simulated Pico and shows the bench with these parts; `bench` is a script of inputs at fixed times (`{"at": 300, "press": 14}`, `"set"`, `"release"`, `"arena"`, `"ble"`, `"wifi"`) - an exercise with input parts needs one. Its check gets one more local, `board` (§6r) |
+| `c` | `engine: "cruby"` | in a Pico lesson: this cell runs on CRuby - the laptop's side of lesson `pico-ble` (`require "ble"` is `pico_laptop.rb`) |
 
 Rules that the code and tests rely on:
 
@@ -381,7 +413,8 @@ Rules that the code and tests rely on:
   so a new lesson changes no other file; the linter flags a count in the
   docs.
 - `test/check_harness.rb` needs a `SOLUTIONS[id]` entry (one or more solution
-  snippets for `de` and `en`; `ja` uses `en`'s) or it aborts. Its body runs in
+  snippets for `de` and `en`; `ja` uses `en`'s) or it aborts (the Pico
+  lessons' entries are `<<~'SOL'` heredocs, handed to `pico_harness.rb`). Its body runs in
   a method because lesson bindings capture top-level locals, and each
   language runs in a process of its own because top-level `def`/`class`
   outlive the binding (an English solution would let the Japanese starter
@@ -904,6 +937,10 @@ machine:
   context**: https or localhost. The live site is https, so it works there;
   on a plain `http://<ip>` the browser hides the API and the dialog offers
   only the file.
+- **An editable tab** of a Pico cell (§6r) is saved under the cell's key
+  plus `~<name>`, with the tab's own starter as the fingerprint:
+  `chunky_cell_<lang>_<id>_<idx>@<fp>~dechunk.rb`; read-only tabs are never
+  saved, a reset removes the tab keys too.
 - **A cell's saved code** is the key `chunky_cell_<lang>_<id>_<idx>@<fp>`:
   the cell's index in the lesson and a fingerprint of its starter code
   (`shell/store.rb`: a polynomial hash of the bytes, base 36, at most six
@@ -1914,6 +1951,162 @@ on **PicoRuby.wasm** instead of CRuby:
   `test/check_harness.rb` runs the exercise under CRuby with the result
   handed over as a `Value` (the demos need PicoRuby and are skipped);
   `test/picoruby_test.mjs` the rest, in a browser.
+- The seven hardware lessons after `spinel` run on this worker too, with a
+  simulated Pico 2 W and a bench below the cell: §6r.
+
+## 6r. The Pico bench: hardware lessons (`pico-blink` to `pico-deploy`)
+
+Seven lessons in the section "Ruby auf dem Pico" / "Ruby on a Pico" /
+"PicoでRuby", after `spinel`: `pico-blink` (GPIO, the onboard LED, Task,
+an IRB on the board), `pico-sensors` (button, pull-up, ADC, the chip's
+thermometer, I2C and the BME280), `pico-robot` (PWM, buzzer, the Waveshare
+PicoGo with IR sensors and sonar), `pico-epaper` (SPI, the Waveshare
+2.13" e-paper, a camera picture in black and white), `pico-wifi` (CYW43,
+`Net::HTTP` to rubygems and Open-Meteo, chunked bodies, a dashboard),
+`pico-ble` (BLE::UART, a CRuby laptop cell), `pico-deploy` (boards, R2P2,
+prremote). Lesson `picoruby` ends with a cell pointing to `pico-blink`.
+The plan they follow, with its research, is in `tmp/pico-research/` of the
+branch's worktree (not in git); this section is what was built.
+
+**The hardware is Ruby, in the lesson's worker.** The lessons are
+`"engine": "picoruby"` (§6m) with `"pico": {"board": "pico2w"}`, so cells
+run on PicoRuby.wasm 4.0.3. The API classes (`GPIO`, `PWM`, `ADC`, `I2C`,
+`SPI`, `CYW43`, `Net::HTTP`) are **PicoRuby's own mrblib, vendored
+unchanged** (`html/pico_sim/vendor/`, `tools/vendor_picoruby_mrblib.rb
+--check` ties them to the wasm's version). Only their C primitives are
+written anew, in Ruby, against a simulated world (`pico_sim/prims.rb`,
+following the 4.0.3 C sources); BLE, the camera and the sonar are
+stand-ins (`stand_ins/`). The devices - pins, the e-paper's SSD16xx
+controller with its RAM, the BME280 with its calibration registers, the
+PicoGo's kinematics and IR cones, the radio, Wi-Fi with canned HTTP - are
+plain Ruby too (`devices/`, `world.rb`). The **same files run under CRuby**
+in `test/pico_harness.rb` (host `test/pico_cruby_host.rb`: a virtual clock,
+Tasks as Fibers), so a check behaves the same on the page and in the test.
+Load order: `pico_sim/manifest.txt`; the worker writes the files to `/sim`
+on the first run with a board.
+
+**The worker** (`picoruby_worker_core.js`, hosted by
+`picoruby_worker.js`) turns PicoRuby's scheduler in 16 ms batches and
+yields between them, so inputs from the page (`{kind: "input"}`) reach a
+running loop, and output (`chunky:picoruby-progress`) and bench snapshots
+stream out while it runs. A busy loop without `sleep_ms` still sees inputs:
+every simulated input read calls `PicoSim.breathe`. No SharedArrayBuffer
+(nginx sends no COOP/COEP). HTTP from `Net::HTTP` is a sync XHR from the
+worker: rubygems through the `/rubygems` bridge, other https directly
+(Open-Meteo has CORS), and when that fails the canned answer from
+`assets/data/pico/http/` (the bench says "canned").
+
+**The run model.** ▶ on a board cell is "flash and reset": pins, PWM,
+motors, the robot's pose and the BLE link start over; the e-paper keeps its
+picture (it is non-volatile), the notebook variables stay. Board cells get
+60 s (an IRB line below one 30 s), and the bench's **■ Stop** is the
+Pico's reset: the worker is ended as on a timeout, the cell keeps what it
+printed and says "The Pico was reset" plus `picoRestarted`. An IRB below a
+board cell (`show_irb` in the cell) uses the cells' session, so `led` from
+the cell is there, and its lines do not reset the board. The lessons are
+`"live": false`.
+
+**The bench** (`html/pico_board.js`, plain JS like `game.js`): one per
+lesson, moved under the cell being run (`#pico-slot-<idx>`, `mount`);
+it draws the worker's snapshots and sends the controls' inputs back.
+An SVG Pico 2 W (landscape, 40 labelled pads with tooltips naming each
+pin's functions, the pin state as a coloured ring), a breadboard with the
+cell's parts and jumper wires, cards for parts without pins (the PicoGo
+arena with draggable box and bacon, the camera, Wi-Fi's HTTP log, the
+laptop's BLE terminal), and real HTML controls below: ■ Stop, sound
+(muted by default), the button (pointer, Space, Enter), sliders (light,
+room temperature, the BME280's T/RH/p), the picture chooser, "access point
+off", the laptop's line form. A control the bench script drives follows
+its value and is locked (🤖). A polite live region says changes at most
+every 1.5 s; the SVG's `<desc>` follows the state. Dark-mode tokens for the
+bench only (the site has no dark theme). Parts (`board.parts`), wiring
+fixed per part: `led15`, `button14`, `light26`, `temp`, `buzzer16`,
+`envsensor` (I2C0 on GP20/21), `epd213` (SPI1, GP8-13), `picogo`
+(GP2-4, 14-21, 26 - not with `envsensor`), `camera`, `wifi`, `laptop`. The
+linter refuses unknown parts and two parts on one pin. API, for tests too:
+`chunkyPicoBoard.mount/receive/inputs/input/sendLine/ble/started/reset/
+unmount/debug` (the head of the file).
+
+**The bench script** (`"bench"` on a cell) applies inputs at fixed times
+in the Ruby world - presses, slider values, BLE lines, the arena's layout,
+Wi-Fi off - on the page and in the harness alike, so an exercise with input
+parts is deterministic. **Checks** get `board`, a `PicoRubyCells::Board`
+built from the world's summary that the worker returns with every answer:
+`writes`, `level_at(pin, ms)`, `pulses`, `gaps`, `pwm`, `buzz`, `onboard`,
+`i2c`, `epd.refreshes / frame.black?(x, y) / black_count / text?("Hi")`
+(the 5×7 font), `robot.hit? / gap_cm / traveled_cm`, `http`,
+`http_json(host)`, `wifi_connected?`, `ble.rx / tx / lines`. Keep
+`refreshes >= 1` in e-paper checks: the frame survives runs, so a demo's
+picture must never satisfy an exercise.
+
+**Tabs** (more files in one cell, `tabs` in §3): the shell renders a WAI-
+ARIA tab list (`View.cell_html`; arrow keys move, 🔒 on read-only tabs),
+`initCell` with a read-only flag, `setCellTabSrc` fetches `src` tabs,
+`getCellTabs` hands all of them to the run. The worker writes them to
+`/lib/<name>` with `$LOAD_PATH = ["/lib"]`, as R2P2 does, and clears their
+`$LOADED_FEATURES` per run; an error in a tab comes back as `name.rb:line`
+and marks the line in that tab (`markCellTabLine`). An editable tab is
+saved under `Store.tab_key` (the cell's key + `~name`, §6a) and restored by
+the lesson's reset. The drivers live in `html/pico/lib/<lang>/`, one copy
+per language with translated comments; the linter requires the code to be
+equal across languages modulo comments.
+
+**The laptop's side** (lesson `pico-ble`): a cell with `"engine":
+"cruby"` runs on the kernel. `require "ble"` loads `html/pico_laptop.rb`
+(a `BrowserGems` shim): the blockless subset of the `ble` gem 1.0.0 -
+`BLE::Adapter` (`devices` lists the Pico while a cell of the lesson runs
+`BLE::UART#start`, from `chunkyPicoBoard.ble()`), `Device#connect`,
+`#[]=(svc, char, value, raw:)` (→ `sendLine`), `#subscribe { |bytes| }`,
+and `DBus::Main` / `DBus::SystemBus.instance` with a `run` that returns
+at once. The page calls the kept blocks on each `chunky:pico-ble` event
+(`ChunkyApp#pico_laptop_notify`) and appends what they print to that
+cell's output. `pico[nus, rx, raw: true] = v` does not parse since Ruby
+3.4 (no keywords in an index assignment), so the lesson writes
+`pico.[]=(nus, rx, v, raw: true)` and says why. A line the laptop sent is
+not sent again to the next run (`mount` drops `ble.line`).
+
+**Facts from PicoRuby 4.0.3's C that differ from its docs** (the lessons
+follow the C; re-check on an update): `ADC#read` returns volts (0..3.3),
+like `read_voltage`; `CYW43.connect_timeout`'s timeout is in seconds and a
+failure raises `CYW43::ConnectTimeout`; `Net::HTTP.get_response` returns
+the `Net::HTTP` object (use `Net::HTTP.new(host, 443)`, `use_ssl = true`,
+`get(path)`), and a chunked body comes through undecoded; a button pin
+without `PULL_UP` reads 0 (the pads start with the pull-down on);
+`PWM#duty` clamps to 100. PicoRuby's compiler dies on a big nested array
+literal - `font5x7.rb` is a hex heredoc for that reason. A tab's first
+line must not contain `Encoding: x` (CRuby reads it as a magic comment in
+the harness).
+
+**Simulation choices, not facts** - the lessons call them "in this
+simulation": robot speed (a quarter turn ≈ 390 ms at speed 50) and IR
+range (≈ 12 cm), the ADC noise (±2 LSB), the Wi-Fi access point and its
+address, chunk sizes, the camera (PicoRuby has no camera driver; the
+pictures are our own drawings), error messages the C source has no literal
+for. **Nothing has been tried on a real Pico** yet: the drivers follow the
+datasheets and Waveshare's demos and are tested in the simulator only. A
+hidden browser tab throttles timers, which stretches `sleep_ms`; the
+checks' tolerances are wide, the harness is exact.
+
+**How to add a part:** a device class in `pico_sim/devices/` (its `state`
+for the bench, its summary for `board`), registered in `PARTS` with its
+pins; the pins in `test/pico_lint.rb`'s `PART_PINS` (and `INPUT_PARTS` if a learner can change it); its drawing, wiring and
+controls in `pico_board.js` (`PARTS`, `buildControls`, `render`), ui
+strings `board*` in all three languages (main.rb hands every `board*` key
+to the bench; then `tools/build_embed_ui.rb`); a `Board` method if checks
+need it; a case in `test/pico_sim_test.rb`, one demo cell in
+`tmp/pico-lessons/make_bench.rb` for `pico_bench_shots.mjs`.
+
+Tests: `ruby test/pico_sim_test.rb` (the simulator under CRuby),
+`ruby test/pico_harness.rb [--demos]` (the exercises; check_harness.rb
+delegates to it), `ruby test/pico_laptop_test.rb`, `node
+test/pico_wasm_test.mjs` (probes, parts and every demo cell on real
+PicoRuby.wasm, ~2 min), and against a dev server `node
+test/pico_lessons_test.mjs [de] [en] [ja]` (every lesson in a browser,
+~2 min per language; `SHOTS=dir` saves screenshots),
+`test/pico_board_test.mjs` and `test/pico_bench_shots.mjs` (on the lesson
+files in `tmp/pico-lessons/`). Lesson files are written by generators
+there (`gen_group1.rb` .. `gen_group3.rb`) and put into lessons.js by
+`tmp/insert_pico.js`, their SOLUTIONS by `tmp/insert_solutions.rb`.
 
 ## 6n. Spinel: a compiler in the page (lesson `spinel`)
 
@@ -2323,6 +2516,12 @@ ruby spinel_build_test.rb                # the plain Ruby of the compiler worker
 BASE=http://127.0.0.1:8011/ node embed_test.mjs     # the embedded cell (§6k), ~1 min
 BASE=http://127.0.0.1:8011/ node picoruby_test.mjs  # the PicoRuby lesson (§6m), ~30 s
 ruby ../tools/vendor_picoruby.rb --check            # the PicoRuby runtime is what PICORUBY_VERSION.txt records
+ruby pico_sim_test.rb                    # the Pico simulator under CRuby (§6r)
+ruby pico_harness.rb --demos             # the Pico exercises (check_harness.rb runs it too), demo cells as a smoke test
+ruby pico_laptop_test.rb                 # pico_laptop.rb, pico-ble's laptop cell
+node pico_wasm_test.mjs                  # probes + every Pico demo cell on real PicoRuby.wasm, ~2 min
+ruby ../tools/vendor_picoruby_mrblib.rb --check  # the vendored mrblib is unchanged
+BASE=http://127.0.0.1:8011/ node pico_lessons_test.mjs de en ja   # the Pico lessons in a browser, ~2 min per language
 ```
 
 The CRuby harnesses exercise the real `browser_gems.rb` with `File.read`
