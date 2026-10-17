@@ -305,7 +305,13 @@ xord.org, under the MIT License (the text above).
 |---|---|---|---|---|
 | PicoRuby's peripheral mrblib: `picoruby-gpio`, `-pwm`, `-adc`, `-i2c`, `-spi`, `-cyw43`, `-net-http`, `-pio` (`mrbgems/<gem>/mrblib/`) | 4.0.3 (tag) | MIT (the text in `html/assets/picoruby/NOTICE.md`) | HASUMI Hitoshi and the PicoRuby contributors | `html/pico_sim/vendor/`: `gpio.rb`, `pwm.rb`, `adc.rb`, `i2c.rb`, `spi.rb`, `cyw43.rb`, `net-http/http_request.rb`, `net-http/http_response.rb`, `net-http/http_client.rb`, `pio.rb`, `pio_state_machine.rb` - unchanged copies; sizes and SHA-256 in `vendor/VENDOR.txt` (`tools/vendor_picoruby_mrblib.rb`) |
 | [picoruby-ws2812](https://github.com/ksbmyk/picoruby-ws2812) (community gem, a pure-Ruby WS2812 driver over `picoruby-pio`), `mrblib/ws2812.rb` | commit 6f0b6d2 (2026-03-28) | MIT | 2025 ksbmyk (Miyuki Koshiba) | `html/pico/lib/ws2812.rb` - an unchanged copy (SHA-256 checked by `test/pico_sim_test.rb`); shown read-only as a tab in lesson `pico-robot` |
+| PicoRuby's `picoruby-picomodem` device side, `mrbgems/picoruby-picomodem/mrblib/picomodem.rb` (R2P2's PicoModem / RBTP) | 4.0.3 (tag) | MIT (the text in `html/assets/picoruby/NOTICE.md`) | HASUMI Hitoshi and the PicoRuby contributors | `test/vendor/picomodem.rb` - an unchanged copy (SHA-256 checked by `test/pico_real_test.mjs`), run under CRuby by `test/pico_real_device.rb` to test `html/pico_real.js` against it; not served |
 | The 5×7 font, derived from X11 misc-fixed `5x7.bdf` | - | public domain ("Public domain font. Share and enjoy.") | - | `html/pico/lib/font5x7.rb` (`tools/build_font5x7.rb`) |
+
+`html/pico_real.js` (a real Pico over Web Serial and Web Bluetooth) is our
+own code; it follows R2P2's protocol as PicoRuby 4.0.3's sources and the R2P2
+Web Terminal (picoruby.org, `pages/r2p2/terminal.rb`) implement it, and copies
+no code from them.
 
 The rest of the simulator (`prims.rb`, the devices and stand-ins) is our own
 code, written from the PicoRuby 4.0.3 C sources' behaviour and the parts'
