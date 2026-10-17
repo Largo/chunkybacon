@@ -99,7 +99,11 @@ async function go(page, id) {
           oneLine: names.every(c => c.getClientRects().length === 1 && c.getBoundingClientRect().height < lineH(c) * 1.6),
           cols: [...document.querySelectorAll(".lessonText table.boards tr:first-child th")].length,
           old: !!document.querySelector(".lessonText table.boards code"),
-          broken, scroll: document.documentElement.scrollWidth
+          broken, scroll: document.documentElement.scrollWidth,
+          // the boards' names ("Pico 2 W", ボード) on one line each, in every language
+          firstCol: [...document.querySelectorAll(".lessonText table.boards tr > :first-child")]
+            .filter(c => { const r = document.createRange(); r.selectNodeContents(c); return new Set([...r.getClientRects()].map(x => Math.round(x.top))).size > 1; })
+            .map(c => c.textContent)
         };
       });
       const L = `pico-deploy/${lang} at ${width} px`;
@@ -107,8 +111,9 @@ async function go(page, id) {
       check(`${L}: each file name on one line`, r.oneLine);
       check(`${L}: the boards table has four columns, no file names in it`, r.cols === 4 && !r.old, r.cols);
       check(`${L}: no word breaks inside`, r.broken.length === 0, r.broken.join(" "));
+      check(`${L}: each board's name on one line`, r.firstCol.length === 0, r.firstCol.join(" | "));
       check(`${L}: the page fits`, r.scroll <= width + 2, r.scroll);
-      if (lang !== "ja" || width > 400) await shot(page.locator(".lessonText").first(), `deploy-${lang}-${width}.png`);
+      await shot(page.locator(".lessonText").first(), `deploy-${lang}-${width}.png`);
       await page.close();
     }
     await ctx.close();

@@ -672,7 +672,7 @@
     boardRealCrc: "the CRC-32 does not match – send it again",
     boardRealTimeout: "the Pico did not answer for 5 seconds",
     boardRealNoSecure: "A real Pico needs a secure page, and this one is plain http. Open the course on https://chunkybacon.idogawa.com or on localhost.",
-    boardRealNoSerial: "This browser has no Web Serial: Chrome, Edge and Opera on a computer have it; Firefox, Safari and phones do not. The simulated bench works everywhere.",
+    boardRealNoSerial: "This browser has no Web Serial: Chrome, Edge and Opera on a computer have it; Firefox and Safari do not, and phones cannot reach USB ports. The simulated bench works everywhere.",
     boardRealNoBle: "This browser has no Web Bluetooth: Chrome and Edge on Windows, macOS, ChromeOS and Android have it (on Linux it may have to be switched on in chrome://flags); Firefox and Safari do not.",
     boardRealBle: "A real Pico 2 W (Bluetooth)",
     boardRealBleIntro: "Start a BLE::UART program on a Pico 2 W with R2P2-PICORUBY (like the cells here), then connect: the laptop's lines go to it, and its lines show on the laptop and reach the CRuby cell. The browser lists only devices with the Nordic UART Service, and the page talks to the one you pick. Not yet tried on real hardware.",

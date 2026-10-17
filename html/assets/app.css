@@ -672,6 +672,9 @@ nav#lessonNav a.active::before {
 /* a table of words, not code (pico-deploy's boards): a word wraps whole,
    never "Boar|d" - the narrow columns give way first */
 .lessonText table.cheat.boards th, .lessonText table.cheat.boards td { overflow-wrap: normal; }
+/* the first column (the board's name, "Pico 2 W"): one line also in Japanese,
+   whose line breaking would split ボード or "Pico W" */
+.lessonText table.cheat.boards th:first-child, .lessonText table.cheat.boards td:first-child { white-space: nowrap; }
 @media (max-width: 480px) {
   .lessonText table.cheat.boards th, .lessonText table.cheat.boards td { padding-right: 0.6rem; }
 }
