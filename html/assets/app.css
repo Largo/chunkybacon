@@ -796,6 +796,37 @@ kbd {
 .cell .cm-s-default .cm-bracket { color: #9aa0a8; }
 .cell .CodeMirror-matchingbracket { color: #fff !important; background: #3a404a; }
 
+/* a Pico lesson's cell with several files (shell/view.rb's tabs_html):
+   tabs on the cap, the selected one joined to its editor */
+.cell-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  background: #2b3038;
+  padding: 0.3rem 0.4rem 0;
+}
+.cell-tab {
+  font-family: var(--font-code);
+  font-size: 13px;
+  color: var(--cap-text);
+  background: transparent;
+  border: 0;
+  border-radius: 4px 4px 0 0;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+}
+.cell-tab[aria-selected="true"] { color: #fff; background: var(--cap); }
+.cell-tab:hover { color: #fff; }
+.cell-tab:focus-visible { outline: 3px solid var(--clip); outline-offset: -3px; }
+.cell-tab-lock { margin-right: 0.3em; font-size: 0.85em; }
+/* a read-only tab (a driver to read): no cursor glow, a quieter cap */
+.cell .CodeMirror.is-readonly { background: #262a31; }
+.cell .CodeMirror.is-readonly .CodeMirror-cursor { border-left-color: transparent; }
+/* the bench's slot below a board cell (pico_board.js fills it) */
+.pico-slot { border-top: 1px solid var(--rule); background: var(--sheet); padding: 0.5rem 0.7rem; }
+.pico-bench { margin: 0; }
+.pico-state { font-size: 12px; white-space: pre-wrap; word-break: break-all; color: var(--ink-soft); }
+
 .cell-toolbar {
   display: flex;
   justify-content: flex-end;
