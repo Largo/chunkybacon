@@ -79,6 +79,16 @@ Last updated 2026-10-06.
   cannot delete `.git/worktrees/agent-a88082be1e674fa38`, a stale entry -
   harmless.)
 
+- Lesson `ironruby` (HANDOVER §6s, branch `ironruby-lesson`) needs its
+  runtime on the host before it works: once, `ruby tools/vendor_ironruby.rb
+  --from /root/workspace/ironruby-wasm/wasm/dist` in the live checkout
+  (stocks `.cache/ironruby/`; `tools/after_deploy.sh` keeps it current
+  after that), and the Hetzner hook (`/usr/local/sbin/chunkybacon-deploy`)
+  has to rsync `html/assets/ironruby/` to chunkybacon.idogawa.com as it does
+  `html/assets/spinel/`. Until then the lesson says IronRuby could not be
+  loaded. Upstream IronRuby items found on the way are listed at the end of
+  §6s.
+
 ## Smaller open ends found on the way
 
 - browser_test's "a re-run stops the old game" (Snake) is flaky: it reads
