@@ -50,6 +50,8 @@ module PicoSim
       connect(world, true)
       line = text.end_with?("\n") ? text : "#{text}\n"
       @queue << line
+      # the bench's laptop shows what it sent, wherever it came from
+      world.event("ble", "rx|#{line.chomp}")
     end
 
     # the page's laptop panel (or the CRuby cell through it)

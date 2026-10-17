@@ -208,7 +208,8 @@ module PicoSim
     end
 
     def state(world)
-      { "busy" => busy?(world.now), "sleeping" => @sleeping }
+      # "mode": the refresh under way, so the bench can flash a full one
+      { "busy" => busy?(world.now), "sleeping" => @sleeping, "mode" => @pending }
     end
 
     def summary(world, out)
