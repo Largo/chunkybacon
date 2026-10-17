@@ -65,6 +65,7 @@ class ST7789
     return if x1 <= x0 || y1 <= y0
     window(x0, y0, x1 - 1, y1 - 1)
     data(bytes(color) * ((x1 - x0) * (y1 - y0)))
+    nil
   end
 
   def pixel(x, y, color)
@@ -101,6 +102,7 @@ class ST7789
       end
       x += w
     end
+    nil
   end
 
   private

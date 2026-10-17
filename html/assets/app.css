@@ -1009,7 +1009,7 @@ kbd {
 .pb-key-cap.is-pressed { fill: #2c4f8e; stroke: #8db4ff; }
 .pb-key-text { fill: #e4e6ea; font: 700 8px var(--font-display); pointer-events: none; }
 .pb-key-arrow { font-size: 5px; }
-.pb-rgb-led, .pb-robot-led { fill: #dcd8cc; stroke: #8f8b80; stroke-width: 0.5; }
+.pb-rgb-led, .pb-robot-led { fill: #6f6c66; stroke: #4a4844; stroke-width: 0.5; }
 .pb-rgb-led.is-on, .pb-robot-led.is-on { stroke: rgba(255, 255, 255, 0.75); }
 .pb-rgb-glow { opacity: 0; pointer-events: none; }
 /* the cards: arena, camera, Wi-Fi, laptop */
