@@ -11,6 +11,8 @@
 #
 # Also loaded by test/check_harness.rb, which runs the exercise under CRuby
 # and hands the check a Value, as the page does.
+require "json"
+
 module PicoRubyCells
   # PicoRuby's value as CRuby sees it: its inspect text. Compares with an
   # object by that object's inspect, so a check can say
@@ -44,7 +46,276 @@ module PicoRubyCells
   # PicoRuby could not be loaded
   class Unavailable < StandardError; end
 
+  # The simulated board after a run (docs/HANDOVER.md §6r): an exercise's
+  # check gets it as `board`, from the world's summary JSON that the worker
+  # hands over with its answer (html/pico_sim/world.rb) - or that
+  # test/pico_harness.rb builds the same way under CRuby. Every method is
+  # total: nil, 0 or [] when there is nothing to say, never an exception.
+  # Times are ms since the run started.
+  class Board
+    attr_reader :data
+
+    def initialize(data)
+      @data = data.is_a?(Hash) ? data : {}
+    end
+
+    def t = @data["t"].to_i
+    def name = @data["board"]
+
+    # [[t, level], ...] of an output pin
+    def writes(pin)
+      list = (@data["writes"] || {})[pin.to_s]
+      list.is_a?(Array) ? list : []
+    end
+
+    # the level the pin was last written, nil if it never was
+    def level(pin)
+      last = writes(pin).last
+      last && last[1]
+    end
+
+    # the level at time +t+ (0 before the first write)
+    def level_at(pin, time)
+      level = nil
+      writes(pin).each do |at, value|
+        break if at > time
+
+        level = value
+      end
+      level || 0
+    end
+
+    # [[t, level], ...] with repeated levels folded: the moments it changed
+    def changes(pin)
+      out = []
+      writes(pin).each { |at, value| out << [at, value] unless out.last && out.last[1] == value }
+      out
+    end
+
+    # the lengths (ms) of the finished periods at +level+ - from a change to
+    # it until the next change; one still going at the end does not count
+    def pulses(pin, level = 1)
+      list = changes(pin)
+      out = []
+      list.each_with_index do |(at, value), i|
+        nxt = list[i + 1]
+        out << nxt[0] - at if value == level && nxt
+      end
+      out
+    end
+
+    # the low periods between two highs
+    def gaps(pin)
+      list = changes(pin)
+      out = []
+      list.each_with_index do |(at, value), i|
+        nxt = list[i + 1]
+        out << nxt[0] - at if value == 0 && nxt && i.positive? && list[i - 1][1] == 1
+      end
+      out
+    end
+
+    # "out", "in_pull_up", "pwm", ... ; nil for a pin never set up
+    def mode(pin) = (@data["modes"] || {})[pin.to_s]
+
+    # [[t, frequency, duty], ...]
+    def pwm(pin)
+      list = (@data["pwm"] || {})[pin.to_s]
+      list.is_a?(Array) ? list : []
+    end
+
+    # [[t, frequency], ...] of the buzzer (0 = silent)
+    def buzz = @data["buzz"].is_a?(Array) ? @data["buzz"] : []
+
+    def onboard = @data["onboard"].to_i
+
+    # I2C transfers per address: {"0x76" => 12}
+    def i2c = @data["i2c"].is_a?(Hash) ? @data["i2c"] : {}
+
+    def epd = Epd.new(@data["epd"])
+    def robot = Robot.new(@data["robot"])
+    def ble = Ble.new(@data["ble"])
+
+    # [{"m", "url", "status", "canned", "body"}, ...]
+    def http = @data["http"].is_a?(Array) ? @data["http"] : []
+
+    # the last answer from a host whose name contains +host_part+, parsed
+    # as JSON; nil when there is none or it is not JSON
+    def http_json(host_part)
+      entry = http.reverse.find { |e| e["url"].to_s.split("/")[2].to_s.include?(host_part.to_s) }
+      entry && JSON.parse(entry["body"].to_s)
+    rescue StandardError
+      nil
+    end
+
+    def wifi_connected? = (@data["wifi"] || {})["connected"] == true
+
+    def events = @data["events"].is_a?(Array) ? @data["events"] : []
+
+    class Epd
+      def initialize(data)
+        @data = data.is_a?(Hash) ? data : {}
+      end
+
+      def list = @data["refreshes"].is_a?(Array) ? @data["refreshes"] : []
+      def refreshes = list.size
+      def modes = list.map { |entry| entry[1] }
+      def sleeping? = @data["sleeping"] == true
+      def frame = Frame.new(@data["frame"].to_s)
+    end
+
+    # The e-paper's picture: 250 x 122, x left to right, y top to bottom.
+    # The hex is the panel's RAM (html/pico_sim/devices/epd213.rb): 250 rows
+    # of 16 bytes, row x, pixel 121 - y of that row, the leftmost pixel in a
+    # byte's highest bit, 1 = white.
+    class Frame
+      WIDTH = 250
+      HEIGHT = 122
+
+      def initialize(hex)
+        @bytes = hex.size >= 8000 ? [hex].pack("H*").bytes : nil
+      end
+
+      def blank? = @bytes.nil?
+
+      def black?(x, y)
+        return false if @bytes.nil? || x.negative? || y.negative? || x >= WIDTH || y >= HEIGHT
+
+        s = HEIGHT - 1 - y
+        (@bytes[x * 16 + s / 8] & (0x80 >> (s % 8))).zero?
+      end
+
+      def black_count
+        return 0 if @bytes.nil?
+
+        @black_count ||= black_pixels.size
+      end
+
+      # [[x, y], ...]
+      def black_pixels
+        return [] if @bytes.nil?
+
+        @black_pixels ||= begin
+          out = []
+          WIDTH.times { |x| HEIGHT.times { |y| out << [x, y] if black?(x, y) } }
+          out
+        end
+      end
+
+      # +str+ drawn in the 5 x 7 font (html/pico/lib/font5x7.rb) at scale
+      # 1, 2 or 3, black on white, anywhere on the picture
+      def text?(str)
+        str = str.to_s
+        return false if str.empty? || @bytes.nil?
+
+        font = PicoRubyCells.font
+        (1..3).any? { |scale| find_text(str, scale, font) }
+      rescue StandardError
+        false
+      end
+
+      def find_text(str, scale, font)
+        glyphs = str.chars.map { |c| font[0][(c.ord.between?(32, 126) ? c.ord : 63) - 32] }
+        advance = font[1]
+        # where the first glyph's first black pixel could be
+        first = nil
+        glyphs.each_with_index do |rows, i|
+          rows.each_with_index do |bits, r|
+            col = (0..4).find { |cc| bits & (0x10 >> cc) != 0 }
+            if col
+              first = [i * advance + col, r]
+              break
+            end
+          end
+          break if first
+        end
+        return false unless first
+
+        black_pixels.any? do |bx, by|
+          ox = bx - first[0] * scale
+          oy = by - first[1] * scale
+          glyphs_at?(glyphs, ox, oy, scale, advance)
+        end
+      end
+
+      def glyphs_at?(glyphs, ox, oy, scale, advance)
+        glyphs.each_with_index do |rows, i|
+          gx = ox + i * advance * scale
+          rows.each_with_index do |bits, r|
+            5.times do |c|
+              ink = bits & (0x10 >> c) != 0
+              # a glyph's last column may be its built-in gap: white is
+              # required only where the font has ink in that column somewhere
+              next if !ink && c == 4 && rows.none? { |b| b & 1 != 0 }
+
+              px = gx + c * scale
+              py = oy + r * scale
+              return false if black?(px, py) != ink
+            end
+          end
+        end
+        true
+      end
+    end
+
+    class Robot
+      def initialize(data)
+        @data = data.is_a?(Hash) ? data : {}
+      end
+
+      def hit? = @data["hit"] == true
+      def gap_cm = @data["gap"].to_f
+      def traveled_cm = @data["traveled"].to_f
+      def moving? = @data["moving"] == true
+      def x = @data["x"].to_f
+      def y = @data["y"].to_f
+      def heading = @data["h"].to_f
+      def layout = @data["layout"]
+      def there? = !@data.empty?
+    end
+
+    class Ble
+      def initialize(data)
+        @data = data.is_a?(Hash) ? data : {}
+      end
+
+      # the lines the laptop sent
+      def rx = @data["rx"].is_a?(Array) ? @data["rx"] : []
+      # what the Pico sent, as text, and as lines without their newlines
+      def tx = @data["tx"].to_s
+      def lines = tx.split("\n").map(&:chomp)
+      def advertised = @data["adv"]
+      def connected? = @data["connected"] == true
+    end
+  end
+
   module_function
+
+  # the board for a check: nil for "" (a run without a board)
+  def board(json)
+    text = json.to_s
+    return nil if text.empty?
+
+    Board.new(JSON.parse(text))
+  rescue StandardError
+    nil
+  end
+
+  # [FONT5X7, FONT5X7_ADVANCE] from html/pico/lib/font5x7.rb: the page reads
+  # it with fetchTextSync, the harness from the file (font_source=)
+  def font
+    @font ||= begin
+      source = @font_source ? @font_source.call : $window.fetchTextSync("pico/lib/font5x7.rb").to_s
+      mod = Module.new
+      mod.module_eval(source, "font5x7.rb")
+      [mod.const_get(:FONT5X7), mod.const_get(:FONT5X7_ADVANCE)]
+    end
+  end
+
+  def font_source=(loader)
+    @font_source = loader
+    @font = nil
+  end
 
   # nil, true and false as themselves (main.rb leaves out "=> nil" after
   # output, as for CRuby), everything else as a Value

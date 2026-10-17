@@ -1,0 +1,29 @@
+# The Pico simulator's files in load order (docs/HANDOVER.md §6r): the
+# worker writes them to /sim and picoruby_lab.rb requires them one by one;
+# test/pico_harness.rb loads the same list under CRuby, without host_js.rb
+# and boot.rb (its host is test/pico_cruby_host.rb).
+prims.rb
+vendor/gpio.rb
+vendor/pwm.rb
+vendor/adc.rb
+vendor/i2c.rb
+vendor/spi.rb
+vendor/cyw43.rb
+stand_ins/cyw43.rb
+stand_ins/network.rb
+stand_ins/socket.rb
+vendor/net-http/http_request.rb
+vendor/net-http/http_response.rb
+vendor/net-http/http_client.rb
+stand_ins/ble.rb
+stand_ins/hcsr04.rb
+stand_ins/camera.rb
+world.rb
+bench.rb
+devices/pins.rb
+devices/epd213.rb
+devices/bme280.rb
+devices/picogo.rb
+devices/radio.rb
+host_js.rb
+boot.rb

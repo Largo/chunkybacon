@@ -1,0 +1,9 @@
+{
+  "url": "https://api.open-meteo.com/v1/forecast?latitude=47.37&longitude=8.54&current=temperature_2m,weather_code,wind_speed_10m",
+  "fetched": "2026-10-17",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json; charset=utf-8"
+  },
+  "body": "{\"latitude\":47.376667,\"longitude\":8.543693,\"generationtime_ms\":0.2084970474243164,\"utc_offset_seconds\":0,\"timezone\":\"GMT\",\"timezone_abbreviation\":\"GMT\",\"elevation\":422.0,\"current_units\":{\"time\":\"iso8601\",\"interval\":\"seconds\",\"temperature_2m\":\"°C\",\"weather_code\":\"wmo code\",\"wind_speed_10m\":\"km/h\"},\"current\":{\"time\":\"2026-10-17T01:00\",\"interval\":900,\"temperature_2m\":12.3,\"weather_code\":45,\"wind_speed_10m\":1.5}}"
+}
