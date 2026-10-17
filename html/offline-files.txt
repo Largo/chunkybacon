@@ -172,11 +172,7 @@ ironruby_lab.js
 ironruby_lab.rb
 ironruby_worker.js
 lessons.js
-lessons.js
-lessons.js
 letter.js
-main.rb
-main.rb
 main.rb
 numo_narray.rb
 object_graph.rb
@@ -233,13 +229,9 @@ ruby+stdlib.wasm
 ruby2d.rb
 sandbox_sim.rb
 shell/app.rb
-shell/app.rb
-shell/app.rb
 shell/boot.rb
 shell/bridge.js
 shell/cheatsheet.rb
-shell/course.rb
-shell/course.rb
 shell/course.rb
 shell/jsg.rb
 shell/loader.js
