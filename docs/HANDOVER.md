@@ -1990,7 +1990,10 @@ on the first run with a board.
 yields between them, so inputs from the page (`{kind: "input"}`) reach a
 running loop, and output (`chunky:picoruby-progress`) and bench snapshots
 stream out while it runs. A busy loop without `sleep_ms` still sees inputs:
-every simulated input read calls `PicoSim.breathe`. No SharedArrayBuffer
+every simulated input read calls `PicoSim.breathe`, and so do GPIO writes
+and PWM changes (`breathe_out`). Each run's `inputs` replace the worker's
+whole set (a key the page dropped must not linger: a BLE line already seen
+came back in the next run). No SharedArrayBuffer
 (nginx sends no COOP/COEP). HTTP from `Net::HTTP` is a sync XHR from the
 worker: rubygems through the `/rubygems` bridge, other https directly
 (Open-Meteo has CORS), and when that fails the canned answer from
@@ -1999,7 +2002,10 @@ worker: rubygems through the `/rubygems` bridge, other https directly
 **The run model.** ▶ on a board cell is "flash and reset": pins, PWM,
 motors, the robot's pose and the BLE link start over; the e-paper keeps its
 picture (it is non-volatile), the notebook variables stay. Board cells get
-60 s (an IRB line below one 30 s), and the bench's **■ Stop** is the
+60 s (an IRB line below one 30 s, its output streams too) - but a run
+that gives the worker's event loop no turn for 10 s (`while true; puts; end`,
+the worker posts `{alive}` every 500 ms otherwise) is stopped as on a
+timeout (`QUIET` in picoruby_lab.js). The bench's **■ Stop** is the
 Pico's reset: the worker is ended as on a timeout, the cell keeps what it
 printed and says "The Pico was reset" plus `picoRestarted`. An IRB below a
 board cell (`show_irb` in the cell) uses the cells' session, so `led` from
