@@ -2043,7 +2043,11 @@ snapshots and sends the controls' inputs back.
   language, without the bench script), pins idle, the robot at its start,
   the e-paper with the picture the panel keeps (or blank), the badge
   "○ idle – ▶ Run starts it" (`boardIdle`), ■ Stop disabled. Built one per
-  animation frame; nothing goes to the worker until ▶.
+  animation frame; nothing goes to the worker until ▶. main.rb's first
+  `sync_state` (Ruby has just booted) does not `unmount` them - that used
+  to rebuild every bench ~2 s after load, closing an open USB panel and
+  stopping a webcam; a later page or reset does (pico_extras_test checks
+  that no `.pico-bench` is removed at boot).
 - **▶ makes that cell's bench the live one** (`mount`, built anew only if
   the cell's parts differ); the cell that was live goes back to its idle
   preview - the Pico runs the new cell's program now. Only the live bench
@@ -2138,8 +2142,10 @@ most every 33 ms, "x,y,w,h|<4 hex digits a pixel>" in glass coordinates
 copy is complete); `SPI#write` with one String hands it on as it is (a
 part says `takes_string?`), no 64 800-element Array. The driver tab
 `st7789.rb` (de/en/ja comments) keeps no buffer (a screen is 64 800 bytes):
-`fill`, `fill_rect` (clipped; one window and the colour's two bytes
-repeated), `pixel`, `rect`, `text(str, x, y, color, bg:, scale:)` (one
+`fill`, `fill_rect` (clipped; one window, CS low, then one `SPI#write` per
+row - at most 480 bytes: a whole screen at once would be 64 800 bytes that
+`SPI#write` mallocs a second copy of, ~130 KB against R2P2's 184 KB heap on
+an RP2040; `test_lcd_fill_streams_rows_of_at_most_480_bytes`), `pixel`, `rect`, `text(str, x, y, color, bg:, scale:)` (one
 window per character), `backlight(percent)`, `ST7789.rgb(r, g, b)`. Checks:
 `board.lcd` - `on?`, `visible?` (and a backlight), `inverted?`,
 `backlight`, `color(x, y)` (RGB565 in the RAM), `rgb(x, y)` (as the glass
@@ -2161,8 +2167,10 @@ drawn pictures stay the default and the fallback: no `isSecureContext` /
 the note under the button says so (`boardWebcamNo`) and nothing changes.
 The stream stops on a second click, when a drawn picture is chosen, when
 its track ends, and with the page (`unmount`; a permission answer that
-comes after the page went stops its stream at once). Frames go only to
-the worker; pico-epaper's camera text says it is optional and stays in the
+comes after the page went, or after a drawn picture was chosen while the
+browser asked, stops its stream at once). Frames go to the worker only
+while it runs something (`chunkyPicoRuby.busy()`; each run and IRB line
+takes the newest frame with its inputs anyway), and only to the worker; pico-epaper's camera text says it is optional and stays in the
 browser. 127.0.0.1, localhost and https are secure contexts; a plain-http
 address such as `http://88.99.151.170:8011` is not - there the button only
 says why not.
@@ -2181,7 +2189,12 @@ folded `<details>` under the controls, on the page's main thread:
   CHA/CUP, ED, EL, SU/SD, SGR and ?25 ignored, OSC skipped, 24 x 80, 400
   lines above) and **answers the editor's queries** (ESC[5n -> ESC[0n,
   ESC[6n -> the cursor; unanswered, each query waits 500 ms, and a shell
-  that got no answer at boot takes the terminal as dumb). A line field types (+ CR), Ctrl-C.
+  that got no answer at boot takes the terminal as dumb). East-Asian wide
+  characters and emoji take two columns, as in xterm.js (the cursor report
+  depends on it). A line field types (+ CR), Ctrl-C - both disabled (and
+  their handlers return) while a cell is sent: a byte inside a PicoModem
+  frame breaks its CRC. An unplug or read error releases the reader and
+  writer and closes the port (`Link#gone`), so Connect works again.
   **Send this cell** (`Link#sendCell`): Ctrl-C, Ctrl-D (leaves irb; only
   prints ^D at the shell), wait for `$> ` on the cursor's line (else irb's
   prompt -> Ctrl-D again, else Ctrl-C, else Enter); then per file one
@@ -2193,8 +2206,9 @@ folded `<details>` under the controls, on the page's main thread:
   editor drops what came before it); the tabs to `/lib/<name>`, the code to
   `/home/chunky.rb` (or `/home/app.rb`, a box: R2P2 starts it at power-up),
   then the path + CR typed, which runs it as a job. With tabs, the main file
-  gets one first line `["/lib/x.rb"].each { |f| $LOADED_FEATURES.delete(f)
-  }` (R2P2's require remembers the full path; the simulator clears its
+  starts with `["/lib/x.rb"].each { |f| $LOADED_FEATURES.delete(f) }; `
+  in front of its first line (own line only before `=begin`), so R2P2's
+  error line numbers are the editor's (R2P2's require remembers the full path; the simulator clears its
   features per run too); a `show_irb` line (the page's) becomes a comment.
   Every one of these facts is cited by file and line in pico_real.js's head
   and in `tmp/pico-research/PROGRESS.md` (PicoRuby 4.0.3: shell.rb,
@@ -2210,11 +2224,16 @@ folded `<details>` under the controls, on the page's main thread:
   CRuby cell finds it; `sendLine` goes to it instead of the simulator;
   each line it sends is one `chunky:pico-ble` event (`realBle`) and shows
   on every laptop's screen. Not PicoRuby.wasm's `JS::BLE::UART`: the cells'
-  PicoRuby is in a worker, which has no Web Bluetooth.
+  PicoRuby is in a worker, which has no Web Bluetooth. Disconnect says
+  "Not connected" (`BleLink#close` sets `closing`, so its own
+  `gattserverdisconnected` is not "went away"); `onGone(link)` is ignored
+  for a link that is no longer the current one; a failed GATT setup
+  (service, characteristic, notify) disconnects.
 - **Degrades**: not `isSecureContext` (plain http such as
   `http://88.99.151.170:8011`) -> a note naming https and localhost; no
-  `navigator.serial` / `.bluetooth` (Firefox, Safari, phones) -> a note
-  naming the browsers that have it. No button then. The panels' strings are
+  `navigator.serial` / `.bluetooth` (Firefox, Safari) -> a note naming the
+  browsers that have it; Android (Chrome 138+ has `navigator.serial`, over
+  Bluetooth only) -> the same note (`why: "phone"`). No button then. The panels' strings are
   `boardReal*` (de/en/ja; `chunkyPicoReal.lib.EN` is the English fallback,
   kept equal to `ui.en` by the test). pico-deploy's last cell explains it
   all to the learner (and the safety: only a device picked in the
@@ -2231,7 +2250,9 @@ folded `<details>` under the controls, on the page's main thread:
   fakes injected by `addInitScript`). Open on hardware: whether Chrome's
   Web Serial needs DTR set for TinyUSB to send (the Web Terminal does not
   set it), whether 32-byte pieces are needed on the RP2350, whether
-  `$LOADED_FEATURES` is shared between the shell's jobs.
+  `$LOADED_FEATURES` is shared between the shell's jobs, whether the shell
+  is the first of the 3 CDC ports in every OS's list (pico-deploy says
+  "normally the first - try the next if no `$>` comes").
 
 **The bench script** (`"bench"` on a cell) applies inputs at fixed times
 in the Ruby world - presses, slider values, BLE lines, the arena's layout,
