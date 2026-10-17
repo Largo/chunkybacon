@@ -11108,7 +11108,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h3>Licht von unten: vier WS2812</h3><p>Unter dem PicoGo sitzen vier RGB-LEDs, alle an GP22. Es sind <strong>WS2812</strong>-LEDs («NeoPixel»): In jeder sitzt ein winziger Chip neben einer roten, einer grünen und einer blauen LED. Sie hängen als Kette an einem einzigen Draht. Der Pico schickt 24 Bit pro LED – Grün, Rot, Blau, je acht Bit –, und jede LED behält die ersten 24 Bit, die bei ihr ankommen, und reicht den Rest weiter. Bleibt der Draht länger als 50 µs tief, zeigen alle, was sie bekommen haben.</p><p>Ein Bit ist ein Puls: etwa 0,4 µs hoch ist eine 0, etwa 0,8 µs eine 1. So schnell schaltet keine Ruby-Schleife einen Pin. Der RP2350 hat Helfer dafür: <strong>PIO</strong>, kleine Zustandsmaschinen, die winzige Programme selbständig an Pins ausführen. <code>picoruby-pio</code> von PicoRuby schreibt diese Programme in Ruby, und das Community-Gem <a href='https://github.com/ksbmyk/picoruby-ws2812' target='_blank'>picoruby-ws2812</a> von Miyuki Koshiba (MIT-Lizenz) baut darauf einen LED-Treiber – der Tab <code>ws2812.rb</code>, unverändert. Es gehört nicht zu PicoRuby selbst: Auf einem echten Pico kopierst du es nach <code>/lib</code>, wie die anderen Treiber.</p>"
+            "html": "<h3>Licht von unten: vier WS2812</h3><p>Unter dem PicoGo sitzen vier RGB-LEDs, alle an GP22. Es sind <strong>WS2812</strong>-LEDs («NeoPixel»): In jeder sitzt ein winziger Chip neben einer roten, einer grünen und einer blauen LED. Sie hängen als Kette an einem einzigen Draht. Der Pico schickt 24 Bit pro LED – Grün, Rot, Blau, je acht Bit –, und jede LED behält die ersten 24 Bit, die bei ihr ankommen, und reicht den Rest weiter. Bleibt der Draht länger als 50 µs tief, zeigen alle, was sie bekommen haben.</p><p>Ein Bit ist ein Puls: etwa 0,4 µs hoch ist eine 0, etwa 0,8 µs eine 1. So schnell schaltet keine Ruby-Schleife einen Pin. Der RP2350 hat Helfer dafür: <strong>PIO</strong>, kleine Zustandsmaschinen, die winzige Programme selbständig an Pins ausführen. <code>picoruby-pio</code> von PicoRuby schreibt diese Programme in Ruby, und das Community-Gem <a href='https://github.com/ksbmyk/picoruby-ws2812' target='_blank'>picoruby-ws2812</a> von ksbmyk (MIT-Lizenz) baut darauf einen LED-Treiber – der Tab <code>ws2812.rb</code>, unverändert. Es gehört nicht zu PicoRuby selbst: Auf einem echten Pico kopierst du es nach <code>/lib</code>, wie die anderen Treiber.</p>"
           },
           {
             "t": "c",
@@ -11127,7 +11127,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Die LEDs behalten ihre Farben, wenn das Programm endet – und wenn ■ Stopp den Pico zurücksetzt: Sie haben noch Strom, und niemand hat ihnen etwas anderes gesagt. <code>leds.clear</code> schaltet sie aus. Das Gem beginnt mit <code>brightness</code> 5 %: WS2812 sind hell, und viele davon bei voller Leistung brauchen mehr Strom, als ein USB-Anschluss liefert.</p><p>Öffne den Tab <code>ws2812.rb</code>. <code>self.pio_program</code> ist das PIO-Programm, vier Befehle: <code>out :x, 1</code> nimmt das nächste Bit, während der Pin tief ist (<code>side: 0</code>), und <code>jmp</code> setzt den Pin hoch und springt bei einer 0 weg. Bei 8 MHz ist ein Takt 125 ns: Eine 1 bleibt 7 Takte hoch (875 ns), eine 0 zwei (250 ns), und jedes Bit dauert 10 (1,25 µs). <code>_convert</code> stellt Grün an den Anfang und rechnet die Helligkeit ein. Dasselbe ohne das Gem:</p>"
+            "html": "<p>Die LEDs behalten ihre Farben, wenn das Programm endet – und wenn ■ Stopp den Pico zurücksetzt: Sie haben noch Strom, und niemand hat ihnen etwas anderes gesagt. <code>leds.clear</code> schaltet sie aus. Das Gem beginnt mit <code>brightness</code> 5 %: WS2812 sind hell, und viele davon bei voller Leistung brauchen mehr Strom, als ein USB-Anschluss liefert.</p><p>Öffne den Tab <code>ws2812.rb</code>. <code>self.pio_program</code> ist das PIO-Programm, vier Befehle: <code>out :x, 1</code> nimmt das nächste Bit, während der Pin tief ist (<code>side: 0</code>), und <code>jmp</code> setzt den Pin hoch und springt bei einer 0 weg. Bei 8 MHz ist ein Takt 125 ns: Eine 1 bleibt 7 Takte hoch (875 ns), eine 0 zwei (250 ns), und jedes Bit dauert 10 (1,25 µs). 250 ns sind kürzer als die 0,4 µs von vorhin, aber noch eine 0: Ein WS2812 nimmt eine Spanne – die Simulation zählt einen Puls von etwa 0,15 bis 0,55 µs als 0. <code>_convert</code> stellt Grün an den Anfang und rechnet die Helligkeit ein. Dasselbe ohne das Gem:</p>"
           },
           {
             "t": "c",
@@ -11140,7 +11140,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>out_shift_threshold: 24</code> nimmt aus jedem 32-Bit-Wort 24 Bit, von oben (<code>out_shift_right: false</code>) – darum ist jede Farbe um 8 nach links geschoben. Nimm jetzt <code>freq: 8_000_000,</code> heraus und führ die Zelle nochmals aus: Die Zustandsmaschine läuft mit voller Geschwindigkeit (125 MHz), die Pulse sind 16-mal kürzer, und die LEDs sehen gar nichts – die Werkbank sagt es. In dieser Simulation wird das Timing aus dem Programm gemessen, so wie eine LED es liest; die PIO selbst läuft nicht Takt für Takt.</p>"
+            "html": "<p><code>out_shift_threshold: 24</code> nimmt aus jedem 32-Bit-Wort 24 Bit, von oben (<code>out_shift_right: false</code>) – darum ist jede Farbe um 8 nach links geschoben. Nimm jetzt <code>freq: 8_000_000,</code> heraus und führ die Zelle nochmals aus: Die Zustandsmaschine läuft mit ihren voreingestellten 125 MHz (<code>freq:</code> ist sonst <code>125_000_000</code>), die Pulse sind 16-mal kürzer, und die LEDs sehen gar nichts – die Werkbank sagt es. In dieser Simulation wird das Timing aus dem Programm gemessen, so wie eine LED es liest; die PIO selbst läuft nicht Takt für Takt.</p>"
           }
         ]
       },
@@ -11265,7 +11265,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h3>Lights underneath: four WS2812</h3><p>Under the PicoGo sit four RGB LEDs, all on GP22. They are <strong>WS2812</strong> LEDs (\"NeoPixels\"): in each, a tiny chip sits beside a red, a green and a blue LED. They hang in a chain on a single wire. The Pico sends 24 bits per LED – green, red, blue, eight bits each – and every LED keeps the first 24 bits that reach it and passes the rest on. When the wire stays low for more than 50 µs, all of them show what they got.</p><p>A bit is a pulse: high for about 0.4 µs is a 0, about 0.8 µs a 1. No Ruby loop switches a pin that fast. The RP2350 has helpers for this: <strong>PIO</strong>, small state machines that run tiny programs on pins by themselves. PicoRuby's <code>picoruby-pio</code> writes those programs in Ruby, and the community gem <a href='https://github.com/ksbmyk/picoruby-ws2812' target='_blank'>picoruby-ws2812</a> by Miyuki Koshiba (MIT licence) builds an LED driver on it – the tab <code>ws2812.rb</code>, unchanged. It is not part of PicoRuby: on a real Pico you copy it into <code>/lib</code>, like the other drivers.</p>"
+            "html": "<h3>Lights underneath: four WS2812</h3><p>Under the PicoGo sit four RGB LEDs, all on GP22. They are <strong>WS2812</strong> LEDs (\"NeoPixels\"): in each, a tiny chip sits beside a red, a green and a blue LED. They hang in a chain on a single wire. The Pico sends 24 bits per LED – green, red, blue, eight bits each – and every LED keeps the first 24 bits that reach it and passes the rest on. When the wire stays low for more than 50 µs, all of them show what they got.</p><p>A bit is a pulse: high for about 0.4 µs is a 0, about 0.8 µs a 1. No Ruby loop switches a pin that fast. The RP2350 has helpers for this: <strong>PIO</strong>, small state machines that run tiny programs on pins by themselves. PicoRuby's <code>picoruby-pio</code> writes those programs in Ruby, and the community gem <a href='https://github.com/ksbmyk/picoruby-ws2812' target='_blank'>picoruby-ws2812</a> by ksbmyk (MIT licence) builds an LED driver on it – the tab <code>ws2812.rb</code>, unchanged. It is not part of PicoRuby: on a real Pico you copy it into <code>/lib</code>, like the other drivers.</p>"
           },
           {
             "t": "c",
@@ -11284,7 +11284,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>The LEDs keep their colours when the program ends – and when ■ Stop resets the Pico: they still have power, and nobody told them otherwise. <code>leds.clear</code> switches them off. The gem starts at <code>brightness</code> 5 %: WS2812s are bright, and many of them at full power draw more current than a USB port gives.</p><p>Open the tab <code>ws2812.rb</code>. <code>self.pio_program</code> is the PIO program, four instructions: <code>out :x, 1</code> takes the next bit while the pin is low (<code>side: 0</code>), and <code>jmp</code> sets the pin high and jumps away for a 0. At 8 MHz one cycle is 125 ns: a 1 stays high for 7 cycles (875 ns), a 0 for 2 (250 ns), and every bit takes 10 (1.25 µs). <code>_convert</code> puts green first and scales by the brightness. The same without the gem:</p>"
+            "html": "<p>The LEDs keep their colours when the program ends – and when ■ Stop resets the Pico: they still have power, and nobody told them otherwise. <code>leds.clear</code> switches them off. The gem starts at <code>brightness</code> 5 %: WS2812s are bright, and many of them at full power draw more current than a USB port gives.</p><p>Open the tab <code>ws2812.rb</code>. <code>self.pio_program</code> is the PIO program, four instructions: <code>out :x, 1</code> takes the next bit while the pin is low (<code>side: 0</code>), and <code>jmp</code> sets the pin high and jumps away for a 0. At 8 MHz one cycle is 125 ns: a 1 stays high for 7 cycles (875 ns), a 0 for 2 (250 ns), and every bit takes 10 (1.25 µs). 250 ns is shorter than the 0.4 µs from before, but still a 0: a WS2812 accepts a range – the simulation counts a pulse of roughly 0.15 to 0.55 µs as a 0. <code>_convert</code> puts green first and scales by the brightness. The same without the gem:</p>"
           },
           {
             "t": "c",
@@ -11297,7 +11297,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>out_shift_threshold: 24</code> takes 24 bits from every 32-bit word, from the top (<code>out_shift_right: false</code>) – that is why each colour is shifted left by 8. Now take <code>freq: 8_000_000,</code> out and run the cell again: the state machine runs at full speed (125 MHz), the pulses are 16 times shorter, and the LEDs see nothing at all – the bench says so. In this simulation the timing is measured from the program, the way an LED reads it; the PIO itself is not run cycle by cycle.</p>"
+            "html": "<p><code>out_shift_threshold: 24</code> takes 24 bits from every 32-bit word, from the top (<code>out_shift_right: false</code>) – that is why each colour is shifted left by 8. Now take <code>freq: 8_000_000,</code> out and run the cell again: the state machine runs at its default 125 MHz (<code>freq:</code> defaults to <code>125_000_000</code>), the pulses are 16 times shorter, and the LEDs see nothing at all – the bench says so. In this simulation the timing is measured from the program, the way an LED reads it; the PIO itself is not run cycle by cycle.</p>"
           }
         ]
       },
@@ -11422,7 +11422,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<h3>下からの光：4個のWS2812</h3><p>PicoGoの下にはRGB LEDが4個あり、どれもGP22につながっています。<strong>WS2812</strong>（「NeoPixel」）というLEDで、1個の中に小さなチップと、赤・緑・青のLEDが入っています。1本の線に数珠つなぎになっています。PicoはLED 1個につき24ビット（緑、赤、青を8ビットずつ）を送り、各LEDは最初に届いた24ビットを取って、残りを次へ渡します。線が50 µs以上LOWのままになると、全部のLEDが受け取った色を表示します。</p><p>1ビットは1つのパルスです。約0.4 µsのHIGHが0、約0.8 µsが1。Rubyのループではピンをそんなに速く切り替えられません。そこでRP2350には<strong>PIO</strong>という助っ人があります。ピンの上で小さなプログラムを勝手に動かす、小さなステートマシンです。PicoRubyの<code>picoruby-pio</code>を使うとそのプログラムをRubyで書けます。Miyuki Koshibaさんのコミュニティgem <a href='https://github.com/ksbmyk/picoruby-ws2812' target='_blank'>picoruby-ws2812</a>（MITライセンス）は、それを使ったLEDドライバーで、タブ<code>ws2812.rb</code>はそのままのコピーです。PicoRuby本体には入っていないので、本物のPicoではほかのドライバーと同じく<code>/lib</code>にコピーします。</p>"
+            "html": "<h3>下からの光：4個のWS2812</h3><p>PicoGoの下にはRGB LEDが4個あり、どれもGP22につながっています。<strong>WS2812</strong>（「NeoPixel」）というLEDで、1個の中に小さなチップと、赤・緑・青のLEDが入っています。1本の線に数珠つなぎになっています。PicoはLED 1個につき24ビット（緑、赤、青を8ビットずつ）を送り、各LEDは最初に届いた24ビットを取って、残りを次へ渡します。線が50 µs以上LOWのままになると、全部のLEDが受け取った色を表示します。</p><p>1ビットは1つのパルスです。約0.4 µsのHIGHが0、約0.8 µsが1。Rubyのループではピンをそんなに速く切り替えられません。そこでRP2350には<strong>PIO</strong>という助っ人があります。ピンの上で小さなプログラムを勝手に動かす、小さなステートマシンです。PicoRubyの<code>picoruby-pio</code>を使うとそのプログラムをRubyで書けます。ksbmykさんのコミュニティgem <a href='https://github.com/ksbmyk/picoruby-ws2812' target='_blank'>picoruby-ws2812</a>（MITライセンス）は、それを使ったLEDドライバーで、タブ<code>ws2812.rb</code>はそのままのコピーです。PicoRuby本体には入っていないので、本物のPicoではほかのドライバーと同じく<code>/lib</code>にコピーします。</p>"
           },
           {
             "t": "c",
@@ -11441,7 +11441,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>プログラムが終わっても、■停止でPicoがリセットされても、LEDは色を保ったままです。電源は来ていて、誰も消せと言っていないからです。<code>leds.clear</code>で消えます。gemの<code>brightness</code>は5 %から始まります。WS2812はとても明るく、たくさんを最大の明るさにするとUSBポートが出せる以上の電流が流れるからです。</p><p>タブ<code>ws2812.rb</code>を開いてください。<code>self.pio_program</code>がPIOのプログラムで、命令は4つです。<code>out :x, 1</code>はピンがLOW（<code>side: 0</code>）のあいだに次のビットを取り、<code>jmp</code>はピンをHIGHにして、0のときは飛びます。8 MHzでは1サイクルが125 nsなので、1は7サイクル（875 ns）、0は2サイクル（250 ns）HIGHのままで、どのビットも10サイクル（1.25 µs）かかります。<code>_convert</code>は緑を先頭にして、明るさを掛けます。gemを使わずに同じことをすると：</p>"
+            "html": "<p>プログラムが終わっても、■停止でPicoがリセットされても、LEDは色を保ったままです。電源は来ていて、誰も消せと言っていないからです。<code>leds.clear</code>で消えます。gemの<code>brightness</code>は5 %から始まります。WS2812はとても明るく、たくさんを最大の明るさにするとUSBポートが出せる以上の電流が流れるからです。</p><p>タブ<code>ws2812.rb</code>を開いてください。<code>self.pio_program</code>がPIOのプログラムで、命令は4つです。<code>out :x, 1</code>はピンがLOW（<code>side: 0</code>）のあいだに次のビットを取り、<code>jmp</code>はピンをHIGHにして、0のときは飛びます。8 MHzでは1サイクルが125 nsなので、1は7サイクル（875 ns）、0は2サイクル（250 ns）HIGHのままで、どのビットも10サイクル（1.25 µs）かかります。250 nsは先ほどの0.4 µsより短いですが、それでも0です。WS2812はある幅を受け付けます。このシミュレーションでは、約0.15〜0.55 µsのHIGHを0と数えます。<code>_convert</code>は緑を先頭にして、明るさを掛けます。gemを使わずに同じことをすると：</p>"
           },
           {
             "t": "c",
@@ -11454,7 +11454,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>out_shift_threshold: 24</code>は32ビットのワードから上から順に（<code>out_shift_right: false</code>）24ビットを取ります。だからどの色も8ビット左へずらしてあります。では<code>freq: 8_000_000,</code>を消して、もう一度実行してみましょう。ステートマシンが全速（125 MHz）で動き、パルスが16分の1になって、LEDには何も見えません。作業台のそう表示されます。このシミュレーションでは、LEDが読むのと同じようにプログラムからタイミングを測っています。PIOそのものを1サイクルずつ動かしているわけではありません。</p>"
+            "html": "<p><code>out_shift_threshold: 24</code>は32ビットのワードから上から順に（<code>out_shift_right: false</code>）24ビットを取ります。だからどの色も8ビット左へずらしてあります。では<code>freq: 8_000_000,</code>を消して、もう一度実行してみましょう。ステートマシンが既定の125 MHz（<code>freq:</code>の既定値は<code>125_000_000</code>）で動き、パルスが16分の1になって、LEDには何も見えません。作業台にもそう表示されます。このシミュレーションでは、LEDが読むのと同じようにプログラムからタイミングを測っています。PIOそのものを1サイクルずつ動かしているわけではありません。</p>"
           }
         ]
       }
