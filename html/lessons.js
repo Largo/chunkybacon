@@ -283,7 +283,8 @@ window.LESSONS_JSON = JSON.stringify({
       "boardBleOff": "Bluetooth getrennt",
       "boardBleGot": "Der Laptop hat bekommen",
       "boardBleLink": "Laptop verbunden",
-      "boardAdvertising": "sichtbar"
+      "boardAdvertising": "sichtbar",
+      "boardAlone": "nur der Pico mit seiner LED auf dem Board"
     },
     "en": {
       "title": "Learn Ruby with Chunky Bacon",
@@ -558,7 +559,8 @@ window.LESSONS_JSON = JSON.stringify({
       "boardBleOff": "Bluetooth disconnected",
       "boardBleGot": "The laptop got",
       "boardBleLink": "Laptop connected",
-      "boardAdvertising": "advertising"
+      "boardAdvertising": "advertising",
+      "boardAlone": "only the Pico, with its onboard LED"
     },
     "ja": {
       "title": "Chunky Baconと学ぶRuby",
@@ -833,7 +835,8 @@ window.LESSONS_JSON = JSON.stringify({
       "boardBleOff": "Bluetooth切断",
       "boardBleGot": "ノートPCが受信",
       "boardBleLink": "ノートPCを接続",
-      "boardAdvertising": "アドバタイズ中"
+      "boardAdvertising": "アドバタイズ中",
+      "boardAlone": "Pico だけ（ボード上の LED）"
     }
   },
   "lessons": [
@@ -9573,6 +9576,10 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "def woerter_zaehlen(woerter)\n  anzahl = {}\n  # jedes Wort zählen\n  anzahl\nend\n\nwoerter_zaehlen(%w[chunky bacon chunky fuchs chunky])",
             "check": "result == {\"chunky\" => 3, \"bacon\" => 1, \"fuchs\" => 1} && code.include?(\"def woerter_zaehlen\") && !code.include?(\".tally\")",
             "hint": "Geh mit <code>each</code> durch die Wörter und zähl hoch: <code>anzahl[wort] = (anzahl[wort] || 0) + 1</code>. <code>Hash.new(0)</code> geht in PicoRuby auch."
+          },
+          {
+            "t": "h",
+            "html": "<h3>Jetzt mit Pins</h3><p>PicoRuby wurde für Chips wie den auf einem Raspberry Pi Pico gemacht. Lektion {{nr:pico-blink}} bringt das Ruby dieser Lektion auf einen simulierten Pico 2 W: zuerst eine LED an einem Pin, dann Knöpfe, Sensoren, ein Roboter, ein E-Paper-Display, WLAN und Bluetooth – mit demselben <code>Task</code> und <code>sleep_ms</code> wie hier.</p>"
           }
         ]
       },
@@ -9644,6 +9651,10 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "def count_words(words)\n  counts = {}\n  # count each word\n  counts\nend\n\ncount_words(%w[chunky bacon chunky fox chunky])",
             "check": "result == {\"chunky\" => 3, \"bacon\" => 1, \"fox\" => 1} && code.include?(\"def count_words\") && !code.include?(\".tally\")",
             "hint": "Go through the words with <code>each</code> and count up: <code>counts[word] = (counts[word] || 0) + 1</code>. <code>Hash.new(0)</code> works in PicoRuby, too."
+          },
+          {
+            "t": "h",
+            "html": "<h3>Now with pins</h3><p>PicoRuby was made for chips like the one on a Raspberry Pi Pico. Lesson {{nr:pico-blink}} puts the Ruby of this lesson on a simulated Pico 2 W: an LED on a pin first, then buttons, sensors, a robot, an e-paper display, Wi-Fi and Bluetooth – with the same <code>Task</code> and <code>sleep_ms</code> as here.</p>"
           }
         ]
       },
@@ -9715,6 +9726,10 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "def count_words(words)\n  counts = {}\n  # 単語をひとつずつ数える\n  counts\nend\n\ncount_words(%w[chunky bacon chunky fox chunky])",
             "check": "result == {\"chunky\" => 3, \"bacon\" => 1, \"fox\" => 1} && code.include?(\"def count_words\") && !code.include?(\".tally\")",
             "hint": "<code>each</code> で単語をたどって数を足していこう：<code>counts[word] = (counts[word] || 0) + 1</code>。<code>Hash.new(0)</code> もPicoRubyで使えるよ。"
+          },
+          {
+            "t": "h",
+            "html": "<h3>次はピンを使って</h3><p>PicoRubyは、Raspberry Pi Picoに載っているようなチップのために作られました。レッスン{{nr:pico-blink}}では、このレッスンのRubyをシミュレーションのPico 2 Wに載せます。まずピンにつないだLED、それからボタン、センサー、ロボット、電子ペーパーディスプレイ、Wi-Fi、Bluetoothです。ここと同じ<code>Task</code>と<code>sleep_ms</code>を使います。</p>"
           }
         ]
       }
@@ -9897,6 +9912,2248 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "# 偶数なら n / 2、奇数なら 3 * n + 1 - n == 1 になるまで\ndef collatz(n)\n  steps = 0\n\n  steps\nend\n\nputs collatz(27)",
             "check": "result.is_a?(ChunkySpinel::Program) && result.ok? && result.output.split.last == \"111\" && code.include?(\"def collatz\")",
             "hint": "ループを使おう。<code>while n != 1</code> … <code>end</code>の中で、<code>n = n.even? ? n / 2 : 3 * n + 1</code>と<code>steps += 1</code>。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pico-blink",
+      "section": {
+        "de": "Ruby auf dem Pico",
+        "en": "Ruby on a Pico",
+        "ja": "PicoでRuby"
+      },
+      "engine": "picoruby",
+      "live": false,
+      "pico": {
+        "board": "pico2w"
+      },
+      "de": {
+        "title": "Eine LED blinken lassen",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ein Computer auf einem Chip</h2><p>Ein <strong>Mikrocontroller</strong> ist ein ganzer kleiner Computer auf einem Chip: Prozessor, Speicher und – was einem Laptop fehlt – <em>Pins</em>, kleine Metallbeinchen, die dein Programm ein- und ausschaltet oder abliest. Der Raspberry Pi Pico 2 W ist ein Board mit so einem Chip, dem RP2350, dazu einem Funkchip für WLAN und Bluetooth. Darauf läuft PicoRuby, dasselbe Ruby wie in Lektion {{nr:picoruby}}, nur jetzt mit Pins.</p><p>Drückst du in dieser Lektion ▶, erscheint unter der Zelle ein Pico: eine <strong>Simulation</strong> des Boards, mit den Teilen, die die Zelle braucht, auf einem Steckbrett angeschlossen. Seine 40 Pins haben zweierlei Nummern. Die <em>GP-Nummern</em> (GP0 bis GP28) braucht dein Programm; die <em>physischen Nummern</em> (1 bis 40) zählen die Beinchen rund ums Board, beginnend mit Pin 1 neben der USB-Buchse. GP15 zum Beispiel ist Pin 20. Manche Pins sind gar kein GPIO: <code>GND</code> ist die Masse, 0 Volt, der Rückweg für jeden Strom, und <code>3V3</code> liefert 3,3 Volt. Zeig auf einen Pin, dann siehst du, was er kann.</p><p>An GP15 hängt eine LED. Schalte sie ein:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"gpio\"\n\nlampe = GPIO.new(15, GPIO::OUT)\nlampe.write(1)\n",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p><code>GPIO</code> heisst <em>general purpose input/output</em>, Ein- und Ausgang für alles. <code>GPIO.new(15, GPIO::OUT)</code> macht GP15 zum Ausgang: Das Programm bestimmt seine Spannung. <code>write(1)</code> legt 3,3 Volt an, <code>write(0)</code> 0 Volt. Die Antwort ist <code>0</code> – so sagt PicoRuby «erledigt».</p><p>Das zweite Argument enthält <em>Flags</em>, und mehrere verbindest du mit <code>|</code>: Ein Eingang mit Pull-up-Widerstand ist <code>GPIO::IN | GPIO::PULL_UP</code> (mehr dazu in Lektion {{nr:pico-sensors}}). Auf dem Steckbrett siehst du noch ein Teil: einen Widerstand von 330 Ω vor der LED. Eine LED lässt so viel Strom durch, wie sie bekommt; der Widerstand begrenzt ihn auf ein paar Milliampere, damit weder die LED noch der Pin Schaden nimmt.</p><p>Blinken heisst einschalten, warten, ausschalten. <code>sleep_ms</code> wartet eine Anzahl Millisekunden:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"gpio\"\n\nlampe = GPIO.new(15, GPIO::OUT)\n10.times do\n  lampe.write(1)  # an\n  sleep_ms 250    # eine Viertelsekunde warten\n  lampe.write(0)  # aus\n  sleep_ms 250\nend\n",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>Die LED auf dem Board</h3><p>Der Pico hat eine eigene LED, neben der USB-Buchse. Beim einfachen Pico hängt sie an GP25. Beim Pico W und Pico 2 W brauchte der Funkchip diesen Pin, darum hängt die LED am Funkchip (dem CYW43439), und <code>GPIO.new(25, GPIO::OUT)</code> lässt gar nichts blinken – eine klassische Falle. In PicoRuby gehst du stattdessen über die Pins des Funkchips, nachdem du ihn mit <code>CYW43.init</code> geweckt hast:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\n\nCYW43.init    # zuerst den Funkchip aufwecken\nbordlampe = CYW43::GPIO.new(CYW43::GPIO::LED_PIN)\n5.times do\n  bordlampe.write(1)\n  sleep_ms 200\n  bordlampe.write(0)\n  sleep_ms 200\nend\n",
+            "board": {
+              "parts": []
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>Zwei Dinge auf einmal</h3><p>Erinnerst du dich an <code>Task</code> aus Lektion {{nr:picoruby}}? Sobald ein Task in <code>sleep_ms</code> wartet, kommt der nächste dran. So blinken zwei LEDs in ihrem eigenen Takt: Ein Task kümmert sich um die LED auf dem Board, das Hauptprogramm um GP15. <code>blinker.terminate</code> beendet den Task am Schluss – sonst liefe er weiter:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"gpio\"\nrequire \"cyw43\"\n\nCYW43.init\nbordlampe = CYW43::GPIO.new(CYW43::GPIO::LED_PIN)\nlampe = GPIO.new(15, GPIO::OUT)\n\n# die LED auf dem Board in ihrem eigenen Takt: alle 500 ms\nblinker = Task.new do\n  loop do\n    bordlampe.write(1)\n    sleep_ms 500\n    bordlampe.write(0)\n    sleep_ms 500\n  end\nend\n\n# derweil blinkt das Hauptprogramm GP15 schnell, 3 Sekunden lang\n10.times do\n  lampe.write(1)\n  sleep_ms 150\n  lampe.write(0)\n  sleep_ms 150\nend\nblinker.terminate\nbordlampe.write(0)\n",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>Ein IRB auf dem Pico</h3><p>Auf einem echten Pico hat R2P2 (die Shell von PicoRuby) ein <code>irb</code>: Du tippst eine Zeile, und das Board führt sie sofort aus. Dieses hier läuft auf dem simulierten Pico, und <code>lampe</code> kommt aus der Zelle. Probier <code>lampe.write 1</code> und <code>lampe.write 0</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"gpio\"\nlampe = GPIO.new(15, GPIO::OUT)\nshow_irb",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Auf einem echten Pico 2 W: Lade die Datei <code>R2P2-PICORUBY-…-PICO2_W-….uf2</code> bei <a href='https://github.com/picoruby/picoruby/releases' target='_blank'>den Releases von PicoRuby</a> herunter. Halte den Knopf BOOTSEL gedrückt, während du den Pico an den Computer steckst – ein Laufwerk namens <code>RP2350</code> erscheint –, und kopiere die Datei darauf. Der Pico startet neu, als kleiner Ruby-Computer. Öffne <a href='https://picoruby.org/terminal' target='_blank'>picoruby.org/terminal</a> in Chrome oder Edge (es spricht über Web Serial mit dem Board) und verbinde dich: Du bekommst die Shell von R2P2, mit <code>irb</code>. Lade dein Programm als <code>/home/app.rb</code> hoch, dann führt der Pico es bei jedem Start aus. Der Code ist derselbe wie hier.</p><p>Die LED: das lange Bein (+) über einen Widerstand von 330 Ω an GP15 (Pin 20), das kurze an GND (Pin 18).</p></div><div class='docs'><strong>Nachschlagen:</strong> <a href='https://picoruby.org/r2p2-tutorials' target='_blank'>R2P2-Tutorials</a> · <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-gpio' target='_blank'>picoruby-gpio</a> · <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-cyw43' target='_blank'>picoruby-cyw43</a> · <a href='https://datasheets.raspberrypi.com/picow/pico-2-w-pinout.pdf' target='_blank'>Pinbelegung des Pico 2 W</a> (alle englisch)</div><div class='task'><strong>Aufgabe:</strong> Lass die LED an GP15 fünfmal blinken: jedes Mal 200 ms an, 300 ms aus – und am Schluss bleibt sie aus.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"gpio\"\n\nblinklicht = GPIO.new(15, GPIO::OUT)\n# fünfmal: 200 ms an, 300 ms aus\n",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            },
+            "check": "board.pulses(15).size == 5 && board.pulses(15).all? { |ms| ms.between?(150, 280) } && board.gaps(15).all? { |ms| ms.between?(230, 400) } && board.level(15) == 0",
+            "hint": "<code>5.times do</code> … <code>end</code>, darin <code>blinklicht.write(1)</code>, <code>sleep_ms 200</code>, <code>blinklicht.write(0)</code>, <code>sleep_ms 300</code>."
+          },
+          {
+            "t": "h",
+            "html": "<p>Blinken ist das «Hallo, Welt» der Mikrocontroller – geschafft.</p><p>In Lektion {{nr:pico-sensors}} hört der Pico zu: einem Knopf und Sensoren.</p>"
+          }
+        ]
+      },
+      "en": {
+        "title": "Blinking an LED",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>A computer on one chip</h2><p>A <strong>microcontroller</strong> is a whole small computer on one chip: processor, memory and – what a laptop lacks – <em>pins</em>, little metal legs your program switches on and off or reads. The Raspberry Pi Pico 2 W is a board with such a chip, the RP2350, plus a wireless chip for Wi-Fi and Bluetooth. It runs PicoRuby, the same Ruby as in lesson {{nr:picoruby}}, but now with pins.</p><p>When you press ▶ in this lesson, a Pico appears below the cell: a <strong>simulation</strong> of the board, with the parts the cell needs wired to it on a breadboard. Its 40 pins have two kinds of numbers. The <em>GP numbers</em> (GP0 to GP28) are the ones your program uses; the <em>physical numbers</em> (1 to 40) count the legs round the board, starting with pin 1 next to the USB socket. GP15, for example, is pin 20. Some pins are no GPIO at all: <code>GND</code> is ground, 0 volts, the way back for every current, and <code>3V3</code> gives 3.3 volts. Point at a pin to see what it can do.</p><p>An LED sits on GP15. Switch it on:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"gpio\"\n\nled = GPIO.new(15, GPIO::OUT)\nled.write(1)\n",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p><code>GPIO</code> stands for <em>general purpose input/output</em>. <code>GPIO.new(15, GPIO::OUT)</code> makes GP15 an output: the program sets its level. <code>write(1)</code> puts 3.3 volts on it, <code>write(0)</code> 0 volts. Its answer is <code>0</code> – PicoRuby's way of saying \"done\".</p><p>The second argument holds <em>flags</em>, and several are combined with <code>|</code>: an input with a pull-up resistor is <code>GPIO::IN | GPIO::PULL_UP</code> (more on that in lesson {{nr:pico-sensors}}). On the breadboard you see one more part: a 330 Ω resistor in front of the LED. An LED lets through as much current as it can get; the resistor keeps that to a few milliamperes, so neither the LED nor the pin is damaged.</p><p>Blinking is switching on, waiting and switching off. <code>sleep_ms</code> waits a number of milliseconds:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"gpio\"\n\nled = GPIO.new(15, GPIO::OUT)\n10.times do\n  led.write(1)    # on\n  sleep_ms 250    # wait a quarter of a second\n  led.write(0)    # off\n  sleep_ms 250\nend\n",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>The LED on the board</h3><p>The Pico has an LED of its own, next to the USB socket. On the plain Pico it is on GP25. On a Pico W or Pico 2 W the wireless chip needed that pin, so the LED hangs off the wireless chip (the CYW43439), and <code>GPIO.new(25, GPIO::OUT)</code> blinks nothing at all – a classic trap. In PicoRuby you go through the chip's own pins instead, after waking it with <code>CYW43.init</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\n\nCYW43.init    # wake up the wireless chip first\nonboard = CYW43::GPIO.new(CYW43::GPIO::LED_PIN)\n5.times do\n  onboard.write(1)\n  sleep_ms 200\n  onboard.write(0)\n  sleep_ms 200\nend\n",
+            "board": {
+              "parts": []
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>Two things at once</h3><p>Remember <code>Task</code> from lesson {{nr:picoruby}}? Whenever a task waits in <code>sleep_ms</code>, the next one runs. So two LEDs can blink at their own pace: a task looks after the LED on the board, the main program after GP15. <code>blinker.terminate</code> ends the task at the end – otherwise it would carry on:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"gpio\"\nrequire \"cyw43\"\n\nCYW43.init\nonboard = CYW43::GPIO.new(CYW43::GPIO::LED_PIN)\nled = GPIO.new(15, GPIO::OUT)\n\n# the onboard LED at its own pace: every 500 ms\nblinker = Task.new do\n  loop do\n    onboard.write(1)\n    sleep_ms 500\n    onboard.write(0)\n    sleep_ms 500\n  end\nend\n\n# meanwhile the main program blinks GP15 fast, for 3 seconds\n10.times do\n  led.write(1)\n  sleep_ms 150\n  led.write(0)\n  sleep_ms 150\nend\nblinker.terminate\nonboard.write(0)\n",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>An IRB on the Pico</h3><p>On a real Pico, R2P2 (PicoRuby's shell) has an <code>irb</code>: you type a line and the board does it at once. This one runs on the simulated Pico, and <code>led</code> comes from the cell. Try <code>led.write 1</code> and <code>led.write 0</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"gpio\"\nled = GPIO.new(15, GPIO::OUT)\nshow_irb",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p>On a real Pico 2 W: download the file <code>R2P2-PICORUBY-…-PICO2_W-….uf2</code> from <a href='https://github.com/picoruby/picoruby/releases' target='_blank'>PicoRuby's releases</a>. Hold the BOOTSEL button while you plug the Pico into your computer – a drive called <code>RP2350</code> appears – and copy the file onto it. The Pico restarts as a small Ruby computer. Open <a href='https://picoruby.org/terminal' target='_blank'>picoruby.org/terminal</a> in Chrome or Edge (it talks to the board through Web Serial) and connect: you get R2P2's shell, with <code>irb</code>. Upload your program as <code>/home/app.rb</code>, and the Pico runs it every time it starts. The code is the same as here.</p><p>The LED: its long leg (+) through a 330 Ω resistor to GP15 (pin 20), its short leg to GND (pin 18).</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://picoruby.org/r2p2-tutorials' target='_blank'>R2P2 tutorials</a> · <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-gpio' target='_blank'>picoruby-gpio</a> · <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-cyw43' target='_blank'>picoruby-cyw43</a> · <a href='https://datasheets.raspberrypi.com/picow/pico-2-w-pinout.pdf' target='_blank'>Pico 2 W pinout</a></div><div class='task'><strong>Task:</strong> Make the LED on GP15 blink five times: 200 ms on, 300 ms off each time – and leave it off at the end.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"gpio\"\n\nsignal = GPIO.new(15, GPIO::OUT)\n# five times: 200 ms on, 300 ms off\n",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            },
+            "check": "board.pulses(15).size == 5 && board.pulses(15).all? { |ms| ms.between?(150, 280) } && board.gaps(15).all? { |ms| ms.between?(230, 400) } && board.level(15) == 0",
+            "hint": "<code>5.times do</code> … <code>end</code>, and inside it <code>signal.write(1)</code>, <code>sleep_ms 200</code>, <code>signal.write(0)</code>, <code>sleep_ms 300</code>."
+          },
+          {
+            "t": "h",
+            "html": "<p>Blinking is the \"Hello, world\" of microcontrollers – done.</p><p>In lesson {{nr:pico-sensors}} the Pico starts listening: to a button and to sensors.</p>"
+          }
+        ]
+      },
+      "ja": {
+        "title": "LEDを点滅させる",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>1つのチップの上のコンピューター</h2><p><strong>マイコン</strong>（マイクロコントローラー）は、1つのチップに収まった小さなコンピューターです。プロセッサーとメモリー、そしてノートパソコンにはない<em>ピン</em>があります。ピンは小さな金属の足で、プログラムがオンとオフを切り替えたり、読み取ったりします。Raspberry Pi Pico 2 Wはそんなチップ（RP2350）と、Wi-FiとBluetoothのための無線チップを載せたボードです。そこではPicoRubyが動きます。レッスン{{nr:picoruby}}と同じRubyですが、今度はピンがあります。</p><p>このレッスンで▶を押すと、セルの下にPicoが現れます。ボードの<strong>シミュレーション</strong>で、セルに必要な部品がブレッドボードの上でつながっています。40本のピンには2種類の番号があります。<em>GP番号</em>（GP0からGP28）はプログラムで使う番号です。<em>物理番号</em>（1から40）は、USBソケットのとなりの1番ピンから、ボードのまわりの足を順に数えた番号です。たとえばGP15は20番ピンです。GPIOではないピンもあります。<code>GND</code>はグラウンド、つまり0ボルトで、すべての電流の帰り道です。<code>3V3</code>は3.3ボルトを出します。ピンを指すと、何ができるかが表示されます。</p><p>GP15にはLEDがつながっています。点けてみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"gpio\"\n\nled = GPIO.new(15, GPIO::OUT)\nled.write(1)\n",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p><code>GPIO</code>は<em>general purpose input/output</em>（汎用の入出力）の略です。<code>GPIO.new(15, GPIO::OUT)</code>でGP15が出力になり、プログラムが電圧を決めます。<code>write(1)</code>は3.3ボルト、<code>write(0)</code>は0ボルトです。答えの<code>0</code>は、PicoRubyの「できました」です。</p><p>2つ目の引数は<em>フラグ</em>で、<code>|</code>でいくつも組み合わせられます。プルアップ抵抗つきの入力は<code>GPIO::IN | GPIO::PULL_UP</code>です（くわしくはレッスン{{nr:pico-sensors}}で）。ブレッドボードにはもう1つ部品があります。LEDの前の330 Ωの抵抗です。LEDは流れてくるだけ電流を通してしまうので、抵抗がそれを数ミリアンペアにおさえ、LEDもピンもこわれないようにします。</p><p>点滅とは、点けて、待って、消すことです。<code>sleep_ms</code>は指定したミリ秒だけ待ちます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"gpio\"\n\nled = GPIO.new(15, GPIO::OUT)\n10.times do\n  led.write(1)    # 点ける\n  sleep_ms 250    # 0.25秒待つ\n  led.write(0)    # 消す\n  sleep_ms 250\nend\n",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>ボードの上のLED</h3><p>PicoにはUSBソケットのとなりに自分のLEDがあります。ふつうのPicoではGP25につながっています。Pico WとPico 2 Wではそのピンを無線チップが使うので、LEDは無線チップ（CYW43439）につながっていて、<code>GPIO.new(25, GPIO::OUT)</code>では何も点滅しません。よくあるわなです。PicoRubyでは<code>CYW43.init</code>で無線チップを起こしてから、そのチップのピンを使います。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\n\nCYW43.init    # まず無線チップを起こす\nonboard = CYW43::GPIO.new(CYW43::GPIO::LED_PIN)\n5.times do\n  onboard.write(1)\n  sleep_ms 200\n  onboard.write(0)\n  sleep_ms 200\nend\n",
+            "board": {
+              "parts": []
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>2つのことを同時に</h3><p>レッスン{{nr:picoruby}}の<code>Task</code>をおぼえていますか？あるタスクが<code>sleep_ms</code>で待つと、次のタスクが動きます。だから2つのLEDがそれぞれのペースで点滅できます。タスクがボードのLEDを、メインのプログラムがGP15を受け持ちます。最後の<code>blinker.terminate</code>でタスクを終わらせます。そうしないと動き続けます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"gpio\"\nrequire \"cyw43\"\n\nCYW43.init\nonboard = CYW43::GPIO.new(CYW43::GPIO::LED_PIN)\nled = GPIO.new(15, GPIO::OUT)\n\n# 基板のLEDは自分のペースで：500ミリ秒ごと\nblinker = Task.new do\n  loop do\n    onboard.write(1)\n    sleep_ms 500\n    onboard.write(0)\n    sleep_ms 500\n  end\nend\n\n# そのあいだメインのプログラムはGP15を3秒間速く点滅させる\n10.times do\n  led.write(1)\n  sleep_ms 150\n  led.write(0)\n  sleep_ms 150\nend\nblinker.terminate\nonboard.write(0)\n",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>PicoのIRB</h3><p>本物のPicoでは、R2P2（PicoRubyのシェル）に<code>irb</code>があります。1行入力すると、ボードがすぐに実行します。このIRBはシミュレーションのPicoで動き、<code>led</code>はセルから来ています。<code>led.write 1</code>と<code>led.write 0</code>をためしてみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"gpio\"\nled = GPIO.new(15, GPIO::OUT)\nshow_irb",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>本物のPico 2 Wでは、<a href='https://github.com/picoruby/picoruby/releases' target='_blank'>PicoRubyのリリース</a>から<code>R2P2-PICORUBY-…-PICO2_W-….uf2</code>というファイルをダウンロードします。BOOTSELボタンを押したままPicoをコンピューターにつなぐと、<code>RP2350</code>というドライブが現れるので、そこにファイルをコピーします。Picoは小さなRubyコンピューターとして再起動します。ChromeかEdgeで<a href='https://picoruby.org/terminal' target='_blank'>picoruby.org/terminal</a>を開いて（Web Serialでボードと話します）接続すると、<code>irb</code>のあるR2P2のシェルが使えます。プログラムを<code>/home/app.rb</code>としてアップロードすると、Picoは起動するたびにそれを実行します。コードはここと同じです。</p><p>LEDは、長い足（+）を330 Ωの抵抗を通してGP15（20番ピン）に、短い足をGND（18番ピン）につなぎます。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://picoruby.org/r2p2-tutorials' target='_blank'>R2P2のチュートリアル</a>・<a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-gpio' target='_blank'>picoruby-gpio</a>・<a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-cyw43' target='_blank'>picoruby-cyw43</a>・<a href='https://datasheets.raspberrypi.com/picow/pico-2-w-pinout.pdf' target='_blank'>Pico 2 Wのピン配置</a></div><div class='task'><strong>課題：</strong>GP15のLEDを5回点滅させましょう。毎回200ミリ秒点けて300ミリ秒消し、最後は消えたままにします。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"gpio\"\n\nsignal = GPIO.new(15, GPIO::OUT)\n# 5回：200ミリ秒点けて、300ミリ秒消す\n",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            },
+            "check": "board.pulses(15).size == 5 && board.pulses(15).all? { |ms| ms.between?(150, 280) } && board.gaps(15).all? { |ms| ms.between?(230, 400) } && board.level(15) == 0",
+            "hint": "<code>5.times do</code> … <code>end</code>の中に、<code>signal.write(1)</code>、<code>sleep_ms 200</code>、<code>signal.write(0)</code>、<code>sleep_ms 300</code>を書けばいいよ！"
+          },
+          {
+            "t": "h",
+            "html": "<p>点滅はマイコンの最初の一歩です。できましたね。</p><p>レッスン{{nr:pico-sensors}}では、Picoがボタンとセンサーに耳をかたむけます。</p>"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pico-sensors",
+      "engine": "picoruby",
+      "live": false,
+      "pico": {
+        "board": "pico2w"
+      },
+      "de": {
+        "title": "Knöpfe und Sensoren",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Der Pico hört zu</h2><p>Bis jetzt hat der Pico gesprochen. Jetzt hört er zu. Ein Pin kann ein <em>Eingang</em> sein: Das Programm liest, ob 3,3 Volt anliegen (<code>1</code>, high) oder 0 Volt (<code>0</code>, low).</p><p>Ein Taster an GP14 verbindet den Pin mit GND, wenn du ihn drückst – dann liest er 0. Und wenn niemand drückt? Dann hängt der Pin an nichts, und irgendetwas muss seine Spannung bestimmen. <code>GPIO::PULL_UP</code> schaltet im Chip einen Widerstand ein, der den Pin sanft auf 3,3 Volt zieht. Nicht gedrückt liest 1, gedrückt 0: Der Knopf gewinnt gegen den schwachen Widerstand. Starte die Zelle und drück den Knopf auf der Werkbank (mit der Maus oder mit der Tastatur darauf):</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"gpio\"\n\nlampe = GPIO.new(15, GPIO::OUT)\nknopf = GPIO.new(14, GPIO::IN | GPIO::PULL_UP)\n# 10 Sekunden lang: drück den Knopf auf der Werkbank\n1000.times do\n  lampe.write(knopf.low? ? 1 : 0)   # low = gedrückt\n  sleep_ms 10\nend\n",
+            "board": {
+              "parts": [
+                "led15",
+                "button14"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p><code>low?</code> ist <code>read == 0</code>, <code>high?</code> ist <code>read == 1</code>. Nimm jetzt <code>| GPIO::PULL_UP</code> aus der Zelle und starte sie nochmals: Die LED bleibt an, gedrückt oder nicht. Jetzt zieht nichts den Pin hinauf. Der RP2350 startet jeden Pin mit einem schwachen Pull-<em>down</em>, darum liest er hier ständig 0, «gedrückt» – und ein Pin ganz ohne Pull-Widerstand <em>schwebt</em> und liest, was er gerade auffängt. Ein Knopf-Pin bekommt also immer einen Pull-Widerstand: <code>PULL_UP</code> für einen Knopf nach GND wie hier, <code>PULL_DOWN</code> für einen Knopf nach 3V3.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Zwischen 0 und 1: analoge Werte</h3><p>Ein Knopf kennt zwei Zustände. Ein Lichtsensor kennt viele: Je heller, desto mehr Spannung gibt er. GP26 bis GP28 können eine Spannung messen – der <em>Analog-Digital-Wandler</em> (ADC) des Chips macht daraus eine Zahl von 0 bis 4095 (12 Bit). <code>read_raw</code> gibt diese Zahl, <code>read_voltage</code> die Volt, 0 bis 3,3. (<code>read</code> gibt in PicoRuby 4.0.3 ebenfalls die Volt, obwohl seine Dokumentation 0 bis 1 verspricht – es zählt der C-Code.) Der Lichtsensor hier ist ein Fotowiderstand mit einem Widerstand von 10 kΩ an GP26; in dieser Simulation folgt seine Spannung einfach dem Licht-Regler:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"adc\"\n\nlicht = ADC.new(26)\n# schieb den Licht-Regler, während es läuft\n20.times do\n  puts \"#{licht.read_raw} von 4095 = #{licht.read_voltage.round(2)} V\"\n  sleep_ms 200\nend\n",
+            "board": {
+              "parts": [
+                "light26"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>Der Chip hat sogar einen eigenen Sensor: ein Thermometer, auf einem fünften ADC-Kanal namens <code>:temperature</code>. Das Datenblatt des RP2350 nennt die Formel: 0,706 Volt bei 27 °C und 1,721 Millivolt weniger für jedes Grad wärmer. Der Chip misst sich selbst, nicht den Raum – auf einem echten Board ist er ein paar Grad wärmer als die Luft. Und die letzte Stelle springt: Ein Schritt des ADC ist fast ein halbes Grad. Schieb den Regler für die Raumtemperatur:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"adc\"\n\nchip = ADC.new(:temperature)\n5.times do\n  volt = chip.read_voltage\n  puts \"#{(27 - (volt - 0.706) / 0.001721).round(1)} °C\"\n  sleep_ms 500\nend\n",
+            "board": {
+              "parts": [
+                "temp"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>I2C: zwei Drähte, viele Chips</h3><p>Sensorchips, die mehr wissen als eine Spannung, reden in Bytes. <strong>I2C</strong> braucht dafür zwei Drähte: SDA trägt die Daten, SCL den Takt. Viele Chips teilen sich dieselben zwei Drähte; jeder hat eine <em>Adresse</em>, eine Zahl von 0x08 bis 0x77, und antwortet nur, wenn man ihn damit ruft.</p><p>Der Pico Environment Sensor von Waveshare ist ein Board mit fünf solchen Chips, an I2C0 mit SDA an GP20 und SCL an GP21. <code>scan</code> ruft jede Adresse und schreibt, wer antwortet:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"i2c\"\n\ni2c = I2C.new(unit: :RP2040_I2C0, frequency: 400_000,\n              sda_pin: 20, scl_pin: 21)\ni2c.scan    # fragt jede Adresse: Wer ist da?\n",
+            "board": {
+              "parts": [
+                "envsensor"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>0x76 ist der BME280 (Temperatur, Luftfeuchtigkeit, Luftdruck), 0x29 ein Lichtsensor, 0x53 ein UV-Sensor, 0x59 ein Luftqualitätssensor und 0x68 ein Bewegungssensor. Zwei Chips an einem Bus dürfen nie dieselbe Adresse haben: Steckst du die Uhr DS3231 von Waveshare obendrauf, antwortet sie ebenfalls auf 0x68 – und die beiden reden durcheinander.</p><h3>Ein Treiber in einem Tab</h3><p>Der BME280 schickt rohe Zahlen, und daraus °C, % und hPa zu machen, braucht die Formeln aus dem Datenblatt. Sie stehen in einem <strong>Treiber</strong>: dem Tab <code>bme280.rb</code> über dem Code. Das ist gewöhnliches PicoRuby, das du lesen kannst – eine Klasse, die über <code>I2C</code> die Register des Chips liest und schreibt. <code>require \"bme280\"</code> lädt ihn, so wie R2P2 auf einem echten Pico <code>/lib/bme280.rb</code> lädt. Schieb die Regler, während es läuft:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"i2c\"\nrequire \"bme280\"\n\ni2c = I2C.new(unit: :RP2040_I2C0, frequency: 400_000,\n              sda_pin: 20, scl_pin: 21)\nluft = BME280.new(i2c)\n5.times do\n  puts \"#{luft.temperature} °C, #{luft.humidity} %, #{luft.pressure} hPa\"\n  sleep_ms 1000\nend\n",
+            "tabs": [
+              {
+                "name": "bme280.rb",
+                "src": "pico/lib/de/bme280.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "envsensor"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Der Knopf kommt zwischen GP14 (Pin 19) und GND (Pin 18). Der Lichtsensor ist ein Fotowiderstand von 3V3 (Pin 36) nach GP26 (Pin 31) und ein Widerstand von 10 kΩ von GP26 nach GND (Pin 33, AGND): mehr Licht, weniger Widerstand, mehr Volt an GP26. Das Board Environment Sensor braucht gar keine Drähte – der Pico steckt auf seiner Stiftleiste. Leg den Treiber als <code>/lib/bme280.rb</code> aufs Board (das Web Terminal lädt Dateien hoch), dann geht <code>require \"bme280\"</code> auch dort.</p></div><div class='docs'><strong>Nachschlagen:</strong> <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-adc' target='_blank'>picoruby-adc</a> · <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-i2c' target='_blank'>picoruby-i2c</a> · <a href='https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf' target='_blank'>Datenblatt des BME280</a> · <a href='https://www.waveshare.com/wiki/Pico-Environment-Sensor' target='_blank'>Pico Environment Sensor (Waveshare)</a> (alle englisch)</div><div class='task'><strong>Aufgabe:</strong> Ein Nachtlicht: 20-mal, alle 100 ms, schaltest du die LED ein, wenn der Lichtsensor weniger als 1,0 Volt misst, sonst aus. Die Aufgabe dreht das Licht eine Weile herunter und wieder hinauf (🤖 beim Regler).</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"gpio\"\nrequire \"adc\"\n\nnachtlicht = GPIO.new(15, GPIO::OUT)\nfuehler = ADC.new(26)\n20.times do\n  # dunkel (unter 1,0 Volt)? LED an, sonst aus\n  sleep_ms 100\nend\n",
+            "board": {
+              "parts": [
+                "light26",
+                "led15"
+              ]
+            },
+            "bench": [
+              {
+                "at": 0,
+                "set": {
+                  "adc26": 0.8
+                }
+              },
+              {
+                "at": 700,
+                "set": {
+                  "adc26": 0.1
+                }
+              },
+              {
+                "at": 1400,
+                "set": {
+                  "adc26": 0.9
+                }
+              }
+            ],
+            "check": "board.level_at(15, 500) == 0 && board.level_at(15, 1150) == 1 && board.level_at(15, 1850) == 0 && code.include?(\"read\")",
+            "hint": "In der Schleife: <code>if fuehler.read_voltage &lt; 1.0</code> → <code>nachtlicht.write(1)</code>, <code>else</code> → <code>nachtlicht.write(0)</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "Buttons and sensors",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>The Pico listens</h2><p>So far the Pico has spoken. Now it listens. A pin can be an <em>input</em>: the program reads whether there are 3.3 volts on it (<code>1</code>, high) or 0 volts (<code>0</code>, low).</p><p>A push button on GP14 connects the pin to GND when you press it – then it reads 0. And when nobody presses? Then the pin is connected to nothing, and something has to decide its level. <code>GPIO::PULL_UP</code> switches on a resistor inside the chip that pulls the pin gently up to 3.3 volts. Not pressed reads 1, pressed reads 0: the button wins against the weak resistor. Run the cell and press the button on the bench (with the mouse, or with the keyboard on it):</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"gpio\"\n\nled = GPIO.new(15, GPIO::OUT)\nbutton = GPIO.new(14, GPIO::IN | GPIO::PULL_UP)\n# for 10 seconds: press the button on the bench\n1000.times do\n  led.write(button.low? ? 1 : 0)   # low = pressed\n  sleep_ms 10\nend\n",
+            "board": {
+              "parts": [
+                "led15",
+                "button14"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p><code>low?</code> is <code>read == 0</code>, <code>high?</code> is <code>read == 1</code>. Now take <code>| GPIO::PULL_UP</code> out of the cell and run it again: the LED stays on, pressed or not. Now nothing pulls the pin up. The RP2350 starts every pin with a weak pull-<em>down</em>, so here it reads 0, \"pressed\", all the time – and a pin with no pull resistor at all <em>floats</em> and reads whatever it picks up. So a button pin always gets a pull resistor: <code>PULL_UP</code> for a button to GND, as here, or <code>PULL_DOWN</code> for a button to 3V3.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Between 0 and 1: analog values</h3><p>A button knows two states. A light sensor knows many: the brighter, the more voltage it gives. GP26 to GP28 can measure a voltage – the chip's <em>analog-to-digital converter</em> (ADC) turns it into a number from 0 to 4095 (12 bits). <code>read_raw</code> gives that number, <code>read_voltage</code> the volts, 0 to 3.3. (<code>read</code> gives the volts as well in PicoRuby 4.0.3, although its documentation promises 0 to 1 – the C code decides.) The light sensor here is a photoresistor and a 10 kΩ resistor on GP26; in this simulation its voltage simply follows the light slider:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"adc\"\n\nlight = ADC.new(26)\n# move the light slider while it runs\n20.times do\n  puts \"#{light.read_raw} of 4095 = #{light.read_voltage.round(2)} V\"\n  sleep_ms 200\nend\n",
+            "board": {
+              "parts": [
+                "light26"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>The chip even carries a sensor of its own: a thermometer, on a fifth ADC channel called <code>:temperature</code>. The RP2350's datasheet gives the formula: 0.706 volts at 27 °C, and 1.721 millivolts less for every degree warmer. The chip measures itself, not the room – on a real board it is a few degrees warmer than the air. And the last digit jumps: one step of the ADC is almost half a degree. Move the room temperature slider:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"adc\"\n\nchip = ADC.new(:temperature)\n5.times do\n  volts = chip.read_voltage\n  puts \"#{(27 - (volts - 0.706) / 0.001721).round(1)} °C\"\n  sleep_ms 500\nend\n",
+            "board": {
+              "parts": [
+                "temp"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>I2C: two wires, many chips</h3><p>Sensor chips that know more than a voltage talk in bytes. <strong>I2C</strong> needs two wires for that: SDA carries the data, SCL the clock. Many chips share the same two wires; each has an <em>address</em>, a number from 0x08 to 0x77, and only answers when it is called by it.</p><p>Waveshare's Pico Environment Sensor is a board with five such chips, on I2C0 with SDA on GP20 and SCL on GP21. <code>scan</code> calls every address and prints who answers:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"i2c\"\n\ni2c = I2C.new(unit: :RP2040_I2C0, frequency: 400_000,\n              sda_pin: 20, scl_pin: 21)\ni2c.scan    # asks every address: who is there?\n",
+            "board": {
+              "parts": [
+                "envsensor"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>0x76 is the BME280 (temperature, humidity, air pressure), 0x29 a light sensor, 0x53 a UV sensor, 0x59 an air-quality sensor and 0x68 a motion sensor. Two chips on one bus must never share an address: stack Waveshare's DS3231 clock board on top, and it answers at 0x68 too – the two talk over each other.</p><h3>A driver in a tab</h3><p>The BME280 sends raw numbers, and turning them into °C, % and hPa takes the datasheet's formulas. They are in a <strong>driver</strong>: the tab <code>bme280.rb</code> above the code. It is plain PicoRuby you can read – a class that reads and writes the chip's registers through <code>I2C</code>. <code>require \"bme280\"</code> loads it, just as R2P2 loads <code>/lib/bme280.rb</code> on a real Pico. Move the sliders while it runs:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"i2c\"\nrequire \"bme280\"\n\ni2c = I2C.new(unit: :RP2040_I2C0, frequency: 400_000,\n              sda_pin: 20, scl_pin: 21)\nbme = BME280.new(i2c)\n5.times do\n  puts \"#{bme.temperature} °C, #{bme.humidity} %, #{bme.pressure} hPa\"\n  sleep_ms 1000\nend\n",
+            "tabs": [
+              {
+                "name": "bme280.rb",
+                "src": "pico/lib/en/bme280.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "envsensor"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p>The button goes between GP14 (pin 19) and GND (pin 18). The light sensor is a photoresistor from 3V3 (pin 36) to GP26 (pin 31) and a 10 kΩ resistor from GP26 to GND (pin 33, AGND): more light, less resistance, more volts on GP26. The Environment Sensor board needs no wires at all – the Pico plugs onto its header. Put the driver on the board as <code>/lib/bme280.rb</code> (the Web Terminal uploads files), then <code>require \"bme280\"</code> works there too.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-adc' target='_blank'>picoruby-adc</a> · <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-i2c' target='_blank'>picoruby-i2c</a> · <a href='https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf' target='_blank'>BME280 datasheet</a> · <a href='https://www.waveshare.com/wiki/Pico-Environment-Sensor' target='_blank'>Pico Environment Sensor (Waveshare)</a></div><div class='task'><strong>Task:</strong> A night light: 20 times, every 100 ms, switch the LED on when the light sensor reads less than 1.0 volt, otherwise off. The exercise turns the light down for a while and up again (🤖 by the slider).</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"gpio\"\nrequire \"adc\"\n\nnight_light = GPIO.new(15, GPIO::OUT)\nsensor = ADC.new(26)\n20.times do\n  # dark (below 1.0 volt)? LED on, otherwise off\n  sleep_ms 100\nend\n",
+            "board": {
+              "parts": [
+                "light26",
+                "led15"
+              ]
+            },
+            "bench": [
+              {
+                "at": 0,
+                "set": {
+                  "adc26": 0.8
+                }
+              },
+              {
+                "at": 700,
+                "set": {
+                  "adc26": 0.1
+                }
+              },
+              {
+                "at": 1400,
+                "set": {
+                  "adc26": 0.9
+                }
+              }
+            ],
+            "check": "board.level_at(15, 500) == 0 && board.level_at(15, 1150) == 1 && board.level_at(15, 1850) == 0 && code.include?(\"read\")",
+            "hint": "Inside the loop: <code>if sensor.read_voltage &lt; 1.0</code> → <code>night_light.write(1)</code>, <code>else</code> → <code>night_light.write(0)</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "ボタンとセンサー",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Picoが耳をすます</h2><p>ここまではPicoが話していました。今度は聞く番です。ピンは<em>入力</em>にもなれます。プログラムは、ピンに3.3ボルトがかかっているか（<code>1</code>、high）、0ボルトか（<code>0</code>、low）を読みます。</p><p>GP14のボタンは、押すとピンをGNDにつなぎます。すると0が読めます。では、だれも押していないときは？ピンはどこにもつながっていないので、何かが電圧を決めなければなりません。<code>GPIO::PULL_UP</code>はチップの中の抵抗をオンにして、ピンをやさしく3.3ボルトに引き上げます。押していなければ1、押せば0です。ボタンが弱い抵抗に勝つのです。セルを実行して、作業台のボタンを押してみましょう（マウスでも、ボタンの上でキーボードでもできます）。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"gpio\"\n\nled = GPIO.new(15, GPIO::OUT)\nbutton = GPIO.new(14, GPIO::IN | GPIO::PULL_UP)\n# 10秒間：作業台のボタンを押してみて\n1000.times do\n  led.write(button.low? ? 1 : 0)   # low = 押されている\n  sleep_ms 10\nend\n",
+            "board": {
+              "parts": [
+                "led15",
+                "button14"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p><code>low?</code>は<code>read == 0</code>、<code>high?</code>は<code>read == 1</code>のことです。では、セルから<code>| GPIO::PULL_UP</code>を消して、もう一度実行してみましょう。押しても押さなくてもLEDは点いたままです。今はピンを引き上げるものがありません。RP2350はどのピンも弱いプル<em>ダウン</em>で起動するので、ここではピンがずっと0、つまり「押されている」と読めます。プル抵抗がまったくないピンは<em>浮いて</em>いて、拾ったものを何でも読んでしまいます。だからボタンのピンにはいつもプル抵抗をつけます。ここのようにGNDへのボタンなら<code>PULL_UP</code>、3V3へのボタンなら<code>PULL_DOWN</code>です。</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>0と1のあいだ：アナログの値</h3><p>ボタンには2つの状態しかありません。光センサーにはたくさんあります。明るいほど高い電圧を出すのです。GP26からGP28は電圧を測れます。チップの<em>アナログ・デジタル変換器</em>（ADC）が、それを0から4095（12ビット）の数にします。<code>read_raw</code>はその数を、<code>read_voltage</code>はボルト（0から3.3）を返します（PicoRuby 4.0.3では<code>read</code>もボルトを返します。ドキュメントには0から1とありますが、決めるのはCのコードです）。ここの光センサーは、GP26につないだ光センサー（フォトレジスター）と10 kΩの抵抗です。このシミュレーションでは、電圧はそのまま明るさのスライダーに従います。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"adc\"\n\nlight = ADC.new(26)\n# 動いているあいだに明るさのスライダーを動かそう\n20.times do\n  puts \"#{light.read_raw} of 4095 = #{light.read_voltage.round(2)} V\"\n  sleep_ms 200\nend\n",
+            "board": {
+              "parts": [
+                "light26"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>チップには自分のセンサーまであります。温度計で、<code>:temperature</code>という5番目のADCチャンネルにつながっています。RP2350のデータシートに式がのっています。27 °Cで0.706ボルト、1度上がるごとに1.721ミリボルト下がります。チップが測るのは部屋ではなく自分自身なので、本物のボードでは空気より何度か高くなります。それに最後のけたがとびます。ADCの1段は、ほぼ0.5度だからです。室温のスライダーを動かしてみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"adc\"\n\nchip = ADC.new(:temperature)\n5.times do\n  volts = chip.read_voltage\n  puts \"#{(27 - (volts - 0.706) / 0.001721).round(1)} °C\"\n  sleep_ms 500\nend\n",
+            "board": {
+              "parts": [
+                "temp"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>I2C：2本の線とたくさんのチップ</h3><p>電圧よりも多くのことを知っているセンサーチップは、バイトで話します。<strong>I2C</strong>はそのために2本の線を使います。SDAがデータを、SCLがクロックを運びます。たくさんのチップが同じ2本の線を分け合います。それぞれに0x08から0x77までの<em>アドレス</em>があり、その番号で呼ばれたときだけ答えます。</p><p>WaveshareのPico Environment Sensorは、そんなチップを5つ載せたボードで、I2C0のSDAがGP20、SCLがGP21です。<code>scan</code>はすべてのアドレスを呼んで、答えたものを出力します。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"i2c\"\n\ni2c = I2C.new(unit: :RP2040_I2C0, frequency: 400_000,\n              sda_pin: 20, scl_pin: 21)\ni2c.scan    # すべてのアドレスに「だれかいる？」と聞く\n",
+            "board": {
+              "parts": [
+                "envsensor"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>0x76はBME280（温度・湿度・気圧）、0x29は光センサー、0x53は紫外線センサー、0x59は空気の質のセンサー、0x68は動きのセンサーです。1つのバスの2つのチップが同じアドレスを持ってはいけません。WaveshareのDS3231の時計ボードを上に重ねると、それも0x68で答えるので、2つの話がまざってしまいます。</p><h3>タブの中のドライバー</h3><p>BME280が送ってくるのは生の数です。それを°C、%、hPaにするにはデータシートの式が必要です。式は<strong>ドライバー</strong>に入っています。コードの上の<code>bme280.rb</code>というタブです。中身は読めるふつうのPicoRubyで、<code>I2C</code>を通してチップのレジスターを読み書きするクラスです。<code>require \"bme280\"</code>で読みこみます。本物のPicoでR2P2が<code>/lib/bme280.rb</code>を読みこむのと同じです。動いているあいだにスライダーを動かしてみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"i2c\"\nrequire \"bme280\"\n\ni2c = I2C.new(unit: :RP2040_I2C0, frequency: 400_000,\n              sda_pin: 20, scl_pin: 21)\nbme = BME280.new(i2c)\n5.times do\n  puts \"#{bme.temperature} °C, #{bme.humidity} %, #{bme.pressure} hPa\"\n  sleep_ms 1000\nend\n",
+            "tabs": [
+              {
+                "name": "bme280.rb",
+                "src": "pico/lib/ja/bme280.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "envsensor"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>ボタンはGP14（19番ピン）とGND（18番ピン）のあいだにつなぎます。光センサーは、3V3（36番ピン）からGP26（31番ピン）へのフォトレジスターと、GP26からGND（33番ピン、AGND）への10 kΩの抵抗です。明るいほど抵抗が小さくなり、GP26の電圧が上がります。Environment Sensorのボードには線がまったくいりません。Picoをそのピンヘッダーに差すだけです。ドライバーを<code>/lib/bme280.rb</code>としてボードに置けば（Web Terminalでファイルをアップロードできます）、そこでも<code>require \"bme280\"</code>が使えます。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-adc' target='_blank'>picoruby-adc</a>・<a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-i2c' target='_blank'>picoruby-i2c</a>・<a href='https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf' target='_blank'>BME280のデータシート</a>・<a href='https://www.waveshare.com/wiki/Pico-Environment-Sensor' target='_blank'>Pico Environment Sensor（Waveshare）</a></div><div class='task'><strong>課題：</strong>常夜灯を作りましょう。100ミリ秒ごとに20回、光センサーが1.0ボルト未満ならLEDを点け、そうでなければ消します。課題が明かりをしばらく暗くして、また明るくします（スライダーの横に🤖が出ます）。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"gpio\"\nrequire \"adc\"\n\nnight_light = GPIO.new(15, GPIO::OUT)\nsensor = ADC.new(26)\n20.times do\n  # 暗い（1.0ボルト未満）？　ならLEDを点け、そうでなければ消す\n  sleep_ms 100\nend\n",
+            "board": {
+              "parts": [
+                "light26",
+                "led15"
+              ]
+            },
+            "bench": [
+              {
+                "at": 0,
+                "set": {
+                  "adc26": 0.8
+                }
+              },
+              {
+                "at": 700,
+                "set": {
+                  "adc26": 0.1
+                }
+              },
+              {
+                "at": 1400,
+                "set": {
+                  "adc26": 0.9
+                }
+              }
+            ],
+            "check": "board.level_at(15, 500) == 0 && board.level_at(15, 1150) == 1 && board.level_at(15, 1850) == 0 && code.include?(\"read\")",
+            "hint": "ループの中で<code>if sensor.read_voltage &lt; 1.0</code>なら<code>night_light.write(1)</code>、<code>else</code>なら<code>night_light.write(0)</code>だよ！"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pico-robot",
+      "engine": "picoruby",
+      "live": false,
+      "pico": {
+        "board": "pico2w"
+      },
+      "de": {
+        "title": "PWM, Motoren und ein Roboter",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Halb an, halb aus: PWM</h2><p>Ein Pin kennt nur 0 und 3,3 Volt. Wie dimmst du dann eine LED? Du schaltest sie so schnell ein und aus, dass das Auge nur den Durchschnitt sieht: <strong>PWM</strong>, <em>Pulsweitenmodulation</em>. Die <em>Frequenz</em> sagt, wie oft pro Sekunde, der <em>Duty</em> (Tastgrad), wie viel jeder Periode der Pin an ist. In PicoRuby ist der Duty ein Prozentwert, 0 bis 100 (MicroPython zählt mit <code>duty_u16</code> von 0 bis 65535). <code>PWM.new</code> macht einen Pin zum PWM-Ausgang:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pwm\"\n\nlampe = PWM.new(15, frequency: 1000, duty: 0)\n3.times do\n  21.times do |i|            # heller: 0, 5, ... 100 %\n    lampe.duty(i * 5)\n    sleep_ms 40\n  end\n  21.times do |i|            # und wieder dunkler\n    lampe.duty(100 - i * 5)\n    sleep_ms 40\n  end\nend\n",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>Mit demselben Trick entsteht Ton. Ein Piezo-Summer klickt einmal pro Periode; 440 Klicks pro Sekunde sind der Ton A. <code>frequency</code> ändert den Ton, <code>duty(0)</code> macht ihn still. Schalte zuerst mit dem Knopf «Ton» unter der Werkbank den Ton ein:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pwm\"\n\nsummer = PWM.new(16, frequency: 440, duty: 50)\nsleep_ms 300\n# C D E F G G (Hz)\n[262, 294, 330, 349, 392, 392].each do |hz|\n  summer.frequency(hz)\n  sleep_ms 250\nend\nsummer.duty(0)    # Ruhe\n",
+            "board": {
+              "parts": [
+                "buzzer16"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>Ein Roboter: der PicoGo</h3><p>Ein Motor braucht viel mehr Strom, als ein Pin liefern kann. Darum sitzt zwischen dem Pico und den Motoren des Roboters PicoGo von Waveshare ein <em>Motortreiber</em>, ein Chip TB6612. Pro Motor nimmt er zwei Richtungs-Pins und einen PWM-Pin für die Geschwindigkeit:</p><table><tr><th>linker Motor</th><th>rechter Motor</th><th>das Rad</th></tr><tr><td>AIN1 = 0, AIN2 = 1</td><td>BIN1 = 0, BIN2 = 1</td><td>dreht vorwärts</td></tr><tr><td>AIN1 = 1, AIN2 = 0</td><td>BIN1 = 1, BIN2 = 0</td><td>dreht rückwärts</td></tr><tr><td>beide 0</td><td>beide 0</td><td>steht</td></tr></table><p>Beim PicoGo ist für den linken Motor AIN1 an GP18, AIN2 an GP17 und PWMA an GP16; für den rechten BIN1 an GP19, BIN2 an GP20 und PWMB an GP21. Der Tab <code>picogo.rb</code> packt das alles in eine Klasse: <code>forward</code>, <code>backward</code>, <code>left</code>, <code>right</code> (an Ort und Stelle), <code>stop</code> und <code>set_motor(left, right)</code>, jede Geschwindigkeit von −100 bis 100. Lies ihn – er ist die Wahrheitstabelle oben, in Ruby:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"picogo\"\n\nroboter = PicoGo.new\nroboter.forward(50)\nsleep_ms 1000\nroboter.left(30)  # an Ort und Stelle\nsleep_ms 600\nroboter.stop\n",
+            "tabs": [
+              {
+                "name": "picogo.rb",
+                "src": "pico/lib/de/picogo.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>Ein Quadrat: viermal geradeaus und eine Vierteldrehung. Wie lange eine Vierteldrehung dauert, hängt von der Geschwindigkeit, der Batterie und dem Boden ab – in dieser Simulation sind es bei Geschwindigkeit 50 etwa 390 ms; bei einem echten PicoGo findest du die Zahl durch Ausprobieren:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"picogo\"\n\nroboter = PicoGo.new\n4.times do\n  roboter.forward(50)\n  sleep_ms 1000\n  roboter.right(50)\n  sleep_ms 390      # etwa eine Vierteldrehung (in dieser Simulation)\nend\nroboter.stop\n",
+            "tabs": [
+              {
+                "name": "picogo.rb",
+                "src": "pico/lib/de/picogo.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>Hindernisse sehen</h3><p>Vorne hat der PicoGo zwei <em>Infrarot-Hindernissensoren</em>: Eine IR-LED leuchtet nach vorn, und wenn etwas das Licht zurückwirft, geht der Pin des Sensors auf low. Der rechte hängt an GP2, der linke an GP3 – 0 heisst «Hindernis». In dieser Simulation sehen sie etwa 12 cm weit. Und obendrauf sitzt ein <em>Ultraschallsensor</em>: Er schickt einen Stoss Ultraschall, zu hoch zum Hören (Trigger an GP14), und stoppt das Echo (an GP15) – Schall legt 343 Meter pro Sekunde zurück, also ergibt die Zeit den Abstand. Die Klasse von PicoRuby dafür heisst <code>HCSR04</code>; ihr Gem liegt im Repository von PicoRuby, ist aber in den Standard-Builds von R2P2 nicht dabei. Diesmal steht eine Kiste in der Arena – und unter der Werkbank kannst du eine zweite hineinstellen und verschieben:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"picogo\"\nrequire \"hcsr04\"\n\nroboter = PicoGo.new\nsonar = HCSR04.new(trig: 14, echo: 15)\nroboter.right(15)   # langsam drehen, zuerst nach rechts\nsleep_ms 400\nroboter.left(15)    # dann nach links schwenken\n12.times do\n  puts \"#{sonar.distance_cm} cm\"\n  sleep_ms 100\nend\nroboter.stop\n",
+            "tabs": [
+              {
+                "name": "picogo.rb",
+                "src": "pico/lib/de/picogo.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            },
+            "bench": [
+              {
+                "at": 0,
+                "arena": "box"
+              }
+            ]
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Der PicoGo ist ein Bausatz: Der Pico steckt auf seiner Stiftleiste, und er läuft mit Akkus 14500 zu 3,7 V. Laut Waveshare nimmt er die ganze Pico-Reihe; der Pico 2 W hat dieselben Pins an denselben Stellen. Leg <code>picogo.rb</code> als <code>/lib/picogo.rb</code> aufs Board und dein Programm als <code>/home/app.rb</code>, zieh das USB-Kabel ab und schalte ihn ein – auf dem Boden, nicht auf dem Tisch. Für <code>HCSR04</code> baust du R2P2 selbst, mit dem Gem <code>picoruby-hcsr04</code> in seiner Build-Konfiguration. Und die Motoren des PicoGo hängen an GP20 und GP21, den Pins des I2C-Busses des Environment Sensor aus Lektion {{nr:pico-sensors}} – die beiden Boards passen nicht zusammen.</p></div><div class='docs'><strong>Nachschlagen:</strong> <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-pwm' target='_blank'>picoruby-pwm</a> · <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-hcsr04' target='_blank'>picoruby-hcsr04</a> · <a href='https://www.waveshare.com/wiki/PicoGo' target='_blank'>PicoGo (Waveshare)</a> · <a href='https://datasheets.raspberrypi.com/picow/pico-2-w-datasheet.pdf' target='_blank'>Datenblatt des Pico 2 W</a> (alle englisch)</div><div class='task'><strong>Aufgabe:</strong> 60 cm vor dem Roboter steht eine Wand. Fahr auf sie zu und halte an, bevor du sie berührst: Sobald einer der IR-Sensoren 0 liest, stoppst du die Motoren.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"gpio\"\nrequire \"picogo\"\n\nflitzer = PicoGo.new\nir_links = GPIO.new(3, GPIO::IN)\nir_rechts = GPIO.new(2, GPIO::IN)\nflitzer.forward(40)\n# weiterfahren, bis ein IR-Sensor die Wand sieht (0 liest)\nsleep_ms 1000\nflitzer.stop\n",
+            "tabs": [
+              {
+                "name": "picogo.rb",
+                "src": "pico/lib/de/picogo.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            },
+            "bench": [
+              {
+                "at": 0,
+                "arena": "wall60"
+              }
+            ],
+            "check": "!board.robot.hit? && board.robot.gap_cm.between?(1, 13) && !board.robot.moving? && board.robot.traveled_cm > 30 && code.match?(/\\.(low\\?|high\\?|read\\b)/)",
+            "hint": "Statt <code>sleep_ms 1000</code> wartest du auf die Wand: <code>sleep_ms 10 until ir_links.low? || ir_rechts.low?</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "PWM, motors and a robot",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Half on, half off: PWM</h2><p>A pin knows only 0 and 3.3 volts. How do you dim an LED, then? You switch it on and off so fast that the eye only sees the average: <strong>PWM</strong>, <em>pulse-width modulation</em>. The <em>frequency</em> says how many times per second, the <em>duty</em> how much of each period the pin is on. In PicoRuby the duty is a percentage, 0 to 100 (MicroPython counts 0 to 65535 with <code>duty_u16</code>). <code>PWM.new</code> makes a pin a PWM output:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pwm\"\n\nled = PWM.new(15, frequency: 1000, duty: 0)\n3.times do\n  21.times do |i|            # brighter: 0, 5, ... 100 %\n    led.duty(i * 5)\n    sleep_ms 40\n  end\n  21.times do |i|            # and darker again\n    led.duty(100 - i * 5)\n    sleep_ms 40\n  end\nend\n",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>The same trick makes sound. A piezo buzzer clicks once per period; 440 clicks a second are the note A. <code>frequency</code> changes the note, and <code>duty(0)</code> silences it. Switch the sound on first with the Sound button under the bench:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pwm\"\n\nbuzzer = PWM.new(16, frequency: 440, duty: 50)\nsleep_ms 300\n# C D E F G G (Hz)\n[262, 294, 330, 349, 392, 392].each do |hz|\n  buzzer.frequency(hz)\n  sleep_ms 250\nend\nbuzzer.duty(0)    # silence\n",
+            "board": {
+              "parts": [
+                "buzzer16"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>A robot: the PicoGo</h3><p>A motor needs far more current than a pin can give. So between the Pico and the motors of Waveshare's PicoGo robot sits a <em>motor driver</em>, a TB6612 chip. Per motor it takes two direction pins and one PWM pin for the speed:</p><table><tr><th>left motor</th><th>right motor</th><th>the wheel</th></tr><tr><td>AIN1 = 0, AIN2 = 1</td><td>BIN1 = 0, BIN2 = 1</td><td>turns forward</td></tr><tr><td>AIN1 = 1, AIN2 = 0</td><td>BIN1 = 1, BIN2 = 0</td><td>turns backward</td></tr><tr><td>both 0</td><td>both 0</td><td>stops</td></tr></table><p>On the PicoGo, AIN1 is GP18, AIN2 GP17 and PWMA GP16 for the left motor; BIN1 GP19, BIN2 GP20 and PWMB GP21 for the right one. The tab <code>picogo.rb</code> wraps all of this in a class: <code>forward</code>, <code>backward</code>, <code>left</code>, <code>right</code> (on the spot), <code>stop</code> and <code>set_motor(left, right)</code>, each speed −100 to 100. Read it – it is the truth table above in Ruby:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"picogo\"\n\nrobot = PicoGo.new\nrobot.forward(50)\nsleep_ms 1000\nrobot.left(30)    # on the spot\nsleep_ms 600\nrobot.stop\n",
+            "tabs": [
+              {
+                "name": "picogo.rb",
+                "src": "pico/lib/en/picogo.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>A square: four times straight on and a quarter turn. How long a quarter turn takes depends on the speed, the battery and the floor – in this simulation it is about 390 ms at speed 50; on a real PicoGo you find the number by trying:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"picogo\"\n\nrobot = PicoGo.new\n4.times do\n  robot.forward(50)\n  sleep_ms 1000\n  robot.right(50)\n  sleep_ms 390      # about a quarter turn (in this simulation)\nend\nrobot.stop\n",
+            "tabs": [
+              {
+                "name": "picogo.rb",
+                "src": "pico/lib/en/picogo.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>Seeing obstacles</h3><p>At its front the PicoGo has two <em>infrared obstacle sensors</em>: an IR LED shines forward, and when something reflects the light back, the sensor's pin goes low. The right one is on GP2, the left one on GP3 – 0 means \"obstacle\". In this simulation they see about 12 cm ahead. And on top sits an <em>ultrasonic sensor</em>: it sends a burst of ultrasound, too high to hear (trigger on GP14), and times the echo (on GP15) – sound travels 343 metres a second, so the time gives the distance. PicoRuby's class for it is <code>HCSR04</code>; its gem is in the PicoRuby repository but not in R2P2's default builds. The arena has a box in it this time – and under the bench you can put in another one and move it:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"picogo\"\nrequire \"hcsr04\"\n\nrobot = PicoGo.new\nsonar = HCSR04.new(trig: 14, echo: 15)\nrobot.right(15)     # turn slowly, to the right first\nsleep_ms 400\nrobot.left(15)      # then sweep to the left\n12.times do\n  puts \"#{sonar.distance_cm} cm\"\n  sleep_ms 100\nend\nrobot.stop\n",
+            "tabs": [
+              {
+                "name": "picogo.rb",
+                "src": "pico/lib/en/picogo.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            },
+            "bench": [
+              {
+                "at": 0,
+                "arena": "box"
+              }
+            ]
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p>The PicoGo is a kit: the Pico plugs into its header, and it runs on 3.7 V 14500 rechargeable batteries. Waveshare says it takes the Pico series; the Pico 2 W has the same pins in the same places. Put <code>picogo.rb</code> on the board as <code>/lib/picogo.rb</code> and your program as <code>/home/app.rb</code>, unplug the USB cable and switch it on – on the floor, not on the table. For <code>HCSR04</code> you build R2P2 yourself with the <code>picoruby-hcsr04</code> gem added to its build configuration. And the PicoGo's motors sit on GP20 and GP21, the pins of the Environment Sensor's I2C bus from lesson {{nr:pico-sensors}} – the two boards do not go together.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-pwm' target='_blank'>picoruby-pwm</a> · <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-hcsr04' target='_blank'>picoruby-hcsr04</a> · <a href='https://www.waveshare.com/wiki/PicoGo' target='_blank'>PicoGo (Waveshare)</a> · <a href='https://datasheets.raspberrypi.com/picow/pico-2-w-datasheet.pdf' target='_blank'>Pico 2 W datasheet</a></div><div class='task'><strong>Task:</strong> A wall stands 60 cm in front of the robot. Drive towards it and stop before you touch it: as soon as one of the IR sensors reads 0, stop the motors.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"gpio\"\nrequire \"picogo\"\n\nrover = PicoGo.new\nir_left = GPIO.new(3, GPIO::IN)\nir_right = GPIO.new(2, GPIO::IN)\nrover.forward(40)\n# drive on until an IR sensor sees the wall (reads 0)\nsleep_ms 1000\nrover.stop\n",
+            "tabs": [
+              {
+                "name": "picogo.rb",
+                "src": "pico/lib/en/picogo.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            },
+            "bench": [
+              {
+                "at": 0,
+                "arena": "wall60"
+              }
+            ],
+            "check": "!board.robot.hit? && board.robot.gap_cm.between?(1, 13) && !board.robot.moving? && board.robot.traveled_cm > 30 && code.match?(/\\.(low\\?|high\\?|read\\b)/)",
+            "hint": "Instead of <code>sleep_ms 1000</code>, wait for the wall: <code>sleep_ms 10 until ir_left.low? || ir_right.low?</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "PWMとモーターとロボット",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>半分オン、半分オフ：PWM</h2><p>ピンが知っているのは0ボルトと3.3ボルトだけです。では、LEDを暗くするにはどうするのでしょう？　目には平均しか見えないくらい速く、オンとオフをくり返すのです。これが<strong>PWM</strong>、<em>パルス幅変調</em>です。<em>周波数</em>は1秒に何回かを、<em>デューティー</em>は1周期のうちどれだけオンかを表します。PicoRubyではデューティーは0から100のパーセントです（MicroPythonは<code>duty_u16</code>で0から65535まで数えます）。<code>PWM.new</code>でピンがPWM出力になります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pwm\"\n\nled = PWM.new(15, frequency: 1000, duty: 0)\n3.times do\n  21.times do |i|            # 明るく：0、5、… 100 %\n    led.duty(i * 5)\n    sleep_ms 40\n  end\n  21.times do |i|            # そしてまた暗く\n    led.duty(100 - i * 5)\n    sleep_ms 40\n  end\nend\n",
+            "board": {
+              "parts": [
+                "led15"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>同じしかけで音も出せます。圧電ブザーは1周期に1回カチッと鳴ります。1秒に440回ならラの音です。<code>frequency</code>で音の高さを変え、<code>duty(0)</code>で止めます。まず作業台の下の「音」のボタンで音をオンにしましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pwm\"\n\nbuzzer = PWM.new(16, frequency: 440, duty: 50)\nsleep_ms 300\n# ド レ ミ ファ ソ ソ（Hz）\n[262, 294, 330, 349, 392, 392].each do |hz|\n  buzzer.frequency(hz)\n  sleep_ms 250\nend\nbuzzer.duty(0)    # 静かに\n",
+            "board": {
+              "parts": [
+                "buzzer16"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>ロボット：PicoGo</h3><p>モーターには、ピンが出せるよりずっと多くの電流が必要です。そこでWaveshareのロボットPicoGoでは、Picoとモーターのあいだに<em>モータードライバー</em>、TB6612というチップがあります。モーター1つにつき、向きのためのピン2本と、速さのためのPWMのピン1本を使います。</p><table><tr><th>左のモーター</th><th>右のモーター</th><th>車輪</th></tr><tr><td>AIN1 = 0, AIN2 = 1</td><td>BIN1 = 0, BIN2 = 1</td><td>前に回る</td></tr><tr><td>AIN1 = 1, AIN2 = 0</td><td>BIN1 = 1, BIN2 = 0</td><td>後ろに回る</td></tr><tr><td>両方0</td><td>両方0</td><td>止まる</td></tr></table><p>PicoGoでは、左のモーターがAIN1はGP18、AIN2はGP17、PWMAはGP16、右のモーターがBIN1はGP19、BIN2はGP20、PWMBはGP21です。<code>picogo.rb</code>のタブは、これを全部1つのクラスにまとめています。<code>forward</code>、<code>backward</code>、<code>left</code>、<code>right</code>（その場で回る）、<code>stop</code>、そして<code>set_motor(left, right)</code>で、速さはどれも−100から100です。読んでみましょう。上の真理値表をRubyで書いたものです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"picogo\"\n\nrobot = PicoGo.new\nrobot.forward(50)\nsleep_ms 1000\nrobot.left(30)    # その場で\nsleep_ms 600\nrobot.stop\n",
+            "tabs": [
+              {
+                "name": "picogo.rb",
+                "src": "pico/lib/ja/picogo.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>正方形を走ります。まっすぐ進んで4分の1回転するのを4回です。4分の1回転にかかる時間は、速さと電池と床で変わります。このシミュレーションでは速さ50でだいたい390ミリ秒です。本物のPicoGoでは、ためしながら数を見つけます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"picogo\"\n\nrobot = PicoGo.new\n4.times do\n  robot.forward(50)\n  sleep_ms 1000\n  robot.right(50)\n  sleep_ms 390      # だいたい4分の1回転（このシミュレーションでは）\nend\nrobot.stop\n",
+            "tabs": [
+              {
+                "name": "picogo.rb",
+                "src": "pico/lib/ja/picogo.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>障害物を見る</h3><p>PicoGoの前には<em>赤外線の障害物センサー</em>が2つあります。赤外線LEDが前を照らし、何かが光をはね返すと、センサーのピンがlowになります。右のセンサーはGP2、左はGP3で、0が「障害物あり」です。このシミュレーションでは、前に12 cmくらいまで見えます。上には<em>超音波センサー</em>が載っています。耳には聞こえない高い音を出し（トリガーはGP14）、こだまが返るまでの時間を測ります（GP15）。音は1秒に343メートル進むので、時間から距離がわかります。PicoRubyのそのためのクラスは<code>HCSR04</code>です。そのgemはPicoRubyのリポジトリーにありますが、R2P2の標準のビルドには入っていません。今度はアリーナに箱があります。作業台の下で、もう1つ箱を置いて動かすこともできます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"picogo\"\nrequire \"hcsr04\"\n\nrobot = PicoGo.new\nsonar = HCSR04.new(trig: 14, echo: 15)\nrobot.right(15)     # ゆっくり回る、まず右へ\nsleep_ms 400\nrobot.left(15)      # それから左へ見わたす\n12.times do\n  puts \"#{sonar.distance_cm} cm\"\n  sleep_ms 100\nend\nrobot.stop\n",
+            "tabs": [
+              {
+                "name": "picogo.rb",
+                "src": "pico/lib/ja/picogo.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            },
+            "bench": [
+              {
+                "at": 0,
+                "arena": "box"
+              }
+            ]
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>PicoGoは組み立てキットです。Picoはそのピンヘッダーに差しこみ、3.7 Vの14500充電池で動きます。WaveshareによるとPicoシリーズに対応していて、Pico 2 Wも同じ場所に同じピンがあります。<code>picogo.rb</code>を<code>/lib/picogo.rb</code>として、プログラムを<code>/home/app.rb</code>としてボードに置き、USBケーブルを抜いてスイッチを入れます。テーブルの上ではなく床の上で走らせましょう。<code>HCSR04</code>を使うには、ビルドの設定に<code>picoruby-hcsr04</code>のgemを加えて、R2P2を自分でビルドします。それから、PicoGoのモーターはGP20とGP21を使います。これはレッスン{{nr:pico-sensors}}のEnvironment SensorのI2Cバスのピンなので、2つのボードはいっしょに使えません。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-pwm' target='_blank'>picoruby-pwm</a>・<a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-hcsr04' target='_blank'>picoruby-hcsr04</a>・<a href='https://www.waveshare.com/wiki/PicoGo' target='_blank'>PicoGo（Waveshare）</a>・<a href='https://datasheets.raspberrypi.com/picow/pico-2-w-datasheet.pdf' target='_blank'>Pico 2 Wのデータシート</a></div><div class='task'><strong>課題：</strong>ロボットの60 cm前に壁があります。壁に向かって走り、さわる前に止まりましょう。赤外線センサーのどちらかが0を読んだら、すぐにモーターを止めます。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"gpio\"\nrequire \"picogo\"\n\nrover = PicoGo.new\nir_left = GPIO.new(3, GPIO::IN)\nir_right = GPIO.new(2, GPIO::IN)\nrover.forward(40)\n# 赤外線センサーが壁を見つける（0を読む）まで走り続ける\nsleep_ms 1000\nrover.stop\n",
+            "tabs": [
+              {
+                "name": "picogo.rb",
+                "src": "pico/lib/ja/picogo.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            },
+            "bench": [
+              {
+                "at": 0,
+                "arena": "wall60"
+              }
+            ],
+            "check": "!board.robot.hit? && board.robot.gap_cm.between?(1, 13) && !board.robot.moving? && board.robot.traveled_cm > 30 && code.match?(/\\.(low\\?|high\\?|read\\b)/)",
+            "hint": "<code>sleep_ms 1000</code>のかわりに、壁を待とう：<code>sleep_ms 10 until ir_left.low? || ir_right.low?</code>だよ！"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pico-epaper",
+      "engine": "picoruby",
+      "live": false,
+      "pico": {
+        "board": "pico2w"
+      },
+      "de": {
+        "title": "E-Paper über SPI",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>E-Paper: ein Bild, das bleibt</h2><p>Ein E-Paper-Display funktioniert wie eine gedruckte Seite: Winzige schwarze und weisse Teilchen werden von einer Spannung an ihren Platz geschoben und bleiben dann dort. Das Bild bleibt ohne Strom, auch wenn der Pico ausgesteckt ist. Der Preis ist die Geschwindigkeit: Ein voller Refresh dauert etwa zwei Sekunden, und das Display flackert schwarz und weiss, bis die Teilchen still sind.</p><p>Das <strong>Pico-ePaper-2.13</strong> von Waveshare (250 × 122 Pixel, schwarz-weiss) wird auf den Pico gesteckt und spricht <strong>SPI</strong>, einen Bus aus wenigen Drähten: Der Takt CLK (GP10) gibt das Tempo vor, und bei jedem Takt geht ein Bit über die Datenleitung DIN (GP11) hinaus. CS (GP9) wählt den Chip: Er hört nur zu, solange CS tief ist. DC (GP8) sagt, was die Bytes sind: tief für einen Befehl, hoch für die Daten dazu. RST (GP12) setzt das Display zurück, und BUSY (GP13) meldet dem Pico, dass es noch arbeitet.</p><p>Der Treiber ist gewöhnliches Ruby im Tab <code>epd2in13.rb</code>, die Buchstaben stehen in <code>font5x7.rb</code>. <code>require \"epd2in13\"</code> lädt ihn, wie es auf einem echten Pico <code>/lib/epd2in13.rb</code> laden würde. Führ die Zelle aus und schau, wie das Display auf dem Bench flackert:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nepd = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                   rst_pin: 12, busy_pin: 13)\nepd.clear\nepd.text(10, 10, \"Chunky Bacon!\", scale: 2)\nepd.text(10, 40, \"Ruby auf E-Paper\")\nepd.refresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/de/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "epd213"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>Öffne den Tab <code>epd2in13.rb</code>. <code>command</code> setzt DC tief, schickt ein Byte mit <code>@spi.write</code>, setzt dann DC hoch und schickt die Daten. <code>init</code> ist die Folge aus dem Beispielcode von Waveshare: ein Reset, ein Software-Reset (<code>0x12</code>), die Zahl der Zeilen, das Fenster im Speicher des Displays. <code>refresh</code> schickt das Bild (Befehl <code>0x24</code> und 4000 Bytes, ein Bit pro Pixel) und startet das Auffrischen (<code>0x22</code>, <code>0x20</code>).</p><p>Dann fragt <code>busy_wait</code> alle 10 ms GP13 ab und wartet, <strong>solange es 1 liest</strong>: Bei diesem Controller heisst BUSY hoch beschäftigt. PicoRuby hat einen eigenen Treiber für einen anderen E-Paper-Chip, den UC8151 im Badger von Pimoroni, und der wartet umgekehrt, denn dort heisst BUSY tief beschäftigt. Zwei Chips, zwei Antworten: Darum beginnt ein Treiber mit dem Datenblatt.</p><p>Alles, was du zeichnest, landet zuerst in einem Puffer im Speicher des Pico: <code>pixel</code>, <code>line</code>, <code>rect</code> und <code>text</code> ändern nur Bits darin, und zu sehen ist erst etwas nach <code>refresh</code>. Mit <code>fill: true</code> wird ein Rechteck gefüllt. Ein Balkendiagramm aus einem Array:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nepd = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                   rst_pin: 12, busy_pin: 13)\n# Scheiben Speck, eine Zahl pro Tag\ngegessen = [3, 5, 2, 7, 4]\nepd.clear\nepd.rect(0, 0, 250, 122)\nepd.text(8, 6, \"Speck pro Tag\", scale: 2)\ngegessen.each_with_index do |anzahl, i|\n  x = 30 + i * 42\n  # ein Balken: 11 Pixel pro Scheibe, auf der Linie stehend\n  hoehe = anzahl * 11\n  epd.rect(x, 108 - hoehe, 26, hoehe, fill: true)\n  epd.text(x + 11, 112, anzahl.to_s)\nend\nepd.line(20, 108, 240, 108)\nepd.refresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/de/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "epd213"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>Partieller Refresh</h3><p><code>refresh(partial: true)</code> schickt das neue Bild, und der Controller vergleicht es mit dem vorherigen und bewegt nur die Pixel, die sich geändert haben: etwa 0,3 Sekunden, kein Flackern. Der Preis sind <em>Geisterbilder</em>, blasse Spuren alter Pixel (das simulierte Display zeigt keine). Waveshare rät: nach ein paar partiellen Refreshes einen vollen, und in einem Projekt, das lange läuft, nicht öfter als alle drei Minuten auffrischen. Ein Zähler:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nepd = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                   rst_pin: 12, busy_pin: 13)\nepd.clear\nepd.text(10, 10, \"Zaehlen\", scale: 2)\n# zuerst ein voller Refresh: die Grundlage der partiellen\nepd.refresh\n1.upto(5) do |zahl|\n  # Weiss über die alte Ziffer, dann die neue\n  epd.rect(100, 45, 60, 45, EPD2in13::WHITE, fill: true)\n  epd.text(118, 50, zahl.to_s, scale: 5)\n  # partiell: nur die geänderten Pixel, kein Flackern\n  epd.refresh(partial: true)\n  sleep_ms 1000\nend\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/de/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "epd213"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>Eine Kamera liefert Zahlen</h3><p>Eine Kamera ist ein Gitter aus winzigen Lichtsensoren, und heraus kommt eine Zahl pro Pixel: 0 für schwarz bis 255 für weiss. <code>Camera.new.capture</code> gibt dir 160 × 120 davon in einem String, ein Byte pro Pixel, Zeile um Zeile: Byte <code>y * 160 + x</code> ist das Pixel bei (x, y). Das E-Paper kennt nur schwarz und weiss, also wird jede Zahl zu einer Entscheidung. Führ die Zelle aus, wähl dann unter dem Bench ein anderes Bild und führ sie noch einmal aus:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"camera\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nepd = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                   rst_pin: 12, busy_pin: 13)\n# 160 x 120 Bytes, Zeile um Zeile: 0 = schwarz, 255 = weiss\ngrau = Camera.new.capture\nepd.clear\n120.times do |y|\n  160.times do |x|\n    # dunkler als 128? ein schwarzes Pixel\n    epd.pixel(45 + x, 1 + y) if grau.getbyte(y * 160 + x) < 128\n  end\nend\nepd.refresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/de/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "epd213",
+                "camera"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>Eine feste Schwelle verliert jedes Grau. <em>Dithering</em> behält es: Grau wird zu einem Muster aus schwarzen und weissen Punkten, mehr schwarz, wo es dunkler ist. Probier es in der Zelle aus: Vergleich mit <code>[[64, 192], [240, 128]][y % 2][x % 2]</code> statt <code>128</code>.</p><p><strong>Ehrlich gesagt:</strong> <code>Camera</code> ist ein Ersatz der Simulation, PicoRuby hat keinen Kameratreiber. Kameras für den Pico gibt es: Die Arducam HM01B0 liefert graue Pixel wie diese, braucht aber PIO und DMA des Pico, um mit ihrem Takt mitzuhalten, und das kann heute keine PicoRuby-Bibliothek. Die Arducam Mega schickt JPEG-Dateien, zu gross, um sie auf einem Pico in Ruby zu entpacken. Diese Zelle zeigt also, was du mit den Zahlen machst, nicht, wie du sie auf echter Hardware bekommst.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>In echt: ein Pico 2 W mit der Firmware R2P2-PICORUBY (<a href='https://picoruby.org/' target='_blank'>picoruby.org</a>) und ein Pico-ePaper-2.13 (V4) von Waveshare, direkt auf die Pins des Pico gesteckt. Die zwei Tabs kommen nach <code>/lib</code>, als <code>/lib/epd2in13.rb</code> und <code>/lib/font5x7.rb</code>, die Zelle als <code>/home/app.rb</code>, zum Beispiel mit dem Upload des <a href='https://picoruby.org/terminal' target='_blank'>R2P2-Webterminals</a>. Der eigene UC8151-Treiber von PicoRuby ist nicht in der Standard-Firmware, und er steuert ohnehin einen anderen Chip. Ein Treiber, der in Ruby Pixel um Pixel setzt, ist auf einem Mikrocontroller langsam: Nimm den Pico 2 W, nicht den älteren Pico.</p></div><div class='docs'><strong>Nachschlagen:</strong> <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-spi' target='_blank'>picoruby-spi</a> · <a href='https://www.waveshare.com/wiki/Pico-ePaper-2.13' target='_blank'>Pico-ePaper-2.13 im Waveshare-Wiki</a> (englisch) · <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-uc8151' target='_blank'>picoruby-uc8151</a></div><div class='task'><strong>Aufgabe:</strong> Ein Namensschild. Zeichne einen Rahmen um das ganze Display, genau auf seinen äussersten Pixeln, schreib mit <code>text</code> deinen Namen hinein, und frisch das Display auf.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nschild = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                      rst_pin: 12, busy_pin: 13)\nschild.clear\n# ein Rahmen um das ganze Display, dein Name darin, dann refresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/de/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "epd213"
+              ]
+            },
+            "check": "board.epd.refreshes >= 1 && [[0, 0], [249, 0], [0, 121], [249, 121], [125, 0], [0, 60]].all? { |xy| board.epd.frame.black?(*xy) } && board.epd.frame.black_count > 745 && code.include?(\".text(\")",
+            "hint": "<code>schild.rect(0, 0, 250, 122)</code> läuft dem Rand entlang, dann <code>schild.text(20, 45, \"Chunky\", scale: 3)</code> und <code>schild.refresh</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "E-paper over SPI",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>E-paper: a picture that stays</h2><p>An e-paper display works like a printed page: tiny black and white particles are pushed into place by a voltage and then stay there. The picture stays without power, even with the Pico unplugged. The price is speed: a full refresh takes about two seconds, and the display flashes black and white while the particles settle.</p><p>The Waveshare <strong>Pico-ePaper-2.13</strong> (250 × 122 pixels, black and white) is plugged onto the Pico and talks <strong>SPI</strong>, a bus of a few wires: the clock CLK (GP10) sets the pace, and on every tick one bit goes out on the data wire DIN (GP11). CS (GP9) chooses the chip: it only listens while CS is low. DC (GP8) says what the bytes are: low for a command, high for the data that belongs to it. RST (GP12) resets the display, and BUSY (GP13) tells the Pico that it is still at work.</p><p>The driver is plain Ruby in the tab <code>epd2in13.rb</code>, the letters are in <code>font5x7.rb</code>. <code>require \"epd2in13\"</code> loads it, as it would load <code>/lib/epd2in13.rb</code> on a real Pico. Run the cell and watch the display on the bench flash:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nepd = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                   rst_pin: 12, busy_pin: 13)\nepd.clear\nepd.text(10, 10, \"Chunky bacon!\", scale: 2)\nepd.text(10, 40, \"Ruby on e-paper\")\nepd.refresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/en/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "epd213"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>Open the tab <code>epd2in13.rb</code>. <code>command</code> puts DC low, sends one byte with <code>@spi.write</code>, then puts DC high and sends the data. <code>init</code> is the sequence from Waveshare's own demo code: a reset, a software reset (<code>0x12</code>), the number of lines, the window of the display's memory. <code>refresh</code> sends the picture (command <code>0x24</code> and 4000 bytes, one bit per pixel) and starts the update (<code>0x22</code>, <code>0x20</code>).</p><p>Then <code>busy_wait</code> asks GP13 every 10 ms and waits <strong>while it reads 1</strong>: on this controller, BUSY high means busy. PicoRuby has a driver of its own for another e-paper chip, the UC8151 of Pimoroni's Badger, and it waits the other way round, because there BUSY low means busy. Two chips, two answers: that is why a driver starts with the datasheet.</p><p>Everything you draw goes into a buffer in the Pico's memory first: <code>pixel</code>, <code>line</code>, <code>rect</code> and <code>text</code> only change bits there, and nothing shows until <code>refresh</code>. With <code>fill: true</code> a rectangle is filled. A bar chart from an Array:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nepd = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                   rst_pin: 12, busy_pin: 13)\n# slices of bacon, one number per day\neaten = [3, 5, 2, 7, 4]\nepd.clear\nepd.rect(0, 0, 250, 122)\nepd.text(8, 6, \"Bacon per day\", scale: 2)\neaten.each_with_index do |n, i|\n  x = 30 + i * 42\n  # a bar: 11 pixels per slice, standing on the line\n  h = n * 11\n  epd.rect(x, 108 - h, 26, h, fill: true)\n  epd.text(x + 11, 112, n.to_s)\nend\nepd.line(20, 108, 240, 108)\nepd.refresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/en/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "epd213"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>Partial refresh</h3><p><code>refresh(partial: true)</code> sends the new picture, and the controller compares it with the one before and moves only the pixels that changed: about 0.3 seconds, no flash. The price is <em>ghosting</em>, faint traces of old pixels (the simulated display shows none). Waveshare's advice: after a few partial refreshes do a full one, and in a long-running project don't refresh more often than every three minutes. A counter:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nepd = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                   rst_pin: 12, busy_pin: 13)\nepd.clear\nepd.text(10, 10, \"Counting\", scale: 2)\n# a full refresh first: the base for the partial ones\nepd.refresh\n1.upto(5) do |n|\n  # white over the old digit, then the new one\n  epd.rect(100, 45, 60, 45, EPD2in13::WHITE, fill: true)\n  epd.text(118, 50, n.to_s, scale: 5)\n  # partial: only the changed pixels, no flash\n  epd.refresh(partial: true)\n  sleep_ms 1000\nend\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/en/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "epd213"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>A camera gives you numbers</h3><p>A camera is a grid of tiny light sensors, and what comes out of it is one number per pixel: 0 for black up to 255 for white. <code>Camera.new.capture</code> gives you 160 × 120 of them in a String, one byte each, row after row: byte <code>y * 160 + x</code> is the pixel at (x, y). The e-paper only knows black and white, so every number becomes a decision. Run the cell, then choose another picture under the bench and run it again:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"camera\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nepd = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                   rst_pin: 12, busy_pin: 13)\n# 160 x 120 bytes, row after row: 0 = black, 255 = white\ngrey = Camera.new.capture\nepd.clear\n120.times do |y|\n  160.times do |x|\n    # darker than 128? a black pixel\n    epd.pixel(45 + x, 1 + y) if grey.getbyte(y * 160 + x) < 128\n  end\nend\nepd.refresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/en/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "epd213",
+                "camera"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>A fixed threshold loses every grey. <em>Dithering</em> keeps it: grey becomes a pattern of black and white dots, more black where it is darker. Try it in the cell: compare with <code>[[64, 192], [240, 128]][y % 2][x % 2]</code> instead of <code>128</code>.</p><p><strong>Honestly:</strong> <code>Camera</code> is the simulation's stand-in, PicoRuby has no camera driver. Cameras for the Pico exist: the Arducam HM01B0 delivers grey pixels like these, but it needs the Pico's PIO and DMA to keep up with its clock, and no PicoRuby library does that today. The Arducam Mega sends JPEG files, too big to decode on a Pico in Ruby. So this cell shows what you do with the numbers, not how to get them on real hardware.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p>The real thing: a Pico 2 W with the R2P2-PICORUBY firmware (<a href='https://picoruby.org/' target='_blank'>picoruby.org</a>) and a Waveshare Pico-ePaper-2.13 (V4), plugged straight onto the Pico's pins. Put the two tabs into <code>/lib</code> as <code>/lib/epd2in13.rb</code> and <code>/lib/font5x7.rb</code>, the cell as <code>/home/app.rb</code>, for example with the upload of the <a href='https://picoruby.org/terminal' target='_blank'>R2P2 web terminal</a>. PicoRuby's own UC8151 driver is not in the default firmware, and it drives another chip anyway. A driver that sets pixel after pixel in Ruby is slow on a microcontroller: take the Pico 2 W, not the older Pico.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-spi' target='_blank'>picoruby-spi</a> · <a href='https://www.waveshare.com/wiki/Pico-ePaper-2.13' target='_blank'>Pico-ePaper-2.13 in the Waveshare wiki</a> · <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-uc8151' target='_blank'>picoruby-uc8151</a></div><div class='task'><strong>Task:</strong> A name badge. Draw a frame around the whole display, right along its outermost pixels, write your name inside it with <code>text</code>, and refresh.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nbadge = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                     rst_pin: 12, busy_pin: 13)\nbadge.clear\n# a frame around the whole display, your name inside, then refresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/en/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "epd213"
+              ]
+            },
+            "check": "board.epd.refreshes >= 1 && [[0, 0], [249, 0], [0, 121], [249, 121], [125, 0], [0, 60]].all? { |xy| board.epd.frame.black?(*xy) } && board.epd.frame.black_count > 745 && code.include?(\".text(\")",
+            "hint": "<code>badge.rect(0, 0, 250, 122)</code> runs along the edge, then <code>badge.text(20, 45, \"Chunky\", scale: 3)</code> and <code>badge.refresh</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "SPIで電子ペーパー",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>電子ペーパー：消えない絵</h2><p>電子ペーパーは印刷されたページのようなものです。小さな白と黒の粒が電圧で動かされ、そのままそこに留まります。 電源がなくても、Picoを抜いても絵は残ります。そのかわり遅く、フルリフレッシュには約2秒かかり、粒が落ち着くまで画面が白黒に点滅します。</p><p>Waveshareの<strong>Pico-ePaper-2.13</strong>（250 × 122ピクセル、白黒）はPicoに直接差し込み、<strong>SPI</strong>で話します。 SPIは数本の線でできたバスです。クロックCLK（GP10）がテンポを決め、1拍ごとにデータ線DIN（GP11）から1ビットが出ていきます。 CS（GP9）はチップを選ぶ線で、CSがLOWの間だけチップは聞いています。DC（GP8）はバイトの意味を伝えます。LOWならコマンド、HIGHならそのコマンドのデータです。 RST（GP12）はディスプレイをリセットし、BUSY（GP13）は「まだ作業中」とPicoに知らせます。</p><p>ドライバーはタブ<code>epd2in13.rb</code>にあるふつうのRubyで、文字は<code>font5x7.rb</code>にあります。 <code>require \"epd2in13\"</code>で読み込みます。本物のPicoで<code>/lib/epd2in13.rb</code>を読み込むのと同じです。 セルを実行して、ベンチのディスプレイが点滅するのを見てみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nepd = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                   rst_pin: 12, busy_pin: 13)\nepd.clear\nepd.text(10, 10, \"Chunky bacon!\", scale: 2)\nepd.text(10, 40, \"Ruby on e-paper\")\nepd.refresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/ja/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "epd213"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>タブ<code>epd2in13.rb</code>を開いてみましょう。<code>command</code>はDCをLOWにして<code>@spi.write</code>で1バイト送り、 それからDCをHIGHにしてデータを送ります。<code>init</code>はWaveshareのサンプルコードにある手順です。リセット、ソフトウェアリセット（<code>0x12</code>）、 行数、ディスプレイのメモリーの範囲を順に送ります。<code>refresh</code>は絵（コマンド<code>0x24</code>と4000バイト、1ピクセル1ビット）を送り、 更新を始めます（<code>0x22</code>、<code>0x20</code>）。</p><p>そのあと<code>busy_wait</code>が10ミリ秒ごとにGP13を調べ、<strong>1が読める間</strong>待ちます。このコントローラーではBUSYがHIGHなら作業中です。 PicoRubyには別の電子ペーパーチップ、PimoroniのBadgerに載っているUC8151用のドライバーがあり、そちらは逆向きに待ちます。UC8151ではBUSYがLOWなら作業中だからです。 チップが違えば答えも違います。だからドライバー作りはデータシートを読むところから始まります。</p><p>描いたものは、まずPicoのメモリーにあるバッファーに入ります。<code>pixel</code>、<code>line</code>、<code>rect</code>、<code>text</code>はそこのビットを変えるだけで、 <code>refresh</code>するまで何も表示されません。<code>fill: true</code>を付けると四角形が塗りつぶされます。配列から棒グラフを描いてみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nepd = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                   rst_pin: 12, busy_pin: 13)\n# 1日ごとに食べたベーコンの枚数\neaten = [3, 5, 2, 7, 4]\nepd.clear\nepd.rect(0, 0, 250, 122)\nepd.text(8, 6, \"Bacon per day\", scale: 2)\neaten.each_with_index do |n, i|\n  x = 30 + i * 42\n  # 棒グラフ：1枚あたり11ピクセル、線の上に立てる\n  h = n * 11\n  epd.rect(x, 108 - h, 26, h, fill: true)\n  epd.text(x + 11, 112, n.to_s)\nend\nepd.line(20, 108, 240, 108)\nepd.refresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/ja/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "epd213"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>部分リフレッシュ</h3><p><code>refresh(partial: true)</code>は新しい絵を送り、コントローラーは前の絵と比べて変わったピクセルだけを動かします。約0.3秒で、点滅もありません。 そのかわり<em>ゴースト</em>、つまり古いピクセルのうっすらした跡が残ります（シミュレーションのディスプレイには出ません）。 Waveshareのおすすめは、部分リフレッシュを何回かしたらフルリフレッシュを1回すること、そして長く動かすプロジェクトでは3分より短い間隔でリフレッシュしないことです。カウンターを作ってみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nepd = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                   rst_pin: 12, busy_pin: 13)\nepd.clear\nepd.text(10, 10, \"Counting\", scale: 2)\n# まずフルリフレッシュ：部分リフレッシュの基準になる\nepd.refresh\n1.upto(5) do |n|\n  # 古い数字を白で塗り、新しい数字を書く\n  epd.rect(100, 45, 60, 45, EPD2in13::WHITE, fill: true)\n  epd.text(118, 50, n.to_s, scale: 5)\n  # 部分リフレッシュ：変わったピクセルだけ、点滅なし\n  epd.refresh(partial: true)\n  sleep_ms 1000\nend\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/ja/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "epd213"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>カメラがくれるのは数</h3><p>カメラは小さな光センサーを格子状に並べたもので、出てくるのはピクセルごとの数です。0が黒、255が白です。 <code>Camera.new.capture</code>はその数を160 × 120個、1ピクセル1バイトで1行ずつ並べたStringで返します。 <code>y * 160 + x</code>番目のバイトが(x, y)のピクセルです。電子ペーパーは白と黒しか知らないので、数ごとに白か黒かを決めます。 セルを実行したら、ベンチの下で別の写真を選んで、もう一度実行してみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"camera\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nepd = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                   rst_pin: 12, busy_pin: 13)\n# 160 x 120 バイト、1行ずつ：0 = 黒、255 = 白\ngrey = Camera.new.capture\nepd.clear\n120.times do |y|\n  160.times do |x|\n    # 128より暗い？なら黒いピクセル\n    epd.pixel(45 + x, 1 + y) if grey.getbyte(y * 160 + x) < 128\n  end\nend\nepd.refresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/ja/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "epd213",
+                "camera"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>決まったしきい値では灰色がすべて消えます。<em>ディザリング</em>なら灰色が残ります。灰色を白と黒の点の模様にして、暗いところほど黒を多くするのです。 セルで試してみましょう。<code>128</code>の代わりに<code>[[64, 192], [240, 128]][y % 2][x % 2]</code>と比べてください。</p><p><strong>正直に言うと：</strong><code>Camera</code>はシミュレーションの代役で、PicoRubyにカメラのドライバーはありません。 Pico用のカメラはあります。Arducam HM01B0はこれと同じような灰色のピクセルを出しますが、そのクロックについていくにはPicoのPIOとDMAが必要で、 今のところそれができるPicoRubyのライブラリーはありません。Arducam MegaはJPEGファイルを送ってきますが、PicoのRubyで展開するには大きすぎます。 このセルが見せているのは数の使い方で、本物のハードウェアで数を手に入れる方法ではありません。</p>"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>本物で試すには、R2P2-PICORUBYファームウェア （<a href='https://picoruby.org/' target='_blank'>picoruby.org</a>）を入れたPico 2 Wと、WaveshareのPico-ePaper-2.13（V4）を用意し、ディスプレイをPicoのピンに直接差し込みます。 2つのタブは<code>/lib/epd2in13.rb</code>と<code>/lib/font5x7.rb</code>として<code>/lib</code>に、セルは<code>/home/app.rb</code>として置きます。 たとえば<a href='https://picoruby.org/terminal' target='_blank'>R2P2 Webターミナル</a>のアップロードが使えます。 PicoRuby自身のUC8151ドライバーは標準のファームウェアに入っておらず、そもそも別のチップ用です。 Rubyで1ピクセルずつ描くドライバーはマイコンでは遅いので、古いPicoではなくPico 2 Wを使いましょう。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-spi' target='_blank'>picoruby-spi</a>・<a href='https://www.waveshare.com/wiki/Pico-ePaper-2.13' target='_blank'>WaveshareウィキのPico-ePaper-2.13</a>（英語）・<a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-uc8151' target='_blank'>picoruby-uc8151</a></div><div class='task'><strong>課題：</strong>名札を作りましょう。ディスプレイのいちばん外側のピクセルに沿って全体を囲む枠を描き、その中に<code>text</code>で自分の名前を書いて、リフレッシュしてください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nbadge = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                     rst_pin: 12, busy_pin: 13)\nbadge.clear\n# ディスプレイ全体を囲む枠と、その中に名前。最後にrefresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/ja/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "epd213"
+              ]
+            },
+            "check": "board.epd.refreshes >= 1 && [[0, 0], [249, 0], [0, 121], [249, 121], [125, 0], [0, 60]].all? { |xy| board.epd.frame.black?(*xy) } && board.epd.frame.black_count > 745 && code.include?(\".text(\")",
+            "hint": "<code>badge.rect(0, 0, 250, 122)</code>でふちに沿った枠になるよ。それから<code>badge.text(20, 45, \"Chunky\", scale: 3)</code>と<code>badge.refresh</code>だね。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pico-wifi",
+      "engine": "picoruby",
+      "live": false,
+      "pico": {
+        "board": "pico2w"
+      },
+      "de": {
+        "title": "WLAN: eine Web-API auf dem E-Paper",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Das W im Pico 2 W</h2><p>Das silberne Kästchen neben der Antenne des Pico 2 W ist sein Funkchip, der CYW43439: WLAN und Bluetooth in einem. Der RP2350 spricht über GP23, GP24, GP25 und GP29 mit ihm, die nicht am Rand des Boards liegen, also bleiben alle Pins frei, die du erreichst. Sein WLAN kennt nur 2,4 GHz (ein Netz, das nur auf 5 GHz sendet, bleibt unsichtbar) und nur IPv4. Die Bibliothek von PicoRuby heisst nach dem Chip: <code>CYW43</code>. Tritt dem simulierten Netz <code>chunkynet</code> bei, Passwort <code>chunkybacon</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\n\n# das Land bestimmt, welche Funkkanäle erlaubt sind\nCYW43.init(\"CH\")\n# Station-Modus: einem Netz beitreten (keines sein)\nCYW43.enable_sta_mode\nverbunden = CYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                                  CYW43::Auth::WPA2_AES_PSK, 10)\nputs \"verbunden: #{verbunden}\"\nputs CYW43.tcpip_link_status_name\nCYW43.ipv4_address\n",
+            "board": {
+              "parts": [
+                "wifi"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>Das letzte Argument von <code>connect_timeout</code> ist die Wartezeit <strong>in Sekunden</strong>: Der C-Code von PicoRuby 4.0.3 multipliziert sie mit 1000, ein Beispiel mit <code>10_000</code> wartet also fast drei Stunden. Die Adresse kommt vom simulierten Router (<code>192.168.4.23</code> hat die Simulation gewählt). Geht es schief, antwortet <code>connect_timeout</code> nicht <code>false</code>, sondern löst <code>CYW43::ConnectTimeout</code> aus. Ein falsches Passwort (in der Simulation gibt es nach anderthalb Sekunden auf; ein echter Chip versucht es vielleicht bis zum Ende der Wartezeit):</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nbegin\n  CYW43.connect_timeout(\"chunkynet\", \"magerer Speck\",\n                        CYW43::Auth::WPA2_AES_PSK, 10)\nrescue CYW43::ConnectTimeout => e\n  \"kein WLAN: #{e.message}\"\nend\n",
+            "board": {
+              "parts": [
+                "wifi"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>Auf R2P2 gehört das Passwort nicht in <code>app.rb</code>. Der Shell-Befehl <code>nmcli</code> fragt nach Land, Netz und Passwort und schreibt sie nach <code>/etc/network/wifi.yml</code>, das Passwort verschlüsselt mit einem Schlüssel aus der eigenen Seriennummer des Boards (<code>Machine.unique_id</code>), so dass die Datei auf einem anderen Board nichts nützt. Beim Start verbindet sich R2P2 von selbst. Die Zellen hier haben das Passwort im Code, weil es nur einen Spielzeug-Router öffnet.</p><p>Jetzt das Internet. <code>Net::HTTP.get</code> nimmt den Server mit seinem Schema und einen Pfad und antwortet mit dem Inhalt als String. Achte auf das <code>https://</code>: Ohne spricht PicoRuby gewöhnliches HTTP, auch auf Port 443. Die API von rubygems.org erzählt dir von einem Gem:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\n# mit https:// vorne, sonst ist es gewöhnliches HTTP\nantwort = Net::HTTP.get(\"https://rubygems.org\", \"/api/v1/gems/rake.json\")\ninfo = JSON.parse(antwort)\n\"#{info[\"name\"]} #{info[\"version\"]}\"\n",
+            "board": {
+              "parts": [
+                "wifi"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>Dieses <code>Net::HTTP</code> ist kein Ersatz: Es ist die eigene Bibliothek von PicoRuby (picoruby-net-http 4.0.3), die hier unverändert läuft. Simuliert ist nur die Schicht darunter: Der Socket gibt die Anfrage an deinen Browser weiter, und der holt sie wirklich. Ist der Server nicht erreichbar, antwortet die Simulation mit einer Kopie, die beim Schreiben der Lektion gespeichert wurde, und die WLAN-Karte auf dem Bench sagt das (\"canned\").</p><p>Als Nächstes das Wetter von Open-Meteo, das ohne Schlüssel geht. Eine Sache aus dem Quellcode von PicoRuby: In 4.0.3 gibt <code>Net::HTTP.get_response</code> die Verbindung zurück, nicht die Antwort. Nimm also den langen Weg mit <code>Net::HTTP.new</code>, <code>use_ssl = true</code> und <code>get</code>. Und schau dir den Inhalt genau an:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\nrequire \"net/http\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\npfad = \"/v1/forecast?latitude=47.37&longitude=8.54\" +\n       \"&current=temperature_2m,weather_code,wind_speed_10m\"\n# der lange Weg: get_response gibt in 4.0.3 keine Antwort\nhttp = Net::HTTP.new(\"api.open-meteo.com\", 443)\nhttp.use_ssl = true\nantwort = http.get(pfad)\nputs antwort.code\nputs antwort[\"transfer-encoding\"]\nputs antwort.body\n",
+            "board": {
+              "parts": [
+                "wifi"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>Der Inhalt beginnt mit einer kurzen Zeile wie <code>b5</code>, und weitere solche Zeilen stecken mitten im JSON. Open-Meteo schickt seine Antwort <em>chunked</em> (<code>Transfer-Encoding: chunked</code>): in Stücken, jedes nach einer Zeile mit seiner Grösse in Hexadezimal, und am Ende eine <code>0</code>. Ein Browser oder CRuby setzt die Stücke wieder zusammen. <code>Net::HTTP</code> von PicoRuby 4.0.3 gibt sie weiter, wie sie sind, und <code>JSON.parse</code> scheitert daran. (Die Grösse der Stücke wählt die Simulation; der echte Server wählt seine eigene.)</p><p>Die Lösung ist eine kleine Hilfsmethode im Tab <code>dechunk.rb</code>. Dieser Tab gehört dir: Du kannst ihn ändern, und er wird mit deinem Code gespeichert. Ob die erste Zeile aus Hex-Ziffern besteht, prüft er Byte für Byte, nicht mit einer Regexp, denn die kleine Regexp-Maschine von PicoRuby kennt kein <code>\\A</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\nrequire \"dechunk\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\npfad = \"/v1/forecast?latitude=47.37&longitude=8.54\" +\n       \"&current=temperature_2m,weather_code,wind_speed_10m\"\nhttp = Net::HTTP.new(\"api.open-meteo.com\", 443)\nhttp.use_ssl = true\nantwort = http.get(pfad)\n# dechunk kommt aus dem Tab dechunk.rb\njetzt = JSON.parse(dechunk(antwort.body))[\"current\"]\n\"#{jetzt[\"temperature_2m\"]} C, Wind #{jetzt[\"wind_speed_10m\"]} km/h\"\n",
+            "tabs": [
+              {
+                "name": "dechunk.rb",
+                "code": "# dechunk(body): setzt eine Antwort in Stücken wieder zusammen\n# (\"Transfer-Encoding: chunked\": Stücke, jedes nach seiner Grösse in\n# hex, 0 am Ende; Net::HTTP von PicoRuby 4.0.3 reicht sie so weiter)\ndef dechunk(body)\n  return body unless chunked_body?(body)\n  out = \"\"\n  rest = body\n  while (nl = rest.index(\"\\r\\n\"))\n    size = rest[0, nl].to_i(16)\n    break if size == 0\n    # die Grössen zählen Bytes, darum byteslice, nicht [ ]\n    out << rest.byteslice(nl + 2, size)\n    rest = rest.byteslice(nl + 4 + size, rest.bytesize).to_s\n  end\n  out\nend\n\n# in Stücken? Die erste Zeile ist nur aus Hex-Ziffern (ohne Regexp:\n# die kleine Regexp-Maschine von PicoRuby kennt kein \\A)\ndef chunked_body?(body)\n  nl = body.index(\"\\r\\n\")\n  return false if nl.nil? || nl == 0\n  i = 0\n  while i < nl\n    c = body.getbyte(i)\n    digit = c >= 48 && c <= 57\n    letter = (c >= 97 && c <= 102) || (c >= 65 && c <= 70)\n    return false unless digit || letter\n    i += 1\n  end\n  true\nend\n",
+                "readonly": false
+              }
+            ],
+            "board": {
+              "parts": [
+                "wifi"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>Ein Wetter-Dashboard</h3><p>Alles zusammen: WLAN, HTTPS, JSON und das E-Paper aus Lektion {{nr:pico-epaper}}. Der <code>weather_code</code> ist ein WMO-Code: 0 und 1 sind klar, 45 und 48 Nebel, 51 bis 67 Niesel und Regen, 71 bis 77 Schnee, ab 80 Schauer und Gewitter. Das Symbol ist aus Linien und Rechtecken gezeichnet. Die Zeit ist UTC, weil die Anfrage nach keiner Zeitzone fragt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\nrequire \"spi\"\nrequire \"epd2in13\"\nrequire \"dechunk\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\npfad = \"/v1/forecast?latitude=47.37&longitude=8.54\" +\n       \"&current=temperature_2m,weather_code,wind_speed_10m\"\nhttp = Net::HTTP.new(\"api.open-meteo.com\", 443)\nhttp.use_ssl = true\njetzt = JSON.parse(dechunk(http.get(pfad).body))[\"current\"]\n# WMO-Wettercode: 0 klar ... 95 Gewitter\nwmo = jetzt[\"weather_code\"]\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nepd = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                   rst_pin: 12, busy_pin: 13)\nepd.clear\nepd.text(6, 6, \"Zuerich\", scale: 2)\nepd.text(6, 32, \"#{jetzt[\"temperature_2m\"]} C\", scale: 4)\nepd.text(6, 76, \"Wind #{jetzt[\"wind_speed_10m\"]} km/h\", scale: 2)\nepd.text(6, 104, \"#{jetzt[\"time\"]} UTC\")\ncx = 205\ncase wmo\nwhen 0, 1\n  # eine Sonne: eine runde Scheibe aus Linien und acht Strahlen\n  (-9..9).each do |d|\n    w = d.abs > 5 ? 14 - d.abs : 9\n    epd.line(cx - w, 40 + d, cx + w, 40 + d)\n  end\n  rays = [[0, -1], [1, -1], [1, 0], [1, 1],\n          [0, 1], [-1, 1], [-1, 0], [-1, -1]]\n  rays.each do |dx, dy|\n    epd.line(cx + dx * 14, 40 + dy * 14, cx + dx * 22, 40 + dy * 22)\n  end\nwhen 45, 48\n  # Nebel: vier graue Linien\n  4.times { |i| epd.line(cx - 25, 28 + i * 8, cx + 25, 28 + i * 8) }\nelse\n  # eine Wolke, mit Regen oder Schnee darunter\n  epd.rect(cx - 25, 38, 50, 16, fill: true)\n  epd.rect(cx - 13, 27, 24, 12, fill: true)\n  if (51..67).include?(wmo) || wmo >= 80\n    5.times { |i| epd.line(cx - 20 + i * 10, 58, cx - 24 + i * 10, 68) }\n  elsif (71..77).include?(wmo)\n    5.times { |i| epd.rect(cx - 21 + i * 10, 62, 3, 3, fill: true) }\n  end\nend\nepd.refresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/de/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              },
+              {
+                "name": "dechunk.rb",
+                "code": "# dechunk(body): setzt eine Antwort in Stücken wieder zusammen\n# (\"Transfer-Encoding: chunked\": Stücke, jedes nach seiner Grösse in\n# hex, 0 am Ende; Net::HTTP von PicoRuby 4.0.3 reicht sie so weiter)\ndef dechunk(body)\n  return body unless chunked_body?(body)\n  out = \"\"\n  rest = body\n  while (nl = rest.index(\"\\r\\n\"))\n    size = rest[0, nl].to_i(16)\n    break if size == 0\n    # die Grössen zählen Bytes, darum byteslice, nicht [ ]\n    out << rest.byteslice(nl + 2, size)\n    rest = rest.byteslice(nl + 4 + size, rest.bytesize).to_s\n  end\n  out\nend\n\n# in Stücken? Die erste Zeile ist nur aus Hex-Ziffern (ohne Regexp:\n# die kleine Regexp-Maschine von PicoRuby kennt kein \\A)\ndef chunked_body?(body)\n  nl = body.index(\"\\r\\n\")\n  return false if nl.nil? || nl == 0\n  i = 0\n  while i < nl\n    c = body.getbyte(i)\n    digit = c >= 48 && c <= 57\n    letter = (c >= 97 && c <= 102) || (c >= 65 && c <= 70)\n    return false unless digit || letter\n    i += 1\n  end\n  true\nend\n",
+                "readonly": false
+              }
+            ],
+            "board": {
+              "parts": [
+                "wifi",
+                "epd213"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>Kleiner Speicher, grosse Antworten</h3><p>Ein Pico 2 W hat 520 KB Speicher, und <code>JSON.parse</code> baut darin den ganzen Baum einer Antwort. Frag eine API also nach wenig: <code>current=</code> fragt Open-Meteo nach drei Werten, ein paar hundert Bytes. Für eine grosse Antwort hat PicoRuby <code>JSON::Digger</code>, der einen Wert aus dem Text holt, ohne den Rest zu bauen. Probier es in der Zelle oben aus:</p> <pre><code>JSON::Digger.new(dechunk(antwort.body)).dig(\"current\", \"temperature_2m\").parse</code></pre> <p>Und <code>use_ssl = true</code> verschlüsselt die Verbindung. Ob der Pico auch das Zertifikat des Servers prüft, ist eine andere Frage: Auf RP2040 und RP2350 geht <code>ca_file=</code> nicht, eine Zertifizierungsstelle muss im Flash liegen und der Verbindung mit <code>set_ca</code> gegeben werden.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>WLAN braucht einen Pico 2 W mit der Firmware R2P2-PICORUBY von <a href='https://picoruby.org/' target='_blank'>picoruby.org</a>. Die offizielle Firmware für den gewöhnlichen Pico läuft auch auf einem Pico W, aber ohne Funk; ein Pico W mit WLAN braucht eine selbst gebaute Firmware. Verbinde dich mit dem <a href='https://picoruby.org/terminal' target='_blank'>R2P2-Webterminal</a>, führ einmal <code>nmcli</code> aus und gib Land, Netz und Passwort an. Danach kann <code>app.rb</code> die Zeilen mit <code>CYW43</code> weglassen: R2P2 ist verbunden, bevor es dein Programm startet. Kopier <code>epd2in13.rb</code>, <code>font5x7.rb</code> und <code>dechunk.rb</code> nach <code>/lib</code>. Dein Router muss 2,4 GHz anbieten.</p></div><div class='docs'><strong>Nachschlagen:</strong> <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-net-http' target='_blank'>picoruby-net-http</a> · <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-cyw43' target='_blank'>picoruby-cyw43</a> · <a href='https://open-meteo.com/en/docs' target='_blank'>die API von Open-Meteo</a> · <a href='https://guides.rubygems.org/rubygems-org-api/' target='_blank'>die API von rubygems.org</a> (englisch)</div><div class='task'><strong>Aufgabe:</strong> Ein Gem-Wächter. Hol <code>https://rubygems.org/api/v1/gems/rake.json</code> und zeig <code>rake</code> und seine neuste Version, zum Beispiel <code>rake 13.4.2</code>, auf dem E-Paper. Die Zelle tritt schon dem Netz bei und richtet <code>papier</code> ein.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\nrequire \"spi\"\nrequire \"epd2in13\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\npapier = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                      rst_pin: 12, busy_pin: 13)\npapier.clear\n# https://rubygems.org/api/v1/gems/rake.json holen und\n# \"rake <Version>\" aufs Papier schreiben, dann refresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/de/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "wifi",
+                "epd213"
+              ]
+            },
+            "check": "->(v) { board.wifi_connected? && board.epd.refreshes >= 1 && !v.nil? && board.epd.frame.text?(v.to_s) }.(board.http_json(\"rubygems.org\")&.fetch(\"version\", nil))",
+            "hint": "<code>antwort = Net::HTTP.get(\"https://rubygems.org\", \"/api/v1/gems/rake.json\")</code>, dann <code>JSON.parse(antwort)[\"version\"]</code> in <code>papier.text(...)</code>, und am Ende <code>papier.refresh</code>."
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer: Projektideen'><p>Ideen für einen Pico 2 W auf deinem Tisch, jede mit einer freien API ohne Schlüssel:</p><ul><li><strong>Gem-Wächter mit Licht:</strong> jede Stunde fragen und die LED aus Lektion {{nr:pico-blink}} blinken lassen, wenn sich die Version ändert. <code>/api/v1/versions/rake/latest.json</code> ist eine noch kleinere Antwort.</li><li><strong>Wetteruhr:</strong> das Dashboard oben alle 15 Minuten (so oft ändern sich die <code>current</code>-Werte von Open-Meteo), mit partiellem Refresh und jede Stunde einem vollen.</li><li><strong>Nächster Zug:</strong> <code>transport.opendata.ch/v1/stationboard?station=Zürich&amp;limit=3</code>, die nächsten Abfahrten an einem Schweizer Bahnhof. Die Antwort ist gross: Grab mit <code>JSON::Digger</code> hinein.</li><li><strong>Wo ist die ISS?</strong> <code>http://api.open-notify.org/iss-now.json</code> (gewöhnliches HTTP, etwa hundert Bytes): ein Punkt auf einer kleinen Weltkarte.</li><li><strong>Sternenzähler:</strong> die Sterne von <code>api.github.com/repos/picoruby/picoruby</code> als Zeiger auf einem Servo, den PWM aus Lektion {{nr:pico-robot}} steuert.</li></ul><p>PicoRuby hat auch Bibliotheken für die Zeit per NTP (picoruby-net-ntp) und für MQTT (picoruby-net-mqtt), für eine Uhr, die sich selbst stellt, oder eine Türklingel, die eine Nachricht schickt.</p></div>"
+          }
+        ]
+      },
+      "en": {
+        "title": "Wi-Fi: a web API on e-paper",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>The W in Pico 2 W</h2><p>The silver box next to the antenna of the Pico 2 W is its wireless chip, the CYW43439: Wi-Fi and Bluetooth in one. The RP2350 talks to it over GP23, GP24, GP25 and GP29, which are not on the board's edge, so every pin you can reach stays free. Its Wi-Fi is 2.4 GHz only (a network that only sends on 5 GHz stays invisible) and IPv4 only. PicoRuby's library is named after the chip: <code>CYW43</code>. Join the simulated network <code>chunkynet</code>, password <code>chunkybacon</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\n\n# the country decides which radio channels are allowed\nCYW43.init(\"CH\")\n# station mode: join a network (not be one)\nCYW43.enable_sta_mode\nok = CYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                           CYW43::Auth::WPA2_AES_PSK, 10)\nputs \"connected: #{ok}\"\nputs CYW43.tcpip_link_status_name\nCYW43.ipv4_address\n",
+            "board": {
+              "parts": [
+                "wifi"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>The last argument of <code>connect_timeout</code> is the timeout <strong>in seconds</strong>: PicoRuby 4.0.3's C code multiplies it by 1000, so an example that passes <code>10_000</code> waits almost three hours. The address comes from the simulated router (<code>192.168.4.23</code> is the simulation's choice). When it fails, <code>connect_timeout</code> does not answer <code>false</code>: it raises <code>CYW43::ConnectTimeout</code>. A wrong password (in the simulation it gives up after one and a half seconds; a real chip may keep trying until the timeout):</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nbegin\n  CYW43.connect_timeout(\"chunkynet\", \"streaky bacon\",\n                        CYW43::Auth::WPA2_AES_PSK, 10)\nrescue CYW43::ConnectTimeout => e\n  \"no Wi-Fi: #{e.message}\"\nend\n",
+            "board": {
+              "parts": [
+                "wifi"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>On R2P2 the password does not go into <code>app.rb</code>. The shell command <code>nmcli</code> asks for the country, the network and the password and writes them to <code>/etc/network/wifi.yml</code>, the password encrypted with a key made from the board's own serial number (<code>Machine.unique_id</code>), so the file is useless on another board. At start-up R2P2 joins the network by itself. The cells here keep the password in the code because it opens nothing but a pretend router.</p><p>Now the internet. <code>Net::HTTP.get</code> takes the server with its scheme and a path, and answers the body as a String. Mind the <code>https://</code>: without it PicoRuby speaks plain HTTP, even on port 443. The rubygems.org API tells you about a gem:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\n# with https:// in front, or it is plain HTTP\nbody = Net::HTTP.get(\"https://rubygems.org\", \"/api/v1/gems/rake.json\")\ninfo = JSON.parse(body)\n\"#{info[\"name\"]} #{info[\"version\"]}\"\n",
+            "board": {
+              "parts": [
+                "wifi"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>This <code>Net::HTTP</code> is no stand-in: it is PicoRuby's own library (picoruby-net-http 4.0.3), running here unchanged. Only the layer beneath it is simulated: the socket hands the request to your browser, which fetches it for real. When the server cannot be reached, the simulation answers with a copy saved when the lesson was written, and the Wi-Fi card on the bench says so (\"canned\").</p><p>Next, the weather from Open-Meteo, which needs no key. One thing found in PicoRuby's source: in 4.0.3 <code>Net::HTTP.get_response</code> returns the connection, not the response, so take the long way with <code>Net::HTTP.new</code>, <code>use_ssl = true</code> and <code>get</code>. And look closely at the body:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\nrequire \"net/http\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\npath = \"/v1/forecast?latitude=47.37&longitude=8.54\" +\n       \"&current=temperature_2m,weather_code,wind_speed_10m\"\n# the long way: get_response gives no response in 4.0.3\nhttp = Net::HTTP.new(\"api.open-meteo.com\", 443)\nhttp.use_ssl = true\nres = http.get(path)\nputs res.code\nputs res[\"transfer-encoding\"]\nputs res.body\n",
+            "board": {
+              "parts": [
+                "wifi"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>The body starts with a short line like <code>b5</code>, and more such lines sit in the middle of the JSON. Open-Meteo sends its answer <em>chunked</em> (<code>Transfer-Encoding: chunked</code>): in pieces, each after a line with its size in hexadecimal, and a <code>0</code> at the end. A browser or CRuby puts the pieces back together. PicoRuby 4.0.3's <code>Net::HTTP</code> hands them on as they are, and <code>JSON.parse</code> fails on them. (The size of each piece is the simulation's; the real server picks its own.)</p><p>The fix is a small helper in the tab <code>dechunk.rb</code>. This tab is yours: you can change it, and it is saved with your code. It checks whether the first line is hex digits byte by byte, not with a regexp, because PicoRuby's small regexp engine does not know <code>\\A</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\nrequire \"dechunk\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\npath = \"/v1/forecast?latitude=47.37&longitude=8.54\" +\n       \"&current=temperature_2m,weather_code,wind_speed_10m\"\nhttp = Net::HTTP.new(\"api.open-meteo.com\", 443)\nhttp.use_ssl = true\nres = http.get(path)\n# dechunk comes from the tab dechunk.rb\nnow = JSON.parse(dechunk(res.body))[\"current\"]\n\"#{now[\"temperature_2m\"]} C, wind #{now[\"wind_speed_10m\"]} km/h\"\n",
+            "tabs": [
+              {
+                "name": "dechunk.rb",
+                "code": "# dechunk(body): puts an answer that came in chunks back together\n# (\"Transfer-Encoding: chunked\": pieces, each after its size in hex,\n# 0 at the end; PicoRuby 4.0.3's Net::HTTP hands them on as they are)\ndef dechunk(body)\n  return body unless chunked_body?(body)\n  out = \"\"\n  rest = body\n  while (nl = rest.index(\"\\r\\n\"))\n    size = rest[0, nl].to_i(16)\n    break if size == 0\n    # sizes count bytes, so byteslice, not [ ]\n    out << rest.byteslice(nl + 2, size)\n    rest = rest.byteslice(nl + 4 + size, rest.bytesize).to_s\n  end\n  out\nend\n\n# chunked? the first line is hex digits only (no regexp:\n# PicoRuby's small regexp engine has no \\A)\ndef chunked_body?(body)\n  nl = body.index(\"\\r\\n\")\n  return false if nl.nil? || nl == 0\n  i = 0\n  while i < nl\n    c = body.getbyte(i)\n    digit = c >= 48 && c <= 57\n    letter = (c >= 97 && c <= 102) || (c >= 65 && c <= 70)\n    return false unless digit || letter\n    i += 1\n  end\n  true\nend\n",
+                "readonly": false
+              }
+            ],
+            "board": {
+              "parts": [
+                "wifi"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>A weather dashboard</h3><p>All of it together: Wi-Fi, HTTPS, JSON and the e-paper from lesson {{nr:pico-epaper}}. The <code>weather_code</code> is a WMO code: 0 and 1 are clear, 45 and 48 fog, 51 to 67 drizzle and rain, 71 to 77 snow, from 80 showers and thunderstorms. The icon is drawn from lines and rectangles. The time is UTC, because the request asks for no time zone:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\nrequire \"spi\"\nrequire \"epd2in13\"\nrequire \"dechunk\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\npath = \"/v1/forecast?latitude=47.37&longitude=8.54\" +\n       \"&current=temperature_2m,weather_code,wind_speed_10m\"\nhttp = Net::HTTP.new(\"api.open-meteo.com\", 443)\nhttp.use_ssl = true\nnow = JSON.parse(dechunk(http.get(path).body))[\"current\"]\n# WMO weather code: 0 clear ... 95 thunderstorm\nwmo = now[\"weather_code\"]\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nepd = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                   rst_pin: 12, busy_pin: 13)\nepd.clear\nepd.text(6, 6, \"Zurich\", scale: 2)\nepd.text(6, 32, \"#{now[\"temperature_2m\"]} C\", scale: 4)\nepd.text(6, 76, \"wind #{now[\"wind_speed_10m\"]} km/h\", scale: 2)\nepd.text(6, 104, \"#{now[\"time\"]} UTC\")\ncx = 205\ncase wmo\nwhen 0, 1\n  # a sun: a round disc of lines, and eight rays\n  (-9..9).each do |d|\n    w = d.abs > 5 ? 14 - d.abs : 9\n    epd.line(cx - w, 40 + d, cx + w, 40 + d)\n  end\n  rays = [[0, -1], [1, -1], [1, 0], [1, 1],\n          [0, 1], [-1, 1], [-1, 0], [-1, -1]]\n  rays.each do |dx, dy|\n    epd.line(cx + dx * 14, 40 + dy * 14, cx + dx * 22, 40 + dy * 22)\n  end\nwhen 45, 48\n  # fog: four grey lines\n  4.times { |i| epd.line(cx - 25, 28 + i * 8, cx + 25, 28 + i * 8) }\nelse\n  # a cloud, with rain or snow under it\n  epd.rect(cx - 25, 38, 50, 16, fill: true)\n  epd.rect(cx - 13, 27, 24, 12, fill: true)\n  if (51..67).include?(wmo) || wmo >= 80\n    5.times { |i| epd.line(cx - 20 + i * 10, 58, cx - 24 + i * 10, 68) }\n  elsif (71..77).include?(wmo)\n    5.times { |i| epd.rect(cx - 21 + i * 10, 62, 3, 3, fill: true) }\n  end\nend\nepd.refresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/en/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              },
+              {
+                "name": "dechunk.rb",
+                "code": "# dechunk(body): puts an answer that came in chunks back together\n# (\"Transfer-Encoding: chunked\": pieces, each after its size in hex,\n# 0 at the end; PicoRuby 4.0.3's Net::HTTP hands them on as they are)\ndef dechunk(body)\n  return body unless chunked_body?(body)\n  out = \"\"\n  rest = body\n  while (nl = rest.index(\"\\r\\n\"))\n    size = rest[0, nl].to_i(16)\n    break if size == 0\n    # sizes count bytes, so byteslice, not [ ]\n    out << rest.byteslice(nl + 2, size)\n    rest = rest.byteslice(nl + 4 + size, rest.bytesize).to_s\n  end\n  out\nend\n\n# chunked? the first line is hex digits only (no regexp:\n# PicoRuby's small regexp engine has no \\A)\ndef chunked_body?(body)\n  nl = body.index(\"\\r\\n\")\n  return false if nl.nil? || nl == 0\n  i = 0\n  while i < nl\n    c = body.getbyte(i)\n    digit = c >= 48 && c <= 57\n    letter = (c >= 97 && c <= 102) || (c >= 65 && c <= 70)\n    return false unless digit || letter\n    i += 1\n  end\n  true\nend\n",
+                "readonly": false
+              }
+            ],
+            "board": {
+              "parts": [
+                "wifi",
+                "epd213"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>Small memory, big answers</h3><p>A Pico 2 W has 520 KB of memory, and <code>JSON.parse</code> builds the whole tree of an answer in it. So ask an API for little: <code>current=</code> asks Open-Meteo for three values, a few hundred bytes. For a big answer PicoRuby has <code>JSON::Digger</code>, which picks one value out of the text without building the rest. Try it in the cell above:</p> <pre><code>JSON::Digger.new(dechunk(res.body)).dig(\"current\", \"temperature_2m\").parse</code></pre> <p>And <code>use_ssl = true</code> encrypts the connection. Whether the Pico also checks the server's certificate is another matter: on RP2040 and RP2350, <code>ca_file=</code> is not supported, and a certificate authority has to be stored in flash and given to the connection with <code>set_ca</code>.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p>Wi-Fi needs a Pico 2 W with the R2P2-PICORUBY firmware from <a href='https://picoruby.org/' target='_blank'>picoruby.org</a>. The official firmware for the plain Pico runs on a Pico W too, but without the radio; a Pico W with Wi-Fi needs a firmware you build yourself. Connect with the <a href='https://picoruby.org/terminal' target='_blank'>R2P2 web terminal</a>, run <code>nmcli</code> once and give it your country, network and password. Then <code>app.rb</code> can leave out the lines with <code>CYW43</code>: R2P2 is connected before it starts your program. Copy <code>epd2in13.rb</code>, <code>font5x7.rb</code> and <code>dechunk.rb</code> to <code>/lib</code>. Your router has to offer 2.4 GHz.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-net-http' target='_blank'>picoruby-net-http</a> · <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-cyw43' target='_blank'>picoruby-cyw43</a> · <a href='https://open-meteo.com/en/docs' target='_blank'>the Open-Meteo API</a> · <a href='https://guides.rubygems.org/rubygems-org-api/' target='_blank'>the rubygems.org API</a></div><div class='task'><strong>Task:</strong> A gem watcher. Fetch <code>https://rubygems.org/api/v1/gems/rake.json</code> and show <code>rake</code> and its newest version, for example <code>rake 13.4.2</code>, on the e-paper. The cell already joins the network and sets up <code>paper</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\nrequire \"spi\"\nrequire \"epd2in13\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\npaper = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                     rst_pin: 12, busy_pin: 13)\npaper.clear\n# fetch https://rubygems.org/api/v1/gems/rake.json and show\n# \"rake <version>\" on the paper, then refresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/en/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "wifi",
+                "epd213"
+              ]
+            },
+            "check": "->(v) { board.wifi_connected? && board.epd.refreshes >= 1 && !v.nil? && board.epd.frame.text?(v.to_s) }.(board.http_json(\"rubygems.org\")&.fetch(\"version\", nil))",
+            "hint": "<code>body = Net::HTTP.get(\"https://rubygems.org\", \"/api/v1/gems/rake.json\")</code>, then <code>JSON.parse(body)[\"version\"]</code> into <code>paper.text(...)</code>, and <code>paper.refresh</code> at the end."
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine: project ideas'><p>Ideas for a Pico 2 W on your desk, each a free API that needs no key:</p><ul><li><strong>Gem watcher with a light:</strong> ask every hour and blink the LED from lesson {{nr:pico-blink}} when the version changes. <code>/api/v1/versions/rake/latest.json</code> is an even smaller answer.</li><li><strong>Weather clock:</strong> the dashboard above every 15 minutes (Open-Meteo's <code>current</code> values change that often), with a partial refresh and a full one every hour.</li><li><strong>Next train:</strong> <code>transport.opendata.ch/v1/stationboard?station=Zürich&amp;limit=3</code>, the next departures from a Swiss station. The answer is big: dig into it with <code>JSON::Digger</code>.</li><li><strong>Where is the ISS?</strong> <code>http://api.open-notify.org/iss-now.json</code> (plain HTTP, about a hundred bytes): a dot on a small world map.</li><li><strong>Star counter:</strong> the stars of <code>api.github.com/repos/picoruby/picoruby</code> as a needle on a servo, which PWM from lesson {{nr:pico-robot}} drives.</li></ul><p>PicoRuby also has libraries for NTP time (picoruby-net-ntp) and for MQTT (picoruby-net-mqtt), for a clock that sets itself or a doorbell that sends a message.</p></div>"
+          }
+        ]
+      },
+      "ja": {
+        "title": "Wi-Fi：Web APIを電子ペーパーに",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Pico 2 WのW</h2><p>Pico 2 Wのアンテナの横にある銀色の箱が無線チップCYW43439で、Wi-FiとBluetoothを1つでこなします。 RP2350はボードのふちに出ていないGP23、GP24、GP25、GP29でこのチップと話すので、手の届くピンはすべて空いたままです。Wi-Fiは2.4 GHzだけ（5 GHzでしか電波を出さないネットワークは見えません）、IPv4だけです。 PicoRubyのライブラリーはチップの名前どおり<code>CYW43</code>といいます。シミュレーションのネットワーク<code>chunkynet</code>（パスワード<code>chunkybacon</code>）につないでみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\n\n# 国によって使ってよい無線チャンネルが決まる\nCYW43.init(\"CH\")\n# ステーションモード：ネットワークに参加する（自分はならない）\nCYW43.enable_sta_mode\nok = CYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                           CYW43::Auth::WPA2_AES_PSK, 10)\nputs \"connected: #{ok}\"\nputs CYW43.tcpip_link_status_name\nCYW43.ipv4_address\n",
+            "board": {
+              "parts": [
+                "wifi"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p><code>connect_timeout</code>の最後の引数は<strong>秒単位</strong>のタイムアウトです。PicoRuby 4.0.3のCのコードはこれを1000倍するので、 <code>10_000</code>を渡す例だと3時間近く待つことになります。アドレスはシミュレーションのルーターがくれます（<code>192.168.4.23</code>はシミュレーションが決めた値です）。 失敗したとき、<code>connect_timeout</code>は<code>false</code>を返さず、<code>CYW43::ConnectTimeout</code>を発生させます。 パスワードを間違えてみましょう（シミュレーションでは1.5秒であきらめますが、本物のチップはタイムアウトまで試し続けるかもしれません）。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nbegin\n  CYW43.connect_timeout(\"chunkynet\", \"streaky bacon\",\n                        CYW43::Auth::WPA2_AES_PSK, 10)\nrescue CYW43::ConnectTimeout => e\n  \"no Wi-Fi: #{e.message}\"\nend\n",
+            "board": {
+              "parts": [
+                "wifi"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>R2P2では、パスワードを<code>app.rb</code>に書きません。シェルのコマンド<code>nmcli</code>が国、ネットワーク、パスワードを聞いて<code>/etc/network/wifi.yml</code>に書き込みます。 パスワードはボード固有のシリアル番号（<code>Machine.unique_id</code>）から作った鍵で暗号化されるので、そのファイルは別のボードでは役に立ちません。 起動するとR2P2は自分でネットワークにつなぎます。ここのセルでパスワードをコードに書いているのは、それがおもちゃのルーターしか開けないからです。</p><p>次はインターネットです。<code>Net::HTTP.get</code>はスキーム付きのサーバーとパスを受け取り、本文をStringで返します。 <code>https://</code>に気をつけてください。付けないとPicoRubyは443番ポートでもただのHTTPで話します。rubygems.orgのAPIでgemのことを聞いてみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\n# 先頭にhttps://を付ける。付けないとただのHTTPになる\nbody = Net::HTTP.get(\"https://rubygems.org\", \"/api/v1/gems/rake.json\")\ninfo = JSON.parse(body)\n\"#{info[\"name\"]} #{info[\"version\"]}\"\n",
+            "board": {
+              "parts": [
+                "wifi"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>この<code>Net::HTTP</code>は代役ではなく、PicoRuby自身のライブラリー（picoruby-net-http 4.0.3）がそのまま動いています。 シミュレーションしているのはその下の層だけです。ソケットがリクエストをブラウザーに渡し、ブラウザーが本当に取ってきます。 サーバーにつながらないときは、レッスンを書いたときに保存したコピーでシミュレーションが答え、ベンチのWi-Fiカードにそう表示されます（「canned」）。</p><p>次はキーのいらないOpen-Meteoから天気を取ってきます。PicoRubyのソースを読んでわかったことがあります。4.0.3の<code>Net::HTTP.get_response</code>はレスポンスではなく接続を返すのです。 なので<code>Net::HTTP.new</code>、<code>use_ssl = true</code>、<code>get</code>で遠回りしましょう。そして本文をよく見てください。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\nrequire \"net/http\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\npath = \"/v1/forecast?latitude=47.37&longitude=8.54\" +\n       \"&current=temperature_2m,weather_code,wind_speed_10m\"\n# 遠回り：4.0.3のget_responseはレスポンスを返さない\nhttp = Net::HTTP.new(\"api.open-meteo.com\", 443)\nhttp.use_ssl = true\nres = http.get(path)\nputs res.code\nputs res[\"transfer-encoding\"]\nputs res.body\n",
+            "board": {
+              "parts": [
+                "wifi"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>本文は<code>b5</code>のような短い行で始まり、JSONの途中にも同じような行があります。Open-Meteoは答えを<em>チャンク</em>（<code>Transfer-Encoding: chunked</code>）で送ってくるのです。 小分けにして、それぞれの前に16進数で大きさを書いた行を置き、最後に<code>0</code>を付けます。ブラウザーやCRubyは小分けをつなぎ直しますが、 PicoRuby 4.0.3の<code>Net::HTTP</code>はそのまま渡すので、<code>JSON.parse</code>が失敗します。（小分けの大きさはシミュレーションが決めたもので、本物のサーバーは自分で決めます。）</p><p>直すのはタブ<code>dechunk.rb</code>の小さなヘルパーです。このタブはあなたのものです。書き換えてもよく、コードといっしょに保存されます。 最初の行が16進数の数字かどうかは、正規表現ではなく1バイトずつ調べています。PicoRubyの小さな正規表現エンジンは<code>\\A</code>を知らないからです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\nrequire \"dechunk\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\npath = \"/v1/forecast?latitude=47.37&longitude=8.54\" +\n       \"&current=temperature_2m,weather_code,wind_speed_10m\"\nhttp = Net::HTTP.new(\"api.open-meteo.com\", 443)\nhttp.use_ssl = true\nres = http.get(path)\n# dechunkはタブdechunk.rbから来る\nnow = JSON.parse(dechunk(res.body))[\"current\"]\n\"#{now[\"temperature_2m\"]} C, wind #{now[\"wind_speed_10m\"]} km/h\"\n",
+            "tabs": [
+              {
+                "name": "dechunk.rb",
+                "code": "# dechunk(body)：小分けで届いた答えをつなぎ直す\n# （\"Transfer-Encoding: chunked\"：それぞれ16進数の大きさの行のあとに続き、\n# 0で終わる。PicoRuby 4.0.3のNet::HTTPは小分けのまま渡してくる）\ndef dechunk(body)\n  return body unless chunked_body?(body)\n  out = \"\"\n  rest = body\n  while (nl = rest.index(\"\\r\\n\"))\n    size = rest[0, nl].to_i(16)\n    break if size == 0\n    # 大きさはバイト数なので [ ] ではなく byteslice\n    out << rest.byteslice(nl + 2, size)\n    rest = rest.byteslice(nl + 4 + size, rest.bytesize).to_s\n  end\n  out\nend\n\n# 小分け？ 最初の行が16進数の数字だけかを調べる（正規表現なし：\n# PicoRubyの小さな正規表現エンジンには \\A がない）\ndef chunked_body?(body)\n  nl = body.index(\"\\r\\n\")\n  return false if nl.nil? || nl == 0\n  i = 0\n  while i < nl\n    c = body.getbyte(i)\n    digit = c >= 48 && c <= 57\n    letter = (c >= 97 && c <= 102) || (c >= 65 && c <= 70)\n    return false unless digit || letter\n    i += 1\n  end\n  true\nend\n",
+                "readonly": false
+              }
+            ],
+            "board": {
+              "parts": [
+                "wifi"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>天気ダッシュボード</h3><p>全部合わせます。Wi-Fi、HTTPS、JSON、そしてレッスン{{nr:pico-epaper}}の電子ペーパーです。<code>weather_code</code>はWMOのコードで、 0と1は快晴、45と48は霧、51から67は霧雨と雨、71から77は雪、80からはにわか雨と雷雨です。アイコンは線と四角形で描きます。 リクエストでタイムゾーンを指定していないので、時刻はUTCです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\nrequire \"spi\"\nrequire \"epd2in13\"\nrequire \"dechunk\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\npath = \"/v1/forecast?latitude=47.37&longitude=8.54\" +\n       \"&current=temperature_2m,weather_code,wind_speed_10m\"\nhttp = Net::HTTP.new(\"api.open-meteo.com\", 443)\nhttp.use_ssl = true\nnow = JSON.parse(dechunk(http.get(path).body))[\"current\"]\n# WMOの天気コード：0は快晴 … 95は雷雨\nwmo = now[\"weather_code\"]\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nepd = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                   rst_pin: 12, busy_pin: 13)\nepd.clear\nepd.text(6, 6, \"Zurich\", scale: 2)\nepd.text(6, 32, \"#{now[\"temperature_2m\"]} C\", scale: 4)\nepd.text(6, 76, \"wind #{now[\"wind_speed_10m\"]} km/h\", scale: 2)\nepd.text(6, 104, \"#{now[\"time\"]} UTC\")\ncx = 205\ncase wmo\nwhen 0, 1\n  # 太陽：線でできた丸い円盤と8本の光\n  (-9..9).each do |d|\n    w = d.abs > 5 ? 14 - d.abs : 9\n    epd.line(cx - w, 40 + d, cx + w, 40 + d)\n  end\n  rays = [[0, -1], [1, -1], [1, 0], [1, 1],\n          [0, 1], [-1, 1], [-1, 0], [-1, -1]]\n  rays.each do |dx, dy|\n    epd.line(cx + dx * 14, 40 + dy * 14, cx + dx * 22, 40 + dy * 22)\n  end\nwhen 45, 48\n  # 霧：4本の灰色の線\n  4.times { |i| epd.line(cx - 25, 28 + i * 8, cx + 25, 28 + i * 8) }\nelse\n  # 雲。その下に雨か雪\n  epd.rect(cx - 25, 38, 50, 16, fill: true)\n  epd.rect(cx - 13, 27, 24, 12, fill: true)\n  if (51..67).include?(wmo) || wmo >= 80\n    5.times { |i| epd.line(cx - 20 + i * 10, 58, cx - 24 + i * 10, 68) }\n  elsif (71..77).include?(wmo)\n    5.times { |i| epd.rect(cx - 21 + i * 10, 62, 3, 3, fill: true) }\n  end\nend\nepd.refresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/ja/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              },
+              {
+                "name": "dechunk.rb",
+                "code": "# dechunk(body)：小分けで届いた答えをつなぎ直す\n# （\"Transfer-Encoding: chunked\"：それぞれ16進数の大きさの行のあとに続き、\n# 0で終わる。PicoRuby 4.0.3のNet::HTTPは小分けのまま渡してくる）\ndef dechunk(body)\n  return body unless chunked_body?(body)\n  out = \"\"\n  rest = body\n  while (nl = rest.index(\"\\r\\n\"))\n    size = rest[0, nl].to_i(16)\n    break if size == 0\n    # 大きさはバイト数なので [ ] ではなく byteslice\n    out << rest.byteslice(nl + 2, size)\n    rest = rest.byteslice(nl + 4 + size, rest.bytesize).to_s\n  end\n  out\nend\n\n# 小分け？ 最初の行が16進数の数字だけかを調べる（正規表現なし：\n# PicoRubyの小さな正規表現エンジンには \\A がない）\ndef chunked_body?(body)\n  nl = body.index(\"\\r\\n\")\n  return false if nl.nil? || nl == 0\n  i = 0\n  while i < nl\n    c = body.getbyte(i)\n    digit = c >= 48 && c <= 57\n    letter = (c >= 97 && c <= 102) || (c >= 65 && c <= 70)\n    return false unless digit || letter\n    i += 1\n  end\n  true\nend\n",
+                "readonly": false
+              }
+            ],
+            "board": {
+              "parts": [
+                "wifi",
+                "epd213"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>小さなメモリー、大きな答え</h3><p>Pico 2 Wのメモリーは520 KBで、<code>JSON.parse</code>は答えの木をまるごとそこに作ります。だからAPIには少しだけ頼みましょう。 <code>current=</code>でOpen-Meteoに頼むのは3つの値だけで、数百バイトです。大きな答えのためにPicoRubyには<code>JSON::Digger</code>があり、残りを作らずに1つの値だけをテキストから取り出します。 上のセルで試してみましょう。</p> <pre><code>JSON::Digger.new(dechunk(res.body)).dig(\"current\", \"temperature_2m\").parse</code></pre> <p>また、<code>use_ssl = true</code>は接続を暗号化します。Picoがサーバーの証明書まで確かめるかどうかは別の話です。 RP2040とRP2350では<code>ca_file=</code>が使えず、認証局をフラッシュに置いて<code>set_ca</code>で接続に渡す必要があります。</p>"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>Wi-Fiを使うには、<a href='https://picoruby.org/' target='_blank'>picoruby.org</a>のR2P2-PICORUBYファームウェアを入れたPico 2 Wが必要です。 ふつうのPico用の公式ファームウェアもPico Wで動きますが、無線は使えません。Wi-Fi付きのPico Wには自分でビルドしたファームウェアが必要です。<a href='https://picoruby.org/terminal' target='_blank'>R2P2 Webターミナル</a>でつなぎ、 一度だけ<code>nmcli</code>を実行して国、ネットワーク、パスワードを入れます。そうすれば<code>app.rb</code>から<code>CYW43</code>の行を省けます。 R2P2はプログラムを始める前につないでくれるからです。<code>epd2in13.rb</code>、<code>font5x7.rb</code>、<code>dechunk.rb</code>は<code>/lib</code>にコピーします。 ルーターは2.4 GHzに対応している必要があります。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-net-http' target='_blank'>picoruby-net-http</a>・<a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-cyw43' target='_blank'>picoruby-cyw43</a>・<a href='https://open-meteo.com/en/docs' target='_blank'>Open-MeteoのAPI</a>（英語）・<a href='https://guides.rubygems.org/rubygems-org-api/' target='_blank'>rubygems.orgのAPI</a>（英語）</div><div class='task'><strong>課題：</strong>gemウォッチャーを作りましょう。<code>https://rubygems.org/api/v1/gems/rake.json</code>を取ってきて、 <code>rake</code>とその最新バージョンを、たとえば<code>rake 13.4.2</code>のように電子ペーパーに表示してください。ネットワークへの接続と<code>paper</code>の準備はセルがもうしています。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\nrequire \"spi\"\nrequire \"epd2in13\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\npaper = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                     rst_pin: 12, busy_pin: 13)\npaper.clear\n# https://rubygems.org/api/v1/gems/rake.json を取ってきて\n# \"rake <バージョン>\" をペーパーに表示し、最後にrefresh\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/ja/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "wifi",
+                "epd213"
+              ]
+            },
+            "check": "->(v) { board.wifi_connected? && board.epd.refreshes >= 1 && !v.nil? && board.epd.frame.text?(v.to_s) }.(board.http_json(\"rubygems.org\")&.fetch(\"version\", nil))",
+            "hint": "<code>body = Net::HTTP.get(\"https://rubygems.org\", \"/api/v1/gems/rake.json\")</code>して、<code>JSON.parse(body)[\"version\"]</code>を<code>paper.text(...)</code>に渡そう。最後に<code>paper.refresh</code>を忘れずにね。"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは：プロジェクトのアイデア'><p>机の上のPico 2 Wでできるアイデアです。どれもキーのいらない無料のAPIを使います。</p><ul><li><strong>ライト付きgemウォッチャー：</strong>1時間ごとに聞いて、バージョンが変わったらレッスン{{nr:pico-blink}}のLEDを点滅させます。 <code>/api/v1/versions/rake/latest.json</code>ならもっと小さな答えです。</li><li><strong>天気時計：</strong>上のダッシュボードを15分ごとに（Open-Meteoの<code>current</code>の値はそのくらいで変わります）、部分リフレッシュで更新し、1時間に1回フルリフレッシュします。</li><li><strong>次の電車：</strong><code>transport.opendata.ch/v1/stationboard?station=Zürich&amp;limit=3</code>で、スイスの駅の次の発車がわかります。 答えが大きいので<code>JSON::Digger</code>で掘り出しましょう。</li><li><strong>ISSはどこ？</strong><code>http://api.open-notify.org/iss-now.json</code>（ただのHTTPで、100バイトほど）を使って、小さな世界地図に点を打ちます。</li><li><strong>スターカウンター：</strong><code>api.github.com/repos/picoruby/picoruby</code>のスターの数を、レッスン{{nr:pico-robot}}のPWMで動くサーボの針で示します。</li></ul><p>PicoRubyには、NTPで時刻を合わせるライブラリー（picoruby-net-ntp）やMQTTのライブラリー（picoruby-net-mqtt）もあります。 自分で時刻を合わせる時計や、メッセージを送るドアベルが作れます。</p></div>"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pico-ble",
+      "engine": "picoruby",
+      "live": false,
+      "pico": {
+        "board": "pico2w"
+      },
+      "de": {
+        "title": "Bluetooth: Laptop und Pico",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Bluetooth: Laptop und Pico</h2><p>Der Pico 2 W hat einen Funkchip, den CYW43439, der WLAN und Bluetooth spricht. Bluetooth Low Energy (BLE) kennt zwei Rollen: Ein <em>Peripheral</em> macht Werbung – es sendet immer wieder seinen Namen aus –, und ein <em>Central</em>, hier dein Laptop, findet es und verbindet sich. Was die beiden einander sagen, ist ihre Sache. Am einfachsten ist der <strong>Nordic UART Service</strong>: eine serielle Leitung über BLE, mit einer Characteristic, auf die der Laptop schreibt, und einer, über die sich der Pico meldet.</p><p>PicoRuby hat ihn als <code>BLE::UART</code>, geschrieben von HASUMI Hitoshi. Er braucht einen Pico 2 W mit R2P2-PICORUBY: Das R2P2 für den Pico W lässt BLE weg, weil in seine 2 MB Flash nicht Netzwerk und BLE zusammen passen. Auf dem Bench ist der Laptop simuliert und der Funk auch – die Methoden von <code>BLE::UART</code> sind die echten, aber die Simulation reicht die Zeilen ohne Bluetooth-Stack weiter. Starte den Echo-Server und tipp dann eine Zeile ins Laptop-Feld:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ble\"\n\nfunk = BLE::UART.new(name: \"PicoRuby\")\nfunk.on_connect { puts \"ein Laptop ist verbunden\" }\n# start ruft den Block etwa alle 20 ms auf, hier 30 Sekunden lang\nfunk.start(30_000) do\n  if funk.available?\n    daten = funk.read_nonblock(256)\n    funk.puts(\"echo: #{daten}\") if daten\n  end\nend\n",
+            "board": {
+              "parts": [
+                "laptop"
+              ]
+            },
+            "bench": [
+              {
+                "at": 1000,
+                "ble": "Hello, Pico!"
+              }
+            ]
+          },
+          {
+            "t": "h",
+            "html": "<h3>Auf dem Laptop (CRuby)</h3><p>Die nächste Zelle ist anders: Sie läuft nicht auf dem Pico, sondern auf CRuby, dem anderen Ruby des Kurses (Lektion {{nr:rubies}} stellt die Rubys vor) – sie ist die Laptop-Seite des Funks. Sie benutzt die API des Gems <code>ble</code>, das mit BlueZ spricht, dem Bluetooth-Stack von Linux: den Pico an seinem Namen erkennen, verbinden, seine Meldungen abonnieren, eine Zeile schreiben. Im Kurs reicht ein kleiner Ersatz für das Gem die Zeilen an den simulierten Funk weiter.</p><p>Starte zuerst den Echo-Server oben. Er macht 30 Sekunden lang Werbung, und ein Laptop findet nur einen Pico, der Werbung macht – sonst ist <code>adapter.devices</code> gleich <code>[]</code>, und die Zelle sagt «nicht gefunden».</p>"
+          },
+          {
+            "t": "c",
+            "engine": "cruby",
+            "code": "require \"ble\"\n\nnus = \"6e400001-b5a3-f393-e0a9-e50e24dcca9e\" # Nordic UART Service\nrx = \"6e400002-b5a3-f393-e0a9-e50e24dcca9e\"  # hierhin schreibt der Laptop\ntx = \"6e400003-b5a3-f393-e0a9-e50e24dcca9e\"  # hier meldet sich der Pico\n\nadapter = BLE::Adapter.new(\"hci0\")\nadapter.start_discovery\nsleep 2\nadapter.stop_discovery\nmac = adapter.devices.find { |m| adapter[m].name == \"PicoRuby\" }\n\nif mac\n  pico = adapter[mac]\n  pico.connect\n  pico.subscribe(nus, tx, raw: true) { |daten| print daten }\n  # pico[nus, rx, raw: true] = ... ist seit Ruby 3.4 verboten: keine\n  # Schlüsselwörter in einer Index-Zuweisung - also beim Namen rufen\n  pico.[]=(nus, rx, \"Hallo von CRuby #{RUBY_VERSION}\\n\", raw: true)\n  haupt = DBus::Main.new\n  haupt << DBus::SystemBus.instance\n  haupt.run # unter Linux: die Schleife, die die Meldungen zustellt\nelse\n  puts \"nicht gefunden - sendet der Pico oben seinen Namen?\"\nend\n"
+          },
+          {
+            "t": "h",
+            "html": "<h3>PicoPaper: in beide Richtungen</h3><p>Ein echtes Programm tut mehr als ein Echo. PicoPaper nimmt Befehle vom Laptop an und meldet sich von selbst: Die Zeile <code>SHOW Chunky bacon!</code> bringt den Text aufs E-Paper (der Treiber aus Lektion {{nr:pico-epaper}} steckt in den Tabs), und alle 5 Sekunden, solange ein Laptop verbunden ist, schickt der Pico <code>T</code> und die Temperatur des Chips. <code>gets_nonblock</code> wartet nie: Es gibt eine ganze Zeile zurück, oder <code>nil</code>, solange keine angekommen ist – so ist der Block sofort fertig, wenn es nichts zu tun gibt, und <code>start</code> ruft ihn 20 ms später wieder auf. Das Bench-Skript schickt ein <code>SHOW</code>; weitere tippst du ins Laptop-Feld.</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ble\"\nrequire \"adc\"\nrequire \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\npapier = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                      rst_pin: 12, busy_pin: 13)\nfuehler = ADC.new(:temperature)\nfunk = BLE::UART.new(name: \"PicoPaper\")\nzuletzt = Machine.board_millis\n\nfunk.start(30_000) do\n  zeile = funk.gets_nonblock # eine ganze Zeile, oder nil\n  if zeile\n    befehl, text = zeile.chomp.split(\" \", 2)\n    if befehl == \"SHOW\"\n      papier.clear\n      papier.text(4, 4, text.to_s, scale: 2)\n      papier.refresh\n      funk.puts \"OK\"\n    end\n  end\n  if Machine.board_millis - zuletzt > 5000 && funk.connected?\n    grad = 27 - (fuehler.read - 0.706) / 0.001721\n    funk.puts \"T #{(grad * 10).to_i / 10.0}\"\n    zuletzt = Machine.board_millis\n  end\nend\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/de/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "laptop",
+                "epd213",
+                "temp"
+              ]
+            },
+            "bench": [
+              {
+                "at": 500,
+                "ble": "SHOW Chunky bacon!"
+              }
+            ]
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Der Code des Picos läuft so, wie er ist, auf einem Pico 2 W mit R2P2-PICORUBY – wie er dorthin kommt, zeigt Lektion {{nr:pico-deploy}}. Für die Seite des Laptops gibt es mehrere Wege:</p><ul><li><strong>CRuby mit dem Gem <code>ble</code></strong> unter Linux mit BlueZ: <code>gem install ble</code>, dann die Zelle oben, in der <code>main.run</code> wirklich die Schleife ist. Das Gem kam zuletzt 2018 heraus. Seine Block-Formen benutzen <code>Proc.new</code> ohne Block, was Ruby 3 entfernt hat; bleib also bei den Aufrufen ohne Block wie oben – und rechne damit, es zu flicken oder selbst mit <code>ruby-dbus</code> über D-Bus mit BlueZ zu sprechen.</li><li><strong>Web Bluetooth</strong> aus einer Webseite: PicoRuby.wasm hat <code>JS::BLE::UART</code>, den Nordic UART Service von der Seite des Browsers. Das braucht Chrome oder Edge, eine Seite über HTTPS oder localhost und einen Klick, der die Geräteauswahl öffnet. In einem Web Worker geht es nicht – und die Zellen hier laufen in einem.</li><li><strong>Ein Pico ohne Funk</strong>: Das Board Pico-BLE von Waveshare sitzt an UART0 (GP0, GP1). Auf dem Pico ist es ein gewöhnlicher <code>UART</code>; ein Linux-Computer koppelt sich damit und öffnet <code>/dev/rfcomm0</code> wie eine serielle Schnittstelle.</li><li><strong>Ganz ohne Bluetooth</strong>, über WLAN: R2P2-PICORUBY hat <code>picoruby-drb</code>, das das dRuby von CRuby spricht. <code>DRb.start_service(\"druby://0.0.0.0:8787\", paper)</code> auf dem Pico stellt ein Objekt bereit, und irb auf dem Laptop ruft seine Methoden über <code>DRbObject.new_with_uri(\"druby://&lt;Adresse&gt;:8787\")</code> auf. Das Interop-Skript des Gems ist genau dafür geschrieben; ob es schon auf einem Board lief, ist nicht dokumentiert.</li></ul></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-ble-uart' target='_blank'>picoruby-ble-uart</a> · <a href='https://picoruby.org/wasm-ble' target='_blank'>BLE in PicoRuby.wasm</a> · <a href='https://rubygems.org/gems/ble' target='_blank'>das Gem ble</a></div><div class='task'><strong>Aufgabe:</strong> Schreib ChunkyPico: Beantworte <code>PING</code> mit <code>PONG</code> und <code>TEMP</code> mit der Temperatur des Chips in °C, ausgerechnet mit der Formel aus PicoPaper. Das Bench-Skript verbindet den Laptop, schickt nach 0,3 Sekunden <code>PING</code> und nach 0,8 <code>TEMP</code> und stellt den Raum auf 23 °C.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"ble\"\nrequire \"adc\"\n\nverbindung = BLE::UART.new(name: \"ChunkyPico\")\nchip = ADC.new(:temperature)\nverbindung.start(1500) do\n  nachricht = verbindung.gets_nonblock\n  # \"PING\" -> \"PONG\" antworten, \"TEMP\" -> die Temperatur in °C\nend\n",
+            "board": {
+              "parts": [
+                "laptop",
+                "temp"
+              ]
+            },
+            "bench": [
+              {
+                "at": 0,
+                "set": {
+                  "tempC": 23
+                }
+              },
+              {
+                "at": 0,
+                "ble": "connect"
+              },
+              {
+                "at": 300,
+                "ble": "PING"
+              },
+              {
+                "at": 800,
+                "ble": "TEMP"
+              }
+            ],
+            "check": "board.ble.lines.include?(\"PONG\") && board.ble.lines.any? { |l| l[/-?\\d+(?:\\.\\d+)?/].to_f.between?(21.5, 24.5) }",
+            "hint": "<code>nachricht</code> ist <code>nil</code>, solange nichts angekommen ist – also zuerst <code>if nachricht</code>. Dann <code>nachricht.chomp == \"PING\"</code> und <code>verbindung.puts \"PONG\"</code>. Die Temperatur ist <code>27 - (chip.read - 0.706) / 0.001721</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "Bluetooth: laptop and Pico",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Bluetooth: laptop and Pico</h2><p>The Pico 2 W has a radio chip, the CYW43439, that speaks Wi-Fi and Bluetooth. Bluetooth Low Energy (BLE) knows two roles: a <em>peripheral</em> advertises – it sends out its name again and again – and a <em>central</em>, here your laptop, finds it and connects. What the two say to each other is up to them. The simplest choice is the <strong>Nordic UART Service</strong>: a serial line over BLE, with one characteristic the laptop writes to and one the Pico notifies on.</p><p>PicoRuby has it as <code>BLE::UART</code>, written by HASUMI Hitoshi. It needs a Pico 2 W with R2P2-PICORUBY: the R2P2 for the Pico W leaves BLE out, because its 2 MB of flash cannot hold both networking and BLE. On the bench the laptop is simulated, and so is the radio – the methods of <code>BLE::UART</code> are the real ones, but the simulation passes the lines along without a Bluetooth stack. Start the echo server, then type a line into the laptop panel:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ble\"\n\nuart = BLE::UART.new(name: \"PicoRuby\")\nuart.on_connect { puts \"a laptop connected\" }\n# start calls the block about every 20 ms, here for 30 seconds\nuart.start(30_000) do\n  if uart.available?\n    data = uart.read_nonblock(256)\n    uart.puts(\"echo: #{data}\") if data\n  end\nend\n",
+            "board": {
+              "parts": [
+                "laptop"
+              ]
+            },
+            "bench": [
+              {
+                "at": 1000,
+                "ble": "Hello, Pico!"
+              }
+            ]
+          },
+          {
+            "t": "h",
+            "html": "<h3>On the laptop (CRuby)</h3><p>The next cell is different: it does not run on the Pico but on CRuby, the course's other Ruby (lesson {{nr:rubies}} lines up the Rubies) – it is the laptop's side of the radio. It uses the API of the <code>ble</code> gem, which talks to BlueZ, the Bluetooth stack of Linux: look for the Pico by its name, connect, subscribe to what it notifies, write a line. In the course a small stand-in for the gem hands the lines to the simulated radio.</p><p>Run the echo server above first. It advertises for 30 seconds, and a laptop only finds a Pico that advertises – otherwise <code>adapter.devices</code> is <code>[]</code> and the cell says \"not found\".</p>"
+          },
+          {
+            "t": "c",
+            "engine": "cruby",
+            "code": "require \"ble\"\n\nnus = \"6e400001-b5a3-f393-e0a9-e50e24dcca9e\" # Nordic UART Service\nrx = \"6e400002-b5a3-f393-e0a9-e50e24dcca9e\"  # the laptop writes here\ntx = \"6e400003-b5a3-f393-e0a9-e50e24dcca9e\"  # the Pico notifies here\n\nadapter = BLE::Adapter.new(\"hci0\")\nadapter.start_discovery\nsleep 2\nadapter.stop_discovery\nmac = adapter.devices.find { |m| adapter[m].name == \"PicoRuby\" }\n\nif mac\n  pico = adapter[mac]\n  pico.connect\n  pico.subscribe(nus, tx, raw: true) { |bytes| print bytes }\n  # pico[nus, rx, raw: true] = ... is no longer Ruby (3.4): no keywords\n  # in an index assignment - so the method is called by its name\n  pico.[]=(nus, rx, \"hello from CRuby #{RUBY_VERSION}\\n\", raw: true)\n  main = DBus::Main.new\n  main << DBus::SystemBus.instance\n  main.run # on Linux: the loop that delivers the notifications\nelse\n  puts \"not found - is the Pico above advertising?\"\nend\n"
+          },
+          {
+            "t": "h",
+            "html": "<h3>PicoPaper: both directions</h3><p>A real program does more than echo. PicoPaper takes commands from the laptop and reports by itself: the line <code>SHOW Chunky bacon!</code> puts the text on the e-paper (the driver from lesson {{nr:pico-epaper}} is in the tabs), and every 5 seconds, while a laptop is connected, the Pico sends <code>T</code> and the chip's temperature. <code>gets_nonblock</code> never waits: it returns a whole line, or <code>nil</code> while none has arrived – so the block is done at once when there is nothing to do, and <code>start</code> calls it again 20 ms later. The bench script sends one <code>SHOW</code>; type more into the laptop panel.</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ble\"\nrequire \"adc\"\nrequire \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\npaper = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                     rst_pin: 12, busy_pin: 13)\nsensor = ADC.new(:temperature)\nuart = BLE::UART.new(name: \"PicoPaper\")\nlast = Machine.board_millis\n\nuart.start(30_000) do\n  line = uart.gets_nonblock # a whole line, or nil\n  if line\n    command, text = line.chomp.split(\" \", 2)\n    if command == \"SHOW\"\n      paper.clear\n      paper.text(4, 4, text.to_s, scale: 2)\n      paper.refresh\n      uart.puts \"OK\"\n    end\n  end\n  if Machine.board_millis - last > 5000 && uart.connected?\n    celsius = 27 - (sensor.read - 0.706) / 0.001721\n    uart.puts \"T #{(celsius * 10).to_i / 10.0}\"\n    last = Machine.board_millis\n  end\nend\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/en/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "laptop",
+                "epd213",
+                "temp"
+              ]
+            },
+            "bench": [
+              {
+                "at": 500,
+                "ble": "SHOW Chunky bacon!"
+              }
+            ]
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p>The Pico's code runs as it is on a Pico 2 W with R2P2-PICORUBY – lesson {{nr:pico-deploy}} shows how it gets there. For the laptop's side there are several ways:</p><ul><li><strong>CRuby with the <code>ble</code> gem</strong> on Linux with BlueZ: <code>gem install ble</code>, then the cell above, where <code>main.run</code> really is the loop. The gem's last release is from 2018. Its block forms use <code>Proc.new</code> without a block, which Ruby 3 removed, so stick to the calls without a block, as above – and be ready to patch it, or to talk to BlueZ over D-Bus yourself with <code>ruby-dbus</code>.</li><li><strong>Web Bluetooth</strong> from a web page: PicoRuby.wasm has <code>JS::BLE::UART</code>, the Nordic UART Service from the browser's side. It needs Chrome or Edge, a page on HTTPS or localhost, and a click that opens the device chooser. It does not work in a Web Worker – and the cells here run in one.</li><li><strong>A Pico without radio</strong>: Waveshare's Pico-BLE board sits on UART0 (GP0, GP1). On the Pico it is a plain <code>UART</code>; a Linux computer pairs with it and opens <code>/dev/rfcomm0</code> like a serial port.</li><li><strong>No Bluetooth at all</strong>, over Wi-Fi: R2P2-PICORUBY has <code>picoruby-drb</code>, which speaks CRuby's dRuby. <code>DRb.start_service(\"druby://0.0.0.0:8787\", paper)</code> on the Pico serves an object, and irb on the laptop calls its methods through <code>DRbObject.new_with_uri(\"druby://&lt;address&gt;:8787\")</code>. Its interop script is written for exactly that; whether it has been tried on a board is not documented.</li></ul></div><div class='docs'><strong>Look it up:</strong> <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-ble-uart' target='_blank'>picoruby-ble-uart</a> · <a href='https://picoruby.org/wasm-ble' target='_blank'>BLE in PicoRuby.wasm</a> · <a href='https://rubygems.org/gems/ble' target='_blank'>the ble gem</a></div><div class='task'><strong>Task:</strong> Write ChunkyPico: answer <code>PING</code> with <code>PONG</code>, and <code>TEMP</code> with the chip's temperature in °C, worked out with the formula from PicoPaper. The bench script connects the laptop, sends <code>PING</code> after 0.3 seconds and <code>TEMP</code> after 0.8, and sets the room to 23 °C.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"ble\"\nrequire \"adc\"\n\nlink = BLE::UART.new(name: \"ChunkyPico\")\nchip = ADC.new(:temperature)\nlink.start(1500) do\n  message = link.gets_nonblock\n  # \"PING\" -> answer \"PONG\", \"TEMP\" -> the temperature in °C\nend\n",
+            "board": {
+              "parts": [
+                "laptop",
+                "temp"
+              ]
+            },
+            "bench": [
+              {
+                "at": 0,
+                "set": {
+                  "tempC": 23
+                }
+              },
+              {
+                "at": 0,
+                "ble": "connect"
+              },
+              {
+                "at": 300,
+                "ble": "PING"
+              },
+              {
+                "at": 800,
+                "ble": "TEMP"
+              }
+            ],
+            "check": "board.ble.lines.include?(\"PONG\") && board.ble.lines.any? { |l| l[/-?\\d+(?:\\.\\d+)?/].to_f.between?(21.5, 24.5) }",
+            "hint": "<code>message</code> is <code>nil</code> while nothing has arrived, so first <code>if message</code>. Then <code>message.chomp == \"PING\"</code> and <code>link.puts \"PONG\"</code>. The temperature is <code>27 - (chip.read - 0.706) / 0.001721</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "Bluetooth：パソコンとPico",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Bluetooth：パソコンとPico</h2><p>Pico 2 Wには無線チップCYW43439が載っていて、Wi-FiとBluetoothを話します。Bluetooth Low Energy（BLE）には2つの役割があります。<em>ペリフェラル</em>はアドバタイズ、つまり自分の名前を何度も発信します。<em>セントラル</em>（ここではあなたのノートパソコン）はそれを見つけて接続します。2台が何をやりとりするかは自由です。いちばん簡単なのは<strong>Nordic UART Service</strong>で、BLEの上のシリアル回線です。ノートパソコンが書き込むキャラクタリスティックと、Picoが通知するキャラクタリスティックが1つずつあります。</p><p>PicoRubyでは、HASUMI Hitoshiさんが書いた<code>BLE::UART</code>として使えます。必要なのはR2P2-PICORUBYを入れたPico 2 Wです。Pico W用のR2P2にはBLEが入っていません。2 MBのフラッシュにはネットワークとBLEの両方が入らないからです。ベンチのノートパソコンはシミュレーションで、無線もシミュレーションです。<code>BLE::UART</code>のメソッドは本物ですが、行の受け渡しはBluetoothスタックなしでシミュレーションがおこないます。エコーサーバーを起動して、ノートパソコンの欄に1行入力してみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ble\"\n\nuart = BLE::UART.new(name: \"PicoRuby\")\nuart.on_connect { puts \"a laptop connected\" }\n# startはブロックを約20ミリ秒ごとに呼びます。ここでは30秒間\nuart.start(30_000) do\n  if uart.available?\n    data = uart.read_nonblock(256)\n    uart.puts(\"echo: #{data}\") if data\n  end\nend\n",
+            "board": {
+              "parts": [
+                "laptop"
+              ]
+            },
+            "bench": [
+              {
+                "at": 1000,
+                "ble": "Hello, Pico!"
+              }
+            ]
+          },
+          {
+            "t": "h",
+            "html": "<h3>ノートパソコンの側（CRuby）</h3><p>次のセルはほかと違います。Picoではなく、このコースのもうひとつのRubyであるCRubyで動きます（いろいろなRubyはレッスン{{nr:rubies}}で紹介しています）。これは無線のノートパソコン側です。使うのは<code>ble</code> gemのAPIで、このgemはLinuxのBluetoothスタックBlueZと話します。名前でPicoを探し、接続し、通知を購読して、1行書き込みます。コースの中では、gemの小さな代役が行をシミュレーションの無線に渡します。</p><p>先に上のエコーサーバーを実行してください。30秒間アドバタイズします。ノートパソコンが見つけられるのはアドバタイズ中のPicoだけです。そうでなければ<code>adapter.devices</code>は<code>[]</code>になり、セルは「not found」と表示します。</p>"
+          },
+          {
+            "t": "c",
+            "engine": "cruby",
+            "code": "require \"ble\"\n\nnus = \"6e400001-b5a3-f393-e0a9-e50e24dcca9e\" # Nordic UART Service\nrx = \"6e400002-b5a3-f393-e0a9-e50e24dcca9e\"  # ノートPCはここに書く\ntx = \"6e400003-b5a3-f393-e0a9-e50e24dcca9e\"  # Picoはここで通知する\n\nadapter = BLE::Adapter.new(\"hci0\")\nadapter.start_discovery\nsleep 2\nadapter.stop_discovery\nmac = adapter.devices.find { |m| adapter[m].name == \"PicoRuby\" }\n\nif mac\n  pico = adapter[mac]\n  pico.connect\n  pico.subscribe(nus, tx, raw: true) { |bytes| print bytes }\n  # pico[nus, rx, raw: true] = ...はRuby 3.4から書けない（添字代入に\n  # キーワード引数は使えない）ので、メソッドを名前で呼ぶ\n  pico.[]=(nus, rx, \"hello from CRuby #{RUBY_VERSION}\\n\", raw: true)\n  main = DBus::Main.new\n  main << DBus::SystemBus.instance\n  main.run # Linuxでは、通知を届けるループ\nelse\n  puts \"not found - is the Pico above advertising?\"\nend\n"
+          },
+          {
+            "t": "h",
+            "html": "<h3>PicoPaper：双方向に</h3><p>本物のプログラムはエコーだけではありません。PicoPaperはノートパソコンから命令を受け取り、自分からも報告します。<code>SHOW Chunky bacon!</code>という行を送ると、その文字が電子ペーパーに表示されます（レッスン{{nr:pico-epaper}}のドライバーがタブに入っています）。そしてノートパソコンが接続している間、Picoは5秒ごとに<code>T</code>とチップの温度を送ります。<code>gets_nonblock</code>は決して待ちません。1行まるごとを返すか、まだ届いていなければ<code>nil</code>を返します。そのため、することがなければブロックはすぐに終わり、<code>start</code>が20ミリ秒後にまた呼び出します。ベンチのスクリプトは<code>SHOW</code>を1つ送ります。ほかの行はノートパソコンの欄に入力してください。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ble\"\nrequire \"adc\"\nrequire \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\npaper = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                     rst_pin: 12, busy_pin: 13)\nsensor = ADC.new(:temperature)\nuart = BLE::UART.new(name: \"PicoPaper\")\nlast = Machine.board_millis\n\nuart.start(30_000) do\n  line = uart.gets_nonblock # 1行まるごと、またはnil\n  if line\n    command, text = line.chomp.split(\" \", 2)\n    if command == \"SHOW\"\n      paper.clear\n      paper.text(4, 4, text.to_s, scale: 2)\n      paper.refresh\n      uart.puts \"OK\"\n    end\n  end\n  if Machine.board_millis - last > 5000 && uart.connected?\n    celsius = 27 - (sensor.read - 0.706) / 0.001721\n    uart.puts \"T #{(celsius * 10).to_i / 10.0}\"\n    last = Machine.board_millis\n  end\nend\n",
+            "tabs": [
+              {
+                "name": "epd2in13.rb",
+                "src": "pico/lib/ja/epd2in13.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "laptop",
+                "epd213",
+                "temp"
+              ]
+            },
+            "bench": [
+              {
+                "at": 500,
+                "ble": "SHOW Chunky bacon!"
+              }
+            ]
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>Picoのコードは、R2P2-PICORUBYを入れたPico 2 Wでそのまま動きます。そこへの載せ方はレッスン{{nr:pico-deploy}}で説明します。ノートパソコン側にはいくつかの方法があります。</p><ul><li><strong>CRubyと<code>ble</code> gem</strong>（LinuxとBlueZ）：<code>gem install ble</code>のあと上のセルを実行します。そこでは<code>main.run</code>が本当にループになります。このgemの最後のリリースは2018年です。ブロックを使う形はブロックなしの<code>Proc.new</code>を使っていて、それはRuby 3で削除されました。上のようにブロックなしの呼び出しだけを使い、gemに手を入れるか、<code>ruby-dbus</code>でD-Bus越しにBlueZと直接話す覚悟をしておきましょう。</li><li><strong>Web Bluetooth</strong>（Webページから）：PicoRuby.wasmには<code>JS::BLE::UART</code>があり、ブラウザー側のNordic UART Serviceです。ChromeかEdge、HTTPSかlocalhostのページ、そしてデバイス選択を開くクリックが必要です。Web Workerの中では動きません。ここのセルはWeb Workerの中で動いています。</li><li><strong>無線のないPico</strong>：WaveshareのPico-BLEボードはUART0（GP0、GP1）につなぎます。Picoからは普通の<code>UART</code>です。Linuxのコンピューターはペアリングして、<code>/dev/rfcomm0</code>をシリアルポートのように開きます。</li><li><strong>Bluetoothを使わない</strong>（Wi-Fi経由）：R2P2-PICORUBYには<code>picoruby-drb</code>があり、CRubyのdRubyを話します。Picoで<code>DRb.start_service(\"druby://0.0.0.0:8787\", paper)</code>とするとオブジェクトを公開でき、ノートパソコンのirbから<code>DRbObject.new_with_uri(\"druby://&lt;アドレス&gt;:8787\")</code>でそのメソッドを呼べます。相互運用のスクリプトはまさにそのために書かれていますが、実機で試されたかどうかは文書にありません。</li></ul></div><div class='docs'><strong>調べてみよう：</strong><a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-ble-uart' target='_blank'>picoruby-ble-uart（英語）</a>・<a href='https://picoruby.org/wasm-ble' target='_blank'>PicoRuby.wasmのBLE（英語）</a>・<a href='https://rubygems.org/gems/ble' target='_blank'>ble gem（英語）</a></div><div class='task'><strong>課題：</strong> ChunkyPicoを書きましょう。<code>PING</code>には<code>PONG</code>を、<code>TEMP</code>にはチップの温度（°C）を返します。温度はPicoPaperの式で計算してください。ベンチのスクリプトはノートパソコンを接続し、0.3秒後に<code>PING</code>、0.8秒後に<code>TEMP</code>を送り、部屋を23 °Cにします。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"ble\"\nrequire \"adc\"\n\nlink = BLE::UART.new(name: \"ChunkyPico\")\nchip = ADC.new(:temperature)\nlink.start(1500) do\n  message = link.gets_nonblock\n  # \"PING\"には\"PONG\"、\"TEMP\"には温度（°C）を返す\nend\n",
+            "board": {
+              "parts": [
+                "laptop",
+                "temp"
+              ]
+            },
+            "bench": [
+              {
+                "at": 0,
+                "set": {
+                  "tempC": 23
+                }
+              },
+              {
+                "at": 0,
+                "ble": "connect"
+              },
+              {
+                "at": 300,
+                "ble": "PING"
+              },
+              {
+                "at": 800,
+                "ble": "TEMP"
+              }
+            ],
+            "check": "board.ble.lines.include?(\"PONG\") && board.ble.lines.any? { |l| l[/-?\\d+(?:\\.\\d+)?/].to_f.between?(21.5, 24.5) }",
+            "hint": "何も届いていない間、<code>message</code>は<code>nil</code>だよ。だからまず<code>if message</code>。それから<code>message.chomp == \"PING\"</code>なら<code>link.puts \"PONG\"</code>。温度は<code>27 - (chip.read - 0.706) / 0.001721</code>だね。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pico-deploy",
+      "engine": "picoruby",
+      "live": false,
+      "pico": {
+        "board": "pico2w"
+      },
+      "de": {
+        "title": "Auf einen echten Pico: R2P2 und prremote",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Auf einen echten Pico</h2><p>Alles in den letzten Lektionen lief auf einem simulierten Board. Geschrieben war der Code für ein echtes – so kommt er dorthin. Zuerst: welches Board? Raspberry Pi baut vier Picos, und die PicoRuby-Firmware R2P2 gibt es als zwei Dateien (Stand Oktober 2026):</p><table><tr><th>Board</th><th>Chip, RAM, Flash</th><th>Funk</th><th>LED auf dem Board</th><th>R2P2-Datei</th><th>Was geht</th></tr><tr><td>Pico</td><td>RP2040, 264 kB, 2 MB</td><td>–</td><td>GP25</td><td><code>R2P2-FEMTORUBY-…-PICO</code></td><td>Pins, PWM, ADC, I2C, SPI</td></tr><tr><td>Pico W</td><td>RP2040, 264 kB, 2 MB</td><td>CYW43439: WLAN, Bluetooth</td><td>am Funkchip</td><td>dieselbe Datei, ohne Funk</td><td>Pins; WLAN nur selbst gebaut, BLE nie</td></tr><tr><td>Pico 2</td><td>RP2350, 520 kB, 4 MB</td><td>–</td><td>GP25</td><td><code>R2P2-PICORUBY-…-PICO2_W</code></td><td>Pins, PWM, ADC, I2C, SPI</td></tr><tr><td><strong>Pico 2 W</strong></td><td>RP2350, 520 kB, 4 MB</td><td>CYW43439</td><td>am Funkchip</td><td><code>R2P2-PICORUBY-…-PICO2_W</code></td><td>alles: WLAN, HTTPS, BLE, dRuby</td></tr></table><p>FemtoRuby ist PicoRuby auf der kleineren VM von mruby/c, PicoRuby selbst läuft auf der VM von mruby – derselben, die dieser Kurs im Browser laufen lässt. Der Pico 2 W ist das einzige Board mit einer offiziellen Datei, die alles hat, was diese Lektionen benutzt haben; nimm also den.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Eine Einkaufsliste</h3><table><tr><th>Teil</th><th>Wofür</th></tr><tr><td><a href='https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html' target='_blank'>Raspberry Pi Pico 2 WH</a> (das H: Stiftleisten schon angelötet)</td><td>das Board; passt ins Steckbrett</td></tr><tr><td>ein Micro-USB-Kabel, das <strong>Daten</strong> überträgt</td><td>Strom, das Terminal, das Kopieren der Firmware; mit einem reinen Ladekabel erscheint kein Laufwerk</td></tr><tr><td>ein Steckbrett und Steckkabel</td><td>verdrahten ohne Löten</td></tr><tr><td>LEDs, Widerstände mit 330 Ω, ein Taster</td><td>Blinken, der Knopf</td></tr><tr><td>ein Fotowiderstand (LDR) und ein Widerstand mit 10 kΩ, ein passiver Summer</td><td>der Lichtsensor an GP26, Töne</td></tr><tr><td><a href='https://www.waveshare.com/wiki/Pico-Environment-Sensor' target='_blank'>Waveshare Pico-Environment-Sensor</a></td><td>Temperatur, Luftfeuchtigkeit und Luftdruck (BME280) über I2C</td></tr><tr><td><a href='https://www.waveshare.com/wiki/Pico-ePaper-2.13' target='_blank'>Waveshare Pico-ePaper-2.13</a></td><td>das E-Paper-Display, 250 × 122 Pixel</td></tr><tr><td><a href='https://www.waveshare.com/wiki/PicoGo' target='_blank'>Waveshare PicoGo</a></td><td>der Roboter: Motoren, Infrarotsensoren, Ultraschallsensor</td></tr><tr><td><a href='https://www.waveshare.com/wiki/Pico-BLE' target='_blank'>Waveshare Pico-BLE</a> (wenn du willst)</td><td>Bluetooth für einen Pico ohne Funk</td></tr></table><p>Die Waveshare-Boards werden auf die Pins des Picos gesteckt; sie benutzen die Pins, die der Bench gezeigt hat. Nicht jedes Paar passt zusammen – der PicoGo und der Umweltsensor wollen beide GP20 und GP21.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>R2P2 Schritt für Schritt</h3><ol><li><strong>Die Firmware holen.</strong> <code>curl -fsSL https://picoruby.org/r2p2-latest.sh | sh</code> lädt die neueste R2P2-Datei (eine <code>.uf2</code>) herunter, oder du nimmst sie aus den Releases auf GitHub.</li><li><strong>Aufspielen.</strong> Halt den Knopf BOOTSEL gedrückt, während du den Pico einsteckst: Ein Laufwerk erscheint (<code>RP2350</code> bei einem Pico 2 W). Zieh die <code>.uf2</code> darauf; der Pico startet neu, als kleiner Ruby-Computer.</li><li><strong>Mit ihm reden.</strong> Öffne das R2P2 Web Terminal auf <a href='https://picoruby.org/terminal' target='_blank'>picoruby.org/terminal</a> in Chrome oder Edge – es benutzt Web Serial, installieren musst du nichts. Du bekommst die Shell von R2P2, mit <code>ls</code>, <code>cat</code>, <code>vim</code> und <code>irb</code>: das IRB aus Lektion {{nr:pico-blink}}, in echt.</li><li><strong>Dateien hinbringen.</strong> <code>.rb</code>-Dateien aufs Laufwerk ziehen geht seit PicoRuby 3.4 nicht mehr. Stattdessen: das Hochladen im Web Terminal, das <code>vim</code> auf dem Board oder PicoModem, das eigene Übertragungsprotokoll von R2P2 mit CRC-Prüfung: <code>picoruby tools/picomodem.rb put app.rb /home/app.rb</code>.</li><li><strong>Starten.</strong> Beim Einschalten wartet R2P2 2 Sekunden (<kbd>s</kbd> überspringt den Start), verbindet sich mit dem WLAN, wenn es <code>/etc/network/wifi.yml</code> gibt, und führt <strong><code>/home/app.rb</code></strong> aus. Dorthin gehört dein Programm.</li><li><strong>Bibliotheken</strong> kommen nach <code>/lib</code>: <code>/lib/epd2in13.rb</code>, geladen mit <code>require \"epd2in13\"</code>, weil R2P2 <code>$LOAD_PATH = [\"/lib\"]</code> setzt. Die Tabs der Zellen hier tun dasselbe – jeder Tab wird vor dem Lauf nach <code>/lib</code> geschrieben.</li></ol>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>prremote: auf dem Computer übersetzen, auf dem Chip ausführen</h3><p>R2P2 ist ein ganzes Ruby auf dem Board, mit Dateisystem und Shell. <strong>prremote</strong> geht den anderen Weg. Es ist ein Kommandozeilen-Werkzeug von ITO Yosei von LumberMill, Inc. in Takachiho (Miyazaki, Japan), ein Gem unter der MIT-Lizenz seit Mai 2026; Version 0.4.2 kam am 16. Oktober 2026 heraus, und sein README warnt, dass es noch früh in der Entwicklung ist und sich Befehle ändern können. Es nennt sich «inspired by mpremote for MicroPython» – ein mpremote für Ruby.</p><p>prremote spielt eine winzige Laufzeit-Firmware mit <strong>mruby/c</strong> aufs Board. Übersetzt wird das Ruby auf deinem Computer, von deinem eigenen <code>mrbc</code> (es muss mruby 4.x sein), und der Bytecode geht über die serielle USB-Leitung aufs Board, mit 115200 Baud, wenn du nichts anderes einstellst. Die beiden sprechen ein kurzes Protokoll:</p><ul><li>Der Computer schickt jede Sekunde <code>Ctrl-C</code> (das Byte 3), bis das Board <code>READY prremote-runtime/0.4.2 board=picow</code> antwortet.</li><li>Er schickt den Bytecode. Eine übersetzte mruby-Datei beginnt mit den Buchstaben <code>RITE</code>, und daran erkennt das Board, dass ein Programm kommt. (Es achtet auf drei solche Wörter aus vier Buchstaben: <code>RITE</code>, <code>DPLY</code>, <code>BORD</code>.) Der Computer schreibt in Stücken von 256 Bytes, mit 4 ms Pause dazwischen.</li><li>Das Board antwortet <code>RUNNING</code>, dann, was das Programm ausgibt, dann <code>DONE</code> – oder <code>ERROR</code> und den Grund.</li><li>Für <code>prremote deploy</code> schickt der Computer <code>DPLY</code> vor dem Bytecode. Das Board behält das Programm im Flash, führt es bei jedem Start aus und antwortet <code>DEPLOYED</code>.</li></ul><figure><img src='assets/pico/prremote-sequence.svg' alt='Sequenzdiagramm: Der Computer schickt jede Sekunde Ctrl-C, bis das Gerät READY prremote-runtime/0.4.2 board=picow antwortet; dann schickt er den Bytecode, der mit RITE beginnt; das Gerät antwortet RUNNING, die Ausgabe des Programms und DONE, oder ERROR und einen Grund. Für prremote deploy schickt der Computer DPLY und den Bytecode, und das Gerät antwortet DEPLOYED.' width='640'><figcaption>Der Handschlag von prremote über die serielle USB-Leitung</figcaption></figure><p>Hier dieses Gespräch mit einem Schein-Gerät – reines Ruby, ohne Board:</p>"
+          },
+          {
+            "t": "c",
+            "code": "# Ein Schein-Gerät, das antwortet wie die Laufzeit-Firmware von prremote.\n# Beim ersten Ctrl-C ist es noch beschäftigt, das zweite bekommt READY.\nstupser = 0\ngeraet = lambda do |bytes|\n  if bytes == \"\\x03\"\n    stupser += 1\n    stupser < 2 ? [] : [\"READY prremote-runtime/0.4.2 board=picow\"]\n  elsif bytes.start_with?(\"RITE\")\n    [\"RUNNING\", \"Hello from Pico W!\", \"DONE\"]\n  elsif bytes.start_with?(\"DPLY\")\n    [\"DEPLOYED\"]\n  else\n    []\n  end\nend\n\n# die Seite des Computers: etwas schicken, die Antwort ausgeben\nreden = lambda do |bytes, was|\n  puts \"Computer -> #{was}\"\n  geraet.call(bytes).each { |zeile| puts \"  <- #{zeile}\" }\nend\n\nbytecode = \"RITE...\" # was mrbc aus app.rb gemacht hat\nreden.call(\"\\x03\", \"Ctrl-C\")\nreden.call(\"\\x03\", \"Ctrl-C (eine Sekunde später)\")\nreden.call(bytecode, \"der Bytecode (prremote run)\")\nreden.call(\"DPLY\" + bytecode, \"DPLY + Bytecode (prremote deploy)\")\n"
+          },
+          {
+            "t": "h",
+            "html": "<p><strong>Mehrere Dateien</strong>: <code>prremote run lib.rb main.rb</code> übersetzt die Dateien in dieser Reihenfolge zu einer einzigen Bytecode-Datei, sodass Klassen und Methoden aus früheren Dateien in späteren da sind. mruby/c hat kein <code>require</code>, und das README empfiehlt das als Ersatz. Nennt ein Skript die Konstante eines Boards wie <code>M5StickCPlus</code>, stellt prremote sogar die Bibliothek dieses Boards von selbst davor. Die Tabs dieses Kurses ahmen stattdessen den Weg von R2P2 nach – Dateien in <code>/lib</code> und <code>require</code> –, aber die Idee ist dieselbe: die Bibliothek im Hintergrund, dein Programm vorne.</p><p><strong>Die Befehle</strong>: <code>install -b picow</code> spielt die Firmware auf, <code>run</code> führt Dateien einmal aus, <code>watch</code> bei jedem Speichern wieder, <code>deploy</code> und <code>undeploy</code> legen ein Programm ins Flash oder entfernen es, <code>eval</code> führt eine Zeile aus, <code>reset</code> schickt Ctrl-C, <code>list</code> zeigt die seriellen Schnittstellen und <code>version</code> die Versionen.</p><p><strong>Seine Grenzen</strong>: prremote kennt den Pico, den Pico W, den Pico 2 (das Aufspielen ist als noch nicht auf echter Hardware getestet markiert) und ESP32-Boards wie den M5Stack; der Pico 2 W steht nicht auf seiner Liste. Auf einem Pico W hat es Pins, ADC, PWM, I2C, SPI, WLAN, NTP und TCP – aber kein TLS (also kein HTTPS) und kein BLE. Auf dem Board gibt es keine Shell, kein Dateisystem und kein IRB. Und es hat seine eigene Ruby-API, mit Absicht – es folgt nicht den Namen von PicoRuby:</p><table><tr><th></th><th>prremote</th><th>PicoRuby (R2P2)</th></tr><tr><td>LED auf dem Board</td><td><code>GPIO.led</code></td><td><code>CYW43::GPIO.new(CYW43::GPIO::LED_PIN)</code></td></tr><tr><td>ein Ausgangs-Pin</td><td><code>GPIO.new(15, :output)</code></td><td><code>GPIO.new(15, GPIO::OUT)</code></td></tr><tr><td>WLAN</td><td><code>WiFi.connect(ssid, pw, auth, secs)</code></td><td><code>CYW43.connect_timeout(ssid, pw, auth, secs)</code></td></tr><tr><td>wie das Programm hinkommt</td><td>Bytecode in den RAM, oder mit <code>deploy</code> ins Flash</td><td>Quelldateien im Dateisystem</td></tr></table><p>Der Code dieser Lektionen läuft also unverändert auf R2P2 und muss für prremote angepasst werden.</p><div class='offweb' data-title='Auf deinem Computer'><p><strong>R2P2</strong>: die Schritte oben – <code>curl -fsSL https://picoruby.org/r2p2-latest.sh | sh</code>, BOOTSEL, die Datei hinziehen, dann das Web Terminal.</p><p><strong>prremote</strong>: <code>gem install prremote</code> (Ruby 3.4 oder neuer) und ein <code>mrbc</code> von mruby 4: <code>brew install mruby</code> auf dem Mac; unter Linux mruby 4 aus den Quellen bauen oder mit <code>MRBC=/path/to/mrbc</code> auf eines zeigen – das mruby-Paket von Debian ist 3.x, was prremote nicht kompatibel nennt. Dann einmal <code>prremote install -b picow</code> (BOOTSEL halten, einstecken) und von da an <code>prremote watch app.rb</code> – jedes Speichern führt die Datei wieder aus. <code>prremote deploy lib.rb main.rb</code> lässt sie auf dem Board. In WSL2 braucht das USB-Gerät zuerst <code>usbipd attach --wsl</code>.</p></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://github.com/lumbermill/prremote#readme' target='_blank'>das README von prremote</a> · <a href='https://picoruby.org/setup' target='_blank'>R2P2 einrichten</a> · <a href='https://github.com/picoruby/picoruby/blob/master/mrbgems/picoruby-r2p2/README.md' target='_blank'>das README von R2P2</a></div><div class='task'><strong>Aufgabe:</strong> Schreib <code>lauf_status(zeilen)</code>, so wie die Computer-Seite von prremote die Zeilen des Boards liest: <code>:done</code>, sobald <code>DONE</code> kam, <code>\"error: &lt;grund&gt;\"</code> für <code>ERROR &lt;grund&gt;</code>, <code>:running</code> nach <code>RUNNING</code>, solange noch kein Ende da ist, und sonst <code>:waiting</code>. Die letzten Zeilen der Zelle probieren vier Gespräche aus.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def lauf_status(zeilen)\n  # DONE -> :done, \"ERROR x\" -> \"error: x\", RUNNING -> :running\n  :waiting\nend\n\nbereit = \"READY prremote-runtime/0.4.2 board=picow\"\n[lauf_status([bereit, \"RUNNING\", \"hello\", \"DONE\"]),\n lauf_status([bereit, \"RUNNING\", \"ERROR NoMethodError\"]),\n lauf_status([bereit, \"RUNNING\", \"tick\"]),\n lauf_status([bereit])]\n",
+            "check": "result == [:done, \"error: NoMethodError\", :running, :waiting] && code.include?(\"def lauf_status\")",
+            "hint": "Geh mit <code>each</code> durch die Zeilen und merk dir den Stand: <code>zeile == \"DONE\"</code>, <code>zeile.start_with?(\"ERROR \")</code> (der Grund ist <code>zeile[6..-1]</code>), <code>zeile == \"RUNNING\"</code>. Am Ende gibst du den Stand zurück."
+          }
+        ]
+      },
+      "en": {
+        "title": "Onto a real Pico: R2P2 and prremote",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Onto a real Pico</h2><p>Everything in the last lessons ran on a simulated board. The code was written for a real one, so here is how it gets there. First: which board? Raspberry Pi makes four Picos, and PicoRuby's firmware R2P2 comes as two files (versions as of October 2026):</p><table><tr><th>Board</th><th>Chip, RAM, flash</th><th>Radio</th><th>Onboard LED</th><th>R2P2 file</th><th>What works</th></tr><tr><td>Pico</td><td>RP2040, 264 kB, 2 MB</td><td>–</td><td>GP25</td><td><code>R2P2-FEMTORUBY-…-PICO</code></td><td>pins, PWM, ADC, I2C, SPI</td></tr><tr><td>Pico W</td><td>RP2040, 264 kB, 2 MB</td><td>CYW43439: Wi-Fi, Bluetooth</td><td>on the radio chip</td><td>the same file, without the radio</td><td>pins; Wi-Fi only in a build of your own, never BLE</td></tr><tr><td>Pico 2</td><td>RP2350, 520 kB, 4 MB</td><td>–</td><td>GP25</td><td><code>R2P2-PICORUBY-…-PICO2_W</code></td><td>pins, PWM, ADC, I2C, SPI</td></tr><tr><td><strong>Pico 2 W</strong></td><td>RP2350, 520 kB, 4 MB</td><td>CYW43439</td><td>on the radio chip</td><td><code>R2P2-PICORUBY-…-PICO2_W</code></td><td>everything: Wi-Fi, HTTPS, BLE, dRuby</td></tr></table><p>FemtoRuby is PicoRuby built on the smaller VM of mruby/c, PicoRuby proper is built on mruby's VM – the one this course runs in the browser. The Pico 2 W is the only board with an official file that has everything these lessons used, so get that one.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>A shopping list</h3><table><tr><th>Part</th><th>What for</th></tr><tr><td><a href='https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html' target='_blank'>Raspberry Pi Pico 2 WH</a> (the H: pin headers already soldered on)</td><td>the board; fits into a breadboard</td></tr><tr><td>a micro-USB cable that carries <strong>data</strong></td><td>power, the terminal, copying the firmware; a charging-only cable shows no drive</td></tr><tr><td>a breadboard and jumper wires</td><td>wiring without solder</td></tr><tr><td>LEDs, 330 Ω resistors, a push button</td><td>blinking, the button</td></tr><tr><td>a light-dependent resistor (LDR) and a 10 kΩ resistor, a passive buzzer</td><td>the light sensor on GP26, tones</td></tr><tr><td><a href='https://www.waveshare.com/wiki/Pico-Environment-Sensor' target='_blank'>Waveshare Pico-Environment-Sensor</a></td><td>temperature, humidity and air pressure (BME280) over I2C</td></tr><tr><td><a href='https://www.waveshare.com/wiki/Pico-ePaper-2.13' target='_blank'>Waveshare Pico-ePaper-2.13</a></td><td>the e-paper display, 250 × 122 pixels</td></tr><tr><td><a href='https://www.waveshare.com/wiki/PicoGo' target='_blank'>Waveshare PicoGo</a></td><td>the robot: motors, infrared sensors, ultrasonic sensor</td></tr><tr><td><a href='https://www.waveshare.com/wiki/Pico-BLE' target='_blank'>Waveshare Pico-BLE</a> (optional)</td><td>Bluetooth for a Pico without radio</td></tr></table><p>The Waveshare boards plug onto the Pico's pins; they use the pins the bench showed. Not every pair fits together – the PicoGo and the environment sensor both want GP20 and GP21.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>R2P2 step by step</h3><ol><li><strong>Get the firmware.</strong> <code>curl -fsSL https://picoruby.org/r2p2-latest.sh | sh</code> downloads the newest R2P2 file (a <code>.uf2</code>), or take it from the releases on GitHub.</li><li><strong>Flash it.</strong> Hold the BOOTSEL button while you plug the Pico in: a drive appears (<code>RP2350</code> on a Pico 2 W). Drag the <code>.uf2</code> onto it; the Pico restarts as a small Ruby computer.</li><li><strong>Talk to it.</strong> Open the R2P2 Web Terminal at <a href='https://picoruby.org/terminal' target='_blank'>picoruby.org/terminal</a> in Chrome or Edge – it uses Web Serial, nothing to install. You get R2P2's shell, with <code>ls</code>, <code>cat</code>, <code>vim</code> and <code>irb</code>: the IRB of lesson {{nr:pico-blink}}, for real.</li><li><strong>Put files on it.</strong> Dragging <code>.rb</code> files onto the drive is gone since PicoRuby 3.4. Instead: the Web Terminal's upload, the <code>vim</code> on the board, or PicoModem, R2P2's own transfer protocol with a CRC check: <code>picoruby tools/picomodem.rb put app.rb /home/app.rb</code>.</li><li><strong>Start it.</strong> At boot R2P2 waits 2 seconds (press <kbd>s</kbd> to skip), connects to Wi-Fi if <code>/etc/network/wifi.yml</code> exists, and runs <strong><code>/home/app.rb</code></strong>. That is where your program goes.</li><li><strong>Libraries</strong> go into <code>/lib</code>: <code>/lib/epd2in13.rb</code>, loaded with <code>require \"epd2in13\"</code>, because R2P2 sets <code>$LOAD_PATH = [\"/lib\"]</code>. The tabs of the cells here do the same – each tab is written to <code>/lib</code> before the run.</li></ol>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>prremote: compile on the computer, run on the chip</h3><p>R2P2 is a whole Ruby on the board, with a file system and a shell. <strong>prremote</strong> goes the other way. It is a command-line tool by ITO Yosei of LumberMill, Inc. in Takachiho (Miyazaki, Japan), a gem under the MIT licence since May 2026; version 0.4.2 came out on 16 October 2026, and its README warns that it is in early development and that commands may change. It calls itself \"inspired by mpremote for MicroPython\" – mpremote for Ruby.</p><p>prremote puts a tiny <strong>mruby/c</strong> runtime firmware on the board. The Ruby is compiled on your computer, by your own <code>mrbc</code> (it must be mruby 4.x), and the bytecode goes to the board over the USB serial line, at 115200 baud unless you choose otherwise. The two speak a short protocol:</p><ul><li>The computer sends <code>Ctrl-C</code> (the byte 3) every second, until the board answers <code>READY prremote-runtime/0.4.2 board=picow</code>.</li><li>It sends the bytecode. A compiled mruby file begins with the letters <code>RITE</code>, and that is how the board knows a program is coming. (It watches for three such four-letter words: <code>RITE</code>, <code>DPLY</code>, <code>BORD</code>.) The computer writes in pieces of 256 bytes with 4 ms between them.</li><li>The board answers <code>RUNNING</code>, then whatever the program prints, then <code>DONE</code> – or <code>ERROR</code> and the reason.</li><li>For <code>prremote deploy</code> the computer sends <code>DPLY</code> before the bytecode. The board keeps the program in flash, runs it at every boot, and answers <code>DEPLOYED</code>.</li></ul><figure><img src='assets/pico/prremote-sequence.svg' alt='Sequence diagram: the computer sends Ctrl-C every second until the device answers READY prremote-runtime/0.4.2 board=picow; then it sends the bytecode, which begins with RITE; the device answers RUNNING, the program's output and DONE, or ERROR and a reason. For prremote deploy the computer sends DPLY and the bytecode, and the device answers DEPLOYED.' width='640'><figcaption>prremote's handshake over the USB serial line</figcaption></figure><p>Here is that dialogue with a pretend device – plain Ruby, no board needed:</p>"
+          },
+          {
+            "t": "c",
+            "code": "# A pretend device that answers like prremote's runtime firmware.\n# It is still busy at the first Ctrl-C; the second one gets READY.\nkicks = 0\ndevice = lambda do |bytes|\n  if bytes == \"\\x03\"\n    kicks += 1\n    kicks < 2 ? [] : [\"READY prremote-runtime/0.4.2 board=picow\"]\n  elsif bytes.start_with?(\"RITE\")\n    [\"RUNNING\", \"Hello from Pico W!\", \"DONE\"]\n  elsif bytes.start_with?(\"DPLY\")\n    [\"DEPLOYED\"]\n  else\n    []\n  end\nend\n\n# the host's side: send something, print what comes back\ntalk = lambda do |bytes, label|\n  puts \"host -> #{label}\"\n  device.call(bytes).each { |line| puts \"  <- #{line}\" }\nend\n\nbytecode = \"RITE...\" # what mrbc made of app.rb\ntalk.call(\"\\x03\", \"Ctrl-C\")\ntalk.call(\"\\x03\", \"Ctrl-C (one second later)\")\ntalk.call(bytecode, \"the bytecode (prremote run)\")\ntalk.call(\"DPLY\" + bytecode, \"DPLY + bytecode (prremote deploy)\")\n"
+          },
+          {
+            "t": "h",
+            "html": "<p><strong>Several files</strong>: <code>prremote run lib.rb main.rb</code> compiles the files in that order into one bytecode file, so classes and methods from earlier files are there in later ones. mruby/c has no <code>require</code>, and the README recommends this as its replacement. When a script names a board's constant such as <code>M5StickCPlus</code>, prremote even puts that board's library in front by itself. The tabs of this course imitate R2P2's way instead – files in <code>/lib</code> and <code>require</code> – but the idea is the same: the library in the background, your program in front.</p><p><strong>The commands</strong>: <code>install -b picow</code> puts the firmware on the board, <code>run</code> runs files once, <code>watch</code> runs them again on every save, <code>deploy</code> and <code>undeploy</code> keep a program in flash or remove it, <code>eval</code> runs one line, <code>reset</code> sends Ctrl-C, <code>list</code> shows the serial ports and <code>version</code> the versions.</p><p><strong>Its limits</strong>: prremote knows the Pico, the Pico W, the Pico 2 (flashing marked as not yet tested on hardware) and ESP32 boards such as the M5Stack; the Pico 2 W is not on its list. On a Pico W it has pins, ADC, PWM, I2C, SPI, Wi-Fi, NTP and TCP – but no TLS (so no HTTPS) and no BLE. The board has no shell, no file system and no IRB. And it has its own Ruby API, on purpose – it does not follow PicoRuby's names:</p><table><tr><th></th><th>prremote</th><th>PicoRuby (R2P2)</th></tr><tr><td>onboard LED</td><td><code>GPIO.led</code></td><td><code>CYW43::GPIO.new(CYW43::GPIO::LED_PIN)</code></td></tr><tr><td>an output pin</td><td><code>GPIO.new(15, :output)</code></td><td><code>GPIO.new(15, GPIO::OUT)</code></td></tr><tr><td>Wi-Fi</td><td><code>WiFi.connect(ssid, pw, auth, secs)</code></td><td><code>CYW43.connect_timeout(ssid, pw, auth, secs)</code></td></tr><tr><td>getting the program there</td><td>bytecode into RAM, or flash with <code>deploy</code></td><td>source files in the file system</td></tr></table><p>So the code of these lessons runs on R2P2 as it is, and needs changes for prremote.</p><div class='offweb' data-title='On your machine'><p><strong>R2P2</strong>: the steps above – <code>curl -fsSL https://picoruby.org/r2p2-latest.sh | sh</code>, BOOTSEL, drag the file, then the Web Terminal.</p><p><strong>prremote</strong>: <code>gem install prremote</code> (Ruby 3.4 or newer) and an <code>mrbc</code> of mruby 4: <code>brew install mruby</code> on a Mac; on Linux build mruby 4 from source, or point <code>MRBC=/path/to/mrbc</code> at one – Debian's mruby package is 3.x, which prremote calls not compatible. Then once <code>prremote install -b picow</code> (hold BOOTSEL, plug in), and from then on <code>prremote watch app.rb</code> – every save runs the file again. <code>prremote deploy lib.rb main.rb</code> keeps it on the board. In WSL2 the USB device needs <code>usbipd attach --wsl</code> first.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://github.com/lumbermill/prremote#readme' target='_blank'>the prremote README</a> · <a href='https://picoruby.org/setup' target='_blank'>setting up R2P2</a> · <a href='https://github.com/picoruby/picoruby/blob/master/mrbgems/picoruby-r2p2/README.md' target='_blank'>the R2P2 README</a></div><div class='task'><strong>Task:</strong> Write <code>run_status(lines)</code>, the way prremote's computer side reads the board's lines: <code>:done</code> once <code>DONE</code> came, <code>\"error: &lt;reason&gt;\"</code> for <code>ERROR &lt;reason&gt;</code>, <code>:running</code> after <code>RUNNING</code> without an end yet, and <code>:waiting</code> otherwise. The last lines of the cell try four dialogues.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def run_status(lines)\n  # DONE -> :done, \"ERROR x\" -> \"error: x\", RUNNING -> :running\n  :waiting\nend\n\nready = \"READY prremote-runtime/0.4.2 board=picow\"\n[run_status([ready, \"RUNNING\", \"hello\", \"DONE\"]),\n run_status([ready, \"RUNNING\", \"ERROR NoMethodError\"]),\n run_status([ready, \"RUNNING\", \"tick\"]),\n run_status([ready])]\n",
+            "check": "result == [:done, \"error: NoMethodError\", :running, :waiting] && code.include?(\"def run_status\")",
+            "hint": "Go through the lines with <code>each</code> and remember the state: <code>line == \"DONE\"</code>, <code>line.start_with?(\"ERROR \")</code> (the reason is <code>line[6..-1]</code>), <code>line == \"RUNNING\"</code>. Return the state at the end."
+          }
+        ]
+      },
+      "ja": {
+        "title": "本物のPicoへ：R2P2とprremote",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>本物のPicoへ</h2><p>これまでのレッスンはすべてシミュレーションのボードで動いていました。でもコードは本物のボードのために書かれています。ここではそこへの載せ方を説明します。まず、どのボードを選ぶのでしょうか。Raspberry PiはPicoを4種類作っていて、PicoRubyのファームウェアR2P2は2つのファイルで配布されています（2026年10月時点）。</p><table><tr><th>ボード</th><th>チップ、RAM、フラッシュ</th><th>無線</th><th>ボード上のLED</th><th>R2P2のファイル</th><th>できること</th></tr><tr><td>Pico</td><td>RP2040、264 kB、2 MB</td><td>–</td><td>GP25</td><td><code>R2P2-FEMTORUBY-…-PICO</code></td><td>ピン、PWM、ADC、I2C、SPI</td></tr><tr><td>Pico W</td><td>RP2040、264 kB、2 MB</td><td>CYW43439：Wi-Fi、Bluetooth</td><td>無線チップにつながっている</td><td>同じファイル（無線なし）</td><td>ピン。Wi-Fiは自分でビルドしたときだけ、BLEは使えない</td></tr><tr><td>Pico 2</td><td>RP2350、520 kB、4 MB</td><td>–</td><td>GP25</td><td><code>R2P2-PICORUBY-…-PICO2_W</code></td><td>ピン、PWM、ADC、I2C、SPI</td></tr><tr><td><strong>Pico 2 W</strong></td><td>RP2350、520 kB、4 MB</td><td>CYW43439</td><td>無線チップにつながっている</td><td><code>R2P2-PICORUBY-…-PICO2_W</code></td><td>すべて：Wi-Fi、HTTPS、BLE、dRuby</td></tr></table><p>FemtoRubyはmruby/cの小さなVMの上に作ったPicoRubyで、PicoRuby本体はmrubyのVMの上で動きます。このコースがブラウザーで動かしているのと同じVMです。これらのレッスンで使ったものがすべてそろった公式ファイルがあるのはPico 2 Wだけなので、それを選びましょう。</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>買い物リスト</h3><table><tr><th>部品</th><th>用途</th></tr><tr><td><a href='https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html' target='_blank'>Raspberry Pi Pico 2 WH</a>（Hはピンヘッダーがはんだ付け済みという意味）</td><td>ボード本体。ブレッドボードに挿せる</td></tr><tr><td><strong>データ</strong>を通すmicro-USBケーブル</td><td>電源、ターミナル、ファームウェアのコピー。充電専用のケーブルではドライブが出てこない</td></tr><tr><td>ブレッドボードとジャンパーワイヤー</td><td>はんだ付けなしで配線する</td></tr><tr><td>LED、330 Ωの抵抗、押しボタン</td><td>点滅、ボタン</td></tr><tr><td>光センサー（LDR）と10 kΩの抵抗、パッシブブザー</td><td>GP26の光センサー、音</td></tr><tr><td><a href='https://www.waveshare.com/wiki/Pico-Environment-Sensor' target='_blank'>Waveshare Pico-Environment-Sensor</a></td><td>I2Cで温度・湿度・気圧（BME280）</td></tr><tr><td><a href='https://www.waveshare.com/wiki/Pico-ePaper-2.13' target='_blank'>Waveshare Pico-ePaper-2.13</a></td><td>電子ペーパーディスプレイ、250 × 122ピクセル</td></tr><tr><td><a href='https://www.waveshare.com/wiki/PicoGo' target='_blank'>Waveshare PicoGo</a></td><td>ロボット：モーター、赤外線センサー、超音波センサー</td></tr><tr><td><a href='https://www.waveshare.com/wiki/Pico-BLE' target='_blank'>Waveshare Pico-BLE</a>（なくてもよい）</td><td>無線のないPicoにBluetoothを</td></tr></table><p>WaveshareのボードはPicoのピンに挿して使います。使うピンはベンチで見たとおりです。どれでも組み合わせられるわけではありません。PicoGoと環境センサーはどちらもGP20とGP21を使います。</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>R2P2をひとつずつ</h3><ol><li><strong>ファームウェアを入手します。</strong><code>curl -fsSL https://picoruby.org/r2p2-latest.sh | sh</code>で最新のR2P2ファイル（<code>.uf2</code>）をダウンロードできます。GitHubのリリースから取ってきてもかまいません。</li><li><strong>書き込みます。</strong>BOOTSELボタンを押したままPicoをつなぐと、ドライブが現れます（Pico 2 Wでは<code>RP2350</code>）。そこへ<code>.uf2</code>をドラッグすると、Picoは小さなRubyコンピューターとして再起動します。</li><li><strong>話しかけます。</strong>ChromeかEdgeで<a href='https://picoruby.org/terminal' target='_blank'>picoruby.org/terminal</a>のR2P2 Web Terminalを開きます。Web Serialを使うので、インストールは不要です。R2P2のシェルが使えて、<code>ls</code>、<code>cat</code>、<code>vim</code>、<code>irb</code>があります。レッスン{{nr:pico-blink}}のIRBの本物です。</li><li><strong>ファイルを載せます。</strong><code>.rb</code>ファイルをドライブにドラッグする方法は、PicoRuby 3.4からなくなりました。代わりにWeb Terminalのアップロード、ボード上の<code>vim</code>、またはR2P2独自のCRCチェック付き転送プロトコルPicoModemを使います：<code>picoruby tools/picomodem.rb put app.rb /home/app.rb</code></li><li><strong>起動します。</strong>電源を入れるとR2P2は2秒待ち（<kbd>s</kbd>で飛ばせます）、<code>/etc/network/wifi.yml</code>があればWi-Fiにつなぎ、<strong><code>/home/app.rb</code></strong>を実行します。あなたのプログラムはそこに置きます。</li><li><strong>ライブラリ</strong>は<code>/lib</code>に置きます。<code>/lib/epd2in13.rb</code>なら<code>require \"epd2in13\"</code>で読み込めます。R2P2が<code>$LOAD_PATH = [\"/lib\"]</code>を設定するからです。ここのセルのタブも同じことをしています。実行の前に、タブがひとつずつ<code>/lib</code>に書き込まれます。</li></ol>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>prremote：コンピューターでコンパイルして、チップで実行する</h3><p>R2P2はファイルシステムとシェルを備えた、ボード上の完全なRubyです。<strong>prremote</strong>は逆の道を行きます。宮崎県高千穂町のLumberMill, Inc.のITO Yoseiさんが作ったコマンドラインツールで、2026年5月からMITライセンスのgemとして公開されています。バージョン0.4.2は2026年10月16日に出ました。READMEには、まだ開発の初期段階でコマンドが変わるかもしれないと書かれています。自身を「inspired by mpremote for MicroPython」と説明していて、いわばRuby版のmpremoteです。</p><p>prremoteはボードに小さな<strong>mruby/c</strong>のランタイムファームウェアを書き込みます。Rubyはあなたのコンピューターで、あなたの<code>mrbc</code>（mruby 4.xが必要です）がコンパイルし、バイトコードはUSBシリアル回線でボードへ送られます（速度は標準で115200ボーです）。両者は短いプロトコルで話します。</p><ul><li>コンピューターは、ボードが<code>READY prremote-runtime/0.4.2 board=picow</code>と答えるまで、1秒ごとに<code>Ctrl-C</code>（バイト値3）を送ります。</li><li>次にバイトコードを送ります。コンパイルしたmrubyのファイルは<code>RITE</code>という文字で始まり、ボードはそれでプログラムが来たとわかります（ボードは<code>RITE</code>、<code>DPLY</code>、<code>BORD</code>という4文字の合図を見張っています）。コンピューターは256バイトずつ、間に4ミリ秒空けて書き込みます。</li><li>ボードは<code>RUNNING</code>、プログラムの出力、そして<code>DONE</code>を返します。失敗したときは<code>ERROR</code>と理由を返します。</li><li><code>prremote deploy</code>では、コンピューターはバイトコードの前に<code>DPLY</code>を送ります。ボードはプログラムをフラッシュに保存して起動のたびに実行し、<code>DEPLOYED</code>と答えます。</li></ul><figure><img src='assets/pico/prremote-sequence.svg' alt='シーケンス図：コンピューターはデバイスがREADY prremote-runtime/0.4.2 board=picowと答えるまで、1秒ごとにCtrl-Cを送ります。次にRITEで始まるバイトコードを送ります。デバイスはRUNNING、プログラムの出力、DONEを返すか、ERRORと理由を返します。prremote deployではコンピューターがDPLYとバイトコードを送り、デバイスはDEPLOYEDと答えます。' width='640'><figcaption>USBシリアル回線の上のprremoteのハンドシェイク</figcaption></figure><p>そのやりとりを、見せかけのデバイスで再現してみましょう。ボードのいらない、ただのRubyです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "# prremoteのランタイムファームウェアのように答える、見せかけのデバイス\n# 最初のCtrl-Cではまだ忙しく、2回目でREADYを返す\nkicks = 0\ndevice = lambda do |bytes|\n  if bytes == \"\\x03\"\n    kicks += 1\n    kicks < 2 ? [] : [\"READY prremote-runtime/0.4.2 board=picow\"]\n  elsif bytes.start_with?(\"RITE\")\n    [\"RUNNING\", \"Hello from Pico W!\", \"DONE\"]\n  elsif bytes.start_with?(\"DPLY\")\n    [\"DEPLOYED\"]\n  else\n    []\n  end\nend\n\n# ホスト側：何かを送り、返ってきたものを表示する\ntalk = lambda do |bytes, label|\n  puts \"host -> #{label}\"\n  device.call(bytes).each { |line| puts \"  <- #{line}\" }\nend\n\nbytecode = \"RITE...\" # mrbcがapp.rbから作ったもの\ntalk.call(\"\\x03\", \"Ctrl-C\")\ntalk.call(\"\\x03\", \"Ctrl-C (one second later)\")\ntalk.call(bytecode, \"the bytecode (prremote run)\")\ntalk.call(\"DPLY\" + bytecode, \"DPLY + bytecode (prremote deploy)\")\n"
+          },
+          {
+            "t": "h",
+            "html": "<p><strong>複数のファイル</strong>：<code>prremote run lib.rb main.rb</code>は、ファイルをこの順に1つのバイトコードファイルへコンパイルします。そのため、前のファイルのクラスやメソッドを後のファイルで使えます。mruby/cには<code>require</code>がなく、READMEはこれをその代わりとして勧めています。スクリプトが<code>M5StickCPlus</code>のようなボードの定数を使うと、prremoteはそのボードのライブラリを自動で前に付けてくれます。このコースのタブは代わりにR2P2のやり方（<code>/lib</code>のファイルと<code>require</code>）をまねていますが、考え方は同じです。ライブラリは裏に、あなたのプログラムは表に置きます。</p><p><strong>コマンド</strong>：<code>install -b picow</code>はファームウェアを書き込み、<code>run</code>はファイルを1回実行し、<code>watch</code>は保存するたびに実行し直します。<code>deploy</code>と<code>undeploy</code>はプログラムをフラッシュに保存したり消したりします。<code>eval</code>は1行を実行し、<code>reset</code>はCtrl-Cを送り、<code>list</code>はシリアルポートを、<code>version</code>はバージョンを表示します。</p><p><strong>限界</strong>：prremoteが対応しているのはPico、Pico W、Pico 2（書き込みは実機で未確認と書かれています）と、M5StackなどのESP32ボードです。Pico 2 Wはリストにありません。Pico Wではピン、ADC、PWM、I2C、SPI、Wi-Fi、NTP、TCPが使えますが、TLS（つまりHTTPS）とBLEはありません。ボードにはシェルもファイルシステムもIRBもありません。そして、わざと独自のRuby APIを持っていて、PicoRubyの名前には合わせていません。</p><table><tr><th></th><th>prremote</th><th>PicoRuby（R2P2）</th></tr><tr><td>ボード上のLED</td><td><code>GPIO.led</code></td><td><code>CYW43::GPIO.new(CYW43::GPIO::LED_PIN)</code></td></tr><tr><td>出力ピン</td><td><code>GPIO.new(15, :output)</code></td><td><code>GPIO.new(15, GPIO::OUT)</code></td></tr><tr><td>Wi-Fi</td><td><code>WiFi.connect(ssid, pw, auth, secs)</code></td><td><code>CYW43.connect_timeout(ssid, pw, auth, secs)</code></td></tr><tr><td>プログラムの載せ方</td><td>バイトコードをRAMへ、または<code>deploy</code>でフラッシュへ</td><td>ファイルシステムのソースファイル</td></tr></table><p>つまり、これらのレッスンのコードはR2P2ではそのまま動き、prremoteでは書き直しが必要です。</p><div class='offweb' data-title='自分のコンピューターでは'><p><strong>R2P2</strong>：上の手順のとおりです。<code>curl -fsSL https://picoruby.org/r2p2-latest.sh | sh</code>、BOOTSEL、ファイルのドラッグ、そしてWeb Terminalです。</p><p><strong>prremote</strong>：<code>gem install prremote</code>（Ruby 3.4以上）と、mruby 4の<code>mrbc</code>が必要です。Macなら<code>brew install mruby</code>です。Linuxではmruby 4をソースからビルドするか、<code>MRBC=/path/to/mrbc</code>で指定します。Debianのmrubyパッケージは3.xで、prremoteは互換性がないとしています。最初に一度<code>prremote install -b picow</code>（BOOTSELを押したままつなぐ）を実行し、あとは<code>prremote watch app.rb</code>を使います。保存するたびにファイルが実行し直されます。<code>prremote deploy lib.rb main.rb</code>でボードに残せます。WSL2では、先に<code>usbipd attach --wsl</code>でUSBデバイスをつなぐ必要があります。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://github.com/lumbermill/prremote#readme' target='_blank'>prremoteのREADME（英語）</a>・<a href='https://picoruby.org/setup' target='_blank'>R2P2のセットアップ（英語）</a>・<a href='https://github.com/picoruby/picoruby/blob/master/mrbgems/picoruby-r2p2/README.md' target='_blank'>R2P2のREADME（英語）</a></div><div class='task'><strong>課題：</strong> prremoteのコンピューター側がボードの行を読むように、<code>run_status(lines)</code>を書きましょう。<code>DONE</code>が来たら<code>:done</code>、<code>ERROR &lt;reason&gt;</code>なら<code>\"error: &lt;reason&gt;\"</code>、<code>RUNNING</code>のあとまだ終わっていなければ<code>:running</code>、それ以外は<code>:waiting</code>を返します。セルの最後の数行で4つのやりとりを試します。</div>"
+          },
+          {
+            "t": "x",
+            "code": "def run_status(lines)\n  # DONEなら:done、\"ERROR x\"なら\"error: x\"、RUNNINGなら:running\n  :waiting\nend\n\nready = \"READY prremote-runtime/0.4.2 board=picow\"\n[run_status([ready, \"RUNNING\", \"hello\", \"DONE\"]),\n run_status([ready, \"RUNNING\", \"ERROR NoMethodError\"]),\n run_status([ready, \"RUNNING\", \"tick\"]),\n run_status([ready])]\n",
+            "check": "result == [:done, \"error: NoMethodError\", :running, :waiting] && code.include?(\"def run_status\")",
+            "hint": "<code>each</code>で行をたどって、状態を覚えておこう：<code>line == \"DONE\"</code>、<code>line.start_with?(\"ERROR \")</code>（理由は<code>line[6..-1]</code>）、<code>line == \"RUNNING\"</code>。最後にその状態を返せばいいよ。"
           }
         ]
       }

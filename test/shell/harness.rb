@@ -22,7 +22,7 @@ def lesson_count = COURSE_IDS.size
 def lesson_number(id) = COURSE_IDS.index(id) + 1
 # the lessons of the sidebar group that starts at +first+, up to the next
 # lesson with a "section"
-def group_size(first, sections = %w[hallo three tl-collections])
+def group_size(first, sections = %w[hallo three pico-blink tl-collections])
   starts = sections.map { |id| COURSE_IDS.index(id) } + [COURSE_IDS.size]
   at = sections.index(first)
   starts[at + 1] - starts[at]

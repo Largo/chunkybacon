@@ -33,6 +33,7 @@ assets/herb/herb-browser.esm.js
 assets/herb/prism/deserialize.js
 assets/herb/prism/nodes.js
 assets/herb/prism/visitor.js
+assets/pico/prremote-sequence.svg
 assets/picoruby/PICORUBY_VERSION.txt
 assets/picoruby/init.iife.js
 assets/picoruby/picoruby.js
@@ -167,11 +168,18 @@ main.rb
 numo_narray.rb
 object_graph.rb
 offline.js
+pico/lib/de/bme280.rb
+pico/lib/de/epd2in13.rb
+pico/lib/de/picogo.rb
 pico/lib/en/bme280.rb
 pico/lib/en/epd2in13.rb
 pico/lib/en/picogo.rb
 pico/lib/font5x7.rb
+pico/lib/ja/bme280.rb
+pico/lib/ja/epd2in13.rb
+pico/lib/ja/picogo.rb
 pico_board.js
+pico_laptop.rb
 pico_sim/bench.rb
 pico_sim/boot.rb
 pico_sim/devices/bme280.rb

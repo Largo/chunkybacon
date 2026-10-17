@@ -168,7 +168,7 @@ end
   def test_nav_links_sections_and_marks
     html = ChunkyShell::View.nav_html(@course, "de", "rechnen", ["hallo"], "#", [], "", "keine", "%d von %d fertig")
     assert_equal lesson_count, html.scan("<a ").length
-    assert_equal 3, html.scan("<section ").length
+    assert_equal 4, html.scan("<section ").length
     assert_includes html, %(<span class="nav-group-name">Grundkurs</span>)
     assert_includes html, %(<span class="nav-group-count" title="1 von #{group_size("hallo")} fertig" aria-label="1 von #{group_size("hallo")} fertig">1/#{group_size("hallo")}</span>)
     assert_includes html, %(<a class="lesson done" href="#hallo" data-id="hallo"><span class="num">1</span><span class="name">Hallo, Welt!</span></a>)
@@ -179,6 +179,7 @@ end
   def test_nav_groups_are_named_by_their_first_lesson
     groups = ChunkyShell::View.nav_groups(@course, "en")
     assert_equal [["hallo", "Basics", group_size("hallo")], ["three", "Side trips", group_size("three")],
+                  ["pico-blink", "Ruby on a Pico", group_size("pico-blink")],
                   ["tl-collections", "Advanced: timelog", group_size("tl-collections")]],
                  groups.map { |key, name, list| [key, name, list.length] }
   end
