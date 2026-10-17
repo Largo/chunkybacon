@@ -175,6 +175,8 @@
   function progress(data) {
     if (!current || data.id !== current.id || current.item.kind === "drop") return;
     var item = current.item;
+    // kept for the answer of a run that is stopped: what it printed stays
+    current.streamed = (current.streamed || "") + String(data.progress);
     window.dispatchEvent(new CustomEvent("chunky:picoruby-progress", {
       detail: { idx: item.idx || 0, kind: item.kind, sid: item.irbSid || 0, seq: item.seq || 0, output: String(data.progress) }
     }));
@@ -198,7 +200,7 @@
     current = null;
     endWorker();
     if (done.item.board && window.chunkyPicoBoard && window.chunkyPicoBoard.reset) window.chunkyPicoBoard.reset(status || "stopped");
-    reply(done.item, { status: status || "stopped", output: "" }, performance.now() - done.started);
+    reply(done.item, { status: status || "stopped", output: done.streamed || "" }, performance.now() - done.started);
     if (queue.length) window.ensurePicoRuby();
   }
 

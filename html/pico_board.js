@@ -9,6 +9,7 @@
 //   chunkyPicoBoard.inputs()                JSON of the current inputs, sent with each run
 //   chunkyPicoBoard.input(key, value)       set one (and tell a running cell: chunkyPicoRuby.input)
 //   chunkyPicoBoard.sendLine(text)          a line from the laptop's side to the Pico (BLE RX)
+//   chunkyPicoBoard.ble()                   JSON {adv, connected, running}: for html/pico_laptop.rb
 //   chunkyPicoBoard.started(idx)            the worker took that cell's run (picoruby_lab.js)
 //   chunkyPicoBoard.reset(reason)           the worker ended: "reset" badge; the e-paper keeps its picture
 //   chunkyPicoBoard.unmount()               another lesson
@@ -65,7 +66,8 @@
   // English, for a mount without the course's strings
   var UI = {
     boardStop: "■ Stop (reset the Pico)", boardReset: "The Pico was reset.",
-    boardTitle: "Pico 2 W bench", boardParts: "On the bench", boardEnded: "The program has ended.",
+    boardTitle: "Pico 2 W bench", boardParts: "On the bench", boardAlone: "only the Pico, with its onboard LED",
+    boardEnded: "The program has ended.",
     boardRunning: "running", boardMotorsOn: "motors on", boardCanned: "canned",
     boardSound: "Sound", boardOn: "on", boardOff: "off", boardScripted: "set by the exercise",
     boardLed: "LED on GP15", boardOnboard: "Onboard LED", boardButton: "Button on GP14",
@@ -349,7 +351,8 @@
     figure.appendChild(svg);
 
     var caption = el("figcaption", "pico-parts");
-    caption.textContent = t("boardParts") + ": " + partNames(b).join(", ");
+    var names = partNames(b);
+    caption.textContent = t("boardParts") + ": " + (names.length ? names.join(", ") : t("boardAlone"));
     figure.appendChild(caption);
 
     var controls = el("div", "pico-controls");
@@ -1627,6 +1630,8 @@
       // a cell's run is a reset of the board: the pins start over, the
       // e-paper keeps its picture
       if (config.reset !== false) {
+        // a line sent to an earlier run is not sent again to this one
+        delete values["ble.line"];
         bench.state = null;
         bench.layout = "open";
         bench.spoken = {};
@@ -1657,6 +1662,13 @@
       }
     },
     inputs: function () { return JSON.stringify(values); },
+    // the radio as the laptop's side sees it (html/pico_laptop.rb): the
+    // Pico's advertising name while its cell runs, and the link
+    ble: function () {
+      var l = bench && bench.state && bench.state.parts && bench.state.parts.laptop || {};
+      return JSON.stringify({ adv: l.adv || "", connected: !!l.connected,
+                              running: !!bench && !bench.waiting && bench.badge.className.indexOf("is-running") >= 0 });
+    },
     input: function (key, value) {
       values[String(key)] = String(value);
       // a value set from elsewhere (a test, the CRuby cell): the slider follows

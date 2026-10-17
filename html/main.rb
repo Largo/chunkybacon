@@ -224,6 +224,19 @@ BrowserGems.files["(shims)"]["processing.rb"] = <<~'RUBY'
     end
   end
 RUBY
+# require "ble" in a Pico lesson's CRuby cell (the laptop's side, lesson
+# pico-ble): the `ble` gem's API over the bench's simulated radio
+# (pico_laptop.rb; the real gem needs BlueZ and D-Bus). Fetched on the first
+# require, like processing.rb.
+BrowserGems.files["(shims)"]["ble.rb"] = <<~'RUBY'
+  unless defined?(PicoLaptop)
+    source = JSG.w.fetchTextSync("pico_laptop.rb").to_s
+    raise LoadError, "could not fetch pico_laptop.rb" if source.start_with?("ERROR ")
+
+    eval(source, TOPLEVEL_BINDING, "pico_laptop.rb")
+  end
+  PicoLaptop.cell = ChunkyApp.instance.laptop_cell__
+RUBY
 # require "ruby2d": the gem is Ruby around a C extension on SDL3. Its Ruby
 # comes as it is (assets/ruby2d/ruby2d.rb, tools/vendor_ruby2d.rb), ruby2d.rb
 # is the extension in Ruby: draw calls become commands game.js paints, and
@@ -377,6 +390,7 @@ class ChunkyApp
     $window.chunkyPicoRuby.reset if $window[:chunkyPicoRuby].typeof == "object"
     # the Pico's bench belongs to the page that went (pico_board.js)
     $window.chunkyPicoBoard.unmount if $window[:chunkyPicoBoard].typeof == "object"
+    PicoLaptop.forget if defined?(PicoLaptop)
     dispose_three
     dispose_shoes
     dispose_sketches
@@ -460,6 +474,8 @@ class ChunkyApp
     $window.addEventListener("chunky:picoruby") { |event| picoruby_answer(event.detail) }
     # ... and what they print shows while they run (a Pico lesson's 60 s)
     $window.addEventListener("chunky:picoruby-progress") { |event| picoruby_progress(event.detail) }
+    # the simulated Pico notified over BLE: the laptop cell's blocks (pico_laptop.rb)
+    $window.addEventListener("chunky:pico-ble") { |event| pico_laptop_notify(event.detail.text.to_s) }
     $window.addEventListener("chunky:install") do |event|
       sync_state(event.detail)
       panel_install(event.detail.name)
@@ -1320,6 +1336,30 @@ class ChunkyApp
                     "bench" => reset ? (cell["bench"] || []) : [], "reset" => reset })
   end
 
+  # the CRuby cell that runs now in a Pico lesson (pico_laptop.rb's shim)
+  def laptop_cell__ = @laptop_cell
+
+  # A line the simulated Pico sent over BLE: each notification block of the
+  # laptop's cell runs, and what it prints goes below that cell's output
+  def pico_laptop_notify(text)
+    return unless defined?(PicoLaptop) && picoruby?
+
+    PicoLaptop.deliver(text) do |idx, printed|
+      next if idx.nil? || printed.empty?
+
+      out_el = $d.getElementById("cell-out-#{idx}")
+      next if out_el.nil? || out_el.to_s == "null"
+
+      pre = out_el.querySelector("pre.pico-notified")
+      if pre.nil? || pre.to_s == "null"
+        out_el.insertAdjacentHTML("beforeend", "<pre class=\"cell-stdout pico-notified\"></pre>")
+        out_el.style.display = "block"
+        pre = out_el.querySelector("pre.pico-notified")
+      end
+      pre.innerHTML = pre.innerHTML.to_s + AnsiHtml.to_html(printed)
+    end
+  end
+
   # what a run printed so far, below the cell (picoruby_lab.js's progress)
   def picoruby_progress(detail)
     return unless detail.seq.to_i == @seq && detail.kind.to_s == "cell"
@@ -1696,6 +1736,13 @@ class ChunkyApp
     # a lesson on PicoRuby: the worker runs it, picoruby_answer shows it
     # (a cell with "engine": "cruby" in it runs here, on CRuby: the laptop's side)
     return start_picoruby_run(idx, code, auto) if picoruby? && cell["engine"] != "cruby"
+    # the laptop's side (lesson pico-ble): a new run forgets this cell's
+    # notification blocks, and what it subscribes belongs to it
+    if picoruby?
+      @laptop_cell = idx
+      PicoLaptop.forget(idx) if defined?(PicoLaptop)
+      PicoLaptop.cell = idx if defined?(PicoLaptop)
+    end
 
     if workshop?
       # the shell's callbacks (shell/workspace.rb), across the two Rubies
