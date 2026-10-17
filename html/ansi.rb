@@ -29,11 +29,12 @@ module AnsiHtml
     text.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;")
   end
 
-  # The text as HTML: escaped, with a span wherever a style is on
-  def self.to_html(text)
-    return escape(text) unless text.include?("\e")
+  # The text as HTML: escaped, with a span wherever a style is on. +style+
+  # is the state the text starts in, and is left as it ends: output that
+  # arrives in chunks (a PicoRuby run's) keeps a colour across them
+  def self.to_html(text, style = {})
+    return escape(text) if style.empty? && !text.include?("\e")
 
-    style = {}
     html = +""
     position = 0
     text.scan(ESCAPE) do

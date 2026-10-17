@@ -1,5 +1,5 @@
 # The kernel's side of a lesson with "engine": "jruby" (the JRuby lesson,
-# docs/HANDOVER.md §6r). Its cells run on JRuby 10.1 (TeaVM) in a Web Worker
+# docs/HANDOVER.md §6t). Its cells run on JRuby 10.1 (TeaVM) in a Web Worker
 # (jruby_lab.js, jruby_worker.js, jruby_lab.rb), which answers in text, as
 # the PicoRuby lesson's worker does - so the values, errors and syntax
 # messages are PicoRubyCells' (picoruby_cells.rb).

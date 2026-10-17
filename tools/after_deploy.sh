@@ -15,7 +15,7 @@
 # as it is, and lesson 45 says that Spinel could not be loaded - so this
 # exits with the build's status, for the hook's log, and changes nothing else.
 #
-# Then the JRuby lesson's runtimes (docs/HANDOVER.md §6r), nothing built:
+# Then the JRuby lesson's runtimes (docs/HANDOVER.md §6t), nothing built:
 # tools/vendor_jruby.rb (TeaVM JRuby + the USGS data, html/assets/jruby/)
 # and tools/vendor_jruby_swing.rb (the bonus's jars, html/assets/jruby-swing/)
 # copy pinned, SHA-256-checked files into place - no-ops while they are
@@ -26,6 +26,13 @@
 # the hook keeps its retry marker and runs it again on its next round, so
 # stocking the cache by hand later is enough, no new commit needed. (The
 # hook publishes to chunkybacon.idogawa.com only after a success.)
+#
+# Then the IronRuby lesson's runtime (docs/HANDOVER.md §6s), nothing built:
+# tools/vendor_ironruby.rb copies the pinned, SHA-256-checked .NET/IronRuby
+# bundle from this host's .cache/ironruby/ (stocked once with --from) and
+# the NuGet DLLs into html/assets/ironruby/ - a no-op while it is current.
+# When it fails, the lesson says IronRuby could not be loaded and the rest
+# is unaffected: a warning, not this script's status.
 set -u
 cd "$(dirname "$0")/.." || exit 1
 
@@ -49,4 +56,11 @@ for tool in vendor_jruby vendor_jruby_swing; do
     [ "$status" -ne 0 ] || status=3
   }
 done
+if command -v ruby >/dev/null 2>&1; then
+  ruby tools/vendor_ironruby.rb ||
+    echo "after_deploy: tools/vendor_ironruby.rb failed; the IronRuby lesson cannot load until it succeeds" >&2
+else
+  docker compose --profile build run --rm spinel-build ruby tools/vendor_ironruby.rb ||
+    echo "after_deploy: tools/vendor_ironruby.rb failed; the IronRuby lesson cannot load until it succeeds" >&2
+fi
 exit "$status"

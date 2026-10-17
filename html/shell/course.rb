@@ -57,5 +57,16 @@ module ChunkyShell
     # true for a lesson whose cells run on JRuby (TeaVM) instead of CRuby
     # ("engine": "jruby", the JRuby lesson: html/jruby_lab.js)
     def jruby?(idx) = @lessons[idx][:engine] == "jruby"
+    # a Pico lesson's cell (docs/HANDOVER.md §6r): its tabs, the files
+    # beside the main one ([] without), and whether it runs on a board
+    def tabs(cell)
+      tabs = cell[:tabs]
+      tabs.nil? ? [] : tabs.to_a
+    end
+
+    def board?(cell) = !cell[:board].nil?
+    # true for a lesson whose cells run on IronRuby (.NET in WebAssembly)
+    # instead of CRuby ("engine": "ironruby", the IronRuby lesson: html/ironruby_lab.js)
+    def ironruby?(idx) = @lessons[idx][:engine] == "ironruby"
   end
 end

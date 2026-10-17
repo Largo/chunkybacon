@@ -1,6 +1,6 @@
 # Puts the jars of the JRuby lesson's bonus - Swing windows from Ruby with
 # Glimmer, on JRuby 9.4 inside CheerpJ (html/jruby_swing.html,
-# docs/HANDOVER.md §6r) - into html/assets/jruby-swing/. About 38 MB on
+# docs/HANDOVER.md §6t) - into html/assets/jruby-swing/. About 38 MB on
 # disk, not in git (.gitignore); a learner's browser fetches only the byte
 # ranges it needs (about 20 MB), and only after a click on the bonus.
 #

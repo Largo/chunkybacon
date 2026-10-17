@@ -1,5 +1,5 @@
 // Headless test for the JRuby lesson ("engine": "jruby"; docs/HANDOVER.md
-// §6r): its cells run on JRuby 10.1 (TeaVM) in a Web Worker
+// §6t): its cells run on JRuby 10.1 (TeaVM) in a Web Worker
 // (jruby_worker.js), one cell on the page's CRuby ("on": "cruby"). Checks:
 // no JRuby for other lessons, the status line, every demo's output (Java
 // classes, the ZXing QR code, the USGS JSON, Jackson, Lesson::Quakes,

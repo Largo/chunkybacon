@@ -10,6 +10,14 @@ class AnsiHtmlTest < Minitest::Test
     assert_equal "a &lt;b&gt; &amp; c", html("a <b> & c")
   end
 
+  # a run's output in chunks (main.rb's picoruby_progress): the style goes on
+  def test_a_style_carries_over_to_the_next_chunk
+    style = {}
+    assert_equal "<span class=\"ansi-fg-1\">a</span>", AnsiHtml.to_html("\e[31ma", style)
+    assert_equal "<span class=\"ansi-fg-1\">b</span>c", AnsiHtml.to_html("b\e[0mc", style)
+    assert_empty style
+  end
+
   def test_a_colour_and_its_reset
     assert_equal "<span class=\"ansi-fg-1\">rot</span> normal", html("\e[31mrot\e[0m normal")
   end

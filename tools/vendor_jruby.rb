@@ -1,7 +1,7 @@
 # Puts JRuby for the browser - JRuby 10.1 compiled to JavaScript by TeaVM
 # (github.com/Largo/jruby-teavm) - and the lesson's earthquake data into
 # html/assets/jruby/, for the JRuby lesson ("engine": "jruby",
-# html/jruby_lab.js, html/jruby_worker.js; docs/HANDOVER.md §6r). About
+# html/jruby_lab.js, html/jruby_worker.js; docs/HANDOVER.md §6t). About
 # 31 MB on disk, not in git (.gitignore), like Spinel's html/assets/spinel/.
 #
 #   ruby tools/vendor_jruby.rb --from ~/jruby-teavm

@@ -1,7 +1,7 @@
-// A Web Worker with a PicoRuby.wasm of its own, for the PicoRuby lesson
-// (docs/HANDOVER.md §6m). The same runtime the page's shell runs on
-// (assets/picoruby/, tools/vendor_picoruby.rb), but a second instance, and
-// off the page's thread:
+// A Web Worker with a PicoRuby.wasm of its own, for the lessons with
+// "engine": "picoruby" (docs/HANDOVER.md §6m, §6r). The same runtime the
+// page's shell runs on (assets/picoruby/, tools/vendor_picoruby.rb), but a
+// second instance, and off the page's thread:
 //
 // - PicoRuby counts its time slices in ticks that only JavaScript advances,
 //   so a loop that never ends never gives the thread back. Here it blocks
@@ -10,106 +10,138 @@
 //   (globalThis.picorubyRefs, picorubyEventHandlers): two instances in one
 //   window would mix them up.
 //
-// picoruby_lab.rb is a Task that takes requests (PicoLab.take) and answers
-// them (PicoLab.answer). For each message this file turns PicoRuby's
-// scheduler itself - the tick and Module._mrb_run_step_status, what
-// init.iife.js does on timers - until the answer is there, and posts it
-// back with what the run printed (Module.print).
+// picoruby_worker_core.js turns the scheduler (in batches, yielding to this
+// worker's event loop between them) and answers the requests; this file is
+// its host in a browser: messages, the HTTP of the simulated Pico (sync
+// XHR, canned answers as a fallback), the camera's pictures and the files
+// of html/pico_sim/.
 //
-//   in   {id, kind: "run", sid, code}  |  {id, kind: "drop", sid}
-//   out  {id, status: "ok"|"error"|"syntax", output, inspect, errorClass, line, message, irbs}
+//   in   {id, kind: "run", sid, code, tabs, board, inputs} | {id, kind: "drop", sid}
+//        {kind: "input", key, value}   (at once, even while a run goes on)
+//   out  {id, status: "ok"|"error"|"syntax", output, inspect, errorClass, line, file, message, irbs, board}
+//        {id, progress: text}   what a run printed so far
+//        {id, board: kind, text}   the bench's messages (state, epd_frame, lcd, ble, log)
 //        {ready: true, version} once, or {failed: message}
 import createModule from "./assets/picoruby/picoruby.js";
+import { bootCore } from "./picoruby_worker_core.js";
 
-const TICK = 4;   // ms, MRB_TICK_UNIT of the wasm build (init.iife.js)
-let Module = null;
-let output = [];
-let lastTick = 0;
-let request = null;
-let answer = null;
-
-globalThis.PicoLab = {
-  take() { const text = request; request = null; return text; },
-  answer(text) { answer = String(text); }
+const base = new URL(".", import.meta.url);
+const syncGet = (url, binary) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", new URL(url, base).href, false);
+  if (binary) xhr.overrideMimeType("text/plain; charset=x-user-defined");
+  xhr.send(null);
+  return xhr;
 };
 
-function step() {
-  const now = performance.now();
-  while (now - lastTick >= TICK) { Module._mrb_tick_wasm(); lastTick += TICK; }
-  return Module._mrb_run_step_status ? Module._mrb_run_step_status() : (Module._mrb_run_step() < 0 ? -1 : 1);
+// The Pico's HTTP, mapped onto what this origin can reach (no nginx change):
+// rubygems.org through the gem bridge, www.ruby-lang.org through the proxy,
+// other https hosts directly (CORS), http:// never (mixed content). When
+// that fails: the canned answer in assets/data/pico/http/, marked with the
+// header x-chunky-canned; without one, status 0 (the socket raises).
+const CANNED_ONLY = [];   // hosts that never answer a browser (probe P6)
+function slug(url) {
+  const u = new URL(url);
+  return `${u.host}__${(u.pathname + u.search).replace(/^\//, "").replace(/[^A-Za-z0-9.]+/g, "_")}`;
+}
+function canned(url) {
+  try {
+    const xhr = syncGet(`assets/data/pico/http/${slug(url)}.json`);
+    if (xhr.status !== 200) return "0\n\n\n";
+    const data = JSON.parse(xhr.responseText);
+    const headers = Object.assign({}, data.headers || {}, { "x-chunky-canned": "1" });
+    const lines = Object.keys(headers).map(k => `${k}: ${headers[k]}`).join("\n");
+    return `${data.status || 200}\n${lines}\n\n${data.body || ""}`;
+  } catch (e) {
+    return "0\n\n\n";
+  }
+}
+function http(method, url, headersJson, body) {
+  let target = null;
+  try {
+    const u = new URL(url);
+    if (u.protocol === "https:" && !CANNED_ONLY.includes(u.host)) {
+      if (u.host === "rubygems.org" && u.pathname.startsWith("/api/v1/gems/")) target = `/rubygems${u.pathname}${u.search}`;
+      else if (u.host === "www.ruby-lang.org") target = `/proxy/ruby-lang${u.pathname}${u.search}`;
+      else target = u.href;
+    }
+  } catch (e) { return "0\n\n\n"; }
+  if (!target) return canned(url);
+  try {
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, new URL(target, base).href, false);
+    try { xhr.timeout = 8000; } catch (e) { /* not for sync XHRs here */ }
+    let headers = {};
+    try { headers = JSON.parse(headersJson || "{}"); } catch (e) { headers = {}; }
+    Object.keys(headers).forEach(k => {
+      if (!/^(host|user-agent|connection|content-length)$/i.test(k)) xhr.setRequestHeader(k, headers[k]);
+    });
+    xhr.send(method === "GET" || method === "HEAD" ? null : body);
+    if (!xhr.status || xhr.status >= 500) return canned(url);
+    const lines = xhr.getAllResponseHeaders().trim().split(/\r?\n/).filter(Boolean)
+      .filter(l => !/^(content-encoding|content-length|transfer-encoding):/i.test(l)).join("\n");
+    return `${xhr.status}\n${lines}\n\n${xhr.responseText}`;
+  } catch (e) {
+    return canned(url);
+  }
 }
 
-// one request, answered: no time limit here - the page has one
-function ask(text) {
-  request = text;
-  answer = null;
-  while (answer === null) {
-    if (step() < 0) throw new Error("PicoRuby's scheduler failed");
-  }
-  return answer;
+// a 160x120 PGM of assets/data/pico/camera/, as hex (a NUL would end the
+// string on its way into PicoRuby)
+function cameraHex(name) {
+  try {
+    const xhr = syncGet(`assets/data/pico/camera/${String(name).replace(/[^a-z0-9_-]/gi, "")}.pgm`, true);
+    if (xhr.status !== 200) return "";
+    const text = xhr.responseText;
+    let hex = "";
+    for (let i = 0; i < text.length; i++) hex += (text.charCodeAt(i) & 0xff).toString(16).padStart(2, "0");
+    return hex;
+  } catch (e) { return ""; }
 }
 
-// "error\tNoMethodError\t3\tundefined method ...\t0": the message is
-// everything between the line and the last field
-function parse(text) {
-  const parts = String(text).split("\t");
-  const kind = parts[0];
-  if (kind === "syntax") return { status: "syntax", message: parts.slice(1).join("\t") };
-  if (kind === "dropped") return { status: "dropped" };
-  const irbs = Number(parts.pop()) || 0;
-  if (kind === "error") {
-    return { status: "error", errorClass: parts[1], line: Number(parts[2]) || null,
-             message: parts.slice(3).join("\t"), irbs };
-  }
-  return { status: "ok", inspect: parts.slice(1).join("\t"), irbs };
+async function getText(path) {
+  const response = await fetch(new URL(path, base), { cache: "no-cache" });
+  if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
+  return response.text();
 }
 
-function run(kind, sid, code) {
-  output = [];
-  const result = parse(ask(kind === "run" ? `run\t${sid}\t${code}` : `drop\t${sid}`));
-  // the mark ended a line a `print` left open (picoruby_lab.rb)
-  let text = output.join("").replace(/\u0001\n$/, "");
-  output = [];
-  // a raised error is also reported by the Task machinery, as its last line
-  // with that error - once is enough; a cell's own line that looks the same
-  // stays (only the last one goes, and only for the error raised)
-  if (result.status === "error") {
-    const line = `Exception in task: #<${result.errorClass}: ${result.message}>\n`;
-    const at = text.lastIndexOf(line);
-    if (at >= 0 && (at === 0 || text[at - 1] === "\n")) text = text.slice(0, at) + text.slice(at + line.length);
-  }
-  result.output = text;
-  return result;
+// html/pico_sim/manifest.txt: one file per line, in load order
+async function simFiles() {
+  const names = (await getText("pico_sim/manifest.txt")).split("\n").map(l => l.replace(/#.*/, "").trim()).filter(Boolean);
+  const codes = await Promise.all(names.map(name => getText(`pico_sim/${name}`)));
+  return names.map((name, i) => ({ name, code: codes[i] }));
 }
+
+const host = {
+  progress(id, text) { postMessage({ id, progress: text }); },
+  board(id, kind, text) { postMessage({ id, board: kind, text }); },
+  alive(id) { postMessage({ id, alive: true }); },
+  http, cameraHex, simFiles
+};
 
 const boot = (async () => {
-  const code = await (await fetch("picoruby_lab.rb", { cache: "no-cache" })).text();
-  Module = await createModule({
-    locateFile: name => new URL(`assets/picoruby/${name}`, import.meta.url).href,
-    print: line => { output.push(line + "\n"); },
-    printErr: line => { output.push(line + "\n"); }
+  const labCode = await getText("picoruby_lab.rb");
+  const core = await bootCore({
+    createModule, labCode, host,
+    moduleArgs: { locateFile: name => new URL(`assets/picoruby/${name}`, import.meta.url).href }
   });
-  Module.ccall("picorb_init", "number", [], []);
-  Module.ccall("picorb_create_task_with_filename", "number", ["string", "string"], [code, "picoruby_lab.rb"]);
-  lastTick = performance.now();
-  const probe = run("run", "boot", '"#{RUBY_ENGINE} #{RUBY_ENGINE_VERSION}, PicoRuby #{PICORUBY_VERSION}"');
-  if (probe.status !== "ok") throw new Error(`picoruby_lab.rb did not start: ${JSON.stringify(probe)}`);
-  run("drop", "boot");
-  postMessage({ ready: true, version: probe.inspect.replace(/^"|"$/g, "") });
+  postMessage({ ready: true, version: core.version });
+  return core;
 })().catch(e => {
   postMessage({ failed: String((e && e.message) || e) });
   throw e;
 });
 
 onmessage = async event => {
-  await boot;
-  const { id, kind, sid, code } = event.data;
+  const data = event.data;
+  const core = await boot;
+  if (data.kind === "input") { core.input(data.key, data.value); return; }
   let result;
   try {
-    result = run(kind, String(sid), String(code || ""));
+    result = await core.handle(data);
   } catch (e) {
-    result = { status: "error", errorClass: "RuntimeError", line: null,
-               message: `PicoRuby: ${(e && e.message) || e}`, output: "", irbs: 0 };
+    result = { status: "error", errorClass: "RuntimeError", line: null, file: "",
+               message: `PicoRuby: ${(e && e.message) || e}`, output: "", irbs: 0, board: "" };
   }
-  postMessage(Object.assign({ id }, result));
+  postMessage(Object.assign({ id: data.id }, result));
 };

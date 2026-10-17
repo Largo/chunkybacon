@@ -49,6 +49,18 @@ class PortabilityTest < Minitest::Test
     Dir[File.join(WORKER_DIR, "*.rb")].sort.map { |f| ["spinel/#{File.basename(f)}", File.read(f)] }
   end
 
+  # the Pico lessons' simulator (not PicoRuby's own vendored mrblib), their
+  # drivers and the lab: PicoRuby.wasm in the lesson's worker
+  HTML_DIR = File.expand_path("../../html", __dir__)
+  PICO_SCANS = %i[regexp_escapes match_globals missing_methods missing_constants blockless_enumerators
+                  js_arguments task_self].freeze
+
+  def pico_sources
+    files = Dir[File.join(HTML_DIR, "pico_sim/**/*.rb")].reject { |f| f.include?("/vendor/") } +
+            Dir[File.join(HTML_DIR, "pico/lib/**/*.rb")] + [File.join(HTML_DIR, "picoruby_lab.rb")]
+    files.sort.map { |f| [f.delete_prefix("#{HTML_DIR}/"), File.read(f)] }
+  end
+
   def each_node(node, &block)
     return unless node
 
@@ -90,8 +102,13 @@ class PortabilityTest < Minitest::Test
     end
   end
 
+  # (a call without a receiver is a method of the file's own - the lab's
+  # drop(sid) - but for Kernel's catch and throw)
   def missing_methods(node)
-    "#{node.name} is missing in PicoRuby" if node.is_a?(Prism::CallNode) && MISSING_METHODS.include?(node.name)
+    return unless node.is_a?(Prism::CallNode) && MISSING_METHODS.include?(node.name)
+    return if node.receiver.nil? && !%i[catch throw].include?(node.name)
+
+    "#{node.name} is missing in PicoRuby"
   end
 
   def missing_constants(node)
@@ -162,6 +179,13 @@ class PortabilityTest < Minitest::Test
       assert_empty found, found.join("\n")
     end
 
+    if PICO_SCANS.include?(scan)
+      define_method("test_pico_sim_passes_#{scan}") do
+        found = offenses(pico_sources) { |node| send(scan, node) }
+        assert_empty found, found.join("\n")
+      end
+    end
+
     define_method("test_#{scan}_finds_bad_code") do
       found = offenses([["sample.rb", BAD_SAMPLE]]) { |node| send(scan, node) }
       refute_empty found, "#{scan} no longer finds anything in the bad sample"
@@ -175,6 +199,18 @@ class PortabilityTest < Minitest::Test
     assert_equal shell_sources.map(&:first).sort, listed.sort
     assert_equal "jsg.rb", listed.first, "the sugar comes before its first use" if listed.include?("jsg.rb")
     assert_equal "boot.rb", listed.last, "boot.rb starts the page: last"
+  end
+
+  # html/pico_sim/manifest.txt: every file of the simulator once, in an
+  # order that works: the primitives first, the worker's host last
+  def test_the_pico_sim_manifest_lists_every_file
+    dir = File.join(HTML_DIR, "pico_sim")
+    listed = File.readlines(File.join(dir, "manifest.txt"), chomp: true).map { |l| l.sub(/#.*/, "").strip }.reject(&:empty?)
+    on_disk = Dir[File.join(dir, "**/*.rb")].map { |f| f.delete_prefix("#{dir}/") }
+    assert_equal listed.uniq, listed
+    assert_equal on_disk.sort, listed.sort
+    assert_equal "prims.rb", listed.first
+    assert_equal %w[host_js.rb boot.rb], listed.last(2)
   end
 
   # spinel/manifest.txt: "role: files..." - every worker file in some role,

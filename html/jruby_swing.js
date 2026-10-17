@@ -1,5 +1,5 @@
 // The JRuby lesson's Swing bonus, inside its iframe (jruby_swing.html,
-// docs/HANDOVER.md §6r): boots JRuby 9.4 on CheerpJ as soon as the page
+// docs/HANDOVER.md §6t): boots JRuby 9.4 on CheerpJ as soon as the page
 // opens - the lesson opens it only on the learner's click - then loads
 // Glimmer in the background and builds one hidden window, so the first real
 // window takes 1-2 s instead of 5-7 s. Four cells share one Ruby runtime

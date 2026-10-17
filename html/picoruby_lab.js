@@ -4,23 +4,41 @@
 // page's side of it.
 //
 //   ensurePicoRuby()                 the shell calls it when such a lesson opens
-//   chunkyPicoRuby.run(idx, code, auto, seq)   main.rb, for a cell
-//   chunkyPicoRuby.irb(sid, code, seq)         main.rb, for a line in an IRB
+//   chunkyPicoRuby.run(idx, code, auto, seq, tabsJson, boardJson)
+//                                    main.rb, for a cell; the last two are
+//                                    optional: the cell's tabs
+//                                    ([{name, code}]) and its board (§6r)
+//   chunkyPicoRuby.irb(sid, code, seq, boardJson)   main.rb, a line in an IRB
 //   chunkyPicoRuby.reset()           main.rb, a new lesson or a reset: no
 //                                    variables left
+//   chunkyPicoRuby.busy()           something runs at the worker now
+//   chunkyPicoRuby.input(key, value) the bench (pico_board.js): a button, a
+//                                    slider - reaches a run that goes on
+//   chunkyPicoRuby.stop()            the bench's ■: the Pico's reset - the
+//                                    run ends as on the time limit
 //
 // Answers come back as a "chunky:picoruby" event on window, {kind: "cell" |
 // "irb", idx, sid, seq, auto, elapsed, status ("ok" | "error" | "syntax" |
-// "stopped" | "failed"), output, value (the result's inspect), errorClass,
-// line, message, irbs (show_irb calls)}, which main.rb turns into the cell's
-// output. One request at a time, in order. A run that takes too long (a
-// loop that never ends) cannot be interrupted inside PicoRuby: the worker
-// is ended and a new one started, and the answer is status "stopped" -
-// every variable is gone with it.
+// "stopped" | "reset" | "failed"), output, value (the result's inspect),
+// errorClass, line, file (the tab the error is in, "" for the cell's own
+// code), message, irbs (show_irb calls), board (the simulated board's
+// summary JSON, "" without a board)}, which main.rb turns into the cell's
+// output. What a run prints comes early too, as "chunky:picoruby-progress"
+// events ({idx, kind, seq, output}), and the bench's messages go to
+// chunkyPicoBoard.receive(kind, text). One request at a time, in order. A
+// run that takes too long (a loop that never ends) cannot be interrupted
+// inside PicoRuby: the worker is ended and a new one started, and the
+// answer is status "stopped" - every variable is gone with it.
 (function () {
   "use strict";
 
-  var LIMIT = { auto: 1000, run: 10000, irb: 10000 };   // ms
+  // ms; a cell with a board (a Pico lesson) runs as long as a program on a
+  // Pico might, an IRB line below it half that
+  var LIMIT = { auto: 1000, run: 10000, irb: 10000, board: 60000, boardIrb: 30000 };
+  // ms; a board run that has not given the worker's event loop a turn for
+  // this long is stuck in a loop without a sleep (`while true; puts; end`):
+  // it ends as a cell without a board would, not after a silent minute
+  var QUIET = 10000;
   var queue = [];
   var current = null;   // {id, item, started, timer}: the request out now
   var nextId = 1;
@@ -29,13 +47,30 @@
   var pico = window.chunkyPicoRuby = {
     ready: false, loading: null, error: null, version: "", worker: null,
 
-    run: function (idx, code, auto, seq) {
+    run: function (idx, code, auto, seq, tabsJson, boardJson) {
       enqueue({ kind: "cell", idx: Number(idx), sid: "cells", code: String(code),
-                auto: auto === true || auto === "true", seq: Number(seq) });
+                auto: auto === true || auto === "true", seq: Number(seq),
+                tabs: parseTabs(tabsJson), board: boardJson ? String(boardJson) : "" });
     },
-    irb: function (sid, code, seq) {
-      sessions["irb" + sid] = true;
-      enqueue({ kind: "irb", sid: "irb" + sid, irbSid: Number(sid), code: String(code), seq: Number(seq) });
+    // an IRB below a board cell (a Pico lesson) shares the cells' session:
+    // its lines see the cell's `led` and drive the same board
+    irb: function (sid, code, seq, boardJson) {
+      var worker = boardJson ? "cells" : "irb" + sid;
+      if (!boardJson) sessions[worker] = true;
+      enqueue({ kind: "irb", sid: worker, irbSid: Number(sid), code: String(code), seq: Number(seq),
+                tabs: [], board: boardJson ? String(boardJson) : "" });
+    },
+    // a run or an IRB line is out at the worker now (pico_board.js: the
+    // webcam's frames go only then)
+    busy: function () { return !!current; },
+    // a bench input (pico_board.js): at once, even while a run goes on
+    input: function (key, value) {
+      if (pico.worker) pico.worker.postMessage({ kind: "input", key: String(key), value: String(value) });
+    },
+    // the bench's ■ Stop, the Pico's reset: like the time limit, but the
+    // answer says "reset"
+    stop: function () {
+      if (current) stop(current.id, "reset");
     },
     // a new lesson or a reset: the cells' and the IRBs' variables go. A run
     // still going would hold up the new page's runs (up to its 10 s): the
@@ -44,6 +79,7 @@
       queue = queue.filter(function (item) { return item.kind === "drop"; });
       if (current) {
         clearTimeout(current.timer);
+        clearInterval(current.quiet);
         current = null;
         endWorker();
         return;
@@ -77,6 +113,13 @@
           resolve(true);
         } else if (data.failed) {
           fail(worker, data.failed, resolve);
+        } else if (data.alive) {
+          if (current && data.id === current.id) current.heard = performance.now();
+        } else if (data.progress !== undefined) {
+          if (current && data.id === current.id) current.heard = performance.now();
+          progress(data);
+        } else if (data.board !== undefined && data.status === undefined) {
+          if (window.chunkyPicoBoard && current && data.id === current.id) window.chunkyPicoBoard.receive(String(data.board), String(data.text));
         } else {
           answered(data);
         }
@@ -115,28 +158,68 @@
     if (current || !pico.ready || queue.length === 0) return;
     var item = queue.shift();
     var id = nextId++;
-    var limit = item.kind === "drop" ? 2000 : item.auto ? LIMIT.auto : item.kind === "irb" ? LIMIT.irb : LIMIT.run;
-    current = { id: id, item: item, started: performance.now(),
+    var board = !!item.board;
+    var limit = item.kind === "drop" ? 2000 : item.auto ? LIMIT.auto
+      : item.kind === "irb" ? (board ? LIMIT.boardIrb : LIMIT.irb) : (board ? LIMIT.board : LIMIT.run);
+    current = { id: id, item: item, started: performance.now(), heard: performance.now(),
                 timer: setTimeout(function () { stop(id); }, limit) };
-    pico.worker.postMessage({ id: id, kind: item.kind === "drop" ? "drop" : "run", sid: item.sid, code: item.code || "" });
+    if (board && item.kind !== "drop") {
+      current.quiet = setInterval(function () {
+        if (current && current.id === id && performance.now() - current.heard > QUIET) stop(id);
+      }, 1000);
+    }
+    var inputs = board && window.chunkyPicoBoard && window.chunkyPicoBoard.inputs ? parseInputs(window.chunkyPicoBoard.inputs()) : {};
+    // the bench was moved under this cell when ▶ was pressed; it draws this
+    // run's state from now on, not the one of the run it waited for
+    if (board && item.kind === "cell" && window.chunkyPicoBoard && window.chunkyPicoBoard.started) window.chunkyPicoBoard.started(String(item.idx));
+    pico.worker.postMessage({ id: id, kind: item.kind === "drop" ? "drop" : "run", sid: item.sid, code: item.code || "",
+                              tabs: item.tabs || [], board: item.board || "", inputs: inputs });
+  }
+
+  function parseTabs(json) {
+    if (!json) return [];
+    try {
+      var list = JSON.parse(String(json));
+      return Array.isArray(list) ? list.map(function (t) { return { name: String(t.name), code: String(t.code || "") }; }) : [];
+    } catch (e) { return []; }
+  }
+
+  function parseInputs(json) {
+    try { var v = JSON.parse(String(json || "{}")); return v && typeof v === "object" ? v : {}; } catch (e) { return {}; }
+  }
+
+  // what a run printed so far: main.rb shows it below the cell while it runs
+  function progress(data) {
+    if (!current || data.id !== current.id || current.item.kind === "drop") return;
+    var item = current.item;
+    // kept for the answer of a run that is stopped: what it printed stays
+    current.streamed = (current.streamed || "") + String(data.progress);
+    window.dispatchEvent(new CustomEvent("chunky:picoruby-progress", {
+      detail: { idx: item.idx || 0, kind: item.kind, sid: item.irbSid || 0, seq: item.seq || 0, output: String(data.progress) }
+    }));
   }
 
   function answered(data) {
     if (!current || data.id !== current.id) return;
     clearTimeout(current.timer);
+    clearInterval(current.quiet);
     var done = current;
     current = null;
     reply(done.item, data, performance.now() - done.started);
     pump();
   }
 
-  // the time is up: PicoRuby cannot be interrupted, the worker goes
-  function stop(id) {
+  // the time is up (or ■ was pressed: "reset"): PicoRuby cannot be
+  // interrupted, the worker goes
+  function stop(id, status) {
     if (!current || current.id !== id) return;
     var done = current;
+    clearTimeout(done.timer);
+    clearInterval(done.quiet);
     current = null;
     endWorker();
-    reply(done.item, { status: "stopped", output: "" }, performance.now() - done.started);
+    if (done.item.board && window.chunkyPicoBoard && window.chunkyPicoBoard.reset) window.chunkyPicoBoard.reset(status || "stopped");
+    reply(done.item, { status: status || "stopped", output: done.streamed || "" }, performance.now() - done.started);
     if (queue.length) window.ensurePicoRuby();
   }
 
@@ -158,8 +241,8 @@
       kind: item.kind, idx: item.idx || 0, sid: item.irbSid || 0, seq: item.seq || 0,
       auto: !!item.auto, elapsed: elapsed / 1000,
       status: String(data.status), output: String(data.output || ""), value: String(data.inspect || ""),
-      errorClass: String(data.errorClass || ""), line: Number(data.line) || 0,
-      message: String(data.message || ""), irbs: Number(data.irbs) || 0
+      errorClass: String(data.errorClass || ""), line: Number(data.line) || 0, file: String(data.file || ""),
+      message: String(data.message || ""), irbs: Number(data.irbs) || 0, board: String(data.board || "")
     };
     window.dispatchEvent(new CustomEvent("chunky:picoruby", { detail: detail }));
   }

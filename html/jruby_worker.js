@@ -1,5 +1,5 @@
 // A Web Worker with JRuby of its own, for the JRuby lesson ("engine":
-// "jruby", docs/HANDOVER.md §6r): JRuby 10.1 compiled to JavaScript by TeaVM
+// "jruby", docs/HANDOVER.md §6t): JRuby 10.1 compiled to JavaScript by TeaVM
 // (assets/jruby/, tools/vendor_jruby.rb). Started by jruby_lab.js only when
 // that lesson opens - nothing of it loads anywhere else.
 //

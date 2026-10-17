@@ -527,8 +527,9 @@ module JS
       props["ChunkyStorage"] = @fs.js
       props["ChunkyOffline"] = @offline.js
       props["cellEditors"] = @editors
-      props["initCell"] = proc do |idx, label, hint|
+      props["initCell"] = proc do |idx, label, hint, readonly|
         @calls << ["initCell", idx, label, hint]
+        @calls << ["initCellReadonly", idx] if readonly == "true"
         editor = @editors[idx.to_s] = Editor.new
         # index.html: a key in the editor tells the shell (live runs)
         editor.js_on("change", proc do |_cm, change|
@@ -556,7 +557,8 @@ module JS
       # the course as bridge.js hands it over: lesson numbers filled in
       props["LESSONS"] = LessonRefs.resolve(JSON.parse(File.read(File.expand_path("../../lessons.json", __dir__))))
       @confirm = true
-      %w[setCellCode refreshAllCells ensureThree ensurePython ensureSqlite ensureHerb ensurePicoRuby scrollTo].each do |name|
+      %w[setCellCode refreshAllCells ensureThree ensurePython ensureSqlite ensureHerb ensurePicoRuby ensurePicoBoard picoBoardPreviews
+         setCellTabSrc clearCellTabSrc scrollTo].each do |name|
         props[name] = proc { |*args| @calls << [name, *args]; nil }
       end
       props["confirm"] = proc { |_msg| @confirm }

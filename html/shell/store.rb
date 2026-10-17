@@ -53,6 +53,11 @@ module ChunkyShell
     # wrong cell.
     def self.code_key(lang, id, idx, starter) = "#{CODE_PREFIX}#{lang}_#{id}_#{idx}@#{fingerprint(starter)}"
 
+    # An editable tab of a Pico lesson's cell (design §2.3): the key of the
+    # cell's code for the tab's own starter, and "~<name>". It has an "@",
+    # so migrate_code_keys leaves it alone.
+    def self.tab_key(lang, id, idx, name, starter) = "#{code_key(lang, id, idx, starter)}~#{name}"
+
     # A polynomial hash of the bytes, mod 2^31 - 1, in base 36 (at most six
     # characters). PicoRuby has each_byte (probed); the numbers stay well
     # inside its 64-bit Integer.

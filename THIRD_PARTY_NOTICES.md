@@ -151,6 +151,23 @@ pins its SHA-256 and the resulting tree); for `cheerpj-patch.jar`, commit
 6e134ab of [Largo/jruby-cheerpj](https://github.com/Largo/jruby-cheerpj)
 (`tools/jruby_swing.json`). The unmodified jars are JRuby's and Maven
 Central's releases.
+## The IronRuby lesson (`html/assets/ironruby/`, put there on deploy)
+
+Lesson `ironruby` only, loaded only when it opens. Not in git:
+`tools/vendor_ironruby.rb` copies the pinned build (`tools/ironruby.json`)
+and the NuGet packages into place, with `NOTICE.md` and the license texts
+(from `tools/ironruby-licenses/`) in `html/assets/ironruby/licenses/`,
+served next to the files.
+
+| Component | Version | License | Copyright | License text |
+|---|---|---|---|---|
+| [IronRuby](https://github.com/Largo/ironruby) (`IronRuby*.wasm`, `ironruby.js`) and the [Dynamic Language Runtime](https://github.com/IronLanguages/dlr) (`Microsoft.Scripting*.wasm`, `Microsoft.Dynamic.wasm`) | 4.0.1, branch `wasm`, the commit in `tools/ironruby.json` | Apache-2.0 | .NET Foundation and Contributors | `LICENSE-ironruby-dlr.txt` |
+| IronRuby's standard library (`stdlib.zip`: Ruby's libraries and bundled gems) | as in that commit | Ruby license or BSD-2-Clause (some gems: their own, as in their files) | Yukihiro Matsumoto and the authors | `LICENSE-ruby.txt` |
+| [.NET](https://github.com/dotnet/runtime) runtime and class libraries for browser-wasm (`dotnet*.js`, `dotnet.native.wasm`, `System*.wasm`, ...) | 10.0.13 | MIT | .NET Foundation and Contributors | `LICENSE-dotnet.txt` |
+| [Prism](https://github.com/ruby/prism), compiled into `dotnet.native.wasm` | as in that commit | MIT | 2022-present Shopify Inc. | `LICENSE-prism.md` |
+| [AngleSharp](https://github.com/AngleSharp/AngleSharp) (`AngleSharp*.wasm`, behind IronRuby's Nokogiri) | 1.5.0 (AngleSharp.Xml 1.2.0) | MIT | AngleSharp | `LICENSE-anglesharp.txt` |
+| [QRCoder](https://github.com/codebude/QRCoder) (`nuget/QRCoder.dll`, `lib/net6.0`) | 1.6.0 | MIT | Raffael Herrmann, Shane Krueger | `LICENSE-qrcoder.txt` |
+| [Markdig](https://github.com/xoofx/markdig) (`nuget/Markdig.dll`, `lib/net8.0`) | 0.44.0 | BSD-2-Clause | Alexandre Mutel | `LICENSE-markdig.txt` |
 
 ## Cached gems (`html/gems/cache/`)
 
@@ -319,11 +336,40 @@ course's stand-in for it. Its constants, the table of colour names,
 `randomGaussian` …) are adapted from the gem's source, Copyright (c) 2019
 xord.org, under the MIT License (the text above).
 
+## The Pico lessons (`html/pico_sim/`, `html/pico/lib/`)
+
+| Component | Version | License | Copyright | Files |
+|---|---|---|---|---|
+| PicoRuby's peripheral mrblib: `picoruby-gpio`, `-pwm`, `-adc`, `-i2c`, `-spi`, `-cyw43`, `-net-http`, `-pio` (`mrbgems/<gem>/mrblib/`) | 4.0.3 (tag) | MIT (the text in `html/assets/picoruby/NOTICE.md`) | HASUMI Hitoshi and the PicoRuby contributors | `html/pico_sim/vendor/`: `gpio.rb`, `pwm.rb`, `adc.rb`, `i2c.rb`, `spi.rb`, `cyw43.rb`, `net-http/http_request.rb`, `net-http/http_response.rb`, `net-http/http_client.rb`, `pio.rb`, `pio_state_machine.rb` - unchanged copies; sizes and SHA-256 in `vendor/VENDOR.txt` (`tools/vendor_picoruby_mrblib.rb`) |
+| [picoruby-ws2812](https://github.com/ksbmyk/picoruby-ws2812) (community gem, a pure-Ruby WS2812 driver over `picoruby-pio`), `mrblib/ws2812.rb` | commit 6f0b6d2 (2026-03-28) | MIT | 2025 ksbmyk | `html/pico/lib/ws2812.rb` - an unchanged copy (SHA-256 checked by `test/pico_sim_test.rb`); shown read-only as a tab in lesson `pico-robot` |
+| PicoRuby's `picoruby-picomodem` device side, `mrbgems/picoruby-picomodem/mrblib/picomodem.rb` (R2P2's PicoModem / RBTP) | 4.0.3 (tag) | MIT (the text in `html/assets/picoruby/NOTICE.md`) | HASUMI Hitoshi and the PicoRuby contributors | `test/vendor/picomodem.rb` - an unchanged copy (SHA-256 checked by `test/pico_real_test.mjs`), run under CRuby by `test/pico_real_device.rb` to test `html/pico_real.js` against it; not served |
+| The 5×7 font, derived from X11 misc-fixed `5x7.bdf` | - | public domain ("Public domain font. Share and enjoy.") | - | `html/pico/lib/font5x7.rb` (`tools/build_font5x7.rb`) |
+
+`html/pico_real.js` (a real Pico over Web Serial and Web Bluetooth) is our
+own code; it follows R2P2's protocol as PicoRuby 4.0.3's sources and the R2P2
+Web Terminal (picoruby.org, `pages/r2p2/terminal.rb`) implement it, and copies
+no code from them.
+
+The rest of the simulator (`prims.rb`, the devices and stand-ins) is our own
+code, written from the PicoRuby 4.0.3 C sources' behaviour and the parts'
+datasheets (Bosch BME280, Solomon Systech SSD16xx/UC8151, Toshiba TB6612,
+Sitronix ST7789V, Worldsemi WS2812B, the RP2040/RP2350 PIO chapters).
+The drivers in `html/pico/lib/{de,en,ja}/` are our own; the e-paper's command
+sequence and the PicoGo's pins and motor direction table follow Waveshare's
+MicroPython/C demo code (`EPD_2in13_V4`, `Motor.py`, `Pico-LCD-1.14.py`,
+`Pico-RGB-LED.py`) as facts - no code was copied. The board, breadboard and part drawings in `html/pico_board.js` and
+`html/assets/pico/prremote-sequence.svg` are our own. "Raspberry Pi" and
+"Pico" are trademarks of Raspberry Pi Ltd, "Waveshare" and "PicoGo" of
+Waveshare Electronics; they are named to identify the hardware only.
+
 ## Data
 
 | Data | License | Source | Files |
 |---|---|---|---|
 | USGS "All Earthquakes, Past Month" (the snapshot of 2026-10-17: 10,224 earthquakes; and its 622 of magnitude 4.5 or more) | Public domain (U.S. Government work) | U.S. Geological Survey, Earthquake Hazards Program, https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson | `tools/jruby-data/` (unchanged; `4.5_month.geojson` filtered from it), served from `html/assets/jruby/data/` (lesson `jruby`); `SOURCE.txt` |
+| Weather in Zurich, one answer of the Open-Meteo forecast API (fetched 2026-10-17), the Pico lessons' canned fallback | CC BY 4.0 | Weather data by [Open-Meteo.com](https://open-meteo.com/) | `html/assets/data/pico/http/api.open-meteo.com__*.json` |
+| The gem `rake`'s entry in the rubygems.org API (fetched 2026-10-17), the same | facts about a gem (its own metadata) | https://rubygems.org/api/v1/gems/rake.json | `html/assets/data/pico/http/rubygems.org__*.json` |
+| The camera's two pictures | our own (procedural drawings, `tools/make_pico_fixtures.rb`) | - | `html/assets/data/pico/camera/{chunky,bacon}.pgm` |
 | Optical Recognition of Handwritten Digits (the 1797 digits of its test part, as scikit-learn ships them) | CC BY 4.0 | E. Alpaydin, C. Kaynak, UCI Machine Learning Repository, https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits | `html/assets/data/digits.csv` (unchanged values, integers instead of floats) |
 
 ## Not bundled

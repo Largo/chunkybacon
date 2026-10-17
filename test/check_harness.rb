@@ -13,6 +13,7 @@ require_relative "../html/sandbox_sim"
 require_relative "../html/earlier_cells"
 require "tmpdir"
 require "fileutils"
+require "rbconfig"
 
 # Gem code "lives" under BrowserGems.root and cells write files relative to
 # the working directory; both are temp dirs here, as both are wasm memory in
@@ -69,6 +70,12 @@ JRubyCells.fetch_text = lambda do |url|
   path = File.expand_path("../html/#{url}", __dir__)
   File.exist?(path) ? File.read(path) : nil
 end
+# a lesson with "engine": "ironruby" runs on IronRuby (.NET in WebAssembly)
+# in the browser; here its cells, starter and solutions run on the same
+# bundle under Node (ironruby_node.mjs, check_ironruby below), and the
+# CRuby half of the check gets result and probe as the page hands them over
+require_relative "../html/ironruby_cells"
+require "open3"
 $shown_games = []
 # spinel(code) (lesson 45): without the page, spinel.rb is CRuby's run of the
 # program, which is what the lesson's check reads (result.output)
@@ -249,6 +256,49 @@ BROWSER_ONLY = %w[pycall sympy numpy matplotlib sklearn sequel erb].freeze
 
 # the Rumale exercise's picture of a seven (its starter defines it too)
 RUMALE_SEVEN = "PIC = %w[.######. ......#. .....#.. ....#... ...#.... ...#.... ..#..... ..#.....].join(\"\\n\") + \"\\n\"\n"
+
+# The IronRuby lesson's solutions: the loops of bacon_svg, and by index with
+# ModuleMatrix. <<~'RUBY': the #{} are IronRuby's, not the harness's.
+IRONRUBY_SOLUTIONS = [<<~'RUBY', <<~'RUBY'].freeze
+    def qr_svg(text, cell = 6)
+      level = QRCoder::QRCodeGenerator::ECCLevel.Q
+      data = QRCoder::QRCodeGenerator.new.CreateQrCode(text, level)
+      rects = []
+      data.module_matrix.each_with_index do |row, y|
+        row.each_with_index do |dark, x|
+          rects << %(<rect x="#{x * cell}" y="#{y * cell}" width="#{cell}" height="#{cell}"/>) if dark
+        end
+      end
+      size = data.module_matrix.count * cell
+      %(<svg xmlns="http://www.w3.org/2000/svg" width="#{size}" ) +
+        %(height="#{size}" style="background:#fff">#{rects.join}</svg>)
+    end
+
+    show_svg qr_svg("Chunky Bacon")
+  RUBY
+    def qr_svg(text, cell = 6)
+      data = QRCoder::QRCodeGenerator.new.CreateQrCode(text, QRCoder::QRCodeGenerator::ECCLevel.Q)
+      matrix = data.ModuleMatrix
+      n = matrix.Count
+      rects = (0...n).flat_map do |y|
+        (0...n).select { |x| matrix[y][x] }.map do |x|
+          %(<rect x="#{x * cell}" y="#{y * cell}" width="#{cell}" height="#{cell}"/>)
+        end
+      end
+      %(<svg xmlns="http://www.w3.org/2000/svg" width="#{n * cell}" height="#{n * cell}">#{rects.join}</svg>)
+    end
+
+    qr_svg("Chunky Bacon").size
+  RUBY
+
+# ...and answers that look right but are not: a rect for every module, all
+# rects on one spot, the light modules. Each must fail the check (the probe
+# compares the rects with QRCoder's dark modules, not just their number).
+IRONRUBY_WRONG = [
+  %(rects << %(<rect x="\#{x * cell}" y="\#{y * cell}" width="\#{cell}" height="\#{cell}"/>)),
+  %(rects << %(<rect x="0" y="0" width="\#{cell}" height="\#{cell}"/>) if dark),
+  %(rects << %(<rect x="\#{x * cell}" y="\#{y * cell}" width="\#{cell}" height="\#{cell}"/>) unless dark)
+].map { |line| IRONRUBY_SOLUTIONS.first.sub(/^ *rects << .*$/, "      " + line) }.freeze
 
 SOLUTIONS = {
   "hallo" => {
@@ -730,6 +780,587 @@ puts read.amount)]
   },
   # the ruby2d window (ruby2d.rb): the check replays the cell and holds the
   # arrow keys on that copy until Chunky reaches both edges
+  # the Pico lessons (test/pico_harness.rb runs them on the simulator)
+  "pico-blink" => {
+    "de" => [
+      <<~'SOL',
+      require "gpio"
+
+      blinklicht = GPIO.new(15, GPIO::OUT)
+      5.times do
+        blinklicht.write(1)
+        sleep_ms 200
+        blinklicht.write(0)
+        sleep_ms 300
+      end
+      SOL
+      <<~'SOL'
+      require "gpio"
+
+      blinklicht = GPIO.new(15, GPIO::OUT)
+      zaehler = 0
+      while zaehler < 5
+        blinklicht.write(1)
+        sleep_ms 200
+        blinklicht.write(0)
+        sleep_ms 300
+        zaehler += 1
+      end
+      SOL
+    ],
+    "en" => [
+      <<~'SOL',
+      require "gpio"
+
+      signal = GPIO.new(15, GPIO::OUT)
+      5.times do
+        signal.write(1)
+        sleep_ms 200
+        signal.write(0)
+        sleep_ms 300
+      end
+      SOL
+      <<~'SOL'
+      require "gpio"
+
+      signal = GPIO.new(15, GPIO::OUT)
+      count = 0
+      while count < 5
+        signal.write(1)
+        sleep_ms 200
+        signal.write(0)
+        sleep_ms 300
+        count += 1
+      end
+      SOL
+    ]
+  },
+  "pico-sensors" => {
+    "de" => [
+      <<~'SOL',
+      require "gpio"
+      require "adc"
+
+      nachtlicht = GPIO.new(15, GPIO::OUT)
+      fuehler = ADC.new(26)
+      20.times do
+        if fuehler.read_voltage < 1.0
+          nachtlicht.write(1)
+        else
+          nachtlicht.write(0)
+        end
+        sleep_ms 100
+      end
+      SOL
+      <<~'SOL'
+      require "gpio"
+      require "adc"
+
+      nachtlicht = GPIO.new(15, GPIO::OUT)
+      fuehler = ADC.new(26)
+      20.times do
+        nachtlicht.write(fuehler.read < 1.0 ? 1 : 0)
+        sleep_ms 100
+      end
+      SOL
+    ],
+    "en" => [
+      <<~'SOL',
+      require "gpio"
+      require "adc"
+
+      night_light = GPIO.new(15, GPIO::OUT)
+      sensor = ADC.new(26)
+      20.times do
+        if sensor.read_voltage < 1.0
+          night_light.write(1)
+        else
+          night_light.write(0)
+        end
+        sleep_ms 100
+      end
+      SOL
+      <<~'SOL'
+      require "gpio"
+      require "adc"
+
+      night_light = GPIO.new(15, GPIO::OUT)
+      sensor = ADC.new(26)
+      20.times do
+        night_light.write(sensor.read < 1.0 ? 1 : 0)
+        sleep_ms 100
+      end
+      SOL
+    ]
+  },
+  "pico-robot" => {
+    "de" => [
+      <<~'SOL',
+      require "gpio"
+      require "picogo"
+
+      flitzer = PicoGo.new
+      ir_links = GPIO.new(3, GPIO::IN)
+      ir_rechts = GPIO.new(2, GPIO::IN)
+      flitzer.forward(40)
+      sleep_ms 10 until ir_links.low? || ir_rechts.low?
+      flitzer.stop
+      SOL
+      <<~'SOL'
+      require "gpio"
+      require "picogo"
+
+      flitzer = PicoGo.new
+      ir_links = GPIO.new(3, GPIO::IN)
+      ir_rechts = GPIO.new(2, GPIO::IN)
+      flitzer.forward(40)
+      while ir_links.read == 1 && ir_rechts.read == 1
+        sleep_ms 5
+      end
+      flitzer.stop
+      SOL
+    ],
+    "en" => [
+      <<~'SOL',
+      require "gpio"
+      require "picogo"
+
+      rover = PicoGo.new
+      ir_left = GPIO.new(3, GPIO::IN)
+      ir_right = GPIO.new(2, GPIO::IN)
+      rover.forward(40)
+      sleep_ms 10 until ir_left.low? || ir_right.low?
+      rover.stop
+      SOL
+      <<~'SOL'
+      require "gpio"
+      require "picogo"
+
+      rover = PicoGo.new
+      ir_left = GPIO.new(3, GPIO::IN)
+      ir_right = GPIO.new(2, GPIO::IN)
+      rover.forward(40)
+      while ir_left.read == 1 && ir_right.read == 1
+        sleep_ms 5
+      end
+      rover.stop
+      SOL
+    ]
+  },
+  "pico-epaper" => {
+    "de" => [
+      <<~'SOL',
+      require "spi"
+      require "epd2in13"
+
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,
+                    sck_pin: 10, copi_pin: 11)
+      schild = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,
+                            rst_pin: 12, busy_pin: 13)
+      schild.clear
+      schild.rect(0, 0, 250, 122)
+      schild.text(20, 45, "Chunky Bacon", scale: 3)
+      schild.refresh
+      SOL
+      <<~'SOL'
+      require "spi"
+      require "epd2in13"
+
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,
+                    sck_pin: 10, copi_pin: 11)
+      schild = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,
+                            rst_pin: 12, busy_pin: 13)
+      schild.clear
+      4.times { |i| schild.rect(i, i, 250 - 2 * i, 122 - 2 * i) }
+      schild.text(30, 50, "Fuchs", scale: 2)
+      schild.refresh(partial: false)
+      SOL
+    ],
+    "en" => [
+      <<~'SOL',
+      require "spi"
+      require "epd2in13"
+
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,
+                    sck_pin: 10, copi_pin: 11)
+      badge = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,
+                           rst_pin: 12, busy_pin: 13)
+      badge.clear
+      badge.rect(0, 0, 250, 122)
+      badge.text(20, 45, "Chunky Bacon", scale: 3)
+      badge.refresh
+      SOL
+      <<~'SOL'
+      require "spi"
+      require "epd2in13"
+
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,
+                    sck_pin: 10, copi_pin: 11)
+      badge = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,
+                           rst_pin: 12, busy_pin: 13)
+      badge.clear
+      badge.line(0, 0, 249, 0)
+      badge.line(0, 121, 249, 121)
+      badge.line(0, 0, 0, 121)
+      badge.line(249, 0, 249, 121)
+      badge.text(80, 40, "Why", scale: 4)
+      badge.refresh
+      SOL
+    ]
+  },
+  "pico-lcd" => {
+    "de" => [
+      <<~'SOL',
+      require "spi"
+      require "gpio"
+      require "st7789"
+
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,
+                    sck_pin: 10, copi_pin: 11)
+      lcd = ST7789.new(spi: spi)
+      lcd.fill(ST7789::BLACK)
+      taste_a = GPIO.new(15, GPIO::IN | GPIO::PULL_UP)
+      zaehler = 0
+      vorher = false
+      lcd.text("0", 100, 50, ST7789::YELLOW, scale: 4)
+      100.times do
+        jetzt = taste_a.low?
+        if jetzt && !vorher
+          zaehler += 1
+          lcd.text(zaehler.to_s, 100, 50, ST7789::YELLOW, scale: 4)
+        end
+        vorher = jetzt
+        sleep_ms 20
+      end
+      SOL
+      <<~'SOL'
+      require "spi"
+      require "gpio"
+      require "st7789"
+
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,
+                    sck_pin: 10, copi_pin: 11)
+      lcd = ST7789.new(spi: spi)
+      lcd.fill(ST7789::BLACK)
+      taste_a = GPIO.new(15, GPIO::IN | GPIO::PULL_UP)
+      zaehler = 0
+      oben = true
+      100.times do
+        if taste_a.low? && oben
+          zaehler += 1
+          lcd.fill(ST7789::BLACK)
+          lcd.text("Zahl: #{zaehler}", 20, 50, ST7789::GREEN, scale: 3)
+        end
+        oben = taste_a.high?
+        sleep_ms 20
+      end
+      SOL
+    ],
+    "en" => [
+      <<~'SOL',
+      require "spi"
+      require "gpio"
+      require "st7789"
+
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,
+                    sck_pin: 10, copi_pin: 11)
+      lcd = ST7789.new(spi: spi)
+      lcd.fill(ST7789::BLACK)
+      key_a = GPIO.new(15, GPIO::IN | GPIO::PULL_UP)
+      count = 0
+      was = false
+      lcd.text("0", 100, 50, ST7789::YELLOW, scale: 4)
+      100.times do
+        now = key_a.low?
+        if now && !was
+          count += 1
+          lcd.text(count.to_s, 100, 50, ST7789::YELLOW, scale: 4)
+        end
+        was = now
+        sleep_ms 20
+      end
+      SOL
+      <<~'SOL'
+      require "spi"
+      require "gpio"
+      require "st7789"
+
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,
+                    sck_pin: 10, copi_pin: 11)
+      lcd = ST7789.new(spi: spi)
+      lcd.fill(ST7789::BLACK)
+      key_a = GPIO.new(15, GPIO::IN | GPIO::PULL_UP)
+      count = 0
+      up = true
+      100.times do
+        if key_a.low? && up
+          count += 1
+          lcd.fill(ST7789::BLACK)
+          lcd.text("Count: #{count}", 20, 50, ST7789::GREEN, scale: 3)
+        end
+        up = key_a.high?
+        sleep_ms 20
+      end
+      SOL
+    ],
+  },
+  "pico-wifi" => {
+    "de" => [
+      <<~'SOL',
+      require "cyw43"
+      require "net/http"
+      require "json"
+      require "spi"
+      require "epd2in13"
+
+      CYW43.init("CH")
+      CYW43.enable_sta_mode
+      CYW43.connect_timeout("chunkynet", "chunkybacon",
+                            CYW43::Auth::WPA2_AES_PSK, 10)
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,
+                    sck_pin: 10, copi_pin: 11)
+      papier = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,
+                            rst_pin: 12, busy_pin: 13)
+      papier.clear
+      antwort = Net::HTTP.get("https://rubygems.org", "/api/v1/gems/rake.json")
+      version = JSON.parse(antwort)["version"]
+      papier.text(10, 50, "rake #{version}", scale: 2)
+      papier.refresh
+      SOL
+      <<~'SOL'
+      require "cyw43"
+      require "net/http"
+      require "json"
+      require "spi"
+      require "epd2in13"
+
+      CYW43.init("CH")
+      CYW43.enable_sta_mode
+      CYW43.connect_timeout("chunkynet", "chunkybacon",
+                            CYW43::Auth::WPA2_AES_PSK, 10)
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,
+                    sck_pin: 10, copi_pin: 11)
+      papier = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,
+                            rst_pin: 12, busy_pin: 13)
+      papier.clear
+      http = Net::HTTP.new("rubygems.org", 443)
+      http.use_ssl = true
+      antwort = http.get("/api/v1/gems/rake.json")
+      http.finish
+      gem_info = JSON.parse(antwort.body)
+      papier.text(8, 40, "rake " + gem_info["version"], scale: 3)
+      papier.refresh
+      SOL
+    ],
+    "en" => [
+      <<~'SOL',
+      require "cyw43"
+      require "net/http"
+      require "json"
+      require "spi"
+      require "epd2in13"
+
+      CYW43.init("CH")
+      CYW43.enable_sta_mode
+      CYW43.connect_timeout("chunkynet", "chunkybacon",
+                            CYW43::Auth::WPA2_AES_PSK, 10)
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,
+                    sck_pin: 10, copi_pin: 11)
+      paper = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,
+                           rst_pin: 12, busy_pin: 13)
+      paper.clear
+      body = Net::HTTP.get("https://rubygems.org", "/api/v1/gems/rake.json")
+      version = JSON.parse(body)["version"]
+      paper.text(10, 50, "rake #{version}", scale: 2)
+      paper.refresh
+      SOL
+      <<~'SOL'
+      require "cyw43"
+      require "net/http"
+      require "json"
+      require "spi"
+      require "epd2in13"
+
+      CYW43.init("CH")
+      CYW43.enable_sta_mode
+      CYW43.connect_timeout("chunkynet", "chunkybacon",
+                            CYW43::Auth::WPA2_AES_PSK, 10)
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,
+                    sck_pin: 10, copi_pin: 11)
+      paper = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,
+                           rst_pin: 12, busy_pin: 13)
+      paper.clear
+      http = Net::HTTP.new("rubygems.org", 443)
+      http.use_ssl = true
+      res = http.get("/api/v1/gems/rake.json")
+      http.finish
+      info = JSON.parse(res.body)
+      paper.rect(0, 0, 250, 122)
+      paper.text(8, 8, "Gem watcher")
+      paper.text(8, 40, "#{info["name"]} #{info["version"]}", scale: 3)
+      paper.refresh
+      SOL
+    ]
+  },
+  "pico-ble" => {
+    "de" => [
+      <<~'SOL',
+      require "ble"
+      require "adc"
+
+      verbindung = BLE::UART.new(name: "ChunkyPico")
+      chip = ADC.new(:temperature)
+      verbindung.start(1500) do
+        nachricht = verbindung.gets_nonblock
+        if nachricht
+          case nachricht.chomp
+          when "PING" then verbindung.puts "PONG"
+          when "TEMP"
+            grad = 27 - (chip.read - 0.706) / 0.001721
+            verbindung.puts "#{(grad * 10).to_i / 10.0} °C"
+          end
+        end
+      end
+      SOL
+      <<~'SOL'
+      require "ble"
+      require "adc"
+
+      verbindung = BLE::UART.new(name: "ChunkyPico")
+      chip = ADC.new(:temperature)
+      verbindung.start(1500) do
+        nachricht = verbindung.gets_nonblock
+        next unless nachricht
+
+        if nachricht.chomp == "PING"
+          verbindung.puts "PONG"
+        elsif nachricht.chomp == "TEMP"
+          verbindung.puts((27 - (chip.read - 0.706) / 0.001721).to_s)
+        end
+      end
+      SOL
+    ],
+    "en" => [
+      <<~'SOL',
+      require "ble"
+      require "adc"
+
+      link = BLE::UART.new(name: "ChunkyPico")
+      chip = ADC.new(:temperature)
+      link.start(1500) do
+        message = link.gets_nonblock
+        if message
+          case message.chomp
+          when "PING" then link.puts "PONG"
+          when "TEMP"
+            celsius = 27 - (chip.read - 0.706) / 0.001721
+            link.puts "#{(celsius * 10).to_i / 10.0} °C"
+          end
+        end
+      end
+      SOL
+      <<~'SOL'
+      require "ble"
+      require "adc"
+
+      link = BLE::UART.new(name: "ChunkyPico")
+      chip = ADC.new(:temperature)
+      link.start(1500) do
+        message = link.gets_nonblock
+        next unless message
+
+        if message.chomp == "PING"
+          link.puts "PONG"
+        elsif message.chomp == "TEMP"
+          link.puts((27 - (chip.read - 0.706) / 0.001721).to_s)
+        end
+      end
+      SOL
+    ]
+  },
+  "pico-deploy" => {
+    "de" => [
+      <<~'SOL',
+      def lauf_status(zeilen)
+        stand = :waiting
+        zeilen.each do |zeile|
+          if zeile == "DONE"
+            stand = :done
+          elsif zeile.start_with?("ERROR ")
+            stand = "error: #{zeile[6..-1]}"
+          elsif zeile == "RUNNING"
+            stand = :running
+          end
+        end
+        stand
+      end
+
+      bereit = "READY prremote-runtime/0.4.2 board=picow"
+      [lauf_status([bereit, "RUNNING", "hello", "DONE"]),
+       lauf_status([bereit, "RUNNING", "ERROR NoMethodError"]),
+       lauf_status([bereit, "RUNNING", "tick"]),
+       lauf_status([bereit])]
+      SOL
+      <<~'SOL'
+      def lauf_status(zeilen)
+        return :done if zeilen.include?("DONE")
+
+        fehler = zeilen.find { |zeile| zeile.start_with?("ERROR") }
+        return "error: " + fehler.split(" ", 2)[1] if fehler
+        return :running if zeilen.include?("RUNNING")
+
+        :waiting
+      end
+
+      bereit = "READY prremote-runtime/0.4.2 board=picow"
+      [lauf_status([bereit, "RUNNING", "hello", "DONE"]),
+       lauf_status([bereit, "RUNNING", "ERROR NoMethodError"]),
+       lauf_status([bereit, "RUNNING", "tick"]),
+       lauf_status([bereit])]
+      SOL
+    ],
+    "en" => [
+      <<~'SOL',
+      def run_status(lines)
+        status = :waiting
+        lines.each do |line|
+          if line == "DONE"
+            status = :done
+          elsif line.start_with?("ERROR ")
+            status = "error: #{line[6..-1]}"
+          elsif line == "RUNNING"
+            status = :running
+          end
+        end
+        status
+      end
+
+      ready = "READY prremote-runtime/0.4.2 board=picow"
+      [run_status([ready, "RUNNING", "hello", "DONE"]),
+       run_status([ready, "RUNNING", "ERROR NoMethodError"]),
+       run_status([ready, "RUNNING", "tick"]),
+       run_status([ready])]
+      SOL
+      <<~'SOL'
+      def run_status(lines)
+        return :done if lines.include?("DONE")
+
+        error = lines.find { |line| line.start_with?("ERROR") }
+        return "error: " + error.split(" ", 2)[1] if error
+        return :running if lines.include?("RUNNING")
+
+        :waiting
+      end
+
+      ready = "READY prremote-runtime/0.4.2 board=picow"
+      [run_status([ready, "RUNNING", "hello", "DONE"]),
+       run_status([ready, "RUNNING", "ERROR NoMethodError"]),
+       run_status([ready, "RUNNING", "tick"]),
+       run_status([ready])]
+      SOL
+    ]
+  },
+  # (end of the Pico lessons)
   "ruby2d" => {
     "de" => [%(require "ruby2d"
 set title: "Chunky bleibt da", width: 400, height: 300
@@ -838,6 +1469,11 @@ end
 
 quakes = JSON.parse(File.read("data/all_month.geojson"))["features"]
 puts strong_quakes(quakes, 5))]
+  },
+  # the IronRuby lesson: the same code in de and en (IRONRUBY_SOLUTIONS)
+  "ironruby" => {
+    "de" => IRONRUBY_SOLUTIONS,
+    "en" => IRONRUBY_SOLUTIONS
   },
   # PicoRuby has no tally: by hand, with || and with Hash.new(0)
   "picoruby" => {
@@ -1466,6 +2102,74 @@ def load_lesson_files(lesson)
   end
 end
 
+# The IronRuby lesson ("engine": "ironruby") on IronRuby itself: the bundle
+# the page loads (html/assets/ironruby/, tools/vendor_ironruby.rb) under Node,
+# one process per language - every cell above the exercise, in order (what ▶
+# on the exercise runs first on a fresh page), then the starter and the
+# solutions, each followed by the exercise's "probe". The check is CRuby, as
+# on the page: output (the picture lines taken out), result and probe as
+# PicoRubyCells::Values, code. Returns the number of failures.
+IRONRUBY_NODE = File.expand_path("ironruby_node.mjs", __dir__)
+
+def ironruby_available?
+  File.file?(File.expand_path("../html/assets/ironruby/_framework/dotnet.js", __dir__)) &&
+    system("node", "--version", out: File::NULL, err: File::NULL)
+end
+
+def check_ironruby(lesson, lang, cells, exercise_at)
+  where = "#{lesson["id"]}/#{lang}"
+  exercise = cells[exercise_at]
+  solutions = SOLUTIONS.fetch(lesson["id"]).fetch(SOLUTION_LANG.fetch(lang, lang))
+  earlier = EarlierCells.before(exercise_at, cells, {}) { |i| cells[i]["code"] }
+  variants = [["starter", exercise["code"]]] + IRONRUBY_WRONG.each_with_index.map { |s, i| ["wrong#{i + 1}", s] } +
+             solutions.each_with_index.map { |s, i| ["solution#{i + 1}", s] }
+  runs = earlier.map { |_, code| { "code" => code } } +
+         variants.map { |_, code| { "code" => code, "probe" => exercise["probe"] } }
+  out, err, status = Open3.capture3("node", IRONRUBY_NODE, stdin_data: JSON.generate("runs" => runs))
+  unless status.success?
+    puts "FAIL #{where}: test/ironruby_node.mjs exited #{status.exitstatus}: #{err.lines.last(3).join.strip}"
+    return 1
+  end
+  answers = JSON.parse(out)
+  failures = 0
+  earlier.each_with_index do |(idx, _), i|
+    answer = answers[i]
+    next if answer["ok"]
+
+    puts "FAIL #{where}: demo cell #{idx} raised #{answer.dig("error", "class")}: #{answer.dig("error", "message")}"
+    failures += 1
+  end
+  variants.each_with_index do |(label, candidate), i|
+    answer = answers[earlier.size + i]
+    starter_like = label == "starter" || label.start_with?("wrong")
+    if !answer["ok"] && !starter_like
+      puts "FAIL #{where} (#{label}): raised #{answer.dig("error", "class")}: #{answer.dig("error", "message")}"
+      failures += 1
+      next
+    end
+    bind = RubyVM::InstructionSequence.compile("proc { binding }.call", "chunky.rb").eval
+    output, = IronRubyCells.split(answer["stdout"].to_s)
+    bind.local_variable_set(:output, output)
+    bind.local_variable_set(:result, answer["ok"] ? PicoRubyCells.value(answer["result"].to_s) : nil)
+    bind.local_variable_set(:probe, answer["probe"] ? PicoRubyCells.value(answer["probe"].to_s) : nil)
+    bind.local_variable_set(:code, candidate)
+    %i[images scenes downloads audios games shoes_types].each { |name| bind.local_variable_set(name, []) }
+    passed = begin
+      !!eval(exercise["check"], bind, "check.rb")
+    rescue Exception
+      false
+    end
+    if starter_like && passed
+      puts "FAIL #{where}: #{label} code passes check! (probe #{answer["probe"].inspect})"
+      failures += 1
+    elsif !starter_like && !passed
+      puts "FAIL #{where} (#{label}): does not pass check (probe #{answer["probe"].inspect})"
+      failures += 1
+    end
+  end
+  failures
+end
+
 # While working on a few lessons: HARNESS_JSON=other/lessons.json runs another
 # build of the course, HARNESS_ONLY=id,id only those lessons, and
 # HARNESS_SOLUTIONS=file.rb (a file whose last expression is a Hash like
@@ -1486,6 +2190,11 @@ def run_harness(langs)
     selected = selected.select { |lesson| only.include?(lesson["id"]) }
   end
   failures = 0
+  # the Pico lessons ("pico") run on the Pico simulator, in a process of
+  # their own (test/pico_harness.rb): a clean top level for GPIO, no
+  # CRuby net/http
+  pico, selected = selected.partition { |lesson| lesson["pico"] }
+  failures += 1 unless pico.empty? || pico_harness(pico, langs)
   Dir.chdir(WORKDIR)
 
   # the JRuby lesson's data is vendored, not in git (tools/vendor_jruby.rb)
@@ -1493,6 +2202,12 @@ def run_harness(langs)
     puts "SKIP jruby: no html/assets/jruby/data/ - run tools/vendor_jruby.rb"
     selected = selected.reject { |lesson| lesson["engine"] == "jruby" }
   end
+  # the IronRuby lesson's runtime is vendored, not in git (tools/vendor_ironruby.rb)
+  if selected.any? { |lesson| lesson["engine"] == "ironruby" } && !ironruby_available?
+    puts "SKIP ironruby: no html/assets/ironruby/ (run tools/vendor_ironruby.rb) or no node"
+    selected = selected.reject { |lesson| lesson["engine"] == "ironruby" }
+  end
+
   selected.each do |lesson|
 
   langs.each do |lang|
@@ -1500,6 +2215,11 @@ def run_harness(langs)
     cells = l["cells"]
     exercise_at = cells.index { |c| c["t"] == "x" }
     exercise = cells[exercise_at]
+    # the IronRuby lesson runs on IronRuby, under Node (check_ironruby)
+    if lesson["engine"] == "ironruby"
+      failures += check_ironruby(lesson, lang, cells, exercise_at)
+      next
+    end
     # A fresh page, where the learner's first ▶ is the exercise's: the cells
     # above it that the page runs first, in order (html/earlier_cells.rb).
     # The cells above any demo cell are the first of these, so every demo
@@ -1625,13 +2345,26 @@ end
   failures.zero?
 end
 
+def pico_harness(lessons, langs)
+  ids = lessons.map { |lesson| lesson["id"] }
+  args = [RbConfig.ruby, File.expand_path("pico_harness.rb", __dir__), "--stdin", "--lang=#{langs.join(",")}", "--only=#{ids.join(",")}"]
+  IO.popen(args, "w") { |io| io.write(JSON.generate(SOLUTIONS.slice(*ids))) }
+  $?.success?
+end
+
+# test/pico_harness.rb asks for the solutions of the lessons it checks on
+# its own (ruby test/pico_harness.rb, without check_harness.rb)
+if ARGV[0] == "--dump-solutions"
+  puts JSON.generate(SOLUTIONS.slice(*ARGV[1].to_s.split(",")))
+  exit
+end
+
 # One process per language: lesson code defines methods and classes at the
 # top level, which outlive the binding, and ja runs the same code as en - an
 # en solution's `def square` would let the ja starter pass.
 if (lang = ENV["HARNESS_LANG"])
   exit(run_harness([lang]) ? 0 : 1)
 else
-  require "rbconfig"
   results = LANGS.map { |l| system({ "HARNESS_LANG" => l }, RbConfig.ruby, __FILE__) }
   exit(results.all? ? 0 : 1)
 end

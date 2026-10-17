@@ -1,5 +1,5 @@
 # The JRuby side of the JRuby lesson ("engine": "jruby", docs/HANDOVER.md
-# §6r). jruby_worker.js evaluates this once, inside JRuby 10.1 (TeaVM), right
+# §6t). jruby_worker.js evaluates this once, inside JRuby 10.1 (TeaVM), right
 # after the boot; then every cell is a call of ChunkyLab.run.
 #
 # TeaVM JRuby evaluates each request in a scope of its own, so a local from

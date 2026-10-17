@@ -1,4 +1,4 @@
-// JRuby for the JRuby lesson (docs/HANDOVER.md §6r): a lesson with
+// JRuby for the JRuby lesson (docs/HANDOVER.md §6t): a lesson with
 // "engine": "jruby" runs its cells on JRuby 10.1 (TeaVM, compiled to
 // JavaScript) instead of CRuby - except a cell with "on": "cruby", which
 // the page's own ruby.wasm runs, for the side-by-side. JRuby runs in a Web
@@ -124,7 +124,7 @@
 
   function setState(s) { state = s; show(); }
 
-  // The bonus card (docs/HANDOVER.md §6r): its button puts jruby_swing.html
+  // The bonus card (docs/HANDOVER.md §6t): its button puts jruby_swing.html
   // - JRuby 9.4 on CheerpJ, about 40 MB - into an iframe in place of the
   // card's preview. Nothing of it loads before that click; a new lesson page
   // drops the iframe, and the JVM in it, with the rest of the lesson's HTML.
