@@ -642,6 +642,26 @@ class PicoSimTest < Minitest::Test
     assert PicoCRuby.posted.any? { |kind, text| kind == "lcd" && text.start_with?("0,0,240,135|") }
   end
 
+  # on an RP2040 Pico a full screen at once (64 800 bytes, copied again by
+  # SPI#write) would not fit in R2P2's heap: fill sends it a row at a time
+  def test_lcd_fill_streams_rows_of_at_most_480_bytes
+    sizes = []
+    board = run_board(parts: ["lcd114"]) do
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000, sck_pin: 10, copi_pin: 11)
+      spi.define_singleton_method(:write) do |*args|
+        sizes << args.sum { |x| x.is_a?(String) ? x.bytesize : 1 }
+        super(*args)
+      end
+      require "st7789"
+      d = ST7789.new(spi: spi)
+      d.fill(ST7789::GREEN)
+      d.fill_rect(-5, 100, 300, 50, ST7789::RED)
+    end
+    assert_operator sizes.max, :<=, 480
+    assert_equal 240 * 100, board.lcd.count(ST7789::GREEN)
+    assert_equal 240 * 35, board.lcd.count(ST7789::RED)
+  end
+
   def test_lcd_dark_before_init_inverted_without_invon_and_keeps_its_ram
     board = run_board(parts: ["lcd114"]) { sleep_ms 5 }
     refute board.lcd.on?

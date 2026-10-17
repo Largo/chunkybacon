@@ -64,7 +64,9 @@ class ST7789
     y1 = y + h > HEIGHT ? HEIGHT : y + h
     return if x1 <= x0 || y1 <= y0
     window(x0, y0, x1 - 1, y1 - 1)
-    data(bytes(color) * ((x1 - x0) * (y1 - y0)))
+    # 1行ずつ送る（その間CSは低いまま）。画面全体を一度に送ると64 800バイトになり、
+    # SPI#writeがそれをもう一度コピーする。Picoにはメモリが足りない
+    data_rows(bytes(color) * (x1 - x0), y1 - y0)
     nil
   end
 
@@ -164,6 +166,14 @@ class ST7789
     @dc.write(1)
     @cs.write(0)
     @spi.write(*args)
+    @cs.write(1)
+  end
+
+  # 同じバイト列をn回続けて、ひとつながりのピクセルデータとして送る
+  def data_rows(row, n)
+    @dc.write(1)
+    @cs.write(0)
+    n.times { @spi.write(row) }
     @cs.write(1)
   end
 end
