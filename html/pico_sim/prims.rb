@@ -471,7 +471,7 @@ module PIO
 
     # nothing in these programs pushes: a blocking get waits for ever
     def get
-      PicoSim.world.pio_stall(@sm__, "get: the RX FIFO stays empty")
+      PicoSim.world.pio_stall(@sm__, "get")
       0
     end
 

@@ -1,4 +1,4 @@
-// The seven Pico lessons of html/lessons.js in a browser (docs/HANDOVER.md
+// The eight Pico lessons of html/lessons.js in a browser (docs/HANDOVER.md
 // §6r), against a dev server, in each language asked for (default de en):
 //
 //   BASE=http://127.0.0.1:18111/ node test/pico_lessons_test.mjs [de] [en] [ja]
@@ -16,7 +16,9 @@
 // bench's laptop panel; ■ Stop resets the Pico within a second, keeps what
 // the run printed, and the next run works; the CRuby laptop cell
 // (pico_laptop.rb) finds the advertising Pico and prints its echo; no page
-// errors. (■ Stop is the live bench's: the other cells show idle previews
+// errors. The LCD: its frames reach the bench's glass, the joystick
+// pressed with the mouse reaches the running loop and B ends it; the WS2812
+// cells light the PicoGo's and the matrix's LEDs. (■ Stop is the live bench's: the other cells show idle previews
 // with Stop disabled, so the tests click ".pico-stop:enabled".)
 // pico_board_test.mjs covers the same machinery on the demo lesson
 // file (tmp/), pico_bench_shots.mjs the drawing.
@@ -30,7 +32,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const BASE = process.env.BASE || "http://127.0.0.1:8011/";
 const SHOTS = process.env.SHOTS || "";
 const langs = process.argv.slice(2).length ? process.argv.slice(2) : ["de", "en"];
-const IDS = ["pico-blink", "pico-sensors", "pico-robot", "pico-epaper", "pico-wifi", "pico-ble", "pico-deploy"];
+const IDS = ["pico-blink", "pico-sensors", "pico-robot", "pico-epaper", "pico-lcd", "pico-wifi", "pico-ble", "pico-deploy"];
 
 const text = fs.readFileSync(path.join(ROOT, "html/lessons.js"), "utf8");
 const data = JSON.parse(text.slice(text.indexOf("JSON.stringify(") + 15, text.lastIndexOf(");")));
@@ -160,7 +162,26 @@ for (const lang of langs) {
 
       // ---------- every other demo cell ----------
       let o;
-      if (parts.includes("button14")) {
+      if (parts.includes("lcd114") && /GPIO::PULL_UP/.test(c.code)) {
+        // the joystick cell: steer with the mouse, B ends the loop
+        await run(page, i, { wait: false });
+        await until(page, x => document.querySelector(`#pico-slot-${x} .pico-lcd-keys`) && /"lit":true/.test(window.__bench().state), i, 10000);
+        const f0 = (await debug(page)).lcd;
+        const right = page.locator(`#pico-slot-${i} .pico-lcd-keys button`).nth(3);
+        await right.hover();
+        await page.mouse.down();
+        check(`${L} cell ${i}: the joystick, pushed right with the mouse, reaches the loop`, await until(page, () => /"keys":\["right"\]/.test(window.__bench().state), null, 3000));
+        check(`${L} cell ${i}: ...and the square moves on the glass`, await until(page, f => window.__bench().lcd > f + 2, f0, 3000));
+        await page.mouse.up();
+        const t0 = Date.now();
+        const b = page.locator(`#pico-slot-${i} .pico-lcd-keys button`).nth(6);
+        await b.hover();
+        await page.mouse.down();
+        await page.waitForFunction(x => window.__rans.includes(x), i, { timeout: 20000 });
+        await page.mouse.up();
+        check(`${L} cell ${i}: key B ends the program (${Date.now() - t0} ms)`, Date.now() - t0 < 4000);
+        o = await out(page, i);
+      } else if (parts.includes("button14")) {
         await run(page, i, { wait: false });
         await until(page, x => document.querySelector(`#pico-slot-${x} .pico-press`) && window.__bench().state, i);
         await page.waitForTimeout(500);
@@ -180,6 +201,15 @@ for (const lang of langs) {
         const d = await debug(page);
         const mounted = await page.evaluate(x => !!document.querySelector(`#pico-slot-${x} .pico-bench`) && !document.getElementById(`pico-slot-${x}`).hidden, i);
         check(`${L} cell ${i}: the bench is under the cell and drew this run's state`, mounted && d.idx === String(i) && d.state && d.state !== before.state, JSON.stringify({ mounted, idx: d.idx }));
+      }
+      if (parts.includes("lcd114")) {
+        const d = await debug(page);
+        const lit = await page.evaluate(x => { const im = document.querySelector(`#pico-slot-${x} .pb-lcd-image`); return im ? [im.getAttribute("href") || "", im.style.opacity] : ["", ""]; }, i);
+        check(`${L} cell ${i}: the LCD's frames reached the bench and the glass is lit`, d.lcd > (before.lcd || 0) && lit[0].length > 100 && Number(lit[1]) > 0, JSON.stringify({ lcd: d.lcd, img: lit[0].length, opacity: lit[1] }));
+      }
+      if (parts.includes("rgbled") || (parts.includes("picogo") && /ws2812|pio/.test(c.code))) {
+        const lit = await page.evaluate(x => [...document.querySelectorAll(`#pico-slot-${x} .pb-rgb-led.is-on, #pico-slot-${x} .pb-robot-led.is-on`)].length, i);
+        check(`${L} cell ${i}: the WS2812 LEDs light up on the bench`, lit >= (parts.includes("rgbled") ? 160 : 1), lit);
       }
       if (parts.includes("epd213")) {
         const d = await debug(page);

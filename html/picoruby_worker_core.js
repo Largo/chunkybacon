@@ -16,7 +16,7 @@
 //
 // The host (picoruby_worker.js in a browser, a fake in node) gives:
 //   progress(id, text)            output since the last flush
-//   board(id, kind, text)         "state" | "epd_frame" | "ble" | "log"
+//   board(id, kind, text)         "state" | "epd_frame" | "lcd" | "ble" | "log"
 //   http(method, url, headersJson, body) -> "status\nheaders\n\nbody"
 //   cameraHex(name) -> hex string
 //   simFiles() -> Promise<[{name, code}]>   html/pico_sim/, in manifest order

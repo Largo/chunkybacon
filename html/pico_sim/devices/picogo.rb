@@ -50,7 +50,7 @@ module PicoSim
       world.adc_source(0, self)
       world.watch(4, self)
       [16, 17, 18, 19, 20, 21].each { |pin| world.watch(pin, self) }
-      @leds = Ws2812Chain.new(22, 4)
+      @leds = Ws2812Chain.new(22, 4, world.epd_store)
       world.pio_watch(22, self)
     end
 

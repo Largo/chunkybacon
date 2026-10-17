@@ -513,11 +513,18 @@ class PicoSimTest < Minitest::Test
     end
     # the gem's default brightness: 5 %
     assert_equal [[12, 5, 0]] * 4, board.leds.colors
+    # the chips keep their colours over a reset of the Pico, until clear
+    board = run_board(parts: ["picogo"]) { sleep_ms 5 }
+    assert_equal [[12, 5, 0]] * 4, board.leds.colors
+    assert_equal 0, board.leds.frames
+    board = run_board(parts: ["picogo"]) { ws2812(4, 22).clear }
+    assert_equal [], board.leds.lit
   end
 
   def test_pio_at_the_default_clock_is_too_fast_for_ws2812
     require "pio"
     out = nil
+    PicoSim.world.epd_store.delete("ws2812:22")   # no colours left from another test
     board = run_board(parts: ["picogo"]) do
       prog = WS2812.pio_program
       sm = PIO::StateMachine.new(pio: PIO::PIO0, sm: 0, program: prog, sideset_pins: 22,
@@ -530,7 +537,8 @@ class PicoSimTest < Minitest::Test
     assert_equal 125_000_000, out
     assert_equal "too_fast", board.leds.note
     assert_equal [], board.leds.lit
-    assert board.events.any? { |e| e[1] == "log" && e[2].include?("too short") }
+    assert_equal 0, board.leds.frames
+    assert board.events.any? { |e| e[1] == "log" && e[2].start_with?("ws2812 too_fast GP22 56 16") }
   end
 
   def test_pio_program_by_hand_grb_left_aligned

@@ -521,7 +521,7 @@ module PicoSim
       t = advance
       unless sm.enabled
         sm.backlog.concat(words)
-        pio_stall(sm, "put: the TX FIFO is full and the state machine does not run (sm.start)") if sm.backlog.size > sm.fifo_depth
+        pio_stall(sm, "put") if sm.backlog.size > sm.fifo_depth
         return
       end
       pio_send(sm, words, t)
@@ -552,8 +552,10 @@ module PicoSim
       sleep_ms(left.ceil) if left > 0
     end
 
+    # a put into the full FIFO of a stopped state machine, a get from an
+    # empty one: it waits for ever ("pio stall put PIO0 SM0" for the bench)
     def pio_stall(sm, why)
-      event("log", "PIO#{sm.pio} SM#{sm.sm}: #{why}")
+      event("log", "pio stall #{why} PIO#{sm.pio} SM#{sm.sm}")
       while true
         sleep_ms 100
       end

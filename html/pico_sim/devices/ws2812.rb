@@ -13,7 +13,9 @@
 # at the default 125 MHz - are too short for the chip, which sees nothing.
 #
 # The colours are what the chip got (0..255 each); the bench brightens
-# them for the screen, as a camera would see a lit LED.
+# them for the screen, as a camera would see a lit LED. They outlast a reset
+# of the Pico, as the chips do while they have power (World#epd_store): a
+# program that should leave them dark ends with clear.
 
 module PicoSim
   class Ws2812Chain
@@ -24,10 +26,12 @@ module PicoSim
 
     attr_reader :pin, :count, :frames, :note
 
-    def initialize(pin, count)
+    def initialize(pin, count, store)
       @pin = pin
       @count = count
-      @colors = Array.new(count, 0)
+      key = "ws2812:#{pin}"
+      store[key] = Array.new(count, 0) unless store[key] && store[key].size == count
+      @colors = store[key]
       @bits = []
       @frames = 0
       @until = nil
@@ -39,18 +43,18 @@ module PicoSim
       latch(world) if @until && t > @until + 0.05
       ns = sm.timing_ns(world.board)
       if ns.nil?
-        say(world, "unknown", "PIO on GP#{@pin}: the program sends no pulse per bit the WS2812 can read")
+        say(world, "unknown", "ws2812 unknown GP#{@pin}")
         return
       end
       @timing = [ns[0].round, ns[2].round]
       one = decode(ns[0])
       zero = decode(ns[2])
       if one.nil? && zero.nil?
-        say(world, "too_fast", "WS2812 on GP#{@pin}: pulses of #{ns[0].round} and #{ns[2].round} ns are too short - check freq:")
+        say(world, "too_fast", "ws2812 too_fast GP#{@pin} #{ns[0].round} #{ns[2].round}")
         return
       end
       if one == zero
-        say(world, "one_level", "WS2812 on GP#{@pin}: 0 and 1 look the same (#{ns[2].round} / #{ns[0].round} ns high)")
+        say(world, "one_level", "ws2812 one_level GP#{@pin} #{ns[0].round} #{ns[2].round}")
       else
         @note = nil
       end
@@ -69,6 +73,8 @@ module PicoSim
       high_ns >= SPLIT_NS ? 1 : 0
     end
 
+    # the bench's log: "ws2812 <note> GP<pin> [<T1H ns> <T0H ns>]" (the page
+    # words it, pico_board.js onLog)
     def say(world, note, text)
       world.event("log", text) unless @note == note
       @note = note
@@ -131,7 +137,7 @@ module PicoSim
     def pins = [PIN]
 
     def attach(world)
-      @chain = Ws2812Chain.new(PIN, 160)
+      @chain = Ws2812Chain.new(PIN, 160, world.epd_store)
       world.pio_watch(PIN, self)
     end
 

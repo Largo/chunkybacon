@@ -999,6 +999,102 @@ puts read.amount)]
       SOL
     ]
   },
+  "pico-lcd" => {
+    "de" => [
+      <<~'SOL',
+      require "spi"
+      require "gpio"
+      require "st7789"
+
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,
+                    sck_pin: 10, copi_pin: 11)
+      lcd = ST7789.new(spi: spi)
+      lcd.fill(ST7789::BLACK)
+      taste_a = GPIO.new(15, GPIO::IN | GPIO::PULL_UP)
+      zaehler = 0
+      vorher = false
+      lcd.text("0", 100, 50, ST7789::YELLOW, scale: 4)
+      100.times do
+        jetzt = taste_a.low?
+        if jetzt && !vorher
+          zaehler += 1
+          lcd.text(zaehler.to_s, 100, 50, ST7789::YELLOW, scale: 4)
+        end
+        vorher = jetzt
+        sleep_ms 20
+      end
+      SOL
+      <<~'SOL'
+      require "spi"
+      require "gpio"
+      require "st7789"
+
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,
+                    sck_pin: 10, copi_pin: 11)
+      lcd = ST7789.new(spi: spi)
+      lcd.fill(ST7789::BLACK)
+      taste_a = GPIO.new(15, GPIO::IN | GPIO::PULL_UP)
+      zaehler = 0
+      oben = true
+      100.times do
+        if taste_a.low? && oben
+          zaehler += 1
+          lcd.fill(ST7789::BLACK)
+          lcd.text("Zahl: #{zaehler}", 20, 50, ST7789::GREEN, scale: 3)
+        end
+        oben = taste_a.high?
+        sleep_ms 20
+      end
+      SOL
+    ],
+    "en" => [
+      <<~'SOL',
+      require "spi"
+      require "gpio"
+      require "st7789"
+
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,
+                    sck_pin: 10, copi_pin: 11)
+      lcd = ST7789.new(spi: spi)
+      lcd.fill(ST7789::BLACK)
+      key_a = GPIO.new(15, GPIO::IN | GPIO::PULL_UP)
+      count = 0
+      was = false
+      lcd.text("0", 100, 50, ST7789::YELLOW, scale: 4)
+      100.times do
+        now = key_a.low?
+        if now && !was
+          count += 1
+          lcd.text(count.to_s, 100, 50, ST7789::YELLOW, scale: 4)
+        end
+        was = now
+        sleep_ms 20
+      end
+      SOL
+      <<~'SOL'
+      require "spi"
+      require "gpio"
+      require "st7789"
+
+      spi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,
+                    sck_pin: 10, copi_pin: 11)
+      lcd = ST7789.new(spi: spi)
+      lcd.fill(ST7789::BLACK)
+      key_a = GPIO.new(15, GPIO::IN | GPIO::PULL_UP)
+      count = 0
+      up = true
+      100.times do
+        if key_a.low? && up
+          count += 1
+          lcd.fill(ST7789::BLACK)
+          lcd.text("Count: #{count}", 20, 50, ST7789::GREEN, scale: 3)
+        end
+        up = key_a.high?
+        sleep_ms 20
+      end
+      SOL
+    ],
+  },
   "pico-wifi" => {
     "de" => [
       <<~'SOL',

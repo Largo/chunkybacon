@@ -901,6 +901,7 @@ kbd {
 .pico-moves { display: inline-flex; align-items: center; gap: 0.2rem; }
 .pico-moves-name { font-weight: 600; margin-right: 0.2rem; }
 .pico-move { min-width: 2rem; padding: 0.15rem 0.4rem; font-size: 0.85rem; }
+.pico-press.pico-key { min-width: 2.2rem; padding: 0.15rem 0.45rem; }
 .pico-line { max-width: 100%; min-width: 0; }
 .pico-line input { box-sizing: border-box; max-width: 100%; min-width: 0; width: 11rem; font: inherit; font-family: var(--font-code); padding: 0.2rem 0.4rem; border: 1px solid var(--ink-soft); border-radius: 4px; background: var(--pb-board); color: var(--pb-ink); }
 .pico-say { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -996,6 +997,21 @@ kbd {
 @keyframes pb-epd-full { 0% { opacity: 1; fill: #1d1d1d; } 50% { opacity: 1; fill: #e8e6df; } }
 .pb-busy { fill: #3a2c10; stroke: #8a6a20; stroke-width: 0.6; }
 .pb-busy.is-on { fill: #ffbf2f; stroke: #fff2c9; }
+/* the Pico-LCD-1.14 and the Pico-RGB-LED */
+.pb-lcd-pcb, .pb-rgb-pcb { fill: #1b1d21; stroke: #0b0c0d; stroke-width: 0.8; }
+.pb-lcd-bezel { fill: #0c0d0f; stroke: #2c2f34; stroke-width: 0.8; }
+.pb-lcd-glass { fill: #040506; }
+.pb-lcd-glass.is-backlit { fill: #161a20; }
+.pb-lcd-image { image-rendering: pixelated; image-rendering: crisp-edges; transition: opacity 80ms; }
+.pb-joy-base { fill: #2b2e33; stroke: #0e0f11; stroke-width: 0.8; }
+.pb-key { cursor: pointer; touch-action: none; }
+.pb-key-cap { fill: #3a3e45; stroke: #8b9099; stroke-width: 0.8; }
+.pb-key-cap.is-pressed { fill: #2c4f8e; stroke: #8db4ff; }
+.pb-key-text { fill: #e4e6ea; font: 700 8px var(--font-display); pointer-events: none; }
+.pb-key-arrow { font-size: 5px; }
+.pb-rgb-led, .pb-robot-led { fill: #dcd8cc; stroke: #8f8b80; stroke-width: 0.5; }
+.pb-rgb-led.is-on, .pb-robot-led.is-on { stroke: rgba(255, 255, 255, 0.75); }
+.pb-rgb-glow { opacity: 0; pointer-events: none; }
 /* the cards: arena, camera, Wi-Fi, laptop */
 .pb-card { fill: var(--pb-card); stroke: var(--pb-card-edge); stroke-width: 1; }
 .pb-card-title { fill: var(--pb-ink); font: 700 10px var(--font-display); }
@@ -1066,7 +1082,7 @@ kbd {
 .pb-ble-dot.is-on { fill: #3d8bff; }
 @media (prefers-reduced-motion: reduce) {
   .pb-epd-flash.is-flashing, .pb-photo-flash.is-flashing, .pb-radio.is-on { animation: none; }
-  .pb-button-cap { transition: none; }
+  .pb-button-cap, .pb-lcd-image { transition: none; }
 }
 @media (prefers-color-scheme: dark) {
   .pico-slot { --pb-mat: #23272e; }

@@ -287,6 +287,25 @@ window.LESSONS_JSON = JSON.stringify({
       "boardWebcam": "Meine Webcam benutzen",
       "boardWebcamOn": "Webcam an – ihre Bilder bleiben in diesem Browser.",
       "boardWebcamNo": "Keine Webcam verfügbar (keine Erlaubnis, keine Kamera oder die Seite ist nicht auf https) – es bleibt bei den gezeichneten Bildern.",
+      "boardLcd": "LCD 1,14\"",
+      "boardLcdKeys": "Tasten am LCD",
+      "boardKeyA": "Taste A (GP15)",
+      "boardKeyB": "Taste B (GP17)",
+      "boardJoyUp": "Joystick nach oben (GP2)",
+      "boardJoyDown": "Joystick nach unten (GP18)",
+      "boardJoyLeft": "Joystick nach links (GP16)",
+      "boardJoyRight": "Joystick nach rechts (GP20)",
+      "boardJoyCtrl": "Joystick gedrückt (GP3)",
+      "boardLcdDark": "LCD dunkel",
+      "boardLcdAlt": "LCD an, Hintergrundlicht %1 %",
+      "boardOnPico": "steckt auf den Pins des Pico",
+      "boardRgbLed": "RGB-LED-Matrix 16 × 10 (GP6)",
+      "boardLeds": "LEDs",
+      "boardLedsAlt": "%1 von %2 LEDs leuchten",
+      "boardWsFast": "WS2812 an GP%1: Pulse von %2 ns sind zu kurz – die LEDs sehen nichts (freq:?)",
+      "boardWsUnknown": "PIO an GP%1: keine Pulse, die eine WS2812 lesen kann",
+      "boardWsSame": "WS2812 an GP%1: 0 und 1 sehen gleich aus (%2 ns)",
+      "boardPioStall": "PIO: Die Zustandsmaschine wartet für immer – läuft sie (sm.start)?",
       "boardAdvertising": "sichtbar",
       "boardAlone": "nur der Pico mit seiner LED auf dem Board",
       "ironStopped": "Nach 30 Sekunden angehalten.",
@@ -570,6 +589,25 @@ window.LESSONS_JSON = JSON.stringify({
       "boardWebcam": "Use my webcam",
       "boardWebcamOn": "Webcam on – its pictures stay in this browser.",
       "boardWebcamNo": "No webcam here (no permission, no camera, or the page is not on https) – the drawn pictures stay.",
+      "boardLcd": "LCD 1.14\"",
+      "boardLcdKeys": "LCD keys",
+      "boardKeyA": "Key A (GP15)",
+      "boardKeyB": "Key B (GP17)",
+      "boardJoyUp": "Joystick up (GP2)",
+      "boardJoyDown": "Joystick down (GP18)",
+      "boardJoyLeft": "Joystick left (GP16)",
+      "boardJoyRight": "Joystick right (GP20)",
+      "boardJoyCtrl": "Joystick pressed (GP3)",
+      "boardLcdDark": "LCD dark",
+      "boardLcdAlt": "LCD on, backlight %1 %",
+      "boardOnPico": "sits on the Pico's pins",
+      "boardRgbLed": "RGB LED matrix 16 × 10 (GP6)",
+      "boardLeds": "LEDs",
+      "boardLedsAlt": "%1 of %2 LEDs lit",
+      "boardWsFast": "WS2812 on GP%1: pulses of %2 ns are too short – the LEDs see nothing (freq:?)",
+      "boardWsUnknown": "PIO on GP%1: no pulses a WS2812 can read",
+      "boardWsSame": "WS2812 on GP%1: 0 and 1 look the same (%2 ns)",
+      "boardPioStall": "PIO: the state machine waits for ever – does it run (sm.start)?",
       "boardAdvertising": "advertising",
       "boardAlone": "only the Pico, with its onboard LED",
       "ironStopped": "Stopped after 30 seconds.",
@@ -853,6 +891,25 @@ window.LESSONS_JSON = JSON.stringify({
       "boardWebcam": "自分のWebカメラを使う",
       "boardWebcamOn": "Webカメラはオンです。映像はこのブラウザーの外に出ません。",
       "boardWebcamNo": "Webカメラを使えません（許可がない、カメラがない、またはページがhttpsではない）。描いた絵をそのまま使います。",
+      "boardLcd": "LCD 1.14インチ",
+      "boardLcdKeys": "LCDのキー",
+      "boardKeyA": "キーA（GP15）",
+      "boardKeyB": "キーB（GP17）",
+      "boardJoyUp": "ジョイスティック上（GP2）",
+      "boardJoyDown": "ジョイスティック下（GP18）",
+      "boardJoyLeft": "ジョイスティック左（GP16）",
+      "boardJoyRight": "ジョイスティック右（GP20）",
+      "boardJoyCtrl": "ジョイスティック押し込み（GP3）",
+      "boardLcdDark": "LCDは消灯",
+      "boardLcdAlt": "LCD点灯、バックライト%1 %",
+      "boardOnPico": "Picoのピンに直接挿す",
+      "boardRgbLed": "RGB LEDマトリクス 16 × 10（GP6）",
+      "boardLeds": "LED",
+      "boardLedsAlt": "%2個のLEDのうち%1個が点灯",
+      "boardWsFast": "GP%1のWS2812: %2 nsのパルスは短すぎて、LEDには何も見えません（freq:は？）",
+      "boardWsUnknown": "GP%1のPIO: WS2812が読めるパルスがありません",
+      "boardWsSame": "GP%1のWS2812: 0と1が同じに見えます（%2 ns）",
+      "boardPioStall": "PIO: ステートマシンがずっと待っています。動いていますか（sm.start）？",
       "boardAdvertising": "アドバタイズ中",
       "boardAlone": "Picoだけ（基板のLED）",
       "ironStopped": "30秒で止めました。",
@@ -10940,6 +10997,42 @@ window.LESSONS_JSON = JSON.stringify({
             ],
             "check": "!board.robot.hit? && board.robot.gap_cm.between?(1, 13) && !board.robot.moving? && board.robot.traveled_cm > 30 && code.match?(/\\.(low\\?|high\\?|read\\b)/)",
             "hint": "Statt <code>sleep_ms 1000</code> wartest du auf die Wand: <code>sleep_ms 10 until ir_links.low? || ir_rechts.low?</code>."
+          },
+          {
+            "t": "h",
+            "html": "<h3>Licht von unten: vier WS2812</h3><p>Unter dem PicoGo sitzen vier RGB-LEDs, alle an GP22. Es sind <strong>WS2812</strong>-LEDs («NeoPixel»): In jeder sitzt ein winziger Chip neben einer roten, einer grünen und einer blauen LED. Sie hängen als Kette an einem einzigen Draht. Der Pico schickt 24 Bit pro LED – Grün, Rot, Blau, je acht Bit –, und jede LED behält die ersten 24 Bit, die bei ihr ankommen, und reicht den Rest weiter. Bleibt der Draht länger als 50 µs tief, zeigen alle, was sie bekommen haben.</p><p>Ein Bit ist ein Puls: etwa 0,4 µs hoch ist eine 0, etwa 0,8 µs eine 1. So schnell schaltet keine Ruby-Schleife einen Pin. Der RP2350 hat Helfer dafür: <strong>PIO</strong>, kleine Zustandsmaschinen, die winzige Programme selbständig an Pins ausführen. <code>picoruby-pio</code> von PicoRuby schreibt diese Programme in Ruby, und das Community-Gem <a href='https://github.com/ksbmyk/picoruby-ws2812' target='_blank'>picoruby-ws2812</a> von Miyuki Koshiba (MIT-Lizenz) baut darauf einen LED-Treiber – der Tab <code>ws2812.rb</code>, unverändert. Es gehört nicht zu PicoRuby selbst: Auf einem echten Pico kopierst du es nach <code>/lib</code>, wie die anderen Treiber.</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ws2812\"\n\nleds = WS2812.new(pin: 22, num: 4)\nleds.brightness = 30            # Prozent; das Gem beginnt mit 5\nleds.set_rgb(0, 255, 0, 0)      # rot\nleds.set_hex(1, 0x00FF00)       # grün\nleds.set_hsb(2, 240, 100, 100)  # blau: Farbton 240 Grad\nleds.set_rgb(3, 255, 160, 0)    # orange\nleds.show\nsleep_ms 1000\n# ein Licht läuft um den Roboter herum\n12.times do |i|\n  leds.fill(0, 0, 0)\n  leds.set_hsb(i % 4, i * 30, 100, 100)\n  leds.show\n  sleep_ms 150\nend\n",
+            "tabs": [
+              {
+                "name": "ws2812.rb",
+                "src": "pico/lib/ws2812.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>Die LEDs behalten ihre Farben, wenn das Programm endet – und wenn ■ Stopp den Pico zurücksetzt: Sie haben noch Strom, und niemand hat ihnen etwas anderes gesagt. <code>leds.clear</code> schaltet sie aus. Das Gem beginnt mit <code>brightness</code> 5 %: WS2812 sind hell, und viele davon bei voller Leistung brauchen mehr Strom, als ein USB-Anschluss liefert.</p><p>Öffne den Tab <code>ws2812.rb</code>. <code>self.pio_program</code> ist das PIO-Programm, vier Befehle: <code>out :x, 1</code> nimmt das nächste Bit, während der Pin tief ist (<code>side: 0</code>), und <code>jmp</code> setzt den Pin hoch und springt bei einer 0 weg. Bei 8 MHz ist ein Takt 125 ns: Eine 1 bleibt 7 Takte hoch (875 ns), eine 0 zwei (250 ns), und jedes Bit dauert 10 (1,25 µs). <code>_convert</code> stellt Grün an den Anfang und rechnet die Helligkeit ein. Dasselbe ohne das Gem:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pio\"\n\nws = PIO.asm(side_set: 1) do\n  wrap_target\n  label :bitloop\n  out :x, 1,                  side: 0, delay: 2\n  jmp :do_zero, cond: :not_x, side: 1, delay: 1\n  label :do_one\n  jmp :bitloop,               side: 1, delay: 4\n  label :do_zero\n  nop                         side: 0, delay: 4\n  wrap\nend\n# vier Befehle zu 16 Bit\np ws.instructions.map { |i| i.to_s(16) }\nsm = PIO::StateMachine.new(\n  pio: PIO::PIO0, sm: 0, program: ws, freq: 8_000_000,\n  sideset_pins: 22, out_shift_right: false,\n  out_shift_autopull: true, out_shift_threshold: 24,\n  fifo_join: PIO::FIFO_JOIN_TX\n)\nsm.start\n# ein Wort pro LED: grün, rot, blau - an den Anfang der 32 Bit geschoben\nsm.put_buffer([0x200000 << 8, 0x002000 << 8,\n               0x000020 << 8, 0x202020 << 8])\n",
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p><code>out_shift_threshold: 24</code> nimmt aus jedem 32-Bit-Wort 24 Bit, von oben (<code>out_shift_right: false</code>) – darum ist jede Farbe um 8 nach links geschoben. Nimm jetzt <code>freq: 8_000_000,</code> heraus und führ die Zelle nochmals aus: Die Zustandsmaschine läuft mit voller Geschwindigkeit (125 MHz), die Pulse sind 16-mal kürzer, und die LEDs sehen gar nichts – die Werkbank sagt es. In dieser Simulation wird das Timing aus dem Programm gemessen, so wie eine LED es liest; die PIO selbst läuft nicht Takt für Takt.</p>"
           }
         ]
       },
@@ -11061,6 +11154,42 @@ window.LESSONS_JSON = JSON.stringify({
             ],
             "check": "!board.robot.hit? && board.robot.gap_cm.between?(1, 13) && !board.robot.moving? && board.robot.traveled_cm > 30 && code.match?(/\\.(low\\?|high\\?|read\\b)/)",
             "hint": "Instead of <code>sleep_ms 1000</code>, wait for the wall: <code>sleep_ms 10 until ir_left.low? || ir_right.low?</code>."
+          },
+          {
+            "t": "h",
+            "html": "<h3>Lights underneath: four WS2812</h3><p>Under the PicoGo sit four RGB LEDs, all on GP22. They are <strong>WS2812</strong> LEDs (\"NeoPixels\"): in each, a tiny chip sits beside a red, a green and a blue LED. They hang in a chain on a single wire. The Pico sends 24 bits per LED – green, red, blue, eight bits each – and every LED keeps the first 24 bits that reach it and passes the rest on. When the wire stays low for more than 50 µs, all of them show what they got.</p><p>A bit is a pulse: high for about 0.4 µs is a 0, about 0.8 µs a 1. No Ruby loop switches a pin that fast. The RP2350 has helpers for this: <strong>PIO</strong>, small state machines that run tiny programs on pins by themselves. PicoRuby's <code>picoruby-pio</code> writes those programs in Ruby, and the community gem <a href='https://github.com/ksbmyk/picoruby-ws2812' target='_blank'>picoruby-ws2812</a> by Miyuki Koshiba (MIT licence) builds an LED driver on it – the tab <code>ws2812.rb</code>, unchanged. It is not part of PicoRuby: on a real Pico you copy it into <code>/lib</code>, like the other drivers.</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ws2812\"\n\nleds = WS2812.new(pin: 22, num: 4)\nleds.brightness = 30            # percent; the gem starts at 5\nleds.set_rgb(0, 255, 0, 0)      # red\nleds.set_hex(1, 0x00FF00)       # green\nleds.set_hsb(2, 240, 100, 100)  # blue: hue 240 degrees\nleds.set_rgb(3, 255, 160, 0)    # orange\nleds.show\nsleep_ms 1000\n# one light runs round the robot\n12.times do |i|\n  leds.fill(0, 0, 0)\n  leds.set_hsb(i % 4, i * 30, 100, 100)\n  leds.show\n  sleep_ms 150\nend\n",
+            "tabs": [
+              {
+                "name": "ws2812.rb",
+                "src": "pico/lib/ws2812.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>The LEDs keep their colours when the program ends – and when ■ Stop resets the Pico: they still have power, and nobody told them otherwise. <code>leds.clear</code> switches them off. The gem starts at <code>brightness</code> 5 %: WS2812s are bright, and many of them at full power draw more current than a USB port gives.</p><p>Open the tab <code>ws2812.rb</code>. <code>self.pio_program</code> is the PIO program, four instructions: <code>out :x, 1</code> takes the next bit while the pin is low (<code>side: 0</code>), and <code>jmp</code> sets the pin high and jumps away for a 0. At 8 MHz one cycle is 125 ns: a 1 stays high for 7 cycles (875 ns), a 0 for 2 (250 ns), and every bit takes 10 (1.25 µs). <code>_convert</code> puts green first and scales by the brightness. The same without the gem:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pio\"\n\nws = PIO.asm(side_set: 1) do\n  wrap_target\n  label :bitloop\n  out :x, 1,                  side: 0, delay: 2\n  jmp :do_zero, cond: :not_x, side: 1, delay: 1\n  label :do_one\n  jmp :bitloop,               side: 1, delay: 4\n  label :do_zero\n  nop                         side: 0, delay: 4\n  wrap\nend\n# four 16-bit instructions\np ws.instructions.map { |i| i.to_s(16) }\nsm = PIO::StateMachine.new(\n  pio: PIO::PIO0, sm: 0, program: ws, freq: 8_000_000,\n  sideset_pins: 22, out_shift_right: false,\n  out_shift_autopull: true, out_shift_threshold: 24,\n  fifo_join: PIO::FIFO_JOIN_TX\n)\nsm.start\n# one word per LED: green, red, blue - moved to the top of 32 bits\nsm.put_buffer([0x200000 << 8, 0x002000 << 8,\n               0x000020 << 8, 0x202020 << 8])\n",
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p><code>out_shift_threshold: 24</code> takes 24 bits from every 32-bit word, from the top (<code>out_shift_right: false</code>) – that is why each colour is shifted left by 8. Now take <code>freq: 8_000_000,</code> out and run the cell again: the state machine runs at full speed (125 MHz), the pulses are 16 times shorter, and the LEDs see nothing at all – the bench says so. In this simulation the timing is measured from the program, the way an LED reads it; the PIO itself is not run cycle by cycle.</p>"
           }
         ]
       },
@@ -11182,6 +11311,42 @@ window.LESSONS_JSON = JSON.stringify({
             ],
             "check": "!board.robot.hit? && board.robot.gap_cm.between?(1, 13) && !board.robot.moving? && board.robot.traveled_cm > 30 && code.match?(/\\.(low\\?|high\\?|read\\b)/)",
             "hint": "<code>sleep_ms 1000</code>のかわりに、壁を待とう：<code>sleep_ms 10 until ir_left.low? || ir_right.low?</code>だよ！"
+          },
+          {
+            "t": "h",
+            "html": "<h3>下からの光：4個のWS2812</h3><p>PicoGoの下にはRGB LEDが4個あり、どれもGP22につながっています。<strong>WS2812</strong>（「NeoPixel」）というLEDで、1個の中に小さなチップと、赤・緑・青のLEDが入っています。1本の線に数珠つなぎになっています。PicoはLED 1個につき24ビット（緑、赤、青を8ビットずつ）を送り、各LEDは最初に届いた24ビットを取って、残りを次へ渡します。線が50 µs以上LOWのままになると、全部のLEDが受け取った色を表示します。</p><p>1ビットは1つのパルスです。約0.4 µsのHIGHが0、約0.8 µsが1。Rubyのループではピンをそんなに速く切り替えられません。そこでRP2350には<strong>PIO</strong>という助っ人があります。ピンの上で小さなプログラムを勝手に動かす、小さなステートマシンです。PicoRubyの<code>picoruby-pio</code>を使うとそのプログラムをRubyで書けます。Miyuki Koshibaさんのコミュニティgem <a href='https://github.com/ksbmyk/picoruby-ws2812' target='_blank'>picoruby-ws2812</a>（MITライセンス）は、それを使ったLEDドライバーで、タブ<code>ws2812.rb</code>はそのままのコピーです。PicoRuby本体には入っていないので、本物のPicoではほかのドライバーと同じく<code>/lib</code>にコピーします。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ws2812\"\n\nleds = WS2812.new(pin: 22, num: 4)\nleds.brightness = 30            # パーセント。gem は 5 から始まる\nleds.set_rgb(0, 255, 0, 0)      # 赤\nleds.set_hex(1, 0x00FF00)       # 緑\nleds.set_hsb(2, 240, 100, 100)  # 青: 色相 240 度\nleds.set_rgb(3, 255, 160, 0)    # オレンジ\nleds.show\nsleep_ms 1000\n# 光がロボットのまわりを回る\n12.times do |i|\n  leds.fill(0, 0, 0)\n  leds.set_hsb(i % 4, i * 30, 100, 100)\n  leds.show\n  sleep_ms 150\nend\n",
+            "tabs": [
+              {
+                "name": "ws2812.rb",
+                "src": "pico/lib/ws2812.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>プログラムが終わっても、■停止でPicoがリセットされても、LEDは色を保ったままです。電源は来ていて、誰も消せと言っていないからです。<code>leds.clear</code>で消えます。gemの<code>brightness</code>は5 %から始まります。WS2812はとても明るく、たくさんを最大の明るさにするとUSBポートが出せる以上の電流が流れるからです。</p><p>タブ<code>ws2812.rb</code>を開いてください。<code>self.pio_program</code>がPIOのプログラムで、命令は4つです。<code>out :x, 1</code>はピンがLOW（<code>side: 0</code>）のあいだに次のビットを取り、<code>jmp</code>はピンをHIGHにして、0のときは飛びます。8 MHzでは1サイクルが125 nsなので、1は7サイクル（875 ns）、0は2サイクル（250 ns）HIGHのままで、どのビットも10サイクル（1.25 µs）かかります。<code>_convert</code>は緑を先頭にして、明るさを掛けます。gemを使わずに同じことをすると：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"pio\"\n\nws = PIO.asm(side_set: 1) do\n  wrap_target\n  label :bitloop\n  out :x, 1,                  side: 0, delay: 2\n  jmp :do_zero, cond: :not_x, side: 1, delay: 1\n  label :do_one\n  jmp :bitloop,               side: 1, delay: 4\n  label :do_zero\n  nop                         side: 0, delay: 4\n  wrap\nend\n# 16 ビットの命令が 4 つ\np ws.instructions.map { |i| i.to_s(16) }\nsm = PIO::StateMachine.new(\n  pio: PIO::PIO0, sm: 0, program: ws, freq: 8_000_000,\n  sideset_pins: 22, out_shift_right: false,\n  out_shift_autopull: true, out_shift_threshold: 24,\n  fifo_join: PIO::FIFO_JOIN_TX\n)\nsm.start\n# LED 1 個に 1 ワード: 緑、赤、青。32 ビットの上のほうへずらす\nsm.put_buffer([0x200000 << 8, 0x002000 << 8,\n               0x000020 << 8, 0x202020 << 8])\n",
+            "board": {
+              "parts": [
+                "picogo"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p><code>out_shift_threshold: 24</code>は32ビットのワードから上から順に（<code>out_shift_right: false</code>）24ビットを取ります。だからどの色も8ビット左へずらしてあります。では<code>freq: 8_000_000,</code>を消して、もう一度実行してみましょう。ステートマシンが全速（125 MHz）で動き、パルスが16分の1になって、LEDには何も見えません。作業台のそう表示されます。このシミュレーションでは、LEDが読むのと同じようにプログラムからタイミングを測っています。PIOそのものを1サイクルずつ動かしているわけではありません。</p>"
           }
         ]
       }
@@ -11571,6 +11736,527 @@ window.LESSONS_JSON = JSON.stringify({
             },
             "check": "board.epd.refreshes >= 1 && [[0, 0], [249, 0], [0, 121], [249, 121], [125, 0], [0, 60]].all? { |xy| board.epd.frame.black?(*xy) } && board.epd.frame.black_count > 745 && code.include?(\".text(\")",
             "hint": "<code>badge.rect(0, 0, 250, 122)</code>でふちに沿った枠になるよ。それから<code>badge.text(20, 45, \"Chunky\", scale: 3)</code>と<code>badge.refresh</code>だね。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pico-lcd",
+      "engine": "picoruby",
+      "live": false,
+      "pico": {
+        "board": "pico2w"
+      },
+      "de": {
+        "title": "Ein Farbdisplay und ein Joystick",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Pixel, die leuchten</h2><p>Das E-Paper aus Lektion {{nr:pico-epaper}} behält sein Bild ohne Strom, aber ein neues dauert Sekunden. Ein LCD ist umgekehrt: Ein neues Bild ist sofort da, und ohne Strom ist es weg. Das <strong>Pico-LCD-1.14</strong> von Waveshare hat 240 × 135 Pixel in Farbe, einen <strong>ST7789</strong>-Controller und neben dem Glas einen Joystick und zwei Tasten. Es wird direkt auf die Pins des Pico gesteckt.</p><p>Es spricht SPI auf den Pins des E-Papers – CLK GP10, DIN GP11, CS GP9, DC GP8, RST GP12 –, darum passt immer nur eines der beiden auf einen Pico. GP13 ist hier nicht BUSY, sondern die <strong>Hintergrundbeleuchtung</strong>: Das Glas macht kein eigenes Licht, eine Lampe dahinter tut es, und solange GP13 tief ist, bleibt der Bildschirm dunkel, egal was darauf ist.</p><p>Der Treiber ist der Tab <code>st7789.rb</code>, die Buchstaben sind <code>font5x7.rb</code> aus Lektion {{nr:pico-epaper}}. Führ die Zelle aus:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLACK)\nlcd.rect(0, 0, 240, 135, ST7789::WHITE)\nlcd.text(\"Chunky Bacon\", 30, 12, ST7789::YELLOW, scale: 3)\nlcd.fill_rect(15, 50, 65, 40, ST7789::RED)\nlcd.fill_rect(88, 50, 65, 40, ST7789::GREEN)\nlcd.fill_rect(161, 50, 65, 40, ST7789::BLUE)\nlcd.text(\"rot gruen blau\", 50, 105, ST7789::WHITE, scale: 2)\n",
+            "tabs": [
+              {
+                "name": "st7789.rb",
+                "src": "pico/lib/de/st7789.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "lcd114"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>Öffne den Tab <code>st7789.rb</code>. <code>init</code> ist die Folge von Waveshare: ein Reset, dann <code>0x36</code> (wie herum das Bild liegt; <code>0x70</code> ist quer), <code>0x3A</code> mit <code>0x05</code> (16 Bit pro Pixel), eine Reihe Einstellungen für Spannungen und Takt, <code>0x21</code> (Farben invertiert – dieses Glas zeigt sie sonst verkehrt), <code>0x11</code> (aufwachen) und <code>0x29</code> (Display an).</p><p>Anders als der Treiber des E-Papers hält dieser kein eigenes Bild. <code>fill_rect</code> nennt dem Controller ein <em>Fenster</em> – die Spalten mit <code>0x2A</code>, die Zeilen mit <code>0x2B</code> – und schickt nach <code>0x2C</code> die Pixel, die das Fenster Zeile für Zeile füllen. Ein ganzer Bildschirm sind 240 × 135 × 2 = 64 800 Bytes; eine Kopie davon bräuchte ein Achtel der 520 KB Speicher des Pico 2 W. Und die <code>40</code> und <code>53</code> in <code>window</code>: Der Controller hat Speicher für 240 × 320 Pixel, und das Glas zeigt nur einen Teil davon. Ohne sie wäre das Bild verschoben und abgeschnitten.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Eine Farbe ist eine Zahl</h3><p>Jedes Pixel hat 16 Bit: 5 für Rot, 6 für Grün, 5 für Blau – <em>RGB565</em>. Grün bekommt das Bit mehr, weil das Auge Grüntöne am besten unterscheidet. <code>ST7789.rgb(255, 128, 0)</code> behält von jedem Wert zwischen 0 und 255 die oberen Bits und packt sie in eine Zahl; der Controller will ihr hohes Byte zuerst. Hier sind die Bits von Orange und ein Raster von Farben:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\norange = ST7789.rgb(255, 128, 0)\n# 5 Bit Rot, 6 Grün, 5 Blau\nputs orange.to_s(2)\n# 24 Spalten zu 10 Pixeln, 9 Zeilen zu 15\n9.times do |zeile|\n  24.times do |spalte|\n    farbe = ST7789.rgb(spalte * 11, zeile * 31, 255 - spalte * 11)\n    lcd.fill_rect(spalte * 10, zeile * 15, 10, 15, farbe)\n  end\nend\n",
+            "tabs": [
+              {
+                "name": "st7789.rb",
+                "src": "pico/lib/de/st7789.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "lcd114"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>Tasten und ein Joystick</h3><p>Links vom Glas sitzt ein Joystick mit fünf Bewegungen: hoch (GP2), runter (GP18), links (GP16), rechts (GP20) und gedrückt (GP3). Rechts sind die Tasten A (GP15) und B (GP17). Jede verbindet ihren Pin mit GND, wie der Knopf aus Lektion {{nr:pico-sensors}}: Sie brauchen <code>GPIO::PULL_UP</code>, und gedrückt liest 0. Auf der Werkbank drückst du sie auf der Zeichnung oder mit den Knöpfen darunter. Führ die Zelle aus und lenk das Quadrat; A malt es rot, B beendet das Programm:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"gpio\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLACK)\nlcd.text(\"B: Ende\", 195, 125, ST7789::WHITE)\npins = { hoch: 2, runter: 18, links: 16, rechts: 20, a: 15, b: 17 }\ntasten = {}\npins.each { |name, pin| tasten[name] = GPIO.new(pin, GPIO::IN | GPIO::PULL_UP) }\nx = 110\ny = 58\nlcd.fill_rect(x, y, 20, 20, ST7789::YELLOW)\n# etwa 10 Sekunden, oder bis B\n500.times do\n  break if tasten[:b].low?\n  dx = 0\n  dy = 0\n  dx = -4 if tasten[:links].low?\n  dx = 4 if tasten[:rechts].low?\n  dy = -4 if tasten[:hoch].low?\n  dy = 4 if tasten[:runter].low?\n  if dx != 0 || dy != 0 || tasten[:a].low?\n    lcd.fill_rect(x, y, 20, 20, ST7789::BLACK)\n    x = [[x + dx, 0].max, 220].min\n    y = [[y + dy, 0].max, 105].min\n    lcd.fill_rect(x, y, 20, 20, tasten[:a].low? ? ST7789::RED : ST7789::YELLOW)\n  end\n  sleep_ms 20\nend\nlcd.text(\"Tschuess\", 72, 60, ST7789::WHITE, scale: 2)\n",
+            "tabs": [
+              {
+                "name": "st7789.rb",
+                "src": "pico/lib/de/st7789.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "lcd114"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Hintergrundbeleuchtung ist ein PWM, wie die gedimmte LED aus Lektion {{nr:pico-robot}}: <code>backlight(prozent)</code> setzt ihren Tastgrad auf GP13. Dunkler spart Akku – und bei 0 ist das Bild noch im Speicher des Controllers, nur sieht es niemand:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLUE)\nlcd.text(\"Dunkler\", 50, 55, ST7789::WHITE, bg: ST7789::BLUE, scale: 4)\n[100, 60, 30, 10, 0, 90].each do |prozent|\n  lcd.backlight(prozent)\n  puts \"#{prozent} %\"\n  sleep_ms 600\nend\n",
+            "tabs": [
+              {
+                "name": "st7789.rb",
+                "src": "pico/lib/de/st7789.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "lcd114"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>160 LEDs als Bildschirm</h3><p>Noch ein Weg, Farbe zu zeigen: Das <strong>Pico-RGB-LED</strong> von Waveshare ist eine Platine mit 160 WS2812-LEDs, 16 nebeneinander und 10 untereinander – die Sorte, die in Lektion {{nr:pico-robot}} den PicoGo von unten beleuchtet, gesteuert vom selben Community-Gem, dem Tab <code>ws2812.rb</code>. Alle hängen an einer Datenleitung (GP6 im Demo von Waveshare), LED 0 oben links, dann Zeile für Zeile: Die LED in Spalte <code>x</code> und Zeile <code>y</code> hat die Nummer <code>y * 16 + x</code>. Alle 160 in vollem Weiss brauchen etwa 2,5 A, mehr als ein USB-Anschluss liefert – ein Grund mehr, warum das Gem mit 5 % Helligkeit beginnt.</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ws2812\"\n\nmatrix = WS2812.new(pin: 6, num: 160)\nmatrix.brightness = 20\n10.times do |y|\n  16.times do |x|\n    # der Farbton geht von links nach rechts einmal herum, nach unten dunkler\n    matrix.set_hsb(y * 16 + x, x * 22, 100, 100 - y * 8)\n  end\nend\nmatrix.show\n",
+            "tabs": [
+              {
+                "name": "ws2812.rb",
+                "src": "pico/lib/ws2812.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "rgbled"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Rechner'><p>Das echte Ding: ein Pico 2 W mit R2P2 (<a href='https://picoruby.org/' target='_blank'>picoruby.org</a>) und ein Pico-LCD-1.14 von Waveshare, auf die Pins des Pico gesteckt. Leg <code>st7789.rb</code> und <code>font5x7.rb</code> nach <code>/lib</code> und die Zelle nach <code>/home/app.rb</code>. Bei 10 MHz braucht ein ganzer Bildschirm mindestens 52 ms auf der Leitung, und das Ruby darum herum braucht länger: Zeichne, was sich ändert, nicht den ganzen Bildschirm. Der Treiber folgt dem Demo von Waveshare und dem Datenblatt des ST7789, ist aber bisher nur in dieser Simulation gelaufen – und wie herum das Glas im Speicher des Controllers liegt, hat die Simulation gewählt, so dass Waveshares <code>0x70</code> aufrecht steht. Für das Pico-RGB-LED kommt <code>ws2812.rb</code> ebenfalls nach <code>/lib</code>; es braucht <code>picoruby-pio</code>, das die R2P2-Builds für die Pico-Boards haben.</p></div><div class='docs'><strong>Nachschlagen:</strong> <a href='https://www.waveshare.com/wiki/Pico-LCD-1.14' target='_blank'>Pico-LCD-1.14 im Waveshare-Wiki</a> · <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-spi' target='_blank'>picoruby-spi</a> · <a href='https://www.waveshare.com/wiki/Pico-RGB-LED' target='_blank'>Pico-RGB-LED</a> · <a href='https://github.com/ksbmyk/picoruby-ws2812' target='_blank'>picoruby-ws2812</a></div><div class='task'><strong>Aufgabe:</strong> Ein Zähler. Jeder Druck auf Taste A (GP15) zählt eins dazu, und der Bildschirm zeigt die Zahl in grossen Ziffern (<code>scale:</code> 3 bis 5) – und keine anderen Ziffern. Das Programm läuft etwa zwei Sekunden, und die Übung drückt A dreimal. Zwei Fallen warten: Die Taste braucht ihren Pull-up, und ein Druck dauert länger als ein Durchgang der Schleife, zählt aber einmal.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"spi\"\nrequire \"gpio\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLACK)\ntaste_a = GPIO.new(15, GPIO::IN)\nzaehler = 0\n100.times do\n  # wenn A gerade gedrückt wurde: zählen, die Zahl zeigen\n  sleep_ms 20\nend\n",
+            "check": "board.lcd.visible? && board.lcd.text?(\"3\", 3..5) && (\"0\"..\"9\").none? { |d| d != \"3\" && board.lcd.text?(d) } && board.mode(15) == \"in_pull_up\"",
+            "hint": "Zwei Dinge! <code>GPIO.new(15, GPIO::IN | GPIO::PULL_UP)</code>, sonst liegt der Pin auf 0 und sieht die ganze Zeit gedrückt aus. Und zähl nur den Moment, in dem er runtergeht: Merk dir <code>taste_a.low?</code> vom letzten Durchgang in einer Variablen und zähl, wenn er jetzt tief ist und vorher nicht. <code>lcd.text(zaehler.to_s, 100, 50, ST7789::YELLOW, scale: 4)</code> malt über die alte Ziffer.",
+            "tabs": [
+              {
+                "name": "st7789.rb",
+                "src": "pico/lib/de/st7789.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "lcd114"
+              ]
+            },
+            "bench": [
+              {
+                "at": 300,
+                "press": 15
+              },
+              {
+                "at": 400,
+                "release": 15
+              },
+              {
+                "at": 800,
+                "press": 15
+              },
+              {
+                "at": 900,
+                "release": 15
+              },
+              {
+                "at": 1300,
+                "press": 15
+              },
+              {
+                "at": 1400,
+                "release": 15
+              }
+            ]
+          }
+        ]
+      },
+      "en": {
+        "title": "A colour screen and a joystick",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Pixels that glow</h2><p>The e-paper of lesson {{nr:pico-epaper}} keeps its picture without power, but a new one takes seconds. An LCD is the other way round: a new picture shows at once, and without power it is gone. Waveshare's <strong>Pico-LCD-1.14</strong> has 240 × 135 pixels in colour, an <strong>ST7789</strong> controller, and beside the glass a joystick and two keys. It is plugged straight onto the Pico's pins.</p><p>It talks SPI on the e-paper's pins – CLK GP10, DIN GP11, CS GP9, DC GP8, RST GP12 – so only one of the two fits on a Pico at a time. GP13 is not BUSY here but the <strong>backlight</strong>: the glass makes no light of its own, a lamp behind it does, and while GP13 is low the screen stays dark, whatever is on it.</p><p>The driver is the tab <code>st7789.rb</code>, the letters are <code>font5x7.rb</code> from lesson {{nr:pico-epaper}}. Run the cell:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLACK)\nlcd.rect(0, 0, 240, 135, ST7789::WHITE)\nlcd.text(\"Chunky Bacon\", 30, 12, ST7789::YELLOW, scale: 3)\nlcd.fill_rect(15, 50, 65, 40, ST7789::RED)\nlcd.fill_rect(88, 50, 65, 40, ST7789::GREEN)\nlcd.fill_rect(161, 50, 65, 40, ST7789::BLUE)\nlcd.text(\"red green blue\", 50, 105, ST7789::WHITE, scale: 2)\n",
+            "tabs": [
+              {
+                "name": "st7789.rb",
+                "src": "pico/lib/en/st7789.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "lcd114"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>Open the tab <code>st7789.rb</code>. <code>init</code> is Waveshare's sequence: a reset, then <code>0x36</code> (which way round the picture goes; <code>0x70</code> is landscape), <code>0x3A</code> with <code>0x05</code> (16 bits per pixel), a row of voltage and timing settings, <code>0x21</code> (colours inverted – this glass shows them the wrong way round otherwise), <code>0x11</code> (wake up) and <code>0x29</code> (display on).</p><p>Unlike the e-paper's driver this one keeps no picture of its own. <code>fill_rect</code> tells the controller a <em>window</em> – the columns with <code>0x2A</code>, the rows with <code>0x2B</code> – and after <code>0x2C</code> it sends the pixels, which fill the window row by row. A whole screen is 240 × 135 × 2 = 64 800 bytes; a copy of it would take an eighth of the Pico 2 W's 520 KB of memory. And the <code>40</code> and <code>53</code> in <code>window</code>: the controller has memory for 240 × 320 pixels, and the glass shows only part of it. Without them the picture would be shifted and cut off.</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>A colour is a number</h3><p>Each pixel is 16 bits: 5 for red, 6 for green, 5 for blue – <em>RGB565</em>. Green gets the extra bit because the eye tells shades of green apart best. <code>ST7789.rgb(255, 128, 0)</code> keeps the top bits of each value from 0 to 255 and packs them into one number; the controller wants its high byte first. Here are the bits of orange, and a grid of colours:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\norange = ST7789.rgb(255, 128, 0)\n# 5 bits red, 6 green, 5 blue\nputs orange.to_s(2)\n# 24 columns of 10 pixels, 9 rows of 15\n9.times do |row|\n  24.times do |col|\n    color = ST7789.rgb(col * 11, row * 31, 255 - col * 11)\n    lcd.fill_rect(col * 10, row * 15, 10, 15, color)\n  end\nend\n",
+            "tabs": [
+              {
+                "name": "st7789.rb",
+                "src": "pico/lib/en/st7789.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "lcd114"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>Keys and a joystick</h3><p>Left of the glass sits a joystick with five moves: up (GP2), down (GP18), left (GP16), right (GP20) and pressed (GP3). On the right are the keys A (GP15) and B (GP17). Each connects its pin to GND, like the button of lesson {{nr:pico-sensors}}: they need <code>GPIO::PULL_UP</code>, and pressed reads 0. On the bench you press them on the drawing or with the buttons under it. Run the cell and steer the square; A paints it red, B ends the program:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"gpio\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLACK)\nlcd.text(\"B: stop\", 195, 125, ST7789::WHITE)\npins = { up: 2, down: 18, left: 16, right: 20, a: 15, b: 17 }\nkeys = {}\npins.each { |name, pin| keys[name] = GPIO.new(pin, GPIO::IN | GPIO::PULL_UP) }\nx = 110\ny = 58\nlcd.fill_rect(x, y, 20, 20, ST7789::YELLOW)\n# about 10 seconds, or until B\n500.times do\n  break if keys[:b].low?\n  dx = 0\n  dy = 0\n  dx = -4 if keys[:left].low?\n  dx = 4 if keys[:right].low?\n  dy = -4 if keys[:up].low?\n  dy = 4 if keys[:down].low?\n  if dx != 0 || dy != 0 || keys[:a].low?\n    lcd.fill_rect(x, y, 20, 20, ST7789::BLACK)\n    x = [[x + dx, 0].max, 220].min\n    y = [[y + dy, 0].max, 105].min\n    lcd.fill_rect(x, y, 20, 20, keys[:a].low? ? ST7789::RED : ST7789::YELLOW)\n  end\n  sleep_ms 20\nend\nlcd.text(\"bye\", 105, 60, ST7789::WHITE, scale: 2)\n",
+            "tabs": [
+              {
+                "name": "st7789.rb",
+                "src": "pico/lib/en/st7789.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "lcd114"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>The backlight is a PWM, like the dimmed LED of lesson {{nr:pico-robot}}: <code>backlight(percent)</code> sets its duty on GP13. Dimmer saves battery – and at 0 the picture is still in the controller's memory, only nobody sees it:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLUE)\nlcd.text(\"Dimmer\", 60, 55, ST7789::WHITE, bg: ST7789::BLUE, scale: 4)\n[100, 60, 30, 10, 0, 90].each do |percent|\n  lcd.backlight(percent)\n  puts \"#{percent} %\"\n  sleep_ms 600\nend\n",
+            "tabs": [
+              {
+                "name": "st7789.rb",
+                "src": "pico/lib/en/st7789.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "lcd114"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>160 LEDs as a screen</h3><p>Another way to show colour: Waveshare's <strong>Pico-RGB-LED</strong> is a board with 160 WS2812 LEDs, 16 across and 10 down – the kind that lights the PicoGo from below in lesson {{nr:pico-robot}}, driven by the same community gem, the tab <code>ws2812.rb</code>. They all hang on one data wire (GP6 in Waveshare's demo), LED 0 at the top left, then row by row: the LED in column <code>x</code> and row <code>y</code> is number <code>y * 16 + x</code>. All 160 at full white would draw about 2.5 A, more than a USB port gives – one more reason why the gem starts at 5 % brightness.</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ws2812\"\n\nmatrix = WS2812.new(pin: 6, num: 160)\nmatrix.brightness = 20\n10.times do |y|\n  16.times do |x|\n    # the hue goes round once from left to right, darker downwards\n    matrix.set_hsb(y * 16 + x, x * 22, 100, 100 - y * 8)\n  end\nend\nmatrix.show\n",
+            "tabs": [
+              {
+                "name": "ws2812.rb",
+                "src": "pico/lib/ws2812.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "rgbled"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p>The real thing: a Pico 2 W with R2P2 (<a href='https://picoruby.org/' target='_blank'>picoruby.org</a>) and a Waveshare Pico-LCD-1.14, plugged onto the Pico's pins. Put <code>st7789.rb</code> and <code>font5x7.rb</code> into <code>/lib</code> and the cell into <code>/home/app.rb</code>. At 10 MHz a whole screen needs at least 52 ms on the wire, and the Ruby around it takes longer: draw what changes, not the whole screen. The driver follows Waveshare's demo and the ST7789's datasheet, but so far it has only run in this simulation – and which way round the glass sits in the controller's memory is the simulation's choice, made so that Waveshare's <code>0x70</code> reads upright. For the Pico-RGB-LED, <code>ws2812.rb</code> goes into <code>/lib</code> too; it needs <code>picoruby-pio</code>, which R2P2's builds for the Pico boards have.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://www.waveshare.com/wiki/Pico-LCD-1.14' target='_blank'>Pico-LCD-1.14 in the Waveshare wiki</a> · <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-spi' target='_blank'>picoruby-spi</a> · <a href='https://www.waveshare.com/wiki/Pico-RGB-LED' target='_blank'>Pico-RGB-LED</a> · <a href='https://github.com/ksbmyk/picoruby-ws2812' target='_blank'>picoruby-ws2812</a></div><div class='task'><strong>Task:</strong> A counter. Each press of key A (GP15) adds one, and the screen shows the count in big digits (<code>scale:</code> 3 to 5) – and no other digits. The program runs for about two seconds, and the exercise presses A three times. Two traps are waiting: the key needs its pull-up, and a press lasts longer than one pass of the loop but counts once.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"spi\"\nrequire \"gpio\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLACK)\nkey_a = GPIO.new(15, GPIO::IN)\ncount = 0\n100.times do\n  # when A has just been pressed: count it, show the count\n  sleep_ms 20\nend\n",
+            "check": "board.lcd.visible? && board.lcd.text?(\"3\", 3..5) && (\"0\"..\"9\").none? { |d| d != \"3\" && board.lcd.text?(d) } && board.mode(15) == \"in_pull_up\"",
+            "hint": "Two things! <code>GPIO.new(15, GPIO::IN | GPIO::PULL_UP)</code>, or the pin sits at 0 and looks pressed the whole time. And count only the moment it goes down: keep the last pass's <code>key_a.low?</code> in a variable, and count when it is low now but was not before. <code>lcd.text(count.to_s, 100, 50, ST7789::YELLOW, scale: 4)</code> paints over the old digit.",
+            "tabs": [
+              {
+                "name": "st7789.rb",
+                "src": "pico/lib/en/st7789.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "lcd114"
+              ]
+            },
+            "bench": [
+              {
+                "at": 300,
+                "press": 15
+              },
+              {
+                "at": 400,
+                "release": 15
+              },
+              {
+                "at": 800,
+                "press": 15
+              },
+              {
+                "at": 900,
+                "release": 15
+              },
+              {
+                "at": 1300,
+                "press": 15
+              },
+              {
+                "at": 1400,
+                "release": 15
+              }
+            ]
+          }
+        ]
+      },
+      "ja": {
+        "title": "カラー液晶とジョイスティック",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>光るピクセル</h2><p>レッスン{{nr:pico-epaper}}の電子ペーパーは電源がなくても絵が残りますが、新しい絵には数秒かかります。LCDはその逆です。新しい絵はすぐに出て、電源がなくなると消えます。Waveshareの<strong>Pico-LCD-1.14</strong>は240 × 135ピクセルのカラー液晶で、コントローラは<strong>ST7789</strong>、液晶の横にジョイスティックとキーが2つあります。Picoのピンに直接挿して使います。</p><p>通信は電子ペーパーと同じピンのSPIです（CLK GP10、DIN GP11、CS GP9、DC GP8、RST GP12）。なので、Picoに載せられるのはどちらか一方だけです。ここでのGP13はBUSYではなく<strong>バックライト</strong>です。液晶そのものは光らず、後ろのライトが光ります。GP13がLOWのあいだは、何が描いてあっても画面は暗いままです。</p><p>ドライバーはタブ<code>st7789.rb</code>、文字はレッスン{{nr:pico-epaper}}の<code>font5x7.rb</code>です。セルを実行してみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLACK)\nlcd.rect(0, 0, 240, 135, ST7789::WHITE)\nlcd.text(\"Chunky Bacon\", 30, 12, ST7789::YELLOW, scale: 3)\nlcd.fill_rect(15, 50, 65, 40, ST7789::RED)\nlcd.fill_rect(88, 50, 65, 40, ST7789::GREEN)\nlcd.fill_rect(161, 50, 65, 40, ST7789::BLUE)\nlcd.text(\"red green blue\", 50, 105, ST7789::WHITE, scale: 2)\n",
+            "tabs": [
+              {
+                "name": "st7789.rb",
+                "src": "pico/lib/ja/st7789.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "lcd114"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>タブ<code>st7789.rb</code>を開いてください。<code>init</code>はWaveshareと同じ手順です。リセットのあと、<code>0x36</code>（絵の向き。<code>0x70</code>は横向き）、<code>0x3A</code>と<code>0x05</code>（1ピクセル16ビット）、電圧とタイミングの設定がいくつか、<code>0x21</code>（色の反転。この液晶はこれがないと色が逆に見えます）、<code>0x11</code>（スリープ解除）、<code>0x29</code>（表示オン）と続きます。</p><p>電子ペーパーのドライバーと違って、このドライバーは自分で絵を持ちません。<code>fill_rect</code>はコントローラに<em>ウィンドウ</em>を伝え（列は<code>0x2A</code>、行は<code>0x2B</code>）、<code>0x2C</code>のあとにピクセルを送ります。ピクセルはウィンドウを1行ずつ埋めていきます。画面全体は240 × 135 × 2 = 64 800バイトで、そのコピーを持つとPico 2 Wの520 KBのメモリの8分の1を使ってしまいます。それから<code>window</code>の中の<code>40</code>と<code>53</code>。コントローラには240 × 320ピクセル分のメモリがあり、液晶に見えるのはその一部だけです。これがないと絵がずれて、はみ出してしまいます。</p>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>色は数</h3><p>1ピクセルは16ビットで、赤に5、緑に6、青に5ビットです（<em>RGB565</em>）。緑が1ビット多いのは、目が緑の濃淡をいちばんよく見分けるからです。<code>ST7789.rgb(255, 128, 0)</code>は0〜255の値それぞれの上位ビットを残して、1つの数にまとめます。コントローラは上位バイトを先に受け取ります。オレンジのビットと、色の格子です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\norange = ST7789.rgb(255, 128, 0)\n# 赤 5 ビット、緑 6、青 5\nputs orange.to_s(2)\n# 10 ピクセルの列が 24、15 ピクセルの行が 9\n9.times do |row|\n  24.times do |col|\n    color = ST7789.rgb(col * 11, row * 31, 255 - col * 11)\n    lcd.fill_rect(col * 10, row * 15, 10, 15, color)\n  end\nend\n",
+            "tabs": [
+              {
+                "name": "st7789.rb",
+                "src": "pico/lib/ja/st7789.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "lcd114"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>キーとジョイスティック</h3><p>液晶の左にはジョイスティックがあり、動きは5つです。上（GP2）、下（GP18）、左（GP16）、右（GP20）、押し込み（GP3）。右側にはキーA（GP15）とB（GP17）があります。どれもピンをGNDにつなぐので、レッスン{{nr:pico-sensors}}のボタンと同じく<code>GPIO::PULL_UP</code>が必要で、押すと0になります。作業台では、絵の上か、その下のボタンで押せます。セルを実行して四角を動かしてみましょう。Aで赤くなり、Bでプログラムが終わります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"gpio\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLACK)\nlcd.text(\"B: stop\", 195, 125, ST7789::WHITE)\npins = { up: 2, down: 18, left: 16, right: 20, a: 15, b: 17 }\nkeys = {}\npins.each { |name, pin| keys[name] = GPIO.new(pin, GPIO::IN | GPIO::PULL_UP) }\nx = 110\ny = 58\nlcd.fill_rect(x, y, 20, 20, ST7789::YELLOW)\n# 10 秒くらい、または B を押すまで\n500.times do\n  break if keys[:b].low?\n  dx = 0\n  dy = 0\n  dx = -4 if keys[:left].low?\n  dx = 4 if keys[:right].low?\n  dy = -4 if keys[:up].low?\n  dy = 4 if keys[:down].low?\n  if dx != 0 || dy != 0 || keys[:a].low?\n    lcd.fill_rect(x, y, 20, 20, ST7789::BLACK)\n    x = [[x + dx, 0].max, 220].min\n    y = [[y + dy, 0].max, 105].min\n    lcd.fill_rect(x, y, 20, 20, keys[:a].low? ? ST7789::RED : ST7789::YELLOW)\n  end\n  sleep_ms 20\nend\nlcd.text(\"bye\", 105, 60, ST7789::WHITE, scale: 2)\n",
+            "tabs": [
+              {
+                "name": "st7789.rb",
+                "src": "pico/lib/ja/st7789.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "lcd114"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<p>バックライトはレッスン{{nr:pico-robot}}でLEDを暗くしたのと同じPWMです。<code>backlight(percent)</code>でGP13のデューティを決めます。暗くすると電池が長持ちします。0にしても絵はコントローラのメモリに残っていて、ただ見えないだけです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"spi\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLUE)\nlcd.text(\"Dimmer\", 60, 55, ST7789::WHITE, bg: ST7789::BLUE, scale: 4)\n[100, 60, 30, 10, 0, 90].each do |percent|\n  lcd.backlight(percent)\n  puts \"#{percent} %\"\n  sleep_ms 600\nend\n",
+            "tabs": [
+              {
+                "name": "st7789.rb",
+                "src": "pico/lib/ja/st7789.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "lcd114"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<h3>160個のLEDを画面に</h3><p>色を見せる方法はほかにもあります。Waveshareの<strong>Pico-RGB-LED</strong>はWS2812のLEDが横に16個、縦に10個、全部で160個並んだボードです。レッスン{{nr:pico-robot}}でPicoGoを下から照らしたのと同じ種類で、同じコミュニティgem（タブ<code>ws2812.rb</code>）で動かします。全部が1本のデータ線（WaveshareのデモではGP6）につながっていて、LED 0が左上、そこから1行ずつ並びます。列<code>x</code>、行<code>y</code>のLEDは<code>y * 16 + x</code>番です。160個全部を真っ白にすると約2.5 A流れ、USBポートが出せる量を超えます。gemが明るさ5 %から始まる理由のひとつです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"ws2812\"\n\nmatrix = WS2812.new(pin: 6, num: 160)\nmatrix.brightness = 20\n10.times do |y|\n  16.times do |x|\n    # 色相は左から右へ一周、下へ行くほど暗く\n    matrix.set_hsb(y * 16 + x, x * 22, 100, 100 - y * 8)\n  end\nend\nmatrix.show\n",
+            "tabs": [
+              {
+                "name": "ws2812.rb",
+                "src": "pico/lib/ws2812.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "rgbled"
+              ]
+            }
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のマシンで'><p>本物でやるなら、R2P2を入れたPico 2 W（<a href='https://picoruby.org/' target='_blank'>picoruby.org</a>）とWaveshareのPico-LCD-1.14を用意し、Picoのピンに挿します。<code>st7789.rb</code>と<code>font5x7.rb</code>を<code>/lib</code>に、セルを<code>/home/app.rb</code>に置きます。10 MHzだと画面全体を送るだけで最低52 msかかり、まわりのRubyはもっと時間がかかります。画面全体ではなく、変わったところだけを描きましょう。ドライバーはWaveshareのデモとST7789のデータシートに従っていますが、まだこのシミュレーションでしか動かしていません。また、液晶がコントローラのメモリの中でどちら向きに置かれているかはシミュレーションが決めたもので、Waveshareの<code>0x70</code>で正しい向きになるようにしてあります。Pico-RGB-LEDを使うときは<code>ws2812.rb</code>も<code>/lib</code>に置きます。必要な<code>picoruby-pio</code>は、Picoボード向けのR2P2に入っています。</p></div><div class='docs'><strong>調べてみよう：</strong> <a href='https://www.waveshare.com/wiki/Pico-LCD-1.14' target='_blank'>Waveshare wikiのPico-LCD-1.14</a> · <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-spi' target='_blank'>picoruby-spi</a> · <a href='https://www.waveshare.com/wiki/Pico-RGB-LED' target='_blank'>Pico-RGB-LED</a> · <a href='https://github.com/ksbmyk/picoruby-ws2812' target='_blank'>picoruby-ws2812</a></div><div class='task'><strong>課題：</strong>カウンターを作りましょう。キーA（GP15）を押すたびに1ずつ増え、画面にその数を大きな数字（<code>scale:</code> 3〜5）で表示します。ほかの数字は出さないでください。プログラムは約2秒動き、課題がAを3回押します。落とし穴が2つあります。キーにはプルアップが必要なこと、そして1回の押下はループの1周より長く続きますが、数えるのは1回だということです。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"spi\"\nrequire \"gpio\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLACK)\nkey_a = GPIO.new(15, GPIO::IN)\ncount = 0\n100.times do\n  # A が押された瞬間に: 数えて、数を表示する\n  sleep_ms 20\nend\n",
+            "check": "board.lcd.visible? && board.lcd.text?(\"3\", 3..5) && (\"0\"..\"9\").none? { |d| d != \"3\" && board.lcd.text?(d) } && board.mode(15) == \"in_pull_up\"",
+            "hint": "ポイントは2つだよ！<code>GPIO.new(15, GPIO::IN | GPIO::PULL_UP)</code>にしないと、ピンは0のままで、ずっと押されているように見えちゃう。それから、押された瞬間だけ数えよう。前の周の<code>key_a.low?</code>を変数に覚えておいて、今はLOWで前はそうじゃなかったときに数えるんだ。<code>lcd.text(count.to_s, 100, 50, ST7789::YELLOW, scale: 4)</code>なら古い数字の上に描けるよ。",
+            "tabs": [
+              {
+                "name": "st7789.rb",
+                "src": "pico/lib/ja/st7789.rb"
+              },
+              {
+                "name": "font5x7.rb",
+                "src": "pico/lib/font5x7.rb"
+              }
+            ],
+            "board": {
+              "parts": [
+                "lcd114"
+              ]
+            },
+            "bench": [
+              {
+                "at": 300,
+                "press": 15
+              },
+              {
+                "at": 400,
+                "release": 15
+              },
+              {
+                "at": 800,
+                "press": 15
+              },
+              {
+                "at": 900,
+                "release": 15
+              },
+              {
+                "at": 1300,
+                "press": 15
+              },
+              {
+                "at": 1400,
+                "release": 15
+              }
+            ]
           }
         ]
       }

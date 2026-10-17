@@ -24,6 +24,8 @@ module PicoLint
   # parts whose inputs an exercise's check depends on: it needs a bench
   INPUT_PARTS = %w[button14 light26 envsensor picogo laptop camera lcd114].freeze
   ARENAS = %w[open wall60 box].freeze
+  # the Pico-LCD-1.14's keys A, B and its joystick (a bench can press them)
+  LCD_KEYS = [15, 17, 2, 3, 16, 18, 20].freeze
   BENCH_ACTIONS = %w[set press release arena ble wifi].freeze
   # what the worker writes to /lib itself (picoruby_worker_core.js STUBS)
   STUBS = %w[gpio pwm adc i2c spi pio cyw43 network ble hcsr04 camera socket net/http env].freeze
@@ -159,7 +161,8 @@ module PicoLint
       value = event[actions[0]]
       case actions[0]
       when "press", "release"
-        add.("ERROR", "bench", where, "#{at}: no button on GP#{value}") unless value == 14 && parts.include?("button14")
+        pressable = (value == 14 && parts.include?("button14")) || (LCD_KEYS.include?(value) && parts.include?("lcd114"))
+        add.("ERROR", "bench", where, "#{at}: no button on GP#{value}") unless pressable
       when "arena"
         add.("ERROR", "bench", where, "#{at}: arena #{value.inspect} (known: #{ARENAS.join(', ')})") unless ARENAS.include?(value)
         add.("ERROR", "bench", where, "#{at}: an arena without the picogo part") unless parts.include?("picogo")

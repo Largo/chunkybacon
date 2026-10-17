@@ -6,7 +6,7 @@
 //
 //   chunkyPicoBoard.previews()              a static bench under every board cell of the page (no worker)
 //   chunkyPicoBoard.mount(idx, configJson, uiJson)  make #pico-slot-<idx>'s bench the live one (built anew for other parts)
-//   chunkyPicoBoard.receive(kind, text)     "state" | "epd_frame" | "ble" | "log" from the worker
+//   chunkyPicoBoard.receive(kind, text)     "state" | "epd_frame" | "lcd" | "ble" | "log" from the worker
 //   chunkyPicoBoard.inputs()                JSON of the current inputs, sent with each run
 //   chunkyPicoBoard.input(key, value)       set one (and tell a running cell: chunkyPicoRuby.input)
 //   chunkyPicoBoard.sendLine(text)          a line from the laptop's side to the Pico (BLE RX)
@@ -17,7 +17,8 @@
 //   chunkyPicoBoard.debug()                 what the live bench holds (the browser tests)
 //   chunkyPicoBoard.benches()               every bench: [{idx, live, parts, badge, inPage}]
 //
-// Input keys: pin14 ("1" pressed), adc26 (0..1), tempC, bme.t, bme.rh,
+// Input keys: pin14 ("1" pressed; the LCD's keys pin15, pin17 and the
+// joystick pin2, pin3, pin16, pin18, pin20 alike), adc26 (0..1), tempC, bme.t, bme.rh,
 // bme.p, arena.box / arena.bacon ("x,y" cm), wifi.off ("1"), camera
 // (a picture's name), ble.line ("<n>|<text>", a new n sends the text once),
 // ble.connected ("1"/"0").
@@ -29,8 +30,10 @@
 // below it, each jumper wire plugs into the breadboard column of its pin,
 // past the pin's label. Parts without pins (the robot's arena, the camera,
 // Wi-Fi, the laptop) go to the right of the breadboard, or below it when
-// the slot is narrower than 600 px. The e-paper's 250 x 122 pixels are drawn
-// 1:1 from the panel's RAM.
+// the slot is narrower than 600 px. The e-paper's 250 x 122 pixels and the
+// LCD's 240 x 135 are drawn 1:1 from the panels' RAM; the LCD and the
+// RGB LED matrix are HATs that sit on the Pico's pins, so they get no
+// wires (the pins' rings show what their pins do).
 //
 // Accessibility, as game.js: the bench is a <figure role=group> with a
 // caption naming the parts, the SVG is one image with a text alternative
@@ -86,7 +89,15 @@
     boardWifi: "Wi-Fi", boardWifiOff: "Access point off", boardWifiUp: "Wi-Fi connected to chunkynet",
     boardLaptop: "Laptop (Bluetooth LE)", boardSend: "Send", boardLine: "Line to the Pico",
     boardBleOn: "Bluetooth connected", boardBleOff: "Bluetooth disconnected", boardBleGot: "The laptop got",
-    boardIdle: "idle – ▶ Run starts it", boardBleLink: "Laptop connected", boardAdvertising: "advertising", boardChipTemp: "chip sensor"
+    boardIdle: "idle – ▶ Run starts it", boardBleLink: "Laptop connected", boardAdvertising: "advertising", boardChipTemp: "chip sensor",
+    boardLcd: "LCD 1.14\"", boardLcdKeys: "LCD keys", boardKeyA: "Key A (GP15)", boardKeyB: "Key B (GP17)",
+    boardJoyUp: "Joystick up (GP2)", boardJoyDown: "Joystick down (GP18)", boardJoyLeft: "Joystick left (GP16)",
+    boardJoyRight: "Joystick right (GP20)", boardJoyCtrl: "Joystick pressed (GP3)", boardLcdDark: "LCD dark",
+    boardLcdAlt: "LCD on, backlight %1 %", boardOnPico: "sits on the Pico's pins",
+    boardRgbLed: "RGB LED matrix 16 × 10 (GP6)", boardLeds: "LEDs", boardLedsAlt: "%1 of %2 LEDs lit",
+    boardWsFast: "WS2812 on GP%1: pulses of %2 ns are too short – the LEDs see nothing (freq:?)",
+    boardWsUnknown: "PIO on GP%1: no pulses a WS2812 can read", boardWsSame: "WS2812 on GP%1: 0 and 1 look the same (%2 ns)",
+    boardPioStall: "PIO: the state machine waits for ever – does it run (sm.start)?"
   };
 
   var values = {};          // the page's inputs, sent with each run
@@ -94,6 +105,7 @@
   var benches = [];         // every bench on the page: the live one and the static previews
   var strings = {};         // the course's board* strings in the page's language
   var epd = { frames: 0, hex: "", url: "", black: 0 };   // the panel keeps its picture across runs
+  var lcd = { px: null, frames: 0, url: "", key: "" };    // the LCD's RAM as the worker reported it
   var lineNo = 0;
   var audio = null;
 
@@ -195,7 +207,10 @@
     // Waveshare's 8-pin cable, in the connector's order
     epd213: { row: "epd", w: 300, h: 176,
               leads: [[30, 39, "vsys"], [50, 13, "gnd"], [70, 15, "blue"], [90, 14, "yellow"], [110, 12, "orange"],
-                      [130, 11, "green"], [150, 16, "white"], [170, 17, "purple"]], draw: drawEpd }
+                      [130, 11, "green"], [150, 16, "white"], [170, 17, "purple"]], draw: drawEpd },
+    // HATs on the Pico's header: no wires
+    lcd114: { row: "epd", w: 320, h: 172, leads: [], draw: drawLcd },
+    rgbled: { row: "epd", w: 300, h: 206, leads: [], draw: drawRgbLed }
   };
   var SIDE = {
     picogo: { h: 236, draw: drawArena },
@@ -257,7 +272,7 @@
 
     var top = parts.filter(function (p) { return PARTS[p] && PARTS[p].row === "top"; });
     var bottom = parts.filter(function (p) { return PARTS[p] && PARTS[p].row === "bottom"; });
-    var hasEpd = parts.indexOf("epd213") >= 0;
+    var bigs = parts.filter(function (p) { return PARTS[p] && PARTS[p].row === "epd"; });
     var side = parts.filter(function (p) { return SIDE[p]; });
 
     // column A: the breadboard
@@ -283,7 +298,7 @@
     var py = y + LABEL + 6;
     var pico = drawPico(picoLayer, px, py, wireless, b);
     y = py + PICO_H + LABEL + 6;
-    if (bottom.length || hasEpd) {
+    if (bottom.length || bigs.length) {
       var row = place(bottom, px, 0, "bottom");
       var rowLanes = lanes(row, px);
       if (row.length) {
@@ -292,13 +307,13 @@
         row.forEach(function (p) { p.y = y; bh = Math.max(bh, p.spec.h); });
         y += bh;
       }
-      if (hasEpd) {
-        var ep = { id: "epd213", spec: PARTS.epd213, x: Math.round((COL - PARTS.epd213.w) / 2), row: "bottom" };
-        y += 10 + lanes([ep], px) * 6 + (row.length ? 8 : 0);
+      bigs.forEach(function (id, n) {
+        var ep = { id: id, spec: PARTS[id], x: Math.round((COL - PARTS[id].w) / 2), row: "bottom" };
+        y += 10 + lanes([ep], px) * 6 + (row.length || n ? 8 : 0);
         ep.y = y;
         y += ep.spec.h;
         row.push(ep);
-      }
+      });
       placed = placed.concat(row);
     }
     var heightA = y + 10;
@@ -380,6 +395,7 @@
     var names = { led15: t("boardLed"), button14: t("boardButton"), light26: t("boardLight") + " (GP26)",
                   temp: t("boardRoom"), buzzer16: t("boardBuzzer") + " (GP16)", envsensor: t("boardEnv"),
                   epd213: t("boardEpd"), picogo: t("boardRobot"), camera: t("boardCamera"),
+                  lcd114: "Pico-LCD-1.14", rgbled: t("boardRgbLed"),
                   wifi: t("boardWifi"), laptop: t("boardLaptop") };
     return b.parts.map(function (p) { return names[p] || p; });
   }
@@ -799,6 +815,102 @@
     return refs;
   }
 
+  // the Waveshare Pico-LCD-1.14 (V2): 240 x 135 on an ST7789 (SPI1, DC GP8,
+  // CS GP9, CLK GP10, DIN GP11, RST GP12, backlight GP13), the joystick on
+  // the left, keys A and B on the right - all to GND, so 0 = pressed. It
+  // sits on the Pico's header: no wires. The keys can be pressed here too.
+  var LCD_KEYS = [["pin2", "up", "boardJoyUp", "▲"], ["pin16", "left", "boardJoyLeft", "◀"], ["pin3", "ctrl", "boardJoyCtrl", "●"],
+                  ["pin20", "right", "boardJoyRight", "▶"], ["pin18", "down", "boardJoyDown", "▼"],
+                  ["pin15", "A", "boardKeyA", "A"], ["pin17", "B", "boardKeyB", "B"]];
+
+  function drawLcd(g, spec, b) {
+    var refs = { keys: {} };
+    var board = sv("g", null, g);
+    title(board, "Waveshare Pico-LCD-1.14 · ST7789 · SPI1 (CLK GP10, DIN GP11, CS GP9, DC GP8, RST GP12, BL GP13) · A GP15, B GP17 · joystick GP2, GP3, GP16, GP18, GP20");
+    sv("rect", { x: 0, y: 0, width: 320, height: 172, rx: 6, "class": "pb-lcd-pcb" }, board);
+    txt(g, 10, 13, "Pico-LCD-1.14", "pb-silk pb-silk-tiny");
+    txt(g, 310, 13, t("boardOnPico"), "pb-silk pb-silk-tiny", { "text-anchor": "end" });
+    sv("rect", { x: 37, y: 20, width: 246, height: 144, rx: 2, "class": "pb-lcd-bezel" }, g);
+    refs.glass = sv("rect", { x: 40, y: 24, width: 240, height: 135, "class": "pb-lcd-glass" }, g);
+    refs.image = sv("image", { x: 40, y: 24, width: 240, height: 135, preserveAspectRatio: "none", "class": "pb-lcd-image" }, g);
+    refs.image.style.opacity = "0";
+    if (lcd.url) refs.image.setAttribute("href", lcd.url);
+    // the joystick: four ways and a press
+    var jx = 19, jy = 92;
+    sv("rect", { x: jx - 17, y: jy - 17, width: 34, height: 34, rx: 4, "class": "pb-joy-base" }, g);
+    var at = { up: [jx, jy - 11], down: [jx, jy + 11], left: [jx - 11, jy], right: [jx + 11, jy], ctrl: [jx, jy], A: [301, 62], B: [301, 122] };
+    LCD_KEYS.forEach(function (k) {
+      var xy = at[k[1]];
+      var kg = sv("g", { "class": "pb-key" + (k[1] === "A" || k[1] === "B" ? " pb-key-ab" : "") }, g);
+      title(kg, t(k[2]));
+      var big = k[1] === "A" || k[1] === "B";
+      var cap = sv("circle", { cx: xy[0], cy: xy[1], r: big ? 9 : (k[1] === "ctrl" ? 6 : 5.2), "class": "pb-key-cap" }, kg);
+      txt(kg, xy[0], xy[1] + (big ? 3.2 : 2.4), k[3], big ? "pb-key-text" : "pb-key-text pb-key-arrow", { "text-anchor": "middle" });
+      if (big) txt(g, xy[0], xy[1] + 20, "GP" + k[0].slice(3), "pb-silk pb-silk-tiny", { "text-anchor": "middle" });
+      pressable(kg, k[0]);
+      refs.keys[k[0]] = cap;
+    });
+    refs.finger = txt(g, 301, 158, "🤖", "pb-small", { "text-anchor": "middle", visibility: "hidden" });
+    return refs;
+  }
+
+  // a key or joystick way on a drawing: held while the pointer is down
+  function pressable(node, key) {
+    var down = false;
+    node.addEventListener("pointerdown", function (e) {
+      down = true;
+      if (node.setPointerCapture) node.setPointerCapture(e.pointerId);
+      e.preventDefault();
+      api.input(key, "1");
+    });
+    var up = function () { if (!down) return; down = false; api.input(key, "0"); };
+    node.addEventListener("pointerup", up);
+    node.addEventListener("pointercancel", up);
+    node.addEventListener("lostpointercapture", up);
+  }
+
+  // the Waveshare Pico-RGB-LED: 16 x 10 WS2812-type LEDs on GP6, LED 0 at
+  // the top left, row after row (Waveshare's demo); a HAT, no wires
+  function drawRgbLed(g, spec, b) {
+    var refs = { leds: [], glows: [] };
+    var board = sv("g", null, g);
+    title(board, "Waveshare Pico-RGB-LED · 160 × WS2812 · DIN GP6");
+    sv("rect", { x: 0, y: 0, width: 300, height: 206, rx: 6, "class": "pb-rgb-pcb" }, board);
+    txt(g, 10, 15, "Pico-RGB-LED · DIN GP6", "pb-silk pb-silk-tiny");
+    txt(g, 290, 15, t("boardOnPico"), "pb-silk pb-silk-tiny", { "text-anchor": "end" });
+    for (var i = 0; i < 160; i++) {
+      var x = 20 + (i % 16) * 17, y = 30 + Math.floor(i / 16) * 17;
+      refs.glows.push(sv("circle", { cx: x, cy: y, r: 8.5, "class": "pb-rgb-glow" }, g));
+      refs.leds.push(sv("rect", { x: x - 5, y: y - 5, width: 10, height: 10, rx: 1.5, "class": "pb-rgb-led" }, g));
+    }
+    return refs;
+  }
+
+  // what a lit LED looks like on a screen: the chip's 0..255, brightened
+  function ledColor(hex, i) {
+    var r = parseInt(hex.substr(i * 6, 2), 16) || 0, g = parseInt(hex.substr(i * 6 + 2, 2), 16) || 0, bl = parseInt(hex.substr(i * 6 + 4, 2), 16) || 0;
+    if (!r && !g && !bl) return "";
+    var f = function (v) { return Math.round(255 * Math.pow(v / 255, 0.45)); };
+    return "rgb(" + f(r) + "," + f(g) + "," + f(bl) + ")";
+  }
+
+  function paintLeds(nodes, glows, hex) {
+    nodes.forEach(function (node, i) {
+      var c = ledColor(hex || "", i);
+      if (node.lit === c) return;
+      node.lit = c;
+      node.style.fill = c;
+      node.classList.toggle("is-on", !!c);
+      if (glows) { glows[i].style.fill = c; glows[i].style.opacity = c ? "0.55" : "0"; }
+    });
+  }
+
+  function litCount(hex) {
+    var n = 0;
+    for (var i = 0; i < (hex || "").length / 6; i++) if (ledColor(hex, i)) n++;
+    return n;
+  }
+
   // ---------- the parts without pins ----------
 
   function card(g, h, name, hint, width) {
@@ -872,6 +984,13 @@
     refs.irDotL = sv("circle", { cx: Math.cos(0.35) * 6.3 * s, cy: -Math.sin(0.35) * 6.3 * s, r: 0.45 * s, "class": "pb-robot-ir" }, refs.robot);
     refs.irDotR = sv("circle", { cx: Math.cos(0.35) * 6.3 * s, cy: Math.sin(0.35) * 6.3 * s, r: 0.45 * s, "class": "pb-robot-ir" }, refs.robot);
     refs.robotBuzz = sv("circle", { cx: -4 * s, cy: 0, r: 1.2 * s, "class": "pb-robot-buzz" }, refs.robot);
+    // the four WS2812 underneath (GP22): 0 front left, then clockwise
+    refs.ledGlows = [];
+    refs.leds = [[45], [-45], [-135], [135]].map(function (a) {
+      var rad = a[0] * Math.PI / 180, x = Math.cos(rad) * 5.6 * s, y = -Math.sin(rad) * 5.6 * s;
+      refs.ledGlows.push(sv("circle", { cx: x, cy: y, r: 2.6 * s, "class": "pb-rgb-glow" }, refs.robot));
+      return sv("circle", { cx: x, cy: y, r: 0.85 * s, "class": "pb-robot-led" }, refs.robot);
+    });
     refs.info = txt(g, ARENA.x, SIDE.picogo.h - 9, "", "pb-small pb-info");
     // drags: the box and the bacon follow the pointer
     dragger(refs.bacon, "arena.bacon", b);
@@ -1025,6 +1144,26 @@
     b.controls[key] = { input: input, show: show, mark: mark, scale: scale || 1 };
   }
 
+  // a real button that holds an input at "1" while it is pressed (pointer,
+  // Space, Enter) - the LCD's keys
+  function holdButton(text, key) {
+    var press = el("button", "pico-press pico-key", text);
+    press.type = "button";
+    press.setAttribute("aria-pressed", "false");
+    var down = function () { press.setAttribute("aria-pressed", "true"); api.input(key, "1"); };
+    var up = function () { if (press.getAttribute("aria-pressed") !== "true") return; press.setAttribute("aria-pressed", "false"); api.input(key, "0"); };
+    press.addEventListener("pointerdown", function (e) { press.setPointerCapture(e.pointerId); down(); });
+    press.addEventListener("pointerup", up);
+    press.addEventListener("pointercancel", up);
+    press.addEventListener("keydown", function (e) {
+      if ((e.key === " " || e.key === "Enter") && !e.repeat) { e.preventDefault(); down(); }
+    });
+    press.addEventListener("keyup", function (e) { if (e.key === " " || e.key === "Enter") { e.preventDefault(); up(); } });
+    press.addEventListener("blur", up);
+    press.addEventListener("click", function (e) { e.preventDefault(); });
+    return press;
+  }
+
   function buildControls(box, b) {
     var parts = b.parts;
     if (parts.indexOf("button14") >= 0) {
@@ -1046,6 +1185,21 @@
       row.appendChild(press);
       b.controls.pin14 = { button: press, mark: scriptedMark(row) };
       box.appendChild(row);
+    }
+    if (parts.indexOf("lcd114") >= 0) {
+      var keysRow = el("div", "pico-row pico-lcd-keys");
+      keysRow.setAttribute("role", "group");
+      keysRow.setAttribute("aria-label", t("boardLcdKeys"));
+      keysRow.appendChild(el("span", "pico-moves-name", t("boardLcdKeys")));
+      LCD_KEYS.forEach(function (k) {
+        var kb = holdButton(k[3], k[0]);
+        kb.setAttribute("aria-label", t(k[2]));
+        kb.title = t(k[2]);
+        keysRow.appendChild(kb);
+        b.controls[k[0]] = { button: kb };
+      });
+      b.controls.lcdKeys = { mark: scriptedMark(keysRow) };
+      box.appendChild(keysRow);
     }
     if (parts.indexOf("light26") >= 0) slider(box, b, "adc26", t("boardLight") + " (GP26)", 0, 100, 1, 50, "%", 100);
     if (parts.indexOf("temp") >= 0) slider(box, b, "tempC", t("boardRoom"), -10, 45, 0.5, 21, "°C");
@@ -1205,7 +1359,7 @@
         else if (st[0] === "p") { cls += " is-pwm"; opacity = String(0.25 + 0.75 * Math.min(100, Number(st.slice(1)) || 0) / 100); }
         else if (/^in/.test(st)) cls += " is-in";
         else if (st === "adc") cls += " is-adc";
-        else if (st === "i2c" || st === "spi" || st === "alt") cls += " is-bus";
+        else if (st === "i2c" || st === "spi" || st === "alt" || st === "pio") cls += " is-bus";
       }
       node.setAttribute("class", cls);
       if (opacity) node.style.opacity = opacity; else node.style.opacity = "";
@@ -1261,7 +1415,29 @@
       r.epd213.flash.classList.toggle("is-flashing", flash);
       r.epd213.flash.classList.toggle("is-fast", flash && e.mode === "fast");
     }
-    if (r.picogo) drawArenaObjects(b, parts.picogo);
+    if (r.picogo) {
+      drawArenaObjects(b, parts.picogo);
+      paintLeds(r.picogo.leds, r.picogo.ledGlows, parts.picogo ? parts.picogo.leds : "");
+    }
+    if (r.rgbled) paintLeds(r.rgbled.leds, r.rgbled.glows, parts.rgbled ? parts.rgbled.leds : "");
+    if (r.lcd114) {
+      var lc = parts.lcd114 || {};
+      var bl = Number(lc.bl) || 0;
+      var shown = !!lc.lit && bl > 0;
+      if (shown && lcd.px && lcd.key !== (lc.inv ? "i" : "n") + lcd.frames) paintLcd(!!lc.inv);
+      r.lcd114.image.style.opacity = shown ? String(0.3 + 0.7 * Math.min(100, bl) / 100) : "0";
+      r.lcd114.glass.classList.toggle("is-backlit", bl > 0);
+      var held = lc.keys || [];
+      var byScriptKeys = lc.scripted || [];
+      LCD_KEYS.forEach(function (k) {
+        var down = parts.lcd114 ? held.indexOf(k[1]) >= 0 : values[k[0]] === "1";
+        r.lcd114.keys[k[0]].classList.toggle("is-pressed", down);
+        var c = b.controls[k[0]];
+        if (c) c.button.classList.toggle("is-down", down);
+      });
+      r.lcd114.finger.setAttribute("visibility", byScriptKeys.length ? "visible" : "hidden");
+      if (b.controls.lcdKeys) b.controls.lcdKeys.mark.hidden = !byScriptKeys.length;
+    }
     if (r.wifi) {
       var wf = parts.wifi || { up: values["wifi.off"] !== "1", connected: false };
       r.wifi.apLed.classList.toggle("is-on", !!wf.up);
@@ -1461,6 +1637,47 @@
     return { url: canvas.toDataURL(), black: black };
   }
 
+  // the LCD's RAM (RGB565) as the glass shows it: inverted unless the
+  // controller inverts (INVON; this IPS glass needs it for true colours)
+  function paintLcd(inv) {
+    if (!lcd.px) return;
+    var canvas = lcd.canvas || (lcd.canvas = document.createElement("canvas"));
+    canvas.width = 240;
+    canvas.height = 135;
+    var ctx = canvas.getContext("2d");
+    var img = ctx.createImageData(240, 135);
+    for (var i = 0; i < 32400; i++) {
+      var c = inv ? lcd.px[i] : lcd.px[i] ^ 0xFFFF;
+      var o = i * 4;
+      img.data[o] = ((c >> 11) * 255 / 31) | 0;
+      img.data[o + 1] = (((c >> 5) & 63) * 255 / 63) | 0;
+      img.data[o + 2] = ((c & 31) * 255 / 31) | 0;
+      img.data[o + 3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+    lcd.url = canvas.toDataURL();
+    lcd.key = (inv ? "i" : "n") + lcd.frames;
+    benches.forEach(function (o) { if (o.refs.lcd114) o.refs.lcd114.image.setAttribute("href", lcd.url); });
+  }
+
+  // "x,y,w,h|hex": a rectangle of the glass that changed (4 hex digits a pixel)
+  function onLcd(b, text) {
+    var bar = text.indexOf("|");
+    var head = text.slice(0, bar).split(",").map(Number);
+    var hex = text.slice(bar + 1);
+    if (head.length !== 4) return;
+    lcd.px = lcd.px || new Uint16Array(32400);
+    var k = 0;
+    for (var y = head[1]; y < head[1] + head[3]; y++) {
+      for (var x = head[0]; x < head[0] + head[2]; x++) {
+        lcd.px[y * 240 + x] = parseInt(hex.substr(k, 4), 16) || 0;
+        k += 4;
+      }
+    }
+    lcd.frames++;
+    if (b) schedule();
+  }
+
   // ---------- sound (muted until the learner turns it on) ----------
 
   function tone() {
@@ -1525,6 +1742,15 @@
       change("moving", moving, moving ? t("boardRobotMoving") + "." : fill(t("boardRobotStopped"), num(Math.max(0, g.sonar), 0)) + ".");
     }
     if (parts.wifi) change("wifi", !!parts.wifi.connected, parts.wifi.connected ? t("boardWifiUp") + "." : "");
+    if (parts.lcd114) {
+      var on = !!parts.lcd114.lit && Number(parts.lcd114.bl) > 0;
+      change("lcd", on, on ? fill(t("boardLcdAlt"), Number(parts.lcd114.bl) || 0) + "." : t("boardLcdDark") + ".");
+    }
+    ["picogo", "rgbled"].forEach(function (id) {
+      if (!parts[id] || parts[id].leds === undefined) return;
+      var hex = parts[id].leds, n = hex.length / 6;
+      change("leds-" + id, litCount(hex), fill(t("boardLedsAlt"), litCount(hex), n) + ".");
+    });
     if (parts.laptop) change("ble", !!parts.laptop.connected, (parts.laptop.connected ? t("boardBleOn") : t("boardBleOff")) + ".");
     if (news.length) say(b, news.join(" "));
   }
@@ -1538,6 +1764,10 @@
     if (p.button14) bits.push(t("boardButton") + " " + (p.button14.pressed ? t("boardPressed") : t("boardReleased")) + ".");
     if (p.buzzer16 && p.buzzer16.hz) bits.push(t("boardBuzzer") + " " + p.buzzer16.hz + " Hz.");
     if (b.refs.epd213) bits.push(fill(t("boardEpdAlt"), epd.frames, epd.black) + ".");
+    if (p.lcd114) bits.push(p.lcd114.lit && Number(p.lcd114.bl) > 0 ? fill(t("boardLcdAlt"), Number(p.lcd114.bl) || 0) + "." : t("boardLcdDark") + ".");
+    ["picogo", "rgbled"].forEach(function (id) {
+      if (p[id] && p[id].leds) bits.push(t("boardLeds") + ": " + fill(t("boardLedsAlt"), litCount(p[id].leds), p[id].leds.length / 6) + ".");
+    });
     if (p.picogo) bits.push(t("boardRobot") + ": x " + num(p.picogo.x, 0) + " cm, y " + num(p.picogo.y, 0) + " cm, " + num(p.picogo.h, 0) + "°, sonar " + num(p.picogo.sonar, 0) + " cm.");
     var text = bits.join(" ");
     if (b.desc.textContent !== text) b.desc.textContent = text;
@@ -1588,6 +1818,17 @@
   }
 
   function onLog(b, text) {
+    // the simulator's notes on WS2812 timing and a waiting PIO
+    var ws = /^ws2812 (\w+) GP(\d+)(?: (\d+) (\d+))?/.exec(text);
+    if (ws) {
+      var key = { too_fast: "boardWsFast", unknown: "boardWsUnknown", one_level: "boardWsSame" }[ws[1]];
+      if (key) say(b, fill(t(key), ws[2], ws[3] ? ws[4] + " / " + ws[3] : ""));
+      return;
+    }
+    if (/^pio stall /.test(text)) {
+      say(b, t("boardPioStall"));
+      return;
+    }
     if (/^camera /.test(text)) {
       showPhoto(b, text.slice(7), true);
       say(b, t("boardCaptured") + ".");
@@ -1917,6 +2158,8 @@
         schedule();
       } else if (kind === "epd_frame") {
         onFrame(bench, text);
+      } else if (kind === "lcd") {
+        onLcd(bench, text);
       } else {
         bench.log.push([kind, text]);
         if (bench.log.length > 50) bench.log.shift();
@@ -1965,6 +2208,9 @@
         if (p.buzzer16) p.buzzer16.hz = 0;
         if (p.picogo) { p.picogo.l = 0; p.picogo.r = 0; }
         if (p.epd213) p.epd213.busy = false;
+        // the Pico's pins start over: GP13 low, the backlight dark (the
+        // LCD's RAM and the WS2812s keep what they have)
+        if (p.lcd114) { p.lcd114.bl = 0; p.lcd114.keys = []; p.lcd114.scripted = []; }
         if (p.laptop) p.laptop.connected = false;
         if (p.wifi) p.wifi.connected = false;
       }
@@ -1980,13 +2226,14 @@
       bench = null;
       values = {};
       epd = { frames: 0, hex: "", url: "", black: 0 };
+      lcd = { px: null, frames: 0, url: "", key: "" };
       if (audio && audio.osc) { audio.osc.stop(); audio.osc = null; }
       stopWebcam(true);
       api.previews();
     },
     // for tests: what the live bench holds now (null before the first ▶)
     debug: function () {
-      return bench ? { idx: bench.idx, frames: epd.frames, state: bench.lastState || "", frame: epd.hex,
+      return bench ? { idx: bench.idx, frames: epd.frames, lcd: lcd.frames, lcdUrl: lcd.url.length, state: bench.lastState || "", frame: epd.hex,
                        log: bench.log.slice(), reset: bench.lastReset || "", wide: bench.wide,
                        black: epd.black, badge: bench.badge.textContent, said: bench.say.textContent } : null;
     },

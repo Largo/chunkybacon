@@ -163,17 +163,19 @@ module PicoRubyCells
     # Text in the 5 x 7 font on a picture: the including class answers
     # blank?, black?(x, y) (ink there?) and black_pixels ([[x, y], ...]).
     module InkText
-      # +str+ drawn in the 5 x 7 font (html/pico/lib/font5x7.rb) at scale
-      # 1, 2 or 3, black on white, anywhere on the picture
-      def text?(str)
+      # +str+ drawn in the 5 x 7 font (html/pico/lib/font5x7.rb) at one of
+      # +scales+ (text_scales), ink on its background, anywhere on the picture
+      def text?(str, scales = text_scales)
         str = str.to_s
         return false if str.empty? || blank?
 
         font = PicoRubyCells.font
-        (1..3).any? { |scale| find_text(str, scale, font) }
+        scales.any? { |scale| find_text(str, scale, font) }
       rescue StandardError
         false
       end
+
+      def text_scales = (1..3)
 
       def find_text(str, scale, font)
         glyphs = str.chars.map { |c| font[0][(c.ord.between?(32, 126) ? c.ord : 63) - 32] }
@@ -326,6 +328,9 @@ module PicoRubyCells
 
         @background ||= @px.tally.max_by { |_c, n| n }[0]
       end
+
+      # big digits are common on a colour screen: up to scale 5
+      def text_scales = (1..5)
 
       # ink for text?: every pixel that is not the background
       def black?(x, y)

@@ -20,7 +20,7 @@
 //        {kind: "input", key, value}   (at once, even while a run goes on)
 //   out  {id, status: "ok"|"error"|"syntax", output, inspect, errorClass, line, file, message, irbs, board}
 //        {id, progress: text}   what a run printed so far
-//        {id, board: kind, text}   the bench's messages (state, epd_frame, ble, log)
+//        {id, board: kind, text}   the bench's messages (state, epd_frame, lcd, ble, log)
 //        {ready: true, version} once, or {failed: message}
 import createModule from "./assets/picoruby/picoruby.js";
 import { bootCore } from "./picoruby_worker_core.js";
