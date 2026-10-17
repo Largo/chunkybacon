@@ -228,7 +228,11 @@ window.LESSONS_JSON = JSON.stringify({
       "cheatNone": "Nichts gefunden.",
       "cheatClose": "Spickzettel schliessen",
       "cheatLessons": "Lektion",
-      "cheatDocs": "Doku"
+      "cheatDocs": "Doku",
+      "tabsLabel": "Dateien",
+      "tabReadonly": "schreibgeschützt",
+      "boardStop": "■ Stopp (Pico zurücksetzen)",
+      "boardReset": "Pico zurückgesetzt."
     },
     "en": {
       "title": "Learn Ruby with Chunky Bacon",
@@ -448,7 +452,11 @@ window.LESSONS_JSON = JSON.stringify({
       "cheatNone": "Nothing found.",
       "cheatClose": "Close the cheat sheet",
       "cheatLessons": "Lesson",
-      "cheatDocs": "Docs"
+      "cheatDocs": "Docs",
+      "tabsLabel": "Files",
+      "tabReadonly": "read-only",
+      "boardStop": "■ Stop (reset the Pico)",
+      "boardReset": "The Pico was reset."
     },
     "ja": {
       "title": "Chunky Baconと学ぶRuby",
@@ -668,7 +676,11 @@ window.LESSONS_JSON = JSON.stringify({
       "cheatNone": "見つかりませんでした。",
       "cheatClose": "チートシートを閉じる",
       "cheatLessons": "レッスン",
-      "cheatDocs": "ドキュメント"
+      "cheatDocs": "ドキュメント",
+      "tabsLabel": "ファイル",
+      "tabReadonly": "読み取り専用",
+      "boardStop": "■ 停止（Picoをリセット）",
+      "boardReset": "Picoをリセットしました。"
     }
   },
   "lessons": [

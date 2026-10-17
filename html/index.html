@@ -665,24 +665,30 @@
     // editors, main.rb reads and marks them)
     window.cellEditors = {};
     // +label+ names the editor for screen readers ("Code, cell 2"), +hint+
-    // says how to run it and how to leave it (shell/app.rb, UI strings)
-    window.initCell = function (idx, label, hint) {
+    // says how to run it and how to leave it (shell/app.rb, UI strings).
+    // +idx+ is "2" for a cell's (main) editor, "2-1" for its first tab (a
+    // Pico lesson's cell with several files); +readonly+ "true" makes it
+    // read-only - the cursor stays, so it can be read and copied.
+    window.initCell = function (idx, label, hint, readonly) {
       var ta = document.getElementById("cell-code-" + idx);
       if (!ta) return;
+      var cellIdx = String(idx).split("-")[0];
       var cm = window.cellEditors[idx] = CodeMirror.fromTextArea(ta, {
         lineNumbers: true,
         mode: "text/x-ruby",
         matchBrackets: true,
         indentUnit: 2,
         viewportMargin: Infinity,
+        readOnly: readonly === "true" || readonly === true,
         screenReaderLabel: label || null,
         extraKeys: {
           "Shift-Enter": function () {
-            var btn = document.querySelector('.run-cell[data-idx="' + idx + '"]');
+            var btn = document.querySelector('.run-cell[data-idx="' + cellIdx + '"]');
             if (btn) btn.click();
           }
         }
       });
+      if (readonly === "true" || readonly === true) cm.getWrapperElement().classList.add("is-readonly");
       // Tab indents, as in any code editor - but Escape, then Tab (or
       // Shift+Tab) leaves it; without that the keyboard is trapped (WCAG
       // 2.1.2). CodeMirror.Pass would fall through to the default keymap
@@ -723,7 +729,99 @@
     window.clearCellMarks = function (idx) {
       var ed = window.cellEditors[idx];
       if (ed) ed.getAllMarks().forEach(function (m) { m.clear(); });
+      // and the marks in its tabs (an error in a driver)
+      Object.keys(window.cellEditors).forEach(function (key) {
+        if (key.indexOf(idx + "-") === 0) window.cellEditors[key].getAllMarks().forEach(function (m) { m.clear(); });
+      });
       if (window.ChunkyStepper) window.ChunkyStepper.clear(idx);
+    };
+    // A Pico lesson's cell with several files (design §2.2): a tab list
+    // above its editors (shell/view.rb's tabs_html), the WAI-ARIA tabs
+    // pattern - a click or Enter selects, the arrow keys, Home and End move.
+    window.chunkyTabs = {
+      select: function (idx, k, focus) {
+        var tabs = document.querySelectorAll('.cell-tab[data-idx="' + idx + '"]');
+        tabs.forEach(function (tab) {
+          var on = tab.getAttribute("data-k") === String(k);
+          tab.setAttribute("aria-selected", on ? "true" : "false");
+          tab.tabIndex = on ? 0 : -1;
+          var panel = document.getElementById(tab.getAttribute("aria-controls"));
+          if (panel) panel.hidden = !on;
+          if (on && focus) tab.focus();
+        });
+        var ed = window.cellEditors[Number(k) === 0 ? String(idx) : idx + "-" + k];
+        if (ed) ed.refresh();
+      }
+    };
+    document.addEventListener("click", function (e) {
+      var tab = e.target.closest && e.target.closest(".cell-tab");
+      if (tab) window.chunkyTabs.select(tab.getAttribute("data-idx"), tab.getAttribute("data-k"), false);
+    });
+    document.addEventListener("keydown", function (e) {
+      var tab = e.target.closest && e.target.closest(".cell-tab");
+      if (!tab) return;
+      var idx = tab.getAttribute("data-idx");
+      var all = Array.prototype.slice.call(document.querySelectorAll('.cell-tab[data-idx="' + idx + '"]'));
+      var at = all.indexOf(tab), to = null;
+      if (e.key === "ArrowRight") to = (at + 1) % all.length;
+      else if (e.key === "ArrowLeft") to = (at - 1 + all.length) % all.length;
+      else if (e.key === "Home") to = 0;
+      else if (e.key === "End") to = all.length - 1;
+      if (to === null) return;
+      e.preventDefault();
+      window.chunkyTabs.select(idx, all[to].getAttribute("data-k"), true);
+    });
+    // a read-only tab shows a file of html/ (a driver), fetched once
+    var tabSources = {};
+    window.setCellTabSrc = function (idx, k, src) {
+      var key = idx + "-" + k;
+      tabSources[key] = { src: String(src), loaded: false };
+      fetch(String(src), { cache: "no-cache" }).then(function (r) { return r.ok ? r.text() : Promise.reject(r.status); })
+        .then(function (text) {
+          var entry = tabSources[key];
+          var ed = window.cellEditors[key];
+          if (!entry || entry.src !== String(src) || !ed) return;
+          entry.loaded = true;
+          ed.setValue(text);
+        })
+        .catch(function () { /* getCellTabs reads it synchronously then */ });
+    };
+    // the cell's tabs as the editors hold them, in order: a JSON string
+    // [{name, code, readonly}] (main.rb's cell_tabs); a src tab still
+    // loading is read synchronously
+    window.getCellTabs = function (idx) {
+      var out = [];
+      document.querySelectorAll('.cell-tab[data-idx="' + idx + '"]').forEach(function (tab) {
+        var k = tab.getAttribute("data-k");
+        if (k === "0") return;
+        var key = idx + "-" + k;
+        var entry = tabSources[key];
+        var ed = window.cellEditors[key];
+        var code = ed ? ed.getValue() : "";
+        if (entry && !entry.loaded) {
+          var text = window.fetchTextSync(entry.src);
+          if (text.indexOf("ERROR ") !== 0) { code = text; entry.loaded = true; if (ed) ed.setValue(text); }
+        }
+        out.push({ name: tab.getAttribute("data-name"), code: code, readonly: tab.getAttribute("data-readonly") === "true" });
+      });
+      return JSON.stringify(out);
+    };
+    // an error in a tab: that tab, and its line marked
+    window.markCellTabLine = function (idx, name, lineNo) {
+      var tab = document.querySelector('.cell-tab[data-idx="' + idx + '"][data-name="' + String(name).replace(/"/g, "") + '"]');
+      if (!tab) return;
+      var k = tab.getAttribute("data-k");
+      window.chunkyTabs.select(idx, k, false);
+      window.markCellLine(k === "0" ? String(idx) : idx + "-" + k, Number(lineNo));
+    };
+    // the Pico lessons' bench (pico_board.js), loaded when a lesson has a
+    // cell with a board (shell/app.rb)
+    window.ensurePicoBoard = function () {
+      if (window.chunkyPicoBoard || document.getElementById("picoBoardScript")) return;
+      var script = document.createElement("script");
+      script.id = "picoBoardScript";
+      script.src = "pico_board.js";
+      document.head.appendChild(script);
     };
     window.markCellLine = function (idx, lineNo) {
       var ed = window.cellEditors[idx];

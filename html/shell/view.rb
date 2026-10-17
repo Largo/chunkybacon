@@ -79,7 +79,9 @@ module ChunkyShell
     # +step+: [label, name] of ⏯ in a lesson with "stepper": true ("⏯
     #   Schritt für Schritt", "Schritt für Schritt durch Zelle %d"), or nil.
     #   Not beside an IRB either: what it runs is typed later, in the widget.
-    def self.lesson_html(cells, task_label, run_label, live = "", run_name = "", step = nil)
+    # +tab_labels+: [the tab list's name ("Dateien"), "read-only"] for a
+    #   Pico lesson's cells with tabs (several files, design §2.2)
+    def self.lesson_html(cells, task_label, run_label, live = "", run_name = "", step = nil, tab_labels = nil)
       html = "".dup
       number = 0
       cells.each_with_index do |cell, idx|
@@ -89,7 +91,8 @@ module ChunkyShell
           switch = irb ? "" : live
           name = run_name == "" ? "" : format(run_name, number)
           stepper = step.nil? || irb ? "" : step_html(idx, step[0], format(step[1], number))
-          html << cell_html(idx, cell.t == "x", task_label, run_label, switch, name, stepper)
+          html << cell_html(idx, cell.t == "x", task_label, run_label, switch, name, stepper,
+                            tab_list(cell), !cell[:board].nil?, tab_labels || ["Files", "read-only"])
         else
           html << %(<div class="lessonText">#{cell.html}</div>)
         end
@@ -101,16 +104,62 @@ module ChunkyShell
     # "▶ Run"; the name keeps the visible word (WCAG 2.5.3, Label in Name).
     # The exercise's button says that Alt+R presses it.
     # +step+: step_html's ⏯, left of ▶
-    def self.cell_html(idx, exercise, task_label, run_label, live = "", name = "", step = "")
+    # +tabs+: [[name, readonly], ...], the main file first - more than one
+    #   and the cell gets a tab list (WAI-ARIA tabs), one editor per file
+    #   (#cell-code-<idx> for the main file, #cell-code-<idx>-<k> for tab k)
+    # +board+: a Pico lesson's cell with a board: the slot the bench is
+    #   moved into when the cell runs (pico_board.js)
+    def self.cell_html(idx, exercise, task_label, run_label, live = "", name = "", step = "", tabs = [], board = false,
+                       tab_labels = ["Files", "read-only"])
       label = name == "" ? "" : %( aria-label="#{escape_html(name)}")
       keys = exercise ? ' aria-keyshortcuts="Alt+R"' : ""
+      editors = tabs.length > 1 ? tabs_html(idx, tabs, tab_labels) : %(<textarea title="code" id="cell-code-#{idx}"></textarea>)
+      slot = board ? %(<div class="pico-slot" id="pico-slot-#{idx}" hidden></div>) : ""
       <<~HTML
         <div class="cell#{exercise ? ' exercise' : ''}" data-label="#{task_label}">
-          <textarea title="code" id="cell-code-#{idx}"></textarea>
+          #{editors}
           <div class="cell-toolbar">#{live}#{step}<button type="button" class="run-cell" data-idx="#{idx}"#{label}#{keys}>#{run_label}</button></div>
           <div class="cell-out" id="cell-out-#{idx}" style="display:none"></div>
+          #{slot}
         </div>
       HTML
+    end
+
+    # [[name, readonly], ...] of a cell: [] without tabs, else the main
+    # file ("main", app.rb) and the cell's "tabs" - a src tab is always
+    # read-only, an inline one unless it says "readonly": false. Optional
+    # fields with brackets (docs/PICORUBY_SHELL.md §5 #5).
+    def self.tab_list(cell)
+      tabs = cell[:tabs]
+      return [] if tabs.nil?
+
+      list = [[(cell[:main] || "app.rb").to_s, false]]
+      tabs.to_a.each { |tab| list << [tab[:name].to_s, !tab[:src].nil? || tab[:readonly] != false] }
+      list
+    end
+
+    # the tab list and one panel per file; index.html's chunkyTabs switches
+    def self.tabs_html(idx, tabs, labels)
+      html = %(<div class="cell-tabs" role="tablist" aria-label="#{escape_html(labels[0])}">).dup
+      tabs.each_with_index do |tab, k|
+        file = tab[0]
+        readonly = tab[1]
+        tab_id = "cell-tab-#{idx}-#{k}"
+        lock = readonly ? %(<span class="cell-tab-lock" aria-hidden="true">🔒</span>) : ""
+        aria = readonly ? %( aria-label="#{escape_html("#{file}, #{labels[1]}")}") : ""
+        html << %(<button type="button" role="tab" class="cell-tab" id="#{tab_id}" data-idx="#{idx}" data-k="#{k}") +
+                %( data-name="#{escape_html(file)}" data-readonly="#{readonly}" aria-selected="#{k.zero?}") +
+                %( aria-controls="cell-panel-#{idx}-#{k}" tabindex="#{k.zero? ? 0 : -1}"#{aria}>#{lock}#{escape_html(file)}</button>)
+      end
+      html << "</div>"
+      tabs.each_with_index do |tab, k|
+        file = tab[0]
+        area = k.zero? ? "cell-code-#{idx}" : "cell-code-#{idx}-#{k}"
+        hidden = k.zero? ? "" : " hidden"
+        html << %(<div class="cell-panel" role="tabpanel" id="cell-panel-#{idx}-#{k}" aria-labelledby="cell-tab-#{idx}-#{k}"#{hidden}>) +
+                %(<textarea title="#{escape_html(file)}" id="#{area}"></textarea></div>)
+      end
+      html
     end
 
     # ⏯: runs the cell recorded, and the stepper below it walks through the

@@ -53,5 +53,14 @@ module ChunkyShell
     # true for a lesson whose cells run on PicoRuby.wasm instead of CRuby
     # ("engine": "picoruby", the PicoRuby lesson: html/picoruby_lab.js)
     def picoruby?(idx) = @lessons[idx][:engine] == "picoruby"
+
+    # a Pico lesson's cell (docs/HANDOVER.md §6r): its tabs, the files
+    # beside the main one ([] without), and whether it runs on a board
+    def tabs(cell)
+      tabs = cell[:tabs]
+      tabs.nil? ? [] : tabs.to_a
+    end
+
+    def board?(cell) = !cell[:board].nil?
   end
 end

@@ -47,9 +47,12 @@
                 auto: auto === true || auto === "true", seq: Number(seq),
                 tabs: parseTabs(tabsJson), board: boardJson ? String(boardJson) : "" });
     },
+    // an IRB below a board cell (a Pico lesson) shares the cells' session:
+    // its lines see the cell's `led` and drive the same board
     irb: function (sid, code, seq, boardJson) {
-      sessions["irb" + sid] = true;
-      enqueue({ kind: "irb", sid: "irb" + sid, irbSid: Number(sid), code: String(code), seq: Number(seq),
+      var worker = boardJson ? "cells" : "irb" + sid;
+      if (!boardJson) sessions[worker] = true;
+      enqueue({ kind: "irb", sid: worker, irbSid: Number(sid), code: String(code), seq: Number(seq),
                 tabs: [], board: boardJson ? String(boardJson) : "" });
     },
     // a bench input (pico_board.js): at once, even while a run goes on

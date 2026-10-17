@@ -375,6 +375,8 @@ class ChunkyApp
     fresh_binding
     # (not in the embedded cell: embed.html has no PicoRuby)
     $window.chunkyPicoRuby.reset if $window[:chunkyPicoRuby].typeof == "object"
+    # the Pico's bench belongs to the page that went (pico_board.js)
+    $window.chunkyPicoBoard.unmount if $window[:chunkyPicoBoard].typeof == "object"
     dispose_three
     dispose_shoes
     dispose_sketches
@@ -456,6 +458,8 @@ class ChunkyApp
     $window.addEventListener("chunky:lesson") { |event| sync_state(event.detail) }
     # a PicoRuby lesson's cells and IRBs answer later (picoruby_lab.js)
     $window.addEventListener("chunky:picoruby") { |event| picoruby_answer(event.detail) }
+    # ... and what they print shows while they run (a Pico lesson's 60 s)
+    $window.addEventListener("chunky:picoruby-progress") { |event| picoruby_progress(event.detail) }
     $window.addEventListener("chunky:install") do |event|
       sync_state(event.detail)
       panel_install(event.detail.name)
@@ -1273,8 +1277,59 @@ class ChunkyApp
 
     @picoruby_codes ||= {}
     @picoruby_codes[idx] = code
-    $window.chunkyPicoRuby.run(idx.to_s, code, auto, @seq.to_s)
+    (@pico_live ||= {}).delete(idx)
+    cell = cells[idx] || {}
+    tabs = cell["tabs"] ? cell_tabs(idx) : "[]"
+    board = pico_board_json(cell, true)
+    $window.chunkyPicoBoard.mount(idx.to_s, board) if board != "" && $window[:chunkyPicoBoard].typeof == "object"
+    $window.chunkyPicoRuby.run(idx.to_s, code, auto, @seq.to_s, tabs, board)
     :pending
+  end
+
+  # A Pico lesson's cell (docs/HANDOVER.md §6r): its tabs as the editors
+  # hold them ([{name, code, readonly}], index.html's getCellTabs) - the
+  # editable ones are kept, as the main file is (the shell's save_tab)
+  def cell_tabs(idx)
+    json = $window.getCellTabs(idx.to_s).to_s
+    unless workshop?
+      JSON.parse(json).each do |tab|
+        next if tab["readonly"]
+
+        $window.chunkySaveTab(idx.to_s, tab["name"].to_s, tab["code"].to_s) if $window[:chunkySaveTab].typeof == "function"
+      end
+    end
+    json
+  rescue JSON::ParserError
+    "[]"
+  end
+
+  # the board a cell runs on, as the worker's simulator takes it: the
+  # lesson's Pico, the cell's parts and bench, and whether the run resets
+  # the board (a cell's run does, a line in an IRB below it does not); ""
+  # for a cell without one
+  def pico_board_json(cell, reset)
+    board = cell["board"]
+    return "" unless board.is_a?(Hash)
+
+    JSON.generate({ "board" => (current_lesson["pico"] || {})["board"] || "pico2w", "parts" => board["parts"] || [],
+                    "bench" => reset ? (cell["bench"] || []) : [], "reset" => reset })
+  end
+
+  # what a run printed so far, below the cell (picoruby_lab.js's progress)
+  def picoruby_progress(detail)
+    return unless detail.seq.to_i == @seq && detail.kind.to_s == "cell"
+
+    idx = detail.idx.to_i
+    out_el = $d.getElementById("cell-out-#{idx}")
+    @pico_live ||= {}
+    unless @pico_live[idx]
+      # the first output of this run replaces the last run's
+      out_el.innerHTML = "<pre class=\"cell-stdout pico-live\"></pre>"
+      out_el.style.display = "block"
+      @pico_live[idx] = true
+    end
+    live = out_el.querySelector("pre.pico-live")
+    live.innerHTML = live.innerHTML.to_s + AnsiHtml.to_html(detail.output.to_s)
   end
 
   def picoruby_answer(detail)
@@ -1284,18 +1339,26 @@ class ChunkyApp
 
     idx = detail.idx.to_i
     auto = detail.auto == true
+    (@pico_live ||= {}).delete(idx)
     code = (@picoruby_codes || {}).delete(idx) || $window.getCellCode(idx).to_s
     status = detail.status.to_s
     message = detail.message.to_s
+    # an error in a tab (a Pico lesson's driver) is marked there, not in
+    # the cell's own code
+    file = detail.file.to_s
+    line = file.empty? ? detail.line.to_i : 0
     error = case status
-            when "error" then PicoRubyCells.error(detail.errorClass.to_s, message, detail.line.to_i, EVAL_FILE)
+            when "error" then PicoRubyCells.error(detail.errorClass.to_s, message, line, EVAL_FILE)
             when "syntax" then SyntaxError.new(ui["picoSyntax"])
             when "stopped" then auto ? AutoRun::Stopped.new : PicoRubyCells::Stopped.new("#{ui['picoStopped']} #{ui['picoRestarted']}")
+            when "reset" then PicoRubyCells::Stopped.new("#{ui['boardReset']} #{ui['picoRestarted']}")
             when "failed" then PicoRubyCells::Unavailable.new("#{ui['picoFailed']} (#{message})")
             end
+    $window.markCellTabLine(idx.to_s, file, detail.line.to_i.to_s) if status == "error" && !file.empty? && !auto
     outcome = begin
       show_picoruby_run(idx, code, auto, output: detail.output.to_s, error: error, irbs: detail.irbs.to_i,
-                        result: status == "ok" ? PicoRubyCells.value(detail.value.to_s) : nil)
+                        result: status == "ok" ? PicoRubyCells.value(detail.value.to_s) : nil,
+                        board: PicoRubyCells.board(detail.board.to_s))
     rescue Exception => e
       $window.console.error("picoruby #{idx}: #{e.class}: #{e.message}")
       :error
@@ -1306,7 +1369,7 @@ class ChunkyApp
 
   # the cell's output as run_cell writes it for CRuby: what was printed,
   # the error (explained where a rule knows it) or "=> value", IRBs
-  def show_picoruby_run(idx, code, auto, output: "", result: nil, error: nil, irbs: 0)
+  def show_picoruby_run(idx, code, auto, output: "", result: nil, error: nil, irbs: 0, board: nil)
     # what an exercise's check sees besides output and result: nothing
     @run_images = []
     @run_downloads = []
@@ -1335,7 +1398,8 @@ class ChunkyApp
     end
     irbs.times do
       sid = @irb_sessions.length
-      @irb_sessions << { pico: true, line: 1, buffer: "" }
+      # a line in it runs on the cell's board, without resetting it
+      @irb_sessions << { pico: true, line: 1, buffer: "", board: pico_board_json(cells[idx] || {}, false) }
       out_html += irb_widget_html(sid)
     end
     out_el = $d.getElementById("cell-out-#{idx}")
@@ -1352,7 +1416,7 @@ class ChunkyApp
     cell = cells[idx]
     return :ok unless cell && cell["t"] == "x"
 
-    check_exercise(cell, code, output, result) ? :pass : :fail
+    check_exercise(cell, code, output, result, board: board) ? :pass : :fail
   end
 
   # A line in a PicoRuby IRB: an unfinished input waits for more (Prism
@@ -1369,7 +1433,7 @@ class ChunkyApp
       session[:buffer] = ""
       append += "<div class=\"irb-error\">#{escape_html("SyntaxError: #{syntax.message.lines.first.to_s.strip}")}</div>"
     else
-      $window.chunkyPicoRuby.irb(sid.to_s, session[:buffer], @seq.to_s)
+      $window.chunkyPicoRuby.irb(sid.to_s, session[:buffer], @seq.to_s, session[:board] || "")
       session[:buffer] = ""
     end
     history.innerHTML += append
@@ -1625,7 +1689,8 @@ class ChunkyApp
     # stays as it is (autorun.rb)
     return :skipped if auto && !AutoRun.runnable?(code, workshop? ? [] : @bind.local_variables)
     # a lesson on PicoRuby: the worker runs it, picoruby_answer shows it
-    return start_picoruby_run(idx, code, auto) if picoruby?
+    # (a cell with "engine": "cruby" in it runs here, on CRuby: the laptop's side)
+    return start_picoruby_run(idx, code, auto) if picoruby? && cell["engine"] != "cruby"
 
     if workshop?
       # the shell's callbacks (shell/workspace.rb), across the two Rubies
@@ -1927,7 +1992,11 @@ class ChunkyApp
 
   # true when the exercise's check passes; the shell marks the lesson done
   # and has Chunky say so
-  def check_exercise(cell, code, output, result)
+  # +board+: a Pico lesson's simulated board after the run
+  # (PicoRubyCells::Board), the check's `board` - set only in a PicoRuby
+  # lesson, where no learner's variable of that name is overwritten by it
+  def check_exercise(cell, code, output, result, board: nil)
+    @bind.local_variable_set(:board, board) if picoruby?
     @bind.local_variable_set(:output, output)
     @bind.local_variable_set(:result, result)
     @bind.local_variable_set(:code, code)

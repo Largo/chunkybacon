@@ -128,6 +128,9 @@ module ChunkyShell
       # the kernel runs a cell (main.rb's run_cell): its code is kept
       JS::Object.register_callback("chunkySaveCode") { |idx, code| app.save_code(idx.to_i, code) }
       window["chunkySaveCode"] = JS.generic_callbacks[:chunkySaveCode]
+      # ... and an editable tab of its (a Pico lesson's cell)
+      JS::Object.register_callback("chunkySaveTab") { |idx, name, code| app.save_tab(idx.to_i, name.to_s, code) }
+      window["chunkySaveTab"] = JS.generic_callbacks[:chunkySaveTab]
     end
 
     # Nav entries are real links (#lesson-id): a plain click is handled here,
@@ -420,6 +423,8 @@ module ChunkyShell
       # a second PicoRuby (the same 0.9 MB, cached) in a Web Worker, only for
       # a lesson whose cells run on it (html/picoruby_lab.js)
       JSG.w.ensurePicoRuby if @course.picoruby?(idx)
+      # the Pico's bench (pico_board.js) only for a lesson with a board
+      JSG.w.ensurePicoBoard if @course.picoruby?(idx) && cells.any? { |cell| code_cell?(cell) && @course.board?(cell) }
       @rendered_lesson_id = id
       # a lesson opened from a link is where the learner left off, too (only
       # a change is written: every write reaches a connected folder)
@@ -428,7 +433,8 @@ module ChunkyShell
       JSG.d.title = "#{@course.numbered_title(idx, @lang)} – #{ui.title}"
       # ⏯ only in the lessons that ask for it ("stepper": true)
       step = @course.stepper?(idx) ? [ui.stepButton, ui.stepCellLabel] : nil
-      el("lessonBody").innerHTML = View.lesson_html(cells, ui.taskLabel, ui.runCell, live_toggle_html, ui.runCellLabel, step)
+      tab_labels = [(ui[:tabsLabel] || "Files").to_s, (ui[:tabReadonly] || "read-only").to_s]
+      el("lessonBody").innerHTML = View.lesson_html(cells, ui.taskLabel, ui.runCell, live_toggle_html, ui.runCellLabel, step, tab_labels)
       number = 0
       cells.each_with_index do |cell, i|
         next unless code_cell?(cell)
@@ -440,6 +446,27 @@ module ChunkyShell
         JSG.w.initCell(i.to_s, format(ui.codeLabel, number), ui.codeHint)
         # saved code only where it was saved for this cell (Store.code_key)
         set_code(i, Store.get(Store.code_key(@lang, id, i, cell.code), cell.code))
+        init_tabs(i, number, cell, id)
+      end
+    end
+
+    # The tabs of a Pico lesson's cell (design §2.2): an editor each; a src
+    # tab is fetched (and read-only), an inline one shows its saved code
+    # (Store.tab_key) or its starter. All strings (§5 #4, #6).
+    def init_tabs(idx, number, cell, id)
+      @course.tabs(cell).each_with_index do |tab, k|
+        name = tab[:name].to_s
+        src = tab[:src]
+        readonly = !src.nil? || tab[:readonly] != false
+        key = "#{idx}-#{k + 1}"
+        JSG.w.initCell(key, "#{format(ui.codeLabel, number)}, #{name}", ui.codeHint, readonly ? "true" : "")
+        if src.nil?
+          starter = tab[:code].to_s
+          code = readonly ? starter : Store.get(Store.tab_key(@lang, id, idx, name, starter), starter)
+          set_code(key, code)
+        else
+          JSG.w.setCellTabSrc(idx.to_s, (k + 1).to_s, src.to_s)
+        end
       end
     end
 
@@ -576,6 +603,13 @@ module ChunkyShell
 
         Store.remove(Store.code_key(@lang, id, i, cell.code))
         set_code(i, cell.code)
+        # an editable tab goes back to its starter too
+        @course.tabs(cell).each_with_index do |tab, k|
+          next unless tab[:src].nil?
+
+          Store.remove(Store.tab_key(@lang, id, i, tab[:name].to_s, tab[:code].to_s))
+          set_code("#{i}-#{k + 1}", tab[:code].to_s)
+        end
         out = el("cell-out-#{i}")
         out.style.display = "none" if out
       end
@@ -606,6 +640,20 @@ module ChunkyShell
       return unless cell && code_cell?(cell)
 
       Store.set(Store.code_key(@lang, current_lesson_id, idx, cell.code), code.to_s)
+    end
+
+    # an editable tab of cell idx, as main.rb ran it (chunkySaveTab): under
+    # the tab's own starter; a read-only tab never is
+    def save_tab(idx, name, code)
+      return if workshop?
+
+      cell = current_cells[idx]
+      return unless cell && code_cell?(cell)
+
+      tab = @course.tabs(cell).find { |t| t[:name].to_s == name }
+      return if tab.nil? || !tab[:src].nil? || tab[:readonly] != false
+
+      Store.set(Store.tab_key(@lang, current_lesson_id, idx, name, tab[:code].to_s), code.to_s)
     end
 
     # Ruby runs on the page's main thread, so the running look goes on
