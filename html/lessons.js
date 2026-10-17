@@ -287,6 +287,42 @@ window.LESSONS_JSON = JSON.stringify({
       "boardWebcam": "Meine Webcam benutzen",
       "boardWebcamOn": "Webcam an – ihre Bilder bleiben in diesem Browser.",
       "boardWebcamNo": "Keine Webcam verfügbar (keine Erlaubnis, keine Kamera oder die Seite ist nicht auf https) – es bleibt bei den gezeichneten Bildern.",
+      "boardRealUsb": "Ein echter Pico (USB)",
+      "boardRealIntro": "Einen Pico mit R2P2 per USB-Kabel anschliessen und verbinden: Dann kommen die Tabs dieser Zelle nach /lib, ihr Code nach /home/chunky.rb, und er läuft dort; das Terminal darunter ist die Shell von R2P2. Der Browser fragt, welches Gerät – die Seite spricht nur mit diesem. Noch nicht mit echter Hardware ausprobiert.",
+      "boardRealConnect": "Echten Pico verbinden …",
+      "boardRealAll": "alle seriellen Ports zeigen",
+      "boardRealSend": "Diese Zelle auf den Pico senden und starten",
+      "boardRealCtrlC": "Ctrl-C",
+      "boardRealClose": "Trennen",
+      "boardRealAsApp": "als /home/app.rb (startet beim Einschalten)",
+      "boardRealTerm": "Terminal von R2P2",
+      "boardRealType": "Eintippen",
+      "boardRealChoose": "Das Gerät in der Liste des Browsers wählen …",
+      "boardRealOn": "Verbunden (%1).",
+      "boardRealNone": "Kein Gerät gewählt.",
+      "boardRealFail": "Verbinden ging nicht: %1",
+      "boardRealOff": "Nicht verbunden.",
+      "boardRealGone": "Die Verbindung ist weg (Kabel ausgesteckt?).",
+      "boardRealPrompt": "Warte auf die Eingabeaufforderung $> von R2P2 …",
+      "boardRealPut": "Schreibe %1 (%2 Bytes) …",
+      "boardRealPutOk": "%1 geschrieben und geprüft (CRC-32).",
+      "boardRealRun": "%1 läuft auf dem Pico. Ctrl-C hält es an.",
+      "boardRealNoPrompt": "Die Eingabeaufforderung $> von R2P2 kam nicht. Läuft R2P2 auf dem Pico, und ist das sein erster serieller Port? Ctrl-C versuchen oder aus- und wieder einstecken.",
+      "boardRealBusy": "Wird noch gesendet – einen Moment.",
+      "boardRealPutFail": "%1 schreiben ging nicht: %2",
+      "boardRealNoAck": "die Shell hat auf Ctrl-B nicht geantwortet (PicoModem gibt es in R2P2 4.0.3; die Shell muss bei ihrer Eingabeaufforderung $> sein)",
+      "boardRealCrc": "die Prüfsumme CRC-32 stimmt nicht – noch einmal senden",
+      "boardRealTimeout": "der Pico hat 5 Sekunden lang nicht geantwortet",
+      "boardRealNoSecure": "Für einen echten Pico braucht es eine sichere Seite, diese ist einfaches http. Den Kurs auf https://chunkybacon.idogawa.com oder auf localhost öffnen.",
+      "boardRealNoSerial": "Dieser Browser hat kein Web Serial: Chrome, Edge und Opera auf einem Computer haben es, Firefox, Safari und Handys nicht. Die simulierte Werkbank geht überall.",
+      "boardRealNoBle": "Dieser Browser hat kein Web Bluetooth: Chrome und Edge unter Windows, macOS, ChromeOS und Android haben es (unter Linux muss es eventuell in chrome://flags eingeschaltet werden), Firefox und Safari nicht.",
+      "boardRealBle": "Ein echter Pico 2 W (Bluetooth)",
+      "boardRealBleIntro": "Auf einem Pico 2 W mit R2P2-PICORUBY ein BLE::UART-Programm starten (wie die Zellen hier) und dann verbinden: Die Zeilen des Laptops gehen an ihn, seine Zeilen erscheinen auf dem Laptop und erreichen die CRuby-Zelle. Der Browser zeigt nur Geräte mit dem Nordic UART Service, und die Seite spricht nur mit dem gewählten. Noch nicht mit echter Hardware ausprobiert.",
+      "boardRealBleConnect": "Echten Pico 2 W verbinden …",
+      "boardRealBleOn": "Per Bluetooth mit %1 verbunden.",
+      "boardRealBleOff": "Nicht verbunden – der Laptop spricht mit dem simulierten Pico.",
+      "boardRealBleGone": "Der Pico 2 W ist weg.",
+      "boardRealTag": "echt",
       "boardLcd": "LCD 1,14\"",
       "boardLcdKeys": "Tasten am LCD",
       "boardKeyA": "Taste A (GP15)",
@@ -589,6 +625,42 @@ window.LESSONS_JSON = JSON.stringify({
       "boardWebcam": "Use my webcam",
       "boardWebcamOn": "Webcam on – its pictures stay in this browser.",
       "boardWebcamNo": "No webcam here (no permission, no camera, or the page is not on https) – the drawn pictures stay.",
+      "boardRealUsb": "A real Pico (USB)",
+      "boardRealIntro": "Plug in a Pico with R2P2 and connect it: then this cell's tabs go to /lib, its code to /home/chunky.rb, and it runs there; the terminal below is R2P2's shell. The browser asks which device – the page talks to that one only. Not yet tried on real hardware.",
+      "boardRealConnect": "Connect a real Pico…",
+      "boardRealAll": "list every serial port",
+      "boardRealSend": "Send this cell to the Pico and run it",
+      "boardRealCtrlC": "Ctrl-C",
+      "boardRealClose": "Disconnect",
+      "boardRealAsApp": "as /home/app.rb (runs at power-up)",
+      "boardRealTerm": "R2P2's terminal",
+      "boardRealType": "Type",
+      "boardRealChoose": "Choose the device in the browser's list…",
+      "boardRealOn": "Connected (%1).",
+      "boardRealNone": "No device chosen.",
+      "boardRealFail": "Could not connect: %1",
+      "boardRealOff": "Not connected.",
+      "boardRealGone": "The connection is gone (unplugged?).",
+      "boardRealPrompt": "Waiting for R2P2's prompt $> …",
+      "boardRealPut": "Writing %1 (%2 bytes)…",
+      "boardRealPutOk": "%1 written and checked (CRC-32).",
+      "boardRealRun": "%1 runs on the Pico. Ctrl-C stops it.",
+      "boardRealNoPrompt": "R2P2's prompt $> did not come. Is R2P2 on the Pico, and is this its first serial port? Try Ctrl-C, or unplug it and connect again.",
+      "boardRealBusy": "Still sending – a moment.",
+      "boardRealPutFail": "Writing %1 failed: %2",
+      "boardRealNoAck": "the shell did not answer Ctrl-B (PicoModem is in R2P2 4.0.3; the shell has to be at its $> prompt)",
+      "boardRealCrc": "the CRC-32 does not match – send it again",
+      "boardRealTimeout": "the Pico did not answer for 5 seconds",
+      "boardRealNoSecure": "A real Pico needs a secure page, and this one is plain http. Open the course on https://chunkybacon.idogawa.com or on localhost.",
+      "boardRealNoSerial": "This browser has no Web Serial: Chrome, Edge and Opera on a computer have it; Firefox, Safari and phones do not. The simulated bench works everywhere.",
+      "boardRealNoBle": "This browser has no Web Bluetooth: Chrome and Edge on Windows, macOS, ChromeOS and Android have it (on Linux it may have to be switched on in chrome://flags); Firefox and Safari do not.",
+      "boardRealBle": "A real Pico 2 W (Bluetooth)",
+      "boardRealBleIntro": "Start a BLE::UART program on a Pico 2 W with R2P2-PICORUBY (like the cells here), then connect: the laptop's lines go to it, and its lines show on the laptop and reach the CRuby cell. The browser lists only devices with the Nordic UART Service, and the page talks to the one you pick. Not yet tried on real hardware.",
+      "boardRealBleConnect": "Connect a real Pico 2 W…",
+      "boardRealBleOn": "Connected to %1 over Bluetooth.",
+      "boardRealBleOff": "Not connected – the laptop talks to the simulated Pico.",
+      "boardRealBleGone": "The Pico 2 W went away.",
+      "boardRealTag": "real",
       "boardLcd": "LCD 1.14\"",
       "boardLcdKeys": "LCD keys",
       "boardKeyA": "Key A (GP15)",
@@ -891,6 +963,42 @@ window.LESSONS_JSON = JSON.stringify({
       "boardWebcam": "自分のWebカメラを使う",
       "boardWebcamOn": "Webカメラはオンです。映像はこのブラウザーの外に出ません。",
       "boardWebcamNo": "Webカメラを使えません（許可がない、カメラがない、またはページがhttpsではない）。描いた絵をそのまま使います。",
+      "boardRealUsb": "本物のPico（USB）",
+      "boardRealIntro": "R2P2が入ったPicoをUSBケーブルでつないで接続します。するとこのセルのタブを /lib に、コードを /home/chunky.rb に書き込んで、Picoの上で実行できます。下の端末はR2P2のシェルです。どのデバイスを使うかはブラウザーが尋ね、ページはそのデバイスとだけ通信します。本物のハードウェアではまだ試していません。",
+      "boardRealConnect": "本物のPicoに接続…",
+      "boardRealAll": "すべてのシリアルポートを表示",
+      "boardRealSend": "このセルをPicoに送って実行",
+      "boardRealCtrlC": "Ctrl-C",
+      "boardRealClose": "切断",
+      "boardRealAsApp": "/home/app.rb として保存（電源を入れると起動）",
+      "boardRealTerm": "R2P2の端末",
+      "boardRealType": "入力",
+      "boardRealChoose": "ブラウザーの一覧からデバイスを選んでください…",
+      "boardRealOn": "接続しました（%1）。",
+      "boardRealNone": "デバイスが選ばれませんでした。",
+      "boardRealFail": "接続できませんでした：%1",
+      "boardRealOff": "接続していません。",
+      "boardRealGone": "接続が切れました（ケーブルが抜けましたか？）。",
+      "boardRealPrompt": "R2P2のプロンプト $> を待っています…",
+      "boardRealPut": "%1 を書き込んでいます（%2バイト）…",
+      "boardRealPutOk": "%1 を書き込み、確かめました（CRC-32）。",
+      "boardRealRun": "%1 がPicoで動いています。Ctrl-Cで止まります。",
+      "boardRealNoPrompt": "R2P2のプロンプト $> が出ませんでした。PicoでR2P2が動いていますか？これは最初のシリアルポートですか？Ctrl-Cを試すか、抜き差ししてもう一度接続してください。",
+      "boardRealBusy": "まだ送っています。少し待ってください。",
+      "boardRealPutFail": "%1 を書き込めませんでした：%2",
+      "boardRealNoAck": "シェルがCtrl-Bに答えませんでした（PicoModemはR2P2 4.0.3にあります。シェルが $> プロンプトの状態である必要があります）",
+      "boardRealCrc": "CRC-32が一致しません。もう一度送ってください",
+      "boardRealTimeout": "Picoが5秒間答えませんでした",
+      "boardRealNoSecure": "本物のPicoを使うには安全なページが必要ですが、このページはただのhttpです。https://chunkybacon.idogawa.com か localhost でコースを開いてください。",
+      "boardRealNoSerial": "このブラウザーにはWeb Serialがありません。パソコンのChrome、Edge、Operaにはありますが、Firefox、Safari、スマートフォンにはありません。シミュレーションの作業台はどこでも動きます。",
+      "boardRealNoBle": "このブラウザーにはWeb Bluetoothがありません。Windows、macOS、ChromeOS、AndroidのChromeとEdgeにはあります（Linuxでは chrome://flags で有効にする必要があるかもしれません）。FirefoxとSafariにはありません。",
+      "boardRealBle": "本物のPico 2 W（Bluetooth）",
+      "boardRealBleIntro": "R2P2-PICORUBYが入ったPico 2 WでBLE::UARTのプログラムを（ここのセルのように）起動してから接続します。ノートPCの行はPicoに届き、Picoの行はノートPCに表示されてCRubyのセルにも届きます。ブラウザーはNordic UART Serviceを持つデバイスだけを表示し、ページは選んだデバイスとだけ通信します。本物のハードウェアではまだ試していません。",
+      "boardRealBleConnect": "本物のPico 2 Wに接続…",
+      "boardRealBleOn": "Bluetoothで %1 に接続しました。",
+      "boardRealBleOff": "接続していません。ノートPCはシミュレーションのPicoと話しています。",
+      "boardRealBleGone": "Pico 2 W との接続が切れました。",
+      "boardRealTag": "本物",
       "boardLcd": "LCD 1.14インチ",
       "boardLcdKeys": "LCDのキー",
       "boardKeyA": "キーA（GP15）",
@@ -12760,7 +12868,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Der Code des Picos läuft so, wie er ist, auf einem Pico 2 W mit R2P2-PICORUBY – wie er dorthin kommt, zeigt Lektion {{nr:pico-deploy}}. Für die Seite des Laptops gibt es mehrere Wege:</p><ul><li><strong>CRuby mit dem Gem <code>ble</code></strong> unter Linux mit BlueZ: <code>gem install ble</code>, dann die Zelle oben, in der <code>main.run</code> wirklich die Schleife ist. Das Gem kam zuletzt 2018 heraus. Seine Block-Formen benutzen <code>Proc.new</code> ohne Block, was Ruby 3 entfernt hat; bleib also bei den Aufrufen ohne Block wie oben – und rechne damit, es zu flicken oder selbst mit <code>ruby-dbus</code> über D-Bus mit BlueZ zu sprechen.</li><li><strong>Web Bluetooth</strong> aus einer Webseite: PicoRuby.wasm hat <code>JS::BLE::UART</code>, den Nordic UART Service von der Seite des Browsers. Das braucht Chrome oder Edge, eine Seite über HTTPS oder localhost und einen Klick, der die Geräteauswahl öffnet. In einem Web Worker geht es nicht – und die Zellen hier laufen in einem.</li><li><strong>Ein Pico ohne Funk</strong>: Das Board Pico-BLE von Waveshare sitzt an UART0 (GP0, GP1). Auf dem Pico ist es ein gewöhnlicher <code>UART</code>; ein Linux-Computer koppelt sich damit und öffnet <code>/dev/rfcomm0</code> wie eine serielle Schnittstelle.</li><li><strong>Ganz ohne Bluetooth</strong>, über WLAN: R2P2-PICORUBY hat <code>picoruby-drb</code>, das das dRuby von CRuby spricht. <code>DRb.start_service(\"druby://0.0.0.0:8787\", paper)</code> auf dem Pico stellt ein Objekt bereit, und irb auf dem Laptop ruft seine Methoden über <code>DRbObject.new_with_uri(\"druby://&lt;Adresse&gt;:8787\")</code> auf. Das Interop-Skript des Gems ist genau dafür geschrieben; ob es schon auf einem Board lief, ist nicht dokumentiert.</li></ul></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-ble-uart' target='_blank'>picoruby-ble-uart</a> · <a href='https://picoruby.org/wasm-ble' target='_blank'>BLE in PicoRuby.wasm</a> · <a href='https://rubygems.org/gems/ble' target='_blank'>das Gem ble</a></div><div class='task'><strong>Aufgabe:</strong> Schreib ChunkyPico: Beantworte <code>PING</code> mit <code>PONG</code> und <code>TEMP</code> mit der Temperatur des Chips in °C, ausgerechnet mit der Formel aus PicoPaper. Das Werkbank-Skript verbindet den Laptop, schickt nach 0,3 Sekunden <code>PING</code> und nach 0,8 <code>TEMP</code> und stellt den Raum auf 23 °C.</div>"
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Der Code des Picos läuft so, wie er ist, auf einem Pico 2 W mit R2P2-PICORUBY – wie er dorthin kommt, zeigt Lektion {{nr:pico-deploy}}. Für die Seite des Laptops gibt es mehrere Wege:</p><ul><li><strong>CRuby mit dem Gem <code>ble</code></strong> unter Linux mit BlueZ: <code>gem install ble</code>, dann die Zelle oben, in der <code>main.run</code> wirklich die Schleife ist. Das Gem kam zuletzt 2018 heraus. Seine Block-Formen benutzen <code>Proc.new</code> ohne Block, was Ruby 3 entfernt hat; bleib also bei den Aufrufen ohne Block wie oben – und rechne damit, es zu flicken oder selbst mit <code>ruby-dbus</code> über D-Bus mit BlueZ zu sprechen.</li><li><strong>Web Bluetooth</strong> aus einer Webseite: PicoRuby.wasm hat <code>JS::BLE::UART</code>, den Nordic UART Service von der Seite des Browsers. Das braucht Chrome oder Edge, eine Seite über HTTPS oder localhost und einen Klick, der die Geräteauswahl öffnet. In einem Web Worker geht es nicht – und die Zellen hier laufen in einem. Darum macht es diese Seite selbst: Unter einer Werkbank mit dem Laptop verbindet <strong>📶 Ein echter Pico 2 W (Bluetooth)</strong> den Laptop der Werkbank mit einem echten Pico 2 W, auf dem eines der Programme oben läuft; die Zeilen des Laptops gehen dann an ihn, und was er sendet, erscheint auf dem Laptop und erreicht die CRuby-Zelle. Welche Browser das können, steht in Lektion {{nr:pico-deploy}}; mit echter Hardware ist es noch nicht ausprobiert.</li><li><strong>Ein Pico ohne Funk</strong>: Das Board Pico-BLE von Waveshare sitzt an UART0 (GP0, GP1). Auf dem Pico ist es ein gewöhnlicher <code>UART</code>; ein Linux-Computer koppelt sich damit und öffnet <code>/dev/rfcomm0</code> wie eine serielle Schnittstelle.</li><li><strong>Ganz ohne Bluetooth</strong>, über WLAN: R2P2-PICORUBY hat <code>picoruby-drb</code>, das das dRuby von CRuby spricht. <code>DRb.start_service(\"druby://0.0.0.0:8787\", paper)</code> auf dem Pico stellt ein Objekt bereit, und irb auf dem Laptop ruft seine Methoden über <code>DRbObject.new_with_uri(\"druby://&lt;Adresse&gt;:8787\")</code> auf. Das Interop-Skript des Gems ist genau dafür geschrieben; ob es schon auf einem Board lief, ist nicht dokumentiert.</li></ul></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-ble-uart' target='_blank'>picoruby-ble-uart</a> · <a href='https://picoruby.org/wasm-ble' target='_blank'>BLE in PicoRuby.wasm</a> · <a href='https://rubygems.org/gems/ble' target='_blank'>das Gem ble</a></div><div class='task'><strong>Aufgabe:</strong> Schreib ChunkyPico: Beantworte <code>PING</code> mit <code>PONG</code> und <code>TEMP</code> mit der Temperatur des Chips in °C, ausgerechnet mit der Formel aus PicoPaper. Das Werkbank-Skript verbindet den Laptop, schickt nach 0,3 Sekunden <code>PING</code> und nach 0,8 <code>TEMP</code> und stellt den Raum auf 23 °C.</div>"
           },
           {
             "t": "x",
@@ -12860,7 +12968,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='On your machine'><p>The Pico's code runs as it is on a Pico 2 W with R2P2-PICORUBY – lesson {{nr:pico-deploy}} shows how it gets there. For the laptop's side there are several ways:</p><ul><li><strong>CRuby with the <code>ble</code> gem</strong> on Linux with BlueZ: <code>gem install ble</code>, then the cell above, where <code>main.run</code> really is the loop. The gem's last release is from 2018. Its block forms use <code>Proc.new</code> without a block, which Ruby 3 removed, so stick to the calls without a block, as above – and be ready to patch it, or to talk to BlueZ over D-Bus yourself with <code>ruby-dbus</code>.</li><li><strong>Web Bluetooth</strong> from a web page: PicoRuby.wasm has <code>JS::BLE::UART</code>, the Nordic UART Service from the browser's side. It needs Chrome or Edge, a page on HTTPS or localhost, and a click that opens the device chooser. It does not work in a Web Worker – and the cells here run in one.</li><li><strong>A Pico without radio</strong>: Waveshare's Pico-BLE board sits on UART0 (GP0, GP1). On the Pico it is a plain <code>UART</code>; a Linux computer pairs with it and opens <code>/dev/rfcomm0</code> like a serial port.</li><li><strong>No Bluetooth at all</strong>, over Wi-Fi: R2P2-PICORUBY has <code>picoruby-drb</code>, which speaks CRuby's dRuby. <code>DRb.start_service(\"druby://0.0.0.0:8787\", paper)</code> on the Pico serves an object, and irb on the laptop calls its methods through <code>DRbObject.new_with_uri(\"druby://&lt;address&gt;:8787\")</code>. Its interop script is written for exactly that; whether it has been tried on a board is not documented.</li></ul></div><div class='docs'><strong>Look it up:</strong> <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-ble-uart' target='_blank'>picoruby-ble-uart</a> · <a href='https://picoruby.org/wasm-ble' target='_blank'>BLE in PicoRuby.wasm</a> · <a href='https://rubygems.org/gems/ble' target='_blank'>the ble gem</a></div><div class='task'><strong>Task:</strong> Write ChunkyPico: answer <code>PING</code> with <code>PONG</code>, and <code>TEMP</code> with the chip's temperature in °C, worked out with the formula from PicoPaper. The bench script connects the laptop, sends <code>PING</code> after 0.3 seconds and <code>TEMP</code> after 0.8, and sets the room to 23 °C.</div>"
+            "html": "<div class='offweb' data-title='On your machine'><p>The Pico's code runs as it is on a Pico 2 W with R2P2-PICORUBY – lesson {{nr:pico-deploy}} shows how it gets there. For the laptop's side there are several ways:</p><ul><li><strong>CRuby with the <code>ble</code> gem</strong> on Linux with BlueZ: <code>gem install ble</code>, then the cell above, where <code>main.run</code> really is the loop. The gem's last release is from 2018. Its block forms use <code>Proc.new</code> without a block, which Ruby 3 removed, so stick to the calls without a block, as above – and be ready to patch it, or to talk to BlueZ over D-Bus yourself with <code>ruby-dbus</code>.</li><li><strong>Web Bluetooth</strong> from a web page: PicoRuby.wasm has <code>JS::BLE::UART</code>, the Nordic UART Service from the browser's side. It needs Chrome or Edge, a page on HTTPS or localhost, and a click that opens the device chooser. It does not work in a Web Worker – and the cells here run in one. So this page does it itself: under a bench with the laptop, <strong>📶 A real Pico 2 W (Bluetooth)</strong> connects the bench's laptop to a real Pico 2 W running one of the programs above; the laptop's lines then go to it, and what it sends shows on the laptop and reaches the CRuby cell. Lesson {{nr:pico-deploy}} says which browsers have it; it has not been tried with real hardware yet.</li><li><strong>A Pico without radio</strong>: Waveshare's Pico-BLE board sits on UART0 (GP0, GP1). On the Pico it is a plain <code>UART</code>; a Linux computer pairs with it and opens <code>/dev/rfcomm0</code> like a serial port.</li><li><strong>No Bluetooth at all</strong>, over Wi-Fi: R2P2-PICORUBY has <code>picoruby-drb</code>, which speaks CRuby's dRuby. <code>DRb.start_service(\"druby://0.0.0.0:8787\", paper)</code> on the Pico serves an object, and irb on the laptop calls its methods through <code>DRbObject.new_with_uri(\"druby://&lt;address&gt;:8787\")</code>. Its interop script is written for exactly that; whether it has been tried on a board is not documented.</li></ul></div><div class='docs'><strong>Look it up:</strong> <a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-ble-uart' target='_blank'>picoruby-ble-uart</a> · <a href='https://picoruby.org/wasm-ble' target='_blank'>BLE in PicoRuby.wasm</a> · <a href='https://rubygems.org/gems/ble' target='_blank'>the ble gem</a></div><div class='task'><strong>Task:</strong> Write ChunkyPico: answer <code>PING</code> with <code>PONG</code>, and <code>TEMP</code> with the chip's temperature in °C, worked out with the formula from PicoPaper. The bench script connects the laptop, sends <code>PING</code> after 0.3 seconds and <code>TEMP</code> after 0.8, and sets the room to 23 °C.</div>"
           },
           {
             "t": "x",
@@ -12960,7 +13068,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>Picoのコードは、R2P2-PICORUBYを入れたPico 2 Wでそのまま動きます。そこへの載せ方はレッスン{{nr:pico-deploy}}で説明します。ノートパソコン側にはいくつかの方法があります。</p><ul><li><strong>CRubyと<code>ble</code> gem</strong>（LinuxとBlueZ）：<code>gem install ble</code>のあと上のセルを実行します。そこでは<code>main.run</code>が本当にループになります。このgemの最後のリリースは2018年です。ブロックを使う形はブロックなしの<code>Proc.new</code>を使っていて、それはRuby 3で削除されました。上のようにブロックなしの呼び出しだけを使い、gemに手を入れるか、<code>ruby-dbus</code>でD-Bus越しにBlueZと直接話す覚悟をしておきましょう。</li><li><strong>Web Bluetooth</strong>（Webページから）：PicoRuby.wasmには<code>JS::BLE::UART</code>があり、ブラウザー側のNordic UART Serviceです。ChromeかEdge、HTTPSかlocalhostのページ、そしてデバイス選択を開くクリックが必要です。Web Workerの中では動きません。ここのセルはWeb Workerの中で動いています。</li><li><strong>無線のないPico</strong>：WaveshareのPico-BLEボードはUART0（GP0、GP1）につなぎます。Picoからは普通の<code>UART</code>です。Linuxのコンピューターはペアリングして、<code>/dev/rfcomm0</code>をシリアルポートのように開きます。</li><li><strong>Bluetoothを使わない</strong>（Wi-Fi経由）：R2P2-PICORUBYには<code>picoruby-drb</code>があり、CRubyのdRubyを話します。Picoで<code>DRb.start_service(\"druby://0.0.0.0:8787\", paper)</code>とするとオブジェクトを公開でき、ノートパソコンのirbから<code>DRbObject.new_with_uri(\"druby://&lt;アドレス&gt;:8787\")</code>でそのメソッドを呼べます。相互運用のスクリプトはまさにそのために書かれていますが、実機で試されたかどうかは文書にありません。</li></ul></div><div class='docs'><strong>調べてみよう：</strong><a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-ble-uart' target='_blank'>picoruby-ble-uart（英語）</a>・<a href='https://picoruby.org/wasm-ble' target='_blank'>PicoRuby.wasmのBLE（英語）</a>・<a href='https://rubygems.org/gems/ble' target='_blank'>ble gem（英語）</a></div><div class='task'><strong>課題：</strong> ChunkyPicoを書きましょう。<code>PING</code>には<code>PONG</code>を、<code>TEMP</code>にはチップの温度（°C）を返します。温度はPicoPaperの式で計算してください。作業台のスクリプトはノートパソコンを接続し、0.3秒後に<code>PING</code>、0.8秒後に<code>TEMP</code>を送り、部屋を23 °Cにします。</div>"
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>Picoのコードは、R2P2-PICORUBYを入れたPico 2 Wでそのまま動きます。そこへの載せ方はレッスン{{nr:pico-deploy}}で説明します。ノートパソコン側にはいくつかの方法があります。</p><ul><li><strong>CRubyと<code>ble</code> gem</strong>（LinuxとBlueZ）：<code>gem install ble</code>のあと上のセルを実行します。そこでは<code>main.run</code>が本当にループになります。このgemの最後のリリースは2018年です。ブロックを使う形はブロックなしの<code>Proc.new</code>を使っていて、それはRuby 3で削除されました。上のようにブロックなしの呼び出しだけを使い、gemに手を入れるか、<code>ruby-dbus</code>でD-Bus越しにBlueZと直接話す覚悟をしておきましょう。</li><li><strong>Web Bluetooth</strong>（Webページから）：PicoRuby.wasmには<code>JS::BLE::UART</code>があり、ブラウザー側のNordic UART Serviceです。ChromeかEdge、HTTPSかlocalhostのページ、そしてデバイス選択を開くクリックが必要です。Web Workerの中では動きません。ここのセルはWeb Workerの中で動いています。そこで、このページ自身が接続します。ノートPCのある作業台の下の<strong>📶 本物のPico 2 W（Bluetooth）</strong>で、作業台のノートPCを、上のプログラムのどれかが動いている本物のPico 2 Wにつなげます。するとノートPCの行はPicoに届き、Picoが送ったものはノートPCに表示されてCRubyのセルにも届きます。使えるブラウザーはレッスン{{nr:pico-deploy}}に書いてあります。本物のハードウェアではまだ試していません。</li><li><strong>無線のないPico</strong>：WaveshareのPico-BLEボードはUART0（GP0、GP1）につなぎます。Picoからは普通の<code>UART</code>です。Linuxのコンピューターはペアリングして、<code>/dev/rfcomm0</code>をシリアルポートのように開きます。</li><li><strong>Bluetoothを使わない</strong>（Wi-Fi経由）：R2P2-PICORUBYには<code>picoruby-drb</code>があり、CRubyのdRubyを話します。Picoで<code>DRb.start_service(\"druby://0.0.0.0:8787\", paper)</code>とするとオブジェクトを公開でき、ノートパソコンのirbから<code>DRbObject.new_with_uri(\"druby://&lt;アドレス&gt;:8787\")</code>でそのメソッドを呼べます。相互運用のスクリプトはまさにそのために書かれていますが、実機で試されたかどうかは文書にありません。</li></ul></div><div class='docs'><strong>調べてみよう：</strong><a href='https://github.com/picoruby/picoruby/tree/master/mrbgems/picoruby-ble-uart' target='_blank'>picoruby-ble-uart（英語）</a>・<a href='https://picoruby.org/wasm-ble' target='_blank'>PicoRuby.wasmのBLE（英語）</a>・<a href='https://rubygems.org/gems/ble' target='_blank'>ble gem（英語）</a></div><div class='task'><strong>課題：</strong> ChunkyPicoを書きましょう。<code>PING</code>には<code>PONG</code>を、<code>TEMP</code>にはチップの温度（°C）を返します。温度はPicoPaperの式で計算してください。作業台のスクリプトはノートパソコンを接続し、0.3秒後に<code>PING</code>、0.8秒後に<code>TEMP</code>を送り、部屋を23 °Cにします。</div>"
           },
           {
             "t": "x",
@@ -13036,6 +13144,10 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "def lauf_status(zeilen)\n  # DONE -> :done, \"ERROR x\" -> \"error: x\", RUNNING -> :running\n  :waiting\nend\n\nbereit = \"READY prremote-runtime/0.4.2 board=picow\"\n[lauf_status([bereit, \"RUNNING\", \"hello\", \"DONE\"]),\n lauf_status([bereit, \"RUNNING\", \"ERROR NoMethodError\"]),\n lauf_status([bereit, \"RUNNING\", \"tick\"]),\n lauf_status([bereit])]\n",
             "check": "result == [:done, \"error: NoMethodError\", :running, :waiting] && code.include?(\"def lauf_status\")",
             "hint": "Geh mit <code>each</code> durch die Zeilen und merk dir den Stand: <code>zeile == \"DONE\"</code>, <code>zeile.start_with?(\"ERROR \")</code> (der Grund ist <code>zeile[6..-1]</code>), <code>zeile == \"RUNNING\"</code>. Am Ende gibst du den Stand zurück."
+          },
+          {
+            "t": "h",
+            "html": "<h3>Direkt von dieser Seite</h3><p>Unter jeder Werkbank dieser Lektionen gibt es ein zugeklapptes Feld <strong>🔌 Ein echter Pico (USB)</strong>. Mit einem Pico mit R2P2 am USB-Kabel macht es, was das Web Terminal macht – direkt aus der Zelle:</p><ol><li><strong>Echten Pico verbinden …</strong> öffnet die Liste der seriellen Ports, die der Browser selbst zeigt. Sie zeigt die Ports von R2P2 (USB-Hersteller 16C0); R2P2 hat drei, seine Shell ist auf dem ersten. Die Seite bekommt genau den Port, den du wählst – sonst nichts von deinem Computer.</li><li>Der schwarze Kasten ist das Terminal von R2P2: was der Pico ausgibt, und darunter eine Zeile zum Eintippen, für <code>ls</code> oder <code>irb</code>. <strong>Ctrl-C</strong> hält ein laufendes Programm an.</li><li><strong>Diese Zelle auf den Pico senden und starten</strong> drückt Ctrl-C (und Ctrl-D, das ein <code>irb</code> verlässt), schreibt jeden Tab der Zelle nach <code>/lib</code> und den Code nach <code>/home/chunky.rb</code> – mit PicoModem, wie der Upload des Web Terminals, jede Datei mit CRC-32 geprüft – und tippt dann <code>/home/chunky.rb</code> bei der Eingabeaufforderung <code>$&gt;</code> ein: Das startet es. Mit dem Häkchen wird daraus <code>/home/app.rb</code>, das Programm, das R2P2 beim Einschalten startet. Eine erste Zeile in der Datei sorgt dafür, dass <code>require</code> die Tabs neu liest; <code>show_irb</code>, das es nur auf dieser Seite gibt, wird zu einem Kommentar – tipp stattdessen <code>irb</code> bei der Eingabeaufforderung.</li></ol><p><strong>Welche Browser</strong>: Web Serial gibt es in Chrome, Edge und Opera auf einem Computer (Windows, macOS, Linux, ChromeOS), nicht in Firefox oder Safari. Unter Linux muss dein Benutzer eventuell in der Gruppe <code>dialout</code> sein, um <code>/dev/ttyACM0</code> zu öffnen. Und die Seite muss sicher sein: <a href='https://chunkybacon.idogawa.com' target='_blank'>chunkybacon.idogawa.com</a> über https, oder localhost. Auf einer Adresse mit einfachem http sagt das Feld nur, warum es nicht geht.</p><p><strong>Bluetooth</strong>: In Lektion {{nr:pico-ble}} haben die Werkbänke mit dem Laptop zusätzlich <strong>📶 Ein echter Pico 2 W (Bluetooth)</strong>: Der Laptop dort spricht dann mit einem echten Pico 2 W, auf dem ein BLE::UART-Programm läuft. Web Bluetooth gibt es in Chrome und Edge unter Windows, macOS, ChromeOS und Android; unter Linux muss es eventuell in <code>chrome://flags</code> eingeschaltet werden.</p><p><strong>Sicher gebaut</strong>: Die Seite erreicht nur ein Gerät, das du in der Auswahl des Browsers gewählt hast, und nur solange dieser Tab offen ist; «Trennen» oder das Schliessen des Tabs beendet es. Nichts geht anderswohin: Der Code geht aus diesem Tab über das Kabel oder den Funk auf deinen Pico. Was dort läuft, ist der Code der Zelle, den du lesen kannst – und wie alles auf einem Pico schaltet er die Pins, die du verkabelt hast. Prüf also zuerst die Verkabelung.</p><p><strong>Ehrlich gesagt</strong>: Diese Verbindung ist noch mit keinem echten Pico ausprobiert. Sie folgt den Quellen von R2P2 4.0.3 – der Eingabeaufforderung, Ctrl-B für PicoModem, den Frames und ihren Prüfsummen – und ist gegen ein nachgebautes R2P2 und gegen den Gerätecode von PicoModem selbst getestet. Wenn es mit deinem Board nicht klappt, macht das R2P2 Web Terminal auf <a href='https://picoruby.org/terminal' target='_blank'>picoruby.org/terminal</a> dasselbe von Hand.</p>"
           }
         ]
       },
@@ -13071,6 +13183,10 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "def run_status(lines)\n  # DONE -> :done, \"ERROR x\" -> \"error: x\", RUNNING -> :running\n  :waiting\nend\n\nready = \"READY prremote-runtime/0.4.2 board=picow\"\n[run_status([ready, \"RUNNING\", \"hello\", \"DONE\"]),\n run_status([ready, \"RUNNING\", \"ERROR NoMethodError\"]),\n run_status([ready, \"RUNNING\", \"tick\"]),\n run_status([ready])]\n",
             "check": "result == [:done, \"error: NoMethodError\", :running, :waiting] && code.include?(\"def run_status\")",
             "hint": "Go through the lines with <code>each</code> and remember the state: <code>line == \"DONE\"</code>, <code>line.start_with?(\"ERROR \")</code> (the reason is <code>line[6..-1]</code>), <code>line == \"RUNNING\"</code>. Return the state at the end."
+          },
+          {
+            "t": "h",
+            "html": "<h3>Straight from this page</h3><p>Under every bench of these lessons there is a folded panel <strong>🔌 A real Pico (USB)</strong>. With a Pico running R2P2 on a USB cable, it does what the Web Terminal does, from the cell itself:</p><ol><li><strong>Connect a real Pico…</strong> opens the browser's own list of serial ports. It shows R2P2's ports (USB vendor 16C0); R2P2 has three, and its shell is on the first. The page gets exactly the port you choose – nothing else on your computer.</li><li>The black box is R2P2's terminal: what the Pico prints, and below it a line to type into, for <code>ls</code> or <code>irb</code>. <strong>Ctrl-C</strong> stops a running program.</li><li><strong>Send this cell to the Pico and run it</strong> presses Ctrl-C (and Ctrl-D, which leaves an <code>irb</code>), writes each tab of the cell to <code>/lib</code> and the code to <code>/home/chunky.rb</code> – with PicoModem, like the Web Terminal's upload, each file checked with CRC-32 – and then types <code>/home/chunky.rb</code> at the prompt <code>$&gt;</code>, which runs it. With the box ticked it becomes <code>/home/app.rb</code>, the program R2P2 starts at power-up. A first line in the file makes <code>require</code> read the tabs anew; <code>show_irb</code>, which only this page has, becomes a comment – type <code>irb</code> at the prompt instead.</li></ol><p><strong>Which browsers</strong>: Web Serial is in Chrome, Edge and Opera on a computer (Windows, macOS, Linux, ChromeOS), not in Firefox or Safari. On Linux your user may have to be in the group <code>dialout</code> to open <code>/dev/ttyACM0</code>. And the page has to be secure: <a href='https://chunkybacon.idogawa.com' target='_blank'>chunkybacon.idogawa.com</a> over https, or localhost. On an address with plain http the panel only says why it cannot.</p><p><strong>Bluetooth</strong>: in lesson {{nr:pico-ble}} the benches with the laptop also have <strong>📶 A real Pico 2 W (Bluetooth)</strong>: the laptop there then talks to a real Pico 2 W running a BLE::UART program. Web Bluetooth is in Chrome and Edge on Windows, macOS, ChromeOS and Android; on Linux it may have to be switched on in <code>chrome://flags</code>.</p><p><strong>Safe by design</strong>: the page can only reach a device you picked in the browser's own chooser, and only while this tab is open; Disconnect, or closing the tab, ends it. Nothing goes anywhere else: the code goes from this tab over the cable or the radio to your Pico. What runs there is the cell's code, which you can read – and like everything on a Pico it switches the pins you wired, so check the wiring first.</p><p><strong>To be honest</strong>: this connection has not been tried on a real Pico yet. It follows R2P2 4.0.3's sources – the prompt, Ctrl-B for PicoModem, the frames and their checksums – and is tested against a pretend R2P2 and against PicoModem's own device code. If it does not work with your board, the R2P2 Web Terminal at <a href='https://picoruby.org/terminal' target='_blank'>picoruby.org/terminal</a> does the same by hand.</p>"
           }
         ]
       },
@@ -13106,6 +13222,10 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "def run_status(lines)\n  # DONEなら:done、\"ERROR x\"なら\"error: x\"、RUNNINGなら:running\n  :waiting\nend\n\nready = \"READY prremote-runtime/0.4.2 board=picow\"\n[run_status([ready, \"RUNNING\", \"hello\", \"DONE\"]),\n run_status([ready, \"RUNNING\", \"ERROR NoMethodError\"]),\n run_status([ready, \"RUNNING\", \"tick\"]),\n run_status([ready])]\n",
             "check": "result == [:done, \"error: NoMethodError\", :running, :waiting] && code.include?(\"def run_status\")",
             "hint": "<code>each</code>で行をたどって、状態を覚えておこう：<code>line == \"DONE\"</code>、<code>line.start_with?(\"ERROR \")</code>（理由は<code>line[6..-1]</code>）、<code>line == \"RUNNING\"</code>。最後にその状態を返せばいいよ。"
+          },
+          {
+            "t": "h",
+            "html": "<h3>このページから直接</h3><p>これらのレッスンの作業台の下には、折りたたまれた<strong>🔌 本物のPico（USB）</strong>の欄があります。R2P2が入ったPicoをUSBケーブルでつなぐと、Web Terminalと同じことをセルから直接できます。</p><ol><li><strong>本物のPicoに接続…</strong>を押すと、ブラウザー自身のシリアルポート一覧が開きます。一覧に出るのはR2P2のポート（USBベンダー16C0）です。R2P2のポートは3つあり、シェルは最初のポートにあります。ページが使えるのは選んだポートだけで、コンピューターのほかのものには触れません。</li><li>黒い枠はR2P2の端末です。Picoが出力したものが表示され、その下の行に<code>ls</code>や<code>irb</code>を入力できます。<strong>Ctrl-C</strong>で動いているプログラムが止まります。</li><li><strong>このセルをPicoに送って実行</strong>は、Ctrl-C（と、<code>irb</code>から抜けるCtrl-D）を送り、セルの各タブを<code>/lib</code>に、コードを<code>/home/chunky.rb</code>に書き込みます。書き込みにはWeb Terminalのアップロードと同じPicoModemを使い、ファイルごとにCRC-32で確かめます。そのあとプロンプト<code>$&gt;</code>で<code>/home/chunky.rb</code>と入力するので、プログラムが動きます。チェックを入れると<code>/home/app.rb</code>になり、R2P2が電源を入れたときに起動するプログラムになります。ファイルの最初の1行で、<code>require</code>がタブを読み直すようにしています。このページにしかない<code>show_irb</code>はコメントになるので、代わりにプロンプトで<code>irb</code>と入力してください。</li></ol><p><strong>使えるブラウザー</strong>：Web Serialは、パソコン（Windows、macOS、Linux、ChromeOS）のChrome、Edge、Operaにあります。FirefoxとSafariにはありません。Linuxでは、<code>/dev/ttyACM0</code>を開くためにユーザーを<code>dialout</code>グループに入れる必要があるかもしれません。また、ページが安全である必要があります。httpsの<a href='https://chunkybacon.idogawa.com' target='_blank'>chunkybacon.idogawa.com</a>か、localhostです。ただのhttpのアドレスでは、欄は使えない理由を表示するだけです。</p><p><strong>Bluetooth</strong>：レッスン{{nr:pico-ble}}では、ノートPCのある作業台に<strong>📶 本物のPico 2 W（Bluetooth）</strong>の欄もあります。そこのノートPCが、BLE::UARTのプログラムが動いている本物のPico 2 Wと話します。Web Bluetoothは、Windows、macOS、ChromeOS、AndroidのChromeとEdgeにあります。Linuxでは<code>chrome://flags</code>で有効にする必要があるかもしれません。</p><p><strong>安全のしくみ</strong>：ページが使えるのは、ブラウザーの選択画面であなたが選んだデバイスだけで、このタブが開いている間だけです。「切断」を押すかタブを閉じると終わります。ほかのどこかへ送られるものはありません。コードはこのタブから、ケーブルか電波であなたのPicoへ行くだけです。Picoで動くのはセルのコードで、中身を読むことができます。Picoで動くものはどれも、配線したピンを切り替えます。先に配線を確かめてください。</p><p><strong>正直に言うと</strong>：この接続は、まだ本物のPicoで試していません。R2P2 4.0.3のソース（プロンプト、PicoModemのためのCtrl-B、フレームとそのチェックサム）に従って作り、まねしたR2P2と、PicoModem自身のデバイス側のコードに対してテストしています。手元のボードでうまく動かないときは、<a href='https://picoruby.org/terminal' target='_blank'>picoruby.org/terminal</a>のR2P2 Web Terminalで同じことを手でできます。</p>"
           }
         ]
       }
