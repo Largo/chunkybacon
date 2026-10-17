@@ -9,7 +9,8 @@
 //   chunkyPicoBoard.receive(kind, text)     "state" | "epd_frame" | "lcd" | "ble" | "log" from the worker
 //   chunkyPicoBoard.inputs()                JSON of the current inputs, sent with each run
 //   chunkyPicoBoard.input(key, value)       set one (and tell a running cell: chunkyPicoRuby.input)
-//   chunkyPicoBoard.sendLine(text)          a line from the laptop's side to the Pico (BLE RX)
+//   chunkyPicoBoard.sendLine(text)          a line from the laptop's side to the Pico (BLE RX; a real one if connected)
+//   chunkyPicoBoard.realBle(line)           pico_real.js: a line from a real Pico 2 W (null: connected / gone)
 //   chunkyPicoBoard.ble()                   JSON {adv, connected, running}: for html/pico_laptop.rb
 //   chunkyPicoBoard.started(idx)            the worker took that cell's run (picoruby_lab.js)
 //   chunkyPicoBoard.reset(reason)           the worker ended: "reset" badge; the e-paper keeps its picture
@@ -379,6 +380,8 @@
     var controls = el("div", "pico-controls");
     buildControls(controls, b);
     figure.appendChild(controls);
+    // a real Pico beside the simulated one (pico_real.js, opt-in, folded)
+    if (window.chunkyPicoReal) window.chunkyPicoReal.attach(figure, b, t);
 
     var say = el("p", "pico-say");
     say.setAttribute("role", "status");
@@ -1448,10 +1451,12 @@
     }
     if (r.laptop) {
       var bl = parts.laptop || {};
+      var real = window.chunkyPicoReal && window.chunkyPicoReal.ble();
+      if (real) bl = { adv: real.name + " (" + t("boardRealTag") + ")", connected: true };
       r.laptop.dot.classList.toggle("is-on", !!bl.connected);
       r.laptop.dot.classList.toggle("is-adv", !bl.connected && !!bl.adv);
       r.laptop.head.textContent = bl.adv ? "BLE · " + bl.adv + " · " + (bl.connected ? t("boardBleOn") : t("boardAdvertising")) : "BLE · …";
-      if (r.link && !r.wifi) r.link.classList.toggle("is-on", !!bl.connected);
+      if (r.link && !r.wifi) r.link.classList.toggle("is-on", !!bl.connected && !real);
     }
     // scripted inputs: the sliders follow the exercise and wait
     Object.keys(b.controls).forEach(function (key) {
@@ -1798,17 +1803,22 @@
   }
 
   function onBle(b, text) {
-    var r = b.refs.laptop;
     if (text.indexOf("tx|") === 0) {
       window.dispatchEvent(new CustomEvent("chunky:pico-ble", { detail: { text: text.slice(3) } }));
-      text.slice(3).split("\n").forEach(function (line, i, all) {
-        if (line === "" && i === all.length - 1) return;
-        b.ble.push("← " + line);
-        say(b, t("boardBleGot") + ": " + line);
-      });
+      bleLines(b, "←", text.slice(3));
     } else if (text.indexOf("rx|") === 0) {
-      b.ble.push("→ " + text.slice(3));
+      bleLines(b, "→", text.slice(3));
     }
+  }
+
+  // lines on the laptop's screen: "←" what the Pico sent, "→" what it got
+  function bleLines(b, dir, text) {
+    var r = b.refs.laptop;
+    text.split("\n").forEach(function (line, i, all) {
+      if (line === "" && i === all.length - 1) return;
+      b.ble.push(dir + " " + line);
+      if (dir === "←") say(b, t("boardBleGot") + ": " + line);
+    });
     while (b.ble.length > 6) b.ble.shift();
     if (r) r.lines.forEach(function (node, i) {
       var line = b.ble[i] || "";
@@ -2171,6 +2181,9 @@
     // the radio as the laptop's side sees it (html/pico_laptop.rb): the
     // Pico's advertising name while its cell runs, and the link
     ble: function () {
+      // a real Pico 2 W over Web Bluetooth (pico_real.js) is the one there
+      var real = window.chunkyPicoReal && window.chunkyPicoReal.ble();
+      if (real) return JSON.stringify({ adv: real.name, connected: true, running: true, real: true });
       var l = bench && bench.state && bench.state.parts && bench.state.parts.laptop || {};
       return JSON.stringify({ adv: l.adv || "", connected: !!l.connected,
                               running: !!bench && !bench.waiting && bench.badge.className.indexOf("is-running") >= 0 });
@@ -2192,8 +2205,23 @@
     },
     // a line from the laptop's side (the bench's laptop panel, the CRuby cell)
     sendLine: function (text) {
+      // to the real Pico 2 W while one is connected, not to the simulator
+      if (window.chunkyPicoReal && window.chunkyPicoReal.ble()) {
+        window.chunkyPicoReal.bleWrite(String(text));
+        benches.forEach(function (b) { if (b.refs.laptop) bleLines(b, "→", String(text).replace(/\n$/, "")); });
+        return;
+      }
       lineNo++;
       api.input("ble.line", lineNo + "|" + String(text));
+    },
+    // pico_real.js: a line from the real Pico 2 W (null: it connected or
+    // went) - to the CRuby cell once, and on every laptop's screen
+    realBle: function (line) {
+      if (line !== null && line !== undefined) {
+        window.dispatchEvent(new CustomEvent("chunky:pico-ble", { detail: { text: String(line) } }));
+        benches.forEach(function (b) { if (b.refs.laptop) bleLines(b, "←", String(line)); });
+      }
+      benches.forEach(function (b) { if (b.refs.laptop) render(b); });
     },
     reset: function (reason) {
       if (!bench) return;

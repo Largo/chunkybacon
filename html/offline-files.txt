@@ -193,6 +193,7 @@ pico/lib/ja/st7789.rb
 pico/lib/ws2812.rb
 pico_board.js
 pico_laptop.rb
+pico_real.js
 pico_sim/bench.rb
 pico_sim/boot.rb
 pico_sim/devices/bme280.rb

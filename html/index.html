@@ -821,13 +821,17 @@
       window.markCellLine(k === "0" ? String(idx) : idx + "-" + k, Number(lineNo));
     };
     // the Pico lessons' bench (pico_board.js), loaded when a lesson has a
-    // cell with a board (shell/app.rb)
+    // cell with a board (shell/app.rb), and before it pico_real.js (a real
+    // Pico over USB or Bluetooth, which the bench offers): in this order
     window.ensurePicoBoard = function () {
       if (window.chunkyPicoBoard || document.getElementById("picoBoardScript")) return;
-      var script = document.createElement("script");
-      script.id = "picoBoardScript";
-      script.src = "pico_board.js";
-      document.head.appendChild(script);
+      ["pico_real.js", "pico_board.js"].forEach(function (src) {
+        var script = document.createElement("script");
+        if (src === "pico_board.js") script.id = "picoBoardScript";
+        script.async = false;
+        script.src = src;
+        document.head.appendChild(script);
+      });
     };
     // the lesson is drawn: a static bench under each board cell (pico_board.js
     // builds them itself once it has loaded)
