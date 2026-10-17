@@ -284,7 +284,10 @@ window.LESSONS_JSON = JSON.stringify({
       "boardBleGot": "Der Laptop hat bekommen",
       "boardBleLink": "Laptop verbunden",
       "boardAdvertising": "sichtbar",
-      "boardAlone": "nur der Pico mit seiner LED auf dem Board"
+      "boardAlone": "nur der Pico mit seiner LED auf dem Board",
+      "ironStopped": "Nach 30 Sekunden angehalten.",
+      "ironRestarted": "IronRuby lässt sich mitten in einer Zelle nicht unterbrechen und wurde neu gestartet: Die Variablen der Zellen davor sind weg – führe sie noch einmal aus.",
+      "ironFailed": "IronRuby konnte nicht geladen werden – bitte lade die Seite neu."
     },
     "en": {
       "title": "Learn Ruby with Chunky Bacon",
@@ -560,7 +563,10 @@ window.LESSONS_JSON = JSON.stringify({
       "boardBleGot": "The laptop got",
       "boardBleLink": "Laptop connected",
       "boardAdvertising": "advertising",
-      "boardAlone": "only the Pico, with its onboard LED"
+      "boardAlone": "only the Pico, with its onboard LED",
+      "ironStopped": "Stopped after 30 seconds.",
+      "ironRestarted": "IronRuby cannot be interrupted in the middle of a cell, so it was started anew: the variables of the cells before are gone – run them again.",
+      "ironFailed": "IronRuby could not be loaded – please reload the page."
     },
     "ja": {
       "title": "Chunky Baconと学ぶRuby",
@@ -836,7 +842,10 @@ window.LESSONS_JSON = JSON.stringify({
       "boardBleGot": "ノートPCが受信",
       "boardBleLink": "ノートPCを接続",
       "boardAdvertising": "アドバタイズ中",
-      "boardAlone": "Picoだけ（基板のLED）"
+      "boardAlone": "Picoだけ（基板のLED）",
+      "ironStopped": "30秒で止めました。",
+      "ironRestarted": "IronRubyはセルの途中で止められないため、起動し直しました。前のセルの変数は消えたので、もう一度実行してください。",
+      "ironFailed": "IronRubyを読み込めませんでした。ページを再読み込みしてください。"
     }
   },
   "lessons": [
@@ -9735,6 +9744,251 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "ironruby",
+      "engine": "ironruby",
+      "live": false,
+      "de": {
+        "title": "IronRuby: Ruby auf .NET",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>IronRuby: Ruby auf .NET, in deinem Browser</h2><div class='ironruby-status'></div><p>In dieser Lektion läuft dein Code nicht auf CRuby. Jede Zelle geht an <strong>IronRuby</strong>: ein Ruby, in C# geschrieben, das auf <strong>.NET</strong> läuft, der Plattform von Microsoft – und diese Seite hat .NET selbst nach WebAssembly übersetzt und in einem Web Worker gestartet, einem Hintergrund-Thread des Browsers. Beim ersten Mal sind das rund 20 MB zum Herunterladen (die Zeile oben zeigt, wie weit es ist); danach hat der Browser es im Cache, und IronRuby startet in ein paar Sekunden. Nur diese Lektion lädt es.</p><p>IronRuby entstand 2007 bei Microsoft, auf der <em>Dynamic Language Runtime</em> (DLR), der Schicht, die dynamische Sprachen wie Ruby und Python auf .NET laufen lässt; 2011 wurde es still darum. <a href='https://github.com/Largo/ironruby' target='_blank'>Largo/ironruby</a> ist ein Fork, der es zurückgebracht hat: Ruby 4.0 auf .NET 8 und 10, geparst von Prism, dem Parser von CRuby selbst – es ist das IronRuby aus der Liste der Rubys in Lektion {{nr:rubies}}. Was es eine Lektion wert macht: Aus Ruby heraus kannst du <em>jede</em> .NET-Bibliothek aufrufen – die ganze Klassenbibliothek von .NET und jedes Paket von NuGet, dem RubyGems von .NET –, und hier, ohne etwas zu installieren. Frag es zuerst, wo es ist:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts RUBY_ENGINE, RUBY_VERSION, IRONRUBY_VERSION\ninfo = System::Runtime::InteropServices::RuntimeInformation\n[\n  \"dein Ruby-Code\",\n  \"IronRuby #{IRONRUBY_VERSION} (in C# geschrieben)\",\n  info.FrameworkDescription,\n  \"WebAssembly (#{info.OSDescription})\",\n  \"dein Browser\"\n].each_with_index { |layer, i| puts \"#{'  ' * i}#{layer}\" }\nSystem::Math.Sqrt(2)   # eine .NET-Methode, aufgerufen wie eine von Ruby"
+          },
+          {
+            "t": "h",
+            "html": "<p>Fünf Schichten, eine in der anderen: dein Code, IronRuby, .NET, WebAssembly, der Browser. <code>RUBY_VERSION</code> ist die Ruby-Sprache, die IronRuby spricht, <code>IRONRUBY_VERSION</code> seine eigene Version. <code>System::Math</code> ist die C#-Klasse <code>System.Math</code>: Namespaces und Klassen von .NET sind Ruby-Konstanten, verbunden mit <code>::</code>, und <code>Sqrt</code> rufst du auf wie jede Ruby-Methode. <code>info.FrameworkDescription</code> ist eine C#-<em>Property</em> – für Ruby eine Methode ohne Argumente.</p><h3>Dein erster QR-Code</h3><p><a href='https://github.com/codebude/QRCoder' target='_blank'>QRCoder</a> ist eine C#-Bibliothek von NuGet, die QR-Codes macht, 144 KB gross, und die Seite hat sie schon geladen. Ihre Objekte machst du mit <code>.new</code>, wie in Ruby. Eines ist anders: Die Werte eines C#-<em>Enums</em> – einer festen Liste von Namen, hier die Fehlerkorrektur-Stufen L, M, Q und H – sind in IronRuby Methoden, also <code>ECCLevel.Q</code>, nicht <code>ECCLevel::Q</code>. <code>show_png</code> ist der Helfer dieser Lektion; er zeigt PNG-Bytes unter der Zelle:</p>"
+          },
+          {
+            "t": "c",
+            "code": "gen   = QRCoder::QRCodeGenerator.new\nlevel = QRCoder::QRCodeGenerator::ECCLevel.Q\ndata  = gen.CreateQrCode(\"Chunky Bacon!\", level)\npng   = QRCoder::PngByteQRCode.new(data).get_graphic(8)\nputs \"#{png.class}: #{png.length} Bytes\"\nputs \"es beginnt mit #{png.to_a.first(4).pack('C*').inspect}\"\nshow_png png\nside = data.module_matrix.count\n\"QR-Version #{data.version}, #{side} x #{side} Module\""
+          },
+          {
+            "t": "h",
+            "html": "<p><strong>Scann ihn mit deinem Handy!</strong> Er sagt <em>Chunky Bacon!</em>. Das PNG kam direkt aus .NET: <code>get_graphic</code> gibt ein <code>System::Byte[]</code> zurück, ein C#-Array von Bytes – keinen Ruby-String. <code>to_a</code> macht daraus ein Ruby-Array von Zahlen, und <code>pack('C*')</code> macht aus denen einen Ruby-String aus Bytes: <code>\"\\x89PNG\"</code>, die vier Bytes, mit denen jede PNG-Datei beginnt. Ruby- und .NET-Objekte treffen sich im selben Programm, und IronRuby wandelt um, wo es kann.</p><h3>Zwei Namen, eine Methode</h3><p>C# nennt seine Methoden <code>CreateQrCode</code>, Ruby würde <code>create_qr_code</code> sagen. IronRuby bietet beides an: <code>data.Version</code> und <code>data.version</code>, <code>ModuleMatrix</code> und <code>module_matrix</code> sind dasselbe. Und <code>ECCLevel.send(name)</code> wählt einen Enum-Wert über seinen Namen, so wie <code>send</code> jede Methode aufruft:</p>"
+          },
+          {
+            "t": "c",
+            "code": "%w[L M Q H].each do |name|\n  ecc = QRCoder::QRCodeGenerator::ECCLevel.send(name)\n  d = gen.CreateQrCode(\"Chunky Bacon!\", ecc)\n  puts \"ECC #{ecc}: Version #{d.Version}, #{d.ModuleMatrix.Count} Module\"\nend\nputs \"dieselbe Liste: #{data.module_matrix.equal?(data.ModuleMatrix)}\"\nputs \"eine #{data.module_matrix.class}\"\nbegin\n  gen.create_qr_code(\"Chunky Bacon!\", level)\nrescue NoMethodError => e\n  puts \"create_qr_code: #{e.class}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Mehr Fehlerkorrektur (H) heisst mehr Module, damit ein Code auch dann noch lesbar ist, wenn ein Viertel davon verdeckt ist. Aber schau dir die letzte Zeile an: <code>create_qr_code</code> ist ein <code>NoMethodError</code>. IronRuby macht aus einem Ruby-Namen Wort für Wort wieder einen C#-Namen, und ein Wort aus zwei Buchstaben liest es als Abkürzung: Aus <code>qr</code> wird <code>QR</code>, also sucht es <code>CreateQRCode</code> – und die C#-Methode heisst <code>CreateQrCode</code>. Eine Faustregel für .NET-Bibliotheken: <strong>Wenn der snake_case-Name scheitert, nimm die Schreibweise von C#.</strong> Die geht immer.</p><h3>Es sind nur Booleans</h3><p><code>module_matrix</code> ist eine <code>List</code> von <code>BitArray</code>s: eine Reihe aus true und false pro Zeile des Codes, true für ein dunkles Modul. Die Collections von .NET sind in IronRuby <code>Enumerable</code>, also gehen <code>each</code> und <code>map</code> mit ihnen wie mit einem Ruby-Array – und <code>puts</code> kann den Code zeichnen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "data.module_matrix.each do |row|\n  puts row.map { |dark| dark ? \"██\" : \"  \" }.join\nend\nnil"
+          },
+          {
+            "t": "h",
+            "html": "<p>Auch der lässt sich scannen. Ein QR-Code ist nichts weiter als dieses Gitter; die drei grossen Quadrate in den Ecken zeigen der Kamera, wo er ist und wo oben ist. Das heisst: Du kannst ihn selbst zeichnen – in Speckfarben, als SVG, ein Bild, das als Text geschrieben ist.</p><h3>Speckfarben</h3><p><code>bacon_svg</code> nimmt die QR-Daten und zwei <em>Keyword-Argumente</em>, <code>cell:</code> (wie viele Pixel pro Modul) und <code>plain:</code> (schwarz auf weiss oder Speck), beide mit Vorgabewerten. <code>%(...)</code> ist ein String-Literal wie <code>\"...\"</code>, nur brauchen die Anführungszeichen darin keinen Backslash – praktisch für SVG. Die beiden <code>each_with_index</code> gehen durch die .NET-Liste der Reihen und durch jede Reihe: <code>y</code> ist die Reihe, <code>x</code> die Spalte:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def bacon_svg(data, cell: 8, plain: false)\n  matrix = data.module_matrix\n  size = matrix.count * cell\n  dots = []\n  matrix.each_with_index do |row, y|\n    row.each_with_index do |dark, x|\n      next unless dark\n\n      hue = 5 + 30 * x / matrix.count   # links rot, rechts orange\n      fill = plain ? \"#000\" : \"hsl(#{hue},75%,32%)\"\n      dots << %(<rect x=\"#{x * cell}\" y=\"#{y * cell}\" width=\"#{cell}\" ) +\n              %(height=\"#{cell}\" rx=\"#{plain ? 0 : 2}\" fill=\"#{fill}\"/>)\n    end\n  end\n  xmlns = \"http://www.w3.org/2000/svg\"\n  paper = plain ? \"#fff\" : \"#fff6e8\"\n  %(<svg xmlns=\"#{xmlns}\" width=\"#{size}\" height=\"#{size}\">) +\n    %(<rect width=\"100%\" height=\"100%\" fill=\"#{paper}\"/>#{dots.join}</svg>)\nend\n\nurl = gen.CreateQrCode(\"https://chunkybacon.idogawa.com/\", level)\nsvg = bacon_svg(url)\nshow_svg svg\n\"#{svg.scan('<rect').size - 1} dunkle Module, #{svg.bytesize} Bytes SVG\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Links rot, rechts orange, abgerundete Module (<code>rx</code>) auf Crème – und ein Handy liest ihn trotzdem, denn ein QR-Code braucht nur dunkel auf hell. Dieser führt zu diesem Kurs.</p><h3>Eine Schweizer QR-Rechnung</h3><p>Jede Rechnung in der Schweiz trägt einen QR-Code wie den nächsten: die <em>QR-Rechnung</em>, mit dem Konto, dem Betrag und einer Referenz für die Zahlung. QRCoder kennt ihr Format. Die Zelle zeigt mehr davon, wie C# von Ruby aus aussieht: Klassen in Klassen (<code>S::Iban</code>, <code>S::Contact</code>, eine Konstante <code>S</code>, damit die Namen kurz bleiben), eine statische <em>Fabrikmethode</em>, die ein Objekt macht (<code>WithStructuredAddress</code>), weitere Enums, <code>nil</code>, wo C# <code>null</code> erwartet, und <code>System::Decimal</code>, die Dezimalzahl, die C# für Geld nimmt – geparst mit <code>InvariantCulture</code>, damit <code>\"42.50\"</code> auf jedem Computer dasselbe heisst, egal in welcher Sprache er läuft:</p>"
+          },
+          {
+            "t": "c",
+            "code": "S = QRCoder::PayloadGenerator::SwissQrCode\niban   = S::Iban.new(\"CH4431999123000889012\", S::Iban::IbanType.QrIban)\nseller = S::Contact.WithStructuredAddress(\n  \"Chunky Bacon AG\", \"8000\", \"Zürich\", \"CH\", \"Speckweg\", \"1\"\n)\nref    = S::Reference.new(S::Reference::ReferenceType.QRR,\n                          \"210000000003139471430009017\",\n                          S::Reference::ReferenceTextType.QrReference)\ninfo   = S::AdditionalInformation.new(\"Ruby-Kurs, Lektion IronRuby\", nil)\ninvariant = System::Globalization::CultureInfo.InvariantCulture\namount = System::Decimal.Parse(\"42.50\", invariant)   # ein C#-decimal\nbill   = S.new(iban, S::Currency.CHF, seller, ref, info, nil, amount)\npayload = bill.to_s.to_s   # der String von .NET, dann ein Ruby-String\nputs payload.lines.first(6).map(&:chomp).join(\" | \")\n\n# Stufe M und UTF-8 (true), wie es der Standard will\nbill_data = gen.CreateQrCode(payload, bill.ecc_level, true)\n# QR-Rechnungen sind schwarz auf weiss\nsvg = bacon_svg(bill_data, cell: 5, plain: true)\n# das Schweizerkreuz in der Mitte\nc = bill_data.module_matrix.count * 5 / 2.0\nbox = lambda do |x, y, w, h, fill|\n  %(<rect x=\"#{x}\" y=\"#{y}\" width=\"#{w}\" height=\"#{h}\" fill=\"#{fill}\"/>)\nend\ncross = box.(c - 17, c - 17, 34, 34, \"#fff\") +\n        box.(c - 15, c - 15, 30, 30, \"#000\") +\n        box.(c - 3, c - 10, 6, 20, \"#fff\") +\n        box.(c - 10, c - 3, 20, 6, \"#fff\")\nshow_svg svg.sub(\"</svg>\", \"#{cross}</svg>\")\n\"#{payload.lines.count} Zeilen Nutzdaten, QR-Version #{bill_data.version}\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Schwarz auf weiss, mit dem Schweizerkreuz in der Mitte: Der Standard will es so, und eine Banking-App liest ihn nur so (die Speck-Version liess sich nicht scannen). Der Standard will auch die Fehlerkorrektur-Stufe M, die die Rechnung kennt (<code>bill.ecc_level</code>), und UTF-8, das <code>true</code>, damit <code>\"Zürich\"</code> mit seinem ü ankommt. Die Daten darin sind einfacher Text – <code>SPC</code>, die Version <code>0200</code>, das Konto und so weiter, ein Feld pro Zeile. Einen solchen Code zurückzulesen, das macht das Ruby-Gem <a href='https://rubygems.org/gems/swiss_qr' target='_blank'>swiss_qr</a>.</p><h3>Operatoren auf einem .NET-Struct</h3><p>Noch ein Stück .NET: <code>System.Numerics.Complex</code>, die komplexen Zahlen von C#. C# kann für einen Typ Operatoren definieren – <code>operator *</code>, <code>operator +</code> –, und IronRuby macht daraus Rubys <code>*</code> und <code>+</code>; unter ihren C#-Namen (<code>op_Multiply</code>) gibt es sie auch. Ruby hat ein eigenes <code>Complex</code>, also bekommt das von .NET eine eigene Konstante: <code>NetComplex</code>. Dann zeichnet es die Mandelbrot-Menge, die Zahlen <code>c</code>, für die <code>z = z * z + c</code> nie über 2 hinauswächst:</p>"
+          },
+          {
+            "t": "c",
+            "code": "NetComplex = System::Numerics::Complex   # Ruby hat ein eigenes Complex\nc = NetComplex.new(-0.5, 0.5)\nz = NetComplex.new(0, 0)\nz = z * z + c                  # operator * und operator + von C#\nputs z, z.magnitude\nputs NetComplex.op_Multiply(c, c) == c * c\n# Euler: e hoch i mal pi ist -1, bis auf Rundung\nputs NetComplex.Exp(NetComplex.ImaginaryOne * Math::PI)\n\n(-12..12).step(2) do |y|\n  puts((-40..20).map do |x|\n    c = NetComplex.new(x / 20.0, y / 10.0)\n    z = NetComplex.new(0, 0)\n    n = 0\n    (z = z * z + c; n += 1) while n < 20 && z.magnitude <= 2\n    n == 20 ? \"@\" : \" .:-=+*#\"[n / 3]\n  end.join)\nend\nnil"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>puts z</code> zeigt die Zahl so, wie .NET sie schreibt, <code>&lt;-0.5; 0.5&gt;</code>: <code>puts</code> ruft <code>to_s</code> auf, und das ist bei einem .NET-Objekt <code>ToString</code> von C#.</p><h3>Extension Methods von C#</h3><p>Eine zweite Bibliothek: <a href='https://github.com/xoofx/markdig' target='_blank'>Markdig</a>, Markdown zu HTML, 470 KB – die Seite lädt sie, sobald eine Zelle sie zum ersten Mal nennt. Markdig fügt seine Funktionen mit <em>Extension Methods</em> hinzu: C#-Methoden, die eine Bibliothek einer Klasse hinzufügt, die sie nicht geschrieben hat, hier <code>use_advanced_extensions</code> dem <code>MarkdownPipelineBuilder</code>. Sie gelten nur, wo du sie einschaltest – <code>using_clr_extensions Markdig</code>, ganz ähnlich wie Rubys <code>using</code> für Refinements. Ohne diese Zeile ist <code>use_advanced_extensions</code> ein <code>NoMethodError</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "using_clr_extensions Markdig\nPIPELINE = Markdig::MarkdownPipelineBuilder.new\n                   .use_advanced_extensions\n                   .use_emoji_and_smiley\n                   .build\nmarkdown = <<~MD\n  # Einkauf :pig:\n\n  | Ding | Preis |\n  |------|------:|\n  | Speck | 4.50 |\n  | Ruby | 0.00 |\nMD\nhtml = Markdig::Markdown.to_html(markdown, PIPELINE)\nshow_html html\nhtml.to_s.lines.first"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>IronRuby 4.0 gibt es <a href='https://github.com/Largo/ironruby/releases' target='_blank'>fertig für Windows, Linux und macOS</a>, in sich geschlossen – kein .NET zu installieren. Auspacken und ein Ruby starten, ein <code>irb</code> oder <code>igem</code>, das <code>gem</code> von IronRuby:</p><pre><code>$ tar xzf ironruby-4.0.1-linux-x64.tar.gz &amp;&amp; cd ironruby-4.0.1-linux-x64\n$ ./ir.sh -e 'puts RUBY_DESCRIPTION'\n$ ./irb.sh</code></pre><p>Ein NuGet-Paket ist eine Zip-Datei: Nimm die DLL aus ihrem Ordner <code>lib/net8.0</code> (oder <code>netstandard2.0</code>) und lade sie mit <code>require</code> und ihrem Pfad, wie diese Seite es mit QRCoder gemacht hat. Unter Windows sind auch Windows Forms und WPF da: <code>require \"System.Windows.Forms\"</code>, und Ruby öffnet Fenster.</p></div><div class='docs'><strong>Nachschlagen:</strong> <a href='https://github.com/codebude/QRCoder/wiki' target='_blank'>das Wiki von QRCoder</a> (englisch) · <a href='https://learn.microsoft.com/de-de/dotnet/api/system.numerics.complex' target='_blank'>System.Numerics.Complex</a> auf Microsoft Learn · <a href='https://github.com/Largo/ironruby' target='_blank'>IronRuby auf GitHub</a></div><div class='task'><strong>Aufgabe:</strong> Schreib <code>qr_svg(text, cell = 6)</code>, das einen <code>&lt;svg&gt;</code>-String mit einem <code>&lt;rect&gt;</code> pro dunklem Modul zurückgibt – ein kleines Geschwister von <code>bacon_svg</code>, schwarz auf weiss. Die Zelle macht schon die QR-Daten und den Rahmen des SVG; füll <code>rects</code>. Die letzte Zeile zeigt <code>qr_svg(\"Chunky Bacon\")</code>: Scann es, dein Handy sollte <em>Chunky Bacon</em> lesen.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def qr_svg(text, cell = 6)\n  level = QRCoder::QRCodeGenerator::ECCLevel.Q\n  data = QRCoder::QRCodeGenerator.new.CreateQrCode(text, level)\n  rects = []\n  # pro dunklem Modul ein <rect x=\"..\" y=\"..\" width=\"..\" height=\"..\"/>:\n  # data.module_matrix.each_with_index do |row, y| ... und darin\n  # row.each_with_index do |dark, x| ...\n  size = data.module_matrix.count * cell\n  %(<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"#{size}\" ) +\n    %(height=\"#{size}\" style=\"background:#fff\">#{rects.join}</svg>)\nend\n\nshow_svg qr_svg(\"Chunky Bacon\")",
+            "probe": "->(svg) { m = QRCoder::QRCodeGenerator.new.CreateQrCode(\"Chunky Bacon\", QRCoder::QRCodeGenerator::ECCLevel.Q).module_matrix; cell = svg[/width=\"([\\d.]+)\"/, 1].to_f / m.count; want = []; m.each_with_index { |row, y| row.each_with_index { |dark, x| want << [x * cell, y * cell] if dark } }; got = svg.scan(/<rect\\b[^>]*>/).select { |r| r =~ /\\sx=\"/ }.map { |r| [r[/\\sx=\"([\\d.]+)\"/, 1].to_f, r[/\\sy=\"([\\d.]+)\"/, 1].to_f] }; [svg.start_with?(\"<svg\"), cell > 0 && got.sort == want.sort, got.size] }.(qr_svg(\"Chunky Bacon\"))",
+            "check": "probe.to_s.start_with?(\"[true, true, \") && code.match?(/module_matrix|ModuleMatrix/) && code.match?(/CreateQrCode|QRCodeGenerator/)",
+            "hint": "Zwei Schleifen, wie in <code>bacon_svg</code>: <code>data.module_matrix.each_with_index do |row, y|</code> und darin <code>row.each_with_index do |dark, x|</code>. Für jedes <code>dark</code>-Modul: <code>rects &lt;&lt; %(&lt;rect x=\"#{x * cell}\" y=\"#{y * cell}\" width=\"#{cell}\" height=\"#{cell}\"/&gt;)</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "IronRuby: Ruby on .NET",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>IronRuby: Ruby on .NET, in your browser</h2><div class='ironruby-status'></div><p>In this lesson your code does not run on CRuby. Every cell goes to <strong>IronRuby</strong>: a Ruby written in C# that runs on <strong>.NET</strong>, Microsoft's platform – and this page has .NET itself compiled to WebAssembly and started in a Web Worker, a background thread of the browser. That is about 20 MB to download the first time (the line above shows how far it is); after that the browser has it cached, and IronRuby starts in a few seconds. Only this lesson loads it.</p><p>IronRuby began at Microsoft in 2007, on the <em>Dynamic Language Runtime</em> (DLR), the layer that lets dynamic languages like Ruby and Python run on .NET; in 2011 it went quiet. <a href='https://github.com/Largo/ironruby' target='_blank'>Largo/ironruby</a> is a fork that brought it back: Ruby 4.0 on .NET 8 and 10, parsed by Prism, CRuby's own parser – it is the IronRuby from the list of Rubies in lesson {{nr:rubies}}. What makes it worth a lesson: from Ruby you can call <em>every</em> .NET library – the whole class library of .NET and any package from NuGet, .NET's RubyGems – and here without installing anything. First, ask it where it is:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts RUBY_ENGINE, RUBY_VERSION, IRONRUBY_VERSION\ninfo = System::Runtime::InteropServices::RuntimeInformation\n[\n  \"your Ruby code\",\n  \"IronRuby #{IRONRUBY_VERSION} (written in C#)\",\n  info.FrameworkDescription,\n  \"WebAssembly (#{info.OSDescription})\",\n  \"your browser\"\n].each_with_index { |layer, i| puts \"#{'  ' * i}#{layer}\" }\nSystem::Math.Sqrt(2)   # a .NET method, called like a Ruby one"
+          },
+          {
+            "t": "h",
+            "html": "<p>Five layers, one inside the other: your code, IronRuby, .NET, WebAssembly, the browser. <code>RUBY_VERSION</code> is the Ruby language IronRuby speaks, <code>IRONRUBY_VERSION</code> its own release. <code>System::Math</code> is the C# class <code>System.Math</code>: .NET's namespaces and classes are Ruby constants, joined with <code>::</code>, and <code>Sqrt</code> is called like any Ruby method. <code>info.FrameworkDescription</code> is a C# <em>property</em> – to Ruby, a method without arguments.</p><h3>Your first QR code</h3><p><a href='https://github.com/codebude/QRCoder' target='_blank'>QRCoder</a> is a C# library from NuGet that makes QR codes, 144 KB, and the page has already loaded it. You make its objects with <code>.new</code>, as in Ruby. One thing is different: the values of a C# <em>enum</em> – a fixed list of names, here the error-correction levels L, M, Q and H – are methods in IronRuby, so it is <code>ECCLevel.Q</code>, not <code>ECCLevel::Q</code>. <code>show_png</code> is this lesson's helper; it shows PNG bytes below the cell:</p>"
+          },
+          {
+            "t": "c",
+            "code": "gen   = QRCoder::QRCodeGenerator.new\nlevel = QRCoder::QRCodeGenerator::ECCLevel.Q\ndata  = gen.CreateQrCode(\"Chunky Bacon!\", level)\npng   = QRCoder::PngByteQRCode.new(data).get_graphic(8)\nputs \"#{png.class}: #{png.length} bytes\"\nputs \"it starts with #{png.to_a.first(4).pack('C*').inspect}\"\nshow_png png\nside = data.module_matrix.count\n\"QR version #{data.version}, #{side} x #{side} modules\""
+          },
+          {
+            "t": "h",
+            "html": "<p><strong>Scan it with your phone!</strong> It says <em>Chunky Bacon!</em>. The PNG came straight out of .NET: <code>get_graphic</code> returns a <code>System::Byte[]</code>, a C# array of bytes – not a Ruby String. <code>to_a</code> turns it into a Ruby Array of numbers, and <code>pack('C*')</code> turns those into a Ruby String of bytes: <code>\"\\x89PNG\"</code>, the four bytes every PNG file starts with. Ruby and .NET objects meet in the same program, and IronRuby converts where it can.</p><h3>Two names, one method</h3><p>C# names its methods <code>CreateQrCode</code>, Ruby would say <code>create_qr_code</code>. IronRuby offers both: <code>data.Version</code> and <code>data.version</code>, <code>ModuleMatrix</code> and <code>module_matrix</code> are the same. And <code>ECCLevel.send(name)</code> picks an enum value by its name, as <code>send</code> calls any method:</p>"
+          },
+          {
+            "t": "c",
+            "code": "%w[L M Q H].each do |name|\n  ecc = QRCoder::QRCodeGenerator::ECCLevel.send(name)\n  d = gen.CreateQrCode(\"Chunky Bacon!\", ecc)\n  puts \"ECC #{ecc}: version #{d.Version}, #{d.ModuleMatrix.Count} modules\"\nend\nputs \"the same list: #{data.module_matrix.equal?(data.ModuleMatrix)}\"\nputs \"a #{data.module_matrix.class}\"\nbegin\n  gen.create_qr_code(\"Chunky Bacon!\", level)\nrescue NoMethodError => e\n  puts \"create_qr_code: #{e.class}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>More error correction (H) means more modules, so a code still reads with a quarter of it covered. But look at the last line: <code>create_qr_code</code> is a <code>NoMethodError</code>. IronRuby turns a Ruby name back into a C# one word by word, and it reads a two-letter word as an abbreviation: <code>qr</code> becomes <code>QR</code>, so it looks for <code>CreateQRCode</code> – and the C# method is called <code>CreateQrCode</code>. A rule of thumb for .NET libraries: <strong>when the snake_case name fails, use the C# spelling.</strong> It always works.</p><h3>It is just booleans</h3><p><code>module_matrix</code> is a <code>List</code> of <code>BitArray</code>s: one row of true and false per line of the code, true for a dark module. .NET's collections are <code>Enumerable</code> in IronRuby, so <code>each</code> and <code>map</code> work on them as on a Ruby Array – and <code>puts</code> can draw the code:</p>"
+          },
+          {
+            "t": "c",
+            "code": "data.module_matrix.each do |row|\n  puts row.map { |dark| dark ? \"██\" : \"  \" }.join\nend\nnil"
+          },
+          {
+            "t": "h",
+            "html": "<p>That one scans, too. A QR code is nothing more than this grid; the three big squares in the corners tell a camera where it is and which way up. Which means you can draw it yourself – in bacon colours, as an SVG, a picture written as text.</p><h3>Bacon colours</h3><p><code>bacon_svg</code> takes the QR data and two <em>keyword arguments</em>, <code>cell:</code> (how many pixels per module) and <code>plain:</code> (black on white or bacon), both with defaults. <code>%(...)</code> is a string literal like <code>\"...\"</code>, but the double quotes inside it need no backslash – handy for SVG. The two <code>each_with_index</code> go through the .NET list of rows and each row: <code>y</code> is the row, <code>x</code> the column:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def bacon_svg(data, cell: 8, plain: false)\n  matrix = data.module_matrix\n  size = matrix.count * cell\n  dots = []\n  matrix.each_with_index do |row, y|\n    row.each_with_index do |dark, x|\n      next unless dark\n\n      hue = 5 + 30 * x / matrix.count   # red left, orange right\n      fill = plain ? \"#000\" : \"hsl(#{hue},75%,32%)\"\n      dots << %(<rect x=\"#{x * cell}\" y=\"#{y * cell}\" width=\"#{cell}\" ) +\n              %(height=\"#{cell}\" rx=\"#{plain ? 0 : 2}\" fill=\"#{fill}\"/>)\n    end\n  end\n  xmlns = \"http://www.w3.org/2000/svg\"\n  paper = plain ? \"#fff\" : \"#fff6e8\"\n  %(<svg xmlns=\"#{xmlns}\" width=\"#{size}\" height=\"#{size}\">) +\n    %(<rect width=\"100%\" height=\"100%\" fill=\"#{paper}\"/>#{dots.join}</svg>)\nend\n\nurl = gen.CreateQrCode(\"https://chunkybacon.idogawa.com/\", level)\nsvg = bacon_svg(url)\nshow_svg svg\n\"#{svg.scan('<rect').size - 1} dark modules, #{svg.bytesize} bytes of SVG\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Red on the left, orange on the right, rounded modules (<code>rx</code>) on cream – and a phone still reads it, because a QR code only needs dark on light. This one leads to this course.</p><h3>A Swiss QR-bill</h3><p>Every invoice in Switzerland carries a QR code like the next one: the <em>QR-bill</em>, with the account, the amount and a reference for the payment. QRCoder knows its format. The cell shows more of how C# looks from Ruby: classes inside classes (<code>S::Iban</code>, <code>S::Contact</code>, a constant <code>S</code> to keep the names short), a static <em>factory method</em> that makes an object (<code>WithStructuredAddress</code>), more enums, <code>nil</code> where C# expects <code>null</code>, and <code>System::Decimal</code>, the decimal number C# uses for money – parsed with <code>InvariantCulture</code>, so that <code>\"42.50\"</code> means the same on every computer, whatever its language:</p>"
+          },
+          {
+            "t": "c",
+            "code": "S = QRCoder::PayloadGenerator::SwissQrCode\niban   = S::Iban.new(\"CH4431999123000889012\", S::Iban::IbanType.QrIban)\nseller = S::Contact.WithStructuredAddress(\n  \"Chunky Bacon AG\", \"8000\", \"Zürich\", \"CH\", \"Speckweg\", \"1\"\n)\nref    = S::Reference.new(S::Reference::ReferenceType.QRR,\n                          \"210000000003139471430009017\",\n                          S::Reference::ReferenceTextType.QrReference)\ninfo   = S::AdditionalInformation.new(\"Ruby course, IronRuby lesson\", nil)\ninvariant = System::Globalization::CultureInfo.InvariantCulture\namount = System::Decimal.Parse(\"42.50\", invariant)   # a C# decimal\nbill   = S.new(iban, S::Currency.CHF, seller, ref, info, nil, amount)\npayload = bill.to_s.to_s   # .NET's String, then a Ruby String\nputs payload.lines.first(6).map(&:chomp).join(\" | \")\n\n# level M and UTF-8 (true), as the standard asks\nbill_data = gen.CreateQrCode(payload, bill.ecc_level, true)\n# QR-bills are black on white\nsvg = bacon_svg(bill_data, cell: 5, plain: true)\n# the Swiss cross in the middle\nc = bill_data.module_matrix.count * 5 / 2.0\nbox = lambda do |x, y, w, h, fill|\n  %(<rect x=\"#{x}\" y=\"#{y}\" width=\"#{w}\" height=\"#{h}\" fill=\"#{fill}\"/>)\nend\ncross = box.(c - 17, c - 17, 34, 34, \"#fff\") +\n        box.(c - 15, c - 15, 30, 30, \"#000\") +\n        box.(c - 3, c - 10, 6, 20, \"#fff\") +\n        box.(c - 10, c - 3, 20, 6, \"#fff\")\nshow_svg svg.sub(\"</svg>\", \"#{cross}</svg>\")\n\"#{payload.lines.count} lines of payload, QR version #{bill_data.version}\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Black on white, with the Swiss cross in the middle: the standard wants it like that, and a banking app reads it only like that (the bacon version did not scan). The standard also asks for error-correction level M, which the bill knows (<code>bill.ecc_level</code>), and for UTF-8, the <code>true</code>, so that <code>\"Zürich\"</code> arrives with its umlaut. The data inside is plain text – <code>SPC</code>, the version <code>0200</code>, the account and so on, one field per line. Reading such a code back is what the Ruby gem <a href='https://rubygems.org/gems/swiss_qr' target='_blank'>swiss_qr</a> does.</p><h3>Operators on a .NET struct</h3><p>One more piece of .NET: <code>System.Numerics.Complex</code>, the complex numbers of C#. C# can define operators for a type – <code>operator *</code>, <code>operator +</code> – and IronRuby makes them Ruby's <code>*</code> and <code>+</code>; under their C# names (<code>op_Multiply</code>) they are there as well. Ruby has a <code>Complex</code> of its own, so the .NET one gets a constant of its own: <code>NetComplex</code>. Then it draws the Mandelbrot set, the numbers <code>c</code> for which <code>z = z * z + c</code> never grows past 2:</p>"
+          },
+          {
+            "t": "c",
+            "code": "NetComplex = System::Numerics::Complex   # Ruby has a Complex of its own\nc = NetComplex.new(-0.5, 0.5)\nz = NetComplex.new(0, 0)\nz = z * z + c                  # C#'s operator * and operator +\nputs z, z.magnitude\nputs NetComplex.op_Multiply(c, c) == c * c\n# Euler: e to the power of i times pi is -1, up to rounding\nputs NetComplex.Exp(NetComplex.ImaginaryOne * Math::PI)\n\n(-12..12).step(2) do |y|\n  puts((-40..20).map do |x|\n    c = NetComplex.new(x / 20.0, y / 10.0)\n    z = NetComplex.new(0, 0)\n    n = 0\n    (z = z * z + c; n += 1) while n < 20 && z.magnitude <= 2\n    n == 20 ? \"@\" : \" .:-=+*#\"[n / 3]\n  end.join)\nend\nnil"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>puts z</code> shows the number as .NET writes it, <code>&lt;-0.5; 0.5&gt;</code>: <code>puts</code> calls <code>to_s</code>, and for a .NET object that is C#'s <code>ToString</code>.</p><h3>C# extension methods</h3><p>A second library: <a href='https://github.com/xoofx/markdig' target='_blank'>Markdig</a>, Markdown to HTML, 470 KB – the page loads it the first time a cell names it. Markdig adds its features with <em>extension methods</em>: C# methods that a library adds to a class it did not write, here <code>use_advanced_extensions</code> to the <code>MarkdownPipelineBuilder</code>. They count only where you switch them on – <code>using_clr_extensions Markdig</code>, much like Ruby's <code>using</code> for refinements. Without that line, <code>use_advanced_extensions</code> is a <code>NoMethodError</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "using_clr_extensions Markdig\nPIPELINE = Markdig::MarkdownPipelineBuilder.new\n                   .use_advanced_extensions\n                   .use_emoji_and_smiley\n                   .build\nmarkdown = <<~MD\n  # Shopping :pig:\n\n  | Thing | Price |\n  |------|------:|\n  | Bacon | 4.50 |\n  | Ruby | 0.00 |\nMD\nhtml = Markdig::Markdown.to_html(markdown, PIPELINE)\nshow_html html\nhtml.to_s.lines.first"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p>IronRuby 4.0 is <a href='https://github.com/Largo/ironruby/releases' target='_blank'>released for Windows, Linux and macOS</a>, self-contained – no .NET to install. Unpack it and start a Ruby, an <code>irb</code> or <code>igem</code>, IronRuby's <code>gem</code>:</p><pre><code>$ tar xzf ironruby-4.0.1-linux-x64.tar.gz &amp;&amp; cd ironruby-4.0.1-linux-x64\n$ ./ir.sh -e 'puts RUBY_DESCRIPTION'\n$ ./irb.sh</code></pre><p>A NuGet package is a zip file: take the DLL from its <code>lib/net8.0</code> folder (or <code>netstandard2.0</code>) and <code>require</code> it with its path, as this page did with QRCoder. On Windows, Windows Forms and WPF are there too: <code>require \"System.Windows.Forms\"</code>, and Ruby opens windows.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://github.com/codebude/QRCoder/wiki' target='_blank'>QRCoder's wiki</a> · <a href='https://learn.microsoft.com/en-us/dotnet/api/system.numerics.complex' target='_blank'>System.Numerics.Complex</a> on Microsoft Learn · <a href='https://github.com/Largo/ironruby' target='_blank'>IronRuby on GitHub</a></div><div class='task'><strong>Task:</strong> Write <code>qr_svg(text, cell = 6)</code>, which returns an <code>&lt;svg&gt;</code> string with one <code>&lt;rect&gt;</code> per dark module – a smaller sibling of <code>bacon_svg</code>, black on white. The cell already makes the QR data and the frame of the SVG; fill <code>rects</code>. The last line shows <code>qr_svg(\"Chunky Bacon\")</code>: scan it, your phone should read <em>Chunky Bacon</em>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def qr_svg(text, cell = 6)\n  level = QRCoder::QRCodeGenerator::ECCLevel.Q\n  data = QRCoder::QRCodeGenerator.new.CreateQrCode(text, level)\n  rects = []\n  # one <rect x=\"..\" y=\"..\" width=\"..\" height=\"..\"/> per dark module:\n  # data.module_matrix.each_with_index do |row, y| ... and inside it\n  # row.each_with_index do |dark, x| ...\n  size = data.module_matrix.count * cell\n  %(<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"#{size}\" ) +\n    %(height=\"#{size}\" style=\"background:#fff\">#{rects.join}</svg>)\nend\n\nshow_svg qr_svg(\"Chunky Bacon\")",
+            "probe": "->(svg) { m = QRCoder::QRCodeGenerator.new.CreateQrCode(\"Chunky Bacon\", QRCoder::QRCodeGenerator::ECCLevel.Q).module_matrix; cell = svg[/width=\"([\\d.]+)\"/, 1].to_f / m.count; want = []; m.each_with_index { |row, y| row.each_with_index { |dark, x| want << [x * cell, y * cell] if dark } }; got = svg.scan(/<rect\\b[^>]*>/).select { |r| r =~ /\\sx=\"/ }.map { |r| [r[/\\sx=\"([\\d.]+)\"/, 1].to_f, r[/\\sy=\"([\\d.]+)\"/, 1].to_f] }; [svg.start_with?(\"<svg\"), cell > 0 && got.sort == want.sort, got.size] }.(qr_svg(\"Chunky Bacon\"))",
+            "check": "probe.to_s.start_with?(\"[true, true, \") && code.match?(/module_matrix|ModuleMatrix/) && code.match?(/CreateQrCode|QRCodeGenerator/)",
+            "hint": "Two loops, as in <code>bacon_svg</code>: <code>data.module_matrix.each_with_index do |row, y|</code> and inside it <code>row.each_with_index do |dark, x|</code>. For each <code>dark</code> module: <code>rects &lt;&lt; %(&lt;rect x=\"#{x * cell}\" y=\"#{y * cell}\" width=\"#{cell}\" height=\"#{cell}\"/&gt;)</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "IronRuby：.NETの上のRuby",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>IronRuby：ブラウザーの中の、.NETの上のRuby</h2><div class='ironruby-status'></div><p>このレッスンでは、あなたのコードはCRubyでは動きません。どのセルも<strong>IronRuby</strong>に送られます。IronRubyはC#で書かれたRubyで、Microsoftのプラットフォーム<strong>.NET</strong>の上で動きます。このページは.NETそのものをWebAssemblyにコンパイルし、Web Worker（ブラウザーの裏で動くスレッド）で起動しています。初回は約20 MBのダウンロードです（どこまで進んだかは上の行に出ます）。そのあとはブラウザーのキャッシュに入るので、数秒で起動します。読み込むのはこのレッスンだけです。</p><p>IronRubyは2007年にMicrosoftで、<em>Dynamic Language Runtime</em>（DLR）の上に生まれました。DLRは、RubyやPythonのような動的な言語を.NETで動かすための層です。2011年に開発は止まりました。<a href='https://github.com/Largo/ironruby' target='_blank'>Largo/ironruby</a> はそれを復活させたフォークで、.NET 8と10の上でRuby 4.0を動かし、CRuby自身のパーサーであるPrismで構文を読みます。レッスン{{nr:rubies}}のRubyの一覧にあったIronRubyです。このレッスンで取り上げる理由は、Rubyから.NETの<em>どんな</em>ライブラリでも呼べることです。.NETのクラスライブラリ全体も、.NET版のRubyGemsであるNuGetのどのパッケージも使えて、しかもここでは何もインストールしなくてよいのです。まず、どこにいるのか聞いてみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts RUBY_ENGINE, RUBY_VERSION, IRONRUBY_VERSION\ninfo = System::Runtime::InteropServices::RuntimeInformation\n[\n  \"your Ruby code\",\n  \"IronRuby #{IRONRUBY_VERSION} (written in C#)\",\n  info.FrameworkDescription,\n  \"WebAssembly (#{info.OSDescription})\",\n  \"your browser\"\n].each_with_index { |layer, i| puts \"#{'  ' * i}#{layer}\" }\nSystem::Math.Sqrt(2)   # .NET のメソッドを Ruby のメソッドのように呼ぶ"
+          },
+          {
+            "t": "h",
+            "html": "<p>5つの層が入れ子になっています。あなたのコード、IronRuby、.NET、WebAssembly、ブラウザーです。<code>RUBY_VERSION</code> はIronRubyが話すRubyの言語のバージョンで、<code>IRONRUBY_VERSION</code> はIronRuby自身のバージョンです。<code>System::Math</code> はC#のクラス <code>System.Math</code> です。.NETの名前空間とクラスはRubyの定数になり、<code>::</code> でつなぎます。<code>Sqrt</code> はRubyのメソッドと同じように呼べます。<code>info.FrameworkDescription</code> はC#の<em>プロパティ</em>で、Rubyからは引数のないメソッドに見えます。</p><h3>はじめてのQRコード</h3><p><a href='https://github.com/codebude/QRCoder' target='_blank'>QRCoder</a> はNuGetにある、QRコードを作るC#のライブラリです。大きさは144 KBで、このページがもう読み込んであります。オブジェクトはRubyと同じく <code>.new</code> で作ります。ひとつだけ違うのは、C#の<em>enum</em>（決まった名前の一覧で、ここでは誤り訂正レベルのL、M、Q、H）の値が、IronRubyではメソッドになることです。<code>ECCLevel::Q</code> ではなく <code>ECCLevel.Q</code> と書きます。<code>show_png</code> はこのレッスン用のヘルパーで、PNGのバイト列をセルの下に表示します。</p>"
+          },
+          {
+            "t": "c",
+            "code": "gen   = QRCoder::QRCodeGenerator.new\nlevel = QRCoder::QRCodeGenerator::ECCLevel.Q\ndata  = gen.CreateQrCode(\"Chunky Bacon!\", level)\npng   = QRCoder::PngByteQRCode.new(data).get_graphic(8)\nputs \"#{png.class}: #{png.length} bytes\"\nputs \"it starts with #{png.to_a.first(4).pack('C*').inspect}\"\nshow_png png\nside = data.module_matrix.count\n\"QR version #{data.version}, #{side} x #{side} modules\""
+          },
+          {
+            "t": "h",
+            "html": "<p><strong>スマートフォンで読み取ってみましょう！</strong> <em>Chunky Bacon!</em> と出るはずです。このPNGは.NETから直接出てきたものです。<code>get_graphic</code> が返すのは <code>System::Byte[]</code>、つまりC#のバイト配列で、RubyのStringではありません。<code>to_a</code> でRubyの数値のArrayになり、<code>pack('C*')</code> でそれがRubyのバイト列のStringになります。<code>\"\\x89PNG\"</code> は、どのPNGファイルも最初に持っている4バイトです。Rubyのオブジェクトと.NETのオブジェクトが同じプログラムの中で出会い、IronRubyはできるところで変換します。</p><h3>名前は2つ、メソッドは1つ</h3><p>C#ではメソッドを <code>CreateQrCode</code> のように名付け、Rubyなら <code>create_qr_code</code> と書くところです。IronRubyはどちらも使えるようにしています。<code>data.Version</code> と <code>data.version</code>、<code>ModuleMatrix</code> と <code>module_matrix</code> は同じものです。そして、<code>send</code> がどんなメソッドでも呼べるように、<code>ECCLevel.send(name)</code> は名前からenumの値を選びます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "%w[L M Q H].each do |name|\n  ecc = QRCoder::QRCodeGenerator::ECCLevel.send(name)\n  d = gen.CreateQrCode(\"Chunky Bacon!\", ecc)\n  puts \"ECC #{ecc}: version #{d.Version}, #{d.ModuleMatrix.Count} modules\"\nend\nputs \"the same list: #{data.module_matrix.equal?(data.ModuleMatrix)}\"\nputs \"a #{data.module_matrix.class}\"\nbegin\n  gen.create_qr_code(\"Chunky Bacon!\", level)\nrescue NoMethodError => e\n  puts \"create_qr_code: #{e.class}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>誤り訂正を強くする（H）ほどモジュールが増え、4分の1が隠れても読めるようになります。ただし最後の行を見てください。<code>create_qr_code</code> は <code>NoMethodError</code> になります。IronRubyはRubyの名前を単語ごとにC#の名前へ戻しますが、2文字の単語は略語だと考えます。<code>qr</code> は <code>QR</code> になり、<code>CreateQRCode</code> を探すのです。C#のメソッド名は <code>CreateQrCode</code> です。.NETのライブラリを使うときの目安は、<strong>snake_caseの名前で失敗したら、C#のつづりを使う</strong>ことです。そちらはいつでも使えます。</p><h3>中身はただの真偽値</h3><p><code>module_matrix</code> は <code>BitArray</code> の <code>List</code> です。コードの1行ごとにtrueとfalseが1列に並び、trueが暗いモジュールです。.NETのコレクションはIronRubyでは <code>Enumerable</code> なので、RubyのArrayと同じように <code>each</code> や <code>map</code> が使えます。<code>puts</code> でコードを描くこともできます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "data.module_matrix.each do |row|\n  puts row.map { |dark| dark ? \"██\" : \"  \" }.join\nend\nnil"
+          },
+          {
+            "t": "h",
+            "html": "<p>これも読み取れます。QRコードはこの格子にすぎません。角にある3つの大きな四角が、コードの位置と向きをカメラに教えます。ということは、自分で描くこともできます。ベーコン色で、SVG（テキストで書かれた絵）として描いてみましょう。</p><h3>ベーコン色</h3><p><code>bacon_svg</code> はQRのデータと、2つの<em>キーワード引数</em>を受け取ります。<code>cell:</code>（1モジュールあたりのピクセル数）と <code>plain:</code>（白地に黒か、ベーコン色か）で、どちらにも既定値があります。<code>%(...)</code> は <code>\"...\"</code> と同じ文字列リテラルですが、中のダブルクォートにバックスラッシュがいりません。SVGを書くのに便利です。2つの <code>each_with_index</code> は、.NETの行のリストと、その各行をたどります。<code>y</code> が行、<code>x</code> が列です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "def bacon_svg(data, cell: 8, plain: false)\n  matrix = data.module_matrix\n  size = matrix.count * cell\n  dots = []\n  matrix.each_with_index do |row, y|\n    row.each_with_index do |dark, x|\n      next unless dark\n\n      hue = 5 + 30 * x / matrix.count   # 左は赤、右はオレンジ\n      fill = plain ? \"#000\" : \"hsl(#{hue},75%,32%)\"\n      dots << %(<rect x=\"#{x * cell}\" y=\"#{y * cell}\" width=\"#{cell}\" ) +\n              %(height=\"#{cell}\" rx=\"#{plain ? 0 : 2}\" fill=\"#{fill}\"/>)\n    end\n  end\n  xmlns = \"http://www.w3.org/2000/svg\"\n  paper = plain ? \"#fff\" : \"#fff6e8\"\n  %(<svg xmlns=\"#{xmlns}\" width=\"#{size}\" height=\"#{size}\">) +\n    %(<rect width=\"100%\" height=\"100%\" fill=\"#{paper}\"/>#{dots.join}</svg>)\nend\n\nurl = gen.CreateQrCode(\"https://chunkybacon.idogawa.com/\", level)\nsvg = bacon_svg(url)\nshow_svg svg\n\"#{svg.scan('<rect').size - 1} dark modules, #{svg.bytesize} bytes of SVG\""
+          },
+          {
+            "t": "h",
+            "html": "<p>左は赤、右はオレンジ、クリーム色の地に角の丸いモジュール（<code>rx</code>）。それでもスマートフォンは読み取れます。QRコードに必要なのは、明るい地に暗い模様だけだからです。このコードはこのコースにつながっています。</p><h3>スイスのQR請求書</h3><p>スイスの請求書にはどれも、次のようなQRコードが付いています。口座、金額、支払いの参照番号が入った<em>QR請求書</em>です。QRCoderはその形式を知っています。このセルでは、RubyからC#がどう見えるかがもっとわかります。クラスの中のクラス（<code>S::Iban</code>、<code>S::Contact</code>。名前を短くするために定数 <code>S</code> を使います）、オブジェクトを作る静的な<em>ファクトリーメソッド</em>（<code>WithStructuredAddress</code>）、さらにいくつかのenum、C#が <code>null</code> を受け取るところの <code>nil</code>、そしてC#がお金に使う10進数 <code>System::Decimal</code> です。<code>InvariantCulture</code> で読むので、<code>\"42.50\"</code> はどの言語のコンピューターでも同じ意味になります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "S = QRCoder::PayloadGenerator::SwissQrCode\niban   = S::Iban.new(\"CH4431999123000889012\", S::Iban::IbanType.QrIban)\nseller = S::Contact.WithStructuredAddress(\n  \"Chunky Bacon AG\", \"8000\", \"Zürich\", \"CH\", \"Speckweg\", \"1\"\n)\nref    = S::Reference.new(S::Reference::ReferenceType.QRR,\n                          \"210000000003139471430009017\",\n                          S::Reference::ReferenceTextType.QrReference)\ninfo   = S::AdditionalInformation.new(\"Ruby course, IronRuby lesson\", nil)\ninvariant = System::Globalization::CultureInfo.InvariantCulture\namount = System::Decimal.Parse(\"42.50\", invariant)   # C# の decimal\nbill   = S.new(iban, S::Currency.CHF, seller, ref, info, nil, amount)\npayload = bill.to_s.to_s   # .NET の String を Ruby の String に\nputs payload.lines.first(6).map(&:chomp).join(\" | \")\n\n# 規格どおり、レベル M と UTF-8（true）\nbill_data = gen.CreateQrCode(payload, bill.ecc_level, true)\n# QR請求書は白地に黒\nsvg = bacon_svg(bill_data, cell: 5, plain: true)\n# まん中にスイスの十字\nc = bill_data.module_matrix.count * 5 / 2.0\nbox = lambda do |x, y, w, h, fill|\n  %(<rect x=\"#{x}\" y=\"#{y}\" width=\"#{w}\" height=\"#{h}\" fill=\"#{fill}\"/>)\nend\ncross = box.(c - 17, c - 17, 34, 34, \"#fff\") +\n        box.(c - 15, c - 15, 30, 30, \"#000\") +\n        box.(c - 3, c - 10, 6, 20, \"#fff\") +\n        box.(c - 10, c - 3, 20, 6, \"#fff\")\nshow_svg svg.sub(\"</svg>\", \"#{cross}</svg>\")\n\"#{payload.lines.count} lines of payload, QR version #{bill_data.version}\""
+          },
+          {
+            "t": "h",
+            "html": "<p>白地に黒で、まん中にスイスの十字があります。規格がそう決めていて、銀行のアプリもこの形でしか読みません（ベーコン色の版は読み取れませんでした）。規格はさらに、請求書が知っている誤り訂正レベルM（<code>bill.ecc_level</code>）と、UTF-8を求めています。<code>true</code> がUTF-8の指定で、これで <code>\"Zürich\"</code> のウムラウトがそのまま届きます。中のデータはただのテキストです。<code>SPC</code>、バージョン <code>0200</code>、口座などが1行に1項目ずつ並びます。このコードを読み戻すのが、Rubyのgem <a href='https://rubygems.org/gems/swiss_qr' target='_blank'>swiss_qr</a> です。</p><h3>.NETの構造体の演算子</h3><p>.NETをもうひとつ。C#の複素数 <code>System.Numerics.Complex</code> です。C#では型に演算子（<code>operator *</code>、<code>operator +</code>）を定義でき、IronRubyはそれをRubyの <code>*</code> と <code>+</code> にします。C#の名前（<code>op_Multiply</code>）でも呼べます。Rubyには自前の <code>Complex</code> があるので、.NETのものには別の定数 <code>NetComplex</code> を付けます。それを使って、<code>z = z * z + c</code> がいつまでも2を超えない数 <code>c</code> の集まり、マンデルブロ集合を描きます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "NetComplex = System::Numerics::Complex   # Ruby には自前の Complex がある\nc = NetComplex.new(-0.5, 0.5)\nz = NetComplex.new(0, 0)\nz = z * z + c                  # C# の operator * と operator +\nputs z, z.magnitude\nputs NetComplex.op_Multiply(c, c) == c * c\n# オイラー：e の iπ 乗は、丸め誤差を除いて -1\nputs NetComplex.Exp(NetComplex.ImaginaryOne * Math::PI)\n\n(-12..12).step(2) do |y|\n  puts((-40..20).map do |x|\n    c = NetComplex.new(x / 20.0, y / 10.0)\n    z = NetComplex.new(0, 0)\n    n = 0\n    (z = z * z + c; n += 1) while n < 20 && z.magnitude <= 2\n    n == 20 ? \"@\" : \" .:-=+*#\"[n / 3]\n  end.join)\nend\nnil"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>puts z</code> は、.NETが書くとおりに数を表示します。<code>&lt;-0.5; 0.5&gt;</code> です。<code>puts</code> は <code>to_s</code> を呼び、.NETのオブジェクトではそれがC#の <code>ToString</code> になるからです。</p><h3>C#の拡張メソッド</h3><p>2つ目のライブラリは <a href='https://github.com/xoofx/markdig' target='_blank'>Markdig</a> です。MarkdownをHTMLにするライブラリで、470 KBあります。セルが初めてその名前を出したときに、ページが読み込みます。Markdigは<em>拡張メソッド</em>で機能を足します。拡張メソッドとは、ライブラリが自分で書いていないクラスに足すC#のメソッドで、ここでは <code>MarkdownPipelineBuilder</code> に <code>use_advanced_extensions</code> を足しています。拡張メソッドは、有効にした場所でだけ使えます。それが <code>using_clr_extensions Markdig</code> で、Rubyのrefinementの <code>using</code> によく似ています。この行がないと、<code>use_advanced_extensions</code> は <code>NoMethodError</code> になります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "using_clr_extensions Markdig\nPIPELINE = Markdig::MarkdownPipelineBuilder.new\n                   .use_advanced_extensions\n                   .use_emoji_and_smiley\n                   .build\nmarkdown = <<~MD\n  # Shopping :pig:\n\n  | Thing | Price |\n  |------|------:|\n  | Bacon | 4.50 |\n  | Ruby | 0.00 |\nMD\nhtml = Markdig::Markdown.to_html(markdown, PIPELINE)\nshow_html html\nhtml.to_s.lines.first"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>IronRuby 4.0は、<a href='https://github.com/Largo/ironruby/releases' target='_blank'>Windows、Linux、macOS向けにリリース</a>されています。必要なものがすべて入っているので、.NETをインストールする必要はありません。展開したら、Rubyや <code>irb</code>、IronRuby版の <code>gem</code> である <code>igem</code> を起動できます。</p><pre><code>$ tar xzf ironruby-4.0.1-linux-x64.tar.gz &amp;&amp; cd ironruby-4.0.1-linux-x64\n$ ./ir.sh -e 'puts RUBY_DESCRIPTION'\n$ ./irb.sh</code></pre><p>NuGetのパッケージはzipファイルです。その <code>lib/net8.0</code> フォルダー（または <code>netstandard2.0</code>）からDLLを取り出し、このページがQRCoderでしたように、パスを付けて <code>require</code> します。Windowsでは、Windows FormsとWPFも使えます。<code>require \"System.Windows.Forms\"</code> と書けば、Rubyがウィンドウを開きます。</p></div><div class='docs'><strong>調べる：</strong> <a href='https://github.com/codebude/QRCoder/wiki' target='_blank'>QRCoderのwiki</a>（英語） · Microsoft Learnの <a href='https://learn.microsoft.com/ja-jp/dotnet/api/system.numerics.complex' target='_blank'>System.Numerics.Complex</a> · <a href='https://github.com/Largo/ironruby' target='_blank'>GitHubのIronRuby</a></div><div class='task'><strong>課題：</strong> <code>qr_svg(text, cell = 6)</code> を書きましょう。暗いモジュールひとつにつき <code>&lt;rect&gt;</code> をひとつ入れた <code>&lt;svg&gt;</code> の文字列を返すメソッドで、<code>bacon_svg</code> の小さな兄弟、白地に黒の版です。QRのデータとSVGの枠はセルがもう作っているので、<code>rects</code> を埋めてください。最後の行が <code>qr_svg(\"Chunky Bacon\")</code> を表示します。読み取ってみて、スマートフォンに <em>Chunky Bacon</em> と出れば成功です。</div>"
+          },
+          {
+            "t": "x",
+            "code": "def qr_svg(text, cell = 6)\n  level = QRCoder::QRCodeGenerator::ECCLevel.Q\n  data = QRCoder::QRCodeGenerator.new.CreateQrCode(text, level)\n  rects = []\n  # 暗いモジュールごとに <rect> をひとつ：\n  # data.module_matrix.each_with_index do |row, y| ... の中で\n  # row.each_with_index do |dark, x| ...\n  size = data.module_matrix.count * cell\n  %(<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"#{size}\" ) +\n    %(height=\"#{size}\" style=\"background:#fff\">#{rects.join}</svg>)\nend\n\nshow_svg qr_svg(\"Chunky Bacon\")",
+            "probe": "->(svg) { m = QRCoder::QRCodeGenerator.new.CreateQrCode(\"Chunky Bacon\", QRCoder::QRCodeGenerator::ECCLevel.Q).module_matrix; cell = svg[/width=\"([\\d.]+)\"/, 1].to_f / m.count; want = []; m.each_with_index { |row, y| row.each_with_index { |dark, x| want << [x * cell, y * cell] if dark } }; got = svg.scan(/<rect\\b[^>]*>/).select { |r| r =~ /\\sx=\"/ }.map { |r| [r[/\\sx=\"([\\d.]+)\"/, 1].to_f, r[/\\sy=\"([\\d.]+)\"/, 1].to_f] }; [svg.start_with?(\"<svg\"), cell > 0 && got.sort == want.sort, got.size] }.(qr_svg(\"Chunky Bacon\"))",
+            "check": "probe.to_s.start_with?(\"[true, true, \") && code.match?(/module_matrix|ModuleMatrix/) && code.match?(/CreateQrCode|QRCodeGenerator/)",
+            "hint": "<code>bacon_svg</code> と同じく、ループは2つだよ。<code>data.module_matrix.each_with_index do |row, y|</code> の中に <code>row.each_with_index do |dark, x|</code>。<code>dark</code> なモジュールごとに <code>rects &lt;&lt; %(&lt;rect x=\"#{x * cell}\" y=\"#{y * cell}\" width=\"#{cell}\" height=\"#{cell}\"/&gt;)</code> だよ。"
+          }
+        ]
+      }
+    },
+    {
       "id": "spinel",
       "live": false,
       "spinel": true,
@@ -12154,6 +12408,174 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "def run_status(lines)\n  # DONEなら:done、\"ERROR x\"なら\"error: x\"、RUNNINGなら:running\n  :waiting\nend\n\nready = \"READY prremote-runtime/0.4.2 board=picow\"\n[run_status([ready, \"RUNNING\", \"hello\", \"DONE\"]),\n run_status([ready, \"RUNNING\", \"ERROR NoMethodError\"]),\n run_status([ready, \"RUNNING\", \"tick\"]),\n run_status([ready])]\n",
             "check": "result == [:done, \"error: NoMethodError\", :running, :waiting] && code.include?(\"def run_status\")",
             "hint": "<code>each</code>で行をたどって、状態を覚えておこう：<code>line == \"DONE\"</code>、<code>line.start_with?(\"ERROR \")</code>（理由は<code>line[6..-1]</code>）、<code>line == \"RUNNING\"</code>。最後にその状態を返せばいいよ。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "qr-rechnung",
+      "de": {
+        "title": "QR-Rechnungen schreiben und lesen",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Die Schweizer QR-Rechnung</h2><p>In der Schweiz liegt einer Rechnung ein Einzahlungsschein bei, unten auf der Seite – und seit 2020 ist das die <strong>QR-Rechnung</strong> (die alten orangen und roten Scheine gibt es seit Herbst 2022 nicht mehr). Ihr QR-Code enthält alles, was eine Bank braucht: auf welches Konto, wie viel, in welcher Währung, von wem, und eine Referenz, an der die Firma erkennt, welche Rechnung bezahlt wurde. Die Banking-App scannt ihn, und niemand tippt mehr eine 27-stellige Nummer ab.</p><p>Zwei Gems, beide reines Ruby: <a href='https://github.com/damoiser/qr-bills' target='_blank'>qr-bills</a> schreibt QR-Rechnungen, <a href='https://github.com/largo/swiss_qr' target='_blank'>swiss_qr</a> liest sie wieder und prüft jede Regel des Standards; den Code in einem Bild oder PDF findet es mit <a href='https://github.com/largo/qr_reader' target='_blank'>qr_reader</a>. Die Velowerkstatt und ihre Kundin sind erfunden, und die Kontonummern sind die Testnummern aus der Spezifikation der QR-Rechnung – hier fliesst kein Geld.</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"qr-bills\"\nrequire \"qr-bills\"\n\nangaben = QRBills.get_qr_params\nangaben[:bill_type] = QRBills.get_qrbill_with_qr_reference_type\nangaben[:output_params][:format] = \"qrcode\"   # nur der Code, kein HTML\nangaben[:qrcode_format] = \"svg\"\n\nrechnung = angaben[:bill_params]\nrechnung[:amount] = 84.50\nrechnung[:currency] = \"CHF\"\nrechnung[:reference_type] = \"QRR\"\nrechnung[:reference] = \"21 00000 00003 13947 14300 09017\"\nrechnung[:additionally_information] = \"Rechnung 2026-042, Kette und Bremsbeläge\"\nrechnung[:creditor][:iban] = \"CH44 3199 9123 0008 8901 2\"\nrechnung[:creditor][:address].merge!(\n  name: \"Velo Speck GmbH\", street_name: \"Musterstrasse\", building_number: \"1\",\n  postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\"\n)\nrechnung[:debtor][:address].merge!(\n  name: \"Pia Muster\", street_name: \"Beispielweg\", building_number: \"7\",\n  postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\"\n)\n\nsvg = QRBills.generate(angaben)[:output]\nshow_image svg, alt: \"Der QR-Code der Rechnung, mit dem Schweizerkreuz in der Mitte\"\ndownload_file svg, \"qr-code.svg\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Was ist passiert?</p><ul><li><code>QRBills.get_qr_params</code> gibt einen Hash mit allen Feldern, die meisten leer; wir füllen sie aus. <code>rechnung</code> ist der innere Teil, <code>angaben[:bill_params]</code> – wer ihn ändert, ändert auch <code>angaben</code>, es ist derselbe Hash.</li><li>Der <strong>Rechnungstyp</strong>: mit QR-Referenz (<code>QRR</code>), mit Creditor Reference (<code>SCOR</code>, beginnt mit RF) oder ohne Referenz (<code>NON</code>).</li><li>Eine <strong>QR-IBAN</strong> – die 5. bis 9. Stelle liegt zwischen 30000 und 31999 – ist das Konto für Rechnungen mit QR-Referenz. Die Referenz hat 27 Ziffern, die letzte ist eine Prüfziffer, aus den anderen berechnet. Daran erkennt die Firma, welche Rechnung bezahlt wurde.</li><li>Die IBAN gehört in <code>rechnung[:creditor][:iban]</code>: Die Adresse hat zwar auch ein Feld dafür, aber das Gem liest sie hier.</li><li><code>QRBills.generate</code> gibt einen Hash zurück; unter <code>:output</code> steht das SVG als String. <code>show_image</code> zeigt es, <code>download_file</code> bietet es als Datei an.</li></ul><p>Und was steht im Code? Gewöhnlicher Text, ein Feld pro Zeile:</p>"
+          },
+          {
+            "t": "c",
+            "code": "inhalt = QRGenerator.build_payload(rechnung)\nputs inhalt"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das ist das ganze Geheimnis: <code>SPC</code> (Swiss Payments Code), Version <code>0200</code>, Zeichensatz 1 (UTF-8), dann das Konto, die Empfängerin mit Adresstyp <code>S</code> (strukturiert: Strasse und Hausnummer in eigenen Feldern), sieben leere Zeilen (reserviert für einen «endgültigen Zahlungsempfänger», der noch nicht erlaubt ist), Betrag, Währung, die Zahlerin, Referenztyp und Referenz, die Mitteilung und <code>EPD</code> – End Payment Data. Die Zeilen trennt CR LF, wie in E-Mails.</p><p>Auf Papier steht der QR-Code in einem Zahlteil fester Grösse: die untersten 105 mm einer A4-Seite, links der <em>Empfangsschein</em>, den die Zahlerin behält, rechts der <em>Zahlteil</em> mit dem 46 mm grossen Code. Prawn (Lektion {{nr:pdf}}) zeichnet ihn:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"prawn\"\nrequire \"prawn\"\n\nangaben[:qrcode_format] = \"png\"\nFile.binwrite(\"qr.png\", QRBills.generate(angaben)[:output].to_blob)\n\nmm = 72 / 25.4   # PDF misst in Punkten: 1 mm sind 2,83 Punkte\nan = rechnung[:creditor][:address]\nvon = rechnung[:debtor][:address]\nzahlbar_an = [rechnung[:creditor][:iban], an[:name], \"#{an[:street_name]} #{an[:building_number]}\",\n              \"#{an[:postal_code]} #{an[:town]}\"]\nzahlbar_durch = [von[:name], \"#{von[:street_name]} #{von[:building_number]}\",\n                 \"#{von[:postal_code]} #{von[:town]}\"]\nbetrag = format(\"%.2f\", rechnung[:amount])\n\nPrawn::Document.generate(\"rechnung.pdf\", page_size: \"A4\", margin: 0) do\n  text_box \"Velo Speck GmbH\\nRechnung 2026-042\", at: [20 * mm, 277 * mm], size: 14\n  dash(3)\n  stroke_horizontal_line 0, bounds.width, at: 105 * mm   # der Zahlteil: die untersten 105 mm\n  stroke_vertical_line 0, 105 * mm, at: 62 * mm          # Empfangsschein | Zahlteil\n  undash\n\n  feld = lambda do |x, y, titel, zeilen|\n    text_box titel, at: [x * mm, y * mm], size: 6, style: :bold\n    text_box zeilen.join(\"\\n\"), at: [x * mm, (y - 3) * mm], size: 8\n  end\n\n  text_box \"Empfangsschein\", at: [5 * mm, 100 * mm], size: 11, style: :bold\n  feld.(5, 93, \"Konto / Zahlbar an\", zahlbar_an)\n  feld.(5, 70, \"Referenz\", [rechnung[:reference]])\n  feld.(5, 60, \"Zahlbar durch\", zahlbar_durch)\n\n  text_box \"Zahlteil\", at: [67 * mm, 100 * mm], size: 11, style: :bold\n  image \"qr.png\", at: [67 * mm, 88 * mm], width: 46 * mm\n  feld.(118, 100, \"Konto / Zahlbar an\", zahlbar_an)\n  feld.(118, 77, \"Referenz\", [rechnung[:reference]])\n  feld.(118, 67, \"Zusätzliche Informationen\", [rechnung[:additionally_information]])\n  feld.(118, 55, \"Zahlbar durch\", zahlbar_durch)\n\n  [5, 67].each do |x|   # Währung und Betrag stehen auf beiden Teilen\n    feld.(x, 37, \"Währung\", [rechnung[:currency]])\n    feld.(x + 15, 37, \"Betrag\", [betrag])\n  end\nend\nshow_pdf \"rechnung.pdf\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Koordinaten sind Millimeter mal <code>mm</code>; y zählt in PDF von der unteren Kante aufwärts, <code>105 * mm</code> ist also die Linie zum Abtrennen. <code>feld</code> ist ein kleines Lambda: ein Titel fett in 6 Punkt, darunter die Zeilen in 8 Punkt – die Grössen, die der Standard verlangt. Diesmal liefert qr-bills den Code als PNG, denn Prawn setzt PNG- und JPEG-Bilder. Es ist ein <code>ChunkyPNG::Image</code> wie in Lektion {{nr:gems}}. Der echte Standard hat noch mehr Regeln – Schriften, Eckmarken für einen leeren Betrag, das Scherensymbol –, und qr-bills kann die ganze Rechnung auch als HTML schreiben (<code>output_params[:format] = \"html\"</code>).</p><p>Jetzt andersherum: Jemand bekommt <code>rechnung.pdf</code> und will wissen, was zu zahlen ist. <strong>swiss_qr</strong> findet den Code mit qr_reader, entziffert ihn und zerlegt den Text:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"swiss_qr\"\ninstall_gem \"qr_reader\"   # findet den QR-Code und entziffert ihn\nrequire \"swiss_qr\"\n\ngelesen = SwissQr.read(\"rechnung.pdf\")\nputs gelesen.creditor.lines\nputs gelesen.formatted_iban, gelesen.qr_iban?\nputs \"#{gelesen.currency} #{gelesen.formatted_amount}\"\nputs gelesen.formatted_reference\nputs gelesen.unstructured_message\ngelesen.debtor.name"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>SwissQr.read</code> nimmt einen Dateinamen, ein IO wie <code>StringIO.new(bytes)</code> oder ein Bild wie das von ChunkyPNG und gibt die erste QR-Rechnung, die es findet, als <code>SwissQr::Bill</code> zurück: ein unveränderliches Objekt (ein <code>Data</code>, Lektion {{nr:tl-mixins}}) mit dem Betrag als <code>BigDecimal</code> (Lektion {{nr:bigdecimal}}) und den Adressen als eigene Objekte. Andere QR-Codes auf der Seite – etwa ein Link zum Webshop – überspringt es.</p><p>swiss_qr liest nicht nur, es prüft auch jede Regel: die Prüfziffern der IBAN und der Referenz, die Längen, den Zeichensatz. Ein Tippfehler in der Referenz fällt auf:</p>"
+          },
+          {
+            "t": "c",
+            "code": "tippfehler = inhalt.sub(\"09017\", \"09071\")   # zwei Ziffern vertauscht\nbegin\n  SwissQr.parse(tippfehler)\nrescue SwissQr::InvalidPayload => e\n  puts e.message\nend\nSwissQr.valid?(inhalt)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p><code>gem install qr-bills swiss_qr qr_reader</code>. swiss_qr bringt auch einen Befehl mit: <code>swiss_qr rechnung.pdf</code> gibt die Rechnung als JSON aus. Für echte Rechnungen brauchst du eine eigene (QR-)IBAN von deiner Bank; die QR-Referenz baut die Buchhaltung meist aus Kunden- und Rechnungsnummer, <code>QRBills.create_creditor_reference</code> macht aus einer eigenen Nummer eine RF-Referenz.</p></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://github.com/damoiser/qr-bills#readme' target='_blank'>qr-bills</a> · <a href='https://github.com/largo/swiss_qr#readme' target='_blank'>swiss_qr</a> · <a href='https://www.six-group.com/en/products-services/banking-services/payment-standardization/standards/qr-bill.html' target='_blank'>SIX: Standards zur QR-Rechnung</a></div><div class='task'><strong>Aufgabe:</strong> Glace Fuchs, ein (erfundener) Glacestand am Seeweg 3, 8000 Seldwyla, hat ein gewöhnliches Konto: IBAN <code>CH58 0079 1123 0008 8901 2</code>. Zu einer gewöhnlichen IBAN gehört keine QR-Referenz, also nimm den Rechnungstyp ohne Referenz (<code>QRBills.get_qrbill_without_reference_type</code>, <code>reference_type</code> <code>\"NON\"</code>, die Referenz bleibt leer). Erstelle eine QR-Rechnung über <strong>CHF 12.30</strong> an Kaz Muster, Bahnhofstrasse 2, 8000 Seldwyla, zeig den QR-Code als PNG mit <code>show_image</code> und lies ihn mit <code>SwissQr.read</code> wieder ein. Lass die gelesene Rechnung als letzten Wert stehen oder gib ihre IBAN und ihren Betrag aus.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Glace Fuchs: QR-Rechnung ohne Referenz über CHF 12.30,\n# als PNG zeigen und mit SwissQr.read wieder einlesen\n",
+            "check": "code.include?(\"SwissQr.read\") && images.any? && ->(bill, text) { bill.respond_to?(:iban) ? bill.iban == \"CH5800791123000889012\" && bill.formatted_amount == \"12.30\" && bill.reference_type == :non : text.delete(\" \").include?(\"CH5800791123000889012\") && text.match?(/12\\.30?(?!\\d)|0\\.123e2/) }.(result, output)",
+            "hint": "Kopier die erste Zelle und ändere sie: <code>get_qrbill_without_reference_type</code>, <code>reference_type = \"NON\"</code>, <code>qrcode_format = \"png\"</code>. <code>QRBills.generate(…)[:output]</code> ist dann ein ChunkyPNG-Bild, das du direkt an <code>show_image</code> und <code>SwissQr.read</code> geben kannst. Meldet SwissQr, der Name der Zahlerin fehle: Füll auch <code>[:debtor][:address]</code> aus."
+          }
+        ]
+      },
+      "en": {
+        "title": "Writing and reading QR-bills",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>The Swiss QR-bill</h2><p>In Switzerland a bill comes with a payment slip at the bottom of the page – and since 2020 that slip is the <strong>QR-bill</strong> (the old orange and red slips have been gone since autumn 2022). Its QR code holds everything a bank needs: which account, how much, in which currency, from whom, and a reference that tells the business which invoice was paid. A banking app scans it, and nobody types a 27-digit number any more.</p><p>Two gems, both pure Ruby: <a href='https://github.com/damoiser/qr-bills' target='_blank'>qr-bills</a> writes QR-bills, <a href='https://github.com/largo/swiss_qr' target='_blank'>swiss_qr</a> reads them back and checks every rule of the standard; it finds the code in an image or a PDF with <a href='https://github.com/largo/qr_reader' target='_blank'>qr_reader</a>. The bike shop and its customer are made up, and the account numbers are the test numbers from the QR-bill's specification – no money moves here.</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"qr-bills\"\nrequire \"qr-bills\"\n\nparams = QRBills.get_qr_params\nparams[:bill_type] = QRBills.get_qrbill_with_qr_reference_type\nparams[:output_params][:format] = \"qrcode\"   # just the code, no HTML\nparams[:qrcode_format] = \"svg\"\n\nbill = params[:bill_params]\nbill[:amount] = 84.50\nbill[:currency] = \"CHF\"\nbill[:reference_type] = \"QRR\"\nbill[:reference] = \"21 00000 00003 13947 14300 09017\"\nbill[:additionally_information] = \"Invoice 2026-042, chain and brake pads\"\nbill[:creditor][:iban] = \"CH44 3199 9123 0008 8901 2\"\nbill[:creditor][:address].merge!(\n  name: \"Velo Speck GmbH\", street_name: \"Musterstrasse\", building_number: \"1\",\n  postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\"\n)\nbill[:debtor][:address].merge!(\n  name: \"Pia Muster\", street_name: \"Beispielweg\", building_number: \"7\",\n  postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\"\n)\n\nsvg = QRBills.generate(params)[:output]\nshow_image svg, alt: \"The bill's QR code, with a Swiss cross in the middle\"\ndownload_file svg, \"qr-code.svg\""
+          },
+          {
+            "t": "h",
+            "html": "<p>What happened?</p><ul><li><code>QRBills.get_qr_params</code> hands out a Hash with every field, most of them empty; we fill them in. <code>bill</code> is the part inside, <code>params[:bill_params]</code> – changing it changes <code>params</code> too, it is the same Hash.</li><li>The <strong>bill type</strong>: with a QR reference (<code>QRR</code>), with a creditor reference (<code>SCOR</code>, starts with RF) or without a reference (<code>NON</code>).</li><li>A <strong>QR-IBAN</strong> – its 5th to 9th digits are between 30000 and 31999 – is the account for bills with a QR reference. The reference has 27 digits, the last one a check digit worked out from the others. It tells the business which invoice was paid.</li><li>The IBAN goes in <code>bill[:creditor][:iban]</code>: the address has a field for it as well, but the gem reads it from here.</li><li><code>QRBills.generate</code> returns a Hash; its <code>:output</code> is the SVG as a String. <code>show_image</code> shows it, <code>download_file</code> offers it as a file.</li></ul><p>And what is in the code? Plain text, one field per line:</p>"
+          },
+          {
+            "t": "c",
+            "code": "payload = QRGenerator.build_payload(bill)\nputs payload"
+          },
+          {
+            "t": "h",
+            "html": "<p>That is the whole secret: <code>SPC</code> (Swiss Payments Code), version <code>0200</code>, character set 1 (UTF-8), then the account, the creditor with address type <code>S</code> (structured: street and number in fields of their own), seven empty lines (kept for an \"ultimate creditor\" that is not allowed yet), amount, currency, the debtor, reference type and reference, the message and <code>EPD</code> – End Payment Data. The lines are separated by CR LF, as in e-mails.</p><p>On paper the QR code sits in a payment slip of a fixed size: the bottom 105 mm of an A4 page, on the left the <em>receipt</em> that the payer keeps, on the right the <em>payment part</em> with the code, 46 mm square. Prawn (lesson {{nr:pdf}}) draws it:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"prawn\"\nrequire \"prawn\"\n\nparams[:qrcode_format] = \"png\"\nFile.binwrite(\"qr.png\", QRBills.generate(params)[:output].to_blob)\n\nmm = 72 / 25.4   # PDF counts in points: 1 mm is 2.83 points\nto = bill[:creditor][:address]\nby = bill[:debtor][:address]\npayable_to = [bill[:creditor][:iban], to[:name], \"#{to[:street_name]} #{to[:building_number]}\",\n              \"#{to[:postal_code]} #{to[:town]}\"]\npayable_by = [by[:name], \"#{by[:street_name]} #{by[:building_number]}\",\n              \"#{by[:postal_code]} #{by[:town]}\"]\namount = format(\"%.2f\", bill[:amount])\n\nPrawn::Document.generate(\"invoice.pdf\", page_size: \"A4\", margin: 0) do\n  text_box \"Velo Speck GmbH\\nInvoice 2026-042\", at: [20 * mm, 277 * mm], size: 14\n  dash(3)\n  stroke_horizontal_line 0, bounds.width, at: 105 * mm   # the bill: the bottom 105 mm\n  stroke_vertical_line 0, 105 * mm, at: 62 * mm          # receipt | payment part\n  undash\n\n  field = lambda do |x, y, heading, lines|\n    text_box heading, at: [x * mm, y * mm], size: 6, style: :bold\n    text_box lines.join(\"\\n\"), at: [x * mm, (y - 3) * mm], size: 8\n  end\n\n  text_box \"Receipt\", at: [5 * mm, 100 * mm], size: 11, style: :bold\n  field.(5, 93, \"Account / Payable to\", payable_to)\n  field.(5, 70, \"Reference\", [bill[:reference]])\n  field.(5, 60, \"Payable by\", payable_by)\n\n  text_box \"Payment part\", at: [67 * mm, 100 * mm], size: 11, style: :bold\n  image \"qr.png\", at: [67 * mm, 88 * mm], width: 46 * mm\n  field.(118, 100, \"Account / Payable to\", payable_to)\n  field.(118, 77, \"Reference\", [bill[:reference]])\n  field.(118, 67, \"Additional information\", [bill[:additionally_information]])\n  field.(118, 55, \"Payable by\", payable_by)\n\n  [5, 67].each do |x|   # currency and amount are on both parts\n    field.(x, 37, \"Currency\", [bill[:currency]])\n    field.(x + 15, 37, \"Amount\", [amount])\n  end\nend\nshow_pdf \"invoice.pdf\""
+          },
+          {
+            "t": "h",
+            "html": "<p>The coordinates are millimetres times <code>mm</code>; in PDF, y counts up from the bottom edge, so <code>105 * mm</code> is the line to tear along. <code>field</code> is a small lambda: a heading in bold 6 point, the lines in 8 point below it – the sizes the standard asks for. This time qr-bills hands out the code as a PNG, because Prawn places PNG and JPEG images. It is a <code>ChunkyPNG::Image</code> as in lesson {{nr:gems}}. The real standard has more rules – fonts, corner marks for an empty amount, the scissors symbol – and qr-bills can also write the whole bill as HTML (<code>output_params[:format] = \"html\"</code>).</p><p>Now the other way round: someone receives <code>invoice.pdf</code> and wants to know what to pay. <strong>swiss_qr</strong> finds the code with qr_reader, decodes it and takes the text apart:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"swiss_qr\"\ninstall_gem \"qr_reader\"   # finds and decodes the QR code\nrequire \"swiss_qr\"\n\npaid = SwissQr.read(\"invoice.pdf\")\nputs paid.creditor.lines\nputs paid.formatted_iban, paid.qr_iban?\nputs \"#{paid.currency} #{paid.formatted_amount}\"\nputs paid.formatted_reference\nputs paid.unstructured_message\npaid.debtor.name"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>SwissQr.read</code> takes a file name, an IO such as <code>StringIO.new(bytes)</code> or an image like ChunkyPNG's, and returns the first QR-bill it finds as a <code>SwissQr::Bill</code>: an immutable object (a <code>Data</code>, lesson {{nr:tl-mixins}}) with the amount as a <code>BigDecimal</code> (lesson {{nr:bigdecimal}}) and the addresses as objects of their own. Other QR codes on the page – a link to a web shop, say – are skipped.</p><p>swiss_qr does not just read, it checks every rule too: the check digits of the IBAN and of the reference, the lengths, the character set. A typo in the reference is caught:</p>"
+          },
+          {
+            "t": "c",
+            "code": "typo = payload.sub(\"09017\", \"09071\")   # two digits swapped\nbegin\n  SwissQr.parse(typo)\nrescue SwissQr::InvalidPayload => e\n  puts e.message\nend\nSwissQr.valid?(payload)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p><code>gem install qr-bills swiss_qr qr_reader</code>. swiss_qr comes with a command as well: <code>swiss_qr invoice.pdf</code> prints the bill as JSON. For real bills you need an IBAN or QR-IBAN of your own from your bank; accounting software usually builds the QR reference from a customer and an invoice number, and <code>QRBills.create_creditor_reference</code> turns a number of your own into an RF reference.</p></div><div class='docs'><strong>Look it up:</strong> <a href='https://github.com/damoiser/qr-bills#readme' target='_blank'>qr-bills</a> · <a href='https://github.com/largo/swiss_qr#readme' target='_blank'>swiss_qr</a> · <a href='https://www.six-group.com/en/products-services/banking-services/payment-standardization/standards/qr-bill.html' target='_blank'>SIX: the QR-bill standards</a></div><div class='task'><strong>Task:</strong> Glace Fuchs, a (made-up) ice-cream stand at Seeweg 3, 8000 Seldwyla, has an ordinary account: IBAN <code>CH58 0079 1123 0008 8901 2</code>. An ordinary IBAN goes without a QR reference, so take the bill type without a reference (<code>QRBills.get_qrbill_without_reference_type</code>, <code>reference_type</code> <code>\"NON\"</code>, the reference stays empty). Make a QR-bill for <strong>CHF 12.30</strong> to Kaz Muster, Bahnhofstrasse 2, 8000 Seldwyla, show its QR code as a PNG with <code>show_image</code> and read it back with <code>SwissQr.read</code>. Leave the bill you read as the last value, or print its IBAN and amount.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Glace Fuchs: a QR-bill without a reference for CHF 12.30,\n# shown as a PNG and read back with SwissQr.read\n",
+            "check": "code.include?(\"SwissQr.read\") && images.any? && ->(bill, text) { bill.respond_to?(:iban) ? bill.iban == \"CH5800791123000889012\" && bill.formatted_amount == \"12.30\" && bill.reference_type == :non : text.delete(\" \").include?(\"CH5800791123000889012\") && text.match?(/12\\.30?(?!\\d)|0\\.123e2/) }.(result, output)",
+            "hint": "Copy the first cell and change it: <code>get_qrbill_without_reference_type</code>, <code>reference_type = \"NON\"</code>, <code>qrcode_format = \"png\"</code>. <code>QRBills.generate(…)[:output]</code> is then a ChunkyPNG image that you can hand straight to <code>show_image</code> and <code>SwissQr.read</code>. If SwissQr says the debtor's name is missing, fill in <code>[:debtor][:address]</code> too."
+          }
+        ]
+      },
+      "ja": {
+        "title": "QR請求書を書いて読む",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>スイスのQR請求書</h2><p>スイスでは、請求書のページの下に払込票が付いています。2020年からは、それが<strong>QR請求書</strong>（QR-bill）です（昔のオレンジと赤の払込票は2022年の秋になくなりました）。そのQRコードには、銀行が必要なものが全部入っています。どの口座に、いくら、どの通貨で、だれから。そして、どの請求書が支払われたかを会社が知るための参照番号です。バンキングアプリがそれをスキャンするので、27桁の番号を打ち込む人はもういません。</p><p>gemは2つで、どちらもピュアRubyです。<a href='https://github.com/damoiser/qr-bills' target='_blank'>qr-bills</a>はQR請求書を書き、<a href='https://github.com/largo/swiss_qr' target='_blank'>swiss_qr</a>はそれを読み戻して、規格のすべてのルールをチェックします。画像やPDFの中のコードは<a href='https://github.com/largo/qr_reader' target='_blank'>qr_reader</a>で見つけます。自転車屋さんとお客さんは架空のもので、口座番号はQR請求書の仕様書にあるテスト用の番号です。ここでお金は動きません。</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"qr-bills\"\nrequire \"qr-bills\"\n\nparams = QRBills.get_qr_params\nparams[:bill_type] = QRBills.get_qrbill_with_qr_reference_type\nparams[:output_params][:format] = \"qrcode\"   # HTMLではなく、コードだけ\nparams[:qrcode_format] = \"svg\"\n\nbill = params[:bill_params]\nbill[:amount] = 84.50\nbill[:currency] = \"CHF\"\nbill[:reference_type] = \"QRR\"\nbill[:reference] = \"21 00000 00003 13947 14300 09017\"\nbill[:additionally_information] = \"Invoice 2026-042, chain and brake pads\"\nbill[:creditor][:iban] = \"CH44 3199 9123 0008 8901 2\"\nbill[:creditor][:address].merge!(\n  name: \"Velo Speck GmbH\", street_name: \"Musterstrasse\", building_number: \"1\",\n  postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\"\n)\nbill[:debtor][:address].merge!(\n  name: \"Pia Muster\", street_name: \"Beispielweg\", building_number: \"7\",\n  postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\"\n)\n\nsvg = QRBills.generate(params)[:output]\nshow_image svg, alt: \"The bill's QR code, with a Swiss cross in the middle\"\ndownload_file svg, \"qr-code.svg\""
+          },
+          {
+            "t": "h",
+            "html": "<p>何が起きたのでしょう？</p><ul><li><code>QRBills.get_qr_params</code>は、すべての項目が入ったハッシュを返します。ほとんどは空なので、それを埋めていきます。<code>bill</code>は内側の部分<code>params[:bill_params]</code>です。これを変えると<code>params</code>も変わります。同じハッシュだからです。</li><li><strong>請求書の種類</strong>：QR参照番号つき（<code>QRR</code>）、クレジター参照番号つき（<code>SCOR</code>、RFで始まる）、参照番号なし（<code>NON</code>）。</li><li><strong>QR-IBAN</strong>（5桁目から9桁目が30000から31999のあいだ）は、QR参照番号つきの請求書のための口座です。参照番号は27桁で、最後の1桁はほかの桁から計算したチェックディジットです。これで会社は、どの請求書が支払われたかがわかります。</li><li>IBANは<code>bill[:creditor][:iban]</code>に入れます。住所にもIBANの項目がありますが、gemが読むのはこちらです。</li><li><code>QRBills.generate</code>はハッシュを返し、その<code>:output</code>がSVGの文字列です。<code>show_image</code>で表示し、<code>download_file</code>でファイルとしてダウンロードできるようにします。</li></ul><p>では、コードの中には何が入っているのでしょう？　ふつうのテキストで、1行に1項目です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "payload = QRGenerator.build_payload(bill)\nputs payload"
+          },
+          {
+            "t": "h",
+            "html": "<p>秘密はこれで全部です。<code>SPC</code>（Swiss Payments Code）、バージョン<code>0200</code>、文字セット1（UTF-8）。そのあとに口座、住所の種類<code>S</code>（構造化：通りと番地が別々の項目）の受取人、7つの空行（まだ使えない「最終受取人」のために取ってある）、金額、通貨、支払人、参照番号の種類と参照番号、メッセージ、そして<code>EPD</code>（End Payment Data）。行と行はメールと同じようにCR LFで区切られています。</p><p>紙の上では、QRコードは決まった大きさの払込票の中にあります。A4のページの下の105 mmで、左は支払った人が取っておく<em>受領証</em>、右は46 mm四方のコードがある<em>支払部分</em>です。Prawn（レッスン{{nr:pdf}}）で描いてみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"prawn\"\nrequire \"prawn\"\n\nparams[:qrcode_format] = \"png\"\nFile.binwrite(\"qr.png\", QRBills.generate(params)[:output].to_blob)\n\nmm = 72 / 25.4   # PDFの単位はポイント：1 mmは2.83ポイント\nto = bill[:creditor][:address]\nby = bill[:debtor][:address]\npayable_to = [bill[:creditor][:iban], to[:name], \"#{to[:street_name]} #{to[:building_number]}\",\n              \"#{to[:postal_code]} #{to[:town]}\"]\npayable_by = [by[:name], \"#{by[:street_name]} #{by[:building_number]}\",\n              \"#{by[:postal_code]} #{by[:town]}\"]\namount = format(\"%.2f\", bill[:amount])\n\nPrawn::Document.generate(\"invoice.pdf\", page_size: \"A4\", margin: 0) do\n  text_box \"Velo Speck GmbH\\nInvoice 2026-042\", at: [20 * mm, 277 * mm], size: 14\n  dash(3)\n  stroke_horizontal_line 0, bounds.width, at: 105 * mm   # 払込票：下の105 mm\n  stroke_vertical_line 0, 105 * mm, at: 62 * mm          # 受領証 | 支払部分\n  undash\n\n  field = lambda do |x, y, heading, lines|\n    text_box heading, at: [x * mm, y * mm], size: 6, style: :bold\n    text_box lines.join(\"\\n\"), at: [x * mm, (y - 3) * mm], size: 8\n  end\n\n  text_box \"Receipt\", at: [5 * mm, 100 * mm], size: 11, style: :bold\n  field.(5, 93, \"Account / Payable to\", payable_to)\n  field.(5, 70, \"Reference\", [bill[:reference]])\n  field.(5, 60, \"Payable by\", payable_by)\n\n  text_box \"Payment part\", at: [67 * mm, 100 * mm], size: 11, style: :bold\n  image \"qr.png\", at: [67 * mm, 88 * mm], width: 46 * mm\n  field.(118, 100, \"Account / Payable to\", payable_to)\n  field.(118, 77, \"Reference\", [bill[:reference]])\n  field.(118, 67, \"Additional information\", [bill[:additionally_information]])\n  field.(118, 55, \"Payable by\", payable_by)\n\n  [5, 67].each do |x|   # 通貨と金額は両方に入る\n    field.(x, 37, \"Currency\", [bill[:currency]])\n    field.(x + 15, 37, \"Amount\", [amount])\n  end\nend\nshow_pdf \"invoice.pdf\""
+          },
+          {
+            "t": "h",
+            "html": "<p>座標はミリメートルに<code>mm</code>を掛けたものです。PDFではyが下の端から上に数えるので、<code>105 * mm</code>は切り取り線です。<code>field</code>は小さなラムダで、太字6ポイントの見出しと、その下に8ポイントの行を書きます。規格が求める大きさです。今回はqr-billsが、レッスン{{nr:gems}}で使った<code>ChunkyPNG::Image</code>としてコードを返します。PNG画像なら、Prawnが配置できるからです。本物の規格にはもっとルールがあります（フォント、金額が空のときのコーナーマーク、はさみの記号など）。qr-billsは請求書全体をHTMLで書くこともできます（<code>output_params[:format] = \"html\"</code>）。</p><p>今度は逆です。だれかが<code>invoice.pdf</code>を受け取って、いくら払えばいいか知りたいとします。<strong>swiss_qr</strong>はqr_readerでコードを見つけ、読み取って、テキストを分解します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"swiss_qr\"\ninstall_gem \"qr_reader\"   # QRコードを見つけて読み取る\nrequire \"swiss_qr\"\n\npaid = SwissQr.read(\"invoice.pdf\")\nputs paid.creditor.lines\nputs paid.formatted_iban, paid.qr_iban?\nputs \"#{paid.currency} #{paid.formatted_amount}\"\nputs paid.formatted_reference\nputs paid.unstructured_message\npaid.debtor.name"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>SwissQr.read</code>は、ファイル名、<code>StringIO.new(bytes)</code>のようなIO、またはChunkyPNGのような画像を受け取り、最初に見つけたQR請求書を<code>SwissQr::Bill</code>として返します。金額は<code>BigDecimal</code>（レッスン{{nr:bigdecimal}}）で、住所はそれぞれ独自のオブジェクトです。全体は変更できないオブジェクト、つまり<code>Data</code>（レッスン{{nr:tl-mixins}}）です。ページの上のほかのQRコード（たとえばウェブショップへのリンク）は飛ばします。</p><p>swiss_qrは読むだけでなく、すべてのルールをチェックします。IBANと参照番号のチェックディジット、長さ、文字セット。参照番号の打ち間違いも見つかります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "typo = payload.sub(\"09017\", \"09071\")   # 2つの数字が入れ替わった\nbegin\n  SwissQr.parse(typo)\nrescue SwissQr::InvalidPayload => e\n  puts e.message\nend\nSwissQr.valid?(payload)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p><code>gem install qr-bills swiss_qr qr_reader</code>。swiss_qrにはコマンドも付いています。<code>swiss_qr invoice.pdf</code>で請求書をJSONとして表示します。本物の請求書には、銀行からもらう自分のIBANかQR-IBANが必要です。QR参照番号はふつう会計ソフトが顧客番号と請求書番号からつくります。<code>QRBills.create_creditor_reference</code>は、自分の番号をRF参照番号にします。</p></div><div class='docs'><strong>調べてみよう：</strong><a href='https://github.com/damoiser/qr-bills#readme' target='_blank'>qr-bills（英語）</a>・<a href='https://github.com/largo/swiss_qr#readme' target='_blank'>swiss_qr（英語）</a>・<a href='https://www.six-group.com/en/products-services/banking-services/payment-standardization/standards/qr-bill.html' target='_blank'>SIX：QR請求書の規格（英語）</a></div><div class='task'><strong>課題：</strong>Glace Fuchsは、Seeweg 3, 8000 Seldwylaにある（架空の）アイスクリーム屋さんで、ふつうの口座を持っています。IBANは<code>CH58 0079 1123 0008 8901 2</code>です。ふつうのIBANにはQR参照番号を付けないので、参照番号なしの種類にします（<code>QRBills.get_qrbill_without_reference_type</code>、<code>reference_type</code>は<code>\"NON\"</code>、参照番号は空のまま）。Kaz Muster, Bahnhofstrasse 2, 8000 Seldwyla宛てに<strong>CHF 12.30</strong>のQR請求書をつくり、そのQRコードをPNGとして<code>show_image</code>で表示して、<code>SwissQr.read</code>で読み戻してください。読んだ請求書を最後の値として残すか、そのIBANと金額を出力します。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Glace Fuchs：参照番号なしのQR請求書（CHF 12.30）を\n# PNGで表示して、SwissQr.readで読み戻す\n",
+            "check": "code.include?(\"SwissQr.read\") && images.any? && ->(bill, text) { bill.respond_to?(:iban) ? bill.iban == \"CH5800791123000889012\" && bill.formatted_amount == \"12.30\" && bill.reference_type == :non : text.delete(\" \").include?(\"CH5800791123000889012\") && text.match?(/12\\.30?(?!\\d)|0\\.123e2/) }.(result, output)",
+            "hint": "最初のセルをコピーして変えてみて：<code>get_qrbill_without_reference_type</code>、<code>reference_type = \"NON\"</code>、<code>qrcode_format = \"png\"</code>。そうすると<code>QRBills.generate(…)[:output]</code>はChunkyPNGの画像になるから、そのまま<code>show_image</code>と<code>SwissQr.read</code>に渡せるよ。支払人の名前がないってSwissQrに言われたら、<code>[:debtor][:address]</code>も埋めてね。"
           }
         ]
       }

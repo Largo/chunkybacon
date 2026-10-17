@@ -425,6 +425,10 @@ module ChunkyShell
       JSG.w.ensurePicoRuby if @course.picoruby?(idx)
       # the Pico's bench (pico_board.js) only for a lesson with a board
       JSG.w.ensurePicoBoard if @course.picoruby?(idx) && cells.any? { |cell| code_cell?(cell) && @course.board?(cell) }
+      # IronRuby (.NET in WebAssembly, ~20 MB) in a Web Worker, only for the
+      # IronRuby lesson (html/ironruby_lab.js); its status line is in the
+      # lesson's first cell
+      JSG.w.ensureIronRuby if @course.ironruby?(idx)
       @rendered_lesson_id = id
       # a lesson opened from a link is where the learner left off, too (only
       # a change is written: every write reaches a connected folder)

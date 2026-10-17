@@ -62,5 +62,8 @@ module ChunkyShell
     end
 
     def board?(cell) = !cell[:board].nil?
+    # true for a lesson whose cells run on IronRuby (.NET in WebAssembly)
+    # instead of CRuby ("engine": "ironruby", the IronRuby lesson: html/ironruby_lab.js)
+    def ironruby?(idx) = @lessons[idx][:engine] == "ironruby"
   end
 end

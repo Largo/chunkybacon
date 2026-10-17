@@ -295,6 +295,7 @@ parses, changes and rewrites it; prose edits can be done by hand.
   "live": false,   // optional: no live runs in this lesson (§6b)
   "stepper": true, // optional: ⏯ beside ▶ on its code cells (§6)
   "engine": "picoruby", // optional: cells and IRBs run on PicoRuby.wasm, not CRuby (§6m)
+                        // or "ironruby": cells run on IronRuby (.NET in wasm) (§6s)
   "pico": { "board": "pico2w" }, // optional: a Pico lesson - cells with "board" get the bench (§6r)
   "de": { "title": "HTML parsen", "cells": [ ... ] },   // no number: it is the lesson's place (§3)
   "en": { "title": "Parsing HTML", "cells": [ ... ] },
@@ -366,6 +367,7 @@ Cells, per language:
 |---|---|---|
 | `h` | `html` | prose block; `<div class='task'>` = the exercise text, `<div class='offweb'>` = "on your machine" box, `<div class='docs'>` = "look it up": links into the official docs (one per lesson, right before the task), `<button type='button' class='cheat-link' data-cheat='strings'>` = opens the cheat sheet (at a section if named) |
 | `c` | `code` | runnable demo cell |
+| `x` | `code`, `probe`, `check`, `hint` | (an `"engine": "ironruby"` lesson) `probe` is IronRuby code run after the learner's, its inspect is the check's local `probe` (§6s) |
 | `c` | `code`, `raises` | a demo that fails on purpose (the errors lesson): `raises` names the error class, and the harness checks the cell raises exactly that |
 | `x` | `code`, `check`, `hint` | the ONE exercise cell of the lesson; `check` is Ruby evaluated in the lesson binding with locals `output`, `result`, `code`, `images`, `downloads`, `audios` (the WAVs `show_audio` got), `games` (copies of the games `show_game` made, to play headless) |
 | `c`/`x` | `tabs` | Pico lessons (§6r): more files of the cell, each a tab beside `code` (the main file, `app.rb`, or `main` if given). `{"name": "epd2in13.rb", "src": "pico/lib/en/epd2in13.rb"}` is fetched and read-only; `{"name": "dechunk.rb", "code": "...", "readonly": false}` is inline and editable (saved per learner). The worker writes them to `/lib`, the code says `require "epd2in13"` |
@@ -571,6 +573,21 @@ bigdecimal (→ bigdecimal-pure); hexapdf depends on openssl and strscan, both
 compiled into the wasm (`NATIVE_GEMS` + `builtin?`; `tools/build_gem_cache.rb`
 skips them as `BUILTIN`). In Chrome: both install from the cache in 0.5 s,
 a 2-page Prawn PDF takes 0.12 s, HexaPDF open + stamp + write 0.17 s.
+
+The QR-bill lesson (`qr-rechnung`) caches qr-bills, rqrcode,
+rqrcode_core, swiss_qr and qr_reader - all pure Ruby. qr-bills wants
+rqrcode below 3, so `PINNED` holds rqrcode 2.2.0 and its rqrcode_core
+1.2.0 (the cache tool takes the latest version and does not read version
+requirements). swiss_qr depends on bigdecimal (→ bigdecimal-pure) and loads
+qr_reader only when it reads an image; qr_reader is not a declared
+dependency, so the lesson installs it itself. qr_reader 0.0.3 or newer is
+needed: 0.0.2 crashed ruby.wasm on PNG and Flate data (zlib called with a
+block). In Chrome: the three gems install from the cache in 0.4 s, a code as
+SVG or PNG takes about 0.6 s, `SwissQr.read` on the 1024 px PNG or on the
+lesson's Prawn PDF about 1 s. Traps: qr-bills reads the IBAN from
+`bill_params[:creditor][:iban]`, not from the address hash its own skeleton
+puts it in, and writes the address type `S` for an empty debtor, which
+swiss_qr rejects (the exercise's hint says so).
 
 ## 5. Browser-environment fixups (in `main.rb`, top)
 
@@ -2114,6 +2131,111 @@ files in `tmp/pico-lessons/`). Lesson files are written by generators
 there (`gen_group1.rb` .. `gen_group3.rb`) and put into lessons.js by
 `tmp/insert_pico.js`, their SOLUTIONS by `tmp/insert_solutions.rb`.
 
+## 6s. IronRuby: .NET in the page (lesson `ironruby`)
+
+Lesson `ironruby` (`"engine": "ironruby"`, `"live": false`, after
+`picoruby`) runs its cells on **IronRuby 4.0** - Ruby written in C#, on
+the DLR - from the `wasm` branch of
+[Largo/ironruby](https://github.com/Largo/ironruby): .NET 10's browser-wasm
+runtime (Mono, AOT-compiled), Prism compiled to WebAssembly, IronRuby's
+standard library in a zip. What the lesson shows off is .NET interop: QRCoder
+(NuGet, MIT) makes a QR code as PNG bytes, the `module_matrix` drawn with
+`puts` and as SVG in bacon colours, a Swiss QR-bill (nested C# classes,
+static factories, enums, `System::Decimal`, `nil` for `null`),
+`System::Numerics::Complex` with C# operators (a Mandelbrot in text), and
+Markdig (NuGet, BSD-2-Clause) with `using_clr_extensions`. The exercise:
+`qr_svg(text, cell = 6)`, one `<rect>` per dark module.
+
+- **Not in git.** `tools/vendor_ironruby.rb` puts the bundle (105 files,
+  70 MB, 20 MB as the `.gz` copies it writes) and the two NuGet DLLs into
+  `html/assets/ironruby/` (gitignored), every file checked against the
+  SHA-256s in `tools/ironruby.json`; the nupkgs come from nuget.org, checked
+  too. Stock the host once with `ruby tools/vendor_ironruby.rb --from
+  <ironruby checkout>/wasm/dist` (built from the commit the JSON names:
+  `wasm/build.sh`, AOT, ~8 min); that keeps the bundle in `.cache/ironruby/`,
+  from which `tools/after_deploy.sh` reruns it (a no-op while current). A
+  new IronRuby build: `--pin --from DIR`, set `"commit"`, rerun with
+  `--from`. It writes `MANIFEST.json` (the sizes the progress bar counts),
+  `NOTICE.md`, `IRONRUBY_VERSION.txt` and `licenses/` (from
+  `tools/ironruby-licenses/`, in git). `--check` says whether it is the
+  pinned one.
+- **nginx**: `location ^~ /assets/ironruby/` - `Cache-Control: no-cache`
+  (.NET's file names carry no hash, so a cached `dotnet.native.wasm` must
+  not meet a newer `dotnet.js`; unchanged files are a 304), the types
+  (`.wasm`, `.dll`, `.zip`), and `gzip_static` sends the `.gz` copies. The
+  official nginx image has no brotli, so the dist's `.br` files are not
+  copied.
+- **The worker** (`ironruby_worker.js`, a module Worker started by
+  `ironruby_lab.js`'s `ensureIronRuby` when the lesson opens -
+  `Course#ironruby?` in the shell; no other lesson loads a byte of it):
+  imports `assets/ironruby/ironruby.js` (the bundle's `bootIronRuby`, which
+  sets `dotnetSidecar` so dotnet.js boots inside a worker), loads
+  `nuget/QRCoder.dll`, writes `ironruby_lab.rb` to
+  `/ironruby/lib/lab_display.rb` and requires it (no cell file name, so a
+  cell's line numbers are its own), then `reset` (no locals). Markdig.dll
+  loads the first time a cell (or a cell above it) names `Markdig`. The
+  progress bar: `fetch` is wrapped and counts the decoded bytes of the
+  manifest's files as they arrive - a PerformanceObserver only heard of
+  them after .NET's start, which holds the thread. At 99 % the status line
+  says "IronRuby is starting" (about 2 s of .NET and the `ruby4.rb`
+  prelude). Measured on the dev box: 20.4 MB over the wire, ready 3.4 s
+  after the lesson opened with an empty cache; cells 100-560 ms.
+- **One binding**, as CRuby's: IronRuby's `run` keeps the top-level locals,
+  so the kernel (`start_ironruby_run` in `main.rb`) sends the cells above
+  that have not run in the worker yet along (`EarlierCells`, as the JRuby
+  lesson does), and they run first, quietly. `chunkyIronRuby.reset` (a new
+  page, ↺) sends `fresh` (`ir.reset()`: the locals go, methods and
+  constants stay - the "already initialized constant" warnings of a cell
+  run again are filtered out of its output).
+- **Answers** come as `chunky:ironruby` events and are shown by
+  `show_picoruby_run` (values as `PicoRubyCells::Value`, errors as CRuby's
+  class of that name, CRuby's Prism explains a syntax error before the
+  code goes out). The pictures: `show_png` / `show_svg` / `show_html` in
+  IronRuby print `\u0001LAB:<kind>:<base64>` lines; `IronRubyCells.split`
+  (`ironruby_cells.rb`) takes them out of the output and shows them below
+  it (PNG at its own size, SVG, HTML in an `<iframe sandbox="">`). Output
+  with `█` gets `.qr-art` (line-height 1, black on white: it scans).
+- **The check has two halves**: the exercise cell's `"probe"` is IronRuby
+  code the worker runs right after the learner's (it calls `qr_svg`, as a
+  lambda so it leaves no locals); its inspect reaches the CRuby `"check"`
+  as the local `probe`. The check wants `[true, true, ...]` (an `<svg>`
+  whose `<rect>`s with an `x` sit exactly on the dark modules QRCoder
+  makes for "Chunky Bacon" - 328 of them, at the cell size the svg's
+  `width` implies; a background rect without `x` is fine, a rect for every
+  module or for the light ones is not) and `module_matrix`/`ModuleMatrix`
+  and `CreateQrCode`/`QRCodeGenerator` in the code.
+- **Stopping**: 30 s per run, and ■ Stop in the cell's output while it runs;
+  both end the worker and start a new one at once (cached: about 1.5 s),
+  and the message says the variables are gone.
+- **Gotchas the lesson teaches** (IronRuby, not wasm): enum values are
+  methods (`ECCLevel.Q`, not `ECCLevel::Q`); a snake_case name with a
+  two-letter word does not round-trip (`create_qr_code` -> `CreateQRCode`,
+  but C# says `CreateQrCode`), use the C# spelling; Ruby has its own
+  `Complex`, so .NET's gets a constant (`NetComplex`); C# extension methods
+  need `using_clr_extensions`.
+- **Found on the way, for IronRuby upstream** (not blocking):
+  `RubyUtils.TryUnmangleName` should round-trip the names `methods`
+  lists (`create_qr_code` is listed and is a NoMethodError);
+  `gen.CreateQrCode(bill)` with a `SwissQrCode` payload came out
+  ISO-8859-1 and version 10, although the payload asks for UTF-8 and level M
+  - possibly IronRuby picking another overload; the lesson passes
+  `CreateQrCode(payload, bill.ecc_level, true)` (UTF-8, verified with
+  qr_reader); once any code runs `refine Object` every call is ~50x slower
+  (not used here); the `wasm` branch is not built by IronRuby's CI.
+- Offline mode (§6c) does not include the runtime: offline, the lesson
+  says IronRuby could not be loaded. Not in the workshop or the embed.
+- **Deploy to chunkybacon.idogawa.com**: the Hetzner hook rsyncs
+  `html/assets/ironruby/` there after `html/assets/spinel/`
+  (`publish_ironruby`; a failure leaves the retry marker, like Spinel's).
+  The host's `.cache/ironruby/` was stocked once with `--from` on
+  2026-10-17. Never run the vendor tool on the Linode.
+- Tests: `test/check_harness.rb` runs every cell above the exercise, the
+  starter and both solutions on the real bundle under Node
+  (`test/ironruby_node.mjs`, ~3 s per language; skipped when
+  `html/assets/ironruby/` is missing); `test/ironruby_test.mjs` the rest in
+  a browser (boot and its bar, every cell's output and pictures, the
+  exercise, a cell run first, ■ Stop, a new page).
+
 ## 6n. Spinel: a compiler in the page (lesson `spinel`)
 
 [Spinel](https://github.com/matz/spinel) is Matz's ahead-of-time compiler:
@@ -2528,6 +2650,8 @@ ruby pico_laptop_test.rb                 # pico_laptop.rb, pico-ble's laptop cel
 node pico_wasm_test.mjs                  # probes + every Pico demo cell on real PicoRuby.wasm, ~2 min
 ruby ../tools/vendor_picoruby_mrblib.rb --check  # the vendored mrblib is unchanged
 BASE=http://127.0.0.1:8011/ node pico_lessons_test.mjs de en ja   # the Pico lessons in a browser, ~2 min per language
+BASE=http://127.0.0.1:8011/ node ironruby_test.mjs  # the IronRuby lesson (§6s), ~1 min; needs html/assets/ironruby/
+ruby ../tools/vendor_ironruby.rb --check            # html/assets/ironruby/ is the pinned IronRuby bundle
 ```
 
 The CRuby harnesses exercise the real `browser_gems.rb` with `File.read`
@@ -2583,6 +2707,7 @@ is rerun to update it:
 | sql.js | `html/assets/sqljs/` | 1 MB | `tools/vendor_sqljs.rb` | |
 | Herb's parser | `html/assets/herb/` | 2 MB | `tools/vendor_herb.rb` | |
 | ruby2d's Ruby | `html/assets/ruby2d/` | 0.2 MB | `tools/vendor_ruby2d.rb` | SHA-256 from rubygems.org |
+| IronRuby (.NET 10 wasm) + QRCoder, Markdig | `html/assets/ironruby/` (not in git, §6s) | 70 MB (20 MB .gz) | `tools/vendor_ironruby.rb` | `tools/vendor_ironruby.rb --check` |
 | the gem cache | `html/gems/cache/` | 11 MB | `tools/build_gem_cache.rb` | |
 
 Afterwards `tools/compress_assets.rb` (the `.gz` copies) and

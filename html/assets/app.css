@@ -1379,6 +1379,49 @@ kbd {
   width: auto;
   image-rendering: auto;
 }
+/* The IronRuby lesson ("engine": "ironruby", ironruby_cells.rb): a PNG from
+   .NET at its own size (a QR code's modules are its pixels: scaled down
+   to 160px a phone may not read it), a Markdown table in a sandboxed frame */
+.cell-image.ironruby-png { width: auto; }
+.ironruby-html {
+  display: block;
+  width: 100%;
+  height: 14rem;
+  margin: 0.4rem 0;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: #fff;
+}
+/* a QR code drawn with puts (██): one line on top of the next, no gaps,
+   dark on white, so a phone reads it */
+.cell-stdout.qr-art {
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: pre;
+  width: fit-content;
+  background: #ffffff;
+  color: #000000;
+}
+/* "IronRuby is starting ...": the lesson's status line with its bar
+   (ironruby_lab.js), and ■ Stop in a cell's output while it runs */
+.ironruby-status { font-size: 0.85rem; color: var(--ink-soft); }
+.ironruby-status:empty { display: none; }
+.ironruby-status progress { display: block; width: 100%; max-width: 22rem; margin-top: 0.3rem; accent-color: #68217a; }
+.ironruby-status progress[hidden] { display: none; }
+.ironruby-status[data-state="download"] .ironruby-status-text::before,
+.ironruby-status[data-state="boot"] .ironruby-status-text::before { content: "⏳ " / ""; }
+.ironruby-status[data-state="ready"] .ironruby-status-text::before { content: "✅ " / ""; }
+.ironruby-status[data-state="failed"] { color: #b3261e; }
+.ironruby-stop {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.15rem 0.7rem;
+  border-radius: 0.4rem;
+  border: 1px solid #b3261e;
+  background: transparent;
+  color: #b3261e;
+  cursor: pointer;
+}
 /* show_pdf: the browser's own PDF viewer, about one page tall */
 .cell-pdf {
   display: block;
