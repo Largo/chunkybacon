@@ -1985,8 +1985,11 @@ Markdig (NuGet, BSD-2-Clause) with `using_clr_extensions`. The exercise:
   code the worker runs right after the learner's (it calls `qr_svg`, as a
   lambda so it leaves no locals); its inspect reaches the CRuby `"check"`
   as the local `probe`. The check wants `[true, true, ...]` (an `<svg>`
-  with more than 200 rects - 328 for "Chunky Bacon") and `module_matrix`/
-  `ModuleMatrix` and `CreateQrCode`/`QRCodeGenerator` in the code.
+  whose `<rect>`s with an `x` sit exactly on the dark modules QRCoder
+  makes for "Chunky Bacon" - 328 of them, at the cell size the svg's
+  `width` implies; a background rect without `x` is fine, a rect for every
+  module or for the light ones is not) and `module_matrix`/`ModuleMatrix`
+  and `CreateQrCode`/`QRCodeGenerator` in the code.
 - **Stopping**: 30 s per run, and ■ Stop in the cell's output while it runs;
   both end the worker and start a new one at once (cached: about 1.5 s),
   and the message says the variables are gone.

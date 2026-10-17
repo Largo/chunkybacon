@@ -281,6 +281,15 @@ IRONRUBY_SOLUTIONS = [<<~'RUBY', <<~'RUBY'].freeze
     qr_svg("Chunky Bacon").size
   RUBY
 
+# ...and answers that look right but are not: a rect for every module, all
+# rects on one spot, the light modules. Each must fail the check (the probe
+# compares the rects with QRCoder's dark modules, not just their number).
+IRONRUBY_WRONG = [
+  %(rects << %(<rect x="\#{x * cell}" y="\#{y * cell}" width="\#{cell}" height="\#{cell}"/>)),
+  %(rects << %(<rect x="0" y="0" width="\#{cell}" height="\#{cell}"/>) if dark),
+  %(rects << %(<rect x="\#{x * cell}" y="\#{y * cell}" width="\#{cell}" height="\#{cell}"/>) unless dark)
+].map { |line| IRONRUBY_SOLUTIONS.first.sub(/^ *rects << .*$/, "      " + line) }.freeze
+
 SOLUTIONS = {
   "hallo" => {
     "de" => [%(puts "Hallo, Welt!"), %("Hallo, Welt!")],
@@ -1435,7 +1444,8 @@ def check_ironruby(lesson, lang, cells, exercise_at)
   exercise = cells[exercise_at]
   solutions = SOLUTIONS.fetch(lesson["id"]).fetch(SOLUTION_LANG.fetch(lang, lang))
   earlier = EarlierCells.before(exercise_at, cells, {}) { |i| cells[i]["code"] }
-  variants = [["starter", exercise["code"]]] + solutions.each_with_index.map { |s, i| ["solution#{i + 1}", s] }
+  variants = [["starter", exercise["code"]]] + IRONRUBY_WRONG.each_with_index.map { |s, i| ["wrong#{i + 1}", s] } +
+             solutions.each_with_index.map { |s, i| ["solution#{i + 1}", s] }
   runs = earlier.map { |_, code| { "code" => code } } +
          variants.map { |_, code| { "code" => code, "probe" => exercise["probe"] } }
   out, err, status = Open3.capture3("node", IRONRUBY_NODE, stdin_data: JSON.generate("runs" => runs))
@@ -1454,7 +1464,8 @@ def check_ironruby(lesson, lang, cells, exercise_at)
   end
   variants.each_with_index do |(label, candidate), i|
     answer = answers[earlier.size + i]
-    if !answer["ok"] && label != "starter"
+    starter_like = label == "starter" || label.start_with?("wrong")
+    if !answer["ok"] && !starter_like
       puts "FAIL #{where} (#{label}): raised #{answer.dig("error", "class")}: #{answer.dig("error", "message")}"
       failures += 1
       next
@@ -1471,10 +1482,10 @@ def check_ironruby(lesson, lang, cells, exercise_at)
     rescue Exception
       false
     end
-    if label == "starter" && passed
-      puts "FAIL #{where}: starter code already passes check! (probe #{answer["probe"].inspect})"
+    if starter_like && passed
+      puts "FAIL #{where}: #{label} code passes check! (probe #{answer["probe"].inspect})"
       failures += 1
-    elsif label != "starter" && !passed
+    elsif !starter_like && !passed
       puts "FAIL #{where} (#{label}): does not pass check (probe #{answer["probe"].inspect})"
       failures += 1
     end
