@@ -1293,6 +1293,68 @@ kbd {
 }
 .cell-earlier::before { content: "↑ " / ""; }
 
+/* The JRuby lesson ("engine": "jruby", main.rb add_engine_badge): which Ruby
+   ran the cell - JRuby in its worker or the page's CRuby - and how long its
+   own run took; under the exercise, what CRuby answered for the same code */
+.cell-engine {
+  display: inline-block;
+  margin: 0 0 0.35rem;
+  padding: 0.05rem 0.45rem;
+  border-radius: 0.6rem;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  border: 1px solid var(--rule);
+}
+.cell-engine.is-jruby { border-color: #c0392b; }
+.cell-engine.is-cruby { border-color: #8d6e00; }
+.cell-engine.is-compare { display: block; width: fit-content; margin: 0.4rem 0 0; }
+/* a QR code of half blocks (█▀▄): one line on top of the next, no gaps, so
+   a phone reads it - dark on light, as a scanner expects */
+.cell-stdout.blocks {
+  line-height: 1;
+  font-size: 0.8rem;
+  letter-spacing: 0;
+  white-space: pre;
+  width: fit-content;
+  background: #ffffff;
+  color: #000000;
+}
+/* ...drawn as an SVG instead (main.rb, JRubyCells.blocks_svg): square
+   modules whatever the font; the text stays in the page, out of sight */
+.cell-blocks { display: block; max-width: 100%; height: auto; margin: 0.3rem 0; background: #ffffff; }
+.cell-stdout.blocks.is-drawn {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+/* the JRuby lesson's Swing bonus: a preview until the click, then the
+   iframe with JRuby on CheerpJ (jruby_lab.js, jruby_swing.html) */
+.jruby-swing { margin: 0.8rem 0; }
+.jruby-swing-preview { display: block; max-width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 0.4rem; margin-bottom: 0.6rem; }
+.lessonText button.jruby-swing-start {
+  font: inherit;
+  font-weight: 600;
+  padding: 0.35rem 1rem;
+  border-radius: 0.4rem;
+  border: 1px solid #c0392b;
+  background: #c0392b;
+  color: #ffffff;
+  cursor: pointer;
+}
+.jruby-swing-frame { display: block; width: 100%; height: 640px; border: 1px solid var(--rule); border-radius: 0.4rem; background: var(--paper); }
+/* "JRuby is starting ...": the lesson's status line (jruby_lab.js) */
+.jruby-status {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.jruby-status:empty { display: none; }
+.jruby-status[data-state="download"]::before,
+.jruby-status[data-state="boot"]::before { content: "⏳ " / ""; }
+.jruby-status[data-state="ready"]::before { content: "☕ " / ""; }
+.jruby-status[data-state="failed"] { color: #b3261e; }
+
 .cell-out {
   border-top: 1px solid var(--rule);
   padding: 0.6rem 0.9rem;

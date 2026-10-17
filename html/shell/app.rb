@@ -423,6 +423,9 @@ module ChunkyShell
       # a second PicoRuby (the same 0.9 MB, cached) in a Web Worker, only for
       # a lesson whose cells run on it (html/picoruby_lab.js)
       JSG.w.ensurePicoRuby if @course.picoruby?(idx)
+      # JRuby (TeaVM, ~7 MB) in a Web Worker, only for the JRuby lesson
+      # (html/jruby_lab.js); its status line is in the lesson's first cell
+      JSG.w.ensureJRuby if @course.jruby?(idx)
       # the Pico's bench (pico_board.js) only for a lesson with a board
       board = @course.picoruby?(idx) && cells.any? { |cell| code_cell?(cell) && @course.board?(cell) }
       JSG.w.ensurePicoBoard if board

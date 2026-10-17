@@ -1,0 +1,58 @@
+<!doctype html>
+<!-- The JRuby lesson's bonus (docs/HANDOVER.md §6t): Swing windows from
+     Ruby with Glimmer, on JRuby 9.4 inside CheerpJ 4.3 - a whole JVM as
+     WebAssembly. The lesson puts this page into an iframe only when the
+     learner clicks its button (html/jruby_lab.js), never before: about
+     40 MB and 20-40 s. CheerpJ draws on the main thread and wants a page of
+     its own, hence the iframe. Its runtime comes from Leaning Technologies'
+     CDN (Community License); the jars are ours (assets/jruby-swing/,
+     tools/vendor_jruby_swing.rb). Logic: jruby_swing.js. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>JRuby + Swing (CheerpJ)</title>
+<style>
+  :root { --paper:#f5f1e8; --card:#fffdf8; --ink:#1e2229; --ink-soft:#4e5560; --rule:#d8d1c1; --accent:#c0392b; --ok:#2f6b3a; --code:#efe9dc; }
+  @media (prefers-color-scheme: dark) {
+    :root { --paper:#1d2026; --card:#262a31; --ink:#e8e4da; --ink-soft:#b3ada1; --rule:#3d424b; --accent:#e06650; --ok:#7fbf8a; --code:#1a1d22; }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  body { padding: 0.6rem 0.2rem 0.8rem; }
+  #status { display: flex; gap: 0.6rem; align-items: center; font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 0.5rem; }
+  #bar { flex: 0 0 140px; height: 6px; background: var(--rule); border-radius: 3px; overflow: hidden; }
+  #bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width 0.4s; }
+  #status.ready #bar { display: none; }
+  #status.ready #msg { color: var(--ok); }
+  #status.failed #msg { color: var(--accent); }
+  #display { width: 100%; height: 430px; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: #e9e7e1; position: relative; }
+  .note { font-size: 0.8rem; color: var(--ink-soft); margin: 0.3rem 0 0.8rem; }
+  .cell { background: var(--card); border: 1px solid var(--rule); border-radius: 6px; margin: 0.7rem 0; overflow: hidden; }
+  .cell p { margin: 0; padding: 0.45rem 0.7rem 0.3rem; font-size: 0.9rem; }
+  .cell textarea { display: block; width: 100%; border: 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    background: var(--code); color: var(--ink); padding: 0.5rem 0.7rem; resize: vertical; tab-size: 2;
+    font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .cell .bar { display: flex; gap: 0.6rem; align-items: center; padding: 0.35rem 0.6rem; font-size: 0.8rem; color: var(--ink-soft); }
+  .cell button { font: inherit; font-weight: 600; padding: 0.2rem 0.9rem; border-radius: 5px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
+  .cell button:disabled { opacity: 0.5; cursor: default; }
+  .cell pre { margin: 0; padding: 0.4rem 0.7rem; white-space: pre-wrap; font: 13px/1.45 ui-monospace, Menlo, Consolas, monospace; border-top: 1px solid var(--rule); }
+  .cell pre.res { color: var(--ok); }
+  .cell pre.err { color: var(--accent); }
+  .cell pre:empty { display: none; }
+  footer { font-size: 0.75rem; color: var(--ink-soft); margin-top: 0.8rem; }
+  footer a { color: inherit; }
+</style>
+<!-- CheerpJ 4.3: the JVM; Leaning Technologies' CDN only (it cannot be self-hosted) -->
+<script src="https://cjrtnc.leaningtech.com/4.3/loader.js"></script>
+</head>
+<body>
+  <div id="status" role="status" aria-live="polite"><span id="bar"><i></i></span><span id="msg"></span></div>
+  <div id="display" aria-label="Java windows"></div>
+  <p class="note" id="banner-note"></p>
+  <div id="cells"></div>
+  <footer id="credits"></footer>
+  <script type="module" src="jruby_swing.js"></script>
+</body>
+</html>

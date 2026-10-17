@@ -11,6 +11,12 @@ test/lessons.json
 /html/assets/spinel.new/
 /html/assets/spinel.old/
 /.cache/
+# JRuby for the browser (TeaVM) with the lesson's USGS data (about 37 MB), and
+# the jars of its Swing bonus (CheerpJ, about 38 MB): put there by
+# tools/vendor_jruby.rb and tools/vendor_jruby_swing.rb from their pins in
+# tools/jruby*.json on the deploy host, never committed (docs/HANDOVER.md §6t)
+/html/assets/jruby/
+/html/assets/jruby-swing/
 # IronRuby for the browser (.NET 10 wasm) and its NuGet DLLs, about 90 MB with
 # the .gz copies: put there by tools/vendor_ironruby.rb from its pins in
 # tools/ironruby.json on the deploy host, never committed (docs/HANDOVER.md §6s)

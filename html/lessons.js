@@ -195,6 +195,15 @@ window.LESSONS_JSON = JSON.stringify({
       "picoStopped": "Nach 10 Sekunden angehalten.",
       "picoRestarted": "PicoRuby lässt sich nicht unterbrechen und wurde neu gestartet: Die Variablen der Zellen davor sind weg – führe sie noch einmal aus.",
       "picoFailed": "PicoRuby konnte nicht geladen werden – bitte lade die Seite neu.",
+      "jrubyStopped": "Nach 60 Sekunden angehalten.",
+      "jrubyRestarted": "JRuby lässt sich nicht unterbrechen und wurde neu gestartet: Die Variablen der Zellen davor sind weg – die Zellen darüber laufen mit der nächsten wieder mit.",
+      "jrubyFailed": "JRuby konnte nicht geladen werden – bitte lade die Seite neu.",
+      "jrubyBadge": "JRuby %s im Browser (TeaVM)",
+      "crubyBadge": "CRuby %s im Browser (ruby.wasm)",
+      "jrubyCrubySame": "CRuby (ruby.wasm) mit demselben Code: %s – dieselbe Antwort, in %s.",
+      "jrubyCrubyDiffers": "CRuby (ruby.wasm) mit demselben Code: %s – eine andere Antwort (in %s).",
+      "jrubyBlocksAlt": "Die Ausgabe als Bild: jeder Halbblock (█▀▄) als Pixel – zum Scannen",
+      "jrubyCrubyNoJava": "CRuby (ruby.wasm) kann diesen Code nicht ausführen: Er braucht Java, das nur JRuby hat (%s).",
       "spinelTitle": "Spinel: Ruby → C → WebAssembly",
       "spinelLoad": "Spinel und clang laden (rund 27 MB)",
       "spinelCompile": "spinel: Ruby → C",
@@ -533,6 +542,15 @@ window.LESSONS_JSON = JSON.stringify({
       "picoStopped": "Stopped after 10 seconds.",
       "picoRestarted": "PicoRuby cannot be interrupted, so it was started anew: the variables of the cells before are gone – run them again.",
       "picoFailed": "PicoRuby could not be loaded – please reload the page.",
+      "jrubyStopped": "Stopped after 60 seconds.",
+      "jrubyRestarted": "JRuby cannot be interrupted, so it was started anew: the variables of the cells before are gone – the cells above run again with the next one.",
+      "jrubyFailed": "JRuby could not be loaded – please reload the page.",
+      "jrubyBadge": "JRuby %s in the browser (TeaVM)",
+      "crubyBadge": "CRuby %s in the browser (ruby.wasm)",
+      "jrubyCrubySame": "CRuby (ruby.wasm) with the same code: %s – the same answer, in %s.",
+      "jrubyCrubyDiffers": "CRuby (ruby.wasm) with the same code: %s – a different answer (in %s).",
+      "jrubyBlocksAlt": "The output as a picture: each half block (█▀▄) as pixels – for scanning",
+      "jrubyCrubyNoJava": "CRuby (ruby.wasm) cannot run this code: it uses Java, which only JRuby has (%s).",
       "spinelTitle": "Spinel: Ruby → C → WebAssembly",
       "spinelLoad": "Loading Spinel and clang (about 27 MB)",
       "spinelCompile": "spinel: Ruby → C",
@@ -871,6 +889,15 @@ window.LESSONS_JSON = JSON.stringify({
       "picoStopped": "10秒で止めました。",
       "picoRestarted": "PicoRubyは途中で止められないため、起動し直しました。前のセルの変数は消えたので、もう一度実行してください。",
       "picoFailed": "PicoRubyを読み込めませんでした。ページを再読み込みしてください。",
+      "jrubyStopped": "60秒で止めました。",
+      "jrubyRestarted": "JRubyは途中で止められないので、起動しなおしました。前のセルの変数は消えています。上のセルは次の実行のときにもう一度動きます。",
+      "jrubyFailed": "JRubyを読み込めませんでした。ページを再読み込みしてください。",
+      "jrubyBadge": "ブラウザーのJRuby %s（TeaVM）",
+      "crubyBadge": "ブラウザーのCRuby %s（ruby.wasm）",
+      "jrubyCrubySame": "同じコードをCRuby（ruby.wasm）で：%s – 同じ答えです（%s）。",
+      "jrubyCrubyDiffers": "同じコードをCRuby（ruby.wasm）で：%s – 答えがちがいます（%s）。",
+      "jrubyBlocksAlt": "出力を画像にしたもの：半ブロック（█▀▄）をそれぞれピクセルで描いています（スキャン用）",
+      "jrubyCrubyNoJava": "CRuby（ruby.wasm）ではこのコードを実行できません。JRubyにしかないJavaを使っているからです（%s）。",
       "spinelTitle": "Spinel：Ruby → C → WebAssembly",
       "spinelLoad": "Spinelとclangを読み込み中（約27 MB）",
       "spinelCompile": "spinel：Ruby → C",
@@ -10343,6 +10370,359 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "# 偶数なら n / 2、奇数なら 3 * n + 1 - n == 1 になるまで\ndef collatz(n)\n  steps = 0\n\n  steps\nend\n\nputs collatz(27)",
             "check": "result.is_a?(ChunkySpinel::Program) && result.ok? && result.output.split.last == \"111\" && code.include?(\"def collatz\")",
             "hint": "ループを使おう。<code>while n != 1</code> … <code>end</code>の中で、<code>n = n.even? ? n / 2 : 3 * n + 1</code>と<code>steps += 1</code>。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "jruby",
+      "engine": "jruby",
+      "live": false,
+      "de": {
+        "title": "JRuby: Ruby mit Java-Bibliotheken",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>JRuby: Ruby auf der Java-VM</h2><p>In dieser Lektion läuft dein Code nicht auf CRuby. Jede Zelle geht an <strong>JRuby</strong> – das Ruby auf der virtuellen Maschine von Java (JVM) aus Lektion {{nr:rubies}}. Ein Browser hat keine JVM, darum wurde dieses JRuby mit <a href='https://teavm.org' target='_blank'>TeaVM</a> von Java nach JavaScript übersetzt, und es läuft in einem eigenen Web Worker. Geladen wird es nur für diese Lektion: rund 7,2 MB, beim ersten Mal.</p><p class='jruby-status'></p><p>Frag es, wer es ist:</p>"
+          },
+          {
+            "t": "c",
+            "code": "[RUBY_ENGINE, JRUBY_VERSION, RUBY_VERSION]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>\"jruby\"</code>, die eigene Version von JRuby und das Ruby, das es spricht: 4.0, dieselbe Sprache wie das CRuby im Rest des Kurses. Was CRuby nicht kann: JRuby kennt die Klassen von Java. <code>java.util.ArrayList</code> ist eine Java-Liste – und <code>&lt;&lt;</code> geht damit wie mit einem Array:</p>"
+          },
+          {
+            "t": "c",
+            "code": "list = java.util.ArrayList.new\nlist << \"Speck\" << \"apfel\" << \"Bacon\"\njava.util.Collections.sort(list) { |a, b| a.downcase <=> b.downcase }\nlist.to_a"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Collections.sort</code> ist Java. Es will einen <em>Comparator</em>, ein Java-Objekt mit einer Methode, die zwei Dinge vergleicht. JRuby macht aus dem Ruby-Block einen. Und die Namen von Java passen sich Ruby an: Javas <code>isEmpty()</code> darf <code>is_empty</code> oder <code>empty?</code> heissen, <code>nextToken()</code> heisst <code>next_token</code> – weiter unten kommen noch mehr.</p><h3>Eine Java-Bibliothek ist eine Ruby-Bibliothek</h3><p>Maven Central, das grosse Bibliotheksregal der Java-Welt, hat über eine halbe Million Bibliotheken, und JRuby kann jede davon benutzen. <a href='https://github.com/zxing/zxing' target='_blank'>ZXing</a> („Zebrastreifen“) erzeugt und liest Strichcodes; viele Android-Apps scannen damit. Dieses JRuby bringt ZXing mit. Eine Webadresse als QR-Code:</p>"
+          },
+          {
+            "t": "c",
+            "code": "java_import com.google.zxing.qrcode.QRCodeWriter\njava_import com.google.zxing.BarcodeFormat\n\nurl = \"https://chunkybacon.idogawa.com\"\nqr = QRCodeWriter.new.encode(url, BarcodeFormat::QR_CODE, 0, 0)\nrows = (0...qr.height).step(2).map do |y|\n  (0...qr.width).map do |x|\n    top = qr.get(x, y)\n    bottom = y + 1 < qr.height && qr.get(x, y + 1)\n    if top && bottom then \"█\"\n    elsif top then \"▀\"\n    elsif bottom then \"▄\"\n    else \" \"\n    end\n  end.join\nend\nputs rows"
+          },
+          {
+            "t": "h",
+            "html": "<p><strong>Halte die Kamera deines Handys darauf</strong> – sie öffnet diesen Kurs. Jede Zeile der Ausgabe enthält zwei Reihen des Codes: <code>▀</code> ist ein Punkt oben, <code>▄</code> einer unten, <code>█</code> beide.</p><p>Fairerweise: Auch CRuby hat ein Gem für QR-Codes (rqrcode, reines Ruby). Es geht um etwas anderes: Was die Java-Welt geschrieben hat, ist ein <code>java_import</code> entfernt. (In diesem Browser-JRuby sind nur die Java-Klassen da, die beim Bauen aufgelistet wurden; auf deinem Computer alle.)</p><h3>Eine grosse JSON-Datei: jedes Erdbeben eines Monats</h3><p>Der U.S. Geological Survey (USGS) veröffentlicht jedes Erdbeben, das seine Seismometer aufzeichnen, als GeoJSON. Hier ist ein Schnappschuss vom 17. Oktober 2026: <strong>7,3 MB, 10’224 Erdbeben</strong> in 30 Tagen, gemeinfrei. Er liegt neben deinem Code als <code>data/all_month.geojson</code>. Das <code>json</code> von JRuby ist dasselbe Gem wie bei CRuby – nur ist sein Parser in Java geschrieben statt in C:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\nt = Time.now\nbeben = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nputs \"#{beben.size} Beben in #{((Time.now - t) * 1000).round} ms\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Jedes Beben ist ein Hash: <code>q[\"properties\"][\"mag\"]</code> ist seine Stärke (Magnitude), <code>q[\"properties\"][\"place\"]</code> der Ort. Die fünf stärksten:</p>"
+          },
+          {
+            "t": "c",
+            "code": "beben.max_by(5) { |q| q[\"properties\"][\"mag\"].to_f }\n  .map { |q| \"M #{q[\"properties\"][\"mag\"]}  #{q[\"properties\"][\"place\"]}\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Und wo die Erde am häufigsten bebt – der Teil des Orts nach dem letzten Komma:</p>"
+          },
+          {
+            "t": "c",
+            "code": "beben.map { |q| q[\"properties\"][\"place\"].to_s.split(\", \").last }\n  .tally.max_by(5) { |_, n| n }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Alaska und Kalifornien liegen vorn, weil der USGS dort die meisten Seismometer hat; er hört dort auch winzige Beben. Jetzt genau dasselbe Parsen auf <strong>CRuby</strong> (ruby.wasm), dem Ruby, auf dem der Rest des Kurses läuft. Das Schildchen über jeder Ausgabe sagt, welches Ruby die Zelle ausgeführt hat und wie lange es gedauert hat:</p>"
+          },
+          {
+            "t": "c",
+            "on": "cruby",
+            "code": "require \"json\"\nt = Time.now\nbeben = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nputs \"#{beben.size} Beben in #{((Time.now - t) * 1000).round} ms\""
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Gemessen'><p>Auf einem Server mit 8 Kernen in einem Chromium ohne Fenster hat CRuby die Datei in <strong>96–208 ms</strong> geparst, JRuby in <strong>0,8–1,0 s</strong>. Im Browser ist <strong>CRuby schneller</strong>: Sein JSON-Parser ist C, nach WebAssembly übersetzt; dieses JRuby ist Java, nach JavaScript übersetzt – ohne den JIT-Compiler, der Java auf einer echten JVM schnell macht. Wegen der Geschwindigkeit nimmt man im Browser kein JRuby – wegen der Bibliotheken schon.</p></div><h3>Jackson: JSON als Strom</h3><p>Die meisten Java-Programme lesen JSON mit <a href='https://github.com/FasterXML/jackson-core' target='_blank'>Jackson</a>. Es baut keinen grossen Hash: Es reicht dir die Datei Stück für Stück, als <em>Tokens</em> – <code>START_OBJECT</code>, <code>FIELD_NAME</code> „mag“, <code>VALUE_NUMBER_FLOAT</code> 5.2 … Die Zelle zählt die Beben ab Stärke 5, in der kleineren Datei <code>data/4.5_month.geojson</code> (nur die 622 Beben ab 4,5, 0,4 MB). <code>token.numeric?</code> ist Javas <code>isNumeric()</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "java_import com.fasterxml.jackson.core.JsonFactory\n\nparser = JsonFactory.new.create_parser(File.read(\"data/4.5_month.geojson\"))\nzaehler = 0\nwhile (token = parser.next_token)\n  if parser.current_name == \"mag\" && token.numeric?\n    zaehler += 1 if parser.double_value >= 5\n  end\nend\nzaehler"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jedes <code>next_token</code> ist ein Ausflug von Ruby nach Java und zurück – Zehntausende Ausflüge für diese Datei. Dieselbe Schleife in Java geschrieben, die diese Lektion als <code>Lesson::Quakes</code> mitbringt, macht den Ausflug einmal:</p><pre><code>public static int countAtLeast(String json, double min) throws IOException {\n    int n = 0;\n    JsonParser p = new JsonFactory().createParser(json);\n    JsonToken t;\n    while ((t = p.nextToken()) != null) {\n        if (t == JsonToken.FIELD_NAME &amp;&amp; \"mag\".equals(p.currentName())) {\n            if (p.nextToken().isNumeric() &amp;&amp; p.getDoubleValue() >= min) n++;\n        }\n    }\n    return n;\n}</code></pre>"
+          },
+          {
+            "t": "c",
+            "code": "Java::Lesson::Quakes.count_at_least(File.read(\"data/4.5_month.geojson\"), 5)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dieselben 173 – und schau dir die Zeiten über den Ausgaben an. Hier gemessen: die Ruby-Schleife <strong>549–756 ms</strong>, die Java-Schleife <strong>39–59 ms</strong>, etwa 9–19-mal schneller. Das ist die Lehre dieses Teils: Wenn eine Schleife heiss läuft, lass die Java-Bibliothek die Schleife drehen. (Ruby ruft <code>countAtLeast</code> mit seinem Ruby-Namen auf, <code>count_at_least</code>.)</p><h3>Threads</h3><p>Auf einer JVM laufen Ruby-Threads wirklich gleichzeitig, jeder auf seinem eigenen Prozessorkern. Das macht sie schnell – und lässt sie einander auf die Füsse treten. Vier Threads zählen je hundertmal 1 dazu, mit einem kurzen <code>sleep</code> zwischen Lesen und Schreiben:</p>"
+          },
+          {
+            "t": "c",
+            "code": "zaehler = 0\nthreads = 4.times.map do\n  Thread.new do\n    100.times do\n      v = zaehler\n      sleep 0.001\n      zaehler = v + 1\n    end\n  end\nend\nthreads.each(&:join)\nzaehler"
+          },
+          {
+            "t": "h",
+            "html": "<p>100, nicht 400. Alle vier Threads lesen dasselbe <code>zaehler</code>, schlafen und schreiben ihren alten Wert plus 1 zurück – drei von vier Additionen gehen verloren. Ein <code>Mutex</code> lässt einen Thread nach dem anderen durch:</p>"
+          },
+          {
+            "t": "c",
+            "code": "zaehler = 0\nlock = Mutex.new\nthreads = 4.times.map do\n  Thread.new do\n    100.times do\n      lock.synchronize do\n        v = zaehler\n        sleep 0.001\n        zaehler = v + 1\n      end\n    end\n  end\nend\nthreads.each(&:join)\nzaehler"
+          },
+          {
+            "t": "h",
+            "html": "<p>400. Java bringt in <code>java.util.concurrent</code> Zähler mit, die dafür gemacht sind: Ein <code>AtomicLong</code> zählt ohne Sperre und ohne etwas zu verlieren. <code>increment_and_get</code> ist Javas <code>incrementAndGet</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "zaehler = java.util.concurrent.atomic.AtomicLong.new(0)\nthreads = 4.times.map do\n  Thread.new { 50_000.times { zaehler.increment_and_get } }\nend\nthreads.each(&:join)\nzaehler.get"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ehrlich gesagt: Im Browser wechseln sich diese Threads auf einem einzigen JavaScript-Thread ab, wie die von CRuby. Das Wettrennen oben kommt vom <code>sleep</code>, und CRuby zeigt es genauso. Was sich auf einer echten JVM ändert, steht im Kasten.</p><div class='offweb' data-title='Auf deinem Computer'><p>JRuby 10.1.2 auf Java 21 gegen CRuby 4.0.6, gemessen auf einem Server mit 8 Kernen (Bereiche aus 20 Läufen, beim Start aus 5, bei Jackson aus 8; die ersten Läufe, in denen sich der JIT-Compiler aufwärmt, stehen extra):</p><ul><li><strong>Starten</strong>: <code>jruby -e 'puts 1'</code> braucht 2,5–2,8 s, <code>ruby</code> 53–65 ms. Die JVM braucht einen Moment.</li><li><strong>4 Threads × fib(27)</strong>: CRuby 77–100 ms nacheinander und 77–105 ms in Threads – kein Gewinn, der GVL lässt immer nur einen Thread Ruby ausführen. JRuby: Die ersten Läufe brauchen 607–723 ms, dann ist der JIT-Compiler warm: 18–39 ms nacheinander, <strong>5,5–17 ms in 4 Threads</strong>, meist rund 10 ms. (CRuby mit YJIT: 16–20 / 16–24 ms.)</li><li><strong>Das Wettrennen ganz ohne sleep</strong> (<code>4.times.map { Thread.new { 50_000.times { zaehler += 1 } } }</code>): JRuby landet zwischen 66’934 und 128’453 statt bei 200’000, CRuby immer bei 200’000. Echte Threads brauchen einen Mutex oder ein AtomicLong.</li><li><strong>Eine Schleife mit Kommazahlen</strong> (eine Mandelbrot-Menge, 200 × 200 Punkte): CRuby 341–399 ms, YJIT 198–244 ms; JRuby beim ersten Mal 573 ms, danach 55–358 ms – oft schneller, aber unruhig.</li><li><strong>JSON.parse</strong> der 7,3-MB-Datei: etwa gleich, CRuby 40–60 ms (60 ms beim ersten Mal, danach 40–48 ms), JRuby 38–43 ms nach dem Aufwärmen (die ersten drei Läufe: 148, 95 und 63 ms). Jackson in 4 Threads liest die Datei viermal in 118–194 ms, nacheinander in 469–553 ms (beim ersten Mal 235 und 977 ms).</li></ul><p>Also: Nach dem Aufwärmen ist JRuby schnell und nutzt jeden Kern – darum laufen Server damit. Installieren kannst du es mit <code>rbenv install jruby-10.1.2.0</code> (es braucht Java 21); eine Java-Bibliothek kommt mit <code>require \"pfad/zu/jackson-core.jar\"</code> dazu oder als Abhängigkeit über das Gem jar-dependencies. In Lektion {{nr:rubies}} hat <code>threads_in_parallel?</code> es behauptet – hier sind die Zahlen.</p></div>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Bonus: Desktop-Fenster mit Glimmer</h3><p>Auf deinem Computer bringt JRuby auch das Desktop-Werkzeug von Java mit, Swing. Mit der <a href='https://github.com/AndyObtiva/glimmer-dsl-swing' target='_blank'>Glimmer-DSL</a> ist ein Fenster ein paar verschachtelte Blöcke, und <code>observe</code> hält das Label im Gleichschritt mit dem Fuchs (<em>Data Binding</em>). Das JRuby von TeaVM hat kein Swing – aber <a href='https://cheerpj.com/' target='_blank'>CheerpJ</a> von Leaning Technologies: eine ganze virtuelle Maschine von Java, nach WebAssembly übersetzt. Darauf läuft JRuby 9.4 – das offizielle <code>jruby-complete</code>, nur eine einzige Klasse ist für CheerpJ angepasst –, ein älteres JRuby, das Ruby 3.1 spricht, und nur als Interpreter. Das hat allerdings seinen Preis: <strong>rund 40 MB</strong> (der Teil von CheerpJ kommt von deren Server, cjrtnc.leaningtech.com), und der Start dauert <strong>20–40 s</strong> – auf einem schnellen Server mit 8 Kernen 27 s (JRuby 14–15 s, dann Glimmer 12–13 s), auf einem Laptop oder Handy länger. Vor deinem Klick wird nichts davon geladen:</p><div class='jruby-swing'><img class='jruby-swing-preview' src='assets/jruby-lesson/swing-de.png' alt='Drei Java-Fenster: Chunky Bacon mit dem Label Speck: 10 und einem Knopf Füttere den Fuchs, ein Umrechner von Celsius in Fahrenheit und ein Kuchendiagramm Was der Fuchs frisst' width='714' height='431' loading='lazy'><button type='button' class='jruby-swing-start' data-frame-title='JRuby 9.4 und Swing auf CheerpJ'>☕ Java-Desktop starten (rund 40 MB, 20–40 s)</button></div><div class='offweb' data-title='Auf deinem Computer'><p>Mit installiertem JRuby: <code>gem install glimmer-dsl-swing</code>, das hier in <code>fuchs.rb</code> schreiben und <code>jruby fuchs.rb</code> starten – ein echtes Fenster, sobald JRuby gestartet ist und Glimmer geladen hat (schon der Start allein braucht die 2,5–2,8 s von oben):</p><pre><code>require \"glimmer-dsl-swing\"\ninclude Glimmer\n\nclass Fox\n  attr_accessor :bacon\n  def initialize = @bacon = 0\nend\nfox = Fox.new\n\njframe(\"Chunky Bacon\") {\n  jpanel {\n    @label = jlabel(\"Bacon: 0\")\n    jbutton(\"Feed the fox\") {\n      on_action_performed { fox.bacon += 1 }\n    }\n  }\n}.show\n\nobserve(fox, :bacon) { |n| @label.text = \"Bacon: #{n}\" }</code></pre></div><div class='task'><strong>Aufgabe:</strong> Schreib <code>staerke_beben(beben, staerke)</code>: Sie gibt zurück, wie viele Beben mindestens diese Stärke haben. Die letzte Zeile der Zelle, <code>staerke_beben(beben, 5)</code>, zählt die ab Stärke 5. Geprüft wird von CRuby – das danach auch deinen Code ausführt, so siehst du, ob sich beide Rubys einig sind.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"json\"\n\ndef staerke_beben(beben, staerke)\n  # die Beben mit mag >= staerke zählen\nend\n\nbeben = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nstaerke_beben(beben, 5)",
+            "check": "quakes = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nwant = ->(m) { quakes.count { |q| q[\"properties\"][\"mag\"].to_f >= m } }\n# the method itself, on CRuby, with two more magnitudes: a hard-coded\n# answer, or one that ignores the magnitude, does not pass. Code that uses\n# Java cannot run here; it is checked by its answer for 5 only.\nothers = begin\n  old_stdout, $stdout = $stdout, StringIO.new\n  box = Object.new\n  eval(code, box.instance_eval { binding }, \"check.rb\")\n  [box.staerke_beben(quakes, 4.5), box.staerke_beben(quakes, 6)]\nrescue NameError\n  raise unless code.match?(/java|Java|com\\./)\n  nil\nensure\n  $stdout = old_stdout\nend\ncode.include?(\"def staerke_beben\") && (result == want[5] || output.split.last == want[5].to_s) &&\n  (others.nil? || others == [want[4.5], want[6]])",
+            "hint": "<code>beben.count { |q| q[\"properties\"][\"mag\"].to_f &gt;= staerke }</code>. <code>mag</code> kann <code>nil</code> sein, und <code>nil.to_f</code> ist <code>0.0</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "JRuby: Ruby with Java's libraries",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>JRuby: Ruby on the Java virtual machine</h2><p>In this lesson your code does not run on CRuby. Every cell goes to <strong>JRuby</strong> – the Ruby on the Java virtual machine (JVM) from lesson {{nr:rubies}}. A browser has no JVM, so this JRuby was translated from Java to JavaScript with <a href='https://teavm.org' target='_blank'>TeaVM</a>, and it runs in a Web Worker of its own. It is loaded only for this lesson: about 7.2 MB, the first time.</p><p class='jruby-status'></p><p>Ask it who it is:</p>"
+          },
+          {
+            "t": "c",
+            "code": "[RUBY_ENGINE, JRUBY_VERSION, RUBY_VERSION]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>\"jruby\"</code>, JRuby's own version, and the Ruby it speaks: 4.0, the same language as the CRuby of the rest of the course. What CRuby cannot do: JRuby knows Java's classes. <code>java.util.ArrayList</code> is a Java list – and <code>&lt;&lt;</code> works on it as on an Array:</p>"
+          },
+          {
+            "t": "c",
+            "code": "list = java.util.ArrayList.new\nlist << \"Speck\" << \"apfel\" << \"Bacon\"\njava.util.Collections.sort(list) { |a, b| a.downcase <=> b.downcase }\nlist.to_a"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Collections.sort</code> is Java. It wants a <em>Comparator</em>, a Java object with one method that compares two things. JRuby turns the Ruby block into one. And Java's names fit into Ruby: Java's <code>isEmpty()</code> may be called <code>is_empty</code> or <code>empty?</code>, <code>nextToken()</code> is <code>next_token</code> – you will see more of them below.</p><h3>A Java library is a Ruby library</h3><p>Maven Central, the big library shelf of the Java world, holds over half a million libraries, and JRuby can use every one of them. <a href='https://github.com/zxing/zxing' target='_blank'>ZXing</a> (“zebra crossing”) makes and reads barcodes; many Android apps scan with it. This JRuby brings ZXing along. A web address as a QR code:</p>"
+          },
+          {
+            "t": "c",
+            "code": "java_import com.google.zxing.qrcode.QRCodeWriter\njava_import com.google.zxing.BarcodeFormat\n\nurl = \"https://chunkybacon.idogawa.com\"\nqr = QRCodeWriter.new.encode(url, BarcodeFormat::QR_CODE, 0, 0)\nrows = (0...qr.height).step(2).map do |y|\n  (0...qr.width).map do |x|\n    top = qr.get(x, y)\n    bottom = y + 1 < qr.height && qr.get(x, y + 1)\n    if top && bottom then \"█\"\n    elsif top then \"▀\"\n    elsif bottom then \"▄\"\n    else \" \"\n    end\n  end.join\nend\nputs rows"
+          },
+          {
+            "t": "h",
+            "html": "<p><strong>Point your phone's camera at it</strong> – it opens this course. Each line of the output holds two rows of the code: <code>▀</code> is a dot on top, <code>▄</code> one below, <code>█</code> both.</p><p>To be fair: CRuby has a gem for QR codes too (rqrcode, pure Ruby). The point is a different one: whatever the Java world has written is one <code>java_import</code> away. (In this browser JRuby only the Java classes listed when it was built are there; on your computer, all of them.)</p><h3>A big JSON file: every earthquake for a month</h3><p>The U.S. Geological Survey (USGS) publishes every earthquake its seismometers record, as GeoJSON. Here is a snapshot of 17 October 2026: <strong>7.3 MB, 10,224 earthquakes</strong> in 30 days, public domain. It lies next to your code as <code>data/all_month.geojson</code>. JRuby's <code>json</code> is the same gem as CRuby's – only its parser is written in Java instead of C:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\nt = Time.now\nquakes = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nputs \"#{quakes.size} quakes in #{((Time.now - t) * 1000).round} ms\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Each earthquake is a Hash: <code>q[\"properties\"][\"mag\"]</code> is its magnitude, <code>q[\"properties\"][\"place\"]</code> where it was. The five strongest:</p>"
+          },
+          {
+            "t": "c",
+            "code": "quakes.max_by(5) { |q| q[\"properties\"][\"mag\"].to_f }\n  .map { |q| \"M #{q[\"properties\"][\"mag\"]}  #{q[\"properties\"][\"place\"]}\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>And where the earth shakes most often – the part after the last comma of the place:</p>"
+          },
+          {
+            "t": "c",
+            "code": "quakes.map { |q| q[\"properties\"][\"place\"].to_s.split(\", \").last }\n  .tally.max_by(5) { |_, n| n }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Alaska and California lead because the USGS has the most seismometers there; it hears even tiny quakes. Now the very same parse on <strong>CRuby</strong> (ruby.wasm), the Ruby the rest of this course runs on. The label above each output says which Ruby ran the cell, and how long it took:</p>"
+          },
+          {
+            "t": "c",
+            "on": "cruby",
+            "code": "require \"json\"\nt = Time.now\nquakes = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nputs \"#{quakes.size} quakes in #{((Time.now - t) * 1000).round} ms\""
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Measured'><p>On an 8-core server in headless Chromium, CRuby parsed the file in <strong>96–208 ms</strong>, JRuby in <strong>0.8–1.0 s</strong>. In the browser <strong>CRuby is faster</strong>: its JSON parser is C, compiled to WebAssembly; this JRuby is Java translated to JavaScript, without the JIT compiler that makes Java fast on a real JVM. Speed is not why you would pick JRuby in a browser – the libraries are.</p></div><h3>Jackson: JSON as a stream</h3><p>Most Java programs read JSON with <a href='https://github.com/FasterXML/jackson-core' target='_blank'>Jackson</a>. It does not build one big Hash: it hands you the file piece by piece, as <em>tokens</em> – <code>START_OBJECT</code>, <code>FIELD_NAME</code> “mag”, <code>VALUE_NUMBER_FLOAT</code> 5.2 … The cell counts the quakes of magnitude 5 or more, on the smaller file <code>data/4.5_month.geojson</code> (only the 622 quakes from 4.5 up, 0.4 MB). <code>token.numeric?</code> is Java's <code>isNumeric()</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "java_import com.fasterxml.jackson.core.JsonFactory\n\nparser = JsonFactory.new.create_parser(File.read(\"data/4.5_month.geojson\"))\ncount = 0\nwhile (token = parser.next_token)\n  if parser.current_name == \"mag\" && token.numeric?\n    count += 1 if parser.double_value >= 5\n  end\nend\ncount"
+          },
+          {
+            "t": "h",
+            "html": "<p>Every <code>next_token</code> is a trip from Ruby into Java and back – tens of thousands of trips for this file. The same loop written in Java, which this lesson brings along as <code>Lesson::Quakes</code>, makes the trip once:</p><pre><code>public static int countAtLeast(String json, double min) throws IOException {\n    int n = 0;\n    JsonParser p = new JsonFactory().createParser(json);\n    JsonToken t;\n    while ((t = p.nextToken()) != null) {\n        if (t == JsonToken.FIELD_NAME &amp;&amp; \"mag\".equals(p.currentName())) {\n            if (p.nextToken().isNumeric() &amp;&amp; p.getDoubleValue() >= min) n++;\n        }\n    }\n    return n;\n}</code></pre>"
+          },
+          {
+            "t": "c",
+            "code": "Java::Lesson::Quakes.count_at_least(File.read(\"data/4.5_month.geojson\"), 5)"
+          },
+          {
+            "t": "h",
+            "html": "<p>The same 173 – and look at the times above the outputs. Measured here: the Ruby loop <strong>549–756 ms</strong>, the Java loop <strong>39–59 ms</strong>, about 9–19 times faster. That is the lesson of this part: when a loop is hot, let the Java library do the looping. (Ruby calls <code>countAtLeast</code> by its Ruby name, <code>count_at_least</code>.)</p><h3>Threads</h3><p>On a JVM, Ruby threads really run at the same time, each on its own processor core. That makes them fast – and lets them trample on each other. Four threads, each adding 1 a hundred times, with a short <code>sleep</code> between reading and writing:</p>"
+          },
+          {
+            "t": "c",
+            "code": "count = 0\nthreads = 4.times.map do\n  Thread.new do\n    100.times do\n      v = count\n      sleep 0.001\n      count = v + 1\n    end\n  end\nend\nthreads.each(&:join)\ncount"
+          },
+          {
+            "t": "h",
+            "html": "<p>100, not 400. All four threads read the same <code>count</code>, sleep, and write back their old value plus 1 – three of every four additions get lost. A <code>Mutex</code> lets one thread at a time through:</p>"
+          },
+          {
+            "t": "c",
+            "code": "count = 0\nlock = Mutex.new\nthreads = 4.times.map do\n  Thread.new do\n    100.times do\n      lock.synchronize do\n        v = count\n        sleep 0.001\n        count = v + 1\n      end\n    end\n  end\nend\nthreads.each(&:join)\ncount"
+          },
+          {
+            "t": "h",
+            "html": "<p>400. Java brings counters made for this in <code>java.util.concurrent</code>: an <code>AtomicLong</code> adds without a lock and without losing anything. <code>increment_and_get</code> is Java's <code>incrementAndGet</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "count = java.util.concurrent.atomic.AtomicLong.new(0)\nthreads = 4.times.map do\n  Thread.new { 50_000.times { count.increment_and_get } }\nend\nthreads.each(&:join)\ncount.get"
+          },
+          {
+            "t": "h",
+            "html": "<p>To be honest about the browser: these threads take turns on one JavaScript thread, as CRuby's do. The race above comes from the <code>sleep</code>, and CRuby shows it just the same. What changes on a real JVM is in the box below.</p><div class='offweb' data-title='On your machine'><p>JRuby 10.1.2 on Java 21 against CRuby 4.0.6, measured on an 8-core server (ranges of 20 runs, 5 for the start, 8 for Jackson; the first runs, while the JIT compiler warms up, are given apart):</p><ul><li><strong>Starting</strong>: <code>jruby -e 'puts 1'</code> takes 2.5–2.8 s, <code>ruby</code> 53–65 ms. The JVM needs a moment.</li><li><strong>4 threads × fib(27)</strong>: CRuby 77–100 ms one after another and 77–105 ms in threads – no gain, the GVL lets one thread at a time run Ruby. JRuby: the first runs take 607–723 ms, then the JIT compiler has warmed up: 18–39 ms one after another, <strong>5.5–17 ms in 4 threads</strong>, mostly about 10 ms. (CRuby with YJIT: 16–20 / 16–24 ms.)</li><li><strong>The race without any sleep</strong> (<code>4.times.map { Thread.new { 50_000.times { count += 1 } } }</code>): JRuby ends between 66,934 and 128,453 instead of 200,000, CRuby always at 200,000. Real threads need a Mutex or an AtomicLong.</li><li><strong>A float loop</strong> (a Mandelbrot set, 200 × 200 points): CRuby 341–399 ms, YJIT 198–244 ms; JRuby 573 ms the first time, then 55–358 ms – often faster, but unsteady.</li><li><strong>JSON.parse</strong> of the 7.3 MB file: about the same, CRuby 40–60 ms (60 ms the first time, then 40–48 ms), JRuby 38–43 ms after warm-up (its first three runs: 148, 95 and 63 ms). Jackson in 4 threads reads the file 4 times in 118–194 ms, one after another 469–553 ms (the first time 235 and 977 ms).</li></ul><p>So: after a warm-up, JRuby is fast and uses every core – that is why servers run it. Install it with <code>rbenv install jruby-10.1.2.0</code> (it needs Java 21); a Java library comes in with <code>require \"path/to/jackson-core.jar\"</code>, or as a dependency through the jar-dependencies gem. In lesson {{nr:rubies}}, <code>threads_in_parallel?</code> said so – here are the numbers.</p></div>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Bonus: desktop windows with Glimmer</h3><p>On your computer JRuby also brings Java's desktop toolkit, Swing. With the <a href='https://github.com/AndyObtiva/glimmer-dsl-swing' target='_blank'>Glimmer DSL</a> a window is a few nested blocks, and <code>observe</code> keeps the label in step with the fox (<em>data binding</em>). TeaVM's JRuby has no Swing – but <a href='https://cheerpj.com/' target='_blank'>CheerpJ</a> by Leaning Technologies has: a whole Java virtual machine, compiled to WebAssembly. On it runs JRuby 9.4 – the official <code>jruby-complete</code>, with just one class adapted for CheerpJ –, an older JRuby that speaks Ruby 3.1, and only as an interpreter. That comes at a price: <strong>about 40 MB</strong> (CheerpJ's own part comes from their server, cjrtnc.leaningtech.com), and starting takes <strong>20–40 s</strong> – on a fast 8-core server 27 s (JRuby 14–15 s, then Glimmer 12–13 s), on a laptop or phone longer. Nothing of it loads before you click:</p><div class='jruby-swing'><img class='jruby-swing-preview' src='assets/jruby-lesson/swing-en.png' alt='Three Java windows: Chunky Bacon with the label Bacon: 10 and a button Feed the fox, a Celsius to Fahrenheit converter, and a pie chart What the fox eats' width='714' height='431' loading='lazy'><button type='button' class='jruby-swing-start' data-frame-title='JRuby 9.4 and Swing on CheerpJ'>☕ Start the Java desktop (about 40 MB, 20–40 s)</button></div><div class='offweb' data-title='On your machine'><p>With JRuby installed: <code>gem install glimmer-dsl-swing</code>, put this into <code>fox.rb</code> and run <code>jruby fox.rb</code> – a real window, once JRuby has started and loaded Glimmer (the start alone takes the 2.5–2.8 s from above):</p><pre><code>require \"glimmer-dsl-swing\"\ninclude Glimmer\n\nclass Fox\n  attr_accessor :bacon\n  def initialize = @bacon = 0\nend\nfox = Fox.new\n\njframe(\"Chunky Bacon\") {\n  jpanel {\n    @label = jlabel(\"Bacon: 0\")\n    jbutton(\"Feed the fox\") {\n      on_action_performed { fox.bacon += 1 }\n    }\n  }\n}.show\n\nobserve(fox, :bacon) { |n| @label.text = \"Bacon: #{n}\" }</code></pre></div><div class='task'><strong>Task:</strong> Write <code>strong_quakes(quakes, magnitude)</code>: it returns how many quakes have at least that magnitude. The last line of the cell, <code>strong_quakes(quakes, 5)</code>, counts those of magnitude 5 and up. The check is done by CRuby – which then runs your code as well, so you see whether both Rubies agree.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"json\"\n\ndef strong_quakes(quakes, magnitude)\n  # count the quakes with mag >= magnitude\nend\n\nquakes = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nstrong_quakes(quakes, 5)",
+            "check": "quakes = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nwant = ->(m) { quakes.count { |q| q[\"properties\"][\"mag\"].to_f >= m } }\n# the method itself, on CRuby, with two more magnitudes: a hard-coded\n# answer, or one that ignores the magnitude, does not pass. Code that uses\n# Java cannot run here; it is checked by its answer for 5 only.\nothers = begin\n  old_stdout, $stdout = $stdout, StringIO.new\n  box = Object.new\n  eval(code, box.instance_eval { binding }, \"check.rb\")\n  [box.strong_quakes(quakes, 4.5), box.strong_quakes(quakes, 6)]\nrescue NameError\n  raise unless code.match?(/java|Java|com\\./)\n  nil\nensure\n  $stdout = old_stdout\nend\ncode.include?(\"def strong_quakes\") && (result == want[5] || output.split.last == want[5].to_s) &&\n  (others.nil? || others == [want[4.5], want[6]])",
+            "hint": "<code>quakes.count { |q| q[\"properties\"][\"mag\"].to_f &gt;= magnitude }</code>. <code>mag</code> can be <code>nil</code>, and <code>nil.to_f</code> is <code>0.0</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "JRuby：JavaのライブラリとRuby",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>JRuby：Java仮想マシンの上のRuby</h2><p>このレッスンでは、あなたのコードはCRubyでは動きません。どのセルも<strong>JRuby</strong>に送られます。レッスン{{nr:rubies}}で紹介した、Java仮想マシン（JVM）の上で動くRubyです。ブラウザーにはJVMがないので、このJRubyは<a href='https://teavm.org' target='_blank'>TeaVM</a>でJavaからJavaScriptに変換してあり、専用のWeb Workerで動きます。読み込むのはこのレッスンのときだけで、初回に約7.2 MBです。</p><p class='jruby-status'></p><p>まず、名前を聞いてみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "[RUBY_ENGINE, JRUBY_VERSION, RUBY_VERSION]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>\"jruby\"</code>、JRuby自身のバージョン、そして話すRubyのバージョン 4.0 です。このコースのほかの部分で使っているCRubyと同じ言語です。CRubyにできないこと：JRubyはJavaのクラスを知っています。<code>java.util.ArrayList</code> はJavaのリストですが、Arrayと同じように <code>&lt;&lt;</code> が使えます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "list = java.util.ArrayList.new\nlist << \"Speck\" << \"apfel\" << \"Bacon\"\njava.util.Collections.sort(list) { |a, b| a.downcase <=> b.downcase }\nlist.to_a"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Collections.sort</code> はJavaです。引数に<em>Comparator</em>（2つのものを比べるメソッドをひとつ持つJavaのオブジェクト）が必要ですが、JRubyはRubyのブロックをそれに変えてくれます。Javaの名前もRubyらしくなります。Javaの <code>isEmpty()</code> は <code>is_empty</code> とも <code>empty?</code> とも書けて、<code>nextToken()</code> は <code>next_token</code> になります。この先にもたくさん出てきます。</p><h3>JavaのライブラリはRubyのライブラリ</h3><p>Javaの世界の大きなライブラリ置き場、Maven Centralには50万以上のライブラリがあり、JRubyはそのどれでも使えます。<a href='https://github.com/zxing/zxing' target='_blank'>ZXing</a>（「ゼブラ・クロッシング」）はバーコードを作ったり読んだりするライブラリで、多くのAndroidアプリがスキャンに使っています。このJRubyにはZXingが入っています。WebアドレスをQRコードにしてみましょう。</p>"
+          },
+          {
+            "t": "c",
+            "code": "java_import com.google.zxing.qrcode.QRCodeWriter\njava_import com.google.zxing.BarcodeFormat\n\nurl = \"https://chunkybacon.idogawa.com\"\nqr = QRCodeWriter.new.encode(url, BarcodeFormat::QR_CODE, 0, 0)\nrows = (0...qr.height).step(2).map do |y|\n  (0...qr.width).map do |x|\n    top = qr.get(x, y)\n    bottom = y + 1 < qr.height && qr.get(x, y + 1)\n    if top && bottom then \"█\"\n    elsif top then \"▀\"\n    elsif bottom then \"▄\"\n    else \" \"\n    end\n  end.join\nend\nputs rows"
+          },
+          {
+            "t": "h",
+            "html": "<p><strong>スマートフォンのカメラを向けてみてください。</strong>このコースが開きます。出力の1行に、コードの2段分が入っています。<code>▀</code> は上の点、<code>▄</code> は下の点、<code>█</code> は両方です。</p><p>公平のために言うと、CRubyにもQRコードのgem（rqrcode、純粋なRuby）があります。言いたいのは別のことです。Javaの世界で書かれたものは、<code>java_import</code> ひとつで使えるのです。（このブラウザー版のJRubyで使えるのは、ビルドのときに一覧に入れたJavaクラスだけです。自分のコンピューターなら全部使えます。）</p><h3>大きなJSONファイル：1か月分のすべての地震</h3><p>アメリカ地質調査所（USGS）は、地震計がとらえたすべての地震をGeoJSONで公開しています。ここにあるのは2026年10月17日のスナップショットで、30日分の<strong>7.3 MB、10,224件の地震</strong>です。パブリックドメインです。コードの隣に <code>data/all_month.geojson</code> として置いてあります。JRubyの <code>json</code> はCRubyと同じgemですが、パーサーがCではなくJavaで書かれています。</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\nt = Time.now\nquakes = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nputs \"#{quakes.size} quakes in #{((Time.now - t) * 1000).round} ms\""
+          },
+          {
+            "t": "h",
+            "html": "<p>地震ひとつひとつがHashです。<code>q[\"properties\"][\"mag\"]</code> がマグニチュード、<code>q[\"properties\"][\"place\"]</code> が場所です。強いほうから5つ：</p>"
+          },
+          {
+            "t": "c",
+            "code": "quakes.max_by(5) { |q| q[\"properties\"][\"mag\"].to_f }\n  .map { |q| \"M #{q[\"properties\"][\"mag\"]}  #{q[\"properties\"][\"place\"]}\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>地震がいちばん多い場所は？ 場所の最後のカンマのあとの部分で数えます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "quakes.map { |q| q[\"properties\"][\"place\"].to_s.split(\", \").last }\n  .tally.max_by(5) { |_, n| n }"
+          },
+          {
+            "t": "h",
+            "html": "<p>アラスカとカリフォルニアが多いのは、USGSの地震計がそこにいちばん多く、小さな地震まで記録するからです。次は、まったく同じパースを<strong>CRuby</strong>（ruby.wasm）で。このコースのほかの部分で動いているRubyです。出力の上のラベルが、どちらのRubyがセルを実行したか、どれだけ時間がかかったかを示します。</p>"
+          },
+          {
+            "t": "c",
+            "on": "cruby",
+            "code": "require \"json\"\nt = Time.now\nquakes = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nputs \"#{quakes.size} quakes in #{((Time.now - t) * 1000).round} ms\""
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='測定結果'><p>8コアのサーバー上、ウィンドウのないChromiumで測ると、CRubyはこのファイルを<strong>96–208 ms</strong>で、JRubyは<strong>0.8–1.0 秒</strong>でパースしました。ブラウザーでは<strong>CRubyのほうが速い</strong>のです。CRubyのJSONパーサーはCをWebAssemblyにしたもので、このJRubyはJavaをJavaScriptに変換したもの。本物のJVMでJavaを速くしているJITコンパイラーがありません。ブラウザーでJRubyを選ぶ理由は速さではなく、ライブラリです。</p></div><h3>Jackson：流れとして読むJSON</h3><p>Javaのプログラムの多くは、JSONを<a href='https://github.com/FasterXML/jackson-core' target='_blank'>Jackson</a>で読みます。Jacksonは大きなHashを作りません。ファイルを少しずつ、<em>トークン</em>として渡してくれます。<code>START_OBJECT</code>、<code>FIELD_NAME</code>「mag」、<code>VALUE_NUMBER_FLOAT</code> 5.2 …。このセルは、小さいほうのファイル <code>data/4.5_month.geojson</code>（マグニチュード4.5以上の622件だけ、0.4 MB）で、マグニチュード5以上の地震を数えます。<code>token.numeric?</code> はJavaの <code>isNumeric()</code> です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "java_import com.fasterxml.jackson.core.JsonFactory\n\nparser = JsonFactory.new.create_parser(File.read(\"data/4.5_month.geojson\"))\ncount = 0\nwhile (token = parser.next_token)\n  if parser.current_name == \"mag\" && token.numeric?\n    count += 1 if parser.double_value >= 5\n  end\nend\ncount"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>next_token</code> のたびに、RubyからJavaへ行って戻ってきます。このファイルだと何万回もです。同じループをJavaで書いたもの（このレッスンに <code>Lesson::Quakes</code> として入っています）なら、行き来は1回で済みます。</p><pre><code>public static int countAtLeast(String json, double min) throws IOException {\n    int n = 0;\n    JsonParser p = new JsonFactory().createParser(json);\n    JsonToken t;\n    while ((t = p.nextToken()) != null) {\n        if (t == JsonToken.FIELD_NAME &amp;&amp; \"mag\".equals(p.currentName())) {\n            if (p.nextToken().isNumeric() &amp;&amp; p.getDoubleValue() >= min) n++;\n        }\n    }\n    return n;\n}</code></pre>"
+          },
+          {
+            "t": "c",
+            "code": "Java::Lesson::Quakes.count_at_least(File.read(\"data/4.5_month.geojson\"), 5)"
+          },
+          {
+            "t": "h",
+            "html": "<p>同じ173です。出力の上の時間を見比べてください。ここで測った値は、Rubyのループが<strong>549–756 ms</strong>、Javaのループが<strong>39–59 ms</strong>、およそ9–19倍の速さです。この部分の教訓：熱いループは、Javaのライブラリに回してもらいましょう。（Rubyからは<code>countAtLeast</code> をRubyの名前 <code>count_at_least</code> で呼びます。）</p><h3>スレッド</h3><p>JVMの上では、Rubyのスレッドは本当に同時に、それぞれ別のCPUコアで動きます。だから速いのですが、おたがいの足を踏むこともあります。4つのスレッドがそれぞれ100回1を足します。読んでから書くまでのあいだに短い <code>sleep</code> をはさみます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "count = 0\nthreads = 4.times.map do\n  Thread.new do\n    100.times do\n      v = count\n      sleep 0.001\n      count = v + 1\n    end\n  end\nend\nthreads.each(&:join)\ncount"
+          },
+          {
+            "t": "h",
+            "html": "<p>400ではなく100です。4つのスレッドが同じ <code>count</code> を読み、眠り、古い値に1を足して書き戻すので、4回のうち3回の足し算が消えてしまいます。<code>Mutex</code> を使うと、スレッドがひとつずつ通ります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "count = 0\nlock = Mutex.new\nthreads = 4.times.map do\n  Thread.new do\n    100.times do\n      lock.synchronize do\n        v = count\n        sleep 0.001\n        count = v + 1\n      end\n    end\n  end\nend\nthreads.each(&:join)\ncount"
+          },
+          {
+            "t": "h",
+            "html": "<p>400になりました。Javaの <code>java.util.concurrent</code> には、こういうときのためのカウンターがあります。<code>AtomicLong</code> はロックなしで、ひとつも失わずに足し算します。<code>increment_and_get</code> はJavaの <code>incrementAndGet</code> です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "count = java.util.concurrent.atomic.AtomicLong.new(0)\nthreads = 4.times.map do\n  Thread.new { 50_000.times { count.increment_and_get } }\nend\nthreads.each(&:join)\ncount.get"
+          },
+          {
+            "t": "h",
+            "html": "<p>ブラウザーについて正直に言うと、ここのスレッドはCRubyと同じように、ひとつのJavaScriptスレッドの上で順番に動いています。上の競合は <code>sleep</code> から来ていて、CRubyでも同じように起きます。本物のJVMで何が変わるかは、下の枠を見てください。</p><div class='offweb' data-title='自分のコンピューターでは'><p>Java 21上のJRuby 10.1.2とCRuby 4.0.6を、8コアのサーバーで測りました（20回の範囲。起動は5回、Jacksonは8回。JITコンパイラーが温まるまでの最初の数回は別に書いています）。</p><ul><li><strong>起動</strong>：<code>jruby -e 'puts 1'</code> は2.5–2.8 秒、<code>ruby</code> は53–65 ms。JVMの起動には少し時間がかかります。</li><li><strong>4スレッド × fib(27)</strong>：CRubyは順番に77–100 ms、スレッドで77–105 ms。GVLが一度にひとつのスレッドしかRubyを動かさないので、速くなりません。JRubyは最初の数回が607–723 ms、JITコンパイラーが温まると順番に18–39 ms、<strong>4スレッドで5.5–17 ms</strong>（たいてい約10 ms）。（YJITつきのCRuby：16–20 / 16–24 ms）</li><li><strong>sleepなしの競合</strong>（<code>4.times.map { Thread.new { 50_000.times { count += 1 } } }</code>）：JRubyは200,000ではなく66,934〜128,453で終わり、CRubyはいつも200,000です。本物のスレッドにはMutexかAtomicLongが必要です。</li><li><strong>小数のループ</strong>（マンデルブロ集合、200 × 200点）：CRuby 341–399 ms、YJIT 198–244 ms。JRubyは1回目573 ms、そのあと55–358 ms。速いことが多いのですが、ばらつきます。</li><li>7.3 MBのファイルの<strong>JSON.parse</strong>：ほぼ同じで、CRuby 40–60 ms（1回目60 ms、そのあと40–48 ms）、温まったJRuby 38–43 ms（最初の3回は148、95、63 ms）。Jacksonを4スレッドで使うと、ファイルを4回読むのに118–194 ms、順番だと469–553 msです（1回目はそれぞれ235 msと977 ms）。</li></ul><p>つまり、温まったあとのJRubyは速く、すべてのコアを使います。だからサーバーで使われるのです。<code>rbenv install jruby-10.1.2.0</code> でインストールできます（Java 21が必要）。Javaのライブラリは <code>require \"path/to/jackson-core.jar\"</code> で、またはjar-dependencies gemで依存関係として読み込めます。レッスン{{nr:rubies}}の <code>threads_in_parallel?</code> の答えの、これが数字です。</p></div>"
+          },
+          {
+            "t": "h",
+            "html": "<h3>おまけ：Glimmerでデスクトップのウィンドウ</h3><p>自分のコンピューターなら、JRubyでJavaのデスクトップ用ツールキットSwingも使えます。<a href='https://github.com/AndyObtiva/glimmer-dsl-swing' target='_blank'>Glimmer DSL</a>を使うと、ウィンドウはブロックを入れ子にするだけで書けて、<code>observe</code> がラベルをキツネに合わせて更新します（<em>データバインディング</em>）。TeaVM版のJRubyにはSwingがありませんが、Leaning Technologiesの<a href='https://cheerpj.com/' target='_blank'>CheerpJ</a>にはあります。Java仮想マシンまるごとをWebAssemblyにしたものです。その上で、JRuby 9.4（公式の <code>jruby-complete</code> に、CheerpJ用に手直ししたクラスをひとつだけ加えたもの。Ruby 3.1を話す古めのJRubyで、インタープリターのみ）が動きます。ただし代償があります。<strong>約40 MB</strong>（CheerpJ自身の部分は同社のサーバー cjrtnc.leaningtech.com から）、起動に<strong>20〜40秒</strong>。速い8コアのサーバーで27秒（JRuby 14–15秒、そのあとGlimmer 12–13秒）、ノートパソコンやスマートフォンではもっとかかります。クリックするまで何も読み込みません。</p><div class='jruby-swing'><img class='jruby-swing-preview' src='assets/jruby-lesson/swing-en.png' alt='3つのJavaのウィンドウ：Bacon: 10というラベルとFeed the foxボタンのあるChunky Bacon、摂氏から華氏への変換、円グラフWhat the fox eats' width='714' height='431' loading='lazy'><button type='button' class='jruby-swing-start' data-frame-title='CheerpJの上のJRuby 9.4とSwing'>☕ Javaのデスクトップを起動（約40 MB、20〜40秒）</button></div><div class='offweb' data-title='自分のコンピューターでは'><p>JRubyをインストールしたら、<code>gem install glimmer-dsl-swing</code> を実行し、これを <code>fox.rb</code> に書いて <code>jruby fox.rb</code> で動かします。JRubyが起動してGlimmerを読み込むと、本物のウィンドウが開きます（起動だけで上の2.5–2.8 秒かかります）。</p><pre><code>require \"glimmer-dsl-swing\"\ninclude Glimmer\n\nclass Fox\n  attr_accessor :bacon\n  def initialize = @bacon = 0\nend\nfox = Fox.new\n\njframe(\"Chunky Bacon\") {\n  jpanel {\n    @label = jlabel(\"Bacon: 0\")\n    jbutton(\"Feed the fox\") {\n      on_action_performed { fox.bacon += 1 }\n    }\n  }\n}.show\n\nobserve(fox, :bacon) { |n| @label.text = \"Bacon: #{n}\" }</code></pre></div><div class='task'><strong>課題：</strong><code>strong_quakes(quakes, magnitude)</code> を書きましょう。マグニチュードが magnitude 以上の地震がいくつあるかを返します。セルの最後の行 <code>strong_quakes(quakes, 5)</code> は、マグニチュード5以上を数えます。チェックはCRubyが行い、そのあとあなたのコードをCRubyでも実行するので、2つのRubyの答えが一致するかがわかります。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"json\"\n\ndef strong_quakes(quakes, magnitude)\n  # mag が magnitude 以上の地震を数える\nend\n\nquakes = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nstrong_quakes(quakes, 5)",
+            "check": "quakes = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nwant = ->(m) { quakes.count { |q| q[\"properties\"][\"mag\"].to_f >= m } }\n# the method itself, on CRuby, with two more magnitudes: a hard-coded\n# answer, or one that ignores the magnitude, does not pass. Code that uses\n# Java cannot run here; it is checked by its answer for 5 only.\nothers = begin\n  old_stdout, $stdout = $stdout, StringIO.new\n  box = Object.new\n  eval(code, box.instance_eval { binding }, \"check.rb\")\n  [box.strong_quakes(quakes, 4.5), box.strong_quakes(quakes, 6)]\nrescue NameError\n  raise unless code.match?(/java|Java|com\\./)\n  nil\nensure\n  $stdout = old_stdout\nend\ncode.include?(\"def strong_quakes\") && (result == want[5] || output.split.last == want[5].to_s) &&\n  (others.nil? || others == [want[4.5], want[6]])",
+            "hint": "<code>quakes.count { |q| q[\"properties\"][\"mag\"].to_f &gt;= magnitude }</code>。<code>mag</code> は <code>nil</code> のこともあるけど、<code>nil.to_f</code> は <code>0.0</code> になるよ。"
           }
         ]
       }

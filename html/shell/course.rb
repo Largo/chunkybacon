@@ -54,6 +54,9 @@ module ChunkyShell
     # ("engine": "picoruby", the PicoRuby lesson: html/picoruby_lab.js)
     def picoruby?(idx) = @lessons[idx][:engine] == "picoruby"
 
+    # true for a lesson whose cells run on JRuby (TeaVM) instead of CRuby
+    # ("engine": "jruby", the JRuby lesson: html/jruby_lab.js)
+    def jruby?(idx) = @lessons[idx][:engine] == "jruby"
     # a Pico lesson's cell (docs/HANDOVER.md §6r): its tabs, the files
     # beside the main one ([] without), and whether it runs on a board
     def tabs(cell)

@@ -1,0 +1,32 @@
+{
+  "about": "The JRuby lesson's bonus: JRuby 9.4 (Ruby 3.1) on CheerpJ 4.3, a JVM in WebAssembly, with Glimmer DSL for Swing, JFreeChart and FlatLaf (html/jruby_swing.html). The CheerpJ runtime itself comes from Leaning Technologies' CDN (cjrtnc.leaningtech.com/4.3/loader.js) and is not vendored.",
+  "maven": {
+    "jruby-complete-9.4.15.0.jar": {
+      "path": "org/jruby/jruby-complete/9.4.15.0/jruby-complete-9.4.15.0.jar",
+      "sha256": "e8a461c48da851d839b8deb8b67b1987542ba5e23b8febfa0e60f0065e2639d2"
+    },
+    "flatlaf-3.7.2.jar": {
+      "path": "com/formdev/flatlaf/3.7.2/flatlaf-3.7.2.jar",
+      "sha256": "917aff3963c88d797d0fd9b9ccbd70f7681c101df9d11c59e2bc7a3a6c0fabf4"
+    },
+    "jfreechart-1.5.6.jar": {
+      "path": "org/jfree/jfreechart/1.5.6/jfreechart-1.5.6.jar",
+      "sha256": "be7ae6310ca005ac98eceb74fa514af88cad098c808845786f762ca08a5b4bb3"
+    }
+  },
+  "built": {
+    "repo": "https://github.com/Largo/jruby-cheerpj",
+    "commit": "6e134ab",
+    "build": "./run.sh prepare (needs a JDK and network: patch/build.sh, patch/glimmer/build.sh)",
+    "files": {
+      "cheerpj-patch.jar": {
+        "about": "JRuby's ConstantField, patched so Java's static final char/short/float constants work under CheerpJ (patch/src)",
+        "sha256": "c0e1f3dc1865d35806bf68548ef86aa2fc628ea45a7096fe815f202b31c9f772"
+      },
+      "glimmer-swing-gems.jar": {
+        "about": "glimmer-dsl-swing 0.0.5 and its pure-Ruby gems, packed as a jar (require 'glimmer-cheerpj')",
+        "sha256": "117b1104aacd7acc27cf177e0ab8c1db212949f096d57c78768e61c7037660ee"
+      }
+    }
+  }
+}

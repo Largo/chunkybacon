@@ -61,6 +61,15 @@ require_relative "../html/game"
 # here its exercise runs under CRuby, and the check gets the result as the
 # page hands it over - a PicoRubyCells::Value, PicoRuby's inspect text
 require_relative "../html/picoruby_cells"
+# a lesson with "engine": "jruby" runs on JRuby (TeaVM) in the browser; its
+# exercise's check runs in CRuby there too, on the same USGS snapshot, which
+# JRubyCells.load_data reads from the vendored html/assets/jruby/data/
+# (tools/vendor_jruby.rb) - the lesson is skipped when it is not there
+require_relative "../html/jruby_cells"
+JRubyCells.fetch_text = lambda do |url|
+  path = File.expand_path("../html/#{url}", __dir__)
+  File.exist?(path) ? File.read(path) : nil
+end
 # a lesson with "engine": "ironruby" runs on IronRuby (.NET in WebAssembly)
 # in the browser; here its cells, starter and solutions run on the same
 # bundle under Node (ironruby_node.mjs, check_ironruby below), and the
@@ -1421,6 +1430,46 @@ which_ruby(RUBY_ENGINE)),
 def which_ruby(engine) = NAMES.fetch(engine, engine)
 puts which_ruby(RUBY_ENGINE))]
   },
+  # the JRuby lesson: count, select.size, and by hand with each
+  "jruby" => {
+    "de" => [%(require "json"
+
+def staerke_beben(beben, staerke)
+  beben.count { |q| q["properties"]["mag"].to_f >= staerke }
+end
+
+beben = JSON.parse(File.read("data/all_month.geojson"))["features"]
+staerke_beben(beben, 5)),
+             %(require "json"
+
+def staerke_beben(beben, staerke)
+  anzahl = 0
+  beben.each do |q|
+    mag = q["properties"]["mag"]
+    anzahl += 1 if mag && mag >= staerke
+  end
+  anzahl
+end
+
+beben = JSON.parse(File.read("data/all_month.geojson"))["features"]
+puts staerke_beben(beben, 5))],
+    "en" => [%(require "json"
+
+def strong_quakes(quakes, magnitude)
+  quakes.count { |q| q["properties"]["mag"].to_f >= magnitude }
+end
+
+quakes = JSON.parse(File.read("data/all_month.geojson"))["features"]
+strong_quakes(quakes, 5)),
+             %(require "json"
+
+def strong_quakes(quakes, magnitude)
+  quakes.select { |q| q.dig("properties", "mag").to_f >= magnitude }.size
+end
+
+quakes = JSON.parse(File.read("data/all_month.geojson"))["features"]
+puts strong_quakes(quakes, 5))]
+  },
   # the IronRuby lesson: the same code in de and en (IRONRUBY_SOLUTIONS)
   "ironruby" => {
     "de" => IRONRUBY_SOLUTIONS,
@@ -2148,6 +2197,11 @@ def run_harness(langs)
   failures += 1 unless pico.empty? || pico_harness(pico, langs)
   Dir.chdir(WORKDIR)
 
+  # the JRuby lesson's data is vendored, not in git (tools/vendor_jruby.rb)
+  if selected.any? { |lesson| lesson["engine"] == "jruby" } && !JRubyCells.fetch_text.call(JRubyCells::DATA.values.first)
+    puts "SKIP jruby: no html/assets/jruby/data/ - run tools/vendor_jruby.rb"
+    selected = selected.reject { |lesson| lesson["engine"] == "jruby" }
+  end
   # the IronRuby lesson's runtime is vendored, not in git (tools/vendor_ironruby.rb)
   if selected.any? { |lesson| lesson["engine"] == "ironruby" } && !ironruby_available?
     puts "SKIP ironruby: no html/assets/ironruby/ (run tools/vendor_ironruby.rb) or no node"
@@ -2180,7 +2234,7 @@ def run_harness(langs)
     # a demo cell below the exercise (none yet) runs first on a fresh page
     # without it: the exercise is left out while it holds its starter
     last = cells.rindex { |c| c["t"] == "c" }
-    if last && last > exercise_at && lesson["engine"] != "picoruby"
+    if last && last > exercise_at && !%w[picoruby jruby].include?(lesson["engine"])
       bind = RubyVM::InstructionSequence.compile("proc { binding }.call", "chunky.rb").eval
       unmix_ruby2d
       load_lesson_files(lesson)
@@ -2210,6 +2264,9 @@ def run_harness(langs)
       # a PicoRuby lesson's demos use what only PicoRuby has (Task,
       # sleep_ms, PICORUBY_VERSION): test/picoruby_test.mjs runs them
       demos = [] if lesson["engine"] == "picoruby"
+      # the JRuby lesson's demos call Java (java_import, AtomicLong):
+      # test/jruby_test.mjs runs them; its CRuby side reads the USGS data
+      demos = [] if lesson["engine"] == "jruby"
       demos.each do |demo|
         _, _, err = run_in(bind, lesson["spinel"] ? ChunkySpinel.cell_source(demo["code"]) : demo["code"])
         # a cell that shows an error on purpose names it ("raises"), and
@@ -2243,6 +2300,7 @@ def run_harness(langs)
       $explicit_downloads = []
       SandboxFS.reset!
       load_lesson_files(lesson)
+      JRubyCells.load_data if lesson["engine"] == "jruby"
       watch = FileWatch.snapshot
       # a lesson with "spinel": true runs each cell's code as a program for Spinel (main.rb)
       result, output, error = run_in(bind, lesson["spinel"] ? ChunkySpinel.cell_source(candidate) : candidate)
@@ -2255,7 +2313,7 @@ def run_harness(langs)
 
       bind.local_variable_set(:output, output)
       # the page hands a PicoRuby lesson's check the value's inspect text
-      result = PicoRubyCells.value(result.inspect) if lesson["engine"] == "picoruby"
+      result = PicoRubyCells.value(result.inspect) if %w[picoruby jruby].include?(lesson["engine"])
       bind.local_variable_set(:result, result)
       bind.local_variable_set(:code, candidate)
       bind.local_variable_set(:images, $shown_images.dup)
