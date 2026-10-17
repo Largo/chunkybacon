@@ -388,12 +388,16 @@ class ChunkyApp
     seq = state.seq.to_i
     return if seq == @seq
 
+    first = @seq.nil?
     @seq = seq
     fresh_binding
     # (not in the embedded cell: embed.html has no PicoRuby)
     $window.chunkyPicoRuby.reset if $window[:chunkyPicoRuby].typeof == "object"
-    # the Pico's bench belongs to the page that went (pico_board.js)
-    $window.chunkyPicoBoard.unmount if $window[:chunkyPicoBoard].typeof == "object"
+    # the Pico's bench belongs to the page that went (pico_board.js). Not on
+    # the first sync, when Ruby has just booted: the shell drew the page's
+    # previews already and nothing can have run yet - rebuilding them would
+    # close a USB panel or stop a webcam the learner opened meanwhile.
+    $window.chunkyPicoBoard.unmount if !first && $window[:chunkyPicoBoard].typeof == "object"
     PicoLaptop.forget if defined?(PicoLaptop)
     $window.chunkyIronRuby.reset if $window[:chunkyIronRuby].typeof == "object"
     dispose_three

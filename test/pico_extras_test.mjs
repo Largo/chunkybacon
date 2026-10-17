@@ -115,6 +115,27 @@ async function go(page, id) {
   }
 }
 
+// ---------- the previews stay when Ruby boots ----------
+// (the first sync_state of main.rb used to unmount and rebuild every bench
+// about 2 s after load: an open USB panel closed, a started webcam stopped)
+{
+  const ctx = await browser().newContext({ locale: "en-US" });
+  await ctx.addInitScript(() => {
+    window.__benchGone = 0;
+    window.__benchMade = 0;
+    new MutationObserver(ms => ms.forEach(m => {
+      m.addedNodes.forEach(n => { if (n.nodeType === 1 && n.matches(".pico-bench")) window.__benchMade++; });
+      m.removedNodes.forEach(n => { if (n.nodeType === 1 && n.matches(".pico-bench")) window.__benchGone++; });
+    })).observe(document, { childList: true, subtree: true });
+  });
+  const page = await open(ctx, "en", "#pico-blink");
+  await previewsDone(page);
+  await page.waitForTimeout(1500);
+  const r = await page.evaluate(() => ({ made: window.__benchMade, gone: window.__benchGone, slots: document.querySelectorAll(".pico-slot").length }));
+  check("previews: built once, not torn down when Ruby boots", r.gone === 0 && r.made === r.slots, JSON.stringify(r));
+  await ctx.close();
+}
+
 // ---------- the static previews ----------
 {
   const ctx = await browser().newContext({ locale: "en-US" });
