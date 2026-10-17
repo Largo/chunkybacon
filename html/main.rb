@@ -1281,7 +1281,7 @@ class ChunkyApp
     cell = cells[idx] || {}
     tabs = cell["tabs"] ? cell_tabs(idx) : "[]"
     board = pico_board_json(cell, true)
-    $window.chunkyPicoBoard.mount(idx.to_s, board) if board != "" && $window[:chunkyPicoBoard].typeof == "object"
+    $window.chunkyPicoBoard.mount(idx.to_s, board, pico_bench_ui) if board != "" && $window[:chunkyPicoBoard].typeof == "object"
     $window.chunkyPicoRuby.run(idx.to_s, code, auto, @seq.to_s, tabs, board)
     :pending
   end
@@ -1307,6 +1307,11 @@ class ChunkyApp
   # lesson's Pico, the cell's parts and bench, and whether the run resets
   # the board (a cell's run does, a line in an IRB below it does not); ""
   # for a cell without one
+  # the bench's strings (pico_board.js): the ui keys board*, this language
+  def pico_bench_ui
+    (@pico_bench_ui ||= {})[@lang] ||= JSON.generate(ui.select { |key, _| key.start_with?("board") })
+  end
+
   def pico_board_json(cell, reset)
     board = cell["board"]
     return "" unless board.is_a?(Hash)

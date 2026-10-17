@@ -822,10 +822,236 @@ kbd {
 /* a read-only tab (a driver to read): no cursor glow, a quieter cap */
 .cell .CodeMirror.is-readonly { background: #262a31; }
 .cell .CodeMirror.is-readonly .CodeMirror-cursor { border-left-color: transparent; }
-/* the bench's slot below a board cell (pico_board.js fills it) */
-.pico-slot { border-top: 1px solid var(--rule); background: var(--sheet); padding: 0.5rem 0.7rem; }
-.pico-bench { margin: 0; }
-.pico-state { font-size: 12px; white-space: pre-wrap; word-break: break-all; color: var(--ink-soft); }
+/* the bench's slot below a board cell, and the bench (pico_board.js): a
+   white breadboard with the Pico 2 W across it, jumper wires, the parts;
+   cards for the parts without pins; real controls below the drawing. The
+   drawing's colours are the parts' own (a green Pico, gold pads, red
+   LED); the mat, the cards and the labels follow the page's light or dark
+   scheme through the --pb-* tokens. */
+.pico-slot { border-top: 1px solid var(--rule); background: var(--pb-mat); padding: 0.55rem 0.7rem 0.7rem; }
+.pico-bench {
+  --pb-mat: #efe9db;
+  --pb-board: #fbfaf6;
+  --pb-board-edge: #d9d3c4;
+  --pb-hole: #cfc8b8;
+  --pb-card: #fbfaf6;
+  --pb-card-edge: #d9d3c4;
+  --pb-ink: #1e2229;
+  --pb-soft: #5a616b;
+  --pb-label-gp: #ffffff;
+  --pb-label-gp-ink: #1e2229;
+  margin: 0;
+  color: var(--pb-ink);
+}
+.pico-slot { --pb-mat: #efe9db; }
+.pico-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.6rem; margin-bottom: 0.45rem; }
+.pico-bar button { font-size: 0.85rem; padding: 0.25rem 0.75rem; }
+.pico-sound[aria-pressed="true"] { background: var(--fat); }
+.pico-badge { font-size: 0.85rem; color: var(--pb-soft); }
+.pico-badge.is-running { color: var(--ok); font-weight: 600; }
+.pico-badge.is-reset { color: var(--err); font-weight: 600; }
+.pico-svg { display: block; width: 100%; height: auto; margin: 0 auto; user-select: none; -webkit-user-select: none; }
+.pico-parts { font-size: 0.8rem; color: var(--pb-soft); margin: 0.35rem 0 0.2rem; }
+.pico-controls { display: flex; flex-wrap: wrap; gap: 0.35rem 1.2rem; align-items: center; margin-top: 0.35rem; font-size: 0.9rem; }
+.pico-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.6rem; }
+.pico-slider, .pico-line { display: inline-flex; align-items: center; gap: 0.45rem; }
+.pico-slider input[type="range"] { width: 8.5rem; accent-color: var(--bacon); }
+.pico-slider input[type="range"]:disabled { opacity: 0.55; }
+.pico-slider-name { font-weight: 600; }
+.pico-slider-value { min-width: 4.4em; font-variant-numeric: tabular-nums; color: var(--pb-soft); }
+.pico-scripted { font-size: 0.9rem; cursor: help; }
+.pico-press { touch-action: none; min-width: 9rem; }
+.pico-press.is-down, .pico-press[aria-pressed="true"] { background: var(--fat); transform: translateY(1px); box-shadow: 0 1px 0 var(--ink); }
+.pico-check { display: inline-flex; align-items: center; gap: 0.3rem; }
+.pico-moves { display: inline-flex; align-items: center; gap: 0.2rem; }
+.pico-moves-name { font-weight: 600; margin-right: 0.2rem; }
+.pico-move { min-width: 2rem; padding: 0.15rem 0.4rem; font-size: 0.85rem; }
+.pico-line input { width: 11rem; font: inherit; font-family: var(--font-code); padding: 0.2rem 0.4rem; border: 1px solid var(--ink-soft); border-radius: 4px; background: var(--pb-board); color: var(--pb-ink); }
+.pico-say { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* the drawing */
+.pb-breadboard { fill: var(--pb-board); stroke: var(--pb-board-edge); stroke-width: 1; }
+.pb-hole { fill: var(--pb-hole); }
+.pb-pcb { fill: url(#pb-pcb); stroke: #0f4b29; stroke-width: 1; }
+.pb-pcb-edge { fill: none; stroke: rgba(255, 255, 255, 0.08); stroke-width: 1; }
+.pb-pad { fill: #d8b25a; stroke: #a8843a; stroke-width: 0.5; }
+.pb-castle { fill: var(--pb-board); stroke: #a8843a; stroke-width: 0.6; }
+.pb-ring { fill: #e2c06a; stroke: #a8843a; stroke-width: 0.6; }
+.pb-drill { fill: #20262a; }
+.pb-mount { fill: #e2c06a; stroke: #a8843a; stroke-width: 0.6; }
+.pb-mount-hole { fill: var(--pb-board); stroke: #a8843a; stroke-width: 0.4; }
+.pb-silk { fill: #f4f4ef; font: 600 5.5px var(--font-print); }
+.pb-silk-tiny { font-size: 4.6px; font-weight: 600; }
+.pb-silk-name { font: 700 7.4px var(--font-display); letter-spacing: 0.1px; }
+.pb-chip-text { fill: #c9ccd1; font: 700 6.4px var(--font-print); letter-spacing: 0.3px; }
+.pb-chip-small { font-size: 4.4px; font-weight: 600; }
+.pb-chip-temp { font-size: 5.4px; }
+.pb-can-text { fill: #6d747c; font: 700 5px var(--font-print); }
+.pb-antenna-zone { fill: rgba(0, 0, 0, 0.12); }
+.pb-antenna { fill: none; stroke: #d8b25a; stroke-width: 1.6; stroke-linejoin: round; }
+.pb-onboard { fill: #e9f5e4; stroke: #9aa39a; stroke-width: 0.4; }
+.pb-onboard.is-on { fill: #c7ff9e; }
+.pb-onboard-glow { opacity: 0; transition: opacity 60ms; pointer-events: none; }
+/* a pin's label: GP pins white, power red, ground black (the datasheet's colours) */
+.pb-label rect { fill: var(--pb-label-gp); stroke: #b9b2a2; stroke-width: 0.5; }
+.pb-label-text { fill: var(--pb-label-gp-ink); font: 700 6.3px var(--font-code); }
+.pb-label-long { font-size: 5.2px; }
+.pb-label-adc { fill: #2e7d4f; font-weight: 700; }
+.pb-label-gnd rect { fill: #23262b; stroke: #23262b; }
+.pb-label-gnd .pb-label-text { fill: #fff; }
+.pb-label-pwr rect { fill: #c62f22; stroke: #c62f22; }
+.pb-label-pwr .pb-label-text { fill: #fff; }
+.pb-label-ctl rect { fill: #e2b034; stroke: #c09124; }
+/* a pin's state: out high red, out low dark, input a blue ring, PWM
+   orange (as opaque as its duty), a bus pin violet */
+.pb-pinstate { fill: transparent; stroke: transparent; stroke-width: 1.6; }
+.pb-pinstate.is-high { fill: rgba(255, 59, 31, 0.85); stroke: #ffd2c4; }
+.pb-pinstate.is-low { fill: rgba(20, 22, 26, 0.75); stroke: #6a7078; }
+.pb-pinstate.is-in { stroke: #3d8bff; stroke-width: 2; }
+.pb-pinstate.is-adc { stroke: #2fbf71; stroke-width: 2; }
+.pb-pinstate.is-pwm { fill: #ff8a1f; stroke: #ffe0b8; }
+.pb-pinstate.is-bus { fill: rgba(155, 89, 230, 0.8); stroke: #e3d0ff; }
+/* jumper wires */
+.pb-wire-edge { fill: none; stroke: rgba(0, 0, 0, 0.45); stroke-width: 4.2; stroke-linecap: round; stroke-linejoin: round; }
+.pb-wire-core { fill: none; stroke-width: 2.9; stroke-linecap: round; stroke-linejoin: round; }
+.pb-wire-shine { fill: none; stroke: rgba(255, 255, 255, 0.28); stroke-width: 0.9; stroke-linecap: round; stroke-linejoin: round; transform: translate(-0.6px, -0.6px); }
+.pb-wire-tip { fill: #3a3e44; stroke: #15171a; stroke-width: 0.5; }
+.pb-leg { stroke: #a9aeb3; stroke-width: 1.4; stroke-linecap: round; }
+.pb-small { fill: var(--pb-soft); font: 600 7.5px var(--font-print); }
+.pb-value { fill: var(--pb-ink); font-variant-numeric: tabular-nums; }
+/* on the breadboard, white in either scheme */
+.pb-col .pb-small { fill: #5a616b; }
+.pb-col .pb-value { fill: #1e2229; }
+.pb-on-dark { fill: #d8dbe0; }
+.pb-shine { fill: rgba(255, 255, 255, 0.55); }
+.pb-resistor-body { fill: #e9d3a7; stroke: #b39363; stroke-width: 0.6; }
+.pb-led-rim { fill: #b81d10; stroke: #7d1208; stroke-width: 0.6; }
+.pb-led-dome { fill: #d8321f; }
+.pb-led-dome.is-on { fill: #ff6a4d; }
+.pb-led-glow { opacity: 0; pointer-events: none; transition: opacity 60ms; }
+.pb-button-body { fill: #3b3f45; stroke: #1e2125; stroke-width: 0.8; }
+.pb-button-leg { fill: #b9bec4; }
+.pb-button-dot { fill: #23262a; }
+.pb-button-cap { fill: #1c1e21; stroke: #5b6067; stroke-width: 1.4; transition: transform 60ms; transform-origin: 27px 30px; }
+.pb-button-cap.is-pressed { fill: #2c4f8e; stroke: #8db4ff; transform: scale(0.88); }
+.pb-finger path { fill: #c8ccd2; stroke: #6e747c; stroke-width: 0.8; }
+.pb-finger-led { fill: #3d8bff; }
+.pb-sun { fill: #ffcf33; stroke: #d39b00; stroke-width: 0.8; }
+.pb-rays line { stroke: #e7a900; stroke-width: 1.6; stroke-linecap: round; }
+.pb-ldr { fill: #f2d7a6; stroke: #b48a46; stroke-width: 0.8; }
+.pb-ldr-track { fill: none; stroke: #b8432c; stroke-width: 1.2; }
+.pb-buzzer { fill: #202226; stroke: #0e0f11; stroke-width: 0.8; }
+.pb-buzzer-ring { fill: none; stroke: #3a3d43; stroke-width: 1; }
+.pb-buzzer-hole { fill: #050506; }
+.pb-waves path { fill: none; stroke: #8e44ad; stroke-width: 1.6; stroke-linecap: round; }
+.pb-waves { opacity: 0; transition: opacity 80ms; }
+.pb-env { fill: #1d4e9e; stroke: #123468; stroke-width: 0.8; }
+.pb-env-edge { fill: none; stroke: rgba(255, 255, 255, 0.12); }
+.pb-env-text { fill: #ffffff; font: 700 8.5px var(--font-code); font-variant-numeric: tabular-nums; }
+.pb-header { fill: #1d1f22; stroke: #d8b25a; stroke-width: 0.8; }
+.pb-epd-pcb { fill: #1f2124; stroke: #0b0c0d; stroke-width: 0.8; }
+.pb-epd-glass { fill: #cfd0cb; stroke: #a9aaa4; stroke-width: 0.8; }
+.pb-epd-fpc { fill: #c98a2b; opacity: 0.85; }
+.pb-epd-paper { fill: #e8e6df; }
+.pb-epd-image { image-rendering: pixelated; image-rendering: crisp-edges; }
+.pb-epd-flash { fill: #1d1d1d; opacity: 0; pointer-events: none; }
+.pb-epd-flash.is-flashing { animation: pb-epd-full 600ms steps(1, end) infinite; }
+.pb-epd-flash.is-fast { animation: pb-epd-full 750ms steps(1, end) 2; }
+@keyframes pb-epd-full { 0% { opacity: 1; fill: #1d1d1d; } 50% { opacity: 1; fill: #e8e6df; } }
+.pb-busy { fill: #3a2c10; stroke: #8a6a20; stroke-width: 0.6; }
+.pb-busy.is-on { fill: #ffbf2f; stroke: #fff2c9; }
+/* the cards: arena, camera, Wi-Fi, laptop */
+.pb-card { fill: var(--pb-card); stroke: var(--pb-card-edge); stroke-width: 1; }
+.pb-card-title { fill: var(--pb-ink); font: 700 10px var(--font-display); }
+.pb-card-hint { fill: var(--pb-soft); font: 600 7.5px var(--font-print); }
+.pb-arena-wall { fill: #8a6a48; }
+.pb-arena-floor { fill: #e9e2d0; }
+.pb-arena-grid { stroke: rgba(120, 100, 70, 0.18); stroke-width: 0.6; }
+.pb-obstacle { fill: #8a6a48; stroke: #5d452c; stroke-width: 0.8; }
+.pb-box-card { fill: #c99b5d; stroke: #8a6534; stroke-width: 0.8; }
+.pb-box-tape { fill: #e6cf98; }
+.pb-drag { cursor: grab; touch-action: none; }
+.pb-drag:active { cursor: grabbing; }
+.pb-bacon-fat { fill: #f6d9c4; stroke: #c4734f; stroke-width: 0.8; }
+.pb-bacon-meat { fill: none; stroke: #c23b22; stroke-width: 2.2; stroke-linecap: round; }
+.pb-sonar { stroke: #2a6fdb; stroke-width: 1; stroke-dasharray: 3 2.5; }
+.pb-sonar-dot { fill: #2a6fdb; }
+.pb-ir { fill: rgba(220, 40, 40, 0.07); stroke: rgba(220, 40, 40, 0.25); stroke-width: 0.5; }
+.pb-ir.is-seen { fill: rgba(240, 40, 30, 0.38); stroke: rgba(220, 30, 20, 0.8); }
+.pb-robot-body { fill: #24406e; stroke: #111827; stroke-width: 0.8; }
+.pb-robot-rim { fill: none; stroke: rgba(255, 255, 255, 0.14); stroke-width: 0.8; }
+.pb-robot-well { fill: #142540; }
+.pb-robot-caster { fill: url(#pb-metal); stroke: #5d646c; stroke-width: 0.4; }
+.pb-robot-usb { fill: #b9bfc6; }
+.pb-robot-ir { fill: #3a1c1c; stroke: #120808; stroke-width: 0.3; }
+.pb-robot-ir.is-on { fill: #ff3b1f; }
+.pb-robot.is-hit .pb-robot-body { stroke: #ff3b1f; stroke-width: 1.6; }
+.pb-robot-pico { fill: #23824b; stroke: #0f4b29; stroke-width: 0.4; }
+.pb-robot-sonar-board { fill: #1d4e9e; }
+.pb-robot-eye { fill: url(#pb-metal); stroke: #5d646c; stroke-width: 0.4; }
+.pb-robot-buzz { fill: #111; }
+.pb-robot-buzz.is-on { fill: #ffbf2f; }
+.pb-wheel { fill: #17191c; }
+.pb-tread { stroke: #3d424a; }
+.pb-info { font-size: 8.5px; font-variant-numeric: tabular-nums; }
+.pb-cam-pcb { fill: #1d4e9e; stroke: #123468; stroke-width: 0.8; }
+.pb-cam-barrel { fill: #26292e; stroke: #0b0c0e; stroke-width: 1; }
+.pb-photo-frame { fill: #1e2229; }
+.pb-photo { image-rendering: pixelated; }
+.pb-photo.is-preview { opacity: 0.35; }
+.pb-photo-flash { fill: #fff; opacity: 0; pointer-events: none; }
+.pb-photo-flash.is-flashing { animation: pb-photo-flash 400ms ease-out 1; }
+@keyframes pb-photo-flash { 0% { opacity: 0.95; } 100% { opacity: 0; } }
+.pb-router { fill: #2f343c; stroke: #15181c; stroke-width: 0.8; }
+.pb-router-ant { stroke: #2f343c; stroke-width: 3; stroke-linecap: round; }
+.pb-router-led { fill: #3a3f46; }
+.pb-router-led.is-on { fill: #5ee05a; }
+.pb-wifi-waves path { fill: none; stroke: #2a6fdb; stroke-width: 1.8; stroke-linecap: round; }
+.pb-http { fill: #1e2229; }
+.pb-http-title { fill: #9aa0a8; font: 700 7px var(--font-code); }
+.pb-http-line { fill: #d3ccb9; font: 600 7px var(--font-code); }
+.pb-http-line.is-ok { fill: #a6e3a1; }
+.pb-http-line.is-bad { fill: #ffb4a6; }
+.pb-radio { fill: none; stroke: #2a6fdb; stroke-width: 1.4; stroke-dasharray: 2 4; stroke-linecap: round; opacity: 0.25; }
+.pb-radio.is-on { opacity: 0.85; animation: pb-radio 900ms linear infinite; }
+@keyframes pb-radio { to { stroke-dashoffset: -12; } }
+.pb-laptop-lid { fill: #3a3f47; stroke: #1c1f24; stroke-width: 0.8; }
+.pb-laptop-screen { fill: #12151a; }
+.pb-laptop-base { fill: #b9bec5; stroke: #858b93; stroke-width: 0.8; }
+.pb-laptop-notch { fill: #858b93; }
+.pb-term { fill: #d3ccb9; font: 600 8.5px var(--font-code); }
+.pb-term-in { fill: #a6e3a1; }
+.pb-term-head { fill: #9fc4ff; }
+.pb-term-rule { stroke: #343a44; stroke-width: 0.8; }
+.pb-ble-dot { fill: #3a3f46; }
+.pb-ble-dot.is-adv { fill: #e2b034; }
+.pb-ble-dot.is-on { fill: #3d8bff; }
+@media (prefers-reduced-motion: reduce) {
+  .pb-epd-flash.is-flashing, .pb-photo-flash.is-flashing, .pb-radio.is-on { animation: none; }
+  .pb-button-cap { transition: none; }
+}
+@media (prefers-color-scheme: dark) {
+  .pico-slot { --pb-mat: #23272e; }
+  .pico-bench {
+    --pb-mat: #23272e;
+    --pb-board: #ecebe4;
+    --pb-board-edge: #6b6f76;
+    --pb-hole: #c4c0b4;
+    --pb-card: #2d323a;
+    --pb-card-edge: #454b55;
+    --pb-ink: #eceae4;
+    --pb-soft: #b7bcc4;
+  }
+  .pico-bench .pb-arena-floor { fill: #d9d2c0; }
+  .pico-slot .pico-bench button { color: var(--ink); }
+}
+/* narrow slots: the controls one under the other */
+@media (max-width: 620px) {
+  .pico-controls { flex-direction: column; align-items: stretch; }
+  .pico-slider input[type="range"] { flex: 1; width: auto; min-width: 6rem; }
+  .pico-line input { width: auto; flex: 1; min-width: 6rem; }
+  .pico-line { flex: 1; }
+}
 
 .cell-toolbar {
   display: flex;

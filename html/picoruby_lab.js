@@ -152,6 +152,9 @@
     current = { id: id, item: item, started: performance.now(),
                 timer: setTimeout(function () { stop(id); }, limit) };
     var inputs = board && window.chunkyPicoBoard && window.chunkyPicoBoard.inputs ? parseInputs(window.chunkyPicoBoard.inputs()) : {};
+    // the bench was moved under this cell when ▶ was pressed; it draws this
+    // run's state from now on, not the one of the run it waited for
+    if (board && item.kind === "cell" && window.chunkyPicoBoard && window.chunkyPicoBoard.started) window.chunkyPicoBoard.started(String(item.idx));
     pico.worker.postMessage({ id: id, kind: item.kind === "drop" ? "drop" : "run", sid: item.sid, code: item.code || "",
                               tabs: item.tabs || [], board: item.board || "", inputs: inputs });
   }
