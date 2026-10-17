@@ -945,7 +945,9 @@ puts collatz(27))
       papier.clear
       http = Net::HTTP.new("rubygems.org", 443)
       http.use_ssl = true
-      gem_info = JSON.parse(http.get("/api/v1/gems/rake.json").body)
+      antwort = http.get("/api/v1/gems/rake.json")
+      http.finish
+      gem_info = JSON.parse(antwort.body)
       papier.text(8, 40, "rake " + gem_info["version"], scale: 3)
       papier.refresh
       SOL
@@ -990,7 +992,9 @@ puts collatz(27))
       paper.clear
       http = Net::HTTP.new("rubygems.org", 443)
       http.use_ssl = true
-      info = JSON.parse(http.get("/api/v1/gems/rake.json").body)
+      res = http.get("/api/v1/gems/rake.json")
+      http.finish
+      info = JSON.parse(res.body)
       paper.rect(0, 0, 250, 122)
       paper.text(8, 8, "Gem watcher")
       paper.text(8, 40, "#{info["name"]} #{info["version"]}", scale: 3)
