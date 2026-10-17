@@ -11,6 +11,7 @@
 //   chunkyPicoRuby.irb(sid, code, seq, boardJson)   main.rb, a line in an IRB
 //   chunkyPicoRuby.reset()           main.rb, a new lesson or a reset: no
 //                                    variables left
+//   chunkyPicoRuby.busy()           something runs at the worker now
 //   chunkyPicoRuby.input(key, value) the bench (pico_board.js): a button, a
 //                                    slider - reaches a run that goes on
 //   chunkyPicoRuby.stop()            the bench's ■: the Pico's reset - the
@@ -59,6 +60,9 @@
       enqueue({ kind: "irb", sid: worker, irbSid: Number(sid), code: String(code), seq: Number(seq),
                 tabs: [], board: boardJson ? String(boardJson) : "" });
     },
+    // a run or an IRB line is out at the worker now (pico_board.js: the
+    // webcam's frames go only then)
+    busy: function () { return !!current; },
     // a bench input (pico_board.js): at once, even while a run goes on
     input: function (key, value) {
       if (pico.worker) pico.worker.postMessage({ kind: "input", key: String(key), value: String(value) });

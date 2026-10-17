@@ -1258,6 +1258,8 @@
       pick.addEventListener("change", function () {
         var name = pick.value;
         if (cam.stream) { cam.before = name; stopWebcam(); }
+        // still waiting for the browser's permission: that answer is moot now
+        else if (cam.starting) cam.cancelled = true;
         api.input("camera", name);
         benches.forEach(function (o) { if (o.refs.camera) showPhoto(o, name, false); });
       });
@@ -1890,8 +1892,12 @@
     webcamShow();
     navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 320 }, height: { ideal: 240 } }, audio: false }).then(function (stream) {
       cam.starting = false;
-      // the page went while the browser asked
-      if (my !== gen) { stream.getTracks().forEach(function (tr) { tr.stop(); }); return; }
+      // the page went while the browser asked, or a drawn picture was chosen
+      if (my !== gen || cam.cancelled) {
+        stream.getTracks().forEach(function (tr) { tr.stop(); });
+        if (my === gen) { cam.cancelled = false; webcamShow(); }
+        return;
+      }
       cam.stream = stream;
       var video = cam.video = document.createElement("video");
       video.muted = true;
@@ -1907,6 +1913,7 @@
       webcamNote(t("boardWebcamOn"));
     }, function () {
       cam.starting = false;
+      cam.cancelled = false;
       if (my === gen) webcamNote(t("boardWebcamNo"));
     });
   }
@@ -1948,7 +1955,10 @@
     ctx.putImageData(img, 0, 0);
     cam.url = c.toDataURL();
     values["camera.frame"] = camHead + hex.join("");
-    if (window.chunkyPicoRuby && window.chunkyPicoRuby.input) window.chunkyPicoRuby.input("camera.frame", values["camera.frame"]);
+    // to the worker only while something runs there (38 KB a frame): each
+    // run and IRB line gets the newest frame with its inputs anyway
+    var pr = window.chunkyPicoRuby;
+    if (pr && pr.input && (!pr.busy || pr.busy())) pr.input("camera.frame", values["camera.frame"]);
     benches.forEach(function (b) {
       var r = b.refs.camera;
       if (!r || r.captured) return;

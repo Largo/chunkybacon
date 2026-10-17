@@ -253,6 +253,15 @@ async function go(page, id) {
   check("webcam: the frame is a 160 x 120 PGM in hex", w.frame === ("P5\n160 120\n255\n".length + 160 * 120) * 2 &&
     await page.evaluate(() => JSON.parse(window.chunkyPicoBoard.inputs())["camera.frame"].startsWith("50350a")), w.frame);
   check("webcam: the note says the pictures stay in the browser", /stay in this browser/.test(w.note));
+  const idle = await page.evaluate(async () => {
+    const pr = window.chunkyPicoRuby, real = pr.input;
+    let frames = 0;
+    pr.input = function (k, v) { if (k === "camera.frame") frames++; return real.apply(this, arguments); };
+    await new Promise(r => setTimeout(r, 1000));
+    pr.input = real;
+    return { frames, busy: pr.busy() };
+  });
+  check("webcam: no frames to the worker while nothing runs (each run takes the newest with its inputs)", idle.frames === 0 && !idle.busy, JSON.stringify(idle));
   check("webcam: the card shows the webcam's view", await page.evaluate(i => {
     const img = document.querySelector(`#pico-slot-${i} .pb-photo`);
     return /^data:image\/png/.test(img.getAttribute("href") || "") && img.classList.contains("is-live");
@@ -280,6 +289,32 @@ async function go(page, id) {
   check("webcam: another lesson stops the stream", await until(page, () =>
     window.__streams.length >= 3 && window.__streams.every(s => s.getTracks().every(t => t.readyState === "ended")) && !window.chunkyPicoBoard.webcam().on, null, 10000));
   await page.close();
+
+  // a drawn picture chosen while the browser still asks for permission: the
+  // late yes must not switch to the webcam
+  {
+    const c3 = await cam.newContext({ locale: "en-US", permissions: ["camera"] });
+    await c3.addInitScript(() => {
+      window.__streams = [];
+      const md = navigator.mediaDevices, real = md.getUserMedia.bind(md);
+      md.getUserMedia = c => new Promise(res => { window.__grant = () => res(real(c).then(s => { window.__streams.push(s); return s; })); });
+    });
+    const p3 = await open(c3, "en", "#pico-epaper");
+    await previewsDone(p3);
+    await p3.click(`#pico-slot-${camIdx} .pico-webcam`);
+    await until(p3, () => typeof window.__grant === "function");
+    await p3.selectOption(`#pico-slot-${camIdx} select`, "bacon");
+    await p3.evaluate(() => window.__grant());
+    await until(p3, () => window.__streams.length === 1, null, 5000);
+    await p3.waitForTimeout(300);
+    const r3 = await p3.evaluate(i => ({ on: window.chunkyPicoBoard.webcam().on, camera: JSON.parse(window.chunkyPicoBoard.inputs()).camera,
+      ended: window.__streams.every(s => s.getTracks().every(t => t.readyState === "ended")),
+      pressed: document.querySelector(`#pico-slot-${i} .pico-webcam`).getAttribute("aria-pressed"),
+      disabled: document.querySelector(`#pico-slot-${i} .pico-webcam`).disabled }), camIdx);
+    check("webcam: a drawn picture chosen during the permission prompt wins (stream stopped, button usable)",
+      !r3.on && r3.camera === "bacon" && r3.ended && r3.pressed === "false" && !r3.disabled, JSON.stringify(r3));
+    await c3.close();
+  }
 
   // no permission, then no getUserMedia at all (an insecure page): the
   // drawn pictures stay, and the note says why
