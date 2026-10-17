@@ -541,6 +541,21 @@ compiled into the wasm (`NATIVE_GEMS` + `builtin?`; `tools/build_gem_cache.rb`
 skips them as `BUILTIN`). In Chrome: both install from the cache in 0.5 s,
 a 2-page Prawn PDF takes 0.12 s, HexaPDF open + stamp + write 0.17 s.
 
+The QR-bill lesson (`qr-rechnung`) caches qr-bills, rqrcode,
+rqrcode_core, swiss_qr and qr_reader - all pure Ruby. qr-bills wants
+rqrcode below 3, so `PINNED` holds rqrcode 2.2.0 and its rqrcode_core
+1.2.0 (the cache tool takes the latest version and does not read version
+requirements). swiss_qr depends on bigdecimal (→ bigdecimal-pure) and loads
+qr_reader only when it reads an image; qr_reader is not a declared
+dependency, so the lesson installs it itself. qr_reader 0.0.3 or newer is
+needed: 0.0.2 crashed ruby.wasm on PNG and Flate data (zlib called with a
+block). In Chrome: the three gems install from the cache in 0.4 s, a code as
+SVG or PNG takes about 0.6 s, `SwissQr.read` on the 1024 px PNG or on the
+lesson's Prawn PDF about 1 s. Traps: qr-bills reads the IBAN from
+`bill_params[:creditor][:iban]`, not from the address hash its own skeleton
+puts it in, and writes the address type `S` for an empty debtor, which
+swiss_qr rejects (the exercise's hint says so).
+
 ## 5. Browser-environment fixups (in `main.rb`, top)
 
 Things ruby.wasm/WASI lacks that gems assume, each patched at boot:

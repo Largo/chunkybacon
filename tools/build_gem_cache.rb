@@ -14,7 +14,8 @@ require 'fileutils'
 GEMS = %w[chunky_bacon chunky_png gammo racc sinatra roda minitest csv benchmark three-rb ruby_pptx lacci nokogiri
           bigdecimal-pure prawn hexapdf jsg pure_jpeg rumale-core rumale-nearest_neighbors sequel
           pastel tty-table tty-box tty-tree tty-font faker herb
-          daru distribution minimization integration networkx rubyvis]
+          daru distribution minimization integration networkx rubyvis
+          qr-bills swiss_qr qr_reader]
 
 # C extensions compiled into the wasm image: a gem may depend on them (hexapdf
 # on openssl and strscan, jsg on js), the browser finds them built in
@@ -33,8 +34,11 @@ SUBSTITUTES = { "bigdecimal" => "bigdecimal-pure" }
 # dependencies (e.g. minitest 6 depends on prism, a C extension) - or when a
 # gem asks for an older one (strings, under tty-table and tty-box, wants
 # unicode-display_width below 3) - or when the gem has to match a vendored
-# build (herb: the parser in html/assets/herb/, tools/vendor_herb.rb)
-PINNED = { "minitest" => "5.27.0", "unicode-display_width" => "2.6.0", "herb" => "0.10.3" }
+# build (herb: the parser in html/assets/herb/, tools/vendor_herb.rb) - or
+# when a gem rules out the latest (qr-bills wants rqrcode below 3, and
+# rqrcode 2 wants rqrcode_core 1)
+PINNED = { "minitest" => "5.27.0", "unicode-display_width" => "2.6.0", "herb" => "0.10.3",
+           "rqrcode" => "2.2.0", "rqrcode_core" => "1.2.0" }
 
 # gems whose C extension is optional (pure-Ruby fallback in lib/) or stood
 # in for (herb's is its parser: html/herb_bridge.rb hands it to Herb's

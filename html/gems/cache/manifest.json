@@ -396,5 +396,38 @@
     "version": "0.6.3",
     "file": "ostruct-0.6.3.gem",
     "deps": []
+  },
+  "qr-bills": {
+    "version": "2.0.0",
+    "file": "qr-bills-2.0.0.gem",
+    "deps": [
+      "i18n",
+      "rqrcode"
+    ]
+  },
+  "swiss_qr": {
+    "version": "0.1.0",
+    "file": "swiss_qr-0.1.0.gem",
+    "deps": [
+      "bigdecimal"
+    ]
+  },
+  "qr_reader": {
+    "version": "0.0.3",
+    "file": "qr_reader-0.0.3.gem",
+    "deps": []
+  },
+  "rqrcode": {
+    "version": "2.2.0",
+    "file": "rqrcode-2.2.0.gem",
+    "deps": [
+      "chunky_png",
+      "rqrcode_core"
+    ]
+  },
+  "rqrcode_core": {
+    "version": "1.2.0",
+    "file": "rqrcode_core-1.2.0.gem",
+    "deps": []
   }
 }

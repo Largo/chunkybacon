@@ -175,6 +175,8 @@ noted.
 | prawn | 2.5.0 | Prawn's Ruby-style licence, GPL-2.0 or GPL-3.0, at your choice | Alexander Mankuta, Gregory Brown, Brad Ediger and others | LICENSE, COPYING, GPLv2, GPLv3 |
 | prime | 0.1.4 | Ruby, BSD-2-Clause | Marc-Andre Lafortune | COPYING, BSDL |
 | pure_jpeg | 0.4.0 | MIT | Peter Cooper | LICENSE |
+| qr-bills | 2.0.0 | BSD-3-Clause; Liberation Sans in `web/assets/fonts/` SIL OFL 1.1 | Damiano Radice | none - see below |
+| qr_reader | 0.0.3 | MIT | Andi Idogawa | LICENSE.txt, NOTICE |
 | racc | 1.8.1 | Ruby, BSD-2-Clause | Minero Aoki, Aaron Patterson | COPYING |
 | rack | 3.2.7 | MIT | Leah Neukirchen | MIT-LICENSE |
 | rack-protection | 4.2.1 | MIT | Sinatra contributors | License |
@@ -182,6 +184,8 @@ noted.
 | rb_heap | 1.1.0 | MIT | Florian Hartmann | LICENSE.txt |
 | rexml | 3.4.4 | BSD-2-Clause | Kouhei Sutou | LICENSE.txt |
 | roda | 3.108.0 | MIT | Jeremy Evans | MIT-LICENSE |
+| rqrcode | 2.2.0 | MIT | Duncan Robertson | LICENSE.txt |
+| rqrcode_core | 1.2.0 | MIT | Duncan Robertson | LICENSE.txt |
 | ruby_pptx | 0.2.0 | MIT | Andi Idogawa | LICENSE, NOTICE |
 | rubyvis | 0.7.0 | BSD-2-Clause (gemspec declares none) | Claudio Bustos | LICENSE.txt |
 | rumale-core | 2.2.0 | BSD-3-Clause | yoshoku | LICENSE.txt |
@@ -192,6 +196,7 @@ noted.
 | sinatra | 4.2.1 | MIT | Blake Mizerany, Ryan Tomayko, Simon Rozet, Konstantin Haase | LICENSE |
 | strings | 0.2.1 | MIT | Piotr Murach | LICENSE.txt |
 | strings-ansi | 0.2.0 | MIT | Piotr Murach | LICENSE.txt |
+| swiss_qr | 0.1.0 | MIT | Andi Idogawa | LICENSE.txt |
 | text-table | 1.2.4 | MIT | Aaron Tinio | LICENSE |
 | three-rb | 0.2.1 | MIT | LEF | LICENSE |
 | tilt | 2.9.0 | MIT | Ryan Tomayko, Magnus Holm, Jeremy Evans | COPYING |
@@ -242,6 +247,45 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+```
+
+**qr-bills** (https://github.com/damoiser/qr-bills) declares BSD-3-Clause
+and its archive has no license file; this is its repository's LICENSE. The
+Liberation Sans font files it carries (`web/assets/fonts/`, unused by the
+lesson) are Copyright (c) 2012 Red Hat, Inc., digitized data Copyright (c)
+2010 Google Corporation, under the SIL Open Font License 1.1, as their name
+tables say.
+
+```
+BSD 3-Clause License
+
+Copyright (c) 2021, Damiano Radice (damoiser), dam.radice@gmail.com
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ```
 
 Rumale's gems depend on numo-narray-alt, which is C and not cached:
