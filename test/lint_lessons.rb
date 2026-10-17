@@ -23,11 +23,12 @@ require "rubygems/package"
 require "optparse"
 require "set"
 require_relative "../html/lesson_refs"
+require_relative "pico_lint"
 
 module LessonLint
   LANGS = %w[de en ja].freeze
   SEVERITIES = %w[ERROR WARN INFO].freeze
-  GROUPS = %w[structure parity html refs ja ruby gems counts links].freeze
+  GROUPS = %w[structure parity html refs ja ruby gems counts links pico].freeze
 
   Finding = Struct.new(:group, :severity, :code, :where, :line, :message, :detail, :key, :allowed,
                        keyword_init: true)
@@ -947,7 +948,7 @@ module LessonLint
               add("ruby", "INFO", "tab", where: loc, line: line, message: "tab in code") if code.include?("\t")
             end
             if (check = cell["check"])
-              res = Prism.parse(check, scopes: [locals | %i[output result code images downloads]])
+              res = Prism.parse(check, scopes: [locals | %i[output result code images downloads board]])
               res.errors.each do |e|
                 add("ruby", "ERROR", "check-syntax", where: loc, line: line, message: "check: #{e.message}", extra: e.message)
               end
@@ -963,6 +964,29 @@ module LessonLint
               next if res.success?
               add("ruby", "INFO", "pre-syntax", where: loc, line: line,
                   message: "<pre> block does not parse as Ruby: #{res.errors.first.message}", extra: res.errors.first.message)
+            end
+          end
+        end
+      end
+    end
+
+    # ------------------------------------------------------------ pico
+    # the Pico lessons' cell fields (tabs, main, board, bench, a cell's
+    # engine) and the lesson's "pico": test/pico_lint.rb has the rules,
+    # which test/pico_harness.rb also applies to a lesson file of its own
+    def check_pico
+      lessons.each do |lesson|
+        PicoLint.findings(lesson, @root).each do |sev, code, at, message|
+          id, lang, ci = at.split("/")
+          ci, lang = lang, nil if ci.nil? && lang.to_s.match?(/\A\d+\z/)
+          loc = where(lesson, lang, ci&.to_i)
+          add("pico", sev, code, where: loc, line: line_of(lesson, lang || "en", ci&.to_i), message: message, extra: message[0, 40])
+        end
+        # an inline tab's lines scroll like the cell's
+        LANGS.each do |lang|
+          cells(lesson, lang).each_with_index do |cell, ci|
+            Array(cell["tabs"]).each do |tab|
+              long_lines(tab["code"].to_s, "#{where(lesson, lang, ci)} tab #{tab['name']}", line_of(lesson, lang, ci)) if tab.is_a?(Hash) && tab["code"]
             end
           end
         end

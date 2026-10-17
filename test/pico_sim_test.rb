@@ -448,6 +448,16 @@ class PicoSimTest < Minitest::Test
     assert_equal [[0, 0], [0, 1], [100, 0]], board.writes(15)
   end
 
+  # test/pico_lint.rb's table of parts is the simulator's
+  def test_lint_knows_the_parts_and_their_pins
+    require_relative "pico_lint"
+    assert_equal PicoSim::PARTS.keys.sort, PicoLint::PART_PINS.keys.sort
+    PicoSim::PARTS.each { |id, klass| assert_equal klass.new(id).pins, PicoLint::PART_PINS[id], id }
+    assert_equal PicoCRuby::STUBS, PicoLint::STUBS
+    stubs = File.read(File.expand_path("../html/picoruby_worker_core.js", __dir__))[/STUBS = \[(.*?)\]/m, 1]
+    assert_equal PicoLint::STUBS, stubs.scan(/"([^"]+)"/).flatten
+  end
+
   def test_board_api_is_total
     board = PicoRubyCells.board("{}")
     assert_equal [], board.writes(15)

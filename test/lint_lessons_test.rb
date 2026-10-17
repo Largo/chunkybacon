@@ -233,4 +233,69 @@ class LessonLintTest < Minitest::Test
     assert_finds f, "task-count", "arrays[en]"
     assert_finds f, "block-div.task", "arrays"
   end
+
+  # ---------- the Pico lessons' fields (test/pico_lint.rb) ----------
+
+  # a small lesson with every field, as tmp lesson writers make them
+  def pico_lesson
+    tabs = [{ "name" => "epd2in13.rb", "src" => "pico/lib/en/epd2in13.rb" },
+            { "name" => "helper.rb", "code" => "# en\ndef helper = 1\n", "readonly" => false }]
+    lesson = { "id" => "pico-lint", "engine" => "picoruby", "live" => false, "pico" => { "board" => "pico2w" } }
+    %w[de en ja].each do |lang|
+      lesson[lang] = { "title" => "Pico #{lang}", "cells" => [
+        { "t" => "h", "html" => "<p>x</p><div class='task'>t</div>" },
+        { "t" => "c", "code" => "require \"gpio\"\n", "board" => { "parts" => %w[led15 epd213] }, "tabs" => tabs.map(&:dup) },
+        { "t" => "x", "code" => "x = 1\n", "check" => "board.level(15) == 1",
+          "hint" => "h", "board" => { "parts" => %w[led15 button14] }, "bench" => [{ "at" => 300, "press" => 14 }] }
+      ] }
+    end
+    lesson
+  end
+
+  def with_pico
+    d = data
+    l = pico_lesson
+    yield l if block_given?
+    d["lessons"] << l
+    lint(d, only: %w[pico])
+  end
+
+  def test_pico_lesson_is_clean
+    findings = with_pico
+    assert_empty findings.select { |f| f.severity == "ERROR" }.map { |f| "#{f.code} #{f.where}: #{f.message}" }
+  end
+
+  def test_pico_unknown_part_and_pin_clash
+    assert_finds(with_pico { |l| l["en"]["cells"][1]["board"]["parts"] << "laser" }, "board-part")
+    f = with_pico { |l| %w[de en ja].each { |g| l[g]["cells"][1]["board"] = { "parts" => %w[picogo envsensor] } } }
+    assert_finds f, "board-pins"
+  end
+
+  def test_pico_tabs
+    assert_finds(with_pico { |l| l["en"]["cells"][1]["tabs"][0]["src"] = "pico/lib/en/nope.rb" }, "tab-source")
+    assert_finds(with_pico { |l| l["en"]["cells"][1]["tabs"][1]["name"] = "epd2in13.rb" }, "tab-name")
+    assert_finds(with_pico { |l| l["en"]["cells"][1]["tabs"][1]["name"] = "gpio.rb" }, "tab-name")
+    assert_finds(with_pico { |l| l["en"]["cells"][1]["tabs"][0]["readonly"] = false }, "tab-readonly")
+    assert_finds(with_pico { |l| l["ja"]["cells"][1]["tabs"].reverse! }, "pico-parity")
+    assert_finds(with_pico { |l| l["de"]["cells"][1]["tabs"][1]["code"] = "def helper = 2\n" }, "pico-parity")
+    refute_finds(with_pico { |l| l["ja"]["cells"][1]["tabs"][1]["code"] = "# ja\ndef helper = 1\n" }, "pico-parity")
+  end
+
+  def test_pico_bench_and_engine
+    assert_finds(with_pico { |l| l["en"]["cells"][2]["bench"] << { "at" => 10, "push" => 14 } }, "bench")
+    assert_finds(with_pico { |l| l["en"]["cells"][2]["bench"] << { "at" => 10, "arena" => "wall60" } }, "bench")
+    assert_finds(with_pico { |l| l["en"]["cells"][2].delete("board") }, "bench")
+    f = with_pico { |l| %w[de en ja].each { |g| l[g]["cells"][2].delete("bench") } }
+    assert_finds f, "bench-missing"
+    assert_finds(with_pico { |l| l["en"]["cells"][1]["engine"] = "jruby" }, "cell-engine")
+    assert_finds(with_pico { |l| l["pico"] = { "board" => "esp32" } }, "pico-board")
+    assert_finds(with_pico { |l| l.delete("engine") }, "pico-engine")
+  end
+
+  def test_check_may_use_board
+    d = data
+    l = pico_lesson
+    d["lessons"] << l
+    refute_finds lint(d, only: %w[ruby]).select { |f| f.where.start_with?("pico-lint") }, "check-warning"
+  end
 end
