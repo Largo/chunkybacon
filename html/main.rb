@@ -186,6 +186,15 @@ require_relative "spinel"
 # (picoruby_lab.js); this turns its answers into values, errors and CRuby's
 # syntax messages. ~3 KB at boot.
 require_relative "picoruby_cells"
+# A lesson with "engine": "jruby" runs on JRuby 10.1 (TeaVM) in a Web Worker
+# (jruby_lab.js); its answers are read as PicoRuby's are, and its CRuby cells
+# ("on": "cruby") read the same earthquake data. ~2 KB at boot.
+require_relative "jruby_cells"
+# (jruby_lab.js fetched it when the lesson opened; otherwise it fetches now)
+JRubyCells.fetch_text = lambda do |url|
+  text = $window.chunkyJRuby.text(url).to_s
+  text.start_with?("ERROR ") ? nil : text
+end
 # require "pycall" is the bridge to Pyodide (pycall.rb): the real gem needs
 # libpython, which a browser does not have
 require_relative "pycall"
@@ -375,6 +384,7 @@ class ChunkyApp
     fresh_binding
     # (not in the embedded cell: embed.html has no PicoRuby)
     $window.chunkyPicoRuby.reset if $window[:chunkyPicoRuby].typeof == "object"
+    $window.chunkyJRuby.reset if $window[:chunkyJRuby].typeof == "object"
     dispose_three
     dispose_shoes
     dispose_sketches
@@ -441,6 +451,8 @@ class ChunkyApp
   def fresh_binding
     @bind = TopLevel.binding(EVAL_FILE)
     @ran = {}
+    # what the JRuby worker's binding has run (the JRuby lesson)
+    @jruby_ran = {}
   end
 
   # ---------- setup ----------
@@ -456,6 +468,8 @@ class ChunkyApp
     $window.addEventListener("chunky:lesson") { |event| sync_state(event.detail) }
     # a PicoRuby lesson's cells and IRBs answer later (picoruby_lab.js)
     $window.addEventListener("chunky:picoruby") { |event| picoruby_answer(event.detail) }
+    # the JRuby lesson's cells answer later too (jruby_lab.js)
+    $window.addEventListener("chunky:jruby") { |event| jruby_answer(event.detail) }
     $window.addEventListener("chunky:install") do |event|
       sync_state(event.detail)
       panel_install(event.detail.name)
@@ -1395,6 +1409,122 @@ class ChunkyApp
     history.scrollTop = history.scrollHeight
   end
 
+  # ---------- JRuby (a lesson with "engine": "jruby") ----------
+
+  # The lesson's cells run on JRuby 10.1 (TeaVM) in a Web Worker
+  # (jruby_lab.js), as the PicoRuby lesson's run on PicoRuby: a run goes out
+  # and settles when the answer comes back, as a chunky:jruby event. Unlike
+  # PicoRuby's, the cells share one binding in JRuby, so the cells above
+  # that have not run there yet go along and run first, quietly (as
+  # earlier_cells.rb's do in CRuby). A cell with "on": "cruby" runs on the
+  # page's ruby.wasm instead, and the exercise's check is CRuby's too, on the
+  # same data - where it passes, CRuby runs the learner's code as well and
+  # says whether both Rubies agree. No live runs ("live": false): JRuby can
+  # only be stopped by ending its worker, and a new one takes 3 s to start.
+  def jruby? = !workshop? && current_lesson && current_lesson["engine"] == "jruby"
+
+  def start_jruby_run(idx, code)
+    $window.clearCellMarks(idx)
+    syntax = JRubyCells.syntax_error(code, EVAL_FILE)
+    return show_jruby_run(idx, code, error: syntax) if syntax
+
+    # the cells above that the worker's binding has not run, CRuby's left out
+    jruby_only = cells.map { |cell| cell["on"] == "cruby" ? { "t" => "h" } : cell }
+    earlier = EarlierCells.before(idx, jruby_only, @jruby_ran) { |i| $window.getCellCode(i).to_s }
+    @jruby_pending ||= {}
+    @jruby_pending[idx] = { code: code, earlier: earlier.to_h }
+    $window.chunkyJRuby.run(idx.to_s, code, JSON.generate(earlier), @seq.to_s)
+    :pending
+  end
+
+  def jruby_answer(detail)
+    return unless detail.seq.to_i == @seq   # another page by now
+
+    idx = detail.idx.to_i
+    pending = (@jruby_pending || {}).delete(idx) || { code: $window.getCellCode(idx).to_s, earlier: {} }
+    code = pending[:code]
+    status = detail.status.to_s
+    message = detail.message.to_s
+    failed = detail.earlierFailed.to_s.split(",").map(&:to_i)
+    ran = detail.earlier.to_s.split(",").map(&:to_i)
+    if %w[ok error].include?(status)
+      (ran - failed).each { |i| @jruby_ran[i] = pending[:earlier][i] if pending[:earlier][i] }
+      @jruby_ran[idx] = code if status == "ok"
+    else
+      @jruby_ran = {}   # a new worker: nothing has run in it
+    end
+    error = case status
+            when "error" then JRubyCells.error(detail.errorClass.to_s, message, detail.line.to_i, EVAL_FILE)
+            when "stopped" then PicoRubyCells::Stopped.new("#{ui['jrubyStopped']} #{ui['jrubyRestarted']}")
+            when "failed" then PicoRubyCells::Unavailable.new("#{ui['jrubyFailed']} (#{message})")
+            end
+    elapsed = detail.elapsed.to_f
+    outcome = begin
+      show_jruby_run(idx, code, output: detail.output.to_s, error: error, elapsed: elapsed,
+                                result: status == "ok" ? JRubyCells.value(detail.value.to_s) : nil)
+    rescue Exception => e
+      $window.console.error("jruby #{idx}: #{e.class}: #{e.message}")
+      :error
+    end
+    bridge.ran(idx, outcome.to_s, elapsed, false, elapsed, ran.join(","), failed.join(","), "")
+  end
+
+  def show_jruby_run(idx, code, output: "", result: nil, error: nil, elapsed: nil)
+    cell = cells[idx]
+    # the check reads the data in CRuby (JRubyCells.load_data)
+    JRubyCells.load_data if cell && cell["t"] == "x" && !error
+    outcome = show_picoruby_run(idx, code, false, output: output, result: result, error: error)
+    out_el = $d.getElementById("cell-out-#{idx}")
+    # a QR code of half blocks (█▀▄) only reads as one with no gaps between the lines
+    out_el.innerHTML = out_el.innerHTML.to_s.sub('<pre class="cell-stdout">', '<pre class="cell-stdout blocks">') if output.match?(/[█▀▄]/)
+    add_engine_badge(idx, :jruby, elapsed) if elapsed && !error.is_a?(SyntaxError)
+    compare_with_cruby(idx, code, result, output) if outcome == :pass
+    outcome
+  end
+
+  # which Ruby ran the cell, and how long its own run took
+  def add_engine_badge(idx, engine, seconds)
+    out_el = $d.getElementById("cell-out-#{idx}")
+    return unless out_el
+
+    name = if engine == :jruby
+             format(ui["jrubyBadge"], $window.chunkyJRuby.version.to_s[/\d+(\.\d+)+/].to_s)
+           else
+             format(ui["crubyBadge"], RUBY_VERSION)
+           end
+    time = seconds < 1 ? "#{(seconds * 1000).round} ms" : format("%.2f s", seconds)
+    out_el.insertAdjacentHTML("afterbegin", "<div class=\"cell-engine is-#{engine}\">#{escape_html(name)} · #{time}</div>")
+  end
+
+  # the exercise passed on JRuby: the same code on CRuby, in a binding of
+  # its own (it ran to the end on JRuby, so it ends here too)
+  def compare_with_cruby(idx, code, jruby_result, jruby_output)
+    started = $window.performance.now
+    old_stdout = $stdout
+    $stdout = StringIO.new
+    value = eval(code, TopLevel.binding(EVAL_FILE), EVAL_FILE)
+    printed = $stdout.string
+    $stdout = old_stdout
+    seconds = ($window.performance.now - started) / 1000.0
+    # what the code answered: its value, or (a puts at the end) its last line
+    shown = value.nil? && !printed.strip.empty? ? printed.strip.lines.last.strip : "=> #{inspect_result(value)}"
+    same = value.nil? ? printed == jruby_output : jruby_result == value
+    text = format(ui[same ? "jrubyCrubySame" : "jrubyCrubyDiffers"], shown,
+                  seconds < 1 ? "#{(seconds * 1000).round} ms" : format("%.2f s", seconds))
+    $d.getElementById("cell-out-#{idx}").insertAdjacentHTML("beforeend", "<div class=\"cell-engine is-cruby is-compare\">#{escape_html(text)}</div>")
+  rescue Exception => e
+    $stdout = old_stdout if old_stdout
+    $window.console.error("jruby compare #{idx}: #{e.class}: #{e.message}")
+  end
+
+  # the vendored data is not there (tools/vendor_jruby.rb was not run)
+  def jruby_data_missing(idx)
+    out_el = $d.getElementById("cell-out-#{idx}")
+    out_el.innerHTML = "<div class=\"cell-hint\">#{escape_html(ui['jrubyFailed'])}</div>"
+    out_el.style.display = "block"
+    :error
+  end
+
   # ---------- running cells ----------
 
   def error_line(error, file = EVAL_FILE)
@@ -1504,6 +1634,7 @@ class ChunkyApp
     own = elapsed ? [elapsed - library, 0.0].max : -1
     # a PicoRuby lesson's run went to the worker: picoruby_answer settles it
     unless outcome == :pending
+      add_engine_badge(idx, :cruby, elapsed) if jruby? && !auto && elapsed && (cells[idx] || {})["on"] == "cruby"
       lists = %i[ran failed waiting].map { |key| (earlier[key] || []).join(",") }
       bridge.ran(idx, (outcome || :error).to_s, elapsed || -1, auto, own, *lists)
       bridge.gems(installed_json)
@@ -1522,7 +1653,9 @@ class ChunkyApp
   # worker, and stand alone) or the Spinel lesson (each cell a program of
   # its own).
   def earlier_cells(idx)
-    return [] if workshop? || picoruby? || spinel_lesson?
+    # (the JRuby lesson: its CRuby cells, "on": "cruby", stand alone - the
+    # cells above them ran on JRuby)
+    return [] if workshop? || picoruby? || spinel_lesson? || jruby?
 
     EarlierCells.before(idx, cells, @ran) { |i| $window.getCellCode(i).to_s }
   end
@@ -1626,6 +1759,10 @@ class ChunkyApp
     return :skipped if auto && !AutoRun.runnable?(code, workshop? ? [] : @bind.local_variables)
     # a lesson on PicoRuby: the worker runs it, picoruby_answer shows it
     return start_picoruby_run(idx, code, auto) if picoruby?
+    # the JRuby lesson: JRuby's worker runs it, jruby_answer shows it - but a
+    # cell with "on": "cruby" runs here, on the earthquake data JRuby reads
+    return start_jruby_run(idx, code) if jruby? && cell["on"] != "cruby"
+    return jruby_data_missing(idx) if jruby? && !JRubyCells.load_data
 
     if workshop?
       # the shell's callbacks (shell/workspace.rb), across the two Rubies

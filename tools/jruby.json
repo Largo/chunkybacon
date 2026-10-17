@@ -1,0 +1,23 @@
+{
+  "jruby": {
+    "about": "JRuby 10.1.2.0 compiled to JavaScript by TeaVM 0.16.0 (the JS build, not wasm-gc), for the JRuby lesson",
+    "repo": "Largo/jruby-teavm",
+    "base": "730d53b",
+    "branch": "lesson-merged",
+    "changes": "json gem 2.21.2 Java ext (require 'json'), jackson-core 2.18.2, lesson.Quakes, ZXing core 3.5.4, AtomicInteger/ConcurrentHashMap, TCharset aliases + isSupported, TCharConversionException, lesson.Quakes as the lesson shows it",
+    "build": "EXTRA_JARS=<dir with jackson-core-2.18.2.jar> ./build.sh   (about 3 min on the Hetzner box, never on the 1-core Linode)"
+  },
+  "files": {
+    "jruby.js": "398f6137fdf2f7dc4293495cbc49f5e36ec98706ebb235f10730f64fa952a854",
+    "stdlib.zip": "5d944ab23e1954bd7efc4ef257fac075041b26400362a355b4ebe36fd6223880"
+  },
+  "data": {
+    "source": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson",
+    "fetched": "2026-10-17",
+    "license": "Public domain (U.S. Government work). Credit: U.S. Geological Survey, Earthquake Hazards Program",
+    "files": {
+      "all_month.geojson": "34c58e0800cd8190dda6e6f616d9e193595d9cb7585595980eea3c5dde880a76",
+      "4.5_month.geojson": "5b232772861915de13a17f5f7138baf86fd48636f8d3f934adcf29bdd5630887"
+    }
+  }
+}

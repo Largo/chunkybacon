@@ -420,6 +420,9 @@ module ChunkyShell
       # a second PicoRuby (the same 0.9 MB, cached) in a Web Worker, only for
       # a lesson whose cells run on it (html/picoruby_lab.js)
       JSG.w.ensurePicoRuby if @course.picoruby?(idx)
+      # JRuby (TeaVM, ~7 MB) in a Web Worker, only for the JRuby lesson
+      # (html/jruby_lab.js); its status line is in the lesson's first cell
+      JSG.w.ensureJRuby if @course.jruby?(idx)
       @rendered_lesson_id = id
       # a lesson opened from a link is where the learner left off, too (only
       # a change is written: every write reaches a connected folder)

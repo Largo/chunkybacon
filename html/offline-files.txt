@@ -29,6 +29,8 @@ assets/herb/herb-browser.esm.js
 assets/herb/prism/deserialize.js
 assets/herb/prism/nodes.js
 assets/herb/prism/visitor.js
+assets/jruby-lesson/swing-de.png
+assets/jruby-lesson/swing-en.png
 assets/picoruby/PICORUBY_VERSION.txt
 assets/picoruby/init.iife.js
 assets/picoruby/picoruby.js
@@ -157,6 +159,13 @@ gems/cache/unicode-display_width-2.6.0.gem
 gems/cache/unicode_utils-1.4.0.gem
 herb_bridge.rb
 index.html
+jruby_cells.rb
+jruby_lab.js
+jruby_lab.rb
+jruby_swing.html
+jruby_swing.js
+jruby_swing_boot.js
+jruby_worker.js
 lessons.js
 letter.js
 main.rb

@@ -114,6 +114,38 @@ on the host; it is a tool of the build and not served.
 | [YoWASP Clang/LLD](https://yowasp.org) (`@yowasp/clang`: LLVM, Clang and LLD as WebAssembly, `clang/`) | 22.0.0-git20542-10 | ISC (the package); LLVM: Apache-2.0 WITH LLVM-exception | Catherine (whitequark); the LLVM project's contributors | `clang/README.md`, `LICENSE-llvm.txt` |
 | [wasi-libc](https://github.com/WebAssembly/wasi-libc), clang's sysroot (`clang/llvm-resources.tar`), linked into every program the lesson builds | as in that package | Apache-2.0 WITH LLVM-exception, Apache-2.0 or MIT; parts: musl (MIT), cloudlibc (BSD-2-Clause), dlmalloc (CC0) | their authors | `LICENSE-wasi-libc.txt`, `LICENSE-wasi-libc-MIT.txt`, `COPYRIGHT-musl.txt`, `LICENSE-cloudlibc.txt` |
 
+## The JRuby lesson (`html/assets/jruby/`, `html/assets/jruby-swing/`, put there on deploy)
+
+Lesson `jruby` only, loaded when it opens (the TeaVM part) or when its bonus
+button is clicked (the CheerpJ part). Not in git: `tools/vendor_jruby.rb` and
+`tools/vendor_jruby_swing.rb` put the files there on the deploy host, checked
+against the SHA-256 pins in `tools/jruby.json` and `tools/jruby_swing.json`,
+and write a `NOTICE.md` / `VERSION.txt` into the folder.
+
+| Component | Version | License | Copyright | Files |
+|---|---|---|---|---|
+| [JRuby](https://www.jruby.org/), compiled to JavaScript by TeaVM (a modified build: [Largo/jruby-teavm](https://github.com/Largo/jruby-teavm), the commit and changes named in `tools/jruby.json`) | 10.1.2.0 | EPL-2.0, or GPL-2.0, or LGPL-2.1 (the recipient's choice) | the JRuby team and contributors | `html/assets/jruby/jruby.js`, `stdlib.zip`; license text `html/assets/jruby/COPYING.jruby` |
+| [TeaVM](https://teavm.org/) runtime and class library, inside `jruby.js` | 0.16.0 | Apache-2.0 | Alexey Andreev and contributors | `html/assets/jruby/jruby.js` |
+| [jackson-core](https://github.com/FasterXML/jackson-core), inside `jruby.js` | 2.18.2 | Apache-2.0 (its shaded FastDoubleParser: MIT) | Copyright 2007-, Tatu Saloranta (tatu.saloranta@iki.fi); its NOTICE: "Jackson is a high-performance, Free/Open Source JSON processing library. It was originally written by Tatu Saloranta (tatu.saloranta@iki.fi), and has been in development since 2007. It is currently developed by a community of developers." | `html/assets/jruby/jruby.js` |
+| [ZXing](https://github.com/zxing/zxing) core, inside `jruby.js` | 3.5.4 | Apache-2.0 | ZXing authors | `html/assets/jruby/jruby.js` |
+| the [json](https://github.com/ruby/json) gem's Java extension, inside `jruby.js` | 2.21.2 | Ruby License or BSD-2-Clause | Florian Frank and contributors | `html/assets/jruby/jruby.js`, `stdlib.zip` |
+| `lesson.Quakes`, the lesson's Java loop, inside `jruby.js` | - | as the course | - | `html/assets/jruby/jruby.js` (its source is shown in the lesson) |
+| The bonus: [JRuby](https://www.jruby.org/) `jruby-complete` (unmodified, from Maven Central) | 9.4.15.0 | EPL-2.0, or GPL-2.0, or LGPL-2.1 | the JRuby team and contributors | `html/assets/jruby-swing/jruby-complete-9.4.15.0.jar` (license texts inside the jar, `META-INF/`) |
+| The bonus: `cheerpj-patch.jar`, one JRuby class (`ConstantField`) patched for CheerpJ, from [Largo/jruby-cheerpj](https://github.com/Largo/jruby-cheerpj) (source in its `patch/src/`) | 6e134ab | EPL-2.0, or GPL-2.0, or LGPL-2.1 (as JRuby) | the JRuby team; Largo | `html/assets/jruby-swing/cheerpj-patch.jar` |
+| The bonus: `html/jruby_swing_boot.js`, the loader from [Largo/jruby-cheerpj](https://github.com/Largo/jruby-cheerpj) | 6e134ab | MIT | 2026 Largo | `html/jruby_swing_boot.js` |
+| The bonus: [Glimmer DSL for Swing](https://github.com/AndyObtiva/glimmer-dsl-swing) and [Glimmer](https://github.com/AndyObtiva/glimmer), packed with the pure-Ruby gems they load (array_include_methods, awesome_print, concurrent-ruby, nested_inherited_jruby_include_package, os, puts_debuggerer: MIT; facets: BSD-2-Clause) | 0.0.5 / 2.5.5 | MIT (each gem as named) | Andy Maleh; the gems' authors | `html/assets/jruby-swing/glimmer-swing-gems.jar` (each gem's own files inside) |
+| The bonus: [JFreeChart](https://www.jfree.org/jfreechart/) (unmodified, from Maven Central) | 1.5.6 | LGPL-2.1 | David Gilbert and contributors | `html/assets/jruby-swing/jfreechart-1.5.6.jar` |
+| The bonus: [FlatLaf](https://www.formdev.com/flatlaf/) (unmodified, from Maven Central) | 3.7.2 | Apache-2.0 | FormDev Software GmbH | `html/assets/jruby-swing/flatlaf-3.7.2.jar` |
+
+**CheerpJ** ([cheerpj.com](https://cheerpj.com/), Leaning Technologies Ltd.),
+the JVM in WebAssembly the bonus runs on, is not bundled: `html/jruby_swing.html`
+loads version 4.3 from Leaning Technologies' CDN (`cjrtnc.leaningtech.com`),
+under the CheerpJ Community License, which this open-source course uses; it
+shows its own "Community Edition" notice in the window area, and the page
+credits it. The lesson's JRuby builds are under the copyleft licenses above:
+their sources are JRuby's own release plus the repositories and commits named
+here and in `tools/jruby.json` / `tools/jruby_swing.json`.
+
 ## Cached gems (`html/gems/cache/`)
 
 Gem archives the in-browser installer unpacks. They are the archives as
@@ -241,6 +273,7 @@ xord.org, under the MIT License (the text above).
 
 | Data | License | Source | Files |
 |---|---|---|---|
+| USGS "All Earthquakes, Past Month" (the snapshot of 2026-10-17: 10,224 earthquakes; and its 622 of magnitude 4.5 or more) | Public domain (U.S. Government work) | U.S. Geological Survey, Earthquake Hazards Program, https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson | `tools/jruby-data/` (unchanged; `4.5_month.geojson` filtered from it), served from `html/assets/jruby/data/` (lesson `jruby`); `SOURCE.txt` |
 | Optical Recognition of Handwritten Digits (the 1797 digits of its test part, as scikit-learn ships them) | CC BY 4.0 | E. Alpaydin, C. Kaynak, UCI Machine Learning Repository, https://archive.ics.uci.edu/dataset/80/optical+recognition+of+handwritten+digits | `html/assets/data/digits.csv` (unchanged values, integers instead of floats) |
 
 ## Not bundled

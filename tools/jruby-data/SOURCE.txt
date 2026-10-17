@@ -1,0 +1,7 @@
+all_month.geojson - USGS "All Earthquakes, Past Month" GeoJSON summary feed
+  source:  https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson
+  fetched: 2026-10-17 (7,255,240 bytes, 10,224 earthquakes)
+4.5_month.geojson - the earthquakes of magnitude 4.5 or more from that same snapshot (622),
+  in the same GeoJSON layout (derived locally; not downloaded separately, so both files agree)
+license: public domain (U.S. Government work).
+credit:  U.S. Geological Survey, Earthquake Hazards Program

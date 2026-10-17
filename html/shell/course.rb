@@ -53,5 +53,9 @@ module ChunkyShell
     # true for a lesson whose cells run on PicoRuby.wasm instead of CRuby
     # ("engine": "picoruby", the PicoRuby lesson: html/picoruby_lab.js)
     def picoruby?(idx) = @lessons[idx][:engine] == "picoruby"
+
+    # true for a lesson whose cells run on JRuby (TeaVM) instead of CRuby
+    # ("engine": "jruby", the JRuby lesson: html/jruby_lab.js)
+    def jruby?(idx) = @lessons[idx][:engine] == "jruby"
   end
 end

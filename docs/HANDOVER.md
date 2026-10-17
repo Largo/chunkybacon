@@ -41,6 +41,13 @@ update, and a single-file mount would keep serving the old one). Consequences:
   --profile build run --rm spinel-build`), and is a no-op otherwise. Until
   it has run once, lesson `spinel` says that Spinel could not be loaded; the rest
   of the course does not depend on it.
+- **The JRuby lesson's runtimes are put there on deploy, not committed**
+  (`html/assets/jruby/`, `html/assets/jruby-swing/`, §6r): the same
+  `tools/after_deploy.sh` runs `tools/vendor_jruby.rb` and
+  `tools/vendor_jruby_swing.rb`, which copy pinned, SHA-256-checked files
+  from the host's `.cache/` (stocked once, by hand, with `--from`) and are
+  no-ops while current. Nothing is built on deploy. Until they have run,
+  lesson `jruby` says that JRuby could not be loaded.
 - **One thing is built on a laptop and copied**: the 📦 Program toolchain for
   lesson `spinel` (`html/compile/toolchain/`, §6d): `tools/compile/build.sh`, then
   `tools/compile/publish.sh`. The host never builds it, and a push does not
@@ -103,6 +110,15 @@ html/
                         PicoRuby in a worker), manifest.txt, wasi.rb (a WASI host), toolchain.rb
                         (Ruby -> C -> wasm), compiler_worker.rb, run_worker.rb (§6n)
   assets/spinel/        NOT IN GIT: built on deploy by tools/build_spinel.rb (§6n)
+  jruby_lab.js          lesson `jruby` ("engine": "jruby"): its runs to a Web Worker, chunky:jruby, the
+                        status line, the Swing bonus's iframe (§6r)
+  jruby_worker.js       that worker: JRuby 10.1 compiled to JavaScript by TeaVM (assets/jruby/jruby.js)
+  jruby_lab.rb          the Ruby in the worker: one binding for the lesson's cells
+  jruby_cells.rb        the kernel's side: JRuby's answers as values, the USGS data for CRuby
+  jruby_swing.html, jruby_swing.js, jruby_swing_boot.js
+                        the bonus: JRuby 9.4 + Glimmer/Swing on CheerpJ, in an iframe, after a click (§6r)
+  assets/jruby/, assets/jruby-swing/
+                        NOT IN GIT: put there on deploy by tools/vendor_jruby.rb, tools/vendor_jruby_swing.rb (§6r)
   workshop.rb           the workshop's runs: project files as the virtual FS,
                         require_relative between them, gets, write-back
   autorun.rb            live runs (§6b): what may run by itself, the time
@@ -148,7 +164,12 @@ tools/build_box_font.rb    html/assets/fonts/chunky-box-drawing.woff, box drawin
 tools/vendor_herb.rb       Herb's WebAssembly parser into html/assets/herb/ (§6j)
 tools/vendor_ruby2d.rb     ruby2d's Ruby files into html/assets/ruby2d/ruby2d.rb, the .gem checked against rubygems.org's SHA-256 (§6l)
 tools/build_spinel.rb     Spinel + clang as WebAssembly into html/assets/spinel/, pinned in tools/spinel.json (§6n)
-tools/after_deploy.sh      what the host's deploy hook runs after the checkout moved: the Spinel build (§1)
+tools/after_deploy.sh      what the host's deploy hook runs after the checkout moved: the Spinel build,
+                           the JRuby lesson's files (§1)
+tools/vendor_jruby.rb      TeaVM JRuby + the USGS data (tools/jruby-data/) into html/assets/jruby/, pinned
+                           in tools/jruby.json (§6r)
+tools/vendor_jruby_swing.rb  the Swing bonus's jars into html/assets/jruby-swing/, pinned in
+                           tools/jruby_swing.json (§6r)
 tools/offline_files.rb     html/offline-files.txt - rerun after adding/removing a file
 tools/dev_server.rb        nginx's stand-in without Docker: html/, the bridges, the same headers and rules (§7)
 tools/build_embed_ui.rb    html/embed-ui.js from lessons.js's ui strings (--check: current?)
@@ -193,6 +214,8 @@ test/language_test.mjs     Playwright: which language a visitor gets (11 checks)
 test/offline_test.mjs      Playwright: offline mode, behind a proxy it takes down
 test/embed_test.mjs        Playwright: an embedded cell on another (made-up) site (§6k)
 test/picoruby_test.mjs     Playwright: the PicoRuby lesson - cells, IRB, exercise, live runs, the stop (§6m)
+test/jruby_test.mjs        Playwright: the JRuby lesson - every demo, CRuby's side, the exercise, en + de,
+                           the Swing bonus on CheerpJ (SKIP_SWING=1 leaves it out) (§6r)
 test/dev_server_test.rb    the dev server's bridge rule and embed headers, and that nginx/default.conf says the same
 test/make_lessons_json.js  writes test/lessons.json for the harnesses
 docs/HANDOVER.md           this file
@@ -1186,6 +1209,76 @@ program and its data file for download, to build at home:
 - The downloadable program was run with a real Ruby (plain, with
   `OCRAN_EXECUTABLE` pointing elsewhere, and with `Ocran` defined); the .exe
   itself was not built here.
+
+## 6r. The JRuby lesson (`jruby`)
+
+Lesson `jruby` (section "side trips", after `spinel`) runs its cells on
+**JRuby 10.1**, compiled from Java to JavaScript by TeaVM
+([Largo/jruby-teavm](https://github.com/Largo/jruby-teavm), a lesson build:
+json ext + jackson-core + ZXing + `lesson.Quakes` + atomics; commit and
+changes in `tools/jruby.json`), in a Web Worker - the PicoRuby lesson's
+pattern (§6m):
+
+- `jruby_lab.js` (page): `ensureJRuby` (the shell calls it when the lesson
+  opens - never elsewhere; ~7 MB the first time), a queue of runs, the
+  `.jruby-status` line, a 60 s limit that ends the worker (JRuby cannot be
+  interrupted), `chunky:jruby` answers. `jruby_worker.js` boots `jruby.js`,
+  mounts `stdlib.zip` and `data/quakes.zip` (at `/data`), evaluates
+  `jruby_lab.rb` (one binding for all cells; the answer behind `\u0001`).
+- `main.rb` (`start_jruby_run`, `jruby_answer`): the cells above that the
+  worker's binding has not run go along and run first, quietly. CRuby
+  checks the syntax first (its messages are the course's). A cell with
+  `"on": "cruby"` runs on the page's ruby.wasm instead, on the same USGS
+  file (`JRubyCells.load_data` writes it into the sandbox's FS) - the
+  side-by-side of the parse. Each output gets a badge: which Ruby, how long.
+- The exercise's check runs in CRuby; when it passes, CRuby runs the
+  learner's code too and says whether both Rubies agree.
+- No live runs (`"live": false`): a stopped run costs a 3 s reboot.
+- Numbers in the text are measured, never claimed: browser (3 boots × 3
+  runs, headless Chromium, idle 8-core box) and desktop (JRuby 10.1.2 on
+  Java 21 vs CRuby 4.0.6, 20 runs). In the browser ruby.wasm is faster at
+  everything; the lesson says so. The lesson text was generated from those
+  results by `jruby-lesson-lab/builder/gen_lesson.rb` on the Hetzner box
+  (`results/*.json` there); edit lessons.js by hand from now on, or rerun it.
+- The data: USGS "all earthquakes, past month", a snapshot of 2026-10-17
+  in git (`tools/jruby-data/`, public domain) - the feed changes every
+  minute, and the text quotes 10,224 quakes and 173 of magnitude 5+.
+
+**The Swing bonus** (CheerpJ): a card with a preview image and a button. The
+click (handled in `jruby_lab.js`) puts `jruby_swing.html` into an iframe:
+JRuby 9.4.15 (Ruby 3.1, interpreted) on CheerpJ 4.3 - a JVM in
+WebAssembly, which needs the main thread and a page of its own. It boots,
+then loads Glimmer and builds one hidden window (the first real window then
+takes ~1 s instead of 5-7 s), and offers five cells: the fox with data
+binding, feeding it from Ruby, a Celsius converter, a JFreeChart pie from a
+Hash, FlatLaf's dark mode. Measured: ~27 s to ready on the idle box (JRuby
+14-15 s, Glimmer 12-13 s), ~40 MB. CheerpJ's runtime comes from
+`cjrtnc.leaningtech.com` only (it cannot be self-hosted; offline, the frame
+says so); its Community License (fine for this open-source course) puts a
+banner into the bottom 50 px of the display. The jars are ours,
+`html/assets/jruby-swing/`, served without gzip, with ranges (nginx `\.jar$`).
+The iframe posts its height (`{chunkySwing: "height"}`).
+
+**Deploy.** Neither folder is in git. `tools/after_deploy.sh` runs
+`tools/vendor_jruby.rb` and `tools/vendor_jruby_swing.rb`; both check
+SHA-256 pins and are no-ops while current. Their sources on the host:
+TeaVM's `jruby.js`/`stdlib.zip` and the two jruby-cheerpj jars from
+`.cache/jruby/` and `.cache/jruby-swing/` - stocked once by hand:
+
+    ruby tools/vendor_jruby.rb --from <jruby-teavm checkout, dist/ built as tools/jruby.json says>
+    ruby tools/vendor_jruby_swing.rb --from <Largo/jruby-cheerpj checkout after ./run.sh prepare>
+
+(the Maven Central jars are downloaded and checked by the tool itself). A
+failure there is a warning in the hook's log, not a failed deploy. The
+deploy hook must also rsync `html/assets/jruby/` and
+`html/assets/jruby-swing/` to the server behind chunkybacon.idogawa.com,
+as it does `html/assets/spinel/` - that server never builds or fetches
+anything heavy.
+
+Tests: `test/jruby_test.mjs` (Playwright: every demo, the CRuby side,
+errors, the exercise, en and de, the bonus on CheerpJ unless
+`SKIP_SWING=1`), `test/check_harness.rb` (the exercise's solutions, on
+CRuby, with the vendored data).
 
 ## 7. nginx and the proxy
 
@@ -2322,6 +2415,7 @@ ruby spinel_build_test.rb                # the plain Ruby of the compiler worker
 # with the dev server started as FRAME_ANCESTORS="http://blog.test:*" ruby tools/dev_server.rb:
 BASE=http://127.0.0.1:8011/ node embed_test.mjs     # the embedded cell (§6k), ~1 min
 BASE=http://127.0.0.1:8011/ node picoruby_test.mjs  # the PicoRuby lesson (§6m), ~30 s
+BASE=http://127.0.0.1:8011/ node jruby_test.mjs     # the JRuby lesson (§6r), ~2 min with the CheerpJ bonus
 ruby ../tools/vendor_picoruby.rb --check            # the PicoRuby runtime is what PICORUBY_VERSION.txt records
 ```
 
@@ -2379,6 +2473,8 @@ is rerun to update it:
 | Herb's parser | `html/assets/herb/` | 2 MB | `tools/vendor_herb.rb` | |
 | ruby2d's Ruby | `html/assets/ruby2d/` | 0.2 MB | `tools/vendor_ruby2d.rb` | SHA-256 from rubygems.org |
 | the gem cache | `html/gems/cache/` | 11 MB | `tools/build_gem_cache.rb` | |
+| TeaVM JRuby + USGS data (not in git) | `html/assets/jruby/` | 37 MB (7 MB over the wire) | `tools/vendor_jruby.rb` | `tools/vendor_jruby.rb --check` |
+| the Swing bonus's jars (not in git) | `html/assets/jruby-swing/` | 38 MB (ranges, ~20 MB fetched) | `tools/vendor_jruby_swing.rb` | `tools/vendor_jruby_swing.rb --check` |
 
 Afterwards `tools/compress_assets.rb` (the `.gz` copies) and
 `tools/offline_files.rb` (the offline copy's list). The PicoRuby lesson
