@@ -32,7 +32,7 @@ const IDS = ["pico-blink", "pico-sensors", "pico-robot", "pico-epaper", "pico-wi
 
 const text = fs.readFileSync(path.join(ROOT, "html/lessons.js"), "utf8");
 const data = JSON.parse(text.slice(text.indexOf("JSON.stringify(") + 15, text.lastIndexOf(");")));
-// ONLY=pico-ble,pico-wifi: just these
+// ONLY=pico-ble,pico-wifi: just these (ONLY=review: only the review regressions)
 const lessons = IDS.filter(id => !process.env.ONLY || process.env.ONLY.split(",").includes(id)).map(id => data.lessons.find(l => l.id === id));
 const SOLUTIONS = JSON.parse(execFileSync("ruby", [path.join(ROOT, "test/check_harness.rb"), "--dump-solutions", IDS.join(",")], { encoding: "utf8" }));
 if (SHOTS) fs.mkdirSync(SHOTS, { recursive: true });
@@ -236,6 +236,86 @@ for (const lang of langs) {
     await page.close();
   }
   await ctx.close();
+}
+
+// regressions from the review (en): stale inputs (the lesson-change case
+// does not show here: the worker restarts on the way), ■ Stop in a board IRB,
+// a loop without sleep, a driver fetch of another lesson, phone width
+if (!process.env.ONLY || process.env.ONLY === "review") {
+  const ctx = await browser.newContext({ locale: "en-US" });
+  const go = async (page, id) => {
+    await page.click(`#lessonNav a[data-id="${id}"]`);
+    await until(page, x => location.hash === "#" + x && document.querySelector('.run-cell[data-idx="1"]'), id, 20000);
+    await page.waitForTimeout(500);
+  };
+  {
+    const page = await open(ctx, "en", "#pico-wifi");
+    await run(page, 1);
+    await page.check("#pico-slot-1 .pico-check input");
+    let o = await run(page, 1);
+    check("review: pico-wifi with the access point off does not connect", /ConnectTimeout|connected: false/.test(o), o);
+    await go(page, "pico-blink");
+    await go(page, "pico-wifi");
+    o = await run(page, 1);
+    check("review: back in pico-wifi, the access point is on again (no stale input in the worker)", /connected: true/.test(o), o);
+    await page.close();
+  }
+  {
+    // a BLE line of a run that ended by itself is not sent to the next run
+    // (the worker kept every input it was ever given)
+    const page = await open(ctx, "en", "#pico-ble");
+    const code = await page.evaluate(() => window.cellEditors["1"].getValue().replace("30_000", "3_000"));
+    await run(page, 1, { code, wait: false });
+    await until(page, () => /echo: Hello, Pico!/.test(JSON.stringify(window.__bench().log)), null, 20000);
+    await page.fill("#pico-slot-1 .pico-line input", "hi-from-first-run");
+    await page.press("#pico-slot-1 .pico-line input", "Enter");
+    await page.waitForFunction(() => window.__rans.includes(1), null, { timeout: 20000 });
+    await run(page, 1, { timeout: 20000 });
+    const log = JSON.stringify((await debug(page)).log);
+    check("review: a BLE line of an earlier run (ended by itself) is not sent again", /Hello, Pico!/.test(log) && !/hi-from-first-run/.test(log), log);
+    await page.close();
+  }
+  {
+    const page = await open(ctx, "en", "#pico-blink");
+    await run(page, 9);
+    await page.fill("#cell-out-9 .irb-input", "10.times { led.write(1); sleep 1 }");
+    await page.press("#cell-out-9 .irb-input", "Enter");
+    await page.waitForTimeout(1500);
+    await page.click(".pico-stop");
+    await until(page, () => /reset/.test((document.querySelector("#cell-out-9 .irb-history") || {}).textContent || ""), null, 5000);
+    const h = await page.evaluate(() => document.querySelector("#cell-out-9 .irb-history").textContent);
+    check("review: ■ Stop during a board IRB line says the Pico was reset", h.includes("The Pico was reset.") && !h.includes("could not be loaded"), h.slice(-300));
+    const t0 = Date.now();
+    const o = await run(page, 1, { code: "while true\n  puts \"busy\"\nend\n", timeout: 30000 });
+    const took = Date.now() - t0;
+    check("review: a loop without sleep ends after the quiet limit, not a minute", took < 20000, `${took} ms: ${o.slice(-200)}`);
+    await page.close();
+  }
+  {
+    const page = await open(ctx, "en", "#pico-robot");
+    await page.route("**/pico/lib/en/picogo.rb", r => r.abort());
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await ready(page);
+    await go(page, "pico-wifi");
+    await page.unroute("**/pico/lib/en/picogo.rb");
+    await until(page, () => window.cellEditors["9-1"], null, 10000);
+    const tabs = await page.evaluate(() => JSON.parse(window.getCellTabs("9")));
+    const dechunk = tabs.find(t => t.name === "dechunk.rb");
+    check("review: an inline tab never gets the driver of the lesson before", dechunk && dechunk.code.includes("def dechunk") && !/PicoGo/.test(dechunk.code), dechunk && dechunk.code.slice(0, 200));
+    await page.close();
+  }
+  await ctx.close();
+  const phone = await browser.newContext({ locale: "en-US", viewport: { width: 360, height: 740 }, isMobile: true, hasTouch: true });
+  for (const id of ["pico-deploy", "pico-ble", "pico-wifi", "pico-robot"]) {
+    const page = await phone.newPage();
+    page.on("pageerror", e => errors.push(`phone ${id}: ${e.message}`));
+    await page.goto(`${BASE}?lang=en#${id}`, { waitUntil: "domcontentloaded" });
+    await ready(page);
+    const w = await page.evaluate(() => document.documentElement.scrollWidth);
+    check(`review: ${id} fits a 360 px phone`, w <= 362, `${w} px`);
+    await page.close();
+  }
+  await phone.close();
 }
 
 // the closing cell of lesson picoruby points to the new section
