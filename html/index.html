@@ -773,14 +773,20 @@
     });
     // a read-only tab shows a file of html/ (a driver), fetched once
     var tabSources = {};
+    // (keyed by "<cell>-<tab>" only, so an inline tab of the next lesson
+    // clears its key: a fetch of the last lesson's driver that is still
+    // pending or failed must not land in that editor)
+    window.clearCellTabSrc = function (idx, k) { delete tabSources[idx + "-" + k]; };
     window.setCellTabSrc = function (idx, k, src) {
       var key = idx + "-" + k;
-      tabSources[key] = { src: String(src), loaded: false };
+      var entry0 = { src: String(src), loaded: false };
+      var ed0 = window.cellEditors[key];
+      tabSources[key] = entry0;
       fetch(String(src), { cache: "no-cache" }).then(function (r) { return r.ok ? r.text() : Promise.reject(r.status); })
         .then(function (text) {
           var entry = tabSources[key];
           var ed = window.cellEditors[key];
-          if (!entry || entry.src !== String(src) || !ed) return;
+          if (entry !== entry0 || !ed || ed !== ed0) return;
           entry.loaded = true;
           ed.setValue(text);
         })

@@ -58,6 +58,9 @@ class PicoTabsTest < Minitest::Test
     assert_equal %w[1 1-1 1-2 1-3 2], inits
     assert_equal %w[1-1 1-3], calls("initCellReadonly").map { |c| c[1] }
     assert_equal [["setCellTabSrc", "1", "1", "pico/lib/en/epd2in13.rb"]], calls("setCellTabSrc")
+    # an inline tab clears its key: a driver fetch of another lesson must
+    # not land in its editor (review finding)
+    assert_equal [["clearCellTabSrc", "1", "2"], ["clearCellTabSrc", "1", "3"]], calls("clearCellTabSrc")
     assert_includes calls("setCellCode"), ["setCellCode", "1-2", HELPER]
     assert_equal 1, calls("ensurePicoBoard").size
     assert find("#pico-slot-1")

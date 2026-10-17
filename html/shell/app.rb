@@ -461,6 +461,7 @@ module ChunkyShell
         key = "#{idx}-#{k + 1}"
         JSG.w.initCell(key, "#{format(ui.codeLabel, number)}, #{name}", ui.codeHint, readonly ? "true" : "")
         if src.nil?
+          JSG.w.clearCellTabSrc(idx.to_s, (k + 1).to_s)
           starter = tab[:code].to_s
           code = readonly ? starter : Store.get(Store.tab_key(@lang, id, idx, name, starter), starter)
           set_code(key, code)

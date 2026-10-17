@@ -558,7 +558,7 @@ module JS
       props["LESSONS"] = LessonRefs.resolve(JSON.parse(File.read(File.expand_path("../../lessons.json", __dir__))))
       @confirm = true
       %w[setCellCode refreshAllCells ensureThree ensurePython ensureSqlite ensureHerb ensurePicoRuby ensurePicoBoard
-         setCellTabSrc scrollTo].each do |name|
+         setCellTabSrc clearCellTabSrc scrollTo].each do |name|
         props[name] = proc { |*args| @calls << [name, *args]; nil }
       end
       props["confirm"] = proc { |_msg| @confirm }
