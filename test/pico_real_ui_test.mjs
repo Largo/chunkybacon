@@ -39,7 +39,7 @@ const browser = await chromium.launch();
 const until = (page, fn, arg, timeout = 8000) => page.waitForFunction(fn, arg, { timeout }).then(() => true, () => false);
 const shot = async (target, name) => { if (SHOTS) await target.screenshot({ path: path.join(SHOTS, name) }).catch(() => {}); };
 
-// +mode+: "fake" (fake serial + bluetooth), "noapi", "insecure"
+// +mode+: "fake" (fake serial + bluetooth), "noapi", "insecure", "android"
 async function open(lang, hash, mode, { width = 1280, dark = false } = {}) {
   const ctx = await browser.newContext({ locale: lang === "de" ? "de-DE" : "en-US", viewport: { width, height: 900 }, colorScheme: dark ? "dark" : "light" });
   await ctx.addInitScript({ path: FAKES });
@@ -47,6 +47,10 @@ async function open(lang, hash, mode, { width = 1280, dark = false } = {}) {
     if (m === "noapi") {
       delete Navigator.prototype.serial;
       delete Navigator.prototype.bluetooth;
+    } else if (m === "android") {
+      // Chrome on Android: navigator.serial is there (Bluetooth serial only)
+      Object.defineProperty(Navigator.prototype, "userAgent", { get: () => "Mozilla/5.0 (Linux; Android 15; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Mobile Safari/537.36", configurable: true });
+      Object.defineProperty(Navigator.prototype, "serial", { get: () => ({ requestPort() { return Promise.reject(new Error("no USB")); }, addEventListener() {} }), configurable: true });
     } else if (m === "insecure") {
       Object.defineProperty(window, "isSecureContext", { get: () => false });
     } else {
@@ -100,6 +104,16 @@ for (const lang of ["de", "en", "ja"]) {
   check(`${lang} no Web Serial: the note, no button`, r.notes.every(w => w === "api") && r.buttons === 0 && r.sup.why === "api", JSON.stringify(r));
   check(`${lang} no Web Serial: names the browsers that have it`, /Chrome/.test(r.text || ""), r.text);
   check(`${lang} pico-blink has no laptop: no Bluetooth panel`, r.ble === 0);
+  await ctx.close();
+}
+{
+  const { ctx, page } = await open("en", "#pico-blink", "android", { width: 412 });
+  const r = await page.evaluate(() => ({
+    notes: [...document.querySelectorAll(".pico-real-usb .pico-real-note")].map(n => n.dataset.why),
+    buttons: document.querySelectorAll(".pico-real-connect").length,
+    text: (document.querySelector(".pico-real-note") || {}).textContent || ""
+  }));
+  check("Android (navigator.serial without USB): the note, no Connect button", r.notes.length > 0 && r.notes.every(w => w === "phone") && r.buttons === 0 && /phones cannot reach USB/.test(r.text), JSON.stringify(r));
   await ctx.close();
 }
 for (const lang of ["de", "en", "ja"]) {

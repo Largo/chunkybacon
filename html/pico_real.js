@@ -18,7 +18,7 @@
 // PicoModem's own device code (test/pico_real_test.mjs).
 //
 //   chunkyPicoReal.attach(figure, bench, t)  a bench was built: add the panels (pico_board.js)
-//   chunkyPicoReal.serialSupport()         {ok, why: "insecure" | "api" | ""}
+//   chunkyPicoReal.serialSupport()         {ok, why: "insecure" | "api" | "phone" | ""}
 //   chunkyPicoReal.bleSupport()            the same for Web Bluetooth
 //   chunkyPicoReal.ble()                   null, or {name} while a real Pico 2 W is connected
 //   chunkyPicoReal.bleWrite(text)          a line to it (pico_board.js's sendLine)
@@ -699,6 +699,9 @@
   function support(api) {
     if (!root.isSecureContext) return { ok: false, why: "insecure" };
     if (!(api in root.navigator)) return { ok: false, why: "api" };
+    // Chrome 138+ on Android has navigator.serial, but over Bluetooth only:
+    // no USB port would ever be listed
+    if (api === "serial" && /Android/.test(root.navigator.userAgent || "")) return { ok: false, why: "phone" };
     return { ok: true, why: "" };
   }
 
