@@ -11,3 +11,7 @@ test/lessons.json
 /html/assets/spinel.new/
 /html/assets/spinel.old/
 /.cache/
+# IronRuby for the browser (.NET 10 wasm) and its NuGet DLLs, about 90 MB with
+# the .gz copies: put there by tools/vendor_ironruby.rb from its pins in
+# tools/ironruby.json on the deploy host, never committed (docs/HANDOVER.md §6s)
+/html/assets/ironruby/

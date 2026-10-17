@@ -53,5 +53,9 @@ module ChunkyShell
     # true for a lesson whose cells run on PicoRuby.wasm instead of CRuby
     # ("engine": "picoruby", the PicoRuby lesson: html/picoruby_lab.js)
     def picoruby?(idx) = @lessons[idx][:engine] == "picoruby"
+
+    # true for a lesson whose cells run on IronRuby (.NET in WebAssembly)
+    # instead of CRuby ("engine": "ironruby", the IronRuby lesson: html/ironruby_lab.js)
+    def ironruby?(idx) = @lessons[idx][:engine] == "ironruby"
   end
 end

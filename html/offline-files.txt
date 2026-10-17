@@ -162,6 +162,10 @@ gems/cache/unicode-display_width-2.6.0.gem
 gems/cache/unicode_utils-1.4.0.gem
 herb_bridge.rb
 index.html
+ironruby_cells.rb
+ironruby_lab.js
+ironruby_lab.rb
+ironruby_worker.js
 lessons.js
 letter.js
 main.rb

@@ -60,6 +60,12 @@ require_relative "../html/game"
 # here its exercise runs under CRuby, and the check gets the result as the
 # page hands it over - a PicoRubyCells::Value, PicoRuby's inspect text
 require_relative "../html/picoruby_cells"
+# a lesson with "engine": "ironruby" runs on IronRuby (.NET in WebAssembly)
+# in the browser; here its cells, starter and solutions run on the same
+# bundle under Node (ironruby_node.mjs, check_ironruby below), and the
+# CRuby half of the check gets result and probe as the page hands them over
+require_relative "../html/ironruby_cells"
+require "open3"
 $shown_games = []
 # spinel(code) (lesson 45): without the page, spinel.rb is CRuby's run of the
 # program, which is what the lesson's check reads (result.output)
@@ -240,6 +246,49 @@ BROWSER_ONLY = %w[pycall sympy numpy matplotlib sklearn sequel erb].freeze
 
 # the Rumale exercise's picture of a seven (its starter defines it too)
 RUMALE_SEVEN = "PIC = %w[.######. ......#. .....#.. ....#... ...#.... ...#.... ..#..... ..#.....].join(\"\\n\") + \"\\n\"\n"
+
+# The IronRuby lesson's solutions: the loops of bacon_svg, and by index with
+# ModuleMatrix. <<~'RUBY': the #{} are IronRuby's, not the harness's.
+IRONRUBY_SOLUTIONS = [<<~'RUBY', <<~'RUBY'].freeze
+    def qr_svg(text, cell = 6)
+      level = QRCoder::QRCodeGenerator::ECCLevel.Q
+      data = QRCoder::QRCodeGenerator.new.CreateQrCode(text, level)
+      rects = []
+      data.module_matrix.each_with_index do |row, y|
+        row.each_with_index do |dark, x|
+          rects << %(<rect x="#{x * cell}" y="#{y * cell}" width="#{cell}" height="#{cell}"/>) if dark
+        end
+      end
+      size = data.module_matrix.count * cell
+      %(<svg xmlns="http://www.w3.org/2000/svg" width="#{size}" ) +
+        %(height="#{size}" style="background:#fff">#{rects.join}</svg>)
+    end
+
+    show_svg qr_svg("Chunky Bacon")
+  RUBY
+    def qr_svg(text, cell = 6)
+      data = QRCoder::QRCodeGenerator.new.CreateQrCode(text, QRCoder::QRCodeGenerator::ECCLevel.Q)
+      matrix = data.ModuleMatrix
+      n = matrix.Count
+      rects = (0...n).flat_map do |y|
+        (0...n).select { |x| matrix[y][x] }.map do |x|
+          %(<rect x="#{x * cell}" y="#{y * cell}" width="#{cell}" height="#{cell}"/>)
+        end
+      end
+      %(<svg xmlns="http://www.w3.org/2000/svg" width="#{n * cell}" height="#{n * cell}">#{rects.join}</svg>)
+    end
+
+    qr_svg("Chunky Bacon").size
+  RUBY
+
+# ...and answers that look right but are not: a rect for every module, all
+# rects on one spot, the light modules. Each must fail the check (the probe
+# compares the rects with QRCoder's dark modules, not just their number).
+IRONRUBY_WRONG = [
+  %(rects << %(<rect x="\#{x * cell}" y="\#{y * cell}" width="\#{cell}" height="\#{cell}"/>)),
+  %(rects << %(<rect x="0" y="0" width="\#{cell}" height="\#{cell}"/>) if dark),
+  %(rects << %(<rect x="\#{x * cell}" y="\#{y * cell}" width="\#{cell}" height="\#{cell}"/>) unless dark)
+].map { |line| IRONRUBY_SOLUTIONS.first.sub(/^ *rects << .*$/, "      " + line) }.freeze
 
 SOLUTIONS = {
   "hallo" => {
@@ -789,6 +838,11 @@ which_ruby(RUBY_ENGINE)),
              %(NAMES = { "ruby" => "CRuby", "jruby" => "JRuby", "truffleruby" => "TruffleRuby", "mruby" => "mruby" }
 def which_ruby(engine) = NAMES.fetch(engine, engine)
 puts which_ruby(RUBY_ENGINE))]
+  },
+  # the IronRuby lesson: the same code in de and en (IRONRUBY_SOLUTIONS)
+  "ironruby" => {
+    "de" => IRONRUBY_SOLUTIONS,
+    "en" => IRONRUBY_SOLUTIONS
   },
   # PicoRuby has no tally: by hand, with || and with Hash.new(0)
   "picoruby" => {
@@ -1417,6 +1471,74 @@ def load_lesson_files(lesson)
   end
 end
 
+# The IronRuby lesson ("engine": "ironruby") on IronRuby itself: the bundle
+# the page loads (html/assets/ironruby/, tools/vendor_ironruby.rb) under Node,
+# one process per language - every cell above the exercise, in order (what ▶
+# on the exercise runs first on a fresh page), then the starter and the
+# solutions, each followed by the exercise's "probe". The check is CRuby, as
+# on the page: output (the picture lines taken out), result and probe as
+# PicoRubyCells::Values, code. Returns the number of failures.
+IRONRUBY_NODE = File.expand_path("ironruby_node.mjs", __dir__)
+
+def ironruby_available?
+  File.file?(File.expand_path("../html/assets/ironruby/_framework/dotnet.js", __dir__)) &&
+    system("node", "--version", out: File::NULL, err: File::NULL)
+end
+
+def check_ironruby(lesson, lang, cells, exercise_at)
+  where = "#{lesson["id"]}/#{lang}"
+  exercise = cells[exercise_at]
+  solutions = SOLUTIONS.fetch(lesson["id"]).fetch(SOLUTION_LANG.fetch(lang, lang))
+  earlier = EarlierCells.before(exercise_at, cells, {}) { |i| cells[i]["code"] }
+  variants = [["starter", exercise["code"]]] + IRONRUBY_WRONG.each_with_index.map { |s, i| ["wrong#{i + 1}", s] } +
+             solutions.each_with_index.map { |s, i| ["solution#{i + 1}", s] }
+  runs = earlier.map { |_, code| { "code" => code } } +
+         variants.map { |_, code| { "code" => code, "probe" => exercise["probe"] } }
+  out, err, status = Open3.capture3("node", IRONRUBY_NODE, stdin_data: JSON.generate("runs" => runs))
+  unless status.success?
+    puts "FAIL #{where}: test/ironruby_node.mjs exited #{status.exitstatus}: #{err.lines.last(3).join.strip}"
+    return 1
+  end
+  answers = JSON.parse(out)
+  failures = 0
+  earlier.each_with_index do |(idx, _), i|
+    answer = answers[i]
+    next if answer["ok"]
+
+    puts "FAIL #{where}: demo cell #{idx} raised #{answer.dig("error", "class")}: #{answer.dig("error", "message")}"
+    failures += 1
+  end
+  variants.each_with_index do |(label, candidate), i|
+    answer = answers[earlier.size + i]
+    starter_like = label == "starter" || label.start_with?("wrong")
+    if !answer["ok"] && !starter_like
+      puts "FAIL #{where} (#{label}): raised #{answer.dig("error", "class")}: #{answer.dig("error", "message")}"
+      failures += 1
+      next
+    end
+    bind = RubyVM::InstructionSequence.compile("proc { binding }.call", "chunky.rb").eval
+    output, = IronRubyCells.split(answer["stdout"].to_s)
+    bind.local_variable_set(:output, output)
+    bind.local_variable_set(:result, answer["ok"] ? PicoRubyCells.value(answer["result"].to_s) : nil)
+    bind.local_variable_set(:probe, answer["probe"] ? PicoRubyCells.value(answer["probe"].to_s) : nil)
+    bind.local_variable_set(:code, candidate)
+    %i[images scenes downloads audios games shoes_types].each { |name| bind.local_variable_set(name, []) }
+    passed = begin
+      !!eval(exercise["check"], bind, "check.rb")
+    rescue Exception
+      false
+    end
+    if starter_like && passed
+      puts "FAIL #{where}: #{label} code passes check! (probe #{answer["probe"].inspect})"
+      failures += 1
+    elsif !starter_like && !passed
+      puts "FAIL #{where} (#{label}): does not pass check (probe #{answer["probe"].inspect})"
+      failures += 1
+    end
+  end
+  failures
+end
+
 # While working on a few lessons: HARNESS_JSON=other/lessons.json runs another
 # build of the course, HARNESS_ONLY=id,id only those lessons, and
 # HARNESS_SOLUTIONS=file.rb (a file whose last expression is a Hash like
@@ -1439,6 +1561,12 @@ def run_harness(langs)
   failures = 0
   Dir.chdir(WORKDIR)
 
+  # the IronRuby lesson's runtime is vendored, not in git (tools/vendor_ironruby.rb)
+  if selected.any? { |lesson| lesson["engine"] == "ironruby" } && !ironruby_available?
+    puts "SKIP ironruby: no html/assets/ironruby/ (run tools/vendor_ironruby.rb) or no node"
+    selected = selected.reject { |lesson| lesson["engine"] == "ironruby" }
+  end
+
   selected.each do |lesson|
 
   langs.each do |lang|
@@ -1446,6 +1574,11 @@ def run_harness(langs)
     cells = l["cells"]
     exercise_at = cells.index { |c| c["t"] == "x" }
     exercise = cells[exercise_at]
+    # the IronRuby lesson runs on IronRuby, under Node (check_ironruby)
+    if lesson["engine"] == "ironruby"
+      failures += check_ironruby(lesson, lang, cells, exercise_at)
+      next
+    end
     # A fresh page, where the learner's first ▶ is the exercise's: the cells
     # above it that the page runs first, in order (html/earlier_cells.rb).
     # The cells above any demo cell are the first of these, so every demo

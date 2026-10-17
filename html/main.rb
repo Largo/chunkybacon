@@ -186,6 +186,10 @@ require_relative "spinel"
 # (picoruby_lab.js); this turns its answers into values, errors and CRuby's
 # syntax messages. ~3 KB at boot.
 require_relative "picoruby_cells"
+# A lesson with "engine": "ironruby" runs on IronRuby (.NET in WebAssembly)
+# in a Web Worker (ironruby_lab.js); its answers are read as PicoRuby's are,
+# and the pictures its cells show come back in the output. ~2 KB at boot.
+require_relative "ironruby_cells"
 # require "pycall" is the bridge to Pyodide (pycall.rb): the real gem needs
 # libpython, which a browser does not have
 require_relative "pycall"
@@ -375,6 +379,7 @@ class ChunkyApp
     fresh_binding
     # (not in the embedded cell: embed.html has no PicoRuby)
     $window.chunkyPicoRuby.reset if $window[:chunkyPicoRuby].typeof == "object"
+    $window.chunkyIronRuby.reset if $window[:chunkyIronRuby].typeof == "object"
     dispose_three
     dispose_shoes
     dispose_sketches
@@ -441,6 +446,8 @@ class ChunkyApp
   def fresh_binding
     @bind = TopLevel.binding(EVAL_FILE)
     @ran = {}
+    # what the IronRuby worker's binding has run (the IronRuby lesson)
+    @ironruby_ran = {}
   end
 
   # ---------- setup ----------
@@ -456,6 +463,8 @@ class ChunkyApp
     $window.addEventListener("chunky:lesson") { |event| sync_state(event.detail) }
     # a PicoRuby lesson's cells and IRBs answer later (picoruby_lab.js)
     $window.addEventListener("chunky:picoruby") { |event| picoruby_answer(event.detail) }
+    # the IronRuby lesson's cells answer later too (ironruby_lab.js)
+    $window.addEventListener("chunky:ironruby") { |event| ironruby_answer(event.detail) }
     $window.addEventListener("chunky:install") do |event|
       sync_state(event.detail)
       panel_install(event.detail.name)
@@ -1306,7 +1315,7 @@ class ChunkyApp
 
   # the cell's output as run_cell writes it for CRuby: what was printed,
   # the error (explained where a rule knows it) or "=> value", IRBs
-  def show_picoruby_run(idx, code, auto, output: "", result: nil, error: nil, irbs: 0)
+  def show_picoruby_run(idx, code, auto, output: "", result: nil, error: nil, irbs: 0, shown: "", out_class: "")
     # what an exercise's check sees besides output and result: nothing
     @run_images = []
     @run_downloads = []
@@ -1317,7 +1326,9 @@ class ChunkyApp
     @run_audios = []
     @run_games = []
     out_html = ""
-    out_html += "<pre class=\"cell-stdout\">#{AnsiHtml.to_html(output)}</pre>" unless output.empty?
+    out_html += "<pre class=\"cell-stdout#{out_class}\">#{AnsiHtml.to_html(output)}</pre>" unless output.empty?
+    # the pictures an IronRuby cell showed (ironruby_cells.rb)
+    out_html += shown
     hint = live_hint(error)
     # a run past the time limit took the worker, and the variables, with it
     hint = "#{hint} #{ui['picoRestarted']}" if error.is_a?(AutoRun::Stopped)
@@ -1330,7 +1341,7 @@ class ChunkyApp
     elsif error
       out_html += "<div class=\"cell-error\">#{escape_html(PicoRubyCells.class_name(error))}: " \
                   "#{AnsiHtml.to_html(error.message.to_s)}</div>"
-    elsif !(result.nil? && (!output.empty? || irbs.positive?))
+    elsif !(result.nil? && (!output.empty? || irbs.positive? || !shown.empty?))
       out_html += "<div class=\"cell-result\">=&gt; #{escape_html(inspect_result(result))}</div>"
     end
     irbs.times do
@@ -1393,6 +1404,79 @@ class ChunkyApp
               end
     history.innerHTML += append
     history.scrollTop = history.scrollHeight
+  end
+
+  # ---------- IronRuby (a lesson with "engine": "ironruby") ----------
+
+  # The lesson's cells run on IronRuby 4.0 - .NET 10 compiled to WebAssembly
+  # - in a Web Worker (ironruby_lab.js), as the PicoRuby lesson's run on
+  # PicoRuby: a run goes out and settles when the answer comes back, as a
+  # chunky:ironruby event. The cells share one binding in IronRuby, so the
+  # cells above that have not run there yet go along and run first, quietly
+  # (as earlier_cells.rb's do in CRuby). The exercise's check has two
+  # halves: the cell's "probe", IronRuby code the worker runs right after
+  # the learner's (it calls their method), and the "check", CRuby here,
+  # which reads the probe's inspect as `probe` (a PicoRubyCells::Value).
+  # No live runs ("live": false): IronRuby can only be stopped by ending
+  # its worker, and a new one takes seconds to start.
+  def ironruby? = !workshop? && current_lesson && current_lesson["engine"] == "ironruby"
+
+  def start_ironruby_run(idx, code)
+    $window.clearCellMarks(idx)
+    syntax = PicoRubyCells.syntax_error(code, EVAL_FILE)
+    return show_ironruby_run(idx, code, error: syntax) if syntax
+
+    earlier = EarlierCells.before(idx, cells, @ironruby_ran) { |i| $window.getCellCode(i).to_s }
+    @ironruby_pending ||= {}
+    @ironruby_pending[idx] = { code: code, earlier: earlier.to_h }
+    cell = cells[idx] || {}
+    $window.chunkyIronRuby.run(idx.to_s, code, JSON.generate(earlier), @seq.to_s, cell["probe"].to_s)
+    :pending
+  end
+
+  def ironruby_answer(detail)
+    return unless detail.seq.to_i == @seq   # another page by now
+
+    idx = detail.idx.to_i
+    pending = (@ironruby_pending || {}).delete(idx) || { code: $window.getCellCode(idx).to_s, earlier: {} }
+    code = pending[:code]
+    status = detail.status.to_s
+    message = detail.message.to_s
+    failed = detail.earlierFailed.to_s.split(",").map(&:to_i)
+    ran = detail.earlier.to_s.split(",").map(&:to_i)
+    if %w[ok error].include?(status)
+      (ran - failed).each { |i| @ironruby_ran[i] = pending[:earlier][i] if pending[:earlier][i] }
+      @ironruby_ran[idx] = code if status == "ok"
+    else
+      @ironruby_ran = {}   # a new worker: nothing has run in it
+    end
+    error = case status
+            when "error" then PicoRubyCells.error(detail.errorClass.to_s, message, detail.line.to_i, EVAL_FILE)
+            when "stopped" then PicoRubyCells::Stopped.new("#{ui['ironStopped']} #{ui['ironRestarted']}")
+            when "failed" then PicoRubyCells::Unavailable.new("#{ui['ironFailed']} (#{message})")
+            end
+    elapsed = detail.elapsed.to_f
+    probe = detail.probe.to_s
+    outcome = begin
+      show_ironruby_run(idx, code, output: detail.output.to_s, error: error,
+                                   probe: probe.empty? ? nil : PicoRubyCells.value(probe),
+                                   result: status == "ok" ? PicoRubyCells.value(detail.value.to_s) : nil)
+    rescue Exception => e
+      $window.console.error("ironruby #{idx}: #{e.class}: #{e.message}")
+      :error
+    end
+    bridge.ran(idx, outcome.to_s, elapsed, false, elapsed, ran.join(","), failed.join(","), "")
+  end
+
+  def show_ironruby_run(idx, code, output: "", result: nil, error: nil, probe: nil)
+    text, shows = IronRubyCells.split(output)
+    # a QR code drawn with puts (█) reads as one only with no gaps between the lines
+    out_class = text.include?("\u2588") ? " qr-art" : ""
+    # what the exercise's check reads besides output, result and code
+    @bind.local_variable_set(:probe, probe) if (cells[idx] || {})["t"] == "x"
+    show_picoruby_run(idx, code, false, output: text, result: result, error: error,
+                                        shown: shows.map { |kind, b64| IronRubyCells.html(kind, b64) }.join,
+                                        out_class: out_class)
   end
 
   # ---------- running cells ----------
@@ -1522,7 +1606,9 @@ class ChunkyApp
   # worker, and stand alone) or the Spinel lesson (each cell a program of
   # its own).
   def earlier_cells(idx)
-    return [] if workshop? || picoruby? || spinel_lesson?
+    # (the IronRuby lesson: its cells run in the worker, which runs the
+    # cells above there - start_ironruby_run)
+    return [] if workshop? || picoruby? || spinel_lesson? || ironruby?
 
     EarlierCells.before(idx, cells, @ran) { |i| $window.getCellCode(i).to_s }
   end
@@ -1626,6 +1712,8 @@ class ChunkyApp
     return :skipped if auto && !AutoRun.runnable?(code, workshop? ? [] : @bind.local_variables)
     # a lesson on PicoRuby: the worker runs it, picoruby_answer shows it
     return start_picoruby_run(idx, code, auto) if picoruby?
+    # the IronRuby lesson: the worker runs it, ironruby_answer shows it
+    return start_ironruby_run(idx, code) if ironruby?
 
     if workshop?
       # the shell's callbacks (shell/workspace.rb), across the two Rubies

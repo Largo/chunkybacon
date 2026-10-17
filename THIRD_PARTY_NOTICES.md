@@ -114,6 +114,24 @@ on the host; it is a tool of the build and not served.
 | [YoWASP Clang/LLD](https://yowasp.org) (`@yowasp/clang`: LLVM, Clang and LLD as WebAssembly, `clang/`) | 22.0.0-git20542-10 | ISC (the package); LLVM: Apache-2.0 WITH LLVM-exception | Catherine (whitequark); the LLVM project's contributors | `clang/README.md`, `LICENSE-llvm.txt` |
 | [wasi-libc](https://github.com/WebAssembly/wasi-libc), clang's sysroot (`clang/llvm-resources.tar`), linked into every program the lesson builds | as in that package | Apache-2.0 WITH LLVM-exception, Apache-2.0 or MIT; parts: musl (MIT), cloudlibc (BSD-2-Clause), dlmalloc (CC0) | their authors | `LICENSE-wasi-libc.txt`, `LICENSE-wasi-libc-MIT.txt`, `COPYRIGHT-musl.txt`, `LICENSE-cloudlibc.txt` |
 
+## The IronRuby lesson (`html/assets/ironruby/`, put there on deploy)
+
+Lesson `ironruby` only, loaded only when it opens. Not in git:
+`tools/vendor_ironruby.rb` copies the pinned build (`tools/ironruby.json`)
+and the NuGet packages into place, with `NOTICE.md` and the license texts
+(from `tools/ironruby-licenses/`) in `html/assets/ironruby/licenses/`,
+served next to the files.
+
+| Component | Version | License | Copyright | License text |
+|---|---|---|---|---|
+| [IronRuby](https://github.com/Largo/ironruby) (`IronRuby*.wasm`, `ironruby.js`) and the [Dynamic Language Runtime](https://github.com/IronLanguages/dlr) (`Microsoft.Scripting*.wasm`, `Microsoft.Dynamic.wasm`) | 4.0.1, branch `wasm`, the commit in `tools/ironruby.json` | Apache-2.0 | .NET Foundation and Contributors | `LICENSE-ironruby-dlr.txt` |
+| IronRuby's standard library (`stdlib.zip`: Ruby's libraries and bundled gems) | as in that commit | Ruby license or BSD-2-Clause (some gems: their own, as in their files) | Yukihiro Matsumoto and the authors | `LICENSE-ruby.txt` |
+| [.NET](https://github.com/dotnet/runtime) runtime and class libraries for browser-wasm (`dotnet*.js`, `dotnet.native.wasm`, `System*.wasm`, ...) | 10.0.13 | MIT | .NET Foundation and Contributors | `LICENSE-dotnet.txt` |
+| [Prism](https://github.com/ruby/prism), compiled into `dotnet.native.wasm` | as in that commit | MIT | 2022-present Shopify Inc. | `LICENSE-prism.md` |
+| [AngleSharp](https://github.com/AngleSharp/AngleSharp) (`AngleSharp*.wasm`, behind IronRuby's Nokogiri) | 1.5.0 (AngleSharp.Xml 1.2.0) | MIT | AngleSharp | `LICENSE-anglesharp.txt` |
+| [QRCoder](https://github.com/codebude/QRCoder) (`nuget/QRCoder.dll`, `lib/net6.0`) | 1.6.0 | MIT | Raffael Herrmann, Shane Krueger | `LICENSE-qrcoder.txt` |
+| [Markdig](https://github.com/xoofx/markdig) (`nuget/Markdig.dll`, `lib/net8.0`) | 0.44.0 | BSD-2-Clause | Alexandre Mutel | `LICENSE-markdig.txt` |
+
 ## Cached gems (`html/gems/cache/`)
 
 Gem archives the in-browser installer unpacks. They are the archives as

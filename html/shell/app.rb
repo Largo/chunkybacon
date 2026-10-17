@@ -420,6 +420,10 @@ module ChunkyShell
       # a second PicoRuby (the same 0.9 MB, cached) in a Web Worker, only for
       # a lesson whose cells run on it (html/picoruby_lab.js)
       JSG.w.ensurePicoRuby if @course.picoruby?(idx)
+      # IronRuby (.NET in WebAssembly, ~20 MB) in a Web Worker, only for the
+      # IronRuby lesson (html/ironruby_lab.js); its status line is in the
+      # lesson's first cell
+      JSG.w.ensureIronRuby if @course.ironruby?(idx)
       @rendered_lesson_id = id
       # a lesson opened from a link is where the learner left off, too (only
       # a change is written: every write reaches a connected folder)

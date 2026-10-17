@@ -79,6 +79,9 @@ Last updated 2026-10-06.
   cannot delete `.git/worktrees/agent-a88082be1e674fa38`, a stale entry -
   harmless.)
 
+- Lesson `ironruby` (HANDOVER §6s): upstream IronRuby items found on the
+  way are listed at the end of §6s.
+
 ## Smaller open ends found on the way
 
 - browser_test's "a re-run stops the old game" (Snake) is flaky: it reads

@@ -758,6 +758,10 @@
   <!-- a second PicoRuby, in a Web Worker, for a lesson whose cells run on it
        ("engine": "picoruby", the PicoRuby lesson): picoruby_lab.js -->
   <script src="picoruby_lab.js"></script>
+  <!-- IronRuby (.NET in WebAssembly), in a Web Worker, for the IronRuby
+       lesson ("engine": "ironruby"): ironruby_lab.js - its 20 MB load only
+       when that lesson opens -->
+  <script src="ironruby_lab.js"></script>
   <script src="compile/compile.js" defer></script>
   <!-- the page shell (PicoRuby) and its bridge to the kernel (CRuby);
        the bridge starts browser.script.iife.js, which runs main.rb -->
