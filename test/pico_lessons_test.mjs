@@ -16,7 +16,9 @@
 // bench's laptop panel; ■ Stop resets the Pico within a second, keeps what
 // the run printed, and the next run works; the CRuby laptop cell
 // (pico_laptop.rb) finds the advertising Pico and prints its echo; no page
-// errors. pico_board_test.mjs covers the same machinery on the demo lesson
+// errors. (■ Stop is the live bench's: the other cells show idle previews
+// with Stop disabled, so the tests click ".pico-stop:enabled".)
+// pico_board_test.mjs covers the same machinery on the demo lesson
 // file (tmp/), pico_bench_shots.mjs the drawing.
 import fs from "fs";
 import path from "path";
@@ -124,7 +126,7 @@ for (const lang of langs) {
           // ■ Stop: within a second, the streamed output stays
           const k = await ranCount(page, i);
           const t0 = Date.now();
-          await page.click(".pico-stop");
+          await page.click(".pico-stop:enabled");
           await page.waitForFunction(([x, n]) => window.__rans.filter(y => y === x).length > n, [i, k], { timeout: 5000 });
           const o = await out(page, i);
           check(`${L} cell ${i}: ■ Stop resets the Pico within a second (${Date.now() - t0} ms)`, Date.now() - t0 < 1500 && o.includes(said.reset[lang]), o);
@@ -133,7 +135,7 @@ for (const lang of langs) {
           continue;
         }
         const k = await ranCount(page, i);
-        await page.click(".pico-stop");
+        await page.click(".pico-stop:enabled");
         await page.waitForFunction(([x, n]) => window.__rans.filter(y => y === x).length > n, [i, k], { timeout: 5000 });
         continue;
       }
@@ -149,7 +151,7 @@ for (const lang of langs) {
             await until(page, ([x, s]) => (document.getElementById("cell-out-" + x).textContent || "").includes("echo: " + s), [i, said.hello[lang]], 8000), await out(page, i));
         }
         const k = await ranCount(page, echo);
-        await page.click(".pico-stop");
+        await page.click(".pico-stop:enabled");
         await page.waitForFunction(([x, n]) => window.__rans.filter(y => y === x).length > n, [echo, k], { timeout: 5000 });
         const again = await run(page, i);
         check(`${L} cell ${i}: without a running Pico it says it found nothing`, !failed(again) && !again.includes("echo"), again);
@@ -281,7 +283,7 @@ if (!process.env.ONLY || process.env.ONLY === "review") {
     await page.fill("#cell-out-9 .irb-input", "10.times { led.write(1); sleep 1 }");
     await page.press("#cell-out-9 .irb-input", "Enter");
     await page.waitForTimeout(1500);
-    await page.click(".pico-stop");
+    await page.click(".pico-stop:enabled");
     await until(page, () => /reset/.test((document.querySelector("#cell-out-9 .irb-history") || {}).textContent || ""), null, 5000);
     const h = await page.evaluate(() => document.querySelector("#cell-out-9 .irb-history").textContent);
     check("review: ■ Stop during a board IRB line says the Pico was reset", h.includes("The Pico was reset.") && !h.includes("could not be loaded"), h.slice(-300));
