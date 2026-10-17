@@ -1362,19 +1362,49 @@ class ChunkyApp
 
   # what a run printed so far, below the cell (picoruby_lab.js's progress)
   def picoruby_progress(detail)
-    return unless detail.seq.to_i == @seq && detail.kind.to_s == "cell"
+    return unless detail.seq.to_i == @seq
+
+    @pico_live ||= {}
+    if detail.kind.to_s == "irb"
+      # a board IRB line runs up to 30 s: what it prints shows as it comes
+      term = $d.querySelector(".irb-term[data-sid='#{detail.sid.to_i}']")
+      return unless term
+
+      history = term.querySelector(".irb-history")
+      key = "irb#{detail.sid.to_i}"
+      live = history.querySelector("pre.pico-live")
+      unless @pico_live[key] && live
+        history.insertAdjacentHTML("beforeend", "<pre class=\"irb-stdout pico-live\"></pre>")
+        live = history.querySelector("pre.pico-live")
+        @pico_live[key] = { style: {}, rest: "" }
+      end
+      live.insertAdjacentHTML("beforeend", pico_stream_html(@pico_live[key], detail.output.to_s))
+      history.scrollTop = history.scrollHeight
+      return
+    end
+    return unless detail.kind.to_s == "cell"
 
     idx = detail.idx.to_i
     out_el = $d.getElementById("cell-out-#{idx}")
-    @pico_live ||= {}
     unless @pico_live[idx]
       # the first output of this run replaces the last run's
       out_el.innerHTML = "<pre class=\"cell-stdout pico-live\"></pre>"
       out_el.style.display = "block"
-      @pico_live[idx] = true
+      @pico_live[idx] = { style: {}, rest: "" }
     end
     live = out_el.querySelector("pre.pico-live")
-    live.innerHTML = live.innerHTML.to_s + AnsiHtml.to_html(detail.output.to_s)
+    # appended, not innerHTML += (that parses the whole output again)
+    live.insertAdjacentHTML("beforeend", pico_stream_html(@pico_live[idx], detail.output.to_s))
+  end
+
+  # one chunk of a run's output as HTML: the colour state goes on from the
+  # last chunk, and an escape code cut at the end waits for the next one
+  def pico_stream_html(state, text)
+    text = state[:rest] + text
+    cut = text =~ /\e(\[[0-9;:?]*)?\z/
+    state[:rest] = cut ? text[cut..] : ""
+    text = text[0...cut] if cut
+    AnsiHtml.to_html(text, state[:style])
   end
 
   def picoruby_answer(detail)
@@ -1492,12 +1522,17 @@ class ChunkyApp
     return unless term
 
     history = term.querySelector(".irb-history")
+    # what streamed in while it ran: the answer brings all of it
+    (@pico_live ||= {}).delete("irb#{detail.sid.to_i}")
+    live = history.querySelector("pre.pico-live")
+    live.remove if live
     output = detail.output.to_s
     append = output.empty? ? "" : "<pre class=\"irb-stdout\">#{AnsiHtml.to_html(output)}</pre>"
     append += case detail.status.to_s
               when "ok" then "<div class=\"irb-result\">=&gt; #{escape_html(inspect_result(PicoRubyCells.value(detail.value.to_s)))}</div>"
               when "error" then "<div class=\"irb-error\">#{escape_html("#{detail.errorClass}: #{detail.message}")}</div>"
               when "stopped" then "<div class=\"irb-note\">#{escape_html("#{ui['picoStopped']} #{ui['picoRestarted']}")}</div>"
+              when "reset" then "<div class=\"irb-note\">#{escape_html("#{ui['boardReset']} #{ui['picoRestarted']}")}</div>"
               else "<div class=\"irb-error\">#{escape_html(ui['picoFailed'])}</div>"
               end
     history.innerHTML += append
