@@ -2025,9 +2025,11 @@ Markdig (NuGet, BSD-2-Clause) with `using_clr_extensions`. The exercise:
   (not used here); the `wasm` branch is not built by IronRuby's CI.
 - Offline mode (§6c) does not include the runtime: offline, the lesson
   says IronRuby could not be loaded. Not in the workshop or the embed.
-- **Deploy to chunkybacon.idogawa.com**: the Hetzner hook rsyncs only
-  `html/assets/spinel/` there today; `html/assets/ironruby/` needs the same
-  rsync (see `docs/OPEN_WORK.md`). Never run the vendor tool on the Linode.
+- **Deploy to chunkybacon.idogawa.com**: the Hetzner hook rsyncs
+  `html/assets/ironruby/` there after `html/assets/spinel/`
+  (`publish_ironruby`; a failure leaves the retry marker, like Spinel's).
+  The host's `.cache/ironruby/` was stocked once with `--from` on
+  2026-10-17. Never run the vendor tool on the Linode.
 - Tests: `test/check_harness.rb` runs every cell above the exercise, the
   starter and both solutions on the real bundle under Node
   (`test/ironruby_node.mjs`, ~3 s per language; skipped when
