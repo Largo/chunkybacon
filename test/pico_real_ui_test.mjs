@@ -156,7 +156,15 @@ for (const lang of ["de", "en", "ja"]) {
   check("USB: Send from irb gets back to the shell first", await until(page, () => window.__dev.runs.filter(r => r === "/home/chunky.rb").length === 2, null, 15000));
   // as app.rb
   await page.check(`${sel} .pico-real-buttons input[type=checkbox] >> nth=-1`);
-  await page.click(`${sel} .pico-real-send`);
+  // while a cell goes over, no Ctrl-C or typed byte may land inside a PicoModem frame
+  const during = await page.evaluate(async s => {
+    document.querySelector(s + " .pico-real-send").click();
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const q = c => document.querySelector(s + " " + c);
+    return { busy: window.chunkyPicoReal.state().serial.busy, send: q(".pico-real-send").disabled, ctrlc: q(".pico-real-ctrlc").disabled,
+             line: q(".pico-real-type input").disabled, go: q(".pico-real-type button").disabled };
+  }, sel);
+  check("USB: while sending, Send, Ctrl-C and the Type form are disabled", during.busy && during.send && during.ctrlc && during.line && during.go, JSON.stringify(during));
   check("USB: as /home/app.rb", await until(page, () => window.__dev.text("/home/app.rb") !== null && window.__dev.runs.includes("/home/app.rb"), null, 15000));
   // the cable out
   await page.evaluate(() => { window.__port.unplug(); });
@@ -228,6 +236,8 @@ for (const lang of ["de", "en", "ja"]) {
   check("BLE: the real Pico's line reaches the CRuby cell's block", await until(page, i => /T 21\.5/.test((document.querySelector(`.run-cell[data-idx="${i}"]`).closest(".cell") || document.body).textContent), cruby, 10000));
   await page.click(`${sel} .pico-real-close`);
   check("BLE: disconnected, the simulated radio is back", await until(page, () => !JSON.parse(window.chunkyPicoBoard.ble()).real));
+  check("BLE: Disconnect says not connected (not \"went away\")", await until(page, s => /^Not connected/.test(document.querySelector(s + " .pico-real-status").textContent), sel),
+        await page.evaluate(s => document.querySelector(s + " .pico-real-status").textContent, sel));
   await ctx.close();
 }
 

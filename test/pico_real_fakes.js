@@ -200,7 +200,7 @@
     return Promise.resolve();
   };
   FakeSerialPort.prototype.getInfo = function () { return { usbVendorId: 0x16C0, usbProductId: 0x4001 }; };
-  FakeSerialPort.prototype.close = function () { try { this.ctl.close(); } catch (e) { /* closed */ } this.device.stop(); return Promise.resolve(); };
+  FakeSerialPort.prototype.close = function () { this.closedByLink = true; try { this.ctl.close(); } catch (e) { /* closed */ } this.device.stop(); return Promise.resolve(); };
   // the cable comes out
   FakeSerialPort.prototype.unplug = function () { try { this.ctl.error(new Error("The device has been lost.")); } catch (e) { /* closed */ } };
 
@@ -215,7 +215,7 @@
     this.tx = {
       uuid: "6e400003-b5a3-f393-e0a9-e50e24dcca9e",
       notifying: false,
-      startNotifications: function () { this.notifying = true; return Promise.resolve(this); },
+      startNotifications: function () { if (self.failNotify) return Promise.reject(new Error("NotSupportedError")); this.notifying = true; return Promise.resolve(this); },
       addEventListener: function (type, f) { (listeners[type] = listeners[type] || []).push(f); },
       value: null
     };

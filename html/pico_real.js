@@ -174,16 +174,31 @@
   Term.prototype.lineFeed = function () {
     if (this.r === this.rows - 1) this.scrollUp(1); else this.r++;
   };
+  // East-Asian wide characters (kana, kanji, hangul, full-width forms,
+  // most emoji) take two columns, as in xterm.js: R2P2's line editor asks
+  // for the cursor's column and redraws by it
+  function wide(cp) {
+    return (cp >= 0x1100 && cp <= 0x115F) || (cp >= 0x2E80 && cp <= 0x303E) ||
+      (cp >= 0x3041 && cp <= 0x33FF) || (cp >= 0x3400 && cp <= 0x4DBF) ||
+      (cp >= 0x4E00 && cp <= 0x9FFF) || (cp >= 0xA000 && cp <= 0xA4CF) ||
+      (cp >= 0xAC00 && cp <= 0xD7A3) || (cp >= 0xF900 && cp <= 0xFAFF) ||
+      (cp >= 0xFE30 && cp <= 0xFE4F) || (cp >= 0xFF00 && cp <= 0xFF60) ||
+      (cp >= 0xFFE0 && cp <= 0xFFE6) || (cp >= 0x1F300 && cp <= 0x1F64F) ||
+      (cp >= 0x1F900 && cp <= 0x1F9FF) || (cp >= 0x20000 && cp <= 0x3FFFD);
+  }
   Term.prototype.put = function (ch) {
-    if (this.wrap) { this.c = 0; this.lineFeed(); this.wrap = false; }
+    var w = wide(ch.codePointAt(0)) && this.cols > 1 ? 2 : 1;
+    if (this.wrap || (w === 2 && this.c === this.cols - 1)) { this.c = 0; this.lineFeed(); this.wrap = false; }
     this.screen[this.r][this.c] = ch;
+    if (w === 2) { this.c++; this.screen[this.r][this.c] = ""; }   // its right half
     if (this.c === this.cols - 1) this.wrap = true; else this.c++;
   };
   Term.prototype.write = function (data) {
     var text = typeof data === "string" ? data : this.decoder.decode(data, { stream: true });
     var reply = "";
     for (var i = 0; i < text.length; i++) {
-      var ch = text[i], code = text.charCodeAt(i);
+      var code = text.codePointAt(i), ch = String.fromCodePoint(code);
+      if (code > 0xFFFF) i++;          // the low surrogate goes with it
       if (this.state === 1) {
         if (ch === "[") { this.state = 2; this.params = ""; }
         else if (ch === "]") this.state = 3;
@@ -299,10 +314,15 @@
     };
     return step();
   };
+  // the device went away (unplugged, a read error): let go of the port too,
+  // else a later Connect finds it still open and locked
   Link.prototype.gone = function () {
     if (this.closed) return;
     this.closed = true;
     this.wake();
+    try { this.reader.releaseLock(); } catch (e) { /* still reading */ }
+    try { this.writer.releaseLock(); } catch (e) { /* pending */ }
+    try { if (this.port.close) Promise.resolve(this.port.close()).catch(function () {}); } catch (e) { /* closed */ }
     this.onChange("gone");
   };
   Link.prototype.bytes = function (u8) {
@@ -494,17 +514,20 @@
         return { ok: false, error: String(e && e.message || e) };
       });
   };
-  // the plan for a cell: its tabs to /lib, the code to /home/<name>, with a
-  // first line that forgets the tabs' earlier loads, so a re-sent driver is
-  // read anew by require (the simulator does the same per run)
+  // the plan for a cell: its tabs to /lib, the code to /home/<name>, starting
+  // with a statement that forgets the tabs' earlier loads, so a re-sent driver
+  // is read anew by require (the simulator does the same per run). It goes in
+  // front of the first line, not on a line of its own, so R2P2's error line
+  // numbers are the editor's.
   function cellFiles(code, tabs, asApp) {
     var files = (tabs || []).map(function (tab) { return { path: "/lib/" + tab.name, text: String(tab.code) }; });
     var main = asApp ? "/home/app.rb" : "/home/chunky.rb";
     var forget = files.map(function (f) { return JSON.stringify(f.path); });
-    var head = forget.length ? "[" + forget.join(", ") + "].each { |f| $LOADED_FEATURES.delete(f) } # chunkybacon: read the /lib files anew\n" : "";
     // show_irb is this page's IRB under a cell; R2P2's own is the irb
     // command at its prompt (the line stays, so the line numbers do too)
     var body = String(code).replace(/^([ \t]*)show_irb[ \t]*$/mg, "$1# show_irb: on R2P2, type irb at the $> prompt");
+    // (=begin must start its line: then the statement gets one of its own)
+    var head = !forget.length ? "" : "[" + forget.join(", ") + "].each { |f| $LOADED_FEATURES.delete(f) }" + (/^=begin/.test(body) ? "\n" : "; ");
     files.push({ path: main, text: head + body, main: true });
     return files;
   }
@@ -564,7 +587,12 @@
       var v = e.target.value;
       self.data(new Uint8Array(v.buffer, v.byteOffset, v.byteLength));
     });
-    device.addEventListener("gattserverdisconnected", function () { self.connected = false; onGone(); });
+    this.closing = false;
+    // a disconnect we asked for (close) is not "the Pico went away"
+    device.addEventListener("gattserverdisconnected", function () {
+      self.connected = false;
+      if (!self.closing) onGone(self);
+    });
   }
   // notifications come in pieces of up to 20 bytes: whole lines go on
   BleLink.prototype.data = function (u8) {
@@ -594,6 +622,7 @@
     return this.out;
   };
   BleLink.prototype.close = function () {
+    this.closing = true;
     this.connected = false;
     try { if (this.device.gatt && this.device.gatt.connected) this.device.gatt.disconnect(); } catch (e) { /* gone */ }
   };
@@ -605,7 +634,12 @@
       .then(function (svc) { return Promise.all([svc.getCharacteristic(NUS_RX), svc.getCharacteristic(NUS_TX)]); })
       .then(function (ch) {
         var link = new BleLink(device, ch[0], ch[1], onLine, onGone);
-        return ch[1].startNotifications().then(function () { return link; });
+        return ch[1].startNotifications().then(function () { return link; }, function (e) { link.close(); throw e; });
+      })
+      .catch(function (e) {
+        // connected but the service, a characteristic or notify failed: hang up
+        try { if (device && device.gatt && device.gatt.connected) device.gatt.disconnect(); } catch (x) { /* gone */ }
+        throw e;
       });
   }
 
@@ -796,7 +830,8 @@
     p.send.addEventListener("click", function () { sendCell(p); });
     p.stop = el("button", "pico-real-ctrlc", t("boardRealCtrlC"));
     p.stop.type = "button";
-    p.stop.addEventListener("click", function () { if (serial.link) serial.link.raw(new Uint8Array([3])); });
+    // not while a PicoModem frame is on the wire: a byte in it breaks the CRC
+    p.stop.addEventListener("click", function () { if (serial.link && !serial.link.busy && !serial.link.capture) serial.link.raw(new Uint8Array([3])); });
     p.close = el("button", "pico-real-close", t("boardRealClose"));
     p.close.type = "button";
     p.close.addEventListener("click", closeSerial);
@@ -830,7 +865,7 @@
     form.appendChild(go);
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      if (!serial.link) return;
+      if (!serial.link || serial.link.busy || serial.link.capture) return;
       serial.link.send(p.line.value + "\r");
       p.line.value = "";
     });
@@ -850,12 +885,13 @@
     p.connect.disabled = serial.opening;
     p.allLab.hidden = on;
     p.send.hidden = p.stop.hidden = p.close.hidden = p.appLab.hidden = !on;
-    p.send.disabled = busy;
+    p.send.disabled = p.stop.disabled = p.line.disabled = p.go.disabled = busy;
     p.form.hidden = !on;
     p.screen.hidden = !on;
     var key = serial.statusKey || "boardRealOff";
     var args = serial.statusArgs || [];
-    p.status.textContent = fill(p.t(key), args[0], args[1]);
+    var said = fill(p.t(key), args[0], args[1]);
+    if (p.status.textContent !== said) p.status.textContent = said;
     if (on && p.root.open) {
       var text = serial.link.term.text();
       if (p.screen.textContent !== text) {
@@ -878,7 +914,9 @@
     ble.opening = true;
     ble.status = "boardRealChoose";
     redraw();
-    connectBle(root.navigator.bluetooth, bleLine, function () {
+    connectBle(root.navigator.bluetooth, bleLine, function (gone) {
+      // a late event of an older link must not clear a newer one
+      if (ble.link !== gone) return;
       ble.link = null;
       ble.status = "boardRealBleGone";
       if (root.chunkyPicoBoard && root.chunkyPicoBoard.realBle) root.chunkyPicoBoard.realBle(null);
@@ -941,7 +979,8 @@
     p.connect.disabled = ble.opening;
     p.close.hidden = !on;
     var key = ble.status || "boardRealBleOff";
-    p.status.textContent = fill(p.t(key), on ? ble.link.name : ble.error || "");
+    var said = fill(p.t(key), on ? ble.link.name : ble.error || "");
+    if (p.status.textContent !== said) p.status.textContent = said;
   }
 
   root.chunkyPicoReal = {

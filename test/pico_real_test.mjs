@@ -104,12 +104,21 @@ check("crc32 runs on (incremental, as picoruby-crc)", lib.crc32(bytes("6789"), l
   check("Term: UTF-8 split across reads", u.cursorLine() === "° ✓ 日本", JSON.stringify(u.cursorLine()));
   u.write("\x1b[2J");
   check("Term: ED 2 clears the screen", u.screen.every(r => r.join("").trim() === ""));
+  const j = new lib.Term(4, 10);
+  j.write("$> 日本a");
+  check("Term: a wide character takes two columns (the cursor report too)", j.cursorLine() === "$> 日本a" && j.write("\x1b[6n") === "\x1b[1;9R", JSON.stringify([j.cursorLine(), j.write("\x1b[6n")]));
+  j.write("\r\n123456789日");
+  check("Term: a wide character that does not fit in the last column wraps whole", j.text().split("\n").slice(-2).join("|") === "123456789|日", JSON.stringify(j.text()));
+  j.write("\r\n🎉x");
+  check("Term: an emoji outside the BMP is one character, two columns", j.cursorLine() === "🎉x" && j.write("\x1b[6n") === "\x1b[4;4R", JSON.stringify([j.cursorLine(), j.write("\x1b[6n")]));
 }
 
 {
   const files = lib.cellFiles('require "gpio"\nled = GPIO.new(15, GPIO::OUT)\nshow_irb\n', [], false);
   check("cellFiles: show_irb (the page's) becomes a comment, same line", files.length === 1 && files[0].text.split("\n")[2] === "# show_irb: on R2P2, type irb at the $> prompt", JSON.stringify(files));
   const two = lib.cellFiles("x\n", [{ name: "a.rb", code: "A" }, { name: "font5x7.rb", code: "F" }], true);
+  const eq = lib.cellFiles("=begin\nx\n=end\n", [{ name: "a.rb", code: "A" }], false);
+  check("cellFiles: =begin on the first line keeps its column (the statement gets a line of its own)", eq[1].text.split("\n")[1] === "=begin", JSON.stringify(eq[1].text));
   check("cellFiles: tabs first, in order, the main file last", two.map(f => f.path).join() === "/lib/a.rb,/lib/font5x7.rb,/home/app.rb" && two[2].text.startsWith('["/lib/a.rb", "/lib/font5x7.rb"].each'));
 }
 
@@ -143,8 +152,10 @@ const until = async (f, ms = 3000) => { const end = Date.now() + ms; while (!f()
   check("sendCell: Ctrl-C stopped the old program", dev.runs[0] === "/home/old.rb" && dev.mode !== "running");
   check("sendCell: the tab went to /lib/blinker.rb unchanged", dev.text("/lib/blinker.rb") === tabs[0].code, dev.text("/lib/blinker.rb"));
   const main = dev.text("/home/chunky.rb") || "";
-  check("sendCell: the code to /home/chunky.rb, after a line that forgets the tab's last load",
-        main === '["/lib/blinker.rb"].each { |f| $LOADED_FEATURES.delete(f) } # chunkybacon: read the /lib files anew\n' + code, JSON.stringify(main));
+  check("sendCell: the code to /home/chunky.rb, behind a statement on its first line that forgets the tab's last load",
+        main === '["/lib/blinker.rb"].each { |f| $LOADED_FEATURES.delete(f) }; ' + code, JSON.stringify(main));
+  check("sendCell: the main file has as many lines as the cell (R2P2's line numbers are the editor's)",
+        main.split("\n").length === code.split("\n").length);
   check("sendCell: then its path typed at the prompt (it ran)", dev.runs[dev.runs.length - 1] === "/home/chunky.rb", JSON.stringify(dev.runs));
   await until(() => link.term.text().includes("hello from the Pico"));
   check("sendCell: the program's output in the terminal", link.term.text().includes("hello from the Pico"), link.term.text().slice(-300));
@@ -179,6 +190,7 @@ const until = async (f, ms = 3000) => { const end = Date.now() + ms; while (!f()
   port.unplug();
   await until(() => link.closed);
   check("Link: the cable out closes it", link.closed);
+  check("Link: and lets go of the port (no lock left, closed: a new Connect can open it)", !port.readable.locked && !port.writable.locked && port.closedByLink === true, JSON.stringify([port.readable.locked, port.writable.locked, port.closedByLink]));
 }
 {
   const { dev, link } = await fakeLink({ failPath: "/lib/x.rb" });
@@ -249,7 +261,17 @@ const until = async (f, ms = 3000) => { const end = Date.now() + ms; while (!f()
   bt.notify("zi\n");
   check("BLE: UTF-8 across notifications", lines[3] === "Grüezi\n", JSON.stringify(lines));
   link.close();
-  check("BLE: close disconnects, the page hears it", gone === 1 && !bt.device.gatt.connected);
+  check("BLE: close disconnects, and it is not reported as the Pico going away", gone === 0 && !bt.device.gatt.connected, String(gone));
+  const again = await lib.connectBle(bt, () => {}, l => { gone++; check("BLE: going away names its own link", l === again); });
+  bt.device.gatt.disconnect();          // the Pico's side hangs up (out of range, reset)
+  check("BLE: the Pico going away is reported once", gone === 1 && !again.connected, String(gone));
+}
+{
+  const bt = new fakes.FakeBluetooth("ChunkyPico");
+  bt.failNotify = true;
+  let err = null;
+  await lib.connectBle(bt, () => {}, () => {}).catch(e => { err = e; });
+  check("BLE: a failed setup is an error and hangs up the GATT connection", err && !bt.device.gatt.connected, String(err));
 }
 
 console.log(`\n${passes} passed, ${failures} failed`);
