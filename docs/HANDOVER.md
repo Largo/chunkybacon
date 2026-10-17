@@ -168,6 +168,7 @@ tools/after_deploy.sh      what the host's deploy hook runs after the checkout m
                            the JRuby lesson's files (§1)
 tools/vendor_jruby.rb      TeaVM JRuby + the USGS data (tools/jruby-data/) into html/assets/jruby/, pinned
                            in tools/jruby.json (§6r)
+tools/jruby-teavm-lesson.patch  the source of that build: git am on Largo/jruby-teavm 730d53b (§6r)
 tools/vendor_jruby_swing.rb  the Swing bonus's jars into html/assets/jruby-swing/, pinned in
                            tools/jruby_swing.json (§6r)
 tools/offline_files.rb     html/offline-files.txt - rerun after adding/removing a file
@@ -1214,15 +1215,25 @@ program and its data file for download, to build at home:
 
 Lesson `jruby` (section "side trips", after `spinel`) runs its cells on
 **JRuby 10.1**, compiled from Java to JavaScript by TeaVM
-([Largo/jruby-teavm](https://github.com/Largo/jruby-teavm), a lesson build:
-json ext + jackson-core + ZXing + `lesson.Quakes` + atomics; commit and
-changes in `tools/jruby.json`), in a Web Worker - the PicoRuby lesson's
-pattern (§6m):
+([Largo/jruby-teavm](https://github.com/Largo/jruby-teavm) at its public
+commit 730d53b plus `tools/jruby-teavm-lesson.patch`, a lesson build: json
+ext + jackson-core + ZXing + `lesson.Quakes` + atomics; pins and the rebuild
+recipe in `tools/jruby.json`), in a Web Worker - the PicoRuby lesson's
+pattern (§6m). The patch is the complete source of the changes (JRuby is
+GPL/EPL): `git am` on 730d53b gives the tree pinned in `tools/jruby.json`,
+whose build gives the pinned `jruby.js` bit for bit (`stdlib.zip`: the same
+entries, other zip timestamps). `vendor_jruby.rb` serves it next to
+`jruby.js`. A new build means: commit in jruby-teavm, a new patch
+(`git format-patch -1 --stdout`), new pins:
 
 - `jruby_lab.js` (page): `ensureJRuby` (the shell calls it when the lesson
   opens - never elsewhere; ~7 MB the first time), a queue of runs, the
-  `.jruby-status` line, a 60 s limit that ends the worker (JRuby cannot be
-  interrupted), `chunky:jruby` answers. `jruby_worker.js` boots `jruby.js`,
+  `.jruby-status` line (it says "stopped" once a run past the limit or a
+  reset ended the worker), a 60 s limit that ends the worker (JRuby cannot
+  be interrupted), `chunky:jruby` answers. An output of half blocks only
+  (the ZXing QR code) is drawn as an SVG of square modules
+  (`JRubyCells.blocks_svg`), the text hidden next to it: as text, the rows
+  depend on the font's block glyphs, and the QR code did not scan. `jruby_worker.js` boots `jruby.js`,
   mounts `stdlib.zip` and `data/quakes.zip` (at `/data`), evaluates
   `jruby_lab.rb` (one binding for all cells; the answer behind `\u0001`).
 - `main.rb` (`start_jruby_run`, `jruby_answer`): the cells above that the
@@ -1231,12 +1242,17 @@ pattern (§6m):
   `"on": "cruby"` runs on the page's ruby.wasm instead, on the same USGS
   file (`JRubyCells.load_data` writes it into the sandbox's FS) - the
   side-by-side of the parse. Each output gets a badge: which Ruby, how long.
-- The exercise's check runs in CRuby; when it passes, CRuby runs the
-  learner's code too and says whether both Rubies agree.
+- The exercise's check runs in CRuby; it also calls the learner's method
+  there with magnitudes 4.5 and 6 (622 and 13 quakes in the snapshot), so a
+  hard-coded 173 or an ignored parameter fails. Code that uses Java cannot
+  run on CRuby (a NameError): it is checked by its answer for 5 only. When
+  the check passes, CRuby runs the learner's code too and says whether both
+  Rubies agree - or, for Java code, that CRuby has no Java.
 - No live runs (`"live": false`): a stopped run costs a 3 s reboot.
 - Numbers in the text are measured, never claimed: browser (3 boots × 3
   runs, headless Chromium, idle 8-core box) and desktop (JRuby 10.1.2 on
-  Java 21 vs CRuby 4.0.6, 20 runs). In the browser ruby.wasm is faster at
+  Java 21 vs CRuby 4.0.6, 20 runs; startup 5, Jackson 8; JRuby's warm-up
+  runs quoted apart). In the browser ruby.wasm is faster at
   everything; the lesson says so. The lesson text was generated from those
   results by `jruby-lesson-lab/builder/gen_lesson.rb` on the Hetzner box
   (`results/*.json` there); edit lessons.js by hand from now on, or rerun it.
@@ -1268,12 +1284,45 @@ TeaVM's `jruby.js`/`stdlib.zip` and the two jruby-cheerpj jars from
     ruby tools/vendor_jruby.rb --from <jruby-teavm checkout, dist/ built as tools/jruby.json says>
     ruby tools/vendor_jruby_swing.rb --from <Largo/jruby-cheerpj checkout after ./run.sh prepare>
 
-(the Maven Central jars are downloaded and checked by the tool itself). A
-failure there is a warning in the hook's log, not a failed deploy. The
-deploy hook must also rsync `html/assets/jruby/` and
-`html/assets/jruby-swing/` to the server behind chunkybacon.idogawa.com,
-as it does `html/assets/spinel/` - that server never builds or fetches
-anything heavy.
+(the Maven Central jars are downloaded and checked by the tool itself).
+A failure there leaves the rest of the course as it is, but makes
+`after_deploy.sh` fail (status 3 when Spinel was fine): the hook keeps its
+retry marker and runs it again every round, so stocking `.cache/` later is
+enough - no commit needed. While it fails, the hook does not publish to
+chunkybacon.idogawa.com either (it publishes after a success only).
+
+**Before main gets this lesson** (not done yet - both are on the live host,
+outside the repo):
+
+1. Stock the live checkout's cache once (as root on the Hetzner box):
+
+       cd /root/workspace/web/sites/chunkybacon
+       ruby tools/vendor_jruby.rb --from <jruby-teavm checkout: 730d53b + the patch, built>
+       ruby tools/vendor_jruby_swing.rb --from <Largo/jruby-cheerpj 6e134ab after ./run.sh prepare>
+
+   (on the Hetzner box the builds are in
+   `/root/workspace/jruby-lesson-lab/builder/teavm-src` and
+   `/root/workspace/jruby-cheerpj`).
+2. Have `/usr/local/sbin/chunkybacon-deploy` publish both folders to the
+   server behind chunkybacon.idogawa.com, as it does `html/assets/spinel/`
+   (that 1-core server never builds or fetches anything heavy, and its own
+   hook does not run `after_deploy.sh`) - in `after_deploy()`, call this
+   after `publish_spinel`:
+
+       publish_jruby() {
+         for dir in jruby jruby-swing; do
+           rsync -a --delete --delay-updates -e "ssh -4 -o BatchMode=yes -o ConnectTimeout=30" \
+             "html/assets/$dir/" \
+             "idogawa.dev:/home/dockeruser/workspace/chunkybacon.idogawa.com/html/assets/$dir/" ||
+             { echo "rsync of html/assets/$dir/ to idogawa.dev failed" >&2; return 1; }
+         done
+         echo "jruby published to chunkybacon.idogawa.com"
+       }
+       # if sh tools/after_deploy.sh && publish_spinel && publish_jruby; then
+
+   (~73 MB the first time, then only what changed; the Linode has room.)
+   Its nginx needs this repo's `nginx/default.conf` too (the `.jar`,
+   `.geojson` and `.patch` locations) - check that it serves them.
 
 Tests: `test/jruby_test.mjs` (Playwright: every demo, the CRuby side,
 errors, the exercise, en and de, the bonus on CheerpJ unless

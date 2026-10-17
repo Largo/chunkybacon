@@ -28,6 +28,37 @@ module JRubyCells
   def class_name(error) = PicoRubyCells.class_name(error)
   def syntax_error(code, file) = PicoRubyCells.syntax_error(code, file)
 
+  # An output made only of half blocks (█▀▄ and spaces) - the lesson's QR
+  # code - as an SVG: each character one pixel wide and two tall, black on
+  # white. As text its rows depend on the font (a block glyph taller than
+  # half the line squeezes the white rows, and a phone cannot read the
+  # code); drawn, every module is square. nil for any other output.
+  BLOCK_PX = 5
+
+  def blocks_svg(output, label)
+    text = output.to_s.chomp
+    return nil if text.empty? || !text.match?(/\A[█▀▄ \n]+\z/) || !text.match?(/[█▀▄]/)
+
+    lines = text.split("\n", -1)
+    width = lines.map(&:length).max
+    height = lines.size * 2
+    path = +""
+    lines.each_with_index do |line, row|
+      line.each_char.with_index do |char, col|
+        y = row * 2
+        case char
+        when "█" then path << "M#{col} #{y}h1v2h-1z"
+        when "▀" then path << "M#{col} #{y}h1v1h-1z"
+        when "▄" then path << "M#{col} #{y + 1}h1v1h-1z"
+        end
+      end
+    end
+    label = label.to_s.gsub("&", "&amp;").gsub("<", "&lt;").gsub('"', "&quot;")
+    %(<svg class="cell-blocks" role="img" aria-label="#{label}" xmlns="http://www.w3.org/2000/svg" ) +
+      %(viewBox="0 0 #{width} #{height}" width="#{width * BLOCK_PX}" height="#{height * BLOCK_PX}" shape-rendering="crispEdges">) +
+      %(<rect width="#{width}" height="#{height}" fill="#fff"/><path d="#{path}" fill="#000"/></svg>)
+  end
+
   # the data files for a CRuby run; true when they are there
   def load_data
     DATA.all? do |name, url|

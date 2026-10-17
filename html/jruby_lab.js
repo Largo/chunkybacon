@@ -31,21 +31,24 @@
   var queue = [];
   var current = null;
   var nextId = 1;
-  var state = "idle";   // idle | download | boot | ready | failed
+  var state = "idle";   // idle | download | boot | ready | stopped | failed
   var bootStarted = 0;
 
   var TEXT = {
     de: { download: "JRuby wird geladen … (rund 7 MB, nur beim ersten Mal)",
           boot: "JRuby startet … (rund 3 s)",
           ready: "JRuby ist bereit: %v, gestartet in %s s.",
+          stopped: "JRuby wurde beendet; es startet beim nächsten Lauf neu (rund 3 s).",
           failed: "JRuby konnte nicht geladen werden: %m" },
     en: { download: "Loading JRuby … (about 7 MB, the first time only)",
           boot: "JRuby is starting … (about 3 s)",
           ready: "JRuby is ready: %v, started in %s s.",
+          stopped: "JRuby was stopped; it starts again with the next run (about 3 s).",
           failed: "JRuby could not be loaded: %m" },
     ja: { download: "JRuby を読み込んでいます … (約 7 MB、初回のみ)",
           boot: "JRuby を起動しています … (約 3 秒)",
           ready: "JRuby の準備ができました: %v (起動 %s 秒)",
+          stopped: "JRuby は停止しました。次の実行で再起動します (約 3 秒)。",
           failed: "JRuby を読み込めませんでした: %m" }
   };
 
@@ -98,7 +101,7 @@
   function show() {
     var t = TEXT[lang()];
     var text = state === "ready"
-      ? t.ready.replace("%v", jr.version).replace("%s", (jr.bootMs / 1000).toFixed(1))
+      ? t.ready.replace("%v", jr.version).replace("%s", seconds(jr.bootMs))
       : state === "failed" ? t.failed.replace("%m", jr.error || "")
       : t[state] || "";
     var els = document.querySelectorAll(".jruby-status");
@@ -108,6 +111,11 @@
     }
   }
   jr.show = show;
+  // 4.9 in English and Japanese, 4,9 in German (as the course's text)
+  function seconds(ms) {
+    var s = (ms / 1000).toFixed(1);
+    return lang() === "de" ? s.replace(".", ",") : s;
+  }
   // the lesson's HTML comes and goes with the page: keep the line current
   var body = document.getElementById("lessonBody");
   if (body && window.MutationObserver) {
@@ -242,7 +250,8 @@
     if (jr.worker) jr.worker.terminate();
     jr.worker = null;
     jr.ready = false;
-    state = "idle";
+    // the line said "ready": say that the next run boots a new one
+    setState("stopped");
   }
 
   function reply(item, data, elapsed) {

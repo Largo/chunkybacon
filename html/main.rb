@@ -1475,8 +1475,15 @@ class ChunkyApp
     JRubyCells.load_data if cell && cell["t"] == "x" && !error
     outcome = show_picoruby_run(idx, code, false, output: output, result: result, error: error)
     out_el = $d.getElementById("cell-out-#{idx}")
-    # a QR code of half blocks (█▀▄) only reads as one with no gaps between the lines
-    out_el.innerHTML = out_el.innerHTML.to_s.sub('<pre class="cell-stdout">', '<pre class="cell-stdout blocks">') if output.match?(/[█▀▄]/)
+    # a QR code of half blocks (█▀▄): drawn as square pixels above the text,
+    # which stays (hidden) for copying - as text, its rows depend on the font
+    # and a phone may not read it (JRubyCells.blocks_svg); any other output
+    # with blocks gets lines with no gaps between them
+    if output.match?(/[█▀▄]/)
+      drawing = JRubyCells.blocks_svg(output, ui["jrubyBlocksAlt"])
+      pre = drawing ? %(#{drawing}<pre class="cell-stdout blocks is-drawn" aria-hidden="true">) : '<pre class="cell-stdout blocks">'
+      out_el.innerHTML = out_el.innerHTML.to_s.sub('<pre class="cell-stdout">', pre)
+    end
     add_engine_badge(idx, :jruby, elapsed) if elapsed && !error.is_a?(SyntaxError)
     compare_with_cruby(idx, code, result, output) if outcome == :pass
     outcome
@@ -1492,8 +1499,16 @@ class ChunkyApp
            else
              format(ui["crubyBadge"], RUBY_VERSION)
            end
-    time = seconds < 1 ? "#{(seconds * 1000).round} ms" : format("%.2f s", seconds)
+    time = engine_time(seconds)
     out_el.insertAdjacentHTML("afterbegin", "<div class=\"cell-engine is-#{engine}\">#{escape_html(name)} · #{time}</div>")
+  end
+
+  # 812 ms, 1.07 s (1,07 s in German, as the course writes numbers)
+  def engine_time(seconds)
+    return "#{(seconds * 1000).round} ms" if seconds < 1
+
+    text = format("%.2f s", seconds)
+    @lang == "de" ? text.tr(".", ",") : text
   end
 
   # the exercise passed on JRuby: the same code on CRuby, in a binding of
@@ -1509,13 +1524,21 @@ class ChunkyApp
     # what the code answered: its value, or (a puts at the end) its last line
     shown = value.nil? && !printed.strip.empty? ? printed.strip.lines.last.strip : "=> #{inspect_result(value)}"
     same = value.nil? ? printed == jruby_output : jruby_result == value
-    text = format(ui[same ? "jrubyCrubySame" : "jrubyCrubyDiffers"], shown,
-                  seconds < 1 ? "#{(seconds * 1000).round} ms" : format("%.2f s", seconds))
+    text = format(ui[same ? "jrubyCrubySame" : "jrubyCrubyDiffers"], shown, engine_time(seconds))
     $d.getElementById("cell-out-#{idx}").insertAdjacentHTML("beforeend", "<div class=\"cell-engine is-cruby is-compare\">#{escape_html(text)}</div>")
   rescue Exception => e
     $stdout = old_stdout if old_stdout
-    $window.console.error("jruby compare #{idx}: #{e.class}: #{e.message}")
+    if e.is_a?(NameError) && code.match?(JAVA_CODE)
+      # Java's classes (java.util..., Java::Lesson::Quakes) are JRuby's own:
+      # say so, instead of no line at all
+      text = format(ui["jrubyCrubyNoJava"], "#{e.class}: #{e.message[/\A[^\n]*/]}")
+      $d.getElementById("cell-out-#{idx}").insertAdjacentHTML("beforeend", "<div class=\"cell-engine is-cruby is-compare\">#{escape_html(text)}</div>")
+    else
+      $window.console.error("jruby compare #{idx}: #{e.class}: #{e.message}")
+    end
   end
+  # code that reaches for Java (a NameError on CRuby is then expected)
+  JAVA_CODE = /\bjava[._]|\bJava::|\bjavax\.|\bcom\.\w|\bjava_import\b|require\s*\(?\s*["']java["']/
 
   # the vendored data is not there (tools/vendor_jruby.rb was not run)
   def jruby_data_missing(idx)

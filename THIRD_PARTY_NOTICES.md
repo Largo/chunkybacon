@@ -124,7 +124,7 @@ and write a `NOTICE.md` / `VERSION.txt` into the folder.
 
 | Component | Version | License | Copyright | Files |
 |---|---|---|---|---|
-| [JRuby](https://www.jruby.org/), compiled to JavaScript by TeaVM (a modified build: [Largo/jruby-teavm](https://github.com/Largo/jruby-teavm), the commit and changes named in `tools/jruby.json`) | 10.1.2.0 | EPL-2.0, or GPL-2.0, or LGPL-2.1 (the recipient's choice) | the JRuby team and contributors | `html/assets/jruby/jruby.js`, `stdlib.zip`; license text `html/assets/jruby/COPYING.jruby` |
+| [JRuby](https://www.jruby.org/), compiled to JavaScript by TeaVM (a modified build: [Largo/jruby-teavm](https://github.com/Largo/jruby-teavm) at commit 730d53b plus `tools/jruby-teavm-lesson.patch`, as `tools/jruby.json` says) | 10.1.2.0 | EPL-2.0, or GPL-2.0, or LGPL-2.1 (the recipient's choice) | the JRuby team and contributors | `html/assets/jruby/jruby.js`, `stdlib.zip`; license text `html/assets/jruby/COPYING.jruby`; source of the changes `html/assets/jruby/jruby-teavm-lesson.patch` |
 | [TeaVM](https://teavm.org/) runtime and class library, inside `jruby.js` | 0.16.0 | Apache-2.0 | Alexey Andreev and contributors | `html/assets/jruby/jruby.js` |
 | [jackson-core](https://github.com/FasterXML/jackson-core), inside `jruby.js` | 2.18.2 | Apache-2.0 (its shaded FastDoubleParser: MIT) | Copyright 2007-, Tatu Saloranta (tatu.saloranta@iki.fi); its NOTICE: "Jackson is a high-performance, Free/Open Source JSON processing library. It was originally written by Tatu Saloranta (tatu.saloranta@iki.fi), and has been in development since 2007. It is currently developed by a community of developers." | `html/assets/jruby/jruby.js` |
 | [ZXing](https://github.com/zxing/zxing) core, inside `jruby.js` | 3.5.4 | Apache-2.0 | ZXing authors | `html/assets/jruby/jruby.js` |
@@ -142,9 +142,15 @@ the JVM in WebAssembly the bonus runs on, is not bundled: `html/jruby_swing.html
 loads version 4.3 from Leaning Technologies' CDN (`cjrtnc.leaningtech.com`),
 under the CheerpJ Community License, which this open-source course uses; it
 shows its own "Community Edition" notice in the window area, and the page
-credits it. The lesson's JRuby builds are under the copyleft licenses above:
-their sources are JRuby's own release plus the repositories and commits named
-here and in `tools/jruby.json` / `tools/jruby_swing.json`.
+credits it. The lesson's JRuby builds are under the copyleft licenses above,
+and their complete sources are public: for `jruby.js` and `stdlib.zip`,
+commit 730d53b of [Largo/jruby-teavm](https://github.com/Largo/jruby-teavm)
+plus `tools/jruby-teavm-lesson.patch` in this repository (`git am` on that
+commit; the same file is served next to `jruby.js`, and `tools/jruby.json`
+pins its SHA-256 and the resulting tree); for `cheerpj-patch.jar`, commit
+6e134ab of [Largo/jruby-cheerpj](https://github.com/Largo/jruby-cheerpj)
+(`tools/jruby_swing.json`). The unmodified jars are JRuby's and Maven
+Central's releases.
 
 ## Cached gems (`html/gems/cache/`)
 

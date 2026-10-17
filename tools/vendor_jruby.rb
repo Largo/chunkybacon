@@ -5,8 +5,8 @@
 # 31 MB on disk, not in git (.gitignore), like Spinel's html/assets/spinel/.
 #
 #   ruby tools/vendor_jruby.rb --from ~/jruby-teavm
-#        a jruby-teavm checkout whose dist/ was built from the commit (and
-#        changes) tools/jruby.json names; its jruby.js and stdlib.zip are
+#        a jruby-teavm checkout whose dist/ was built from the commit and
+#        patch (tools/jruby-teavm-lesson.patch) tools/jruby.json names; its jruby.js and stdlib.zip are
 #        also kept in .cache/jruby/ (not in git), for the runs without --from
 #   ruby tools/vendor_jruby.rb            the same from .cache/jruby/ (or
 #        $CHUNKY_JRUBY_FROM, a folder with jruby.js and stdlib.zip): what
@@ -34,7 +34,12 @@ TARGET = File.join(ROOT, "html/assets/jruby")
 RECORD = File.join(TARGET, "JRUBY_VERSION.txt")
 DATA = File.join(__dir__, "jruby-data")
 CACHE = File.join(ROOT, ".cache/jruby")
-DERIVED = %w[data/quakes.zip data/SOURCE.txt jruby.js.gz data/all_month.geojson.gz COPYING.jruby NOTICE.md].freeze
+# the source of the lesson build on top of the public base commit, in git
+# here and served next to jruby.js (JRuby's GPL/EPL: the source goes along)
+PATCH = File.join(ROOT, PIN["jruby"]["patch"]["file"])
+PATCH_NAME = File.basename(PATCH)
+DERIVED = (%w[data/quakes.zip data/SOURCE.txt jruby.js.gz data/all_month.geojson.gz COPYING.jruby NOTICE.md] +
+           [PATCH_NAME]).freeze
 
 def sha256(path) = Digest::SHA256.file(path).hexdigest
 
@@ -45,7 +50,8 @@ end
 def current?
   pinned.all? { |name, digest| File.file?(File.join(TARGET, name)) && sha256(File.join(TARGET, name)) == digest } &&
     DERIVED.all? { |name| File.file?(File.join(TARGET, name)) } &&
-    File.file?(RECORD) && File.read(RECORD).include?("base=#{PIN["jruby"]["base"]}\n")
+    File.file?(RECORD) && File.read(RECORD).include?("base=#{PIN["jruby"]["base"]}\n") &&
+    File.read(RECORD).include?("patch=#{PATCH_NAME} #{PIN["jruby"]["patch"]["sha256"]}\n")
 end
 
 if ARGV.include?("--check")
@@ -82,6 +88,9 @@ sources.each do |name, path|
   abort "#{path}: SHA-256 #{digest} is not tools/jruby.json's #{expected}" unless digest == expected
 end
 abort "COPYING.jruby: missing next to #{dist} (JRuby's license, it ships with jruby.js)" unless copying
+unless File.file?(PATCH) && sha256(PATCH) == PIN["jruby"]["patch"]["sha256"]
+  abort "#{PATCH}: missing or not tools/jruby.json's patch - the source of jruby.js has to ship with it"
+end
 
 # a build given with --from: keep its files for the deploy's runs
 if from
@@ -97,6 +106,7 @@ sources.each do |name, path|
 end
 FileUtils.cp(File.join(DATA, "SOURCE.txt"), File.join(TARGET, "data/SOURCE.txt"))
 FileUtils.cp(copying, File.join(TARGET, "COPYING.jruby"))
+FileUtils.cp(PATCH, File.join(TARGET, PATCH_NAME))
 
 # A zip as java.util.zip reads it (TeaVM JRuby's mountZip): deflated
 # entries, no extras, no data descriptors
@@ -140,16 +150,18 @@ File.write(File.join(TARGET, "NOTICE.md"), <<~MARKDOWN)
   Licenses: THIRD_PARTY_NOTICES.md ("The JRuby lesson").
 
   - `jruby.js`, `stdlib.zip`: JRuby 10.1.2.0 (EPL-2.0 / GPL-2.0 / LGPL-2.1, `COPYING.jruby`),
-    compiled to JavaScript by TeaVM 0.16.0 (Apache-2.0) from #{PIN["jruby"]["repo"]}
-    #{PIN["jruby"]["base"]} plus: #{PIN["jruby"]["changes"]}. Inside: jackson-core 2.18.2
+    compiled to JavaScript by TeaVM 0.16.0 (Apache-2.0) from https://github.com/#{PIN["jruby"]["repo"]}
+    at commit #{PIN["jruby"]["base"]} plus `#{PATCH_NAME}` (in this folder, and in the course's
+    repository as #{PIN["jruby"]["patch"]["file"]}): #{PIN["jruby"]["changes"]}. Inside: jackson-core 2.18.2
     (Apache-2.0), ZXing core 3.5.4 (Apache-2.0), the json gem 2.21.2 (Ruby license / BSD-2-Clause).
+    To rebuild: #{PIN["jruby"]["build"]}.
   - `data/`: #{PIN["data"]["license"]}. Source: #{PIN["data"]["source"]}, fetched #{PIN["data"]["fetched"]}.
 MARKDOWN
 # last: --check and the next run see a complete install only
 File.write(RECORD, <<~TEXT)
   repo=#{PIN["jruby"]["repo"]}
   base=#{PIN["jruby"]["base"]}
-  branch=#{PIN["jruby"]["branch"]}
+  patch=#{PATCH_NAME} #{PIN["jruby"]["patch"]["sha256"]}
   data=#{PIN["data"]["source"]} (#{PIN["data"]["fetched"]})
   installed_by=tools/vendor_jruby.rb
   #{pinned.map { |name, digest| "file=#{name} #{File.size(File.join(TARGET, name))} #{digest}" }.join("\n")}

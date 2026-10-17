@@ -987,6 +987,16 @@ kbd {
   background: #ffffff;
   color: #000000;
 }
+/* ...drawn as an SVG instead (main.rb, JRubyCells.blocks_svg): square
+   modules whatever the font; the text stays in the page, out of sight */
+.cell-blocks { display: block; max-width: 100%; height: auto; margin: 0.3rem 0; background: #ffffff; }
+.cell-stdout.blocks.is-drawn {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
 /* the JRuby lesson's Swing bonus: a preview until the click, then the
    iframe with JRuby on CheerpJ (jruby_lab.js, jruby_swing.html) */
 .jruby-swing { margin: 0.8rem 0; }

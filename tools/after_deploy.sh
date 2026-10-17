@@ -20,10 +20,12 @@
 # and tools/vendor_jruby_swing.rb (the bonus's jars, html/assets/jruby-swing/)
 # copy pinned, SHA-256-checked files into place - no-ops while they are
 # current. They take TeaVM's build and two jruby-cheerpj jars from this
-# host's .cache/ (stocked once with --from), so they cannot fail by
-# themselves later; when they do, the lesson says JRuby could not be loaded
-# and the rest is unaffected - a warning, not this script's status (a retry
-# would not stock the cache, and Spinel's publishing must not wait on it).
+# host's .cache/ (stocked once with --from, before main gets the lesson).
+# When one fails, the lesson says JRuby could not be loaded and the rest is
+# unaffected - but this script then fails too (status 3 if Spinel was fine):
+# the hook keeps its retry marker and runs it again on its next round, so
+# stocking the cache by hand later is enough, no new commit needed. (The
+# hook publishes to chunkybacon.idogawa.com only after a success.)
 set -u
 cd "$(dirname "$0")/.." || exit 1
 
@@ -39,10 +41,12 @@ status=$?
 
 for tool in vendor_jruby vendor_jruby_swing; do
   if command -v ruby >/dev/null 2>&1; then
-    ruby "tools/$tool.rb" || echo "after_deploy: tools/$tool.rb failed; the JRuby lesson cannot load that part until it succeeds" >&2
+    ruby "tools/$tool.rb"
   else
-    docker compose --profile build run --rm spinel-build ruby "tools/$tool.rb" ||
-      echo "after_deploy: tools/$tool.rb failed; the JRuby lesson cannot load that part until it succeeds" >&2
-  fi
+    docker compose --profile build run --rm spinel-build ruby "tools/$tool.rb"
+  fi || {
+    echo "after_deploy: tools/$tool.rb failed; the JRuby lesson cannot load that part until it succeeds" >&2
+    [ "$status" -ne 0 ] || status=3
+  }
 done
 exit "$status"

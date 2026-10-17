@@ -83,10 +83,30 @@ check('a Ruby block as a Java Comparator', sort.includes('["apfel", "Bacon", "Sp
 const qrIdx = await cellWith('QRCodeWriter');
 const qr = await run(page, qrIdx);
 check('ZXing prints a QR code in half blocks', (qr.match(/█/g) || []).length > 40 && qr.includes('▀') && qr.includes('▄'));
-check('...in an output with no gaps between its lines', await page.evaluate(i => {
-  const pre = document.querySelector(`#cell-out-${i} .cell-stdout`);
-  return pre.classList.contains('blocks') && getComputedStyle(pre).lineHeight === getComputedStyle(pre).fontSize;
-}, qrIdx));
+// drawn as an SVG of square modules (JRubyCells.blocks_svg), the text hidden
+// next to it: as text, the font's block glyphs decide whether it scans
+const qrShape = await page.evaluate(i => {
+  const svg = document.querySelector(`#cell-out-${i} svg.cell-blocks`);
+  const pre = document.querySelector(`#cell-out-${i} .cell-stdout.blocks.is-drawn`);
+  if (!svg || !pre) return null;
+  const [, , w, h] = svg.getAttribute('viewBox').split(' ').map(Number);
+  const box = svg.getBoundingClientRect();
+  const lines = pre.textContent.replace(/\n$/, '').split('\n');
+  return { w, h, cols: Math.max(...lines.map(l => l.length)), rows: lines.length,
+           pxW: box.width / w, pxH: box.height / h, preShown: pre.getBoundingClientRect().height > 2 };
+}, qrIdx);
+check('...drawn as square pixels, a character one module wide and two tall', !!qrShape &&
+  qrShape.w === qrShape.cols && qrShape.h === 2 * qrShape.rows && Math.abs(qrShape.pxW - qrShape.pxH) < 0.01 && qrShape.pxW >= 3);
+check('...the text kept in the page, out of sight', !!qrShape && !qrShape.preShown);
+{
+  // and a QR reader reads it off the screen (qr_reader gem, when installed)
+  const png = '/tmp/jruby_test_qr.png';
+  await (await page.$(`#cell-out-${qrIdx} svg.cell-blocks`)).screenshot({ path: png });
+  const { spawnSync } = await import('node:child_process');
+  const read = spawnSync('ruby', ['-e', 'require "qr_reader"; puts QrReader.read(ARGV[0]).inspect', png], { encoding: 'utf8' });
+  if (read.status === 0) check('...and the screenshot scans: https://chunkybacon.idogawa.com', read.stdout.includes('https://chunkybacon.idogawa.com'));
+  else console.log('  (no qr_reader gem: the scan is not checked)', (read.stderr || '').split('\n')[0]);
+}
 check('...and no "=> nil" after it', !qr.includes('=> nil'));
 const parse = await run(page, await cellWith('JSON.parse', 'def '));
 check('JSON.parse of the 7.3 MB USGS file on JRuby', /10224 quakes in \d+ ms/.test(parse));
@@ -126,9 +146,36 @@ check('a Java exception reaches the cell', java.includes('NumberFormatException'
 const starter = 'require "json"\n\ndef strong_quakes(quakes, magnitude)\n  # count the quakes with mag >= magnitude\nend\n\nquakes = JSON.parse(File.read("data/all_month.geojson"))["features"]\nstrong_quakes(quakes, 5)';
 await run(page, ex, starter);
 check('the starter does not pass', !(await page.getAttribute('.cell.exercise', 'class')).includes('celebrate'));
+const passes = async body => {
+  await run(page, ex, starter.replace('  # count the quakes with mag >= magnitude', body));
+  return (await page.getAttribute('.cell.exercise', 'class')).includes('celebrate');
+};
+check('a body that ignores the magnitude does not pass', !(await passes('  quakes.count { |q| q["properties"]["mag"].to_f >= 5 }')));
+check('...nor a hard-coded 173', !(await passes('  173')));
+check('...nor > instead of >=', !(await passes('  quakes.count { |q| q["properties"]["mag"].to_f > magnitude }')));
+const javaBody = '  n = java.util.concurrent.atomic.AtomicLong.new\n  quakes.each { |q| n.increment_and_get if q["properties"]["mag"].to_f >= magnitude }\n  n.get';
+const errorsBefore = errors.length;
+check('a solution with Java (AtomicLong) passes', await passes(javaBody));
+const javaOut = await out(page, ex);
+check('...and CRuby says it has no Java, instead of nothing', /CRuby \(ruby\.wasm\) cannot run this code: it uses Java/.test(javaOut));
+check('...with no console error', errors.length === errorsBefore);
 const solved = await run(page, ex, starter.replace('  # count the quakes with mag >= magnitude', '  quakes.count { |q| q["properties"]["mag"].to_f >= magnitude }'));
 check('a solution passes the check (CRuby, the same data)', (await page.getAttribute('.cell.exercise', 'class')).includes('celebrate'));
 check('...and CRuby, running the same code, agrees', /CRuby \(ruby\.wasm\) with the same code: => 173 – the same answer/.test(solved));
+
+// ---------- a reset during a run ends the worker: the status line says so ----------
+// (the lesson's reset button, while the first cell sleeps; the time limit's
+// stop takes the same path, endWorker, after 60 s)
+page.once('dialog', d => d.accept());
+await page.evaluate(i => { window.setCellCode(i, 'sleep 30'); document.querySelector(`.run-cell[data-idx="${i}"]`).click(); }, cells[0]);
+await page.waitForTimeout(800);
+await page.click('#reset-code');
+await page.waitForFunction(() => !window.chunkyJRuby.worker, null, { timeout: 10000 }).catch(() => {});
+check('after a reset during a run, the status line no longer says ready',
+  /JRuby was stopped; it starts again with the next run/.test(await page.textContent('.jruby-status')));
+const again = await run(page, ex, '1 + 1');
+check('...and the next run boots a new one: ready again', again.includes('=> 2') &&
+  /JRuby is ready: jruby 10\.1/.test(await page.textContent('.jruby-status')));
 
 // ---------- a reset: JRuby's variables go too ----------
 await page.evaluate(() => window.chunkyJRuby.reset());
@@ -175,7 +222,7 @@ if (process.env.SKIP_SWING) {
   const ctxDe = await browser.newContext({ locale: 'de-DE' });
   const de = await open(ctxDe, '#jruby');
   await de.waitForFunction(() => window.chunkyJRuby.ready, null, { timeout: 90000 });
-  check('de: the status line is German', /JRuby ist bereit: jruby 10\.1/.test(await de.textContent('.jruby-status')));
+  check('de: the status line is German, with a decimal comma', /JRuby ist bereit: jruby 10\.1.*, gestartet in \d+,\d s\./.test(await de.textContent('.jruby-status')));
   const deCells = await codeCells(de);
   const deWho = await run(de, deCells[0]);
   check('de: the cells run on JRuby', deWho.includes('["jruby", "10.1.2.0", "4.0.0"]') && deWho.includes('JRuby 10.1.2.0 im Browser (TeaVM)'));
