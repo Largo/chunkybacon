@@ -63,6 +63,9 @@ class PicoTabsTest < Minitest::Test
     assert_equal [["clearCellTabSrc", "1", "2"], ["clearCellTabSrc", "1", "3"]], calls("clearCellTabSrc")
     assert_includes calls("setCellCode"), ["setCellCode", "1-2", HELPER]
     assert_equal 1, calls("ensurePicoBoard").size
+    # the static benches, once the cells are drawn (pico_board.js previews)
+    assert_equal 1, calls("picoBoardPreviews").size
+    assert_operator window.calls.index { |c| c[0] == "picoBoardPreviews" }, :>, window.calls.rindex { |c| c[0] == "initCell" }
     assert find("#pico-slot-1")
     assert find(".cell-tab[data-name='dechunk.rb']")
     assert_empty JS.console_errors

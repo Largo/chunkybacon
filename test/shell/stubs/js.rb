@@ -557,7 +557,7 @@ module JS
       # the course as bridge.js hands it over: lesson numbers filled in
       props["LESSONS"] = LessonRefs.resolve(JSON.parse(File.read(File.expand_path("../../lessons.json", __dir__))))
       @confirm = true
-      %w[setCellCode refreshAllCells ensureThree ensurePython ensureSqlite ensureHerb ensurePicoRuby ensurePicoBoard
+      %w[setCellCode refreshAllCells ensureThree ensurePython ensureSqlite ensureHerb ensurePicoRuby ensurePicoBoard picoBoardPreviews
          setCellTabSrc clearCellTabSrc scrollTo].each do |name|
         props[name] = proc { |*args| @calls << [name, *args]; nil }
       end

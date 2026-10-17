@@ -882,6 +882,7 @@ kbd {
 .pico-badge { font-size: 0.85rem; color: var(--pb-soft); }
 .pico-badge.is-running { color: var(--ok); font-weight: 600; }
 .pico-badge.is-reset { color: var(--err); font-weight: 600; }
+.pico-bar button:disabled { opacity: 0.55; cursor: default; }
 .pico-svg { display: block; width: 100%; height: auto; margin: 0 auto; user-select: none; -webkit-user-select: none; }
 .pico-parts { font-size: 0.8rem; color: var(--pb-soft); margin: 0.35rem 0 0.2rem; }
 .pico-controls { display: flex; flex-wrap: wrap; gap: 0.35rem 1.2rem; align-items: center; margin-top: 0.35rem; font-size: 0.9rem; }

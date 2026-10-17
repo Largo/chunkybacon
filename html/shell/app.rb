@@ -424,7 +424,8 @@ module ChunkyShell
       # a lesson whose cells run on it (html/picoruby_lab.js)
       JSG.w.ensurePicoRuby if @course.picoruby?(idx)
       # the Pico's bench (pico_board.js) only for a lesson with a board
-      JSG.w.ensurePicoBoard if @course.picoruby?(idx) && cells.any? { |cell| code_cell?(cell) && @course.board?(cell) }
+      board = @course.picoruby?(idx) && cells.any? { |cell| code_cell?(cell) && @course.board?(cell) }
+      JSG.w.ensurePicoBoard if board
       # IronRuby (.NET in WebAssembly, ~20 MB) in a Web Worker, only for the
       # IronRuby lesson (html/ironruby_lab.js); its status line is in the
       # lesson's first cell
@@ -452,6 +453,8 @@ module ChunkyShell
         set_code(i, Store.get(Store.code_key(@lang, id, i, cell.code), cell.code))
         init_tabs(i, number, cell, id)
       end
+      # the benches before the first ▶ (pico_board.js, docs/HANDOVER.md §6r)
+      JSG.w.picoBoardPreviews if board
     end
 
     # The tabs of a Pico lesson's cell (design §2.2): an editor each; a src

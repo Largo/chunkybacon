@@ -829,6 +829,11 @@
       script.src = "pico_board.js";
       document.head.appendChild(script);
     };
+    // the lesson is drawn: a static bench under each board cell (pico_board.js
+    // builds them itself once it has loaded)
+    window.picoBoardPreviews = function () {
+      if (window.chunkyPicoBoard && window.chunkyPicoBoard.previews) window.chunkyPicoBoard.previews();
+    };
     window.markCellLine = function (idx, lineNo) {
       var ed = window.cellEditors[idx];
       if (!ed) return;

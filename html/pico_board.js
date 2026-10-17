@@ -4,7 +4,8 @@
 // to the parts. The simulator (html/pico_sim/) runs in the lesson's worker;
 // this file only draws what it reports and sends inputs back.
 //
-//   chunkyPicoBoard.mount(idx, configJson, uiJson)  build for these parts, move into #pico-slot-<idx>, show
+//   chunkyPicoBoard.previews()              a static bench under every board cell of the page (no worker)
+//   chunkyPicoBoard.mount(idx, configJson, uiJson)  make #pico-slot-<idx>'s bench the live one (built anew for other parts)
 //   chunkyPicoBoard.receive(kind, text)     "state" | "epd_frame" | "ble" | "log" from the worker
 //   chunkyPicoBoard.inputs()                JSON of the current inputs, sent with each run
 //   chunkyPicoBoard.input(key, value)       set one (and tell a running cell: chunkyPicoRuby.input)
@@ -12,8 +13,9 @@
 //   chunkyPicoBoard.ble()                   JSON {adv, connected, running}: for html/pico_laptop.rb
 //   chunkyPicoBoard.started(idx)            the worker took that cell's run (picoruby_lab.js)
 //   chunkyPicoBoard.reset(reason)           the worker ended: "reset" badge; the e-paper keeps its picture
-//   chunkyPicoBoard.unmount()               another lesson
-//   chunkyPicoBoard.debug()                 what the bench holds (the browser tests)
+//   chunkyPicoBoard.unmount()               another page: every bench goes, then previews() for the new one
+//   chunkyPicoBoard.debug()                 what the live bench holds (the browser tests)
+//   chunkyPicoBoard.benches()               every bench: [{idx, live, parts, badge, inPage}]
 //
 // Input keys: pin14 ("1" pressed), adc26 (0..1), tempC, bme.t, bme.rh,
 // bme.p, arena.box / arena.bacon ("x,y" cm), wifi.off ("1"), camera
@@ -84,11 +86,13 @@
     boardWifi: "Wi-Fi", boardWifiOff: "Access point off", boardWifiUp: "Wi-Fi connected to chunkynet",
     boardLaptop: "Laptop (Bluetooth LE)", boardSend: "Send", boardLine: "Line to the Pico",
     boardBleOn: "Bluetooth connected", boardBleOff: "Bluetooth disconnected", boardBleGot: "The laptop got",
-    boardBleLink: "Laptop connected", boardAdvertising: "advertising", boardChipTemp: "chip sensor"
+    boardIdle: "idle – ▶ Run starts it", boardBleLink: "Laptop connected", boardAdvertising: "advertising", boardChipTemp: "chip sensor"
   };
 
   var values = {};          // the page's inputs, sent with each run
-  var bench = null;         // the mounted bench (build)
+  var bench = null;         // the live bench: the one under the cell that runs (mount)
+  var benches = [];         // every bench on the page: the live one and the static previews
+  var strings = {};         // the course's board* strings in the page's language
   var epd = { frames: 0, hex: "", url: "", black: 0 };   // the panel keeps its picture across runs
   var lineNo = 0;
   var audio = null;
@@ -127,7 +131,7 @@
     catch (e) { return Number(n).toFixed(digits || 0); }
   }
 
-  function t(key) { return (bench && bench.ui[key]) || UI[key] || key; }
+  function t(key) { return strings[key] || UI[key] || key; }
 
   function fill(text, a, b) { return String(text).replace("%1", a).replace("%2", b === undefined ? "" : b); }
 
@@ -208,7 +212,7 @@
     var b = { config: config, parts: parts, ui: ui || {}, board: String(config.board || "pico2w"),
               wide: w, refs: {}, controls: {}, state: null, log: [], http: [], ble: [], said: "",
               lastSay: 0, sayTimer: null, status: "", spoken: {} };
-    bench = b;   // t() reads the strings from here while it builds
+    if (ui && Object.keys(ui).length) strings = ui;   // t() reads them while it builds
     var wireless = b.board !== "pico" && b.board !== "pico2";
 
     var figure = el("figure", "pico-bench");
@@ -219,6 +223,7 @@
     var bar = el("div", "pico-bar");
     var stop = el("button", "pico-stop", t("boardStop"));
     stop.type = "button";
+    b.stopBtn = stop;
     stop.addEventListener("click", function () {
       if (window.chunkyPicoRuby && window.chunkyPicoRuby.stop) window.chunkyPicoRuby.stop();
     });
@@ -310,6 +315,7 @@
     // column B: the parts without pins; the arena of a wide bench goes
     // under both columns
     arenaLayout(w);
+    b.arena = ARENA;
     var heightB = 0;
     var bx = w ? COL + GAP : 0;
     var by = w ? 0 : heightA + GAP;
@@ -898,6 +904,7 @@
     });
     node.addEventListener("pointermove", function (e) {
       if (!active) return;
+      ARENA = b.arena || ARENA;
       var m = b.svg.getScreenCTM();
       if (!m) return;
       var pt = b.svg.createSVGPoint();
@@ -907,7 +914,7 @@
       var gm = b.refs.picogo.g.transform.baseVal.consolidate();
       var ox = gm ? gm.matrix.e : 0, oy = gm ? gm.matrix.f : 0;
       var x = (local.x - ox - ARENA.x) / ARENA.s, y = ARENA.h - (local.y - oy - ARENA.y) / ARENA.s;
-      setXY(key, x, y);
+      setXY(b, key, x, y);
     });
     var end = function () { active = false; };
     node.addEventListener("pointerup", end);
@@ -920,12 +927,10 @@
     return [Number(xy[0]) || 0, Number(xy[1]) || 0];
   }
 
-  function setXY(key, x, y) {
+  function setXY(b, key, x, y) {
     x = Math.max(12, Math.min(ARENA.w - 12, Math.round(x)));
     y = Math.max(12, Math.min(ARENA.h - 12, Math.round(y)));
     api.input(key, x + "," + y);
-    if (bench && bench.state) render();
-    else if (bench) drawArenaObjects(bench, null);
   }
 
   function drawCamera(g, b) {
@@ -1027,8 +1032,8 @@
       var press = el("button", "pico-press", t("boardButton"));
       press.type = "button";
       press.setAttribute("aria-pressed", "false");
-      var down = function () { press.setAttribute("aria-pressed", "true"); api.input("pin14", "1"); render(); };
-      var up = function () { if (press.getAttribute("aria-pressed") !== "true") return; press.setAttribute("aria-pressed", "false"); api.input("pin14", "0"); render(); };
+      var down = function () { press.setAttribute("aria-pressed", "true"); api.input("pin14", "1"); };
+      var up = function () { if (press.getAttribute("aria-pressed") !== "true") return; press.setAttribute("aria-pressed", "false"); api.input("pin14", "0"); };
       press.addEventListener("pointerdown", function (e) { press.setPointerCapture(e.pointerId); down(); });
       press.addEventListener("pointerup", up);
       press.addEventListener("pointercancel", up);
@@ -1056,8 +1061,8 @@
       check.type = "checkbox";
       check.checked = values["arena.box"] !== undefined && values["arena.box"] !== "";
       check.addEventListener("change", function () {
-        if (check.checked) { var xy = getXY("arena.box"); setXY("arena.box", xy[0], xy[1]); }
-        else { api.input("arena.box", ""); render(); }
+        if (check.checked) { var xy = getXY("arena.box"); setXY(b, "arena.box", xy[0], xy[1]); }
+        else api.input("arena.box", "");
         moves.forEach(function (m) { if (m.key === "arena.box") m.btn.disabled = !check.checked; });
       });
       boxIn.appendChild(check);
@@ -1073,7 +1078,7 @@
           var btn = el("button", "pico-move", d[0]);
           btn.type = "button";
           btn.setAttribute("aria-label", o[1] + " " + t(d[3]));
-          btn.addEventListener("click", function () { var xy = getXY(o[0]); setXY(o[0], xy[0] + d[1], xy[1] + d[2]); });
+          btn.addEventListener("click", function () { var xy = getXY(o[0]); setXY(b, o[0], xy[0] + d[1], xy[1] + d[2]); });
           if (o[0] === "arena.box") btn.disabled = !check.checked;
           moves.push({ key: o[0], btn: btn });
           grp.appendChild(btn);
@@ -1103,7 +1108,7 @@
       var cb = el("input");
       cb.type = "checkbox";
       cb.checked = values["wifi.off"] === "1";
-      cb.addEventListener("change", function () { api.input("wifi.off", cb.checked ? "1" : "0"); render(); });
+      cb.addEventListener("change", function () { api.input("wifi.off", cb.checked ? "1" : "0"); });
       off.appendChild(cb);
       off.appendChild(document.createTextNode(" " + t("boardWifiOff")));
       var wrow = el("div", "pico-row");
@@ -1151,12 +1156,16 @@
 
   function schedule() {
     if (pendingFrame) return;
-    pendingFrame = requestAnimationFrame(function () { pendingFrame = 0; render(); });
+    pendingFrame = requestAnimationFrame(function () { pendingFrame = 0; render(bench); });
   }
 
-  function render() {
-    var b = bench;
+  // +b+: a bench, the live one by default; a static preview (no state)
+  // draws the parts idle, with the page's inputs
+  function render(b) {
+    b = b || bench;
     if (!b) return;
+    ARENA = b.arena || ARENA;
+    var live = b === bench;
     var s = b.state || { pins: {}, parts: {}, scripted: {}, onboard: 0 };
     var parts = s.parts || {};
     var scripted = s.scripted || {};
@@ -1265,8 +1274,10 @@
       b.controls["wifi.off"].check.disabled = wOn;
       if (wOn) b.controls["wifi.off"].check.checked = scripted["wifi.off"] === "1";
     }
-    tone();
-    narrate(b, s);
+    if (live) {
+      tone();
+      narrate(b, s);
+    }
     describe(b);
   }
 
@@ -1327,7 +1338,7 @@
     r.off = r.off || [0, 0];
     var last = performance.now();
     var step = function (now) {
-      if (bench !== b) return;
+      if (bench !== b) { r.spinning = false; return; }
       var dt = (now - last) / 1000;
       last = now;
       // the ribs pass at the floor's speed (the dash pattern is 1 cm long)
@@ -1345,7 +1356,7 @@
     var r = b.refs.camera;
     if (!r) return;
     photo(name, function (url) {
-      if (!url || bench !== b) return;
+      if (!url || b.dead) return;
       r.photo.setAttribute("href", url);
       r.photo.classList.toggle("is-preview", !captured);
       r.caption.textContent = captured ? name + ".pgm" : "";
@@ -1520,6 +1531,12 @@
       say(b, t("boardEpdRefreshed") + " (" + epd.frames + ").");
       describe(b);
     }
+    // one panel: the previews of the other cells show the picture it keeps
+    benches.forEach(function (o) {
+      if (o === b || !o.refs.epd213) return;
+      o.refs.epd213.image.setAttribute("href", epd.url);
+      describe(o);
+    });
   }
 
   function onBle(b, text) {
@@ -1571,40 +1588,102 @@
     return slot && slot.clientWidth ? slot.clientWidth : (document.querySelector(".cell") || document.body).clientWidth;
   }
 
+  // a bench into its slot, shown; every board cell has a slot of its own,
+  // so the others keep their benches
   function attach(b, slot) {
-    document.querySelectorAll(".pico-slot").forEach(function (s) { if (s !== slot) s.hidden = true; });
-    slot.appendChild(b.el);
+    b.slot = slot;
+    if (b.el.parentNode !== slot) slot.appendChild(b.el);
     slot.hidden = false;
-    if (window.ResizeObserver) {
-      if (api._observer) api._observer.disconnect();
-      api._observer = new ResizeObserver(function () {
-        if (!bench || bench.el.parentNode !== slot) return;
-        var wide = slotWidth(slot) >= WIDE;
-        if (wide !== bench.wide) rebuild(slot);
+    if (window.ResizeObserver && !b.observer) {
+      b.observer = new ResizeObserver(function () {
+        if (benches.indexOf(b) < 0 || b.el.parentNode !== slot) return;
+        if ((slotWidth(slot) >= WIDE) !== b.wide) rebuild(b);
       });
-      api._observer.observe(slot);
+      b.observer.observe(slot);
     }
   }
 
-  function rebuild(slot) {
-    var old = bench;
-    var b = build(old.config, old.ui, slotWidth(slot));
+  // a bench goes: out of the page, its timers and observer with it
+  function drop(b) {
+    b.dead = true;
+    if (b.observer) b.observer.disconnect();
+    if (b.sayTimer) clearTimeout(b.sayTimer);
+    if (b.el.parentNode) b.el.parentNode.removeChild(b.el);
+    var i = benches.indexOf(b);
+    if (i >= 0) benches.splice(i, 1);
+    if (bench === b) bench = null;
+  }
+
+  function benchIn(slot) {
+    for (var i = 0; i < benches.length; i++) if (benches[i].slot === slot) return benches[i];
+    return null;
+  }
+
+  // the slot went from narrow to wide or back: the same bench, drawn anew
+  function rebuild(old) {
+    var b = build(old.config, old.ui, slotWidth(old.slot));
     b.key = old.key; b.idx = old.idx; b.state = old.state; b.log = old.log; b.http = old.http; b.ble = old.ble;
     b.status = old.status; b.spoken = old.spoken; b.badge.textContent = old.badge.textContent; b.badge.className = old.badge.className;
-    b.lastState = old.lastState; b.lastReset = old.lastReset; b.sound = false;
+    b.lastState = old.lastState; b.lastReset = old.lastReset; b.sound = false; b.waiting = old.waiting;
+    b.stopBtn.disabled = old.stopBtn.disabled;
     // a message the old bench's live region was still waiting to say goes
     // to the new one
     if (old.sayTimer) clearTimeout(old.sayTimer);
+    if (old.observer) old.observer.disconnect();
     b.lastSay = old.lastSay;
     if (old.pendingSay) say(b, old.pendingSay);
+    var slot = old.slot;
     if (old.el.parentNode) old.el.parentNode.replaceChild(b.el, old.el);
-    render();
+    benches[benches.indexOf(old)] = b;
+    if (bench === old) bench = b;
+    attach(b, slot);
+    render(b);
   }
 
   function setBadge(b, text, cls) {
     b.badge.textContent = text;
     b.badge.className = "pico-badge" + (cls ? " is-" + cls : "");
   }
+
+  // a static preview: the cell's parts and wires, the pins idle, the robot
+  // at its start, the e-paper with the picture the panel keeps (or blank);
+  // the inputs work and go with the next run. ▶ makes it live (mount).
+  function idle(b) {
+    b.state = null;
+    b.lastState = "";
+    b.waiting = "";
+    b.spoken = {};
+    b.layout = "open";
+    b.stopBtn.disabled = true;
+    setBadge(b, "○ " + t("boardIdle"), "idle");
+    render(b);
+  }
+
+  // what a board cell of the page's lesson puts on its bench, as main.rb's
+  // pico_board_json says it (without the bench script, which runs on ▶)
+  function cellConfig(idx) {
+    var st = window.ChunkyBridge && window.ChunkyBridge.state;
+    var data = window.LESSONS;
+    if (!st || !data || st.workshop) return null;
+    var lesson = null;
+    for (var i = 0; i < data.lessons.length; i++) if (data.lessons[i].id === st.lesson) lesson = data.lessons[i];
+    if (!lesson || lesson.engine !== "picoruby") return null;
+    var l10n = lesson[st.lang] || lesson.de;
+    var cell = l10n && l10n.cells && l10n.cells[Number(idx)];
+    if (!cell || !cell.board) return null;
+    return { board: (lesson.pico || {}).board || "pico2w", parts: cell.board.parts || [], bench: [], reset: true };
+  }
+
+  function pageStrings() {
+    var st = window.ChunkyBridge && window.ChunkyBridge.state;
+    var all = (window.LESSONS && window.LESSONS.ui) || {};
+    var ui = all[st && st.lang] || {};
+    var out = {};
+    Object.keys(ui).forEach(function (k) { if (k.indexOf("board") === 0) out[k] = ui[k]; });
+    return out;
+  }
+
+  var gen = 0;   // a new page: previews still queued for the old one are dropped
 
   // a run of the bench's cell ended (main.rb's answer): the Pico keeps its pins
   window.addEventListener("chunky:picoruby", function (e) {
@@ -1618,35 +1697,71 @@
     mount: function (idx, configJson, uiJson) {
       var config = {}, ui = {};
       try { config = JSON.parse(String(configJson || "{}")); } catch (e) { config = {}; }
-      try { ui = uiJson ? JSON.parse(String(uiJson)) : (bench ? bench.ui : {}); } catch (e) { ui = {}; }
+      try { ui = uiJson ? JSON.parse(String(uiJson)) : strings; } catch (e) { ui = {}; }
+      if (uiJson && Object.keys(ui).length) strings = ui;
       var key = JSON.stringify([config.board, config.parts]);
       var slot = document.getElementById("pico-slot-" + idx);
-      if (!bench || bench.key !== key) {
-        if (bench && bench.el.parentNode) bench.el.parentNode.removeChild(bench.el);
-        if (bench && bench.sayTimer) clearTimeout(bench.sayTimer);
-        build(config, ui, slotWidth(slot));
-        bench.key = key;
+      // this cell's preview becomes the live bench; a preview for other
+      // parts (or none yet) is built anew
+      var b = slot ? benchIn(slot) : (bench && bench.key === key && !bench.slot ? bench : null);
+      if (!b || b.key !== key) {
+        if (b) drop(b);
+        b = build(config, ui, slotWidth(slot));
+        b.key = key;
+        benches.push(b);
       }
-      bench.config = config;
-      bench.idx = String(idx);
+      // the cell that ran before shows its preview again: the Pico runs
+      // this cell's program now
+      if (bench && bench !== b) idle(bench);
+      bench = b;
+      b.config = config;
+      b.idx = String(idx);
       // until the worker takes this run, what it sends is the last run's
-      bench.waiting = String(idx);
-      bench.lastReset = "";
+      b.waiting = String(idx);
+      b.lastReset = "";
       // a cell's run is a reset of the board: the pins start over, the
       // e-paper keeps its picture
       if (config.reset !== false) {
         // a line sent to an earlier run is not sent again to this one
         delete values["ble.line"];
-        bench.state = null;
-        bench.layout = "open";
-        bench.spoken = {};
-        bench.ble = [];
-        bench.log = [];
-        onBle(bench, "");
+        b.state = null;
+        b.layout = "open";
+        b.spoken = {};
+        b.ble = [];
+        b.log = [];
+        onBle(b, "");
       }
-      if (slot) attach(bench, slot);
-      setBadge(bench, "▶ " + t("boardRunning"), "running");
-      render();
+      if (slot) attach(b, slot);
+      b.stopBtn.disabled = false;
+      setBadge(b, "▶ " + t("boardRunning"), "running");
+      render(b);
+    },
+    // a static bench under every board cell of the page, before any run
+    // (the shell calls it once the lesson is drawn; unmount, too): built
+    // one per frame, no worker started
+    previews: function () {
+      benches.slice().forEach(function (b) { if (b.slot && !b.slot.isConnected) drop(b); });
+      var my = gen;
+      var slots = Array.prototype.slice.call(document.querySelectorAll(".pico-slot"));
+      var next = function () {
+        if (my !== gen) return;
+        var slot = slots.shift();
+        if (!slot) return;
+        if (slot.isConnected && !benchIn(slot)) {
+          var idx = slot.id.replace("pico-slot-", "");
+          var config = cellConfig(idx);
+          if (config) {
+            var b = build(config, pageStrings(), slotWidth(slot));
+            b.key = JSON.stringify([config.board, config.parts]);
+            b.idx = idx;
+            benches.push(b);
+            attach(b, slot);
+            idle(b);
+          }
+        }
+        if (slots.length) requestAnimationFrame(next);
+      };
+      next();
     },
     started: function (idx) {
       if (bench && bench.waiting === String(idx)) bench.waiting = "";
@@ -1675,15 +1790,20 @@
       return JSON.stringify({ adv: l.adv || "", connected: !!l.connected,
                               running: !!bench && !bench.waiting && bench.badge.className.indexOf("is-running") >= 0 });
     },
+    // one world for the page: a value set on any bench (or from a test,
+    // the CRuby cell) shows on all of them and reaches a running cell
     input: function (key, value) {
-      values[String(key)] = String(value);
-      // a value set from elsewhere (a test, the CRuby cell): the slider follows
-      var c = bench && bench.controls[String(key)];
-      if (c && c.input && document.activeElement !== c.input) {
-        c.input.value = String(Number(value) * c.scale);
-        c.show(Number(value) * c.scale);
-      }
-      if (window.chunkyPicoRuby && window.chunkyPicoRuby.input) window.chunkyPicoRuby.input(String(key), String(value));
+      key = String(key);
+      values[key] = String(value);
+      benches.forEach(function (b) {
+        var c = b.controls[key];
+        if (c && c.input && document.activeElement !== c.input) {
+          c.input.value = String(Number(value) * c.scale);
+          c.show(Number(value) * c.scale);
+        }
+      });
+      if (window.chunkyPicoRuby && window.chunkyPicoRuby.input) window.chunkyPicoRuby.input(key, String(value));
+      benches.forEach(function (b) { render(b); });
     },
     // a line from the laptop's side (the bench's laptop panel, the CRuby cell)
     sendLine: function (text) {
@@ -1708,22 +1828,33 @@
       }
       setBadge(bench, "↺ " + t("boardReset"), "reset");
       say(bench, t("boardReset"));
-      render();
+      render(bench);
     },
+    // another page (lesson, language, reset): every bench goes, the inputs
+    // and the panel's picture with them; the new page's previews follow
     unmount: function () {
-      if (api._observer) api._observer.disconnect();
-      if (bench && bench.el.parentNode) bench.el.parentNode.removeChild(bench.el);
-      if (bench && bench.sayTimer) clearTimeout(bench.sayTimer);
+      gen++;
+      benches.slice().forEach(drop);
       bench = null;
       values = {};
       epd = { frames: 0, hex: "", url: "", black: 0 };
       if (audio && audio.osc) { audio.osc.stop(); audio.osc = null; }
+      api.previews();
     },
-    // for tests: what the bench holds now
+    // for tests: what the live bench holds now (null before the first ▶)
     debug: function () {
       return bench ? { idx: bench.idx, frames: epd.frames, state: bench.lastState || "", frame: epd.hex,
                        log: bench.log.slice(), reset: bench.lastReset || "", wide: bench.wide,
                        black: epd.black, badge: bench.badge.textContent, said: bench.say.textContent } : null;
+    },
+    // for tests: every bench on the page (the order they were built in)
+    benches: function () {
+      return benches.map(function (b) {
+        return { idx: b.idx, live: b === bench, parts: b.parts.slice(), badge: b.badge.textContent, inPage: !!(b.slot && b.slot.isConnected) };
+      });
     }
   };
+
+  // loaded after the shell drew the lesson (index.html's ensurePicoBoard)
+  api.previews();
 })();
