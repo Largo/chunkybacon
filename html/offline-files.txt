@@ -127,6 +127,8 @@ gems/cache/pdf-core-0.10.0.gem
 gems/cache/prawn-2.5.0.gem
 gems/cache/prime-0.1.4.gem
 gems/cache/pure_jpeg-0.4.0.gem
+gems/cache/qr-bills-2.0.0.gem
+gems/cache/qr_reader-0.0.3.gem
 gems/cache/racc-1.8.1.gem
 gems/cache/rack-3.2.7.gem
 gems/cache/rack-protection-4.2.1.gem
@@ -134,6 +136,8 @@ gems/cache/rack-session-2.1.2.gem
 gems/cache/rb_heap-1.1.0.gem
 gems/cache/rexml-3.4.4.gem
 gems/cache/roda-3.108.0.gem
+gems/cache/rqrcode-2.2.0.gem
+gems/cache/rqrcode_core-1.2.0.gem
 gems/cache/ruby_pptx-0.2.0.gem
 gems/cache/rubyvis-0.7.0.gem
 gems/cache/rubyzip-3.7.0.gem
@@ -144,6 +148,7 @@ gems/cache/sequel-5.109.0.gem
 gems/cache/sinatra-4.2.1.gem
 gems/cache/strings-0.2.1.gem
 gems/cache/strings-ansi-0.2.0.gem
+gems/cache/swiss_qr-0.1.0.gem
 gems/cache/text-table-1.2.4.gem
 gems/cache/three-rb-0.2.1.gem
 gems/cache/tilt-2.9.0.gem

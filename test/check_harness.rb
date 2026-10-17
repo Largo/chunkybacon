@@ -682,6 +682,52 @@ end
 puts collatz(27))
     ]
   },
+  "qr-rechnung" => {
+    "de" => [%(install_gem "qr-bills"
+install_gem "swiss_qr"
+install_gem "qr_reader"
+require "qr-bills"
+require "swiss_qr"
+
+fuchs = QRBills.get_qr_params
+fuchs[:bill_type] = QRBills.get_qrbill_without_reference_type
+fuchs[:output_params][:format] = "qrcode"
+fuchs[:qrcode_format] = "png"
+glace = fuchs[:bill_params]
+glace[:amount] = 12.30
+glace[:reference_type] = "NON"
+glace[:creditor][:iban] = "CH58 0079 1123 0008 8901 2"
+glace[:creditor][:address].merge!(name: "Glace Fuchs", street_name: "Seeweg", building_number: "3",
+                                  postal_code: "8000", town: "Seldwyla", country: "CH")
+glace[:debtor][:address].merge!(name: "Kaz Muster", street_name: "Bahnhofstrasse", building_number: "2",
+                                postal_code: "8000", town: "Seldwyla", country: "CH")
+bild = QRBills.generate(fuchs)[:output]
+show_image bild
+SwissQr.read(bild))],
+    "en" => [%(install_gem "qr-bills"
+install_gem "swiss_qr"
+install_gem "qr_reader"
+require "qr-bills"
+require "swiss_qr"
+
+fox = QRBills.get_qr_params
+fox[:bill_type] = QRBills.get_qrbill_without_reference_type
+fox[:output_params][:format] = "qrcode"
+fox[:qrcode_format] = "png"
+ice = fox[:bill_params]
+ice[:amount] = 12.30
+ice[:reference_type] = "NON"
+ice[:creditor][:iban] = "CH58 0079 1123 0008 8901 2"
+ice[:creditor][:address].merge!(name: "Glace Fuchs", street_name: "Seeweg", building_number: "3",
+                                postal_code: "8000", town: "Seldwyla", country: "CH")
+ice[:debtor][:address].merge!(name: "Kaz Muster", street_name: "Bahnhofstrasse", building_number: "2",
+                              postal_code: "8000", town: "Seldwyla", country: "CH")
+png = QRBills.generate(fox)[:output]
+show_image png
+read = SwissQr.read(StringIO.new(png.to_blob))
+puts read.formatted_iban
+puts read.amount)]
+  },
   # the ruby2d window (ruby2d.rb): the check replays the cell and holds the
   # arrow keys on that copy until Chunky reaches both edges
   "ruby2d" => {
