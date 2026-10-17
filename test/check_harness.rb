@@ -13,6 +13,7 @@ require_relative "../html/sandbox_sim"
 require_relative "../html/earlier_cells"
 require "tmpdir"
 require "fileutils"
+require "rbconfig"
 
 # Gem code "lives" under BrowserGems.root and cells write files relative to
 # the working directory; both are temp dirs here, as both are wasm memory in
@@ -1391,6 +1392,11 @@ def run_harness(langs)
     selected = selected.select { |lesson| only.include?(lesson["id"]) }
   end
   failures = 0
+  # the Pico lessons ("pico") run on the Pico simulator, in a process of
+  # their own (test/pico_harness.rb): a clean top level for GPIO, no
+  # CRuby net/http
+  pico, selected = selected.partition { |lesson| lesson["pico"] }
+  failures += 1 unless pico.empty? || pico_harness(pico, langs)
   Dir.chdir(WORKDIR)
 
   selected.each do |lesson|
@@ -1521,13 +1527,26 @@ end
   failures.zero?
 end
 
+def pico_harness(lessons, langs)
+  ids = lessons.map { |lesson| lesson["id"] }
+  args = [RbConfig.ruby, File.expand_path("pico_harness.rb", __dir__), "--stdin", "--lang=#{langs.join(",")}", "--only=#{ids.join(",")}"]
+  IO.popen(args, "w") { |io| io.write(JSON.generate(SOLUTIONS.slice(*ids))) }
+  $?.success?
+end
+
+# test/pico_harness.rb asks for the solutions of the lessons it checks on
+# its own (ruby test/pico_harness.rb, without check_harness.rb)
+if ARGV[0] == "--dump-solutions"
+  puts JSON.generate(SOLUTIONS.slice(*ARGV[1].to_s.split(",")))
+  exit
+end
+
 # One process per language: lesson code defines methods and classes at the
 # top level, which outlive the binding, and ja runs the same code as en - an
 # en solution's `def square` would let the ja starter pass.
 if (lang = ENV["HARNESS_LANG"])
   exit(run_harness([lang]) ? 0 : 1)
 else
-  require "rbconfig"
   results = LANGS.map { |l| system({ "HARNESS_LANG" => l }, RbConfig.ruby, __FILE__) }
   exit(results.all? ? 0 : 1)
 end
