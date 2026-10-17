@@ -33,5 +33,7 @@ module PicoSim
     def breathe
       sleep_ms 1 if @board.busy.to_s.to_f > 10
     end
+
+    def breathe_out = breathe
   end
 end

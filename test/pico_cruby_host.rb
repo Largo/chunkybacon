@@ -251,6 +251,7 @@ module PicoCRuby
     def http(method, url, headers, body) = PicoCRuby.http(method, url, headers, body)
     def camera_hex(name) = PicoCRuby.camera_hex(name)
     def breathe = PicoCRuby.breathe
+    def breathe_out = PicoCRuby.limit!
   end
 end
 

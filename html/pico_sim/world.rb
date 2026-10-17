@@ -46,6 +46,12 @@ module PicoSim
     def breathe
       host.breathe
     end
+
+    # a write or a PWM change: the same turn for the event loop in the
+    # browser, but no simulated time of its own (the CRuby host's clock)
+    def breathe_out
+      host.breathe_out
+    end
   end
 
   # one GPIO: the SIO direction, the output latch, the pad's pulls
@@ -314,7 +320,10 @@ module PicoSim
       @rng.int(2)
     end
 
+    # writes breathe too: a blink loop that forgot its sleep still lets the
+    # bench draw and ■ Stop through (host_js.rb)
     def gpio_write(pin, value)
+      PicoSim.breathe_out
       p = @pins[pin]
       p.level = value
       log_write(pin, value) if p.mode == :out
@@ -350,6 +359,7 @@ module PicoSim
     end
 
     def pwm_set(pin, freq, duty)
+      PicoSim.breathe_out
       t = advance
       @pwm[pin] = [freq, duty]
       list = (@pwm_log[pin] ||= [])

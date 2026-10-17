@@ -115,6 +115,7 @@ async function simFiles() {
 const host = {
   progress(id, text) { postMessage({ id, progress: text }); },
   board(id, kind, text) { postMessage({ id, board: kind, text }); },
+  alive(id) { postMessage({ id, alive: true }); },
   http, cameraHex, simFiles
 };
 

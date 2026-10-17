@@ -34,6 +34,10 @@
   // ms; a cell with a board (a Pico lesson) runs as long as a program on a
   // Pico might, an IRB line below it half that
   var LIMIT = { auto: 1000, run: 10000, irb: 10000, board: 60000, boardIrb: 30000 };
+  // ms; a board run that has not given the worker's event loop a turn for
+  // this long is stuck in a loop without a sleep (`while true; puts; end`):
+  // it ends as a cell without a board would, not after a silent minute
+  var QUIET = 10000;
   var queue = [];
   var current = null;   // {id, item, started, timer}: the request out now
   var nextId = 1;
@@ -71,6 +75,7 @@
       queue = queue.filter(function (item) { return item.kind === "drop"; });
       if (current) {
         clearTimeout(current.timer);
+        clearInterval(current.quiet);
         current = null;
         endWorker();
         return;
@@ -104,7 +109,10 @@
           resolve(true);
         } else if (data.failed) {
           fail(worker, data.failed, resolve);
+        } else if (data.alive) {
+          if (current && data.id === current.id) current.heard = performance.now();
         } else if (data.progress !== undefined) {
+          if (current && data.id === current.id) current.heard = performance.now();
           progress(data);
         } else if (data.board !== undefined && data.status === undefined) {
           if (window.chunkyPicoBoard && current && data.id === current.id) window.chunkyPicoBoard.receive(String(data.board), String(data.text));
@@ -149,8 +157,13 @@
     var board = !!item.board;
     var limit = item.kind === "drop" ? 2000 : item.auto ? LIMIT.auto
       : item.kind === "irb" ? (board ? LIMIT.boardIrb : LIMIT.irb) : (board ? LIMIT.board : LIMIT.run);
-    current = { id: id, item: item, started: performance.now(),
+    current = { id: id, item: item, started: performance.now(), heard: performance.now(),
                 timer: setTimeout(function () { stop(id); }, limit) };
+    if (board && item.kind !== "drop") {
+      current.quiet = setInterval(function () {
+        if (current && current.id === id && performance.now() - current.heard > QUIET) stop(id);
+      }, 1000);
+    }
     var inputs = board && window.chunkyPicoBoard && window.chunkyPicoBoard.inputs ? parseInputs(window.chunkyPicoBoard.inputs()) : {};
     // the bench was moved under this cell when ▶ was pressed; it draws this
     // run's state from now on, not the one of the run it waited for
@@ -185,6 +198,7 @@
   function answered(data) {
     if (!current || data.id !== current.id) return;
     clearTimeout(current.timer);
+    clearInterval(current.quiet);
     var done = current;
     current = null;
     reply(done.item, data, performance.now() - done.started);
@@ -197,6 +211,7 @@
     if (!current || current.id !== id) return;
     var done = current;
     clearTimeout(done.timer);
+    clearInterval(done.quiet);
     current = null;
     endWorker();
     if (done.item.board && window.chunkyPicoBoard && window.chunkyPicoBoard.reset) window.chunkyPicoBoard.reset(status || "stopped");
