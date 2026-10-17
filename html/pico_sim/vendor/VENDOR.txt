@@ -1,0 +1,13 @@
+source=https://raw.githubusercontent.com/picoruby/picoruby/4.0.3/mrbgems/<gem>/mrblib/<file>
+tag=4.0.3
+license=MIT, (c) HASUMI Hitoshi and the PicoRuby contributors (see THIRD_PARTY_NOTICES.md)
+installed_by=tools/vendor_picoruby_mrblib.rb (unchanged copies; prims.rb is their C side)
+file=gpio.rb 2671 8da0199efaeec00e9af8774f6708ca08f8c1f8ee484227d814c9003778177226
+file=pwm.rb 177 219540324928ff019fcc2d5231b5b02b2748d5f36dd48ffa825b028e5c01f6eb
+file=adc.rb 412 d0acd82112450f3681a0c458be3545bc643bcbc9f6e951a63251ab428ce21ba5
+file=i2c.rb 836 31937713d8b86a85047c87c0736d4132564a79dc3ee08125d60635888494473e
+file=spi.rb 843 6153143825cb85829d48d9f2460682e80b4fed71c825278da00d90dddd460504
+file=cyw43.rb 1735 8609c68a18ae302f28c25c0bcbac86e263eb5fae487e18969c8ec1ee849b40a5
+file=net-http/http_request.rb 4324 db74a9b8c0fa26623362eb5c66a4ca44606025abc93327c8e6ddb2e9e4bd43d3
+file=net-http/http_response.rb 4637 6d963718d0f4d6ed57d79ea07e4576d6d99afd19e1ca29f2564ea6b2c960ae37
+file=net-http/http_client.rb 8526 ab2bfc6e410c07c607e2d44f3c058aa90b6fad66a73b3e75b43046f8750b4bae
