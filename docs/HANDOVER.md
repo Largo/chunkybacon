@@ -2030,16 +2030,39 @@ the cell is there, and its lines do not reset the board. The lessons are
 `"live": false`.
 
 **The bench** (`html/pico_board.js`, plain JS like `game.js`): one per
-lesson, moved under the cell being run (`#pico-slot-<idx>`, `mount`);
-it draws the worker's snapshots and sends the controls' inputs back.
+board cell, in the cell's `#pico-slot-<idx>`. It draws the worker's
+snapshots and sends the controls' inputs back.
+
+- **Before any run** every board cell shows a *static preview*
+  (`previews()`: the shell calls `window.picoBoardPreviews` once the lesson
+  is drawn, and pico_board.js calls it itself when it loads later): the
+  cell's parts and wires from `window.LESSONS` (the bridge's lesson and
+  language, without the bench script), pins idle, the robot at its start,
+  the e-paper with the picture the panel keeps (or blank), the badge
+  "○ idle – ▶ Run starts it" (`boardIdle`), ■ Stop disabled. Built one per
+  animation frame; nothing goes to the worker until ▶.
+- **▶ makes that cell's bench the live one** (`mount`, built anew only if
+  the cell's parts differ); the cell that was live goes back to its idle
+  preview - the Pico runs the new cell's program now. Only the live bench
+  takes snapshots, speaks, sounds and has a working Stop; `debug()` is the
+  live bench (null before the first ▶), `benches()` lists them all.
+- **One world for the page:** the inputs (`values`) are shared - a slider,
+  the button or the arena's box set on any bench shows on every bench and
+  goes with the next run, so a learner can set the light before ▶. A new
+  e-paper frame shows on every e-paper bench (one panel).
+- `unmount` (a new lesson, a language switch, the lesson's reset; main.rb's
+  `sync_state`, which comes after the shell drew the new page) drops every
+  bench, the inputs and the panel's picture, then builds the new page's
+  previews. Each bench keeps its own arena geometry (`b.arena`) and resize
+  observer, so a narrow and a wide bench can sit on one page.
 An SVG Pico 2 W (landscape, 40 labelled pads with tooltips naming each
 pin's functions, the pin state as a coloured ring), a breadboard with the
 cell's parts and jumper wires, cards for parts without pins (the PicoGo
 arena with draggable box and bacon, the camera, Wi-Fi's HTTP log, the
 laptop's BLE terminal), and real HTML controls below: ■ Stop, sound
 (muted by default), the button (pointer, Space, Enter), sliders (light,
-room temperature, the BME280's T/RH/p), the picture chooser, "access point
-off", the laptop's line form. A control the bench script drives follows
+room temperature, the BME280's T/RH/p), the picture chooser and "Use my
+webcam", "access point off", the laptop's line form. A control the bench script drives follows
 its value and is locked (🤖). A polite live region says changes at most
 every 1.5 s; the SVG's `<desc>` follows the state. Dark-mode tokens for the
 bench only (the site has no dark theme). Parts (`board.parts`), wiring
@@ -2047,8 +2070,26 @@ fixed per part: `led15`, `button14`, `light26`, `temp`, `buzzer16`,
 `envsensor` (I2C0 on GP20/21), `epd213` (SPI1, GP8-13), `picogo`
 (GP2-4, 14-21, 26 - not with `envsensor`), `camera`, `wifi`, `laptop`. The
 linter refuses unknown parts and two parts on one pin. API, for tests too:
-`chunkyPicoBoard.mount/receive/inputs/input/sendLine/ble/started/reset/
-unmount/debug` (the head of the file).
+`chunkyPicoBoard.previews/mount/receive/inputs/input/sendLine/ble/started/
+reset/unmount/debug/benches/webcam` (the head of the file).
+
+**The webcam** (opt-in, DESIGN N4): "📷 Use my webcam" on the camera card
+calls `getUserMedia` on the page (video only, 320×240 asked for); every
+250 ms the frame is cut to 4:3, scaled to 160×120, turned grey (Rec. 601
+luma) and handed to the worker as a binary PGM in hex - input
+`camera.frame`, with `camera` = `"webcam"` - and the card shows it as a
+viewfinder (`.is-live`). `stand_ins/camera.rb` takes that frame, or the
+drawn "chunky" while none has come; a capture logs `camera webcam`. The
+drawn pictures stay the default and the fallback: no `isSecureContext` /
+`mediaDevices` (plain http on another host), no permission, no camera -
+the note under the button says so (`boardWebcamNo`) and nothing changes.
+The stream stops on a second click, when a drawn picture is chosen, when
+its track ends, and with the page (`unmount`; a permission answer that
+comes after the page went stops its stream at once). Frames go only to
+the worker; pico-epaper's camera text says it is optional and stays in the
+browser. 127.0.0.1, localhost and https are secure contexts; a plain-http
+address such as `http://88.99.151.170:8011` is not - there the button only
+says why not.
 
 **The bench script** (`"bench"` on a cell) applies inputs at fixed times
 in the Ruby world - presses, slider values, BLE lines, the arena's layout,
@@ -2127,7 +2168,9 @@ PicoRuby.wasm, ~2 min), and against a dev server `node
 test/pico_lessons_test.mjs [de] [en] [ja]` (every lesson in a browser,
 ~2 min per language; `SHOTS=dir` saves screenshots),
 `test/pico_board_test.mjs` and `test/pico_bench_shots.mjs` (on the lesson
-files in `tmp/pico-lessons/`). Lesson files are written by generators
+files in `tmp/pico-lessons/`), `test/pico_extras_test.mjs` (pico-deploy's
+tables at 360 px and desktop, the static previews, the webcam with
+Chromium's fake camera and its fallbacks; `SHOTS=dir`). Lesson files are written by generators
 there (`gen_group1.rb` .. `gen_group3.rb`) and put into lessons.js by
 `tmp/insert_pico.js`, their SOLUTIONS by `tmp/insert_solutions.rb`.
 
