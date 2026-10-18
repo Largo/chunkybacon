@@ -25,6 +25,8 @@ COMMIT = "5cfbee3a3b36515cbfbab40205f8fc5f292307f8"
 DIR = "assets/app/src/main/resources/ruboto"
 SOURCE = "https://raw.githubusercontent.com/#{REPO}/%<commit>s/#{DIR}/%<file>s"
 FILES = %w[base.rb package.rb activity.rb widget.rb toast.rb].freeze
+# Ruboto's MIT license, next to the files (the .rb files carry no header)
+LICENSE = "https://raw.githubusercontent.com/#{REPO}/%<commit>s/LICENSE"
 
 def get(url, limit = 5)
   uri = URI(url)
@@ -52,6 +54,11 @@ def check
       problems << "#{file}: changed since it was vendored"
     end
   end
+  line = record[/^file=LICENSE (\d+) (\h+)$/]
+  path = File.join(TARGET, "LICENSE")
+  if line.nil? || !File.exist?(path) || Digest::SHA256.file(path).hexdigest != Regexp.last_match(2)
+    problems << "LICENSE: missing or changed"
+  end
   if problems.empty?
     puts "html/ruboto_sim/vendor: Ruboto #{COMMIT[0, 7]}, #{FILES.size} files as recorded"
   else
@@ -71,6 +78,9 @@ def vendor(from)
     lines << "file=ruboto/#{file} #{body.bytesize} #{Digest::SHA256.hexdigest(body)}"
     puts "ruboto/#{file} (#{body.bytesize} bytes)"
   end
+  license = from ? File.binread(File.join(from, "LICENSE")) : get(format(LICENSE, commit: COMMIT))
+  File.binwrite(File.join(TARGET, "LICENSE"), license)
+  lines << "file=LICENSE #{license.bytesize} #{Digest::SHA256.hexdigest(license)}"
   File.write(RECORD, lines.join("\n") + "\n")
 end
 

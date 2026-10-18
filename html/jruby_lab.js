@@ -34,6 +34,9 @@
   "use strict";
 
   var LIMIT = 60000;   // ms: the biggest cell (the 7.3 MB JSON on a slow phone) needs a few seconds
+  // a tap on the simulated phone: Android itself says "isn't responding"
+  // after 5 s; a slow phone's browser gets twice that
+  var PHONE_LIMIT = 10000;
   var queue = [];
   var current = null;
   var nextId = 1;
@@ -74,7 +77,12 @@
     // ticks of the phone's clock are dropped while anything else waits
     busy: function () { return !!current || queue.length > 0 || !jr.ready; },
     reset: function () {
-      queue = [];
+      // the phone's load stays queued: it only loads code
+      queue = queue.filter(function (item) { return item.kind === "android"; });
+      if (current && current.item.kind === "android") {
+        queue.push({ kind: "fresh", queued: performance.now() });
+        return;
+      }
       if (current) {
         // its answer was for the page that went away
         clearTimeout(current.timer);
@@ -166,9 +174,19 @@
 
   // +android+: the Ruboto lesson - the phone (ruboto_sim/) loads right after JRuby
   window.ensureJRuby = function (android) {
+    // The phone's Ruby (Ruboto's base.rb: Kernel#method_missing, View,
+    // Activity ...) stays in a JRuby once loaded: another lesson gets a
+    // JRuby of its own, about 3 s to boot again
+    if (!android && jr.phoneLoaded) {
+      // what the old lesson waited for goes with its worker
+      if (current) { clearTimeout(current.timer); current = null; }
+      queue = [];
+      endWorker();
+    }
     if (android && !jr.phoneQueued) {
       jr.phoneQueued = true;
       queue.push({ kind: "android", queued: performance.now() });
+      if (jr.ready) pump();
     }
     if (texts[DATA] === undefined) {
       fetch(DATA).then(function (r) { return r.ok ? r.text() : null; })
@@ -240,7 +258,12 @@
     var item = queue.shift();
     var id = nextId++;
     current = { id: id, item: item, started: performance.now(),
-                timer: setTimeout(function () { stop(id); }, LIMIT) };
+                timer: setTimeout(function () { stop(id); }, item.kind === "phone" ? PHONE_LIMIT : LIMIT) };
+    if (item.kind === "fresh") {
+      jr.worker.postMessage({ id: id, kind: "fresh" });
+      return;
+    }
+    if (item.kind === "android" || item.kind === "phone" || item.android) jr.phoneLoaded = true;
     if (item.kind === "phone" || item.kind === "android") {
       jr.worker.postMessage({ id: id, kind: item.kind, event: item.event });
       return;
@@ -270,6 +293,7 @@
   function endWorker() {
     if (jr.worker) jr.worker.terminate();
     jr.phoneQueued = false;
+    jr.phoneLoaded = false;
     jr.worker = null;
     jr.ready = false;
     // the line said "ready": say that the next run boots a new one
@@ -277,7 +301,7 @@
   }
 
   function reply(item, data, elapsed) {
-    if (item.kind === "android") return;   // the phone loaded ahead of the first run
+    if (item.kind === "android" || item.kind === "fresh") return;   // the phone loaded ahead of the first run; a reset
     if (item.kind === "phone") {
       window.dispatchEvent(new CustomEvent("chunky:phone", { detail: {
         status: String(data.status), phone: String(data.phone || ""), message: String(data.message || "") } }));

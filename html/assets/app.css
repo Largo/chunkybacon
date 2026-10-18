@@ -2659,7 +2659,10 @@ footer a { color: var(--bakelite); }
    in a narrow column), logcat beside it. Inside the screen the colours are
    Android's Material 3 light theme, not the course's: it is the app's look.
    Outside it - the bar, logcat - the course's light or dark scheme. */
-.ruboto-slot { border-top: 1px solid var(--rule); padding: 0.55rem 0.7rem 0.7rem; background: var(--sheet); }
+.ruboto-slot { border-top: 1px solid var(--rule); padding: 0.55rem 0.7rem 0.7rem; background: var(--sheet); overflow-x: auto; }
+/* what the toasts say, for screen readers only */
+.rp-live { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.ruboto-slot { position: relative; }
 .rp-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.8rem; margin-bottom: 0.5rem; }
 .rp-bar button { font-size: 0.85rem; padding: 0.25rem 0.75rem; }
 .rp-badge { font-size: 0.8rem; color: var(--ink-soft); }
@@ -2678,6 +2681,10 @@ footer a { color: var(--bakelite); }
 }
 .rp-device.is-portrait .rp-screen { width: 360px; height: 712px; }
 .rp-device.is-landscape .rp-screen { width: 640px; height: 432px; }
+/* the keyboard's place is always visible inside the screen */
+.rp-screen button:focus-visible, .rp-screen [role="button"]:focus-visible, .rp-screen select:focus-visible,
+.rp-screen input[type="range"]:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+.rp-screen:focus { outline: none; }
 /* the course's buttons (cream, 2 px ink, Outfit) stop at the screen's edge */
 .rp-screen button, .rp-screen button:where(:hover, :active) {
   font-family: inherit; font-weight: inherit; line-height: inherit; border: none; box-shadow: none; transform: none;
@@ -2691,7 +2698,7 @@ footer a { color: var(--bakelite); }
 .rp-screen .rp-nav button:disabled { opacity: 0.35; cursor: default; }
 .rp-screen .rp-appbar { flex: none; height: 56px; display: flex; align-items: center; gap: 4px; padding: 0 4px 0 16px; background: var(--md-container); }
 .rp-screen .rp-title { flex: 1 1 auto; font-size: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.rp-screen .rp-action, .rp-screen .rp-more { background: none; border: none; box-shadow: none; color: var(--md-primary); font: 500 14px/1 inherit; padding: 10px 12px; border-radius: 20px; cursor: pointer; }
+.rp-screen .rp-action, .rp-screen .rp-more { background: none; border: none; box-shadow: none; color: var(--md-primary); font-weight: 500; font-size: 14px; line-height: 1; padding: 10px 12px; border-radius: 20px; cursor: pointer; }
 .rp-screen .rp-more { color: var(--md-variant); font-size: 20px; padding: 8px 14px; }
 .rp-screen .rp-content { position: relative; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow: auto; }
 .rp-screen .rp-content.is-dialog-theme { background: rgba(0, 0, 0, 0.32); justify-content: center; align-items: center; }
@@ -2707,7 +2714,7 @@ footer a { color: var(--bakelite); }
 .rp-screen .rp-text.is-single span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rp-screen .rp-button {
   margin: 4px; min-height: 40px; padding: 8px 20px; border: none; border-radius: 20px; box-shadow: none;
-  background: var(--md-primary); color: var(--md-on-primary); font: 500 14px/1.2 inherit; cursor: pointer;
+  background: var(--md-primary); color: var(--md-on-primary); font-weight: 500; font-size: 14px; line-height: 1.2; cursor: pointer;
 }
 .rp-screen .rp-button:hover:not(:disabled) { filter: brightness(1.1); }
 .rp-screen .rp-button:disabled, .rp-screen .rp-button.is-disabled { background: rgba(29, 27, 32, 0.12); color: rgba(29, 27, 32, 0.38); cursor: default; }
@@ -2718,6 +2725,19 @@ footer a { color: var(--bakelite); }
 .rp-screen .rp-edit:focus { border-bottom: 2px solid var(--md-primary); }
 .rp-screen .rp-check { display: flex; align-items: center; gap: 10px; min-height: 40px; cursor: pointer; }
 .rp-screen .rp-check input { width: 18px; height: 18px; accent-color: var(--md-primary); margin: 0; }
+/* Android 14's switch: the text first, a track with a thumb at the end */
+.rp-screen .rp-check.is-switch { flex-direction: row-reverse; justify-content: space-between; }
+.rp-screen .rp-check.is-switch input {
+  appearance: none; -webkit-appearance: none; position: relative; flex: none; width: 52px; height: 32px; border-radius: 16px;
+  border: 2px solid var(--md-outline); background: var(--md-container); box-sizing: border-box; cursor: pointer;
+}
+.rp-screen .rp-check.is-switch input::after {
+  content: ""; position: absolute; top: 6px; left: 6px; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--md-outline); transition: left 0.1s, width 0.1s, height 0.1s, top 0.1s;
+}
+.rp-screen .rp-check.is-switch input:checked { background: var(--md-primary); border-color: var(--md-primary); }
+.rp-screen .rp-check.is-switch input:checked::after { left: 22px; top: 2px; width: 24px; height: 24px; background: var(--md-on-primary); }
+.rp-screen .rp-check.is-switch input:focus-visible, .rp-screen .rp-check input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .rp-screen .rp-seek { margin: 8px 4px; accent-color: var(--md-primary); }
 .rp-screen .rp-progress { margin: 8px 4px; accent-color: var(--md-primary); }
 .rp-screen .rp-image { position: relative; overflow: hidden; display: flex; }
@@ -2725,24 +2745,25 @@ footer a { color: var(--bakelite); }
 .rp-screen .rp-image:not(.is-wrap) { min-height: 48px; }
 .rp-screen .rp-image.is-wrap img { position: static; height: auto; max-height: 100%; }
 .rp-screen .rp-list { display: flex; flex-direction: column; overflow: auto; }
-.rp-screen .rp-row { display: block; text-align: left; padding: 12px 16px; min-height: 48px; box-sizing: border-box; font: 16px/1.5 inherit; color: inherit; background: none; border: none; border-bottom: 1px solid #e7e0ec; border-radius: 0; box-shadow: none; }
+.rp-screen .rp-li { display: flex; flex-direction: column; }
+.rp-screen .rp-row { display: block; text-align: left; padding: 12px 16px; min-height: 48px; box-sizing: border-box; font-size: 16px; line-height: 1.5; color: inherit; background: none; border: none; border-bottom: 1px solid #e7e0ec; border-radius: 0; box-shadow: none; }
 .rp-screen button.rp-row { cursor: pointer; }
 .rp-screen button.rp-row:hover { background: rgba(103, 80, 164, 0.08); }
 .rp-screen .rp-spinner { margin: 4px 0; padding: 8px; font: inherit; color: inherit; background: var(--md-surface); border: 1px solid var(--md-outline); border-radius: 4px; }
 .rp-screen .rp-v.is-clickable:not(button) { cursor: pointer; }
 .rp-screen .rp-menu-layer { position: absolute; inset: 0; z-index: 3; }
 .rp-screen .rp-menu { position: absolute; right: 8px; top: 8px; min-width: 160px; background: var(--md-container); border-radius: 4px; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3); padding: 8px 0; display: flex; flex-direction: column; }
-.rp-screen .rp-menu-item { text-align: left; background: none; border: none; box-shadow: none; border-radius: 0; padding: 12px 16px; font: 14px inherit; color: inherit; cursor: pointer; }
+.rp-screen .rp-menu-item { text-align: left; background: none; border: none; box-shadow: none; border-radius: 0; padding: 12px 16px; font-size: 14px; color: inherit; cursor: pointer; }
 .rp-screen .rp-menu-item:hover { background: rgba(103, 80, 164, 0.08); }
 .rp-screen .rp-scrim { position: absolute; inset: 0; z-index: 4; background: rgba(0, 0, 0, 0.32); display: flex; align-items: center; justify-content: center; }
 .rp-screen .rp-dialog { background: var(--md-container); color: var(--md-on-surface); border-radius: 28px; padding: 24px; width: 280px; max-height: 80%; overflow: auto; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; gap: 12px; }
 .rp-screen .rp-dialog-activity { padding: 16px; }
 .rp-screen .rp-dialog-title { font-size: 22px; line-height: 1.25; }
 .rp-screen .rp-dialog-message { color: var(--md-variant); }
-.rp-screen .rp-dialog-item { text-align: left; background: none; border: none; box-shadow: none; border-radius: 8px; padding: 10px 8px; font: 16px inherit; color: inherit; cursor: pointer; }
+.rp-screen .rp-dialog-item { text-align: left; background: none; border: none; box-shadow: none; border-radius: 8px; padding: 10px 8px; font-size: 16px; color: inherit; cursor: pointer; }
 .rp-screen .rp-dialog-item:hover { background: rgba(103, 80, 164, 0.08); }
 .rp-screen .rp-dialog-buttons { display: flex; justify-content: flex-end; gap: 8px; }
-.rp-screen .rp-dialog-button { background: none; border: none; box-shadow: none; color: var(--md-primary); font: 500 14px inherit; padding: 10px 12px; border-radius: 20px; cursor: pointer; }
+.rp-screen .rp-dialog-button { background: none; border: none; box-shadow: none; color: var(--md-primary); font-weight: 500; font-size: 14px; padding: 10px 12px; border-radius: 20px; cursor: pointer; }
 .rp-screen .rp-dialog-button:hover { background: rgba(103, 80, 164, 0.08); }
 .rp-screen .rp-toasts { position: absolute; left: 0; right: 0; bottom: 64px; display: flex; justify-content: center; pointer-events: none; z-index: 5; }
 .rp-screen .rp-toast { max-width: 80%; background: #313033; color: #f4eff4; border-radius: 20px; padding: 10px 16px; font-size: 14px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); animation: rp-toast-in 0.15s ease-out; }
@@ -2750,7 +2771,7 @@ footer a { color: var(--bakelite); }
 .rp-screen .rp-home { flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; gap: 36px; padding-top: 56px; background: linear-gradient(160deg, #3b2f63, #6a4e8c 55%, #c58b6a); color: #fff; }
 .rp-screen .rp-home-clock { font-size: 56px; font-weight: 300; letter-spacing: 1px; }
 .rp-screen .rp-home-empty { opacity: 0.7; }
-.rp-screen .rp-app-icon { display: flex; flex-direction: column; align-items: center; gap: 6px; background: none; border: none; box-shadow: none; color: #fff; font: 13px inherit; cursor: pointer; padding: 8px; border-radius: 16px; }
+.rp-screen .rp-app-icon { display: flex; flex-direction: column; align-items: center; gap: 6px; background: none; border: none; box-shadow: none; color: #fff; font-size: 13px; cursor: pointer; padding: 8px; border-radius: 16px; }
 .rp-screen .rp-app-icon img { width: 56px; height: 56px; border-radius: 50%; background: #fef7ff; padding: 6px; box-sizing: border-box; }
 .rp-screen .rp-app-icon:hover { background: rgba(255, 255, 255, 0.12); }
 .rp-logcat { flex: 1 1 12rem; min-width: 11rem; max-width: 100%; display: flex; flex-direction: column; border: 1px solid var(--rule); border-radius: 6px; background: var(--cap); color: var(--cap-text); align-self: stretch; max-height: 40rem; }
@@ -2770,6 +2791,7 @@ footer a { color: var(--bakelite); }
 .rp-note { margin-top: 0.5rem; font-size: 0.9rem; color: var(--ink-soft); }
 @media (prefers-reduced-motion: reduce) {
   .rp-toast { animation: none; }
+  .rp-screen .rp-check.is-switch input::after { transition: none; }
 }
 @media (max-width: 620px) {
   .rp-stage { flex-direction: column; }

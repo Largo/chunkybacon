@@ -2,19 +2,27 @@
 // docs/HANDOVER.md §6u): its cells run on JRuby (TeaVM) in the JRuby lesson's
 // worker, with the simulated phone (ruboto_sim/) loaded into it, and
 // ruboto_phone.js draws the phone below a cell that starts an app. Checks: no
-// phone for other lessons, every demo app (taps, a toast, a rotation that
-// recreates the activity, logcat, Home and the launcher, a list with a
-// dialog and a menu, the photo frame's timer and its second activity, Back),
-// an older phone going stale, a crash and its dialog, an onCreate without
-// super, the exercise (starter fails, a solution passes), and the German
-// lesson. Needs html/assets/jruby/ (tools/vendor_jruby.rb). About a minute.
+// phone for other lessons, the phone loading before the first run, every
+// demo app (taps, a toast, a rotation that recreates the activity, logcat,
+// Home, Back and the launcher, a list with a dialog and a menu, typing at a
+// person's pace, the keyboard in a dialog, the photo frame's timer and its
+// second activity), an older phone going stale and out of reach, a crash and
+// its dialog, an onCreate without super, the exercise (starter fails, a
+// solution passes, the learner's phone starts fresh), idle gaps between runs,
+// the JRuby lesson getting a JRuby of its own afterwards, and the German and
+// Japanese lessons. No run may show a JavaScript TypeError. Needs
+// html/assets/jruby/ (tools/vendor_jruby.rb). About two minutes.
+// The simulator's Android semantics in detail: test/ruboto_sim_test.mjs.
 //   BASE=http://127.0.0.1:18011/ node test/ruboto_test.mjs
 import { chromium } from '/usr/local/lib/node_modules/playwright/index.mjs';
 
 const BASE = process.env.BASE || 'http://127.0.0.1:8011/';
 const browser = await chromium.launch();
 let failures = 0;
-const check = (name, cond) => { console.log(`${cond ? 'PASS' : 'FAIL'} ${name}`); if (!cond) failures++; };
+const check = (name, cond, detail) => {
+  console.log(`${cond ? 'PASS' : 'FAIL'} ${name}${cond || detail === undefined ? '' : '\n      ' + JSON.stringify(detail).slice(0, 400)}`);
+  if (!cond) failures++;
+};
 const errors = [];
 
 async function open(ctx, hash) {
@@ -29,12 +37,17 @@ async function open(ctx, hash) {
   await page.waitForFunction(() => window.ChunkyBridge && window.ChunkyBridge.ready, null, { timeout: 120000 });
   return page;
 }
+// a TypeError from JavaScript in a run is JRuby's runtime failing (the
+// TeaVM reference-queue bug of 2026-10 looked so), never the learner's code
+const typeErrors = [];
 async function run(page, idx, text) {
   if (text !== undefined) await page.evaluate(([i, t]) => window.setCellCode(i, t), [idx, text]);
   await page.evaluate(() => { window.__ran = null; window.addEventListener('chunky:ran', e => { window.__ran = e.detail; }, { once: true }); });
   await page.click(`.run-cell[data-idx="${idx}"]`);
   await page.waitForFunction(() => window.__ran, null, { timeout: 90000 });
-  return page.evaluate(i => document.getElementById('cell-out-' + i).innerText, idx);
+  const text2 = await page.evaluate(i => document.getElementById('cell-out-' + i).innerText, idx);
+  if (/\(JavaScript\) TypeError/.test(text2)) typeErrors.push(`cell ${idx}: ${text2.slice(0, 200)}`);
+  return text2;
 }
 // the worker has answered every tap so far
 const settle = page => page.waitForFunction(() => !window.chunkyJRuby.busy(), null, { timeout: 30000 });
@@ -59,8 +72,13 @@ const cellIndex = (page, pattern) => page.evaluate(src => {
 }
 
 const ctx = await browser.newContext({ locale: 'en-US', viewport: { width: 1280, height: 1000 } });
+const asked = [];
+ctx.on('request', r => { if (/ruboto_sim\/manifest\.txt/.test(r.url())) asked.push(r.url()); });
 const page = await open(ctx, '#ruboto');
 check('the lesson loads the phone script', await page.evaluate(() => !!document.getElementById('rubotoPhoneScript')));
+await page.waitForFunction(() => window.chunkyJRuby.ready, null, { timeout: 120000 });
+await settle(page);
+check('the phone loads right after JRuby, before the first run', asked.length > 0);
 
 const build = await run(page, 1);
 check('android.os.Build answers from the simulated phone', /Chunky Phone \(simulated\)", "14", 34/.test(build));
@@ -81,6 +99,7 @@ check('the launcher starts the app again', /Chunky bacon!/.test(await screen(pag
 const sample = await cellIndex(page, /class SampleActivity/);
 await run(page, sample);
 check('the older phone goes stale', await page.evaluate(i => document.getElementById('ruboto-slot-' + i).classList.contains('is-stale'), hello));
+check('...and out of the keyboard\'s reach', await page.evaluate(i => document.querySelector('#ruboto-slot-' + i + ' .rp-stage').inert === true, hello));
 await tap(page, `#ruboto-slot-${sample} .rp-button`);
 check('a tap runs the proc: the text changes', /What hath Matz wrought!/.test(await screen(page, sample)));
 check('...and a toast comes up', /Flipped a bit via butterfly/.test(await page.textContent(`#ruboto-slot-${sample} .rp-toasts`)));
@@ -97,30 +116,45 @@ await tap(page, `#ruboto-slot-${life} .rp-button`);
 await tap(page, `#ruboto-slot-${life} .rp-button`);
 await tap(page, `#ruboto-slot-${life} .rp-rotate`);
 const lifelog = await logcat(page, life);
-check('logcat shows the rotation in order',
-      /onPause[\s\S]*onSaveInstanceState: 2 taps[\s\S]*onStop[\s\S]*onDestroy[\s\S]*onCreate, bundle: Bundle\[\{taps=2\}\]/.test(lifelog));
+check('logcat shows the rotation in Android 14\'s order',
+      /onPause[\s\S]*onStop[\s\S]*onSaveInstanceState: 2 taps[\s\S]*onDestroy[\s\S]*onCreate, bundle: Bundle\[\{taps=2\}\]/.test(lifelog));
 check('...and the taps survive it', /2 taps/.test(await screen(page, life)));
 await tap(page, `#ruboto-slot-${life} .rp-nav-back`);
-check('Back ends the activity: onDestroy, the home screen', /onDestroy\s*$/.test(await logcat(page, life)) && await page.$(`#ruboto-slot-${life} .rp-app-icon`) !== null);
+const afterBack = await logcat(page, life);
+const sinceRotation = afterBack.slice(afterBack.lastIndexOf('onCreate, bundle: Bundle'));
+check('Back on the first screen sends the app to the background (Android 12+): no onDestroy',
+      !/onDestroy/.test(sinceRotation) && /onSaveInstanceState: 2 taps\s*$/.test(afterBack) &&
+      await page.$(`#ruboto-slot-${life} .rp-app-icon`) !== null);
 await tap(page, `#ruboto-slot-${life} .rp-app-icon`);
-check('...and the next start has no bundle', /0 taps/.test(await screen(page, life)));
+check('...and the launcher brings the same activity back', /2 taps/.test(await screen(page, life)));
 
 // the shopping list
 const shop = await cellIndex(page, /class ShoppingActivity/);
 await run(page, shop);
-await page.fill(`#ruboto-slot-${shop} .rp-edit`, 'Toast');
-await page.waitForTimeout(350);
+// at a person's pace: answers to the debounced text arrive while typing
+await page.click(`#ruboto-slot-${shop} .rp-edit`);
+await page.keyboard.type('Toast with jam', { delay: 230 });
+await page.waitForTimeout(400);
 await settle(page);
+check('typing at a person\'s pace keeps every letter in order', await page.inputValue(`#ruboto-slot-${shop} .rp-edit`) === 'Toast with jam');
 await tap(page, `#ruboto-slot-${shop} .rp-button`);
-check('typing and Add put an item into the list', /Toast/.test(await page.textContent(`#ruboto-slot-${shop} .rp-list`)));
+check('typing and Add put an item into the list', /Toast with jam/.test(await page.textContent(`#ruboto-slot-${shop} .rp-list`)));
 check('...and the field is empty again', await page.inputValue(`#ruboto-slot-${shop} .rp-edit`) === '');
+await page.focus(`#ruboto-slot-${shop} .rp-row >> nth=0`);
+await page.keyboard.press('Enter');
+await settle(page);
+check('Enter on a list row opens its dialog, with the keyboard in it',
+      await page.evaluate(() => !!document.activeElement.closest('.rp-dialog')));
+await page.keyboard.press('Escape');
+await settle(page);
+check('Escape cancels the dialog', await page.$(`#ruboto-slot-${shop} .rp-dialog`) === null);
 await tap(page, `#ruboto-slot-${shop} .rp-row >> nth=1`);
 check('a tap on an item opens the AlertDialog', /eggs[\s\S]*Got it\?/.test(await page.textContent(`#ruboto-slot-${shop} .rp-dialog`)));
 await tap(page, `#ruboto-slot-${shop} .rp-dialog-button >> text=Remove`);
 check('...whose Remove takes it off', !/eggs/.test(await page.textContent(`#ruboto-slot-${shop} .rp-list`)) && await page.$(`#ruboto-slot-${shop} .rp-dialog`) === null);
 await page.click(`#ruboto-slot-${shop} .rp-more`);
 await tap(page, `#ruboto-slot-${shop} .rp-menu-item >> text=Sort`);
-check('the menu sorts the list', (await page.$$eval(`#ruboto-slot-${shop} .rp-row`, rows => rows.map(r => r.textContent))).join(' ') === 'Bacon Coffee Toast');
+check('the menu sorts the list', (await page.$$eval(`#ruboto-slot-${shop} .rp-row`, rows => rows.map(r => r.textContent))).join(' ') === 'Bacon Coffee Toast with jam');
 
 // the photo frame
 const frame = await cellIndex(page, /class PhotoFrameActivity/);
@@ -134,7 +168,7 @@ check('the Handler moves on after 4 seconds', await photo() === 'blue_marble');
 await tap(page, `#ruboto-slot-${frame} .rp-button >> text=Next`);
 check('Next moves on at once', await photo() === 'moonwalk');
 await tap(page, `#ruboto-slot-${frame} .rp-image`);
-check('a tap on the photo starts the second activity', /Photo 3 of 6/.test(await screen(page, frame)));
+check('a tap on the photo starts the second activity, which reads the long extra', /Photo 3 of 6/.test(await screen(page, frame)));
 await tap(page, `#ruboto-slot-${frame} .rp-nav-back`);
 check('Back returns to the frame, on the same photo', /Photo frame/.test(await screen(page, frame)) && await photo() === 'moonwalk');
 await tap(page, `#ruboto-slot-${frame} .rp-rotate`);
@@ -167,7 +201,23 @@ const solution = starter.replace("@count = 0", "@count = bundle ? bundle.getInt(
   .replace(/\nend\n?$/, "\n\n  def onSaveInstanceState(out_state)\n    super\n    out_state.putInt('count', @count)\n  end\nend\n");
 await run(page, x, solution);
 check('a solution passes', await outcome() === 'pass');
-check('...and its phone shows 4 after the check\'s taps and rotation', /\b4\b/.test(await screen(page, x)));
+check('...and the learner\'s phone starts the app fresh after the check\'s taps (0, upright)',
+      /^\s*Counter\s+0\s+\+1/.test(await screen(page, x)) && await page.$(`#ruboto-slot-${x} .rp-device.is-portrait`) !== null);
+await run(page, x, solution);
+check('...and passes again on a second run', await outcome() === 'pass');
+
+// runs with the pauses a learner makes: the JS garbage collector runs then
+for (let i = 0; i < 6; i++) {
+  await page.waitForTimeout(700);
+  await run(page, hello);
+}
+check('six runs with idle gaps between them: the app starts every time', /Chunky bacon!/.test(await screen(page, hello)));
+
+// the JRuby lesson afterwards: a JRuby without Ruboto's globals
+await page.evaluate(() => { location.hash = '#jruby'; });
+await page.waitForFunction(() => window.cellEditors && Object.keys(window.cellEditors).some(i => /JRUBY_VERSION/.test(window.cellEditors[i].getValue())), null, { timeout: 60000 });
+const leak = await run(page, 1, 'defined?(View).inspect + " " + defined?(RubotoSim).inspect');
+check('the JRuby lesson after this one gets a JRuby of its own (no View, no RubotoSim)', /"nil nil"/.test(leak), leak);
 await ctx.close();
 
 // German
@@ -180,6 +230,19 @@ await ctx.close();
   check('...with German phone controls', /Drehen/.test(await p.textContent(`#ruboto-slot-${idx} .rp-rotate`)));
   await de.close();
 }
+
+// Japanese: the English code, Japanese controls
+{
+  const ja = await browser.newContext({ locale: 'ja-JP' });
+  const p = await open(ja, '?lang=ja#ruboto');
+  const idx = await cellIndex(p, /class HelloActivity/);
+  await run(p, idx);
+  check('the Japanese lesson starts its app', /Hello[\s\S]*Chunky bacon!/.test(await screen(p, idx)));
+  check('...with Japanese phone controls', /回転/.test(await p.textContent(`#ruboto-slot-${idx} .rp-rotate`)));
+  await ja.close();
+}
+
+check('no JavaScript TypeError in any run', typeErrors.length === 0, typeErrors);
 
 check('no page errors', errors.length === 0);
 await browser.close();

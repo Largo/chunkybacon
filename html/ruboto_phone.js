@@ -24,18 +24,18 @@
   var TEXT = {
     de: { back: "Zurück", home: "Startbildschirm", recents: "Letzte Apps", rotate: "⟳ Drehen", rotateTitle: "Das Handy drehen (Hoch- und Querformat)",
           logcat: "Logcat", clear: "Leeren", badge: "Simuliertes Android 14 (API 34) · JRuby", stopped: "„%s“ wurde beendet",
-          closeApp: "App schließen", openAgain: "App wieder öffnen", stale: "Dieses Handy zeigt nicht mehr den aktuellen Stand – ein anderer Lauf hat eine neue App gestartet. ▶ startet diese wieder.",
-          workerGone: "JRuby wurde beendet – ▶ startet die App wieder.", more: "Weitere Optionen", empty: "(keine Zeilen)",
+          closeApp: "App schliessen", openAgain: "App wieder öffnen", stale: "Dieses Handy zeigt nicht mehr den aktuellen Stand – ein anderer Lauf hat eine neue App gestartet. ▶ startet die App dieser Zelle wieder.",
+          workerGone: "JRuby wurde beendet – ▶ startet die App wieder.", more: "Weitere Optionen", anr: "„%s“ reagiert nicht (nach 10 s angehalten).",
           noApp: "Keine App" },
     en: { back: "Back", home: "Home", recents: "Recent apps", rotate: "⟳ Rotate", rotateTitle: "Rotate the phone (portrait and landscape)",
           logcat: "Logcat", clear: "Clear", badge: "Simulated Android 14 (API 34) · JRuby", stopped: "%s has stopped",
           closeApp: "Close app", openAgain: "Open app again", stale: "This phone is out of date – another run started a new app. ▶ starts this one again.",
-          workerGone: "JRuby was stopped – ▶ starts the app again.", more: "More options", empty: "(no lines)",
+          workerGone: "JRuby was stopped – ▶ starts the app again.", more: "More options", anr: "%s isn't responding (stopped after 10 s).",
           noApp: "No app" },
     ja: { back: "戻る", home: "ホーム", recents: "最近のアプリ", rotate: "⟳ 回転", rotateTitle: "スマホを回転（縦向き・横向き）",
           logcat: "Logcat", clear: "クリア", badge: "シミュレーションのAndroid 14（API 34）・JRuby", stopped: "「%s」が停止しました",
-          closeApp: "アプリを閉じる", openAgain: "アプリをもう一度開く", stale: "このスマホは最新ではありません。別の実行が新しいアプリを起動しました。▶でこのアプリをもう一度起動します。",
-          workerGone: "JRubyが停止しました。▶でアプリをもう一度起動します。", more: "その他のオプション", empty: "（行がありません）",
+          closeApp: "アプリを閉じる", openAgain: "アプリをもう一度開く", stale: "このスマホの表示は古くなっています。別の実行で新しいアプリが起動しました。▶でこのセルのアプリをもう一度起動します。",
+          workerGone: "JRubyが停止しました。▶でアプリをもう一度起動します。", more: "その他のオプション", anr: "「%s」が応答していません（10秒で停止しました）。",
           noApp: "アプリなし" }
   };
   var DRAWABLES = {
@@ -124,11 +124,18 @@
         if (view.hint) e.placeholder = view.hint;
         textStyle(e, view, false);
         e.setAttribute("data-sim", view.sim);
-        var timer = null;
+        e.setAttribute("aria-label", view.hint || "");
+        // the app's text as last sent; draw() keeps a focused field whose
+        // text is still that (the learner types on), and replaces it when
+        // the app set another (cleared it after Add)
+        e.__sent = e.value;
         e.addEventListener("input", function () {
-          clearTimeout(timer);
-          var value = e.value;
-          timer = setTimeout(function () { phone.send({ action: "text", sim: view.sim, text: value }); }, 200);
+          clearTimeout(e.__timer);
+          e.__timer = setTimeout(function () {
+            e.__timer = null;
+            e.__sent = e.value;
+            phone.send({ action: "text", sim: view.sim, text: e.value });
+          }, 200);
         });
         break;
       case "CheckBox":
@@ -137,6 +144,7 @@
         var box = el("input");
         box.type = "checkbox";
         box.checked = !!view.checked;
+        box.setAttribute("data-focus", "check:" + view.sim);
         if (view.type === "Switch") box.setAttribute("role", "switch");
         if (view.enabled === false) box.disabled = true;
         box.addEventListener("click", function (event) {
@@ -179,12 +187,19 @@
         e.setAttribute("role", "list");
         (view.items || []).forEach(function (item, i) {
           var row = el(view.itemClickable ? "button" : "div", "rp-row", item);
-          row.setAttribute("role", "listitem");
           if (view.itemClickable) {
+            // a button in a list item: screen readers say both
             row.type = "button";
+            row.setAttribute("data-focus", "row:" + view.sim + ":" + i);
             row.addEventListener("click", function () { phone.send({ action: "item", sim: view.sim, index: i }); });
+            var li = el("div", "rp-li");
+            li.setAttribute("role", "listitem");
+            li.appendChild(row);
+            e.appendChild(li);
+          } else {
+            row.setAttribute("role", "listitem");
+            e.appendChild(row);
           }
-          e.appendChild(row);
         });
         break;
       case "Spinner":
@@ -244,12 +259,16 @@
       size(e, "width", w, horizontal && linear, linear);
       size(e, "height", h, !horizontal && linear, linear);
       if (lp.weight > 0 && linear) {
-        e.style.flex = lp.weight + " 1 0px";
+        // Android shares out the space left after the wrap_content sizes
+        var along = horizontal ? w : h;
+        e.style.flex = lp.weight + " 1 " + (along === -2 || along === undefined ? "auto" : "0px");
         e.style[horizontal ? "minWidth" : "minHeight"] = "0";
       }
       if (lp.gravity !== undefined && lp.gravity >= 0) {
         var g = horizontal ? vgrav(lp.gravity) : hgrav(lp.gravity);
-        if (linear && g) e.style.alignSelf = ALIGN[g];
+        // layout_gravity means nothing across a match_parent size
+        var across = horizontal ? h : w;
+        if (linear && g && across !== -1) e.style.alignSelf = ALIGN[g];
         if (!linear) {
           var hg = hgrav(lp.gravity), vg = vgrav(lp.gravity);
           if (hg) e.style.justifySelf = hg === "stretch" ? "stretch" : hg;
@@ -379,17 +398,52 @@
     note.hidden = true;
     slot.appendChild(note);
 
+    // toasts for screen readers: one live region that stays
+    var live = el("div", "rp-live");
+    live.setAttribute("aria-live", "polite");
+    slot.appendChild(live);
+
     this.device = device;
     this.holder = holder;
+    this.screen = screen;
     this.body = body;
     this.clock = status.firstChild;
     this.note = note;
+    this.live = live;
     this.rotateButton = rotate;
+    screen.tabIndex = -1;
+
+    // Escape closes the menu, else acts as Back (a dialog's cancel)
+    slot.addEventListener("keydown", function (event) {
+      if (event.key !== "Escape" || !self.state) return;
+      if (self.menuOpen) {
+        self.menuOpen = false;
+        self.draw();
+        var more = self.body.querySelector(".rp-more");
+        if (more) more.focus();
+      } else if (self.state.device && (self.state.device.dialog || self.state.device.crash)) {
+        self.send(self.state.device.crash ? { action: "close" } : { action: "back" });
+      } else {
+        return;
+      }
+      event.preventDefault();
+    });
+    // the column's width changes with the sidebar too, not only the window's
+    if (window.ResizeObserver) {
+      this.resizer = new ResizeObserver(function () {
+        if (self.state) self.fit(self.device.classList.contains("is-landscape") ? "landscape" : "portrait");
+      });
+      this.resizer.observe(slot);
+    }
   };
 
   Phone.prototype.send = function (event) {
     if (!this.alive || live !== this || !window.chunkyJRuby) return;
     if (event.action !== "tick") this.menuOpen = false;
+    // the time since the last screen moves the phone's clock first; the
+    // install number keeps an input from reaching an app installed after it
+    if (this.snapAt) event.ms = Math.round(performance.now() - this.snapAt);
+    if (this.state) event.install = this.state.install;
     window.chunkyJRuby.phone(event);
   };
 
@@ -397,8 +451,12 @@
   Phone.prototype.show = function (json, all) {
     var data;
     try { data = JSON.parse(json); } catch (e) { return; }
+    var had = this.state && this.state.device;
     this.state = data;
     this.snapAt = performance.now();
+    // a dialog or the crash dialog that just opened gets the focus
+    this.openedModal = !!((data.device && (data.device.dialog || data.device.crash)) &&
+                          !(had && (had.dialog || had.crash)));
     var device = data.device || {};
     this.log(device.log || [], all);
     (device.toasts || []).forEach(function (toast) { this.toasts.push(toast); }, this);
@@ -417,10 +475,12 @@
     var minutes = Math.floor((device.clock || 0) / 60000);
     this.clock.textContent = "12:" + String(minutes % 60).padStart(2, "0");
 
-    // keep the caret where the learner types
+    // where the keyboard is: kept by the control's key (data-focus or
+    // data-sim); a field the learner types into is kept as it is
     var focus = document.activeElement;
-    var focusSim = focus && this.body.contains(focus) ? focus.getAttribute("data-sim") : null;
-    var caret = focusSim && typeof focus.selectionStart === "number" ? focus.selectionStart : null;
+    var inside = focus && this.body.contains(focus);
+    var focusKey = inside ? (focus.getAttribute("data-focus") || (focus.getAttribute("data-sim") && "sim:" + focus.getAttribute("data-sim"))) : null;
+    var typing = inside && focus.classList.contains("rp-edit") ? focus : null;
 
     var body = this.body;
     body.innerHTML = "";
@@ -449,15 +509,37 @@
     body.appendChild(this.toastLayer);
     if (this.toastShown) this.toastLayer.appendChild(this.toastShown);
 
-    if (focusSim) {
-      var again = body.querySelector('[data-sim="' + focusSim + '"]');
-      if (again && again.focus) {
-        again.focus();
-        if (caret !== null && typeof again.setSelectionRange === "function") {
-          var at = Math.min(caret, again.value.length);
-          try { again.setSelectionRange(at, at); } catch (e) { /* not a text field */ }
-        }
+    // a modal over the screen: what is behind it is out of reach
+    var modal = body.querySelector(".rp-scrim, .rp-menu-layer");
+    if (modal) {
+      Array.prototype.forEach.call(body.children, function (child) {
+        if (child !== modal && !child.contains(modal) && !child.classList.contains("rp-toasts")) child.inert = true;
+      });
+    }
+    if (typing) {
+      var fresh = body.querySelector('.rp-edit[data-sim="' + typing.getAttribute("data-sim") + '"]');
+      // the app has not set another text: the learner's field stays, with
+      // its caret, selection and what is not sent yet
+      if (fresh && fresh.value === typing.__sent && !modal) {
+        typing.style.cssText = fresh.style.cssText;
+        fresh.parentNode.replaceChild(typing, fresh);
+        if (document.activeElement !== typing) typing.focus();
+        return;
       }
+    }
+    if (this.openedModal) {
+      this.openedModal = false;
+      var first = modal && modal.querySelector("button");
+      if (first) { first.focus(); return; }
+    }
+    if (focusKey) {
+      var again = focusKey.indexOf("sim:") === 0
+        ? body.querySelector('[data-sim="' + focusKey.slice(4) + '"]')
+        : body.querySelector('[data-focus="' + focusKey + '"]');
+      if (again && again.focus && !again.closest("[inert]")) { again.focus(); return; }
+      // the control is gone (a dialog closed, a new screen): the screen keeps the focus
+      if (modal) { var m = modal.querySelector("button"); if (m) { m.focus(); return; } }
+      this.screen.focus();
     }
   };
 
@@ -470,6 +552,7 @@
     menu.filter(function (item) { return item.action; }).forEach(function (item) {
       var b = el("button", "rp-action", item.title);
       b.type = "button";
+      b.setAttribute("data-focus", "action:" + item.index);
       if (item.enabled === false) b.disabled = true;
       b.addEventListener("click", function () { self.send({ action: "menu", index: item.index }); });
       bar.appendChild(b);
@@ -477,9 +560,16 @@
     if (menu.some(function (item) { return !item.action; })) {
       var more = el("button", "rp-more", "⋮");
       more.type = "button";
+      more.setAttribute("data-focus", "more");
+      more.setAttribute("aria-haspopup", "menu");
       more.setAttribute("aria-label", t("more"));
       more.setAttribute("aria-expanded", this.menuOpen ? "true" : "false");
-      more.addEventListener("click", function () { self.menuOpen = !self.menuOpen; self.draw(); });
+      more.addEventListener("click", function () {
+        self.menuOpen = !self.menuOpen;
+        self.draw();
+        var first = self.body.querySelector(".rp-menu-item");
+        if (self.menuOpen && first) first.focus();
+      });
       bar.appendChild(more);
     }
     return bar;
@@ -494,6 +584,7 @@
     (activity.menu || []).filter(function (item) { return !item.action; }).forEach(function (item) {
       var b = el("button", "rp-menu-item", (item.checked === undefined ? "" : item.checked ? "☑ " : "☐ ") + item.title);
       b.type = "button";
+      b.setAttribute("data-focus", "menu:" + item.index);
       b.setAttribute("role", "menuitem");
       if (item.enabled === false) b.disabled = true;
       b.addEventListener("click", function (event) {
@@ -514,11 +605,18 @@
     });
     var box = el("div", "rp-dialog");
     box.setAttribute("role", "dialog");
-    if (d.title) box.appendChild(el("div", "rp-dialog-title", d.title));
+    box.setAttribute("aria-modal", "true");
+    if (d.title) {
+      var title = el("div", "rp-dialog-title", d.title);
+      title.id = "rp-dialog-title-" + this.idx;
+      box.setAttribute("aria-labelledby", title.id);
+      box.appendChild(title);
+    }
     if (d.message) box.appendChild(el("div", "rp-dialog-message", d.message));
     (d.items || []).forEach(function (item, i) {
       var b = el("button", "rp-dialog-item", item);
       b.type = "button";
+      b.setAttribute("data-focus", "dlgi:" + i);
       b.addEventListener("click", function () { self.send({ action: "dialog", which: i }); });
       box.appendChild(b);
     });
@@ -527,6 +625,7 @@
     (d.buttons || []).forEach(function (button) {
       var b = el("button", "rp-dialog-button", button.text);
       b.type = "button";
+      b.setAttribute("data-focus", "dlg:" + button.which);
       b.addEventListener("click", function () { self.send({ action: "dialog", which: button.which }); });
       buttons.appendChild(b);
     });
@@ -540,7 +639,11 @@
     var scrim = el("div", "rp-scrim");
     var box = el("div", "rp-dialog is-crash");
     box.setAttribute("role", "alertdialog");
-    box.appendChild(el("div", "rp-dialog-title", t("stopped").replace("%s", label)));
+    box.setAttribute("aria-modal", "true");
+    var title = el("div", "rp-dialog-title", t("stopped").replace("%s", label));
+    title.id = "rp-crash-title-" + this.idx;
+    box.setAttribute("aria-labelledby", title.id);
+    box.appendChild(title);
     var again = el("button", "rp-dialog-item", "↻ " + t("openAgain"));
     again.type = "button";
     again.addEventListener("click", function () { self.send({ action: "close" }); self.send({ action: "launch" }); });
@@ -562,6 +665,7 @@
     if (data.app) {
       var icon = el("button", "rp-app-icon");
       icon.type = "button";
+      icon.setAttribute("data-focus", "icon");
       var img = el("img");
       img.src = DRAWABLES.chunky;
       img.alt = "";
@@ -581,13 +685,15 @@
     if (this.toastTimer || this.toasts.length === 0) return;
     var toast = this.toasts.shift();
     var e = el("div", "rp-toast", toast.text);
-    e.setAttribute("role", "status");
+    e.setAttribute("aria-hidden", "true");
+    this.live.textContent = toast.text;
     this.toastShown = e;
     if (this.toastLayer) this.toastLayer.appendChild(e);
     this.toastTimer = setTimeout(function () {
       self.toastTimer = null;
       if (self.toastShown && self.toastShown.parentNode) self.toastShown.parentNode.removeChild(self.toastShown);
       self.toastShown = null;
+      self.live.textContent = "";
       self.nextToast();
     }, toast.long ? 3500 : 2000);
   };
@@ -639,7 +745,8 @@
     var outerW = size[0] + 24, outerH = size[1] + 24 + 48 + 24;
     var style = getComputedStyle(this.slot);
     var avail = (this.slot.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight)) || outerW;
-    var scale = Math.min(1, (avail - 4) / outerW);
+    // not below 0.7: a narrow page scrolls the slot sideways instead
+    var scale = Math.max(0.7, Math.min(1, (avail - 4) / outerW));
     this.device.style.transform = scale < 1 ? "scale(" + scale.toFixed(3) + ")" : "";
     this.holder.style.width = Math.round(outerW * scale) + "px";
     this.holder.style.height = Math.round(outerH * scale) + "px";
@@ -650,12 +757,23 @@
     clearTimeout(this.tickTimer);
     clearTimeout(this.toastTimer);
     this.toasts = [];
+    if (this.resizer) this.resizer.disconnect();
+    var stage = this.slot.querySelector(".rp-stage");
+    if (stage) stage.inert = true;
     this.slot.classList.add("is-stale");
     this.note.textContent = message;
     this.note.hidden = false;
   };
 
   // ---------- the page's side ----------
+
+  // the app's pictures (0.3 MB) before a Handler shows them: no empty frame
+  var preloaded = false;
+  function preload() {
+    if (preloaded) return;
+    preloaded = true;
+    Object.keys(DRAWABLES).forEach(function (name) { var img = new Image(); img.src = DRAWABLES[name]; });
+  }
 
   var api = window.chunkyRubotoPhone = {
     mount: function (idx, json) {
@@ -665,6 +783,7 @@
       // the class body's value (=> :onCreate) says nothing next to the app
       var arrow = out.querySelector(".cell-result");
       if (arrow) arrow.parentNode.removeChild(arrow);
+      preload();
       var slot = el("div", "ruboto-slot");
       slot.id = "ruboto-slot-" + idx;
       out.appendChild(slot);
@@ -672,7 +791,8 @@
       live.show(String(json), true);
     },
     stale: function (reason) {
-      if (live) live.retire(reason === "stopped" ? t("workerGone") : t("stale"));
+      if (live) live.retire(reason === "anr" ? t("anr").replace("%s", (live.state && live.state.app) || "App") + " " + t("workerGone")
+                            : reason === "stopped" ? t("workerGone") : t("stale"));
       live = null;
     },
     debug: function () { return live; }
@@ -682,9 +802,9 @@
     var d = event.detail || {};
     if (!live) return;
     if (d.status === "ok" && d.phone) live.show(d.phone, false);
-    else if (d.status === "stopped" || d.status === "failed") api.stale("stopped");
+    else if (d.status === "stopped") api.stale("anr");
+    else if (d.status === "failed") api.stale("stopped");
   });
-  window.addEventListener("resize", function () { if (live && live.state) live.draw(); });
 
   // calls made before this file had loaded (index.html's stand-in)
   var pending = window.chunkyRubotoPhonePending || [];

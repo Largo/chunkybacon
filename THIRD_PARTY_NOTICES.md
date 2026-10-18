@@ -121,7 +121,7 @@ Android stand-ins are listed there); these files are in git.
 
 | Component | Version | License | Copyright | Files |
 |---|---|---|---|---|
-| [Ruboto](https://github.com/ruboto/ruboto) 2 ([Largo/ruboto](https://github.com/Largo/ruboto)): `ruboto/base.rb`, `package.rb`, `activity.rb`, `widget.rb`, `toast.rb`, unchanged (`tools/vendor_ruboto.rb`) | 5cfbee3 | MIT | 2011 Daniel Jackoway, Charles Nutter, Scott Moyer, Uwe Kubosch | `html/ruboto_sim/vendor/ruboto/`; record `html/ruboto_sim/vendor/VENDOR.txt` |
+| [Ruboto](https://github.com/ruboto/ruboto) 2 ([Largo/ruboto](https://github.com/Largo/ruboto)): `ruboto/base.rb`, `package.rb`, `activity.rb`, `widget.rb`, `toast.rb`, unchanged (`tools/vendor_ruboto.rb`) | 5cfbee3 | MIT | 2011 Daniel Jackoway, Charles Nutter, Scott Moyer, Uwe Kubosch | `html/ruboto_sim/vendor/ruboto/`; license text `html/ruboto_sim/vendor/LICENSE`; record `html/ruboto_sim/vendor/VENDOR.txt` |
 | Photos of NASA ([images.nasa.gov](https://images.nasa.gov/)), resized: AS08-14-2383 (Earthrise), AS17-148-22727 (The Blue Marble), AS11-40-5903 (Aldrin on the Moon), 6900540 (Saturn V, Apollo 11 launch), iss058e005282 (aurora), iss072e057797 (Hurricane Milton) | - | public domain (NASA imagery is not copyrighted; NASA asks for credit, and that it not be used to imply endorsement) | Credit: NASA | `html/assets/ruboto/drawable/*.jpg` |
 
 ## The JRuby lesson (`html/assets/jruby/`, `html/assets/jruby-swing/`, put there on deploy)

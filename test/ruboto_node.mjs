@@ -12,7 +12,7 @@
 //       {"ok": false, "error": {"class": ..., "message": ..., "line": 3}, "phone": "{...}", "probe": ...},
 //       {"phone": "{...}"}]
 //   a run's "phone" is the screen when the cell started an app; "probe" runs
-//   after the cell, when it ran without an error
+//   after the cell, when it ran without an error; "delay" (ms) waits first
 //
 // Exit status 2 when JRuby is not there (the harness skips the lesson).
 import fs from "node:fs";
@@ -58,6 +58,10 @@ function split(out) {
 
 const answers = [];
 for (const run of input.runs || []) {
+  // an idle gap, as between a learner's runs: the JS garbage collector runs
+  // then, and finds what JRuby's weak references hold (the TeaVM reference
+  // queue bug of 2026-10 showed only so)
+  if (run.delay) await new Promise(resolve => setTimeout(resolve, run.delay));
   if (run.reset) {
     await evalAsync("ChunkyLab.fresh");
     answers.push({ reset: true });

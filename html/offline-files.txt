@@ -253,6 +253,7 @@ rack_playground.rb
 ruboto_phone.js
 ruboto_sim/manifest.txt
 ruboto_sim/ruboto_sim.rb
+ruboto_sim/vendor/LICENSE
 ruboto_sim/vendor/VENDOR.txt
 ruboto_sim/vendor/ruboto/activity.rb
 ruboto_sim/vendor/ruboto/base.rb

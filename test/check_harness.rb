@@ -2190,8 +2190,10 @@ def check_ruboto(lesson, lang, cells, exercise_at)
   demos = (0...exercise_at).select { |i| cells[i]["t"] == "c" }
   variants = [["starter", exercise["code"]]] + RUBOTO_WRONG.each_with_index.map { |s, i| ["wrong#{i + 1}", s] } +
              solutions.each_with_index.map { |s, i| ["solution#{i + 1}", s] }
-  runs = demos.map { |i| { "code" => cells[i]["code"] } } +
-         variants.map { |_, code| { "code" => code, "probe" => exercise["probe"] } }
+  # with idle gaps, as a learner runs cells: a garbage collection between
+  # runs is what broke JRuby's proxy cache once (HANDOVER §6u)
+  runs = demos.map { |i| { "code" => cells[i]["code"], "delay" => 300 } } +
+         variants.map { |_, code| { "code" => code, "probe" => exercise["probe"], "delay" => 300 } }
   out, err, status = Open3.capture3("node", RUBOTO_NODE, stdin_data: JSON.generate("runs" => runs))
   unless status.success?
     puts "FAIL #{where}: test/ruboto_node.mjs exited #{status.exitstatus}: #{err.lines.last(3).join.strip}"

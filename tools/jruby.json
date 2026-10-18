@@ -5,15 +5,15 @@
     "base": "730d53b",
     "patch": {
       "file": "tools/jruby-teavm-lesson.patch",
-      "sha256": "906980c021fce6837927ef4b3ac3c59cb36cf78901b630c5d3ab67f996de3eeb",
-      "about": "the lessons' build source on top of base: git format-patch of two commits (local branch ruboto-sim, 38898b4 + 997b339 in the builder's checkout), apply with git am; the result's tree is the one named here",
-      "tree": "0534905fe80b9d61b17c7d8158970cf1b02815e9"
+      "sha256": "94d423dd2ba02955f0527abdba26f0b0019d6b663804e1c8bf745e84577406f4",
+      "about": "the lessons' build source on top of base: git format-patch of three commits (local branch ruboto-sim, 38898b4 + 997b339 + a38020b in the builder's checkout), apply with git am; the result's tree is the one named here",
+      "tree": "89d3135ab2293d1e50b17bb802af988e5191f61a"
     },
-    "changes": "json gem 2.21.2 Java ext (require 'json'), jackson-core 2.18.2, lesson.Quakes, ZXing core 3.5.4, AtomicInteger/ConcurrentHashMap, TCharset aliases + isSupported, TCharConversionException; the Ruboto lesson's Android stand-ins (android-src/: android.*, org.ruboto.*, org.chunkybacon.sim.Device)",
-    "build": "git clone https://github.com/Largo/jruby-teavm && git -C jruby-teavm checkout 730d53b && git -C jruby-teavm am <this repo>/tools/jruby-teavm-lesson.patch, then setup/fetch.sh (inputs, incl. jackson-core 2.18.2 and ZXing core 3.5.4 from Maven Central, SHA-256-checked) and ./build.sh (about 3 min on the Hetzner box, never on the 1-core Linode). The pinned jruby.js is that build, from a fresh clone (2026-10-18; on 2026-10-17 a rebuild of the JRuby lesson's patch was bit-identical). An incremental build in another checkout gave the same code with other generated short names: TeaVM numbers classes in the order javac gets the sources, which follows the directory listing. stdlib.zip: the same 1376 entries byte for byte in every build, only its zip timestamps differ (so its pin is the build that shipped first)"
+    "changes": "json gem 2.21.2 Java ext (require 'json'), jackson-core 2.18.2, lesson.Quakes, ZXing core 3.5.4, AtomicInteger/ConcurrentHashMap, TCharset aliases + isSupported, TCharConversionException; the Ruboto lesson's Android stand-ins (android-src/: android.*, org.ruboto.*, org.chunkybacon.sim.Device); a fix of TeaVM's ReferenceQueue typing in teavm-plugin (QueuedReferences: without it JRuby's proxy cache failed after a GC with 'TypeError: d.bfq is not a function')",
+    "build": "git clone https://github.com/Largo/jruby-teavm && git -C jruby-teavm checkout 730d53b && git -C jruby-teavm am <this repo>/tools/jruby-teavm-lesson.patch, then setup/fetch.sh (inputs, incl. jackson-core 2.18.2 and ZXing core 3.5.4 from Maven Central, SHA-256-checked) and ./build.sh (about 3 min on the Hetzner box, never on the 1-core Linode). The pinned jruby.js is that build, from a fresh clone (2026-10-19; on 2026-10-17 a rebuild of the JRuby lesson's patch was bit-identical). An incremental build in another checkout gave the same code with other generated short names: TeaVM numbers classes in the order javac gets the sources, which follows the directory listing. stdlib.zip: the same 1376 entries byte for byte in every build, only its zip timestamps differ (so its pin is the build that shipped first)"
   },
   "files": {
-    "jruby.js": "053cc212dd96f75301050af0c730494deafbec83d292bc472074b6b36c7029ce",
+    "jruby.js": "1cfda09e5cd325754fe26a6f15518d25971e40982b002859d27e987426f25783",
     "stdlib.zip": "5d944ab23e1954bd7efc4ef257fac075041b26400362a355b4ebe36fd6223880"
   },
   "data": {

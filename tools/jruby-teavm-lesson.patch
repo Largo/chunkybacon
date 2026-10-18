@@ -1,7 +1,7 @@
 From 38898b433e447933b8e6f1929396796b836e5d78 Mon Sep 17 00:00:00 2001
 From: Largo <Largo@users.noreply.github.com>
 Date: Sat, 17 Oct 2026 09:21:37 +0200
-Subject: [PATCH 1/2] chunkybacon JRuby lesson build: json ext, Jackson, ZXing,
+Subject: [PATCH 1/3] chunkybacon JRuby lesson build: json ext, Jackson, ZXing,
  lesson.Quakes
 
 On top of 730d53b, the build behind https://chunkybacon.idogawa.com's JRuby
@@ -5489,7 +5489,7 @@ index 493bd9d..8b98c93 100644
 From 997b33915fe03fd1757119448802f2e9382f0232 Mon Sep 17 00:00:00 2001
 From: Largo <Largo@users.noreply.github.com>
 Date: Sun, 18 Oct 2026 15:24:03 +0200
-Subject: [PATCH 2/2] chunkybacon Ruboto lesson: Android stand-ins for a
+Subject: [PATCH 2/3] chunkybacon Ruboto lesson: Android stand-ins for a
  simulated phone
 
 android-src/ (compiled with the core by scripts/compile.sh, listed in
@@ -7987,6 +7987,168 @@ index c019102..c88c590 100755
  ( cd build/work && javac $JFLAGS -cp "$here/build/anno:$CP" -processorpath "$here/build/anno:$CP" \
      -processor org.jruby.anno.AnnotationBinder -s "$here/build/gen-s" -implicit:none -d "$here/build/classes" @sources.txt ) \
    > build/javac.log 2>&1 || { grep -E 'error:' -A2 build/javac.log | head -150; grep -c 'error:' build/javac.log; exit 1; }
+-- 
+2.47.3
+
+
+From a38020b7e6b7c225654732b181a5c6100e3b2620 Mon Sep 17 00:00:00 2001
+From: Largo <Largo@users.noreply.github.com>
+Date: Mon, 19 Oct 2026 00:52:01 +0200
+Subject: [PATCH 3/3] Fix ReferenceQueue typing (TeaVM), strict Bundle for the
+ simulated phone
+
+teavm-plugin: TeaVM 0.16.0's WeakReferenceDependencyListener makes a new
+dependency node on every method it is called for, and connects the queue
+argument of WeakReference.<init> instead of the reference, so to the
+analysis ReferenceQueue.poll() returns nothing. Methods called only on
+polled references were dropped from their classes: JRuby's
+ObjectProxyCache.Segment.expunge calls EntryRef.hash() on them, and the
+first expunge after a JS garbage collection failed with "TypeError:
+d.bfq is not a function" (2000 Java objects with singleton classes and
+idle gaps: 29 of 30 runs before, 0 of 30 after). JavaIntegrationPlugin
+now connects every Weak/Soft/PhantomReference made with a queue to what
+ReferenceQueue.poll()/remove() return. The same pattern is in
+ObjectSpace, WeakIdentityHashMap, WeakValuedMap, ConcurrentWeakHashMap,
+JarCache and WeakKeyValueIdentityMap.
+
+android-src: Bundle is typed as Android's (getInt finds only an int,
+another type gives the default and Android's W/Bundle warning in
+logcat - JRuby passes a Ruby Integer to putExtra as a long), and has
+the array/list methods (put/getStringArrayList, IntegerArrayList,
+StringArray, IntArray, Bundle).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ android-src/android/os/Bundle.java            | 50 ++++++++++++++++---
+ .../jrubyweb/teavm/JavaIntegrationPlugin.java | 31 ++++++++++++
+ 2 files changed, 73 insertions(+), 8 deletions(-)
+
+diff --git a/android-src/android/os/Bundle.java b/android-src/android/os/Bundle.java
+index 9f61288..c5aa7c9 100644
+--- a/android-src/android/os/Bundle.java
++++ b/android-src/android/os/Bundle.java
+@@ -1,10 +1,16 @@
+ package android.os;
+ 
++import java.util.ArrayList;
+ import java.util.LinkedHashMap;
++import org.chunkybacon.sim.Device;
+ import java.util.Map;
+ import java.util.Set;
+ 
+-/** android.os.Bundle (stand-in): a map of String keys to simple values. */
++/**
++ * android.os.Bundle (stand-in): a map of String keys to simple values. Typed as
++ * Android's is: getInt finds only an int - a value of another type gives the
++ * default and a warning in logcat (a Ruby Integer reaches putExtra/put as a long).
++ */
+ public class Bundle {
+     private final Map<String, Object> map = new LinkedHashMap<>();
+ 
+@@ -18,19 +24,47 @@ public class Bundle {
+     public void putBoolean(String key, boolean value) { map.put(key, value); }
+     public void putAll(Bundle other) { map.putAll(other.map); }
+ 
+-    public String getString(String key) { Object v = map.get(key); return v instanceof String ? (String) v : null; }
++    public String getString(String key) { Object v = map.get(key); return v instanceof String ? (String) v : wrong(key, "String", v, null); }
+     public String getString(String key, String def) { String v = getString(key); return v == null ? def : v; }
+     public int getInt(String key) { return getInt(key, 0); }
+-    // any number: a Ruby Integer reaches Java as an int or a long, depending on the overload JRuby picks
+-    public int getInt(String key, int def) { Object v = map.get(key); return v instanceof Number && !(v instanceof Double || v instanceof Float) ? ((Number) v).intValue() : def; }
++    public int getInt(String key, int def) { Object v = map.get(key); return v instanceof Integer ? (Integer) v : wrong(key, "Integer", v, def); }
+     public long getLong(String key) { return getLong(key, 0L); }
+-    public long getLong(String key, long def) { Object v = map.get(key); return v instanceof Number && !(v instanceof Double || v instanceof Float) ? ((Number) v).longValue() : def; }
++    public long getLong(String key, long def) { Object v = map.get(key); return v instanceof Long ? (Long) v : wrong(key, "Long", v, def); }
+     public double getDouble(String key) { return getDouble(key, 0.0); }
+-    public double getDouble(String key, double def) { Object v = map.get(key); return v instanceof Number ? ((Number) v).doubleValue() : def; }
++    public double getDouble(String key, double def) { Object v = map.get(key); return v instanceof Double ? (Double) v : wrong(key, "Double", v, def); }
+     public float getFloat(String key) { return getFloat(key, 0f); }
+-    public float getFloat(String key, float def) { Object v = map.get(key); return v instanceof Number ? ((Number) v).floatValue() : def; }
++    public float getFloat(String key, float def) { Object v = map.get(key); return v instanceof Float ? (Float) v : wrong(key, "Float", v, def); }
+     public boolean getBoolean(String key) { return getBoolean(key, false); }
+-    public boolean getBoolean(String key, boolean def) { Object v = map.get(key); return v instanceof Boolean ? (Boolean) v : def; }
++    public boolean getBoolean(String key, boolean def) { Object v = map.get(key); return v instanceof Boolean ? (Boolean) v : wrong(key, "Boolean", v, def); }
++
++    public void putStringArrayList(String key, ArrayList<String> value) { map.put(key, value == null ? null : new ArrayList<>(value)); }
++    public void putIntegerArrayList(String key, ArrayList<Integer> value) { map.put(key, value == null ? null : new ArrayList<>(value)); }
++    public void putStringArray(String key, String[] value) { map.put(key, value == null ? null : value.clone()); }
++    public void putIntArray(String key, int[] value) { map.put(key, value == null ? null : value.clone()); }
++    public void putBundle(String key, Bundle value) { map.put(key, value); }
++
++    @SuppressWarnings("unchecked")
++    public ArrayList<String> getStringArrayList(String key) { return typedList(key, "ArrayList<String>"); }
++    @SuppressWarnings("unchecked")
++    public ArrayList<Integer> getIntegerArrayList(String key) { return typedList(key, "ArrayList<Integer>"); }
++    public String[] getStringArray(String key) { Object v = map.get(key); return v instanceof String[] ? (String[]) v : wrong(key, "String[]", v, null); }
++    public int[] getIntArray(String key) { Object v = map.get(key); return v instanceof int[] ? (int[]) v : wrong(key, "int[]", v, null); }
++    public Bundle getBundle(String key) { Object v = map.get(key); return v instanceof Bundle ? (Bundle) v : wrong(key, "Bundle", v, null); }
++
++    @SuppressWarnings("unchecked")
++    private <V> ArrayList<V> typedList(String key, String typeName) {
++        Object v = map.get(key);
++        return v instanceof ArrayList ? (ArrayList<V>) v : wrong(key, typeName, v, null);
++    }
++
++    // Android's BaseBundle: a value of another type is a ClassCastException it catches and logs
++    private static <V> V wrong(String key, String typeName, Object v, V def) {
++        if (v != null) {
++            Device.log("W", "Bundle", "Key " + key + " expected " + typeName + " but value was a "
++                    + v.getClass().getName() + ".  The default value " + def + " was returned.");
++        }
++        return def;
++    }
+ 
+     public boolean containsKey(String key) { return map.containsKey(key); }
+     public void remove(String key) { map.remove(key); }
+diff --git a/teavm-plugin/jrubyweb/teavm/JavaIntegrationPlugin.java b/teavm-plugin/jrubyweb/teavm/JavaIntegrationPlugin.java
+index 2df9fd2..2773e6a 100644
+--- a/teavm-plugin/jrubyweb/teavm/JavaIntegrationPlugin.java
++++ b/teavm-plugin/jrubyweb/teavm/JavaIntegrationPlugin.java
+@@ -20,6 +20,12 @@ import org.teavm.vm.spi.TeaVMPlugin;
+  *     class behind Collections.EMPTY_LIST, is null. JRuby builds a proxy (and its Ruby name) for the enclosing class
+  *     of every proxied nested class. TeaVM's own runtime classes (org.teavm.*) are left out: their nested classes
+  *     must never become reachable through reflection (wasm-gc maps some of them to JS references).</li>
++ * <li>The types a {@code ReferenceQueue} hands out. TeaVM 0.16.0's own listener for this
++ *     (WeakReferenceDependencyListener) makes a new node on every method it sees and connects the queue argument
++ *     instead of the reference, so to the analysis {@code poll()} returns nothing: a method that is only called on
++ *     polled references (JRuby's ObjectProxyCache calls {@code EntryRef.hash()} so) is left out of the class, and
++ *     the first expunge after a JS garbage collection fails with "TypeError: d.bfq is not a function". Here every
++ *     reference made with a queue flows into what {@code poll()}/{@code remove()} return.</li>
+  * <li>Records the target for {@link JavaClassesPolicy}: native class-library methods with a generated body can be
+  *     called reflectively on JavaScript only.</li>
+  * </ul>
+@@ -32,6 +38,31 @@ public class JavaIntegrationPlugin implements TeaVMPlugin {
+         javaScript = host.getExtension(TeaVMJavaScriptHost.class) != null;
+         host.add(new MethodReference(Class.class, "getEnclosingClass", Class.class), new Owner(true));
+         host.add(new MethodReference(Class.class, "getDeclaringClass", Class.class), new Owner(false));
++        host.add(new QueuedReferences());
++    }
++
++    private static final class QueuedReferences extends org.teavm.dependency.AbstractDependencyListener {
++        private org.teavm.dependency.DependencyNode references;
++
++        @Override
++        public void started(DependencyAgent agent) {
++            references = agent.createNode();
++        }
++
++        @Override
++        public void methodReached(DependencyAgent agent, MethodDependency method) {
++            MethodReference ref = method.getReference();
++            String owner = ref.getClassName();
++            String name = ref.getName();
++            boolean reference = owner.equals("java.lang.ref.WeakReference") || owner.equals("java.lang.ref.SoftReference")
++                    || owner.equals("java.lang.ref.PhantomReference");
++            if (reference && name.equals("<init>") && ref.parameterCount() == 2) {
++                method.getVariable(0).connect(references);
++            } else if (owner.equals("java.lang.ref.ReferenceQueue") && (name.equals("poll") || name.equals("remove"))
++                    && method.getResult() != null) {
++                references.connect(method.getResult());
++            }
++        }
+     }
+ 
+     private static final class Owner implements DependencyPlugin {
 -- 
 2.47.3
 

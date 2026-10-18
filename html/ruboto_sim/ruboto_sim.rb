@@ -54,7 +54,9 @@ module RubotoSim
 
   # an activity on the stack: the Java component, the Ruby object that gets
   # the callbacks (the component itself on the singleton way), its class name
-  Entry = Struct.new(:java, :ruby, :name, :intent)
+  # +orientation+: the one it was made for (a rotation while it was stopped
+  # recreates it when it comes back); +saved+: its last onSaveInstanceState
+  Entry = Struct.new(:java, :ruby, :name, :intent, :orientation, :saved)
 
   class << self
     attr_reader :stack
@@ -74,6 +76,7 @@ module RubotoSim
     # a new page, or ↺: no app, no data
     def wipe
       Device.wipe
+      @install = 0
       @stack = []
       @main = nil
       @label = nil
@@ -84,13 +87,36 @@ module RubotoSim
 
     # ---- a cell ----
 
-    # The classes of a cell that are activities: `class Name` (no
-    # superclass) before a `def onCreate`. ScriptLoader also finds the class
-    # by a regular expression on the script.
+    # The classes of a cell that are activities: a top-level `class Name`
+    # (no superclass) with a `def onCreate` in it. ScriptLoader also finds
+    # the class by a regular expression on the script; this follows the
+    # nesting by indentation, so a class inside the activity is not taken.
     def activity_names(code)
-      classes = code.to_enum(:scan, /^[ \t]*class[ \t]+([A-Z]\w*)[ \t]*(?:;|#|$)/).map { [Regexp.last_match(1), Regexp.last_match.begin(0)] }
-      creates = code.to_enum(:scan, /\bdef[ \t]+onCreate\b/).map { Regexp.last_match.begin(0) }
-      creates.filter_map { |at| classes.select { |_, pos| pos < at }.last&.first }.uniq
+      classes_with(code) { |stack, line| line.match?(/\A\s*def[ \t]+onCreate\b/) && stack.size == 1 && stack.first[2] }
+    end
+
+    # the top-level classes a cell opens (`class Name` lines at depth 1)
+    def class_names(code)
+      classes_with(code) { |stack, _| stack.size == 1 }
+    end
+
+    # walks the lines with a stack of [name, indent, plain?] for the open
+    # `class`/`module` lines; the names of the outermost ones for which the
+    # block says yes
+    def classes_with(code)
+      stack = []
+      names = []
+      code.each_line do |line|
+        indent = line[/\A[ \t]*/].size
+        if (m = line.match(/\A[ \t]*(class|module)[ \t]+([A-Z]\w*)(.*)$/)) && !line.include?(" end")
+          stack << [m[2], indent, m[1] == "class" && !m[3].match?(/\A\s*</)]
+          names << stack.first[0] if stack.size == 1 && yield(stack, line) && stack.first[2]
+          next
+        end
+        stack.pop if line.match?(/\A[ \t]*end\b/) && stack.any? && stack.last[1] == indent
+        names << stack.first[0] if stack.any? && yield(stack, line)
+      end
+      names.uniq
     end
 
     # Before the cell runs: each activity class it defines gets a new
@@ -98,9 +124,33 @@ module RubotoSim
     def prepare(code)
       names = activity_names(code)
       fresh_process unless names.empty?
+      # what to put back if the cell fails (rollback): a broken rerun must
+      # not replace the script of the app that keeps running
+      @undo = names.to_h do |name|
+        [name, [(Object.const_get(name) if Object.const_defined?(name, false)), @scripts[name]]]
+      end
       names.to_h do |name|
         component = new_component(name, code)
         [name, component]
+      end
+    end
+
+    # the cell failed: its activities' constants and scripts as before it
+    def rollback
+      (@undo || {}).each do |name, (constant, script)|
+        Object.send(:remove_const, name) if Object.const_defined?(name, false)
+        Object.const_set(name, constant) if constant
+        if script then @scripts[name] = script else @scripts.delete(name) end
+      end
+      @undo = nil
+    end
+
+    # a cell that reopens a running activity's class (no onCreate of its own)
+    # changes it from now on: its code goes along when the activity is made
+    # anew (a rotation), after the activity's own script
+    def reopened(code, prepared)
+      (class_names(code) - prepared.keys).each do |name|
+        @scripts[name] << code if @scripts[name] && !@scripts[name].include?(code)
       end
     end
 
@@ -118,19 +168,36 @@ module RubotoSim
       return false if prepared.empty?
 
       name, component = prepared.first
-      # a new app on an upright phone, with a log of its own
-      Device.reset
-      Device.clearLog
-      Device.setOrientation(Device::PORTRAIT)
-      @stack = []
-      @crash = nil
-      @home = false
       @main = name
       @label = name.sub(/Activity\z/, "").gsub(/([a-z])([A-Z])/, '\1 \2')
       @label = name if @label.empty?
+      fresh_install
       push(Entry.new(component, component, name, launcher_intent(name)), nil)
-      run_due(Device.now)
+      after_input
       true
+    end
+
+    # a new app on an upright phone, with a log of its own; an input the page
+    # sent for the app before it is ignored (+install+ in the snapshot)
+    def fresh_install
+      Device.reset
+      Device.clearLog
+      Device.setOrientation(Device::PORTRAIT)
+      @install += 1
+      @stack = []
+      @crash = nil
+      @home = false
+    end
+
+    # the exercise's check has tapped through the app: the learner gets it
+    # fresh, as if just installed (its preferences too)
+    def relaunch
+      return unless @main && @scripts[@main] && !@crash
+
+      Device.clearPreferences
+      fresh_install
+      push(instantiate(@main, nil, launcher_intent(@main)), nil)
+      after_input
     end
 
     # ---- the page's input ----
@@ -142,7 +209,10 @@ module RubotoSim
       old = $stdout
       $stdout = out = StringIO.new
       begin
-        guarded { dispatch(event) }
+        # an input for an app that has been replaced since (the page sent it
+        # before the newer run's answer came)
+        stale = event.key?("install") && event["install"].to_i != @install
+        guarded { dispatch(event) } unless stale
       ensure
         $stdout = old
         out.string.each_line { |line| Device.log("I", "System.out", line.chomp) }
@@ -151,10 +221,13 @@ module RubotoSim
     end
 
     def dispatch(event)
+      # the phone's clock: the time that passed since the last screen first
+      # (a Runnable due meanwhile runs before the tap)
+      run_due(Device.now + event["ms"].to_i.clamp(0, 60_000)) if event["ms"]
       top = @stack.last
       case event["action"]
       when "tick"
-        run_due(Device.now + event["ms"].to_i.clamp(0, 60_000))
+        nil
       when "close"     # the crash dialog's button
         @crash = nil
         @home = true
@@ -177,6 +250,12 @@ module RubotoSim
         dialog = Device.dialog
         if dialog
           dialog.cancel if dialog.isCancelable
+        elsif @stack.size == 1 && !ruby_method?(top, :onBackPressed)
+          # Android 12 and newer: Back on the app's first screen moves the
+          # app to the background, as Home does - the activity is not ended
+          Device.log("I", "ActivityTaskManager", "Back on the root activity: moving #{$package_name} to the background")
+          pause_and_stop(top)
+          @home = true
         else
           call(top, :onBackPressed)
         end
@@ -187,8 +266,22 @@ module RubotoSim
         return if @home || !top
         view_input(top, event)
       end
+      after_input
+    end
+
+    # what an input or a start leaves to do: finished activities, started
+    # intents, Runnables due now
+    def after_input
       settle
       run_due(Device.now)
+    end
+
+    # the activity's own Ruby defines +name+ (not Java's, not Ruboto's)
+    def ruby_method?(entry, name)
+      method = entry.ruby.method(name)
+      method.source_location&.first == FILE
+    rescue NameError
+      false
     end
 
     def view_input(top, event)
@@ -254,36 +347,90 @@ module RubotoSim
     # the script again, for a new instance of its activity (Ruboto evaluates
     # it for every component); what it prints goes to logcat
     def reload(name, java_class = JRubotoActivity)
-      component = new_component(name, @scripts[name].first, java_class)
+      scripts = @scripts[name]
+      component = new_component(name, scripts.first, java_class)
+      @scripts[name] = scripts
       fresh_process
-      eval(@scripts[name].first, @bind, FILE, 1) # rubocop:disable Security/Eval
+      scripts.each do |code|
+        # the other activities of the same code must not be reopened: they
+        # may be running (their class is their activity's singleton class)
+        others = class_names(code).select { |other| other != name && @scripts.key?(other) }
+        held = others.to_h { |other| [other, Object.const_get(other)] }
+        begin
+          held.each_key do |other|
+            Object.send(:remove_const, other)
+            Object.const_set(other, JRubotoActivity.new.singleton_class)
+          end
+          eval(code, @bind, FILE, 1) # rubocop:disable Security/Eval
+        ensure
+          held.each do |other, constant|
+            Object.send(:remove_const, other) if Object.const_defined?(other, false)
+            Object.const_set(other, constant)
+          end
+        end
+      end
       component
     end
 
     def push(entry, saved)
       entry.java.setIntent(entry.intent) if entry.intent
       entry.java.setTheme(Java::android.R::style::Theme_Dialog) if entry.java.is_a?(JRubotoDialog)
+      entry.orientation = Device.getOrientation
       @stack << entry
       ::RUBOTO_JAVA_PROXIES[entry.ruby] = entry.ruby
       call(entry, :onCreate, saved)
+      # finish() in onCreate: Android goes straight to onDestroy (settle)
+      return if entry.java.isFinishing
+
       call(entry, :onStart)
       call(entry, :onRestoreInstanceState, saved) if saved
       call(entry, :onResume)
       menu(entry)
+      first_selections(entry.java.simContentView)
     end
 
+    # a stopped activity comes back - made anew if the phone turned meanwhile
     def restart(entry)
+      return recreate_stopped(entry) if entry.orientation != Device.getOrientation
+
       call(entry, :onRestart)
       call(entry, :onStart)
       call(entry, :onResume)
       menu(entry)
     end
 
+    # Android 9 and newer save the state after onStop (and whenever an
+    # activity stops without finishing: Home, a screen on top, a rotation)
     def pause_and_stop(entry, saved = Bundle.new)
       call(entry, :onPause)
-      call(entry, :onSaveInstanceState, saved)
       call(entry, :onStop)
-      saved
+      save(entry, saved)
+    end
+
+    def save(entry, saved = Bundle.new)
+      call(entry, :onSaveInstanceState, saved)
+      entry.saved = saved
+    end
+
+    # Android reports a Spinner's first item as selected after the first
+    # layout pass
+    def first_selections(view)
+      return unless view
+
+      view.simInitialSelection if view.is_a?(Spinner)
+      return unless view.is_a?(Java::AndroidView::ViewGroup)
+
+      view.getChildCount.times { |i| first_selections(view.getChildAt(i)) }
+    end
+
+    # an activity's dialog dies with it; Android logs the leaked window
+    def drop_dialog(entry)
+      dialog = Device.dialog
+      return unless dialog
+
+      Device.log("E", "WindowManager", "Activity #{$package_name}.#{entry.name} has leaked window " \
+                                       "#{dialog.getClass.getSimpleName} that was originally added here")
+      dialog.dismiss
     end
 
     def destroy(entry)
@@ -295,10 +442,20 @@ module RubotoSim
     # which gets the Bundle the old one saved
     def recreate(entry)
       saved = pause_and_stop(entry)
+      drop_dialog(entry)
       destroy(entry)
       @stack.pop
       fresh = instantiate(entry.name, entry.java.is_a?(JRubotoDialog) ? JRubotoDialog : nil, entry.intent)
       push(fresh, saved)
+    end
+
+    # the phone turned while this activity was stopped: it is made anew as it
+    # comes back, with the state it saved when it stopped
+    def recreate_stopped(entry)
+      destroy(entry)
+      @stack.delete(entry)
+      fresh = instantiate(entry.name, entry.java.is_a?(JRubotoDialog) ? JRubotoDialog : nil, entry.intent)
+      push(fresh, entry.saved || Bundle.new)
     end
 
     # a new instance of activity +name+ (an intent's, or a recreation)
@@ -325,8 +482,9 @@ module RubotoSim
       return unless entry.java.simMenuDirty
 
       menu = entry.java.simNewMenu
-      call(entry, :onCreateOptionsMenu, menu)
-      call(entry, :onPrepareOptionsMenu, menu)
+      # the menu shows only when both answer true
+      shown = call(entry, :onCreateOptionsMenu, menu) && call(entry, :onPrepareOptionsMenu, menu)
+      menu.clear unless shown
     end
 
     # what the app asked for: activities that finished, intents it started
@@ -347,18 +505,22 @@ module RubotoSim
       entry = @stack.find { |e| e.java.equal?(java) }
       return unless entry
 
-      if entry.equal?(@stack.last)
-        call(entry, :onPause)
+      if entry.java.simState == "created"
+        # finished in onCreate: no onStart, onResume, onPause, onStop
+        @stack.delete(entry)
+        destroy(entry)
+        @home = true if @stack.empty?
+      elsif entry.equal?(@stack.last)
+        # Android's order: this one pauses, the one below comes back, then
+        # this one stops and ends
+        call(entry, :onPause) unless @home
+        drop_dialog(entry)
         @stack.pop
         below = @stack.last
-        call(entry, :onStop)
+        restart(below) if below && !@home
+        call(entry, :onStop) unless @home
         destroy(entry)
-        if below
-          restart(below)
-        else
-          Device.dialog&.dismiss
-          @home = true
-        end
+        @home = true unless below
       else
         @stack.delete(entry)
         destroy(entry)
@@ -374,8 +536,10 @@ module RubotoSim
       dialog = intent.getTargetClass&.getName == JRubotoDialog.java_class.name
       entry = instantiate(name, dialog ? JRubotoDialog : nil, intent)
       push(entry, nil)
-      call(below, :onSaveInstanceState, Bundle.new) if below
-      call(below, :onStop) if below
+      return unless below
+
+      call(below, :onStop)
+      save(below)
     end
 
     # one callback; Android's check that the override called super
@@ -434,13 +598,13 @@ module RubotoSim
     def snapshot(all = false)
       top = @home ? nil : @stack.last
       device = Device.snapshot(top&.java, @label, @crash, all)
-      %({"home":#{@home || @stack.empty?},"app":#{JSON.generate(@label)},"device":#{device}})
+      %({"home":#{@home || @stack.empty?},"app":#{JSON.generate(@label)},"install":#{@install},"device":#{device}})
     end
 
     # the same for a test: the page still gets the log lines and toasts
     def peek
       top = @home ? nil : @stack.last
-      %({"home":#{@home || @stack.empty?},"app":#{JSON.generate(@label)},"device":#{Device.peek(top&.java, @label, @crash)}})
+      %({"home":#{@home || @stack.empty?},"app":#{JSON.generate(@label)},"install":#{@install},"device":#{Device.peek(top&.java, @label, @crash)}})
     end
 
     def phone = (@phone ||= Phone.new)
@@ -553,9 +717,12 @@ module ChunkyLab
     old = $stdout
     $stdout = StringIO.new if quiet
     installing = installed = false
+    # the check starts the app as installed anew: no preferences of an earlier check
+    RubotoSim::Device.clearPreferences if probe
     fields = begin
       prepared = RubotoSim.prepare(code)
       value = eval(code, @bind, FILE, 1)
+      RubotoSim.reopened(code, prepared)
       unless quiet
         installing = true
         installed = RubotoSim.install(prepared)
@@ -566,6 +733,8 @@ module ChunkyLab
       if installing
         RubotoSim.crash(e)
         installed = true
+      else
+        RubotoSim.rollback
       end
       { status: "error", errorClass: e.class.name.to_s, line: line_of(e), message: e.message.to_s }
     end
@@ -575,6 +744,8 @@ module ChunkyLab
       rescue Exception => e # rubocop:disable Lint/RescueException
         "#<#{e.class}: #{e.message}>"
       end
+      # the probe tapped and turned the app: the learner's starts fresh
+      RubotoSim.guarded { RubotoSim.relaunch } if installed
     end
     $stdout = old
     fields[:phone] = RubotoSim.snapshot(true) if installed
