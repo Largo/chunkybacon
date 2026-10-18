@@ -12,9 +12,16 @@
 // lesson's cells, the answer as a line behind \u0001) and mounts the
 // earthquake data at /data (data/quakes.zip).
 //
-//   in   {id, kind: "run", code, earlier: [code, ...]}  |  {id, kind: "fresh"}
+// The Ruboto lesson ("android": true, docs/HANDOVER.md §6u) adds a simulated
+// phone: its runs carry android: true, and the first of them loads
+// ruboto_sim/ (Ruboto's own Ruby and the activity manager, ruboto_sim.rb) into
+// JRuby's file system; the Android classes are in jruby.js itself.
+//
+//   in   {id, kind: "run", code, earlier: [code, ...], android, probe}  |  {id, kind: "fresh"}
+//        {id, kind: "android"} (load the phone now)  |  {id, kind: "phone", event} (a tap ...)
 //   out  {id, status: "ok"|"error", output, inspect, errorClass, line, message,
-//         earlierFailed: [index into earlier, ...], ms (all of it), cellMs (the cell's own run)}
+//         earlierFailed: [index into earlier, ...], ms (all of it), cellMs (the cell's own run),
+//         probe (its inspect), phone (the screen, JSON)}  |  {id, phone} for "phone"
 //        {progress: text} while it loads, {ready: true, version, ms} once,
 //        or {failed: message}
 const t0 = performance.now();
@@ -41,8 +48,11 @@ function split(out) {
   return { output: text.slice(0, at), answer };
 }
 
-async function run(code, quiet) {
-  const raw = await evalAsync(`ChunkyLab.run(${literal(code)}, ${quiet ? "true" : "false"})`);
+async function run(code, quiet, android, probe) {
+  const call = android
+    ? `ChunkyLab.run_android(${literal(code)}, ${quiet ? "true" : "false"}, ${probe ? literal(probe) : "nil"})`
+    : `ChunkyLab.run(${literal(code)}, ${quiet ? "true" : "false"})`;
+  const raw = await evalAsync(call);
   const { output, answer } = split(raw.out);
   if (answer) return Object.assign({ output }, answer);
   // ChunkyLab itself failed (a Java error past Ruby's rescue)
@@ -76,23 +86,62 @@ const boot = (async () => {
   throw e;
 });
 
+// the simulated phone: its files written into JRuby's file system once
+let phoneLoaded = null;
+function loadPhone() {
+  if (phoneLoaded) return phoneLoaded;
+  phoneLoaded = (async () => {
+    const base = new URL("ruboto_sim/", import.meta.url);
+    const text = url => fetch(new URL(url, base).href, { cache: "no-cache" }).then(r => {
+      if (!r.ok) throw new Error(`ruboto_sim/${url}: HTTP ${r.status}`);
+      return r.text();
+    });
+    const names = (await text("manifest.txt")).split("\n").map(l => l.trim()).filter(l => l && !l.startsWith("#"));
+    const files = await Promise.all(names.map(text));
+    let setup = 'require "fileutils"\n';
+    names.forEach((name, i) => {
+      setup += `FileUtils.mkdir_p(File.dirname("/ruboto/${name}")); File.write("/ruboto/${name}", ${literal(files[i])})\n`;
+    });
+    setup += '$LOAD_PATH.unshift("/ruboto", "/ruboto/vendor")\nrequire "ruboto_sim"\nRubotoSim.boot\nnil';
+    const loaded = await evalAsync(setup);
+    if (loaded.error) throw new Error(`ruboto_sim.rb: ${loaded.error}`);
+  })();
+  phoneLoaded.catch(() => { phoneLoaded = null; });
+  return phoneLoaded;
+}
+
+async function phoneInput(json) {
+  const raw = await evalAsync(`$stdout.print("\u0001" + RubotoSim.input(${literal(json)}))`);
+  const text = String(raw.out || "");
+  const at = text.lastIndexOf("\u0001");
+  if (at < 0) throw new Error(String(raw.error || "the phone gave no answer"));
+  return text.slice(at + 1);
+}
+
 onmessage = async event => {
   await boot;
-  const { id, kind, code, earlier } = event.data;
+  const { id, kind, code, earlier, android, probe } = event.data;
   const started = performance.now();
   let result;
   try {
     if (kind === "fresh") {
       await evalAsync("ChunkyLab.fresh");
       result = { status: "ok" };
+    } else if (kind === "android") {
+      await loadPhone();
+      result = { status: "ok" };
+    } else if (kind === "phone") {
+      await loadPhone();
+      result = { status: "ok", phone: await phoneInput(JSON.stringify(event.data.event)) };
     } else {
+      if (android) await loadPhone();
       const failed = [];
       for (let i = 0; i < (earlier || []).length; i++) {
-        const quiet = await run(earlier[i], true);
+        const quiet = await run(earlier[i], true, android, null);
         if (quiet.status !== "ok") failed.push(i);
       }
       const own = performance.now();
-      result = await run(code, false);
+      result = await run(code, false, android, probe);
       result.cellMs = performance.now() - own;
       result.earlierFailed = failed;
     }

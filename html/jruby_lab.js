@@ -13,6 +13,12 @@
 //                                       that have not run in this page yet; they
 //                                       run first, quietly, as CRuby's do
 //   chunkyJRuby.reset()                 main.rb, a new lesson or a reset
+//   chunkyJRuby.run(..., probe, android) the Ruboto lesson ("android": true, §6u):
+//                                       the cell runs with the simulated phone,
+//                                       +probe+ (the exercise's) after it
+//   chunkyJRuby.phone(event)            ruboto_phone.js: a tap, a key, a tick of
+//                                       the phone's clock (JSON); the answer is a
+//                                       "chunky:phone" event {status, phone}
 //
 // Answers come back as a "chunky:jruby" event on window: {idx, seq, elapsed
 // (the cell's own run, s), total (with the cells above and the wait for the
@@ -55,12 +61,18 @@
   var jr = window.chunkyJRuby = {
     ready: false, loading: null, error: null, version: "", bootMs: 0, worker: null,
 
-    run: function (idx, code, earlier, seq) {
+    run: function (idx, code, earlier, seq, probe, android) {
       var list = [];
       try { list = JSON.parse(String(earlier || "[]")); } catch (e) { list = []; }
       enqueue({ kind: "run", idx: Number(idx), code: String(code), earlier: list, seq: Number(seq),
-                queued: performance.now() });
+                probe: probe ? String(probe) : "", android: !!android, queued: performance.now() });
     },
+    // the phone's input waits behind the runs; nothing is sent while JRuby loads
+    phone: function (event) {
+      enqueue({ kind: "phone", event: event, queued: performance.now() });
+    },
+    // ticks of the phone's clock are dropped while anything else waits
+    busy: function () { return !!current || queue.length > 0 || !jr.ready; },
     reset: function () {
       queue = [];
       if (current) {
@@ -152,7 +164,12 @@
     }
   });
 
-  window.ensureJRuby = function () {
+  // +android+: the Ruboto lesson - the phone (ruboto_sim/) loads right after JRuby
+  window.ensureJRuby = function (android) {
+    if (android && !jr.phoneQueued) {
+      jr.phoneQueued = true;
+      queue.push({ kind: "android", queued: performance.now() });
+    }
     if (texts[DATA] === undefined) {
       fetch(DATA).then(function (r) { return r.ok ? r.text() : null; })
         .then(function (t) { if (t !== null && texts[DATA] === undefined) texts[DATA] = t; })
@@ -224,7 +241,11 @@
     var id = nextId++;
     current = { id: id, item: item, started: performance.now(),
                 timer: setTimeout(function () { stop(id); }, LIMIT) };
-    jr.worker.postMessage({ id: id, kind: "run", code: item.code,
+    if (item.kind === "phone" || item.kind === "android") {
+      jr.worker.postMessage({ id: id, kind: item.kind, event: item.event });
+      return;
+    }
+    jr.worker.postMessage({ id: id, kind: "run", code: item.code, android: item.android, probe: item.probe,
                             earlier: item.earlier.map(function (pair) { return String(pair[1]); }) });
   }
 
@@ -248,6 +269,7 @@
 
   function endWorker() {
     if (jr.worker) jr.worker.terminate();
+    jr.phoneQueued = false;
     jr.worker = null;
     jr.ready = false;
     // the line said "ready": say that the next run boots a new one
@@ -255,6 +277,12 @@
   }
 
   function reply(item, data, elapsed) {
+    if (item.kind === "android") return;   // the phone loaded ahead of the first run
+    if (item.kind === "phone") {
+      window.dispatchEvent(new CustomEvent("chunky:phone", { detail: {
+        status: String(data.status), phone: String(data.phone || ""), message: String(data.message || "") } }));
+      return;
+    }
     var earlier = item.earlier || [];
     var detail = {
       idx: item.idx, seq: item.seq, elapsed: elapsed / 1000,
@@ -262,6 +290,8 @@
       status: String(data.status), output: String(data.output || ""), value: String(data.inspect || ""),
       errorClass: String(data.errorClass || ""), line: Number(data.line) || 0,
       message: String(data.message || ""),
+      probe: data.probe === undefined ? "" : String(data.probe),
+      phone: String(data.phone || ""),
       earlier: earlier.map(function (pair) { return pair[0]; }).join(","),
       earlierFailed: (data.earlierFailed || []).map(function (i) { return earlier[i] && earlier[i][0]; }).join(",")
     };

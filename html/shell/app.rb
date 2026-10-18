@@ -425,7 +425,10 @@ module ChunkyShell
       JSG.w.ensurePicoRuby if @course.picoruby?(idx)
       # JRuby (TeaVM, ~7 MB) in a Web Worker, only for the JRuby lesson
       # (html/jruby_lab.js); its status line is in the lesson's first cell
-      JSG.w.ensureJRuby if @course.jruby?(idx)
+      JSG.w.ensureJRuby(@course.android?(idx)) if @course.jruby?(idx)
+      # the Ruboto lesson's phone (html/ruboto_phone.js), the simulated
+      # Android itself loads into JRuby's worker (ruboto_sim/)
+      JSG.w.ensureRubotoPhone if @course.android?(idx)
       # the Pico's bench (pico_board.js) only for a lesson with a board
       board = @course.picoruby?(idx) && cells.any? { |cell| code_cell?(cell) && @course.board?(cell) }
       JSG.w.ensurePicoBoard if board

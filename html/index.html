@@ -833,6 +833,20 @@
         document.head.appendChild(script);
       });
     };
+    // the Ruboto lesson's phone (ruboto_phone.js, docs/HANDOVER.md §6u): loaded
+    // when the lesson opens; a mount before it has loaded waits in the list
+    window.chunkyRubotoPhonePending = window.chunkyRubotoPhonePending || [];
+    window.chunkyRubotoPhone = window.chunkyRubotoPhone || {
+      mount: function () { if (window.chunkyRubotoPhonePending) window.chunkyRubotoPhonePending.push(["mount", [].slice.call(arguments)]); },
+      stale: function () { if (window.chunkyRubotoPhonePending) window.chunkyRubotoPhonePending.push(["stale", [].slice.call(arguments)]); }
+    };
+    window.ensureRubotoPhone = function () {
+      if (document.getElementById("rubotoPhoneScript")) return;
+      var script = document.createElement("script");
+      script.id = "rubotoPhoneScript";
+      script.src = "ruboto_phone.js";
+      document.head.appendChild(script);
+    };
     // the lesson is drawn: a static bench under each board cell (pico_board.js
     // builds them itself once it has loaded)
     window.picoBoardPreviews = function () {

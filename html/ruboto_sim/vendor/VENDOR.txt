@@ -1,0 +1,9 @@
+source=https://raw.githubusercontent.com/Largo/ruboto/5cfbee3a3b36515cbfbab40205f8fc5f292307f8/assets/app/src/main/resources/ruboto/<file>
+commit=5cfbee3a3b36515cbfbab40205f8fc5f292307f8
+license=MIT, (c) 2011 Daniel Jackoway, Charles Nutter, Scott Moyer, Uwe Kubosch (see THIRD_PARTY_NOTICES.md)
+installed_by=tools/vendor_ruboto.rb (unchanged copies; html/ruboto_sim/ruboto_sim.rb plays Ruboto's Java side)
+file=ruboto/base.rb 1092 d989b567cb4eb424c043a28cc62f58da992757a9fe60b4c78e5fe65b027f831c
+file=ruboto/package.rb 378 a66401b9c36731f2d8ec0f9bd703f86b4e85ef21c7cece2e8ea4edf26b4a2203
+file=ruboto/activity.rb 3506 91f4bdf37dac13e64a89096f683612d75415487171bd300891c2c65cc1f8f4eb
+file=ruboto/widget.rb 8868 0eff38ede503ff15f1e0ac486b45a7fc66f820466f1460a3284841848088e9c5
+file=ruboto/toast.rb 516 1876a554cbad17df2c0fbd6fa0abe387863275c4a75904e5f0a3f409a64fd40d

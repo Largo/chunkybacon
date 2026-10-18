@@ -57,6 +57,9 @@ module ChunkyShell
     # true for a lesson whose cells run on JRuby (TeaVM) instead of CRuby
     # ("engine": "jruby", the JRuby lesson: html/jruby_lab.js)
     def jruby?(idx) = @lessons[idx][:engine] == "jruby"
+    # a JRuby lesson with the simulated phone ("android": true, the Ruboto
+    # lesson: html/ruboto_sim/, html/ruboto_phone.js)
+    def android?(idx) = jruby?(idx) && @lessons[idx][:android] == true
     # a Pico lesson's cell (docs/HANDOVER.md §6r): its tabs, the files
     # beside the main one ([] without), and whether it runs on a board
     def tabs(cell)

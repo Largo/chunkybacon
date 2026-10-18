@@ -41,6 +41,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   [IronRuby](https://github.com/Largo/ironruby) on .NET, RubyMotion,
   DragonRuby and more), a lesson whose cells and IRB run on
   [PicoRuby.wasm](https://github.com/picoruby/picoruby) instead of CRuby,
+  Android apps in Ruby with [Ruboto](https://github.com/Largo/ruboto) on a
+  simulated phone (JRuby in the browser, Ruboto's own Ruby, a photo frame),
   Ruby on a simulated Raspberry Pi Pico 2 W (LEDs, buttons, sensors, a
   robot, an e-paper display, Wi-Fi and Bluetooth, then a real board),
   Ruby compiled ahead of time by Matz's [Spinel](https://github.com/matz/spinel)

@@ -294,6 +294,42 @@ IRONRUBY_SOLUTIONS = [<<~'RUBY', <<~'RUBY'].freeze
 # ...and answers that look right but are not: a rect for every module, all
 # rects on one spot, the light modules. Each must fail the check (the probe
 # compares the rects with QRCoder's dark modules, not just their number).
+# The Ruboto lesson's counter (lesson `ruboto`), as the starter has it, with
+# +read+ for where onCreate takes the count from and +save+ for what
+# onSaveInstanceState does with it (nil: no onSaveInstanceState)
+def ruboto_counter(var, up, label, title, read:, save:)
+  saving = save ? "\n  def onSaveInstanceState(out_state)\n    super\n    #{save}\n  end\n" : ""
+  <<~RUBY
+    require 'ruboto/widget'
+    ruboto_import_widgets :LinearLayout, :TextView, :Button
+
+    class CounterActivity
+      def onCreate(bundle)
+        super
+        set_title '#{title}'
+        #{var} = #{read}
+        self.content_view = linear_layout orientation: :vertical, gravity: :center do
+          #{label} = text_view text: #{var}.to_s, text_size: 64, gravity: :center
+          button text: '+1', on_click_listener: proc { #{up} }
+        end
+      end
+
+      def #{up}
+        #{var} += 1
+        #{label}.text = #{var}.to_s
+      end
+    #{saving}end
+  RUBY
+end
+
+# Ruboto counters that must fail the check: saved but never read back, read
+# but never saved, and one that starts at 3
+RUBOTO_WRONG = [
+  ruboto_counter("@count", "count_up", "@label", "Counter", read: "0", save: "out_state.putInt('count', @count)"),
+  ruboto_counter("@count", "count_up", "@label", "Counter", read: "bundle ? bundle.getInt('count') : 0", save: nil),
+  ruboto_counter("@count", "count_up", "@label", "Counter", read: "3", save: "out_state.putInt('count', @count)")
+].freeze
+
 IRONRUBY_WRONG = [
   %(rects << %(<rect x="\#{x * cell}" y="\#{y * cell}" width="\#{cell}" height="\#{cell}"/>)),
   %(rects << %(<rect x="0" y="0" width="\#{cell}" height="\#{cell}"/>) if dark),
@@ -1475,6 +1511,28 @@ puts strong_quakes(quakes, 5))]
     "de" => IRONRUBY_SOLUTIONS,
     "en" => IRONRUBY_SOLUTIONS
   },
+  # the Ruboto lesson: the count in the Bundle (getInt, or a String), or in
+  # SharedPreferences, which outlive the activity too
+  "ruboto" => {
+    "de" => [ruboto_counter("@zahl", "hochzaehlen", "@anzeige", "Zähler",
+                            read: "bundle ? bundle.getInt('zahl') : 0",
+                            save: "out_state.putInt('zahl', @zahl)"),
+             ruboto_counter("@zahl", "hochzaehlen", "@anzeige", "Zähler",
+                            read: "bundle&.containsKey('zahl') ? bundle.getString('zahl').to_i : 0",
+                            save: "out_state.putString('zahl', @zahl.to_s)"),
+             ruboto_counter("@zahl", "hochzaehlen", "@anzeige", "Zähler",
+                            read: "getPreferences(0).getInt('zahl', 0)",
+                            save: "getPreferences(0).edit.putInt('zahl', @zahl).apply")],
+    "en" => [ruboto_counter("@count", "count_up", "@label", "Counter",
+                            read: "bundle ? bundle.getInt('count') : 0",
+                            save: "out_state.putInt('count', @count)"),
+             ruboto_counter("@count", "count_up", "@label", "Counter",
+                            read: "bundle&.containsKey('count') ? bundle.getString('count').to_i : 0",
+                            save: "out_state.putString('count', @count.to_s)"),
+             ruboto_counter("@count", "count_up", "@label", "Counter",
+                            read: "getPreferences(0).getInt('count', 0)",
+                            save: "getPreferences(0).edit.putInt('count', @count).apply")]
+  },
   # PicoRuby has no tally: by hand, with || and with Hash.new(0)
   "picoruby" => {
     "de" => [%(def woerter_zaehlen(woerter)
@@ -2111,6 +2169,79 @@ end
 # PicoRubyCells::Values, code. Returns the number of failures.
 IRONRUBY_NODE = File.expand_path("ironruby_node.mjs", __dir__)
 
+# The Ruboto lesson ("engine": "jruby", "android": true) on JRuby with the
+# simulated phone: the JRuby the page loads (html/assets/jruby/), under Node
+# (test/ruboto_node.mjs), one process per language - every code cell above
+# the exercise, in order (each must run, and each that defines an activity
+# must start it), then the starter, RUBOTO_WRONG and the solutions, each
+# followed by the exercise's "probe". The check is CRuby, as on the page.
+# Returns the number of failures.
+RUBOTO_NODE = File.expand_path("ruboto_node.mjs", __dir__)
+
+def ruboto_available?
+  File.file?(File.expand_path("../html/assets/jruby/jruby.js", __dir__)) &&
+    system("node", "--version", out: File::NULL, err: File::NULL)
+end
+
+def check_ruboto(lesson, lang, cells, exercise_at)
+  where = "#{lesson["id"]}/#{lang}"
+  exercise = cells[exercise_at]
+  solutions = SOLUTIONS.fetch(lesson["id"]).fetch(SOLUTION_LANG.fetch(lang, lang))
+  demos = (0...exercise_at).select { |i| cells[i]["t"] == "c" }
+  variants = [["starter", exercise["code"]]] + RUBOTO_WRONG.each_with_index.map { |s, i| ["wrong#{i + 1}", s] } +
+             solutions.each_with_index.map { |s, i| ["solution#{i + 1}", s] }
+  runs = demos.map { |i| { "code" => cells[i]["code"] } } +
+         variants.map { |_, code| { "code" => code, "probe" => exercise["probe"] } }
+  out, err, status = Open3.capture3("node", RUBOTO_NODE, stdin_data: JSON.generate("runs" => runs))
+  unless status.success?
+    puts "FAIL #{where}: test/ruboto_node.mjs exited #{status.exitstatus}: #{err.lines.last(3).join.strip}"
+    return 1
+  end
+  answers = JSON.parse(out)
+  failures = 0
+  demos.each_with_index do |idx, i|
+    answer = answers[i]
+    if !answer["ok"]
+      puts "FAIL #{where}: demo cell #{idx} raised #{answer.dig("error", "class")}: #{answer.dig("error", "message")}"
+      failures += 1
+    elsif cells[idx]["code"].match?(/def onCreate/) && !answer["phone"]
+      puts "FAIL #{where}: demo cell #{idx} defines an activity, but no app started"
+      failures += 1
+    elsif answer["phone"] && JSON.parse(answer["phone"]).dig("device", "crash")
+      puts "FAIL #{where}: demo cell #{idx}'s app crashed: #{JSON.parse(answer["phone"]).dig("device", "log").last.inspect}"
+      failures += 1
+    end
+  end
+  variants.each_with_index do |(label, candidate), i|
+    answer = answers[demos.size + i]
+    starter_like = label == "starter" || label.start_with?("wrong")
+    if !answer["ok"]
+      puts "FAIL #{where} (#{label}): raised #{answer.dig("error", "class")}: #{answer.dig("error", "message")}"
+      failures += 1
+      next
+    end
+    bind = RubyVM::InstructionSequence.compile("proc { binding }.call", "chunky.rb").eval
+    bind.local_variable_set(:output, answer["stdout"].to_s)
+    bind.local_variable_set(:result, PicoRubyCells.value(answer["result"].to_s))
+    bind.local_variable_set(:probe, answer["probe"] ? PicoRubyCells.value(answer["probe"].to_s) : nil)
+    bind.local_variable_set(:code, candidate)
+    %i[images scenes downloads audios games shoes_types].each { |name| bind.local_variable_set(name, []) }
+    passed = begin
+      !!eval(exercise["check"], bind, "check.rb")
+    rescue Exception
+      false
+    end
+    if starter_like && passed
+      puts "FAIL #{where}: #{label} code passes check! (probe #{answer["probe"].inspect})"
+      failures += 1
+    elsif !starter_like && !passed
+      puts "FAIL #{where} (#{label}): does not pass check (probe #{answer["probe"].inspect})"
+      failures += 1
+    end
+  end
+  failures
+end
+
 def ironruby_available?
   File.file?(File.expand_path("../html/assets/ironruby/_framework/dotnet.js", __dir__)) &&
     system("node", "--version", out: File::NULL, err: File::NULL)
@@ -2202,6 +2333,11 @@ def run_harness(langs)
     puts "SKIP jruby: no html/assets/jruby/data/ - run tools/vendor_jruby.rb"
     selected = selected.reject { |lesson| lesson["engine"] == "jruby" }
   end
+  # the Ruboto lesson's JRuby is vendored, not in git (tools/vendor_jruby.rb)
+  if selected.any? { |lesson| lesson["android"] } && !ruboto_available?
+    puts "SKIP ruboto: no html/assets/jruby/jruby.js (run tools/vendor_jruby.rb) or no node"
+    selected = selected.reject { |lesson| lesson["android"] }
+  end
   # the IronRuby lesson's runtime is vendored, not in git (tools/vendor_ironruby.rb)
   if selected.any? { |lesson| lesson["engine"] == "ironruby" } && !ironruby_available?
     puts "SKIP ironruby: no html/assets/ironruby/ (run tools/vendor_ironruby.rb) or no node"
@@ -2215,6 +2351,11 @@ def run_harness(langs)
     cells = l["cells"]
     exercise_at = cells.index { |c| c["t"] == "x" }
     exercise = cells[exercise_at]
+    # the Ruboto lesson runs on JRuby with the simulated phone, under Node
+    if lesson["android"]
+      failures += check_ruboto(lesson, lang, cells, exercise_at)
+      next
+    end
     # the IronRuby lesson runs on IronRuby, under Node (check_ironruby)
     if lesson["engine"] == "ironruby"
       failures += check_ironruby(lesson, lang, cells, exercise_at)
