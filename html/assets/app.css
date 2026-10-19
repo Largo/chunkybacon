@@ -2736,6 +2736,9 @@ footer a { color: var(--bakelite); }
   background: var(--md-outline); transition: left 0.1s, width 0.1s, height 0.1s, top 0.1s;
 }
 .rp-screen .rp-check.is-switch input:checked { background: var(--md-primary); border-color: var(--md-primary); }
+/* disabled, as Android draws it: 38 % */
+.rp-screen .rp-check.is-disabled { opacity: 0.38; cursor: default; }
+.rp-screen .rp-check.is-disabled input { cursor: default; }
 .rp-screen .rp-check.is-switch input:checked::after { left: 22px; top: 2px; width: 24px; height: 24px; background: var(--md-on-primary); }
 .rp-screen .rp-check.is-switch input:focus-visible, .rp-screen .rp-check input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .rp-screen .rp-seek { margin: 8px 4px; accent-color: var(--md-primary); }

@@ -497,6 +497,8 @@ class ChunkyApp
     $window.addEventListener("chunky:picoruby") { |event| picoruby_answer(event.detail) }
     # the JRuby lesson's cells answer later too (jruby_lab.js)
     $window.addEventListener("chunky:jruby") { |event| jruby_answer(event.detail) }
+    # a tap past its limit ended JRuby's worker: nothing has run in the new one
+    $window.addEventListener("chunky:phone") { |event| @jruby_ran = {} if %w[stopped failed].include?(event.detail.status.to_s) }
     # ... and what they print shows while they run (a Pico lesson's 60 s)
     $window.addEventListener("chunky:picoruby-progress") { |event| picoruby_progress(event.detail) }
     # the simulated Pico notified over BLE: the laptop cell's blocks (pico_laptop.rb)

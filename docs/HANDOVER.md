@@ -1372,8 +1372,12 @@ outside the repo):
        ruby tools/vendor_jruby_swing.rb --from <Largo/jruby-cheerpj 6e134ab after ./run.sh prepare>
 
    (on the Hetzner box the builds are in
-   `/root/workspace/jruby-lesson-lab/builder/teavm-src` and
-   `/root/workspace/jruby-cheerpj`).
+   `/root/workspace/jruby-lesson-lab/rebuild` - the fresh clone + patch
+   whose `dist/jruby.js` is the pinned one; `builder/teavm-src` and
+   `builder/teavm-ruboto` hold older or incremental builds that do not
+   match the pin - and `/root/workspace/jruby-cheerpj`). Done for the
+   current pin: the live `.cache/jruby/` holds it (the JRuby lesson's
+   first build kept as `jruby.js.before-ruboto`).
 2. Have `/usr/local/sbin/chunkybacon-deploy` publish both folders to the
    server behind chunkybacon.idogawa.com, as it does `html/assets/spinel/`
    (that 1-core server never builds or fetches anything heavy, and its own
@@ -1463,14 +1467,25 @@ download but 0.3 MB of photos. What makes the phone:
   `onStart`/... raises `SuperNotCalledException` with the `def`'s line. An
   exception in a callback crashes the app: logcat gets Android's `FATAL
   EXCEPTION` with the cell's lines, the screen "X has stopped". What the
-  app `puts`es outside a cell run goes to logcat as `I/System.out`.
+  app `puts`es goes to logcat as `I/System.out`, line by line in order with
+  its `Log.d` lines (`LogcatOut`), also during the cell's first start. A
+  boolean callback (`onCreateOptionsMenu`, `onPrepareOptionsMenu`,
+  `onOptionsItemSelected`) answering anything but true or false crashes
+  the app as Ruboto's generated Java does on a phone (nil: a
+  `java.lang.NullPointerException` from unboxing, anything else "failed to
+  coerce"); false hides the menu.
   The lifecycle follows Android 14 (`test/ruboto_sim_test.mjs` pins each
   rule): `onSaveInstanceState` after `onStop`, whenever an activity stops
-  without finishing (Home, a screen on top, a rotation); Back on the app's
-  only screen (no Ruby `onBackPressed`) moves the app to the background
-  (Android 12+), Back on a second screen ends it in Android's order (it
-  pauses, the one below restarts, then it stops and is destroyed);
-  `finish()` in `onCreate` goes straight to `onDestroy`; a rotation while
+  without finishing (Home, a screen on top, a rotation); Back reaching
+  Activity's own `onBackPressed` (no override, or an override's `super`:
+  `RubotoActivity#onBackPressed` is redefined in Ruby to set a flag) moves
+  the app to the background on its only screen (Android 12+) and ends a
+  second screen in Android's order (it pauses, the one below comes back,
+  then it stops and is destroyed); `finish()` in `onCreate` goes straight
+  to `onDestroy`; "start the next screen, then finish" (a splash) creates
+  the next one before the old one stops and ends; a dialog-themed activity
+  (`start_ruboto_dialog`) only pauses the one below; an AlertDialog open on
+  Home comes back with its activity; a rotation while
   an activity is stopped recreates it when it comes back, with what it
   saved; an activity's dialog dies with it (`E/WindowManager ... leaked
   window`); the menu shows only when `onCreateOptionsMenu` and
@@ -1492,11 +1507,16 @@ download but 0.3 MB of photos. What makes the phone:
   `RubotoSim.input`: tap, text, seek, item, select, menu, dialog, back,
   home, launch, rotate, close (the crash dialog), tick - and answers with
   the new screen. Every event carries `ms`, the real time since the last
-  screen: the phone's clock moves by it first (Runnables due meanwhile run
+  screen - now `clock`, the moment on the phone's clock, so two inputs in
+  flight do not count the same time twice (`ms`, a delta, still works for
+  tests): the phone's clock moves to it first (Runnables due meanwhile run
   before the tap), and `install`, the app it was meant for: an input the
   page sent before a newer run's answer came is ignored.
   `ensureJRuby(true)` queues the phone's load right after the boot (a
-  reset keeps it queued). `jruby_lab.js` queues phone events behind runs
+  reset keeps it queued; another lesson drops it while it is not sent
+  yet). A reset during a tap gives it a second's grace and then a fresh
+  binding, instead of ending the worker; after a tap past its limit,
+  main.rb forgets which cells above ran (the new worker has none). `jruby_lab.js` queues phone events behind runs
   (`chunkyJRuby.phone`, answer `chunky:phone`) with a limit of 10 s, not
   60 (Android says "isn't responding" after 5); a stopped worker makes
   every phone stale. Once the phone was loaded, another JRuby lesson gets
@@ -1512,9 +1532,15 @@ download but 0.3 MB of photos. What makes the phone:
   one); a later cell's app makes the older phones stale (and `inert`). While
   a Runnable is due, and the page is visible and JRuby idle, the page sends
   ticks, so a slideshow follows real time. A focused text field the app has
-  not changed survives a redraw as it is (caret, selection, what is not
-  sent yet); the keyboard's place is kept by each control's key, moves into
-  a dialog or the menu as it opens, and Escape closes them; toasts go to a
+  not changed (text, enabled, hint, kind) survives a redraw as it is
+  (caret, selection, what is not sent yet), in a dialog too; a replaced one
+  never sends its stale text; the keyboard's place is kept by each
+  control's key, moves into a dialog or the menu as it opens and back to
+  the control that opened it, and Escape closes them (the dialog is modal
+  within the screen through `inert`, so no `aria-modal`; the menu is plain
+  buttons and closes when the keyboard leaves it); `layout_weight` follows
+  Android's measuring (0 dp, n dp, wrap_content, match_parent's inverted
+  split); toasts go to a
   live region for screen readers; a ResizeObserver refits the phone (the
   scale stays at 0.7 or more: a narrow page scrolls the slot sideways); the
   photos are fetched when the first phone mounts.

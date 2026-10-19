@@ -83,6 +83,15 @@
         queue.push({ kind: "fresh", queued: performance.now() });
         return;
       }
+      if (current && current.item.kind === "phone") {
+        // a tap takes milliseconds: a second's grace, then a fresh binding;
+        // only a runaway handler ends the worker (stop)
+        var id = current.id;
+        clearTimeout(current.timer);
+        current.timer = setTimeout(function () { stop(id); }, 1000);
+        queue.push({ kind: "fresh", queued: performance.now() });
+        return;
+      }
       if (current) {
         // its answer was for the page that went away
         clearTimeout(current.timer);
@@ -174,6 +183,11 @@
 
   // +android+: the Ruboto lesson - the phone (ruboto_sim/) loads right after JRuby
   window.ensureJRuby = function (android) {
+    // the phone's load is queued but not sent yet: another lesson drops it
+    if (!android && jr.phoneQueued && !jr.phoneLoaded) {
+      queue = queue.filter(function (item) { return item.kind !== "android"; });
+      jr.phoneQueued = false;
+    }
     // The phone's Ruby (Ruboto's base.rb: Kernel#method_missing, View,
     // Activity ...) stays in a JRuby once loaded: another lesson gets a
     // JRuby of its own, about 3 s to boot again

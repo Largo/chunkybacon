@@ -148,13 +148,15 @@ check('Enter on a list row opens its dialog, with the keyboard in it',
 await page.keyboard.press('Escape');
 await settle(page);
 check('Escape cancels the dialog', await page.$(`#ruboto-slot-${shop} .rp-dialog`) === null);
+check('...and the keyboard is back on the row that opened it',
+      await page.evaluate(() => document.activeElement.getAttribute('data-focus')) === await page.getAttribute(`#ruboto-slot-${shop} .rp-row >> nth=0`, 'data-focus'));
 await tap(page, `#ruboto-slot-${shop} .rp-row >> nth=1`);
-check('a tap on an item opens the AlertDialog', /eggs[\s\S]*Got it\?/.test(await page.textContent(`#ruboto-slot-${shop} .rp-dialog`)));
+check('a tap on an item opens the AlertDialog', /bacon[\s\S]*Got it\?/.test(await page.textContent(`#ruboto-slot-${shop} .rp-dialog`)));
 await tap(page, `#ruboto-slot-${shop} .rp-dialog-button >> text=Remove`);
-check('...whose Remove takes it off', !/eggs/.test(await page.textContent(`#ruboto-slot-${shop} .rp-list`)) && await page.$(`#ruboto-slot-${shop} .rp-dialog`) === null);
+check('...whose Remove takes it off', !/bacon/.test(await page.textContent(`#ruboto-slot-${shop} .rp-list`)) && await page.$(`#ruboto-slot-${shop} .rp-dialog`) === null);
 await page.click(`#ruboto-slot-${shop} .rp-more`);
 await tap(page, `#ruboto-slot-${shop} .rp-menu-item >> text=Sort`);
-check('the menu sorts the list', (await page.$$eval(`#ruboto-slot-${shop} .rp-row`, rows => rows.map(r => r.textContent))).join(' ') === 'Bacon Coffee Toast with jam');
+check('the menu sorts the list', (await page.$$eval(`#ruboto-slot-${shop} .rp-row`, rows => rows.map(r => r.textContent))).join(' ') === 'Coffee Eggs Toast with jam');
 
 // the photo frame
 const frame = await cellIndex(page, /class PhotoFrameActivity/);
@@ -213,12 +215,47 @@ for (let i = 0; i < 6; i++) {
 }
 check('six runs with idle gaps between them: the app starts every time', /Chunky bacon!/.test(await screen(page, hello)));
 
+// typing into a text field inside a dialog, while a Handler redraws the screen
+const dlgApp = 'require "ruboto/widget"\nruboto_import_widgets :LinearLayout, :TextView, :EditText, :Button\n\n' +
+  'class AskActivity\n  def onCreate(b)\n    super\n    @n = 0\n    @h = android.os.Handler.new(android.os.Looper.main_looper)\n' +
+  '    @t = proc { @n += 1; @l.text = @n.to_s; @h.postDelayed(@t, 300) }.to_java(java.lang.Runnable)\n' +
+  '    self.content_view = linear_layout(orientation: :vertical) { @l = text_view(text: "0"); button(text: "ask", on_click_listener: proc { ask }) }\n' +
+  '    @h.postDelayed(@t, 300)\n  end\n\n  def ask\n    field = android.widget.EditText.new(self)\n' +
+  '    android.app.AlertDialog::Builder.new(self).set_title("Name?").set_view(field).set_positive_button("OK", proc { @l.text = field.text.to_s }).show\n  end\nend\n';
+await run(page, hello, dlgApp);
+await tap(page, `#ruboto-slot-${hello} .rp-button`);
+await page.click(`#ruboto-slot-${hello} .rp-dialog .rp-edit`);
+await page.keyboard.type('Chunky Bacon', { delay: 120 });
+await page.waitForTimeout(400);
+await settle(page);
+check('typing in a dialog\'s field while a Handler redraws keeps every letter',
+      await page.inputValue(`#ruboto-slot-${hello} .rp-dialog .rp-edit`) === 'Chunky Bacon');
+
+// a tap whose handler never returns: Android says "isn't responding"; the next run still works
+await run(page, hello, 'require "ruboto/widget"\nruboto_import_widgets :Button\n\nHUNG = "defined above"\n\nclass HangActivity\n  def onCreate(b); super; self.content_view = button(text: "hang", on_click_listener: proc { loop { } }); end\nend\n');
+await page.click(`#ruboto-slot-${hello} .rp-button`);
+await page.waitForFunction(i => document.getElementById('ruboto-slot-' + i).classList.contains('is-stale'), hello, { timeout: 30000 });
+check('a hung tap handler is stopped after 10 s, with Android\'s note', /isn't responding/.test(await page.textContent(`#ruboto-slot-${hello} .rp-note`)));
+const after = await run(page, sample);
+check('...and the next run starts its app again on a new JRuby', /Domo arigato/.test(await screen(page, sample)), after);
+
 // the JRuby lesson afterwards: a JRuby without Ruboto's globals
 await page.evaluate(() => { location.hash = '#jruby'; });
 await page.waitForFunction(() => window.cellEditors && Object.keys(window.cellEditors).some(i => /JRUBY_VERSION/.test(window.cellEditors[i].getValue())), null, { timeout: 60000 });
 const leak = await run(page, 1, 'defined?(View).inspect + " " + defined?(RubotoSim).inspect');
 check('the JRuby lesson after this one gets a JRuby of its own (no View, no RubotoSim)', /"nil nil"/.test(leak), leak);
 await ctx.close();
+
+// leaving for the JRuby lesson before JRuby is ready: the phone does not follow
+{
+  const quick = await browser.newContext({ locale: 'en-US' });
+  const p = await open(quick, '#ruboto');
+  await p.evaluate(() => { location.hash = '#jruby'; });
+  await p.waitForFunction(() => window.cellEditors && Object.keys(window.cellEditors).some(i => /JRUBY_VERSION/.test(window.cellEditors[i].getValue())), null, { timeout: 60000 });
+  const leak2 = await run(p, 1, 'defined?(View).inspect + " " + defined?(RubotoSim).inspect');
+  check('leaving before JRuby is ready: the JRuby lesson still gets no phone', /"nil nil"/.test(leak2), leak2);
+  await quick.close();
+}
 
 // German
 {

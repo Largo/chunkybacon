@@ -65,6 +65,17 @@
     return e;
   }
 
+  // the key of a control the keyboard is on (data-focus, or its view's sim id)
+  function focusKeyOf(el, body) {
+    if (!el || !body.contains(el)) return null;
+    return el.getAttribute("data-focus") || (el.getAttribute("data-sim") && "sim:" + el.getAttribute("data-sim")) || null;
+  }
+  function byFocusKey(body, key) {
+    return key.indexOf("sim:") === 0
+      ? body.querySelector('[data-sim="' + key.slice(4) + '"]')
+      : body.querySelector('[data-focus="' + key + '"]');
+  }
+
   // ARGB int (unsigned) -> CSS
   function color(argb) {
     var a = Math.floor(argb / 16777216) & 255;
@@ -133,6 +144,7 @@
           clearTimeout(e.__timer);
           e.__timer = setTimeout(function () {
             e.__timer = null;
+            if (!e.isConnected) return;   // a field the app has replaced since
             e.__sent = e.value;
             phone.send({ action: "text", sim: view.sim, text: e.value });
           }, 200);
@@ -259,9 +271,13 @@
       size(e, "width", w, horizontal && linear, linear);
       size(e, "height", h, !horizontal && linear, linear);
       if (lp.weight > 0 && linear) {
-        // Android shares out the space left after the wrap_content sizes
+        // Android measures a weighted child at its own size (0 dp: nothing,
+        // wrap_content: its content, n dp: n) and shares out what is left;
+        // match_parent children overfill, and the excess is taken back by
+        // weight - CSS's shrink (shrink x basis) gives the same split
         var along = horizontal ? w : h;
-        e.style.flex = lp.weight + " 1 " + (along === -2 || along === undefined ? "auto" : "0px");
+        if (along === -1) e.style.flex = "0 " + lp.weight + " 100%";
+        else e.style.flex = lp.weight + " " + lp.weight + " " + (along === 0 ? "0px" : along > 0 ? along + "px" : "auto");
         e.style[horizontal ? "minWidth" : "minHeight"] = "0";
       }
       if (lp.gravity !== undefined && lp.gravity >= 0) {
@@ -275,6 +291,8 @@
           if (vg) e.style.alignSelf = vg;
         }
       }
+      // an unweighted child keeps its measured size along a LinearLayout
+      if (linear && !(lp.weight > 0) && !e.style.flex) e.style.flexShrink = "0";
       if (lp.margins) e.style.margin = lp.margins[1] + "px " + lp.margins[2] + "px " + lp.margins[3] + "px " + lp.margins[0] + "px";
     }
     if (view.padding) e.style.padding = view.padding[1] + "px " + view.padding[2] + "px " + view.padding[3] + "px " + view.padding[0] + "px";
@@ -442,8 +460,12 @@
     if (event.action !== "tick") this.menuOpen = false;
     // the time since the last screen moves the phone's clock first; the
     // install number keeps an input from reaching an app installed after it
-    if (this.snapAt) event.ms = Math.round(performance.now() - this.snapAt);
-    if (this.state) event.install = this.state.install;
+    if (this.state) {
+      // the moment on the phone's clock: two inputs in flight do not count
+      // the same time twice
+      event.clock = (this.state.device.clock || 0) + Math.round(performance.now() - this.snapAt);
+      event.install = this.state.install;
+    }
     window.chunkyJRuby.phone(event);
   };
 
@@ -454,9 +476,12 @@
     var had = this.state && this.state.device;
     this.state = data;
     this.snapAt = performance.now();
-    // a dialog or the crash dialog that just opened gets the focus
+    // a dialog or the crash dialog that just opened gets the focus; the
+    // control that had it gets it back when the dialog closes
     this.openedModal = !!((data.device && (data.device.dialog || data.device.crash)) &&
                           !(had && (had.dialog || had.crash)));
+    this.closedModal = !!(had && (had.dialog || had.crash) && !(data.device && (data.device.dialog || data.device.crash)));
+    if (this.openedModal) this.returnKey = focusKeyOf(document.activeElement, this.body);
     var device = data.device || {};
     this.log(device.log || [], all);
     (device.toasts || []).forEach(function (toast) { this.toasts.push(toast); }, this);
@@ -479,7 +504,7 @@
     // data-sim); a field the learner types into is kept as it is
     var focus = document.activeElement;
     var inside = focus && this.body.contains(focus);
-    var focusKey = inside ? (focus.getAttribute("data-focus") || (focus.getAttribute("data-sim") && "sim:" + focus.getAttribute("data-sim"))) : null;
+    var focusKey = focusKeyOf(focus, this.body);
     var typing = inside && focus.classList.contains("rp-edit") ? focus : null;
 
     var body = this.body;
@@ -518,24 +543,34 @@
     }
     if (typing) {
       var fresh = body.querySelector('.rp-edit[data-sim="' + typing.getAttribute("data-sim") + '"]');
-      // the app has not set another text: the learner's field stays, with
-      // its caret, selection and what is not sent yet
-      if (fresh && fresh.value === typing.__sent && !modal) {
+      // the app has not changed the field (its text, enabled, hint, kind):
+      // the learner's field stays, with its caret, selection and what is
+      // not sent yet - also in a dialog; one behind a dialog is inert
+      if (fresh && fresh.value === typing.__sent && !fresh.closest("[inert]") && fresh.disabled === typing.disabled &&
+          fresh.placeholder === typing.placeholder && fresh.type === typing.type && fresh.inputMode === typing.inputMode &&
+          fresh.className === typing.className) {
         typing.style.cssText = fresh.style.cssText;
         fresh.parentNode.replaceChild(typing, fresh);
         if (document.activeElement !== typing) typing.focus();
         return;
       }
+      // replaced: what the old field had not sent yet must not undo the app's text
+      clearTimeout(typing.__timer);
+      typing.__timer = null;
     }
     if (this.openedModal) {
       this.openedModal = false;
       var first = modal && modal.querySelector("button");
       if (first) { first.focus(); return; }
     }
+    if (this.closedModal && this.returnKey) {
+      this.closedModal = false;
+      var opener = byFocusKey(body, this.returnKey);
+      this.returnKey = null;
+      if (opener && !opener.closest("[inert]")) { opener.focus(); return; }
+    }
     if (focusKey) {
-      var again = focusKey.indexOf("sim:") === 0
-        ? body.querySelector('[data-sim="' + focusKey.slice(4) + '"]')
-        : body.querySelector('[data-focus="' + focusKey + '"]');
+      var again = byFocusKey(body, focusKey);
       if (again && again.focus && !again.closest("[inert]")) { again.focus(); return; }
       // the control is gone (a dialog closed, a new screen): the screen keeps the focus
       if (modal) { var m = modal.querySelector("button"); if (m) { m.focus(); return; } }
@@ -561,7 +596,7 @@
       var more = el("button", "rp-more", "⋮");
       more.type = "button";
       more.setAttribute("data-focus", "more");
-      more.setAttribute("aria-haspopup", "menu");
+      more.setAttribute("aria-haspopup", "true");
       more.setAttribute("aria-label", t("more"));
       more.setAttribute("aria-expanded", this.menuOpen ? "true" : "false");
       more.addEventListener("click", function () {
@@ -580,12 +615,16 @@
     var layer = el("div", "rp-menu-layer");
     layer.addEventListener("click", function () { self.menuOpen = false; self.draw(); });
     var popup = el("div", "rp-menu");
-    popup.setAttribute("role", "menu");
+    // the keyboard leaving the menu closes it, as a tap outside does
+    layer.addEventListener("focusout", function (event) {
+      if (self.menuOpen && !layer.contains(event.relatedTarget)) {
+        setTimeout(function () { if (self.menuOpen && !layer.contains(document.activeElement)) { self.menuOpen = false; self.draw(); } }, 0);
+      }
+    });
     (activity.menu || []).filter(function (item) { return !item.action; }).forEach(function (item) {
       var b = el("button", "rp-menu-item", (item.checked === undefined ? "" : item.checked ? "☑ " : "☐ ") + item.title);
       b.type = "button";
       b.setAttribute("data-focus", "menu:" + item.index);
-      b.setAttribute("role", "menuitem");
       if (item.enabled === false) b.disabled = true;
       b.addEventListener("click", function (event) {
         event.stopPropagation();
@@ -605,7 +644,6 @@
     });
     var box = el("div", "rp-dialog");
     box.setAttribute("role", "dialog");
-    box.setAttribute("aria-modal", "true");
     if (d.title) {
       var title = el("div", "rp-dialog-title", d.title);
       title.id = "rp-dialog-title-" + this.idx;
@@ -639,7 +677,6 @@
     var scrim = el("div", "rp-scrim");
     var box = el("div", "rp-dialog is-crash");
     box.setAttribute("role", "alertdialog");
-    box.setAttribute("aria-modal", "true");
     var title = el("div", "rp-dialog-title", t("stopped").replace("%s", label));
     title.id = "rp-crash-title-" + this.idx;
     box.setAttribute("aria-labelledby", title.id);
@@ -714,7 +751,7 @@
         self.tickTimer = setTimeout(tick, 250);
         return;
       }
-      self.send({ action: "tick", ms: Math.round(performance.now() - self.snapAt) });
+      self.send({ action: "tick" });
     }, wait);
   };
 

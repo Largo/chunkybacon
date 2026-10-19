@@ -35,6 +35,15 @@ require "ruboto/widget"
 # call super
 class SuperNotCalledException < StandardError; end
 
+# what a phone throws when a boolean callback answers nil (Ruboto's Java
+# unboxes it): java.lang.NullPointerException, as a Ruby error with the
+# learner's line
+class JavaNullPointer < StandardError
+  def self.name = "java.lang.NullPointerException"
+  def self.to_s = name
+  def self.inspect = name
+end
+
 module RubotoSim
   Device = Java::OrgChunkybaconSim::Device
   Bundle = Java::AndroidOs::Bundle
@@ -56,7 +65,50 @@ module RubotoSim
   # the callbacks (the component itself on the singleton way), its class name
   # +orientation+: the one it was made for (a rotation while it was stopped
   # recreates it when it comes back); +saved+: its last onSaveInstanceState
-  Entry = Struct.new(:java, :ruby, :name, :intent, :orientation, :saved)
+  # +dialog+: an AlertDialog it showed, put away while the app is in the background
+  Entry = Struct.new(:java, :ruby, :name, :intent, :orientation, :saved, :dialog)
+
+  # What the app prints goes to logcat line by line, as System.out does on a
+  # phone - in order with the Log.d lines around it
+  class LogcatOut
+    def initialize
+      @line = +""
+    end
+
+    def write(*parts)
+      parts.each do |part|
+        @line << part.to_s
+        while (at = @line.index("\n"))
+          Device.log("I", "System.out", @line[0, at])
+          @line = @line[(at + 1)..]
+        end
+      end
+      parts.sum { |part| part.to_s.bytesize }
+    end
+
+    def puts(*args)
+      args = [""] if args.empty?
+      args.flatten.each { |arg| text = arg.to_s; write(text.end_with?("\n") ? text : "#{text}\n") }
+      nil
+    end
+
+    def print(*args) = (write(*args) && nil)
+    def printf(*args) = (write(format(*args)) && nil)
+    def <<(obj) = (write(obj) && self)
+    def flush = self
+    def sync = true
+    def sync=(_value)
+      nil
+    end
+    def tty? = false
+    def fileno = nil
+
+    # a last line without its newline
+    def finish
+      Device.log("I", "System.out", @line) unless @line.empty?
+      @line = +""
+    end
+  end
 
   class << self
     attr_reader :stack
@@ -67,6 +119,15 @@ module RubotoSim
 
     def boot(bind = nil)
       JRubotoActivity.__persistent__ = true
+      # Activity.onBackPressed of Android 12 and newer: the system decides
+      # (a root activity goes to the background, another one finishes);
+      # an override's super lands here, and dispatch acts on the flag
+      JRubotoActivity.class_eval do
+        def onBackPressed
+          @sim_back_pressed = true
+          nil
+        end
+      end
       @conversions = View.constant_conversions.dup
       @bind = bind
       @scripts = {}
@@ -92,31 +153,59 @@ module RubotoSim
     # the class by a regular expression on the script; this follows the
     # nesting by indentation, so a class inside the activity is not taken.
     def activity_names(code)
-      classes_with(code) { |stack, line| line.match?(/\A\s*def[ \t]+onCreate\b/) && stack.size == 1 && stack.first[2] }
+      names, balanced = classes_with(code) { |stack, line| line.match?(/\A\s*def[ \t]+onCreate\b/) && stack.size == 1 && stack.first[2] }
+      # indentation that does not add up (an unindented body, an end out of
+      # line): the simple rule - the last class line before each onCreate
+      return names if balanced && !names.empty?
+
+      loose = by_position(code)
+      balanced ? (names.empty? ? loose : names) : loose
+    end
+
+    # the last `class Name` line (no superclass) before each `def onCreate`
+    def by_position(code)
+      classes = code.to_enum(:scan, /^[ \t]*class[ \t]+([A-Z]\w*)[ \t]*(?:;|#|$)/).map { [Regexp.last_match(1), Regexp.last_match.begin(0)] }
+      creates = code.to_enum(:scan, /\bdef[ \t]+onCreate\b/).map { Regexp.last_match.begin(0) }
+      creates.filter_map { |at| classes.select { |_, pos| pos < at }.last&.first }.uniq
     end
 
     # the top-level classes a cell opens (`class Name` lines at depth 1)
     def class_names(code)
-      classes_with(code) { |stack, _| stack.size == 1 }
+      classes_with(code) { |stack, _| stack.size == 1 }.first
     end
 
     # walks the lines with a stack of [name, indent, plain?] for the open
     # `class`/`module` lines; the names of the outermost ones for which the
     # block says yes
+    # ... and whether the class lines and their ends added up
     def classes_with(code)
       stack = []
       names = []
-      code.each_line do |line|
+      balanced = true
+      code.each_line do |raw|
+        line = raw.sub(/(\A|\s)#.*$/, "\\1")   # a comment says nothing about the nesting
         indent = line[/\A[ \t]*/].size
-        if (m = line.match(/\A[ \t]*(class|module)[ \t]+([A-Z]\w*)(.*)$/)) && !line.include?(" end")
-          stack << [m[2], indent, m[1] == "class" && !m[3].match?(/\A\s*</)]
+        if (m = line.match(/\A[ \t]*(class|module)[ \t]+([A-Z]\w*)(.*)$/))
+          entry = [m[2], indent, m[1] == "class" && !m[3].match?(/\A\s*</)]
+          stack << entry
           names << stack.first[0] if stack.size == 1 && yield(stack, line) && stack.first[2]
+          if m[3].match?(/;\s*end\s*\z/)
+            # a class on one line: what is in it counts, then it is closed
+            names << stack.first[0] if m[3].match?(/def[ \t]+onCreate\b/) && stack.size == 1 && entry[2] && yield(stack, "def onCreate")
+            stack.pop
+          end
           next
         end
-        stack.pop if line.match?(/\A[ \t]*end\b/) && stack.any? && stack.last[1] == indent
+        if line.match?(/\A[ \t]*end\b/) && stack.any?
+          if stack.last[1] == indent
+            stack.pop
+          elsif indent < stack.last[1]
+            balanced = false
+          end
+        end
         names << stack.first[0] if stack.any? && yield(stack, line)
       end
-      names.uniq
+      [names.uniq, balanced && stack.empty?]
     end
 
     # Before the cell runs: each activity class it defines gets a new
@@ -150,7 +239,8 @@ module RubotoSim
     # anew (a rotation), after the activity's own script
     def reopened(code, prepared)
       (class_names(code) - prepared.keys).each do |name|
-        @scripts[name] << code if @scripts[name] && !@scripts[name].include?(code)
+        # the latest version of a reopening cell replaces the one before
+        @scripts[name] = [@scripts[name].first, code] if @scripts[name]
       end
     end
 
@@ -172,8 +262,10 @@ module RubotoSim
       @label = name.sub(/Activity\z/, "").gsub(/([a-z])([A-Z])/, '\1 \2')
       @label = name if @label.empty?
       fresh_install
-      push(Entry.new(component, component, name, launcher_intent(name)), nil)
-      after_input
+      to_logcat do
+        push(Entry.new(component, component, name, launcher_intent(name)), nil)
+        after_input
+      end
       true
     end
 
@@ -196,8 +288,20 @@ module RubotoSim
 
       Device.clearPreferences
       fresh_install
-      push(instantiate(@main, nil, launcher_intent(@main)), nil)
-      after_input
+      to_logcat do
+        push(instantiate(@main, nil, launcher_intent(@main)), nil)
+        after_input
+      end
+    end
+
+    # what the app prints while the block runs goes to logcat
+    def to_logcat
+      old = $stdout
+      $stdout = out = LogcatOut.new
+      yield
+    ensure
+      out&.finish
+      $stdout = old
     end
 
     # ---- the page's input ----
@@ -206,24 +310,23 @@ module RubotoSim
     # What the app prints goes to logcat, as System.out does on a phone.
     def input(json)
       event = JSON.parse(json)
-      old = $stdout
-      $stdout = out = StringIO.new
-      begin
-        # an input for an app that has been replaced since (the page sent it
-        # before the newer run's answer came)
-        stale = event.key?("install") && event["install"].to_i != @install
-        guarded { dispatch(event) } unless stale
-      ensure
-        $stdout = old
-        out.string.each_line { |line| Device.log("I", "System.out", line.chomp) }
-      end
+      # an input for an app that has been replaced since (the page sent it
+      # before the newer run's answer came)
+      stale = event.key?("install") && event["install"].to_i != @install
+      to_logcat { guarded { dispatch(event) } } unless stale
       snapshot
     end
 
     def dispatch(event)
-      # the phone's clock: the time that passed since the last screen first
-      # (a Runnable due meanwhile runs before the tap)
-      run_due(Device.now + event["ms"].to_i.clamp(0, 60_000)) if event["ms"]
+      # the phone's clock: the moment of the input on the page's clock
+      # ("clock"; two inputs in flight do not count the same time twice), or
+      # the time since the last screen ("ms") - a Runnable due meanwhile runs
+      # before the tap
+      if event["clock"]
+        run_due(event["clock"].to_i.clamp(Device.now, Device.now + 60_000))
+      elsif event["ms"]
+        run_due(Device.now + event["ms"].to_i.clamp(0, 60_000))
+      end
       top = @stack.last
       case event["action"]
       when "tick"
@@ -235,29 +338,51 @@ module RubotoSim
         return if @main.nil? || @crash
         if @home && top
           @home = false
-          restart(top)
+          # an activity under a dialog-themed one shows again too
+          below = @stack[-2]
+          if below && top.java.is_a?(JRubotoDialog) && below.java.simState == "stopped"
+            call(below, :onRestart)
+            call(below, :onStart)
+          end
+          come_back(top)
+          # the dialog it had open is there again
+          Device.dialog = top.dialog if top.dialog&.isShowing
+          top.dialog = nil
         elsif !top
           @home = false
           push(instantiate(@main, nil, launcher_intent(@main)), nil)
         end
       when "home"
         return if @home || !top
-        Device.dialog&.dismiss
+        # an open dialog stays the activity's; it shows again when it comes back
+        top.dialog = Device.dialog
+        Device.dialog = nil
         pause_and_stop(top)
+        below = @stack[-2]
+        pause_and_stop_paused(below) if below
         @home = true
       when "back"
         return if @home || !top
         dialog = Device.dialog
         if dialog
           dialog.cancel if dialog.isCancelable
-        elsif @stack.size == 1 && !ruby_method?(top, :onBackPressed)
-          # Android 12 and newer: Back on the app's first screen moves the
-          # app to the background, as Home does - the activity is not ended
-          Device.log("I", "ActivityTaskManager", "Back on the root activity: moving #{$package_name} to the background")
-          pause_and_stop(top)
-          @home = true
         else
+          top.java.instance_variable_set(:@sim_back_pressed, false)
           call(top, :onBackPressed)
+          # Activity's own onBackPressed was reached (no override, or super)
+          if top.java.instance_variable_get(:@sim_back_pressed)
+            top.java.instance_variable_set(:@sim_back_pressed, false)
+            if @stack.size == 1
+              # Android 12 and newer: Back on the app's first screen moves
+              # the app to the background, as Home does - it is not ended
+              Device.log("I", "ActivityTaskManager", "Back on the root activity: moving #{$package_name} to the background")
+              top.dialog = nil
+              pause_and_stop(top)
+              @home = true
+            else
+              top.java.finish
+            end
+          end
         end
       when "rotate"
         Device.setOrientation(Device.getOrientation == Device::PORTRAIT ? Device::LANDSCAPE : Device::PORTRAIT)
@@ -295,7 +420,7 @@ module RubotoSim
         item = menu && event["index"].to_i < menu.size ? menu.getItem(event["index"].to_i) : nil
         return unless item&.isEnabled
 
-        call(top, :onOptionsItemSelected, item) unless Java::OrgChunkybaconSim::SimMenu.clickListener(item)
+        call_boolean(top, :onOptionsItemSelected, item) unless Java::OrgChunkybaconSim::SimMenu.clickListener(item)
         return
       end
       view = Device.view(event["sim"].to_i)
@@ -389,6 +514,31 @@ module RubotoSim
       first_selections(entry.java.simContentView)
     end
 
+    # an activity on top again: from paused or started only onResume, from
+    # stopped onRestart, onStart, onResume
+    def come_back(entry)
+      case entry.java.simState
+      when "paused", "started"
+        if entry.orientation != Device.getOrientation
+          pause_and_stop_paused(entry)
+          return recreate_stopped(entry)
+        end
+        call(entry, :onResume)
+        menu(entry)
+      else
+        restart(entry)
+      end
+    end
+
+    # a paused activity (under a dialog-themed one) that has to stop too
+    def pause_and_stop_paused(entry)
+      return unless %w[paused started].include?(entry.java.simState)
+
+      call(entry, :onPause) if entry.java.simState == "started"
+      call(entry, :onStop)
+      save(entry)
+    end
+
     # a stopped activity comes back - made anew if the phone turned meanwhile
     def restart(entry)
       return recreate_stopped(entry) if entry.orientation != Device.getOrientation
@@ -434,6 +584,12 @@ module RubotoSim
     end
 
     def destroy(entry)
+      if entry.dialog
+        # put away on Home: it dies with the activity, as on screen
+        Device.dialog = entry.dialog
+        entry.dialog = nil
+        drop_dialog(entry)
+      end
       call(entry, :onDestroy)
       ::RUBOTO_JAVA_PROXIES.delete(entry.ruby)
     end
@@ -483,8 +639,28 @@ module RubotoSim
 
       menu = entry.java.simNewMenu
       # the menu shows only when both answer true
-      shown = call(entry, :onCreateOptionsMenu, menu) && call(entry, :onPrepareOptionsMenu, menu)
+      shown = call_boolean(entry, :onCreateOptionsMenu, menu) && call_boolean(entry, :onPrepareOptionsMenu, menu)
       menu.clear unless shown
+    end
+
+    # A callback whose Java signature returns a boolean: Ruboto's generated
+    # Java casts the Ruby answer to Boolean and unboxes it, so on a phone a
+    # nil (a forgotten `true` after the last line) is a NullPointerException
+    # and anything else not a boolean fails to coerce - the app crashes
+    def call_boolean(entry, name, *args)
+      result = call(entry, name, *args)
+      return result if [true, false].include?(result) || !ruby_method?(entry, name)
+
+      message = if result.nil?
+                  "Attempt to invoke virtual method 'boolean java.lang.Boolean.booleanValue()' on a null object reference " \
+                    "(#{name} answered nil, not true or false)"
+                else
+                  "failed to coerce #{result.class} to java.lang.Boolean (#{name} answered #{result.inspect[0, 60]})"
+                end
+      error = (result.nil? ? JavaNullPointer : TypeError).new(message)
+      file, line = entry.ruby.method(name).source_location
+      error.set_backtrace(["#{file}:#{line}:in '#{name}'", *caller])
+      raise error
     end
 
     # what the app asked for: activities that finished, intents it started
@@ -494,8 +670,10 @@ module RubotoSim
         started = Device.takeStarted
         break unless finishing || started
 
-        finished(finishing) if finishing
+        # "start the next screen, then finish": the next one is created
+        # before this one stops and ends (Android's order, a splash screen)
         start(started) if started
+        finished(finishing) if finishing
       end
       top = @stack.last
       menu(top) if top && !@home
@@ -507,18 +685,24 @@ module RubotoSim
 
       if entry.java.simState == "created"
         # finished in onCreate: no onStart, onResume, onPause, onStop
+        was_top = entry.equal?(@stack.last)
         @stack.delete(entry)
         destroy(entry)
-        @home = true if @stack.empty?
+        below = @stack.last
+        if below.nil?
+          @home = true
+        elsif was_top && !@home
+          come_back(below)
+        end
       elsif entry.equal?(@stack.last)
         # Android's order: this one pauses, the one below comes back, then
         # this one stops and ends
-        call(entry, :onPause) unless @home
+        call(entry, :onPause) unless @home || entry.java.simState != "resumed"
         drop_dialog(entry)
         @stack.pop
         below = @stack.last
-        restart(below) if below && !@home
-        call(entry, :onStop) unless @home
+        come_back(below) if below && !@home
+        call(entry, :onStop) unless @home || entry.java.simState == "stopped"
         destroy(entry)
         @home = true unless below
       else
@@ -532,14 +716,22 @@ module RubotoSim
       raise ArgumentError, "the intent names no activity class: #{intent}" unless name
 
       below = @stack.last
-      call(below, :onPause) if below
+      # a screen that finished in onCreate (a splash) never started: nothing to pause
+      call(below, :onPause) if below && below.java.simState == "resumed"
       dialog = intent.getTargetClass&.getName == JRubotoDialog.java_class.name
       entry = instantiate(name, dialog ? JRubotoDialog : nil, intent)
       push(entry, nil)
+      @home = false
       return unless below
+      # the new one finished in onCreate: the one below comes back (finished)
+      return if entry.java.isFinishing && entry.java.simState == "created"
+      # a dialog-themed activity leaves the one below visible: only paused
+      return if dialog
+      return if below.java.simState == "created"
 
       call(below, :onStop)
-      save(below)
+      # one that is finishing saves nothing: it ends next (finished)
+      save(below) unless below.java.isFinishing
     end
 
     # one callback; Android's check that the override called super
@@ -717,14 +909,15 @@ module ChunkyLab
     old = $stdout
     $stdout = StringIO.new if quiet
     installing = installed = false
-    # the check starts the app as installed anew: no preferences of an earlier check
-    RubotoSim::Device.clearPreferences if probe
     fields = begin
       prepared = RubotoSim.prepare(code)
       value = eval(code, @bind, FILE, 1)
       RubotoSim.reopened(code, prepared)
       unless quiet
         installing = true
+        # the check starts the app as installed anew: no preferences of an
+        # earlier check (a cell that fails keeps the running app's)
+        RubotoSim::Device.clearPreferences if probe && !prepared.empty?
         installed = RubotoSim.install(prepared)
       end
       { status: "ok", inspect: inspect_of(value) }
