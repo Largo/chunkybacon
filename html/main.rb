@@ -497,6 +497,8 @@ class ChunkyApp
     $window.addEventListener("chunky:picoruby") { |event| picoruby_answer(event.detail) }
     # the JRuby lesson's cells answer later too (jruby_lab.js)
     $window.addEventListener("chunky:jruby") { |event| jruby_answer(event.detail) }
+    # a tap past its limit ended JRuby's worker: nothing has run in the new one
+    $window.addEventListener("chunky:phone") { |event| @jruby_ran = {} if %w[stopped failed].include?(event.detail.status.to_s) }
     # ... and what they print shows while they run (a Pico lesson's 60 s)
     $window.addEventListener("chunky:picoruby-progress") { |event| picoruby_progress(event.detail) }
     # the simulated Pico notified over BLE: the laptop cell's blocks (pico_laptop.rb)
@@ -1581,6 +1583,12 @@ class ChunkyApp
   # says whether both Rubies agree. No live runs ("live": false): JRuby can
   # only be stopped by ending its worker, and a new one takes 3 s to start.
   def jruby? = !workshop? && current_lesson && current_lesson["engine"] == "jruby"
+  # the Ruboto lesson: JRuby with a simulated phone (docs/HANDOVER.md §6u). A
+  # cell that defines an activity starts the app on it (html/ruboto_phone.js
+  # draws it below the cell); the exercise's "probe" taps through the app in
+  # JRuby, and its check reads the probe's inspect as `probe`, as the
+  # IronRuby lesson's does. Nothing here runs on CRuby: Android is JRuby's.
+  def android? = jruby? && current_lesson["android"] == true
 
   def start_jruby_run(idx, code)
     $window.clearCellMarks(idx)
@@ -1592,7 +1600,8 @@ class ChunkyApp
     earlier = EarlierCells.before(idx, jruby_only, @jruby_ran) { |i| $window.getCellCode(i).to_s }
     @jruby_pending ||= {}
     @jruby_pending[idx] = { code: code, earlier: earlier.to_h }
-    $window.chunkyJRuby.run(idx.to_s, code, JSON.generate(earlier), @seq.to_s)
+    probe = android? ? (cells[idx] || {})["probe"].to_s : ""
+    $window.chunkyJRuby.run(idx.to_s, code, JSON.generate(earlier), @seq.to_s, probe, android?)
     :pending
   end
 
@@ -1618,9 +1627,13 @@ class ChunkyApp
             when "failed" then PicoRubyCells::Unavailable.new("#{ui['jrubyFailed']} (#{message})")
             end
     elapsed = detail.elapsed.to_f
+    probe = detail.probe.to_s
+    # a stopped worker took the phone with it
+    $window.chunkyRubotoPhone.stale("stopped") if android? && %w[stopped failed].include?(status)
     outcome = begin
       show_jruby_run(idx, code, output: detail.output.to_s, error: error, elapsed: elapsed,
-                                result: status == "ok" ? JRubyCells.value(detail.value.to_s) : nil)
+                                result: status == "ok" ? JRubyCells.value(detail.value.to_s) : nil,
+                                probe: probe.empty? ? nil : JRubyCells.value(probe), phone: detail.phone.to_s)
     rescue Exception => e
       $window.console.error("jruby #{idx}: #{e.class}: #{e.message}")
       :error
@@ -1628,11 +1641,15 @@ class ChunkyApp
     bridge.ran(idx, outcome.to_s, elapsed, false, elapsed, ran.join(","), failed.join(","), "")
   end
 
-  def show_jruby_run(idx, code, output: "", result: nil, error: nil, elapsed: nil)
+  def show_jruby_run(idx, code, output: "", result: nil, error: nil, elapsed: nil, probe: nil, phone: "")
     cell = cells[idx]
     # the check reads the data in CRuby (JRubyCells.load_data)
-    JRubyCells.load_data if cell && cell["t"] == "x" && !error
+    JRubyCells.load_data if cell && cell["t"] == "x" && !error && !android?
+    # what the Ruboto lesson's check reads besides output, result and code
+    @bind.local_variable_set(:probe, probe) if android? && cell && cell["t"] == "x"
     outcome = show_picoruby_run(idx, code, false, output: output, result: result, error: error)
+    # the app this cell started, on the phone below it
+    $window.chunkyRubotoPhone.mount(idx, phone) if android? && !phone.empty?
     out_el = $d.getElementById("cell-out-#{idx}")
     # a QR code of half blocks (█▀▄): drawn as square pixels above the text,
     # which stays (hidden) for copying - as text, its rows depend on the font
@@ -1644,7 +1661,7 @@ class ChunkyApp
       out_el.innerHTML = out_el.innerHTML.to_s.sub('<pre class="cell-stdout">', pre)
     end
     add_engine_badge(idx, :jruby, elapsed) if elapsed && !error.is_a?(SyntaxError)
-    compare_with_cruby(idx, code, result, output) if outcome == :pass
+    compare_with_cruby(idx, code, result, output) if outcome == :pass && !android?
     outcome
   end
 

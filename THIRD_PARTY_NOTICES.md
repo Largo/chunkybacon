@@ -114,6 +114,16 @@ on the host; it is a tool of the build and not served.
 | [YoWASP Clang/LLD](https://yowasp.org) (`@yowasp/clang`: LLVM, Clang and LLD as WebAssembly, `clang/`) | 22.0.0-git20542-10 | ISC (the package); LLVM: Apache-2.0 WITH LLVM-exception | Catherine (whitequark); the LLVM project's contributors | `clang/README.md`, `LICENSE-llvm.txt` |
 | [wasi-libc](https://github.com/WebAssembly/wasi-libc), clang's sysroot (`clang/llvm-resources.tar`), linked into every program the lesson builds | as in that package | Apache-2.0 WITH LLVM-exception, Apache-2.0 or MIT; parts: musl (MIT), cloudlibc (BSD-2-Clause), dlmalloc (CC0) | their authors | `LICENSE-wasi-libc.txt`, `LICENSE-wasi-libc-MIT.txt`, `COPYRIGHT-musl.txt`, `LICENSE-cloudlibc.txt` |
 
+## The Ruboto lesson (`html/ruboto_sim/`, `html/assets/ruboto/`)
+
+Lesson `ruboto` only. It runs on the JRuby above (the same `jruby.js`, whose
+Android stand-ins are listed there); these files are in git.
+
+| Component | Version | License | Copyright | Files |
+|---|---|---|---|---|
+| [Ruboto](https://github.com/ruboto/ruboto) 2 ([Largo/ruboto](https://github.com/Largo/ruboto)): `ruboto/base.rb`, `package.rb`, `activity.rb`, `widget.rb`, `toast.rb`, unchanged (`tools/vendor_ruboto.rb`) | 5cfbee3 | MIT | 2011 Daniel Jackoway, Charles Nutter, Scott Moyer, Uwe Kubosch | `html/ruboto_sim/vendor/ruboto/`; license text `html/ruboto_sim/vendor/LICENSE`; record `html/ruboto_sim/vendor/VENDOR.txt` |
+| Photos of NASA ([images.nasa.gov](https://images.nasa.gov/)), resized: AS08-14-2383 (Earthrise), AS17-148-22727 (The Blue Marble), AS11-40-5903 (Aldrin on the Moon), 6900540 (Saturn V, Apollo 11 launch), iss058e005282 (aurora), iss072e057797 (Hurricane Milton) | - | public domain (NASA imagery is not copyrighted; NASA asks for credit, and that it not be used to imply endorsement) | Credit: NASA | `html/assets/ruboto/drawable/*.jpg` |
+
 ## The JRuby lesson (`html/assets/jruby/`, `html/assets/jruby-swing/`, put there on deploy)
 
 Lesson `jruby` only, loaded when it opens (the TeaVM part) or when its bonus
@@ -130,6 +140,7 @@ and write a `NOTICE.md` / `VERSION.txt` into the folder.
 | [ZXing](https://github.com/zxing/zxing) core, inside `jruby.js` | 3.5.4 | Apache-2.0 | ZXing authors | `html/assets/jruby/jruby.js` |
 | the [json](https://github.com/ruby/json) gem's Java extension, inside `jruby.js` | 2.21.2 | Ruby License or BSD-2-Clause | Florian Frank and contributors | `html/assets/jruby/jruby.js`, `stdlib.zip` |
 | `lesson.Quakes`, the lesson's Java loop, inside `jruby.js` | - | as the course | - | `html/assets/jruby/jruby.js` (its source is shown in the lesson) |
+| The Ruboto lesson's Android stand-ins (`android.*`, `org.ruboto.RubotoActivity`/`ScriptInfo`/`RubotoDialog`, the app's `R`, `org.chunkybacon.sim.*`), written for the course, inside `jruby.js` | - | as the course | - | `html/assets/jruby/jruby.js` (source in `jruby-teavm-lesson.patch`, `android-src/`) |
 | The bonus: [JRuby](https://www.jruby.org/) `jruby-complete` (unmodified, from Maven Central) | 9.4.15.0 | EPL-2.0, or GPL-2.0, or LGPL-2.1 | the JRuby team and contributors | `html/assets/jruby-swing/jruby-complete-9.4.15.0.jar` (license texts inside the jar, `META-INF/`) |
 | The bonus: `cheerpj-patch.jar`, one JRuby class (`ConstantField`) patched for CheerpJ, from [Largo/jruby-cheerpj](https://github.com/Largo/jruby-cheerpj) (source in its `patch/src/`) | 6e134ab | EPL-2.0, or GPL-2.0, or LGPL-2.1 (as JRuby) | the JRuby team; Largo | `html/assets/jruby-swing/cheerpj-patch.jar` |
 | The bonus: `html/jruby_swing_boot.js`, the loader from [Largo/jruby-cheerpj](https://github.com/Largo/jruby-cheerpj) | 6e134ab | MIT | 2026 Largo | `html/jruby_swing_boot.js` |

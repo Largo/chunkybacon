@@ -1,7 +1,7 @@
 From 38898b433e447933b8e6f1929396796b836e5d78 Mon Sep 17 00:00:00 2001
 From: Largo <Largo@users.noreply.github.com>
 Date: Sat, 17 Oct 2026 09:21:37 +0200
-Subject: [PATCH] chunkybacon JRuby lesson build: json ext, Jackson, ZXing,
+Subject: [PATCH 1/3] chunkybacon JRuby lesson build: json ext, Jackson, ZXing,
  lesson.Quakes
 
 On top of 730d53b, the build behind https://chunkybacon.idogawa.com's JRuby
@@ -5482,6 +5482,2673 @@ index 493bd9d..8b98c93 100644
              default: return null;
          }
      }
+-- 
+2.47.3
+
+
+From 997b33915fe03fd1757119448802f2e9382f0232 Mon Sep 17 00:00:00 2001
+From: Largo <Largo@users.noreply.github.com>
+Date: Sun, 18 Oct 2026 15:24:03 +0200
+Subject: [PATCH 2/3] chunkybacon Ruboto lesson: Android stand-ins for a
+ simulated phone
+
+android-src/ (compiled with the core by scripts/compile.sh, listed in
+java-classes.txt): the Android classes Ruboto apps use most, written anew
+for the browser - android.app.Activity/AlertDialog, android.widget.*
+(TextView, Button, EditText, CheckBox, Switch, SeekBar, ImageView,
+LinearLayout, FrameLayout, ScrollView, ListView, Spinner, ArrayAdapter,
+Toast), android.view.* (View, ViewGroup, Gravity, Menu), android.os
+(Bundle, Handler, Build), android.util.Log, android.graphics.Color,
+SharedPreferences; Ruboto's RubotoActivity/ScriptInfo/RubotoDialog; the
+lesson app's R (drawables); and org.chunkybacon.sim.Device, the phone they
+run on (clock, logcat, toasts, dialogs, snapshot as JSON). They draw
+nothing: the page draws the snapshot. The lifecycle is driven from Ruby
+(chunkybacon's html/ruboto_sim/ruboto_sim.rb).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ android-src/android/R.java                    |  23 ++
+ android-src/android/app/Activity.java         |  93 ++++++++
+ android-src/android/app/AlertDialog.java      |  71 ++++++
+ android-src/android/app/Dialog.java           |  31 +++
+ android-src/android/app/Fragment.java         |   8 +
+ android-src/android/content/Context.java      |  15 ++
+ .../android/content/ContextWrapper.java       |   5 +
+ .../android/content/DialogInterface.java      |  15 ++
+ android-src/android/content/Intent.java       |  47 ++++
+ .../android/content/SharedPreferences.java    |  27 +++
+ .../android/content/res/Configuration.java    |  11 +
+ .../android/content/res/Resources.java        |   8 +
+ android-src/android/graphics/Color.java       |  39 ++++
+ android-src/android/graphics/Typeface.java    |  22 ++
+ android-src/android/os/Build.java             |  17 ++
+ android-src/android/os/Bundle.java            |  43 ++++
+ android-src/android/os/Handler.java           |  15 ++
+ android-src/android/os/Looper.java            |   8 +
+ android-src/android/os/SystemClock.java       |   9 +
+ android-src/android/text/Editable.java        |   7 +
+ android-src/android/text/InputType.java       |  13 ++
+ android-src/android/text/TextWatcher.java     |   8 +
+ android-src/android/util/Log.java             |  22 ++
+ .../android/view/ContextThemeWrapper.java     |  10 +
+ android-src/android/view/Gravity.java         |  18 ++
+ android-src/android/view/Menu.java            |  15 ++
+ android-src/android/view/MenuItem.java        |  27 +++
+ android-src/android/view/View.java            | 124 ++++++++++
+ android-src/android/view/ViewGroup.java       |  91 ++++++++
+ android-src/android/view/ViewParent.java      |   6 +
+ android-src/android/widget/Adapter.java       |   9 +
+ android-src/android/widget/AdapterView.java   |  75 ++++++
+ android-src/android/widget/ArrayAdapter.java  |  27 +++
+ android-src/android/widget/BaseAdapter.java   |   8 +
+ android-src/android/widget/Button.java        |  10 +
+ android-src/android/widget/CheckBox.java      |   9 +
+ .../android/widget/CompoundButton.java        |  34 +++
+ android-src/android/widget/EditText.java      |  44 ++++
+ android-src/android/widget/FrameLayout.java   |  28 +++
+ android-src/android/widget/ImageView.java     |  37 +++
+ android-src/android/widget/LinearLayout.java  |  49 ++++
+ android-src/android/widget/ListAdapter.java   |   5 +
+ android-src/android/widget/ListView.java      |  15 ++
+ android-src/android/widget/ProgressBar.java   |  30 +++
+ android-src/android/widget/ScrollView.java    |  16 ++
+ android-src/android/widget/SeekBar.java       |  33 +++
+ android-src/android/widget/Spinner.java       |  25 ++
+ .../android/widget/SpinnerAdapter.java        |   5 +
+ android-src/android/widget/Switch.java        |   9 +
+ android-src/android/widget/TextView.java      |  74 ++++++
+ android-src/android/widget/Toast.java         |  29 +++
+ android-src/org/chunkybacon/sim/Device.java   | 217 ++++++++++++++++++
+ .../org/chunkybacon/sim/Drawables.java        |  22 ++
+ android-src/org/chunkybacon/sim/Json.java     |  45 ++++
+ android-src/org/chunkybacon/sim/SimMenu.java  |  73 ++++++
+ .../org/chunkybacon/sim/SimPreferences.java   |  44 ++++
+ android-src/org/ruboto/RubotoActivity.java    |  14 ++
+ android-src/org/ruboto/RubotoDialog.java      |   5 +
+ android-src/org/ruboto/ScriptInfo.java        |  24 ++
+ android-src/org/ruboto/example/R.java         |  22 ++
+ java-classes.txt                              |  90 ++++++++
+ scripts/compile.sh                            |   2 +-
+ 62 files changed, 1976 insertions(+), 1 deletion(-)
+ create mode 100644 android-src/android/R.java
+ create mode 100644 android-src/android/app/Activity.java
+ create mode 100644 android-src/android/app/AlertDialog.java
+ create mode 100644 android-src/android/app/Dialog.java
+ create mode 100644 android-src/android/app/Fragment.java
+ create mode 100644 android-src/android/content/Context.java
+ create mode 100644 android-src/android/content/ContextWrapper.java
+ create mode 100644 android-src/android/content/DialogInterface.java
+ create mode 100644 android-src/android/content/Intent.java
+ create mode 100644 android-src/android/content/SharedPreferences.java
+ create mode 100644 android-src/android/content/res/Configuration.java
+ create mode 100644 android-src/android/content/res/Resources.java
+ create mode 100644 android-src/android/graphics/Color.java
+ create mode 100644 android-src/android/graphics/Typeface.java
+ create mode 100644 android-src/android/os/Build.java
+ create mode 100644 android-src/android/os/Bundle.java
+ create mode 100644 android-src/android/os/Handler.java
+ create mode 100644 android-src/android/os/Looper.java
+ create mode 100644 android-src/android/os/SystemClock.java
+ create mode 100644 android-src/android/text/Editable.java
+ create mode 100644 android-src/android/text/InputType.java
+ create mode 100644 android-src/android/text/TextWatcher.java
+ create mode 100644 android-src/android/util/Log.java
+ create mode 100644 android-src/android/view/ContextThemeWrapper.java
+ create mode 100644 android-src/android/view/Gravity.java
+ create mode 100644 android-src/android/view/Menu.java
+ create mode 100644 android-src/android/view/MenuItem.java
+ create mode 100644 android-src/android/view/View.java
+ create mode 100644 android-src/android/view/ViewGroup.java
+ create mode 100644 android-src/android/view/ViewParent.java
+ create mode 100644 android-src/android/widget/Adapter.java
+ create mode 100644 android-src/android/widget/AdapterView.java
+ create mode 100644 android-src/android/widget/ArrayAdapter.java
+ create mode 100644 android-src/android/widget/BaseAdapter.java
+ create mode 100644 android-src/android/widget/Button.java
+ create mode 100644 android-src/android/widget/CheckBox.java
+ create mode 100644 android-src/android/widget/CompoundButton.java
+ create mode 100644 android-src/android/widget/EditText.java
+ create mode 100644 android-src/android/widget/FrameLayout.java
+ create mode 100644 android-src/android/widget/ImageView.java
+ create mode 100644 android-src/android/widget/LinearLayout.java
+ create mode 100644 android-src/android/widget/ListAdapter.java
+ create mode 100644 android-src/android/widget/ListView.java
+ create mode 100644 android-src/android/widget/ProgressBar.java
+ create mode 100644 android-src/android/widget/ScrollView.java
+ create mode 100644 android-src/android/widget/SeekBar.java
+ create mode 100644 android-src/android/widget/Spinner.java
+ create mode 100644 android-src/android/widget/SpinnerAdapter.java
+ create mode 100644 android-src/android/widget/Switch.java
+ create mode 100644 android-src/android/widget/TextView.java
+ create mode 100644 android-src/android/widget/Toast.java
+ create mode 100644 android-src/org/chunkybacon/sim/Device.java
+ create mode 100644 android-src/org/chunkybacon/sim/Drawables.java
+ create mode 100644 android-src/org/chunkybacon/sim/Json.java
+ create mode 100644 android-src/org/chunkybacon/sim/SimMenu.java
+ create mode 100644 android-src/org/chunkybacon/sim/SimPreferences.java
+ create mode 100644 android-src/org/ruboto/RubotoActivity.java
+ create mode 100644 android-src/org/ruboto/RubotoDialog.java
+ create mode 100644 android-src/org/ruboto/ScriptInfo.java
+ create mode 100644 android-src/org/ruboto/example/R.java
+
+diff --git a/android-src/android/R.java b/android-src/android/R.java
+new file mode 100644
+index 0000000..a296fe8
+--- /dev/null
++++ b/android-src/android/R.java
+@@ -0,0 +1,23 @@
++package android;
++
++/** android.R (stand-in): the framework resources Ruboto's helpers name. */
++public final class R {
++    public static final class id {
++        public static final int content = 0x01020002;
++        public static final int list = 0x0102000a;
++        public static final int text1 = 0x01020014;
++        public static final int text2 = 0x01020015;
++    }
++    public static final class layout {
++        public static final int simple_list_item_1 = 0x01090003;
++        public static final int simple_list_item_2 = 0x01090004;
++        public static final int simple_spinner_item = 0x01090008;
++        public static final int simple_spinner_dropdown_item = 0x01090009;
++    }
++    public static final class style {
++        public static final int Theme = 0x01030005;
++        public static final int Theme_Dialog = 0x0103000b;
++    }
++    public static final class attr {
++    }
++}
+diff --git a/android-src/android/app/Activity.java b/android-src/android/app/Activity.java
+new file mode 100644
+index 0000000..003677a
+--- /dev/null
++++ b/android-src/android/app/Activity.java
+@@ -0,0 +1,93 @@
++package android.app;
++
++import android.content.Intent;
++import android.content.SharedPreferences;
++import android.os.Bundle;
++import android.view.ContextThemeWrapper;
++import android.view.Menu;
++import android.view.MenuItem;
++import android.view.View;
++import android.view.ViewGroup;
++import org.chunkybacon.sim.Device;
++import org.chunkybacon.sim.Json;
++import org.chunkybacon.sim.SimMenu;
++
++/**
++ * android.app.Activity (stand-in, chunkybacon Ruboto lesson). The lifecycle
++ * methods do what Activity's do for an app that does not override them;
++ * the simulated phone (ruboto_sim.rb) calls them in Android's order.
++ */
++public class Activity extends ContextThemeWrapper {
++    public static final int RESULT_OK = -1;
++    public static final int RESULT_CANCELED = 0;
++
++    private CharSequence title = null;
++    private View content;
++    private Intent intent = new Intent();
++    private boolean finishing = false;
++    private String state = "new";
++    private SimMenu menu = null;
++    private boolean menuDirty = true;
++    private boolean superCalled = false;
++
++    public Activity() {}
++
++    private void lifecycle(String s) { state = s; superCalled = true; }
++
++    public void onCreate(Bundle savedInstanceState) { lifecycle("created"); }
++    public void onStart() { lifecycle("started"); }
++    public void onRestart() { superCalled = true; }
++    public void onResume() { lifecycle("resumed"); }
++    public void onPause() { lifecycle("paused"); }
++    public void onStop() { lifecycle("stopped"); }
++    public void onDestroy() { lifecycle("destroyed"); }
++    public void onSaveInstanceState(Bundle outState) { superCalled = true; }
++    public void onRestoreInstanceState(Bundle savedInstanceState) { superCalled = true; }
++    public void onBackPressed() { finish(); }
++    public boolean onCreateOptionsMenu(Menu menu) { return true; }
++    public boolean onPrepareOptionsMenu(Menu menu) { return true; }
++    public boolean onOptionsItemSelected(MenuItem item) { return false; }
++
++    /** Android throws SuperNotCalledException when an override of onCreate (and friends) does not call super */
++    public boolean simTakeSuperCalled() { boolean called = superCalled; superCalled = false; return called; }
++    public String simState() { return state; }
++    public void simState(String s) { state = s; }
++
++    public void setContentView(View view) {
++        if (view.getLayoutParams() == null) {
++            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
++        }
++        content = view;
++    }
++    public void setContentView(int layoutResID) {
++        throw new UnsupportedOperationException("XML layouts (res/layout) are not part of the simulated phone: build the views in Ruby");
++    }
++    public View simContentView() { return content; }
++    public View findViewById(int id) { return content == null ? null : content.findViewById(id); }
++
++    public void setTitle(CharSequence title) { this.title = title; }
++    public CharSequence getTitle() { return title; }
++
++    public Intent getIntent() { return intent; }
++    public void setIntent(Intent intent) { this.intent = intent; }
++
++    public void finish() { finishing = true; Device.finish(this); }
++    public boolean isFinishing() { return finishing; }
++    public boolean isDestroyed() { return "destroyed".equals(state); }
++
++    public void runOnUiThread(Runnable action) { action.run(); }
++    public SharedPreferences getPreferences(int mode) { return getSharedPreferences(getLocalClassName(), mode); }
++    public String getLocalClassName() { return getClass().getSimpleName(); }
++
++    public void invalidateOptionsMenu() { menuDirty = true; }
++    public boolean simMenuDirty() { return menuDirty; }
++    public Menu simNewMenu() { menu = new SimMenu(); menuDirty = false; return menu; }
++    public Menu simMenu() { return menu; }
++
++    public void describe(Json j) {
++        j.put("title", title == null ? null : title.toString()).put("state", state);
++        j.put("dialogTheme", getThemeResId() == android.R.style.Theme_Dialog);
++        if (menu != null && menu.size() > 0) { j.key("menu"); org.chunkybacon.sim.Device.describeMenu(menu, j); }
++        if (content != null) { j.key("content").open('{'); content.describe(j); j.close('}'); }
++    }
++}
+diff --git a/android-src/android/app/AlertDialog.java b/android-src/android/app/AlertDialog.java
+new file mode 100644
+index 0000000..cb61069
+--- /dev/null
++++ b/android-src/android/app/AlertDialog.java
+@@ -0,0 +1,71 @@
++package android.app;
++
++import android.content.Context;
++import android.content.DialogInterface;
++import android.view.View;
++import org.chunkybacon.sim.Json;
++
++/** android.app.AlertDialog (stand-in): title, message, a list of items or a view, up to three buttons. */
++public class AlertDialog extends Dialog {
++    private CharSequence message;
++    private final CharSequence[] buttonText = new CharSequence[3];
++    private final DialogInterface.OnClickListener[] buttonListener = new DialogInterface.OnClickListener[3];
++    private CharSequence[] items;
++    private DialogInterface.OnClickListener itemsListener;
++    private View view;
++
++    protected AlertDialog(Context context) { super(context); }
++
++    public void setMessage(CharSequence message) { this.message = message; }
++    public void setView(View view) { this.view = view; }
++    @Override public View simView() { return view; }
++
++    public void setButton(int which, CharSequence text, DialogInterface.OnClickListener listener) {
++        int i = -which - 1;
++        buttonText[i] = text;
++        buttonListener[i] = listener;
++    }
++
++    /** the simulated finger: +which+ a BUTTON_* constant, or an item's index */
++    public void simClick(int which) {
++        DialogInterface.OnClickListener l = which >= 0 ? itemsListener : buttonListener[-which - 1];
++        dismiss();
++        if (l != null) l.onClick(this, which);
++    }
++
++    @Override public void describe(Json j) {
++        super.describe(j);
++        if (message != null) j.put("message", message.toString());
++        if (items != null) {
++            j.key("items").open('[');
++            for (CharSequence s : items) j.value(String.valueOf(s));
++            j.close(']');
++        }
++        if (view != null) { j.key("view").open('{'); view.describe(j); j.close('}'); }
++        j.key("buttons").open('[');
++        // Android's order on screen: neutral on the left, then negative, positive
++        int[] order = { DialogInterface.BUTTON_NEUTRAL, DialogInterface.BUTTON_NEGATIVE, DialogInterface.BUTTON_POSITIVE };
++        for (int which : order) {
++            CharSequence t = buttonText[-which - 1];
++            if (t != null) j.item().open('{').put("which", which).put("text", t.toString()).close('}');
++        }
++        j.close(']');
++    }
++
++    public static class Builder {
++        private final AlertDialog dialog;
++
++        public Builder(Context context) { dialog = new AlertDialog(context); }
++
++        public Builder setTitle(CharSequence title) { dialog.setTitle(title); return this; }
++        public Builder setMessage(CharSequence message) { dialog.setMessage(message); return this; }
++        public Builder setView(View view) { dialog.setView(view); return this; }
++        public Builder setCancelable(boolean cancelable) { dialog.setCancelable(cancelable); return this; }
++        public Builder setPositiveButton(CharSequence text, DialogInterface.OnClickListener l) { dialog.setButton(DialogInterface.BUTTON_POSITIVE, text, l); return this; }
++        public Builder setNegativeButton(CharSequence text, DialogInterface.OnClickListener l) { dialog.setButton(DialogInterface.BUTTON_NEGATIVE, text, l); return this; }
++        public Builder setNeutralButton(CharSequence text, DialogInterface.OnClickListener l) { dialog.setButton(DialogInterface.BUTTON_NEUTRAL, text, l); return this; }
++        public Builder setItems(CharSequence[] items, DialogInterface.OnClickListener l) { dialog.items = items; dialog.itemsListener = l; return this; }
++        public AlertDialog create() { return dialog; }
++        public AlertDialog show() { dialog.show(); return dialog; }
++    }
++}
+diff --git a/android-src/android/app/Dialog.java b/android-src/android/app/Dialog.java
+new file mode 100644
+index 0000000..02ae04c
+--- /dev/null
++++ b/android-src/android/app/Dialog.java
+@@ -0,0 +1,31 @@
++package android.app;
++
++import android.content.Context;
++import android.content.DialogInterface;
++import org.chunkybacon.sim.Device;
++import org.chunkybacon.sim.Json;
++
++/** android.app.Dialog (stand-in): one at a time on the simulated phone. */
++public class Dialog implements DialogInterface {
++    private CharSequence title;
++    private boolean showing = false;
++    private boolean cancelable = true;
++
++    public Dialog(Context context) {}
++
++    public void setTitle(CharSequence title) { this.title = title; }
++    public CharSequence getTitle() { return title; }
++    public void setCancelable(boolean c) { cancelable = c; }
++    public boolean isCancelable() { return cancelable; }
++    public void show() { showing = true; Device.dialog = this; }
++    public boolean isShowing() { return showing; }
++    public void dismiss() { showing = false; if (Device.dialog == this) Device.dialog = null; }
++    public void cancel() { dismiss(); }
++    /** the view in the dialog (AlertDialog.Builder#setView), for the simulated finger */
++    public android.view.View simView() { return null; }
++
++    public void describe(Json j) {
++        if (title != null) j.put("title", title.toString());
++        j.put("cancelable", cancelable);
++    }
++}
+diff --git a/android-src/android/app/Fragment.java b/android-src/android/app/Fragment.java
+new file mode 100644
+index 0000000..68c525c
+--- /dev/null
++++ b/android-src/android/app/Fragment.java
+@@ -0,0 +1,8 @@
++package android.app;
++
++/** android.app.Fragment (stand-in): only so that Ruboto's widget helpers can be defined on it. */
++public class Fragment {
++    private Activity activity;
++    public Fragment() {}
++    public Activity getActivity() { return activity; }
++}
+diff --git a/android-src/android/content/Context.java b/android-src/android/content/Context.java
+new file mode 100644
+index 0000000..0aae1fc
+--- /dev/null
++++ b/android-src/android/content/Context.java
+@@ -0,0 +1,15 @@
++package android.content;
++
++import android.content.res.Resources;
++import org.chunkybacon.sim.Device;
++
++/** android.content.Context (stand-in, chunkybacon Ruboto lesson). */
++public abstract class Context {
++    public static final int MODE_PRIVATE = 0;
++
++    public void startActivity(Intent intent) { Device.startActivity(intent); }
++    public String getPackageName() { return "org.ruboto.example"; }
++    public Context getApplicationContext() { return this; }
++    public Resources getResources() { return Resources.INSTANCE; }
++    public SharedPreferences getSharedPreferences(String name, int mode) { return Device.preferences(name); }
++}
+diff --git a/android-src/android/content/ContextWrapper.java b/android-src/android/content/ContextWrapper.java
+new file mode 100644
+index 0000000..e97459c
+--- /dev/null
++++ b/android-src/android/content/ContextWrapper.java
+@@ -0,0 +1,5 @@
++package android.content;
++
++/** android.content.ContextWrapper (stand-in). */
++public class ContextWrapper extends Context {
++}
+diff --git a/android-src/android/content/DialogInterface.java b/android-src/android/content/DialogInterface.java
+new file mode 100644
+index 0000000..3dbe844
+--- /dev/null
++++ b/android-src/android/content/DialogInterface.java
+@@ -0,0 +1,15 @@
++package android.content;
++
++/** android.content.DialogInterface (stand-in). */
++public interface DialogInterface {
++    int BUTTON_POSITIVE = -1;
++    int BUTTON_NEGATIVE = -2;
++    int BUTTON_NEUTRAL = -3;
++
++    void dismiss();
++    void cancel();
++
++    interface OnClickListener {
++        void onClick(DialogInterface dialog, int which);
++    }
++}
+diff --git a/android-src/android/content/Intent.java b/android-src/android/content/Intent.java
+new file mode 100644
+index 0000000..512af86
+--- /dev/null
++++ b/android-src/android/content/Intent.java
+@@ -0,0 +1,47 @@
++package android.content;
++
++import android.os.Bundle;
++
++/** android.content.Intent (stand-in): what activity to start, and its extras. */
++public class Intent {
++    public static final int FLAG_ACTIVITY_NEW_TASK = 0x10000000;
++    public static final int FLAG_ACTIVITY_CLEAR_TOP = 0x04000000;
++    public static final String ACTION_MAIN = "android.intent.action.MAIN";
++
++    private final Bundle extras = new Bundle();
++    private Class<?> target;
++    private int flags;
++    private String action;
++
++    public Intent() {}
++    public Intent(String action) { this.action = action; }
++    public Intent(Context context, Class<?> cls) { this.target = cls; }
++
++    public Intent setClass(Context context, Class<?> cls) { this.target = cls; return this; }
++    public Class<?> getTargetClass() { return target; }
++    public String getAction() { return action; }
++    public Intent setAction(String action) { this.action = action; return this; }
++    public Intent addFlags(int f) { flags |= f; return this; }
++    public Intent setFlags(int f) { flags = f; return this; }
++    public int getFlags() { return flags; }
++
++    public Intent putExtra(String name, String value) { extras.putString(name, value); return this; }
++    public Intent putExtra(String name, int value) { extras.putInt(name, value); return this; }
++    public Intent putExtra(String name, long value) { extras.putLong(name, value); return this; }
++    public Intent putExtra(String name, double value) { extras.putDouble(name, value); return this; }
++    public Intent putExtra(String name, boolean value) { extras.putBoolean(name, value); return this; }
++    public Intent putExtras(Bundle b) { extras.putAll(b); return this; }
++
++    public boolean hasExtra(String name) { return extras.containsKey(name); }
++    public String getStringExtra(String name) { return extras.getString(name); }
++    public int getIntExtra(String name, int def) { return extras.getInt(name, def); }
++    public long getLongExtra(String name, long def) { return extras.getLong(name, def); }
++    public double getDoubleExtra(String name, double def) { return extras.getDouble(name, def); }
++    public boolean getBooleanExtra(String name, boolean def) { return extras.getBoolean(name, def); }
++    public Bundle getExtras() { return extras; }
++    public Bundle getBundleExtra(String name) { return null; }
++
++    @Override public String toString() {
++        return "Intent { " + (target != null ? "cmp=" + target.getName() + " " : "") + extras + " }";
++    }
++}
+diff --git a/android-src/android/content/SharedPreferences.java b/android-src/android/content/SharedPreferences.java
+new file mode 100644
+index 0000000..0c2c8c6
+--- /dev/null
++++ b/android-src/android/content/SharedPreferences.java
+@@ -0,0 +1,27 @@
++package android.content;
++
++import java.util.Map;
++
++/** android.content.SharedPreferences (stand-in): org.chunkybacon.sim.SimPreferences implements it. */
++public interface SharedPreferences {
++    String getString(String key, String defValue);
++    int getInt(String key, int defValue);
++    long getLong(String key, long defValue);
++    float getFloat(String key, float defValue);
++    boolean getBoolean(String key, boolean defValue);
++    boolean contains(String key);
++    Map<String, ?> getAll();
++    Editor edit();
++
++    interface Editor {
++        Editor putString(String key, String value);
++        Editor putInt(String key, int value);
++        Editor putLong(String key, long value);
++        Editor putFloat(String key, float value);
++        Editor putBoolean(String key, boolean value);
++        Editor remove(String key);
++        Editor clear();
++        boolean commit();
++        void apply();
++    }
++}
+diff --git a/android-src/android/content/res/Configuration.java b/android-src/android/content/res/Configuration.java
+new file mode 100644
+index 0000000..9a1d7a7
+--- /dev/null
++++ b/android-src/android/content/res/Configuration.java
+@@ -0,0 +1,11 @@
++package android.content.res;
++
++import org.chunkybacon.sim.Device;
++
++/** android.content.res.Configuration (stand-in): the orientation, live from the simulated phone. */
++public class Configuration {
++    public static final int ORIENTATION_PORTRAIT = 1;
++    public static final int ORIENTATION_LANDSCAPE = 2;
++    public int orientation = ORIENTATION_PORTRAIT;
++    public int getOrientation() { orientation = Device.getOrientation(); return orientation; }
++}
+diff --git a/android-src/android/content/res/Resources.java b/android-src/android/content/res/Resources.java
+new file mode 100644
+index 0000000..b2204b1
+--- /dev/null
++++ b/android-src/android/content/res/Resources.java
+@@ -0,0 +1,8 @@
++package android.content.res;
++
++/** android.content.res.Resources (stand-in): only the configuration. */
++public class Resources {
++    public static final Resources INSTANCE = new Resources();
++    private final Configuration configuration = new Configuration();
++    public Configuration getConfiguration() { return configuration; }
++}
+diff --git a/android-src/android/graphics/Color.java b/android-src/android/graphics/Color.java
+new file mode 100644
+index 0000000..a7cc381
+--- /dev/null
++++ b/android-src/android/graphics/Color.java
+@@ -0,0 +1,39 @@
++package android.graphics;
++
++/** android.graphics.Color (stand-in): ARGB ints. */
++public class Color {
++    public static final int BLACK = 0xFF000000;
++    public static final int DKGRAY = 0xFF444444;
++    public static final int GRAY = 0xFF888888;
++    public static final int LTGRAY = 0xFFCCCCCC;
++    public static final int WHITE = 0xFFFFFFFF;
++    public static final int RED = 0xFFFF0000;
++    public static final int GREEN = 0xFF00FF00;
++    public static final int BLUE = 0xFF0000FF;
++    public static final int YELLOW = 0xFFFFFF00;
++    public static final int CYAN = 0xFF00FFFF;
++    public static final int MAGENTA = 0xFFFF00FF;
++    public static final int TRANSPARENT = 0;
++
++    public static int rgb(int r, int g, int b) { return argb(255, r, g, b); }
++    public static int argb(int a, int r, int g, int b) { return (a & 255) << 24 | (r & 255) << 16 | (g & 255) << 8 | (b & 255); }
++    public static int red(int c) { return (c >> 16) & 255; }
++    public static int green(int c) { return (c >> 8) & 255; }
++    public static int blue(int c) { return c & 255; }
++    public static int alpha(int c) { return (c >>> 24); }
++
++    public static int parseColor(String s) {
++        if (s.startsWith("#")) {
++            long v = Long.parseLong(s.substring(1), 16);
++            if (s.length() == 7) v |= 0xFF000000L;
++            else if (s.length() != 9) throw new IllegalArgumentException("Unknown color");
++            return (int) v;
++        }
++        switch (s.toLowerCase()) {
++            case "black": return BLACK; case "white": return WHITE; case "red": return RED; case "green": return GREEN;
++            case "blue": return BLUE; case "yellow": return YELLOW; case "gray": case "grey": return GRAY;
++            case "cyan": return CYAN; case "magenta": return MAGENTA;
++            default: throw new IllegalArgumentException("Unknown color");
++        }
++    }
++}
+diff --git a/android-src/android/graphics/Typeface.java b/android-src/android/graphics/Typeface.java
+new file mode 100644
+index 0000000..4f670d8
+--- /dev/null
++++ b/android-src/android/graphics/Typeface.java
+@@ -0,0 +1,22 @@
++package android.graphics;
++
++/** android.graphics.Typeface (stand-in): the font family and style a TextView draws with. */
++public class Typeface {
++    public static final int NORMAL = 0, BOLD = 1, ITALIC = 2, BOLD_ITALIC = 3;
++    public static final Typeface DEFAULT = new Typeface("sans-serif", NORMAL);
++    public static final Typeface DEFAULT_BOLD = new Typeface("sans-serif", BOLD);
++    public static final Typeface SANS_SERIF = DEFAULT;
++    public static final Typeface SERIF = new Typeface("serif", NORMAL);
++    public static final Typeface MONOSPACE = new Typeface("monospace", NORMAL);
++
++    private final String family;
++    private final int style;
++    private Typeface(String family, int style) { this.family = family; this.style = style; }
++
++    public static Typeface create(Typeface family, int style) { return new Typeface(family == null ? "sans-serif" : family.family, style); }
++    public static Typeface create(String family, int style) { return new Typeface(family, style); }
++    public int getStyle() { return style; }
++    public String getFamily() { return family; }
++    public boolean isBold() { return (style & BOLD) != 0; }
++    public boolean isItalic() { return (style & ITALIC) != 0; }
++}
+diff --git a/android-src/android/os/Build.java b/android-src/android/os/Build.java
+new file mode 100644
+index 0000000..c001bf7
+--- /dev/null
++++ b/android-src/android/os/Build.java
+@@ -0,0 +1,17 @@
++package android.os;
++
++/** android.os.Build (stand-in): the simulated phone runs Android 14 (API 34), the lowest Ruboto 2 runs on. */
++public class Build {
++    public static final String MODEL = "Chunky Phone (simulated)";
++    public static final String MANUFACTURER = "chunkybacon";
++
++    public static class VERSION {
++        public static final int SDK_INT = 34;
++        public static final String RELEASE = "14";
++    }
++
++    public static class VERSION_CODES {
++        public static final int TIRAMISU = 33;
++        public static final int UPSIDE_DOWN_CAKE = 34;
++    }
++}
+diff --git a/android-src/android/os/Bundle.java b/android-src/android/os/Bundle.java
+new file mode 100644
+index 0000000..9f61288
+--- /dev/null
++++ b/android-src/android/os/Bundle.java
+@@ -0,0 +1,43 @@
++package android.os;
++
++import java.util.LinkedHashMap;
++import java.util.Map;
++import java.util.Set;
++
++/** android.os.Bundle (stand-in): a map of String keys to simple values. */
++public class Bundle {
++    private final Map<String, Object> map = new LinkedHashMap<>();
++
++    public Bundle() {}
++
++    public void putString(String key, String value) { map.put(key, value); }
++    public void putInt(String key, int value) { map.put(key, value); }
++    public void putLong(String key, long value) { map.put(key, value); }
++    public void putDouble(String key, double value) { map.put(key, value); }
++    public void putFloat(String key, float value) { map.put(key, value); }
++    public void putBoolean(String key, boolean value) { map.put(key, value); }
++    public void putAll(Bundle other) { map.putAll(other.map); }
++
++    public String getString(String key) { Object v = map.get(key); return v instanceof String ? (String) v : null; }
++    public String getString(String key, String def) { String v = getString(key); return v == null ? def : v; }
++    public int getInt(String key) { return getInt(key, 0); }
++    // any number: a Ruby Integer reaches Java as an int or a long, depending on the overload JRuby picks
++    public int getInt(String key, int def) { Object v = map.get(key); return v instanceof Number && !(v instanceof Double || v instanceof Float) ? ((Number) v).intValue() : def; }
++    public long getLong(String key) { return getLong(key, 0L); }
++    public long getLong(String key, long def) { Object v = map.get(key); return v instanceof Number && !(v instanceof Double || v instanceof Float) ? ((Number) v).longValue() : def; }
++    public double getDouble(String key) { return getDouble(key, 0.0); }
++    public double getDouble(String key, double def) { Object v = map.get(key); return v instanceof Number ? ((Number) v).doubleValue() : def; }
++    public float getFloat(String key) { return getFloat(key, 0f); }
++    public float getFloat(String key, float def) { Object v = map.get(key); return v instanceof Number ? ((Number) v).floatValue() : def; }
++    public boolean getBoolean(String key) { return getBoolean(key, false); }
++    public boolean getBoolean(String key, boolean def) { Object v = map.get(key); return v instanceof Boolean ? (Boolean) v : def; }
++
++    public boolean containsKey(String key) { return map.containsKey(key); }
++    public void remove(String key) { map.remove(key); }
++    public Set<String> keySet() { return map.keySet(); }
++    public int size() { return map.size(); }
++    public boolean isEmpty() { return map.isEmpty(); }
++    public void clear() { map.clear(); }
++
++    @Override public String toString() { return "Bundle[" + map + "]"; }
++}
+diff --git a/android-src/android/os/Handler.java b/android-src/android/os/Handler.java
+new file mode 100644
+index 0000000..687c1b1
+--- /dev/null
++++ b/android-src/android/os/Handler.java
+@@ -0,0 +1,15 @@
++package android.os;
++
++import org.chunkybacon.sim.Device;
++
++/** android.os.Handler (stand-in): Runnables on the simulated phone's clock. */
++public class Handler {
++    public Handler() {}
++    public Handler(Looper looper) {}
++
++    public boolean post(Runnable r) { Device.post(r, 0, this); return true; }
++    public boolean postDelayed(Runnable r, long delayMillis) { Device.post(r, delayMillis, this); return true; }
++    public void removeCallbacks(Runnable r) { Device.cancel(r, this); }
++    public void removeCallbacksAndMessages(Object token) { Device.cancel(null, this); }
++    public Looper getLooper() { return Looper.getMainLooper(); }
++}
+diff --git a/android-src/android/os/Looper.java b/android-src/android/os/Looper.java
+new file mode 100644
+index 0000000..6c4dc01
+--- /dev/null
++++ b/android-src/android/os/Looper.java
+@@ -0,0 +1,8 @@
++package android.os;
++
++/** android.os.Looper (stand-in): the simulated phone has only the main thread's. */
++public class Looper {
++    private static final Looper MAIN = new Looper();
++    public static Looper getMainLooper() { return MAIN; }
++    public static Looper myLooper() { return MAIN; }
++}
+diff --git a/android-src/android/os/SystemClock.java b/android-src/android/os/SystemClock.java
+new file mode 100644
+index 0000000..ba81b76
+--- /dev/null
++++ b/android-src/android/os/SystemClock.java
+@@ -0,0 +1,9 @@
++package android.os;
++
++import org.chunkybacon.sim.Device;
++
++/** android.os.SystemClock (stand-in): the simulated phone's clock. */
++public class SystemClock {
++    public static long uptimeMillis() { return Device.now(); }
++    public static long elapsedRealtime() { return Device.now(); }
++}
+diff --git a/android-src/android/text/Editable.java b/android-src/android/text/Editable.java
+new file mode 100644
+index 0000000..43e49c0
+--- /dev/null
++++ b/android-src/android/text/Editable.java
+@@ -0,0 +1,7 @@
++package android.text;
++
++/** android.text.Editable (stand-in): the text of an EditText. */
++public interface Editable extends CharSequence {
++    Editable append(CharSequence text);
++    void clear();
++}
+diff --git a/android-src/android/text/InputType.java b/android-src/android/text/InputType.java
+new file mode 100644
+index 0000000..f3818d7
+--- /dev/null
++++ b/android-src/android/text/InputType.java
+@@ -0,0 +1,13 @@
++package android.text;
++
++/** android.text.InputType (stand-in): the keyboard an EditText asks for. */
++public interface InputType {
++    int TYPE_CLASS_TEXT = 1;
++    int TYPE_CLASS_NUMBER = 2;
++    int TYPE_CLASS_PHONE = 3;
++    int TYPE_NUMBER_FLAG_DECIMAL = 0x2000;
++    int TYPE_NUMBER_FLAG_SIGNED = 0x1000;
++    int TYPE_TEXT_VARIATION_PASSWORD = 0x80;
++    int TYPE_TEXT_VARIATION_EMAIL_ADDRESS = 0x20;
++    int TYPE_TEXT_FLAG_MULTI_LINE = 0x20000;
++}
+diff --git a/android-src/android/text/TextWatcher.java b/android-src/android/text/TextWatcher.java
+new file mode 100644
+index 0000000..14979ba
+--- /dev/null
++++ b/android-src/android/text/TextWatcher.java
+@@ -0,0 +1,8 @@
++package android.text;
++
++/** android.text.TextWatcher (stand-in). */
++public interface TextWatcher {
++    void beforeTextChanged(CharSequence s, int start, int count, int after);
++    void onTextChanged(CharSequence s, int start, int before, int count);
++    void afterTextChanged(Editable s);
++}
+diff --git a/android-src/android/util/Log.java b/android-src/android/util/Log.java
+new file mode 100644
+index 0000000..2eb4bd3
+--- /dev/null
++++ b/android-src/android/util/Log.java
+@@ -0,0 +1,22 @@
++package android.util;
++
++import org.chunkybacon.sim.Device;
++
++/** android.util.Log (stand-in): lines for the simulated phone's logcat. */
++public final class Log {
++    public static final int VERBOSE = 2, DEBUG = 3, INFO = 4, WARN = 5, ERROR = 6, ASSERT = 7;
++
++    private Log() {}
++
++    private static int out(String level, String tag, String msg, Throwable tr) {
++        Device.log(level, tag, tr == null ? msg : msg + "\n" + tr);
++        return 1;
++    }
++    public static int v(String tag, String msg) { return out("V", tag, msg, null); }
++    public static int d(String tag, String msg) { return out("D", tag, msg, null); }
++    public static int i(String tag, String msg) { return out("I", tag, msg, null); }
++    public static int w(String tag, String msg) { return out("W", tag, msg, null); }
++    public static int e(String tag, String msg) { return out("E", tag, msg, null); }
++    public static int e(String tag, String msg, Throwable tr) { return out("E", tag, msg, tr); }
++    public static int wtf(String tag, String msg) { return out("A", tag, msg, null); }
++}
+diff --git a/android-src/android/view/ContextThemeWrapper.java b/android-src/android/view/ContextThemeWrapper.java
+new file mode 100644
+index 0000000..ab974ab
+--- /dev/null
++++ b/android-src/android/view/ContextThemeWrapper.java
+@@ -0,0 +1,10 @@
++package android.view;
++
++import android.content.ContextWrapper;
++
++/** android.view.ContextThemeWrapper (stand-in). */
++public class ContextThemeWrapper extends ContextWrapper {
++    private int theme;
++    public void setTheme(int resid) { theme = resid; }
++    public int getThemeResId() { return theme; }
++}
+diff --git a/android-src/android/view/Gravity.java b/android-src/android/view/Gravity.java
+new file mode 100644
+index 0000000..c3227ba
+--- /dev/null
++++ b/android-src/android/view/Gravity.java
+@@ -0,0 +1,18 @@
++package android.view;
++
++/** android.view.Gravity (stand-in): Android's constants. */
++public class Gravity {
++    public static final int NO_GRAVITY = 0;
++    public static final int CENTER_HORIZONTAL = 1;
++    public static final int LEFT = 3;
++    public static final int RIGHT = 5;
++    public static final int FILL_HORIZONTAL = 7;
++    public static final int CENTER_VERTICAL = 16;
++    public static final int CENTER = 17;
++    public static final int TOP = 48;
++    public static final int BOTTOM = 80;
++    public static final int FILL_VERTICAL = 112;
++    public static final int FILL = 119;
++    public static final int START = 0x00800003;
++    public static final int END = 0x00800005;
++}
+diff --git a/android-src/android/view/Menu.java b/android-src/android/view/Menu.java
+new file mode 100644
+index 0000000..67d1f6b
+--- /dev/null
++++ b/android-src/android/view/Menu.java
+@@ -0,0 +1,15 @@
++package android.view;
++
++/** android.view.Menu (stand-in): org.chunkybacon.sim.SimMenu implements it. */
++public interface Menu {
++    int NONE = 0;
++    int FIRST = 1;
++
++    MenuItem add(CharSequence title);
++    MenuItem add(int groupId, int itemId, int order, CharSequence title);
++    MenuItem findItem(int id);
++    MenuItem getItem(int index);
++    int size();
++    void clear();
++    void removeItem(int id);
++}
+diff --git a/android-src/android/view/MenuItem.java b/android-src/android/view/MenuItem.java
+new file mode 100644
+index 0000000..ae7063c
+--- /dev/null
++++ b/android-src/android/view/MenuItem.java
+@@ -0,0 +1,27 @@
++package android.view;
++
++/** android.view.MenuItem (stand-in): org.chunkybacon.sim.SimMenu.Item implements it. */
++public interface MenuItem {
++    int SHOW_AS_ACTION_NEVER = 0;
++    int SHOW_AS_ACTION_IF_ROOM = 1;
++    int SHOW_AS_ACTION_ALWAYS = 2;
++    int SHOW_AS_ACTION_WITH_TEXT = 4;
++
++    int getItemId();
++    CharSequence getTitle();
++    MenuItem setTitle(CharSequence title);
++    MenuItem setOnMenuItemClickListener(OnMenuItemClickListener listener);
++    void setShowAsAction(int actionEnum);
++    MenuItem setEnabled(boolean enabled);
++    boolean isEnabled();
++    MenuItem setVisible(boolean visible);
++    boolean isVisible();
++    MenuItem setCheckable(boolean checkable);
++    MenuItem setChecked(boolean checked);
++    boolean isChecked();
++    MenuItem setIcon(int iconRes);
++
++    interface OnMenuItemClickListener {
++        boolean onMenuItemClick(MenuItem item);
++    }
++}
+diff --git a/android-src/android/view/View.java b/android-src/android/view/View.java
+new file mode 100644
+index 0000000..5a1f5c1
+--- /dev/null
++++ b/android-src/android/view/View.java
+@@ -0,0 +1,124 @@
++package android.view;
++
++import android.content.Context;
++import org.chunkybacon.sim.Device;
++import org.chunkybacon.sim.Json;
++
++/**
++ * android.view.View (stand-in, chunkybacon Ruboto lesson). Draws nothing:
++ * describe() writes what the page's phone draws. Sizes are dp (the
++ * simulated phone has a density of 1).
++ */
++public class View {
++    public static final int VISIBLE = 0;
++    public static final int INVISIBLE = 4;
++    public static final int GONE = 8;
++    public static final int NO_ID = -1;
++    public static final int TEXT_ALIGNMENT_INHERIT = 0;
++    public static final int TEXT_ALIGNMENT_GRAVITY = 1;
++    public static final int TEXT_ALIGNMENT_TEXT_START = 2;
++    public static final int TEXT_ALIGNMENT_TEXT_END = 3;
++    public static final int TEXT_ALIGNMENT_CENTER = 4;
++    public static final int TEXT_ALIGNMENT_VIEW_START = 5;
++    public static final int TEXT_ALIGNMENT_VIEW_END = 6;
++
++    public interface OnClickListener { void onClick(View v); }
++    public interface OnLongClickListener { boolean onLongClick(View v); }
++
++    private final Context context;
++    private final int simId;
++    private int id = NO_ID;
++    private int visibility = VISIBLE;
++    private boolean enabled = true;
++    private boolean clickable = false;
++    private int[] padding = { 0, 0, 0, 0 };
++    private Integer background = null;
++    private float alpha = 1f;
++    private int textAlignment = TEXT_ALIGNMENT_GRAVITY;
++    private ViewGroup.LayoutParams layoutParams;
++    ViewGroup parent;
++    private Object tag;
++    private OnClickListener onClick;
++    private OnLongClickListener onLongClick;
++    private int minimumHeight = 0, minimumWidth = 0;
++
++    public View(Context context) {
++        this.context = context;
++        this.simId = Device.register(this);
++    }
++
++    public Context getContext() { return context; }
++    public int getSimId() { return simId; }
++
++    public int getId() { return id; }
++    public void setId(int id) { this.id = id; }
++    public int getVisibility() { return visibility; }
++    public void setVisibility(int v) { this.visibility = v; }
++    public boolean isShown() { return visibility == VISIBLE && (parent == null || parent.isShown()); }
++    public boolean isEnabled() { return enabled; }
++    public void setEnabled(boolean enabled) { this.enabled = enabled; }
++    public boolean isClickable() { return clickable; }
++    public void setClickable(boolean clickable) { this.clickable = clickable; }
++    public void setPadding(int left, int top, int right, int bottom) { padding = new int[] { left, top, right, bottom }; }
++    public int getPaddingLeft() { return padding[0]; }
++    public int getPaddingTop() { return padding[1]; }
++    public int getPaddingRight() { return padding[2]; }
++    public int getPaddingBottom() { return padding[3]; }
++    public void setBackgroundColor(int color) { background = color; }
++    public float getAlpha() { return alpha; }
++    public void setAlpha(float alpha) { this.alpha = alpha; }
++    public int getTextAlignment() { return textAlignment; }
++    public void setTextAlignment(int a) { textAlignment = a; }
++    public void setMinimumHeight(int h) { minimumHeight = h; }
++    public void setMinimumWidth(int w) { minimumWidth = w; }
++    public Object getTag() { return tag; }
++    public void setTag(Object tag) { this.tag = tag; }
++    public ViewParent getParent() { return parent; }
++
++    public ViewGroup.LayoutParams getLayoutParams() { return layoutParams; }
++    public void setLayoutParams(ViewGroup.LayoutParams params) { this.layoutParams = params; }
++
++    public void setOnClickListener(OnClickListener l) { if (l != null) clickable = true; onClick = l; }
++    public void setOnLongClickListener(OnLongClickListener l) { onLongClick = l; }
++    public boolean hasOnClickListeners() { return onClick != null; }
++
++    public boolean performClick() {
++        if (onClick == null) return false;
++        onClick.onClick(this);
++        return true;
++    }
++
++    public boolean performLongClick() { return onLongClick != null && onLongClick.onLongClick(this); }
++
++    public void invalidate() {}
++    public void requestLayout() {}
++    public boolean requestFocus() { return true; }
++
++    public View findViewById(int id) { return this.id == id ? this : null; }
++
++    /** what the page draws; subclasses add theirs after super's */
++    public void describe(Json j) {
++        j.put("type", kind()).put("sim", simId);
++        if (id != NO_ID) j.put("id", id);
++        if (visibility != VISIBLE) j.put("visibility", visibility == GONE ? "gone" : "invisible");
++        if (!enabled) j.put("enabled", false);
++        if (onClick != null || clickable) j.put("clickable", true);
++        if (onLongClick != null) j.put("longClickable", true);
++        if (padding[0] != 0 || padding[1] != 0 || padding[2] != 0 || padding[3] != 0) {
++            j.key("padding").open('[').value(padding[0]).value(padding[1]).value(padding[2]).value(padding[3]).close(']');
++        }
++        if (background != null) j.put("background", background.intValue() & 0xFFFFFFFFL);
++        if (alpha != 1f) j.put("alpha", (double) alpha);
++        if (textAlignment != TEXT_ALIGNMENT_GRAVITY) j.put("textAlignment", textAlignment);
++        if (minimumHeight > 0) j.put("minHeight", minimumHeight);
++        if (minimumWidth > 0) j.put("minWidth", minimumWidth);
++        if (layoutParams != null) { j.key("layout").open('{'); layoutParams.describe(j); j.close('}'); }
++    }
++
++    /** the class name the page draws by: the nearest stand-in's */
++    protected String kind() { return "View"; }
++
++    @Override public String toString() {
++        return getClass().getName() + "{" + Integer.toHexString(System.identityHashCode(this)) + (id != NO_ID ? " #" + id : "") + "}";
++    }
++}
+diff --git a/android-src/android/view/ViewGroup.java b/android-src/android/view/ViewGroup.java
+new file mode 100644
+index 0000000..c0fa44b
+--- /dev/null
++++ b/android-src/android/view/ViewGroup.java
+@@ -0,0 +1,91 @@
++package android.view;
++
++import android.content.Context;
++import java.util.ArrayList;
++import java.util.List;
++import org.chunkybacon.sim.Json;
++
++/** android.view.ViewGroup (stand-in): a view with children. */
++public abstract class ViewGroup extends View implements ViewParent {
++    private final List<View> children = new ArrayList<>();
++
++    public ViewGroup(Context context) { super(context); }
++
++    public static class LayoutParams {
++        public static final int FILL_PARENT = -1;
++        public static final int MATCH_PARENT = -1;
++        public static final int WRAP_CONTENT = -2;
++
++        public int width;
++        public int height;
++
++        public LayoutParams(int width, int height) { this.width = width; this.height = height; }
++        public LayoutParams(LayoutParams source) { this(source.width, source.height); }
++
++        public void describe(Json j) { j.put("width", width).put("height", height); }
++    }
++
++    public static class MarginLayoutParams extends LayoutParams {
++        public int leftMargin, topMargin, rightMargin, bottomMargin;
++
++        public MarginLayoutParams(int width, int height) { super(width, height); }
++        public MarginLayoutParams(LayoutParams source) { super(source); }
++
++        public void setMargins(int left, int top, int right, int bottom) {
++            leftMargin = left; topMargin = top; rightMargin = right; bottomMargin = bottom;
++        }
++
++        @Override public void describe(Json j) {
++            super.describe(j);
++            if (leftMargin != 0 || topMargin != 0 || rightMargin != 0 || bottomMargin != 0) {
++                j.key("margins").open('[').value(leftMargin).value(topMargin).value(rightMargin).value(bottomMargin).close(']');
++            }
++        }
++    }
++
++    protected LayoutParams generateDefaultLayoutParams() {
++        return new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
++    }
++
++    public void addView(View child) { addView(child, -1); }
++
++    public void addView(View child, int index) {
++        if (child.parent != null) {
++            throw new IllegalStateException("The specified child already has a parent. You must call removeView() on the child's parent first.");
++        }
++        if (child.getLayoutParams() == null) child.setLayoutParams(generateDefaultLayoutParams());
++        if (index < 0 || index > children.size()) children.add(child); else children.add(index, child);
++        child.parent = this;
++    }
++
++    public void addView(View child, LayoutParams params) {
++        child.setLayoutParams(params);
++        addView(child, -1);
++    }
++
++    public void removeView(View child) { if (children.remove(child)) child.parent = null; }
++    public void removeViewAt(int index) { removeView(children.get(index)); }
++    public void removeAllViews() { for (View c : children) c.parent = null; children.clear(); }
++    public int getChildCount() { return children.size(); }
++    public View getChildAt(int index) { return index >= 0 && index < children.size() ? children.get(index) : null; }
++    public int indexOfChild(View child) { return children.indexOf(child); }
++
++    @Override public View findViewById(int id) {
++        View self = super.findViewById(id);
++        if (self != null) return self;
++        for (View c : children) {
++            View found = c.findViewById(id);
++            if (found != null) return found;
++        }
++        return null;
++    }
++
++    @Override public void describe(Json j) {
++        super.describe(j);
++        j.key("children").open('[');
++        for (View c : children) { j.item().open('{'); c.describe(j); j.close('}'); }
++        j.close(']');
++    }
++
++    @Override protected String kind() { return "ViewGroup"; }
++}
+diff --git a/android-src/android/view/ViewParent.java b/android-src/android/view/ViewParent.java
+new file mode 100644
+index 0000000..b65f7e8
+--- /dev/null
++++ b/android-src/android/view/ViewParent.java
+@@ -0,0 +1,6 @@
++package android.view;
++
++/** android.view.ViewParent (stand-in). */
++public interface ViewParent {
++    ViewParent getParent();
++}
+diff --git a/android-src/android/widget/Adapter.java b/android-src/android/widget/Adapter.java
+new file mode 100644
+index 0000000..12f40fc
+--- /dev/null
++++ b/android-src/android/widget/Adapter.java
+@@ -0,0 +1,9 @@
++package android.widget;
++
++/** android.widget.Adapter (stand-in). */
++public interface Adapter {
++    int getCount();
++    Object getItem(int position);
++    long getItemId(int position);
++    boolean isEmpty();
++}
+diff --git a/android-src/android/widget/AdapterView.java b/android-src/android/widget/AdapterView.java
+new file mode 100644
+index 0000000..79768f6
+--- /dev/null
++++ b/android-src/android/widget/AdapterView.java
+@@ -0,0 +1,75 @@
++package android.widget;
++
++import android.content.Context;
++import android.view.View;
++import android.view.ViewGroup;
++import org.chunkybacon.sim.Json;
++
++/** android.widget.AdapterView (stand-in): items from an Adapter. */
++public abstract class AdapterView<T extends Adapter> extends ViewGroup {
++    public static final int INVALID_POSITION = -1;
++
++    public interface OnItemClickListener {
++        void onItemClick(AdapterView<?> parent, View view, int position, long id);
++    }
++    public interface OnItemLongClickListener {
++        boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id);
++    }
++    public interface OnItemSelectedListener {
++        void onItemSelected(AdapterView<?> parent, View view, int position, long id);
++        void onNothingSelected(AdapterView<?> parent);
++    }
++
++    private OnItemClickListener onItemClick;
++    private OnItemSelectedListener onItemSelected;
++    int selected = INVALID_POSITION;
++
++    public AdapterView(Context context) { super(context); }
++
++    public abstract T getAdapter();
++    public abstract void setAdapter(T adapter);
++
++    public void setOnItemClickListener(OnItemClickListener l) { onItemClick = l; }
++    public OnItemClickListener getOnItemClickListener() { return onItemClick; }
++    public void setOnItemSelectedListener(OnItemSelectedListener l) { onItemSelected = l; }
++    public OnItemSelectedListener getOnItemSelectedListener() { return onItemSelected; }
++
++    public int getCount() { T a = getAdapter(); return a == null ? 0 : a.getCount(); }
++    public Object getItemAtPosition(int position) { T a = getAdapter(); return a == null || position < 0 ? null : a.getItem(position); }
++    public long getItemIdAtPosition(int position) { T a = getAdapter(); return a == null || position < 0 ? -1 : a.getItemId(position); }
++    public int getSelectedItemPosition() { return selected; }
++    public Object getSelectedItem() { return getItemAtPosition(selected); }
++    public long getSelectedItemId() { return getItemIdAtPosition(selected); }
++
++    public void setSelection(int position) {
++        if (position == selected) return;
++        selected = position;
++        if (onItemSelected != null) onItemSelected.onItemSelected(this, row(position), position, getItemIdAtPosition(position));
++    }
++
++    /** the row's view, as an adapter's simple_list_item_1 makes it */
++    View row(int position) {
++        TextView row = new TextView(getContext());
++        Object item = getItemAtPosition(position);
++        row.setText(String.valueOf(item));
++        return row;
++    }
++
++    /** the simulated finger taps row +position+ */
++    public boolean simItemClick(int position) {
++        if (position < 0 || position >= getCount()) return false;
++        if (onItemClick == null) return false;
++        onItemClick.onItemClick(this, row(position), position, getItemIdAtPosition(position));
++        return true;
++    }
++
++    @Override public void describe(Json j) {
++        super.describe(j);
++        j.key("items").open('[');
++        int n = getCount();
++        for (int i = 0; i < n && i < 500; i++) j.value(String.valueOf(getItemAtPosition(i)));
++        j.close(']');
++        if (selected != INVALID_POSITION) j.put("selected", selected);
++        if (onItemClick != null) j.put("itemClickable", true);
++    }
++}
+diff --git a/android-src/android/widget/ArrayAdapter.java b/android-src/android/widget/ArrayAdapter.java
+new file mode 100644
+index 0000000..a6a3e85
+--- /dev/null
++++ b/android-src/android/widget/ArrayAdapter.java
+@@ -0,0 +1,27 @@
++package android.widget;
++
++import android.content.Context;
++import java.util.ArrayList;
++import java.util.Arrays;
++import java.util.Collection;
++import java.util.List;
++
++/** android.widget.ArrayAdapter (stand-in): the items of a ListView or Spinner, shown by toString. */
++public class ArrayAdapter<T> extends BaseAdapter {
++    private final List<T> items;
++    private int dropDownResource;
++
++    public ArrayAdapter(Context context, int resource) { this.items = new ArrayList<>(); }
++    public ArrayAdapter(Context context, int resource, List<T> objects) { this.items = new ArrayList<>(objects); }
++    public ArrayAdapter(Context context, int resource, T[] objects) { this.items = new ArrayList<>(Arrays.asList(objects)); }
++
++    public int getCount() { return items.size(); }
++    public T getItem(int position) { return items.get(position); }
++    public int getPosition(T item) { return items.indexOf(item); }
++    public void add(T item) { items.add(item); }
++    public void addAll(Collection<? extends T> c) { items.addAll(c); }
++    public void insert(T item, int index) { items.add(index, item); }
++    public void remove(T item) { items.remove(item); }
++    public void clear() { items.clear(); }
++    public void setDropDownViewResource(int resource) { dropDownResource = resource; }
++}
+diff --git a/android-src/android/widget/BaseAdapter.java b/android-src/android/widget/BaseAdapter.java
+new file mode 100644
+index 0000000..7d16d2f
+--- /dev/null
++++ b/android-src/android/widget/BaseAdapter.java
+@@ -0,0 +1,8 @@
++package android.widget;
++
++/** android.widget.BaseAdapter (stand-in). */
++public abstract class BaseAdapter implements ListAdapter, SpinnerAdapter {
++    public long getItemId(int position) { return position; }
++    public boolean isEmpty() { return getCount() == 0; }
++    public void notifyDataSetChanged() {}
++}
+diff --git a/android-src/android/widget/Button.java b/android-src/android/widget/Button.java
+new file mode 100644
+index 0000000..d8ea7e5
+--- /dev/null
++++ b/android-src/android/widget/Button.java
+@@ -0,0 +1,10 @@
++package android.widget;
++
++import android.content.Context;
++import android.view.Gravity;
++
++/** android.widget.Button (stand-in). */
++public class Button extends TextView {
++    public Button(Context context) { super(context); setGravity(Gravity.CENTER); }
++    @Override protected String kind() { return "Button"; }
++}
+diff --git a/android-src/android/widget/CheckBox.java b/android-src/android/widget/CheckBox.java
+new file mode 100644
+index 0000000..d3bff67
+--- /dev/null
++++ b/android-src/android/widget/CheckBox.java
+@@ -0,0 +1,9 @@
++package android.widget;
++
++import android.content.Context;
++
++/** android.widget.CheckBox (stand-in). */
++public class CheckBox extends CompoundButton {
++    public CheckBox(Context context) { super(context); }
++    @Override protected String kind() { return "CheckBox"; }
++}
+diff --git a/android-src/android/widget/CompoundButton.java b/android-src/android/widget/CompoundButton.java
+new file mode 100644
+index 0000000..4469d2d
+--- /dev/null
++++ b/android-src/android/widget/CompoundButton.java
+@@ -0,0 +1,34 @@
++package android.widget;
++
++import android.content.Context;
++import org.chunkybacon.sim.Json;
++
++/** android.widget.CompoundButton (stand-in): a button that is checked or not. */
++public abstract class CompoundButton extends Button {
++    public interface OnCheckedChangeListener { void onCheckedChanged(CompoundButton button, boolean isChecked); }
++
++    private boolean checked;
++    private OnCheckedChangeListener listener;
++
++    public CompoundButton(Context context) { super(context); setGravity(android.view.Gravity.START | android.view.Gravity.CENTER_VERTICAL); }
++
++    public boolean isChecked() { return checked; }
++    public void setChecked(boolean c) {
++        if (c == checked) return;
++        checked = c;
++        if (listener != null) listener.onCheckedChanged(this, c);
++    }
++    public void toggle() { setChecked(!checked); }
++    public void setOnCheckedChangeListener(OnCheckedChangeListener l) { listener = l; }
++
++    @Override public boolean performClick() {
++        toggle();
++        super.performClick();
++        return true;
++    }
++
++    @Override public void describe(Json j) {
++        super.describe(j);
++        j.put("checked", checked).put("clickable", true);
++    }
++}
+diff --git a/android-src/android/widget/EditText.java b/android-src/android/widget/EditText.java
+new file mode 100644
+index 0000000..17924e2
+--- /dev/null
++++ b/android-src/android/widget/EditText.java
+@@ -0,0 +1,44 @@
++package android.widget;
++
++import android.content.Context;
++import android.text.Editable;
++import android.text.TextWatcher;
++import java.util.ArrayList;
++import org.chunkybacon.sim.Json;
++
++/** android.widget.EditText (stand-in): the page's phone types into it (setText, as the keyboard would). */
++public class EditText extends TextView {
++    private int inputType = 1;
++    private final SimEditable editable = new SimEditable();
++
++    public EditText(Context context) { super(context); }
++
++    @Override public Editable getText() { editable.value = String.valueOf(super.getText()); return editable; }
++
++    @Override void afterChange() {
++        editable.value = String.valueOf(super.getText());
++        for (TextWatcher w : new ArrayList<>(watchers)) w.afterTextChanged(editable);
++    }
++
++    public void setInputType(int type) { inputType = type; }
++    public int getInputType() { return inputType; }
++    public void setSelection(int index) {}
++    public void selectAll() {}
++
++    @Override public void describe(Json j) {
++        super.describe(j);
++        j.put("inputType", inputType);
++    }
++
++    @Override protected String kind() { return "EditText"; }
++
++    public final class SimEditable implements Editable {
++        String value = "";
++        public int length() { return value.length(); }
++        public char charAt(int i) { return value.charAt(i); }
++        public CharSequence subSequence(int s, int e) { return value.subSequence(s, e); }
++        public Editable append(CharSequence more) { EditText.this.append(more); return this; }
++        public void clear() { setText(""); }
++        @Override public String toString() { return value; }
++    }
++}
+diff --git a/android-src/android/widget/FrameLayout.java b/android-src/android/widget/FrameLayout.java
+new file mode 100644
+index 0000000..d7f7b2f
+--- /dev/null
++++ b/android-src/android/widget/FrameLayout.java
+@@ -0,0 +1,28 @@
++package android.widget;
++
++import android.content.Context;
++import android.view.ViewGroup;
++import org.chunkybacon.sim.Json;
++
++/** android.widget.FrameLayout (stand-in): children on top of each other. */
++public class FrameLayout extends ViewGroup {
++    public FrameLayout(Context context) { super(context); }
++
++    public static class LayoutParams extends ViewGroup.MarginLayoutParams {
++        public int gravity = -1;
++        public LayoutParams(int width, int height) { super(width, height); }
++        public LayoutParams(int width, int height, int gravity) { super(width, height); this.gravity = gravity; }
++        public LayoutParams(ViewGroup.LayoutParams source) { super(source); }
++
++        @Override public void describe(Json j) {
++            super.describe(j);
++            if (gravity != -1) j.put("gravity", gravity);
++        }
++    }
++
++    @Override protected ViewGroup.LayoutParams generateDefaultLayoutParams() {
++        return new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
++    }
++
++    @Override protected String kind() { return "FrameLayout"; }
++}
+diff --git a/android-src/android/widget/ImageView.java b/android-src/android/widget/ImageView.java
+new file mode 100644
+index 0000000..c950af8
+--- /dev/null
++++ b/android-src/android/widget/ImageView.java
+@@ -0,0 +1,37 @@
++package android.widget;
++
++import android.content.Context;
++import android.view.View;
++import org.chunkybacon.sim.Drawables;
++import org.chunkybacon.sim.Json;
++
++/** android.widget.ImageView (stand-in): shows one of the app's drawables (R.drawable.*). */
++public class ImageView extends View {
++    public enum ScaleType { CENTER, CENTER_CROP, CENTER_INSIDE, FIT_CENTER, FIT_END, FIT_START, FIT_XY, MATRIX }
++
++    private int resource = 0;
++    private ScaleType scaleType = ScaleType.FIT_CENTER;
++    private boolean adjustViewBounds = false;
++
++    public ImageView(Context context) { super(context); }
++
++    public void setImageResource(int resId) {
++        if (resId != 0 && Drawables.name(resId) == null) {
++            throw new IllegalArgumentException("Resource ID #0x" + Integer.toHexString(resId) + " is not a drawable of this app");
++        }
++        resource = resId;
++    }
++    public int getImageResource() { return resource; }
++    public void setScaleType(ScaleType type) { scaleType = type; }
++    public ScaleType getScaleType() { return scaleType; }
++    public void setAdjustViewBounds(boolean adjust) { adjustViewBounds = adjust; }
++    public void setContentDescription(CharSequence text) {}
++
++    @Override public void describe(Json j) {
++        super.describe(j);
++        if (resource != 0) j.put("drawable", Drawables.name(resource));
++        j.put("scaleType", scaleType.name());
++    }
++
++    @Override protected String kind() { return "ImageView"; }
++}
+diff --git a/android-src/android/widget/LinearLayout.java b/android-src/android/widget/LinearLayout.java
+new file mode 100644
+index 0000000..7d3998a
+--- /dev/null
++++ b/android-src/android/widget/LinearLayout.java
+@@ -0,0 +1,49 @@
++package android.widget;
++
++import android.content.Context;
++import android.view.ViewGroup;
++import org.chunkybacon.sim.Json;
++
++/** android.widget.LinearLayout (stand-in): children in a row or a column. */
++public class LinearLayout extends ViewGroup {
++    public static final int HORIZONTAL = 0;
++    public static final int VERTICAL = 1;
++
++    private int orientation = HORIZONTAL;
++    private int gravity = android.view.Gravity.START | android.view.Gravity.TOP;
++
++    public LinearLayout(Context context) { super(context); }
++
++    public static class LayoutParams extends ViewGroup.MarginLayoutParams {
++        public float weight;
++        public int gravity = -1;
++
++        public LayoutParams(int width, int height) { super(width, height); }
++        public LayoutParams(int width, int height, float weight) { super(width, height); this.weight = weight; }
++        public LayoutParams(ViewGroup.LayoutParams source) { super(source); }
++
++        @Override public void describe(Json j) {
++            super.describe(j);
++            if (weight != 0) j.put("weight", (double) weight);
++            if (gravity != -1) j.put("gravity", gravity);
++        }
++    }
++
++    public int getOrientation() { return orientation; }
++    public void setOrientation(int orientation) { this.orientation = orientation; }
++    public int getGravity() { return gravity; }
++    public void setGravity(int gravity) { this.gravity = gravity; }
++
++    @Override protected ViewGroup.LayoutParams generateDefaultLayoutParams() {
++        return orientation == VERTICAL
++            ? new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
++            : new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
++    }
++
++    @Override public void describe(Json j) {
++        super.describe(j);
++        j.put("orientation", orientation == VERTICAL ? "vertical" : "horizontal").put("gravity", gravity);
++    }
++
++    @Override protected String kind() { return "LinearLayout"; }
++}
+diff --git a/android-src/android/widget/ListAdapter.java b/android-src/android/widget/ListAdapter.java
+new file mode 100644
+index 0000000..8f47fe0
+--- /dev/null
++++ b/android-src/android/widget/ListAdapter.java
+@@ -0,0 +1,5 @@
++package android.widget;
++
++/** android.widget.ListAdapter (stand-in). */
++public interface ListAdapter extends Adapter {
++}
+diff --git a/android-src/android/widget/ListView.java b/android-src/android/widget/ListView.java
+new file mode 100644
+index 0000000..b3140d1
+--- /dev/null
++++ b/android-src/android/widget/ListView.java
+@@ -0,0 +1,15 @@
++package android.widget;
++
++import android.content.Context;
++
++/** android.widget.ListView (stand-in): a scrolling list of an adapter's items. */
++public class ListView extends AdapterView<ListAdapter> {
++    private ListAdapter adapter;
++
++    public ListView(Context context) { super(context); }
++
++    public ListAdapter getAdapter() { return adapter; }
++    public void setAdapter(ListAdapter adapter) { this.adapter = adapter; }
++
++    @Override protected String kind() { return "ListView"; }
++}
+diff --git a/android-src/android/widget/ProgressBar.java b/android-src/android/widget/ProgressBar.java
+new file mode 100644
+index 0000000..e5ae1a4
+--- /dev/null
++++ b/android-src/android/widget/ProgressBar.java
+@@ -0,0 +1,30 @@
++package android.widget;
++
++import android.content.Context;
++import android.view.View;
++import org.chunkybacon.sim.Json;
++
++/** android.widget.ProgressBar (stand-in). */
++public class ProgressBar extends View {
++    private int max = 100;
++    private int progress = 0;
++    private boolean indeterminate = false;
++
++    public ProgressBar(Context context) { super(context); }
++
++    public int getMax() { return max; }
++    public void setMax(int max) { this.max = max; if (progress > max) progress = max; }
++    public int getProgress() { return progress; }
++    public void setProgress(int p) { progress = Math.max(0, Math.min(max, p)); progressChanged(false); }
++    public boolean isIndeterminate() { return indeterminate; }
++    public void setIndeterminate(boolean i) { indeterminate = i; }
++    void progressChanged(boolean fromUser) {}
++
++    @Override public void describe(Json j) {
++        super.describe(j);
++        j.put("max", max).put("progress", progress);
++        if (indeterminate) j.put("indeterminate", true);
++    }
++
++    @Override protected String kind() { return "ProgressBar"; }
++}
+diff --git a/android-src/android/widget/ScrollView.java b/android-src/android/widget/ScrollView.java
+new file mode 100644
+index 0000000..b4b1b7c
+--- /dev/null
++++ b/android-src/android/widget/ScrollView.java
+@@ -0,0 +1,16 @@
++package android.widget;
++
++import android.content.Context;
++import android.view.View;
++
++/** android.widget.ScrollView (stand-in): one child, scrolled by the page. */
++public class ScrollView extends FrameLayout {
++    public ScrollView(Context context) { super(context); }
++
++    @Override public void addView(View child, int index) {
++        if (getChildCount() > 0) throw new IllegalStateException("ScrollView can host only one direct child");
++        super.addView(child, index);
++    }
++
++    @Override protected String kind() { return "ScrollView"; }
++}
+diff --git a/android-src/android/widget/SeekBar.java b/android-src/android/widget/SeekBar.java
+new file mode 100644
+index 0000000..c812c09
+--- /dev/null
++++ b/android-src/android/widget/SeekBar.java
+@@ -0,0 +1,33 @@
++package android.widget;
++
++import android.content.Context;
++
++/** android.widget.SeekBar (stand-in): the page's phone drags it with simDrag. */
++public class SeekBar extends ProgressBar {
++    public interface OnSeekBarChangeListener {
++        void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser);
++        void onStartTrackingTouch(SeekBar seekBar);
++        void onStopTrackingTouch(SeekBar seekBar);
++    }
++
++    private OnSeekBarChangeListener listener;
++    private boolean fromUser = false;
++
++    public SeekBar(Context context) { super(context); }
++
++    public void setOnSeekBarChangeListener(OnSeekBarChangeListener l) { listener = l; }
++
++    @Override void progressChanged(boolean ignored) {
++        if (listener != null) listener.onProgressChanged(this, getProgress(), fromUser);
++    }
++
++    /** the simulated finger: touch, move to +progress+, let go */
++    public void simDrag(int progress) {
++        if (listener != null) listener.onStartTrackingTouch(this);
++        fromUser = true;
++        try { setProgress(progress); } finally { fromUser = false; }
++        if (listener != null) listener.onStopTrackingTouch(this);
++    }
++
++    @Override protected String kind() { return "SeekBar"; }
++}
+diff --git a/android-src/android/widget/Spinner.java b/android-src/android/widget/Spinner.java
+new file mode 100644
+index 0000000..bde6f5a
+--- /dev/null
++++ b/android-src/android/widget/Spinner.java
+@@ -0,0 +1,25 @@
++package android.widget;
++
++import android.content.Context;
++
++/** android.widget.Spinner (stand-in): a drop-down; selects its first item once it has an adapter. */
++public class Spinner extends AdapterView<SpinnerAdapter> {
++    private SpinnerAdapter adapter;
++
++    public Spinner(Context context) { super(context); }
++
++    public SpinnerAdapter getAdapter() { return adapter; }
++    public void setAdapter(SpinnerAdapter adapter) {
++        this.adapter = adapter;
++        selected = adapter != null && adapter.getCount() > 0 ? 0 : INVALID_POSITION;
++    }
++
++    /** Android reports the first selection after the layout pass; the simulated phone does it when the app has drawn */
++    public void simInitialSelection() {
++        if (selected != INVALID_POSITION && getOnItemSelectedListener() != null) {
++            getOnItemSelectedListener().onItemSelected(this, row(selected), selected, getItemIdAtPosition(selected));
++        }
++    }
++
++    @Override protected String kind() { return "Spinner"; }
++}
+diff --git a/android-src/android/widget/SpinnerAdapter.java b/android-src/android/widget/SpinnerAdapter.java
+new file mode 100644
+index 0000000..85cdff9
+--- /dev/null
++++ b/android-src/android/widget/SpinnerAdapter.java
+@@ -0,0 +1,5 @@
++package android.widget;
++
++/** android.widget.SpinnerAdapter (stand-in). */
++public interface SpinnerAdapter extends Adapter {
++}
+diff --git a/android-src/android/widget/Switch.java b/android-src/android/widget/Switch.java
+new file mode 100644
+index 0000000..68466a8
+--- /dev/null
++++ b/android-src/android/widget/Switch.java
+@@ -0,0 +1,9 @@
++package android.widget;
++
++import android.content.Context;
++
++/** android.widget.Switch (stand-in). */
++public class Switch extends CompoundButton {
++    public Switch(Context context) { super(context); }
++    @Override protected String kind() { return "Switch"; }
++}
+diff --git a/android-src/android/widget/TextView.java b/android-src/android/widget/TextView.java
+new file mode 100644
+index 0000000..1f1dfae
+--- /dev/null
++++ b/android-src/android/widget/TextView.java
+@@ -0,0 +1,74 @@
++package android.widget;
++
++import android.content.Context;
++import android.graphics.Typeface;
++import android.text.TextWatcher;
++import android.view.Gravity;
++import android.view.View;
++import java.util.ArrayList;
++import java.util.List;
++import org.chunkybacon.sim.Json;
++
++/** android.widget.TextView (stand-in). */
++public class TextView extends View {
++    private CharSequence text = "";
++    private CharSequence hint = null;
++    private float textSize = 14f;
++    private Integer textColor = null;
++    private int gravity = Gravity.TOP | Gravity.START;
++    private Typeface typeface = null;
++    private int maxLines = 0;
++    final List<TextWatcher> watchers = new ArrayList<>();
++
++    public TextView(Context context) { super(context); }
++
++    public CharSequence getText() { return text; }
++
++    public void setText(CharSequence text) {
++        CharSequence before = this.text;
++        String next = text == null ? "" : text.toString();
++        for (TextWatcher w : new ArrayList<>(watchers)) w.beforeTextChanged(before, 0, before.length(), next.length());
++        this.text = next;
++        for (TextWatcher w : new ArrayList<>(watchers)) w.onTextChanged(next, 0, before.length(), next.length());
++        afterChange();
++    }
++
++    void afterChange() {}
++
++    public void append(CharSequence more) { setText(String.valueOf(text) + more); }
++    public int length() { return text.length(); }
++    public CharSequence getHint() { return hint; }
++    public void setHint(CharSequence hint) { this.hint = hint; }
++    public float getTextSize() { return textSize; }
++    public void setTextSize(float size) { textSize = size; }
++    public void setTextSize(int unit, float size) { textSize = size; }
++    public void setTextColor(int color) { textColor = color; }
++    public int getCurrentTextColor() { return textColor == null ? 0xDE000000 : textColor; }
++    public int getGravity() { return gravity; }
++    public void setGravity(int gravity) { this.gravity = gravity; }
++    public Typeface getTypeface() { return typeface; }
++    public void setTypeface(Typeface tf) { typeface = tf; }
++    public void setTypeface(Typeface tf, int style) { typeface = Typeface.create(tf, style); }
++    public void setMaxLines(int n) { maxLines = n; }
++    public void setSingleLine(boolean single) { maxLines = single ? 1 : 0; }
++    public void setSingleLine() { maxLines = 1; }
++    public void setLines(int n) { maxLines = n; }
++
++    public void addTextChangedListener(TextWatcher watcher) { watchers.add(watcher); }
++    public void removeTextChangedListener(TextWatcher watcher) { watchers.remove(watcher); }
++
++    @Override public void describe(Json j) {
++        super.describe(j);
++        j.put("text", String.valueOf(text)).put("textSize", (double) textSize).put("gravity", gravity);
++        if (hint != null) j.put("hint", String.valueOf(hint));
++        if (textColor != null) j.put("textColor", textColor.intValue() & 0xFFFFFFFFL);
++        if (typeface != null) {
++            j.put("font", typeface.getFamily());
++            if (typeface.isBold()) j.put("bold", true);
++            if (typeface.isItalic()) j.put("italic", true);
++        }
++        if (maxLines > 0) j.put("maxLines", maxLines);
++    }
++
++    @Override protected String kind() { return "TextView"; }
++}
+diff --git a/android-src/android/widget/Toast.java b/android-src/android/widget/Toast.java
+new file mode 100644
+index 0000000..f0681cc
+--- /dev/null
++++ b/android-src/android/widget/Toast.java
+@@ -0,0 +1,29 @@
++package android.widget;
++
++import android.content.Context;
++import org.chunkybacon.sim.Device;
++
++/** android.widget.Toast (stand-in): the page's phone shows it for 2 s (LENGTH_SHORT) or 3.5 s. */
++public class Toast {
++    public static final int LENGTH_SHORT = 0;
++    public static final int LENGTH_LONG = 1;
++
++    private CharSequence text;
++    private int duration;
++
++    public Toast(Context context) {}
++
++    public static Toast makeText(Context context, CharSequence text, int duration) {
++        Toast t = new Toast(context);
++        t.text = text;
++        t.duration = duration;
++        return t;
++    }
++
++    public void show() { Device.toast(this); }
++    public void cancel() {}
++    public void setText(CharSequence text) { this.text = text; }
++    public CharSequence getText() { return text; }
++    public void setDuration(int duration) { this.duration = duration; }
++    public int getDuration() { return duration; }
++}
+diff --git a/android-src/org/chunkybacon/sim/Device.java b/android-src/org/chunkybacon/sim/Device.java
+new file mode 100644
+index 0000000..49cd309
+--- /dev/null
++++ b/android-src/org/chunkybacon/sim/Device.java
+@@ -0,0 +1,217 @@
++package org.chunkybacon.sim;
++
++import android.app.Activity;
++import android.app.Dialog;
++import android.content.Intent;
++import android.content.SharedPreferences;
++import android.view.View;
++import android.widget.Toast;
++import java.util.ArrayList;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Map;
++
++/**
++ * The simulated phone that the Android stand-ins of the chunkybacon Ruboto
++ * lesson live on: a virtual clock, logcat, the toasts and dialogs on screen,
++ * the Handler queue, the intents an activity started, SharedPreferences.
++ *
++ * The activity stack and the lifecycle are driven from Ruby (ruboto_sim.rb):
++ * the Ruby methods of an activity (onCreate, ...) can only be called from
++ * Ruby in this build (no bytecode generation, so Java cannot dispatch to a
++ * Ruby override). Everything Java can do on its own - views, listeners,
++ * timers - happens here.
++ */
++public final class Device {
++    private Device() {}
++
++    public static final int PORTRAIT = 1;
++    public static final int LANDSCAPE = 2;
++
++    static long clock = 0;
++    static int nextSimId = 1;
++    static final Map<Integer, View> views = new HashMap<>();
++    static final List<String[]> log = new ArrayList<>();
++    static int logShown = 0;
++    static final List<String[]> toasts = new ArrayList<>();
++    static int toastsShown = 0;
++    static final List<Intent> started = new ArrayList<>();
++    static final List<Activity> finishing = new ArrayList<>();
++    static final List<Timer> timers = new ArrayList<>();
++    static long timerSeq = 0;
++    static int orientation = PORTRAIT;
++    static final Map<String, SimPreferences> prefs = new HashMap<>();
++    public static Dialog dialog = null;
++
++    static final class Timer {
++        final long due;
++        final long seq;
++        final Runnable task;
++        final Object owner;
++        Timer(long due, long seq, Runnable task, Object owner) { this.due = due; this.seq = seq; this.task = task; this.owner = owner; }
++    }
++
++    // ---- views ----
++
++    public static int register(View view) {
++        int id = nextSimId++;
++        views.put(id, view);
++        return id;
++    }
++
++    public static View view(int simId) { return views.get(simId); }
++
++    // ---- the clock and the Handler queue ----
++
++    public static long now() { return clock; }
++
++    public static void post(Runnable task, long delay, Object owner) {
++        timers.add(new Timer(clock + Math.max(0, delay), timerSeq++, task, owner));
++    }
++
++    public static void cancel(Runnable task, Object owner) {
++        timers.removeIf(t -> (task == null || t.task == task) && (owner == null || t.owner == owner));
++    }
++
++    /** ms until the next posted Runnable is due, -1 when none is */
++    public static long nextTimer() {
++        long next = -1;
++        for (Timer t : timers) if (next < 0 || t.due < next) next = t.due;
++        return next < 0 ? -1 : Math.max(0, next - clock);
++    }
++
++    /** The due Runnable that runs next (removed from the queue), or null; the clock moves to its time. */
++    public static Runnable takeDue(long until) {
++        Timer best = null;
++        for (Timer t : timers) {
++            if (t.due <= until && (best == null || t.due < best.due || (t.due == best.due && t.seq < best.seq))) best = t;
++        }
++        if (best == null) return null;
++        timers.remove(best);
++        if (best.due > clock) clock = best.due;
++        return best.task;
++    }
++
++    public static void advanceTo(long until) { if (until > clock) clock = until; }
++
++    public static int pendingTimers() { return timers.size(); }
++
++    // ---- logcat ----
++
++    public static void log(String level, String tag, String message) {
++        log.add(new String[] { level, String.valueOf(tag), String.valueOf(message), Long.toString(clock) });
++        if (log.size() > 2000) { log.remove(0); if (logShown > 0) logShown--; }
++    }
++
++    /** an app installed anew starts with an empty log (the page shows one log per app) */
++    public static void clearLog() { log.clear(); logShown = 0; }
++
++    public static List<String> logLines() {
++        List<String> lines = new ArrayList<>();
++        for (String[] e : log) lines.add(e[0] + "/" + e[1] + ": " + e[2]);
++        return lines;
++    }
++
++    // ---- toasts ----
++
++    public static void toast(Toast toast) {
++        toasts.add(new String[] { String.valueOf(toast.getText()), Integer.toString(toast.getDuration()) });
++    }
++
++    public static List<String> toastTexts() {
++        List<String> list = new ArrayList<>();
++        for (String[] t : toasts) list.add(t[0]);
++        return list;
++    }
++
++    // ---- activities (Ruby takes these and runs the lifecycle) ----
++
++    public static void startActivity(Intent intent) { started.add(intent); }
++
++    public static Intent takeStarted() { return started.isEmpty() ? null : started.remove(0); }
++
++    public static void finish(Activity activity) { if (!finishing.contains(activity)) finishing.add(activity); }
++
++    public static Activity takeFinishing() { return finishing.isEmpty() ? null : finishing.remove(0); }
++
++    public static int getOrientation() { return orientation; }
++    public static void setOrientation(int o) { orientation = o; }
++
++    public static SharedPreferences preferences(String name) {
++        return prefs.computeIfAbsent(name, k -> new SimPreferences());
++    }
++
++    public static void clearPreferences() { prefs.clear(); }
++
++    /** A new app: no views, timers, toasts, dialogs or intents of the old one. The log and the preferences stay. */
++    public static void reset() {
++        views.clear();
++        timers.clear();
++        toasts.clear();
++        toastsShown = 0;
++        started.clear();
++        finishing.clear();
++        dialog = null;
++    }
++
++    /** Everything, as on a fresh page: the clock, the log and the preferences too. */
++    public static void wipe() {
++        reset();
++        log.clear();
++        logShown = 0;
++        prefs.clear();
++        clock = 0;
++        orientation = PORTRAIT;
++    }
++
++    public static void describeMenu(android.view.Menu menu, Json j) { ((SimMenu) menu).describe(j); }
++
++    // ---- the snapshot the page draws ----
++
++    /**
++     * The screen as JSON: +top+ the activity on top (null: the home screen),
++     * +label+ the app's name, +crash+ a crash message (or null). Log lines
++     * and toasts since the last snapshot go along (+all+: every one).
++     */
++    public static String snapshot(Activity top, String label, String crash, boolean all) {
++        return snapshot(top, label, crash, all, true);
++    }
++
++    /** the same, without marking the log lines and toasts as shown: what a test reads */
++    public static String peek(Activity top, String label, String crash) {
++        return snapshot(top, label, crash, true, false);
++    }
++
++    private static String snapshot(Activity top, String label, String crash, boolean all, boolean consume) {
++        Json j = new Json().open('{');
++        j.put("clock", clock).put("orientation", orientation == LANDSCAPE ? "landscape" : "portrait");
++        j.put("label", label);
++        if (crash != null) j.put("crash", crash);
++        j.put("nextTimer", nextTimer());
++        if (top != null) {
++            j.key("activity").open('{');
++            top.describe(j);
++            j.close('}');
++        }
++        if (dialog != null && dialog.isShowing()) {
++            j.key("dialog").open('{');
++            dialog.describe(j);
++            j.close('}');
++        }
++        j.key("toasts").open('[');
++        for (int i = all ? 0 : toastsShown; i < toasts.size(); i++) {
++            String[] t = toasts.get(i);
++            j.item().open('{').put("text", t[0]).put("long", "1".equals(t[1])).close('}');
++        }
++        j.close(']');
++        if (consume) toastsShown = toasts.size();
++        j.key("log").open('[');
++        for (int i = all ? 0 : logShown; i < log.size(); i++) {
++            String[] e = log.get(i);
++            j.item().open('[').value(e[0]).value(e[1]).value(e[2]).value(Long.parseLong(e[3])).close(']');
++        }
++        j.close(']');
++        if (consume) logShown = log.size();
++        return j.close('}').toString();
++    }
++}
+diff --git a/android-src/org/chunkybacon/sim/Drawables.java b/android-src/org/chunkybacon/sim/Drawables.java
+new file mode 100644
+index 0000000..0a48e47
+--- /dev/null
++++ b/android-src/org/chunkybacon/sim/Drawables.java
+@@ -0,0 +1,22 @@
++package org.chunkybacon.sim;
++
++import org.ruboto.example.R;
++
++/** The app's drawables by resource id (org.ruboto.example.R.drawable), for ImageView. */
++public final class Drawables {
++    private Drawables() {}
++
++    private static final String[] NAMES = { "chunky", "saturn_v", "earthrise", "moonwalk", "blue_marble", "aurora", "hurricane" };
++
++    public static String name(int id) {
++        int i = id - R.drawable.chunky;
++        return i >= 0 && i < NAMES.length ? NAMES[i] : null;
++    }
++
++    /** every drawable's id, in R's order */
++    public static int[] all() {
++        int[] ids = new int[NAMES.length];
++        for (int i = 0; i < ids.length; i++) ids[i] = R.drawable.chunky + i;
++        return ids;
++    }
++}
+diff --git a/android-src/org/chunkybacon/sim/Json.java b/android-src/org/chunkybacon/sim/Json.java
+new file mode 100644
+index 0000000..e9d4bab
+--- /dev/null
++++ b/android-src/org/chunkybacon/sim/Json.java
+@@ -0,0 +1,45 @@
++package org.chunkybacon.sim;
++
++/** A small JSON writer for the phone's snapshot (no reflection, no library). */
++public final class Json {
++    private final StringBuilder out = new StringBuilder();
++    private boolean first = true;
++
++    public Json open(char brace) { out.append(brace); first = true; return this; }
++    public Json close(char brace) { out.append(brace); first = false; return this; }
++
++    private void comma() { if (!first) out.append(','); first = false; }
++
++    public Json key(String name) { comma(); str(name); out.append(':'); first = true; return this; }
++    public Json item() { comma(); first = true; return this; }
++
++    public Json value(String s) { comma(); if (s == null) out.append("null"); else str(s); return this; }
++    public Json value(long n) { comma(); out.append(n); return this; }
++    public Json value(double n) { comma(); out.append(Double.isFinite(n) ? Double.toString(n) : "0"); return this; }
++    public Json value(boolean b) { comma(); out.append(b); return this; }
++
++    public Json put(String k, String v) { return key(k).value(v); }
++    public Json put(String k, long v) { return key(k).value(v); }
++    public Json put(String k, double v) { return key(k).value(v); }
++    public Json put(String k, boolean v) { return key(k).value(v); }
++
++    private void str(String s) {
++        out.append('"');
++        for (int i = 0; i < s.length(); i++) {
++            char c = s.charAt(i);
++            switch (c) {
++                case '"': out.append("\\\""); break;
++                case '\\': out.append("\\\\"); break;
++                case '\n': out.append("\\n"); break;
++                case '\r': out.append("\\r"); break;
++                case '\t': out.append("\\t"); break;
++                default:
++                    if (c < 0x20) out.append(String.format("\\u%04x", (int) c));
++                    else out.append(c);
++            }
++        }
++        out.append('"');
++    }
++
++    @Override public String toString() { return out.toString(); }
++}
+diff --git a/android-src/org/chunkybacon/sim/SimMenu.java b/android-src/org/chunkybacon/sim/SimMenu.java
+new file mode 100644
+index 0000000..c03b5ea
+--- /dev/null
++++ b/android-src/org/chunkybacon/sim/SimMenu.java
+@@ -0,0 +1,73 @@
++package org.chunkybacon.sim;
++
++import android.view.Menu;
++import android.view.MenuItem;
++import java.util.ArrayList;
++import java.util.List;
++
++/** The options menu of the simulated phone's app bar. */
++public final class SimMenu implements Menu {
++    final List<Item> items = new ArrayList<>();
++    private int nextId = 0x7f0a1000;
++
++    public MenuItem add(CharSequence title) { return add(0, nextId++, 0, title); }
++
++    public MenuItem add(int groupId, int itemId, int order, CharSequence title) {
++        Item item = new Item(itemId, order, title);
++        int at = items.size();
++        while (at > 0 && items.get(at - 1).order > order) at--;
++        items.add(at, item);
++        return item;
++    }
++
++    public MenuItem findItem(int id) { for (Item i : items) if (i.id == id) return i; return null; }
++    public MenuItem getItem(int index) { return items.get(index); }
++    public int size() { return items.size(); }
++    public void clear() { items.clear(); }
++    public void removeItem(int id) { items.removeIf(i -> i.id == id); }
++
++    /** true when the item's own listener handled the click */
++    public static boolean clickListener(MenuItem item) {
++        Item i = (Item) item;
++        return i.listener != null && i.listener.onMenuItemClick(item);
++    }
++
++    void describe(Json j) {
++        j.open('[');
++        for (int n = 0; n < items.size(); n++) {
++            Item i = items.get(n);
++            if (!i.visible) continue;
++            j.item().open('{').put("index", n).put("title", String.valueOf(i.title)).put("action", i.show != 0);
++            if (!i.enabled) j.put("enabled", false);
++            if (i.checkable) j.put("checked", i.checked);
++            j.close('}');
++        }
++        j.close(']');
++    }
++
++    public static final class Item implements MenuItem {
++        final int id;
++        final int order;
++        CharSequence title;
++        OnMenuItemClickListener listener;
++        int show = SHOW_AS_ACTION_NEVER;
++        boolean enabled = true, visible = true, checkable = false, checked = false;
++
++        Item(int id, int order, CharSequence title) { this.id = id; this.order = order; this.title = title; }
++
++        public int getItemId() { return id; }
++        public CharSequence getTitle() { return title; }
++        public MenuItem setTitle(CharSequence title) { this.title = title; return this; }
++        public MenuItem setOnMenuItemClickListener(OnMenuItemClickListener l) { listener = l; return this; }
++        public void setShowAsAction(int actionEnum) { show = actionEnum; }
++        public MenuItem setEnabled(boolean e) { enabled = e; return this; }
++        public boolean isEnabled() { return enabled; }
++        public MenuItem setVisible(boolean v) { visible = v; return this; }
++        public boolean isVisible() { return visible; }
++        public MenuItem setCheckable(boolean c) { checkable = c; return this; }
++        public MenuItem setChecked(boolean c) { checked = c; return this; }
++        public boolean isChecked() { return checked; }
++        public MenuItem setIcon(int iconRes) { return this; }
++        @Override public String toString() { return String.valueOf(title); }
++    }
++}
+diff --git a/android-src/org/chunkybacon/sim/SimPreferences.java b/android-src/org/chunkybacon/sim/SimPreferences.java
+new file mode 100644
+index 0000000..4fee8b0
+--- /dev/null
++++ b/android-src/org/chunkybacon/sim/SimPreferences.java
+@@ -0,0 +1,44 @@
++package org.chunkybacon.sim;
++
++import android.content.SharedPreferences;
++import java.util.HashMap;
++import java.util.Map;
++
++/** SharedPreferences of the simulated phone: kept while the page is open (the app's data). */
++public final class SimPreferences implements SharedPreferences {
++    final Map<String, Object> values = new HashMap<>();
++
++    public String getString(String key, String defValue) { Object v = values.get(key); return v instanceof String ? (String) v : defValue; }
++    public int getInt(String key, int defValue) { Object v = values.get(key); return v instanceof Integer ? (Integer) v : defValue; }
++    public long getLong(String key, long defValue) { Object v = values.get(key); return v instanceof Long ? (Long) v : defValue; }
++    public float getFloat(String key, float defValue) { Object v = values.get(key); return v instanceof Float ? (Float) v : defValue; }
++    public boolean getBoolean(String key, boolean defValue) { Object v = values.get(key); return v instanceof Boolean ? (Boolean) v : defValue; }
++    public boolean contains(String key) { return values.containsKey(key); }
++    public Map<String, ?> getAll() { return new HashMap<>(values); }
++    public SharedPreferences.Editor edit() { return new SimEditor(this); }
++
++    public static final class SimEditor implements SharedPreferences.Editor {
++        private final SimPreferences prefs;
++        private final Map<String, Object> changes = new HashMap<>();
++        private boolean clear = false;
++        SimEditor(SimPreferences prefs) { this.prefs = prefs; }
++        public SharedPreferences.Editor putString(String key, String value) { changes.put(key, value); return this; }
++        public SharedPreferences.Editor putInt(String key, int value) { changes.put(key, value); return this; }
++        public SharedPreferences.Editor putLong(String key, long value) { changes.put(key, value); return this; }
++        public SharedPreferences.Editor putFloat(String key, float value) { changes.put(key, value); return this; }
++        public SharedPreferences.Editor putBoolean(String key, boolean value) { changes.put(key, value); return this; }
++        public SharedPreferences.Editor remove(String key) { changes.put(key, this); return this; }
++        public SharedPreferences.Editor clear() { clear = true; return this; }
++        public boolean commit() {
++            if (clear) prefs.values.clear();
++            for (Map.Entry<String, Object> e : changes.entrySet()) {
++                if (e.getValue() == this || e.getValue() == null) prefs.values.remove(e.getKey());
++                else prefs.values.put(e.getKey(), e.getValue());
++            }
++            changes.clear();
++            clear = false;
++            return true;
++        }
++        public void apply() { commit(); }
++    }
++}
+diff --git a/android-src/org/ruboto/RubotoActivity.java b/android-src/org/ruboto/RubotoActivity.java
+new file mode 100644
+index 0000000..3b41cee
+--- /dev/null
++++ b/android-src/org/ruboto/RubotoActivity.java
+@@ -0,0 +1,14 @@
++package org.ruboto;
++
++/**
++ * org.ruboto.RubotoActivity (Ruboto's own class, re-made for the simulated
++ * phone). On a phone, Ruboto generates this Java class and it forwards every
++ * Android callback to the Ruby object; here ruboto_sim.rb calls the Ruby
++ * object directly, so this is an Activity with Ruboto's constants.
++ */
++public class RubotoActivity extends android.app.Activity {
++    public static final String THEME_KEY = "RUBOTO_THEME";
++    private final ScriptInfo scriptInfo = new ScriptInfo();
++
++    public ScriptInfo getScriptInfo() { return scriptInfo; }
++}
+diff --git a/android-src/org/ruboto/RubotoDialog.java b/android-src/org/ruboto/RubotoDialog.java
+new file mode 100644
+index 0000000..2cf3b1e
+--- /dev/null
++++ b/android-src/org/ruboto/RubotoDialog.java
+@@ -0,0 +1,5 @@
++package org.ruboto;
++
++/** org.ruboto.RubotoDialog: an activity in the dialog theme (start_ruboto_dialog). */
++public class RubotoDialog extends RubotoActivity {
++}
+diff --git a/android-src/org/ruboto/ScriptInfo.java b/android-src/org/ruboto/ScriptInfo.java
+new file mode 100644
+index 0000000..a1e823e
+--- /dev/null
++++ b/android-src/org/ruboto/ScriptInfo.java
+@@ -0,0 +1,24 @@
++package org.ruboto;
++
++import android.content.Intent;
++
++/** org.ruboto.ScriptInfo (Ruboto's own class, re-made for the simulated phone): which Ruby class backs a component. */
++public class ScriptInfo {
++    public static final String CLASS_NAME_KEY = "Ruboto Class Name";
++    public static final String SCRIPT_NAME_KEY = "Ruboto Script Name";
++
++    private String rubyClassName;
++    private String scriptName;
++    private Object rubyInstance;
++
++    public void setFromIntent(Intent intent) {
++        if (intent.hasExtra(CLASS_NAME_KEY)) rubyClassName = intent.getStringExtra(CLASS_NAME_KEY);
++        if (intent.hasExtra(SCRIPT_NAME_KEY)) scriptName = intent.getStringExtra(SCRIPT_NAME_KEY);
++    }
++    public String getRubyClassName() { return rubyClassName; }
++    public void setRubyClassName(String name) { rubyClassName = name; }
++    public String getScriptName() { return scriptName; }
++    public void setScriptName(String name) { scriptName = name; }
++    public Object getRubyInstance() { return rubyInstance; }
++    public void setRubyInstance(Object instance) { rubyInstance = instance; }
++}
+diff --git a/android-src/org/ruboto/example/R.java b/android-src/org/ruboto/example/R.java
+new file mode 100644
+index 0000000..0af3bed
+--- /dev/null
++++ b/android-src/org/ruboto/example/R.java
+@@ -0,0 +1,22 @@
++package org.ruboto.example;
++
++/**
++ * The app's R class, as the Android build would generate it for the
++ * lesson's app (package org.ruboto.example): its pictures in res/drawable.
++ * The photos are NASA's (public domain); chunky is the course's fox.
++ */
++public final class R {
++    public static final class drawable {
++        public static final int chunky = 0x7f080000;
++        public static final int saturn_v = 0x7f080001;
++        public static final int earthrise = 0x7f080002;
++        public static final int moonwalk = 0x7f080003;
++        public static final int blue_marble = 0x7f080004;
++        public static final int aurora = 0x7f080005;
++        public static final int hurricane = 0x7f080006;
++    }
++    public static final class id {
++        public static final int photo = 0x7f0a0000;
++        public static final int caption = 0x7f0a0001;
++    }
++}
+diff --git a/java-classes.txt b/java-classes.txt
+index 1e5de0b..4d47008 100644
+--- a/java-classes.txt
++++ b/java-classes.txt
+@@ -93,3 +93,93 @@ com.google.zxing.qrcode.QRCodeWriter
+ com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
+ com.google.zxing.common.BitMatrix
+ com.google.zxing.WriterException
++
++# chunkybacon Ruboto lesson: the simulated phone's Android stand-ins (android-src/): android.*, Ruboto's
++# RubotoActivity/ScriptInfo, the app's R, and org.chunkybacon.sim (the phone itself)
++android.app.Activity
++android.app.AlertDialog
++android.app.AlertDialog$Builder
++android.app.Dialog
++android.app.Fragment
++android.content.Context
++android.content.ContextWrapper
++android.content.DialogInterface
++android.content.DialogInterface$OnClickListener
++android.content.Intent
++android.content.res.Configuration
++android.content.res.Resources
++android.content.SharedPreferences
++android.content.SharedPreferences$Editor
++android.graphics.Color
++android.graphics.Typeface
++android.os.Build
++android.os.Build$VERSION
++android.os.Build$VERSION_CODES
++android.os.Bundle
++android.os.Handler
++android.os.Looper
++android.os.SystemClock
++android.R
++android.R$attr
++android.R$id
++android.R$layout
++android.R$style
++android.text.Editable
++android.text.InputType
++android.text.TextWatcher
++android.util.Log
++android.view.ContextThemeWrapper
++android.view.Gravity
++android.view.Menu
++android.view.MenuItem
++android.view.MenuItem$OnMenuItemClickListener
++android.view.View
++android.view.View$OnClickListener
++android.view.View$OnLongClickListener
++android.view.ViewGroup
++android.view.ViewGroup$LayoutParams
++android.view.ViewGroup$MarginLayoutParams
++android.view.ViewParent
++android.widget.Adapter
++android.widget.AdapterView
++android.widget.AdapterView$OnItemClickListener
++android.widget.AdapterView$OnItemLongClickListener
++android.widget.AdapterView$OnItemSelectedListener
++android.widget.ArrayAdapter
++android.widget.BaseAdapter
++android.widget.Button
++android.widget.CheckBox
++android.widget.CompoundButton
++android.widget.CompoundButton$OnCheckedChangeListener
++android.widget.EditText
++android.widget.EditText$SimEditable
++android.widget.FrameLayout
++android.widget.FrameLayout$LayoutParams
++android.widget.ImageView
++android.widget.ImageView$ScaleType
++android.widget.LinearLayout
++android.widget.LinearLayout$LayoutParams
++android.widget.ListAdapter
++android.widget.ListView
++android.widget.ProgressBar
++android.widget.ScrollView
++android.widget.SeekBar
++android.widget.SeekBar$OnSeekBarChangeListener
++android.widget.Spinner
++android.widget.SpinnerAdapter
++android.widget.Switch
++android.widget.TextView
++android.widget.Toast
++org.chunkybacon.sim.Device
++org.chunkybacon.sim.Drawables
++org.chunkybacon.sim.Json
++org.chunkybacon.sim.SimMenu
++org.chunkybacon.sim.SimMenu$Item
++org.chunkybacon.sim.SimPreferences
++org.chunkybacon.sim.SimPreferences$SimEditor
++org.ruboto.example.R
++org.ruboto.example.R$drawable
++org.ruboto.example.R$id
++org.ruboto.RubotoActivity
++org.ruboto.RubotoDialog
++org.ruboto.ScriptInfo
+diff --git a/scripts/compile.sh b/scripts/compile.sh
+index c019102..c88c590 100755
+--- a/scripts/compile.sh
++++ b/scripts/compile.sh
+@@ -56,7 +56,7 @@ javac $JFLAGS -proc:none -cp "$CP" -sourcepath src -implicit:class -d build/anno
+   src/org/jruby/anno/{FrameField,AnnotationBinder,JRubyMethod}.java src/org/jruby/runtime/Visibility.java \
+   src/org/jruby/util/{CodegenUtils,SafePropertyAccessor}.java
+ echo "[2/4] core + launcher (with AnnotationBinder)"
+-find "$here/src" "$here/gems-src" "$here/demo-src" -name '*.java' > build/work/sources.txt
++find "$here/src" "$here/gems-src" "$here/demo-src" "$here/android-src" -name '*.java' > build/work/sources.txt
+ ( cd build/work && javac $JFLAGS -cp "$here/build/anno:$CP" -processorpath "$here/build/anno:$CP" \
+     -processor org.jruby.anno.AnnotationBinder -s "$here/build/gen-s" -implicit:none -d "$here/build/classes" @sources.txt ) \
+   > build/javac.log 2>&1 || { grep -E 'error:' -A2 build/javac.log | head -150; grep -c 'error:' build/javac.log; exit 1; }
+-- 
+2.47.3
+
+
+From a38020b7e6b7c225654732b181a5c6100e3b2620 Mon Sep 17 00:00:00 2001
+From: Largo <Largo@users.noreply.github.com>
+Date: Mon, 19 Oct 2026 00:52:01 +0200
+Subject: [PATCH 3/3] Fix ReferenceQueue typing (TeaVM), strict Bundle for the
+ simulated phone
+
+teavm-plugin: TeaVM 0.16.0's WeakReferenceDependencyListener makes a new
+dependency node on every method it is called for, and connects the queue
+argument of WeakReference.<init> instead of the reference, so to the
+analysis ReferenceQueue.poll() returns nothing. Methods called only on
+polled references were dropped from their classes: JRuby's
+ObjectProxyCache.Segment.expunge calls EntryRef.hash() on them, and the
+first expunge after a JS garbage collection failed with "TypeError:
+d.bfq is not a function" (2000 Java objects with singleton classes and
+idle gaps: 29 of 30 runs before, 0 of 30 after). JavaIntegrationPlugin
+now connects every Weak/Soft/PhantomReference made with a queue to what
+ReferenceQueue.poll()/remove() return. The same pattern is in
+ObjectSpace, WeakIdentityHashMap, WeakValuedMap, ConcurrentWeakHashMap,
+JarCache and WeakKeyValueIdentityMap.
+
+android-src: Bundle is typed as Android's (getInt finds only an int,
+another type gives the default and Android's W/Bundle warning in
+logcat - JRuby passes a Ruby Integer to putExtra as a long), and has
+the array/list methods (put/getStringArrayList, IntegerArrayList,
+StringArray, IntArray, Bundle).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ android-src/android/os/Bundle.java            | 50 ++++++++++++++++---
+ .../jrubyweb/teavm/JavaIntegrationPlugin.java | 31 ++++++++++++
+ 2 files changed, 73 insertions(+), 8 deletions(-)
+
+diff --git a/android-src/android/os/Bundle.java b/android-src/android/os/Bundle.java
+index 9f61288..c5aa7c9 100644
+--- a/android-src/android/os/Bundle.java
++++ b/android-src/android/os/Bundle.java
+@@ -1,10 +1,16 @@
+ package android.os;
+ 
++import java.util.ArrayList;
+ import java.util.LinkedHashMap;
++import org.chunkybacon.sim.Device;
+ import java.util.Map;
+ import java.util.Set;
+ 
+-/** android.os.Bundle (stand-in): a map of String keys to simple values. */
++/**
++ * android.os.Bundle (stand-in): a map of String keys to simple values. Typed as
++ * Android's is: getInt finds only an int - a value of another type gives the
++ * default and a warning in logcat (a Ruby Integer reaches putExtra/put as a long).
++ */
+ public class Bundle {
+     private final Map<String, Object> map = new LinkedHashMap<>();
+ 
+@@ -18,19 +24,47 @@ public class Bundle {
+     public void putBoolean(String key, boolean value) { map.put(key, value); }
+     public void putAll(Bundle other) { map.putAll(other.map); }
+ 
+-    public String getString(String key) { Object v = map.get(key); return v instanceof String ? (String) v : null; }
++    public String getString(String key) { Object v = map.get(key); return v instanceof String ? (String) v : wrong(key, "String", v, null); }
+     public String getString(String key, String def) { String v = getString(key); return v == null ? def : v; }
+     public int getInt(String key) { return getInt(key, 0); }
+-    // any number: a Ruby Integer reaches Java as an int or a long, depending on the overload JRuby picks
+-    public int getInt(String key, int def) { Object v = map.get(key); return v instanceof Number && !(v instanceof Double || v instanceof Float) ? ((Number) v).intValue() : def; }
++    public int getInt(String key, int def) { Object v = map.get(key); return v instanceof Integer ? (Integer) v : wrong(key, "Integer", v, def); }
+     public long getLong(String key) { return getLong(key, 0L); }
+-    public long getLong(String key, long def) { Object v = map.get(key); return v instanceof Number && !(v instanceof Double || v instanceof Float) ? ((Number) v).longValue() : def; }
++    public long getLong(String key, long def) { Object v = map.get(key); return v instanceof Long ? (Long) v : wrong(key, "Long", v, def); }
+     public double getDouble(String key) { return getDouble(key, 0.0); }
+-    public double getDouble(String key, double def) { Object v = map.get(key); return v instanceof Number ? ((Number) v).doubleValue() : def; }
++    public double getDouble(String key, double def) { Object v = map.get(key); return v instanceof Double ? (Double) v : wrong(key, "Double", v, def); }
+     public float getFloat(String key) { return getFloat(key, 0f); }
+-    public float getFloat(String key, float def) { Object v = map.get(key); return v instanceof Number ? ((Number) v).floatValue() : def; }
++    public float getFloat(String key, float def) { Object v = map.get(key); return v instanceof Float ? (Float) v : wrong(key, "Float", v, def); }
+     public boolean getBoolean(String key) { return getBoolean(key, false); }
+-    public boolean getBoolean(String key, boolean def) { Object v = map.get(key); return v instanceof Boolean ? (Boolean) v : def; }
++    public boolean getBoolean(String key, boolean def) { Object v = map.get(key); return v instanceof Boolean ? (Boolean) v : wrong(key, "Boolean", v, def); }
++
++    public void putStringArrayList(String key, ArrayList<String> value) { map.put(key, value == null ? null : new ArrayList<>(value)); }
++    public void putIntegerArrayList(String key, ArrayList<Integer> value) { map.put(key, value == null ? null : new ArrayList<>(value)); }
++    public void putStringArray(String key, String[] value) { map.put(key, value == null ? null : value.clone()); }
++    public void putIntArray(String key, int[] value) { map.put(key, value == null ? null : value.clone()); }
++    public void putBundle(String key, Bundle value) { map.put(key, value); }
++
++    @SuppressWarnings("unchecked")
++    public ArrayList<String> getStringArrayList(String key) { return typedList(key, "ArrayList<String>"); }
++    @SuppressWarnings("unchecked")
++    public ArrayList<Integer> getIntegerArrayList(String key) { return typedList(key, "ArrayList<Integer>"); }
++    public String[] getStringArray(String key) { Object v = map.get(key); return v instanceof String[] ? (String[]) v : wrong(key, "String[]", v, null); }
++    public int[] getIntArray(String key) { Object v = map.get(key); return v instanceof int[] ? (int[]) v : wrong(key, "int[]", v, null); }
++    public Bundle getBundle(String key) { Object v = map.get(key); return v instanceof Bundle ? (Bundle) v : wrong(key, "Bundle", v, null); }
++
++    @SuppressWarnings("unchecked")
++    private <V> ArrayList<V> typedList(String key, String typeName) {
++        Object v = map.get(key);
++        return v instanceof ArrayList ? (ArrayList<V>) v : wrong(key, typeName, v, null);
++    }
++
++    // Android's BaseBundle: a value of another type is a ClassCastException it catches and logs
++    private static <V> V wrong(String key, String typeName, Object v, V def) {
++        if (v != null) {
++            Device.log("W", "Bundle", "Key " + key + " expected " + typeName + " but value was a "
++                    + v.getClass().getName() + ".  The default value " + def + " was returned.");
++        }
++        return def;
++    }
+ 
+     public boolean containsKey(String key) { return map.containsKey(key); }
+     public void remove(String key) { map.remove(key); }
+diff --git a/teavm-plugin/jrubyweb/teavm/JavaIntegrationPlugin.java b/teavm-plugin/jrubyweb/teavm/JavaIntegrationPlugin.java
+index 2df9fd2..2773e6a 100644
+--- a/teavm-plugin/jrubyweb/teavm/JavaIntegrationPlugin.java
++++ b/teavm-plugin/jrubyweb/teavm/JavaIntegrationPlugin.java
+@@ -20,6 +20,12 @@ import org.teavm.vm.spi.TeaVMPlugin;
+  *     class behind Collections.EMPTY_LIST, is null. JRuby builds a proxy (and its Ruby name) for the enclosing class
+  *     of every proxied nested class. TeaVM's own runtime classes (org.teavm.*) are left out: their nested classes
+  *     must never become reachable through reflection (wasm-gc maps some of them to JS references).</li>
++ * <li>The types a {@code ReferenceQueue} hands out. TeaVM 0.16.0's own listener for this
++ *     (WeakReferenceDependencyListener) makes a new node on every method it sees and connects the queue argument
++ *     instead of the reference, so to the analysis {@code poll()} returns nothing: a method that is only called on
++ *     polled references (JRuby's ObjectProxyCache calls {@code EntryRef.hash()} so) is left out of the class, and
++ *     the first expunge after a JS garbage collection fails with "TypeError: d.bfq is not a function". Here every
++ *     reference made with a queue flows into what {@code poll()}/{@code remove()} return.</li>
+  * <li>Records the target for {@link JavaClassesPolicy}: native class-library methods with a generated body can be
+  *     called reflectively on JavaScript only.</li>
+  * </ul>
+@@ -32,6 +38,31 @@ public class JavaIntegrationPlugin implements TeaVMPlugin {
+         javaScript = host.getExtension(TeaVMJavaScriptHost.class) != null;
+         host.add(new MethodReference(Class.class, "getEnclosingClass", Class.class), new Owner(true));
+         host.add(new MethodReference(Class.class, "getDeclaringClass", Class.class), new Owner(false));
++        host.add(new QueuedReferences());
++    }
++
++    private static final class QueuedReferences extends org.teavm.dependency.AbstractDependencyListener {
++        private org.teavm.dependency.DependencyNode references;
++
++        @Override
++        public void started(DependencyAgent agent) {
++            references = agent.createNode();
++        }
++
++        @Override
++        public void methodReached(DependencyAgent agent, MethodDependency method) {
++            MethodReference ref = method.getReference();
++            String owner = ref.getClassName();
++            String name = ref.getName();
++            boolean reference = owner.equals("java.lang.ref.WeakReference") || owner.equals("java.lang.ref.SoftReference")
++                    || owner.equals("java.lang.ref.PhantomReference");
++            if (reference && name.equals("<init>") && ref.parameterCount() == 2) {
++                method.getVariable(0).connect(references);
++            } else if (owner.equals("java.lang.ref.ReferenceQueue") && (name.equals("poll") || name.equals("remove"))
++                    && method.getResult() != null) {
++                references.connect(method.getResult());
++            }
++        }
+     }
+ 
+     private static final class Owner implements DependencyPlugin {
 -- 
 2.47.3
 

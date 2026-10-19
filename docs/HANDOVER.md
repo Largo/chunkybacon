@@ -1271,15 +1271,32 @@ Lesson `jruby` (section "side trips", after `spinel`) runs its cells on
 **JRuby 10.1**, compiled from Java to JavaScript by TeaVM
 ([Largo/jruby-teavm](https://github.com/Largo/jruby-teavm) at its public
 commit 730d53b plus `tools/jruby-teavm-lesson.patch`, a lesson build: json
-ext + jackson-core + ZXing + `lesson.Quakes` + atomics; pins and the rebuild
-recipe in `tools/jruby.json`), in a Web Worker - the PicoRuby lesson's
+ext + jackson-core + ZXing + `lesson.Quakes` + atomics, and the Ruboto
+lesson's Android stand-ins (§6u), and a fix of TeaVM's ReferenceQueue
+typing (below); pins and the rebuild recipe in `tools/jruby.json`), in a
+Web Worker - the PicoRuby lesson's
 pattern (§6m). The patch is the complete source of the changes (JRuby is
 GPL/EPL): `git am` on 730d53b gives the tree pinned in `tools/jruby.json`,
 whose build gives the pinned `jruby.js` bit for bit (`stdlib.zip`: the same
 entries, other zip timestamps). `vendor_jruby.rb` serves it next to
-`jruby.js`. A new build means: commit in jruby-teavm, a new patch
-(`git format-patch -1 --stdout`), new pins:
+`jruby.js`. A new build means: commit in jruby-teavm (the builder's
+local branch `ruboto-sim` holds the three commits), a new patch
+(`git format-patch 730d53b..HEAD --stdout`), new pins, and both lessons'
+browser tests:
 
+- **The reference-queue fix** (third commit of the patch,
+  `teavm-plugin/.../JavaIntegrationPlugin.java`, `QueuedReferences`):
+  TeaVM 0.16.0's `WeakReferenceDependencyListener` makes a new dependency
+  node for every method and connects the queue argument, not the
+  reference, so to TeaVM `ReferenceQueue.poll()` returns nothing, and a
+  method only ever called on polled references is left out of its class.
+  JRuby's proxy cache (`ObjectProxyCache.Segment.expunge`) calls
+  `EntryRef.hash()` so: after a JS garbage collection with Java proxies in
+  the cache, the next run failed with `TypeError: d.bfq is not a function`
+  - 29 of 30 runs of 2000 singleton-classed Java objects with idle gaps,
+  about one Ruboto app start in four. Our listener connects every
+  reference made with a queue to what `poll()`/`remove()` return: 0 of 30.
+  Worth reporting to TeaVM; Largo/jruby-teavm's main has the bug too.
 - `jruby_lab.js` (page): `ensureJRuby` (the shell calls it when the lesson
   opens - never elsewhere; ~7 MB the first time), a queue of runs, the
   `.jruby-status` line (it says "stopped" once a run past the limit or a
@@ -1355,8 +1372,12 @@ outside the repo):
        ruby tools/vendor_jruby_swing.rb --from <Largo/jruby-cheerpj 6e134ab after ./run.sh prepare>
 
    (on the Hetzner box the builds are in
-   `/root/workspace/jruby-lesson-lab/builder/teavm-src` and
-   `/root/workspace/jruby-cheerpj`).
+   `/root/workspace/jruby-lesson-lab/rebuild` - the fresh clone + patch
+   whose `dist/jruby.js` is the pinned one; `builder/teavm-src` and
+   `builder/teavm-ruboto` hold older or incremental builds that do not
+   match the pin - and `/root/workspace/jruby-cheerpj`). Done for the
+   current pin: the live `.cache/jruby/` holds it (the JRuby lesson's
+   first build kept as `jruby.js.before-ruboto`).
 2. Have `/usr/local/sbin/chunkybacon-deploy` publish both folders to the
    server behind chunkybacon.idogawa.com, as it does `html/assets/spinel/`
    (that 1-core server never builds or fetches anything heavy, and its own
@@ -1382,6 +1403,178 @@ Tests: `test/jruby_test.mjs` (Playwright: every demo, the CRuby side,
 errors, the exercise, en and de, the bonus on CheerpJ unless
 `SKIP_SWING=1`), `test/check_harness.rb` (the exercise's solutions, on
 CRuby, with the vendored data).
+
+## 6u. The Ruboto lesson (`ruboto`): Android on a simulated phone
+
+Lesson `ruboto` (side trips, right after `jruby`) teaches Ruboto 2
+([Largo/ruboto](https://github.com/Largo/ruboto)): Android apps in Ruby. Its
+lesson entry is `"engine": "jruby", "android": true`, so its cells run in the
+JRuby lesson's worker (§6t) on the **same `jruby.js`** - nothing more to
+download but 0.3 MB of photos. What makes the phone:
+
+- **Android's classes are Java stand-ins compiled into `jruby.js`**
+  (`android-src/` in the jruby-teavm patch, listed in its
+  `java-classes.txt`): `android.app.Activity`/`AlertDialog`, `android.widget.*`
+  (TextView, Button, EditText, CheckBox, Switch, SeekBar, ProgressBar,
+  ImageView, LinearLayout, FrameLayout, ScrollView, ListView, Spinner,
+  ArrayAdapter, Toast), `android.view.*` (View, ViewGroup + LayoutParams,
+  Gravity, Menu/MenuItem), `android.os` (Bundle, Handler, Looper, Build,
+  SystemClock), `android.util.Log`, `android.graphics.Color`/`Typeface`,
+  SharedPreferences, `android.R`; Ruboto's own `org.ruboto.RubotoActivity`,
+  `ScriptInfo`, `RubotoDialog`; the app's `org.ruboto.example.R` (its
+  `R.drawable.*` are the photos); and `org.chunkybacon.sim.Device`, the phone:
+  a virtual clock with the Handler queue, logcat, toasts, the dialog on
+  screen, intents an activity started, preferences, and `snapshot`, the
+  screen as JSON. They draw nothing. Real Java means JRuby's real Java
+  integration does the Ruboto work: a proc becomes a `View.OnClickListener`,
+  `text: 'Hi'` finds `setText`, `ViewGroup::LayoutParams.constants` feed
+  Ruboto's symbol table. A class that is not there fails as "not in this
+  build's java-classes.txt". `Bundle` is as strict as Android's: `getInt`
+  finds only an int, anything else gives the default and Android's
+  `W/Bundle ... expected Integer but value was a java.lang.Long` in logcat -
+  and JRuby hands a Ruby Integer to `putExtra` as a long, so the lesson
+  reads extras with `getLongExtra`. A Ruby Array is no `ArrayList`
+  parameter (`java.util.ArrayList.new(array)`), as on desktop JRuby.
+- **Ruboto's own Ruby, unchanged**: `html/ruboto_sim/vendor/ruboto/`
+  (base, package, activity, widget, toast; `tools/vendor_ruboto.rb`, pinned
+  commit in its `COMMIT`, `--check` offline). Only these five: service,
+  broadcast receiver, preference need classes the phone has not.
+- **`html/ruboto_sim/ruboto_sim.rb`** plays Ruboto's Java side
+  (`ScriptLoader`) and Android's activity manager. A cell whose code has
+  `class Name` (no superclass) before a `def onCreate` is an activity's
+  script (the class must be top-level and hold the `def onCreate`; the
+  lines are followed by indentation, so a class nested in it is not taken):
+  before it runs, `Name` is set to the **singleton class of a new
+  `RubotoActivity`**, so the class body defines its methods on that Java
+  object - ScriptLoader's "methods on the meta class" way: `self` is the
+  Activity, `Toast.makeText(self, ...)` works, `super` reaches Java. After
+  the cell, the first such class is installed: the old app ends without
+  callbacks (a reinstall), the phone turns upright, logcat empties, and
+  `onCreate`, `onStart`, `onResume`, `onCreateOptionsMenu` run. A new
+  instance of that activity (a rotation, the launcher after Back) runs the
+  cell's code again, as Ruboto evaluates a script per component - quietly,
+  and with Ruboto's symbol table reset to its state after the require
+  (`fresh_process`; otherwise widget.rb warns "Overwriting symbol"); the
+  cell's other activities are pointed at throwaway components meanwhile
+  (they may be running), and a later cell that reopened the class (no
+  `onCreate` of its own) is evaluated after it, so its change lasts. A cell
+  that fails puts back the constants and scripts it replaced
+  (`RubotoSim.rollback`): the running app keeps its good script. The
+  other way, `start_ruboto_activity` with a block, gives a plain Ruby class:
+  its instance gets `@ruboto_java_instance`, base.rb's `method_missing` does
+  the rest (a `super` with no superclass method lands there too). Every
+  callback is checked as Android checks it: no `super` in `onCreate`/
+  `onStart`/... raises `SuperNotCalledException` with the `def`'s line. An
+  exception in a callback crashes the app: logcat gets Android's `FATAL
+  EXCEPTION` with the cell's lines, the screen "X has stopped". What the
+  app `puts`es goes to logcat as `I/System.out`, line by line in order with
+  its `Log.d` lines (`LogcatOut`), also during the cell's first start. A
+  boolean callback (`onCreateOptionsMenu`, `onPrepareOptionsMenu`,
+  `onOptionsItemSelected`) answering anything but true or false crashes
+  the app as Ruboto's generated Java does on a phone (nil: a
+  `java.lang.NullPointerException` from unboxing, anything else "failed to
+  coerce"); false hides the menu.
+  The lifecycle follows Android 14 (`test/ruboto_sim_test.mjs` pins each
+  rule): `onSaveInstanceState` after `onStop`, whenever an activity stops
+  without finishing (Home, a screen on top, a rotation); Back reaching
+  Activity's own `onBackPressed` (no override, or an override's `super`:
+  `RubotoActivity#onBackPressed` is redefined in Ruby to set a flag) moves
+  the app to the background on its only screen (Android 12+) and ends a
+  second screen in Android's order (it pauses, the one below comes back,
+  then it stops and is destroyed); `finish()` in `onCreate` goes straight
+  to `onDestroy`; "start the next screen, then finish" (a splash) creates
+  the next one before the old one stops and ends; a dialog-themed activity
+  (`start_ruboto_dialog`) only pauses the one below; an AlertDialog open on
+  Home comes back with its activity; a rotation while
+  an activity is stopped recreates it when it comes back, with what it
+  saved; an activity's dialog dies with it (`E/WindowManager ... leaked
+  window`); the menu shows only when `onCreateOptionsMenu` and
+  `onPrepareOptionsMenu` answer true; a Spinner reports its first item
+  after the first layout.
+  `ChunkyLab.run_android` is `ChunkyLab.run` around this (prepare, eval,
+  install, the probe); `ChunkyLab.fresh` wipes the phone too.
+- **Why the lifecycle is Ruby's**: TeaVM's JRuby cannot generate classes, so
+  Java cannot call a Ruby override (`activity.onCreate` from Java runs
+  Java's). Ruby calls the callbacks; Java does what it does by itself
+  (listeners, the Handler's Runnables, `finish()` and `startActivity()` are
+  queued in `Device` and `RubotoSim.settle` acts on them). Desktop JRuby
+  10.1 is no test bed for this: a `super` from a singleton method on a Java
+  object fails there (`__super$` TypeError); TeaVM's build handles it.
+- **The worker** (`jruby_worker.js`): a run with `android: true` loads the
+  phone first (once: `ruboto_sim/manifest.txt`'s files written into JRuby's
+  file system at `/ruboto`, `require "ruboto_sim"`), answers carry `phone`
+  (the screen) and `probe`; `{kind: "phone", event}` is one input -
+  `RubotoSim.input`: tap, text, seek, item, select, menu, dialog, back,
+  home, launch, rotate, close (the crash dialog), tick - and answers with
+  the new screen. Every event carries `ms`, the real time since the last
+  screen - now `clock`, the moment on the phone's clock, so two inputs in
+  flight do not count the same time twice (`ms`, a delta, still works for
+  tests): the phone's clock moves to it first (Runnables due meanwhile run
+  before the tap), and `install`, the app it was meant for: an input the
+  page sent before a newer run's answer came is ignored.
+  `ensureJRuby(true)` queues the phone's load right after the boot (a
+  reset keeps it queued; another lesson drops it while it is not sent
+  yet). A reset during a tap gives it a second's grace and then a fresh
+  binding, instead of ending the worker; after a tap past its limit,
+  main.rb forgets which cells above ran (the new worker has none). `jruby_lab.js` queues phone events behind runs
+  (`chunkyJRuby.phone`, answer `chunky:phone`) with a limit of 10 s, not
+  60 (Android says "isn't responding" after 5); a stopped worker makes
+  every phone stale. Once the phone was loaded, another JRuby lesson gets
+  a new worker (`ensureJRuby(false)` ends it): Ruboto's `Kernel#method_missing`,
+  `View`, `Activity` ... must not leak into the JRuby lesson.
+- **The page's phone** (`html/ruboto_phone.js`, loaded by
+  `ensureRubotoPhone` for this lesson; CSS at the end of `app.css`, scoped to
+  `.rp-screen` because the course's `button:hover` wins otherwise): draws a
+  snapshot at 1 dp = 1 CSS px (360 x 640, scaled in a narrow column) -
+  LinearLayout as a flexbox (weights, gravity, match/wrap), the app bar with
+  its menu, dialogs, toasts one after another (2 s / 3.5 s), the launcher,
+  the crash dialog, logcat beside it. One phone is live (the worker has
+  one); a later cell's app makes the older phones stale (and `inert`). While
+  a Runnable is due, and the page is visible and JRuby idle, the page sends
+  ticks, so a slideshow follows real time. A focused text field the app has
+  not changed (text, enabled, hint, kind) survives a redraw as it is
+  (caret, selection, what is not sent yet), in a dialog too; a replaced one
+  never sends its stale text; the keyboard's place is kept by each
+  control's key, moves into a dialog or the menu as it opens and back to
+  the control that opened it, and Escape closes them (the dialog is modal
+  within the screen through `inert`, so no `aria-modal`; the menu is plain
+  buttons and closes when the keyboard leaves it); `layout_weight` follows
+  Android's measuring (0 dp, n dp, wrap_content, match_parent's inverted
+  split); toasts go to a
+  live region for screen readers; a ResizeObserver refits the phone (the
+  scale stays at 0.7 or more: a narrow page scrolls the slot sideways); the
+  photos are fetched when the first phone mounts.
+- **The exercise** (`CounterActivity`, keep the count over a rotation):
+  its `probe` taps +1 three times, rotates, taps again, through
+  `phone` (`RubotoSim::Phone`: `tap`, `type`, `rotate`, `back`, `home`,
+  `wait`, `menu`, `texts`, `toasts`, `log`, `app`, `crashed?` - it reads the
+  screen with `Device.peek`, which leaves the log lines to the page);
+  the check compares the probe's inspect and wants a `def
+  onSaveInstanceState` (a global variable also survives a rotation, but not
+  the process being killed in the background). Preferences are cleared
+  before the check, and after it the app is installed anew, so the
+  learner's phone starts at 0, upright.
+- **Honest limits**, also in the lesson's box: no XML layouts
+  (`setContentView(int)` says so), no Ruby subclasses of Java classes (not
+  on a phone either), no camera, sensors, network, threads; this JRuby keeps
+  a proc's Java conversion, a phone's makes a new one each time (Ruboto's
+  README) - so the lesson keeps `proc.to_java(java.lang.Runnable)` for
+  `removeCallbacks`. The 24 MB APK in the text is the debug build of the
+  Wear OS reader made with Ruboto on this box (`wear-reader`).
+- **The photos**: six NASA images (public domain), resized to 640 px,
+  `html/assets/ruboto/drawable/` (in git), credits in
+  THIRD_PARTY_NOTICES.md; the fox icon is `assets/chunky.svg`.
+
+Tests: `test/ruboto_test.mjs` (Playwright: every demo app, typing at a
+person's pace, the keyboard in dialogs, stale phones, crash,
+SuperNotCalled, the exercise, runs with idle gaps, the JRuby lesson
+afterwards, German, Japanese, no JavaScript `TypeError` in any run),
+`test/ruboto_sim_test.mjs` (the Android rules above, under Node),
+`test/check_harness.rb` runs the lesson's cells, starter, `RUBOTO_WRONG`
+and solutions on the real `jruby.js` under Node (`test/ruboto_node.mjs`,
+300 ms apart: the idle gaps are what exposed the reference-queue bug of
+§6t), `ruby tools/vendor_ruboto.rb --check`. Deploy: nothing new - the phone's files are in git, the stand-ins
+are in `jruby.js` (§6t's `vendor_jruby.rb` and `publish_jruby`).
 
 ## 7. nginx and the proxy
 
@@ -2998,6 +3191,9 @@ ruby spinel_build_test.rb                # the plain Ruby of the compiler worker
 BASE=http://127.0.0.1:8011/ node embed_test.mjs     # the embedded cell (§6k), ~1 min
 BASE=http://127.0.0.1:8011/ node picoruby_test.mjs  # the PicoRuby lesson (§6m), ~30 s
 BASE=http://127.0.0.1:8011/ node jruby_test.mjs     # the JRuby lesson (§6t), ~2 min with the CheerpJ bonus
+BASE=http://127.0.0.1:8011/ node ruboto_test.mjs    # the Ruboto lesson's phone (§6u), ~2 min
+node ruboto_sim_test.mjs                            # the simulated Android's lifecycle rules, ~1 min
+ruby ../tools/vendor_ruboto.rb --check              # html/ruboto_sim/vendor/ is Ruboto's pinned Ruby
 ruby ../tools/vendor_picoruby.rb --check            # the PicoRuby runtime is what PICORUBY_VERSION.txt records
 ruby pico_sim_test.rb                    # the Pico simulator under CRuby (§6r)
 ruby pico_harness.rb --demos             # the Pico exercises (check_harness.rb runs it too), demo cells as a smoke test
@@ -3066,6 +3262,7 @@ is rerun to update it:
 | the gem cache | `html/gems/cache/` | 11 MB | `tools/build_gem_cache.rb` | |
 | TeaVM JRuby + USGS data (not in git) | `html/assets/jruby/` | 37 MB (7 MB over the wire) | `tools/vendor_jruby.rb` | `tools/vendor_jruby.rb --check` |
 | the Swing bonus's jars (not in git) | `html/assets/jruby-swing/` | 38 MB (ranges, ~20 MB fetched) | `tools/vendor_jruby_swing.rb` | `tools/vendor_jruby_swing.rb --check` |
+| Ruboto's Ruby (the Ruboto lesson's phone, §6u) | `html/ruboto_sim/vendor/` | 15 KB | `tools/vendor_ruboto.rb` | `tools/vendor_ruboto.rb --check` |
 
 Afterwards `tools/compress_assets.rb` (the `.gz` copies) and
 `tools/offline_files.rb` (the offline copy's list). The PicoRuby lesson
