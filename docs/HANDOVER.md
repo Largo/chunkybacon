@@ -592,6 +592,17 @@ reach the hosts in `NET_HTTP_HOSTS` (ruby-lang.org, rubygems.org,
 api.github.com). What cannot work: anything needing a C extension with no
 pure stand-in (sqlite3, pg, ffi …), threads, sockets, subprocesses.
 
+**Rails** runs too (lesson `rails`, §6v): `install_gem "rails"` installs
+railties, actionpack, actionview, activemodel, activerecord and
+activesupport from the cache with what they need (zeitwerk, thor, rackup,
+rake, tzinfo + tzinfo-data, rack-test, rails-dom-testing,
+rails-html-sanitizer, loofah, crass, erubi, builder, useragent,
+connection_pool, drb; 2.3 MB of .gem files), and a `Rails::Application`
+boots, routes, renders ERB views from files and answers the mini browser.
+Left out on purpose (`OPTIONAL_NATIVE_DEPS`): actioncable (nio4r and
+websocket-driver are C), the mail, storage, text and job frameworks and
+bundler under `rails`, irb under `railties` (its rdoc now needs rbs, C).
+
 prawn and hexapdf are in the cache (lesson `pdf`). prawn's ttfunk depends on
 bigdecimal (→ bigdecimal-pure); hexapdf depends on openssl and strscan, both
 compiled into the wasm (`NATIVE_GEMS` + `builtin?`; `tools/build_gem_cache.rb`
@@ -641,6 +652,20 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   the file.
 - Real `Module#autoload` works now that gems are files; the loader no longer
   hooks it.
+- The stripped `Gem` gets what gems ask of it at load time: `Gem::Version`
+  (`rubygems/version`; rack-test compares Rack's release), `Gem.path` and
+  `Gem.default_dir` (ActiveSupport's BacktraceCleaner and file watcher: the
+  installed gems' directory, `BrowserGems::ROOT`), `Gem.win_platform?` (no)
+  and `Kernel#gem` (a no-op: Active Record's SQLite adapter asks for sqlite3
+  2.1). `error_highlight` is loaded: the image only declares the module,
+  and Rails' error page calls `ErrorHighlight.spot` for every frame.
+- `STDOUT` is `CellStdout` (sandbox_sim.rb): a cell's output is caught by
+  swapping `$stdout` for a StringIO per run, so an object that keeps the
+  stream it was given (a Logger: `config.logger = Logger.new(STDOUT)`)
+  would write into a buffer read long ago. The stand-in writes to whatever
+  `$stdout` is at the time of the write and forwards everything else
+  (`tty?`, `sync=`) there; `$stdout = STDOUT` goes to the real stdout, not
+  into a loop. `Logger.new($stdout)` still binds to one cell's buffer.
 - Every lesson, IRB widget and workshop file gets its binding from
   `TopLevel.binding`: compiled on its own, so it has a top-level scope of
   its own. Bindings made from `TOPLEVEL_BINDING` all share one, and a
@@ -660,6 +685,14 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   (selectors only, not @-rules or values): Sinatra's 404 page is still
   grey and centred, inside the fake browser. Not handled: `html.x`
   (would need `:host(.x)`) and attributes on the `<body>` tag itself.
+  What the app prints while it answers (a Rails app logs every request:
+  `Started GET "/menu"` … `Completed 200 OK`) is caught in
+  `navigate_browser` and shown in the `.mb-log` pane under the page (the
+  last `MB_LOG_LINES` lines, ANSI colours as in a cell's output, hidden
+  until there is something; `ui.browserLog` names it) - the first page
+  loads after the cell has run, so without the pane the log of every
+  request would go to the console. The Rack env carries `REMOTE_ADDR`
+  127.0.0.1, so a log line reads `for 127.0.0.1 at …` as on a server.
 - **show_three**: one shared `Three::Backends::ThreeJS` for all stages
   (a second backend rebuilds a clean scene as defaults); canvas ids from a
   page-wide counter; contexts disposed on re-run/lesson change.
@@ -1576,6 +1609,97 @@ and solutions on the real `jruby.js` under Node (`test/ruboto_node.mjs`,
 §6t), `ruby tools/vendor_ruboto.rb --check`. Deploy: nothing new - the phone's files are in git, the stand-ins
 are in `jruby.js` (§6t's `vendor_jruby.rb` and `publish_jruby`).
 
+## 6v. Rails in the page (lessons `rails` and `activerecord`)
+
+Real Rails 8.1 (railties, actionpack, actionview, activesupport) from the
+gem cache, as one file - the shape of Rails' own bug report templates - in
+three cells that share the lesson's binding:
+
+1. **Boot**: `install_gem "rails"`, `require "rails"` and
+   `"action_controller/railtie"`, the app's folders, then
+   `class Diner < Rails::Application` with `config.root = "/tmp/diner"`,
+   `eager_load = false`, `consider_all_requests_local = true` (the error
+   page with details, as in development; otherwise a missing route is an
+   empty 404) and `logger = Logger.new(STDOUT)` (the `CellStdout` stand-in,
+   §5, so the log reaches the cell or the mini browser's log pane).
+   `Diner.initialize! unless Diner.initialized?` - `initialize!` raises the
+   second time, and learners run cells again. From the cache: install and
+   load 3.5 s, `initialize!` 1.8 s, the first request 0.1 s, then a few
+   ms each (Chrome). Live runs: a cached install and the requires are off
+   the clock, `initialize!` is one line of the learner's, so the live run
+   is "stopped" after it has booted - harmless, and the app cell and the
+   exercise then run live in 20 ms (the mini browser follows the typing).
+2. **The app**: `config/routes.rb` written with `Rails.application.routes.draw`
+   and read with `Diner.reload_routes!`, two views written under
+   `app/views/diner/`, `DinerController < ActionController::Base` with
+   actions that render by convention, `show_browser Diner, "/"`.
+3. **The route table** from `Diner.routes.routes.reject(&:internal)`.
+
+The exercise rewrites `config/routes.rb` with one more route and adds a
+second controller (`KitchenController#bacon`, `KuecheController#speck`);
+its check uses `mock_get` and `routes.recognize_path`. `test/rails_test.mjs`
+runs the lesson in a browser in en and de; the check harness runs it under
+CRuby from the same cache (`HARNESS_ONLY=rails`), where `/tmp/diner` is a
+real folder.
+
+Traps, each found the hard way:
+
+- **The routes file must exist before `initialize!`** - the boot cell writes
+  an empty `Rails.application.routes.draw do end`. Rails records
+  `paths["config/routes.rb"].existent` at boot; a file written later is
+  unknown to the routes reloader, and the development reloader
+  (`config.enable_reloading`, on by default) reloads *all* routes whenever
+  a watched file changed - a view rewritten by a re-run of the app cell is
+  enough - and then finds none: every path is Rails' welcome page.
+  `Diner.routes.draw` in a cell instead of the file has the same fate.
+- **`app/views` must exist before `initialize!`** too: the controller's
+  view paths are `paths["app/views"].existent` when `ActionController::Base`
+  loads; a folder made later gives `MissingExactTemplate` for every action.
+- **Absolute paths**: `config.root` is `/tmp/diner` because relative paths
+  go to the in-memory `SandboxFS` (§5), which Rails' resolvers and
+  `Dir.glob` cannot see; `/tmp` is skipped by `FileWatch`, so the app's
+  files are not offered as downloads. Under the harness `/tmp/diner` is
+  the developer's real `/tmp`.
+- **The log of a click** is written after the cell has finished (the mini
+  browser loads its first page then): `navigate_browser` catches it for
+  the log pane (§6). A Logger made with `$stdout` instead of `STDOUT`
+  logs into the boot cell's finished buffer, i.e. nowhere.
+- **`SimThread`** (§5) needed `Thread.each_caller_location` (ActiveSupport's
+  BacktraceCleaner takes its method object), `Thread::Backtrace`
+  (SyntaxErrorProxy) and thread variables; `io/console/size` is a shim
+  (`IO.console_size`, the route inspector's terminal width).
+- Rails' development error page lists every route and the source of the
+  failing frame; it needs `ErrorHighlight.spot` (§5) - without it, the page
+  of the error page fails, `ShowExceptions` answers an empty 500.
+- tzinfo finds no zoneinfo in wasm and raises `DataSourceNotFound` in
+  `initialize!`: `tzinfo-data` is in the cache as an extra dependency of
+  tzinfo (`EXTRA_DEPS` in tools/build_gem_cache.rb, manifest.json), 295 KB,
+  0.3 s. `config.time_zone = "Bern"` works.
+- One `Rails.application` per page: a second lesson would reopen `Diner`,
+  not make an app of its own (`Rails.app_class` is set once).
+
+**Active Record** (lesson `activerecord`, right after): `require
+"active_record"` alone, `establish_connection(adapter: "sqlite3", database:
+"diner.db")` on the sqlite3 stand-in (§6f, which gained the gem's 2.x API
+for it), `ActiveRecord::Schema.define` with `create_table ... force: true`
+(so the cell runs again), a model with a validation, `create!`, `where`,
+`order`, `find_by`, `update!`, `errors.full_messages`; the exercise makes a
+second table and model. `ActiveRecord::Base.logger = Logger.new(STDOUT)`
+puts the SQL under each cell, in Active Record's colours. The database is a
+relative path, so it is a `SandboxFS` file and offered as a download under
+every cell that wrote it (28 KB), as Sequel's is; with `Rails.root` defined
+(the Rails lesson ran first) Active Record expands it to `/tmp/diner/…`,
+which works too, without the download. The shell's preload of sql.js looks
+for `sqlite3` and `ActiveRecord` in a cell as well as `Sequel`/`SQLite3`
+(`App#uses_sqlite?`, the lesson-open scan) - the kernel's `NotReady` path
+would also load it, but only after a first run that fails. The lesson is
+`BROWSER_ONLY` in the check harness (sql.js is JavaScript) and tested by
+`test/rails_test.mjs` in en and de; German names need
+`self.table_name = "gerichte"`, because Active Record pluralises English
+(`Gericht` → `gerichts`) - the lesson says so. Forms (POST) would need the
+mini browser to submit them (it only GETs); `has_many`/`belongs_to` are
+mentioned, not shown.
+
 ## 7. nginx and the proxy
 
 Compression: `gzip on` for text (html, rb - typed `text/plain` in the app-code
@@ -1891,6 +2015,20 @@ is pure Ruby (cached, `sequel-5.109.0.gem`); the sqlite3 gem under it is C.
   saved); `live_test.mjs` the live-run rule and a workshop program's
   database (first run, re-run, reload, the card); `offline_test.mjs` runs
   Sequel and a file database from the copy.
+
+**Active Record's SQLite adapter** (lesson `activerecord`, §6v) drives the
+stand-in like the sqlite3 gem 2.x: `SQLite3::ForkSafety.suppress_warnings!`,
+`Constants::Open::SHAREDCACHE`, the pragmas as methods (`Pragmas`,
+`db.journal_mode = :wal`, checked with `Pragmas.method_defined?` first;
+WAL and mmap in memory answer what they answer), `busy_handler_timeout=`,
+`total_changes` (`SELECT total_changes()`), `encoding`, and a `Statement`
+with the step-by-step side: `bind_params`, `column_count`, `step`, `to_a`,
+`columns`, `types` - the statement runs once, on the first of these, and
+keeps its rows until `reset!` or new bindings. Its rows are arrays whatever
+`results_as_hash` says (Active Record opens with `results_as_hash: true`
+and reads arrays from statements, as the gem has it); `ResultSet` carries
+that flag from construction, and `get_first_value` reads a hash row too.
+`Statement#execute` (Sequel's path) is as before.
 
 ## 6g. A terminal below the cell: TTY, colours, box drawing
 

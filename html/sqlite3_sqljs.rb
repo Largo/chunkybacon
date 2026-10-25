@@ -141,6 +141,46 @@ module SQLite3
   # a binary value, as the gem has it
   class Blob < String; end
 
+  # What Active Record's SQLite adapter asks of the gem before its first
+  # query, and a browser tab has no use for: forking, open flags.
+  module ForkSafety
+    def self.suppress_warnings!; end
+  end
+
+  module Constants
+    module Open
+      READONLY = 0x00000001
+      READWRITE = 0x00000002
+      CREATE = 0x00000004
+      SHAREDCACHE = 0x00020000
+    end
+  end
+
+  # PRAGMAs as the gem's methods: Active Record sets its defaults through
+  # `db.journal_mode = :wal` and asks Pragmas.method_defined?("journal_mode=")
+  # first. A pragma SQLite in memory has no use for (mmap_size, WAL) answers
+  # what it answers; none fails.
+  module Pragmas
+    NAMES = %w[foreign_keys journal_mode synchronous mmap_size journal_size_limit cache_size temp_store
+               case_sensitive_like secure_delete].freeze
+
+    NAMES.each do |name|
+      define_method("#{name}=") { |value| set_pragma(name, value) }
+      define_method(name) { get_first_value("PRAGMA #{name}") }
+    end
+
+    def set_pragma(name, value)
+      text = case value
+             when true then "1"
+             when false then "0"
+             when Symbol, String then "'#{Database.quote(value)}'"
+             else value.to_s
+             end
+      execute("PRAGMA #{name} = #{text}")
+      value
+    end
+  end
+
   # The rows of one statement; the gem hands this to query and
   # Statement#execute blocks. Sequel reads columns, types and each.
   class ResultSet
@@ -148,8 +188,9 @@ module SQLite3
 
     attr_reader :columns, :types
 
-    def initialize(db, answer)
+    def initialize(db, answer, as_hash = db.results_as_hash)
       @db = db
+      @as_hash = as_hash
       @columns = answer["columns"]
       @types = answer["types"]
       @rows = answer["rows"].map { |row| row.map { |v| Bridge.decode(v) } }
@@ -167,7 +208,7 @@ module SQLite3
     def next
       row = @rows[@at] or return nil
       @at += 1
-      @db.results_as_hash ? @columns.zip(row).to_h : row
+      @as_hash ? @columns.zip(row).to_h : row
     end
 
     def reset(*) = @at = 0
@@ -179,7 +220,7 @@ module SQLite3
   # A statement: its SQL, run afresh on each execute (sql.js statements live
   # in JavaScript; keeping them across calls would gain little in memory)
   class Statement
-    attr_reader :sql, :columns, :types
+    attr_reader :sql
 
     def initialize(db, sql)
       @db = db
@@ -190,8 +231,24 @@ module SQLite3
 
     def bind_params(*vars)
       @bound = vars
+      @result = nil
       self
     end
+
+    # The gem's step-by-step side, as Active Record drives a statement:
+    # bind_params, column_count, then step (no rows) or to_a, columns, types.
+    # The statement runs once, on the first of these, and keeps its rows
+    # until reset! or new bindings. Rows are arrays here whatever the
+    # database's results_as_hash says, as the gem's Statement has them
+    # (Active Record opens with results_as_hash: true and reads arrays).
+    def column_count = run_once.columns.size
+    def step = run_once.next
+    def to_a = run_once.to_a
+    def each(&block) = run_once.each(&block)
+    def done? = run_once.eof?
+    def columns = @columns || run_once.columns
+    def types = @types || run_once.types
+    def active? = !@closed
 
     def execute(*vars)
       raise MisuseException, "cannot use a closed statement" if @closed
@@ -214,12 +271,31 @@ module SQLite3
       self
     end
 
-    def reset! = self
+    def reset!
+      @result = nil
+      self
+    end
+
     def close = @closed = true
     def closed? = @closed
+
+    private
+
+    def run_once
+      @result ||= begin
+        raise MisuseException, "cannot use a closed statement" if @closed
+
+        result = @db.run_query(@sql, @bound, as_hash: false)
+        @columns = result.columns
+        @types = result.types
+        result
+      end
+    end
   end
 
   class Database
+    include Pragmas
+
     attr_accessor :results_as_hash
 
     attr_reader :filename
@@ -310,10 +386,17 @@ module SQLite3
     end
 
     def get_first_row(sql, *vars) = execute(sql, *vars).first
-    def get_first_value(sql, *vars) = Array(get_first_row(sql, *vars)).then { |row| row.is_a?(Hash) ? row.values.first : row.first }
+    def get_first_value(sql, *vars)
+      row = get_first_row(sql, *vars)
+      row.is_a?(Hash) ? row.values.first : Array(row).first
+    end
 
     def last_insert_row_id = Integer(Bridge.sqlite.call(:lastInsertRowId, @id).to_s)
     def changes = Bridge.sqlite.call(:changes, @id).to_i
+    # all rows changed since the database was opened: Active Record compares
+    # it before and after a statement to learn whether anything was written
+    def total_changes = Integer(get_first_value("SELECT total_changes()"))
+    def encoding = get_first_value("PRAGMA encoding").to_s
 
     def transaction(mode = :deferred)
       execute("BEGIN #{mode.to_s.upcase} TRANSACTION")
@@ -362,6 +445,7 @@ module SQLite3
     # things the C library does that make no sense in a browser tab
     def busy_timeout(_ms) = self
     def busy_timeout=(_ms); end
+    def busy_handler_timeout=(_ms); end
     def extended_result_codes=(_on); end
 
     def create_function(name, *)
@@ -369,9 +453,9 @@ module SQLite3
     end
 
     # used by Statement and execute: one statement and its rows
-    def run_query(sql, vars)
+    def run_query(sql, vars, as_hash: @results_as_hash)
       before(sql)
-      result = ResultSet.new(self, Bridge.call(:query, @id, sql.to_s, JSON.generate(Bridge.bindings(vars))))
+      result = ResultSet.new(self, Bridge.call(:query, @id, sql.to_s, JSON.generate(Bridge.bindings(vars))), as_hash)
       after(sql)
       result
     end

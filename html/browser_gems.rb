@@ -33,7 +33,7 @@ module BrowserGems
   NATIVE_GEMS = %w[
     sqlite3 pg mysql2 ffi byebug debug bcrypt puma eventmachine
     nio4r websocket-driver msgpack oj yajl-ruby curb typhoeus redcarpet
-    commonmarker sassc grpc google-protobuf rmagick vips json-c openssl
+    commonmarker sassc grpc google-protobuf rmagick vips json json-c openssl
     strscan js numo-narray numo-narray-alt processing rays reflexion rucy ruby2d
   ].freeze
 
@@ -41,12 +41,22 @@ module BrowserGems
   # when installing that gem, because it falls back to pure Ruby. ruby_pptx
   # uses Nokogiri when it loads and REXML otherwise; jsg needs ruby_wasm (the
   # build tool) only for its `jsg` command, not in the browser.
-  OPTIONAL_NATIVE_DEPS = { "ruby_pptx" => %w[nokogiri], "jsg" => %w[ruby_wasm] }.freeze
+  # Rails: railties lists irb (for `rails console`; irb's rdoc now needs
+  # rbs, a C extension) and the rails gem lists every framework - Action
+  # Cable needs nio4r and websocket-driver (C), the mail and storage ones
+  # only make sense on a server. What is left is what a page can run:
+  # railties, actionpack, actionview, activemodel, activerecord, activesupport.
+  OPTIONAL_NATIVE_DEPS = {
+    "ruby_pptx" => %w[nokogiri], "jsg" => %w[ruby_wasm],
+    "railties" => %w[irb],
+    "rails" => %w[actioncable actionmailbox actionmailer actiontext activestorage activejob bundler]
+  }.freeze
 
   # default gems of the wasm image that a gem names as dependencies (prime
-  # names forwardable and singleton): already there, as on disk - no
-  # download, and offline too. (tools/build_gem_cache.rb leaves them out.)
-  DEFAULT_GEMS = %w[forwardable singleton].freeze
+  # names forwardable and singleton; Rails securerandom, uri, timeout and
+  # tsort): already there, as on disk - no download, and offline too.
+  # (tools/build_gem_cache.rb leaves them out.)
+  DEFAULT_GEMS = %w[forwardable singleton securerandom uri timeout tsort].freeze
 
   # gems replaced by a pure-Ruby stand-in providing the same require: a
   # dependency on bigdecimal (C extension, absent from the wasm image)
@@ -61,6 +71,15 @@ module BrowserGems
   # network sockets). Enough for gems like ipaddr/sinatra to LOAD; anything
   # actually touching the network raises a clear error.
   SHIMS = {
+    # io/console is a C extension the wasm image lacks; IO.console_size is
+    # what Action Dispatch's route inspector asks for (Rails) - a terminal
+    # of 80 columns, as the real method answers without a console
+    "io/console/size.rb" => <<~'RUBY',
+      class IO
+        def self.default_console_size = [24, 80]
+        def self.console_size = default_console_size
+      end
+    RUBY
     "socket.rb" => <<~'RUBY',
       class SocketError < StandardError; end unless defined?(SocketError)
       class BasicSocket; end unless defined?(BasicSocket)

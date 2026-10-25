@@ -15,7 +15,8 @@ GEMS = %w[chunky_bacon chunky_png gammo racc sinatra roda minitest csv benchmark
           bigdecimal-pure prawn hexapdf jsg pure_jpeg rumale-core rumale-nearest_neighbors sequel
           pastel tty-table tty-box tty-tree tty-font faker herb
           daru distribution minimization integration networkx rubyvis
-          qr-bills swiss_qr qr_reader wavefile]
+          qr-bills swiss_qr qr_reader wavefile
+          rails tzinfo-data]
 
 # C extensions compiled into the wasm image: a gem may depend on them (hexapdf
 # on openssl and strscan, jsg on js), the browser finds them built in
@@ -24,7 +25,10 @@ GEMS = %w[chunky_bacon chunky_png gammo racc sinatra roda minitest csv benchmark
 # html/processing.rb for processing (rays and reflexion are C++).
 # forwardable and singleton (under prime) are default gems: plain Ruby, in the
 # image too, so BrowserGems.install finds them there (DEFAULT_GEMS).
-BUILTIN = %w[openssl strscan js numo-narray numo-narray-alt processing forwardable singleton]
+# json, securerandom, uri, timeout and tsort (under Rails) are default gems of
+# the image as well; drb is listed there but not loadable, so it is cached.
+BUILTIN = %w[openssl strscan js numo-narray numo-narray-alt processing forwardable singleton
+             json securerandom uri timeout tsort]
 
 # a dependency on the C extension resolves to the pure stand-in, as in
 # BrowserGems::SUBSTITUTES (ttfunk, under prawn, depends on bigdecimal)
@@ -48,13 +52,17 @@ ALLOW_EXTENSIONS = %w[racc herb]
 # dependencies not declared in the gemspec but needed at runtime in the
 # browser (racc is a default gem locally, absent from the wasm stdlib; matrix,
 # prime and ostruct left the default gems, and SciRuby's gems are older than that)
+# tzinfo (under Active Support) reads the system's zoneinfo, which the wasm
+# filesystem has none of: tzinfo-data carries it as Ruby
 EXTRA_DEPS = { "gammo" => %w[racc], "daru" => %w[matrix], "distribution" => %w[prime],
-               "rubyvis" => %w[ostruct rexml] }
+               "rubyvis" => %w[ostruct rexml], "tzinfo" => %w[tzinfo-data] }
 
 # native dependencies a gem declares but falls back from (ruby_pptx uses
 # Nokogiri when it loads, REXML otherwise) - left out of the cache and the
 # manifest; keep in sync with BrowserGems::OPTIONAL_NATIVE_DEPS
-OPTIONAL_NATIVE_DEPS = { "ruby_pptx" => %w[nokogiri], "jsg" => %w[ruby_wasm] }
+OPTIONAL_NATIVE_DEPS = { "ruby_pptx" => %w[nokogiri], "jsg" => %w[ruby_wasm],
+                         "railties" => %w[irb],
+                         "rails" => %w[actioncable actionmailbox actionmailer actiontext activestorage activejob bundler] }
 
 # gems built from a local checkout instead of downloaded: nokogiri is
 # nokogiri-pure's nokogiri.gemspec (named "nokogiri" so that gems depending

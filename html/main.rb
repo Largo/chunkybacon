@@ -127,6 +127,35 @@ begin
 rescue LoadError
   nil
 end
+# ...and Gem::Version (rack-test, under Rails, compares Rack's release when
+# it loads), Gem.path and Gem.default_dir (ActiveSupport's BacktraceCleaner
+# drops the frames from gem directories, its file watcher skips them): the
+# installed gems' directory is the one there is. Gem.win_platform?: no.
+begin
+  require "rubygems/version" unless defined?(Gem::Version)
+rescue LoadError
+  nil
+end
+def Gem.path = [BrowserGems::ROOT] unless Gem.respond_to?(:path)
+def Gem.default_dir = BrowserGems::ROOT unless Gem.respond_to?(:default_dir)
+def Gem.win_platform? = false unless Gem.respond_to?(:win_platform?)
+# ErrorHighlight: on a computer Ruby loads it at startup (the "^^^^" under
+# the culprit in an error message); the wasm image only declares the module.
+# Rails' error page asks ErrorHighlight.spot for every frame of the backtrace.
+begin
+  require "error_highlight"
+rescue LoadError
+  nil
+end
+# ...and Kernel#gem, which activates a version of an installed gem (Active
+# Record's SQLite adapter asks for sqlite3 >= 2.1 that way): here every
+# installed gem is on the load path already, in the one version there is
+unless Kernel.private_method_defined?(:gem)
+  module Kernel
+    def gem(_name, *_requirements) = true
+    private :gem
+  end
+end
 # ...but the stub does not last: a gem that loads full RubyGems (rubyzip
 # does, so ruby_pptx does) brings the real Gem.find_files, whose plugin scan
 # finds the wasm image's bundled minitest 6 and loads it over this 5.x -
@@ -1148,8 +1177,24 @@ class ChunkyApp
           <span class="mb-status" aria-live="polite"></span>
         </div>
         <div class="mb-view"></div>
+        <pre class="mb-log" role="log" aria-label="#{escape_html(ui["browserLog"])}" hidden></pre>
       </div>
     HTML
+  end
+
+  # what the app printed while it answered - a Rails app logs every request
+  # ("Started GET "/menu" ... Completed 200 OK") - goes into the log pane
+  # under the page, the last MB_LOG_LINES lines of it
+  MB_LOG_LINES = 60
+
+  def browser_log(widget, printed)
+    return if printed.empty?
+
+    log_el = widget.querySelector(".mb-log")
+    lines = (log_el.innerText.to_s + printed).lines.last(MB_LOG_LINES)
+    log_el.innerHTML = AnsiHtml.to_html(lines.join)
+    log_el.removeAttribute("hidden")
+    log_el.scrollTop = log_el.scrollHeight
   end
 
   def navigate_browser(widget)
@@ -1160,8 +1205,16 @@ class ChunkyApp
     path = "/" + path unless path.start_with?("/")
     input.value = path
     status_el = widget.querySelector(".mb-status")
+    printed = ""
     page = begin
-      status, headers, body = RackPlayground.get(app, path)
+      old_stdout = $stdout
+      $stdout = StringIO.new
+      begin
+        status, headers, body = RackPlayground.get(app, path)
+      ensure
+        printed = $stdout.string
+        $stdout = old_stdout
+      end
       content_type = (headers["content-type"] || headers["Content-Type"]).to_s
       status_el.innerText = status.to_s
       status_el.className = "mb-status #{status < 400 ? 'ok' : 'err'}"
@@ -1172,6 +1225,7 @@ class ChunkyApp
       "<pre class=\"mb-error\">#{escape_html("#{e.class}: #{e.message}")}</pre>"
     end
     browser_page(widget.querySelector(".mb-view")).innerHTML = "#{MB_PAGE_STYLE}<div class=\"mb-page\">#{page_styles_scoped(page)}</div>"
+    browser_log(widget, printed)
   end
 
   # In the shadow root there is no <html> or <body> (the fragment parser

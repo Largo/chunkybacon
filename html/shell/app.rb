@@ -414,8 +414,9 @@ module ChunkyShell
       # scikit-learn ~19 MB, matplotlib ~9 MB)
       python = cells.select { |cell| code_cell?(cell) && cell.code.to_s.include?("PyCall") }
       JSG.w.ensurePython(python.map { |cell| cell.code.to_s }.join("\n")) unless python.empty?
-      # SQLite (sql.js, ~650 KB) only for a lesson that uses Sequel or sqlite3
-      JSG.w.ensureSqlite if cells.any? { |cell| code_cell?(cell) && cell.code.to_s.match?(/Sequel|SQLite3/) }
+      # SQLite (sql.js, ~650 KB) only for a lesson that uses Sequel, sqlite3
+      # or Active Record (adapter: "sqlite3")
+      JSG.w.ensureSqlite if cells.any? { |cell| code_cell?(cell) && cell.code.to_s.match?(/Sequel|SQLite3|sqlite3|ActiveRecord/) }
       # Herb's parser (WebAssembly, 1.7 MB) only for a lesson that requires herb
       JSG.w.ensureHerb if cells.any? { |cell| code_cell?(cell) && cell.code.to_s.include?('require "herb"') }
       # Spinel and clang (WebAssembly, ~27 MB) only for the lesson that compiles with it
@@ -715,7 +716,7 @@ module ChunkyShell
 
     def uses_sqlite?(idx)
       editor = JSG.w.cellEditors[idx.to_s]
-      editor ? editor.getValue.to_s.match?(/Sequel|SQLite3/) : false
+      editor ? editor.getValue.to_s.match?(/Sequel|SQLite3|sqlite3|ActiveRecord/) : false
     end
 
     # the kernel ran cell idx: "ok" | "error" | "pass" | "fail"; a live run

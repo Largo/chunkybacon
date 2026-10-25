@@ -252,7 +252,7 @@ SOLUTION_LANG = { "ja" => "en" }.freeze
 # Sequel's sqlite3 to sql.js (html/sqlite3_sqljs.rb), and Herb's parser is
 # its WebAssembly build (html/herb_bridge.rb) - only a page has them;
 # test/browser_test.mjs runs them.
-BROWSER_ONLY = %w[pycall sympy numpy matplotlib sklearn sequel erb].freeze
+BROWSER_ONLY = %w[pycall sympy numpy matplotlib sklearn sequel erb activerecord].freeze
 
 # the Rumale exercise's picture of a seven (its starter defines it too)
 RUMALE_SEVEN = "PIC = %w[.######. ......#. .....#.. ....#... ...#.... ...#.... ..#..... ..#.....].join(\"\\n\") + \"\\n\"\n"
@@ -2127,6 +2127,44 @@ show_browser TimelogWeb, "/")]
   "roda" => {
     "de" => [%(install_gem "roda"\nrequire "roda"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      "<h1>Kiosk</h1>"\n    end\n    r.get "bestellung", Integer do |anzahl|\n      "\#{anzahl} Streifen Speck, kommt sofort!"\n    end\n  end\nend\nshow_browser Kiosk, "/bestellung/5")],
     "en" => [%(install_gem "roda"\nrequire "roda"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      "<h1>Kiosk</h1>"\n    end\n    r.get "order", Integer do |amount|\n      "\#{amount} strips of bacon, coming right up!"\n    end\n  end\nend\nshow_browser Kiosk, "/order/5")]
+  },
+  # the Rails app (Diner / Imbiss) boots in the lesson's first cell and is
+  # one per process, like Rails.application: the exercise redraws its routes
+  "rails" => {
+    "de" => [%(Rails.root.join("config/routes.rb").write(<<~RUBY)
+  Rails.application.routes.draw do
+    root "imbiss#start"
+    get "/speisekarte" => "imbiss#speisekarte", as: :speisekarte
+    get "/hallo/:name" => "imbiss#hallo"
+    get "/speck" => "kueche#speck"
+  end
+RUBY
+Imbiss.reload_routes!
+
+class KuecheController < ActionController::Base
+  def speck
+    render plain: "CHUNKY BACON!"
+  end
+end
+
+show_browser Imbiss, "/speck")],
+    "en" => [%(Rails.root.join("config/routes.rb").write(<<~RUBY)
+  Rails.application.routes.draw do
+    root "diner#home"
+    get "/menu" => "diner#menu", as: :menu
+    get "/hello/:name" => "diner#hello"
+    get "/bacon" => "kitchen#bacon"
+  end
+RUBY
+Diner.reload_routes!
+
+class KitchenController < ActionController::Base
+  def bacon
+    render plain: "CHUNKY BACON!"
+  end
+end
+
+show_browser Diner, "/bacon")]
   }
 }
 

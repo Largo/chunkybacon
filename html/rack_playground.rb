@@ -15,6 +15,7 @@ module RackPlayground
       "SERVER_NAME" => "localhost",
       "SERVER_PORT" => "80",
       "HTTP_HOST" => "localhost",
+      "REMOTE_ADDR" => "127.0.0.1",
       "SERVER_PROTOCOL" => "HTTP/1.1",
       "rack.url_scheme" => "http",
       "rack.input" => StringIO.new(""),

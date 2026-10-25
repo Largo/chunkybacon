@@ -149,6 +149,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveNeedsEarlier": "Die Zellen darüber sind noch nicht gelaufen und brauchen länger, als ein Live-Lauf darf – ▶ führt sie zuerst aus.",
       "liveLesson": "In dieser Lektion ist Live aus: Für jeden Ton rechnen die Zellen Tausende Zahlen aus, zu viel für einen Lauf bei jeder Tipppause. Mit ▶ ausführen.",
       "browserUrl": "Adresse",
+      "browserLog": "Server-Log",
       "irbInput": "IRB-Eingabe",
       "threeLabel": "3D-Szene",
       "audioLabel": "Ein Klang, %s Sekunden",
@@ -496,6 +497,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveNeedsEarlier": "The cells above have not run yet and take longer than a live run may – ▶ runs them first.",
       "liveLesson": "Live is off in this lesson: its cells compute thousands of numbers for every sound – too much for a run at every pause in typing. Run them with ▶.",
       "browserUrl": "Address",
+      "browserLog": "Server log",
       "irbInput": "IRB input",
       "threeLabel": "3D scene",
       "audioLabel": "A sound, %s seconds",
@@ -843,6 +845,7 @@ window.LESSONS_JSON = JSON.stringify({
       "liveNeedsEarlier": "上のセルがまだ実行されていません。ライブ実行には時間がかかりすぎるので、▶ を押すと上のセルから順に実行します。",
       "liveLesson": "このレッスンではライブはオフです。セルが音ごとに何千もの数を計算するので、入力が止まるたびに実行するには重すぎます。▶ で実行してください。",
       "browserUrl": "アドレス",
+      "browserLog": "サーバーログ",
       "irbInput": "IRBの入力",
       "threeLabel": "3Dシーン",
       "audioLabel": "音、%s秒",
@@ -4449,6 +4452,246 @@ window.LESSONS_JSON = JSON.stringify({
             "code": "install_gem \"roda\"\nrequire \"roda\"\n\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      \"<h1>Kiosk</h1><a href='/order/5'>Order 5 strips</a>\"\n    end\n\n    # r.get \"order\", Integer do |amount|\n    #   ...\n    # end\n  end\nend\n\nshow_browser Kiosk, \"/order/5\"",
             "check": "s1, b1 = mock_get(Kiosk, \"/\"); s2, b2 = mock_get(Kiosk, \"/order/5\"); s3, _ = mock_get(Kiosk, \"/pizza\"); s1 == 200 && b1.include?(\"Kiosk\") && s2 == 200 && b2.include?(\"5\") && b2.include?(\"bacon\") && s3 == 404",
             "hint": "routeブロックの中に、こう書いてみて：<code>r.get \"order\", Integer do |amount|</code> … <code>\"#{amount} strips of bacon, coming right up!\"</code> … <code>end</code>"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rails",
+      "de": {
+        "title": "Rails – Routen, Controller, Views",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ruby on Rails – das Framework, das Ruby berühmt machte</h2><p>Die beiden Web-Frameworks der Lektionen davor sind absichtlich klein. <strong>Ruby on Rails</strong> ist das grosse: David Heinemeier Hansson hat es 2004 aus Basecamp herausgelöst, GitHub, Shopify und Airbnb sind damit gross geworden. Vieles, was im Web heute selbstverständlich ist – Routen im REST-Stil, Datenbank-Migrationen, <em>Konvention vor Konfiguration</em> –, hat Rails erfunden oder bekannt gemacht. Rails ist keine Bibliothek, die du aufrufst: Es ist ein <strong>Framework</strong>, das <em>deinen</em> Code aufruft – sofern du ihn dorthin legst, wo Rails ihn erwartet.</p><p>Eine echte Rails-App hat Dutzende Ordner (<code>rails new</code> legt sie an). Eine Rails-App passt aber auch in eine Datei – so sind die Vorlagen für Fehlermeldungen an Rails selbst geschrieben –, und hier läuft Rails 8 direkt auf der Seite. Die erste Zelle startet es: Rails kommt aus dem Gem-Cache des Kurses (rund 2 MB Ruby), und der Start der Anwendung dauert ein paar Sekunden:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\n\n# rails new legt Dutzende Ordner und Dateien an - hier: ein Ordner für die\n# Views und die Routen-Datei, vorerst leer\nFileUtils.mkdir_p(\"/tmp/imbiss/app/views\")\nFileUtils.mkdir_p(\"/tmp/imbiss/config\")\nFile.write(\"/tmp/imbiss/config/routes.rb\", \"Rails.application.routes.draw do\nend\n\")\n\nclass Imbiss < Rails::Application\n  config.root = \"/tmp/imbiss\"\n  config.eager_load = false                 # Code erst laden, wenn er gebraucht wird\n  config.consider_all_requests_local = true # Fehlerseiten mit Details, wie in der Entwicklung\n  config.logger = Logger.new(STDOUT)       # das Log erscheint unter der Seite\nend\nImbiss.initialize! unless Imbiss.initialized? # ein Server startet einmal, die App auch\nRails.version"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Rails.version</code> antwortet: Ein komplettes Rails läuft. Mit <code>initialize!</code> hat die Anwendung ihre <em>Initializer</em> durchlaufen und ihren Middleware-Stapel gebaut – genau das, was <code>bin/rails server</code> tut, bevor er auf Anfragen wartet. (Die Absicherung <code>unless Imbiss.initialized?</code> lässt dich die Zelle nochmals ausführen – eine App startet nur einmal.)</p><p>Rails sortiert eine Web-App in drei Arten von Teilen, <strong>MVC</strong>:</p><ul><li><strong>Routen</strong> (<code>config/routes.rb</code>) sagen, welcher Pfad zu welcher Controller-Action gehört: <code>get \"/speisekarte\" => \"imbiss#speisekarte\"</code>.</li><li>Ein <strong>Controller</strong> (<code>app/controllers/imbiss_controller.rb</code>) ist eine Klasse; jede öffentliche Methode ist eine <em>Action</em>, die zusammensucht, was die Seite braucht.</li><li>Eine <strong>View</strong> (<code>app/views/imbiss/speisekarte.html.erb</code>) ist eine ERB-Vorlage (Lektion {{nr:erb}}), die daraus HTML macht – und Rails findet sie über ihren Namen: Die Action <code>speisekarte</code> des <code>ImbissController</code> rendert <code>imbiss/speisekarte.html.erb</code>, ohne dass du es sagst. Das ist <em>Konvention vor Konfiguration</em>.</li></ul><p>(Das M, das <em>Model</em>, sind die Daten – die Aufgabe von Active Record, eine Geschichte für eine andere Lektion.) Hier wohnen alle drei in einer Zelle: Die Routen-Datei und die Views werden in den Ordner der App geschrieben, wohin <code>rails new</code> sie gelegt hätte, und der Controller ist eine Klasse. <code>reload_routes!</code> tut, was der Entwicklungsserver von selbst tut, wenn sich <code>config/routes.rb</code> ändert – er liest die Datei neu:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"imbiss#start\"\n    get \"/speisekarte\" => \"imbiss#speisekarte\", as: :speisekarte\n    get \"/hallo/:name\" => \"imbiss#hallo\"\n  end\nRUBY\nImbiss.reload_routes!\n\nRails.root.join(\"app/views/imbiss\").mkpath\nRails.root.join(\"app/views/imbiss/start.html.erb\").write(<<~ERB)\n  <h1>Chunkys Imbiss</h1>\n  <p>Willkommen! Heute im Angebot: Speck.</p>\n  <%= link_to \"Zur Speisekarte\", speisekarte_path %>\nERB\nRails.root.join(\"app/views/imbiss/speisekarte.html.erb\").write(<<~ERB)\n  <h2>Speisekarte</h2>\n  <ul>\n    <% @gerichte.each do |gericht| %>\n      <li><%= gericht %></li>\n    <% end %>\n  </ul>\n  <%= link_to \"Zurück\", root_path %>\nERB\n\nclass ImbissController < ActionController::Base\n  def start\n  end\n\n  def speisekarte\n    @gerichte = [\"Speck\", \"Ei\", \"Kaffee\"]\n  end\n\n  def hallo\n    render plain: \"Hallo, #{params[:name]}! Schön, dass du da bist.\"\n  end\nend\n\nshow_browser Imbiss, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Klick dich durch den Mini-Browser – und lies das Server-Log unter der Seite: Jede Anfrage ist ein <code>Started GET \"/speisekarte\"</code>, dann <code>Processing by ImbissController#speisekarte as HTML</code>, <code>Rendering imbiss/speisekarte.html.erb</code> und <code>Completed 200 OK in 3ms</code>. Das ist das Rails-Log, der erste Ort zum Nachsehen, wenn etwas schiefgeht. Probier <code>/pizza</code> in der Adressleiste, einen Pfad ohne Route: Die Fehlerseite von Rails zählt sogar alle Routen auf, die es kennt.</p><p>Verfolge eine Anfrage: <code>get \"/speisekarte\" => \"imbiss#speisekarte\"</code> schickt sie an <code>ImbissController#speisekarte</code>. Die Action setzt <code>@gerichte</code> – und <strong>die Instanzvariablen des Controllers sind in der View sichtbar</strong>; so kommen Daten in die Vorlage. <code>start</code> ist leer: Eine Action braucht keinen Code, wenn die View es allein kann. <code>hallo</code> rendert Text statt einer View, mit <code>params[:name]</code> aus dem Pfad. Und die Links: <code>link_to \"Zurück\", root_path</code> – <code>root_path</code> und <code>speisekarte_path</code> sind <em>Routen-Helfer</em>, die Rails aus <code>root</code> und <code>as: :speisekarte</code> für dich schreibt, damit ein Pfad nur an einer Stelle steht.</p><p>Auf deinem Rechner druckt <code>bin/rails routes</code> die Routentabelle; hier zählt die App sie selbst auf (<code>(.:format)</code> ist optional: <code>/speisekarte.json</code> käme bei derselben Action an):</p>"
+          },
+          {
+            "t": "c",
+            "code": "Imbiss.routes.routes.reject(&:internal).each do |route|\n  ziel = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{ziel}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb'><strong>Auf deinem Rechner</strong> beginnt es so: <code>gem install rails</code>, dann legt <code>rails new imbiss</code> den ganzen Ordnerbaum an, <code>bin/rails server</code> liefert ihn unter <code>localhost:3000</code> aus, und <code>bin/rails generate controller imbiss start speisekarte</code> schreibt dir Controller, die beiden Views und die Routen. Die drei Teile dieser Lektion wohnen dann in <code>config/routes.rb</code>, <code>app/controllers/imbiss_controller.rb</code> und <code>app/views/imbiss/</code>. Über diese Lektion hinaus bringt Rails Active Record für die Datenbank, Formulare, Sessions, Mail, Hintergrund-Jobs und Hotwire fürs Frontend mit – der <a href='https://guides.rubyonrails.org/getting_started.html' target='_blank'>Getting-Started-Guide</a> (englisch) baut an einem Nachmittag einen kleinen Shop.</div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://guides.rubyonrails.org/routing.html' target='_blank'>Rails Routing</a> · <a href='https://guides.rubyonrails.org/action_controller_overview.html' target='_blank'>Action Controller</a> · <a href='https://guides.rubyonrails.org/layouts_and_rendering.html' target='_blank'>Layouts and Rendering</a> · <a href='https://api.rubyonrails.org/' target='_blank'>Rails API</a></div><div class='task'><strong>Aufgabe:</strong> Ergänze einen zweiten Controller: die Route <code>get \"/speck\" => \"kueche#speck\"</code> und einen <code>KuecheController</code>, dessen Action <code>speck</code> den Text <code>CHUNKY BACON!</code> rendert. Der Mini-Browser unten zeigt <code>/speck</code> – im Moment noch den Routing-Fehler von Rails.</div>"
+          },
+          {
+            "t": "x",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"imbiss#start\"\n    get \"/speisekarte\" => \"imbiss#speisekarte\", as: :speisekarte\n    get \"/hallo/:name\" => \"imbiss#hallo\"\n    # get \"/speck\" => \"kueche#speck\"\n  end\nRUBY\nImbiss.reload_routes!\n\nclass KuecheController < ActionController::Base\n  # def speck\n  #   render plain: \"...\"\n  # end\nend\n\nshow_browser Imbiss, \"/speck\"",
+            "check": "s1, _ = mock_get(Imbiss, \"/\"); s2, b2 = mock_get(Imbiss, \"/speck\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\") && (Imbiss.routes.recognize_path(\"/speck\") rescue nil) == { controller: \"kueche\", action: \"speck\" }",
+            "hint": "Beide Teile einkommentieren: die Route <code>get \"/speck\" => \"kueche#speck\"</code> in der Routen-Datei, und im <code>KuecheController</code> die Action <code>def speck</code> mit <code>render plain: \"CHUNKY BACON!\"</code>. Danach die Zelle neu ausführen."
+          }
+        ]
+      },
+      "en": {
+        "title": "Rails – routes, controllers, views",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ruby on Rails – the framework that made Ruby famous</h2><p>The two web frameworks of the lessons before this one are small on purpose. <strong>Ruby on Rails</strong> is the big one: David Heinemeier Hansson extracted it from Basecamp in 2004, and GitHub, Shopify and Airbnb grew up on it. Much of what the web takes for granted today – REST-style routes, database migrations, <em>convention over configuration</em> – Rails invented or made popular. Rails is not a library you call: it is a <strong>framework</strong> that calls <em>your</em> code, as long as you put it where Rails expects it.</p><p>A real Rails app has dozens of folders (<code>rails new</code> makes them). But a Rails app also fits in one file – Rails' own bug report templates are written that way – and here Rails 8 runs right in the page. The first cell boots it: Rails comes from the course's gem cache (about 2 MB of Ruby), and starting the application takes a few seconds:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\n\n# rails new makes dozens of folders and files - here: a folder for the\n# views and the routes file, empty for now\nFileUtils.mkdir_p(\"/tmp/diner/app/views\")\nFileUtils.mkdir_p(\"/tmp/diner/config\")\nFile.write(\"/tmp/diner/config/routes.rb\", \"Rails.application.routes.draw do\nend\n\")\n\nclass Diner < Rails::Application\n  config.root = \"/tmp/diner\"\n  config.eager_load = false                 # load code when it is needed, as in development\n  config.consider_all_requests_local = true # error pages with details, as in development\n  config.logger = Logger.new(STDOUT)       # the log goes under the page\nend\nDiner.initialize! unless Diner.initialized? # a server boots once - so does the app\nRails.version"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Rails.version</code> answers: a complete Rails is running. With <code>initialize!</code> the application ran its <em>initializers</em> and built its middleware stack, exactly what <code>bin/rails server</code> does before it listens. (The guard <code>unless Diner.initialized?</code> lets you run the cell again – an app boots once.)</p><p>Rails sorts a web app into three kinds of parts, <strong>MVC</strong>:</p><ul><li><strong>Routes</strong> (<code>config/routes.rb</code>) say which path belongs to which controller action: <code>get \"/menu\" => \"diner#menu\"</code>.</li><li>A <strong>controller</strong> (<code>app/controllers/diner_controller.rb</code>) is a class; each public method is an <em>action</em> that gathers what the page needs.</li><li>A <strong>view</strong> (<code>app/views/diner/menu.html.erb</code>) is an ERB template (lesson {{nr:erb}}) that turns it into HTML – and Rails finds it by its name: the action <code>menu</code> of <code>DinerController</code> renders <code>diner/menu.html.erb</code> without being told. That is <em>convention over configuration</em>.</li></ul><p>(The M, the <em>model</em>, is the data – Active Record's job, a story for another lesson.) Here all three live in one cell: the routes file and the views are written into the app's folder, where <code>rails new</code> would have put them, and the controller is a class. <code>reload_routes!</code> does what the development server does by itself when <code>config/routes.rb</code> changes – it reads the file again:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"diner#home\"\n    get \"/menu\" => \"diner#menu\", as: :menu\n    get \"/hello/:name\" => \"diner#hello\"\n  end\nRUBY\nDiner.reload_routes!\n\nRails.root.join(\"app/views/diner\").mkpath\nRails.root.join(\"app/views/diner/home.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <p>Welcome! Today's special: bacon.</p>\n  <%= link_to \"See the menu\", menu_path %>\nERB\nRails.root.join(\"app/views/diner/menu.html.erb\").write(<<~ERB)\n  <h2>Menu</h2>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li><%= dish %></li>\n    <% end %>\n  </ul>\n  <%= link_to \"Back\", root_path %>\nERB\n\nclass DinerController < ActionController::Base\n  def home\n  end\n\n  def menu\n    @dishes = [\"Bacon\", \"Egg\", \"Coffee\"]\n  end\n\n  def hello\n    render plain: \"Hello, #{params[:name]}! Nice to see you.\"\n  end\nend\n\nshow_browser Diner, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Click around in the mini browser – and read the server log under the page: every request is one <code>Started GET \"/menu\"</code>, then <code>Processing by DinerController#menu as HTML</code>, <code>Rendering diner/menu.html.erb</code> and <code>Completed 200 OK in 3ms</code>. That is the Rails log, the first place to look when something goes wrong. Try <code>/pizza</code> in the address bar, a path with no route: Rails' error page even lists every route it knows.</p><p>Follow one request: <code>get \"/menu\" => \"diner#menu\"</code> sends it to <code>DinerController#menu</code>. The action sets <code>@dishes</code> – and <strong>the controller's instance variables are visible in the view</strong>; that is how data reaches the template. <code>home</code> is empty: an action needs no code when the view can do it alone. <code>hello</code> renders text instead of a view, with <code>params[:name]</code> from the path. And the links: <code>link_to \"Back\", root_path</code> – <code>root_path</code> and <code>menu_path</code> are <em>route helpers</em>, written for you from <code>root</code> and <code>as: :menu</code>, so a path is spelled in one place only.</p><p>On your computer <code>bin/rails routes</code> prints the route table; here the app lists it itself (<code>(.:format)</code> is optional: <code>/menu.json</code> would reach the same action):</p>"
+          },
+          {
+            "t": "c",
+            "code": "Diner.routes.routes.reject(&:internal).each do |route|\n  target = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{target}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb'><strong>On your machine</strong> it starts like this: <code>gem install rails</code>, then <code>rails new diner</code> makes the whole folder tree, <code>bin/rails server</code> serves it at <code>localhost:3000</code>, and <code>bin/rails generate controller diner home menu</code> writes the controller, the two views and the routes for you. This lesson's three parts then live in <code>config/routes.rb</code>, <code>app/controllers/diner_controller.rb</code> and <code>app/views/diner/</code>. Beyond this lesson Rails brings Active Record for the database, forms, sessions, mail, background jobs and Hotwire for the front end – the <a href='https://guides.rubyonrails.org/getting_started.html' target='_blank'>Getting Started guide</a> builds a small shop in an afternoon.</div><div class='docs'><strong>Look it up:</strong> <a href='https://guides.rubyonrails.org/routing.html' target='_blank'>Rails Routing</a> · <a href='https://guides.rubyonrails.org/action_controller_overview.html' target='_blank'>Action Controller</a> · <a href='https://guides.rubyonrails.org/layouts_and_rendering.html' target='_blank'>Layouts and Rendering</a> · <a href='https://api.rubyonrails.org/' target='_blank'>Rails API</a></div><div class='task'><strong>Task:</strong> Add a second controller: the route <code>get \"/bacon\" => \"kitchen#bacon\"</code> and a <code>KitchenController</code> whose action <code>bacon</code> renders the text <code>CHUNKY BACON!</code>. The mini browser below shows <code>/bacon</code> – for now, Rails' routing error.</div>"
+          },
+          {
+            "t": "x",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"diner#home\"\n    get \"/menu\" => \"diner#menu\", as: :menu\n    get \"/hello/:name\" => \"diner#hello\"\n    # get \"/bacon\" => \"kitchen#bacon\"\n  end\nRUBY\nDiner.reload_routes!\n\nclass KitchenController < ActionController::Base\n  # def bacon\n  #   render plain: \"...\"\n  # end\nend\n\nshow_browser Diner, \"/bacon\"",
+            "check": "s1, _ = mock_get(Diner, \"/\"); s2, b2 = mock_get(Diner, \"/bacon\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\") && (Diner.routes.recognize_path(\"/bacon\") rescue nil) == { controller: \"kitchen\", action: \"bacon\" }",
+            "hint": "Uncomment both parts: the route <code>get \"/bacon\" => \"kitchen#bacon\"</code> in the routes file, and in <code>KitchenController</code> the action <code>def bacon</code> with <code>render plain: \"CHUNKY BACON!\"</code>. Then run the cell again."
+          }
+        ]
+      },
+      "ja": {
+        "title": "Rails：ルート・コントローラー・ビュー",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ruby on Rails：Rubyを有名にしたフレームワーク</h2><p>この前の2つのレッスンのWebフレームワークは、わざと小さく作られています。<strong>Ruby on Rails</strong>は大きいほうです。2004年にDavid Heinemeier HanssonがBasecampから切り出したもので、GitHub、Shopify、Airbnbはこの上で育ちました。今のWebで当たり前になっていること、たとえばRESTスタイルのルート、データベースのマイグレーション、<em>設定より規約</em>（convention over configuration）の多くは、Railsが生み出したか、広めたものです。Railsは、あなたが呼び出すライブラリではありません。Railsが期待する場所にコードを置いておけば、<em>あなたの</em>コードを呼び出してくれる<strong>フレームワーク</strong>です。</p><p>本物のRailsアプリには、何十ものフォルダがあります（<code>rails new</code>が作ります）。けれども、Railsアプリは1つのファイルにも収まります。Rails自身へのバグ報告用テンプレートは、そのように書かれています。そしてここでは、Rails 8がこのページの中で動きます。最初のセルがRailsを起動します。Railsはコースのgemキャッシュから来て（約2 MBのRuby）、アプリケーションの起動には数秒かかります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\n\n# rails new はフォルダやファイルをたくさん作ります。ここでは、ビューの\n# フォルダと、今はまだ空っぽのルートのファイルだけです\nFileUtils.mkdir_p(\"/tmp/diner/app/views\")\nFileUtils.mkdir_p(\"/tmp/diner/config\")\nFile.write(\"/tmp/diner/config/routes.rb\", \"Rails.application.routes.draw do\nend\n\")\n\nclass Diner < Rails::Application\n  config.root = \"/tmp/diner\"\n  config.eager_load = false                 # コードは必要になったときに読み込む（開発環境と同じ）\n  config.consider_all_requests_local = true # エラーページに詳細を出す（開発環境と同じ）\n  config.logger = Logger.new(STDOUT)       # ログはページの下に出ます\nend\nDiner.initialize! unless Diner.initialized? # サーバーの起動は一度だけ。アプリも同じです\nRails.version"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Rails.version</code>が答えてくれました。完全なRailsが動いています。<code>initialize!</code>で、アプリケーションは<em>イニシャライザ</em>を順に実行し、ミドルウェアのスタックを組み立てました。<code>bin/rails server</code>がリクエストを待ち始める前にすることと、まったく同じです（<code>unless Diner.initialized?</code>という守りがあるので、このセルは何度でも実行できます。アプリの起動は一度だけだからです）。</p><p>RailsはWebアプリを3種類の部品に分けます。<strong>MVC</strong>です。</p><ul><li><strong>ルート</strong>（<code>config/routes.rb</code>）は、どのパスがどのコントローラーのアクションに対応するかを決めます：<code>get \"/menu\" => \"diner#menu\"</code>。</li><li><strong>コントローラー</strong>（<code>app/controllers/diner_controller.rb</code>）はクラスです。公開メソッドの1つ1つが<em>アクション</em>で、ページに必要なものを集めます。</li><li><strong>ビュー</strong>（<code>app/views/diner/menu.html.erb</code>）はERBテンプレート（レッスン{{nr:erb}}）で、集めたものをHTMLにします。そしてRailsは、ビューを名前で見つけます。<code>DinerController</code>のアクション<code>menu</code>は、何も言わなくても<code>diner/menu.html.erb</code>を描画します。これが<em>設定より規約</em>です。</li></ul><p>（Mの<em>モデル</em>はデータのことで、Active Recordの仕事です。それは別のレッスンの話にしましょう。）ここでは3つとも1つのセルに入っています。ルートのファイルとビューは、<code>rails new</code>なら置いたはずの、アプリのフォルダに書き込みます。コントローラーはクラスです。<code>reload_routes!</code>は、<code>config/routes.rb</code>が変わったときに開発サーバーが自分でしていること、つまりファイルを読み直すことをします。</p>"
+          },
+          {
+            "t": "c",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"diner#home\"\n    get \"/menu\" => \"diner#menu\", as: :menu\n    get \"/hello/:name\" => \"diner#hello\"\n  end\nRUBY\nDiner.reload_routes!\n\nRails.root.join(\"app/views/diner\").mkpath\nRails.root.join(\"app/views/diner/home.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <p>Welcome! Today's special: bacon.</p>\n  <%= link_to \"See the menu\", menu_path %>\nERB\nRails.root.join(\"app/views/diner/menu.html.erb\").write(<<~ERB)\n  <h2>Menu</h2>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li><%= dish %></li>\n    <% end %>\n  </ul>\n  <%= link_to \"Back\", root_path %>\nERB\n\nclass DinerController < ActionController::Base\n  def home\n  end\n\n  def menu\n    @dishes = [\"Bacon\", \"Egg\", \"Coffee\"]\n  end\n\n  def hello\n    render plain: \"Hello, #{params[:name]}! Nice to see you.\"\n  end\nend\n\nshow_browser Diner, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p>ミニブラウザの中を動き回ってみてください。そして、ページの下のサーバーログを読んでみましょう。リクエストのたびに、<code>Started GET \"/menu\"</code>、続いて<code>Processing by DinerController#menu as HTML</code>、<code>Rendering diner/menu.html.erb</code>、<code>Completed 200 OK in 3ms</code>と出ています。これがRailsのログで、何かがうまくいかないとき、最初に見る場所です。アドレスバーに<code>/pizza</code>と入れて、ルートのないパスも試してみてください。Railsのエラーページは、知っているルートをすべて並べてくれます。</p><p>リクエストを1つ追いかけてみましょう。<code>get \"/menu\" => \"diner#menu\"</code>は、リクエストを<code>DinerController#menu</code>へ送ります。アクションは<code>@dishes</code>をセットします。そして<strong>コントローラーのインスタンス変数は、ビューから見えます</strong>。こうしてデータがテンプレートに届くのです。<code>home</code>は空っぽです。ビューだけで足りるなら、アクションにコードはいりません。<code>hello</code>はビューの代わりにテキストを描画し、パスから来た<code>params[:name]</code>を使っています。それからリンクです。<code>link_to \"Back\", root_path</code>の<code>root_path</code>と<code>menu_path</code>は<em>ルートヘルパー</em>で、<code>root</code>と<code>as: :menu</code>からRailsが書いてくれます。おかげで、パスを書く場所は1か所だけで済みます。</p><p>自分のコンピューターなら<code>bin/rails routes</code>がルートの一覧を出力します。ここではアプリ自身に一覧を出してもらいましょう（<code>(.:format)</code>は省略できる部分です。<code>/menu.json</code>でも同じアクションに届きます）。</p>"
+          },
+          {
+            "t": "c",
+            "code": "Diner.routes.routes.reject(&:internal).each do |route|\n  target = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{target}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb'><strong>自分のコンピューターでは</strong>、こう始めます。<code>gem install rails</code>のあと、<code>rails new diner</code>がフォルダの木をまるごと作り、<code>bin/rails server</code>が<code>localhost:3000</code>で公開し、<code>bin/rails generate controller diner home menu</code>がコントローラーと2つのビューとルートを書いてくれます。このレッスンの3つの部品は、<code>config/routes.rb</code>、<code>app/controllers/diner_controller.rb</code>、<code>app/views/diner/</code>に住むことになります。このレッスンの先には、データベースのためのActive Record、フォーム、セッション、メール、バックグラウンドジョブ、フロントエンドのためのHotwireが待っています。<a href='https://railsguides.jp/getting_started.html' target='_blank'>Rails をはじめよう</a>のガイドでは、小さなお店を午後いっぱいで作ります。</div><div class='docs'><strong>調べてみよう：</strong><a href='https://railsguides.jp/routing.html' target='_blank'>Rails のルーティング</a>・<a href='https://railsguides.jp/action_controller_overview.html' target='_blank'>Action Controller の概要</a>・<a href='https://railsguides.jp/layouts_and_rendering.html' target='_blank'>レイアウトとレンダリング</a>・<a href='https://api.rubyonrails.org/' target='_blank'>Rails API（英語）</a></div><div class='task'><strong>課題：</strong>2つめのコントローラーを追加しましょう。ルート<code>get \"/bacon\" => \"kitchen#bacon\"</code>と、アクション<code>bacon</code>がテキスト<code>CHUNKY BACON!</code>を描画する<code>KitchenController</code>です。下のミニブラウザは<code>/bacon</code>を表示していますが、今はまだRailsのルーティングエラーです。</div>"
+          },
+          {
+            "t": "x",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"diner#home\"\n    get \"/menu\" => \"diner#menu\", as: :menu\n    get \"/hello/:name\" => \"diner#hello\"\n    # get \"/bacon\" => \"kitchen#bacon\"\n  end\nRUBY\nDiner.reload_routes!\n\nclass KitchenController < ActionController::Base\n  # def bacon\n  #   render plain: \"...\"\n  # end\nend\n\nshow_browser Diner, \"/bacon\"",
+            "check": "s1, _ = mock_get(Diner, \"/\"); s2, b2 = mock_get(Diner, \"/bacon\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\") && (Diner.routes.recognize_path(\"/bacon\") rescue nil) == { controller: \"kitchen\", action: \"bacon\" }",
+            "hint": "2か所のコメントを外してね。ルートのファイルの中のルート<code>get \"/bacon\" => \"kitchen#bacon\"</code>と、<code>KitchenController</code>の中のアクション<code>def bacon</code>（中身は<code>render plain: \"CHUNKY BACON!\"</code>）。書けたら、もう一度セルを実行してね。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "activerecord",
+      "de": {
+        "title": "Active Record – Models und die Datenbank",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Das M in MVC: Active Record</h2><p>Lektion {{nr:rails}} hat das <em>Model</em> ausgelassen – die Daten. In Rails heisst das <strong>Active Record</strong>: eine Klasse pro Tabelle, ein Objekt pro Zeile, und das SQL wird für dich geschrieben. (Der Name ist der des Musters aus Martin Fowlers Buch: ein Objekt, das seine Datenbankzeile mit sich herumträgt.) Active Record funktioniert auch ohne Rails – hier für sich allein, mit SQLite auf der Seite wie in Lektion {{nr:sequel}}, wo Sequel dieselbe Arbeit auf seine Art getan hat.</p><p>Zuerst die Tabelle. Auf deinem Rechner legt sie eine <em>Migration</em>-Datei an; der Schema-Block unten ist derselbe Code, sofort ausgeführt. Das Log unter der Zelle zeigt das SQL, das Active Record schreibt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"active_record\"\n\nActiveRecord::Base.logger = Logger.new(STDOUT)  # das SQL, unter jeder Zelle\nActiveRecord::Base.establish_connection(adapter: \"sqlite3\", database: \"imbiss.db\")\n\nActiveRecord::Schema.define do\n  create_table :gerichte, force: true do |t|\n    t.string  :name\n    t.decimal :preis, precision: 6, scale: 2\n    t.timestamps\n  end\nend\nActiveRecord::Base.connection.tables"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>create_table :gerichte</code> mit <code>t.string</code>, <code>t.decimal</code> und <code>t.timestamps</code> – zwei Spalten, <code>created_at</code> und <code>updated_at</code>, die Active Record selbst ausfüllt; <code>id</code> gibt es gratis. <code>force: true</code> löscht die Tabelle vorher, damit die Zelle nochmals laufen kann. Die zwei Tabellen mehr sind Rails' eigene Buchhaltung: welche Migrationen gelaufen sind. <code>imbiss.db</code> ist eine echte SQLite-Datenbank – unter der Zelle wird sie zum Download angeboten.</p><p>Jetzt die Klasse. Ihr Name steht in der Einzahl, der Tabellenname in der Mehrzahl – Active Record weiss, dass <code>Dish</code> zu <code>dishes</code> gehört (wieder Konvention vor Konfiguration); bei deutschen Namen sagen wir die Tabelle selbst. Die Spalten werden zu Attributen, ohne eine Zeile Code:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Gericht < ActiveRecord::Base\n  self.table_name = \"gerichte\"   # Rails bildet englische Mehrzahlen (Gericht -> \"gerichts\")\n  validates :name, presence: true\nend\n\nGericht.delete_all   # eine leere Tabelle, sooft diese Zelle läuft\nGericht.create!(name: \"Speck\", preis: 4.5)\nGericht.create!(name: \"Ei\", preis: 2)\nGericht.create!(name: \"Kaffee\", preis: 3.2)\nGericht.count"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Gericht.create!</code> ist <code>Gericht.new(…)</code> plus <code>save!</code>: Das Log zeigt jedes <code>INSERT</code> in einer eigenen Transaktion, und <code>RETURNING \"id\"</code> bringt die neue id zurück. <code>validates :name, presence: true</code> ist eine <em>Validierung</em>: Ein Gericht ohne Namen wird nicht gespeichert – <code>save</code> antwortet <code>false</code> und <code>errors</code> erklärt, warum, während <code>save!</code> und <code>create!</code> eine Exception werfen. Fragen stellen ist die Stärke von Active Record: <code>where</code>, <code>order</code> und die anderen geben eine <em>Relation</em> zurück, die erst zu SQL wird, wenn die Zeilen gebraucht werden – darum lassen sie sich verketten:</p>"
+          },
+          {
+            "t": "c",
+            "code": "guenstig = Gericht.where(\"preis < ?\", 4).order(:preis)\nputs guenstig.to_sql\nputs guenstig.map(&:name).inspect\n\nei = Gericht.find_by(name: \"Ei\")\nei.update!(preis: 2.5)\nputs ei.updated_at\n\nnamenlos = Gericht.new(preis: 1)\nputs namenlos.save\nnamenlos.errors.full_messages"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das <code>?</code> in <code>where(\"preis < ?\", 4)</code> ist ein Platzhalter: Der Wert geht getrennt an die Datenbank, nie ins SQL geklebt – die eine Gewohnheit, die SQL-Injection fernhält. <code>find_by</code> gibt ein Objekt oder <code>nil</code>, <code>update!</code> schreibt ein <code>UPDATE</code> und setzt <code>updated_at</code> – und das Gericht ohne Namen bleibt draussen, mit einer Meldung (auf Englisch, bis man Rails Deutsch beibringt), die ein Formular zeigen könnte.</p><div class='offweb'><strong>Auf deinem Rechner</strong>, in einer Rails-App: <code>bin/rails generate model Gericht name:string preis:decimal</code> schreibt die Model-Klasse und eine Migrations-Datei, <code>bin/rails db:migrate</code> legt die Tabelle an, und <code>bin/rails console</code> ist ein IRB mit deinen Models geladen – <code>Gericht.count</code> geht dort wie hier. Mit <code>has_many</code> und <code>belongs_to</code> hängen Models zusammen (eine Bestellung hat viele Gerichte), und derselbe Code spricht mit PostgreSQL oder MySQL, sobald <code>config/database.yml</code> es sagt.</div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://guides.rubyonrails.org/active_record_basics.html' target='_blank'>Active Record Basics</a> · <a href='https://guides.rubyonrails.org/active_record_querying.html' target='_blank'>Query Interface</a> · <a href='https://guides.rubyonrails.org/active_record_validations.html' target='_blank'>Validations</a> · <a href='https://guides.rubyonrails.org/active_record_migrations.html' target='_blank'>Migrations</a></div><div class='task'><strong>Aufgabe:</strong> Die Gäste des Imbiss bekommen eine eigene Tabelle. Gib <code>Gast</code> die Validierung, dass ein Name nötig ist, und mach aus <code>stammgaeste</code> die Gäste mit mindestens 2 Besuchen (<code>where</code> mit einem <code>?</code>-Platzhalter). Die Zelle soll mit <code>[\"Kaz\"]</code> enden.</div>"
+          },
+          {
+            "t": "x",
+            "code": "ActiveRecord::Schema.define do\n  create_table :gaeste, force: true do |t|\n    t.string  :name\n    t.integer :besuche\n    t.timestamps\n  end\nend\n\nclass Gast < ActiveRecord::Base\n  self.table_name = \"gaeste\"\n  # validates ...\nend\n\nGast.create!(name: \"Kaz\", besuche: 3)\nGast.create!(name: \"Ada\", besuche: 1)\n\nstammgaeste = Gast.all   # nur die Gäste mit mindestens 2 Besuchen, bitte\nstammgaeste.map(&:name)",
+            "check": "Gast.count == 2 && !Gast.new(besuche: 5).valid? && result == [\"Kaz\"]",
+            "hint": "<code>validates :name, presence: true</code> in der Klasse, und <code>stammgaeste = Gast.where(\"besuche >= ?\", 2)</code>. Danach die Zelle neu ausführen."
+          }
+        ]
+      },
+      "en": {
+        "title": "Active Record – models and the database",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>The M in MVC: Active Record</h2><p>Lesson {{nr:rails}} left out the <em>model</em> – the data. In Rails that is <strong>Active Record</strong>: one class per table, one object per row, and the SQL is written for you. (The name is the pattern's, from Martin Fowler's book: an object that carries its database row around with it.) Active Record works outside Rails too – here on its own, with SQLite in the page as in lesson {{nr:sequel}}, where Sequel did the same job in its own style.</p><p>First the table. On your computer a <em>migration</em> file creates it; the schema block below is the same code, run right away. The log under the cell shows the SQL Active Record writes:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"active_record\"\n\nActiveRecord::Base.logger = Logger.new(STDOUT)  # the SQL, under each cell\nActiveRecord::Base.establish_connection(adapter: \"sqlite3\", database: \"diner.db\")\n\nActiveRecord::Schema.define do\n  create_table :dishes, force: true do |t|\n    t.string  :name\n    t.decimal :price, precision: 6, scale: 2\n    t.timestamps\n  end\nend\nActiveRecord::Base.connection.tables"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>create_table :dishes</code> with <code>t.string</code>, <code>t.decimal</code> and <code>t.timestamps</code> – two columns, <code>created_at</code> and <code>updated_at</code>, that Active Record fills in by itself; <code>id</code> comes for free. <code>force: true</code> drops the table first, so the cell can run again. The two extra tables are Rails' own bookkeeping: which migrations ran. <code>diner.db</code> is a real SQLite database – below the cell it is offered as a download.</p><p>Now the class. Its name is singular, the table's plural – Active Record knows that <code>Dish</code> goes with <code>dishes</code> (convention over configuration again), and the columns become attributes without a line of code:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Dish < ActiveRecord::Base\n  validates :name, presence: true\nend\n\nDish.delete_all   # a clean table whenever this cell runs again\nDish.create!(name: \"Bacon\", price: 4.5)\nDish.create!(name: \"Egg\", price: 2)\nDish.create!(name: \"Coffee\", price: 3.2)\nDish.count"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Dish.create!</code> is <code>Dish.new(…)</code> plus <code>save!</code>: the log shows each <code>INSERT</code> in a transaction of its own, and <code>RETURNING \"id\"</code> brings the new id back. <code>validates :name, presence: true</code> is a <em>validation</em>: a dish without a name is not saved – <code>save</code> answers <code>false</code> and <code>errors</code> explains why, while <code>save!</code> and <code>create!</code> raise. Asking questions is where Active Record shines: <code>where</code>, <code>order</code> and the rest return a <em>relation</em> that becomes SQL only when the rows are needed, so they chain:</p>"
+          },
+          {
+            "t": "c",
+            "code": "cheap = Dish.where(\"price < ?\", 4).order(:price)\nputs cheap.to_sql\nputs cheap.map(&:name).inspect\n\negg = Dish.find_by(name: \"Egg\")\negg.update!(price: 2.5)\nputs egg.updated_at\n\nnameless = Dish.new(price: 1)\nputs nameless.save\nnameless.errors.full_messages"
+          },
+          {
+            "t": "h",
+            "html": "<p>The <code>?</code> in <code>where(\"price < ?\", 4)</code> is a placeholder: the value is passed to the database separately, never glued into the SQL – the one habit that keeps SQL injection out. <code>find_by</code> returns one object or <code>nil</code>, <code>update!</code> writes an <code>UPDATE</code> and sets <code>updated_at</code> – and the dish without a name stays out, with a message a form could show.</p><div class='offweb'><strong>On your machine</strong>, in a Rails app: <code>bin/rails generate model Dish name:string price:decimal</code> writes the model class and a migration file, <code>bin/rails db:migrate</code> creates the table, and <code>bin/rails console</code> is an IRB with your models loaded – <code>Dish.count</code> works there as here. With <code>has_many</code> and <code>belongs_to</code> models link up (an order has many dishes), and the same code talks to PostgreSQL or MySQL once <code>config/database.yml</code> says so.</div><div class='docs'><strong>Look it up:</strong> <a href='https://guides.rubyonrails.org/active_record_basics.html' target='_blank'>Active Record Basics</a> · <a href='https://guides.rubyonrails.org/active_record_querying.html' target='_blank'>Query Interface</a> · <a href='https://guides.rubyonrails.org/active_record_validations.html' target='_blank'>Validations</a> · <a href='https://guides.rubyonrails.org/active_record_migrations.html' target='_blank'>Migrations</a></div><div class='task'><strong>Task:</strong> The diner's guests get a table of their own. Give <code>Guest</code> the validation that a name is required, and make <code>regulars</code> the guests with at least 2 visits (<code>where</code> with a <code>?</code> placeholder). The cell should end with <code>[\"Kaz\"]</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "ActiveRecord::Schema.define do\n  create_table :guests, force: true do |t|\n    t.string  :name\n    t.integer :visits\n    t.timestamps\n  end\nend\n\nclass Guest < ActiveRecord::Base\n  # validates ...\nend\n\nGuest.create!(name: \"Kaz\", visits: 3)\nGuest.create!(name: \"Ada\", visits: 1)\n\nregulars = Guest.all   # only the guests with at least 2 visits, please\nregulars.map(&:name)",
+            "check": "Guest.count == 2 && !Guest.new(visits: 5).valid? && result == [\"Kaz\"]",
+            "hint": "<code>validates :name, presence: true</code> inside the class, and <code>regulars = Guest.where(\"visits >= ?\", 2)</code>. Then run the cell again."
+          }
+        ]
+      },
+      "ja": {
+        "title": "Active Record：モデルとデータベース",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>MVCのM：Active Record</h2><p>レッスン{{nr:rails}}では、<em>モデル</em>、つまりデータの話を飛ばしました。Railsではそれが<strong>Active Record</strong>です。テーブルごとに1つのクラス、行ごとに1つのオブジェクトがあり、SQLは書いてもらえます（この名前は、Martin Fowlerの本にあるパターンの名前です。自分のデータベースの行を持ち歩くオブジェクト、という意味です）。Active RecordはRailsの外でも動きます。ここでは単独で、ページの中のSQLiteを使います。レッスン{{nr:sequel}}のSequelも、同じ仕事を自分の流儀でしていました。</p><p>まずはテーブルです。自分のコンピューターでは<em>マイグレーション</em>のファイルが作りますが、下のスキーマのブロックは同じコードを、その場で実行するものです。セルの下のログに、Active Recordが書いたSQLが出ます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"active_record\"\n\nActiveRecord::Base.logger = Logger.new(STDOUT)  # SQLは各セルの下に出ます\nActiveRecord::Base.establish_connection(adapter: \"sqlite3\", database: \"diner.db\")\n\nActiveRecord::Schema.define do\n  create_table :dishes, force: true do |t|\n    t.string  :name\n    t.decimal :price, precision: 6, scale: 2\n    t.timestamps\n  end\nend\nActiveRecord::Base.connection.tables"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>create_table :dishes</code>に<code>t.string</code>、<code>t.decimal</code>、<code>t.timestamps</code>です。最後のものは<code>created_at</code>と<code>updated_at</code>の2列で、Active Recordが自分で埋めてくれます。<code>id</code>はおまけで付いてきます。<code>force: true</code>は先にテーブルを消すので、このセルは何度でも実行できます。余分に見える2つのテーブルは、どのマイグレーションを実行したかを記録する、Rails自身の帳簿です。<code>diner.db</code>は本物のSQLiteデータベースで、セルの下からダウンロードできます。</p><p>次はクラスです。クラス名は単数形、テーブル名は複数形です。Active Recordは<code>Dish</code>が<code>dishes</code>と組になると知っていて（ここでも設定より規約です）、列は1行も書かずに属性になります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Dish < ActiveRecord::Base\n  validates :name, presence: true\nend\n\nDish.delete_all   # このセルをもう一度実行しても、テーブルは空から始まります\nDish.create!(name: \"Bacon\", price: 4.5)\nDish.create!(name: \"Egg\", price: 2)\nDish.create!(name: \"Coffee\", price: 3.2)\nDish.count"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Dish.create!</code>は、<code>Dish.new(…)</code>と<code>save!</code>を合わせたものです。ログを見ると、<code>INSERT</code>が1つずつトランザクションの中で実行され、<code>RETURNING \"id\"</code>が新しいidを持ち帰っています。<code>validates :name, presence: true</code>は<em>バリデーション</em>です。名前のない料理は保存されません。<code>save</code>は<code>false</code>を返し、<code>errors</code>が理由を説明します。<code>save!</code>と<code>create!</code>は、代わりに例外を投げます。Active Recordが輝くのは、問い合わせです。<code>where</code>や<code>order</code>などは<em>リレーション</em>を返し、行が必要になってはじめてSQLになるので、つなげて書けます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "cheap = Dish.where(\"price < ?\", 4).order(:price)\nputs cheap.to_sql\nputs cheap.map(&:name).inspect\n\negg = Dish.find_by(name: \"Egg\")\negg.update!(price: 2.5)\nputs egg.updated_at\n\nnameless = Dish.new(price: 1)\nputs nameless.save\nnameless.errors.full_messages"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>where(\"price < ?\", 4)</code>の<code>?</code>はプレースホルダーです。値はSQLに貼り付けられるのではなく、別にデータベースへ渡されます。これがSQLインジェクションを防ぐ、たった1つの習慣です。<code>find_by</code>は1つのオブジェクトか<code>nil</code>を返し、<code>update!</code>は<code>UPDATE</code>を書いて<code>updated_at</code>を更新します。そして名前のない料理は保存されず、フォームに表示できるメッセージが残ります。</p><div class='offweb'><strong>自分のコンピューターでは</strong>、Railsアプリの中でこうします。<code>bin/rails generate model Dish name:string price:decimal</code>がモデルのクラスとマイグレーションのファイルを書き、<code>bin/rails db:migrate</code>がテーブルを作り、<code>bin/rails console</code>はモデルを読み込んだIRBです。<code>Dish.count</code>は、そこでもここと同じように動きます。<code>has_many</code>と<code>belongs_to</code>でモデル同士がつながり（注文は多くの料理を持ちます）、<code>config/database.yml</code>に書けば、同じコードがPostgreSQLやMySQLと話します。</div><div class='docs'><strong>調べてみよう：</strong><a href='https://railsguides.jp/active_record_basics.html' target='_blank'>Active Record の基礎</a>・<a href='https://railsguides.jp/active_record_querying.html' target='_blank'>Active Record クエリインターフェイス</a>・<a href='https://railsguides.jp/active_record_validations.html' target='_blank'>Active Record バリデーション</a>・<a href='https://railsguides.jp/active_record_migrations.html' target='_blank'>Active Record マイグレーション</a></div><div class='task'><strong>課題：</strong>食堂のお客さんにも、専用のテーブルを用意します。<code>Guest</code>に、名前が必須というバリデーションを付けて、<code>regulars</code>を来店が2回以上のお客さんだけにしましょう（<code>?</code>プレースホルダー付きの<code>where</code>で）。セルの最後は<code>[\"Kaz\"]</code>になるはずです。</div>"
+          },
+          {
+            "t": "x",
+            "code": "ActiveRecord::Schema.define do\n  create_table :guests, force: true do |t|\n    t.string  :name\n    t.integer :visits\n    t.timestamps\n  end\nend\n\nclass Guest < ActiveRecord::Base\n  # validates ...\nend\n\nGuest.create!(name: \"Kaz\", visits: 3)\nGuest.create!(name: \"Ada\", visits: 1)\n\nregulars = Guest.all   # 来店が2回以上のお客さんだけにしてください\nregulars.map(&:name)",
+            "check": "Guest.count == 2 && !Guest.new(visits: 5).valid? && result == [\"Kaz\"]",
+            "hint": "クラスの中に<code>validates :name, presence: true</code>、それから<code>regulars = Guest.where(\"visits >= ?\", 2)</code>だよ。書けたら、もう一度セルを実行してね。"
           }
         ]
       }

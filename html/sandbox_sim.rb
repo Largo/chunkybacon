@@ -340,6 +340,16 @@ if defined?(JS)
     def []=(key, val)
       (@locals ||= {})[key] = val
     end
+    def key?(key) = (@locals ||= {}).key?(key)
+    def keys = (@locals ||= {}).keys
+    # thread variables (Thread#thread_variable_get/set): kept apart from the
+    # fiber-locals above, as on a real Thread
+    def thread_variable_get(key) = (@thread_variables ||= {})[key]
+    def thread_variable_set(key, val)
+      (@thread_variables ||= {})[key] = val
+    end
+    def thread_variable?(key) = (@thread_variables ||= {}).key?(key)
+    attr_accessor :name, :report_on_exception, :abort_on_exception
 
     def self.current
       scheduler_current || MAIN
@@ -356,13 +366,44 @@ if defined?(JS)
   SimThread::Mutex = ::Mutex if defined?(::Mutex)
   SimThread::Queue = ::Queue if defined?(::Queue)
   SimThread::ConditionVariable = ::ConditionVariable if defined?(::ConditionVariable)
+  # Thread::Backtrace::Location is what ActiveSupport's SyntaxErrorProxy names
+  SimThread::Backtrace = ::Thread::Backtrace if defined?(::Thread::Backtrace)
   def SimThread.pass; end
   def SimThread.main = SimThread::MAIN
   def SimThread.handle_interrupt(_config) = yield
   def SimThread.list = registry.select(&:alive?)
+  # Thread.each_caller_location (Ruby 3.2): ActiveSupport's BacktraceCleaner
+  # takes its method object when it loads
+  def SimThread.each_caller_location(&block) = caller_locations(2).each(&block)
 
   Object.send(:remove_const, :Thread) if defined?(Thread)
   Thread = SimThread
 end
+
+# STDOUT: the cell that runs now. A cell's output is caught by swapping
+# $stdout for a StringIO per run, so an object that keeps the stream it was
+# given - a Logger (Rails' config.logger = Logger.new(STDOUT), as in its own
+# production.rb), a TTY writer - would go on writing into a buffer that was
+# read long ago. STDOUT is a stand-in that writes to whatever $stdout is at
+# the time of the write: the running cell's buffer, or the real stdout
+# between runs. Everything else is forwarded there too (tty?, sync=, ...).
+class CellStdout
+  ORIGINAL = STDOUT
+
+  def write(*args) = target.write(*args)
+  def close; end
+
+  def target
+    out = $stdout
+    out.equal?(self) ? ORIGINAL : out
+  end
+
+  def respond_to_missing?(name, include_private = false) = target.respond_to?(name, include_private)
+  def method_missing(name, *args, &block) = target.public_send(name, *args, &block)
+  def inspect = "#<CellStdout>"
+end
+
+Object.send(:remove_const, :STDOUT)
+STDOUT = CellStdout.new
 
 SandboxFS.reset!

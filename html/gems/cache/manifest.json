@@ -434,5 +434,189 @@
     "version": "1.1.2",
     "file": "wavefile-1.1.2.gem",
     "deps": []
+  },
+  "rails": {
+    "version": "8.1.4",
+    "file": "rails-8.1.4.gem",
+    "deps": [
+      "actionpack",
+      "actionview",
+      "activemodel",
+      "activerecord",
+      "activesupport",
+      "railties"
+    ]
+  },
+  "tzinfo-data": {
+    "version": "1.2026.5",
+    "file": "tzinfo-data-1.2026.5.gem",
+    "deps": [
+      "tzinfo"
+    ]
+  },
+  "actionpack": {
+    "version": "8.1.4",
+    "file": "actionpack-8.1.4.gem",
+    "deps": [
+      "actionview",
+      "activesupport",
+      "nokogiri",
+      "rack",
+      "rack-session",
+      "rack-test",
+      "rails-dom-testing",
+      "rails-html-sanitizer",
+      "useragent"
+    ]
+  },
+  "actionview": {
+    "version": "8.1.4",
+    "file": "actionview-8.1.4.gem",
+    "deps": [
+      "activesupport",
+      "builder",
+      "erubi",
+      "rails-dom-testing",
+      "rails-html-sanitizer"
+    ]
+  },
+  "activemodel": {
+    "version": "8.1.4",
+    "file": "activemodel-8.1.4.gem",
+    "deps": [
+      "activesupport"
+    ]
+  },
+  "activerecord": {
+    "version": "8.1.4",
+    "file": "activerecord-8.1.4.gem",
+    "deps": [
+      "activemodel",
+      "activesupport",
+      "timeout"
+    ]
+  },
+  "activesupport": {
+    "version": "8.1.4",
+    "file": "activesupport-8.1.4.gem",
+    "deps": [
+      "base64",
+      "bigdecimal",
+      "concurrent-ruby",
+      "connection_pool",
+      "drb",
+      "i18n",
+      "json",
+      "logger",
+      "minitest",
+      "securerandom",
+      "tzinfo",
+      "uri"
+    ]
+  },
+  "railties": {
+    "version": "8.1.4",
+    "file": "railties-8.1.4.gem",
+    "deps": [
+      "actionpack",
+      "activesupport",
+      "rackup",
+      "rake",
+      "thor",
+      "tsort",
+      "zeitwerk"
+    ]
+  },
+  "tzinfo": {
+    "version": "2.0.6",
+    "file": "tzinfo-2.0.6.gem",
+    "deps": [
+      "concurrent-ruby",
+      "tzinfo-data"
+    ]
+  },
+  "rack-test": {
+    "version": "2.3.0",
+    "file": "rack-test-2.3.0.gem",
+    "deps": [
+      "rack"
+    ]
+  },
+  "rails-dom-testing": {
+    "version": "2.3.0",
+    "file": "rails-dom-testing-2.3.0.gem",
+    "deps": [
+      "activesupport",
+      "minitest",
+      "nokogiri"
+    ]
+  },
+  "rails-html-sanitizer": {
+    "version": "1.7.1",
+    "file": "rails-html-sanitizer-1.7.1.gem",
+    "deps": [
+      "loofah",
+      "nokogiri"
+    ]
+  },
+  "useragent": {
+    "version": "0.16.11",
+    "file": "useragent-0.16.11.gem",
+    "deps": []
+  },
+  "builder": {
+    "version": "3.3.0",
+    "file": "builder-3.3.0.gem",
+    "deps": []
+  },
+  "erubi": {
+    "version": "1.13.1",
+    "file": "erubi-1.13.1.gem",
+    "deps": []
+  },
+  "connection_pool": {
+    "version": "3.0.2",
+    "file": "connection_pool-3.0.2.gem",
+    "deps": []
+  },
+  "drb": {
+    "version": "2.2.3",
+    "file": "drb-2.2.3.gem",
+    "deps": []
+  },
+  "rackup": {
+    "version": "2.3.1",
+    "file": "rackup-2.3.1.gem",
+    "deps": [
+      "rack"
+    ]
+  },
+  "rake": {
+    "version": "13.4.2",
+    "file": "rake-13.4.2.gem",
+    "deps": []
+  },
+  "thor": {
+    "version": "1.5.0",
+    "file": "thor-1.5.0.gem",
+    "deps": []
+  },
+  "zeitwerk": {
+    "version": "2.8.3",
+    "file": "zeitwerk-2.8.3.gem",
+    "deps": []
+  },
+  "loofah": {
+    "version": "2.25.2",
+    "file": "loofah-2.25.2.gem",
+    "deps": [
+      "crass",
+      "nokogiri"
+    ]
+  },
+  "crass": {
+    "version": "1.0.8",
+    "file": "crass-1.0.8.gem",
+    "deps": []
   }
 }

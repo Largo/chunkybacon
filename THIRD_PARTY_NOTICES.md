@@ -190,16 +190,26 @@ noted.
 
 | Gem | Version | License | Authors (per gemspec) | License file in the archive |
 |---|---|---|---|---|
+| actionpack | 8.1.4 | MIT | David Heinemeier Hansson | MIT-LICENSE |
+| actionview | 8.1.4 | MIT | David Heinemeier Hansson | MIT-LICENSE |
+| activemodel | 8.1.4 | MIT | David Heinemeier Hansson | MIT-LICENSE |
+| activerecord | 8.1.4 | MIT | David Heinemeier Hansson | MIT-LICENSE |
+| activesupport | 8.1.4 | MIT | David Heinemeier Hansson | MIT-LICENSE |
 | base64 | 0.3.0 | Ruby, BSD-2-Clause | Yusuke Endoh | COPYING, LEGAL |
 | benchmark | 0.5.0 | Ruby, BSD-2-Clause | Yukihiro Matsumoto | COPYING |
 | bigdecimal-pure | 0.1.0 | MIT | Andi Idogawa | LICENSE |
+| builder | 3.3.0 | MIT | Jim Weirich, Aaron Patterson | MIT-LICENSE |
 | chunky_bacon | 0.1.0 | MIT; the fox drawing CC BY-SA 4.0 | Andi Idogawa | LICENSE, LICENSE-ASSETS |
 | chunky_png | 1.4.0 | MIT | Willem van Bergen | LICENSE |
 | cmdparse | 3.0.7 | MIT | Thomas Leitner | COPYING |
 | concurrent-ruby | 1.3.8 | MIT | Jerry D'Antonio, Petr Chalupa, the Ruby Concurrency Team | LICENSE.txt |
+| connection_pool | 3.0.2 | MIT | Mike Perham, Damian Janowski | LICENSE |
+| crass | 1.0.8 | MIT | Ryan Grove | LICENSE |
 | csv | 3.3.6 | Ruby, BSD-2-Clause | James Edward Gray II, Kouhei Sutou | LICENSE.txt |
 | daru | 0.3 | BSD-2-Clause | Sameer Deshmukh | LICENSE |
 | distribution | 0.8.0 | BSD-3-Clause (gemspec declares none) | Claudio Bustos, Carlos Agarie | LICENCE.md |
+| drb | 2.2.3 | Ruby, BSD-2-Clause | Masatoshi SEKI | LICENSE.txt |
+| erubi | 1.13.1 | MIT | Jeremy Evans, kuwata-lab.com | MIT-LICENSE |
 | faker | 3.8.0 | MIT | Benjamin Curtis, Vitor Oliveira | License.txt |
 | gammo | 0.3.0 | MIT | namusyaka | LICENSE.txt |
 | geom2d | 0.4.1 | MIT | Thomas Leitner | LICENSE |
@@ -210,6 +220,7 @@ noted.
 | jsg | 0.2.1 | MIT | Andi Idogawa | LICENSE.txt |
 | lacci | 0.5.0 | MIT | Marco Concetto Rudilosso, Noah Gibbs | none - see below |
 | logger | 1.7.0 | Ruby, BSD-2-Clause | Naotoshi Seo, SHIBATA Hiroshi | COPYING |
+| loofah | 2.25.2 | MIT | Mike Dalessio, Bryan Helmkamp | MIT-LICENSE.txt |
 | matrix | 0.4.3 | Ruby, BSD-2-Clause | Marc-Andre Lafortune | COPYING |
 | minimization | 0.2.5 | BSD-2-Clause (gemspec declares none) | Claudio Bustos, Rajat Kapoor | LICENSE.txt |
 | minitest | 5.27.0 | MIT | Ryan Davis | none - see below |
@@ -229,6 +240,13 @@ noted.
 | rack | 3.2.7 | MIT | Leah Neukirchen | MIT-LICENSE |
 | rack-protection | 4.2.1 | MIT | Sinatra contributors | License |
 | rack-session | 2.1.2 | MIT | Samuel Williams, Jeremy Evans and others | license.md |
+| rack-test | 2.3.0 | MIT | Jeremy Evans, Bryan Helmkamp | MIT-LICENSE.txt |
+| rackup | 2.3.1 | MIT | Samuel Williams, James Tucker, Leah Neukirchen, Jeremy Evans and others | license.md |
+| rails | 8.1.4 | MIT | David Heinemeier Hansson | MIT-LICENSE |
+| rails-dom-testing | 2.3.0 | MIT | Rafael Mendonça França, Kasper Timm Hansen | MIT-LICENSE |
+| rails-html-sanitizer | 1.7.1 | MIT | Rafael Mendonça França, Kasper Timm Hansen, Mike Dalessio | MIT-LICENSE |
+| railties | 8.1.4 | MIT | David Heinemeier Hansson | MIT-LICENSE |
+| rake | 13.4.2 | MIT | Hiroshi SHIBATA, Eric Hodel, Jim Weirich | MIT-LICENSE |
 | rb_heap | 1.1.0 | MIT | Florian Hartmann | LICENSE.txt |
 | rexml | 3.4.4 | BSD-2-Clause | Kouhei Sutou | LICENSE.txt |
 | roda | 3.108.0 | MIT | Jeremy Evans | MIT-LICENSE |
@@ -246,6 +264,7 @@ noted.
 | strings-ansi | 0.2.0 | MIT | Piotr Murach | LICENSE.txt |
 | swiss_qr | 0.1.0 | MIT | Andi Idogawa | LICENSE.txt |
 | text-table | 1.2.4 | MIT | Aaron Tinio | LICENSE |
+| thor | 1.5.0 | MIT | Yehuda Katz, José Valim | LICENSE.md |
 | three-rb | 0.2.1 | MIT | LEF | LICENSE |
 | tilt | 2.9.0 | MIT | Ryan Tomayko, Magnus Holm, Jeremy Evans | COPYING |
 | ttfunk | 1.8.0 | Prawn's Ruby-style licence, GPL-2.0 or GPL-3.0, at your choice | Alexander Mankuta, Gregory Brown, Brad Ediger, Cameron Dutro and others | LICENSE, COPYING, GPLv2, GPLv3 |
@@ -256,9 +275,13 @@ noted.
 | tty-screen | 0.8.2 | MIT | Piotr Murach | LICENSE.txt |
 | tty-table | 0.12.0 | MIT | Piotr Murach | LICENSE.txt |
 | tty-tree | 0.4.0 | MIT | Piotr Murach | LICENSE.txt |
+| tzinfo | 2.0.6 | MIT | Philip Ross | LICENSE |
+| tzinfo-data | 1.2026.5 | MIT | Philip Ross | LICENSE |
 | unicode-display_width | 2.6.0 | MIT | Jan Lelis | MIT-LICENSE.txt |
 | unicode_utils | 1.4.0 | BSD-2-Clause (gemspec declares none) | Stefan Lang | LICENSE.txt |
+| useragent | 0.16.11 | MIT | Joshua Peek, Garry Shutler | LICENSE |
 | wavefile | 1.1.2 | MIT | Joel Strait | LICENSE |
+| zeitwerk | 2.8.3 | MIT | Xavier Noria | MIT-LICENSE |
 
 `tools/build_gem_cache.rb` rewrites this cache; update the table with it.
 

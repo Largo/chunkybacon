@@ -40,6 +40,10 @@ links@htmlcell6
 
 # ja links to the Japanese reference manual where en links the English one
 links@irbcell2
+# rails [ja]: the Rails Guides in Japanese (railsguides.jp) where en links
+# guides.rubyonrails.org
+links@railscell6
+links@activerecordcell6
 links@tl-formatscell10
 links@tl-performancecell8
 

@@ -2089,6 +2089,21 @@ button.mb-go {
 }
 /* the page inside .mb-view is in a shadow root: its styles are
    MB_PAGE_STYLE in main.rb */
+/* what the app printed while answering (a Rails app logs every request) */
+.mb-log {
+  margin: 0;
+  max-height: 9.5rem;
+  overflow: auto;
+  padding: 0.4rem 0.6rem;
+  border-top: 1px solid var(--rule);
+  background: var(--code-bg);
+  color: var(--ink-soft);
+  font-family: var(--font-code);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+.mb-log[hidden] { display: none; }
 
 /* file explorer (simulated filesystem) */
 .file-explorer {
