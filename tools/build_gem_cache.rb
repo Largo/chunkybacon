@@ -15,7 +15,7 @@ GEMS = %w[chunky_bacon chunky_png gammo racc sinatra roda minitest csv benchmark
           bigdecimal-pure prawn hexapdf jsg pure_jpeg rumale-core rumale-nearest_neighbors sequel
           pastel tty-table tty-box tty-tree tty-font faker herb
           daru distribution minimization integration networkx rubyvis
-          qr-bills swiss_qr qr_reader]
+          qr-bills swiss_qr qr_reader wavefile]
 
 # C extensions compiled into the wasm image: a gem may depend on them (hexapdf
 # on openssl and strscan, jsg on js), the browser finds them built in

@@ -229,6 +229,11 @@ module FriendlyErrors
       "en" => "There is no method `%{meth}`\nRuby knows no method `%{meth}` here. Is it defined in another cell? Then run that one first (▶).",
       "ja" => "`%{meth}` というメソッドはありません\nここでは `%{meth}` というメソッドが見つかりません。別のセルで定義しているなら、先にそのセルを実行（▶）してください。"
     },
+    turtle_outside: {
+      "de" => "`%{meth}` gehört in den Schildkröten-Block\nChunky versteht `%{meth}` nur zwischen `turtle do` und `end` – dort läuft er los. Ausserhalb kennt Ruby keine Methode `%{meth}`. Schreib also:\n`turtle do`\n`  %{meth} …`\n`end`",
+      "en" => "`%{meth}` belongs inside the turtle block\nChunky understands `%{meth}` only between `turtle do` and `end` – that is where he walks. Outside, Ruby knows no method `%{meth}`. So write:\n`turtle do`\n`  %{meth} …`\n`end`",
+      "ja" => "`%{meth}` はタートルのブロックの中で使います\nChunkyが `%{meth}` を理解するのは `turtle do` と `end` の間だけです。そこでChunkyが歩きます。外側では、Rubyは `%{meth}` というメソッドを知りません。次のように書いてください:\n`turtle do`\n`  %{meth} …`\n`end`"
+    },
     attr_missing: {
       "de" => "`%{klass}` hat kein `%{meth}`\nVon außen sieht man die Instanzvariable `@%{meth}` erst mit `attr_reader :%{meth}` in der Klasse.",
       "en" => "`%{klass}` has no `%{meth}`\nThe instance variable `@%{meth}` can only be read from outside once the class says `attr_reader :%{meth}`.",

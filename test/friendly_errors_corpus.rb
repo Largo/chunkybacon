@@ -89,6 +89,10 @@ module FriendlyErrors
     { id: "own-error-unrescued", lesson: "tl-errors", code: %(class TimelogError < StandardError; end\n\ndef sync\n  raise TimelogError, "network error"\nend\n\nsync), expect: :own_error },
     # ---- 48 tl-pattern
     { id: "case-in-no-else", lesson: "tl-pattern", code: %(def dispatch(command)\n  case command\n  in ["add", project, hours]\n    "Entry: \#{project} (\#{hours}h)"\n  in ["report"]\n    "Report"\n  end\nend\n\ndispatch(["dance"])), expect: :no_pattern },
+    # ---- turtle (html/turtle.rb, loaded by the harnesses)
+    { id: "turtle-forward-outside", lesson: "turtle", code: %(forward 100\nright 90), expect: :turtle_outside },
+    { id: "turtle-right-outside-def", lesson: "turtle", code: %(def square\n  4.times { forward 100; right 90 }\nend\n\nsquare), expect: :turtle_outside },
+    { id: "turtle-own-method-typo", lesson: "turtle", code: %(turtle do\n  4.times { forwrad 100; right 90 }\nend), expect: :name_lower },
     # ---- 39/40 tl-formats, gems
     { id: "require-typo", lesson: "gems", code: %(require "chunky_pgn"), expect: :load_error },
     { id: "python-true", lesson: "tl-cli", code: %(verbose = True\nputs "on" if verbose), expect: :name_python_kw },

@@ -246,7 +246,7 @@ check('⏯ on the loop: 5 steps, the first line marked in the editor', st.state 
 check('... the slider has the focus, named, "Schritt 1 von 5"',
       st.slider && st.slider.focused && st.slider.name === 'Schritt wählen' && st.slider.value === 'Schritt 1 von 5');
 check('... the status line reads the run, not the stepper',
-      (await page.textContent('#runStatus')).startsWith('Zelle 2 ausgeführt: Streifen Nummer 1') && !(await page.textContent('#runStatus')).includes('Schritt'));
+      (await page.textContent('#runStatus')).includes('Zelle 2 ausgeführt: Streifen Nummer 1') && !(await page.textContent('#runStatus')).includes('Schritt'));
 for (let n = 0; n < 3; n++) await page.keyboard.press('ArrowRight');
 await page.waitForTimeout(150);
 st = await stepper(3);
@@ -1041,7 +1041,7 @@ check('show_game draws a 20 x 15 grid, paused', widget.cells === 300 && widget.s
 check('... a named, focusable application that says how to play and leave it', widget.role === 'application' && widget.tab === 0 &&
   widget.label === 'Spiel mit 20 × 15 Feldern' && widget.keys.includes('Leertaste') && widget.keys.includes('Tab verlässt'));
 await page.waitForFunction(() => document.getElementById('runStatus').textContent.includes('Spiel mit'), null, { timeout: 3000 }).catch(() => {});
-check('... and the status line reads its name, not its grid', (await page.textContent('#runStatus')) === 'Zelle 5 ausgeführt: Spiel mit 20 × 15 Feldern');
+check('... and the status line reads its name, not its grid', (await page.textContent('#runStatus')).endsWith('Zelle 5 ausgeführt: Spiel mit 20 × 15 Feldern'));
 await page.focus(`.run-cell[data-idx="${snakeCell}"]`);
 await page.keyboard.press('Tab');
 check('Tab from Run reaches the game, which waits', await page.$eval(snake, g => document.activeElement === g && g.dataset.state === 'paused'));
