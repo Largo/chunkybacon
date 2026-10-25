@@ -2444,6 +2444,211 @@ window.LESSONS_JSON = JSON.stringify({
       "stepper": true
     },
     {
+      "id": "zufall",
+      "stepper": true,
+      "de": {
+        "title": "Zufall und Würfel",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Zufall und Würfel</h2><p>Spiele brauchen Überraschungen, und Programme brauchen manchmal Zufall: eine Würfelzahl, eine zufällige Karte, ein Passwort. Rubys Würfel heisst <code>rand</code>. Mit einer Zahl würfelt er von 0 bis <em>darunter</em>, mit einem Bereich genau in diesem Bereich – und ohne alles eine Kommazahl zwischen 0 und 1. Führ die Zelle ein paarmal aus:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p rand(6)        # 0 bis 5\np rand(1..6)     # 1 bis 6 – wie ein Würfel\nrand             # eine Kommazahl zwischen 0 und 1"
+          },
+          {
+            "t": "h",
+            "html": "<p>Auch Arrays können würfeln: <code>sample</code> zieht ein zufälliges Element (oder mehrere), <code>shuffle</code> mischt die ganze Liste – wie ein Kartenspiel. Das Original bleibt dabei unverändert:</p>"
+          },
+          {
+            "t": "c",
+            "code": "snacks = [\"Speck\", \"Ei\", \"Toast\", \"Käse\"]\np snacks.sample\np snacks.sample(2)\nsnacks.shuffle"
+          },
+          {
+            "t": "h",
+            "html": "<p>Viele Würfe auf einmal sammelst du mit <code>times.map</code> in einem Array – jeder Durchgang des Blocks ist ein Wurf. Danach kannst du auswerten, zum Beispiel mit <code>count</code> zählen, wie oft die Sechs fiel:</p>"
+          },
+          {
+            "t": "c",
+            "code": "wuerfe = 20.times.map { rand(1..6) }\np wuerfe\nwuerfe.count(6)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ein Geheimnis: Computer würfeln gar nicht richtig. Sie rechnen aus einem Startwert eine Folge aus, die zufällig <em>aussieht</em>. Mit <code>srand</code> legst du den Startwert selbst fest – und bekommst jedes Mal dieselben Zahlen. Das ist Gold wert, wenn du einen Fehler suchst oder ein Spiel testest:</p>"
+          },
+          {
+            "t": "c",
+            "code": "srand(42)\nerster = 5.times.map { rand(1..6) }\nsrand(42)\nzweiter = 5.times.map { rand(1..6) }\nerster == zweiter"
+          },
+          {
+            "t": "h",
+            "html": "<p>Mit <code>if</code> aus Lektion {{nr:wenn}} (Entscheidungen) wird daraus ein Spiel. Wer würfelt höher, Chunky oder du? Führ die Zelle aus, bis du gewinnst:</p>"
+          },
+          {
+            "t": "c",
+            "code": "chunky = rand(1..6)\ndu = rand(1..6)\nputs \"Chunky würfelt #{chunky}, du würfelst #{du}.\"\nif chunky > du\n  \"Chunky gewinnt!\"\nelsif du > chunky\n  \"Du gewinnst!\"\nelse\n  \"Unentschieden – noch einmal!\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Zufall ist unberechenbar – aber nur im Kleinen. Würfelst du tausendmal, liegt der Durchschnitt fast immer nahe bei 3,5, der Mitte zwischen 1 und 6. Probier es: Jeder Lauf gibt eine andere Zahl, aber alle liegen dicht beieinander.</p>"
+          },
+          {
+            "t": "c",
+            "code": "wuerfe = 1000.times.map { rand(1..6) }\nwuerfe.sum / 1000.0"
+          },
+          {
+            "t": "h",
+            "html": "<p>Damit kannst du schon vieles bauen: ein Memory mit gemischten Karten, einen Zufallsgenerator für Namen, eine Münze (<code>[\"Kopf\", \"Zahl\"].sample</code>). Chunkys Snake in Lektion {{nr:snake}} legt den Speck mit <code>sample</code> auf ein freies Feld, und die Lektion {{nr:statistik}} (Statistik) rechnet aus, wie wahrscheinlich fünf Sechsen in zwanzig Würfen sind.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-rand' target='_blank'>Kernel#rand</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-sample' target='_blank'>Array#sample</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-shuffle' target='_blank'>Array#shuffle</a> · <a href='https://docs.ruby-lang.org/en/4.0/Random.html' target='_blank'>Random</a></div><div class='task'><strong>Aufgabe:</strong> Würfle 100 Mal mit <em>zwei</em> Würfeln – jeder Wurf ist die Summe von zwei <code>rand(1..6)</code> – und speichere die 100 Summen im Array <code>summen</code>. Zähle dann in <code>siebener</code>, wie oft die 7 dabei war (die häufigste Summe!).</div>"
+          },
+          {
+            "t": "x",
+            "code": "# 100 Würfe mit zwei Würfeln: jede Summe in summen\n# summen = 100.times.map { ... }\n# siebener = ...\n",
+            "hints": [
+              "Ein Wurf mit zwei Würfeln ist <code>rand(1..6)</code> plus noch einmal <code>rand(1..6)</code>. Wiederhole das hundertmal mit <code>times.map</code> – und zähl danach mit <code>count</code>, wie oft 7 herauskam."
+            ],
+            "check": "summen.is_a?(Array) && summen.length == 100 && summen.all? { |s| (2..12).include?(s) } && summen.max > 6 && siebener == summen.count(7) && code.include?(\"rand\")",
+            "hint": "<code>summen = 100.times.map { rand(1..6) + rand(1..6) }</code> und danach <code>siebener = summen.count(7)</code>.",
+            "solution": "summen = 100.times.map { rand(1..6) + rand(1..6) }\nsiebener = summen.count(7)"
+          }
+        ]
+      },
+      "en": {
+        "title": "Chance and dice",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Chance and dice</h2><p>Games need surprises, and programs sometimes need chance: a die roll, a random card, a password. Ruby's die is called <code>rand</code>. With a number it rolls from 0 up to <em>below</em> it, with a range exactly within that range – and with nothing at all, a decimal between 0 and 1. Run the cell a few times:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p rand(6)        # 0 to 5\np rand(1..6)     # 1 to 6 - like a die\nrand             # a decimal between 0 and 1"
+          },
+          {
+            "t": "h",
+            "html": "<p>Arrays can roll dice, too: <code>sample</code> draws one random element (or several), <code>shuffle</code> mixes the whole list – like a deck of cards. The original stays as it is:</p>"
+          },
+          {
+            "t": "c",
+            "code": "snacks = [\"bacon\", \"egg\", \"toast\", \"cheese\"]\np snacks.sample\np snacks.sample(2)\nsnacks.shuffle"
+          },
+          {
+            "t": "h",
+            "html": "<p>You collect many throws at once in an array with <code>times.map</code> – every pass of the block is one throw. Then you can evaluate them, for instance count how often the six came up with <code>count</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "throws = 20.times.map { rand(1..6) }\np throws\nthrows.count(6)"
+          },
+          {
+            "t": "h",
+            "html": "<p>A secret: computers do not really roll dice. From a starting value they compute a sequence that merely <em>looks</em> random. With <code>srand</code> you set that starting value yourself – and get the same numbers every time. That is worth gold when you are hunting a bug or testing a game:</p>"
+          },
+          {
+            "t": "c",
+            "code": "srand(42)\nfirst = 5.times.map { rand(1..6) }\nsrand(42)\nsecond = 5.times.map { rand(1..6) }\nfirst == second"
+          },
+          {
+            "t": "h",
+            "html": "<p>With <code>if</code> from lesson {{nr:wenn}} (decisions) this becomes a game. Who rolls higher, Chunky or you? Run the cell until you win:</p>"
+          },
+          {
+            "t": "c",
+            "code": "chunky = rand(1..6)\nyou = rand(1..6)\nputs \"Chunky rolls #{chunky}, you roll #{you}.\"\nif chunky > you\n  \"Chunky wins!\"\nelsif you > chunky\n  \"You win!\"\nelse\n  \"A draw - roll again!\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Chance is unpredictable – but only in the small. Roll a thousand times and the average almost always lands near 3.5, the middle between 1 and 6. Try it: every run gives a different number, but they all sit close together.</p>"
+          },
+          {
+            "t": "c",
+            "code": "throws = 1000.times.map { rand(1..6) }\nthrows.sum / 1000.0"
+          },
+          {
+            "t": "h",
+            "html": "<p>That already lets you build a lot: a memory game with shuffled cards, a random name generator, a coin (<code>[\"heads\", \"tails\"].sample</code>). Chunky's Snake in lesson {{nr:snake}} puts the bacon on a free cell with <code>sample</code>, and lesson {{nr:statistik}} (statistics) works out how likely five sixes in twenty throws are.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-rand' target='_blank'>Kernel#rand</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-sample' target='_blank'>Array#sample</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-shuffle' target='_blank'>Array#shuffle</a> · <a href='https://docs.ruby-lang.org/en/4.0/Random.html' target='_blank'>Random</a></div><div class='task'><strong>Task:</strong> Roll 100 times with <em>two</em> dice – every throw is the sum of two <code>rand(1..6)</code> – and store the 100 totals in the array <code>totals</code>. Then count in <code>sevens</code> how often 7 came up (the most common total!).</div>"
+          },
+          {
+            "t": "x",
+            "code": "# 100 throws with two dice: every total in totals\n# totals = 100.times.map { ... }\n# sevens = ...\n",
+            "hints": [
+              "One throw with two dice is <code>rand(1..6)</code> plus another <code>rand(1..6)</code>. Repeat that a hundred times with <code>times.map</code> – then count with <code>count</code> how often 7 came out."
+            ],
+            "check": "totals.is_a?(Array) && totals.length == 100 && totals.all? { |t| (2..12).include?(t) } && totals.max > 6 && sevens == totals.count(7) && code.include?(\"rand\")",
+            "hint": "<code>totals = 100.times.map { rand(1..6) + rand(1..6) }</code> and then <code>sevens = totals.count(7)</code>.",
+            "solution": "totals = 100.times.map { rand(1..6) + rand(1..6) }\nsevens = totals.count(7)"
+          }
+        ]
+      },
+      "ja": {
+        "title": "ランダムとサイコロ",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>ランダムとサイコロ</h2><p>ゲームには意外性が必要ですし、プログラムにもときどき偶然が必要です。サイコロの目、ランダムなカード、パスワードなどです。Rubyのサイコロは<code>rand</code>といいます。数を渡すと0からその数の<em>手前</em>まで、範囲を渡すとちょうどその範囲で、何も渡さなければ0と1の間の小数を返します。セルを何回か実行してみてください：</p>"
+          },
+          {
+            "t": "c",
+            "code": "p rand(6)        # 0から5\np rand(1..6)     # 1から6。サイコロと同じ\nrand             # 0と1の間の小数"
+          },
+          {
+            "t": "h",
+            "html": "<p>配列もサイコロを振れます。<code>sample</code>はランダムに1つ（または何個か）を選び、<code>shuffle</code>はトランプのようにリスト全体を混ぜます。もとの配列はそのままです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "snacks = [\"bacon\", \"egg\", \"toast\", \"cheese\"]\np snacks.sample\np snacks.sample(2)\nsnacks.shuffle"
+          },
+          {
+            "t": "h",
+            "html": "<p>たくさん振った結果は、<code>times.map</code>で配列にまとめて集められます。ブロックの1回が1回の投げです。そのあとで集計できます。たとえば<code>count</code>で、6が何回出たか数えてみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "throws = 20.times.map { rand(1..6) }\np throws\nthrows.count(6)"
+          },
+          {
+            "t": "h",
+            "html": "<p>ひみつを1つお話しします。コンピューターは本当にサイコロを振っているわけではありません。開始値から、ランダムに<em>見える</em>数の列を計算しているのです。<code>srand</code>でその開始値を自分で決めると、毎回同じ数が出ます。バグを探すときやゲームをテストするときには、とても役に立ちます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "srand(42)\nfirst = 5.times.map { rand(1..6) }\nsrand(42)\nsecond = 5.times.map { rand(1..6) }\nfirst == second"
+          },
+          {
+            "t": "h",
+            "html": "<p>レッスン{{nr:wenn}}（条件分岐）の<code>if</code>と組み合わせれば、ゲームになります。Chunkyとあなた、どちらの目が大きいでしょう？勝つまでセルを実行してみてください：</p>"
+          },
+          {
+            "t": "c",
+            "code": "chunky = rand(1..6)\nyou = rand(1..6)\nputs \"Chunky rolls #{chunky}, you roll #{you}.\"\nif chunky > you\n  \"Chunky wins!\"\nelsif you > chunky\n  \"You win!\"\nelse\n  \"A draw - roll again!\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>偶然は予測できません。ただし、それは小さな範囲での話です。1000回振ると、平均はほとんどいつも、1と6のまん中の3.5の近くになります。試してみてください。実行するたびに違う数になりますが、どれも近い値です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "throws = 1000.times.map { rand(1..6) }\nthrows.sum / 1000.0"
+          },
+          {
+            "t": "h",
+            "html": "<p>これだけで、いろいろ作れます。カードを混ぜた神経衰弱、名前のランダム生成、コイン投げ（<code>[\"heads\", \"tails\"].sample</code>）など。レッスン{{nr:snake}}のChunkyのスネークは、<code>sample</code>で空いているマスにベーコンを置きますし、レッスン{{nr:statistik}}（統計）では、20回のうち6が5回出る確率を計算します。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/method/Kernel/m/rand.html' target='_blank'>Kernel.#rand</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Array/i/sample.html' target='_blank'>Array#sample</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Array/i/shuffle.html' target='_blank'>Array#shuffle</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Random.html' target='_blank'>Random</a></div><div class='task'><strong>課題：</strong>サイコロを<em>2つ</em>使って100回振りましょう。1回の投げは<code>rand(1..6)</code>2つの合計です。100個の合計を配列<code>totals</code>に入れてください。それから、7が何回出たか（いちばん出やすい合計です！）を<code>sevens</code>に数えましょう。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# サイコロ2つで100回：合計を totals に\n# totals = 100.times.map { ... }\n# sevens = ...\n",
+            "hints": [
+              "サイコロ2つの1回分は、<code>rand(1..6)</code>にもう1つ<code>rand(1..6)</code>をたしたものだよ。それを<code>times.map</code>で100回くり返して、あとは<code>count</code>で7が何回出たか数えてみて。"
+            ],
+            "check": "totals.is_a?(Array) && totals.length == 100 && totals.all? { |t| (2..12).include?(t) } && totals.max > 6 && sevens == totals.count(7) && code.include?(\"rand\")",
+            "hint": "<code>totals = 100.times.map { rand(1..6) + rand(1..6) }</code>、それから<code>sevens = totals.count(7)</code>だよ。",
+            "solution": "totals = 100.times.map { rand(1..6) + rand(1..6) }\nsevens = totals.count(7)"
+          }
+        ]
+      }
+    },
+    {
       "id": "hashes",
       "de": {
         "title": "Hashes",
@@ -3088,6 +3293,211 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "times == [\"07:45\", \"10:15\", \"12:30\"] && bacon_days == 2 && code.scan(\"/\").length >= 4",
             "hint": "<code>times = notes.join(\" \").scan(/\\d\\d:\\d\\d/)</code>、または<code>notes.flat_map { |note| note.scan(/\\d\\d:\\d\\d/) }</code>。そして<code>bacon_days = notes.count { |note| note.match?(/bacon/i) }</code>だよ。",
             "solution": "notes = [\"Breakfast at 07:45: Bacon\", \"Snack at 10:15: apple\", \"Lunch at 12:30: bacon and egg\", \"Evening: not hungry\"]\ntimes = notes.join(\" \").scan(/\\d\\d:\\d\\d/)\nbacon_days = notes.count { |note| note.match?(/bacon/i) }"
+          }
+        ]
+      }
+    },
+    {
+      "id": "formatieren",
+      "stepper": true,
+      "de": {
+        "title": "Text formatieren",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Text formatieren: Quittungen, Tabellen, Briefe</h2><p>Ein Programm, das etwas ausrechnet, ist die halbe Miete – die andere Hälfte ist, das Ergebnis schön hinzuschreiben. Für Spalten gibt es <code>ljust</code> (linksbündig auffüllen), <code>rjust</code> (rechtsbündig) und <code>center</code>: Du sagst, wie breit das Feld sein soll, und Ruby füllt mit Leerzeichen auf – oder mit einem Zeichen deiner Wahl:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"Speck\".ljust(10) + \"4.50\".rjust(6)\nputs \"Ei\".ljust(10) + \"1.20\".rjust(6)\n\"Chunky\".center(20, \"~\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Für Zahlen ist <code>format</code> das Werkzeug: Ein Vorlagentext mit <strong>Platzhaltern</strong>, die mit <code>%</code> beginnen. <code>%d</code> ist eine ganze Zahl, <code>%s</code> ein String, <code>%.2f</code> eine Kommazahl mit zwei Nachkommastellen. Eine Zahl dazwischen gibt die Breite an, ein Minus richtet linksbündig aus:</p>"
+          },
+          {
+            "t": "c",
+            "code": "preis = 4.5\nputs format(\"%.2f Franken\", preis)\nputs format(\"%-10s %6.2f\", \"Speck\", preis)\nformat(\"%03d\", 7)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dasselbe geht kürzer mit dem <code>%</code>-Operator hinter einem String – mehrere Werte in eckigen Klammern. Und <code>*</code> wiederholt einen String, praktisch für Trennlinien:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"-\" * 20\nputs \"%s hat %d Streifen\" % [\"Chunky\", 3]\n\"=\" * 20"
+          },
+          {
+            "t": "h",
+            "html": "<p>Längere Texte über mehrere Zeilen schreibst du als <strong>Heredoc</strong>: <code>&lt;&lt;~NAME</code> beginnt ihn, eine Zeile mit <code>NAME</code> beendet ihn. Die Tilde entfernt die gemeinsame Einrückung, und <code>#{}</code> funktioniert wie in jedem String:</p>"
+          },
+          {
+            "t": "c",
+            "code": "name = \"Chunky\"\nbrief = <<~BRIEF\n  Lieber #{name},\n  danke für den Speck!\n    Gruss, Kaz\nBRIEF\nputs brief"
+          },
+          {
+            "t": "h",
+            "html": "<p>Text, der von Menschen kommt, ist unordentlich: Leerzeichen am Rand, doppelte Leerzeichen, ein Zeilenumbruch am Ende. <code>strip</code> putzt die Ränder, <code>squeeze</code> fasst Wiederholungen zusammen, und <code>split</code> zerlegt an einem Trennzeichen in ein Array:</p>"
+          },
+          {
+            "t": "c",
+            "code": "eingabe = \"   Speck mit    Ei  \\n\"\np eingabe.strip\np eingabe.strip.squeeze(\" \")\n\"a,b,,c\".split(\",\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Alles zusammen ergibt eine Quittung. Der Hash aus Lektion {{nr:hashes}} (Hashes) liefert Artikel und Preise, <code>each</code> geht sie durch, und jede Zeile wird mit <code>ljust</code> und <code>format</code> ausgerichtet:</p>"
+          },
+          {
+            "t": "c",
+            "code": "bestellung = { \"Speck\" => 4.5, \"Ei\" => 1.2, \"Kaffee\" => 3.0 }\nputs \"Quittung\".center(18, \"=\")\nbestellung.each do |artikel, preis|\n  puts artikel.ljust(12) + format(\"%6.2f\", preis)\nend\nputs \"-\" * 18\nputs \"Total\".ljust(12) + format(\"%6.2f\", bestellung.values.sum)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Merk dir: <code>ljust</code>, <code>rjust</code> und <code>center</code> für Spalten, <code>format</code> für Zahlen, Heredocs für Absätze, <code>strip</code> und <code>split</code> zum Aufräumen. Mehr Platzhalter für <code>format</code> findest du in der Doku – <code>%x</code> für Hexadezimalzahlen, <code>%e</code> für Zehnerpotenzen, <code>%%</code> für ein echtes Prozentzeichen.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-ljust' target='_blank'>String#ljust</a> · <a href='https://docs.ruby-lang.org/en/4.0/format_specifications_rdoc.html' target='_blank'>format</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/literals_rdoc.html#label-Here+Document+Literals' target='_blank'>Heredocs</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-strip' target='_blank'>String#strip</a></div><div class='task'><strong>Aufgabe:</strong> Mach aus dem Hash <code>einkauf</code> einen Einkaufszettel <code>zettel</code>: ein String mit einer Zeile pro Artikel – der Name linksbündig auf 10 Zeichen, dahinter der Preis mit zwei Nachkommastellen rechtsbündig auf 7 Zeichen (<code>Speck        4.50</code>). Die Zeilen sind mit <code>\"\\n\"</code> verbunden, ohne Zeilenumbruch am Ende.</div>"
+          },
+          {
+            "t": "x",
+            "code": "einkauf = { \"Speck\" => 4.5, \"Brot\" => 2, \"Honig\" => 6.8 }\n# zettel = ...   # pro Artikel eine Zeile: Name auf 10 Zeichen, Preis auf 7 (2 Nachkommastellen)\n",
+            "hints": [
+              "Geh mit <code>map</code> durch <code>einkauf</code> – der Block bekommt Artikel und Preis. Bau pro Paar eine Zeile aus <code>ljust</code> und <code>format</code>, und verbinde die Zeilen am Ende mit <code>join</code>."
+            ],
+            "check": "zettel == einkauf.map { |artikel, preis| artikel.ljust(10) + format(\"%7.2f\", preis) }.join(\"\\n\") && code.include?(\"einkauf\")",
+            "hint": "<code>zettel = einkauf.map { |artikel, preis| artikel.ljust(10) + format(\"%7.2f\", preis) }.join(\"\\n\")</code> – <code>%7.2f</code> heisst: 7 Zeichen breit, zwei Nachkommastellen.",
+            "solution": "einkauf = { \"Speck\" => 4.5, \"Brot\" => 2, \"Honig\" => 6.8 }\nzettel = einkauf.map { |artikel, preis| artikel.ljust(10) + format(\"%7.2f\", preis) }.join(\"\\n\")"
+          }
+        ]
+      },
+      "en": {
+        "title": "Formatting text",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Formatting text: receipts, tables, letters</h2><p>A program that works something out is half the job – the other half is writing the result down nicely. For columns there are <code>ljust</code> (pad on the right, so the text sits left), <code>rjust</code> (pad on the left) and <code>center</code>: you say how wide the field should be, and Ruby fills it with spaces – or with a character of your choice:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"bacon\".ljust(10) + \"4.50\".rjust(6)\nputs \"egg\".ljust(10) + \"1.20\".rjust(6)\n\"Chunky\".center(20, \"~\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>For numbers, <code>format</code> is the tool: a template text with <strong>placeholders</strong> that start with <code>%</code>. <code>%d</code> is a whole number, <code>%s</code> a string, <code>%.2f</code> a decimal with two digits after the point. A number in between sets the width, a minus aligns to the left:</p>"
+          },
+          {
+            "t": "c",
+            "code": "price = 4.5\nputs format(\"%.2f francs\", price)\nputs format(\"%-10s %6.2f\", \"bacon\", price)\nformat(\"%03d\", 7)"
+          },
+          {
+            "t": "h",
+            "html": "<p>The same is shorter with the <code>%</code> operator after a string – several values go in square brackets. And <code>*</code> repeats a string, handy for dividing lines:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"-\" * 20\nputs \"%s has %d strips\" % [\"Chunky\", 3]\n\"=\" * 20"
+          },
+          {
+            "t": "h",
+            "html": "<p>Longer texts over several lines are written as a <strong>heredoc</strong>: <code>&lt;&lt;~NAME</code> opens it, a line with <code>NAME</code> ends it. The tilde removes the shared indentation, and <code>#{}</code> works as in any string:</p>"
+          },
+          {
+            "t": "c",
+            "code": "name = \"Chunky\"\nletter = <<~LETTER\n  Dear #{name},\n  thanks for the bacon!\n    Yours, Kaz\nLETTER\nputs letter"
+          },
+          {
+            "t": "h",
+            "html": "<p>Text that comes from people is untidy: spaces at the edges, double spaces, a line break at the end. <code>strip</code> cleans the edges, <code>squeeze</code> folds repetitions, and <code>split</code> cuts at a separator into an array:</p>"
+          },
+          {
+            "t": "c",
+            "code": "input = \"   bacon with    egg  \\n\"\np input.strip\np input.strip.squeeze(\" \")\n\"a,b,,c\".split(\",\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>All of it together makes a receipt. The hash from lesson {{nr:hashes}} (hashes) holds items and prices, <code>each</code> walks through them, and every line is aligned with <code>ljust</code> and <code>format</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "order = { \"bacon\" => 4.5, \"egg\" => 1.2, \"coffee\" => 3.0 }\nputs \"Receipt\".center(18, \"=\")\norder.each do |item, price|\n  puts item.ljust(12) + format(\"%6.2f\", price)\nend\nputs \"-\" * 18\nputs \"Total\".ljust(12) + format(\"%6.2f\", order.values.sum)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Remember: <code>ljust</code>, <code>rjust</code> and <code>center</code> for columns, <code>format</code> for numbers, heredocs for paragraphs, <code>strip</code> and <code>split</code> for tidying up. The documentation lists more placeholders for <code>format</code> – <code>%x</code> for hexadecimal, <code>%e</code> for powers of ten, <code>%%</code> for a real percent sign.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-ljust' target='_blank'>String#ljust</a> · <a href='https://docs.ruby-lang.org/en/4.0/format_specifications_rdoc.html' target='_blank'>format</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/literals_rdoc.html#label-Here+Document+Literals' target='_blank'>Heredocs</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-strip' target='_blank'>String#strip</a></div><div class='task'><strong>Task:</strong> Turn the hash <code>shopping</code> into a shopping list <code>list</code>: a string with one line per item – the name on the left, padded to 10 characters, then the price with two decimals, right-aligned on 7 characters (<code>Bacon        4.50</code>). The lines are joined with <code>\"\\n\"</code>, with no line break at the end.</div>"
+          },
+          {
+            "t": "x",
+            "code": "shopping = { \"Bacon\" => 4.5, \"Bread\" => 2, \"Honey\" => 6.8 }\n# list = ...   # one line per item: name on 10 characters, price on 7 with two decimals\n",
+            "hints": [
+              "Go through <code>shopping</code> with <code>map</code> – the block gets the item and its price. Build one line per pair from <code>ljust</code> and <code>format</code>, and join the lines at the end with <code>join</code>."
+            ],
+            "check": "list == shopping.map { |item, price| item.ljust(10) + format(\"%7.2f\", price) }.join(\"\\n\") && code.include?(\"shopping\")",
+            "hint": "<code>list = shopping.map { |item, price| item.ljust(10) + format(\"%7.2f\", price) }.join(\"\\n\")</code> – <code>%7.2f</code> means: 7 characters wide, two decimals.",
+            "solution": "shopping = { \"Bacon\" => 4.5, \"Bread\" => 2, \"Honey\" => 6.8 }\nlist = shopping.map { |item, price| item.ljust(10) + format(\"%7.2f\", price) }.join(\"\\n\")"
+          }
+        ]
+      },
+      "ja": {
+        "title": "テキストの整形",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>テキストの整形：レシート、表、手紙</h2><p>何かを計算するプログラムは、仕事の半分です。もう半分は、結果をきれいに書き出すことです。列をそろえるには<code>ljust</code>（右に空白を足して左寄せ）、<code>rjust</code>（左に空白を足して右寄せ）、<code>center</code>があります。幅を伝えると、Rubyが空白で埋めてくれます。好きな文字で埋めることもできます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"bacon\".ljust(10) + \"4.50\".rjust(6)\nputs \"egg\".ljust(10) + \"1.20\".rjust(6)\n\"Chunky\".center(20, \"~\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>数には<code>format</code>が便利です。<code>%</code>で始まる<strong>プレースホルダー</strong>を入れたテンプレートの文字列を渡します。<code>%d</code>は整数、<code>%s</code>は文字列、<code>%.2f</code>は小数点以下2桁の小数です。間に数を書くと幅になり、マイナスをつけると左寄せになります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "price = 4.5\nputs format(\"%.2f francs\", price)\nputs format(\"%-10s %6.2f\", \"bacon\", price)\nformat(\"%03d\", 7)"
+          },
+          {
+            "t": "h",
+            "html": "<p>同じことは、文字列のあとに<code>%</code>演算子を書くと短くなります。値が複数あるときは角かっこに入れます。<code>*</code>は文字列をくり返すので、区切り線に便利です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"-\" * 20\nputs \"%s has %d strips\" % [\"Chunky\", 3]\n\"=\" * 20"
+          },
+          {
+            "t": "h",
+            "html": "<p>何行にもわたる長い文章は<strong>ヒアドキュメント</strong>で書きます。<code>&lt;&lt;~NAME</code>で始めて、<code>NAME</code>だけの行で終わります。チルダは共通のインデントを取りのぞき、<code>#{}</code>はふつうの文字列と同じように使えます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "name = \"Chunky\"\nletter = <<~LETTER\n  Dear #{name},\n  thanks for the bacon!\n    Yours, Kaz\nLETTER\nputs letter"
+          },
+          {
+            "t": "h",
+            "html": "<p>人が入力したテキストは乱れています。両端の空白、二重の空白、最後の改行などです。<code>strip</code>は両端をきれいにし、<code>squeeze</code>はくり返しをまとめ、<code>split</code>は区切り文字で配列に分けます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "input = \"   bacon with    egg  \\n\"\np input.strip\np input.strip.squeeze(\" \")\n\"a,b,,c\".split(\",\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>全部合わせるとレシートになります。レッスン{{nr:hashes}}（ハッシュ）のハッシュに品物と値段を入れ、<code>each</code>でたどって、各行を<code>ljust</code>と<code>format</code>でそろえます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "order = { \"bacon\" => 4.5, \"egg\" => 1.2, \"coffee\" => 3.0 }\nputs \"Receipt\".center(18, \"=\")\norder.each do |item, price|\n  puts item.ljust(12) + format(\"%6.2f\", price)\nend\nputs \"-\" * 18\nputs \"Total\".ljust(12) + format(\"%6.2f\", order.values.sum)"
+          },
+          {
+            "t": "h",
+            "html": "<p>覚えておきましょう。列には<code>ljust</code>、<code>rjust</code>、<code>center</code>、数には<code>format</code>、段落にはヒアドキュメント、片づけには<code>strip</code>と<code>split</code>です。<code>format</code>のプレースホルダーはドキュメントにもっと載っています。<code>%x</code>は16進数、<code>%e</code>は指数表記、<code>%%</code>はパーセント記号そのものです。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/method/String/i/ljust.html' target='_blank'>String#ljust</a>・<a href='https://docs.ruby-lang.org/ja/latest/doc/print_format.html' target='_blank'>format</a>・<a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fliteral.html#here' target='_blank'>ヒアドキュメント</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/String/i/strip.html' target='_blank'>String#strip</a></div><div class='task'><strong>課題：</strong>ハッシュ<code>shopping</code>から買い物リスト<code>list</code>を作りましょう。1品につき1行の文字列です。名前は左寄せで10文字分、そのあとに値段を小数点以下2桁で右寄せ7文字分（<code>Bacon        4.50</code>）。行は<code>\"\\n\"</code>でつなぎ、最後に改行は入れません。</div>"
+          },
+          {
+            "t": "x",
+            "code": "shopping = { \"Bacon\" => 4.5, \"Bread\" => 2, \"Honey\" => 6.8 }\n# list = ...   # 1品1行：名前を10文字、値段を小数2桁で7文字に\n",
+            "hints": [
+              "<code>shopping</code>を<code>map</code>でたどってみて。ブロックには品物と値段が来るよ。1組ごとに<code>ljust</code>と<code>format</code>で1行を作って、最後に<code>join</code>で行をつなげるんだ。"
+            ],
+            "check": "list == shopping.map { |item, price| item.ljust(10) + format(\"%7.2f\", price) }.join(\"\\n\") && code.include?(\"shopping\")",
+            "hint": "<code>list = shopping.map { |item, price| item.ljust(10) + format(\"%7.2f\", price) }.join(\"\\n\")</code>だよ。<code>%7.2f</code>は「幅7文字、小数点以下2桁」という意味。",
+            "solution": "shopping = { \"Bacon\" => 4.5, \"Bread\" => 2, \"Honey\" => 6.8 }\nlist = shopping.map { |item, price| item.ljust(10) + format(\"%7.2f\", price) }.join(\"\\n\")"
           }
         ]
       }
@@ -4461,6 +4871,210 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "digit_sum == 10 && pairs == [[1, 2], [3, 4], [5, 6]] && code.include?(\"digits\") && code.include?(\"each_slice\")",
             "hint": "探しているのは<code>digits</code>と<code>each_slice</code>だよ：<code>2026.digits.sum</code>。それと気をつけて。るりまには<code>each_slice(n) -&gt; Enumerator</code>とあるよね。ブロックなしだとEnumeratorが返ってくるから、<code>.to_a</code>で配列にしよう：<code>[1, 2, 3, 4, 5, 6].each_slice(2).to_a</code>。",
             "solution": "digit_sum = 2026.digits.sum\npairs = [1, 2, 3, 4, 5, 6].each_slice(2).to_a"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dateien",
+      "de": {
+        "title": "Dateien lesen und schreiben",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Dateien lesen und schreiben</h2><p>Bis jetzt vergisst dein Programm alles, sobald die Zelle fertig ist. Wer sich etwas merken will – Notizen, Punktestände, Messwerte –, schreibt es in eine <strong>Datei</strong>. In Ruby ist das ein Zweizeiler: <code>File.write</code> legt die Datei an (oder überschreibt sie) und <code>File.read</code> holt den ganzen Inhalt als String zurück:</p>"
+          },
+          {
+            "t": "c",
+            "code": "File.write(\"notizen.txt\", \"Speck kaufen\\nEier kaufen\\n\")\nFile.read(\"notizen.txt\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Datei erscheint als Download unter der Zelle – und <code>show_files</code> zeigt dir den Ordner, in dem du gerade arbeitest. Ob es eine Datei gibt, fragst du mit <code>File.exist?</code>, bevor du sie liest:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p File.exist?(\"notizen.txt\")\np File.exist?(\"geheim.txt\")\nshow_files"
+          },
+          {
+            "t": "h",
+            "html": "<p>Meistens willst du eine Datei <em>zeilenweise</em>: <code>lines</code> zerlegt den String an den Zeilenumbrüchen, <code>chomp: true</code> schneidet die Umbrüche gleich ab. Dann hast du ein Array und kannst alles damit tun, was du aus Lektion {{nr:arrays}} (Arrays) kennst:</p>"
+          },
+          {
+            "t": "c",
+            "code": "zeilen = File.read(\"notizen.txt\").lines(chomp: true)\nzeilen.each_with_index { |zeile, i| puts \"#{i + 1}. #{zeile}\" }\nzeilen.length"
+          },
+          {
+            "t": "h",
+            "html": "<p>Vorsicht: <code>File.write</code> ersetzt den Inhalt. Willst du etwas <em>anhängen</em>, lies die Datei zuerst, häng den neuen Text an und schreib alles zurück:</p>"
+          },
+          {
+            "t": "c",
+            "code": "File.write(\"notizen.txt\", File.read(\"notizen.txt\") + \"Brot kaufen\\n\")\nputs File.read(\"notizen.txt\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Eine Zeile pro Eintrag, die Felder durch Kommas getrennt – so sieht die einfachste Tabellendatei aus (CSV). Lesen heisst dann: Zeile für Zeile durchgehen, jede mit <code>split</code> zerlegen und die Teile verwenden:</p>"
+          },
+          {
+            "t": "c",
+            "code": "File.write(\"preise.csv\", \"Speck,4.50\\nEi,1.20\\nKaffee,3.00\\n\")\ntotal = 0\nFile.read(\"preise.csv\").lines(chomp: true).each do |zeile|\n  artikel, preis = zeile.split(\",\")\n  total += preis.to_f\nend\ntotal"
+          },
+          {
+            "t": "h",
+            "html": "<p>Und zum Aufräumen: <code>File.delete</code> löscht eine Datei. Danach ist sie weg – <code>File.exist?</code> sagt <code>false</code>, und <code>File.read</code> würde einen Fehler melden.</p>"
+          },
+          {
+            "t": "c",
+            "code": "File.delete(\"preise.csv\")\nFile.exist?(\"preise.csv\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='Auf deinem Computer'><p>Dort schreiben dieselben Methoden echte Dateien auf die Festplatte – <code>File.write(\"notizen.txt\", …)</code> landet im Ordner, in dem du <code>ruby</code> gestartet hast. Zum Anhängen gibt es dort auch <code>File.open(\"notizen.txt\", \"a\") { |f| f.puts \"Brot kaufen\" }</code>, und <code>Dir.glob(\"*.txt\")</code> listet alle Textdateien im Ordner. Hier im Browser leben die Dateien nur auf dieser Seite: Was eine Zelle schreibt, erscheint als Download unter ihr – so nimmst du es mit.</p></div><p>Im Aufbaukurs, Lektion {{nr:tl-formats}} (Daten speichern), speicherst du mit denselben Handgriffen ganze Datensätze als CSV, JSON und YAML.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/File.html' target='_blank'>File</a> · <a href='https://docs.ruby-lang.org/en/4.0/IO.html#method-c-write' target='_blank'>File.write</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-lines' target='_blank'>String#lines</a> · <a href='https://docs.ruby-lang.org/en/4.0/Dir.html' target='_blank'>Dir</a></div><div class='task'><strong>Aufgabe:</strong> Schreib die Datei <code>einkauf.txt</code> mit drei Zeilen – in jeder ein Artikel. Lies sie danach wieder ein und speichere die drei Zeilen, ohne Zeilenumbruch, im Array <code>artikel</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Schreib einkauf.txt mit drei Zeilen (je ein Artikel),\n# dann lies sie zurück: die Zeilen ohne Umbruch in artikel\n",
+            "hints": [
+              "Zwei Schritte: Zuerst <code>File.write</code> mit einem String, in dem die drei Artikel durch Zeilenumbrüche getrennt sind. Dann <code>File.read</code>, und daraus mit <code>lines</code> ein Array machen."
+            ],
+            "check": "File.exist?(\"einkauf.txt\") && artikel.is_a?(Array) && artikel.length == 3 && artikel.all? { |a| a.is_a?(String) && !a.empty? && !a.include?(\"\\n\") } && artikel == File.read(\"einkauf.txt\").lines(chomp: true)",
+            "hint": "<code>File.write(\"einkauf.txt\", \"Speck\\nEier\\nBrot\\n\")</code> und dann <code>artikel = File.read(\"einkauf.txt\").lines(chomp: true)</code>.",
+            "solution": "File.write(\"einkauf.txt\", \"Speck\\nEier\\nBrot\\n\")\nartikel = File.read(\"einkauf.txt\").lines(chomp: true)"
+          }
+        ]
+      },
+      "en": {
+        "title": "Reading and writing files",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Reading and writing files</h2><p>Until now your program forgets everything as soon as the cell is done. To remember something – notes, high scores, measurements – you write it to a <strong>file</strong>. In Ruby that is two lines: <code>File.write</code> creates the file (or overwrites it) and <code>File.read</code> brings the whole content back as a string:</p>"
+          },
+          {
+            "t": "c",
+            "code": "File.write(\"notes.txt\", \"buy bacon\\nbuy eggs\\n\")\nFile.read(\"notes.txt\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>The file appears as a download below the cell – and <code>show_files</code> shows you the folder you are working in. Whether a file exists you ask with <code>File.exist?</code> before reading it:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p File.exist?(\"notes.txt\")\np File.exist?(\"secret.txt\")\nshow_files"
+          },
+          {
+            "t": "h",
+            "html": "<p>Most of the time you want a file <em>line by line</em>: <code>lines</code> splits the string at the line breaks, <code>chomp: true</code> cuts the breaks off right away. Then you have an array and can do everything you know from lesson {{nr:arrays}} (arrays) with it:</p>"
+          },
+          {
+            "t": "c",
+            "code": "lines = File.read(\"notes.txt\").lines(chomp: true)\nlines.each_with_index { |line, i| puts \"#{i + 1}. #{line}\" }\nlines.length"
+          },
+          {
+            "t": "h",
+            "html": "<p>Careful: <code>File.write</code> replaces the content. To <em>append</em> something, read the file first, add the new text and write it all back:</p>"
+          },
+          {
+            "t": "c",
+            "code": "File.write(\"notes.txt\", File.read(\"notes.txt\") + \"buy bread\\n\")\nputs File.read(\"notes.txt\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>One line per entry, the fields separated by commas – that is what the simplest table file looks like (CSV). Reading it means: go through it line by line, cut each with <code>split</code> and use the parts:</p>"
+          },
+          {
+            "t": "c",
+            "code": "File.write(\"prices.csv\", \"bacon,4.50\\negg,1.20\\ncoffee,3.00\\n\")\ntotal = 0\nFile.read(\"prices.csv\").lines(chomp: true).each do |line|\n  item, price = line.split(\",\")\n  total += price.to_f\nend\ntotal"
+          },
+          {
+            "t": "h",
+            "html": "<p>And for tidying up: <code>File.delete</code> removes a file. After that it is gone – <code>File.exist?</code> says <code>false</code>, and <code>File.read</code> would report an error.</p>"
+          },
+          {
+            "t": "c",
+            "code": "File.delete(\"prices.csv\")\nFile.exist?(\"prices.csv\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='On your machine'><p>There, the same methods write real files to disk – <code>File.write(\"notes.txt\", …)</code> lands in the folder you started <code>ruby</code> in. For appending there is also <code>File.open(\"notes.txt\", \"a\") { |f| f.puts \"buy bread\" }</code>, and <code>Dir.glob(\"*.txt\")</code> lists every text file in the folder. Here in the browser the files live on this page only: what a cell writes appears as a download below it – that is how you take it with you.</p></div><p>In the advanced course, lesson {{nr:tl-formats}} (saving data), you store whole records as CSV, JSON and YAML with the same moves.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/File.html' target='_blank'>File</a> · <a href='https://docs.ruby-lang.org/en/4.0/IO.html#method-c-write' target='_blank'>File.write</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-lines' target='_blank'>String#lines</a> · <a href='https://docs.ruby-lang.org/en/4.0/Dir.html' target='_blank'>Dir</a></div><div class='task'><strong>Task:</strong> Write the file <code>shopping.txt</code> with three lines – one item in each. Then read it back and store the three lines, without their line breaks, in the array <code>items</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Write shopping.txt with three lines (one item each),\n# then read it back: the lines, without their line breaks, in items\n",
+            "hints": [
+              "Two steps: first <code>File.write</code> with a string in which the three items are separated by line breaks. Then <code>File.read</code>, and make an array of it with <code>lines</code>."
+            ],
+            "check": "File.exist?(\"shopping.txt\") && items.is_a?(Array) && items.length == 3 && items.all? { |i| i.is_a?(String) && !i.empty? && !i.include?(\"\\n\") } && items == File.read(\"shopping.txt\").lines(chomp: true)",
+            "hint": "<code>File.write(\"shopping.txt\", \"bacon\\neggs\\nbread\\n\")</code> and then <code>items = File.read(\"shopping.txt\").lines(chomp: true)</code>.",
+            "solution": "File.write(\"shopping.txt\", \"bacon\\neggs\\nbread\\n\")\nitems = File.read(\"shopping.txt\").lines(chomp: true)"
+          }
+        ]
+      },
+      "ja": {
+        "title": "ファイルの読み書き",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>ファイルの読み書き</h2><p>これまでのプログラムは、セルが終わるとすべて忘れてしまいます。メモ、ハイスコア、測定値など、何かを覚えておきたいときは<strong>ファイル</strong>に書きます。Rubyなら2行です。<code>File.write</code>がファイルを作り（あるいは上書きし）、<code>File.read</code>が中身全体を文字列として返します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "File.write(\"notes.txt\", \"buy bacon\\nbuy eggs\\n\")\nFile.read(\"notes.txt\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>ファイルはセルの下にダウンロードとして現れます。<code>show_files</code>を使うと、今作業しているフォルダが見られます。ファイルがあるかどうかは、読む前に<code>File.exist?</code>で確かめます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "p File.exist?(\"notes.txt\")\np File.exist?(\"secret.txt\")\nshow_files"
+          },
+          {
+            "t": "h",
+            "html": "<p>たいていは、ファイルを<em>1行ずつ</em>扱いたいものです。<code>lines</code>は文字列を改行で分け、<code>chomp: true</code>は改行をその場で切り落とします。あとは配列なので、レッスン{{nr:arrays}}（配列）で学んだことが全部使えます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "lines = File.read(\"notes.txt\").lines(chomp: true)\nlines.each_with_index { |line, i| puts \"#{i + 1}. #{line}\" }\nlines.length"
+          },
+          {
+            "t": "h",
+            "html": "<p>注意：<code>File.write</code>は中身を置きかえます。何かを<em>追加</em>したいときは、先にファイルを読んで、新しいテキストを足して、全部を書き戻します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "File.write(\"notes.txt\", File.read(\"notes.txt\") + \"buy bread\\n\")\nputs File.read(\"notes.txt\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>1行に1件、項目はカンマ区切り。これがいちばん簡単な表のファイル（CSV）です。読むときは、1行ずつたどって、<code>split</code>で分けて、その部分を使います：</p>"
+          },
+          {
+            "t": "c",
+            "code": "File.write(\"prices.csv\", \"bacon,4.50\\negg,1.20\\ncoffee,3.00\\n\")\ntotal = 0\nFile.read(\"prices.csv\").lines(chomp: true).each do |line|\n  item, price = line.split(\",\")\n  total += price.to_f\nend\ntotal"
+          },
+          {
+            "t": "h",
+            "html": "<p>片づけには<code>File.delete</code>でファイルを消します。消したあとは<code>File.exist?</code>が<code>false</code>になり、<code>File.read</code>はエラーになります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "File.delete(\"prices.csv\")\nFile.exist?(\"prices.csv\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb' data-title='自分のコンピューターでは'><p>そこでは、同じメソッドが本物のファイルをディスクに書きます。<code>File.write(\"notes.txt\", …)</code>は、<code>ruby</code>を起動したフォルダに保存されます。追記には<code>File.open(\"notes.txt\", \"a\") { |f| f.puts \"buy bread\" }</code>もあり、<code>Dir.glob(\"*.txt\")</code>はフォルダ内のテキストファイルをすべて一覧にします。このブラウザの中では、ファイルはこのページの中だけに存在します。セルが書いたファイルはそのセルの下にダウンロードとして現れるので、そこから持ち帰れます。</p></div><p>応用コースのレッスン{{nr:tl-formats}}（データの保存）では、同じ手順でデータ全体をCSV、JSON、YAMLとして保存します。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/File.html' target='_blank'>File</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/IO/s/write.html' target='_blank'>File.write</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/String/i/lines.html' target='_blank'>String#lines</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Dir.html' target='_blank'>Dir</a></div><div class='task'><strong>課題：</strong>3行のファイル<code>shopping.txt</code>を書きましょう。1行に品物を1つ入れます。それから読み戻して、改行を取りのぞいた3行を配列<code>items</code>に入れてください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# shopping.txt に3行（1行に品物1つ）を書いて、\n# 読み戻す：改行を除いた行を items に\n",
+            "hints": [
+              "2ステップだよ。まず<code>File.write</code>に、3つの品物を改行で区切った文字列を渡す。次に<code>File.read</code>で読んで、<code>lines</code>で配列にするんだ。"
+            ],
+            "check": "File.exist?(\"shopping.txt\") && items.is_a?(Array) && items.length == 3 && items.all? { |i| i.is_a?(String) && !i.empty? && !i.include?(\"\\n\") } && items == File.read(\"shopping.txt\").lines(chomp: true)",
+            "hint": "<code>File.write(\"shopping.txt\", \"bacon\\neggs\\nbread\\n\")</code>、それから<code>items = File.read(\"shopping.txt\").lines(chomp: true)</code>だよ。",
+            "solution": "File.write(\"shopping.txt\", \"bacon\\neggs\\nbread\\n\")\nitems = File.read(\"shopping.txt\").lines(chomp: true)"
           }
         ]
       }
@@ -18251,7 +18865,8 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "strings",
       "lessons": [
-        "strings"
+        "strings",
+        "formatieren"
       ],
       "title": {
         "de": "Strings (Text)",
@@ -18562,7 +19177,8 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "arrays",
       "lessons": [
-        "arrays"
+        "arrays",
+        "zufall"
       ],
       "title": {
         "de": "Arrays (Listen)",
@@ -19277,7 +19893,8 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "files",
       "lessons": [
-        "tl-formats"
+        "tl-formats",
+        "dateien"
       ],
       "title": {
         "de": "Dateien & Formate",

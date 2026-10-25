@@ -381,6 +381,42 @@ SOLUTIONS = {
     "en" => [%(notes = ["Breakfast at 07:45: Bacon", "Snack at 10:15: apple", "Lunch at 12:30: bacon and egg", "Evening: not hungry"]\ntimes = notes.join(" ").scan(/\\d\\d:\\d\\d/)\nbacon_days = notes.count { |note| note.match?(/bacon/i) }),
              %(notes = ["Breakfast at 07:45: Bacon", "Snack at 10:15: apple", "Lunch at 12:30: bacon and egg", "Evening: not hungry"]\ntimes = notes.flat_map { |note| note.scan(/\\d{2}:\\d{2}/) }\nbacon_days = notes.select { |note| note =~ /[Bb]acon/ }.length\np bacon_days)]
   },
+  "zufall" => {
+    "de" => [%(summen = 100.times.map { rand(1..6) + rand(1..6) }
+siebener = summen.count(7)),
+             %(summen = Array.new(100) { rand(1..6) + rand(1..6) }
+siebener = summen.count { |s| s == 7 }
+p siebener)],
+    "en" => [%(totals = 100.times.map { rand(1..6) + rand(1..6) }
+sevens = totals.count(7)),
+             %(totals = Array.new(100) { rand(1..6) + rand(1..6) }
+sevens = totals.count { |t| t == 7 }
+p sevens)]
+  },
+  "formatieren" => {
+    "de" => [%(einkauf = { "Speck" => 4.5, "Brot" => 2, "Honig" => 6.8 }
+zettel = einkauf.map { |artikel, preis| artikel.ljust(10) + format("%7.2f", preis) }.join("\\n")),
+             %(einkauf = { "Speck" => 4.5, "Brot" => 2, "Honig" => 6.8 }
+zettel = einkauf.map { |a, p| format("%-10s%7.2f", a, p) }.join("\\n")
+puts zettel)],
+    "en" => [%(shopping = { "Bacon" => 4.5, "Bread" => 2, "Honey" => 6.8 }
+list = shopping.map { |item, price| item.ljust(10) + format("%7.2f", price) }.join("\\n")),
+             %(shopping = { "Bacon" => 4.5, "Bread" => 2, "Honey" => 6.8 }
+list = shopping.map { |i, p| format("%-10s%7.2f", i, p) }.join("\\n")
+puts list)]
+  },
+  "dateien" => {
+    "de" => [%(File.write("einkauf.txt", "Speck\\nEier\\nBrot\\n")
+artikel = File.read("einkauf.txt").lines(chomp: true)),
+             %(File.write("einkauf.txt", ["Speck", "Eier", "Brot"].join("\\n"))
+artikel = File.read("einkauf.txt").split("\\n")
+p artikel)],
+    "en" => [%(File.write("shopping.txt", "bacon\\neggs\\nbread\\n")
+items = File.read("shopping.txt").lines(chomp: true)),
+             %(File.write("shopping.txt", ["bacon", "eggs", "bread"].join("\\n"))
+items = File.read("shopping.txt").split("\\n")
+p items)]
+  },
   "fehler" => {
     "de" => [%(fuchs = { name: "Chunky", streifen: 3 }\n\ndef satz(tier)\n  "\#{tier[:name]} isst \#{tier[:streifen]} Streifen Speck."\nend\n\nsatz(fuchs)),
              %(fuchs = { name: "Chunky", streifen: 3 }\n\ndef satz(tier)\n  "\#{tier[:name]} isst " + tier[:streifen].to_s + " Streifen Speck."\nend\n\nputs satz(fuchs))],

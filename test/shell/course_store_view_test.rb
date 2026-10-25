@@ -215,7 +215,7 @@ end
   # "stepper": true) - not gems, servers or the network, not the IRB
   def test_the_lessons_with_a_stepper
     flagged = @course.ids.each_index.select { |idx| @course.stepper?(idx) }.map { |idx| @course.id(idx) }
-    assert_equal %w[variablen strings wenn schleifen arrays hashes methoden turtle klassen module], flagged
+    assert_equal %w[variablen strings wenn schleifen arrays zufall hashes formatieren methoden turtle klassen module], flagged
     side_trips = @course.ids.each_index.find { |idx| idx.positive? && @course.section(idx, "de") }
     assert(flagged.all? { |id| @course.index(id) < side_trips }, "the Basics only")
   end

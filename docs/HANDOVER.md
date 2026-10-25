@@ -335,8 +335,8 @@ lessons that start a real course - a lesson on its own belongs in "Ausflüge"
 `"stepper": true` puts ⏯ (step through) beside every ▶ of the lesson but an
 IRB's (`View.lesson_html`, `Course#stepper?`). It is on the Basics whose
 cells are plain Ruby and short, where watching a run teaches something:
-lessons `variablen` to `module` (variablen, strings, wenn, schleifen, arrays, hashes, methoden,
-turtle, klassen, module) - assignments, a branch taken, a loop's passes,
+lessons `variablen` to `module` (variablen, strings, wenn, schleifen, arrays, zufall, hashes,
+formatieren, methoden, turtle, klassen, module) - assignments, a branch taken, a loop's passes,
 a block's variable, a method called and returning, recursion. Not on
 hallo and rechnen (one-line cells: one step), the IRB, nor on 14-19,
 whose cells install gems, start servers or fetch from the web - nothing of
