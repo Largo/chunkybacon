@@ -4697,6 +4697,150 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "rails-mvc",
+      "de": {
+        "title": "Rails – eine Seite aus der Datenbank",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>MVC, alle drei zusammen</h2><p>Das Model kam in Lektion {{nr:activerecord}}, der Rest von MVC in Lektion {{nr:rails}}: Routen, ein Controller, Views. Jetzt treffen sich die drei, so wie jede Rails-App arbeitet: Eine Anfrage kommt herein, der Controller fragt das Model nach Zeilen, die View macht HTML daraus. Die Zelle unten startet dieselbe Anwendung wie damals – eine App startet einmal pro Seite, wer also aus der Rails-Lektion kommt, hat sie schon laufen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\nrequire \"active_record\"\n\n# die App der Rails-Lektion: Sie startet einmal pro Seite, darum dieselbe\n# Klasse, und ihre Ordner entstehen nur, wenn sie noch fehlen\nFileUtils.mkdir_p(\"/tmp/imbiss/app/views\")\nFileUtils.mkdir_p(\"/tmp/imbiss/config\")\nrouten = \"/tmp/imbiss/config/routes.rb\"\nFile.write(routen, \"Rails.application.routes.draw do\\nend\\n\") unless File.exist?(routen)\n\nclass Imbiss < Rails::Application\n  config.root = \"/tmp/imbiss\"\n  config.eager_load = false\n  config.consider_all_requests_local = true\n  config.logger = Logger.new(STDOUT)\nend\nImbiss.initialize! unless Imbiss.initialized?\nRails.version"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dann die Datenbank, wie in der Active-Record-Lektion – die Datei liegt im Ordner <code>db/</code> der App, wo <code>rails new</code> sie hält. Neu ist die Zeile mit <code>inflections</code>: Sie sagt Rails die deutsche Mehrzahl, damit <code>Gericht</code> von selbst zur Tabelle <code>gerichte</code> findet und die Routen-Helfer richtig heissen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "ActiveRecord::Base.logger = Logger.new(STDOUT)\nActiveRecord::Base.establish_connection(adapter: \"sqlite3\", database: \"db/imbiss.sqlite3\")\n\n# Rails bildet englische Mehrzahlen - einmal gesagt, kennt es die deutsche\nActiveSupport::Inflector.inflections(:en) { |regel| regel.irregular \"gericht\", \"gerichte\" }\n\nActiveRecord::Schema.define do\n  create_table :gerichte, force: true do |t|\n    t.string  :name\n    t.decimal :preis, precision: 6, scale: 2\n    t.timestamps\n  end\nend\n\nclass Gericht < ActiveRecord::Base\n  validates :name, presence: true\nend\n\nGericht.create!(name: \"Speck\", preis: 4.5)\nGericht.create!(name: \"Ei\", preis: 2)\nGericht.create!(name: \"Kaffee\", preis: 3.2)\nGericht.count"
+          },
+          {
+            "t": "h",
+            "html": "<p>Und die Web-Seite. <code>resources :gerichte</code> ist die Rails-Art zu sagen «Seiten über Gerichte»: Eine Zeile erklärt die REST-Routen – hier nur zwei der sieben, die Liste und ein Gericht. <code>link_to gericht.name, gericht</code> bekommt ein Model-Objekt statt eines Pfads, und Rails macht <code>/gerichte/1</code> daraus; <code>number_to_currency</code> ist einer der View-Helfer:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"gerichte#index\"\n    resources :gerichte, only: [:index, :show]\n  end\nRUBY\nImbiss.reload_routes!\n\nRails.root.join(\"app/views/gerichte\").mkpath\nRails.root.join(\"app/views/gerichte/index.html.erb\").write(<<~ERB)\n  <h1>Chunkys Imbiss</h1>\n  <ul>\n    <% @gerichte.each do |gericht| %>\n      <li>\n        <%= link_to gericht.name, gericht %>\n        – <%= number_to_currency(gericht.preis, unit: \"CHF \") %>\n      </li>\n    <% end %>\n  </ul>\nERB\n\nclass GerichteController < ActionController::Base\n  def index\n    @gerichte = Gericht.order(:preis)\n  end\nend\n\nshow_browser Imbiss, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Klick auf ein Gericht: Rails beschwert sich, dass der <code>GerichteController</code> keine Action <code>show</code> hat – die Route gibt es, den Code nicht. Das ist die Aufgabe. Vorher die Routentabelle, mit den zwei Routen, die <code>resources</code> gemacht hat, und den Namen ihrer Helfer, <code>gerichte_path</code> und <code>gericht_path</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Imbiss.routes.routes.reject(&:internal).each do |route|\n  ziel = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{ziel}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb'><strong>Auf deinem Rechner</strong> ist diese ganze Lektion ein Befehl: <code>bin/rails generate scaffold Gericht name:string preis:decimal</code> schreibt das Model, seine Migration, den Controller mit allen sieben Actions, ihre Views und die <code>resources</code>-Zeile – dann <code>bin/rails db:migrate</code> und <code>bin/rails server</code>, und <code>localhost:3000/gerichte</code> listet, zeigt, ergänzt, ändert und löscht Gerichte. Die erzeugten Dateien zu lesen ist ein guter Weg zu lernen, was Rails wo erwartet.</div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://guides.rubyonrails.org/routing.html#resource-routing-the-rails-default' target='_blank'>Resource routing</a> · <a href='https://guides.rubyonrails.org/action_view_helpers.html' target='_blank'>Action View helpers</a> · <a href='https://guides.rubyonrails.org/getting_started.html' target='_blank'>Getting Started with Rails</a></div><div class='task'><strong>Aufgabe:</strong> Gib dem <code>GerichteController</code> die Action <code>show</code>, die das Gericht über <code>params[:id]</code> findet, und setz den Namen des Gerichts in die Überschrift von <code>show.html.erb</code> (<code>&lt;%= @gericht.name %&gt;</code>). Der Mini-Browser unten öffnet das erste Gericht – im Moment noch ein Fehler: Die View läuft, aber keine Action hat <code>@gericht</code> gesetzt.</div>"
+          },
+          {
+            "t": "x",
+            "code": "Rails.root.join(\"app/views/gerichte/show.html.erb\").write(<<~ERB)\n  <h2>Hier gehört der Name des Gerichts hin</h2>\n  <p><%= number_to_currency(@gericht.preis, unit: \"CHF \") %></p>\n  <%= link_to \"Zurück zur Speisekarte\", gerichte_path %>\nERB\n\nclass GerichteController < ActionController::Base\n  # def show\n  #   @gericht = Gericht.find(params[:id])\n  # end\nend\n\nshow_browser Imbiss, \"/gerichte/#{Gericht.first.id}\"",
+            "check": "g = Gericht.order(:id).first; s1, _ = mock_get(Imbiss, \"/\"); s2, b2 = mock_get(Imbiss, \"/gerichte/#{g.id}\"); s1 == 200 && s2 == 200 && b2.include?(g.name) && b2.include?(\"CHF 4.50\")",
+            "hint": "<code>def show</code> mit <code>@gericht = Gericht.find(params[:id])</code> einkommentieren, und in der View <code>&lt;h2&gt;&lt;%= @gericht.name %&gt;&lt;/h2&gt;</code> schreiben. Danach die Zelle neu ausführen."
+          }
+        ]
+      },
+      "en": {
+        "title": "Rails – a page from the database",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>MVC, all three together</h2><p>The model came in lesson {{nr:activerecord}}, the rest of MVC in lesson {{nr:rails}}: routes, a controller, views. Now the three meet, the way every Rails app works: a request comes in, the controller asks the model for rows, the view turns them into HTML. The cell below boots the same application as before – an app boots once per page, so if you come from the Rails lesson it is already up:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\nrequire \"active_record\"\n\n# the app of the Rails lesson: it boots once per page, so this is the same\n# class, and its folders are made again only if they are missing\nFileUtils.mkdir_p(\"/tmp/diner/app/views\")\nFileUtils.mkdir_p(\"/tmp/diner/config\")\nroutes = \"/tmp/diner/config/routes.rb\"\nFile.write(routes, \"Rails.application.routes.draw do\\nend\\n\") unless File.exist?(routes)\n\nclass Diner < Rails::Application\n  config.root = \"/tmp/diner\"\n  config.eager_load = false\n  config.consider_all_requests_local = true\n  config.logger = Logger.new(STDOUT)\nend\nDiner.initialize! unless Diner.initialized?\nRails.version"
+          },
+          {
+            "t": "h",
+            "html": "<p>Then the database, as in the Active Record lesson – the file lives in the app's <code>db/</code> folder, where <code>rails new</code> keeps it:</p>"
+          },
+          {
+            "t": "c",
+            "code": "ActiveRecord::Base.logger = Logger.new(STDOUT)\nActiveRecord::Base.establish_connection(adapter: \"sqlite3\", database: \"db/diner.sqlite3\")\n\nActiveRecord::Schema.define do\n  create_table :dishes, force: true do |t|\n    t.string  :name\n    t.decimal :price, precision: 6, scale: 2\n    t.timestamps\n  end\nend\n\nclass Dish < ActiveRecord::Base\n  validates :name, presence: true\nend\n\nDish.create!(name: \"Bacon\", price: 4.5)\nDish.create!(name: \"Egg\", price: 2)\nDish.create!(name: \"Coffee\", price: 3.2)\nDish.count"
+          },
+          {
+            "t": "h",
+            "html": "<p>And the web side. <code>resources :dishes</code> is the Rails way to say \"pages about dishes\": one line declares the REST routes – here only two of the seven, the list and one dish. <code>link_to dish.name, dish</code> gets a model object instead of a path, and Rails works out <code>/dishes/1</code> from it; <code>number_to_currency</code> is one of the view helpers:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"dishes#index\"\n    resources :dishes, only: [:index, :show]\n  end\nRUBY\nDiner.reload_routes!\n\nRails.root.join(\"app/views/dishes\").mkpath\nRails.root.join(\"app/views/dishes/index.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li>\n        <%= link_to dish.name, dish %>\n        – <%= number_to_currency(dish.price, unit: \"CHF \") %>\n      </li>\n    <% end %>\n  </ul>\nERB\n\nclass DishesController < ActionController::Base\n  def index\n    @dishes = Dish.order(:price)\n  end\nend\n\nshow_browser Diner, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Click a dish: Rails complains that <code>DishesController</code> has no <code>show</code> action – the route exists, the code does not. That is the exercise. Before it, the route table, with the two routes <code>resources</code> made and the names of their helpers, <code>dishes_path</code> and <code>dish_path</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Diner.routes.routes.reject(&:internal).each do |route|\n  target = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{target}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb'><strong>On your machine</strong> this whole lesson is one command: <code>bin/rails generate scaffold Dish name:string price:decimal</code> writes the model, its migration, the controller with all seven actions, their views and the <code>resources</code> line – then <code>bin/rails db:migrate</code> and <code>bin/rails server</code>, and <code>localhost:3000/dishes</code> lists, shows, adds, edits and deletes dishes. Reading the generated files is a fine way to learn what Rails expects where.</div><div class='docs'><strong>Look it up:</strong> <a href='https://guides.rubyonrails.org/routing.html#resource-routing-the-rails-default' target='_blank'>Resource routing</a> · <a href='https://guides.rubyonrails.org/action_view_helpers.html' target='_blank'>Action View helpers</a> · <a href='https://guides.rubyonrails.org/getting_started.html' target='_blank'>Getting Started with Rails</a></div><div class='task'><strong>Task:</strong> Give <code>DishesController</code> the <code>show</code> action, which finds the dish from <code>params[:id]</code>, and put the dish's name into the heading of <code>show.html.erb</code> (<code>&lt;%= @dish.name %&gt;</code>). The mini browser below opens the first dish – for now an error: the view runs, but no action has set <code>@dish</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "Rails.root.join(\"app/views/dishes/show.html.erb\").write(<<~ERB)\n  <h2>The dish's name goes here</h2>\n  <p><%= number_to_currency(@dish.price, unit: \"CHF \") %></p>\n  <%= link_to \"Back to the menu\", dishes_path %>\nERB\n\nclass DishesController < ActionController::Base\n  # def show\n  #   @dish = Dish.find(params[:id])\n  # end\nend\n\nshow_browser Diner, \"/dishes/#{Dish.first.id}\"",
+            "check": "d = Dish.order(:id).first; s1, _ = mock_get(Diner, \"/\"); s2, b2 = mock_get(Diner, \"/dishes/#{d.id}\"); s1 == 200 && s2 == 200 && b2.include?(d.name) && b2.include?(\"CHF 4.50\")",
+            "hint": "Uncomment <code>def show</code> with <code>@dish = Dish.find(params[:id])</code>, and write <code>&lt;h2&gt;&lt;%= @dish.name %&gt;&lt;/h2&gt;</code> in the view. Then run the cell again."
+          }
+        ]
+      },
+      "ja": {
+        "title": "Rails：データベースからページを作る",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>MVCの3つをそろえて</h2><p>モデルはレッスン{{nr:activerecord}}で、MVCの残り、つまりルートとコントローラーとビューはレッスン{{nr:rails}}で学びました。今度は3つが出会います。どのRailsアプリも、こう動いています。リクエストが来ると、コントローラーがモデルに行を尋ね、ビューがそれをHTMLにします。下のセルは、前と同じアプリケーションを起動します。アプリの起動はページごとに一度なので、Railsのレッスンから来た人なら、もう動いています。</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\nrequire \"active_record\"\n\n# Railsのレッスンと同じアプリです。起動はページごとに一度なので同じクラスを使い、\n# フォルダは、まだないときだけ作ります\nFileUtils.mkdir_p(\"/tmp/diner/app/views\")\nFileUtils.mkdir_p(\"/tmp/diner/config\")\nroutes = \"/tmp/diner/config/routes.rb\"\nFile.write(routes, \"Rails.application.routes.draw do\\nend\\n\") unless File.exist?(routes)\n\nclass Diner < Rails::Application\n  config.root = \"/tmp/diner\"\n  config.eager_load = false\n  config.consider_all_requests_local = true\n  config.logger = Logger.new(STDOUT)\nend\nDiner.initialize! unless Diner.initialized?\nRails.version"
+          },
+          {
+            "t": "h",
+            "html": "<p>次はデータベースです。Active Recordのレッスンと同じですが、ファイルはアプリの<code>db/</code>フォルダに置きます。<code>rails new</code>がデータベースを置く場所です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "ActiveRecord::Base.logger = Logger.new(STDOUT)\nActiveRecord::Base.establish_connection(adapter: \"sqlite3\", database: \"db/diner.sqlite3\")\n\nActiveRecord::Schema.define do\n  create_table :dishes, force: true do |t|\n    t.string  :name\n    t.decimal :price, precision: 6, scale: 2\n    t.timestamps\n  end\nend\n\nclass Dish < ActiveRecord::Base\n  validates :name, presence: true\nend\n\nDish.create!(name: \"Bacon\", price: 4.5)\nDish.create!(name: \"Egg\", price: 2)\nDish.create!(name: \"Coffee\", price: 3.2)\nDish.count"
+          },
+          {
+            "t": "h",
+            "html": "<p>そしてWebの側です。<code>resources :dishes</code>は、「料理についてのページ」をRails流に言ったものです。1行でRESTのルートを宣言します。ここでは7つのうち2つ、一覧と1つの料理だけです。<code>link_to dish.name, dish</code>はパスの代わりにモデルのオブジェクトを受け取り、Railsがそこから<code>/dishes/1</code>を導きます。<code>number_to_currency</code>はビューヘルパーの1つです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"dishes#index\"\n    resources :dishes, only: [:index, :show]\n  end\nRUBY\nDiner.reload_routes!\n\nRails.root.join(\"app/views/dishes\").mkpath\nRails.root.join(\"app/views/dishes/index.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li>\n        <%= link_to dish.name, dish %>\n        – <%= number_to_currency(dish.price, unit: \"CHF \") %>\n      </li>\n    <% end %>\n  </ul>\nERB\n\nclass DishesController < ActionController::Base\n  def index\n    @dishes = Dish.order(:price)\n  end\nend\n\nshow_browser Diner, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p>料理をクリックしてみてください。<code>DishesController</code>に<code>show</code>アクションがない、とRailsが文句を言います。ルートはあるのに、コードがないからです。それが課題です。その前にルートの一覧を見ておきましょう。<code>resources</code>が作った2つのルートと、そのヘルパーの名前、<code>dishes_path</code>と<code>dish_path</code>です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "Diner.routes.routes.reject(&:internal).each do |route|\n  target = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{target}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb'><strong>自分のコンピューターでは</strong>、このレッスンまるごとがコマンド1つです。<code>bin/rails generate scaffold Dish name:string price:decimal</code>が、モデル、そのマイグレーション、7つのアクションすべてを持つコントローラー、そのビュー、<code>resources</code>の行を書きます。あとは<code>bin/rails db:migrate</code>と<code>bin/rails server</code>で、<code>localhost:3000/dishes</code>が料理の一覧、表示、追加、編集、削除をしてくれます。生成されたファイルを読むのは、Railsが何をどこに期待しているかを学ぶ、よい方法です。</div><div class='docs'><strong>調べてみよう：</strong><a href='https://railsguides.jp/routing.html#リソースベースのルーティング:-railsのデフォルト' target='_blank'>リソースベースのルーティング</a>・<a href='https://railsguides.jp/action_view_helpers.html' target='_blank'>Action View ヘルパー</a>・<a href='https://railsguides.jp/getting_started.html' target='_blank'>Rails をはじめよう</a></div><div class='task'><strong>課題：</strong><code>DishesController</code>に、<code>params[:id]</code>で料理を見つける<code>show</code>アクションを足して、<code>show.html.erb</code>の見出しに料理の名前（<code>&lt;%= @dish.name %&gt;</code>）を入れましょう。下のミニブラウザは最初の料理を開いていますが、今はまだエラーです。ビューは動くのに、<code>@dish</code>をセットするアクションがないからです。</div>"
+          },
+          {
+            "t": "x",
+            "code": "Rails.root.join(\"app/views/dishes/show.html.erb\").write(<<~ERB)\n  <h2>The dish's name goes here</h2>\n  <p><%= number_to_currency(@dish.price, unit: \"CHF \") %></p>\n  <%= link_to \"Back to the menu\", dishes_path %>\nERB\n\nclass DishesController < ActionController::Base\n  # def show\n  #   @dish = Dish.find(params[:id])\n  # end\nend\n\nshow_browser Diner, \"/dishes/#{Dish.first.id}\"",
+            "check": "d = Dish.order(:id).first; s1, _ = mock_get(Diner, \"/\"); s2, b2 = mock_get(Diner, \"/dishes/#{d.id}\"); s1 == 200 && s2 == 200 && b2.include?(d.name) && b2.include?(\"CHF 4.50\")",
+            "hint": "<code>def show</code>のコメントを外して<code>@dish = Dish.find(params[:id])</code>にして、ビューには<code>&lt;h2&gt;&lt;%= @dish.name %&gt;&lt;/h2&gt;</code>と書いてね。書けたら、もう一度セルを実行してね。"
+          }
+        ]
+      }
+    },
+    {
       "id": "http",
       "de": {
         "title": "HTTP – Daten aus dem Netz",

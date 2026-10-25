@@ -44,6 +44,7 @@ links@irbcell2
 # guides.rubyonrails.org
 links@railscell6
 links@activerecordcell6
+links@rails-mvccell8
 links@tl-formatscell10
 links@tl-performancecell8
 

@@ -127,10 +127,61 @@ const runModel = async (lang, words) => {
   await page.close();
 };
 
+// lesson `rails-mvc`: the Rails app of lesson `rails` with Active Record
+// behind it; the exercise adds the show action and its view
+const runMvc = async (lang, words) => {
+  const page = await browser.newPage({ locale: lang === 'de' ? 'de-DE' : 'en-US' });
+  page.on('pageerror', (e) => { console.log('[pageerror]', e.message); failures++; });
+  const out = (idx) => page.evaluate((i) => document.getElementById(`cell-out-${i}`).innerText, idx);
+  const until = (fn, arg, timeout = 90000) => page.waitForFunction(fn, arg, { timeout }).then(() => true, () => false);
+  const codeCells = () => page.$$eval('.run-cell', (buttons) => buttons.map((b) => b.getAttribute('data-idx')));
+  const outHas = (idx, re, timeout) => until(([i, src]) => new RegExp(src).test(document.getElementById(`cell-out-${i}`).innerText), [idx, re.source], timeout);
+  const mbText = (idx) => page.$eval(`#cell-out-${idx} .mb-view`, (view) => view.shadowRoot.querySelector('.mb-page').innerText);
+  const mbStatus = (idx) => page.$eval(`#cell-out-${idx} .mb-status`, (el) => el.textContent);
+
+  await page.goto(`${BASE}?lang=${lang}#rails-mvc`, { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
+  check(`${lang}: the MVC lesson opens`, (await page.textContent('#lessonBody h2')).includes('MVC'));
+  const [boot, db, app, routes, exercise] = await codeCells();
+
+  await page.click(`.run-cell[data-idx="${boot}"]`);
+  check(`${lang}: mvc: Rails boots`, await outHas(boot, /=> "8\.\d+\.\d+"/, 180000), await out(boot));
+  await page.click(`.run-cell[data-idx="${db}"]`);
+  check(`${lang}: mvc: three dishes in the app's database`, await outHas(db, /=> 3(\n|$)/, 180000), await out(db));
+  await page.click(`.run-cell[data-idx="${app}"]`);
+  check(`${lang}: mvc: the index lists the dishes from the database`,
+        await until((i) => { const v = document.querySelector(`#cell-out-${i} .mb-view`); return v && v.shadowRoot && /CHF 4.50/.test(v.shadowRoot.textContent); }, app),
+        await out(app));
+  const links = await page.$eval(`#cell-out-${app} .mb-view`, (view) => [...view.shadowRoot.querySelectorAll('a')].map((a) => a.getAttribute('href')));
+  check(`${lang}: mvc: link_to with a model object makes the paths`, links.length === 3 && links.every((h) => new RegExp(`^/${words.resource}/\\d+$`).test(h)), links.join(' '));
+  check(`${lang}: mvc: the cheapest dish comes first`, (await mbText(app)).indexOf('CHF 2.00') < (await mbText(app)).indexOf('CHF 4.50'));
+  await page.$eval(`#cell-out-${app} .mb-view`, (view) => view.shadowRoot.querySelector('a').click());
+  check(`${lang}: mvc: the show action is missing, says Rails`, await until((i) => document.querySelector(`#cell-out-${i} .mb-status`).textContent === '404', app) && /could not be found/.test(await mbText(app)), await mbText(app));
+
+  await page.click(`.run-cell[data-idx="${routes}"]`);
+  check(`${lang}: mvc: the resources routes`, await outHas(routes, new RegExp(`GET\\s+/${words.resource}/:id\\(\\.:format\\)\\s+${words.resource}#show`)), await out(routes));
+
+  await page.click(`.run-cell[data-idx="${exercise}"]`);
+  // the view runs without the action (Rails renders a template on its own), with @dish nil
+  check(`${lang}: mvc: the starter opens the first dish without an action`, await until((i) => (document.querySelector(`#cell-out-${i} .mb-status`) || {}).textContent === '500', exercise) && /for nil/.test(await mbText(exercise)), await out(exercise));
+  check(`${lang}: mvc: the starter does not pass`, !(await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+  const starter = await page.evaluate((i) => window.cellEditors[i].getValue(), exercise);
+  const solution = starter.replace(/<h2>[^<]*<\/h2>/, `<h2><%= @${words.ivar}.name %></h2>`)
+    .replace(`# def show\n  #   @${words.ivar} = ${words.model}.find(params[:id])\n  # end`, `def show\n    @${words.ivar} = ${words.model}.find(params[:id])\n  end`);
+  check(`${lang}: mvc: the solution differs from the starter`, solution !== starter && solution.includes('def show') && !solution.includes('# def show'), solution);
+  await page.evaluate(([i, c]) => window.cellEditors[i].setValue(c), [exercise, solution]);
+  await page.click(`.run-cell[data-idx="${exercise}"]`);
+  check(`${lang}: mvc: the solution passes`, await until(() => document.getElementById('chunkyChat').className.includes('pass'), null), await out(exercise));
+  check(`${lang}: mvc: the show page has the dish`, (await mbStatus(exercise)) === '200' && /CHF 4.50/.test(await mbText(exercise)) && new RegExp(words.first).test(await mbText(exercise)), await mbText(exercise));
+  await page.close();
+};
+
 await run('en', { home: 'home', hello: 'hello', bacon: 'bacon' });
 await run('de', { home: 'start', hello: 'hallo', bacon: 'speck' });
 await runModel('en', { db: 'diner.db', table: 'dishes', model: 'Guest', visits: 'visits' });
 await runModel('de', { db: 'imbiss.db', table: 'gerichte', model: 'Gast', visits: 'besuche' });
+await runMvc('en', { resource: 'dishes', model: 'Dish', ivar: 'dish', first: 'Bacon' });
+await runMvc('de', { resource: 'gerichte', model: 'Gericht', ivar: 'gericht', first: 'Speck' });
 
 await browser.close();
 console.log(failures === 0 ? 'ALL RAILS CHECKS OK' : `${failures} failures`);

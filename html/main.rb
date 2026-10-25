@@ -148,14 +148,24 @@ rescue LoadError
   nil
 end
 # ...and Kernel#gem, which activates a version of an installed gem (Active
-# Record's SQLite adapter asks for sqlite3 >= 2.1 that way): here every
-# installed gem is on the load path already, in the one version there is
-unless Kernel.private_method_defined?(:gem)
-  module Kernel
-    def gem(_name, *_requirements) = true
-    private :gem
+# Record's SQLite adapter asks for sqlite3 >= 2.1 that way): a gem the
+# installer put on the load path, or one the image has built in or stands in
+# for (sqlite3, in NATIVE_GEMS), is there in the one version there is.
+# Prepended, so it still answers after a gem loads the full RubyGems
+# (railties does), whose own Kernel#gem knows none of the installed gems;
+# any other name goes to that one, when it is there. No require in here: a
+# gem that asks for itself while it loads would recurse until the VM traps.
+module ChunkyKernelGem
+  def gem(name, *requirements)
+    name = name.to_s
+    return true if BrowserGems.installed.key?(name) || BrowserGems::NATIVE_GEMS.include?(name) ||
+                   BrowserGems::DEFAULT_GEMS.include?(name)
+
+    defined?(super) ? super : true
   end
+  private :gem
 end
+Kernel.prepend(ChunkyKernelGem)
 # ...but the stub does not last: a gem that loads full RubyGems (rubyzip
 # does, so ruby_pptx does) brings the real Gem.find_files, whose plugin scan
 # finds the wasm image's bundled minitest 6 and loads it over this 5.x -

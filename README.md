@@ -13,7 +13,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   IRB and reading the Ruby documentation, to
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, Ruby on Rails itself booted in the page
-  (routes, controllers and views, then Active Record on SQLite), 3D graphics, tables, frames and colours
+  (routes, controllers and views, Active Record on SQLite, then a page from
+  the database with `resources`), 3D graphics, tables, frames and colours
   for the terminal with the [TTY toolkit](https://ttytoolkit.org),
   sketches that move and follow the mouse with
   [Processing](https://github.com/xord/processing), test data that looks
@@ -373,7 +374,7 @@ ruby server_test.rb       # the optional server (server/)
 ruby dev_server_test.rb   # the bridges serve only the course's pages, the embed's headers; nginx says the same
 node embed_test.mjs       # an embedded cell on another site (dev server with FRAME_ANCESTORS="http://blog.test:*")
 node picoruby_test.mjs    # the PicoRuby lesson: cells and IRB on PicoRuby.wasm in a worker
-node rails_test.mjs       # lessons `rails` and `activerecord`: Rails boots from the cache, views, the log pane, Active Record on SQLite (en, de)
+node rails_test.mjs       # lessons `rails`, `activerecord`, `rails-mvc`: Rails boots from the cache, views, the log pane, Active Record on SQLite (en, de)
 ruby ../tools/vendor_picoruby.rb --check # the PicoRuby runtime is the one PICORUBY_VERSION.txt records
 ruby ../tools/build_embed_ui.rb --check   # html/embed-ui.js has lessons.js's ui strings
 BASE=http://127.0.0.1:8012/ node permalink_test.mjs   # permalinks, against the server

@@ -657,8 +657,10 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   `Gem.default_dir` (ActiveSupport's BacktraceCleaner and file watcher: the
   installed gems' directory, `BrowserGems::ROOT`), `Gem.win_platform?` (no)
   and `Kernel#gem` (a no-op: Active Record's SQLite adapter asks for sqlite3
-  2.1). `error_highlight` is loaded: the image only declares the module,
-  and Rails' error page calls `ErrorHighlight.spot` for every frame.
+  2.1; a module prepended to Kernel, so it outlives the full RubyGems
+  that railties loads, §6v). `error_highlight` is loaded: the image only
+  declares the module, and Rails' error page calls `ErrorHighlight.spot`
+  for every frame.
 - `STDOUT` is `CellStdout` (sandbox_sim.rb): a cell's output is caught by
   swapping `$stdout` for a StringIO per run, so an object that keeps the
   stream it was given (a Logger: `config.logger = Logger.new(STDOUT)`)
@@ -1609,7 +1611,7 @@ and solutions on the real `jruby.js` under Node (`test/ruboto_node.mjs`,
 §6t), `ruby tools/vendor_ruboto.rb --check`. Deploy: nothing new - the phone's files are in git, the stand-ins
 are in `jruby.js` (§6t's `vendor_jruby.rb` and `publish_jruby`).
 
-## 6v. Rails in the page (lessons `rails` and `activerecord`)
+## 6v. Rails in the page (lessons `rails`, `activerecord`, `rails-mvc`)
 
 Real Rails 8.1 (railties, actionpack, actionview, activesupport) from the
 gem cache, as one file - the shape of Rails' own bug report templates - in
@@ -1699,6 +1701,40 @@ would also load it, but only after a first run that fails. The lesson is
 (`Gericht` → `gerichts`) - the lesson says so. Forms (POST) would need the
 mini browser to submit them (it only GETs); `has_many`/`belongs_to` are
 mentioned, not shown.
+
+**The two together** (lesson `rails-mvc`): the same `Diner` application
+(it reopens the class and makes the folders and the empty routes file only
+where they are missing, so it runs first or after the Rails lesson alike),
+Active Record on `db/diner.sqlite3` under `Rails.root`, `resources :dishes,
+only: [:index, :show]`, `link_to dish.name, dish` and `number_to_currency`;
+the exercise adds the `show` action and the dish's name to its view. Its
+traps:
+
+- **No mtimes on the wasm filesystem**: `File.mtime` is 1970 for every
+  file, so Action View's `CacheExpiry::ViewReloader` (the file watcher that
+  drops compiled templates in development) never sees a rewritten view -
+  it does see a new file, by the count. The installer's patch on
+  `actionview` (`POST_INSTALL_PATCHES`) makes the reloader report a change
+  before every request and drop the templates, a few ms each. Without it
+  the exercise's rewritten `show.html.erb` rendered as compiled from the
+  starter - and the first lesson got away with it only because its
+  exercise rewrites routes, not views.
+- **A view without an action**: Rails renders `show.html.erb` on its own
+  when the template exists and the controller has no `show` (implicit
+  render), so the starter's error is `undefined method 'price' for nil`,
+  not a missing action - the task text says so.
+- **`Kernel#gem` after RubyGems**: railties loads the full RubyGems, whose
+  own `Kernel#gem` knows none of the installed gems, so Active Record's
+  `gem "sqlite3", ">= 2.1"` failed in this lesson while the Active Record
+  lesson (no railties) was fine. The stub is now a module prepended to
+  Kernel (`ChunkyKernelGem`, main.rb): true for an installed, native or
+  default gem, else the real `gem`. It must not `require`: a gem asking
+  for itself while it loads recursed until the VM trapped ("unreachable").
+- German: `ActiveSupport::Inflector.inflections(:en) { |i| i.irregular
+  "gericht", "gerichte" }` once, and `Gericht` finds `gerichte` and
+  `resources :gerichte` makes `gericht_path`/`gerichte_path` - nicer than
+  the `self.table_name` of the Active Record lesson, which the text
+  contrasts.
 
 ## 7. nginx and the proxy
 

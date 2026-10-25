@@ -325,6 +325,25 @@ module BrowserGems
         end
       RUBY
     },
+    # The wasm filesystem keeps no mtimes - every file reads as 1970 - so a
+    # view written again is invisible to Action View's file watcher, and a
+    # cell that rewrites a template (lesson `rails-mvc`'s exercise) would
+    # keep seeing the one compiled first. In development the watcher's job
+    # is to drop the compiled templates when a file changed; here one may
+    # have changed before every request, so they are dropped every time
+    # (compiling a view again costs a few ms).
+    "actionview" => {
+      "lib/action_view/cache_expiry.rb" => <<~'RUBY'
+        module ActionView
+          module CacheExpiry
+            class ViewReloader
+              def updated? = true
+              def execute = reload!
+            end
+          end
+        end
+      RUBY
+    },
     # I18n reads its load path on the first lookup - for Faker 318 YAML files,
     # 4.6 MB, about six seconds in the browser. That is loading a library:
     # off a live run's clock (autorun.rb), and not done in a live run at all,

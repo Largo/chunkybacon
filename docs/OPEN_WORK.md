@@ -43,10 +43,11 @@ Last updated 2026-10-25.
     lesson does it yet);
   - the design's nice-to-haves (LCD, WS2812, IRQ, a webcam for the camera,
     a board switch, Web Serial to a real Pico): `tmp/pico-research/DESIGN.md` §7.
-- Lessons `rails` and `activerecord` (2026-10-25, HANDOVER §6v): Rails 8.1
-  boots in the page from the gem cache - routes file, controller, views,
-  the mini browser's new log pane - and Active Record runs on the sqlite3
-  stand-in (§6f). Open there: forms need the mini browser to POST;
+- Lessons `rails`, `activerecord` and `rails-mvc` (2026-10-25, HANDOVER
+  §6v): Rails 8.1 boots in the page from the gem cache - routes file,
+  controller, views, the mini browser's new log pane - Active Record runs
+  on the sqlite3 stand-in (§6f), and the third lesson joins them with
+  `resources`. Open there: forms need the mini browser to POST;
   `has_many`/`belongs_to` are only mentioned; the browser tests run the
   lessons in en and de, nothing runs the Japanese cells (they are the
   English code).
