@@ -4731,7 +4731,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "DinerApp.routes.routes.reject(&:internal).each do |route|\n  ziel = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{ziel}\"\nend"
+            "code": "ImbissApp.routes.routes.reject(&:internal).each do |route|\n  ziel = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{ziel}\"\nend"
           },
           {
             "t": "h",
