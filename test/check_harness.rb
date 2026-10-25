@@ -252,7 +252,7 @@ SOLUTION_LANG = { "ja" => "en" }.freeze
 # Sequel's sqlite3 to sql.js (html/sqlite3_sqljs.rb), and Herb's parser is
 # its WebAssembly build (html/herb_bridge.rb) - only a page has them;
 # test/browser_test.mjs runs them.
-BROWSER_ONLY = %w[pycall sympy numpy matplotlib sklearn sequel erb activerecord rails-mvc].freeze
+BROWSER_ONLY = %w[pycall sympy numpy matplotlib sklearn sequel erb activerecord rails-mvc rails-forms].freeze
 
 # the Rumale exercise's picture of a seven (its starter defines it too)
 RUMALE_SEVEN = "PIC = %w[.######. ......#. .....#.. ....#... ...#.... ...#.... ..#..... ..#.....].join(\"\\n\") + \"\\n\"\n"
@@ -2139,7 +2139,7 @@ show_browser TimelogWeb, "/")]
     get "/speck" => "kueche#speck"
   end
 RUBY
-Imbiss.reload_routes!
+ImbissApp.reload_routes!
 
 class KuecheController < ActionController::Base
   def speck
@@ -2147,7 +2147,7 @@ class KuecheController < ActionController::Base
   end
 end
 
-show_browser Imbiss, "/speck")],
+show_browser ImbissApp, "/speck")],
     "en" => [%(Rails.root.join("config/routes.rb").write(<<~RUBY)
   Rails.application.routes.draw do
     root "diner#home"
@@ -2156,7 +2156,7 @@ show_browser Imbiss, "/speck")],
     get "/bacon" => "kitchen#bacon"
   end
 RUBY
-Diner.reload_routes!
+DinerApp.reload_routes!
 
 class KitchenController < ActionController::Base
   def bacon
@@ -2164,7 +2164,7 @@ class KitchenController < ActionController::Base
   end
 end
 
-show_browser Diner, "/bacon")]
+show_browser DinerApp, "/bacon")]
   }
 }
 

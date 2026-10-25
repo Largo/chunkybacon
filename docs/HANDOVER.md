@@ -471,7 +471,7 @@ an SVG's text, a Rubyvis chart (§6o) or the name of a file the cell wrote;
 check, in `turtle.rb`, §6),
 `show_game(width:, height:) { |g| ... }` (a grid game the page drives; a
 check plays `games`, in `game.rb`, §6),
-`show_browser(app, path)` + `mock_get`, `show_irb`, `show_files`, `show_three(scene, camera, orbit:, &animate)`,
+`show_browser(app, path)` + `mock_get`, `mock_post`, `show_irb`, `show_files`, `show_three(scene, camera, orbit:, &animate)`,
 `show_shoes { ... }`, `show_letter(boxes:) { |digits| ... }` (§6e),
 `spinel(code)` / `show_spinel_irb` (Spinel, in `spinel.rb`, §6n; in a lesson with `"spinel": true` every cell is run as `spinel(its code)` - `ChunkySpinel.cell_source`, `Course#spinel?`),
 `download_file(data, name)`, `show_pdf(pdf)` (a file
@@ -695,6 +695,20 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   loads after the cell has run, so without the pane the log of every
   request would go to the console. The Rack env carries `REMOTE_ADDR`
   127.0.0.1, so a log line reads `for 127.0.0.1 at …` as on a server.
+  **Forms**: a submit button (or Enter in a text field) inside the page
+  sends its form as a browser would - the fields as `FormData` with the
+  button pressed, urlencoded, a GET as the query string, a POST as the body
+  with its content type (`submit_browser_form`). **Cookies**: what the app
+  sets (`set-cookie`, Rack 3's array or newline-joined string) is kept per
+  widget (`@browser_cookies[bid]`, `Max-Age=0` or a past `Expires` forgets
+  one) and sent back as `HTTP_COOKIE`, so a Rails session, its flash and
+  the authenticity token work. **Redirects**: 301/302/303 are followed with
+  a GET, 307/308 with the same request, five at most; the URL bar shows
+  where it landed (`browser_request`). `RackPlayground.request` takes any
+  method, body, content type and cookie; `RackPlayground.post` and
+  `Kernel#mock_post(app, path, params)` (status, body, location) are for
+  checks: the forms lesson's check posts an empty name with a price and
+  reads the price back from the 422 page, so it saves nothing.
 - **show_three**: one shared `Three::Backends::ThreeJS` for all stages
   (a second backend rebuilds a clean scene as defaults); canvas ids from a
   page-wide counter; contexts disposed on re-run/lesson change.
@@ -1295,7 +1309,7 @@ program and its data file for download, to build at home:
   hand and deletes it again. Paths use `/`: ruby.wasm's `File.dirname` is
   POSIX and does not split at `\` (Ruby on Windows takes both).
 - The exercise's check sets and deletes `OCRAN_EXECUTABLE` itself
-  (`D:/Apps/Imbiss.exe`).
+  (`D:/Apps/ImbissApp.exe`).
 - The downloadable program was run with a real Ruby (plain, with
   `OCRAN_EXECUTABLE` pointing elsewhere, and with `Ocran` defined); the .exe
   itself was not built here.
@@ -1611,7 +1625,7 @@ and solutions on the real `jruby.js` under Node (`test/ruboto_node.mjs`,
 §6t), `ruby tools/vendor_ruboto.rb --check`. Deploy: nothing new - the phone's files are in git, the stand-ins
 are in `jruby.js` (§6t's `vendor_jruby.rb` and `publish_jruby`).
 
-## 6v. Rails in the page (lessons `rails`, `activerecord`, `rails-mvc`)
+## 6v. Rails in the page (lessons `rails`, `activerecord`, `rails-mvc`, `rails-forms`)
 
 Real Rails 8.1 (railties, actionpack, actionview, activesupport) from the
 gem cache, as one file - the shape of Rails' own bug report templates - in
@@ -1619,12 +1633,14 @@ three cells that share the lesson's binding:
 
 1. **Boot**: `install_gem "rails"`, `require "rails"` and
    `"action_controller/railtie"`, the app's folders, then
-   `class Diner < Rails::Application` with `config.root = "/tmp/diner"`,
+   `class DinerApp < Rails::Application` (`ImbissApp` in German: the
+   Sinatra lesson's app is `Diner`/`Imbiss`, and a class lives as long as
+   the page, §3) with `config.root = "/tmp/diner"`,
    `eager_load = false`, `consider_all_requests_local = true` (the error
    page with details, as in development; otherwise a missing route is an
    empty 404) and `logger = Logger.new(STDOUT)` (the `CellStdout` stand-in,
    §5, so the log reaches the cell or the mini browser's log pane).
-   `Diner.initialize! unless Diner.initialized?` - `initialize!` raises the
+   `DinerApp.initialize! unless DinerApp.initialized?` - `initialize!` raises the
    second time, and learners run cells again. From the cache: install and
    load 3.5 s, `initialize!` 1.8 s, the first request 0.1 s, then a few
    ms each (Chrome). Live runs: a cached install and the requires are off
@@ -1632,10 +1648,10 @@ three cells that share the lesson's binding:
    is "stopped" after it has booted - harmless, and the app cell and the
    exercise then run live in 20 ms (the mini browser follows the typing).
 2. **The app**: `config/routes.rb` written with `Rails.application.routes.draw`
-   and read with `Diner.reload_routes!`, two views written under
+   and read with `DinerApp.reload_routes!`, two views written under
    `app/views/diner/`, `DinerController < ActionController::Base` with
-   actions that render by convention, `show_browser Diner, "/"`.
-3. **The route table** from `Diner.routes.routes.reject(&:internal)`.
+   actions that render by convention, `show_browser DinerApp, "/"`.
+3. **The route table** from `DinerApp.routes.routes.reject(&:internal)`.
 
 The exercise rewrites `config/routes.rb` with one more route and adds a
 second controller (`KitchenController#bacon`, `KuecheController#speck`);
@@ -1653,7 +1669,7 @@ Traps, each found the hard way:
   (`config.enable_reloading`, on by default) reloads *all* routes whenever
   a watched file changed - a view rewritten by a re-run of the app cell is
   enough - and then finds none: every path is Rails' welcome page.
-  `Diner.routes.draw` in a cell instead of the file has the same fate.
+  `DinerApp.routes.draw` in a cell instead of the file has the same fate.
 - **`app/views` must exist before `initialize!`** too: the controller's
   view paths are `paths["app/views"].existent` when `ActionController::Base`
   loads; a folder made later gives `MissingExactTemplate` for every action.
@@ -1677,7 +1693,7 @@ Traps, each found the hard way:
   `initialize!`: `tzinfo-data` is in the cache as an extra dependency of
   tzinfo (`EXTRA_DEPS` in tools/build_gem_cache.rb, manifest.json), 295 KB,
   0.3 s. `config.time_zone = "Bern"` works.
-- One `Rails.application` per page: a second lesson would reopen `Diner`,
+- One `Rails.application` per page: a second lesson would reopen `DinerApp`,
   not make an app of its own (`Rails.app_class` is set once).
 
 **Active Record** (lesson `activerecord`, right after): `require
@@ -1702,7 +1718,7 @@ would also load it, but only after a first run that fails. The lesson is
 mini browser to submit them (it only GETs); `has_many`/`belongs_to` are
 mentioned, not shown.
 
-**The two together** (lesson `rails-mvc`): the same `Diner` application
+**The two together** (lesson `rails-mvc`): the same `DinerApp` application
 (it reopens the class and makes the folders and the empty routes file only
 where they are missing, so it runs first or after the Rails lesson alike),
 Active Record on `db/diner.sqlite3` under `Rails.root`, `resources :dishes,
@@ -1735,6 +1751,28 @@ traps:
   `resources :gerichte` makes `gericht_path`/`gerichte_path` - nicer than
   the `self.table_name` of the Active Record lesson, which the text
   contrasts.
+
+**Forms** (lesson `rails-forms`): the app and data cells of `rails-mvc`
+(the generator copies them), then `resources :dishes, only: [:index,
+:show, :new, :create]`, `new.html.erb` with `form_with model: @dish`,
+`create` with `params.expect(dish: [:name, :price])`, `redirect_to @dish,
+notice:` and `render :new, status: :unprocessable_entity`; the index and
+show views print `notice`. In the mini browser (§6: forms, cookies,
+redirects) the empty name comes back as 422 with the message and the
+typed price, a valid form lands on the dish's page with the flash shown
+once, the log shows `Started POST`, the `INSERT`, `Redirected to` and the
+GET after it. Forgery protection is on (the token is in the form and in
+the POST's parameters) and passes because the session cookie comes back;
+`mock_post` without a session passes too (no `load_defaults`, so
+`default_protect_from_forgery` is off for the check's bare request - the
+browser path verifies the token all the same). The exercise adds the
+price field and lets `create` accept it; its check posts an empty name
+with a price and expects `value="2.8"` on the 422 page, so it writes
+nothing. `secret_key_base`: Rails generates `tmp/local_secret.txt` under
+`Rails.root` on the first session (the wasm filesystem takes it).
+`test/rails_test.mjs` runs all four lessons in en and de, and `rails` and
+`rails-forms` in ja (the Japanese cells are the English code under the
+Japanese interface).
 
 ## 7. nginx and the proxy
 

@@ -31,7 +31,7 @@ const run = async (lang, words) => {
 
   await page.goto(`${BASE}?lang=${lang}#rails`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
-  check(`${lang}: the lesson opens`, (await page.textContent('#lessonBody h2')).includes('Rails'));
+  check(`${lang}: the lesson opens`, /Rails/.test(await page.textContent('#lessonBody h2')));
   const [boot, app, routes, exercise] = await codeCells();
 
   // 1. boot: Rails from the cache, the application initialized
@@ -176,12 +176,78 @@ const runMvc = async (lang, words) => {
   await page.close();
 };
 
+// lesson `rails-forms`: the mini browser sends a form - the empty name comes
+// back as 422 with its message, a dish is created, the redirect is followed
+// and the flash shows once (a session cookie kept by the mini browser)
+const runForms = async (lang, words) => {
+  const page = await browser.newPage({ locale: lang === 'de' ? 'de-DE' : 'en-US' });
+  page.on('pageerror', (e) => { console.log('[pageerror]', e.message); failures++; });
+  const out = (idx) => page.evaluate((i) => document.getElementById(`cell-out-${i}`).innerText, idx);
+  const until = (fn, arg, timeout = 90000) => page.waitForFunction(fn, arg, { timeout }).then(() => true, () => false);
+  const codeCells = () => page.$$eval('.run-cell', (buttons) => buttons.map((b) => b.getAttribute('data-idx')));
+  const outHas = (idx, re, timeout) => until(([i, src]) => new RegExp(src).test(document.getElementById(`cell-out-${i}`).innerText), [idx, re.source], timeout);
+  const mbText = (idx) => page.$eval(`#cell-out-${idx} .mb-view`, (view) => view.shadowRoot.querySelector('.mb-page').innerText);
+  const mbStatus = (idx) => page.$eval(`#cell-out-${idx} .mb-status`, (el) => el.textContent);
+  const mbUrl = (idx) => page.$eval(`#cell-out-${idx} .mb-url`, (el) => el.value);
+  const mbHas = (idx, re) => until(([i, src]) => { const v = document.querySelector(`#cell-out-${i} .mb-view`); return v && v.shadowRoot && new RegExp(src).test(v.shadowRoot.textContent); }, [idx, re.source]);
+  const fill = (idx, name, value) => page.$eval(`#cell-out-${idx} .mb-view`, (view, [n, v]) => { view.shadowRoot.querySelector(`input[name="${n}"]`).value = v; }, [name, value]);
+  const send = (idx) => page.$eval(`#cell-out-${idx} .mb-view`, (view) => view.shadowRoot.querySelector('input[type=submit]').click());
+
+  await page.goto(`${BASE}?lang=${lang}#rails-forms`, { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
+  check(`${lang}: the forms lesson opens`, /new|create/i.test(await page.textContent('#lessonBody h2')));
+  const [boot, db, app, exercise] = await codeCells();
+
+  await page.click(`.run-cell[data-idx="${boot}"]`);
+  check(`${lang}: forms: Rails boots`, await outHas(boot, /=> "8\.\d+\.\d+"/, 180000), await out(boot));
+  await page.click(`.run-cell[data-idx="${db}"]`);
+  check(`${lang}: forms: the dishes`, await outHas(db, /=> 3(\n|$)/, 180000), await out(db));
+  await page.click(`.run-cell[data-idx="${app}"]`);
+  check(`${lang}: forms: the index with the link to the form`, await mbHas(app, /CHF 4.50/), await out(app));
+  await page.$eval(`#cell-out-${app} .mb-view`, (view) => [...view.shadowRoot.querySelectorAll('a')].pop().click());
+  check(`${lang}: forms: the new form`, await mbHas(app, new RegExp(words.newTitle)) && (await mbUrl(app)) === `/${words.resource}/new`, await mbText(app));
+  // sent empty: 422, the message, the price typed still there
+  await fill(app, `${words.param}[${words.price}]`, '1.5');
+  await send(app);
+  check(`${lang}: forms: an empty name comes back as 422 with the message`, await mbHas(app, /can't be blank/) && (await mbStatus(app)) === '422', await mbText(app));
+  check(`${lang}: forms: what was typed is still in the form`, await page.$eval(`#cell-out-${app} .mb-view`, (view, n) => view.shadowRoot.querySelector(`input[name="${n}"]`).value, `${words.param}[${words.price}]`) === '1.5');
+  // a dish: created, redirect followed, the flash once
+  await fill(app, `${words.param}[name]`, 'Tea');
+  await send(app);
+  check(`${lang}: forms: created, redirected to the dish, the flash shown`, await mbHas(app, new RegExp(`Tea ${words.notice}`)) && (await mbStatus(app)) === '200' && /^\/\w+\/\d+$/.test(await mbUrl(app)), (await mbUrl(app)) + ' ' + await mbText(app));
+  const log = await page.$eval(`#cell-out-${app} .mb-log`, (el) => el.innerText);
+  check(`${lang}: forms: the log has the POST, the redirect and the GET after it`, /Started POST/.test(log) && /Redirected to/.test(log) && /INSERT INTO/.test(log), log.slice(-600));
+  await page.$eval(`#cell-out-${app} .mb-view`, (view) => view.shadowRoot.querySelector('a').click());
+  check(`${lang}: forms: back on the index, the flash is gone and Tea is listed`, await mbHas(app, /Tea/) && !new RegExp(words.notice).test(await mbText(app)), await mbText(app));
+
+  await page.click(`.run-cell[data-idx="${exercise}"]`);
+  check(`${lang}: forms: the starter's form has no price field`, await mbHas(exercise, new RegExp(words.newTitle)) && !(await page.$eval(`#cell-out-${exercise} .mb-view`, (view, n) => !!view.shadowRoot.querySelector(`input[name="${n}"]`), `${words.param}[${words.price}]`)), await mbText(exercise));
+  check(`${lang}: forms: the starter does not pass`, !(await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+  const starter = await page.evaluate((i) => window.cellEditors[i].getValue(), exercise);
+  const solution = starter.replace(/<%#[^%]*%>/, `<%= ${words.builder}.label :${words.price} %>\n    <%= ${words.builder}.number_field :${words.price}, step: 0.1 %>`)
+    .replace(`[:name]`, `[:name, :${words.price}]`);
+  check(`${lang}: forms: the solution differs from the starter`, solution !== starter && solution.includes('number_field') && solution.includes(`:name, :${words.price}]`), solution);
+  await page.evaluate(([i, c]) => window.cellEditors[i].setValue(c), [exercise, solution]);
+  await page.click(`.run-cell[data-idx="${exercise}"]`);
+  check(`${lang}: forms: the solution passes`, await until(() => document.getElementById('chunkyChat').className.includes('pass'), null), await out(exercise));
+  await fill(exercise, `${words.param}[name]`, 'Juice');
+  await fill(exercise, `${words.param}[${words.price}]`, '3');
+  await send(exercise);
+  check(`${lang}: forms: a dish with a price through the finished form`, await mbHas(exercise, /Juice/) && /CHF 3.00/.test(await mbText(exercise)), await mbText(exercise));
+  await page.close();
+};
+
 await run('en', { home: 'home', hello: 'hello', bacon: 'bacon' });
 await run('de', { home: 'start', hello: 'hallo', bacon: 'speck' });
 await runModel('en', { db: 'diner.db', table: 'dishes', model: 'Guest', visits: 'visits' });
 await runModel('de', { db: 'imbiss.db', table: 'gerichte', model: 'Gast', visits: 'besuche' });
 await runMvc('en', { resource: 'dishes', model: 'Dish', ivar: 'dish', first: 'Bacon' });
 await runMvc('de', { resource: 'gerichte', model: 'Gericht', ivar: 'gericht', first: 'Speck' });
+await runForms('en', { resource: 'dishes', param: 'dish', price: 'price', builder: 'form', newTitle: 'New dish', notice: 'is on the menu' });
+await runForms('de', { resource: 'gerichte', param: 'gericht', price: 'preis', builder: 'formular', newTitle: 'Neues Gericht', notice: 'steht auf der Speisekarte' });
+// the Japanese lessons run the English code under the Japanese interface
+await run('ja', { home: 'home', hello: 'hello', bacon: 'bacon' });
+await runForms('ja', { resource: 'dishes', param: 'dish', price: 'price', builder: 'form', newTitle: 'New dish', notice: 'is on the menu' });
 
 await browser.close();
 console.log(failures === 0 ? 'ALL RAILS CHECKS OK' : `${failures} failures`);

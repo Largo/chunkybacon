@@ -4467,15 +4467,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\n\n# rails new legt Dutzende Ordner und Dateien an - hier: ein Ordner für die\n# Views und die Routen-Datei, vorerst leer\nFileUtils.mkdir_p(\"/tmp/imbiss/app/views\")\nFileUtils.mkdir_p(\"/tmp/imbiss/config\")\nFile.write(\"/tmp/imbiss/config/routes.rb\", \"Rails.application.routes.draw do\nend\n\")\n\nclass Imbiss < Rails::Application\n  config.root = \"/tmp/imbiss\"\n  config.eager_load = false                 # Code erst laden, wenn er gebraucht wird\n  config.consider_all_requests_local = true # Fehlerseiten mit Details, wie in der Entwicklung\n  config.logger = Logger.new(STDOUT)       # das Log erscheint unter der Seite\nend\nImbiss.initialize! unless Imbiss.initialized? # ein Server startet einmal, die App auch\nRails.version"
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\n\n# rails new legt Dutzende Ordner und Dateien an - hier: ein Ordner für die\n# Views und die Routen-Datei, vorerst leer\nFileUtils.mkdir_p(\"/tmp/imbiss/app/views\")\nFileUtils.mkdir_p(\"/tmp/imbiss/config\")\nFile.write(\"/tmp/imbiss/config/routes.rb\", \"Rails.application.routes.draw do\nend\n\")\n\nclass ImbissApp < Rails::Application\n  config.root = \"/tmp/imbiss\"\n  config.eager_load = false                 # Code erst laden, wenn er gebraucht wird\n  config.consider_all_requests_local = true # Fehlerseiten mit Details, wie in der Entwicklung\n  config.logger = Logger.new(STDOUT)       # das Log erscheint unter der Seite\nend\nImbissApp.initialize! unless ImbissApp.initialized? # ein Server startet einmal, die App auch\nRails.version"
           },
           {
             "t": "h",
-            "html": "<p><code>Rails.version</code> antwortet: Ein komplettes Rails läuft. Mit <code>initialize!</code> hat die Anwendung ihre <em>Initializer</em> durchlaufen und ihren Middleware-Stapel gebaut – genau das, was <code>bin/rails server</code> tut, bevor er auf Anfragen wartet. (Die Absicherung <code>unless Imbiss.initialized?</code> lässt dich die Zelle nochmals ausführen – eine App startet nur einmal.)</p><p>Rails sortiert eine Web-App in drei Arten von Teilen, <strong>MVC</strong>:</p><ul><li><strong>Routen</strong> (<code>config/routes.rb</code>) sagen, welcher Pfad zu welcher Controller-Action gehört: <code>get \"/speisekarte\" => \"imbiss#speisekarte\"</code>.</li><li>Ein <strong>Controller</strong> (<code>app/controllers/imbiss_controller.rb</code>) ist eine Klasse; jede öffentliche Methode ist eine <em>Action</em>, die zusammensucht, was die Seite braucht.</li><li>Eine <strong>View</strong> (<code>app/views/imbiss/speisekarte.html.erb</code>) ist eine ERB-Vorlage (Lektion {{nr:erb}}), die daraus HTML macht – und Rails findet sie über ihren Namen: Die Action <code>speisekarte</code> des <code>ImbissController</code> rendert <code>imbiss/speisekarte.html.erb</code>, ohne dass du es sagst. Das ist <em>Konvention vor Konfiguration</em>.</li></ul><p>(Das M, das <em>Model</em>, sind die Daten – die Aufgabe von Active Record, eine Geschichte für eine andere Lektion.) Hier wohnen alle drei in einer Zelle: Die Routen-Datei und die Views werden in den Ordner der App geschrieben, wohin <code>rails new</code> sie gelegt hätte, und der Controller ist eine Klasse. <code>reload_routes!</code> tut, was der Entwicklungsserver von selbst tut, wenn sich <code>config/routes.rb</code> ändert – er liest die Datei neu:</p>"
+            "html": "<p><code>Rails.version</code> antwortet: Ein komplettes Rails läuft. Mit <code>initialize!</code> hat die Anwendung ihre <em>Initializer</em> durchlaufen und ihren Middleware-Stapel gebaut – genau das, was <code>bin/rails server</code> tut, bevor er auf Anfragen wartet. (Die Absicherung <code>unless ImbissApp.initialized?</code> lässt dich die Zelle nochmals ausführen – eine App startet nur einmal.)</p><p>Rails sortiert eine Web-App in drei Arten von Teilen, <strong>MVC</strong>:</p><ul><li><strong>Routen</strong> (<code>config/routes.rb</code>) sagen, welcher Pfad zu welcher Controller-Action gehört: <code>get \"/speisekarte\" => \"imbiss#speisekarte\"</code>.</li><li>Ein <strong>Controller</strong> (<code>app/controllers/imbiss_controller.rb</code>) ist eine Klasse; jede öffentliche Methode ist eine <em>Action</em>, die zusammensucht, was die Seite braucht.</li><li>Eine <strong>View</strong> (<code>app/views/imbiss/speisekarte.html.erb</code>) ist eine ERB-Vorlage (Lektion {{nr:erb}}), die daraus HTML macht – und Rails findet sie über ihren Namen: Die Action <code>speisekarte</code> des <code>ImbissController</code> rendert <code>imbiss/speisekarte.html.erb</code>, ohne dass du es sagst. Das ist <em>Konvention vor Konfiguration</em>.</li></ul><p>(Das M, das <em>Model</em>, sind die Daten – die Aufgabe von Active Record, Lektion {{nr:activerecord}}.) Hier wohnen alle drei in einer Zelle: Die Routen-Datei und die Views werden in den Ordner der App geschrieben, wohin <code>rails new</code> sie gelegt hätte, und der Controller ist eine Klasse. <code>reload_routes!</code> tut, was der Entwicklungsserver von selbst tut, wenn sich <code>config/routes.rb</code> ändert – er liest die Datei neu:</p>"
           },
           {
             "t": "c",
-            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"imbiss#start\"\n    get \"/speisekarte\" => \"imbiss#speisekarte\", as: :speisekarte\n    get \"/hallo/:name\" => \"imbiss#hallo\"\n  end\nRUBY\nImbiss.reload_routes!\n\nRails.root.join(\"app/views/imbiss\").mkpath\nRails.root.join(\"app/views/imbiss/start.html.erb\").write(<<~ERB)\n  <h1>Chunkys Imbiss</h1>\n  <p>Willkommen! Heute im Angebot: Speck.</p>\n  <%= link_to \"Zur Speisekarte\", speisekarte_path %>\nERB\nRails.root.join(\"app/views/imbiss/speisekarte.html.erb\").write(<<~ERB)\n  <h2>Speisekarte</h2>\n  <ul>\n    <% @gerichte.each do |gericht| %>\n      <li><%= gericht %></li>\n    <% end %>\n  </ul>\n  <%= link_to \"Zurück\", root_path %>\nERB\n\nclass ImbissController < ActionController::Base\n  def start\n  end\n\n  def speisekarte\n    @gerichte = [\"Speck\", \"Ei\", \"Kaffee\"]\n  end\n\n  def hallo\n    render plain: \"Hallo, #{params[:name]}! Schön, dass du da bist.\"\n  end\nend\n\nshow_browser Imbiss, \"/\""
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"imbiss#start\"\n    get \"/speisekarte\" => \"imbiss#speisekarte\", as: :speisekarte\n    get \"/hallo/:name\" => \"imbiss#hallo\"\n  end\nRUBY\nImbissApp.reload_routes!\n\nRails.root.join(\"app/views/imbiss\").mkpath\nRails.root.join(\"app/views/imbiss/start.html.erb\").write(<<~ERB)\n  <h1>Chunkys Imbiss</h1>\n  <p>Willkommen! Heute im Angebot: Speck.</p>\n  <%= link_to \"Zur Speisekarte\", speisekarte_path %>\nERB\nRails.root.join(\"app/views/imbiss/speisekarte.html.erb\").write(<<~ERB)\n  <h2>Speisekarte</h2>\n  <ul>\n    <% @gerichte.each do |gericht| %>\n      <li><%= gericht %></li>\n    <% end %>\n  </ul>\n  <%= link_to \"Zurück\", root_path %>\nERB\n\nclass ImbissController < ActionController::Base\n  def start\n  end\n\n  def speisekarte\n    @gerichte = [\"Speck\", \"Ei\", \"Kaffee\"]\n  end\n\n  def hallo\n    render plain: \"Hallo, #{params[:name]}! Schön, dass du da bist.\"\n  end\nend\n\nshow_browser ImbissApp, \"/\""
           },
           {
             "t": "h",
@@ -4483,7 +4483,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "Imbiss.routes.routes.reject(&:internal).each do |route|\n  ziel = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{ziel}\"\nend"
+            "code": "ImbissApp.routes.routes.reject(&:internal).each do |route|\n  ziel = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{ziel}\"\nend"
           },
           {
             "t": "h",
@@ -4491,8 +4491,8 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "x",
-            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"imbiss#start\"\n    get \"/speisekarte\" => \"imbiss#speisekarte\", as: :speisekarte\n    get \"/hallo/:name\" => \"imbiss#hallo\"\n    # get \"/speck\" => \"kueche#speck\"\n  end\nRUBY\nImbiss.reload_routes!\n\nclass KuecheController < ActionController::Base\n  # def speck\n  #   render plain: \"...\"\n  # end\nend\n\nshow_browser Imbiss, \"/speck\"",
-            "check": "s1, _ = mock_get(Imbiss, \"/\"); s2, b2 = mock_get(Imbiss, \"/speck\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\") && (Imbiss.routes.recognize_path(\"/speck\") rescue nil) == { controller: \"kueche\", action: \"speck\" }",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"imbiss#start\"\n    get \"/speisekarte\" => \"imbiss#speisekarte\", as: :speisekarte\n    get \"/hallo/:name\" => \"imbiss#hallo\"\n    # get \"/speck\" => \"kueche#speck\"\n  end\nRUBY\nImbissApp.reload_routes!\n\nclass KuecheController < ActionController::Base\n  # def speck\n  #   render plain: \"...\"\n  # end\nend\n\nshow_browser ImbissApp, \"/speck\"",
+            "check": "s1, _ = mock_get(ImbissApp, \"/\"); s2, b2 = mock_get(ImbissApp, \"/speck\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\") && (ImbissApp.routes.recognize_path(\"/speck\") rescue nil) == { controller: \"kueche\", action: \"speck\" }",
             "hint": "Beide Teile einkommentieren: die Route <code>get \"/speck\" => \"kueche#speck\"</code> in der Routen-Datei, und im <code>KuecheController</code> die Action <code>def speck</code> mit <code>render plain: \"CHUNKY BACON!\"</code>. Danach die Zelle neu ausführen."
           }
         ]
@@ -4506,15 +4506,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\n\n# rails new makes dozens of folders and files - here: a folder for the\n# views and the routes file, empty for now\nFileUtils.mkdir_p(\"/tmp/diner/app/views\")\nFileUtils.mkdir_p(\"/tmp/diner/config\")\nFile.write(\"/tmp/diner/config/routes.rb\", \"Rails.application.routes.draw do\nend\n\")\n\nclass Diner < Rails::Application\n  config.root = \"/tmp/diner\"\n  config.eager_load = false                 # load code when it is needed, as in development\n  config.consider_all_requests_local = true # error pages with details, as in development\n  config.logger = Logger.new(STDOUT)       # the log goes under the page\nend\nDiner.initialize! unless Diner.initialized? # a server boots once - so does the app\nRails.version"
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\n\n# rails new makes dozens of folders and files - here: a folder for the\n# views and the routes file, empty for now\nFileUtils.mkdir_p(\"/tmp/diner/app/views\")\nFileUtils.mkdir_p(\"/tmp/diner/config\")\nFile.write(\"/tmp/diner/config/routes.rb\", \"Rails.application.routes.draw do\nend\n\")\n\nclass DinerApp < Rails::Application\n  config.root = \"/tmp/diner\"\n  config.eager_load = false                 # load code when it is needed, as in development\n  config.consider_all_requests_local = true # error pages with details, as in development\n  config.logger = Logger.new(STDOUT)       # the log goes under the page\nend\nDinerApp.initialize! unless DinerApp.initialized? # a server boots once - so does the app\nRails.version"
           },
           {
             "t": "h",
-            "html": "<p><code>Rails.version</code> answers: a complete Rails is running. With <code>initialize!</code> the application ran its <em>initializers</em> and built its middleware stack, exactly what <code>bin/rails server</code> does before it listens. (The guard <code>unless Diner.initialized?</code> lets you run the cell again – an app boots once.)</p><p>Rails sorts a web app into three kinds of parts, <strong>MVC</strong>:</p><ul><li><strong>Routes</strong> (<code>config/routes.rb</code>) say which path belongs to which controller action: <code>get \"/menu\" => \"diner#menu\"</code>.</li><li>A <strong>controller</strong> (<code>app/controllers/diner_controller.rb</code>) is a class; each public method is an <em>action</em> that gathers what the page needs.</li><li>A <strong>view</strong> (<code>app/views/diner/menu.html.erb</code>) is an ERB template (lesson {{nr:erb}}) that turns it into HTML – and Rails finds it by its name: the action <code>menu</code> of <code>DinerController</code> renders <code>diner/menu.html.erb</code> without being told. That is <em>convention over configuration</em>.</li></ul><p>(The M, the <em>model</em>, is the data – Active Record's job, a story for another lesson.) Here all three live in one cell: the routes file and the views are written into the app's folder, where <code>rails new</code> would have put them, and the controller is a class. <code>reload_routes!</code> does what the development server does by itself when <code>config/routes.rb</code> changes – it reads the file again:</p>"
+            "html": "<p><code>Rails.version</code> answers: a complete Rails is running. With <code>initialize!</code> the application ran its <em>initializers</em> and built its middleware stack, exactly what <code>bin/rails server</code> does before it listens. (The guard <code>unless DinerApp.initialized?</code> lets you run the cell again – an app boots once.)</p><p>Rails sorts a web app into three kinds of parts, <strong>MVC</strong>:</p><ul><li><strong>Routes</strong> (<code>config/routes.rb</code>) say which path belongs to which controller action: <code>get \"/menu\" => \"diner#menu\"</code>.</li><li>A <strong>controller</strong> (<code>app/controllers/diner_controller.rb</code>) is a class; each public method is an <em>action</em> that gathers what the page needs.</li><li>A <strong>view</strong> (<code>app/views/diner/menu.html.erb</code>) is an ERB template (lesson {{nr:erb}}) that turns it into HTML – and Rails finds it by its name: the action <code>menu</code> of <code>DinerController</code> renders <code>diner/menu.html.erb</code> without being told. That is <em>convention over configuration</em>.</li></ul><p>(The M, the <em>model</em>, is the data – Active Record's job, lesson {{nr:activerecord}}.) Here all three live in one cell: the routes file and the views are written into the app's folder, where <code>rails new</code> would have put them, and the controller is a class. <code>reload_routes!</code> does what the development server does by itself when <code>config/routes.rb</code> changes – it reads the file again:</p>"
           },
           {
             "t": "c",
-            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"diner#home\"\n    get \"/menu\" => \"diner#menu\", as: :menu\n    get \"/hello/:name\" => \"diner#hello\"\n  end\nRUBY\nDiner.reload_routes!\n\nRails.root.join(\"app/views/diner\").mkpath\nRails.root.join(\"app/views/diner/home.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <p>Welcome! Today's special: bacon.</p>\n  <%= link_to \"See the menu\", menu_path %>\nERB\nRails.root.join(\"app/views/diner/menu.html.erb\").write(<<~ERB)\n  <h2>Menu</h2>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li><%= dish %></li>\n    <% end %>\n  </ul>\n  <%= link_to \"Back\", root_path %>\nERB\n\nclass DinerController < ActionController::Base\n  def home\n  end\n\n  def menu\n    @dishes = [\"Bacon\", \"Egg\", \"Coffee\"]\n  end\n\n  def hello\n    render plain: \"Hello, #{params[:name]}! Nice to see you.\"\n  end\nend\n\nshow_browser Diner, \"/\""
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"diner#home\"\n    get \"/menu\" => \"diner#menu\", as: :menu\n    get \"/hello/:name\" => \"diner#hello\"\n  end\nRUBY\nDinerApp.reload_routes!\n\nRails.root.join(\"app/views/diner\").mkpath\nRails.root.join(\"app/views/diner/home.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <p>Welcome! Today's special: bacon.</p>\n  <%= link_to \"See the menu\", menu_path %>\nERB\nRails.root.join(\"app/views/diner/menu.html.erb\").write(<<~ERB)\n  <h2>Menu</h2>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li><%= dish %></li>\n    <% end %>\n  </ul>\n  <%= link_to \"Back\", root_path %>\nERB\n\nclass DinerController < ActionController::Base\n  def home\n  end\n\n  def menu\n    @dishes = [\"Bacon\", \"Egg\", \"Coffee\"]\n  end\n\n  def hello\n    render plain: \"Hello, #{params[:name]}! Nice to see you.\"\n  end\nend\n\nshow_browser DinerApp, \"/\""
           },
           {
             "t": "h",
@@ -4522,7 +4522,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "Diner.routes.routes.reject(&:internal).each do |route|\n  target = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{target}\"\nend"
+            "code": "DinerApp.routes.routes.reject(&:internal).each do |route|\n  target = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{target}\"\nend"
           },
           {
             "t": "h",
@@ -4530,8 +4530,8 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "x",
-            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"diner#home\"\n    get \"/menu\" => \"diner#menu\", as: :menu\n    get \"/hello/:name\" => \"diner#hello\"\n    # get \"/bacon\" => \"kitchen#bacon\"\n  end\nRUBY\nDiner.reload_routes!\n\nclass KitchenController < ActionController::Base\n  # def bacon\n  #   render plain: \"...\"\n  # end\nend\n\nshow_browser Diner, \"/bacon\"",
-            "check": "s1, _ = mock_get(Diner, \"/\"); s2, b2 = mock_get(Diner, \"/bacon\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\") && (Diner.routes.recognize_path(\"/bacon\") rescue nil) == { controller: \"kitchen\", action: \"bacon\" }",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"diner#home\"\n    get \"/menu\" => \"diner#menu\", as: :menu\n    get \"/hello/:name\" => \"diner#hello\"\n    # get \"/bacon\" => \"kitchen#bacon\"\n  end\nRUBY\nDinerApp.reload_routes!\n\nclass KitchenController < ActionController::Base\n  # def bacon\n  #   render plain: \"...\"\n  # end\nend\n\nshow_browser DinerApp, \"/bacon\"",
+            "check": "s1, _ = mock_get(DinerApp, \"/\"); s2, b2 = mock_get(DinerApp, \"/bacon\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\") && (DinerApp.routes.recognize_path(\"/bacon\") rescue nil) == { controller: \"kitchen\", action: \"bacon\" }",
             "hint": "Uncomment both parts: the route <code>get \"/bacon\" => \"kitchen#bacon\"</code> in the routes file, and in <code>KitchenController</code> the action <code>def bacon</code> with <code>render plain: \"CHUNKY BACON!\"</code>. Then run the cell again."
           }
         ]
@@ -4545,15 +4545,15 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\n\n# rails new はフォルダやファイルをたくさん作ります。ここでは、ビューの\n# フォルダと、今はまだ空っぽのルートのファイルだけです\nFileUtils.mkdir_p(\"/tmp/diner/app/views\")\nFileUtils.mkdir_p(\"/tmp/diner/config\")\nFile.write(\"/tmp/diner/config/routes.rb\", \"Rails.application.routes.draw do\nend\n\")\n\nclass Diner < Rails::Application\n  config.root = \"/tmp/diner\"\n  config.eager_load = false                 # コードは必要になったときに読み込む（開発環境と同じ）\n  config.consider_all_requests_local = true # エラーページに詳細を出す（開発環境と同じ）\n  config.logger = Logger.new(STDOUT)       # ログはページの下に出ます\nend\nDiner.initialize! unless Diner.initialized? # サーバーの起動は一度だけ。アプリも同じです\nRails.version"
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\n\n# rails new はフォルダやファイルをたくさん作ります。ここでは、ビューの\n# フォルダと、今はまだ空っぽのルートのファイルだけです\nFileUtils.mkdir_p(\"/tmp/diner/app/views\")\nFileUtils.mkdir_p(\"/tmp/diner/config\")\nFile.write(\"/tmp/diner/config/routes.rb\", \"Rails.application.routes.draw do\nend\n\")\n\nclass DinerApp < Rails::Application\n  config.root = \"/tmp/diner\"\n  config.eager_load = false                 # コードは必要になったときに読み込む（開発環境と同じ）\n  config.consider_all_requests_local = true # エラーページに詳細を出す（開発環境と同じ）\n  config.logger = Logger.new(STDOUT)       # ログはページの下に出ます\nend\nDinerApp.initialize! unless DinerApp.initialized? # サーバーの起動は一度だけ。アプリも同じです\nRails.version"
           },
           {
             "t": "h",
-            "html": "<p><code>Rails.version</code>が答えてくれました。完全なRailsが動いています。<code>initialize!</code>で、アプリケーションは<em>イニシャライザ</em>を順に実行し、ミドルウェアのスタックを組み立てました。<code>bin/rails server</code>がリクエストを待ち始める前にすることと、まったく同じです（<code>unless Diner.initialized?</code>という守りがあるので、このセルは何度でも実行できます。アプリの起動は一度だけだからです）。</p><p>RailsはWebアプリを3種類の部品に分けます。<strong>MVC</strong>です。</p><ul><li><strong>ルート</strong>（<code>config/routes.rb</code>）は、どのパスがどのコントローラーのアクションに対応するかを決めます：<code>get \"/menu\" => \"diner#menu\"</code>。</li><li><strong>コントローラー</strong>（<code>app/controllers/diner_controller.rb</code>）はクラスです。公開メソッドの1つ1つが<em>アクション</em>で、ページに必要なものを集めます。</li><li><strong>ビュー</strong>（<code>app/views/diner/menu.html.erb</code>）はERBテンプレート（レッスン{{nr:erb}}）で、集めたものをHTMLにします。そしてRailsは、ビューを名前で見つけます。<code>DinerController</code>のアクション<code>menu</code>は、何も言わなくても<code>diner/menu.html.erb</code>を描画します。これが<em>設定より規約</em>です。</li></ul><p>（Mの<em>モデル</em>はデータのことで、Active Recordの仕事です。それは別のレッスンの話にしましょう。）ここでは3つとも1つのセルに入っています。ルートのファイルとビューは、<code>rails new</code>なら置いたはずの、アプリのフォルダに書き込みます。コントローラーはクラスです。<code>reload_routes!</code>は、<code>config/routes.rb</code>が変わったときに開発サーバーが自分でしていること、つまりファイルを読み直すことをします。</p>"
+            "html": "<p><code>Rails.version</code>が答えてくれました。完全なRailsが動いています。<code>initialize!</code>で、アプリケーションは<em>イニシャライザ</em>を順に実行し、ミドルウェアのスタックを組み立てました。<code>bin/rails server</code>がリクエストを待ち始める前にすることと、まったく同じです（<code>unless DinerApp.initialized?</code>という守りがあるので、このセルは何度でも実行できます。アプリの起動は一度だけだからです）。</p><p>RailsはWebアプリを3種類の部品に分けます。<strong>MVC</strong>です。</p><ul><li><strong>ルート</strong>（<code>config/routes.rb</code>）は、どのパスがどのコントローラーのアクションに対応するかを決めます：<code>get \"/menu\" => \"diner#menu\"</code>。</li><li><strong>コントローラー</strong>（<code>app/controllers/diner_controller.rb</code>）はクラスです。公開メソッドの1つ1つが<em>アクション</em>で、ページに必要なものを集めます。</li><li><strong>ビュー</strong>（<code>app/views/diner/menu.html.erb</code>）はERBテンプレート（レッスン{{nr:erb}}）で、集めたものをHTMLにします。そしてRailsは、ビューを名前で見つけます。<code>DinerController</code>のアクション<code>menu</code>は、何も言わなくても<code>diner/menu.html.erb</code>を描画します。これが<em>設定より規約</em>です。</li></ul><p>（Mの<em>モデル</em>はデータのことで、Active Recordの仕事です。レッスン{{nr:activerecord}}で学びます。）ここでは3つとも1つのセルに入っています。ルートのファイルとビューは、<code>rails new</code>なら置いたはずの、アプリのフォルダに書き込みます。コントローラーはクラスです。<code>reload_routes!</code>は、<code>config/routes.rb</code>が変わったときに開発サーバーが自分でしていること、つまりファイルを読み直すことをします。</p>"
           },
           {
             "t": "c",
-            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"diner#home\"\n    get \"/menu\" => \"diner#menu\", as: :menu\n    get \"/hello/:name\" => \"diner#hello\"\n  end\nRUBY\nDiner.reload_routes!\n\nRails.root.join(\"app/views/diner\").mkpath\nRails.root.join(\"app/views/diner/home.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <p>Welcome! Today's special: bacon.</p>\n  <%= link_to \"See the menu\", menu_path %>\nERB\nRails.root.join(\"app/views/diner/menu.html.erb\").write(<<~ERB)\n  <h2>Menu</h2>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li><%= dish %></li>\n    <% end %>\n  </ul>\n  <%= link_to \"Back\", root_path %>\nERB\n\nclass DinerController < ActionController::Base\n  def home\n  end\n\n  def menu\n    @dishes = [\"Bacon\", \"Egg\", \"Coffee\"]\n  end\n\n  def hello\n    render plain: \"Hello, #{params[:name]}! Nice to see you.\"\n  end\nend\n\nshow_browser Diner, \"/\""
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"diner#home\"\n    get \"/menu\" => \"diner#menu\", as: :menu\n    get \"/hello/:name\" => \"diner#hello\"\n  end\nRUBY\nDinerApp.reload_routes!\n\nRails.root.join(\"app/views/diner\").mkpath\nRails.root.join(\"app/views/diner/home.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <p>Welcome! Today's special: bacon.</p>\n  <%= link_to \"See the menu\", menu_path %>\nERB\nRails.root.join(\"app/views/diner/menu.html.erb\").write(<<~ERB)\n  <h2>Menu</h2>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li><%= dish %></li>\n    <% end %>\n  </ul>\n  <%= link_to \"Back\", root_path %>\nERB\n\nclass DinerController < ActionController::Base\n  def home\n  end\n\n  def menu\n    @dishes = [\"Bacon\", \"Egg\", \"Coffee\"]\n  end\n\n  def hello\n    render plain: \"Hello, #{params[:name]}! Nice to see you.\"\n  end\nend\n\nshow_browser DinerApp, \"/\""
           },
           {
             "t": "h",
@@ -4561,7 +4561,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "Diner.routes.routes.reject(&:internal).each do |route|\n  target = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{target}\"\nend"
+            "code": "DinerApp.routes.routes.reject(&:internal).each do |route|\n  target = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{target}\"\nend"
           },
           {
             "t": "h",
@@ -4569,8 +4569,8 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "x",
-            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"diner#home\"\n    get \"/menu\" => \"diner#menu\", as: :menu\n    get \"/hello/:name\" => \"diner#hello\"\n    # get \"/bacon\" => \"kitchen#bacon\"\n  end\nRUBY\nDiner.reload_routes!\n\nclass KitchenController < ActionController::Base\n  # def bacon\n  #   render plain: \"...\"\n  # end\nend\n\nshow_browser Diner, \"/bacon\"",
-            "check": "s1, _ = mock_get(Diner, \"/\"); s2, b2 = mock_get(Diner, \"/bacon\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\") && (Diner.routes.recognize_path(\"/bacon\") rescue nil) == { controller: \"kitchen\", action: \"bacon\" }",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"diner#home\"\n    get \"/menu\" => \"diner#menu\", as: :menu\n    get \"/hello/:name\" => \"diner#hello\"\n    # get \"/bacon\" => \"kitchen#bacon\"\n  end\nRUBY\nDinerApp.reload_routes!\n\nclass KitchenController < ActionController::Base\n  # def bacon\n  #   render plain: \"...\"\n  # end\nend\n\nshow_browser DinerApp, \"/bacon\"",
+            "check": "s1, _ = mock_get(DinerApp, \"/\"); s2, b2 = mock_get(DinerApp, \"/bacon\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\") && (DinerApp.routes.recognize_path(\"/bacon\") rescue nil) == { controller: \"kitchen\", action: \"bacon\" }",
             "hint": "2か所のコメントを外してね。ルートのファイルの中のルート<code>get \"/bacon\" => \"kitchen#bacon\"</code>と、<code>KitchenController</code>の中のアクション<code>def bacon</code>（中身は<code>render plain: \"CHUNKY BACON!\"</code>）。書けたら、もう一度セルを実行してね。"
           }
         ]
@@ -4707,7 +4707,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\nrequire \"active_record\"\n\n# die App der Rails-Lektion: Sie startet einmal pro Seite, darum dieselbe\n# Klasse, und ihre Ordner entstehen nur, wenn sie noch fehlen\nFileUtils.mkdir_p(\"/tmp/imbiss/app/views\")\nFileUtils.mkdir_p(\"/tmp/imbiss/config\")\nrouten = \"/tmp/imbiss/config/routes.rb\"\nFile.write(routen, \"Rails.application.routes.draw do\\nend\\n\") unless File.exist?(routen)\n\nclass Imbiss < Rails::Application\n  config.root = \"/tmp/imbiss\"\n  config.eager_load = false\n  config.consider_all_requests_local = true\n  config.logger = Logger.new(STDOUT)\nend\nImbiss.initialize! unless Imbiss.initialized?\nRails.version"
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\nrequire \"active_record\"\n\n# die App der Rails-Lektion: Sie startet einmal pro Seite, darum dieselbe\n# Klasse, und ihre Ordner entstehen nur, wenn sie noch fehlen\nFileUtils.mkdir_p(\"/tmp/imbiss/app/views\")\nFileUtils.mkdir_p(\"/tmp/imbiss/config\")\nrouten = \"/tmp/imbiss/config/routes.rb\"\nFile.write(routen, \"Rails.application.routes.draw do\\nend\\n\") unless File.exist?(routen)\n\nclass ImbissApp < Rails::Application\n  config.root = \"/tmp/imbiss\"\n  config.eager_load = false\n  config.consider_all_requests_local = true\n  config.logger = Logger.new(STDOUT)\nend\nImbissApp.initialize! unless ImbissApp.initialized?\nRails.version"
           },
           {
             "t": "h",
@@ -4723,7 +4723,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"gerichte#index\"\n    resources :gerichte, only: [:index, :show]\n  end\nRUBY\nImbiss.reload_routes!\n\nRails.root.join(\"app/views/gerichte\").mkpath\nRails.root.join(\"app/views/gerichte/index.html.erb\").write(<<~ERB)\n  <h1>Chunkys Imbiss</h1>\n  <ul>\n    <% @gerichte.each do |gericht| %>\n      <li>\n        <%= link_to gericht.name, gericht %>\n        – <%= number_to_currency(gericht.preis, unit: \"CHF \") %>\n      </li>\n    <% end %>\n  </ul>\nERB\n\nclass GerichteController < ActionController::Base\n  def index\n    @gerichte = Gericht.order(:preis)\n  end\nend\n\nshow_browser Imbiss, \"/\""
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"gerichte#index\"\n    resources :gerichte, only: [:index, :show]\n  end\nRUBY\nImbissApp.reload_routes!\n\nRails.root.join(\"app/views/gerichte\").mkpath\nRails.root.join(\"app/views/gerichte/index.html.erb\").write(<<~ERB)\n  <h1>Chunkys Imbiss</h1>\n  <ul>\n    <% @gerichte.each do |gericht| %>\n      <li>\n        <%= link_to gericht.name, gericht %>\n        – <%= number_to_currency(gericht.preis, unit: \"CHF \") %>\n      </li>\n    <% end %>\n  </ul>\nERB\n\nclass GerichteController < ActionController::Base\n  def index\n    @gerichte = Gericht.order(:preis)\n  end\nend\n\nshow_browser ImbissApp, \"/\""
           },
           {
             "t": "h",
@@ -4731,7 +4731,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "Imbiss.routes.routes.reject(&:internal).each do |route|\n  ziel = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{ziel}\"\nend"
+            "code": "DinerApp.routes.routes.reject(&:internal).each do |route|\n  ziel = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{ziel}\"\nend"
           },
           {
             "t": "h",
@@ -4739,8 +4739,8 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "x",
-            "code": "Rails.root.join(\"app/views/gerichte/show.html.erb\").write(<<~ERB)\n  <h2>Hier gehört der Name des Gerichts hin</h2>\n  <p><%= number_to_currency(@gericht.preis, unit: \"CHF \") %></p>\n  <%= link_to \"Zurück zur Speisekarte\", gerichte_path %>\nERB\n\nclass GerichteController < ActionController::Base\n  # def show\n  #   @gericht = Gericht.find(params[:id])\n  # end\nend\n\nshow_browser Imbiss, \"/gerichte/#{Gericht.first.id}\"",
-            "check": "g = Gericht.order(:id).first; s1, _ = mock_get(Imbiss, \"/\"); s2, b2 = mock_get(Imbiss, \"/gerichte/#{g.id}\"); s1 == 200 && s2 == 200 && b2.include?(g.name) && b2.include?(\"CHF 4.50\")",
+            "code": "Rails.root.join(\"app/views/gerichte/show.html.erb\").write(<<~ERB)\n  <h2>Hier gehört der Name des Gerichts hin</h2>\n  <p><%= number_to_currency(@gericht.preis, unit: \"CHF \") %></p>\n  <%= link_to \"Zurück zur Speisekarte\", gerichte_path %>\nERB\n\nclass GerichteController < ActionController::Base\n  # def show\n  #   @gericht = Gericht.find(params[:id])\n  # end\nend\n\nshow_browser ImbissApp, \"/gerichte/#{Gericht.first.id}\"",
+            "check": "g = Gericht.order(:id).first; s1, _ = mock_get(ImbissApp, \"/\"); s2, b2 = mock_get(ImbissApp, \"/gerichte/#{g.id}\"); s1 == 200 && s2 == 200 && b2.include?(g.name) && b2.include?(\"CHF 4.50\")",
             "hint": "<code>def show</code> mit <code>@gericht = Gericht.find(params[:id])</code> einkommentieren, und in der View <code>&lt;h2&gt;&lt;%= @gericht.name %&gt;&lt;/h2&gt;</code> schreiben. Danach die Zelle neu ausführen."
           }
         ]
@@ -4754,7 +4754,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\nrequire \"active_record\"\n\n# the app of the Rails lesson: it boots once per page, so this is the same\n# class, and its folders are made again only if they are missing\nFileUtils.mkdir_p(\"/tmp/diner/app/views\")\nFileUtils.mkdir_p(\"/tmp/diner/config\")\nroutes = \"/tmp/diner/config/routes.rb\"\nFile.write(routes, \"Rails.application.routes.draw do\\nend\\n\") unless File.exist?(routes)\n\nclass Diner < Rails::Application\n  config.root = \"/tmp/diner\"\n  config.eager_load = false\n  config.consider_all_requests_local = true\n  config.logger = Logger.new(STDOUT)\nend\nDiner.initialize! unless Diner.initialized?\nRails.version"
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\nrequire \"active_record\"\n\n# the app of the Rails lesson: it boots once per page, so this is the same\n# class, and its folders are made again only if they are missing\nFileUtils.mkdir_p(\"/tmp/diner/app/views\")\nFileUtils.mkdir_p(\"/tmp/diner/config\")\nroutes = \"/tmp/diner/config/routes.rb\"\nFile.write(routes, \"Rails.application.routes.draw do\\nend\\n\") unless File.exist?(routes)\n\nclass DinerApp < Rails::Application\n  config.root = \"/tmp/diner\"\n  config.eager_load = false\n  config.consider_all_requests_local = true\n  config.logger = Logger.new(STDOUT)\nend\nDinerApp.initialize! unless DinerApp.initialized?\nRails.version"
           },
           {
             "t": "h",
@@ -4770,7 +4770,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"dishes#index\"\n    resources :dishes, only: [:index, :show]\n  end\nRUBY\nDiner.reload_routes!\n\nRails.root.join(\"app/views/dishes\").mkpath\nRails.root.join(\"app/views/dishes/index.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li>\n        <%= link_to dish.name, dish %>\n        – <%= number_to_currency(dish.price, unit: \"CHF \") %>\n      </li>\n    <% end %>\n  </ul>\nERB\n\nclass DishesController < ActionController::Base\n  def index\n    @dishes = Dish.order(:price)\n  end\nend\n\nshow_browser Diner, \"/\""
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"dishes#index\"\n    resources :dishes, only: [:index, :show]\n  end\nRUBY\nDinerApp.reload_routes!\n\nRails.root.join(\"app/views/dishes\").mkpath\nRails.root.join(\"app/views/dishes/index.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li>\n        <%= link_to dish.name, dish %>\n        – <%= number_to_currency(dish.price, unit: \"CHF \") %>\n      </li>\n    <% end %>\n  </ul>\nERB\n\nclass DishesController < ActionController::Base\n  def index\n    @dishes = Dish.order(:price)\n  end\nend\n\nshow_browser DinerApp, \"/\""
           },
           {
             "t": "h",
@@ -4778,7 +4778,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "Diner.routes.routes.reject(&:internal).each do |route|\n  target = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{target}\"\nend"
+            "code": "DinerApp.routes.routes.reject(&:internal).each do |route|\n  target = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{target}\"\nend"
           },
           {
             "t": "h",
@@ -4786,8 +4786,8 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "x",
-            "code": "Rails.root.join(\"app/views/dishes/show.html.erb\").write(<<~ERB)\n  <h2>The dish's name goes here</h2>\n  <p><%= number_to_currency(@dish.price, unit: \"CHF \") %></p>\n  <%= link_to \"Back to the menu\", dishes_path %>\nERB\n\nclass DishesController < ActionController::Base\n  # def show\n  #   @dish = Dish.find(params[:id])\n  # end\nend\n\nshow_browser Diner, \"/dishes/#{Dish.first.id}\"",
-            "check": "d = Dish.order(:id).first; s1, _ = mock_get(Diner, \"/\"); s2, b2 = mock_get(Diner, \"/dishes/#{d.id}\"); s1 == 200 && s2 == 200 && b2.include?(d.name) && b2.include?(\"CHF 4.50\")",
+            "code": "Rails.root.join(\"app/views/dishes/show.html.erb\").write(<<~ERB)\n  <h2>The dish's name goes here</h2>\n  <p><%= number_to_currency(@dish.price, unit: \"CHF \") %></p>\n  <%= link_to \"Back to the menu\", dishes_path %>\nERB\n\nclass DishesController < ActionController::Base\n  # def show\n  #   @dish = Dish.find(params[:id])\n  # end\nend\n\nshow_browser DinerApp, \"/dishes/#{Dish.first.id}\"",
+            "check": "d = Dish.order(:id).first; s1, _ = mock_get(DinerApp, \"/\"); s2, b2 = mock_get(DinerApp, \"/dishes/#{d.id}\"); s1 == 200 && s2 == 200 && b2.include?(d.name) && b2.include?(\"CHF 4.50\")",
             "hint": "Uncomment <code>def show</code> with <code>@dish = Dish.find(params[:id])</code>, and write <code>&lt;h2&gt;&lt;%= @dish.name %&gt;&lt;/h2&gt;</code> in the view. Then run the cell again."
           }
         ]
@@ -4801,7 +4801,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\nrequire \"active_record\"\n\n# Railsのレッスンと同じアプリです。起動はページごとに一度なので同じクラスを使い、\n# フォルダは、まだないときだけ作ります\nFileUtils.mkdir_p(\"/tmp/diner/app/views\")\nFileUtils.mkdir_p(\"/tmp/diner/config\")\nroutes = \"/tmp/diner/config/routes.rb\"\nFile.write(routes, \"Rails.application.routes.draw do\\nend\\n\") unless File.exist?(routes)\n\nclass Diner < Rails::Application\n  config.root = \"/tmp/diner\"\n  config.eager_load = false\n  config.consider_all_requests_local = true\n  config.logger = Logger.new(STDOUT)\nend\nDiner.initialize! unless Diner.initialized?\nRails.version"
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\nrequire \"active_record\"\n\n# Railsのレッスンと同じアプリです。起動はページごとに一度なので同じクラスを使い、\n# フォルダは、まだないときだけ作ります\nFileUtils.mkdir_p(\"/tmp/diner/app/views\")\nFileUtils.mkdir_p(\"/tmp/diner/config\")\nroutes = \"/tmp/diner/config/routes.rb\"\nFile.write(routes, \"Rails.application.routes.draw do\\nend\\n\") unless File.exist?(routes)\n\nclass DinerApp < Rails::Application\n  config.root = \"/tmp/diner\"\n  config.eager_load = false\n  config.consider_all_requests_local = true\n  config.logger = Logger.new(STDOUT)\nend\nDinerApp.initialize! unless DinerApp.initialized?\nRails.version"
           },
           {
             "t": "h",
@@ -4817,7 +4817,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"dishes#index\"\n    resources :dishes, only: [:index, :show]\n  end\nRUBY\nDiner.reload_routes!\n\nRails.root.join(\"app/views/dishes\").mkpath\nRails.root.join(\"app/views/dishes/index.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li>\n        <%= link_to dish.name, dish %>\n        – <%= number_to_currency(dish.price, unit: \"CHF \") %>\n      </li>\n    <% end %>\n  </ul>\nERB\n\nclass DishesController < ActionController::Base\n  def index\n    @dishes = Dish.order(:price)\n  end\nend\n\nshow_browser Diner, \"/\""
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"dishes#index\"\n    resources :dishes, only: [:index, :show]\n  end\nRUBY\nDinerApp.reload_routes!\n\nRails.root.join(\"app/views/dishes\").mkpath\nRails.root.join(\"app/views/dishes/index.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li>\n        <%= link_to dish.name, dish %>\n        – <%= number_to_currency(dish.price, unit: \"CHF \") %>\n      </li>\n    <% end %>\n  </ul>\nERB\n\nclass DishesController < ActionController::Base\n  def index\n    @dishes = Dish.order(:price)\n  end\nend\n\nshow_browser DinerApp, \"/\""
           },
           {
             "t": "h",
@@ -4825,7 +4825,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "c",
-            "code": "Diner.routes.routes.reject(&:internal).each do |route|\n  target = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{target}\"\nend"
+            "code": "DinerApp.routes.routes.reject(&:internal).each do |route|\n  target = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(4)} #{route.path.spec.to_s.ljust(24)} #{target}\"\nend"
           },
           {
             "t": "h",
@@ -4833,9 +4833,129 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "x",
-            "code": "Rails.root.join(\"app/views/dishes/show.html.erb\").write(<<~ERB)\n  <h2>The dish's name goes here</h2>\n  <p><%= number_to_currency(@dish.price, unit: \"CHF \") %></p>\n  <%= link_to \"Back to the menu\", dishes_path %>\nERB\n\nclass DishesController < ActionController::Base\n  # def show\n  #   @dish = Dish.find(params[:id])\n  # end\nend\n\nshow_browser Diner, \"/dishes/#{Dish.first.id}\"",
-            "check": "d = Dish.order(:id).first; s1, _ = mock_get(Diner, \"/\"); s2, b2 = mock_get(Diner, \"/dishes/#{d.id}\"); s1 == 200 && s2 == 200 && b2.include?(d.name) && b2.include?(\"CHF 4.50\")",
+            "code": "Rails.root.join(\"app/views/dishes/show.html.erb\").write(<<~ERB)\n  <h2>The dish's name goes here</h2>\n  <p><%= number_to_currency(@dish.price, unit: \"CHF \") %></p>\n  <%= link_to \"Back to the menu\", dishes_path %>\nERB\n\nclass DishesController < ActionController::Base\n  # def show\n  #   @dish = Dish.find(params[:id])\n  # end\nend\n\nshow_browser DinerApp, \"/dishes/#{Dish.first.id}\"",
+            "check": "d = Dish.order(:id).first; s1, _ = mock_get(DinerApp, \"/\"); s2, b2 = mock_get(DinerApp, \"/dishes/#{d.id}\"); s1 == 200 && s2 == 200 && b2.include?(d.name) && b2.include?(\"CHF 4.50\")",
             "hint": "<code>def show</code>のコメントを外して<code>@dish = Dish.find(params[:id])</code>にして、ビューには<code>&lt;h2&gt;&lt;%= @dish.name %&gt;&lt;/h2&gt;</code>と書いてね。書けたら、もう一度セルを実行してね。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rails-forms",
+      "de": {
+        "title": "Rails – Formulare: ein Gericht hinzufügen",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ein Formular: new und create</h2><p>Bisher hat der Browser nur Seiten angefordert – <code>GET</code>. Ein Formular <em>schickt</em> etwas: ein HTML-<code>&lt;form&gt;</code> mit <code>method=\"post\"</code>, und der Browser packt die Felder in die Anfrage. In Rails ist das ein Paar von Actions, per Konvention benannt: <code>new</code> zeigt das leere Formular, <code>create</code> nimmt entgegen, was es schickt, speichert es und schickt den Browser weiter zum neuen Datensatz – ein <em>Redirect</em>. Der Mini-Browser schickt Formulare so, wie ein Browser es tut, darum lässt sich das alles hier ausprobieren.</p><p>Die App und ihre Daten sind die aus Lektion {{nr:rails-mvc}}:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\nrequire \"active_record\"\n\n# die App der Rails-Lektion: Sie startet einmal pro Seite, darum dieselbe\n# Klasse, und ihre Ordner entstehen nur, wenn sie noch fehlen\nFileUtils.mkdir_p(\"/tmp/imbiss/app/views\")\nFileUtils.mkdir_p(\"/tmp/imbiss/config\")\nrouten = \"/tmp/imbiss/config/routes.rb\"\nFile.write(routen, \"Rails.application.routes.draw do\\nend\\n\") unless File.exist?(routen)\n\nclass ImbissApp < Rails::Application\n  config.root = \"/tmp/imbiss\"\n  config.eager_load = false\n  config.consider_all_requests_local = true\n  config.logger = Logger.new(STDOUT)\nend\nImbissApp.initialize! unless ImbissApp.initialized?\nRails.version"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dann die Tabelle, das Model und drei Gerichte:</p>"
+          },
+          {
+            "t": "c",
+            "code": "ActiveRecord::Base.logger = Logger.new(STDOUT)\nActiveRecord::Base.establish_connection(adapter: \"sqlite3\", database: \"db/imbiss.sqlite3\")\n\n# Rails bildet englische Mehrzahlen - einmal gesagt, kennt es die deutsche\nActiveSupport::Inflector.inflections(:en) { |regel| regel.irregular \"gericht\", \"gerichte\" }\n\nActiveRecord::Schema.define do\n  create_table :gerichte, force: true do |t|\n    t.string  :name\n    t.decimal :preis, precision: 6, scale: 2\n    t.timestamps\n  end\nend\n\nclass Gericht < ActiveRecord::Base\n  validates :name, presence: true\nend\n\nGericht.create!(name: \"Speck\", preis: 4.5)\nGericht.create!(name: \"Ei\", preis: 2)\nGericht.create!(name: \"Kaffee\", preis: 3.2)\nGericht.count"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jetzt das Formular. <code>resources :gerichte</code> bekommt <code>:new</code> und <code>:create</code>, zwei weitere seiner sieben Routen: <code>GET /gerichte/new</code> und <code>POST /gerichte</code>. Die View <code>new.html.erb</code> baut das Formular mit <code>form_with model: @gericht</code>, das am Model erkennt, wohin es geschickt wird und wie die Felder heissen (<code>gericht[name]</code>). In <code>create</code> holt <code>params.expect(gericht: [:name, :preis])</code> genau diese zwei Felder aus der Anfrage und sonst nichts – <em>Strong Parameters</em>, damit niemand eine Spalte hineinschmuggelt, die du nicht angeboten hast. Dann <code>save</code>: true, und der Browser wird mit einer <em>Flash</em>-Nachricht auf die Seite des Gerichts geschickt; false, und das Formular kommt mit den Fehlern zurück (Status 422):</p>"
+          },
+          {
+            "t": "c",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"gerichte#index\"\n    resources :gerichte, only: [:index, :show, :new, :create]\n  end\nRUBY\nImbissApp.reload_routes!\n\nRails.root.join(\"app/views/gerichte\").mkpath\nRails.root.join(\"app/views/gerichte/index.html.erb\").write(<<~ERB)\n  <h1>Chunkys Imbiss</h1>\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <ul>\n    <% @gerichte.each do |gericht| %>\n      <li>\n        <%= link_to gericht.name, gericht %>\n        – <%= number_to_currency(gericht.preis, unit: \"CHF \") %>\n      </li>\n    <% end %>\n  </ul>\n  <%= link_to \"Gericht hinzufügen\", new_gericht_path %>\nERB\nRails.root.join(\"app/views/gerichte/new.html.erb\").write(<<~ERB)\n  <h2>Neues Gericht</h2>\n  <% @gericht.errors.full_messages.each do |meldung| %>\n    <p><em><%= meldung %></em></p>\n  <% end %>\n  <%= form_with model: @gericht do |formular| %>\n    <%= formular.label :name %>\n    <%= formular.text_field :name %>\n    <%= formular.label :preis %>\n    <%= formular.number_field :preis, step: 0.1 %>\n    <%= formular.submit \"Auf die Speisekarte\" %>\n  <% end %>\nERB\nRails.root.join(\"app/views/gerichte/show.html.erb\").write(<<~ERB)\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <h2><%= @gericht.name %></h2>\n  <p><%= number_to_currency(@gericht.preis, unit: \"CHF \") %></p>\n  <%= link_to \"Zurück zur Speisekarte\", gerichte_path %>\nERB\n\nclass GerichteController < ActionController::Base\n  def index\n    @gerichte = Gericht.order(:preis)\n  end\n\n  def show\n    @gericht = Gericht.find(params[:id])\n  end\n\n  def new\n    @gericht = Gericht.new\n  end\n\n  def create\n    @gericht = Gericht.new(params.expect(gericht: [:name, :preis]))\n    if @gericht.save\n      redirect_to @gericht, notice: \"#{@gericht.name} steht auf der Speisekarte.\"\n    else\n      render :new, status: :unprocessable_entity\n    end\n  end\nend\n\nshow_browser ImbissApp, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Klick auf «Gericht hinzufügen», lass den Namen leer und schick ab: Das Formular kommt mit <em>Name can't be blank</em> zurück, das Getippte noch drin. Füll es aus: Das Log zeigt den <code>POST</code>, das <code>INSERT</code>, <code>Redirected to http://localhost/gerichte/4</code> und das <code>GET</code> danach – und die Seite sagt <em>… steht auf der Speisekarte</em>, einmal. Dieser Satz reiste im <em>Flash</em>, einer Nachricht, die in der Session nur bis zur nächsten Seite lebt; die Session steckt in einem Cookie, das der Mini-Browser aufbewahrt wie ein Browser. Beachte das versteckte Feld <code>authenticity_token</code> im Formular (im Log bei den Parametern des <code>POST</code>): Rails' Schutz gegen gefälschte Formulare von fremden Seiten, bei jedem <code>POST</code> geprüft, ohne dass du etwas tun musst.</p><div class='offweb'><strong>Auf deinem Rechner</strong> schreibt <code>bin/rails generate scaffold</code> das alles, dazu <code>edit</code>, <code>update</code> und <code>destroy</code>: Dieselbe Formular-Datei dient dem Bearbeiten (<code>form_with</code> merkt einen gespeicherten Datensatz und wechselt auf <code>PATCH</code>), und Löschen ist ein Button mit <code>data: { turbo_method: :delete }</code>. Der Shop des Guides geht genau hier weiter: Layouts, Partials, Anmeldung, und Hotwire für Seiten, die sich ohne Neuladen ändern.</div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://guides.rubyonrails.org/form_helpers.html' target='_blank'>Action View Form Helpers</a> · <a href='https://guides.rubyonrails.org/action_controller_overview.html#strong-parameters' target='_blank'>Strong parameters</a> · <a href='https://guides.rubyonrails.org/action_controller_overview.html#the-flash' target='_blank'>The flash</a> · <a href='https://guides.rubyonrails.org/getting_started.html' target='_blank'>Getting Started with Rails</a></div><div class='task'><strong>Aufgabe:</strong> Dieses Formular hat kein Feld für den Preis. Ergänze in der View <code>formular.label :preis</code> und <code>formular.number_field :preis, step: 0.1</code>, und lass <code>create</code> auch den Preis entgegennehmen (die Zeile mit <code>expect</code>). Dann füg im Mini-Browser ein Gericht hinzu – mit Preis.</div>"
+          },
+          {
+            "t": "x",
+            "code": "Rails.root.join(\"app/views/gerichte/new.html.erb\").write(<<~ERB)\n  <h2>Neues Gericht</h2>\n  <% @gericht.errors.full_messages.each do |meldung| %>\n    <p><em><%= meldung %></em></p>\n  <% end %>\n  <%= form_with model: @gericht do |formular| %>\n    <%= formular.label :name %>\n    <%= formular.text_field :name %>\n    <%# hierhin ein label und ein number_field für den Preis %>\n    <%= formular.submit \"Auf die Speisekarte\" %>\n  <% end %>\nERB\n\nclass GerichteController < ActionController::Base\n  def create\n    @gericht = Gericht.new(params.expect(gericht: [:name]))   # der Preis darf noch nicht herein\n    if @gericht.save\n      redirect_to @gericht, notice: \"#{@gericht.name} steht auf der Speisekarte.\"\n    else\n      render :new, status: :unprocessable_entity\n    end\n  end\nend\n\nshow_browser ImbissApp, \"/gerichte/new\"",
+            "check": "s1, b1 = mock_get(ImbissApp, \"/gerichte/new\"); s2, b2 = mock_post(ImbissApp, \"/gerichte\", \"gericht[name]\" => \"\", \"gericht[preis]\" => \"2.8\"); s1 == 200 && b1.include?('name=\"gericht[preis]\"') && s2 == 422 && b2.include?('value=\"2.8\"')",
+            "hint": "In der View, wo der Kommentar steht: <code>&lt;%= formular.label :preis %&gt;</code> und <code>&lt;%= formular.number_field :preis, step: 0.1 %&gt;</code>. In <code>create</code>: <code>params.expect(gericht: [:name, :preis])</code>. Danach die Zelle neu ausführen."
+          }
+        ]
+      },
+      "en": {
+        "title": "Rails – forms: adding a dish",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>A form: new and create</h2><p>So far the browser only asked for pages – <code>GET</code>. A form <em>sends</em> something: an HTML <code>&lt;form&gt;</code> with <code>method=\"post\"</code>, and the browser packs the fields into the request. In Rails that is a pair of actions, named by convention: <code>new</code> shows the empty form, <code>create</code> takes what it sends, saves it, and sends the browser on to the new record – a <em>redirect</em>. The mini browser sends forms the way a browser does, so you can try it all here.</p><p>The app and its data are those of lesson {{nr:rails-mvc}}:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\nrequire \"active_record\"\n\n# the app of the Rails lesson: it boots once per page, so this is the same\n# class, and its folders are made again only if they are missing\nFileUtils.mkdir_p(\"/tmp/diner/app/views\")\nFileUtils.mkdir_p(\"/tmp/diner/config\")\nroutes = \"/tmp/diner/config/routes.rb\"\nFile.write(routes, \"Rails.application.routes.draw do\\nend\\n\") unless File.exist?(routes)\n\nclass DinerApp < Rails::Application\n  config.root = \"/tmp/diner\"\n  config.eager_load = false\n  config.consider_all_requests_local = true\n  config.logger = Logger.new(STDOUT)\nend\nDinerApp.initialize! unless DinerApp.initialized?\nRails.version"
+          },
+          {
+            "t": "h",
+            "html": "<p>Then the table, the model and three dishes:</p>"
+          },
+          {
+            "t": "c",
+            "code": "ActiveRecord::Base.logger = Logger.new(STDOUT)\nActiveRecord::Base.establish_connection(adapter: \"sqlite3\", database: \"db/diner.sqlite3\")\n\nActiveRecord::Schema.define do\n  create_table :dishes, force: true do |t|\n    t.string  :name\n    t.decimal :price, precision: 6, scale: 2\n    t.timestamps\n  end\nend\n\nclass Dish < ActiveRecord::Base\n  validates :name, presence: true\nend\n\nDish.create!(name: \"Bacon\", price: 4.5)\nDish.create!(name: \"Egg\", price: 2)\nDish.create!(name: \"Coffee\", price: 3.2)\nDish.count"
+          },
+          {
+            "t": "h",
+            "html": "<p>Now the form. <code>resources :dishes</code> gets <code>:new</code> and <code>:create</code>, two more of its seven routes: <code>GET /dishes/new</code> and <code>POST /dishes</code>. The view <code>new.html.erb</code> builds the form with <code>form_with model: @dish</code>, which knows from the model where to send it and what to call the fields (<code>dish[name]</code>). In <code>create</code>, <code>params.expect(dish: [:name, :price])</code> takes exactly those two fields out of the request and nothing else – <em>strong parameters</em>, so nobody can sneak in a column you did not offer. Then <code>save</code>: true, and the browser is sent to the dish's page with a <em>flash</em> notice; false, and the form comes back with the errors (status 422):</p>"
+          },
+          {
+            "t": "c",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"dishes#index\"\n    resources :dishes, only: [:index, :show, :new, :create]\n  end\nRUBY\nDinerApp.reload_routes!\n\nRails.root.join(\"app/views/dishes\").mkpath\nRails.root.join(\"app/views/dishes/index.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li>\n        <%= link_to dish.name, dish %>\n        – <%= number_to_currency(dish.price, unit: \"CHF \") %>\n      </li>\n    <% end %>\n  </ul>\n  <%= link_to \"Add a dish\", new_dish_path %>\nERB\nRails.root.join(\"app/views/dishes/new.html.erb\").write(<<~ERB)\n  <h2>New dish</h2>\n  <% @dish.errors.full_messages.each do |message| %>\n    <p><em><%= message %></em></p>\n  <% end %>\n  <%= form_with model: @dish do |form| %>\n    <%= form.label :name %>\n    <%= form.text_field :name %>\n    <%= form.label :price %>\n    <%= form.number_field :price, step: 0.1 %>\n    <%= form.submit \"Add to the menu\" %>\n  <% end %>\nERB\nRails.root.join(\"app/views/dishes/show.html.erb\").write(<<~ERB)\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <h2><%= @dish.name %></h2>\n  <p><%= number_to_currency(@dish.price, unit: \"CHF \") %></p>\n  <%= link_to \"Back to the menu\", dishes_path %>\nERB\n\nclass DishesController < ActionController::Base\n  def index\n    @dishes = Dish.order(:price)\n  end\n\n  def show\n    @dish = Dish.find(params[:id])\n  end\n\n  def new\n    @dish = Dish.new\n  end\n\n  def create\n    @dish = Dish.new(params.expect(dish: [:name, :price]))\n    if @dish.save\n      redirect_to @dish, notice: \"#{@dish.name} is on the menu.\"\n    else\n      render :new, status: :unprocessable_entity\n    end\n  end\nend\n\nshow_browser DinerApp, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Click \"Add a dish\", leave the name empty and send: the form returns with <em>Name can't be blank</em>, what you typed still in it. Fill it in: the log shows the <code>POST</code>, the <code>INSERT</code>, <code>Redirected to http://localhost/dishes/4</code> and the <code>GET</code> that follows – and the page says <em>… is on the menu</em>, once. That sentence travelled in the <em>flash</em>, a message kept in the session just until the next page; the session lives in a cookie, which the mini browser keeps like a browser. Notice the hidden <code>authenticity_token</code> field in the form (look at the log of the <code>POST</code>'s parameters): Rails' protection against forged forms from other sites, checked on every <code>POST</code>, with no work on your part.</p><div class='offweb'><strong>On your machine</strong> <code>bin/rails generate scaffold</code> writes all of this, plus <code>edit</code>, <code>update</code> and <code>destroy</code>: the same form file serves editing (<code>form_with</code> notices a saved record and switches to <code>PATCH</code>), and a delete is a button with <code>data: { turbo_method: :delete }</code>. The guide's shop goes on from exactly here: layouts, partials, authentication, and Hotwire for pages that update without a reload.</div><div class='docs'><strong>Look it up:</strong> <a href='https://guides.rubyonrails.org/form_helpers.html' target='_blank'>Action View Form Helpers</a> · <a href='https://guides.rubyonrails.org/action_controller_overview.html#strong-parameters' target='_blank'>Strong parameters</a> · <a href='https://guides.rubyonrails.org/action_controller_overview.html#the-flash' target='_blank'>The flash</a> · <a href='https://guides.rubyonrails.org/getting_started.html' target='_blank'>Getting Started with Rails</a></div><div class='task'><strong>Task:</strong> This form has no field for the price. Add <code>form.label :price</code> and <code>form.number_field :price, step: 0.1</code> to the view, and let <code>create</code> accept the price too (the <code>expect</code> line). Then add a dish in the mini browser – with a price.</div>"
+          },
+          {
+            "t": "x",
+            "code": "Rails.root.join(\"app/views/dishes/new.html.erb\").write(<<~ERB)\n  <h2>New dish</h2>\n  <% @dish.errors.full_messages.each do |message| %>\n    <p><em><%= message %></em></p>\n  <% end %>\n  <%= form_with model: @dish do |form| %>\n    <%= form.label :name %>\n    <%= form.text_field :name %>\n    <%# a label and a number_field for the price go here %>\n    <%= form.submit \"Add to the menu\" %>\n  <% end %>\nERB\n\nclass DishesController < ActionController::Base\n  def create\n    @dish = Dish.new(params.expect(dish: [:name]))   # the price is not allowed in yet\n    if @dish.save\n      redirect_to @dish, notice: \"#{@dish.name} is on the menu.\"\n    else\n      render :new, status: :unprocessable_entity\n    end\n  end\nend\n\nshow_browser DinerApp, \"/dishes/new\"",
+            "check": "s1, b1 = mock_get(DinerApp, \"/dishes/new\"); s2, b2 = mock_post(DinerApp, \"/dishes\", \"dish[name]\" => \"\", \"dish[price]\" => \"2.8\"); s1 == 200 && b1.include?('name=\"dish[price]\"') && s2 == 422 && b2.include?('value=\"2.8\"')",
+            "hint": "In the view, where the comment is: <code>&lt;%= form.label :price %&gt;</code> and <code>&lt;%= form.number_field :price, step: 0.1 %&gt;</code>. In <code>create</code>: <code>params.expect(dish: [:name, :price])</code>. Then run the cell again."
+          }
+        ]
+      },
+      "ja": {
+        "title": "Rails：フォームで料理を追加する",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>フォーム：newとcreate</h2><p>これまでブラウザは、ページを求めるだけでした。<code>GET</code>です。フォームは何かを<em>送ります</em>。<code>method=\"post\"</code>のHTMLの<code>&lt;form&gt;</code>で、ブラウザが入力欄の中身をリクエストに詰めます。Railsではこれが、規約で名前の決まったアクションの組になります。<code>new</code>は空のフォームを表示し、<code>create</code>は送られてきたものを受け取って保存し、ブラウザを新しいレコードのページへ送ります。これが<em>リダイレクト</em>です。ミニブラウザもブラウザと同じようにフォームを送るので、ここで全部試せます。</p><p>アプリとそのデータは、レッスン{{nr:rails-mvc}}のものです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\nrequire \"active_record\"\n\n# Railsのレッスンと同じアプリです。起動はページごとに一度なので同じクラスを使い、\n# フォルダは、まだないときだけ作ります\nFileUtils.mkdir_p(\"/tmp/diner/app/views\")\nFileUtils.mkdir_p(\"/tmp/diner/config\")\nroutes = \"/tmp/diner/config/routes.rb\"\nFile.write(routes, \"Rails.application.routes.draw do\\nend\\n\") unless File.exist?(routes)\n\nclass DinerApp < Rails::Application\n  config.root = \"/tmp/diner\"\n  config.eager_load = false\n  config.consider_all_requests_local = true\n  config.logger = Logger.new(STDOUT)\nend\nDinerApp.initialize! unless DinerApp.initialized?\nRails.version"
+          },
+          {
+            "t": "h",
+            "html": "<p>次に、テーブルとモデルと3つの料理です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "ActiveRecord::Base.logger = Logger.new(STDOUT)\nActiveRecord::Base.establish_connection(adapter: \"sqlite3\", database: \"db/diner.sqlite3\")\n\nActiveRecord::Schema.define do\n  create_table :dishes, force: true do |t|\n    t.string  :name\n    t.decimal :price, precision: 6, scale: 2\n    t.timestamps\n  end\nend\n\nclass Dish < ActiveRecord::Base\n  validates :name, presence: true\nend\n\nDish.create!(name: \"Bacon\", price: 4.5)\nDish.create!(name: \"Egg\", price: 2)\nDish.create!(name: \"Coffee\", price: 3.2)\nDish.count"
+          },
+          {
+            "t": "h",
+            "html": "<p>いよいよフォームです。<code>resources :dishes</code>に<code>:new</code>と<code>:create</code>を足すと、7つのルートのうち、さらに2つが増えます。<code>GET /dishes/new</code>と<code>POST /dishes</code>です。ビュー<code>new.html.erb</code>は<code>form_with model: @dish</code>でフォームを組み立てます。モデルを見れば、どこへ送るか、入力欄をどう呼ぶか（<code>dish[name]</code>）がわかるからです。<code>create</code>の中の<code>params.expect(dish: [:name, :price])</code>は、リクエストからこの2つの欄だけを取り出し、ほかは受け取りません。これが<em>Strong Parameters</em>で、あなたが用意していない列を誰かにこっそり差し込まれないためのものです。そして<code>save</code>です。trueならブラウザは<em>flash</em>のお知らせ付きで料理のページへ送られ、falseならフォームがエラー付きで戻ってきます（ステータス422）。</p>"
+          },
+          {
+            "t": "c",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"dishes#index\"\n    resources :dishes, only: [:index, :show, :new, :create]\n  end\nRUBY\nDinerApp.reload_routes!\n\nRails.root.join(\"app/views/dishes\").mkpath\nRails.root.join(\"app/views/dishes/index.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li>\n        <%= link_to dish.name, dish %>\n        – <%= number_to_currency(dish.price, unit: \"CHF \") %>\n      </li>\n    <% end %>\n  </ul>\n  <%= link_to \"Add a dish\", new_dish_path %>\nERB\nRails.root.join(\"app/views/dishes/new.html.erb\").write(<<~ERB)\n  <h2>New dish</h2>\n  <% @dish.errors.full_messages.each do |message| %>\n    <p><em><%= message %></em></p>\n  <% end %>\n  <%= form_with model: @dish do |form| %>\n    <%= form.label :name %>\n    <%= form.text_field :name %>\n    <%= form.label :price %>\n    <%= form.number_field :price, step: 0.1 %>\n    <%= form.submit \"Add to the menu\" %>\n  <% end %>\nERB\nRails.root.join(\"app/views/dishes/show.html.erb\").write(<<~ERB)\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <h2><%= @dish.name %></h2>\n  <p><%= number_to_currency(@dish.price, unit: \"CHF \") %></p>\n  <%= link_to \"Back to the menu\", dishes_path %>\nERB\n\nclass DishesController < ActionController::Base\n  def index\n    @dishes = Dish.order(:price)\n  end\n\n  def show\n    @dish = Dish.find(params[:id])\n  end\n\n  def new\n    @dish = Dish.new\n  end\n\n  def create\n    @dish = Dish.new(params.expect(dish: [:name, :price]))\n    if @dish.save\n      redirect_to @dish, notice: \"#{@dish.name} is on the menu.\"\n    else\n      render :new, status: :unprocessable_entity\n    end\n  end\nend\n\nshow_browser DinerApp, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p>「Add a dish」をクリックして、名前を空のまま送ってみてください。フォームが<em>Name can't be blank</em>と一緒に戻ってきます。入力した内容はそのままです。今度はきちんと入力してみましょう。ログには<code>POST</code>、<code>INSERT</code>、<code>Redirected to http://localhost/dishes/4</code>、そのあとの<code>GET</code>が出て、ページには<em>… is on the menu</em>と、一度だけ表示されます。この文は<em>flash</em>に乗って運ばれました。次のページまでだけセッションに置かれるメッセージです。セッションはクッキーの中にあり、ミニブラウザもブラウザと同じようにクッキーを持ち続けます。フォームの隠し欄<code>authenticity_token</code>にも注目してください（<code>POST</code>のパラメータのログに出ています）。よそのサイトから偽のフォームを送られないためのRailsの守りで、<code>POST</code>のたびに確かめられます。あなたは何もしなくてかまいません。</p><div class='offweb'><strong>自分のコンピューターでは</strong>、<code>bin/rails generate scaffold</code>がこれを全部書いてくれて、さらに<code>edit</code>、<code>update</code>、<code>destroy</code>も付いてきます。同じフォームのファイルが編集にも使われ（<code>form_with</code>は保存済みのレコードに気づいて<code>PATCH</code>に切り替えます）、削除は<code>data: { turbo_method: :delete }</code>付きのボタンです。ガイドのお店は、ちょうどここから先へ進みます。レイアウト、パーシャル、ログイン、そして再読み込みなしに変わるページのためのHotwireです。</div><div class='docs'><strong>調べてみよう：</strong><a href='https://railsguides.jp/form_helpers.html' target='_blank'>Action View フォームヘルパー</a>・<a href='https://railsguides.jp/action_controller_overview.html#strong-parameters' target='_blank'>Strong Parameters</a>・<a href='https://railsguides.jp/action_controller_overview.html#flash' target='_blank'>flash</a>・<a href='https://railsguides.jp/getting_started.html' target='_blank'>Rails をはじめよう</a></div><div class='task'><strong>課題：</strong>このフォームには価格の欄がありません。ビューに<code>form.label :price</code>と<code>form.number_field :price, step: 0.1</code>を足して、<code>create</code>が価格も受け取るようにしましょう（<code>expect</code>の行です）。それからミニブラウザで、価格付きの料理を追加してみてください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "Rails.root.join(\"app/views/dishes/new.html.erb\").write(<<~ERB)\n  <h2>New dish</h2>\n  <% @dish.errors.full_messages.each do |message| %>\n    <p><em><%= message %></em></p>\n  <% end %>\n  <%= form_with model: @dish do |form| %>\n    <%= form.label :name %>\n    <%= form.text_field :name %>\n    <%# a label and a number_field for the price go here %>\n    <%= form.submit \"Add to the menu\" %>\n  <% end %>\nERB\n\nclass DishesController < ActionController::Base\n  def create\n    @dish = Dish.new(params.expect(dish: [:name]))   # 価格はまだ受け取っていません\n    if @dish.save\n      redirect_to @dish, notice: \"#{@dish.name} is on the menu.\"\n    else\n      render :new, status: :unprocessable_entity\n    end\n  end\nend\n\nshow_browser DinerApp, \"/dishes/new\"",
+            "check": "s1, b1 = mock_get(DinerApp, \"/dishes/new\"); s2, b2 = mock_post(DinerApp, \"/dishes\", \"dish[name]\" => \"\", \"dish[price]\" => \"2.8\"); s1 == 200 && b1.include?('name=\"dish[price]\"') && s2 == 422 && b2.include?('value=\"2.8\"')",
+            "hint": "ビューのコメントのところに<code>&lt;%= form.label :price %&gt;</code>と<code>&lt;%= form.number_field :price, step: 0.1 %&gt;</code>を書いてね。<code>create</code>の中は<code>params.expect(dish: [:name, :price])</code>。書けたら、もう一度セルを実行してね。"
           }
         ]
       }

@@ -45,6 +45,7 @@ links@irbcell2
 links@railscell6
 links@activerecordcell6
 links@rails-mvccell8
+links@rails-formscell6
 links@tl-formatscell10
 links@tl-performancecell8
 

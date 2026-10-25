@@ -9,6 +9,7 @@ require 'js/require_remote'
 JS::RequireRemote.instance.base_url = JS.global[:document][:baseURI].to_s
 require 'json'
 require 'stringio'
+require 'time'   # Time.parse: a cookie's expiry (the mini browser's jar)
 require 'singleton'
 # did_you_mean comes with Ruby, but ruby.wasm boots without it (no
 # gem_prelude). Loaded, a misspelt name in a cell gets a suggestion below
@@ -563,6 +564,13 @@ class ChunkyApp
       elsif (row = target.closest(".fe-file"))
         widget = row.closest(".file-explorer")
         preview_file(widget, row.getAttribute("data-path")) if widget
+      elsif css_class.include?("mb-view") && (button = event.composedPath.first.closest("button, input[type=submit]")) &&
+            button.getAttribute("type").to_s != "button" && !button.form.nil?
+        # a form's submit button inside the fake browser: the form is sent
+        # to the app, as a browser would
+        event.preventDefault
+        widget = target.closest(".mini-browser")
+        submit_browser_form(widget, button.form, button) if widget
       elsif css_class.include?("mb-view") && (link = event.composedPath.first.closest("a"))
         # links inside the fake browser navigate the fake browser; its page
         # is in a shadow root, so the click arrives with .mb-view as target
@@ -585,6 +593,11 @@ class ChunkyApp
         event.preventDefault
         widget = target.closest(".mini-browser")
         navigate_browser(widget) if widget
+      elsif target_class.include?("mb-view") && (field = event.composedPath.first).tagName.to_s == "INPUT" && !field.form.nil?
+        # Enter in a form's text field sends the form, as in a browser
+        event.preventDefault
+        widget = target.closest(".mini-browser")
+        submit_browser_form(widget, field.form, field.form.querySelector("button:not([type]), button[type=submit], input[type=submit]")) if widget
       elsif target_class.include?("irb-input")
         event.preventDefault
         term = target.closest(".irb-term")
@@ -1207,28 +1220,57 @@ class ChunkyApp
     log_el.scrollTop = log_el.scrollHeight
   end
 
+  # The URL bar: a GET of the path in it.
   def navigate_browser(widget)
-    app = @browser_apps[widget.getAttribute("data-bid").to_i]
-    return unless app
     input = widget.querySelector(".mb-url")
     path = input.value
     path = "/" + path unless path.start_with?("/")
-    input.value = path
+    browser_request(widget, "GET", path)
+  end
+
+  # A form sent from the page: its fields urlencoded, as a browser sends
+  # them (FormData, with the button pressed), to the form's action with its
+  # method - a GET as a query string, a POST as the body.
+  def submit_browser_form(widget, form, submitter)
+    data = submitter.nil? ? JS.global[:FormData].new(form) : JS.global[:FormData].new(form, submitter)
+    encoded = JS.global[:URLSearchParams].new(data).toString.to_s
+    action = form.getAttribute("action").to_s
+    action = widget.querySelector(".mb-url").value.to_s if action.empty?
+    if form.method.to_s.downcase == "post"
+      browser_request(widget, "POST", action, body: encoded)
+    else
+      browser_request(widget, "GET", "#{action.split("?").first}#{encoded.empty? ? "" : "?#{encoded}"}")
+    end
+  end
+
+  # One request of the fake browser: the app's answer into the page, its
+  # status into the chrome, what it printed into the log pane. Cookies the
+  # app sets come back with the next request (a Rails session, the flash),
+  # and a redirect is followed, as a browser does - the URL bar then shows
+  # where it landed.
+  def browser_request(widget, method, path, body: nil)
+    bid = widget.getAttribute("data-bid").to_i
+    app = @browser_apps[bid]
+    return unless app
+
     status_el = widget.querySelector(".mb-status")
-    printed = ""
+    printed = +""
     page = begin
-      old_stdout = $stdout
-      $stdout = StringIO.new
-      begin
-        status, headers, body = RackPlayground.get(app, path)
-      ensure
-        printed = $stdout.string
-        $stdout = old_stdout
+      status = headers = response = nil
+      5.times do
+        status, headers, response, output = browser_call(bid, app, method, path, body)
+        printed << output
+        location = headers["location"] || headers["Location"]
+        break unless [301, 302, 303, 307, 308].include?(status) && location
+
+        path = location.to_s.sub(%r{\Ahttps?://[^/]*}, "")
+        method, body = "GET", nil unless [307, 308].include?(status)
       end
+      widget.querySelector(".mb-url").value = path
       content_type = (headers["content-type"] || headers["Content-Type"]).to_s
       status_el.innerText = status.to_s
       status_el.className = "mb-status #{status < 400 ? 'ok' : 'err'}"
-      content_type.empty? || content_type.include?("html") ? body : "<pre>#{escape_html(body)}</pre>"
+      content_type.empty? || content_type.include?("html") ? response : "<pre>#{escape_html(response)}</pre>"
     rescue Exception => e
       status_el.innerText = "ERR"
       status_el.className = "mb-status err"
@@ -1236,6 +1278,35 @@ class ChunkyApp
     end
     browser_page(widget.querySelector(".mb-view")).innerHTML = "#{MB_PAGE_STYLE}<div class=\"mb-page\">#{page_styles_scoped(page)}</div>"
     browser_log(widget, printed)
+  end
+
+  # the app called once, with the widget's cookies; what it prints caught;
+  # the cookies it sets kept (name=value; Max-Age=0 or an expiry in the
+  # past forgets one)
+  def browser_call(bid, app, method, path, body)
+    jar = (@browser_cookies ||= {})[bid] ||= {}
+    cookie = jar.map { |name, value| "#{name}=#{value}" }.join("; ")
+    old_stdout = $stdout
+    $stdout = StringIO.new
+    begin
+      status, headers, response = RackPlayground.request(
+        app, path, method: method, body: body,
+        content_type: body ? "application/x-www-form-urlencoded" : nil, cookie: cookie
+      )
+    ensure
+      output = $stdout.string
+      $stdout = old_stdout
+    end
+    set = headers["set-cookie"] || headers["Set-Cookie"]
+    Array(set).flat_map { |line| line.to_s.split("\n") }.each do |line|
+      pair, *attributes = line.split(";").map(&:strip)
+      name, value = pair.to_s.split("=", 2)
+      next if name.nil? || name.empty?
+
+      gone = attributes.any? { |a| a =~ /\Amax-age=0\z/i || (a =~ /\Aexpires=(.*)/i && (Time.parse($1) < Time.now rescue false)) }
+      gone || value.to_s.empty? ? jar.delete(name) : jar[name] = value
+    end
+    [status, headers, response, output]
   end
 
   # In the shadow root there is no <html> or <body> (the fragment parser
@@ -1271,6 +1342,10 @@ class ChunkyApp
     a { color: #1a5dc8; text-decoration: underline; cursor: pointer; }
     pre { margin: 0; white-space: pre-wrap; font-size: 0.88rem; }
     .mb-error { color: var(--err); }
+    label { display: block; margin-top: 0.5rem; }
+    input, button, select, textarea { font: inherit; }
+    input[type=text], input[type=number], input[type=email], textarea { padding: 0.2rem 0.4rem; border: 1px solid #b9c3cd; border-radius: 4px; }
+    button, input[type=submit] { margin-top: 0.6rem; padding: 0.25rem 0.8rem; }
     </style>
   HTML
 
