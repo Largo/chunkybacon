@@ -14,7 +14,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, Ruby on Rails itself booted in the page
   (routes, controllers and views, Active Record on SQLite, a page from
-  the database with `resources`, a form with `new` and `create`), 3D graphics, tables, frames and colours
+  the database with `resources`, forms, all seven REST actions, `has_many`
+  and `belongs_to`), 3D graphics, tables, frames and colours
   for the terminal with the [TTY toolkit](https://ttytoolkit.org),
   sketches that move and follow the mouse with
   [Processing](https://github.com/xord/processing), test data that looks

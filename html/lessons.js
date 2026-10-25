@@ -4961,6 +4961,246 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "rails-crud",
+      "de": {
+        "title": "Rails – ändern und löschen: alle sieben",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Die letzten drei: edit, update, destroy</h2><p>Lektion {{nr:rails-forms}} hat ein Gericht hinzugefügt. Eines ändern und eines von der Karte nehmen sind die drei Actions, die von den sieben, die <code>resources</code> kennt, noch fehlen: <code>edit</code> zeigt das Formular nochmals, ausgefüllt; <code>update</code> speichert die Änderungen; <code>destroy</code> löscht. Zwei davon brauchen HTTP-Methoden, die ein Browser-Formular nicht schicken kann – <code>PATCH</code> und <code>DELETE</code> –, darum versteckt Rails ein Feld <code>_method</code> im Formular, das eine Middleware liest; du schreibst nur <code>method: :delete</code>.</p><p>Die App und ihre Daten, noch einmal:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\nrequire \"active_record\"\n\n# die App der Rails-Lektion: Sie startet einmal pro Seite, darum dieselbe\n# Klasse, und ihre Ordner entstehen nur, wenn sie noch fehlen\nFileUtils.mkdir_p(\"/tmp/imbiss/app/views\")\nFileUtils.mkdir_p(\"/tmp/imbiss/config\")\nrouten = \"/tmp/imbiss/config/routes.rb\"\nFile.write(routen, \"Rails.application.routes.draw do\\nend\\n\") unless File.exist?(routen)\n\nclass ImbissApp < Rails::Application\n  config.root = \"/tmp/imbiss\"\n  config.eager_load = false\n  config.consider_all_requests_local = true\n  config.logger = Logger.new(STDOUT)\nend\nImbissApp.initialize! unless ImbissApp.initialized?\nRails.version"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Tabelle, das Model, drei Gerichte:</p>"
+          },
+          {
+            "t": "c",
+            "code": "ActiveRecord::Base.logger = Logger.new(STDOUT)\nActiveRecord::Base.establish_connection(adapter: \"sqlite3\", database: \"db/imbiss.sqlite3\")\n\n# Rails bildet englische Mehrzahlen - einmal gesagt, kennt es die deutsche\nActiveSupport::Inflector.inflections(:en) { |regel| regel.irregular \"gericht\", \"gerichte\" }\n\nActiveRecord::Schema.define do\n  create_table :gerichte, force: true do |t|\n    t.string  :name\n    t.decimal :preis, precision: 6, scale: 2\n    t.timestamps\n  end\nend\n\nclass Gericht < ActiveRecord::Base\n  validates :name, presence: true\nend\n\nGericht.create!(name: \"Speck\", preis: 4.5)\nGericht.create!(name: \"Ei\", preis: 2)\nGericht.create!(name: \"Kaffee\", preis: 3.2)\nGericht.count"
+          },
+          {
+            "t": "h",
+            "html": "<p>Neu unten: <code>resources :gerichte</code> ohne <code>only:</code> – alle sieben Routen. Das Formular ist in ein <em>Partial</em> gewandert, <code>_form.html.erb</code>, das <code>new</code> und <code>edit</code> beide mit <code>render</code> einfügen: Dasselbe <code>form_with</code> merkt, ob das Gericht schon gespeichert ist, und schickt an <code>POST /gerichte</code> oder <code>PATCH /gerichte/1</code>; sogar den Button beschriftet es selbst. <code>button_to \"Löschen\", @gericht, method: :delete</code> ist ein Formular aus einem Knopf. Und weil vier Actions damit beginnen, das Gericht zu suchen, tut es ein <code>before_action</code> einmal für alle:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"gerichte#index\"\n    resources :gerichte\n  end\nRUBY\nImbissApp.reload_routes!\n\nviews = Rails.root.join(\"app/views/gerichte\")\nviews.mkpath\nviews.join(\"index.html.erb\").write(<<~ERB)\n  <h1>Chunkys Imbiss</h1>\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <ul>\n    <% @gerichte.each do |gericht| %>\n      <li>\n        <%= link_to gericht.name, gericht %>\n        – <%= number_to_currency(gericht.preis, unit: \"CHF \") %>\n      </li>\n    <% end %>\n  </ul>\n  <%= link_to \"Gericht hinzufügen\", new_gericht_path %>\nERB\nviews.join(\"_form.html.erb\").write(<<~ERB)\n  <% gericht.errors.full_messages.each do |meldung| %>\n    <p><em><%= meldung %></em></p>\n  <% end %>\n  <%= form_with model: gericht do |formular| %>\n    <%= formular.label :name %>\n    <%= formular.text_field :name %>\n    <%= formular.label :preis %>\n    <%= formular.number_field :preis, step: 0.1 %>\n    <%= formular.submit %>\n  <% end %>\nERB\nviews.join(\"new.html.erb\").write(<<~ERB)\n  <h2>Neues Gericht</h2>\n  <%= render \"form\", gericht: @gericht %>\nERB\nviews.join(\"edit.html.erb\").write(<<~ERB)\n  <h2><%= @gericht.name %> bearbeiten</h2>\n  <%= render \"form\", gericht: @gericht %>\nERB\nviews.join(\"show.html.erb\").write(<<~ERB)\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <h2><%= @gericht.name %></h2>\n  <p><%= number_to_currency(@gericht.preis, unit: \"CHF \") %></p>\n  <%= link_to \"Bearbeiten\", edit_gericht_path(@gericht) %> ·\n  <%= link_to \"Zurück zur Speisekarte\", gerichte_path %>\n  <%= button_to \"Löschen\", @gericht, method: :delete %>\nERB\n\nclass GerichteController < ActionController::Base\n  before_action :set_gericht, only: [:show, :edit, :update, :destroy]\n\n  def index\n    @gerichte = Gericht.order(:preis)\n  end\n\n  def show\n  end\n\n  def new\n    @gericht = Gericht.new\n  end\n\n  def create\n    @gericht = Gericht.new(gericht_params)\n    if @gericht.save\n      redirect_to @gericht, notice: \"#{@gericht.name} steht auf der Speisekarte.\"\n    else\n      render :new, status: :unprocessable_entity\n    end\n  end\n\n  def edit\n  end\n\n  def update\n    if @gericht.update(gericht_params)\n      redirect_to @gericht, notice: \"#{@gericht.name} wurde geändert.\"\n    else\n      render :edit, status: :unprocessable_entity\n    end\n  end\n\n  def destroy\n    @gericht.destroy\n    redirect_to gerichte_path, notice: \"#{@gericht.name} ist von der Karte.\", status: :see_other\n  end\n\n  private\n\n  def set_gericht\n    @gericht = Gericht.find(params[:id])\n  end\n\n  def gericht_params\n    params.expect(gericht: [:name, :preis])\n  end\nend\n\nshow_browser ImbissApp, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Öffne ein Gericht, klick auf <em>Bearbeiten</em>, ändere den Preis, speichere: <code>update</code> antwortet mit einem Redirect zum Gericht, und das Log zeigt ein <code>PATCH</code> – die Anfrage kam als <code>POST</code> mit <code>_method=patch</code> an, und <code>Rack::MethodOverride</code> hat das <code>PATCH</code> daraus gemacht, das die Route will. <em>Löschen</em> ist derselbe Trick mit <code>DELETE</code>; danach ist der Redirect ein <code>303 See Other</code>, das dem Browser sagt, die Liste mit <code>GET</code> zu holen statt das <code>DELETE</code> dort zu wiederholen. Hier die ganze Routentabelle – sieben Routen aus einer Zeile:</p>"
+          },
+          {
+            "t": "c",
+            "code": "ImbissApp.routes.routes.reject(&:internal).each do |route|\n  ziel = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(6)} #{route.path.spec.to_s.ljust(28)} #{ziel}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb'><strong>Auf deinem Rechner</strong> ist das, was <code>bin/rails generate scaffold Gericht name:string preis:decimal</code> dir gibt, fast Zeile für Zeile – schau in einer gescaffoldeten App in <code>app/controllers/gerichte_controller.rb</code> und <code>app/views/gerichte/</code>, und du erkennst jedes Stück wieder. Das Scaffold antwortet auch mit JSON (<code>/gerichte.json</code>) und fragt vor dem Löschen «Sicher?» (<code>data: { turbo_confirm: \"…\" }</code>; Turbo ist der Teil von Hotwire, der Formulare ohne Neuladen der Seite schickt).</div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://guides.rubyonrails.org/routing.html#crud-verbs-and-actions' target='_blank'>CRUD, verbs and actions</a> · <a href='https://guides.rubyonrails.org/layouts_and_rendering.html#using-partials' target='_blank'>Partials</a> · <a href='https://guides.rubyonrails.org/action_controller_overview.html#filters' target='_blank'>Filters (before_action)</a> · <a href='https://api.rubyonrails.org/classes/ActionView/Helpers/UrlHelper.html#method-i-button_to' target='_blank'>button_to</a></div><div class='task'><strong>Aufgabe:</strong> Löschen braucht zwei Klicks: das Gericht, dann <em>Löschen</em>. Setz neben jedes Gericht in der Liste ein <code>button_to \"Löschen\", gericht, method: :delete</code>, damit die Karte von der Startseite aus gekürzt werden kann. Der Mini-Browser zeigt die Liste.</div>"
+          },
+          {
+            "t": "x",
+            "code": "Rails.root.join(\"app/views/gerichte/index.html.erb\").write(<<~ERB)\n  <h1>Chunkys Imbiss</h1>\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <ul>\n    <% @gerichte.each do |gericht| %>\n      <li>\n        <%= link_to gericht.name, gericht %>\n        – <%= number_to_currency(gericht.preis, unit: \"CHF \") %>\n        <%# hierhin ein Löschen-Button für dieses Gericht %>\n      </li>\n    <% end %>\n  </ul>\n  <%= link_to \"Gericht hinzufügen\", new_gericht_path %>\nERB\n\nshow_browser ImbissApp, \"/\"",
+            "check": "s, b = mock_get(ImbissApp, \"/\"); s == 200 && b.scan(/name=\"_method\" value=\"delete\"/).size >= Gericht.count && b.scan(%r{action=\"/gerichte/\\d+\"}).size >= Gericht.count",
+            "hint": "Wo der Kommentar steht: <code>&lt;%= button_to \"Löschen\", gericht, method: :delete %&gt;</code> – <code>gericht</code>, die Variable der Schleife, nicht <code>@gericht</code>. Danach die Zelle neu ausführen und einen Knopf drücken."
+          }
+        ]
+      },
+      "en": {
+        "title": "Rails – editing and deleting: all seven",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>The last three: edit, update, destroy</h2><p>Lesson {{nr:rails-forms}} added a dish. Changing one and taking it off the menu are the three actions still missing from the seven that <code>resources</code> knows: <code>edit</code> shows the form again, filled in; <code>update</code> saves the changes; <code>destroy</code> deletes. Two of them use HTTP methods a browser form cannot send – <code>PATCH</code> and <code>DELETE</code> – so Rails hides a field <code>_method</code> in the form and a middleware reads it; you only write <code>method: :delete</code>.</p><p>The app and its data, once more:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\nrequire \"active_record\"\n\n# the app of the Rails lesson: it boots once per page, so this is the same\n# class, and its folders are made again only if they are missing\nFileUtils.mkdir_p(\"/tmp/diner/app/views\")\nFileUtils.mkdir_p(\"/tmp/diner/config\")\nroutes = \"/tmp/diner/config/routes.rb\"\nFile.write(routes, \"Rails.application.routes.draw do\\nend\\n\") unless File.exist?(routes)\n\nclass DinerApp < Rails::Application\n  config.root = \"/tmp/diner\"\n  config.eager_load = false\n  config.consider_all_requests_local = true\n  config.logger = Logger.new(STDOUT)\nend\nDinerApp.initialize! unless DinerApp.initialized?\nRails.version"
+          },
+          {
+            "t": "h",
+            "html": "<p>The table, the model, three dishes:</p>"
+          },
+          {
+            "t": "c",
+            "code": "ActiveRecord::Base.logger = Logger.new(STDOUT)\nActiveRecord::Base.establish_connection(adapter: \"sqlite3\", database: \"db/diner.sqlite3\")\n\nActiveRecord::Schema.define do\n  create_table :dishes, force: true do |t|\n    t.string  :name\n    t.decimal :price, precision: 6, scale: 2\n    t.timestamps\n  end\nend\n\nclass Dish < ActiveRecord::Base\n  validates :name, presence: true\nend\n\nDish.create!(name: \"Bacon\", price: 4.5)\nDish.create!(name: \"Egg\", price: 2)\nDish.create!(name: \"Coffee\", price: 3.2)\nDish.count"
+          },
+          {
+            "t": "h",
+            "html": "<p>What is new below: <code>resources :dishes</code> without <code>only:</code> – all seven routes. The form moved into a <em>partial</em>, <code>_form.html.erb</code>, that <code>new</code> and <code>edit</code> both <code>render</code>: the same <code>form_with</code> notices whether the dish is saved yet and sends to <code>POST /dishes</code> or <code>PATCH /dishes/1</code>, and even labels the button <em>Create Dish</em> or <em>Update Dish</em> by itself. <code>button_to \"Delete\", @dish, method: :delete</code> is a one-button form. And since four actions start by finding the dish, a <code>before_action</code> does it once for all of them:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"dishes#index\"\n    resources :dishes\n  end\nRUBY\nDinerApp.reload_routes!\n\nviews = Rails.root.join(\"app/views/dishes\")\nviews.mkpath\nviews.join(\"index.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li>\n        <%= link_to dish.name, dish %>\n        – <%= number_to_currency(dish.price, unit: \"CHF \") %>\n      </li>\n    <% end %>\n  </ul>\n  <%= link_to \"Add a dish\", new_dish_path %>\nERB\nviews.join(\"_form.html.erb\").write(<<~ERB)\n  <% dish.errors.full_messages.each do |message| %>\n    <p><em><%= message %></em></p>\n  <% end %>\n  <%= form_with model: dish do |form| %>\n    <%= form.label :name %>\n    <%= form.text_field :name %>\n    <%= form.label :price %>\n    <%= form.number_field :price, step: 0.1 %>\n    <%= form.submit %>\n  <% end %>\nERB\nviews.join(\"new.html.erb\").write(<<~ERB)\n  <h2>New dish</h2>\n  <%= render \"form\", dish: @dish %>\nERB\nviews.join(\"edit.html.erb\").write(<<~ERB)\n  <h2>Edit <%= @dish.name %></h2>\n  <%= render \"form\", dish: @dish %>\nERB\nviews.join(\"show.html.erb\").write(<<~ERB)\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <h2><%= @dish.name %></h2>\n  <p><%= number_to_currency(@dish.price, unit: \"CHF \") %></p>\n  <%= link_to \"Edit\", edit_dish_path(@dish) %> ·\n  <%= link_to \"Back to the menu\", dishes_path %>\n  <%= button_to \"Delete\", @dish, method: :delete %>\nERB\n\nclass DishesController < ActionController::Base\n  before_action :set_dish, only: [:show, :edit, :update, :destroy]\n\n  def index\n    @dishes = Dish.order(:price)\n  end\n\n  def show\n  end\n\n  def new\n    @dish = Dish.new\n  end\n\n  def create\n    @dish = Dish.new(dish_params)\n    if @dish.save\n      redirect_to @dish, notice: \"#{@dish.name} is on the menu.\"\n    else\n      render :new, status: :unprocessable_entity\n    end\n  end\n\n  def edit\n  end\n\n  def update\n    if @dish.update(dish_params)\n      redirect_to @dish, notice: \"#{@dish.name} was updated.\"\n    else\n      render :edit, status: :unprocessable_entity\n    end\n  end\n\n  def destroy\n    @dish.destroy\n    redirect_to dishes_path, notice: \"#{@dish.name} is off the menu.\", status: :see_other\n  end\n\n  private\n\n  def set_dish\n    @dish = Dish.find(params[:id])\n  end\n\n  def dish_params\n    params.expect(dish: [:name, :price])\n  end\nend\n\nshow_browser DinerApp, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Open a dish, click <em>Edit</em>, change the price, save: <code>update</code> answers with a redirect to the dish, and the log shows a <code>PATCH</code> – the request arrived as <code>POST</code> with <code>_method=patch</code>, and <code>Rack::MethodOverride</code> turned it into the <code>PATCH</code> the route wants. <em>Delete</em> is the same trick with <code>DELETE</code>; after it the redirect is a <code>303 See Other</code>, which tells the browser to <code>GET</code> the list rather than repeat the <code>DELETE</code> there. Here is the whole route table now – seven routes from one line:</p>"
+          },
+          {
+            "t": "c",
+            "code": "DinerApp.routes.routes.reject(&:internal).each do |route|\n  target = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(6)} #{route.path.spec.to_s.ljust(28)} #{target}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb'><strong>On your machine</strong> this is what <code>bin/rails generate scaffold Dish name:string price:decimal</code> gives you, almost line for line – look at <code>app/controllers/dishes_controller.rb</code> and <code>app/views/dishes/</code> in a scaffolded app and you will recognise every piece. The scaffold also answers JSON (<code>/dishes.json</code>) and asks \"are you sure?\" before deleting (<code>data: { turbo_confirm: \"…\" }</code>, Turbo being Hotwire's part that sends forms without a page reload).</div><div class='docs'><strong>Look it up:</strong> <a href='https://guides.rubyonrails.org/routing.html#crud-verbs-and-actions' target='_blank'>CRUD, verbs and actions</a> · <a href='https://guides.rubyonrails.org/layouts_and_rendering.html#using-partials' target='_blank'>Partials</a> · <a href='https://guides.rubyonrails.org/action_controller_overview.html#filters' target='_blank'>Filters (before_action)</a> · <a href='https://api.rubyonrails.org/classes/ActionView/Helpers/UrlHelper.html#method-i-button_to' target='_blank'>button_to</a></div><div class='task'><strong>Task:</strong> Deleting takes two clicks: the dish, then <em>Delete</em>. Put a <code>button_to \"Delete\", dish, method: :delete</code> next to every dish in the list, so the menu can be trimmed from the index page. The mini browser shows the list.</div>"
+          },
+          {
+            "t": "x",
+            "code": "Rails.root.join(\"app/views/dishes/index.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li>\n        <%= link_to dish.name, dish %>\n        – <%= number_to_currency(dish.price, unit: \"CHF \") %>\n        <%# a Delete button for this dish goes here %>\n      </li>\n    <% end %>\n  </ul>\n  <%= link_to \"Add a dish\", new_dish_path %>\nERB\n\nshow_browser DinerApp, \"/\"",
+            "check": "s, b = mock_get(DinerApp, \"/\"); s == 200 && b.scan(/name=\"_method\" value=\"delete\"/).size >= Dish.count && b.scan(%r{action=\"/dishes/\\d+\"}).size >= Dish.count",
+            "hint": "Where the comment is: <code>&lt;%= button_to \"Delete\", dish, method: :delete %&gt;</code> – <code>dish</code>, the loop's variable, not <code>@dish</code>. Then run the cell again and click one."
+          }
+        ]
+      },
+      "ja": {
+        "title": "Rails：編集と削除、7つのアクション",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>残りの3つ：edit、update、destroy</h2><p>レッスン{{nr:rails-forms}}では料理を追加しました。料理を変えることと、メニューから外すことが、<code>resources</code>の知っている7つのアクションのうち、まだ足りない3つです。<code>edit</code>は中身の入ったフォームをもう一度表示し、<code>update</code>は変更を保存し、<code>destroy</code>は削除します。そのうち2つは、ブラウザのフォームでは送れないHTTPメソッド、<code>PATCH</code>と<code>DELETE</code>を使います。そこでRailsはフォームに<code>_method</code>という欄を隠しておき、ミドルウェアがそれを読みます。あなたが書くのは<code>method: :delete</code>だけです。</p><p>アプリとそのデータを、もう一度用意します。</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"rails\"\nrequire \"action_controller/railtie\"\nrequire \"active_record\"\n\n# Railsのレッスンと同じアプリです。起動はページごとに一度なので同じクラスを使い、\n# フォルダは、まだないときだけ作ります\nFileUtils.mkdir_p(\"/tmp/diner/app/views\")\nFileUtils.mkdir_p(\"/tmp/diner/config\")\nroutes = \"/tmp/diner/config/routes.rb\"\nFile.write(routes, \"Rails.application.routes.draw do\\nend\\n\") unless File.exist?(routes)\n\nclass DinerApp < Rails::Application\n  config.root = \"/tmp/diner\"\n  config.eager_load = false\n  config.consider_all_requests_local = true\n  config.logger = Logger.new(STDOUT)\nend\nDinerApp.initialize! unless DinerApp.initialized?\nRails.version"
+          },
+          {
+            "t": "h",
+            "html": "<p>テーブルとモデルと3つの料理です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "ActiveRecord::Base.logger = Logger.new(STDOUT)\nActiveRecord::Base.establish_connection(adapter: \"sqlite3\", database: \"db/diner.sqlite3\")\n\nActiveRecord::Schema.define do\n  create_table :dishes, force: true do |t|\n    t.string  :name\n    t.decimal :price, precision: 6, scale: 2\n    t.timestamps\n  end\nend\n\nclass Dish < ActiveRecord::Base\n  validates :name, presence: true\nend\n\nDish.create!(name: \"Bacon\", price: 4.5)\nDish.create!(name: \"Egg\", price: 2)\nDish.create!(name: \"Coffee\", price: 3.2)\nDish.count"
+          },
+          {
+            "t": "h",
+            "html": "<p>下のコードで新しいところです。<code>resources :dishes</code>に<code>only:</code>がありません。7つのルート全部です。フォームは<em>パーシャル</em>の<code>_form.html.erb</code>に移り、<code>new</code>と<code>edit</code>の両方が<code>render</code>で差し込みます。同じ<code>form_with</code>が、その料理が保存済みかどうかに気づいて、<code>POST /dishes</code>か<code>PATCH /dishes/1</code>かを選び、ボタンの文字まで<em>Create Dish</em>か<em>Update Dish</em>にしてくれます。<code>button_to \"Delete\", @dish, method: :delete</code>は、ボタン1つのフォームです。そして4つのアクションが料理を探すところから始まるので、<code>before_action</code>がまとめて一度だけやってくれます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"dishes#index\"\n    resources :dishes\n  end\nRUBY\nDinerApp.reload_routes!\n\nviews = Rails.root.join(\"app/views/dishes\")\nviews.mkpath\nviews.join(\"index.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li>\n        <%= link_to dish.name, dish %>\n        – <%= number_to_currency(dish.price, unit: \"CHF \") %>\n      </li>\n    <% end %>\n  </ul>\n  <%= link_to \"Add a dish\", new_dish_path %>\nERB\nviews.join(\"_form.html.erb\").write(<<~ERB)\n  <% dish.errors.full_messages.each do |message| %>\n    <p><em><%= message %></em></p>\n  <% end %>\n  <%= form_with model: dish do |form| %>\n    <%= form.label :name %>\n    <%= form.text_field :name %>\n    <%= form.label :price %>\n    <%= form.number_field :price, step: 0.1 %>\n    <%= form.submit %>\n  <% end %>\nERB\nviews.join(\"new.html.erb\").write(<<~ERB)\n  <h2>New dish</h2>\n  <%= render \"form\", dish: @dish %>\nERB\nviews.join(\"edit.html.erb\").write(<<~ERB)\n  <h2>Edit <%= @dish.name %></h2>\n  <%= render \"form\", dish: @dish %>\nERB\nviews.join(\"show.html.erb\").write(<<~ERB)\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <h2><%= @dish.name %></h2>\n  <p><%= number_to_currency(@dish.price, unit: \"CHF \") %></p>\n  <%= link_to \"Edit\", edit_dish_path(@dish) %> ·\n  <%= link_to \"Back to the menu\", dishes_path %>\n  <%= button_to \"Delete\", @dish, method: :delete %>\nERB\n\nclass DishesController < ActionController::Base\n  before_action :set_dish, only: [:show, :edit, :update, :destroy]\n\n  def index\n    @dishes = Dish.order(:price)\n  end\n\n  def show\n  end\n\n  def new\n    @dish = Dish.new\n  end\n\n  def create\n    @dish = Dish.new(dish_params)\n    if @dish.save\n      redirect_to @dish, notice: \"#{@dish.name} is on the menu.\"\n    else\n      render :new, status: :unprocessable_entity\n    end\n  end\n\n  def edit\n  end\n\n  def update\n    if @dish.update(dish_params)\n      redirect_to @dish, notice: \"#{@dish.name} was updated.\"\n    else\n      render :edit, status: :unprocessable_entity\n    end\n  end\n\n  def destroy\n    @dish.destroy\n    redirect_to dishes_path, notice: \"#{@dish.name} is off the menu.\", status: :see_other\n  end\n\n  private\n\n  def set_dish\n    @dish = Dish.find(params[:id])\n  end\n\n  def dish_params\n    params.expect(dish: [:name, :price])\n  end\nend\n\nshow_browser DinerApp, \"/\""
+          },
+          {
+            "t": "h",
+            "html": "<p>料理を開いて<em>Edit</em>をクリックし、価格を変えて保存してみてください。<code>update</code>は料理のページへのリダイレクトで答え、ログには<code>PATCH</code>が出ます。リクエストは<code>_method=patch</code>付きの<code>POST</code>として届き、<code>Rack::MethodOverride</code>がルートの求める<code>PATCH</code>に変えたのです。<em>Delete</em>は<code>DELETE</code>で同じ手を使います。そのあとのリダイレクトは<code>303 See Other</code>で、そこで<code>DELETE</code>を繰り返すのではなく、一覧を<code>GET</code>するようブラウザに伝えます。これがルートの一覧の全体です。1行から7つのルートが生まれています。</p>"
+          },
+          {
+            "t": "c",
+            "code": "DinerApp.routes.routes.reject(&:internal).each do |route|\n  target = \"#{route.requirements[:controller]}##{route.requirements[:action]}\"\n  puts \"#{route.verb.ljust(6)} #{route.path.spec.to_s.ljust(28)} #{target}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='offweb'><strong>自分のコンピューターでは</strong>、これは<code>bin/rails generate scaffold Dish name:string price:decimal</code>が作るものと、ほとんど1行ずつ同じです。scaffoldで作ったアプリの<code>app/controllers/dishes_controller.rb</code>と<code>app/views/dishes/</code>を見れば、どの部品にも見覚えがあるはずです。scaffoldはJSONでも答え（<code>/dishes.json</code>）、削除の前に「本当に？」と尋ねます（<code>data: { turbo_confirm: \"…\" }</code>。TurboはHotwireのうち、ページを再読み込みせずにフォームを送る部分です）。</div><div class='docs'><strong>調べてみよう：</strong><a href='https://railsguides.jp/routing.html#crudと動詞とアクション' target='_blank'>CRUDと動詞とアクション</a>・<a href='https://railsguides.jp/layouts_and_rendering.html#パーシャルを使う' target='_blank'>パーシャル</a>・<a href='https://railsguides.jp/action_controller_overview.html#フィルタ' target='_blank'>フィルタ（before_action）</a>・<a href='https://api.rubyonrails.org/classes/ActionView/Helpers/UrlHelper.html#method-i-button_to' target='_blank'>button_to（英語）</a></div><div class='task'><strong>課題：</strong>削除にはクリックが2回いります。料理、それから<em>Delete</em>です。一覧の料理の1つ1つに<code>button_to \"Delete\", dish, method: :delete</code>を並べて、一覧のページからメニューを減らせるようにしましょう。ミニブラウザは一覧を表示しています。</div>"
+          },
+          {
+            "t": "x",
+            "code": "Rails.root.join(\"app/views/dishes/index.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li>\n        <%= link_to dish.name, dish %>\n        – <%= number_to_currency(dish.price, unit: \"CHF \") %>\n        <%# a Delete button for this dish goes here %>\n      </li>\n    <% end %>\n  </ul>\n  <%= link_to \"Add a dish\", new_dish_path %>\nERB\n\nshow_browser DinerApp, \"/\"",
+            "check": "s, b = mock_get(DinerApp, \"/\"); s == 200 && b.scan(/name=\"_method\" value=\"delete\"/).size >= Dish.count && b.scan(%r{action=\"/dishes/\\d+\"}).size >= Dish.count",
+            "hint": "コメントのところに<code>&lt;%= button_to \"Delete\", dish, method: :delete %&gt;</code>だよ。<code>@dish</code>ではなく、ループの変数の<code>dish</code>。書けたら、もう一度セルを実行して、ボタンを押してみてね。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rails-associations",
+      "de": {
+        "title": "Active Record – has_many und belongs_to",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Tabellen, die zusammengehören</h2><p>Eine Speisekarte hat Kategorien, und jedes Gericht steht in einer. In einer Datenbank ist das eine Spalte: <code>kategorie_id</code> in der Tabelle der Gerichte hält die id der Zeile der Kategorie – ein <em>Fremdschlüssel</em>. Active Record macht aus dieser Spalte zwei Methoden, mit je einer Zeile auf beiden Seiten erklärt: <code>has_many :gerichte</code> in <code>Kategorie</code>, <code>belongs_to :kategorie</code> in <code>Gericht</code>. Alles andere – die Joins, die ids, das Zwischenspeichern – leitet es aus den Namen ab. Lektion {{nr:activerecord}} hatte die eine Tabelle; hier kommen zwei (und die deutschen Mehrzahlen sagen wir Rails wieder vorher):</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"active_record\"\n\nActiveRecord::Base.logger = Logger.new(STDOUT)\nActiveRecord::Base.establish_connection(adapter: \"sqlite3\", database: \"karte.db\")\nActiveRecord::Base.belongs_to_required_by_default = true   # wie rails new es einstellt\nActiveSupport::Inflector.inflections(:en) do |regel|   # die deutschen Mehrzahlen dieser Lektion\n  regel.irregular \"kategorie\", \"kategorien\"\n  regel.irregular \"gericht\", \"gerichte\"\n  regel.irregular \"koch\", \"koeche\"\n  regel.irregular \"spezialitaet\", \"spezialitaeten\"\nend\n\nActiveRecord::Schema.define do\n  create_table :kategorien, force: true do |t|\n    t.string :name\n  end\n  create_table :gerichte, force: true do |t|\n    t.string     :name\n    t.decimal    :preis, precision: 6, scale: 2\n    t.references :kategorie   # die Spalte kategorie_id, mit Index\n    t.timestamps\n  end\nend\n\nclass Kategorie < ActiveRecord::Base\n  has_many :gerichte\nend\n\nclass Gericht < ActiveRecord::Base\n  belongs_to :kategorie\nend\n\nvorspeisen = Kategorie.create!(name: \"Vorspeisen\")\nhauptgänge = Kategorie.create!(name: \"Hauptgänge\")\nvorspeisen.gerichte.create!(name: \"Suppe\", preis: 3)\nhauptgänge.gerichte.create!(name: \"Speck\", preis: 4.5)\nhauptgänge.gerichte.create!(name: \"Ei\", preis: 2)\nGericht.count"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>t.references :kategorie</code> ist das Wort der Migration für «eine Spalte <code>kategorie_id</code>, mit Index», und <code>vorspeisen.gerichte.create!</code> füllt sie aus: Ein Gericht, das über die <code>gerichte</code> der Kategorie entsteht, kennt seine Kategorie. Die zwei <code>INSERT</code>s im Log zeigen es. Von jetzt an sind beide Richtungen ein Methodenaufruf, und eine Relation wie <code>hauptgänge.gerichte</code> lässt sich abfragen wie jede andere:</p>"
+          },
+          {
+            "t": "c",
+            "code": "ei = Gericht.find_by(name: \"Ei\")\nputs ei.kategorie.name\n\nhauptgänge = Kategorie.find_by(name: \"Hauptgänge\")\nputs hauptgänge.gerichte.map(&:name).inspect\nputs hauptgänge.gerichte.sum(:preis)\n\nputs Gericht.joins(:kategorie).where(kategorien: { name: \"Hauptgänge\" }).pluck(:name).inspect\n\nKategorie.includes(:gerichte).each do |kategorie|\n  puts \"#{kategorie.name}: #{kategorie.gerichte.map(&:name).join(\", \")}\"\nend\n\nwaise = Gericht.new(name: \"Waise\", preis: 1)\nwaise.valid?\nwaise.errors.full_messages"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>ei.kategorie</code> lädt die Kategorie, <code>hauptgänge.gerichte</code> die Gerichte – je eine Abfrage, <code>WHERE kategorie_id = ?</code>, im Log. <code>joins(:kategorie)</code> lässt die Datenbank die zwei Tabellen verbinden, damit du Gerichte in einer Abfrage nach dem Namen ihrer Kategorie filtern kannst; <code>includes(:gerichte)</code> lädt alle Kategorien und alle ihre Gerichte in zwei Abfragen statt einer pro Kategorie – das berühmte <em>N+1</em>-Problem, mit einem Wort gelöst. Und die Waise: <code>belongs_to</code> ist auch eine Validierung, <em>Kategorie must exist</em>, wenn <code>belongs_to_required_by_default</code> an ist, wie in jeder App, die <code>rails new</code> anlegt.</p><div class='offweb'><strong>Auf deinem Rechner</strong> schreibt <code>bin/rails generate model Gericht name:string preis:decimal kategorie:references</code> die Migration mit <code>t.references</code> und das <code>belongs_to</code> ins Model für dich; das <code>has_many</code> auf der anderen Seite ergänzt du. Darüber hinaus: <code>has_many :through</code> für Viele-zu-viele (eine Bestellung hat viele Gerichte über ihre Positionen), <code>dependent: :destroy</code>, damit eine Kategorie ihre Gerichte mitnimmt, und <code>has_one</code>.</div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://guides.rubyonrails.org/association_basics.html' target='_blank'>Active Record Associations</a> · <a href='https://guides.rubyonrails.org/active_record_querying.html#joining-tables' target='_blank'>Joining tables</a> · <a href='https://guides.rubyonrails.org/active_record_querying.html#eager-loading-associations' target='_blank'>Eager loading</a></div><div class='task'><strong>Aufgabe:</strong> Jeder Koch hat Spezialitäten. Erkläre die zwei Seiten – <code>has_many :spezialitaeten</code> in <code>Koch</code>, <code>belongs_to :koch</code> in <code>Spezialitaet</code> –, damit die Zelle Kaz' zwei Spezialitäten anlegt und mit ihren Namen endet.</div>"
+          },
+          {
+            "t": "x",
+            "code": "ActiveRecord::Schema.define do\n  create_table :koeche, force: true do |t|\n    t.string :name\n  end\n  create_table :spezialitaeten, force: true do |t|\n    t.string     :name\n    t.references :koch\n  end\nend\n\nclass Koch < ActiveRecord::Base\n  # has_many ...\nend\n\nclass Spezialitaet < ActiveRecord::Base\n  # belongs_to ...\nend\n\nkaz = Koch.create!(name: \"Kaz\")\nSpezialitaet.create!(name: \"Rösti\", koch: kaz)\nSpezialitaet.create!(name: \"Fondue\", koch: kaz)\nkaz.spezialitaeten.map(&:name)",
+            "check": "Koch.count == 1 && Spezialitaet.count == 2 && Spezialitaet.first.koch.name == \"Kaz\" && Koch.first.spezialitaeten.count == 2 && result == [\"Rösti\", \"Fondue\"]",
+            "hint": "<code>has_many :spezialitaeten</code> in <code>Koch</code> und <code>belongs_to :koch</code> in <code>Spezialitaet</code>, anstelle der zwei Kommentare. Danach die Zelle neu ausführen."
+          }
+        ]
+      },
+      "en": {
+        "title": "Active Record – has_many and belongs_to",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Tables that belong together</h2><p>A menu has categories, and every dish is in one of them. In a database that is a column: <code>category_id</code> on the dishes table holds the id of the category's row – a <em>foreign key</em>. Active Record turns that column into two methods, declared with one line on each side: <code>has_many :dishes</code> in <code>Category</code>, <code>belongs_to :category</code> in <code>Dish</code>. Everything else – the joins, the ids, the caching – it does from the names. Lesson {{nr:activerecord}} had the one table; here come two:</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"active_record\"\n\nActiveRecord::Base.logger = Logger.new(STDOUT)\nActiveRecord::Base.establish_connection(adapter: \"sqlite3\", database: \"menu.db\")\nActiveRecord::Base.belongs_to_required_by_default = true   # as rails new sets it\n\nActiveRecord::Schema.define do\n  create_table :categories, force: true do |t|\n    t.string :name\n  end\n  create_table :dishes, force: true do |t|\n    t.string     :name\n    t.decimal    :price, precision: 6, scale: 2\n    t.references :category   # the column category_id, with an index\n    t.timestamps\n  end\nend\n\nclass Category < ActiveRecord::Base\n  has_many :dishes\nend\n\nclass Dish < ActiveRecord::Base\n  belongs_to :category\nend\n\nstarters = Category.create!(name: \"Starters\")\nmains    = Category.create!(name: \"Mains\")\nstarters.dishes.create!(name: \"Soup\", price: 3)\nmains.dishes.create!(name: \"Bacon\", price: 4.5)\nmains.dishes.create!(name: \"Egg\", price: 2)\nDish.count"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>t.references :category</code> is the migration's word for \"a <code>category_id</code> column, with an index\", and <code>starters.dishes.create!</code> fills it in: a dish made through the category's <code>dishes</code> knows its category. The two <code>INSERT</code>s in the log show it. From here on both directions are a method call, and a relation like <code>mains.dishes</code> can be queried on like any other:</p>"
+          },
+          {
+            "t": "c",
+            "code": "egg = Dish.find_by(name: \"Egg\")\nputs egg.category.name\n\nmains = Category.find_by(name: \"Mains\")\nputs mains.dishes.map(&:name).inspect\nputs mains.dishes.sum(:price)\n\nputs Dish.joins(:category).where(categories: { name: \"Mains\" }).pluck(:name).inspect\n\nCategory.includes(:dishes).each do |category|\n  puts \"#{category.name}: #{category.dishes.map(&:name).join(\", \")}\"\nend\n\norphan = Dish.new(name: \"Orphan\", price: 1)\norphan.valid?\norphan.errors.full_messages"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>egg.category</code> loads the category, <code>mains.dishes</code> the dishes – each one query, <code>WHERE category_id = ?</code>, in the log. <code>joins(:category)</code> asks the database to connect the two tables, so you can filter dishes by their category's name in one query; <code>includes(:dishes)</code> loads all categories and all their dishes in two queries instead of one per category – the famous <em>N+1</em> problem, solved in a word. And the orphan: <code>belongs_to</code> is also a validation, <em>Category must exist</em>, when <code>belongs_to_required_by_default</code> is on, as it is in every app <code>rails new</code> makes.</p><div class='offweb'><strong>On your machine</strong> <code>bin/rails generate model Dish name:string price:decimal category:references</code> writes the migration with <code>t.references</code> and the <code>belongs_to</code> into the model for you; the <code>has_many</code> on the other side is yours to add. Beyond this: <code>has_many :through</code> for many-to-many (an order has many dishes through its order items), <code>dependent: :destroy</code> so a category takes its dishes with it, and <code>has_one</code>.</div><div class='docs'><strong>Look it up:</strong> <a href='https://guides.rubyonrails.org/association_basics.html' target='_blank'>Active Record Associations</a> · <a href='https://guides.rubyonrails.org/active_record_querying.html#joining-tables' target='_blank'>Joining tables</a> · <a href='https://guides.rubyonrails.org/active_record_querying.html#eager-loading-associations' target='_blank'>Eager loading</a></div><div class='task'><strong>Task:</strong> Every cook has specials. Declare the two sides – <code>has_many :specials</code> in <code>Cook</code>, <code>belongs_to :cook</code> in <code>Special</code> – so that the cell creates Kaz's two specials and ends with their names.</div>"
+          },
+          {
+            "t": "x",
+            "code": "ActiveRecord::Schema.define do\n  create_table :cooks, force: true do |t|\n    t.string :name\n  end\n  create_table :specials, force: true do |t|\n    t.string     :name\n    t.references :cook\n  end\nend\n\nclass Cook < ActiveRecord::Base\n  # has_many ...\nend\n\nclass Special < ActiveRecord::Base\n  # belongs_to ...\nend\n\nkaz = Cook.create!(name: \"Kaz\")\nSpecial.create!(name: \"Rösti\", cook: kaz)\nSpecial.create!(name: \"Fondue\", cook: kaz)\nkaz.specials.map(&:name)",
+            "check": "Cook.count == 1 && Special.count == 2 && Special.first.cook.name == \"Kaz\" && Cook.first.specials.count == 2 && result == [\"Rösti\", \"Fondue\"]",
+            "hint": "<code>has_many :specials</code> in <code>Cook</code> and <code>belongs_to :cook</code> in <code>Special</code>, in place of the two comments. Then run the cell again."
+          }
+        ]
+      },
+      "ja": {
+        "title": "Active Record：has_manyとbelongs_to",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>つながり合うテーブル</h2><p>メニューにはカテゴリーがあり、どの料理もそのどれかに入っています。データベースでは、それは1つの列です。料理のテーブルの<code>category_id</code>が、カテゴリーの行のidを持ちます。<em>外部キー</em>です。Active Recordはこの列を2つのメソッドに変えます。宣言は両側に1行ずつ、<code>Category</code>に<code>has_many :dishes</code>、<code>Dish</code>に<code>belongs_to :category</code>です。そのほかのこと、つまり結合もidもキャッシュも、名前から全部やってくれます。レッスン{{nr:activerecord}}ではテーブルは1つでした。ここでは2つになります。</p>"
+          },
+          {
+            "t": "c",
+            "code": "install_gem \"rails\"\nrequire \"active_record\"\n\nActiveRecord::Base.logger = Logger.new(STDOUT)\nActiveRecord::Base.establish_connection(adapter: \"sqlite3\", database: \"menu.db\")\nActiveRecord::Base.belongs_to_required_by_default = true   # rails new の設定と同じです\n\nActiveRecord::Schema.define do\n  create_table :categories, force: true do |t|\n    t.string :name\n  end\n  create_table :dishes, force: true do |t|\n    t.string     :name\n    t.decimal    :price, precision: 6, scale: 2\n    t.references :category   # category_id という列と、そのインデックス\n    t.timestamps\n  end\nend\n\nclass Category < ActiveRecord::Base\n  has_many :dishes\nend\n\nclass Dish < ActiveRecord::Base\n  belongs_to :category\nend\n\nstarters = Category.create!(name: \"Starters\")\nmains    = Category.create!(name: \"Mains\")\nstarters.dishes.create!(name: \"Soup\", price: 3)\nmains.dishes.create!(name: \"Bacon\", price: 4.5)\nmains.dishes.create!(name: \"Egg\", price: 2)\nDish.count"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>t.references :category</code>は、マイグレーションの言葉で「<code>category_id</code>という列と、そのインデックス」です。そして<code>starters.dishes.create!</code>がそこを埋めます。カテゴリーの<code>dishes</code>を通して作った料理は、自分のカテゴリーを知っています。ログの2つの<code>INSERT</code>がそれを示しています。ここからは、どちらの向きもメソッドの呼び出し1つで、<code>mains.dishes</code>のようなリレーションには、ほかのものと同じように問い合わせができます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "egg = Dish.find_by(name: \"Egg\")\nputs egg.category.name\n\nmains = Category.find_by(name: \"Mains\")\nputs mains.dishes.map(&:name).inspect\nputs mains.dishes.sum(:price)\n\nputs Dish.joins(:category).where(categories: { name: \"Mains\" }).pluck(:name).inspect\n\nCategory.includes(:dishes).each do |category|\n  puts \"#{category.name}: #{category.dishes.map(&:name).join(\", \")}\"\nend\n\norphan = Dish.new(name: \"Orphan\", price: 1)\norphan.valid?\norphan.errors.full_messages"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>egg.category</code>はカテゴリーを、<code>mains.dishes</code>は料理を読み込みます。それぞれログには<code>WHERE category_id = ?</code>のクエリが出ます。<code>joins(:category)</code>は、2つのテーブルをつなぐようデータベースに頼むので、料理をカテゴリーの名前で1回のクエリで絞り込めます。<code>includes(:dishes)</code>は、すべてのカテゴリーとそのすべての料理を、カテゴリーごとに1回ではなく、2回のクエリで読み込みます。有名な<em>N+1</em>問題が、ひと言で片づきます。そして孤児の料理です。<code>belongs_to_required_by_default</code>がオンのとき、<code>rails new</code>が作るどのアプリでもそうなのですが、<code>belongs_to</code>はバリデーションでもあります。<em>Category must exist</em>です。</p><div class='offweb'><strong>自分のコンピューターでは</strong>、<code>bin/rails generate model Dish name:string price:decimal category:references</code>が、<code>t.references</code>付きのマイグレーションと、モデルの中の<code>belongs_to</code>を書いてくれます。反対側の<code>has_many</code>は自分で足します。この先には、多対多のための<code>has_many :through</code>（注文は注文明細を通して多くの料理を持ちます）、カテゴリーが料理を道連れにする<code>dependent: :destroy</code>、それに<code>has_one</code>があります。</div><div class='docs'><strong>調べてみよう：</strong><a href='https://railsguides.jp/association_basics.html' target='_blank'>Active Record の関連付け</a>・<a href='https://railsguides.jp/active_record_querying.html#テーブルを結合する' target='_blank'>テーブルを結合する</a>・<a href='https://railsguides.jp/active_record_querying.html#関連付けを一括読み込みする' target='_blank'>関連付けの一括読み込み</a></div><div class='task'><strong>課題：</strong>どのコックにも得意料理があります。両側を宣言しましょう。<code>Cook</code>に<code>has_many :specials</code>、<code>Special</code>に<code>belongs_to :cook</code>です。そうすれば、このセルはKazの2つの得意料理を作って、その名前で終わります。</div>"
+          },
+          {
+            "t": "x",
+            "code": "ActiveRecord::Schema.define do\n  create_table :cooks, force: true do |t|\n    t.string :name\n  end\n  create_table :specials, force: true do |t|\n    t.string     :name\n    t.references :cook\n  end\nend\n\nclass Cook < ActiveRecord::Base\n  # has_many ...\nend\n\nclass Special < ActiveRecord::Base\n  # belongs_to ...\nend\n\nkaz = Cook.create!(name: \"Kaz\")\nSpecial.create!(name: \"Rösti\", cook: kaz)\nSpecial.create!(name: \"Fondue\", cook: kaz)\nkaz.specials.map(&:name)",
+            "check": "Cook.count == 1 && Special.count == 2 && Special.first.cook.name == \"Kaz\" && Cook.first.specials.count == 2 && result == [\"Rösti\", \"Fondue\"]",
+            "hint": "2つのコメントの代わりに、<code>Cook</code>に<code>has_many :specials</code>、<code>Special</code>に<code>belongs_to :cook</code>だよ。書けたら、もう一度セルを実行してね。"
+          }
+        ]
+      }
+    },
+    {
       "id": "http",
       "de": {
         "title": "HTTP – Daten aus dem Netz",

@@ -46,6 +46,13 @@ links@railscell6
 links@activerecordcell6
 links@rails-mvccell8
 links@rails-formscell6
+links@rails-crudcell8
+links@rails-associationscell4
+
+# rails-associations [de]: the German plurals (Kategorie, Gericht, Koch,
+# Spezialitaet) are told to the inflector in the setup cell, six lines en
+# does not need
+de-code-shape@rails-associations*de*cell1
 links@tl-formatscell10
 links@tl-performancecell8
 

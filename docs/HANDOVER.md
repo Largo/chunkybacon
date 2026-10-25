@@ -704,7 +704,9 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   one) and sent back as `HTTP_COOKIE`, so a Rails session, its flash and
   the authenticity token work. **Redirects**: 301/302/303 are followed with
   a GET, 307/308 with the same request, five at most; the URL bar shows
-  where it landed (`browser_request`). `RackPlayground.request` takes any
+  where it landed (`browser_request`). A form's `_method` field is the
+  app's business: Rails' `Rack::MethodOverride` turns the POST into the
+  PATCH or DELETE (lesson `rails-crud`). `RackPlayground.request` takes any
   method, body, content type and cookie; `RackPlayground.post` and
   `Kernel#mock_post(app, path, params)` (status, body, location) are for
   checks: the forms lesson's check posts an empty name with a price and
@@ -1625,7 +1627,7 @@ and solutions on the real `jruby.js` under Node (`test/ruboto_node.mjs`,
 §6t), `ruby tools/vendor_ruboto.rb --check`. Deploy: nothing new - the phone's files are in git, the stand-ins
 are in `jruby.js` (§6t's `vendor_jruby.rb` and `publish_jruby`).
 
-## 6v. Rails in the page (lessons `rails`, `activerecord`, `rails-mvc`, `rails-forms`)
+## 6v. Rails in the page (lessons `rails` to `rails-associations`)
 
 Real Rails 8.1 (railties, actionpack, actionview, activesupport) from the
 gem cache, as one file - the shape of Rails' own bug report templates - in
@@ -1770,9 +1772,35 @@ price field and lets `create` accept it; its check posts an empty name
 with a price and expects `value="2.8"` on the 422 page, so it writes
 nothing. `secret_key_base`: Rails generates `tmp/local_secret.txt` under
 `Rails.root` on the first session (the wasm filesystem takes it).
-`test/rails_test.mjs` runs all four lessons in en and de, and `rails` and
+`test/rails_test.mjs` runs every Rails lesson in en and de, and `rails` and
 `rails-forms` in ja (the Japanese cells are the English code under the
 Japanese interface).
+
+**All seven** (lesson `rails-crud`): `resources :dishes` without `only:`,
+the form in a partial `_form.html.erb` that `new` and `edit` render,
+`before_action :set_dish`, `update` and `destroy` (`status: :see_other`
+after the delete, so the 303 is followed with a GET). `form_with` on a
+saved record writes `_method=patch`, `button_to "Delete", @dish, method:
+:delete` a one-button form with `_method=delete`; the mini browser posts
+both and `Rack::MethodOverride`, in Rails' stack, makes the PATCH and the
+DELETE of them - the log shows `Started PATCH`/`Started DELETE`. Without
+`load_defaults`, `button_to` renders an `<input type="submit">`, not a
+`<button>` (`button_to_generates_button_tag`), so its label is not in the
+page's text. The exercise rewrites `index.html.erb` with a delete button
+per row; its check counts the `_method=delete` fields and the
+`action="/dishes/<id>"` forms on the index, so it writes nothing.
+
+**Associations** (lesson `rails-associations`): standalone Active Record
+on `menu.db`, `belongs_to_required_by_default = true` (as `rails new`
+sets it, so the orphan's `valid?` is false with "Category must exist"),
+`create_table :categories` and `:dishes` with `t.references :category`,
+`has_many :dishes` / `belongs_to :category`, `starters.dishes.create!`,
+`egg.category`, `mains.dishes.sum`, `joins(:category).where(categories:
+{ name: })`, `includes(:dishes)` (the `WHERE … IN (…)` of the second
+query is the N+1 point). The exercise makes `cooks` and `specials` and
+declares both sides. German needs four irregular inflections (Kategorie,
+Gericht, Koch, Spezialitaet), all in the setup cell, so the exercise keeps
+en's shape (the linter allows the setup cell's six extra lines).
 
 ## 7. nginx and the proxy
 

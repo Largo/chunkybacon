@@ -237,6 +237,98 @@ const runForms = async (lang, words) => {
   await page.close();
 };
 
+// lesson `rails-crud`: all seven actions - edit and update through
+// _method=patch, destroy through a button_to with _method=delete and the
+// 303 after it; the exercise puts a delete button on every row of the index
+const runCrud = async (lang, words) => {
+  const page = await browser.newPage({ locale: lang === 'de' ? 'de-DE' : 'en-US' });
+  page.on('pageerror', (e) => { console.log('[pageerror]', e.message); failures++; });
+  const out = (idx) => page.evaluate((i) => document.getElementById(`cell-out-${i}`).innerText, idx);
+  const until = (fn, arg, timeout = 90000) => page.waitForFunction(fn, arg, { timeout }).then(() => true, () => false);
+  const codeCells = () => page.$$eval('.run-cell', (buttons) => buttons.map((b) => b.getAttribute('data-idx')));
+  const outHas = (idx, re, timeout) => until(([i, src]) => new RegExp(src).test(document.getElementById(`cell-out-${i}`).innerText), [idx, re.source], timeout);
+  const mbText = (idx) => page.$eval(`#cell-out-${idx} .mb-view`, (view) => view.shadowRoot.querySelector('.mb-page').innerText);
+  const mbStatus = (idx) => page.$eval(`#cell-out-${idx} .mb-status`, (el) => el.textContent);
+  const mbUrl = (idx) => page.$eval(`#cell-out-${idx} .mb-url`, (el) => el.value);
+  const mbHas = (idx, re) => until(([i, src]) => { const v = document.querySelector(`#cell-out-${i} .mb-view`); return v && v.shadowRoot && new RegExp(src).test(v.shadowRoot.textContent); }, [idx, re.source]);
+  const mbGo = async (idx, path) => { await page.fill(`#cell-out-${idx} .mb-url`, path); await page.click(`#cell-out-${idx} .mb-go`); };
+  const clickLink = (idx, text) => page.$eval(`#cell-out-${idx} .mb-view`, (view, t) => [...view.shadowRoot.querySelectorAll('a')].find((a) => a.textContent.trim() === t).click(), text);
+  const deleteButtons = (idx) => page.$eval(`#cell-out-${idx} .mb-view`, (view) => [...view.shadowRoot.querySelectorAll('form')].filter((f) => f.querySelector('input[name=_method][value=delete]')).length);
+
+  await page.goto(`${BASE}?lang=${lang}#rails-crud`, { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
+  const [boot, db, app, routes, exercise] = await codeCells();
+  await page.click(`.run-cell[data-idx="${boot}"]`);
+  check(`${lang}: crud: Rails boots`, await outHas(boot, /=> "8\.\d+\.\d+"/, 180000), await out(boot));
+  await page.click(`.run-cell[data-idx="${db}"]`);
+  check(`${lang}: crud: the dishes`, await outHas(db, /=> 3(\n|$)/, 180000), await out(db));
+  await page.click(`.run-cell[data-idx="${app}"]`);
+  check(`${lang}: crud: the index`, await mbHas(app, /CHF 4.50/), await out(app));
+  // edit: the partial, filled in; update through _method=patch
+  await mbGo(app, `/${words.resource}/1/edit`);
+  check(`${lang}: crud: the edit form is filled in`, await mbHas(app, new RegExp(words.editTitle)) && (await page.$eval(`#cell-out-${app} .mb-view`, (view, n) => view.shadowRoot.querySelector(`input[name="${n}"]`).value, `${words.param}[name]`)) === words.first, await mbText(app));
+  check(`${lang}: crud: the form carries _method=patch`, await page.$eval(`#cell-out-${app} .mb-view`, (view) => !!view.shadowRoot.querySelector('input[name=_method][value=patch]')));
+  await page.$eval(`#cell-out-${app} .mb-view`, (view, n) => { view.shadowRoot.querySelector(`input[name="${n}"]`).value = 'Tea'; view.shadowRoot.querySelector('input[type=submit]').click(); }, `${words.param}[name]`);
+  check(`${lang}: crud: updated, redirected to the dish`, await mbHas(app, new RegExp(`Tea ${words.updated}`)) && (await mbUrl(app)) === `/${words.resource}/1`, await mbText(app));
+  let log = await page.$eval(`#cell-out-${app} .mb-log`, (el) => el.innerText);
+  check(`${lang}: crud: the log shows the PATCH`, /Started PATCH "\/\w+\/1"/.test(log) && /UPDATE "\w+" SET/.test(log), log.slice(-500));
+  // delete: the button_to form, the 303, the list without the dish
+  await page.$eval(`#cell-out-${app} .mb-view`, (view) => view.shadowRoot.querySelector('form input[name=_method][value=delete]').form.querySelector('input[type=submit], button').click());
+  check(`${lang}: crud: deleted, back on the list`, await mbHas(app, new RegExp(`Tea ${words.deleted}`)) && (await mbUrl(app)) === `/${words.resource}` && !/CHF 4.50/.test(await mbText(app)), await mbText(app));
+  log = await page.$eval(`#cell-out-${app} .mb-log`, (el) => el.innerText);
+  check(`${lang}: crud: the log shows the DELETE`, /Started DELETE/.test(log) && /DELETE FROM "\w+"/.test(log), log.slice(-500));
+  await page.click(`.run-cell[data-idx="${routes}"]`);
+  check(`${lang}: crud: seven routes`, await outHas(routes, /PATCH\s+\/\w+\/:id/), await out(routes)) && check(`${lang}: crud: ... with DELETE`, /DELETE\s+\/\w+\/:id/.test(await out(routes)));
+  // the exercise: no delete button on the index, then one per dish
+  await page.click(`.run-cell[data-idx="${exercise}"]`);
+  check(`${lang}: crud: the starter's index has no delete buttons`, await mbHas(exercise, /CHF 2.00/) && (await deleteButtons(exercise)) === 0, await mbText(exercise));
+  check(`${lang}: crud: the starter does not pass`, !(await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+  const starter = await page.evaluate((i) => window.cellEditors[i].getValue(), exercise);
+  const solution = starter.replace(/<%#[^%]*%>/, `<%= button_to "${words.deleteLabel}", ${words.param}, method: :delete %>`);
+  check(`${lang}: crud: the solution differs from the starter`, solution !== starter && solution.includes('button_to'), solution);
+  await page.evaluate(([i, c]) => window.cellEditors[i].setValue(c), [exercise, solution]);
+  await page.click(`.run-cell[data-idx="${exercise}"]`);
+  check(`${lang}: crud: the solution passes`, await until(() => document.getElementById('chunkyChat').className.includes('pass'), null), await out(exercise));
+  const before = await deleteButtons(exercise);
+  check(`${lang}: crud: a delete button per dish`, before === 2, String(before));
+  await page.$eval(`#cell-out-${exercise} .mb-view`, (view) => view.shadowRoot.querySelector('form input[name=_method][value=delete]').form.querySelector('input[type=submit], button').click());
+  check(`${lang}: crud: one click, one dish fewer`, await until(([i, n]) => { const v = document.querySelector(`#cell-out-${i} .mb-view`); return [...v.shadowRoot.querySelectorAll('form')].filter((f) => f.querySelector('input[name=_method][value=delete]')).length === n; }, [exercise, before - 1]), await mbText(exercise));
+  await page.close();
+};
+
+// lesson `rails-associations`: has_many and belongs_to on two tables
+const runAssoc = async (lang, words) => {
+  const page = await browser.newPage({ locale: lang === 'de' ? 'de-DE' : 'en-US' });
+  page.on('pageerror', (e) => { console.log('[pageerror]', e.message); failures++; });
+  const out = (idx) => page.evaluate((i) => document.getElementById(`cell-out-${i}`).innerText, idx);
+  const until = (fn, arg, timeout = 90000) => page.waitForFunction(fn, arg, { timeout }).then(() => true, () => false);
+  const codeCells = () => page.$$eval('.run-cell', (buttons) => buttons.map((b) => b.getAttribute('data-idx')));
+  const outHas = (idx, re, timeout) => until(([i, src]) => new RegExp(src).test(document.getElementById(`cell-out-${i}`).innerText), [idx, re.source], timeout);
+
+  await page.goto(`${BASE}?lang=${lang}#rails-associations`, { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
+  const [setup, queries, exercise] = await codeCells();
+  await page.click(`.run-cell[data-idx="${setup}"]`);
+  check(`${lang}: assoc: two tables, three dishes`, await outHas(setup, /=> 3(\n|$)/, 180000), await out(setup));
+  check(`${lang}: assoc: the foreign key is written`, new RegExp(`INSERT INTO "${words.dishes}" \\("name", "${words.price}", "${words.fk}"`).test(await out(setup)), await out(setup));
+  await page.click(`.run-cell[data-idx="${queries}"]`);
+  check(`${lang}: assoc: belongs_to is a validation`, await outHas(queries, new RegExp(`=> \\["${words.category} must exist"\\]`)), await out(queries));
+  const q = await out(queries);
+  check(`${lang}: assoc: both directions and the join`, new RegExp(words.mains).test(q) && /\["\w+", "\w+"\]/.test(q) && /6\.5/.test(q) && /INNER JOIN/.test(q), q);
+  check(`${lang}: assoc: includes loads the dishes in one query`, /WHERE "\w+"\."\w+_id" IN \(/.test(q), q);
+  await page.click(`.run-cell[data-idx="${exercise}"]`);
+  check(`${lang}: assoc: the starter fails on the missing association`, await outHas(exercise, /unknown attribute|Unknown|ist nicht|is not|unbekannt/i), await out(exercise));
+  check(`${lang}: assoc: the starter does not pass`, !(await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+  const starter = await page.evaluate((i) => window.cellEditors[i].getValue(), exercise);
+  const solution = starter.replace('# has_many ...', `has_many :${words.specials}`).replace('# belongs_to ...', `belongs_to :${words.cook}`);
+  check(`${lang}: assoc: the solution differs from the starter`, solution !== starter && solution.includes('has_many :') && solution.includes('belongs_to :'), solution);
+  await page.evaluate(([i, c]) => window.cellEditors[i].setValue(c), [exercise, solution]);
+  await page.click(`.run-cell[data-idx="${exercise}"]`);
+  check(`${lang}: assoc: the solution passes`, await until(() => document.getElementById('chunkyChat').className.includes('pass'), null), await out(exercise));
+  check(`${lang}: assoc: the specials by their cook`, /=> \["Rösti", "Fondue"\]/.test(await out(exercise)), await out(exercise));
+  await page.close();
+};
+
 await run('en', { home: 'home', hello: 'hello', bacon: 'bacon' });
 await run('de', { home: 'start', hello: 'hallo', bacon: 'speck' });
 await runModel('en', { db: 'diner.db', table: 'dishes', model: 'Guest', visits: 'visits' });
@@ -245,6 +337,10 @@ await runMvc('en', { resource: 'dishes', model: 'Dish', ivar: 'dish', first: 'Ba
 await runMvc('de', { resource: 'gerichte', model: 'Gericht', ivar: 'gericht', first: 'Speck' });
 await runForms('en', { resource: 'dishes', param: 'dish', price: 'price', builder: 'form', newTitle: 'New dish', notice: 'is on the menu' });
 await runForms('de', { resource: 'gerichte', param: 'gericht', price: 'preis', builder: 'formular', newTitle: 'Neues Gericht', notice: 'steht auf der Speisekarte' });
+await runCrud('en', { resource: 'dishes', param: 'dish', first: 'Bacon', editTitle: 'Edit Bacon', updated: 'was updated', deleted: 'is off the menu', deleteLabel: 'Delete' });
+await runCrud('de', { resource: 'gerichte', param: 'gericht', first: 'Speck', editTitle: 'Speck bearbeiten', updated: 'wurde geändert', deleted: 'ist von der Karte', deleteLabel: 'Löschen' });
+await runAssoc('en', { dishes: 'dishes', price: 'price', fk: 'category_id', category: 'Category', mains: 'Mains', specials: 'specials', cook: 'cook' });
+await runAssoc('de', { dishes: 'gerichte', price: 'preis', fk: 'kategorie_id', category: 'Kategorie', mains: 'Hauptgänge', specials: 'spezialitaeten', cook: 'koch' });
 // the Japanese lessons run the English code under the Japanese interface
 await run('ja', { home: 'home', hello: 'hello', bacon: 'bacon' });
 await runForms('ja', { resource: 'dishes', param: 'dish', price: 'price', builder: 'form', newTitle: 'New dish', notice: 'is on the menu' });
