@@ -2748,6 +2748,198 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "regex",
+      "de": {
+        "title": "Reguläre Ausdrücke",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Muster im Text: reguläre Ausdrücke</h2><p>Mit <code>include?</code> findest du ein Wort, das du genau kennst. Oft weisst du aber nur, <em>wie etwas aussieht</em>: „eine Zahl“, „eine Uhrzeit“, „ein Wort, das mit S beginnt“. Dafür gibt es <strong>reguläre Ausdrücke</strong> (kurz: Regex): Muster zwischen zwei Schrägstrichen. <code>match?</code> fragt, ob das Muster irgendwo im Text passt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "satz = \"Chunky frisst 3 Streifen Speck\"\np satz.include?(\"Speck\")\np satz.match?(/Speck/)\nsatz.match?(/\\d/)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>/Speck/</code> passt auf genau dieses Wort – so weit nichts Neues. Spannend wird es mit den <strong>Platzhaltern</strong>: <code>\\d</code> steht für eine Ziffer, <code>\\w</code> für ein Wortzeichen (Buchstabe, Ziffer oder <code>_</code>), <code>\\s</code> für Leerraum und <code>.</code> für ein beliebiges Zeichen. Dahinter sagt ein <strong>Mengenzeichen</strong>, wie oft: <code>+</code> heisst „eins oder mehr“, <code>*</code> „beliebig viele, auch keins“, <code>?</code> „keins oder eins“, <code>{2}</code> „genau zwei“. <code>scan</code> sammelt alle Fundstellen in einem Array:</p>"
+          },
+          {
+            "t": "c",
+            "code": "tagebuch = \"Mo: 3 Streifen, Di: 12 Streifen, Mi: 7 Streifen\"\np tagebuch.scan(/\\d/)\ntagebuch.scan(/\\d+/)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Siehst du den Unterschied? <code>/\\d/</code> findet jede Ziffer einzeln, <code>/\\d+/</code> fasst zusammenhängende Ziffern zu einer Zahl zusammen. Die Fundstellen sind Strings. In Lektion {{nr:iteratoren}} hast du gelernt, Listen zu verwandeln – so machst du Zahlen daraus und rechnest weiter:</p>"
+          },
+          {
+            "t": "c",
+            "code": "tagebuch.scan(/\\d+/).map(&:to_i).sum"
+          },
+          {
+            "t": "h",
+            "html": "<p>Eckige Klammern bilden eine <strong>Zeichenklasse</strong>: <code>[aeiou]</code> passt auf einen Vokal, <code>[A-Z]</code> auf einen Grossbuchstaben, <code>[^0-9]</code> auf alles ausser Ziffern. <code>^</code> ganz vorne verankert das Muster am Zeilenanfang, <code>$</code> am Ende. Und ein <code>i</code> hinter dem schliessenden Schrägstrich macht die Suche unempfindlich für Gross- und Kleinschreibung:</p>"
+          },
+          {
+            "t": "c",
+            "code": "woerter = [\"Speck\", \"Ei\", \"Kaffee\", \"speck\", \"Brot\"]\np woerter.select { |wort| wort.match?(/speck/i) }\np woerter.select { |wort| wort.match?(/^[A-E]/) }\n\"Chunky Bacon\".scan(/[aeiou]/).length"
+          },
+          {
+            "t": "h",
+            "html": "<p>Oft willst du nicht nur wissen, <em>ob</em> etwas passt, sondern <em>was</em>. <code>match</code> liefert ein <code>MatchData</code>-Objekt. Runde Klammern bilden <strong>Gruppen</strong>, und mit <code>(?&lt;name&gt;…)</code> gibst du einer Gruppe einen Namen, über den du sie herausholst. Passt nichts, kommt <code>nil</code> zurück – praktisch für <code>if</code>. Für eine einzelne Fundstelle geht es noch kürzer: <code>text[/muster/]</code> liefert den ersten Treffer oder <code>nil</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "zeile = \"Chunky: 3 Streifen um 07:45\"\ntreffer = zeile.match(/(?<wer>\\w+): (?<anzahl>\\d+)/)\np treffer[:wer]\np treffer[:anzahl].to_i\np zeile[/\\d\\d:\\d\\d/]\np \"Keine Zahl hier\".match(/\\d+/)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Zum Ersetzen gibt es <code>sub</code> (die erste Fundstelle) und <code>gsub</code> (alle): Statt eines festen Worts geben sie ein Muster an. So räumst du zum Beispiel wild gesetzte Leerzeichen auf:</p>"
+          },
+          {
+            "t": "c",
+            "code": "text = \"Speck,   Eier,Toast ,  Kaffee\"\np text.gsub(/\\s*,\\s*/, \" | \")\ntext.gsub(/[aeiou]/, \"*\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Reguläre Ausdrücke sehen auf den ersten Blick aus, als wäre eine Katze über die Tastatur gelaufen. Der Trick: Bau sie Stück für Stück auf und prüfe jedes Stück mit <code>match?</code> oder <code>scan</code>, bis das Muster alles findet, was es soll – und nichts anderes. Die wichtigsten Zeichen stehen auf dem <button type='button' class='cheat-link' data-cheat='regexp'>📋 Spickzettel</button>. Im Aufbaukurs, Lektion {{nr:tl-parsing}} (Text parsen), zerlegt ein Regex mit benannten Gruppen die Zeilen einer Zeiterfassung.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Regexp.html' target='_blank'>Regexp</a> · <a href='https://docs.ruby-lang.org/en/4.0/MatchData.html' target='_blank'>MatchData</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-scan' target='_blank'>String#scan</a></div><div class='task'><strong>Aufgabe:</strong> Unten stehen Chunkys Notizen. Lege zwei Variablen an: <code>zeiten</code> – alle Uhrzeiten aus allen Notizen, als Strings wie <code>\"07:45\"</code> (mit <code>scan</code>) – und <code>speck_tage</code> – wie viele Notizen „Speck“ nennen, gross oder klein geschrieben (mit <code>count</code> und <code>match?</code>). Erwartet sind <code>[\"07:45\", \"10:15\", \"12:30\"]</code> und <code>2</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "notizen = [\n  \"Frühstück um 07:45: Speck\",\n  \"Znüni um 10:15: Apfel\",\n  \"Mittag um 12:30: speck und Ei\",\n  \"Abend: kein Hunger\"\n]\n# zeiten = ...      # alle Uhrzeiten, z.B. \"07:45\"\n# speck_tage = ...  # wie viele Notizen Speck nennen (gross oder klein)\n",
+            "check": "zeiten == [\"07:45\", \"10:15\", \"12:30\"] && speck_tage == 2 && code.scan(\"/\").length >= 4",
+            "hint": "<code>zeiten = notizen.join(\" \").scan(/\\d\\d:\\d\\d/)</code> – oder <code>notizen.flat_map { |notiz| notiz.scan(/\\d\\d:\\d\\d/) }</code>. Und <code>speck_tage = notizen.count { |notiz| notiz.match?(/speck/i) }</code>."
+          }
+        ]
+      },
+      "en": {
+        "title": "Regular expressions",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Patterns in text: regular expressions</h2><p>With <code>include?</code> you find a word you know exactly. Often, though, you only know <em>what something looks like</em>: “a number”, “a time”, “a word starting with S”. That is what <strong>regular expressions</strong> (regex for short) are for: patterns between two slashes. <code>match?</code> asks whether the pattern fits anywhere in the text:</p>"
+          },
+          {
+            "t": "c",
+            "code": "sentence = \"Chunky eats 3 strips of bacon\"\np sentence.include?(\"bacon\")\np sentence.match?(/bacon/)\nsentence.match?(/\\d/)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>/bacon/</code> matches exactly that word – nothing new so far. It gets interesting with the <strong>placeholders</strong>: <code>\\d</code> stands for a digit, <code>\\w</code> for a word character (letter, digit or <code>_</code>), <code>\\s</code> for whitespace and <code>.</code> for any character. A <strong>quantifier</strong> after it says how often: <code>+</code> means “one or more”, <code>*</code> “any number, even none”, <code>?</code> “none or one”, <code>{2}</code> “exactly two”. <code>scan</code> collects every match in an array:</p>"
+          },
+          {
+            "t": "c",
+            "code": "diary = \"Mon: 3 strips, Tue: 12 strips, Wed: 7 strips\"\np diary.scan(/\\d/)\ndiary.scan(/\\d+/)"
+          },
+          {
+            "t": "h",
+            "html": "<p>See the difference? <code>/\\d/</code> finds every digit on its own, <code>/\\d+/</code> joins neighbouring digits into one number. The matches are strings. Lesson {{nr:iteratoren}} was about transforming lists – that is how you turn them into numbers and go on calculating:</p>"
+          },
+          {
+            "t": "c",
+            "code": "diary.scan(/\\d+/).map(&:to_i).sum"
+          },
+          {
+            "t": "h",
+            "html": "<p>Square brackets form a <strong>character class</strong>: <code>[aeiou]</code> matches a vowel, <code>[A-Z]</code> a capital letter, <code>[^0-9]</code> anything but a digit. A <code>^</code> at the front anchors the pattern to the start of the line, <code>$</code> to its end. And an <code>i</code> after the closing slash makes the search ignore case:</p>"
+          },
+          {
+            "t": "c",
+            "code": "words = [\"Bacon\", \"Egg\", \"Coffee\", \"bacon\", \"Bread\"]\np words.select { |word| word.match?(/bacon/i) }\np words.select { |word| word.match?(/^[A-C]/) }\n\"Chunky Bacon\".scan(/[aeiou]/).length"
+          },
+          {
+            "t": "h",
+            "html": "<p>Often you want to know not just <em>whether</em> something matches, but <em>what</em>. <code>match</code> returns a <code>MatchData</code> object. Round brackets form <strong>groups</strong>, and with <code>(?&lt;name&gt;…)</code> you give a group a name to fetch it by. If nothing matches, you get <code>nil</code> – handy for <code>if</code>. For a single match there is an even shorter way: <code>text[/pattern/]</code> returns the first match or <code>nil</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "line = \"Chunky: 3 strips at 07:45\"\nfound = line.match(/(?<who>\\w+): (?<count>\\d+)/)\np found[:who]\np found[:count].to_i\np line[/\\d\\d:\\d\\d/]\np \"No number here\".match(/\\d+/)"
+          },
+          {
+            "t": "h",
+            "html": "<p>For replacing there are <code>sub</code> (the first match) and <code>gsub</code> (all of them): instead of a fixed word, they take a pattern. That is how you tidy up stray spaces, for instance:</p>"
+          },
+          {
+            "t": "c",
+            "code": "text = \"Bacon,   eggs,toast ,  coffee\"\np text.gsub(/\\s*,\\s*/, \" | \")\ntext.gsub(/[aeiou]/, \"*\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>At first sight, regular expressions look as if a cat had walked across the keyboard. The trick: build them piece by piece and test each piece with <code>match?</code> or <code>scan</code>, until the pattern finds everything it should – and nothing else. The most important characters are on the <button type='button' class='cheat-link' data-cheat='regexp'>📋 Cheat sheet</button>. In the advanced course, lesson {{nr:tl-parsing}} (parsing text), a regex with named groups takes apart the lines of a time tracker.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Regexp.html' target='_blank'>Regexp</a> · <a href='https://docs.ruby-lang.org/en/4.0/MatchData.html' target='_blank'>MatchData</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-scan' target='_blank'>String#scan</a></div><div class='task'><strong>Task:</strong> Below are Chunky's notes. Create two variables: <code>times</code> – every time of day from all the notes, as strings like <code>\"07:45\"</code> (with <code>scan</code>) – and <code>bacon_days</code> – how many notes mention bacon, in capitals or not (with <code>count</code> and <code>match?</code>). Expected are <code>[\"07:45\", \"10:15\", \"12:30\"]</code> and <code>2</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "notes = [\n  \"Breakfast at 07:45: Bacon\",\n  \"Snack at 10:15: apple\",\n  \"Lunch at 12:30: bacon and egg\",\n  \"Evening: not hungry\"\n]\n# times = ...       # every time of day, e.g. \"07:45\"\n# bacon_days = ...  # how many notes mention bacon (capitals or not)\n",
+            "check": "times == [\"07:45\", \"10:15\", \"12:30\"] && bacon_days == 2 && code.scan(\"/\").length >= 4",
+            "hint": "<code>times = notes.join(\" \").scan(/\\d\\d:\\d\\d/)</code> – or <code>notes.flat_map { |note| note.scan(/\\d\\d:\\d\\d/) }</code>. And <code>bacon_days = notes.count { |note| note.match?(/bacon/i) }</code>."
+          }
+        ]
+      },
+      "ja": {
+        "title": "正規表現",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>テキストの中のパターン：正規表現</h2><p><code>include?</code>を使えば、はっきりわかっている単語を見つけられます。でも、「数字」「時刻」「Sで始まる単語」のように、<em>どんな形をしているか</em>しかわからないことも多いものです。そのためにあるのが<strong>正規表現</strong>（Regex）です。2つのスラッシュの間に書くパターンです。<code>match?</code>は、テキストのどこかにそのパターンが合うかどうかを答えます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "sentence = \"Chunky eats 3 strips of bacon\"\np sentence.include?(\"bacon\")\np sentence.match?(/bacon/)\nsentence.match?(/\\d/)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>/bacon/</code>はその単語そのものに合います。ここまでは新しいことはありません。おもしろいのは<strong>特別な文字</strong>です。<code>\\d</code>は数字1つ、<code>\\w</code>は単語の文字（英数字か<code>_</code>）、<code>\\s</code>は空白、<code>.</code>は任意の1文字を表します。その後ろに<strong>回数</strong>を書けます。<code>+</code>は「1回以上」、<code>*</code>は「0回以上」、<code>?</code>は「0回か1回」、<code>{2}</code>は「ちょうど2回」です。<code>scan</code>は、合った部分をすべて配列に集めます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "diary = \"Mon: 3 strips, Tue: 12 strips, Wed: 7 strips\"\np diary.scan(/\\d/)\ndiary.scan(/\\d+/)"
+          },
+          {
+            "t": "h",
+            "html": "<p>違いがわかりますか？<code>/\\d/</code>は数字を1つずつ見つけ、<code>/\\d+/</code>は続いている数字をまとめて1つの数にします。見つかったものは文字列です。レッスン{{nr:iteratoren}}ではリストを変身させる方法を学びました。そのやり方で数に変えて、計算を続けられます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "diary.scan(/\\d+/).map(&:to_i).sum"
+          },
+          {
+            "t": "h",
+            "html": "<p>角かっこは<strong>文字クラス</strong>を作ります。<code>[aeiou]</code>は母音1つ、<code>[A-Z]</code>は大文字1つ、<code>[^0-9]</code>は数字以外の1文字に合います。先頭の<code>^</code>はパターンを行頭に、<code>$</code>は行末に固定します。そして、閉じるスラッシュの後ろの<code>i</code>は、大文字と小文字を区別しないようにします：</p>"
+          },
+          {
+            "t": "c",
+            "code": "words = [\"Bacon\", \"Egg\", \"Coffee\", \"bacon\", \"Bread\"]\np words.select { |word| word.match?(/bacon/i) }\np words.select { |word| word.match?(/^[A-C]/) }\n\"Chunky Bacon\".scan(/[aeiou]/).length"
+          },
+          {
+            "t": "h",
+            "html": "<p>合うかどうかだけでなく、<em>何が</em>合ったのかを知りたいこともよくあります。<code>match</code>は<code>MatchData</code>オブジェクトを返します。丸かっこは<strong>グループ</strong>を作り、<code>(?&lt;name&gt;…)</code>と書けばグループに名前をつけて、その名前で取り出せます。何も合わなければ<code>nil</code>が返るので、<code>if</code>と組み合わせるのに便利です。1か所だけ取り出すなら、もっと短い書き方もあります。<code>text[/pattern/]</code>は最初に合った部分か<code>nil</code>を返します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "line = \"Chunky: 3 strips at 07:45\"\nfound = line.match(/(?<who>\\w+): (?<count>\\d+)/)\np found[:who]\np found[:count].to_i\np line[/\\d\\d:\\d\\d/]\np \"No number here\".match(/\\d+/)"
+          },
+          {
+            "t": "h",
+            "html": "<p>置き換えには<code>sub</code>（最初の1か所）と<code>gsub</code>（すべて）を使います。決まった単語ではなく、パターンを渡せるのです。たとえば、ばらばらに入った空白をこうして整えられます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "text = \"Bacon,   eggs,toast ,  coffee\"\np text.gsub(/\\s*,\\s*/, \" | \")\ntext.gsub(/[aeiou]/, \"*\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>正規表現は、はじめて見ると猫がキーボードの上を歩いたあとのように見えます。コツは、少しずつ組み立てて、1つ1つを<code>match?</code>や<code>scan</code>で確かめることです。見つけたいものをすべて見つけ、それ以外は見つけないパターンになるまで続けます。大事な文字は<button type='button' class='cheat-link' data-cheat='regexp'>📋 チートシート</button>にまとまっています。応用コースのレッスン{{nr:tl-parsing}}（テキストのパース）では、名前つきグループを持つ正規表現が、時間記録アプリの行を分解します。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fregexp.html' target='_blank'>正規表現</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/MatchData.html' target='_blank'>MatchData</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/String/i/scan.html' target='_blank'>String#scan</a></div><div class='task'><strong>課題：</strong>下にChunkyのメモがあります。変数を2つ作りましょう。<code>times</code>には、すべてのメモの中の時刻を<code>\"07:45\"</code>のような文字列で（<code>scan</code>で）、<code>bacon_days</code>には、大文字でも小文字でもbaconが出てくるメモの数を（<code>count</code>と<code>match?</code>で）入れます。答えは<code>[\"07:45\", \"10:15\", \"12:30\"]</code>と<code>2</code>になるはずです。</div>"
+          },
+          {
+            "t": "x",
+            "code": "notes = [\n  \"Breakfast at 07:45: Bacon\",\n  \"Snack at 10:15: apple\",\n  \"Lunch at 12:30: bacon and egg\",\n  \"Evening: not hungry\"\n]\n# times = ...       # すべての時刻、たとえば \"07:45\"\n# bacon_days = ...  # bacon が出てくるメモの数（大文字でも小文字でも）\n",
+            "check": "times == [\"07:45\", \"10:15\", \"12:30\"] && bacon_days == 2 && code.scan(\"/\").length >= 4",
+            "hint": "<code>times = notes.join(\" \").scan(/\\d\\d:\\d\\d/)</code>、または<code>notes.flat_map { |note| note.scan(/\\d\\d:\\d\\d/) }</code>。そして<code>bacon_days = notes.count { |note| note.match?(/bacon/i) }</code>だよ。"
+          }
+        ]
+      }
+    },
+    {
       "id": "methoden",
       "de": {
         "title": "Methoden",
@@ -18266,6 +18458,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "regexp",
       "lessons": [
+        "regex",
         "tl-parsing"
       ],
       "title": {

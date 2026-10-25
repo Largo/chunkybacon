@@ -375,6 +375,12 @@ SOLUTIONS = {
     "en" => [%(scores = [72, 45, 88, 91, 30, 60]\npassed = scores.select { |score| score >= 60 }\nwith_bonus = passed.map { |score| score + 5 }),
              %(scores = [72, 45, 88, 91, 30, 60]\npassed = scores.select { _1 >= 60 }\nwith_bonus = passed.map { |s| s + 5 }\np with_bonus)]
   },
+  "regex" => {
+    "de" => [%(notizen = ["Frühstück um 07:45: Speck", "Znüni um 10:15: Apfel", "Mittag um 12:30: speck und Ei", "Abend: kein Hunger"]\nzeiten = notizen.join(" ").scan(/\\d\\d:\\d\\d/)\nspeck_tage = notizen.count { |notiz| notiz.match?(/speck/i) }),
+             %(notizen = ["Frühstück um 07:45: Speck", "Znüni um 10:15: Apfel", "Mittag um 12:30: speck und Ei", "Abend: kein Hunger"]\nzeiten = notizen.flat_map { |notiz| notiz.scan(/\\d{2}:\\d{2}/) }\nspeck_tage = notizen.select { |notiz| notiz =~ /[Ss]peck/ }.length\np speck_tage)],
+    "en" => [%(notes = ["Breakfast at 07:45: Bacon", "Snack at 10:15: apple", "Lunch at 12:30: bacon and egg", "Evening: not hungry"]\ntimes = notes.join(" ").scan(/\\d\\d:\\d\\d/)\nbacon_days = notes.count { |note| note.match?(/bacon/i) }),
+             %(notes = ["Breakfast at 07:45: Bacon", "Snack at 10:15: apple", "Lunch at 12:30: bacon and egg", "Evening: not hungry"]\ntimes = notes.flat_map { |note| note.scan(/\\d{2}:\\d{2}/) }\nbacon_days = notes.select { |note| note =~ /[Bb]acon/ }.length\np bacon_days)]
+  },
   "fehler" => {
     "de" => [%(fuchs = { name: "Chunky", streifen: 3 }\n\ndef satz(tier)\n  "\#{tier[:name]} isst \#{tier[:streifen]} Streifen Speck."\nend\n\nsatz(fuchs)),
              %(fuchs = { name: "Chunky", streifen: 3 }\n\ndef satz(tier)\n  "\#{tier[:name]} isst " + tier[:streifen].to_s + " Streifen Speck."\nend\n\nputs satz(fuchs))],
