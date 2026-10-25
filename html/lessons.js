@@ -5595,8 +5595,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"imbiss#start\"\n    get \"/speisekarte\" => \"imbiss#speisekarte\", as: :speisekarte\n    get \"/hallo/:name\" => \"imbiss#hallo\"\n    # get \"/speck\" => \"kueche#speck\"\n  end\nRUBY\nImbissApp.reload_routes!\n\nclass KuecheController < ActionController::Base\n  # def speck\n  #   render plain: \"...\"\n  # end\nend\n\nshow_browser ImbissApp, \"/speck\"",
+            "hints": [
+              "Zwei auskommentierte Stellen: die Route in der Routen-Datei und die Action <code>speck</code> im <code>KuecheController</code>. Entferne die <code>#</code> und ersetz die Punkte durch den Text, den die Seite zeigen soll."
+            ],
             "check": "s1, _ = mock_get(ImbissApp, \"/\"); s2, b2 = mock_get(ImbissApp, \"/speck\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\") && (ImbissApp.routes.recognize_path(\"/speck\") rescue nil) == { controller: \"kueche\", action: \"speck\" }",
-            "hint": "Beide Teile einkommentieren: die Route <code>get \"/speck\" => \"kueche#speck\"</code> in der Routen-Datei, und im <code>KuecheController</code> die Action <code>def speck</code> mit <code>render plain: \"CHUNKY BACON!\"</code>. Danach die Zelle neu ausführen."
+            "hint": "Beide Teile einkommentieren: die Route <code>get \"/speck\" => \"kueche#speck\"</code> in der Routen-Datei, und im <code>KuecheController</code> die Action <code>def speck</code> mit <code>render plain: \"CHUNKY BACON!\"</code>. Danach die Zelle neu ausführen.",
+            "solution": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"imbiss#start\"\n    get \"/speisekarte\" => \"imbiss#speisekarte\", as: :speisekarte\n    get \"/hallo/:name\" => \"imbiss#hallo\"\n    get \"/speck\" => \"kueche#speck\"\n  end\nRUBY\nImbissApp.reload_routes!\n\nclass KuecheController < ActionController::Base\n  def speck\n    render plain: \"CHUNKY BACON!\"\n  end\nend\n\nshow_browser ImbissApp, \"/speck\""
           }
         ]
       },
@@ -5634,8 +5638,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"diner#home\"\n    get \"/menu\" => \"diner#menu\", as: :menu\n    get \"/hello/:name\" => \"diner#hello\"\n    # get \"/bacon\" => \"kitchen#bacon\"\n  end\nRUBY\nDinerApp.reload_routes!\n\nclass KitchenController < ActionController::Base\n  # def bacon\n  #   render plain: \"...\"\n  # end\nend\n\nshow_browser DinerApp, \"/bacon\"",
+            "hints": [
+              "Two commented spots: the route in the routes file and the action <code>bacon</code> in <code>KitchenController</code>. Remove the <code>#</code> and replace the dots with the text the page should show."
+            ],
             "check": "s1, _ = mock_get(DinerApp, \"/\"); s2, b2 = mock_get(DinerApp, \"/bacon\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\") && (DinerApp.routes.recognize_path(\"/bacon\") rescue nil) == { controller: \"kitchen\", action: \"bacon\" }",
-            "hint": "Uncomment both parts: the route <code>get \"/bacon\" => \"kitchen#bacon\"</code> in the routes file, and in <code>KitchenController</code> the action <code>def bacon</code> with <code>render plain: \"CHUNKY BACON!\"</code>. Then run the cell again."
+            "hint": "Uncomment both parts: the route <code>get \"/bacon\" => \"kitchen#bacon\"</code> in the routes file, and in <code>KitchenController</code> the action <code>def bacon</code> with <code>render plain: \"CHUNKY BACON!\"</code>. Then run the cell again.",
+            "solution": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"diner#home\"\n    get \"/menu\" => \"diner#menu\", as: :menu\n    get \"/hello/:name\" => \"diner#hello\"\n    get \"/bacon\" => \"kitchen#bacon\"\n  end\nRUBY\nDinerApp.reload_routes!\n\nclass KitchenController < ActionController::Base\n  def bacon\n    render plain: \"CHUNKY BACON!\"\n  end\nend\n\nshow_browser DinerApp, \"/bacon\""
           }
         ]
       },
@@ -5673,8 +5681,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"diner#home\"\n    get \"/menu\" => \"diner#menu\", as: :menu\n    get \"/hello/:name\" => \"diner#hello\"\n    # get \"/bacon\" => \"kitchen#bacon\"\n  end\nRUBY\nDinerApp.reload_routes!\n\nclass KitchenController < ActionController::Base\n  # def bacon\n  #   render plain: \"...\"\n  # end\nend\n\nshow_browser DinerApp, \"/bacon\"",
+            "hints": [
+              "コメントになっている場所が2つあるよ。ルートのファイルの中のルートと、<code>KitchenController</code>の<code>bacon</code>アクションだ。<code>#</code>を外して、点々をページに出す文字に書きかえてみて。"
+            ],
             "check": "s1, _ = mock_get(DinerApp, \"/\"); s2, b2 = mock_get(DinerApp, \"/bacon\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\") && (DinerApp.routes.recognize_path(\"/bacon\") rescue nil) == { controller: \"kitchen\", action: \"bacon\" }",
-            "hint": "2か所のコメントを外してね。ルートのファイルの中のルート<code>get \"/bacon\" => \"kitchen#bacon\"</code>と、<code>KitchenController</code>の中のアクション<code>def bacon</code>（中身は<code>render plain: \"CHUNKY BACON!\"</code>）。書けたら、もう一度セルを実行してね。"
+            "hint": "2か所のコメントを外してね。ルートのファイルの中のルート<code>get \"/bacon\" => \"kitchen#bacon\"</code>と、<code>KitchenController</code>の中のアクション<code>def bacon</code>（中身は<code>render plain: \"CHUNKY BACON!\"</code>）。書けたら、もう一度セルを実行してね。",
+            "solution": "Rails.root.join(\"config/routes.rb\").write(<<~RUBY)\n  Rails.application.routes.draw do\n    root \"diner#home\"\n    get \"/menu\" => \"diner#menu\", as: :menu\n    get \"/hello/:name\" => \"diner#hello\"\n    get \"/bacon\" => \"kitchen#bacon\"\n  end\nRUBY\nDinerApp.reload_routes!\n\nclass KitchenController < ActionController::Base\n  def bacon\n    render plain: \"CHUNKY BACON!\"\n  end\nend\n\nshow_browser DinerApp, \"/bacon\""
           }
         ]
       }
@@ -5715,8 +5727,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "ActiveRecord::Schema.define do\n  create_table :gaeste, force: true do |t|\n    t.string  :name\n    t.integer :besuche\n    t.timestamps\n  end\nend\n\nclass Gast < ActiveRecord::Base\n  self.table_name = \"gaeste\"\n  # validates ...\nend\n\nGast.create!(name: \"Kaz\", besuche: 3)\nGast.create!(name: \"Ada\", besuche: 1)\n\nstammgaeste = Gast.all   # nur die Gäste mit mindestens 2 Besuchen, bitte\nstammgaeste.map(&:name)",
+            "hints": [
+              "Zwei Zeilen: In der Klasse brauchst du ein <code>validates</code> für den Namen (schau in der Demo nach, wie man «nötig» sagt). Und <code>stammgaeste</code> bekommt statt <code>all</code> ein <code>where</code> mit einer Bedingung an <code>besuche</code>."
+            ],
             "check": "Gast.count == 2 && !Gast.new(besuche: 5).valid? && result == [\"Kaz\"]",
-            "hint": "<code>validates :name, presence: true</code> in der Klasse, und <code>stammgaeste = Gast.where(\"besuche >= ?\", 2)</code>. Danach die Zelle neu ausführen."
+            "hint": "<code>validates :name, presence: true</code> in der Klasse, und <code>stammgaeste = Gast.where(\"besuche >= ?\", 2)</code>. Danach die Zelle neu ausführen.",
+            "solution": "ActiveRecord::Schema.define do\n  create_table :gaeste, force: true do |t|\n    t.string  :name\n    t.integer :besuche\n    t.timestamps\n  end\nend\n\nclass Gast < ActiveRecord::Base\n  self.table_name = \"gaeste\"\n  validates :name, presence: true\nend\n\nGast.create!(name: \"Kaz\", besuche: 3)\nGast.create!(name: \"Ada\", besuche: 1)\n\nstammgaeste = Gast.where(\"besuche >= ?\", 2)   # nur die Gäste mit mindestens 2 Besuchen, bitte\nstammgaeste.map(&:name)"
           }
         ]
       },
@@ -5754,8 +5770,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "ActiveRecord::Schema.define do\n  create_table :guests, force: true do |t|\n    t.string  :name\n    t.integer :visits\n    t.timestamps\n  end\nend\n\nclass Guest < ActiveRecord::Base\n  # validates ...\nend\n\nGuest.create!(name: \"Kaz\", visits: 3)\nGuest.create!(name: \"Ada\", visits: 1)\n\nregulars = Guest.all   # only the guests with at least 2 visits, please\nregulars.map(&:name)",
+            "hints": [
+              "Two lines: inside the class you need a <code>validates</code> for the name (see the demo for how to say \"required\"). And <code>regulars</code> gets a <code>where</code> with a condition on <code>visits</code> instead of <code>all</code>."
+            ],
             "check": "Guest.count == 2 && !Guest.new(visits: 5).valid? && result == [\"Kaz\"]",
-            "hint": "<code>validates :name, presence: true</code> inside the class, and <code>regulars = Guest.where(\"visits >= ?\", 2)</code>. Then run the cell again."
+            "hint": "<code>validates :name, presence: true</code> inside the class, and <code>regulars = Guest.where(\"visits >= ?\", 2)</code>. Then run the cell again.",
+            "solution": "ActiveRecord::Schema.define do\n  create_table :guests, force: true do |t|\n    t.string  :name\n    t.integer :visits\n    t.timestamps\n  end\nend\n\nclass Guest < ActiveRecord::Base\n  validates :name, presence: true\nend\n\nGuest.create!(name: \"Kaz\", visits: 3)\nGuest.create!(name: \"Ada\", visits: 1)\n\nregulars = Guest.where(\"visits >= ?\", 2)   # only the guests with at least 2 visits, please\nregulars.map(&:name)"
           }
         ]
       },
@@ -5793,8 +5813,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "ActiveRecord::Schema.define do\n  create_table :guests, force: true do |t|\n    t.string  :name\n    t.integer :visits\n    t.timestamps\n  end\nend\n\nclass Guest < ActiveRecord::Base\n  # validates ...\nend\n\nGuest.create!(name: \"Kaz\", visits: 3)\nGuest.create!(name: \"Ada\", visits: 1)\n\nregulars = Guest.all   # 来店が2回以上のお客さんだけにしてください\nregulars.map(&:name)",
+            "hints": [
+              "2行だよ。クラスの中に、名前の<code>validates</code>が必要（「必須」の書き方はデモを見てね）。それと<code>regulars</code>は<code>all</code>のかわりに、<code>visits</code>の条件をつけた<code>where</code>にするんだ。"
+            ],
             "check": "Guest.count == 2 && !Guest.new(visits: 5).valid? && result == [\"Kaz\"]",
-            "hint": "クラスの中に<code>validates :name, presence: true</code>、それから<code>regulars = Guest.where(\"visits >= ?\", 2)</code>だよ。書けたら、もう一度セルを実行してね。"
+            "hint": "クラスの中に<code>validates :name, presence: true</code>、それから<code>regulars = Guest.where(\"visits >= ?\", 2)</code>だよ。書けたら、もう一度セルを実行してね。",
+            "solution": "ActiveRecord::Schema.define do\n  create_table :guests, force: true do |t|\n    t.string  :name\n    t.integer :visits\n    t.timestamps\n  end\nend\n\nclass Guest < ActiveRecord::Base\n  validates :name, presence: true\nend\n\nGuest.create!(name: \"Kaz\", visits: 3)\nGuest.create!(name: \"Ada\", visits: 1)\n\nregulars = Guest.where(\"visits >= ?\", 2)   # 来店が2回以上のお客さんだけにしてください\nregulars.map(&:name)"
           }
         ]
       }
@@ -5843,8 +5867,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "Rails.root.join(\"app/views/gerichte/show.html.erb\").write(<<~ERB)\n  <h2>Hier gehört der Name des Gerichts hin</h2>\n  <p><%= number_to_currency(@gericht.preis, unit: \"CHF \") %></p>\n  <%= link_to \"Zurück zur Speisekarte\", gerichte_path %>\nERB\n\nclass GerichteController < ActionController::Base\n  # def show\n  #   @gericht = Gericht.find(params[:id])\n  # end\nend\n\nshow_browser ImbissApp, \"/gerichte/#{Gericht.first.id}\"",
+            "hints": [
+              "Die Action <code>show</code> steht schon da, nur auskommentiert – entferne die <code>#</code>. Dann ersetzt du in der View den Platzhaltertext im <code>&lt;h2&gt;</code> durch eine ERB-Ausgabe von <code>@gericht.name</code>."
+            ],
             "check": "g = Gericht.order(:id).first; s1, _ = mock_get(ImbissApp, \"/\"); s2, b2 = mock_get(ImbissApp, \"/gerichte/#{g.id}\"); s1 == 200 && s2 == 200 && b2.include?(g.name) && b2.include?(\"CHF 4.50\")",
-            "hint": "<code>def show</code> mit <code>@gericht = Gericht.find(params[:id])</code> einkommentieren, und in der View <code>&lt;h2&gt;&lt;%= @gericht.name %&gt;&lt;/h2&gt;</code> schreiben. Danach die Zelle neu ausführen."
+            "hint": "<code>def show</code> mit <code>@gericht = Gericht.find(params[:id])</code> einkommentieren, und in der View <code>&lt;h2&gt;&lt;%= @gericht.name %&gt;&lt;/h2&gt;</code> schreiben. Danach die Zelle neu ausführen.",
+            "solution": "Rails.root.join(\"app/views/gerichte/show.html.erb\").write(<<~ERB)\n  <h2><%= @gericht.name %></h2>\n  <p><%= number_to_currency(@gericht.preis, unit: \"CHF \") %></p>\n  <%= link_to \"Zurück zur Speisekarte\", gerichte_path %>\nERB\n\nclass GerichteController < ActionController::Base\n  def show\n    @gericht = Gericht.find(params[:id])\n  end\nend\n\nshow_browser ImbissApp, \"/gerichte/#{Gericht.first.id}\""
           }
         ]
       },
@@ -5890,8 +5918,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "Rails.root.join(\"app/views/dishes/show.html.erb\").write(<<~ERB)\n  <h2>The dish's name goes here</h2>\n  <p><%= number_to_currency(@dish.price, unit: \"CHF \") %></p>\n  <%= link_to \"Back to the menu\", dishes_path %>\nERB\n\nclass DishesController < ActionController::Base\n  # def show\n  #   @dish = Dish.find(params[:id])\n  # end\nend\n\nshow_browser DinerApp, \"/dishes/#{Dish.first.id}\"",
+            "hints": [
+              "The <code>show</code> action is already there, just commented out – remove the <code>#</code>. Then replace the placeholder text in the view's <code>&lt;h2&gt;</code> with an ERB output of <code>@dish.name</code>."
+            ],
             "check": "d = Dish.order(:id).first; s1, _ = mock_get(DinerApp, \"/\"); s2, b2 = mock_get(DinerApp, \"/dishes/#{d.id}\"); s1 == 200 && s2 == 200 && b2.include?(d.name) && b2.include?(\"CHF 4.50\")",
-            "hint": "Uncomment <code>def show</code> with <code>@dish = Dish.find(params[:id])</code>, and write <code>&lt;h2&gt;&lt;%= @dish.name %&gt;&lt;/h2&gt;</code> in the view. Then run the cell again."
+            "hint": "Uncomment <code>def show</code> with <code>@dish = Dish.find(params[:id])</code>, and write <code>&lt;h2&gt;&lt;%= @dish.name %&gt;&lt;/h2&gt;</code> in the view. Then run the cell again.",
+            "solution": "Rails.root.join(\"app/views/dishes/show.html.erb\").write(<<~ERB)\n  <h2><%= @dish.name %></h2>\n  <p><%= number_to_currency(@dish.price, unit: \"CHF \") %></p>\n  <%= link_to \"Back to the menu\", dishes_path %>\nERB\n\nclass DishesController < ActionController::Base\n  def show\n    @dish = Dish.find(params[:id])\n  end\nend\n\nshow_browser DinerApp, \"/dishes/#{Dish.first.id}\""
           }
         ]
       },
@@ -5937,8 +5969,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "Rails.root.join(\"app/views/dishes/show.html.erb\").write(<<~ERB)\n  <h2>The dish's name goes here</h2>\n  <p><%= number_to_currency(@dish.price, unit: \"CHF \") %></p>\n  <%= link_to \"Back to the menu\", dishes_path %>\nERB\n\nclass DishesController < ActionController::Base\n  # def show\n  #   @dish = Dish.find(params[:id])\n  # end\nend\n\nshow_browser DinerApp, \"/dishes/#{Dish.first.id}\"",
+            "hints": [
+              "<code>show</code>アクションはもう書いてあって、コメントになっているだけだよ。<code>#</code>を外してね。それからビューの<code>&lt;h2&gt;</code>の仮の文字を、<code>@dish.name</code>を出すERBに置きかえるんだ。"
+            ],
             "check": "d = Dish.order(:id).first; s1, _ = mock_get(DinerApp, \"/\"); s2, b2 = mock_get(DinerApp, \"/dishes/#{d.id}\"); s1 == 200 && s2 == 200 && b2.include?(d.name) && b2.include?(\"CHF 4.50\")",
-            "hint": "<code>def show</code>のコメントを外して<code>@dish = Dish.find(params[:id])</code>にして、ビューには<code>&lt;h2&gt;&lt;%= @dish.name %&gt;&lt;/h2&gt;</code>と書いてね。書けたら、もう一度セルを実行してね。"
+            "hint": "<code>def show</code>のコメントを外して<code>@dish = Dish.find(params[:id])</code>にして、ビューには<code>&lt;h2&gt;&lt;%= @dish.name %&gt;&lt;/h2&gt;</code>と書いてね。書けたら、もう一度セルを実行してね。",
+            "solution": "Rails.root.join(\"app/views/dishes/show.html.erb\").write(<<~ERB)\n  <h2><%= @dish.name %></h2>\n  <p><%= number_to_currency(@dish.price, unit: \"CHF \") %></p>\n  <%= link_to \"Back to the menu\", dishes_path %>\nERB\n\nclass DishesController < ActionController::Base\n  def show\n    @dish = Dish.find(params[:id])\n  end\nend\n\nshow_browser DinerApp, \"/dishes/#{Dish.first.id}\""
           }
         ]
       }
@@ -5979,8 +6015,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "Rails.root.join(\"app/views/gerichte/new.html.erb\").write(<<~ERB)\n  <h2>Neues Gericht</h2>\n  <% @gericht.errors.full_messages.each do |meldung| %>\n    <p><em><%= meldung %></em></p>\n  <% end %>\n  <%= form_with model: @gericht do |formular| %>\n    <%= formular.label :name %>\n    <%= formular.text_field :name %>\n    <%# hierhin ein label und ein number_field für den Preis %>\n    <%= formular.submit \"Auf die Speisekarte\" %>\n  <% end %>\nERB\n\nclass GerichteController < ActionController::Base\n  def create\n    @gericht = Gericht.new(params.expect(gericht: [:name]))   # der Preis darf noch nicht herein\n    if @gericht.save\n      redirect_to @gericht, notice: \"#{@gericht.name} steht auf der Speisekarte.\"\n    else\n      render :new, status: :unprocessable_entity\n    end\n  end\nend\n\nshow_browser ImbissApp, \"/gerichte/new\"",
+            "hints": [
+              "Zwei Stellen: In der View, wo der ERB-Kommentar steht, ein <code>label</code> und ein <code>number_field</code> für <code>:preis</code> – wie die zwei Zeilen für <code>:name</code> darüber. Und in <code>create</code> muss <code>expect</code> den Preis auch erlauben."
+            ],
             "check": "s1, b1 = mock_get(ImbissApp, \"/gerichte/new\"); s2, b2 = mock_post(ImbissApp, \"/gerichte\", \"gericht[name]\" => \"\", \"gericht[preis]\" => \"2.8\"); s1 == 200 && b1.include?('name=\"gericht[preis]\"') && s2 == 422 && b2.include?('value=\"2.8\"')",
-            "hint": "In der View, wo der Kommentar steht: <code>&lt;%= formular.label :preis %&gt;</code> und <code>&lt;%= formular.number_field :preis, step: 0.1 %&gt;</code>. In <code>create</code>: <code>params.expect(gericht: [:name, :preis])</code>. Danach die Zelle neu ausführen."
+            "hint": "In der View, wo der Kommentar steht: <code>&lt;%= formular.label :preis %&gt;</code> und <code>&lt;%= formular.number_field :preis, step: 0.1 %&gt;</code>. In <code>create</code>: <code>params.expect(gericht: [:name, :preis])</code>. Danach die Zelle neu ausführen.",
+            "solution": "Rails.root.join(\"app/views/gerichte/new.html.erb\").write(<<~ERB)\n  <h2>Neues Gericht</h2>\n  <% @gericht.errors.full_messages.each do |meldung| %>\n    <p><em><%= meldung %></em></p>\n  <% end %>\n  <%= form_with model: @gericht do |formular| %>\n    <%= formular.label :name %>\n    <%= formular.text_field :name %>\n    <%= formular.label :preis %>\n    <%= formular.number_field :preis, step: 0.1 %>\n    <%= formular.submit \"Auf die Speisekarte\" %>\n  <% end %>\nERB\n\nclass GerichteController < ActionController::Base\n  def create\n    @gericht = Gericht.new(params.expect(gericht: [:name, :preis]))   # der Preis darf noch nicht herein\n    if @gericht.save\n      redirect_to @gericht, notice: \"#{@gericht.name} steht auf der Speisekarte.\"\n    else\n      render :new, status: :unprocessable_entity\n    end\n  end\nend\n\nshow_browser ImbissApp, \"/gerichte/new\""
           }
         ]
       },
@@ -6018,8 +6058,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "Rails.root.join(\"app/views/dishes/new.html.erb\").write(<<~ERB)\n  <h2>New dish</h2>\n  <% @dish.errors.full_messages.each do |message| %>\n    <p><em><%= message %></em></p>\n  <% end %>\n  <%= form_with model: @dish do |form| %>\n    <%= form.label :name %>\n    <%= form.text_field :name %>\n    <%# a label and a number_field for the price go here %>\n    <%= form.submit \"Add to the menu\" %>\n  <% end %>\nERB\n\nclass DishesController < ActionController::Base\n  def create\n    @dish = Dish.new(params.expect(dish: [:name]))   # the price is not allowed in yet\n    if @dish.save\n      redirect_to @dish, notice: \"#{@dish.name} is on the menu.\"\n    else\n      render :new, status: :unprocessable_entity\n    end\n  end\nend\n\nshow_browser DinerApp, \"/dishes/new\"",
+            "hints": [
+              "Two spots: in the view, where the ERB comment is, a <code>label</code> and a <code>number_field</code> for <code>:price</code> – like the two lines for <code>:name</code> above it. And in <code>create</code>, <code>expect</code> has to allow the price too."
+            ],
             "check": "s1, b1 = mock_get(DinerApp, \"/dishes/new\"); s2, b2 = mock_post(DinerApp, \"/dishes\", \"dish[name]\" => \"\", \"dish[price]\" => \"2.8\"); s1 == 200 && b1.include?('name=\"dish[price]\"') && s2 == 422 && b2.include?('value=\"2.8\"')",
-            "hint": "In the view, where the comment is: <code>&lt;%= form.label :price %&gt;</code> and <code>&lt;%= form.number_field :price, step: 0.1 %&gt;</code>. In <code>create</code>: <code>params.expect(dish: [:name, :price])</code>. Then run the cell again."
+            "hint": "In the view, where the comment is: <code>&lt;%= form.label :price %&gt;</code> and <code>&lt;%= form.number_field :price, step: 0.1 %&gt;</code>. In <code>create</code>: <code>params.expect(dish: [:name, :price])</code>. Then run the cell again.",
+            "solution": "Rails.root.join(\"app/views/dishes/new.html.erb\").write(<<~ERB)\n  <h2>New dish</h2>\n  <% @dish.errors.full_messages.each do |message| %>\n    <p><em><%= message %></em></p>\n  <% end %>\n  <%= form_with model: @dish do |form| %>\n    <%= form.label :name %>\n    <%= form.text_field :name %>\n    <%= form.label :price %>\n    <%= form.number_field :price, step: 0.1 %>\n    <%= form.submit \"Add to the menu\" %>\n  <% end %>\nERB\n\nclass DishesController < ActionController::Base\n  def create\n    @dish = Dish.new(params.expect(dish: [:name, :price]))   # the price is not allowed in yet\n    if @dish.save\n      redirect_to @dish, notice: \"#{@dish.name} is on the menu.\"\n    else\n      render :new, status: :unprocessable_entity\n    end\n  end\nend\n\nshow_browser DinerApp, \"/dishes/new\""
           }
         ]
       },
@@ -6057,8 +6101,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "Rails.root.join(\"app/views/dishes/new.html.erb\").write(<<~ERB)\n  <h2>New dish</h2>\n  <% @dish.errors.full_messages.each do |message| %>\n    <p><em><%= message %></em></p>\n  <% end %>\n  <%= form_with model: @dish do |form| %>\n    <%= form.label :name %>\n    <%= form.text_field :name %>\n    <%# a label and a number_field for the price go here %>\n    <%= form.submit \"Add to the menu\" %>\n  <% end %>\nERB\n\nclass DishesController < ActionController::Base\n  def create\n    @dish = Dish.new(params.expect(dish: [:name]))   # 価格はまだ受け取っていません\n    if @dish.save\n      redirect_to @dish, notice: \"#{@dish.name} is on the menu.\"\n    else\n      render :new, status: :unprocessable_entity\n    end\n  end\nend\n\nshow_browser DinerApp, \"/dishes/new\"",
+            "hints": [
+              "2か所だよ。ビューのERBコメントのところに、<code>:price</code>用の<code>label</code>と<code>number_field</code>を、上の<code>:name</code>の2行と同じように書く。それと<code>create</code>の<code>expect</code>で、値段も許可するんだ。"
+            ],
             "check": "s1, b1 = mock_get(DinerApp, \"/dishes/new\"); s2, b2 = mock_post(DinerApp, \"/dishes\", \"dish[name]\" => \"\", \"dish[price]\" => \"2.8\"); s1 == 200 && b1.include?('name=\"dish[price]\"') && s2 == 422 && b2.include?('value=\"2.8\"')",
-            "hint": "ビューのコメントのところに<code>&lt;%= form.label :price %&gt;</code>と<code>&lt;%= form.number_field :price, step: 0.1 %&gt;</code>を書いてね。<code>create</code>の中は<code>params.expect(dish: [:name, :price])</code>。書けたら、もう一度セルを実行してね。"
+            "hint": "ビューのコメントのところに<code>&lt;%= form.label :price %&gt;</code>と<code>&lt;%= form.number_field :price, step: 0.1 %&gt;</code>を書いてね。<code>create</code>の中は<code>params.expect(dish: [:name, :price])</code>。書けたら、もう一度セルを実行してね。",
+            "solution": "Rails.root.join(\"app/views/dishes/new.html.erb\").write(<<~ERB)\n  <h2>New dish</h2>\n  <% @dish.errors.full_messages.each do |message| %>\n    <p><em><%= message %></em></p>\n  <% end %>\n  <%= form_with model: @dish do |form| %>\n    <%= form.label :name %>\n    <%= form.text_field :name %>\n    <%= form.label :price %>\n    <%= form.number_field :price, step: 0.1 %>\n    <%= form.submit \"Add to the menu\" %>\n  <% end %>\nERB\n\nclass DishesController < ActionController::Base\n  def create\n    @dish = Dish.new(params.expect(dish: [:name, :price]))   # 価格はまだ受け取っていません\n    if @dish.save\n      redirect_to @dish, notice: \"#{@dish.name} is on the menu.\"\n    else\n      render :new, status: :unprocessable_entity\n    end\n  end\nend\n\nshow_browser DinerApp, \"/dishes/new\""
           }
         ]
       }
@@ -6107,8 +6155,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "Rails.root.join(\"app/views/gerichte/index.html.erb\").write(<<~ERB)\n  <h1>Chunkys Imbiss</h1>\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <ul>\n    <% @gerichte.each do |gericht| %>\n      <li>\n        <%= link_to gericht.name, gericht %>\n        – <%= number_to_currency(gericht.preis, unit: \"CHF \") %>\n        <%# hierhin ein Löschen-Button für dieses Gericht %>\n      </li>\n    <% end %>\n  </ul>\n  <%= link_to \"Gericht hinzufügen\", new_gericht_path %>\nERB\n\nshow_browser ImbissApp, \"/\"",
+            "hints": [
+              "Nur eine Zeile, dort wo der ERB-Kommentar steht: ein <code>button_to</code> mit dem Text, dem Gericht aus der Schleife und <code>method: :delete</code>. Die Demo weiter oben zeigt so einen Knopf."
+            ],
             "check": "s, b = mock_get(ImbissApp, \"/\"); s == 200 && b.scan(/name=\"_method\" value=\"delete\"/).size >= Gericht.count && b.scan(%r{action=\"/gerichte/\\d+\"}).size >= Gericht.count",
-            "hint": "Wo der Kommentar steht: <code>&lt;%= button_to \"Löschen\", gericht, method: :delete %&gt;</code> – <code>gericht</code>, die Variable der Schleife, nicht <code>@gericht</code>. Danach die Zelle neu ausführen und einen Knopf drücken."
+            "hint": "Wo der Kommentar steht: <code>&lt;%= button_to \"Löschen\", gericht, method: :delete %&gt;</code> – <code>gericht</code>, die Variable der Schleife, nicht <code>@gericht</code>. Danach die Zelle neu ausführen und einen Knopf drücken.",
+            "solution": "Rails.root.join(\"app/views/gerichte/index.html.erb\").write(<<~ERB)\n  <h1>Chunkys Imbiss</h1>\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <ul>\n    <% @gerichte.each do |gericht| %>\n      <li>\n        <%= link_to gericht.name, gericht %>\n        – <%= number_to_currency(gericht.preis, unit: \"CHF \") %>\n        <%= button_to \"Löschen\", gericht, method: :delete %>\n      </li>\n    <% end %>\n  </ul>\n  <%= link_to \"Gericht hinzufügen\", new_gericht_path %>\nERB\n\nshow_browser ImbissApp, \"/\""
           }
         ]
       },
@@ -6154,8 +6206,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "Rails.root.join(\"app/views/dishes/index.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li>\n        <%= link_to dish.name, dish %>\n        – <%= number_to_currency(dish.price, unit: \"CHF \") %>\n        <%# a Delete button for this dish goes here %>\n      </li>\n    <% end %>\n  </ul>\n  <%= link_to \"Add a dish\", new_dish_path %>\nERB\n\nshow_browser DinerApp, \"/\"",
+            "hints": [
+              "Just one line, where the ERB comment is: a <code>button_to</code> with the label, the dish from the loop and <code>method: :delete</code>. The demo further up shows such a button."
+            ],
             "check": "s, b = mock_get(DinerApp, \"/\"); s == 200 && b.scan(/name=\"_method\" value=\"delete\"/).size >= Dish.count && b.scan(%r{action=\"/dishes/\\d+\"}).size >= Dish.count",
-            "hint": "Where the comment is: <code>&lt;%= button_to \"Delete\", dish, method: :delete %&gt;</code> – <code>dish</code>, the loop's variable, not <code>@dish</code>. Then run the cell again and click one."
+            "hint": "Where the comment is: <code>&lt;%= button_to \"Delete\", dish, method: :delete %&gt;</code> – <code>dish</code>, the loop's variable, not <code>@dish</code>. Then run the cell again and click one.",
+            "solution": "Rails.root.join(\"app/views/dishes/index.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li>\n        <%= link_to dish.name, dish %>\n        – <%= number_to_currency(dish.price, unit: \"CHF \") %>\n        <%= button_to \"Delete\", dish, method: :delete %>\n      </li>\n    <% end %>\n  </ul>\n  <%= link_to \"Add a dish\", new_dish_path %>\nERB\n\nshow_browser DinerApp, \"/\""
           }
         ]
       },
@@ -6201,8 +6257,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "Rails.root.join(\"app/views/dishes/index.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li>\n        <%= link_to dish.name, dish %>\n        – <%= number_to_currency(dish.price, unit: \"CHF \") %>\n        <%# a Delete button for this dish goes here %>\n      </li>\n    <% end %>\n  </ul>\n  <%= link_to \"Add a dish\", new_dish_path %>\nERB\n\nshow_browser DinerApp, \"/\"",
+            "hints": [
+              "ERBコメントのところに1行だけだよ。<code>button_to</code>に、ラベルと、ループの中の料理と、<code>method: :delete</code>を渡すんだ。上のデモにそういうボタンがあるよ。"
+            ],
             "check": "s, b = mock_get(DinerApp, \"/\"); s == 200 && b.scan(/name=\"_method\" value=\"delete\"/).size >= Dish.count && b.scan(%r{action=\"/dishes/\\d+\"}).size >= Dish.count",
-            "hint": "コメントのところに<code>&lt;%= button_to \"Delete\", dish, method: :delete %&gt;</code>だよ。<code>@dish</code>ではなく、ループの変数の<code>dish</code>。書けたら、もう一度セルを実行して、ボタンを押してみてね。"
+            "hint": "コメントのところに<code>&lt;%= button_to \"Delete\", dish, method: :delete %&gt;</code>だよ。<code>@dish</code>ではなく、ループの変数の<code>dish</code>。書けたら、もう一度セルを実行して、ボタンを押してみてね。",
+            "solution": "Rails.root.join(\"app/views/dishes/index.html.erb\").write(<<~ERB)\n  <h1>Chunky's Diner</h1>\n  <% if notice %><p><strong><%= notice %></strong></p><% end %>\n  <ul>\n    <% @dishes.each do |dish| %>\n      <li>\n        <%= link_to dish.name, dish %>\n        – <%= number_to_currency(dish.price, unit: \"CHF \") %>\n        <%= button_to \"Delete\", dish, method: :delete %>\n      </li>\n    <% end %>\n  </ul>\n  <%= link_to \"Add a dish\", new_dish_path %>\nERB\n\nshow_browser DinerApp, \"/\""
           }
         ]
       }
@@ -6235,8 +6295,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "ActiveRecord::Schema.define do\n  create_table :koeche, force: true do |t|\n    t.string :name\n  end\n  create_table :spezialitaeten, force: true do |t|\n    t.string     :name\n    t.references :koch\n  end\nend\n\nclass Koch < ActiveRecord::Base\n  # has_many ...\nend\n\nclass Spezialitaet < ActiveRecord::Base\n  # belongs_to ...\nend\n\nkaz = Koch.create!(name: \"Kaz\")\nSpezialitaet.create!(name: \"Rösti\", koch: kaz)\nSpezialitaet.create!(name: \"Fondue\", koch: kaz)\nkaz.spezialitaeten.map(&:name)",
+            "hints": [
+              "Zwei Zeilen, je eine pro Klasse: <code>has_many</code> mit dem Tabellennamen in der Mehrzahl im <code>Koch</code>, <code>belongs_to</code> mit dem Namen in der Einzahl in <code>Spezialitaet</code> – die Kommentare zeigen, wo."
+            ],
             "check": "Koch.count == 1 && Spezialitaet.count == 2 && Spezialitaet.first.koch.name == \"Kaz\" && Koch.first.spezialitaeten.count == 2 && result == [\"Rösti\", \"Fondue\"]",
-            "hint": "<code>has_many :spezialitaeten</code> in <code>Koch</code> und <code>belongs_to :koch</code> in <code>Spezialitaet</code>, anstelle der zwei Kommentare. Danach die Zelle neu ausführen."
+            "hint": "<code>has_many :spezialitaeten</code> in <code>Koch</code> und <code>belongs_to :koch</code> in <code>Spezialitaet</code>, anstelle der zwei Kommentare. Danach die Zelle neu ausführen.",
+            "solution": "ActiveRecord::Schema.define do\n  create_table :koeche, force: true do |t|\n    t.string :name\n  end\n  create_table :spezialitaeten, force: true do |t|\n    t.string     :name\n    t.references :koch\n  end\nend\n\nclass Koch < ActiveRecord::Base\n  has_many :spezialitaeten\nend\n\nclass Spezialitaet < ActiveRecord::Base\n  belongs_to :koch\nend\n\nkaz = Koch.create!(name: \"Kaz\")\nSpezialitaet.create!(name: \"Rösti\", koch: kaz)\nSpezialitaet.create!(name: \"Fondue\", koch: kaz)\nkaz.spezialitaeten.map(&:name)"
           }
         ]
       },
@@ -6266,8 +6330,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "ActiveRecord::Schema.define do\n  create_table :cooks, force: true do |t|\n    t.string :name\n  end\n  create_table :specials, force: true do |t|\n    t.string     :name\n    t.references :cook\n  end\nend\n\nclass Cook < ActiveRecord::Base\n  # has_many ...\nend\n\nclass Special < ActiveRecord::Base\n  # belongs_to ...\nend\n\nkaz = Cook.create!(name: \"Kaz\")\nSpecial.create!(name: \"Rösti\", cook: kaz)\nSpecial.create!(name: \"Fondue\", cook: kaz)\nkaz.specials.map(&:name)",
+            "hints": [
+              "Two lines, one per class: <code>has_many</code> with the plural table name in <code>Cook</code>, <code>belongs_to</code> with the singular name in <code>Special</code> – the comments show where."
+            ],
             "check": "Cook.count == 1 && Special.count == 2 && Special.first.cook.name == \"Kaz\" && Cook.first.specials.count == 2 && result == [\"Rösti\", \"Fondue\"]",
-            "hint": "<code>has_many :specials</code> in <code>Cook</code> and <code>belongs_to :cook</code> in <code>Special</code>, in place of the two comments. Then run the cell again."
+            "hint": "<code>has_many :specials</code> in <code>Cook</code> and <code>belongs_to :cook</code> in <code>Special</code>, in place of the two comments. Then run the cell again.",
+            "solution": "ActiveRecord::Schema.define do\n  create_table :cooks, force: true do |t|\n    t.string :name\n  end\n  create_table :specials, force: true do |t|\n    t.string     :name\n    t.references :cook\n  end\nend\n\nclass Cook < ActiveRecord::Base\n  has_many :specials\nend\n\nclass Special < ActiveRecord::Base\n  belongs_to :cook\nend\n\nkaz = Cook.create!(name: \"Kaz\")\nSpecial.create!(name: \"Rösti\", cook: kaz)\nSpecial.create!(name: \"Fondue\", cook: kaz)\nkaz.specials.map(&:name)"
           }
         ]
       },
@@ -6297,8 +6365,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "ActiveRecord::Schema.define do\n  create_table :cooks, force: true do |t|\n    t.string :name\n  end\n  create_table :specials, force: true do |t|\n    t.string     :name\n    t.references :cook\n  end\nend\n\nclass Cook < ActiveRecord::Base\n  # has_many ...\nend\n\nclass Special < ActiveRecord::Base\n  # belongs_to ...\nend\n\nkaz = Cook.create!(name: \"Kaz\")\nSpecial.create!(name: \"Rösti\", cook: kaz)\nSpecial.create!(name: \"Fondue\", cook: kaz)\nkaz.specials.map(&:name)",
+            "hints": [
+              "クラスごとに1行ずつ、合わせて2行だよ。<code>Cook</code>には複数形のテーブル名で<code>has_many</code>、<code>Special</code>には単数形で<code>belongs_to</code>。場所はコメントが教えてくれるよ。"
+            ],
             "check": "Cook.count == 1 && Special.count == 2 && Special.first.cook.name == \"Kaz\" && Cook.first.specials.count == 2 && result == [\"Rösti\", \"Fondue\"]",
-            "hint": "2つのコメントの代わりに、<code>Cook</code>に<code>has_many :specials</code>、<code>Special</code>に<code>belongs_to :cook</code>だよ。書けたら、もう一度セルを実行してね。"
+            "hint": "2つのコメントの代わりに、<code>Cook</code>に<code>has_many :specials</code>、<code>Special</code>に<code>belongs_to :cook</code>だよ。書けたら、もう一度セルを実行してね。",
+            "solution": "ActiveRecord::Schema.define do\n  create_table :cooks, force: true do |t|\n    t.string :name\n  end\n  create_table :specials, force: true do |t|\n    t.string     :name\n    t.references :cook\n  end\nend\n\nclass Cook < ActiveRecord::Base\n  has_many :specials\nend\n\nclass Special < ActiveRecord::Base\n  belongs_to :cook\nend\n\nkaz = Cook.create!(name: \"Kaz\")\nSpecial.create!(name: \"Rösti\", cook: kaz)\nSpecial.create!(name: \"Fondue\", cook: kaz)\nkaz.specials.map(&:name)"
           }
         ]
       }

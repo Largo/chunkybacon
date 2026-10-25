@@ -362,14 +362,22 @@ module LessonLint
               add("parity", "ERROR", "solution-missing", where: where(lesson, "en", ci), line: line_of(lesson, "en", ci),
                   message: "solution in #{has.select { |_, v| v }.keys.join(", ")} only")
             end
-            if ja.key?("solution") && ja["solution"] != en["solution"]
+            # ja runs en's code, so the solutions match - up to the comments,
+            # which a starter carries in Japanese (the Rails lessons' ERB)
+            if ja.key?("solution") && uncommented(ja["solution"]) != uncommented(en["solution"])
               add("parity", "ERROR", "solution-ja", where: where(lesson, "ja", ci), line: line_of(lesson, "ja", ci),
-                  message: "ja's solution differs from en's (Japanese runs the English code)")
+                  message: "ja's solution differs from en's beyond its comments (Japanese runs the English code)")
             end
           end
         end
         compare_gem_usage(lesson)
       end
+    end
+
+    # code without its comments: whole-line and trailing `# ...` (not inside
+    # a string, by the crude rule "no quote after the #") and ERB's <%# %>
+    def uncommented(code)
+      code.to_s.gsub(/<%#.*?%>/m, "").lines.map { |l| l.sub(/\s*#(?![{])[^"']*\z/, "").rstrip }.reject(&:empty?).join("\n")
     end
 
     def check_ui_parity

@@ -3367,8 +3367,10 @@ the answer at once (`App#reveal_hint`, `View.hint_html`, lessons.js
 - The steps collect in `#cell-hints-<idx>`, a live region named "Tipps zur
   Aufgabe", so a screen reader hears each one. Nothing is persisted: a new
   visit, and "Lektion zurücksetzen", start without hints (`reset_hints`).
-- Tests: `test/shell/app_test.rb` ("hints"), `browser_test.mjs` ("💡 hints"),
-  `check_harness.rb` (every `solution` is a verified one), `lint_lessons.rb`
+- Tests: `test/shell/app_test.rb` ("hints"), `browser_test.mjs` ("💡 hints",
+  and it runs the browser-only lessons' solutions), `rails_test.mjs` (the
+  Rails lessons' cells offer the very solution it runs), `check_harness.rb`
+  (every other `solution` is one of its SOLUTIONS), `lint_lessons.rb`
   (`hints` count and code spans per language, Japanese hints casual,
   `solution` parses).
 
