@@ -45,6 +45,7 @@ module ChunkyShell
       @live_gen = {}        # per cell: the latest keystroke's live run
       @slow = {}            # cells whose last run took too long to run live
       @last_outcome = {}    # a live pass celebrates only when it is new
+      @hints_shown = {}     # per exercise cell: how many hints are out (reveal_hint)
       @nav_closed = Store.get(NAV_CLOSED_KEY, "").split(",")
       @nav_query = ""       # the index's search field
       @cell_numbers = {}    # cell index => its number among the code cells
@@ -238,6 +239,8 @@ module ChunkyShell
       # a "📋 cheat sheet" button in a lesson's text (data-cheat: a section)
       cheat = target.closest(".cheat-link")
       return @cheatsheet&.open_at(cheat.getAttribute("data-cheat")) unless cheat.nil?
+      return reveal_hint(target.getAttribute("data-idx").to_i) if css_class.include?("hint-cell")
+      return apply_solution(target.getAttribute("data-idx").to_i) if css_class.include?("hint-apply")
       return toggle_live if css_class.include?("live-toggle")
       step = css_class.include?("step-cell")
       return unless step || css_class.include?("run-cell")
@@ -397,6 +400,7 @@ module ChunkyShell
       @view_gen += 1
       @slow = {}
       @last_outcome = {}
+      @hints_shown = {}
       @cell_numbers = {}
       @refocus = nil
       JSG.d.body.classList.toggle("in-workshop", workshop?)
@@ -446,7 +450,8 @@ module ChunkyShell
       # ⏯ only in the lessons that ask for it ("stepper": true)
       step = @course.stepper?(idx) ? [ui.stepButton, ui.stepCellLabel] : nil
       tab_labels = [(ui[:tabsLabel] || "Files").to_s, (ui[:tabReadonly] || "read-only").to_s]
-      el("lessonBody").innerHTML = View.lesson_html(cells, ui.taskLabel, ui.runCell, live_toggle_html, ui.runCellLabel, step, tab_labels)
+      hint = [ui.hintButton, ui.hintCellLabel, ui.hintLabel]
+      el("lessonBody").innerHTML = View.lesson_html(cells, ui.taskLabel, ui.runCell, live_toggle_html, ui.runCellLabel, step, tab_labels, hint)
       number = 0
       cells.each_with_index do |cell, i|
         next unless code_cell?(cell)
@@ -627,6 +632,7 @@ module ChunkyShell
         end
         out = el("cell-out-#{i}")
         out.style.display = "none" if out
+        reset_hints(i) if cell.t == "x"
       end
       @bridge.reset
       show_bubble(ui.welcome, nil)
@@ -737,11 +743,15 @@ module ChunkyShell
       return announce_run(idx, outcome, "", first) unless cell && cell.t == "x"
 
       if outcome == "error"
-        show_bubble(ui.errorIntro, "fail")
+        # the error is explained below the cell; Chunky points at 💡
+        show_bubble("#{ui.errorIntro}<br>#{ui.hintOnError}", "fail")
       elsif outcome == "pass"
         exercise_passed
       elsif outcome == "fail"
-        show_bubble(View.failed_html(ui, cell.hint), "fail")
+        # the next hint, lighter ones first; after the last, the solution
+        # is one click away
+        hint = next_hint(idx)
+        show_bubble(View.failed_html(ui, hint.nil? ? ui.hintAllShown : hint), "fail")
       end
       announce_run(idx, outcome, el("chunkyText").innerText.to_s, first)
     end
@@ -934,6 +944,111 @@ module ChunkyShell
       end
       stamp.textContent = View.run_time(seconds, @lang)
       replay(stamp, "fresh")
+    end
+
+    # ---------- hints ----------
+
+    # An exercise's help, one step per click on 💡 (or per failed check):
+    # the cell's "hints" (light nudges: where to start), then its "hint"
+    # (the detailed one), and when all are out, "solution" - a finished
+    # solution to compare with, with a button that puts it into the cell.
+    # The steps collect in the cell's hint panel (#cell-hints-<idx>, a live
+    # region, so a screen reader hears each). Nothing is persisted: a new
+    # visit starts without hints.
+    def hint_levels(cell)
+      levels = []
+      extra = cell[:hints]
+      extra.to_a.each { |h| levels << h.to_s } unless extra.nil?
+      levels << cell.hint.to_s
+      levels
+    end
+
+    # shows the next hint of exercise idx (not the solution); its text, or
+    # nil when every hint is out
+    def next_hint(idx)
+      cell = current_cells[idx]
+      return nil unless cell && cell.t == "x"
+
+      levels = hint_levels(cell)
+      shown = @hints_shown[idx] || 0
+      return nil if shown >= levels.length
+
+      add_hint(idx, View.hint_step_html(levels[shown]))
+      @hints_shown[idx] = shown + 1
+      hint_button_label(idx, cell)
+      levels[shown]
+    end
+
+    # the 💡 button: the next hint, or the solution once the hints are out
+    def reveal_hint(idx)
+      return unless next_hint(idx).nil?
+
+      cell = current_cells[idx]
+      return unless cell && cell.t == "x"
+
+      solution = cell[:solution]
+      return if solution.nil? || (@hints_shown[idx] || 0) > hint_levels(cell).length
+
+      add_hint(idx, View.solution_html(idx, ui.hintSolutionTitle, solution.to_s, ui.hintApply))
+      @hints_shown[idx] = hint_levels(cell).length + 1
+      hint_button_label(idx, cell)
+    end
+
+    # the solution into the editor; the learner runs it with ▶
+    def apply_solution(idx)
+      cell = current_cells[idx]
+      return unless cell && cell.t == "x" && !cell[:solution].nil?
+
+      set_code(idx, cell[:solution].to_s)
+      apply = JSG.d.querySelector("#cell-hints-#{idx} .hint-apply")
+      if apply
+        apply.textContent = ui.hintApplied
+        apply.disabled = true
+      end
+      _, button = cell_parts(idx)
+      button.focus if button
+    end
+
+    def add_hint(idx, html)
+      panel = el("cell-hints-#{idx}")
+      return unless panel
+
+      panel.removeAttribute("hidden")
+      panel.insertAdjacentHTML("beforeend", html)
+    end
+
+    def hint_button_label(idx, cell)
+      button = JSG.d.querySelector(".hint-cell[data-idx='#{idx}']")
+      return unless button
+
+      shown = @hints_shown[idx] || 0
+      levels = hint_levels(cell).length
+      if shown == 0
+        label = ui.hintButton
+      elsif shown < levels
+        label = ui.hintMore
+      elsif shown == levels && !cell[:solution].nil?
+        label = ui.hintSolution
+      else
+        label = ui.hintDone
+        button.disabled = true
+      end
+      button.textContent = label
+    end
+
+    # "Lektion zurücksetzen": the panel empties, the button starts over
+    def reset_hints(idx)
+      @hints_shown[idx] = 0
+      panel = el("cell-hints-#{idx}")
+      if panel
+        panel.innerHTML = ""
+        panel.setAttribute("hidden", "")
+      end
+      button = JSG.d.querySelector(".hint-cell[data-idx='#{idx}']")
+      return unless button
+
+      button.disabled = false
+      button.textContent = ui.hintButton
     end
 
     def cell_parts(idx)

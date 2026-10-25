@@ -394,6 +394,7 @@ Cells, per language:
 | `x` | `code`, `probe`, `check`, `hint` | (an `"engine": "ironruby"` lesson) `probe` is IronRuby code run after the learner's, its inspect is the check's local `probe` (§6s) |
 | `c` | `code`, `raises` | a demo that fails on purpose (the errors lesson): `raises` names the error class, and the harness checks the cell raises exactly that |
 | `x` | `code`, `check`, `hint` | the ONE exercise cell of the lesson; `check` is Ruby evaluated in the lesson binding with locals `output`, `result`, `code`, `images`, `downloads`, `audios` (the WAVs `show_audio` got), `games` (copies of the games `show_game` made, to play headless) |
+| `x` | `hints`, `solution` | the exercise's help behind 💡 (§6v): `hints` are the lighter hints shown before `hint` (one nudge today: where to start, which method), `solution` a finished solution the learner can compare with and put into the cell. `solution` must be one of `check_harness.rb`'s `SOLUTIONS[id]` for the language (ja shows en's), so what 💡 offers is verified; the browser-only lessons' are run by `browser_test.mjs` |
 | `c`/`x` | `tabs` | Pico lessons (§6r): more files of the cell, each a tab beside `code` (the main file, `app.rb`, or `main` if given). `{"name": "epd2in13.rb", "src": "pico/lib/en/epd2in13.rb"}` is fetched and read-only; `{"name": "dechunk.rb", "code": "...", "readonly": false}` is inline and editable (saved per learner). The worker writes them to `/lib`, the code says `require "epd2in13"` |
 | `c`/`x` | `board`, `bench` | Pico lessons: `board: {"parts": [...]}` runs the cell on the simulated Pico and shows the bench with these parts; `bench` is a script of inputs at fixed times (`{"at": 300, "press": 14}`, `"set"`, `"release"`, `"arena"`, `"ble"`, `"wifi"`) - an exercise with input parts needs one. Its check gets one more local, `board` (§6r) |
 | `c` | `engine: "cruby"` | in a Pico lesson: this cell runs on CRuby - the laptop's side of lesson `pico-ble` (`require "ble"` is `pico_laptop.rb`) |
@@ -3344,6 +3345,32 @@ What was decided:
   musik, snake, ruby2d and the timelog lessons; an edit, a reset, ⏯, live
   runs (rehearsed, a gem left for ▶, the time limit), the PicoRuby lesson
   and the workshop unchanged. Not yet in `browser_test.mjs`/`live_test.mjs`.
+
+## 6v. 💡 Hints: a nudge, the hint, a solution
+
+An exercise's help comes in steps, so nobody is stuck and nobody is handed
+the answer at once (`App#reveal_hint`, `View.hint_html`, lessons.js
+`hints`/`hint`/`solution`, §3):
+
+- **💡 Tipp**, at the left of the exercise's toolbar, shows one step per
+  click: the cell's `hints` (lighter: where to start, which method), then
+  its `hint` (the detailed one, nearly the solution), then - the button now
+  reads "💡 Lösung zeigen" - the `solution`, with a button that puts it into
+  the editor ("In die Zelle übernehmen"; the learner runs it with ▶, the
+  keyboard lands on ▶). When everything is out the button says so and is
+  disabled.
+- **A failed check** reveals the next hint, too - Chunky says it in the
+  bubble and it stays in the panel. With every hint out, Chunky points at
+  "Lösung zeigen"; a failed check never shows the solution by itself.
+- **An error** in the exercise reveals nothing (the explanation below the
+  cell is the help) - Chunky points at 💡.
+- The steps collect in `#cell-hints-<idx>`, a live region named "Tipps zur
+  Aufgabe", so a screen reader hears each one. Nothing is persisted: a new
+  visit, and "Lektion zurücksetzen", start without hints (`reset_hints`).
+- Tests: `test/shell/app_test.rb` ("hints"), `browser_test.mjs` ("💡 hints"),
+  `check_harness.rb` (every `solution` is a verified one), `lint_lessons.rb`
+  (`hints` count and code spans per language, Japanese hints casual,
+  `solution` parses).
 
 ## 7a. The optional server: permalinks and a backend
 

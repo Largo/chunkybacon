@@ -2367,6 +2367,21 @@ def run_harness(langs)
     selected = selected.select { |lesson| only.include?(lesson["id"]) }
   end
   failures = 0
+  # The solution a cell offers behind 💡 (its "solution", shell/app.rb
+  # reveal_hint) must be one this harness verifies: one of SOLUTIONS[id]
+  # for the language (ja shows en's). The browser-only lessons' solutions
+  # (no SOLUTIONS entry) are checked by the browser tests.
+  data["lessons"].each do |lesson|
+    next if BROWSER_ONLY.include?(lesson["id"]) # browser_test.mjs runs their solutions
+    langs.each do |lang|
+      cell = lesson.fetch(lang)["cells"].find { |c| c["t"] == "x" }
+      next unless cell && cell["solution"]
+      known = SOLUTIONS.dig(lesson["id"], SOLUTION_LANG.fetch(lang, lang)) || []
+      next if known.include?(cell["solution"])
+      puts "FAIL #{lesson["id"]}/#{lang}: the cell's solution is not one of SOLUTIONS[#{lesson["id"].inspect}] - 💡 would show unverified code"
+      failures += 1
+    end
+  end
   # the Pico lessons ("pico") run on the Pico simulator, in a process of
   # their own (test/pico_harness.rb): a clean top level for GPIO, no
   # CRuby net/http

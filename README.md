@@ -69,6 +69,12 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   checked against 70 typical beginner mistakes drawn from the exercises.
   A misspelt name also gets Ruby's own suggestion ("💡 Did you mean
   name?"), in the learner's language.
+- **Hints in steps, never stuck**: every exercise has a 💡 button beside
+  ▶. The first click gives a nudge (where to start, which method), the
+  next the detailed hint, and then a finished solution to compare with -
+  one click puts it into the cell. A failed check reveals the next hint
+  too, Chunky says it; an error points at the explanation and at 💡. Every
+  solution shown is one the test harness verifies.
 - **Ruby cheat sheet**: one click in the header opens the course's Ruby on
   one page - 17 topics, each with the lessons that teach it and links into
   the official documentation, searchable. On a wide screen it stands beside

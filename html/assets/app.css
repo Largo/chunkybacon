@@ -1822,6 +1822,40 @@ kbd {
 }
 .cell-toolbar .step-cell:hover { background: var(--fat); }
 .cell-toolbar .step-cell[disabled] { opacity: 0.45; cursor: progress; }
+
+/* 💡 Tipp, at the left of the exercise's toolbar: one hint per click, then
+   the solution (shell/app.rb reveal_hint); they collect in .cell-hints */
+.cell-toolbar .hint-cell {
+  margin-right: auto;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--paper);
+}
+.cell-toolbar .hint-cell:hover { background: var(--fat); }
+.cell-toolbar .hint-cell[disabled] { opacity: 0.45; cursor: default; }
+.cell-hints {
+  border-top: 2px solid var(--ink);
+  background: var(--fat);
+  padding: 0.55rem 0.9rem 0.6rem;
+  font-size: 0.92rem;
+}
+.cell-hints .hint-step { margin: 0.3rem 0; }
+.cell-hints .hint-step + .hint-step,
+.cell-hints .hint-step + .hint-solution { border-top: 1px dashed var(--ink-soft); padding-top: 0.5rem; margin-top: 0.5rem; }
+.cell-hints .hint-solution pre {
+  margin: 0.35rem 0 0.6rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--sheet);
+  border: 1px solid var(--ink);
+  overflow-x: auto;
+  font-family: var(--font-code);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  white-space: pre;
+}
+.cell-hints .hint-apply { font-size: 0.85rem; padding: 0.3rem 0.8rem; }
+.cell-hints .hint-apply[disabled] { opacity: 0.6; cursor: default; }
 /* the stepper's line, on the dark editor: dark tints under the code
    (cream 10:1, every syntax colour 4.7:1 or more), the kind of step in the
    bar on the left */

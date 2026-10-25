@@ -356,7 +356,18 @@ window.LESSONS_JSON = JSON.stringify({
       "boardAlone": "nur der Pico mit seiner LED auf dem Board",
       "ironStopped": "Nach 30 Sekunden angehalten.",
       "ironRestarted": "IronRuby lässt sich mitten in einer Zelle nicht unterbrechen und wurde neu gestartet: Die Variablen der Zellen davor sind weg – führe sie noch einmal aus.",
-      "ironFailed": "IronRuby konnte nicht geladen werden – bitte lade die Seite neu."
+      "ironFailed": "IronRuby konnte nicht geladen werden – bitte lade die Seite neu.",
+      "hintButton": "💡 Tipp",
+      "hintMore": "💡 Noch ein Tipp",
+      "hintSolution": "💡 Lösung zeigen",
+      "hintDone": "💡 Alle Tipps gezeigt",
+      "hintCellLabel": "Tipp zu Zelle %d",
+      "hintLabel": "Tipps zur Aufgabe",
+      "hintSolutionTitle": "Eine Lösung – vergleich sie mit deiner:",
+      "hintApply": "In die Zelle übernehmen",
+      "hintApplied": "Übernommen – jetzt ▶ Ausführen",
+      "hintOnError": "Lies die Erklärung unter der Zelle – und wenn du nicht weiterkommst: 💡 Tipp.",
+      "hintAllShown": "Du hast alle Tipps gesehen. Mit „💡 Lösung zeigen“ bekommst du eine fertige Lösung zum Vergleichen."
     },
     "en": {
       "title": "Learn Ruby with Chunky Bacon",
@@ -704,7 +715,18 @@ window.LESSONS_JSON = JSON.stringify({
       "boardAlone": "only the Pico, with its onboard LED",
       "ironStopped": "Stopped after 30 seconds.",
       "ironRestarted": "IronRuby cannot be interrupted in the middle of a cell, so it was started anew: the variables of the cells before are gone – run them again.",
-      "ironFailed": "IronRuby could not be loaded – please reload the page."
+      "ironFailed": "IronRuby could not be loaded – please reload the page.",
+      "hintButton": "💡 Hint",
+      "hintMore": "💡 Another hint",
+      "hintSolution": "💡 Show a solution",
+      "hintDone": "💡 All hints shown",
+      "hintCellLabel": "Hint for cell %d",
+      "hintLabel": "Hints for the task",
+      "hintSolutionTitle": "One solution – compare it with yours:",
+      "hintApply": "Put it in the cell",
+      "hintApplied": "Done – now ▶ Run",
+      "hintOnError": "Read the explanation below the cell – and if you're stuck: 💡 Hint.",
+      "hintAllShown": "You've seen all the hints. “💡 Show a solution” gives you a finished one to compare with."
     },
     "ja": {
       "title": "Chunky Baconと学ぶRuby",
@@ -1052,7 +1074,18 @@ window.LESSONS_JSON = JSON.stringify({
       "boardAlone": "Picoだけ（基板のLED）",
       "ironStopped": "30秒で止めました。",
       "ironRestarted": "IronRubyはセルの途中で止められないため、起動し直しました。前のセルの変数は消えたので、もう一度実行してください。",
-      "ironFailed": "IronRubyを読み込めませんでした。ページを再読み込みしてください。"
+      "ironFailed": "IronRubyを読み込めませんでした。ページを再読み込みしてください。",
+      "hintButton": "💡 ヒント",
+      "hintMore": "💡 もう1つヒント",
+      "hintSolution": "💡 答えを見る",
+      "hintDone": "💡 ヒントは以上",
+      "hintCellLabel": "セル%dのヒント",
+      "hintLabel": "課題のヒント",
+      "hintSolutionTitle": "答えの例だよ。自分のと見比べてみて：",
+      "hintApply": "セルに入れる",
+      "hintApplied": "入れたよ。▶ 実行してみて",
+      "hintOnError": "セルの下の説明を読んでみて。それでも困ったら💡 ヒントだよ。",
+      "hintAllShown": "ヒントは全部見たね。「💡 答えを見る」で、できあがった答えと見比べられるよ。"
     }
   },
   "lessons": [
@@ -1097,8 +1130,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Dein Code:\n",
+            "hints": [
+              "Schreib in die Zelle eine Zeile mit <code>puts</code> und dem Text in Anführungszeichen – oder nur den Text als letzte Zeile."
+            ],
             "check": "output.include?(\"Hallo, Welt!\") || result == \"Hallo, Welt!\"",
-            "hint": "Schreibe <code>puts \"Hallo, Welt!\"</code> – oder einfach <code>\"Hallo, Welt!\"</code> als letzte Zeile."
+            "hint": "Schreibe <code>puts \"Hallo, Welt!\"</code> – oder einfach <code>\"Hallo, Welt!\"</code> als letzte Zeile.",
+            "solution": "puts \"Hallo, Welt!\""
           }
         ]
       },
@@ -1136,8 +1173,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Your code:\n",
+            "hints": [
+              "Start with one line: <code>puts</code> followed by the text in double quotes – or just the text itself as the last line."
+            ],
             "check": "output.include?(\"Hello, World!\") || result == \"Hello, World!\"",
-            "hint": "Write <code>puts \"Hello, World!\"</code> – or simply <code>\"Hello, World!\"</code> as the last line."
+            "hint": "Write <code>puts \"Hello, World!\"</code> – or simply <code>\"Hello, World!\"</code> as the last line.",
+            "solution": "puts \"Hello, World!\""
           }
         ]
       },
@@ -1175,8 +1216,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# ここにコードを書こう:\n",
+            "hints": [
+              "<code>puts</code>のあとに、表示したい文をダブルクォートで囲んで書いてみて。最後の行にその文だけ書くのもアリだよ。"
+            ],
             "check": "output.include?(\"Hello, World!\") || result == \"Hello, World!\"",
-            "hint": "<code>puts \"Hello, World!\"</code>って書いてみて。最後の行にただ<code>\"Hello, World!\"</code>と書くだけでもいいよ。"
+            "hint": "<code>puts \"Hello, World!\"</code>って書いてみて。最後の行にただ<code>\"Hello, World!\"</code>と書くだけでもいいよ。",
+            "solution": "puts \"Hello, World!\""
           }
         ]
       }
@@ -1241,8 +1286,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "",
+            "hints": [
+              "Schreib die Rechnung als Ruby-Ausdruck mit <code>*</code> und <code>/</code> – und schau genau hin, was bei der Division zweier ganzer Zahlen passiert."
+            ],
             "check": "(result == 12.75 || output.include?(\"12.75\")) && (code.include?(\"/\") || code.include?(\"fdiv\"))",
-            "hint": "Mit <code>3 * 17 / 4</code> kommt <code>12</code> heraus – der Rest fällt weg! Mach eine der Zahlen zum Float: <code>3 * 17 / 4.0</code>."
+            "hint": "Mit <code>3 * 17 / 4</code> kommt <code>12</code> heraus – der Rest fällt weg! Mach eine der Zahlen zum Float: <code>3 * 17 / 4.0</code>.",
+            "solution": "puts 3 * 17 / 4.0"
           }
         ]
       },
@@ -1304,8 +1353,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "",
+            "hints": [
+              "Write the bill as one Ruby expression with <code>*</code> and <code>/</code> – then look closely at what dividing two whole numbers gives you."
+            ],
             "check": "(result == 12.75 || output.include?(\"12.75\")) && (code.include?(\"/\") || code.include?(\"fdiv\"))",
-            "hint": "<code>3 * 17 / 4</code> gives <code>12</code> – the remainder is dropped! Make one of the numbers a Float: <code>3 * 17 / 4.0</code>."
+            "hint": "<code>3 * 17 / 4</code> gives <code>12</code> – the remainder is dropped! Make one of the numbers a Float: <code>3 * 17 / 4.0</code>.",
+            "solution": "puts 3 * 17 / 4.0"
           }
         ]
       },
@@ -1367,8 +1420,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "",
+            "hints": [
+              "<code>*</code>と<code>/</code>で計算式を書いてみて。整数どうしの割り算で何が起きるか、よく見てみよう。"
+            ],
             "check": "(result == 12.75 || output.include?(\"12.75\")) && (code.include?(\"/\") || code.include?(\"fdiv\"))",
-            "hint": "<code>3 * 17 / 4</code>だと<code>12</code>になっちゃう。余りが捨てられるからね！ どれか1つの数をFloatにしよう：<code>3 * 17 / 4.0</code>。"
+            "hint": "<code>3 * 17 / 4</code>だと<code>12</code>になっちゃう。余りが捨てられるからね！ どれか1つの数をFloatにしよう：<code>3 * 17 / 4.0</code>。",
+            "solution": "puts 3 * 17 / 4.0"
           }
         ]
       }
@@ -1417,8 +1474,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# name = ...\n# alter = ...\n",
+            "hints": [
+              "Entferne das <code>#</code> vor den beiden Zeilen und setz rechts vom <code>=</code> einen String in Anführungszeichen für <code>name</code> und eine ganze Zahl für <code>alter</code>."
+            ],
             "check": "name.is_a?(String) && !name.empty? && alter.is_a?(Integer)",
-            "hint": "Zum Beispiel: <code>name = \"Kaz\"</code> und <code>alter = 7</code>."
+            "hint": "Zum Beispiel: <code>name = \"Kaz\"</code> und <code>alter = 7</code>.",
+            "solution": "name = \"Kaz\"\nalter = 7"
           }
         ]
       },
@@ -1464,8 +1525,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# name = ...\n# age = ...\n",
+            "hints": [
+              "Remove the <code>#</code> from both lines and put a quoted string after <code>=</code> for <code>name</code> and a whole number for <code>age</code>."
+            ],
             "check": "name.is_a?(String) && !name.empty? && age.is_a?(Integer)",
-            "hint": "For example: <code>name = \"Kaz\"</code> and <code>age = 7</code>."
+            "hint": "For example: <code>name = \"Kaz\"</code> and <code>age = 7</code>.",
+            "solution": "name = \"Kaz\"\nage = 7"
           }
         ]
       },
@@ -1511,8 +1576,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# name = ...\n# age = ...\n",
+            "hints": [
+              "2行の先頭の<code>#</code>を消して、<code>name</code>にはクォートで囲んだ文字列、<code>age</code>には整数を<code>=</code>の右に書いてみて。"
+            ],
             "check": "name.is_a?(String) && !name.empty? && age.is_a?(Integer)",
-            "hint": "たとえば<code>name = \"Kaz\"</code>と<code>age = 7</code>みたいにね。"
+            "hint": "たとえば<code>name = \"Kaz\"</code>と<code>age = 7</code>みたいにね。",
+            "solution": "name = \"Kaz\"\nage = 7"
           }
         ]
       },
@@ -1578,8 +1647,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "lieblingsessen = \"Chunky Bacon\"\n# \"Ich mag ...!\"\n",
+            "hints": [
+              "Beginne mit einem String in doppelten Anführungszeichen und setz <code>lieblingsessen</code> per <code>#{}</code> hinein – für GROSS gibt es eine String-Methode von oben."
+            ],
             "check": "(output.include?(\"Ich mag CHUNKY BACON!\") || result == \"Ich mag CHUNKY BACON!\") && code.include?('#{')",
-            "hint": "Methoden funktionieren auch innerhalb von <code>#{}</code>: <code>\"Ich mag #{lieblingsessen.upcase}!\"</code> – mit doppelten Anführungszeichen."
+            "hint": "Methoden funktionieren auch innerhalb von <code>#{}</code>: <code>\"Ich mag #{lieblingsessen.upcase}!\"</code> – mit doppelten Anführungszeichen.",
+            "solution": "lieblingsessen = \"Chunky Bacon\"\nputs \"Ich mag #{lieblingsessen.upcase}!\""
           }
         ]
       },
@@ -1641,8 +1714,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "favorite_food = \"Chunky Bacon\"\n# \"I love ...!\"\n",
+            "hints": [
+              "Start with a string in double quotes and drop <code>favorite_food</code> into it with <code>#{}</code> – one of the string methods from above handles the capitals."
+            ],
             "check": "(output.include?(\"I love CHUNKY BACON!\") || result == \"I love CHUNKY BACON!\") && code.include?('#{')",
-            "hint": "Methods work inside <code>#{}</code> too: <code>\"I love #{favorite_food.upcase}!\"</code> – with double quotes."
+            "hint": "Methods work inside <code>#{}</code> too: <code>\"I love #{favorite_food.upcase}!\"</code> – with double quotes.",
+            "solution": "favorite_food = \"Chunky Bacon\"\nputs \"I love #{favorite_food.upcase}!\""
           }
         ]
       },
@@ -1704,8 +1781,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "favorite_food = \"Chunky Bacon\"\n# \"I love ...!\"\n",
+            "hints": [
+              "ダブルクォートの文字列を作って、<code>#{}</code>で<code>favorite_food</code>を入れてみて。大文字にするのは、上で出てきた文字列メソッドの出番だよ。"
+            ],
             "check": "(output.include?(\"I love CHUNKY BACON!\") || result == \"I love CHUNKY BACON!\") && code.include?('#{')",
-            "hint": "<code>#{}</code>の中でもメソッドは使えるよ：<code>\"I love #{favorite_food.upcase}!\"</code>。ダブルクォートを使ってね。"
+            "hint": "<code>#{}</code>の中でもメソッドは使えるよ：<code>\"I love #{favorite_food.upcase}!\"</code>。ダブルクォートを使ってね。",
+            "solution": "favorite_food = \"Chunky Bacon\"\nputs \"I love #{favorite_food.upcase}!\""
           }
         ]
       },
@@ -1771,8 +1852,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "zahl = 7\n# if ...\n",
+            "hints": [
+              "Beginne mit <code>if</code> und einem Vergleich von <code>zahl</code> mit <code>&gt;</code>, dann folgen <code>elsif</code> für den zweiten Fall und <code>else</code> für den Rest – alles mit <code>end</code> abschliessen."
+            ],
             "check": "text = output + result.to_s; text.include?(\"mittel\") && !text.include?(\"gross\") && !text.include?(\"klein\") && code.include?(\"elsif\")",
-            "hint": "So geht's: <code>if zahl &gt; 10</code> → <code>\"gross\"</code>, dann <code>elsif zahl &gt; 5</code> → <code>\"mittel\"</code>, dann <code>else</code> → <code>\"klein\"</code> und zum Schluss <code>end</code>."
+            "hint": "So geht's: <code>if zahl &gt; 10</code> → <code>\"gross\"</code>, dann <code>elsif zahl &gt; 5</code> → <code>\"mittel\"</code>, dann <code>else</code> → <code>\"klein\"</code> und zum Schluss <code>end</code>.",
+            "solution": "zahl = 7\nif zahl > 10\n  puts \"gross\"\nelsif zahl > 5\n  puts \"mittel\"\nelse\n  puts \"klein\"\nend"
           }
         ]
       },
@@ -1834,8 +1919,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "number = 7\n# if ...\n",
+            "hints": [
+              "Start with <code>if</code> and compare <code>number</code> using <code>&gt;</code>, then add <code>elsif</code> for the second case and <code>else</code> for the rest – and close with <code>end</code>."
+            ],
             "check": "text = output + result.to_s; text.include?(\"medium\") && !text.include?(\"big\") && !text.include?(\"small\") && code.include?(\"elsif\")",
-            "hint": "Like this: <code>if number &gt; 10</code> → <code>\"big\"</code>, then <code>elsif number &gt; 5</code> → <code>\"medium\"</code>, then <code>else</code> → <code>\"small\"</code> and finally <code>end</code>."
+            "hint": "Like this: <code>if number &gt; 10</code> → <code>\"big\"</code>, then <code>elsif number &gt; 5</code> → <code>\"medium\"</code>, then <code>else</code> → <code>\"small\"</code> and finally <code>end</code>.",
+            "solution": "number = 7\nif number > 10\n  puts \"big\"\nelsif number > 5\n  puts \"medium\"\nelse\n  puts \"small\"\nend"
           }
         ]
       },
@@ -1897,8 +1986,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "number = 7\n# if ...\n",
+            "hints": [
+              "まず<code>if</code>で<code>number</code>を<code>&gt;</code>で比べて、次に<code>elsif</code>、残りは<code>else</code>。最後に<code>end</code>で閉じるのを忘れずにね。"
+            ],
             "check": "text = output + result.to_s; text.include?(\"medium\") && !text.include?(\"big\") && !text.include?(\"small\") && code.include?(\"elsif\")",
-            "hint": "こう書くよ：<code>if number &gt; 10</code>なら<code>\"big\"</code>、<code>elsif number &gt; 5</code>なら<code>\"medium\"</code>、<code>else</code>なら<code>\"small\"</code>、最後に<code>end</code>。"
+            "hint": "こう書くよ：<code>if number &gt; 10</code>なら<code>\"big\"</code>、<code>elsif number &gt; 5</code>なら<code>\"medium\"</code>、<code>else</code>なら<code>\"small\"</code>、最後に<code>end</code>。",
+            "solution": "number = 7\nif number > 10\n  puts \"big\"\nelsif number > 5\n  puts \"medium\"\nelse\n  puts \"small\"\nend"
           }
         ]
       },
@@ -1964,8 +2057,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# 5 mal Chunky Bacon, bitte!\n",
+            "hints": [
+              "Eine Zahl kann in Ruby selbst zählen: Ruf <code>times</code> an der 5 auf und schreib ein einziges <code>puts</code> in den Block (<code>do</code> … <code>end</code>)."
+            ],
             "check": "((output + result.inspect).scan(\"Chunky Bacon!\").length >= 5) && (code.include?(\"times\") || code.include?(\"each\") || code.include?(\"while\") || code.include?(\"upto\") || code.include?(\"for \"))",
-            "hint": "Schreibe <code>5.times do</code> … <code>puts \"Chunky Bacon!\"</code> … <code>end</code>."
+            "hint": "Schreibe <code>5.times do</code> … <code>puts \"Chunky Bacon!\"</code> … <code>end</code>.",
+            "solution": "5.times do\n  puts \"Chunky Bacon!\"\nend"
           }
         ]
       },
@@ -2027,8 +2124,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# 5 times Chunky Bacon, please!\n",
+            "hints": [
+              "Numbers can count for you: call <code>times</code> on 5 and put a single <code>puts</code> inside the block (<code>do</code> … <code>end</code>)."
+            ],
             "check": "((output + result.inspect).scan(\"Chunky Bacon!\").length >= 5) && (code.include?(\"times\") || code.include?(\"each\") || code.include?(\"while\") || code.include?(\"upto\") || code.include?(\"for \"))",
-            "hint": "Write <code>5.times do</code> … <code>puts \"Chunky Bacon!\"</code> … <code>end</code>."
+            "hint": "Write <code>5.times do</code> … <code>puts \"Chunky Bacon!\"</code> … <code>end</code>.",
+            "solution": "5.times do\n  puts \"Chunky Bacon!\"\nend"
           }
         ]
       },
@@ -2090,8 +2191,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Chunky Baconを5回、お願い！\n",
+            "hints": [
+              "Rubyでは数が自分で数えられるよ。5に<code>times</code>を呼んで、ブロック（<code>do</code>…<code>end</code>）の中に<code>puts</code>を1つだけ書いてみて。"
+            ],
             "check": "((output + result.inspect).scan(\"Chunky Bacon!\").length >= 5) && (code.include?(\"times\") || code.include?(\"each\") || code.include?(\"while\") || code.include?(\"upto\") || code.include?(\"for \"))",
-            "hint": "<code>5.times do</code> … <code>puts \"Chunky Bacon!\"</code> … <code>end</code>って書いてみて。"
+            "hint": "<code>5.times do</code> … <code>puts \"Chunky Bacon!\"</code> … <code>end</code>って書いてみて。",
+            "solution": "5.times do\n  puts \"Chunky Bacon!\"\nend"
           }
         ]
       },
@@ -2169,8 +2274,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "fruehstueck = [\"Ei\", \"Brot\"]\n# ...\n",
+            "hints": [
+              "Zwei Schritte: Erst mit <code>&lt;&lt;</code> an <code>fruehstueck</code> anhängen, dann in der letzten Zeile das Array sortieren und mit <code>join</code> zu einem String verbinden."
+            ],
             "check": "fruehstueck.is_a?(Array) && fruehstueck.include?(\"Speck\") && fruehstueck.include?(\"Ei\") && (output.include?(\"Brot, Ei, Speck\") || result == \"Brot, Ei, Speck\")",
-            "hint": "Erst <code>fruehstueck &lt;&lt; \"Speck\"</code>, dann als letzte Zeile <code>fruehstueck.sort.join(\", \")</code> – Methoden lassen sich verketten."
+            "hint": "Erst <code>fruehstueck &lt;&lt; \"Speck\"</code>, dann als letzte Zeile <code>fruehstueck.sort.join(\", \")</code> – Methoden lassen sich verketten.",
+            "solution": "fruehstueck = [\"Ei\", \"Brot\"]\nfruehstueck << \"Speck\"\nputs fruehstueck.sort.join(\", \")"
           }
         ]
       },
@@ -2244,8 +2353,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "breakfast = [\"egg\", \"toast\"]\n# ...\n",
+            "hints": [
+              "Two steps: first append to <code>breakfast</code> with <code>&lt;&lt;</code>, then on the last line sort the array and turn it into one string with <code>join</code>."
+            ],
             "check": "breakfast.is_a?(Array) && breakfast.include?(\"bacon\") && breakfast.include?(\"egg\") && (output.include?(\"bacon, egg, toast\") || result == \"bacon, egg, toast\")",
-            "hint": "First <code>breakfast &lt;&lt; \"bacon\"</code>, then as the last line <code>breakfast.sort.join(\", \")</code> – methods can be chained."
+            "hint": "First <code>breakfast &lt;&lt; \"bacon\"</code>, then as the last line <code>breakfast.sort.join(\", \")</code> – methods can be chained.",
+            "solution": "breakfast = [\"egg\", \"toast\"]\nbreakfast << \"bacon\"\nputs breakfast.sort.join(\", \")"
           }
         ]
       },
@@ -2319,8 +2432,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "breakfast = [\"egg\", \"toast\"]\n# ...\n",
+            "hints": [
+              "2ステップだよ。まず<code>&lt;&lt;</code>で<code>breakfast</code>に追加して、最後の行で配列を並べかえてから<code>join</code>で1つの文字列にしてみて。"
+            ],
             "check": "breakfast.is_a?(Array) && breakfast.include?(\"bacon\") && breakfast.include?(\"egg\") && (output.include?(\"bacon, egg, toast\") || result == \"bacon, egg, toast\")",
-            "hint": "まず<code>breakfast &lt;&lt; \"bacon\"</code>、それから最後の行に<code>breakfast.sort.join(\", \")</code>だよ。メソッドはつなげて呼べるんだ。"
+            "hint": "まず<code>breakfast &lt;&lt; \"bacon\"</code>、それから最後の行に<code>breakfast.sort.join(\", \")</code>だよ。メソッドはつなげて呼べるんだ。",
+            "solution": "breakfast = [\"egg\", \"toast\"]\nbreakfast << \"bacon\"\nputs breakfast.sort.join(\", \")"
           }
         ]
       },
@@ -2390,8 +2507,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# fuchs = { ... }\n",
+            "hints": [
+              "Lege <code>fuchs</code> mit geschweiften Klammern an, mit <code>name:</code> und <code>essen:</code> als Schlüsseln – und schreib darunter eine zweite Zeile, die <code>fuchs[:alter]</code> eine Zahl zuweist."
+            ],
             "check": "fuchs.is_a?(Hash) && fuchs[:name].to_s.length > 0 && fuchs[:essen].to_s.length > 0 && fuchs[:alter].is_a?(Integer) && code.include?(\"fuchs[:alter]\")",
-            "hint": "Zum Beispiel: <code>fuchs = { name: \"Chunky\", essen: \"Speck\" }</code> und darunter <code>fuchs[:alter] = 3</code>."
+            "hint": "Zum Beispiel: <code>fuchs = { name: \"Chunky\", essen: \"Speck\" }</code> und darunter <code>fuchs[:alter] = 3</code>.",
+            "solution": "fuchs = { name: \"Chunky\", essen: \"Speck\" }\nfuchs[:alter] = 3\nfuchs"
           }
         ]
       },
@@ -2457,8 +2578,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# fox = { ... }\n",
+            "hints": [
+              "Create <code>fox</code> with curly braces using <code>name:</code> and <code>food:</code> as keys – then add a second line that assigns a number to <code>fox[:age]</code>."
+            ],
             "check": "fox.is_a?(Hash) && fox[:name].to_s.length > 0 && fox[:food].to_s.length > 0 && fox[:age].is_a?(Integer) && code.include?(\"fox[:age]\")",
-            "hint": "For example: <code>fox = { name: \"Chunky\", food: \"bacon\" }</code> and below it <code>fox[:age] = 3</code>."
+            "hint": "For example: <code>fox = { name: \"Chunky\", food: \"bacon\" }</code> and below it <code>fox[:age] = 3</code>.",
+            "solution": "fox = { name: \"Chunky\", food: \"bacon\" }\nfox[:age] = 3\nfox"
           }
         ]
       },
@@ -2524,8 +2649,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# fox = { ... }\n",
+            "hints": [
+              "波かっこで<code>fox</code>を作って、キーは<code>name:</code>と<code>food:</code>にしてみて。その下にもう1行、<code>fox[:age]</code>に数を入れる行を書くんだよ。"
+            ],
             "check": "fox.is_a?(Hash) && fox[:name].to_s.length > 0 && fox[:food].to_s.length > 0 && fox[:age].is_a?(Integer) && code.include?(\"fox[:age]\")",
-            "hint": "たとえば<code>fox = { name: \"Chunky\", food: \"bacon\" }</code>と書いて、その下に<code>fox[:age] = 3</code>だよ。"
+            "hint": "たとえば<code>fox = { name: \"Chunky\", food: \"bacon\" }</code>と書いて、その下に<code>fox[:age] = 3</code>だよ。",
+            "solution": "fox = { name: \"Chunky\", food: \"bacon\" }\nfox[:age] = 3\nfox"
           }
         ]
       },
@@ -2599,8 +2728,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "punkte = [72, 45, 88, 91, 30, 60]\n# bestanden = punkte.select { ... }\n# mit_bonus = ...\n",
+            "hints": [
+              "Fülle zuerst den <code>select</code>-Block so, dass nur Punktzahlen ab 60 übrig bleiben, und ruf dann auf <code>bestanden</code> die Methode <code>map</code> auf, um jede Zahl zu erhöhen."
+            ],
             "check": "bestanden == [72, 88, 91, 60] && mit_bonus == [77, 93, 96, 65] && code.include?(\"select\") && code.include?(\"map\")",
-            "hint": "<code>bestanden = punkte.select { |punkt| punkt &gt;= 60 }</code> und danach <code>mit_bonus = bestanden.map { |punkt| punkt + 5 }</code>."
+            "hint": "<code>bestanden = punkte.select { |punkt| punkt &gt;= 60 }</code> und danach <code>mit_bonus = bestanden.map { |punkt| punkt + 5 }</code>.",
+            "solution": "punkte = [72, 45, 88, 91, 30, 60]\nbestanden = punkte.select { |punkt| punkt >= 60 }\nmit_bonus = bestanden.map { |punkt| punkt + 5 }"
           }
         ]
       },
@@ -2670,8 +2803,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "scores = [72, 45, 88, 91, 30, 60]\n# passed = scores.select { ... }\n# with_bonus = ...\n",
+            "hints": [
+              "First fill the <code>select</code> block so only scores of 60 or more stay, then call <code>map</code> on <code>passed</code> to add the bonus to each one."
+            ],
             "check": "passed == [72, 88, 91, 60] && with_bonus == [77, 93, 96, 65] && code.include?(\"select\") && code.include?(\"map\")",
-            "hint": "<code>passed = scores.select { |score| score &gt;= 60 }</code> and then <code>with_bonus = passed.map { |score| score + 5 }</code>."
+            "hint": "<code>passed = scores.select { |score| score &gt;= 60 }</code> and then <code>with_bonus = passed.map { |score| score + 5 }</code>.",
+            "solution": "scores = [72, 45, 88, 91, 30, 60]\npassed = scores.select { |score| score >= 60 }\nwith_bonus = passed.map { |score| score + 5 }"
           }
         ]
       },
@@ -2741,8 +2878,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "scores = [72, 45, 88, 91, 30, 60]\n# passed = scores.select { ... }\n# with_bonus = ...\n",
+            "hints": [
+              "まず<code>select</code>のブロックで60以上の点数だけ残るようにして、それから<code>passed</code>に<code>map</code>を呼んで、1つ1つにボーナスをたしてみて。"
+            ],
             "check": "passed == [72, 88, 91, 60] && with_bonus == [77, 93, 96, 65] && code.include?(\"select\") && code.include?(\"map\")",
-            "hint": "<code>passed = scores.select { |score| score &gt;= 60 }</code>、それから<code>with_bonus = passed.map { |score| score + 5 }</code>だよ。"
+            "hint": "<code>passed = scores.select { |score| score &gt;= 60 }</code>、それから<code>with_bonus = passed.map { |score| score + 5 }</code>だよ。",
+            "solution": "scores = [72, 45, 88, 91, 30, 60]\npassed = scores.select { |score| score >= 60 }\nwith_bonus = passed.map { |score| score + 5 }"
           }
         ]
       }
@@ -2807,8 +2948,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "notizen = [\n  \"Frühstück um 07:45: Speck\",\n  \"Znüni um 10:15: Apfel\",\n  \"Mittag um 12:30: speck und Ei\",\n  \"Abend: kein Hunger\"\n]\n# zeiten = ...      # alle Uhrzeiten, z.B. \"07:45\"\n# speck_tage = ...  # wie viele Notizen Speck nennen (gross oder klein)\n",
+            "hints": [
+              "Für <code>zeiten</code>: Hol dir mit <code>scan</code> und einem Muster aus <code>\\d</code> und Doppelpunkt die Uhrzeiten aus allen Notizen. Für <code>speck_tage</code>: <code>count</code> mit einem Block, in dem <code>match?</code> und die Option <code>i</code> stecken."
+            ],
             "check": "zeiten == [\"07:45\", \"10:15\", \"12:30\"] && speck_tage == 2 && code.scan(\"/\").length >= 4",
-            "hint": "<code>zeiten = notizen.join(\" \").scan(/\\d\\d:\\d\\d/)</code> – oder <code>notizen.flat_map { |notiz| notiz.scan(/\\d\\d:\\d\\d/) }</code>. Und <code>speck_tage = notizen.count { |notiz| notiz.match?(/speck/i) }</code>."
+            "hint": "<code>zeiten = notizen.join(\" \").scan(/\\d\\d:\\d\\d/)</code> – oder <code>notizen.flat_map { |notiz| notiz.scan(/\\d\\d:\\d\\d/) }</code>. Und <code>speck_tage = notizen.count { |notiz| notiz.match?(/speck/i) }</code>.",
+            "solution": "notizen = [\"Frühstück um 07:45: Speck\", \"Znüni um 10:15: Apfel\", \"Mittag um 12:30: speck und Ei\", \"Abend: kein Hunger\"]\nzeiten = notizen.join(\" \").scan(/\\d\\d:\\d\\d/)\nspeck_tage = notizen.count { |notiz| notiz.match?(/speck/i) }"
           }
         ]
       },
@@ -2870,8 +3015,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "notes = [\n  \"Breakfast at 07:45: Bacon\",\n  \"Snack at 10:15: apple\",\n  \"Lunch at 12:30: bacon and egg\",\n  \"Evening: not hungry\"\n]\n# times = ...       # every time of day, e.g. \"07:45\"\n# bacon_days = ...  # how many notes mention bacon (capitals or not)\n",
+            "hints": [
+              "For <code>times</code>, use <code>scan</code> with a pattern of <code>\\d</code> and a colon across all the notes. For <code>bacon_days</code>, use <code>count</code> with a block that calls <code>match?</code> – the <code>i</code> flag ignores case."
+            ],
             "check": "times == [\"07:45\", \"10:15\", \"12:30\"] && bacon_days == 2 && code.scan(\"/\").length >= 4",
-            "hint": "<code>times = notes.join(\" \").scan(/\\d\\d:\\d\\d/)</code> – or <code>notes.flat_map { |note| note.scan(/\\d\\d:\\d\\d/) }</code>. And <code>bacon_days = notes.count { |note| note.match?(/bacon/i) }</code>."
+            "hint": "<code>times = notes.join(\" \").scan(/\\d\\d:\\d\\d/)</code> – or <code>notes.flat_map { |note| note.scan(/\\d\\d:\\d\\d/) }</code>. And <code>bacon_days = notes.count { |note| note.match?(/bacon/i) }</code>.",
+            "solution": "notes = [\"Breakfast at 07:45: Bacon\", \"Snack at 10:15: apple\", \"Lunch at 12:30: bacon and egg\", \"Evening: not hungry\"]\ntimes = notes.join(\" \").scan(/\\d\\d:\\d\\d/)\nbacon_days = notes.count { |note| note.match?(/bacon/i) }"
           }
         ]
       },
@@ -2933,8 +3082,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "notes = [\n  \"Breakfast at 07:45: Bacon\",\n  \"Snack at 10:15: apple\",\n  \"Lunch at 12:30: bacon and egg\",\n  \"Evening: not hungry\"\n]\n# times = ...       # すべての時刻、たとえば \"07:45\"\n# bacon_days = ...  # bacon が出てくるメモの数（大文字でも小文字でも）\n",
+            "hints": [
+              "<code>times</code>は、<code>\\d</code>とコロンのパターンで全部のメモに<code>scan</code>をかけてみて。<code>bacon_days</code>は<code>count</code>のブロックの中で<code>match?</code>を使い、<code>i</code>オプションで大文字小文字を無視するんだよ。"
+            ],
             "check": "times == [\"07:45\", \"10:15\", \"12:30\"] && bacon_days == 2 && code.scan(\"/\").length >= 4",
-            "hint": "<code>times = notes.join(\" \").scan(/\\d\\d:\\d\\d/)</code>、または<code>notes.flat_map { |note| note.scan(/\\d\\d:\\d\\d/) }</code>。そして<code>bacon_days = notes.count { |note| note.match?(/bacon/i) }</code>だよ。"
+            "hint": "<code>times = notes.join(\" \").scan(/\\d\\d:\\d\\d/)</code>、または<code>notes.flat_map { |note| note.scan(/\\d\\d:\\d\\d/) }</code>。そして<code>bacon_days = notes.count { |note| note.match?(/bacon/i) }</code>だよ。",
+            "solution": "notes = [\"Breakfast at 07:45: Bacon\", \"Snack at 10:15: apple\", \"Lunch at 12:30: bacon and egg\", \"Evening: not hungry\"]\ntimes = notes.join(\" \").scan(/\\d\\d:\\d\\d/)\nbacon_days = notes.count { |note| note.match?(/bacon/i) }"
           }
         ]
       }
@@ -2992,8 +3145,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# def quadrat(zahl)\n#   ...\n# end\n\n# quadrat(9)\n",
+            "hints": [
+              "Entferne die <code>#</code>-Zeichen, damit aus dem Gerüst mit <code>def</code> … <code>end</code> echter Code wird, und schreib dazwischen die Multiplikation mit <code>zahl</code> und <code>*</code>."
+            ],
             "check": "quadrat(9) == 81 && quadrat(5) == 25 && code.include?(\"def\")",
-            "hint": "So geht's: <code>def quadrat(zahl)</code>, darunter <code>zahl * zahl</code>, dann <code>end</code>."
+            "hint": "So geht's: <code>def quadrat(zahl)</code>, darunter <code>zahl * zahl</code>, dann <code>end</code>.",
+            "solution": "def quadrat(zahl)\n  zahl * zahl\nend\n\nquadrat(9)"
           }
         ]
       },
@@ -3048,8 +3205,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# def square(number)\n#   ...\n# end\n\n# square(9)\n",
+            "hints": [
+              "Remove the <code>#</code> signs so the <code>def</code> … <code>end</code> skeleton becomes real code, then put the multiplication with <code>number</code> and <code>*</code> on the line in between."
+            ],
             "check": "square(9) == 81 && square(5) == 25 && code.include?(\"def\")",
-            "hint": "Like this: <code>def square(number)</code>, below it <code>number * number</code>, then <code>end</code>."
+            "hint": "Like this: <code>def square(number)</code>, below it <code>number * number</code>, then <code>end</code>.",
+            "solution": "def square(number)\n  number * number\nend\n\nsquare(9)"
           }
         ]
       },
@@ -3104,8 +3265,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# def square(number)\n#   ...\n# end\n\n# square(9)\n",
+            "hints": [
+              "<code>#</code>を消して、<code>def</code>…<code>end</code>の骨組みを本物のコードにしよう。あいだの行には<code>number</code>と<code>*</code>を使ったかけ算を書いてみて。"
+            ],
             "check": "square(9) == 81 && square(5) == 25 && code.include?(\"def\")",
-            "hint": "こんなふうに書くよ：<code>def square(number)</code>、その下に<code>number * number</code>、最後に<code>end</code>。"
+            "hint": "こんなふうに書くよ：<code>def square(number)</code>、その下に<code>number * number</code>、最後に<code>end</code>。",
+            "solution": "def square(number)\n  number * number\nend\n\nsquare(9)"
           }
         ]
       },
@@ -3194,8 +3359,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "fuchs = { name: \"Chunky\", streifen: 3 }\n\ndef satz(tier)\n  \"#{tier[:name]} isst \" + tier[:streifen] + \" Streifen Speck.\"\nend\n\nsatz(fuchss, 3)\n",
+            "hints": [
+              "Führ die Zelle aus und nimm die Fehlermeldungen eine nach der anderen: Zuerst stimmt in der letzten Zeile beim Aufruf von <code>satz</code> etwas nicht, danach meldet sich in der Methode das <code>+</code> mit einer Zahl."
+            ],
             "check": "output.include?(\"Chunky isst 3 Streifen Speck.\") || result == \"Chunky isst 3 Streifen Speck.\"",
-            "hint": "Der Reihe nach: <code>fuchss</code> heisst <code>fuchs</code>, <code>satz</code> will nur ein Argument, und die Zahl gehört per Interpolation in den Text: <code>\"#{tier[:name]} isst #{tier[:streifen]} Streifen Speck.\"</code>"
+            "hint": "Der Reihe nach: <code>fuchss</code> heisst <code>fuchs</code>, <code>satz</code> will nur ein Argument, und die Zahl gehört per Interpolation in den Text: <code>\"#{tier[:name]} isst #{tier[:streifen]} Streifen Speck.\"</code>",
+            "solution": "fuchs = { name: \"Chunky\", streifen: 3 }\n\ndef satz(tier)\n  \"#{tier[:name]} isst #{tier[:streifen]} Streifen Speck.\"\nend\n\nsatz(fuchs)"
           }
         ]
       },
@@ -3280,8 +3449,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "fox = { name: \"Chunky\", strips: 3 }\n\ndef sentence(animal)\n  \"#{animal[:name]} eats \" + animal[:strips] + \" strips of bacon.\"\nend\n\nsentence(foxx, 3)\n",
+            "hints": [
+              "Run the cell and take the errors one at a time: first the call to <code>sentence</code> on the last line is off, then the <code>+</code> inside the method complains about a number."
+            ],
             "check": "output.include?(\"Chunky eats 3 strips of bacon.\") || result == \"Chunky eats 3 strips of bacon.\"",
-            "hint": "One by one: <code>foxx</code> is called <code>fox</code>, <code>sentence</code> wants only one argument, and the number goes into the text by interpolation: <code>\"#{animal[:name]} eats #{animal[:strips]} strips of bacon.\"</code>"
+            "hint": "One by one: <code>foxx</code> is called <code>fox</code>, <code>sentence</code> wants only one argument, and the number goes into the text by interpolation: <code>\"#{animal[:name]} eats #{animal[:strips]} strips of bacon.\"</code>",
+            "solution": "fox = { name: \"Chunky\", strips: 3 }\n\ndef sentence(animal)\n  \"#{animal[:name]} eats #{animal[:strips]} strips of bacon.\"\nend\n\nsentence(fox)"
           }
         ]
       },
@@ -3366,8 +3539,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "fox = { name: \"Chunky\", strips: 3 }\n\ndef sentence(animal)\n  \"#{animal[:name]} eats \" + animal[:strips] + \" strips of bacon.\"\nend\n\nsentence(foxx, 3)\n",
+            "hints": [
+              "セルを実行して、エラーを1つずつ片づけよう。まずは最後の行の<code>sentence</code>の呼び出しがおかしくて、次はメソッドの中の<code>+</code>が数のことで文句を言ってくるよ。"
+            ],
             "check": "output.include?(\"Chunky eats 3 strips of bacon.\") || result == \"Chunky eats 3 strips of bacon.\"",
-            "hint": "1つずつ直そう：<code>foxx</code>は<code>fox</code>のまちがい、<code>sentence</code>がほしい引数は1つだけ、そして数は式展開で文に入れよう：<code>\"#{animal[:name]} eats #{animal[:strips]} strips of bacon.\"</code>"
+            "hint": "1つずつ直そう：<code>foxx</code>は<code>fox</code>のまちがい、<code>sentence</code>がほしい引数は1つだけ、そして数は式展開で文に入れよう：<code>\"#{animal[:name]} eats #{animal[:strips]} strips of bacon.\"</code>",
+            "solution": "fox = { name: \"Chunky\", strips: 3 }\n\ndef sentence(animal)\n  \"#{animal[:name]} eats #{animal[:strips]} strips of bacon.\"\nend\n\nsentence(fox)"
           }
         ]
       },
@@ -3410,8 +3587,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def koch(laenge, tiefe)\n  if tiefe == 0\n    forward laenge\n  else\n    # viermal koch(laenge / 3.0, tiefe - 1),\n    # dazwischen left 60, right 120, left 60\n  end\nend\n\nturtle do\n  color \"#2a6fb0\"\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend\n",
+            "hints": [
+              "Im <code>else</code>-Zweig steht viermal ein Aufruf von <code>koch</code> mit einem Drittel der <code>laenge</code> und <code>tiefe - 1</code>; zwischen je zwei Aufrufen kommt eine Drehung mit <code>left</code> oder <code>right</code>, wie in der Aufgabe beschrieben."
+            ],
             "check": "(t = Turtle.from(images).last) && t.closed? && [48, 192, 768].include?(t.edges.size) && t.edges.map { |e| e.length.round(1) }.uniq.size == 1 && (t.corners.map(&:round) - [60, -60, 120, -120]).empty?",
-            "hint": "Vier Aufrufe, drei Drehungen: <code>koch(laenge / 3.0, tiefe - 1)</code>, <code>left 60</code>, <code>koch(…)</code>, <code>right 120</code>, <code>koch(…)</code>, <code>left 60</code>, <code>koch(…)</code>."
+            "hint": "Vier Aufrufe, drei Drehungen: <code>koch(laenge / 3.0, tiefe - 1)</code>, <code>left 60</code>, <code>koch(…)</code>, <code>right 120</code>, <code>koch(…)</code>, <code>left 60</code>, <code>koch(…)</code>.",
+            "solution": "def koch(laenge, tiefe)\n  if tiefe == 0\n    forward laenge\n  else\n    koch(laenge / 3.0, tiefe - 1)\n    left 60\n    koch(laenge / 3.0, tiefe - 1)\n    right 120\n    koch(laenge / 3.0, tiefe - 1)\n    left 60\n    koch(laenge / 3.0, tiefe - 1)\n  end\nend\n\nturtle do\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend"
           }
         ]
       },
@@ -3449,8 +3630,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def koch(length, depth)\n  if depth == 0\n    forward length\n  else\n    # four times koch(length / 3.0, depth - 1),\n    # with left 60, right 120, left 60 in between\n  end\nend\n\nturtle do\n  color \"#2a6fb0\"\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend\n",
+            "hints": [
+              "In the <code>else</code> branch, call <code>koch</code> four times with a third of <code>length</code> and <code>depth - 1</code>; between each pair of calls, put one turn with <code>left</code> or <code>right</code> as the task describes."
+            ],
             "check": "(t = Turtle.from(images).last) && t.closed? && [48, 192, 768].include?(t.edges.size) && t.edges.map { |e| e.length.round(1) }.uniq.size == 1 && (t.corners.map(&:round) - [60, -60, 120, -120]).empty?",
-            "hint": "Four calls, three turns: <code>koch(length / 3.0, depth - 1)</code>, <code>left 60</code>, <code>koch(…)</code>, <code>right 120</code>, <code>koch(…)</code>, <code>left 60</code>, <code>koch(…)</code>."
+            "hint": "Four calls, three turns: <code>koch(length / 3.0, depth - 1)</code>, <code>left 60</code>, <code>koch(…)</code>, <code>right 120</code>, <code>koch(…)</code>, <code>left 60</code>, <code>koch(…)</code>.",
+            "solution": "def koch(length, depth)\n  if depth == 0\n    forward length\n  else\n    koch(length / 3.0, depth - 1)\n    left 60\n    koch(length / 3.0, depth - 1)\n    right 120\n    koch(length / 3.0, depth - 1)\n    left 60\n    koch(length / 3.0, depth - 1)\n  end\nend\n\nturtle do\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend"
           }
         ]
       },
@@ -3488,8 +3673,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def koch(length, depth)\n  if depth == 0\n    forward length\n  else\n    # koch(length / 3.0, depth - 1) を4回、\n    # あいだに left 60、right 120、left 60\n  end\nend\n\nturtle do\n  color \"#2a6fb0\"\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend\n",
+            "hints": [
+              "<code>else</code>の中で、<code>length</code>を3分の1に、<code>depth - 1</code>にして<code>koch</code>を4回呼んでみて。呼び出しのあいだには、課題にある<code>left</code>か<code>right</code>の回転を1つずつ入れるんだよ。"
+            ],
             "check": "(t = Turtle.from(images).last) && t.closed? && [48, 192, 768].include?(t.edges.size) && t.edges.map { |e| e.length.round(1) }.uniq.size == 1 && (t.corners.map(&:round) - [60, -60, 120, -120]).empty?",
-            "hint": "呼び出し4回に、回転3回だよ：<code>koch(length / 3.0, depth - 1)</code>、<code>left 60</code>、<code>koch(…)</code>、<code>right 120</code>、<code>koch(…)</code>、<code>left 60</code>、<code>koch(…)</code>！"
+            "hint": "呼び出し4回に、回転3回だよ：<code>koch(length / 3.0, depth - 1)</code>、<code>left 60</code>、<code>koch(…)</code>、<code>right 120</code>、<code>koch(…)</code>、<code>left 60</code>、<code>koch(…)</code>！",
+            "solution": "def koch(length, depth)\n  if depth == 0\n    forward length\n  else\n    koch(length / 3.0, depth - 1)\n    left 60\n    koch(length / 3.0, depth - 1)\n    right 120\n    koch(length / 3.0, depth - 1)\n    left 60\n    koch(length / 3.0, depth - 1)\n  end\nend\n\nturtle do\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend"
           }
         ]
       }
@@ -3550,8 +3739,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# class Fuchs\n#   ...\n# end\n",
+            "hints": [
+              "Scroll zum Katzen-Beispiel hoch und bau es nach: <code>class Fuchs</code>, darin <code>attr_reader :name</code>, ein <code>initialize(name)</code>, das <code>@name</code> setzt, und <code>def ruf</code>."
+            ],
             "check": "f = Fuchs.new(\"Kaz\"); f.name == \"Kaz\" && f.ruf == \"Chunky Bacon!\" && code.include?(\"class Fuchs\")",
-            "hint": "Übernimm das Katzen-Beispiel und pass es an: Klasse <code>Fuchs</code>, und <code>ruf</code> gibt genau <code>\"Chunky Bacon!\"</code> zurück."
+            "hint": "Übernimm das Katzen-Beispiel und pass es an: Klasse <code>Fuchs</code>, und <code>ruf</code> gibt genau <code>\"Chunky Bacon!\"</code> zurück.",
+            "solution": "class Fuchs\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def ruf\n    \"Chunky Bacon!\"\n  end\nend\nf = Fuchs.new(\"Kaz\")\nf.ruf"
           }
         ]
       },
@@ -3609,8 +3802,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# class Fox\n#   ...\n# end\n",
+            "hints": [
+              "Scroll up to the cat example and mirror it: <code>class Fox</code>, inside it <code>attr_reader :name</code>, an <code>initialize(name)</code> that sets <code>@name</code>, and a <code>def shout</code>."
+            ],
             "check": "f = Fox.new(\"Kaz\"); f.name == \"Kaz\" && f.shout == \"Chunky Bacon!\" && code.include?(\"class Fox\")",
-            "hint": "Copy the cat example and adapt it: class <code>Fox</code>, and <code>shout</code> returns exactly <code>\"Chunky Bacon!\"</code>."
+            "hint": "Copy the cat example and adapt it: class <code>Fox</code>, and <code>shout</code> returns exactly <code>\"Chunky Bacon!\"</code>.",
+            "solution": "class Fox\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def shout\n    \"Chunky Bacon!\"\n  end\nend\nf = Fox.new(\"Kaz\")\nf.shout"
           }
         ]
       },
@@ -3668,8 +3865,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# class Fox\n#   ...\n# end\n",
+            "hints": [
+              "上の猫の例まで戻って、まねして組んでみて。<code>class Fox</code>の中に<code>attr_reader :name</code>、<code>@name</code>をセットする<code>initialize(name)</code>、それと<code>def shout</code>だよ。"
+            ],
             "check": "f = Fox.new(\"Kaz\"); f.name == \"Kaz\" && f.shout == \"Chunky Bacon!\" && code.include?(\"class Fox\")",
-            "hint": "猫の例をコピーして書きかえてみて。クラス名は<code>Fox</code>、<code>shout</code>はぴったり<code>\"Chunky Bacon!\"</code>を返すようにね。"
+            "hint": "猫の例をコピーして書きかえてみて。クラス名は<code>Fox</code>、<code>shout</code>はぴったり<code>\"Chunky Bacon!\"</code>を返すようにね。",
+            "solution": "class Fox\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def shout\n    \"Chunky Bacon!\"\n  end\nend\nf = Fox.new(\"Kaz\")\nf.shout"
           }
         ]
       },
@@ -3711,8 +3912,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class Waldtier\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def laut\n    \"...\"\n  end\n\n  def vorstellen\n    \"Ich bin #{name} und sage #{laut}\"\n  end\nend\n\n# class Rotfuchs < Waldtier\n#   ...\n# end\n\n# Rotfuchs.new(\"Chunky\").vorstellen\n",
+            "hints": [
+              "Hebe die Kommentarzeichen auf und schreib <code>class Rotfuchs &lt; Waldtier</code> – darin überschreibst du nur die Methode, die den Laut liefert; <code>initialize</code> und <code>vorstellen</code> erbt Rotfuchs."
+            ],
             "check": "Rotfuchs.superclass == Waldtier && Rotfuchs.new(\"Kaz\").vorstellen == \"Ich bin Kaz und sage Chunky Bacon!\" && !Rotfuchs.instance_methods(false).include?(:vorstellen)",
-            "hint": "<code>class Rotfuchs &lt; Waldtier</code>, darin nur <code>def laut</code> mit <code>\"Chunky Bacon!\"</code> – und <code>end</code>, <code>end</code>."
+            "hint": "<code>class Rotfuchs &lt; Waldtier</code>, darin nur <code>def laut</code> mit <code>\"Chunky Bacon!\"</code> – und <code>end</code>, <code>end</code>.",
+            "solution": "class Waldtier\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def laut\n    \"...\"\n  end\n  def vorstellen\n    \"Ich bin #{name} und sage #{laut}\"\n  end\nend\n\nclass Rotfuchs < Waldtier\n  def laut\n    \"Chunky Bacon!\"\n  end\nend\n\nRotfuchs.new(\"Chunky\").vorstellen"
           }
         ]
       },
@@ -3750,8 +3955,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class ForestAnimal\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def sound\n    \"...\"\n  end\n\n  def introduce\n    \"I am #{name} and I say #{sound}\"\n  end\nend\n\n# class RedFox < ForestAnimal\n#   ...\n# end\n\n# RedFox.new(\"Chunky\").introduce\n",
+            "hints": [
+              "Uncomment the skeleton and write <code>class RedFox &lt; ForestAnimal</code> – inside it, override only the method that gives the sound; <code>initialize</code> and <code>introduce</code> come for free."
+            ],
             "check": "RedFox.superclass == ForestAnimal && RedFox.new(\"Kaz\").introduce == \"I am Kaz and I say Chunky Bacon!\" && !RedFox.instance_methods(false).include?(:introduce)",
-            "hint": "<code>class RedFox &lt; ForestAnimal</code>, inside it only <code>def sound</code> with <code>\"Chunky Bacon!\"</code> – and <code>end</code>, <code>end</code>."
+            "hint": "<code>class RedFox &lt; ForestAnimal</code>, inside it only <code>def sound</code> with <code>\"Chunky Bacon!\"</code> – and <code>end</code>, <code>end</code>.",
+            "solution": "class ForestAnimal\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def sound\n    \"...\"\n  end\n  def introduce\n    \"I am #{name} and I say #{sound}\"\n  end\nend\n\nclass RedFox < ForestAnimal\n  def sound\n    \"Chunky Bacon!\"\n  end\nend\n\nRedFox.new(\"Chunky\").introduce"
           }
         ]
       },
@@ -3789,8 +3998,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class ForestAnimal\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def sound\n    \"...\"\n  end\n\n  def introduce\n    \"I am #{name} and I say #{sound}\"\n  end\nend\n\n# class RedFox < ForestAnimal\n#   ...\n# end\n\n# RedFox.new(\"Chunky\").introduce\n",
+            "hints": [
+              "コメントをはずして<code>class RedFox &lt; ForestAnimal</code>と書いてみて。中で書きかえるのは鳴き声を返すメソッドだけで、<code>initialize</code>と<code>introduce</code>は親からもらえるんだよ。"
+            ],
             "check": "RedFox.superclass == ForestAnimal && RedFox.new(\"Kaz\").introduce == \"I am Kaz and I say Chunky Bacon!\" && !RedFox.instance_methods(false).include?(:introduce)",
-            "hint": "<code>class RedFox &lt; ForestAnimal</code>の中に<code>def sound</code>だけ書いて、<code>\"Chunky Bacon!\"</code>を返そう。最後は<code>end</code>、<code>end</code>だよ。"
+            "hint": "<code>class RedFox &lt; ForestAnimal</code>の中に<code>def sound</code>だけ書いて、<code>\"Chunky Bacon!\"</code>を返そう。最後は<code>end</code>、<code>end</code>だよ。",
+            "solution": "class ForestAnimal\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def sound\n    \"...\"\n  end\n  def introduce\n    \"I am #{name} and I say #{sound}\"\n  end\nend\n\nclass RedFox < ForestAnimal\n  def sound\n    \"Chunky Bacon!\"\n  end\nend\n\nRedFox.new(\"Chunky\").introduce"
           }
         ]
       }
@@ -3851,8 +4064,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# module Laut\n#   ...\n# end\n\n# class Dachs\n#   ...\n# end\n",
+            "hints": [
+              "Zuerst <code>module Laut</code> mit einer Methode <code>ruf</code> (<code>def</code> … <code>end</code>), dann darunter <code>class Dachs</code>, in der eine Zeile mit <code>include</code> genügt – und zum Schluss <code>Dachs.new.ruf</code>."
+            ],
             "check": "Laut.is_a?(Module) && !Laut.is_a?(Class) && Dachs.include?(Laut) && Dachs.new.ruf == \"CHUNKY BACON!\" && code.include?(\"include\")",
-            "hint": "<code>module Laut</code> mit <code>def ruf</code> … <code>\"CHUNKY BACON!\"</code> … dann <code>class Dachs</code> mit <code>include Laut</code> darin."
+            "hint": "<code>module Laut</code> mit <code>def ruf</code> … <code>\"CHUNKY BACON!\"</code> … dann <code>class Dachs</code> mit <code>include Laut</code> darin.",
+            "solution": "module Laut\n  def ruf\n    \"CHUNKY BACON!\"\n  end\nend\n\nclass Dachs\n  include Laut\nend\n\nDachs.new.ruf"
           }
         ]
       },
@@ -3910,8 +4127,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# module Loud\n#   ...\n# end\n\n# class Badger\n#   ...\n# end\n",
+            "hints": [
+              "First <code>module Loud</code> with a method <code>shout</code> (<code>def</code> … <code>end</code>), then <code>class Badger</code> below it where a single <code>include</code> line is enough – and finally <code>Badger.new.shout</code>."
+            ],
             "check": "Loud.is_a?(Module) && !Loud.is_a?(Class) && Badger.include?(Loud) && Badger.new.shout == \"CHUNKY BACON!\" && code.include?(\"include\")",
-            "hint": "<code>module Loud</code> with <code>def shout</code> … <code>\"CHUNKY BACON!\"</code> … then <code>class Badger</code> with <code>include Loud</code> inside."
+            "hint": "<code>module Loud</code> with <code>def shout</code> … <code>\"CHUNKY BACON!\"</code> … then <code>class Badger</code> with <code>include Loud</code> inside.",
+            "solution": "module Loud\n  def shout\n    \"CHUNKY BACON!\"\n  end\nend\n\nclass Badger\n  include Loud\nend\n\nBadger.new.shout"
           }
         ]
       },
@@ -3969,8 +4190,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# module Loud\n#   ...\n# end\n\n# class Badger\n#   ...\n# end\n",
+            "hints": [
+              "まず<code>module Loud</code>の中に<code>def</code>…<code>end</code>で<code>shout</code>を書いて、その下の<code>class Badger</code>には<code>include</code>の1行だけでOK。最後に<code>Badger.new.shout</code>を書いてみて。"
+            ],
             "check": "Loud.is_a?(Module) && !Loud.is_a?(Class) && Badger.include?(Loud) && Badger.new.shout == \"CHUNKY BACON!\" && code.include?(\"include\")",
-            "hint": "<code>module Loud</code>の中に<code>def shout</code>を書いて、<code>\"CHUNKY BACON!\"</code>を返すようにしよう。それから<code>class Badger</code>を作って、その中に<code>include Loud</code>と書くんだよ。"
+            "hint": "<code>module Loud</code>の中に<code>def shout</code>を書いて、<code>\"CHUNKY BACON!\"</code>を返すようにしよう。それから<code>class Badger</code>を作って、その中に<code>include Loud</code>と書くんだよ。",
+            "solution": "module Loud\n  def shout\n    \"CHUNKY BACON!\"\n  end\nend\n\nclass Badger\n  include Loud\nend\n\nBadger.new.shout"
           }
         ]
       },
@@ -3996,8 +4221,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# [4, 8, 15].map { |x| ... }\n",
+            "hints": [
+              "Entferne das <code>#</code> und ersetz die drei Punkte im Block: <code>x</code> ist jeweils eine Zahl aus dem Array – was musst du damit rechnen, damit aus 4 eine 12 wird?"
+            ],
             "check": "result == [12, 24, 45] && code.include?(\"map\")",
-            "hint": "Schreibe <code>[4, 8, 15].map { |x| x * 3 }</code> als letzte Zeile – <code>map</code> baut aus jedem Element ein neues Array."
+            "hint": "Schreibe <code>[4, 8, 15].map { |x| x * 3 }</code> als letzte Zeile – <code>map</code> baut aus jedem Element ein neues Array.",
+            "solution": "[4, 8, 15].map { |x| x * 3 }"
           }
         ]
       },
@@ -4019,8 +4248,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# [4, 8, 15].map { |x| ... }\n",
+            "hints": [
+              "Remove the <code>#</code> and replace the dots inside the block: <code>x</code> is one number from the array at a time – what do you do to it so 4 becomes 12?"
+            ],
             "check": "result == [12, 24, 45] && code.include?(\"map\")",
-            "hint": "Write <code>[4, 8, 15].map { |x| x * 3 }</code> as the last line – <code>map</code> builds a new array from every element."
+            "hint": "Write <code>[4, 8, 15].map { |x| x * 3 }</code> as the last line – <code>map</code> builds a new array from every element.",
+            "solution": "[4, 8, 15].map { |x| x * 3 }"
           }
         ]
       },
@@ -4042,8 +4275,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# [4, 8, 15].map { |x| ... }\n",
+            "hints": [
+              "<code>#</code>を消して、ブロックの中の点々を書きかえてみて。<code>x</code>には配列の数が1つずつ入るから、4が12になる計算を考えてみよう。"
+            ],
             "check": "result == [12, 24, 45] && code.include?(\"map\")",
-            "hint": "最後の行に<code>[4, 8, 15].map { |x| x * 3 }</code>って書いてみて。<code>map</code>は、それぞれの要素から新しい配列を作ってくれるよ。"
+            "hint": "最後の行に<code>[4, 8, 15].map { |x| x * 3 }</code>って書いてみて。<code>map</code>は、それぞれの要素から新しい配列を作ってくれるよ。",
+            "solution": "[4, 8, 15].map { |x| x * 3 }"
           }
         ]
       }
@@ -4100,8 +4337,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# 1. Die Quersumme von 2026\n# quersumme = ...\n\n# 2. Die Liste in Paaren\n# paare = ...\n",
+            "hints": [
+              "Such auf der Integer-Seite die Methode, deren Name mit <code>dig</code> beginnt (das Ergebnis dann mit <code>sum</code> addieren), und bei Enumerable eine mit <code>each_</code> und „slice“ im Namen – kommt ein Enumerator zurück, hilft <code>to_a</code>."
+            ],
             "check": "quersumme == 10 && paare == [[1, 2], [3, 4], [5, 6]] && code.include?(\"digits\") && code.include?(\"each_slice\")",
-            "hint": "Gesucht sind <code>digits</code> und <code>each_slice</code>: <code>2026.digits.sum</code>. Und Achtung, die Doku sagt <code>each_slice(n) → enumerator</code> – ohne Block kommt ein Enumerator heraus, erst <code>.to_a</code> macht daraus ein Array: <code>[1, 2, 3, 4, 5, 6].each_slice(2).to_a</code>."
+            "hint": "Gesucht sind <code>digits</code> und <code>each_slice</code>: <code>2026.digits.sum</code>. Und Achtung, die Doku sagt <code>each_slice(n) → enumerator</code> – ohne Block kommt ein Enumerator heraus, erst <code>.to_a</code> macht daraus ein Array: <code>[1, 2, 3, 4, 5, 6].each_slice(2).to_a</code>.",
+            "solution": "quersumme = 2026.digits.sum\npaare = [1, 2, 3, 4, 5, 6].each_slice(2).to_a"
           }
         ]
       },
@@ -4155,8 +4396,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# 1. The digit sum of 2026\n# digit_sum = ...\n\n# 2. The list in pairs\n# pairs = ...\n",
+            "hints": [
+              "On the Integer page look for a method starting with <code>dig</code> (then <code>sum</code> the result); in Enumerable look for one starting with <code>each_</code> with slice in its name – if you get an Enumerator back, <code>to_a</code> helps."
+            ],
             "check": "digit_sum == 10 && pairs == [[1, 2], [3, 4], [5, 6]] && code.include?(\"digits\") && code.include?(\"each_slice\")",
-            "hint": "You are looking for <code>digits</code> and <code>each_slice</code>: <code>2026.digits.sum</code>. And careful, the docs say <code>each_slice(n) → enumerator</code> – without a block you get an Enumerator, and only <code>.to_a</code> turns it into an array: <code>[1, 2, 3, 4, 5, 6].each_slice(2).to_a</code>."
+            "hint": "You are looking for <code>digits</code> and <code>each_slice</code>: <code>2026.digits.sum</code>. And careful, the docs say <code>each_slice(n) → enumerator</code> – without a block you get an Enumerator, and only <code>.to_a</code> turns it into an array: <code>[1, 2, 3, 4, 5, 6].each_slice(2).to_a</code>.",
+            "solution": "digit_sum = 2026.digits.sum\npairs = [1, 2, 3, 4, 5, 6].each_slice(2).to_a"
           }
         ]
       },
@@ -4210,8 +4455,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# 1. 2026の各桁の和\n# digit_sum = ...\n\n# 2. ペアに分けたリスト\n# pairs = ...\n",
+            "hints": [
+              "Integerのページで<code>dig</code>で始まるメソッドを探して、結果を<code>sum</code>してみて。Enumerableでは<code>each_</code>で始まって名前にsliceが入るメソッドを探して、Enumeratorが返ってきたら<code>to_a</code>をつけるんだ。"
+            ],
             "check": "digit_sum == 10 && pairs == [[1, 2], [3, 4], [5, 6]] && code.include?(\"digits\") && code.include?(\"each_slice\")",
-            "hint": "探しているのは<code>digits</code>と<code>each_slice</code>だよ：<code>2026.digits.sum</code>。それと気をつけて。るりまには<code>each_slice(n) -&gt; Enumerator</code>とあるよね。ブロックなしだとEnumeratorが返ってくるから、<code>.to_a</code>で配列にしよう：<code>[1, 2, 3, 4, 5, 6].each_slice(2).to_a</code>。"
+            "hint": "探しているのは<code>digits</code>と<code>each_slice</code>だよ：<code>2026.digits.sum</code>。それと気をつけて。るりまには<code>each_slice(n) -&gt; Enumerator</code>とあるよね。ブロックなしだとEnumeratorが返ってくるから、<code>.to_a</code>で配列にしよう：<code>[1, 2, 3, 4, 5, 6].each_slice(2).to_a</code>。",
+            "solution": "digit_sum = 2026.digits.sum\npairs = [1, 2, 3, 4, 5, 6].each_slice(2).to_a"
           }
         ]
       }
@@ -4244,8 +4493,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"chunky_png\"\nrequire \"chunky_png\"\n\n# bild = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n# ...\n# show_image bild\n",
+            "hints": [
+              "Entferne die <code>#</code>, damit <code>bild</code> erzeugt und am Ende gezeigt wird; dazwischen gehst du mit <code>times</code> die Zeilen durch und färbst mit <code>bild[x, y] =</code> nur die, bei denen <code>even?</code> zutrifft."
+            ],
             "check": "defined?(ChunkyPNG) && bild.is_a?(ChunkyPNG::Image) && bild.width >= 8 && bild.pixels.include?(ChunkyPNG::Color.rgb(193, 74, 46)) && images.length >= 1",
-            "hint": "Zum Beispiel: <code>8.times do |y|</code> … wenn <code>y.even?</code>, dann <code>8.times { |x| bild[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }</code> … <code>end</code> – und am Ende <code>show_image bild</code>."
+            "hint": "Zum Beispiel: <code>8.times do |y|</code> … wenn <code>y.even?</code>, dann <code>8.times { |x| bild[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }</code> … <code>end</code> – und am Ende <code>show_image bild</code>.",
+            "solution": "install_gem \"chunky_png\"\nrequire \"chunky_png\"\nbild = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times do |y|\n  next unless y.even?\n  8.times { |x| bild[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }\nend\nshow_image bild"
           }
         ]
       },
@@ -4275,8 +4528,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"chunky_png\"\nrequire \"chunky_png\"\n\n# image = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n# ...\n# show_image image\n",
+            "hints": [
+              "Remove the <code>#</code> so <code>image</code> is created and shown at the end; in between, walk through the rows with <code>times</code> and color pixels via <code>image[x, y] =</code> only when the row is <code>even?</code>."
+            ],
             "check": "defined?(ChunkyPNG) && image.is_a?(ChunkyPNG::Image) && image.width >= 8 && image.pixels.include?(ChunkyPNG::Color.rgb(193, 74, 46)) && images.length >= 1",
-            "hint": "For example: <code>8.times do |y|</code> … if <code>y.even?</code>, then <code>8.times { |x| image[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }</code> … <code>end</code> – and finally <code>show_image image</code>."
+            "hint": "For example: <code>8.times do |y|</code> … if <code>y.even?</code>, then <code>8.times { |x| image[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }</code> … <code>end</code> – and finally <code>show_image image</code>.",
+            "solution": "install_gem \"chunky_png\"\nrequire \"chunky_png\"\nimage = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times do |y|\n  next unless y.even?\n  8.times { |x| image[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }\nend\nshow_image image"
           }
         ]
       },
@@ -4306,8 +4563,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"chunky_png\"\nrequire \"chunky_png\"\n\n# image = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n# ...\n# show_image image\n",
+            "hints": [
+              "<code>#</code>を消して、<code>image</code>を作って最後に表示するようにしよう。あいだでは<code>times</code>で行を回って、<code>even?</code>な行だけ<code>image[x, y] =</code>で色をつけてみて。"
+            ],
             "check": "defined?(ChunkyPNG) && image.is_a?(ChunkyPNG::Image) && image.width >= 8 && image.pixels.include?(ChunkyPNG::Color.rgb(193, 74, 46)) && images.length >= 1",
-            "hint": "たとえば<code>8.times do |y|</code>で1行ずつくり返して、<code>y.even?</code>のときだけ<code>8.times { |x| image[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }</code>で塗り、<code>end</code>で閉じる。最後に<code>show_image image</code>で表示しよう。"
+            "hint": "たとえば<code>8.times do |y|</code>で1行ずつくり返して、<code>y.even?</code>のときだけ<code>8.times { |x| image[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }</code>で塗り、<code>end</code>で閉じる。最後に<code>show_image image</code>で表示しよう。",
+            "solution": "install_gem \"chunky_png\"\nrequire \"chunky_png\"\nimage = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times do |y|\n  next unless y.even?\n  8.times { |x| image[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }\nend\nshow_image image"
           }
         ]
       }
@@ -4372,8 +4633,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# links = doc.css(\"a\").map { |link| ... }\n",
+            "hints": [
+              "Führ zuerst die Zellen oben aus, damit <code>doc</code> da ist; dann entfernst du das <code>#</code> und ersetzst die Punkte im Block – aus jedem <code>link</code> willst du das Attribut <code>href</code> holen, mit eckigen Klammern."
+            ],
             "check": "links == [\"/speck\", \"/ei\", \"/kaffee\"]",
-            "hint": "<code>links = doc.css(\"a\").map { |link| link[\"href\"] }</code> – und vorher die Demo-Zellen ausführen, damit <code>doc</code> existiert."
+            "hint": "<code>links = doc.css(\"a\").map { |link| link[\"href\"] }</code> – und vorher die Demo-Zellen ausführen, damit <code>doc</code> existiert.",
+            "solution": "links = doc.css(\"a\").map { |link| link[\"href\"] }\nlinks"
           }
         ]
       },
@@ -4435,8 +4700,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# links = doc.css(\"a\").map { |link| ... }\n",
+            "hints": [
+              "Run the cells above first so <code>doc</code> exists; then remove the <code>#</code> and replace the dots in the block – from each <code>link</code> you want the <code>href</code> attribute, using square brackets."
+            ],
             "check": "links == [\"/bacon\", \"/egg\", \"/coffee\"]",
-            "hint": "<code>links = doc.css(\"a\").map { |link| link[\"href\"] }</code> – and run the demo cells first so <code>doc</code> exists."
+            "hint": "<code>links = doc.css(\"a\").map { |link| link[\"href\"] }</code> – and run the demo cells first so <code>doc</code> exists.",
+            "solution": "links = doc.css(\"a\").map { |link| link[\"href\"] }\nlinks"
           }
         ]
       },
@@ -4498,8 +4767,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# links = doc.css(\"a\").map { |link| ... }\n",
+            "hints": [
+              "先に上のセルを実行して<code>doc</code>を作っておいてね。それから<code>#</code>を消して、ブロックの中の点々を、<code>link</code>から角かっこで<code>href</code>属性を取り出す式に書きかえてみて。"
+            ],
             "check": "links == [\"/bacon\", \"/egg\", \"/coffee\"]",
-            "hint": "こう書いてみて：<code>links = doc.css(\"a\").map { |link| link[\"href\"] }</code>。それと、<code>doc</code>ができるように、先に上のデモのセルを実行しておいてね。"
+            "hint": "こう書いてみて：<code>links = doc.css(\"a\").map { |link| link[\"href\"] }</code>。それと、<code>doc</code>ができるように、先に上のデモのセルを実行しておいてね。",
+            "solution": "links = doc.css(\"a\").map { |link| link[\"href\"] }\nlinks"
           }
         ]
       }
@@ -4524,8 +4797,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"sinatra\"\nrequire \"sinatra/base\"\n\nclass MeineSeite < Sinatra::Base\n  get \"/\" do\n    \"<h1>Meine Seite</h1>\"\n  end\n\n  # get \"/speck\" do\n  #   ...\n  # end\nend\n\nshow_browser MeineSeite, \"/speck\"",
+            "hints": [
+              "Entferne die <code>#</code> vor dem zweiten <code>get</code>-Block und schreib zwischen <code>do</code> und <code>end</code> nur den Text, den die Route zurückgeben soll – dann die Zelle neu ausführen."
+            ],
             "check": "s1, _ = mock_get(MeineSeite, \"/\"); s2, b2 = mock_get(MeineSeite, \"/speck\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\")",
-            "hint": "Genau wie die anderen Routen: <code>get \"/speck\" do</code>, darunter <code>\"CHUNKY BACON!\"</code>, dann <code>end</code>. Danach die Zelle neu ausführen."
+            "hint": "Genau wie die anderen Routen: <code>get \"/speck\" do</code>, darunter <code>\"CHUNKY BACON!\"</code>, dann <code>end</code>. Danach die Zelle neu ausführen.",
+            "solution": "install_gem \"sinatra\"\nrequire \"sinatra/base\"\nclass MeineSeite < Sinatra::Base\n  get \"/\" do\n    \"<h1>Meine Seite</h1>\"\n  end\n  get \"/speck\" do\n    \"CHUNKY BACON!\"\n  end\nend\nshow_browser MeineSeite, \"/speck\""
           }
         ]
       },
@@ -4547,8 +4824,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"sinatra\"\nrequire \"sinatra/base\"\n\nclass MySite < Sinatra::Base\n  get \"/\" do\n    \"<h1>My Site</h1>\"\n  end\n\n  # get \"/bacon\" do\n  #   ...\n  # end\nend\n\nshow_browser MySite, \"/bacon\"",
+            "hints": [
+              "Remove the <code>#</code> from the second <code>get</code> block and put just the text the route should return between <code>do</code> and <code>end</code> – then run the cell again."
+            ],
             "check": "s1, _ = mock_get(MySite, \"/\"); s2, b2 = mock_get(MySite, \"/bacon\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\")",
-            "hint": "Just like the other routes: <code>get \"/bacon\" do</code>, below it <code>\"CHUNKY BACON!\"</code>, then <code>end</code>. Then run the cell again."
+            "hint": "Just like the other routes: <code>get \"/bacon\" do</code>, below it <code>\"CHUNKY BACON!\"</code>, then <code>end</code>. Then run the cell again.",
+            "solution": "install_gem \"sinatra\"\nrequire \"sinatra/base\"\nclass MySite < Sinatra::Base\n  get \"/\" do\n    \"<h1>My Site</h1>\"\n  end\n  get \"/bacon\" do\n    \"CHUNKY BACON!\"\n  end\nend\nshow_browser MySite, \"/bacon\""
           }
         ]
       },
@@ -4570,8 +4851,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"sinatra\"\nrequire \"sinatra/base\"\n\nclass MySite < Sinatra::Base\n  get \"/\" do\n    \"<h1>My Site</h1>\"\n  end\n\n  # get \"/bacon\" do\n  #   ...\n  # end\nend\n\nshow_browser MySite, \"/bacon\"",
+            "hints": [
+              "2つ目の<code>get</code>ブロックの<code>#</code>を消して、<code>do</code>と<code>end</code>のあいだにルートが返す文だけを書いてみて。書けたらセルをもう一度実行だよ。"
+            ],
             "check": "s1, _ = mock_get(MySite, \"/\"); s2, b2 = mock_get(MySite, \"/bacon\"); s1 == 200 && s2 == 200 && b2.include?(\"CHUNKY BACON!\")",
-            "hint": "ほかのルートと同じだよ。<code>get \"/bacon\" do</code>と書いて、その下に<code>\"CHUNKY BACON!\"</code>、最後に<code>end</code>。書けたら、もう一度セルを実行してね。"
+            "hint": "ほかのルートと同じだよ。<code>get \"/bacon\" do</code>と書いて、その下に<code>\"CHUNKY BACON!\"</code>、最後に<code>end</code>。書けたら、もう一度セルを実行してね。",
+            "solution": "install_gem \"sinatra\"\nrequire \"sinatra/base\"\nclass MySite < Sinatra::Base\n  get \"/\" do\n    \"<h1>My Site</h1>\"\n  end\n  get \"/bacon\" do\n    \"CHUNKY BACON!\"\n  end\nend\nshow_browser MySite, \"/bacon\""
           }
         ]
       }
@@ -4596,8 +4881,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"roda\"\nrequire \"roda\"\n\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      \"<h1>Kiosk</h1><a href='/bestellung/5'>5 Streifen bestellen</a>\"\n    end\n\n    # r.get \"bestellung\", Integer do |anzahl|\n    #   ...\n    # end\n  end\nend\n\nshow_browser Kiosk, \"/bestellung/5\"",
+            "hints": [
+              "Entferne die <code>#</code> vor den drei Zeilen im <code>route</code>-Block – die Route steht schon fast da. Innen fehlt nur der Text mit <code>anzahl</code> darin."
+            ],
             "check": "s1, b1 = mock_get(Kiosk, \"/\"); s2, b2 = mock_get(Kiosk, \"/bestellung/5\"); s3, _ = mock_get(Kiosk, \"/pizza\"); s1 == 200 && b1.include?(\"Kiosk\") && s2 == 200 && b2.include?(\"5\") && b2.include?(\"Speck\") && s3 == 404",
-            "hint": "<code>r.get \"bestellung\", Integer do |anzahl|</code> … <code>\"#{anzahl} Streifen Speck, kommt sofort!\"</code> … <code>end</code> – innerhalb des route-Blocks."
+            "hint": "<code>r.get \"bestellung\", Integer do |anzahl|</code> … <code>\"#{anzahl} Streifen Speck, kommt sofort!\"</code> … <code>end</code> – innerhalb des route-Blocks.",
+            "solution": "install_gem \"roda\"\nrequire \"roda\"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      \"<h1>Kiosk</h1>\"\n    end\n    r.get \"bestellung\", Integer do |anzahl|\n      \"#{anzahl} Streifen Speck, kommt sofort!\"\n    end\n  end\nend\nshow_browser Kiosk, \"/bestellung/5\""
           }
         ]
       },
@@ -4619,8 +4908,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"roda\"\nrequire \"roda\"\n\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      \"<h1>Kiosk</h1><a href='/order/5'>Order 5 strips</a>\"\n    end\n\n    # r.get \"order\", Integer do |amount|\n    #   ...\n    # end\n  end\nend\n\nshow_browser Kiosk, \"/order/5\"",
+            "hints": [
+              "Remove the <code>#</code> in front of the three lines inside the <code>route</code> block – the route is almost there. Inside, only the text with <code>amount</code> in it is missing."
+            ],
             "check": "s1, b1 = mock_get(Kiosk, \"/\"); s2, b2 = mock_get(Kiosk, \"/order/5\"); s3, _ = mock_get(Kiosk, \"/pizza\"); s1 == 200 && b1.include?(\"Kiosk\") && s2 == 200 && b2.include?(\"5\") && b2.include?(\"bacon\") && s3 == 404",
-            "hint": "<code>r.get \"order\", Integer do |amount|</code> … <code>\"#{amount} strips of bacon, coming right up!\"</code> … <code>end</code> – inside the route block."
+            "hint": "<code>r.get \"order\", Integer do |amount|</code> … <code>\"#{amount} strips of bacon, coming right up!\"</code> … <code>end</code> – inside the route block.",
+            "solution": "install_gem \"roda\"\nrequire \"roda\"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      \"<h1>Kiosk</h1>\"\n    end\n    r.get \"order\", Integer do |amount|\n      \"#{amount} strips of bacon, coming right up!\"\n    end\n  end\nend\nshow_browser Kiosk, \"/order/5\""
           }
         ]
       },
@@ -4642,8 +4935,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"roda\"\nrequire \"roda\"\n\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      \"<h1>Kiosk</h1><a href='/order/5'>Order 5 strips</a>\"\n    end\n\n    # r.get \"order\", Integer do |amount|\n    #   ...\n    # end\n  end\nend\n\nshow_browser Kiosk, \"/order/5\"",
+            "hints": [
+              "<code>route</code>ブロックの中の3行から<code>#</code>を外してみて。ルートはほぼできてるよ。中には<code>amount</code>を入れた文章を書くだけだよ。"
+            ],
             "check": "s1, b1 = mock_get(Kiosk, \"/\"); s2, b2 = mock_get(Kiosk, \"/order/5\"); s3, _ = mock_get(Kiosk, \"/pizza\"); s1 == 200 && b1.include?(\"Kiosk\") && s2 == 200 && b2.include?(\"5\") && b2.include?(\"bacon\") && s3 == 404",
-            "hint": "routeブロックの中に、こう書いてみて：<code>r.get \"order\", Integer do |amount|</code> … <code>\"#{amount} strips of bacon, coming right up!\"</code> … <code>end</code>"
+            "hint": "routeブロックの中に、こう書いてみて：<code>r.get \"order\", Integer do |amount|</code> … <code>\"#{amount} strips of bacon, coming right up!\"</code> … <code>end</code>",
+            "solution": "install_gem \"roda\"\nrequire \"roda\"\nclass Kiosk < Roda\n  route do |r|\n    r.root do\n      \"<h1>Kiosk</h1>\"\n    end\n    r.get \"order\", Integer do |amount|\n      \"#{amount} strips of bacon, coming right up!\"\n    end\n  end\nend\nshow_browser Kiosk, \"/order/5\""
           }
         ]
       }
@@ -5436,8 +5733,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"net/http\"\nrequire \"json\"\n\n# info = JSON.parse(Net::HTTP.get(URI(\"...\")))\n# info[\"downloads\"]\n",
+            "hints": [
+              "Die zwei auskommentierten Zeilen sind das Gerüst: Setz die Adresse aus der Aufgabe in <code>URI(\"...\")</code> ein und lass <code>info[\"downloads\"]</code> als letzte Zeile stehen."
+            ],
             "check": "info.is_a?(Hash) && info[\"name\"] == \"sinatra\" && info[\"downloads\"].is_a?(Integer) && info[\"downloads\"] > 0 && result == info[\"downloads\"]",
-            "hint": "<code>info = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/sinatra.json\")))</code> – und als letzte Zeile <code>info[\"downloads\"]</code>."
+            "hint": "<code>info = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/sinatra.json\")))</code> – und als letzte Zeile <code>info[\"downloads\"]</code>.",
+            "solution": "require \"net/http\"\nrequire \"json\"\ninfo = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/sinatra.json\")))\ninfo[\"downloads\"]"
           }
         ]
       },
@@ -5483,8 +5784,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"net/http\"\nrequire \"json\"\n\n# info = JSON.parse(Net::HTTP.get(URI(\"...\")))\n# info[\"downloads\"]\n",
+            "hints": [
+              "The two commented lines are the skeleton: put the address from the task into <code>URI(\"...\")</code> and leave <code>info[\"downloads\"]</code> as the last line."
+            ],
             "check": "info.is_a?(Hash) && info[\"name\"] == \"sinatra\" && info[\"downloads\"].is_a?(Integer) && info[\"downloads\"] > 0 && result == info[\"downloads\"]",
-            "hint": "<code>info = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/sinatra.json\")))</code> – and as the last line <code>info[\"downloads\"]</code>."
+            "hint": "<code>info = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/sinatra.json\")))</code> – and as the last line <code>info[\"downloads\"]</code>.",
+            "solution": "require \"net/http\"\nrequire \"json\"\ninfo = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/sinatra.json\")))\ninfo[\"downloads\"]"
           }
         ]
       },
@@ -5530,8 +5835,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"net/http\"\nrequire \"json\"\n\n# info = JSON.parse(Net::HTTP.get(URI(\"...\")))\n# info[\"downloads\"]\n",
+            "hints": [
+              "コメントになってる2行が骨組みだよ。課題のアドレスを<code>URI(\"...\")</code>に入れて、最後の行は<code>info[\"downloads\"]</code>のままにしてね。"
+            ],
             "check": "info.is_a?(Hash) && info[\"name\"] == \"sinatra\" && info[\"downloads\"].is_a?(Integer) && info[\"downloads\"] > 0 && result == info[\"downloads\"]",
-            "hint": "<code>info = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/sinatra.json\")))</code>と書いて、最後の行を<code>info[\"downloads\"]</code>にしてみて。"
+            "hint": "<code>info = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/sinatra.json\")))</code>と書いて、最後の行を<code>info[\"downloads\"]</code>にしてみて。",
+            "solution": "require \"net/http\"\nrequire \"json\"\ninfo = JSON.parse(Net::HTTP.get(URI(\"https://rubygems.org/api/v1/gems/sinatra.json\")))\ninfo[\"downloads\"]"
           }
         ]
       }
@@ -5588,8 +5897,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"bigdecimal/util\"\n\n# total = \"4.20\".to_d * 3 + ...\n",
+            "hints": [
+              "Jeden Preis als String mit <code>to_d</code> in eine BigDecimal verwandeln, dann mit der Menge malnehmen und alles zusammenzählen – wie in der Demo oben."
+            ],
             "check": "total.is_a?(BigDecimal) && total == BigDecimal(\"18.7\")",
-            "hint": "<code>total = \"4.20\".to_d * 3 + \"1.15\".to_d * 2 + \"3.80\".to_d</code> – Strings mit <code>to_d</code> in BigDecimals verwandeln, dann ganz normal rechnen."
+            "hint": "<code>total = \"4.20\".to_d * 3 + \"1.15\".to_d * 2 + \"3.80\".to_d</code> – Strings mit <code>to_d</code> in BigDecimals verwandeln, dann ganz normal rechnen.",
+            "solution": "require \"bigdecimal/util\"\ntotal = \"4.20\".to_d * 3 + \"1.15\".to_d * 2 + \"3.80\".to_d\ntotal"
           }
         ]
       },
@@ -5643,8 +5956,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"bigdecimal/util\"\n\n# total = \"4.20\".to_d * 3 + ...\n",
+            "hints": [
+              "Turn each price, as a string, into a BigDecimal with <code>to_d</code>, multiply by the quantity and add everything up – like in the demo above."
+            ],
             "check": "total.is_a?(BigDecimal) && total == BigDecimal(\"18.7\")",
-            "hint": "<code>total = \"4.20\".to_d * 3 + \"1.15\".to_d * 2 + \"3.80\".to_d</code> – turn the strings into BigDecimals with <code>to_d</code>, then calculate as usual."
+            "hint": "<code>total = \"4.20\".to_d * 3 + \"1.15\".to_d * 2 + \"3.80\".to_d</code> – turn the strings into BigDecimals with <code>to_d</code>, then calculate as usual.",
+            "solution": "require \"bigdecimal/util\"\ntotal = \"4.20\".to_d * 3 + \"1.15\".to_d * 2 + \"3.80\".to_d\ntotal"
           }
         ]
       },
@@ -5698,8 +6015,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"bigdecimal/util\"\n\n# total = \"4.20\".to_d * 3 + ...\n",
+            "hints": [
+              "値段を文字列のまま<code>to_d</code>でBigDecimalにして、個数をかけて、全部たしてみて。上のデモと同じやり方だよ。"
+            ],
             "check": "total.is_a?(BigDecimal) && total == BigDecimal(\"18.7\")",
-            "hint": "たとえばこう：<code>total = \"4.20\".to_d * 3 + \"1.15\".to_d * 2 + \"3.80\".to_d</code>。文字列を<code>to_d</code>でBigDecimalに変えたら、あとはいつもどおり計算するだけだよ。"
+            "hint": "たとえばこう：<code>total = \"4.20\".to_d * 3 + \"1.15\".to_d * 2 + \"3.80\".to_d</code>。文字列を<code>to_d</code>でBigDecimalに変えたら、あとはいつもどおり計算するだけだよ。",
+            "solution": "require \"bigdecimal/util\"\ntotal = \"4.20\".to_d * 3 + \"1.15\".to_d * 2 + \"3.80\".to_d\ntotal"
           }
         ]
       }
@@ -5753,8 +6074,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# turm = Three::Scene.new\n# turm.add(Three::AmbientLight.new(0xffffff, 0.4))\n# ...\n# show_three turm, kamera do\n#   turm.rotation.y += 0.01\n# end\n",
+            "hints": [
+              "Führ zuerst die Zellen oben aus, damit <code>kamera</code> da ist. Dann nimm die auskommentierten Zeilen als Gerüst und bau die Würfel mit einer Schleife, jeder mit einem anderen <code>position.y</code>."
+            ],
             "check": "defined?(Three) && turm.is_a?(Three::Scene) && turm.children.count { |k| k.is_a?(Three::Mesh) } >= 3 && scenes.any? { |s| s.equal?(turm) }",
-            "hint": "Drei Würfel auf einmal: <code>3.times do |i|</code> … ein <code>Three::Mesh</code> bauen, <code>klotz.position.y = i - 1.0</code> setzen und mit <code>turm.add(klotz)</code> in die Szene hängen … <code>end</code>. Und nicht vergessen, zuerst die Zellen oben auszuführen, damit <code>kamera</code> existiert."
+            "hint": "Drei Würfel auf einmal: <code>3.times do |i|</code> … ein <code>Three::Mesh</code> bauen, <code>klotz.position.y = i - 1.0</code> setzen und mit <code>turm.add(klotz)</code> in die Szene hängen … <code>end</code>. Und nicht vergessen, zuerst die Zellen oben auszuführen, damit <code>kamera</code> existiert.",
+            "solution": "turm = Three::Scene.new\nturm.add(Three::AmbientLight.new(0xffffff, 0.4))\nlampe = Three::DirectionalLight.new(0xffffff, 2.0)\nlampe.position.set(2, 4, 3)\nturm.add(lampe)\n\n3.times do |i|\n  klotz = Three::Mesh.new(\n    Three::BoxGeometry.new(1, 1, 1),\n    Three::MeshStandardMaterial.new(color: 0xe8722a)\n  )\n  klotz.position.y = i - 1.0\n  turm.add(klotz)\nend\n\nshow_three turm, kamera do\n  turm.rotation.y += 0.01\nend"
           }
         ]
       },
@@ -5800,8 +6125,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# tower = Three::Scene.new\n# tower.add(Three::AmbientLight.new(0xffffff, 0.4))\n# ...\n# show_three tower, camera do\n#   tower.rotation.y += 0.01\n# end\n",
+            "hints": [
+              "Run the cells above first so <code>camera</code> exists. Then use the commented lines as the skeleton and build the cubes in a loop, each with a different <code>position.y</code>."
+            ],
             "check": "defined?(Three) && tower.is_a?(Three::Scene) && tower.children.count { |k| k.is_a?(Three::Mesh) } >= 3 && scenes.any? { |s| s.equal?(tower) }",
-            "hint": "Three cubes at once: <code>3.times do |i|</code> … build a <code>Three::Mesh</code>, set <code>block.position.y = i - 1.0</code> and hang it in the scene with <code>tower.add(block)</code> … <code>end</code>. And remember to run the cells above first, so that <code>camera</code> exists."
+            "hint": "Three cubes at once: <code>3.times do |i|</code> … build a <code>Three::Mesh</code>, set <code>block.position.y = i - 1.0</code> and hang it in the scene with <code>tower.add(block)</code> … <code>end</code>. And remember to run the cells above first, so that <code>camera</code> exists.",
+            "solution": "tower = Three::Scene.new\ntower.add(Three::AmbientLight.new(0xffffff, 0.4))\nsun = Three::DirectionalLight.new(0xffffff, 2.0)\nsun.position.set(2, 4, 3)\ntower.add(sun)\n\n3.times do |i|\n  block = Three::Mesh.new(\n    Three::BoxGeometry.new(1, 1, 1),\n    Three::MeshStandardMaterial.new(color: 0xe8722a)\n  )\n  block.position.y = i - 1.0\n  tower.add(block)\nend\n\nshow_three tower, camera do\n  tower.rotation.y += 0.01\nend"
           }
         ]
       },
@@ -5847,8 +6176,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# tower = Three::Scene.new\n# tower.add(Three::AmbientLight.new(0xffffff, 0.4))\n# ...\n# show_three tower, camera do\n#   tower.rotation.y += 0.01\n# end\n",
+            "hints": [
+              "まず上のセルを実行して<code>camera</code>を作っておいてね。それからコメントの行を骨組みにして、ループで立方体を作ろう。それぞれ<code>position.y</code>を変えるんだよ。"
+            ],
             "check": "defined?(Three) && tower.is_a?(Three::Scene) && tower.children.count { |k| k.is_a?(Three::Mesh) } >= 3 && scenes.any? { |s| s.equal?(tower) }",
-            "hint": "3つまとめて作るなら：<code>3.times do |i|</code> … <code>Three::Mesh</code>を作って<code>block.position.y = i - 1.0</code>を設定し、<code>tower.add(block)</code>でシーンに追加 … <code>end</code>。それから、<code>camera</code>ができるように、先に上のセルを実行しておくのを忘れないでね。"
+            "hint": "3つまとめて作るなら：<code>3.times do |i|</code> … <code>Three::Mesh</code>を作って<code>block.position.y = i - 1.0</code>を設定し、<code>tower.add(block)</code>でシーンに追加 … <code>end</code>。それから、<code>camera</code>ができるように、先に上のセルを実行しておくのを忘れないでね。",
+            "solution": "tower = Three::Scene.new\ntower.add(Three::AmbientLight.new(0xffffff, 0.4))\nsun = Three::DirectionalLight.new(0xffffff, 2.0)\nsun.position.set(2, 4, 3)\ntower.add(sun)\n\n3.times do |i|\n  block = Three::Mesh.new(\n    Three::BoxGeometry.new(1, 1, 1),\n    Three::MeshStandardMaterial.new(color: 0xe8722a)\n  )\n  block.position.y = i - 1.0\n  tower.add(block)\nend\n\nshow_three tower, camera do\n  tower.rotation.y += 0.01\nend"
           }
         ]
       }
@@ -5913,8 +6246,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# karte = Pptx::Presentation.new_default\n# titel = karte.slides.add(karte.slide_layouts[\"Title Slide\"])\n# ...\n# karte.save(\"karte.pptx\")\n",
+            "hints": [
+              "Die auskommentierten Zeilen zeigen den Anfang: Präsentation anlegen, eine Folie mit <code>slides.add</code> und einem Layout holen, ihr einen Titel geben. Wiederhole das für die weiteren Folien und speichere am Ende."
+            ],
             "check": "downloads.include?(\"karte.pptx\") && (k = Pptx::Presentation.open(\"karte.pptx\")).slides.size >= 3 && k.slides.all? { |f| !f.shapes.title.nil? && !f.shapes.title.text.strip.empty? }",
-            "hint": "Drei Folien, jede mit einem Layout, das einen Titel hat (\"Title Slide\", \"Title and Content\"), jeweils <code>shapes.title.text</code> setzen – und am Ende <code>karte.save(\"karte.pptx\")</code>. Der Download muss unter <em>dieser</em> Zelle erscheinen."
+            "hint": "Drei Folien, jede mit einem Layout, das einen Titel hat (\"Title Slide\", \"Title and Content\"), jeweils <code>shapes.title.text</code> setzen – und am Ende <code>karte.save(\"karte.pptx\")</code>. Der Download muss unter <em>dieser</em> Zelle erscheinen.",
+            "solution": "karte = Pptx::Presentation.new_default\ntitel = karte.slides.add(karte.slide_layouts[\"Title Slide\"])\ntitel.shapes.title.text = \"Speisekarte\"\n%w[Vorspeisen Hauptgänge].each do |gang|\n  folie = karte.slides.add(karte.slide_layouts[\"Title and Content\"])\n  folie.shapes.title.text = gang\n  folie.placeholders[1].text_frame.text = \"Speck\nEier\"\nend\nkarte.save(\"karte.pptx\")"
           }
         ]
       },
@@ -5976,8 +6313,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# menu = Pptx::Presentation.new_default\n# title = menu.slides.add(menu.slide_layouts[\"Title Slide\"])\n# ...\n# menu.save(\"menu.pptx\")\n",
+            "hints": [
+              "The commented lines show the start: create the presentation, get a slide with <code>slides.add</code> and a layout, give it a title. Repeat that for the other slides and save at the end."
+            ],
             "check": "downloads.include?(\"menu.pptx\") && (m = Pptx::Presentation.open(\"menu.pptx\")).slides.size >= 3 && m.slides.all? { |s| !s.shapes.title.nil? && !s.shapes.title.text.strip.empty? }",
-            "hint": "Three slides, each from a layout that has a title (\"Title Slide\", \"Title and Content\"), each with <code>shapes.title.text</code> set – and finally <code>menu.save(\"menu.pptx\")</code>. The download has to appear below <em>this</em> cell."
+            "hint": "Three slides, each from a layout that has a title (\"Title Slide\", \"Title and Content\"), each with <code>shapes.title.text</code> set – and finally <code>menu.save(\"menu.pptx\")</code>. The download has to appear below <em>this</em> cell.",
+            "solution": "menu = Pptx::Presentation.new_default\ntitle = menu.slides.add(menu.slide_layouts[\"Title Slide\"])\ntitle.shapes.title.text = \"Menu\"\n%w[Starters Mains].each do |course|\n  slide = menu.slides.add(menu.slide_layouts[\"Title and Content\"])\n  slide.shapes.title.text = course\n  slide.placeholders[1].text_frame.text = \"Bacon\nEggs\"\nend\nmenu.save(\"menu.pptx\")"
           }
         ]
       },
@@ -6039,8 +6380,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# menu = Pptx::Presentation.new_default\n# title = menu.slides.add(menu.slide_layouts[\"Title Slide\"])\n# ...\n# menu.save(\"menu.pptx\")\n",
+            "hints": [
+              "コメントの行が出だしだよ。プレゼンを作って、<code>slides.add</code>にレイアウトを渡してスライドを1枚もらい、タイトルをつける。それをほかのスライドでも繰り返して、最後に保存してね。"
+            ],
             "check": "downloads.include?(\"menu.pptx\") && (m = Pptx::Presentation.open(\"menu.pptx\")).slides.size >= 3 && m.slides.all? { |s| !s.shapes.title.nil? && !s.shapes.title.text.strip.empty? }",
-            "hint": "スライドは3枚だよ。どれもタイトルのあるレイアウト（\"Title Slide\"、\"Title and Content\"）から作って、それぞれ<code>shapes.title.text</code>を設定しよう。最後に<code>menu.save(\"menu.pptx\")</code>。ダウンロードが<em>この</em>セルの下に出てくればOKだよ。"
+            "hint": "スライドは3枚だよ。どれもタイトルのあるレイアウト（\"Title Slide\"、\"Title and Content\"）から作って、それぞれ<code>shapes.title.text</code>を設定しよう。最後に<code>menu.save(\"menu.pptx\")</code>。ダウンロードが<em>この</em>セルの下に出てくればOKだよ。",
+            "solution": "menu = Pptx::Presentation.new_default\ntitle = menu.slides.add(menu.slide_layouts[\"Title Slide\"])\ntitle.shapes.title.text = \"Menu\"\n%w[Starters Mains].each do |course|\n  slide = menu.slides.add(menu.slide_layouts[\"Title and Content\"])\n  slide.shapes.title.text = course\n  slide.placeholders[1].text_frame.text = \"Bacon\nEggs\"\nend\nmenu.save(\"menu.pptx\")"
           }
         ]
       }
@@ -6089,8 +6434,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# urkunde.pdf: 3 Seiten – \"Stufe 1\", \"Stufe 2\", \"Stufe 3\"\n",
+            "hints": [
+              "Schau dir in der Demo an, wie Prawn ein PDF mit <code>generate</code> schreibt. Du brauchst drei <code>text</code>-Zeilen – und zwischen ihnen jeweils eine neue Seite."
+            ],
             "check": "downloads.include?(\"urkunde.pdf\") && code.include?(\"Prawn\") && (require \"hexapdf\"; HexaPDF::Document.open(\"urkunde.pdf\") { |d| d.pages.count } == 3)",
-            "hint": "Beginne mit <code>Prawn::Document.generate(\"urkunde.pdf\") do … end</code> und setze <code>start_new_page</code> zwischen die drei <code>text</code>-Zeilen."
+            "hint": "Beginne mit <code>Prawn::Document.generate(\"urkunde.pdf\") do … end</code> und setze <code>start_new_page</code> zwischen die drei <code>text</code>-Zeilen.",
+            "solution": "require \"prawn\"\nPrawn::Document.generate(\"urkunde.pdf\") do\n  text \"Stufe 1\"\n  start_new_page\n  text \"Stufe 2\"\n  start_new_page\n  text \"Stufe 3\"\nend"
           }
         ]
       },
@@ -6136,8 +6485,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# certificate.pdf: 3 pages – \"Level 1\", \"Level 2\", \"Level 3\"\n",
+            "hints": [
+              "Look at how the demo writes a PDF with Prawn's <code>generate</code>. You need three <code>text</code> lines – and a new page between each of them."
+            ],
             "check": "downloads.include?(\"certificate.pdf\") && code.include?(\"Prawn\") && (require \"hexapdf\"; HexaPDF::Document.open(\"certificate.pdf\") { |d| d.pages.count } == 3)",
-            "hint": "Start with <code>Prawn::Document.generate(\"certificate.pdf\") do … end</code> and put <code>start_new_page</code> between the three <code>text</code> lines."
+            "hint": "Start with <code>Prawn::Document.generate(\"certificate.pdf\") do … end</code> and put <code>start_new_page</code> between the three <code>text</code> lines.",
+            "solution": "require \"prawn\"\nPrawn::Document.generate(\"certificate.pdf\") do\n  text \"Level 1\"\n  start_new_page\n  text \"Level 2\"\n  start_new_page\n  text \"Level 3\"\nend"
           }
         ]
       },
@@ -6183,8 +6536,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# certificate.pdf：3ページ – \"Level 1\"、\"Level 2\"、\"Level 3\"\n",
+            "hints": [
+              "デモでPrawnが<code>generate</code>でPDFを書いているところを見てみて。<code>text</code>の行が3つ必要で、その間ごとに新しいページを入れるんだよ。"
+            ],
             "check": "downloads.include?(\"certificate.pdf\") && code.include?(\"Prawn\") && (require \"hexapdf\"; HexaPDF::Document.open(\"certificate.pdf\") { |d| d.pages.count } == 3)",
-            "hint": "<code>Prawn::Document.generate(\"certificate.pdf\") do … end</code>で始めて、3つの<code>text</code>の行の間に<code>start_new_page</code>を入れてみて。"
+            "hint": "<code>Prawn::Document.generate(\"certificate.pdf\") do … end</code>で始めて、3つの<code>text</code>の行の間に<code>start_new_page</code>を入れてみて。",
+            "solution": "require \"prawn\"\nPrawn::Document.generate(\"certificate.pdf\") do\n  text \"Level 1\"\n  start_new_page\n  text \"Level 2\"\n  start_new_page\n  text \"Level 3\"\nend"
           }
         ]
       }
@@ -6233,8 +6590,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# postkarte.jpg: 80 × 60, oben himmelblau, unten grasgrün\n",
+            "hints": [
+              "Baue wie in der Demo eine Quelle, deren Block für jedes Pixel <code>x</code>, <code>y</code> eine Farbe <code>[r, g, b]</code> liefert – oben eine, unten die andere, entschieden an <code>y</code>. Dann encodieren und schreiben."
+            ],
             "check": "downloads.include?(\"postkarte.jpg\") && PureJPEG.read(\"postkarte.jpg\").then { |img| [img.width, img.height, img[40, 10], img[40, 50]] }.then { |w, h, oben, unten| w == 80 && h == 60 && oben.b > 180 && oben.b > oben.r + 50 && unten.g > 120 && unten.r < 120 && unten.b < 120 }",
-            "hint": "Ein <code>PureJPEG::Source::RawSource.new(80, 60) do |x, y| … end</code>, der für <code>y &lt; 30</code> <code>[100, 160, 230]</code> liefert und sonst <code>[60, 160, 60]</code> – dann <code>PureJPEG.encode(…).write(\"postkarte.jpg\")</code>."
+            "hint": "Ein <code>PureJPEG::Source::RawSource.new(80, 60) do |x, y| … end</code>, der für <code>y &lt; 30</code> <code>[100, 160, 230]</code> liefert und sonst <code>[60, 160, 60]</code> – dann <code>PureJPEG.encode(…).write(\"postkarte.jpg\")</code>.",
+            "solution": "require \"pure_jpeg\"\nkarte = PureJPEG::Source::RawSource.new(80, 60) do |x, y|\n  y < 30 ? [100, 160, 230] : [60, 160, 60]\nend\nPureJPEG.encode(karte).write(\"postkarte.jpg\")"
           }
         ]
       },
@@ -6280,8 +6641,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# postcard.jpg: 80 × 60, top half sky blue, bottom half grass green\n",
+            "hints": [
+              "Build a source like the demo's, whose block returns a colour <code>[r, g, b]</code> for every pixel <code>x</code>, <code>y</code> – one for the top, the other for the bottom, decided by <code>y</code>. Then encode and write it."
+            ],
             "check": "downloads.include?(\"postcard.jpg\") && PureJPEG.read(\"postcard.jpg\").then { |img| [img.width, img.height, img[40, 10], img[40, 50]] }.then { |w, h, top, bottom| w == 80 && h == 60 && top.b > 180 && top.b > top.r + 50 && bottom.g > 120 && bottom.r < 120 && bottom.b < 120 }",
-            "hint": "A <code>PureJPEG::Source::RawSource.new(80, 60) do |x, y| … end</code> that returns <code>[100, 160, 230]</code> for <code>y &lt; 30</code> and <code>[60, 160, 60]</code> otherwise – then <code>PureJPEG.encode(…).write(\"postcard.jpg\")</code>."
+            "hint": "A <code>PureJPEG::Source::RawSource.new(80, 60) do |x, y| … end</code> that returns <code>[100, 160, 230]</code> for <code>y &lt; 30</code> and <code>[60, 160, 60]</code> otherwise – then <code>PureJPEG.encode(…).write(\"postcard.jpg\")</code>.",
+            "solution": "require \"pure_jpeg\"\ncard = PureJPEG::Source::RawSource.new(80, 60) do |x, y|\n  y < 30 ? [100, 160, 230] : [60, 160, 60]\nend\nPureJPEG.encode(card).write(\"postcard.jpg\")"
           }
         ]
       },
@@ -6327,8 +6692,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# postcard.jpg：80 × 60、上半分は空色、下半分は草色\n",
+            "hints": [
+              "デモみたいにソースを作って、そのブロックで<code>x</code>、<code>y</code>ごとに色<code>[r, g, b]</code>を返してみて。上半分と下半分は<code>y</code>で決めるんだよ。あとはエンコードして書き出すだけ。"
+            ],
             "check": "downloads.include?(\"postcard.jpg\") && PureJPEG.read(\"postcard.jpg\").then { |img| [img.width, img.height, img[40, 10], img[40, 50]] }.then { |w, h, top, bottom| w == 80 && h == 60 && top.b > 180 && top.b > top.r + 50 && bottom.g > 120 && bottom.r < 120 && bottom.b < 120 }",
-            "hint": "<code>PureJPEG::Source::RawSource.new(80, 60) do |x, y| … end</code>で、<code>y &lt; 30</code>なら<code>[100, 160, 230]</code>、それ以外なら<code>[60, 160, 60]</code>を返すようにしてみて。最後に<code>PureJPEG.encode(…).write(\"postcard.jpg\")</code>だよ。"
+            "hint": "<code>PureJPEG::Source::RawSource.new(80, 60) do |x, y| … end</code>で、<code>y &lt; 30</code>なら<code>[100, 160, 230]</code>、それ以外なら<code>[60, 160, 60]</code>を返すようにしてみて。最後に<code>PureJPEG.encode(…).write(\"postcard.jpg\")</code>だよ。",
+            "solution": "require \"pure_jpeg\"\ncard = PureJPEG::Source::RawSource.new(80, 60) do |x, y|\n  y < 30 ? [100, 160, 230] : [60, 160, 60]\nend\nPureJPEG.encode(card).write(\"postcard.jpg\")"
           }
         ]
       }
@@ -6425,8 +6794,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"pycall\"\npd = PyCall.import_module(\"pandas\")\n\nrechnung = pd.DataFrame.new({\n  \"gast\"  => [\"Kaz\", \"Isi\", \"Kaz\", \"Isi\", \"Kaz\"],\n  \"preis\" => [4.5, 2.0, 3.0, 4.5, 3.5]\n})\n# ausgaben = ...   (ein Ruby-Hash: Gast => Summe)\n",
+            "hints": [
+              "Schau dir in der Demo an, wie <code>groupby</code> Zeilen zusammenlegt. Gruppiere nach <code>gast</code>, nimm die Spalte <code>preis</code> und summiere – das Ergebnis musst du am Ende noch in einen Ruby-Hash verwandeln."
+            ],
             "check": "ausgaben.is_a?(Hash) && ausgaben.transform_values(&:to_f) == { \"Isi\" => 6.5, \"Kaz\" => 11.0 } && code.include?(\"groupby\")",
-            "hint": "Schritt für Schritt: Führ zuerst nur <code>rechnung.groupby(\"gast\")[\"preis\"].sum</code> aus und schau es dir an – eine Series mit einer Summe pro Gast. Dann macht <code>.to_dict</code> daraus ein Python-<code>dict</code> und <code>.to_h</code> einen Ruby-Hash."
+            "hint": "Schritt für Schritt: Führ zuerst nur <code>rechnung.groupby(\"gast\")[\"preis\"].sum</code> aus und schau es dir an – eine Series mit einer Summe pro Gast. Dann macht <code>.to_dict</code> daraus ein Python-<code>dict</code> und <code>.to_h</code> einen Ruby-Hash.",
+            "solution": "require \"pycall\"\npd = PyCall.import_module(\"pandas\")\n\nrechnung = pd.DataFrame.new({\n  \"gast\"  => [\"Kaz\", \"Isi\", \"Kaz\", \"Isi\", \"Kaz\"],\n  \"preis\" => [4.5, 2.0, 3.0, 4.5, 3.5]\n})\nausgaben = rechnung.groupby(\"gast\")[\"preis\"].sum.to_dict.to_h"
           }
         ]
       },
@@ -6520,8 +6893,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"pycall\"\npd = PyCall.import_module(\"pandas\")\n\nbill = pd.DataFrame.new({\n  \"guest\" => [\"Kaz\", \"Isi\", \"Kaz\", \"Isi\", \"Kaz\"],\n  \"price\" => [4.5, 2.0, 3.0, 4.5, 3.5]\n})\n# spending = ...   (a Ruby hash: guest => total)\n",
+            "hints": [
+              "Look at how <code>groupby</code> puts rows together in the demo. Group by <code>guest</code>, take the <code>price</code> column and sum it – the result still has to become a Ruby hash at the end."
+            ],
             "check": "spending.is_a?(Hash) && spending.transform_values(&:to_f) == { \"Isi\" => 6.5, \"Kaz\" => 11.0 } && code.include?(\"groupby\")",
-            "hint": "Take it step by step: first run <code>bill.groupby(\"guest\")[\"price\"].sum</code> on its own and look at it – a Series with one total per guest. Then <code>.to_dict</code> turns it into a Python <code>dict</code>, and <code>.to_h</code> into a Ruby hash."
+            "hint": "Take it step by step: first run <code>bill.groupby(\"guest\")[\"price\"].sum</code> on its own and look at it – a Series with one total per guest. Then <code>.to_dict</code> turns it into a Python <code>dict</code>, and <code>.to_h</code> into a Ruby hash.",
+            "solution": "require \"pycall\"\npd = PyCall.import_module(\"pandas\")\n\nbill = pd.DataFrame.new({\n  \"guest\" => [\"Kaz\", \"Isi\", \"Kaz\", \"Isi\", \"Kaz\"],\n  \"price\" => [4.5, 2.0, 3.0, 4.5, 3.5]\n})\nspending = bill.groupby(\"guest\")[\"price\"].sum.to_dict.to_h"
           }
         ]
       },
@@ -6615,8 +6992,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"pycall\"\npd = PyCall.import_module(\"pandas\")\n\nbill = pd.DataFrame.new({\n  \"guest\" => [\"Kaz\", \"Isi\", \"Kaz\", \"Isi\", \"Kaz\"],\n  \"price\" => [4.5, 2.0, 3.0, 4.5, 3.5]\n})\n# spending = ...   （Rubyのハッシュ：客 => 合計）\n",
+            "hints": [
+              "デモで<code>groupby</code>が行をまとめるところを見てみて。<code>guest</code>でグループにして、<code>price</code>の列を合計するんだ。最後にその結果をRubyのハッシュにするのを忘れずにね。"
+            ],
             "check": "spending.is_a?(Hash) && spending.transform_values(&:to_f) == { \"Isi\" => 6.5, \"Kaz\" => 11.0 } && code.include?(\"groupby\")",
-            "hint": "一歩ずついこう。まず<code>bill.groupby(\"guest\")[\"price\"].sum</code>だけを実行して、中身を見てみて。お客さんごとの合計が入ったSeriesだよ。それから<code>.to_dict</code>でPythonの<code>dict</code>に、<code>.to_h</code>でRubyのハッシュにするんだ。"
+            "hint": "一歩ずついこう。まず<code>bill.groupby(\"guest\")[\"price\"].sum</code>だけを実行して、中身を見てみて。お客さんごとの合計が入ったSeriesだよ。それから<code>.to_dict</code>でPythonの<code>dict</code>に、<code>.to_h</code>でRubyのハッシュにするんだ。",
+            "solution": "require \"pycall\"\npd = PyCall.import_module(\"pandas\")\n\nbill = pd.DataFrame.new({\n  \"guest\" => [\"Kaz\", \"Isi\", \"Kaz\", \"Isi\", \"Kaz\"],\n  \"price\" => [4.5, 2.0, 3.0, 4.5, 3.5]\n})\nspending = bill.groupby(\"guest\")[\"price\"].sum.to_dict.to_h"
           }
         ]
       }
@@ -6689,8 +7070,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"pycall\"\nsp = PyCall.import_module(\"sympy\")\nx = sp.symbols(\"x\")\n\nkurve = x ** 3 - 6 * x ** 2 + 9 * x\n# flach = ...   (die x, an denen die Kurve flach ist)\n",
+            "hints": [
+              "Zwei Schritte: zuerst die Ableitung von <code>kurve</code> nach <code>x</code> bilden, dann die Nullstellen dieser Ableitung lösen lassen – beides kennst du aus den Zellen oben."
+            ],
             "check": "flach.to_s == \"[1, 3]\" && code.include?(\"diff\") && code.include?(\"solve\")",
-            "hint": "<code>sp.diff(kurve, x)</code> ist die Ableitung, 3x² − 12x + 9. Steck sie in <code>sp.solve(…, x)</code>, so wie oben bei x² − 5x + 6."
+            "hint": "<code>sp.diff(kurve, x)</code> ist die Ableitung, 3x² − 12x + 9. Steck sie in <code>sp.solve(…, x)</code>, so wie oben bei x² − 5x + 6.",
+            "solution": "require \"pycall\"\nsp = PyCall.import_module(\"sympy\")\nx = sp.symbols(\"x\")\n\nkurve = x ** 3 - 6 * x ** 2 + 9 * x\nflach = sp.solve(sp.diff(kurve, x), x)"
           }
         ]
       },
@@ -6760,8 +7145,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"pycall\"\nsp = PyCall.import_module(\"sympy\")\nx = sp.symbols(\"x\")\n\ncurve = x ** 3 - 6 * x ** 2 + 9 * x\n# flat = ...   (the x where the curve is flat)\n",
+            "hints": [
+              "Two steps: first take the derivative of <code>curve</code> with respect to <code>x</code>, then solve where that derivative is zero – you have seen both in the cells above."
+            ],
             "check": "flat.to_s == \"[1, 3]\" && code.include?(\"diff\") && code.include?(\"solve\")",
-            "hint": "<code>sp.diff(curve, x)</code> is the derivative, 3x² − 12x + 9. Put it into <code>sp.solve(…, x)</code>, the way the demo solved x² − 5x + 6."
+            "hint": "<code>sp.diff(curve, x)</code> is the derivative, 3x² − 12x + 9. Put it into <code>sp.solve(…, x)</code>, the way the demo solved x² − 5x + 6.",
+            "solution": "require \"pycall\"\nsp = PyCall.import_module(\"sympy\")\nx = sp.symbols(\"x\")\n\ncurve = x ** 3 - 6 * x ** 2 + 9 * x\nflat = sp.solve(sp.diff(curve, x), x)"
           }
         ]
       },
@@ -6831,8 +7220,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"pycall\"\nsp = PyCall.import_module(\"sympy\")\nx = sp.symbols(\"x\")\n\ncurve = x ** 3 - 6 * x ** 2 + 9 * x\n# flat = ...   （曲線が平らになるx）\n",
+            "hints": [
+              "2ステップだよ。まず<code>curve</code>を<code>x</code>で微分して、次にその導関数が0になるところを解いてもらう。どっちも上のセルでやったよね。"
+            ],
             "check": "flat.to_s == \"[1, 3]\" && code.include?(\"diff\") && code.include?(\"solve\")",
-            "hint": "<code>sp.diff(curve, x)</code>が導関数で、3x² − 12x + 9になるよ。それを<code>sp.solve(…, x)</code>に入れてみて。上でx² − 5x + 6を解いたのと同じだよ。"
+            "hint": "<code>sp.diff(curve, x)</code>が導関数で、3x² − 12x + 9になるよ。それを<code>sp.solve(…, x)</code>に入れてみて。上でx² − 5x + 6を解いたのと同じだよ。",
+            "solution": "require \"pycall\"\nsp = PyCall.import_module(\"sympy\")\nx = sp.symbols(\"x\")\n\ncurve = x ** 3 - 6 * x ** 2 + 9 * x\nflat = sp.solve(sp.diff(curve, x), x)"
           }
         ]
       }
@@ -6905,8 +7298,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"pycall\"\nnp = PyCall.import_module(\"numpy\")\n\npunkte = np.array([55, 72, 61, 48, 90, 67, 59])\n# bestanden = ...   (wie viele Punkte sind 60 oder mehr)\n",
+            "hints": [
+              "Ein Vergleich wie <code>punkte &gt;= 60</code> gilt in NumPy für das ganze Array auf einmal. Wie zählst du danach, wie viele <code>True</code> darin sind, ohne Schleife?"
+            ],
             "check": "bestanden == 4 && bestanden.is_a?(Integer)",
-            "hint": "<code>punkte &gt;= 60</code> ergibt ein Array aus <code>True</code> und <code>False</code>. <code>True</code> zählt als 1 und <code>False</code> als 0 – also ist seine <code>sum</code> die Anzahl."
+            "hint": "<code>punkte &gt;= 60</code> ergibt ein Array aus <code>True</code> und <code>False</code>. <code>True</code> zählt als 1 und <code>False</code> als 0 – also ist seine <code>sum</code> die Anzahl.",
+            "solution": "require \"pycall\"\nnp = PyCall.import_module(\"numpy\")\n\npunkte = np.array([55, 72, 61, 48, 90, 67, 59])\nbestanden = (punkte >= 60).sum"
           }
         ]
       },
@@ -6976,8 +7373,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"pycall\"\nnp = PyCall.import_module(\"numpy\")\n\nscores = np.array([55, 72, 61, 48, 90, 67, 59])\n# passed = ...   (how many scores are 60 or more)\n",
+            "hints": [
+              "A comparison like <code>scores &gt;= 60</code> applies to the whole NumPy array at once. How do you then count the <code>True</code>s in it, without a loop?"
+            ],
             "check": "passed == 4 && passed.is_a?(Integer)",
-            "hint": "<code>scores &gt;= 60</code> gives an array of <code>True</code> and <code>False</code>. <code>True</code> counts as 1 and <code>False</code> as 0 – so its <code>sum</code> is the count."
+            "hint": "<code>scores &gt;= 60</code> gives an array of <code>True</code> and <code>False</code>. <code>True</code> counts as 1 and <code>False</code> as 0 – so its <code>sum</code> is the count.",
+            "solution": "require \"pycall\"\nnp = PyCall.import_module(\"numpy\")\n\nscores = np.array([55, 72, 61, 48, 90, 67, 59])\npassed = (scores >= 60).sum"
           }
         ]
       },
@@ -7047,8 +7448,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"pycall\"\nnp = PyCall.import_module(\"numpy\")\n\nscores = np.array([55, 72, 61, 48, 90, 67, 59])\n# passed = ...   （60点以上がいくつあるか）\n",
+            "hints": [
+              "<code>scores &gt;= 60</code>みたいな比較は、NumPyなら配列全体にいっぺんにかかるよ。その中の<code>True</code>の数を、ループなしでどう数えるかな？"
+            ],
             "check": "passed == 4 && passed.is_a?(Integer)",
-            "hint": "<code>scores &gt;= 60</code>は<code>True</code>と<code>False</code>の配列になるよ。<code>True</code>は1、<code>False</code>は0として数えられるから、その<code>sum</code>が個数になるんだ。"
+            "hint": "<code>scores &gt;= 60</code>は<code>True</code>と<code>False</code>の配列になるよ。<code>True</code>は1、<code>False</code>は0として数えられるから、その<code>sum</code>が個数になるんだ。",
+            "solution": "require \"pycall\"\nnp = PyCall.import_module(\"numpy\")\n\nscores = np.array([55, 72, 61, 48, 90, 67, 59])\npassed = (scores >= 60).sum"
           }
         ]
       }
@@ -7105,8 +7510,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"pycall\"\nplt = PyCall.import_module(\"matplotlib.pyplot\")\n\ntage = [\"Mo\", \"Di\", \"Mi\", \"Do\", \"Fr\", \"Sa\", \"So\"]\nmaeuse = [3, 5, 2, 6, 4, 7, 1]\n# ein Balkendiagramm mit dem Titel \"Fuchs-Jagd\", dann plt.show\n",
+            "hints": [
+              "Drei Zeilen: die Balken aus <code>tage</code> und <code>maeuse</code> zeichnen, den Titel setzen, dann <code>plt.show</code>. Die Demo oben zeigt dieselben Schritte für eine Linie."
+            ],
             "check": "code.include?(\".bar\") && images.any? { |url| url.start_with?(\"data:image/svg+xml;base64,\") && url.split(\",\", 2).last.unpack1(\"m0\").include?(\"Fuchs-Jagd\") }",
-            "hint": "<code>plt.bar(tage, maeuse)</code> zeichnet die Balken, <code>plt.title(\"Fuchs-Jagd\")</code> setzt den Titel – oder mit <code>fig, ax = plt.subplots</code> dasselbe als <code>ax.bar</code> und <code>ax.set_title</code>. Erst <code>plt.show</code> bringt das Bild unter die Zelle."
+            "hint": "<code>plt.bar(tage, maeuse)</code> zeichnet die Balken, <code>plt.title(\"Fuchs-Jagd\")</code> setzt den Titel – oder mit <code>fig, ax = plt.subplots</code> dasselbe als <code>ax.bar</code> und <code>ax.set_title</code>. Erst <code>plt.show</code> bringt das Bild unter die Zelle.",
+            "solution": "require \"pycall\"\nplt = PyCall.import_module(\"matplotlib.pyplot\")\n\ntage = [\"Mo\", \"Di\", \"Mi\", \"Do\", \"Fr\", \"Sa\", \"So\"]\nmaeuse = [3, 5, 2, 6, 4, 7, 1]\nplt.bar(tage, maeuse)\nplt.title(\"Fuchs-Jagd\")\nplt.show"
           }
         ]
       },
@@ -7160,8 +7569,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"pycall\"\nplt = PyCall.import_module(\"matplotlib.pyplot\")\n\ndays = [\"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\", \"Sun\"]\nmice = [3, 5, 2, 6, 4, 7, 1]\n# a bar chart titled \"Fox hunt\", then plt.show\n",
+            "hints": [
+              "Three lines: draw the bars from <code>days</code> and <code>mice</code>, set the title, then <code>plt.show</code>. The demo above shows the same steps for a line chart."
+            ],
             "check": "code.include?(\".bar\") && images.any? { |url| url.start_with?(\"data:image/svg+xml;base64,\") && url.split(\",\", 2).last.unpack1(\"m0\").include?(\"Fox hunt\") }",
-            "hint": "<code>plt.bar(days, mice)</code> draws the bars, <code>plt.title(\"Fox hunt\")</code> sets the title – or, with <code>fig, ax = plt.subplots</code>, the same as <code>ax.bar</code> and <code>ax.set_title</code>. Only <code>plt.show</code> puts the picture below the cell."
+            "hint": "<code>plt.bar(days, mice)</code> draws the bars, <code>plt.title(\"Fox hunt\")</code> sets the title – or, with <code>fig, ax = plt.subplots</code>, the same as <code>ax.bar</code> and <code>ax.set_title</code>. Only <code>plt.show</code> puts the picture below the cell.",
+            "solution": "require \"pycall\"\nplt = PyCall.import_module(\"matplotlib.pyplot\")\n\ndays = [\"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\", \"Sun\"]\nmice = [3, 5, 2, 6, 4, 7, 1]\nplt.bar(days, mice)\nplt.title(\"Fox hunt\")\nplt.show"
           }
         ]
       },
@@ -7215,8 +7628,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"pycall\"\nplt = PyCall.import_module(\"matplotlib.pyplot\")\n\ndays = [\"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\", \"Sun\"]\nmice = [3, 5, 2, 6, 4, 7, 1]\n# タイトルが\"Fox hunt\"の棒グラフを描いて、plt.show\n",
+            "hints": [
+              "3行だよ。<code>days</code>と<code>mice</code>から棒を描いて、タイトルをつけて、<code>plt.show</code>。上のデモが折れ線で同じ手順をやってるよ。"
+            ],
             "check": "code.include?(\".bar\") && images.any? { |url| url.start_with?(\"data:image/svg+xml;base64,\") && url.split(\",\", 2).last.unpack1(\"m0\").include?(\"Fox hunt\") }",
-            "hint": "<code>plt.bar(days, mice)</code>で棒、<code>plt.title(\"Fox hunt\")</code>でタイトルだよ。<code>fig, ax = plt.subplots</code>を使うなら<code>ax.bar</code>と<code>ax.set_title</code>でもいいよ。<code>plt.show</code>を呼ばないと、絵はセルの下に出てこないからね。"
+            "hint": "<code>plt.bar(days, mice)</code>で棒、<code>plt.title(\"Fox hunt\")</code>でタイトルだよ。<code>fig, ax = plt.subplots</code>を使うなら<code>ax.bar</code>と<code>ax.set_title</code>でもいいよ。<code>plt.show</code>を呼ばないと、絵はセルの下に出てこないからね。",
+            "solution": "require \"pycall\"\nplt = PyCall.import_module(\"matplotlib.pyplot\")\n\ndays = [\"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\", \"Sun\"]\nmice = [3, 5, 2, 6, 4, 7, 1]\nplt.bar(days, mice)\nplt.title(\"Fox hunt\")\nplt.show"
           }
         ]
       }
@@ -7281,8 +7698,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"pycall\"\nlm = PyCall.import_module(\"sklearn.linear_model\")\n\nstunden  = [[1], [2], [3], [4], [5]]\npunkte = [52, 59, 66, 73, 80]\n# prognose = ...   (die vorhergesagten Punkte für 6 Stunden)\n",
+            "hints": [
+              "Lege ein Modell an, trainiere es mit <code>fit</code> auf <code>stunden</code> und <code>punkte</code>, und frag es dann mit <code>predict</code> nach 6 Stunden – die Antwort kommt als Array mit einem Element."
+            ],
             "check": "prognose.is_a?(Numeric) && (prognose - 87).abs < 0.01 && code.include?(\"fit\")",
-            "hint": "<code>modell = lm.LinearRegression.new</code>, dann <code>modell.fit(stunden, punkte)</code>. <code>modell.predict([[6]])</code> ergibt ein Array mit einer Vorhersage – <code>[0]</code> holt sie als Ruby-Zahl heraus."
+            "hint": "<code>modell = lm.LinearRegression.new</code>, dann <code>modell.fit(stunden, punkte)</code>. <code>modell.predict([[6]])</code> ergibt ein Array mit einer Vorhersage – <code>[0]</code> holt sie als Ruby-Zahl heraus.",
+            "solution": "require \"pycall\"\nlm = PyCall.import_module(\"sklearn.linear_model\")\n\nstunden  = [[1], [2], [3], [4], [5]]\npunkte = [52, 59, 66, 73, 80]\nmodell = lm.LinearRegression.new\nmodell.fit(stunden, punkte)\nprognose = modell.predict([[6]])[0]"
           }
         ]
       },
@@ -7344,8 +7765,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"pycall\"\nlm = PyCall.import_module(\"sklearn.linear_model\")\n\nhours  = [[1], [2], [3], [4], [5]]\npoints = [52, 59, 66, 73, 80]\n# forecast = ...   (the predicted points for 6 hours)\n",
+            "hints": [
+              "Create a model, train it with <code>fit</code> on <code>hours</code> and <code>points</code>, then ask it with <code>predict</code> about 6 hours – the answer comes as an array with one element."
+            ],
             "check": "forecast.is_a?(Numeric) && (forecast - 87).abs < 0.01 && code.include?(\"fit\")",
-            "hint": "<code>model = lm.LinearRegression.new</code>, then <code>model.fit(hours, points)</code>. <code>model.predict([[6]])</code> gives an array with one prediction – <code>[0]</code> takes it out as a Ruby number."
+            "hint": "<code>model = lm.LinearRegression.new</code>, then <code>model.fit(hours, points)</code>. <code>model.predict([[6]])</code> gives an array with one prediction – <code>[0]</code> takes it out as a Ruby number.",
+            "solution": "require \"pycall\"\nlm = PyCall.import_module(\"sklearn.linear_model\")\n\nhours  = [[1], [2], [3], [4], [5]]\npoints = [52, 59, 66, 73, 80]\nmodel = lm.LinearRegression.new\nmodel.fit(hours, points)\nforecast = model.predict([[6]])[0]"
           }
         ]
       },
@@ -7407,8 +7832,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"pycall\"\nlm = PyCall.import_module(\"sklearn.linear_model\")\n\nhours  = [[1], [2], [3], [4], [5]]\npoints = [52, 59, 66, 73, 80]\n# forecast = ...   （6時間のときの予測点数）\n",
+            "hints": [
+              "モデルを作って、<code>hours</code>と<code>points</code>で<code>fit</code>して学習させて、<code>predict</code>で6時間のときを聞いてみて。答えは要素1つの配列で返ってくるよ。"
+            ],
             "check": "forecast.is_a?(Numeric) && (forecast - 87).abs < 0.01 && code.include?(\"fit\")",
-            "hint": "<code>model = lm.LinearRegression.new</code>のあと、<code>model.fit(hours, points)</code>だよ。<code>model.predict([[6]])</code>は予測が1つ入った配列になるから、<code>[0]</code>でRubyの数値として取り出してね。"
+            "hint": "<code>model = lm.LinearRegression.new</code>のあと、<code>model.fit(hours, points)</code>だよ。<code>model.predict([[6]])</code>は予測が1つ入った配列になるから、<code>[0]</code>でRubyの数値として取り出してね。",
+            "solution": "require \"pycall\"\nlm = PyCall.import_module(\"sklearn.linear_model\")\n\nhours  = [[1], [2], [3], [4], [5]]\npoints = [52, 59, 66, 73, 80]\nmodel = lm.LinearRegression.new\nmodel.fit(hours, points)\nforecast = model.predict([[6]])[0]"
           }
         ]
       }
@@ -7476,8 +7905,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "sieben = <<~BILD\n  .######.\n  ......#.\n  .....#..\n  ....#...\n  ...#....\n  ...#....\n  ..#.....\n  ..#.....\nBILD\n# pixel = ...   (64 Zahlen: # ist 16, . ist 0)\n# ziffer = ...   (was lerner darin sieht, als Ruby-Zahl)\n",
+            "hints": [
+              "Zuerst <code>pixel</code>: Mach aus dem Bild eine Liste von 64 Zeichen (ohne Zeilenumbrüche) und verwandle jedes mit <code>map</code> in 16 oder 0. Dann frag <code>lerner</code> mit <code>predict</code>."
+            ],
             "check": "ziffer == 7 && code.include?(\"predict\")",
-            "hint": "<code>sieben.delete(\"\\n\").chars</code> gibt die 64 Zeichen; <code>map { |z| z == \"#\" ? 16 : 0 }</code> macht Zahlen daraus. <code>lerner.predict(Numo::DFloat[pixel])</code> will eine Tabelle mit einer Zeile pro Bild – hier eine Zeile –, und <code>[0]</code> holt die Antwort heraus."
+            "hint": "<code>sieben.delete(\"\\n\").chars</code> gibt die 64 Zeichen; <code>map { |z| z == \"#\" ? 16 : 0 }</code> macht Zahlen daraus. <code>lerner.predict(Numo::DFloat[pixel])</code> will eine Tabelle mit einer Zeile pro Bild – hier eine Zeile –, und <code>[0]</code> holt die Antwort heraus.",
+            "solution": "sieben = %w[.######. ......#. .....#.. ....#... ...#.... ...#.... ..#..... ..#.....].join(\"\\n\") + \"\\n\"\npixel = sieben.delete(\"\\n\").chars.map { |z| z == \"#\" ? 16 : 0 }\nziffer = lerner.predict(Numo::DFloat[pixel])[0]"
           }
         ]
       },
@@ -7539,8 +7972,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "seven = <<~PICTURE\n  .######.\n  ......#.\n  .....#..\n  ....#...\n  ...#....\n  ...#....\n  ..#.....\n  ..#.....\nPICTURE\n# pixels = ...   (64 numbers: # is 16, . is 0)\n# digit = ...   (what learner sees in it, as a Ruby number)\n",
+            "hints": [
+              "First <code>pixels</code>: turn the picture into a list of 64 characters (without the line breaks) and map each one to 16 or 0 with <code>map</code>. Then ask <code>learner</code> with <code>predict</code>."
+            ],
             "check": "digit == 7 && code.include?(\"predict\")",
-            "hint": "<code>seven.delete(\"\\n\").chars</code> gives the 64 characters; <code>map { |c| c == \"#\" ? 16 : 0 }</code> makes numbers of them. <code>learner.predict(Numo::DFloat[pixels])</code> wants a table, one row per picture – here one row – and <code>[0]</code> takes out the answer."
+            "hint": "<code>seven.delete(\"\\n\").chars</code> gives the 64 characters; <code>map { |c| c == \"#\" ? 16 : 0 }</code> makes numbers of them. <code>learner.predict(Numo::DFloat[pixels])</code> wants a table, one row per picture – here one row – and <code>[0]</code> takes out the answer.",
+            "solution": "seven = %w[.######. ......#. .....#.. ....#... ...#.... ...#.... ..#..... ..#.....].join(\"\\n\") + \"\\n\"\npixels = seven.delete(\"\\n\").chars.map { |c| c == \"#\" ? 16 : 0 }\ndigit = learner.predict(Numo::DFloat[pixels])[0]"
           }
         ]
       },
@@ -7602,8 +8039,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "seven = <<~PICTURE\n  .######.\n  ......#.\n  .....#..\n  ....#...\n  ...#....\n  ...#....\n  ..#.....\n  ..#.....\nPICTURE\n# pixels = ...   （64個の数：#は16、.は0）\n# digit = ...   （learnerに見えたもの。Rubyの数値で）\n",
+            "hints": [
+              "まず<code>pixels</code>だよ。絵を改行なしの64文字のリストにして、<code>map</code>で1文字ずつ16か0に変えてね。それから<code>learner</code>に<code>predict</code>で聞いてみよう。"
+            ],
             "check": "digit == 7 && code.include?(\"predict\")",
-            "hint": "<code>seven.delete(\"\\n\").chars</code>で64個の文字になるよ。<code>map { |c| c == \"#\" ? 16 : 0 }</code>で数にしてね。<code>learner.predict(Numo::DFloat[pixels])</code>は1枚の絵を1行とする表がほしいから、ここでは1行だけ。<code>[0]</code>で答えを取り出してね。"
+            "hint": "<code>seven.delete(\"\\n\").chars</code>で64個の文字になるよ。<code>map { |c| c == \"#\" ? 16 : 0 }</code>で数にしてね。<code>learner.predict(Numo::DFloat[pixels])</code>は1枚の絵を1行とする表がほしいから、ここでは1行だけ。<code>[0]</code>で答えを取り出してね。",
+            "solution": "seven = %w[.######. ......#. .....#.. ....#... ...#.... ...#.... ..#..... ..#.....].join(\"\\n\") + \"\\n\"\npixels = seven.delete(\"\\n\").chars.map { |c| c == \"#\" ? 16 : 0 }\ndigit = learner.predict(Numo::DFloat[pixels])[0]"
           }
         ]
       }
@@ -7708,8 +8149,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"daru\"\nrequire \"daru\"\n\nsnacks = Daru::DataFrame.new({\n  tag:   [\"Mo\", \"Mo\", \"Di\", \"Mi\", \"Mi\", \"Mi\"],\n  snack: [\"Speck\", \"Beeren\", \"Speck\", \"Ei\", \"Speck\", \"Beeren\"],\n  gramm: [120, 80, 150, 60, 90, 40]\n})\n# pro_snack = ...   (ein Ruby-Hash: Snack => Gramm zusammen)\n",
+            "hints": [
+              "Gruppiere <code>snacks</code> nach <code>:snack</code> und lass die Gruppen summieren – wie in der Demo. Davon brauchst du nur die Spalte <code>:gramm</code>, als Hash."
+            ],
             "check": "pro_snack.is_a?(Hash) && pro_snack.transform_values(&:to_i) == { \"Beeren\" => 120, \"Ei\" => 60, \"Speck\" => 360 } && code.include?(\"group_by\")",
-            "hint": "<code>snacks.group_by(:snack).sum</code> zählt pro Snack zusammen. Davon nimmst du die Spalte <code>[:gramm]</code>, und <code>to_h</code> macht aus dem Vector einen Hash."
+            "hint": "<code>snacks.group_by(:snack).sum</code> zählt pro Snack zusammen. Davon nimmst du die Spalte <code>[:gramm]</code>, und <code>to_h</code> macht aus dem Vector einen Hash.",
+            "solution": "install_gem \"daru\"\nrequire \"daru\"\nsnacks = Daru::DataFrame.new({ tag: [\"Mo\", \"Mo\", \"Di\", \"Mi\", \"Mi\", \"Mi\"], snack: [\"Speck\", \"Beeren\", \"Speck\", \"Ei\", \"Speck\", \"Beeren\"], gramm: [120, 80, 150, 60, 90, 40] })\npro_snack = snacks.group_by(:snack).sum[:gramm].to_h"
           }
         ]
       },
@@ -7811,8 +8256,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"daru\"\nrequire \"daru\"\n\nsnacks = Daru::DataFrame.new({\n  day:   [\"Mon\", \"Mon\", \"Tue\", \"Wed\", \"Wed\", \"Wed\"],\n  snack: [\"bacon\", \"berries\", \"bacon\", \"egg\", \"bacon\", \"berries\"],\n  grams: [120, 80, 150, 60, 90, 40]\n})\n# per_snack = ...   (a Ruby hash: snack => grams in all)\n",
+            "hints": [
+              "Group <code>snacks</code> by <code>:snack</code> and let the groups sum up – as in the demo. Of that you only need the <code>:grams</code> column, as a hash."
+            ],
             "check": "per_snack.is_a?(Hash) && per_snack.transform_values(&:to_i) == { \"bacon\" => 360, \"berries\" => 120, \"egg\" => 60 } && code.include?(\"group_by\")",
-            "hint": "<code>snacks.group_by(:snack).sum</code> adds up per snack. Take the column <code>[:grams]</code> from that, and <code>to_h</code> turns the Vector into a hash."
+            "hint": "<code>snacks.group_by(:snack).sum</code> adds up per snack. Take the column <code>[:grams]</code> from that, and <code>to_h</code> turns the Vector into a hash.",
+            "solution": "install_gem \"daru\"\nrequire \"daru\"\nsnacks = Daru::DataFrame.new({ day: [\"Mon\", \"Mon\", \"Tue\", \"Wed\", \"Wed\", \"Wed\"], snack: [\"bacon\", \"berries\", \"bacon\", \"egg\", \"bacon\", \"berries\"], grams: [120, 80, 150, 60, 90, 40] })\nper_snack = snacks.group_by(:snack).sum[:grams].to_h"
           }
         ]
       },
@@ -7914,8 +8363,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"daru\"\nrequire \"daru\"\n\nsnacks = Daru::DataFrame.new({\n  day:   [\"Mon\", \"Mon\", \"Tue\", \"Wed\", \"Wed\", \"Wed\"],\n  snack: [\"bacon\", \"berries\", \"bacon\", \"egg\", \"bacon\", \"berries\"],\n  grams: [120, 80, 150, 60, 90, 40]\n})\n# per_snack = ...   （Rubyのハッシュ：おやつ => 合計のグラム数）\n",
+            "hints": [
+              "<code>snacks</code>を<code>:snack</code>でグループにして、デモみたいに合計してみて。そこから必要なのは<code>:grams</code>の列だけ。それをハッシュにするんだよ。"
+            ],
             "check": "per_snack.is_a?(Hash) && per_snack.transform_values(&:to_i) == { \"bacon\" => 360, \"berries\" => 120, \"egg\" => 60 } && code.include?(\"group_by\")",
-            "hint": "<code>snacks.group_by(:snack).sum</code>でおやつごとに合計できるよ。そこから<code>[:grams]</code>の列を取って、<code>to_h</code>でVectorをハッシュにしてね。"
+            "hint": "<code>snacks.group_by(:snack).sum</code>でおやつごとに合計できるよ。そこから<code>[:grams]</code>の列を取って、<code>to_h</code>でVectorをハッシュにしてね。",
+            "solution": "install_gem \"daru\"\nrequire \"daru\"\nsnacks = Daru::DataFrame.new({ day: [\"Mon\", \"Mon\", \"Tue\", \"Wed\", \"Wed\", \"Wed\"], snack: [\"bacon\", \"berries\", \"bacon\", \"egg\", \"bacon\", \"berries\"], grams: [120, 80, 150, 60, 90, 40] })\nper_snack = snacks.group_by(:snack).sum[:grams].to_h"
           }
         ]
       }
@@ -8004,8 +8457,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"distribution\"\nrequire \"distribution\"\n\nwuerfe = 20   # eine Sechs kommt mit der Wahrscheinlichkeit 1/6\n# chance = ...   (mindestens 5 Sechsen)\n",
+            "hints": [
+              "Schau in der Demo, wie die Binomialverteilung mit <code>cdf</code> «höchstens so viele» rechnet. «Mindestens 5» ist 1 minus «höchstens 4» – und schreib die Wahrscheinlichkeit einer Sechs als Dezimalzahl."
+            ],
             "check": "chance.is_a?(Numeric) && (chance - 0.2313).abs < 0.001 && code.include?(\"Binomial\")",
-            "hint": "«Mindestens 5» ist das Gegenteil von «höchstens 4», und «höchstens» rechnet <code>cdf</code>. Die Wahrscheinlichkeit für eine Sechs schreibst du <code>1 / 6.0</code> – mit <code>1 / 6</code> rechnet Ruby in ganzen Zahlen, und das gibt 0."
+            "hint": "«Mindestens 5» ist das Gegenteil von «höchstens 4», und «höchstens» rechnet <code>cdf</code>. Die Wahrscheinlichkeit für eine Sechs schreibst du <code>1 / 6.0</code> – mit <code>1 / 6</code> rechnet Ruby in ganzen Zahlen, und das gibt 0.",
+            "solution": "install_gem \"distribution\"\nrequire \"distribution\"\nchance = 1 - Distribution::Binomial.cdf(4, 20, 1 / 6.0)"
           }
         ]
       },
@@ -8091,8 +8548,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"distribution\"\nrequire \"distribution\"\n\nthrows = 20   # a six comes up with the probability 1/6\n# chance = ...   (at least 5 sixes)\n",
+            "hints": [
+              "See how the demo uses the binomial distribution's <code>cdf</code> for \"at most this many\". \"At least 5\" is 1 minus \"at most 4\" – and write the probability of a six as a decimal."
+            ],
             "check": "chance.is_a?(Numeric) && (chance - 0.2313).abs < 0.001 && code.include?(\"Binomial\")",
-            "hint": "\"At least 5\" is the opposite of \"at most 4\", and \"at most\" is what <code>cdf</code> works out. Write the probability of a six as <code>1 / 6.0</code> – with <code>1 / 6</code> Ruby computes in whole numbers, and that gives 0."
+            "hint": "\"At least 5\" is the opposite of \"at most 4\", and \"at most\" is what <code>cdf</code> works out. Write the probability of a six as <code>1 / 6.0</code> – with <code>1 / 6</code> Ruby computes in whole numbers, and that gives 0.",
+            "solution": "install_gem \"distribution\"\nrequire \"distribution\"\nchance = 1 - Distribution::Binomial.cdf(4, 20, 1 / 6.0)"
           }
         ]
       },
@@ -8178,8 +8639,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"distribution\"\nrequire \"distribution\"\n\nthrows = 20   # 6が出る確率は1/6\n# chance = ...   （6が少なくとも5回）\n",
+            "hints": [
+              "デモで二項分布の<code>cdf</code>が「多くてもこの回数」を計算しているのを見てみて。「少なくとも5回」は1引く「多くても4回」だよ。6が出る確率は小数で書いてね。"
+            ],
             "check": "chance.is_a?(Numeric) && (chance - 0.2313).abs < 0.001 && code.include?(\"Binomial\")",
-            "hint": "「少なくとも5回」は「多くても4回」の反対で、「多くても」を計算するのが<code>cdf</code>だよ。6が出る確率は<code>1 / 6.0</code>と書いてね。<code>1 / 6</code>だとRubyは整数で計算して、0になっちゃうんだ。"
+            "hint": "「少なくとも5回」は「多くても4回」の反対で、「多くても」を計算するのが<code>cdf</code>だよ。6が出る確率は<code>1 / 6.0</code>と書いてね。<code>1 / 6</code>だとRubyは整数で計算して、0になっちゃうんだ。",
+            "solution": "install_gem \"distribution\"\nrequire \"distribution\"\nchance = 1 - Distribution::Binomial.cdf(4, 20, 1 / 6.0)"
           }
         ]
       }
@@ -8252,8 +8717,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"networkx\"\nrequire \"networkx\"\n\n# Chunkys Wege im Wald, in Minuten:\n#   Fuchsbau - Bach 4, Fuchsbau - Lichtung 7, Bach - Lichtung 2,\n#   Bach - Hühnerstall 9, Lichtung - Hühnerstall 5\nwald = NetworkX::Graph.new\n# weg = ...       (der schnellste Weg vom Fuchsbau zum Hühnerstall)\n# minuten = ...   (wie lange er dauert)\n",
+            "hints": [
+              "Trag zuerst jeden Weg aus dem Kommentar mit <code>add_edge</code> und seinem <code>weight</code> in <code>wald</code> ein. Dann lass Dijkstra zweimal rechnen: einmal den Pfad, einmal seine Länge."
+            ],
             "check": "weg == [\"Fuchsbau\", \"Bach\", \"Lichtung\", \"Hühnerstall\"] && minuten == 11 && code.include?(\"dijkstra\")",
-            "hint": "Für jeden Weg ein <code>wald.add_edge(\"Fuchsbau\", \"Bach\", weight: 4)</code>. Dann <code>NetworkX.dijkstra_path(wald, \"Fuchsbau\", \"Hühnerstall\")</code> und dasselbe mit <code>dijkstra_path_length</code>. Der schnellste Weg hat nicht die wenigsten Stationen!"
+            "hint": "Für jeden Weg ein <code>wald.add_edge(\"Fuchsbau\", \"Bach\", weight: 4)</code>. Dann <code>NetworkX.dijkstra_path(wald, \"Fuchsbau\", \"Hühnerstall\")</code> und dasselbe mit <code>dijkstra_path_length</code>. Der schnellste Weg hat nicht die wenigsten Stationen!",
+            "solution": "install_gem \"networkx\"\nrequire \"networkx\"\nwald = NetworkX::Graph.new\n[[\"Fuchsbau\", \"Bach\", 4], [\"Fuchsbau\", \"Lichtung\", 7], [\"Bach\", \"Lichtung\", 2], [\"Bach\", \"Hühnerstall\", 9], [\"Lichtung\", \"Hühnerstall\", 5]].each { |a, b, m| wald.add_edge(a, b, weight: m) }\nweg = NetworkX.dijkstra_path(wald, \"Fuchsbau\", \"Hühnerstall\")\nminuten = NetworkX.dijkstra_path_length(wald, \"Fuchsbau\", \"Hühnerstall\")"
           }
         ]
       },
@@ -8323,8 +8792,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"networkx\"\nrequire \"networkx\"\n\n# Chunky's paths in the wood, in minutes:\n#   den - stream 4, den - clearing 7, stream - clearing 2,\n#   stream - henhouse 9, clearing - henhouse 5\nwood = NetworkX::Graph.new\n# path = ...      (the fastest way from the den to the henhouse)\n# minutes = ...   (how long it takes)\n",
+            "hints": [
+              "First add every path from the comment to <code>wood</code> with <code>add_edge</code> and its <code>weight</code>. Then let Dijkstra work twice: once for the path, once for its length."
+            ],
             "check": "path == [\"den\", \"stream\", \"clearing\", \"henhouse\"] && minutes == 11 && code.include?(\"dijkstra\")",
-            "hint": "One <code>wood.add_edge(\"den\", \"stream\", weight: 4)</code> for every path. Then <code>NetworkX.dijkstra_path(wood, \"den\", \"henhouse\")</code>, and the same with <code>dijkstra_path_length</code>. The fastest way does not have the fewest stops!"
+            "hint": "One <code>wood.add_edge(\"den\", \"stream\", weight: 4)</code> for every path. Then <code>NetworkX.dijkstra_path(wood, \"den\", \"henhouse\")</code>, and the same with <code>dijkstra_path_length</code>. The fastest way does not have the fewest stops!",
+            "solution": "install_gem \"networkx\"\nrequire \"networkx\"\nwood = NetworkX::Graph.new\n[[\"den\", \"stream\", 4], [\"den\", \"clearing\", 7], [\"stream\", \"clearing\", 2], [\"stream\", \"henhouse\", 9], [\"clearing\", \"henhouse\", 5]].each { |a, b, m| wood.add_edge(a, b, weight: m) }\npath = NetworkX.dijkstra_path(wood, \"den\", \"henhouse\")\nminutes = NetworkX.dijkstra_path_length(wood, \"den\", \"henhouse\")"
           }
         ]
       },
@@ -8394,8 +8867,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"networkx\"\nrequire \"networkx\"\n\n# 森の中のチャンキーの道（分）：\n#   den - stream 4、den - clearing 7、stream - clearing 2、\n#   stream - henhouse 9、clearing - henhouse 5\nwood = NetworkX::Graph.new\n# path = ...      （巣穴（den）からニワトリ小屋（henhouse）までのいちばん速い道）\n# minutes = ...   （かかる時間）\n",
+            "hints": [
+              "まずコメントにある道を1本ずつ<code>add_edge</code>と<code>weight</code>で<code>wood</code>に入れてね。それからダイクストラに2回計算してもらおう。1回は道、もう1回はその長さだよ。"
+            ],
             "check": "path == [\"den\", \"stream\", \"clearing\", \"henhouse\"] && minutes == 11 && code.include?(\"dijkstra\")",
-            "hint": "道ごとに<code>wood.add_edge(\"den\", \"stream\", weight: 4)</code>を書くよ。それから<code>NetworkX.dijkstra_path(wood, \"den\", \"henhouse\")</code>、<code>dijkstra_path_length</code>でも同じようにね。いちばん速い道は、通る場所がいちばん少ない道とは限らないよ！"
+            "hint": "道ごとに<code>wood.add_edge(\"den\", \"stream\", weight: 4)</code>を書くよ。それから<code>NetworkX.dijkstra_path(wood, \"den\", \"henhouse\")</code>、<code>dijkstra_path_length</code>でも同じようにね。いちばん速い道は、通る場所がいちばん少ない道とは限らないよ！",
+            "solution": "install_gem \"networkx\"\nrequire \"networkx\"\nwood = NetworkX::Graph.new\n[[\"den\", \"stream\", 4], [\"den\", \"clearing\", 7], [\"stream\", \"clearing\", 2], [\"stream\", \"henhouse\", 9], [\"clearing\", \"henhouse\", 5]].each { |a, b, m| wood.add_edge(a, b, weight: m) }\npath = NetworkX.dijkstra_path(wood, \"den\", \"henhouse\")\nminutes = NetworkX.dijkstra_path_length(wood, \"den\", \"henhouse\")"
           }
         ]
       }
@@ -8492,8 +8969,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"sequel\"\nrequire \"sequel\"\n\nzeit = Sequel.sqlite\nzeit.create_table(:arbeit) do\n  primary_key :id\n  String :projekt\n  Float  :stunden\nend\nzeit[:arbeit].import([:projekt, :stunden],\n  [[\"Chunky\", 2.5], [\"Speck\", 0.5], [\"Bacon\", 1.5], [\"Chunky\", 3.0], [\"Speck\", 1.5]])\n\n# stunden_pro_projekt = ...   (ein Ruby-Hash: Projekt => Stunden)\n",
+            "hints": [
+              "Sieh dir im Rapport oben an, wie <code>group</code> und <code>select</code> mit <code>sum</code> zusammenspielen. Dasselbe für <code>:projekt</code> und <code>:stunden</code> – und am Ende <code>as_hash</code> für den Ruby-Hash."
+            ],
             "check": "stunden_pro_projekt.is_a?(Hash) && stunden_pro_projekt.transform_values(&:to_f) == { \"Bacon\" => 1.5, \"Chunky\" => 5.5, \"Speck\" => 2.0 } && code.include?(\"group\")",
-            "hint": "<code>zeit[:arbeit].group(:projekt)</code> legt die Zeilen jedes Projekts zusammen; <code>.select(:projekt) { sum(:stunden).as(:total) }</code> zählt sie zusammen, wie im Rapport oben. <code>.as_hash(:projekt, :total)</code> macht daraus den Ruby-Hash."
+            "hint": "<code>zeit[:arbeit].group(:projekt)</code> legt die Zeilen jedes Projekts zusammen; <code>.select(:projekt) { sum(:stunden).as(:total) }</code> zählt sie zusammen, wie im Rapport oben. <code>.as_hash(:projekt, :total)</code> macht daraus den Ruby-Hash.",
+            "solution": "install_gem \"sequel\"\nrequire \"sequel\"\n\nzeit = Sequel.sqlite\nzeit.create_table(:arbeit) do\n  primary_key :id\n  String :projekt\n  Float  :stunden\nend\nzeit[:arbeit].import([:projekt, :stunden],\n  [[\"Chunky\", 2.5], [\"Speck\", 0.5], [\"Bacon\", 1.5], [\"Chunky\", 3.0], [\"Speck\", 1.5]])\n\nstunden_pro_projekt = zeit[:arbeit].group(:projekt).select(:projekt) { sum(:stunden).as(:total) }.as_hash(:projekt, :total)"
           }
         ]
       },
@@ -8587,8 +9068,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"sequel\"\nrequire \"sequel\"\n\nlog = Sequel.sqlite\nlog.create_table(:work) do\n  primary_key :id\n  String :project\n  Float  :hours\nend\nlog[:work].import([:project, :hours],\n  [[\"Chunky\", 2.5], [\"Speck\", 0.5], [\"Bacon\", 1.5], [\"Chunky\", 3.0], [\"Speck\", 1.5]])\n\n# hours_per_project = ...   (a Ruby hash: project => hours)\n",
+            "hints": [
+              "Look at how <code>group</code> and <code>select</code> with <code>sum</code> work together in the timesheet above. Do the same for <code>:project</code> and <code>:hours</code> – and finish with <code>as_hash</code> for the Ruby hash."
+            ],
             "check": "hours_per_project.is_a?(Hash) && hours_per_project.transform_values(&:to_f) == { \"Bacon\" => 1.5, \"Chunky\" => 5.5, \"Speck\" => 2.0 } && code.include?(\"group\")",
-            "hint": "<code>log[:work].group(:project)</code> puts each project's rows together; <code>.select(:project) { sum(:hours).as(:total) }</code> adds them up, as in the timesheet above. <code>.as_hash(:project, :total)</code> then makes the Ruby hash."
+            "hint": "<code>log[:work].group(:project)</code> puts each project's rows together; <code>.select(:project) { sum(:hours).as(:total) }</code> adds them up, as in the timesheet above. <code>.as_hash(:project, :total)</code> then makes the Ruby hash.",
+            "solution": "install_gem \"sequel\"\nrequire \"sequel\"\n\nlog = Sequel.sqlite\nlog.create_table(:work) do\n  primary_key :id\n  String :project\n  Float  :hours\nend\nlog[:work].import([:project, :hours],\n  [[\"Chunky\", 2.5], [\"Speck\", 0.5], [\"Bacon\", 1.5], [\"Chunky\", 3.0], [\"Speck\", 1.5]])\n\nhours_per_project = log[:work].group(:project).select(:project) { sum(:hours).as(:total) }.as_hash(:project, :total)"
           }
         ]
       },
@@ -8682,8 +9167,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"sequel\"\nrequire \"sequel\"\n\nlog = Sequel.sqlite\nlog.create_table(:work) do\n  primary_key :id\n  String :project\n  Float  :hours\nend\nlog[:work].import([:project, :hours],\n  [[\"Chunky\", 2.5], [\"Speck\", 0.5], [\"Bacon\", 1.5], [\"Chunky\", 3.0], [\"Speck\", 1.5]])\n\n# hours_per_project = ...   （Rubyのハッシュ：プロジェクト => 時間）\n",
+            "hints": [
+              "上の作業報告で<code>group</code>と<code>select</code>と<code>sum</code>がどう組み合わさっているか見てみて。同じことを<code>:project</code>と<code>:hours</code>でやって、最後に<code>as_hash</code>でRubyのハッシュにするんだよ。"
+            ],
             "check": "hours_per_project.is_a?(Hash) && hours_per_project.transform_values(&:to_f) == { \"Bacon\" => 1.5, \"Chunky\" => 5.5, \"Speck\" => 2.0 } && code.include?(\"group\")",
-            "hint": "<code>log[:work].group(:project)</code>でプロジェクトごとに行をまとめて、上の作業報告と同じように<code>.select(:project) { sum(:hours).as(:total) }</code>で合計するんだ。最後に<code>.as_hash(:project, :total)</code>でRubyのハッシュになるよ。"
+            "hint": "<code>log[:work].group(:project)</code>でプロジェクトごとに行をまとめて、上の作業報告と同じように<code>.select(:project) { sum(:hours).as(:total) }</code>で合計するんだ。最後に<code>.as_hash(:project, :total)</code>でRubyのハッシュになるよ。",
+            "solution": "install_gem \"sequel\"\nrequire \"sequel\"\n\nlog = Sequel.sqlite\nlog.create_table(:work) do\n  primary_key :id\n  String :project\n  Float  :hours\nend\nlog[:work].import([:project, :hours],\n  [[\"Chunky\", 2.5], [\"Speck\", 0.5], [\"Bacon\", 1.5], [\"Chunky\", 3.0], [\"Speck\", 1.5]])\n\nhours_per_project = log[:work].group(:project).select(:project) { sum(:hours).as(:total) }.as_hash(:project, :total)"
           }
         ]
       }
@@ -8732,8 +9221,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "show_shoes do\n  stack do\n    # title \"...\"\n    # @feld = edit_line \"\"\n    # @gruss = para \"...\"\n    # button \"Gruess mich\" do\n    #   ...\n    # end\n  end\nend\n",
+            "hints": [
+              "Entferne die <code>#</code> und füll die Lücken: Das Eingabefeld kommt in <code>@feld</code>, der Gruss in <code>@gruss</code>. Im Knopf-Block ersetzt du den Text von <code>@gruss</code> mit dem, was in <code>@feld</code> steht."
+            ],
             "check": "apps >= 1 && shoes_types.include?(\"EditLine\") && shoes_types.include?(\"Button\") && shoes_types.count { |t| t == \"Para\" } >= 2",
-            "hint": "Etwa so: <code>@feld = edit_line \"\"</code>, dann <code>@gruss = para \"...\"</code>, und im Knopf-Block <code>@gruss.replace(\"Hallo, #{@feld.text}!\")</code>. <code>title</code> zählt übrigens auch als <code>para</code> – zwei Textzeilen brauchst du trotzdem."
+            "hint": "Etwa so: <code>@feld = edit_line \"\"</code>, dann <code>@gruss = para \"...\"</code>, und im Knopf-Block <code>@gruss.replace(\"Hallo, #{@feld.text}!\")</code>. <code>title</code> zählt übrigens auch als <code>para</code> – zwei Textzeilen brauchst du trotzdem.",
+            "solution": "show_shoes do\n  stack do\n    title \"Gruss-App\"\n    @feld = edit_line \"\"\n    @gruss = para \"Wer bist du?\"\n    button \"Gruess mich\" do\n      @gruss.replace(\"Hallo, #{@feld.text}!\")\n    end\n  end\nend"
           }
         ]
       },
@@ -8779,8 +9272,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "show_shoes do\n  stack do\n    # title \"...\"\n    # @field = edit_line \"\"\n    # @greeting = para \"...\"\n    # button \"Greet me\" do\n    #   ...\n    # end\n  end\nend\n",
+            "hints": [
+              "Remove the <code>#</code> and fill the gaps: the field goes into <code>@field</code>, the greeting into <code>@greeting</code>. In the button block, replace the text of <code>@greeting</code> with what is in <code>@field</code>."
+            ],
             "check": "apps >= 1 && shoes_types.include?(\"EditLine\") && shoes_types.include?(\"Button\") && shoes_types.count { |t| t == \"Para\" } >= 2",
-            "hint": "Something like: <code>@field = edit_line \"\"</code>, then <code>@greeting = para \"...\"</code>, and inside the button block <code>@greeting.replace(\"Hello, #{@field.text}!\")</code>. Note that <code>title</code> counts as a <code>para</code> too – you still need two lines of text."
+            "hint": "Something like: <code>@field = edit_line \"\"</code>, then <code>@greeting = para \"...\"</code>, and inside the button block <code>@greeting.replace(\"Hello, #{@field.text}!\")</code>. Note that <code>title</code> counts as a <code>para</code> too – you still need two lines of text.",
+            "solution": "show_shoes do\n  stack do\n    title \"Greeter\"\n    @field = edit_line \"\"\n    @greeting = para \"Who are you?\"\n    button \"Greet me\" do\n      @greeting.replace(\"Hello, #{@field.text}!\")\n    end\n  end\nend"
           }
         ]
       },
@@ -8826,8 +9323,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "show_shoes do\n  stack do\n    # title \"...\"\n    # @field = edit_line \"\"\n    # @greeting = para \"...\"\n    # button \"Greet me\" do\n    #   ...\n    # end\n  end\nend\n",
+            "hints": [
+              "<code>#</code>を外して空いているところを埋めてみて。入力欄は<code>@field</code>に、あいさつは<code>@greeting</code>に入れるよ。ボタンのブロックでは、<code>@greeting</code>の文字を<code>@field</code>の中身で置きかえるんだ。"
+            ],
             "check": "apps >= 1 && shoes_types.include?(\"EditLine\") && shoes_types.include?(\"Button\") && shoes_types.count { |t| t == \"Para\" } >= 2",
-            "hint": "たとえばこんな感じ：<code>@field = edit_line \"\"</code>、次に<code>@greeting = para \"...\"</code>、そしてボタンのブロックの中で<code>@greeting.replace(\"Hello, #{@field.text}!\")</code>。ちなみに<code>title</code>も<code>para</code>として数えられるけど、テキストの行が2つ必要なことに変わりはないよ。"
+            "hint": "たとえばこんな感じ：<code>@field = edit_line \"\"</code>、次に<code>@greeting = para \"...\"</code>、そしてボタンのブロックの中で<code>@greeting.replace(\"Hello, #{@field.text}!\")</code>。ちなみに<code>title</code>も<code>para</code>として数えられるけど、テキストの行が2つ必要なことに変わりはないよ。",
+            "solution": "show_shoes do\n  stack do\n    title \"Greeter\"\n    @field = edit_line \"\"\n    @greeting = para \"Who are you?\"\n    button \"Greet me\" do\n      @greeting.replace(\"Hello, #{@field.text}!\")\n    end\n  end\nend"
           }
         ]
       }
@@ -8892,8 +9393,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def rechnungspfad\n  # neben der .exe, wenn es eine gibt - sonst neben dem Skript\nend\n",
+            "hints": [
+              "Die Methode <code>programmordner</code> aus der Zelle oben weiss schon, wo das Programm liegt. Deine Methode muss nur noch den Dateinamen daran hängen – mit <code>File.join</code>."
+            ],
             "check": "begin\n  ENV[\"OCRAN_EXECUTABLE\"] = \"D:/Apps/Imbiss.exe\"\n  as_exe = rechnungspfad\nensure\n  ENV.delete(\"OCRAN_EXECUTABLE\")\nend\nas_exe == \"D:/Apps/rechnung.txt\" && rechnungspfad.to_s.end_with?(\"rechnung.txt\") && !rechnungspfad.to_s.include?(\"Apps\")",
-            "hint": "<code>File.join(programmordner, \"rechnung.txt\")</code> – <code>programmordner</code> von oben weiss schon, wo die .exe liegt."
+            "hint": "<code>File.join(programmordner, \"rechnung.txt\")</code> – <code>programmordner</code> von oben weiss schon, wo die .exe liegt.",
+            "solution": "def rechnungspfad\n  File.join(programmordner, \"rechnung.txt\")\nend"
           }
         ]
       },
@@ -8955,8 +9460,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def receipt_path\n  # next to the .exe when there is one - next to the script otherwise\nend\n",
+            "hints": [
+              "The method <code>app_folder</code> from the cell above already knows where the program lives. Your method only has to attach the file name to it – with <code>File.join</code>."
+            ],
             "check": "begin\n  ENV[\"OCRAN_EXECUTABLE\"] = \"D:/Apps/Imbiss.exe\"\n  as_exe = receipt_path\nensure\n  ENV.delete(\"OCRAN_EXECUTABLE\")\nend\nas_exe == \"D:/Apps/receipt.txt\" && receipt_path.to_s.end_with?(\"receipt.txt\") && !receipt_path.to_s.include?(\"Apps\")",
-            "hint": "<code>File.join(app_folder, \"receipt.txt\")</code> – <code>app_folder</code> from above already knows where the .exe is."
+            "hint": "<code>File.join(app_folder, \"receipt.txt\")</code> – <code>app_folder</code> from above already knows where the .exe is.",
+            "solution": "def receipt_path\n  File.join(app_folder, \"receipt.txt\")\nend"
           }
         ]
       },
@@ -9018,8 +9527,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def receipt_path\n  # .exeがあればその隣、なければスクリプトの隣\nend\n",
+            "hints": [
+              "上のセルの<code>app_folder</code>が、プログラムの場所をもう知ってるよ。あとはそこにファイル名をくっつけるだけ。<code>File.join</code>を使ってね。"
+            ],
             "check": "begin\n  ENV[\"OCRAN_EXECUTABLE\"] = \"D:/Apps/Imbiss.exe\"\n  as_exe = receipt_path\nensure\n  ENV.delete(\"OCRAN_EXECUTABLE\")\nend\nas_exe == \"D:/Apps/receipt.txt\" && receipt_path.to_s.end_with?(\"receipt.txt\") && !receipt_path.to_s.include?(\"Apps\")",
-            "hint": "<code>File.join(app_folder, \"receipt.txt\")</code>だよ。上の<code>app_folder</code>が、.exeの場所をもう知ってるからね。"
+            "hint": "<code>File.join(app_folder, \"receipt.txt\")</code>だよ。上の<code>app_folder</code>が、.exeの場所をもう知ってるからね。",
+            "solution": "def receipt_path\n  File.join(app_folder, \"receipt.txt\")\nend"
           }
         ]
       }
@@ -9076,8 +9589,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Einkaufszettel: Artikel | Menge, Speck 3, Brezel 2 – mit Unicode-Linien\n",
+            "hints": [
+              "Schau in der Demo, wie eine <code>TTY::Table</code> mit <code>header:</code> und <code>rows:</code> gebaut wird. Dann <code>render</code> mit dem Unicode-Stil und das Ergebnis mit <code>puts</code> ausgeben."
+            ],
             "check": "[output, result.to_s].join.then { |t| t.include?(\"┌\") && t.match?(/Artikel\\s*│\\s*Menge/) && t.match?(/Speck\\s*│\\s*3/) && t.match?(/Brezel\\s*│\\s*2/) }",
-            "hint": "<code>TTY::Table.new(header: [\"Artikel\", \"Menge\"], rows: [[\"Speck\", 3], [\"Brezel\", 2]])</code> – und dann <code>puts</code> mit <code>.render(:unicode)</code>."
+            "hint": "<code>TTY::Table.new(header: [\"Artikel\", \"Menge\"], rows: [[\"Speck\", 3], [\"Brezel\", 2]])</code> – und dann <code>puts</code> mit <code>.render(:unicode)</code>.",
+            "solution": "zettel = TTY::Table.new(header: [\"Artikel\", \"Menge\"], rows: [[\"Speck\", 3], [\"Brezel\", 2]])\nputs zettel.render(:unicode)"
           }
         ]
       },
@@ -9131,8 +9648,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# shopping list: Item | Qty, Bacon 3, Pretzel 2 – with Unicode lines\n",
+            "hints": [
+              "See how the demo builds a <code>TTY::Table</code> with <code>header:</code> and <code>rows:</code>. Then <code>render</code> it in the Unicode style and print the result with <code>puts</code>."
+            ],
             "check": "[output, result.to_s].join.then { |t| t.include?(\"┌\") && t.match?(/Item\\s*│\\s*Qty/) && t.match?(/Bacon\\s*│\\s*3/) && t.match?(/Pretzel\\s*│\\s*2/) }",
-            "hint": "<code>TTY::Table.new(header: [\"Item\", \"Qty\"], rows: [[\"Bacon\", 3], [\"Pretzel\", 2]])</code> – then <code>puts</code> it with <code>.render(:unicode)</code>."
+            "hint": "<code>TTY::Table.new(header: [\"Item\", \"Qty\"], rows: [[\"Bacon\", 3], [\"Pretzel\", 2]])</code> – then <code>puts</code> it with <code>.render(:unicode)</code>.",
+            "solution": "list = TTY::Table.new(header: [\"Item\", \"Qty\"], rows: [[\"Bacon\", 3], [\"Pretzel\", 2]])\nputs list.render(:unicode)"
           }
         ]
       },
@@ -9186,8 +9707,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# 買い物メモ：Item | Qty、Bacon 3、Pretzel 2 ― Unicodeの線で\n",
+            "hints": [
+              "デモで<code>TTY::Table</code>が<code>header:</code>と<code>rows:</code>でどう作られているか見てみて。それをUnicodeスタイルで<code>render</code>して、<code>puts</code>で表示するんだよ。"
+            ],
             "check": "[output, result.to_s].join.then { |t| t.include?(\"┌\") && t.match?(/Item\\s*│\\s*Qty/) && t.match?(/Bacon\\s*│\\s*3/) && t.match?(/Pretzel\\s*│\\s*2/) }",
-            "hint": "<code>TTY::Table.new(header: [\"Item\", \"Qty\"], rows: [[\"Bacon\", 3], [\"Pretzel\", 2]])</code>をつくって、<code>.render(:unicode)</code>を<code>puts</code>してね。"
+            "hint": "<code>TTY::Table.new(header: [\"Item\", \"Qty\"], rows: [[\"Bacon\", 3], [\"Pretzel\", 2]])</code>をつくって、<code>.render(:unicode)</code>を<code>puts</code>してね。",
+            "solution": "list = TTY::Table.new(header: [\"Item\", \"Qty\"], rows: [[\"Bacon\", 3], [\"Pretzel\", 2]])\nputs list.render(:unicode)"
           }
         ]
       }
@@ -9244,8 +9769,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Chunkys Malprogramm: bei gedrückter Maus\n# eine Linie von (pmouseX, pmouseY) nach (mouseX, mouseY)\nrequire \"processing\"\nusing Processing\n\nsetup do\n  size 400, 300\n  background 255\nend\n\ndraw do\nend\n",
+            "hints": [
+              "Alles passiert in <code>draw</code>: eine Zeile, die mit <code>line</code> von der alten zur neuen Mausposition zeichnet – aber nur, wenn <code>mousePressed</code> wahr ist."
+            ],
             "check": "sketch && sketch.width == 400 && sketch.height == 300 && sketch.simulate__([[\"move\", 10, 10], [\"move\", 50, 60], [\"down\", 50, 60], [\"move\", 120, 90], [\"move\", 200, 100]]).select { |s| s[:op] == \"line\" && s[:stroke] }.map { |s| s[:args].map(&:round) }.then { |lines| !lines.include?([10, 10, 50, 60]) && lines.include?([50, 60, 120, 90]) && lines.include?([120, 90, 200, 100]) }",
-            "hint": "In <code>draw</code>: <code>line pmouseX, pmouseY, mouseX, mouseY if mousePressed</code>"
+            "hint": "In <code>draw</code>: <code>line pmouseX, pmouseY, mouseX, mouseY if mousePressed</code>",
+            "solution": "require \"processing\"\nusing Processing\nsetup do\n  size 400, 300\n  background 255\nend\ndraw do\n  line pmouseX, pmouseY, mouseX, mouseY if mousePressed\nend"
           }
         ]
       },
@@ -9299,8 +9828,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Chunky's paint program: while the mouse is pressed,\n# a line from (pmouseX, pmouseY) to (mouseX, mouseY)\nrequire \"processing\"\nusing Processing\n\nsetup do\n  size 400, 300\n  background 255\nend\n\ndraw do\nend\n",
+            "hints": [
+              "It all happens in <code>draw</code>: one line that draws with <code>line</code> from the old to the new mouse position – but only while <code>mousePressed</code> is true."
+            ],
             "check": "sketch && sketch.width == 400 && sketch.height == 300 && sketch.simulate__([[\"move\", 10, 10], [\"move\", 50, 60], [\"down\", 50, 60], [\"move\", 120, 90], [\"move\", 200, 100]]).select { |s| s[:op] == \"line\" && s[:stroke] }.map { |s| s[:args].map(&:round) }.then { |lines| !lines.include?([10, 10, 50, 60]) && lines.include?([50, 60, 120, 90]) && lines.include?([120, 90, 200, 100]) }",
-            "hint": "In <code>draw</code>: <code>line pmouseX, pmouseY, mouseX, mouseY if mousePressed</code>"
+            "hint": "In <code>draw</code>: <code>line pmouseX, pmouseY, mouseX, mouseY if mousePressed</code>",
+            "solution": "require \"processing\"\nusing Processing\nsetup do\n  size 400, 300\n  background 255\nend\ndraw do\n  if mousePressed\n    line pmouseX, pmouseY, mouseX, mouseY\n  end\nend"
           }
         ]
       },
@@ -9354,8 +9887,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Chunkyのお絵かき：マウスを押している間、\n# (pmouseX, pmouseY)から(mouseX, mouseY)へ線を引く\nrequire \"processing\"\nusing Processing\n\nsetup do\n  size 400, 300\n  background 255\nend\n\ndraw do\nend\n",
+            "hints": [
+              "全部<code>draw</code>の中でやるよ。<code>line</code>で前のマウスの位置から今の位置まで線を引く1行だけ。ただし<code>mousePressed</code>が真のときだけね。"
+            ],
             "check": "sketch && sketch.width == 400 && sketch.height == 300 && sketch.simulate__([[\"move\", 10, 10], [\"move\", 50, 60], [\"down\", 50, 60], [\"move\", 120, 90], [\"move\", 200, 100]]).select { |s| s[:op] == \"line\" && s[:stroke] }.map { |s| s[:args].map(&:round) }.then { |lines| !lines.include?([10, 10, 50, 60]) && lines.include?([50, 60, 120, 90]) && lines.include?([120, 90, 200, 100]) }",
-            "hint": "<code>draw</code>の中で：<code>line pmouseX, pmouseY, mouseX, mouseY if mousePressed</code>"
+            "hint": "<code>draw</code>の中で：<code>line pmouseX, pmouseY, mouseX, mouseY if mousePressed</code>",
+            "solution": "require \"processing\"\nusing Processing\nsetup do\n  size 400, 300\n  background 255\nend\ndraw do\n  if mousePressed\n    line pmouseX, pmouseY, mouseX, mouseY\n  end\nend"
           }
         ]
       }
@@ -9412,8 +9949,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"faker\"\nrequire \"faker\"\n\n# 5 Testkunden mit :name und :email, mit dem Startwert 2024\n",
+            "hints": [
+              "Zwei Schritte: Zuerst legst du Fakers Zufall fest, wie in der Demo gezeigt. Dann baust du mit <code>5.times.map</code> fünf Hashes, jeder mit einem Namen und einer E-Mail von Faker."
+            ],
             "check": "list = local_variables.include?(:kunden) ? kunden : result\ndefined?(Faker::Config) && Faker::Config.random.respond_to?(:seed) && Faker::Config.random.seed == 2024 &&\n  list.is_a?(Array) && list.size == 5 &&\n  list.all? { |c| c.is_a?(Hash) && c[:name].is_a?(String) && !c[:name].strip.empty? && c[:email].to_s.include?(\"@\") }",
-            "hint": "<code>Faker::Config.random = Random.new(2024)</code>, dann <code>kunden = 5.times.map { { name: Faker::Name.name, email: Faker::Internet.email } }</code>"
+            "hint": "<code>Faker::Config.random = Random.new(2024)</code>, dann <code>kunden = 5.times.map { { name: Faker::Name.name, email: Faker::Internet.email } }</code>",
+            "solution": "install_gem \"faker\"\nrequire \"faker\"\nFaker::Config.random = Random.new(2024)\nkunden = 5.times.map { { name: Faker::Name.name, email: Faker::Internet.email } }"
           }
         ]
       },
@@ -9467,8 +10008,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"faker\"\nrequire \"faker\"\n\n# 5 test customers with :name and :email, with the seed 2024\n",
+            "hints": [
+              "Two steps: first pin Faker's randomness, as the demo shows. Then build five hashes with <code>5.times.map</code>, each with a name and an email from Faker."
+            ],
             "check": "list = local_variables.include?(:customers) ? customers : result\ndefined?(Faker::Config) && Faker::Config.random.respond_to?(:seed) && Faker::Config.random.seed == 2024 &&\n  list.is_a?(Array) && list.size == 5 &&\n  list.all? { |c| c.is_a?(Hash) && c[:name].is_a?(String) && !c[:name].strip.empty? && c[:email].to_s.include?(\"@\") }",
-            "hint": "<code>Faker::Config.random = Random.new(2024)</code>, then <code>customers = 5.times.map { { name: Faker::Name.name, email: Faker::Internet.email } }</code>"
+            "hint": "<code>Faker::Config.random = Random.new(2024)</code>, then <code>customers = 5.times.map { { name: Faker::Name.name, email: Faker::Internet.email } }</code>",
+            "solution": "install_gem \"faker\"\nrequire \"faker\"\nFaker::Config.random = Random.new(2024)\ncustomers = 5.times.map { { name: Faker::Name.name, email: Faker::Internet.email } }"
           }
         ]
       },
@@ -9522,8 +10067,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"faker\"\nrequire \"faker\"\n\n# :nameと:emailを持つテスト用のお客さん5人、シードは2024\n",
+            "hints": [
+              "2ステップだよ。まずデモみたいにFakerの乱数を固定して、次に<code>5.times.map</code>でハッシュを5つ作ってね。それぞれにFakerの名前とメールアドレスを入れるんだ。"
+            ],
             "check": "list = local_variables.include?(:customers) ? customers : result\ndefined?(Faker::Config) && Faker::Config.random.respond_to?(:seed) && Faker::Config.random.seed == 2024 &&\n  list.is_a?(Array) && list.size == 5 &&\n  list.all? { |c| c.is_a?(Hash) && c[:name].is_a?(String) && !c[:name].strip.empty? && c[:email].to_s.include?(\"@\") }",
-            "hint": "<code>Faker::Config.random = Random.new(2024)</code>のあと、<code>customers = 5.times.map { { name: Faker::Name.name, email: Faker::Internet.email } }</code>"
+            "hint": "<code>Faker::Config.random = Random.new(2024)</code>のあと、<code>customers = 5.times.map { { name: Faker::Name.name, email: Faker::Internet.email } }</code>",
+            "solution": "install_gem \"faker\"\nrequire \"faker\"\nFaker::Config.random = Random.new(2024)\ncustomers = 5.times.map { { name: Faker::Name.name, email: Faker::Internet.email } }"
           }
         ]
       }
@@ -9596,8 +10145,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"herb\"\nrequire \"herb\"\nrequire \"minitest\"\n\ndef ladenliste\n  \"<ul><% waren.each do |ware| %><li><%= ware %></span><% end %></ul>\"\nend\n\n# Schreib einen Test LadenTest, der mit Herb prüft, dass ladenliste keine\n# Fehler hat, und führ ihn mit run_tests aus – dann repariere ladenliste.\n",
+            "hints": [
+              "Erst der Test: eine Klasse, die von <code>Minitest::Test</code> erbt, mit einer <code>test_</code>-Methode, die Herbs Fehlerliste leer erwartet. Dann <code>run_tests</code> – und wenn er rot ist, such den Tag, der nicht zu seinem Gegenstück passt."
+            ],
             "check": "defined?(LadenTest) && LadenTest.instance_methods.grep(/\\Atest_/).any? && code.match?(/Herb\\.parse\\(\\s*ladenliste/) && output.include?(\"runs,\") && output.include?(\"0 failures\") && output.include?(\"0 errors\") && Herb.parse(ladenliste).success? && ladenliste.include?(\"<li>\")",
-            "hint": "<code>class LadenTest &lt; Minitest::Test</code> mit <code>def test_ladenliste_ist_heil</code> und darin <code>assert_empty Herb.parse(ladenliste).errors</code>; danach <code>run_tests</code>. Und das <code>&lt;/span&gt;</code> gehört zu keinem Tag – das <code>&lt;li&gt;</code> braucht ein <code>&lt;/li&gt;</code>."
+            "hint": "<code>class LadenTest &lt; Minitest::Test</code> mit <code>def test_ladenliste_ist_heil</code> und darin <code>assert_empty Herb.parse(ladenliste).errors</code>; danach <code>run_tests</code>. Und das <code>&lt;/span&gt;</code> gehört zu keinem Tag – das <code>&lt;li&gt;</code> braucht ein <code>&lt;/li&gt;</code>.",
+            "solution": "install_gem \"herb\"\nrequire \"herb\"\nrequire \"minitest\"\n\ndef ladenliste\n  \"<ul><% waren.each do |ware| %><li><%= ware %></li><% end %></ul>\"\nend\n\nclass LadenTest < Minitest::Test\n  def test_ladenliste_ist_heil\n    assert_empty Herb.parse(ladenliste).errors\n  end\nend\n\nrun_tests"
           }
         ]
       },
@@ -9667,8 +10220,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"herb\"\nrequire \"herb\"\nrequire \"minitest\"\n\ndef shop_list\n  \"<ul><% goods.each do |item| %><li><%= item %></span><% end %></ul>\"\nend\n\n# Write a test ShopTest that checks with Herb that shop_list has no errors,\n# and run it with run_tests - then repair shop_list.\n",
+            "hints": [
+              "The test first: a class inheriting from <code>Minitest::Test</code> with one <code>test_</code> method that expects Herb's error list to be empty. Then <code>run_tests</code> – and when it is red, look for the tag that does not match its partner."
+            ],
             "check": "defined?(ShopTest) && ShopTest.instance_methods.grep(/\\Atest_/).any? && code.match?(/Herb\\.parse\\(\\s*shop_list/) && output.include?(\"runs,\") && output.include?(\"0 failures\") && output.include?(\"0 errors\") && Herb.parse(shop_list).success? && shop_list.include?(\"<li>\")",
-            "hint": "<code>class ShopTest &lt; Minitest::Test</code> with <code>def test_shop_list_is_whole</code> and in it <code>assert_empty Herb.parse(shop_list).errors</code>; then <code>run_tests</code>. And the <code>&lt;/span&gt;</code> belongs to no tag – the <code>&lt;li&gt;</code> needs an <code>&lt;/li&gt;</code>."
+            "hint": "<code>class ShopTest &lt; Minitest::Test</code> with <code>def test_shop_list_is_whole</code> and in it <code>assert_empty Herb.parse(shop_list).errors</code>; then <code>run_tests</code>. And the <code>&lt;/span&gt;</code> belongs to no tag – the <code>&lt;li&gt;</code> needs an <code>&lt;/li&gt;</code>.",
+            "solution": "install_gem \"herb\"\nrequire \"herb\"\nrequire \"minitest\"\n\ndef shop_list\n  \"<ul><% goods.each do |item| %><li><%= item %></li><% end %></ul>\"\nend\n\nclass ShopTest < Minitest::Test\n  def test_shop_list_is_whole\n    assert_empty Herb.parse(shop_list).errors\n  end\nend\n\nrun_tests"
           }
         ]
       },
@@ -9738,8 +10295,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"herb\"\nrequire \"herb\"\nrequire \"minitest\"\n\ndef shop_list\n  \"<ul><% goods.each do |item| %><li><%= item %></span><% end %></ul>\"\nend\n\n# shop_listにエラーがないことをHerbで確かめるテストShopTestを書いて、\n# run_testsで実行してください。それからshop_listを直します。\n",
+            "hints": [
+              "まずテストから。<code>Minitest::Test</code>を継承したクラスに、Herbのエラー一覧が空であることを期待する<code>test_</code>メソッドを1つ書いてね。それから<code>run_tests</code>。赤くなったら、相手と合っていないタグを探してみて。"
+            ],
             "check": "defined?(ShopTest) && ShopTest.instance_methods.grep(/\\Atest_/).any? && code.match?(/Herb\\.parse\\(\\s*shop_list/) && output.include?(\"runs,\") && output.include?(\"0 failures\") && output.include?(\"0 errors\") && Herb.parse(shop_list).success? && shop_list.include?(\"<li>\")",
-            "hint": "<code>class ShopTest &lt; Minitest::Test</code>の中に<code>def test_shop_list_is_whole</code>、その中に<code>assert_empty Herb.parse(shop_list).errors</code>。それから<code>run_tests</code>。そして<code>&lt;/span&gt;</code>はどのタグのものでもありません。<code>&lt;li&gt;</code>には<code>&lt;/li&gt;</code>が必要です。"
+            "hint": "<code>class ShopTest &lt; Minitest::Test</code>の中に<code>def test_shop_list_is_whole</code>、その中に<code>assert_empty Herb.parse(shop_list).errors</code>。それから<code>run_tests</code>。そして<code>&lt;/span&gt;</code>はどのタグのものでもありません。<code>&lt;li&gt;</code>には<code>&lt;/li&gt;</code>が必要です。",
+            "solution": "install_gem \"herb\"\nrequire \"herb\"\nrequire \"minitest\"\n\ndef shop_list\n  \"<ul><% goods.each do |item| %><li><%= item %></li><% end %></ul>\"\nend\n\nclass ShopTest < Minitest::Test\n  def test_shop_list_is_whole\n    assert_empty Herb.parse(shop_list).errors\n  end\nend\n\nrun_tests"
           }
         ]
       }
@@ -9812,8 +10373,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"prism\"\n\ndef eingaben(zeilen)\n  # Zeilen sammeln, bis Prism.parse(code).success? ist\nend\n",
+            "hints": [
+              "Du brauchst ein Array für die fertigen Eingaben und einen Puffer für die Zeilen der aktuellen. Geh die Zeilen mit <code>each</code> durch und frag Prism nach jeder, ob der Puffer schon vollständig ist."
+            ],
             "check": "eingaben([\"x = 1\", \"def doppelt(n)\", \"  n * 2\", \"end\", \"doppelt(x)\"]) == [\"x = 1\", \"def doppelt(n)\\n  n * 2\\nend\", \"doppelt(x)\"] && eingaben([\"[1,\", \"2]\", \"\\\"Speck\", \"\\\"\", \"puts 3\"]) == [\"[1,\\n2]\", \"\\\"Speck\\n\\\"\", \"puts 3\"]",
-            "hint": "Ein Puffer für die Zeilen der aktuellen Eingabe: jede Zeile anhängen, <code>puffer.join(\"\\n\")</code> parsen – und wenn das klappt, den Code ins Ergebnis legen und den Puffer leeren."
+            "hint": "Ein Puffer für die Zeilen der aktuellen Eingabe: jede Zeile anhängen, <code>puffer.join(\"\\n\")</code> parsen – und wenn das klappt, den Code ins Ergebnis legen und den Puffer leeren.",
+            "solution": "require \"prism\"\ndef eingaben(zeilen)\n  fertig = []\n  puffer = []\n  zeilen.each do |zeile|\n    puffer << zeile\n    code = puffer.join(\"\n\")\n    if Prism.parse(code).success?\n      fertig << code\n      puffer = []\n    end\n  end\n  fertig\nend"
           }
         ]
       },
@@ -9883,8 +10448,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"prism\"\n\ndef inputs(lines)\n  # collect lines until Prism.parse(code).success?\nend\n",
+            "hints": [
+              "You need an array for the finished inputs and a buffer for the lines of the current one. Walk the lines with <code>each</code> and ask Prism after each one whether the buffer is complete yet."
+            ],
             "check": "inputs([\"x = 1\", \"def double(n)\", \"  n * 2\", \"end\", \"double(x)\"]) == [\"x = 1\", \"def double(n)\\n  n * 2\\nend\", \"double(x)\"] && inputs([\"[1,\", \"2]\", \"\\\"bacon\", \"\\\"\", \"puts 3\"]) == [\"[1,\\n2]\", \"\\\"bacon\\n\\\"\", \"puts 3\"]",
-            "hint": "A buffer for the lines of the current input: append each line, parse <code>buffer.join(\"\\n\")</code> – and when that works, put the code into the result and empty the buffer."
+            "hint": "A buffer for the lines of the current input: append each line, parse <code>buffer.join(\"\\n\")</code> – and when that works, put the code into the result and empty the buffer.",
+            "solution": "require \"prism\"\ndef inputs(lines)\n  done = []\n  buffer = []\n  lines.each do |line|\n    buffer << line\n    code = buffer.join(\"\n\")\n    if Prism.parse(code).success?\n      done << code\n      buffer = []\n    end\n  end\n  done\nend"
           }
         ]
       },
@@ -9954,8 +10523,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"prism\"\n\ndef inputs(lines)\n  # Prism.parse(code).success? になるまで行を集める\nend\n",
+            "hints": [
+              "できあがった入力を入れる配列と、今の入力の行をためるバッファが必要だよ。<code>each</code>で行を見ていって、1行ごとにバッファが完成したかPrismに聞いてみて。"
+            ],
             "check": "inputs([\"x = 1\", \"def double(n)\", \"  n * 2\", \"end\", \"double(x)\"]) == [\"x = 1\", \"def double(n)\\n  n * 2\\nend\", \"double(x)\"] && inputs([\"[1,\", \"2]\", \"\\\"bacon\", \"\\\"\", \"puts 3\"]) == [\"[1,\\n2]\", \"\\\"bacon\\n\\\"\", \"puts 3\"]",
-            "hint": "今の入力の行をためるバッファを用意して、1行ずつ追加し、<code>buffer.join(\"\\n\")</code>をパースしてみて。うまくいったら、そのコードを結果に入れてバッファを空にするんだよ。"
+            "hint": "今の入力の行をためるバッファを用意して、1行ずつ追加し、<code>buffer.join(\"\\n\")</code>をパースしてみて。うまくいったら、そのコードを結果に入れてバッファを空にするんだよ。",
+            "solution": "require \"prism\"\ndef inputs(lines)\n  done = []\n  buffer = []\n  lines.each do |line|\n    buffer << line\n    code = buffer.join(\"\n\")\n    if Prism.parse(code).success?\n      done << code\n      buffer = []\n    end\n  end\n  done\nend"
           }
         ]
       }
@@ -10021,8 +10594,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# tusch.wav: C4 E4 G4 C5 nacheinander (je 0.25 s), dann alle vier zusammen (1 s)\n",
+            "hints": [
+              "Die Helfer aus den Zellen oben sind alles, was du brauchst: <code>noten</code> für die Töne nacheinander, <code>zusammen</code> für den Akkord. Zwei Arrays von Samples hängst du mit <code>+</code> hintereinander."
+            ],
             "check": "downloads.include?(\"tusch.wav\") && File.read(\"tusch.wav\", mode: \"rb\").b.then { |bytes| head = bytes.unpack(\"a4Va4a4VvvVVvva4V\"); s = bytes.byteslice(44..).unpack(\"s<*\"); amp = ->(from, f) { part = s[(from * 22050).round, 2205] || []; re = im = 0.0; part.each_with_index { |x, n| w = 2 * Math::PI * f * n / 22050; re += x * Math.cos(w); im += x * Math.sin(w) }; Math.hypot(re, im) * 2 / [part.size, 1].max }; c4, e4, g4, c5 = 261.63, 329.63, 392.0, 523.25; arpeggio = [[0.07, c4, [e4, g4]], [0.32, e4, [c4, g4, c5]], [0.57, g4, [c4, e4, c5]], [0.82, c5, [c4, e4, g4]]]; head.values_at(0, 2, 6, 7, 10) == [\"RIFF\", \"WAVE\", 1, 22050, 16] && (1.9..2.1).cover?(s.size / 22050.0) && arpeggio.all? { |t, f, others| (a = amp.(t, f)) > 1000 && others.all? { |o| amp.(t, o) < a / 4 } } && [[1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }",
-            "hint": "<code>noten(\"C4 E4 G4 C5\")</code> gibt dir die vier Töne. Für den Akkord <code>zusammen(*%w[C4 E4 G4 C5].map { |name| huelle(ton(frequenz(name), 1.0, :sinus, 0.2)) })</code> – beides mit <code>+</code> hintereinanderhängen und <code>File.binwrite(\"tusch.wav\", wav(…))</code>."
+            "hint": "<code>noten(\"C4 E4 G4 C5\")</code> gibt dir die vier Töne. Für den Akkord <code>zusammen(*%w[C4 E4 G4 C5].map { |name| huelle(ton(frequenz(name), 1.0, :sinus, 0.2)) })</code> – beides mit <code>+</code> hintereinanderhängen und <code>File.binwrite(\"tusch.wav\", wav(…))</code>.",
+            "solution": "akkord = zusammen(*%w[C4 E4 G4 C5].map { |name| huelle(ton(frequenz(name), 1.0, :sinus, 0.2)) })\nFile.binwrite(\"tusch.wav\", wav(noten(\"C4 E4 G4 C5\") + akkord))"
           }
         ]
       },
@@ -10084,8 +10661,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# fanfare.wav: C4 E4 G4 C5 one after another (0.25 s each), then all four together (1 s)\n",
+            "hints": [
+              "The helpers from the cells above are all you need: <code>notes</code> for the tones in a row, <code>mix</code> for the chord. Two arrays of samples join end to end with <code>+</code>."
+            ],
             "check": "downloads.include?(\"fanfare.wav\") && File.read(\"fanfare.wav\", mode: \"rb\").b.then { |bytes| head = bytes.unpack(\"a4Va4a4VvvVVvva4V\"); s = bytes.byteslice(44..).unpack(\"s<*\"); amp = ->(from, f) { part = s[(from * 22050).round, 2205] || []; re = im = 0.0; part.each_with_index { |x, n| w = 2 * Math::PI * f * n / 22050; re += x * Math.cos(w); im += x * Math.sin(w) }; Math.hypot(re, im) * 2 / [part.size, 1].max }; c4, e4, g4, c5 = 261.63, 329.63, 392.0, 523.25; arpeggio = [[0.07, c4, [e4, g4]], [0.32, e4, [c4, g4, c5]], [0.57, g4, [c4, e4, c5]], [0.82, c5, [c4, e4, g4]]]; head.values_at(0, 2, 6, 7, 10) == [\"RIFF\", \"WAVE\", 1, 22050, 16] && (1.9..2.1).cover?(s.size / 22050.0) && arpeggio.all? { |t, f, others| (a = amp.(t, f)) > 1000 && others.all? { |o| amp.(t, o) < a / 4 } } && [[1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }",
-            "hint": "<code>notes(\"C4 E4 G4 C5\")</code> gives you the four tones. For the chord, <code>mix(*%w[C4 E4 G4 C5].map { |name| envelope(tone(frequency(name), 1.0, :sine, 0.2)) })</code> – join both with <code>+</code> and <code>File.binwrite(\"fanfare.wav\", wav(…))</code>."
+            "hint": "<code>notes(\"C4 E4 G4 C5\")</code> gives you the four tones. For the chord, <code>mix(*%w[C4 E4 G4 C5].map { |name| envelope(tone(frequency(name), 1.0, :sine, 0.2)) })</code> – join both with <code>+</code> and <code>File.binwrite(\"fanfare.wav\", wav(…))</code>.",
+            "solution": "chord = mix(*%w[C4 E4 G4 C5].map { |name| envelope(tone(frequency(name), 1.0, :sine, 0.2)) })\nFile.binwrite(\"fanfare.wav\", wav(notes(\"C4 E4 G4 C5\") + chord))"
           }
         ]
       },
@@ -10147,8 +10728,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# fanfare.wav：C4 E4 G4 C5を順に（各0.25秒）、そのあと4つ同時に（1秒）\n",
+            "hints": [
+              "上のセルのヘルパーだけで作れるよ。順番に鳴らす音は<code>notes</code>、和音は<code>mix</code>。サンプルの配列2つは<code>+</code>でつなげられるんだ。"
+            ],
             "check": "downloads.include?(\"fanfare.wav\") && File.read(\"fanfare.wav\", mode: \"rb\").b.then { |bytes| head = bytes.unpack(\"a4Va4a4VvvVVvva4V\"); s = bytes.byteslice(44..).unpack(\"s<*\"); amp = ->(from, f) { part = s[(from * 22050).round, 2205] || []; re = im = 0.0; part.each_with_index { |x, n| w = 2 * Math::PI * f * n / 22050; re += x * Math.cos(w); im += x * Math.sin(w) }; Math.hypot(re, im) * 2 / [part.size, 1].max }; c4, e4, g4, c5 = 261.63, 329.63, 392.0, 523.25; arpeggio = [[0.07, c4, [e4, g4]], [0.32, e4, [c4, g4, c5]], [0.57, g4, [c4, e4, c5]], [0.82, c5, [c4, e4, g4]]]; head.values_at(0, 2, 6, 7, 10) == [\"RIFF\", \"WAVE\", 1, 22050, 16] && (1.9..2.1).cover?(s.size / 22050.0) && arpeggio.all? { |t, f, others| (a = amp.(t, f)) > 1000 && others.all? { |o| amp.(t, o) < a / 4 } } && [[1.3, c4], [1.3, e4], [1.3, g4], [1.3, c5]].all? { |t, f| amp.(t, f) > 1000 } }",
-            "hint": "<code>notes(\"C4 E4 G4 C5\")</code>で4つの音ができるよ。和音は<code>mix(*%w[C4 E4 G4 C5].map { |name| envelope(tone(frequency(name), 1.0, :sine, 0.2)) })</code>。2つを<code>+</code>でつないで、<code>File.binwrite(\"fanfare.wav\", wav(…))</code>で保存しよう。"
+            "hint": "<code>notes(\"C4 E4 G4 C5\")</code>で4つの音ができるよ。和音は<code>mix(*%w[C4 E4 G4 C5].map { |name| envelope(tone(frequency(name), 1.0, :sine, 0.2)) })</code>。2つを<code>+</code>でつないで、<code>File.binwrite(\"fanfare.wav\", wav(…))</code>で保存しよう。",
+            "solution": "chord = mix(*%w[C4 E4 G4 C5].map { |name| envelope(tone(frequency(name), 1.0, :sine, 0.2)) })\nFile.binwrite(\"fanfare.wav\", wav(notes(\"C4 E4 G4 C5\") + chord))"
           }
         ]
       }
@@ -10205,8 +10790,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Chunkys Snake ohne Wände: rechts hinaus, links wieder herein;\n# oben hinaus, unten wieder herein. Nur der eigene Schwanz\n# beendet das Spiel noch.\nshow_game(width: 16, height: 12) do |g|\n  fuchs = [[4, 6], [3, 6], [2, 6]]\n  kurs = [1, 0]\n  futter = [10, 6]\n  gefressen = 0\n\n  g.on_key(:left)  { kurs = [-1, 0] unless kurs == [1, 0] }\n  g.on_key(:right) { kurs = [1, 0]  unless kurs == [-1, 0] }\n  g.on_key(:up)    { kurs = [0, -1] unless kurs == [0, 1] }\n  g.on_key(:down)  { kurs = [0, 1]  unless kurs == [0, -1] }\n\n  g.cell(*futter, :bacon)\n  fuchs.each { |teil| g.cell(*teil, :body) }\n\n  g.every(0.15) do\n    x, y = fuchs.first\n    kopf = [x + kurs[0], y + kurs[1]]\n    if !g.inside?(*kopf) || fuchs.include?(kopf)\n      g.game_over(\"Autsch! #{gefressen} Speck.\")\n      next\n    end\n\n    fuchs.unshift(kopf)\n    if kopf == futter\n      gefressen += 1\n      futter = g.free_cells.sample\n    else\n      fuchs.pop\n    end\n\n    g.clear\n    g.cell(*futter, :bacon)\n    fuchs.each { |teil| g.cell(*teil, :body) }\n    g.cell(*kopf, :chunky)\n    g.status(\"Speck: #{gefressen}\")\n  end\nend\n",
+            "hints": [
+              "Nur zwei Stellen ändern sich: wie <code>kopf</code> berechnet wird und was das Spiel beendet. Für das Hinaus-und-wieder-herein gibt es einen Rechenoperator, der eine Zahl «umklappt»."
+            ],
             "check": "games.last && ->(game, x = nil, y = nil, tick = nil) { tick = ->(t = game.ticks) { 100.times { break if game.ticks > t || game.over?; game.advance(0.05) } }; tick.(); x, y = (0...game.width).to_a.product((0...game.height).to_a).find { |a, b| game.cell(a, b) == :chunky }; x && game.width.times.all? { |k| tick.(); !game.over? && game.cell((x + k + 1) % game.width, y) == :chunky } && (game.press(:up); game.height.times.all? { |k| tick.(); !game.over? && game.cell(x, (y - k - 1) % game.height) == :chunky }) }.(games.last)",
-            "hint": "Rechne den Kopf gleich mit <code>%</code> aus: <code>kopf = [(x + kurs[0]) % 16, (y + kurs[1]) % 12]</code>. <code>16 % 16</code> ist 0, und <code>-1 % 16</code> ist in Ruby 15 – genau das andere Ende. Dann braucht die Bedingung nur noch <code>fuchs.include?(kopf)</code>."
+            "hint": "Rechne den Kopf gleich mit <code>%</code> aus: <code>kopf = [(x + kurs[0]) % 16, (y + kurs[1]) % 12]</code>. <code>16 % 16</code> ist 0, und <code>-1 % 16</code> ist in Ruby 15 – genau das andere Ende. Dann braucht die Bedingung nur noch <code>fuchs.include?(kopf)</code>.",
+            "solution": "show_game(width: 16, height: 12) do |g|\n  fuchs = [[4, 6], [3, 6], [2, 6]]\n  kurs = [1, 0]\n  futter = [10, 6]\n  gefressen = 0\n  g.on_key(:left)  { kurs = [-1, 0] unless kurs == [1, 0] }\n  g.on_key(:right) { kurs = [1, 0]  unless kurs == [-1, 0] }\n  g.on_key(:up)    { kurs = [0, -1] unless kurs == [0, 1] }\n  g.on_key(:down)  { kurs = [0, 1]  unless kurs == [0, -1] }\n  g.cell(*futter, :bacon)\n  fuchs.each { |teil| g.cell(*teil, :body) }\n  g.every(0.15) do\n    x, y = fuchs.first\n    kopf = [(x + kurs[0]) % 16, (y + kurs[1]) % 12]\n    if fuchs.include?(kopf)\n      g.game_over(\"Autsch! #{gefressen} Speck.\")\n      next\n    end\n    fuchs.unshift(kopf)\n    if kopf == futter\n      gefressen += 1\n      futter = g.free_cells.sample\n    else\n      fuchs.pop\n    end\n    g.clear\n    g.cell(*futter, :bacon)\n    fuchs.each { |teil| g.cell(*teil, :body) }\n    g.cell(*kopf, :chunky)\n    g.status(\"Speck: #{gefressen}\")\n  end\nend"
           }
         ]
       },
@@ -10260,8 +10849,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Chunky's Snake without walls: out on the right, back in on the\n# left; out at the top, back in at the bottom. Only his own tail\n# still ends the game.\nshow_game(width: 16, height: 12) do |g|\n  fox = [[4, 6], [3, 6], [2, 6]]\n  heading = [1, 0]\n  food = [10, 6]\n  eaten = 0\n\n  g.on_key(:left)  { heading = [-1, 0] unless heading == [1, 0] }\n  g.on_key(:right) { heading = [1, 0]  unless heading == [-1, 0] }\n  g.on_key(:up)    { heading = [0, -1] unless heading == [0, 1] }\n  g.on_key(:down)  { heading = [0, 1]  unless heading == [0, -1] }\n\n  g.cell(*food, :bacon)\n  fox.each { |part| g.cell(*part, :body) }\n\n  g.every(0.15) do\n    x, y = fox.first\n    head = [x + heading[0], y + heading[1]]\n    if !g.inside?(*head) || fox.include?(head)\n      g.game_over(\"Ouch! #{eaten} bacon.\")\n      next\n    end\n\n    fox.unshift(head)\n    if head == food\n      eaten += 1\n      food = g.free_cells.sample\n    else\n      fox.pop\n    end\n\n    g.clear\n    g.cell(*food, :bacon)\n    fox.each { |part| g.cell(*part, :body) }\n    g.cell(*head, :chunky)\n    g.status(\"Bacon: #{eaten}\")\n  end\nend\n",
+            "hints": [
+              "Only two places change: how <code>head</code> is computed and what ends the game. For going out one side and coming back in on the other there is an arithmetic operator that \"wraps\" a number around."
+            ],
             "check": "games.last && ->(game, x = nil, y = nil, tick = nil) { tick = ->(t = game.ticks) { 100.times { break if game.ticks > t || game.over?; game.advance(0.05) } }; tick.(); x, y = (0...game.width).to_a.product((0...game.height).to_a).find { |a, b| game.cell(a, b) == :chunky }; x && game.width.times.all? { |k| tick.(); !game.over? && game.cell((x + k + 1) % game.width, y) == :chunky } && (game.press(:up); game.height.times.all? { |k| tick.(); !game.over? && game.cell(x, (y - k - 1) % game.height) == :chunky }) }.(games.last)",
-            "hint": "Compute the head with <code>%</code> straight away: <code>head = [(x + heading[0]) % 16, (y + heading[1]) % 12]</code>. <code>16 % 16</code> is 0, and in Ruby <code>-1 % 16</code> is 15 – just the other end. Then the condition only needs <code>fox.include?(head)</code>."
+            "hint": "Compute the head with <code>%</code> straight away: <code>head = [(x + heading[0]) % 16, (y + heading[1]) % 12]</code>. <code>16 % 16</code> is 0, and in Ruby <code>-1 % 16</code> is 15 – just the other end. Then the condition only needs <code>fox.include?(head)</code>.",
+            "solution": "show_game(width: 16, height: 12) do |g|\n  fox = [[4, 6], [3, 6], [2, 6]]\n  heading = [1, 0]\n  food = [10, 6]\n  eaten = 0\n  g.on_key(:left)  { heading = [-1, 0] unless heading == [1, 0] }\n  g.on_key(:right) { heading = [1, 0]  unless heading == [-1, 0] }\n  g.on_key(:up)    { heading = [0, -1] unless heading == [0, 1] }\n  g.on_key(:down)  { heading = [0, 1]  unless heading == [0, -1] }\n  g.cell(*food, :bacon)\n  fox.each { |part| g.cell(*part, :body) }\n  g.every(0.15) do\n    x, y = fox.first\n    head = [(x + heading[0]) % g.width, (y + heading[1]) % g.height]\n    if fox.include?(head)\n      g.game_over(\"Ouch! #{eaten} bacon.\")\n      next\n    end\n    fox.unshift(head)\n    if head == food\n      eaten += 1\n      food = g.free_cells.sample\n    else\n      fox.pop\n    end\n    g.clear\n    g.cell(*food, :bacon)\n    fox.each { |part| g.cell(*part, :body) }\n    g.cell(*head, :chunky)\n    g.status(\"Bacon: #{eaten}\")\n  end\nend"
           }
         ]
       },
@@ -10315,8 +10908,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# 壁のないChunkyのSnake：右から出たら左から、上から出たら\n# 下から戻ってくる。ゲームが終わるのは、自分のしっぽを\n# かんだときだけ。\nshow_game(width: 16, height: 12) do |g|\n  fox = [[4, 6], [3, 6], [2, 6]]\n  heading = [1, 0]\n  food = [10, 6]\n  eaten = 0\n\n  g.on_key(:left)  { heading = [-1, 0] unless heading == [1, 0] }\n  g.on_key(:right) { heading = [1, 0]  unless heading == [-1, 0] }\n  g.on_key(:up)    { heading = [0, -1] unless heading == [0, 1] }\n  g.on_key(:down)  { heading = [0, 1]  unless heading == [0, -1] }\n\n  g.cell(*food, :bacon)\n  fox.each { |part| g.cell(*part, :body) }\n\n  g.every(0.15) do\n    x, y = fox.first\n    head = [x + heading[0], y + heading[1]]\n    if !g.inside?(*head) || fox.include?(head)\n      g.game_over(\"Ouch! #{eaten} bacon.\")\n      next\n    end\n\n    fox.unshift(head)\n    if head == food\n      eaten += 1\n      food = g.free_cells.sample\n    else\n      fox.pop\n    end\n\n    g.clear\n    g.cell(*food, :bacon)\n    fox.each { |part| g.cell(*part, :body) }\n    g.cell(*head, :chunky)\n    g.status(\"Bacon: #{eaten}\")\n  end\nend\n",
+            "hints": [
+              "変えるのは2か所だけ。<code>head</code>の計算と、ゲームを終わらせる条件だよ。片側から出て反対側から入るには、数を「ぐるっと回す」計算の演算子があるんだ。"
+            ],
             "check": "games.last && ->(game, x = nil, y = nil, tick = nil) { tick = ->(t = game.ticks) { 100.times { break if game.ticks > t || game.over?; game.advance(0.05) } }; tick.(); x, y = (0...game.width).to_a.product((0...game.height).to_a).find { |a, b| game.cell(a, b) == :chunky }; x && game.width.times.all? { |k| tick.(); !game.over? && game.cell((x + k + 1) % game.width, y) == :chunky } && (game.press(:up); game.height.times.all? { |k| tick.(); !game.over? && game.cell(x, (y - k - 1) % game.height) == :chunky }) }.(games.last)",
-            "hint": "頭を計算するときに、すぐ<code>%</code>を使おう：<code>head = [(x + heading[0]) % 16, (y + heading[1]) % 12]</code>。<code>16 % 16</code>は0で、Rubyでは<code>-1 % 16</code>は15。ちょうど反対の端だよ。そうすれば、条件は<code>fox.include?(head)</code>だけでいいんだ！"
+            "hint": "頭を計算するときに、すぐ<code>%</code>を使おう：<code>head = [(x + heading[0]) % 16, (y + heading[1]) % 12]</code>。<code>16 % 16</code>は0で、Rubyでは<code>-1 % 16</code>は15。ちょうど反対の端だよ。そうすれば、条件は<code>fox.include?(head)</code>だけでいいんだ！",
+            "solution": "show_game(width: 16, height: 12) do |g|\n  fox = [[4, 6], [3, 6], [2, 6]]\n  heading = [1, 0]\n  food = [10, 6]\n  eaten = 0\n  g.on_key(:left)  { heading = [-1, 0] unless heading == [1, 0] }\n  g.on_key(:right) { heading = [1, 0]  unless heading == [-1, 0] }\n  g.on_key(:up)    { heading = [0, -1] unless heading == [0, 1] }\n  g.on_key(:down)  { heading = [0, 1]  unless heading == [0, -1] }\n  g.cell(*food, :bacon)\n  fox.each { |part| g.cell(*part, :body) }\n  g.every(0.15) do\n    x, y = fox.first\n    head = [(x + heading[0]) % g.width, (y + heading[1]) % g.height]\n    if fox.include?(head)\n      g.game_over(\"Ouch! #{eaten} bacon.\")\n      next\n    end\n    fox.unshift(head)\n    if head == food\n      eaten += 1\n      food = g.free_cells.sample\n    else\n      fox.pop\n    end\n    g.clear\n    g.cell(*food, :bacon)\n    fox.each { |part| g.cell(*part, :body) }\n    g.cell(*head, :chunky)\n    g.status(\"Bacon: #{eaten}\")\n  end\nend"
           }
         ]
       }
@@ -10381,8 +10978,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Chunky läuft aus dem Fenster hinaus. Halte ihn drin:\n# am linken und am rechten Rand bleibt er stehen.\nrequire \"ruby2d\"\n\nset title: \"Chunky bleibt da\", width: 400, height: 300\n\nfuchs = Rectangle.new(x: 170, y: 240, width: 60, height: 40,\n                      color: \"orange\")\n\non :key_held do |event|\n  fuchs.x -= 5 if event.key?(:left)\n  fuchs.x += 5 if event.key?(:right)\nend\n\nshow\n",
+            "hints": [
+              "Alles passiert im <code>on :key_held</code>-Block, nach den zwei Zeilen, die Chunky bewegen: Dort begrenzt du <code>fuchs.x</code> mit <code>clamp</code> auf den erlaubten Bereich. Rechne vorher aus, welches <code>x</code> das grösste erlaubte ist."
+            ],
             "check": "games.last && ->(w, before = nil, mover = nil) { w.tick; before = w.objects.map(&:x); w.press(:right, frames: 2); mover = w.objects.zip(before).find { |o, x0| o.x > x0 }&.first; !mover.nil? && (w.press(:right, frames: 200); mover.x + mover.width <= w.width && mover.x + mover.width > w.width - 8) && (w.press(:left, frames: 300); mover.x >= 0 && mover.x < 8) }.(games.last)",
-            "hint": "Seine rechte Seite liegt bei <code>fuchs.x + fuchs.width</code>, also darf sein <code>x</code> von 0 bis <code>Window.width - fuchs.width</code> gehen. Nach dem Bewegen setzt du ihn zwischen diese Grenzen zurück: <code>fuchs.x = fuchs.x.clamp(0, Window.width - fuchs.width)</code> – im <code>on :key_held</code>-Block, unter den zwei Zeilen, die ihn bewegen."
+            "hint": "Seine rechte Seite liegt bei <code>fuchs.x + fuchs.width</code>, also darf sein <code>x</code> von 0 bis <code>Window.width - fuchs.width</code> gehen. Nach dem Bewegen setzt du ihn zwischen diese Grenzen zurück: <code>fuchs.x = fuchs.x.clamp(0, Window.width - fuchs.width)</code> – im <code>on :key_held</code>-Block, unter den zwei Zeilen, die ihn bewegen.",
+            "solution": "require \"ruby2d\"\nset title: \"Chunky bleibt da\", width: 400, height: 300\nfuchs = Rectangle.new(x: 170, y: 240, width: 60, height: 40, color: \"orange\")\non :key_held do |event|\n  fuchs.x -= 5 if event.key?(:left)\n  fuchs.x += 5 if event.key?(:right)\n  fuchs.x = fuchs.x.clamp(0, Window.width - fuchs.width)\nend\nshow"
           }
         ]
       },
@@ -10444,8 +11045,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Chunky walks out of the window. Keep him inside:\n# at the left and at the right edge he stops.\nrequire \"ruby2d\"\n\nset title: \"Chunky stays\", width: 400, height: 300\n\nfox = Rectangle.new(x: 170, y: 240, width: 60, height: 40,\n                    color: \"orange\")\n\non :key_held do |event|\n  fox.x -= 5 if event.key?(:left)\n  fox.x += 5 if event.key?(:right)\nend\n\nshow\n",
+            "hints": [
+              "It all happens in the <code>on :key_held</code> block, after the two lines that move Chunky: there you limit <code>fox.x</code> to the allowed range with <code>clamp</code>. Work out first what the largest allowed <code>x</code> is."
+            ],
             "check": "games.last && ->(w, before = nil, mover = nil) { w.tick; before = w.objects.map(&:x); w.press(:right, frames: 2); mover = w.objects.zip(before).find { |o, x0| o.x > x0 }&.first; !mover.nil? && (w.press(:right, frames: 200); mover.x + mover.width <= w.width && mover.x + mover.width > w.width - 8) && (w.press(:left, frames: 300); mover.x >= 0 && mover.x < 8) }.(games.last)",
-            "hint": "His right side is at <code>fox.x + fox.width</code>, so his <code>x</code> may go from 0 up to <code>Window.width - fox.width</code>. After moving, put him back between those limits: <code>fox.x = fox.x.clamp(0, Window.width - fox.width)</code> – in the <code>on :key_held</code> block, below the two lines that move him."
+            "hint": "His right side is at <code>fox.x + fox.width</code>, so his <code>x</code> may go from 0 up to <code>Window.width - fox.width</code>. After moving, put him back between those limits: <code>fox.x = fox.x.clamp(0, Window.width - fox.width)</code> – in the <code>on :key_held</code> block, below the two lines that move him.",
+            "solution": "require \"ruby2d\"\nset title: \"Chunky stays\", width: 400, height: 300\nfox = Rectangle.new(x: 170, y: 240, width: 60, height: 40, color: \"orange\")\non :key_held do |event|\n  fox.x -= 5 if event.key?(:left)\n  fox.x += 5 if event.key?(:right)\n  fox.x = fox.x.clamp(0, Window.width - fox.width)\nend\nshow"
           }
         ]
       },
@@ -10507,8 +11112,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Chunkyがウィンドウの外へ歩いていってしまう。中にとどめよう：\n# 左の端でも右の端でも止まるように。\nrequire \"ruby2d\"\n\nset title: \"Chunky stays\", width: 400, height: 300\n\nfox = Rectangle.new(x: 170, y: 240, width: 60, height: 40,\n                    color: \"orange\")\n\non :key_held do |event|\n  fox.x -= 5 if event.key?(:left)\n  fox.x += 5 if event.key?(:right)\nend\n\nshow\n",
+            "hints": [
+              "全部<code>on :key_held</code>ブロックの中、Chunkyを動かす2行のあとでやるよ。そこで<code>fox.x</code>を<code>clamp</code>で許される範囲におさめるんだ。いちばん大きい<code>x</code>がいくつか、先に考えてみて。"
+            ],
             "check": "games.last && ->(w, before = nil, mover = nil) { w.tick; before = w.objects.map(&:x); w.press(:right, frames: 2); mover = w.objects.zip(before).find { |o, x0| o.x > x0 }&.first; !mover.nil? && (w.press(:right, frames: 200); mover.x + mover.width <= w.width && mover.x + mover.width > w.width - 8) && (w.press(:left, frames: 300); mover.x >= 0 && mover.x < 8) }.(games.last)",
-            "hint": "右側は<code>fox.x + fox.width</code>だから、<code>x</code>は0から<code>Window.width - fox.width</code>までならいいんだ。動かしたあとで、その範囲に戻そう：<code>fox.x = fox.x.clamp(0, Window.width - fox.width)</code>。<code>on :key_held</code>のブロックの中、動かす2行の下に書けばいいよ！"
+            "hint": "右側は<code>fox.x + fox.width</code>だから、<code>x</code>は0から<code>Window.width - fox.width</code>までならいいんだ。動かしたあとで、その範囲に戻そう：<code>fox.x = fox.x.clamp(0, Window.width - fox.width)</code>。<code>on :key_held</code>のブロックの中、動かす2行の下に書けばいいよ！",
+            "solution": "require \"ruby2d\"\nset title: \"Chunky stays\", width: 400, height: 300\nfox = Rectangle.new(x: 170, y: 240, width: 60, height: 40, color: \"orange\")\non :key_held do |event|\n  fox.x -= 5 if event.key?(:left)\n  fox.x += 5 if event.key?(:right)\n  fox.x = fox.x.clamp(0, Window.width - fox.width)\nend\nshow"
           }
         ]
       }
@@ -10557,8 +11166,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def welches_ruby(engine)\n  # \"ruby\" -> \"CRuby\", \"jruby\" -> \"JRuby\", ...\nend\n\nwelches_ruby(RUBY_ENGINE)",
+            "hints": [
+              "Du brauchst eine Fallunterscheidung über <code>engine</code> mit einem Fall pro bekanntem Namen – und einen Fall für «alles andere», der den Namen unverändert zurückgibt."
+            ],
             "check": "welches_ruby(\"ruby\") == \"CRuby\" && welches_ruby(\"jruby\") == \"JRuby\" && welches_ruby(\"truffleruby\") == \"TruffleRuby\" && welches_ruby(\"mruby\") == \"mruby\" && welches_ruby(\"opal\") == \"opal\"",
-            "hint": "<code>case engine</code> mit einem <code>when</code> pro Name und <code>else engine</code> am Schluss – oder ein Hash: <code>{ \"ruby\" => \"CRuby\", … }.fetch(engine, engine)</code>."
+            "hint": "<code>case engine</code> mit einem <code>when</code> pro Name und <code>else engine</code> am Schluss – oder ein Hash: <code>{ \"ruby\" => \"CRuby\", … }.fetch(engine, engine)</code>.",
+            "solution": "def welches_ruby(engine)\n  case engine\n  when \"ruby\" then \"CRuby\"\n  when \"jruby\" then \"JRuby\"\n  when \"truffleruby\" then \"TruffleRuby\"\n  else engine\n  end\nend\n\nwelches_ruby(RUBY_ENGINE)"
           }
         ]
       },
@@ -10604,8 +11217,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def which_ruby(engine)\n  # \"ruby\" -> \"CRuby\", \"jruby\" -> \"JRuby\", ...\nend\n\nwhich_ruby(RUBY_ENGINE)",
+            "hints": [
+              "You need a case distinction on <code>engine</code> with one branch per known name – and a branch for \"anything else\" that returns the name unchanged."
+            ],
             "check": "which_ruby(\"ruby\") == \"CRuby\" && which_ruby(\"jruby\") == \"JRuby\" && which_ruby(\"truffleruby\") == \"TruffleRuby\" && which_ruby(\"mruby\") == \"mruby\" && which_ruby(\"opal\") == \"opal\"",
-            "hint": "<code>case engine</code> with a <code>when</code> for each name and <code>else engine</code> at the end – or a hash: <code>{ \"ruby\" => \"CRuby\", … }.fetch(engine, engine)</code>."
+            "hint": "<code>case engine</code> with a <code>when</code> for each name and <code>else engine</code> at the end – or a hash: <code>{ \"ruby\" => \"CRuby\", … }.fetch(engine, engine)</code>.",
+            "solution": "def which_ruby(engine)\n  case engine\n  when \"ruby\" then \"CRuby\"\n  when \"jruby\" then \"JRuby\"\n  when \"truffleruby\" then \"TruffleRuby\"\n  else engine\n  end\nend\n\nwhich_ruby(RUBY_ENGINE)"
           }
         ]
       },
@@ -10651,8 +11268,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def which_ruby(engine)\n  # \"ruby\" -> \"CRuby\", \"jruby\" -> \"JRuby\", ...\nend\n\nwhich_ruby(RUBY_ENGINE)",
+            "hints": [
+              "<code>engine</code>で場合分けして、知っている名前ごとに1つ分岐を作ってね。それと「それ以外」の分岐で、名前をそのまま返すんだよ。"
+            ],
             "check": "which_ruby(\"ruby\") == \"CRuby\" && which_ruby(\"jruby\") == \"JRuby\" && which_ruby(\"truffleruby\") == \"TruffleRuby\" && which_ruby(\"mruby\") == \"mruby\" && which_ruby(\"opal\") == \"opal\"",
-            "hint": "名前ごとに <code>when</code> を書いた <code>case engine</code> に、最後は <code>else engine</code>。ハッシュでもいけるよ：<code>{ \"ruby\" => \"CRuby\", … }.fetch(engine, engine)</code>。"
+            "hint": "名前ごとに <code>when</code> を書いた <code>case engine</code> に、最後は <code>else engine</code>。ハッシュでもいけるよ：<code>{ \"ruby\" => \"CRuby\", … }.fetch(engine, engine)</code>。",
+            "solution": "def which_ruby(engine)\n  case engine\n  when \"ruby\" then \"CRuby\"\n  when \"jruby\" then \"JRuby\"\n  when \"truffleruby\" then \"TruffleRuby\"\n  else engine\n  end\nend\n\nwhich_ruby(RUBY_ENGINE)"
           }
         ]
       }
@@ -10726,8 +11347,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def woerter_zaehlen(woerter)\n  anzahl = {}\n  # jedes Wort zählen\n  anzahl\nend\n\nwoerter_zaehlen(%w[chunky bacon chunky fuchs chunky])",
+            "hints": [
+              "Geh mit <code>each</code> durch <code>woerter</code>. Für jedes Wort erhöhst du seinen Eintrag in <code>anzahl</code> um eins – beim ersten Mal gibt es noch keinen Eintrag, daran musst du denken."
+            ],
             "check": "result == {\"chunky\" => 3, \"bacon\" => 1, \"fuchs\" => 1} && code.include?(\"def woerter_zaehlen\") && !code.include?(\".tally\")",
-            "hint": "Geh mit <code>each</code> durch die Wörter und zähl hoch: <code>anzahl[wort] = (anzahl[wort] || 0) + 1</code>. <code>Hash.new(0)</code> geht in PicoRuby auch."
+            "hint": "Geh mit <code>each</code> durch die Wörter und zähl hoch: <code>anzahl[wort] = (anzahl[wort] || 0) + 1</code>. <code>Hash.new(0)</code> geht in PicoRuby auch.",
+            "solution": "def woerter_zaehlen(woerter)\n  anzahl = {}\n  woerter.each { |wort| anzahl[wort] = (anzahl[wort] || 0) + 1 }\n  anzahl\nend\n\nwoerter_zaehlen(%w[chunky bacon chunky fuchs chunky])"
           },
           {
             "t": "h",
@@ -10801,8 +11426,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def count_words(words)\n  counts = {}\n  # count each word\n  counts\nend\n\ncount_words(%w[chunky bacon chunky fox chunky])",
+            "hints": [
+              "Go through <code>words</code> with <code>each</code>. For every word, raise its entry in <code>counts</code> by one – the first time there is no entry yet, so think about that."
+            ],
             "check": "result == {\"chunky\" => 3, \"bacon\" => 1, \"fox\" => 1} && code.include?(\"def count_words\") && !code.include?(\".tally\")",
-            "hint": "Go through the words with <code>each</code> and count up: <code>counts[word] = (counts[word] || 0) + 1</code>. <code>Hash.new(0)</code> works in PicoRuby, too."
+            "hint": "Go through the words with <code>each</code> and count up: <code>counts[word] = (counts[word] || 0) + 1</code>. <code>Hash.new(0)</code> works in PicoRuby, too.",
+            "solution": "def count_words(words)\n  counts = {}\n  words.each { |word| counts[word] = (counts[word] || 0) + 1 }\n  counts\nend\n\ncount_words(%w[chunky bacon chunky fox chunky])"
           },
           {
             "t": "h",
@@ -10876,8 +11505,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def count_words(words)\n  counts = {}\n  # 単語をひとつずつ数える\n  counts\nend\n\ncount_words(%w[chunky bacon chunky fox chunky])",
+            "hints": [
+              "<code>words</code>を<code>each</code>でたどってね。単語ごとに<code>counts</code>のその項目を1ふやすんだ。最初はまだ項目がないから、そこに気をつけて。"
+            ],
             "check": "result == {\"chunky\" => 3, \"bacon\" => 1, \"fox\" => 1} && code.include?(\"def count_words\") && !code.include?(\".tally\")",
-            "hint": "<code>each</code> で単語をたどって数を足していこう：<code>counts[word] = (counts[word] || 0) + 1</code>。<code>Hash.new(0)</code> もPicoRubyで使えるよ。"
+            "hint": "<code>each</code> で単語をたどって数を足していこう：<code>counts[word] = (counts[word] || 0) + 1</code>。<code>Hash.new(0)</code> もPicoRubyで使えるよ。",
+            "solution": "def count_words(words)\n  counts = {}\n  words.each { |word| counts[word] = (counts[word] || 0) + 1 }\n  counts\nend\n\ncount_words(%w[chunky bacon chunky fox chunky])"
           },
           {
             "t": "h",
@@ -10964,9 +11597,13 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def qr_svg(text, cell = 6)\n  level = QRCoder::QRCodeGenerator::ECCLevel.Q\n  data = QRCoder::QRCodeGenerator.new.CreateQrCode(text, level)\n  rects = []\n  # pro dunklem Modul ein <rect x=\"..\" y=\"..\" width=\"..\" height=\"..\"/>:\n  # data.module_matrix.each_with_index do |row, y| ... und darin\n  # row.each_with_index do |dark, x| ...\n  size = data.module_matrix.count * cell\n  %(<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"#{size}\" ) +\n    %(height=\"#{size}\" style=\"background:#fff\">#{rects.join}</svg>)\nend\n\nshow_svg qr_svg(\"Chunky Bacon\")",
-            "probe": "->(svg) { m = QRCoder::QRCodeGenerator.new.CreateQrCode(\"Chunky Bacon\", QRCoder::QRCodeGenerator::ECCLevel.Q).module_matrix; cell = svg[/width=\"([\\d.]+)\"/, 1].to_f / m.count; want = []; m.each_with_index { |row, y| row.each_with_index { |dark, x| want << [x * cell, y * cell] if dark } }; got = svg.scan(/<rect\\b[^>]*>/).select { |r| r =~ /\\sx=\"/ }.map { |r| [r[/\\sx=\"([\\d.]+)\"/, 1].to_f, r[/\\sy=\"([\\d.]+)\"/, 1].to_f] }; [svg.start_with?(\"<svg\"), cell > 0 && got.sort == want.sort, got.size] }.(qr_svg(\"Chunky Bacon\"))",
+            "hints": [
+              "Sieh dir an, wie <code>bacon_svg</code> oben durch <code>module_matrix</code> läuft: eine Schleife über die Zeilen, darin eine über die Module. Für jedes dunkle Modul legst du einen <code>&lt;rect&gt;</code>-String in <code>rects</code>."
+            ],
             "check": "probe.to_s.start_with?(\"[true, true, \") && code.match?(/module_matrix|ModuleMatrix/) && code.match?(/CreateQrCode|QRCodeGenerator/)",
-            "hint": "Zwei Schleifen, wie in <code>bacon_svg</code>: <code>data.module_matrix.each_with_index do |row, y|</code> und darin <code>row.each_with_index do |dark, x|</code>. Für jedes <code>dark</code>-Modul: <code>rects &lt;&lt; %(&lt;rect x=\"#{x * cell}\" y=\"#{y * cell}\" width=\"#{cell}\" height=\"#{cell}\"/&gt;)</code>."
+            "hint": "Zwei Schleifen, wie in <code>bacon_svg</code>: <code>data.module_matrix.each_with_index do |row, y|</code> und darin <code>row.each_with_index do |dark, x|</code>. Für jedes <code>dark</code>-Modul: <code>rects &lt;&lt; %(&lt;rect x=\"#{x * cell}\" y=\"#{y * cell}\" width=\"#{cell}\" height=\"#{cell}\"/&gt;)</code>.",
+            "solution": "def qr_svg(text, cell = 6)\n  level = QRCoder::QRCodeGenerator::ECCLevel.Q\n  data = QRCoder::QRCodeGenerator.new.CreateQrCode(text, level)\n  rects = []\n  data.module_matrix.each_with_index do |row, y|\n    row.each_with_index do |dark, x|\n      rects << %(<rect x=\"#{x * cell}\" y=\"#{y * cell}\" width=\"#{cell}\" height=\"#{cell}\"/>) if dark\n    end\n  end\n  size = data.module_matrix.count * cell\n  %(<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"#{size}\" ) +\n    %(height=\"#{size}\" style=\"background:#fff\">#{rects.join}</svg>)\nend\n\nshow_svg qr_svg(\"Chunky Bacon\")\n",
+            "probe": "->(svg) { m = QRCoder::QRCodeGenerator.new.CreateQrCode(\"Chunky Bacon\", QRCoder::QRCodeGenerator::ECCLevel.Q).module_matrix; cell = svg[/width=\"([\\d.]+)\"/, 1].to_f / m.count; want = []; m.each_with_index { |row, y| row.each_with_index { |dark, x| want << [x * cell, y * cell] if dark } }; got = svg.scan(/<rect\\b[^>]*>/).select { |r| r =~ /\\sx=\"/ }.map { |r| [r[/\\sx=\"([\\d.]+)\"/, 1].to_f, r[/\\sy=\"([\\d.]+)\"/, 1].to_f] }; [svg.start_with?(\"<svg\"), cell > 0 && got.sort == want.sort, got.size] }.(qr_svg(\"Chunky Bacon\"))"
           }
         ]
       },
@@ -11044,9 +11681,13 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def qr_svg(text, cell = 6)\n  level = QRCoder::QRCodeGenerator::ECCLevel.Q\n  data = QRCoder::QRCodeGenerator.new.CreateQrCode(text, level)\n  rects = []\n  # one <rect x=\"..\" y=\"..\" width=\"..\" height=\"..\"/> per dark module:\n  # data.module_matrix.each_with_index do |row, y| ... and inside it\n  # row.each_with_index do |dark, x| ...\n  size = data.module_matrix.count * cell\n  %(<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"#{size}\" ) +\n    %(height=\"#{size}\" style=\"background:#fff\">#{rects.join}</svg>)\nend\n\nshow_svg qr_svg(\"Chunky Bacon\")",
-            "probe": "->(svg) { m = QRCoder::QRCodeGenerator.new.CreateQrCode(\"Chunky Bacon\", QRCoder::QRCodeGenerator::ECCLevel.Q).module_matrix; cell = svg[/width=\"([\\d.]+)\"/, 1].to_f / m.count; want = []; m.each_with_index { |row, y| row.each_with_index { |dark, x| want << [x * cell, y * cell] if dark } }; got = svg.scan(/<rect\\b[^>]*>/).select { |r| r =~ /\\sx=\"/ }.map { |r| [r[/\\sx=\"([\\d.]+)\"/, 1].to_f, r[/\\sy=\"([\\d.]+)\"/, 1].to_f] }; [svg.start_with?(\"<svg\"), cell > 0 && got.sort == want.sort, got.size] }.(qr_svg(\"Chunky Bacon\"))",
+            "hints": [
+              "Look at how <code>bacon_svg</code> above walks the <code>module_matrix</code>: a loop over the rows, inside it one over the modules. For each dark module, put one <code>&lt;rect&gt;</code> string into <code>rects</code>."
+            ],
             "check": "probe.to_s.start_with?(\"[true, true, \") && code.match?(/module_matrix|ModuleMatrix/) && code.match?(/CreateQrCode|QRCodeGenerator/)",
-            "hint": "Two loops, as in <code>bacon_svg</code>: <code>data.module_matrix.each_with_index do |row, y|</code> and inside it <code>row.each_with_index do |dark, x|</code>. For each <code>dark</code> module: <code>rects &lt;&lt; %(&lt;rect x=\"#{x * cell}\" y=\"#{y * cell}\" width=\"#{cell}\" height=\"#{cell}\"/&gt;)</code>."
+            "hint": "Two loops, as in <code>bacon_svg</code>: <code>data.module_matrix.each_with_index do |row, y|</code> and inside it <code>row.each_with_index do |dark, x|</code>. For each <code>dark</code> module: <code>rects &lt;&lt; %(&lt;rect x=\"#{x * cell}\" y=\"#{y * cell}\" width=\"#{cell}\" height=\"#{cell}\"/&gt;)</code>.",
+            "solution": "def qr_svg(text, cell = 6)\n  level = QRCoder::QRCodeGenerator::ECCLevel.Q\n  data = QRCoder::QRCodeGenerator.new.CreateQrCode(text, level)\n  rects = []\n  data.module_matrix.each_with_index do |row, y|\n    row.each_with_index do |dark, x|\n      rects << %(<rect x=\"#{x * cell}\" y=\"#{y * cell}\" width=\"#{cell}\" height=\"#{cell}\"/>) if dark\n    end\n  end\n  size = data.module_matrix.count * cell\n  %(<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"#{size}\" ) +\n    %(height=\"#{size}\" style=\"background:#fff\">#{rects.join}</svg>)\nend\n\nshow_svg qr_svg(\"Chunky Bacon\")\n",
+            "probe": "->(svg) { m = QRCoder::QRCodeGenerator.new.CreateQrCode(\"Chunky Bacon\", QRCoder::QRCodeGenerator::ECCLevel.Q).module_matrix; cell = svg[/width=\"([\\d.]+)\"/, 1].to_f / m.count; want = []; m.each_with_index { |row, y| row.each_with_index { |dark, x| want << [x * cell, y * cell] if dark } }; got = svg.scan(/<rect\\b[^>]*>/).select { |r| r =~ /\\sx=\"/ }.map { |r| [r[/\\sx=\"([\\d.]+)\"/, 1].to_f, r[/\\sy=\"([\\d.]+)\"/, 1].to_f] }; [svg.start_with?(\"<svg\"), cell > 0 && got.sort == want.sort, got.size] }.(qr_svg(\"Chunky Bacon\"))"
           }
         ]
       },
@@ -11124,9 +11765,13 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def qr_svg(text, cell = 6)\n  level = QRCoder::QRCodeGenerator::ECCLevel.Q\n  data = QRCoder::QRCodeGenerator.new.CreateQrCode(text, level)\n  rects = []\n  # 暗いモジュールごとに <rect> をひとつ：\n  # data.module_matrix.each_with_index do |row, y| ... の中で\n  # row.each_with_index do |dark, x| ...\n  size = data.module_matrix.count * cell\n  %(<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"#{size}\" ) +\n    %(height=\"#{size}\" style=\"background:#fff\">#{rects.join}</svg>)\nend\n\nshow_svg qr_svg(\"Chunky Bacon\")",
-            "probe": "->(svg) { m = QRCoder::QRCodeGenerator.new.CreateQrCode(\"Chunky Bacon\", QRCoder::QRCodeGenerator::ECCLevel.Q).module_matrix; cell = svg[/width=\"([\\d.]+)\"/, 1].to_f / m.count; want = []; m.each_with_index { |row, y| row.each_with_index { |dark, x| want << [x * cell, y * cell] if dark } }; got = svg.scan(/<rect\\b[^>]*>/).select { |r| r =~ /\\sx=\"/ }.map { |r| [r[/\\sx=\"([\\d.]+)\"/, 1].to_f, r[/\\sy=\"([\\d.]+)\"/, 1].to_f] }; [svg.start_with?(\"<svg\"), cell > 0 && got.sort == want.sort, got.size] }.(qr_svg(\"Chunky Bacon\"))",
+            "hints": [
+              "上の<code>bacon_svg</code>が<code>module_matrix</code>をどうたどっているか見てみて。行のループの中にモジュールのループがあるよ。暗いモジュールごとに<code>&lt;rect&gt;</code>の文字列を1つ<code>rects</code>に入れるんだ。"
+            ],
             "check": "probe.to_s.start_with?(\"[true, true, \") && code.match?(/module_matrix|ModuleMatrix/) && code.match?(/CreateQrCode|QRCodeGenerator/)",
-            "hint": "<code>bacon_svg</code> と同じく、ループは2つだよ。<code>data.module_matrix.each_with_index do |row, y|</code> の中に <code>row.each_with_index do |dark, x|</code>。<code>dark</code> なモジュールごとに <code>rects &lt;&lt; %(&lt;rect x=\"#{x * cell}\" y=\"#{y * cell}\" width=\"#{cell}\" height=\"#{cell}\"/&gt;)</code> だよ。"
+            "hint": "<code>bacon_svg</code> と同じく、ループは2つだよ。<code>data.module_matrix.each_with_index do |row, y|</code> の中に <code>row.each_with_index do |dark, x|</code>。<code>dark</code> なモジュールごとに <code>rects &lt;&lt; %(&lt;rect x=\"#{x * cell}\" y=\"#{y * cell}\" width=\"#{cell}\" height=\"#{cell}\"/&gt;)</code> だよ。",
+            "solution": "def qr_svg(text, cell = 6)\n  level = QRCoder::QRCodeGenerator::ECCLevel.Q\n  data = QRCoder::QRCodeGenerator.new.CreateQrCode(text, level)\n  rects = []\n  data.module_matrix.each_with_index do |row, y|\n    row.each_with_index do |dark, x|\n      rects << %(<rect x=\"#{x * cell}\" y=\"#{y * cell}\" width=\"#{cell}\" height=\"#{cell}\"/>) if dark\n    end\n  end\n  size = data.module_matrix.count * cell\n  %(<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"#{size}\" ) +\n    %(height=\"#{size}\" style=\"background:#fff\">#{rects.join}</svg>)\nend\n\nshow_svg qr_svg(\"Chunky Bacon\")\n",
+            "probe": "->(svg) { m = QRCoder::QRCodeGenerator.new.CreateQrCode(\"Chunky Bacon\", QRCoder::QRCodeGenerator::ECCLevel.Q).module_matrix; cell = svg[/width=\"([\\d.]+)\"/, 1].to_f / m.count; want = []; m.each_with_index { |row, y| row.each_with_index { |dark, x| want << [x * cell, y * cell] if dark } }; got = svg.scan(/<rect\\b[^>]*>/).select { |r| r =~ /\\sx=\"/ }.map { |r| [r[/\\sx=\"([\\d.]+)\"/, 1].to_f, r[/\\sy=\"([\\d.]+)\"/, 1].to_f] }; [svg.start_with?(\"<svg\"), cell > 0 && got.sort == want.sort, got.size] }.(qr_svg(\"Chunky Bacon\"))"
           }
         ]
       }
@@ -11189,8 +11834,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# gerade: n / 2, ungerade: 3 * n + 1 - so lange, bis n == 1 ist\ndef collatz(n)\n  schritte = 0\n\n  schritte\nend\n\nputs collatz(27)",
+            "hints": [
+              "Zwischen <code>schritte = 0</code> und <code>schritte</code> fehlt eine Schleife, die läuft, solange <code>n</code> nicht 1 ist. In jeder Runde wird <code>n</code> nach der Regel aus dem Kommentar neu berechnet und ein Schritt gezählt."
+            ],
             "check": "result.is_a?(ChunkySpinel::Program) && result.ok? && result.output.split.last == \"111\" && code.include?(\"def collatz\")",
-            "hint": "Eine Schleife: <code>while n != 1</code> … <code>end</code>. Darin <code>n = n.even? ? n / 2 : 3 * n + 1</code> und <code>schritte += 1</code>."
+            "hint": "Eine Schleife: <code>while n != 1</code> … <code>end</code>. Darin <code>n = n.even? ? n / 2 : 3 * n + 1</code> und <code>schritte += 1</code>.",
+            "solution": "def collatz(n)\n  schritte = 0\n  while n != 1\n    n = n.even? ? n / 2 : 3 * n + 1\n    schritte += 1\n  end\n  schritte\nend\n\nputs collatz(27)"
           }
         ]
       },
@@ -11248,8 +11897,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# even: n / 2, odd: 3 * n + 1 - until n == 1\ndef collatz(n)\n  steps = 0\n\n  steps\nend\n\nputs collatz(27)",
+            "hints": [
+              "Between <code>steps = 0</code> and <code>steps</code> a loop is missing that runs as long as <code>n</code> is not 1. Each round recomputes <code>n</code> by the rule in the comment and counts one step."
+            ],
             "check": "result.is_a?(ChunkySpinel::Program) && result.ok? && result.output.split.last == \"111\" && code.include?(\"def collatz\")",
-            "hint": "A loop: <code>while n != 1</code> … <code>end</code>. Inside it <code>n = n.even? ? n / 2 : 3 * n + 1</code> and <code>steps += 1</code>."
+            "hint": "A loop: <code>while n != 1</code> … <code>end</code>. Inside it <code>n = n.even? ? n / 2 : 3 * n + 1</code> and <code>steps += 1</code>.",
+            "solution": "def collatz(n)\n  steps = 0\n  until n == 1\n    n = n.even? ? n / 2 : 3 * n + 1\n    steps += 1\n  end\n  steps\nend\n\nputs collatz(27)"
           }
         ]
       },
@@ -11307,8 +11960,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# 偶数なら n / 2、奇数なら 3 * n + 1 - n == 1 になるまで\ndef collatz(n)\n  steps = 0\n\n  steps\nend\n\nputs collatz(27)",
+            "hints": [
+              "<code>steps = 0</code>と<code>steps</code>の間に、<code>n</code>が1でない間まわるループが足りないよ。1周ごとにコメントのルールで<code>n</code>を計算しなおして、ステップを1つ数えるんだ。"
+            ],
             "check": "result.is_a?(ChunkySpinel::Program) && result.ok? && result.output.split.last == \"111\" && code.include?(\"def collatz\")",
-            "hint": "ループを使おう。<code>while n != 1</code> … <code>end</code>の中で、<code>n = n.even? ? n / 2 : 3 * n + 1</code>と<code>steps += 1</code>。"
+            "hint": "ループを使おう。<code>while n != 1</code> … <code>end</code>の中で、<code>n = n.even? ? n / 2 : 3 * n + 1</code>と<code>steps += 1</code>。",
+            "solution": "def collatz(n)\n  steps = 0\n  until n == 1\n    n = n.even? ? n / 2 : 3 * n + 1\n    steps += 1\n  end\n  steps\nend\n\nputs collatz(27)"
           }
         ]
       }
@@ -11428,8 +12085,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"json\"\n\ndef staerke_beben(beben, staerke)\n  # die Beben mit mag >= staerke zählen\nend\n\nbeben = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nstaerke_beben(beben, 5)",
+            "hints": [
+              "Jedes Beben ist ein Hash; seine Stärke steht unter <code>\"properties\"</code> und dann <code>\"mag\"</code>. <code>count</code> mit einem Block zählt die, deren Stärke gross genug ist – und rechne mit einer fehlenden Stärke."
+            ],
             "check": "quakes = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nwant = ->(m) { quakes.count { |q| q[\"properties\"][\"mag\"].to_f >= m } }\n# the method itself, on CRuby, with two more magnitudes: a hard-coded\n# answer, or one that ignores the magnitude, does not pass. Code that uses\n# Java cannot run here; it is checked by its answer for 5 only.\nothers = begin\n  old_stdout, $stdout = $stdout, StringIO.new\n  box = Object.new\n  eval(code, box.instance_eval { binding }, \"check.rb\")\n  [box.staerke_beben(quakes, 4.5), box.staerke_beben(quakes, 6)]\nrescue NameError\n  raise unless code.match?(/java|Java|com\\./)\n  nil\nensure\n  $stdout = old_stdout\nend\ncode.include?(\"def staerke_beben\") && (result == want[5] || output.split.last == want[5].to_s) &&\n  (others.nil? || others == [want[4.5], want[6]])",
-            "hint": "<code>beben.count { |q| q[\"properties\"][\"mag\"].to_f &gt;= staerke }</code>. <code>mag</code> kann <code>nil</code> sein, und <code>nil.to_f</code> ist <code>0.0</code>."
+            "hint": "<code>beben.count { |q| q[\"properties\"][\"mag\"].to_f &gt;= staerke }</code>. <code>mag</code> kann <code>nil</code> sein, und <code>nil.to_f</code> ist <code>0.0</code>.",
+            "solution": "require \"json\"\n\ndef staerke_beben(beben, staerke)\n  beben.count { |q| q[\"properties\"][\"mag\"].to_f >= staerke }\nend\n\nbeben = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nstaerke_beben(beben, 5)"
           }
         ]
       },
@@ -11544,8 +12205,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"json\"\n\ndef strong_quakes(quakes, magnitude)\n  # count the quakes with mag >= magnitude\nend\n\nquakes = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nstrong_quakes(quakes, 5)",
+            "hints": [
+              "Every quake is a hash; its magnitude is under <code>\"properties\"</code>, then <code>\"mag\"</code>. <code>count</code> with a block counts those strong enough – and expect a missing magnitude now and then."
+            ],
             "check": "quakes = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nwant = ->(m) { quakes.count { |q| q[\"properties\"][\"mag\"].to_f >= m } }\n# the method itself, on CRuby, with two more magnitudes: a hard-coded\n# answer, or one that ignores the magnitude, does not pass. Code that uses\n# Java cannot run here; it is checked by its answer for 5 only.\nothers = begin\n  old_stdout, $stdout = $stdout, StringIO.new\n  box = Object.new\n  eval(code, box.instance_eval { binding }, \"check.rb\")\n  [box.strong_quakes(quakes, 4.5), box.strong_quakes(quakes, 6)]\nrescue NameError\n  raise unless code.match?(/java|Java|com\\./)\n  nil\nensure\n  $stdout = old_stdout\nend\ncode.include?(\"def strong_quakes\") && (result == want[5] || output.split.last == want[5].to_s) &&\n  (others.nil? || others == [want[4.5], want[6]])",
-            "hint": "<code>quakes.count { |q| q[\"properties\"][\"mag\"].to_f &gt;= magnitude }</code>. <code>mag</code> can be <code>nil</code>, and <code>nil.to_f</code> is <code>0.0</code>."
+            "hint": "<code>quakes.count { |q| q[\"properties\"][\"mag\"].to_f &gt;= magnitude }</code>. <code>mag</code> can be <code>nil</code>, and <code>nil.to_f</code> is <code>0.0</code>.",
+            "solution": "require \"json\"\n\ndef strong_quakes(quakes, magnitude)\n  quakes.count { |q| q[\"properties\"][\"mag\"].to_f >= magnitude }\nend\n\nquakes = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nstrong_quakes(quakes, 5)"
           }
         ]
       },
@@ -11660,8 +12325,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"json\"\n\ndef strong_quakes(quakes, magnitude)\n  # mag が magnitude 以上の地震を数える\nend\n\nquakes = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nstrong_quakes(quakes, 5)",
+            "hints": [
+              "地震は1つ1つがハッシュで、強さは<code>\"properties\"</code>の中の<code>\"mag\"</code>にあるよ。<code>count</code>にブロックを渡して、十分強いものを数えてね。強さがないデータもあるから気をつけて。"
+            ],
             "check": "quakes = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nwant = ->(m) { quakes.count { |q| q[\"properties\"][\"mag\"].to_f >= m } }\n# the method itself, on CRuby, with two more magnitudes: a hard-coded\n# answer, or one that ignores the magnitude, does not pass. Code that uses\n# Java cannot run here; it is checked by its answer for 5 only.\nothers = begin\n  old_stdout, $stdout = $stdout, StringIO.new\n  box = Object.new\n  eval(code, box.instance_eval { binding }, \"check.rb\")\n  [box.strong_quakes(quakes, 4.5), box.strong_quakes(quakes, 6)]\nrescue NameError\n  raise unless code.match?(/java|Java|com\\./)\n  nil\nensure\n  $stdout = old_stdout\nend\ncode.include?(\"def strong_quakes\") && (result == want[5] || output.split.last == want[5].to_s) &&\n  (others.nil? || others == [want[4.5], want[6]])",
-            "hint": "<code>quakes.count { |q| q[\"properties\"][\"mag\"].to_f &gt;= magnitude }</code>。<code>mag</code> は <code>nil</code> のこともあるけど、<code>nil.to_f</code> は <code>0.0</code> になるよ。"
+            "hint": "<code>quakes.count { |q| q[\"properties\"][\"mag\"].to_f &gt;= magnitude }</code>。<code>mag</code> は <code>nil</code> のこともあるけど、<code>nil.to_f</code> は <code>0.0</code> になるよ。",
+            "solution": "require \"json\"\n\ndef strong_quakes(quakes, magnitude)\n  quakes.count { |q| q[\"properties\"][\"mag\"].to_f >= magnitude }\nend\n\nquakes = JSON.parse(File.read(\"data/all_month.geojson\"))[\"features\"]\nstrong_quakes(quakes, 5)"
           }
         ]
       }
@@ -11733,9 +12402,13 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require 'ruboto/widget'\nruboto_import_widgets :LinearLayout, :TextView, :Button\n\nclass CounterActivity\n  def onCreate(bundle)\n    super\n    set_title 'Zähler'\n    @zahl = 0\n    self.content_view = linear_layout orientation: :vertical, gravity: :center do\n      @anzeige = text_view text: @zahl.to_s, text_size: 64, gravity: :center\n      button text: '+1', on_click_listener: proc { hochzaehlen }\n    end\n  end\n\n  def hochzaehlen\n    @zahl += 1\n    @anzeige.text = @zahl.to_s\n  end\nend\n",
-            "probe": "->(p) { 3.times { p.tap \"+1\" }; three = p.texts.include?(\"3\"); p.rotate; kept = p.texts.include?(\"3\"); p.tap \"+1\"; [p.app, three, kept, p.texts.include?(\"4\"), p.crashed?] }.(phone)",
+            "hints": [
+              "Zwei Stellen: eine neue Methode <code>onSaveInstanceState</code>, die nach <code>super</code> die Zahl ins Bundle legt – und in <code>onCreate</code> liest du sie aus <code>bundle</code>, falls es eines gibt. Schau, wie <code>LebenActivity</code> das macht."
+            ],
             "check": "probe.to_s == %([\"CounterActivity\", true, true, true, false]) && code.match?(/def\\s+onSaveInstanceState/)",
-            "hint": "Zwei Stellen: <code>def onSaveInstanceState(out_state)</code> mit <code>super</code> und <code>out_state.putInt('zahl', @zahl)</code>, und in <code>onCreate</code> <code>@zahl = bundle ? bundle.getInt('zahl') : 0</code> – genau so, wie <code>LebenActivity</code> ihre Tipps behält."
+            "hint": "Zwei Stellen: <code>def onSaveInstanceState(out_state)</code> mit <code>super</code> und <code>out_state.putInt('zahl', @zahl)</code>, und in <code>onCreate</code> <code>@zahl = bundle ? bundle.getInt('zahl') : 0</code> – genau so, wie <code>LebenActivity</code> ihre Tipps behält.",
+            "solution": "require 'ruboto/widget'\nruboto_import_widgets :LinearLayout, :TextView, :Button\n\nclass CounterActivity\n  def onCreate(bundle)\n    super\n    set_title 'Zähler'\n    @zahl = bundle ? bundle.getInt('zahl') : 0\n    self.content_view = linear_layout orientation: :vertical, gravity: :center do\n      @anzeige = text_view text: @zahl.to_s, text_size: 64, gravity: :center\n      button text: '+1', on_click_listener: proc { hochzaehlen }\n    end\n  end\n\n  def hochzaehlen\n    @zahl += 1\n    @anzeige.text = @zahl.to_s\n  end\n\n  def onSaveInstanceState(out_state)\n    super\n    out_state.putInt('zahl', @zahl)\n  end\nend\n",
+            "probe": "->(p) { 3.times { p.tap \"+1\" }; three = p.texts.include?(\"3\"); p.rotate; kept = p.texts.include?(\"3\"); p.tap \"+1\"; [p.app, three, kept, p.texts.include?(\"4\"), p.crashed?] }.(phone)"
           }
         ]
       },
@@ -11801,9 +12474,13 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require 'ruboto/widget'\nruboto_import_widgets :LinearLayout, :TextView, :Button\n\nclass CounterActivity\n  def onCreate(bundle)\n    super\n    set_title 'Counter'\n    @count = 0\n    self.content_view = linear_layout orientation: :vertical, gravity: :center do\n      @label = text_view text: @count.to_s, text_size: 64, gravity: :center\n      button text: '+1', on_click_listener: proc { count_up }\n    end\n  end\n\n  def count_up\n    @count += 1\n    @label.text = @count.to_s\n  end\nend\n",
-            "probe": "->(p) { 3.times { p.tap \"+1\" }; three = p.texts.include?(\"3\"); p.rotate; kept = p.texts.include?(\"3\"); p.tap \"+1\"; [p.app, three, kept, p.texts.include?(\"4\"), p.crashed?] }.(phone)",
+            "hints": [
+              "Two places: a new method <code>onSaveInstanceState</code> that puts the count into the bundle after <code>super</code> – and in <code>onCreate</code> you read it from <code>bundle</code> if there is one. See how <code>LifeActivity</code> does it."
+            ],
             "check": "probe.to_s == %([\"CounterActivity\", true, true, true, false]) && code.match?(/def\\s+onSaveInstanceState/)",
-            "hint": "Two places: <code>def onSaveInstanceState(out_state)</code> with <code>super</code> and <code>out_state.putInt('count', @count)</code>, and in <code>onCreate</code> <code>@count = bundle ? bundle.getInt('count') : 0</code> – just as <code>LifeActivity</code> keeps its taps."
+            "hint": "Two places: <code>def onSaveInstanceState(out_state)</code> with <code>super</code> and <code>out_state.putInt('count', @count)</code>, and in <code>onCreate</code> <code>@count = bundle ? bundle.getInt('count') : 0</code> – just as <code>LifeActivity</code> keeps its taps.",
+            "solution": "require 'ruboto/widget'\nruboto_import_widgets :LinearLayout, :TextView, :Button\n\nclass CounterActivity\n  def onCreate(bundle)\n    super\n    set_title 'Counter'\n    @count = bundle ? bundle.getInt('count') : 0\n    self.content_view = linear_layout orientation: :vertical, gravity: :center do\n      @label = text_view text: @count.to_s, text_size: 64, gravity: :center\n      button text: '+1', on_click_listener: proc { count_up }\n    end\n  end\n\n  def count_up\n    @count += 1\n    @label.text = @count.to_s\n  end\n\n  def onSaveInstanceState(out_state)\n    super\n    out_state.putInt('count', @count)\n  end\nend\n",
+            "probe": "->(p) { 3.times { p.tap \"+1\" }; three = p.texts.include?(\"3\"); p.rotate; kept = p.texts.include?(\"3\"); p.tap \"+1\"; [p.app, three, kept, p.texts.include?(\"4\"), p.crashed?] }.(phone)"
           }
         ]
       },
@@ -11869,9 +12546,13 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require 'ruboto/widget'\nruboto_import_widgets :LinearLayout, :TextView, :Button\n\nclass CounterActivity\n  def onCreate(bundle)\n    super\n    set_title 'Counter'\n    @count = 0\n    self.content_view = linear_layout orientation: :vertical, gravity: :center do\n      @label = text_view text: @count.to_s, text_size: 64, gravity: :center\n      button text: '+1', on_click_listener: proc { count_up }\n    end\n  end\n\n  def count_up\n    @count += 1\n    @label.text = @count.to_s\n  end\nend\n",
-            "probe": "->(p) { 3.times { p.tap \"+1\" }; three = p.texts.include?(\"3\"); p.rotate; kept = p.texts.include?(\"3\"); p.tap \"+1\"; [p.app, three, kept, p.texts.include?(\"4\"), p.crashed?] }.(phone)",
+            "hints": [
+              "2か所だよ。新しいメソッド<code>onSaveInstanceState</code>で、<code>super</code>のあとに数をバンドルへ入れる。そして<code>onCreate</code>では、<code>bundle</code>があればそこから読むんだ。<code>LifeActivity</code>のやり方を見てみて。"
+            ],
             "check": "probe.to_s == %([\"CounterActivity\", true, true, true, false]) && code.match?(/def\\s+onSaveInstanceState/)",
-            "hint": "直すところは2か所だよ。<code>def onSaveInstanceState(out_state)</code>で<code>super</code>と<code>out_state.putInt('count', @count)</code>、それから<code>onCreate</code>で<code>@count = bundle ? bundle.getInt('count') : 0</code>。<code>LifeActivity</code>がタップ数を残すのと同じやり方だよ。"
+            "hint": "直すところは2か所だよ。<code>def onSaveInstanceState(out_state)</code>で<code>super</code>と<code>out_state.putInt('count', @count)</code>、それから<code>onCreate</code>で<code>@count = bundle ? bundle.getInt('count') : 0</code>。<code>LifeActivity</code>がタップ数を残すのと同じやり方だよ。",
+            "solution": "require 'ruboto/widget'\nruboto_import_widgets :LinearLayout, :TextView, :Button\n\nclass CounterActivity\n  def onCreate(bundle)\n    super\n    set_title 'Counter'\n    @count = bundle ? bundle.getInt('count') : 0\n    self.content_view = linear_layout orientation: :vertical, gravity: :center do\n      @label = text_view text: @count.to_s, text_size: 64, gravity: :center\n      button text: '+1', on_click_listener: proc { count_up }\n    end\n  end\n\n  def count_up\n    @count += 1\n    @label.text = @count.to_s\n  end\n\n  def onSaveInstanceState(out_state)\n    super\n    out_state.putInt('count', @count)\n  end\nend\n",
+            "probe": "->(p) { 3.times { p.tap \"+1\" }; three = p.texts.include?(\"3\"); p.rotate; kept = p.texts.include?(\"3\"); p.tap \"+1\"; [p.app, three, kept, p.texts.include?(\"4\"), p.crashed?] }.(phone)"
           }
         ]
       }
@@ -11961,13 +12642,17 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"gpio\"\n\nblinklicht = GPIO.new(15, GPIO::OUT)\n# fünfmal: 200 ms an, 300 ms aus\n",
+            "hints": [
+              "Eine Schleife mit <code>5.times</code>. In jeder Runde: LED mit <code>write</code> einschalten, mit <code>sleep_ms</code> warten, ausschalten, wieder warten."
+            ],
+            "check": "board.pulses(15).size == 5 && board.pulses(15).all? { |ms| ms.between?(150, 280) } && board.gaps(15).all? { |ms| ms.between?(230, 400) } && board.level(15) == 0",
+            "hint": "<code>5.times do</code> … <code>end</code>, darin <code>blinklicht.write(1)</code>, <code>sleep_ms 200</code>, <code>blinklicht.write(0)</code>, <code>sleep_ms 300</code>.",
+            "solution": "require \"gpio\"\n\nblinklicht = GPIO.new(15, GPIO::OUT)\n5.times do\n  blinklicht.write(1)\n  sleep_ms 200\n  blinklicht.write(0)\n  sleep_ms 300\nend\n",
             "board": {
               "parts": [
                 "led15"
               ]
-            },
-            "check": "board.pulses(15).size == 5 && board.pulses(15).all? { |ms| ms.between?(150, 280) } && board.gaps(15).all? { |ms| ms.between?(230, 400) } && board.level(15) == 0",
-            "hint": "<code>5.times do</code> … <code>end</code>, darin <code>blinklicht.write(1)</code>, <code>sleep_ms 200</code>, <code>blinklicht.write(0)</code>, <code>sleep_ms 300</code>."
+            }
           },
           {
             "t": "h",
@@ -12048,13 +12733,17 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"gpio\"\n\nsignal = GPIO.new(15, GPIO::OUT)\n# five times: 200 ms on, 300 ms off\n",
+            "hints": [
+              "A loop with <code>5.times</code>. Each round: switch the LED on with <code>write</code>, wait with <code>sleep_ms</code>, switch it off, wait again."
+            ],
+            "check": "board.pulses(15).size == 5 && board.pulses(15).all? { |ms| ms.between?(150, 280) } && board.gaps(15).all? { |ms| ms.between?(230, 400) } && board.level(15) == 0",
+            "hint": "<code>5.times do</code> … <code>end</code>, and inside it <code>signal.write(1)</code>, <code>sleep_ms 200</code>, <code>signal.write(0)</code>, <code>sleep_ms 300</code>.",
+            "solution": "require \"gpio\"\n\nsignal = GPIO.new(15, GPIO::OUT)\n5.times do\n  signal.write(1)\n  sleep_ms 200\n  signal.write(0)\n  sleep_ms 300\nend\n",
             "board": {
               "parts": [
                 "led15"
               ]
-            },
-            "check": "board.pulses(15).size == 5 && board.pulses(15).all? { |ms| ms.between?(150, 280) } && board.gaps(15).all? { |ms| ms.between?(230, 400) } && board.level(15) == 0",
-            "hint": "<code>5.times do</code> … <code>end</code>, and inside it <code>signal.write(1)</code>, <code>sleep_ms 200</code>, <code>signal.write(0)</code>, <code>sleep_ms 300</code>."
+            }
           },
           {
             "t": "h",
@@ -12135,13 +12824,17 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"gpio\"\n\nsignal = GPIO.new(15, GPIO::OUT)\n# 5回：200ミリ秒点けて、300ミリ秒消す\n",
+            "hints": [
+              "<code>5.times</code>のループだよ。1周ごとに、<code>write</code>でLEDをつけて、<code>sleep_ms</code>で待って、消して、また待つんだ。"
+            ],
+            "check": "board.pulses(15).size == 5 && board.pulses(15).all? { |ms| ms.between?(150, 280) } && board.gaps(15).all? { |ms| ms.between?(230, 400) } && board.level(15) == 0",
+            "hint": "<code>5.times do</code> … <code>end</code>の中に、<code>signal.write(1)</code>、<code>sleep_ms 200</code>、<code>signal.write(0)</code>、<code>sleep_ms 300</code>を書けばいいよ！",
+            "solution": "require \"gpio\"\n\nsignal = GPIO.new(15, GPIO::OUT)\n5.times do\n  signal.write(1)\n  sleep_ms 200\n  signal.write(0)\n  sleep_ms 300\nend\n",
             "board": {
               "parts": [
                 "led15"
               ]
-            },
-            "check": "board.pulses(15).size == 5 && board.pulses(15).all? { |ms| ms.between?(150, 280) } && board.gaps(15).all? { |ms| ms.between?(230, 400) } && board.level(15) == 0",
-            "hint": "<code>5.times do</code> … <code>end</code>の中に、<code>signal.write(1)</code>、<code>sleep_ms 200</code>、<code>signal.write(0)</code>、<code>sleep_ms 300</code>を書けばいいよ！"
+            }
           },
           {
             "t": "h",
@@ -12243,6 +12936,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"gpio\"\nrequire \"adc\"\n\nnachtlicht = GPIO.new(15, GPIO::OUT)\nfuehler = ADC.new(26)\n20.times do\n  # dunkel (unter 1,0 Volt)? LED an, sonst aus\n  sleep_ms 100\nend\n",
+            "hints": [
+              "In der Schleife brauchst du ein <code>if</code>: <code>fuehler.read_voltage</code> mit 1.0 vergleichen und je nachdem <code>nachtlicht</code> mit <code>write</code> ein- oder ausschalten."
+            ],
+            "check": "board.level_at(15, 500) == 0 && board.level_at(15, 1150) == 1 && board.level_at(15, 1850) == 0 && code.include?(\"read\")",
+            "hint": "In der Schleife: <code>if fuehler.read_voltage &lt; 1.0</code> → <code>nachtlicht.write(1)</code>, <code>else</code> → <code>nachtlicht.write(0)</code>.",
+            "solution": "require \"gpio\"\nrequire \"adc\"\n\nnachtlicht = GPIO.new(15, GPIO::OUT)\nfuehler = ADC.new(26)\n20.times do\n  if fuehler.read_voltage < 1.0\n    nachtlicht.write(1)\n  else\n    nachtlicht.write(0)\n  end\n  sleep_ms 100\nend\n",
             "board": {
               "parts": [
                 "light26",
@@ -12268,9 +12967,7 @@ window.LESSONS_JSON = JSON.stringify({
                   "adc26": 0.9
                 }
               }
-            ],
-            "check": "board.level_at(15, 500) == 0 && board.level_at(15, 1150) == 1 && board.level_at(15, 1850) == 0 && code.include?(\"read\")",
-            "hint": "In der Schleife: <code>if fuehler.read_voltage &lt; 1.0</code> → <code>nachtlicht.write(1)</code>, <code>else</code> → <code>nachtlicht.write(0)</code>."
+            ]
           }
         ]
       },
@@ -12360,6 +13057,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"gpio\"\nrequire \"adc\"\n\nnight_light = GPIO.new(15, GPIO::OUT)\nsensor = ADC.new(26)\n20.times do\n  # dark (below 1.0 volt)? LED on, otherwise off\n  sleep_ms 100\nend\n",
+            "hints": [
+              "Inside the loop you need an <code>if</code>: compare <code>sensor.read_voltage</code> with 1.0 and switch <code>night_light</code> on or off with <code>write</code> accordingly."
+            ],
+            "check": "board.level_at(15, 500) == 0 && board.level_at(15, 1150) == 1 && board.level_at(15, 1850) == 0 && code.include?(\"read\")",
+            "hint": "Inside the loop: <code>if sensor.read_voltage &lt; 1.0</code> → <code>night_light.write(1)</code>, <code>else</code> → <code>night_light.write(0)</code>.",
+            "solution": "require \"gpio\"\nrequire \"adc\"\n\nnight_light = GPIO.new(15, GPIO::OUT)\nsensor = ADC.new(26)\n20.times do\n  if sensor.read_voltage < 1.0\n    night_light.write(1)\n  else\n    night_light.write(0)\n  end\n  sleep_ms 100\nend\n",
             "board": {
               "parts": [
                 "light26",
@@ -12385,9 +13088,7 @@ window.LESSONS_JSON = JSON.stringify({
                   "adc26": 0.9
                 }
               }
-            ],
-            "check": "board.level_at(15, 500) == 0 && board.level_at(15, 1150) == 1 && board.level_at(15, 1850) == 0 && code.include?(\"read\")",
-            "hint": "Inside the loop: <code>if sensor.read_voltage &lt; 1.0</code> → <code>night_light.write(1)</code>, <code>else</code> → <code>night_light.write(0)</code>."
+            ]
           }
         ]
       },
@@ -12477,6 +13178,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"gpio\"\nrequire \"adc\"\n\nnight_light = GPIO.new(15, GPIO::OUT)\nsensor = ADC.new(26)\n20.times do\n  # 暗い（1.0ボルト未満）？　ならLEDを点け、そうでなければ消す\n  sleep_ms 100\nend\n",
+            "hints": [
+              "ループの中に<code>if</code>が必要だよ。<code>sensor.read_voltage</code>を1.0と比べて、その結果で<code>night_light</code>を<code>write</code>でつけたり消したりしてね。"
+            ],
+            "check": "board.level_at(15, 500) == 0 && board.level_at(15, 1150) == 1 && board.level_at(15, 1850) == 0 && code.include?(\"read\")",
+            "hint": "ループの中で<code>if sensor.read_voltage &lt; 1.0</code>なら<code>night_light.write(1)</code>、<code>else</code>なら<code>night_light.write(0)</code>だよ！",
+            "solution": "require \"gpio\"\nrequire \"adc\"\n\nnight_light = GPIO.new(15, GPIO::OUT)\nsensor = ADC.new(26)\n20.times do\n  if sensor.read_voltage < 1.0\n    night_light.write(1)\n  else\n    night_light.write(0)\n  end\n  sleep_ms 100\nend\n",
             "board": {
               "parts": [
                 "light26",
@@ -12502,9 +13209,7 @@ window.LESSONS_JSON = JSON.stringify({
                   "adc26": 0.9
                 }
               }
-            ],
-            "check": "board.level_at(15, 500) == 0 && board.level_at(15, 1150) == 1 && board.level_at(15, 1850) == 0 && code.include?(\"read\")",
-            "hint": "ループの中で<code>if sensor.read_voltage &lt; 1.0</code>なら<code>night_light.write(1)</code>、<code>else</code>なら<code>night_light.write(0)</code>だよ！"
+            ]
           }
         ]
       }
@@ -12615,6 +13320,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"gpio\"\nrequire \"picogo\"\n\nflitzer = PicoGo.new\nir_links = GPIO.new(3, GPIO::IN)\nir_rechts = GPIO.new(2, GPIO::IN)\nflitzer.forward(40)\n# weiterfahren, bis ein IR-Sensor die Wand sieht (0 liest)\nsleep_ms 1000\nflitzer.stop\n",
+            "hints": [
+              "Ersetze das <code>sleep_ms 1000</code>: Statt eine feste Zeit zu warten, wartest du in kleinen Schritten, bis einer der beiden Sensoren <code>low?</code> ist."
+            ],
+            "check": "!board.robot.hit? && board.robot.gap_cm.between?(1, 13) && !board.robot.moving? && board.robot.traveled_cm > 30 && code.match?(/\\.(low\\?|high\\?|read\\b)/)",
+            "hint": "Statt <code>sleep_ms 1000</code> wartest du auf die Wand: <code>sleep_ms 10 until ir_links.low? || ir_rechts.low?</code>.",
+            "solution": "require \"gpio\"\nrequire \"picogo\"\n\nflitzer = PicoGo.new\nir_links = GPIO.new(3, GPIO::IN)\nir_rechts = GPIO.new(2, GPIO::IN)\nflitzer.forward(40)\nsleep_ms 10 until ir_links.low? || ir_rechts.low?\nflitzer.stop\n",
             "tabs": [
               {
                 "name": "picogo.rb",
@@ -12631,9 +13342,7 @@ window.LESSONS_JSON = JSON.stringify({
                 "at": 0,
                 "arena": "wall60"
               }
-            ],
-            "check": "!board.robot.hit? && board.robot.gap_cm.between?(1, 13) && !board.robot.moving? && board.robot.traveled_cm > 30 && code.match?(/\\.(low\\?|high\\?|read\\b)/)",
-            "hint": "Statt <code>sleep_ms 1000</code> wartest du auf die Wand: <code>sleep_ms 10 until ir_links.low? || ir_rechts.low?</code>."
+            ]
           },
           {
             "t": "h",
@@ -12772,6 +13481,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"gpio\"\nrequire \"picogo\"\n\nrover = PicoGo.new\nir_left = GPIO.new(3, GPIO::IN)\nir_right = GPIO.new(2, GPIO::IN)\nrover.forward(40)\n# drive on until an IR sensor sees the wall (reads 0)\nsleep_ms 1000\nrover.stop\n",
+            "hints": [
+              "Replace the <code>sleep_ms 1000</code>: instead of waiting a fixed time, wait in small steps until one of the two sensors is <code>low?</code>."
+            ],
+            "check": "!board.robot.hit? && board.robot.gap_cm.between?(1, 13) && !board.robot.moving? && board.robot.traveled_cm > 30 && code.match?(/\\.(low\\?|high\\?|read\\b)/)",
+            "hint": "Instead of <code>sleep_ms 1000</code>, wait for the wall: <code>sleep_ms 10 until ir_left.low? || ir_right.low?</code>.",
+            "solution": "require \"gpio\"\nrequire \"picogo\"\n\nrover = PicoGo.new\nir_left = GPIO.new(3, GPIO::IN)\nir_right = GPIO.new(2, GPIO::IN)\nrover.forward(40)\nsleep_ms 10 until ir_left.low? || ir_right.low?\nrover.stop\n",
             "tabs": [
               {
                 "name": "picogo.rb",
@@ -12788,9 +13503,7 @@ window.LESSONS_JSON = JSON.stringify({
                 "at": 0,
                 "arena": "wall60"
               }
-            ],
-            "check": "!board.robot.hit? && board.robot.gap_cm.between?(1, 13) && !board.robot.moving? && board.robot.traveled_cm > 30 && code.match?(/\\.(low\\?|high\\?|read\\b)/)",
-            "hint": "Instead of <code>sleep_ms 1000</code>, wait for the wall: <code>sleep_ms 10 until ir_left.low? || ir_right.low?</code>."
+            ]
           },
           {
             "t": "h",
@@ -12929,6 +13642,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"gpio\"\nrequire \"picogo\"\n\nrover = PicoGo.new\nir_left = GPIO.new(3, GPIO::IN)\nir_right = GPIO.new(2, GPIO::IN)\nrover.forward(40)\n# 赤外線センサーが壁を見つける（0を読む）まで走り続ける\nsleep_ms 1000\nrover.stop\n",
+            "hints": [
+              "<code>sleep_ms 1000</code>を置きかえてね。決まった時間を待つかわりに、2つのセンサーのどちらかが<code>low?</code>になるまで、少しずつ待つんだ。"
+            ],
+            "check": "!board.robot.hit? && board.robot.gap_cm.between?(1, 13) && !board.robot.moving? && board.robot.traveled_cm > 30 && code.match?(/\\.(low\\?|high\\?|read\\b)/)",
+            "hint": "<code>sleep_ms 1000</code>のかわりに、壁を待とう：<code>sleep_ms 10 until ir_left.low? || ir_right.low?</code>だよ！",
+            "solution": "require \"gpio\"\nrequire \"picogo\"\n\nrover = PicoGo.new\nir_left = GPIO.new(3, GPIO::IN)\nir_right = GPIO.new(2, GPIO::IN)\nrover.forward(40)\nsleep_ms 10 until ir_left.low? || ir_right.low?\nrover.stop\n",
             "tabs": [
               {
                 "name": "picogo.rb",
@@ -12945,9 +13664,7 @@ window.LESSONS_JSON = JSON.stringify({
                 "at": 0,
                 "arena": "wall60"
               }
-            ],
-            "check": "!board.robot.hit? && board.robot.gap_cm.between?(1, 13) && !board.robot.moving? && board.robot.traveled_cm > 30 && code.match?(/\\.(low\\?|high\\?|read\\b)/)",
-            "hint": "<code>sleep_ms 1000</code>のかわりに、壁を待とう：<code>sleep_ms 10 until ir_left.low? || ir_right.low?</code>だよ！"
+            ]
           },
           {
             "t": "h",
@@ -13102,6 +13819,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nschild = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                      rst_pin: 12, busy_pin: 13)\nschild.clear\n# ein Rahmen um das ganze Display, dein Name darin, dann refresh\n",
+            "hints": [
+              "Drei Aufrufe auf <code>schild</code>: ein <code>rect</code> so gross wie das ganze Display (schau oben, wie breit und hoch es ist), ein <code>text</code> mit deinem Namen, dann <code>refresh</code>."
+            ],
+            "check": "board.epd.refreshes >= 1 && [[0, 0], [249, 0], [0, 121], [249, 121], [125, 0], [0, 60]].all? { |xy| board.epd.frame.black?(*xy) } && board.epd.frame.black_count > 745 && code.include?(\".text(\")",
+            "hint": "<code>schild.rect(0, 0, 250, 122)</code> läuft dem Rand entlang, dann <code>schild.text(20, 45, \"Chunky\", scale: 3)</code> und <code>schild.refresh</code>.",
+            "solution": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nschild = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                      rst_pin: 12, busy_pin: 13)\nschild.clear\nschild.rect(0, 0, 250, 122)\nschild.text(20, 45, \"Chunky Bacon\", scale: 3)\nschild.refresh\n",
             "tabs": [
               {
                 "name": "epd2in13.rb",
@@ -13116,9 +13839,7 @@ window.LESSONS_JSON = JSON.stringify({
               "parts": [
                 "epd213"
               ]
-            },
-            "check": "board.epd.refreshes >= 1 && [[0, 0], [249, 0], [0, 121], [249, 121], [125, 0], [0, 60]].all? { |xy| board.epd.frame.black?(*xy) } && board.epd.frame.black_count > 745 && code.include?(\".text(\")",
-            "hint": "<code>schild.rect(0, 0, 250, 122)</code> läuft dem Rand entlang, dann <code>schild.text(20, 45, \"Chunky\", scale: 3)</code> und <code>schild.refresh</code>."
+            }
           }
         ]
       },
@@ -13229,6 +13950,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nbadge = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                     rst_pin: 12, busy_pin: 13)\nbadge.clear\n# a frame around the whole display, your name inside, then refresh\n",
+            "hints": [
+              "Three calls on <code>badge</code>: a <code>rect</code> as large as the whole display (see above how wide and high it is), a <code>text</code> with your name, then <code>refresh</code>."
+            ],
+            "check": "board.epd.refreshes >= 1 && [[0, 0], [249, 0], [0, 121], [249, 121], [125, 0], [0, 60]].all? { |xy| board.epd.frame.black?(*xy) } && board.epd.frame.black_count > 745 && code.include?(\".text(\")",
+            "hint": "<code>badge.rect(0, 0, 250, 122)</code> runs along the edge, then <code>badge.text(20, 45, \"Chunky\", scale: 3)</code> and <code>badge.refresh</code>.",
+            "solution": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nbadge = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                     rst_pin: 12, busy_pin: 13)\nbadge.clear\nbadge.rect(0, 0, 250, 122)\nbadge.text(20, 45, \"Chunky Bacon\", scale: 3)\nbadge.refresh\n",
             "tabs": [
               {
                 "name": "epd2in13.rb",
@@ -13243,9 +13970,7 @@ window.LESSONS_JSON = JSON.stringify({
               "parts": [
                 "epd213"
               ]
-            },
-            "check": "board.epd.refreshes >= 1 && [[0, 0], [249, 0], [0, 121], [249, 121], [125, 0], [0, 60]].all? { |xy| board.epd.frame.black?(*xy) } && board.epd.frame.black_count > 745 && code.include?(\".text(\")",
-            "hint": "<code>badge.rect(0, 0, 250, 122)</code> runs along the edge, then <code>badge.text(20, 45, \"Chunky\", scale: 3)</code> and <code>badge.refresh</code>."
+            }
           }
         ]
       },
@@ -13356,6 +14081,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nbadge = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                     rst_pin: 12, busy_pin: 13)\nbadge.clear\n# ディスプレイ全体を囲む枠と、その中に名前。最後にrefresh\n",
+            "hints": [
+              "<code>badge</code>に3つ命令するよ。ディスプレイ全体と同じ大きさの<code>rect</code>（幅と高さは上を見てね）、名前の<code>text</code>、そして<code>refresh</code>だよ。"
+            ],
+            "check": "board.epd.refreshes >= 1 && [[0, 0], [249, 0], [0, 121], [249, 121], [125, 0], [0, 60]].all? { |xy| board.epd.frame.black?(*xy) } && board.epd.frame.black_count > 745 && code.include?(\".text(\")",
+            "hint": "<code>badge.rect(0, 0, 250, 122)</code>でふちに沿った枠になるよ。それから<code>badge.text(20, 45, \"Chunky\", scale: 3)</code>と<code>badge.refresh</code>だね。",
+            "solution": "require \"spi\"\nrequire \"epd2in13\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\nbadge = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                     rst_pin: 12, busy_pin: 13)\nbadge.clear\nbadge.rect(0, 0, 250, 122)\nbadge.text(20, 45, \"Chunky Bacon\", scale: 3)\nbadge.refresh\n",
             "tabs": [
               {
                 "name": "epd2in13.rb",
@@ -13370,9 +14101,7 @@ window.LESSONS_JSON = JSON.stringify({
               "parts": [
                 "epd213"
               ]
-            },
-            "check": "board.epd.refreshes >= 1 && [[0, 0], [249, 0], [0, 121], [249, 121], [125, 0], [0, 60]].all? { |xy| board.epd.frame.black?(*xy) } && board.epd.frame.black_count > 745 && code.include?(\".text(\")",
-            "hint": "<code>badge.rect(0, 0, 250, 122)</code>でふちに沿った枠になるよ。それから<code>badge.text(20, 45, \"Chunky\", scale: 3)</code>と<code>badge.refresh</code>だね。"
+            }
           }
         ]
       }
@@ -13509,8 +14238,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"spi\"\nrequire \"gpio\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLACK)\ntaste_a = GPIO.new(15, GPIO::IN)\nzaehler = 0\n100.times do\n  # wenn A gerade gedrückt wurde: zählen, die Zahl zeigen\n  sleep_ms 20\nend\n",
+            "hints": [
+              "Erst die Taste richtig anlegen: Sie braucht <code>GPIO::PULL_UP</code>. Dann zählst du in der Schleife nur den Übergang von «nicht gedrückt» zu «gedrückt» – dafür merkst du dir den letzten Zustand in einer Variablen."
+            ],
             "check": "board.lcd.visible? && board.lcd.text?(\"3\", 3..5) && (\"0\"..\"9\").none? { |d| d != \"3\" && board.lcd.text?(d) } && board.mode(15) == \"in_pull_up\"",
             "hint": "Zwei Dinge! <code>GPIO.new(15, GPIO::IN | GPIO::PULL_UP)</code>, sonst liegt der Pin auf 0 und sieht die ganze Zeit gedrückt aus. Und zähl nur den Moment, in dem er runtergeht: Merk dir <code>taste_a.low?</code> vom letzten Durchgang in einer Variablen und zähl, wenn er jetzt tief ist und vorher nicht. <code>lcd.text(zaehler.to_s, 100, 50, ST7789::YELLOW, scale: 4)</code> malt über die alte Ziffer.",
+            "solution": "require \"spi\"\nrequire \"gpio\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLACK)\ntaste_a = GPIO.new(15, GPIO::IN | GPIO::PULL_UP)\nzaehler = 0\nvorher = false\nlcd.text(\"0\", 100, 50, ST7789::YELLOW, scale: 4)\n100.times do\n  jetzt = taste_a.low?\n  if jetzt && !vorher\n    zaehler += 1\n    lcd.text(zaehler.to_s, 100, 50, ST7789::YELLOW, scale: 4)\n  end\n  vorher = jetzt\n  sleep_ms 20\nend\n",
             "tabs": [
               {
                 "name": "st7789.rb",
@@ -13680,8 +14413,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"spi\"\nrequire \"gpio\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLACK)\nkey_a = GPIO.new(15, GPIO::IN)\ncount = 0\n100.times do\n  # when A has just been pressed: count it, show the count\n  sleep_ms 20\nend\n",
+            "hints": [
+              "First set the key up right: it needs <code>GPIO::PULL_UP</code>. Then, in the loop, count only the change from \"not pressed\" to \"pressed\" – keep the previous state in a variable for that."
+            ],
             "check": "board.lcd.visible? && board.lcd.text?(\"3\", 3..5) && (\"0\"..\"9\").none? { |d| d != \"3\" && board.lcd.text?(d) } && board.mode(15) == \"in_pull_up\"",
             "hint": "Two things! <code>GPIO.new(15, GPIO::IN | GPIO::PULL_UP)</code>, or the pin sits at 0 and looks pressed the whole time. And count only the moment it goes down: keep the last pass's <code>key_a.low?</code> in a variable, and count when it is low now but was not before. <code>lcd.text(count.to_s, 100, 50, ST7789::YELLOW, scale: 4)</code> paints over the old digit.",
+            "solution": "require \"spi\"\nrequire \"gpio\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLACK)\nkey_a = GPIO.new(15, GPIO::IN | GPIO::PULL_UP)\ncount = 0\nwas = false\nlcd.text(\"0\", 100, 50, ST7789::YELLOW, scale: 4)\n100.times do\n  now = key_a.low?\n  if now && !was\n    count += 1\n    lcd.text(count.to_s, 100, 50, ST7789::YELLOW, scale: 4)\n  end\n  was = now\n  sleep_ms 20\nend\n",
             "tabs": [
               {
                 "name": "st7789.rb",
@@ -13851,8 +14588,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"spi\"\nrequire \"gpio\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLACK)\nkey_a = GPIO.new(15, GPIO::IN)\ncount = 0\n100.times do\n  # A が押された瞬間に: 数えて、数を表示する\n  sleep_ms 20\nend\n",
+            "hints": [
+              "まずキーを正しく用意してね。<code>GPIO::PULL_UP</code>が必要だよ。それからループの中では「押されていない」から「押された」への変化だけを数えるんだ。そのために前の状態を変数に覚えておいてね。"
+            ],
             "check": "board.lcd.visible? && board.lcd.text?(\"3\", 3..5) && (\"0\"..\"9\").none? { |d| d != \"3\" && board.lcd.text?(d) } && board.mode(15) == \"in_pull_up\"",
             "hint": "ポイントは2つだよ！<code>GPIO.new(15, GPIO::IN | GPIO::PULL_UP)</code>にしないと、ピンは0のままで、ずっと押されているように見えちゃう。それから、押された瞬間だけ数えよう。前の周の<code>key_a.low?</code>を変数に覚えておいて、今はLOWで前はそうじゃなかったときに数えるんだ。<code>lcd.text(count.to_s, 100, 50, ST7789::YELLOW, scale: 4)</code>なら古い数字の上に描けるよ。",
+            "solution": "require \"spi\"\nrequire \"gpio\"\nrequire \"st7789\"\n\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 10_000_000,\n              sck_pin: 10, copi_pin: 11)\nlcd = ST7789.new(spi: spi)\nlcd.fill(ST7789::BLACK)\nkey_a = GPIO.new(15, GPIO::IN | GPIO::PULL_UP)\ncount = 0\nwas = false\nlcd.text(\"0\", 100, 50, ST7789::YELLOW, scale: 4)\n100.times do\n  now = key_a.low?\n  if now && !was\n    count += 1\n    lcd.text(count.to_s, 100, 50, ST7789::YELLOW, scale: 4)\n  end\n  was = now\n  sleep_ms 20\nend\n",
             "tabs": [
               {
                 "name": "st7789.rb",
@@ -14020,6 +14761,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\nrequire \"spi\"\nrequire \"epd2in13\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\npapier = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                      rst_pin: 12, busy_pin: 13)\npapier.clear\n# https://rubygems.org/api/v1/gems/rake.json holen und\n# \"rake <Version>\" aufs Papier schreiben, dann refresh\n",
+            "hints": [
+              "Hol die Antwort mit <code>Net::HTTP.get</code> (Host und Pfad getrennt, wie in der Demo), parse sie mit <code>JSON.parse</code> und nimm den Eintrag <code>\"version\"</code>. Dann aufs <code>papier</code> schreiben und auffrischen."
+            ],
+            "check": "->(v) { board.wifi_connected? && board.epd.refreshes >= 1 && !v.nil? && board.epd.frame.text?(v.to_s) }.(board.http_json(\"rubygems.org\")&.fetch(\"version\", nil))",
+            "hint": "<code>antwort = Net::HTTP.get(\"https://rubygems.org\", \"/api/v1/gems/rake.json\")</code>, dann <code>JSON.parse(antwort)[\"version\"]</code> in <code>papier.text(...)</code>, und am Ende <code>papier.refresh</code>.",
+            "solution": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\nrequire \"spi\"\nrequire \"epd2in13\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\npapier = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                      rst_pin: 12, busy_pin: 13)\npapier.clear\nantwort = Net::HTTP.get(\"https://rubygems.org\", \"/api/v1/gems/rake.json\")\nversion = JSON.parse(antwort)[\"version\"]\npapier.text(10, 50, \"rake #{version}\", scale: 2)\npapier.refresh\n",
             "tabs": [
               {
                 "name": "epd2in13.rb",
@@ -14035,9 +14782,7 @@ window.LESSONS_JSON = JSON.stringify({
                 "wifi",
                 "epd213"
               ]
-            },
-            "check": "->(v) { board.wifi_connected? && board.epd.refreshes >= 1 && !v.nil? && board.epd.frame.text?(v.to_s) }.(board.http_json(\"rubygems.org\")&.fetch(\"version\", nil))",
-            "hint": "<code>antwort = Net::HTTP.get(\"https://rubygems.org\", \"/api/v1/gems/rake.json\")</code>, dann <code>JSON.parse(antwort)[\"version\"]</code> in <code>papier.text(...)</code>, und am Ende <code>papier.refresh</code>."
+            }
           },
           {
             "t": "h",
@@ -14160,6 +14905,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\nrequire \"spi\"\nrequire \"epd2in13\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\npaper = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                     rst_pin: 12, busy_pin: 13)\npaper.clear\n# fetch https://rubygems.org/api/v1/gems/rake.json and show\n# \"rake <version>\" on the paper, then refresh\n",
+            "hints": [
+              "Fetch the answer with <code>Net::HTTP.get</code> (host and path apart, as in the demo), parse it with <code>JSON.parse</code> and take the <code>\"version\"</code> entry. Then write it on the <code>paper</code> and refresh."
+            ],
+            "check": "->(v) { board.wifi_connected? && board.epd.refreshes >= 1 && !v.nil? && board.epd.frame.text?(v.to_s) }.(board.http_json(\"rubygems.org\")&.fetch(\"version\", nil))",
+            "hint": "<code>body = Net::HTTP.get(\"https://rubygems.org\", \"/api/v1/gems/rake.json\")</code>, then <code>JSON.parse(body)[\"version\"]</code> into <code>paper.text(...)</code>, and <code>paper.refresh</code> at the end.",
+            "solution": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\nrequire \"spi\"\nrequire \"epd2in13\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\npaper = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                     rst_pin: 12, busy_pin: 13)\npaper.clear\nbody = Net::HTTP.get(\"https://rubygems.org\", \"/api/v1/gems/rake.json\")\nversion = JSON.parse(body)[\"version\"]\npaper.text(10, 50, \"rake #{version}\", scale: 2)\npaper.refresh\n",
             "tabs": [
               {
                 "name": "epd2in13.rb",
@@ -14175,9 +14926,7 @@ window.LESSONS_JSON = JSON.stringify({
                 "wifi",
                 "epd213"
               ]
-            },
-            "check": "->(v) { board.wifi_connected? && board.epd.refreshes >= 1 && !v.nil? && board.epd.frame.text?(v.to_s) }.(board.http_json(\"rubygems.org\")&.fetch(\"version\", nil))",
-            "hint": "<code>body = Net::HTTP.get(\"https://rubygems.org\", \"/api/v1/gems/rake.json\")</code>, then <code>JSON.parse(body)[\"version\"]</code> into <code>paper.text(...)</code>, and <code>paper.refresh</code> at the end."
+            }
           },
           {
             "t": "h",
@@ -14300,6 +15049,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\nrequire \"spi\"\nrequire \"epd2in13\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\npaper = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                     rst_pin: 12, busy_pin: 13)\npaper.clear\n# https://rubygems.org/api/v1/gems/rake.json を取ってきて\n# \"rake <バージョン>\" をペーパーに表示し、最後にrefresh\n",
+            "hints": [
+              "<code>Net::HTTP.get</code>で答えを取ってきて（デモみたいにホストとパスを分けてね）、<code>JSON.parse</code>でパースして、<code>\"version\"</code>の項目を取り出すんだ。それを<code>paper</code>に書いて、リフレッシュしてね。"
+            ],
+            "check": "->(v) { board.wifi_connected? && board.epd.refreshes >= 1 && !v.nil? && board.epd.frame.text?(v.to_s) }.(board.http_json(\"rubygems.org\")&.fetch(\"version\", nil))",
+            "hint": "<code>body = Net::HTTP.get(\"https://rubygems.org\", \"/api/v1/gems/rake.json\")</code>して、<code>JSON.parse(body)[\"version\"]</code>を<code>paper.text(...)</code>に渡そう。最後に<code>paper.refresh</code>を忘れずにね。",
+            "solution": "require \"cyw43\"\nrequire \"net/http\"\nrequire \"json\"\nrequire \"spi\"\nrequire \"epd2in13\"\n\nCYW43.init(\"CH\")\nCYW43.enable_sta_mode\nCYW43.connect_timeout(\"chunkynet\", \"chunkybacon\",\n                      CYW43::Auth::WPA2_AES_PSK, 10)\nspi = SPI.new(unit: :RP2040_SPI1, frequency: 4_000_000,\n              sck_pin: 10, copi_pin: 11)\npaper = EPD2in13.new(spi: spi, cs_pin: 9, dc_pin: 8,\n                     rst_pin: 12, busy_pin: 13)\npaper.clear\nbody = Net::HTTP.get(\"https://rubygems.org\", \"/api/v1/gems/rake.json\")\nversion = JSON.parse(body)[\"version\"]\npaper.text(10, 50, \"rake #{version}\", scale: 2)\npaper.refresh\n",
             "tabs": [
               {
                 "name": "epd2in13.rb",
@@ -14315,9 +15070,7 @@ window.LESSONS_JSON = JSON.stringify({
                 "wifi",
                 "epd213"
               ]
-            },
-            "check": "->(v) { board.wifi_connected? && board.epd.refreshes >= 1 && !v.nil? && board.epd.frame.text?(v.to_s) }.(board.http_json(\"rubygems.org\")&.fetch(\"version\", nil))",
-            "hint": "<code>body = Net::HTTP.get(\"https://rubygems.org\", \"/api/v1/gems/rake.json\")</code>して、<code>JSON.parse(body)[\"version\"]</code>を<code>paper.text(...)</code>に渡そう。最後に<code>paper.refresh</code>を忘れずにね。"
+            }
           },
           {
             "t": "h",
@@ -14402,6 +15155,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"ble\"\nrequire \"adc\"\n\nverbindung = BLE::UART.new(name: \"ChunkyPico\")\nchip = ADC.new(:temperature)\nverbindung.start(1500) do\n  nachricht = verbindung.gets_nonblock\n  # \"PING\" -> \"PONG\" antworten, \"TEMP\" -> die Temperatur in °C\nend\n",
+            "hints": [
+              "<code>nachricht</code> ist meistens <code>nil</code>, weil nichts angekommen ist – prüf das zuerst. Dann vergleichst du den Text (ohne Zeilenende) und antwortest mit <code>verbindung.puts</code>; die Temperaturformel steht in PicoPaper."
+            ],
+            "check": "board.ble.lines.include?(\"PONG\") && board.ble.lines.any? { |l| l[/-?\\d+(?:\\.\\d+)?/].to_f.between?(21.5, 24.5) }",
+            "hint": "<code>nachricht</code> ist <code>nil</code>, solange nichts angekommen ist – also zuerst <code>if nachricht</code>. Dann <code>nachricht.chomp == \"PING\"</code> und <code>verbindung.puts \"PONG\"</code>. Die Temperatur ist <code>27 - (chip.read - 0.706) / 0.001721</code>.",
+            "solution": "require \"ble\"\nrequire \"adc\"\n\nverbindung = BLE::UART.new(name: \"ChunkyPico\")\nchip = ADC.new(:temperature)\nverbindung.start(1500) do\n  nachricht = verbindung.gets_nonblock\n  if nachricht\n    case nachricht.chomp\n    when \"PING\" then verbindung.puts \"PONG\"\n    when \"TEMP\"\n      grad = 27 - (chip.read - 0.706) / 0.001721\n      verbindung.puts \"#{(grad * 10).to_i / 10.0} °C\"\n    end\n  end\nend\n",
             "board": {
               "parts": [
                 "laptop",
@@ -14427,9 +15186,7 @@ window.LESSONS_JSON = JSON.stringify({
                 "at": 800,
                 "ble": "TEMP"
               }
-            ],
-            "check": "board.ble.lines.include?(\"PONG\") && board.ble.lines.any? { |l| l[/-?\\d+(?:\\.\\d+)?/].to_f.between?(21.5, 24.5) }",
-            "hint": "<code>nachricht</code> ist <code>nil</code>, solange nichts angekommen ist – also zuerst <code>if nachricht</code>. Dann <code>nachricht.chomp == \"PING\"</code> und <code>verbindung.puts \"PONG\"</code>. Die Temperatur ist <code>27 - (chip.read - 0.706) / 0.001721</code>."
+            ]
           }
         ]
       },
@@ -14502,6 +15259,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"ble\"\nrequire \"adc\"\n\nlink = BLE::UART.new(name: \"ChunkyPico\")\nchip = ADC.new(:temperature)\nlink.start(1500) do\n  message = link.gets_nonblock\n  # \"PING\" -> answer \"PONG\", \"TEMP\" -> the temperature in °C\nend\n",
+            "hints": [
+              "<code>message</code> is <code>nil</code> most of the time because nothing has arrived – check that first. Then compare the text (without its line end) and answer with <code>link.puts</code>; the temperature formula is in PicoPaper."
+            ],
+            "check": "board.ble.lines.include?(\"PONG\") && board.ble.lines.any? { |l| l[/-?\\d+(?:\\.\\d+)?/].to_f.between?(21.5, 24.5) }",
+            "hint": "<code>message</code> is <code>nil</code> while nothing has arrived, so first <code>if message</code>. Then <code>message.chomp == \"PING\"</code> and <code>link.puts \"PONG\"</code>. The temperature is <code>27 - (chip.read - 0.706) / 0.001721</code>.",
+            "solution": "require \"ble\"\nrequire \"adc\"\n\nlink = BLE::UART.new(name: \"ChunkyPico\")\nchip = ADC.new(:temperature)\nlink.start(1500) do\n  message = link.gets_nonblock\n  if message\n    case message.chomp\n    when \"PING\" then link.puts \"PONG\"\n    when \"TEMP\"\n      celsius = 27 - (chip.read - 0.706) / 0.001721\n      link.puts \"#{(celsius * 10).to_i / 10.0} °C\"\n    end\n  end\nend\n",
             "board": {
               "parts": [
                 "laptop",
@@ -14527,9 +15290,7 @@ window.LESSONS_JSON = JSON.stringify({
                 "at": 800,
                 "ble": "TEMP"
               }
-            ],
-            "check": "board.ble.lines.include?(\"PONG\") && board.ble.lines.any? { |l| l[/-?\\d+(?:\\.\\d+)?/].to_f.between?(21.5, 24.5) }",
-            "hint": "<code>message</code> is <code>nil</code> while nothing has arrived, so first <code>if message</code>. Then <code>message.chomp == \"PING\"</code> and <code>link.puts \"PONG\"</code>. The temperature is <code>27 - (chip.read - 0.706) / 0.001721</code>."
+            ]
           }
         ]
       },
@@ -14602,6 +15363,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"ble\"\nrequire \"adc\"\n\nlink = BLE::UART.new(name: \"ChunkyPico\")\nchip = ADC.new(:temperature)\nlink.start(1500) do\n  message = link.gets_nonblock\n  # \"PING\"には\"PONG\"、\"TEMP\"には温度（°C）を返す\nend\n",
+            "hints": [
+              "<code>message</code>はたいてい<code>nil</code>だよ。まだ何も届いていないからね。まずそれを確かめて。それから文字（行末を除いて）を比べて、<code>link.puts</code>で返事をするんだ。温度の式はPicoPaperにあるよ。"
+            ],
+            "check": "board.ble.lines.include?(\"PONG\") && board.ble.lines.any? { |l| l[/-?\\d+(?:\\.\\d+)?/].to_f.between?(21.5, 24.5) }",
+            "hint": "何も届いていない間、<code>message</code>は<code>nil</code>だよ。だからまず<code>if message</code>。それから<code>message.chomp == \"PING\"</code>なら<code>link.puts \"PONG\"</code>。温度は<code>27 - (chip.read - 0.706) / 0.001721</code>だね。",
+            "solution": "require \"ble\"\nrequire \"adc\"\n\nlink = BLE::UART.new(name: \"ChunkyPico\")\nchip = ADC.new(:temperature)\nlink.start(1500) do\n  message = link.gets_nonblock\n  if message\n    case message.chomp\n    when \"PING\" then link.puts \"PONG\"\n    when \"TEMP\"\n      celsius = 27 - (chip.read - 0.706) / 0.001721\n      link.puts \"#{(celsius * 10).to_i / 10.0} °C\"\n    end\n  end\nend\n",
             "board": {
               "parts": [
                 "laptop",
@@ -14627,9 +15394,7 @@ window.LESSONS_JSON = JSON.stringify({
                 "at": 800,
                 "ble": "TEMP"
               }
-            ],
-            "check": "board.ble.lines.include?(\"PONG\") && board.ble.lines.any? { |l| l[/-?\\d+(?:\\.\\d+)?/].to_f.between?(21.5, 24.5) }",
-            "hint": "何も届いていない間、<code>message</code>は<code>nil</code>だよ。だからまず<code>if message</code>。それから<code>message.chomp == \"PING\"</code>なら<code>link.puts \"PONG\"</code>。温度は<code>27 - (chip.read - 0.706) / 0.001721</code>だね。"
+            ]
           }
         ]
       }
@@ -14671,8 +15436,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def lauf_status(zeilen)\n  # DONE -> :done, \"ERROR x\" -> \"error: x\", RUNNING -> :running\n  :waiting\nend\n\nbereit = \"READY prremote-runtime/0.4.2 board=picow\"\n[lauf_status([bereit, \"RUNNING\", \"hello\", \"DONE\"]),\n lauf_status([bereit, \"RUNNING\", \"ERROR NoMethodError\"]),\n lauf_status([bereit, \"RUNNING\", \"tick\"]),\n lauf_status([bereit])]\n",
+            "hints": [
+              "Merk dir den Stand in einer Variablen, die mit <code>:waiting</code> beginnt. Geh die Zeilen mit <code>each</code> durch und setz den Stand um, wenn eine Zeile <code>DONE</code>, <code>RUNNING</code> oder <code>ERROR …</code> ist."
+            ],
             "check": "result == [:done, \"error: NoMethodError\", :running, :waiting] && code.include?(\"def lauf_status\")",
-            "hint": "Geh mit <code>each</code> durch die Zeilen und merk dir den Stand: <code>zeile == \"DONE\"</code>, <code>zeile.start_with?(\"ERROR \")</code> (der Grund ist <code>zeile[6..-1]</code>), <code>zeile == \"RUNNING\"</code>. Am Ende gibst du den Stand zurück."
+            "hint": "Geh mit <code>each</code> durch die Zeilen und merk dir den Stand: <code>zeile == \"DONE\"</code>, <code>zeile.start_with?(\"ERROR \")</code> (der Grund ist <code>zeile[6..-1]</code>), <code>zeile == \"RUNNING\"</code>. Am Ende gibst du den Stand zurück.",
+            "solution": "def lauf_status(zeilen)\n  stand = :waiting\n  zeilen.each do |zeile|\n    if zeile == \"DONE\"\n      stand = :done\n    elsif zeile.start_with?(\"ERROR \")\n      stand = \"error: #{zeile[6..-1]}\"\n    elsif zeile == \"RUNNING\"\n      stand = :running\n    end\n  end\n  stand\nend\n\nbereit = \"READY prremote-runtime/0.4.2 board=picow\"\n[lauf_status([bereit, \"RUNNING\", \"hello\", \"DONE\"]),\n lauf_status([bereit, \"RUNNING\", \"ERROR NoMethodError\"]),\n lauf_status([bereit, \"RUNNING\", \"tick\"]),\n lauf_status([bereit])]\n"
           },
           {
             "t": "h",
@@ -14710,8 +15479,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def run_status(lines)\n  # DONE -> :done, \"ERROR x\" -> \"error: x\", RUNNING -> :running\n  :waiting\nend\n\nready = \"READY prremote-runtime/0.4.2 board=picow\"\n[run_status([ready, \"RUNNING\", \"hello\", \"DONE\"]),\n run_status([ready, \"RUNNING\", \"ERROR NoMethodError\"]),\n run_status([ready, \"RUNNING\", \"tick\"]),\n run_status([ready])]\n",
+            "hints": [
+              "Keep the state in a variable that starts as <code>:waiting</code>. Walk the lines with <code>each</code> and change the state when a line is <code>DONE</code>, <code>RUNNING</code> or <code>ERROR …</code>."
+            ],
             "check": "result == [:done, \"error: NoMethodError\", :running, :waiting] && code.include?(\"def run_status\")",
-            "hint": "Go through the lines with <code>each</code> and remember the state: <code>line == \"DONE\"</code>, <code>line.start_with?(\"ERROR \")</code> (the reason is <code>line[6..-1]</code>), <code>line == \"RUNNING\"</code>. Return the state at the end."
+            "hint": "Go through the lines with <code>each</code> and remember the state: <code>line == \"DONE\"</code>, <code>line.start_with?(\"ERROR \")</code> (the reason is <code>line[6..-1]</code>), <code>line == \"RUNNING\"</code>. Return the state at the end.",
+            "solution": "def run_status(lines)\n  status = :waiting\n  lines.each do |line|\n    if line == \"DONE\"\n      status = :done\n    elsif line.start_with?(\"ERROR \")\n      status = \"error: #{line[6..-1]}\"\n    elsif line == \"RUNNING\"\n      status = :running\n    end\n  end\n  status\nend\n\nready = \"READY prremote-runtime/0.4.2 board=picow\"\n[run_status([ready, \"RUNNING\", \"hello\", \"DONE\"]),\n run_status([ready, \"RUNNING\", \"ERROR NoMethodError\"]),\n run_status([ready, \"RUNNING\", \"tick\"]),\n run_status([ready])]\n"
           },
           {
             "t": "h",
@@ -14749,8 +15522,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def run_status(lines)\n  # DONEなら:done、\"ERROR x\"なら\"error: x\"、RUNNINGなら:running\n  :waiting\nend\n\nready = \"READY prremote-runtime/0.4.2 board=picow\"\n[run_status([ready, \"RUNNING\", \"hello\", \"DONE\"]),\n run_status([ready, \"RUNNING\", \"ERROR NoMethodError\"]),\n run_status([ready, \"RUNNING\", \"tick\"]),\n run_status([ready])]\n",
+            "hints": [
+              "状態を変数に持っておいて、最初は<code>:waiting</code>にしてね。<code>each</code>で行をたどって、<code>DONE</code>、<code>RUNNING</code>、<code>ERROR …</code>の行が来たら状態を変えるんだ。"
+            ],
             "check": "result == [:done, \"error: NoMethodError\", :running, :waiting] && code.include?(\"def run_status\")",
-            "hint": "<code>each</code>で行をたどって、状態を覚えておこう：<code>line == \"DONE\"</code>、<code>line.start_with?(\"ERROR \")</code>（理由は<code>line[6..-1]</code>）、<code>line == \"RUNNING\"</code>。最後にその状態を返せばいいよ。"
+            "hint": "<code>each</code>で行をたどって、状態を覚えておこう：<code>line == \"DONE\"</code>、<code>line.start_with?(\"ERROR \")</code>（理由は<code>line[6..-1]</code>）、<code>line == \"RUNNING\"</code>。最後にその状態を返せばいいよ。",
+            "solution": "def run_status(lines)\n  status = :waiting\n  lines.each do |line|\n    if line == \"DONE\"\n      status = :done\n    elsif line.start_with?(\"ERROR \")\n      status = \"error: #{line[6..-1]}\"\n    elsif line == \"RUNNING\"\n      status = :running\n    end\n  end\n  status\nend\n\nready = \"READY prremote-runtime/0.4.2 board=picow\"\n[run_status([ready, \"RUNNING\", \"hello\", \"DONE\"]),\n run_status([ready, \"RUNNING\", \"ERROR NoMethodError\"]),\n run_status([ready, \"RUNNING\", \"tick\"]),\n run_status([ready])]\n"
           },
           {
             "t": "h",
@@ -14811,8 +15588,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Glace Fuchs: QR-Rechnung ohne Referenz über CHF 12.30,\n# als PNG zeigen und mit SwissQr.read wieder einlesen\n",
+            "hints": [
+              "Kopier dir die erste Zelle als Vorlage und ändere drei Dinge: den Rechnungstyp ohne Referenz, den Referenztyp <code>\"NON\"</code> und das Bildformat <code>\"png\"</code>. Das Bild zeigst du dann und liest es wieder ein."
+            ],
             "check": "code.include?(\"SwissQr.read\") && images.any? && ->(bill, text) { bill.respond_to?(:iban) ? bill.iban == \"CH5800791123000889012\" && bill.formatted_amount == \"12.30\" && bill.reference_type == :non : text.delete(\" \").include?(\"CH5800791123000889012\") && text.match?(/12\\.30?(?!\\d)|0\\.123e2/) }.(result, output)",
-            "hint": "Kopier die erste Zelle und ändere sie: <code>get_qrbill_without_reference_type</code>, <code>reference_type = \"NON\"</code>, <code>qrcode_format = \"png\"</code>. <code>QRBills.generate(…)[:output]</code> ist dann ein ChunkyPNG-Bild, das du direkt an <code>show_image</code> und <code>SwissQr.read</code> geben kannst. Meldet SwissQr, der Name der Zahlerin fehle: Füll auch <code>[:debtor][:address]</code> aus."
+            "hint": "Kopier die erste Zelle und ändere sie: <code>get_qrbill_without_reference_type</code>, <code>reference_type = \"NON\"</code>, <code>qrcode_format = \"png\"</code>. <code>QRBills.generate(…)[:output]</code> ist dann ein ChunkyPNG-Bild, das du direkt an <code>show_image</code> und <code>SwissQr.read</code> geben kannst. Meldet SwissQr, der Name der Zahlerin fehle: Füll auch <code>[:debtor][:address]</code> aus.",
+            "solution": "install_gem \"qr-bills\"\ninstall_gem \"swiss_qr\"\ninstall_gem \"qr_reader\"\nrequire \"qr-bills\"\nrequire \"swiss_qr\"\n\nfuchs = QRBills.get_qr_params\nfuchs[:bill_type] = QRBills.get_qrbill_without_reference_type\nfuchs[:output_params][:format] = \"qrcode\"\nfuchs[:qrcode_format] = \"png\"\nglace = fuchs[:bill_params]\nglace[:amount] = 12.30\nglace[:reference_type] = \"NON\"\nglace[:creditor][:iban] = \"CH58 0079 1123 0008 8901 2\"\nglace[:creditor][:address].merge!(name: \"Glace Fuchs\", street_name: \"Seeweg\", building_number: \"3\",\n                                  postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\")\nglace[:debtor][:address].merge!(name: \"Kaz Muster\", street_name: \"Bahnhofstrasse\", building_number: \"2\",\n                                postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\")\nbild = QRBills.generate(fuchs)[:output]\nshow_image bild\nSwissQr.read(bild)"
           }
         ]
       },
@@ -14866,8 +15647,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Glace Fuchs: a QR-bill without a reference for CHF 12.30,\n# shown as a PNG and read back with SwissQr.read\n",
+            "hints": [
+              "Copy the first cell as your template and change three things: the bill type without a reference, the reference type <code>\"NON\"</code> and the picture format <code>\"png\"</code>. Then show the picture and read it back in."
+            ],
             "check": "code.include?(\"SwissQr.read\") && images.any? && ->(bill, text) { bill.respond_to?(:iban) ? bill.iban == \"CH5800791123000889012\" && bill.formatted_amount == \"12.30\" && bill.reference_type == :non : text.delete(\" \").include?(\"CH5800791123000889012\") && text.match?(/12\\.30?(?!\\d)|0\\.123e2/) }.(result, output)",
-            "hint": "Copy the first cell and change it: <code>get_qrbill_without_reference_type</code>, <code>reference_type = \"NON\"</code>, <code>qrcode_format = \"png\"</code>. <code>QRBills.generate(…)[:output]</code> is then a ChunkyPNG image that you can hand straight to <code>show_image</code> and <code>SwissQr.read</code>. If SwissQr says the debtor's name is missing, fill in <code>[:debtor][:address]</code> too."
+            "hint": "Copy the first cell and change it: <code>get_qrbill_without_reference_type</code>, <code>reference_type = \"NON\"</code>, <code>qrcode_format = \"png\"</code>. <code>QRBills.generate(…)[:output]</code> is then a ChunkyPNG image that you can hand straight to <code>show_image</code> and <code>SwissQr.read</code>. If SwissQr says the debtor's name is missing, fill in <code>[:debtor][:address]</code> too.",
+            "solution": "install_gem \"qr-bills\"\ninstall_gem \"swiss_qr\"\ninstall_gem \"qr_reader\"\nrequire \"qr-bills\"\nrequire \"swiss_qr\"\n\nfox = QRBills.get_qr_params\nfox[:bill_type] = QRBills.get_qrbill_without_reference_type\nfox[:output_params][:format] = \"qrcode\"\nfox[:qrcode_format] = \"png\"\nice = fox[:bill_params]\nice[:amount] = 12.30\nice[:reference_type] = \"NON\"\nice[:creditor][:iban] = \"CH58 0079 1123 0008 8901 2\"\nice[:creditor][:address].merge!(name: \"Glace Fuchs\", street_name: \"Seeweg\", building_number: \"3\",\n                                postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\")\nice[:debtor][:address].merge!(name: \"Kaz Muster\", street_name: \"Bahnhofstrasse\", building_number: \"2\",\n                              postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\")\npng = QRBills.generate(fox)[:output]\nshow_image png\nread = SwissQr.read(StringIO.new(png.to_blob))\nputs read.formatted_iban\nputs read.amount"
           }
         ]
       },
@@ -14921,8 +15706,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Glace Fuchs：参照番号なしのQR請求書（CHF 12.30）を\n# PNGで表示して、SwissQr.readで読み戻す\n",
+            "hints": [
+              "最初のセルをコピーしてひな形にして、3つだけ変えてみて。参照なしの請求書タイプ、参照タイプの<code>\"NON\"</code>、画像形式の<code>\"png\"</code>だよ。それから画像を表示して、読み戻すんだ。"
+            ],
             "check": "code.include?(\"SwissQr.read\") && images.any? && ->(bill, text) { bill.respond_to?(:iban) ? bill.iban == \"CH5800791123000889012\" && bill.formatted_amount == \"12.30\" && bill.reference_type == :non : text.delete(\" \").include?(\"CH5800791123000889012\") && text.match?(/12\\.30?(?!\\d)|0\\.123e2/) }.(result, output)",
-            "hint": "最初のセルをコピーして変えてみて：<code>get_qrbill_without_reference_type</code>、<code>reference_type = \"NON\"</code>、<code>qrcode_format = \"png\"</code>。そうすると<code>QRBills.generate(…)[:output]</code>はChunkyPNGの画像になるから、そのまま<code>show_image</code>と<code>SwissQr.read</code>に渡せるよ。支払人の名前がないってSwissQrに言われたら、<code>[:debtor][:address]</code>も埋めてね。"
+            "hint": "最初のセルをコピーして変えてみて：<code>get_qrbill_without_reference_type</code>、<code>reference_type = \"NON\"</code>、<code>qrcode_format = \"png\"</code>。そうすると<code>QRBills.generate(…)[:output]</code>はChunkyPNGの画像になるから、そのまま<code>show_image</code>と<code>SwissQr.read</code>に渡せるよ。支払人の名前がないってSwissQrに言われたら、<code>[:debtor][:address]</code>も埋めてね。",
+            "solution": "install_gem \"qr-bills\"\ninstall_gem \"swiss_qr\"\ninstall_gem \"qr_reader\"\nrequire \"qr-bills\"\nrequire \"swiss_qr\"\n\nfox = QRBills.get_qr_params\nfox[:bill_type] = QRBills.get_qrbill_without_reference_type\nfox[:output_params][:format] = \"qrcode\"\nfox[:qrcode_format] = \"png\"\nice = fox[:bill_params]\nice[:amount] = 12.30\nice[:reference_type] = \"NON\"\nice[:creditor][:iban] = \"CH58 0079 1123 0008 8901 2\"\nice[:creditor][:address].merge!(name: \"Glace Fuchs\", street_name: \"Seeweg\", building_number: \"3\",\n                                postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\")\nice[:debtor][:address].merge!(name: \"Kaz Muster\", street_name: \"Bahnhofstrasse\", building_number: \"2\",\n                              postal_code: \"8000\", town: \"Seldwyla\", country: \"CH\")\npng = QRBills.generate(fox)[:output]\nshow_image png\nread = SwissQr.read(StringIO.new(png.to_blob))\nputs read.formatted_iban\nputs read.amount"
           }
         ]
       }
@@ -14968,8 +15757,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "eintraege = [\n  { projekt: \"ProjectX\", stunden: 3.5 },\n  { projekt: \"Intern\",   stunden: 2.0 },\n  { projekt: \"ProjectX\", stunden: 3.0 }\n]\n\n# stunden = ...\n",
+            "hints": [
+              "Erst <code>group_by</code> nach dem Projekt – das gibt dir pro Projekt eine Liste von Einträgen. Dann verwandelst du jede Liste mit <code>transform_values</code> in ihre Stundensumme."
+            ],
             "check": "stunden == { \"ProjectX\" => 6.5, \"Intern\" => 2.0 }",
-            "hint": "<code>stunden = eintraege.group_by { |e| e[:projekt] }.transform_values { |liste| liste.sum { |e| e[:stunden] } }</code>"
+            "hint": "<code>stunden = eintraege.group_by { |e| e[:projekt] }.transform_values { |liste| liste.sum { |e| e[:stunden] } }</code>",
+            "solution": "eintraege = [{ projekt: \"ProjectX\", stunden: 3.5 }, { projekt: \"Intern\", stunden: 2.0 }, { projekt: \"ProjectX\", stunden: 3.0 }]\nstunden = eintraege.group_by { |e| e[:projekt] }.transform_values { |l| l.sum { |e| e[:stunden] } }"
           }
         ]
       },
@@ -15007,8 +15800,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "entries = [\n  { project: \"ProjectX\", hours: 3.5 },\n  { project: \"Intern\",   hours: 2.0 },\n  { project: \"ProjectX\", hours: 3.0 }\n]\n\n# hours = ...\n",
+            "hints": [
+              "First <code>group_by</code> the project – that gives you a list of entries per project. Then turn each list into its sum of hours with <code>transform_values</code>."
+            ],
             "check": "hours == { \"ProjectX\" => 6.5, \"Intern\" => 2.0 }",
-            "hint": "<code>hours = entries.group_by { |e| e[:project] }.transform_values { |list| list.sum { |e| e[:hours] } }</code>"
+            "hint": "<code>hours = entries.group_by { |e| e[:project] }.transform_values { |list| list.sum { |e| e[:hours] } }</code>",
+            "solution": "entries = [{ project: \"ProjectX\", hours: 3.5 }, { project: \"Intern\", hours: 2.0 }, { project: \"ProjectX\", hours: 3.0 }]\nhours = entries.group_by { |e| e[:project] }.transform_values { |l| l.sum { |e| e[:hours] } }"
           }
         ]
       },
@@ -15046,8 +15843,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "entries = [\n  { project: \"ProjectX\", hours: 3.5 },\n  { project: \"Intern\",   hours: 2.0 },\n  { project: \"ProjectX\", hours: 3.0 }\n]\n\n# hours = ...\n",
+            "hints": [
+              "まずプロジェクトで<code>group_by</code>してみて。プロジェクトごとにエントリのリストができるよ。それから<code>transform_values</code>で、それぞれのリストを時間の合計に変えるんだ。"
+            ],
             "check": "hours == { \"ProjectX\" => 6.5, \"Intern\" => 2.0 }",
-            "hint": "こう書けるよ：<code>hours = entries.group_by { |e| e[:project] }.transform_values { |list| list.sum { |e| e[:hours] } }</code>"
+            "hint": "こう書けるよ：<code>hours = entries.group_by { |e| e[:project] }.transform_values { |list| list.sum { |e| e[:hours] } }</code>",
+            "solution": "entries = [{ project: \"ProjectX\", hours: 3.5 }, { project: \"Intern\", hours: 2.0 }, { project: \"ProjectX\", hours: 3.0 }]\nhours = entries.group_by { |e| e[:project] }.transform_values { |l| l.sum { |e| e[:hours] } }"
           }
         ]
       }
@@ -15080,8 +15881,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# def parse_zeile(zeile)\n#   muster = /.../  # benannte Gruppen: datum, von, bis, projekt\n#   ...\n# end\n",
+            "hints": [
+              "Nimm das Muster aus der Demo-Zelle als Vorlage. Dann <code>match</code> auf die Zeile anwenden, bei <code>nil</code> sofort <code>nil</code> zurückgeben, und sonst die drei benannten Gruppen in einen Hash packen."
+            ],
             "check": "parse_zeile(\"2026-09-15 08:30-12:00 ProjectX Meeting\") == { projekt: \"ProjectX\", von: \"08:30\", bis: \"12:00\" } && parse_zeile(\"Kaffeepause\").nil? && code.include?(\"(?<\")",
-            "hint": "Muster wie in der Demo. Danach: <code>treffer = zeile.match(muster)</code>, <code>return nil unless treffer</code>, dann <code>{ projekt: treffer[:projekt], von: treffer[:von], bis: treffer[:bis] }</code>."
+            "hint": "Muster wie in der Demo. Danach: <code>treffer = zeile.match(muster)</code>, <code>return nil unless treffer</code>, dann <code>{ projekt: treffer[:projekt], von: treffer[:von], bis: treffer[:bis] }</code>.",
+            "solution": "def parse_zeile(zeile)\n  muster = /(?<datum>\\d{4}-\\d{2}-\\d{2}) (?<von>\\d{2}:\\d{2})-(?<bis>\\d{2}:\\d{2}) (?<projekt>\\S+)/\n  treffer = zeile.match(muster)\n  return nil unless treffer\n  { projekt: treffer[:projekt], von: treffer[:von], bis: treffer[:bis] }\nend"
           }
         ]
       },
@@ -15111,8 +15916,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# def parse_line(line)\n#   pattern = /.../  # named groups: date, from, to, project\n#   ...\n# end\n",
+            "hints": [
+              "Take the pattern from the demo cell as your template. Then apply <code>match</code> to the line, return <code>nil</code> at once when it is <code>nil</code>, and otherwise pack the three named groups into a hash."
+            ],
             "check": "parse_line(\"2026-09-15 08:30-12:00 ProjectX meeting\") == { project: \"ProjectX\", from: \"08:30\", to: \"12:00\" } && parse_line(\"coffee break\").nil? && code.include?(\"(?<\")",
-            "hint": "Pattern like in the demo. Then: <code>hit = line.match(pattern)</code>, <code>return nil unless hit</code>, then <code>{ project: hit[:project], from: hit[:from], to: hit[:to] }</code>."
+            "hint": "Pattern like in the demo. Then: <code>hit = line.match(pattern)</code>, <code>return nil unless hit</code>, then <code>{ project: hit[:project], from: hit[:from], to: hit[:to] }</code>.",
+            "solution": "def parse_line(line)\n  pattern = /(?<date>\\d{4}-\\d{2}-\\d{2}) (?<from>\\d{2}:\\d{2})-(?<to>\\d{2}:\\d{2}) (?<project>\\S+)/\n  hit = line.match(pattern)\n  return nil unless hit\n  { project: hit[:project], from: hit[:from], to: hit[:to] }\nend"
           }
         ]
       },
@@ -15142,8 +15951,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# def parse_line(line)\n#   pattern = /.../  # 名前付きグループ：date、from、to、project\n#   ...\n# end\n",
+            "hints": [
+              "デモのセルのパターンをひな形にしてね。行に<code>match</code>をかけて、<code>nil</code>ならすぐ<code>nil</code>を返す。そうでなければ、名前つきグループ3つをハッシュに詰めるんだ。"
+            ],
             "check": "parse_line(\"2026-09-15 08:30-12:00 ProjectX meeting\") == { project: \"ProjectX\", from: \"08:30\", to: \"12:00\" } && parse_line(\"coffee break\").nil? && code.include?(\"(?<\")",
-            "hint": "パターンはデモと同じでいいよ。そのあとは<code>hit = line.match(pattern)</code>、<code>return nil unless hit</code>、そして<code>{ project: hit[:project], from: hit[:from], to: hit[:to] }</code>を返そう。"
+            "hint": "パターンはデモと同じでいいよ。そのあとは<code>hit = line.match(pattern)</code>、<code>return nil unless hit</code>、そして<code>{ project: hit[:project], from: hit[:from], to: hit[:to] }</code>を返そう。",
+            "solution": "def parse_line(line)\n  pattern = /(?<date>\\d{4}-\\d{2}-\\d{2}) (?<from>\\d{2}:\\d{2})-(?<to>\\d{2}:\\d{2}) (?<project>\\S+)/\n  hit = line.match(pattern)\n  return nil unless hit\n  { project: hit[:project], from: hit[:from], to: hit[:to] }\nend"
           }
         ]
       }
@@ -15176,8 +15989,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def als_stunden(uhrzeit)\n  h, m = uhrzeit.split(\":\").map(&:to_i)\n  h + m / 60.0\nend\n\n# def add_entry(projekt:, von:, bis:, notiz: nil)\n#   ...\n# end\n",
+            "hints": [
+              "Entferne die <code>#</code> vor dem Methodengerüst. Die letzte Zeile der Methode ist ein Hash-Literal mit den fünf Schlüsseln aus der Aufgabe – <code>stunden</code> rechnest du mit <code>als_stunden</code> aus."
+            ],
             "check": "e = add_entry(projekt: \"X\", von: \"08:30\", bis: \"10:00\"); e[:stunden] == 1.5 && e[:projekt] == \"X\" && e[:notiz].nil? && add_entry(projekt: \"Y\", von: \"09:00\", bis: \"17:00\", notiz: \"Doku\")[:notiz] == \"Doku\" && code.include?(\"projekt:\")",
-            "hint": "<code>{ projekt: projekt, von: von, bis: bis, notiz: notiz, stunden: als_stunden(bis) - als_stunden(von) }</code> – als letzte Zeile der Methode."
+            "hint": "<code>{ projekt: projekt, von: von, bis: bis, notiz: notiz, stunden: als_stunden(bis) - als_stunden(von) }</code> – als letzte Zeile der Methode.",
+            "solution": "def als_stunden(uhrzeit)\n  h, m = uhrzeit.split(\":\").map(&:to_i)\n  h + m / 60.0\nend\n\ndef add_entry(projekt:, von:, bis:, notiz: nil)\n  { projekt: projekt, von: von, bis: bis, notiz: notiz, stunden: als_stunden(bis) - als_stunden(von) }\nend"
           }
         ]
       },
@@ -15207,8 +16024,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def as_hours(time)\n  h, m = time.split(\":\").map(&:to_i)\n  h + m / 60.0\nend\n\n# def add_entry(project:, from:, to:, note: nil)\n#   ...\n# end\n",
+            "hints": [
+              "Remove the <code>#</code> in front of the method skeleton. The method's last line is a hash literal with the five keys from the task – you work out <code>hours</code> with <code>as_hours</code>."
+            ],
             "check": "e = add_entry(project: \"X\", from: \"08:30\", to: \"10:00\"); e[:hours] == 1.5 && e[:project] == \"X\" && e[:note].nil? && add_entry(project: \"Y\", from: \"09:00\", to: \"17:00\", note: \"docs\")[:note] == \"docs\" && code.include?(\"project:\")",
-            "hint": "<code>{ project: project, from: from, to: to, note: note, hours: as_hours(to) - as_hours(from) }</code> – as the method's last line."
+            "hint": "<code>{ project: project, from: from, to: to, note: note, hours: as_hours(to) - as_hours(from) }</code> – as the method's last line.",
+            "solution": "def as_hours(time)\n  h, m = time.split(\":\").map(&:to_i)\n  h + m / 60.0\nend\n\ndef add_entry(project:, from:, to:, note: nil)\n  { project: project, from: from, to: to, note: note, hours: as_hours(to) - as_hours(from) }\nend"
           }
         ]
       },
@@ -15238,8 +16059,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "def as_hours(time)\n  h, m = time.split(\":\").map(&:to_i)\n  h + m / 60.0\nend\n\n# def add_entry(project:, from:, to:, note: nil)\n#   ...\n# end\n",
+            "hints": [
+              "メソッドの骨組みの<code>#</code>を外してね。メソッドの最後の行は、課題にある5つのキーを持つハッシュのリテラルだよ。<code>hours</code>は<code>as_hours</code>で計算するんだ。"
+            ],
             "check": "e = add_entry(project: \"X\", from: \"08:30\", to: \"10:00\"); e[:hours] == 1.5 && e[:project] == \"X\" && e[:note].nil? && add_entry(project: \"Y\", from: \"09:00\", to: \"17:00\", note: \"docs\")[:note] == \"docs\" && code.include?(\"project:\")",
-            "hint": "メソッドの最後の行に<code>{ project: project, from: from, to: to, note: note, hours: as_hours(to) - as_hours(from) }</code>と書けばOKだよ。"
+            "hint": "メソッドの最後の行に<code>{ project: project, from: from, to: to, note: note, hours: as_hours(to) - as_hours(from) }</code>と書けばOKだよ。",
+            "solution": "def as_hours(time)\n  h, m = time.split(\":\").map(&:to_i)\n  h + m / 60.0\nend\n\ndef add_entry(project:, from:, to:, note: nil)\n  { project: project, from: from, to: to, note: note, hours: as_hours(to) - as_hours(from) }\nend"
           }
         ]
       }
@@ -15272,8 +16097,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Entry aus der Demo-Zelle oben wird hier weiterverwendet -\n# fuehre sie zuerst aus!\n\nclass Timesheet\n  def initialize\n    @eintraege = []\n  end\n\n  def add(entry)\n    @eintraege << entry\n    self\n  end\n\n  # def total_for(projekt)\n  #   ...\n  # end\nend\n",
+            "hints": [
+              "Führ zuerst die Demo-Zelle mit <code>Entry</code> aus. Dann aktivierst du <code>total_for</code>: Aus <code>@eintraege</code> die Einträge dieses Projekts mit <code>select</code> herausfiltern und ihre Stunden mit <code>sum</code> zusammenzählen."
+            ],
             "check": "ts = Timesheet.new.add(Entry.new(projekt: \"A\", von: \"08:00\", bis: \"10:30\")).add(Entry.new(projekt: \"B\", von: \"10:30\", bis: \"11:30\")).add(Entry.new(projekt: \"A\", von: \"13:00\", bis: \"14:00\")); ts.total_for(\"A\") == 3.5 && ts.total_for(\"B\") == 1.0 && ts.total_for(\"C\") == 0",
-            "hint": "<code>def total_for(projekt); @eintraege.select { |e| e.projekt == projekt }.sum(&:stunden); end</code> – und vorher die Entry-Zelle oben ausführen."
+            "hint": "<code>def total_for(projekt); @eintraege.select { |e| e.projekt == projekt }.sum(&:stunden); end</code> – und vorher die Entry-Zelle oben ausführen.",
+            "solution": "class Timesheet\n  def initialize\n    @eintraege = []\n  end\n\n  def add(entry)\n    @eintraege << entry\n    self\n  end\n\n  def total_for(projekt)\n    @eintraege.select { |e| e.projekt == projekt }.sum(&:stunden)\n  end\nend"
           }
         ]
       },
@@ -15303,8 +16132,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Entry from the demo cell above is reused here -\n# run it first!\n\nclass Timesheet\n  def initialize\n    @entries = []\n  end\n\n  def add(entry)\n    @entries << entry\n    self\n  end\n\n  # def total_for(project)\n  #   ...\n  # end\nend\n",
+            "hints": [
+              "Run the demo cell with <code>Entry</code> first. Then enable <code>total_for</code>: filter this project's entries out of <code>@entries</code> with <code>select</code> and add up their hours with <code>sum</code>."
+            ],
             "check": "ts = Timesheet.new.add(Entry.new(project: \"A\", from: \"08:00\", to: \"10:30\")).add(Entry.new(project: \"B\", from: \"10:30\", to: \"11:30\")).add(Entry.new(project: \"A\", from: \"13:00\", to: \"14:00\")); ts.total_for(\"A\") == 3.5 && ts.total_for(\"B\") == 1.0 && ts.total_for(\"C\") == 0",
-            "hint": "<code>def total_for(project); @entries.select { |e| e.project == project }.sum(&:hours); end</code> – and run the Entry cell above first."
+            "hint": "<code>def total_for(project); @entries.select { |e| e.project == project }.sum(&:hours); end</code> – and run the Entry cell above first.",
+            "solution": "class Timesheet\n  def initialize\n    @entries = []\n  end\n\n  def add(entry)\n    @entries << entry\n    self\n  end\n\n  def total_for(project)\n    @entries.select { |e| e.project == project }.sum(&:hours)\n  end\nend"
           }
         ]
       },
@@ -15334,8 +16167,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# 上のデモセルのEntryをここでも使う。\n# 先にそのセルを実行しておこう！\n\nclass Timesheet\n  def initialize\n    @entries = []\n  end\n\n  def add(entry)\n    @entries << entry\n    self\n  end\n\n  # def total_for(project)\n  #   ...\n  # end\nend\n",
+            "hints": [
+              "まず<code>Entry</code>のデモのセルを実行してね。それから<code>total_for</code>を有効にして、<code>@entries</code>からそのプロジェクトのエントリを<code>select</code>で選び、<code>sum</code>で時間をたすんだ。"
+            ],
             "check": "ts = Timesheet.new.add(Entry.new(project: \"A\", from: \"08:00\", to: \"10:30\")).add(Entry.new(project: \"B\", from: \"10:30\", to: \"11:30\")).add(Entry.new(project: \"A\", from: \"13:00\", to: \"14:00\")); ts.total_for(\"A\") == 3.5 && ts.total_for(\"B\") == 1.0 && ts.total_for(\"C\") == 0",
-            "hint": "こう書けるよ：<code>def total_for(project); @entries.select { |e| e.project == project }.sum(&:hours); end</code>。それと、上のEntryのセルを先に実行しておいてね。"
+            "hint": "こう書けるよ：<code>def total_for(project); @entries.select { |e| e.project == project }.sum(&:hours); end</code>。それと、上のEntryのセルを先に実行しておいてね。",
+            "solution": "class Timesheet\n  def initialize\n    @entries = []\n  end\n\n  def add(entry)\n    @entries << entry\n    self\n  end\n\n  def total_for(project)\n    @entries.select { |e| e.project == project }.sum(&:hours)\n  end\nend"
           }
         ]
       }
@@ -15392,8 +16229,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"time\"\n\n# def dauer_in_stunden(datum, von, bis)\n#   anfang = Time.strptime(...)\n#   ...\n# end\n\n# dauer_in_stunden(\"2026-09-15\", \"22:00\", \"01:30\")\n",
+            "hints": [
+              "Baue aus Datum und Uhrzeit einen String und lass <code>Time.strptime</code> mit dem passenden Format ein Time-Objekt daraus machen – für Anfang und Ende. Die Differenz zweier Zeiten sind Sekunden."
+            ],
             "check": "dauer_in_stunden(\"2026-09-15\", \"08:30\", \"12:00\") == 3.5 && dauer_in_stunden(\"2026-09-15\", \"22:00\", \"01:30\") == 3.5 && dauer_in_stunden(\"2026-09-15\", \"09:15\", \"10:00\") == 0.75 && code.include?(\"Time\")",
-            "hint": "<code>anfang = Time.strptime(\"#{datum} #{von}\", \"%Y-%m-%d %H:%M\")</code>, genauso <code>ende</code>. Dann <code>ende += 24 * 3600 if ende &lt; anfang</code> und zum Schluss <code>(ende - anfang) / 3600</code>."
+            "hint": "<code>anfang = Time.strptime(\"#{datum} #{von}\", \"%Y-%m-%d %H:%M\")</code>, genauso <code>ende</code>. Dann <code>ende += 24 * 3600 if ende &lt; anfang</code> und zum Schluss <code>(ende - anfang) / 3600</code>.",
+            "solution": "require \"time\"\n\ndef dauer_in_stunden(datum, von, bis)\n  anfang = Time.strptime(\"#{datum} #{von}\", \"%Y-%m-%d %H:%M\")\n  ende = Time.strptime(\"#{datum} #{bis}\", \"%Y-%m-%d %H:%M\")\n  ende += 24 * 3600 if ende < anfang\n  (ende - anfang) / 3600\nend\n\ndauer_in_stunden(\"2026-09-15\", \"22:00\", \"01:30\")"
           }
         ]
       },
@@ -15447,8 +16288,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"time\"\n\n# def duration_in_hours(date, from, to)\n#   begins = Time.strptime(...)\n#   ...\n# end\n\n# duration_in_hours(\"2026-09-15\", \"22:00\", \"01:30\")\n",
+            "hints": [
+              "Build a string from the date and the time of day and let <code>Time.strptime</code> with a matching format make a Time object of it – for the beginning and the end. The difference of two times is in seconds."
+            ],
             "check": "duration_in_hours(\"2026-09-15\", \"08:30\", \"12:00\") == 3.5 && duration_in_hours(\"2026-09-15\", \"22:00\", \"01:30\") == 3.5 && duration_in_hours(\"2026-09-15\", \"09:15\", \"10:00\") == 0.75 && code.include?(\"Time\")",
-            "hint": "<code>begins = Time.strptime(\"#{date} #{from}\", \"%Y-%m-%d %H:%M\")</code>, the same for <code>ends</code>. Then <code>ends += 24 * 3600 if ends &lt; begins</code> and finally <code>(ends - begins) / 3600</code>."
+            "hint": "<code>begins = Time.strptime(\"#{date} #{from}\", \"%Y-%m-%d %H:%M\")</code>, the same for <code>ends</code>. Then <code>ends += 24 * 3600 if ends &lt; begins</code> and finally <code>(ends - begins) / 3600</code>.",
+            "solution": "require \"time\"\n\ndef duration_in_hours(date, from, to)\n  begins = Time.strptime(\"#{date} #{from}\", \"%Y-%m-%d %H:%M\")\n  ends = Time.strptime(\"#{date} #{to}\", \"%Y-%m-%d %H:%M\")\n  ends += 24 * 3600 if ends < begins\n  (ends - begins) / 3600\nend\n\nduration_in_hours(\"2026-09-15\", \"22:00\", \"01:30\")"
           }
         ]
       },
@@ -15502,8 +16347,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"time\"\n\n# def duration_in_hours(date, from, to)\n#   begins = Time.strptime(...)\n#   ...\n# end\n\n# duration_in_hours(\"2026-09-15\", \"22:00\", \"01:30\")\n",
+            "hints": [
+              "日付と時刻をつなげた文字列を作って、<code>Time.strptime</code>に合う書式を渡してTimeオブジェクトにしてみて。はじまりと終わりの両方だよ。2つの時刻の差は秒になるからね。"
+            ],
             "check": "duration_in_hours(\"2026-09-15\", \"08:30\", \"12:00\") == 3.5 && duration_in_hours(\"2026-09-15\", \"22:00\", \"01:30\") == 3.5 && duration_in_hours(\"2026-09-15\", \"09:15\", \"10:00\") == 0.75 && code.include?(\"Time\")",
-            "hint": "<code>begins = Time.strptime(\"#{date} #{from}\", \"%Y-%m-%d %H:%M\")</code>、<code>ends</code>も同じように作ろう。それから<code>ends += 24 * 3600 if ends &lt; begins</code>、最後に<code>(ends - begins) / 3600</code>だよ。"
+            "hint": "<code>begins = Time.strptime(\"#{date} #{from}\", \"%Y-%m-%d %H:%M\")</code>、<code>ends</code>も同じように作ろう。それから<code>ends += 24 * 3600 if ends &lt; begins</code>、最後に<code>(ends - begins) / 3600</code>だよ。",
+            "solution": "require \"time\"\n\ndef duration_in_hours(date, from, to)\n  begins = Time.strptime(\"#{date} #{from}\", \"%Y-%m-%d %H:%M\")\n  ends = Time.strptime(\"#{date} #{to}\", \"%Y-%m-%d %H:%M\")\n  ends += 24 * 3600 if ends < begins\n  (ends - begins) / 3600\nend\n\nduration_in_hours(\"2026-09-15\", \"22:00\", \"01:30\")"
           }
         ]
       }
@@ -15577,8 +16426,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class Stundenblatt\n  def initialize\n    @eintraege = []\n  end\n\n  def add(projekt, stunden)\n    @eintraege << { projekt: projekt, stunden: stunden }\n    self\n  end\n\n  def eintraege\n    @eintraege   # das Leck: die interne Liste selbst\n  end\nend\n\nblatt = Stundenblatt.new.add(\"ProjectX\", 3.5)\nblatt.eintraege.frozen?\n",
+            "hints": [
+              "Nur die Methode <code>eintraege</code> ändert sich: Statt der Liste selbst gibst du eine Kopie zurück, die du einfrierst. <code>add</code> und <code>@eintraege</code> bleiben, wie sie sind."
+            ],
             "check": "b = Stundenblatt.new.add(\"A\", 1.0); liste = b.eintraege; liste.frozen? && (begin; liste << 1; false; rescue FrozenError; true; end) && b.eintraege.length == 1 && b.add(\"B\", 2.0).eintraege.length == 2",
-            "hint": "Zwei Methoden, eine Zeile: <code>@eintraege.dup.freeze</code> – erst kopieren, dann die Kopie einfrieren. Friere nicht <code>@eintraege</code> selbst ein, sonst klappt <code>add</code> nicht mehr."
+            "hint": "Zwei Methoden, eine Zeile: <code>@eintraege.dup.freeze</code> – erst kopieren, dann die Kopie einfrieren. Friere nicht <code>@eintraege</code> selbst ein, sonst klappt <code>add</code> nicht mehr.",
+            "solution": "class Stundenblatt\n  def initialize\n    @eintraege = []\n  end\n\n  def add(projekt, stunden)\n    @eintraege << { projekt: projekt, stunden: stunden }\n    self\n  end\n\n  def eintraege\n    @eintraege.dup.freeze\n  end\nend\n\nblatt = Stundenblatt.new.add(\"ProjectX\", 3.5)\nblatt.eintraege.frozen?"
           }
         ]
       },
@@ -15649,8 +16502,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class Logbook\n  def initialize\n    @entries = []\n  end\n\n  def add(project, hours)\n    @entries << { project: project, hours: hours }\n    self\n  end\n\n  def entries\n    @entries   # the leak: the internal list itself\n  end\nend\n\nlog = Logbook.new.add(\"ProjectX\", 3.5)\nlog.entries.frozen?\n",
+            "hints": [
+              "Only the method <code>entries</code> changes: instead of the list itself, return a copy that you freeze. <code>add</code> and <code>@entries</code> stay as they are."
+            ],
             "check": "b = Logbook.new.add(\"A\", 1.0); list = b.entries; list.frozen? && (begin; list << 1; false; rescue FrozenError; true; end) && b.entries.length == 1 && b.add(\"B\", 2.0).entries.length == 2",
-            "hint": "Two methods, one line: <code>@entries.dup.freeze</code> – copy first, then freeze the copy. Don't freeze <code>@entries</code> itself, or <code>add</code> stops working."
+            "hint": "Two methods, one line: <code>@entries.dup.freeze</code> – copy first, then freeze the copy. Don't freeze <code>@entries</code> itself, or <code>add</code> stops working.",
+            "solution": "class Logbook\n  def initialize\n    @entries = []\n  end\n\n  def add(project, hours)\n    @entries << { project: project, hours: hours }\n    self\n  end\n\n  def entries\n    @entries.dup.freeze\n  end\nend\n\nlog = Logbook.new.add(\"ProjectX\", 3.5)\nlog.entries.frozen?"
           }
         ]
       },
@@ -15721,8 +16578,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class Logbook\n  def initialize\n    @entries = []\n  end\n\n  def add(project, hours)\n    @entries << { project: project, hours: hours }\n    self\n  end\n\n  def entries\n    @entries   # 漏れ：内部のリストそのもの\n  end\nend\n\nlog = Logbook.new.add(\"ProjectX\", 3.5)\nlog.entries.frozen?\n",
+            "hints": [
+              "変えるのは<code>entries</code>メソッドだけだよ。リストそのものではなく、コピーを返して、そのコピーをfreezeするんだ。<code>add</code>と<code>@entries</code>はそのままでね。"
+            ],
             "check": "b = Logbook.new.add(\"A\", 1.0); list = b.entries; list.frozen? && (begin; list << 1; false; rescue FrozenError; true; end) && b.entries.length == 1 && b.add(\"B\", 2.0).entries.length == 2",
-            "hint": "メソッド2つで1行だよ：<code>@entries.dup.freeze</code>。まずコピーして、そのコピーを凍結するんだ。<code>@entries</code>そのものを凍結しちゃだめだよ。<code>add</code>が動かなくなるからね。"
+            "hint": "メソッド2つで1行だよ：<code>@entries.dup.freeze</code>。まずコピーして、そのコピーを凍結するんだ。<code>@entries</code>そのものを凍結しちゃだめだよ。<code>add</code>が動かなくなるからね。",
+            "solution": "class Logbook\n  def initialize\n    @entries = []\n  end\n\n  def add(project, hours)\n    @entries << { project: project, hours: hours }\n    self\n  end\n\n  def entries\n    @entries.dup.freeze\n  end\nend\n\nlog = Logbook.new.add(\"ProjectX\", 3.5)\nlog.entries.frozen?"
           }
         ]
       }
@@ -15755,8 +16616,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class Eintrag\n  attr_reader :projekt, :stunden\n\n  def initialize(projekt, stunden)\n    @projekt = projekt\n    @stunden = stunden\n  end\n\n  def gueltig?\n    stunden > 0 && !projekt.to_s.empty?\n  end\nend\n\n# class TestEintrag < Minitest::Test\n#   def test_...\n#   end\n# end\n\n# run_tests\n",
+            "hints": [
+              "Entferne die <code>#</code> vor dem Klassengerüst. Eine Testmethode heisst <code>test_…</code>; mit <code>assert</code> prüfst du, dass ein guter Eintrag gültig ist, mit <code>refute</code>, dass ein schlechter es nicht ist."
+            ],
             "check": "defined?(TestEintrag) && TestEintrag.instance_methods.grep(/\\Atest_/).length >= 2 && output.include?(\"0 failures\") && output.include?(\"0 errors\") && output.include?(\"runs,\")",
-            "hint": "Zum Beispiel: <code>def test_gueltig; assert Eintrag.new(\"X\", 2.0).gueltig?; end</code> und <code>def test_negative_stunden; refute Eintrag.new(\"X\", -1).gueltig?; end</code> – dann <code>run_tests</code>."
+            "hint": "Zum Beispiel: <code>def test_gueltig; assert Eintrag.new(\"X\", 2.0).gueltig?; end</code> und <code>def test_negative_stunden; refute Eintrag.new(\"X\", -1).gueltig?; end</code> – dann <code>run_tests</code>.",
+            "solution": "class Eintrag\n  attr_reader :projekt, :stunden\n  def initialize(projekt, stunden)\n    @projekt = projekt\n    @stunden = stunden\n  end\n  def gueltig?\n    stunden > 0 && !projekt.to_s.empty?\n  end\nend\n\nclass TestEintrag < Minitest::Test\n  def test_gueltig\n    assert Eintrag.new(\"X\", 2.0).gueltig?\n  end\n\n  def test_negative_stunden\n    refute Eintrag.new(\"X\", -1).gueltig?\n  end\nend\n\nrun_tests"
           }
         ]
       },
@@ -15786,8 +16651,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class Entry\n  attr_reader :project, :hours\n\n  def initialize(project, hours)\n    @project = project\n    @hours = hours\n  end\n\n  def valid?\n    hours > 0 && !project.to_s.empty?\n  end\nend\n\n# class TestEntry < Minitest::Test\n#   def test_...\n#   end\n# end\n\n# run_tests\n",
+            "hints": [
+              "Remove the <code>#</code> in front of the class skeleton. A test method is called <code>test_…</code>; with <code>assert</code> you check that a good entry is valid, with <code>refute</code> that a bad one is not."
+            ],
             "check": "defined?(TestEntry) && TestEntry.instance_methods.grep(/\\Atest_/).length >= 2 && output.include?(\"0 failures\") && output.include?(\"0 errors\") && output.include?(\"runs,\")",
-            "hint": "For example: <code>def test_valid; assert Entry.new(\"X\", 2.0).valid?; end</code> and <code>def test_negative_hours; refute Entry.new(\"X\", -1).valid?; end</code> – then <code>run_tests</code>."
+            "hint": "For example: <code>def test_valid; assert Entry.new(\"X\", 2.0).valid?; end</code> and <code>def test_negative_hours; refute Entry.new(\"X\", -1).valid?; end</code> – then <code>run_tests</code>.",
+            "solution": "class Entry\n  attr_reader :project, :hours\n  def initialize(project, hours)\n    @project = project\n    @hours = hours\n  end\n  def valid?\n    hours > 0 && !project.to_s.empty?\n  end\nend\n\nclass TestEntry < Minitest::Test\n  def test_valid\n    assert Entry.new(\"X\", 2.0).valid?\n  end\n\n  def test_negative_hours\n    refute Entry.new(\"X\", -1).valid?\n  end\nend\n\nrun_tests"
           }
         ]
       },
@@ -15817,8 +16686,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class Entry\n  attr_reader :project, :hours\n\n  def initialize(project, hours)\n    @project = project\n    @hours = hours\n  end\n\n  def valid?\n    hours > 0 && !project.to_s.empty?\n  end\nend\n\n# class TestEntry < Minitest::Test\n#   def test_...\n#   end\n# end\n\n# run_tests\n",
+            "hints": [
+              "クラスの骨組みの<code>#</code>を外してね。テストメソッドの名前は<code>test_…</code>で始めるよ。良いエントリが有効なことは<code>assert</code>で、悪いエントリが無効なことは<code>refute</code>で確かめるんだ。"
+            ],
             "check": "defined?(TestEntry) && TestEntry.instance_methods.grep(/\\Atest_/).length >= 2 && output.include?(\"0 failures\") && output.include?(\"0 errors\") && output.include?(\"runs,\")",
-            "hint": "たとえば<code>def test_valid; assert Entry.new(\"X\", 2.0).valid?; end</code>と<code>def test_negative_hours; refute Entry.new(\"X\", -1).valid?; end</code>を書いて、最後に<code>run_tests</code>を呼んでみて。"
+            "hint": "たとえば<code>def test_valid; assert Entry.new(\"X\", 2.0).valid?; end</code>と<code>def test_negative_hours; refute Entry.new(\"X\", -1).valid?; end</code>を書いて、最後に<code>run_tests</code>を呼んでみて。",
+            "solution": "class Entry\n  attr_reader :project, :hours\n  def initialize(project, hours)\n    @project = project\n    @hours = hours\n  end\n  def valid?\n    hours > 0 && !project.to_s.empty?\n  end\nend\n\nclass TestEntry < Minitest::Test\n  def test_valid\n    assert Entry.new(\"X\", 2.0).valid?\n  end\n\n  def test_negative_hours\n    refute Entry.new(\"X\", -1).valid?\n  end\nend\n\nrun_tests"
           }
         ]
       }
@@ -15851,8 +16724,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class Timesheet\n  # include ...\n\n  def initialize(eintraege)\n    @eintraege = eintraege\n  end\n\n  # def each(&block)\n  #   ...\n  # end\nend\n\nts = Timesheet.new([\n  { projekt: \"A\", stunden: 2.0 },\n  { projekt: \"B\", stunden: 1.0 }\n])\n\n# ts.sum { |e| e[:stunden] }\n",
+            "hints": [
+              "Zwei auskommentierte Stellen: <code>include Enumerable</code> oben in der Klasse und eine Methode <code>each</code>, die den Block einfach an <code>@eintraege.each</code> weitergibt."
+            ],
             "check": "Timesheet.include?(Enumerable) && ts.map { |e| e[:projekt] } == [\"A\", \"B\"] && ts.sum { |e| e[:stunden] } == 3.0 && code.include?(\"include Enumerable\") && code.include?(\"def each\")",
-            "hint": "<code>include Enumerable</code> in die Klasse, dazu <code>def each(&block); @eintraege.each(&block); end</code>."
+            "hint": "<code>include Enumerable</code> in die Klasse, dazu <code>def each(&block); @eintraege.each(&block); end</code>.",
+            "solution": "class Timesheet\n  include Enumerable\n\n  def initialize(eintraege)\n    @eintraege = eintraege\n  end\n\n  def each(&block)\n    @eintraege.each(&block)\n  end\nend\n\nts = Timesheet.new([{ projekt: \"A\", stunden: 2.0 }, { projekt: \"B\", stunden: 1.0 }])\nts.sum { |e| e[:stunden] }"
           }
         ]
       },
@@ -15882,8 +16759,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class Timesheet\n  # include ...\n\n  def initialize(entries)\n    @entries = entries\n  end\n\n  # def each(&block)\n  #   ...\n  # end\nend\n\nts = Timesheet.new([\n  { project: \"A\", hours: 2.0 },\n  { project: \"B\", hours: 1.0 }\n])\n\n# ts.sum { |e| e[:hours] }\n",
+            "hints": [
+              "Two commented spots: <code>include Enumerable</code> at the top of the class and an <code>each</code> method that simply passes the block on to <code>@entries.each</code>."
+            ],
             "check": "Timesheet.include?(Enumerable) && ts.map { |e| e[:project] } == [\"A\", \"B\"] && ts.sum { |e| e[:hours] } == 3.0 && code.include?(\"include Enumerable\") && code.include?(\"def each\")",
-            "hint": "<code>include Enumerable</code> into the class, plus <code>def each(&block); @entries.each(&block); end</code>."
+            "hint": "<code>include Enumerable</code> into the class, plus <code>def each(&block); @entries.each(&block); end</code>.",
+            "solution": "class Timesheet\n  include Enumerable\n\n  def initialize(entries)\n    @entries = entries\n  end\n\n  def each(&block)\n    @entries.each(&block)\n  end\nend\n\nts = Timesheet.new([{ project: \"A\", hours: 2.0 }, { project: \"B\", hours: 1.0 }])\nts.sum { |e| e[:hours] }"
           }
         ]
       },
@@ -15913,8 +16794,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class Timesheet\n  # include ...\n\n  def initialize(entries)\n    @entries = entries\n  end\n\n  # def each(&block)\n  #   ...\n  # end\nend\n\nts = Timesheet.new([\n  { project: \"A\", hours: 2.0 },\n  { project: \"B\", hours: 1.0 }\n])\n\n# ts.sum { |e| e[:hours] }\n",
+            "hints": [
+              "コメントになっている2か所だよ。クラスの上のほうに<code>include Enumerable</code>、それとブロックをそのまま<code>@entries.each</code>に渡すだけの<code>each</code>メソッドだよ。"
+            ],
             "check": "Timesheet.include?(Enumerable) && ts.map { |e| e[:project] } == [\"A\", \"B\"] && ts.sum { |e| e[:hours] } == 3.0 && code.include?(\"include Enumerable\") && code.include?(\"def each\")",
-            "hint": "クラスの中に<code>include Enumerable</code>を書いて、<code>def each(&block); @entries.each(&block); end</code>も足してみて。"
+            "hint": "クラスの中に<code>include Enumerable</code>を書いて、<code>def each(&block); @entries.each(&block); end</code>も足してみて。",
+            "solution": "class Timesheet\n  include Enumerable\n\n  def initialize(entries)\n    @entries = entries\n  end\n\n  def each(&block)\n    @entries.each(&block)\n  end\nend\n\nts = Timesheet.new([{ project: \"A\", hours: 2.0 }, { project: \"B\", hours: 1.0 }])\nts.sum { |e| e[:hours] }"
           }
         ]
       }
@@ -15955,8 +16840,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# def each_projekt(eintraege)\n#   ... group_by ... yield ...\n# end\n\n# Test:\n# each_projekt([{ projekt: \"A\", stunden: 1.0 }]) do |projekt, liste|\n#   puts \"#{projekt}: #{liste.length} Eintraege\"\n# end\n",
+            "hints": [
+              "Gruppiere die Einträge mit <code>group_by</code> nach dem Projekt und geh die Gruppen mit <code>each</code> durch. Für jede rufst du <code>yield</code> mit Projekt und Liste auf."
+            ],
             "check": "gesammelt = []; each_projekt([{ projekt: \"A\", stunden: 1.0 }, { projekt: \"B\", stunden: 2.0 }, { projekt: \"A\", stunden: 0.5 }]) { |p, liste| gesammelt << [p, liste.length] }; gesammelt == [[\"A\", 2], [\"B\", 1]] && code.include?(\"yield\")",
-            "hint": "<code>def each_projekt(eintraege); eintraege.group_by { |e| e[:projekt] }.each { |projekt, liste| yield(projekt, liste) }; end</code>"
+            "hint": "<code>def each_projekt(eintraege); eintraege.group_by { |e| e[:projekt] }.each { |projekt, liste| yield(projekt, liste) }; end</code>",
+            "solution": "def each_projekt(eintraege)\n  eintraege.group_by { |e| e[:projekt] }.each { |projekt, liste| yield(projekt, liste) }\nend"
           }
         ]
       },
@@ -15994,8 +16883,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# def each_project(entries)\n#   ... group_by ... yield ...\n# end\n\n# Test:\n# each_project([{ project: \"A\", hours: 1.0 }]) do |project, list|\n#   puts \"#{project}: #{list.length} entries\"\n# end\n",
+            "hints": [
+              "Group the entries by project with <code>group_by</code> and walk the groups with <code>each</code>. For each one, call <code>yield</code> with the project and its list."
+            ],
             "check": "collected = []; each_project([{ project: \"A\", hours: 1.0 }, { project: \"B\", hours: 2.0 }, { project: \"A\", hours: 0.5 }]) { |p, list| collected << [p, list.length] }; collected == [[\"A\", 2], [\"B\", 1]] && code.include?(\"yield\")",
-            "hint": "<code>def each_project(entries); entries.group_by { |e| e[:project] }.each { |project, list| yield(project, list) }; end</code>"
+            "hint": "<code>def each_project(entries); entries.group_by { |e| e[:project] }.each { |project, list| yield(project, list) }; end</code>",
+            "solution": "def each_project(entries)\n  entries.group_by { |e| e[:project] }.each { |project, list| yield(project, list) }\nend"
           }
         ]
       },
@@ -16033,8 +16926,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# def each_project(entries)\n#   ... group_by ... yield ...\n# end\n\n# テスト:\n# each_project([{ project: \"A\", hours: 1.0 }]) do |project, list|\n#   puts \"#{project}: #{list.length} entries\"\n# end\n",
+            "hints": [
+              "エントリを<code>group_by</code>でプロジェクトごとにまとめて、そのグループを<code>each</code>でたどってね。グループごとに、プロジェクトとリストを渡して<code>yield</code>を呼ぶんだ。"
+            ],
             "check": "collected = []; each_project([{ project: \"A\", hours: 1.0 }, { project: \"B\", hours: 2.0 }, { project: \"A\", hours: 0.5 }]) { |p, list| collected << [p, list.length] }; collected == [[\"A\", 2], [\"B\", 1]] && code.include?(\"yield\")",
-            "hint": "たとえばこう書けるよ：<code>def each_project(entries); entries.group_by { |e| e[:project] }.each { |project, list| yield(project, list) }; end</code>"
+            "hint": "たとえばこう書けるよ：<code>def each_project(entries); entries.group_by { |e| e[:project] }.each { |project, list| yield(project, list) }; end</code>",
+            "solution": "def each_project(entries)\n  entries.group_by { |e| e[:project] }.each { |project, list| yield(project, list) }\nend"
           }
         ]
       }
@@ -16067,8 +16964,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class TimelogError < StandardError; end\n\n# def sync_mit_retry(dienst, max:)\n#   versuche = 0\n#   begin\n#     ...\n#   rescue TimelogError\n#     ...\n#   end\n# end\n",
+            "hints": [
+              "Zähl im <code>begin</code>-Block die Versuche hoch, bevor du <code>dienst.call</code> aufrufst. Im <code>rescue</code> entscheidest du: unter <code>max</code> noch einmal <code>retry</code>, sonst den Fehler mit <code>raise</code> weiterwerfen."
+            ],
             "check": "z1 = 0; ok_dienst = lambda { z1 += 1; raise TimelogError, \"kaputt\" if z1 < 3; \"ok\" }; erg = sync_mit_retry(ok_dienst, max: 5); kaputt = begin; z2 = 0; immer_kaputt = lambda { z2 += 1; raise TimelogError, \"kaputt\" }; sync_mit_retry(immer_kaputt, max: 2); false; rescue TimelogError; z2 == 2; end; erg == \"ok\" && z1 == 3 && kaputt && code.include?(\"retry\")",
-            "hint": "<code>versuche += 1</code> im begin-Block vor <code>dienst.call</code>; im rescue: <code>retry if versuche < max</code>, sonst <code>raise</code>."
+            "hint": "<code>versuche += 1</code> im begin-Block vor <code>dienst.call</code>; im rescue: <code>retry if versuche < max</code>, sonst <code>raise</code>.",
+            "solution": "class TimelogError < StandardError; end\n\ndef sync_mit_retry(dienst, max:)\n  versuche = 0\n  begin\n    versuche += 1\n    dienst.call\n  rescue TimelogError\n    retry if versuche < max\n    raise\n  end\nend"
           }
         ]
       },
@@ -16098,8 +16999,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class TimelogError < StandardError; end\n\n# def sync_with_retry(service, max:)\n#   attempts = 0\n#   begin\n#     ...\n#   rescue TimelogError\n#     ...\n#   end\n# end\n",
+            "hints": [
+              "Count the attempts up in the <code>begin</code> block before calling <code>service.call</code>. In the <code>rescue</code> you decide: below <code>max</code>, <code>retry</code> once more, otherwise throw the error on with <code>raise</code>."
+            ],
             "check": "c1 = 0; ok_service = lambda { c1 += 1; raise TimelogError, \"broken\" if c1 < 3; \"ok\" }; res = sync_with_retry(ok_service, max: 5); broke = begin; c2 = 0; always_broken = lambda { c2 += 1; raise TimelogError, \"broken\" }; sync_with_retry(always_broken, max: 2); false; rescue TimelogError; c2 == 2; end; res == \"ok\" && c1 == 3 && broke && code.include?(\"retry\")",
-            "hint": "<code>attempts += 1</code> in the begin block before <code>service.call</code>; in the rescue: <code>retry if attempts < max</code>, otherwise <code>raise</code>."
+            "hint": "<code>attempts += 1</code> in the begin block before <code>service.call</code>; in the rescue: <code>retry if attempts < max</code>, otherwise <code>raise</code>.",
+            "solution": "class TimelogError < StandardError; end\n\ndef sync_with_retry(service, max:)\n  attempts = 0\n  begin\n    attempts += 1\n    service.call\n  rescue TimelogError\n    retry if attempts < max\n    raise\n  end\nend"
           }
         ]
       },
@@ -16129,8 +17034,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class TimelogError < StandardError; end\n\n# def sync_with_retry(service, max:)\n#   attempts = 0\n#   begin\n#     ...\n#   rescue TimelogError\n#     ...\n#   end\n# end\n",
+            "hints": [
+              "<code>begin</code>ブロックの中で、<code>service.call</code>を呼ぶ前に試行回数を1ふやしてね。<code>rescue</code>では、<code>max</code>より少なければ<code>retry</code>、そうでなければ<code>raise</code>でエラーをそのまま投げるんだ。"
+            ],
             "check": "c1 = 0; ok_service = lambda { c1 += 1; raise TimelogError, \"broken\" if c1 < 3; \"ok\" }; res = sync_with_retry(ok_service, max: 5); broke = begin; c2 = 0; always_broken = lambda { c2 += 1; raise TimelogError, \"broken\" }; sync_with_retry(always_broken, max: 2); false; rescue TimelogError; c2 == 2; end; res == \"ok\" && c1 == 3 && broke && code.include?(\"retry\")",
-            "hint": "beginブロックの中で、<code>service.call</code>の前に<code>attempts += 1</code>しよう。rescueの中では<code>retry if attempts < max</code>、そうでなければ<code>raise</code>だよ。"
+            "hint": "beginブロックの中で、<code>service.call</code>の前に<code>attempts += 1</code>しよう。rescueの中では<code>retry if attempts < max</code>、そうでなければ<code>raise</code>だよ。",
+            "solution": "class TimelogError < StandardError; end\n\ndef sync_with_retry(service, max:)\n  attempts = 0\n  begin\n    attempts += 1\n    service.call\n  rescue TimelogError\n    retry if attempts < max\n    raise\n  end\nend"
           }
         ]
       }
@@ -16187,8 +17096,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"csv\"\n\ndaten = [\n  { projekt: \"A\", stunden: 1.5 },\n  { projekt: \"B\", stunden: 2.0 }\n]\n\n# def nach_csv(eintraege)\n#   ...\n# end\n\n# def aus_csv(text)\n#   ...  # Tipp: zeile[\"stunden\"].to_f\n# end\n\n# File.write(\"eintraege.csv\", nach_csv(daten))\n# aus_csv(File.read(\"eintraege.csv\"))\n",
+            "hints": [
+              "Die Demos oben zeigen <code>CSV.generate</code> und <code>CSV.parse</code> mit <code>headers: true</code> – daraus baust du die beiden Methoden. Danach schreiben, zurücklesen und als letzte Zeile das Ergebnis von <code>aus_csv</code> stehen lassen."
+            ],
             "check": "File.exist?(\"eintraege.csv\") && aus_csv(File.read(\"eintraege.csv\")) == daten && nach_csv(daten).lines.first.strip == \"projekt,stunden\"",
-            "hint": "<code>nach_csv</code>/<code>aus_csv</code> wie in den Demos, dann <code>File.write(\"eintraege.csv\", nach_csv(daten))</code> und als letzte Zeile <code>aus_csv(File.read(\"eintraege.csv\"))</code>."
+            "hint": "<code>nach_csv</code>/<code>aus_csv</code> wie in den Demos, dann <code>File.write(\"eintraege.csv\", nach_csv(daten))</code> und als letzte Zeile <code>aus_csv(File.read(\"eintraege.csv\"))</code>.",
+            "solution": "require \"csv\"\n\ndef nach_csv(eintraege)\n  CSV.generate do |csv|\n    csv << [\"projekt\", \"stunden\"]\n    eintraege.each { |e| csv << [e[:projekt], e[:stunden]] }\n  end\nend\n\ndef aus_csv(text)\n  CSV.parse(text, headers: true).map { |z| { projekt: z[\"projekt\"], stunden: z[\"stunden\"].to_f } }\nend\n\ndaten = [{ projekt: \"A\", stunden: 1.5 }, { projekt: \"B\", stunden: 2.0 }]\nFile.write(\"eintraege.csv\", nach_csv(daten))\naus_csv(File.read(\"eintraege.csv\"))"
           }
         ]
       },
@@ -16242,8 +17155,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"csv\"\n\ndata = [\n  { project: \"A\", hours: 1.5 },\n  { project: \"B\", hours: 2.0 }\n]\n\n# def to_csv(entries)\n#   ...\n# end\n\n# def from_csv(text)\n#   ...  # hint: row[\"hours\"].to_f\n# end\n\n# File.write(\"entries.csv\", to_csv(data))\n# from_csv(File.read(\"entries.csv\"))\n",
+            "hints": [
+              "The demos above show <code>CSV.generate</code> and <code>CSV.parse</code> with <code>headers: true</code> – build the two methods from them. Then write, read back, and leave the result of <code>from_csv</code> as the last line."
+            ],
             "check": "File.exist?(\"entries.csv\") && from_csv(File.read(\"entries.csv\")) == data && to_csv(data).lines.first.strip == \"project,hours\"",
-            "hint": "<code>to_csv</code>/<code>from_csv</code> like the demos, then <code>File.write(\"entries.csv\", to_csv(data))</code> and as the last line <code>from_csv(File.read(\"entries.csv\"))</code>."
+            "hint": "<code>to_csv</code>/<code>from_csv</code> like the demos, then <code>File.write(\"entries.csv\", to_csv(data))</code> and as the last line <code>from_csv(File.read(\"entries.csv\"))</code>.",
+            "solution": "require \"csv\"\n\ndef to_csv(entries)\n  CSV.generate do |csv|\n    csv << [\"project\", \"hours\"]\n    entries.each { |e| csv << [e[:project], e[:hours]] }\n  end\nend\n\ndef from_csv(text)\n  CSV.parse(text, headers: true).map { |r| { project: r[\"project\"], hours: r[\"hours\"].to_f } }\nend\n\ndata = [{ project: \"A\", hours: 1.5 }, { project: \"B\", hours: 2.0 }]\nFile.write(\"entries.csv\", to_csv(data))\nfrom_csv(File.read(\"entries.csv\"))"
           }
         ]
       },
@@ -16297,8 +17214,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"csv\"\n\ndata = [\n  { project: \"A\", hours: 1.5 },\n  { project: \"B\", hours: 2.0 }\n]\n\n# def to_csv(entries)\n#   ...\n# end\n\n# def from_csv(text)\n#   ...  # ヒント: row[\"hours\"].to_f\n# end\n\n# File.write(\"entries.csv\", to_csv(data))\n# from_csv(File.read(\"entries.csv\"))\n",
+            "hints": [
+              "上のデモに<code>CSV.generate</code>と<code>headers: true</code>つきの<code>CSV.parse</code>があるよ。それをもとに2つのメソッドを作ってね。書き出して、読み戻して、最後の行は<code>from_csv</code>の結果にしておくんだ。"
+            ],
             "check": "File.exist?(\"entries.csv\") && from_csv(File.read(\"entries.csv\")) == data && to_csv(data).lines.first.strip == \"project,hours\"",
-            "hint": "<code>to_csv</code>と<code>from_csv</code>はデモと同じ要領で書けるよ。そのあと<code>File.write(\"entries.csv\", to_csv(data))</code>で保存して、最後の行を<code>from_csv(File.read(\"entries.csv\"))</code>にしてね。"
+            "hint": "<code>to_csv</code>と<code>from_csv</code>はデモと同じ要領で書けるよ。そのあと<code>File.write(\"entries.csv\", to_csv(data))</code>で保存して、最後の行を<code>from_csv(File.read(\"entries.csv\"))</code>にしてね。",
+            "solution": "require \"csv\"\n\ndef to_csv(entries)\n  CSV.generate do |csv|\n    csv << [\"project\", \"hours\"]\n    entries.each { |e| csv << [e[:project], e[:hours]] }\n  end\nend\n\ndef from_csv(text)\n  CSV.parse(text, headers: true).map { |r| { project: r[\"project\"], hours: r[\"hours\"].to_f } }\nend\n\ndata = [{ project: \"A\", hours: 1.5 }, { project: \"B\", hours: 2.0 }]\nFile.write(\"entries.csv\", to_csv(data))\nfrom_csv(File.read(\"entries.csv\"))"
           }
         ]
       }
@@ -16331,8 +17252,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"optparse\"\n\n# def parse_argv(argv)\n#   optionen = { woche: false, format: \"text\" }\n#   ...\n# end\n",
+            "hints": [
+              "Lege wie in der Demo einen <code>OptionParser</code> an, mit einem <code>on</code> pro Option, das in <code>optionen</code> schreibt. <code>parse</code> gibt dir die übrigen Argumente – das erste davon ist der Befehl."
+            ],
             "check": "a = parse_argv([\"report\", \"--week\"]); b = parse_argv([\"export\", \"--format\", \"csv\"]); c2 = parse_argv([\"add\"]); a == { befehl: \"report\", woche: true, format: \"text\" } && b == { befehl: \"export\", woche: false, format: \"csv\" } && c2 == { befehl: \"add\", woche: false, format: \"text\" }",
-            "hint": "Wie in der Demo – am Ende: <code>rest = parser.parse(argv); { befehl: rest.first, woche: optionen[:woche], format: optionen[:format] }</code>"
+            "hint": "Wie in der Demo – am Ende: <code>rest = parser.parse(argv); { befehl: rest.first, woche: optionen[:woche], format: optionen[:format] }</code>",
+            "solution": "require \"optparse\"\n\ndef parse_argv(argv)\n  optionen = { woche: false, format: \"text\" }\n  parser = OptionParser.new do |p|\n    p.on(\"--week\") { optionen[:woche] = true }\n    p.on(\"--format FORMAT\") { |f| optionen[:format] = f }\n  end\n  rest = parser.parse(argv)\n  { befehl: rest.first, woche: optionen[:woche], format: optionen[:format] }\nend"
           }
         ]
       },
@@ -16362,8 +17287,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"optparse\"\n\n# def parse_argv(argv)\n#   options = { week: false, format: \"text\" }\n#   ...\n# end\n",
+            "hints": [
+              "Create an <code>OptionParser</code> as in the demo, with one <code>on</code> per option that writes into <code>options</code>. <code>parse</code> gives you the remaining arguments – the first of them is the command."
+            ],
             "check": "a = parse_argv([\"report\", \"--week\"]); b = parse_argv([\"export\", \"--format\", \"csv\"]); c2 = parse_argv([\"add\"]); a == { command: \"report\", week: true, format: \"text\" } && b == { command: \"export\", week: false, format: \"csv\" } && c2 == { command: \"add\", week: false, format: \"text\" }",
-            "hint": "Like the demo – at the end: <code>rest = parser.parse(argv); { command: rest.first, week: options[:week], format: options[:format] }</code>"
+            "hint": "Like the demo – at the end: <code>rest = parser.parse(argv); { command: rest.first, week: options[:week], format: options[:format] }</code>",
+            "solution": "require \"optparse\"\n\ndef parse_argv(argv)\n  options = { week: false, format: \"text\" }\n  parser = OptionParser.new do |p|\n    p.on(\"--week\") { options[:week] = true }\n    p.on(\"--format FORMAT\") { |f| options[:format] = f }\n  end\n  rest = parser.parse(argv)\n  { command: rest.first, week: options[:week], format: options[:format] }\nend"
           }
         ]
       },
@@ -16393,8 +17322,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "require \"optparse\"\n\n# def parse_argv(argv)\n#   options = { week: false, format: \"text\" }\n#   ...\n# end\n",
+            "hints": [
+              "デモみたいに<code>OptionParser</code>を作って、オプションごとに<code>on</code>を1つ書いて<code>options</code>に入れてね。<code>parse</code>は残りの引数を返すから、その最初がコマンドだよ。"
+            ],
             "check": "a = parse_argv([\"report\", \"--week\"]); b = parse_argv([\"export\", \"--format\", \"csv\"]); c2 = parse_argv([\"add\"]); a == { command: \"report\", week: true, format: \"text\" } && b == { command: \"export\", week: false, format: \"csv\" } && c2 == { command: \"add\", week: false, format: \"text\" }",
-            "hint": "デモと同じやり方でいいよ。最後はこうしよう：<code>rest = parser.parse(argv); { command: rest.first, week: options[:week], format: options[:format] }</code>"
+            "hint": "デモと同じやり方でいいよ。最後はこうしよう：<code>rest = parser.parse(argv); { command: rest.first, week: options[:week], format: options[:format] }</code>",
+            "solution": "require \"optparse\"\n\ndef parse_argv(argv)\n  options = { week: false, format: \"text\" }\n  parser = OptionParser.new do |p|\n    p.on(\"--week\") { options[:week] = true }\n    p.on(\"--format FORMAT\") { |f| options[:format] = f }\n  end\n  rest = parser.parse(argv)\n  { command: rest.first, week: options[:week], format: options[:format] }\nend"
           }
         ]
       }
@@ -16435,8 +17368,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# def dispatch(befehl)\n#   case befehl\n#   in ...\n#   end\n# end\n",
+            "hints": [
+              "Ein <code>case befehl</code> mit vier Zweigen: drei <code>in</code>-Muster für Arrays – die Variablen darin fängst du gleich im Muster ein – und ein <code>else</code> für alles andere."
+            ],
             "check": "dispatch([\"add\", \"X\", 2.5]) == \"Eintrag: X (2.5h)\" && dispatch([\"report\"]) == \"Bericht\" && dispatch([\"export\", \"csv\"]) == \"Export als csv\" && dispatch([\"tanzen\"]) == \"Unbekanntes Kommando\" && code.include?(\"in [\")",
-            "hint": "Vier Zweige: <code>in [\"add\", projekt, stunden]</code>, <code>in [\"report\"]</code>, <code>in [\"export\", format]</code>, <code>else</code>."
+            "hint": "Vier Zweige: <code>in [\"add\", projekt, stunden]</code>, <code>in [\"report\"]</code>, <code>in [\"export\", format]</code>, <code>else</code>.",
+            "solution": "def dispatch(befehl)\n  case befehl\n  in [\"add\", projekt, stunden]\n    \"Eintrag: #{projekt} (#{stunden}h)\"\n  in [\"report\"]\n    \"Bericht\"\n  in [\"export\", format]\n    \"Export als #{format}\"\n  else\n    \"Unbekanntes Kommando\"\n  end\nend"
           }
         ]
       },
@@ -16474,8 +17411,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# def dispatch(command)\n#   case command\n#   in ...\n#   end\n# end\n",
+            "hints": [
+              "A <code>case command</code> with four branches: three <code>in</code> patterns for arrays – you capture the variables right inside the pattern – and an <code>else</code> for everything else."
+            ],
             "check": "dispatch([\"add\", \"X\", 2.5]) == \"Entry: X (2.5h)\" && dispatch([\"report\"]) == \"Report\" && dispatch([\"export\", \"csv\"]) == \"Export as csv\" && dispatch([\"dance\"]) == \"Unknown command\" && code.include?(\"in [\")",
-            "hint": "Four branches: <code>in [\"add\", project, hours]</code>, <code>in [\"report\"]</code>, <code>in [\"export\", format]</code>, <code>else</code>."
+            "hint": "Four branches: <code>in [\"add\", project, hours]</code>, <code>in [\"report\"]</code>, <code>in [\"export\", format]</code>, <code>else</code>.",
+            "solution": "def dispatch(command)\n  case command\n  in [\"add\", project, hours]\n    \"Entry: #{project} (#{hours}h)\"\n  in [\"report\"]\n    \"Report\"\n  in [\"export\", format]\n    \"Export as #{format}\"\n  else\n    \"Unknown command\"\n  end\nend"
           }
         ]
       },
@@ -16513,8 +17454,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# def dispatch(command)\n#   case command\n#   in ...\n#   end\n# end\n",
+            "hints": [
+              "<code>case command</code>に4つの分岐だよ。配列の<code>in</code>パターンが3つで、変数はパターンの中でそのまま受け取れるよ。あとは<code>else</code>でそれ以外を受けるんだ。"
+            ],
             "check": "dispatch([\"add\", \"X\", 2.5]) == \"Entry: X (2.5h)\" && dispatch([\"report\"]) == \"Report\" && dispatch([\"export\", \"csv\"]) == \"Export as csv\" && dispatch([\"dance\"]) == \"Unknown command\" && code.include?(\"in [\")",
-            "hint": "分岐は4つだよ：<code>in [\"add\", project, hours]</code>、<code>in [\"report\"]</code>、<code>in [\"export\", format]</code>、そして<code>else</code>。"
+            "hint": "分岐は4つだよ：<code>in [\"add\", project, hours]</code>、<code>in [\"report\"]</code>、<code>in [\"export\", format]</code>、そして<code>else</code>。",
+            "solution": "def dispatch(command)\n  case command\n  in [\"add\", project, hours]\n    \"Entry: #{project} (#{hours}h)\"\n  in [\"report\"]\n    \"Report\"\n  in [\"export\", format]\n    \"Export as #{format}\"\n  else\n    \"Unknown command\"\n  end\nend"
           }
         ]
       }
@@ -16555,8 +17500,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class Modell\n  # def self.validates_presence_of(*felder)\n  #   define_method(:valid?) do\n  #     ...\n  #   end\n  # end\nend\n\nclass Buchung < Modell\n  attr_accessor :projekt, :stunden\n  # validates_presence_of :projekt\nend\n",
+            "hints": [
+              "Entferne die <code>#</code> in <code>Modell</code> und <code>Buchung</code>. Im <code>define_method</code>-Block prüfst du mit <code>all?</code> jedes Feld – seinen Wert holst du mit <code>send</code>."
+            ],
             "check": "b = Buchung.new; b.projekt = \"X\"; b2 = Buchung.new; b2.projekt = \"\"; b3 = Buchung.new; b.valid? && !b2.valid? && !b3.valid? && code.include?(\"define_method\")",
-            "hint": "<code>felder.all? { |f| wert = send(f); !wert.nil? && wert != \"\" }</code> – im define_method-Block. Danach in <code>Buchung</code> die Zeile <code>validates_presence_of :projekt</code> aktivieren."
+            "hint": "<code>felder.all? { |f| wert = send(f); !wert.nil? && wert != \"\" }</code> – im define_method-Block. Danach in <code>Buchung</code> die Zeile <code>validates_presence_of :projekt</code> aktivieren.",
+            "solution": "class Modell\n  def self.validates_presence_of(*felder)\n    define_method(:valid?) do\n      felder.all? { |f| wert = send(f); !wert.nil? && wert != \"\" }\n    end\n  end\nend\n\nclass Buchung < Modell\n  attr_accessor :projekt, :stunden\n  validates_presence_of :projekt\nend"
           }
         ]
       },
@@ -16594,8 +17543,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class BaseModel\n  # def self.validates_presence_of(*fields)\n  #   define_method(:valid?) do\n  #     ...\n  #   end\n  # end\nend\n\nclass Booking < BaseModel\n  attr_accessor :project, :hours\n  # validates_presence_of :project\nend\n",
+            "hints": [
+              "Remove the <code>#</code> in <code>BaseModel</code> and <code>Booking</code>. Inside the <code>define_method</code> block, check every field with <code>all?</code> – fetch its value with <code>send</code>."
+            ],
             "check": "b = Booking.new; b.project = \"X\"; b2 = Booking.new; b2.project = \"\"; b3 = Booking.new; b.valid? && !b2.valid? && !b3.valid? && code.include?(\"define_method\")",
-            "hint": "<code>fields.all? { |f| value = send(f); !value.nil? && value != \"\" }</code> – inside the define_method block. Then activate the line <code>validates_presence_of :project</code> in <code>Booking</code>."
+            "hint": "<code>fields.all? { |f| value = send(f); !value.nil? && value != \"\" }</code> – inside the define_method block. Then activate the line <code>validates_presence_of :project</code> in <code>Booking</code>.",
+            "solution": "class BaseModel\n  def self.validates_presence_of(*fields)\n    define_method(:valid?) do\n      fields.all? { |f| value = send(f); !value.nil? && value != \"\" }\n    end\n  end\nend\n\nclass Booking < BaseModel\n  attr_accessor :project, :hours\n  validates_presence_of :project\nend"
           }
         ]
       },
@@ -16633,8 +17586,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "class BaseModel\n  # def self.validates_presence_of(*fields)\n  #   define_method(:valid?) do\n  #     ...\n  #   end\n  # end\nend\n\nclass Booking < BaseModel\n  attr_accessor :project, :hours\n  # validates_presence_of :project\nend\n",
+            "hints": [
+              "<code>BaseModel</code>と<code>Booking</code>の<code>#</code>を外してね。<code>define_method</code>のブロックの中では、<code>all?</code>で各フィールドを確かめるよ。値は<code>send</code>で取り出すんだ。"
+            ],
             "check": "b = Booking.new; b.project = \"X\"; b2 = Booking.new; b2.project = \"\"; b3 = Booking.new; b.valid? && !b2.valid? && !b3.valid? && code.include?(\"define_method\")",
-            "hint": "define_methodのブロックの中で<code>fields.all? { |f| value = send(f); !value.nil? && value != \"\" }</code>を使ってみて。それから<code>Booking</code>の中の<code>validates_presence_of :project</code>の行を有効にしよう（先頭の#を消すだけだよ）。"
+            "hint": "define_methodのブロックの中で<code>fields.all? { |f| value = send(f); !value.nil? && value != \"\" }</code>を使ってみて。それから<code>Booking</code>の中の<code>validates_presence_of :project</code>の行を有効にしよう（先頭の#を消すだけだよ）。",
+            "solution": "class BaseModel\n  def self.validates_presence_of(*fields)\n    define_method(:valid?) do\n      fields.all? { |f| value = send(f); !value.nil? && value != \"\" }\n    end\n  end\nend\n\nclass Booking < BaseModel\n  attr_accessor :project, :hours\n  validates_presence_of :project\nend"
           }
         ]
       }
@@ -16659,8 +17616,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "module Timelog\n  class Konfiguration\n    attr_reader :projekte, :raster\n\n    def initialize\n      @projekte = {}\n      @raster = 60\n    end\n\n    # def projekt(name, satz:)\n    #   ...\n    # end\n\n    # def runde_auf(minuten)\n    #   ...\n    # end\n  end\n\n  # def self.configure(&block)\n  #   ...\n  # end\n\n  # def self.config\n  #   ...\n  # end\nend\n\n# Timelog.configure do\n#   projekt \"ProjectX\", satz: 120\n#   runde_auf 15\n# end\n",
+            "hints": [
+              "Drei Teile: die beiden DSL-Methoden in <code>Konfiguration</code> schreiben nur in <code>@projekte</code> und <code>@raster</code>; <code>Timelog.configure</code> legt eine neue Konfiguration an und führt den Block mit <code>instance_eval</code> darauf aus; <code>Timelog.config</code> gibt sie zurück."
+            ],
             "check": "Timelog.configure { projekt \"A\", satz: 100\n runde_auf 30 }; Timelog.config.projekte[\"A\"] == 100 && Timelog.config.raster == 30 && code.include?(\"instance_eval\")",
-            "hint": "<code>def self.configure(&block); @config = Konfiguration.new; @config.instance_eval(&block); @config; end</code> und <code>def self.config; @config; end</code>. Die DSL-Methoden schreiben einfach in <code>@projekte</code> bzw. <code>@raster</code>."
+            "hint": "<code>def self.configure(&block); @config = Konfiguration.new; @config.instance_eval(&block); @config; end</code> und <code>def self.config; @config; end</code>. Die DSL-Methoden schreiben einfach in <code>@projekte</code> bzw. <code>@raster</code>.",
+            "solution": "module Timelog\n  class Konfiguration\n    attr_reader :projekte, :raster\n\n    def initialize\n      @projekte = {}\n      @raster = 60\n    end\n\n    def projekt(name, satz:)\n      @projekte[name] = satz\n    end\n\n    def runde_auf(minuten)\n      @raster = minuten\n    end\n  end\n\n  def self.configure(&block)\n    @config = Konfiguration.new\n    @config.instance_eval(&block)\n    @config\n  end\n\n  def self.config\n    @config\n  end\nend"
           }
         ]
       },
@@ -16682,8 +17643,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "module Timelog\n  class Configuration\n    attr_reader :projects, :grid\n\n    def initialize\n      @projects = {}\n      @grid = 60\n    end\n\n    # def project(name, rate:)\n    #   ...\n    # end\n\n    # def round_to(minutes)\n    #   ...\n    # end\n  end\n\n  # def self.configure(&block)\n  #   ...\n  # end\n\n  # def self.config\n  #   ...\n  # end\nend\n\n# Timelog.configure do\n#   project \"ProjectX\", rate: 120\n#   round_to 15\n# end\n",
+            "hints": [
+              "Three parts: the two DSL methods in <code>Configuration</code> just write into <code>@projects</code> and <code>@grid</code>; <code>Timelog.configure</code> creates a new configuration and runs the block on it with <code>instance_eval</code>; <code>Timelog.config</code> returns it."
+            ],
             "check": "Timelog.configure { project \"A\", rate: 100\n round_to 30 }; Timelog.config.projects[\"A\"] == 100 && Timelog.config.grid == 30 && code.include?(\"instance_eval\")",
-            "hint": "<code>def self.configure(&block); @config = Configuration.new; @config.instance_eval(&block); @config; end</code> and <code>def self.config; @config; end</code>. The DSL methods simply write into <code>@projects</code> / <code>@grid</code>."
+            "hint": "<code>def self.configure(&block); @config = Configuration.new; @config.instance_eval(&block); @config; end</code> and <code>def self.config; @config; end</code>. The DSL methods simply write into <code>@projects</code> / <code>@grid</code>.",
+            "solution": "module Timelog\n  class Configuration\n    attr_reader :projects, :grid\n\n    def initialize\n      @projects = {}\n      @grid = 60\n    end\n\n    def project(name, rate:)\n      @projects[name] = rate\n    end\n\n    def round_to(minutes)\n      @grid = minutes\n    end\n  end\n\n  def self.configure(&block)\n    @config = Configuration.new\n    @config.instance_eval(&block)\n    @config\n  end\n\n  def self.config\n    @config\n  end\nend"
           }
         ]
       },
@@ -16705,8 +17670,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "module Timelog\n  class Configuration\n    attr_reader :projects, :grid\n\n    def initialize\n      @projects = {}\n      @grid = 60\n    end\n\n    # def project(name, rate:)\n    #   ...\n    # end\n\n    # def round_to(minutes)\n    #   ...\n    # end\n  end\n\n  # def self.configure(&block)\n  #   ...\n  # end\n\n  # def self.config\n  #   ...\n  # end\nend\n\n# Timelog.configure do\n#   project \"ProjectX\", rate: 120\n#   round_to 15\n# end\n",
+            "hints": [
+              "3つのパーツだよ。<code>Configuration</code>の2つのDSLメソッドは<code>@projects</code>と<code>@grid</code>に書き込むだけ。<code>Timelog.configure</code>は新しい設定を作って、<code>instance_eval</code>でその上でブロックを実行する。<code>Timelog.config</code>はそれを返すんだ。"
+            ],
             "check": "Timelog.configure { project \"A\", rate: 100\n round_to 30 }; Timelog.config.projects[\"A\"] == 100 && Timelog.config.grid == 30 && code.include?(\"instance_eval\")",
-            "hint": "<code>def self.configure(&block); @config = Configuration.new; @config.instance_eval(&block); @config; end</code>と<code>def self.config; @config; end</code>だよ。DSLのメソッドは、<code>@projects</code>や<code>@grid</code>に書き込むだけでいいんだ。"
+            "hint": "<code>def self.configure(&block); @config = Configuration.new; @config.instance_eval(&block); @config; end</code>と<code>def self.config; @config; end</code>だよ。DSLのメソッドは、<code>@projects</code>や<code>@grid</code>に書き込むだけでいいんだ。",
+            "solution": "module Timelog\n  class Configuration\n    attr_reader :projects, :grid\n\n    def initialize\n      @projects = {}\n      @grid = 60\n    end\n\n    def project(name, rate:)\n      @projects[name] = rate\n    end\n\n    def round_to(minutes)\n      @grid = minutes\n    end\n  end\n\n  def self.configure(&block)\n    @config = Configuration.new\n    @config.instance_eval(&block)\n    @config\n  end\n\n  def self.config\n    @config\n  end\nend"
           }
         ]
       }
@@ -16739,8 +17708,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# Diese Methode soll auf das NAECHSTE Raster runden -\n# aber sie liefert runde(38, 15) => 30 statt 45. Warum?\n\ndef runde(minuten, raster)\n  (minuten / raster) * raster\nend\n\nrunde(38, 15)\n",
+            "hints": [
+              "Probier <code>p 38 / 15</code> aus – was kommt heraus, und warum? Dann überlege, wie du aus der Division eine Kommazahl machst und sie mit <code>round</code> rundest, bevor du mit dem Raster multiplizierst."
+            ],
             "check": "runde(38, 15) == 45 && runde(8, 15) == 15 && runde(7, 15) == 0 && runde(22, 15) == 15 && runde(60, 60) == 60",
-            "hint": "<code>38 / 15</code> ist Ganzzahl-Division (ergibt 2, Rest weg!). Erst zu Float machen, dann runden: <code>(minuten.to_f / raster).round * raster</code>."
+            "hint": "<code>38 / 15</code> ist Ganzzahl-Division (ergibt 2, Rest weg!). Erst zu Float machen, dann runden: <code>(minuten.to_f / raster).round * raster</code>.",
+            "solution": "def runde(minuten, raster)\n  (minuten.to_f / raster).round * raster\nend"
           }
         ]
       },
@@ -16770,8 +17743,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# This method should round to the NEAREST grid -\n# but it returns round_to(38, 15) => 30 instead of 45. Why?\n\ndef round_to(minutes, grid)\n  (minutes / grid) * grid\nend\n\nround_to(38, 15)\n",
+            "hints": [
+              "Try <code>p 38 / 15</code> – what comes out, and why? Then think about how to make the division a decimal and round it with <code>round</code> before multiplying by the grid."
+            ],
             "check": "round_to(38, 15) == 45 && round_to(8, 15) == 15 && round_to(7, 15) == 0 && round_to(22, 15) == 15 && round_to(60, 60) == 60",
-            "hint": "<code>38 / 15</code> is integer division (gives 2, remainder gone!). Convert to Float first, then round: <code>(minutes.to_f / grid).round * grid</code>."
+            "hint": "<code>38 / 15</code> is integer division (gives 2, remainder gone!). Convert to Float first, then round: <code>(minutes.to_f / grid).round * grid</code>.",
+            "solution": "def round_to(minutes, grid)\n  (minutes.to_f / grid).round * grid\nend"
           }
         ]
       },
@@ -16801,8 +17778,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "# このメソッドは「いちばん近い」刻みに丸めるはず。\n# なのにround_to(38, 15)が45ではなく30を返す。なぜ？\n\ndef round_to(minutes, grid)\n  (minutes / grid) * grid\nend\n\nround_to(38, 15)\n",
+            "hints": [
+              "<code>p 38 / 15</code>を試してみて。何が出る？それはなぜかな？それから、割り算を小数にして<code>round</code>で丸めてからグリッドをかける方法を考えてみよう。"
+            ],
             "check": "round_to(38, 15) == 45 && round_to(8, 15) == 15 && round_to(7, 15) == 0 && round_to(22, 15) == 15 && round_to(60, 60) == 60",
-            "hint": "<code>38 / 15</code>は整数どうしの割り算だよ（答えは2で、余りは消えちゃう！）。先にFloatに変換してから丸めよう：<code>(minutes.to_f / grid).round * grid</code>"
+            "hint": "<code>38 / 15</code>は整数どうしの割り算だよ（答えは2で、余りは消えちゃう！）。先にFloatに変換してから丸めよう：<code>(minutes.to_f / grid).round * grid</code>",
+            "solution": "def round_to(minutes, grid)\n  (minutes.to_f / grid).round * grid\nend"
           }
         ]
       }
@@ -16851,8 +17832,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "eintraege = 500.times.map { |i| { projekt: \"P#{i % 5}\", stunden: 1.0 } }\n\ndef langsamer_bericht(eintraege)\n  eintraege.map { |e| e[:projekt] }.uniq.to_h do |p|\n    [p, eintraege.select { |e| e[:projekt] == p }.sum { |e| e[:stunden] }]\n  end\nend\n\n# def schneller_bericht(eintraege)\n#   ...\n# end\n\n# require \"benchmark\"\n# { langsam: Benchmark.realtime { 50.times { langsamer_bericht(eintraege) } }.round(3),\n#   schnell: Benchmark.realtime { 50.times { schneller_bericht(eintraege) } }.round(3) }\n",
+            "hints": [
+              "<code>schneller_bericht</code> braucht nur einen Durchlauf: <code>group_by</code> nach dem Projekt und dann <code>transform_values</code> für die Stundensummen – wie in der Collections-Lektion. Vergleich beide danach mit <code>Benchmark</code>."
+            ],
             "check": "schneller_bericht(eintraege) == langsamer_bericht(eintraege) && code.include?(\"group_by\")",
-            "hint": "<code>eintraege.group_by { |e| e[:projekt] }.transform_values { |l| l.sum { |e| e[:stunden] } }</code> – ein Durchlauf statt einer pro Projekt."
+            "hint": "<code>eintraege.group_by { |e| e[:projekt] }.transform_values { |l| l.sum { |e| e[:stunden] } }</code> – ein Durchlauf statt einer pro Projekt.",
+            "solution": "eintraege = 500.times.map { |i| { projekt: \"P#{i % 5}\", stunden: 1.0 } }\n\ndef langsamer_bericht(eintraege)\n  eintraege.map { |e| e[:projekt] }.uniq.to_h do |p|\n    [p, eintraege.select { |e| e[:projekt] == p }.sum { |e| e[:stunden] }]\n  end\nend\n\ndef schneller_bericht(eintraege)\n  eintraege.group_by { |e| e[:projekt] }.transform_values { |l| l.sum { |e| e[:stunden] } }\nend"
           }
         ]
       },
@@ -16898,8 +17883,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "entries = 500.times.map { |i| { project: \"P#{i % 5}\", hours: 1.0 } }\n\ndef slow_report(entries)\n  entries.map { |e| e[:project] }.uniq.to_h do |p|\n    [p, entries.select { |e| e[:project] == p }.sum { |e| e[:hours] }]\n  end\nend\n\n# def fast_report(entries)\n#   ...\n# end\n\n# require \"benchmark\"\n# { slow: Benchmark.realtime { 50.times { slow_report(entries) } }.round(3),\n#   fast: Benchmark.realtime { 50.times { fast_report(entries) } }.round(3) }\n",
+            "hints": [
+              "<code>fast_report</code> needs a single pass: <code>group_by</code> the project, then <code>transform_values</code> for the sums of hours – as in the collections lesson. Afterwards compare both with <code>Benchmark</code>."
+            ],
             "check": "fast_report(entries) == slow_report(entries) && code.include?(\"group_by\")",
-            "hint": "<code>entries.group_by { |e| e[:project] }.transform_values { |l| l.sum { |e| e[:hours] } }</code> – one pass instead of one per project."
+            "hint": "<code>entries.group_by { |e| e[:project] }.transform_values { |l| l.sum { |e| e[:hours] } }</code> – one pass instead of one per project.",
+            "solution": "entries = 500.times.map { |i| { project: \"P#{i % 5}\", hours: 1.0 } }\n\ndef slow_report(entries)\n  entries.map { |e| e[:project] }.uniq.to_h do |p|\n    [p, entries.select { |e| e[:project] == p }.sum { |e| e[:hours] }]\n  end\nend\n\ndef fast_report(entries)\n  entries.group_by { |e| e[:project] }.transform_values { |l| l.sum { |e| e[:hours] } }\nend"
           }
         ]
       },
@@ -16945,8 +17934,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "entries = 500.times.map { |i| { project: \"P#{i % 5}\", hours: 1.0 } }\n\ndef slow_report(entries)\n  entries.map { |e| e[:project] }.uniq.to_h do |p|\n    [p, entries.select { |e| e[:project] == p }.sum { |e| e[:hours] }]\n  end\nend\n\n# def fast_report(entries)\n#   ...\n# end\n\n# require \"benchmark\"\n# { slow: Benchmark.realtime { 50.times { slow_report(entries) } }.round(3),\n#   fast: Benchmark.realtime { 50.times { fast_report(entries) } }.round(3) }\n",
+            "hints": [
+              "<code>fast_report</code>は1回たどるだけでいいよ。プロジェクトで<code>group_by</code>して、<code>transform_values</code>で時間の合計にするんだ。コレクションのレッスンと同じだね。そのあと<code>Benchmark</code>で両方を比べてみて。"
+            ],
             "check": "fast_report(entries) == slow_report(entries) && code.include?(\"group_by\")",
-            "hint": "<code>entries.group_by { |e| e[:project] }.transform_values { |l| l.sum { |e| e[:hours] } }</code>を使ってみて。プロジェクトごとに1回ずつじゃなくて、全体を1回たどるだけで済むよ。"
+            "hint": "<code>entries.group_by { |e| e[:project] }.transform_values { |l| l.sum { |e| e[:hours] } }</code>を使ってみて。プロジェクトごとに1回ずつじゃなくて、全体を1回たどるだけで済むよ。",
+            "solution": "entries = 500.times.map { |i| { project: \"P#{i % 5}\", hours: 1.0 } }\n\ndef slow_report(entries)\n  entries.map { |e| e[:project] }.uniq.to_h do |p|\n    [p, entries.select { |e| e[:project] == p }.sum { |e| e[:hours] }]\n  end\nend\n\ndef fast_report(entries)\n  entries.group_by { |e| e[:project] }.transform_values { |l| l.sum { |e| e[:hours] } }\nend"
           }
         ]
       }
@@ -16971,8 +17964,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"roda\"\nrequire \"roda\"\nrequire \"erb\"\n\nEINTRAEGE = [\n  { projekt: \"ProjectX\", stunden: 3.5 },\n  { projekt: \"Intern\",   stunden: 2.0 },\n  { projekt: \"ProjectX\", stunden: 3.0 }\n]\n\nclass TimelogWeb < Roda\n  route do |r|\n    r.root do\n      \"<h1>timelog</h1><a href='/projekt/ProjectX'>ProjectX</a> <a href='/projekt/Intern'>Intern</a>\"\n    end\n\n    # r.get \"projekt\", String do |name|\n    #   passende = EINTRAEGE.select { ... }\n    #   \"<h2>...</h2>...\"\n    # end\n  end\nend\n\nshow_browser TimelogWeb, \"/\"\n",
+            "hints": [
+              "Die neue Route kommt in den <code>route</code>-Block neben <code>r.root</code>. Darin wählst du mit <code>select</code> die Einträge des Projekts aus <code>EINTRAEGE</code> und baust aus Überschrift und Stunden einen HTML-String."
+            ],
             "check": "s1, b1 = mock_get(TimelogWeb, \"/\"); s2, b2 = mock_get(TimelogWeb, \"/projekt/ProjectX\"); s3, _ = mock_get(TimelogWeb, \"/quatsch\"); s1 == 200 && b1.include?(\"ProjectX\") && s2 == 200 && b2.include?(\"ProjectX\") && b2.include?(\"3.5\") && s3 == 404",
-            "hint": "<code>r.get \"projekt\", String do |name|; passende = EINTRAEGE.select { |e| e[:projekt] == name }; \"&lt;h2&gt;#{name}&lt;/h2&gt;\" + passende.map { |e| \"#{e[:stunden]}h\" }.join(\", \"); end</code>"
+            "hint": "<code>r.get \"projekt\", String do |name|; passende = EINTRAEGE.select { |e| e[:projekt] == name }; \"&lt;h2&gt;#{name}&lt;/h2&gt;\" + passende.map { |e| \"#{e[:stunden]}h\" }.join(\", \"); end</code>",
+            "solution": "install_gem \"roda\"\nrequire \"roda\"\nrequire \"erb\"\n\nEINTRAEGE = [\n  { projekt: \"ProjectX\", stunden: 3.5 },\n  { projekt: \"Intern\",   stunden: 2.0 },\n  { projekt: \"ProjectX\", stunden: 3.0 }\n]\n\nclass TimelogWeb < Roda\n  route do |r|\n    r.root do\n      \"<h1>timelog</h1><a href='/projekt/ProjectX'>ProjectX</a>\"\n    end\n\n    r.get \"projekt\", String do |name|\n      passende = EINTRAEGE.select { |e| e[:projekt] == name }\n      \"<h2>#{name}</h2>\" + passende.map { |e| \"#{e[:stunden]}h\" }.join(\", \")\n    end\n  end\nend\n\nshow_browser TimelogWeb, \"/\""
           },
           {
             "t": "h",
@@ -16998,8 +17995,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"roda\"\nrequire \"roda\"\nrequire \"erb\"\n\nENTRIES = [\n  { project: \"ProjectX\", hours: 3.5 },\n  { project: \"Intern\",   hours: 2.0 },\n  { project: \"ProjectX\", hours: 3.0 }\n]\n\nclass TimelogWeb < Roda\n  route do |r|\n    r.root do\n      \"<h1>timelog</h1><a href='/project/ProjectX'>ProjectX</a> <a href='/project/Intern'>Intern</a>\"\n    end\n\n    # r.get \"project\", String do |name|\n    #   matching = ENTRIES.select { ... }\n    #   \"<h2>...</h2>...\"\n    # end\n  end\nend\n\nshow_browser TimelogWeb, \"/\"\n",
+            "hints": [
+              "The new route goes into the <code>route</code> block next to <code>r.root</code>. Inside it, pick the project's entries from <code>ENTRIES</code> with <code>select</code> and build an HTML string from the heading and the hours."
+            ],
             "check": "s1, b1 = mock_get(TimelogWeb, \"/\"); s2, b2 = mock_get(TimelogWeb, \"/project/ProjectX\"); s3, _ = mock_get(TimelogWeb, \"/nonsense\"); s1 == 200 && b1.include?(\"ProjectX\") && s2 == 200 && b2.include?(\"ProjectX\") && b2.include?(\"3.5\") && s3 == 404",
-            "hint": "<code>r.get \"project\", String do |name|; matching = ENTRIES.select { |e| e[:project] == name }; \"&lt;h2&gt;#{name}&lt;/h2&gt;\" + matching.map { |e| \"#{e[:hours]}h\" }.join(\", \"); end</code>"
+            "hint": "<code>r.get \"project\", String do |name|; matching = ENTRIES.select { |e| e[:project] == name }; \"&lt;h2&gt;#{name}&lt;/h2&gt;\" + matching.map { |e| \"#{e[:hours]}h\" }.join(\", \"); end</code>",
+            "solution": "install_gem \"roda\"\nrequire \"roda\"\nrequire \"erb\"\n\nENTRIES = [\n  { project: \"ProjectX\", hours: 3.5 },\n  { project: \"Intern\",   hours: 2.0 },\n  { project: \"ProjectX\", hours: 3.0 }\n]\n\nclass TimelogWeb < Roda\n  route do |r|\n    r.root do\n      \"<h1>timelog</h1><a href='/project/ProjectX'>ProjectX</a>\"\n    end\n\n    r.get \"project\", String do |name|\n      matching = ENTRIES.select { |e| e[:project] == name }\n      \"<h2>#{name}</h2>\" + matching.map { |e| \"#{e[:hours]}h\" }.join(\", \")\n    end\n  end\nend\n\nshow_browser TimelogWeb, \"/\""
           },
           {
             "t": "h",
@@ -17025,8 +18026,12 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "x",
             "code": "install_gem \"roda\"\nrequire \"roda\"\nrequire \"erb\"\n\nENTRIES = [\n  { project: \"ProjectX\", hours: 3.5 },\n  { project: \"Intern\",   hours: 2.0 },\n  { project: \"ProjectX\", hours: 3.0 }\n]\n\nclass TimelogWeb < Roda\n  route do |r|\n    r.root do\n      \"<h1>timelog</h1><a href='/project/ProjectX'>ProjectX</a> <a href='/project/Intern'>Intern</a>\"\n    end\n\n    # r.get \"project\", String do |name|\n    #   matching = ENTRIES.select { ... }\n    #   \"<h2>...</h2>...\"\n    # end\n  end\nend\n\nshow_browser TimelogWeb, \"/\"\n",
+            "hints": [
+              "新しいルートは<code>route</code>ブロックの中、<code>r.root</code>のとなりに書くよ。その中で<code>ENTRIES</code>からそのプロジェクトのエントリを<code>select</code>で選んで、見出しと時間からHTMLの文字列を組み立てるんだ。"
+            ],
             "check": "s1, b1 = mock_get(TimelogWeb, \"/\"); s2, b2 = mock_get(TimelogWeb, \"/project/ProjectX\"); s3, _ = mock_get(TimelogWeb, \"/nonsense\"); s1 == 200 && b1.include?(\"ProjectX\") && s2 == 200 && b2.include?(\"ProjectX\") && b2.include?(\"3.5\") && s3 == 404",
-            "hint": "たとえばこう書けるよ：<code>r.get \"project\", String do |name|; matching = ENTRIES.select { |e| e[:project] == name }; \"&lt;h2&gt;#{name}&lt;/h2&gt;\" + matching.map { |e| \"#{e[:hours]}h\" }.join(\", \"); end</code>"
+            "hint": "たとえばこう書けるよ：<code>r.get \"project\", String do |name|; matching = ENTRIES.select { |e| e[:project] == name }; \"&lt;h2&gt;#{name}&lt;/h2&gt;\" + matching.map { |e| \"#{e[:hours]}h\" }.join(\", \"); end</code>",
+            "solution": "install_gem \"roda\"\nrequire \"roda\"\nrequire \"erb\"\n\nENTRIES = [\n  { project: \"ProjectX\", hours: 3.5 },\n  { project: \"Intern\",   hours: 2.0 },\n  { project: \"ProjectX\", hours: 3.0 }\n]\n\nclass TimelogWeb < Roda\n  route do |r|\n    r.root do\n      \"<h1>timelog</h1><a href='/project/ProjectX'>ProjectX</a>\"\n    end\n\n    r.get \"project\", String do |name|\n      matching = ENTRIES.select { |e| e[:project] == name }\n      \"<h2>#{name}</h2>\" + matching.map { |e| \"#{e[:hours]}h\" }.join(\", \")\n    end\n  end\nend\n\nshow_browser TimelogWeb, \"/\""
           },
           {
             "t": "h",
