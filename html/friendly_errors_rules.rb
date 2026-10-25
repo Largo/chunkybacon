@@ -255,6 +255,27 @@ module FriendlyErrors
     find(:const_unknown, { name: name }, at: at, label: :lbl_unknown)
   end
 
+  # Chunky's turtle commands (html/turtle.rb) outside `turtle do … end`:
+  # `forward 100` on main is a plain NameError - say where they work. Only
+  # the commands no other lesson would call bare (not color, hide, show).
+  TURTLE_COMMANDS = %w[forward back right left goto home jump face circle pen_up pen_down pen_width].freeze
+
+  rule :turtle_outside, NameError do |c|
+    e = c.error
+    name = e.name.to_s
+    next unless TURTLE_COMMANDS.include?(name) && Object.const_defined?(:Turtle)
+
+    receiver = begin
+      e.receiver
+    rescue ArgumentError
+      nil
+    end
+    # on main only: `fox.forward 100` on a Turtle of one's own is another story
+    next unless receiver.inspect == "main"
+
+    find(:turtle_outside, { meth: name }, at: c.word_at(c.line, name), label: :lbl_unknown)
+  end
+
   # an unknown lower-case name: `nmae`, or a bare call `square(9)`
   rule :name_lower, NameError do |c|
     e = c.error

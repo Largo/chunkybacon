@@ -258,6 +258,7 @@ noted.
 | tty-tree | 0.4.0 | MIT | Piotr Murach | LICENSE.txt |
 | unicode-display_width | 2.6.0 | MIT | Jan Lelis | MIT-LICENSE.txt |
 | unicode_utils | 1.4.0 | BSD-2-Clause (gemspec declares none) | Stefan Lang | LICENSE.txt |
+| wavefile | 1.1.2 | MIT | Joel Strait | LICENSE |
 
 `tools/build_gem_cache.rb` rewrites this cache; update the table with it.
 

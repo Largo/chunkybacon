@@ -1924,7 +1924,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>Das <code>|i|</code> ist ein <strong>Blockparameter</strong>: Bei jeder Runde steckt Ruby die aktuelle Zahl hinein – beginnend bei 0, darum das <code>+ 1</code>. Für kurze Blöcke schreibt man statt <code>do</code> … <code>end</code> meist geschweifte Klammern; das bedeutet genau dasselbe: <code>3.times { |i| puts i }</code>.</p><p>Zum Zählen gibt es <strong>Bereiche</strong> (Ranges): <code>1..5</code> sind die Zahlen von 1 bis 5. Mit <code>each</code> läufst du durch alle hindurch:</p>"
+            "html": "<p>Das <code>|i|</code> ist ein <strong>Blockparameter</strong>: Bei jeder Runde steckt Ruby die aktuelle Zahl hinein – beginnend bei 0, darum das <code>+ 1</code>. Für kurze Blöcke schreibt man statt <code>do</code> … <code>end</code> meist geschweifte Klammern; das bedeutet genau dasselbe: <code>3.times { |i| puts i }</code>.</p><p>Neben ▶ steht bei dieser Zelle <strong>⏯ Schritt für Schritt</strong>: Damit siehst du die Schleife Runde für Runde – und welchen Wert <code>i</code> gerade hat.</p><p>Zum Zählen gibt es <strong>Bereiche</strong> (Ranges): <code>1..5</code> sind die Zahlen von 1 bis 5. Mit <code>each</code> läufst du durch alle hindurch:</p>"
           },
           {
             "t": "c",
@@ -1987,7 +1987,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p>The <code>|i|</code> is a <strong>block parameter</strong>: on every round Ruby puts the current number into it – starting at 0, hence the <code>+ 1</code>. For short blocks people usually write curly braces instead of <code>do</code> … <code>end</code>; it means exactly the same: <code>3.times { |i| puts i }</code>.</p><p>For counting there are <strong>ranges</strong>: <code>1..5</code> are the numbers from 1 to 5. <code>each</code> walks through all of them:</p>"
+            "html": "<p>The <code>|i|</code> is a <strong>block parameter</strong>: on every round Ruby puts the current number into it – starting at 0, hence the <code>+ 1</code>. For short blocks people usually write curly braces instead of <code>do</code> … <code>end</code>; it means exactly the same: <code>3.times { |i| puts i }</code>.</p><p>Next to ▶ this cell has <strong>⏯ Step through</strong>: watch the loop go round by round, and see what <code>i</code> is each time.</p><p>For counting there are <strong>ranges</strong>: <code>1..5</code> are the numbers from 1 to 5. <code>each</code> walks through all of them:</p>"
           },
           {
             "t": "c",
@@ -2050,7 +2050,7 @@ window.LESSONS_JSON = JSON.stringify({
           },
           {
             "t": "h",
-            "html": "<p><code>|i|</code>は<strong>ブロック引数</strong>です。1周するたびに、Rubyがそのときの数をここに入れてくれます。数えはじめは0なので、<code>+ 1</code>しているのです。短いブロックは、<code>do</code> … <code>end</code>の代わりに波かっこで書くのがふつうです。意味はまったく同じです：<code>3.times { |i| puts i }</code>。</p><p>数えるときには<strong>範囲</strong>（Range）も使えます。<code>1..5</code>は1から5までの数です。<code>each</code>で1つずつ順に処理できます：</p>"
+            "html": "<p><code>|i|</code>は<strong>ブロック引数</strong>です。1周するたびに、Rubyがそのときの数をここに入れてくれます。数えはじめは0なので、<code>+ 1</code>しているのです。短いブロックは、<code>do</code> … <code>end</code>の代わりに波かっこで書くのがふつうです。意味はまったく同じです：<code>3.times { |i| puts i }</code>。</p><p>このセルの▶の横には<strong>⏯ 1ステップずつ</strong>があります。ループが1周ずつ進むようすと、そのときの<code>i</code>の値を見ることができます。</p><p>数えるときには<strong>範囲</strong>（Range）も使えます。<code>1..5</code>は1から5までの数です。<code>each</code>で1つずつ順に処理できます：</p>"
           },
           {
             "t": "c",

@@ -9,6 +9,8 @@ require "stringio"
 require_relative "../html/friendly_errors"
 require_relative "friendly_errors_corpus"
 require_relative "../html/autorun"
+# the turtle commands, for the turtle corpus entries (rule turtle_outside)
+require_relative "../html/turtle"
 
 errors = FriendlyErrors::CORPUS.filter_map do |item|
   bind = eval("proc { binding }.call", TOPLEVEL_BINDING)

@@ -4,7 +4,7 @@ What is unfinished, what state it is in, and where the context for it lives.
 `docs/HANDOVER.md` explains how everything works; this file lists what is in
 flight. Keep it short and current: tick items off, delete finished sections.
 
-Last updated 2026-10-17.
+Last updated 2026-10-25.
 
 ## Where the context is defined
 
@@ -23,17 +23,17 @@ Last updated 2026-10-17.
 ## State of the repository
 
 - Lesson `spinel`, Spinel (HANDOVER §6n), is the first part of the site that is
-  built on deploy rather than committed. **The host's deploy hook has to
-  run `sh tools/after_deploy.sh` after it moves the checkout** - that hook
-  lives on the host, not in this repository, so this line is still to be
-  added there (with Ruby 3.3+ on the host, or Docker for the `spinel-build`
-  service). Until it has run once, lesson `spinel` says Spinel could not be
-  loaded. The first build takes a few minutes; it keeps about 175 MB in
-  `.cache/spinel/` and about 115 MB per build in `html/assets/spinel/`
-  (the current one and the one before).
-- Branch `picoruby-hardware` (2026-10-17, not merged): the seven Pico
-  lessons `pico-blink` to `pico-deploy` with the simulator, the bench, tabs
-  and the BLE laptop cell (HANDOVER §6r). Open there:
+  built on deploy rather than committed. The hosts' deploy hooks (outside
+  this repository, `docs/HOSTING.local.md`) run `sh tools/after_deploy.sh`
+  after moving the checkout - on the main host since 2026-10-06; the small
+  mirror must never build it (the build needs ~4 GB) and gets the result
+  copied over instead. Until a build has run once, lesson `spinel` says
+  Spinel could not be loaded. The first build takes a few minutes; it keeps
+  about 175 MB in `.cache/spinel/` and about 115 MB per build in
+  `html/assets/spinel/` (the current one and the one before).
+- The Pico lessons `pico-blink` to `pico-deploy` (branch `picoruby-hardware`,
+  merged into `main` 2026-10-17) with the simulator, the bench, tabs and
+  the BLE laptop cell (HANDOVER §6r). Still open there:
   - the bench exists only after a board cell's first ▶, so a slider or
     picture cannot be set before the first run (a bench mounted at page
     load under the first board cell would fix it);
@@ -43,12 +43,13 @@ Last updated 2026-10-17.
     lesson does it yet);
   - the design's nice-to-haves (LCD, WS2812, IRQ, a webcam for the camera,
     a board switch, Web Serial to a real Pico): `tmp/pico-research/DESIGN.md` §7.
-- `main` (2026-10-16: iterators, error messages, inheritance and docs in the basics, time and objects in the timelog track; on 2026-10-08 the SciRuby lessons `daru` to `networkx` - Daru, statistics, networkx.rb - came last, after `ruby2d`, the other Rubies and PicoRuby (`rubies`, `picoruby`) and Spinel (`spinel`)). The site does NOT show it yet: the
-  host's checkout stopped following `main` on 2026-09-30 (the history
-  rewrite; GitHub's push webhook is answered with 202, but the live
-  `lessons.js` is from 2026-09-30). On the host: `git status`, then
-  `git fetch && git reset --hard origin/main` and reload nginx
-  (`docs/HOSTING.local.md`); after that check that a push deploys again.
+- `main` deploys again: since 2026-10-06 the host polls GitHub every two
+  minutes and resets its checkout to `origin/main` (it refuses while the
+  checkout is dirty - commit or stash before leaving it). `main` holds the
+  basics as reworked 2026-10-16 (iterators, error messages, inheritance,
+  docs; time and objects in the timelog track), the SciRuby lessons `daru`
+  to `networkx` (2026-10-08) after `ruby2d`, the other Rubies (`rubies`,
+  `picoruby`, `ironruby`, `jruby`, `ruboto`) and Spinel (`spinel`).
 - Merged 2026-10-05: PR #2 Sequel (HANDOVER §6f), PR #3 TTY, Processing,
   Faker, ERB + Herb (§6g-§6j), the experiments' early fixes #15-#17, PR #19
   matplotlib (§6d), and the experiments #5-#13 as `experiments/NN-<idea>/`.
@@ -138,31 +139,25 @@ Last updated 2026-10-17.
   "Integrated"): the letter (Rumale) is pointer-only - a typed-digits
   fallback would make it keyboard-usable; Run buttons still turn
   `disabled` while running (`aria-disabled` would keep the focus and read
-  "running …", but needs the tests' `.disabled` checks changed); the
-  loading screen's tab title is German under `?lang=ja`; no real screen
+  "running …", but needs the tests' `.disabled` checks changed); no real screen
   reader (NVDA, VoiceOver) has been tried. `keyboard.mjs` still reports
   four FAILs that are its own assumptions (Tab indenting, no Enter on the
   skip link, a live `.cell-out`, the first Tab opening the drawer) -
   worth updating if the audit is rerun.
 - Turtle graphics (lesson `turtle`, `html/turtle.rb`): `forward 100` outside
-  `turtle { }` is a plain NoMethodError for main, which the friendly
-  errors explain as "defined in another cell? run that one first" - a
-  rule for the turtle's commands (`forward`, `right`, `pen_up` …) saying
-  "only inside `turtle do … end`" would fit (`friendly_errors_rules.rb`,
-  before `name_lower`; a corpus entry needs the harness to require
-  turtle.rb). Defining the commands on main was rejected: it would
-  shadow a learner's own `def right`. More exercises the check helpers
+  `turtle { }` is explained since 2026-10-25 (rule `turtle_outside`, the
+  movement and pen commands on main; `color`, `hide`, `show` are left to
+  the generic rule, other lessons call such names too). Defining the
+  commands on main was rejected: it would shadow a learner's own `def
+  right`. More exercises the check helpers
   already grade are listed in `experiments/06-turtle-graphics/NOTES.md`
   (a house without lifting the pen, a 7-point star, a spiral); `fill`
   and `write "text"` are not there yet.
-- Music (lesson `musik`, `show_audio`): the lesson's "on your machine" box
-  names the `wavefile` gem (pure Ruby, `install_gem "wavefile"`), which is
-  not in the gem cache: it installs through the rubygems proxy and writes
-  a WAV that `show_audio` plays (checked 2026-10-06), but fails offline -
-  `tools/build_gem_cache.rb` `GEMS` + THIRD_PARTY_NOTICES would fix that
-  (`experiments/05-ruby-music/NOTES.md`, step 7). The lesson has no
-  exercise on `audios` yet (a check can read what was played without a
-  file), and `music.rb`'s `C4*2` durations and sharps were left out.
+- Music (lesson `musik`, `show_audio`): the `wavefile` gem the "on your
+  machine" box names is in the gem cache since 2026-10-25 (so it installs
+  offline too). The lesson has no exercise on `audios` yet (a check can
+  read what was played without a file), and `music.rb`'s `C4*2` durations
+  and sharps were left out.
 - Games (lesson `snake`, `show_game`, `html/game.rb`/`game.js`): `:chunky` is
   the 🦊 emoji, and emoji look different on every system (headless
   Chromium draws 🥓 as a small red glyph) - a head-only Chunky sprite and
@@ -189,8 +184,8 @@ Last updated 2026-10-17.
   web build ignores it. Not tried: the workshop, the embedded cell, a real
   screen reader on the canvas.
 - Stepping through a cell (⏯, lessons `variablen` to `module`, `html/step_recorder.rb`,
-  `html/stepper.js`): no lesson text mentions ⏯ yet - a sentence in
-  schleifen's prose ("watch the loop with ⏯") would point learners at it.
+  `html/stepper.js`): schleifen's prose points at ⏯ since 2026-10-25 (the
+  block-parameter paragraph); the other stepper lessons do not.
   Past ~200 steps the slider moves in slivers; the experiment's tick
   strip, grouped by passes, was left out. Steps are lines, not
   expressions (a one-line block shares its line; `_1`/`it` show no

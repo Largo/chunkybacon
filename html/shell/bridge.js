@@ -324,5 +324,15 @@
   // the course's languages are its ui sections; <html lang> is right from
   // the spinner on (screen readers), the shell renders in it
   bridge.lang = state.lang = pickLang(Object.keys(window.LESSONS.ui));
+  // the loading screen in that language: index.html starts out in German
+  // (the course's first language), which a Japanese or English visitor saw
+  // as the tab's title until the shell came up
+  (function () {
+    var ui = window.LESSONS.ui[bridge.lang];
+    var title = document.getElementById("spinnerTitle");
+    if (!ui || !ui.title) return;
+    document.title = ui.title;
+    if (title) { title.textContent = ui.title; title.setAttribute("lang", bridge.lang); }
+  })();
   document.documentElement.lang = bridge.lang;
 })();

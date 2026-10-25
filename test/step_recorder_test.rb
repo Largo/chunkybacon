@@ -222,6 +222,7 @@ class StepRecorderTest < Minitest::Test
     flagged.each do |lesson|
       %w[de en].each do |lang|
         setup
+        all = LESSONS.find { |l| l["id"] == lesson["id"] }[lang]["cells"]
         cells(lesson["id"], lang).each do |cell, idx|
           t = record(cell["code"])
           where = "#{lesson['id']} #{lang} cell #{idx}"
@@ -229,7 +230,12 @@ class StepRecorderTest < Minitest::Test
           code_lines = cell["code"].lines.grep_v(/\A\s*(#|\z)/)
           assert_equal code_lines.any?, events(t).include?("line"), where
           assert_nil t[:steps].find { |s| s[:event] == "recorder-error" }, where
-          assert_nil t[:error], where unless cell["t"] == "x"
+          # a demo may fail on purpose (methoden: a method cannot see the
+          # cell's variables) - then the text below it names the error
+          explained = t[:error] && all[idx + 1] && all[idx + 1]["t"] == "h" &&
+                      all[idx + 1]["html"].include?(t[:error].split(":").first)
+          assert_nil t[:error], where unless cell["t"] == "x" || explained
+          assert_equal "error", t[:steps].last[:event].to_s, where if explained
           assert_operator JSON.generate(t).bytesize, :<, 200_000, where
         end
       end

@@ -17,6 +17,8 @@ require_relative "../html/friendly_errors"
 require_relative "friendly_errors_corpus"
 # the real time limit of live runs (AutoRun::Stopped)
 require_relative "../html/autorun"
+# the turtle commands, for the turtle corpus entries (rule turtle_outside)
+require_relative "../html/turtle"
 
 FILE = "chunky.rb" # html/main.rb EVAL_FILE
 

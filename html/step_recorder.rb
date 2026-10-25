@@ -41,7 +41,7 @@ class StepRecorder
 
   # what the kernel itself puts into the binding (main.rb's check_exercise;
   # test/step_recorder_test.rb keeps the two lists equal) - never shown
-  HIDDEN = %i[output result code images downloads scenes apps shoes_types sketch audios games _].freeze
+  HIDDEN = %i[output result code images downloads scenes apps shoes_types sketch audios games board _].freeze
 
   Frame = Struct.new(:kind, :name, :line, :binding, :own, :seen, :last_line, :iter, :id, :shot)
 
@@ -61,6 +61,7 @@ class StepRecorder
     @truncated = false
     @block_locals = {}
     @started = false
+    @stopped = false
   end
 
   # Runs the block (which must eval +code+ with file name +file+), recording
@@ -151,6 +152,8 @@ class StepRecorder
   end
 
   def on_event(tp)
+    return if @stopped
+
     case tp.event
     when :call
       # a method this cell defined; its binding holds exactly its own locals
@@ -244,8 +247,15 @@ class StepRecorder
     }.compact
   end
 
+  # Past the cap (or after a recorder error) the hook ignores every event;
+  # #run's ensure disables the TracePoint once the cell is done. Disabling a
+  # targeted TracePoint from inside its own hook rewrites the cell's
+  # instruction sequence while frames of it are still running - CRuby 4.0
+  # segfaults now and then on a deep recursion (one run in four of the
+  # recorder test, test_deep_recursion_keeps_few_frames), and in the browser
+  # that would take the whole Ruby VM with it.
   def stop_tracing
-    @tracer.disable
+    @stopped = true
   end
 
   def snapshot
