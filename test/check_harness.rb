@@ -381,6 +381,584 @@ SOLUTIONS = {
     "en" => [%(notes = ["Breakfast at 07:45: Bacon", "Snack at 10:15: apple", "Lunch at 12:30: bacon and egg", "Evening: not hungry"]\ntimes = notes.join(" ").scan(/\\d\\d:\\d\\d/)\nbacon_days = notes.count { |note| note.match?(/bacon/i) }),
              %(notes = ["Breakfast at 07:45: Bacon", "Snack at 10:15: apple", "Lunch at 12:30: bacon and egg", "Evening: not hungry"]\ntimes = notes.flat_map { |note| note.scan(/\\d{2}:\\d{2}/) }\nbacon_days = notes.select { |note| note =~ /[Bb]acon/ }.length\np bacon_days)]
   },
+  "zufall" => {
+    "de" => [%(summen = 100.times.map { rand(1..6) + rand(1..6) }
+siebener = summen.count(7)),
+             %(summen = Array.new(100) { rand(1..6) + rand(1..6) }
+siebener = summen.count { |s| s == 7 }
+p siebener)],
+    "en" => [%(totals = 100.times.map { rand(1..6) + rand(1..6) }
+sevens = totals.count(7)),
+             %(totals = Array.new(100) { rand(1..6) + rand(1..6) }
+sevens = totals.count { |t| t == 7 }
+p sevens)]
+  },
+  "formatieren" => {
+    "de" => [%(einkauf = { "Speck" => 4.5, "Brot" => 2, "Honig" => 6.8 }
+zettel = einkauf.map { |artikel, preis| artikel.ljust(10) + format("%7.2f", preis) }.join("\\n")),
+             %(einkauf = { "Speck" => 4.5, "Brot" => 2, "Honig" => 6.8 }
+zettel = einkauf.map { |a, p| format("%-10s%7.2f", a, p) }.join("\\n")
+puts zettel)],
+    "en" => [%(shopping = { "Bacon" => 4.5, "Bread" => 2, "Honey" => 6.8 }
+list = shopping.map { |item, price| item.ljust(10) + format("%7.2f", price) }.join("\\n")),
+             %(shopping = { "Bacon" => 4.5, "Bread" => 2, "Honey" => 6.8 }
+list = shopping.map { |i, p| format("%-10s%7.2f", i, p) }.join("\\n")
+puts list)]
+  },
+  "dateien" => {
+    "de" => [%(File.write("einkauf.txt", "Speck\\nEier\\nBrot\\n")
+artikel = File.read("einkauf.txt").lines(chomp: true)),
+             %(File.write("einkauf.txt", ["Speck", "Eier", "Brot"].join("\\n"))
+artikel = File.read("einkauf.txt").split("\\n")
+p artikel)],
+    "en" => [%(File.write("shopping.txt", "bacon\\neggs\\nbread\\n")
+items = File.read("shopping.txt").lines(chomp: true)),
+             %(File.write("shopping.txt", ["bacon", "eggs", "bread"].join("\\n"))
+items = File.read("shopping.txt").split("\\n")
+p items)]
+  },
+  "arrays#bonus" => {
+    "de" => [%(einkauf = ["Speck", "Ei", "Toast", "Speck", "Kaffee", "Ei", "Speck"]
+ohne_doppelte = einkauf.uniq.sort
+anzahl_speck = einkauf.count("Speck")
+erster_letzter = [einkauf.first, einkauf.last]),
+             %(einkauf = ["Speck", "Ei", "Toast", "Speck", "Kaffee", "Ei", "Speck"]
+ohne_doppelte = einkauf.sort.uniq
+anzahl_speck = einkauf.count("Speck")
+erster_letzter = [einkauf[0], einkauf[-1]]
+p erster_letzter)],
+    "en" => [%(shopping = ["bacon", "egg", "toast", "bacon", "coffee", "egg", "bacon"]
+no_duplicates = shopping.uniq.sort
+bacon_count = shopping.count("bacon")
+first_last = [shopping.first, shopping.last]),
+             %(shopping = ["bacon", "egg", "toast", "bacon", "coffee", "egg", "bacon"]
+no_duplicates = shopping.sort.uniq
+bacon_count = shopping.count("bacon")
+first_last = [shopping[0], shopping[-1]]
+p first_last)]
+  },
+  "methoden#bonus" => {
+    "de" => [%(def tagesgruss(name, stunde = 12)
+  if stunde < 12
+    "Guten Morgen, \#{name}!"
+  elsif stunde < 18
+    "Guten Tag, \#{name}!"
+  else
+    "Guten Abend, \#{name}!"
+  end
+end
+
+tagesgruss("Kaz", 9)),
+             %(def tagesgruss(name, stunde = 12)
+  zeit = stunde < 12 ? "Morgen" : (stunde < 18 ? "Tag" : "Abend")
+  "Guten \#{zeit}, \#{name}!"
+end
+
+puts tagesgruss("Kaz", 9))],
+    "en" => [%(def greeting_for(name, hour = 12)
+  if hour < 12
+    "Good morning, \#{name}!"
+  elsif hour < 18
+    "Good afternoon, \#{name}!"
+  else
+    "Good evening, \#{name}!"
+  end
+end
+
+greeting_for("Kaz", 9)),
+             %(def greeting_for(name, hour = 12)
+  time = hour < 12 ? "morning" : (hour < 18 ? "afternoon" : "evening")
+  "Good \#{time}, \#{name}!"
+end
+
+puts greeting_for("Kaz", 9))]
+  },
+  "strings#bonus" => {
+    "de" => [%(wort = "Lagerregal"
+rueckwaerts = wort.reverse
+palindrom = wort.downcase == wort.downcase.reverse
+laenge = wort.length),
+             %(wort = "Lagerregal"
+rueckwaerts = wort.reverse
+klein = wort.downcase
+palindrom = klein == klein.reverse
+laenge = wort.size
+p palindrom)],
+    "en" => [%(word = "Racecar"
+backwards = word.reverse
+palindrome = word.downcase == word.downcase.reverse
+length = word.length),
+             %(word = "Racecar"
+backwards = word.reverse
+lower = word.downcase
+palindrome = lower == lower.reverse
+length = word.size
+p palindrome)]
+  },
+  "wenn#bonus" => {
+    "de" => [%(punkte = 83
+note = case punkte
+       when 90..100 then "A"
+       when 80..89 then "B"
+       when 70..79 then "C"
+       else "D"
+       end),
+             %(punkte = 83
+case punkte
+when 90..100
+  note = "A"
+when 80..89
+  note = "B"
+when 70..79
+  note = "C"
+else
+  note = "D"
+end
+puts note)],
+    "en" => [%(points = 83
+grade = case points
+        when 90..100 then "A"
+        when 80..89 then "B"
+        when 70..79 then "C"
+        else "D"
+        end),
+             %(points = 83
+case points
+when 90..100
+  grade = "A"
+when 80..89
+  grade = "B"
+when 70..79
+  grade = "C"
+else
+  grade = "D"
+end
+puts grade)]
+  },
+  "schleifen#bonus" => {
+    "de" => [%((1..15).each do |i|
+  if i % 15 == 0
+    puts "Speck-Ei"
+  elsif i % 3 == 0
+    puts "Speck"
+  elsif i % 5 == 0
+    puts "Ei"
+  else
+    puts i
+  end
+end),
+             %(1.upto(15) do |i|
+  wort = ""
+  wort += "Speck" if i % 3 == 0
+  wort += "-" if i % 15 == 0
+  wort += "Ei" if i % 5 == 0
+  puts(wort == "" ? i : wort)
+end)],
+    "en" => [%((1..15).each do |i|
+  if i % 15 == 0
+    puts "bacon-egg"
+  elsif i % 3 == 0
+    puts "bacon"
+  elsif i % 5 == 0
+    puts "egg"
+  else
+    puts i
+  end
+end),
+             %(1.upto(15) do |i|
+  word = ""
+  word += "bacon" if i % 3 == 0
+  word += "-" if i % 15 == 0
+  word += "egg" if i % 5 == 0
+  puts(word == "" ? i : word)
+end)]
+  },
+  "hashes#bonus" => {
+    "de" => [%(woerter = %w[speck ei speck toast ei speck]
+zaehlung = Hash.new(0)
+woerter.each { |wort| zaehlung[wort] += 1 }
+haeufigstes = zaehlung.key(zaehlung.values.max)),
+             %(woerter = %w[speck ei speck toast ei speck]
+zaehlung = {}
+woerter.each do |wort|
+  zaehlung[wort] = zaehlung.fetch(wort, 0) + 1
+end
+haeufigstes = zaehlung.max_by { |wort, anzahl| anzahl }[0]
+p haeufigstes)],
+    "en" => [%(words = %w[bacon egg bacon toast egg bacon]
+tally = Hash.new(0)
+words.each { |word| tally[word] += 1 }
+most_common = tally.key(tally.values.max)),
+             %(words = %w[bacon egg bacon toast egg bacon]
+tally = {}
+words.each do |word|
+  tally[word] = tally.fetch(word, 0) + 1
+end
+most_common = tally.max_by { |word, count| count }[0]
+p most_common)]
+  },
+  "iteratoren#bonus" => {
+    "de" => [%(woerter = ["Speck", "Ei", "Kaffee", "Brot", "Honigbrot"]
+initialen = woerter.map { |wort| wort[0] }.join
+laengstes = woerter.max_by { |wort| wort.length }
+nach_laenge = woerter.sort_by { |wort| wort.length }),
+             %(woerter = ["Speck", "Ei", "Kaffee", "Brot", "Honigbrot"]
+initialen = woerter.map { _1[0] }.join
+laengstes = woerter.max_by(&:length)
+nach_laenge = woerter.sort_by(&:length)
+p nach_laenge)],
+    "en" => [%(words = ["bacon", "egg", "coffee", "milk", "pancakes"]
+initials = words.map { |word| word[0] }.join
+longest = words.max_by { |word| word.length }
+by_length = words.sort_by { |word| word.length }),
+             %(words = ["bacon", "egg", "coffee", "milk", "pancakes"]
+initials = words.map { _1[0] }.join
+longest = words.max_by(&:length)
+by_length = words.sort_by(&:length)
+p by_length)]
+  },
+  "rechnen#bonus" => {
+    "de" => [%(fahrenheit = 25 * 9 / 5 + 32
+celsius = ((100 - 32) * 5 / 9.0).round(1)),
+             %(fahrenheit = 25 * 9 / 5 + 32
+celsius = (100 - 32).fdiv(9).*(5).round(1)
+puts celsius)],
+    "en" => [%(fahrenheit = 25 * 9 / 5 + 32
+celsius = ((100 - 32) * 5 / 9.0).round(1)),
+             %(fahrenheit = 25 * 9 / 5 + 32
+celsius = (100 - 32).fdiv(9).*(5).round(1)
+puts celsius)]
+  },
+  "variablen#bonus" => {
+    "de" => [%(a = 1
+b = 2
+merker = a
+a = b
+b = merker
+summe = a + b),
+             %(a = 1
+b = 2
+alt = a
+a = b
+b = alt
+summe = a + b
+puts summe)],
+    "en" => [%(a = 1
+b = 2
+helper = a
+a = b
+b = helper
+total = a + b),
+             %(a = 1
+b = 2
+old = a
+a = b
+b = old
+total = a + b
+puts total)]
+  },
+  "zufall#bonus" => {
+    "de" => [%(zahlen = (1..10).to_a.sample(3).sort
+muenzen = 10.times.map { ["Kopf", "Zahl"].sample }),
+             %(zahlen = [*1..10].shuffle.first(3).sort
+muenzen = Array.new(10) { %w[Kopf Zahl].sample }
+p muenzen.count("Kopf"))],
+    "en" => [%(numbers = (1..10).to_a.sample(3).sort
+coins = 10.times.map { ["heads", "tails"].sample }),
+             %(numbers = [*1..10].shuffle.first(3).sort
+coins = Array.new(10) { %w[heads tails].sample }
+p coins.count("heads"))]
+  },
+  "regex#bonus" => {
+    "de" => [%(bericht = "Chunky: 3 Streifen, Kaz: 12 Streifen, Isi: 7 Streifen"
+paare = bericht.scan(/(\\w+): (\\d+)/)
+gesamt = paare.sum { |name, zahl| zahl.to_i }),
+             %(bericht = "Chunky: 3 Streifen, Kaz: 12 Streifen, Isi: 7 Streifen"
+paare = bericht.scan(/([A-Za-z]+): (\\d+)/)
+gesamt = paare.map { |p| p[1].to_i }.sum
+p gesamt)],
+    "en" => [%(report = "Chunky: 3 strips, Kaz: 12 strips, Isi: 7 strips"
+pairs = report.scan(/(\\w+): (\\d+)/)
+total = pairs.sum { |name, number| number.to_i }),
+             %(report = "Chunky: 3 strips, Kaz: 12 strips, Isi: 7 strips"
+pairs = report.scan(/([A-Za-z]+): (\\d+)/)
+total = pairs.map { |p| p[1].to_i }.sum
+p total)]
+  },
+  "formatieren#bonus" => {
+    "de" => [%(einkauf = { "Speck" => 4.5, "Brot" => 2, "Honig" => 6.8 }
+zeilen = einkauf.map { |artikel, preis| artikel.ljust(12) + format("%6.2f", preis) }
+tabelle = "Artikel".ljust(12) + "Preis".rjust(6) + "\\n" + "-" * 18 + "\\n" + zeilen.join("\\n")),
+             %(einkauf = { "Speck" => 4.5, "Brot" => 2, "Honig" => 6.8 }
+teile = ["Artikel".ljust(12) + "Preis".rjust(6), "-" * 18]
+einkauf.each { |a, p| teile << format("%-12s%6.2f", a, p) }
+tabelle = teile.join("\\n")
+puts tabelle)],
+    "en" => [%(shopping = { "Bacon" => 4.5, "Bread" => 2, "Honey" => 6.8 }
+lines = shopping.map { |item, price| item.ljust(12) + format("%6.2f", price) }
+table = "Item".ljust(12) + "Price".rjust(6) + "\\n" + "-" * 18 + "\\n" + lines.join("\\n")),
+             %(shopping = { "Bacon" => 4.5, "Bread" => 2, "Honey" => 6.8 }
+parts = ["Item".ljust(12) + "Price".rjust(6), "-" * 18]
+shopping.each { |i, p| parts << format("%-12s%6.2f", i, p) }
+table = parts.join("\\n")
+puts table)]
+  },
+  "klassen#bonus" => {
+    "de" => [%(class Sparschwein
+  def initialize
+    @rappen = 0
+  end
+
+  def einwerfen(rappen)
+    @rappen += rappen
+  end
+
+  def stand
+    @rappen
+  end
+end
+
+schwein = Sparschwein.new
+schwein.einwerfen(50)
+schwein.einwerfen(20)
+schwein.stand),
+             %(class Sparschwein
+  attr_reader :stand
+
+  def initialize
+    @stand = 0
+  end
+
+  def einwerfen(rappen)
+    @stand = @stand + rappen
+    self
+  end
+end
+
+puts Sparschwein.new.einwerfen(50).einwerfen(20).stand)],
+    "en" => [%(class PiggyBank
+  def initialize
+    @cents = 0
+  end
+
+  def add(cents)
+    @cents += cents
+  end
+
+  def total
+    @cents
+  end
+end
+
+bank = PiggyBank.new
+bank.add(50)
+bank.add(20)
+bank.total),
+             %(class PiggyBank
+  attr_reader :total
+
+  def initialize
+    @total = 0
+  end
+
+  def add(cents)
+    @total = @total + cents
+    self
+  end
+end
+
+puts PiggyBank.new.add(50).add(20).total)]
+  },
+  "vererbung#bonus" => {
+    "de" => [%(class Nutztier
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  def laut
+    "..."
+  end
+
+  def vorstellen
+    "Ich bin \#{name} und sage \#{laut}"
+  end
+end
+
+class Huhn < Nutztier
+  def laut
+    "Gack!"
+  end
+
+  def vorstellen
+    super + " – und ich lege Eier"
+  end
+end
+
+Huhn.new("Berta").vorstellen),
+             %(class Nutztier
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  def laut
+    "..."
+  end
+
+  def vorstellen
+    "Ich bin \#{name} und sage \#{laut}"
+  end
+end
+
+class Huhn < Nutztier
+  def laut = "Gack!"
+
+  def vorstellen
+    "\#{super} – und ich lege Eier"
+  end
+end
+
+puts Huhn.new("Berta").vorstellen)],
+    "en" => [%(class FarmAnimal
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  def sound
+    "..."
+  end
+
+  def introduce
+    "I am \#{name} and I say \#{sound}"
+  end
+end
+
+class Hen < FarmAnimal
+  def sound
+    "Cluck!"
+  end
+
+  def introduce
+    super + " - and I lay eggs"
+  end
+end
+
+Hen.new("Berta").introduce),
+             %(class FarmAnimal
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  def sound
+    "..."
+  end
+
+  def introduce
+    "I am \#{name} and I say \#{sound}"
+  end
+end
+
+class Hen < FarmAnimal
+  def sound = "Cluck!"
+
+  def introduce
+    "\#{super} - and I lay eggs"
+  end
+end
+
+puts Hen.new("Berta").introduce)]
+  },
+  "module#bonus" => {
+    "de" => [%(class Rucksack
+  include Comparable
+  attr_reader :gewicht
+
+  def initialize(gewicht)
+    @gewicht = gewicht
+  end
+
+  def <=>(anderer)
+    gewicht <=> anderer.gewicht
+  end
+end
+
+[Rucksack.new(7), Rucksack.new(3), Rucksack.new(5)].min.gewicht),
+             %(class Rucksack
+  include Comparable
+  attr_reader :gewicht
+
+  def initialize(gewicht) = @gewicht = gewicht
+  def <=>(anderer) = gewicht <=> anderer.gewicht
+end
+
+puts [Rucksack.new(7), Rucksack.new(3), Rucksack.new(5)].min.gewicht)],
+    "en" => [%(class Backpack
+  include Comparable
+  attr_reader :weight
+
+  def initialize(weight)
+    @weight = weight
+  end
+
+  def <=>(other)
+    weight <=> other.weight
+  end
+end
+
+[Backpack.new(7), Backpack.new(3), Backpack.new(5)].min.weight),
+             %(class Backpack
+  include Comparable
+  attr_reader :weight
+
+  def initialize(weight) = @weight = weight
+  def <=>(other) = weight <=> other.weight
+end
+
+puts [Backpack.new(7), Backpack.new(3), Backpack.new(5)].min.weight)]
+  },
+  "dateien#bonus" => {
+    "de" => [%(File.write("punkte.txt", "Kaz,12\\nIsi,7\\nChunky,3\\n")
+zeilen = File.read("punkte.txt").lines(chomp: true).map { |zeile| zeile.split(",") }
+total = zeilen.sum { |name, punkte| punkte.to_i }
+bester = zeilen.max_by { |name, punkte| punkte.to_i }[0]),
+             %(File.write("punkte.txt", "Kaz,12\\nIsi,7\\nChunky,3\\n")
+total = 0
+bester = nil
+meiste = -1
+File.read("punkte.txt").split("\\n").each do |zeile|
+  name, punkte = zeile.split(",")
+  total += punkte.to_i
+  if punkte.to_i > meiste
+    meiste = punkte.to_i
+    bester = name
+  end
+end
+puts bester)],
+    "en" => [%(File.write("points.txt", "Kaz,12\\nIsi,7\\nChunky,3\\n")
+rows = File.read("points.txt").lines(chomp: true).map { |line| line.split(",") }
+total = rows.sum { |name, points| points.to_i }
+best = rows.max_by { |name, points| points.to_i }[0]),
+             %(File.write("points.txt", "Kaz,12\\nIsi,7\\nChunky,3\\n")
+total = 0
+best = nil
+most = -1
+File.read("points.txt").split("\\n").each do |line|
+  name, points = line.split(",")
+  total += points.to_i
+  if points.to_i > most
+    most = points.to_i
+    best = name
+  end
+end
+puts best)]
+  },
   "fehler" => {
     "de" => [%(fuchs = { name: "Chunky", streifen: 3 }\n\ndef satz(tier)\n  "\#{tier[:name]} isst \#{tier[:streifen]} Streifen Speck."\nend\n\nsatz(fuchs)),
              %(fuchs = { name: "Chunky", streifen: 3 }\n\ndef satz(tier)\n  "\#{tier[:name]} isst " + tier[:streifen].to_s + " Streifen Speck."\nend\n\nputs satz(fuchs))],
@@ -2367,6 +2945,23 @@ def run_harness(langs)
     selected = selected.select { |lesson| only.include?(lesson["id"]) }
   end
   failures = 0
+  checked = 0   # exercises run: the main one of every lesson, and the bonus ones
+  # The solution a cell offers behind 💡 (its "solution", shell/app.rb
+  # reveal_hint) must be one this harness verifies: one of SOLUTIONS[id]
+  # for the language (ja shows en's). The browser-only lessons' solutions
+  # (no SOLUTIONS entry) are checked by the browser tests.
+  data["lessons"].each do |lesson|
+    next if BROWSER_ONLY.include?(lesson["id"]) # browser_test.mjs runs their solutions
+    langs.each do |lang|
+      lesson.fetch(lang)["cells"].select { |c| c["t"] == "x" && c["solution"] }.each do |cell|
+        key = cell["bonus"] ? "#{lesson["id"]}#bonus" : lesson["id"]
+        known = SOLUTIONS.dig(key, SOLUTION_LANG.fetch(lang, lang)) || []
+        next if known.include?(cell["solution"])
+        puts "FAIL #{key}/#{lang}: the cell's solution is not one of SOLUTIONS[#{key.inspect}] - 💡 would show unverified code"
+        failures += 1
+      end
+    end
+  end
   # the Pico lessons ("pico") run on the Pico simulator, in a process of
   # their own (test/pico_harness.rb): a clean top level for GPIO, no
   # CRuby net/http
@@ -2415,9 +3010,6 @@ def run_harness(langs)
     # binding in this process), finds it.
     # A cell that shows an error on purpose is not among them; it runs here
     # in its place too, to check it raises what it says.
-    earlier = EarlierCells.before(exercise_at, cells, {}) { |i| cells[i]["code"] }.to_h
-    demos = (0...exercise_at).select { |i| earlier.key?(i) || cells[i]["raises"] }
-                             .map { |i| { "code" => cells[i]["code"], "raises" => cells[i]["raises"] } }
     # a demo cell below the exercise (none yet) runs first on a fresh page
     # without it: the exercise is left out while it holds its starter
     last = cells.rindex { |c| c["t"] == "c" }
@@ -2435,7 +3027,19 @@ def run_harness(langs)
         break
       end
     end
-    solutions = SOLUTIONS.fetch(lesson["id"]).fetch(SOLUTION_LANG.fetch(lang, lang))
+    # every exercise: the main one (SOLUTIONS[id]) and the bonus ones
+    # ("bonus": true, SOLUTIONS["id#bonus"]); the starter must fail, every
+    # solution pass, with the demo cells above run first (EarlierCells: the
+    # other exercises are left out while they hold their starter)
+    xs = cells.each_index.select { |i| cells[i]["t"] == "x" }
+    xs.each do |exercise_at|
+    checked += 1
+    exercise = cells[exercise_at]
+    key = exercise["bonus"] ? "#{lesson["id"]}#bonus" : lesson["id"]
+    earlier = EarlierCells.before(exercise_at, cells, {}) { |i| cells[i]["code"] }.to_h
+    demos = (0...exercise_at).select { |i| earlier.key?(i) || cells[i]["raises"] }
+                             .map { |i| { "code" => cells[i]["code"], "raises" => cells[i]["raises"] } }
+    solutions = SOLUTIONS.fetch(key).fetch(SOLUTION_LANG.fetch(lang, lang))
     variants = [["starter", exercise["code"]]] +
                solutions.each_with_index.map { |s, i| ["solution#{i + 1}", s] }
 
@@ -2518,17 +3122,18 @@ def run_harness(langs)
       end
 
       if label == "starter" && passed
-        puts "FAIL #{lesson["id"]}/#{lang}: starter code already passes check!"
+        puts "FAIL #{key}/#{lang}: starter code already passes check!"
         failures += 1
       elsif label != "starter" && !passed
-        puts "FAIL #{lesson["id"]}/#{lang} (#{label}): does not pass check"
+        puts "FAIL #{key}/#{lang} (#{label}): does not pass check"
         failures += 1
       end
+    end
     end
   end
 end
 
-  puts failures.zero? ? "ALL CHECKS OK (#{selected.size} lessons x #{langs.join("+")}, puts + no-puts variants)" : "#{failures} failures (#{langs.join("+")})"
+  puts failures.zero? ? "ALL CHECKS OK (#{selected.size} lessons, #{checked} exercises x #{langs.join("+")}, puts + no-puts variants)" : "#{failures} failures (#{langs.join("+")})"
   failures.zero?
 end
 

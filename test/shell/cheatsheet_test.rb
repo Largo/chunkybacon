@@ -53,8 +53,8 @@ class CheatsheetTest < Minitest::Test
     start
     click(button)
     links = find_all("#cheat-strings a.cheat-lesson")
-    assert_equal ["strings"], links.map { |a| a.attrs["data-id"] }
-    assert_equal ["4"], links.map(&:text)
+    assert_equal %w[strings formatieren], links.map { |a| a.attrs["data-id"] }
+    assert_equal ["4", lesson_number("formatieren").to_s], links.map(&:text)
     assert_equal "#strings", links.first.attrs["href"]
     docs = find_all("#cheat-strings .cheat-docs a")
     assert_includes docs.map { |a| a.attrs["href"] }, "https://docs.ruby-lang.org/en/4.0/String.html"

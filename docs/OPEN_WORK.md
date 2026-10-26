@@ -104,6 +104,39 @@ Last updated 2026-10-25.
 - Lesson `ironruby` (HANDOVER §6s): upstream IronRuby items found on the
   way are listed at the end of §6s.
 
+## Done 2026-10-25, and what it opens up
+
+- **Hints in steps** (HANDOVER §6v): 💡 beside ▶ on every exercise - a
+  nudge (`hints`), the detailed `hint`, then a verified `solution` that
+  one click puts into the cell; a failed check reveals the next hint, an
+  error points at 💡. All 84 exercises have a nudge and a solution in
+  de/en/ja. Follow-ups worth doing:
+  - a second, lighter nudge for the long exercises of the timelog track
+    and the Pico lessons (`hints` is an array - the shell shows any number);
+  - remember which hints a learner saw (today nothing is persisted: a
+    reload starts over - fine for a notebook, but the progress file
+    (§6a) could carry it);
+  - the solution is one answer; where the check accepts several shapes
+    (the dice exercise, `Array.new` vs `times.map`) a second solution
+    could be offered as "another way" - `check_harness.rb` already holds
+    two per lesson.
+- **New Basics lessons**: `regex` (regular expressions, after
+  `iteratoren`), `zufall` (chance and dice, after `arrays`), `formatieren`
+  (ljust/format/heredocs/strip, after `regex`), `dateien` (File.write/read,
+  lines, CSV by hand, after `doku`). Gaps that are still open in the
+  Basics, each a lesson's worth: Symbols and `nil` on their own
+  (truthiness, `&.`, `||=`, `to_sym` - today a paragraph each in `wenn`
+  and `hashes`); time and dates (`Time.now`, `strftime` - only in the
+  timelog track); sorting and searching (`sort`, `sort_by` with several
+  keys, `min_by`, `bsearch`); `Struct`/`Data` before classes; recursion
+  on its own (the turtle lesson has it in passing).
+- **Bonus exercises** (2026-10-26, HANDOVER §3 `bonus`): a second `x`
+  cell with `"bonus": true` at the end of a lesson, checked and praised
+  with its own 💡, not needed for the tick; `SOLUTIONS["<id>#bonus"]` in
+  the harness, the linter allows it after the main exercise. The Basics
+  lessons have one; the side trips and the timelog track do not yet - a
+  bonus per timelog lesson would make a second pass through the project.
+
 ## Smaller open ends found on the way
 
 - browser_test's "a re-run stops the old game" (Snake) is flaky: it reads

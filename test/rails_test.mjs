@@ -14,6 +14,10 @@ const check = (name, cond, detail = '') => {
   if (!cond) failures++;
 };
 
+// the solution a lesson's exercise offers behind 💡 (lessons.js "solution", shell/app.rb
+// reveal_hint): it must be the one this test runs, so what learners see is what passes here
+const cellSolution = (page, id, lang) => page.evaluate(([i, g]) => window.LESSONS.lessons.find(l => l.id === i)[g].cells.find(c => c.t === 'x').solution, [id, lang]);
+
 // one language: a fresh page, so Rails boots from nothing each time
 const run = async (lang, words) => {
   const page = await browser.newPage({ locale: lang === 'de' ? 'de-DE' : 'en-US' });
@@ -73,6 +77,7 @@ const run = async (lang, words) => {
   const starter = await page.evaluate((i) => window.cellEditors[i].getValue(), exercise);
   const solution = starter.replace(`# get "/${words.bacon}"`, `get "/${words.bacon}"`)
     .replace(`# def ${words.bacon}\n  #   render plain: "..."\n  # end`, `def ${words.bacon}\n    render plain: "CHUNKY BACON!"\n  end`);
+  check(`${lang}: rails: 💡 offers this very solution`, solution === await cellSolution(page, 'rails', lang), solution);
   check(`${lang}: the solution differs from the starter`, solution !== starter && !solution.includes('"..."'), solution);
   await page.evaluate(([i, c]) => window.cellEditors[i].setValue(c), [exercise, solution]);
   await page.click(`.run-cell[data-idx="${exercise}"]`);
@@ -119,6 +124,7 @@ const runModel = async (lang, words) => {
   const starter = await page.evaluate((i) => window.cellEditors[i].getValue(), exercise);
   const solution = starter.replace('# validates ...', 'validates :name, presence: true')
     .replace(`${words.model}.all`, `${words.model}.where("${words.visits} >= ?", 2)`);
+  check(`${lang}: activerecord: 💡 offers this very solution`, solution === await cellSolution(page, 'activerecord', lang), solution);
   check(`${lang}: the solution differs from the starter`, solution !== starter && solution.includes('where('), solution);
   await page.evaluate(([i, c]) => window.cellEditors[i].setValue(c), [exercise, solution]);
   await page.click(`.run-cell[data-idx="${exercise}"]`);
@@ -168,6 +174,7 @@ const runMvc = async (lang, words) => {
   const starter = await page.evaluate((i) => window.cellEditors[i].getValue(), exercise);
   const solution = starter.replace(/<h2>[^<]*<\/h2>/, `<h2><%= @${words.ivar}.name %></h2>`)
     .replace(`# def show\n  #   @${words.ivar} = ${words.model}.find(params[:id])\n  # end`, `def show\n    @${words.ivar} = ${words.model}.find(params[:id])\n  end`);
+  check(`${lang}: rails-mvc: 💡 offers this very solution`, solution === await cellSolution(page, 'rails-mvc', lang), solution);
   check(`${lang}: mvc: the solution differs from the starter`, solution !== starter && solution.includes('def show') && !solution.includes('# def show'), solution);
   await page.evaluate(([i, c]) => window.cellEditors[i].setValue(c), [exercise, solution]);
   await page.click(`.run-cell[data-idx="${exercise}"]`);
@@ -226,6 +233,7 @@ const runForms = async (lang, words) => {
   const starter = await page.evaluate((i) => window.cellEditors[i].getValue(), exercise);
   const solution = starter.replace(/<%#[^%]*%>/, `<%= ${words.builder}.label :${words.price} %>\n    <%= ${words.builder}.number_field :${words.price}, step: 0.1 %>`)
     .replace(`[:name]`, `[:name, :${words.price}]`);
+  check(`${lang}: rails-forms: 💡 offers this very solution`, solution === await cellSolution(page, 'rails-forms', lang), solution);
   check(`${lang}: forms: the solution differs from the starter`, solution !== starter && solution.includes('number_field') && solution.includes(`:name, :${words.price}]`), solution);
   await page.evaluate(([i, c]) => window.cellEditors[i].setValue(c), [exercise, solution]);
   await page.click(`.run-cell[data-idx="${exercise}"]`);
@@ -285,6 +293,7 @@ const runCrud = async (lang, words) => {
   check(`${lang}: crud: the starter does not pass`, !(await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
   const starter = await page.evaluate((i) => window.cellEditors[i].getValue(), exercise);
   const solution = starter.replace(/<%#[^%]*%>/, `<%= button_to "${words.deleteLabel}", ${words.param}, method: :delete %>`);
+  check(`${lang}: rails-crud: 💡 offers this very solution`, solution === await cellSolution(page, 'rails-crud', lang), solution);
   check(`${lang}: crud: the solution differs from the starter`, solution !== starter && solution.includes('button_to'), solution);
   await page.evaluate(([i, c]) => window.cellEditors[i].setValue(c), [exercise, solution]);
   await page.click(`.run-cell[data-idx="${exercise}"]`);
@@ -321,6 +330,7 @@ const runAssoc = async (lang, words) => {
   check(`${lang}: assoc: the starter does not pass`, !(await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
   const starter = await page.evaluate((i) => window.cellEditors[i].getValue(), exercise);
   const solution = starter.replace('# has_many ...', `has_many :${words.specials}`).replace('# belongs_to ...', `belongs_to :${words.cook}`);
+  check(`${lang}: rails-associations: 💡 offers this very solution`, solution === await cellSolution(page, 'rails-associations', lang), solution);
   check(`${lang}: assoc: the solution differs from the starter`, solution !== starter && solution.includes('has_many :') && solution.includes('belongs_to :'), solution);
   await page.evaluate(([i, c]) => window.cellEditors[i].setValue(c), [exercise, solution]);
   await page.click(`.run-cell[data-idx="${exercise}"]`);
