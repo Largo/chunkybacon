@@ -232,6 +232,31 @@ class AppTest < Minitest::Test
     assert_includes bubble, "💡"
   end
 
+  # ---------- bonus exercises ----------
+
+  # lesson arrays ends with a bonus exercise ("bonus": true): checked and
+  # praised, but the lesson's tick comes from the main exercise
+  def test_a_bonus_exercise_is_labelled_and_is_not_the_one_alt_r_runs
+    start(hash: "#arrays")
+    bonus = find(".cell.exercise.bonus")
+    refute_nil bonus
+    assert_equal "Bonus", bonus.attrs["data-label"]
+    assert_nil bonus.js_querySelector(".run-cell").attrs["aria-keyshortcuts"], "Alt+R runs the main exercise"
+    assert_equal "Aufgabe", find(".cell.exercise").attrs["data-label"], "the main exercise comes first"
+    refute_nil bonus.js_querySelector(".hint-cell"), "💡 on the bonus too"
+  end
+
+  def test_a_passed_bonus_praises_but_does_not_tick_the_lesson
+    start(hash: "#arrays")
+    idx = find(".cell.exercise.bonus .run-cell").attrs["data-idx"].to_i
+    fire("chunky:ran", { "idx" => idx, "outcome" => "pass", "elapsed" => 0.2, "auto" => false, "own" => 0.2 })
+    assert_equal "pass", bubble_state
+    assert_includes bubble, "Bonus geschafft"
+    refute_includes ChunkyShell::Store.done_ids, "arrays"
+    fire("chunky:ran", { "idx" => exercise_idx, "outcome" => "pass", "elapsed" => 0.2, "auto" => false, "own" => 0.2 })
+    assert_includes ChunkyShell::Store.done_ids, "arrays"
+  end
+
   # ---------- hints (💡) ----------
 
   def hint_button(idx) = find(".hint-cell[data-idx='#{idx}']")
@@ -537,7 +562,7 @@ class AppTest < Minitest::Test
 
   def test_step_buttons_only_where_the_lesson_asks_for_them
     start(hash: "#schleifen")
-    assert_equal %w[1 3 5 7 9 11 13], find_all(".step-cell").map { |b| b.attrs["data-idx"] }, "every code cell, the exercise too"
+    assert_equal %w[1 3 5 7 9 11 13 15], find_all(".step-cell").map { |b| b.attrs["data-idx"] }, "every code cell, the exercise and its bonus too"
     assert_equal "⏯ Schritt für Schritt", step_button(3).text
     assert_equal "Schritt für Schritt durch Zelle 2", step_button(3).attrs["aria-label"], "the visible words, and the cell"
     assert step_button(3).js_closest(".cell-toolbar"), "in the toolbar, beside ▶"

@@ -1582,6 +1582,20 @@ await setExercise('puts nope');
 await runExercise();
 check('an error points at 💡 Tipp', (await page.textContent('#chunkyText')).includes('💡 Tipp'));
 
+// ---------- a bonus exercise (arrays): praised, but the tick comes from the main one ----------
+await page.click('#lessonNav a[data-id="arrays"]');
+await page.waitForSelector('.cell.exercise.bonus .run-cell', { timeout: 10000 });
+await page.evaluate(() => { const done = JSON.parse(localStorage.getItem('chunky_done') || '{}'); });
+const bonusIdx = await page.$eval('.cell.exercise.bonus .run-cell', b => +b.dataset.idx);
+check('the bonus exercise is labelled, after the main one, without Alt+R', (await page.$eval('.cell.exercise.bonus', c => c.dataset.label)) === 'Bonus' &&
+  bonusIdx > +(await exerciseIdx()) && !(await page.$eval('.cell.exercise.bonus .run-cell', b => b.getAttribute('aria-keyshortcuts'))));
+const bonusSolution = await page.evaluate(i => window.LESSONS.lessons.find(l => l.id === 'arrays').de.cells[i].solution, bonusIdx);
+await page.evaluate(([i, code]) => window.cellEditors[i].setValue(code), [bonusIdx, bonusSolution]);
+await page.evaluate(() => { document.getElementById('chunkyChat').className = ''; });
+await page.click(`.run-cell[data-idx="${bonusIdx}"]`);
+await page.waitForFunction(() => ['pass', 'fail'].includes(document.getElementById('chunkyChat').className), null, { timeout: 30000 }).catch(() => {});
+check('its solution passes and Chunky says it was the bonus', (await page.getAttribute('#chunkyChat', 'class')).includes('pass') && (await page.textContent('#chunkyText')).includes('Bonus geschafft'));
+
 // every exercise's solution passes - the lessons check_harness.rb cannot run (BROWSER_ONLY: Pyodide, sql.js, Herb)
 for (const id of ['pycall', 'sympy', 'numpy', 'matplotlib', 'sklearn', 'sequel', 'erb']) {
   await page.click(`#lessonNav a[data-id="${id}"]`);

@@ -393,7 +393,8 @@ Cells, per language:
 | `c` | `code` | runnable demo cell |
 | `x` | `code`, `probe`, `check`, `hint` | (an `"engine": "ironruby"` lesson) `probe` is IronRuby code run after the learner's, its inspect is the check's local `probe` (§6s) |
 | `c` | `code`, `raises` | a demo that fails on purpose (the errors lesson): `raises` names the error class, and the harness checks the cell raises exactly that |
-| `x` | `code`, `check`, `hint` | the ONE exercise cell of the lesson; `check` is Ruby evaluated in the lesson binding with locals `output`, `result`, `code`, `images`, `downloads`, `audios` (the WAVs `show_audio` got), `games` (copies of the games `show_game` made, to play headless) |
+| `x` | `code`, `check`, `hint` | the exercise cell of the lesson (one main one; bonus ones below, `"bonus": true`); `check` is Ruby evaluated in the lesson binding with locals `output`, `result`, `code`, `images`, `downloads`, `audios` (the WAVs `show_audio` got), `games` (copies of the games `show_game` made, to play headless) |
+| `x` | `bonus` | `true` on a second exercise at the end of a lesson (after its `<div class='task bonus'>`): checked and praised like the main one, with its own 💡, but the lesson's tick comes from the main exercise alone (`App#bonus_passed`), Alt+R runs the main one, and the harness takes its solutions from `SOLUTIONS["<id>#bonus"]`. Most Basics lessons (rechnen to module, regex, formatieren, dateien) end with one |
 | `x` | `hints`, `solution` | the exercise's help behind 💡 (§6v): `hints` are the lighter hints shown before `hint` (one nudge today: where to start, which method), `solution` a finished solution the learner can compare with and put into the cell. `solution` must be one of `check_harness.rb`'s `SOLUTIONS[id]` for the language (ja shows en's), so what 💡 offers is verified; the browser-only lessons' are run by `browser_test.mjs` |
 | `c`/`x` | `tabs` | Pico lessons (§6r): more files of the cell, each a tab beside `code` (the main file, `app.rb`, or `main` if given). `{"name": "epd2in13.rb", "src": "pico/lib/en/epd2in13.rb"}` is fetched and read-only; `{"name": "dechunk.rb", "code": "...", "readonly": false}` is inline and editable (saved per learner). The worker writes them to `/lib`, the code says `require "epd2in13"` |
 | `c`/`x` | `board`, `bench` | Pico lessons: `board: {"parts": [...]}` runs the cell on the simulated Pico and shows the bench with these parts; `bench` is a script of inputs at fixed times (`{"at": 300, "press": 14}`, `"set"`, `"release"`, `"arena"`, `"ble"`, `"wifi"`) - an exercise with input parts needs one. Its check gets one more local, `board` (§6r) |
@@ -421,7 +422,9 @@ Rules that the code and tests rely on:
   Rotfuchs).
 - All cells of a lesson share one binding (notebook kernel). Demo and
   exercise names deliberately differ (Katze vs Fuchs) so a demo cannot
-  satisfy the check. A cell run before the cells above it gets them run
+  satisfy the check. A bonus exercise must not need the main exercise's
+  solution either (EarlierCells leaves an exercise out while it holds its
+  starter - the harness runs each exercise with the demos alone). A cell run before the cells above it gets them run
   first (§6p), so a demo cell may use what any cell above it makes - but
   not the exercise's names: the exercise is left out while it holds its
   starter.

@@ -367,7 +367,9 @@ window.LESSONS_JSON = JSON.stringify({
       "hintApply": "In die Zelle übernehmen",
       "hintApplied": "Übernommen – jetzt ▶ Ausführen",
       "hintOnError": "Lies die Erklärung unter der Zelle – und wenn du nicht weiterkommst: 💡 Tipp.",
-      "hintAllShown": "Du hast alle Tipps gesehen. Mit „💡 Lösung zeigen“ bekommst du eine fertige Lösung zum Vergleichen."
+      "hintAllShown": "Du hast alle Tipps gesehen. Mit „💡 Lösung zeigen“ bekommst du eine fertige Lösung zum Vergleichen.",
+      "bonusLabel": "Bonus",
+      "bonusDone": "Bonus geschafft – das war die schwierigere Aufgabe! Das Häkchen der Lektion gibt es für die Aufgabe darüber."
     },
     "en": {
       "title": "Learn Ruby with Chunky Bacon",
@@ -726,7 +728,9 @@ window.LESSONS_JSON = JSON.stringify({
       "hintApply": "Put it in the cell",
       "hintApplied": "Done – now ▶ Run",
       "hintOnError": "Read the explanation below the cell – and if you're stuck: 💡 Hint.",
-      "hintAllShown": "You've seen all the hints. “💡 Show a solution” gives you a finished one to compare with."
+      "hintAllShown": "You've seen all the hints. “💡 Show a solution” gives you a finished one to compare with.",
+      "bonusLabel": "Bonus",
+      "bonusDone": "Bonus done – that was the harder one! The lesson's tick comes from the task above it."
     },
     "ja": {
       "title": "Chunky Baconと学ぶRuby",
@@ -1085,7 +1089,9 @@ window.LESSONS_JSON = JSON.stringify({
       "hintApply": "セルに入れる",
       "hintApplied": "入れたよ。▶ 実行してみて",
       "hintOnError": "セルの下の説明を読んでみて。それでも困ったら💡 ヒントだよ。",
-      "hintAllShown": "ヒントは全部見たね。「💡 答えを見る」で、できあがった答えと見比べられるよ。"
+      "hintAllShown": "ヒントは全部見たね。「💡 答えを見る」で、できあがった答えと見比べられるよ。",
+      "bonusLabel": "ボーナス",
+      "bonusDone": "ボーナスクリア！むずかしいほうの課題だったよ。レッスンのチェックは、その上の課題でつくよ。"
     }
   },
   "lessons": [
@@ -1292,6 +1298,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "(result == 12.75 || output.include?(\"12.75\")) && (code.include?(\"/\") || code.include?(\"fdiv\"))",
             "hint": "Mit <code>3 * 17 / 4</code> kommt <code>12</code> heraus – der Rest fällt weg! Mach eine der Zahlen zum Float: <code>3 * 17 / 4.0</code>.",
             "solution": "puts 3 * 17 / 4.0"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Umrechnen! 25 °C in Fahrenheit: mal 9, durch 5, plus 32 – das ergibt <code>77</code>, speichere es in <code>fahrenheit</code>. Und 100 °F zurück in Celsius: minus 32, mal 5, durch 9 – auf eine Nachkommastelle gerundet <code>37.8</code>, in <code>celsius</code>. Achtung Ganzzahl-Falle beim Teilen!</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# fahrenheit = ...   # 25 °C in Fahrenheit: mal 9, durch 5, plus 32\n# celsius = ...      # 100 °F in Celsius: minus 32, mal 5, durch 9 – auf eine Stelle gerundet\n",
+            "hints": [
+              "Die erste Rechnung geht mit ganzen Zahlen auf. Bei der zweiten muss eine Zahl ein Komma haben (<code>9.0</code>), sonst schneidet Ruby ab – und <code>round</code> nimmt die gewünschte Zahl Stellen in Klammern."
+            ],
+            "check": "fahrenheit == 77 && celsius == 37.8 && code.include?(\"*\")",
+            "hint": "<code>fahrenheit = 25 * 9 / 5 + 32</code> und <code>celsius = ((100 - 32) * 5 / 9.0).round(1)</code>.",
+            "solution": "fahrenheit = 25 * 9 / 5 + 32\ncelsius = ((100 - 32) * 5 / 9.0).round(1)"
           }
         ]
       },
@@ -1359,6 +1380,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "(result == 12.75 || output.include?(\"12.75\")) && (code.include?(\"/\") || code.include?(\"fdiv\"))",
             "hint": "<code>3 * 17 / 4</code> gives <code>12</code> – the remainder is dropped! Make one of the numbers a Float: <code>3 * 17 / 4.0</code>.",
             "solution": "puts 3 * 17 / 4.0"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Conversions! 25 °C in Fahrenheit: times 9, divided by 5, plus 32 – that gives <code>77</code>, store it in <code>fahrenheit</code>. And 100 °F back to Celsius: minus 32, times 5, divided by 9 – rounded to one decimal, <code>37.8</code>, in <code>celsius</code>. Mind the whole-number trap when dividing!</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# fahrenheit = ...   # 25 °C in Fahrenheit: times 9, divided by 5, plus 32\n# celsius = ...      # 100 °F in Celsius: minus 32, times 5, divided by 9 - rounded to one decimal\n",
+            "hints": [
+              "The first calculation works out in whole numbers. In the second one, one number needs a decimal point (<code>9.0</code>) or Ruby cuts off – and <code>round</code> takes the number of decimals in brackets."
+            ],
+            "check": "fahrenheit == 77 && celsius == 37.8 && code.include?(\"*\")",
+            "hint": "<code>fahrenheit = 25 * 9 / 5 + 32</code> and <code>celsius = ((100 - 32) * 5 / 9.0).round(1)</code>.",
+            "solution": "fahrenheit = 25 * 9 / 5 + 32\ncelsius = ((100 - 32) * 5 / 9.0).round(1)"
           }
         ]
       },
@@ -1426,6 +1462,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "(result == 12.75 || output.include?(\"12.75\")) && (code.include?(\"/\") || code.include?(\"fdiv\"))",
             "hint": "<code>3 * 17 / 4</code>だと<code>12</code>になっちゃう。余りが捨てられるからね！ どれか1つの数をFloatにしよう：<code>3 * 17 / 4.0</code>。",
             "solution": "puts 3 * 17 / 4.0"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>単位の変換です。25 °Cを華氏に：9をかけて、5で割って、32をたすと<code>77</code>になります。<code>fahrenheit</code>に入れてください。そして100 °Fを摂氏に戻します：32を引いて、5をかけて、9で割り、小数第1位に丸めると<code>37.8</code>。<code>celsius</code>に入れましょう。割り算の整数の落とし穴に注意！</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# fahrenheit = ...   # 25 °C を華氏に：9をかけて、5で割って、32をたす\n# celsius = ...      # 100 °F を摂氏に：32を引いて、5をかけて、9で割る。小数第1位に丸める\n",
+            "hints": [
+              "1つめの計算は整数でぴったり割り切れるよ。2つめは、どれか1つを小数（<code>9.0</code>）にしないとRubyが切り捨てちゃう。<code>round</code>にはかっこで桁数を渡してね。"
+            ],
+            "check": "fahrenheit == 77 && celsius == 37.8 && code.include?(\"*\")",
+            "hint": "<code>fahrenheit = 25 * 9 / 5 + 32</code>、<code>celsius = ((100 - 32) * 5 / 9.0).round(1)</code>だよ。",
+            "solution": "fahrenheit = 25 * 9 / 5 + 32\ncelsius = ((100 - 32) * 5 / 9.0).round(1)"
           }
         ]
       }
@@ -1480,6 +1531,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "name.is_a?(String) && !name.empty? && alter.is_a?(Integer)",
             "hint": "Zum Beispiel: <code>name = \"Kaz\"</code> und <code>alter = 7</code>.",
             "solution": "name = \"Kaz\"\nalter = 7"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Ein Klassiker: Tausche die Werte von <code>a</code> und <code>b</code>, so dass danach <code>a</code> gleich 2 und <code>b</code> gleich 1 ist – mit einer dritten Variable als Zwischenlager. Rechne zum Schluss <code>summe = a + b</code> aus.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "a = 1\nb = 2\n# tausche a und b – mit einer Hilfsvariable\n# summe = ...   # a plus b\n",
+            "hints": [
+              "Wenn du <code>a = b</code> schreibst, ist der alte Wert von <code>a</code> weg. Leg ihn vorher in eine dritte Variable, zum Beispiel <code>merker</code>, und hol ihn danach für <code>b</code> wieder heraus."
+            ],
+            "check": "a == 2 && b == 1 && summe == 3 && code.scan(\"=\").length >= 5",
+            "hint": "<code>merker = a</code>, dann <code>a = b</code>, dann <code>b = merker</code> – und <code>summe = a + b</code>.",
+            "solution": "a = 1\nb = 2\nmerker = a\na = b\nb = merker\nsumme = a + b"
           }
         ]
       },
@@ -1531,6 +1597,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "name.is_a?(String) && !name.empty? && age.is_a?(Integer)",
             "hint": "For example: <code>name = \"Kaz\"</code> and <code>age = 7</code>.",
             "solution": "name = \"Kaz\"\nage = 7"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> A classic: swap the values of <code>a</code> and <code>b</code>, so that afterwards <code>a</code> is 2 and <code>b</code> is 1 – with a third variable as temporary storage. Finally work out <code>total = a + b</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "a = 1\nb = 2\n# swap a and b - with a helper variable\n# total = ...   # a plus b\n",
+            "hints": [
+              "Once you write <code>a = b</code>, the old value of <code>a</code> is gone. Put it into a third variable first, say <code>helper</code>, and take it out again for <code>b</code> afterwards."
+            ],
+            "check": "a == 2 && b == 1 && total == 3 && code.scan(\"=\").length >= 5",
+            "hint": "<code>helper = a</code>, then <code>a = b</code>, then <code>b = helper</code> – and <code>total = a + b</code>.",
+            "solution": "a = 1\nb = 2\nhelper = a\na = b\nb = helper\ntotal = a + b"
           }
         ]
       },
@@ -1582,6 +1663,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "name.is_a?(String) && !name.empty? && age.is_a?(Integer)",
             "hint": "たとえば<code>name = \"Kaz\"</code>と<code>age = 7</code>みたいにね。",
             "solution": "name = \"Kaz\"\nage = 7"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>定番の問題です。<code>a</code>と<code>b</code>の値を入れかえて、<code>a</code>が2、<code>b</code>が1になるようにしましょう。一時的に置いておくための3つめの変数を使います。最後に<code>total = a + b</code>を計算してください。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "a = 1\nb = 2\n# a と b を入れかえる。補助の変数を使って\n# total = ...   # a たす b\n",
+            "hints": [
+              "<code>a = b</code>と書いたとたん、<code>a</code>の古い値は消えちゃうよ。先に3つめの変数、たとえば<code>helper</code>に入れておいて、あとで<code>b</code>のために取り出すんだ。"
+            ],
+            "check": "a == 2 && b == 1 && total == 3 && code.scan(\"=\").length >= 5",
+            "hint": "<code>helper = a</code>、次に<code>a = b</code>、次に<code>b = helper</code>。そして<code>total = a + b</code>だよ。",
+            "solution": "a = 1\nb = 2\nhelper = a\na = b\nb = helper\ntotal = a + b"
           }
         ]
       },
@@ -1653,6 +1749,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "(output.include?(\"Ich mag CHUNKY BACON!\") || result == \"Ich mag CHUNKY BACON!\") && code.include?('#{')",
             "hint": "Methoden funktionieren auch innerhalb von <code>#{}</code>: <code>\"Ich mag #{lieblingsessen.upcase}!\"</code> – mit doppelten Anführungszeichen.",
             "solution": "lieblingsessen = \"Chunky Bacon\"\nputs \"Ich mag #{lieblingsessen.upcase}!\""
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Ein Palindrom liest sich vorwärts wie rückwärts. Lege zu <code>wort</code> drei Variablen an: <code>rueckwaerts</code> – das Wort umgedreht; <code>palindrom</code> – <code>true</code>, wenn das Wort kleingeschrieben gleich seiner Umkehrung ist; und <code>laenge</code> – die Zahl seiner Zeichen.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "wort = \"Lagerregal\"\n# rueckwaerts = ...  # das Wort umgedreht\n# palindrom = ...    # true, wenn es rückwärts gleich lautet (Gross/klein egal)\n# laenge = ...       # wie viele Zeichen\n",
+            "hints": [
+              "<code>reverse</code> dreht um, <code>length</code> zählt. Für den Vergleich machst du beide Seiten mit <code>downcase</code> klein – und <code>==</code> ergibt dann von selbst <code>true</code> oder <code>false</code>."
+            ],
+            "check": "rueckwaerts == \"lagerregaL\" && palindrom == true && laenge == 10 && code.include?(\"reverse\")",
+            "hint": "<code>rueckwaerts = wort.reverse</code>, <code>palindrom = wort.downcase == wort.downcase.reverse</code> und <code>laenge = wort.length</code>.",
+            "solution": "wort = \"Lagerregal\"\nrueckwaerts = wort.reverse\npalindrom = wort.downcase == wort.downcase.reverse\nlaenge = wort.length"
           }
         ]
       },
@@ -1720,6 +1831,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "(output.include?(\"I love CHUNKY BACON!\") || result == \"I love CHUNKY BACON!\") && code.include?('#{')",
             "hint": "Methods work inside <code>#{}</code> too: <code>\"I love #{favorite_food.upcase}!\"</code> – with double quotes.",
             "solution": "favorite_food = \"Chunky Bacon\"\nputs \"I love #{favorite_food.upcase}!\""
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> A palindrome reads the same forwards and backwards. Create three variables for <code>word</code>: <code>backwards</code> – the word reversed; <code>palindrome</code> – <code>true</code> when the word in lower case equals its reverse; and <code>length</code> – the number of its characters.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "word = \"Racecar\"\n# backwards = ...   # the word reversed\n# palindrome = ...  # true when the word reads the same backwards (ignore the case)\n# length = ...      # how many characters\n",
+            "hints": [
+              "<code>reverse</code> turns it around, <code>length</code> counts. For the comparison make both sides lower case with <code>downcase</code> – and <code>==</code> gives <code>true</code> or <code>false</code> by itself."
+            ],
+            "check": "backwards == \"racecaR\" && palindrome == true && length == 7 && code.include?(\"reverse\")",
+            "hint": "<code>backwards = word.reverse</code>, <code>palindrome = word.downcase == word.downcase.reverse</code> and <code>length = word.length</code>.",
+            "solution": "word = \"Racecar\"\nbackwards = word.reverse\npalindrome = word.downcase == word.downcase.reverse\nlength = word.length"
           }
         ]
       },
@@ -1787,6 +1913,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "(output.include?(\"I love CHUNKY BACON!\") || result == \"I love CHUNKY BACON!\") && code.include?('#{')",
             "hint": "<code>#{}</code>の中でもメソッドは使えるよ：<code>\"I love #{favorite_food.upcase}!\"</code>。ダブルクォートを使ってね。",
             "solution": "favorite_food = \"Chunky Bacon\"\nputs \"I love #{favorite_food.upcase}!\""
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>回文は、前から読んでも後ろから読んでも同じ言葉です。<code>word</code>について変数を3つ作りましょう。<code>backwards</code>には逆さまにした単語を、<code>palindrome</code>には小文字にした単語がその逆さまと等しいとき<code>true</code>を、<code>length</code>には文字数を入れてください。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "word = \"Racecar\"\n# backwards = ...   # 逆さまにした単語\n# palindrome = ...  # 逆から読んでも同じなら true（大文字小文字は無視）\n# length = ...      # 文字数\n",
+            "hints": [
+              "<code>reverse</code>でひっくり返して、<code>length</code>で数えるよ。比べるときは両方を<code>downcase</code>で小文字にしてね。<code>==</code>が勝手に<code>true</code>か<code>false</code>を返してくれるよ。"
+            ],
+            "check": "backwards == \"racecaR\" && palindrome == true && length == 7 && code.include?(\"reverse\")",
+            "hint": "<code>backwards = word.reverse</code>、<code>palindrome = word.downcase == word.downcase.reverse</code>、<code>length = word.length</code>だよ。",
+            "solution": "word = \"Racecar\"\nbackwards = word.reverse\npalindrome = word.downcase == word.downcase.reverse\nlength = word.length"
           }
         ]
       },
@@ -1858,6 +1999,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "text = output + result.to_s; text.include?(\"mittel\") && !text.include?(\"gross\") && !text.include?(\"klein\") && code.include?(\"elsif\")",
             "hint": "So geht's: <code>if zahl &gt; 10</code> → <code>\"gross\"</code>, dann <code>elsif zahl &gt; 5</code> → <code>\"mittel\"</code>, dann <code>else</code> → <code>\"klein\"</code> und zum Schluss <code>end</code>.",
             "solution": "zahl = 7\nif zahl > 10\n  puts \"gross\"\nelsif zahl > 5\n  puts \"mittel\"\nelse\n  puts \"klein\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Noten aus Punkten, mit <code>case</code>/<code>when</code> und Bereichen: 90 bis 100 Punkte sind ein <code>\"A\"</code>, 80 bis 89 ein <code>\"B\"</code>, 70 bis 79 ein <code>\"C\"</code>, alles darunter ein <code>\"D\"</code>. Speichere die Note für <code>punkte</code> in <code>note</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "punkte = 83\n# note = ...   # 90 bis 100: \"A\", 80 bis 89: \"B\", 70 bis 79: \"C\", darunter: \"D\"\n",
+            "hints": [
+              "Schau dir die <code>case</code>-Demo oben an: Ein <code>when</code> pro Bereich (<code>90..100</code>), ein <code>else</code> für den Rest. Das Ergebnis von <code>case</code> kannst du direkt in <code>note</code> speichern."
+            ],
+            "check": "note == \"B\" && code.include?(\"case\") && code.include?(\"when\") && code.include?(\"..\")",
+            "hint": "<code>note = case punkte</code>, dann <code>when 90..100 then \"A\"</code>, <code>when 80..89 then \"B\"</code>, <code>when 70..79 then \"C\"</code>, <code>else \"D\"</code> und <code>end</code>.",
+            "solution": "punkte = 83\nnote = case punkte\n       when 90..100 then \"A\"\n       when 80..89 then \"B\"\n       when 70..79 then \"C\"\n       else \"D\"\n       end"
           }
         ]
       },
@@ -1925,6 +2081,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "text = output + result.to_s; text.include?(\"medium\") && !text.include?(\"big\") && !text.include?(\"small\") && code.include?(\"elsif\")",
             "hint": "Like this: <code>if number &gt; 10</code> → <code>\"big\"</code>, then <code>elsif number &gt; 5</code> → <code>\"medium\"</code>, then <code>else</code> → <code>\"small\"</code> and finally <code>end</code>.",
             "solution": "number = 7\nif number > 10\n  puts \"big\"\nelsif number > 5\n  puts \"medium\"\nelse\n  puts \"small\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Grades from points, with <code>case</code>/<code>when</code> and ranges: 90 to 100 points are an <code>\"A\"</code>, 80 to 89 a <code>\"B\"</code>, 70 to 79 a <code>\"C\"</code>, anything below a <code>\"D\"</code>. Store the grade for <code>points</code> in <code>grade</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "points = 83\n# grade = ...   # 90 to 100: \"A\", 80 to 89: \"B\", 70 to 79: \"C\", below: \"D\"\n",
+            "hints": [
+              "Look at the <code>case</code> demo above: one <code>when</code> per range (<code>90..100</code>), an <code>else</code> for the rest. You can store the result of <code>case</code> straight into <code>grade</code>."
+            ],
+            "check": "grade == \"B\" && code.include?(\"case\") && code.include?(\"when\") && code.include?(\"..\")",
+            "hint": "<code>grade = case points</code>, then <code>when 90..100 then \"A\"</code>, <code>when 80..89 then \"B\"</code>, <code>when 70..79 then \"C\"</code>, <code>else \"D\"</code> and <code>end</code>.",
+            "solution": "points = 83\ngrade = case points\n        when 90..100 then \"A\"\n        when 80..89 then \"B\"\n        when 70..79 then \"C\"\n        else \"D\"\n        end"
           }
         ]
       },
@@ -1992,6 +2163,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "text = output + result.to_s; text.include?(\"medium\") && !text.include?(\"big\") && !text.include?(\"small\") && code.include?(\"elsif\")",
             "hint": "こう書くよ：<code>if number &gt; 10</code>なら<code>\"big\"</code>、<code>elsif number &gt; 5</code>なら<code>\"medium\"</code>、<code>else</code>なら<code>\"small\"</code>、最後に<code>end</code>。",
             "solution": "number = 7\nif number > 10\n  puts \"big\"\nelsif number > 5\n  puts \"medium\"\nelse\n  puts \"small\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>点数から成績を出しましょう。<code>case</code>/<code>when</code>と範囲を使います。90〜100点は<code>\"A\"</code>、80〜89点は<code>\"B\"</code>、70〜79点は<code>\"C\"</code>、それ未満は<code>\"D\"</code>です。<code>points</code>の成績を<code>grade</code>に入れてください。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "points = 83\n# grade = ...   # 90〜100: \"A\"、80〜89: \"B\"、70〜79: \"C\"、それ未満: \"D\"\n",
+            "hints": [
+              "上の<code>case</code>のデモを見てみて。範囲ごとに<code>when</code>を1つ（<code>90..100</code>）、残りは<code>else</code>だよ。<code>case</code>の結果はそのまま<code>grade</code>に入れられるよ。"
+            ],
+            "check": "grade == \"B\" && code.include?(\"case\") && code.include?(\"when\") && code.include?(\"..\")",
+            "hint": "<code>grade = case points</code>、それから<code>when 90..100 then \"A\"</code>、<code>when 80..89 then \"B\"</code>、<code>when 70..79 then \"C\"</code>、<code>else \"D\"</code>、<code>end</code>だよ。",
+            "solution": "points = 83\ngrade = case points\n        when 90..100 then \"A\"\n        when 80..89 then \"B\"\n        when 70..79 then \"C\"\n        else \"D\"\n        end"
           }
         ]
       },
@@ -2063,6 +2249,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "((output + result.inspect).scan(\"Chunky Bacon!\").length >= 5) && (code.include?(\"times\") || code.include?(\"each\") || code.include?(\"while\") || code.include?(\"upto\") || code.include?(\"for \"))",
             "hint": "Schreibe <code>5.times do</code> … <code>puts \"Chunky Bacon!\"</code> … <code>end</code>.",
             "solution": "5.times do\n  puts \"Chunky Bacon!\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Ein Klassiker: Gib die Zahlen 1 bis 15 aus, eine pro Zeile – aber statt jeder durch 3 teilbaren Zahl <code>Speck</code>, statt jeder durch 5 teilbaren <code>Ei</code>, und wenn beides zutrifft <code>Speck-Ei</code>. Ob eine Zahl teilbar ist, verrät der Rest: <code>9 % 3</code> ist <code>0</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# 1 bis 15: bei Vielfachen von 3 \"Speck\", von 5 \"Ei\",\n# bei beidem \"Speck-Ei\", sonst die Zahl – je eine Zeile\n",
+            "hints": [
+              "Eine Schleife über <code>1..15</code> und darin ein <code>if</code>/<code>elsif</code>/<code>else</code>. Prüf den Fall «beides» zuerst – sonst gewinnt bei 15 die 3 allein."
+            ],
+            "check": "output.lines.map(&:strip) == (1..15).map { |i| i % 15 == 0 ? \"Speck-Ei\" : i % 3 == 0 ? \"Speck\" : i % 5 == 0 ? \"Ei\" : i.to_s } && (code.include?(\"times\") || code.include?(\"each\") || code.include?(\"while\") || code.include?(\"upto\") || code.include?(\"for \"))",
+            "hint": "<code>(1..15).each do |i|</code>, dann <code>if i % 15 == 0</code> → <code>puts \"Speck-Ei\"</code>, <code>elsif i % 3 == 0</code> → Speck, <code>elsif i % 5 == 0</code> → Ei, <code>else puts i</code>, <code>end</code>, <code>end</code>.",
+            "solution": "(1..15).each do |i|\n  if i % 15 == 0\n    puts \"Speck-Ei\"\n  elsif i % 3 == 0\n    puts \"Speck\"\n  elsif i % 5 == 0\n    puts \"Ei\"\n  else\n    puts i\n  end\nend"
           }
         ]
       },
@@ -2130,6 +2331,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "((output + result.inspect).scan(\"Chunky Bacon!\").length >= 5) && (code.include?(\"times\") || code.include?(\"each\") || code.include?(\"while\") || code.include?(\"upto\") || code.include?(\"for \"))",
             "hint": "Write <code>5.times do</code> … <code>puts \"Chunky Bacon!\"</code> … <code>end</code>.",
             "solution": "5.times do\n  puts \"Chunky Bacon!\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> A classic: print the numbers 1 to 15, one per line – but <code>bacon</code> instead of every number divisible by 3, <code>egg</code> instead of every one divisible by 5, and <code>bacon-egg</code> when both apply. The remainder tells you whether a number divides: <code>9 % 3</code> is <code>0</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# 1 to 15: \"bacon\" for multiples of 3, \"egg\" for multiples of 5,\n# \"bacon-egg\" for both, the number itself otherwise - one per line\n",
+            "hints": [
+              "A loop over <code>1..15</code> with an <code>if</code>/<code>elsif</code>/<code>else</code> inside. Check the \"both\" case first – otherwise 3 alone wins at 15."
+            ],
+            "check": "output.lines.map(&:strip) == (1..15).map { |i| i % 15 == 0 ? \"bacon-egg\" : i % 3 == 0 ? \"bacon\" : i % 5 == 0 ? \"egg\" : i.to_s } && (code.include?(\"times\") || code.include?(\"each\") || code.include?(\"while\") || code.include?(\"upto\") || code.include?(\"for \"))",
+            "hint": "<code>(1..15).each do |i|</code>, then <code>if i % 15 == 0</code> → <code>puts \"bacon-egg\"</code>, <code>elsif i % 3 == 0</code> → bacon, <code>elsif i % 5 == 0</code> → egg, <code>else puts i</code>, <code>end</code>, <code>end</code>.",
+            "solution": "(1..15).each do |i|\n  if i % 15 == 0\n    puts \"bacon-egg\"\n  elsif i % 3 == 0\n    puts \"bacon\"\n  elsif i % 5 == 0\n    puts \"egg\"\n  else\n    puts i\n  end\nend"
           }
         ]
       },
@@ -2197,6 +2413,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "((output + result.inspect).scan(\"Chunky Bacon!\").length >= 5) && (code.include?(\"times\") || code.include?(\"each\") || code.include?(\"while\") || code.include?(\"upto\") || code.include?(\"for \"))",
             "hint": "<code>5.times do</code> … <code>puts \"Chunky Bacon!\"</code> … <code>end</code>って書いてみて。",
             "solution": "5.times do\n  puts \"Chunky Bacon!\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>定番の問題です。1から15までの数を1行に1つずつ出力しましょう。ただし、3で割り切れる数のかわりに<code>bacon</code>、5で割り切れる数のかわりに<code>egg</code>、両方に当てはまるなら<code>bacon-egg</code>を出します。割り切れるかどうかは余りでわかります。<code>9 % 3</code>は<code>0</code>です。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# 1から15まで：3の倍数は \"bacon\"、5の倍数は \"egg\"、\n# 両方なら \"bacon-egg\"、それ以外はその数を、1行に1つずつ出力\n",
+            "hints": [
+              "<code>1..15</code>のループの中に<code>if</code>/<code>elsif</code>/<code>else</code>を書くよ。「両方」の場合を最初に調べてね。そうしないと15のとき3だけが勝っちゃうよ。"
+            ],
+            "check": "output.lines.map(&:strip) == (1..15).map { |i| i % 15 == 0 ? \"bacon-egg\" : i % 3 == 0 ? \"bacon\" : i % 5 == 0 ? \"egg\" : i.to_s } && (code.include?(\"times\") || code.include?(\"each\") || code.include?(\"while\") || code.include?(\"upto\") || code.include?(\"for \"))",
+            "hint": "<code>(1..15).each do |i|</code>の中で、<code>if i % 15 == 0</code>なら<code>puts \"bacon-egg\"</code>、<code>elsif i % 3 == 0</code>ならbacon、<code>elsif i % 5 == 0</code>ならegg、<code>else puts i</code>、<code>end</code>、<code>end</code>と2つ閉じるよ。",
+            "solution": "(1..15).each do |i|\n  if i % 15 == 0\n    puts \"bacon-egg\"\n  elsif i % 3 == 0\n    puts \"bacon\"\n  elsif i % 5 == 0\n    puts \"egg\"\n  else\n    puts i\n  end\nend"
           }
         ]
       },
@@ -2280,6 +2511,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "fruehstueck.is_a?(Array) && fruehstueck.include?(\"Speck\") && fruehstueck.include?(\"Ei\") && (output.include?(\"Brot, Ei, Speck\") || result == \"Brot, Ei, Speck\")",
             "hint": "Erst <code>fruehstueck &lt;&lt; \"Speck\"</code>, dann als letzte Zeile <code>fruehstueck.sort.join(\", \")</code> – Methoden lassen sich verketten.",
             "solution": "fruehstueck = [\"Ei\", \"Brot\"]\nfruehstueck << \"Speck\"\nputs fruehstueck.sort.join(\", \")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Chunkys Einkaufszettel unten hat Doppelte. Lege drei Variablen an: <code>ohne_doppelte</code> – die Artikel ohne Doppelte, sortiert; <code>anzahl_speck</code> – wie oft Speck auf dem Zettel steht (<code>count</code> nimmt das gesuchte Wort als Argument); und <code>erster_letzter</code> – ein Array aus dem ersten und dem letzten Artikel des Zettels.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "einkauf = [\"Speck\", \"Ei\", \"Toast\", \"Speck\", \"Kaffee\", \"Ei\", \"Speck\"]\n# ohne_doppelte = ...   # ohne Doppelte, sortiert\n# anzahl_speck = ...    # wie oft Speck auf dem Zettel steht\n# erster_letzter = ...  # der erste und der letzte Artikel, als Array\n",
+            "hints": [
+              "Drei Methoden aus den Zellen oben: <code>uniq</code> und <code>sort</code> lassen sich verketten, <code>count</code> bekommt das gesuchte Wort in Klammern, und <code>first</code> und <code>last</code> kennst du schon."
+            ],
+            "check": "ohne_doppelte == [\"Ei\", \"Kaffee\", \"Speck\", \"Toast\"] && anzahl_speck == 3 && erster_letzter == [\"Speck\", \"Speck\"] && code.include?(\"uniq\")",
+            "hint": "<code>ohne_doppelte = einkauf.uniq.sort</code>, <code>anzahl_speck = einkauf.count(\"Speck\")</code> und <code>erster_letzter = [einkauf.first, einkauf.last]</code>.",
+            "solution": "einkauf = [\"Speck\", \"Ei\", \"Toast\", \"Speck\", \"Kaffee\", \"Ei\", \"Speck\"]\nohne_doppelte = einkauf.uniq.sort\nanzahl_speck = einkauf.count(\"Speck\")\nerster_letzter = [einkauf.first, einkauf.last]"
           }
         ]
       },
@@ -2359,6 +2605,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "breakfast.is_a?(Array) && breakfast.include?(\"bacon\") && breakfast.include?(\"egg\") && (output.include?(\"bacon, egg, toast\") || result == \"bacon, egg, toast\")",
             "hint": "First <code>breakfast &lt;&lt; \"bacon\"</code>, then as the last line <code>breakfast.sort.join(\", \")</code> – methods can be chained.",
             "solution": "breakfast = [\"egg\", \"toast\"]\nbreakfast << \"bacon\"\nputs breakfast.sort.join(\", \")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Chunky's shopping list below has duplicates. Create three variables: <code>no_duplicates</code> – the items without duplicates, sorted; <code>bacon_count</code> – how often bacon is on the list (<code>count</code> takes the word you look for as its argument); and <code>first_last</code> – an array of the list's first and last item.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "shopping = [\"bacon\", \"egg\", \"toast\", \"bacon\", \"coffee\", \"egg\", \"bacon\"]\n# no_duplicates = ...   # without duplicates, sorted\n# bacon_count = ...     # how often bacon is on the list\n# first_last = ...      # the first and the last item, as an array\n",
+            "hints": [
+              "Three methods from the cells above: <code>uniq</code> and <code>sort</code> can be chained, <code>count</code> gets the word in brackets, and you know <code>first</code> and <code>last</code> already."
+            ],
+            "check": "no_duplicates == [\"bacon\", \"coffee\", \"egg\", \"toast\"] && bacon_count == 3 && first_last == [\"bacon\", \"bacon\"] && code.include?(\"uniq\")",
+            "hint": "<code>no_duplicates = shopping.uniq.sort</code>, <code>bacon_count = shopping.count(\"bacon\")</code> and <code>first_last = [shopping.first, shopping.last]</code>.",
+            "solution": "shopping = [\"bacon\", \"egg\", \"toast\", \"bacon\", \"coffee\", \"egg\", \"bacon\"]\nno_duplicates = shopping.uniq.sort\nbacon_count = shopping.count(\"bacon\")\nfirst_last = [shopping.first, shopping.last]"
           }
         ]
       },
@@ -2438,6 +2699,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "breakfast.is_a?(Array) && breakfast.include?(\"bacon\") && breakfast.include?(\"egg\") && (output.include?(\"bacon, egg, toast\") || result == \"bacon, egg, toast\")",
             "hint": "まず<code>breakfast &lt;&lt; \"bacon\"</code>、それから最後の行に<code>breakfast.sort.join(\", \")</code>だよ。メソッドはつなげて呼べるんだ。",
             "solution": "breakfast = [\"egg\", \"toast\"]\nbreakfast << \"bacon\"\nputs breakfast.sort.join(\", \")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>下のChunkyの買い物リストには重複があります。変数を3つ作りましょう。<code>no_duplicates</code>には重複をなくして並べかえた品物を、<code>bacon_count</code>にはbaconがリストに何回あるかを（<code>count</code>には探す言葉を引数に渡します）、<code>first_last</code>にはリストの最初と最後の品物を配列にして入れてください。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "shopping = [\"bacon\", \"egg\", \"toast\", \"bacon\", \"coffee\", \"egg\", \"bacon\"]\n# no_duplicates = ...   # 重複なしで、並べかえて\n# bacon_count = ...     # bacon がリストに何回あるか\n# first_last = ...      # 最初と最後の品物を配列に\n",
+            "hints": [
+              "上のセルに出てきたメソッド3つだよ。<code>uniq</code>と<code>sort</code>はつなげて呼べる。<code>count</code>にはかっこで言葉を渡す。<code>first</code>と<code>last</code>はもう知ってるよね。"
+            ],
+            "check": "no_duplicates == [\"bacon\", \"coffee\", \"egg\", \"toast\"] && bacon_count == 3 && first_last == [\"bacon\", \"bacon\"] && code.include?(\"uniq\")",
+            "hint": "<code>no_duplicates = shopping.uniq.sort</code>、<code>bacon_count = shopping.count(\"bacon\")</code>、そして<code>first_last = [shopping.first, shopping.last]</code>だよ。",
+            "solution": "shopping = [\"bacon\", \"egg\", \"toast\", \"bacon\", \"coffee\", \"egg\", \"bacon\"]\nno_duplicates = shopping.uniq.sort\nbacon_count = shopping.count(\"bacon\")\nfirst_last = [shopping.first, shopping.last]"
           }
         ]
       },
@@ -2510,6 +2786,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "summen.is_a?(Array) && summen.length == 100 && summen.all? { |s| (2..12).include?(s) } && summen.max > 6 && siebener == summen.count(7) && code.include?(\"rand\")",
             "hint": "<code>summen = 100.times.map { rand(1..6) + rand(1..6) }</code> und danach <code>siebener = summen.count(7)</code>.",
             "solution": "summen = 100.times.map { rand(1..6) + rand(1..6) }\nsiebener = summen.count(7)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Eine kleine Lotterie: <code>zahlen</code> sind drei <em>verschiedene</em> Zahlen von 1 bis 10, sortiert – <code>sample</code> mit einer Anzahl zieht ohne Zurücklegen, und <code>(1..10).to_a</code> macht aus dem Bereich ein Array. Dann <code>muenzen</code>: zehn Münzwürfe, jeder <code>\"Kopf\"</code> oder <code>\"Zahl\"</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# zahlen = ...   # 3 verschiedene Zahlen von 1 bis 10, sortiert\n# muenzen = ...  # 10 Münzwürfe: je \"Kopf\" oder \"Zahl\"\n",
+            "hints": [
+              "Für die Zahlen: aus dem Bereich ein Array machen, dann <code>sample(3)</code> und <code>sort</code>. Für die Münzen: zehnmal mit <code>times.map</code> aus einem Array mit zwei Strings eines ziehen."
+            ],
+            "check": "zahlen.length == 3 && zahlen.uniq.length == 3 && zahlen.all? { |z| (1..10).include?(z) } && zahlen == zahlen.sort && muenzen.length == 10 && muenzen.all? { |m| [\"Kopf\", \"Zahl\"].include?(m) } && code.include?(\"sample\")",
+            "hint": "<code>zahlen = (1..10).to_a.sample(3).sort</code> und <code>muenzen = 10.times.map { [\"Kopf\", \"Zahl\"].sample }</code>.",
+            "solution": "zahlen = (1..10).to_a.sample(3).sort\nmuenzen = 10.times.map { [\"Kopf\", \"Zahl\"].sample }"
           }
         ]
       },
@@ -2577,6 +2868,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "totals.is_a?(Array) && totals.length == 100 && totals.all? { |t| (2..12).include?(t) } && totals.max > 6 && sevens == totals.count(7) && code.include?(\"rand\")",
             "hint": "<code>totals = 100.times.map { rand(1..6) + rand(1..6) }</code> and then <code>sevens = totals.count(7)</code>.",
             "solution": "totals = 100.times.map { rand(1..6) + rand(1..6) }\nsevens = totals.count(7)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> A little lottery: <code>numbers</code> are three <em>different</em> numbers from 1 to 10, sorted – <code>sample</code> with a count draws without putting back, and <code>(1..10).to_a</code> turns the range into an array. Then <code>coins</code>: ten coin flips, each <code>\"heads\"</code> or <code>\"tails\"</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# numbers = ...   # 3 different numbers from 1 to 10, sorted\n# coins = ...     # 10 coin flips: \"heads\" or \"tails\" each\n",
+            "hints": [
+              "For the numbers: turn the range into an array, then <code>sample(3)</code> and <code>sort</code>. For the coins: draw one out of an array with two strings ten times with <code>times.map</code>."
+            ],
+            "check": "numbers.length == 3 && numbers.uniq.length == 3 && numbers.all? { |n| (1..10).include?(n) } && numbers == numbers.sort && coins.length == 10 && coins.all? { |c| [\"heads\", \"tails\"].include?(c) } && code.include?(\"sample\")",
+            "hint": "<code>numbers = (1..10).to_a.sample(3).sort</code> and <code>coins = 10.times.map { [\"heads\", \"tails\"].sample }</code>.",
+            "solution": "numbers = (1..10).to_a.sample(3).sort\ncoins = 10.times.map { [\"heads\", \"tails\"].sample }"
           }
         ]
       },
@@ -2644,6 +2950,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "totals.is_a?(Array) && totals.length == 100 && totals.all? { |t| (2..12).include?(t) } && totals.max > 6 && sevens == totals.count(7) && code.include?(\"rand\")",
             "hint": "<code>totals = 100.times.map { rand(1..6) + rand(1..6) }</code>、それから<code>sevens = totals.count(7)</code>だよ。",
             "solution": "totals = 100.times.map { rand(1..6) + rand(1..6) }\nsevens = totals.count(7)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>小さな宝くじです。<code>numbers</code>は1から10のうち<em>違う</em>数3つを並べかえたものです。<code>sample</code>に個数を渡すと、同じものを二度は引きません。<code>(1..10).to_a</code>で範囲を配列にできます。それから<code>coins</code>：コイン投げ10回、それぞれ<code>\"heads\"</code>か<code>\"tails\"</code>です。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# numbers = ...   # 1から10のうち、違う数を3つ、並べかえて\n# coins = ...     # コイン投げ10回：\"heads\" か \"tails\"\n",
+            "hints": [
+              "数のほうは、範囲を配列にしてから<code>sample(3)</code>と<code>sort</code>。コインのほうは、文字列2つの配列から<code>times.map</code>で10回1つずつ引いてみて。"
+            ],
+            "check": "numbers.length == 3 && numbers.uniq.length == 3 && numbers.all? { |n| (1..10).include?(n) } && numbers == numbers.sort && coins.length == 10 && coins.all? { |c| [\"heads\", \"tails\"].include?(c) } && code.include?(\"sample\")",
+            "hint": "<code>numbers = (1..10).to_a.sample(3).sort</code>、<code>coins = 10.times.map { [\"heads\", \"tails\"].sample }</code>だよ。",
+            "solution": "numbers = (1..10).to_a.sample(3).sort\ncoins = 10.times.map { [\"heads\", \"tails\"].sample }"
           }
         ]
       }
@@ -2718,6 +3039,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "fuchs.is_a?(Hash) && fuchs[:name].to_s.length > 0 && fuchs[:essen].to_s.length > 0 && fuchs[:alter].is_a?(Integer) && code.include?(\"fuchs[:alter]\")",
             "hint": "Zum Beispiel: <code>fuchs = { name: \"Chunky\", essen: \"Speck\" }</code> und darunter <code>fuchs[:alter] = 3</code>.",
             "solution": "fuchs = { name: \"Chunky\", essen: \"Speck\" }\nfuchs[:alter] = 3\nfuchs"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Zähle, wie oft jedes Wort in <code>woerter</code> vorkommt: <code>zaehlung</code> ist ein Hash von Wort zu Anzahl – wie der Zähler mit <code>Hash.new(0)</code> oben. Finde dann in <code>haeufigstes</code> das Wort, das am öftesten vorkommt: <code>zaehlung.values.max</code> ist die grösste Anzahl, und <code>zaehlung.key(…)</code> liefert den Schlüssel zu einem Wert.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "woerter = %w[speck ei speck toast ei speck]\n# zaehlung = ...     # Wort => wie oft es vorkommt\n# haeufigstes = ...  # das Wort, das am öftesten vorkommt\n",
+            "hints": [
+              "Erst den Zähler: <code>Hash.new(0)</code>, dann mit <code>each</code> durch <code>woerter</code> und bei jedem Wort <code>+= 1</code>. Für das häufigste Wort fragst du den Hash mit <code>key</code> nach dem grössten Wert."
+            ],
+            "check": "zaehlung == { \"speck\" => 3, \"ei\" => 2, \"toast\" => 1 } && haeufigstes == \"speck\" && code.include?(\"each\")",
+            "hint": "<code>zaehlung = Hash.new(0)</code>, <code>woerter.each { |wort| zaehlung[wort] += 1 }</code> und dann <code>haeufigstes = zaehlung.key(zaehlung.values.max)</code>.",
+            "solution": "woerter = %w[speck ei speck toast ei speck]\nzaehlung = Hash.new(0)\nwoerter.each { |wort| zaehlung[wort] += 1 }\nhaeufigstes = zaehlung.key(zaehlung.values.max)"
           }
         ]
       },
@@ -2789,6 +3125,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "fox.is_a?(Hash) && fox[:name].to_s.length > 0 && fox[:food].to_s.length > 0 && fox[:age].is_a?(Integer) && code.include?(\"fox[:age]\")",
             "hint": "For example: <code>fox = { name: \"Chunky\", food: \"bacon\" }</code> and below it <code>fox[:age] = 3</code>.",
             "solution": "fox = { name: \"Chunky\", food: \"bacon\" }\nfox[:age] = 3\nfox"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Count how often each word occurs in <code>words</code>: <code>tally</code> is a hash from word to count – like the counter with <code>Hash.new(0)</code> above. Then find in <code>most_common</code> the word that occurs most: <code>tally.values.max</code> is the largest count, and <code>tally.key(…)</code> gives the key for a value.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "words = %w[bacon egg bacon toast egg bacon]\n# tally = ...         # word => how often it occurs\n# most_common = ...   # the word that occurs most\n",
+            "hints": [
+              "First the counter: <code>Hash.new(0)</code>, then <code>each</code> through <code>words</code> with <code>+= 1</code> for every word. For the most common word, ask the hash with <code>key</code> for its largest value."
+            ],
+            "check": "tally == { \"bacon\" => 3, \"egg\" => 2, \"toast\" => 1 } && most_common == \"bacon\" && code.include?(\"each\")",
+            "hint": "<code>tally = Hash.new(0)</code>, <code>words.each { |word| tally[word] += 1 }</code> and then <code>most_common = tally.key(tally.values.max)</code>.",
+            "solution": "words = %w[bacon egg bacon toast egg bacon]\ntally = Hash.new(0)\nwords.each { |word| tally[word] += 1 }\nmost_common = tally.key(tally.values.max)"
           }
         ]
       },
@@ -2860,6 +3211,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "fox.is_a?(Hash) && fox[:name].to_s.length > 0 && fox[:food].to_s.length > 0 && fox[:age].is_a?(Integer) && code.include?(\"fox[:age]\")",
             "hint": "たとえば<code>fox = { name: \"Chunky\", food: \"bacon\" }</code>と書いて、その下に<code>fox[:age] = 3</code>だよ。",
             "solution": "fox = { name: \"Chunky\", food: \"bacon\" }\nfox[:age] = 3\nfox"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong><code>words</code>のそれぞれの単語が何回出てくるか数えましょう。<code>tally</code>は単語から回数へのハッシュです。上の<code>Hash.new(0)</code>のカウンターと同じです。それから、いちばん多く出てくる単語を<code>most_common</code>に入れてください。<code>tally.values.max</code>がいちばん大きい回数で、<code>tally.key(…)</code>は値に対応するキーを返します。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "words = %w[bacon egg bacon toast egg bacon]\n# tally = ...         # 単語 => 出てくる回数\n# most_common = ...   # いちばん多く出てくる単語\n",
+            "hints": [
+              "まずカウンターだよ。<code>Hash.new(0)</code>を作って、<code>each</code>で<code>words</code>をたどって、単語ごとに<code>+= 1</code>。いちばん多い単語は、<code>key</code>でいちばん大きい値のキーをハッシュに聞いてみて。"
+            ],
+            "check": "tally == { \"bacon\" => 3, \"egg\" => 2, \"toast\" => 1 } && most_common == \"bacon\" && code.include?(\"each\")",
+            "hint": "<code>tally = Hash.new(0)</code>、<code>words.each { |word| tally[word] += 1 }</code>、それから<code>most_common = tally.key(tally.values.max)</code>だよ。",
+            "solution": "words = %w[bacon egg bacon toast egg bacon]\ntally = Hash.new(0)\nwords.each { |word| tally[word] += 1 }\nmost_common = tally.key(tally.values.max)"
           }
         ]
       },
@@ -2939,6 +3305,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "bestanden == [72, 88, 91, 60] && mit_bonus == [77, 93, 96, 65] && code.include?(\"select\") && code.include?(\"map\")",
             "hint": "<code>bestanden = punkte.select { |punkt| punkt &gt;= 60 }</code> und danach <code>mit_bonus = bestanden.map { |punkt| punkt + 5 }</code>.",
             "solution": "punkte = [72, 45, 88, 91, 30, 60]\nbestanden = punkte.select { |punkt| punkt >= 60 }\nmit_bonus = bestanden.map { |punkt| punkt + 5 }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Drei Werkzeuge aus der Kiste, auf <code>woerter</code> angewandt: <code>initialen</code> – die Anfangsbuchstaben aller Wörter als ein String (<code>\"SEKBH\"</code>); <code>laengstes</code> – das längste Wort; <code>nach_laenge</code> – die Wörter nach Länge sortiert, das kürzeste zuerst.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "woerter = [\"Speck\", \"Ei\", \"Kaffee\", \"Brot\", \"Honigbrot\"]\n# initialen = ...    # die Anfangsbuchstaben als ein String: \"SEKBH\"\n# laengstes = ...    # das längste Wort\n# nach_laenge = ...  # die Wörter nach Länge sortiert, das kürzeste zuerst\n",
+            "hints": [
+              "<code>map</code> holt aus jedem Wort das erste Zeichen (<code>wort[0]</code>) – <code>join</code> klebt sie zusammen. <code>max_by</code> und <code>sort_by</code> bekommen im Block, worauf es ankommt: die Länge."
+            ],
+            "check": "initialen == \"SEKBH\" && laengstes == \"Honigbrot\" && nach_laenge == [\"Ei\", \"Brot\", \"Speck\", \"Kaffee\", \"Honigbrot\"] && code.include?(\"map\")",
+            "hint": "<code>initialen = woerter.map { |wort| wort[0] }.join</code>, <code>laengstes = woerter.max_by { |wort| wort.length }</code> und <code>nach_laenge = woerter.sort_by { |wort| wort.length }</code>.",
+            "solution": "woerter = [\"Speck\", \"Ei\", \"Kaffee\", \"Brot\", \"Honigbrot\"]\ninitialen = woerter.map { |wort| wort[0] }.join\nlaengstes = woerter.max_by { |wort| wort.length }\nnach_laenge = woerter.sort_by { |wort| wort.length }"
           }
         ]
       },
@@ -3014,6 +3395,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "passed == [72, 88, 91, 60] && with_bonus == [77, 93, 96, 65] && code.include?(\"select\") && code.include?(\"map\")",
             "hint": "<code>passed = scores.select { |score| score &gt;= 60 }</code> and then <code>with_bonus = passed.map { |score| score + 5 }</code>.",
             "solution": "scores = [72, 45, 88, 91, 30, 60]\npassed = scores.select { |score| score >= 60 }\nwith_bonus = passed.map { |score| score + 5 }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Three tools from the box, applied to <code>words</code>: <code>initials</code> – the first letters of all the words as one string (<code>\"becmp\"</code>); <code>longest</code> – the longest word; <code>by_length</code> – the words sorted by length, shortest first.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "words = [\"bacon\", \"egg\", \"coffee\", \"milk\", \"pancakes\"]\n# initials = ...    # the first letters, as one string: \"becmp\"\n# longest = ...     # the longest word\n# by_length = ...   # the words sorted by length, shortest first\n",
+            "hints": [
+              "<code>map</code> takes the first character out of every word (<code>word[0]</code>) – <code>join</code> glues them together. <code>max_by</code> and <code>sort_by</code> get what matters in their block: the length."
+            ],
+            "check": "initials == \"becmp\" && longest == \"pancakes\" && by_length == [\"egg\", \"milk\", \"bacon\", \"coffee\", \"pancakes\"] && code.include?(\"map\")",
+            "hint": "<code>initials = words.map { |word| word[0] }.join</code>, <code>longest = words.max_by { |word| word.length }</code> and <code>by_length = words.sort_by { |word| word.length }</code>.",
+            "solution": "words = [\"bacon\", \"egg\", \"coffee\", \"milk\", \"pancakes\"]\ninitials = words.map { |word| word[0] }.join\nlongest = words.max_by { |word| word.length }\nby_length = words.sort_by { |word| word.length }"
           }
         ]
       },
@@ -3089,6 +3485,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "passed == [72, 88, 91, 60] && with_bonus == [77, 93, 96, 65] && code.include?(\"select\") && code.include?(\"map\")",
             "hint": "<code>passed = scores.select { |score| score &gt;= 60 }</code>、それから<code>with_bonus = passed.map { |score| score + 5 }</code>だよ。",
             "solution": "scores = [72, 45, 88, 91, 30, 60]\npassed = scores.select { |score| score >= 60 }\nwith_bonus = passed.map { |score| score + 5 }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>道具箱から3つ、<code>words</code>に使ってみましょう。<code>initials</code>にはすべての単語の頭文字をつなげた1つの文字列（<code>\"becmp\"</code>）を、<code>longest</code>にはいちばん長い単語を、<code>by_length</code>には短い順に並べた単語を入れてください。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "words = [\"bacon\", \"egg\", \"coffee\", \"milk\", \"pancakes\"]\n# initials = ...    # 頭文字をつなげた1つの文字列：\"becmp\"\n# longest = ...     # いちばん長い単語\n# by_length = ...   # 短い順に並べた単語\n",
+            "hints": [
+              "<code>map</code>で各単語の最初の文字（<code>word[0]</code>）を取り出して、<code>join</code>でくっつけるよ。<code>max_by</code>と<code>sort_by</code>には、ブロックで何に注目するかを渡すんだ。ここでは長さだね。"
+            ],
+            "check": "initials == \"becmp\" && longest == \"pancakes\" && by_length == [\"egg\", \"milk\", \"bacon\", \"coffee\", \"pancakes\"] && code.include?(\"map\")",
+            "hint": "<code>initials = words.map { |word| word[0] }.join</code>、<code>longest = words.max_by { |word| word.length }</code>、<code>by_length = words.sort_by { |word| word.length }</code>だよ。",
+            "solution": "words = [\"bacon\", \"egg\", \"coffee\", \"milk\", \"pancakes\"]\ninitials = words.map { |word| word[0] }.join\nlongest = words.max_by { |word| word.length }\nby_length = words.sort_by { |word| word.length }"
           }
         ]
       }
@@ -3159,6 +3570,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "zeiten == [\"07:45\", \"10:15\", \"12:30\"] && speck_tage == 2 && code.scan(\"/\").length >= 4",
             "hint": "<code>zeiten = notizen.join(\" \").scan(/\\d\\d:\\d\\d/)</code> – oder <code>notizen.flat_map { |notiz| notiz.scan(/\\d\\d:\\d\\d/) }</code>. Und <code>speck_tage = notizen.count { |notiz| notiz.match?(/speck/i) }</code>.",
             "solution": "notizen = [\"Frühstück um 07:45: Speck\", \"Znüni um 10:15: Apfel\", \"Mittag um 12:30: speck und Ei\", \"Abend: kein Hunger\"]\nzeiten = notizen.join(\" \").scan(/\\d\\d:\\d\\d/)\nspeck_tage = notizen.count { |notiz| notiz.match?(/speck/i) }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Hat ein Muster <em>Gruppen</em> in runden Klammern, liefert <code>scan</code> pro Fundstelle ein Array mit den Gruppen. Hol aus <code>bericht</code> mit einem Muster aus zwei Gruppen – Name, Doppelpunkt, Leerzeichen, Zahl – die Paare <code>paare</code> heraus: <code>[[\"Chunky\", \"3\"], [\"Kaz\", \"12\"], [\"Isi\", \"7\"]]</code>. Zähle dann in <code>gesamt</code> die Zahlen zusammen: 22.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "bericht = \"Chunky: 3 Streifen, Kaz: 12 Streifen, Isi: 7 Streifen\"\n# paare = ...    # [[\"Chunky\", \"3\"], [\"Kaz\", \"12\"], [\"Isi\", \"7\"]]\n# gesamt = ...   # die Zahlen zusammengezählt: 22\n",
+            "hints": [
+              "Das Muster braucht zwei Gruppen: <code>(\\w+)</code> für den Namen und <code>(\\d+)</code> für die Zahl, dazwischen Doppelpunkt und Leerzeichen. Für die Summe nimmst du <code>sum</code> mit einem Block – die zweite Hälfte jedes Paars ist noch ein String."
+            ],
+            "check": "paare == [[\"Chunky\", \"3\"], [\"Kaz\", \"12\"], [\"Isi\", \"7\"]] && gesamt == 22 && code.include?(\"scan\")",
+            "hint": "<code>paare = bericht.scan(/(\\w+): (\\d+)/)</code> und <code>gesamt = paare.sum { |name, zahl| zahl.to_i }</code>.",
+            "solution": "bericht = \"Chunky: 3 Streifen, Kaz: 12 Streifen, Isi: 7 Streifen\"\npaare = bericht.scan(/(\\w+): (\\d+)/)\ngesamt = paare.sum { |name, zahl| zahl.to_i }"
           }
         ]
       },
@@ -3226,6 +3652,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "times == [\"07:45\", \"10:15\", \"12:30\"] && bacon_days == 2 && code.scan(\"/\").length >= 4",
             "hint": "<code>times = notes.join(\" \").scan(/\\d\\d:\\d\\d/)</code> – or <code>notes.flat_map { |note| note.scan(/\\d\\d:\\d\\d/) }</code>. And <code>bacon_days = notes.count { |note| note.match?(/bacon/i) }</code>.",
             "solution": "notes = [\"Breakfast at 07:45: Bacon\", \"Snack at 10:15: apple\", \"Lunch at 12:30: bacon and egg\", \"Evening: not hungry\"]\ntimes = notes.join(\" \").scan(/\\d\\d:\\d\\d/)\nbacon_days = notes.count { |note| note.match?(/bacon/i) }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> When a pattern has <em>groups</em> in round brackets, <code>scan</code> returns an array of the groups for every match. Take the pairs <code>pairs</code> out of <code>report</code> with a pattern of two groups – name, colon, space, number: <code>[[\"Chunky\", \"3\"], [\"Kaz\", \"12\"], [\"Isi\", \"7\"]]</code>. Then add the numbers up in <code>total</code>: 22.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "report = \"Chunky: 3 strips, Kaz: 12 strips, Isi: 7 strips\"\n# pairs = ...   # [[\"Chunky\", \"3\"], [\"Kaz\", \"12\"], [\"Isi\", \"7\"]]\n# total = ...   # the numbers added up: 22\n",
+            "hints": [
+              "The pattern needs two groups: <code>(\\w+)</code> for the name and <code>(\\d+)</code> for the number, with the colon and a space in between. For the sum, use <code>sum</code> with a block – the second half of every pair is still a string."
+            ],
+            "check": "pairs == [[\"Chunky\", \"3\"], [\"Kaz\", \"12\"], [\"Isi\", \"7\"]] && total == 22 && code.include?(\"scan\")",
+            "hint": "<code>pairs = report.scan(/(\\w+): (\\d+)/)</code> and <code>total = pairs.sum { |name, number| number.to_i }</code>.",
+            "solution": "report = \"Chunky: 3 strips, Kaz: 12 strips, Isi: 7 strips\"\npairs = report.scan(/(\\w+): (\\d+)/)\ntotal = pairs.sum { |name, number| number.to_i }"
           }
         ]
       },
@@ -3293,6 +3734,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "times == [\"07:45\", \"10:15\", \"12:30\"] && bacon_days == 2 && code.scan(\"/\").length >= 4",
             "hint": "<code>times = notes.join(\" \").scan(/\\d\\d:\\d\\d/)</code>、または<code>notes.flat_map { |note| note.scan(/\\d\\d:\\d\\d/) }</code>。そして<code>bacon_days = notes.count { |note| note.match?(/bacon/i) }</code>だよ。",
             "solution": "notes = [\"Breakfast at 07:45: Bacon\", \"Snack at 10:15: apple\", \"Lunch at 12:30: bacon and egg\", \"Evening: not hungry\"]\ntimes = notes.join(\" \").scan(/\\d\\d:\\d\\d/)\nbacon_days = notes.count { |note| note.match?(/bacon/i) }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>パターンに丸かっこの<em>グループ</em>があると、<code>scan</code>は一致ごとにグループの配列を返します。<code>report</code>から、名前・コロン・空白・数の2グループのパターンで、ペア<code>pairs</code>を取り出しましょう：<code>[[\"Chunky\", \"3\"], [\"Kaz\", \"12\"], [\"Isi\", \"7\"]]</code>。それから<code>total</code>に数の合計を入れてください：22です。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "report = \"Chunky: 3 strips, Kaz: 12 strips, Isi: 7 strips\"\n# pairs = ...   # [[\"Chunky\", \"3\"], [\"Kaz\", \"12\"], [\"Isi\", \"7\"]]\n# total = ...   # 数をすべてたしたもの：22\n",
+            "hints": [
+              "パターンにはグループが2つ必要だよ。名前の<code>(\\w+)</code>と数の<code>(\\d+)</code>、間にコロンと空白。合計はブロックつきの<code>sum</code>で。ペアの後ろ半分はまだ文字列だからね。"
+            ],
+            "check": "pairs == [[\"Chunky\", \"3\"], [\"Kaz\", \"12\"], [\"Isi\", \"7\"]] && total == 22 && code.include?(\"scan\")",
+            "hint": "<code>pairs = report.scan(/(\\w+): (\\d+)/)</code>、<code>total = pairs.sum { |name, number| number.to_i }</code>だよ。",
+            "solution": "report = \"Chunky: 3 strips, Kaz: 12 strips, Isi: 7 strips\"\npairs = report.scan(/(\\w+): (\\d+)/)\ntotal = pairs.sum { |name, number| number.to_i }"
           }
         ]
       }
@@ -3364,6 +3820,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "zettel == einkauf.map { |artikel, preis| artikel.ljust(10) + format(\"%7.2f\", preis) }.join(\"\\n\") && code.include?(\"einkauf\")",
             "hint": "<code>zettel = einkauf.map { |artikel, preis| artikel.ljust(10) + format(\"%7.2f\", preis) }.join(\"\\n\")</code> – <code>%7.2f</code> heisst: 7 Zeichen breit, zwei Nachkommastellen.",
             "solution": "einkauf = { \"Speck\" => 4.5, \"Brot\" => 2, \"Honig\" => 6.8 }\nzettel = einkauf.map { |artikel, preis| artikel.ljust(10) + format(\"%7.2f\", preis) }.join(\"\\n\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Eine ganze Tabelle als String <code>tabelle</code>: zuerst eine Kopfzeile mit <code>Artikel</code> linksbündig auf 12 Zeichen und <code>Preis</code> rechtsbündig auf 6, dann eine Linie aus 18 Strichen, dann pro Artikel eine Zeile wie in der Quittung oben (Name auf 12, Preis mit <code>%6.2f</code>). Die Zeilen verbindet <code>\"\\n\"</code>, ohne Umbruch am Ende.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "einkauf = { \"Speck\" => 4.5, \"Brot\" => 2, \"Honig\" => 6.8 }\n# tabelle = ...   # Kopfzeile \"Artikel\" / \"Preis\", 18 Striche, dann pro Artikel eine Zeile\n",
+            "hints": [
+              "Bau die Tabelle aus drei Teilen und klebe sie mit <code>+</code> und <code>\"\\n\"</code> zusammen: die Kopfzeile aus <code>ljust</code> und <code>rjust</code>, die Linie aus <code>\"-\" * 18</code>, die Artikelzeilen aus <code>map</code> und <code>join</code>."
+            ],
+            "check": "tabelle == \"Artikel\".ljust(12) + \"Preis\".rjust(6) + \"\\n\" + \"-\" * 18 + \"\\n\" + einkauf.map { |artikel, preis| artikel.ljust(12) + format(\"%6.2f\", preis) }.join(\"\\n\") && code.include?(\"ljust\")",
+            "hint": "<code>zeilen = einkauf.map { |artikel, preis| artikel.ljust(12) + format(\"%6.2f\", preis) }</code>, dann <code>tabelle = \"Artikel\".ljust(12) + \"Preis\".rjust(6) + \"\\n\" + \"-\" * 18 + \"\\n\" + zeilen.join(\"\\n\")</code>.",
+            "solution": "einkauf = { \"Speck\" => 4.5, \"Brot\" => 2, \"Honig\" => 6.8 }\nzeilen = einkauf.map { |artikel, preis| artikel.ljust(12) + format(\"%6.2f\", preis) }\ntabelle = \"Artikel\".ljust(12) + \"Preis\".rjust(6) + \"\\n\" + \"-\" * 18 + \"\\n\" + zeilen.join(\"\\n\")"
           }
         ]
       },
@@ -3431,6 +3902,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "list == shopping.map { |item, price| item.ljust(10) + format(\"%7.2f\", price) }.join(\"\\n\") && code.include?(\"shopping\")",
             "hint": "<code>list = shopping.map { |item, price| item.ljust(10) + format(\"%7.2f\", price) }.join(\"\\n\")</code> – <code>%7.2f</code> means: 7 characters wide, two decimals.",
             "solution": "shopping = { \"Bacon\" => 4.5, \"Bread\" => 2, \"Honey\" => 6.8 }\nlist = shopping.map { |item, price| item.ljust(10) + format(\"%7.2f\", price) }.join(\"\\n\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> A whole table as the string <code>table</code>: first a header line with <code>Item</code> on the left, padded to 12 characters, and <code>Price</code> right-aligned on 6; then a line of 18 dashes; then one line per item like in the receipt above (name on 12, price with <code>%6.2f</code>). The lines are joined with <code>\"\\n\"</code>, no line break at the end.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "shopping = { \"Bacon\" => 4.5, \"Bread\" => 2, \"Honey\" => 6.8 }\n# table = ...   # a header line \"Item\" / \"Price\", a line of 18 dashes, then one line per item\n",
+            "hints": [
+              "Build the table from three parts and glue them with <code>+</code> and <code>\"\\n\"</code>: the header from <code>ljust</code> and <code>rjust</code>, the line from <code>\"-\" * 18</code>, the item lines from <code>map</code> and <code>join</code>."
+            ],
+            "check": "table == \"Item\".ljust(12) + \"Price\".rjust(6) + \"\\n\" + \"-\" * 18 + \"\\n\" + shopping.map { |item, price| item.ljust(12) + format(\"%6.2f\", price) }.join(\"\\n\") && code.include?(\"ljust\")",
+            "hint": "<code>lines = shopping.map { |item, price| item.ljust(12) + format(\"%6.2f\", price) }</code>, then <code>table = \"Item\".ljust(12) + \"Price\".rjust(6) + \"\\n\" + \"-\" * 18 + \"\\n\" + lines.join(\"\\n\")</code>.",
+            "solution": "shopping = { \"Bacon\" => 4.5, \"Bread\" => 2, \"Honey\" => 6.8 }\nlines = shopping.map { |item, price| item.ljust(12) + format(\"%6.2f\", price) }\ntable = \"Item\".ljust(12) + \"Price\".rjust(6) + \"\\n\" + \"-\" * 18 + \"\\n\" + lines.join(\"\\n\")"
           }
         ]
       },
@@ -3498,6 +3984,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "list == shopping.map { |item, price| item.ljust(10) + format(\"%7.2f\", price) }.join(\"\\n\") && code.include?(\"shopping\")",
             "hint": "<code>list = shopping.map { |item, price| item.ljust(10) + format(\"%7.2f\", price) }.join(\"\\n\")</code>だよ。<code>%7.2f</code>は「幅7文字、小数点以下2桁」という意味。",
             "solution": "shopping = { \"Bacon\" => 4.5, \"Bread\" => 2, \"Honey\" => 6.8 }\nlist = shopping.map { |item, price| item.ljust(10) + format(\"%7.2f\", price) }.join(\"\\n\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>表全体を1つの文字列<code>table</code>にしましょう。まず見出し行：<code>Item</code>を左寄せで12文字分、<code>Price</code>を右寄せで6文字分。次にダッシュ18個の線。それから上のレシートのように1品1行（名前は12文字分、値段は<code>%6.2f</code>）。行は<code>\"\\n\"</code>でつなぎ、最後に改行は入れません。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "shopping = { \"Bacon\" => 4.5, \"Bread\" => 2, \"Honey\" => 6.8 }\n# table = ...   # \"Item\" / \"Price\" の見出し行、ダッシュ18個の線、そして1品1行\n",
+            "hints": [
+              "表を3つの部分から作って、<code>+</code>と<code>\"\\n\"</code>でくっつけてみて。見出しは<code>ljust</code>と<code>rjust</code>、線は<code>\"-\" * 18</code>、品物の行は<code>map</code>と<code>join</code>だよ。"
+            ],
+            "check": "table == \"Item\".ljust(12) + \"Price\".rjust(6) + \"\\n\" + \"-\" * 18 + \"\\n\" + shopping.map { |item, price| item.ljust(12) + format(\"%6.2f\", price) }.join(\"\\n\") && code.include?(\"ljust\")",
+            "hint": "<code>lines = shopping.map { |item, price| item.ljust(12) + format(\"%6.2f\", price) }</code>、それから<code>table = \"Item\".ljust(12) + \"Price\".rjust(6) + \"\\n\" + \"-\" * 18 + \"\\n\" + lines.join(\"\\n\")</code>だよ。",
+            "solution": "shopping = { \"Bacon\" => 4.5, \"Bread\" => 2, \"Honey\" => 6.8 }\nlines = shopping.map { |item, price| item.ljust(12) + format(\"%6.2f\", price) }\ntable = \"Item\".ljust(12) + \"Price\".rjust(6) + \"\\n\" + \"-\" * 18 + \"\\n\" + lines.join(\"\\n\")"
           }
         ]
       }
@@ -3561,6 +4062,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "quadrat(9) == 81 && quadrat(5) == 25 && code.include?(\"def\")",
             "hint": "So geht's: <code>def quadrat(zahl)</code>, darunter <code>zahl * zahl</code>, dann <code>end</code>.",
             "solution": "def quadrat(zahl)\n  zahl * zahl\nend\n\nquadrat(9)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Schreib <code>tagesgruss(name, stunde)</code>: Vor 12 Uhr gibt sie <code>Guten Morgen, Kaz!</code> zurück, ab 12 <code>Guten Tag, Kaz!</code> und ab 18 <code>Guten Abend, Kaz!</code>. Die Stunde bekommt den Standardwert 12, damit auch <code>tagesgruss(\"Kaz\")</code> geht. Teste mit <code>tagesgruss(\"Kaz\", 9)</code> als letzter Zeile.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def tagesgruss(name, stunde = 12)\n#   ...\n# end\n\n# tagesgruss(\"Kaz\", 9)\n",
+            "hints": [
+              "Ein <code>def</code> mit zwei Parametern, der zweite mit Standardwert – wie <code>gruss</code> oben. Drinnen entscheidet ein <code>if</code>/<code>elsif</code>/<code>else</code> über <code>stunde</code>, welcher Satz zurückkommt."
+            ],
+            "check": "tagesgruss(\"Kaz\", 9) == \"Guten Morgen, Kaz!\" && tagesgruss(\"Kaz\", 15) == \"Guten Tag, Kaz!\" && tagesgruss(\"Ida\", 20) == \"Guten Abend, Ida!\" && tagesgruss(\"Kaz\") == \"Guten Tag, Kaz!\" && code.include?(\"def\")",
+            "hint": "<code>def tagesgruss(name, stunde = 12)</code>, darin <code>if stunde &lt; 12</code> → <code>\"Guten Morgen, #{name}!\"</code>, <code>elsif stunde &lt; 18</code> → Guten Tag, <code>else</code> → Guten Abend – und zwei <code>end</code>, eins für das <code>if</code>, eins für die Methode.",
+            "solution": "def tagesgruss(name, stunde = 12)\n  if stunde < 12\n    \"Guten Morgen, #{name}!\"\n  elsif stunde < 18\n    \"Guten Tag, #{name}!\"\n  else\n    \"Guten Abend, #{name}!\"\n  end\nend\n\ntagesgruss(\"Kaz\", 9)"
           }
         ]
       },
@@ -3621,6 +4137,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "square(9) == 81 && square(5) == 25 && code.include?(\"def\")",
             "hint": "Like this: <code>def square(number)</code>, below it <code>number * number</code>, then <code>end</code>.",
             "solution": "def square(number)\n  number * number\nend\n\nsquare(9)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Write <code>greeting_for(name, hour)</code>: before 12 it returns <code>Good morning, Kaz!</code>, from 12 on <code>Good afternoon, Kaz!</code> and from 18 on <code>Good evening, Kaz!</code>. The hour gets the default value 12, so that <code>greeting_for(\"Kaz\")</code> works too. Test it with <code>greeting_for(\"Kaz\", 9)</code> as the last line.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def greeting_for(name, hour = 12)\n#   ...\n# end\n\n# greeting_for(\"Kaz\", 9)\n",
+            "hints": [
+              "A <code>def</code> with two parameters, the second with a default – like <code>greet</code> above. Inside, an <code>if</code>/<code>elsif</code>/<code>else</code> on <code>hour</code> decides which sentence comes back."
+            ],
+            "check": "greeting_for(\"Kaz\", 9) == \"Good morning, Kaz!\" && greeting_for(\"Kaz\", 15) == \"Good afternoon, Kaz!\" && greeting_for(\"Ida\", 20) == \"Good evening, Ida!\" && greeting_for(\"Kaz\") == \"Good afternoon, Kaz!\" && code.include?(\"def\")",
+            "hint": "<code>def greeting_for(name, hour = 12)</code>, inside it <code>if hour &lt; 12</code> → <code>\"Good morning, #{name}!\"</code>, <code>elsif hour &lt; 18</code> → afternoon, <code>else</code> → evening – and two <code>end</code>s, one for the <code>if</code>, one for the method.",
+            "solution": "def greeting_for(name, hour = 12)\n  if hour < 12\n    \"Good morning, #{name}!\"\n  elsif hour < 18\n    \"Good afternoon, #{name}!\"\n  else\n    \"Good evening, #{name}!\"\n  end\nend\n\ngreeting_for(\"Kaz\", 9)"
           }
         ]
       },
@@ -3681,6 +4212,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "square(9) == 81 && square(5) == 25 && code.include?(\"def\")",
             "hint": "こんなふうに書くよ：<code>def square(number)</code>、その下に<code>number * number</code>、最後に<code>end</code>。",
             "solution": "def square(number)\n  number * number\nend\n\nsquare(9)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong><code>greeting_for(name, hour)</code>を書きましょう。12時より前なら<code>Good morning, Kaz!</code>、12時からは<code>Good afternoon, Kaz!</code>、18時からは<code>Good evening, Kaz!</code>を返します。時刻のデフォルト値は12にして、<code>greeting_for(\"Kaz\")</code>でも動くようにしてください。最後の行で<code>greeting_for(\"Kaz\", 9)</code>を試しましょう。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def greeting_for(name, hour = 12)\n#   ...\n# end\n\n# greeting_for(\"Kaz\", 9)\n",
+            "hints": [
+              "引数2つの<code>def</code>で、2つめにはデフォルト値をつけるよ。上の<code>greet</code>と同じだね。中では<code>hour</code>を<code>if</code>/<code>elsif</code>/<code>else</code>で分けて、どの文を返すか決めるんだ。"
+            ],
+            "check": "greeting_for(\"Kaz\", 9) == \"Good morning, Kaz!\" && greeting_for(\"Kaz\", 15) == \"Good afternoon, Kaz!\" && greeting_for(\"Ida\", 20) == \"Good evening, Ida!\" && greeting_for(\"Kaz\") == \"Good afternoon, Kaz!\" && code.include?(\"def\")",
+            "hint": "<code>def greeting_for(name, hour = 12)</code>の中で、<code>if hour &lt; 12</code>なら<code>\"Good morning, #{name}!\"</code>、<code>elsif hour &lt; 18</code>ならafternoon、<code>else</code>ならevening。<code>end</code>は2つ、<code>if</code>の分とメソッドの分だよ。",
+            "solution": "def greeting_for(name, hour = 12)\n  if hour < 12\n    \"Good morning, #{name}!\"\n  elsif hour < 18\n    \"Good afternoon, #{name}!\"\n  else\n    \"Good evening, #{name}!\"\n  end\nend\n\ngreeting_for(\"Kaz\", 9)"
           }
         ]
       },
@@ -4155,6 +4701,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "f = Fuchs.new(\"Kaz\"); f.name == \"Kaz\" && f.ruf == \"Chunky Bacon!\" && code.include?(\"class Fuchs\")",
             "hint": "Übernimm das Katzen-Beispiel und pass es an: Klasse <code>Fuchs</code>, und <code>ruf</code> gibt genau <code>\"Chunky Bacon!\"</code> zurück.",
             "solution": "class Fuchs\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def ruf\n    \"Chunky Bacon!\"\n  end\nend\nf = Fuchs.new(\"Kaz\")\nf.ruf"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Ein Sparschwein, das sich etwas merkt: Die Klasse <code>Sparschwein</code> startet leer, <code>einwerfen(rappen)</code> legt Münzen hinein, und <code>stand</code> sagt, wie viel drin ist. Nach <code>einwerfen(50)</code> und <code>einwerfen(20)</code> soll <code>stand</code> 70 ergeben. Die Instanzvariable braucht in <code>initialize</code> ihren Startwert.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# class Sparschwein\n#   ...            # startet leer; einwerfen(rappen) legt Münzen hinein; stand: wie viel drin ist\n# end\n\n# schwein = Sparschwein.new\n# schwein.einwerfen(50)\n# schwein.einwerfen(20)\n# schwein.stand\n",
+            "hints": [
+              "Wie der Hamster oben: <code>initialize</code> setzt eine Instanzvariable (<code>@rappen = 0</code>), <code>einwerfen</code> zählt mit <code>+=</code> dazu, und <code>stand</code> gibt die Variable zurück."
+            ],
+            "check": "s = Sparschwein.new; s.einwerfen(50); s.einwerfen(20); s.stand == 70 && Sparschwein.new.stand == 0 && code.include?(\"class Sparschwein\") && code.include?(\"@\")",
+            "hint": "<code>def initialize; @rappen = 0; end</code>, <code>def einwerfen(rappen); @rappen += rappen; end</code> und <code>def stand; @rappen; end</code> – dann die vier Zeilen unten einkommentieren.",
+            "solution": "class Sparschwein\n  def initialize\n    @rappen = 0\n  end\n\n  def einwerfen(rappen)\n    @rappen += rappen\n  end\n\n  def stand\n    @rappen\n  end\nend\n\nschwein = Sparschwein.new\nschwein.einwerfen(50)\nschwein.einwerfen(20)\nschwein.stand"
           }
         ]
       },
@@ -4218,6 +4779,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "f = Fox.new(\"Kaz\"); f.name == \"Kaz\" && f.shout == \"Chunky Bacon!\" && code.include?(\"class Fox\")",
             "hint": "Copy the cat example and adapt it: class <code>Fox</code>, and <code>shout</code> returns exactly <code>\"Chunky Bacon!\"</code>.",
             "solution": "class Fox\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def shout\n    \"Chunky Bacon!\"\n  end\nend\nf = Fox.new(\"Kaz\")\nf.shout"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> A piggy bank that remembers: the class <code>PiggyBank</code> starts empty, <code>add(cents)</code> puts coins in, and <code>total</code> says how much is inside. After <code>add(50)</code> and <code>add(20)</code>, <code>total</code> should give 70. The instance variable needs its starting value in <code>initialize</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# class PiggyBank\n#   ...           # starts empty; add(cents) puts coins in; total answers how much is in\n# end\n\n# bank = PiggyBank.new\n# bank.add(50)\n# bank.add(20)\n# bank.total\n",
+            "hints": [
+              "Like the hamster above: <code>initialize</code> sets an instance variable (<code>@cents = 0</code>), <code>add</code> counts up with <code>+=</code>, and <code>total</code> returns the variable."
+            ],
+            "check": "b = PiggyBank.new; b.add(50); b.add(20); b.total == 70 && PiggyBank.new.total == 0 && code.include?(\"class PiggyBank\") && code.include?(\"@\")",
+            "hint": "<code>def initialize; @cents = 0; end</code>, <code>def add(cents); @cents += cents; end</code> and <code>def total; @cents; end</code> – then uncomment the four lines below.",
+            "solution": "class PiggyBank\n  def initialize\n    @cents = 0\n  end\n\n  def add(cents)\n    @cents += cents\n  end\n\n  def total\n    @cents\n  end\nend\n\nbank = PiggyBank.new\nbank.add(50)\nbank.add(20)\nbank.total"
           }
         ]
       },
@@ -4281,6 +4857,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "f = Fox.new(\"Kaz\"); f.name == \"Kaz\" && f.shout == \"Chunky Bacon!\" && code.include?(\"class Fox\")",
             "hint": "猫の例をコピーして書きかえてみて。クラス名は<code>Fox</code>、<code>shout</code>はぴったり<code>\"Chunky Bacon!\"</code>を返すようにね。",
             "solution": "class Fox\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def shout\n    \"Chunky Bacon!\"\n  end\nend\nf = Fox.new(\"Kaz\")\nf.shout"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>中身を覚えている貯金箱です。クラス<code>PiggyBank</code>は空で始まり、<code>add(cents)</code>で硬貨を入れ、<code>total</code>でいくら入っているか答えます。<code>add(50)</code>と<code>add(20)</code>のあと、<code>total</code>は70になるはずです。インスタンス変数には<code>initialize</code>で最初の値が必要です。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# class PiggyBank\n#   ...           # 最初は空。add(cents) で硬貨を入れる。total で中身がいくらか答える\n# end\n\n# bank = PiggyBank.new\n# bank.add(50)\n# bank.add(20)\n# bank.total\n",
+            "hints": [
+              "上のハムスターと同じだよ。<code>initialize</code>でインスタンス変数（<code>@cents = 0</code>）を用意して、<code>add</code>では<code>+=</code>でふやして、<code>total</code>はその変数を返すんだ。"
+            ],
+            "check": "b = PiggyBank.new; b.add(50); b.add(20); b.total == 70 && PiggyBank.new.total == 0 && code.include?(\"class PiggyBank\") && code.include?(\"@\")",
+            "hint": "<code>def initialize; @cents = 0; end</code>、<code>def add(cents); @cents += cents; end</code>、<code>def total; @cents; end</code>。それから下の4行のコメントを外してね。",
+            "solution": "class PiggyBank\n  def initialize\n    @cents = 0\n  end\n\n  def add(cents)\n    @cents += cents\n  end\n\n  def total\n    @cents\n  end\nend\n\nbank = PiggyBank.new\nbank.add(50)\nbank.add(20)\nbank.total"
           }
         ]
       },
@@ -4328,6 +4919,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "Rotfuchs.superclass == Waldtier && Rotfuchs.new(\"Kaz\").vorstellen == \"Ich bin Kaz und sage Chunky Bacon!\" && !Rotfuchs.instance_methods(false).include?(:vorstellen)",
             "hint": "<code>class Rotfuchs &lt; Waldtier</code>, darin nur <code>def laut</code> mit <code>\"Chunky Bacon!\"</code> – und <code>end</code>, <code>end</code>.",
             "solution": "class Waldtier\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def laut\n    \"...\"\n  end\n  def vorstellen\n    \"Ich bin #{name} und sage #{laut}\"\n  end\nend\n\nclass Rotfuchs < Waldtier\n  def laut\n    \"Chunky Bacon!\"\n  end\nend\n\nRotfuchs.new(\"Chunky\").vorstellen"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Jetzt mit <code>super</code>, wie der Hund oben: Schreib <code>Huhn</code>, das von <code>Nutztier</code> erbt. Sein <code>laut</code> ist <code>\"Gack!\"</code>, und sein <code>vorstellen</code> nimmt den Satz der Elternklasse und hängt <code> – und ich lege Eier</code> an. <code>Huhn.new(\"Berta\").vorstellen</code> ergibt dann <code>Ich bin Berta und sage Gack! – und ich lege Eier</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "class Nutztier\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def laut\n    \"...\"\n  end\n\n  def vorstellen\n    \"Ich bin #{name} und sage #{laut}\"\n  end\nend\n\n# class Huhn < Nutztier\n#   ...   # laut ist \"Gack!\", vorstellen hängt \" – und ich lege Eier\" an den Satz der Eltern\n# end\n\n# Huhn.new(\"Berta\").vorstellen\n",
+            "hints": [
+              "Zwei Methoden in <code>Huhn</code>: <code>laut</code> gibt einfach den neuen Ton zurück. <code>vorstellen</code> ruft mit <code>super</code> die Fassung von <code>Nutztier</code> auf und hängt mit <code>+</code> den Zusatz an."
+            ],
+            "check": "Huhn.superclass == Nutztier && Huhn.new(\"Berta\").vorstellen == \"Ich bin Berta und sage Gack! – und ich lege Eier\" && Huhn.instance_methods(false).include?(:vorstellen) && code.include?(\"super\")",
+            "hint": "<code>class Huhn &lt; Nutztier</code> mit <code>def laut; \"Gack!\"; end</code> und <code>def vorstellen; super + \" – und ich lege Eier\"; end</code>.",
+            "solution": "class Nutztier\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def laut\n    \"...\"\n  end\n\n  def vorstellen\n    \"Ich bin #{name} und sage #{laut}\"\n  end\nend\n\nclass Huhn < Nutztier\n  def laut\n    \"Gack!\"\n  end\n\n  def vorstellen\n    super + \" – und ich lege Eier\"\n  end\nend\n\nHuhn.new(\"Berta\").vorstellen"
           }
         ]
       },
@@ -4371,6 +4977,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "RedFox.superclass == ForestAnimal && RedFox.new(\"Kaz\").introduce == \"I am Kaz and I say Chunky Bacon!\" && !RedFox.instance_methods(false).include?(:introduce)",
             "hint": "<code>class RedFox &lt; ForestAnimal</code>, inside it only <code>def sound</code> with <code>\"Chunky Bacon!\"</code> – and <code>end</code>, <code>end</code>.",
             "solution": "class ForestAnimal\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def sound\n    \"...\"\n  end\n  def introduce\n    \"I am #{name} and I say #{sound}\"\n  end\nend\n\nclass RedFox < ForestAnimal\n  def sound\n    \"Chunky Bacon!\"\n  end\nend\n\nRedFox.new(\"Chunky\").introduce"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Now with <code>super</code>, like the dog above: write <code>Hen</code>, which inherits from <code>FarmAnimal</code>. Its <code>sound</code> is <code>\"Cluck!\"</code>, and its <code>introduce</code> takes the parent's sentence and appends <code> - and I lay eggs</code>. <code>Hen.new(\"Berta\").introduce</code> then gives <code>I am Berta and I say Cluck! - and I lay eggs</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "class FarmAnimal\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def sound\n    \"...\"\n  end\n\n  def introduce\n    \"I am #{name} and I say #{sound}\"\n  end\nend\n\n# class Hen < FarmAnimal\n#   ...   # sound is \"Cluck!\", introduce adds \" - and I lay eggs\" to the parent's sentence\n# end\n\n# Hen.new(\"Berta\").introduce\n",
+            "hints": [
+              "Two methods in <code>Hen</code>: <code>sound</code> simply returns the new noise. <code>introduce</code> calls <code>FarmAnimal</code>'s version with <code>super</code> and appends the extra with <code>+</code>."
+            ],
+            "check": "Hen.superclass == FarmAnimal && Hen.new(\"Berta\").introduce == \"I am Berta and I say Cluck! - and I lay eggs\" && Hen.instance_methods(false).include?(:introduce) && code.include?(\"super\")",
+            "hint": "<code>class Hen &lt; FarmAnimal</code> with <code>def sound; \"Cluck!\"; end</code> and <code>def introduce; super + \" - and I lay eggs\"; end</code>.",
+            "solution": "class FarmAnimal\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def sound\n    \"...\"\n  end\n\n  def introduce\n    \"I am #{name} and I say #{sound}\"\n  end\nend\n\nclass Hen < FarmAnimal\n  def sound\n    \"Cluck!\"\n  end\n\n  def introduce\n    super + \" - and I lay eggs\"\n  end\nend\n\nHen.new(\"Berta\").introduce"
           }
         ]
       },
@@ -4414,6 +5035,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "RedFox.superclass == ForestAnimal && RedFox.new(\"Kaz\").introduce == \"I am Kaz and I say Chunky Bacon!\" && !RedFox.instance_methods(false).include?(:introduce)",
             "hint": "<code>class RedFox &lt; ForestAnimal</code>の中に<code>def sound</code>だけ書いて、<code>\"Chunky Bacon!\"</code>を返そう。最後は<code>end</code>、<code>end</code>だよ。",
             "solution": "class ForestAnimal\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def sound\n    \"...\"\n  end\n  def introduce\n    \"I am #{name} and I say #{sound}\"\n  end\nend\n\nclass RedFox < ForestAnimal\n  def sound\n    \"Chunky Bacon!\"\n  end\nend\n\nRedFox.new(\"Chunky\").introduce"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>今度は上の犬のように<code>super</code>を使います。<code>FarmAnimal</code>を継承する<code>Hen</code>を書きましょう。<code>sound</code>は<code>\"Cluck!\"</code>、<code>introduce</code>は親クラスの文に<code> - and I lay eggs</code>を足します。<code>Hen.new(\"Berta\").introduce</code>は<code>I am Berta and I say Cluck! - and I lay eggs</code>になります。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "class FarmAnimal\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def sound\n    \"...\"\n  end\n\n  def introduce\n    \"I am #{name} and I say #{sound}\"\n  end\nend\n\n# class Hen < FarmAnimal\n#   ...   # sound は \"Cluck!\"、introduce は親の文に \" - and I lay eggs\" を足す\n# end\n\n# Hen.new(\"Berta\").introduce\n",
+            "hints": [
+              "<code>Hen</code>にメソッドを2つ。<code>sound</code>は新しい鳴き声を返すだけ。<code>introduce</code>は<code>super</code>で<code>FarmAnimal</code>のほうを呼んで、<code>+</code>で言葉を足すんだ。"
+            ],
+            "check": "Hen.superclass == FarmAnimal && Hen.new(\"Berta\").introduce == \"I am Berta and I say Cluck! - and I lay eggs\" && Hen.instance_methods(false).include?(:introduce) && code.include?(\"super\")",
+            "hint": "<code>class Hen &lt; FarmAnimal</code>の中に<code>def sound; \"Cluck!\"; end</code>と<code>def introduce; super + \" - and I lay eggs\"; end</code>だよ。",
+            "solution": "class FarmAnimal\n  attr_reader :name\n\n  def initialize(name)\n    @name = name\n  end\n\n  def sound\n    \"...\"\n  end\n\n  def introduce\n    \"I am #{name} and I say #{sound}\"\n  end\nend\n\nclass Hen < FarmAnimal\n  def sound\n    \"Cluck!\"\n  end\n\n  def introduce\n    super + \" - and I lay eggs\"\n  end\nend\n\nHen.new(\"Berta\").introduce"
           }
         ]
       }
@@ -4480,6 +5116,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "Laut.is_a?(Module) && !Laut.is_a?(Class) && Dachs.include?(Laut) && Dachs.new.ruf == \"CHUNKY BACON!\" && code.include?(\"include\")",
             "hint": "<code>module Laut</code> mit <code>def ruf</code> … <code>\"CHUNKY BACON!\"</code> … dann <code>class Dachs</code> mit <code>include Laut</code> darin.",
             "solution": "module Laut\n  def ruf\n    \"CHUNKY BACON!\"\n  end\nend\n\nclass Dachs\n  include Laut\nend\n\nDachs.new.ruf"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Mach <code>Rucksack</code> vergleichbar, wie das Paket oben: <code>include Comparable</code>, ein <code>attr_reader :gewicht</code>, ein <code>initialize(gewicht)</code> und ein <code>&lt;=&gt;</code>, das die Gewichte vergleicht. Danach kann Ruby Rucksäcke mit <code>&lt;</code> vergleichen und aus einem Array den leichtesten mit <code>min</code> finden – die letzte Zeile soll 3 ergeben.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# class Rucksack\n#   include ...        # Comparable, nach Gewicht\n#   attr_reader :gewicht\n#   ...\n# end\n\n# [Rucksack.new(7), Rucksack.new(3), Rucksack.new(5)].min.gewicht\n",
+            "hints": [
+              "Das Paket oben ist die Vorlage: <code>Comparable</code> einmischen und <code>&lt;=&gt;</code> schreiben, das das eigene <code>gewicht</code> mit <code>anderer.gewicht</code> vergleicht – alles andere (<code>&lt;</code>, <code>min</code>, <code>between?</code>) bekommst du geschenkt."
+            ],
+            "check": "Rucksack.include?(Comparable) && Rucksack.new(3) < Rucksack.new(5) && [Rucksack.new(7), Rucksack.new(3), Rucksack.new(5)].min.gewicht == 3 && Rucksack.new(4).between?(Rucksack.new(3), Rucksack.new(5)) && code.include?(\"<=>\")",
+            "hint": "<code>include Comparable</code>, <code>attr_reader :gewicht</code>, <code>def initialize(gewicht); @gewicht = gewicht; end</code> und <code>def &lt;=&gt;(anderer); gewicht &lt;=&gt; anderer.gewicht; end</code>.",
+            "solution": "class Rucksack\n  include Comparable\n  attr_reader :gewicht\n\n  def initialize(gewicht)\n    @gewicht = gewicht\n  end\n\n  def <=>(anderer)\n    gewicht <=> anderer.gewicht\n  end\nend\n\n[Rucksack.new(7), Rucksack.new(3), Rucksack.new(5)].min.gewicht"
           }
         ]
       },
@@ -4543,6 +5194,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "Loud.is_a?(Module) && !Loud.is_a?(Class) && Badger.include?(Loud) && Badger.new.shout == \"CHUNKY BACON!\" && code.include?(\"include\")",
             "hint": "<code>module Loud</code> with <code>def shout</code> … <code>\"CHUNKY BACON!\"</code> … then <code>class Badger</code> with <code>include Loud</code> inside.",
             "solution": "module Loud\n  def shout\n    \"CHUNKY BACON!\"\n  end\nend\n\nclass Badger\n  include Loud\nend\n\nBadger.new.shout"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Make <code>Backpack</code> comparable, like the parcel above: <code>include Comparable</code>, an <code>attr_reader :weight</code>, an <code>initialize(weight)</code> and a <code>&lt;=&gt;</code> that compares the weights. Then Ruby can compare backpacks with <code>&lt;</code> and find the lightest in an array with <code>min</code> – the last line should give 3.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# class Backpack\n#   include ...        # Comparable, by weight\n#   attr_reader :weight\n#   ...\n# end\n\n# [Backpack.new(7), Backpack.new(3), Backpack.new(5)].min.weight\n",
+            "hints": [
+              "The parcel above is the template: mix in <code>Comparable</code> and write <code>&lt;=&gt;</code>, which compares your own <code>weight</code> with <code>other.weight</code> – everything else (<code>&lt;</code>, <code>min</code>, <code>between?</code>) comes for free."
+            ],
+            "check": "Backpack.include?(Comparable) && Backpack.new(3) < Backpack.new(5) && [Backpack.new(7), Backpack.new(3), Backpack.new(5)].min.weight == 3 && Backpack.new(4).between?(Backpack.new(3), Backpack.new(5)) && code.include?(\"<=>\")",
+            "hint": "<code>include Comparable</code>, <code>attr_reader :weight</code>, <code>def initialize(weight); @weight = weight; end</code> and <code>def &lt;=&gt;(other); weight &lt;=&gt; other.weight; end</code>.",
+            "solution": "class Backpack\n  include Comparable\n  attr_reader :weight\n\n  def initialize(weight)\n    @weight = weight\n  end\n\n  def <=>(other)\n    weight <=> other.weight\n  end\nend\n\n[Backpack.new(7), Backpack.new(3), Backpack.new(5)].min.weight"
           }
         ]
       },
@@ -4606,6 +5272,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "Loud.is_a?(Module) && !Loud.is_a?(Class) && Badger.include?(Loud) && Badger.new.shout == \"CHUNKY BACON!\" && code.include?(\"include\")",
             "hint": "<code>module Loud</code>の中に<code>def shout</code>を書いて、<code>\"CHUNKY BACON!\"</code>を返すようにしよう。それから<code>class Badger</code>を作って、その中に<code>include Loud</code>と書くんだよ。",
             "solution": "module Loud\n  def shout\n    \"CHUNKY BACON!\"\n  end\nend\n\nclass Badger\n  include Loud\nend\n\nBadger.new.shout"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>上の小包のように、<code>Backpack</code>を比べられるようにしましょう。<code>include Comparable</code>、<code>attr_reader :weight</code>、<code>initialize(weight)</code>、そして重さを比べる<code>&lt;=&gt;</code>です。そうすればRubyはリュックを<code>&lt;</code>で比べ、配列からいちばん軽いものを<code>min</code>で見つけられます。最後の行は3になるはずです。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# class Backpack\n#   include ...        # Comparable、重さで比べる\n#   attr_reader :weight\n#   ...\n# end\n\n# [Backpack.new(7), Backpack.new(3), Backpack.new(5)].min.weight\n",
+            "hints": [
+              "上の小包がお手本だよ。<code>Comparable</code>をincludeして、自分の<code>weight</code>と<code>other.weight</code>を比べる<code>&lt;=&gt;</code>を書くだけ。あとの<code>&lt;</code>や<code>min</code>や<code>between?</code>はおまけでついてくるよ。"
+            ],
+            "check": "Backpack.include?(Comparable) && Backpack.new(3) < Backpack.new(5) && [Backpack.new(7), Backpack.new(3), Backpack.new(5)].min.weight == 3 && Backpack.new(4).between?(Backpack.new(3), Backpack.new(5)) && code.include?(\"<=>\")",
+            "hint": "<code>include Comparable</code>、<code>attr_reader :weight</code>、<code>def initialize(weight); @weight = weight; end</code>、<code>def &lt;=&gt;(other); weight &lt;=&gt; other.weight; end</code>だよ。",
+            "solution": "class Backpack\n  include Comparable\n  attr_reader :weight\n\n  def initialize(weight)\n    @weight = weight\n  end\n\n  def <=>(other)\n    weight <=> other.weight\n  end\nend\n\n[Backpack.new(7), Backpack.new(3), Backpack.new(5)].min.weight"
           }
         ]
       },
@@ -4941,6 +5622,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "File.exist?(\"einkauf.txt\") && artikel.is_a?(Array) && artikel.length == 3 && artikel.all? { |a| a.is_a?(String) && !a.empty? && !a.include?(\"\\n\") } && artikel == File.read(\"einkauf.txt\").lines(chomp: true)",
             "hint": "<code>File.write(\"einkauf.txt\", \"Speck\\nEier\\nBrot\\n\")</code> und dann <code>artikel = File.read(\"einkauf.txt\").lines(chomp: true)</code>.",
             "solution": "File.write(\"einkauf.txt\", \"Speck\\nEier\\nBrot\\n\")\nartikel = File.read(\"einkauf.txt\").lines(chomp: true)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Die Zelle schreibt eine Punkteliste als <code>punkte.txt</code>, ein Name und eine Zahl pro Zeile, durch Komma getrennt. Lies die Datei zurück und rechne aus: <code>total</code>, alle Punkte zusammen (22), und <code>bester</code>, der Name mit den meisten Punkten (<code>\"Kaz\"</code>). <code>split</code> zerlegt eine Zeile, <code>max_by</code> aus Lektion {{nr:iteratoren}} findet den Spitzenreiter.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "File.write(\"punkte.txt\", \"Kaz,12\\nIsi,7\\nChunky,3\\n\")\n# total = ...    # alle Punkte zusammen: 22\n# bester = ...   # der Name mit den meisten Punkten: \"Kaz\"\n",
+            "hints": [
+              "Lies die Datei mit <code>File.read</code>, zerlege sie mit <code>lines</code> und jede Zeile mit <code>split(\",\")</code> in Name und Zahl. Die Zahl ist ein String – <code>to_i</code> macht sie zum Rechnen bereit."
+            ],
+            "check": "File.exist?(\"punkte.txt\") && total == 22 && bester == \"Kaz\" && code.include?(\"split\") && code.include?(\"File.read\")",
+            "hint": "<code>zeilen = File.read(\"punkte.txt\").lines(chomp: true).map { |zeile| zeile.split(\",\") }</code>, dann <code>total = zeilen.sum { |name, punkte| punkte.to_i }</code> und <code>bester = zeilen.max_by { |name, punkte| punkte.to_i }[0]</code>.",
+            "solution": "File.write(\"punkte.txt\", \"Kaz,12\\nIsi,7\\nChunky,3\\n\")\nzeilen = File.read(\"punkte.txt\").lines(chomp: true).map { |zeile| zeile.split(\",\") }\ntotal = zeilen.sum { |name, punkte| punkte.to_i }\nbester = zeilen.max_by { |name, punkte| punkte.to_i }[0]"
           }
         ]
       },
@@ -5008,6 +5704,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "File.exist?(\"shopping.txt\") && items.is_a?(Array) && items.length == 3 && items.all? { |i| i.is_a?(String) && !i.empty? && !i.include?(\"\\n\") } && items == File.read(\"shopping.txt\").lines(chomp: true)",
             "hint": "<code>File.write(\"shopping.txt\", \"bacon\\neggs\\nbread\\n\")</code> and then <code>items = File.read(\"shopping.txt\").lines(chomp: true)</code>.",
             "solution": "File.write(\"shopping.txt\", \"bacon\\neggs\\nbread\\n\")\nitems = File.read(\"shopping.txt\").lines(chomp: true)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> The cell writes a list of points as <code>points.txt</code>, a name and a number per line, separated by a comma. Read the file back and work out <code>total</code>, all the points added up (22), and <code>best</code>, the name with the most points (<code>\"Kaz\"</code>). <code>split</code> cuts a line, <code>max_by</code> from lesson {{nr:iteratoren}} finds the champion.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "File.write(\"points.txt\", \"Kaz,12\\nIsi,7\\nChunky,3\\n\")\n# total = ...   # all the points added up: 22\n# best = ...    # the name with the most points: \"Kaz\"\n",
+            "hints": [
+              "Read the file with <code>File.read</code>, cut it with <code>lines</code> and every line with <code>split(\",\")</code> into name and number. The number is a string – <code>to_i</code> makes it ready for arithmetic."
+            ],
+            "check": "File.exist?(\"points.txt\") && total == 22 && best == \"Kaz\" && code.include?(\"split\") && code.include?(\"File.read\")",
+            "hint": "<code>rows = File.read(\"points.txt\").lines(chomp: true).map { |line| line.split(\",\") }</code>, then <code>total = rows.sum { |name, points| points.to_i }</code> and <code>best = rows.max_by { |name, points| points.to_i }[0]</code>.",
+            "solution": "File.write(\"points.txt\", \"Kaz,12\\nIsi,7\\nChunky,3\\n\")\nrows = File.read(\"points.txt\").lines(chomp: true).map { |line| line.split(\",\") }\ntotal = rows.sum { |name, points| points.to_i }\nbest = rows.max_by { |name, points| points.to_i }[0]"
           }
         ]
       },
@@ -5075,6 +5786,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "File.exist?(\"shopping.txt\") && items.is_a?(Array) && items.length == 3 && items.all? { |i| i.is_a?(String) && !i.empty? && !i.include?(\"\\n\") } && items == File.read(\"shopping.txt\").lines(chomp: true)",
             "hint": "<code>File.write(\"shopping.txt\", \"bacon\\neggs\\nbread\\n\")</code>、それから<code>items = File.read(\"shopping.txt\").lines(chomp: true)</code>だよ。",
             "solution": "File.write(\"shopping.txt\", \"bacon\\neggs\\nbread\\n\")\nitems = File.read(\"shopping.txt\").lines(chomp: true)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>このセルは点数の一覧を<code>points.txt</code>に書きます。1行に名前と数が1つずつ、カンマ区切りです。ファイルを読み戻して、<code>total</code>（点数の合計、22）と<code>best</code>（いちばん点数が多い名前、<code>\"Kaz\"</code>）を求めましょう。<code>split</code>で行を分け、レッスン{{nr:iteratoren}}の<code>max_by</code>で一番を見つけます。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "File.write(\"points.txt\", \"Kaz,12\\nIsi,7\\nChunky,3\\n\")\n# total = ...   # 点数の合計：22\n# best = ...    # いちばん点数が多い名前：\"Kaz\"\n",
+            "hints": [
+              "<code>File.read</code>でファイルを読んで、<code>lines</code>で行に分けて、各行を<code>split(\",\")</code>で名前と数に分けてみて。数は文字列のままだから、<code>to_i</code>で計算できるようにしてね。"
+            ],
+            "check": "File.exist?(\"points.txt\") && total == 22 && best == \"Kaz\" && code.include?(\"split\") && code.include?(\"File.read\")",
+            "hint": "<code>rows = File.read(\"points.txt\").lines(chomp: true).map { |line| line.split(\",\") }</code>、それから<code>total = rows.sum { |name, points| points.to_i }</code>と<code>best = rows.max_by { |name, points| points.to_i }[0]</code>だよ。",
+            "solution": "File.write(\"points.txt\", \"Kaz,12\\nIsi,7\\nChunky,3\\n\")\nrows = File.read(\"points.txt\").lines(chomp: true).map { |line| line.split(\",\") }\ntotal = rows.sum { |name, points| points.to_i }\nbest = rows.max_by { |name, points| points.to_i }[0]"
           }
         ]
       }

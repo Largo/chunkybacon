@@ -280,9 +280,14 @@ module LessonLint
             add("structure", "WARN", "unknown-key", where: where(lesson, lang), message: "unknown key #{k.inspect}")
           end
           xs = cells(lesson, lang).each_index.select { |i| cells(lesson, lang)[i]["t"] == "x" }
-          if xs.size != 1
+          mains = xs.reject { |i| cells(lesson, lang)[i]["bonus"] }
+          if mains.size != 1
             add("structure", "WARN", "exercise-count", where: where(lesson, lang),
-                message: "#{xs.size} exercise (x) cells, the format expects exactly one")
+                message: "#{mains.size} exercise (x) cells, the format expects exactly one (plus bonus ones, \"bonus\": true)")
+          end
+          if mains.any? && xs.any? { |i| cells(lesson, lang)[i]["bonus"] && i < mains.first }
+            add("structure", "ERROR", "bonus-order", where: where(lesson, lang),
+                message: "a bonus exercise comes before the main one (Alt+R, the tests and the harness take the first x)")
           end
           cells(lesson, lang).each_with_index do |c, ci|
             need = { "h" => %w[html], "c" => %w[code], "x" => %w[check hint] }[c["t"]] # an empty starter is fine
@@ -321,9 +326,12 @@ module LessonLint
       text = File.read(path, encoding: "UTF-8")
       block = text[/^SOLUTIONS = \{\n(.*?)^\}/m, 1] or return
       sol = block.scan(/^  "([^"]+)" => \{/).flatten
-      sol += text[/BROWSER_ONLY = %w\[(.*?)\]/m, 1].to_s.split # skipped on purpose
-      (ids - sol).each { |id| add("structure", "ERROR", "no-solution", where: id, message: "no SOLUTIONS entry in test/check_harness.rb") }
-      (sol - ids).each { |id| add("structure", "WARN", "stale-solution", where: id, message: "SOLUTIONS entry for an id that is not a lesson") }
+      skipped = text[/BROWSER_ONLY = %w\[(.*?)\]/m, 1].to_s.split # skipped on purpose
+      # a bonus exercise has its own entry: "<id>#bonus"
+      bonus = lessons.select { |l| cells(l, "en").any? { |c| c["t"] == "x" && c["bonus"] } }.map { |l| "#{l["id"]}#bonus" }
+      sol += skipped + skipped.map { |id| "#{id}#bonus" }
+      (ids + bonus - sol).each { |id| add("structure", "ERROR", "no-solution", where: id, message: "no SOLUTIONS entry in test/check_harness.rb") }
+      (sol - ids - bonus - skipped.map { |id| "#{id}#bonus" }).each { |id| add("structure", "WARN", "stale-solution", where: id, message: "SOLUTIONS entry for an id that is not a lesson") }
     end
 
     # ------------------------------------------------------------ parity
@@ -345,6 +353,10 @@ module LessonLint
           when "h" then compare_html(lesson, ci, { "de" => de, "en" => en, "ja" => ja })
           end
           if en["t"] == "x"
+            if [de, en, ja].map { |c| c["bonus"] == true }.uniq.size > 1
+              add("parity", "ERROR", "bonus-flag", where: where(lesson, "en", ci), line: line_of(lesson, "en", ci),
+                  message: "\"bonus\" differs between the languages")
+            end
             compare_spans(lesson, ci, "hint", { "de" => de["hint"], "en" => en["hint"], "ja" => ja["hint"] })
             # the lighter hints before it (shell/app.rb reveal_hint): the same
             # number in every language, and a solution in all or none

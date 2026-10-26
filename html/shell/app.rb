@@ -451,7 +451,8 @@ module ChunkyShell
       step = @course.stepper?(idx) ? [ui.stepButton, ui.stepCellLabel] : nil
       tab_labels = [(ui[:tabsLabel] || "Files").to_s, (ui[:tabReadonly] || "read-only").to_s]
       hint = [ui.hintButton, ui.hintCellLabel, ui.hintLabel]
-      el("lessonBody").innerHTML = View.lesson_html(cells, ui.taskLabel, ui.runCell, live_toggle_html, ui.runCellLabel, step, tab_labels, hint)
+      el("lessonBody").innerHTML = View.lesson_html(cells, ui.taskLabel, ui.runCell, live_toggle_html, ui.runCellLabel, step, tab_labels, hint,
+                                                    ui.bonusLabel)
       number = 0
       cells.each_with_index do |cell, i|
         next unless code_cell?(cell)
@@ -746,7 +747,7 @@ module ChunkyShell
         # the error is explained below the cell; Chunky points at 💡
         show_bubble("#{ui.errorIntro}<br>#{ui.hintOnError}", "fail")
       elsif outcome == "pass"
-        exercise_passed
+        cell[:bonus] == true ? bonus_passed : exercise_passed
       elsif outcome == "fail"
         # the next hint, lighter ones first; after the last, the solution
         # is one click away
@@ -894,6 +895,13 @@ module ChunkyShell
       next_id = idx + 1 < total ? @course.id(idx + 1) : nil
       all_done = Store.done_ids.length >= total
       show_bubble(View.passed_html(praise[rand(praise.length)], ui, idx, total, next_id, all_done, @router.prefix(@lang)), "pass")
+    end
+
+    # a bonus exercise ("bonus": true, §3): praise, but the lesson's tick
+    # comes from its main exercise
+    def bonus_passed
+      praise = ui.praise.to_a
+      show_bubble("#{praise[rand(praise.length)]}<br><small>#{ui.bonusDone}</small>", "pass")
     end
 
     def settle_cell(idx, outcome, elapsed)
@@ -1126,7 +1134,8 @@ module ChunkyShell
       return unless outcome == "pass" && before != "pass"
 
       replay(cell, "celebrate") if cell
-      exercise_passed
+      data = current_cells[idx]
+      data && data[:bonus] == true ? bonus_passed : exercise_passed
     end
 
     # A cell that took longer than LIVE_SLOW runs only with ▶ until a run

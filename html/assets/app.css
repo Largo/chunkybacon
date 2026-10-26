@@ -784,6 +784,8 @@ kbd {
 .cell:focus-within, .cell.running { border-left-color: var(--glow); border-right-color: var(--glow); }
 .cell.exercise { border: 2px solid var(--ink); border-left-width: 4px; border-right-width: 4px; }
 .cell.exercise:focus-within, .cell.exercise.running { border-left-color: var(--glow); border-right-color: var(--glow); }
+/* a bonus exercise ("bonus": true): the same frame, its label in mustard */
+.cell.exercise.bonus::before { background: var(--mustard); color: var(--ink); }
 .cell.exercise::before {
   content: attr(data-label);
   display: block;

@@ -75,6 +75,9 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   one click puts it into the cell. A failed check reveals the next hint
   too, Chunky says it; an error points at the explanation and at 💡. Every
   solution shown is one the test harness verifies.
+- **Bonus exercises**: most Basics lessons end with a second, harder task
+  in a "Bonus" box - checked and cheered like the first, with its own
+  hints, but the lesson's tick comes from the main task alone.
 - **Ruby cheat sheet**: one click in the header opens the course's Ruby on
   one page - 17 topics, each with the lessons that teach it and links into
   the official documentation, searchable. On a wide screen it stands beside

@@ -130,15 +130,12 @@ Last updated 2026-10-25.
   timelog track); sorting and searching (`sort`, `sort_by` with several
   keys, `min_by`, `bsearch`); `Struct`/`Data` before classes; recursion
   on its own (the turtle lesson has it in passing).
-- **Extending the existing lessons** - the format expects exactly ONE
-  exercise per lesson (lint `exercise-count`, `check_harness.rb` takes
-  the first `x`, `App#exercise_passed` marks the lesson done on any pass).
-  A "Bonus" exercise (`"bonus": true` on a second `x` cell: checked and
-  praised but not needed for the tick) would let every Basics lesson end
-  with a harder task; it needs the three places above plus
-  `SOLUTIONS["id#2"]` and the stepper test. Until then, a lesson can grow
-  with more demo cells and a "try this" sentence in the prose - the saved
-  code of learners survives (cells are keyed by starter fingerprint, §6a).
+- **Bonus exercises** (2026-10-26, HANDOVER §3 `bonus`): a second `x`
+  cell with `"bonus": true` at the end of a lesson, checked and praised
+  with its own 💡, not needed for the tick; `SOLUTIONS["<id>#bonus"]` in
+  the harness, the linter allows it after the main exercise. The Basics
+  lessons have one; the side trips and the timelog track do not yet - a
+  bonus per timelog lesson would make a second pass through the project.
 
 ## Smaller open ends found on the way
 
