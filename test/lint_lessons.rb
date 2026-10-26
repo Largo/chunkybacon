@@ -280,9 +280,14 @@ module LessonLint
             add("structure", "WARN", "unknown-key", where: where(lesson, lang), message: "unknown key #{k.inspect}")
           end
           xs = cells(lesson, lang).each_index.select { |i| cells(lesson, lang)[i]["t"] == "x" }
-          if xs.size != 1
+          mains = xs.reject { |i| cells(lesson, lang)[i]["bonus"] }
+          if mains.size != 1
             add("structure", "WARN", "exercise-count", where: where(lesson, lang),
-                message: "#{xs.size} exercise (x) cells, the format expects exactly one")
+                message: "#{mains.size} exercise (x) cells, the format expects exactly one (plus bonus ones, \"bonus\": true)")
+          end
+          if mains.any? && xs.any? { |i| cells(lesson, lang)[i]["bonus"] && i < mains.first }
+            add("structure", "ERROR", "bonus-order", where: where(lesson, lang),
+                message: "a bonus exercise comes before the main one (Alt+R, the tests and the harness take the first x)")
           end
           cells(lesson, lang).each_with_index do |c, ci|
             need = { "h" => %w[html], "c" => %w[code], "x" => %w[check hint] }[c["t"]] # an empty starter is fine
@@ -321,9 +326,12 @@ module LessonLint
       text = File.read(path, encoding: "UTF-8")
       block = text[/^SOLUTIONS = \{\n(.*?)^\}/m, 1] or return
       sol = block.scan(/^  "([^"]+)" => \{/).flatten
-      sol += text[/BROWSER_ONLY = %w\[(.*?)\]/m, 1].to_s.split # skipped on purpose
-      (ids - sol).each { |id| add("structure", "ERROR", "no-solution", where: id, message: "no SOLUTIONS entry in test/check_harness.rb") }
-      (sol - ids).each { |id| add("structure", "WARN", "stale-solution", where: id, message: "SOLUTIONS entry for an id that is not a lesson") }
+      skipped = text[/BROWSER_ONLY = %w\[(.*?)\]/m, 1].to_s.split # skipped on purpose
+      # a bonus exercise has its own entry: "<id>#bonus"
+      bonus = lessons.select { |l| cells(l, "en").any? { |c| c["t"] == "x" && c["bonus"] } }.map { |l| "#{l["id"]}#bonus" }
+      sol += skipped + skipped.map { |id| "#{id}#bonus" }
+      (ids + bonus - sol).each { |id| add("structure", "ERROR", "no-solution", where: id, message: "no SOLUTIONS entry in test/check_harness.rb") }
+      (sol - ids - bonus - skipped.map { |id| "#{id}#bonus" }).each { |id| add("structure", "WARN", "stale-solution", where: id, message: "SOLUTIONS entry for an id that is not a lesson") }
     end
 
     # ------------------------------------------------------------ parity
@@ -345,11 +353,43 @@ module LessonLint
           when "h" then compare_html(lesson, ci, { "de" => de, "en" => en, "ja" => ja })
           end
           if en["t"] == "x"
+            if [de, en, ja].map { |c| c["bonus"] == true }.uniq.size > 1
+              add("parity", "ERROR", "bonus-flag", where: where(lesson, "en", ci), line: line_of(lesson, "en", ci),
+                  message: "\"bonus\" differs between the languages")
+            end
             compare_spans(lesson, ci, "hint", { "de" => de["hint"], "en" => en["hint"], "ja" => ja["hint"] })
+            # the lighter hints before it (shell/app.rb reveal_hint): the same
+            # number in every language, and a solution in all or none
+            counts = { "de" => de, "en" => en, "ja" => ja }.transform_values { |c| (c["hints"] || []).size }
+            if counts.values.uniq.size > 1
+              add("parity", "ERROR", "hints-count", where: where(lesson, "en", ci), line: line_of(lesson, "en", ci),
+                  message: "hints differ in number: #{counts}")
+            else
+              counts["en"].times do |k|
+                compare_spans(lesson, ci, "hints[#{k}]", { "de" => de["hints"][k], "en" => en["hints"][k], "ja" => ja["hints"][k] })
+              end
+            end
+            has = { "de" => de, "en" => en, "ja" => ja }.transform_values { |c| c.key?("solution") }
+            if has.values.uniq.size > 1
+              add("parity", "ERROR", "solution-missing", where: where(lesson, "en", ci), line: line_of(lesson, "en", ci),
+                  message: "solution in #{has.select { |_, v| v }.keys.join(", ")} only")
+            end
+            # ja runs en's code, so the solutions match - up to the comments,
+            # which a starter carries in Japanese (the Rails lessons' ERB)
+            if ja.key?("solution") && uncommented(ja["solution"]) != uncommented(en["solution"])
+              add("parity", "ERROR", "solution-ja", where: where(lesson, "ja", ci), line: line_of(lesson, "ja", ci),
+                  message: "ja's solution differs from en's beyond its comments (Japanese runs the English code)")
+            end
           end
         end
         compare_gem_usage(lesson)
       end
+    end
+
+    # code without its comments: whole-line and trailing `# ...` (not inside
+    # a string, by the crude rule "no quote after the #") and ERB's <%# %>
+    def uncommented(code)
+      code.to_s.gsub(/<%#.*?%>/m, "").lines.map { |l| l.sub(/\s*#(?![{])[^"']*\z/, "").rstrip }.reject(&:empty?).join("\n")
     end
 
     def check_ui_parity
@@ -637,6 +677,7 @@ module LessonLint
         texts = []
         texts << ["html", Text.plain(cell["html"])] if cell["html"]
         texts << ["hint", Text.plain(cell["hint"])] if cell["hint"]
+        (cell["hints"] || []).each { |h| texts << ["hint", Text.plain(h)] }
         texts << ["code", comments(cell["code"]).join("\n")] if cell["code"]
         refs = []
         texts.each do |field, text|
@@ -851,12 +892,13 @@ module LessonLint
         end
         next unless lang == "ja"
         check_ja_prose(lesson, ci, cell) if cell["html"]
-        check_ja_hint(lesson, ci, cell) if cell["hint"]
+        check_ja_hint(lesson, ci, cell["hint"]) if cell["hint"]
+        (cell["hints"] || []).each { |h| check_ja_hint(lesson, ci, h) }
       end
       # German or English left in Japanese, German left in English
       each_cell do |lesson, _li, lang, cell, ci|
         next if lang == "de"
-        [cell["html"], cell["hint"]].compact.each do |h|
+        ([cell["html"], cell["hint"]] + (cell["hints"] || [])).compact.each do |h|
           text = Text.prose(h)
           if (m = text.match(/\b(?:Lektion|Aufgabe|Hinweis|nicht|oder|Beispiel|Schreibe|Zahl|sind)\b|[äöüÄÖÜß]\p{L}*/))
             next if m[0] =~ /\A(Zürich|Jürgen|Ruby|Matz|Jöran|Björn|Möbius|Gödel|Füße)/ # names
@@ -900,8 +942,8 @@ module LessonLint
       end
     end
 
-    def check_ja_hint(lesson, ci, cell)
-      text = Text.prose(cell["hint"], code_marker: "〔code〕")
+    def check_ja_hint(lesson, ci, hint)
+      text = Text.prose(hint, code_marker: "〔code〕")
       polite = text.scan(/(?:です|ます|ました|ましょう|ください)(?=[。！!？?]|\z)/)
       return if polite.empty?
       add("ja", "INFO", "hint-polite", where: where(lesson, "ja", ci) + " hint", line: line_of(lesson, "ja", ci),
@@ -928,6 +970,12 @@ module LessonLint
           cells(lesson, lang).each_with_index do |cell, ci|
             loc = where(lesson, lang, ci)
             line = line_of(lesson, lang, ci)
+            if (sol = cell["solution"])
+              Prism.parse(sol, scopes: [locals.dup]).errors.each do |e|
+                add("ruby", "ERROR", "solution-syntax", where: loc, line: line,
+                    message: "solution line #{e.location.start_line}: #{e.message}", extra: e.message)
+              end
+            end
             if (code = cell["code"])
               res = Prism.parse(code, scopes: [locals.dup])
               res.errors.each do |e|
@@ -1118,7 +1166,7 @@ module LessonLint
     def check_links
       urls = Hash.new { |h, k| h[k] = [] }
       each_cell do |lesson, _li, lang, cell, ci|
-        [cell["html"], cell["hint"]].compact.each do |h|
+        ([cell["html"], cell["hint"]] + (cell["hints"] || [])).compact.each do |h|
           h.scan(/href=['"]([^'"]+)['"]/) { |(u)| urls[Text.decode(u)] << where(lesson, lang, ci) }
         end
       end

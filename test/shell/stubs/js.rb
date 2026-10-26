@@ -247,6 +247,7 @@ module JS
     # ---- DOM methods (JS functions on the element) ----
     def js_getAttribute(name) = attrs[name.to_s]
     def js_setAttribute(name, value) = (attrs[name.to_s] = value.to_s) && nil
+    def js_removeAttribute(name) = attrs.delete(name.to_s) && nil
     def js_hasAttribute(name) = attrs.key?(name.to_s)
     def js_querySelector(selector) = descendants.find { |e| Selector.match?(e, selector) }
     def js_querySelectorAll(selector) = NodeList.new(descendants.select { |e| Selector.match?(e, selector) })
@@ -256,6 +257,14 @@ module JS
       node = self
       node = node.parent while node && !(node.is_a?(Node) && !node.text? && Selector.match?(node, selector))
       node
+    end
+
+    # "beforeend" only: what the shell's hint panel uses (App#add_hint)
+    def js_insertAdjacentHTML(where, html)
+      raise ArgumentError, "stub: insertAdjacentHTML #{where}" unless where.to_s == "beforeend"
+
+      HTML.parse(html.to_s).each { |node| js_appendChild(node) }
+      nil
     end
 
     def js_appendChild(node)

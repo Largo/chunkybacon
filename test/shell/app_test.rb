@@ -232,6 +232,127 @@ class AppTest < Minitest::Test
     assert_includes bubble, "💡"
   end
 
+  # ---------- bonus exercises ----------
+
+  # lesson arrays ends with a bonus exercise ("bonus": true): checked and
+  # praised, but the lesson's tick comes from the main exercise
+  def test_a_bonus_exercise_is_labelled_and_is_not_the_one_alt_r_runs
+    start(hash: "#arrays")
+    bonus = find(".cell.exercise.bonus")
+    refute_nil bonus
+    assert_equal "Bonus", bonus.attrs["data-label"]
+    assert_nil bonus.js_querySelector(".run-cell").attrs["aria-keyshortcuts"], "Alt+R runs the main exercise"
+    assert_equal "Aufgabe", find(".cell.exercise").attrs["data-label"], "the main exercise comes first"
+    refute_nil bonus.js_querySelector(".hint-cell"), "💡 on the bonus too"
+  end
+
+  def test_a_passed_bonus_praises_but_does_not_tick_the_lesson
+    start(hash: "#arrays")
+    idx = find(".cell.exercise.bonus .run-cell").attrs["data-idx"].to_i
+    fire("chunky:ran", { "idx" => idx, "outcome" => "pass", "elapsed" => 0.2, "auto" => false, "own" => 0.2 })
+    assert_equal "pass", bubble_state
+    assert_includes bubble, "Bonus geschafft"
+    refute_includes ChunkyShell::Store.done_ids, "arrays"
+    fire("chunky:ran", { "idx" => exercise_idx, "outcome" => "pass", "elapsed" => 0.2, "auto" => false, "own" => 0.2 })
+    assert_includes ChunkyShell::Store.done_ids, "arrays"
+  end
+
+  # ---------- hints (💡) ----------
+
+  def hint_button(idx) = find(".hint-cell[data-idx='#{idx}']")
+  def hint_panel(idx) = byid("cell-hints-#{idx}")
+  def hint_steps(idx) = hint_panel(idx).js_querySelectorAll(".hint-step").js_list.map(&:text)
+  # the hints of the exercise, until the button offers the solution
+  def show_all_hints(idx)
+    click(hint_button(idx)) while ["💡 Tipp", "💡 Noch ein Tipp"].include?(hint_button(idx).text)
+  end
+  def fail_check(idx) = fire("chunky:ran", { "idx" => idx, "outcome" => "fail", "elapsed" => 0.2, "auto" => false, "own" => 0.2 })
+
+  def test_the_exercise_has_a_hint_button_and_an_empty_panel
+    start
+    idx = exercise_idx
+    button = hint_button(idx)
+    assert_equal "💡 Tipp", button.text
+    assert_equal "Tipp zu Zelle #{find_all("#lessonBody .cell").length}", button.attrs["aria-label"], "numbered like ▶"
+    assert button.js_closest(".cell-toolbar"), "in the toolbar, beside ▶"
+    assert hint_panel(idx).js_get("hidden"), "the panel waits"
+    assert_equal "Tipps zur Aufgabe", hint_panel(idx).attrs["aria-label"]
+    assert_nil find(".cell:not(.exercise) .hint-cell"), "demo cells have no hints"
+  end
+
+  def test_a_click_shows_the_hints_one_at_a_time_then_the_solution
+    start
+    idx = exercise_idx
+    click(hint_button(idx))
+    refute hint_panel(idx).js_get("hidden")
+    assert_equal 1, hint_steps(idx).length
+    assert_includes hint_steps(idx).first, "💡"
+    # lesson hallo: a nudge, the detailed hint, then the solution
+    assert_equal "💡 Noch ein Tipp", hint_button(idx).text
+    click(hint_button(idx))
+    assert_equal 2, hint_steps(idx).length
+    assert_equal "💡 Lösung zeigen", hint_button(idx).text
+    click(hint_button(idx))
+    solution = hint_panel(idx).js_querySelector(".hint-solution pre")
+    refute_nil solution
+    assert_includes solution.text, "Hallo, Welt!"
+    assert_equal "💡 Alle Tipps gezeigt", hint_button(idx).text
+    assert hint_button(idx).js_get("disabled")
+    click(hint_button(idx))
+    assert_equal 1, find_all(".hint-solution").length, "a disabled button adds nothing"
+  end
+
+  def test_the_solution_goes_into_the_cell_on_request
+    start
+    idx = exercise_idx
+    show_all_hints(idx)
+    click(hint_button(idx))
+    apply = hint_panel(idx).js_querySelector(".hint-apply")
+    click(apply)
+    code = calls("setCellCode").last
+    assert_equal idx.to_s, code[1]
+    assert_includes code[2], "Hallo, Welt!"
+    assert_equal "Übernommen – jetzt ▶ Ausführen", apply.text
+    assert apply.js_get("disabled")
+    assert doc.js_get("activeElement").equal?(run_button(idx)), "the keyboard is on ▶"
+  end
+
+  def test_a_failed_check_reveals_the_next_hint_in_the_panel_too
+    start
+    idx = exercise_idx
+    fail_check(idx)
+    assert_equal 1, hint_steps(idx).length
+    assert_includes bubble, hint_steps(idx).first.sub("💡 ", "")
+    fail_check(idx)
+    assert_equal 2, hint_steps(idx).length, "the detailed hint comes second"
+    assert_includes bubble, hint_steps(idx).last.sub("💡 ", "")
+    assert_equal "💡 Lösung zeigen", hint_button(idx).text
+    fail_check(idx)
+    assert_equal 2, hint_steps(idx).length, "no hint left: none repeated"
+    assert_includes bubble, "Lösung zeigen"
+    assert_empty find_all(".hint-solution"), "a failed check never shows the solution by itself"
+  end
+
+  def test_an_error_in_the_exercise_points_at_the_hint
+    start
+    idx = exercise_idx
+    fire("chunky:ran", { "idx" => idx, "outcome" => "error", "elapsed" => 0.2, "auto" => false, "own" => 0.2 })
+    assert_includes bubble, "💡 Tipp"
+    assert_empty hint_steps(idx), "an error reveals nothing: the explanation is below the cell"
+  end
+
+  def test_reset_lesson_clears_the_hints
+    start
+    idx = exercise_idx
+    show_all_hints(idx)
+    click(hint_button(idx))
+    click(byid("reset-code"))
+    assert hint_panel(idx).js_get("hidden")
+    assert_empty hint_steps(idx)
+    assert_equal "💡 Tipp", hint_button(idx).text
+    refute hint_button(idx).js_get("disabled")
+  end
+
   def test_a_passed_check_marks_the_lesson_and_links_the_next
     start
     idx = exercise_idx
@@ -441,7 +562,7 @@ class AppTest < Minitest::Test
 
   def test_step_buttons_only_where_the_lesson_asks_for_them
     start(hash: "#schleifen")
-    assert_equal %w[1 3 5 7 9 11 13], find_all(".step-cell").map { |b| b.attrs["data-idx"] }, "every code cell, the exercise too"
+    assert_equal %w[1 3 5 7 9 11 13 15], find_all(".step-cell").map { |b| b.attrs["data-idx"] }, "every code cell, the exercise and its bonus too"
     assert_equal "⏯ Schritt für Schritt", step_button(3).text
     assert_equal "Schritt für Schritt durch Zelle 2", step_button(3).attrs["aria-label"], "the visible words, and the cell"
     assert step_button(3).js_closest(".cell-toolbar"), "in the toolbar, beside ▶"

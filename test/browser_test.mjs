@@ -1551,6 +1551,64 @@ await page.waitForFunction(i => document.querySelector(`#cell-out-${i} .friendly
 friendly = await friendlyBox();
 check('... and the explanation Japanese', friendly && friendly.lang === 'ja' && friendly.title === 'Rubyのかけ算は * です');
 
+// ---------- 💡 hints: a nudge, the detailed hint, then a solution (shell/app.rb reveal_hint) ----------
+await page.selectOption('#langSelect', 'de');
+await page.waitForTimeout(300);
+await page.click('#lessonNav a[data-id="hallo"]');
+await page.waitForSelector('.cell.exercise .hint-cell', { timeout: 10000 });
+const hintIdx = await exerciseIdx();
+const hintBtn = `.hint-cell[data-idx="${hintIdx}"]`;
+const hintSteps = () => page.$$eval(`#cell-hints-${hintIdx} .hint-step`, l => l.map(p => p.textContent));
+check('💡 Tipp sits in the exercise toolbar, the panel waits', (await page.textContent(hintBtn)) === '💡 Tipp' &&
+  await page.$eval(`#cell-hints-${hintIdx}`, p => p.hidden) && !(await page.$('.cell:not(.exercise) .hint-cell')));
+await page.click(hintBtn);
+check('one click: the nudge, the button offers another', (await hintSteps()).length === 1 && (await page.textContent(hintBtn)) === '💡 Noch ein Tipp' &&
+  !(await page.$eval(`#cell-hints-${hintIdx}`, p => p.hidden)));
+await setExercise('1 + 1');
+await runExercise();
+check('a failed check adds the detailed hint and Chunky says it', (await hintSteps()).length === 2 &&
+  (await page.textContent('#chunkyText')).includes((await hintSteps())[1].replace('💡 ', '')) && (await page.textContent(hintBtn)) === '💡 Lösung zeigen');
+await runExercise();
+check('another failure repeats no hint and points at the solution', (await hintSteps()).length === 2 && (await page.textContent('#chunkyText')).includes('Lösung zeigen'));
+await page.click(hintBtn);
+check('the solution appears with its button; 💡 is done', (await page.textContent(`#cell-hints-${hintIdx} .hint-solution pre`)).includes('Hallo, Welt!') &&
+  (await page.textContent(hintBtn)) === '💡 Alle Tipps gezeigt' && await page.$eval(hintBtn, b => b.disabled));
+await page.click(`#cell-hints-${hintIdx} .hint-apply`);
+check('... and goes into the cell, the keyboard on ▶', (await page.evaluate(i => window.cellEditors[i].getValue(), hintIdx)).includes('puts "Hallo, Welt!"') &&
+  await page.evaluate(i => document.activeElement === document.querySelector(`.run-cell[data-idx="${i}"]`), hintIdx));
+await runExercise();
+check('the solution passes', (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+await setExercise('puts nope');
+await runExercise();
+check('an error points at 💡 Tipp', (await page.textContent('#chunkyText')).includes('💡 Tipp'));
+
+// ---------- a bonus exercise (arrays): praised, but the tick comes from the main one ----------
+await page.click('#lessonNav a[data-id="arrays"]');
+await page.waitForSelector('.cell.exercise.bonus .run-cell', { timeout: 10000 });
+await page.evaluate(() => { const done = JSON.parse(localStorage.getItem('chunky_done') || '{}'); });
+const bonusIdx = await page.$eval('.cell.exercise.bonus .run-cell', b => +b.dataset.idx);
+check('the bonus exercise is labelled, after the main one, without Alt+R', (await page.$eval('.cell.exercise.bonus', c => c.dataset.label)) === 'Bonus' &&
+  bonusIdx > +(await exerciseIdx()) && !(await page.$eval('.cell.exercise.bonus .run-cell', b => b.getAttribute('aria-keyshortcuts'))));
+const bonusSolution = await page.evaluate(i => window.LESSONS.lessons.find(l => l.id === 'arrays').de.cells[i].solution, bonusIdx);
+await page.evaluate(([i, code]) => window.cellEditors[i].setValue(code), [bonusIdx, bonusSolution]);
+await page.evaluate(() => { document.getElementById('chunkyChat').className = ''; });
+await page.click(`.run-cell[data-idx="${bonusIdx}"]`);
+await page.waitForFunction(() => ['pass', 'fail'].includes(document.getElementById('chunkyChat').className), null, { timeout: 30000 }).catch(() => {});
+check('its solution passes and Chunky says it was the bonus', (await page.getAttribute('#chunkyChat', 'class')).includes('pass') && (await page.textContent('#chunkyText')).includes('Bonus geschafft'));
+
+// every exercise's solution passes - the lessons check_harness.rb cannot run (BROWSER_ONLY: Pyodide, sql.js, Herb)
+for (const id of ['pycall', 'sympy', 'numpy', 'matplotlib', 'sklearn', 'sequel', 'erb']) {
+  await page.click(`#lessonNav a[data-id="${id}"]`);
+  await page.waitForSelector('.cell.exercise .run-cell', { timeout: 10000 });
+  const solution = await page.evaluate(i => window.LESSONS.lessons.find(l => l.id === i).de.cells.find(c => c.t === 'x').solution, id);
+  check(`${id}: the exercise offers a solution`, typeof solution === 'string' && solution.length > 0);
+  await page.evaluate(() => { document.getElementById('chunkyChat').className = ''; });
+  await setExercise(solution || '');
+  await runExercise();
+  await page.waitForFunction(() => ['pass', 'fail'].includes(document.getElementById('chunkyChat').className), null, { timeout: 120000 }).catch(() => {});
+  check(`${id}: its solution passes`, (await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+}
+
 await page.screenshot({ path: '/tmp/chunkybacon.png', fullPage: true });
 await browser.close();
 console.log(failures === 0 ? 'ALL BROWSER TESTS OK' : `${failures} FAILURES`);

@@ -81,7 +81,14 @@ module ChunkyShell
     #   Not beside an IRB either: what it runs is typed later, in the widget.
     # +tab_labels+: [the tab list's name ("Dateien"), "read-only"] for a
     #   Pico lesson's cells with tabs (several files, design §2.2)
-    def self.lesson_html(cells, task_label, run_label, live = "", run_name = "", step = nil, tab_labels = nil)
+    # +hint+: [the 💡 button's label ("💡 Tipp"), its name ("Tipp zu Zelle
+    #   %d"), the hint panel's name ("Tipps zur Aufgabe")] for the exercise
+    #   cell (App#reveal_hint), or nil
+    # +bonus_label+: the label of a bonus exercise ("Bonus"; a second `x`
+    #   cell with "bonus": true, checked and praised but not needed for the
+    #   lesson's tick, §3)
+    def self.lesson_html(cells, task_label, run_label, live = "", run_name = "", step = nil, tab_labels = nil, hint = nil,
+                         bonus_label = nil)
       html = "".dup
       number = 0
       cells.each_with_index do |cell, idx|
@@ -91,8 +98,12 @@ module ChunkyShell
           switch = irb ? "" : live
           name = run_name == "" ? "" : format(run_name, number)
           stepper = step.nil? || irb ? "" : step_html(idx, step[0], format(step[1], number))
-          html << cell_html(idx, cell.t == "x", task_label, run_label, switch, name, stepper,
-                            tab_list(cell), !cell[:board].nil?, tab_labels || ["Files", "read-only"])
+          exercise = cell.t == "x"
+          bonus = exercise && cell[:bonus] == true
+          hint_btn = hint.nil? || !exercise ? "" : hint_html(idx, hint[0], format(hint[1], number))
+          html << cell_html(idx, exercise, bonus ? bonus_label.to_s : task_label, run_label, switch, name, stepper,
+                            tab_list(cell), !cell[:board].nil?, tab_labels || ["Files", "read-only"],
+                            hint_btn, hint.nil? || !exercise ? nil : hint[2], bonus)
         else
           html << %(<div class="lessonText">#{cell.html}</div>)
         end
@@ -109,20 +120,38 @@ module ChunkyShell
     #   (#cell-code-<idx> for the main file, #cell-code-<idx>-<k> for tab k)
     # +board+: a Pico lesson's cell with a board: the slot the bench is
     #   moved into when the cell runs (pico_board.js)
+    # +hint_btn+: hint_html's 💡, at the left of the toolbar; +hint_region+:
+    #   the name of the panel the hints appear in (nil: no panel)
     def self.cell_html(idx, exercise, task_label, run_label, live = "", name = "", step = "", tabs = [], board = false,
-                       tab_labels = ["Files", "read-only"])
+                       tab_labels = ["Files", "read-only"], hint_btn = "", hint_region = nil, bonus = false)
       label = name == "" ? "" : %( aria-label="#{escape_html(name)}")
-      keys = exercise ? ' aria-keyshortcuts="Alt+R"' : ""
+      keys = exercise && !bonus ? ' aria-keyshortcuts="Alt+R"' : ""
       editors = tabs.length > 1 ? tabs_html(idx, tabs, tab_labels) : %(<textarea title="code" id="cell-code-#{idx}"></textarea>)
       slot = board ? %(<div class="pico-slot" id="pico-slot-#{idx}" hidden></div>) : ""
+      hints = hint_region.nil? ? "" : %(<div class="cell-hints" id="cell-hints-#{idx}" role="region" aria-label="#{escape_html(hint_region)}" aria-live="polite" hidden></div>)
       <<~HTML
-        <div class="cell#{exercise ? ' exercise' : ''}" data-label="#{task_label}">
+        <div class="cell#{exercise ? ' exercise' : ''}#{bonus ? ' bonus' : ''}" data-label="#{task_label}">
           #{editors}
-          <div class="cell-toolbar">#{live}#{step}<button type="button" class="run-cell" data-idx="#{idx}"#{label}#{keys}>#{run_label}</button></div>
+          <div class="cell-toolbar">#{hint_btn}#{live}#{step}<button type="button" class="run-cell" data-idx="#{idx}"#{label}#{keys}>#{run_label}</button></div>
+          #{hints}
           <div class="cell-out" id="cell-out-#{idx}" style="display:none"></div>
           #{slot}
         </div>
       HTML
+    end
+
+    # 💡 Tipp beside the exercise's ▶: one hint per click (App#reveal_hint)
+    def self.hint_html(idx, label, name)
+      %(<button type="button" class="hint-cell" data-idx="#{idx}" aria-label="#{escape_html(name)}">#{escape_html(label)}</button>)
+    end
+
+    # the hint panel's entries (App#reveal_hint): a hint, or the solution
+    # with a button that puts it into the cell
+    def self.hint_step_html(text) = %(<p class="hint-step">💡 #{text}</p>)
+
+    def self.solution_html(idx, title, code, apply_label)
+      %(<div class="hint-solution"><p class="hint-step">#{title}</p><pre>#{escape_html(code)}</pre>) +
+        %(<button type="button" class="hint-apply" data-idx="#{idx}">#{escape_html(apply_label)}</button></div>)
     end
 
     # [[name, readonly], ...] of a cell: [] without tabs, else the main
