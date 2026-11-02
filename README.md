@@ -9,7 +9,8 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 ## What's inside
 
 - **Lessons** from `puts "Hallo, Welt!"` through strings, `map` and
-  `select`, methods, reading error messages, classes, inheritance, modules,
+  `select`, sorting and binary search, time and dates, methods, reading
+  error messages, recursion (up to the Towers of Hanoi), classes, inheritance, modules,
   IRB and reading the Ruby documentation, to
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, Ruby on Rails itself booted in the page

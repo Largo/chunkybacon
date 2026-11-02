@@ -4,7 +4,7 @@ What is unfinished, what state it is in, and where the context for it lives.
 `docs/HANDOVER.md` explains how everything works; this file lists what is in
 flight. Keep it short and current: tick items off, delete finished sections.
 
-Last updated 2026-10-25.
+Last updated 2026-11-02.
 
 ## Where the context is defined
 
@@ -123,18 +123,22 @@ Last updated 2026-10-25.
 - **New Basics lessons**: `regex` (regular expressions, after
   `iteratoren`), `zufall` (chance and dice, after `arrays`), `formatieren`
   (ljust/format/heredocs/strip, after `regex`), `dateien` (File.write/read,
-  lines, CSV by hand, after `doku`). Gaps that are still open in the
-  Basics, each a lesson's worth: Symbols and `nil` on their own
-  (truthiness, `&.`, `||=`, `to_sym` - today a paragraph each in `wenn`
-  and `hashes`); time and dates (`Time.now`, `strftime` - only in the
-  timelog track); sorting and searching (`sort`, `sort_by` with several
-  keys, `min_by`, `bsearch`); `Struct`/`Data` before classes; recursion
-  on its own (the turtle lesson has it in passing).
+  lines, CSV by hand, after `doku`). Since 2026-11-02 also `sortieren`
+  (sort, sort_by with an array key, max_by/min_by, `<=>`, bsearch; after
+  `iteratoren`), `zeit` (Time, strftime, Date arithmetic, wday, date
+  ranges, leap years; after `formatieren`) and `rekursion` (base case,
+  factorial, nested arrays, Fibonacci with a memo hash, the Towers of
+  Hanoi; after `fehler`), all with ⏯, a bonus, and links from the cheat
+  sheet. Gaps that are still open in the Basics, each a lesson's worth:
+  Symbols and `nil` on their own (truthiness, `&.`, `||=`, `to_sym` -
+  today a paragraph each in `wenn` and `hashes`); `Struct`/`Data` before
+  classes.
 - **Bonus exercises** (2026-10-26, HANDOVER §3 `bonus`): a second `x`
   cell with `"bonus": true` at the end of a lesson, checked and praised
   with its own 💡, not needed for the tick; `SOLUTIONS["<id>#bonus"]` in
   the harness, the linter allows it after the main exercise. The Basics
-  lessons have one; the side trips and the timelog track do not yet - a
+  lessons have one (`turtle` and `fehler` since 2026-11-02; not `hallo`,
+  `irb`, `doku`); the side trips and the timelog track do not yet - a
   bonus per timelog lesson would make a second pass through the project.
 
 ## Smaller open ends found on the way

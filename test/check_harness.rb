@@ -375,6 +375,24 @@ SOLUTIONS = {
     "en" => [%(scores = [72, 45, 88, 91, 30, 60]\npassed = scores.select { |score| score >= 60 }\nwith_bonus = passed.map { |score| score + 5 }),
              %(scores = [72, 45, 88, 91, 30, 60]\npassed = scores.select { _1 >= 60 }\nwith_bonus = passed.map { |s| s + 5 }\np with_bonus)]
   },
+  "sortieren" => {
+    "de" => ["punkte = { \"Chunky\" => 42, \"Kaz\" => 17, \"Isi\" => 42, \"Bo\" => 8, \"Mo\" => 23 }\n\nrangliste = punkte.sort_by { |name, p| [-p, name] }.map { |name, p| name }\nletzter = punkte.min_by { |name, p| p }.first",
+             "punkte = { \"Chunky\" => 42, \"Kaz\" => 17, \"Isi\" => 42, \"Bo\" => 8, \"Mo\" => 23 }\nrangliste = punkte.sort { |(n1, p1), (n2, p2)| [p2, n1] <=> [p1, n2] }.map(&:first)\nletzter = punkte.min_by { |_, pkt| pkt }[0]\np rangliste"],
+    "en" => ["scores = { \"Chunky\" => 42, \"Kaz\" => 17, \"Isi\" => 42, \"Bo\" => 8, \"Mo\" => 23 }\n\nranking = scores.sort_by { |name, points| [-points, name] }.map { |name, points| name }\nlast_place = scores.min_by { |name, points| points }.first",
+             "scores = { \"Chunky\" => 42, \"Kaz\" => 17, \"Isi\" => 42, \"Bo\" => 8, \"Mo\" => 23 }\nranking = scores.sort { |(n1, p1), (n2, p2)| [p2, n1] <=> [p1, n2] }.map(&:first)\nlast_place = scores.min_by { |_, pts| pts }[0]\np ranking"]
+  },
+  "zeit" => {
+    "de" => ["require \"date\"\nveroeffentlicht = Date.new(1995, 12, 21)\n\nwochentag = %w[Sonntag Montag Dienstag Mittwoch Donnerstag Freitag Samstag][veroeffentlicht.wday]\ntage_bis = (Date.new(2026, 12, 24) - Date.new(2026, 11, 2)).to_i",
+             "require \"date\"\nveroeffentlicht = Date.new(1995, 12, 21)\nnamen = %w[Sonntag Montag Dienstag Mittwoch Donnerstag Freitag Samstag]\nwochentag = namen[veroeffentlicht.wday]\ntage_bis = Integer(Date.new(2026, 12, 24) - Date.new(2026, 11, 2))\np wochentag"],
+    "en" => ["require \"date\"\nrelease = Date.new(1995, 12, 21)\n\nweekday = release.strftime(\"%A\")\ndays_until = (Date.new(2026, 12, 24) - Date.new(2026, 11, 2)).to_i",
+             "require \"date\"\nrelease = Date.new(1995, 12, 21)\nweekday = %w[Sunday Monday Tuesday Wednesday Thursday Friday Saturday][release.wday]\ndays_until = (Date.new(2026, 12, 24) - Date.new(2026, 11, 2)).to_i\np days_until"]
+  },
+  "rekursion" => {
+    "de" => ["def hoch(basis, exponent)\n  return 1 if exponent == 0\n  basis * hoch(basis, exponent - 1)\nend\n\nhoch(2, 10)",
+             "def hoch(basis, exponent)\n  if exponent.zero?\n    1\n  else\n    basis * hoch(basis, exponent - 1)\n  end\nend\np hoch(2, 10)"],
+    "en" => ["def power(base, exponent)\n  return 1 if exponent == 0\n  base * power(base, exponent - 1)\nend\n\npower(2, 10)",
+             "def power(base, exponent)\n  if exponent.zero?\n    1\n  else\n    base * power(base, exponent - 1)\n  end\nend\np power(2, 10)"]
+  },
   "regex" => {
     "de" => [%(notizen = ["Frühstück um 07:45: Speck", "Znüni um 10:15: Apfel", "Mittag um 12:30: speck und Ei", "Abend: kein Hunger"]\nzeiten = notizen.join(" ").scan(/\\d\\d:\\d\\d/)\nspeck_tage = notizen.count { |notiz| notiz.match?(/speck/i) }),
              %(notizen = ["Frühstück um 07:45: Speck", "Znüni um 10:15: Apfel", "Mittag um 12:30: speck und Ei", "Abend: kein Hunger"]\nzeiten = notizen.flat_map { |notiz| notiz.scan(/\\d{2}:\\d{2}/) }\nspeck_tage = notizen.select { |notiz| notiz =~ /[Ss]peck/ }.length\np speck_tage)],
@@ -596,6 +614,36 @@ words.each do |word|
 end
 most_common = tally.max_by { |word, count| count }[0]
 p most_common)]
+  },
+  "sortieren#bonus" => {
+    "de" => ["karte = %w[Speck Ei Toast Brot Kaffee Tee]\npreise = [1, 3, 4, 7, 12, 18, 25, 40]\n\nnach_laenge = karte.sort_by { |w| [w.length, w] }\nerste_grosse = preise.bsearch { |preis| preis >= 10 }",
+             "karte = %w[Speck Ei Toast Brot Kaffee Tee]\npreise = [1, 3, 4, 7, 12, 18, 25, 40]\nnach_laenge = karte.sort { |a, b| [a.size, a] <=> [b.size, b] }\nerste_grosse = preise.bsearch { _1 >= 10 }\np nach_laenge"],
+    "en" => ["menu = %w[bacon egg toast jam coffee tea]\nprices = [1, 3, 4, 7, 12, 18, 25, 40]\n\nsorted_words = menu.sort_by { |w| [w.length, w] }\nfirst_big = prices.bsearch { |price| price >= 10 }",
+             "menu = %w[bacon egg toast jam coffee tea]\nprices = [1, 3, 4, 7, 12, 18, 25, 40]\nsorted_words = menu.sort { |a, b| [a.size, a] <=> [b.size, b] }\nfirst_big = prices.bsearch { _1 >= 10 }\np sorted_words"]
+  },
+  "zeit#bonus" => {
+    "de" => ["require \"date\"\n\npechmonate = (1..12).select { |monat| Date.new(2026, monat, 13).friday? }",
+             "require \"date\"\npechmonate = (1..12).filter_map { |m| m if Date.new(2026, m, 13).friday? }\np pechmonate"],
+    "en" => ["require \"date\"\n\nunlucky = (1..12).select { |month| Date.new(2026, month, 13).friday? }",
+             "require \"date\"\nunlucky = (1..12).filter_map { |m| m if Date.new(2026, m, 13).friday? }\np unlucky"]
+  },
+  "rekursion#bonus" => {
+    "de" => ["def auspacken(ding)\n  if ding.is_a?(Array)\n    ding.flat_map { |inneres| auspacken(inneres) }\n  else\n    [ding]\n  end\nend\n\nauspacken([1, [2, [3, [4]]], 5])",
+             "def auspacken(ding)\n  return [ding] unless ding.is_a?(Array)\n  ergebnis = []\n  ding.each { |inneres| ergebnis += auspacken(inneres) }\n  ergebnis\nend\np auspacken([1, [2, [3, [4]]], 5])"],
+    "en" => ["def unbox(thing)\n  if thing.is_a?(Array)\n    thing.flat_map { |inner| unbox(inner) }\n  else\n    [thing]\n  end\nend\n\nunbox([1, [2, [3, [4]]], 5])",
+             "def unbox(thing)\n  return [thing] unless thing.is_a?(Array)\n  result = []\n  thing.each { |inner| result += unbox(inner) }\n  result\nend\np unbox([1, [2, [3, [4]]], 5])"]
+  },
+  "turtle#bonus" => {
+    "de" => ["turtle do\n  color \"#d4a017\"\n  7.times do\n    forward 150\n    right 3 * 360 / 7.0\n  end\nend",
+             "angle = 1080.0 / 7\nturtle do\n  7.times { forward 150; left angle }\nend"],
+    "en" => ["turtle do\n  color \"#d4a017\"\n  7.times do\n    forward 150\n    right 3 * 360 / 7.0\n  end\nend",
+             "angle = 1080.0 / 7\nturtle do\n  7.times { forward 150; left angle }\nend"]
+  },
+  "fehler#bonus" => {
+    "de" => ["streifen = [3, 5, 2, 7]\nsumme = 0\nstreifen.each do |s|\n  summe += s\nend\nschnitt = summe / streifen.length.to_f",
+             "streifen = [3, 5, 2, 7]\nschnitt = streifen.sum.fdiv(streifen.length)\np schnitt"],
+    "en" => ["strips = [3, 5, 2, 7]\ntotal = 0\nstrips.each do |s|\n  total += s\nend\naverage = total / strips.length.to_f",
+             "strips = [3, 5, 2, 7]\naverage = strips.sum.fdiv(strips.length)\np average"]
   },
   "iteratoren#bonus" => {
     "de" => [%(woerter = ["Speck", "Ei", "Kaffee", "Brot", "Honigbrot"]
