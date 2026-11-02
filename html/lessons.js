@@ -20,14 +20,14 @@ window.LESSONS_JSON = JSON.stringify({
       "loading": "Ruby wird geladen … (einmalig ca. 10 MB)",
       "kernelFailed": "Ruby konnte nicht geladen werden – bitte lade die Seite neu.",
       "shellFailed": "Die Seite konnte nicht starten – bitte lade sie neu.",
-      "welcome": "Hallo! Ich bin einer der Füchse aus <em>why's (poignant) guide to Ruby</em> – die beiden, die immer „Chunky Bacon!“ rufen. 🦊🥓 Diese Seite ist ein <strong>Notizbuch</strong>: Führe jede Code-Zelle mit <em>▶ Ausführen</em> oder <kbd>Shift</kbd>+<kbd>Enter</kbd> aus – den Wert der letzten Zeile zeigt Ruby automatisch als <code>=&gt;</code>. Die Zelle unter dem gelben Kasten ist deine Aufgabe. Los geht's!",
+      "welcome": "Chunky Bacon! 🦊🥓 In <em>why's (poignant) guide to Ruby</em> sind wir zwei so lange in whys Beispiele geplatzt, bis er uns hineingeschrieben hat. Hier haben wir ein ganzes Notizbuch – mit Platz für dich. Führe jede Code-Zelle mit <em>▶ Ausführen</em> oder <kbd>Shift</kbd>+<kbd>Enter</kbd> aus; den Wert der letzten Zeile zeigt Ruby von selbst als <code>=&gt;</code>. Die Zelle unter dem gelben Kasten ist deine Aufgabe. Auf geht's – Chunky Bacon!",
       "resetConfirm": "Alle Zellen dieser Lektion zurücksetzen?",
       "praise": [
-        "CHUNKY BACON! 🥓 Genau so!",
-        "Sauber! Die Füchse jubeln: CHUNKY BACON!",
-        "Perfekt! Du bist auf dem Weg zur Ruby-Erleuchtung.",
-        "Ausgezeichnet! Matz wäre stolz auf dich.",
-        "Wunderbar! Weiter so!"
+        "Juhu! Chunky Bacon erreicht! 🥓",
+        "CHUNKY BACON! Genau so.",
+        "Chunky Bacon für alle – gut gemacht!",
+        "Ruby hat dich verstanden, und die Füchse auch. Ausgezeichnet!",
+        "Matz wollte, dass Programmieren Freude macht – das sah danach aus. Weiter so!"
       ],
       "failIntro": "Hmm, das ist noch nicht ganz richtig.",
       "errorIntro": "Autsch, Ruby meldet einen Fehler – schau unter die Zelle.",
@@ -381,14 +381,14 @@ window.LESSONS_JSON = JSON.stringify({
       "loading": "Loading Ruby … (one-time, about 10 MB)",
       "kernelFailed": "Ruby could not be loaded – please reload the page.",
       "shellFailed": "The page could not start – please reload it.",
-      "welcome": "Hi! I'm one of the foxes from <em>why's (poignant) guide to Ruby</em> – the two who keep shouting “chunky bacon!” 🦊🥓 This page is a <strong>notebook</strong>: run every code cell with <em>▶ Run</em> or <kbd>Shift</kbd>+<kbd>Enter</kbd> – Ruby automatically shows the value of the last line as <code>=&gt;</code>. The cell under the yellow box is your task. Let's go!",
+      "welcome": "Chunky bacon! 🦊🥓 In <em>why's (poignant) guide to Ruby</em> the two of us kept barging into why's examples until he finally wrote us in. Here we have a whole notebook – with room for you. Run any code cell with <em>▶ Run</em> or <kbd>Shift</kbd>+<kbd>Enter</kbd>; Ruby shows the value of the last line as <code>=&gt;</code> all by itself. The cell under the yellow box is your task. Come on – chunky bacon!",
       "resetConfirm": "Reset all cells of this lesson?",
       "praise": [
-        "CHUNKY BACON! 🥓 That's it!",
-        "Nice! The foxes cheer: CHUNKY BACON!",
-        "Perfect! You are on the path to Ruby enlightenment.",
-        "Excellent! Matz would be proud.",
-        "Wonderful! Keep going!"
+        "Woohoo! Chunky bacon accomplished! 🥓",
+        "CHUNKY BACON! That's exactly it.",
+        "Plenty of chunky bacon to go around – well done!",
+        "Ruby understood you, and so did the foxes. Excellent!",
+        "Matz wanted programming to be joyful – that looked like fun. Keep going!"
       ],
       "failIntro": "Hmm, that's not quite right yet.",
       "errorIntro": "Ouch, Ruby reports an error – check below the cell.",
@@ -742,14 +742,14 @@ window.LESSONS_JSON = JSON.stringify({
       "loading": "Rubyを読み込み中 …（初回のみ、約10 MB）",
       "kernelFailed": "Rubyを読み込めませんでした。ページを再読み込みしてください。",
       "shellFailed": "ページを開始できませんでした。再読み込みしてください。",
-      "welcome": "こんにちは！ぼくは『<em>why's (poignant) guide to Ruby</em>』のキツネ。「Chunky bacon!」って叫んでる、あの二匹の片方だよ。🦊🥓 このページは<strong>ノートブック</strong>になっていて、どのコードセルも<em>▶ 実行</em>か<kbd>Shift</kbd>+<kbd>Enter</kbd>で動かせるよ。最後の行の値は、Rubyが自動で<code>=&gt;</code>のあとに見せてくれる。黄色いボックスの下のセルがきみの課題だよ。さあ、始めよう！",
+      "welcome": "Chunky bacon! 🦊🥓 『<em>why's (poignant) guide to Ruby</em>』では、ぼくたち二匹がwhyの例題に何度も割りこんで、とうとう例題に書いてもらったんだ。ここにはノートブックがまるごと一冊あって、きみの席もあるよ。どのコードセルも<em>▶ 実行</em>か<kbd>Shift</kbd>+<kbd>Enter</kbd>で動かせる。最後の行の値は、Rubyが<code>=&gt;</code>のあとに自分で見せてくれるよ。黄色いボックスの下のセルがきみの課題。さあ、chunky bacon!",
       "resetConfirm": "このレッスンのセルをすべて元に戻しますか？",
       "praise": [
-        "CHUNKY BACON! 🥓 そのとおり！",
-        "いいね！キツネたちも大喜び：CHUNKY BACON!",
-        "完璧！Rubyの悟りへの道を着実に進んでるよ。",
-        "すばらしい！Matzもきっと喜ぶよ。",
-        "お見事！この調子でいこう！"
+        "やった！Chunky bacon、達成！🥓",
+        "CHUNKY BACON! まさにそれ！",
+        "chunky baconはみんなの分もたっぷりあるよ。よくできました！",
+        "Rubyにも、キツネたちにも、ちゃんと伝わったよ。すばらしい！",
+        "Matzはプログラミングを楽しくしたかったんだ。いまの、楽しそうだったね。この調子！"
       ],
       "failIntro": "うーん、まだちょっと違うみたい。",
       "errorIntro": "あいたっ、Rubyがエラーを出したよ。セルの下を見てみて。",
@@ -3505,6 +3505,304 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "sortieren",
+      "stepper": true,
+      "de": {
+        "title": "Sortieren und suchen",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Sortieren und suchen</h2><p>Listen kommen selten in der Reihenfolge, die du brauchst: die Bestenliste, der Einkaufszettel von A bis Z, das günstigste Angebot zuerst. Ruby sortiert mit <code>sort</code> – Zahlen nach Grösse, Strings nach dem Alphabet –, und <code>reverse</code> dreht das Ergebnis um:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p [5, 3, 9, 1].sort\np [\"Toast\", \"Speck\", \"Ei\"].sort\n[5, 3, 9, 1].sort.reverse"
+          },
+          {
+            "t": "h",
+            "html": "<p>Vorsicht bei Strings: Ruby vergleicht sie Buchstabe für Buchstabe nach ihrem Zeichencode, und jeder Grossbuchstabe kommt vor jedem Kleinbuchstaben. So landet <code>\"Zebra\"</code> vor <code>\"apfel\"</code>. <code>sort_by</code> sortiert nach dem, was der Block zurückgibt – hier das Wort in Kleinbuchstaben:</p>"
+          },
+          {
+            "t": "c",
+            "code": "woerter = [\"speck\", \"Zebra\", \"apfel\", \"Chunky\"]\np woerter.sort\nwoerter.sort_by { |w| w.downcase }"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>sort_by</code> ist das Werkzeug für jeden Tag: Wörter nach ihrer Länge, Leute nach ihrem Alter, alles nach allem. Hier sind vier Füchse und wie viele Streifen Speck jeder gegessen hat, nach dem Alter sortiert:</p>"
+          },
+          {
+            "t": "c",
+            "code": "fuechse = [\n  { name: \"Chunky\", streifen: 12, alter: 3 },\n  { name: \"Kaz\", streifen: 7, alter: 5 },\n  { name: \"Isi\", streifen: 12, alter: 2 },\n  { name: \"Bo\", streifen: 3, alter: 4 }\n]\nfuechse.sort_by { |f| f[:alter] }.map { |f| f[:name] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Wer hat am meisten Speck gegessen? Dafür musst du nicht die ganze Liste sortieren – <code>max_by</code> und <code>min_by</code> nennen den Sieger sofort, und <code>max_by(2)</code> die zwei Besten:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p fuechse.max_by { |f| f[:streifen] }[:name]\np fuechse.min_by { |f| f[:streifen] }[:name]\nfuechse.max_by(2) { |f| f[:alter] }.map { |f| f[:name] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Hm: Chunky und Isi haben beide 12 Streifen gegessen, und <code>max_by</code> hat einfach den ersten genommen. Für eine faire Rangliste gibt der Block ein <em>Array</em> zurück. Ruby vergleicht Arrays Element für Element, das zweite zählt also nur, wenn die ersten gleich sind. Die meisten Streifen zuerst – das Minus dreht diese Reihenfolge um –, dann nach dem Namen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "tabelle = fuechse.sort_by { |f| [-f[:streifen], f[:name]] }\ntabelle.each_with_index do |f, i|\n  puts \"#{i + 1}. #{f[:name]} (#{f[:streifen]})\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Hinter jedem Vergleich steckt ein kleiner Operator, das <em>Raumschiff</em> <code>&lt;=&gt;</code>. Es antwortet <code>-1</code>, wenn die linke Seite zuerst kommt, <code>0</code>, wenn beide gleich sind, und <code>1</code>, wenn die rechte zuerst kommt. Gib <code>sort</code> einen Block, und du benutzt es selbst – <code>b &lt;=&gt; a</code> statt <code>a &lt;=&gt; b</code> sortiert rückwärts:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p 3 <=> 7\np 7 <=> 7\np \"Ei\" <=> \"Speck\"\n[5, 3, 9, 1].sort { |a, b| b <=> a }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Und suchen? <code>include?</code> fragt, ob etwas da ist, <code>index</code>, wo es ist, und <code>find</code> gibt das erste Element zurück, dem der Block zustimmt. Alle drei laufen die Liste von vorne durch:</p>"
+          },
+          {
+            "t": "c",
+            "code": "zahlen = [4, 8, 15, 16, 23, 42]\np zahlen.include?(15)\np zahlen.index(23)\nzahlen.find { |z| z > 20 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>In einer langen <em>sortierten</em> Liste geht es viel schneller – so, wie du in einem Wörterbuch suchst: in der Mitte aufschlagen, schauen, ob dein Wort davor oder danach kommt, die falsche Hälfte vergessen, wiederholen. Das ist <code>bsearch</code>, die binäre Suche. Sie findet das erste Element, für das der Block <code>true</code> sagt. Zehntausend Zahlen brauchen etwa vierzehn Blicke, eine Million bräuchte zwanzig:</p>"
+          },
+          {
+            "t": "c",
+            "code": "sortiert = (3..30_000).step(3).to_a   # 3, 6, 9 ... 30000\nblicke = 0\ntreffer = sortiert.bsearch { |z| blicke += 1; z >= 20_000 }\nputs \"#{treffer} nach #{blicke} Blicken\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Darum halten Datenbanken und Suchmaschinen ihre Daten sortiert. Die Lektion {{nr:iteratoren}} (map, select &amp; Co.) hat die Methoden gezeigt, aus denen Sortieren gebaut ist; <code>sort_by</code> mit einem Array als Schlüssel ist der Trick, den du am häufigsten brauchen wirst.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-sort' target='_blank'>Array#sort</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-sort_by' target='_blank'>Enumerable#sort_by</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-max_by' target='_blank'>Enumerable#max_by</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-bsearch' target='_blank'>Array#bsearch</a> · <a href='https://docs.ruby-lang.org/en/4.0/Comparable.html' target='_blank'>Comparable (&lt;=&gt;)</a></div><div class='task'><strong>Aufgabe:</strong> <code>punkte</code> enthält die Punkte von fünf Füchsen. Schreib ihre Namen in <code>rangliste</code>: die meisten Punkte zuerst, bei Gleichstand nach dem Alphabet. Nenne dann in <code>letzter</code> den Fuchs mit den wenigsten Punkten – mit <code>min_by</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "punkte = { \"Chunky\" => 42, \"Kaz\" => 17, \"Isi\" => 42, \"Bo\" => 8, \"Mo\" => 23 }\n\n# rangliste = ...   # die Namen: meiste Punkte zuerst, bei Gleichstand nach dem Alphabet\n# letzter = ...     # der Name mit den wenigsten Punkten\n",
+            "hints": [
+              "Das <code>sort_by</code> eines Hashs bekommt <code>|name, p|</code> als Blockparameter. Gib aus dem Block ein Array zurück – zuerst <code>-p</code>, dann <code>name</code> – und behalte mit <code>map</code> nur die Namen."
+            ],
+            "check": "rangliste == [\"Chunky\", \"Isi\", \"Mo\", \"Kaz\", \"Bo\"] && letzter == \"Bo\" && code.include?(\"sort\") && code.include?(\"min_by\")",
+            "hint": "<code>rangliste = punkte.sort_by { |name, p| [-p, name] }.map { |name, p| name }</code> und <code>letzter = punkte.min_by { |name, p| p }.first</code> – <code>min_by</code> auf einem Hash gibt ein Paar <code>[name, punkte]</code>.",
+            "solution": "punkte = { \"Chunky\" => 42, \"Kaz\" => 17, \"Isi\" => 42, \"Bo\" => 8, \"Mo\" => 23 }\n\nrangliste = punkte.sort_by { |name, p| [-p, name] }.map { |name, p| name }\nletzter = punkte.min_by { |name, p| p }.first"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Sortiere <code>karte</code> in <code>nach_laenge</code>: die kürzesten Wörter zuerst, gleich lange nach dem Alphabet. Finde dann in der sortierten Liste <code>preise</code> den ersten Preis von 10 oder mehr – mit <code>bsearch</code>, in <code>erste_grosse</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "karte = %w[Speck Ei Toast Brot Kaffee Tee]\npreise = [1, 3, 4, 7, 12, 18, 25, 40]\n\n# nach_laenge = ...    # das kürzeste Wort zuerst, gleich lange nach dem Alphabet\n# erste_grosse = ...   # mit bsearch: der erste Preis, der 10 oder mehr ist\n",
+            "hints": [
+              "Wieder zwei Schlüssel, wie bei der Rangliste: zuerst die Länge, dann das Wort selbst. Bei <code>bsearch</code> fragt der Block: „Ist dieser Preis schon gross genug?“"
+            ],
+            "check": "nach_laenge == [\"Ei\", \"Tee\", \"Brot\", \"Speck\", \"Toast\", \"Kaffee\"] && erste_grosse == 12 && code.include?(\"bsearch\")",
+            "hint": "<code>nach_laenge = karte.sort_by { |w| [w.length, w] }</code> und <code>erste_grosse = preise.bsearch { |preis| preis &gt;= 10 }</code>.",
+            "solution": "karte = %w[Speck Ei Toast Brot Kaffee Tee]\npreise = [1, 3, 4, 7, 12, 18, 25, 40]\n\nnach_laenge = karte.sort_by { |w| [w.length, w] }\nerste_grosse = preise.bsearch { |preis| preis >= 10 }"
+          }
+        ]
+      },
+      "en": {
+        "title": "Sorting and searching",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Sorting and searching</h2><p>Lists rarely arrive in the order you need: the high score table, the shopping list from A to Z, the cheapest offer first. Ruby sorts with <code>sort</code> – numbers by size, strings alphabetically – and <code>reverse</code> turns the result round:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p [5, 3, 9, 1].sort\np [\"toast\", \"bacon\", \"egg\"].sort\n[5, 3, 9, 1].sort.reverse"
+          },
+          {
+            "t": "h",
+            "html": "<p>Careful with strings: Ruby compares them letter by letter by their character code, and every capital letter comes before every small one. So <code>\"Zebra\"</code> lands before <code>\"apple\"</code>. <code>sort_by</code> sorts by whatever the block returns – here the word in lowercase:</p>"
+          },
+          {
+            "t": "c",
+            "code": "words = [\"bacon\", \"Zebra\", \"apple\", \"Chunky\"]\np words.sort\nwords.sort_by { |w| w.downcase }"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>sort_by</code> is the everyday tool: words by their length, people by their age, anything by anything. Here are four foxes and how many strips of bacon each of them ate, sorted by age:</p>"
+          },
+          {
+            "t": "c",
+            "code": "foxes = [\n  { name: \"Chunky\", strips: 12, age: 3 },\n  { name: \"Kaz\", strips: 7, age: 5 },\n  { name: \"Isi\", strips: 12, age: 2 },\n  { name: \"Bo\", strips: 3, age: 4 }\n]\nfoxes.sort_by { |f| f[:age] }.map { |f| f[:name] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Who ate the most bacon? You don't need to sort the whole list for that – <code>max_by</code> and <code>min_by</code> name the winner straight away, and <code>max_by(2)</code> the top two:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p foxes.max_by { |f| f[:strips] }[:name]\np foxes.min_by { |f| f[:strips] }[:name]\nfoxes.max_by(2) { |f| f[:age] }.map { |f| f[:name] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Hm: Chunky and Isi both ate 12 strips, and <code>max_by</code> simply took the first. For a fair leaderboard the block returns an <em>array</em>. Ruby compares arrays element by element, so the second element only counts when the first ones are equal. Most strips first – the minus sign turns that order round – then by name:</p>"
+          },
+          {
+            "t": "c",
+            "code": "board = foxes.sort_by { |f| [-f[:strips], f[:name]] }\nboard.each_with_index do |f, i|\n  puts \"#{i + 1}. #{f[:name]} (#{f[:strips]})\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Behind every comparison sits one small operator, the <em>spaceship</em> <code>&lt;=&gt;</code>. It answers <code>-1</code> when the left side comes first, <code>0</code> when both are equal and <code>1</code> when the right one comes first. Give <code>sort</code> a block and you use it yourself – <code>b &lt;=&gt; a</code> instead of <code>a &lt;=&gt; b</code> sorts backwards:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p 3 <=> 7\np 7 <=> 7\np \"egg\" <=> \"bacon\"\n[5, 3, 9, 1].sort { |a, b| b <=> a }"
+          },
+          {
+            "t": "h",
+            "html": "<p>And searching? <code>include?</code> asks whether something is there, <code>index</code> where it is, and <code>find</code> returns the first element the block agrees with. All three walk through the list from the front:</p>"
+          },
+          {
+            "t": "c",
+            "code": "numbers = [4, 8, 15, 16, 23, 42]\np numbers.include?(15)\np numbers.index(23)\nnumbers.find { |n| n > 20 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>In a long <em>sorted</em> list there is a much faster way – the one you use with a dictionary: open it in the middle, check whether your word comes before or after, forget the wrong half, repeat. That is <code>bsearch</code>, binary search. It finds the first element for which the block says <code>true</code>. Ten thousand numbers take about fourteen looks; a million would take twenty:</p>"
+          },
+          {
+            "t": "c",
+            "code": "sorted = (3..30_000).step(3).to_a   # 3, 6, 9 ... 30000\nlooks = 0\nhit = sorted.bsearch { |n| looks += 1; n >= 20_000 }\nputs \"#{hit} after #{looks} looks\""
+          },
+          {
+            "t": "h",
+            "html": "<p>That is also why databases and search engines keep their data sorted. Lesson {{nr:iteratoren}} (map, select &amp; co.) showed the methods that sorting is made of; <code>sort_by</code> with an array as key is the trick you will use most.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-sort' target='_blank'>Array#sort</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-sort_by' target='_blank'>Enumerable#sort_by</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-max_by' target='_blank'>Enumerable#max_by</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-bsearch' target='_blank'>Array#bsearch</a> · <a href='https://docs.ruby-lang.org/en/4.0/Comparable.html' target='_blank'>Comparable (&lt;=&gt;)</a></div><div class='task'><strong>Task:</strong> <code>scores</code> holds the points of five foxes. Put their names into <code>ranking</code>: most points first, and with a tie in alphabetical order. Then name the fox with the fewest points in <code>last_place</code> – with <code>min_by</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "scores = { \"Chunky\" => 42, \"Kaz\" => 17, \"Isi\" => 42, \"Bo\" => 8, \"Mo\" => 23 }\n\n# ranking = ...      # the names: most points first, a tie alphabetically\n# last_place = ...   # the name with the fewest points\n",
+            "hints": [
+              "A hash's <code>sort_by</code> gets <code>|name, points|</code> as block parameters. Return an array from the block – <code>-points</code> first, then <code>name</code> – and use <code>map</code> to keep only the names."
+            ],
+            "check": "ranking == [\"Chunky\", \"Isi\", \"Mo\", \"Kaz\", \"Bo\"] && last_place == \"Bo\" && code.include?(\"sort\") && code.include?(\"min_by\")",
+            "hint": "<code>ranking = scores.sort_by { |name, points| [-points, name] }.map { |name, points| name }</code> and <code>last_place = scores.min_by { |name, points| points }.first</code> – <code>min_by</code> on a hash gives a pair <code>[name, points]</code>.",
+            "solution": "scores = { \"Chunky\" => 42, \"Kaz\" => 17, \"Isi\" => 42, \"Bo\" => 8, \"Mo\" => 23 }\n\nranking = scores.sort_by { |name, points| [-points, name] }.map { |name, points| name }\nlast_place = scores.min_by { |name, points| points }.first"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Sort <code>menu</code> into <code>sorted_words</code>: the shortest words first, and words of the same length alphabetically. Then find in the sorted list <code>prices</code> the first price of 10 or more – with <code>bsearch</code>, into <code>first_big</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "menu = %w[bacon egg toast jam coffee tea]\nprices = [1, 3, 4, 7, 12, 18, 25, 40]\n\n# sorted_words = ...   # shortest word first, words of the same length alphabetically\n# first_big = ...      # with bsearch: the first price that is 10 or more\n",
+            "hints": [
+              "Two keys again, as with the leaderboard: the length first, then the word itself. For <code>bsearch</code> the block asks “is this price already big enough?”."
+            ],
+            "check": "sorted_words == [\"egg\", \"jam\", \"tea\", \"bacon\", \"toast\", \"coffee\"] && first_big == 12 && code.include?(\"bsearch\")",
+            "hint": "<code>sorted_words = menu.sort_by { |w| [w.length, w] }</code> and <code>first_big = prices.bsearch { |price| price &gt;= 10 }</code>.",
+            "solution": "menu = %w[bacon egg toast jam coffee tea]\nprices = [1, 3, 4, 7, 12, 18, 25, 40]\n\nsorted_words = menu.sort_by { |w| [w.length, w] }\nfirst_big = prices.bsearch { |price| price >= 10 }"
+          }
+        ]
+      },
+      "ja": {
+        "title": "並べかえと検索",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>並べかえと検索</h2><p>リストが必要な順番で届くことはめったにありません。ハイスコアの表、AからZの買い物リスト、いちばん安い品物を先に。Rubyは<code>sort</code>で並べかえます。数は大きさの順、文字列はアルファベット順です。<code>reverse</code>で結果を逆にできます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "p [5, 3, 9, 1].sort\np [\"toast\", \"bacon\", \"egg\"].sort\n[5, 3, 9, 1].sort.reverse"
+          },
+          {
+            "t": "h",
+            "html": "<p>文字列には注意が必要です。Rubyは文字列を1文字ずつ文字コードで比べるので、大文字はすべての小文字より前に来ます。そのため<code>\"Zebra\"</code>が<code>\"apple\"</code>より前になります。<code>sort_by</code>は、ブロックが返すもので並べかえます。ここでは小文字にした単語です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "words = [\"bacon\", \"Zebra\", \"apple\", \"Chunky\"]\np words.sort\nwords.sort_by { |w| w.downcase }"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>sort_by</code>は毎日使う道具です。単語を長さで、人を年齢で、なんでもなんででも並べかえられます。ここに4匹のキツネと、それぞれが食べたベーコンの枚数があります。年齢順に並べてみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "foxes = [\n  { name: \"Chunky\", strips: 12, age: 3 },\n  { name: \"Kaz\", strips: 7, age: 5 },\n  { name: \"Isi\", strips: 12, age: 2 },\n  { name: \"Bo\", strips: 3, age: 4 }\n]\nfoxes.sort_by { |f| f[:age] }.map { |f| f[:name] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>いちばんたくさんベーコンを食べたのはだれでしょう？そのためにリスト全体を並べかえる必要はありません。<code>max_by</code>と<code>min_by</code>は勝者をすぐに教えてくれますし、<code>max_by(2)</code>なら上位2つを返します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "p foxes.max_by { |f| f[:strips] }[:name]\np foxes.min_by { |f| f[:strips] }[:name]\nfoxes.max_by(2) { |f| f[:age] }.map { |f| f[:name] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>おや、ChunkyとIsiはどちらも12枚食べていて、<code>max_by</code>は単に最初のほうを選びました。公平なランキングにするには、ブロックが<em>配列</em>を返すようにします。Rubyは配列を要素ごとに比べるので、2番目の要素は1番目が等しいときだけ効きます。枚数の多い順（マイナス記号で順番が逆になります）、次に名前の順です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "board = foxes.sort_by { |f| [-f[:strips], f[:name]] }\nboard.each_with_index do |f, i|\n  puts \"#{i + 1}. #{f[:name]} (#{f[:strips]})\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>どの比較の裏にも、小さな演算子がひとつあります。<em>宇宙船演算子</em><code>&lt;=&gt;</code>です。左が先なら<code>-1</code>、等しければ<code>0</code>、右が先なら<code>1</code>を返します。<code>sort</code>にブロックを渡すと、自分でこれを使えます。<code>a &lt;=&gt; b</code>のかわりに<code>b &lt;=&gt; a</code>と書くと逆順になります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "p 3 <=> 7\np 7 <=> 7\np \"egg\" <=> \"bacon\"\n[5, 3, 9, 1].sort { |a, b| b <=> a }"
+          },
+          {
+            "t": "h",
+            "html": "<p>では検索は？<code>include?</code>はあるかどうか、<code>index</code>はどこにあるかを答え、<code>find</code>はブロックが認める最初の要素を返します。3つとも、リストを先頭から順に調べます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "numbers = [4, 8, 15, 16, 23, 42]\np numbers.include?(15)\np numbers.index(23)\nnumbers.find { |n| n > 20 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>長い<em>並べかえ済みの</em>リストなら、ずっと速い方法があります。辞書を引くときと同じです。まん中を開いて、探している単語が前か後ろかを見て、違うほうの半分は忘れ、それをくり返します。これが<code>bsearch</code>、二分探索です。ブロックが<code>true</code>と言う最初の要素を見つけます。1万個の数なら約14回、100万個でも20回ほどで済みます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "sorted = (3..30_000).step(3).to_a   # 3, 6, 9 … 30000まで\nlooks = 0\nhit = sorted.bsearch { |n| looks += 1; n >= 20_000 }\nputs \"#{hit} after #{looks} looks\""
+          },
+          {
+            "t": "h",
+            "html": "<p>データベースや検索エンジンがデータを並べかえて持っているのは、このためです。レッスン{{nr:iteratoren}}（map、selectなど）では、並べかえの材料になるメソッドを見ました。キーに配列を使う<code>sort_by</code>は、いちばんよく使う技になるでしょう。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/method/Array/i/sort.html' target='_blank'>Array#sort</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Enumerable/i/sort_by.html' target='_blank'>Enumerable#sort_by</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Enumerable/i/max_by.html' target='_blank'>Enumerable#max_by</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Array/i/bsearch.html' target='_blank'>Array#bsearch</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Comparable.html' target='_blank'>Comparable (&lt;=&gt;)</a></div><div class='task'><strong>課題：</strong><code>scores</code>には5匹のキツネの点数が入っています。名前を<code>ranking</code>に入れましょう。点数の多い順で、同点ならアルファベット順です。それから、いちばん点数の少ないキツネの名前を<code>min_by</code>で<code>last_place</code>に入れてください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "scores = { \"Chunky\" => 42, \"Kaz\" => 17, \"Isi\" => 42, \"Bo\" => 8, \"Mo\" => 23 }\n\n# ranking = ...      # 名前を点数の多い順に。同点ならアルファベット順\n# last_place = ...   # いちばん点数の少ない名前\n",
+            "hints": [
+              "ハッシュの<code>sort_by</code>は、ブロック引数に<code>|name, points|</code>をもらうよ。ブロックから配列を返して（先に<code>-points</code>、次に<code>name</code>）、<code>map</code>で名前だけ残してみて。"
+            ],
+            "check": "ranking == [\"Chunky\", \"Isi\", \"Mo\", \"Kaz\", \"Bo\"] && last_place == \"Bo\" && code.include?(\"sort\") && code.include?(\"min_by\")",
+            "hint": "<code>ranking = scores.sort_by { |name, points| [-points, name] }.map { |name, points| name }</code>、それから<code>last_place = scores.min_by { |name, points| points }.first</code>だよ。ハッシュの<code>min_by</code>はペア<code>[name, points]</code>を返すからね。",
+            "solution": "scores = { \"Chunky\" => 42, \"Kaz\" => 17, \"Isi\" => 42, \"Bo\" => 8, \"Mo\" => 23 }\n\nranking = scores.sort_by { |name, points| [-points, name] }.map { |name, points| name }\nlast_place = scores.min_by { |name, points| points }.first"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong><code>menu</code>を並べかえて<code>sorted_words</code>に入れましょう。短い単語から先に、同じ長さならアルファベット順です。それから、並べかえ済みのリスト<code>prices</code>から、10以上の最初の値段を<code>bsearch</code>で見つけて<code>first_big</code>に入れてください。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "menu = %w[bacon egg toast jam coffee tea]\nprices = [1, 3, 4, 7, 12, 18, 25, 40]\n\n# sorted_words = ...   # 短い単語から。同じ長さならアルファベット順\n# first_big = ...      # bsearchで：10以上の最初の値段\n",
+            "hints": [
+              "ランキングと同じで、キーは2つ。まず長さ、次に単語そのもの。<code>bsearch</code>のブロックは「この値段はもう十分大きい？」って聞くんだ。"
+            ],
+            "check": "sorted_words == [\"egg\", \"jam\", \"tea\", \"bacon\", \"toast\", \"coffee\"] && first_big == 12 && code.include?(\"bsearch\")",
+            "hint": "<code>sorted_words = menu.sort_by { |w| [w.length, w] }</code>、<code>first_big = prices.bsearch { |price| price &gt;= 10 }</code>だよ。",
+            "solution": "menu = %w[bacon egg toast jam coffee tea]\nprices = [1, 3, 4, 7, 12, 18, 25, 40]\n\nsorted_words = menu.sort_by { |w| [w.length, w] }\nfirst_big = prices.bsearch { |price| price >= 10 }"
+          }
+        ]
+      }
+    },
+    {
       "id": "regex",
       "de": {
         "title": "Reguläre Ausdrücke",
@@ -4004,6 +4302,280 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "zeit",
+      "stepper": true,
+      "de": {
+        "title": "Zeit und Datum",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Zeit und Datum</h2><p>„Wie viele Tage noch bis zu den Ferien?“ „An welchem Wochentag bin ich geboren?“ Ruby kennt den Kalender. <code>Time.now</code> ist genau dieser Moment – führ die Zelle zweimal aus und schau den Sekunden zu:</p>"
+          },
+          {
+            "t": "c",
+            "code": "jetzt = Time.now\np jetzt.year\np jetzt.month\np jetzt.hour\njetzt"
+          },
+          {
+            "t": "h",
+            "html": "<p>Eine <code>Time</code> allein sieht recht technisch aus. <code>strftime</code> („string format time“) macht daraus Text, wie du ihn willst: Jeder <code>%</code>-Buchstabe ist ein Platzhalter – <code>%d</code> der Tag, <code>%m</code> der Monat, <code>%Y</code> das Jahr mit vier Stellen, <code>%H:%M</code> Stunden und Minuten, <code>%A</code> der Wochentag und <code>%B</code> der Name des Monats:</p>"
+          },
+          {
+            "t": "c",
+            "code": "jetzt = Time.now\nputs jetzt.strftime(\"%d.%m.%Y %H:%M\")\nputs jetzt.strftime(\"%Y-%m-%d\")\njetzt.strftime(\"%A, %-d. %B\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Für Tage im Kalender – Geburtstage, Feiertage, Abgabetermine – gibt es <code>Date</code>. Es gehört zu Ruby, muss aber zuerst mit <code>require \"date\"</code> geladen werden. Ein Date kennt seinen Wochentag, und mit <code>+</code> und <code>-</code> rechnest du in Tagen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\ngeburtstag = Date.new(2026, 7, 14)\np geburtstag.saturday?\np geburtstag + 7\ngeburtstag.strftime(\"%A\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die Differenz zweier Dates ist eine Anzahl Tage. Ruby gibt sie als Bruch wie <code>(60/1)</code> zurück – ein Date liesse sich theoretisch in Stunden zerlegen –, und <code>to_i</code> macht daraus eine gewöhnliche ganze Zahl:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\nheute = Date.today\nneujahr = Date.new(heute.year + 1, 1, 1)\np neujahr - heute\n(neujahr - heute).to_i"
+          },
+          {
+            "t": "h",
+            "html": "<p>Bei Namen spricht Ruby Englisch: <code>%A</code> gibt immer „Thursday“, in jedem Land. Hinter jedem Wochentag steckt eine Zahl, <code>wday</code>: 0 ist Sonntag, 1 Montag, bis 6 für Samstag. Mit einem eigenen Array gibst du den Tagen deutsche Namen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\ntage = %w[Sonntag Montag Dienstag Mittwoch Donnerstag Freitag Samstag]\nheiligabend = Date.new(2026, 12, 24)\np heiligabend.wday\ntage[heiligabend.wday]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dates können sogar einen Bereich bilden, genau wie Zahlen: <code>(von..bis)</code> enthält jeden Tag dazwischen. Wie viele Samstage hat der Dezember 2026?</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\ndezember = Date.new(2026, 12, 1)..Date.new(2026, 12, 31)\ndezember.count { |d| d.saturday? }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Eine letzte Eigenheit des Kalenders: Schaltjahre. Jedes vierte Jahr hat einen 29. Februar – ausser jedes hundertste, ausser jedes vierhundertste. <code>Date.leap?</code> kennt die Regel, und <code>Date.valid_date?</code> prüft, ob es einen Tag überhaupt gibt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\np Date.leap?(2024)\np Date.leap?(1900)\np Date.leap?(2000)\nDate.valid_date?(2026, 2, 29)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Time</code> ist für Momente mit Uhrzeit (wann fuhr der Zug ab?), <code>Date</code> für Tage im Kalender (wann ist das Fest?). Die Lektion {{nr:formatieren}} (Text formatieren) hat <code>format</code> gezeigt, dessen Platzhalter ganz ähnlich funktionieren wie die von <code>strftime</code>; die Timelog-Reihe rechnet in Lektion {{nr:tl-time}} ernsthaft mit Zeit.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Time.html' target='_blank'>Time</a> · <a href='https://docs.ruby-lang.org/en/4.0/Date.html' target='_blank'>Date</a> · <a href='https://docs.ruby-lang.org/en/4.0/language/strftime_formatting_rdoc.html' target='_blank'>strftime-Platzhalter</a></div><div class='task'><strong>Aufgabe:</strong> Ruby wurde am <code>Date.new(1995, 12, 21)</code> zum ersten Mal veröffentlicht. Schreib den Wochentag dieses Tages auf Deutsch in <code>wochentag</code> – mit <code>wday</code> und einem Array der Namen. Zähle dann in <code>tage_bis</code>, wie viele ganze Tage zwischen dem 2. November 2026 und dem 24. Dezember 2026 liegen – mit zwei <code>Date.new</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"date\"\nveroeffentlicht = Date.new(1995, 12, 21)   # Rubys erste öffentliche Version\n\n# wochentag = ...   # der Wochentag davon auf Deutsch, z. B. \"Montag\"\n# tage_bis = ...    # ganze Tage vom 2. November 2026 bis zum 24. Dezember 2026\n",
+            "hints": [
+              "Für den Wochentag: Ein Array mit den Namen von Sonntag bis Samstag, und <code>wday</code> ist der Index darin. Für die Tage: ein Date vom anderen abziehen und eine ganze Zahl daraus machen."
+            ],
+            "check": "wochentag == \"Donnerstag\" && tage_bis == 52 && tage_bis.is_a?(Integer) && code.include?(\"wday\") && code.include?(\"2026, 12, 24\")",
+            "hint": "<code>wochentag = %w[Sonntag Montag Dienstag Mittwoch Donnerstag Freitag Samstag][veroeffentlicht.wday]</code> und <code>tage_bis = (Date.new(2026, 12, 24) - Date.new(2026, 11, 2)).to_i</code>.",
+            "solution": "require \"date\"\nveroeffentlicht = Date.new(1995, 12, 21)\n\nwochentag = %w[Sonntag Montag Dienstag Mittwoch Donnerstag Freitag Samstag][veroeffentlicht.wday]\ntage_bis = (Date.new(2026, 12, 24) - Date.new(2026, 11, 2)).to_i"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Freitag, der 13.! Sammle in <code>pechmonate</code> die Monate von 2026 (als Zahlen, 1 bis 12), deren 13. auf einen Freitag fällt. <code>select</code> über <code>1..12</code> und <code>friday?</code> bringen dich ans Ziel.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "require \"date\"\n\n# pechmonate = ...   # die Monate von 2026 (als Zahlen), deren 13. ein Freitag ist\n",
+            "hints": [
+              "Bau für jeden Monat von 1 bis 12 mit <code>Date.new(2026, monat, 13)</code> das Datum seines 13. und frag es <code>friday?</code>. <code>select</code> behält die Monate, bei denen der Block <code>true</code> sagt."
+            ],
+            "check": "pechmonate == [2, 3, 11] && code.include?(\"friday?\")",
+            "hint": "<code>pechmonate = (1..12).select { |monat| Date.new(2026, monat, 13).friday? }</code>",
+            "solution": "require \"date\"\n\npechmonate = (1..12).select { |monat| Date.new(2026, monat, 13).friday? }"
+          }
+        ]
+      },
+      "en": {
+        "title": "Time and dates",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Time and dates</h2><p>“How many days until the holidays?” “What weekday was I born on?” Ruby knows the calendar. <code>Time.now</code> is this very moment – run the cell twice and watch the seconds move:</p>"
+          },
+          {
+            "t": "c",
+            "code": "now = Time.now\np now.year\np now.month\np now.hour\nnow"
+          },
+          {
+            "t": "h",
+            "html": "<p>A <code>Time</code> on its own looks rather technical. <code>strftime</code> (“string format time”) turns it into text the way you want it: every <code>%</code> letter is a placeholder – <code>%d</code> the day, <code>%m</code> the month, <code>%Y</code> the year with four digits, <code>%H:%M</code> hours and minutes, <code>%A</code> the weekday and <code>%B</code> the month's name:</p>"
+          },
+          {
+            "t": "c",
+            "code": "now = Time.now\nputs now.strftime(\"%d.%m.%Y %H:%M\")\nputs now.strftime(\"%Y-%m-%d\")\nnow.strftime(\"%A, %B %-d\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>For days on the calendar – birthdays, holidays, deadlines – there is <code>Date</code>. It comes with Ruby but has to be loaded with <code>require \"date\"</code> first. A Date knows its weekday, and with <code>+</code> and <code>-</code> you count in days:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\nbirthday = Date.new(2026, 7, 14)\np birthday.saturday?\np birthday + 7\nbirthday.strftime(\"%A\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>The difference between two Dates is a number of days. Ruby gives it as a fraction like <code>(60/1)</code> – a Date could in theory be cut into hours – and <code>to_i</code> turns it into a plain whole number:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\ntoday = Date.today\nnew_year = Date.new(today.year + 1, 1, 1)\np new_year - today\n(new_year - today).to_i"
+          },
+          {
+            "t": "h",
+            "html": "<p>When it comes to names, Ruby speaks English: <code>%A</code> always gives “Thursday”, in every country. Behind each weekday is a number, <code>wday</code>: 0 is Sunday, 1 Monday, up to 6 for Saturday. With an array of your own you can give the days any names you like – German ones, say:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\ngerman = %w[Sonntag Montag Dienstag Mittwoch Donnerstag Freitag Samstag]   # the days in German\nchristmas_eve = Date.new(2026, 12, 24)\np christmas_eve.wday\ngerman[christmas_eve.wday]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dates can even make a range, just like numbers: <code>(from..to)</code> contains every day in between. How many Saturdays does December 2026 have?</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\ndecember = Date.new(2026, 12, 1)..Date.new(2026, 12, 31)\ndecember.count { |d| d.saturday? }"
+          },
+          {
+            "t": "h",
+            "html": "<p>One last quirk of the calendar: leap years. Every fourth year has a 29 February – except every hundredth, except every four hundredth. <code>Date.leap?</code> knows the rule, and <code>Date.valid_date?</code> checks whether a day exists at all:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\np Date.leap?(2024)\np Date.leap?(1900)\np Date.leap?(2000)\nDate.valid_date?(2026, 2, 29)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Time</code> is for moments with a clock (when did the train leave?), <code>Date</code> for days on the calendar (when is the party?). Lesson {{nr:formatieren}} (formatting text) showed <code>format</code>, whose placeholders work much like those of <code>strftime</code>; the timelog track computes with time in earnest in lesson {{nr:tl-time}}.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Time.html' target='_blank'>Time</a> · <a href='https://docs.ruby-lang.org/en/4.0/Date.html' target='_blank'>Date</a> · <a href='https://docs.ruby-lang.org/en/4.0/language/strftime_formatting_rdoc.html' target='_blank'>strftime placeholders</a></div><div class='task'><strong>Task:</strong> Ruby was first released on <code>Date.new(1995, 12, 21)</code>. Put the weekday of that day, as a word, into <code>weekday</code>. Then count in <code>days_until</code> how many whole days lie between 2 November 2026 and 24 December 2026 – with two <code>Date.new</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"date\"\nrelease = Date.new(1995, 12, 21)   # Ruby's first public release\n\n# weekday = ...      # the weekday of release as a word, e.g. \"Monday\"\n# days_until = ...   # whole days from 2 November 2026 to 24 December 2026\n",
+            "hints": [
+              "For the weekday you have two ways: <code>strftime</code> with the placeholder for the weekday's name, or <code>wday</code> and an array of names. For the days: subtract one Date from the other and make a whole number of it."
+            ],
+            "check": "weekday == \"Thursday\" && days_until == 52 && days_until.is_a?(Integer) && code.match?(/strftime|wday/) && code.include?(\"2026, 12, 24\")",
+            "hint": "<code>weekday = release.strftime(\"%A\")</code> and <code>days_until = (Date.new(2026, 12, 24) - Date.new(2026, 11, 2)).to_i</code>.",
+            "solution": "require \"date\"\nrelease = Date.new(1995, 12, 21)\n\nweekday = release.strftime(\"%A\")\ndays_until = (Date.new(2026, 12, 24) - Date.new(2026, 11, 2)).to_i"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Friday the 13th! Collect in <code>unlucky</code> the months of 2026 (as numbers, 1 to 12) whose 13th falls on a Friday. <code>select</code> over <code>1..12</code> and <code>friday?</code> will get you there.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "require \"date\"\n\n# unlucky = ...   # the months of 2026 (as numbers) whose 13th is a Friday\n",
+            "hints": [
+              "For each month from 1 to 12, build the date of its 13th with <code>Date.new(2026, month, 13)</code> and ask it <code>friday?</code>. <code>select</code> keeps the months for which the block says <code>true</code>."
+            ],
+            "check": "unlucky == [2, 3, 11] && code.include?(\"friday?\")",
+            "hint": "<code>unlucky = (1..12).select { |month| Date.new(2026, month, 13).friday? }</code>",
+            "solution": "require \"date\"\n\nunlucky = (1..12).select { |month| Date.new(2026, month, 13).friday? }"
+          }
+        ]
+      },
+      "ja": {
+        "title": "時刻と日付",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>時刻と日付</h2><p>「休みまであと何日？」「わたしは何曜日に生まれたの？」Rubyはカレンダーを知っています。<code>Time.now</code>はまさにこの瞬間です。セルを2回実行して、秒が進むのを見てみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "now = Time.now\np now.year\np now.month\np now.hour\nnow"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Time</code>をそのまま表示すると、ずいぶん技術的に見えます。<code>strftime</code>（“string format time”）を使うと、好きな形の文字列にできます。<code>%</code>のついた文字はどれもプレースホルダーです。<code>%d</code>は日、<code>%m</code>は月、<code>%Y</code>は4けたの年、<code>%H:%M</code>は時と分、<code>%A</code>は曜日、<code>%B</code>は月の名前です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "now = Time.now\nputs now.strftime(\"%d.%m.%Y %H:%M\")\nputs now.strftime(\"%Y-%m-%d\")\nnow.strftime(\"%A, %B %-d\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>カレンダーの上の日付、つまり誕生日や祝日やしめきりには<code>Date</code>があります。Rubyについてきますが、先に<code>require \"date\"</code>で読みこむ必要があります。Dateは自分の曜日を知っていて、<code>+</code>と<code>-</code>で日数を計算できます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\nbirthday = Date.new(2026, 7, 14)\np birthday.saturday?\np birthday + 7\nbirthday.strftime(\"%A\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>2つのDateの差は日数です。Rubyはそれを<code>(60/1)</code>のような分数で返します（Dateは理屈の上では時間に分けられるからです）。<code>to_i</code>でふつうの整数にできます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\ntoday = Date.today\nnew_year = Date.new(today.year + 1, 1, 1)\np new_year - today\n(new_year - today).to_i"
+          },
+          {
+            "t": "h",
+            "html": "<p>名前については、Rubyは英語を話します。<code>%A</code>はどの国でも「Thursday」を返します。どの曜日の裏にも数があり、それが<code>wday</code>です。0が日曜日、1が月曜日、6が土曜日です。自分の配列を使えば、曜日にどんな名前でもつけられます。たとえばドイツ語の名前です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\ngerman = %w[Sonntag Montag Dienstag Mittwoch Donnerstag Freitag Samstag]   # ドイツ語の曜日\nchristmas_eve = Date.new(2026, 12, 24)\np christmas_eve.wday\ngerman[christmas_eve.wday]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dateは数と同じように範囲も作れます。<code>(from..to)</code>には、そのあいだのすべての日が入っています。2026年12月には土曜日が何回あるでしょう？</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\ndecember = Date.new(2026, 12, 1)..Date.new(2026, 12, 31)\ndecember.count { |d| d.saturday? }"
+          },
+          {
+            "t": "h",
+            "html": "<p>最後に、カレンダーのくせをもうひとつ。うるう年です。4年ごとに2月29日がありますが、100年ごとの年は除き、さらに400年ごとの年は除きません。<code>Date.leap?</code>はこの規則を知っていて、<code>Date.valid_date?</code>はその日がそもそも存在するかを調べます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"date\"\np Date.leap?(2024)\np Date.leap?(1900)\np Date.leap?(2000)\nDate.valid_date?(2026, 2, 29)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Time</code>は時計のある瞬間（電車は何時に出た？）、<code>Date</code>はカレンダーの日（パーティーはいつ？）に使います。レッスン{{nr:formatieren}}（文字列の整形）で見た<code>format</code>のプレースホルダーは、<code>strftime</code>のものとよく似ています。timelogのコースでは、レッスン{{nr:tl-time}}で本格的に時間を計算します。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/Time.html' target='_blank'>Time</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Date.html' target='_blank'>Date</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Time/i/strftime.html' target='_blank'>strftimeの書式</a></div><div class='task'><strong>課題：</strong>Rubyが初めて公開されたのは<code>Date.new(1995, 12, 21)</code>です。その日の曜日を英語の単語で<code>weekday</code>に入れましょう。それから、2026年11月2日から2026年12月24日までが何日あるかを、2つの<code>Date.new</code>を使って整数で<code>days_until</code>に入れてください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"date\"\nrelease = Date.new(1995, 12, 21)   # Rubyが初めて公開された日\n\n# weekday = ...      # その日の曜日を英語の単語で。たとえば \"Monday\"\n# days_until = ...   # 2026年11月2日から2026年12月24日までの日数（整数）\n",
+            "hints": [
+              "曜日には2つの方法があるよ。曜日の名前のプレースホルダーを使う<code>strftime</code>か、<code>wday</code>と名前の配列。日数のほうは、Dateからもう1つのDateを引いて、整数にしてみて。"
+            ],
+            "check": "weekday == \"Thursday\" && days_until == 52 && days_until.is_a?(Integer) && code.match?(/strftime|wday/) && code.include?(\"2026, 12, 24\")",
+            "hint": "<code>weekday = release.strftime(\"%A\")</code>、<code>days_until = (Date.new(2026, 12, 24) - Date.new(2026, 11, 2)).to_i</code>だよ。",
+            "solution": "require \"date\"\nrelease = Date.new(1995, 12, 21)\n\nweekday = release.strftime(\"%A\")\ndays_until = (Date.new(2026, 12, 24) - Date.new(2026, 11, 2)).to_i"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>13日の金曜日！2026年のうち、13日が金曜日になる月（1から12の数）を<code>unlucky</code>に集めましょう。<code>1..12</code>に<code>select</code>を使い、<code>friday?</code>で聞けばできます。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "require \"date\"\n\n# unlucky = ...   # 2026年のうち、13日が金曜日になる月（数で）\n",
+            "hints": [
+              "1から12の月ごとに、<code>Date.new(2026, month, 13)</code>で13日の日付を作って、<code>friday?</code>って聞いてみて。<code>select</code>は、ブロックが<code>true</code>と言った月だけを残すよ。"
+            ],
+            "check": "unlucky == [2, 3, 11] && code.include?(\"friday?\")",
+            "hint": "<code>unlucky = (1..12).select { |month| Date.new(2026, month, 13).friday? }</code>",
+            "solution": "require \"date\"\n\nunlucky = (1..12).select { |month| Date.new(2026, month, 13).friday? }"
+          }
+        ]
+      }
+    },
+    {
       "id": "methoden",
       "de": {
         "title": "Methoden",
@@ -4321,6 +4893,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "output.include?(\"Chunky isst 3 Streifen Speck.\") || result == \"Chunky isst 3 Streifen Speck.\"",
             "hint": "Der Reihe nach: <code>fuchss</code> heisst <code>fuchs</code>, <code>satz</code> will nur ein Argument, und die Zahl gehört per Interpolation in den Text: <code>\"#{tier[:name]} isst #{tier[:streifen]} Streifen Speck.\"</code>",
             "solution": "fuchs = { name: \"Chunky\", streifen: 3 }\n\ndef satz(tier)\n  \"#{tier[:name]} isst #{tier[:streifen]} Streifen Speck.\"\nend\n\nsatz(fuchs)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Die gemeinsten Fehler kommen ohne Meldung. Dieser Code soll ausrechnen, wie viele Streifen die Füchse im Schnitt gegessen haben – 4.25 –, und Ruby antwortet seelenruhig <code>1</code>. Nichts ist rot: Ruby tut genau, was im Code steht. Setz ein <code>p summe</code> in die Schleife und schau zu, was mit <code>summe</code> passiert; in der letzten Zeile steckt ein zweiter Fehler. Behebe beide, bis <code>schnitt</code> 4.25 ist.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "streifen = [3, 5, 2, 7]\nsumme = 0\nstreifen.each do |s|\n  summe = s\nend\nschnitt = summe / streifen.length\n",
+            "hints": [
+              "Zwei Fehler. In der Schleife soll <code>summe</code> bei jedem Durchgang wachsen, statt ersetzt zu werden. Und in der letzten Zeile ergeben zwei ganze Zahlen geteilt wieder eine ganze Zahl – die Falle aus der Rechnen-Lektion."
+            ],
+            "check": "schnitt == 4.25",
+            "hint": "<code>summe += s</code> statt <code>summe = s</code>, und <code>summe / streifen.length.to_f</code> (oder <code>summe.fdiv(streifen.length)</code>), damit der Bruch bleibt.",
+            "solution": "streifen = [3, 5, 2, 7]\nsumme = 0\nstreifen.each do |s|\n  summe += s\nend\nschnitt = summe / streifen.length.to_f"
           }
         ]
       },
@@ -4411,6 +4998,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "output.include?(\"Chunky eats 3 strips of bacon.\") || result == \"Chunky eats 3 strips of bacon.\"",
             "hint": "One by one: <code>foxx</code> is called <code>fox</code>, <code>sentence</code> wants only one argument, and the number goes into the text by interpolation: <code>\"#{animal[:name]} eats #{animal[:strips]} strips of bacon.\"</code>",
             "solution": "fox = { name: \"Chunky\", strips: 3 }\n\ndef sentence(animal)\n  \"#{animal[:name]} eats #{animal[:strips]} strips of bacon.\"\nend\n\nsentence(fox)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> The nastiest bugs come without a message. This code should work out how many strips the foxes ate on average – 4.25 – and Ruby calmly answers <code>1</code>. Nothing is red: Ruby does exactly what the code says. Put a <code>p total</code> into the loop and watch what happens to <code>total</code>; the last line hides a second mistake. Fix both until <code>average</code> is 4.25.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "strips = [3, 5, 2, 7]\ntotal = 0\nstrips.each do |s|\n  total = s\nend\naverage = total / strips.length\n",
+            "hints": [
+              "Two mistakes. In the loop, <code>total</code> should grow with every pass instead of being replaced. And in the last line two whole numbers divide into a whole number – the trap from the arithmetic lesson."
+            ],
+            "check": "average == 4.25",
+            "hint": "<code>total += s</code> instead of <code>total = s</code>, and <code>total / strips.length.to_f</code> (or <code>total.fdiv(strips.length)</code>) so the fraction stays.",
+            "solution": "strips = [3, 5, 2, 7]\ntotal = 0\nstrips.each do |s|\n  total += s\nend\naverage = total / strips.length.to_f"
           }
         ]
       },
@@ -4501,10 +5103,251 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "output.include?(\"Chunky eats 3 strips of bacon.\") || result == \"Chunky eats 3 strips of bacon.\"",
             "hint": "1つずつ直そう：<code>foxx</code>は<code>fox</code>のまちがい、<code>sentence</code>がほしい引数は1つだけ、そして数は式展開で文に入れよう：<code>\"#{animal[:name]} eats #{animal[:strips]} strips of bacon.\"</code>",
             "solution": "fox = { name: \"Chunky\", strips: 3 }\n\ndef sentence(animal)\n  \"#{animal[:name]} eats #{animal[:strips]} strips of bacon.\"\nend\n\nsentence(fox)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>いちばんやっかいなバグは、メッセージなしでやってきます。このコードは、キツネたちが平均で何枚食べたか（4.25）を計算するはずなのに、Rubyは平然と<code>1</code>と答えます。赤いところはどこにもありません。Rubyはコードに書いてあるとおりに動いているのです。ループの中に<code>p total</code>を入れて、<code>total</code>に何が起きているか見てみましょう。最後の行には、もうひとつまちがいがかくれています。<code>average</code>が4.25になるまで、両方を直してください。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "strips = [3, 5, 2, 7]\ntotal = 0\nstrips.each do |s|\n  total = s\nend\naverage = total / strips.length\n",
+            "hints": [
+              "まちがいは2つ。ループの中で、<code>total</code>は回るたびに増えるはずで、置きかわっちゃだめなんだ。それから最後の行。整数どうしを割ると整数になるよね。計算のレッスンで見たわなだよ。"
+            ],
+            "check": "average == 4.25",
+            "hint": "<code>total = s</code>じゃなくて<code>total += s</code>、それから小数が残るように<code>total / strips.length.to_f</code>（または<code>total.fdiv(strips.length)</code>）だよ。",
+            "solution": "strips = [3, 5, 2, 7]\ntotal = 0\nstrips.each do |s|\n  total += s\nend\naverage = total / strips.length.to_f"
           }
         ]
       },
       "rubyMessage": true
+    },
+    {
+      "id": "rekursion",
+      "stepper": true,
+      "de": {
+        "title": "Rekursion – Methoden, die sich selbst aufrufen",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Rekursion – Methoden, die sich selbst aufrufen</h2><p>Öffnest du eine russische Puppe, steckt eine kleinere darin, und in der eine noch kleinere – bis zur winzigsten, die sich nicht mehr öffnen lässt. Eine Methode kann genauso arbeiten: Sie löst ein grosses Problem, indem sie <em>sich selbst</em> mit einem etwas kleineren aufruft, bis das Problem so klein ist, dass die Antwort auf der Hand liegt. Das heisst <strong>Rekursion</strong>. Ein Countdown:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def countdown(n)\n  if n == 0\n    puts \"Chunky Bacon!\"\n  else\n    puts n\n    countdown(n - 1)\n  end\nend\n\ncountdown(3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jede Rekursion hat zwei Teile. Der <strong>Basisfall</strong> (<code>n == 0</code>) ist die winzigste Puppe: Hier hört die Methode auf, sich aufzurufen. Der <strong>rekursive Schritt</strong> erledigt ein bisschen Arbeit und gibt den Rest, eine Nummer kleiner, an den nächsten Aufruf weiter. Drück bei der Zelle oben auf ⏯ Schrittweise: <code>countdown(3)</code> ruft <code>countdown(2)</code> auf, das ruft <code>countdown(1)</code> auf …</p><p>Das klassische Beispiel ist die Fakultät: 5! = 5 · 4 · 3 · 2 · 1. Anders betrachtet ist 5! einfach 5 · 4!, und 4! ist 4 · 3!, bis hinunter zu 1!, und das ist einfach 1. Dieser Satz <em>ist</em> schon die Methode:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def fakultaet(n)\n  return 1 if n <= 1\n  n * fakultaet(n - 1)\nend\n\np fakultaet(5)\nfakultaet(30)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Rubys ganze Zahlen werden so gross, wie sie müssen, darum hat <code>fakultaet(30)</code> klaglos 33 Stellen. Und ohne Basisfall? Die Methode würde sich ewig selbst aufrufen, jeder Aufruf wartet auf den nächsten, bis Ruby der Platz für wartende Aufrufe ausgeht und mit <code>SystemStackError: stack level too deep</code> anhält. Wie man so eine Meldung liest, weisst du aus Lektion {{nr:fehler}}.</p><p>Rekursion glänzt bei Dingen in Dingen – einer Schachtel in einer Schachtel in einer Schachtel. Diese Methode zählt jede Zahl in einem Array zusammen, egal wie tief es verschachtelt ist:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def tiefe_summe(ding)\n  if ding.is_a?(Array)\n    ding.sum { |inneres| tiefe_summe(inneres) }\n  else\n    ding\n  end\nend\n\nschachteln = [1, [2, 3], [[4], 5], [[[6]]]]\ntiefe_summe(schachteln)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Eine Schleife müsste wissen, wie tief die Schachteln gehen. Der Rekursion ist das egal: Jeder Aufruf packt eine Schicht aus und überlässt den Rest dem nächsten Aufruf. Ordner in Ordnern, die Tags einer HTML-Seite (Lektion {{nr:html}}), ein Stammbaum – alles Dinge in Dingen.</p><p>Rekursion kann auch verschwenderisch langsam sein. Bei den Fibonacci-Zahlen – 0, 1, 1, 2, 3, 5, 8 … – ist jede die Summe der beiden davor. Als Rekursion sind das zwei Zeilen, aber <code>fib(30)</code> würde sich 2,7 Millionen Mal aufrufen, weil es dieselben Zahlen immer wieder ausrechnet. Ein Hash als Gedächtnis hilft: Was einmal berechnet ist, wird nachgeschaut (<code>||=</code> rechnet nur, wenn der Hash noch nichts hat):</p>"
+          },
+          {
+            "t": "c",
+            "code": "def fib(n)\n  return n if n < 2\n  fib(n - 1) + fib(n - 2)\nend\n\ndef schnelle_fib(n, gedaechtnis = {})\n  return n if n < 2\n  gedaechtnis[n] ||= schnelle_fib(n - 1, gedaechtnis) + schnelle_fib(n - 2, gedaechtnis)\nend\n\np fib(15)\nschnelle_fib(90)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>schnelle_fib(90)</code> kommt mit weniger als 200 Aufrufen aus; das einfache <code>fib(90)</code> würde noch rechnen, wenn die Sonne erlischt.</p><p>Zum Schluss ein Rätsel, das mit Schleifen schwer und mit Rekursion kurz ist: die Türme von Hanoi. Scheiben verschiedener Grösse liegen auf dem linken Stab, die grösste unten. Bring sie alle auf den rechten Stab – immer nur eine Scheibe, und nie eine grössere auf eine kleinere. Der Trick: Um <em>n</em> Scheiben zu bewegen, bring die <em>n - 1</em> darüber auf den freien Stab, dann die grosse, dann die <em>n - 1</em> wieder obendrauf:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def hanoi(n, von, nach, frei)\n  return if n == 0\n  hanoi(n - 1, von, frei, nach)\n  puts \"Scheibe #{n}: #{von} -> #{nach}\"\n  hanoi(n - 1, frei, nach, von)\nend\n\nhanoi(3, \"links\", \"rechts\", \"Mitte\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Sieben Züge für drei Scheiben, allgemein 2<sup>n</sup> - 1. Eine Legende erzählt von Mönchen, die 64 goldene Scheiben bewegen; mit einem Zug pro Sekunde brauchen sie 585 Milliarden Jahre. Probier <code>hanoi(4, …)</code> – oder geh <code>hanoi(2, …)</code> mit ⏯ Schritt für Schritt durch und schau, wie sich die Aufrufe stapeln und wieder abbauen. In Lektion {{nr:turtle}} zeichnet Chunky mit Rekursion: eine Schneeflocke, deren Kanten Schneeflocken sind.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/syntax/methods_rdoc.html' target='_blank'>Methods</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-flat_map' target='_blank'>Enumerable#flat_map</a> · <a href='https://docs.ruby-lang.org/en/4.0/SystemStackError.html' target='_blank'>SystemStackError</a></div><div class='task'><strong>Aufgabe:</strong> Schreib eine rekursive Methode <code>hoch(basis, exponent)</code>: <code>hoch(2, 10)</code> ist 2 · 2 · … · 2, zehnmal, also 1024. Basisfall: Alles hoch 0 ist 1. Rekursiver Schritt: <code>basis</code> mal <code>hoch(basis, exponent - 1)</code>. Natürlich ohne <code>**</code>!</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def hoch(basis, exponent)\n#   return ... if exponent == 0   # der Basisfall: alles hoch 0 ist 1\n#   ...                           # der Schritt: basis mal hoch(basis, exponent - 1)\n# end\n\n# hoch(2, 10)\n",
+            "hints": [
+              "Zwei Fälle, wie bei <code>fakultaet</code>: Ist <code>exponent</code> 0, ist die Antwort sofort 1; sonst multiplizierst du <code>basis</code> mit dem, was die Methode für einen um eins kleineren Exponenten sagt."
+            ],
+            "check": "hoch(2, 10) == 1024 && hoch(3, 0) == 1 && hoch(5, 3) == 125 && !code.include?(\"**\") && !code.include?(\".pow\") && (code[/^([ \\t]*)def hoch.*?^\\1end\\b/m] || code[/^\\s*def hoch.*$/]).to_s.scan(\"hoch(\").size >= 2",
+            "hint": "<code>def hoch(basis, exponent)</code>, dann <code>return 1 if exponent == 0</code> und <code>basis * hoch(basis, exponent - 1)</code>, dann <code>end</code>.",
+            "solution": "def hoch(basis, exponent)\n  return 1 if exponent == 0\n  basis * hoch(basis, exponent - 1)\nend\n\nhoch(2, 10)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Schreib <code>auspacken(ding)</code>, das jede Verschachtelung in eine flache Liste auspackt: <code>auspacken([1, [2, [3, [4]]], 5])</code> ergibt <code>[1, 2, 3, 4, 5]</code>, und ein einzelnes Ding eine Liste mit nur diesem Ding, <code>auspacken(7)</code> → <code>[7]</code>. Ohne <code>flatten</code> – darum geht's ja!</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def auspacken(ding)\n#   ...   # ein Array: jedes Element auspacken und die Ergebnisse zusammenhängen\n#   ...   # alles andere: eine Liste mit nur diesem Ding\n# end\n\n# auspacken([1, [2, [3, [4]]], 5])\n",
+            "hints": [
+              "Schau dir <code>tiefe_summe</code> an: Es zählt zusammen, was die inneren Aufrufe zurückgeben. Hier gibt jeder Aufruf eine <em>Liste</em> zurück, und die Listen der inneren Aufrufe werden aneinandergehängt – das macht <code>flat_map</code>. Was kein Array ist, wird zu <code>[ding]</code>."
+            ],
+            "check": "auspacken([1, [2, [3, [4]]], 5]) == [1, 2, 3, 4, 5] && auspacken([[[\"Speck\"]], \"Ei\"]) == [\"Speck\", \"Ei\"] && auspacken(7) == [7] && !code.include?(\"flatten\")",
+            "hint": "<code>if ding.is_a?(Array)</code> → <code>ding.flat_map { |inneres| auspacken(inneres) }</code>, <code>else</code> → <code>[ding]</code>.",
+            "solution": "def auspacken(ding)\n  if ding.is_a?(Array)\n    ding.flat_map { |inneres| auspacken(inneres) }\n  else\n    [ding]\n  end\nend\n\nauspacken([1, [2, [3, [4]]], 5])"
+          }
+        ]
+      },
+      "en": {
+        "title": "Recursion – methods that call themselves",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Recursion – methods that call themselves</h2><p>Open a Russian doll and there is a smaller doll inside, and inside that one a smaller one still – until the tiniest, which does not open. A method can work the same way: it solves a big problem by calling <em>itself</em> with a slightly smaller one, until the problem is so small that the answer is obvious. That is called <strong>recursion</strong>. A countdown:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def countdown(n)\n  if n == 0\n    puts \"Chunky bacon!\"\n  else\n    puts n\n    countdown(n - 1)\n  end\nend\n\ncountdown(3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Every recursion has two parts. The <strong>base case</strong> (<code>n == 0</code>) is the tiniest doll: here the method stops calling itself. The <strong>recursive step</strong> does a little work and hands the rest, one size smaller, to the next call. Press ⏯ Step through on the cell above: <code>countdown(3)</code> calls <code>countdown(2)</code>, which calls <code>countdown(1)</code> …</p><p>The classic example is the factorial: 5! = 5 · 4 · 3 · 2 · 1. Look at it differently and 5! is just 5 · 4!, and 4! is 4 · 3!, down to 1!, which is simply 1. That sentence <em>is</em> the method already:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def factorial(n)\n  return 1 if n <= 1\n  n * factorial(n - 1)\nend\n\np factorial(5)\nfactorial(30)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ruby's integers grow as large as they need to, so <code>factorial(30)</code> has 33 digits without complaint. And without a base case? The method would call itself forever, every call waiting for the next one, until Ruby runs out of room for waiting calls and stops with <code>SystemStackError: stack level too deep</code>. You already know how to read such a message from lesson {{nr:fehler}}.</p><p>Recursion shines with things inside things – a box in a box in a box. This method adds up every number in an array, however deep it is nested:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def deep_sum(thing)\n  if thing.is_a?(Array)\n    thing.sum { |inner| deep_sum(inner) }\n  else\n    thing\n  end\nend\n\nboxes = [1, [2, 3], [[4], 5], [[[6]]]]\ndeep_sum(boxes)"
+          },
+          {
+            "t": "h",
+            "html": "<p>A loop would have to know how deep the boxes go. The recursion does not care: each call unpacks one layer and leaves the rest to the next call. Folders in folders, the tags of an HTML page (lesson {{nr:html}}), a family tree – all of them are things inside things.</p><p>Recursion can also be wastefully slow. In the Fibonacci numbers – 0, 1, 1, 2, 3, 5, 8 … – each one is the sum of the two before it. Written as a recursion that is two lines, but <code>fib(30)</code> would call itself 2.7 million times, because it works out the same numbers over and over. A hash as a memory fixes it: what has been computed once is looked up (<code>||=</code> only computes when the hash has nothing yet):</p>"
+          },
+          {
+            "t": "c",
+            "code": "def fib(n)\n  return n if n < 2\n  fib(n - 1) + fib(n - 2)\nend\n\ndef fast_fib(n, memo = {})\n  return n if n < 2\n  memo[n] ||= fast_fib(n - 1, memo) + fast_fib(n - 2, memo)\nend\n\np fib(15)\nfast_fib(90)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>fast_fib(90)</code> makes fewer than 200 calls; the plain <code>fib(90)</code> would still be running when the sun burns out.</p><p>Finally, a puzzle that is hard to solve with loops and short with recursion: the Towers of Hanoi. Discs of different sizes sit on the left peg, the largest at the bottom. Move them all to the right peg – one disc at a time, and never a larger disc on a smaller one. The trick: to move <em>n</em> discs, move the <em>n - 1</em> above it to the spare peg, then the big one, then the <em>n - 1</em> back on top:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def hanoi(n, from, to, spare)\n  return if n == 0\n  hanoi(n - 1, from, spare, to)\n  puts \"Disc #{n}: #{from} -> #{to}\"\n  hanoi(n - 1, spare, to, from)\nend\n\nhanoi(3, \"left\", \"right\", \"middle\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Seven moves for three discs, 2<sup>n</sup> - 1 in general. A legend tells of monks who move 64 golden discs; at one move per second they need 585 billion years. Try <code>hanoi(4, …)</code> – or step through <code>hanoi(2, …)</code> with ⏯ and watch the calls pile up and unwind. In lesson {{nr:turtle}} Chunky draws with recursion: a snowflake whose edges are snowflakes.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/methods_rdoc.html' target='_blank'>Methods</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-flat_map' target='_blank'>Enumerable#flat_map</a> · <a href='https://docs.ruby-lang.org/en/4.0/SystemStackError.html' target='_blank'>SystemStackError</a></div><div class='task'><strong>Task:</strong> Write a recursive method <code>power(base, exponent)</code>: <code>power(2, 10)</code> is 2 · 2 · … · 2, ten times, so 1024. Base case: anything to the power of 0 is 1. Recursive step: <code>base</code> times <code>power(base, exponent - 1)</code>. Without <code>**</code>, of course!</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def power(base, exponent)\n#   return ... if exponent == 0   # the base case: anything to the power of 0 is 1\n#   ...                           # the step: base times power(base, exponent - 1)\n# end\n\n# power(2, 10)\n",
+            "hints": [
+              "Two cases, like in <code>factorial</code>: when <code>exponent</code> is 0 the answer is 1 straight away; otherwise multiply <code>base</code> by what the method says about an exponent one smaller."
+            ],
+            "check": "power(2, 10) == 1024 && power(3, 0) == 1 && power(5, 3) == 125 && !code.include?(\"**\") && !code.include?(\".pow\") && (code[/^([ \\t]*)def power.*?^\\1end\\b/m] || code[/^\\s*def power.*$/]).to_s.scan(\"power(\").size >= 2",
+            "hint": "<code>def power(base, exponent)</code>, then <code>return 1 if exponent == 0</code> and <code>base * power(base, exponent - 1)</code>, then <code>end</code>.",
+            "solution": "def power(base, exponent)\n  return 1 if exponent == 0\n  base * power(base, exponent - 1)\nend\n\npower(2, 10)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Write <code>unbox(thing)</code>, which unpacks any nesting into one flat list: <code>unbox([1, [2, [3, [4]]], 5])</code> gives <code>[1, 2, 3, 4, 5]</code>, and a single thing gives a list with just that thing, <code>unbox(7)</code> → <code>[7]</code>. Without <code>flatten</code> – that's the point!</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def unbox(thing)\n#   ...   # an Array: unbox every element and join the results\n#   ...   # anything else: a list with just that thing\n# end\n\n# unbox([1, [2, [3, [4]]], 5])\n",
+            "hints": [
+              "Look at <code>deep_sum</code>: it adds up what the inner calls return. Here every call returns a <em>list</em>, and the lists of the inner calls are joined – <code>flat_map</code> does that. Something that is not an Array becomes <code>[thing]</code>."
+            ],
+            "check": "unbox([1, [2, [3, [4]]], 5]) == [1, 2, 3, 4, 5] && unbox([[[\"bacon\"]], \"egg\"]) == [\"bacon\", \"egg\"] && unbox(7) == [7] && !code.include?(\"flatten\")",
+            "hint": "<code>if thing.is_a?(Array)</code> → <code>thing.flat_map { |inner| unbox(inner) }</code>, <code>else</code> → <code>[thing]</code>.",
+            "solution": "def unbox(thing)\n  if thing.is_a?(Array)\n    thing.flat_map { |inner| unbox(inner) }\n  else\n    [thing]\n  end\nend\n\nunbox([1, [2, [3, [4]]], 5])"
+          }
+        ]
+      },
+      "ja": {
+        "title": "再帰 – 自分を呼び出すメソッド",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>再帰 – 自分を呼び出すメソッド</h2><p>マトリョーシカ人形を開けると、中にもっと小さな人形が入っていて、その中にはさらに小さな人形があります。いちばん小さな、もう開かない人形まで続きます。メソッドも同じように動けます。大きな問題を解くために、少しだけ小さくした問題で<em>自分自身</em>を呼び出し、答えが明らかなくらい問題が小さくなるまで続けるのです。これを<strong>再帰</strong>といいます。カウントダウンの例です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def countdown(n)\n  if n == 0\n    puts \"Chunky bacon!\"\n  else\n    puts n\n    countdown(n - 1)\n  end\nend\n\ncountdown(3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>再帰には必ず2つの部分があります。<strong>基本ケース</strong>（<code>n == 0</code>）はいちばん小さな人形で、ここでメソッドは自分を呼ぶのをやめます。<strong>再帰ステップ</strong>は少しだけ仕事をして、ひとまわり小さくした残りを次の呼び出しに渡します。上のセルで⏯ ステップ実行を押してみてください。<code>countdown(3)</code>が<code>countdown(2)</code>を呼び、それが<code>countdown(1)</code>を呼び……</p><p>定番の例は階乗です。5! = 5 · 4 · 3 · 2 · 1。見方を変えると、5!は5 · 4!で、4!は4 · 3!、そして1!まで下りると、それはただの1です。この文が、そのままメソッドになっています：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def factorial(n)\n  return 1 if n <= 1\n  n * factorial(n - 1)\nend\n\np factorial(5)\nfactorial(30)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Rubyの整数は必要なだけ大きくなるので、<code>factorial(30)</code>の33けたも問題ありません。では基本ケースがなかったら？メソッドは永遠に自分を呼び続け、どの呼び出しも次を待ち続けます。やがて待っている呼び出しを置く場所がなくなり、Rubyは<code>SystemStackError: stack level too deep</code>で止まります。このようなメッセージの読み方は、レッスン{{nr:fehler}}で学びました。</p><p>再帰がいちばん輝くのは、ものの中にものが入っているときです。箱の中の箱の中の箱のように。このメソッドは、どれだけ深く入れ子になっていても、配列の中の数をすべて合計します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def deep_sum(thing)\n  if thing.is_a?(Array)\n    thing.sum { |inner| deep_sum(inner) }\n  else\n    thing\n  end\nend\n\nboxes = [1, [2, 3], [[4], 5], [[[6]]]]\ndeep_sum(boxes)"
+          },
+          {
+            "t": "h",
+            "html": "<p>ループで書くなら、箱が何段あるかを知っていなければなりません。再帰は気にしません。どの呼び出しも1段だけ開けて、残りは次の呼び出しにまかせます。フォルダーの中のフォルダー、HTMLページのタグ（レッスン{{nr:html}}）、家系図。どれも、ものの中のものです。</p><p>再帰はむだに遅くなることもあります。フィボナッチ数（0、1、1、2、3、5、8……）は、どれも前の2つの和です。再帰で書けば2行ですが、<code>fib(30)</code>は同じ数を何度も計算し直すので、自分を270万回も呼び出します。ハッシュを記憶として使えば解決します。一度計算したものは調べるだけです（<code>||=</code>はハッシュにまだ何もないときだけ計算します）：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def fib(n)\n  return n if n < 2\n  fib(n - 1) + fib(n - 2)\nend\n\ndef fast_fib(n, memo = {})\n  return n if n < 2\n  memo[n] ||= fast_fib(n - 1, memo) + fast_fib(n - 2, memo)\nend\n\np fib(15)\nfast_fib(90)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>fast_fib(90)</code>の呼び出しは200回足らずです。ふつうの<code>fib(90)</code>なら、太陽が燃えつきてもまだ計算しているでしょう。</p><p>最後に、ループでは難しく、再帰なら短く書けるパズルです。ハノイの塔。大きさの違う円盤が左の棒に、大きいものを下にして重なっています。全部を右の棒に移しましょう。一度に動かせるのは1枚だけで、小さな円盤の上に大きな円盤を置いてはいけません。コツはこうです。<em>n</em>枚を動かすには、上の<em>n - 1</em>枚をあいている棒に移し、次にいちばん大きな1枚を動かし、それから<em>n - 1</em>枚をその上に戻します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def hanoi(n, from, to, spare)\n  return if n == 0\n  hanoi(n - 1, from, spare, to)\n  puts \"Disc #{n}: #{from} -> #{to}\"\n  hanoi(n - 1, spare, to, from)\nend\n\nhanoi(3, \"left\", \"right\", \"middle\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>3枚なら7手、一般には2<sup>n</sup> - 1手です。64枚の金の円盤を動かす僧侶たちの伝説があります。1秒に1手でも、5850億年かかります。<code>hanoi(4, …)</code>を試してみてください。あるいは<code>hanoi(2, …)</code>を⏯で1ステップずつ実行して、呼び出しが積み重なり、また解けていく様子を見てみましょう。レッスン{{nr:turtle}}では、Chunkyが再帰で絵を描きます。辺がまた雪の結晶になっている雪の結晶です。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fdef.html' target='_blank'>メソッド定義</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Enumerable/i/flat_map.html' target='_blank'>Enumerable#flat_map</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/SystemStackError.html' target='_blank'>SystemStackError</a></div><div class='task'><strong>課題：</strong>再帰メソッド<code>power(base, exponent)</code>を書きましょう。<code>power(2, 10)</code>は2 · 2 · … · 2を10回、つまり1024です。基本ケース：0乗はなんでも1です。再帰ステップ：<code>base</code>かける<code>power(base, exponent - 1)</code>です。もちろん<code>**</code>は使いません！</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def power(base, exponent)\n#   return ... if exponent == 0   # 基本ケース：0乗はなんでも1\n#   ...                           # 一歩：base かける power(base, exponent - 1)\n# end\n\n# power(2, 10)\n",
+            "hints": [
+              "<code>factorial</code>と同じで2つの場合があるよ。<code>exponent</code>が0なら答えはすぐ1。そうでなければ、指数を1つ小さくしたときにメソッドが返すものに<code>base</code>をかけてみて。"
+            ],
+            "check": "power(2, 10) == 1024 && power(3, 0) == 1 && power(5, 3) == 125 && !code.include?(\"**\") && !code.include?(\".pow\") && (code[/^([ \\t]*)def power.*?^\\1end\\b/m] || code[/^\\s*def power.*$/]).to_s.scan(\"power(\").size >= 2",
+            "hint": "<code>def power(base, exponent)</code>、それから<code>return 1 if exponent == 0</code>と<code>base * power(base, exponent - 1)</code>、最後に<code>end</code>だよ。",
+            "solution": "def power(base, exponent)\n  return 1 if exponent == 0\n  base * power(base, exponent - 1)\nend\n\npower(2, 10)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>どんな入れ子もひらたいリストに開ける<code>unbox(thing)</code>を書きましょう。<code>unbox([1, [2, [3, [4]]], 5])</code>は<code>[1, 2, 3, 4, 5]</code>になり、1つだけのものはそれだけが入ったリストになります。<code>unbox(7)</code> → <code>[7]</code>です。<code>flatten</code>は使いません。それが目的ですから！</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def unbox(thing)\n#   ...   # 配列なら：要素をそれぞれunboxして、結果をつなげる\n#   ...   # それ以外：その1つだけが入ったリスト\n# end\n\n# unbox([1, [2, [3, [4]]], 5])\n",
+            "hints": [
+              "<code>deep_sum</code>を見てみて。内側の呼び出しが返すものを合計してるよね。ここではどの呼び出しも<em>リスト</em>を返して、内側の呼び出しのリストをつなげるんだ。それをやってくれるのが<code>flat_map</code>。配列じゃないものは<code>[thing]</code>にするよ。"
+            ],
+            "check": "unbox([1, [2, [3, [4]]], 5]) == [1, 2, 3, 4, 5] && unbox([[[\"bacon\"]], \"egg\"]) == [\"bacon\", \"egg\"] && unbox(7) == [7] && !code.include?(\"flatten\")",
+            "hint": "<code>if thing.is_a?(Array)</code> → <code>thing.flat_map { |inner| unbox(inner) }</code>、<code>else</code> → <code>[thing]</code>だよ。",
+            "solution": "def unbox(thing)\n  if thing.is_a?(Array)\n    thing.flat_map { |inner| unbox(inner) }\n  else\n    [thing]\n  end\nend\n\nunbox([1, [2, [3, [4]]], 5])"
+          }
+        ]
+      }
     },
     {
       "id": "turtle",
@@ -4549,6 +5392,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "(t = Turtle.from(images).last) && t.closed? && [48, 192, 768].include?(t.edges.size) && t.edges.map { |e| e.length.round(1) }.uniq.size == 1 && (t.corners.map(&:round) - [60, -60, 120, -120]).empty?",
             "hint": "Vier Aufrufe, drei Drehungen: <code>koch(laenge / 3.0, tiefe - 1)</code>, <code>left 60</code>, <code>koch(…)</code>, <code>right 120</code>, <code>koch(…)</code>, <code>left 60</code>, <code>koch(…)</code>.",
             "solution": "def koch(laenge, tiefe)\n  if tiefe == 0\n    forward laenge\n  else\n    koch(laenge / 3.0, tiefe - 1)\n    left 60\n    koch(laenge / 3.0, tiefe - 1)\n    right 120\n    koch(laenge / 3.0, tiefe - 1)\n    left 60\n    koch(laenge / 3.0, tiefe - 1)\n  end\nend\n\nturtle do\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Ein Stern mit sieben Zacken. Der fünfzackige Stern oben dreht sich an jeder Spitze um 144° – in fünf Drehungen kommt er zweimal herum, 2 · 360 / 5. Zeichne einen siebenzackigen Stern mit sieben Kanten von 150, der in seinen sieben Drehungen <em>dreimal</em> herumkommt. Wie viele Grad ist jede Drehung? Lass Ruby rechnen – geteilt durch <code>7.0</code> bleibt der Bruch erhalten.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "turtle do\n  color \"#d4a017\"\n  # 7.times do\n  #   forward ...\n  #   right ...   # dreimal herum in sieben Drehungen\n  # end\nend\n",
+            "hints": [
+              "Siebenmal: <code>forward 150</code>, dann drehen. Drei ganze Runden sind <code>3 * 360</code> Grad, verteilt auf sieben Spitzen."
+            ],
+            "check": "Turtle.from(images).last.then { |t| !t.nil? && t.regular_polygon?(7, 150) && t.winding.abs.round == 3 }",
+            "hint": "Innerhalb von <code>turtle do</code> … <code>end</code>: <code>7.times do</code>, dann <code>forward 150</code> und <code>right 3 * 360 / 7.0</code>, dann <code>end</code>.",
+            "solution": "turtle do\n  color \"#d4a017\"\n  7.times do\n    forward 150\n    right 3 * 360 / 7.0\n  end\nend"
           }
         ]
       },
@@ -4592,6 +5450,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "(t = Turtle.from(images).last) && t.closed? && [48, 192, 768].include?(t.edges.size) && t.edges.map { |e| e.length.round(1) }.uniq.size == 1 && (t.corners.map(&:round) - [60, -60, 120, -120]).empty?",
             "hint": "Four calls, three turns: <code>koch(length / 3.0, depth - 1)</code>, <code>left 60</code>, <code>koch(…)</code>, <code>right 120</code>, <code>koch(…)</code>, <code>left 60</code>, <code>koch(…)</code>.",
             "solution": "def koch(length, depth)\n  if depth == 0\n    forward length\n  else\n    koch(length / 3.0, depth - 1)\n    left 60\n    koch(length / 3.0, depth - 1)\n    right 120\n    koch(length / 3.0, depth - 1)\n    left 60\n    koch(length / 3.0, depth - 1)\n  end\nend\n\nturtle do\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> A star with seven points. The five-pointed star above turns 144° at every point – in five turns it goes twice around, 2 · 360 / 5. Draw a seven-pointed star with seven edges of 150 that goes <em>three</em> times around in its seven turns. How many degrees is each turn? Let Ruby work it out – dividing by <code>7.0</code> keeps the fraction.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "turtle do\n  color \"#d4a017\"\n  # 7.times do\n  #   forward ...\n  #   right ...   # three times around in seven turns\n  # end\nend\n",
+            "hints": [
+              "Seven times: <code>forward 150</code>, then turn. Three full circles are <code>3 * 360</code> degrees, shared out over seven points."
+            ],
+            "check": "Turtle.from(images).last.then { |t| !t.nil? && t.regular_polygon?(7, 150) && t.winding.abs.round == 3 }",
+            "hint": "Inside <code>turtle do</code> … <code>end</code>: <code>7.times do</code>, then <code>forward 150</code> and <code>right 3 * 360 / 7.0</code>, then <code>end</code>.",
+            "solution": "turtle do\n  color \"#d4a017\"\n  7.times do\n    forward 150\n    right 3 * 360 / 7.0\n  end\nend"
           }
         ]
       },
@@ -4635,6 +5508,21 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "(t = Turtle.from(images).last) && t.closed? && [48, 192, 768].include?(t.edges.size) && t.edges.map { |e| e.length.round(1) }.uniq.size == 1 && (t.corners.map(&:round) - [60, -60, 120, -120]).empty?",
             "hint": "呼び出し4回に、回転3回だよ：<code>koch(length / 3.0, depth - 1)</code>、<code>left 60</code>、<code>koch(…)</code>、<code>right 120</code>、<code>koch(…)</code>、<code>left 60</code>、<code>koch(…)</code>！",
             "solution": "def koch(length, depth)\n  if depth == 0\n    forward length\n  else\n    koch(length / 3.0, depth - 1)\n    left 60\n    koch(length / 3.0, depth - 1)\n    right 120\n    koch(length / 3.0, depth - 1)\n    left 60\n    koch(length / 3.0, depth - 1)\n  end\nend\n\nturtle do\n  3.times do\n    koch(270, 3)\n    right 120\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>7つのとがりがある星です。上の五芒星は、とがりごとに144°曲がります。5回曲がるあいだに2周するので、2 · 360 / 5です。長さ150の辺が7本あって、7回曲がるあいだに<em>3</em>周する七芒星を描きましょう。1回に何度曲がればよいでしょう？計算はRubyにまかせましょう。<code>7.0</code>で割れば小数が残ります。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "turtle do\n  color \"#d4a017\"\n  # 7.times do\n  #   forward ...\n  #   right ...   # 7回曲がるあいだに3周\n  # end\nend\n",
+            "hints": [
+              "7回、<code>forward 150</code>してから曲がるよ。3周は<code>3 * 360</code>度。それを7つのとがりで分けるんだ。"
+            ],
+            "check": "Turtle.from(images).last.then { |t| !t.nil? && t.regular_polygon?(7, 150) && t.winding.abs.round == 3 }",
+            "hint": "<code>turtle do</code> … <code>end</code>の中で、<code>7.times do</code>、<code>forward 150</code>と<code>right 3 * 360 / 7.0</code>、そして<code>end</code>だよ。",
+            "solution": "turtle do\n  color \"#d4a017\"\n  7.times do\n    forward 150\n    right 3 * 360 / 7.0\n  end\nend"
           }
         ]
       }
@@ -20083,6 +20971,7 @@ window.LESSONS_JSON = JSON.stringify({
       "id": "enumerable",
       "lessons": [
         "iteratoren",
+        "sortieren",
         "tl-collections"
       ],
       "title": {
@@ -20135,6 +21024,30 @@ window.LESSONS_JSON = JSON.stringify({
           "de": "sortieren nach (auch <code>min_by</code>, <code>max_by</code>)",
           "en": "sort by (also <code>min_by</code>, <code>max_by</code>)",
           "ja": "〜で並べかえ（<code>min_by</code>、<code>max_by</code>も）"
+        },
+        {
+          "c": "a.sort_by { |f| [-f.points, f.name] }",
+          "de": "nach mehreren Schlüsseln sortieren: zuerst absteigend nach Punkten, bei Gleichstand nach dem Namen",
+          "en": "sort by several keys: points descending first, a tie by name",
+          "ja": "複数のキーで並べかえ：まず点数の多い順、同点なら名前順"
+        },
+        {
+          "c": "a.max_by { |f| f.points }   a.min_by(2) { … }",
+          "de": "das Element mit dem grössten / die zwei mit den kleinsten Werten",
+          "en": "the element with the largest value / the two with the smallest",
+          "ja": "値がいちばん大きい要素／いちばん小さい2つ"
+        },
+        {
+          "c": "sorted.bsearch { |x| x >= 10 }",
+          "de": "binäre Suche in einer sortierten Liste: das erste Element, für das der Block <code>true</code> sagt",
+          "en": "binary search in a sorted list: the first element for which the block says <code>true</code>",
+          "ja": "並べかえ済みのリストを二分探索：ブロックが<code>true</code>を返す最初の要素"
+        },
+        {
+          "c": "a <=> b",
+          "de": "Raumschiff: -1, 0 oder 1 – worauf <code>sort</code> beruht",
+          "en": "spaceship: -1, 0 or 1 – what <code>sort</code> is built on",
+          "ja": "宇宙船演算子：-1、0、1。<code>sort</code>の土台"
         },
         {
           "c": "a.any? { |x| x > 2 }",
@@ -20315,6 +21228,7 @@ window.LESSONS_JSON = JSON.stringify({
       "id": "methods",
       "lessons": [
         "methoden",
+        "rekursion",
         "tl-methods",
         "tl-blocks"
       ],
@@ -20382,6 +21296,12 @@ window.LESSONS_JSON = JSON.stringify({
           "de": "einzeilige Methode",
           "en": "a one-line method",
           "ja": "1行メソッド"
+        },
+        {
+          "c": "def fact(n)\n  return 1 if n <= 1\n  n * fact(n - 1)\nend",
+          "de": "Rekursion: die Methode ruft sich selbst auf, bis zum Basisfall",
+          "en": "recursion: the method calls itself, down to the base case",
+          "ja": "再帰：基本ケースまで、メソッドが自分自身を呼び出す"
         },
         {
           "c": "empty?   sort!",
@@ -20788,6 +21708,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "time",
       "lessons": [
+        "zeit",
         "tl-time"
       ],
       "title": {

@@ -253,6 +253,19 @@ header .progress-btn:hover,
 header .cheat-btn:hover { background: #fff; border-color: #fff; }
 /* the sheet is out: the button is pressed, like the index's current lesson */
 header .cheat-btn[aria-expanded="true"] { background: var(--highlight); }
+/* the masthead measures itself, not the window: a docked cheat sheet or a
+   tablet beside the open index leave it ~750 px, where the title wrapped to
+   two lines and the subtitle to four. Then the header buttons keep only
+   their icons (their names stay in title / aria-label) */
+header { container-type: inline-size; }
+@container (max-width: 880px) {
+  header h1 { font-size: 1.45rem; }
+  header .cheat-label, header .progress-label { display: none; }
+  header .cheat-btn, header .progress-btn { padding-left: 0.6rem; padding-right: 0.6rem; }
+}
+@container (max-width: 600px) {
+  header #siteSubtitle { display: none; }
+}
 .progress-icon {
   width: 1.15em;
   height: 1.15em;
@@ -814,6 +827,8 @@ kbd {
 .cell .CodeMirror-cursor { border-left: 2px solid var(--glow); }
 .cell .CodeMirror-selected, .cell .CodeMirror-focused .CodeMirror-selected { background: #3a404a; }
 .cell .CodeMirror pre.CodeMirror-line { padding: 0 0.7rem; }
+/* index.html hangWrappedLines adds a wrapped line's hanging indent to this */
+.cell .CodeMirror { --cm-line-pad: 0.7rem; }
 /* the editor's input is a hidden textarea: the ring goes on the editor,
    inset, as the cell clips what sticks out */
 .cell .CodeMirror-focused { outline: 3px solid var(--clip); outline-offset: -3px; }
@@ -1132,12 +1147,15 @@ kbd {
 
 .cell-toolbar {
   display: flex;
+  flex-wrap: wrap;           /* a phone's toolbar takes two rows, not squeezed labels */
   justify-content: flex-end;
   align-items: center;
+  row-gap: 0.4rem;
   padding: 0.45rem 0.55rem 0.45rem 0.9rem;
   border-top: 2px solid var(--ink);
   background: var(--sheet);
 }
+.cell-toolbar > * { white-space: nowrap; }
 /* the one strong button: Run, in deep Infra Red */
 .cell-toolbar .run-cell {
   font-size: 0.92rem;
@@ -1836,6 +1854,13 @@ kbd {
 }
 .cell-toolbar .hint-cell:hover { background: var(--fat); }
 .cell-toolbar .hint-cell[disabled] { opacity: 0.45; cursor: default; }
+/* after a run the time stamp joins the toolbar (shell/app.rb show_run_time,
+   inserted first): 💡 stays at the left edge, the stamp beside it, and the
+   stamp's auto margin keeps the buttons on the right - two auto margins
+   would park 💡 in the middle */
+.cell-toolbar .hint-cell { order: -1; }
+.cell-toolbar:has(.hint-cell) .run-time { margin-left: 0.7rem; }
+.cell-toolbar:has(.run-time) .hint-cell { margin-right: 0; }
 .cell-hints {
   border-top: 2px solid var(--ink);
   background: var(--fat);
@@ -2630,7 +2655,9 @@ footer a { color: var(--bakelite); }
   header p { font-size: 0.85rem; }
   header select { padding: 0.35rem 0.5rem; }
 
-  .column { margin-left: 0.5rem; }
+  /* no margin strip on a small screen: a sliver of paper and a line
+     beside the page read as a rendering glitch, and the room is short */
+  .column { margin-left: 0; border-left: 0; }
   main { padding: 1.4rem 1rem 2rem 1rem; }
   .sidebar-toggle { top: 0.85rem; left: 0.6rem; }
   body.sidebar-closed .sidebar-toggle { background: transparent; border-color: transparent; }
