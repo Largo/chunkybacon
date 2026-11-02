@@ -364,8 +364,17 @@
     editor = window.CodeMirror.fromTextArea(ta, {
       lineNumbers: true, mode: "text/x-ruby", matchBrackets: true, indentUnit: 2,
       viewportMargin: Infinity, extraKeys: { "Shift-Enter": run },
+      lineWrapping: true,
       screenReaderLabel: ui.embedCode || "Ruby code you can run"
     });
+    // as index.html's hangWrappedLines: a wrapped line's continuation hangs
+    // two characters further in than the line itself
+    editor.on("renderLine", function (cm, line, elt) {
+      var off = (window.CodeMirror.countColumn(line.text, null, cm.getOption("tabSize")) + 2) * cm.defaultCharWidth();
+      elt.style.textIndent = "-" + off + "px";
+      elt.style.paddingLeft = "calc(var(--cm-line-pad, 4px) + " + off + "px)";
+    });
+    editor.refresh();
     window.cellEditors[0] = editor;
     // as the course's editors (index.html: initCell): Tab indents, but
     // Escape, then Tab leaves the editor - no keyboard trap (WCAG 2.1.2);

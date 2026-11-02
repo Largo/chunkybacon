@@ -669,6 +669,19 @@
     // +idx+ is "2" for a cell's (main) editor, "2-1" for its first tab (a
     // Pico lesson's cell with several files); +readonly+ "true" makes it
     // read-only - the cursor stays, so it can be read and copied.
+    // Long lines wrap instead of running off the cell's right edge (on a
+    // phone a third of a line was hidden behind a scrollbar nobody saw). A
+    // wrapped line's continuation hangs two characters further in than the
+    // line's own indentation, so it does not read as a line of its own.
+    window.hangWrappedLines = function (cm) {
+      cm.on("renderLine", function (cm, line, elt) {
+        var indent = CodeMirror.countColumn(line.text, null, cm.getOption("tabSize"));
+        var off = (indent + 2) * cm.defaultCharWidth();
+        elt.style.textIndent = "-" + off + "px";
+        elt.style.paddingLeft = "calc(var(--cm-line-pad, 4px) + " + off + "px)";
+      });
+      cm.refresh();
+    };
     window.initCell = function (idx, label, hint, readonly) {
       var ta = document.getElementById("cell-code-" + idx);
       if (!ta) return;
@@ -679,6 +692,7 @@
         matchBrackets: true,
         indentUnit: 2,
         viewportMargin: Infinity,
+        lineWrapping: true,
         readOnly: readonly === "true" || readonly === true,
         screenReaderLabel: label || null,
         extraKeys: {
@@ -688,6 +702,7 @@
           }
         }
       });
+      window.hangWrappedLines(cm);
       if (readonly === "true" || readonly === true) cm.getWrapperElement().classList.add("is-readonly");
       // Tab indents, as in any code editor - but Escape, then Tab (or
       // Shift+Tab) leaves it; without that the keyboard is trapped (WCAG

@@ -20,14 +20,14 @@ window.LESSONS_JSON = JSON.stringify({
       "loading": "Ruby wird geladen … (einmalig ca. 10 MB)",
       "kernelFailed": "Ruby konnte nicht geladen werden – bitte lade die Seite neu.",
       "shellFailed": "Die Seite konnte nicht starten – bitte lade sie neu.",
-      "welcome": "Hallo! Ich bin einer der Füchse aus <em>why's (poignant) guide to Ruby</em> – die beiden, die immer „Chunky Bacon!“ rufen. 🦊🥓 Diese Seite ist ein <strong>Notizbuch</strong>: Führe jede Code-Zelle mit <em>▶ Ausführen</em> oder <kbd>Shift</kbd>+<kbd>Enter</kbd> aus – den Wert der letzten Zeile zeigt Ruby automatisch als <code>=&gt;</code>. Die Zelle unter dem gelben Kasten ist deine Aufgabe. Los geht's!",
+      "welcome": "Chunky Bacon! 🦊🥓 In <em>why's (poignant) guide to Ruby</em> sind wir zwei so lange in whys Beispiele geplatzt, bis er uns hineingeschrieben hat. Hier haben wir ein ganzes Notizbuch – mit Platz für dich. Führe jede Code-Zelle mit <em>▶ Ausführen</em> oder <kbd>Shift</kbd>+<kbd>Enter</kbd> aus; den Wert der letzten Zeile zeigt Ruby von selbst als <code>=&gt;</code>. Die Zelle unter dem gelben Kasten ist deine Aufgabe. Auf geht's – Chunky Bacon!",
       "resetConfirm": "Alle Zellen dieser Lektion zurücksetzen?",
       "praise": [
-        "CHUNKY BACON! 🥓 Genau so!",
-        "Sauber! Die Füchse jubeln: CHUNKY BACON!",
-        "Perfekt! Du bist auf dem Weg zur Ruby-Erleuchtung.",
-        "Ausgezeichnet! Matz wäre stolz auf dich.",
-        "Wunderbar! Weiter so!"
+        "Juhu! Chunky Bacon erreicht! 🥓",
+        "CHUNKY BACON! Genau so.",
+        "Chunky Bacon für alle – gut gemacht!",
+        "Ruby hat dich verstanden, und die Füchse auch. Ausgezeichnet!",
+        "Matz wollte, dass Programmieren Freude macht – das sah danach aus. Weiter so!"
       ],
       "failIntro": "Hmm, das ist noch nicht ganz richtig.",
       "errorIntro": "Autsch, Ruby meldet einen Fehler – schau unter die Zelle.",
@@ -381,14 +381,14 @@ window.LESSONS_JSON = JSON.stringify({
       "loading": "Loading Ruby … (one-time, about 10 MB)",
       "kernelFailed": "Ruby could not be loaded – please reload the page.",
       "shellFailed": "The page could not start – please reload it.",
-      "welcome": "Hi! I'm one of the foxes from <em>why's (poignant) guide to Ruby</em> – the two who keep shouting “chunky bacon!” 🦊🥓 This page is a <strong>notebook</strong>: run every code cell with <em>▶ Run</em> or <kbd>Shift</kbd>+<kbd>Enter</kbd> – Ruby automatically shows the value of the last line as <code>=&gt;</code>. The cell under the yellow box is your task. Let's go!",
+      "welcome": "Chunky bacon! 🦊🥓 In <em>why's (poignant) guide to Ruby</em> the two of us kept barging into why's examples until he finally wrote us in. Here we have a whole notebook – with room for you. Run any code cell with <em>▶ Run</em> or <kbd>Shift</kbd>+<kbd>Enter</kbd>; Ruby shows the value of the last line as <code>=&gt;</code> all by itself. The cell under the yellow box is your task. Come on – chunky bacon!",
       "resetConfirm": "Reset all cells of this lesson?",
       "praise": [
-        "CHUNKY BACON! 🥓 That's it!",
-        "Nice! The foxes cheer: CHUNKY BACON!",
-        "Perfect! You are on the path to Ruby enlightenment.",
-        "Excellent! Matz would be proud.",
-        "Wonderful! Keep going!"
+        "Woohoo! Chunky bacon accomplished! 🥓",
+        "CHUNKY BACON! That's exactly it.",
+        "Plenty of chunky bacon to go around – well done!",
+        "Ruby understood you, and so did the foxes. Excellent!",
+        "Matz wanted programming to be joyful – that looked like fun. Keep going!"
       ],
       "failIntro": "Hmm, that's not quite right yet.",
       "errorIntro": "Ouch, Ruby reports an error – check below the cell.",
@@ -742,14 +742,14 @@ window.LESSONS_JSON = JSON.stringify({
       "loading": "Rubyを読み込み中 …（初回のみ、約10 MB）",
       "kernelFailed": "Rubyを読み込めませんでした。ページを再読み込みしてください。",
       "shellFailed": "ページを開始できませんでした。再読み込みしてください。",
-      "welcome": "こんにちは！ぼくは『<em>why's (poignant) guide to Ruby</em>』のキツネ。「Chunky bacon!」って叫んでる、あの二匹の片方だよ。🦊🥓 このページは<strong>ノートブック</strong>になっていて、どのコードセルも<em>▶ 実行</em>か<kbd>Shift</kbd>+<kbd>Enter</kbd>で動かせるよ。最後の行の値は、Rubyが自動で<code>=&gt;</code>のあとに見せてくれる。黄色いボックスの下のセルがきみの課題だよ。さあ、始めよう！",
+      "welcome": "Chunky bacon! 🦊🥓 『<em>why's (poignant) guide to Ruby</em>』では、ぼくたち二匹がwhyの例題に何度も割りこんで、とうとう例題に書いてもらったんだ。ここにはノートブックがまるごと一冊あって、きみの席もあるよ。どのコードセルも<em>▶ 実行</em>か<kbd>Shift</kbd>+<kbd>Enter</kbd>で動かせる。最後の行の値は、Rubyが<code>=&gt;</code>のあとに自分で見せてくれるよ。黄色いボックスの下のセルがきみの課題。さあ、chunky bacon!",
       "resetConfirm": "このレッスンのセルをすべて元に戻しますか？",
       "praise": [
-        "CHUNKY BACON! 🥓 そのとおり！",
-        "いいね！キツネたちも大喜び：CHUNKY BACON!",
-        "完璧！Rubyの悟りへの道を着実に進んでるよ。",
-        "すばらしい！Matzもきっと喜ぶよ。",
-        "お見事！この調子でいこう！"
+        "やった！Chunky bacon、達成！🥓",
+        "CHUNKY BACON! まさにそれ！",
+        "chunky baconはみんなの分もたっぷりあるよ。よくできました！",
+        "Rubyにも、キツネたちにも、ちゃんと伝わったよ。すばらしい！",
+        "Matzはプログラミングを楽しくしたかったんだ。いまの、楽しそうだったね。この調子！"
       ],
       "failIntro": "うーん、まだちょっと違うみたい。",
       "errorIntro": "あいたっ、Rubyがエラーを出したよ。セルの下を見てみて。",
