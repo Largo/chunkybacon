@@ -411,6 +411,18 @@ SOLUTIONS = {
     "en" => ["def perfect?(n)\n  divisors = (1...n).select { |d| n % d == 0 }\n  divisors.sum == n\nend\n\n(1..500).select { |n| perfect?(n) }",
              "def perfect?(n)\n  (1..n / 2).select { |d| (n % d).zero? }.sum == n\nend\np (1..500).select { |n| perfect?(n) }"]
   },
+  "symbole" => {
+    "de" => ["karte = { speck: 4.5, ei: 1.2 }\nbestellung = [\"speck\", \"toast\", \"ei\"]\n\nsumme = bestellung.sum { |gericht| karte[gericht.to_sym] || 0 }\nfehlt = bestellung.select { |gericht| karte[gericht.to_sym].nil? }",
+             "karte = { speck: 4.5, ei: 1.2 }\nbestellung = [\"speck\", \"toast\", \"ei\"]\npreise = bestellung.map { |g| karte.fetch(g.to_sym, nil) }\nsumme = preise.compact.sum\nfehlt = bestellung.reject { |g| karte.key?(g.to_sym) }\np summe"],
+    "en" => ["menu = { bacon: 4.5, egg: 1.2 }\norder = [\"bacon\", \"toast\", \"egg\"]\n\ntotal = order.sum { |dish| menu[dish.to_sym] || 0 }\nmissing = order.select { |dish| menu[dish.to_sym].nil? }",
+             "menu = { bacon: 4.5, egg: 1.2 }\norder = [\"bacon\", \"toast\", \"egg\"]\nprices = order.map { |d| menu.fetch(d.to_sym, nil) }\ntotal = prices.compact.sum\nmissing = order.reject { |d| menu.key?(d.to_sym) }\np total"]
+  },
+  "struct" => {
+    "de" => ["Buch = Struct.new(:titel, :autor, :seiten) do\n  def kurz?\n    seiten < 200\n  end\nend\n\nBuch.new(\"Why's (Poignant) Guide\", \"why\", 176).kurz?",
+             "Buch = Struct.new(:titel, :autor, :seiten) do\n  def kurz? = seiten < 200\nend\np Buch.new(\"Why's (Poignant) Guide\", \"why\", 176).kurz?"],
+    "en" => ["Book = Struct.new(:title, :author, :pages) do\n  def short?\n    pages < 200\n  end\nend\n\nBook.new(\"Why's (Poignant) Guide\", \"why\", 176).short?",
+             "Book = Struct.new(:title, :author, :pages) do\n  def short? = pages < 200\nend\np Book.new(\"Why's (Poignant) Guide\", \"why\", 176).short?"]
+  },
   "regex" => {
     "de" => [%(notizen = ["Frühstück um 07:45: Speck", "Znüni um 10:15: Apfel", "Mittag um 12:30: speck und Ei", "Abend: kein Hunger"]\nzeiten = notizen.join(" ").scan(/\\d\\d:\\d\\d/)\nspeck_tage = notizen.count { |notiz| notiz.match?(/speck/i) }),
              %(notizen = ["Frühstück um 07:45: Speck", "Znüni um 10:15: Apfel", "Mittag um 12:30: speck und Ei", "Abend: kein Hunger"]\nzeiten = notizen.flat_map { |notiz| notiz.scan(/\\d{2}:\\d{2}/) }\nspeck_tage = notizen.select { |notiz| notiz =~ /[Ss]peck/ }.length\np speck_tage)],
@@ -680,6 +692,18 @@ p most_common)]
              "def goldbach(n)\n  2.upto(n) do |a|\n    return [a, n - a] if primzahl?(a) && primzahl?(n - a)\n  end\nend\np goldbach(100)"],
     "en" => ["def goldbach(n)\n  a = (2..n / 2).find { |x| prime?(x) && prime?(n - x) }\n  [a, n - a]\nend\n\ngoldbach(28)",
              "def goldbach(n)\n  2.upto(n) do |a|\n    return [a, n - a] if prime?(a) && prime?(n - a)\n  end\nend\np goldbach(100)"]
+  },
+  "symbole#bonus" => {
+    "de" => ["woerter = %w[Speck Ei Senf Essig Apfel]\ngruppen = {}\n\nwoerter.each do |wort|\n  gruppen[wort[0]] ||= []\n  gruppen[wort[0]] << wort\nend",
+             "woerter = %w[Speck Ei Senf Essig Apfel]\ngruppen = {}\nwoerter.each { |w| (gruppen[w[0]] ||= []) << w }\np gruppen"],
+    "en" => ["words = %w[bacon egg banana eel apple]\ngroups = {}\n\nwords.each do |word|\n  groups[word[0]] ||= []\n  groups[word[0]] << word\nend",
+             "words = %w[bacon egg banana eel apple]\ngroups = {}\nwords.each { |w| (groups[w[0]] ||= []) << w }\np groups"]
+  },
+  "struct#bonus" => {
+    "de" => ["Temperatur = Data.define(:grad) do\n  def fahrenheit\n    grad * 9 / 5.0 + 32\n  end\n\n  def waermer(um)\n    with(grad: grad + um)\n  end\nend\n\nTemperatur.new(grad: 20).waermer(5)",
+             "Temperatur = Data.define(:grad) do\n  def fahrenheit = grad * 1.8 + 32\n  def waermer(um) = with(grad: grad + um)\nend\np Temperatur.new(grad: 20).fahrenheit"],
+    "en" => ["Temperature = Data.define(:degrees) do\n  def fahrenheit\n    degrees * 9 / 5.0 + 32\n  end\n\n  def warmer(by)\n    with(degrees: degrees + by)\n  end\nend\n\nTemperature.new(degrees: 20).warmer(5)",
+             "Temperature = Data.define(:degrees) do\n  def fahrenheit = degrees * 1.8 + 32\n  def warmer(by) = with(degrees: degrees + by)\nend\np Temperature.new(degrees: 20).fahrenheit"]
   },
   "iteratoren#bonus" => {
     "de" => [%(woerter = ["Speck", "Ei", "Kaffee", "Brot", "Honigbrot"]

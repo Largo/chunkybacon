@@ -3755,6 +3755,280 @@ window.LESSONS_JSON = JSON.stringify({
       }
     },
     {
+      "id": "symbole",
+      "stepper": true,
+      "de": {
+        "title": "nil, true und Symbole",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>nil, true und Symbole</h2><p>Drei kleine Werte begegnen dir in Ruby überall. Der erste ist <code>nil</code> – „nichts“. Du bekommst es, wann immer es keine Antwort gibt: ein Schlüssel, den der Hash nicht hat, eine Stelle hinter dem Ende eines Arrays, ein <code>find</code>, das nichts findet:</p>"
+          },
+          {
+            "t": "c",
+            "code": "tier = { name: \"Chunky\" }\np tier[:alter]\np [1, 2, 3][10]\np [1, 2, 3].find { |n| n > 5 }\nnil.class"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>nil</code> ist ein echtes Objekt mit eigenen Methoden. <code>nil?</code> fragt, ob etwas nil ist, und <code>to_s</code>, <code>to_a</code> und <code>to_i</code> machen daraus einen leeren String, ein leeres Array und 0:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p nil.nil?\np 42.nil?\np nil.to_s\np nil.to_a\nnil.to_i"
+          },
+          {
+            "t": "h",
+            "html": "<p>In einem <code>if</code> gelten nur zwei Werte als falsch: <code>false</code> und <code>nil</code>. <em>Alles</em> andere gilt als wahr – sogar <code>0</code>, der leere String und das leere Array, anders als in vielen anderen Sprachen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "[false, nil, 0, \"\", [], \"Speck\"].each do |wert|\n  if wert\n    puts \"#{wert.inspect} gilt als wahr\"\n  else\n    puts \"#{wert.inspect} gilt als falsch\"\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Zwei Abkürzungen kümmern sich um nil. <code>a || b</code> liefert einen Ersatz: Es ist <code>a</code>, ausser <code>a</code> ist nil oder false – dann ist es <code>b</code>. Und <code>||=</code> weist nur zu, wenn die Variable noch leer ist, praktisch für „einmal setzen“:</p>"
+          },
+          {
+            "t": "c",
+            "code": "spitzname = nil\nputs spitzname || \"kein Spitzname\"\nspitzname ||= \"Chunky\"\nspitzname ||= \"Kaz\"   # schon gesetzt: bleibt \"Chunky\"\nspitzname"
+          },
+          {
+            "t": "h",
+            "html": "<p>Eine Methode auf nil aufzurufen ist der häufigste Fehler überhaupt: <code>undefined method 'upcase' for nil</code>. Der <strong>Safe-Navigation-Operator</strong> <code>&amp;.</code> ruft die Methode nur auf, wenn etwas da ist; sonst ist der ganze Ausdruck einfach nil – und <code>||</code> kann ihn auffangen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "essen = { \"Chunky\" => \"Speck\", \"Kaz\" => \"Eier\" }\np essen[\"Chunky\"]&.upcase\np essen[\"Isi\"]&.upcase\nessen[\"Isi\"]&.upcase || \"NICHTS\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Und Symbole? <code>:speck</code> sieht aus wie ein String ohne Anführungszeichen, und in gewisser Weise ist es einer: ein Name. Aber ein Symbol gibt es nur einmal – jedes <code>:speck</code> in deinem Programm ist genau dasselbe Objekt, und es lässt sich nie ändern. <code>to_s</code> und <code>to_sym</code> wandeln zwischen beiden um:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p :speck.equal?(:speck)   # jedes Mal dasselbe Objekt\np :speck.frozen?          # und es ändert sich nie\np :speck.to_s\n\"speck\".to_sym"
+          },
+          {
+            "t": "h",
+            "html": "<p>Darum sind Symbole die liebsten Schlüssel von Hashes: Sie sind Namen, kein Text. Daten von aussen – aus einer Datei, aus dem Netz – kommen aber mit Strings als Schlüssel. <code>transform_keys(&amp;:to_sym)</code> macht Symbole daraus:</p>"
+          },
+          {
+            "t": "c",
+            "code": "aus_dem_netz = { \"name\" => \"Kaz\", \"essen\" => \"Eier\" }\nkaz = aus_dem_netz.transform_keys(&:to_sym)\nkaz[:essen]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Eine Faustregel: Text, den du Menschen zeigst, ist ein String; ein Name, den dein Programm innen benutzt, ist ein Symbol. Und wo immer etwas nil sein könnte, entscheide bewusst, was passieren soll – mit <code>||</code>, mit <code>&amp;.</code> oder mit einem <code>if</code>.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/NilClass.html' target='_blank'>NilClass</a> · <a href='https://docs.ruby-lang.org/en/4.0/Symbol.html' target='_blank'>Symbol</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/calling_methods_rdoc.html#label-Safe+Navigation+Operator' target='_blank'>Safe navigation (&amp;.)</a> · <a href='https://docs.ruby-lang.org/en/4.0/Hash.html#method-i-transform_keys' target='_blank'>Hash#transform_keys</a></div><div class='task'><strong>Aufgabe:</strong> Die Karte hat Symbole als Schlüssel, aber die Bestellung kam als Strings. Zähle in <code>summe</code> die Preise der Bestellung zusammen – ein Gericht, das die Karte nicht kennt, zählt 0 – und sammle in <code>fehlt</code> die Gerichte, die keinen Preis haben.</div>"
+          },
+          {
+            "t": "x",
+            "code": "karte = { speck: 4.5, ei: 1.2 }\nbestellung = [\"speck\", \"toast\", \"ei\"]\n\n# summe = ...   # die Preise der Bestellung; ein Gericht ohne Preis zählt 0\n# fehlt = ...   # die Gerichte der Bestellung, die keinen Preis haben\n",
+            "hints": [
+              "Mach aus jedem Gericht mit <code>to_sym</code> ein Symbol, bevor du es in <code>karte</code> nachschlägst. Ein Gericht, das fehlt, ergibt nil – <code>|| 0</code> macht daraus 0. Für die fehlenden: <code>select</code> die Gerichte, deren Preis <code>nil?</code> ist."
+            ],
+            "check": "summe.round(2) == 5.7 && fehlt == [\"toast\"] && code.include?(\"to_sym\")",
+            "hint": "<code>summe = bestellung.sum { |gericht| karte[gericht.to_sym] || 0 }</code> und <code>fehlt = bestellung.select { |gericht| karte[gericht.to_sym].nil? }</code>.",
+            "solution": "karte = { speck: 4.5, ei: 1.2 }\nbestellung = [\"speck\", \"toast\", \"ei\"]\n\nsumme = bestellung.sum { |gericht| karte[gericht.to_sym] || 0 }\nfehlt = bestellung.select { |gericht| karte[gericht.to_sym].nil? }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Sortiere die Wörter nach ihrem ersten Buchstaben in <code>gruppen</code>: <code>{ \"S\" =&gt; [\"Speck\", \"Senf\"], … }</code>. Der Trick ist <code>||=</code>: Sorg für jedes Wort dafür, dass sein Buchstabe ein leeres Array hat (falls er noch keins hat), und häng dann das Wort an.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "woerter = %w[Speck Ei Senf Essig Apfel]\ngruppen = {}\n\n# für jedes Wort: gruppen[sein erster Buchstabe] ||= [] und dann das Wort dazu\n",
+            "hints": [
+              "<code>wort[0]</code> ist der erste Buchstabe. <code>gruppen[wort[0]] ||= []</code> legt nur beim ersten Mal ein leeres Array hin; danach hängt <code>&lt;&lt;</code> das Wort an."
+            ],
+            "check": "gruppen == { \"S\" => [\"Speck\", \"Senf\"], \"E\" => [\"Ei\", \"Essig\"], \"A\" => [\"Apfel\"] } && code.include?(\"||=\")",
+            "hint": "<code>woerter.each do |wort|</code>, darin <code>gruppen[wort[0]] ||= []</code> und <code>gruppen[wort[0]] &lt;&lt; wort</code>, dann <code>end</code>.",
+            "solution": "woerter = %w[Speck Ei Senf Essig Apfel]\ngruppen = {}\n\nwoerter.each do |wort|\n  gruppen[wort[0]] ||= []\n  gruppen[wort[0]] << wort\nend"
+          }
+        ]
+      },
+      "en": {
+        "title": "nil, true and symbols",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>nil, true and symbols</h2><p>Three small values turn up everywhere in Ruby. The first is <code>nil</code> – “nothing”. You get it whenever there is no answer: a hash key that doesn't exist, a position past the end of an array, a <code>find</code> that finds nothing:</p>"
+          },
+          {
+            "t": "c",
+            "code": "animal = { name: \"Chunky\" }\np animal[:age]\np [1, 2, 3][10]\np [1, 2, 3].find { |n| n > 5 }\nnil.class"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>nil</code> is a real object with methods of its own. <code>nil?</code> asks whether something is nil, and <code>to_s</code>, <code>to_a</code> and <code>to_i</code> turn it into an empty string, an empty array and 0:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p nil.nil?\np 42.nil?\np nil.to_s\np nil.to_a\nnil.to_i"
+          },
+          {
+            "t": "h",
+            "html": "<p>In an <code>if</code> only two values count as false: <code>false</code> and <code>nil</code>. <em>Everything</em> else counts as true – even <code>0</code>, the empty string and the empty array, unlike in many other languages:</p>"
+          },
+          {
+            "t": "c",
+            "code": "[false, nil, 0, \"\", [], \"bacon\"].each do |value|\n  if value\n    puts \"#{value.inspect} counts as true\"\n  else\n    puts \"#{value.inspect} counts as false\"\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Two shortcuts deal with nil. <code>a || b</code> gives a fallback: it is <code>a</code>, unless <code>a</code> is nil or false – then it is <code>b</code>. And <code>||=</code> assigns only when the variable is still empty, which is handy for “set it once”:</p>"
+          },
+          {
+            "t": "c",
+            "code": "nickname = nil\nputs nickname || \"no nickname\"\nnickname ||= \"Chunky\"\nnickname ||= \"Kaz\"   # already set: stays \"Chunky\"\nnickname"
+          },
+          {
+            "t": "h",
+            "html": "<p>Calling a method on nil is the most common error there is: <code>undefined method 'upcase' for nil</code>. The <strong>safe navigation operator</strong> <code>&amp;.</code> only calls the method when there is something there; otherwise the whole expression is simply nil – and <code>||</code> can catch it:</p>"
+          },
+          {
+            "t": "c",
+            "code": "foods = { \"Chunky\" => \"bacon\", \"Kaz\" => \"eggs\" }\np foods[\"Chunky\"]&.upcase\np foods[\"Isi\"]&.upcase\nfoods[\"Isi\"]&.upcase || \"NOTHING\""
+          },
+          {
+            "t": "h",
+            "html": "<p>And symbols? <code>:bacon</code> looks like a string without quotes, and in a way it is one: a name. But a symbol exists only once – every <code>:bacon</code> in your program is the very same object, and it can never be changed. <code>to_s</code> and <code>to_sym</code> convert between the two:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p :bacon.equal?(:bacon)   # the very same object, every time\np :bacon.frozen?          # and it never changes\np :bacon.to_s\n\"bacon\".to_sym"
+          },
+          {
+            "t": "h",
+            "html": "<p>That makes symbols the favourite keys of hashes: they are names, not text. But data from outside – a file, the web – comes with strings as keys. <code>transform_keys(&amp;:to_sym)</code> turns them into symbols:</p>"
+          },
+          {
+            "t": "c",
+            "code": "from_the_web = { \"name\" => \"Kaz\", \"food\" => \"eggs\" }\nkaz = from_the_web.transform_keys(&:to_sym)\nkaz[:food]"
+          },
+          {
+            "t": "h",
+            "html": "<p>A rule of thumb: text you show to people is a string, a name your program uses inside is a symbol. And wherever something might be nil, decide on purpose what should happen – with <code>||</code>, with <code>&amp;.</code> or with an <code>if</code>.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/NilClass.html' target='_blank'>NilClass</a> · <a href='https://docs.ruby-lang.org/en/4.0/Symbol.html' target='_blank'>Symbol</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/calling_methods_rdoc.html#label-Safe+Navigation+Operator' target='_blank'>Safe navigation (&amp;.)</a> · <a href='https://docs.ruby-lang.org/en/4.0/Hash.html#method-i-transform_keys' target='_blank'>Hash#transform_keys</a></div><div class='task'><strong>Task:</strong> The menu has symbols as keys, but the order came in as strings. Add up the prices of the order in <code>total</code> – a dish the menu doesn't know counts 0 – and collect in <code>missing</code> the dishes that have no price.</div>"
+          },
+          {
+            "t": "x",
+            "code": "menu = { bacon: 4.5, egg: 1.2 }\norder = [\"bacon\", \"toast\", \"egg\"]\n\n# total = ...     # the prices of the order; a dish without a price counts 0\n# missing = ...   # the dishes of the order that have no price\n",
+            "hints": [
+              "Turn each dish into a symbol with <code>to_sym</code> before you look it up in <code>menu</code>. A dish that isn't there gives nil – <code>|| 0</code> turns that into 0. For the missing ones: <code>select</code> the dishes whose price is <code>nil?</code>."
+            ],
+            "check": "total.round(2) == 5.7 && missing == [\"toast\"] && code.include?(\"to_sym\")",
+            "hint": "<code>total = order.sum { |dish| menu[dish.to_sym] || 0 }</code> and <code>missing = order.select { |dish| menu[dish.to_sym].nil? }</code>.",
+            "solution": "menu = { bacon: 4.5, egg: 1.2 }\norder = [\"bacon\", \"toast\", \"egg\"]\n\ntotal = order.sum { |dish| menu[dish.to_sym] || 0 }\nmissing = order.select { |dish| menu[dish.to_sym].nil? }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Sort the words into <code>groups</code> by their first letter: <code>{ \"b\" =&gt; [\"bacon\", \"banana\"], … }</code>. The trick is <code>||=</code>: for each word, make sure its letter has an empty array (if it doesn't have one yet), then add the word to it.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "words = %w[bacon egg banana eel apple]\ngroups = {}\n\n# for every word: groups[its first letter] ||= [] and then add the word\n",
+            "hints": [
+              "<code>word[0]</code> is the first letter. <code>groups[word[0]] ||= []</code> puts an empty array there only the first time; after that, <code>&lt;&lt;</code> adds the word."
+            ],
+            "check": "groups == { \"b\" => [\"bacon\", \"banana\"], \"e\" => [\"egg\", \"eel\"], \"a\" => [\"apple\"] } && code.include?(\"||=\")",
+            "hint": "<code>words.each do |word|</code>, inside <code>groups[word[0]] ||= []</code> and <code>groups[word[0]] &lt;&lt; word</code>, then <code>end</code>.",
+            "solution": "words = %w[bacon egg banana eel apple]\ngroups = {}\n\nwords.each do |word|\n  groups[word[0]] ||= []\n  groups[word[0]] << word\nend"
+          }
+        ]
+      },
+      "ja": {
+        "title": "nil、trueとシンボル",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>nil、trueとシンボル</h2><p>Rubyでは、3つの小さな値がいたるところに出てきます。1つめは<code>nil</code>、つまり「なにもない」です。答えがないときには、いつでもこれが返ってきます。ハッシュにないキー、配列の終わりより先の位置、何も見つからなかった<code>find</code>などです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "animal = { name: \"Chunky\" }\np animal[:age]\np [1, 2, 3][10]\np [1, 2, 3].find { |n| n > 5 }\nnil.class"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>nil</code>は、自分のメソッドを持った本物のオブジェクトです。<code>nil?</code>はnilかどうかを聞き、<code>to_s</code>、<code>to_a</code>、<code>to_i</code>はそれを空の文字列、空の配列、0に変えます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "p nil.nil?\np 42.nil?\np nil.to_s\np nil.to_a\nnil.to_i"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>if</code>の中で偽になる値は、<code>false</code>と<code>nil</code>の2つだけです。それ以外は<em>すべて</em>真になります。多くのほかの言語とちがって、<code>0</code>も空の文字列も空の配列も真です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "[false, nil, 0, \"\", [], \"bacon\"].each do |value|\n  if value\n    puts \"#{value.inspect} counts as true\"\n  else\n    puts \"#{value.inspect} counts as false\"\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>nilを扱う近道が2つあります。<code>a || b</code>は代わりの値をくれます。<code>a</code>がnilかfalseでなければ<code>a</code>、そうなら<code>b</code>です。そして<code>||=</code>は、変数がまだ空のときだけ代入します。「一度だけ入れる」のに便利です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "nickname = nil\nputs nickname || \"no nickname\"\nnickname ||= \"Chunky\"\nnickname ||= \"Kaz\"   # もう入っているので \"Chunky\" のまま\nnickname"
+          },
+          {
+            "t": "h",
+            "html": "<p>nilに対してメソッドを呼ぶのは、いちばんよくあるエラーです。<code>undefined method 'upcase' for nil</code>。<strong>ぼっち演算子</strong>（safe navigation operator）<code>&amp;.</code>は、何かあるときだけメソッドを呼びます。なければ式全体がただのnilになり、それを<code>||</code>で受け止められます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "foods = { \"Chunky\" => \"bacon\", \"Kaz\" => \"eggs\" }\np foods[\"Chunky\"]&.upcase\np foods[\"Isi\"]&.upcase\nfoods[\"Isi\"]&.upcase || \"NOTHING\""
+          },
+          {
+            "t": "h",
+            "html": "<p>ではシンボルは？<code>:bacon</code>は引用符のない文字列のように見えますし、ある意味ではそのとおり、名前です。でもシンボルは1つしか存在しません。プログラムのどの<code>:bacon</code>もまったく同じオブジェクトで、決して変えられません。<code>to_s</code>と<code>to_sym</code>で、たがいに変換できます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "p :bacon.equal?(:bacon)   # いつでもまったく同じオブジェクト\np :bacon.frozen?          # しかも決して変わらない\np :bacon.to_s\n\"bacon\".to_sym"
+          },
+          {
+            "t": "h",
+            "html": "<p>だからシンボルは、ハッシュのキーとして人気があります。文字ではなく名前だからです。でも外から来るデータ（ファイルやウェブ）は、キーが文字列です。<code>transform_keys(&amp;:to_sym)</code>でシンボルにできます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "from_the_web = { \"name\" => \"Kaz\", \"food\" => \"eggs\" }\nkaz = from_the_web.transform_keys(&:to_sym)\nkaz[:food]"
+          },
+          {
+            "t": "h",
+            "html": "<p>目安はこうです。人に見せる文字は文字列、プログラムの中で使う名前はシンボル。そして、nilになるかもしれないところでは、何が起きるべきかをわざと決めましょう。<code>||</code>でも、<code>&amp;.</code>でも、<code>if</code>でもかまいません。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/NilClass.html' target='_blank'>NilClass</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Symbol.html' target='_blank'>Symbol</a>・<a href='https://docs.ruby-lang.org/ja/latest/doc/spec=2fcall.html' target='_blank'>&amp;.（メソッド呼び出し）</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Hash/i/transform_keys.html' target='_blank'>Hash#transform_keys</a></div><div class='task'><strong>課題：</strong>メニューのキーはシンボルですが、注文は文字列で届きました。注文の値段の合計を<code>total</code>に入れましょう。メニューにない料理は0として数えます。それから、値段のない料理を<code>missing</code>に集めてください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "menu = { bacon: 4.5, egg: 1.2 }\norder = [\"bacon\", \"toast\", \"egg\"]\n\n# total = ...     # 注文の値段の合計。値段のない料理は0\n# missing = ...   # 注文のうち、値段のない料理\n",
+            "hints": [
+              "<code>menu</code>で調べる前に、料理を<code>to_sym</code>でシンボルにしよう。ない料理はnilになるから、<code>|| 0</code>で0にするんだ。足りないほうは、値段が<code>nil?</code>の料理を<code>select</code>してね。"
+            ],
+            "check": "total.round(2) == 5.7 && missing == [\"toast\"] && code.include?(\"to_sym\")",
+            "hint": "<code>total = order.sum { |dish| menu[dish.to_sym] || 0 }</code>、<code>missing = order.select { |dish| menu[dish.to_sym].nil? }</code>だよ。",
+            "solution": "menu = { bacon: 4.5, egg: 1.2 }\norder = [\"bacon\", \"toast\", \"egg\"]\n\ntotal = order.sum { |dish| menu[dish.to_sym] || 0 }\nmissing = order.select { |dish| menu[dish.to_sym].nil? }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>単語を最初の文字ごとに<code>groups</code>に分けましょう：<code>{ \"b\" =&gt; [\"bacon\", \"banana\"], … }</code>。コツは<code>||=</code>です。単語ごとに、その文字に空の配列があるようにして（まだなければ）、それから単語を追加します。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "words = %w[bacon egg banana eel apple]\ngroups = {}\n\n# 単語ごとに：groups[最初の文字] ||= [] してから単語を追加\n",
+            "hints": [
+              "<code>word[0]</code>が最初の文字だよ。<code>groups[word[0]] ||= []</code>は最初の1回だけ空の配列を置いて、そのあとは<code>&lt;&lt;</code>で単語を追加するんだ。"
+            ],
+            "check": "groups == { \"b\" => [\"bacon\", \"banana\"], \"e\" => [\"egg\", \"eel\"], \"a\" => [\"apple\"] } && code.include?(\"||=\")",
+            "hint": "<code>words.each do |word|</code>、中に<code>groups[word[0]] ||= []</code>と<code>groups[word[0]] &lt;&lt; word</code>、それから<code>end</code>だよ。",
+            "solution": "words = %w[bacon egg banana eel apple]\ngroups = {}\n\nwords.each do |word|\n  groups[word[0]] ||= []\n  groups[word[0]] << word\nend"
+          }
+        ]
+      }
+    },
+    {
       "id": "sortieren",
       "stepper": true,
       "de": {
@@ -6225,6 +6499,232 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "Turtle.from(images).last.then { |t| !t.nil? && t.regular_polygon?(7, 150) && t.winding.abs.round == 3 }",
             "hint": "<code>turtle do</code> … <code>end</code>の中で、<code>7.times do</code>、<code>forward 150</code>と<code>right 3 * 360 / 7.0</code>、そして<code>end</code>だよ。",
             "solution": "turtle do\n  color \"#d4a017\"\n  7.times do\n    forward 150\n    right 3 * 360 / 7.0\n  end\nend"
+          }
+        ]
+      }
+    },
+    {
+      "id": "struct",
+      "stepper": true,
+      "de": {
+        "title": "Struct und Data – schnelle kleine Klassen",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Struct und Data – schnelle kleine Klassen</h2><p>Oft willst du ein paar Werte zusammenhalten: einen Punkt mit x und y, ein Buch mit Titel und Autor, einen Imbiss mit Name und Preis. Ein Hash kann das, aber ein Tippfehler im Schlüssel gibt dir ein stilles <code>nil</code>. <code>Struct</code> baut genau dafür eine kleine Klasse, in einer Zeile – ihr Name beginnt mit einem Grossbuchstaben, wie jede Klasse:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Imbiss = Struct.new(:name, :preis)\nspeck = Imbiss.new(\"Speck\", 4.5)\np speck.name\np speck.preis\nspeck"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das Objekt kennt seine Felder: <code>speck.preis</code> statt <code>speck[:preis]</code>, und ein vertipptes <code>speck.prais</code> ist sofort ein Fehler statt eines heimlichen nil. Ein Struct wird schön ausgegeben, zwei mit denselben Werten sind gleich, und seine Felder lassen sich ändern:</p>"
+          },
+          {
+            "t": "c",
+            "code": "toast = Imbiss.new(\"Toast\", 2.0)\np toast == Imbiss.new(\"Toast\", 2.0)\ntoast.preis = 2.5\np toast.to_a\ntoast.to_h"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ein Block nach <code>Struct.new</code> fügt Methoden hinzu, genau wie in einer Klasse. Darin sind die Felder einfach mit ihrem Namen da. Wie weit ist es von zuhause zur Metzgerei?</p>"
+          },
+          {
+            "t": "c",
+            "code": "Ort = Struct.new(:x, :y) do\n  def abstand_zu(anderer)\n    Math.sqrt((x - anderer.x)**2 + (y - anderer.y)**2)\n  end\nend\n\nzuhause = Ort.new(0, 0)\nmetzgerei = Ort.new(3, 4)\nzuhause.abstand_zu(metzgerei)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Manchmal ist Veränderbarkeit genau das, was du nicht willst: eine Münze, ein Datum, ein Preis auf einer Quittung sollen bleiben, wie sie sind. <code>Data</code> ist dieselbe Idee ohne Setter – einmal gemacht, nie geändert. Du baust es mit Schlüsselwörtern, und <code>with</code> macht eine geänderte Kopie, während das Original unberührt bleibt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Muenze = Data.define(:wert, :waehrung)\nfranken = Muenze.new(wert: 1, waehrung: \"CHF\")\np franken\nfuenfliber = franken.with(wert: 5)\np fuenfliber\nfranken.wert"
+          },
+          {
+            "t": "h",
+            "html": "<p>Probier <code>franken.wert = 2</code>: Diese Methode gibt es nicht. Structs und Data-Objekte funktionieren mit allem, was du schon kennst – in Arrays, mit <code>sum</code>, mit <code>sort_by</code>. <code>&amp;:preis</code> ist die Kurzform von <code>{ |i| i.preis }</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "karte = [Imbiss.new(\"Speck\", 4.5), Imbiss.new(\"Ei\", 1.5), Imbiss.new(\"Toast\", 2.0)]\np karte.sum(&:preis)\nkarte.sort_by(&:preis).map(&:name)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Braucht ein Objekt ein paar Felder und vielleicht eine oder zwei Methoden, ist Struct oder Data schneller als eine ganze Klasse. Bekommt es eigenes Verhalten, gib ihm eine <code>class</code> – wie das geht, zeigt die nächste Lektion.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Struct.html' target='_blank'>Struct</a> · <a href='https://docs.ruby-lang.org/en/4.0/Data.html' target='_blank'>Data</a></div><div class='task'><strong>Aufgabe:</strong> Bau ein Struct <code>Buch</code> mit den Feldern <code>titel</code>, <code>autor</code> und <code>seiten</code>, und gib ihm eine Methode <code>kurz?</code>, die für Bücher mit weniger als 200 Seiten wahr ist.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Buch = Struct.new(...) do\n#   def kurz?\n#     ...   # true bei weniger als 200 Seiten\n#   end\n# end\n\n# Buch.new(\"Why's (Poignant) Guide\", \"why\", 176).kurz?\n",
+            "hints": [
+              "Wie <code>Ort</code> oben: <code>Struct.new</code> mit den drei Feldnamen als Symbole, dann ein <code>do</code>-Block mit <code>def kurz?</code> darin. In der Methode ist <code>seiten</code> einfach da."
+            ],
+            "check": "Buch < Struct && Buch.members == [:titel, :autor, :seiten] && Buch.new(\"A\", \"B\", 150).kurz? && !Buch.new(\"A\", \"B\", 300).kurz? && Buch.new(\"A\", \"B\", 150).titel == \"A\"",
+            "hint": "<code>Buch = Struct.new(:titel, :autor, :seiten) do</code>, darin <code>def kurz?</code> → <code>seiten &lt; 200</code> → <code>end</code>, und ein <code>end</code> für den Block.",
+            "solution": "Buch = Struct.new(:titel, :autor, :seiten) do\n  def kurz?\n    seiten < 200\n  end\nend\n\nBuch.new(\"Why's (Poignant) Guide\", \"why\", 176).kurz?"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Bau <code>Temperatur</code> mit <code>Data.define</code> und einem Feld, <code>grad</code> (Celsius). Es bekommt zwei Methoden: <code>fahrenheit</code> (grad · 9 / 5 + 32, also sind 20 °C 68.0) und <code>waermer(um)</code>, das eine <em>neue</em> Temperatur zurückgibt, die <code>um</code> Grad wärmer ist – die alte bleibt, wie sie ist.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# Temperatur = Data.define(:grad) do\n#   def fahrenheit\n#     ...   # grad mal 9, geteilt durch 5.0, plus 32\n#   end\n#\n#   def waermer(um)\n#     ...   # eine Kopie, um Grad wärmer - mit with\n#   end\n# end\n\n# Temperatur.new(grad: 20).waermer(5)\n",
+            "hints": [
+              "<code>Data.define(:grad) do … end</code> funktioniert wie <code>Struct.new</code>. Für <code>waermer</code> macht <code>with(grad: …)</code> die Kopie – <code>grad</code> selbst änderst du nie."
+            ],
+            "check": "Temperatur < Data && Temperatur.new(grad: 20).then { |t| t.fahrenheit == 68.0 && t.waermer(5).grad == 25 && t.waermer(5).is_a?(Temperatur) && t.grad == 20 && !t.respond_to?(:grad=) }",
+            "hint": "<code>def fahrenheit</code> → <code>grad * 9 / 5.0 + 32</code>, und <code>def waermer(um)</code> → <code>with(grad: grad + um)</code>.",
+            "solution": "Temperatur = Data.define(:grad) do\n  def fahrenheit\n    grad * 9 / 5.0 + 32\n  end\n\n  def waermer(um)\n    with(grad: grad + um)\n  end\nend\n\nTemperatur.new(grad: 20).waermer(5)"
+          }
+        ]
+      },
+      "en": {
+        "title": "Struct and Data – quick little classes",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Struct and Data – quick little classes</h2><p>Often you want to keep a few values together: a point with x and y, a book with title and author, a snack with name and price. A hash can do it, but a typo in a key gives you a silent <code>nil</code>. <code>Struct</code> builds a small class for exactly that, in one line – its name starts with a capital letter, like every class:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Snack = Struct.new(:name, :price)\nbacon = Snack.new(\"bacon\", 4.5)\np bacon.name\np bacon.price\nbacon"
+          },
+          {
+            "t": "h",
+            "html": "<p>The object knows its fields: <code>bacon.price</code> instead of <code>bacon[:price]</code>, and a misspelt <code>bacon.prize</code> is an error at once rather than a sneaky nil. A Struct prints nicely, two with the same values are equal, and its fields can be changed:</p>"
+          },
+          {
+            "t": "c",
+            "code": "toast = Snack.new(\"toast\", 2.0)\np toast == Snack.new(\"toast\", 2.0)\ntoast.price = 2.5\np toast.to_a\ntoast.to_h"
+          },
+          {
+            "t": "h",
+            "html": "<p>A block after <code>Struct.new</code> adds methods, just as in a class. Inside them, the fields are simply there by name. How far is it from home to the bacon shop?</p>"
+          },
+          {
+            "t": "c",
+            "code": "Spot = Struct.new(:x, :y) do\n  def distance_to(other)\n    Math.sqrt((x - other.x)**2 + (y - other.y)**2)\n  end\nend\n\nhome = Spot.new(0, 0)\nbacon_shop = Spot.new(3, 4)\nhome.distance_to(bacon_shop)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Sometimes being changeable is exactly what you don't want: a coin, a date or a price on a receipt should stay as it is. <code>Data</code> is the same idea without setters – once made, never changed. You build it with keywords, and <code>with</code> makes a changed copy while the original stays untouched:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Coin = Data.define(:value, :currency)\nfranc = Coin.new(value: 1, currency: \"CHF\")\np franc\nfive = franc.with(value: 5)\np five\nfranc.value"
+          },
+          {
+            "t": "h",
+            "html": "<p>Try <code>franc.value = 2</code>: there is no such method. Structs and Data objects work with everything you already know – in arrays, with <code>sum</code>, with <code>sort_by</code>. <code>&amp;:price</code> is short for <code>{ |s| s.price }</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "menu = [Snack.new(\"bacon\", 4.5), Snack.new(\"egg\", 1.5), Snack.new(\"toast\", 2.0)]\np menu.sum(&:price)\nmenu.sort_by(&:price).map(&:name)"
+          },
+          {
+            "t": "h",
+            "html": "<p>When an object needs a few fields and perhaps a method or two, Struct or Data is quicker than a full class. When it grows behaviour of its own, give it a <code>class</code> – the next lesson shows how.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Struct.html' target='_blank'>Struct</a> · <a href='https://docs.ruby-lang.org/en/4.0/Data.html' target='_blank'>Data</a></div><div class='task'><strong>Task:</strong> Build a Struct <code>Book</code> with the fields <code>title</code>, <code>author</code> and <code>pages</code>, and give it a method <code>short?</code> that is true for books with fewer than 200 pages.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Book = Struct.new(...) do\n#   def short?\n#     ...   # true for fewer than 200 pages\n#   end\n# end\n\n# Book.new(\"Why's (Poignant) Guide\", \"why\", 176).short?\n",
+            "hints": [
+              "Like <code>Spot</code> above: <code>Struct.new</code> with the three field names as symbols, then a <code>do</code> block with <code>def short?</code> inside. In the method, <code>pages</code> is simply there."
+            ],
+            "check": "Book < Struct && Book.members == [:title, :author, :pages] && Book.new(\"A\", \"B\", 150).short? && !Book.new(\"A\", \"B\", 300).short? && Book.new(\"A\", \"B\", 150).title == \"A\"",
+            "hint": "<code>Book = Struct.new(:title, :author, :pages) do</code>, inside <code>def short?</code> → <code>pages &lt; 200</code> → <code>end</code>, and an <code>end</code> for the block.",
+            "solution": "Book = Struct.new(:title, :author, :pages) do\n  def short?\n    pages < 200\n  end\nend\n\nBook.new(\"Why's (Poignant) Guide\", \"why\", 176).short?"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Build <code>Temperature</code> with <code>Data.define</code> and one field, <code>degrees</code> (Celsius). It gets two methods: <code>fahrenheit</code> (degrees · 9 / 5 + 32, so 20 °C is 68.0) and <code>warmer(by)</code>, which returns a <em>new</em> Temperature that is <code>by</code> degrees warmer – the old one stays as it is.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# Temperature = Data.define(:degrees) do\n#   def fahrenheit\n#     ...   # degrees times 9, divided by 5.0, plus 32\n#   end\n#\n#   def warmer(by)\n#     ...   # a copy, by degrees warmer - with with\n#   end\n# end\n\n# Temperature.new(degrees: 20).warmer(5)\n",
+            "hints": [
+              "<code>Data.define(:degrees) do … end</code> works like <code>Struct.new</code>. For <code>warmer</code>, <code>with(degrees: …)</code> makes the copy – you never change <code>degrees</code> itself."
+            ],
+            "check": "Temperature < Data && Temperature.new(degrees: 20).then { |t| t.fahrenheit == 68.0 && t.warmer(5).degrees == 25 && t.warmer(5).is_a?(Temperature) && t.degrees == 20 && !t.respond_to?(:degrees=) }",
+            "hint": "<code>def fahrenheit</code> → <code>degrees * 9 / 5.0 + 32</code>, and <code>def warmer(by)</code> → <code>with(degrees: degrees + by)</code>.",
+            "solution": "Temperature = Data.define(:degrees) do\n  def fahrenheit\n    degrees * 9 / 5.0 + 32\n  end\n\n  def warmer(by)\n    with(degrees: degrees + by)\n  end\nend\n\nTemperature.new(degrees: 20).warmer(5)"
+          }
+        ]
+      },
+      "ja": {
+        "title": "StructとData – 手軽な小さいクラス",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>StructとData – 手軽な小さいクラス</h2><p>いくつかの値をひとまとめにしたいことはよくあります。たとえば、xとyのある点、題名と著者のある本、名前と値段のあるおやつなどです。ハッシュでもできますが、キーを打ちまちがえると、だまって<code>nil</code>が返ってきます。<code>Struct</code>は、まさにそのための小さなクラスを1行で作ります。どのクラスとも同じく、名前は大文字で始めます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "Snack = Struct.new(:name, :price)\nbacon = Snack.new(\"bacon\", 4.5)\np bacon.name\np bacon.price\nbacon"
+          },
+          {
+            "t": "h",
+            "html": "<p>このオブジェクトは自分のフィールドを知っています。<code>bacon[:price]</code>ではなく<code>bacon.price</code>と書き、<code>bacon.prize</code>と打ちまちがえれば、こっそりnilになるのではなく、すぐにエラーになります。Structはきれいに表示され、同じ値の2つは等しく、フィールドは変更できます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "toast = Snack.new(\"toast\", 2.0)\np toast == Snack.new(\"toast\", 2.0)\ntoast.price = 2.5\np toast.to_a\ntoast.to_h"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>Struct.new</code>のあとにブロックを書くと、クラスと同じようにメソッドを追加できます。メソッドの中では、フィールドは名前でそのまま使えます。家からベーコン屋さんまで、どれくらいでしょう？</p>"
+          },
+          {
+            "t": "c",
+            "code": "Spot = Struct.new(:x, :y) do\n  def distance_to(other)\n    Math.sqrt((x - other.x)**2 + (y - other.y)**2)\n  end\nend\n\nhome = Spot.new(0, 0)\nbacon_shop = Spot.new(3, 4)\nhome.distance_to(bacon_shop)"
+          },
+          {
+            "t": "h",
+            "html": "<p>変えられることが、かえって困る場合もあります。硬貨、日付、レシートの値段は、そのままであるべきです。<code>Data</code>は同じ考え方で、セッターがありません。一度作ったら、決して変わりません。キーワードで作り、<code>with</code>は変更したコピーを作ります。元のものはそのままです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "Coin = Data.define(:value, :currency)\nfranc = Coin.new(value: 1, currency: \"CHF\")\np franc\nfive = franc.with(value: 5)\np five\nfranc.value"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>franc.value = 2</code>を試してみてください。そんなメソッドはありません。StructやDataのオブジェクトは、もう知っているものと何でも組み合わせられます。配列に入れたり、<code>sum</code>や<code>sort_by</code>を使ったり。<code>&amp;:price</code>は<code>{ |s| s.price }</code>の短い書き方です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "menu = [Snack.new(\"bacon\", 4.5), Snack.new(\"egg\", 1.5), Snack.new(\"toast\", 2.0)]\np menu.sum(&:price)\nmenu.sort_by(&:price).map(&:name)"
+          },
+          {
+            "t": "h",
+            "html": "<p>フィールドがいくつかと、メソッドが1つか2つあればよいなら、StructやDataのほうが完全なクラスより手軽です。自分のふるまいがふえてきたら、<code>class</code>にしましょう。その方法は次のレッスンで見ます。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/class/Struct.html' target='_blank'>Struct</a>・<a href='https://docs.ruby-lang.org/ja/latest/class/Data.html' target='_blank'>Data</a></div><div class='task'><strong>課題：</strong>フィールド<code>title</code>、<code>author</code>、<code>pages</code>を持つStruct<code>Book</code>を作り、200ページ未満の本なら真になるメソッド<code>short?</code>をつけましょう。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# Book = Struct.new(...) do\n#   def short?\n#     ...   # 200ページ未満ならtrue\n#   end\n# end\n\n# Book.new(\"Why's (Poignant) Guide\", \"why\", 176).short?\n",
+            "hints": [
+              "上の<code>Spot</code>と同じだよ。3つのフィールド名をシンボルにして<code>Struct.new</code>に渡して、<code>do</code>ブロックの中に<code>def short?</code>を書くんだ。メソッドの中では<code>pages</code>がそのまま使えるよ。"
+            ],
+            "check": "Book < Struct && Book.members == [:title, :author, :pages] && Book.new(\"A\", \"B\", 150).short? && !Book.new(\"A\", \"B\", 300).short? && Book.new(\"A\", \"B\", 150).title == \"A\"",
+            "hint": "<code>Book = Struct.new(:title, :author, :pages) do</code>、中に<code>def short?</code> → <code>pages &lt; 200</code> → <code>end</code>、そしてブロックの<code>end</code>だよ。",
+            "solution": "Book = Struct.new(:title, :author, :pages) do\n  def short?\n    pages < 200\n  end\nend\n\nBook.new(\"Why's (Poignant) Guide\", \"why\", 176).short?"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong><code>Data.define</code>で、フィールド<code>degrees</code>（摂氏）を1つ持つ<code>Temperature</code>を作りましょう。メソッドは2つです。<code>fahrenheit</code>（degrees · 9 / 5 + 32。20 °Cなら68.0）と、<code>by</code>度だけ暖かい<em>新しい</em>Temperatureを返す<code>warmer(by)</code>です。元のものはそのままです。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# Temperature = Data.define(:degrees) do\n#   def fahrenheit\n#     ...   # degreesに9をかけて5.0で割り、32をたす\n#   end\n#\n#   def warmer(by)\n#     ...   # byだけ暖かいコピー。withを使って\n#   end\n# end\n\n# Temperature.new(degrees: 20).warmer(5)\n",
+            "hints": [
+              "<code>Data.define(:degrees) do … end</code>は<code>Struct.new</code>と同じように使えるよ。<code>warmer</code>では<code>with(degrees: …)</code>がコピーを作るんだ。<code>degrees</code>そのものは変えないよ。"
+            ],
+            "check": "Temperature < Data && Temperature.new(degrees: 20).then { |t| t.fahrenheit == 68.0 && t.warmer(5).degrees == 25 && t.warmer(5).is_a?(Temperature) && t.degrees == 20 && !t.respond_to?(:degrees=) }",
+            "hint": "<code>def fahrenheit</code> → <code>degrees * 9 / 5.0 + 32</code>、<code>def warmer(by)</code> → <code>with(degrees: degrees + by)</code>だよ。",
+            "solution": "Temperature = Data.define(:degrees) do\n  def fahrenheit\n    degrees * 9 / 5.0 + 32\n  end\n\n  def warmer(by)\n    with(degrees: degrees + by)\n  end\nend\n\nTemperature.new(degrees: 20).warmer(5)"
           }
         ]
       }
@@ -21399,7 +21899,8 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "conditions",
       "lessons": [
-        "wenn"
+        "wenn",
+        "symbole"
       ],
       "title": {
         "de": "Vergleiche & Entscheidungen",
@@ -21824,7 +22325,8 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "hashes",
       "lessons": [
-        "hashes"
+        "hashes",
+        "symbole"
       ],
       "title": {
         "de": "Hashes",
@@ -21859,6 +22361,12 @@ window.LESSONS_JSON = JSON.stringify({
           "de": "andere Schlüssel, etwa Strings, mit <code>=&gt;</code>",
           "en": "other keys, strings for example, with <code>=&gt;</code>",
           "ja": "文字列などほかのキーは<code>=&gt;</code>で"
+        },
+        {
+          "c": ":name.to_s   \"name\".to_sym",
+          "de": "Symbol → String / String → Symbol",
+          "en": "symbol → string / string → symbol",
+          "ja": "シンボル→文字列／文字列→シンボル"
         },
         {
           "c": "h[:name]",
@@ -21913,6 +22421,12 @@ window.LESSONS_JSON = JSON.stringify({
           "de": "alle Werte umwandeln",
           "en": "transform every value",
           "ja": "すべての値を変換"
+        },
+        {
+          "c": "h.transform_keys(&:to_sym)",
+          "de": "String-Schlüssel (aus einer Datei, aus dem Netz) zu Symbolen",
+          "en": "string keys (from a file, from the web) to symbols",
+          "ja": "文字列のキー（ファイルやウェブから）をシンボルに"
         },
         {
           "c": "h.sort_by { |k, v| v }",
@@ -22049,6 +22563,7 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "classes",
       "lessons": [
+        "struct",
         "klassen",
         "vererbung",
         "module",
@@ -22163,10 +22678,22 @@ window.LESSONS_JSON = JSON.stringify({
           "ja": "変更できない値オブジェクト：<code>Point.new(x: 1, y: 2)</code>（変更できるのは<code>Struct</code>）"
         },
         {
+          "c": "coin.with(value: 5)",
+          "de": "eine geänderte Kopie eines Data-Objekts (das Original bleibt)",
+          "en": "a changed copy of a Data object (the original stays)",
+          "ja": "Dataオブジェクトを変更したコピー（元はそのまま）"
+        },
+        {
           "c": "fox.is_a?(Fox)   Fox.ancestors",
           "de": "gehört das Objekt zu dieser Klasse? / die ganze Ahnenreihe",
           "en": "is the object of this class? / the whole family line",
           "ja": "このクラスのオブジェクト？／先祖の列"
+        },
+        {
+          "c": "Snack = Struct.new(:name, :price)",
+          "de": "eine kleine Klasse mit Feldern in einer Zeile; die Felder lassen sich ändern",
+          "en": "a small class with fields in one line; the fields can be changed",
+          "ja": "フィールドを持つ小さなクラスを1行で。フィールドは変更できる"
         }
       ]
     },

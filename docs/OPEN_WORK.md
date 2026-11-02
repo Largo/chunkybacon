@@ -134,10 +134,10 @@ Last updated 2026-11-02.
   `geheimschrift` (ord/chr, Caesar with `%` wrapping, ROT13 with `tr`,
   cracking by trying all keys; after `methoden`) and `knobeln` (sentence
   palindromes, anagrams, primes, Collatz; task perfect numbers, bonus
-  Goldbach; after `rekursion`). Gaps that are still open in the Basics, each a lesson's worth:
-  Symbols and `nil` on their own (truthiness, `&.`, `||=`, `to_sym` -
-  today a paragraph each in `wenn` and `hashes`); `Struct`/`Data` before
-  classes.
+  Goldbach; after `rekursion`). And the two gaps that were left:
+  `symbole` (nil, truthiness, `||`/`||=`, `&.`, symbols vs strings,
+  `transform_keys`; after `iteratoren`) and `struct` (Struct with
+  methods, Data and `with`; before `klassen`).
 - **Bonus exercises** (2026-10-26, HANDOVER §3 `bonus`): a second `x`
   cell with `"bonus": true` at the end of a lesson, checked and praised
   with its own 💡, not needed for the tick; `SOLUTIONS["<id>#bonus"]` in
