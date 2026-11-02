@@ -20,14 +20,14 @@ window.LESSONS_JSON = JSON.stringify({
       "loading": "Ruby wird geladen … (einmalig ca. 10 MB)",
       "kernelFailed": "Ruby konnte nicht geladen werden – bitte lade die Seite neu.",
       "shellFailed": "Die Seite konnte nicht starten – bitte lade sie neu.",
-      "welcome": "Chunky Bacon! 🦊🥓 In <em>why's (poignant) guide to Ruby</em> sind wir zwei so lange in whys Beispiele geplatzt, bis er uns hineingeschrieben hat. Hier haben wir ein ganzes Notizbuch – mit Platz für dich. Führe jede Code-Zelle mit <em>▶ Ausführen</em> oder <kbd>Shift</kbd>+<kbd>Enter</kbd> aus; den Wert der letzten Zeile zeigt Ruby von selbst als <code>=&gt;</code>. Die Zelle unter dem gelben Kasten ist deine Aufgabe. Auf geht's – Chunky Bacon!",
+      "welcome": "Chunky Bacon! 🦊🥓 Willkommen! Wir sind zwei Füchse, die Ruby lieben (und Speck), und wir begleiten dich. Jeder dunkle Kasten auf dieser Seite ist Ruby-Code, den du ausführen kannst: Klick auf <em>▶ Ausführen</em> oder drück <kbd>Shift</kbd>+<kbd>Enter</kbd>. Den Wert der letzten Zeile zeigt Ruby nach <code>=&gt;</code>. Der Kasten unter jeder gelben Aufgabe gehört dir – stimmt er, jubeln wir. Los geht's!",
       "resetConfirm": "Alle Zellen dieser Lektion zurücksetzen?",
       "praise": [
-        "Juhu! Chunky Bacon erreicht! 🥓",
-        "CHUNKY BACON! Genau so.",
-        "Chunky Bacon für alle – gut gemacht!",
-        "Ruby hat dich verstanden, und die Füchse auch. Ausgezeichnet!",
-        "Matz wollte, dass Programmieren Freude macht – das sah danach aus. Weiter so!"
+        "Chunky Bacon! Genau so! 🥓",
+        "Juhu – es läuft! Chunky Bacon!",
+        "Genau richtig – die Füchse jubeln!",
+        "Gut gemacht! Weiter zur nächsten.",
+        "Perfekt! Ruby ist ganz deiner Meinung."
       ],
       "failIntro": "Hmm, das ist noch nicht ganz richtig.",
       "errorIntro": "Autsch, Ruby meldet einen Fehler – schau unter die Zelle.",
@@ -381,14 +381,14 @@ window.LESSONS_JSON = JSON.stringify({
       "loading": "Loading Ruby … (one-time, about 10 MB)",
       "kernelFailed": "Ruby could not be loaded – please reload the page.",
       "shellFailed": "The page could not start – please reload it.",
-      "welcome": "Chunky bacon! 🦊🥓 In <em>why's (poignant) guide to Ruby</em> the two of us kept barging into why's examples until he finally wrote us in. Here we have a whole notebook – with room for you. Run any code cell with <em>▶ Run</em> or <kbd>Shift</kbd>+<kbd>Enter</kbd>; Ruby shows the value of the last line as <code>=&gt;</code> all by itself. The cell under the yellow box is your task. Come on – chunky bacon!",
+      "welcome": "Chunky bacon! 🦊🥓 Welcome! We're two foxes who love Ruby (and bacon), and we'll keep you company. Every dark box on this page is Ruby code you can run: click <em>▶ Run</em> or press <kbd>Shift</kbd>+<kbd>Enter</kbd>. Ruby shows the value of the last line after <code>=&gt;</code>. The box under each yellow task is yours to fill in – when it's right, we cheer. Let's go!",
       "resetConfirm": "Reset all cells of this lesson?",
       "praise": [
-        "Woohoo! Chunky bacon accomplished! 🥓",
-        "CHUNKY BACON! That's exactly it.",
-        "Plenty of chunky bacon to go around – well done!",
-        "Ruby understood you, and so did the foxes. Excellent!",
-        "Matz wanted programming to be joyful – that looked like fun. Keep going!"
+        "Chunky bacon! That's it! 🥓",
+        "Woohoo – it works! Chunky bacon!",
+        "Exactly right – the foxes are cheering!",
+        "Nice work! On to the next one.",
+        "Perfect! Ruby agrees with you."
       ],
       "failIntro": "Hmm, that's not quite right yet.",
       "errorIntro": "Ouch, Ruby reports an error – check below the cell.",
@@ -742,14 +742,14 @@ window.LESSONS_JSON = JSON.stringify({
       "loading": "Rubyを読み込み中 …（初回のみ、約10 MB）",
       "kernelFailed": "Rubyを読み込めませんでした。ページを再読み込みしてください。",
       "shellFailed": "ページを開始できませんでした。再読み込みしてください。",
-      "welcome": "Chunky bacon! 🦊🥓 『<em>why's (poignant) guide to Ruby</em>』では、ぼくたち二匹がwhyの例題に何度も割りこんで、とうとう例題に書いてもらったんだ。ここにはノートブックがまるごと一冊あって、きみの席もあるよ。どのコードセルも<em>▶ 実行</em>か<kbd>Shift</kbd>+<kbd>Enter</kbd>で動かせる。最後の行の値は、Rubyが<code>=&gt;</code>のあとに自分で見せてくれるよ。黄色いボックスの下のセルがきみの課題。さあ、chunky bacon!",
+      "welcome": "Chunky bacon! 🦊🥓 ようこそ！ぼくたちはRuby（とベーコン）が大好きな2匹のキツネ。きみといっしょに進むよ。このページの黒い箱は、どれも動かせるRubyのコード。<em>▶ 実行</em>をクリックするか、<kbd>Shift</kbd>+<kbd>Enter</kbd>を押してね。最後の行の値は、Rubyが<code>=&gt;</code>のあとに見せてくれる。黄色い課題の下の箱は、きみが書く場所。正解したら、ぼくたちが大よろこびするよ。さあ、始めよう！",
       "resetConfirm": "このレッスンのセルをすべて元に戻しますか？",
       "praise": [
-        "やった！Chunky bacon、達成！🥓",
-        "CHUNKY BACON! まさにそれ！",
-        "chunky baconはみんなの分もたっぷりあるよ。よくできました！",
-        "Rubyにも、キツネたちにも、ちゃんと伝わったよ。すばらしい！",
-        "Matzはプログラミングを楽しくしたかったんだ。いまの、楽しそうだったね。この調子！"
+        "Chunky bacon! そのとおり！🥓",
+        "やった、動いた！Chunky bacon!",
+        "大正解！キツネたちも大よろこび！",
+        "よくできました！次へいこう。",
+        "完璧！Rubyもきみと同じ意見だよ。"
       ],
       "failIntro": "うーん、まだちょっと違うみたい。",
       "errorIntro": "あいたっ、Rubyがエラーを出したよ。セルの下を見てみて。",
@@ -2432,6 +2432,256 @@ window.LESSONS_JSON = JSON.stringify({
         ]
       },
       "stepper": true
+    },
+    {
+      "id": "muster",
+      "stepper": true,
+      "de": {
+        "title": "Muster mit Schleifen",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Muster mit Schleifen</h2><p>Lange bevor Bildschirme Bilder zeigen konnten, haben Programmiererinnen mit Buchstaben gezeichnet: Bäume, Raketen, ganze Porträts aus <code>#</code> und <code>*</code>. Dafür brauchst du nur einen Trick – in Ruby wiederholt ein String mal eine Zahl den String:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"-\" * 20\nputs \"Speck \" * 3\n\"🥓\" * 5"
+          },
+          {
+            "t": "h",
+            "html": "<p>Steck das in eine Schleife und lass die Zahl bei jedem Durchgang um eins wachsen, und du bekommst eine Treppe. <code>1.upto(5)</code> zählt von 1 bis 5, und jeder Durchgang zeichnet eine Zeile – genau so viele <code>#</code>, wie die Zeile Nummer hat:</p>"
+          },
+          {
+            "t": "c",
+            "code": "1.upto(5) do |zeile|\n  puts \"#\" * zeile\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Eine Pyramide braucht auch links Platz. Zähl, was jede Zeile braucht: In einer Pyramide mit fünf Zeilen hat Zeile 1 vier Leerzeichen und einen Stern, Zeile 2 drei Leerzeichen und drei Sterne … Zeile <em>n</em> hat also <code>5 - n</code> Leerzeichen und <code>2 · n - 1</code> Sterne. Drück ⏯ Schrittweise und schau, wie sich beide Zahlen ändern:</p>"
+          },
+          {
+            "t": "c",
+            "code": "hoehe = 5\n1.upto(hoehe) do |zeile|\n  leer = \" \" * (hoehe - zeile)\n  sterne = \"*\" * (2 * zeile - 1)\n  puts leer + sterne\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das Zählen der Leerzeichen kann Ruby dir abnehmen: <code>center(breite)</code> füllt einen String auf beiden Seiten auf, bis er so breit ist. <code>1.step(11, 2)</code> zählt 1, 3, 5 … 11 – die Äste eines Baums, mit einem Stamm am Schluss:</p>"
+          },
+          {
+            "t": "c",
+            "code": "breite = 11\n1.step(breite, 2) do |n|\n  ast = \"*\" * n\n  puts ast.center(breite)\nend\nputs \"|\".center(breite)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Zwei Schleifen ineinander ergeben ein Gitter: Die äussere geht durch die Zeilen, die innere durch die Spalten jeder Zeile. Beim Schachbrett ist ein Feld dunkel, wenn Zeile + Spalte gerade ist. <code>?</code> und <code>:</code> sind ein kurzes <code>if</code>: <em>Bedingung</em> <code>?</code> <em>dies</em> <code>:</code> <em>das</em>.</p>"
+          },
+          {
+            "t": "c",
+            "code": "8.times do |zeile|\n  reihe = \"\"\n  8.times do |spalte|\n    reihe += (zeile + spalte).even? ? \"# \" : \". \"\n  end\n  puts reihe\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dasselbe Gitter mit einer anderen Regel zeichnet alles, was du ausrechnen kannst. Hier bekommt ein Feld ein <code>X</code>, wenn es auf einer der beiden Diagonalen liegt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "groesse = 9\ngroesse.times do |zeile|\n  reihe = \"\"\n  groesse.times do |spalte|\n    auf_diagonale = spalte == zeile || spalte == groesse - 1 - zeile\n    reihe += auf_diagonale ? \"X\" : \".\"\n  end\n  puts reihe\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ändere die Regel und schau, was herauskommt: <code>zeile == 4 || spalte == 4</code> ist ein Plus, <code>zeile == spalte</code> eine Diagonale, <code>(zeile * spalte) % 3 == 0</code> ein Muster, das du selbst sehen musst. In Lektion {{nr:turtle}} zeichnet Chunky echte Linien statt Buchstaben.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-2A' target='_blank'>String#*</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-center' target='_blank'>String#center</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-upto' target='_blank'>Integer#upto</a> · <a href='https://docs.ruby-lang.org/en/4.0/Numeric.html#method-i-step' target='_blank'>Numeric#step</a></div><div class='task'><strong>Aufgabe:</strong> Zeichne eine Treppe <em>nach unten</em>: Die erste Zeile hat fünf <code>#</code>, die nächste vier und so weiter, bis zu einem einzigen <code>#</code>. Nimm eine Schleife – nicht fünf <code>puts</code> von Hand.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# eine Treppe nach unten: 5 #, dann 4, 3, 2, 1\n",
+            "hints": [
+              "<code>upto</code> zählt hinauf – sein Bruder <code>downto</code> zählt hinunter. In der Schleife ein <code>puts</code> mit einem String mal der Nummer der Zeile."
+            ],
+            "check": "[output, result.to_s].any? { |s| s.lines.map(&:rstrip).reject(&:empty?) == [\"#####\", \"####\", \"###\", \"##\", \"#\"] } && code.match?(/times|upto|downto|step|each|map/)",
+            "hint": "<code>5.downto(1) do |zeile|</code>, darin <code>puts \"#\" * zeile</code>, dann <code>end</code>.",
+            "solution": "5.downto(1) do |zeile|\n  puts \"#\" * zeile\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Zeichne eine Raute, sieben Zeichen breit: Zeilen mit 1, 3, 5, 7, 5, 3 und 1 Sternen, jede zentriert. Eine Schleife reicht, wenn du weisst, über welche Zahlen sie laufen soll.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# eine Raute, 7 breit: Zeilen mit 1, 3, 5, 7, 5, 3, 1 Sternen, zentriert\n",
+            "hints": [
+              "Schreib die Breiten in ein Array, <code>[1, 3, 5, 7, 5, 3, 1]</code>, und geh mit <code>each</code> hindurch. Jede Zeile: so viele Sterne, dann <code>center(7)</code>."
+            ],
+            "check": "[output, result.to_s].any? { |s| s.lines.map(&:rstrip).reject(&:empty?) == [\"   *\", \"  ***\", \" *****\", \"*******\", \" *****\", \"  ***\", \"   *\"] } && code.match?(/times|upto|downto|step|each|map/)",
+            "hint": "<code>[1, 3, 5, 7, 5, 3, 1].each do |n|</code>, darin zuerst <code>sterne = \"*\" * n</code>, dann <code>puts sterne.center(7)</code>.",
+            "solution": "[1, 3, 5, 7, 5, 3, 1].each do |n|\n  sterne = \"*\" * n\n  puts sterne.center(7)\nend"
+          }
+        ]
+      },
+      "en": {
+        "title": "Patterns with loops",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Patterns with loops</h2><p>Long before screens could show pictures, programmers drew with letters: trees, rockets, whole portraits made of <code>#</code> and <code>*</code>. All you need is one trick – in Ruby, a string times a number repeats the string:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"-\" * 20\nputs \"bacon \" * 3\n\"🥓\" * 5"
+          },
+          {
+            "t": "h",
+            "html": "<p>Put that into a loop and let the number grow by one on every pass, and you get a staircase. <code>1.upto(5)</code> counts from 1 to 5, and every pass draws one row – exactly as many <code>#</code> as the row's number:</p>"
+          },
+          {
+            "t": "c",
+            "code": "1.upto(5) do |row|\n  puts \"#\" * row\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>A pyramid needs room on the left, too. Count what each row needs: in a pyramid five rows high, row 1 has 4 spaces and 1 star, row 2 has 3 spaces and 3 stars … So row <em>n</em> has <code>5 - n</code> spaces and <code>2 · n - 1</code> stars. Press ⏯ Step through and watch both numbers change:</p>"
+          },
+          {
+            "t": "c",
+            "code": "height = 5\n1.upto(height) do |row|\n  spaces = \" \" * (height - row)\n  stars = \"*\" * (2 * row - 1)\n  puts spaces + stars\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ruby can do the counting of spaces for you: <code>center(width)</code> pads a string on both sides until it is that wide. <code>1.step(11, 2)</code> counts 1, 3, 5 … 11 – the branches of a tree, with a trunk at the end:</p>"
+          },
+          {
+            "t": "c",
+            "code": "width = 11\n1.step(width, 2) do |n|\n  branch = \"*\" * n\n  puts branch.center(width)\nend\nputs \"|\".center(width)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Two loops inside each other make a grid: the outer one goes through the rows, the inner one through the columns of each row. For the chessboard a square is dark when row + column is even. The <code>?</code> and <code>:</code> are a short <code>if</code>: <em>condition</em> <code>?</code> <em>this</em> <code>:</code> <em>that</em>.</p>"
+          },
+          {
+            "t": "c",
+            "code": "8.times do |row|\n  line = \"\"\n  8.times do |col|\n    line += (row + col).even? ? \"# \" : \". \"\n  end\n  puts line\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>The same grid with a different rule draws whatever you can compute. Here a square gets an <code>X</code> when it lies on one of the two diagonals:</p>"
+          },
+          {
+            "t": "c",
+            "code": "size = 9\nsize.times do |row|\n  line = \"\"\n  size.times do |col|\n    on_diagonal = col == row || col == size - 1 - row\n    line += on_diagonal ? \"X\" : \".\"\n  end\n  puts line\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Change the rule and see what comes out: <code>row == 4 || col == 4</code> is a plus sign, <code>row == col</code> one diagonal, <code>(row * col) % 3 == 0</code> a pattern you have to see for yourself. In lesson {{nr:turtle}} Chunky draws real lines instead of letters.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-2A' target='_blank'>String#*</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-center' target='_blank'>String#center</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-upto' target='_blank'>Integer#upto</a> · <a href='https://docs.ruby-lang.org/en/4.0/Numeric.html#method-i-step' target='_blank'>Numeric#step</a></div><div class='task'><strong>Task:</strong> Draw a staircase going <em>down</em>: the first row has five <code>#</code>, the next four, and so on, down to a single <code>#</code>. Use a loop – not five <code>puts</code> written by hand.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# a staircase going down: 5 #, then 4, 3, 2, 1\n",
+            "hints": [
+              "<code>upto</code> counts up – its brother <code>downto</code> counts down. In the loop, one <code>puts</code> with a string times the row's number."
+            ],
+            "check": "[output, result.to_s].any? { |s| s.lines.map(&:rstrip).reject(&:empty?) == [\"#####\", \"####\", \"###\", \"##\", \"#\"] } && code.match?(/times|upto|downto|step|each|map/)",
+            "hint": "<code>5.downto(1) do |row|</code>, inside <code>puts \"#\" * row</code>, then <code>end</code>.",
+            "solution": "5.downto(1) do |row|\n  puts \"#\" * row\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Draw a diamond seven characters wide: rows of 1, 3, 5, 7, 5, 3 and 1 stars, each centred. One loop is enough if you know which numbers to loop over.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# a diamond, 7 wide: rows of 1, 3, 5, 7, 5, 3, 1 stars, centered\n",
+            "hints": [
+              "Put the widths into an array, <code>[1, 3, 5, 7, 5, 3, 1]</code>, and walk through it with <code>each</code>. Every row: that many stars, then <code>center(7)</code>."
+            ],
+            "check": "[output, result.to_s].any? { |s| s.lines.map(&:rstrip).reject(&:empty?) == [\"   *\", \"  ***\", \" *****\", \"*******\", \" *****\", \"  ***\", \"   *\"] } && code.match?(/times|upto|downto|step|each|map/)",
+            "hint": "<code>[1, 3, 5, 7, 5, 3, 1].each do |n|</code>, inside first <code>stars = \"*\" * n</code>, then <code>puts stars.center(7)</code>.",
+            "solution": "[1, 3, 5, 7, 5, 3, 1].each do |n|\n  stars = \"*\" * n\n  puts stars.center(7)\nend"
+          }
+        ]
+      },
+      "ja": {
+        "title": "ループで模様",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>ループで模様</h2><p>画面が絵を出せるようになるずっと前から、プログラマーは文字で絵を描いてきました。木やロケット、<code>#</code>と<code>*</code>でできた肖像画まで。必要なのはひとつの技だけです。Rubyでは、文字列に数をかけると、その文字列がくり返されます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"-\" * 20\nputs \"bacon \" * 3\n\"🥓\" * 5"
+          },
+          {
+            "t": "h",
+            "html": "<p>これをループに入れて、回るたびに数を1ずつ増やすと、階段ができます。<code>1.upto(5)</code>は1から5まで数え、1回ごとに1行を描きます。描くのは、行の番号と同じ数の<code>#</code>です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "1.upto(5) do |row|\n  puts \"#\" * row\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>ピラミッドには左側のすき間も必要です。各行に何が必要か数えてみましょう。高さ5のピラミッドでは、1行目は空白4つと星1つ、2行目は空白3つと星3つ……。つまり<em>n</em>行目は空白が<code>5 - n</code>個、星が<code>2 · n - 1</code>個です。⏯ ステップ実行を押して、2つの数が変わるのを見てみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "height = 5\n1.upto(height) do |row|\n  spaces = \" \" * (height - row)\n  stars = \"*\" * (2 * row - 1)\n  puts spaces + stars\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>空白を数えるのはRubyにまかせられます。<code>center(width)</code>は、文字列がその幅になるまで両側をうめます。<code>1.step(11, 2)</code>は1、3、5……11と数えます。木の枝と、最後に幹です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "width = 11\n1.step(width, 2) do |n|\n  branch = \"*\" * n\n  puts branch.center(width)\nend\nputs \"|\".center(width)"
+          },
+          {
+            "t": "h",
+            "html": "<p>ループを2つ重ねると、マス目ができます。外側のループが行を、内側のループがその行の列を回ります。チェス盤では、行と列の和が偶数のマスが黒です。<code>?</code>と<code>:</code>は短い<code>if</code>で、<em>条件</em> <code>?</code> <em>これ</em> <code>:</code> <em>あれ</em>という意味です。</p>"
+          },
+          {
+            "t": "c",
+            "code": "8.times do |row|\n  line = \"\"\n  8.times do |col|\n    line += (row + col).even? ? \"# \" : \". \"\n  end\n  puts line\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>同じマス目でも規則を変えれば、計算できるものはなんでも描けます。ここでは、2本の対角線のどちらかの上にあるマスに<code>X</code>を置きます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "size = 9\nsize.times do |row|\n  line = \"\"\n  size.times do |col|\n    on_diagonal = col == row || col == size - 1 - row\n    line += on_diagonal ? \"X\" : \".\"\n  end\n  puts line\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>規則を変えて、何が出てくるか見てみましょう。<code>row == 4 || col == 4</code>はプラス記号、<code>row == col</code>は対角線1本、<code>(row * col) % 3 == 0</code>は自分の目で確かめてください。レッスン{{nr:turtle}}では、Chunkyが文字ではなく本物の線を描きます。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/method/String/i/=2a.html' target='_blank'>String#*</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/String/i/center.html' target='_blank'>String#center</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Integer/i/upto.html' target='_blank'>Integer#upto</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Numeric/i/step.html' target='_blank'>Numeric#step</a></div><div class='task'><strong>課題：</strong><em>下り</em>の階段を描きましょう。1行目は<code>#</code>が5つ、次は4つ、と続けて、最後は<code>#</code>1つです。<code>puts</code>を5回手で書くのではなく、ループを使ってください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# 下りの階段：#が5つ、それから4、3、2、1\n",
+            "hints": [
+              "<code>upto</code>は上に数えるよね。その兄弟の<code>downto</code>は下に数えるんだ。ループの中は、文字列に行の番号をかけた<code>puts</code>がひとつ。"
+            ],
+            "check": "[output, result.to_s].any? { |s| s.lines.map(&:rstrip).reject(&:empty?) == [\"#####\", \"####\", \"###\", \"##\", \"#\"] } && code.match?(/times|upto|downto|step|each|map/)",
+            "hint": "<code>5.downto(1) do |row|</code>、中に<code>puts \"#\" * row</code>、それから<code>end</code>だよ。",
+            "solution": "5.downto(1) do |row|\n  puts \"#\" * row\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>幅7文字のひし形を描きましょう。星が1、3、5、7、5、3、1個の行で、どれも中央ぞろえです。どの数でループを回せばよいかわかれば、ループは1つで足ります。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# 幅7のひし形：星が1、3、5、7、5、3、1個の行を中央ぞろえで\n",
+            "hints": [
+              "幅を配列<code>[1, 3, 5, 7, 5, 3, 1]</code>に入れて、<code>each</code>で回してみて。各行は、その数だけの星を<code>center(7)</code>するんだ。"
+            ],
+            "check": "[output, result.to_s].any? { |s| s.lines.map(&:rstrip).reject(&:empty?) == [\"   *\", \"  ***\", \" *****\", \"*******\", \" *****\", \"  ***\", \"   *\"] } && code.match?(/times|upto|downto|step|each|map/)",
+            "hint": "<code>[1, 3, 5, 7, 5, 3, 1].each do |n|</code>、中でまず<code>stars = \"*\" * n</code>、それから<code>puts stars.center(7)</code>だよ。",
+            "solution": "[1, 3, 5, 7, 5, 3, 1].each do |n|\n  stars = \"*\" * n\n  puts stars.center(7)\nend"
+          }
+        ]
+      }
     },
     {
       "id": "arrays",
@@ -4805,6 +5055,256 @@ window.LESSONS_JSON = JSON.stringify({
       "stepper": true
     },
     {
+      "id": "geheimschrift",
+      "stepper": true,
+      "de": {
+        "title": "Geheimschrift",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Geheimschrift</h2><p>Julius Caesar soll seine geheimen Briefe geschrieben haben, indem er jeden Buchstaben um drei Stellen im Alphabet verschob: Aus A wurde D, aus B wurde E. Um das zu bauen, brauchst du eine Tatsache – für den Computer ist jedes Zeichen eine Zahl. <code>ord</code> gibt die Zahl eines Zeichens, <code>chr</code> macht aus einer Zahl wieder ein Zeichen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"A\".ord\np \"a\".ord\np 98.chr\n\"speck\".chars.map { |z| z.ord }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Einen Buchstaben zu verschieben ist also einfaches Rechnen: Zahl plus 3, zurück zum Zeichen. Ein ganzes Wort geht Buchstabe für Buchstabe mit <code>chars</code>, <code>map</code> und <code>join</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "wort = \"speck\"\nwort.chars.map { |z| (z.ord + 3).chr }.join"
+          },
+          {
+            "t": "h",
+            "html": "<p>Doch am Ende des Alphabets geht es schief: <code>\"z\".ord + 3</code> ist die Zahl von <code>}</code>, nicht von einem Buchstaben. Das Alphabet muss herumlaufen, z → c. Das erledigt der Rest <code>%</code> aus Lektion {{nr:rechnen}}: ab <code>a</code> zählen (0 bis 25), den Schlüssel dazuzählen, den Rest durch 26 nehmen, <code>a</code> wieder dazuzählen. Was kein kleiner Buchstabe ist, bleibt, wie es ist:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def verschieben(buchstabe, schluessel)\n  return buchstabe unless (\"a\"..\"z\").include?(buchstabe)\n  ((buchstabe.ord - \"a\".ord + schluessel) % 26 + \"a\".ord).chr\nend\n\np verschieben(\"z\", 3)\np verschieben(\"!\", 3)\n\"chunky bacon!\".chars.map { |z| verschieben(z, 3) }.join"
+          },
+          {
+            "t": "h",
+            "html": "<p>Entschlüsseln ist zurückschieben – ein negativer Schlüssel. Und mit dem Schlüssel 13, ROT13 genannt, sind Ver- und Entschlüsseln dasselbe, denn 13 + 13 = 26: Zweimal herum bringt jeden Buchstaben nach Hause.</p>"
+          },
+          {
+            "t": "c",
+            "code": "geheim = \"chunky bacon!\".chars.map { |z| verschieben(z, 3) }.join\np geheim\np geheim.chars.map { |z| verschieben(z, -3) }.join\nrot = \"hallo\".chars.map { |z| verschieben(z, 13) }.join\np rot\nrot.chars.map { |z| verschieben(z, 13) }.join"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ruby hat sogar eine Abkürzung zum Vertauschen von Zeichen: <code>tr</code> („translate“) ersetzt jedes Zeichen der ersten Liste durch das an derselben Stelle der zweiten. ROT13 in einer Zeile:</p>"
+          },
+          {
+            "t": "c",
+            "code": "\"chunky bacon\".tr(\"a-z\", \"n-za-m\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Wie knackt man eine Caesar-Schrift, ohne den Schlüssel zu kennen? Es gibt nur 25 Schlüssel – probier einfach alle! Ein Computer erledigt das im Nu; du musst nur die Zeile finden, die Sinn ergibt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "raetsel = \"eqfg ku hwp\"\n1.upto(25) do |schluessel|\n  versuch = raetsel.chars.map { |z| verschieben(z, -schluessel) }.join\n  puts \"#{schluessel}: #{versuch}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Darum ist Caesars Schrift heute ein Spielzeug. Das Schloss in der Adresszeile deines Browsers benutzt so lange Schlüssel, dass es viel länger dauern würde, alle auszuprobieren, als es das Universum gibt – aber die Idee, eine Regel plus ein geheimer Schlüssel, ist dieselbe.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-ord' target='_blank'>String#ord</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-chr' target='_blank'>Integer#chr</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-chars' target='_blank'>String#chars</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-tr' target='_blank'>String#tr</a></div><div class='task'><strong>Aufgabe:</strong> Schreib eine Methode <code>caesar(text, schluessel)</code>, die jeden kleinen Buchstaben von <code>text</code> um <code>schluessel</code> verschiebt und alles andere in Ruhe lässt: <code>caesar(\"hallo, fuchs!\", 1)</code> ergibt <code>\"ibmmp, gvdit!\"</code>, und ein negativer Schlüssel entschlüsselt. <code>verschieben</code> von oben erledigt die Arbeit für einen einzelnen Buchstaben.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def caesar(text, schluessel)\n#   ...   # jeder Buchstabe um schluessel verschoben, alles andere bleibt\n# end\n\n# caesar(\"hallo, fuchs!\", 1)\n",
+            "hints": [
+              "In der Methode: den Text mit <code>chars</code> zerlegen, jedes Zeichen mit <code>map</code> und <code>verschieben</code> verschieben und mit <code>join</code> wieder zusammensetzen."
+            ],
+            "check": "caesar(\"hallo, fuchs!\", 1) == \"ibmmp, gvdit!\" && caesar(\"xyz\", 3) == \"abc\" && caesar(caesar(\"chunky bacon\", 7), -7) == \"chunky bacon\"",
+            "hint": "<code>def caesar(text, schluessel)</code>, darin <code>text.chars.map { |z| verschieben(z, schluessel) }.join</code>, dann <code>end</code>.",
+            "solution": "def caesar(text, schluessel)\n  text.chars.map { |z| verschieben(z, schluessel) }.join\nend\n\ncaesar(\"hallo, fuchs!\", 1)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Du hast eine Nachricht abgefangen und weisst, dass es darin um Speck geht. Finde den <code>schluessel</code> (1 bis 25), mit dem die entschlüsselte Nachricht <code>\"speck\"</code> enthält – lass Ruby mit <code>find</code> suchen – und schreib die entschlüsselte Nachricht in <code>klartext</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "abgefangen = \"opc qfnsd tdde dapnv\"\n\n# schluessel = ...   # der Schlüssel, mit dem in der Nachricht \"speck\" steht\n# klartext = ...     # die Nachricht, mit diesem Schlüssel entschlüsselt\n",
+            "hints": [
+              "<code>(1..25).find { |s| … }</code> gibt das erste <code>s</code> zurück, für das der Block wahr ist. Im Block: mit <code>-s</code> entschlüsseln und <code>include?(\"speck\")</code> fragen."
+            ],
+            "check": "schluessel == 11 && klartext == \"der fuchs isst speck\" && code.match?(/find|detect|upto|each|times|until|while|loop/)",
+            "hint": "<code>schluessel = (1..25).find { |s| abgefangen.chars.map { |z| verschieben(z, -s) }.join.include?(\"speck\") }</code>, dann für <code>klartext</code> noch einmal mit <code>-schluessel</code> entschlüsseln.",
+            "solution": "abgefangen = \"opc qfnsd tdde dapnv\"\n\nschluessel = (1..25).find { |s| abgefangen.chars.map { |z| verschieben(z, -s) }.join.include?(\"speck\") }\nklartext = abgefangen.chars.map { |z| verschieben(z, -schluessel) }.join"
+          }
+        ]
+      },
+      "en": {
+        "title": "Secret codes",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Secret codes</h2><p>Julius Caesar is said to have written his secret letters by shifting every letter three places along the alphabet: A became D, B became E. To build that you need one fact – for the computer every character is a number. <code>ord</code> gives a character's number, <code>chr</code> turns a number back into a character:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"A\".ord\np \"a\".ord\np 98.chr\n\"bacon\".chars.map { |c| c.ord }"
+          },
+          {
+            "t": "h",
+            "html": "<p>So shifting a letter is plain arithmetic: number plus 3, back to a character. A whole word goes letter by letter with <code>chars</code>, <code>map</code> and <code>join</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "word = \"bacon\"\nword.chars.map { |c| (c.ord + 3).chr }.join"
+          },
+          {
+            "t": "h",
+            "html": "<p>But at the end of the alphabet it breaks: <code>\"z\".ord + 3</code> is the number of <code>}</code>, not of a letter. The alphabet has to wrap round, z → c. The remainder <code>%</code> from lesson {{nr:rechnen}} does that: count from <code>a</code> (0 to 25), add the key, take the remainder of 26, add <code>a</code> back on. Anything that isn't a small letter stays as it is:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def shift_letter(letter, key)\n  return letter unless (\"a\"..\"z\").include?(letter)\n  ((letter.ord - \"a\".ord + key) % 26 + \"a\".ord).chr\nend\n\np shift_letter(\"z\", 3)\np shift_letter(\"!\", 3)\n\"chunky bacon!\".chars.map { |c| shift_letter(c, 3) }.join"
+          },
+          {
+            "t": "h",
+            "html": "<p>Decoding is shifting back – a negative key. And with key 13, called ROT13, encoding and decoding are the same thing, because 13 + 13 = 26: twice round brings every letter home.</p>"
+          },
+          {
+            "t": "c",
+            "code": "secret = \"chunky bacon!\".chars.map { |c| shift_letter(c, 3) }.join\np secret\np secret.chars.map { |c| shift_letter(c, -3) }.join\nrot = \"hello\".chars.map { |c| shift_letter(c, 13) }.join\np rot\nrot.chars.map { |c| shift_letter(c, 13) }.join"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ruby even has a shortcut for swapping characters: <code>tr</code> (“translate”) replaces every character of the first list by the one at the same place in the second. ROT13 in one line:</p>"
+          },
+          {
+            "t": "c",
+            "code": "\"chunky bacon\".tr(\"a-z\", \"n-za-m\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>How do you crack a Caesar code without knowing the key? There are only 25 keys – just try them all! A computer does that in no time; you only have to spot the line that makes sense:</p>"
+          },
+          {
+            "t": "c",
+            "code": "mystery = \"eqfg ku hwp\"\n1.upto(25) do |key|\n  guess = mystery.chars.map { |c| shift_letter(c, -key) }.join\n  puts \"#{key}: #{guess}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>That is why Caesar's code is a toy today. The lock in your browser's address bar uses keys so long that trying them all would take far longer than the universe has existed – but the idea, a rule plus a secret key, is the same.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-ord' target='_blank'>String#ord</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-chr' target='_blank'>Integer#chr</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-chars' target='_blank'>String#chars</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-tr' target='_blank'>String#tr</a></div><div class='task'><strong>Task:</strong> Write a method <code>caesar(text, key)</code> that shifts every small letter of <code>text</code> by <code>key</code> and leaves everything else alone: <code>caesar(\"hello, fox!\", 1)</code> gives <code>\"ifmmp, gpy!\"</code>, and a negative key decodes. <code>shift_letter</code> from above can do the work for a single letter.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def caesar(text, key)\n#   ...   # every letter shifted by key, everything else stays\n# end\n\n# caesar(\"hello, fox!\", 1)\n",
+            "hints": [
+              "Inside the method: take the text apart with <code>chars</code>, shift every character with <code>map</code> and <code>shift_letter</code>, and put it back together with <code>join</code>."
+            ],
+            "check": "caesar(\"hello, fox!\", 1) == \"ifmmp, gpy!\" && caesar(\"xyz\", 3) == \"abc\" && caesar(caesar(\"chunky bacon\", 7), -7) == \"chunky bacon\"",
+            "hint": "<code>def caesar(text, key)</code>, inside <code>text.chars.map { |c| shift_letter(c, key) }.join</code>, then <code>end</code>.",
+            "solution": "def caesar(text, key)\n  text.chars.map { |c| shift_letter(c, key) }.join\nend\n\ncaesar(\"hello, fox!\", 1)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> You have intercepted a message, and you know it is about bacon. Find the <code>key</code> (1 to 25) under which the decoded message contains <code>\"bacon\"</code> – let Ruby search with <code>find</code> – and put the decoded message into <code>plain</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "intercepted = \"esp qzi pled mlnzy\"\n\n# key = ...     # the key under which the message contains \"bacon\"\n# plain = ...   # the message, decoded with that key\n",
+            "hints": [
+              "<code>(1..25).find { |k| … }</code> returns the first <code>k</code> for which the block is true. In the block: decode with <code>-k</code> and ask <code>include?(\"bacon\")</code>."
+            ],
+            "check": "key == 11 && plain == \"the fox eats bacon\" && code.match?(/find|detect|upto|each|times|until|while|loop/)",
+            "hint": "<code>key = (1..25).find { |k| intercepted.chars.map { |c| shift_letter(c, -k) }.join.include?(\"bacon\") }</code>, then decode once more with <code>-key</code> for <code>plain</code>.",
+            "solution": "intercepted = \"esp qzi pled mlnzy\"\n\nkey = (1..25).find { |k| intercepted.chars.map { |c| shift_letter(c, -k) }.join.include?(\"bacon\") }\nplain = intercepted.chars.map { |c| shift_letter(c, -key) }.join"
+          }
+        ]
+      },
+      "ja": {
+        "title": "暗号",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>暗号</h2><p>ユリウス・カエサルは、秘密の手紙のどの文字もアルファベットで3つずらして書いたといわれています。AはDに、BはEになります。これを作るには、ひとつのことを知っていれば十分です。コンピューターにとって、どの文字も数なのです。<code>ord</code>は文字の数を返し、<code>chr</code>は数を文字に戻します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"A\".ord\np \"a\".ord\np 98.chr\n\"bacon\".chars.map { |c| c.ord }"
+          },
+          {
+            "t": "h",
+            "html": "<p>つまり、文字をずらすのはただの計算です。数に3をたして、文字に戻します。単語全体は、<code>chars</code>と<code>map</code>と<code>join</code>で1文字ずつ処理します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "word = \"bacon\"\nword.chars.map { |c| (c.ord + 3).chr }.join"
+          },
+          {
+            "t": "h",
+            "html": "<p>ところが、アルファベットの終わりでうまくいかなくなります。<code>\"z\".ord + 3</code>は<code>}</code>の数で、文字ではありません。アルファベットは一周して、z → cとならなければなりません。それをしてくれるのが、レッスン{{nr:rechnen}}の余り<code>%</code>です。<code>a</code>から数えて（0から25）、keyをたし、26で割った余りをとり、<code>a</code>をたし直します。小文字でないものは、そのままです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def shift_letter(letter, key)\n  return letter unless (\"a\"..\"z\").include?(letter)\n  ((letter.ord - \"a\".ord + key) % 26 + \"a\".ord).chr\nend\n\np shift_letter(\"z\", 3)\np shift_letter(\"!\", 3)\n\"chunky bacon!\".chars.map { |c| shift_letter(c, 3) }.join"
+          },
+          {
+            "t": "h",
+            "html": "<p>解読は逆にずらすこと、つまりマイナスのkeyです。そしてkeyが13のとき（ROT13といいます）は、暗号化と解読が同じになります。13 + 13 = 26なので、2回ずらすとどの文字も元に戻るのです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "secret = \"chunky bacon!\".chars.map { |c| shift_letter(c, 3) }.join\np secret\np secret.chars.map { |c| shift_letter(c, -3) }.join\nrot = \"hello\".chars.map { |c| shift_letter(c, 13) }.join\np rot\nrot.chars.map { |c| shift_letter(c, 13) }.join"
+          },
+          {
+            "t": "h",
+            "html": "<p>Rubyには文字を入れかえる近道もあります。<code>tr</code>（“translate”）は、1つめのリストの文字を、2つめのリストの同じ位置の文字に置きかえます。ROT13が1行です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "\"chunky bacon\".tr(\"a-z\", \"n-za-m\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>keyを知らずにカエサル暗号を破るには？keyは25通りしかありません。全部試せばいいのです！コンピューターならあっという間です。意味の通る行を見つけるだけです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "mystery = \"eqfg ku hwp\"\n1.upto(25) do |key|\n  guess = mystery.chars.map { |c| shift_letter(c, -key) }.join\n  puts \"#{key}: #{guess}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>だから、カエサル暗号は今ではおもちゃです。ブラウザーのアドレスバーにある鍵マークは、とても長いkeyを使っているので、全部試すには宇宙が始まってから今までよりずっと長い時間がかかります。それでも、規則と秘密のkeyという考え方は同じです。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/method/String/i/ord.html' target='_blank'>String#ord</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Integer/i/chr.html' target='_blank'>Integer#chr</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/String/i/chars.html' target='_blank'>String#chars</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/String/i/tr.html' target='_blank'>String#tr</a></div><div class='task'><strong>課題：</strong><code>text</code>の小文字をすべて<code>key</code>だけずらし、それ以外はそのままにするメソッド<code>caesar(text, key)</code>を書きましょう。<code>caesar(\"hello, fox!\", 1)</code>は<code>\"ifmmp, gpy!\"</code>になり、マイナスのkeyなら解読します。1文字ぶんの仕事は、上の<code>shift_letter</code>がしてくれます。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def caesar(text, key)\n#   ...   # どの文字もkeyだけずらし、それ以外はそのまま\n# end\n\n# caesar(\"hello, fox!\", 1)\n",
+            "hints": [
+              "メソッドの中では、テキストを<code>chars</code>でばらして、<code>map</code>と<code>shift_letter</code>で1文字ずつずらし、<code>join</code>で元に戻すんだ。"
+            ],
+            "check": "caesar(\"hello, fox!\", 1) == \"ifmmp, gpy!\" && caesar(\"xyz\", 3) == \"abc\" && caesar(caesar(\"chunky bacon\", 7), -7) == \"chunky bacon\"",
+            "hint": "<code>def caesar(text, key)</code>、中に<code>text.chars.map { |c| shift_letter(c, key) }.join</code>、それから<code>end</code>だよ。",
+            "solution": "def caesar(text, key)\n  text.chars.map { |c| shift_letter(c, key) }.join\nend\n\ncaesar(\"hello, fox!\", 1)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>メッセージを手に入れました。ベーコンの話だということはわかっています。解読すると<code>\"bacon\"</code>が出てくる<code>key</code>（1から25）を<code>find</code>でRubyに探させて、解読したメッセージを<code>plain</code>に入れてください。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "intercepted = \"esp qzi pled mlnzy\"\n\n# key = ...     # 解読すると \"bacon\" が出てくるkey\n# plain = ...   # そのkeyで解読したメッセージ\n",
+            "hints": [
+              "<code>(1..25).find { |k| … }</code>は、ブロックが真になる最初の<code>k</code>を返すよ。ブロックの中では、<code>-k</code>で解読して<code>include?(\"bacon\")</code>って聞いてみて。"
+            ],
+            "check": "key == 11 && plain == \"the fox eats bacon\" && code.match?(/find|detect|upto|each|times|until|while|loop/)",
+            "hint": "<code>key = (1..25).find { |k| intercepted.chars.map { |c| shift_letter(c, -k) }.join.include?(\"bacon\") }</code>、それから<code>plain</code>のために<code>-key</code>でもう一度解読だよ。",
+            "solution": "intercepted = \"esp qzi pled mlnzy\"\n\nkey = (1..25).find { |k| intercepted.chars.map { |c| shift_letter(c, -k) }.join.include?(\"bacon\") }\nplain = intercepted.chars.map { |c| shift_letter(c, -key) }.join"
+          }
+        ]
+      }
+    },
+    {
       "id": "fehler",
       "de": {
         "title": "Fehlermeldungen lesen",
@@ -5345,6 +5845,208 @@ window.LESSONS_JSON = JSON.stringify({
             "check": "unbox([1, [2, [3, [4]]], 5]) == [1, 2, 3, 4, 5] && unbox([[[\"bacon\"]], \"egg\"]) == [\"bacon\", \"egg\"] && unbox(7) == [7] && !code.include?(\"flatten\")",
             "hint": "<code>if thing.is_a?(Array)</code> → <code>thing.flat_map { |inner| unbox(inner) }</code>、<code>else</code> → <code>[thing]</code>だよ。",
             "solution": "def unbox(thing)\n  if thing.is_a?(Array)\n    thing.flat_map { |inner| unbox(inner) }\n  else\n    [thing]\n  end\nend\n\nunbox([1, [2, [3, [4]]], 5])"
+          }
+        ]
+      }
+    },
+    {
+      "id": "knobeln",
+      "stepper": true,
+      "de": {
+        "title": "Knobeleien",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Knobeleien</h2><p>Manche kleinen Probleme sind so berühmt, dass Programmiererinnen auf der ganzen Welt sie kennen: Sie tauchen in Programmierclubs, Vorstellungsgesprächen und Mathewettbewerben auf. In der Schleifen-Lektion bist du FizzBuzz schon in Verkleidung begegnet, in der String-Lektion einem Palindrom – einem Wort, das rückwärts gleich lautet. Hier ist ein besserer Palindrom-Test, der Grossbuchstaben, Leerzeichen und Satzzeichen übergeht, damit ganze Sätze zählen. <code>delete(\"^a-z\")</code> löscht alles, was <em>kein</em> kleiner Buchstabe ist:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def palindrom?(text)\n  buchstaben = text.downcase.delete(\"^a-z\")\n  buchstaben == buchstaben.reverse\nend\n\np palindrom?(\"Lagerregal\")\np palindrom?(\"Speck\")\npalindrom?(\"Ein Esel lese nie.\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Zwei Wörter sind <strong>Anagramme</strong>, wenn sie aus genau denselben Buchstaben bestehen: „Lampe“ und „Palme“. Der Trick: die Buchstaben beider Wörter sortieren und vergleichen – das Sortieren aus Lektion {{nr:sortieren}} erledigt die ganze Arbeit:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def anagramm?(a, b)\n  a.downcase.chars.sort == b.downcase.chars.sort\nend\n\np anagramm?(\"Lampe\", \"Palme\")\np anagramm?(\"Regal\", \"Lager\")\nanagramm?(\"Speck\", \"Specht\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Eine <strong>Primzahl</strong> ist eine Zahl über 1, die nur durch 1 und sich selbst ohne Rest teilbar ist: 2, 3, 5, 7, 11 … Um eine Zahl zu prüfen, probierst du jeden Teiler ab 2 – und du kannst bei ihrer Quadratwurzel aufhören, denn ein grösserer Teiler hätte einen kleineren Partner, den du schon probiert hast. <code>none?</code> ist wahr, wenn der Block für keinen wahr ist:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def primzahl?(n)\n  return false if n < 2\n  (2..Math.sqrt(n)).none? { |t| n % t == 0 }\nend\n\n(1..50).select { |n| primzahl?(n) }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Und jetzt ein Rätsel, das niemand auf der Welt gelöst hat: die <strong>Collatz-Vermutung</strong>. Nimm irgendeine positive Zahl. Ist sie gerade, halbiere sie; ist sie ungerade, verdreifache sie und zähl 1 dazu. Wiederhole. Bisher ist jede Zahl bei 1 gelandet – Mathematiker haben Zahlen weit über eine Trillion geprüft –, aber niemand hat bewiesen, dass es jede muss. Geh die Zelle mit ⏯ durch und schau, wie 27 klettert:</p>"
+          },
+          {
+            "t": "c",
+            "code": "n = 27\nschritte = 0\nwhile n != 1\n  n = n.even? ? n / 2 : 3 * n + 1\n  schritte += 1\nend\nschritte"
+          },
+          {
+            "t": "h",
+            "html": "<p>27 braucht 111 Schritte und klettert unterwegs bis 9232 – probier andere Startzahlen. Solche Knobeleien sind die perfekte Übung: kurz, leicht zu überprüfen, und es gibt immer noch einen zweiten Weg, sie zu lösen.</p><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-reverse' target='_blank'>String#reverse</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-delete' target='_blank'>String#delete</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-none-3F' target='_blank'>Enumerable#none?</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-25' target='_blank'>Integer#%</a></div><div class='task'><strong>Aufgabe:</strong> Eine Zahl ist <strong>vollkommen</strong>, wenn ihre Teiler unter ihr selbst zusammen die Zahl ergeben: 6 = 1 + 2 + 3. Schreib <code>vollkommen?(n)</code> und finde alle vollkommenen Zahlen bis 500. (Es gibt nur drei – und schon die alten Griechen kannten sie.)</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def vollkommen?(n)\n#   ...   # true, wenn die Teiler von n unter n zusammen n ergeben\n# end\n\n# (1..500).select { |n| vollkommen?(n) }\n",
+            "hints": [
+              "Sammle zuerst die Teiler: die Zahlen von 1 bis unter <code>n</code> (<code>1...n</code>, drei Punkte), die <code>n</code> ohne Rest teilen – <code>select</code> mit <code>n % t == 0</code>. Dann vergleichst du ihre <code>sum</code> mit <code>n</code>."
+            ],
+            "check": "(1..500).select { |n| vollkommen?(n) } == [6, 28, 496] && vollkommen?(8128) && !vollkommen?(12)",
+            "hint": "<code>def vollkommen?(n)</code>, darin <code>(1...n).select { |t| n % t == 0 }.sum == n</code>, dann <code>end</code>.",
+            "solution": "def vollkommen?(n)\n  teiler = (1...n).select { |t| n % t == 0 }\n  teiler.sum == n\nend\n\n(1..500).select { |n| vollkommen?(n) }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Noch ein ungelöstes Rätsel, die <strong>Goldbach-Vermutung</strong> von 1742: Jede gerade Zahl über 2 ist die Summe zweier Primzahlen. Schreib <code>goldbach(n)</code>, das das erste Paar <code>[p, q]</code> von Primzahlen mit <code>p + q == n</code> zurückgibt, die kleinere zuerst: <code>goldbach(28)</code> ist <code>[5, 23]</code>. <code>primzahl?</code> von oben hilft.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def goldbach(n)\n#   ...   # das erste Paar Primzahlen [p, q] mit p + q == n, die kleinere zuerst\n# end\n\n# goldbach(28)\n",
+            "hints": [
+              "Probier die kleinere Zahl <code>a</code> von 2 bis <code>n / 2</code>: Das Paar passt, wenn <code>a</code> und <code>n - a</code> beide Primzahlen sind. <code>find</code> hört beim ersten auf."
+            ],
+            "check": "goldbach(28) == [5, 23] && goldbach(100) == [3, 97] && goldbach(4) == [2, 2] && (6..200).step(2).all? { |n| goldbach(n).then { |pq| pq.sum == n && pq.all? { |x| primzahl?(x) } } }",
+            "hint": "<code>a = (2..n / 2).find { |x| primzahl?(x) &amp;&amp; primzahl?(n - x) }</code>, dann <code>[a, n - a]</code> zurückgeben.",
+            "solution": "def goldbach(n)\n  a = (2..n / 2).find { |x| primzahl?(x) && primzahl?(n - x) }\n  [a, n - a]\nend\n\ngoldbach(28)"
+          }
+        ]
+      },
+      "en": {
+        "title": "Classic puzzles",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Classic puzzles</h2><p>Some little problems are so famous that programmers all over the world know them: they turn up in coding clubs, job interviews and maths competitions alike. In the loops lesson you already met FizzBuzz in disguise, and in the strings lesson a palindrome – a word that reads the same backwards. Here is a better palindrome test, one that ignores capitals, spaces and punctuation, so that whole sentences count. <code>delete(\"^a-z\")</code> deletes everything that is <em>not</em> a small letter:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def palindrome?(text)\n  letters = text.downcase.delete(\"^a-z\")\n  letters == letters.reverse\nend\n\np palindrome?(\"Racecar\")\np palindrome?(\"bacon\")\npalindrome?(\"Was it a car or a cat I saw?\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Two words are <strong>anagrams</strong> when they are made of exactly the same letters: “listen” and “silent”. The trick: sort the letters of both words and compare – sorting from lesson {{nr:sortieren}} does all the work:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def anagram?(a, b)\n  a.downcase.chars.sort == b.downcase.chars.sort\nend\n\np anagram?(\"listen\", \"silent\")\np anagram?(\"Dormitory\", \"dirtyroom\")\nanagram?(\"bacon\", \"bagel\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>A <strong>prime</strong> is a number above 1 that only 1 and itself divide without a remainder: 2, 3, 5, 7, 11 … To test a number, try every divisor from 2 upwards – and you can stop at its square root, because a bigger divisor would have a smaller partner you have tried already. <code>none?</code> is true when the block is true for none of them:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def prime?(n)\n  return false if n < 2\n  (2..Math.sqrt(n)).none? { |d| n % d == 0 }\nend\n\n(1..50).select { |n| prime?(n) }"
+          },
+          {
+            "t": "h",
+            "html": "<p>And now a puzzle that nobody in the world has solved, the <strong>Collatz conjecture</strong>. Take any positive number. If it is even, halve it; if it is odd, triple it and add 1. Repeat. So far every number has ended at 1 – mathematicians have checked numbers far beyond a billion billion – but nobody has proved that every number must. Step through the cell with ⏯ and watch 27 climb:</p>"
+          },
+          {
+            "t": "c",
+            "code": "n = 27\nsteps = 0\nwhile n != 1\n  n = n.even? ? n / 2 : 3 * n + 1\n  steps += 1\nend\nsteps"
+          },
+          {
+            "t": "h",
+            "html": "<p>27 needs 111 steps and climbs as high as 9232 on the way – try other starting numbers. Puzzles like these are perfect practice: short, easy to check, and there is always a second way to solve them.</p><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-reverse' target='_blank'>String#reverse</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-delete' target='_blank'>String#delete</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-none-3F' target='_blank'>Enumerable#none?</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-25' target='_blank'>Integer#%</a></div><div class='task'><strong>Task:</strong> A number is <strong>perfect</strong> when its divisors below itself add up to the number: 6 = 1 + 2 + 3. Write <code>perfect?(n)</code> and find all perfect numbers up to 500. (There are only three – and the ancient Greeks already knew them.)</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def perfect?(n)\n#   ...   # true when the divisors of n below n add up to n\n# end\n\n# (1..500).select { |n| perfect?(n) }\n",
+            "hints": [
+              "Collect the divisors first: the numbers from 1 to below <code>n</code> (<code>1...n</code>, three dots) that divide <code>n</code> without a remainder – <code>select</code> with <code>n % d == 0</code>. Then compare their <code>sum</code> with <code>n</code>."
+            ],
+            "check": "(1..500).select { |n| perfect?(n) } == [6, 28, 496] && perfect?(8128) && !perfect?(12)",
+            "hint": "<code>def perfect?(n)</code>, inside <code>(1...n).select { |d| n % d == 0 }.sum == n</code>, then <code>end</code>.",
+            "solution": "def perfect?(n)\n  divisors = (1...n).select { |d| n % d == 0 }\n  divisors.sum == n\nend\n\n(1..500).select { |n| perfect?(n) }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Another unsolved puzzle, <strong>Goldbach's conjecture</strong> from 1742: every even number above 2 is the sum of two primes. Write <code>goldbach(n)</code>, which returns the first pair <code>[p, q]</code> of primes with <code>p + q == n</code>, the smaller one first: <code>goldbach(28)</code> is <code>[5, 23]</code>. <code>prime?</code> from above helps.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def goldbach(n)\n#   ...   # the first pair of primes [p, q] with p + q == n, the smaller one first\n# end\n\n# goldbach(28)\n",
+            "hints": [
+              "Try the smaller number <code>a</code> from 2 up to <code>n / 2</code>: the pair works when both <code>a</code> and <code>n - a</code> are prime. <code>find</code> stops at the first one."
+            ],
+            "check": "goldbach(28) == [5, 23] && goldbach(100) == [3, 97] && goldbach(4) == [2, 2] && (6..200).step(2).all? { |n| goldbach(n).then { |pq| pq.sum == n && pq.all? { |x| prime?(x) } } }",
+            "hint": "<code>a = (2..n / 2).find { |x| prime?(x) &amp;&amp; prime?(n - x) }</code>, then return <code>[a, n - a]</code>.",
+            "solution": "def goldbach(n)\n  a = (2..n / 2).find { |x| prime?(x) && prime?(n - x) }\n  [a, n - a]\nend\n\ngoldbach(28)"
+          }
+        ]
+      },
+      "ja": {
+        "title": "定番パズル",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>定番パズル</h2><p>小さな問題の中には、世界中のプログラマーが知っているほど有名なものがあります。プログラミングクラブにも、就職の面接にも、数学のコンテストにも出てきます。ループのレッスンでは変装したFizzBuzzに、文字列のレッスンでは回文（逆から読んでも同じ単語）に、もう出会いました。ここでは、大文字、空白、句読点を無視して、文全体も回文として数えられる、よりよいテストを作ります。<code>delete(\"^a-z\")</code>は、小文字<em>ではない</em>ものをすべて消します：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def palindrome?(text)\n  letters = text.downcase.delete(\"^a-z\")\n  letters == letters.reverse\nend\n\np palindrome?(\"Racecar\")\np palindrome?(\"bacon\")\npalindrome?(\"Was it a car or a cat I saw?\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>2つの単語がまったく同じ文字でできているとき、それらは<strong>アナグラム</strong>です。“listen”と“silent”のように。コツは、両方の単語の文字を並べかえて比べることです。仕事はレッスン{{nr:sortieren}}の並べかえが全部してくれます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def anagram?(a, b)\n  a.downcase.chars.sort == b.downcase.chars.sort\nend\n\np anagram?(\"listen\", \"silent\")\np anagram?(\"Dormitory\", \"dirtyroom\")\nanagram?(\"bacon\", \"bagel\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><strong>素数</strong>は、1と自分自身でしか割り切れない、1より大きい数です。2、3、5、7、11……。ある数を調べるには、2から順に割ってみます。平方根まで調べればやめてかまいません。それより大きな約数があれば、もう試したもっと小さな相方がいるはずだからです。<code>none?</code>は、ブロックがどれにも真にならないときに真です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def prime?(n)\n  return false if n < 2\n  (2..Math.sqrt(n)).none? { |d| n % d == 0 }\nend\n\n(1..50).select { |n| prime?(n) }"
+          },
+          {
+            "t": "h",
+            "html": "<p>そして、世界のだれも解いていないパズル、<strong>コラッツ予想</strong>です。好きな正の数をとります。偶数なら半分に、奇数なら3倍して1をたします。これをくり返します。これまで、どの数も最後は1になりました。数学者たちは途方もなく大きな数まで調べましたが、どの数も必ずそうなることは、まだだれも証明していません。⏯でセルを1ステップずつ実行して、27がのぼっていく様子を見てみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "n = 27\nsteps = 0\nwhile n != 1\n  n = n.even? ? n / 2 : 3 * n + 1\n  steps += 1\nend\nsteps"
+          },
+          {
+            "t": "h",
+            "html": "<p>27は111ステップかかり、とちゅうで9232までのぼります。ほかの数でも試してみてください。こうしたパズルは最高の練習です。短く、正しいかどうか確かめやすく、いつでも別の解き方があります。</p><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/ja/latest/method/String/i/reverse.html' target='_blank'>String#reverse</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/String/i/delete.html' target='_blank'>String#delete</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Enumerable/i/none=3f.html' target='_blank'>Enumerable#none?</a>・<a href='https://docs.ruby-lang.org/ja/latest/method/Integer/i/=25.html' target='_blank'>Integer#%</a></div><div class='task'><strong>課題：</strong>自分より小さい約数の和が自分自身になる数を<strong>完全数</strong>といいます。6 = 1 + 2 + 3です。<code>perfect?(n)</code>を書いて、500までの完全数をすべて見つけましょう（3つしかありません。古代ギリシャの人たちも知っていました）。</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def perfect?(n)\n#   ...   # nより小さいnの約数の和がnになるならtrue\n# end\n\n# (1..500).select { |n| perfect?(n) }\n",
+            "hints": [
+              "まず約数を集めよう。1から<code>n</code>の手前まで（<code>1...n</code>、点が3つ）で、<code>n</code>を割り切る数だよ。<code>n % d == 0</code>で<code>select</code>してね。それから、その<code>sum</code>を<code>n</code>と比べるんだ。"
+            ],
+            "check": "(1..500).select { |n| perfect?(n) } == [6, 28, 496] && perfect?(8128) && !perfect?(12)",
+            "hint": "<code>def perfect?(n)</code>、中に<code>(1...n).select { |d| n % d == 0 }.sum == n</code>、それから<code>end</code>だよ。",
+            "solution": "def perfect?(n)\n  divisors = (1...n).select { |d| n % d == 0 }\n  divisors.sum == n\nend\n\n(1..500).select { |n| perfect?(n) }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>ボーナス：</strong>もうひとつの未解決パズル、1742年の<strong>ゴールドバッハ予想</strong>です。2より大きい偶数は、どれも2つの素数の和で表せます。<code>p + q == n</code>となる最初の素数の組<code>[p, q]</code>を、小さいほうを先にして返す<code>goldbach(n)</code>を書きましょう。<code>goldbach(28)</code>は<code>[5, 23]</code>です。上の<code>prime?</code>が役に立ちます。</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def goldbach(n)\n#   ...   # p + q == n となる最初の素数の組 [p, q]。小さいほうが先\n# end\n\n# goldbach(28)\n",
+            "hints": [
+              "小さいほうの数<code>a</code>を2から<code>n / 2</code>まで試してみて。<code>a</code>と<code>n - a</code>が両方とも素数なら、その組で決まり。<code>find</code>は最初の1つで止まるよ。"
+            ],
+            "check": "goldbach(28) == [5, 23] && goldbach(100) == [3, 97] && goldbach(4) == [2, 2] && (6..200).step(2).all? { |n| goldbach(n).then { |pq| pq.sum == n && pq.all? { |x| prime?(x) } } }",
+            "hint": "<code>a = (2..n / 2).find { |x| prime?(x) &amp;&amp; prime?(n - x) }</code>、それから<code>[a, n - a]</code>を返すんだ。",
+            "solution": "def goldbach(n)\n  a = (2..n / 2).find { |x| prime?(x) && prime?(n - x) }\n  [a, n - a]\nend\n\ngoldbach(28)"
           }
         ]
       }
@@ -20552,7 +21254,8 @@ window.LESSONS_JSON = JSON.stringify({
       "id": "strings",
       "lessons": [
         "strings",
-        "formatieren"
+        "formatieren",
+        "geheimschrift"
       ],
       "title": {
         "de": "Strings (Text)",
@@ -20678,6 +21381,18 @@ window.LESSONS_JSON = JSON.stringify({
           "de": "Heredoc: Text über mehrere Zeilen",
           "en": "heredoc: text over several lines",
           "ja": "ヒアドキュメント：複数行の文字列"
+        },
+        {
+          "c": "\"a\".ord   97.chr",
+          "de": "Zeichen → Zahl / Zahl → Zeichen",
+          "en": "character → number / number → character",
+          "ja": "文字→数／数→文字"
+        },
+        {
+          "c": "s.tr(\"a-z\", \"n-za-m\")",
+          "de": "Zeichen vertauschen (hier ROT13)",
+          "en": "swap characters (here ROT13)",
+          "ja": "文字を置きかえる（ここではROT13）"
         }
       ]
     },
@@ -20779,7 +21494,8 @@ window.LESSONS_JSON = JSON.stringify({
     {
       "id": "loops",
       "lessons": [
-        "schleifen"
+        "schleifen",
+        "muster"
       ],
       "title": {
         "de": "Schleifen",
@@ -20857,6 +21573,12 @@ window.LESSONS_JSON = JSON.stringify({
           "de": "zur nächsten Runde springen / die Schleife verlassen",
           "en": "jump to the next round / leave the loop",
           "ja": "次の周へ進む／ループを抜ける"
+        },
+        {
+          "c": "5.times { |row| 5.times { |col| … } }",
+          "de": "zwei Schleifen ineinander: ein Gitter aus Zeilen und Spalten",
+          "en": "two loops inside each other: a grid of rows and columns",
+          "ja": "ループを2つ重ねる：行と列のマス目"
         }
       ]
     },
@@ -21230,7 +21952,8 @@ window.LESSONS_JSON = JSON.stringify({
         "methoden",
         "rekursion",
         "tl-methods",
-        "tl-blocks"
+        "tl-blocks",
+        "knobeln"
       ],
       "title": {
         "de": "Methoden & Blöcke",

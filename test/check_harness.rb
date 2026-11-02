@@ -393,6 +393,24 @@ SOLUTIONS = {
     "en" => ["def power(base, exponent)\n  return 1 if exponent == 0\n  base * power(base, exponent - 1)\nend\n\npower(2, 10)",
              "def power(base, exponent)\n  if exponent.zero?\n    1\n  else\n    base * power(base, exponent - 1)\n  end\nend\np power(2, 10)"]
   },
+  "muster" => {
+    "de" => ["5.downto(1) do |zeile|\n  puts \"#\" * zeile\nend",
+             "puts (1..5).to_a.reverse.map { |n| \"#\" * n }"],
+    "en" => ["5.downto(1) do |row|\n  puts \"#\" * row\nend",
+             "puts (1..5).to_a.reverse.map { |n| \"#\" * n }"]
+  },
+  "geheimschrift" => {
+    "de" => ["def caesar(text, schluessel)\n  text.chars.map { |z| verschieben(z, schluessel) }.join\nend\n\ncaesar(\"hallo, fuchs!\", 1)",
+             "def caesar(text, schluessel)\n  text.gsub(/[a-z]/) { |z| ((z.ord - 97 + schluessel) % 26 + 97).chr }\nend\np caesar(\"hallo, fuchs!\", 1)"],
+    "en" => ["def caesar(text, key)\n  text.chars.map { |c| shift_letter(c, key) }.join\nend\n\ncaesar(\"hello, fox!\", 1)",
+             "def caesar(text, key)\n  text.gsub(/[a-z]/) { |c| ((c.ord - 97 + key) % 26 + 97).chr }\nend\np caesar(\"hello, fox!\", 1)"]
+  },
+  "knobeln" => {
+    "de" => ["def vollkommen?(n)\n  teiler = (1...n).select { |t| n % t == 0 }\n  teiler.sum == n\nend\n\n(1..500).select { |n| vollkommen?(n) }",
+             "def vollkommen?(n)\n  (1..n / 2).select { |t| (n % t).zero? }.sum == n\nend\np (1..500).select { |n| vollkommen?(n) }"],
+    "en" => ["def perfect?(n)\n  divisors = (1...n).select { |d| n % d == 0 }\n  divisors.sum == n\nend\n\n(1..500).select { |n| perfect?(n) }",
+             "def perfect?(n)\n  (1..n / 2).select { |d| (n % d).zero? }.sum == n\nend\np (1..500).select { |n| perfect?(n) }"]
+  },
   "regex" => {
     "de" => [%(notizen = ["Frühstück um 07:45: Speck", "Znüni um 10:15: Apfel", "Mittag um 12:30: speck und Ei", "Abend: kein Hunger"]\nzeiten = notizen.join(" ").scan(/\\d\\d:\\d\\d/)\nspeck_tage = notizen.count { |notiz| notiz.match?(/speck/i) }),
              %(notizen = ["Frühstück um 07:45: Speck", "Znüni um 10:15: Apfel", "Mittag um 12:30: speck und Ei", "Abend: kein Hunger"]\nzeiten = notizen.flat_map { |notiz| notiz.scan(/\\d{2}:\\d{2}/) }\nspeck_tage = notizen.select { |notiz| notiz =~ /[Ss]peck/ }.length\np speck_tage)],
@@ -644,6 +662,24 @@ p most_common)]
              "streifen = [3, 5, 2, 7]\nschnitt = streifen.sum.fdiv(streifen.length)\np schnitt"],
     "en" => ["strips = [3, 5, 2, 7]\ntotal = 0\nstrips.each do |s|\n  total += s\nend\naverage = total / strips.length.to_f",
              "strips = [3, 5, 2, 7]\naverage = strips.sum.fdiv(strips.length)\np average"]
+  },
+  "muster#bonus" => {
+    "de" => ["[1, 3, 5, 7, 5, 3, 1].each do |n|\n  sterne = \"*\" * n\n  puts sterne.center(7)\nend",
+             "((1..4).to_a + [3, 2, 1]).map { |z| (\"*\" * (2 * z - 1)).center(7).rstrip }.join(\"\\n\")"],
+    "en" => ["[1, 3, 5, 7, 5, 3, 1].each do |n|\n  stars = \"*\" * n\n  puts stars.center(7)\nend",
+             "((1..4).to_a + [3, 2, 1]).map { |r| (\"*\" * (2 * r - 1)).center(7).rstrip }.join(\"\\n\")"]
+  },
+  "geheimschrift#bonus" => {
+    "de" => ["abgefangen = \"opc qfnsd tdde dapnv\"\n\nschluessel = (1..25).find { |s| abgefangen.chars.map { |z| verschieben(z, -s) }.join.include?(\"speck\") }\nklartext = abgefangen.chars.map { |z| verschieben(z, -schluessel) }.join",
+             "abgefangen = \"opc qfnsd tdde dapnv\"\nschluessel = 1\nschluessel += 1 until abgefangen.chars.map { |z| verschieben(z, -schluessel) }.join.include?(\"speck\")\nklartext = abgefangen.chars.map { |z| verschieben(z, -schluessel) }.join\np klartext"],
+    "en" => ["intercepted = \"esp qzi pled mlnzy\"\n\nkey = (1..25).find { |k| intercepted.chars.map { |c| shift_letter(c, -k) }.join.include?(\"bacon\") }\nplain = intercepted.chars.map { |c| shift_letter(c, -key) }.join",
+             "intercepted = \"esp qzi pled mlnzy\"\nkey = 1\nkey += 1 until intercepted.chars.map { |c| shift_letter(c, -key) }.join.include?(\"bacon\")\nplain = intercepted.chars.map { |c| shift_letter(c, -key) }.join\np plain"]
+  },
+  "knobeln#bonus" => {
+    "de" => ["def goldbach(n)\n  a = (2..n / 2).find { |x| primzahl?(x) && primzahl?(n - x) }\n  [a, n - a]\nend\n\ngoldbach(28)",
+             "def goldbach(n)\n  2.upto(n) do |a|\n    return [a, n - a] if primzahl?(a) && primzahl?(n - a)\n  end\nend\np goldbach(100)"],
+    "en" => ["def goldbach(n)\n  a = (2..n / 2).find { |x| prime?(x) && prime?(n - x) }\n  [a, n - a]\nend\n\ngoldbach(28)",
+             "def goldbach(n)\n  2.upto(n) do |a|\n    return [a, n - a] if prime?(a) && prime?(n - a)\n  end\nend\np goldbach(100)"]
   },
   "iteratoren#bonus" => {
     "de" => [%(woerter = ["Speck", "Ei", "Kaffee", "Brot", "Honigbrot"]
