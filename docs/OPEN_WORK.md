@@ -129,7 +129,12 @@ Last updated 2026-11-02.
   ranges, leap years; after `formatieren`) and `rekursion` (base case,
   factorial, nested arrays, Fibonacci with a memo hash, the Towers of
   Hanoi; after `fehler`), all with ⏯, a bonus, and links from the cheat
-  sheet. Gaps that are still open in the Basics, each a lesson's worth:
+  sheet. Then `muster` (patterns from loops: staircases, a tree with
+  `center`, a chessboard from two loops; after `schleifen`),
+  `geheimschrift` (ord/chr, Caesar with `%` wrapping, ROT13 with `tr`,
+  cracking by trying all keys; after `methoden`) and `knobeln` (sentence
+  palindromes, anagrams, primes, Collatz; task perfect numbers, bonus
+  Goldbach; after `rekursion`). Gaps that are still open in the Basics, each a lesson's worth:
   Symbols and `nil` on their own (truthiness, `&.`, `||=`, `to_sym` -
   today a paragraph each in `wenn` and `hashes`); `Struct`/`Data` before
   classes.
