@@ -336,7 +336,8 @@ lessons that start a real course - a lesson on its own belongs in "Ausflüge"
 IRB's (`View.lesson_html`, `Course#stepper?`). It is on the Basics whose
 cells are plain Ruby and short, where watching a run teaches something:
 lessons `variablen` to `module` (variablen, strings, wenn, schleifen, muster, arrays, zufall, hashes,
-sortieren, formatieren, zeit, methoden, geheimschrift, rekursion, knobeln, turtle, klassen, module) - assignments, a branch taken, a loop's passes,
+symbole, sortieren, formatieren, zeit, methoden, geheimschrift, rekursion, knobeln, turtle, struct,
+klassen, module) - assignments, a branch taken, a loop's passes,
 a block's variable, a method called and returning, recursion. Not on
 hallo and rechnen (one-line cells: one step), the IRB, nor on 14-19,
 whose cells install gems, start servers or fetch from the web - nothing of
