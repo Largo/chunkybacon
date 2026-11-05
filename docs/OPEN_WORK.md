@@ -4,7 +4,7 @@ What is unfinished, what state it is in, and where the context for it lives.
 `docs/HANDOVER.md` explains how everything works; this file lists what is in
 flight. Keep it short and current: tick items off, delete finished sections.
 
-Last updated 2026-11-02.
+Last updated 2026-11-05.
 
 ## Where the context is defined
 
@@ -138,6 +138,33 @@ Last updated 2026-11-02.
   `symbole` (nil, truthiness, `||`/`||=`, `&.`, symbols vs strings,
   `transform_keys`; after `iteratoren`) and `struct` (Struct with
   methods, Data and `with`; before `klassen`).
+- **Twenty more Basics lessons** (2026-11-05), each with ⏯, a task, a
+  bonus, hints, verified solutions and cheat sheet rows: `bereiche`
+  (ranges, after `arrays`), `mengen` (Set, after `hashes`), `reduce` and
+  `listen` (reduce/each_with_object; zip, each_slice, each_cons, partition,
+  chunk_while; after `iteratoren`), `unicode` (bytes, code points, grapheme
+  clusters, normalization; after `formatieren`), `bloecke` (yield,
+  block_given?; after `methoden`), `gitter`, `zahlensysteme` and `brueche`
+  (grids, binary/hex/bits, divmod/gcd/Rational; after `geheimschrift`),
+  `ausnahmen` (rescue/ensure/retry; after `fehler`), `enumeratoren`
+  (Enumerator, lazy; after `knobeln`), a run of algorithm lessons after
+  `turtle` (`sortierverfahren`, `kombinatorik`, `backtracking`, `stapel`,
+  `labyrinth`, `aehnlich`, `lebensspiel`, `markov`) and `operatoren`
+  (operators, eql?/hash, Comparable; after `module`). `fehler` now points
+  at `ausnahmen`, `geheimschrift` at `unicode`. Worth a look later:
+  - `tl-blocks` and `tl-errors` (timelog track) open with what `bloecke`
+    and `ausnahmen` now teach - they could start one step further;
+  - `listen` and `sortieren` both show `max_by(2)`, `listen` and `brueche`
+    both introduce multiple assignment (`a, b = ...`);
+  - `sortierverfahren`'s last demo counts the comparisons of Ruby's own
+    `sort` on shuffled cards, so its numbers change from run to run (the
+    prose says "about");
+  - ⏯ stops at 600 steps in the recursive demos of `aehnlich` and in
+    `backtracking`'s solution counter - fine, but the slider ends mid-run;
+  - the checks test values (several inputs where the task is a method);
+    where the task is variables to fill (before `methoden`), a hard-coded
+    answer with the method's name in a comment would still pass, as in the
+    older Basics lessons.
 - **Bonus exercises** (2026-10-26, HANDOVER §3 `bonus`): a second `x`
   cell with `"bonus": true` at the end of a lesson, checked and praised
   with its own 💡, not needed for the tick; `SOLUTIONS["<id>#bonus"]` in
@@ -234,7 +261,7 @@ Last updated 2026-11-02.
   polygon's are averaged. `close` ends the window here, while the gem's own
   web build ignores it. Not tried: the workshop, the embedded cell, a real
   screen reader on the canvas.
-- Stepping through a cell (⏯, lessons `variablen` to `module`, `html/step_recorder.rb`,
+- Stepping through a cell (⏯, lessons `variablen` to `operatoren`, `html/step_recorder.rb`,
   `html/stepper.js`): schleifen's prose points at ⏯ since 2026-10-25 (the
   block-parameter paragraph); the other stepper lessons do not.
   Past ~200 steps the slider moves in slivers; the experiment's tick
