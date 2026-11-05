@@ -215,7 +215,10 @@ end
   # "stepper": true) - not gems, servers or the network, not the IRB
   def test_the_lessons_with_a_stepper
     flagged = @course.ids.each_index.select { |idx| @course.stepper?(idx) }.map { |idx| @course.id(idx) }
-    assert_equal %w[variablen strings wenn schleifen muster arrays zufall hashes symbole sortieren formatieren zeit methoden geheimschrift rekursion knobeln turtle struct klassen module], flagged
+    assert_equal %w[variablen strings wenn schleifen muster arrays bereiche zufall hashes mengen reduce listen
+                    symbole sortieren formatieren unicode zeit methoden bloecke geheimschrift gitter zahlensysteme
+                    brueche ausnahmen rekursion knobeln enumeratoren turtle sortierverfahren kombinatorik
+                    backtracking stapel labyrinth aehnlich lebensspiel markov struct klassen module operatoren], flagged
     side_trips = @course.ids.each_index.find { |idx| idx.positive? && @course.section(idx, "de") }
     assert(flagged.all? { |id| @course.index(id) < side_trips }, "the Basics only")
   end

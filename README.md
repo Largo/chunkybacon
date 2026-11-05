@@ -8,12 +8,23 @@ Learn Ruby in your browser — an interactive, notebook-style course in
 
 ## What's inside
 
-- **Lessons** from `puts "Hallo, Welt!"` through strings, `map` and
-  `select`, nil, truthiness and symbols, patterns drawn with loops, sorting and binary search, time and
-  dates, methods, secret codes (Caesar and ROT13), reading error messages,
-  recursion (up to the Towers of Hanoi), classic puzzles (primes,
-  anagrams, Collatz, Goldbach), Struct and Data, classes, inheritance, modules,
-  IRB and reading the Ruby documentation, to
+- **Lessons** from `puts "Hallo, Welt!"` through strings, ranges, sets, `map` and
+  `select`, `reduce` and `each_with_object`, `zip`, `each_slice` and `chunk_while`,
+  nil, truthiness and symbols, patterns drawn with loops, sorting and binary search,
+  letters, bytes and emoji (`grapheme_clusters`, `unicode_normalize`), time and
+  dates, methods and methods that take a block (`yield`), secret codes (Caesar and
+  ROT13), grids of arrays (tic-tac-toe, Minesweeper), binary, hex and bits,
+  fractions and whole-number maths (`divmod`, `gcd`, Rational), reading error
+  messages and catching errors with `rescue`, recursion (up to the Towers of
+  Hanoi), classic puzzles (primes, anagrams, Collatz, Goldbach), endless lists
+  with Enumerator and `lazy`, algorithms to practise on (sorting by hand up to
+  merge sort and quicksort, combinations and permutations, backtracking with the
+  N queens and a 4×4 sudoku, stacks and queues with a bracket checker and a
+  reverse Polish calculator, a maze solved by breadth-first search, edit
+  distance and Ruby's own "Did you mean?", Conway's Game of Life, text from
+  Markov chains), Struct and Data, classes, inheritance, modules, operators for
+  your own classes (`+`, `==`, `eql?`/`hash`, `<=>`), IRB and reading the Ruby
+  documentation, to
   gems, HTML parsing with Nokogiri, exact arithmetic with BigDecimal, web
   routing with Sinatra and Roda, Ruby on Rails itself booted in the page
   (routes, controllers and views, Active Record on SQLite, a page from
@@ -185,7 +196,7 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   just told (lessons `arrays`, `hashes`, `klassen`). Pure Ruby to SVG; a screen reader hears
   the arrows in words.
 - **Step by step through a cell**: in the basics lessons with plain Ruby
-  (3-12), ⏯ beside ▶ runs a cell and records it line by line - then a
+  (`variablen` to `operatoren`), ⏯ beside ▶ runs a cell and records it line by line - then a
   slider walks through the run: the line about to run marked in the
   editor, the variables of the cell, a method or a loop's pass (what just
   changed in yellow), the output so far, and Chunky saying what happens
