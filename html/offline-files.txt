@@ -35,6 +35,7 @@ assets/herb/prism/nodes.js
 assets/herb/prism/visitor.js
 assets/jruby-lesson/swing-de.png
 assets/jruby-lesson/swing-en.png
+assets/pages.css
 assets/pico/prremote-sequence.svg
 assets/picoruby/PICORUBY_VERSION.txt
 assets/picoruby/init.iife.js
@@ -98,6 +99,7 @@ compile/wasi-shim/strace.js
 compile/wasi-shim/wasi.js
 compile/wasi-shim/wasi_defs.js
 compile/worker.js
+datenschutz.html
 earlier_cells.rb
 friendly_errors.rb
 friendly_errors_messages.rb
@@ -198,6 +200,7 @@ gems/cache/useragent-0.16.11.gem
 gems/cache/wavefile-1.1.2.gem
 gems/cache/zeitwerk-2.8.3.gem
 herb_bridge.rb
+impressum.html
 index.html
 ironruby_cells.rb
 ironruby_lab.js
@@ -216,6 +219,7 @@ main.rb
 numo_narray.rb
 object_graph.rb
 offline.js
+pages.js
 pico/lib/de/bme280.rb
 pico/lib/de/epd2in13.rb
 pico/lib/de/picogo.rb
@@ -314,4 +318,5 @@ step_recorder.rb
 stepper.js
 storage.js
 turtle.rb
+welcome.html
 workshop.rb

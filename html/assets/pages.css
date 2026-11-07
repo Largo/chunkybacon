@@ -1,0 +1,142 @@
+/* The pages around the course: the landing page (welcome.html) and the
+   legal pages (impressum.html, datenschutz.html). Same 2 CV palette and
+   type as assets/app.css, but quieter: the foxes stay small, the red is a
+   band, not the page. Language: every text exists as [data-l="de"] and
+   [data-l="en"]; <html lang> picks one (pages.js). */
+
+:root {
+  --infra: #ee3f24;
+  --cap: #1e2229;
+  --bakelite: #ede5d0;
+  --mustard: #e2b034;
+  --cap-text: #d3ccb9;
+  --paper: #f5f1e8;
+  --sheet: #fbf9f4;
+  --ink: #1e2229;
+  --ink-soft: #4e5560;
+  --rule: #d8d1c1;
+  --bacon: #bd2d00;
+  --focus: #2f6db5;
+
+  --font-print: "Atkinson Hyperlegible Next", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-code: "Atkinson Hyperlegible Mono", ui-monospace, "Cascadia Code", Menlo, monospace;
+  --font-display: "Outfit", "Avenir Next", "Futura", system-ui, sans-serif;
+  --page: 66rem;
+}
+
+html[lang="de"] [data-l="en"],
+html[lang="en"] [data-l="de"] { display: none !important; }
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 1.05rem/1.6 var(--font-print);
+}
+a { color: var(--bacon); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.15; letter-spacing: -0.01em; }
+h2 { font-size: 1.9rem; margin: 0 0 1rem; }
+h3 { font-size: 1.2rem; margin: 0 0 0.4rem; }
+code { font-family: var(--font-code); font-size: 0.92em; }
+
+.wrap { max-width: var(--page); margin: 0 auto; padding-inline: 1.25rem; }
+
+/* ---------- top bar ---------- */
+.topbar { background: var(--cap); color: var(--cap-text); }
+.topbar .wrap { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; padding-block: 0.7rem; }
+.brand { display: flex; align-items: center; gap: 0.5rem; color: var(--bakelite); text-decoration: none;
+  font: 800 1.15rem var(--font-display); }
+.brand img { width: 28px; height: 28px; }
+.topnav { display: flex; gap: 1.1rem; margin-left: auto; flex-wrap: wrap; align-items: center; }
+.topnav a { color: var(--cap-text); text-decoration: none; font-weight: 600; }
+.topnav a:hover { color: var(--bakelite); }
+.langs { display: flex; gap: 0.2rem; }
+.langs button { background: none; border: 1px solid #4a505a; color: var(--cap-text); border-radius: 4px;
+  font: 700 0.8rem var(--font-display); padding: 0.2rem 0.45rem; cursor: pointer; }
+html[lang="de"] .langs [data-set="de"], html[lang="en"] .langs [data-set="en"] {
+  background: var(--bakelite); color: var(--cap); border-color: var(--bakelite); }
+
+/* ---------- buttons ---------- */
+.btn { display: inline-block; padding: 0.75rem 1.3rem; border-radius: 6px; text-decoration: none;
+  font: 700 1rem var(--font-display); border: 2px solid var(--cap); }
+.btn.primary { background: var(--cap); color: var(--bakelite); }
+.btn.primary:hover { background: #000; }
+.btn.ghost { color: var(--cap); background: transparent; }
+.btn.ghost:hover { background: var(--bakelite); }
+
+/* ---------- hero ---------- */
+.hero { padding-block: 4.5rem 3.5rem; border-bottom: 6px solid var(--infra); }
+.hero .wrap { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; align-items: center; }
+.hero h1 { font-size: clamp(2.3rem, 5vw, 3.6rem); margin: 0 0 1rem; }
+.hero .lead { font-size: 1.2rem; color: var(--ink-soft); max-width: 34rem; margin: 0 0 1.8rem; }
+.hero .ctas { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+.facts { list-style: none; padding: 0; margin: 2.2rem 0 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.6rem;
+  color: var(--ink-soft); font-size: 0.95rem; }
+.facts strong { color: var(--ink); }
+
+/* a still life of a notebook cell, so the page shows what the course is */
+.cell { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden;
+  box-shadow: 0 10px 30px rgba(30, 34, 41, 0.12); font-family: var(--font-code); font-size: 0.95rem; }
+.cell .code { background: var(--cap); color: #e8e2d2; padding: 1rem 1.1rem; white-space: pre; overflow-x: auto; }
+.cell .code .k { color: #ff7131; }
+.cell .code .s { color: var(--mustard); }
+.cell .out { padding: 0.8rem 1.1rem; color: var(--ink); }
+.cell .out .r { color: var(--ink-soft); }
+.cell .bar { display: flex; justify-content: space-between; padding: 0.45rem 1.1rem; font: 600 0.8rem var(--font-print);
+  color: var(--ink-soft); border-bottom: 1px solid var(--rule); }
+
+/* ---------- sections ---------- */
+section { padding-block: 4rem; }
+section.alt { background: var(--sheet); border-block: 1px solid var(--rule); }
+.intro { color: var(--ink-soft); max-width: 42rem; margin: -0.4rem 0 2rem; }
+.grid { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+.card { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 1.3rem 1.4rem; }
+section.alt .card { background: var(--paper); }
+.card p { margin: 0; color: var(--ink-soft); }
+.card .count { font: 800 0.85rem var(--font-display); color: var(--bacon); text-transform: uppercase;
+  letter-spacing: 0.04em; margin-bottom: 0.3rem; }
+.card.main { border-top: 4px solid var(--infra); }
+.card.lab { border-top: 4px solid var(--mustard); }
+.checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.7rem;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); }
+.checks li { padding-left: 1.8rem; position: relative; }
+.checks li::before { content: "✓"; position: absolute; left: 0; color: var(--bacon); font-weight: 800; }
+.steps { counter-reset: step; }
+.steps .card { position: relative; padding-top: 2.6rem; }
+.steps .card::before { counter-increment: step; content: counter(step); position: absolute; top: 1rem; left: 1.4rem;
+  font: 800 1.1rem var(--font-display); color: var(--bacon); }
+
+.about { display: grid; grid-template-columns: 9rem 1fr; gap: 2rem; align-items: start; }
+.about .photo { width: 9rem; height: 9rem; border-radius: 50%; background: var(--bakelite);
+  display: grid; place-items: center; color: var(--ink-soft); font-size: 0.8rem; text-align: center; }
+
+.contact { background: var(--cap); color: var(--cap-text); border-radius: 10px; padding: 2rem 2.2rem; margin-top: 2rem;
+  display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; justify-content: space-between; }
+.contact h3 { color: var(--bakelite); }
+.contact p { margin: 0; }
+.contact .btn.primary { background: var(--bakelite); color: var(--cap); border-color: var(--bakelite); }
+
+/* ---------- legal pages ---------- */
+.legal { padding-block: 3rem 4rem; }
+.legal .wrap { max-width: 46rem; }
+.legal h1 { font-size: 2.4rem; margin: 0 0 0.3rem; }
+.legal h2 { font-size: 1.3rem; margin: 2.2rem 0 0.5rem; }
+.legal .stand { color: var(--ink-soft); margin: 0 0 2rem; }
+.legal address { font-style: normal; }
+.todo { background: #fff3c4; color: #5c4400; outline: 1px dashed #b38600; padding: 0 0.2em; }
+
+/* ---------- footer ---------- */
+.sitefoot { background: var(--cap); color: var(--cap-text); font-size: 0.9rem; padding-block: 2.2rem; }
+.sitefoot .wrap { display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between; }
+.sitefoot nav { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.sitefoot a { color: var(--bakelite); }
+.sitefoot p { margin: 0; max-width: 36rem; }
+
+@media (max-width: 760px) {
+  .hero { padding-block: 2.5rem 2.5rem; }
+  .hero .wrap { grid-template-columns: 1fr; gap: 2rem; }
+  .about { grid-template-columns: 1fr; }
+  .topnav { margin-left: 0; width: 100%; }
+}

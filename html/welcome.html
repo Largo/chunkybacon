@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- DRAFT landing page. The brand is still "Chunky Bacon"; when the new
+       name is chosen, replace it in .brand, <title> and the og: tags. -->
+  <title data-de="Ruby lernen im Browser – Chunky Bacon" data-en="Learn Ruby in your browser – Chunky Bacon">Ruby lernen im Browser – Chunky Bacon</title>
+  <meta name="description" content="Interaktiver Ruby-Kurs im Browser: 98 Lektionen von den Grundlagen bis Rails, auf Deutsch, Englisch und Japanisch. Kein Setup, kein Konto, kein Tracking.">
+  <link rel="icon" href="assets/why-foxes/fox-head.svg">
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
+  <link rel="stylesheet" href="assets/pages.css">
+  <script src="pages.js" defer></script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="welcome.html"><img src="assets/why-foxes/fox-head.svg" alt="">Chunky Bacon</a>
+    <nav class="topnav" aria-label="Seite">
+      <a href="#lehrplan"><span data-l="de">Lehrplan</span><span data-l="en">Curriculum</span></a>
+      <a href="#teams"><span data-l="de">Für Teams</span><span data-l="en">For teams</span></a>
+      <a href="#ueber"><span data-l="de">Über</span><span data-l="en">About</span></a>
+      <span class="langs"><button type="button" data-set="de" lang="de">DE</button><button type="button" data-set="en" lang="en">EN</button></span>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <h1>
+          <span data-l="de">Ruby lernen.<br>Direkt im Browser.</span>
+          <span data-l="en">Learn Ruby.<br>Right in your browser.</span>
+        </h1>
+        <p class="lead" data-l="de">Ein interaktives Notizbuch: lesen, Code ausführen, Aufgaben lösen – von der ersten Zeile bis zur Rails-Anwendung. Ohne Installation, ohne Konto.</p>
+        <p class="lead" data-l="en">An interactive notebook: read, run code, solve exercises – from your first line to a Rails application. Nothing to install, no account.</p>
+        <div class="ctas">
+          <a class="btn primary" href="./#hallo"><span data-l="de">Kurs starten</span><span data-l="en">Start the course</span></a>
+          <a class="btn ghost" href="#lehrplan"><span data-l="de">Lehrplan ansehen</span><span data-l="en">See the curriculum</span></a>
+        </div>
+        <ul class="facts">
+          <li><strong>98</strong> <span data-l="de">Lektionen</span><span data-l="en">lessons</span></li>
+          <li><strong>Deutsch · English · 日本語</strong></li>
+          <li><strong>Open Source</strong> (MIT, CC BY-SA)</li>
+          <li><strong data-l="de">Kein Tracking</strong><strong data-l="en">No tracking</strong></li>
+        </ul>
+      </div>
+      <div class="cell" aria-hidden="true">
+        <div class="bar"><span>Ruby 4.0</span><span>▶ Shift+Enter</span></div>
+        <div class="code"><span class="k">def</span> greet(name)
+  <span class="s">"Hello, #{name}!"</span>
+<span class="k">end</span>
+
+%w[Ada Matz].map { |n| greet(n) }</div>
+        <div class="out"><span class="r">=&gt;</span> ["Hello, Ada!", "Hello, Matz!"]</div>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <h2><span data-l="de">Was Sie danach können</span><span data-l="en">What you can do afterwards</span></h2>
+      <ul class="checks">
+        <li data-l="de">Eigene Ruby-Programme schreiben und lesen – Variablen, Schleifen, Methoden, Klassen, Module</li>
+        <li data-l="en">Write and read your own Ruby programs – variables, loops, methods, classes, modules</li>
+        <li data-l="de">Code mit Minitest absichern und Fehler gezielt finden</li>
+        <li data-l="en">Back your code with Minitest and track down bugs on purpose</li>
+        <li data-l="de">Daten verarbeiten: Text, reguläre Ausdrücke, JSON, CSV, YAML</li>
+        <li data-l="en">Process data: text, regular expressions, JSON, CSV, YAML</li>
+        <li data-l="de">Ein echtes Kommandozeilen-Werkzeug von Grund auf bauen</li>
+        <li data-l="en">Build a real command-line tool from scratch</li>
+        <li data-l="de">Webanwendungen mit Sinatra, Roda und Ruby on Rails entwickeln</li>
+        <li data-l="en">Build web applications with Sinatra, Roda and Ruby on Rails</li>
+        <li data-l="de">Gems einsetzen und wissen, wie es auf dem eigenen Rechner weitergeht</li>
+        <li data-l="en">Use gems, and know how to carry on on your own machine</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="alt" id="lehrplan">
+    <div class="wrap">
+      <h2><span data-l="de">Lehrplan</span><span data-l="en">Curriculum</span></h2>
+      <p class="intro" data-l="de">Zwei Kurse bilden den roten Faden. Die Labs sind Vertiefungen für Neugierige – man kann sie jederzeit überspringen.</p>
+      <p class="intro" data-l="en">Two courses form the main path. The labs go deeper for the curious – skip them any time.</p>
+      <div class="grid">
+        <div class="card main">
+          <div class="count"><span data-l="de">41 Lektionen</span><span data-l="en">41 lessons</span></div>
+          <h3><span data-l="de">Grundkurs</span><span data-l="en">Basics</span></h3>
+          <p data-l="de">Von <code>puts</code> über Arrays, Hashes, Methoden und Klassen bis zu Sinatra, Rails und ActiveRecord. Für Einsteigerinnen und Einsteiger ohne Vorkenntnisse.</p>
+          <p data-l="en">From <code>puts</code> through arrays, hashes, methods and classes to Sinatra, Rails and ActiveRecord. For complete beginners.</p>
+        </div>
+        <div class="card main">
+          <div class="count"><span data-l="de">18 Lektionen</span><span data-l="en">18 lessons</span></div>
+          <h3><span data-l="de">Aufbaukurs: timelog</span><span data-l="en">Advanced: timelog</span></h3>
+          <p data-l="de">Ein durchgehendes Projekt, eine Zeiterfassung: Parsing, Tests, Fehlerbehandlung, CLI, Pattern Matching, Metaprogrammierung, DSLs und eine Web-Oberfläche als Abschluss.</p>
+          <p data-l="en">One project all the way through, a time tracker: parsing, tests, error handling, a CLI, pattern matching, metaprogramming, DSLs and a web front end to finish.</p>
+        </div>
+        <div class="card lab">
+          <div class="count"><span data-l="de">30 Labs</span><span data-l="en">30 labs</span></div>
+          <h3><span data-l="de">Ausflüge</span><span data-l="en">Side trips</span></h3>
+          <p data-l="de">PDF und PowerPoint erzeugen, Data Science, Spiele, Desktop-Apps und andere Ruby-Implementierungen wie JRuby.</p>
+          <p data-l="en">Generate PDFs and PowerPoint decks, data science, games, desktop apps and other Ruby implementations such as JRuby.</p>
+        </div>
+        <div class="card lab">
+          <div class="count"><span data-l="de">9 Labs</span><span data-l="en">9 labs</span></div>
+          <h3><span data-l="de">Ruby auf dem Pico</span><span data-l="en">Ruby on a Pico</span></h3>
+          <p data-l="de">Mikrocontroller mit PicoRuby: LEDs, Sensoren, Displays, WLAN – im Simulator oder auf echter Hardware.</p>
+          <p data-l="en">Microcontrollers with PicoRuby: LEDs, sensors, displays, Wi-Fi – in the simulator or on real hardware.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2><span data-l="de">So funktioniert es</span><span data-l="en">How it works</span></h2>
+      <div class="grid steps">
+        <div class="card">
+          <h3><span data-l="de">Lesen</span><span data-l="en">Read</span></h3>
+          <p data-l="de">Kurze Erklärungen, abwechselnd mit lauffähigen Codezellen.</p>
+          <p data-l="en">Short explanations, interleaved with runnable code cells.</p>
+        </div>
+        <div class="card">
+          <h3><span data-l="de">Ausprobieren</span><span data-l="en">Try it</span></h3>
+          <p data-l="de">Echtes Ruby 4.0 läuft in Ihrem Browser (WebAssembly). Code ändern, ausführen, Ergebnis sehen.</p>
+          <p data-l="en">Real Ruby 4.0 runs in your browser (WebAssembly). Change the code, run it, see the result.</p>
+        </div>
+        <div class="card">
+          <h3><span data-l="de">Üben</span><span data-l="en">Practise</span></h3>
+          <p data-l="de">Jede Lektion endet mit einer Aufgabe, die sofort geprüft wird – mit gestuften Hinweisen, wenn es hakt.</p>
+          <p data-l="en">Every lesson ends with an exercise that is checked at once – with step-by-step hints if you get stuck.</p>
+        </div>
+      </div>
+      <p class="intro" style="margin-top:1.6rem" data-l="de">Ihr Fortschritt bleibt auf Ihrem Gerät. Sie können ihn als Datei sichern oder einen Ordner verbinden – es gibt kein Konto und keine Analyse-Software.</p>
+      <p class="intro" style="margin-top:1.6rem" data-l="en">Your progress stays on your device. Save it as a file or connect a folder – there is no account and no analytics software.</p>
+    </div>
+  </section>
+
+  <section class="alt" id="teams">
+    <div class="wrap">
+      <h2><span data-l="de">Für Teams, Schulen und Unternehmen</span><span data-l="en">For teams, schools and companies</span></h2>
+      <div class="grid">
+        <div class="card">
+          <h3><span data-l="de">Onboarding</span><span data-l="en">Onboarding</span></h3>
+          <p data-l="de">Neue Entwicklerinnen und Entwickler lernen Ruby und Rails im eigenen Tempo, ohne dass jemand eine Umgebung aufsetzen muss.</p>
+          <p data-l="en">New developers learn Ruby and Rails at their own pace, without anyone having to set up an environment.</p>
+        </div>
+        <div class="card">
+          <h3><span data-l="de">Workshops</span><span data-l="en">Workshops</span></h3>
+          <p data-l="de">Begleitete Kurse vor Ort oder online, auf Deutsch, Englisch oder Japanisch.</p>
+          <p data-l="en">Guided courses on site or online, in German, English or Japanese.</p>
+        </div>
+        <div class="card">
+          <h3><span data-l="de">Eigene Lektionen</span><span data-l="en">Custom lessons</span></h3>
+          <p data-l="de">Lektionen zu Ihrem Stack, Ihren Gems und Ihren Daten.</p>
+          <p data-l="en">Lessons about your stack, your gems and your data.</p>
+        </div>
+        <div class="card">
+          <h3><span data-l="de">Selbst betreiben</span><span data-l="en">Host it yourself</span></h3>
+          <p data-l="de">Der Kurs ist Open Source und eine statische Website – im eigenen Netz betreibbar, auch offline.</p>
+          <p data-l="en">The course is open source and a static website – run it on your own network, even offline.</p>
+        </div>
+      </div>
+      <div class="contact">
+        <div>
+          <h3><span data-l="de">Interesse?</span><span data-l="en">Interested?</span></h3>
+          <p data-l="de">Schreiben Sie an <span class="todo">[kontakt@neue-domain]</span> – Antwort in der Regel innert zwei Arbeitstagen.</p>
+          <p data-l="en">Write to <span class="todo">[kontakt@neue-domain]</span> – usually answered within two working days.</p>
+        </div>
+        <a class="btn primary" href="mailto:"><span data-l="de">Kontakt aufnehmen</span><span data-l="en">Get in touch</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="ueber">
+    <div class="wrap about">
+      <div class="photo"><span class="todo">Foto</span></div>
+      <div>
+        <h2><span data-l="de">Über den Kurs</span><span data-l="en">About the course</span></h2>
+        <p data-l="de">Der Kurs wird von <a href="https://idogawa.com">Andi Idogawa</a> entwickelt und betreut. <span class="todo">[Zwei, drei Sätze: Hintergrund, Erfahrung mit Ruby, Firma/Ort.]</span></p>
+        <p data-l="en">The course is written and maintained by <a href="https://idogawa.com">Andi Idogawa</a>. <span class="todo">[Two or three sentences: background, Ruby experience, company/location.]</span></p>
+        <p data-l="de">Der Quellcode liegt öffentlich auf <a href="https://github.com/Largo/chunkybacon">GitHub</a>. Der Name und die Füchse erinnern an <em>why's (poignant) guide to Ruby</em> von why the lucky stiff.</p>
+        <p data-l="en">The source code is public on <a href="https://github.com/Largo/chunkybacon">GitHub</a>. The name and the foxes are a nod to <em>why's (poignant) guide to Ruby</em> by why the lucky stiff.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="sitefoot">
+  <div class="wrap">
+    <nav aria-label="Rechtliches">
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html"><span data-l="de">Datenschutz</span><span data-l="en">Privacy</span></a>
+      <a href="https://github.com/Largo/chunkybacon">GitHub</a>
+    </nav>
+    <p data-l="de">Kursinhalte <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.de">CC BY-SA 4.0</a>, Code <a href="https://github.com/Largo/chunkybacon/blob/main/LICENSE">MIT</a>. Füchse nach why the lucky stiff (<a href="https://creativecommons.org/licenses/by-sa/2.5/deed.de">CC BY-SA 2.5</a>).</p>
+    <p data-l="en">Course content <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>, code <a href="https://github.com/Largo/chunkybacon/blob/main/LICENSE">MIT</a>. Foxes after why the lucky stiff (<a href="https://creativecommons.org/licenses/by-sa/2.5/">CC BY-SA 2.5</a>).</p>
+  </div>
+</footer>
+</body>
+</html>
