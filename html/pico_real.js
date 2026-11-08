@@ -671,7 +671,7 @@
     boardRealNoAck: "the shell did not answer Ctrl-B (PicoModem is in R2P2 4.0.3; the shell has to be at its $> prompt)",
     boardRealCrc: "the CRC-32 does not match – send it again",
     boardRealTimeout: "the Pico did not answer for 5 seconds",
-    boardRealNoSecure: "A real Pico needs a secure page, and this one is plain http. Open the course on https://chunkybacon.idogawa.com or on localhost.",
+    boardRealNoSecure: "A real Pico needs a secure page, and this one is plain http. Open the course on https://letsruby.com or on localhost.",
     boardRealNoSerial: "This browser has no Web Serial: Chrome, Edge and Opera on a computer have it; Firefox and Safari do not, and phones cannot reach USB ports. The simulated bench works everywhere.",
     boardRealNoBle: "This browser has no Web Bluetooth: Chrome and Edge on Windows, macOS, ChromeOS and Android have it (on Linux it may have to be switched on in chrome://flags); Firefox and Safari do not.",
     boardRealBle: "A real Pico 2 W (Bluetooth)",

@@ -24,6 +24,10 @@ services:
       RACK_ENV: production
       BUNDLE_WITHOUT: test
       BUNDLE_FROZEN: "true"   # use Gemfile.lock as it is: the checkout is mounted read-only
+      # canonical links name this address (server/app.rb#origin); the
+      # server sets PUBLIC_ORIGIN=https://letsruby.com in .env, empty = the
+      # host each request came to
+      PUBLIC_ORIGIN: "${PUBLIC_ORIGIN:-}"
     volumes:
       - ./:/srv/chunkybacon:ro
       - serverbundle:/usr/local/bundle

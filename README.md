@@ -263,7 +263,7 @@ course's Ruby, its output and its widgets:
   words = %w[chunky bacon is chunky]
   words.tally
 </pre>
-<script src="https://chunkybacon.idogawa.com/embed.js" defer></script>
+<script src="https://letsruby.com/embed.js" defer></script>
 ```
 
 `embed.js` turns every `pre[data-chunky]` into an iframe of the course's

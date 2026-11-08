@@ -28,7 +28,7 @@ const reload = async page => {
 
 let page = await visit(['en-US', 'en']);
 check('an English browser gets English', (await lang(page)) === 'en' &&
-  (await page.textContent('#siteTitle')).includes('Learn Ruby'));
+  (await page.textContent('#siteSubtitle')).includes('A Ruby notebook'));
 await page.context().close();
 
 page = await visit(['ja-JP']);
@@ -37,7 +37,7 @@ await page.context().close();
 
 page = await visit(['de-CH', 'en']);
 check('a Swiss German browser gets German', (await lang(page)) === 'de' &&
-  (await page.textContent('#siteTitle')).includes('Ruby lernen'));
+  (await page.textContent('#siteSubtitle')).includes('Ruby-Notizbuch'));
 await page.context().close();
 
 page = await visit(['fr-FR', 'de-DE', 'en']);

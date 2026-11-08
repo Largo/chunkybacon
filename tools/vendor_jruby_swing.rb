@@ -18,7 +18,7 @@
 # SHA-256 before it is copied. nginx serves them as they are - no gzip,
 # with Range requests (nginx/default.conf).
 #
-# Never on the 1-core server behind chunkybacon.idogawa.com: the deploy hook
+# Never on the 1-core server behind letsruby.com: the deploy hook
 # on the Hetzner box runs this and copies html/assets/jruby-swing/ over.
 require "json"
 require "digest"

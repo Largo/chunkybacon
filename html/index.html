@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruby lernen mit Chunky Bacon</title>
+    <title>Let&#39;s Ruby – Ruby lernen im Browser</title>
     <meta name="theme-color" content="#1e2229">
     <!-- Atkinson Hyperlegible Next/Mono for everything the learner reads and
          types, Shantell Sans for Chunky's own voice (see app.css); self-hosted,
@@ -47,28 +47,28 @@
         };
       })();
     </script>
-    <meta name="description" content="Lerne die Programmiersprache Ruby direkt im Browser – mit Chunky Bacon. Ein interaktives Notizbuch auf Deutsch, Englisch und Japanisch, kein Setup nötig.">
+    <meta name="description" content="Lerne die Programmiersprache Ruby direkt im Browser. Ein interaktives Notizbuch auf Deutsch, Englisch und Japanisch, kein Setup nötig.">
     <meta name="author" content="Andi Idogawa">
     <!-- Link previews (Slack, X, LinkedIn, Discord, messengers): the 2:1 card
          from docs/social/card.html (tools/render_social_cards.mjs), served
          by the site itself from social/ (not in the offline copy). Scrapers
          want an absolute URL, so it names the domain; X takes og:image too. -->
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Chunky Bacon">
-    <meta property="og:title" content="Learn Ruby with Chunky Bacon">
+    <meta property="og:site_name" content="Let&#39;s Ruby">
+    <meta property="og:title" content="Let&#39;s Ruby – learn Ruby right in your browser">
     <meta property="og:description" content="An interactive Ruby notebook in your browser, in German, English and Japanese – from puts to web apps, PDFs and 3D. Nothing to install.">
-    <meta property="og:image" content="https://chunkybacon.idogawa.com/social/github-social.png">
+    <meta property="og:image" content="https://letsruby.com/social/github-social.png">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1600">
     <meta property="og:image:height" content="800">
-    <meta property="og:image:alt" content="Chunky Bacon: learn Ruby right in your browser. A notebook cell whose Ruby code answers &quot;Chunky Bacon&quot;, beside two cartoon foxes by why the lucky stiff shouting &quot;Chunky bacon!!&quot; on a red field.">
+    <meta property="og:image:alt" content="Let&#39;s Ruby: learn Ruby right in your browser. A notebook cell whose Ruby code answers &quot;Let&#39;s Ruby&quot;, beside the Let&#39;s Ruby logo, a cut ruby with a play arrow, and the address letsruby.com on a red field.">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="stylesheet" href="assets/codemirror.css">
     <link rel="stylesheet" href="assets/app.css">
     <script src="assets/codemirror.js"></script>
     <script src="assets/codemirror-ruby.js"></script>
     <script src="lessons.js"></script>
-    <link rel="icon" href="assets/why-foxes/fox-head.svg">
+    <link rel="icon" href="assets/brand/letsruby-mark.svg">
 </head>
 <body>
 
@@ -76,7 +76,7 @@
       <img class="spinner-image" src="assets/why-foxes/chunky-bacon.svg" alt="">
       <!-- before the shell knows the language: the title in German, the
            wait in all three, each marked with its language -->
-      <h1 id="spinnerTitle" lang="de">Ruby lernen mit Chunky Bacon</h1>
+      <h1 id="spinnerTitle" lang="de">Let&#39;s Ruby</h1>
       <p id="spinnerText"><span lang="de">Einen Moment …</span> / <span lang="en">One moment …</span> / <span lang="ja">少々お待ちください …</span></p>
       <div class="load-bar" aria-hidden="true"></div>
     </div>
@@ -126,7 +126,7 @@
             <!-- the fox leads back to the landing page, "./" (nginx/default.conf) -->
             <a class="home-link" href="./"><img id="mascot" src="assets/why-foxes/fox-tall.svg" alt="Zur Startseite"></a>
             <div class="headerText">
-              <h1 id="siteTitle">Ruby lernen mit Chunky Bacon</h1>
+              <h1 id="siteTitle">Let&#39;s Ruby</h1>
               <p id="siteSubtitle"></p>
               <!-- until CRuby is up (shell/app.rb): Run waits for it -->
               <p id="kernelStatus" class="kernel-status" role="status" hidden></p>

@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- The landing page, served at / (nginx/default.conf, server/app.rb); the
-       course is /learn. The brand is still "Chunky Bacon": when the new name
-       is chosen, replace it in .brand, <title> and the og: tags. -->
+       course is /learn. The brand is "Let's Ruby" (letsruby.com): .brand, <title>, the
+       og: tags and the favicon (assets/brand/letsruby-mark.svg). -->
   <script>
     // An old link to a lesson - /#methoden, /?lang=en#methoden - goes on to
     // the course; this page's own anchors stay here. Also when the link is
@@ -24,20 +24,22 @@
       window.addEventListener("hashchange", onward);
     })();
   </script>
-  <title data-de="Ruby lernen im Browser – Chunky Bacon" data-en="Learn Ruby in your browser – Chunky Bacon" data-ja="ブラウザでRubyを学ぶ – Chunky Bacon">Ruby lernen im Browser – Chunky Bacon</title>
+  <title data-de="Ruby lernen im Browser – Let&#39;s Ruby" data-en="Learn Ruby in your browser – Let&#39;s Ruby" data-ja="ブラウザでRubyを学ぶ – Let&#39;s Ruby">Ruby lernen im Browser – Let&#39;s Ruby</title>
   <meta name="description" content="Interaktiver Ruby-Kurs im Browser: 98 Lektionen von den Grundlagen bis Rails, auf Deutsch, Englisch und Japanisch. Kein Setup, kein Konto, kein Tracking.">
   <meta name="author" content="Andi Idogawa">
+  <link rel="canonical" href="https://letsruby.com/">
+  <meta property="og:url" content="https://letsruby.com/">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Chunky Bacon">
+  <meta property="og:site_name" content="Let&#39;s Ruby">
   <meta property="og:title" content="Learn Ruby right in your browser">
   <meta property="og:description" content="An interactive Ruby course in German, English and Japanese – 98 lessons from your first line to Rails. Nothing to install, no account, no tracking.">
-  <meta property="og:image" content="https://chunkybacon.idogawa.com/social/github-social.png">
+  <meta property="og:image" content="https://letsruby.com/social/github-social.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1600">
   <meta property="og:image:height" content="800">
-  <meta property="og:image:alt" content="Chunky Bacon: learn Ruby right in your browser. A notebook cell whose Ruby code answers &quot;Chunky Bacon&quot;, beside two cartoon foxes by why the lucky stiff shouting &quot;Chunky bacon!!&quot; on a red field.">
+  <meta property="og:image:alt" content="Let&#39;s Ruby: learn Ruby right in your browser. A notebook cell whose Ruby code answers &quot;Let&#39;s Ruby&quot;, beside the Let&#39;s Ruby logo, a cut ruby with a play arrow, and the address letsruby.com on a red field.">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" href="assets/why-foxes/fox-head.svg">
+  <link rel="icon" href="assets/brand/letsruby-mark.svg">
   <link rel="stylesheet" href="assets/fonts/fonts.css">
   <link rel="stylesheet" href="assets/pages.css">
   <script src="pages.js" defer></script>
@@ -47,7 +49,7 @@
 
 <header class="topbar">
   <div class="wrap">
-    <a class="brand" href="./"><img src="assets/why-foxes/fox-head.svg" alt="">Chunky Bacon</a>
+    <a class="brand" href="./"><img src="assets/brand/letsruby-mark.svg" alt="">Let&#39;s Ruby</a>
     <nav class="topnav" aria-label="Seite">
       <a href="#lehrplan"><span data-l="de">Lehrplan</span><span data-l="en">Curriculum</span><span data-l="ja">カリキュラム</span></a>
       <a href="#teams"><span data-l="de">Für Teams</span><span data-l="en">For teams</span><span data-l="ja">チーム向け</span></a>

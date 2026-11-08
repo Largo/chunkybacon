@@ -2,14 +2,14 @@
 // cell (an iframe of embed.html), with one script tag:
 //
 //   <pre data-chunky data-gems="chunky_png" data-lang="en">puts 1 + 1</pre>
-//   <script src="https://chunkybacon.idogawa.com/embed.js" defer></script>
+//   <script src="https://letsruby.com/embed.js" defer></script>
 //
 // Attributes (all optional): data-gems="a,b", data-lang="de|en|ja",
 // data-load="visible|click|eager" (when ruby.wasm loads, default visible),
 // data-run="1" (run once loaded), aria-label (the iframe's title).
 //
 // The cells come from the course's host: where this script came from, or
-// the script tag's data-base="https://chunkybacon.idogawa.com/". Only pages
+// the script tag's data-base="https://letsruby.com/". Only pages
 // that host allows may frame them (Content-Security-Policy frame-ancestors,
 // nginx/default.conf: https://idogawa.com); elsewhere the iframe stays empty.
 //
@@ -73,7 +73,7 @@
     var id = "chunky-" + (++count);
     var lines = code.split("\n").length;
     var frame = document.createElement("iframe");
-    frame.title = pre.getAttribute("aria-label") || "Ruby code you can run (Chunky Bacon)";
+    frame.title = pre.getAttribute("aria-label") || "Ruby code you can run (Let's Ruby)";
     frame.loading = "lazy";
     // defence in depth: the server sends the same sandbox as a header
     // (NOTES.md); without allow-same-origin the cell has an origin of its
