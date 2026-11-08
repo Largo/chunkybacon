@@ -395,6 +395,23 @@ BASE=http://127.0.0.1:8012/ node permalink_test.mjs   # permalinks, against the 
 cd ../gem/chunky_bacon && rake test   # the companion gem
 ```
 
+## Legal pages
+
+The legal notice and privacy policy name whoever runs a deployment, so they
+are not in git: `html/impressum.html` and `html/datenschutz.html` are
+ignored and live only on the server. Copy the templates and fill in every
+yellow `.todo`:
+
+```sh
+cp html/impressum.example.html html/impressum.html
+cp html/datenschutz.example.html html/datenschutz.html
+```
+
+The deploy hooks leave untracked files alone. Without the files the footer
+links to them disappear (`html/legal_links.js`); the privacy template lists
+what the course sends where, so check it again when a lesson starts talking
+to a new host.
+
 ## License
 
 Both licenses allow commercial use.

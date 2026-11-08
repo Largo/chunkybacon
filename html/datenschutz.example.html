@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- TEMPLATE. Copy to datenschutz.html (git-ignored, lives only on the server)
+       and fill in every .todo. Facts checked against the code on 2026-11-08 (storage.js, sw.js,
+       main.rb host table, nginx/default.conf, jruby_swing.html). Fill in every
+       .todo; if a new external host is added to the course, list it here.
+       Not legal advice - have it reviewed before relying on it. -->
+  <title data-de="Datenschutz – Chunky Bacon" data-en="Privacy – Chunky Bacon">Datenschutz – Chunky Bacon</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/why-foxes/fox-head.svg">
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
+  <link rel="stylesheet" href="assets/pages.css">
+  <script src="pages.js" defer></script>
+  <script src="legal_links.js" defer></script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="welcome.html"><img src="assets/why-foxes/fox-head.svg" alt="">Chunky Bacon</a>
+    <nav class="topnav" aria-label="Seite">
+      <a href="./"><span data-l="de">Zum Kurs</span><span data-l="en">To the course</span></a>
+      <span class="langs"><button type="button" data-set="de" lang="de">DE</button><button type="button" data-set="en" lang="en">EN</button></span>
+    </nav>
+  </div>
+</header>
+
+<main class="legal">
+  <div class="wrap">
+    <div data-l="de">
+      <h1>Datenschutzerklärung</h1>
+      <p class="stand">Stand: November 2026</p>
+
+      <h2>Kurz gesagt</h2>
+      <p>Der Kurs läuft in Ihrem Browser. Es gibt kein Konto, keine Cookies, keine Analyse- oder Werbe-Software. Ihr Code und Ihr Fortschritt bleiben auf Ihrem Gerät. Unser Server sieht nur, was jeder Webserver sieht: technische Zugriffsdaten.</p>
+
+      <h2>Verantwortlich</h2>
+      <p><span class="todo">[Name]</span>, E-Mail: <span class="todo">[email]</span>. Diese Erklärung richtet sich nach dem Schweizer Datenschutzgesetz (DSG) und, soweit anwendbar, nach der EU-Datenschutz-Grundverordnung (DSGVO).</p>
+
+      <h2>Beim Aufruf der Website</h2>
+      <p>Beim Laden der Seiten verarbeitet der Webserver automatisch: IP-Adresse, Datum und Uhrzeit, aufgerufene Adresse, Referrer, Browser-Kennung (User-Agent) und Statuscode. Diese Daten werden nur für den Betrieb und die Abwehr von Missbrauch verwendet (z. B. Begrenzung der Anfragen pro IP-Adresse), nicht mit anderen Daten zusammengeführt und nach <span class="todo">[14]</span> Tagen gelöscht.</p>
+      <p>Hosting: <span class="todo">[Akamai/Linode, Rechenzentrum Ort, Land]</span>. Die Verbindung ist per HTTPS verschlüsselt.</p>
+
+      <h2>Auf Ihrem Gerät gespeichert</h2>
+      <p>Damit Sie weitermachen können, wo Sie aufgehört haben, speichert der Kurs im Speicher Ihres Browsers (localStorage, IndexedDB): erledigte Lektionen, Ihren Code in den Zellen, die gewählte Sprache und Dateien, die Sie in der Werkstatt anlegen. Für den Offline-Modus legt der Browser auf Wunsch eine Kopie des Kurses an. Wenn Sie einen Ordner verbinden oder eine Fortschrittsdatei herunterladen, landen die Daten dort. Nichts davon wird an uns übertragen. Sie können alles jederzeit über die Website-Daten Ihres Browsers löschen.</p>
+
+      <h2>Gems und Web-Beispiele</h2>
+      <p>Wenn Sie im Kurs ein Gem installieren oder eine Lektion Daten von rubygems.org oder www.ruby-lang.org abruft, holt unser Server diese Daten stellvertretend ab. Die Betreiber dieser Dienste sehen dabei die Adresse unseres Servers, nicht Ihre.</p>
+      <p>Ausnahmen, bei denen Ihr Browser direkt einen Dritten kontaktiert und dieser Ihre IP-Adresse sieht:</p>
+      <ul>
+        <li><strong>GitHub</strong> (api.github.com, GitHub Inc., USA) – nur wenn Sie in der HTTP-Lektion Code ausführen, der die GitHub-API abfragt.</li>
+        <li><strong>CheerpJ</strong> (cjrtnc.leaningtech.com, Leaning Technologies Ltd., Vereinigtes Königreich) – nur wenn Sie in der JRuby-Lektion den optionalen Swing-Bonus starten.</li>
+      </ul>
+
+      <h2>Links</h2>
+      <p>Der Kurs verlinkt auf Dokumentation und Websites Dritter. Erst wenn Sie einem Link folgen, gelten deren Datenschutzbestimmungen.</p>
+
+      <h2>Kontakt per E-Mail</h2>
+      <p>Wenn Sie uns schreiben, verwenden wir Ihre Angaben nur, um Ihre Anfrage zu beantworten, und löschen sie, wenn sie nicht mehr gebraucht werden.</p>
+
+      <h2>Ihre Rechte</h2>
+      <p>Sie können Auskunft über Ihre Daten verlangen sowie deren Berichtigung oder Löschung. Schreiben Sie dazu an die oben genannte Adresse. Sie können sich zudem beim Eidgenössischen Datenschutz- und Öffentlichkeitsbeauftragten (EDÖB) bzw. bei der Aufsichtsbehörde Ihres Wohnlandes beschweren.</p>
+    </div>
+
+    <div data-l="en">
+      <h1>Privacy policy</h1>
+      <p class="stand">Last updated: November 2026</p>
+
+      <h2>In short</h2>
+      <p>The course runs in your browser. There is no account, no cookies, no analytics or advertising software. Your code and progress stay on your device. Our server only sees what any web server sees: technical access data.</p>
+
+      <h2>Controller</h2>
+      <p><span class="todo">[Name]</span>, email: <span class="todo">[email]</span>. This policy follows the Swiss Federal Act on Data Protection (FADP) and, where applicable, the EU General Data Protection Regulation (GDPR).</p>
+
+      <h2>When you visit the website</h2>
+      <p>When pages load, the web server automatically processes: IP address, date and time, requested address, referrer, browser identifier (user agent) and status code. This data is used only to run the service and prevent abuse (for example limiting requests per IP address), is not combined with other data, and is deleted after <span class="todo">[14]</span> days.</p>
+      <p>Hosting: <span class="todo">[Akamai/Linode, data-centre location, country]</span>. Connections are encrypted with HTTPS.</p>
+
+      <h2>Stored on your device</h2>
+      <p>So you can pick up where you left off, the course stores in your browser's storage (localStorage, IndexedDB): completed lessons, your code in the cells, your chosen language and files you create in the workshop. For offline mode the browser keeps a copy of the course if you ask it to. If you connect a folder or download a progress file, the data goes there. None of it is sent to us. You can delete all of it at any time through your browser's site data settings.</p>
+
+      <h2>Gems and web examples</h2>
+      <p>When you install a gem in the course, or a lesson fetches data from rubygems.org or www.ruby-lang.org, our server fetches it on your behalf. Those services see our server's address, not yours.</p>
+      <p>Exceptions, where your browser contacts a third party directly and it sees your IP address:</p>
+      <ul>
+        <li><strong>GitHub</strong> (api.github.com, GitHub Inc., USA) – only when you run code in the HTTP lesson that queries the GitHub API.</li>
+        <li><strong>CheerpJ</strong> (cjrtnc.leaningtech.com, Leaning Technologies Ltd., United Kingdom) – only when you start the optional Swing bonus in the JRuby lesson.</li>
+      </ul>
+
+      <h2>Links</h2>
+      <p>The course links to third-party documentation and websites. Their privacy policies apply only once you follow a link.</p>
+
+      <h2>Contact by email</h2>
+      <p>If you write to us, we use your details only to answer your request and delete them once they are no longer needed.</p>
+
+      <h2>Your rights</h2>
+      <p>You can ask for access to your data, and for it to be corrected or deleted, by writing to the address above. You may also complain to the Swiss Federal Data Protection and Information Commissioner (FDPIC) or the supervisory authority in your country of residence.</p>
+    </div>
+  </div>
+</main>
+
+<footer class="sitefoot">
+  <div class="wrap">
+    <nav aria-label="Rechtliches">
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html"><span data-l="de">Datenschutz</span><span data-l="en">Privacy</span></a>
+      <a href="welcome.html"><span data-l="de">Über den Kurs</span><span data-l="en">About the course</span></a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>
