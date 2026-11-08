@@ -182,7 +182,7 @@ for (let tries = 0; tries < 240; tries++) {
 await waitForState(c, 'ready', 60000);
 // (the browser itself may look for a new sw.js meanwhile)
 const gets = requests.filter((r) => r.startsWith('GET ') && !r.includes('offline-files.txt') && r !== 'GET /sw.js');
-check(`the check fetched only what changed (${gets.join(', ')})`, gets.length >= 1 && gets.length <= 2 && gets.every((r) => r === 'GET /' || r === 'GET /index.html'));
+check(`the check fetched only what changed (${gets.join(', ')})`, gets.length >= 1 && gets.length <= 2 && gets.every((r) => r === 'GET /learn' || r === 'GET /index.html'));
 index = await copyIndex(c);
 check('the copy has the new version', index.files['index.html'].v === 'e"deploy-2"' && index.files[''].v === 'e"deploy-2"');
 await c.close();
