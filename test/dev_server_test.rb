@@ -78,6 +78,16 @@ class DevServerTest < Minitest::Test
 
   # ---------- the files ----------
 
+  def test_the_root_is_the_landing_page_and_the_course_is_learn
+    root = get("/")
+    assert_equal "200", root.code
+    assert_includes root.body, 'id="start"'
+    learn = get("/learn")
+    assert_equal "200", learn.code
+    assert_includes learn.body, 'id="lessonBody"'
+    assert_equal "no-cache", learn["Cache-Control"]
+  end
+
   def test_static_files_may_be_read_cross_origin
     res = get("/main.rb")
     assert_equal "200", res.code

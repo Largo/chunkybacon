@@ -14,8 +14,15 @@ class ServerTest < Minitest::Test
 
   def get(path, method: "GET") = Rack::MockRequest.new(APP).request(method, path)
 
-  def test_the_root_page_announces_permalinks
+  def test_the_root_is_the_landing_page
     res = get("/")
+    assert_equal 200, res.status
+    assert_includes res.body, 'href="learn#hallo"'
+    refute_includes res.body, "chunky-permalinks"
+  end
+
+  def test_the_course_page_announces_permalinks
+    res = get("/learn")
     assert_equal 200, res.status
     assert_includes res.body, '<base href="/">'
     assert_includes res.body, '<meta name="chunky-permalinks" content="/">'

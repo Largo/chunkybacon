@@ -61,10 +61,13 @@ end
 # file may be read cross-origin (the sandboxed embed's origin is "null");
 # embed.html itself comes sandboxed.
 class SiteHandler < WEBrick::HTTPServlet::FileHandler
-  NO_CACHE = /(\.(html|rb|js|css|json)|\/)\z/i
+  NO_CACHE = /(\.(html|rb|js|css|json)|\/|\/learn)\z/i
+  # as nginx/default.conf: / is the landing page, the course is /learn
+  PAGES = { "/" => "/welcome.html", "/learn" => "/index.html" }.freeze
   GZIP = /\.(html|rb|js|css|json|svg|wasm)\z/i
 
   def do_GET(req, res)
+    req.path_info = PAGES[req.path] if PAGES.key?(req.path)
     res["Cache-Control"] = "no-cache" if req.path.match?(NO_CACHE)
     if req.path == "/embed.html"
       res["Content-Security-Policy"] = CourseRules::EMBED_CSP

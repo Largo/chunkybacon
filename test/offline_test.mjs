@@ -55,7 +55,7 @@ const comeBack = () => { down = false; };
 const browser = await playwright[BROWSER].launch();
 const ctx = await browser.newContext({ locale: 'de-DE' });
 
-async function open(path = '') {
+async function open(path = 'learn') {
   const page = await ctx.newPage();
   page.on('pageerror', (e) => console.log('[pageerror]', e.message));
   page.on('dialog', (d) => d.accept());
@@ -155,9 +155,9 @@ await b.close();
 
 // ---------- 4. a deploy ----------
 comeBack();
-const html = await (await fetch(SITE)).text();
+const html = await (await fetch(SITE + 'learn')).text();
 const marked = html.replace('<meta charset="UTF-8">', '<meta charset="UTF-8">\n    <meta name="deploy" content="2">');
-overrides.set('/', { body: marked, etag: '"deploy-2"' });
+overrides.set('/learn', { body: marked, etag: '"deploy-2"' });
 overrides.set('/index.html', { body: marked, etag: '"deploy-2"' });
 const c = await open();
 check('online, a deploy shows at once (not the copy)',
@@ -195,7 +195,7 @@ comeBack();
 overrides.clear();
 
 // ---------- 5. permalinks, when the server makes them ----------
-const permalinks = (await (await fetch(SITE)).text()).includes('name="chunky-permalinks"');
+const permalinks = (await (await fetch(SITE + 'learn')).text()).includes('name="chunky-permalinks"');
 if (permalinks) {
   const e = await open('de/hallo');
   await e.evaluate(() => navigator.serviceWorker.controller.postMessage({ type: 'refresh', force: true }));
@@ -247,7 +247,7 @@ check('…the dialog offers it again', (await offlineText(g)).includes('Auf dies
 await g.close();
 goDown();
 const h = await ctx.newPage();
-const failed = await h.goto(SITE, { timeout: 15000 }).then(() => false, () => true);
+const failed = await h.goto(SITE + 'learn', { timeout: 15000 }).then(() => false, () => true);
 check('turned off, offline is offline again', failed);
 comeBack();
 

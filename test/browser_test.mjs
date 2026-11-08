@@ -30,7 +30,7 @@ const exerciseOut = async () => {
 // (CRuby, 10 MB) loads afterwards. A run asked for meanwhile waits for it.
 const kernelReady = p => p.waitForFunction(() => window.ChunkyBridge && window.ChunkyBridge.ready, null, { timeout: 120000 });
 
-await page.goto(BASE, { waitUntil: 'domcontentloaded' });
+await page.goto(BASE + 'learn', { waitUntil: 'domcontentloaded' });
 await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 check('app becomes visible after wasm boot', true);
 check('the lesson is readable before the kernel has loaded',

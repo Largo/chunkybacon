@@ -8,7 +8,8 @@
 #   cd server && bundle install && bundle exec puma -p 8012
 #
 # What it serves:
-#   /, /de, /de/methoden, /de/werkstatt   index.html, told about permalinks
+#   /                                     welcome.html, the landing page
+#   /learn, /de, /de/methoden, /de/werkstatt   index.html, told about permalinks
 #                                         (<base>, <meta name="chunky-permalinks">)
 #                                         and titled for the lesson
 #   /api/lessons                          the lessons and their titles, JSON
@@ -22,6 +23,7 @@ require_relative "course"
 class ChunkyServer < Roda
   HTML = File.expand_path("../html", __dir__)
   INDEX = File.join(HTML, "index.html")
+  WELCOME = File.join(HTML, "welcome.html")
   LESSONS = File.join(HTML, "lessons.js")
   # the code revalidates on every load, as with nginx; a 304 is cheap
   STATIC_HEADERS = { "Cache-Control" => "no-cache" }.freeze
@@ -45,7 +47,13 @@ class ChunkyServer < Roda
     r.public
     course = self.class.course
 
-    r.root { page }
+    # / is the landing page (it sends an old /#methoden link on to /learn);
+    # the course is /learn, /de, /de/methoden
+    r.root do
+      response["cache-control"] = "no-cache"
+      File.read(WELCOME, encoding: "UTF-8")
+    end
+    r.is("learn") { page }
 
     r.on "api" do
       r.get("lessons") { course.index }

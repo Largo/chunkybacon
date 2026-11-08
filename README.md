@@ -337,7 +337,10 @@ Node: clang is WebAssembly, run through the wasmtime gem; a few minutes
 the first time, afterwards a no-op until `tools/spinel.json` changes).
 
 Or any static file server over `html/` (the rubygems proxy then needs
-nginx, see `nginx/default.conf`). Lessons then live at `/#methoden`.
+nginx, see `nginx/default.conf`). Lessons then live at `/index.html#methoden`.
+nginx, the dev server and `server/` serve the landing page (`welcome.html`)
+at `/` and the course at `/learn`; an old `/#methoden` link goes on to the
+course.
 Without Docker, `ruby tools/dev_server.rb` (port 8011) serves `html/` with
 nginx's bridges, headers and rules.
 
