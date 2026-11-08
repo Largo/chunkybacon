@@ -185,6 +185,7 @@ header {
   border-bottom: 2px solid var(--ink);
 }
 body.sidebar-closed header { padding-left: 4.25rem; }
+header .home-link { flex: none; line-height: 0; border-radius: 50%; }
 /* the fox in an oval badge, like the one centred on that car's blank nose */
 header #mascot {
   width: 50px;
@@ -2719,7 +2720,7 @@ footer a { color: var(--bakelite); }
 /* narrow phones: three buttons need the room, the fox still waves from
    the speech bubble below */
 @media (max-width: 420px) {
-  header #mascot { display: none; }
+  header .home-link { display: none; }
   header h1 { font-size: 1rem; }
 }
 

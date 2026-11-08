@@ -3,10 +3,40 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- DRAFT landing page. The brand is still "Chunky Bacon"; when the new
-       name is chosen, replace it in .brand, <title> and the og: tags. -->
-  <title data-de="Ruby lernen im Browser – Chunky Bacon" data-en="Learn Ruby in your browser – Chunky Bacon">Ruby lernen im Browser – Chunky Bacon</title>
+  <!-- The landing page, served at / (nginx/default.conf, server/app.rb); the
+       course is /learn. The brand is still "Chunky Bacon": when the new name
+       is chosen, replace it in .brand, <title> and the og: tags. -->
+  <script>
+    // An old link to a lesson - /#methoden, /?lang=en#methoden - goes on to
+    // the course; this page's own anchors stay here. Also when the link is
+    // followed from this very page (a hash change, not a load). The course
+    // is "learn" where the server knows it (nginx, server/app.rb,
+    // tools/dev_server.rb), else index.html - any other static host.
+    window.chunkyCourse = fetch("learn", { method: "HEAD", cache: "no-cache" })
+      .then(function (r) { return r.ok ? "learn" : "index.html"; }, function () { return "index.html"; });
+    (function () {
+      function onward() {
+        var id = location.hash.slice(1);
+        if (!id || ["lehrplan", "teams", "ueber"].indexOf(id) >= 0) return;
+        window.chunkyCourse.then(function (course) { location.replace(course + location.search + location.hash); });
+      }
+      onward();
+      window.addEventListener("hashchange", onward);
+    })();
+  </script>
+  <title data-de="Ruby lernen im Browser – Chunky Bacon" data-en="Learn Ruby in your browser – Chunky Bacon" data-ja="ブラウザでRubyを学ぶ – Chunky Bacon">Ruby lernen im Browser – Chunky Bacon</title>
   <meta name="description" content="Interaktiver Ruby-Kurs im Browser: 98 Lektionen von den Grundlagen bis Rails, auf Deutsch, Englisch und Japanisch. Kein Setup, kein Konto, kein Tracking.">
+  <meta name="author" content="Andi Idogawa">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Chunky Bacon">
+  <meta property="og:title" content="Learn Ruby right in your browser">
+  <meta property="og:description" content="An interactive Ruby course in German, English and Japanese – 98 lessons from your first line to Rails. Nothing to install, no account, no tracking.">
+  <meta property="og:image" content="https://chunkybacon.idogawa.com/social/github-social.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1600">
+  <meta property="og:image:height" content="800">
+  <meta property="og:image:alt" content="Chunky Bacon: learn Ruby right in your browser. A notebook cell whose Ruby code answers &quot;Chunky Bacon&quot;, beside two cartoon foxes by why the lucky stiff shouting &quot;Chunky bacon!!&quot; on a red field.">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/why-foxes/fox-head.svg">
   <link rel="stylesheet" href="assets/fonts/fonts.css">
   <link rel="stylesheet" href="assets/pages.css">
@@ -17,12 +47,13 @@
 
 <header class="topbar">
   <div class="wrap">
-    <a class="brand" href="welcome.html"><img src="assets/why-foxes/fox-head.svg" alt="">Chunky Bacon</a>
+    <a class="brand" href="./"><img src="assets/why-foxes/fox-head.svg" alt="">Chunky Bacon</a>
     <nav class="topnav" aria-label="Seite">
-      <a href="#lehrplan"><span data-l="de">Lehrplan</span><span data-l="en">Curriculum</span></a>
-      <a href="#teams"><span data-l="de">Für Teams</span><span data-l="en">For teams</span></a>
-      <a href="#ueber"><span data-l="de">Über</span><span data-l="en">About</span></a>
-      <span class="langs"><button type="button" data-set="de" lang="de">DE</button><button type="button" data-set="en" lang="en">EN</button></span>
+      <a href="#lehrplan"><span data-l="de">Lehrplan</span><span data-l="en">Curriculum</span><span data-l="ja">カリキュラム</span></a>
+      <a href="#teams"><span data-l="de">Für Teams</span><span data-l="en">For teams</span><span data-l="ja">チーム向け</span></a>
+      <a href="#ueber"><span data-l="de">Über</span><span data-l="en">About</span><span data-l="ja">概要</span></a>
+      <a href="learn"><span data-l="de">Zum Kurs</span><span data-l="en">Course</span><span data-l="ja">コースへ</span></a>
+      <span class="langs"><button type="button" data-set="de" lang="de">DE</button><button type="button" data-set="en" lang="en">EN</button><button type="button" data-set="ja" lang="ja">日本語</button></span>
     </nav>
   </div>
 </header>
@@ -34,18 +65,21 @@
         <h1>
           <span data-l="de">Ruby lernen.<br>Direkt im Browser.</span>
           <span data-l="en">Learn Ruby.<br>Right in your browser.</span>
+          <span data-l="ja">Rubyを学ぼう。<br>ブラウザだけで。</span>
         </h1>
         <p class="lead" data-l="de">Ein interaktives Notizbuch: lesen, Code ausführen, Aufgaben lösen – von der ersten Zeile bis zur Rails-Anwendung. Ohne Installation, ohne Konto.</p>
         <p class="lead" data-l="en">An interactive notebook: read, run code, solve exercises – from your first line to a Rails application. Nothing to install, no account.</p>
+        <p class="lead" data-l="ja">読んで、コードを動かして、課題を解く。インタラクティブなノートブックで、最初の1行からRailsアプリケーションまで学べます。インストールもアカウントも不要です。</p>
         <div class="ctas">
-          <a class="btn primary" href="./#hallo"><span data-l="de">Kurs starten</span><span data-l="en">Start the course</span></a>
-          <a class="btn ghost" href="#lehrplan"><span data-l="de">Lehrplan ansehen</span><span data-l="en">See the curriculum</span></a>
+          <a class="btn primary" id="continue" href="learn" hidden><span data-l="de">Weiterlernen</span><span data-l="en">Continue learning</span><span data-l="ja">続きから学ぶ</span></a>
+          <a class="btn primary" id="start" href="learn#hallo"><span data-l="de">Kurs starten</span><span data-l="en">Start the course</span><span data-l="ja">コースを始める</span></a>
+          <a class="btn ghost" href="#lehrplan"><span data-l="de">Lehrplan ansehen</span><span data-l="en">See the curriculum</span><span data-l="ja">カリキュラムを見る</span></a>
         </div>
         <ul class="facts">
-          <li><strong>98</strong> <span data-l="de">Lektionen</span><span data-l="en">lessons</span></li>
+          <li><strong>98</strong> <span data-l="de">Lektionen</span><span data-l="en">lessons</span><span data-l="ja">レッスン</span></li>
           <li><strong>Deutsch · English · 日本語</strong></li>
           <li><strong>Open Source</strong> (MIT, CC BY-SA)</li>
-          <li><strong data-l="de">Kein Tracking</strong><strong data-l="en">No tracking</strong></li>
+          <li><strong data-l="de">Kein Tracking</strong><strong data-l="en">No tracking</strong><strong data-l="ja">トラッキングなし</strong></li>
         </ul>
       </div>
       <div class="cell" aria-hidden="true">
@@ -62,53 +96,64 @@
 
   <section>
     <div class="wrap">
-      <h2><span data-l="de">Was Sie danach können</span><span data-l="en">What you can do afterwards</span></h2>
+      <h2><span data-l="de">Was Sie danach können</span><span data-l="en">What you can do afterwards</span><span data-l="ja">修了後にできること</span></h2>
       <ul class="checks">
         <li data-l="de">Eigene Ruby-Programme schreiben und lesen – Variablen, Schleifen, Methoden, Klassen, Module</li>
         <li data-l="en">Write and read your own Ruby programs – variables, loops, methods, classes, modules</li>
+        <li data-l="ja">Rubyのプログラムを自分で書いて読める（変数、ループ、メソッド、クラス、モジュール）</li>
         <li data-l="de">Code mit Minitest absichern und Fehler gezielt finden</li>
         <li data-l="en">Back your code with Minitest and track down bugs on purpose</li>
+        <li data-l="ja">Minitestでコードを守り、バグを狙って見つけられる</li>
         <li data-l="de">Daten verarbeiten: Text, reguläre Ausdrücke, JSON, CSV, YAML</li>
         <li data-l="en">Process data: text, regular expressions, JSON, CSV, YAML</li>
+        <li data-l="ja">テキスト、正規表現、JSON、CSV、YAMLでデータを処理できる</li>
         <li data-l="de">Ein echtes Kommandozeilen-Werkzeug von Grund auf bauen</li>
         <li data-l="en">Build a real command-line tool from scratch</li>
+        <li data-l="ja">本格的なコマンドラインツールをゼロから作れる</li>
         <li data-l="de">Webanwendungen mit Sinatra, Roda und Ruby on Rails entwickeln</li>
         <li data-l="en">Build web applications with Sinatra, Roda and Ruby on Rails</li>
+        <li data-l="ja">Sinatra、Roda、Ruby on RailsでWebアプリケーションを作れる</li>
         <li data-l="de">Gems einsetzen und wissen, wie es auf dem eigenen Rechner weitergeht</li>
         <li data-l="en">Use gems, and know how to carry on on your own machine</li>
+        <li data-l="ja">gemを使いこなし、自分のパソコンでの続け方がわかる</li>
       </ul>
     </div>
   </section>
 
   <section class="alt" id="lehrplan">
     <div class="wrap">
-      <h2><span data-l="de">Lehrplan</span><span data-l="en">Curriculum</span></h2>
+      <h2><span data-l="de">Lehrplan</span><span data-l="en">Curriculum</span><span data-l="ja">カリキュラム</span></h2>
       <p class="intro" data-l="de">Zwei Kurse bilden den roten Faden. Die Labs sind Vertiefungen für Neugierige – man kann sie jederzeit überspringen.</p>
       <p class="intro" data-l="en">Two courses form the main path. The labs go deeper for the curious – skip them any time.</p>
+      <p class="intro" data-l="ja">2つのコースが学習の軸です。ラボは興味のある人向けの発展編で、いつでも飛ばせます。</p>
       <div class="grid">
         <div class="card main">
-          <div class="count"><span data-l="de">41 Lektionen</span><span data-l="en">41 lessons</span></div>
-          <h3><span data-l="de">Grundkurs</span><span data-l="en">Basics</span></h3>
+          <div class="count"><span data-l="de">41 Lektionen</span><span data-l="en">41 lessons</span><span data-l="ja">41レッスン</span></div>
+          <h3><span data-l="de">Grundkurs</span><span data-l="en">Basics</span><span data-l="ja">基礎コース</span></h3>
           <p data-l="de">Von <code>puts</code> über Arrays, Hashes, Methoden und Klassen bis zu Sinatra, Rails und ActiveRecord. Für Einsteigerinnen und Einsteiger ohne Vorkenntnisse.</p>
           <p data-l="en">From <code>puts</code> through arrays, hashes, methods and classes to Sinatra, Rails and ActiveRecord. For complete beginners.</p>
+          <p data-l="ja"><code>puts</code>から配列、ハッシュ、メソッド、クラスを経て、Sinatra、Rails、ActiveRecordまで。プログラミング未経験の方向けです。</p>
         </div>
         <div class="card main">
-          <div class="count"><span data-l="de">18 Lektionen</span><span data-l="en">18 lessons</span></div>
-          <h3><span data-l="de">Aufbaukurs: timelog</span><span data-l="en">Advanced: timelog</span></h3>
+          <div class="count"><span data-l="de">18 Lektionen</span><span data-l="en">18 lessons</span><span data-l="ja">18レッスン</span></div>
+          <h3><span data-l="de">Aufbaukurs: timelog</span><span data-l="en">Advanced: timelog</span><span data-l="ja">応用コース：timelog</span></h3>
           <p data-l="de">Ein durchgehendes Projekt, eine Zeiterfassung: Parsing, Tests, Fehlerbehandlung, CLI, Pattern Matching, Metaprogrammierung, DSLs und eine Web-Oberfläche als Abschluss.</p>
           <p data-l="en">One project all the way through, a time tracker: parsing, tests, error handling, a CLI, pattern matching, metaprogramming, DSLs and a web front end to finish.</p>
+          <p data-l="ja">ひとつのプロジェクト（作業時間の記録ツール）を最後まで作ります。パース、テスト、エラー処理、CLI、パターンマッチ、メタプログラミング、DSL、そして仕上げにWeb画面。</p>
         </div>
         <div class="card lab">
-          <div class="count"><span data-l="de">30 Labs</span><span data-l="en">30 labs</span></div>
-          <h3><span data-l="de">Ausflüge</span><span data-l="en">Side trips</span></h3>
+          <div class="count"><span data-l="de">30 Labs</span><span data-l="en">30 labs</span><span data-l="ja">30ラボ</span></div>
+          <h3><span data-l="de">Ausflüge</span><span data-l="en">Side trips</span><span data-l="ja">寄り道</span></h3>
           <p data-l="de">PDF und PowerPoint erzeugen, Data Science, Spiele, Desktop-Apps und andere Ruby-Implementierungen wie JRuby.</p>
           <p data-l="en">Generate PDFs and PowerPoint decks, data science, games, desktop apps and other Ruby implementations such as JRuby.</p>
+          <p data-l="ja">PDFやPowerPointの生成、データサイエンス、ゲーム、デスクトップアプリ、そしてJRubyなど別のRuby実装。</p>
         </div>
         <div class="card lab">
-          <div class="count"><span data-l="de">9 Labs</span><span data-l="en">9 labs</span></div>
-          <h3><span data-l="de">Ruby auf dem Pico</span><span data-l="en">Ruby on a Pico</span></h3>
+          <div class="count"><span data-l="de">9 Labs</span><span data-l="en">9 labs</span><span data-l="ja">9ラボ</span></div>
+          <h3><span data-l="de">Ruby auf dem Pico</span><span data-l="en">Ruby on a Pico</span><span data-l="ja">PicoでRuby</span></h3>
           <p data-l="de">Mikrocontroller mit PicoRuby: LEDs, Sensoren, Displays, WLAN – im Simulator oder auf echter Hardware.</p>
           <p data-l="en">Microcontrollers with PicoRuby: LEDs, sensors, displays, Wi-Fi – in the simulator or on real hardware.</p>
+          <p data-l="ja">PicoRubyでマイコンを動かします。LED、センサー、ディスプレイ、Wi-Fi。シミュレーターでも実機でも。</p>
         </div>
       </div>
     </div>
@@ -116,61 +161,70 @@
 
   <section>
     <div class="wrap">
-      <h2><span data-l="de">So funktioniert es</span><span data-l="en">How it works</span></h2>
+      <h2><span data-l="de">So funktioniert es</span><span data-l="en">How it works</span><span data-l="ja">学び方</span></h2>
       <div class="grid steps">
         <div class="card">
-          <h3><span data-l="de">Lesen</span><span data-l="en">Read</span></h3>
+          <h3><span data-l="de">Lesen</span><span data-l="en">Read</span><span data-l="ja">読む</span></h3>
           <p data-l="de">Kurze Erklärungen, abwechselnd mit lauffähigen Codezellen.</p>
           <p data-l="en">Short explanations, interleaved with runnable code cells.</p>
+          <p data-l="ja">短い解説と、実行できるコードセルが交互に並んでいます。</p>
         </div>
         <div class="card">
-          <h3><span data-l="de">Ausprobieren</span><span data-l="en">Try it</span></h3>
+          <h3><span data-l="de">Ausprobieren</span><span data-l="en">Try it</span><span data-l="ja">試す</span></h3>
           <p data-l="de">Echtes Ruby 4.0 läuft in Ihrem Browser (WebAssembly). Code ändern, ausführen, Ergebnis sehen.</p>
           <p data-l="en">Real Ruby 4.0 runs in your browser (WebAssembly). Change the code, run it, see the result.</p>
+          <p data-l="ja">本物のRuby 4.0がブラウザの中で動きます（WebAssembly）。コードを書き換えて実行し、結果をその場で確認できます。</p>
         </div>
         <div class="card">
-          <h3><span data-l="de">Üben</span><span data-l="en">Practise</span></h3>
+          <h3><span data-l="de">Üben</span><span data-l="en">Practise</span><span data-l="ja">練習する</span></h3>
           <p data-l="de">Jede Lektion endet mit einer Aufgabe, die sofort geprüft wird – mit gestuften Hinweisen, wenn es hakt.</p>
           <p data-l="en">Every lesson ends with an exercise that is checked at once – with step-by-step hints if you get stuck.</p>
+          <p data-l="ja">各レッスンの最後に課題があり、すぐに採点されます。つまずいたら段階的なヒントが出せます。</p>
         </div>
       </div>
       <p class="intro" style="margin-top:1.6rem" data-l="de">Ihr Fortschritt bleibt auf Ihrem Gerät. Sie können ihn als Datei sichern oder einen Ordner verbinden – es gibt kein Konto und keine Analyse-Software.</p>
       <p class="intro" style="margin-top:1.6rem" data-l="en">Your progress stays on your device. Save it as a file or connect a folder – there is no account and no analytics software.</p>
+      <p class="intro" style="margin-top:1.6rem" data-l="ja">進み具合はお使いの端末にだけ保存されます。ファイルに保存したり、フォルダーとつないだりもできます。アカウントもアクセス解析もありません。</p>
     </div>
   </section>
 
   <section class="alt" id="teams">
     <div class="wrap">
-      <h2><span data-l="de">Für Teams, Schulen und Unternehmen</span><span data-l="en">For teams, schools and companies</span></h2>
+      <h2><span data-l="de">Für Teams, Schulen und Unternehmen</span><span data-l="en">For teams, schools and companies</span><span data-l="ja">チーム・学校・企業の方へ</span></h2>
       <div class="grid">
         <div class="card">
-          <h3><span data-l="de">Onboarding</span><span data-l="en">Onboarding</span></h3>
+          <h3><span data-l="de">Onboarding</span><span data-l="en">Onboarding</span><span data-l="ja">オンボーディング</span></h3>
           <p data-l="de">Neue Entwicklerinnen und Entwickler lernen Ruby und Rails im eigenen Tempo, ohne dass jemand eine Umgebung aufsetzen muss.</p>
           <p data-l="en">New developers learn Ruby and Rails at their own pace, without anyone having to set up an environment.</p>
+          <p data-l="ja">新しく加わった開発者が、環境構築なしで自分のペースでRubyとRailsを学べます。</p>
         </div>
         <div class="card">
-          <h3><span data-l="de">Workshops</span><span data-l="en">Workshops</span></h3>
+          <h3><span data-l="de">Workshops</span><span data-l="en">Workshops</span><span data-l="ja">ワークショップ</span></h3>
           <p data-l="de">Begleitete Kurse vor Ort oder online, auf Deutsch, Englisch oder Japanisch.</p>
           <p data-l="en">Guided courses on site or online, in German, English or Japanese.</p>
+          <p data-l="ja">講師付きのコースを、対面またはオンラインで。ドイツ語・英語・日本語に対応します。</p>
         </div>
         <div class="card">
-          <h3><span data-l="de">Eigene Lektionen</span><span data-l="en">Custom lessons</span></h3>
+          <h3><span data-l="de">Eigene Lektionen</span><span data-l="en">Custom lessons</span><span data-l="ja">オリジナルレッスン</span></h3>
           <p data-l="de">Lektionen zu Ihrem Stack, Ihren Gems und Ihren Daten.</p>
           <p data-l="en">Lessons about your stack, your gems and your data.</p>
+          <p data-l="ja">御社の技術スタック、gem、データに合わせたレッスンを作成します。</p>
         </div>
         <div class="card">
-          <h3><span data-l="de">Selbst betreiben</span><span data-l="en">Host it yourself</span></h3>
+          <h3><span data-l="de">Selbst betreiben</span><span data-l="en">Host it yourself</span><span data-l="ja">自社で運用</span></h3>
           <p data-l="de">Der Kurs ist Open Source und eine statische Website – im eigenen Netz betreibbar, auch offline.</p>
           <p data-l="en">The course is open source and a static website – run it on your own network, even offline.</p>
+          <p data-l="ja">コースはオープンソースの静的サイトです。社内ネットワークでも、オフラインでも動かせます。</p>
         </div>
       </div>
       <div class="contact">
         <div>
-          <h3><span data-l="de">Interesse?</span><span data-l="en">Interested?</span></h3>
+          <h3><span data-l="de">Interesse?</span><span data-l="en">Interested?</span><span data-l="ja">ご興味がありますか？</span></h3>
           <p data-l="de">Schreiben Sie an <a href="mailto:web@idogawa.com">web@idogawa.com</a> – Antwort in der Regel innert zwei Arbeitstagen.</p>
           <p data-l="en">Write to <a href="mailto:web@idogawa.com">web@idogawa.com</a> – usually answered within two working days.</p>
+          <p data-l="ja"><a href="mailto:web@idogawa.com">web@idogawa.com</a> までご連絡ください。通常2営業日以内にお返事します。</p>
         </div>
-        <a class="btn primary" href="mailto:web@idogawa.com"><span data-l="de">Kontakt aufnehmen</span><span data-l="en">Get in touch</span></a>
+        <a class="btn primary" href="mailto:web@idogawa.com"><span data-l="de">Kontakt aufnehmen</span><span data-l="en">Get in touch</span><span data-l="ja">お問い合わせ</span></a>
       </div>
     </div>
   </section>
@@ -178,11 +232,13 @@
   <section id="ueber">
     <div class="wrap">
       <div>
-        <h2><span data-l="de">Über den Kurs</span><span data-l="en">About the course</span></h2>
+        <h2><span data-l="de">Über den Kurs</span><span data-l="en">About the course</span><span data-l="ja">このコースについて</span></h2>
         <p data-l="de">Der Kurs wird von <a href="https://idogawa.com">Andi Idogawa</a> entwickelt und betreut.</p>
         <p data-l="en">The course is written and maintained by <a href="https://idogawa.com">Andi Idogawa</a>.</p>
+        <p data-l="ja">このコースは<a href="https://idogawa.com">Andi Idogawa</a>が制作・運営しています。</p>
         <p data-l="de">Der Quellcode liegt öffentlich auf <a href="https://github.com/Largo/chunkybacon">GitHub</a>. Der Name und die Füchse erinnern an <em>why's (poignant) guide to Ruby</em> von why the lucky stiff.</p>
         <p data-l="en">The source code is public on <a href="https://github.com/Largo/chunkybacon">GitHub</a>. The name and the foxes are a nod to <em>why's (poignant) guide to Ruby</em> by why the lucky stiff.</p>
+        <p data-l="ja">ソースコードは<a href="https://github.com/Largo/chunkybacon">GitHub</a>で公開しています。名前とキツネは、why the lucky stiffの『why's (poignant) guide to Ruby』へのオマージュです。</p>
       </div>
     </div>
   </section>
@@ -191,13 +247,30 @@
 <footer class="sitefoot">
   <div class="wrap">
     <nav aria-label="Rechtliches">
-      <a href="impressum.html">Impressum</a>
-      <a href="datenschutz.html"><span data-l="de">Datenschutz</span><span data-l="en">Privacy</span></a>
+      <a href="impressum.html"><span data-l="de">Impressum</span><span data-l="en">Legal notice</span><span data-l="ja">運営者情報</span></a>
+      <a href="datenschutz.html"><span data-l="de">Datenschutz</span><span data-l="en">Privacy</span><span data-l="ja">プライバシー</span></a>
       <a href="https://github.com/Largo/chunkybacon">GitHub</a>
     </nav>
     <p data-l="de">Kursinhalte <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.de">CC BY-SA 4.0</a>, Code <a href="https://github.com/Largo/chunkybacon/blob/main/LICENSE">MIT</a>. Füchse nach why the lucky stiff (<a href="https://creativecommons.org/licenses/by-sa/2.5/deed.de">CC BY-SA 2.5</a>).</p>
     <p data-l="en">Course content <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>, code <a href="https://github.com/Largo/chunkybacon/blob/main/LICENSE">MIT</a>. Foxes after why the lucky stiff (<a href="https://creativecommons.org/licenses/by-sa/2.5/">CC BY-SA 2.5</a>).</p>
+    <p data-l="ja">コース内容は<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja">CC BY-SA 4.0</a>、コードは<a href="https://github.com/Largo/chunkybacon/blob/main/LICENSE">MIT</a>。キツネの絵はwhy the lucky stiffによるもの（<a href="https://creativecommons.org/licenses/by-sa/2.5/deed.ja">CC BY-SA 2.5</a>）。</p>
   </div>
 </footer>
+
+<script>
+  // a learner who has been here before: "Continue" takes them back to the
+  // lesson they left off at (the course remembers it, storage.js)
+  (function () {
+    try {
+      for (var i = 0; i < localStorage.length; i++) {
+        if (localStorage.key(i).indexOf("chunky_") === 0) {
+          document.getElementById("continue").hidden = false;
+          document.getElementById("start").className = "btn ghost";
+          return;
+        }
+      }
+    } catch (e) { /* no storage: everyone starts at the beginning */ }
+  })();
+</script>
 </body>
 </html>

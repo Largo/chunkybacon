@@ -65,9 +65,11 @@ check('... that reloads into the workshop', await page.evaluate(() => document.b
 await page.goto(BASE + '/#hashes');
 await page.waitForSelector('#app', { state: 'visible' });
 check('an old /#hash link becomes a permalink', await shown('hashes') && (await path()) === '/en/hashes');
-await page.goto(BASE + '/');
+await page.goto(BASE + '/learn');
 await page.waitForSelector('#app', { state: 'visible' });
-check('the bare address names the lesson left off at', (await path()) === '/en/hashes');
+check('/learn names the lesson left off at', (await path()) === '/en/hashes');
+await page.goto(BASE + '/');
+check('the bare address is the landing page', await page.locator('#start').count() > 0);
 
 // what the server says about pages that do not exist
 check('an unknown lesson is a 404', (await page.goto(BASE + '/de/gibts-nicht')).status() === 404);

@@ -50,7 +50,7 @@ await page.context().close();
 
 page = await visit(['en-US'], '?v=1&lang=ja#irb');
 check('?lang= picks the language', (await lang(page)) === 'ja');
-check('?lang= leaves the address, the rest stays', page.url().endsWith('/?v=1#irb'));
+check('?lang= leaves the address, the rest stays', page.url().endsWith('/learn?v=1#irb'));
 check('?lang= is kept as the choice', (await page.evaluate(() => localStorage.getItem('chunky_lang'))) === 'ja');
 await page.goto(BASE + '#hallo', { waitUntil: 'domcontentloaded' });
 await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
