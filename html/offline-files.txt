@@ -99,7 +99,6 @@ compile/wasi-shim/strace.js
 compile/wasi-shim/wasi.js
 compile/wasi-shim/wasi_defs.js
 compile/worker.js
-datenschutz.html
 earlier_cells.rb
 friendly_errors.rb
 friendly_errors_messages.rb
@@ -200,7 +199,6 @@ gems/cache/useragent-0.16.11.gem
 gems/cache/wavefile-1.1.2.gem
 gems/cache/zeitwerk-2.8.3.gem
 herb_bridge.rb
-impressum.html
 index.html
 ironruby_cells.rb
 ironruby_lab.js
@@ -213,6 +211,7 @@ jruby_swing.html
 jruby_swing.js
 jruby_swing_boot.js
 jruby_worker.js
+legal_links.js
 lessons.js
 letter.js
 main.rb

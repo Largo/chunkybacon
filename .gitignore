@@ -21,3 +21,7 @@ test/lessons.json
 # the .gz copies: put there by tools/vendor_ironruby.rb from its pins in
 # tools/ironruby.json on the deploy host, never committed (docs/HANDOVER.md §6s)
 /html/assets/ironruby/
+# the operator's legal pages: per deployment, never committed, so a fork never
+# names this site's operator (templates: html/*.example.html, README "Legal pages")
+/html/impressum.html
+/html/datenschutz.html
