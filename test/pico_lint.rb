@@ -11,7 +11,8 @@ require "prism"
 require "json"
 
 module PicoLint
-  LANGS = %w[de en ja].freeze
+  # the course's languages; a lesson is checked in those it has
+  LANGS = %w[de en ja fr it].freeze
   BOARDS = %w[pico picow pico2 pico2w].freeze
   # the parts of html/pico_sim/devices (PicoSim::PARTS) and the GPIOs they
   # take (test/pico_sim_test.rb checks this table against the simulator)
@@ -176,13 +177,13 @@ module PicoLint
     end
   end
 
-  # tabs, board and bench are the same in de, en and ja; a tab's code too,
+  # tabs, board and bench are the same in every language; a tab's code too,
   # but for its comments
   def parity(lesson, per_lang, root, add)
-    return unless per_lang.size == LANGS.size && per_lang.values.map(&:size).uniq.size == 1
+    return unless per_lang.key?("en") && per_lang.size > 1 && per_lang.values.map(&:size).uniq.size == 1
 
     per_lang["en"].each_index do |ci|
-      cells = LANGS.to_h { |g| [g, per_lang[g][ci]] }
+      cells = per_lang.transform_values { |list| list[ci] }
       next unless cells.values.all? { |c| c.is_a?(Hash) && code_cell?(c) }
 
       where = "#{lesson['id']}/#{ci}"

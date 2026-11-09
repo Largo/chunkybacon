@@ -71,6 +71,20 @@ class ServerTest < Minitest::Test
     assert_includes res.body, '<html lang="ja">'
   end
 
+  # every language of the course (lessons.js's ui: de, en, ja, fr, it) has
+  # its permalinks, and each page names all of them as alternates
+  def test_every_course_language_has_permalinks
+    langs = Course.load(File.expand_path("../html/lessons.js", __dir__)).langs
+    langs.each do |lang|
+      res = get("/#{lang}/methoden")
+      assert_equal 200, res.status, lang
+      assert_includes res.body, %(<html lang="#{lang}">), lang
+      assert_includes res.body, %(<link rel="canonical" href="http://example.org/#{lang}/methoden">), lang
+      langs.each { |other| assert_includes res.body, %(<link rel="alternate" hreflang="#{other}" href="http://example.org/#{other}/methoden">), "#{lang} -> #{other}" }
+      assert_equal 200, get("/#{lang}").status, lang
+    end
+  end
+
   def test_unknown_languages_and_lessons_are_404
     %w[/xx/methoden /de/gibts-nicht /de/methoden/mehr /assets].each do |path|
       res = get(path)

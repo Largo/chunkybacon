@@ -215,6 +215,10 @@ class Ruby2DTest < Minitest::Test
     assert_match(/not found/, assert_raises(Ruby2D::Error) { Ruby2D::Image.new("nowhere.png") }.message)
     Ruby2D.lang__ = "ja"
     assert_match(/Audioはこのページでは使えません/, assert_raises(Ruby2D::Error) { Ruby2D::Audio.new(path) }.message)
+    Ruby2D.lang__ = "fr"
+    assert_match(/Audio n'est pas disponible/, assert_raises(Ruby2D::Error) { Ruby2D::Audio.new(path) }.message)
+    Ruby2D.lang__ = "it"
+    assert_match(/Audio non è disponibile/, assert_raises(Ruby2D::Error) { Ruby2D::Audio.new(path) }.message)
   ensure
     File.delete(path) if path && File.exist?(path)
   end
@@ -250,7 +254,8 @@ class Ruby2DTest < Minitest::Test
   # every code cell of the lesson runs and shows one window; the exercise's
   # starter and a solution do what the check says
   def test_the_lessons_cells
-    %w[de en ja].each do |lang|
+    data_langs = JSON.parse(File.read(File.expand_path("lessons.json", __dir__)))["ui"].keys
+    data_langs.each do |lang|
       LESSON[lang]["cells"].select { |c| %w[c x].include?(c["t"]) }.each_with_index do |cell, i|
         r = run_program(cell["code"])
         assert r, "#{lang} cell #{i}: no window"

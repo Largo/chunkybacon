@@ -18,10 +18,10 @@ module ChunkyShell
     def lang?(lang) = @langs.include?(lang)
     def ui(lang) = @ui[lang]
 
-    # a lesson in one language; German when a translation is missing
+    # a lesson in one language; English when a translation is missing
     def l10n(idx, lang)
       lesson = @lessons[idx]
-      lesson[lang] || lesson.de
+      lesson[lang] || lesson.en
     end
 
     # lessons.js titles have no number: a lesson's number is its place
@@ -35,7 +35,7 @@ module ChunkyShell
     # answers nil, but PicoRuby logs "Method not found" for it.
     def section(idx, lang)
       section = @lessons[idx][:section]
-      section && (section[lang] || section.de)
+      section && (section[lang] || section[:en])
     end
 
     # false for a lesson whose cells compute too much for live runs

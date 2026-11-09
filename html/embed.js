@@ -4,7 +4,7 @@
 //   <pre data-chunky data-gems="chunky_png" data-lang="en">puts 1 + 1</pre>
 //   <script src="https://letsruby.com/embed.js" defer></script>
 //
-// Attributes (all optional): data-gems="a,b", data-lang="de|en|ja",
+// Attributes (all optional): data-gems="a,b", data-lang="de|en|ja|fr|it",
 // data-load="visible|click|eager" (when ruby.wasm loads, default visible),
 // data-run="1" (run once loaded), aria-label (the iframe's title).
 //

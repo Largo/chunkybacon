@@ -151,6 +151,19 @@ class AppTest < Minitest::Test
     assert_includes find(".run-cell").text, "実行"
   end
 
+  # French and Italian, once lessons.js has them: the page's language, the
+  # selector and the run button in it
+  %w[fr it].each do |code|
+    define_method("test_language_#{code}") do
+      ui = JSON.parse(File.read(LESSONS_JSON))["ui"][code]
+      skip "lessons.js has no #{code} yet" unless ui
+      start(storage: { "chunky_lang" => code })
+      assert_equal code, doc.js_get("documentElement").attrs["lang"]
+      assert_equal code, byid("langSelect").props["value"]
+      assert_includes find(".run-cell").text, ui["runCell"].sub(/\A▶\s*/, "")
+    end
+  end
+
   # bridge.js decides (?lang=, last choice, browser languages); its word
   # beats what localStorage held
   def test_the_language_bridge_js_picked

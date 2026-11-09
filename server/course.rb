@@ -35,7 +35,11 @@ class Course
   def lang?(lang) = @ui.key?(lang)
   def ids = @lessons.map { |lesson| lesson["id"] }
   def lesson?(id) = @by_id.key?(id)
-  def ui(lang, key) = @ui.dig(lang, key)
+  # a ui string, English when the language lacks it (as the shell does)
+  def ui(lang, key) = @ui.dig(lang, key) || @ui.dig("en", key)
+
+  # a lesson in one language; English when a translation is missing
+  def l10n(id, lang) = @by_id[id] && (@by_id[id][lang] || @by_id[id]["en"])
 
   # what a page names: a lesson id or the workshop
   def page?(id) = lesson?(id) || id == WORKSHOP_ID
@@ -50,12 +54,12 @@ class Course
   end
 
   # "9. Methoden"
-  def numbered_title(lang, id) = LessonRefs.numbered(@numbers.fetch(id), @by_id.dig(id, lang, "title"))
+  def numbered_title(lang, id) = LessonRefs.numbered(@numbers.fetch(id), l10n(id, lang)&.dig("title"))
 
   # The lesson's first paragraph as plain text, shortened for a link
   # preview; the course's subtitle for anything else.
   def description(lang, id = nil, limit = 160)
-    html = id && @by_id.dig(id, lang, "cells")&.find { |cell| cell["t"] == "h" }&.dig("html")
+    html = id && l10n(id, lang)&.dig("cells")&.find { |cell| cell["t"] == "h" }&.dig("html")
     return ui(lang, "subtitle") unless html
 
     text = html.sub(%r{<h2>.*?</h2>}m, "").gsub(/<[^>]+>/, " ").gsub("&nbsp;", " ")

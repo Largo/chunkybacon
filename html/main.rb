@@ -497,7 +497,7 @@ class ChunkyApp
   end
 
   def l10n(lesson)
-    lesson[@lang] || lesson["de"]
+    lesson[@lang] || lesson["en"] || lesson["de"]
   end
 
   def cells
@@ -705,7 +705,7 @@ class ChunkyApp
       samples, rate = ChunkyAudio.pcm(bytes)
       # "1,5" - and "0,25" for a short sound, not "0,3" (or "0,0")
       seconds = format(samples.size >= rate ? "%.1f" : "%.2f", samples.size.fdiv(rate))
-      seconds = seconds.tr(".", ",") if @lang == "de"
+      seconds = seconds.tr(".", ",") if decimal_comma?
       label = escape_html(format(ui["audioLabel"], seconds))
       picture = samples.empty? ? "" : "<img class=\"cell-wave\" alt=\"\" src=\"data:image/svg+xml;base64,#{[ChunkyAudio.waveform_svg(samples, rate)].pack('m0')}\">"
       "<div class=\"cell-audio\">#{picture}<audio controls preload=\"auto\" src=\"#{url}\" aria-label=\"#{label}\"></audio></div>"
@@ -1818,13 +1818,17 @@ class ChunkyApp
     out_el.insertAdjacentHTML("afterbegin", "<div class=\"cell-engine is-#{engine}\">#{escape_html(name)} · #{time}</div>")
   end
 
-  # 812 ms, 1.07 s (1,07 s in German, as the course writes numbers)
+  # 812 ms, 1.07 s (1,07 s in German, French and Italian, as the course
+  # writes numbers)
   def engine_time(seconds)
     return "#{(seconds * 1000).round} ms" if seconds < 1
 
     text = format("%.2f s", seconds)
-    @lang == "de" ? text.tr(".", ",") : text
+    decimal_comma? ? text.tr(".", ",") : text
   end
+
+  # the page's language writes 1,5 for 1.5
+  def decimal_comma? = %w[de fr it].include?(@lang)
 
   # the exercise passed on JRuby: the same code on CRuby, in a binding of
   # its own (it ran to the end on JRuby, so it ends here too)

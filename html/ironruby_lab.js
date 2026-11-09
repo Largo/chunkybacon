@@ -50,7 +50,17 @@
           boot: "IronRuby を起動しています …",
           ready: "IronRuby の準備ができました: %v (起動 %s 秒)",
           failed: "IronRuby を読み込めませんでした: %m",
-          stop: "■ 停止" }
+          stop: "■ 停止" },
+    fr: { download: "Démarrage de .NET dans votre navigateur … (environ 20 Mo la première fois, ensuite en cache)",
+          boot: "IronRuby démarre …",
+          ready: "IronRuby est prêt : %v, démarré en %s s.",
+          failed: "IronRuby n'a pas pu être chargé : %m",
+          stop: "■ Arrêter" },
+    it: { download: "Avvio di .NET nel tuo browser … (circa 20 MB la prima volta, poi in cache)",
+          boot: "IronRuby si sta avviando …",
+          ready: "IronRuby è pronto: %v, avviato in %s s.",
+          failed: "Impossibile caricare IronRuby: %m",
+          stop: "■ Ferma" }
   };
 
   var ir = window.chunkyIronRuby = {
@@ -77,8 +87,8 @@
   };
 
   function lang() {
-    var l = (document.documentElement.lang || "de").slice(0, 2);
-    return TEXT[l] ? l : "de";
+    var l = (document.documentElement.lang || "en").slice(0, 2);
+    return TEXT[l] ? l : "en";
   }
 
   // the status line(s) of the lesson; also called after the shell drew the

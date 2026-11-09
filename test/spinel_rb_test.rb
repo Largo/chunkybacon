@@ -55,7 +55,7 @@ class SpinelRbTest < Minitest::Test
     shell = File.read(File.expand_path("../html/shell/spinel.rb", __dir__))
     keys = shell.scan(/t\("(spinel[A-Za-z]+|irbExitNote)"/).flatten.uniq
     assert_operator keys.size, :>=, 20
-    %w[de en ja].each do |lang|
+    data["ui"].each_key do |lang|
       keys.each { |key| assert data["ui"][lang].key?(key), "ui.#{key} missing in #{lang}" }
     end
   end

@@ -41,9 +41,9 @@ module ChunkyShell
     def open? = JSG.d.body.classList.contains("cheat-open") == true
     def overlay? = JSG.w.matchMedia(OVERLAY).matches == true
 
-    # a UI string in the page's language, German when missing
+    # a UI string in the page's language, English when missing
     def t(key)
-      text = @app.ui[key] || @app.course.ui("de")[key]
+      text = @app.ui[key] || @app.course.ui("en")[key]
       text.nil? ? key : text.to_s
     end
 
@@ -184,15 +184,15 @@ module ChunkyShell
         lessons << [id.to_s, idx + 1, @app.href(id.to_s)] unless idx.nil?
       end
       docs = section.docs.to_a.map do |doc|
-        [(doc[lang] || doc.de).to_s, (lang == "ja" ? doc.urlJa : doc.url).to_s]
+        [(doc[lang] || doc.en).to_s, (lang == "ja" ? doc.urlJa : doc.url).to_s]
       end
       rows = section.rows.to_a.map do |row|
         code = row.c.to_s
-        html = (row[lang] || row.de).to_s
+        html = (row[lang] || row.en).to_s
         [code, html, "#{code} #{html}".downcase]
       end
       title = section.title
-      { id: section.id.to_s, title: (title[lang] || title.de).to_s, lessons: lessons, docs: docs, rows: rows }
+      { id: section.id.to_s, title: (title[lang] || title.en).to_s, lessons: lessons, docs: docs, rows: rows }
     end
 
     # the rows of +section+ that +needle+ (lowercase) finds - all of them

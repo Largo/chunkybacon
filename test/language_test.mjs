@@ -40,13 +40,36 @@ check('a Swiss German browser gets German', (await lang(page)) === 'de' &&
   (await page.textContent('#siteSubtitle')).includes('Ruby-Notizbuch'));
 await page.context().close();
 
-page = await visit(['fr-FR', 'de-DE', 'en']);
+page = await visit(['fr-CH', 'de-CH', 'en']);
+check('a Swiss French browser gets French', (await lang(page)) === 'fr');
+await page.context().close();
+
+page = await visit(['it-CH', 'de-CH']);
+check('a Swiss Italian browser gets Italian', (await lang(page)) === 'it');
+await page.context().close();
+
+page = await visit(['fr-FR']);
+check('a French browser gets French', (await lang(page)) === 'fr');
+await page.context().close();
+
+page = await visit(['it-IT', 'en']);
+check('an Italian browser gets Italian', (await lang(page)) === 'it');
+await page.context().close();
+
+page = await visit(['es-ES', 'de-DE', 'en']);
 check('the first preferred language the course has wins', (await lang(page)) === 'de');
 await page.context().close();
 
-page = await visit(['fr-FR', 'it']);
+page = await visit(['es-ES', 'pt']);
 check('a language the course lacks falls back to English', (await lang(page)) === 'en');
 await page.context().close();
+
+for (const code of ['fr', 'it']) {
+  page = await visit(['en-US'], `?lang=${code}#hallo`);
+  check(`?lang=${code} picks ${code}`, (await lang(page)) === code &&
+    (await page.$eval('#langSelect', s => s.value)) === code);
+  await page.context().close();
+}
 
 page = await visit(['en-US'], '?v=1&lang=ja#irb');
 check('?lang= picks the language', (await lang(page)) === 'ja');

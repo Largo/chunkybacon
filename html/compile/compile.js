@@ -36,6 +36,22 @@
       first: "初回はコンパイラ（約 45 MB）を読み込みます。以降はキャッシュされます。",
       translate: "Ruby を C に変換中 …", fetch: "コンパイラを読み込み中 …", compile: "C をコンパイル中 …", link: "リンク中 …",
       done: "完成：", error: "うまくいきませんでした：", note: "Spinel は Ruby の一部だけに対応しています。このページの補助（show_image、show_irb など）はプログラムでは使えません。"
+    },
+    fr: {
+      button: "📦 Programme", title: "Construire ce code comme programme autonome (Spinel)",
+      win: "Windows (.exe)", linux: "Linux (x86_64)",
+      intro: "Transforme le code en un programme qui tourne sans Ruby – ici même dans le navigateur, rien n'est envoyé.",
+      first: "La première fois, le compilateur se charge (environ 45 Mo) – ensuite il est en cache.",
+      translate: "Traduction de Ruby en C …", fetch: "Chargement du compilateur …", compile: "Compilation du C …", link: "Édition des liens du programme …",
+      done: "Terminé : ", error: "Cela n'a pas marché :", note: "Spinel ne prend en charge qu'une partie de Ruby, et les aides de la page (show_image, show_irb …) n'existent pas dans le programme."
+    },
+    it: {
+      button: "📦 Programma", title: "Compila questo codice come programma autonomo (Spinel)",
+      win: "Windows (.exe)", linux: "Linux (x86_64)",
+      intro: "Trasforma il codice in un programma che gira senza Ruby – qui nel browser, non viene caricato niente.",
+      first: "La prima volta carica il compilatore (circa 45 MB) – poi resta in cache.",
+      translate: "Traduzione da Ruby a C …", fetch: "Caricamento del compilatore …", compile: "Compilazione del C …", link: "Linking del programma …",
+      done: "Fatto: ", error: "Non ha funzionato:", note: "Spinel supporta solo una parte di Ruby, e gli aiuti della pagina (show_image, show_irb …) nel programma non esistono."
     }
   };
   function t() { return TEXT[document.documentElement.lang] || TEXT.en; }
@@ -82,8 +98,8 @@
   function release(panel) { busy = null; panel.el.classList.remove("busy"); }
 
   function finish(panel, d) {
-    var name = d.target === "win" ? "programm.exe" : "programm";
-    if (document.documentElement.lang === "en") name = d.target === "win" ? "program.exe" : "program";
+    var name = document.documentElement.lang === "de" ? "programm" : "program";
+    if (d.target === "win") name += ".exe";
     var url = URL.createObjectURL(new Blob([d.bin], { type: "application/octet-stream" }));
     var a = document.createElement("a");
     a.href = url; a.download = name;

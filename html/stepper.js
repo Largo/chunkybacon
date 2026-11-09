@@ -14,7 +14,7 @@
 //       (bridge.js, after its paint): another lesson drops every recording;
 //       the same lesson again - another language - shows each one again,
 //       at its step, where the cell's code is the same apart from comments
-//       (en <-> ja, and cells whose German code is the English one)
+//       (en <-> ja/fr/it, and cells whose German code is the English one)
 //
 // Keyboard and screen readers: the slider is a native range input (arrow
 // keys, Home, End, Page Up/Down), named, its value "Schritt 3 von 12". The
@@ -31,9 +31,9 @@
 
   function strings() {
     var all = window.LESSONS.ui;
-    return all[lang()] || all.de;
+    return all[lang()] || all.en;
   }
-  function lang() { return window.ChunkyBridge ? window.ChunkyBridge.state.lang : "de"; }
+  function lang() { return window.ChunkyBridge ? window.ChunkyBridge.state.lang : "en"; }
 
   // the course's ui strings are Ruby format strings: %s and %d, in order
   function fmt(text, args) {
