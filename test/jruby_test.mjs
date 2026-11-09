@@ -104,7 +104,7 @@ check('...the text kept in the page, out of sight', !!qrShape && !qrShape.preSho
   await (await page.$(`#cell-out-${qrIdx} svg.cell-blocks`)).screenshot({ path: png });
   const { spawnSync } = await import('node:child_process');
   const read = spawnSync('ruby', ['-e', 'require "qr_reader"; puts QrReader.read(ARGV[0]).inspect', png], { encoding: 'utf8' });
-  if (read.status === 0) check('...and the screenshot scans: https://chunkybacon.idogawa.com', read.stdout.includes('https://chunkybacon.idogawa.com'));
+  if (read.status === 0) check('...and the screenshot scans: https://letsruby.com', read.stdout.includes('https://letsruby.com'));
   else console.log('  (no qr_reader gem: the scan is not checked)', (read.stderr || '').split('\n')[0]);
 }
 check('...and no "=> nil" after it', !qr.includes('=> nil'));

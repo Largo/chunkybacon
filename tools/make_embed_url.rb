@@ -5,7 +5,7 @@
 # (nginx/default.conf); a link works anywhere.
 #
 #   ruby tools/make_embed_url.rb example.rb [--gems chunky_png] [--lang en]
-#        [--load visible|click|eager] [--run] [--base https://chunkybacon.idogawa.com/]
+#        [--load visible|click|eager] [--run] [--base https://letsruby.com/]
 #
 # Prints the address, an <iframe> and a Markdown link. The code is
 # deflate-raw (zlib window bits -15, as the browser's CompressionStream
@@ -15,7 +15,7 @@ require "base64"
 require "uri"
 require "optparse"
 
-options = { base: "https://chunkybacon.idogawa.com/" }
+options = { base: "https://letsruby.com/" }
 OptionParser.new do |o|
   o.banner = "usage: ruby tools/make_embed_url.rb FILE [options]   (FILE - for stdin)"
   o.on("--gems LIST") { |v| options[:gems] = v }

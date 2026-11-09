@@ -2,10 +2,10 @@
 # runs every beginner mistake of friendly_errors_corpus.rb like a notebook
 # cell - in a fresh binding, as chunky.rb, a live one under the live-run time
 # limit - and checks that the rule it expects explains it (or none, where
-# Ruby's own message is meant to stay). Prints each explanation in German,
-# English and Japanese, then a table; exits 1 on a MISS.
+# Ruby's own message is meant to stay). Prints each explanation in every
+# language of FriendlyErrors::LANGS (de en ja fr it), then a table; exits 1 on a MISS.
 #
-#   ruby friendly_errors_harness.rb               # all, 3 languages
+#   ruby friendly_errors_harness.rb               # all, every language
 #   ruby friendly_errors_harness.rb --lang ja     # one language
 #   ruby friendly_errors_harness.rb --only else   # ids containing "else"
 #   ruby friendly_errors_harness.rb --summary     # just the table

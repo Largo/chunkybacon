@@ -3,6 +3,7 @@
 # file under html/. Paths are relative to this file.
 ansi.rb
 assets/app.css
+assets/brand/letsruby-mark.svg
 assets/chunky.svg
 assets/codemirror-ruby.js
 assets/codemirror.css

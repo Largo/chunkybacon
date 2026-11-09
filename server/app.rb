@@ -36,9 +36,9 @@ class ChunkyServer < Roda
   plugin :head
   plugin :json
   plugin :not_found do
-    "<!DOCTYPE html><meta charset=\"UTF-8\"><title>404 – Chunky Bacon</title>" \
+    "<!DOCTYPE html><meta charset=\"UTF-8\"><title>404 – Let's Ruby</title>" \
       "<p>Diese Seite gibt es nicht. · This page does not exist. · このページはありません。</p>" \
-      "<p><a href=\"#{h(base_path)}\">Chunky Bacon</a></p>"
+      "<p><a href=\"#{h(base_path)}\">Let's Ruby</a></p>"
   end
 
   def self.course = Course.cached(LESSONS)
@@ -82,6 +82,14 @@ class ChunkyServer < Roda
 
   def h(text) = Rack::Utils.escape_html(text.to_s)
 
+  # the address canonical links name: PUBLIC_ORIGIN (https://letsruby.com on
+  # the server, so a page reached under an old host name points search
+  # engines at the new one), else the host the request came to
+  def origin
+    public_origin = ENV["PUBLIC_ORIGIN"].to_s.chomp("/")
+    public_origin.empty? ? request.base_url : public_origin
+  end
+
   # where the course lives - "/" unless it is mounted under a path
   def base_path = "#{request.script_name}/"
 
@@ -102,7 +110,7 @@ class ChunkyServer < Roda
       html = meta(html, "property", "og:title", title)
       html = meta(html, "property", "og:description", description)
       if id
-        url = ->(language) { "#{request.base_url}#{base}#{language}/#{id}" }
+        url = ->(language) { "#{origin}#{base}#{language}/#{id}" }
         added << %(<link rel="canonical" href="#{h url.(lang)}">)
         added << %(<meta property="og:url" content="#{h url.(lang)}">)
         course.langs.each { |language| added << %(<link rel="alternate" hreflang="#{language}" href="#{h url.(language)}">) }

@@ -27,7 +27,7 @@
 # progress bar counts), NOTICE.md and the license texts (licenses/, from
 # tools/ironruby-licenses/, which is in git).
 #
-# Never on the 1-core server behind chunkybacon.idogawa.com: the deploy hook
+# Never on the 1-core server behind letsruby.com: the deploy hook
 # on the Hetzner box runs this and copies html/assets/ironruby/ over.
 require "json"
 require "digest"

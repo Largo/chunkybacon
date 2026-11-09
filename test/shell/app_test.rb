@@ -17,13 +17,13 @@ class AppTest < Minitest::Test
     start
     assert_equal "none", byid("spinner").props["style"]["display"]
     assert_equal "block", byid("app").props["style"]["display"]
-    assert_equal "Ruby lernen mit Chunky Bacon", byid("siteTitle").text
+    assert_equal "Let's Ruby", byid("siteTitle").text
     assert_equal lesson_count, find_all("#lessonNav a").length
     assert_equal "hallo", find("#lessonNav a.active").attrs["data-id"]
     assert_equal "Hallo, Welt!", find("#lessonBody h2").text
     assert_equal 4, find_all("#lessonBody .cell").length
     assert_equal "Aufgabe", find(".cell.exercise").attrs["data-label"]
-    assert_equal "1. Hallo, Welt! – Ruby lernen mit Chunky Bacon", doc.props["title"]
+    assert_equal "1. Hallo, Welt! – Let's Ruby", doc.props["title"]
     assert_includes bubble, "Chunky Bacon"
     assert_empty JS.console_errors
   end
@@ -139,7 +139,7 @@ class AppTest < Minitest::Test
     start
     byid("langSelect").props["value"] = "en"
     JS.fire(byid("langSelect").wrap, "change")
-    assert_equal "Learn Ruby with Chunky Bacon", byid("siteTitle").text
+    assert_equal "Let's Ruby", byid("siteTitle").text
     assert_equal "en", doc.js_get("documentElement").attrs["lang"]
     assert_equal "en", window.storage["chunky_lang"]
     assert_equal ["setState", "en", "hallo", false], calls("setState").last
@@ -151,12 +151,25 @@ class AppTest < Minitest::Test
     assert_includes find(".run-cell").text, "実行"
   end
 
+  # French and Italian, once lessons.js has them: the page's language, the
+  # selector and the run button in it
+  %w[fr it].each do |code|
+    define_method("test_language_#{code}") do
+      ui = JSON.parse(File.read(LESSONS_JSON))["ui"][code]
+      skip "lessons.js has no #{code} yet" unless ui
+      start(storage: { "chunky_lang" => code })
+      assert_equal code, doc.js_get("documentElement").attrs["lang"]
+      assert_equal code, byid("langSelect").props["value"]
+      assert_includes find(".run-cell").text, ui["runCell"].sub(/\A▶\s*/, "")
+    end
+  end
+
   # bridge.js decides (?lang=, last choice, browser languages); its word
   # beats what localStorage held
   def test_the_language_bridge_js_picked
     start(storage: { "chunky_lang" => "de" }) { window.props["ChunkyBridge"]["lang"] = "en" }
     assert_equal "en", doc.js_get("documentElement").attrs["lang"]
-    assert_equal "Learn Ruby with Chunky Bacon", byid("siteTitle").text
+    assert_equal "Let's Ruby", byid("siteTitle").text
   end
 
   def test_unknown_stored_language_falls_back_to_german
@@ -169,7 +182,7 @@ class AppTest < Minitest::Test
     window.storage["chunky_lang"] = "en"
     window.storage["chunky_done"] = '["hallo"]'
     fire("chunky-progress-loaded")
-    assert_equal "Learn Ruby with Chunky Bacon", byid("siteTitle").text
+    assert_equal "Let's Ruby", byid("siteTitle").text
     assert_includes find('#lessonNav a[data-id="hallo"]').attrs["class"], "done"
   end
 

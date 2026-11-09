@@ -58,7 +58,17 @@
           boot: "JRuby を起動しています … (約 3 秒)",
           ready: "JRuby の準備ができました: %v (起動 %s 秒)",
           stopped: "JRuby は停止しました。次の実行で再起動します (約 3 秒)。",
-          failed: "JRuby を読み込めませんでした: %m" }
+          failed: "JRuby を読み込めませんでした: %m" },
+    fr: { download: "Chargement de JRuby … (environ 7 Mo, la première fois seulement)",
+          boot: "JRuby démarre … (environ 3 s)",
+          ready: "JRuby est prêt : %v, démarré en %s s.",
+          stopped: "JRuby a été arrêté ; il redémarre à la prochaine exécution (environ 3 s).",
+          failed: "JRuby n'a pas pu être chargé : %m" },
+    it: { download: "Caricamento di JRuby … (circa 7 MB, solo la prima volta)",
+          boot: "JRuby si sta avviando … (circa 3 s)",
+          ready: "JRuby è pronto: %v, avviato in %s s.",
+          stopped: "JRuby è stato fermato; ripartirà alla prossima esecuzione (circa 3 s).",
+          failed: "Impossibile caricare JRuby: %m" }
   };
 
   var jr = window.chunkyJRuby = {
@@ -121,8 +131,8 @@
   var DATA = "assets/jruby/data/all_month.geojson";
 
   function lang() {
-    var l = (document.documentElement.lang || "de").slice(0, 2);
-    return TEXT[l] ? l : "de";
+    var l = (document.documentElement.lang || "en").slice(0, 2);
+    return TEXT[l] ? l : "en";
   }
 
   // the status line(s) of the lesson; also called by the shell after it drew
@@ -140,10 +150,11 @@
     }
   }
   jr.show = show;
-  // 4.9 in English and Japanese, 4,9 in German (as the course's text)
+  // 4.9 in English and Japanese, 4,9 in German, French and Italian (as the
+  // course's text)
   function seconds(ms) {
     var s = (ms / 1000).toFixed(1);
-    return lang() === "de" ? s.replace(".", ",") : s;
+    return /^(de|fr|it)$/.test(lang()) ? s.replace(".", ",") : s;
   }
   // the lesson's HTML comes and goes with the page: keep the line current
   var body = document.getElementById("lessonBody");

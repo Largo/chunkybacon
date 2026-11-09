@@ -36,7 +36,17 @@
           logcat: "Logcat", clear: "クリア", badge: "シミュレーションのAndroid 14（API 34）・JRuby", stopped: "「%s」が停止しました",
           closeApp: "アプリを閉じる", openAgain: "アプリをもう一度開く", stale: "このスマホの表示は古くなっています。別の実行で新しいアプリが起動しました。▶でこのセルのアプリをもう一度起動します。",
           workerGone: "JRubyが停止しました。▶でアプリをもう一度起動します。", more: "その他のオプション", anr: "「%s」が応答していません（10秒で停止しました）。",
-          noApp: "アプリなし" }
+          noApp: "アプリなし" },
+    fr: { back: "Retour", home: "Accueil", recents: "Applis récentes", rotate: "⟳ Pivoter", rotateTitle: "Faire pivoter le téléphone (portrait et paysage)",
+          logcat: "Logcat", clear: "Effacer", badge: "Android 14 simulé (API 34) · JRuby", stopped: "« %s » s'est arrêtée",
+          closeApp: "Fermer l'appli", openAgain: "Rouvrir l'appli", stale: "Ce téléphone n'est plus à jour – une autre exécution a lancé une nouvelle appli. ▶ relance celle de cette cellule.",
+          workerGone: "JRuby a été arrêté – ▶ relance l'appli.", more: "Plus d'options", anr: "« %s » ne répond pas (arrêtée après 10 s).",
+          noApp: "Aucune appli" },
+    it: { back: "Indietro", home: "Home", recents: "App recenti", rotate: "⟳ Ruota", rotateTitle: "Ruota il telefono (verticale e orizzontale)",
+          logcat: "Logcat", clear: "Svuota", badge: "Android 14 simulato (API 34) · JRuby", stopped: "«%s» si è interrotta",
+          closeApp: "Chiudi app", openAgain: "Riapri app", stale: "Questo telefono non è più aggiornato – un'altra esecuzione ha avviato una nuova app. ▶ riavvia quella di questa cella.",
+          workerGone: "JRuby è stato fermato – ▶ riavvia l'app.", more: "Altre opzioni", anr: "«%s» non risponde (fermata dopo 10 s).",
+          noApp: "Nessuna app" }
   };
   var DRAWABLES = {
     chunky: "assets/chunky.svg",
@@ -53,8 +63,8 @@
   var live = null;   // the live phone: {idx, slot, state, ...}
 
   function lang() {
-    var l = (document.documentElement.lang || "de").slice(0, 2);
-    return TEXT[l] ? l : "de";
+    var l = (document.documentElement.lang || "en").slice(0, 2);
+    return TEXT[l] ? l : "en";
   }
   function t(key) { return TEXT[lang()][key]; }
 

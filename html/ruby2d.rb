@@ -44,7 +44,11 @@ module Ruby2D
     "en" => "%s is not available on this page: the stand-in for ruby2d here draws shapes and text only. " \
             "On your computer, with the real gem, it works.",
     "ja" => "%sはこのページでは使えません。ここのruby2dの代わりは図形と文字だけを描きます。" \
-            "自分のコンピューターで本物のgemを使えば動きます。"
+            "自分のコンピューターで本物のgemを使えば動きます。",
+    "fr" => "%s n'est pas disponible sur cette page : le remplaçant de ruby2d ici ne dessine que des formes et du texte. " \
+            "Sur votre ordinateur, avec le vrai gem, cela fonctionne.",
+    "it" => "%s non è disponibile in questa pagina: il sostituto di ruby2d qui disegna solo forme e testo. " \
+            "Sul tuo computer, con la gem vera, funziona."
   }.freeze
 
   def self.not_here(what)

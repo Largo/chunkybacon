@@ -4,20 +4,17 @@
        card.html?format=github   1600x800 (2:1)  -> html/social/github-social.png (GitHub social preview, og:image)
      The site in the 2 CV look (docs/HANDOVER.md §10b), the tokens copied from
      html/assets/app.css: the course's name on the pale page beside a
-     notebook cell whose answer is that name, and on one big Infra Red field
-     _why's two foxes shouting "Chunky bacon!!" over the footer's tartan
-     strip, under the dark cap with who made it. The foxes are
-     html/assets/why-foxes/chunky-bacon.svg, put inline and held still (both
-     balloons out, as under prefers-reduced-motion): by why the lucky stiff,
-     from why's (poignant) guide to Ruby, CC BY-SA 2.5 - the card credits
-     them, keep that line. No Citroen marks.
+     notebook cell whose answer is that name, the Let's Ruby mark
+     (html/assets/brand/letsruby-mark.svg) and the domain on one big Infra
+     Red field over the footer's tartan strip, under the dark cap with who
+     made it. No Citroen marks.
      The page is laid out on a
      1200-unit stage scaled to 1600 pixels; it needs a server (file:// blocks
-     the fonts and the fetch), and sets html.ready once the foxes are in. -->
+     the fonts and the fetch), and sets html.ready once the mark is in. -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Chunky Bacon social card</title>
+<title>Let&#39;s Ruby social card</title>
 <script>
   if (new URLSearchParams(location.search).get("format") === "github") document.documentElement.classList.add("github");
 </script>
@@ -45,14 +42,14 @@
 
     /* the stage: 1200 units wide, scaled to 1600 pixels */
     --stage-h: 675px;
-    --word-top: 34px;  --word-size: 140px;
+    --word-top: 30px;  --word-size: 128px;
     --tag-top: 298px;  --tag-size: 30px;
     --cell-top: 398px;
     --band-top: 583px;  /* the tartan; the cap below it */
   }
   html.github {
     --stage-h: 600px;
-    --word-top: 22px;  --word-size: 120px;
+    --word-top: 18px;  --word-size: 108px;
     --tag-top: 250px;  --tag-size: 28px;
     --cell-top: 336px;
     --band-top: 514px;
@@ -157,7 +154,7 @@
     color: var(--ok);
   }
 
-  /* the one warm field, the foxes standing on the tartan at its foot */
+  /* the one warm field: the mark, the domain at its foot */
   .field {
     position: absolute;
     left: 700px;
@@ -167,15 +164,11 @@
     background: var(--infra);
     border-left: 2px solid var(--ink);
   }
-  .foxes svg {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 500px;
-    height: auto;
-    display: block;
-  }
-  .foxes svg * { animation: none !important; }
+.mark { position: absolute; left: 50%; top: 46%; width: 300px; transform: translate(-50%, -50%); }
+.mark svg { display: block; width: 100%; height: auto; border: 2px solid var(--ink); border-radius: 66px; box-shadow: 0 6px 0 var(--ink); }
+.domain { position: absolute; left: 0; right: 0; bottom: 34px; text-align: center; font-family: var(--font-display); font-weight: 800; font-size: 40px; color: var(--sheet); letter-spacing: -0.01em; }
+html.github .mark { width: 260px; top: 44%; }
+html.github .domain { bottom: 26px; font-size: 36px; }
 
   /* the site's footer: a strip of the seats' tartan, then the dark cap */
   .band {
@@ -223,29 +216,29 @@
 </head>
 <body>
 <div class="stage">
-  <div class="wordmark">Chunky<br>Bacon</div>
+  <div class="wordmark">Let&#39;s<br>Ruby</div>
 
   <p class="tagline">Learn Ruby right in your browser.<span class="sub">Nothing to install.</span></p>
 
   <div class="cell">
-    <div class="code"><span class="gutter">1</span><span class="line"><span class="s">"chunky bacon"</span>.split.map(<span class="y">&amp;:capitalize</span>).join(<span class="s">" "</span>)</span></div>
+    <div class="code"><span class="gutter">1</span><span class="line"><span class="s">"let&#39;s ruby"</span>.split.map(<span class="y">&amp;:capitalize</span>).join(<span class="s">" "</span>)</span></div>
     <div class="toolbar"><span class="time">&lt; 0.1 s</span><span class="live">⚡ Live</span><span class="run">▶ Run</span></div>
-    <div class="out">=&gt; "Chunky Bacon"</div>
+    <div class="out">=&gt; "Let&#39;s Ruby"</div>
   </div>
 
-  <div class="field"><div class="foxes" id="foxes"></div></div>
+  <div class="field"><div class="mark" id="mark"></div><div class="domain">letsruby.com</div></div>
 
   <div class="band"><div class="band-row">
     <img src="avatar.jpg" alt="">
-    <div><div class="name">Andi Idogawa<span class="handle">@largo</span></div><div class="repo">github.com/Largo/chunkybacon</div></div>
-    <div class="credit">Foxes by why the lucky stiff, from<br>why's (poignant) guide to Ruby · CC BY-SA 2.5</div>
+    <div><div class="name">Andi Idogawa<span class="handle">@largo</span></div><div class="repo">letsruby.com · github.com/Largo/chunkybacon</div></div>
+    <div class="credit">Open source · MIT, CC BY-SA<br>Deutsch · English · 日本語</div>
   </div></div>
 </div>
 <script>
-  fetch("/html/assets/why-foxes/chunky-bacon.svg")
+  fetch("/html/assets/brand/letsruby-mark.svg")
     .then(function (r) { return r.text(); })
     .then(function (svg) {
-      document.getElementById("foxes").innerHTML = svg;
+      document.getElementById("mark").innerHTML = svg;
       document.documentElement.classList.add("ready");
     });
 </script>

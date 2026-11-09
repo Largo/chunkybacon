@@ -59,6 +59,35 @@ class LessonLintTest < Minitest::Test
     refute_finds lint(d, only: %w[parity]), "ja-code"
   end
 
+  # fr and it as lessons.js will have them: en's cells, translated comments
+  # allowed, the code itself en's
+  def with_fr_it(d)
+    copy = ->(o) { o.is_a?(Hash) && o.key?("de") && o.key?("en") ? %w[fr it].each { |g| o[g] ||= Marshal.load(Marshal.dump(o["en"])) } : nil }
+    copy.(d["ui"])
+    d["lessons"].each { |l| copy.(l); copy.(l["section"]) if l["section"] }
+    d
+  end
+
+  def test_fr_and_it_code_must_equal_en
+    d = with_fr_it(data)
+    cell(d, "methoden", "fr") { |c| c["t"] == "c" }["code"] = "def salut(nom)\n  \"Salut, \#{nom} !\"\nend"
+    c = cell(d, "methoden", "it") { |x| x["t"] == "x" }
+    c["check"] = "square(9) == 81"
+    f = lint(d, only: %w[parity])
+    assert_finds f, "fr-code", "methoden[fr]"
+    assert_finds f, "it-check", "methoden[it]"
+  end
+
+  def test_fr_comments_may_differ_and_a_missing_language_is_an_error
+    d = with_fr_it(data)
+    c = cell(d, "methoden", "fr") { |x| x["t"] == "x" }
+    c["code"] = "# Ceci est un commentaire\n#{c["code"]}"
+    lesson(d, "arrays").delete("it")
+    f = lint(d, only: %w[structure parity])
+    refute_finds f, "fr-code"
+    assert_finds f, "missing-lang", "arrays[it]"
+  end
+
   def test_de_drift_signals
     d = data
     c = cell(d, "methoden", "de") { |x| x["t"] == "c" }

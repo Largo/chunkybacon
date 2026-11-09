@@ -119,7 +119,8 @@
   //      address again, so it cannot overrule a later switch on reload.
   //   2. the language chosen last time
   //   3. the first of the browser's preferred languages the course has
-  //      (navigator.languages: "de-CH" is German, "ja-JP" Japanese)
+  //      (navigator.languages: "de-CH" is German, "fr-CH" French,
+  //      "it-CH" Italian, "ja-JP" Japanese)
   //   4. English, the one most visitors read
   function pickLang(available) {
     var has = function (code) { return available.indexOf(code) >= 0; };
@@ -160,7 +161,7 @@
     var text = document.getElementById("spinnerText");
     if (!text) return;
     var ui = (window.LESSONS && window.LESSONS.ui) || {};
-    text.textContent = ((ui[bridge.lang] || ui.de || {}).shellFailed) || "The page could not start - please reload it.";
+    text.textContent = ((ui[bridge.lang] || ui.en || {}).shellFailed) || "The page could not start - please reload it.";
   }, 20000);
   var shellUp = false;
 

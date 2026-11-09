@@ -6,8 +6,9 @@
 // (TOPLEVEL_BINDING): the fox with data binding, a Celsius converter, a
 // JFreeChart pie from a Ruby Hash, FlatLaf's dark mode.
 //
-//   ?lang=de|en|ja     the texts (the Java windows' own strings stay ASCII
-//                      for ja: CheerpJ's Swing fonts have no CJK)
+//   ?lang=de|en|ja|fr|it  the texts (the Java windows' own strings stay
+//                      English for ja, fr and it - CheerpJ's Swing fonts have
+//                      no CJK, and the lessons' fr/it code is en's)
 //
 // To the lesson (parent): {chunkySwing: "height", height} whenever the page
 // grows, so the iframe needs no scroll bar of its own. For tests:
@@ -16,11 +17,9 @@ import { bootJRuby } from "./jruby_swing_boot.js";
 
 const JARS = "assets/jruby-swing/";
 const params = new URLSearchParams(location.search);
-const lang = ["de", "en", "ja"].includes(params.get("lang")) ? params.get("lang") : "en";
-document.documentElement.lang = lang;
 const $ = id => document.getElementById(id);
 
-const TEXT = {
+const TEXTS = {
   en: {
     start: "Starting CheerpJ, the JVM …", runtime: "Downloading the Java runtime … %d/%t",
     jar: "Loading the JRuby jar …", boot: "Booting the Ruby runtime (the slow part) …", warm: "Warming up the interpreter …",
@@ -71,8 +70,46 @@ const TEXT = {
       chart: "Javaのライブラリ<a href='https://www.jfree.org/jfreechart/' target='_blank' rel='noopener'>JFreeChart</a>がRubyのHashを描きます。",
       dark: "<a href='https://www.formdev.com/flatlaf/' target='_blank' rel='noopener'>FlatLaf</a>：呼び出しひとつで、すべてのウィンドウがダークモードに。"
     }
+  },
+  fr: {
+    start: "Démarrage de CheerpJ, la JVM …", runtime: "Téléchargement de l'environnement Java … %d/%t",
+    jar: "Chargement du jar JRuby …", boot: "Démarrage de Ruby (la partie lente) …", warm: "L'interpréteur se met en route …",
+    glimmer: "Chargement de Glimmer et construction d'une fenêtre de test invisible …",
+    ready: "Prêt : JRuby %v (Ruby %r) sur Java %j, %s s après le clic.",
+    failed: "CheerpJ n'a pas pu démarrer : %m", offline: "Le chargeur de CheerpJ (cjrtnc.leaningtech.com) n'a pas pu être chargé – hors ligne ?",
+    run: "▶ Exécuter", waiting: "en attente de JRuby …", running: "en cours …",
+    banner: "La bande en bas de la zone des fenêtres est la mention de CheerpJ lui-même (sa Community License l'exige). Les fenêtres se déplacent par leur barre de titre.",
+    credits: "JRuby 9.4.15 (EPL-2.0/GPL-2.0/LGPL-2.1) sur <a href='https://cheerpj.com/' target='_blank' rel='noopener'>CheerpJ</a> 4.3 de Leaning Technologies (environnement depuis leur CDN, Community License) ; Glimmer DSL for Swing (MIT), JFreeChart (LGPL-2.1), FlatLaf (Apache-2.0). Licences : THIRD_PARTY_NOTICES.md.",
+    cells: {
+      fox: "Une fenêtre, ce sont quelques blocs imbriqués. <code>observe</code> lie le libellé au renard : cliquez sur le bouton ci-dessus.",
+      feed: "La liaison de données marche aussi depuis Ruby : changez le renard ici, et la fenêtre suit.",
+      temp: "À vous : tapez une température dans le champ de la fenêtre.",
+      chart: "<a href='https://www.jfree.org/jfreechart/' target='_blank' rel='noopener'>JFreeChart</a>, une bibliothèque Java, dessine un Hash Ruby.",
+      dark: "<a href='https://www.formdev.com/flatlaf/' target='_blank' rel='noopener'>FlatLaf</a> : toutes les fenêtres en mode sombre, en un seul appel."
+    }
+  },
+  it: {
+    start: "Avvio di CheerpJ, la JVM …", runtime: "Download del runtime Java … %d/%t",
+    jar: "Caricamento del jar di JRuby …", boot: "Avvio di Ruby (la parte lenta) …", warm: "L'interprete si sta scaldando …",
+    glimmer: "Caricamento di Glimmer e costruzione di una finestra di prova nascosta …",
+    ready: "Pronto: JRuby %v (Ruby %r) su Java %j, %s s dopo il clic.",
+    failed: "CheerpJ non è riuscito ad avviarsi: %m", offline: "Il loader di CheerpJ (cjrtnc.leaningtech.com) non si è caricato – sei offline?",
+    run: "▶ Esegui", waiting: "in attesa di JRuby …", running: "in esecuzione …",
+    banner: "La striscia in fondo all'area delle finestre è l'avviso di CheerpJ stesso (lo richiede la sua Community License). Le finestre si spostano trascinando la barra del titolo.",
+    credits: "JRuby 9.4.15 (EPL-2.0/GPL-2.0/LGPL-2.1) su <a href='https://cheerpj.com/' target='_blank' rel='noopener'>CheerpJ</a> 4.3 di Leaning Technologies (runtime dal loro CDN, Community License); Glimmer DSL for Swing (MIT), JFreeChart (LGPL-2.1), FlatLaf (Apache-2.0). Licenze: THIRD_PARTY_NOTICES.md.",
+    cells: {
+      fox: "Una finestra è fatta di qualche blocco annidato. <code>observe</code> lega l'etichetta alla volpe: clicca il pulsante qui sopra.",
+      feed: "Il data binding funziona anche dal lato di Ruby: cambia la volpe qui, e la finestra la segue.",
+      temp: "Tocca a te: scrivi una temperatura nel campo della finestra.",
+      chart: "<a href='https://www.jfree.org/jfreechart/' target='_blank' rel='noopener'>JFreeChart</a>, una libreria Java, disegna un Hash di Ruby.",
+      dark: "<a href='https://www.formdev.com/flatlaf/' target='_blank' rel='noopener'>FlatLaf</a>: tutte le finestre in modalità scura, con una sola chiamata."
+    }
   }
-}[lang];
+};
+// the texts' language; English for one it does not know
+const lang = Object.hasOwn(TEXTS, params.get("lang") || "") ? params.get("lang") : "en";
+document.documentElement.lang = lang;
+const TEXT = TEXTS[lang];
 
 // The Java windows' words: Swing's fonts here have Latin letters only
 const W = lang === "de"

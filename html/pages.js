@@ -1,11 +1,16 @@
 // Language for the pages around the course (welcome.html and the legal
 // pages): ?lang=en in the address, else the course's stored choice
-// ("chunky_lang", written by shell/app.rb), else the browser's. A page
-// without Japanese text (the legal pages) shows Japanese learners English.
+// ("chunky_lang", written by shell/app.rb), else the browser's
+// (navigator.languages, first one this page has: fr-CH -> fr). German and
+// English are on every page; Japanese, French and Italian only where the
+// page has them - a page without them (the legal pages) shows those
+// learners English.
 (function () {
   "use strict";
-  var hasJa = !!document.querySelector('[data-l="ja"]');
-  var SUPPORTED = hasJa ? ["de", "en", "ja"] : ["de", "en"];
+  var OPTIONAL = ["ja", "fr", "it"];
+  var SUPPORTED = ["de", "en"].concat(OPTIONAL.filter(function (l) {
+    return !!document.querySelector('[data-l="' + l + '"]');
+  }));
 
   function stored() {
     try {
@@ -14,10 +19,22 @@
     } catch (e) { return null; }
   }
 
+  // the browser's languages in order of preference: the first this page
+  // has; else English when one of them is a course language this page
+  // lacks; else German
+  function browser() {
+    var list = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || "de"];
+    var codes = Array.prototype.map.call(list, function (l) { return String(l).slice(0, 2).toLowerCase(); });
+    for (var i = 0; i < codes.length; i++) if (SUPPORTED.indexOf(codes[i]) >= 0) return codes[i];
+    for (var j = 0; j < codes.length; j++) if (OPTIONAL.indexOf(codes[j]) >= 0) return "en";
+    return "de";
+  }
+
   function pick() {
-    var q = new URLSearchParams(location.search).get("lang");
-    var want = q || stored() || (navigator.language || "de").slice(0, 2);
-    if (want === "ja" && !hasJa) want = "en";
+    var want = new URLSearchParams(location.search).get("lang") || stored();
+    if (!want) return browser();
+    want = want.slice(0, 2).toLowerCase();
+    if (OPTIONAL.indexOf(want) >= 0 && SUPPORTED.indexOf(want) < 0) want = "en";
     return SUPPORTED.indexOf(want) >= 0 ? want : "de";
   }
 

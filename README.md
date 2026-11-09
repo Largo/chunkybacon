@@ -3,7 +3,7 @@
 ![Chunky Bacon: learn Ruby right in your browser](docs/social/twitter-card.png)
 
 Learn Ruby in your browser — an interactive, notebook-style course in
-**German, English and Japanese**. No setup: Ruby itself runs client-side via
+**German, English, Japanese, French and Italian**. No setup: Ruby itself runs client-side via
 [ruby.wasm](https://github.com/ruby/ruby.wasm).
 
 ## What's inside
@@ -263,7 +263,7 @@ course's Ruby, its output and its widgets:
   words = %w[chunky bacon is chunky]
   words.tally
 </pre>
-<script src="https://chunkybacon.idogawa.com/embed.js" defer></script>
+<script src="https://letsruby.com/embed.js" defer></script>
 ```
 
 `embed.js` turns every `pre[data-chunky]` into an iframe of the course's
@@ -365,7 +365,7 @@ server everything works as before. With Docker:
 cd test
 node make_lessons_json.js # test/lessons.json for the Ruby harnesses
 ruby check_harness.rb     # every lesson: starter fails, solutions pass
-ruby lint_lessons.rb      # lessons.js content: de/en/ja parity, references, Japanese rules, Prism, gems, counts
+ruby lint_lessons.rb      # lessons.js content: de/en/ja/fr/it parity, references, Japanese rules, Prism, gems, counts
 ruby lint_lessons_test.rb # the linter's fault-injection tests
 ruby gems_harness.rb      # gem installer, sinatra + roda offline
 ruby shell/run.rb         # the page shell (PicoRuby code) under Minitest

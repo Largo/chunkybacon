@@ -2,8 +2,8 @@
    legal pages (impressum.html, datenschutz.html). Same 2 CV palette and
    type as assets/app.css, but quieter: the foxes stay small, the red is a
    band, not the page. Language: every text exists as [data-l="de"] and
-   [data-l="en"] (and [data-l="ja"] on the landing page); <html lang> picks one
-   (pages.js). */
+   [data-l="en"] (and [data-l="ja"], [data-l="fr"], [data-l="it"] on the
+   landing page); <html lang> picks one (pages.js). */
 
 :root {
   --infra: #ee3f24;
@@ -27,7 +27,9 @@
 
 html:not([lang="de"]) [data-l="de"],
 html:not([lang="en"]) [data-l="en"],
-html:not([lang="ja"]) [data-l="ja"] { display: none !important; }
+html:not([lang="ja"]) [data-l="ja"],
+html:not([lang="fr"]) [data-l="fr"],
+html:not([lang="it"]) [data-l="it"] { display: none !important; }
 
 /* Japanese: the same font stacks as assets/app.css */
 :root:lang(ja) {
@@ -65,7 +67,8 @@ code { font-family: var(--font-code); font-size: 0.92em; }
 .langs { display: flex; gap: 0.2rem; }
 .langs button { background: none; border: 1px solid #4a505a; color: var(--cap-text); border-radius: 4px;
   font: 700 0.8rem var(--font-display); padding: 0.2rem 0.45rem; cursor: pointer; }
-html[lang="de"] .langs [data-set="de"], html[lang="en"] .langs [data-set="en"], html[lang="ja"] .langs [data-set="ja"] {
+html[lang="de"] .langs [data-set="de"], html[lang="en"] .langs [data-set="en"], html[lang="ja"] .langs [data-set="ja"],
+html[lang="fr"] .langs [data-set="fr"], html[lang="it"] .langs [data-set="it"] {
   background: var(--bakelite); color: var(--cap); border-color: var(--bakelite); }
 
 /* ---------- buttons ---------- */

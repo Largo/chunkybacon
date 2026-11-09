@@ -71,7 +71,7 @@ module FriendlyErrors
     RULES << Rule.new(name, classes, block)
   end
 
-  LANGS = %w[de en ja].freeze
+  LANGS = %w[de en ja fr it].freeze
 
   class << self
     def explain(error, source:, lang: "en", file: "chunky.rb", binding: nil)
@@ -127,7 +127,7 @@ module FriendlyErrors
       glued.split("\n").map { |para| para.gsub(/(.{1,#{width}})( +|\z)/, "\\1\n").rstrip }.join("\n").tr("\u00A0", " ")
     end
 
-    # "a, b and c" / "a, b und c" / "a、b、c"
+    # "a, b and c" / "a, b und c" / "a, b et c" / "a, b e c" / "a、b、c"
     def list_join(items, lang)
       return items.join("、") if lang == "ja"
       return items.first.to_s if items.length < 2
@@ -135,7 +135,7 @@ module FriendlyErrors
       "#{items[0..-2].join(', ')}#{t_raw(:w_and, lang)}#{items.last}"
     end
 
-    # "1 argument", "2 Argumente", "引数2個"
+    # "1 argument", "2 Argumente", "2 arguments", "2 argomenti", "引数2個"
     def args_words(n, lang)
       forms = t_raw(:w_args, lang)
       n = n.to_i

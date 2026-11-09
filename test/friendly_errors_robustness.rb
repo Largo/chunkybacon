@@ -41,7 +41,9 @@ end
 variants = [
   ->(item) { { source: item[:code], lang: "ja" } },
   ->(_) { { source: "", lang: "de" } },
-  ->(_) { { source: "x = 1\n" * 3, lang: "fr" } },
+  ->(_) { { source: "x = 1\n" * 3, lang: "xx" } },
+  ->(item) { { source: item[:code], lang: "fr" } },
+  ->(item) { { source: item[:code], lang: "it" } },
   ->(item) { { source: item[:code], lang: nil, file: "other.rb" } },
   ->(item) { { source: item[:code].lines.first.to_s, lang: "en" } }
 ]

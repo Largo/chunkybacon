@@ -1,5 +1,5 @@
 # The check harness of the Pico lessons (docs/HANDOVER.md §6r): for each
-# lesson with "pico", in de, en and ja, the exercise's starter must fail
+# lesson with "pico", in de, en, ja, fr and it, the exercise's starter must fail
 # its check and every known solution pass - run under CRuby on the Pico
 # simulator (html/pico_sim/, test/pico_cruby_host.rb), with the cell's tabs
 # as files to require and its bench script, and the check given `output`,
@@ -15,8 +15,8 @@
 #
 # A lesson file is one lesson object as in html/lessons.js, plus its
 # solutions: {"id": ..., "engine": "picoruby", "pico": {...}, "de": {...},
-# "en": {...}, "ja": {...}, "solutions": {"de": [...], "en": [...]}} (ja
-# runs en's). A solution is the main file's code, or {"code": ..., "tabs":
+# "en": {...}, "ja": {...}, "fr": {...}, "it": {...}, "solutions": {"de": [...],
+# "en": [...]}} (ja, fr and it run en's). A solution is the main file's code, or {"code": ..., "tabs":
 # {"dechunk.rb": "..."}} for one that also changes an editable tab. Such a
 # file is linted first (test/pico_lint.rb: tabs, board, bench, parity).
 # For the lessons in html/lessons.js the solutions come from
@@ -35,8 +35,9 @@ require_relative "pico_lint"
 module PicoHarness
   ROOT = File.expand_path("..", __dir__)
   HTML = File.join(ROOT, "html")
-  LANGS = %w[de en ja].freeze
-  SOLUTION_LANG = { "ja" => "en" }.freeze
+  LANGS = %w[de en ja fr it].freeze
+  # ja, fr and it run en's code, so en's solutions
+  SOLUTION_LANG = { "ja" => "en", "fr" => "en", "it" => "en" }.freeze
 
   module_function
 

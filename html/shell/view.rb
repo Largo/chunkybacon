@@ -243,10 +243,13 @@ module ChunkyShell
       %(<img class="run-fox" src="assets/why-foxes/fox-head.svg" alt="">#{text})
     end
 
-    # "1.4 s"; German writes "1,4 s"
+    # languages that write a decimal comma: "1,4 s"
+    COMMA_LANGS = %w[de fr it].freeze
+    def self.decimal(text, lang) = COMMA_LANGS.include?(lang) ? text.tr(".", ",") : text
+
+    # "1.4 s"; German, French and Italian write "1,4 s"
     def self.run_time(seconds, lang)
-      text = seconds < 0.1 ? "< 0.1 s" : format("%.1f s", seconds)
-      lang == "de" ? text.tr(".", ",") : text
+      decimal(seconds < 0.1 ? "< 0.1 s" : format("%.1f s", seconds), lang)
     end
 
     # Chunky after a passed exercise: praise, then where to go next
