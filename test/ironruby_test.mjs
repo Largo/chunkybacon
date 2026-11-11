@@ -114,14 +114,14 @@ check('...shown as a PNG below the cell', png.length === 1 && png[0][0] === 'png
 const names = await timed('names', await cellWith('ECCLevel.send'));
 check('enum values by name, ECC H is version 2', names.includes('ECC H: Version 2, 33 Module'));
 check('module_matrix is ModuleMatrix, a List of BitArray', names.includes('dieselbe Liste: true') && names.includes('List[System::Collections::BitArray]'));
-check('create_qr_code is a NoMethodError (the qr -> QR gotcha)', names.includes('create_qr_code: NoMethodError'));
+check('create_qr_code finds CreateQrCode (IronRuby 4.0.5+)', names.includes('create_qr_code: Version 2'));
 const artIdx = await cellWith('"██"');
 const art = await timed('art', artIdx);
 check('puts draws the QR code in blocks', art.includes('██████████████'));
 check('...without gaps between the lines (qr-art)', await page.evaluate(i => !!document.querySelector(`#cell-out-${i} .cell-stdout.qr-art`), artIdx));
 const baconIdx = await cellWith('def bacon_svg');
 const bacon = await timed('bacon', baconIdx);
-check('bacon_svg: an SVG with 415 dark modules', bacon.includes('415 dunkle Module'));
+check('bacon_svg: an SVG with 448 dark modules (https://letsruby.com/)', bacon.includes('448 dunkle Module'));
 const baconPics = await pictures(page, baconIdx);
 check('...shown as an SVG in bacon colours', baconPics.length === 1 && baconPics[0][0] === 'svg' && baconPics[0][1].startsWith('<svg') && baconPics[0][1].includes('hsl('));
 const billIdx = await cellWith('SwissQrCode');
