@@ -1,5 +1,5 @@
 # Writes html/embed-ui.js: the course's interface strings (lessons.js "ui",
-# de/en/ja) without the 800 KB of lessons, for the embedded cell
+# every language in it) without the 800 KB of lessons, for the embedded cell
 # (html/embed.html). The kernel (main.rb) formats gem errors, widget labels
 # and loading notes from them; the embed shows "Run", "Loading Ruby" and its
 # screen-reader texts from them too. It goes stale whenever a ui string in

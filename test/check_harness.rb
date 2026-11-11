@@ -243,10 +243,15 @@ end
 # and clobbered by lesson code (the HTTP lesson's `data = ...` did exactly
 # that). Method locals are invisible to those bindings.
 
-LANGS = %w[de en ja].freeze
-# The Japanese lessons run the English code (only its comments are
-# translated), so they are checked with the English solutions.
-SOLUTION_LANG = { "ja" => "en" }.freeze
+# The languages to check: those of the course (lessons.json's ui), else these.
+LANGS = %w[de en ja fr it].freeze
+def course_langs
+  path = ENV.fetch("HARNESS_JSON", File.expand_path("lessons.json", __dir__))
+  File.exist?(path) ? JSON.parse(File.read(path)).fetch("ui").keys : LANGS
+end
+# The Japanese, French and Italian lessons run the English code (only its
+# comments are translated), so they are checked with the English solutions.
+SOLUTION_LANG = { "ja" => "en", "fr" => "en", "it" => "en" }.freeze
 
 # Lessons that need the browser: PyCall talks to Pyodide (html/pycall.rb),
 # Sequel's sqlite3 to sql.js (html/sqlite3_sqljs.rb), and Herb's parser is
@@ -3296,7 +3301,7 @@ def run_harness(langs)
   checked = 0   # exercises run: the main one of every lesson, and the bonus ones
   # The solution a cell offers behind 💡 (its "solution", shell/app.rb
   # reveal_hint) must be one this harness verifies: one of SOLUTIONS[id]
-  # for the language (ja shows en's). The browser-only lessons' solutions
+  # for the language (ja, fr and it show en's). The browser-only lessons' solutions
   # (no SOLUTIONS entry) are checked by the browser tests.
   data["lessons"].each do |lesson|
     next if BROWSER_ONLY.include?(lesson["id"]) # browser_test.mjs runs their solutions
@@ -3500,11 +3505,11 @@ if ARGV[0] == "--dump-solutions"
 end
 
 # One process per language: lesson code defines methods and classes at the
-# top level, which outlive the binding, and ja runs the same code as en - an
-# en solution's `def square` would let the ja starter pass.
+# top level, which outlive the binding, and ja/fr/it run the same code as en -
+# an en solution's `def square` would let the ja starter pass.
 if (lang = ENV["HARNESS_LANG"])
   exit(run_harness([lang]) ? 0 : 1)
 else
-  results = LANGS.map { |l| system({ "HARNESS_LANG" => l }, RbConfig.ruby, __FILE__) }
+  results = course_langs.map { |l| system({ "HARNESS_LANG" => l }, RbConfig.ruby, __FILE__) }
   exit(results.all? ? 0 : 1)
 end

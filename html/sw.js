@@ -43,7 +43,10 @@ const fromCopy = new Set();   // clients whose page came from the copy
 
 // ---------- the copy ----------
 
+// "" in the copy is the course page, which the site answers at "learn" ("./"
+// is the landing page, welcome.html)
 function urlFor(path) {
+  if (path === "") path = "learn";
   return new URL(path.split("/").map(encodeURIComponent).join("/"), base).href;
 }
 function keyFor(path, version) {
@@ -87,7 +90,7 @@ async function fetchList(python) {
   if (!response.ok) throw new Error(LIST + ": HTTP " + response.status);
   const files = (await response.text()).split("\n").map((line) => line.trim())
     .filter((line) => line !== "" && !line.startsWith("#") && (python || !PYTHON.test(line)));
-  return [""].concat(files);   // "" is the page as the site answers "./"
+  return [""].concat(files);   // "" is the course page as the site answers "learn"
 }
 
 async function headVersion(path) {

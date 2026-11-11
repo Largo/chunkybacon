@@ -134,8 +134,7 @@ module ChunkyShell
     end
 
     def kilobytes(bytes)
-      text = format("%.1f KB", bytes / 1024.0)
-      lang == "de" ? text.tr(".", ",") : text
+      View.decimal(format("%.1f KB", bytes / 1024.0), lang)
     end
 
     def options(type)

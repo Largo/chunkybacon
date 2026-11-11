@@ -14,8 +14,15 @@ class ServerTest < Minitest::Test
 
   def get(path, method: "GET") = Rack::MockRequest.new(APP).request(method, path)
 
-  def test_the_root_page_announces_permalinks
+  def test_the_root_is_the_landing_page
     res = get("/")
+    assert_equal 200, res.status
+    assert_includes res.body, 'href="learn#hallo"'
+    refute_includes res.body, "chunky-permalinks"
+  end
+
+  def test_the_course_page_announces_permalinks
+    res = get("/learn")
     assert_equal 200, res.status
     assert_includes res.body, '<base href="/">'
     assert_includes res.body, '<meta name="chunky-permalinks" content="/">'
@@ -26,11 +33,21 @@ class ServerTest < Minitest::Test
     res = get("/de/methoden")
     assert_equal 200, res.status
     assert_includes res.body, '<html lang="de">'
-    assert_includes res.body, "<title>#{METHODEN}. Methoden – Ruby lernen mit Chunky Bacon</title>"
-    assert_includes res.body, %(<meta property="og:title" content="#{METHODEN}. Methoden – Ruby lernen mit Chunky Bacon">)
+    assert_includes res.body, "<title>#{METHODEN}. Methoden – Let&#39;s Ruby</title>"
+    assert_includes res.body, %(<meta property="og:title" content="#{METHODEN}. Methoden – Let&#39;s Ruby">)
     assert_includes res.body, '<link rel="canonical" href="http://example.org/de/methoden">'
     assert_includes res.body, '<link rel="alternate" hreflang="ja" href="http://example.org/ja/methoden">'
     assert_includes res.body, '<meta name="chunky-permalinks" content="/">'
+  end
+
+  def test_public_origin_names_the_canonical_address
+    ENV["PUBLIC_ORIGIN"] = "https://letsruby.com/"
+    body = get("/en/methoden").body
+    assert_includes body, %(<link rel="canonical" href="https://letsruby.com/en/methoden">)
+    assert_includes body, %(<meta property="og:url" content="https://letsruby.com/en/methoden">)
+    assert_includes body, %(<link rel="alternate" hreflang="de" href="https://letsruby.com/de/methoden">)
+  ensure
+    ENV.delete("PUBLIC_ORIGIN")
   end
 
   def test_the_description_is_the_lessons_first_paragraph
@@ -48,10 +65,24 @@ class ServerTest < Minitest::Test
   end
 
   def test_the_workshop_and_a_bare_language
-    assert_includes get("/en/werkstatt").body, "<title>Workshop – Learn Ruby with Chunky Bacon</title>"
+    assert_includes get("/en/werkstatt").body, "<title>Workshop – Let&#39;s Ruby</title>"
     res = get("/ja")
     assert_equal 200, res.status
     assert_includes res.body, '<html lang="ja">'
+  end
+
+  # every language of the course (lessons.js's ui: de, en, ja, fr, it) has
+  # its permalinks, and each page names all of them as alternates
+  def test_every_course_language_has_permalinks
+    langs = Course.load(File.expand_path("../html/lessons.js", __dir__)).langs
+    langs.each do |lang|
+      res = get("/#{lang}/methoden")
+      assert_equal 200, res.status, lang
+      assert_includes res.body, %(<html lang="#{lang}">), lang
+      assert_includes res.body, %(<link rel="canonical" href="http://example.org/#{lang}/methoden">), lang
+      langs.each { |other| assert_includes res.body, %(<link rel="alternate" hreflang="#{other}" href="http://example.org/#{other}/methoden">), "#{lang} -> #{other}" }
+      assert_equal 200, get("/#{lang}").status, lang
+    end
   end
 
   def test_unknown_languages_and_lessons_are_404

@@ -172,11 +172,12 @@ served next to the files.
 
 | Component | Version | License | Copyright | License text |
 |---|---|---|---|---|
-| [IronRuby](https://github.com/Largo/ironruby) (`IronRuby*.wasm`, `ironruby.js`) and the [Dynamic Language Runtime](https://github.com/IronLanguages/dlr) (`Microsoft.Scripting*.wasm`, `Microsoft.Dynamic.wasm`) | 4.0.1, branch `wasm`, the commit in `tools/ironruby.json` | Apache-2.0 | .NET Foundation and Contributors | `LICENSE-ironruby-dlr.txt` |
+| [IronRuby](https://github.com/Largo/ironruby) (`IronRuby*.wasm`, `ironruby.js`) and the [Dynamic Language Runtime](https://github.com/IronLanguages/dlr) (`Microsoft.Scripting*.wasm`, `Microsoft.Dynamic.wasm`) | 4.0.5, branch `wasm`, the commit in `tools/ironruby.json` | Apache-2.0 | .NET Foundation and Contributors | `LICENSE-ironruby-dlr.txt` |
 | IronRuby's standard library (`stdlib.zip`: Ruby's libraries and bundled gems) | as in that commit | Ruby license or BSD-2-Clause (some gems: their own, as in their files) | Yukihiro Matsumoto and the authors | `LICENSE-ruby.txt` |
 | [.NET](https://github.com/dotnet/runtime) runtime and class libraries for browser-wasm (`dotnet*.js`, `dotnet.native.wasm`, `System*.wasm`, ...) | 10.0.13 | MIT | .NET Foundation and Contributors | `LICENSE-dotnet.txt` |
 | [Prism](https://github.com/ruby/prism), compiled into `dotnet.native.wasm` | as in that commit | MIT | 2022-present Shopify Inc. | `LICENSE-prism.md` |
 | [AngleSharp](https://github.com/AngleSharp/AngleSharp) (`AngleSharp*.wasm`, behind IronRuby's Nokogiri) | 1.5.0 (AngleSharp.Xml 1.2.0) | MIT | AngleSharp | `LICENSE-anglesharp.txt` |
+| [ZstdSharp](https://github.com/oleg-st/ZstdSharp) (`ZstdSharp.wasm`, behind IronRuby's zstd-ruby), a C# port of [zstd](https://github.com/facebook/zstd) 1.5.7 | 0.8.8 | MIT (zstd: BSD-3-Clause) | Oleg Stepanischev; zstd: Meta Platforms, Inc. and affiliates | `LICENSE-zstdsharp.txt` |
 | [QRCoder](https://github.com/codebude/QRCoder) (`nuget/QRCoder.dll`, `lib/net6.0`) | 1.6.0 | MIT | Raffael Herrmann, Shane Krueger | `LICENSE-qrcoder.txt` |
 | [Markdig](https://github.com/xoofx/markdig) (`nuget/Markdig.dll`, `lib/net8.0`) | 0.44.0 | BSD-2-Clause | Alexandre Mutel | `LICENSE-markdig.txt` |
 

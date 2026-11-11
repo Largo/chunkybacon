@@ -25,7 +25,7 @@
 # unaffected - but this script then fails too (status 3 if Spinel was fine):
 # the hook keeps its retry marker and runs it again on its next round, so
 # stocking the cache by hand later is enough, no new commit needed. (The
-# hook publishes to chunkybacon.idogawa.com only after a success.)
+# hook publishes to letsruby.com only after a success.)
 #
 # Then the IronRuby lesson's runtime (docs/HANDOVER.md §6s), nothing built:
 # tools/vendor_ironruby.rb copies the pinned, SHA-256-checked .NET/IronRuby

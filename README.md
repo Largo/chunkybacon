@@ -3,7 +3,7 @@
 ![Chunky Bacon: learn Ruby right in your browser](docs/social/twitter-card.png)
 
 Learn Ruby in your browser — an interactive, notebook-style course in
-**German, English and Japanese**. No setup: Ruby itself runs client-side via
+**German, English, Japanese, French and Italian**. No setup: Ruby itself runs client-side via
 [ruby.wasm](https://github.com/ruby/ruby.wasm).
 
 ## What's inside
@@ -274,7 +274,7 @@ course's Ruby, its output and its widgets:
   words = %w[chunky bacon is chunky]
   words.tally
 </pre>
-<script src="https://chunkybacon.idogawa.com/embed.js" defer></script>
+<script src="https://letsruby.com/embed.js" defer></script>
 ```
 
 `embed.js` turns every `pre[data-chunky]` into an iframe of the course's
@@ -348,7 +348,10 @@ Node: clang is WebAssembly, run through the wasmtime gem; a few minutes
 the first time, afterwards a no-op until `tools/spinel.json` changes).
 
 Or any static file server over `html/` (the rubygems proxy then needs
-nginx, see `nginx/default.conf`). Lessons then live at `/#methoden`.
+nginx, see `nginx/default.conf`). Lessons then live at `/index.html#methoden`.
+nginx, the dev server and `server/` serve the landing page (`welcome.html`)
+at `/` and the course at `/learn`; an old `/#methoden` link goes on to the
+course.
 Without Docker, `ruby tools/dev_server.rb` (port 8011) serves `html/` with
 nginx's bridges, headers and rules.
 
@@ -373,7 +376,7 @@ server everything works as before. With Docker:
 cd test
 node make_lessons_json.js # test/lessons.json for the Ruby harnesses
 ruby check_harness.rb     # every lesson: starter fails, solutions pass
-ruby lint_lessons.rb      # lessons.js content: de/en/ja parity, references, Japanese rules, Prism, gems, counts
+ruby lint_lessons.rb      # lessons.js content: de/en/ja/fr/it parity, references, Japanese rules, Prism, gems, counts
 ruby lint_lessons_test.rb # the linter's fault-injection tests
 ruby gems_harness.rb      # gem installer, sinatra + roda offline
 ruby shell/run.rb         # the page shell (PicoRuby code) under Minitest
@@ -405,6 +408,23 @@ ruby ../tools/build_embed_ui.rb --check   # html/embed-ui.js has lessons.js's ui
 BASE=http://127.0.0.1:8012/ node permalink_test.mjs   # permalinks, against the server
 cd ../gem/chunky_bacon && rake test   # the companion gem
 ```
+
+## Legal pages
+
+The legal notice and privacy policy name whoever runs a deployment, so they
+are not in git: `html/impressum.html` and `html/datenschutz.html` are
+ignored and live only on the server. Copy the templates and fill in every
+yellow `.todo`:
+
+```sh
+cp html/impressum.example.html html/impressum.html
+cp html/datenschutz.example.html html/datenschutz.html
+```
+
+The deploy hooks leave untracked files alone. Without the files the footer
+links to them disappear (`html/legal_links.js`); the privacy template lists
+what the course sends where, so check it again when a lesson starts talking
+to a new host.
 
 ## License
 

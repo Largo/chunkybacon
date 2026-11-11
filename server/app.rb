@@ -8,7 +8,8 @@
 #   cd server && bundle install && bundle exec puma -p 8012
 #
 # What it serves:
-#   /, /de, /de/methoden, /de/werkstatt   index.html, told about permalinks
+#   /                                     welcome.html, the landing page
+#   /learn, /de, /de/methoden, /de/werkstatt   index.html, told about permalinks
 #                                         (<base>, <meta name="chunky-permalinks">)
 #                                         and titled for the lesson
 #   /api/lessons                          the lessons and their titles, JSON
@@ -22,6 +23,7 @@ require_relative "course"
 class ChunkyServer < Roda
   HTML = File.expand_path("../html", __dir__)
   INDEX = File.join(HTML, "index.html")
+  WELCOME = File.join(HTML, "welcome.html")
   LESSONS = File.join(HTML, "lessons.js")
   # the code revalidates on every load, as with nginx; a 304 is cheap
   STATIC_HEADERS = { "Cache-Control" => "no-cache" }.freeze
@@ -34,9 +36,9 @@ class ChunkyServer < Roda
   plugin :head
   plugin :json
   plugin :not_found do
-    "<!DOCTYPE html><meta charset=\"UTF-8\"><title>404 – Chunky Bacon</title>" \
+    "<!DOCTYPE html><meta charset=\"UTF-8\"><title>404 – Let's Ruby</title>" \
       "<p>Diese Seite gibt es nicht. · This page does not exist. · このページはありません。</p>" \
-      "<p><a href=\"#{h(base_path)}\">Chunky Bacon</a></p>"
+      "<p><a href=\"#{h(base_path)}\">Let's Ruby</a></p>"
   end
 
   def self.course = Course.cached(LESSONS)
@@ -45,7 +47,13 @@ class ChunkyServer < Roda
     r.public
     course = self.class.course
 
-    r.root { page }
+    # / is the landing page (it sends an old /#methoden link on to /learn);
+    # the course is /learn, /de, /de/methoden
+    r.root do
+      response["cache-control"] = "no-cache"
+      File.read(WELCOME, encoding: "UTF-8")
+    end
+    r.is("learn") { page }
 
     r.on "api" do
       r.get("lessons") { course.index }
@@ -74,6 +82,14 @@ class ChunkyServer < Roda
 
   def h(text) = Rack::Utils.escape_html(text.to_s)
 
+  # the address canonical links name: PUBLIC_ORIGIN (https://letsruby.com on
+  # the server, so a page reached under an old host name points search
+  # engines at the new one), else the host the request came to
+  def origin
+    public_origin = ENV["PUBLIC_ORIGIN"].to_s.chomp("/")
+    public_origin.empty? ? request.base_url : public_origin
+  end
+
   # where the course lives - "/" unless it is mounted under a path
   def base_path = "#{request.script_name}/"
 
@@ -94,7 +110,7 @@ class ChunkyServer < Roda
       html = meta(html, "property", "og:title", title)
       html = meta(html, "property", "og:description", description)
       if id
-        url = ->(language) { "#{request.base_url}#{base}#{language}/#{id}" }
+        url = ->(language) { "#{origin}#{base}#{language}/#{id}" }
         added << %(<link rel="canonical" href="#{h url.(lang)}">)
         added << %(<meta property="og:url" content="#{h url.(lang)}">)
         course.langs.each { |language| added << %(<link rel="alternate" hreflang="#{language}" href="#{h url.(language)}">) }

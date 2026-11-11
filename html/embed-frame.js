@@ -3,7 +3,7 @@
 // The address's fragment says what to show - nothing of it reaches a server:
 //   #code=<UTF-8, deflate-raw, base64url>   the cell's code (or src=<plain text>)
 //   &gems=chunky_png,prawn                  installed before the first run
-//   &lang=de|en|ja                          the interface language (else the browser's)
+//   &lang=de|en|ja|fr|it                    the interface language (else the browser's)
 //   &load=visible|click|eager               when ruby.wasm loads: once the cell is
 //                                           on screen (default), on the first Run,
 //                                           or at once
@@ -266,10 +266,10 @@
   var els = {};
   var refocus = false;
   function setStatus(text) { if (els.status) els.status.textContent = text; postSize(); }
-  // "1.4 s", German "1,4 s" (as the course's shell/view.rb)
+  // "1.4 s", German, French and Italian "1,4 s" (as the course's shell/view.rb)
   function runTime(seconds) {
     var text = seconds < 0.1 ? "< 0.1 s" : seconds.toFixed(1) + " s";
-    return lang === "de" ? text.replace(".", ",") : text;
+    return /^(de|fr|it)$/.test(lang) ? text.replace(".", ",") : text;
   }
   function setRunning(on, outcome, elapsed) {
     if (!els.cell) return;

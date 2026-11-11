@@ -142,6 +142,10 @@ class TurtleTest < Minitest::Test
     assert_equal "Chunkyが線を4本かきました", t.alt_text
     assert_includes t.to_svg, "<title>Chunkyが線を4本かきました</title>"
     Turtle.lang = "fr"
+    assert_equal "Chunky a tracé 4 traits", t.alt_text
+    Turtle.lang = "it"
+    assert_equal "Chunky ha disegnato 4 linee", t.alt_text
+    Turtle.lang = "xx"
     assert_equal "Chunky drew 4 lines", t.alt_text
     # every language says everything
     keys = Turtle::TEXTS["en"].keys

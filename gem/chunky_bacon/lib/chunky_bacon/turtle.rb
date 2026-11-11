@@ -68,6 +68,20 @@ class Turtle
       dizzy: "Chunkyは目が回ってしまいました：%{max}回を超えて回転しました。終わらないループになっていませんか？",
       color: "%{name} は色ではありません。\"red\" や \"#c14a2e\" のように書いてください",
       drew_one: "Chunkyが線を1本かきました", drew: "Chunkyが線を%{n}本かきました"
+    },
+    "fr" => {
+      tired: "Chunky est fatigué : plus de %{max} pas. Y a-t-il une boucle qui ne s'arrête jamais, " \
+             "ou une récursion sans cas de base ?",
+      dizzy: "Chunky a le tournis : plus de %{max} rotations. Y a-t-il une boucle qui ne s'arrête jamais ?",
+      color: "%{name} n'est pas une couleur – essayez \"red\" ou \"#c14a2e\"",
+      drew_one: "Chunky a tracé 1 trait", drew: "Chunky a tracé %{n} traits"
+    },
+    "it" => {
+      tired: "Chunky è stanco: più di %{max} passi. C'è un ciclo che non finisce mai, " \
+             "o una ricorsione senza caso base?",
+      dizzy: "A Chunky gira la testa: più di %{max} rotazioni. C'è un ciclo che non finisce mai?",
+      color: "%{name} non è un colore – prova \"red\" o \"#c14a2e\"",
+      drew_one: "Chunky ha disegnato 1 linea", drew: "Chunky ha disegnato %{n} linee"
     }
   }.freeze
 
@@ -357,7 +371,7 @@ class Turtle
   # ---------- class side ----------
 
   class << self
-    # "de", "en" or "ja": the language of the errors and the alt text
+    # "de", "en", "ja", "fr" or "it": the language of the errors and the alt text
     # (main.rb sets the lesson's)
     attr_writer :lang
 

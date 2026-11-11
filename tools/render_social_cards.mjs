@@ -2,7 +2,7 @@
 //   docs/social/twitter-card.png  1600x900 (16:9)  X, Bluesky, Mastodon, the README
 //   html/social/github-social.png 1600x800 (2:1)   GitHub social preview, og:image
 // The 2:1 card is under html/ so the site serves it itself: index.html's
-// og:image is https://chunkybacon.idogawa.com/social/github-social.png.
+// og:image is https://letsruby.com/social/github-social.png.
 // The page is served from the repo through Playwright's request routing
 // (file:// would block the fonts), so nothing listens on a port.
 //
@@ -29,7 +29,7 @@ for (const format of FORMATS) {
     return route.fulfill({ path: file });
   });
   await page.goto(`${ORIGIN}/docs/social/card.html${format.query}`);
-  await page.waitForSelector('html.ready', { state: 'attached' }); // the foxes are in
+  await page.waitForSelector('html.ready', { state: 'attached' }); // the mark is in
   await page.evaluate(() => document.fonts.ready);
   const missing = await page.evaluate(() =>
     ['Outfit', 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible Mono']

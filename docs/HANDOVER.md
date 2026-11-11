@@ -4,7 +4,7 @@ Everything you need to run, change and extend the site. The README says
 what the site is; this document says how it works and where the traps are.
 Work in progress - what is unfinished, and in what state - is in
 `docs/OPEN_WORK.md`.
-Last updated 2026-10-16. The course is in German, English and Japanese, with a cheat sheet.
+Last updated 2026-10-16. The course is in German, English, Japanese, French and Italian, with a cheat sheet.
 
 ## 1. Where it runs
 
@@ -369,7 +369,14 @@ the harness checks `ja` with the English solutions. So a change to an English
 code cell or check must be made in `ja` too (same cell, same code, comments
 in Japanese). Japanese prose is です・ます体, hints are Chunky speaking
 (casual); app.css adds Japanese fallback fonts under `:lang(ja)`. German is
-written the Swiss way: `ss`, never `ß` ("heisst", "gross").
+written the Swiss way: `ss`, never `ß` ("heisst", "gross"). **French and
+Italian work like Japanese**: English code with translated comments, `check`
+byte-identical, en's solutions (the linter's parity group, the harnesses'
+`SOLUTION_LANG`); French says "vous", Italian "tu". The linter, the check
+harness and the server take their language list from `ui`; a string table in
+the page's JavaScript or Ruby (turtle.rb, ruby2d.rb, jruby_lab.js, ...) falls
+back to English, never German, for a language it lacks, and de, fr and it
+write a decimal comma ("1,4 s").
 
 Which language a visitor gets is decided in the browser, by
 `shell/bridge.js` (`pickLang`, read by the shell as `ChunkyBridge.lang`), no
@@ -3441,7 +3448,7 @@ in that regex.
 cd test
 node make_lessons_json.js      # test/lessons.json
 ruby check_harness.rb          # every lesson but the browser-only ones x 3 languages, starter fails, solutions pass (HARNESS_ONLY=id,id: those)
-ruby lint_lessons.rb           # lessons.js content: de/en/ja parity, references, Japanese rules, Prism, gems, counts
+ruby lint_lessons.rb           # lessons.js content: de/en/ja/fr/it parity, references, Japanese rules, Prism, gems, counts
 ruby lint_lessons_test.rb      # the linter's fault-injection tests
 ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, errors
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans

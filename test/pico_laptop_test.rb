@@ -87,7 +87,7 @@ class PicoLaptopTest < Minitest::Test
     data = JSON.parse(text[/JSON\.stringify\((.*)\);\s*\z/m, 1])
     lesson = data["lessons"].find { |l| l["id"] == "pico-ble" }
     skip "pico-ble not in lessons.js" unless lesson
-    %w[de en ja].each do |lang|
+    data["ui"].each_key do |lang|
       cell = lesson[lang]["cells"].find { |c| c["engine"] == "cruby" }
       refute_nil cell, lang
       code = cell["code"].sub(/^require "ble"\n/, "").gsub(/^(\s*)sleep (\d+)/, '\1nil')

@@ -28,7 +28,7 @@ const reload = async page => {
 
 let page = await visit(['en-US', 'en']);
 check('an English browser gets English', (await lang(page)) === 'en' &&
-  (await page.textContent('#siteTitle')).includes('Learn Ruby'));
+  (await page.textContent('#siteSubtitle')).includes('A Ruby notebook'));
 await page.context().close();
 
 page = await visit(['ja-JP']);
@@ -37,20 +37,43 @@ await page.context().close();
 
 page = await visit(['de-CH', 'en']);
 check('a Swiss German browser gets German', (await lang(page)) === 'de' &&
-  (await page.textContent('#siteTitle')).includes('Ruby lernen'));
+  (await page.textContent('#siteSubtitle')).includes('Ruby-Notizbuch'));
 await page.context().close();
 
-page = await visit(['fr-FR', 'de-DE', 'en']);
+page = await visit(['fr-CH', 'de-CH', 'en']);
+check('a Swiss French browser gets French', (await lang(page)) === 'fr');
+await page.context().close();
+
+page = await visit(['it-CH', 'de-CH']);
+check('a Swiss Italian browser gets Italian', (await lang(page)) === 'it');
+await page.context().close();
+
+page = await visit(['fr-FR']);
+check('a French browser gets French', (await lang(page)) === 'fr');
+await page.context().close();
+
+page = await visit(['it-IT', 'en']);
+check('an Italian browser gets Italian', (await lang(page)) === 'it');
+await page.context().close();
+
+page = await visit(['es-ES', 'de-DE', 'en']);
 check('the first preferred language the course has wins', (await lang(page)) === 'de');
 await page.context().close();
 
-page = await visit(['fr-FR', 'it']);
+page = await visit(['es-ES', 'pt']);
 check('a language the course lacks falls back to English', (await lang(page)) === 'en');
 await page.context().close();
 
+for (const code of ['fr', 'it']) {
+  page = await visit(['en-US'], `?lang=${code}#hallo`);
+  check(`?lang=${code} picks ${code}`, (await lang(page)) === code &&
+    (await page.$eval('#langSelect', s => s.value)) === code);
+  await page.context().close();
+}
+
 page = await visit(['en-US'], '?v=1&lang=ja#irb');
 check('?lang= picks the language', (await lang(page)) === 'ja');
-check('?lang= leaves the address, the rest stays', page.url().endsWith('/?v=1#irb'));
+check('?lang= leaves the address, the rest stays', page.url().endsWith('/learn?v=1#irb'));
 check('?lang= is kept as the choice', (await page.evaluate(() => localStorage.getItem('chunky_lang'))) === 'ja');
 await page.goto(BASE + '#hallo', { waitUntil: 'domcontentloaded' });
 await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });

@@ -48,9 +48,9 @@ module ChunkyShell
 
     # ---------- helpers ----------
 
-    # a UI string in the page's language, German when missing; %s -> arg
+    # a UI string in the page's language, English when missing; %s -> arg
     def t(key, arg = nil)
-      text = @app.ui[key] || @app.course.ui("de")[key] || key
+      text = @app.ui[key] || @app.course.ui("en")[key] || key
       arg.nil? ? text : text.sub("%s", arg.to_s)
     end
 
@@ -149,7 +149,7 @@ module ChunkyShell
       JSG.w[name] = JS.generic_callbacks[name.to_sym]
     end
 
-    # HH:MM, as de-CH, en-GB and ja-JP all write it
+    # HH:MM, as de-CH, en-GB, fr-FR, it-IT and ja-JP all write it
     def clock(date) = format("%02d:%02d", date.getHours, date.getMinutes)
 
     def render_button

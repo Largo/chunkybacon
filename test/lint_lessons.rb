@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 # Content linter for html/lessons.js - catches what test/check_harness.rb
-# does not: translation drift between de/en/ja, lesson references that are
+# does not: translation drift between the languages (de, en, ja, fr, it -
+# whatever lessons.js's ui has), lesson references that are
 # not written by id ("lesson {{nr:methoden}}", html/lesson_refs.rb) or name
 # the wrong lesson, the mechanical half of the Japanese rules (HANDOVER §3),
 # Ruby that does not parse or warns, gems the cache does not have, and
@@ -26,7 +27,10 @@ require_relative "../html/lesson_refs"
 require_relative "pico_lint"
 
 module LessonLint
-  LANGS = %w[de en ja].freeze
+  # the course's languages when lessons.js names none; a Linter takes the
+  # keys of its ui. Every language but de runs the English code (its cells'
+  # code equals en's apart from the comments).
+  LANGS = %w[de en ja fr it].freeze
   SEVERITIES = %w[ERROR WARN INFO].freeze
   GROUPS = %w[structure parity html refs ja ruby gems counts links pico].freeze
 
@@ -223,6 +227,10 @@ module LessonLint
 
     def lessons = @src.lessons
 
+    # lessons.js's languages (its ui's keys), and those that run en's code
+    def langs = @langs ||= (@src.ui || {}).keys.then { |k| k.empty? ? LANGS : k }.freeze
+    def en_code_langs = langs - %w[de en]
+
     def where(lesson, lang = nil, idx = nil)
       s = lesson["id"].dup
       s << "[#{lang}]" if lang
@@ -239,7 +247,7 @@ module LessonLint
 
     def each_cell
       lessons.each_with_index do |lesson, li|
-        LANGS.each do |lang|
+        langs.each do |lang|
           cells(lesson, lang).each_with_index { |cell, ci| yield lesson, li, lang, cell, ci }
         end
       end
@@ -266,7 +274,7 @@ module LessonLint
       ids = lessons.map { |l| l["id"] }
       ids.tally.each { |id, n| add("structure", "ERROR", "dup-id", where: id, message: "id used #{n} times") if n > 1 }
       lessons.each do |lesson|
-        LANGS.each do |lang|
+        langs.each do |lang|
           unless lesson[lang].is_a?(Hash)
             add("structure", "ERROR", "missing-lang", where: where(lesson, lang), message: "no #{lang} version")
             next
@@ -309,7 +317,7 @@ module LessonLint
           end
         end
         if (sec = lesson["section"])
-          missing = LANGS.reject { |g| sec[g].to_s.strip != "" }
+          missing = langs.reject { |g| sec[g].to_s.strip != "" }
           add("structure", "ERROR", "section-lang", where: where(lesson), message: "section lacks #{missing.join(", ")}") if missing.any?
         end
         (lesson["files"] || {}).each do |name, path|
@@ -338,47 +346,47 @@ module LessonLint
     def check_parity
       check_ui_parity
       lessons.each do |lesson|
-        next unless LANGS.all? { |g| lesson[g].is_a?(Hash) }
-        types = LANGS.to_h { |g| [g, cells(lesson, g).map { |c| c["t"] }.join] }
+        next unless langs.all? { |g| lesson[g].is_a?(Hash) }
+        types = langs.to_h { |g| [g, cells(lesson, g).map { |c| c["t"] }.join] }
         if types.values.uniq.size > 1
           add("parity", "ERROR", "cell-sequence", where: where(lesson), line: line_of(lesson),
               message: "cell types differ: " + types.map { |g, t| "#{g}=#{t}" }.join(" "))
           next # cell-by-cell comparisons would be noise
         end
         cells(lesson, "en").each_with_index do |en, ci|
-          ja = cells(lesson, "ja")[ci]
-          de = cells(lesson, "de")[ci]
+          by = langs.to_h { |g| [g, cells(lesson, g)[ci]] }
           case en["t"]
-          when "c", "x" then compare_code(lesson, ci, en, ja, de)
-          when "h" then compare_html(lesson, ci, { "de" => de, "en" => en, "ja" => ja })
+          when "c", "x" then compare_code(lesson, ci, by)
+          when "h" then compare_html(lesson, ci, by)
           end
           if en["t"] == "x"
-            if [de, en, ja].map { |c| c["bonus"] == true }.uniq.size > 1
+            if by.values.map { |c| c["bonus"] == true }.uniq.size > 1
               add("parity", "ERROR", "bonus-flag", where: where(lesson, "en", ci), line: line_of(lesson, "en", ci),
                   message: "\"bonus\" differs between the languages")
             end
-            compare_spans(lesson, ci, "hint", { "de" => de["hint"], "en" => en["hint"], "ja" => ja["hint"] })
+            compare_spans(lesson, ci, "hint", by.transform_values { |c| c["hint"] })
             # the lighter hints before it (shell/app.rb reveal_hint): the same
             # number in every language, and a solution in all or none
-            counts = { "de" => de, "en" => en, "ja" => ja }.transform_values { |c| (c["hints"] || []).size }
+            counts = by.transform_values { |c| (c["hints"] || []).size }
             if counts.values.uniq.size > 1
               add("parity", "ERROR", "hints-count", where: where(lesson, "en", ci), line: line_of(lesson, "en", ci),
                   message: "hints differ in number: #{counts}")
             else
               counts["en"].times do |k|
-                compare_spans(lesson, ci, "hints[#{k}]", { "de" => de["hints"][k], "en" => en["hints"][k], "ja" => ja["hints"][k] })
+                compare_spans(lesson, ci, "hints[#{k}]", by.transform_values { |c| c["hints"][k] })
               end
             end
-            has = { "de" => de, "en" => en, "ja" => ja }.transform_values { |c| c.key?("solution") }
+            has = by.transform_values { |c| c.key?("solution") }
             if has.values.uniq.size > 1
               add("parity", "ERROR", "solution-missing", where: where(lesson, "en", ci), line: line_of(lesson, "en", ci),
                   message: "solution in #{has.select { |_, v| v }.keys.join(", ")} only")
             end
-            # ja runs en's code, so the solutions match - up to the comments,
-            # which a starter carries in Japanese (the Rails lessons' ERB)
-            if ja.key?("solution") && uncommented(ja["solution"]) != uncommented(en["solution"])
-              add("parity", "ERROR", "solution-ja", where: where(lesson, "ja", ci), line: line_of(lesson, "ja", ci),
-                  message: "ja's solution differs from en's beyond its comments (Japanese runs the English code)")
+            # ja, fr and it run en's code, so the solutions match - up to the
+            # comments, which a starter carries translated (the Rails lessons' ERB)
+            en_code_langs.each do |g|
+              next unless by[g].key?("solution") && uncommented(by[g]["solution"]) != uncommented(en["solution"])
+              add("parity", "ERROR", "solution-#{g}", where: where(lesson, g, ci), line: line_of(lesson, g, ci),
+                  message: "#{g}'s solution differs from en's beyond its comments (#{g} runs the English code)")
             end
           end
         end
@@ -394,16 +402,16 @@ module LessonLint
 
     def check_ui_parity
       ui = @src.ui
-      keys = LANGS.to_h { |g| [g, (ui[g] || {}).keys] }
+      keys = langs.to_h { |g| [g, (ui[g] || {}).keys] }
       all = keys.values.flatten.uniq
       all.each do |k|
-        missing = LANGS.reject { |g| ui.dig(g, k) }
+        missing = langs.reject { |g| ui.dig(g, k) }
         if missing.any?
           add("parity", "ERROR", "ui-missing", where: "ui.#{k}", line: (l = @src.ui_line("en", k)) && "lessons.js:#{l}",
               message: "ui string missing in #{missing.join(", ")}")
           next
         end
-        vals = LANGS.to_h { |g| [g, ui[g][k]] }
+        vals = langs.to_h { |g| [g, ui[g][k]] }
         if vals.values.map(&:class).uniq.size > 1
           add("parity", "ERROR", "ui-type", where: "ui.#{k}", message: "different types: #{vals.transform_values(&:class)}")
         elsif vals["en"].is_a?(Array)
@@ -421,8 +429,9 @@ module LessonLint
             add("parity", "WARN", "ui-tags", where: "ui.#{k}", line: (l = @src.ui_line("en", k)) && "lessons.js:#{l}",
                 message: "HTML tags differ", detail: tags.map { |g, t| "#{g}: #{t.tally.map { |n, c| c > 1 ? "#{n}×#{c}" : n }.join(" ")}" })
           end
-          if vals["ja"] == vals["en"] && vals["en"] =~ /[a-z]{3,} [a-z]{3,} [a-z]{3,}/i && vals["en"] !~ /\A[A-Z][\w ]+\z/
-            add("parity", "WARN", "ui-untranslated", where: "ui.#{k}[ja]", message: "ja string equals en: #{Text.snippet(vals["en"])}")
+          en_code_langs.each do |g|
+            next unless vals[g] == vals["en"] && vals["en"] =~ /[a-z]{3,} [a-z]{3,} [a-z]{3,}/i && vals["en"] !~ /\A[A-Z][\w ]+\z/
+            add("parity", "WARN", "ui-untranslated", where: "ui.#{k}[#{g}]", message: "#{g} string equals en: #{Text.snippet(vals["en"])}")
           end
           if vals["de"] == vals["en"] && vals["en"] =~ /\b(the|you|your|and|is|to)\b/i
             add("parity", "WARN", "ui-untranslated", where: "ui.#{k}[de]", message: "de string equals en: #{Text.snippet(vals["en"])}")
@@ -431,21 +440,25 @@ module LessonLint
       end
     end
 
-    def compare_code(lesson, ci, en, ja, de)
-      # Japanese runs the English code: same code once comments are gone
+    def compare_code(lesson, ci, by)
+      en = by["en"]
+      de = by["de"]
+      # ja, fr and it run the English code: same code once comments are gone
       a = strip_comments(en["code"].to_s)
-      b = strip_comments(ja["code"].to_s)
-      if a != b
-        add("parity", "ERROR", "ja-code", where: where(lesson, "ja", ci), line: line_of(lesson, "ja", ci),
-            message: "ja code differs from en (comments ignored)", detail: first_diff(a, b))
-      end
-      if en["t"] == "x" && en["check"] != ja["check"]
-        add("parity", "ERROR", "ja-check", where: where(lesson, "ja", ci), line: line_of(lesson, "ja", ci),
-            message: "ja check is not byte-identical to en", detail: first_diff(en["check"].to_s, ja["check"].to_s))
+      en_code_langs.each do |g|
+        b = strip_comments(by[g]["code"].to_s)
+        if a != b
+          add("parity", "ERROR", "#{g}-code", where: where(lesson, g, ci), line: line_of(lesson, g, ci),
+              message: "#{g} code differs from en (comments ignored)", detail: first_diff(a, b, g))
+        end
+        if en["t"] == "x" && en["check"] != by[g]["check"]
+          add("parity", "ERROR", "#{g}-check", where: where(lesson, g, ci), line: line_of(lesson, g, ci),
+              message: "#{g} check is not byte-identical to en", detail: first_diff(en["check"].to_s, by[g]["check"].to_s, g))
+        end
       end
       # comments left in English
       en_comments = comments(en["code"].to_s).to_set
-      { "ja" => ja, "de" => de }.each do |lang, cell|
+      by.except("en").each do |lang, cell|
         comments(cell["code"].to_s).each do |c|
           next unless en_comments.include?(c) && english_prose?(c)
           add("parity", "WARN", "untranslated-comment", where: where(lesson, lang, ci), line: line_of(lesson, lang, ci),
@@ -454,7 +467,7 @@ module LessonLint
       end
       # the same number of comment lines is a cheap drift signal for de
       ne = comments(en["code"].to_s).size
-      { "de" => de, "ja" => ja }.each do |lang, cell|
+      by.except("en").each do |lang, cell|
         n = comments(cell["code"].to_s).size
         next if n == ne
         add("parity", "INFO", "comment-count", where: where(lesson, lang, ci), line: line_of(lesson, lang, ci),
@@ -484,11 +497,11 @@ module LessonLint
       words.count { |w| STOP_EN.include?(w) } >= 2 && text !~ /[^\x00-\x7F]/
     end
 
-    def first_diff(a, b)
+    def first_diff(a, b, lang = "ja")
       la = a.lines
       lb = b.lines
       i = (0...[la.size, lb.size].max).find { |k| la[k] != lb[k] } || 0
-      ["line #{i + 1}", "en: #{Text.snippet(la[i].to_s, 110)}", "ja: #{Text.snippet(lb[i].to_s, 110)}"]
+      ["line #{i + 1}", "en: #{Text.snippet(la[i].to_s, 110)}", "#{lang}: #{Text.snippet(lb[i].to_s, 110)}"]
     end
 
     BLOCK_TAGS = %w[h2 h3 h4 p ul ol li pre table tr img hr div figure details summary].freeze
@@ -519,45 +532,48 @@ module LessonLint
         hosts = links.transform_values { |l| l.map { |u| u[%r{\A\w+://([^/]+)}, 1] || u }.uniq.sort }
         same_sites = hosts.values.uniq.size == 1
         add("parity", same_sites ? "INFO" : "WARN", "links", where: where(lesson, nil, ci), line: line_of(lesson, "en", ci),
-            message: "link targets differ", detail: LANGS.map { |g| "#{g} only: #{(links[g] - LANGS.flat_map { |o| o == g ? [] : links[o] }).uniq.join(" ")}" }.reject { |s| s.end_with?(": ") })
+            message: "link targets differ", detail: langs.map { |g| "#{g} only: #{(links[g] - langs.flat_map { |o| o == g ? [] : links[o] }).uniq.join(" ")}" }.reject { |s| s.end_with?(": ") })
       end
-      # <pre> blocks: identical en/ja once comments are left aside
+      # <pre> blocks: identical en/ja/fr/it once comments are left aside
       pre = html.transform_values { |h| h.scan(%r{<pre>(.*?)</pre>}m).flatten.map { |p| Text.decode(p.gsub(/<[^>]+>/, "")) } }
-      pre["en"].zip(pre["ja"]).each_with_index do |(e, j), k|
-        next if j.nil? || e == j
-        next if (e.lines.reject { |l| l =~ /#/ }) == (j.lines.reject { |l| l =~ /#/ })
-        add("parity", "WARN", "pre-block", where: where(lesson, "ja", ci), line: line_of(lesson, "ja", ci),
-            message: "<pre> block #{k + 1} differs from en", detail: first_diff(e, j))
+      en_code_langs.each do |g|
+        pre["en"].zip(pre[g]).each_with_index do |(e, j), k|
+          next if j.nil? || e == j
+          next if (e.lines.reject { |l| l =~ /#/ }) == (j.lines.reject { |l| l =~ /#/ })
+          add("parity", "WARN", "pre-block", where: where(lesson, g, ci), line: line_of(lesson, g, ci),
+              message: "<pre> block #{k + 1} differs from en", detail: first_diff(e, j, g))
+        end
       end
       compare_spans(lesson, ci, "html", html)
     end
 
-    def normalize_url(url) = url.sub(%r{/deed\.(de|ja|en)\z}, "/").sub(%r{/(de|en|ja)/}, "/*/")
+    def normalize_url(url) = url.sub(%r{/deed\.(de|ja|en|fr|it)\z}, "/").sub(%r{/(de|en|ja|fr|it)/}, "/*/")
 
-    # inline `code`: ja runs the English code, so its spans match en's;
-    # de has its own names, so only spans that also occur in en count
+    # inline `code`: ja, fr and it run the English code, so their spans
+    # match en's; de has its own names, so only spans that also occur in en count
     def compare_spans(lesson, ci, field, by_lang)
       spans = by_lang.transform_values { |h| Text.code_spans(h.to_s).map { |s| s.strip } }
       en = spans["en"].tally
-      ja = spans["ja"].tally
-      only_en = en.filter_map { |s, n| s if ja.fetch(s, 0) < n }
-      only_ja = ja.filter_map { |s, n| s if en.fetch(s, 0) < n }
-      # spans with Japanese placeholders ("sp.solve(式, x)") match their en span
-      # with any word in that place; other Japanese spans are translated output
-      jp = /[\p{Hiragana}\p{Katakana}\p{Han}ー]+/
-      only_ja.select { |s| s =~ jp }.each do |s|
-        re = Regexp.new("\\A" + s.split(jp, -1).map { |part| Regexp.escape(part) }.join("[\\w ]+?") + "\\z")
-        if (hit = only_en.find { |e| e.match?(re) })
-          only_en.delete_at(only_en.index(hit))
+      en_code_langs.each do |g|
+        other = spans[g].tally
+        only_en = en.filter_map { |s, n| s if other.fetch(s, 0) < n }
+        only_g = other.filter_map { |s, n| s if en.fetch(s, 0) < n }
+        # spans with Japanese placeholders ("sp.solve(式, x)") match their en span
+        # with any word in that place; other Japanese spans are translated output
+        jp = /[\p{Hiragana}\p{Katakana}\p{Han}ー]+/
+        only_g.select { |s| s =~ jp }.each do |s|
+          re = Regexp.new("\\A" + s.split(jp, -1).map { |part| Regexp.escape(part) }.join("[\\w ]+?") + "\\z")
+          if (hit = only_en.find { |e| e.match?(re) })
+            only_en.delete_at(only_en.index(hit))
+          end
         end
-      end
-      only_ja.reject! { |s| s =~ jp }
-      only_en.reject! { |s| s.match?(/\A(Task|Hint)\z/) }
-      if only_en.any? || only_ja.any?
-        add("parity", "WARN", "code-spans-ja", where: where(lesson, "ja", ci) + (field == "hint" ? " hint" : ""),
-            line: line_of(lesson, "ja", ci), message: "inline <code> differs from en",
-            detail: ["en only: #{only_en.map(&:inspect).join(", ")}", "ja only: #{only_ja.map(&:inspect).join(", ")}"].reject { |s| s.end_with?(": ") },
-            extra: (only_en + only_ja).join("|"))
+        only_g.reject! { |s| s =~ jp }
+        only_en.reject! { |s| s.match?(/\A(Task|Hint)\z/) }
+        next unless only_en.any? || only_g.any?
+        add("parity", "WARN", "code-spans-#{g}", where: where(lesson, g, ci) + (field == "hint" ? " hint" : ""),
+            line: line_of(lesson, g, ci), message: "inline <code> differs from en",
+            detail: ["en only: #{only_en.map(&:inspect).join(", ")}", "#{g} only: #{only_g.map(&:inspect).join(", ")}"].reject { |s| s.end_with?(": ") },
+            extra: (only_en + only_g).join("|"))
       end
       # de: language-neutral spans (present in de and en somewhere in the lesson)
       de = spans["de"].tally
@@ -586,7 +602,7 @@ module LessonLint
     end
 
     def compare_gem_usage(lesson)
-      use = LANGS.to_h do |g|
+      use = langs.to_h do |g|
         all = cells(lesson, g).map { |c| c["code"].to_s }.join("\n")
         [g, gem_usage(all).map(&:sort)]
       end
@@ -665,7 +681,9 @@ module LessonLint
     REF = {
       "de" => /Lektion(?:en)?\s*(\d+)(?:\s*(?:[–-]|bis)\s*(\d+))?/,
       "en" => /\b[Ll]essons?\s+(\d+)(?:\s*(?:[–-]|to)\s*(\d+))?/,
-      "ja" => /レッスン\s*(\d+)(?:\s*[〜~～–-]\s*(\d+))?/
+      "ja" => /レッスン\s*(\d+)(?:\s*[〜~～–-]\s*(\d+))?/,
+      "fr" => /\b[Ll]eçons?\s+(\d+)(?:\s*(?:[–-]|à)\s*(\d+))?/,
+      "it" => /\b[Ll]ezion[ei]\s+(\d+)(?:\s*(?:[–-]|a)\s*(\d+))?/
     }.freeze
 
     def check_refs
@@ -681,7 +699,7 @@ module LessonLint
         texts << ["code", comments(cell["code"]).join("\n")] if cell["code"]
         refs = []
         texts.each do |field, text|
-          text.scan(REF[lang]) do
+          text.scan(REF.fetch(lang, REF["en"])) do
             m = Regexp.last_match
             nums = [m[1].to_i, m[2]&.to_i].compact
             refs.concat(nums)
@@ -712,10 +730,10 @@ module LessonLint
         end
         (@refs_by_cell ||= {})[[lesson["id"], ci, lang]] = refs.sort
       end
-      # the same references in all three languages
+      # the same references in every language
       lessons.each do |lesson|
         cells(lesson, "en").each_index do |ci|
-          per = LANGS.to_h { |g| [g, @refs_by_cell.fetch([lesson["id"], ci, g], [])] }
+          per = langs.to_h { |g| [g, @refs_by_cell.fetch([lesson["id"], ci, g], [])] }
           next if per.values.uniq.size == 1
           add("refs", "WARN", "ref-parity", where: where(lesson, nil, ci), line: line_of(lesson, "en", ci),
               message: "lesson references differ between languages: #{per.map { |g, r| "#{g}=#{r.inspect}" }.join(" ")}")
@@ -735,7 +753,7 @@ module LessonLint
     def check_ref_tokens
       ids = @src.raw["lessons"].map { |l| l["id"] }.to_set
       @src.raw["lessons"].each do |lesson|
-        LANGS.each do |lang|
+        langs.each do |lang|
           cells(lesson, lang).each_with_index do |cell, ci|
             loc = where(lesson, lang, ci)
             %w[html hint code].each do |field|
@@ -746,7 +764,7 @@ module LessonLint
                     message: "{{nr:#{id}}} - there is no lesson #{id.inspect}", extra: id)
               end
               plain = field == "code" ? comments(text).join("\n") : Text.plain(text)
-              plain.scan(REF[lang]) do
+              plain.scan(REF.fetch(lang, REF["en"])) do
                 found = Regexp.last_match[0]
                 add("refs", "ERROR", "ref-literal", where: loc, line: line_of(lesson, lang, ci),
                     message: "#{found.inspect} - write the lesson's id where its number goes: " \
@@ -778,7 +796,8 @@ module LessonLint
       lessons.each_with_index do |l, i|
         # names survive translation: a word in at least two languages' titles
         # (Roda, pandas, IRB, Minitest) - "ganze" or "command" do not
-        per_lang = LANGS.map do |g|
+        # (the first three: fr and it would count English loanwords twice)
+        per_lang = %w[de en ja].map do |g|
           l.dig(g, "title").to_s.sub(/\A\d+\.\s*/, "").scan(/[A-Za-zÄÖÜäöüß][\w-]{2,}/).map { |w| w.downcase.sub(/-rb\z/, "") }.uniq
         end
         words = per_lang.flatten.tally.select { |_, n| n >= 2 }.keys
@@ -838,7 +857,7 @@ module LessonLint
       routes = ids | %w[werkstatt workshop] # non-lesson routes the shell knows
       each_cell do |lesson, _li, lang, cell, ci|
         %w[html hint].each do |f|
-          cell[f].to_s.scan(/href=['"](?:\/(?:de|en|ja)\/|\/?#)([\w-]+)['"]/) do |(target)|
+          cell[f].to_s.scan(/href=['"](?:\/(?:de|en|ja|fr|it)\/|\/?#)([\w-]+)['"]/) do |(target)|
             next if routes.include?(target)
             add("refs", "ERROR", "anchor", where: where(lesson, lang, ci), line: line_of(lesson, lang, ci),
                 message: "link to ##{target}, which is no lesson id", extra: target)
@@ -849,7 +868,7 @@ module LessonLint
         path = File.join(@root, doc)
         next unless File.exist?(path)
         File.readlines(path, encoding: "UTF-8").each_with_index do |line, n|
-          line.scan(%r{(?:`|\()/(?:#|(?:de|en|ja)/)([a-z][\w-]*)}) do |(target)|
+          line.scan(%r{(?:`|\()/(?:#|(?:de|en|ja|fr|it)/)([a-z][\w-]*)}) do |(target)|
             next if routes.include?(target)
             add("refs", "WARN", "doc-anchor", where: doc, line: "#{doc}:#{n + 1}",
                 message: "/##{target} is no lesson id", extra: target)
@@ -965,7 +984,7 @@ module LessonLint
 
     def check_ruby
       lessons.each do |lesson|
-        LANGS.each do |lang|
+        langs.each do |lang|
           locals = []
           cells(lesson, lang).each_with_index do |cell, ci|
             loc = where(lesson, lang, ci)
@@ -1031,7 +1050,7 @@ module LessonLint
           add("pico", sev, code, where: loc, line: line_of(lesson, lang || "en", ci&.to_i), message: message, extra: message[0, 40])
         end
         # an inline tab's lines scroll like the cell's
-        LANGS.each do |lang|
+        langs.each do |lang|
           cells(lesson, lang).each_with_index do |cell, ci|
             Array(cell["tabs"]).each do |tab|
               long_lines(tab["code"].to_s, "#{where(lesson, lang, ci)} tab #{tab['name']}", line_of(lesson, lang, ci)) if tab.is_a?(Hash) && tab["code"]
@@ -1073,7 +1092,7 @@ module LessonLint
         add("gems", "WARN", "cache-orphan", where: "html/gems/cache/#{f}", message: "not in manifest.json") unless listed.include?(f)
       end
       lessons.each do |lesson|
-        LANGS.each do |lang|
+        langs.each do |lang|
           installed = Set.new
           cells(lesson, lang).each_with_index do |cell, ci|
             code = cell["code"] or next
@@ -1127,7 +1146,7 @@ module LessonLint
       @src.ui.each do |lang, strings|
         strings.each do |k, v|
           Array(v).each do |s|
-            s.to_s.scan(/(\d+)\s*(lessons|Lektionen|レッスン)/) do |num, _|
+            s.to_s.scan(/(\d+)\s*(lessons|Lektionen|レッスン|leçons|lezioni)/) do |num, _|
               next if num.to_i == count
               add("counts", "ERROR", "ui-count", where: "ui.#{k}[#{lang}]", message: "says #{num} lessons, there are #{count}")
             end

@@ -2071,7 +2071,7 @@
     var lesson = null;
     for (var i = 0; i < data.lessons.length; i++) if (data.lessons[i].id === st.lesson) lesson = data.lessons[i];
     if (!lesson || lesson.engine !== "picoruby") return null;
-    var l10n = lesson[st.lang] || lesson.de;
+    var l10n = lesson[st.lang] || lesson.en;
     var cell = l10n && l10n.cells && l10n.cells[Number(idx)];
     if (!cell || !cell.board) return null;
     return { board: (lesson.pico || {}).board || "pico2w", parts: cell.board.parts || [], bench: [], reset: true };

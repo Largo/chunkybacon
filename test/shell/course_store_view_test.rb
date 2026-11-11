@@ -15,7 +15,8 @@ class CourseStoreViewTest < Minitest::Test
   def test_course_has_every_lesson_and_language
     assert_equal lesson_count, @course.size
     assert_equal "hallo", @course.id(0)
-    assert_equal %w[de en ja], @course.langs
+    assert_equal JSON.parse(File.read(LESSONS_JSON))["ui"].keys, @course.langs
+    assert_empty %w[de en ja] - @course.langs
     assert_equal 1, @course.index("rechnen")
     assert_nil @course.index("nonsense")
   end
@@ -27,6 +28,12 @@ class CourseStoreViewTest < Minitest::Test
     assert_equal "1. Hallo, Welt!", @course.numbered_title(0, "de")
     assert_equal "#{lesson_number("methoden")}. Methods", @course.numbered_title(@course.index("methoden"), "en")
     refute_match(/Ad/, @course.title(0, "ja"))
+  end
+
+  # a language a lesson lacks shows the English lesson, not the German one
+  def test_a_missing_translation_falls_back_to_english
+    assert_equal "Hello, World!", @course.title(0, "xx")
+    assert_equal @course.cells(0, "en").size, @course.cells(0, "xx").size
   end
 
   # "lesson {{nr:methoden}}" in lessons.js reaches the shell with its number

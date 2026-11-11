@@ -3,6 +3,7 @@
 # file under html/. Paths are relative to this file.
 ansi.rb
 assets/app.css
+assets/brand/letsruby-mark.svg
 assets/chunky.svg
 assets/codemirror-ruby.js
 assets/codemirror.css
@@ -35,6 +36,7 @@ assets/herb/prism/nodes.js
 assets/herb/prism/visitor.js
 assets/jruby-lesson/swing-de.png
 assets/jruby-lesson/swing-en.png
+assets/pages.css
 assets/pico/prremote-sequence.svg
 assets/picoruby/PICORUBY_VERSION.txt
 assets/picoruby/init.iife.js
@@ -210,12 +212,14 @@ jruby_swing.html
 jruby_swing.js
 jruby_swing_boot.js
 jruby_worker.js
+legal_links.js
 lessons.js
 letter.js
 main.rb
 numo_narray.rb
 object_graph.rb
 offline.js
+pages.js
 pico/lib/de/bme280.rb
 pico/lib/de/epd2in13.rb
 pico/lib/de/picogo.rb
@@ -314,4 +318,5 @@ step_recorder.rb
 stepper.js
 storage.js
 turtle.rb
+welcome.html
 workshop.rb

@@ -30,7 +30,7 @@ const exerciseOut = async () => {
 // (CRuby, 10 MB) loads afterwards. A run asked for meanwhile waits for it.
 const kernelReady = p => p.waitForFunction(() => window.ChunkyBridge && window.ChunkyBridge.ready, null, { timeout: 120000 });
 
-await page.goto(BASE, { waitUntil: 'domcontentloaded' });
+await page.goto(BASE + 'learn', { waitUntil: 'domcontentloaded' });
 await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 check('app becomes visible after wasm boot', true);
 check('the lesson is readable before the kernel has loaded',
@@ -40,7 +40,8 @@ await kernelReady(page);
 await page.waitForFunction(() => document.getElementById('cell-out-1').textContent.includes('=> 2'), null, { timeout: 30000 });
 check('a run clicked while the kernel loads runs once it is up', true);
 
-check('German title', (await page.textContent('#siteTitle')).includes('Ruby lernen mit Chunky Bacon'));
+check('German title', (await page.textContent('#siteTitle')).includes("Let's Ruby"));
+check('German subtitle', (await page.textContent('#siteSubtitle')).includes('Ruby-Notizbuch'));
 const lessonCount = await page.evaluate(() => window.LESSONS.lessons.length);
 check('every lesson in nav', lessonCount > 40 && (await page.$$('#lessonNav a')).length === lessonCount);
 // lessons are numbered by their place (html/lesson_refs.rb): bridge.js
@@ -1512,7 +1513,7 @@ check('panel install shows bubble', (await page.textContent('#chunkyText')).incl
 // switch language to English
 await page.selectOption('#langSelect', 'en');
 await page.waitForTimeout(300);
-check('English title', (await page.textContent('#siteTitle')).includes('Learn Ruby with Chunky Bacon'));
+check('English subtitle', (await page.textContent('#siteSubtitle')).includes('A Ruby notebook'));
 check('English lesson rendered', (await page.textContent('#lessonBody')).includes('Everything together'));
 check('progress survives lang switch', (await page.getAttribute('#lessonNav a:first-of-type', 'class')).includes('done'));
 
@@ -1520,7 +1521,7 @@ check('progress survives lang switch', (await page.getAttribute('#lessonNav a:fi
 await page.reload({ waitUntil: 'domcontentloaded' });
 await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
 await kernelReady(page);
-check('after reload still English', (await page.textContent('#siteTitle')).includes('Learn Ruby'));
+check('after reload still English', (await page.textContent('#siteSubtitle')).includes('A Ruby notebook'));
 check('after reload progress kept', (await page.getAttribute('#lessonNav a:first-of-type', 'class')).includes('done'));
 
 // solve the class lesson (lesson 13) end to end in English
@@ -1539,7 +1540,7 @@ check('class lesson shows => "Chunky Bacon!"', (await exerciseOut()).includes('=
 // Japanese: the lesson around the same (English) code, and it still passes
 await page.selectOption('#langSelect', 'ja');
 await page.waitForTimeout(300);
-check('Japanese title', (await page.textContent('#siteTitle')).includes('Chunky Baconと学ぶRuby'));
+check('Japanese subtitle', (await page.textContent('#siteSubtitle')).includes('ノートブック'));
 check('Japanese sets <html lang>', (await page.getAttribute('html', 'lang')) === 'ja');
 check('Japanese run button', (await page.textContent('.run-cell')).includes('実行'));
 await setExercise('class Fox\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def shout\n    "Chunky Bacon!"\n  end\nend\nFox.new("Kaz").shout');
