@@ -335,9 +335,11 @@ lessons that start a real course - a lesson on its own belongs in "Ausflüge"
 `"stepper": true` puts ⏯ (step through) beside every ▶ of the lesson but an
 IRB's (`View.lesson_html`, `Course#stepper?`). It is on the Basics whose
 cells are plain Ruby and short, where watching a run teaches something:
-lessons `variablen` to `module` (variablen, strings, wenn, schleifen, muster, arrays, zufall, hashes,
-symbole, sortieren, formatieren, zeit, methoden, geheimschrift, rekursion, knobeln, turtle, struct,
-klassen, module) - assignments, a branch taken, a loop's passes,
+lessons `variablen` to `operatoren` (variablen, strings, wenn, schleifen, muster, arrays, bereiche,
+zufall, hashes, mengen, reduce, listen, symbole, sortieren, formatieren, unicode, zeit, methoden,
+bloecke, geheimschrift, gitter, zahlensysteme, brueche, ausnahmen, rekursion, knobeln, enumeratoren,
+turtle, the algorithm lessons sortierverfahren to markov, struct, klassen, module, operatoren) -
+assignments, a branch taken, a loop's passes,
 a block's variable, a method called and returning, recursion. Not on
 hallo and rechnen (one-line cells: one step), the IRB, nor on 14-19,
 whose cells install gems, start servers or fetch from the web - nothing of
@@ -402,7 +404,7 @@ Cells, per language:
 | `x` | `code`, `probe`, `check`, `hint` | (an `"engine": "ironruby"` lesson) `probe` is IronRuby code run after the learner's, its inspect is the check's local `probe` (§6s) |
 | `c` | `code`, `raises` | a demo that fails on purpose (the errors lesson): `raises` names the error class, and the harness checks the cell raises exactly that |
 | `x` | `code`, `check`, `hint` | the exercise cell of the lesson (one main one; bonus ones below, `"bonus": true`); `check` is Ruby evaluated in the lesson binding with locals `output`, `result`, `code`, `images`, `downloads`, `audios` (the WAVs `show_audio` got), `games` (copies of the games `show_game` made, to play headless) |
-| `x` | `bonus` | `true` on a second exercise at the end of a lesson (after its `<div class='task bonus'>`): checked and praised like the main one, with its own 💡, but the lesson's tick comes from the main exercise alone (`App#bonus_passed`), Alt+R runs the main one, and the harness takes its solutions from `SOLUTIONS["<id>#bonus"]`. Most Basics lessons (rechnen to module, regex, formatieren, dateien) end with one; `fehler`'s is a bug without a message, `turtle`'s a seven-pointed star |
+| `x` | `bonus` | `true` on a second exercise at the end of a lesson (after its `<div class='task bonus'>`): checked and praised like the main one, with its own 💡, but the lesson's tick comes from the main exercise alone (`App#bonus_passed`), Alt+R runs the main one, and the harness takes its solutions from `SOLUTIONS["<id>#bonus"]`. Most Basics lessons (rechnen to operatoren, dateien) end with one; `fehler`'s is a bug without a message, `turtle`'s a seven-pointed star |
 | `x` | `hints`, `solution` | the exercise's help behind 💡 (§6v): `hints` are the lighter hints shown before `hint` (one nudge today: where to start, which method), `solution` a finished solution the learner can compare with and put into the cell. `solution` must be one of `check_harness.rb`'s `SOLUTIONS[id]` for the language (ja shows en's), so what 💡 offers is verified; the browser-only lessons' are run by `browser_test.mjs` |
 | `c`/`x` | `tabs` | Pico lessons (§6r): more files of the cell, each a tab beside `code` (the main file, `app.rb`, or `main` if given). `{"name": "epd2in13.rb", "src": "pico/lib/en/epd2in13.rb"}` is fetched and read-only; `{"name": "dechunk.rb", "code": "...", "readonly": false}` is inline and editable (saved per learner). The worker writes them to `/lib`, the code says `require "epd2in13"` |
 | `c`/`x` | `board`, `bench` | Pico lessons: `board: {"parts": [...]}` runs the cell on the simulated Pico and shows the bench with these parts; `bench` is a script of inputs at fixed times (`{"at": 300, "press": 14}`, `"set"`, `"release"`, `"arena"`, `"ble"`, `"wifi"`) - an exercise with input parts needs one. Its check gets one more local, `board` (§6r) |
