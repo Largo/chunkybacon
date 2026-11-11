@@ -200,7 +200,8 @@ File.write(File.join(TARGET, "NOTICE.md"), <<~MARKDOWN)
     standard library is Ruby's, Ruby license / BSD-2-Clause) and the Dynamic Language Runtime
     (Apache-2.0) from #{PIN["ironruby"]["repo"]} #{PIN["ironruby"]["commit"]} (branch #{PIN["ironruby"]["branch"]}),
     on the .NET #{PIN["ironruby"]["dotnet"]} runtime for browser-wasm (MIT), with Prism (MIT) compiled to
-    WebAssembly and AngleSharp (MIT) behind its Nokogiri.
+    WebAssembly, AngleSharp (MIT) behind its Nokogiri and ZstdSharp 0.8.8 (MIT; a port of
+    zstd 1.5.7, BSD-3-Clause) behind its zstd-ruby.
   #{PIN["nuget"].map { |name, pkg| "- `nuget/#{name}.dll`: #{name} #{pkg["version"]} (#{pkg["license"]}), #{pkg["path"]} of the nuget.org package" }.join("\n")}
 MARKDOWN
 # last: --check and the next run see a complete install only
