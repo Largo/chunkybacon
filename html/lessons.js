@@ -5215,6 +5215,202 @@ window.LESSONS_JSON = JSON.stringify({
             "solution": "first_day = nil\n(1..).each do |day|\n  if (1..day).sum >= 100\n    first_day = day\n    break\n  end\nend"
           }
         ]
+      },
+      "fr": {
+        "title": "Intervalles : de … à",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Intervalles : de … à</h2><p>Dans la leçon {{nr:schleifen}}, vous avez compté dans une boucle avec <code>(1..5).each</code>. Ce <code>1..5</code> est un objet à part entière, un <strong>intervalle</strong> (en anglais <em>range</em>) : tout ce qui va d’un début à une fin. Avec deux points, la fin en fait partie ; avec trois, non – pratique pour les horaires d’ouverture : une boulangerie qui ouvre à 7 h et ferme à 12 h est ouverte pendant les heures <code>7...12</code>, et à 12 h la porte est déjà fermée à clé. <code>to_a</code> transforme un intervalle en array, pour que vous voyiez ce qu’il contient :</p>"
+          },
+          {
+            "t": "c",
+            "code": "dice = 1..6\nbakery = 7...12   # à 12 h, la porte est fermée\np dice.to_a\np bakery.to_a\nbakery.size"
+          },
+          {
+            "t": "h",
+            "html": "<p>Un intervalle ne retient que son début et sa fin, pas tout ce qu’il y a entre les deux – <code>1..1_000_000</code> n’est pas plus gros que <code>1..6</code>. Il répond pourtant à beaucoup de questions que vous connaissez des arrays : <code>size</code>, <code>max</code>, <code>include?</code>, <code>sum</code>. Et pour <code>sum</code>, Ruby n’additionne même pas un million de nombres : il utilise la formule que le jeune Carl Friedrich Gauss aurait trouvée à l’école – (premier + dernier) · nombre / 2 :</p>"
+          },
+          {
+            "t": "c",
+            "code": "million = 1..1_000_000\np million.size\np million.max\np million.include?(4711)\nmillion.sum"
+          },
+          {
+            "t": "h",
+            "html": "<p>Les intervalles fonctionnent avec tout ce qui sait ce qui vient ensuite – les lettres aussi : <code>\"a\"..\"e\"</code>, ce sont les lettres de a à e. Quand vous demandez si quelque chose se trouve dans un intervalle de lettres, il y a une différence subtile : <code>include?</code> demande « est-ce l’un des éléments ? », <code>cover?</code> seulement « est-ce situé entre le début et la fin ? ». Et dans l’ordre alphabétique, « chunky » se trouve entre a et z – exactement comme dans un dictionnaire :</p>"
+          },
+          {
+            "t": "c",
+            "code": "letters = \"a\"..\"z\"\np letters.first(5)\np letters.include?(\"chunky\")   # une des 26 lettres ? non\nletters.cover?(\"chunky\")       # entre \"a\" et \"z\" ? oui"
+          },
+          {
+            "t": "h",
+            "html": "<p>Avec des nombres, les deux reviennent au même, et ils marchent aussi avec des nombres décimaux, qu’aucun array ne pourrait jamais énumérer. Vous vous souvenez de <code>case</code>/<code>when</code> dans la leçon {{nr:wenn}}, sur les décisions ? <code>when 36..38</code> pose exactement cette question à l’intervalle. Kaz teste l’eau de son bain :</p>"
+          },
+          {
+            "t": "c",
+            "code": "water = 37.5\np (36..38).include?(water)\ncase water\nwhen 0...36 then \"too cold\"\nwhen 36..38 then \"just right\"\nelse             \"too hot!\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Essayez <code>water = 38.5</code> : c’est au-dessus de <code>36..38</code>, et Kaz ressort aussitôt. Ensuite, <code>step</code> : il parcourt un intervalle à plus grandes enjambées – la version intervalle de <code>0.step(10, 5)</code>. Avec un bloc, il exécute le bloc à chaque enjambée ; sans bloc, <code>to_a</code> les rassemble. Les nombres décimaux marchent aussi :</p>"
+          },
+          {
+            "t": "c",
+            "code": "(0..20).step(5) { |minute| puts \"minute #{minute}: stir the porridge\" }\np (1..10).step(3).to_a\n(0.0..1.0).step(0.25).to_a"
+          },
+          {
+            "t": "h",
+            "html": "<p>Un intervalle n’a même pas besoin de fin. <code>(1..)</code> compte à partir de 1, encore et encore – c’est un <strong>intervalle infini</strong> (<em>endless range</em>). C’est pratique quand vous ne savez pas jusqu’où il faudra aller. Mais ne lui demandez jamais tout : <code>to_a</code> refuse avec une <code>RangeError</code>, et un <code>each</code> sans <code>break</code> compterait jusqu’à la fin des temps. <code>first(5)</code> ne prend que ce dont vous avez besoin, et <code>break</code> arrête la boucle – ici dès que la réserve de bacon de Chunky, qui double chaque jour, dépasse 500 tranches :</p>"
+          },
+          {
+            "t": "c",
+            "code": "p (1..).first(5)\n(1..).each do |day|\n  strips = 2 ** day\n  puts \"day #{day}: #{strips} strips\"\n  break if strips > 500\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jour 9, avec 512 tranches. Les intervalles maintiennent aussi des valeurs dans leurs limites : <code>clamp</code> ramène un nombre trop grand à la fin de l’intervalle, remonte un nombre trop petit à son début et laisse tous les autres tranquilles. La barre d’énergie de Chunky va de 0 à 100 – le bacon ne peut pas la remplir au-delà de 100, et une longue course ne peut pas la faire descendre sous 0 :</p>"
+          },
+          {
+            "t": "c",
+            "code": "energy = 80\nenergy = (energy + 45).clamp(0..100)    # du bacon !\np energy\nenergy = (energy - 130).clamp(0..100)   # une longue course\nenergy"
+          },
+          {
+            "t": "h",
+            "html": "<p>Et enfin, les intervalles découpent des morceaux d’arrays et de chaînes. Dans la leçon {{nr:strings}}, vous avez écrit <code>greeting[0, 6]</code> : « à partir de la position 0, six caractères ». Avec un intervalle, vous dites plutôt « de la position … à la position … ». Si vous omettez la fin, le morceau va jusqu’au bout, et les nombres négatifs comptent depuis la fin, comme toujours :</p>"
+          },
+          {
+            "t": "c",
+            "code": "queue = %w[Chunky Kaz Isi Bo Mo]\np queue[0..2]    # places 0 à 2\np queue[2..]     # de la place 2 jusqu'à la fin\np queue[-2..]    # les deux derniers\n\"Chunky Bacon\"[7..]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Une règle simple : chaque fois que vous pensez « de … à », écrivez un intervalle – pour compter, pour demander « est-ce dedans ? », dans un <code>case</code>, pour garder une valeur dans ses limites et pour découper un morceau. Deux points incluent la fin, trois l’excluent.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Range.html' target='_blank'>Range</a> · <a href='https://docs.ruby-lang.org/en/4.0/Range.html#method-i-step' target='_blank'>Range#step</a> · <a href='https://docs.ruby-lang.org/en/4.0/Comparable.html#method-i-clamp' target='_blank'>Comparable#clamp</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-5B-5D' target='_blank'>Array#[]</a></div><div class='task'><strong>Exercice :</strong> Chunky a mesuré la température chaque jour pendant une semaine, du lundi au dimanche. Mettez les températures du week-end – les deux dernières – dans <code>weekend</code>, avec un intervalle entre crochets. Et comptez dans <code>comfy</code> combien de jours il a fait entre 18 et 24 degrés.</div>"
+          },
+          {
+            "t": "x",
+            "code": "temperatures = [14, 19, 23, 31, 22, 17, 26]   # du lundi au dimanche\n\n# weekend = ...   # samedi et dimanche : un intervalle entre [ ]\n# comfy = ...     # combien de jours il a fait entre 18 et 24 degrés\n",
+            "hints": [
+              "Pour le week-end : les deux dernières places, c’est <code>-2..</code> (ou <code>5..6</code>). Pour compter : commencez par <code>comfy = 0</code>, parcourez les températures avec <code>each</code> et ajoutez 1 chaque fois que <code>(18..24).include?</code> la température."
+            ],
+            "check": "weekend == [17, 26] && comfy == 3 && code.match?(/18\\.\\.\\.?2[45]/) && code.match?(/temperatures\\[[^\\]]*\\.\\./)",
+            "hint": "<code>weekend = temperatures[-2..]</code>, puis <code>comfy = 0</code> et <code>temperatures.each { |t| comfy += 1 if (18..24).include?(t) }</code>.",
+            "solution": "temperatures = [14, 19, 23, 31, 22, 17, 26]\n\nweekend = temperatures[-2..]\ncomfy = 0\ntemperatures.each do |t|\n  comfy += 1 if (18..24).include?(t)\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Chunky se met à épargner : le jour 1, il met 1 franc dans sa tirelire, le jour 2 deux francs, le jour 3 trois … Après <code>day</code> jours, il a donc <code>(1..day).sum</code> francs. Quel jour a-t-il pour la première fois 100 francs ou plus ? Parcourez les jours avec l’intervalle infini <code>(1..)</code>, arrêtez-vous avec <code>break</code> et mettez le jour dans <code>first_day</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# first_day = ...   # le premier jour avec 100 francs ou plus\n# parcourez (1..) et arrêtez avec break\n",
+            "hints": [
+              "Mettez <code>first_day = nil</code> avant la boucle. Dans <code>(1..).each do |day|</code>, vérifiez si <code>(1..day).sum</code> a atteint 100 – si oui, retenez le jour et faites <code>break</code>."
+            ],
+            "check": "first_day == 14 && code.include?(\"(1..)\") && code.include?(\"break\")",
+            "hint": "<code>first_day = nil</code>, puis <code>(1..).each do |day|</code>, dedans <code>if (1..day).sum &gt;= 100</code> → <code>first_day = day</code> et <code>break</code>, puis deux fois <code>end</code>.",
+            "solution": "first_day = nil\n(1..).each do |day|\n  if (1..day).sum >= 100\n    first_day = day\n    break\n  end\nend"
+          }
+        ]
+      },
+      "it": {
+        "title": "Intervalli: da … a",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Intervalli: da … a</h2><p>Nella lezione {{nr:schleifen}} hai contato in un ciclo con <code>(1..5).each</code>. Quel <code>1..5</code> è un oggetto a sé, un <strong>intervallo</strong> (in inglese <em>range</em>): tutto ciò che va da un inizio a una fine. Con due punti la fine ne fa parte, con tre no. Comodo per gli orari di apertura: una panetteria che apre alle 7 e chiude alle 12 è aperta nelle ore <code>7...12</code>, e alle 12 la porta è già chiusa a chiave. <code>to_a</code> trasforma un intervallo in un array, così puoi vedere che cosa contiene:</p>"
+          },
+          {
+            "t": "c",
+            "code": "dice = 1..6\nbakery = 7...12   # alle 12 la porta è chiusa\np dice.to_a\np bakery.to_a\nbakery.size"
+          },
+          {
+            "t": "h",
+            "html": "<p>Un intervallo ricorda solo il suo inizio e la sua fine, non tutto quello che c'è in mezzo: <code>1..1_000_000</code> non è più grande di <code>1..6</code>. Eppure risponde a molte delle domande che conosci dagli array: <code>size</code>, <code>max</code>, <code>include?</code>, <code>sum</code>. E per <code>sum</code> Ruby non somma nemmeno un milione di numeri: usa la formula che si dice il giovane Carl Friedrich Gauss abbia trovato a scuola, cioè (primo + ultimo) · quantità / 2:</p>"
+          },
+          {
+            "t": "c",
+            "code": "million = 1..1_000_000\np million.size\np million.max\np million.include?(4711)\nmillion.sum"
+          },
+          {
+            "t": "h",
+            "html": "<p>Gli intervalli funzionano con tutto ciò che sa che cosa viene dopo, anche con le lettere: <code>\"a\"..\"e\"</code> sono le lettere dalla a alla e. Quando chiedi se qualcosa sta in un intervallo di lettere, c'è una sottile differenza: <code>include?</code> chiede “è uno degli elementi?”, <code>cover?</code> solo “sta tra l'inizio e la fine?”. E in ordine alfabetico “chunky” sta tra a e z, proprio come in un dizionario:</p>"
+          },
+          {
+            "t": "c",
+            "code": "letters = \"a\"..\"z\"\np letters.first(5)\np letters.include?(\"chunky\")   # una delle 26 lettere? no\nletters.cover?(\"chunky\")       # tra \"a\" e \"z\"? sì"
+          },
+          {
+            "t": "h",
+            "html": "<p>Con i numeri le due cose coincidono, e funzionano anche con i decimali, che nessun array potrebbe mai elencare. Ti ricordi <code>case</code>/<code>when</code> dalla lezione {{nr:wenn}}, quella sulle decisioni? <code>when 36..38</code> pone all'intervallo proprio questa domanda. Kaz prova l'acqua del bagno:</p>"
+          },
+          {
+            "t": "c",
+            "code": "water = 37.5\np (36..38).include?(water)\ncase water\nwhen 0...36 then \"too cold\"\nwhen 36..38 then \"just right\"\nelse             \"too hot!\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Prova <code>water = 38.5</code>: sta sopra <code>36..38</code>, e Kaz salta subito fuori. Poi c'è <code>step</code>: percorre un intervallo a passi più lunghi, la versione per intervalli di <code>0.step(10, 5)</code>. Con un blocco esegue il blocco a ogni passo, senza blocco <code>to_a</code> raccoglie i passi. Funziona anche con i decimali:</p>"
+          },
+          {
+            "t": "c",
+            "code": "(0..20).step(5) { |minute| puts \"minute #{minute}: stir the porridge\" }\np (1..10).step(3).to_a\n(0.0..1.0).step(0.25).to_a"
+          },
+          {
+            "t": "h",
+            "html": "<p>Un intervallo non ha nemmeno bisogno di una fine. <code>(1..)</code> conta da 1 in poi, all'infinito: è un <strong>intervallo infinito</strong> (<em>endless range</em>). È comodo quando non sai fin dove dovrai arrivare. Solo, non chiedergli mai tutto: <code>to_a</code> si rifiuta con un <code>RangeError</code>, e un <code>each</code> senza <code>break</code> conterebbe fino alla fine dei tempi. <code>first(5)</code> prende solo quello che ti serve, e <code>break</code> ferma il ciclo, qui appena la scorta di bacon di Chunky, che raddoppia ogni giorno, supera le 500 fette:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p (1..).first(5)\n(1..).each do |day|\n  strips = 2 ** day\n  puts \"day #{day}: #{strips} strips\"\n  break if strips > 500\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Giorno 9, con 512 fette. Gli intervalli tengono anche i valori entro i loro limiti: <code>clamp</code> riporta un numero troppo grande alla fine dell'intervallo, alza uno troppo piccolo fino al suo inizio e lascia stare tutti gli altri. La barra dell'energia di Chunky va da 0 a 100: il bacon non può riempirla oltre 100, e una lunga corsa non può farla scendere sotto 0:</p>"
+          },
+          {
+            "t": "c",
+            "code": "energy = 80\nenergy = (energy + 45).clamp(0..100)    # bacon!\np energy\nenergy = (energy - 130).clamp(0..100)   # una lunga corsa\nenergy"
+          },
+          {
+            "t": "h",
+            "html": "<p>E infine gli intervalli ritagliano pezzi da array e stringhe. Nella lezione {{nr:strings}} hai scritto <code>greeting[0, 6]</code>: “dalla posizione 0, sei caratteri”. Con un intervallo dici invece “dalla posizione … alla posizione …”. Se ometti la fine, il pezzo arriva fino in fondo, e i numeri negativi contano dalla fine, come sempre:</p>"
+          },
+          {
+            "t": "c",
+            "code": "queue = %w[Chunky Kaz Isi Bo Mo]\np queue[0..2]    # posti da 0 a 2\np queue[2..]     # dal posto 2 fino alla fine\np queue[-2..]    # gli ultimi due\n\"Chunky Bacon\"[7..]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Una regola pratica: ogni volta che pensi “da … a”, scrivi un intervallo, per contare, per chiedere “c'è dentro?”, in un <code>case</code>, per tenere un valore entro i suoi limiti e per ritagliare un pezzo. Due punti includono la fine, tre la escludono.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Range.html' target='_blank'>Range</a> · <a href='https://docs.ruby-lang.org/en/4.0/Range.html#method-i-step' target='_blank'>Range#step</a> · <a href='https://docs.ruby-lang.org/en/4.0/Comparable.html#method-i-clamp' target='_blank'>Comparable#clamp</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-5B-5D' target='_blank'>Array#[]</a></div><div class='task'><strong>Esercizio:</strong> Chunky ha misurato la temperatura ogni giorno per una settimana, da lunedì a domenica. Metti le temperature del fine settimana (le ultime due) in <code>weekend</code>, con un intervallo tra parentesi quadre. E conta in <code>comfy</code> in quanti giorni c'erano tra 18 e 24 gradi.</div>"
+          },
+          {
+            "t": "x",
+            "code": "temperatures = [14, 19, 23, 31, 22, 17, 26]   # da lunedì a domenica\n\n# weekend = ...   # sabato e domenica: un intervallo tra [ ]\n# comfy = ...     # in quanti giorni c'erano da 18 a 24 gradi\n",
+            "hints": [
+              "Per il fine settimana: gli ultimi due posti sono <code>-2..</code> (oppure <code>5..6</code>). Per contare: comincia con <code>comfy = 0</code>, percorri le temperature con <code>each</code> e aggiungi 1 ogni volta che <code>(18..24).include?</code> la temperatura."
+            ],
+            "check": "weekend == [17, 26] && comfy == 3 && code.match?(/18\\.\\.\\.?2[45]/) && code.match?(/temperatures\\[[^\\]]*\\.\\./)",
+            "hint": "<code>weekend = temperatures[-2..]</code>, poi <code>comfy = 0</code> e <code>temperatures.each { |t| comfy += 1 if (18..24).include?(t) }</code>.",
+            "solution": "temperatures = [14, 19, 23, 31, 22, 17, 26]\n\nweekend = temperatures[-2..]\ncomfy = 0\ntemperatures.each do |t|\n  comfy += 1 if (18..24).include?(t)\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Chunky comincia a risparmiare: il giorno 1 mette 1 franco nel salvadanaio, il giorno 2 due franchi, il giorno 3 tre … Quindi dopo <code>day</code> giorni ha <code>(1..day).sum</code> franchi. In quale giorno ha per la prima volta 100 franchi o più? Percorri i giorni con l'intervallo infinito <code>(1..)</code>, fermati con <code>break</code> e metti il giorno in <code>first_day</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# first_day = ...   # il primo giorno con 100 franchi o più\n# percorri (1..) e fermati con break\n",
+            "hints": [
+              "Imposta <code>first_day = nil</code> prima del ciclo. Dentro <code>(1..).each do |day|</code> controlla se <code>(1..day).sum</code> ha raggiunto 100: se sì, ricordati il giorno e fai <code>break</code>."
+            ],
+            "check": "first_day == 14 && code.include?(\"(1..)\") && code.include?(\"break\")",
+            "hint": "<code>first_day = nil</code>, poi <code>(1..).each do |day|</code>, dentro <code>if (1..day).sum &gt;= 100</code> → <code>first_day = day</code> e <code>break</code>, poi due volte <code>end</code>.",
+            "solution": "first_day = nil\n(1..).each do |day|\n  if (1..day).sum >= 100\n    first_day = day\n    break\n  end\nend"
+          }
+        ]
       }
     },
     {
@@ -6313,6 +6509,170 @@ window.LESSONS_JSON = JSON.stringify({
             "solution": "sentence = \"The quick brown fox jumps over the lazy dog\"\nother = \"Chunky the fox jumps over the lazy dog\"\n\nalphabet = (\"a\"..\"z\").to_set\npangram = alphabet.subset?(sentence.downcase.chars.to_set)\nmissing = (alphabet - other.downcase.chars.to_set).sort.join"
           }
         ]
+      },
+      "fr": {
+        "title": "Les ensembles",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Les ensembles</h2><p>Un array est une liste : il a un ordre, et la même chose peut y apparaître encore et encore. Mais souvent, seul compte <em>ce qui</em> s’y trouve – les invités d’une fête, les autocollants de votre album, les lettres d’un mot. C’est un <strong>ensemble</strong> (en anglais <em>set</em>), et Ruby l’a intégré : <code>Set</code>. (Les anciennes versions de Ruby avaient d’abord besoin de <code>require \"set\"</code> – la ligne ne fait pas de mal, alors elle reste.) Dans un ensemble, chaque chose n’est présente qu’une fois – les doublons disparaissent tout simplement :</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"set\"\nguests = Set[\"Chunky\", \"Kaz\", \"Chunky\", \"Isi\", \"Kaz\"]\np guests\nguests.size"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ruby affiche un ensemble sous la forme <code>Set[…]</code>. Chunky et Kaz ont été invités deux fois – l’ensemble ne les compte qu’une fois. On ajoute avec <code>&lt;&lt;</code> ou <code>add</code> ; ajouter ce qui y est déjà ne change rien. <code>include?</code> demande si quelque chose s’y trouve – et pour un ensemble, c’est rapide, quelle que soit sa taille : un ensemble fonctionne comme un hash qui n’aurait que des clés (leçon {{nr:hashes}}), il va donc chercher l’élément directement au lieu de parcourir toute la liste :</p>"
+          },
+          {
+            "t": "c",
+            "code": "album = Set.new\nalbum << \"fox\" << \"owl\"\nalbum.add(\"fox\")          # déjà dedans : rien ne se passe\np album.include?(\"owl\")\nalbum.size"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>add?</code>, avec un point d’interrogation, ajoute aussi, mais il vous dit en plus si cela a marché : si l’élément y était déjà, il renvoie <code>nil</code>. Ainsi, vous remarquez la première répétition pendant que vous êtes encore en train de collecter – ici le premier nombre tiré une deuxième fois. Avec ⏯, vous pouvez regarder <code>seen</code> grandir :</p>"
+          },
+          {
+            "t": "c",
+            "code": "rolls = [4, 2, 6, 2, 5, 4]\nseen = Set.new\nrolls.each do |roll|\n  unless seen.add?(roll)\n    puts \"#{roll} comes up for the second time!\"\n    break\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Les ensembles montrent leur vraie force quand on en compare deux. Qu’est-ce que Chunky et Kaz aiment au petit-déjeuner ? <code>&amp;</code>, c’est ce que <em>tous les deux</em> aiment, <code>|</code> ce qu’au moins l’un des deux aime, <code>-</code> ce que seul Chunky aime, et <code>^</code> ce qu’exactement l’un des deux aime – pensez à deux cercles qui se chevauchent :</p>"
+          },
+          {
+            "t": "c",
+            "code": "chunky = Set[\"bacon\", \"egg\", \"toast\", \"jam\"]\nkaz = Set[\"egg\", \"fish\", \"toast\", \"honey\"]\np chunky & kaz    # les deux\np chunky | kaz    # au moins l'un des deux\np chunky - kaz    # seulement Chunky\nchunky ^ kaz      # exactement l'un des deux"
+          },
+          {
+            "t": "h",
+            "html": "<p>Les arrays connaissent d’ailleurs aussi <code>&amp;</code>, <code>|</code> et <code>-</code> – mais avec un ensemble, il est clair que l’ordre et les doublons ne comptent pas. Il y a aussi des questions sur deux ensembles pris en entier : l’un est-il entièrement contenu dans l’autre (<code>subset?</code>), l’un contient-il l’autre (<code>superset?</code>), les deux n’ont-ils rien en commun (<code>disjoint?</code>) ? Y a-t-il assez dans le garde-manger pour des crêpes, et assez pour des gaufres ?</p>"
+          },
+          {
+            "t": "c",
+            "code": "pantry = Set[\"flour\", \"egg\", \"milk\", \"sugar\"]\npancakes = Set[\"flour\", \"egg\", \"milk\"]\nwaffles = Set[\"flour\", \"egg\", \"butter\"]\np pancakes.subset?(pantry)\np pantry.superset?(pancakes)     # la même chose, vue depuis le garde-manger\np waffles.subset?(pantry)\np waffles - pantry               # encore à acheter\npantry.disjoint?(Set[\"fish\", \"rice\"])"
+          },
+          {
+            "t": "h",
+            "html": "<p>Des crêpes, oui ; des gaufres, seulement avec du beurre du magasin. Pour finir : <code>to_set</code> transforme n’importe quelle liste en ensemble. Deux ensembles sont égaux quand ils contiennent les mêmes choses – dans n’importe quel ordre, contrairement aux arrays. Alors, quand prendre un ensemble, et quand un array avec <code>uniq</code> suffit-il ? <code>uniq</code> fait l’affaire quand vous voulez retirer une fois les doublons d’une liste, et il garde l’ordre. Un ensemble est le bon outil quand vous ajoutez sans cesse et demandez <code>include?</code>, ou quand vous comparez des groupes avec <code>&amp;</code>, <code>|</code> et <code>-</code> :</p>"
+          },
+          {
+            "t": "c",
+            "code": "letters = \"banana\".chars\np letters.uniq            # un array : l'ordre est conservé\np letters.to_set          # un ensemble (set)\np Set[1, 2, 3] == Set[3, 2, 1]\n[1, 2, 3] == [3, 2, 1]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Une règle simple : un array quand l’ordre ou les répétitions comptent (une file d’attente, une liste de meilleurs scores, une liste de courses avec trois œufs), un ensemble quand seule compte la question « dedans ou pas ? » (qui vient, ce que nous avons, ce qui manque encore).</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Set.html' target='_blank'>Set</a> · <a href='https://docs.ruby-lang.org/en/4.0/Set.html#method-i-add-3F' target='_blank'>Set#add?</a> · <a href='https://docs.ruby-lang.org/en/4.0/Set.html#method-i-subset-3F' target='_blank'>Set#subset?</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-to_set' target='_blank'>Enumerable#to_set</a></div><div class='task'><strong>Exercice :</strong> Chunky et Kaz collectionnent des autocollants d’animaux et ont plein de doubles. Trouvez, sous forme d’ensembles : <code>both</code> – les autocollants que tous les deux possèdent ; <code>for_kaz</code> – ceux que Chunky a et qui manquent encore à Kaz. Et comptez dans <code>kinds</code> combien d’autocollants différents ils ont à eux deux.</div>"
+          },
+          {
+            "t": "x",
+            "code": "chunky_stickers = %w[fox owl bear fox frog owl]\nkaz_stickers = %w[owl hedgehog frog frog deer]\n\n# les deux = ...      # les autocollants que les deux possèdent, en set\n# for_kaz = ...   # les autocollants de Chunky qui manquent à Kaz, en set\n# kinds = ...     # combien d'autocollants différents ils ont ensemble\n",
+            "hints": [
+              "Transformez d’abord les deux listes en ensembles avec <code>to_set</code>. Ensuite, c’est un opérateur à chaque fois : <code>&amp;</code> pour les deux, <code>-</code> pour « Chunky l’a, Kaz non », et <code>|</code> avec <code>size</code> pour tous ensemble."
+            ],
+            "check": "both.is_a?(Set) && both == Set[\"owl\", \"frog\"] && for_kaz.is_a?(Set) && for_kaz == Set[\"fox\", \"bear\"] && kinds == 6 && (code.include?(\"&\") || code.include?(\"intersection\"))",
+            "hint": "<code>both = chunky_stickers.to_set &amp; kaz_stickers.to_set</code>, <code>for_kaz = chunky_stickers.to_set - kaz_stickers.to_set</code> et <code>kinds = (chunky_stickers.to_set | kaz_stickers.to_set).size</code>.",
+            "solution": "chunky_stickers = %w[fox owl bear fox frog owl]\nkaz_stickers = %w[owl hedgehog frog frog deer]\n\nboth = chunky_stickers.to_set & kaz_stickers.to_set\nfor_kaz = chunky_stickers.to_set - kaz_stickers.to_set\nkinds = (chunky_stickers.to_set | kaz_stickers.to_set).size"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Un <strong>pangramme</strong> est une phrase qui utilise au moins une fois chaque lettre de a à z – comme la célèbre phrase anglaise ci-dessous, avec un renard dedans, qu’on utilisait autrefois pour essayer les machines à écrire. Déterminez dans <code>pangram</code> si <code>sentence</code> en est un (<code>true</code> ou <code>false</code>), et dans <code>missing</code> quelles lettres manquent à <code>other</code> – en une seule chaîne, triée de a à z. Les majuscules comptent comme des minuscules, et <code>(\"a\"..\"z\").to_set</code> est l’alphabet entier sous forme d’ensemble.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "sentence = \"The quick brown fox jumps over the lazy dog\"\nother = \"Chunky the fox jumps over the lazy dog\"\n\n# pangram = ...   # true si sentence contient toutes les lettres de a à z\n# missing = ...   # les lettres qui manquent à other, en une chaîne, de a à z\n",
+            "hints": [
+              "Transformez chaque phrase en un ensemble de ses lettres : <code>downcase</code>, puis <code>chars</code>, puis <code>to_set</code>. Un pangramme est une phrase dont l’ensemble contient l’alphabet entier – <code>subset?</code>. Ce qui manque, c’est l’alphabet <code>-</code> les lettres ; <code>sort</code> et <code>join</code> en font la chaîne."
+            ],
+            "check": "pangram == true && missing == \"biqw\" && (code.include?(\"Set\") || code.include?(\"to_set\"))",
+            "hint": "<code>alphabet = (\"a\"..\"z\").to_set</code>, puis <code>pangram = alphabet.subset?(sentence.downcase.chars.to_set)</code> et <code>missing = (alphabet - other.downcase.chars.to_set).sort.join</code>.",
+            "solution": "sentence = \"The quick brown fox jumps over the lazy dog\"\nother = \"Chunky the fox jumps over the lazy dog\"\n\nalphabet = (\"a\"..\"z\").to_set\npangram = alphabet.subset?(sentence.downcase.chars.to_set)\nmissing = (alphabet - other.downcase.chars.to_set).sort.join"
+          }
+        ]
+      },
+      "it": {
+        "title": "Insiemi",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Insiemi</h2><p>Un array è un elenco: ha un ordine, e la stessa cosa può comparirci più e più volte. Spesso però ti interessa solo <em>che cosa</em> c'è: gli invitati a una festa, le figurine del tuo album, le lettere di una parola. Questo è un <strong>insieme</strong> (in inglese <em>set</em>), e Ruby ce l'ha già integrato: <code>Set</code>. (Le versioni più vecchie di Ruby avevano bisogno prima di <code>require \"set\"</code>; la riga non fa danni, quindi resta.) In un insieme ogni cosa c'è una volta sola: i doppioni spariscono e basta:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"set\"\nguests = Set[\"Chunky\", \"Kaz\", \"Chunky\", \"Isi\", \"Kaz\"]\np guests\nguests.size"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ruby mostra un insieme come <code>Set[…]</code>. Chunky e Kaz erano stati invitati due volte, l'insieme li conta una volta sola. Si aggiunge con <code>&lt;&lt;</code> o <code>add</code>; aggiungere ciò che c'è già non cambia niente. <code>include?</code> chiede se qualcosa c'è, e per un insieme è veloce, per quanto grande diventi: un insieme funziona come un hash con sole chiavi (lezione {{nr:hashes}}), quindi va a cercare l'elemento direttamente invece di scorrere tutto l'elenco:</p>"
+          },
+          {
+            "t": "c",
+            "code": "album = Set.new\nalbum << \"fox\" << \"owl\"\nalbum.add(\"fox\")          # c'è già: non succede nulla\np album.include?(\"owl\")\nalbum.size"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>add?</code>, con il punto interrogativo, aggiunge anche lui, ma ti dice pure se ha funzionato: se l'elemento c'era già, restituisce <code>nil</code>. Così ti accorgi della prima ripetizione mentre stai ancora raccogliendo: qui il primo numero uscito per la seconda volta. Con ⏯ puoi guardare <code>seen</code> che cresce:</p>"
+          },
+          {
+            "t": "c",
+            "code": "rolls = [4, 2, 6, 2, 5, 4]\nseen = Set.new\nrolls.each do |roll|\n  unless seen.add?(roll)\n    puts \"#{roll} comes up for the second time!\"\n    break\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Gli insiemi mostrano la loro vera forza quando ne confronti due. Che cosa piace a Chunky e a Kaz per colazione? <code>&amp;</code> è ciò che piace a <em>entrambi</em>, <code>|</code> ciò che piace ad almeno uno dei due, <code>-</code> ciò che piace solo a Chunky e <code>^</code> ciò che piace a esattamente uno dei due. Pensa a due cerchi che si sovrappongono:</p>"
+          },
+          {
+            "t": "c",
+            "code": "chunky = Set[\"bacon\", \"egg\", \"toast\", \"jam\"]\nkaz = Set[\"egg\", \"fish\", \"toast\", \"honey\"]\np chunky & kaz    # entrambi\np chunky | kaz    # almeno uno dei due\np chunky - kaz    # solo Chunky\nchunky ^ kaz      # esattamente uno dei due"
+          },
+          {
+            "t": "h",
+            "html": "<p>Tra l'altro anche gli array conoscono <code>&amp;</code>, <code>|</code> e <code>-</code>, ma con un insieme è chiaro che ordine e doppioni non contano. Poi ci sono domande su due insiemi presi per intero: uno sta completamente dentro l'altro (<code>subset?</code>), uno contiene l'altro (<code>superset?</code>), i due non hanno niente in comune (<code>disjoint?</code>)? In dispensa c'è abbastanza per i pancake, e c'è abbastanza per i waffle?</p>"
+          },
+          {
+            "t": "c",
+            "code": "pantry = Set[\"flour\", \"egg\", \"milk\", \"sugar\"]\npancakes = Set[\"flour\", \"egg\", \"milk\"]\nwaffles = Set[\"flour\", \"egg\", \"butter\"]\np pancakes.subset?(pantry)\np pantry.superset?(pancakes)     # la stessa cosa, vista dalla dispensa\np waffles.subset?(pantry)\np waffles - pantry               # ancora da comprare\npantry.disjoint?(Set[\"fish\", \"rice\"])"
+          },
+          {
+            "t": "h",
+            "html": "<p>Pancake sì, waffle solo con il burro del negozio. Per finire: <code>to_set</code> trasforma qualsiasi elenco in un insieme. Due insiemi sono uguali quando contengono le stesse cose, in qualunque ordine, a differenza degli array. Allora, quando prendi un insieme, e quando basta un array con <code>uniq</code>? <code>uniq</code> va bene quando vuoi togliere una volta i doppioni da un elenco, e mantiene l'ordine. Un insieme è lo strumento giusto quando continui ad aggiungere e a chiedere <code>include?</code>, o quando confronti gruppi con <code>&amp;</code>, <code>|</code> e <code>-</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "letters = \"banana\".chars\np letters.uniq            # un array: l'ordine resta\np letters.to_set          # un insieme (set)\np Set[1, 2, 3] == Set[3, 2, 1]\n[1, 2, 3] == [3, 2, 1]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Una regola pratica: un array quando contano l'ordine o le ripetizioni (una coda, una classifica, una lista della spesa con tre uova), un insieme quando conta solo “c'è o non c'è?” (chi viene, che cosa abbiamo, che cosa manca ancora).</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Set.html' target='_blank'>Set</a> · <a href='https://docs.ruby-lang.org/en/4.0/Set.html#method-i-add-3F' target='_blank'>Set#add?</a> · <a href='https://docs.ruby-lang.org/en/4.0/Set.html#method-i-subset-3F' target='_blank'>Set#subset?</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-to_set' target='_blank'>Enumerable#to_set</a></div><div class='task'><strong>Esercizio:</strong> Chunky e Kaz collezionano figurine di animali e hanno un sacco di doppioni. Scopri, sotto forma di insiemi: <code>both</code>, le figurine che hanno entrambi; <code>for_kaz</code>, quelle che Chunky ha e che a Kaz mancano ancora. E conta in <code>kinds</code> quante figurine diverse hanno in tutto loro due.</div>"
+          },
+          {
+            "t": "x",
+            "code": "chunky_stickers = %w[fox owl bear fox frog owl]\nkaz_stickers = %w[owl hedgehog frog frog deer]\n\n# entrambi = ...      # le figurine che hanno entrambi, come set\n# for_kaz = ...   # le figurine di Chunky che mancano a Kaz, come set\n# kinds = ...     # quante figurine diverse hanno insieme\n",
+            "hints": [
+              "Prima trasforma entrambi gli elenchi in insiemi con <code>to_set</code>. Poi basta un operatore per ciascuna: <code>&amp;</code> per entrambi, <code>-</code> per “Chunky ce l'ha, Kaz no”, e <code>|</code> con <code>size</code> per tutte insieme."
+            ],
+            "check": "both.is_a?(Set) && both == Set[\"owl\", \"frog\"] && for_kaz.is_a?(Set) && for_kaz == Set[\"fox\", \"bear\"] && kinds == 6 && (code.include?(\"&\") || code.include?(\"intersection\"))",
+            "hint": "<code>both = chunky_stickers.to_set &amp; kaz_stickers.to_set</code>, <code>for_kaz = chunky_stickers.to_set - kaz_stickers.to_set</code> e <code>kinds = (chunky_stickers.to_set | kaz_stickers.to_set).size</code>.",
+            "solution": "chunky_stickers = %w[fox owl bear fox frog owl]\nkaz_stickers = %w[owl hedgehog frog frog deer]\n\nboth = chunky_stickers.to_set & kaz_stickers.to_set\nfor_kaz = chunky_stickers.to_set - kaz_stickers.to_set\nkinds = (chunky_stickers.to_set | kaz_stickers.to_set).size"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Un <strong>pangramma</strong> è una frase che usa almeno una volta ogni lettera dalla a alla z, come la famosa frase inglese qui sotto, con dentro una volpe, che un tempo si usava per provare le macchine da scrivere. Scopri in <code>pangram</code> se <code>sentence</code> lo è (<code>true</code> o <code>false</code>), e in <code>missing</code> quali lettere mancano a <code>other</code>, in un'unica stringa ordinata dalla a alla z. Le maiuscole contano come minuscole, e <code>(\"a\"..\"z\").to_set</code> è l'intero alfabeto come insieme.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "sentence = \"The quick brown fox jumps over the lazy dog\"\nother = \"Chunky the fox jumps over the lazy dog\"\n\n# pangram = ...   # true se sentence ha tutte le lettere dalla a alla z\n# missing = ...   # le lettere che mancano a other, in una stringa, dalla a alla z\n",
+            "hints": [
+              "Trasforma ogni frase in un insieme delle sue lettere: <code>downcase</code>, poi <code>chars</code>, poi <code>to_set</code>. Un pangramma è una frase il cui insieme contiene tutto l'alfabeto: <code>subset?</code>. Quello che manca è l'alfabeto <code>-</code> le lettere; <code>sort</code> e <code>join</code> ne fanno la stringa."
+            ],
+            "check": "pangram == true && missing == \"biqw\" && (code.include?(\"Set\") || code.include?(\"to_set\"))",
+            "hint": "<code>alphabet = (\"a\"..\"z\").to_set</code>, poi <code>pangram = alphabet.subset?(sentence.downcase.chars.to_set)</code> e <code>missing = (alphabet - other.downcase.chars.to_set).sort.join</code>.",
+            "solution": "sentence = \"The quick brown fox jumps over the lazy dog\"\nother = \"Chunky the fox jumps over the lazy dog\"\n\nalphabet = (\"a\"..\"z\").to_set\npangram = alphabet.subset?(sentence.downcase.chars.to_set)\nmissing = (alphabet - other.downcase.chars.to_set).sort.join"
+          }
+        ]
       }
     },
     {
@@ -7067,6 +7427,204 @@ window.LESSONS_JSON = JSON.stringify({
             "solution": "recipes = {\n  \"pancakes\" => { \"egg\" => 2, \"milk\" => 3, \"flour\" => 2 },\n  \"omelette\" => { \"egg\" => 3, \"cheese\" => 1 }\n}\nweek = [\"pancakes\", \"omelette\", \"pancakes\"]\n\nshopping = week.each_with_object(Hash.new(0)) do |dish, list|\n  recipes[dish].each { |item, amount| list[item] += amount }\nend"
           }
         ]
+      },
+      "fr": {
+        "title": "Replier une liste : reduce et each_with_object",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Replier une liste : reduce et each_with_object</h2><p><code>sum</code> additionne toute une liste en un seul nombre, <code>max_by</code> en choisit un gagnant. Tous deux <strong>replient</strong> (en anglais <em>fold</em>) une liste en une seule valeur. Mais que faire si Ruby n’a pas de méthode toute prête pour le repli dont vous avez besoin ? Alors vous l’écrivez vous-même. D’abord la manière simple : une variable qui transporte le résultat pendant que <code>each</code> parcourt la liste – ici, Chunky compte ses bouchées de bacon :</p>"
+          },
+          {
+            "t": "c",
+            "code": "bites = [3, 5, 2, 4]\ntotal = 0\nbites.each do |n|\n  total = total + n\nend\ntotal"
+          },
+          {
+            "t": "h",
+            "html": "<p>Une valeur de départ, puis chaque élément modifie la valeur courante – ce schéma est si courant qu’il a son propre nom : <code>reduce</code>. Vous lui donnez la valeur de départ ; le bloc reçoit la valeur courante (l’<strong>accumulateur</strong>, ici <code>sum</code>) et l’élément suivant, et ce que le bloc renvoie devient le nouvel accumulateur. Plus besoin de variable en dehors du bloc. Avancez pas à pas avec ⏯ et regardez <code>sum</code> grandir – 0, 3, 8, 10 – jusqu’à ce que 14 en sorte :</p>"
+          },
+          {
+            "t": "c",
+            "code": "bites.reduce(0) do |sum, n|\n  sum + n\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Quand le bloc ne fait qu’appliquer un opérateur, donnez à <code>reduce</code> le nom de l’opérateur sous forme de symbole : <code>reduce(:+)</code> additionne, <code>reduce(:*)</code> multiplie. Sans valeur de départ, <code>reduce</code> commence simplement par le premier élément. Et <code>inject</code> est exactement la même méthode sous son ancien nom – vous croiserez les deux :</p>"
+          },
+          {
+            "t": "c",
+            "code": "p bites.reduce(:+)\np (1..5).reduce(:*)    # 1 * 2 * 3 * 4 * 5\n[2, 3, 4].inject(:*)"
+          },
+          {
+            "t": "h",
+            "html": "<p>L’accumulateur n’est pas forcément un nombre – il peut être n’importe quoi. Ici, c’est le mot le plus long jusqu’à présent : à chaque tour, le bloc garde le plus long des deux mots. C’est à peu près ainsi que <code>max_by</code> fonctionne à l’intérieur :</p>"
+          },
+          {
+            "t": "c",
+            "code": "words = %w[egg bacon toast pancake jam]\nwords.reduce do |longest, word|\n  word.length > longest.length ? word : longest\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Voici maintenant l’erreur classique. Ce que renvoie la <em>dernière ligne</em> du bloc devient le nouvel accumulateur – alors que se passe-t-il quand Chunky met un <code>puts</code> à la fin, pour observer ?</p>"
+          },
+          {
+            "t": "c",
+            "code": "bites.reduce(0) do |sum, n|\n  sum + n\n  puts \"so far: #{sum}\"\nend",
+            "raises": "NoMethodError"
+          },
+          {
+            "t": "h",
+            "html": "<p>Une <code>NoMethodError</code> : <code>undefined method '+' for nil</code>. Au premier tour, <code>sum + n</code> a été calculé – puis jeté, parce que <code>puts</code> venait en dernier, et <code>puts</code> renvoie <code>nil</code>. Au deuxième tour, <code>sum</code> valait donc nil, et nil ne sait pas additionner. Un <code>if</code> sans <code>else</code> sur la dernière ligne fait la même chose chaque fois que sa condition est fausse. La règle : le nouvel accumulateur va sur la dernière ligne du bloc. Voici la version réparée – <code>puts</code> d’abord, la somme en dernier :</p>"
+          },
+          {
+            "t": "c",
+            "code": "bites.reduce(0) do |sum, n|\n  puts \"so far: #{sum}, now #{n}\"\n  sum + n\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Souvent, le résultat est un hash ou un array que vous remplissez petit à petit. C’est possible avec <code>reduce</code>, mais alors chaque tour doit se terminer de nouveau par le hash – facile à oublier, et vous savez maintenant ce qui se passe dans ce cas. <code>each_with_object</code> est fait pour cela : vous lui donnez l’objet vide, le bloc le remplit, et à la fin la méthode renvoie l’objet, quelle que soit la dernière ligne du bloc. Attention à l’ordre des paramètres du bloc – l’élément d’abord, puis l’objet. La cuisine additionne les commandes :</p>"
+          },
+          {
+            "t": "c",
+            "code": "orders = [\n  { food: \"bacon\", amount: 2 },\n  { food: \"egg\", amount: 1 },\n  { food: \"bacon\", amount: 3 }\n]\norders.each_with_object(Hash.new(0)) do |order, per_food|\n  per_food[order[:food]] += order[:amount]\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Avec un array vide, <code>each_with_object([])</code> collecte – et contrairement à <code>map</code>, un élément peut ajouter plusieurs entrées, ou aucune. Le serveur pose chaque assiette sur le plateau :</p>"
+          },
+          {
+            "t": "c",
+            "code": "orders.each_with_object([]) do |order, tray|\n  order[:amount].times { tray << order[:food] }\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Une règle simple : si une méthode toute prête fait le repli – <code>sum</code>, <code>max_by</code>, <code>tally</code> – prenez-la. Sinon, prenez <code>reduce</code> quand le résultat est une seule valeur qui change d’un tour à l’autre, et <code>each_with_object</code> quand vous remplissez un hash ou un array. Avec <code>reduce</code>, la nouvelle valeur va toujours sur la dernière ligne.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-reduce' target='_blank'>Enumerable#reduce</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-inject' target='_blank'>Enumerable#inject</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-each_with_object' target='_blank'>Enumerable#each_with_object</a></div><div class='task'><strong>Exercice :</strong> L’énergie de Chunky commence la journée à 50, et elle ne descend jamais sous 0 ni ne dépasse 100. Repliez les <code>events</code> de la journée en <code>energy</code> avec <code>reduce</code> : ajoutez chaque changement, et après chaque étape gardez le résultat dans <code>0..100</code> – avec <code>clamp</code> de la leçon {{nr:bereiche}}. (Tout additionner simplement donnerait 75 – mais à 100, Chunky est rassasié, peu importe le bacon qui reste.)</div>"
+          },
+          {
+            "t": "x",
+            "code": "# du bacon, encore du bacon, une longue course, une sieste, le dîner\nevents = [30, 40, -90, 20, 25]\n\n# energy = ...   # le soir : départ à 50, rester entre 0 et 100\n",
+            "hints": [
+              "La valeur de départ 50 va entre les parenthèses : <code>reduce(50)</code>. Le bloc reçoit l’énergie jusqu’ici et le changement suivant ; sa dernière ligne est la nouvelle énergie – la somme, passée par <code>clamp(0..100)</code>."
+            ],
+            "check": "energy == 55 && (code.include?(\"reduce\") || code.include?(\"inject\")) && code.include?(\"clamp\")",
+            "hint": "<code>energy = events.reduce(50) { |e, change| (e + change).clamp(0..100) }</code>.",
+            "solution": "events = [30, 40, -90, 20, 25]\n\nenergy = events.reduce(50) do |e, change|\n  (e + change).clamp(0..100)\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Kaz cuisine pour toute la semaine et a besoin d’une liste de courses. <code>recipes</code> indique ce qu’il faut pour chaque plat, <code>week</code> ce qu’elle va cuisiner. Construisez le hash <code>shopping</code> avec <code>each_with_object</code> : chaque ingrédient et la quantité nécessaire pour toute la semaine – <code>{ \"egg\" =&gt; 7, … }</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "recipes = {\n  \"pancakes\" => { \"egg\" => 2, \"milk\" => 3, \"flour\" => 2 },\n  \"omelette\" => { \"egg\" => 3, \"cheese\" => 1 }\n}\nweek = [\"pancakes\", \"omelette\", \"pancakes\"]\n\n# shopping = ...   # chaque ingrédient => la quantité nécessaire pour la semaine\n",
+            "hints": [
+              "Commencez par <code>week.each_with_object(Hash.new(0))</code>. Pour chaque plat, cherchez ses ingrédients dans <code>recipes</code> et parcourez-les avec <code>each</code> – ce bloc reçoit un ingrédient et sa quantité, que vous ajoutez au hash."
+            ],
+            "check": "shopping == { \"egg\" => 7, \"milk\" => 6, \"flour\" => 4, \"cheese\" => 1 } && code.include?(\"each_with_object\")",
+            "hint": "<code>shopping = week.each_with_object(Hash.new(0)) do |dish, list|</code>, dedans <code>recipes[dish].each { |item, amount| list[item] += amount }</code>, puis <code>end</code>.",
+            "solution": "recipes = {\n  \"pancakes\" => { \"egg\" => 2, \"milk\" => 3, \"flour\" => 2 },\n  \"omelette\" => { \"egg\" => 3, \"cheese\" => 1 }\n}\nweek = [\"pancakes\", \"omelette\", \"pancakes\"]\n\nshopping = week.each_with_object(Hash.new(0)) do |dish, list|\n  recipes[dish].each { |item, amount| list[item] += amount }\nend"
+          }
+        ]
+      },
+      "it": {
+        "title": "Ripiegare un elenco: reduce e each_with_object",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ripiegare un elenco: reduce e each_with_object</h2><p><code>sum</code> somma un intero elenco in un solo numero, <code>max_by</code> ne sceglie un vincitore. Entrambi <strong>ripiegano</strong> (in inglese <em>fold</em>) un elenco in un unico valore. Ma se Ruby non ha un metodo pronto per il ripiegamento che ti serve? Allora lo scrivi tu. Prima il modo semplice: una variabile che si porta dietro il risultato mentre <code>each</code> percorre l'elenco. Qui Chunky conta i suoi bocconi di bacon:</p>"
+          },
+          {
+            "t": "c",
+            "code": "bites = [3, 5, 2, 4]\ntotal = 0\nbites.each do |n|\n  total = total + n\nend\ntotal"
+          },
+          {
+            "t": "h",
+            "html": "<p>Un valore iniziale, poi ogni elemento modifica il valore corrente: questo schema è così comune che ha un nome tutto suo, <code>reduce</code>. Gli passi il valore iniziale; il blocco riceve il valore corrente (l'<strong>accumulatore</strong>, qui <code>sum</code>) e l'elemento successivo, e ciò che il blocco restituisce diventa il nuovo accumulatore. Nessuna variabile fuori dal blocco. Avanza passo passo con ⏯ e guarda <code>sum</code> che cresce (0, 3, 8, 10) finché non esce 14:</p>"
+          },
+          {
+            "t": "c",
+            "code": "bites.reduce(0) do |sum, n|\n  sum + n\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Quando il blocco non fa altro che applicare un operatore, passa a <code>reduce</code> il nome dell'operatore come simbolo: <code>reduce(:+)</code> somma, <code>reduce(:*)</code> moltiplica. Senza valore iniziale, <code>reduce</code> parte semplicemente dal primo elemento. E <code>inject</code> è esattamente lo stesso metodo con il suo nome più vecchio: li incontrerai tutti e due:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p bites.reduce(:+)\np (1..5).reduce(:*)    # 1 * 2 * 3 * 4 * 5\n[2, 3, 4].inject(:*)"
+          },
+          {
+            "t": "h",
+            "html": "<p>L'accumulatore non deve per forza essere un numero: può essere qualsiasi cosa. Qui è la parola più lunga trovata finora: a ogni giro il blocco tiene la più lunga delle due parole. È più o meno così che funziona <code>max_by</code> al suo interno:</p>"
+          },
+          {
+            "t": "c",
+            "code": "words = %w[egg bacon toast pancake jam]\nwords.reduce do |longest, word|\n  word.length > longest.length ? word : longest\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ora l'errore classico. Ciò che restituisce l'<em>ultima riga</em> del blocco diventa il nuovo accumulatore: allora che cosa succede quando Chunky mette un <code>puts</code> alla fine, per guardare?</p>"
+          },
+          {
+            "t": "c",
+            "code": "bites.reduce(0) do |sum, n|\n  sum + n\n  puts \"so far: #{sum}\"\nend",
+            "raises": "NoMethodError"
+          },
+          {
+            "t": "h",
+            "html": "<p>Un <code>NoMethodError</code>: <code>undefined method '+' for nil</code>. Al primo giro <code>sum + n</code> è stato calcolato, e poi buttato via, perché <code>puts</code> veniva per ultimo, e <code>puts</code> restituisce <code>nil</code>. Così al secondo giro <code>sum</code> era nil, e nil non sa sommare. Un <code>if</code> senza <code>else</code> sull'ultima riga fa lo stesso ogni volta che la sua condizione è falsa. La regola: il nuovo accumulatore va sull'ultima riga del blocco. Ecco la versione riparata, prima <code>puts</code>, la somma per ultima:</p>"
+          },
+          {
+            "t": "c",
+            "code": "bites.reduce(0) do |sum, n|\n  puts \"so far: #{sum}, now #{n}\"\n  sum + n\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Spesso il risultato è un hash o un array che riempi un po' alla volta. Puoi farlo con <code>reduce</code>, ma allora ogni giro deve finire di nuovo con l'hash: facile da dimenticare, e ora sai che cosa succede in quel caso. <code>each_with_object</code> è fatto apposta: gli passi l'oggetto vuoto, il blocco lo riempie, e alla fine il metodo restituisce l'oggetto, qualunque sia l'ultima riga del blocco. Attenzione all'ordine dei parametri del blocco: prima l'elemento, poi l'oggetto. La cucina somma le ordinazioni:</p>"
+          },
+          {
+            "t": "c",
+            "code": "orders = [\n  { food: \"bacon\", amount: 2 },\n  { food: \"egg\", amount: 1 },\n  { food: \"bacon\", amount: 3 }\n]\norders.each_with_object(Hash.new(0)) do |order, per_food|\n  per_food[order[:food]] += order[:amount]\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Con un array vuoto, <code>each_with_object([])</code> raccoglie, e a differenza di <code>map</code> un elemento può aggiungere più voci, o nessuna. Il cameriere mette ogni singolo piatto sul vassoio:</p>"
+          },
+          {
+            "t": "c",
+            "code": "orders.each_with_object([]) do |order, tray|\n  order[:amount].times { tray << order[:food] }\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Una regola pratica: se un metodo pronto fa il ripiegamento (<code>sum</code>, <code>max_by</code>, <code>tally</code>), usalo. Altrimenti usa <code>reduce</code> quando il risultato è un unico valore che cambia da un giro all'altro, e <code>each_with_object</code> quando riempi un hash o un array. Con <code>reduce</code> il nuovo valore va sempre sull'ultima riga.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-reduce' target='_blank'>Enumerable#reduce</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-inject' target='_blank'>Enumerable#inject</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-each_with_object' target='_blank'>Enumerable#each_with_object</a></div><div class='task'><strong>Esercizio:</strong> L'energia di Chunky comincia la giornata a 50, e non scende mai sotto 0 né sale sopra 100. Ripiega gli <code>events</code> della giornata in <code>energy</code> con <code>reduce</code>: aggiungi ogni variazione, e dopo ogni passo tieni il risultato entro <code>0..100</code>, con <code>clamp</code> dalla lezione {{nr:bereiche}}. (Sommare semplicemente tutto darebbe 75, ma a 100 Chunky è sazio, per quanto bacon sia rimasto.)</div>"
+          },
+          {
+            "t": "x",
+            "code": "# bacon, altro bacon, una lunga corsa, un pisolino, la cena\nevents = [30, 40, -90, 20, 25]\n\n# energy = ...   # la sera: si parte da 50, si resta tra 0 e 100\n",
+            "hints": [
+              "Il valore iniziale 50 va tra le parentesi: <code>reduce(50)</code>. Il blocco riceve l'energia fin qui e la variazione successiva; la sua ultima riga è la nuova energia: la somma, passata per <code>clamp(0..100)</code>."
+            ],
+            "check": "energy == 55 && (code.include?(\"reduce\") || code.include?(\"inject\")) && code.include?(\"clamp\")",
+            "hint": "<code>energy = events.reduce(50) { |e, change| (e + change).clamp(0..100) }</code>.",
+            "solution": "events = [30, 40, -90, 20, 25]\n\nenergy = events.reduce(50) do |e, change|\n  (e + change).clamp(0..100)\nend"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Kaz cucina per tutta la settimana e le serve una lista della spesa. <code>recipes</code> dice che cosa serve per ogni piatto, <code>week</code> che cosa cucinerà. Costruisci l'hash <code>shopping</code> con <code>each_with_object</code>: ogni ingrediente e quanto ne serve per tutta la settimana, <code>{ \"egg\" =&gt; 7, … }</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "recipes = {\n  \"pancakes\" => { \"egg\" => 2, \"milk\" => 3, \"flour\" => 2 },\n  \"omelette\" => { \"egg\" => 3, \"cheese\" => 1 }\n}\nweek = [\"pancakes\", \"omelette\", \"pancakes\"]\n\n# shopping = ...   # ogni ingrediente => quanto ne serve per la settimana\n",
+            "hints": [
+              "Comincia con <code>week.each_with_object(Hash.new(0))</code>. Per ogni piatto cerca i suoi ingredienti in <code>recipes</code> e percorrili con <code>each</code>: quel blocco riceve un ingrediente e la sua quantità, che aggiungi all'hash."
+            ],
+            "check": "shopping == { \"egg\" => 7, \"milk\" => 6, \"flour\" => 4, \"cheese\" => 1 } && code.include?(\"each_with_object\")",
+            "hint": "<code>shopping = week.each_with_object(Hash.new(0)) do |dish, list|</code>, dentro <code>recipes[dish].each { |item, amount| list[item] += amount }</code>, poi <code>end</code>.",
+            "solution": "recipes = {\n  \"pancakes\" => { \"egg\" => 2, \"milk\" => 3, \"flour\" => 2 },\n  \"omelette\" => { \"egg\" => 3, \"cheese\" => 1 }\n}\nweek = [\"pancakes\", \"omelette\", \"pancakes\"]\n\nshopping = week.each_with_object(Hash.new(0)) do |dish, list|\n  recipes[dish].each { |item, amount| list[item] += amount }\nend"
+          }
+        ]
       }
     },
     {
@@ -7362,6 +7920,202 @@ window.LESSONS_JSON = JSON.stringify({
             ],
             "check": "packed == \"4s1i4z1l1e\" && unpacked == \"chuuunky\" && (code.include?(\"chunk\") || code.include?(\"slice_when\")) && code.include?(\"each_slice\")",
             "hint": "<code>packed = sizzle.chars.chunk_while { |a, b| a == b }.map { |run| \"#{run.size}#{run.first}\" }.join</code>と<code>unpacked = secret.chars.each_slice(2).map { |count, letter| letter * count.to_i }.join</code>だよ。",
+            "solution": "sizzle = \"ssssizzzzle\"\nsecret = \"1c1h3u1n1k1y\"\n\nruns = sizzle.chars.chunk_while { |a, b| a == b }\npacked = runs.map { |run| \"#{run.size}#{run.first}\" }.join\npairs = secret.chars.each_slice(2)\nunpacked = pairs.map { |count, letter| letter * count.to_i }.join"
+          }
+        ]
+      },
+      "fr": {
+        "title": "Encore des outils pour les listes",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Encore des outils pour les listes</h2><p>Les grands outils pour les listes, vous les connaissez déjà : <code>map</code>, <code>select</code>, <code>sort_by</code>, <code>reduce</code>. Cette leçon vide le reste de la boîte à outils – de petites méthodes qui vous épargnent chacune une boucle avec un compteur ou une variable auxiliaire. La première fonctionne comme une fermeture éclair : <code>zip</code> pose deux listes côte à côte et les assemble, élément par élément, en paires. <code>to_h</code> fait ensuite un hash à partir des paires :</p>"
+          },
+          {
+            "t": "c",
+            "code": "names = [\"Chunky\", \"Kaz\", \"Isi\"]\npoints = [42, 17, 35]\np names.zip(points)\nnames.zip(points).to_h"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>each_with_index</code>, de la leçon {{nr:arrays}}, compte les positions à partir de 0 – c’est pour cela que vous y avez écrit <code>i + 1</code>. <code>each.with_index(1)</code> commence à compter où vous voulez :</p>"
+          },
+          {
+            "t": "c",
+            "code": "names.each.with_index(1) do |name, place|\n  puts \"#{place}. #{name}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Le plus petit et le plus grand d’un coup ? <code>minmax</code>. Les deux plus grands ? <code>max(2)</code> – et <code>min(2)</code> donne les deux plus petits. Et <code>max_by(2)</code> choisit les deux pour lesquels le bloc donne le plus – ici les deux meilleures paires de nom et de score : un podium sans trier toute la liste :</p>"
+          },
+          {
+            "t": "c",
+            "code": "p points.minmax\np points.max(2)\nnames.zip(points).max_by(2) { |name, score| score }"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>partition</code> sépare une liste en deux tas d’un seul coup : les éléments pour lesquels le bloc dit <code>true</code>, et le reste – <code>select</code> et <code>reject</code> à la fois. Elle renvoie les deux tas sous forme d’un array de deux arrays, et <code>passed, failed = …</code> les attrape dans deux variables en même temps. Les notes d’examen de la leçon {{nr:iteratoren}}, avec map, select et cie :</p>"
+          },
+          {
+            "t": "c",
+            "code": "scores = [72, 45, 88, 91, 30, 60]\npassed, failed = scores.partition { |s| s >= 60 }\np passed\nfailed"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>each_slice(n)</code> découpe une liste en morceaux de <code>n</code> – les lignes d’un tableau, les pages d’une longue liste, des équipes de quatre. Le dernier morceau reçoit ce qui reste :</p>"
+          },
+          {
+            "t": "c",
+            "code": "(\"a\"..\"z\").each_slice(7) do |row|\n  puts row.join(\" \")\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>each_cons(2)</code> distribue aussi des morceaux, mais ils se chevauchent : chaque élément avec son voisin – le premier avec le deuxième, le deuxième avec le troisième, et ainsi de suite. C’est exactement ce qu’il faut pour les variations d’un jour à l’autre. Sans bloc, il transmet les paires – à <code>to_a</code>, pour les regarder, ou directement à <code>map</code> :</p>"
+          },
+          {
+            "t": "c",
+            "code": "noon = [12, 15, 11, 18, 20]   # degrés à midi, du lundi au vendredi\np noon.each_cons(2).to_a\nnoon.each_cons(2).map { |before, after| after - before }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Parfois, les morceaux n’ont pas de taille fixe, mais on voit où l’un se termine. <code>chunk_while</code> garde les voisins ensemble tant que le bloc dit <code>true</code> ; <code>slice_when</code> coupe là où le bloc dit <code>true</code> – la même chose, vue de l’autre côté. Chunky est allé au lac ces jours-là du mois. Quels jours se suivaient ?</p>"
+          },
+          {
+            "t": "c",
+            "code": "lake = [1, 2, 3, 7, 8, 12]\nruns = lake.chunk_while { |a, b| b == a + 1 }.to_a\np runs\np lake.slice_when { |a, b| b != a + 1 }.to_a\nruns.map { |run| [run.first, run.last].uniq.join(\"-\") }.join(\", \")"
+          },
+          {
+            "t": "h",
+            "html": "<p>« 1-3, 7-8, 12 » – comme l’écrirait un calendrier ; pour un seul jour, <code>uniq</code> ne laisse qu’un nombre. Le dernier outil : quand le bloc de <code>map</code> renvoie un array pour chaque élément, vous obtenez une liste de listes. <code>flat_map</code> en fait directement une seule liste plate – ici chaque mot de chaque phrase :</p>"
+          },
+          {
+            "t": "c",
+            "code": "sentences = [\"Chunky likes bacon\", \"Kaz likes eggs\"]\np sentences.map { |s| s.split }\nsentences.flat_map { |s| s.split }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Une règle simple : quand vous vous surprenez à écrire une boucle avec un compteur, un « élément précédent » ou deux arrays auxiliaires, regardez d’abord dans la boîte à outils. Deux listes côte à côte : <code>zip</code>. Des morceaux : <code>each_slice</code>. Des voisins : <code>each_cons</code>. Des séries : <code>chunk_while</code>. Deux tas : <code>partition</code>.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-zip' target='_blank'>Enumerable#zip</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-each_slice' target='_blank'>Enumerable#each_slice</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-each_cons' target='_blank'>Enumerable#each_cons</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-chunk_while' target='_blank'>Enumerable#chunk_while</a></div><div class='task'><strong>Exercice :</strong> Le podomètre de Chunky, pendant une semaine. Tirez trois choses de <code>days</code> et <code>steps</code> : <code>per_day</code> – un hash qui associe à chaque jour ses pas ; <code>changes</code> – pour chaque jour à partir du mardi, combien de pas de plus (ou de moins) que la veille ; et <code>top_two</code> – les deux plus grands nombres de pas.</div>"
+          },
+          {
+            "t": "x",
+            "code": "days = %w[Mon Tue Wed Thu Fri Sat Sun]\nsteps = [4200, 6100, 5800, 9000, 3500, 12000, 7400]\n\n# per_day = ...   # { \"Mon\" => 4200, \"Tue\" => 6100, ... }\n# changes = ...   # chaque jour moins la veille : [1900, -300, ...]\n# top_two = ...   # les deux plus grands nombres de pas\n",
+            "hints": [
+              "Trois outils, une ligne chacun : <code>zip</code> puis <code>to_h</code> ; <code>each_cons(2)</code> puis <code>map</code> avec les deux voisins ; et <code>max</code> avec un nombre."
+            ],
+            "check": "per_day == { \"Mon\" => 4200, \"Tue\" => 6100, \"Wed\" => 5800, \"Thu\" => 9000, \"Fri\" => 3500, \"Sat\" => 12000, \"Sun\" => 7400 } && changes == [1900, -300, 3200, -5500, 8500, -4600] && [[12000, 9000], [9000, 12000]].include?(top_two) && code.include?(\"zip\") && code.include?(\"each_cons\")",
+            "hint": "<code>per_day = days.zip(steps).to_h</code>, <code>changes = steps.each_cons(2).map { |before, after| after - before }</code> et <code>top_two = steps.max(2)</code>.",
+            "solution": "days = %w[Mon Tue Wed Thu Fri Sat Sun]\nsteps = [4200, 6100, 5800, 9000, 3500, 12000, 7400]\n\nper_day = days.zip(steps).to_h\nchanges = steps.each_cons(2).map { |before, after| after - before }\ntop_two = steps.max(2)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Le <strong>codage par plages</strong> (<em>run-length encoding</em>) regroupe les lettres répétées : <code>\"aaabcc\"</code> devient <code>\"3a1b2c\"</code> – trois a, un b, deux c. Compressez le grésillement du bacon dans la poêle, <code>sizzle</code>, dans <code>packed</code> ; <code>chunk_while</code> trouve les séries de lettres identiques. Décompressez ensuite <code>secret</code> dans <code>unpacked</code> : chaque nombre y est un seul chiffre, donc <code>each_slice(2)</code> vous donne le nombre et la lettre par paires.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "sizzle = \"ssssizzzzle\"\nsecret = \"1c1h3u1n1k1y\"\n\n# packed = ...     # \"4s1i4z1l1e\"\n# unpacked = ...   # le secret, décompressé\n",
+            "hints": [
+              "Compresser : <code>sizzle.chars</code>, puis <code>chunk_while { |a, b| a == b }</code> ; chaque série devient sa taille suivie de sa lettre, et <code>join</code> colle le tout. Décompresser : <code>secret.chars.each_slice(2)</code> donne des paires comme <code>[\"3\", \"u\"]</code> – répétez la lettre <code>to_i</code> fois."
+            ],
+            "check": "packed == \"4s1i4z1l1e\" && unpacked == \"chuuunky\" && (code.include?(\"chunk\") || code.include?(\"slice_when\")) && code.include?(\"each_slice\")",
+            "hint": "<code>packed = sizzle.chars.chunk_while { |a, b| a == b }.map { |run| \"#{run.size}#{run.first}\" }.join</code> et <code>unpacked = secret.chars.each_slice(2).map { |count, letter| letter * count.to_i }.join</code>.",
+            "solution": "sizzle = \"ssssizzzzle\"\nsecret = \"1c1h3u1n1k1y\"\n\nruns = sizzle.chars.chunk_while { |a, b| a == b }\npacked = runs.map { |run| \"#{run.size}#{run.first}\" }.join\npairs = secret.chars.each_slice(2)\nunpacked = pairs.map { |count, letter| letter * count.to_i }.join"
+          }
+        ]
+      },
+      "it": {
+        "title": "Altri strumenti per gli elenchi",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Altri strumenti per gli elenchi</h2><p>I grandi strumenti per gli elenchi li conosci già: <code>map</code>, <code>select</code>, <code>sort_by</code>, <code>reduce</code>. Questa lezione svuota il resto della cassetta degli attrezzi: piccoli metodi che ti risparmiano ciascuno un ciclo con un contatore o una variabile d'appoggio. Il primo funziona come una cerniera lampo: <code>zip</code> mette due elenchi uno accanto all'altro e li unisce, elemento per elemento, in coppie. Poi <code>to_h</code> fa un hash con le coppie:</p>"
+          },
+          {
+            "t": "c",
+            "code": "names = [\"Chunky\", \"Kaz\", \"Isi\"]\npoints = [42, 17, 35]\np names.zip(points)\nnames.zip(points).to_h"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>each_with_index</code> della lezione {{nr:arrays}} conta le posizioni da 0: per questo lì hai scritto <code>i + 1</code>. <code>each.with_index(1)</code> comincia a contare da dove vuoi tu:</p>"
+          },
+          {
+            "t": "c",
+            "code": "names.each.with_index(1) do |name, place|\n  puts \"#{place}. #{name}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Il più piccolo e il più grande in un colpo solo? <code>minmax</code>. I due più grandi? <code>max(2)</code>, e <code>min(2)</code> dà i due più piccoli. E <code>max_by(2)</code> sceglie i due per cui il blocco dà di più, qui le due migliori coppie di nome e punteggio: un podio senza ordinare tutto l'elenco:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p points.minmax\np points.max(2)\nnames.zip(points).max_by(2) { |name, score| score }"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>partition</code> divide un elenco in due mucchi in un colpo solo: gli elementi per cui il blocco dice <code>true</code>, e il resto. È <code>select</code> e <code>reject</code> insieme. Restituisce i due mucchi come un array di due array, e <code>passed, failed = …</code> li prende in due variabili in una volta. I punteggi dei test della lezione {{nr:iteratoren}}, con map, select &amp; co.:</p>"
+          },
+          {
+            "t": "c",
+            "code": "scores = [72, 45, 88, 91, 30, 60]\npassed, failed = scores.partition { |s| s >= 60 }\np passed\nfailed"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>each_slice(n)</code> taglia un elenco in pezzi da <code>n</code>: le righe di una tabella, le pagine di un lungo elenco, squadre da quattro. L'ultimo pezzo riceve quello che avanza:</p>"
+          },
+          {
+            "t": "c",
+            "code": "(\"a\"..\"z\").each_slice(7) do |row|\n  puts row.join(\" \")\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Anche <code>each_cons(2)</code> distribuisce pezzi, ma si sovrappongono: ogni elemento insieme al suo vicino, il primo con il secondo, il secondo con il terzo e così via. È proprio quello che serve per le variazioni da un giorno all'altro. Senza blocco passa avanti le coppie: a <code>to_a</code>, per guardarle, o direttamente a <code>map</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "noon = [12, 15, 11, 18, 20]   # gradi a mezzogiorno, da lunedì a venerdì\np noon.each_cons(2).to_a\nnoon.each_cons(2).map { |before, after| after - before }"
+          },
+          {
+            "t": "h",
+            "html": "<p>A volte i pezzi non hanno una grandezza fissa, ma si capisce dove finisce uno. <code>chunk_while</code> tiene insieme i vicini finché il blocco dice <code>true</code>; <code>slice_when</code> taglia dove il blocco dice <code>true</code>: la stessa cosa, vista dall'altra parte. Chunky è andato al lago in questi giorni del mese. Quali giorni erano di fila?</p>"
+          },
+          {
+            "t": "c",
+            "code": "lake = [1, 2, 3, 7, 8, 12]\nruns = lake.chunk_while { |a, b| b == a + 1 }.to_a\np runs\np lake.slice_when { |a, b| b != a + 1 }.to_a\nruns.map { |run| [run.first, run.last].uniq.join(\"-\") }.join(\", \")"
+          },
+          {
+            "t": "h",
+            "html": "<p>“1-3, 7-8, 12”, come lo scriverebbe un calendario; per un giorno solo, <code>uniq</code> lascia un unico numero. L'ultimo strumento: quando il blocco di <code>map</code> restituisce un array per ogni elemento, ottieni un elenco di elenchi. <code>flat_map</code> ne fa subito un unico elenco piatto, qui ogni parola di ogni frase:</p>"
+          },
+          {
+            "t": "c",
+            "code": "sentences = [\"Chunky likes bacon\", \"Kaz likes eggs\"]\np sentences.map { |s| s.split }\nsentences.flat_map { |s| s.split }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Una regola pratica: quando ti sorprendi a scrivere un ciclo con un contatore, un “elemento precedente” o due array d'appoggio, guarda prima nella cassetta degli attrezzi. Due elenchi affiancati: <code>zip</code>. Pezzi: <code>each_slice</code>. Vicini: <code>each_cons</code>. Sequenze: <code>chunk_while</code>. Due mucchi: <code>partition</code>.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-zip' target='_blank'>Enumerable#zip</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-each_slice' target='_blank'>Enumerable#each_slice</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-each_cons' target='_blank'>Enumerable#each_cons</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-chunk_while' target='_blank'>Enumerable#chunk_while</a></div><div class='task'><strong>Esercizio:</strong> Il contapassi di Chunky, per una settimana. Ricava tre cose da <code>days</code> e <code>steps</code>: <code>per_day</code>, un hash che associa a ogni giorno i suoi passi; <code>changes</code>, per ogni giorno da martedì in poi, quanti passi in più (o in meno) del giorno prima; e <code>top_two</code>, i due numeri di passi più grandi.</div>"
+          },
+          {
+            "t": "x",
+            "code": "days = %w[Mon Tue Wed Thu Fri Sat Sun]\nsteps = [4200, 6100, 5800, 9000, 3500, 12000, 7400]\n\n# per_day = ...   # { \"Mon\" => 4200, \"Tue\" => 6100, ... }\n# changes = ...   # ogni giorno meno quello prima: [1900, -300, ...]\n# top_two = ...   # i due numeri di passi più grandi\n",
+            "hints": [
+              "Tre strumenti, una riga ciascuno: <code>zip</code> e poi <code>to_h</code>; <code>each_cons(2)</code> e poi <code>map</code> con i due vicini; e <code>max</code> con un numero."
+            ],
+            "check": "per_day == { \"Mon\" => 4200, \"Tue\" => 6100, \"Wed\" => 5800, \"Thu\" => 9000, \"Fri\" => 3500, \"Sat\" => 12000, \"Sun\" => 7400 } && changes == [1900, -300, 3200, -5500, 8500, -4600] && [[12000, 9000], [9000, 12000]].include?(top_two) && code.include?(\"zip\") && code.include?(\"each_cons\")",
+            "hint": "<code>per_day = days.zip(steps).to_h</code>, <code>changes = steps.each_cons(2).map { |before, after| after - before }</code> e <code>top_two = steps.max(2)</code>.",
+            "solution": "days = %w[Mon Tue Wed Thu Fri Sat Sun]\nsteps = [4200, 6100, 5800, 9000, 3500, 12000, 7400]\n\nper_day = days.zip(steps).to_h\nchanges = steps.each_cons(2).map { |before, after| after - before }\ntop_two = steps.max(2)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> La <strong>codifica run-length</strong> (<em>run-length encoding</em>) raggruppa le lettere ripetute: <code>\"aaabcc\"</code> diventa <code>\"3a1b2c\"</code>, cioè tre a, una b, due c. Comprimi lo sfrigolio del bacon in padella, <code>sizzle</code>, in <code>packed</code>; <code>chunk_while</code> trova le sequenze di lettere uguali. Poi decomprimi <code>secret</code> in <code>unpacked</code>: lì ogni numero è una sola cifra, quindi <code>each_slice(2)</code> ti dà numero e lettera a coppie.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "sizzle = \"ssssizzzzle\"\nsecret = \"1c1h3u1n1k1y\"\n\n# packed = ...     # \"4s1i4z1l1e\"\n# unpacked = ...   # il segreto, decompresso\n",
+            "hints": [
+              "Comprimere: <code>sizzle.chars</code>, poi <code>chunk_while { |a, b| a == b }</code>; ogni sequenza diventa la sua lunghezza più la sua lettera, e <code>join</code> le incolla insieme. Decomprimere: <code>secret.chars.each_slice(2)</code> dà coppie come <code>[\"3\", \"u\"]</code>: ripeti la lettera <code>to_i</code> volte."
+            ],
+            "check": "packed == \"4s1i4z1l1e\" && unpacked == \"chuuunky\" && (code.include?(\"chunk\") || code.include?(\"slice_when\")) && code.include?(\"each_slice\")",
+            "hint": "<code>packed = sizzle.chars.chunk_while { |a, b| a == b }.map { |run| \"#{run.size}#{run.first}\" }.join</code> e <code>unpacked = secret.chars.each_slice(2).map { |count, letter| letter * count.to_i }.join</code>.",
             "solution": "sizzle = \"ssssizzzzle\"\nsecret = \"1c1h3u1n1k1y\"\n\nruns = sizzle.chars.chunk_while { |a, b| a == b }\npacked = runs.map { |run| \"#{run.size}#{run.first}\" }.join\npairs = secret.chars.each_slice(2)\nunpacked = pairs.map { |count, letter| letter * count.to_i }.join"
           }
         ]
@@ -9438,6 +10192,202 @@ window.LESSONS_JSON = JSON.stringify({
             "solution": "dishes = [\"Crème brûlée\", \"Café au lait\", \"Éclair\",\n          \"Crêpe with bacon\", \"Jalapeño pizza\"]\n\nslugs = dishes.map do |dish|\n  dish.unicode_normalize(:nfd).gsub(/\\p{Mn}/, \"\").downcase.gsub(\" \", \"-\")\nend"
           }
         ]
+      },
+      "fr": {
+        "title": "Lettres, octets et emoji",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Lettres, octets et emoji</h2><p>Jusqu’ici, un caractère était une lettre du clavier. Mais une chaîne Ruby peut contenir toutes les écritures du monde : le suisse allemand, le japonais, les emoji. Et d’un coup, une question simple devient délicate : quelle est la longueur d’une chaîne ? <code>length</code> compte ses caractères, <code>bytesize</code> les octets (<em>bytes</em>) que l’ordinateur stocke pour eux :</p>"
+          },
+          {
+            "t": "c",
+            "code": "%w[bacon Grüezi ルビー 🦊].each do |word|\n  puts \"#{word}: length #{word.length}, #{word.bytesize} bytes\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>L’ordinateur stocke le texte sous forme d’octets, des nombres de 0 à 255. La façon dont un caractère devient des octets est fixée par l’<strong>encodage</strong>, et celui de Ruby est <strong>UTF-8</strong> : les lettres de A à Z prennent un octet chacune, <code>ü</code> en prend deux, les kana japonais trois et un emoji quatre. <code>bytes</code> les montre, <code>encoding</code> nomme la table :</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"bacon\".bytes\np \"Grüezi\".bytes   # ü, c'est 195, 188\np \"🦊\".bytes\n\"Grüezi\".encoding"
+          },
+          {
+            "t": "h",
+            "html": "<p>Derrière les octets, chaque caractère a son propre numéro dans la grande table <strong>Unicode</strong>, qui répertorie environ 150 000 caractères de toutes les écritures du monde : son <strong>point de code</strong> (<em>code point</em>). <code>A</code>, c’est 65, <code>ü</code> 252, le renard 129418. <code>ord</code> donne le point de code d’un caractère, <code>codepoints</code> ceux d’une chaîne entière. Et avec <code>\\u{...}</code>, vous écrivez un caractère dans une chaîne par son numéro – en hexadécimal, ce qu’explique la leçon {{nr:zahlensysteme}} ; <code>1F98A</code>, c’est 129418 :</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"A\".ord\np \"ü\".ord\np \"🦊\".ord\np \"Grüezi\".codepoints\n\"\\u{1F98A} loves \\u{1F953}\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Un caractère est-il donc un point de code ? Pas toujours. Ce que vous voyez comme <em>un seul</em> signe peut être composé de plusieurs : le drapeau suisse 🇨🇭, ce sont deux points de code, les lettres C et H d’un alphabet spécial pour les drapeaux, et un emoji de famille, ce sont trois personnes collées ensemble par des liants invisibles. <code>chars</code> découpe une chaîne en points de code, <code>grapheme_clusters</code> en ce qu’une personne voit comme un seul caractère :</p>"
+          },
+          {
+            "t": "c",
+            "code": "flag = \"🇨🇭\"\np flag.length\np flag.chars\np flag.grapheme_clusters\nfamily = \"👨‍👩‍👧\"\np family.length\nfamily.grapheme_clusters.length"
+          },
+          {
+            "t": "h",
+            "html": "<p>Une famille de longueur 5 – les deux liants comptent aussi. La différence compte dès que vous démontez du texte. <code>reverse</code> inverse les points de code, et le C H du drapeau devient H C : deux lettres esseulées, plus de pays. Inversé par grappes de graphèmes, chaque emoji reste d’un seul morceau :</p>"
+          },
+          {
+            "t": "c",
+            "code": "greeting = \"Grüezi 🇨🇭\"\np greeting.reverse\ngreeting.grapheme_clusters.reverse.join"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>upcase</code> et <code>downcase</code> connaissent plus que A à Z – les trémas et les accents changent aussi. Et pour l’allemand, ils réservent une surprise : <code>ß</code>, le s dur que les Suisses n’écrivent jamais, n’a pas de majuscule dans l’usage courant, alors <code>upcase</code> en fait <code>SS</code> – exactement ce que fait de toute façon l’orthographe suisse. Le mot s’allonge en route :</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"ÜBER\".downcase\np \"smörgåsbord\".upcase\np \"straße\".upcase\np \"straße\".length\n\"straße\".upcase.length"
+          },
+          {
+            "t": "h",
+            "html": "<p>Le piège le plus sournois de tous : deux chaînes qui se ressemblent exactement et qui ne sont pourtant pas égales. Un <code>é</code> peut être stocké comme un seul point de code, ou comme un simple <code>e</code> suivi d’un <strong>accent combinant</strong> (<code>\\u0301</code>) qui se pose sur la lettre précédente. Le texte venant des noms de fichiers d’un Mac ou d’une page web copiée peut arriver sous l’une ou l’autre forme. <code>unicode_normalize</code> ramène les deux à la même forme :</p>"
+          },
+          {
+            "t": "c",
+            "code": "one = \"Café\"\ntwo = \"Cafe\\u0301\"   # e + un accent combinant\nputs one, two\np one == two\np [one.length, two.length]\none.unicode_normalize == two.unicode_normalize"
+          },
+          {
+            "t": "h",
+            "html": "<p>Normalement, <code>unicode_normalize</code> assemble la lettre et l’accent (cette forme s’appelle NFC). Avec <code>:nfd</code>, il fait l’inverse et les sépare : d’abord la lettre nue, puis l’accent tout seul. Dans une regex, ces accents sont <code>\\p{Mn}</code> – « mark, nonspacing », un signe qui ne prend pas de place à lui. Vous pouvez donc les trouver, les compter … ou les supprimer :</p>"
+          },
+          {
+            "t": "c",
+            "code": "apart = \"Zürich\".unicode_normalize(:nfd)\np apart.chars\np apart.length\napart.scan(/\\p{Mn}/).length"
+          },
+          {
+            "t": "h",
+            "html": "<p>Une règle simple : <code>length</code> compte les points de code, <code>bytesize</code> la place en mémoire, et seul <code>grapheme_clusters</code> compte ce qu’une personne voit. Et le texte qui vient de l’extérieur, vous le normalisez avant de le comparer.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-bytesize' target='_blank'>String#bytesize</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-grapheme_clusters' target='_blank'>String#grapheme_clusters</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-unicode_normalize' target='_blank'>String#unicode_normalize</a> · <a href='https://docs.ruby-lang.org/en/4.0/language/encodings_rdoc.html' target='_blank'>Encodings</a></div><div class='task'><strong>Exercice :</strong> L’appli de chat de Chunky stocke chaque message sous forme d’octets, le <code>length</code> de Ruby compte les points de code, et les gens comptent ce qu’ils voient. Remplissez <code>sizes</code> avec trois nombres pour chaque message – ses octets, ses points de code et les caractères qu’une personne voit ; pour <code>\"Grüezi!\"</code>, c’est <code>[8, 7, 7]</code>. Et <code>backwards</code> reçoit chaque message à l’envers, avec chaque emoji d’un seul morceau.</div>"
+          },
+          {
+            "t": "x",
+            "code": "posts = [\"Grüezi!\", \"ルビー\", \"🦊❤️🥓\", \"Hopp 🇨🇭!\", \"👨‍👩‍👧\"]\n\n# sizes = ...       # par message : [octets, points de code, caractères visibles]\n# backwards = ...   # par message : à l'envers, chaque emoji d'un seul morceau\n",
+            "hints": [
+              "Parcourez <code>posts</code> avec <code>map</code>. Pour <code>sizes</code>, le bloc construit un petit array à partir de <code>bytesize</code>, <code>length</code> et du nombre de <code>grapheme_clusters</code> ; pour <code>backwards</code>, il inverse les grappes de graphèmes et les rassemble à nouveau."
+            ],
+            "check": "sizes == [[8, 7, 7], [9, 3, 3], [14, 4, 3], [14, 8, 7], [18, 5, 1]] && backwards == [\"!izeürG\", \"ービル\", \"🥓❤️🦊\", \"!🇨🇭 ppoH\", \"👨‍👩‍👧\"] && code.include?(\"grapheme_clusters\")",
+            "hint": "<code>sizes = posts.map { |post| [post.bytesize, post.length, post.grapheme_clusters.length] }</code> et <code>backwards = posts.map { |post| post.grapheme_clusters.reverse.join }</code>.",
+            "solution": "posts = [\"Grüezi!\", \"ルビー\", \"🦊❤️🥓\", \"Hopp 🇨🇭!\", \"👨‍👩‍👧\"]\n\nsizes = posts.map do |post|\n  [post.bytesize, post.length, post.grapheme_clusters.length]\nend\nbackwards = posts.map { |post| post.grapheme_clusters.reverse.join }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Les espaces n’ont pas leur place dans une adresse web, et les accents y posent problème. Transformez chaque plat en <strong>slug</strong> pour son adresse web : sans accents, en minuscules, <code>-</code> à la place des espaces – <code>\"Crème brûlée\"</code> devient <code>\"creme-brulee\"</code>. L’astuce de la dernière cellule vous aide : séparez les lettres avec <code>:nfd</code>, puis supprimez chaque <code>\\p{Mn}</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "dishes = [\"Crème brûlée\", \"Café au lait\", \"Éclair\",\n          \"Crêpe with bacon\", \"Jalapeño pizza\"]\n\n# slugs = ...   # chaque plat sans accents, en minuscules, \"-\" à la place des espaces\n",
+            "hints": [
+              "Faites un <code>map</code> sur les plats et enchaînez quatre étapes dans le bloc : <code>unicode_normalize(:nfd)</code>, <code>gsub(/\\p{Mn}/, \"\")</code>, <code>downcase</code>, et un <code>gsub</code> qui transforme les espaces en <code>-</code>."
+            ],
+            "check": "slugs == [\"creme-brulee\", \"cafe-au-lait\", \"eclair\", \"crepe-with-bacon\", \"jalapeno-pizza\"] && code.include?(\"unicode_normalize\")",
+            "hint": "<code>slugs = dishes.map { |dish| dish.unicode_normalize(:nfd).gsub(/\\p{Mn}/, \"\").downcase.gsub(\" \", \"-\") }</code>",
+            "solution": "dishes = [\"Crème brûlée\", \"Café au lait\", \"Éclair\",\n          \"Crêpe with bacon\", \"Jalapeño pizza\"]\n\nslugs = dishes.map do |dish|\n  dish.unicode_normalize(:nfd).gsub(/\\p{Mn}/, \"\").downcase.gsub(\" \", \"-\")\nend"
+          }
+        ]
+      },
+      "it": {
+        "title": "Lettere, byte ed emoji",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Lettere, byte ed emoji</h2><p>Finora un carattere era una lettera della tastiera. Ma una stringa Ruby può contenere tutte le scritture del mondo: lo svizzero tedesco, il giapponese, le emoji. E all'improvviso una domanda semplice diventa complicata: quanto è lunga una stringa? <code>length</code> conta i suoi caratteri, <code>bytesize</code> i byte che il computer memorizza per loro:</p>"
+          },
+          {
+            "t": "c",
+            "code": "%w[bacon Grüezi ルビー 🦊].each do |word|\n  puts \"#{word}: length #{word.length}, #{word.bytesize} bytes\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Il computer memorizza il testo come byte, numeri da 0 a 255. Come un carattere diventa byte lo decide la <strong>codifica</strong> (<em>encoding</em>), e quella di Ruby è <strong>UTF-8</strong>: le lettere dalla A alla Z occupano un byte ciascuna, <code>ü</code> due, i kana giapponesi tre e un'emoji quattro. <code>bytes</code> li mostra, <code>encoding</code> dice il nome della tabella:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"bacon\".bytes\np \"Grüezi\".bytes   # ü è 195, 188\np \"🦊\".bytes\n\"Grüezi\".encoding"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dietro i byte, ogni carattere ha un suo numero nella grande tabella <strong>Unicode</strong>, che elenca circa 150.000 caratteri di tutte le scritture del mondo: il suo <strong>code point</strong> (punto di codice). <code>A</code> è 65, <code>ü</code> è 252, la volpe è 129418. <code>ord</code> dà il code point di un carattere, <code>codepoints</code> quelli di un'intera stringa. E con <code>\\u{...}</code> scrivi un carattere in una stringa tramite il suo numero, in esadecimale, che spiega la lezione {{nr:zahlensysteme}}; <code>1F98A</code> è 129418:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"A\".ord\np \"ü\".ord\np \"🦊\".ord\np \"Grüezi\".codepoints\n\"\\u{1F98A} loves \\u{1F953}\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Quindi un carattere è un code point? Non sempre. Ciò che vedi come <em>un solo</em> segno può essere composto da più parti: la bandiera svizzera 🇨🇭 sono due code point, le lettere C e H di uno speciale alfabeto per bandiere, e un'emoji di famiglia sono tre persone incollate insieme da giunzioni invisibili. <code>chars</code> divide una stringa in code point, <code>grapheme_clusters</code> in ciò che una persona vede come un solo carattere:</p>"
+          },
+          {
+            "t": "c",
+            "code": "flag = \"🇨🇭\"\np flag.length\np flag.chars\np flag.grapheme_clusters\nfamily = \"👨‍👩‍👧\"\np family.length\nfamily.grapheme_clusters.length"
+          },
+          {
+            "t": "h",
+            "html": "<p>Una famiglia di lunghezza 5: contano anche le due giunzioni. La differenza conta appena smonti un testo. <code>reverse</code> capovolge i code point, e il C H della bandiera diventa H C: due lettere solitarie, nessun paese. Capovolta per cluster di grafemi, ogni emoji resta tutta intera:</p>"
+          },
+          {
+            "t": "c",
+            "code": "greeting = \"Grüezi 🇨🇭\"\np greeting.reverse\ngreeting.grapheme_clusters.reverse.join"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>upcase</code> e <code>downcase</code> conoscono più che dalla A alla Z: cambiano anche dieresi e accenti. E per il tedesco hanno una sorpresa: <code>ß</code>, la s dura che gli svizzeri non scrivono mai, nell'uso comune non ha maiuscola, quindi <code>upcase</code> ne fa <code>SS</code>, proprio come fa comunque l'ortografia svizzera. Strada facendo la parola si allunga:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"ÜBER\".downcase\np \"smörgåsbord\".upcase\np \"straße\".upcase\np \"straße\".length\n\"straße\".upcase.length"
+          },
+          {
+            "t": "h",
+            "html": "<p>La trappola più subdola di tutte: due stringhe che sembrano identiche e invece non sono uguali. Una <code>é</code> può essere memorizzata come un solo code point, oppure come una semplice <code>e</code> seguita da un <strong>accento combinante</strong> (<code>\\u0301</code>) che si posa sulla lettera precedente. Il testo che viene dai nomi dei file di un Mac o da una pagina web copiata può arrivare in un modo o nell'altro. <code>unicode_normalize</code> porta entrambe nella stessa forma:</p>"
+          },
+          {
+            "t": "c",
+            "code": "one = \"Café\"\ntwo = \"Cafe\\u0301\"   # e + un accento combinante\nputs one, two\np one == two\np [one.length, two.length]\none.unicode_normalize == two.unicode_normalize"
+          },
+          {
+            "t": "h",
+            "html": "<p>Di solito <code>unicode_normalize</code> unisce lettera e accento (questa forma si chiama NFC). Con <code>:nfd</code> fa il contrario e li separa: prima la lettera nuda, poi l'accento da solo. In una regex questi accenti sono <code>\\p{Mn}</code>, “mark, nonspacing”, un segno che non occupa spazio proprio. Così puoi trovarli, contarli … o toglierli:</p>"
+          },
+          {
+            "t": "c",
+            "code": "apart = \"Zürich\".unicode_normalize(:nfd)\np apart.chars\np apart.length\napart.scan(/\\p{Mn}/).length"
+          },
+          {
+            "t": "h",
+            "html": "<p>Una regola pratica: <code>length</code> conta i code point, <code>bytesize</code> lo spazio in memoria, e solo <code>grapheme_clusters</code> conta ciò che vede una persona. E il testo che arriva da fuori lo normalizzi prima di confrontarlo.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-bytesize' target='_blank'>String#bytesize</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-grapheme_clusters' target='_blank'>String#grapheme_clusters</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-unicode_normalize' target='_blank'>String#unicode_normalize</a> · <a href='https://docs.ruby-lang.org/en/4.0/language/encodings_rdoc.html' target='_blank'>Encodings</a></div><div class='task'><strong>Esercizio:</strong> L'app di chat di Chunky memorizza ogni messaggio come byte, il <code>length</code> di Ruby conta i code point, e le persone contano ciò che vedono. Riempi <code>sizes</code> con tre numeri per ogni messaggio: i suoi byte, i suoi code point e i caratteri che vede una persona; per <code>\"Grüezi!\"</code> sono <code>[8, 7, 7]</code>. E <code>backwards</code> riceve ogni messaggio al contrario, con ogni emoji tutta intera.</div>"
+          },
+          {
+            "t": "x",
+            "code": "posts = [\"Grüezi!\", \"ルビー\", \"🦊❤️🥓\", \"Hopp 🇨🇭!\", \"👨‍👩‍👧\"]\n\n# sizes = ...       # per ogni messaggio: [byte, code point, caratteri visibili]\n# backwards = ...   # per ogni messaggio: al contrario, ogni emoji tutta intera\n",
+            "hints": [
+              "Percorri <code>posts</code> con <code>map</code>. Per <code>sizes</code> il blocco costruisce un piccolo array con <code>bytesize</code>, <code>length</code> e il numero di <code>grapheme_clusters</code>; per <code>backwards</code> capovolge i cluster di grafemi e li riunisce."
+            ],
+            "check": "sizes == [[8, 7, 7], [9, 3, 3], [14, 4, 3], [14, 8, 7], [18, 5, 1]] && backwards == [\"!izeürG\", \"ービル\", \"🥓❤️🦊\", \"!🇨🇭 ppoH\", \"👨‍👩‍👧\"] && code.include?(\"grapheme_clusters\")",
+            "hint": "<code>sizes = posts.map { |post| [post.bytesize, post.length, post.grapheme_clusters.length] }</code> e <code>backwards = posts.map { |post| post.grapheme_clusters.reverse.join }</code>.",
+            "solution": "posts = [\"Grüezi!\", \"ルビー\", \"🦊❤️🥓\", \"Hopp 🇨🇭!\", \"👨‍👩‍👧\"]\n\nsizes = posts.map do |post|\n  [post.bytesize, post.length, post.grapheme_clusters.length]\nend\nbackwards = posts.map { |post| post.grapheme_clusters.reverse.join }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Gli spazi non hanno posto in un indirizzo web, e lì gli accenti creano problemi. Trasforma ogni piatto in uno <strong>slug</strong> per il suo indirizzo web: senza accenti, in minuscolo, <code>-</code> al posto degli spazi. <code>\"Crème brûlée\"</code> diventa <code>\"creme-brulee\"</code>. Ti aiuta il trucco dell'ultima cella: separa le lettere con <code>:nfd</code>, poi togli ogni <code>\\p{Mn}</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "dishes = [\"Crème brûlée\", \"Café au lait\", \"Éclair\",\n          \"Crêpe with bacon\", \"Jalapeño pizza\"]\n\n# slugs = ...   # ogni piatto senza accenti, in minuscolo, \"-\" al posto degli spazi\n",
+            "hints": [
+              "Fai <code>map</code> sui piatti e nel blocco concatena quattro passi: <code>unicode_normalize(:nfd)</code>, <code>gsub(/\\p{Mn}/, \"\")</code>, <code>downcase</code>, e un <code>gsub</code> che trasforma gli spazi in <code>-</code>."
+            ],
+            "check": "slugs == [\"creme-brulee\", \"cafe-au-lait\", \"eclair\", \"crepe-with-bacon\", \"jalapeno-pizza\"] && code.include?(\"unicode_normalize\")",
+            "hint": "<code>slugs = dishes.map { |dish| dish.unicode_normalize(:nfd).gsub(/\\p{Mn}/, \"\").downcase.gsub(\" \", \"-\") }</code>",
+            "solution": "dishes = [\"Crème brûlée\", \"Café au lait\", \"Éclair\",\n          \"Crêpe with bacon\", \"Jalapeño pizza\"]\n\nslugs = dishes.map do |dish|\n  dish.unicode_normalize(:nfd).gsub(/\\p{Mn}/, \"\").downcase.gsub(\" \", \"-\")\nend"
+          }
+        ]
       }
     },
     {
@@ -10572,6 +11522,204 @@ window.LESSONS_JSON = JSON.stringify({
             "solution": "def sift(list)\n  return list unless block_given?\n\n  kept = []\n  list.each { |x| kept << x if yield(x) }\n  kept\nend\n\nsift([3, 8, 12, 5]) { |n| n.even? }"
           }
         ]
+      },
+      "fr": {
+        "title": "Des méthodes qui prennent un bloc : yield",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Des méthodes qui prennent un bloc : yield</h2><p>Depuis la leçon {{nr:schleifen}}, vous donnez des blocs à des méthodes : <code>3.times { … }</code>, <code>each</code>, <code>map</code>, <code>select</code>. Maintenant, vous changez de camp et écrivez vous-même une méthode qui reçoit un bloc. Le mot magique est <code>yield</code> – « céder, passer la main » : à cet endroit, Ruby exécute le bloc qui accompagnait l’appel. Deux <code>yield</code>, deux fois le bloc :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def twice\n  yield\n  yield\nend\n\ntwice { puts \"Chunky Bacon!\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Parcourez la cellule pas à pas avec ⏯ : à chaque <code>yield</code>, Ruby saute hors de la méthode dans le bloc, puis revient. Le bloc n’est pas entre les parenthèses, il s’accroche derrière l’appel – c’est pourquoi <code>def twice</code> n’a besoin d’aucun paramètre pour lui.</p><p>Ça devient intéressant avec des valeurs. <code>yield(dish, price)</code> donne des valeurs au bloc, qui les reçoit entre les <code>|…|</code>. Et ce que le bloc calcule comme dernière valeur revient dans la méthode comme résultat de <code>yield</code>. La même méthode, deux blocs, deux résultats :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def price_tag(dish, price)\n  text = yield(dish, price)\n  \"[ #{text} ]\"\nend\n\nputs price_tag(\"bacon\", 4.5) { |what, price| \"#{what} for #{price} francs\" }\nputs price_tag(\"egg\", 1.2) { |what, price| \"#{what.upcase}!!! #{price}\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>La méthode décide <em>quand</em> quelque chose se passe et avec quelles valeurs – le bloc décide <em>quoi</em>. C’est exactement ainsi que fonctionne <code>map</code> : elle connaît la liste, vous fournissez la transformation.</p><p>Et si aucun bloc n’accompagne l’appel ? Alors <code>yield</code> n’a rien à appeler :</p>"
+          },
+          {
+            "t": "c",
+            "code": "twice",
+            "raises": "LocalJumpError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>LocalJumpError: no block given (yield)</code> – aucun bloc n’a été transmis. Avec <code>block_given?</code>, une méthode demande d’abord s’il y en a un. Le bloc devient ainsi facultatif : qui en passe un décide lui-même, qui n’en passe pas obtient la réponse habituelle :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def welcome(name)\n  if block_given?\n    yield(name)\n  else\n    \"Hello, #{name}!\"\n  end\nend\n\np welcome(\"Kaz\")\np welcome(\"Kaz\") { |n| \"Howdy, #{n}! Bacon?\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Un motif très apprécié est le <strong>sandwich</strong> : la méthode fait quelque chose avant et quelque chose après, et le bloc est la garniture au milieu. Ce qu’on met dedans, chaque appel le décide lui-même :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def sandwich\n  puts \"🍞 bread\"\n  yield\n  puts \"🍞 bread\"\nend\n\nsandwich { puts \"🥓 bacon\" }\nsandwich do\n  puts \"🥚 egg\"\n  puts \"🧀 cheese\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ruby lui-même est plein de sandwichs : <code>File.open(\"notes.txt\") { |file| … }</code> ouvre un fichier, le donne à votre bloc et le referme ensuite, quoi que fasse le bloc – la leçon {{nr:dateien}} vous le montre. Et maintenant, le meilleur : <code>each</code> n’a rien de magique non plus. Avec <code>while</code>, un compteur et <code>yield</code>, vous pouvez l’écrire vous-même – ⏯ vous montre comment la méthode saute dans le bloc une fois pour chaque élément :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def each_of(list)\n  i = 0\n  while i < list.length\n    yield(list[i])\n    i += 1\n  end\n  list\nend\n\nfoxes = [\"Chunky\", \"Kaz\", \"Isi\"]\neach_of(foxes) { |name| puts \"Enjoy your meal, #{name}!\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Comme le vrai <code>each</code>, <code>each_of</code> renvoie la liste elle-même à la fin. Et <code>map</code> ? C’est un <code>each</code> qui collecte les résultats du bloc. <code>map_of</code> s’appuie donc sur <code>each_of</code> : pour chaque élément, elle appelle <em>son propre</em> bloc avec <code>yield(x)</code> et met le résultat dans le nouvel array. Un <code>yield</code> appartient toujours à la méthode dans laquelle il est écrit – même quand il se trouve dans un petit bloc destiné à <code>each_of</code> :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def map_of(list)\n  result = []\n  each_of(list) { |x| result << yield(x) }\n  result\nend\n\np map_of([1, 2, 3]) { |n| n * 10 }\nmap_of(foxes) { |name| name.length }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Parfois, une méthode ne veut pas du tout appeler le bloc elle-même, seulement le transmettre à une autre. Elle donne alors un nom au bloc : <code>&amp;block</code> comme dernier paramètre attrape le bloc dans une variable, et <code>&amp;block</code> dans un appel le transmet, exactement comme s’il avait été écrit à cet endroit :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def for_all_foxes(&block)\n  [\"Chunky\", \"Kaz\", \"Isi\"].map(&block)\nend\n\nfor_all_foxes { |fox| \"#{fox} 🥓🥓🥓\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>La variable <code>block</code> contient un objet <code>Proc</code> – un bloc que l’on peut emporter avec soi. Ce que vous pouvez encore en faire (procs et lambdas), la leçon {{nr:tl-blocks}} vous le montre. Pour commencer, cette règle pratique suffit : écrivez <code>yield</code> quand votre méthode appelle elle-même le bloc, et <code>&amp;block</code> quand elle ne fait que le transmettre. <code>yield(x)</code> donne des valeurs au bloc et rapporte son résultat, et <code>block_given?</code> le rend facultatif.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/methods_rdoc.html#label-Block+Argument' target='_blank'>Méthodes avec un bloc</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/calling_methods_rdoc.html#label-Block+Argument' target='_blank'>Transmettre des blocs</a> · <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-block_given-3F' target='_blank'>Kernel#block_given?</a></div><div class='task'><strong>Exercice :</strong> Écrivez <code>repeat(n)</code> : la méthode appelle son bloc <code>n</code> fois, avec les nombres 1, 2, … jusqu’à <code>n</code>, et renvoie les résultats du bloc sous forme d’array. <code>repeat(4) { |i| i * i }</code> donne <code>[1, 4, 9, 16]</code>, <code>repeat(3) { |i| \"🥓\" * i }</code> donne <code>[\"🥓\", \"🥓🥓\", \"🥓🥓🥓\"]</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def repeat(n)\n#   ...   # appeler le bloc avec 1, 2, ... n\n#   ...   # et renvoyer ses résultats sous forme d'array\n# end\n\n# repeat(4) { |i| i * i }",
+            "hints": [
+              "Commencez avec un array vide et comptez de 1 à <code>n</code> – avec <code>(1..n).each</code> ou avec <code>while</code> comme dans <code>each_of</code>. Pour chaque nombre, <code>&lt;&lt; yield(i)</code> met le résultat du bloc dans l’array ; à la fin, vous renvoyez l’array."
+            ],
+            "check": "repeat(4) { |i| i * i } == [1, 4, 9, 16] && repeat(3) { |i| \"🥓\" * i } == [\"🥓\", \"🥓🥓\", \"🥓🥓🥓\"] && repeat(1) { |i| i + 41 } == [42] && repeat(0) { |i| i } == [] && code.match?(/^\\s*def repeat\\b/)",
+            "hint": "<code>def repeat(n)</code>, dedans <code>results = []</code>, <code>(1..n).each { |i| results &lt;&lt; yield(i) }</code> et <code>results</code>, puis <code>end</code>.",
+            "solution": "def repeat(n)\n  results = []\n  (1..n).each { |i| results << yield(i) }\n  results\nend\n\nrepeat(4) { |i| i * i }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Construisez votre propre <code>select</code> – sans utiliser <code>select</code>, <code>filter</code> ni <code>reject</code> : <code>sift(list)</code> renvoie un nouvel array avec les éléments pour lesquels le bloc donne quelque chose de vrai. <code>sift([3, 8, 12, 5]) { |n| n.even? }</code> donne <code>[8, 12]</code>. Et sans bloc, <code>sift</code> ne filtre rien : <code>sift([3, 8])</code> renvoie toute la liste.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def sift(list)\n#   ...   # sans bloc : toute la liste\n#   ...   # sinon : seulement les éléments pour lesquels le bloc dit vrai\n# end\n\n# sift([3, 8, 12, 5]) { |n| n.even? }",
+            "hints": [
+              "D’abord la question <code>block_given?</code> : sans bloc, renvoyez tout de suite la liste (<code>return list unless block_given?</code>). Sinon, parcourez la liste comme dans <code>map_of</code>, mais ne mettez dans le nouvel array que les éléments pour lesquels <code>yield(x)</code> est vrai."
+            ],
+            "check": "sift([3, 8, 12, 5]) { |n| n.even? } == [8, 12] && sift(%w[bacon egg beans]) { |w| w.start_with?(\"b\") } == [\"bacon\", \"beans\"] && sift([1, nil, 2, false]) { |x| x } == [1, 2] && sift([]) { true } == [] && sift([3, 8]) == [3, 8] && code.match?(/^\\s*def sift\\b/) && code !~ /\\.(select|filter|reject|filter_map|partition)\\b/",
+            "hint": "<code>return list unless block_given?</code>, puis <code>kept = []</code>, <code>list.each { |x| kept &lt;&lt; x if yield(x) }</code> et <code>kept</code> à la fin.",
+            "solution": "def sift(list)\n  return list unless block_given?\n\n  kept = []\n  list.each { |x| kept << x if yield(x) }\n  kept\nend\n\nsift([3, 8, 12, 5]) { |n| n.even? }"
+          }
+        ]
+      },
+      "it": {
+        "title": "Metodi che prendono un blocco: yield",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Metodi che prendono un blocco: yield</h2><p>Dalla lezione {{nr:schleifen}} passi blocchi ai metodi: <code>3.times { … }</code>, <code>each</code>, <code>map</code>, <code>select</code>. Ora cambi lato e scrivi tu un metodo che riceve un blocco. La parola magica è <code>yield</code>, cioè “cedere il passo”: in quel punto Ruby esegue il blocco arrivato insieme alla chiamata. Due <code>yield</code>, due volte il blocco:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def twice\n  yield\n  yield\nend\n\ntwice { puts \"Chunky Bacon!\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Segui la cella con ⏯: a ogni <code>yield</code> Ruby salta fuori dal metodo dentro il blocco, e poi torna indietro. Il blocco non sta tra le parentesi, è attaccato dietro la chiamata: per questo <code>def twice</code> non ha bisogno di un parametro per lui.</p><p>Diventa interessante con i valori. <code>yield(dish, price)</code> passa dei valori al blocco, che li riceve tra le <code>|…|</code>. E quello che il blocco calcola come ultimo valore torna nel metodo come risultato di <code>yield</code>. Lo stesso metodo, due blocchi, due risultati:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def price_tag(dish, price)\n  text = yield(dish, price)\n  \"[ #{text} ]\"\nend\n\nputs price_tag(\"bacon\", 4.5) { |what, price| \"#{what} for #{price} francs\" }\nputs price_tag(\"egg\", 1.2) { |what, price| \"#{what.upcase}!!! #{price}\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Il metodo decide <em>quando</em> succede qualcosa e con quali valori, il blocco decide <em>che cosa</em>. È esattamente così che funziona <code>map</code>: conosce l'elenco, tu fornisci la trasformazione.</p><p>E se non arriva nessun blocco? Allora <code>yield</code> non ha niente da chiamare:</p>"
+          },
+          {
+            "t": "c",
+            "code": "twice",
+            "raises": "LocalJumpError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>LocalJumpError: no block given (yield)</code>: non è stato passato nessun blocco. Con <code>block_given?</code> un metodo chiede prima se ce n'è uno. Così il blocco diventa facoltativo: chi ne passa uno decide da sé, chi non lo fa riceve la risposta solita:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def welcome(name)\n  if block_given?\n    yield(name)\n  else\n    \"Hello, #{name}!\"\n  end\nend\n\np welcome(\"Kaz\")\np welcome(\"Kaz\") { |n| \"Howdy, #{n}! Bacon?\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Uno schema molto amato è il <strong>sandwich</strong>: il metodo fa qualcosa prima e qualcosa dopo, e il blocco è il ripieno in mezzo. Che cosa ci va dentro lo decide ogni chiamata:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def sandwich\n  puts \"🍞 bread\"\n  yield\n  puts \"🍞 bread\"\nend\n\nsandwich { puts \"🥓 bacon\" }\nsandwich do\n  puts \"🥚 egg\"\n  puts \"🧀 cheese\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ruby stesso è pieno di sandwich: <code>File.open(\"notes.txt\") { |file| … }</code> apre un file, lo passa al tuo blocco e poi lo richiude, qualunque cosa faccia il blocco; te lo mostra la lezione {{nr:dateien}}. E ora la parte più bella: nemmeno <code>each</code> è una magia. Con <code>while</code>, un contatore e <code>yield</code> puoi scriverlo tu: ⏯ ti mostra come il metodo salta nel blocco una volta per ogni elemento:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def each_of(list)\n  i = 0\n  while i < list.length\n    yield(list[i])\n    i += 1\n  end\n  list\nend\n\nfoxes = [\"Chunky\", \"Kaz\", \"Isi\"]\neach_of(foxes) { |name| puts \"Enjoy your meal, #{name}!\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Come il vero <code>each</code>, anche <code>each_of</code> alla fine restituisce l'elenco stesso. E <code>map</code>? È un <code>each</code> che raccoglie i risultati del blocco. Quindi <code>map_of</code> si appoggia a <code>each_of</code>: per ogni elemento chiama il <em>proprio</em> blocco con <code>yield(x)</code> e mette il risultato nel nuovo array. Uno <code>yield</code> appartiene sempre al metodo in cui è scritto, anche quando si trova dentro un piccolo blocco per <code>each_of</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def map_of(list)\n  result = []\n  each_of(list) { |x| result << yield(x) }\n  result\nend\n\np map_of([1, 2, 3]) { |n| n * 10 }\nmap_of(foxes) { |name| name.length }"
+          },
+          {
+            "t": "h",
+            "html": "<p>A volte un metodo non vuole affatto chiamare il blocco da sé, ma solo passarlo a un altro. Allora dà un nome al blocco: <code>&amp;block</code> come ultimo parametro cattura il blocco in una variabile, e <code>&amp;block</code> in una chiamata lo passa avanti, proprio come se fosse stato scritto lì:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def for_all_foxes(&block)\n  [\"Chunky\", \"Kaz\", \"Isi\"].map(&block)\nend\n\nfor_all_foxes { |fox| \"#{fox} 🥓🥓🥓\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>La variabile <code>block</code> contiene un oggetto <code>Proc</code>, un blocco che puoi portarti dietro. Che altro puoi farci (proc e lambda) te lo mostra la lezione {{nr:tl-blocks}}. Per cominciare basta questa regola pratica: scrivi <code>yield</code> quando il tuo metodo chiama il blocco da sé, e <code>&amp;block</code> quando lo passa solo avanti. <code>yield(x)</code> dà dei valori al blocco e ne riporta il risultato, e <code>block_given?</code> lo rende facoltativo.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/methods_rdoc.html#label-Block+Argument' target='_blank'>Metodi con un blocco</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/calling_methods_rdoc.html#label-Block+Argument' target='_blank'>Passare blocchi</a> · <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-block_given-3F' target='_blank'>Kernel#block_given?</a></div><div class='task'><strong>Esercizio:</strong> Scrivi <code>repeat(n)</code>: il metodo chiama il suo blocco <code>n</code> volte, con i numeri 1, 2, … fino a <code>n</code>, e restituisce i risultati del blocco come array. <code>repeat(4) { |i| i * i }</code> dà <code>[1, 4, 9, 16]</code>, <code>repeat(3) { |i| \"🥓\" * i }</code> dà <code>[\"🥓\", \"🥓🥓\", \"🥓🥓🥓\"]</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def repeat(n)\n#   ...   # chiama il blocco con 1, 2, ... n\n#   ...   # e restituisci i suoi risultati come array\n# end\n\n# repeat(4) { |i| i * i }",
+            "hints": [
+              "Parti da un array vuoto e conta da 1 a <code>n</code>, con <code>(1..n).each</code> oppure con <code>while</code> come in <code>each_of</code>. Per ogni numero, <code>&lt;&lt; yield(i)</code> mette il risultato del blocco nell'array; alla fine restituisci l'array."
+            ],
+            "check": "repeat(4) { |i| i * i } == [1, 4, 9, 16] && repeat(3) { |i| \"🥓\" * i } == [\"🥓\", \"🥓🥓\", \"🥓🥓🥓\"] && repeat(1) { |i| i + 41 } == [42] && repeat(0) { |i| i } == [] && code.match?(/^\\s*def repeat\\b/)",
+            "hint": "<code>def repeat(n)</code>, dentro <code>results = []</code>, <code>(1..n).each { |i| results &lt;&lt; yield(i) }</code> e <code>results</code>, poi <code>end</code>.",
+            "solution": "def repeat(n)\n  results = []\n  (1..n).each { |i| results << yield(i) }\n  results\nend\n\nrepeat(4) { |i| i * i }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Costruisci il tuo <code>select</code>, senza usare <code>select</code>, <code>filter</code> o <code>reject</code>: <code>sift(list)</code> restituisce un nuovo array con gli elementi per cui il blocco dà qualcosa di vero. <code>sift([3, 8, 12, 5]) { |n| n.even? }</code> dà <code>[8, 12]</code>. E senza blocco <code>sift</code> non scarta niente: <code>sift([3, 8])</code> restituisce l'intero elenco.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def sift(list)\n#   ...   # senza blocco: l'intero elenco\n#   ...   # altrimenti: solo gli elementi per cui il blocco dice vero\n# end\n\n# sift([3, 8, 12, 5]) { |n| n.even? }",
+            "hints": [
+              "Prima la domanda <code>block_given?</code>: senza blocco restituisci subito l'elenco (<code>return list unless block_given?</code>). Altrimenti percorri l'elenco come in <code>map_of</code>, ma metti nel nuovo array solo gli elementi per cui <code>yield(x)</code> è vero."
+            ],
+            "check": "sift([3, 8, 12, 5]) { |n| n.even? } == [8, 12] && sift(%w[bacon egg beans]) { |w| w.start_with?(\"b\") } == [\"bacon\", \"beans\"] && sift([1, nil, 2, false]) { |x| x } == [1, 2] && sift([]) { true } == [] && sift([3, 8]) == [3, 8] && code.match?(/^\\s*def sift\\b/) && code !~ /\\.(select|filter|reject|filter_map|partition)\\b/",
+            "hint": "<code>return list unless block_given?</code>, poi <code>kept = []</code>, <code>list.each { |x| kept &lt;&lt; x if yield(x) }</code> e alla fine <code>kept</code>.",
+            "solution": "def sift(list)\n  return list unless block_given?\n\n  kept = []\n  list.each { |x| kept << x if yield(x) }\n  kept\nend\n\nsift([3, 8, 12, 5]) { |n| n.even? }"
+          }
+        ]
       }
     },
     {
@@ -11284,6 +12432,202 @@ window.LESSONS_JSON = JSON.stringify({
             "solution": "field = [\n  \"*...\",\n  \"..*.\",\n  \"....\"\n].map(&:chars)\n\ndef mine_counts(field)\n  field.map.with_index do |line, r|\n    line.map.with_index do |cell, c|\n      cell == \"*\" ? \"*\" : around(field, r, c).count(\"*\")\n    end\n  end\nend\n\nputs mine_counts(field).map(&:join)"
           }
         ]
+      },
+      "fr": {
+        "title": "Grilles : des arrays dans des arrays",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Grilles : des arrays dans des arrays</h2><p>Dans la leçon {{nr:muster}}, vous avez dessiné un échiquier avec deux boucles – mais le plateau n’existait que sous forme de lignes affichées. Pour jouer sur un plateau, il doit devenir des données : un array de lignes, et chaque ligne un array de cases. <code>garden[row][col]</code> choisit d’abord la ligne, puis la case dans cette ligne – les deux comptées à partir de 0, la ligne 0 tout en haut :</p>"
+          },
+          {
+            "t": "c",
+            "code": "garden = [\n  [\"🌱\", \"🌱\", \"🥕\"],\n  [\"🌱\", \"🦊\", \"🌱\"],\n  [\"🥓\", \"🌱\", \"🌱\"]\n]\np garden[1][1]\np garden[2][0]\ngarden[0]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Pour afficher une grille, transformez chaque ligne en une ligne de texte : <code>map(&amp;:join)</code> assemble chaque ligne en une chaîne, et <code>puts</code> écrit chaque chaîne d’un array sur sa propre ligne. Une case se modifie par une affectation, <code>garden[row][col] = …</code> – ici, Chunky va chercher le bacon :</p>"
+          },
+          {
+            "t": "c",
+            "code": "garden[1][1] = \"🌱\"\ngarden[2][0] = \"🦊\"\nputs garden.map(&:join)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Taper une grille sous forme d’arrays dans des arrays, c’est laborieux. Il est plus rapide de l’écrire sous forme de chaînes, une par ligne, et de laisser <code>map(&amp;:chars)</code> découper chaque ligne en cases – le chemin inverse de <code>map(&amp;:join)</code>. Ici, <code>#</code> est un mur, <code>F</code> est Chunky et <code>B</code> le bacon. Pour trouver quelque chose, parcourez les lignes avec <code>each_with_index</code> et demandez à chaque ligne l’<code>index</code> de ce que vous cherchez :</p>"
+          },
+          {
+            "t": "c",
+            "code": "cellar = [\n  \"#####\",\n  \"#F..#\",\n  \"#.#B#\",\n  \"#####\"\n].map(&:chars)\ncellar.each_with_index do |line, row|\n  col = line.index(\"B\")\n  puts \"bacon in row #{row}, column #{col}\" if col\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Une grille pleine de zéros – disons, combien de tranches de bacon se trouvent sur chaque case d’une plaque de cuisson – va encore plus vite avec <code>Array.new</code> : <code>Array.new(3, 0)</code> est une ligne <code>[0, 0, 0]</code>. <code>Array.new(3, Array.new(3, 0))</code> devrait donc être une plaque de 3 × 3 cases. Posez 5 tranches sur la case en haut à gauche et regardez :</p>"
+          },
+          {
+            "t": "c",
+            "code": "tray = Array.new(3, Array.new(3, 0))\ntray[0][0] = 5\np tray"
+          },
+          {
+            "t": "h",
+            "html": "<p>Quinze tranches pour le prix de cinq ! <code>Array.new(3, row)</code> a créé <em>une seule</em> ligne et l’a mise trois fois dans la plaque – trois étiquettes sur le même array, comme dans la leçon {{nr:arrays}}. Avec un bloc, <code>Array.new(3) { … }</code> exécute le bloc une fois pour chaque ligne et construit ainsi trois lignes indépendantes. <code>show_objects</code> dessine la différence :</p>"
+          },
+          {
+            "t": "c",
+            "code": "good = Array.new(3) { Array.new(3, 0) }\ngood[0][0] = 5\np good\nshow_objects(tray: tray, good: good)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Les trois flèches de <code>tray</code> aboutissent à la même ligne ; <code>good</code> a trois lignes. Passons maintenant à la lecture d’une grille. Une ligne, c’est simplement <code>grid[r]</code>. Une colonne, ce sont les cases situées au même endroit dans chaque ligne : <code>map { |row| row[c] }</code>. <code>transpose</code> retourne toute la grille selon sa diagonale, de sorte que ses lignes sont les anciennes colonnes. Et les deux diagonales sont les cases où la ligne et la colonne sont égales, et les cases où leur somme vaut 2 :</p>"
+          },
+          {
+            "t": "c",
+            "code": "nine = [\n  [1, 2, 3],\n  [4, 5, 6],\n  [7, 8, 9]\n]\np nine[1]                            # ligne 1\np nine.map { |row| row[2] }          # colonne 2\np nine.transpose                     # toutes les colonnes\np 3.times.map { |i| nine[i][i] }     # diagonale ↘\n3.times.map { |i| nine[i][2 - i] }   # diagonale ↙"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>transpose</code> a encore un tour dans son sac. Suivi de <code>map(&amp;:reverse)</code>, il fait pivoter une grille de 90° dans le sens des aiguilles d’une montre : la première colonne, lue de bas en haut, devient la première ligne. Une grille qui n’est pas carrée pivote aussi – cinq lignes de trois deviennent trois lignes de cinq, et le F se retrouve couché :</p>"
+          },
+          {
+            "t": "c",
+            "code": "letter = [\"###\", \"#..\", \"##.\", \"#..\", \"#..\"].map(&:chars)\nturned = letter.transpose.map(&:reverse)\nputs letter.map(&:join)\nputs\nputs turned.map(&:join)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Beaucoup de jeux sur grille s’intéressent aux <strong>voisins</strong> d’une case : les huit cases (au plus) qui l’entourent. Au bord, certaines manquent – et attention : <code>grid[-1]</code> n’est pas nil mais la <em>dernière</em> ligne, car les nombres négatifs comptent à partir de la fin. Vérifiez donc les bords vous-même avant de regarder. <code>next</code> saute le reste d’un tour de boucle :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def around(grid, row, col)\n  found = []\n  (row - 1..row + 1).each do |r|\n    (col - 1..col + 1).each do |c|\n      next if r == row && c == col     # pas la case elle-même\n      next if r < 0 || c < 0 || r >= grid.size || c >= grid[r].size\n      found << grid[r][c]\n    end\n  end\n  found\nend\n\np around(nine, 1, 1)\naround(nine, 0, 0)"
+          },
+          {
+            "t": "h",
+            "html": "<p>La case du milieu a ses huit voisins, le coin seulement trois. À retenir : <code>grid[row][col]</code>, la ligne d’abord ; <code>Array.new(n) { … }</code> pour des lignes indépendantes ; <code>transpose</code> pour les colonnes ; et vérifiez les bords avant de regarder un voisin.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-c-new' target='_blank'>Array.new</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-transpose' target='_blank'>Array#transpose</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-map' target='_blank'>Array#map</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerator.html#method-i-with_index' target='_blank'>Enumerator#with_index</a></div><div class='task'><strong>Exercice :</strong> Morpion ! Écrivez <code>winner(board)</code> : la méthode renvoie <code>\"X\"</code> ou <code>\"O\"</code> quand ce joueur en a trois alignés – sur une ligne, une colonne ou une diagonale – et <code>nil</code> quand personne n’a gagné. Les cases vides sont <code>\".\"</code>, et trois cases vides alignées ne sont pas une victoire.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def winner(board)\n#   ...   # \"X\" ou \"O\" avec trois alignés, sinon nil\n# end\n\n# winner([%w[X O .],\n#         %w[O X .],\n#         %w[O . X]])\n",
+            "hints": [
+              "Rassemblez les huit alignements dans un seul array : les lignes (<code>board</code> lui-même), les colonnes (<code>board.transpose</code>) et les deux diagonales. Ensuite, cherchez avec <code>find</code> un alignement dont les trois cases sont identiques et ne sont pas <code>\".\"</code>."
+            ],
+            "check": "winner([%w[X X X], %w[O O .], %w[. . .]]) == \"X\" && winner([%w[O X .], %w[O X .], %w[O . X]]) == \"O\" && winner([%w[X O .], %w[O X .], %w[. . X]]) == \"X\" && winner([%w[. O X], %w[O X .], %w[X . O]]) == \"X\" && winner([%w[. . .], %w[X X .], %w[O O O]]) == \"O\" && winner([%w[. X .], %w[O X O], %w[. X .]]) == \"X\" && winner([%w[X O X], %w[X O O], %w[O X X]]).nil? && winner([%w[. . .], %w[X O X], %w[O X O]]).nil? && winner([%w[. . .], %w[. . .], %w[. . .]]).nil?",
+            "hint": "<code>lines = board + board.transpose</code>, puis ajoutez les deux diagonales avec <code>&lt;&lt;</code> (<code>3.times.map { |i| board[i][i] }</code> et la même chose avec <code>board[i][2 - i]</code>). <code>line = lines.find { |l| l.uniq.size == 1 &amp;&amp; l[0] != \".\" }</code> – et renvoyez <code>line&amp;.first</code>, qui vaut nil quand il n’y a pas d’alignement de ce genre.",
+            "solution": "def winner(board)\n  lines = board + board.transpose\n  lines << 3.times.map { |i| board[i][i] }\n  lines << 3.times.map { |i| board[i][2 - i] }\n  line = lines.find { |l| l.uniq.size == 1 && l[0] != \".\" }\n  line&.first\nend\n\nwinner([%w[X O .],\n        %w[O X .],\n        %w[O . X]])"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Démineur ! Écrivez <code>mine_counts(field)</code> : la méthode renvoie une nouvelle grille de même taille, dans laquelle une mine <code>\"*\"</code> reste une mine et chaque autre case devient le nombre de mines parmi ses voisins. <code>around</code>, vu plus haut, trouve les voisins pour vous.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "field = [\n  \"*...\",\n  \"..*.\",\n  \"....\"\n].map(&:chars)\n\n# def mine_counts(field)\n#   ...   # \"*\" reste \"*\", toute autre case : combien de \"*\" l'entourent\n# end\n\n# puts mine_counts(field).map(&:join)\n",
+            "hints": [
+              "Pour chaque case, il vous faut son numéro de ligne et de colonne. <code>map.with_index</code> est un <code>map</code> qui donne aussi la position au bloc : faites un map sur les lignes, dans chaque ligne un map sur ses cases, et pour une case qui n’est pas une mine, comptez avec <code>around(field, r, c).count(\"*\")</code>."
+            ],
+            "check": "->(t) { t.([\"*...\", \"..*.\", \"....\"], [\"*211\", \"12*1\", \"0111\"]) && t.([\"*.*.*\", \".....\", \"*...*\"], [\"*2*2*\", \"23132\", \"*101*\"]) && t.([\"**\", \"*.\"], [\"**\", \"*3\"]) && t.([\".\"], [\"0\"]) && t.([\"..\", \"..\", \".*\"], [\"00\", \"11\", \"1*\"]) }.(->(rows, want) { Array(mine_counts(rows.map(&:chars))).map { |r| Array(r).join } == want })",
+            "hint": "<code>field.map.with_index do |line, r|</code>, dedans <code>line.map.with_index { |cell, c| cell == \"*\" ? \"*\" : around(field, r, c).count(\"*\") }</code>, puis <code>end</code>.",
+            "solution": "field = [\n  \"*...\",\n  \"..*.\",\n  \"....\"\n].map(&:chars)\n\ndef mine_counts(field)\n  field.map.with_index do |line, r|\n    line.map.with_index do |cell, c|\n      cell == \"*\" ? \"*\" : around(field, r, c).count(\"*\")\n    end\n  end\nend\n\nputs mine_counts(field).map(&:join)"
+          }
+        ]
+      },
+      "it": {
+        "title": "Griglie: array dentro array",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Griglie: array dentro array</h2><p>Nella lezione {{nr:muster}} hai disegnato una scacchiera con due cicli, ma la scacchiera esisteva solo come righe stampate. Per giocarci sopra deve diventare dati: un array di righe, e ogni riga un array di caselle. <code>garden[row][col]</code> sceglie prima la riga, poi la casella al suo interno; entrambe si contano da 0, con la riga 0 in alto:</p>"
+          },
+          {
+            "t": "c",
+            "code": "garden = [\n  [\"🌱\", \"🌱\", \"🥕\"],\n  [\"🌱\", \"🦊\", \"🌱\"],\n  [\"🥓\", \"🌱\", \"🌱\"]\n]\np garden[1][1]\np garden[2][0]\ngarden[0]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Per stampare una griglia, trasforma ogni riga in una riga di testo: <code>map(&amp;:join)</code> unisce ogni riga in una stringa, e <code>puts</code> scrive ogni stringa di un array su una riga a sé. Una casella cambia con un'assegnazione, <code>garden[row][col] = …</code>: qui Chunky va a prendersi il bacon:</p>"
+          },
+          {
+            "t": "c",
+            "code": "garden[1][1] = \"🌱\"\ngarden[2][0] = \"🦊\"\nputs garden.map(&:join)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Scrivere una griglia come array dentro array è scomodo. Si fa prima a scriverla come stringhe, una per riga, e lasciare che <code>map(&amp;:chars)</code> tagli ogni riga in caselle: il percorso inverso di <code>map(&amp;:join)</code>. Qui <code>#</code> è un muro, <code>F</code> è Chunky e <code>B</code> il bacon. Per trovare qualcosa, percorri le righe con <code>each_with_index</code> e chiedi a ogni riga l'<code>index</code> di ciò che cerchi:</p>"
+          },
+          {
+            "t": "c",
+            "code": "cellar = [\n  \"#####\",\n  \"#F..#\",\n  \"#.#B#\",\n  \"#####\"\n].map(&:chars)\ncellar.each_with_index do |line, row|\n  col = line.index(\"B\")\n  puts \"bacon in row #{row}, column #{col}\" if col\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Una griglia piena di zeri (per esempio quante strisce di bacon ci sono su ogni casella di una teglia) si fa ancora più in fretta con <code>Array.new</code>: <code>Array.new(3, 0)</code> è una riga <code>[0, 0, 0]</code>. Quindi <code>Array.new(3, Array.new(3, 0))</code> dovrebbe essere una teglia di 3 × 3 caselle. Metti 5 strisce sulla casella in alto a sinistra e guarda:</p>"
+          },
+          {
+            "t": "c",
+            "code": "tray = Array.new(3, Array.new(3, 0))\ntray[0][0] = 5\np tray"
+          },
+          {
+            "t": "h",
+            "html": "<p>Quindici strisce al prezzo di cinque! <code>Array.new(3, row)</code> ha creato <em>una sola</em> riga e l'ha messa tre volte nella teglia: tre etichette sullo stesso array, come nella lezione {{nr:arrays}}. Con un blocco, <code>Array.new(3) { … }</code> esegue il blocco una volta per ogni riga e così costruisce tre righe indipendenti. <code>show_objects</code> disegna la differenza:</p>"
+          },
+          {
+            "t": "c",
+            "code": "good = Array.new(3) { Array.new(3, 0) }\ngood[0][0] = 5\np good\nshow_objects(tray: tray, good: good)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Tutte e tre le frecce di <code>tray</code> finiscono nella stessa riga; <code>good</code> ha tre righe. Ora passiamo a leggere una griglia. Una riga è semplicemente <code>grid[r]</code>. Una colonna è la casella nello stesso punto di ogni riga: <code>map { |row| row[c] }</code>. <code>transpose</code> ribalta l'intera griglia lungo la sua diagonale, così le sue righe sono le vecchie colonne. E le due diagonali sono le caselle in cui riga e colonna sono uguali, e quelle in cui la loro somma fa 2:</p>"
+          },
+          {
+            "t": "c",
+            "code": "nine = [\n  [1, 2, 3],\n  [4, 5, 6],\n  [7, 8, 9]\n]\np nine[1]                            # riga 1\np nine.map { |row| row[2] }          # colonna 2\np nine.transpose                     # tutte le colonne\np 3.times.map { |i| nine[i][i] }     # diagonale ↘\n3.times.map { |i| nine[i][2 - i] }   # diagonale ↙"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>transpose</code> ha ancora un asso nella manica. Seguito da <code>map(&amp;:reverse)</code>, ruota una griglia di 90° in senso orario: la prima colonna, letta dal basso verso l'alto, diventa la prima riga. Anche una griglia non quadrata si può ruotare: cinque righe da tre diventano tre righe da cinque, e la F si ritrova sdraiata:</p>"
+          },
+          {
+            "t": "c",
+            "code": "letter = [\"###\", \"#..\", \"##.\", \"#..\", \"#..\"].map(&:chars)\nturned = letter.transpose.map(&:reverse)\nputs letter.map(&:join)\nputs\nputs turned.map(&:join)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Molti giochi su griglia si interessano ai <strong>vicini</strong> di una casella: le (al massimo) otto caselle intorno. Sul bordo alcune mancano, e attenzione: <code>grid[-1]</code> non è nil ma l'<em>ultima</em> riga, perché i numeri negativi contano dalla fine. Quindi controlla tu i bordi prima di guardare. <code>next</code> salta il resto di un giro del ciclo:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def around(grid, row, col)\n  found = []\n  (row - 1..row + 1).each do |r|\n    (col - 1..col + 1).each do |c|\n      next if r == row && c == col     # non la casella stessa\n      next if r < 0 || c < 0 || r >= grid.size || c >= grid[r].size\n      found << grid[r][c]\n    end\n  end\n  found\nend\n\np around(nine, 1, 1)\naround(nine, 0, 0)"
+          },
+          {
+            "t": "h",
+            "html": "<p>La casella in mezzo ha tutti e otto i vicini, l'angolo solo tre. Ricorda: <code>grid[row][col]</code>, prima la riga; <code>Array.new(n) { … }</code> per righe indipendenti; <code>transpose</code> per le colonne; e controlla i bordi prima di guardare un vicino.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-c-new' target='_blank'>Array.new</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-transpose' target='_blank'>Array#transpose</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-map' target='_blank'>Array#map</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerator.html#method-i-with_index' target='_blank'>Enumerator#with_index</a></div><div class='task'><strong>Esercizio:</strong> Tris! Scrivi <code>winner(board)</code>: restituisce <code>\"X\"</code> o <code>\"O\"</code> quando quel giocatore ne ha tre in fila (in una riga, una colonna o una diagonale) e <code>nil</code> quando nessuno ha vinto. Le caselle vuote sono <code>\".\"</code>, e tre caselle vuote in fila non sono una vittoria.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def winner(board)\n#   ...   # \"X\" o \"O\" con tre in fila, altrimenti nil\n# end\n\n# winner([%w[X O .],\n#         %w[O X .],\n#         %w[O . X]])\n",
+            "hints": [
+              "Raccogli tutte e otto le file in un solo array: le righe (<code>board</code> stesso), le colonne (<code>board.transpose</code>) e le due diagonali. Poi cerca con <code>find</code> una fila le cui tre caselle sono tutte uguali e non sono <code>\".\"</code>."
+            ],
+            "check": "winner([%w[X X X], %w[O O .], %w[. . .]]) == \"X\" && winner([%w[O X .], %w[O X .], %w[O . X]]) == \"O\" && winner([%w[X O .], %w[O X .], %w[. . X]]) == \"X\" && winner([%w[. O X], %w[O X .], %w[X . O]]) == \"X\" && winner([%w[. . .], %w[X X .], %w[O O O]]) == \"O\" && winner([%w[. X .], %w[O X O], %w[. X .]]) == \"X\" && winner([%w[X O X], %w[X O O], %w[O X X]]).nil? && winner([%w[. . .], %w[X O X], %w[O X O]]).nil? && winner([%w[. . .], %w[. . .], %w[. . .]]).nil?",
+            "hint": "<code>lines = board + board.transpose</code>, poi aggiungi le due diagonali con <code>&lt;&lt;</code> (<code>3.times.map { |i| board[i][i] }</code> e lo stesso con <code>board[i][2 - i]</code>). <code>line = lines.find { |l| l.uniq.size == 1 &amp;&amp; l[0] != \".\" }</code> e restituisci <code>line&amp;.first</code>, che è nil quando una fila così non c'è.",
+            "solution": "def winner(board)\n  lines = board + board.transpose\n  lines << 3.times.map { |i| board[i][i] }\n  lines << 3.times.map { |i| board[i][2 - i] }\n  line = lines.find { |l| l.uniq.size == 1 && l[0] != \".\" }\n  line&.first\nend\n\nwinner([%w[X O .],\n        %w[O X .],\n        %w[O . X]])"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Campo minato! Scrivi <code>mine_counts(field)</code>: restituisce una nuova griglia della stessa grandezza, in cui una mina <code>\"*\"</code> resta una mina e ogni altra casella diventa il numero di mine tra i suoi vicini. <code>around</code> di prima trova i vicini per te.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "field = [\n  \"*...\",\n  \"..*.\",\n  \"....\"\n].map(&:chars)\n\n# def mine_counts(field)\n#   ...   # \"*\" resta \"*\", ogni altra casella: quanti \"*\" ha intorno\n# end\n\n# puts mine_counts(field).map(&:join)\n",
+            "hints": [
+              "Per ogni casella ti servono il numero di riga e di colonna. <code>map.with_index</code> è un <code>map</code> che passa al blocco anche la posizione: fai un map sulle righe, dentro ogni riga un map sulle sue caselle, e per una casella che non è una mina conta con <code>around(field, r, c).count(\"*\")</code>."
+            ],
+            "check": "->(t) { t.([\"*...\", \"..*.\", \"....\"], [\"*211\", \"12*1\", \"0111\"]) && t.([\"*.*.*\", \".....\", \"*...*\"], [\"*2*2*\", \"23132\", \"*101*\"]) && t.([\"**\", \"*.\"], [\"**\", \"*3\"]) && t.([\".\"], [\"0\"]) && t.([\"..\", \"..\", \".*\"], [\"00\", \"11\", \"1*\"]) }.(->(rows, want) { Array(mine_counts(rows.map(&:chars))).map { |r| Array(r).join } == want })",
+            "hint": "<code>field.map.with_index do |line, r|</code>, dentro <code>line.map.with_index { |cell, c| cell == \"*\" ? \"*\" : around(field, r, c).count(\"*\") }</code>, poi <code>end</code>.",
+            "solution": "field = [\n  \"*...\",\n  \"..*.\",\n  \"....\"\n].map(&:chars)\n\ndef mine_counts(field)\n  field.map.with_index do |line, r|\n    line.map.with_index do |cell, c|\n      cell == \"*\" ? \"*\" : around(field, r, c).count(\"*\")\n    end\n  end\nend\n\nputs mine_counts(field).map(&:join)"
+          }
+        ]
       }
     },
     {
@@ -11558,6 +12902,186 @@ window.LESSONS_JSON = JSON.stringify({
             "solution": "def permissions(mode)\n  8.downto(0).map { |i| mode[i] == 1 ? \"rwx\"[(8 - i) % 3] : \"-\" }.join\nend\n\npermissions(0o754)"
           }
         ]
+      },
+      "fr": {
+        "title": "Binaire, hexadécimal et bits",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Binaire, hexadécimal et bits</h2><p>Nous comptons avec dix chiffres : après le 9, il n’y en a plus, alors on écrit un 1 devant et on recommence à 0. Un ordinateur n’a que deux chiffres, 0 et 1 – il compte en <strong>binaire</strong> et doit faire une retenue bien plus tôt. <code>to_s(2)</code> écrit un nombre en binaire, et <code>rjust</code> de la leçon {{nr:formatieren}} le complète par des zéros devant :</p>"
+          },
+          {
+            "t": "c",
+            "code": "(0..8).each do |n|\n  puts \"#{n}: #{n.to_s(2).rjust(4, \"0\")}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Chaque position vaut le double de celle à sa droite : 1, 2, 4, 8, 16 … <code>1101</code> vaut donc 8 + 4 + 0 + 1 = 13. <code>to_i(2)</code> lit une chaîne de chiffres binaires. Dans le code, vous pouvez écrire un nombre directement en binaire avec <code>0b</code>, en hexadécimal avec <code>0x</code> et en octal (base 8) avec <code>0o</code> – c’est toujours le même nombre, simplement écrit autrement :</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"1101\".to_i(2)\np 0b1101\np 0b1101 == 13\np 0xff\n0o17"
+          },
+          {
+            "t": "h",
+            "html": "<p>L’<strong>hexadécimal</strong> compte avec seize chiffres : de 0 à 9, puis de <code>a</code> à <code>f</code> pour 10 à 15. Deux chiffres hexadécimaux font exactement un octet, de 0 à 255 – c’est pourquoi on écrit si souvent les octets en hexadécimal, comme les points de code de la leçon {{nr:unicode}}. Une couleur web comme <code>\"#ff8800\"</code>, ce sont trois octets : rouge <code>ff</code>, vert <code>88</code>, bleu <code>00</code>. <code>to_i(16)</code> lit l’hexadécimal, <code>to_s(16)</code> l’écrit, et <code>%02x</code> dans <code>format</code> écrit toujours deux chiffres :</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"ff\".to_i(16)\np \"88\".to_i(16)\np 136.to_s(16)\np format(\"%02x\", 8)\nformat(\"#%02x%02x%02x\", 255, 136, 0)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Les bits se combinent position par position. <code>&amp;</code> (AND, « et ») donne un 1 là où les <em>deux</em> nombres ont un 1, <code>|</code> (OR, « ou ») là où au moins l’un des deux en a un, <code>^</code> (XOR, « ou exclusif ») là où exactement un seul en a un. <code>&gt;&gt;</code> décale tous les bits vers la droite, ce qui divise le nombre par deux à chaque pas, et <code>&lt;&lt;</code> les décale vers la gauche, ce qui le double. <code>%04b</code> dans <code>format</code> affiche quatre chiffres binaires :</p>"
+          },
+          {
+            "t": "c",
+            "code": "a = 0b1100\nb = 0b1010\nputs format(\"%04b\", a & b)    # ET\nputs format(\"%04b\", a | b)    # OU\nputs format(\"%04b\", a ^ b)    # OU exclusif\nputs format(\"%04b\", a >> 2)   # décalé de 2 vers la droite\n1 << 10                       # 1, doublé dix fois"
+          },
+          {
+            "t": "h",
+            "html": "<p>Un bit isolé s’obtient avec des crochets : <code>n[0]</code> est le bit le plus bas, celui qui vaut 1 – il vous dit donc si un nombre est impair. <code>digits(2)</code> donne tous les bits, le plus bas en premier, et <code>bit_length</code> indique combien de positions il faut au nombre :</p>"
+          },
+          {
+            "t": "c",
+            "code": "n = 13                 # 1101\np n[0]                 # vaut 1\np n[1]                 # vaut 2\np n.digits(2)\np n.bit_length\nn.to_s(2).count(\"1\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>À quoi servent les bits ? Aux <strong>drapeaux</strong> (<em>flags</em>) : plusieurs réponses oui-ou-non rangées dans un seul nombre. Sous Linux et macOS, chaque fichier a trois permissions – lire (4), écrire (2) et exécuter (1). Chacune est un bit à part, elles s’additionnent donc sans se gêner : 6, c’est lire et écrire. <code>|</code> active un drapeau, <code>&amp;</code> l’interroge – 0 signifie désactivé – et <code>allbits?</code> pose la question de façon plus lisible. (<code>a, b = 1, 2</code> remplit plusieurs variables à la fois.)</p>"
+          },
+          {
+            "t": "c",
+            "code": "read, write, run = 4, 2, 1\nrecipe = read | write       # lire et écrire : 6\np recipe & write            # pas 0 : write est activé\np recipe & run              # 0 : run est désactivé\np recipe.allbits?(write)\nrecipe |= run               # activer run aussi\nrecipe.to_s(2)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Et le XOR a une propriété qui en fait le chouchou des codes secrets : appliquez deux fois XOR avec la même clé, et vous revenez au point de départ – comme ROT13 dans la leçon {{nr:geheimschrift}}, où deux tours ramenaient chaque lettre chez elle. Ici sur les octets d’un mot :</p>"
+          },
+          {
+            "t": "c",
+            "code": "key = 42\nlocked = \"bacon\".bytes.map { |b| b ^ key }\np locked\np locked.map(&:chr).join\nlocked.map { |b| (b ^ key).chr }.join"
+          },
+          {
+            "t": "h",
+            "html": "<p>Les vrais chiffrements utilisent des clés bien plus longues, mais XOR est au cœur de beaucoup d’entre eux. À retenir : <code>to_s(base)</code> écrit un nombre dans une autre base, <code>to_i(base)</code> le relit ; <code>0b</code>, <code>0o</code> et <code>0x</code> l’écrivent directement dans le code ; <code>&amp;</code>, <code>|</code>, <code>^</code> et les décalages travaillent bit par bit.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-to_s' target='_blank'>Integer#to_s</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-to_i' target='_blank'>String#to_i</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-5B-5D' target='_blank'>Integer#[]</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-5E' target='_blank'>Integer#^</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/literals_rdoc.html#label-Integer+Literals' target='_blank'>Littéraux entiers</a></div><div class='task'><strong>Exercice :</strong> Écrivez <code>hex_to_rgb(colour)</code>, qui transforme une couleur web en ses trois octets : <code>hex_to_rgb(\"#ff8800\")</code> donne <code>[255, 136, 0]</code>. Les majuscules, comme dans <code>\"#FFCC00\"</code>, doivent aussi fonctionner.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def hex_to_rgb(colour)\n#   ...   # \"#ff8800\" -> [255, 136, 0]\n# end\n\n# hex_to_rgb(\"#ff8800\")\n",
+            "hints": [
+              "Découpez la chaîne en ses trois paires de chiffres hexadécimaux – <code>colour[1, 2]</code>, <code>colour[3, 2]</code> et <code>colour[5, 2]</code> – et transformez chaque paire en nombre avec <code>to_i(16)</code>."
+            ],
+            "check": "hex_to_rgb(\"#ff8800\") == [255, 136, 0] && hex_to_rgb(\"#000000\") == [0, 0, 0] && hex_to_rgb(\"#FFFFFF\") == [255, 255, 255] && hex_to_rgb(\"#1e90ff\") == [30, 144, 255] && hex_to_rgb(\"#C0ffee\") == [192, 255, 238]",
+            "hint": "<code>def hex_to_rgb(colour)</code>, dedans <code>[colour[1, 2], colour[3, 2], colour[5, 2]].map { |pair| pair.to_i(16) }</code>, puis <code>end</code>. Plus court : <code>colour.delete(\"#\").scan(/../)</code> trouve les paires.",
+            "solution": "def hex_to_rgb(colour)\n  pairs = [colour[1, 2], colour[3, 2], colour[5, 2]]\n  pairs.map { |pair| pair.to_i(16) }\nend\n\nhex_to_rgb(\"#ff8800\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> <code>ls -l</code> affiche les permissions d’un fichier sous forme de neuf lettres : <code>rwx</code> pour son propriétaire, puis pour son groupe, puis pour tous les autres, avec un <code>-</code> pour chaque permission désactivée (x signifie <em>execute</em>, exécuter). Les neuf bits qui se cachent derrière s’écrivent en octal, car chaque chiffre octal fait exactement trois bits, un groupe : <code>0o754</code> donne <code>rwxr-xr--</code>. Écrivez <code>permissions(mode)</code>, qui transforme un tel nombre en ses neuf lettres.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def permissions(mode)\n#   ...   # 0o754 -> \"rwxr-xr--\"\n# end\n\n# permissions(0o754)\n",
+            "hints": [
+              "Le bit 8 est le r du propriétaire, le bit 7 son w, le bit 6 son x ; puis la même chose pour le groupe (bits 5, 4, 3) et pour tous les autres (2, 1, 0). Descendez de 8 à 0 avec <code>8.downto(0)</code> et interrogez <code>mode[i]</code> : un 1 donne la lettre, un 0 un <code>-</code>."
+            ],
+            "check": "permissions(0o754) == \"rwxr-xr--\" && permissions(0o644) == \"rw-r--r--\" && permissions(0o777) == \"rwxrwxrwx\" && permissions(0) == \"---------\" && permissions(0o701) == \"rwx-----x\" && permissions(0o640) == \"rw-r-----\"",
+            "hint": "<code>8.downto(0).map { |i| mode[i] == 1 ? \"rwx\"[(8 - i) % 3] : \"-\" }.join</code> – <code>(8 - i) % 3</code> parcourt 0, 1, 2, 0, 1, 2 … et choisit ainsi r, w ou x.",
+            "solution": "def permissions(mode)\n  8.downto(0).map { |i| mode[i] == 1 ? \"rwx\"[(8 - i) % 3] : \"-\" }.join\nend\n\npermissions(0o754)"
+          }
+        ]
+      },
+      "it": {
+        "title": "Binario, esadecimale e bit",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Binario, esadecimale e bit</h2><p>Noi contiamo con dieci cifre: dopo il 9 sono finite, quindi scriviamo un 1 davanti e ricominciamo da 0. Un computer ha solo due cifre, 0 e 1: conta in <strong>binario</strong> e deve fare il riporto molto prima. <code>to_s(2)</code> scrive un numero in binario, e <code>rjust</code> della lezione {{nr:formatieren}} lo riempie di zeri davanti:</p>"
+          },
+          {
+            "t": "c",
+            "code": "(0..8).each do |n|\n  puts \"#{n}: #{n.to_s(2).rjust(4, \"0\")}\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ogni posizione vale il doppio di quella alla sua destra: 1, 2, 4, 8, 16 … Quindi <code>1101</code> è 8 + 4 + 0 + 1 = 13. <code>to_i(2)</code> legge una stringa di cifre binarie. Nel codice puoi scrivere un numero direttamente in binario con <code>0b</code>, in esadecimale con <code>0x</code> e in ottale (base 8) con <code>0o</code>: è sempre lo stesso numero, solo scritto in modo diverso:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"1101\".to_i(2)\np 0b1101\np 0b1101 == 13\np 0xff\n0o17"
+          },
+          {
+            "t": "h",
+            "html": "<p>L'<strong>esadecimale</strong> conta con sedici cifre: da 0 a 9, poi da <code>a</code> a <code>f</code> per 10–15. Due cifre esadecimali fanno esattamente un byte, da 0 a 255: ecco perché i byte si scrivono così spesso in esadecimale, come i code point della lezione {{nr:unicode}}. Un colore web come <code>\"#ff8800\"</code> sono tre byte: rosso <code>ff</code>, verde <code>88</code>, blu <code>00</code>. <code>to_i(16)</code> legge l'esadecimale, <code>to_s(16)</code> lo scrive, e <code>%02x</code> in <code>format</code> scrive sempre due cifre:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"ff\".to_i(16)\np \"88\".to_i(16)\np 136.to_s(16)\np format(\"%02x\", 8)\nformat(\"#%02x%02x%02x\", 255, 136, 0)"
+          },
+          {
+            "t": "h",
+            "html": "<p>I bit si possono combinare posizione per posizione. <code>&amp;</code> (AND, “e”) dà un 1 dove <em>entrambi</em> i numeri hanno un 1, <code>|</code> (OR, “o”) dove almeno uno ce l'ha, <code>^</code> (XOR, “o esclusivo”) dove ce l'ha esattamente uno. <code>&gt;&gt;</code> sposta tutti i bit verso destra, e così dimezza il numero a ogni passo, e <code>&lt;&lt;</code> li sposta verso sinistra, e così lo raddoppia. <code>%04b</code> in <code>format</code> mostra quattro cifre binarie:</p>"
+          },
+          {
+            "t": "c",
+            "code": "a = 0b1100\nb = 0b1010\nputs format(\"%04b\", a & b)    # E\nputs format(\"%04b\", a | b)    # O\nputs format(\"%04b\", a ^ b)    # O esclusivo\nputs format(\"%04b\", a >> 2)   # spostato a destra di 2\n1 << 10                       # 1, raddoppiato dieci volte"
+          },
+          {
+            "t": "h",
+            "html": "<p>Un singolo bit lo ottieni con le parentesi quadre: <code>n[0]</code> è il bit più basso, quello che vale 1, e quindi ti dice se un numero è dispari. <code>digits(2)</code> dà tutti i bit, il più basso per primo, e <code>bit_length</code> dice quante posizioni servono al numero:</p>"
+          },
+          {
+            "t": "c",
+            "code": "n = 13                 # 1101\np n[0]                 # vale 1\np n[1]                 # vale 2\np n.digits(2)\np n.bit_length\nn.to_s(2).count(\"1\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>A che cosa servono i bit? Ai <strong>flag</strong>: diverse risposte sì-o-no impacchettate in un solo numero. Su Linux e macOS ogni file ha tre permessi: lettura (4), scrittura (2) ed esecuzione (1). Ognuno è un bit a sé, quindi si sommano senza intralciarsi: 6 è lettura e scrittura. <code>|</code> accende un flag, <code>&amp;</code> lo interroga (0 vuol dire spento) e <code>allbits?</code> lo chiede in modo più leggibile. (<code>a, b = 1, 2</code> riempie più variabili in una volta.)</p>"
+          },
+          {
+            "t": "c",
+            "code": "read, write, run = 4, 2, 1\nrecipe = read | write       # lettura e scrittura: 6\np recipe & write            # non 0: write è acceso\np recipe & run              # 0: run è spento\np recipe.allbits?(write)\nrecipe |= run               # accendi anche run\nrecipe.to_s(2)"
+          },
+          {
+            "t": "h",
+            "html": "<p>E lo XOR ha una proprietà che lo rende il beniamino dei codici segreti: fai XOR due volte con la stessa chiave e torni al punto di partenza, come con ROT13 nella lezione {{nr:geheimschrift}}, dove due giri riportavano a casa ogni lettera. Qui sui byte di una parola:</p>"
+          },
+          {
+            "t": "c",
+            "code": "key = 42\nlocked = \"bacon\".bytes.map { |b| b ^ key }\np locked\np locked.map(&:chr).join\nlocked.map { |b| (b ^ key).chr }.join"
+          },
+          {
+            "t": "h",
+            "html": "<p>I veri cifrari usano chiavi molto più lunghe, ma lo XOR è al centro di molti di loro. Ricorda: <code>to_s(base)</code> scrive un numero in un'altra base, <code>to_i(base)</code> lo rilegge; <code>0b</code>, <code>0o</code> e <code>0x</code> lo scrivono direttamente nel codice; <code>&amp;</code>, <code>|</code>, <code>^</code> e gli spostamenti lavorano bit per bit.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-to_s' target='_blank'>Integer#to_s</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-to_i' target='_blank'>String#to_i</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-5B-5D' target='_blank'>Integer#[]</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-5E' target='_blank'>Integer#^</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/literals_rdoc.html#label-Integer+Literals' target='_blank'>Letterali interi</a></div><div class='task'><strong>Esercizio:</strong> Scrivi <code>hex_to_rgb(colour)</code>, che trasforma un colore web nei suoi tre byte: <code>hex_to_rgb(\"#ff8800\")</code> dà <code>[255, 136, 0]</code>. Devono funzionare anche le maiuscole, come in <code>\"#FFCC00\"</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def hex_to_rgb(colour)\n#   ...   # \"#ff8800\" -> [255, 136, 0]\n# end\n\n# hex_to_rgb(\"#ff8800\")\n",
+            "hints": [
+              "Taglia la stringa nelle sue tre coppie di cifre esadecimali (<code>colour[1, 2]</code>, <code>colour[3, 2]</code> e <code>colour[5, 2]</code>) e trasforma ogni coppia in un numero con <code>to_i(16)</code>."
+            ],
+            "check": "hex_to_rgb(\"#ff8800\") == [255, 136, 0] && hex_to_rgb(\"#000000\") == [0, 0, 0] && hex_to_rgb(\"#FFFFFF\") == [255, 255, 255] && hex_to_rgb(\"#1e90ff\") == [30, 144, 255] && hex_to_rgb(\"#C0ffee\") == [192, 255, 238]",
+            "hint": "<code>def hex_to_rgb(colour)</code>, dentro <code>[colour[1, 2], colour[3, 2], colour[5, 2]].map { |pair| pair.to_i(16) }</code>, poi <code>end</code>. Più corto: <code>colour.delete(\"#\").scan(/../)</code> trova le coppie.",
+            "solution": "def hex_to_rgb(colour)\n  pairs = [colour[1, 2], colour[3, 2], colour[5, 2]]\n  pairs.map { |pair| pair.to_i(16) }\nend\n\nhex_to_rgb(\"#ff8800\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> <code>ls -l</code> mostra i permessi di un file come nove lettere: <code>rwx</code> per il proprietario, poi per il gruppo, poi per tutti gli altri, con un <code>-</code> per ogni permesso spento (x sta per <em>execute</em>, eseguire). I nove bit che ci stanno dietro si scrivono in ottale, perché ogni cifra ottale è esattamente tre bit, un gruppo: <code>0o754</code> è <code>rwxr-xr--</code>. Scrivi <code>permissions(mode)</code>, che trasforma un numero così nelle sue nove lettere.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def permissions(mode)\n#   ...   # 0o754 -> \"rwxr-xr--\"\n# end\n\n# permissions(0o754)\n",
+            "hints": [
+              "Il bit 8 è la r del proprietario, il bit 7 la sua w, il bit 6 la sua x; poi lo stesso per il gruppo (bit 5, 4, 3) e per tutti gli altri (2, 1, 0). Scendi da 8 a 0 con <code>8.downto(0)</code> e chiedi <code>mode[i]</code>: un 1 dà la lettera, uno 0 un <code>-</code>."
+            ],
+            "check": "permissions(0o754) == \"rwxr-xr--\" && permissions(0o644) == \"rw-r--r--\" && permissions(0o777) == \"rwxrwxrwx\" && permissions(0) == \"---------\" && permissions(0o701) == \"rwx-----x\" && permissions(0o640) == \"rw-r-----\"",
+            "hint": "<code>8.downto(0).map { |i| mode[i] == 1 ? \"rwx\"[(8 - i) % 3] : \"-\" }.join</code>: <code>(8 - i) % 3</code> va 0, 1, 2, 0, 1, 2 … e così sceglie r, w o x.",
+            "solution": "def permissions(mode)\n  8.downto(0).map { |i| mode[i] == 1 ? \"rwx\"[(8 - i) % 3] : \"-\" }.join\nend\n\npermissions(0o754)"
+          }
+        ]
       }
     },
     {
@@ -11805,6 +13329,170 @@ window.LESSONS_JSON = JSON.stringify({
             ],
             "check": "mixed_number(9/8r) == \"1 1/8\" && mixed_number(3/4r) == \"3/4\" && mixed_number(4/2r) == \"2\" && mixed_number(Rational(7, 2)) == \"3 1/2\" && mixed_number(Rational(22, 7)) == \"3 1/7\" && mixed_number(Rational(5)) == \"5\" && mixed_number(1/3r) == \"1/3\"",
             "hint": "<code>whole, rest = q.numerator.divmod(q.denominator)</code>だよ。<code>rest == 0</code>なら<code>whole.to_s</code>を返そう。そうでなければ<code>fraction = \"#{rest}/#{q.denominator}\"</code>を作って、<code>whole == 0</code>ならそれだけを、ちがえば<code>\"#{whole} #{fraction}\"</code>を返すんだ。",
+            "solution": "def mixed_number(q)\n  whole, rest = q.numerator.divmod(q.denominator)\n  return whole.to_s if rest == 0\n  fraction = \"#{rest}/#{q.denominator}\"\n  return fraction if whole == 0\n  \"#{whole} #{fraction}\"\nend\n\nmixed_number(9/8r)"
+          }
+        ]
+      },
+      "fr": {
+        "title": "Fractions et nombres entiers",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Fractions et nombres entiers</h2><p>Dans la leçon {{nr:rechnen}}, <code>7 / 2</code> donnait 3 : diviser deux nombres entiers laisse tomber le reste. Ce n’est pas un défaut – c’est un outil. <code>/</code> dit combien de fois, <code>%</code> ce qui reste, et <code>divmod</code> donne les deux à la fois ; deux variables à gauche du <code>=</code> se partagent sa réponse. 135 minutes, ce sont 2 heures et 15 minutes, et 5 heures après 22 h, l’horloge indique 3 h :</p>"
+          },
+          {
+            "t": "c",
+            "code": "minutes = 135\np minutes / 60          # heures entières\np minutes % 60          # minutes restantes\nhours, rest = minutes.divmod(60)\nputs \"#{hours} h #{rest} min\"\n(22 + 5) % 24           # 5 heures après 22 h"
+          },
+          {
+            "t": "h",
+            "html": "<p>Deux autres outils pour les nombres entiers viennent de l’école. Le <strong>plus grand commun diviseur</strong>, <code>gcd</code>, est le plus grand nombre qui divise les deux – divisez le haut et le bas d’une fraction par lui, et la fraction est entièrement simplifiée. Le <strong>plus petit commun multiple</strong>, <code>lcm</code>, est le plus petit nombre dans lequel les deux vont : si un bus part toutes les 12 minutes et un autre toutes les 18, tous deux à 8 h 00, ils repartent ensemble à 8 h 36 :</p>"
+          },
+          {
+            "t": "c",
+            "code": "g = 12.gcd(18)\np g\np [12 / g, 18 / g]      # 12/18 simplifié : 2/3\n12.lcm(18)              # minutes avant que les deux bus repartent ensemble"
+          },
+          {
+            "t": "h",
+            "html": "<p>Mais Ruby sait aussi garder une fraction sous forme de fraction : <code>Rational(3, 4)</code>, ce sont trois quarts, et un <code>r</code> après un nombre est la manière courte d’en écrire une – <code>3/4r</code>. Un <code>Rational</code> se simplifie tout seul et calcule exactement, comme vous l’avez appris à l’école : un demi plus un tiers font cinq sixièmes :</p>"
+          },
+          {
+            "t": "c",
+            "code": "p Rational(3, 4)\np Rational(12, 18)          # se simplifie tout seul\nhalf = 1/2r\np half + Rational(1, 3)\np half * 3\nRational(6, 3)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>(2/1)</code> est une fraction qui se trouve être entière. Mais pourquoi des fractions, alors qu’il y a les nombres décimaux ? Parce qu’un nombre décimal comme <code>0.1</code> est stocké en binaire – et en binaire, un dixième ne s’arrête jamais, tout comme 1/3 ne s’arrête jamais en décimal ; l’ordinateur doit donc l’arrondir. Une minuscule erreur est invisible, mais additionnez dix dixièmes et elle apparaît. Parcourez la cellule pas à pas avec ⏯ et regardez les deux sommes grandir :</p>"
+          },
+          {
+            "t": "c",
+            "code": "float_sum = 0\nexact_sum = 0\n10.times do\n  float_sum += 0.1\n  exact_sum += 1/10r\nend\np float_sum\np exact_sum\nfloat_sum == 1"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dix dixièmes font 0.9999999999999999 en floats, mais exactement <code>(1/1)</code> en fractions. Une fraction connaît ses parties, <code>numerator</code> (le numérateur, en haut) et <code>denominator</code> (le dénominateur, en bas), et <code>to_f</code> la transforme en nombre décimal. Dans l’autre sens, <code>to_r</code> transforme un nombre décimal en fraction – et montre ce que l’ordinateur a vraiment stocké : <code>0.75</code> est exact (1/2 + 1/4), <code>0.1</code> ne l’est pas. <code>rationalize</code> trouve la fraction simple qui se cache derrière :</p>"
+          },
+          {
+            "t": "c",
+            "code": "q = Rational(9, 8)\np [q.numerator, q.denominator]\np q.to_f\np 0.75.to_r\np 0.1.to_r\n0.1.rationalize"
+          },
+          {
+            "t": "h",
+            "html": "<p>Tôt ou tard, un résultat doit être un nombre entier. <code>round</code> arrondit au plus proche (une moitié va vers le haut), <code>floor</code> toujours vers le bas, <code>ceil</code> toujours vers le haut – et <code>ceildiv</code> divise et arrondit vers le haut, parfait pour « combien de bus pour 23 renards, à 8 places par bus ? ». Avec un nombre négatif, <code>round</code> arrondit aux dizaines ou aux centaines, et <code>Integer.sqrt</code> est la racine carrée entière :</p>"
+          },
+          {
+            "t": "c",
+            "code": "p Rational(7, 2).round     # 3,5 : une moitié va vers le haut\np 3.7.floor\np 3.2.ceil\np 23.ceildiv(8)            # bus pour 23 renards\np 1234.round(-2)\nInteger.sqrt(50)           # 7, car 7 * 7 = 49"
+          },
+          {
+            "t": "h",
+            "html": "<p>Une règle pratique : des nombres entiers avec <code>/</code>, <code>%</code> et <code>divmod</code> pour ce qui ne se coupe pas en deux – minutes, bus, renards ; <code>Rational</code> quand une fraction doit rester exacte ; un Float pour ce qui est mesuré de toute façon. Et pour l’argent, il y a BigDecimal, dans la leçon {{nr:bigdecimal}}.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-divmod' target='_blank'>Integer#divmod</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-gcd' target='_blank'>Integer#gcd</a> · <a href='https://docs.ruby-lang.org/en/4.0/Rational.html' target='_blank'>Rational</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-c-sqrt' target='_blank'>Integer.sqrt</a></div><div class='task'><strong>Exercice :</strong> La recette de pancakes de Chunky est prévue pour 4 renards, mais 6 vont venir. Écrivez <code>scale_recipe(recipe, from, to)</code>, qui transforme les quantités pour <code>from</code> renards en quantités pour <code>to</code> renards – exactement, en fractions, pas en nombres décimaux : 3/4 de litre de lait pour 4 devient 9/8 de litre pour 6.</div>"
+          },
+          {
+            "t": "x",
+            "code": "pancakes = { milk: 3/4r, flour: 1/2r, eggs: 3 }   # pour 4 renards\n\n# def scale_recipe(recipe, from, to)\n#   ...   # chaque quantité * to / from, en fraction exacte\n# end\n\n# scale_recipe(pancakes, 4, 6)\n",
+            "hints": [
+              "Le facteur est <code>Rational(to, from)</code> – avec des nombres entiers, <code>to / from</code> serait tronqué. Multipliez chaque quantité par ce facteur ; <code>transform_values</code> le fait pour chaque valeur d’un hash et garde les clés."
+            ],
+            "check": "scale_recipe({ milk: 3/4r, flour: 1/2r, eggs: 3 }, 4, 6) == { milk: 9/8r, flour: 3/4r, eggs: 9/2r } && scale_recipe({ sugar: 1/3r, eggs: 2 }, 3, 7) == { sugar: 7/9r, eggs: 14/3r } && scale_recipe({ salt: 1 }, 2, 1) == { salt: 1/2r } && scale_recipe({ milk: 3/4r, eggs: 3 }, 4, 6).values.all? { |v| v.is_a?(Rational) }",
+            "hint": "<code>def scale_recipe(recipe, from, to)</code>, dedans <code>recipe.transform_values { |amount| amount * Rational(to, from) }</code>, puis <code>end</code>.",
+            "solution": "pancakes = { milk: 3/4r, flour: 1/2r, eggs: 3 }\n\ndef scale_recipe(recipe, from, to)\n  recipe.transform_values { |amount| amount * Rational(to, from) }\nend\n\nscale_recipe(pancakes, 4, 6)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Personne ne mesure 9/8 de litre – un cuisinier lit <code>1 1/8</code>. Écrivez <code>mixed_number(q)</code>, qui écrit une fraction sous forme de <strong>nombre mixte</strong> : la partie entière, une espace, puis la fraction qui reste. <code>mixed_number(9/8r)</code> donne <code>\"1 1/8\"</code>, <code>mixed_number(3/4r)</code> simplement <code>\"3/4\"</code> et <code>mixed_number(4/2r)</code> simplement <code>\"2\"</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def mixed_number(q)\n#   ...   # 9/8r -> \"1 1/8\", 3/4r -> \"3/4\", 4/2r -> \"2\"\n# end\n\n# mixed_number(9/8r)\n",
+            "hints": [
+              "<code>q.numerator.divmod(q.denominator)</code> donne la partie entière et le reste : pour 9/8, c’est <code>[1, 1]</code>. Ensuite, il y a trois cas – pas de reste, pas de partie entière, ou les deux."
+            ],
+            "check": "mixed_number(9/8r) == \"1 1/8\" && mixed_number(3/4r) == \"3/4\" && mixed_number(4/2r) == \"2\" && mixed_number(Rational(7, 2)) == \"3 1/2\" && mixed_number(Rational(22, 7)) == \"3 1/7\" && mixed_number(Rational(5)) == \"5\" && mixed_number(1/3r) == \"1/3\"",
+            "hint": "<code>whole, rest = q.numerator.divmod(q.denominator)</code>. Si <code>rest == 0</code>, renvoyez <code>whole.to_s</code>. Sinon, construisez <code>fraction = \"#{rest}/#{q.denominator}\"</code> et renvoyez-la seule si <code>whole == 0</code>, sinon <code>\"#{whole} #{fraction}\"</code>.",
+            "solution": "def mixed_number(q)\n  whole, rest = q.numerator.divmod(q.denominator)\n  return whole.to_s if rest == 0\n  fraction = \"#{rest}/#{q.denominator}\"\n  return fraction if whole == 0\n  \"#{whole} #{fraction}\"\nend\n\nmixed_number(9/8r)"
+          }
+        ]
+      },
+      "it": {
+        "title": "Frazioni e numeri interi",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Frazioni e numeri interi</h2><p>Nella lezione {{nr:rechnen}} <code>7 / 2</code> dava 3: dividendo due numeri interi il resto si perde. Non è un difetto, è uno strumento. <code>/</code> dice quante volte, <code>%</code> che cosa avanza, e <code>divmod</code> dà le due cose insieme; due variabili a sinistra dell'<code>=</code> si dividono la sua risposta. 135 minuti sono 2 ore e 15 minuti, e 5 ore dopo le 22 l'orologio segna le 3:</p>"
+          },
+          {
+            "t": "c",
+            "code": "minutes = 135\np minutes / 60          # ore intere\np minutes % 60          # minuti che avanzano\nhours, rest = minutes.divmod(60)\nputs \"#{hours} h #{rest} min\"\n(22 + 5) % 24           # 5 ore dopo le 22"
+          },
+          {
+            "t": "h",
+            "html": "<p>Altri due strumenti per i numeri interi vengono dalla scuola. Il <strong>massimo comun divisore</strong>, <code>gcd</code>, è il numero più grande che li divide entrambi: dividi per lui il numeratore e il denominatore di una frazione, e la frazione è ridotta ai minimi termini. Il <strong>minimo comune multiplo</strong>, <code>lcm</code>, è il numero più piccolo in cui entrano tutti e due: se un autobus parte ogni 12 minuti e un altro ogni 18, entrambi alle 8:00, ripartono insieme alle 8:36:</p>"
+          },
+          {
+            "t": "c",
+            "code": "g = 12.gcd(18)\np g\np [12 / g, 18 / g]      # 12/18 semplificato: 2/3\n12.lcm(18)              # minuti finché i due autobus ripartono insieme"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ma Ruby sa anche tenere una frazione come frazione: <code>Rational(3, 4)</code> sono tre quarti, e una <code>r</code> dopo un numero è il modo breve per scriverne una: <code>3/4r</code>. Un <code>Rational</code> si semplifica da solo e calcola in modo esatto, come hai imparato a scuola: un mezzo più un terzo fa cinque sesti:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p Rational(3, 4)\np Rational(12, 18)          # si semplifica da solo\nhalf = 1/2r\np half + Rational(1, 3)\np half * 3\nRational(6, 3)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>(2/1)</code> è una frazione che per caso è intera. Ma perché le frazioni, quando ci sono i numeri decimali? Perché un decimale come <code>0.1</code> viene salvato in binario, e in binario un decimo non finisce mai, proprio come 1/3 non finisce mai in decimale: quindi il computer deve arrotondarlo. Un errore minuscolo non si vede, ma somma dieci decimi e salta fuori. Segui la cella con ⏯ e guarda crescere le due somme:</p>"
+          },
+          {
+            "t": "c",
+            "code": "float_sum = 0\nexact_sum = 0\n10.times do\n  float_sum += 0.1\n  exact_sum += 1/10r\nend\np float_sum\np exact_sum\nfloat_sum == 1"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dieci decimi fanno 0.9999999999999999 come float, ma esattamente <code>(1/1)</code> come frazioni. Una frazione conosce le sue parti, <code>numerator</code> (il numeratore, sopra) e <code>denominator</code> (il denominatore, sotto), e <code>to_f</code> la trasforma in un decimale. Al contrario, <code>to_r</code> trasforma un decimale in una frazione e mostra che cosa ha salvato davvero il computer: <code>0.75</code> è esatto (1/2 + 1/4), <code>0.1</code> no. <code>rationalize</code> trova la frazione semplice che ci sta dietro:</p>"
+          },
+          {
+            "t": "c",
+            "code": "q = Rational(9, 8)\np [q.numerator, q.denominator]\np q.to_f\np 0.75.to_r\np 0.1.to_r\n0.1.rationalize"
+          },
+          {
+            "t": "h",
+            "html": "<p>Prima o poi un risultato deve essere un numero intero. <code>round</code> arrotonda al più vicino (una metà va in su), <code>floor</code> sempre in giù, <code>ceil</code> sempre in su, e <code>ceildiv</code> divide e arrotonda in su, perfetto per “quanti autobus per 23 volpi, con 8 posti per autobus?”. Con un numero negativo <code>round</code> arrotonda alle decine o alle centinaia, e <code>Integer.sqrt</code> è la radice quadrata intera:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p Rational(7, 2).round     # 3,5: una metà va in su\np 3.7.floor\np 3.2.ceil\np 23.ceildiv(8)            # autobus per 23 volpi\np 1234.round(-2)\nInteger.sqrt(50)           # 7, perché 7 * 7 = 49"
+          },
+          {
+            "t": "h",
+            "html": "<p>Una regola pratica: numeri interi con <code>/</code>, <code>%</code> e <code>divmod</code> per le cose che non vengono a metà (minuti, autobus, volpi); <code>Rational</code> quando una frazione deve restare esatta; un Float per ciò che comunque si misura. E per i soldi c'è BigDecimal, nella lezione {{nr:bigdecimal}}.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-divmod' target='_blank'>Integer#divmod</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-gcd' target='_blank'>Integer#gcd</a> · <a href='https://docs.ruby-lang.org/en/4.0/Rational.html' target='_blank'>Rational</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-c-sqrt' target='_blank'>Integer.sqrt</a></div><div class='task'><strong>Esercizio:</strong> La ricetta dei pancake di Chunky è per 4 volpi, ma ne arrivano 6. Scrivi <code>scale_recipe(recipe, from, to)</code>, che trasforma le quantità per <code>from</code> volpi in quantità per <code>to</code> volpi, in modo esatto, come frazioni e non come decimali: 3/4 di litro di latte per 4 diventano 9/8 di litro per 6.</div>"
+          },
+          {
+            "t": "x",
+            "code": "pancakes = { milk: 3/4r, flour: 1/2r, eggs: 3 }   # per 4 volpi\n\n# def scale_recipe(recipe, from, to)\n#   ...   # ogni quantità * to / from, come frazione esatta\n# end\n\n# scale_recipe(pancakes, 4, 6)\n",
+            "hints": [
+              "Il fattore è <code>Rational(to, from)</code>: con i numeri interi <code>to / from</code> verrebbe troncato. Moltiplica ogni quantità per il fattore; <code>transform_values</code> lo fa per ogni valore di un hash e tiene le chiavi."
+            ],
+            "check": "scale_recipe({ milk: 3/4r, flour: 1/2r, eggs: 3 }, 4, 6) == { milk: 9/8r, flour: 3/4r, eggs: 9/2r } && scale_recipe({ sugar: 1/3r, eggs: 2 }, 3, 7) == { sugar: 7/9r, eggs: 14/3r } && scale_recipe({ salt: 1 }, 2, 1) == { salt: 1/2r } && scale_recipe({ milk: 3/4r, eggs: 3 }, 4, 6).values.all? { |v| v.is_a?(Rational) }",
+            "hint": "<code>def scale_recipe(recipe, from, to)</code>, dentro <code>recipe.transform_values { |amount| amount * Rational(to, from) }</code>, poi <code>end</code>.",
+            "solution": "pancakes = { milk: 3/4r, flour: 1/2r, eggs: 3 }\n\ndef scale_recipe(recipe, from, to)\n  recipe.transform_values { |amount| amount * Rational(to, from) }\nend\n\nscale_recipe(pancakes, 4, 6)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Nessuno misura 9/8 di litro: un cuoco legge <code>1 1/8</code>. Scrivi <code>mixed_number(q)</code>, che scrive una frazione come <strong>numero misto</strong>: la parte intera, uno spazio, poi la frazione che avanza. <code>mixed_number(9/8r)</code> è <code>\"1 1/8\"</code>, <code>mixed_number(3/4r)</code> solo <code>\"3/4\"</code> e <code>mixed_number(4/2r)</code> solo <code>\"2\"</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def mixed_number(q)\n#   ...   # 9/8r -> \"1 1/8\", 3/4r -> \"3/4\", 4/2r -> \"2\"\n# end\n\n# mixed_number(9/8r)\n",
+            "hints": [
+              "<code>q.numerator.divmod(q.denominator)</code> dà la parte intera e il resto: per 9/8 è <code>[1, 1]</code>. Poi ci sono tre casi: niente resto, niente parte intera, oppure tutti e due."
+            ],
+            "check": "mixed_number(9/8r) == \"1 1/8\" && mixed_number(3/4r) == \"3/4\" && mixed_number(4/2r) == \"2\" && mixed_number(Rational(7, 2)) == \"3 1/2\" && mixed_number(Rational(22, 7)) == \"3 1/7\" && mixed_number(Rational(5)) == \"5\" && mixed_number(1/3r) == \"1/3\"",
+            "hint": "<code>whole, rest = q.numerator.divmod(q.denominator)</code>. Se <code>rest == 0</code>, restituisci <code>whole.to_s</code>. Altrimenti costruisci <code>fraction = \"#{rest}/#{q.denominator}\"</code> e restituiscila da sola se <code>whole == 0</code>, altrimenti <code>\"#{whole} #{fraction}\"</code>.",
             "solution": "def mixed_number(q)\n  whole, rest = q.numerator.divmod(q.denominator)\n  return whole.to_s if rest == 0\n  fraction = \"#{rest}/#{q.denominator}\"\n  return fraction if whole == 0\n  \"#{whole} #{fraction}\"\nend\n\nmixed_number(9/8r)"
           }
         ]
@@ -12638,6 +14326,206 @@ window.LESSONS_JSON = JSON.stringify({
             ],
             "check": "->(catcher) { read_strips(\"3\") == 3 && read_strips(\"10\") == 10 && catcher.(-> { read_strips(\"50\") }) == \"too much bacon: 50\" && catcher.(-> { read_strips(\"11\") }) == \"too much bacon: 11\" && catcher.(-> { read_strips(\"bacon\") }).is_a?(String) }.( ->(f) { begin; f.call; nil; rescue ArgumentError => ex; ex.message; end }) && ->(r) { r.size == 3 && r[0] == 3 && r[1] == \"too much bacon: 50\" && r[2].is_a?(String) && r[2].include?(\"bacon\") }.(take_orders([\"3\", \"50\", \"bacon\"])) && take_orders([\"10\", \"12\", \"0\"]) == [10, \"too much bacon: 12\", 0] && code.include?(\"raise\") && code.match?(/^\\s*def take_orders\\b/)",
             "hint": "<code>count = Integer(text)</code>、それから<code>raise ArgumentError, \"too much bacon: #{count}\" if count &gt; 10</code>と<code>count</code>。<code>take_orders</code>は<code>texts.map do |text|</code>、中に<code>begin</code>、<code>read_strips(text)</code>、<code>rescue ArgumentError =&gt; e</code>、<code>e.message</code>、<code>end</code>。ブロックの<code>end</code>も忘れずにね。",
+            "solution": "def read_strips(text)\n  count = Integer(text)\n  raise ArgumentError, \"too much bacon: #{count}\" if count > 10\n\n  count\nend\n\ndef take_orders(texts)\n  texts.map do |text|\n    begin\n      read_strips(text)\n    rescue ArgumentError => e\n      e.message\n    end\n  end\nend\n\ntake_orders([\"3\", \"50\", \"bacon\"])"
+          }
+        ]
+      },
+      "fr": {
+        "title": "Intercepter les erreurs : rescue",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Intercepter les erreurs : rescue</h2><p>Dans la leçon {{nr:fehler}}, chaque erreur arrêtait le programme, et vous répariez le code. Mais certaines erreurs ne sont pas du tout la faute du code – elles viennent de ce qui arrive de l’extérieur : quelqu’un tape « bacon » là où il faut un nombre. Ruby connaît deux façons de transformer du texte en nombre. <code>to_i</code> est la discrète : elle lit des chiffres tant qu’elle en trouve, et sinon renvoie simplement 0. <code>Integer(…)</code> est la stricte :</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"42\".to_i\np \"12 strips\".to_i\np \"bacon\".to_i\nInteger(\"42\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>« 12 strips » devient discrètement 12, « bacon » devient discrètement 0 – pratique parfois, souvent un mensonge : le renard a-t-il vraiment mangé 0 tranche, ou a-t-il fait une faute de frappe ? <code>Integer</code> n’accepte qu’un texte qui est un nombre de bout en bout. Tout le reste, elle le signale haut et fort :</p>"
+          },
+          {
+            "t": "c",
+            "code": "Integer(\"bacon\")",
+            "raises": "ArgumentError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>ArgumentError: invalid value for Integer(): \"bacon\"</code> – bon à savoir ! Seulement, l’erreur arrête tout le programme. Pour qu’il continue, vous <strong>interceptez</strong> l’erreur : le code qui peut mal tourner se place entre <code>begin</code> et <code>rescue</code> ; après <code>rescue</code> vient l’erreur que vous visez, et en dessous ce qui doit se passer dans ce cas :</p>"
+          },
+          {
+            "t": "c",
+            "code": "begin\n  number = Integer(\"bacon\")\n  puts \"A number: #{number}\"\nrescue ArgumentError\n  puts \"That was no number.\"\nend\nputs \"And on we go!\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Parcourez la cellule pas à pas avec ⏯ : <code>Integer</code> lève l’erreur, et Ruby saute directement au <code>rescue</code> – le <code>puts</code> avec le nombre n’a jamais son tour. Après le <code>end</code>, le programme continue normalement. Avec <code>=&gt; e</code>, vous mettez la main sur l’erreur elle-même : <code>e.class</code> est son type, <code>e.message</code> son message. Et comme différentes choses peuvent mal tourner, il peut y avoir plusieurs <code>rescue</code> – Ruby prend le premier qui convient. Douze tranches, partagées équitablement :</p>"
+          },
+          {
+            "t": "c",
+            "code": "[\"4\", \"bacon\", \"0\"].each do |input|\n  begin\n    foxes = Integer(input)\n    puts \"#{foxes} foxes: #{12 / foxes} strips each\"\n  rescue ArgumentError => e\n    puts \"#{e.class}: #{e.message}\"\n  rescue ZeroDivisionError\n    puts \"Zero foxes? Then Chunky eats them all!\"\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Vous pouvez aussi lever des erreurs vous-même, avec <code>raise</code> : la classe d’erreur, une virgule, votre message. Cela vaut la peine quand votre méthode ne peut rien faire d’une valeur – mieux vaut protester tout de suite qu’un résultat déroutant plus tard. Le stand de bacon de Chunky vend au moins une tranche :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def order_strips(count)\n  raise ArgumentError, \"at least 1, not #{count}\" if count < 1\n\n  \"#{count} strips of bacon, coming right up!\"\nend\n\np order_strips(3)\norder_strips(-2)",
+            "raises": "ArgumentError"
+          },
+          {
+            "t": "h",
+            "html": "<p>La voilà, votre propre <code>ArgumentError</code> avec votre propre message – rouge comme celles de Ruby, et pile à l’endroit où la mauvaise valeur est arrivée. L’intercepter fonctionne comme avant, et dans une méthode, vous n’avez même pas besoin de <code>begin</code> : un <code>rescue</code> directement dans le corps de la méthode intercepte tout ce qui tourne mal dans la méthode avant lui. Deux assistants s’ajoutent : <code>else</code> ne s’exécute que si <em>aucune</em> erreur n’est survenue, et <code>ensure</code> s’exécute <em>toujours</em> à la fin, avec ou sans erreur – l’endroit idéal pour ranger :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def take_order(text)\n  count = Integer(text)\n  raise ArgumentError, \"at least 1, not #{count}\" if count < 1\nrescue ArgumentError => e\n  \"Sorry, no: #{e.message}\"\nelse\n  \"#{count} strips of bacon, coming right up!\"\nensure\n  puts \"(Chunky notes: #{text})\"\nend\n\nputs take_order(\"3\")\nputs take_order(\"0\")\nputs take_order(\"lots\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Parcourez les trois commandes pas à pas avec ⏯ et observez l’ordre des choses : la note de Chunky apparaît à chaque fois <em>avant</em> la réponse. <code>ensure</code> s’exécute pendant que la méthode se termine – avant même que <code>puts</code> reçoive son résultat. Il ne change cependant pas la valeur de retour : celle-ci vient du <code>rescue</code> quand une erreur est survenue, sinon du <code>else</code>.</p><p>Parfois, il suffit tout simplement de réessayer. <code>retry</code> dans le <code>rescue</code> revient au début du <code>begin</code>. Pour que cela ne dure pas éternellement, vous comptez les essais :</p>"
+          },
+          {
+            "t": "c",
+            "code": "inputs = [\"bacon\", \"four\", \"4\"]   # tapés l'un après l'autre\nattempts = 0\nbegin\n  attempts += 1\n  number = Integer(inputs[attempts - 1])\nrescue ArgumentError\n  puts \"Attempt #{attempts}: not a number, again!\"\n  retry if attempts < 3\nend\n\"#{number} after #{attempts} attempts\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Sans le <code>if attempts &lt; 3</code>, une erreur qui revient à chaque fois ferait réessayer <code>retry</code> à l’infini. Un <code>retry</code> a donc toujours besoin d’une limite.</p><p>Et si tout ce que vous voulez, c’est un nombre ou nil, sans aucune erreur ? Pour ce cas fréquent, <code>Integer</code> et <code>Float</code> ont un raccourci, <code>exception: false</code> :</p>"
+          },
+          {
+            "t": "c",
+            "code": "p Integer(\"42\", exception: false)\np Integer(\"bacon\", exception: false)\nFloat(\"4.5\", exception: false)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Une règle pratique : n’interceptez que les erreurs auxquelles vous vous attendez et face auxquelles vous pouvez faire quelque chose de sensé – <code>rescue ArgumentError</code>, pas un <code>rescue</code> tout nu. Un <code>rescue</code> tout nu intercepte presque tout, y compris la <code>NoMethodError</code> de votre faute de frappe, et vous la cherchez ensuite pendant des heures. Et une méthode qui ne peut rien faire d’une valeur le dit avec <code>raise</code> – c’est l’appelant qui décide s’il intercepte l’erreur. Vos propres classes d’erreur viendront plus tard, dans la leçon {{nr:tl-errors}}.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/exceptions_rdoc.html' target='_blank'>begin, rescue, ensure</a> · <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-Integer' target='_blank'>Kernel#Integer</a> · <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-raise' target='_blank'>Kernel#raise</a></div><div class='task'><strong>Exercice :</strong> Les renards ont noté combien de tranches ils ont mangées – pas tous avec des chiffres. Écrivez <code>number_or_nil(text)</code> : la méthode renvoie le nombre contenu dans le texte (<code>\"42\"</code> → 42), et si le texte n’est pas un nombre entier, elle intercepte l’erreur d’<code>Integer</code> avec <code>rescue</code> et renvoie <code>nil</code>. Utilisez-la pour additionner dans <code>total</code> les vrais nombres des notes.</div>"
+          },
+          {
+            "t": "x",
+            "code": "notes = [\"3\", \"three\", \"4\", \"\", \"2\"]\n\n# def number_or_nil(text)\n#   ...   # le nombre dans le texte, ou nil en cas d'ArgumentError\n# end\n\n# total = ...   # les vrais nombres des notes, additionnés",
+            "hints": [
+              "Comme <code>take_order</code> plus haut, en plus court : la méthode contient <code>Integer(text)</code>, en dessous un <code>rescue ArgumentError</code> qui renvoie <code>nil</code> – pas besoin de <code>begin</code>. Pour le total, <code>sum</code> avec un bloc vous aide, et <code>|| 0</code> transforme nil en 0."
+            ],
+            "check": "number_or_nil(\"42\") == 42 && number_or_nil(\"-7\") == -7 && number_or_nil(\"three\").nil? && number_or_nil(\"\").nil? && number_or_nil(\"4.5\").nil? && number_or_nil(\"12 strips\").nil? && total == 9 && code.include?(\"rescue\") && code.match?(/^\\s*def number_or_nil\\b/)",
+            "hint": "<code>def number_or_nil(text)</code>, dedans <code>Integer(text)</code>, puis <code>rescue ArgumentError</code> et <code>nil</code>, puis <code>end</code>. Et <code>total = notes.sum { |n| number_or_nil(n) || 0 }</code>.",
+            "solution": "notes = [\"3\", \"three\", \"4\", \"\", \"2\"]\n\ndef number_or_nil(text)\n  Integer(text)\nrescue ArgumentError\n  nil\nend\n\ntotal = notes.sum { |n| number_or_nil(n) || 0 }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Deux méthodes qui se partagent le travail. <code>read_strips(text)</code> transforme le texte en nombre avec <code>Integer</code> et lève elle-même une <code>ArgumentError</code>, avec le message <code>\"too much bacon: 50\"</code>, quand il y en a plus de 10 – elle n’intercepte rien. <code>take_orders(texts)</code> l’appelle pour chaque texte et renvoie un array : le nombre ou – quand <code>read_strips</code> lève une erreur – son message. <code>take_orders([\"3\", \"50\", \"bacon\"])</code> donne <code>[3, \"too much bacon: 50\", \"invalid value for Integer(): \\\"bacon\\\"\"]</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def read_strips(text)\n#   ...   # le nombre ; plus de 10 : ArgumentError \"too much bacon: 50\"\n# end\n\n# def take_orders(texts)\n#   ...   # pour chaque texte le nombre, ou le message de l'erreur\n# end\n\n# take_orders([\"3\", \"50\", \"bacon\"])",
+            "hints": [
+              "<code>read_strips</code> ressemble à <code>order_strips</code> plus haut, simplement avec <code>Integer(text)</code> d’abord et la limite 10. <code>take_orders</code> transforme chaque texte en résultat avec <code>map</code> ; dans le bloc, un <code>begin</code> … <code>rescue ArgumentError =&gt; e</code> intercepte l’erreur et donne <code>e.message</code>."
+            ],
+            "check": "->(catcher) { read_strips(\"3\") == 3 && read_strips(\"10\") == 10 && catcher.(-> { read_strips(\"50\") }) == \"too much bacon: 50\" && catcher.(-> { read_strips(\"11\") }) == \"too much bacon: 11\" && catcher.(-> { read_strips(\"bacon\") }).is_a?(String) }.( ->(f) { begin; f.call; nil; rescue ArgumentError => ex; ex.message; end }) && ->(r) { r.size == 3 && r[0] == 3 && r[1] == \"too much bacon: 50\" && r[2].is_a?(String) && r[2].include?(\"bacon\") }.(take_orders([\"3\", \"50\", \"bacon\"])) && take_orders([\"10\", \"12\", \"0\"]) == [10, \"too much bacon: 12\", 0] && code.include?(\"raise\") && code.match?(/^\\s*def take_orders\\b/)",
+            "hint": "<code>count = Integer(text)</code>, puis <code>raise ArgumentError, \"too much bacon: #{count}\" if count &gt; 10</code> et <code>count</code>. Dans <code>take_orders</code> : <code>texts.map do |text|</code>, dedans <code>begin</code>, <code>read_strips(text)</code>, <code>rescue ArgumentError =&gt; e</code>, <code>e.message</code>, <code>end</code> – et un <code>end</code> pour le bloc.",
+            "solution": "def read_strips(text)\n  count = Integer(text)\n  raise ArgumentError, \"too much bacon: #{count}\" if count > 10\n\n  count\nend\n\ndef take_orders(texts)\n  texts.map do |text|\n    begin\n      read_strips(text)\n    rescue ArgumentError => e\n      e.message\n    end\n  end\nend\n\ntake_orders([\"3\", \"50\", \"bacon\"])"
+          }
+        ]
+      },
+      "it": {
+        "title": "Catturare gli errori: rescue",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Catturare gli errori: rescue</h2><p>Nella lezione {{nr:fehler}} ogni errore fermava il programma, e tu correggevi il codice. Ma certi errori non sono affatto colpa del codice: vengono da ciò che arriva da fuori, per esempio qualcuno scrive “bacon” dove ci va un numero. Ruby conosce due modi per trasformare un testo in un numero. <code>to_i</code> è quello silenzioso: legge cifre finché ne trova, e altrimenti restituisce semplicemente 0. <code>Integer(…)</code> è quello severo:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"42\".to_i\np \"12 strips\".to_i\np \"bacon\".to_i\nInteger(\"42\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>“12 strips” diventa in silenzio 12, “bacon” diventa in silenzio 0: a volte comodo, spesso una bugia. La volpe ha davvero mangiato 0 strisce, o ha sbagliato a scrivere? <code>Integer</code> accetta solo un testo che sia un numero dall'inizio alla fine. Tutto il resto lo segnala ad alta voce:</p>"
+          },
+          {
+            "t": "c",
+            "code": "Integer(\"bacon\")",
+            "raises": "ArgumentError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>ArgumentError: invalid value for Integer(): \"bacon\"</code>: buono a sapersi! Solo che l'errore ferma tutto il programma. Per farlo andare avanti, <strong>catturi</strong> l'errore: il codice che può andare storto va tra <code>begin</code> e <code>rescue</code>; dopo <code>rescue</code> viene l'errore che intendi, e sotto che cosa deve succedere in quel caso:</p>"
+          },
+          {
+            "t": "c",
+            "code": "begin\n  number = Integer(\"bacon\")\n  puts \"A number: #{number}\"\nrescue ArgumentError\n  puts \"That was no number.\"\nend\nputs \"And on we go!\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Segui la cella con ⏯: <code>Integer</code> solleva l'errore e Ruby salta dritto al <code>rescue</code>; il <code>puts</code> con il numero non arriva mai al suo turno. Dopo l'<code>end</code> il programma prosegue normalmente. Con <code>=&gt; e</code> metti le mani sull'errore stesso: <code>e.class</code> è il suo tipo, <code>e.message</code> il suo messaggio. E siccome possono andare storte cose diverse, ci possono essere più <code>rescue</code>: Ruby prende il primo che va bene. Dodici strisce, divise in modo equo:</p>"
+          },
+          {
+            "t": "c",
+            "code": "[\"4\", \"bacon\", \"0\"].each do |input|\n  begin\n    foxes = Integer(input)\n    puts \"#{foxes} foxes: #{12 / foxes} strips each\"\n  rescue ArgumentError => e\n    puts \"#{e.class}: #{e.message}\"\n  rescue ZeroDivisionError\n    puts \"Zero foxes? Then Chunky eats them all!\"\n  end\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Puoi anche sollevare errori tu stesso, con <code>raise</code>: la classe dell'errore, una virgola, il tuo messaggio. Conviene quando il tuo metodo non sa che farsene di un valore: meglio protestare subito che un risultato misterioso più tardi. La bancarella del bacon di Chunky vende almeno una striscia:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def order_strips(count)\n  raise ArgumentError, \"at least 1, not #{count}\" if count < 1\n\n  \"#{count} strips of bacon, coming right up!\"\nend\n\np order_strips(3)\norder_strips(-2)",
+            "raises": "ArgumentError"
+          },
+          {
+            "t": "h",
+            "html": "<p>Eccolo, il tuo <code>ArgumentError</code> con il tuo messaggio: rosso come quelli di Ruby, e proprio nel punto in cui è arrivato il valore sbagliato. Catturarlo funziona come prima, e dentro un metodo non ti serve nemmeno <code>begin</code>: un <code>rescue</code> direttamente nel corpo del metodo cattura tutto ciò che va storto nel metodo prima di lui. Si aggiungono due aiutanti: <code>else</code> viene eseguito solo quando <em>non</em> è arrivato nessun errore, e <code>ensure</code> viene eseguito <em>sempre</em> alla fine, con o senza errore: il posto giusto per fare ordine:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def take_order(text)\n  count = Integer(text)\n  raise ArgumentError, \"at least 1, not #{count}\" if count < 1\nrescue ArgumentError => e\n  \"Sorry, no: #{e.message}\"\nelse\n  \"#{count} strips of bacon, coming right up!\"\nensure\n  puts \"(Chunky notes: #{text})\"\nend\n\nputs take_order(\"3\")\nputs take_order(\"0\")\nputs take_order(\"lots\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Segui le tre ordinazioni con ⏯ e guarda l'ordine delle cose: la nota di Chunky compare ogni volta <em>prima</em> della risposta. <code>ensure</code> viene eseguito mentre il metodo sta restituendo il risultato, prima ancora che <code>puts</code> lo riceva. Però non cambia il valore di ritorno: quello viene dal <code>rescue</code> quando è arrivato un errore, altrimenti dall'<code>else</code>.</p><p>A volte basta semplicemente riprovare. <code>retry</code> nel <code>rescue</code> salta di nuovo all'inizio del <code>begin</code>. Perché non vada avanti all'infinito, tieni il conto:</p>"
+          },
+          {
+            "t": "c",
+            "code": "inputs = [\"bacon\", \"four\", \"4\"]   # scritti uno dopo l'altro\nattempts = 0\nbegin\n  attempts += 1\n  number = Integer(inputs[attempts - 1])\nrescue ArgumentError\n  puts \"Attempt #{attempts}: not a number, again!\"\n  retry if attempts < 3\nend\n\"#{number} after #{attempts} attempts\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Senza l'<code>if attempts &lt; 3</code>, un errore che si ripresenta ogni volta farebbe riprovare <code>retry</code> all'infinito. Quindi un <code>retry</code> ha sempre bisogno di un limite.</p><p>E se vuoi solo un numero oppure nil, senza nessun errore? Per questo caso frequente <code>Integer</code> e <code>Float</code> hanno una scorciatoia, <code>exception: false</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p Integer(\"42\", exception: false)\np Integer(\"bacon\", exception: false)\nFloat(\"4.5\", exception: false)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Una regola pratica: cattura solo gli errori che ti aspetti e di cui sai fare qualcosa di sensato, <code>rescue ArgumentError</code> e non un <code>rescue</code> nudo. Un <code>rescue</code> nudo cattura quasi tutto, compreso il <code>NoMethodError</code> del tuo errore di battitura, e poi lo cerchi per ore. E un metodo che non sa che farsene di un valore lo dice con <code>raise</code>: chi lo chiama decide se catturare l'errore. Le classi di errore tutte tue arrivano più avanti, nella lezione {{nr:tl-errors}}.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/exceptions_rdoc.html' target='_blank'>begin, rescue, ensure</a> · <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-Integer' target='_blank'>Kernel#Integer</a> · <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-raise' target='_blank'>Kernel#raise</a></div><div class='task'><strong>Esercizio:</strong> Le volpi hanno annotato quante strisce hanno mangiato, non tutte con le cifre. Scrivi <code>number_or_nil(text)</code>: restituisce il numero contenuto nel testo (<code>\"42\"</code> → 42), e se il testo non è un numero intero cattura l'errore di <code>Integer</code> con <code>rescue</code> e restituisce <code>nil</code>. Usalo per sommare in <code>total</code> i numeri veri dei biglietti.</div>"
+          },
+          {
+            "t": "x",
+            "code": "notes = [\"3\", \"three\", \"4\", \"\", \"2\"]\n\n# def number_or_nil(text)\n#   ...   # il numero nel testo, oppure nil con un ArgumentError\n# end\n\n# total = ...   # i numeri veri dei biglietti, sommati",
+            "hints": [
+              "Come <code>take_order</code> qui sopra, solo più corto: il metodo contiene <code>Integer(text)</code>, sotto un <code>rescue ArgumentError</code> che restituisce <code>nil</code>, senza bisogno di <code>begin</code>. Per il totale ti aiuta <code>sum</code> con un blocco, e <code>|| 0</code> trasforma nil in 0."
+            ],
+            "check": "number_or_nil(\"42\") == 42 && number_or_nil(\"-7\") == -7 && number_or_nil(\"three\").nil? && number_or_nil(\"\").nil? && number_or_nil(\"4.5\").nil? && number_or_nil(\"12 strips\").nil? && total == 9 && code.include?(\"rescue\") && code.match?(/^\\s*def number_or_nil\\b/)",
+            "hint": "<code>def number_or_nil(text)</code>, dentro <code>Integer(text)</code>, poi <code>rescue ArgumentError</code> e <code>nil</code>, poi <code>end</code>. E <code>total = notes.sum { |n| number_or_nil(n) || 0 }</code>.",
+            "solution": "notes = [\"3\", \"three\", \"4\", \"\", \"2\"]\n\ndef number_or_nil(text)\n  Integer(text)\nrescue ArgumentError\n  nil\nend\n\ntotal = notes.sum { |n| number_or_nil(n) || 0 }"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Due metodi che si dividono il lavoro. <code>read_strips(text)</code> trasforma il testo in un numero con <code>Integer</code> e solleva lui stesso un <code>ArgumentError</code>, con il messaggio <code>\"too much bacon: 50\"</code>, quando è più di 10; non cattura niente. <code>take_orders(texts)</code> lo chiama per ogni testo e restituisce un array: il numero oppure, quando <code>read_strips</code> solleva un errore, il suo messaggio. <code>take_orders([\"3\", \"50\", \"bacon\"])</code> dà <code>[3, \"too much bacon: 50\", \"invalid value for Integer(): \\\"bacon\\\"\"]</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def read_strips(text)\n#   ...   # il numero; oltre 10: ArgumentError \"too much bacon: 50\"\n# end\n\n# def take_orders(texts)\n#   ...   # per ogni testo il numero, oppure il messaggio dell'errore\n# end\n\n# take_orders([\"3\", \"50\", \"bacon\"])",
+            "hints": [
+              "<code>read_strips</code> è come <code>order_strips</code> qui sopra, solo con prima <code>Integer(text)</code> e il limite 10. <code>take_orders</code> trasforma ogni testo in un risultato con <code>map</code>; dentro il blocco un <code>begin</code> … <code>rescue ArgumentError =&gt; e</code> cattura l'errore e dà <code>e.message</code>."
+            ],
+            "check": "->(catcher) { read_strips(\"3\") == 3 && read_strips(\"10\") == 10 && catcher.(-> { read_strips(\"50\") }) == \"too much bacon: 50\" && catcher.(-> { read_strips(\"11\") }) == \"too much bacon: 11\" && catcher.(-> { read_strips(\"bacon\") }).is_a?(String) }.( ->(f) { begin; f.call; nil; rescue ArgumentError => ex; ex.message; end }) && ->(r) { r.size == 3 && r[0] == 3 && r[1] == \"too much bacon: 50\" && r[2].is_a?(String) && r[2].include?(\"bacon\") }.(take_orders([\"3\", \"50\", \"bacon\"])) && take_orders([\"10\", \"12\", \"0\"]) == [10, \"too much bacon: 12\", 0] && code.include?(\"raise\") && code.match?(/^\\s*def take_orders\\b/)",
+            "hint": "<code>count = Integer(text)</code>, poi <code>raise ArgumentError, \"too much bacon: #{count}\" if count &gt; 10</code> e <code>count</code>. In <code>take_orders</code>: <code>texts.map do |text|</code>, dentro <code>begin</code>, <code>read_strips(text)</code>, <code>rescue ArgumentError =&gt; e</code>, <code>e.message</code>, <code>end</code>, e un <code>end</code> per il blocco.",
             "solution": "def read_strips(text)\n  count = Integer(text)\n  raise ArgumentError, \"too much bacon: #{count}\" if count > 10\n\n  count\nend\n\ndef take_orders(texts)\n  texts.map do |text|\n    begin\n      read_strips(text)\n    rescue ArgumentError => e\n      e.message\n    end\n  end\nend\n\ntake_orders([\"3\", \"50\", \"bacon\"])"
           }
         ]
@@ -13647,6 +15535,202 @@ window.LESSONS_JSON = JSON.stringify({
             "solution": "def journey_length(n)\n  steps = 0\n  while n != 1\n    n = n.even? ? n / 2 : 3 * n + 1\n    steps += 1\n  end\n  steps\nend\n\ndef long_journeys(count, steps)\n  (1..).lazy.select { |n| journey_length(n) > steps }.first(count)\nend\n\nlong_journeys(3, 100)"
           }
         ]
+      },
+      "fr": {
+        "title": "Listes sans fin : Enumerator et lazy",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Listes sans fin : Enumerator et lazy</h2><p>Que se passe-t-il au juste quand vous appelez <code>each</code> en oubliant le bloc ? Pas d’erreur – vous récupérez un <strong>Enumerator</strong> : un objet capable de parcourir la liste et qui se souvient de l’endroit où il en est. Avec <code>next</code>, vous allez chercher un élément après l’autre, quand vous le voulez :</p>"
+          },
+          {
+            "t": "c",
+            "code": "breakfast = [\"bacon\", \"egg\", \"toast\"]\nplate = breakfast.each\np plate\np plate.next\np plate.next\nplate.next"
+          },
+          {
+            "t": "h",
+            "html": "<p>Chaque <code>next</code> avance d’un cran. Après le dernier élément, c’est fini : un quatrième <code>plate.next</code> lève l’erreur <code>StopIteration</code> (« l’itération est arrivée au bout ») – essayez. Et c’est justement l’erreur que <code>loop</code> attrape : <code>loop do … end</code> répète son bloc indéfiniment, jusqu’à ce qu’arrive un <code>break</code> – ou une <code>StopIteration</code>. Alors il s’arrête, tout simplement, sans bruit :</p>"
+          },
+          {
+            "t": "c",
+            "code": "plate = breakfast.each\nloop do\n  puts \"Chunky eats #{plate.next}\"\nend\nputs \"Plate empty!\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Il n’y a pas que <code>each</code> qui renvoie un Enumerator sans bloc – <code>map</code>, <code>select</code> et bien d’autres le font aussi. Vous pouvez y accrocher d’autres méthodes. La plus utile est <code>with_index</code> : elle passe aussi le numéro au bloc et, contrairement à <code>each_with_index</code> de la leçon {{nr:arrays}}, elle peut commencer à 1 et s’accroche à n’importe laquelle de ces méthodes – <code>map</code> compris :</p>"
+          },
+          {
+            "t": "c",
+            "code": "breakfast.each.with_index(1) do |food, nr|\n  puts \"#{nr}. #{food}\"\nend\nbreakfast.map.with_index(1) { |food, nr| food * nr }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Le bacon une fois, l’œuf deux fois, le toast trois fois. Et maintenant, ça devient sans fin : <code>cycle</code> tourne en rond sur une liste – après le dernier élément revient le premier, encore et encore. Pratique pour tout ce qui se fait à tour de rôle – qui fait la vaisselle aujourd’hui ? Un Enumerator sans fin ne doit jamais être parcouru en entier ; un <code>each</code> dessus ne s’arrêterait jamais. Vous prenez ce dont vous avez besoin : <code>first(5)</code> ou <code>take(5)</code> vont chercher les cinq premiers, et <code>zip</code> en prend exactement autant que l’autre liste est longue :</p>"
+          },
+          {
+            "t": "c",
+            "code": "dishes = [\"Chunky\", \"Kaz\", \"Isi\"].cycle\np dishes.first(5)\ndays = [\"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\", \"Sun\"]\ndays.zip(dishes).map { |day, who| \"#{day}: #{who}\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Vous construisez vos propres listes sans fin avec <code>Enumerator.new</code>. Son bloc reçoit un assistant, appelé d’habitude <code>y</code>, et <code>y &lt;&lt; value</code> livre la valeur suivante – un peu comme <code>yield</code> dans la leçon {{nr:bloecke}}. Le bloc peut même contenir un <code>loop</code> sans fin : il ne tourne que tant que quelqu’un réclame des valeurs, puis il attend :</p>"
+          },
+          {
+            "t": "c",
+            "code": "squares = Enumerator.new do |y|\n  n = 1\n  loop do\n    y << n * n\n    n += 1\n  end\nend\n\nsquares.first(10)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>first(10)</code> voulait dix valeurs, alors le bloc a livré dix valeurs – pas une de plus. Un classique à construire soi-même, ce sont les <strong>nombres de Fibonacci</strong> : chacun est la somme des deux précédents, 0, 1, 1, 2, 3, 5, 8 … <code>a, b = b, a + b</code> fait avancer les deux d’un coup. Et <code>take_while</code> prend des valeurs <em>tant qu’</em>elles remplissent une condition, et s’arrête à la première qui ne la remplit pas. Un <code>select</code>, en revanche, continuerait à chercher dans une liste sans fin pour toujours :</p>"
+          },
+          {
+            "t": "c",
+            "code": "fibonacci = Enumerator.new do |y|\n  a, b = 0, 1\n  loop do\n    y << a\n    a, b = b, a + b\n  end\nend\n\np fibonacci.first(10)\nfibonacci.take_while { |f| f < 100 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Et si vous voulez quand même transformer et filtrer une liste sans fin ? Normalement, chaque méthode d’une chaîne traite toute la liste avant que la suivante ait son tour – pour une liste sans fin, cela voudrait dire : jamais. <code>lazy</code> renverse les choses : chaque élément traverse seul toute la chaîne, et c’est seulement le <code>first</code> à la fin qui dit quand s’arrêter. Regardez dans quel ordre les calculs se font :</p>"
+          },
+          {
+            "t": "c",
+            "code": "eager = (1..4).map { |n| puts \"compute #{n}\"; n * n }\np eager.first(2)\nsleepy = (1..4).lazy.map { |n| puts \"compute #{n}\"; n * n }\nsleepy.first(2)"
+          },
+          {
+            "t": "h",
+            "html": "<p>La chaîne pressée (<em>eager</em>) calcule les quatre nombres alors que deux seulement sont nécessaires ; la paresseuse (<em>lazy</em>) exactement deux. Avec <code>(1..)</code> – un range sans fin – au lieu de <code>(1..4)</code>, la pressée ne finirait jamais, et la cellule tournerait jusqu’à ce que vous rechargiez la page (⚡ Live l’arrête au bout d’une seconde, ▶ non). Mieux vaut ne pas essayer. La paresseuse, elle, s’en sort très bien avec l’infini – ici avec tous les nombres à partir de 1 et avec les carrés de tout à l’heure : lesquels se lisent pareil à l’envers, comme les palindromes de la leçon {{nr:knobeln}} ?</p>"
+          },
+          {
+            "t": "c",
+            "code": "sevens = (1..).lazy.select { |n| n % 7 == 0 }\np sevens.first(5)\nmirrored = squares.lazy.select { |s| s.to_s == s.to_s.reverse }\nmirrored.first(6)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Une règle simple : un Enumerator est une liste dont les valeurs ne naissent qu’au moment où quelqu’un les demande – c’est pour cela qu’elle peut être sans fin. Ne demandez jamais <em>tout</em> à une liste sans fin (<code>each</code>, <code>map</code>, <code>select</code>, <code>to_a</code>, <code>sum</code>), seulement ce dont vous avez besoin : avec <code>next</code>, <code>first</code>, <code>take_while</code> ou <code>zip</code>. Et si vous voulez transformer ou filtrer en chemin, activez d’abord <code>lazy</code>.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Enumerator.html' target='_blank'>Enumerator</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerator/Lazy.html' target='_blank'>Enumerator::Lazy</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-cycle' target='_blank'>Array#cycle</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-take_while' target='_blank'>Enumerable#take_while</a></div><div class='task'><strong>Exercice :</strong> Chunky dispose des tranches de bacon en triangles : une en haut, deux en dessous, trois encore en dessous … Combien de tranches il faut pour un triangle entier, ce sont les <strong>nombres triangulaires</strong> qui le disent : 1, 3, 6, 10, 15 … – chacun vaut le précédent plus la longueur de la nouvelle rangée. Construisez l’Enumerator sans fin <code>triangles</code> avec <code>Enumerator.new</code> : <code>triangles.first(6)</code> doit donner <code>[1, 3, 6, 10, 15, 21]</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# triangles = Enumerator.new do |y|\n#   ...   # commencer avec 0 tranche et la rangée 1,\n#   ...   # puis sans fin : ajouter la rangée, livrer la somme, rangée suivante\n# end\n\n# triangles.first(6)",
+            "hints": [
+              "Comme <code>squares</code> plus haut, mais avec deux variables : <code>total</code> et <code>row</code>. À chaque tour du <code>loop</code>, tu ajoutes la rangée au total, tu livres le total avec <code>y &lt;&lt;</code> et tu augmentes la rangée de un."
+            ],
+            "check": "triangles.is_a?(Enumerator) && triangles.first(6) == [1, 3, 6, 10, 15, 21] && triangles.first(100).last == 5050 && triangles.take_while { |t| t < 50 } == [1, 3, 6, 10, 15, 21, 28, 36, 45] && code.include?(\"Enumerator.new\")",
+            "hint": "<code>total = 0</code> et <code>row = 1</code>, puis <code>loop do</code> avec <code>total += row</code>, <code>y &lt;&lt; total</code> et <code>row += 1</code>, puis deux fois <code>end</code>.",
+            "solution": "triangles = Enumerator.new do |y|\n  total = 0\n  row = 1\n  loop do\n    total += row\n    y << total\n    row += 1\n  end\nend\n\ntriangles.first(6)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Retour au voyage de Collatz de la leçon {{nr:knobeln}} : divisez le nombre par deux s’il est pair, sinon multipliez-le par 3 et ajoutez 1 – jusqu’à arriver à 1. Pour 27, cela prend 111 étapes. Écrivez <code>long_journeys(count, steps)</code>, qui utilise <code>lazy</code> pour trouver, à partir de 1, les <code>count</code> premiers nombres de départ dont le voyage prend <em>plus</em> de <code>steps</code> étapes : <code>long_journeys(3, 100)</code> donne <code>[27, 31, 41]</code>. Le compteur d’étapes s’écrit le mieux comme une petite méthode à part, <code>journey_length(n)</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def journey_length(n)\n#   ...   # compter les étapes de Collatz de n jusqu'à 1\n# end\n\n# def long_journeys(count, steps)\n#   ...   # (1..).lazy ... les count premiers nombres de départ\n#   ...   # dont le voyage prend plus de steps étapes\n# end\n\n# long_journeys(3, 100)",
+            "hints": [
+              "<code>journey_length</code>, c’est la boucle <code>while</code> des casse-têtes, emballée dans une méthode qui renvoie les étapes à la fin. Ensuite, <code>(1..).lazy.select { … }</code> filtre les nombres de départ, et <code>first(count)</code> dit quand s’arrêter."
+            ],
+            "check": "long_journeys(3, 100) == [27, 31, 41] && long_journeys(4, 10) == [7, 9, 11, 14] && long_journeys(2, 0) == [2, 3] && code.include?(\"lazy\") && code.match?(/^\\s*def long_journeys\\b/)",
+            "hint": "<code>def journey_length(n)</code> avec <code>steps = 0</code>, <code>while n != 1</code> … <code>steps += 1</code> … <code>end</code> et <code>steps</code> ; puis dans <code>long_journeys</code> : <code>(1..).lazy.select { |n| journey_length(n) &gt; steps }.first(count)</code>.",
+            "solution": "def journey_length(n)\n  steps = 0\n  while n != 1\n    n = n.even? ? n / 2 : 3 * n + 1\n    steps += 1\n  end\n  steps\nend\n\ndef long_journeys(count, steps)\n  (1..).lazy.select { |n| journey_length(n) > steps }.first(count)\nend\n\nlong_journeys(3, 100)"
+          }
+        ]
+      },
+      "it": {
+        "title": "Liste infinite: Enumerator e lazy",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Liste infinite: Enumerator e lazy</h2><p>Che cosa succede davvero quando chiami <code>each</code> senza il blocco? Nessun errore: ottieni un <strong>Enumerator</strong>, un oggetto che sa percorrere la lista e si ricorda a che punto è arrivato. Con <code>next</code> prendi un elemento dopo l'altro, quando vuoi tu:</p>"
+          },
+          {
+            "t": "c",
+            "code": "breakfast = [\"bacon\", \"egg\", \"toast\"]\nplate = breakfast.each\np plate\np plate.next\np plate.next\nplate.next"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ogni <code>next</code> va avanti di uno. Dopo l'ultimo elemento è finita: un quarto <code>plate.next</code> solleva l'errore <code>StopIteration</code> (“l'iterazione è arrivata alla fine”). Provalo! Ed è proprio l'errore che <code>loop</code> intercetta: <code>loop do … end</code> ripete il suo blocco all'infinito, finché non arriva un <code>break</code>, oppure uno <code>StopIteration</code>. A quel punto si ferma e basta, senza fare storie:</p>"
+          },
+          {
+            "t": "c",
+            "code": "plate = breakfast.each\nloop do\n  puts \"Chunky eats #{plate.next}\"\nend\nputs \"Plate empty!\""
+          },
+          {
+            "t": "h",
+            "html": "<p>Non solo <code>each</code> restituisce un Enumerator se manca il blocco: lo fanno anche <code>map</code>, <code>select</code> e molti altri. A questo Enumerator puoi agganciare altri metodi. Il più utile è <code>with_index</code>: passa al blocco anche il numero e, a differenza di <code>each_with_index</code> della lezione {{nr:arrays}}, può partire da 1 e si aggancia a uno qualsiasi di questi metodi, anche a <code>map</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "breakfast.each.with_index(1) do |food, nr|\n  puts \"#{nr}. #{food}\"\nend\nbreakfast.map.with_index(1) { |food, nr| food * nr }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Il bacon una volta, l'uovo due volte, il toast tre volte. E adesso si va all'infinito: <code>cycle</code> gira in tondo su una lista: dopo l'ultimo elemento ricomincia dal primo, ancora e ancora. Comodo per tutto ciò che si fa a turno: chi lava i piatti oggi? Un Enumerator infinito non va mai percorso fino in fondo; un <code>each</code> non si fermerebbe mai. Prendi solo quello che ti serve: <code>first(5)</code> o <code>take(5)</code> prendono i primi cinque, e <code>zip</code> ne prende esattamente quanti sono gli elementi dell'altra lista:</p>"
+          },
+          {
+            "t": "c",
+            "code": "dishes = [\"Chunky\", \"Kaz\", \"Isi\"].cycle\np dishes.first(5)\ndays = [\"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\", \"Sun\"]\ndays.zip(dishes).map { |day, who| \"#{day}: #{who}\" }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Le tue liste infinite le costruisci con <code>Enumerator.new</code>. Il suo blocco riceve un aiutante, di solito chiamato <code>y</code>, e <code>y &lt;&lt; value</code> consegna il valore successivo, un po' come <code>yield</code> nella lezione {{nr:bloecke}}. Il blocco può contenere perfino un <code>loop</code> infinito: va avanti solo finché qualcuno chiede valori, poi aspetta:</p>"
+          },
+          {
+            "t": "c",
+            "code": "squares = Enumerator.new do |y|\n  n = 1\n  loop do\n    y << n * n\n    n += 1\n  end\nend\n\nsquares.first(10)"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>first(10)</code> voleva dieci valori, quindi il blocco ha consegnato dieci valori, nemmeno uno di più. Un classico da costruire da soli sono i <strong>numeri di Fibonacci</strong>: ognuno è la somma dei due precedenti, 0, 1, 1, 2, 3, 5, 8 … <code>a, b = b, a + b</code> li fa avanzare tutti e due in un colpo. E <code>take_while</code> prende valori <em>finché</em> soddisfano una condizione, e si ferma al primo che non la soddisfa. Un <code>select</code>, invece, continuerebbe a cercare in una lista infinita per sempre:</p>"
+          },
+          {
+            "t": "c",
+            "code": "fibonacci = Enumerator.new do |y|\n  a, b = 0, 1\n  loop do\n    y << a\n    a, b = b, a + b\n  end\nend\n\np fibonacci.first(10)\nfibonacci.take_while { |f| f < 100 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>E se vuoi comunque trasformare e filtrare una lista infinita? Di solito ogni metodo di una catena elabora tutta la lista prima che tocchi al successivo: con una lista infinita vorrebbe dire mai. <code>lazy</code> ribalta le cose: ogni elemento attraversa da solo tutta la catena, e solo il <code>first</code> alla fine dice quando fermarsi. Guarda in che ordine vengono fatti i calcoli:</p>"
+          },
+          {
+            "t": "c",
+            "code": "eager = (1..4).map { |n| puts \"compute #{n}\"; n * n }\np eager.first(2)\nsleepy = (1..4).lazy.map { |n| puts \"compute #{n}\"; n * n }\nsleepy.first(2)"
+          },
+          {
+            "t": "h",
+            "html": "<p>La catena impaziente (<em>eager</em>) calcola tutti e quattro i numeri anche se ne servono solo due; quella pigra (<em>lazy</em>) esattamente due. Con <code>(1..)</code>, un range senza fine, al posto di <code>(1..4)</code>, quella impaziente non finirebbe mai, e la cella continuerebbe a girare finché non ricarichi la pagina (⚡ Live la ferma dopo un secondo, ▶ no). Meglio non provarci. Quella pigra, invece, se la cava benissimo con l'infinito: qui con tutti i numeri da 1 in poi e con i quadrati di prima. Quali si leggono uguali anche al contrario, come i palindromi della lezione {{nr:knobeln}}?</p>"
+          },
+          {
+            "t": "c",
+            "code": "sevens = (1..).lazy.select { |n| n % 7 == 0 }\np sevens.first(5)\nmirrored = squares.lazy.select { |s| s.to_s == s.to_s.reverse }\nmirrored.first(6)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Una regola pratica: un Enumerator è una lista i cui valori nascono solo quando qualcuno li chiede, ed è per questo che può essere infinita. A una lista infinita non chiedere mai <em>tutto</em> (<code>each</code>, <code>map</code>, <code>select</code>, <code>to_a</code>, <code>sum</code>), ma solo quanto ti serve: con <code>next</code>, <code>first</code>, <code>take_while</code> o <code>zip</code>. E se vuoi trasformare o filtrare strada facendo, attiva prima <code>lazy</code>.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Enumerator.html' target='_blank'>Enumerator</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerator/Lazy.html' target='_blank'>Enumerator::Lazy</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-cycle' target='_blank'>Array#cycle</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-take_while' target='_blank'>Enumerable#take_while</a></div><div class='task'><strong>Esercizio:</strong> Chunky dispone le strisce di bacon a triangolo: una in cima, due sotto, tre ancora più sotto … Quante strisce servono per un triangolo intero te lo dicono i <strong>numeri triangolari</strong> 1, 3, 6, 10, 15 …: ognuno è il precedente più la lunghezza della nuova fila. Costruisci con <code>Enumerator.new</code> l'Enumerator infinito <code>triangles</code>: <code>triangles.first(6)</code> deve dare <code>[1, 3, 6, 10, 15, 21]</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# triangles = Enumerator.new do |y|\n#   ...   # parti con 0 strisce e la fila 1,\n#   ...   # poi all'infinito: aggiungi la fila, consegna la somma, fila successiva\n# end\n\n# triangles.first(6)",
+            "hints": [
+              "Come <code>squares</code> qui sopra, solo con due variabili: <code>total</code> e <code>row</code>. A ogni giro del <code>loop</code> aggiungi la fila al totale, consegni il totale con <code>y &lt;&lt;</code> e aumenti la fila di uno."
+            ],
+            "check": "triangles.is_a?(Enumerator) && triangles.first(6) == [1, 3, 6, 10, 15, 21] && triangles.first(100).last == 5050 && triangles.take_while { |t| t < 50 } == [1, 3, 6, 10, 15, 21, 28, 36, 45] && code.include?(\"Enumerator.new\")",
+            "hint": "<code>total = 0</code> e <code>row = 1</code>, poi <code>loop do</code> con <code>total += row</code>, <code>y &lt;&lt; total</code> e <code>row += 1</code>, poi due volte <code>end</code>.",
+            "solution": "triangles = Enumerator.new do |y|\n  total = 0\n  row = 1\n  loop do\n    total += row\n    y << total\n    row += 1\n  end\nend\n\ntriangles.first(6)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Torniamo al viaggio di Collatz della lezione {{nr:knobeln}}: dimezza il numero se è pari, altrimenti moltiplicalo per 3 e aggiungi 1, finché non arrivi a 1. Al 27 servono 111 passi. Scrivi <code>long_journeys(count, steps)</code>, che con <code>lazy</code> trova, a partire da 1, i primi <code>count</code> numeri di partenza il cui viaggio richiede <em>più</em> di <code>steps</code> passi: <code>long_journeys(3, 100)</code> dà <code>[27, 31, 41]</code>. Il contapassi conviene scriverlo come un piccolo metodo a parte, <code>journey_length(n)</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def journey_length(n)\n#   ...   # conta i passi di Collatz da n fino a 1\n# end\n\n# def long_journeys(count, steps)\n#   ...   # (1..).lazy ... i primi count numeri di partenza\n#   ...   # il cui viaggio richiede più di steps passi\n# end\n\n# long_journeys(3, 100)",
+            "hints": [
+              "<code>journey_length</code> è il ciclo <code>while</code> dei rompicapi, avvolto in un metodo che alla fine restituisce i passi. Poi <code>(1..).lazy.select { … }</code> filtra i numeri di partenza, e <code>first(count)</code> dice quando fermarsi."
+            ],
+            "check": "long_journeys(3, 100) == [27, 31, 41] && long_journeys(4, 10) == [7, 9, 11, 14] && long_journeys(2, 0) == [2, 3] && code.include?(\"lazy\") && code.match?(/^\\s*def long_journeys\\b/)",
+            "hint": "<code>def journey_length(n)</code> con <code>steps = 0</code>, <code>while n != 1</code> … <code>steps += 1</code> … <code>end</code> e <code>steps</code>; poi in <code>long_journeys</code>: <code>(1..).lazy.select { |n| journey_length(n) &gt; steps }.first(count)</code>.",
+            "solution": "def journey_length(n)\n  steps = 0\n  while n != 1\n    n = n.even? ? n / 2 : 3 * n + 1\n    steps += 1\n  end\n  steps\nend\n\ndef long_journeys(count, steps)\n  (1..).lazy.select { |n| journey_length(n) > steps }.first(count)\nend\n\nlong_journeys(3, 100)"
+          }
+        ]
       }
     },
     {
@@ -14239,6 +16323,202 @@ window.LESSONS_JSON = JSON.stringify({
             "solution": "def quicksort(list)\n  return list if list.size <= 1\n  pivot = list.first\n  small, big = list.drop(1).partition { |c| c < pivot }\n  quicksort(small) + [pivot] + quicksort(big)\nend\n\nquicksort([5, 2, 8, 1, 9, 3, 7, 4])"
           }
         ]
+      },
+      "fr": {
+        "title": "Trier à la main",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Trier à la main</h2><p>Dans la leçon {{nr:sortieren}}, un seul mot suffisait pour trier : <code>sort</code>. Mais comment Ruby s’y prend-il ? Un ordinateur ne voit pas d’un coup d’œil, comme vous, quelle carte est la plus petite. Il ne sait que comparer deux choses à la fois et les déplacer. Alors, pour une fois, trions à la main, pas à pas – avec des cartes numérotées sur une table.</p><p>La première méthode fait comme vous le feriez : trouver la plus petite carte sur la table, la poser dans votre rangée, et recommencer avec le reste jusqu’à ce que la table soit vide. On l’appelle le <strong>tri par sélection</strong> (<em>selection sort</em>). <code>delete_at(i)</code> retire de la table la carte à la position <code>i</code> :</p>"
+          },
+          {
+            "t": "c",
+            "code": "table = [5, 2, 8, 1, 9, 3]\nrow = []\nuntil table.empty?\n  smallest = table.min\n  row << smallest\n  table.delete_at(table.index(smallest))\nend\nrow"
+          },
+          {
+            "t": "h",
+            "html": "<p>Parcourez la cellule pas à pas avec ⏯ : à chaque tour, la table perd une carte et la rangée en gagne une. (Pourquoi pas simplement <code>delete(smallest)</code> ? Cela retirerait <em>toutes</em> les cartes de cette valeur – sur deux cartes égales, l’une se perdrait.)</p><p>Mais c’était un peu de la triche : <code>min</code> a fait le vrai travail, et <code>min</code> doit lui aussi comparer carte après carte. À la main, une méthode de tri n’a que deux outils : <strong>comparer deux cartes</strong> et <strong>échanger deux cartes</strong>. Pour échanger, pas besoin de variable auxiliaire comme dans la leçon {{nr:variablen}} : <code>a, b = b, a</code> affecte les deux d’un coup. Voici la même méthode à l’intérieur de la liste elle-même : pour chaque position <code>i</code>, trouver la plus petite carte à partir de <code>i</code> et l’échanger pour l’amener devant. Un compteur compte les comparaisons :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def selection_sort(list)\n  cards = list.dup\n  comparisons = 0\n  (0...cards.size).each do |i|\n    smallest = i\n    (i + 1...cards.size).each do |j|\n      comparisons += 1\n      smallest = j if cards[j] < cards[smallest]\n    end\n    cards[i], cards[smallest] = cards[smallest], cards[i]\n  end\n  puts \"#{cards.size} cards: #{comparisons} comparisons\"\n  cards\nend\n\nselection_sort([5, 2, 8, 1, 9, 3])"
+          },
+          {
+            "t": "h",
+            "html": "<p>15 comparaisons pour 6 cartes : la première position demande 5 comparaisons, la deuxième 4, puis 3, 2 et 1 – 15 en tout.</p><p>La méthode la plus célèbre est le <strong>tri à bulles</strong> (<em>bubble sort</em>) : parcourez la rangée et comparez deux voisines à la fois. Si elles sont dans le mauvais ordre, échangez-les. Après un passage, le plus grand nombre est remonté tout au bout, comme une bulle qui monte dans l’eau. Répétez les passages jusqu’à ce que l’un d’eux se passe de tout échange :</p>"
+          },
+          {
+            "t": "c",
+            "code": "numbers = [5, 2, 8, 1, 9, 3]\nswapped = true\nwhile swapped\n  swapped = false\n  (0...numbers.size - 1).each do |i|\n    if numbers[i] > numbers[i + 1]\n      numbers[i], numbers[i + 1] = numbers[i + 1], numbers[i]\n      swapped = true\n    end\n  end\n  p numbers\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Après le premier passage, le 9 est au fond ; après le deuxième, le 8 est juste devant lui ; le quatrième passage n’échange plus rien, et la boucle s’arrête. Le tri à bulles est simple mais lent – il ne déplace jamais une carte que d’une place à la fois.</p><p>La troisième méthode, vous la connaissez des jeux de cartes : le <strong>tri par insertion</strong> (<em>insertion sort</em>). Vous prenez les cartes une par une et glissez chacune au bon endroit dans votre main – devant la première carte plus grande. Deux outils pour cela : <code>index</code> avec un bloc trouve la position de la première carte pour laquelle le bloc est vrai (ou <code>nil</code> s’il n’y en a aucune), et <code>insert</code> glisse une carte à une position, les autres se décalant vers la droite :</p>"
+          },
+          {
+            "t": "c",
+            "code": "hand = [2, 5, 8]\np hand.index { |c| c > 3 }   # la première carte plus grande que 3\np hand.index { |c| c > 9 }   # aucune carte n'est plus grande que 9\nhand.insert(1, 3)            # le 3 à la position 1"
+          },
+          {
+            "t": "h",
+            "html": "<p>La méthode complète, vous l’écrirez vous-même à la fin. D’abord la question la plus importante : combien de travail demande un tri ? Comptons les comparaisons de <code>selection_sort</code> pour 8, 16 et 32 cartes – <code>shuffle</code> de la leçon {{nr:zufall}} les mélange :</p>"
+          },
+          {
+            "t": "c",
+            "code": "[8, 16, 32].each do |n|\n  selection_sort((1..n).to_a.shuffle)\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>28, 120, 496 : deux fois plus de cartes, quatre fois plus de travail. En général, c’est n · (n - 1) / 2 comparaisons – cela grandit comme n². Pour 1000 cartes, c’est presque un demi-million ; pour un million de cartes, 500 milliards. Le tri à bulles et le tri par insertion jouent dans la même catégorie.</p><p>Une astuce rend les choses plus rapides : deux piles <em>déjà triées</em> se fusionnent facilement en une seule. Regardez la carte du dessus des deux piles, prenez la plus petite, recommencez. <code>shift</code> retire la première carte d’un array :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def merge_piles(left, right)\n  pile = []\n  until left.empty? || right.empty?\n    if left.first <= right.first\n      pile << left.shift\n    else\n      pile << right.shift\n    end\n  end\n  pile + left + right\nend\n\nmerge_piles([1, 4, 8], [2, 3, 9])"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dès qu’une pile est vide, le reste de l’autre se met simplement derrière – <code>left + right</code>, puisque l’une des deux est vide de toute façon. Et d’où viennent les piles triées ? De la récursion de la leçon {{nr:rekursion}} : partagez les cartes en deux moitiés, triez chaque moitié <em>de la même façon</em> et fusionnez-les. Le cas de base : une seule carte (ou aucune) est déjà triée. C’est le <strong>tri fusion</strong> (<em>merge sort</em>). <code>first(middle)</code> prend la première moitié, <code>drop(middle)</code> la laisse de côté et donne le reste :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def merge_sort(list)\n  return list if list.size <= 1\n  middle = list.size / 2\n  left = merge_sort(list.first(middle))\n  right = merge_sort(list.drop(middle))\n  merge_piles(left, right)\nend\n\nmerge_sort([5, 2, 8, 1, 9, 3, 7, 4])"
+          },
+          {
+            "t": "h",
+            "html": "<p>8 cartes sont coupées en deux trois fois jusqu’à ce qu’il ne reste que des cartes seules, et à chaque niveau chaque carte est fusionnée une fois : moins de 8 · 3 = 24 comparaisons au lieu de 28. Avec 32 cartes, c’est moins de 32 · 5 = 160 au lieu de 496 ; avec un million, environ 20 millions au lieu de 500 milliards. Et le <code>sort</code> de Ruby ? Donnez-lui un bloc, et Ruby l’appelle à chaque comparaison – vous pouvez donc compter avec lui :</p>"
+          },
+          {
+            "t": "c",
+            "code": "[8, 16, 32].each do |n|\n  comparisons = 0\n  (1..n).to_a.shuffle.sort { |a, b| comparisons += 1; a <=> b }\n  puts \"#{n} cards: #{comparisons} comparisons\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Environ 15, 50 et 125 – quelques-unes de plus ou de moins selon le mélange, mais bien en dessous de 28, 120 et 496, et à peu près autant qu’il en faut au tri fusion. Le <code>sort</code> de Ruby répartit le travail tout aussi astucieusement et, en plus, il est écrit en C, qui tourne bien plus vite que du code Ruby. La règle simple : dans de vrais programmes, utilisez toujours <code>sort</code>. On trie à la main pour comprendre comment ça marche – et parce que la question « combien d’étapes cela prend-il ? » compte pour chaque programme.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-insert' target='_blank'>Array#insert</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-index' target='_blank'>Array#index</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-shift' target='_blank'>Array#shift</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-partition' target='_blank'>Enumerable#partition</a></div><div class='task'><strong>Exercice :</strong> Écrivez <code>insertion_sort(list)</code> : prenez en main les cartes de <code>list</code> une par une et glissez chacune devant la première carte plus grande – s’il n’y en a aucune, elle va à la fin. Sans <code>sort</code>, <code>sort_by</code>, <code>min</code> ni <code>max</code> ! Cela doit aussi marcher avec des cartes en double et avec une liste vide.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def insertion_sort(list)\n#   hand = []\n#   ...   # glisser chaque carte de list devant la première plus grande dans hand\n#   hand\n# end\n\n# insertion_sort([5, 2, 8, 1, 9, 3])\n",
+            "hints": [
+              "Commence avec une <code>hand</code> vide et parcours <code>list</code> avec <code>each</code>. Pour chaque carte, <code>hand.index { |c| c &gt; card }</code> trouve la place ; si <code>index</code> donne nil, <code>|| hand.size</code> prend la fin."
+            ],
+            "check": "insertion_sort([5, 2, 8, 1, 9, 3]) == [1, 2, 3, 5, 8, 9] && insertion_sort([3, 1, 3, 2, 1]) == [1, 1, 2, 3, 3] && insertion_sort([]) == [] && insertion_sort([7]) == [7] && insertion_sort(%w[toast bacon egg]) == %w[bacon egg toast] && [[9, 8, 7, 6, 5, 4], (1..12).to_a, [4, 4, 4, 1], [2, 7, 1, 8, 2, 8, 1, 8, 2, 8]].all? { |l| insertion_sort(l.dup) == l.sort } && !code.match?(/\\.(sort|min|max)/)",
+            "hint": "<code>place = hand.index { |c| c &gt; card } || hand.size</code>, puis <code>hand.insert(place, card)</code> – les deux dans le <code>each</code> sur <code>list</code>. À la fin, la méthode renvoie <code>hand</code>.",
+            "solution": "def insertion_sort(list)\n  hand = []\n  list.each do |card|\n    place = hand.index { |c| c > card } || hand.size\n    hand.insert(place, card)\n  end\n  hand\nend\n\ninsertion_sort([5, 2, 8, 1, 9, 3])"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Encore une méthode célèbre avec de la récursion : le <strong>tri rapide</strong> (<em>quicksort</em>). Prenez la première carte comme <em>pivot</em> et répartissez le reste en deux piles : les cartes plus petites que le pivot, et les autres. <code>partition</code> fait cela d’un coup : <code>[5, 2, 8, 1].partition { |c| c &lt; 4 }</code> donne <code>[[2, 1], [5, 8]]</code>. Triez les deux piles avec quicksort et assemblez-les : petites + <code>[pivot]</code> + grandes. Écrivez <code>quicksort(list)</code> – là encore sans <code>sort</code>, <code>min</code> ni <code>max</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def quicksort(list)\n#   return list if list.size <= 1\n#   pivot = list.first\n#   ...   # répartir le reste : plus petites que pivot, et les autres\n#   ...   # trier les deux piles, les assembler avec [pivot] au milieu\n# end\n\n# quicksort([5, 2, 8, 1, 9, 3, 7, 4])\n",
+            "hints": [
+              "Le cas de base est déjà là : zéro ou une carte, c’est trié de toute façon. Le reste sans le pivot, c’est <code>list.drop(1)</code>. <code>partition</code> renvoie deux arrays – attrape-les avec <code>small, big = …</code>."
+            ],
+            "check": "quicksort([5, 2, 8, 1, 9, 3, 7, 4]) == [1, 2, 3, 4, 5, 7, 8, 9] && quicksort([3, 1, 3, 2, 3]) == [1, 2, 3, 3, 3] && quicksort([]) == [] && quicksort([7]) == [7] && quicksort([5, 5, 5, 5]) == [5, 5, 5, 5] && quicksort(%w[toast bacon egg bacon]) == %w[bacon bacon egg toast] && [[9, 8, 7, 6, 5, 4], (1..12).to_a, (1..30).map { |i| i * 17 % 31 }, [2, 7, 1, 8, 2, 8, 1, 8, 2, 8]].all? { |l| quicksort(l.dup) == l.sort } && !code.match?(/\\.(sort|min|max)/)",
+            "hint": "<code>small, big = list.drop(1).partition { |c| c &lt; pivot }</code>, puis <code>quicksort(small) + [pivot] + quicksort(big)</code>.",
+            "solution": "def quicksort(list)\n  return list if list.size <= 1\n  pivot = list.first\n  small, big = list.drop(1).partition { |c| c < pivot }\n  quicksort(small) + [pivot] + quicksort(big)\nend\n\nquicksort([5, 2, 8, 1, 9, 3, 7, 4])"
+          }
+        ]
+      },
+      "it": {
+        "title": "Ordinare a mano",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ordinare a mano</h2><p>Nella lezione {{nr:sortieren}} bastava una sola parola per ordinare: <code>sort</code>. Ma come fa Ruby? Un computer non vede a colpo d'occhio, come fai tu, qual è la carta più piccola. Sa solo confrontare due cose alla volta e spostarle. Quindi, per una volta, ordiniamo a mano, passo dopo passo, con delle carte numerate su un tavolo.</p><p>Il primo metodo fa come faresti tu: trova la carta più piccola sul tavolo, mettila nella tua fila e ripeti con il resto finché il tavolo non è vuoto. Si chiama <strong>ordinamento per selezione</strong> (<em>selection sort</em>). <code>delete_at(i)</code> toglie dal tavolo la carta in posizione <code>i</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "table = [5, 2, 8, 1, 9, 3]\nrow = []\nuntil table.empty?\n  smallest = table.min\n  row << smallest\n  table.delete_at(table.index(smallest))\nend\nrow"
+          },
+          {
+            "t": "h",
+            "html": "<p>Esegui la cella passo passo con ⏯: a ogni giro il tavolo ha una carta in meno e la fila una in più. (Perché non semplicemente <code>delete(smallest)</code>? Toglierebbe <em>tutte</em> le carte con quel valore: di due carte uguali, una andrebbe persa.)</p><p>Però era un po' un imbroglio: il vero lavoro l'ha fatto <code>min</code>, e anche <code>min</code> deve confrontare una carta dopo l'altra. A mano, un metodo di ordinamento ha solo due attrezzi: <strong>confrontare due carte</strong> e <strong>scambiare due carte</strong>. Per scambiare non ti serve una variabile d'appoggio come nella lezione {{nr:variablen}}: <code>a, b = b, a</code> assegna tutte e due in un colpo. Ecco lo stesso metodo dentro la lista stessa: per ogni posizione <code>i</code>, trova la carta più piccola da <code>i</code> in poi e portala davanti con uno scambio. Un contatore conta i confronti:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def selection_sort(list)\n  cards = list.dup\n  comparisons = 0\n  (0...cards.size).each do |i|\n    smallest = i\n    (i + 1...cards.size).each do |j|\n      comparisons += 1\n      smallest = j if cards[j] < cards[smallest]\n    end\n    cards[i], cards[smallest] = cards[smallest], cards[i]\n  end\n  puts \"#{cards.size} cards: #{comparisons} comparisons\"\n  cards\nend\n\nselection_sort([5, 2, 8, 1, 9, 3])"
+          },
+          {
+            "t": "h",
+            "html": "<p>15 confronti per 6 carte: la prima posizione richiede 5 confronti, la seconda 4, poi 3, 2 e 1, in tutto 15.</p><p>Il metodo più famoso è il <strong>bubble sort</strong> (ordinamento a bolle): percorri la fila e confronta due vicine alla volta. Se sono nell'ordine sbagliato, scambiale. Dopo un passaggio il numero più grande è salito fino in fondo, come una bolla che sale nell'acqua. Ripeti i passaggi finché uno non fila liscio senza nessuno scambio:</p>"
+          },
+          {
+            "t": "c",
+            "code": "numbers = [5, 2, 8, 1, 9, 3]\nswapped = true\nwhile swapped\n  swapped = false\n  (0...numbers.size - 1).each do |i|\n    if numbers[i] > numbers[i + 1]\n      numbers[i], numbers[i + 1] = numbers[i + 1], numbers[i]\n      swapped = true\n    end\n  end\n  p numbers\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dopo il primo passaggio il 9 è in fondo, dopo il secondo l'8 gli sta davanti; il quarto passaggio non scambia più niente, e il ciclo si ferma. Il bubble sort è semplice ma lento: sposta una carta sempre e solo di un posto alla volta.</p><p>Il terzo metodo lo conosci dai giochi di carte: l'<strong>ordinamento per inserimento</strong> (<em>insertion sort</em>). Prendi in mano una carta dopo l'altra e infili ognuna al posto giusto, davanti alla prima carta più grande. Due attrezzi per farlo: <code>index</code> con un blocco trova la posizione della prima carta per cui il blocco è vero (oppure <code>nil</code> se non ce n'è nessuna), e <code>insert</code> infila una carta in una posizione, mentre le altre scorrono a destra:</p>"
+          },
+          {
+            "t": "c",
+            "code": "hand = [2, 5, 8]\np hand.index { |c| c > 3 }   # la prima carta più grande di 3\np hand.index { |c| c > 9 }   # nessuna carta è più grande di 9\nhand.insert(1, 3)            # il 3 in posizione 1"
+          },
+          {
+            "t": "h",
+            "html": "<p>Il metodo completo lo scriverai tu alla fine. Prima la domanda più importante: quanto lavoro costa ordinare? Contiamo i confronti di <code>selection_sort</code> per 8, 16 e 32 carte; <code>shuffle</code> della lezione {{nr:zufall}} le mescola:</p>"
+          },
+          {
+            "t": "c",
+            "code": "[8, 16, 32].each do |n|\n  selection_sort((1..n).to_a.shuffle)\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>28, 120, 496: con il doppio delle carte, il lavoro quadruplica. In generale sono n · (n - 1) / 2 confronti, che crescono come n². Per 1000 carte sono quasi mezzo milione, per un milione di carte 500 miliardi. Bubble sort e ordinamento per inserimento giocano nello stesso campionato.</p><p>Un trucco rende tutto più veloce: due mazzetti <em>già ordinati</em> si fondono facilmente in uno solo. Guarda la carta in cima a entrambi i mazzetti, prendi la più piccola, ripeti. <code>shift</code> toglie la prima carta da un array:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def merge_piles(left, right)\n  pile = []\n  until left.empty? || right.empty?\n    if left.first <= right.first\n      pile << left.shift\n    else\n      pile << right.shift\n    end\n  end\n  pile + left + right\nend\n\nmerge_piles([1, 4, 8], [2, 3, 9])"
+          },
+          {
+            "t": "h",
+            "html": "<p>Appena un mazzetto è vuoto, il resto dell'altro va semplicemente in coda: <code>left + right</code>, tanto uno dei due è vuoto. E da dove vengono i mazzetti ordinati? Dalla ricorsione della lezione {{nr:rekursion}}: dividi le carte in due metà, ordina ciascuna metà <em>nello stesso modo</em> e fondile. Il caso base: una carta sola (o nessuna) è già ordinata. Questo è il <strong>merge sort</strong> (ordinamento per fusione). <code>first(middle)</code> prende la prima metà, <code>drop(middle)</code> la salta e dà il resto:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def merge_sort(list)\n  return list if list.size <= 1\n  middle = list.size / 2\n  left = merge_sort(list.first(middle))\n  right = merge_sort(list.drop(middle))\n  merge_piles(left, right)\nend\n\nmerge_sort([5, 2, 8, 1, 9, 3, 7, 4])"
+          },
+          {
+            "t": "h",
+            "html": "<p>8 carte vengono dimezzate tre volte finché non restano carte singole, e a ogni livello ogni carta viene fusa una volta: meno di 8 · 3 = 24 confronti invece di 28. Con 32 carte sono meno di 32 · 5 = 160 invece di 496, con un milione circa 20 milioni invece di 500 miliardi. E il <code>sort</code> di Ruby? Se gli dai un blocco, Ruby lo chiama a ogni confronto, così puoi contare anche tu:</p>"
+          },
+          {
+            "t": "c",
+            "code": "[8, 16, 32].each do |n|\n  comparisons = 0\n  (1..n).to_a.shuffle.sort { |a, b| comparisons += 1; a <=> b }\n  puts \"#{n} cards: #{comparisons} comparisons\"\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Circa 15, 50 e 125, qualcuno in più o in meno a seconda del mescolamento, ma molto meno di 28, 120 e 496, e più o meno quanti ne servono al merge sort. Il <code>sort</code> di Ruby divide il lavoro in modo altrettanto furbo e, per di più, è scritto in C, che gira molto più veloce del codice Ruby. La regola pratica: nei programmi veri usa sempre <code>sort</code>. Si ordina a mano per capire come funziona, e perché la domanda “quanti passi ci vogliono?” conta per ogni programma.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-insert' target='_blank'>Array#insert</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-index' target='_blank'>Array#index</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-shift' target='_blank'>Array#shift</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-partition' target='_blank'>Enumerable#partition</a></div><div class='task'><strong>Esercizio:</strong> Scrivi <code>insertion_sort(list)</code>: prendi in mano le carte di <code>list</code> una dopo l'altra e infila ciascuna davanti alla prima carta più grande; se non ce n'è nessuna, va in fondo. Senza <code>sort</code>, <code>sort_by</code>, <code>min</code> e <code>max</code>! Deve funzionare anche con carte doppie e con una lista vuota.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def insertion_sort(list)\n#   hand = []\n#   ...   # infila ogni carta di list davanti alla prima più grande in hand\n#   hand\n# end\n\n# insertion_sort([5, 2, 8, 1, 9, 3])\n",
+            "hints": [
+              "Parti con una <code>hand</code> vuota e percorri <code>list</code> con <code>each</code>. Per ogni carta, <code>hand.index { |c| c &gt; card }</code> trova il posto; se <code>index</code> dà nil, <code>|| hand.size</code> prende la fine."
+            ],
+            "check": "insertion_sort([5, 2, 8, 1, 9, 3]) == [1, 2, 3, 5, 8, 9] && insertion_sort([3, 1, 3, 2, 1]) == [1, 1, 2, 3, 3] && insertion_sort([]) == [] && insertion_sort([7]) == [7] && insertion_sort(%w[toast bacon egg]) == %w[bacon egg toast] && [[9, 8, 7, 6, 5, 4], (1..12).to_a, [4, 4, 4, 1], [2, 7, 1, 8, 2, 8, 1, 8, 2, 8]].all? { |l| insertion_sort(l.dup) == l.sort } && !code.match?(/\\.(sort|min|max)/)",
+            "hint": "<code>place = hand.index { |c| c &gt; card } || hand.size</code>, poi <code>hand.insert(place, card)</code>, tutti e due dentro l'<code>each</code> su <code>list</code>. Alla fine il metodo restituisce <code>hand</code>.",
+            "solution": "def insertion_sort(list)\n  hand = []\n  list.each do |card|\n    place = hand.index { |c| c > card } || hand.size\n    hand.insert(place, card)\n  end\n  hand\nend\n\ninsertion_sort([5, 2, 8, 1, 9, 3])"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Un altro metodo famoso con la ricorsione: il <strong>quicksort</strong>. Prendi la prima carta come <em>pivot</em> e dividi il resto in due mazzetti: le carte più piccole del pivot e le altre. <code>partition</code> lo fa in un colpo solo: <code>[5, 2, 8, 1].partition { |c| c &lt; 4 }</code> dà <code>[[2, 1], [5, 8]]</code>. Ordina entrambi i mazzetti con il quicksort e rimettili insieme: piccole + <code>[pivot]</code> + grandi. Scrivi <code>quicksort(list)</code>, di nuovo senza <code>sort</code>, <code>min</code> e <code>max</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def quicksort(list)\n#   return list if list.size <= 1\n#   pivot = list.first\n#   ...   # dividi il resto: più piccole di pivot, e le altre\n#   ...   # ordina entrambi i mazzetti, uniscili con [pivot] in mezzo\n# end\n\n# quicksort([5, 2, 8, 1, 9, 3, 7, 4])\n",
+            "hints": [
+              "Il caso base c'è già: zero o una carta sono comunque ordinate. Il resto senza il pivot è <code>list.drop(1)</code>. <code>partition</code> restituisce due array: prendili al volo con <code>small, big = …</code>."
+            ],
+            "check": "quicksort([5, 2, 8, 1, 9, 3, 7, 4]) == [1, 2, 3, 4, 5, 7, 8, 9] && quicksort([3, 1, 3, 2, 3]) == [1, 2, 3, 3, 3] && quicksort([]) == [] && quicksort([7]) == [7] && quicksort([5, 5, 5, 5]) == [5, 5, 5, 5] && quicksort(%w[toast bacon egg bacon]) == %w[bacon bacon egg toast] && [[9, 8, 7, 6, 5, 4], (1..12).to_a, (1..30).map { |i| i * 17 % 31 }, [2, 7, 1, 8, 2, 8, 1, 8, 2, 8]].all? { |l| quicksort(l.dup) == l.sort } && !code.match?(/\\.(sort|min|max)/)",
+            "hint": "<code>small, big = list.drop(1).partition { |c| c &lt; pivot }</code>, poi <code>quicksort(small) + [pivot] + quicksort(big)</code>.",
+            "solution": "def quicksort(list)\n  return list if list.size <= 1\n  pivot = list.first\n  small, big = list.drop(1).partition { |c| c < pivot }\n  quicksort(small) + [pivot] + quicksort(big)\nend\n\nquicksort([5, 2, 8, 1, 9, 3, 7, 4])"
+          }
+        ]
       }
     },
     {
@@ -14537,6 +16817,202 @@ window.LESSONS_JSON = JSON.stringify({
             "solution": "strengths = { \"Chunky\" => 7, \"Kaz\" => 3, \"Isi\" => 5,\n              \"Bo\" => 8, \"Mo\" => 2, \"Lu\" => 4 }\n\ndef fair_teams(strengths)\n  names = strengths.keys\n  pairs = names.combination(names.size / 2).map { |team| [team, names - team] }\n  pairs.min_by do |one, two|\n    (one.sum { |n| strengths[n] } - two.sum { |n| strengths[n] }).abs\n  end\nend\n\nfair_teams(strengths)"
           }
         ]
+      },
+      "fr": {
+        "title": "Toutes les possibilités : la combinatoire",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Toutes les possibilités : la combinatoire</h2><p>Chunky fait ses bagages pour une excursion en montagne : trois chapeaux et deux écharpes. Combien de tenues différentes peut-il composer ? Chaque chapeau va avec chaque écharpe – et c’est exactement ce que construit <code>product</code> : toutes les paires formées d’un élément du premier array et d’un élément du second :</p>"
+          },
+          {
+            "t": "c",
+            "code": "hats = [\"top hat\", \"beanie\", \"straw hat\"]\nscarves = [\"red\", \"checked\"]\noutfits = hats.product(scarves)\noutfits.each { |hat, scarf| puts \"#{hat} with a #{scarf} scarf\" }\noutfits.size"
+          },
+          {
+            "t": "h",
+            "html": "<p>3 chapeaux fois 2 écharpes, cela fait 6 tenues – dans un produit, les nombres se multiplient, d’où le nom. Deux dés fonctionnent de la même façon : chaque face du premier avec chaque face du second. Combien de fois font-ils 7 au total ?</p>"
+          },
+          {
+            "t": "c",
+            "code": "die = (1..6).to_a\nthrows = die.product(die)\np throws.size\np throws.first(3)\nthrows.count { |a, b| a + b == 7 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>6 lancers sur 36 – un sur six. Aucun autre total ne sort aussi souvent ; essayez 2 ou 12.</p><p>Maintenant, un tournoi de ping-pong : quatre renards, et chacun joue une fois contre chacun des autres. <code>product</code> se tromperait – Chunky jouerait contre lui-même, et chaque match apparaîtrait deux fois, Chunky contre Kaz et Kaz contre Chunky. <code>combination(2)</code> en choisit 2 à la fois, et l’ordre ne compte pas :</p>"
+          },
+          {
+            "t": "c",
+            "code": "foxes = %w[Chunky Kaz Isi Bo]\nfoxes.combination(2).each do |a, b|\n  puts \"#{a} against #{b}\"\nend\nfoxes.combination(2).count"
+          },
+          {
+            "t": "h",
+            "html": "<p>Six matchs. À une fête de 10 invités où chacun serre la main de chacun une fois, c’est pareil : le premier serre 9 mains, le deuxième 8 nouvelles, puis 7 … 10 · 9 / 2 = 45 en tout – la même somme que pour les comparaisons de la leçon {{nr:sortierverfahren}}. Et <code>combination(3)</code> forme des équipes de trois :</p>"
+          },
+          {
+            "t": "c",
+            "code": "guests = (1..10).to_a\np guests.combination(2).count\np 10 * 9 / 2\nguests.combination(3).count"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dans une sélection, seul compte <em>qui</em> en fait partie. Sur le banc devant la boulangerie, on regarde aussi qui est assis où : <code>permutation</code> donne tous les ordres possibles. Pour la place de gauche, il y a 3 renards au choix, pour celle du milieu 2, pour celle de droite le dernier – 3 · 2 · 1 = 6, la factorielle 3! de la leçon {{nr:rekursion}} :</p>"
+          },
+          {
+            "t": "c",
+            "code": "%w[Chunky Kaz Isi].permutation.each do |bench|\n  puts bench.join(\" – \")\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Avec les lettres d’un mot, <code>permutation</code> donne toutes les anagrammes. Mais attention aux lettres répétées : pour Ruby, les deux e de « steel » sont des éléments différents, donc chaque mot sort deux fois – <code>uniq</code> jette les doublons. Et quelles anagrammes sont de vrais mots ? C’est ainsi que fonctionne la <strong>force brute</strong> : essayer toutes les possibilités et garder ce qui convient. Un petit dictionnaire (anglais) tranche :</p>"
+          },
+          {
+            "t": "c",
+            "code": "dictionary = %w[sleet bacon steel toast]\ncandidates = \"steel\".chars.permutation.map(&:join)\np candidates.size\np candidates.uniq.size\ncandidates.uniq.select { |w| dictionary.include?(w) }"
+          },
+          {
+            "t": "h",
+            "html": "<p>120 candidats, 60 différents, deux trouvailles. Sur un cadenas de vélo à trois molettes, chaque chiffre peut revenir plusieurs fois : <code>repeated_permutation(3)</code> donne les ordres avec répétition, 10 · 10 · 10 = 1000 codes. Ici, une différence compte : <code>count</code> construit toutes les possibilités et les compte, <code>size</code> calcule le nombre avec la formule sans en construire une seule. Et combien de fois trois dés font-ils 10 au total ?</p>"
+          },
+          {
+            "t": "c",
+            "code": "digits = (0..9).to_a\np digits.repeated_permutation(3).size\np digits.repeated_permutation(4).size\nthree_dice = (1..6).to_a.repeated_permutation(3)\nthree_dice.count { |t| t.sum == 10 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>27 lancers sur 216. Un code PIN à quatre chiffres a 10 000 possibilités – c’est pour cela qu’un téléphone se verrouille après quelques essais ratés. À quelle vitesse ces nombres grandissent, <code>size</code> le montre sans la moindre attente :</p>"
+          },
+          {
+            "t": "c",
+            "code": "ten = (1..10).to_a\ntwenty = (1..20).to_a\np ten.permutation.size\np twenty.permutation.size\n(1..49).to_a.combination(6).size   # une loterie : 6 numéros sur 49"
+          },
+          {
+            "t": "h",
+            "html": "<p>10 renards peuvent se mettre en rang de 3,6 millions de façons, 20 de plus de 2 trillions – <code>count</code> ne finirait jamais, et un billet de loterie offre près de 14 millions de choix possibles. La règle simple : quelques milliers de possibilités, Ruby les essaie en un clin d’œil ; des millions prennent des secondes ; au-delà, la force brute ne sert plus à rien – comptez d’abord (avec <code>size</code>), essayez ensuite. À retenir : <code>product</code> = chacun avec chacun, <code>combination</code> = choisir (l’ordre ne compte pas), <code>permutation</code> = ranger (l’ordre compte), <code>repeated_permutation</code> = ranger avec répétition.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-product' target='_blank'>Array#product</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-combination' target='_blank'>Array#combination</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-permutation' target='_blank'>Array#permutation</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-repeated_permutation' target='_blank'>Array#repeated_permutation</a></div><div class='task'><strong>Exercice :</strong> La pizzeria propose des garnitures avec leurs prix en francs. Écrivez <code>pizzas(toppings, budget)</code> : toutes les pizzas avec trois garnitures <em>différentes</em> qui coûtent ensemble au plus <code>budget</code> – chacune sous forme d’array des trois noms. Combien y en a-t-il pour 5 francs ?</div>"
+          },
+          {
+            "t": "x",
+            "code": "toppings = { \"bacon\" => 3, \"mushrooms\" => 2, \"pineapple\" => 2,\n             \"olives\" => 1, \"salami\" => 3, \"cheese\" => 1 }\n\n# def pizzas(toppings, budget)\n#   ...   # chaque choix de trois garnitures qui coûte au plus budget\n# end\n\n# pizzas(toppings, 5)\n",
+            "hints": [
+              "<code>toppings.keys</code>, ce sont les noms. <code>combination(3)</code> en choisit trois, et <code>select</code> garde les choix dont les prix font au plus <code>budget</code> au total."
+            ],
+            "check": "->(s) { s.(pizzas({\"bacon\"=>3, \"mushrooms\"=>2, \"pineapple\"=>2, \"olives\"=>1, \"salami\"=>3, \"cheese\"=>1}, 5)) == [[\"bacon\", \"cheese\", \"olives\"], [\"cheese\", \"mushrooms\", \"olives\"], [\"cheese\", \"mushrooms\", \"pineapple\"], [\"cheese\", \"olives\", \"pineapple\"], [\"cheese\", \"olives\", \"salami\"], [\"mushrooms\", \"olives\", \"pineapple\"]] && s.(pizzas({\"bacon\"=>3, \"mushrooms\"=>2, \"pineapple\"=>2, \"olives\"=>1, \"salami\"=>3, \"cheese\"=>1}, 4)) == [[\"cheese\", \"mushrooms\", \"olives\"], [\"cheese\", \"olives\", \"pineapple\"]] && s.(pizzas({\"egg\"=>2, \"corn\"=>1, \"rocket\"=>3, \"tomato\"=>1, \"tuna\"=>4}, 6)) == [[\"corn\", \"egg\", \"rocket\"], [\"corn\", \"egg\", \"tomato\"], [\"corn\", \"rocket\", \"tomato\"], [\"corn\", \"tomato\", \"tuna\"], [\"egg\", \"rocket\", \"tomato\"]] && s.(pizzas({ \"A\" => 1, \"B\" => 1, \"C\" => 1 }, 3)) == [[\"A\", \"B\", \"C\"]] && pizzas({ \"A\" => 1, \"B\" => 1, \"C\" => 1 }, 2) == [] && pizzas({ \"A\" => 1, \"B\" => 2 }, 9) == [] }.(->(l) { l.is_a?(Array) ? l.map { |x| Array(x).sort }.sort : l }) && code.include?(\"combination\")",
+            "hint": "<code>toppings.keys.combination(3).select { |pizza| pizza.sum { |t| toppings[t] } &lt;= budget }</code> – c’est toute la méthode.",
+            "solution": "toppings = { \"bacon\" => 3, \"mushrooms\" => 2, \"pineapple\" => 2,\n             \"olives\" => 1, \"salami\" => 3, \"cheese\" => 1 }\n\ndef pizzas(toppings, budget)\n  toppings.keys.combination(3).select do |pizza|\n    pizza.sum { |t| toppings[t] } <= budget\n  end\nend\n\npizzas(toppings, 5)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Six renards veulent jouer au foot, trois contre trois, et chacun a une force. Écrivez <code>fair_teams(strengths)</code> : elle répartit les renards en deux équipes de même taille dont les forces totales diffèrent le moins possible, et renvoie <code>[team1, team2]</code>, deux arrays de noms. Essayez chaque choix de la moitié des joueurs comme première équipe – la seconde, c’est le reste, <code>names - team</code> – et gardez la paire la plus équitable. Cela doit aussi marcher avec quatre ou huit renards.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "strengths = { \"Chunky\" => 7, \"Kaz\" => 3, \"Isi\" => 5,\n              \"Bo\" => 8, \"Mo\" => 2, \"Lu\" => 4 }\n\n# def fair_teams(strengths)\n#   ...   # chaque choix de la moitié des joueurs comme équipe 1, le reste forme l'équipe 2\n#   ...   # la paire [team1, team2] dont les forces diffèrent le moins\n# end\n\n# fair_teams(strengths)\n",
+            "hints": [
+              "<code>names = strengths.keys</code>, puis <code>names.combination(names.size / 2)</code> donne toutes les premières équipes possibles ; la seconde, c’est <code>names - team</code>. <code>min_by</code> choisit la paire avec le plus petit écart – <code>abs</code> rend un écart positif, <code>(-3).abs</code> vaut 3."
+            ],
+            "check": "->(fair) { fair.({\"Chunky\"=>7, \"Kaz\"=>3, \"Isi\"=>5, \"Bo\"=>8, \"Mo\"=>2, \"Lu\"=>4}, 1) && fair.({\"Chunky\"=>1, \"Kaz\"=>2, \"Isi\"=>3, \"Bo\"=>10}, 6) && fair.({\"Chunky\"=>12, \"Kaz\"=>7, \"Isi\"=>3, \"Bo\"=>9, \"Mo\"=>1, \"Lu\"=>6, \"Fe\"=>4, \"Ru\"=>15}, 1) }.(->(s, d) { ->(t) { t.is_a?(Array) && t.size == 2 && t.all? { |x| x.is_a?(Array) && x.size == s.size / 2 } && (t[0] + t[1]).sort == s.keys.sort && (t[0].sum { |n| s[n] } - t[1].sum { |n| s[n] }).abs == d }.(fair_teams(s)) })",
+            "hint": "<code>pairs = names.combination(names.size / 2).map { |team| [team, names - team] }</code>, puis <code>pairs.min_by { |one, two| (one.sum { |n| strengths[n] } - two.sum { |n| strengths[n] }).abs }</code>.",
+            "solution": "strengths = { \"Chunky\" => 7, \"Kaz\" => 3, \"Isi\" => 5,\n              \"Bo\" => 8, \"Mo\" => 2, \"Lu\" => 4 }\n\ndef fair_teams(strengths)\n  names = strengths.keys\n  pairs = names.combination(names.size / 2).map { |team| [team, names - team] }\n  pairs.min_by do |one, two|\n    (one.sum { |n| strengths[n] } - two.sum { |n| strengths[n] }).abs\n  end\nend\n\nfair_teams(strengths)"
+          }
+        ]
+      },
+      "it": {
+        "title": "Tutte le possibilità: combinatoria",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Tutte le possibilità: combinatoria</h2><p>Chunky fa i bagagli per una gita in montagna: tre cappelli e due sciarpe. Quanti abbinamenti diversi può mettere insieme? Ogni cappello sta bene con ogni sciarpa, ed è esattamente quello che costruisce <code>product</code>: tutte le coppie formate da un elemento del primo array e uno del secondo:</p>"
+          },
+          {
+            "t": "c",
+            "code": "hats = [\"top hat\", \"beanie\", \"straw hat\"]\nscarves = [\"red\", \"checked\"]\noutfits = hats.product(scarves)\noutfits.each { |hat, scarf| puts \"#{hat} with a #{scarf} scarf\" }\noutfits.size"
+          },
+          {
+            "t": "h",
+            "html": "<p>3 cappelli per 2 sciarpe fa 6 abbinamenti: in un prodotto i numeri si moltiplicano, da qui il nome. Con due dadi funziona allo stesso modo: ogni faccia del primo con ogni faccia del secondo. Quante volte la somma fa 7?</p>"
+          },
+          {
+            "t": "c",
+            "code": "die = (1..6).to_a\nthrows = die.product(die)\np throws.size\np throws.first(3)\nthrows.count { |a, b| a + b == 7 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>6 lanci su 36, cioè uno su sei. Nessun'altra somma esce così spesso; prova con 2 o 12.</p><p>Adesso un torneo di ping-pong: quattro volpi, e ognuna gioca una volta contro ciascuna delle altre. <code>product</code> sbaglierebbe: Chunky giocherebbe contro sé stesso, e ogni partita comparirebbe due volte, Chunky contro Kaz e Kaz contro Chunky. <code>combination(2)</code> ne sceglie 2 alla volta, e l'ordine non conta:</p>"
+          },
+          {
+            "t": "c",
+            "code": "foxes = %w[Chunky Kaz Isi Bo]\nfoxes.combination(2).each do |a, b|\n  puts \"#{a} against #{b}\"\nend\nfoxes.combination(2).count"
+          },
+          {
+            "t": "h",
+            "html": "<p>Sei partite. A una festa con 10 invitati che si stringono tutti la mano una volta succede lo stesso: il primo stringe 9 mani, il secondo 8 nuove, poi 7 … 10 · 9 / 2 = 45 in tutto, la stessa somma dei confronti della lezione {{nr:sortierverfahren}}. E <code>combination(3)</code> forma squadre da tre:</p>"
+          },
+          {
+            "t": "c",
+            "code": "guests = (1..10).to_a\np guests.combination(2).count\np 10 * 9 / 2\nguests.combination(3).count"
+          },
+          {
+            "t": "h",
+            "html": "<p>In una scelta conta solo <em>chi</em> ne fa parte. Sulla panchina davanti al panificio conta anche chi siede dove: <code>permutation</code> dà tutti gli ordini possibili. Per il posto a sinistra ci sono 3 volpi tra cui scegliere, per quello in mezzo 2, per quello a destra l'ultima: 3 · 2 · 1 = 6, il fattoriale 3! della lezione {{nr:rekursion}}:</p>"
+          },
+          {
+            "t": "c",
+            "code": "%w[Chunky Kaz Isi].permutation.each do |bench|\n  puts bench.join(\" – \")\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Con le lettere di una parola, <code>permutation</code> dà tutti gli anagrammi. Ma attenzione alle lettere ripetute: per Ruby le due e di “steel” sono elementi diversi, quindi ogni parola esce due volte; <code>uniq</code> butta via i doppioni. E quali anagrammi sono parole vere? Così funziona la <strong>forza bruta</strong>: provare tutte le possibilità e tenere quello che va bene. Decide un piccolo dizionario (inglese):</p>"
+          },
+          {
+            "t": "c",
+            "code": "dictionary = %w[sleet bacon steel toast]\ncandidates = \"steel\".chars.permutation.map(&:join)\np candidates.size\np candidates.uniq.size\ncandidates.uniq.select { |w| dictionary.include?(w) }"
+          },
+          {
+            "t": "h",
+            "html": "<p>120 candidati, 60 diversi, due centri. Su un lucchetto per bici con tre rotelle, ogni cifra può comparire più volte: <code>repeated_permutation(3)</code> dà gli ordini con ripetizione, 10 · 10 · 10 = 1000 combinazioni. Qui c'è una differenza importante: <code>count</code> costruisce tutte le possibilità e le conta, <code>size</code> calcola il numero con la formula senza costruirne nemmeno una. E quante volte tre dadi fanno 10 in tutto?</p>"
+          },
+          {
+            "t": "c",
+            "code": "digits = (0..9).to_a\np digits.repeated_permutation(3).size\np digits.repeated_permutation(4).size\nthree_dice = (1..6).to_a.repeated_permutation(3)\nthree_dice.count { |t| t.sum == 10 }"
+          },
+          {
+            "t": "h",
+            "html": "<p>27 lanci su 216. Un PIN di quattro cifre ha 10.000 possibilità: è per questo che un telefono si blocca dopo qualche tentativo sbagliato. Quanto velocemente crescono questi numeri te lo mostra <code>size</code>, senza farti aspettare:</p>"
+          },
+          {
+            "t": "c",
+            "code": "ten = (1..10).to_a\ntwenty = (1..20).to_a\np ten.permutation.size\np twenty.permutation.size\n(1..49).to_a.combination(6).size   # una lotteria: 6 numeri su 49"
+          },
+          {
+            "t": "h",
+            "html": "<p>10 volpi possono mettersi in fila in 3,6 milioni di modi, 20 in oltre 2 trilioni: <code>count</code> non finirebbe mai, e una schedina della lotteria ha quasi 14 milioni di scelte possibili. La regola pratica: qualche migliaio di possibilità Ruby le prova in un attimo, i milioni richiedono secondi, e oltre la forza bruta non serve più. Prima conta (con <code>size</code>), poi prova. Da ricordare: <code>product</code> = ognuno con ognuno, <code>combination</code> = scegliere (l'ordine non conta), <code>permutation</code> = disporre (l'ordine conta), <code>repeated_permutation</code> = disporre con ripetizione.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-product' target='_blank'>Array#product</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-combination' target='_blank'>Array#combination</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-permutation' target='_blank'>Array#permutation</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-repeated_permutation' target='_blank'>Array#repeated_permutation</a></div><div class='task'><strong>Esercizio:</strong> La pizzeria ha degli ingredienti con i prezzi in franchi. Scrivi <code>pizzas(toppings, budget)</code>: tutte le pizze con tre ingredienti <em>diversi</em> che insieme costano al massimo <code>budget</code>, ognuna come array dei tre nomi. Quante ce ne sono con 5 franchi?</div>"
+          },
+          {
+            "t": "x",
+            "code": "toppings = { \"bacon\" => 3, \"mushrooms\" => 2, \"pineapple\" => 2,\n             \"olives\" => 1, \"salami\" => 3, \"cheese\" => 1 }\n\n# def pizzas(toppings, budget)\n#   ...   # ogni scelta di tre ingredienti che costa al massimo budget\n# end\n\n# pizzas(toppings, 5)\n",
+            "hints": [
+              "<code>toppings.keys</code> sono i nomi. <code>combination(3)</code> ne sceglie tre, e <code>select</code> tiene le scelte i cui prezzi sommati fanno al massimo <code>budget</code>."
+            ],
+            "check": "->(s) { s.(pizzas({\"bacon\"=>3, \"mushrooms\"=>2, \"pineapple\"=>2, \"olives\"=>1, \"salami\"=>3, \"cheese\"=>1}, 5)) == [[\"bacon\", \"cheese\", \"olives\"], [\"cheese\", \"mushrooms\", \"olives\"], [\"cheese\", \"mushrooms\", \"pineapple\"], [\"cheese\", \"olives\", \"pineapple\"], [\"cheese\", \"olives\", \"salami\"], [\"mushrooms\", \"olives\", \"pineapple\"]] && s.(pizzas({\"bacon\"=>3, \"mushrooms\"=>2, \"pineapple\"=>2, \"olives\"=>1, \"salami\"=>3, \"cheese\"=>1}, 4)) == [[\"cheese\", \"mushrooms\", \"olives\"], [\"cheese\", \"olives\", \"pineapple\"]] && s.(pizzas({\"egg\"=>2, \"corn\"=>1, \"rocket\"=>3, \"tomato\"=>1, \"tuna\"=>4}, 6)) == [[\"corn\", \"egg\", \"rocket\"], [\"corn\", \"egg\", \"tomato\"], [\"corn\", \"rocket\", \"tomato\"], [\"corn\", \"tomato\", \"tuna\"], [\"egg\", \"rocket\", \"tomato\"]] && s.(pizzas({ \"A\" => 1, \"B\" => 1, \"C\" => 1 }, 3)) == [[\"A\", \"B\", \"C\"]] && pizzas({ \"A\" => 1, \"B\" => 1, \"C\" => 1 }, 2) == [] && pizzas({ \"A\" => 1, \"B\" => 2 }, 9) == [] }.(->(l) { l.is_a?(Array) ? l.map { |x| Array(x).sort }.sort : l }) && code.include?(\"combination\")",
+            "hint": "<code>toppings.keys.combination(3).select { |pizza| pizza.sum { |t| toppings[t] } &lt;= budget }</code>: ecco tutto il metodo.",
+            "solution": "toppings = { \"bacon\" => 3, \"mushrooms\" => 2, \"pineapple\" => 2,\n             \"olives\" => 1, \"salami\" => 3, \"cheese\" => 1 }\n\ndef pizzas(toppings, budget)\n  toppings.keys.combination(3).select do |pizza|\n    pizza.sum { |t| toppings[t] } <= budget\n  end\nend\n\npizzas(toppings, 5)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Sei volpi vogliono giocare a calcio, tre contro tre, e ognuna ha una forza. Scrivi <code>fair_teams(strengths)</code>: divide le volpi in due squadre della stessa grandezza le cui forze totali differiscono il meno possibile, e restituisce <code>[team1, team2]</code>, due array di nomi. Prova ogni scelta di metà dei giocatori come prima squadra (la seconda è il resto, <code>names - team</code>) e tieni la coppia più equilibrata. Deve funzionare anche con quattro o otto volpi.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "strengths = { \"Chunky\" => 7, \"Kaz\" => 3, \"Isi\" => 5,\n              \"Bo\" => 8, \"Mo\" => 2, \"Lu\" => 4 }\n\n# def fair_teams(strengths)\n#   ...   # ogni scelta di metà dei giocatori come squadra 1, il resto è la squadra 2\n#   ...   # la coppia [team1, team2] le cui forze differiscono di meno\n# end\n\n# fair_teams(strengths)\n",
+            "hints": [
+              "<code>names = strengths.keys</code>, poi <code>names.combination(names.size / 2)</code> dà tutte le possibili prime squadre; la seconda è <code>names - team</code>. <code>min_by</code> sceglie la coppia con la differenza più piccola: <code>abs</code> rende positiva una differenza, <code>(-3).abs</code> fa 3."
+            ],
+            "check": "->(fair) { fair.({\"Chunky\"=>7, \"Kaz\"=>3, \"Isi\"=>5, \"Bo\"=>8, \"Mo\"=>2, \"Lu\"=>4}, 1) && fair.({\"Chunky\"=>1, \"Kaz\"=>2, \"Isi\"=>3, \"Bo\"=>10}, 6) && fair.({\"Chunky\"=>12, \"Kaz\"=>7, \"Isi\"=>3, \"Bo\"=>9, \"Mo\"=>1, \"Lu\"=>6, \"Fe\"=>4, \"Ru\"=>15}, 1) }.(->(s, d) { ->(t) { t.is_a?(Array) && t.size == 2 && t.all? { |x| x.is_a?(Array) && x.size == s.size / 2 } && (t[0] + t[1]).sort == s.keys.sort && (t[0].sum { |n| s[n] } - t[1].sum { |n| s[n] }).abs == d }.(fair_teams(s)) })",
+            "hint": "<code>pairs = names.combination(names.size / 2).map { |team| [team, names - team] }</code>, poi <code>pairs.min_by { |one, two| (one.sum { |n| strengths[n] } - two.sum { |n| strengths[n] }).abs }</code>.",
+            "solution": "strengths = { \"Chunky\" => 7, \"Kaz\" => 3, \"Isi\" => 5,\n              \"Bo\" => 8, \"Mo\" => 2, \"Lu\" => 4 }\n\ndef fair_teams(strengths)\n  names = strengths.keys\n  pairs = names.combination(names.size / 2).map { |team| [team, names - team] }\n  pairs.min_by do |one, two|\n    (one.sum { |n| strengths[n] } - two.sum { |n| strengths[n] }).abs\n  end\nend\n\nfair_teams(strengths)"
+          }
+        ]
       }
     },
     {
@@ -14784,6 +17260,170 @@ window.LESSONS_JSON = JSON.stringify({
             ],
             "check": "->(ok) { ok.([[0, 0, 0, 3], [0, 4, 0, 0], [0, 0, 3, 0], [2, 0, 0, 0]]) && ok.([[0, 2, 0, 0], [0, 0, 0, 1], [3, 0, 0, 0], [0, 0, 4, 0]]) && ok.([[1, 0, 0, 0], [0, 0, 3, 0], [0, 4, 0, 0], [0, 0, 0, 2]]) && solve_sudoku([[0, 2, 0, 0], [0, 3, 0, 0], [0, 0, 0, 0], [4, 0, 0, 0]]).nil? }.(->(pz) { ->(g) { g.is_a?(Array) && g.size == 4 && g.all? { |z| z.is_a?(Array) && z.sort == [1, 2, 3, 4] } && g.transpose.all? { |z| z.sort == [1, 2, 3, 4] } && [0, 2].product([0, 2]).all? { |a, b| [g[a][b], g[a][b + 1], g[a + 1][b], g[a + 1][b + 1]].sort == [1, 2, 3, 4] } && (0..3).all? { |a| (0..3).all? { |b| pz[a][b] == 0 || g[a][b] == pz[a][b] } } }.(solve_sudoku(pz.map(&:dup))) })",
             "hint": "探したらすぐに<code>return grid unless r</code>。ループの中は<code>grid[r][c] = n</code>、<code>return grid if solve_sudoku(grid)</code>、<code>grid[r][c] = 0</code>。ループのあとは<code>nil</code>だよ。",
+            "solution": "puzzle = [\n  [0, 0, 0, 3],\n  [0, 4, 0, 0],\n  [0, 0, 3, 0],\n  [2, 0, 0, 0]\n]\n\ndef allowed?(grid, r, c, n)\n  return false if grid[r].include?(n)                # the row\n  return false if grid.any? { |row| row[c] == n }    # the column\n  r0 = r / 2 * 2                                     # the 2×2 box\n  c0 = c / 2 * 2\n  box = [grid[r0][c0], grid[r0][c0 + 1],\n         grid[r0 + 1][c0], grid[r0 + 1][c0 + 1]]\n  !box.include?(n)\nend\n\ndef solve_sudoku(grid)\n  r = grid.index { |row| row.include?(0) }\n  return grid unless r\n  c = grid[r].index(0)\n  (1..4).each do |n|\n    next unless allowed?(grid, r, c, n)\n    grid[r][c] = n\n    return grid if solve_sudoku(grid)\n    grid[r][c] = 0\n  end\n  nil\nend\n\nsolve_sudoku(puzzle)"
+          }
+        ]
+      },
+      "fr": {
+        "title": "Backtracking : essayer et revenir en arrière",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Backtracking : essayer et revenir en arrière</h2><p>Comment trouver la sortie d’un labyrinthe ? Vous partez, et à chaque embranchement vous prenez un chemin. Si vous tombez sur une impasse, vous revenez au dernier embranchement et y essayez le chemin suivant. C’est le <strong>backtracking</strong> (retour sur trace). La force brute de la leçon {{nr:kombinatorik}} construit chaque possibilité jusqu’au bout et ne la vérifie qu’ensuite ; le backtracking abandonne un chemin dès qu’il est clair qu’il ne peut pas mener au but.</p><p>L’exemple le plus célèbre est le <strong>problème des reines</strong> : placer n reines sur un échiquier n×n de façon qu’aucune ne puisse en prendre une autre. Une reine se déplace sur les rangées, les colonnes et les diagonales – donc aucune rangée, aucune colonne et aucune diagonale ne doit en contenir plus d’une. D’abord par force brute, pour 4 reines. Chaque rangée reçoit une reine ; <code>cols[r]</code> indique dans quelle colonne se trouve la reine de la rangée <code>r</code> :</p>"
+          },
+          {
+            "t": "c",
+            "code": "rows = (0...4).to_a\nsolutions = rows.permutation.select do |cols|\n  rows.combination(2).none? do |a, b|\n    (a - b).abs == (cols[a] - cols[b]).abs   # en diagonale ?\n  end\nend\np rows.permutation.size\nsolutions"
+          },
+          {
+            "t": "h",
+            "html": "<p>Comme une permutation utilise chaque colonne exactement une fois, deux reines ne partagent jamais une rangée ni une colonne – il ne reste qu’à vérifier les diagonales : deux reines sont sur une diagonale quand elles sont séparées d’autant de rangées que de colonnes. <code>abs</code> rend un nombre positif, <code>(-2).abs</code> vaut 2. Deux solutions parmi 24 candidats.</p><p>Pour 8 reines, il y aurait déjà 40 320 candidats, pour 12 près de 480 millions. Le backtracking préfère placer les reines rangée par rangée et vérifier <em>tout de suite</em> si la nouvelle reine est en sécurité. <code>queens</code>, ce sont les colonnes des reines déjà placées ; la nouvelle va dans la rangée suivante :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def safe?(queens, col)\n  row = queens.size                   # la prochaine rangée libre\n  queens.each_with_index do |c, r|\n    return false if c == col                        # la même colonne\n    return false if row - r == (col - c).abs        # en diagonale\n  end\n  true\nend\n\np safe?([1, 3], 0)\nsafe?([1, 3], 2)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dans la rangée 2, colonne 0, la nouvelle reine est en sécurité ; en colonne 2, elle serait en diagonale juste à côté de la reine de la rangée 1. Maintenant le backtracking lui-même, sous forme de récursion : si <code>n</code> reines sont placées, la solution est trouvée. Sinon, essayez chaque colonne sûre de la rangée suivante : posez la reine (<code>&lt;&lt;</code>), cherchez la suite – et si cela ne mène nulle part, reprenez la reine (<code>pop</code> retire le dernier élément) et essayez la colonne suivante. Si aucune colonne ne convient, c’est une impasse : <code>nil</code>, et l’appel du dessus continue d’essayer. La ligne <code>puts</code> affiche chaque essai, en retrait selon sa rangée (« row » = rangée, « column » = colonne) :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def queens(n, placed = [])\n  return placed if placed.size == n       # toutes placées : résolu\n  (0...n).each do |col|\n    next unless safe?(placed, col)\n    puts \"  \" * placed.size + \"row #{placed.size}: column #{col}\"\n    placed << col                         # essayer\n    solution = queens(n, placed)\n    return solution if solution\n    placed.pop                            # la reprendre\n  end\n  nil                                     # impasse\nend\n\nqueens(4)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Lisez la trace depuis le haut : la première reine est en colonne 0, la deuxième en colonne 2 – et dans la rangée 2, plus rien n’est sûr. Retour ! La deuxième reine passe à la colonne 3, la troisième trouve la colonne 1, mais il n’y a de nouveau plus de place pour la quatrième. Retour, et encore retour : avec la première reine en colonne 0, ça ne marche pas du tout. Avec la colonne 1, ça marche ensuite d’un seul coup. 8 reines posées au lieu de 24 échiquiers complets vérifiés. Et s’il n’y a aucune solution, la recherche revient jusqu’au tout début – trois reines sur un échiquier 3×3 :</p>"
+          },
+          {
+            "t": "c",
+            "code": "queens(3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Chaque chemin finit dans une impasse, donc <code>queens(3)</code> renvoie <code>nil</code>. Une solution sous forme de liste de colonnes est difficile à lire – dessinons l’échiquier : <code>Q</code> pour une reine, <code>.</code> pour une case vide. Avec 5 reines, d’ailleurs, le tout premier essai passe directement ; la trace n’a que cinq lignes :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def board(solution)\n  solution.each do |col|\n    squares = (0...solution.size).map { |c| c == col ? \"Q\" : \".\" }\n    puts squares.join(\" \")\n  end\nend\n\nboard(queens(5))"
+          },
+          {
+            "t": "h",
+            "html": "<p>Et combien de solutions y a-t-il ? Au lieu de s’arrêter à la première, <code>all_queens</code> continue de chercher et compte. La différence tient en deux lignes : un échiquier complet compte pour 1, et après chaque essai la reine est <em>toujours</em> reprise :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def all_queens(n, placed = [])\n  return 1 if placed.size == n            # une solution de plus\n  count = 0\n  (0...n).each do |col|\n    next unless safe?(placed, col)\n    placed << col\n    count += all_queens(n, placed)\n    placed.pop\n  end\n  count\nend\n\np all_queens(4)\nall_queens(5)"
+          },
+          {
+            "t": "h",
+            "html": "<p>2 et 10 solutions. Essayez aussi <code>all_queens(6)</code> : six reines n’en ont que 4 – moins que cinq ! – et 8 reines en ont 92. La recette de tout backtracking : <strong>1.</strong> La solution est-elle complète ? Alors renvoyez-la. <strong>2.</strong> Sinon, essayez chaque possibilité encore permise pour l’étape suivante : posez-la, cherchez la suite et, si cela échoue, reprenez-la. <strong>3.</strong> Si rien ne convient, renvoyez <code>nil</code> – l’étape d’avant essaie alors sa possibilité suivante. Plus vite vous remarquez qu’un chemin échoue, plus vous économisez de travail.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-pop' target='_blank'>Array#pop</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-abs' target='_blank'>Integer#abs</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/control_expressions_rdoc.html#label-next+Statement' target='_blank'>next</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-index' target='_blank'>Array#index</a></div><div class='task'><strong>Exercice :</strong> Chunky prépare le panier de pique-nique. Les paquets de bacon pèsent 8, 6, 7, 5 et 3 (en centaines de grammes), et il faut y mettre exactement 1,6 kg. Écrivez <code>fill_basket(packets, target)</code> : elle renvoie une sélection de paquets qui pèse exactement <code>target</code> au total, ou <code>nil</code> s’il n’y en a aucune. Avec du backtracking : essayez <em>avec</em> le premier paquet et cherchez la suite pour le reste ; si ça ne marche pas, cherchez la suite <em>sans</em> le premier paquet. Abandonnez un chemin dès que le but est dépassé.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def fill_basket(packets, target)\n#   return [] if target == 0                    # fini : il ne manque rien\n#   return nil if target < 0 || packets.empty?  # trop lourd, ou plus rien\n#   ...   # avec le premier paquet : fill_basket(le reste, target - le premier)\n#   ...   # si ça échoue : fill_basket(le reste, target), sans le premier\n# end\n\n# fill_basket([8, 6, 7, 5, 3], 16)\n",
+            "hints": [
+              "Le reste sans le premier paquet, c’est <code>packets.drop(1)</code>. Si <code>fill_basket(rest, target - first)</code> renvoie un array, le premier paquet s’y ajoute devant : <code>[first] + with</code>."
+            ],
+            "check": "->(good) { good.([8, 6, 7, 5, 3], 16) && good.([8, 6, 7, 5, 3], 3) && good.([5, 10, 12, 13, 15, 18], 30) && good.([4, 4, 4], 8) && good.([2, 9, 4, 7, 1, 6, 3], 27) && good.([7], 7) }.(->(pk, z) { ->(w) { w.is_a?(Array) && w.sum == z && w.all? { |x| w.count(x) <= pk.count(x) } }.(fill_basket(pk, z)) }) && fill_basket([8, 6, 7, 5, 3], 2).nil? && fill_basket([4, 4, 4], 5).nil? && fill_basket([], 3).nil? && fill_basket([2, 4, 6, 8, 10, 12, 14, 16], 33).nil?",
+            "hint": "Après les deux lignes <code>return</code> : <code>first = packets.first</code>, <code>rest = packets.drop(1)</code>, <code>with = fill_basket(rest, target - first)</code>, <code>return [first] + with if with</code>, et comme dernière ligne <code>fill_basket(rest, target)</code>.",
+            "solution": "def fill_basket(packets, target)\n  return [] if target == 0\n  return nil if target < 0 || packets.empty?\n  first = packets.first\n  rest = packets.drop(1)\n  with = fill_basket(rest, target - first)\n  return [first] + with if with\n  fill_basket(rest, target)\nend\n\nfill_basket([8, 6, 7, 5, 3], 16)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Résolvez un sudoku 4×4 : chaque rangée, chaque colonne et chacun des quatre carrés 2×2 contient chaque nombre de 1 à 4 exactement une fois ; 0 est une case vide. Si un nombre peut aller dans une case, <code>allowed?</code> le vérifie déjà. Écrivez <code>solve_sudoku(grid)</code> : trouvez la première case vide – s’il n’y en a pas, la grille est résolue, renvoyez-la. Sinon, essayez 1 à 4 : si le nombre est permis, écrivez-le et continuez à résoudre ; si ça ne marche pas, remettez la case à 0. Si aucun nombre ne convient, renvoyez <code>nil</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "puzzle = [\n  [0, 0, 0, 3],\n  [0, 4, 0, 0],\n  [0, 0, 3, 0],\n  [2, 0, 0, 0]\n]\n\ndef allowed?(grid, r, c, n)\n  return false if grid[r].include?(n)                # la rangée\n  return false if grid.any? { |row| row[c] == n }    # la colonne\n  r0 = r / 2 * 2                                     # le carré 2×2\n  c0 = c / 2 * 2\n  box = [grid[r0][c0], grid[r0][c0 + 1],\n         grid[r0 + 1][c0], grid[r0 + 1][c0 + 1]]\n  !box.include?(n)\nend\n\n# def solve_sudoku(grid)\n#   r = ...   # la première rangée avec un 0 – aucune : résolu, renvoyer grid\n#   c = ...   # la colonne du 0 dans cette rangée\n#   ...       # essayer 1 à 4 : l'écrire, continuer à résoudre, le reprendre\n# end\n\n# solve_sudoku(puzzle)\n",
+            "hints": [
+              "La première rangée avec un 0, c’est <code>grid.index { |row| row.include?(0) }</code>, la colonne dedans <code>grid[r].index(0)</code>. Ensuite, ça marche comme pour les reines : <code>(1..4).each</code>, <code>next unless allowed?(…)</code>, l’écrire, continuer à résoudre récursivement."
+            ],
+            "check": "->(ok) { ok.([[0, 0, 0, 3], [0, 4, 0, 0], [0, 0, 3, 0], [2, 0, 0, 0]]) && ok.([[0, 2, 0, 0], [0, 0, 0, 1], [3, 0, 0, 0], [0, 0, 4, 0]]) && ok.([[1, 0, 0, 0], [0, 0, 3, 0], [0, 4, 0, 0], [0, 0, 0, 2]]) && solve_sudoku([[0, 2, 0, 0], [0, 3, 0, 0], [0, 0, 0, 0], [4, 0, 0, 0]]).nil? }.(->(pz) { ->(g) { g.is_a?(Array) && g.size == 4 && g.all? { |z| z.is_a?(Array) && z.sort == [1, 2, 3, 4] } && g.transpose.all? { |z| z.sort == [1, 2, 3, 4] } && [0, 2].product([0, 2]).all? { |a, b| [g[a][b], g[a][b + 1], g[a + 1][b], g[a + 1][b + 1]].sort == [1, 2, 3, 4] } && (0..3).all? { |a| (0..3).all? { |b| pz[a][b] == 0 || g[a][b] == pz[a][b] } } }.(solve_sudoku(pz.map(&:dup))) })",
+            "hint": "<code>return grid unless r</code> juste après la recherche. Dans la boucle : <code>grid[r][c] = n</code>, <code>return grid if solve_sudoku(grid)</code>, <code>grid[r][c] = 0</code>. Après la boucle : <code>nil</code>.",
+            "solution": "puzzle = [\n  [0, 0, 0, 3],\n  [0, 4, 0, 0],\n  [0, 0, 3, 0],\n  [2, 0, 0, 0]\n]\n\ndef allowed?(grid, r, c, n)\n  return false if grid[r].include?(n)                # the row\n  return false if grid.any? { |row| row[c] == n }    # the column\n  r0 = r / 2 * 2                                     # the 2×2 box\n  c0 = c / 2 * 2\n  box = [grid[r0][c0], grid[r0][c0 + 1],\n         grid[r0 + 1][c0], grid[r0 + 1][c0 + 1]]\n  !box.include?(n)\nend\n\ndef solve_sudoku(grid)\n  r = grid.index { |row| row.include?(0) }\n  return grid unless r\n  c = grid[r].index(0)\n  (1..4).each do |n|\n    next unless allowed?(grid, r, c, n)\n    grid[r][c] = n\n    return grid if solve_sudoku(grid)\n    grid[r][c] = 0\n  end\n  nil\nend\n\nsolve_sudoku(puzzle)"
+          }
+        ]
+      },
+      "it": {
+        "title": "Backtracking: provare e tornare indietro",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Backtracking: provare e tornare indietro</h2><p>Come si trova l'uscita da un labirinto? Ti metti in cammino, e a ogni bivio prendi una strada. Se finisci in un vicolo cieco, torni all'ultimo bivio e lì provi la strada successiva. Questo è il <strong>backtracking</strong>. La forza bruta della lezione {{nr:kombinatorik}} costruisce ogni possibilità fino in fondo e solo dopo la controlla; il backtracking abbandona una strada appena è chiaro che non può portare alla meta.</p><p>L'esempio più famoso è il <strong>problema delle regine</strong>: mettere n regine su una scacchiera n×n in modo che nessuna possa mangiarne un'altra. Una regina si muove lungo righe, colonne e diagonali, quindi nessuna riga, nessuna colonna e nessuna diagonale può contenerne più di una. Prima con la forza bruta, per 4 regine. Ogni riga riceve una regina; <code>cols[r]</code> dice in quale colonna sta la regina della riga <code>r</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "rows = (0...4).to_a\nsolutions = rows.permutation.select do |cols|\n  rows.combination(2).none? do |a, b|\n    (a - b).abs == (cols[a] - cols[b]).abs   # in diagonale?\n  end\nend\np rows.permutation.size\nsolutions"
+          },
+          {
+            "t": "h",
+            "html": "<p>Siccome una permutazione usa ogni colonna esattamente una volta, due regine non condividono mai una riga o una colonna: restano da controllare solo le diagonali. Due regine sono sulla stessa diagonale quando sono distanti tante righe quante colonne. <code>abs</code> rende positivo un numero, <code>(-2).abs</code> fa 2. Due soluzioni su 24 candidati.</p><p>Per 8 regine ci sarebbero già 40.320 candidati, per 12 quasi 480 milioni. Il backtracking preferisce mettere le regine riga per riga e controllare <em>subito</em> se la nuova regina è al sicuro. <code>queens</code> sono le colonne delle regine già piazzate; la nuova va nella riga successiva:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def safe?(queens, col)\n  row = queens.size                   # la prossima riga libera\n  queens.each_with_index do |c, r|\n    return false if c == col                        # la stessa colonna\n    return false if row - r == (col - c).abs        # in diagonale\n  end\n  true\nend\n\np safe?([1, 3], 0)\nsafe?([1, 3], 2)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Nella riga 2, colonna 0, la nuova regina è al sicuro; nella colonna 2 starebbe in diagonale proprio accanto alla regina della riga 1. Ora il backtracking vero e proprio, come ricorsione: se ci sono <code>n</code> regine piazzate, la soluzione è trovata. Altrimenti prova ogni colonna sicura nella riga successiva: metti la regina (<code>&lt;&lt;</code>), continua a cercare con il resto e, se non porta da nessuna parte, togli di nuovo la regina (<code>pop</code> toglie l'ultimo elemento) e prova la colonna successiva. Se non va bene nessuna colonna, è un vicolo cieco: <code>nil</code>, e la chiamata di sopra continua a provare. La riga con <code>puts</code> mostra ogni tentativo, rientrato secondo la sua riga (“row” = riga, “column” = colonna):</p>"
+          },
+          {
+            "t": "c",
+            "code": "def queens(n, placed = [])\n  return placed if placed.size == n       # tutte piazzate: risolto\n  (0...n).each do |col|\n    next unless safe?(placed, col)\n    puts \"  \" * placed.size + \"row #{placed.size}: column #{col}\"\n    placed << col                         # prova\n    solution = queens(n, placed)\n    return solution if solution\n    placed.pop                            # riprendila\n  end\n  nil                                     # vicolo cieco\nend\n\nqueens(4)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Leggi la traccia dall'alto: la prima regina sta nella colonna 0, la seconda nella colonna 2, e nella riga 2 non c'è più niente di sicuro. Indietro! La seconda regina passa alla colonna 3, la terza trova la colonna 1, ma di nuovo non c'è posto per la quarta. Indietro, e ancora indietro: con la prima regina nella colonna 0 non funziona proprio. Con la colonna 1, poi, funziona tutto d'un fiato. 8 regine piazzate invece di 24 scacchiere complete controllate. E se una soluzione non c'è affatto, la ricerca torna indietro fino all'inizio: tre regine su una scacchiera 3×3:</p>"
+          },
+          {
+            "t": "c",
+            "code": "queens(3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ogni strada finisce in un vicolo cieco, quindi <code>queens(3)</code> restituisce <code>nil</code>. Una soluzione come lista di colonne è difficile da leggere: disegniamo la scacchiera, <code>Q</code> per una regina, <code>.</code> per una casella vuota. Con 5 regine, tra l'altro, il primissimo tentativo va dritto alla meta; la traccia ha solo cinque righe:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def board(solution)\n  solution.each do |col|\n    squares = (0...solution.size).map { |c| c == col ? \"Q\" : \".\" }\n    puts squares.join(\" \")\n  end\nend\n\nboard(queens(5))"
+          },
+          {
+            "t": "h",
+            "html": "<p>E quante soluzioni ci sono? Invece di fermarsi alla prima, <code>all_queens</code> continua a cercare e conta. La differenza sta in due righe: una scacchiera completa conta 1, e dopo ogni tentativo la regina viene <em>sempre</em> tolta di nuovo:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def all_queens(n, placed = [])\n  return 1 if placed.size == n            # una soluzione in più\n  count = 0\n  (0...n).each do |col|\n    next unless safe?(placed, col)\n    placed << col\n    count += all_queens(n, placed)\n    placed.pop\n  end\n  count\nend\n\np all_queens(4)\nall_queens(5)"
+          },
+          {
+            "t": "h",
+            "html": "<p>2 e 10 soluzioni. Prova anche <code>all_queens(6)</code>: sei regine ne hanno solo 4 (meno di cinque!), e 8 regine ne hanno 92. La ricetta di ogni backtracking: <strong>1.</strong> La soluzione è completa? Allora restituiscila. <strong>2.</strong> Altrimenti prova ogni possibilità ancora consentita per il passo successivo: mettila, continua a cercare e, se fallisce, toglila. <strong>3.</strong> Se non va bene niente, restituisci <code>nil</code>: allora il passo precedente prova la sua possibilità successiva. Prima ti accorgi che una strada non porta da nessuna parte, più lavoro risparmi.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-pop' target='_blank'>Array#pop</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-abs' target='_blank'>Integer#abs</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/control_expressions_rdoc.html#label-next+Statement' target='_blank'>next</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-index' target='_blank'>Array#index</a></div><div class='task'><strong>Esercizio:</strong> Chunky prepara il cestino da picnic. I pacchetti di bacon pesano 8, 6, 7, 5 e 3 (in etti), e dentro devono andarci esattamente 1,6 kg. Scrivi <code>fill_basket(packets, target)</code>: restituisce una scelta di pacchetti che insieme pesa esattamente <code>target</code>, oppure <code>nil</code> se non ce n'è nessuna. Con il backtracking: prova <em>con</em> il primo pacchetto e continua a cercare per il resto; se non funziona, continua a cercare <em>senza</em> il primo pacchetto. Abbandona una strada appena il target viene superato.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def fill_basket(packets, target)\n#   return [] if target == 0                    # fatto: non manca niente\n#   return nil if target < 0 || packets.empty?  # troppo pesante, o non ne resta nessuno\n#   ...   # con il primo pacchetto: fill_basket(il resto, target - il primo)\n#   ...   # se non va: fill_basket(il resto, target), senza il primo\n# end\n\n# fill_basket([8, 6, 7, 5, 3], 16)\n",
+            "hints": [
+              "Il resto senza il primo pacchetto è <code>packets.drop(1)</code>. Se <code>fill_basket(rest, target - first)</code> restituisce un array, il primo pacchetto ci si aggiunge davanti: <code>[first] + with</code>."
+            ],
+            "check": "->(good) { good.([8, 6, 7, 5, 3], 16) && good.([8, 6, 7, 5, 3], 3) && good.([5, 10, 12, 13, 15, 18], 30) && good.([4, 4, 4], 8) && good.([2, 9, 4, 7, 1, 6, 3], 27) && good.([7], 7) }.(->(pk, z) { ->(w) { w.is_a?(Array) && w.sum == z && w.all? { |x| w.count(x) <= pk.count(x) } }.(fill_basket(pk, z)) }) && fill_basket([8, 6, 7, 5, 3], 2).nil? && fill_basket([4, 4, 4], 5).nil? && fill_basket([], 3).nil? && fill_basket([2, 4, 6, 8, 10, 12, 14, 16], 33).nil?",
+            "hint": "Dopo le due righe con <code>return</code>: <code>first = packets.first</code>, <code>rest = packets.drop(1)</code>, <code>with = fill_basket(rest, target - first)</code>, <code>return [first] + with if with</code>, e come ultima riga <code>fill_basket(rest, target)</code>.",
+            "solution": "def fill_basket(packets, target)\n  return [] if target == 0\n  return nil if target < 0 || packets.empty?\n  first = packets.first\n  rest = packets.drop(1)\n  with = fill_basket(rest, target - first)\n  return [first] + with if with\n  fill_basket(rest, target)\nend\n\nfill_basket([8, 6, 7, 5, 3], 16)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Risolvi un sudoku 4×4: ogni riga, ogni colonna e ciascuno dei quattro riquadri 2×2 contiene ogni numero da 1 a 4 esattamente una volta; 0 è una casella vuota. Se un numero può andare in una casella lo controlla già <code>allowed?</code>. Scrivi <code>solve_sudoku(grid)</code>: trova la prima casella vuota; se non ce n'è nessuna, la griglia è risolta: restituiscila. Altrimenti prova da 1 a 4: se il numero è consentito, scrivilo e continua a risolvere; se non funziona, rimetti la casella a 0. Se non va bene nessun numero, restituisci <code>nil</code>.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "puzzle = [\n  [0, 0, 0, 3],\n  [0, 4, 0, 0],\n  [0, 0, 3, 0],\n  [2, 0, 0, 0]\n]\n\ndef allowed?(grid, r, c, n)\n  return false if grid[r].include?(n)                # la riga\n  return false if grid.any? { |row| row[c] == n }    # la colonna\n  r0 = r / 2 * 2                                     # il riquadro 2×2\n  c0 = c / 2 * 2\n  box = [grid[r0][c0], grid[r0][c0 + 1],\n         grid[r0 + 1][c0], grid[r0 + 1][c0 + 1]]\n  !box.include?(n)\nend\n\n# def solve_sudoku(grid)\n#   r = ...   # la prima riga con uno 0 – nessuna: risolto, restituisci grid\n#   c = ...   # la colonna dello 0 in quella riga\n#   ...       # prova da 1 a 4: scrivilo, continua a risolvere, riprendilo\n# end\n\n# solve_sudoku(puzzle)\n",
+            "hints": [
+              "La prima riga con uno 0 è <code>grid.index { |row| row.include?(0) }</code>, la colonna al suo interno <code>grid[r].index(0)</code>. Dopo funziona come con le regine: <code>(1..4).each</code>, <code>next unless allowed?(…)</code>, scrivilo, continua a risolvere ricorsivamente."
+            ],
+            "check": "->(ok) { ok.([[0, 0, 0, 3], [0, 4, 0, 0], [0, 0, 3, 0], [2, 0, 0, 0]]) && ok.([[0, 2, 0, 0], [0, 0, 0, 1], [3, 0, 0, 0], [0, 0, 4, 0]]) && ok.([[1, 0, 0, 0], [0, 0, 3, 0], [0, 4, 0, 0], [0, 0, 0, 2]]) && solve_sudoku([[0, 2, 0, 0], [0, 3, 0, 0], [0, 0, 0, 0], [4, 0, 0, 0]]).nil? }.(->(pz) { ->(g) { g.is_a?(Array) && g.size == 4 && g.all? { |z| z.is_a?(Array) && z.sort == [1, 2, 3, 4] } && g.transpose.all? { |z| z.sort == [1, 2, 3, 4] } && [0, 2].product([0, 2]).all? { |a, b| [g[a][b], g[a][b + 1], g[a + 1][b], g[a + 1][b + 1]].sort == [1, 2, 3, 4] } && (0..3).all? { |a| (0..3).all? { |b| pz[a][b] == 0 || g[a][b] == pz[a][b] } } }.(solve_sudoku(pz.map(&:dup))) })",
+            "hint": "<code>return grid unless r</code> subito dopo la ricerca. Nel ciclo: <code>grid[r][c] = n</code>, <code>return grid if solve_sudoku(grid)</code>, <code>grid[r][c] = 0</code>. Dopo il ciclo: <code>nil</code>.",
             "solution": "puzzle = [\n  [0, 0, 0, 3],\n  [0, 4, 0, 0],\n  [0, 0, 3, 0],\n  [2, 0, 0, 0]\n]\n\ndef allowed?(grid, r, c, n)\n  return false if grid[r].include?(n)                # the row\n  return false if grid.any? { |row| row[c] == n }    # the column\n  r0 = r / 2 * 2                                     # the 2×2 box\n  c0 = c / 2 * 2\n  box = [grid[r0][c0], grid[r0][c0 + 1],\n         grid[r0 + 1][c0], grid[r0 + 1][c0 + 1]]\n  !box.include?(n)\nend\n\ndef solve_sudoku(grid)\n  r = grid.index { |row| row.include?(0) }\n  return grid unless r\n  c = grid[r].index(0)\n  (1..4).each do |n|\n    next unless allowed?(grid, r, c, n)\n    grid[r][c] = n\n    return grid if solve_sudoku(grid)\n    grid[r][c] = 0\n  end\n  nil\nend\n\nsolve_sudoku(puzzle)"
           }
         ]
@@ -15058,6 +17698,186 @@ window.LESSONS_JSON = JSON.stringify({
             ],
             "check": "rpn(\"3 4 + 2 *\") == 14 && rpn(\"5 1 2 + 4 * + 3 -\") == 14 && rpn(\"10 4 -\") == 6 && rpn(\"12 3 /\") == 4 && rpn(\"2 3 4 * -\") == -10 && rpn(\"7\") == 7 && rpn(\"1 2 3 4 + + +\") == 10 && rpn(\"6 2 / 5 *\") == 15 && rpn(\"100 7 5 - /\") == 50",
             "hint": "ブロックの中で<code>if %w[+ - * /].include?(part)</code>なら、<code>right = stack.pop</code>、<code>left = stack.pop</code>、そして<code>stack.push(case part when \"+\" then left + right … end)</code>。そうでなければ<code>stack.push(part.to_i)</code>だよ。",
+            "solution": "def rpn(text)\n  stack = []\n  text.split.each do |part|\n    if %w[+ - * /].include?(part)\n      right = stack.pop\n      left = stack.pop\n      stack.push(case part\n                 when \"+\" then left + right\n                 when \"-\" then left - right\n                 when \"*\" then left * right\n                 else left / right\n                 end)\n    else\n      stack.push(part.to_i)\n    end\n  end\n  stack.last\nend\n\nrpn(\"3 4 + 2 *\")"
+          }
+        ]
+      },
+      "fr": {
+        "title": "Piles et files d’attente",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Piles et files d’attente</h2><p>Chunky fait des pancakes et pose chaque nouveau sur le dessus de la pile. On les mange aussi par le dessus – le dernier cuit passe en premier. Une telle <strong>pile</strong> (<em>stack</em>) est l’une des idées les plus utiles en programmation, et en Ruby chaque array en est une : <code>push</code> pose quelque chose sur le dessus (à la fin), <code>pop</code> retire celui du dessus, et <code>last</code> regarde simplement ce qu’il y a dessus :</p>"
+          },
+          {
+            "t": "c",
+            "code": "stack = []\nstack.push(\"pancake 1\")\nstack.push(\"pancake 2\")\nstack.push(\"pancake 3\")\np stack.last    # juste regarder\np stack.pop     # le retirer\nstack"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dernier entré, premier sorti – en anglais <em>last in, first out</em>, LIFO en abrégé. C’est pourquoi une pile retourne tout : empilez les lettres d’un mot une par une et retirez-les jusqu’à ce que la pile soit vide (<code>pop</code> sur une pile vide donnerait simplement <code>nil</code>) :</p>"
+          },
+          {
+            "t": "c",
+            "code": "stack = []\n\"bacon\".chars.each { |ch| stack.push(ch) }\nreversed = \"\"\nuntil stack.empty?\n  reversed << stack.pop\nend\nreversed"
+          },
+          {
+            "t": "h",
+            "html": "<p>Vous connaissez la pile de n’importe quel éditeur : <em>annuler</em>. Avant chaque modification, le programme pose l’ancien état sur une pile, et « annuler » retire celui du dessus – toujours la modification la plus récente d’abord :</p>"
+          },
+          {
+            "t": "c",
+            "code": "text = \"Chunky\"\nhistory = []\n%w[loves crispy bacon].each do |word|\n  history.push(text)          # retenir l'ancien état\n  text = \"#{text} #{word}\"\nend\nputs text\ntext = history.pop            # annuler\nputs text\ntext = history.pop            # annuler encore une fois"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ruby lui-même tient aussi une pile : la <strong>pile d’appels</strong> (<em>call stack</em>). Quand une méthode en appelle une autre, le nouvel appel va sur le dessus ; quand il est terminé, on le retire, et Ruby reprend là où il avait été interrompu. <code>caller_locations</code> montre la pile de l’intérieur, le dessus d’abord :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def morning\n  make_coffee\nend\n\ndef make_coffee\n  grind_beans\nend\n\ndef grind_beans\n  caller_locations(0, 3).map(&:base_label)   # la pile d'appels, le dessus d'abord\nend\n\nmorning"
+          },
+          {
+            "t": "h",
+            "html": "<p>C’est la place pour les appels en attente de la leçon {{nr:rekursion}} : une récursion sans cas de base empile appel sur appel jusqu’à ce que la pile déborde – <code>SystemStackError: stack level too deep</code>. Et si un message d’erreur sait dans quelle méthode et à quelle ligne les choses ont mal tourné (leçon {{nr:fehler}}), c’est aussi grâce à la pile d’appels.</p><p>Le pendant de la pile, c’est la <strong>file d’attente</strong> (<em>queue</em>), comme à la boulangerie : qui arrive le premier est servi le premier – premier entré, premier sorti, FIFO (<em>first in, first out</em>). Les nouveaux venus se mettent au bout (<code>push</code>), on sert à l’avant (<code>shift</code>) :</p>"
+          },
+          {
+            "t": "c",
+            "code": "queue = []\nqueue.push(\"Chunky\")\nqueue.push(\"Kaz\")\nqueue.push(\"Isi\")\np queue.shift    # qui est arrivé le premier est servi le premier\nqueue.push(\"Bo\")\nqueue"
+          },
+          {
+            "t": "h",
+            "html": "<p>Kaz est maintenant devant, Bo tout au bout. Avec une file d’attente, chacun passe à son tour, en cercle aussi : qui a eu son tour se remet au bout – <code>queue.push(queue.shift)</code>. C’est ainsi que fonctionne une comptine pour désigner quelqu’un dans un cercle : les deux premiers se remettent au bout, le troisième est éliminé – jusqu’à ce qu’il n’en reste qu’un :</p>"
+          },
+          {
+            "t": "c",
+            "code": "circle = %w[Chunky Kaz Isi Bo Mo]\nuntil circle.size == 1\n  2.times { circle.push(circle.shift) }   # deux se remettent au bout\n  puts \"#{circle.shift} is out\"\nend\ncircle.first"
+          },
+          {
+            "t": "h",
+            "html": "<p>Bo gagne. Et maintenant, retour à la pile, pour une tâche que fait tout éditeur de code : les parenthèses vont-elles ensemble ? Pour une seule sorte de parenthèse, un compteur suffit : <code>(</code> compte vers le haut, <code>)</code> vers le bas. Il ne doit jamais descendre sous 0 (une parenthèse se fermerait sans avoir jamais été ouverte), et à la fin il doit valoir 0 :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def round_brackets_ok?(text)\n  open = 0\n  text.each_char do |ch|\n    open += 1 if ch == \"(\"\n    open -= 1 if ch == \")\"\n    return false if open < 0        # fermée avant d'avoir été ouverte\n  end\n  open == 0\nend\n\np round_brackets_ok?(\"(bacon (and egg))\")\np round_brackets_ok?(\"(bacon))(\")\nround_brackets_ok?(\"([)]\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Le dernier <code>true</code> est faux : dans <code>([)]</code>, les parenthèses rondes vont bien ensemble prises seules, mais le <code>]</code> se ferme alors que la <code>(</code> à l’intérieur est encore ouverte. Avec trois sortes de parenthèses, aucun compteur n’aide plus – pas même trois compteurs. Ce qui compte, c’est l’<em>ordre</em>, et une pile le retient : chaque parenthèse ouvrante va sur le dessus, et chaque fermante doit correspondre à celle du dessus.</p><p>La règle simple : si vous devez toujours traiter d’abord la chose la plus <em>récente</em> – annuler, parenthèses, appels, retour en arrière dans le backtracking de la leçon {{nr:backtracking}} –, prenez une pile : <code>push</code> et <code>pop</code>. Si c’est la plus <em>ancienne</em> qui passe d’abord – clients, joueurs, tâches –, prenez une file d’attente : <code>push</code> et <code>shift</code>.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-push' target='_blank'>Array#push</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-pop' target='_blank'>Array#pop</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-shift' target='_blank'>Array#shift</a> · <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-caller_locations' target='_blank'>Kernel#caller_locations</a></div><div class='task'><strong>Exercice :</strong> Écrivez <code>balanced?(text)</code> : <code>true</code> quand toutes les parenthèses rondes, carrées (crochets) et les accolades du texte vont correctement ensemble, sinon <code>false</code>. Tout le reste du texte ne compte pas. Posez chaque parenthèse ouvrante sur une pile ; à une fermante, sa partenaire doit être sur le dessus – retirez-la. À la fin, la pile doit être vide.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def balanced?(text)\n#   partner = { \")\" => \"(\", \"]\" => \"[\", \"}\" => \"{\" }\n#   stack = []\n#   ...   # une parenthèse ouvrante : sur la pile\n#   ...   # une fermante : sa partenaire doit être sur le dessus – la retirer\n#   ...   # à la fin : la pile est-elle vide ?\n# end\n\n# balanced?(\"{bacon [and (egg)]}\")\n",
+            "hints": [
+              "Parcours les caractères avec <code>text.each_char</code>. <code>\"([{\".include?(ch)</code> repère une parenthèse ouvrante, et pour une fermante <code>partner[ch]</code> est sa partenaire (pour tout le reste nil)."
+            ],
+            "check": "balanced?(\"{bacon [(bacon)]}\") && balanced?(\"\") && balanced?(\"Chunky\") && balanced?(\"{[()()]}()\") && !balanced?(\"([)]\") && !balanced?(\"((\") && !balanced?(\"))\") && !balanced?(\"}{\") && !balanced?(\"(]\") && !balanced?(\"[bacon\") && !balanced?(\"bacon)\") && !balanced?(\"{[(])}\") && code.include?(\"pop\")",
+            "hint": "Ouvrante : <code>stack.push(ch)</code>. Fermante : <code>return false if stack.pop != partner[ch]</code>. Après la boucle : <code>stack.empty?</code>.",
+            "solution": "def balanced?(text)\n  partner = { \")\" => \"(\", \"]\" => \"[\", \"}\" => \"{\" }\n  stack = []\n  text.each_char do |ch|\n    if \"([{\".include?(ch)\n      stack.push(ch)\n    elsif partner[ch]\n      return false if stack.pop != partner[ch]\n    end\n  end\n  stack.empty?\nend\n\nbalanced?(\"{bacon [and (egg)]}\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Une calculatrice sans aucune parenthèse : en <strong>notation polonaise inverse</strong> (NPI, en anglais RPN), l’opérateur vient après les nombres. <code>3 4 + 2 *</code> signifie (3 + 4) · 2 = 14. On calcule avec une pile : un nombre va sur le dessus ; un opérateur retire les deux du dessus, calcule et repose le résultat. À la fin, il ne reste que le résultat. Écrivez <code>rpn(text)</code> pour <code>+</code>, <code>-</code>, <code>*</code> et <code>/</code> avec des nombres entiers. Attention avec <code>-</code> et <code>/</code> : le nombre que vous retirez en premier est celui de <em>droite</em> – <code>10 4 -</code> donne 6.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def rpn(text)\n#   stack = []\n#   text.split.each do |part|\n#     ...   # un opérateur : right = stack.pop, left = stack.pop, calculer\n#     ...   # sinon c'est un nombre : part.to_i sur la pile\n#   end\n#   stack.last\n# end\n\n# rpn(\"3 4 + 2 *\")\n",
+            "hints": [
+              "<code>text.split</code> découpe le texte aux espaces. Si une partie est un opérateur, <code>%w[+ - * /].include?(part)</code> te le dit ; lequel, c’est un <code>case</code> qui décide."
+            ],
+            "check": "rpn(\"3 4 + 2 *\") == 14 && rpn(\"5 1 2 + 4 * + 3 -\") == 14 && rpn(\"10 4 -\") == 6 && rpn(\"12 3 /\") == 4 && rpn(\"2 3 4 * -\") == -10 && rpn(\"7\") == 7 && rpn(\"1 2 3 4 + + +\") == 10 && rpn(\"6 2 / 5 *\") == 15 && rpn(\"100 7 5 - /\") == 50",
+            "hint": "Dans le bloc : <code>if %w[+ - * /].include?(part)</code>, puis <code>right = stack.pop</code>, <code>left = stack.pop</code> et <code>stack.push(case part when \"+\" then left + right … end)</code> ; sinon <code>stack.push(part.to_i)</code>.",
+            "solution": "def rpn(text)\n  stack = []\n  text.split.each do |part|\n    if %w[+ - * /].include?(part)\n      right = stack.pop\n      left = stack.pop\n      stack.push(case part\n                 when \"+\" then left + right\n                 when \"-\" then left - right\n                 when \"*\" then left * right\n                 else left / right\n                 end)\n    else\n      stack.push(part.to_i)\n    end\n  end\n  stack.last\nend\n\nrpn(\"3 4 + 2 *\")"
+          }
+        ]
+      },
+      "it": {
+        "title": "Pile e code",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Pile e code</h2><p>Chunky prepara i pancake e mette ognuno appena fatto in cima alla pila. Anche quando si mangiano si parte dall'alto: l'ultimo cotto è il primo a sparire. Una <strong>pila</strong> così (<em>stack</em>) è una delle idee più utili della programmazione, e in Ruby ogni array lo è: <code>push</code> mette qualcosa in cima (alla fine), <code>pop</code> toglie quello in cima, e <code>last</code> guarda soltanto cosa c'è in cima:</p>"
+          },
+          {
+            "t": "c",
+            "code": "stack = []\nstack.push(\"pancake 1\")\nstack.push(\"pancake 2\")\nstack.push(\"pancake 3\")\np stack.last    # guarda soltanto\np stack.pop     # toglilo\nstack"
+          },
+          {
+            "t": "h",
+            "html": "<p>L'ultimo che entra è il primo che esce: in inglese <em>last in, first out</em>, in breve LIFO. Per questo una pila rovescia tutto: metti sulla pila le lettere di una parola una alla volta e poi toglile finché la pila non è vuota (<code>pop</code> su una pila vuota darebbe semplicemente <code>nil</code>):</p>"
+          },
+          {
+            "t": "c",
+            "code": "stack = []\n\"bacon\".chars.each { |ch| stack.push(ch) }\nreversed = \"\"\nuntil stack.empty?\n  reversed << stack.pop\nend\nreversed"
+          },
+          {
+            "t": "h",
+            "html": "<p>La pila la conosci da qualsiasi editor: <em>annulla</em>. Prima di ogni modifica il programma mette lo stato vecchio su una pila, e “annulla” toglie di nuovo quello in cima: sempre prima la modifica più recente:</p>"
+          },
+          {
+            "t": "c",
+            "code": "text = \"Chunky\"\nhistory = []\n%w[loves crispy bacon].each do |word|\n  history.push(text)          # ricorda lo stato vecchio\n  text = \"#{text} #{word}\"\nend\nputs text\ntext = history.pop            # annulla\nputs text\ntext = history.pop            # annulla ancora una volta"
+          },
+          {
+            "t": "h",
+            "html": "<p>Anche Ruby stesso tiene una pila: lo <strong>stack delle chiamate</strong> (<em>call stack</em>). Quando un metodo ne chiama un altro, la nuova chiamata va in cima; quando ha finito, viene tolta, e Ruby continua da dove era stato interrotto. <code>caller_locations</code> mostra la pila dall'interno, prima la cima:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def morning\n  make_coffee\nend\n\ndef make_coffee\n  grind_beans\nend\n\ndef grind_beans\n  caller_locations(0, 3).map(&:base_label)   # lo stack delle chiamate, prima la cima\nend\n\nmorning"
+          },
+          {
+            "t": "h",
+            "html": "<p>È lo spazio per le chiamate in attesa della lezione {{nr:rekursion}}: una ricorsione senza caso base mette chiamata su chiamata sulla pila finché non trabocca: <code>SystemStackError: stack level too deep</code>. E se un messaggio d'errore sa in quale metodo e in quale riga qualcosa è andato storto (lezione {{nr:fehler}}), è merito anche dello stack delle chiamate.</p><p>Il contrario della pila è la <strong>coda</strong> (<em>queue</em>), come dal panettiere: chi arriva prima viene servito per primo. Il primo che entra è il primo che esce, FIFO (<em>first in, first out</em>). Chi arriva si mette in fondo (<code>push</code>), si serve davanti (<code>shift</code>):</p>"
+          },
+          {
+            "t": "c",
+            "code": "queue = []\nqueue.push(\"Chunky\")\nqueue.push(\"Kaz\")\nqueue.push(\"Isi\")\np queue.shift    # chi è arrivato prima viene servito per primo\nqueue.push(\"Bo\")\nqueue"
+          },
+          {
+            "t": "h",
+            "html": "<p>Adesso davanti c'è Kaz, Bo è proprio in fondo. Con una coda ognuno ha il suo turno, anche in cerchio: chi ha già fatto il suo turno si rimette in fondo, <code>queue.push(queue.shift)</code>. Così funziona una conta in cerchio: i primi due si rimettono in fondo, il terzo è fuori, finché non ne resta solo uno:</p>"
+          },
+          {
+            "t": "c",
+            "code": "circle = %w[Chunky Kaz Isi Bo Mo]\nuntil circle.size == 1\n  2.times { circle.push(circle.shift) }   # due si rimettono in fondo\n  puts \"#{circle.shift} is out\"\nend\ncircle.first"
+          },
+          {
+            "t": "h",
+            "html": "<p>Vince Bo. E ora torniamo alla pila, per un lavoro che fa ogni editor di codice: le parentesi tornano? Per un solo tipo di parentesi basta un contatore: <code>(</code> conta in su, <code>)</code> conta in giù. Non deve mai scendere sotto 0 (si chiuderebbe una parentesi mai aperta), e alla fine deve essere 0:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def round_brackets_ok?(text)\n  open = 0\n  text.each_char do |ch|\n    open += 1 if ch == \"(\"\n    open -= 1 if ch == \")\"\n    return false if open < 0        # chiusa prima di essere aperta\n  end\n  open == 0\nend\n\np round_brackets_ok?(\"(bacon (and egg))\")\np round_brackets_ok?(\"(bacon))(\")\nround_brackets_ok?(\"([)]\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>L'ultimo <code>true</code> è sbagliato: in <code>([)]</code> le parentesi tonde, prese da sole, tornano, ma la <code>]</code> si chiude mentre la <code>(</code> all'interno è ancora aperta. Con tre tipi di parentesi nessun contatore aiuta più, neanche tre contatori. Quello che conta è l'<em>ordine</em>, e una pila se lo ricorda: ogni parentesi aperta va in cima, e ogni parentesi chiusa deve corrispondere a quella in cima.</p><p>La regola pratica: se devi sempre occuparti prima della cosa più <em>recente</em> (annulla, parentesi, chiamate, il tornare indietro nel backtracking della lezione {{nr:backtracking}}), usa una pila: <code>push</code> e <code>pop</code>. Se viene prima la più <em>vecchia</em> (clienti, giocatori, lavori), usa una coda: <code>push</code> e <code>shift</code>.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-push' target='_blank'>Array#push</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-pop' target='_blank'>Array#pop</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-shift' target='_blank'>Array#shift</a> · <a href='https://docs.ruby-lang.org/en/4.0/Kernel.html#method-i-caller_locations' target='_blank'>Kernel#caller_locations</a></div><div class='task'><strong>Esercizio:</strong> Scrivi <code>balanced?(text)</code>: <code>true</code> quando tutte le parentesi tonde, quadre e graffe del testo tornano come si deve, altrimenti <code>false</code>. Tutto il resto del testo non conta. Metti ogni parentesi aperta su una pila; a ogni parentesi chiusa, in cima ci deve essere la sua compagna: toglila. Alla fine la pila deve essere vuota.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def balanced?(text)\n#   partner = { \")\" => \"(\", \"]\" => \"[\", \"}\" => \"{\" }\n#   stack = []\n#   ...   # una parentesi aperta: sulla pila\n#   ...   # una chiusa: in cima ci deve essere la sua compagna – toglila\n#   ...   # alla fine: la pila è vuota?\n# end\n\n# balanced?(\"{bacon [and (egg)]}\")\n",
+            "hints": [
+              "Percorri i caratteri con <code>text.each_char</code>. <code>\"([{\".include?(ch)</code> riconosce una parentesi aperta, e per una chiusa <code>partner[ch]</code> è la sua compagna (per tutto il resto nil)."
+            ],
+            "check": "balanced?(\"{bacon [(bacon)]}\") && balanced?(\"\") && balanced?(\"Chunky\") && balanced?(\"{[()()]}()\") && !balanced?(\"([)]\") && !balanced?(\"((\") && !balanced?(\"))\") && !balanced?(\"}{\") && !balanced?(\"(]\") && !balanced?(\"[bacon\") && !balanced?(\"bacon)\") && !balanced?(\"{[(])}\") && code.include?(\"pop\")",
+            "hint": "Aperta: <code>stack.push(ch)</code>. Chiusa: <code>return false if stack.pop != partner[ch]</code>. Dopo il ciclo: <code>stack.empty?</code>.",
+            "solution": "def balanced?(text)\n  partner = { \")\" => \"(\", \"]\" => \"[\", \"}\" => \"{\" }\n  stack = []\n  text.each_char do |ch|\n    if \"([{\".include?(ch)\n      stack.push(ch)\n    elsif partner[ch]\n      return false if stack.pop != partner[ch]\n    end\n  end\n  stack.empty?\nend\n\nbalanced?(\"{bacon [and (egg)]}\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Una calcolatrice senza nessuna parentesi: nella <strong>notazione polacca inversa</strong> (in inglese RPN) l'operatore viene dopo i numeri. <code>3 4 + 2 *</code> significa (3 + 4) · 2 = 14. Si calcola con una pila: un numero va in cima; un operatore toglie i due in cima, calcola e rimette in cima il risultato. Alla fine resta solo il risultato. Scrivi <code>rpn(text)</code> per <code>+</code>, <code>-</code>, <code>*</code> e <code>/</code> con numeri interi. Attenzione con <code>-</code> e <code>/</code>: il numero che togli per primo è quello di <em>destra</em>: <code>10 4 -</code> fa 6.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def rpn(text)\n#   stack = []\n#   text.split.each do |part|\n#     ...   # un operatore: right = stack.pop, left = stack.pop, calcola\n#     ...   # altrimenti è un numero: part.to_i sulla pila\n#   end\n#   stack.last\n# end\n\n# rpn(\"3 4 + 2 *\")\n",
+            "hints": [
+              "<code>text.split</code> taglia il testo agli spazi. Se una parte è un operatore te lo dice <code>%w[+ - * /].include?(part)</code>; quale sia, lo decide un <code>case</code>."
+            ],
+            "check": "rpn(\"3 4 + 2 *\") == 14 && rpn(\"5 1 2 + 4 * + 3 -\") == 14 && rpn(\"10 4 -\") == 6 && rpn(\"12 3 /\") == 4 && rpn(\"2 3 4 * -\") == -10 && rpn(\"7\") == 7 && rpn(\"1 2 3 4 + + +\") == 10 && rpn(\"6 2 / 5 *\") == 15 && rpn(\"100 7 5 - /\") == 50",
+            "hint": "Nel blocco: <code>if %w[+ - * /].include?(part)</code>, poi <code>right = stack.pop</code>, <code>left = stack.pop</code> e <code>stack.push(case part when \"+\" then left + right … end)</code>; altrimenti <code>stack.push(part.to_i)</code>.",
             "solution": "def rpn(text)\n  stack = []\n  text.split.each do |part|\n    if %w[+ - * /].include?(part)\n      right = stack.pop\n      left = stack.pop\n      stack.push(case part\n                 when \"+\" then left + right\n                 when \"-\" then left - right\n                 when \"*\" then left * right\n                 else left / right\n                 end)\n    else\n      stack.push(part.to_i)\n    end\n  end\n  stack.last\nend\n\nrpn(\"3 4 + 2 *\")"
           }
         ]
@@ -15356,6 +18176,202 @@ window.LESSONS_JSON = JSON.stringify({
             ],
             "check": "->(ok) { ok.(%w[########## #S...#...# #.##.#.#.# #.#..#.#.# #.#.##.#.# #...#..#G# ###...##.# #...#....# ##########], 15) && ok.(%w[S.G], 2) && ok.(%w[SG], 1) && ok.(%w[S... .... ...G], 5) && ok.(%w[S.... .###. .#G#. .#.#. .....], 8) && bacon_trail(%w[S#G]).nil? && bacon_trail(%w[S.#.G]).nil? }.(->(m, len) { ->(orig, t) { m == orig && t.is_a?(Array) && t.map { |row| row.tr(\"*\", \".\") } == m && t.join.count(\"*\") == len - 1 && t.each_index.all? { |r| t[r].length.times.all? { |c| !\"*SG\".include?(t[r][c]) || [[r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]].count { |y, x| y >= 0 && x >= 0 && y < t.length && x < t[y].length && \"*SG\".include?(t[y][x]) } == (t[r][c] == \"*\" ? 2 : 1) } } }.(m.map(&:dup), bacon_trail(m)) })",
             "hint": "探索のあとで<code>cell = locate(maze, \"G\")</code>と<code>return nil unless dist[cell]</code>。それから<code>picture = maze.map(&amp;:dup)</code>、そして<code>while dist[cell] &gt; 0</code>の中で、上と同じように<code>find</code>で1歩戻って、<code>r, c = cell</code>、<code>picture[r][c] = \"*\" if picture[r][c] == \".\"</code>。最後に<code>picture</code>を返すんだ。",
+            "solution": "def bacon_trail(maze)\n  start = locate(maze, \"S\")\n  dist = { start => 0 }\n  queue = [start]\n  until queue.empty?\n    cell = queue.shift\n    open_neighbours(maze, cell).each do |n|\n      next if dist.key?(n)\n      dist[n] = dist[cell] + 1\n      queue.push(n)\n    end\n  end\n  cell = locate(maze, \"G\")\n  return nil unless dist[cell]\n  picture = maze.map(&:dup)\n  while dist[cell] > 0\n    ring = dist[cell] - 1\n    cell = open_neighbours(maze, cell).find { |n| dist[n] == ring }\n    r, c = cell\n    picture[r][c] = \"*\" if picture[r][c] == \".\"\n  end\n  picture\nend\n\nputs bacon_trail(maze)"
+          }
+        ]
+      },
+      "fr": {
+        "title": "À travers le labyrinthe : le parcours en largeur",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>À travers le labyrinthe : le parcours en largeur</h2><p>Chunky se tient à l’entrée d’un labyrinthe, et quelque part à l’intérieur se trouve une tranche de bacon 🥓. Quel est le chemin le plus court ? Vous pourriez errer au hasard en espérant le trouver – ou laisser Ruby chercher, si astucieusement que le premier chemin trouvé est à coup sûr le plus court. Pour cela, le labyrinthe devient des données : un array de chaînes, une chaîne par ligne. <code>#</code> est un mur, <code>.</code> un passage, <code>S</code> le départ et <code>G</code> l’arrivée, le bacon. <code>maze[row][col]</code> lit une case – d’abord la ligne, puis la colonne, toutes deux comptées à partir de 0 :</p>"
+          },
+          {
+            "t": "c",
+            "code": "maze = [\n  \"##########\",\n  \"#S...#...#\",\n  \"#.##.#.#.#\",\n  \"#.#..#.#.#\",\n  \"#.#.##.#.#\",\n  \"#...#..#G#\",\n  \"###...##.#\",\n  \"#...#....#\",\n  \"##########\"\n]\nputs maze\nmaze[1][1]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Où se trouve exactement le <code>S</code> ? Chaque ligne est une chaîne, et <code>index</code> vous indique à quelle position un caractère apparaît pour la première fois – ou <code>nil</code> s’il n’y est pas du tout. Parcourez donc les lignes avec <code>each_with_index</code> ; la première ligne qui donne un <code>index</code> est la bonne. La méthode renvoie l’emplacement sous forme de paire <code>[row, col]</code>, et désormais une telle paire s’appelle une <strong>cellule</strong> :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def locate(maze, char)\n  maze.each_with_index do |line, row|\n    col = line.index(char)\n    return [row, col] if col\n  end\n  nil\nend\n\np locate(maze, \"S\")\nlocate(maze, \"G\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Depuis une cellule, Chunky peut faire un pas vers le haut, le bas, la gauche ou la droite – pas de diagonales, pas d’escalade par-dessus les murs. Un voisin ne compte que s’il se trouve dans le labyrinthe et n’est pas un mur. Le « dans » demande de l’attention en Ruby : <code>maze[-1]</code> n’est pas une erreur mais la <em>dernière</em> ligne, et une colonne au-delà de la fin d’une chaîne donne <code>nil</code> – qui n’est pas un mur non plus. Testez donc d’abord les nombres, et seulement ensuite regardez la case. Une cellule avec trois issues :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def open_neighbours(maze, cell)\n  row, col = cell\n  moves = [[row - 1, col], [row + 1, col], [row, col - 1], [row, col + 1]]\n  moves.select do |r, c|\n    inside = r >= 0 && c >= 0 && r < maze.length && c < maze[r].length\n    inside && maze[r][c] != \"#\"\n  end\nend\n\np open_neighbours(maze, [1, 1])\nopen_neighbours(maze, [5, 3])"
+          },
+          {
+            "t": "h",
+            "html": "<p>Passons maintenant à la recherche. Imaginez que vous lâchez une pierre dans un étang en <code>S</code> : les ondes s’étendent cercle après cercle. D’abord toutes les cellules à un pas, puis toutes celles à deux pas, et ainsi de suite – c’est le <strong>parcours en largeur</strong> (<em>breadth-first search</em>). Pour avancer cercle par cercle, Ruby garde les cellules encore à visiter dans une <strong>file d’attente</strong>, comme celle du buffet du petit-déjeuner : <code>push</code> ajoute à l’arrière, <code>shift</code> prend à l’avant. Premier arrivé, premier servi :</p>"
+          },
+          {
+            "t": "c",
+            "code": "queue = [\"Chunky\", \"Kaz\"]\nqueue.push(\"Isi\")    # Isi se met au bout de la file\np queue.shift        # le premier de la file est servi en premier\np queue.shift\nqueue"
+          },
+          {
+            "t": "h",
+            "html": "<p>La recherche n’a besoin que de cette file et d’un hash <code>dist</code> : pour chaque cellule trouvée jusqu’ici, à combien de pas elle se trouve de <code>S</code>. Au départ, il n’y a que <code>S</code> lui-même, avec 0. Ensuite, encore et encore : sortez la cellule de tête de la file ; chaque voisin qui n’est pas encore dans <code>dist</code> reçoit un pas de plus que cette cellule et se place au bout de la file. Le test <code>dist.key?(n)</code> garantit que chaque cellule n’est visitée qu’une fois – sinon Chunky tournerait en rond. Appuyez sur ⏯ et regardez la file grandir et rétrécir :</p>"
+          },
+          {
+            "t": "c",
+            "code": "start = locate(maze, \"S\")\ndist = { start => 0 }\nqueue = [start]\nuntil queue.empty?\n  cell = queue.shift\n  open_neighbours(maze, cell).each do |n|\n    next if dist.key?(n)\n    dist[n] = dist[cell] + 1\n    queue.push(n)\n  end\nend\ndist[locate(maze, \"G\")]"
+          },
+          {
+            "t": "h",
+            "html": "<p>15 pas. Pourquoi est-ce le chemin le plus court ? La file sert les cellules dans l’ordre où elles ont été trouvées : toutes les cellules du cercle 1 avant celles du cercle 2, toutes celles du cercle 2 avant le cercle 3. Quand l’onde atteint le bacon pour la première fois, il ne peut donc pas exister de chemin plus court – il serait arrivé dans un cercle précédent. Dessinez les cercles dans le labyrinthe et vous verrez les ondes. Chaque chiffre est le nombre de pas, ou plutôt son dernier chiffre : après 9 revient 0 :</p>"
+          },
+          {
+            "t": "c",
+            "code": "maze.each_with_index do |line, r|\n  rings = line.length.times.map do |c|\n    d = dist[[r, c]]\n    line[c] == \".\" && d ? (d % 10).to_s : line[c]\n  end\n  puts rings.join\nend\ndist.size"
+          },
+          {
+            "t": "h",
+            "html": "<p>Deux ondes contournent les murs et se rejoignent dans le coin en haut à droite ; le bacon est atteint d’abord par le bas, après 15 pas. Et <code>dist.size</code> compte toutes les cellules que les ondes ont atteintes : 37, toutes les cases qui ne sont pas des murs – le pot de peinture d’un logiciel de dessin remplit une zone exactement de cette façon. Et le chemin lui-même ? Les cercles le montrent, à rebours : le bacon est dans le cercle 15, l’un de ses voisins dans le cercle 14, l’un des voisins de <em>celui-ci</em> dans le cercle 13 … jusqu’à 0, le départ. Depuis l’arrivée, faites donc toujours un pas vers un voisin d’un cercle plus proche – <code>find</code> prend le premier – et retournez la liste à la fin :</p>"
+          },
+          {
+            "t": "c",
+            "code": "cell = locate(maze, \"G\")\npath = [cell]\nwhile dist[cell] > 0\n  ring = dist[cell] - 1\n  cell = open_neighbours(maze, cell).find { |n| dist[n] == ring }\n  path << cell\nend\npath.reverse"
+          },
+          {
+            "t": "h",
+            "html": "<p>Voilà le chemin de Chunky : 16 cellules de <code>S</code> à <code>G</code>, 15 pas. (Beaucoup de programmes gardent plutôt un second hash pour cela, <code>came_from[n] = cell</code> – une traînée de miettes qui mène de chaque cellule à celle depuis laquelle elle a été trouvée. Ici, les cercles font le même travail.) Dessinons-le maintenant. Attention à la copie : <code>maze.dup</code> ne copierait que l’array, et les chaînes qu’il contient seraient exactement les mêmes – vous l’avez vu avec les flèches dans la leçon {{nr:arrays}}. Et <code>picture[r][c] = \"*\"</code> modifie une chaîne sur place : il remplace le caractère à la position <code>c</code>. <code>map(&amp;:dup)</code> copie chaque ligne une à une :</p>"
+          },
+          {
+            "t": "c",
+            "code": "picture = maze.map(&:dup)\npath.each do |r, c|\n  picture[r][c] = \"*\" if picture[r][c] == \".\"\nend\nputs picture"
+          },
+          {
+            "t": "h",
+            "html": "<p>Le labyrinthe lui-même est resté propre – essayez <code>puts maze</code>. Le parcours en largeur vaut la peine d’être retenu : une file pour ce qui reste à venir, un hash pour ce qui a déjà été vu. Il trouve le chemin le plus court chaque fois que tous les pas coûtent pareil – dans les labyrinthes, sur les plateaux de jeu, à travers les rues d’une ville, ou parmi les amis d’amis : combien de poignées de main vous séparent de n’importe qui d’autre ? Quand les pas coûtent des prix différents – de la boue, une colline –, un cousin prend le relais, l’algorithme de Dijkstra, qui sert toujours en premier la cellule la moins chère.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-push' target='_blank'>Array#push</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-shift' target='_blank'>Array#shift</a> · <a href='https://docs.ruby-lang.org/en/4.0/Hash.html#method-i-key-3F' target='_blank'>Hash#key?</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-index' target='_blank'>String#index</a></div><div class='task'><strong>Exercice :</strong> Écrivez <code>steps_to_bacon(maze)</code> : le nombre de pas du chemin le plus court de <code>S</code> à <code>G</code> – ou <code>nil</code> quand des murs coupent l’accès au bacon. <code>locate</code> et <code>open_neighbours</code> vus plus haut vous aident. La vérification essaie plusieurs labyrinthes, dont certains sans mur extérieur.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def steps_to_bacon(maze)\n#   ...   # le parcours en largeur depuis S, comme plus haut\n#   ...   # le nombre de pas jusqu'à G - ou nil s'il n'y a pas de chemin\n# end\n\n# p steps_to_bacon(maze)\n# p steps_to_bacon([\"S.#.G\"])\n",
+            "hints": [
+              "Partez de la cellule de recherche ci-dessus et mettez-la dans la méthode, avec <code>maze</code> comme paramètre. Une fois la boucle terminée, <code>dist</code> connaît toutes les cellules que Chunky peut atteindre – et pour <code>G</code> il ne sait rien si les ondes n’y sont jamais arrivées."
+            ],
+            "check": "steps_to_bacon(%w[########## #S...#...# #.##.#.#.# #.#..#.#.# #.#.##.#.# #...#..#G# ###...##.# #...#....# ##########]) == 15 && steps_to_bacon(%w[SG]) == 1 && steps_to_bacon(%w[S.G]) == 2 && steps_to_bacon(%w[S... .... ...G]) == 5 && steps_to_bacon(%w[S.... .###. .#G#. .#.#. .....]) == 8 && steps_to_bacon(%w[S#G]).nil? && steps_to_bacon(%w[S.#.G]).nil? && steps_to_bacon(%w[S.#. ..#. ###. ...G]).nil?",
+            "hint": "<code>def steps_to_bacon(maze)</code>, à l’intérieur <code>start = locate(maze, \"S\")</code>, <code>dist = { start =&gt; 0 }</code>, <code>queue = [start]</code> et la boucle <code>until queue.empty?</code> vue plus haut ; à la fin <code>dist[locate(maze, \"G\")]</code> – qui vaut <code>nil</code> tout seul quand <code>G</code> n’a jamais été atteint.",
+            "solution": "def steps_to_bacon(maze)\n  start = locate(maze, \"S\")\n  dist = { start => 0 }\n  queue = [start]\n  until queue.empty?\n    cell = queue.shift\n    open_neighbours(maze, cell).each do |n|\n      next if dist.key?(n)\n      dist[n] = dist[cell] + 1\n      queue.push(n)\n    end\n  end\n  dist[locate(maze, \"G\")]\nend\n\np steps_to_bacon(maze)\nsteps_to_bacon([\"S.#.G\"])"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Écrivez <code>bacon_trail(maze)</code>, qui renvoie un <em>nouveau</em> labyrinthe où le chemin le plus court de Chunky est dessiné : chaque cellule entre <code>S</code> et <code>G</code> devient un <code>*</code>, <code>S</code> et <code>G</code> restent tels quels, et le labyrinthe reçu reste inchangé. S’il n’y a pas de chemin, la méthode renvoie <code>nil</code>. (Si plusieurs chemins sont aussi courts les uns que les autres, n’importe lequel fera l’affaire.)</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def bacon_trail(maze)\n#   ...   # chercher comme dans l'exercice, puis revenir depuis G\n#   ...   # une copie du labyrinthe avec des * sur le chemin - ou nil\n# end\n\n# puts bacon_trail(maze)\n",
+            "hints": [
+              "D’abord la recherche, comme dans l’exercice, pour que <code>dist</code> connaisse chaque cercle. Ensuite, revenez depuis <code>G</code> comme dans la cellule avec <code>path</code>, et peignez chaque cellule du chemin dans une copie faite avec <code>map(&amp;:dup)</code>."
+            ],
+            "check": "->(ok) { ok.(%w[########## #S...#...# #.##.#.#.# #.#..#.#.# #.#.##.#.# #...#..#G# ###...##.# #...#....# ##########], 15) && ok.(%w[S.G], 2) && ok.(%w[SG], 1) && ok.(%w[S... .... ...G], 5) && ok.(%w[S.... .###. .#G#. .#.#. .....], 8) && bacon_trail(%w[S#G]).nil? && bacon_trail(%w[S.#.G]).nil? }.(->(m, len) { ->(orig, t) { m == orig && t.is_a?(Array) && t.map { |row| row.tr(\"*\", \".\") } == m && t.join.count(\"*\") == len - 1 && t.each_index.all? { |r| t[r].length.times.all? { |c| !\"*SG\".include?(t[r][c]) || [[r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]].count { |y, x| y >= 0 && x >= 0 && y < t.length && x < t[y].length && \"*SG\".include?(t[y][x]) } == (t[r][c] == \"*\" ? 2 : 1) } } }.(m.map(&:dup), bacon_trail(m)) })",
+            "hint": "Après la recherche : <code>cell = locate(maze, \"G\")</code> et <code>return nil unless dist[cell]</code> ; puis <code>picture = maze.map(&amp;:dup)</code> et <code>while dist[cell] &gt; 0</code> : reculez d’un pas avec <code>find</code> comme plus haut, <code>r, c = cell</code>, <code>picture[r][c] = \"*\" if picture[r][c] == \".\"</code>. À la fin, renvoyez <code>picture</code>.",
+            "solution": "def bacon_trail(maze)\n  start = locate(maze, \"S\")\n  dist = { start => 0 }\n  queue = [start]\n  until queue.empty?\n    cell = queue.shift\n    open_neighbours(maze, cell).each do |n|\n      next if dist.key?(n)\n      dist[n] = dist[cell] + 1\n      queue.push(n)\n    end\n  end\n  cell = locate(maze, \"G\")\n  return nil unless dist[cell]\n  picture = maze.map(&:dup)\n  while dist[cell] > 0\n    ring = dist[cell] - 1\n    cell = open_neighbours(maze, cell).find { |n| dist[n] == ring }\n    r, c = cell\n    picture[r][c] = \"*\" if picture[r][c] == \".\"\n  end\n  picture\nend\n\nputs bacon_trail(maze)"
+          }
+        ]
+      },
+      "it": {
+        "title": "Attraverso il labirinto: la ricerca in ampiezza",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Attraverso il labirinto: la ricerca in ampiezza</h2><p>Chunky è all'ingresso di un labirinto, e da qualche parte lì dentro c'è una striscia di bacon 🥓. Qual è la strada più corta? Potresti girovagare e sperare, oppure lasciare che Ruby cerchi, in modo così furbo che la prima strada trovata è garantita la più corta. Per farlo il labirinto diventa dati: un array di stringhe, una stringa per riga. <code>#</code> è un muro, <code>.</code> un passaggio, <code>S</code> la partenza e <code>G</code> l'arrivo, il bacon. <code>maze[row][col]</code> legge una casella: prima la riga, poi la colonna, entrambe contate da 0:</p>"
+          },
+          {
+            "t": "c",
+            "code": "maze = [\n  \"##########\",\n  \"#S...#...#\",\n  \"#.##.#.#.#\",\n  \"#.#..#.#.#\",\n  \"#.#.##.#.#\",\n  \"#...#..#G#\",\n  \"###...##.#\",\n  \"#...#....#\",\n  \"##########\"\n]\nputs maze\nmaze[1][1]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dove si trova esattamente la <code>S</code>? Ogni riga è una stringa, e <code>index</code> ti dice in quale posizione compare per la prima volta un carattere, oppure <code>nil</code> se non c'è affatto. Percorri quindi le righe con <code>each_with_index</code>; la prima riga con un <code>index</code> è quella giusta. Il metodo restituisce il posto come coppia <code>[row, col]</code>, e d'ora in poi una coppia del genere si chiama <strong>cella</strong>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def locate(maze, char)\n  maze.each_with_index do |line, row|\n    col = line.index(char)\n    return [row, col] if col\n  end\n  nil\nend\n\np locate(maze, \"S\")\nlocate(maze, \"G\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Da una cella Chunky può fare un passo in su, in giù, a sinistra o a destra: niente diagonali, niente arrampicate sui muri. Un vicino conta solo se sta dentro il labirinto e non è un muro. Il “dentro” richiede attenzione in Ruby: <code>maze[-1]</code> non è un errore ma l'<em>ultima</em> riga, e una colonna oltre la fine di una stringa dà <code>nil</code>, che non è nemmeno un muro. Quindi controlla prima i numeri, e solo dopo guarda la casella. Una cella con tre uscite:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def open_neighbours(maze, cell)\n  row, col = cell\n  moves = [[row - 1, col], [row + 1, col], [row, col - 1], [row, col + 1]]\n  moves.select do |r, c|\n    inside = r >= 0 && c >= 0 && r < maze.length && c < maze[r].length\n    inside && maze[r][c] != \"#\"\n  end\nend\n\np open_neighbours(maze, [1, 1])\nopen_neighbours(maze, [5, 3])"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ora la ricerca. Immagina di lasciar cadere un sasso in uno stagno in <code>S</code>: le onde si allargano cerchio dopo cerchio. Prima tutte le celle a un passo, poi tutte quelle a due passi, e così via: questa è la <strong>ricerca in ampiezza</strong> (<em>breadth-first search</em>). Per procedere cerchio per cerchio, Ruby tiene le celle ancora da visitare in una <strong>coda</strong>, come quella al buffet della colazione: <code>push</code> aggiunge in fondo, <code>shift</code> prende dal davanti. Chi arriva prima viene servito per primo:</p>"
+          },
+          {
+            "t": "c",
+            "code": "queue = [\"Chunky\", \"Kaz\"]\nqueue.push(\"Isi\")    # Isi si mette in fondo alla coda\np queue.shift        # il primo della fila viene servito per primo\np queue.shift\nqueue"
+          },
+          {
+            "t": "h",
+            "html": "<p>Alla ricerca bastano quella coda e un hash <code>dist</code>: per ogni cella trovata finora, a quanti passi si trova da <code>S</code>. All'inizio c'è solo <code>S</code> stessa, con 0. Poi, di nuovo e di nuovo: togli la prima cella dalla coda; ogni vicino che non è ancora in <code>dist</code> riceve un passo in più di questa cella e si mette in fondo alla coda. Il test <code>dist.key?(n)</code> fa sì che ogni cella venga visitata una sola volta, altrimenti Chunky girerebbe in tondo. Premi ⏯ e guarda la coda crescere e restringersi:</p>"
+          },
+          {
+            "t": "c",
+            "code": "start = locate(maze, \"S\")\ndist = { start => 0 }\nqueue = [start]\nuntil queue.empty?\n  cell = queue.shift\n  open_neighbours(maze, cell).each do |n|\n    next if dist.key?(n)\n    dist[n] = dist[cell] + 1\n    queue.push(n)\n  end\nend\ndist[locate(maze, \"G\")]"
+          },
+          {
+            "t": "h",
+            "html": "<p>15 passi. Perché è la strada più corta? La coda serve le celle nell'ordine in cui sono state trovate: tutte le celle del cerchio 1 prima di quelle del cerchio 2, tutte quelle del cerchio 2 prima del cerchio 3. Quindi quando l'onda raggiunge per la prima volta il bacon, non può esserci una strada più corta: sarebbe arrivata in un cerchio precedente. Disegna i cerchi nel labirinto e vedrai le onde. Ogni cifra è il numero di passi, o meglio la sua ultima cifra: dopo il 9 torna lo 0:</p>"
+          },
+          {
+            "t": "c",
+            "code": "maze.each_with_index do |line, r|\n  rings = line.length.times.map do |c|\n    d = dist[[r, c]]\n    line[c] == \".\" && d ? (d % 10).to_s : line[c]\n  end\n  puts rings.join\nend\ndist.size"
+          },
+          {
+            "t": "h",
+            "html": "<p>Due onde girano attorno ai muri e si incontrano nell'angolo in alto a destra; il bacon viene raggiunto prima dal basso, dopo 15 passi. E <code>dist.size</code> conta tutte le celle raggiunte dalle onde: 37, tutte le caselle che non sono muri. Il secchiello di un programma di disegno riempie un'area proprio così. E la strada stessa? La mostrano i cerchi, all'indietro: il bacon sta nel cerchio 15, uno dei suoi vicini nel cerchio 14, uno dei vicini di <em>quest'ultimo</em> nel cerchio 13 … fino a 0, la partenza. Quindi, partendo dall'arrivo, fai sempre un passo verso un vicino di un cerchio più vicino (<code>find</code> prende il primo) e alla fine capovolgi l'elenco:</p>"
+          },
+          {
+            "t": "c",
+            "code": "cell = locate(maze, \"G\")\npath = [cell]\nwhile dist[cell] > 0\n  ring = dist[cell] - 1\n  cell = open_neighbours(maze, cell).find { |n| dist[n] == ring }\n  path << cell\nend\npath.reverse"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ecco la strada di Chunky: 16 celle da <code>S</code> a <code>G</code>, 15 passi. (Molti programmi tengono invece un secondo hash per questo, <code>came_from[n] = cell</code>: una scia di briciole da ogni cella a quella da cui è stata trovata. Qui i cerchi fanno lo stesso lavoro.) Adesso disegniamola. Attenzione alla copia: <code>maze.dup</code> copierebbe solo l'array, e le stringhe al suo interno sarebbero esattamente le stesse; l'hai visto con le frecce nella lezione {{nr:arrays}}. E <code>picture[r][c] = \"*\"</code> modifica una stringa sul posto: sostituisce il carattere in posizione <code>c</code>. <code>map(&amp;:dup)</code> copia ogni singola riga:</p>"
+          },
+          {
+            "t": "c",
+            "code": "picture = maze.map(&:dup)\npath.each do |r, c|\n  picture[r][c] = \"*\" if picture[r][c] == \".\"\nend\nputs picture"
+          },
+          {
+            "t": "h",
+            "html": "<p>Il labirinto stesso è ancora pulito: prova <code>puts maze</code>. Vale la pena ricordarsi della ricerca in ampiezza: una coda per ciò che deve ancora venire, un hash per ciò che è già stato visto. Trova la strada più corta ogni volta che tutti i passi costano uguale: nei labirinti, sulle plance dei giochi, per le strade di una città, o tra amici di amici: quante strette di mano ti separano da chiunque altro? Quando i passi costano in modo diverso (fango, una collina), subentra un cugino, l'algoritmo di Dijkstra, che serve sempre per prima la cella più economica.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-push' target='_blank'>Array#push</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-shift' target='_blank'>Array#shift</a> · <a href='https://docs.ruby-lang.org/en/4.0/Hash.html#method-i-key-3F' target='_blank'>Hash#key?</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-index' target='_blank'>String#index</a></div><div class='task'><strong>Esercizio:</strong> Scrivi <code>steps_to_bacon(maze)</code>: il numero di passi della strada più corta da <code>S</code> a <code>G</code>, oppure <code>nil</code> quando i muri tagliano fuori il bacon. Ti aiutano <code>locate</code> e <code>open_neighbours</code> di sopra. Il controllo prova diversi labirinti, alcuni senza muro esterno.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def steps_to_bacon(maze)\n#   ...   # la ricerca in ampiezza da S, come sopra\n#   ...   # il numero di passi fino a G - o nil se non c'è strada\n# end\n\n# p steps_to_bacon(maze)\n# p steps_to_bacon([\"S.#.G\"])\n",
+            "hints": [
+              "Parti dalla cella della ricerca qui sopra e mettila nel metodo, con <code>maze</code> come parametro. Quando il ciclo è finito, <code>dist</code> conosce ogni cella che Chunky può raggiungere, e di <code>G</code> non sa nulla se le onde non ci sono mai arrivate."
+            ],
+            "check": "steps_to_bacon(%w[########## #S...#...# #.##.#.#.# #.#..#.#.# #.#.##.#.# #...#..#G# ###...##.# #...#....# ##########]) == 15 && steps_to_bacon(%w[SG]) == 1 && steps_to_bacon(%w[S.G]) == 2 && steps_to_bacon(%w[S... .... ...G]) == 5 && steps_to_bacon(%w[S.... .###. .#G#. .#.#. .....]) == 8 && steps_to_bacon(%w[S#G]).nil? && steps_to_bacon(%w[S.#.G]).nil? && steps_to_bacon(%w[S.#. ..#. ###. ...G]).nil?",
+            "hint": "<code>def steps_to_bacon(maze)</code>, dentro <code>start = locate(maze, \"S\")</code>, <code>dist = { start =&gt; 0 }</code>, <code>queue = [start]</code> e il ciclo <code>until queue.empty?</code> di sopra; alla fine <code>dist[locate(maze, \"G\")]</code>, che è <code>nil</code> da solo quando <code>G</code> non è mai stata raggiunta.",
+            "solution": "def steps_to_bacon(maze)\n  start = locate(maze, \"S\")\n  dist = { start => 0 }\n  queue = [start]\n  until queue.empty?\n    cell = queue.shift\n    open_neighbours(maze, cell).each do |n|\n      next if dist.key?(n)\n      dist[n] = dist[cell] + 1\n      queue.push(n)\n    end\n  end\n  dist[locate(maze, \"G\")]\nend\n\np steps_to_bacon(maze)\nsteps_to_bacon([\"S.#.G\"])"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Scrivi <code>bacon_trail(maze)</code>, che restituisce un <em>nuovo</em> labirinto con disegnata la strada più corta di Chunky: ogni cella tra <code>S</code> e <code>G</code> diventa un <code>*</code>, <code>S</code> e <code>G</code> restano come sono, e il labirinto ricevuto resta invariato. Quando non c'è strada, restituisce <code>nil</code>. (Se più strade sono ugualmente corte, va bene una qualsiasi.)</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def bacon_trail(maze)\n#   ...   # cerca come nell'esercizio, poi torna indietro da G\n#   ...   # una copia del labirinto con * sulla strada - o nil\n# end\n\n# puts bacon_trail(maze)\n",
+            "hints": [
+              "Prima la ricerca, come nell'esercizio, così che <code>dist</code> conosca ogni cerchio. Poi torna indietro da <code>G</code> come nella cella con <code>path</code>, e dipingi ogni cella della strada in una copia fatta con <code>map(&amp;:dup)</code>."
+            ],
+            "check": "->(ok) { ok.(%w[########## #S...#...# #.##.#.#.# #.#..#.#.# #.#.##.#.# #...#..#G# ###...##.# #...#....# ##########], 15) && ok.(%w[S.G], 2) && ok.(%w[SG], 1) && ok.(%w[S... .... ...G], 5) && ok.(%w[S.... .###. .#G#. .#.#. .....], 8) && bacon_trail(%w[S#G]).nil? && bacon_trail(%w[S.#.G]).nil? }.(->(m, len) { ->(orig, t) { m == orig && t.is_a?(Array) && t.map { |row| row.tr(\"*\", \".\") } == m && t.join.count(\"*\") == len - 1 && t.each_index.all? { |r| t[r].length.times.all? { |c| !\"*SG\".include?(t[r][c]) || [[r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]].count { |y, x| y >= 0 && x >= 0 && y < t.length && x < t[y].length && \"*SG\".include?(t[y][x]) } == (t[r][c] == \"*\" ? 2 : 1) } } }.(m.map(&:dup), bacon_trail(m)) })",
+            "hint": "Dopo la ricerca: <code>cell = locate(maze, \"G\")</code> e <code>return nil unless dist[cell]</code>; poi <code>picture = maze.map(&amp;:dup)</code> e <code>while dist[cell] &gt; 0</code>: fai un passo indietro con <code>find</code> come sopra, <code>r, c = cell</code>, <code>picture[r][c] = \"*\" if picture[r][c] == \".\"</code>. Alla fine restituisci <code>picture</code>.",
             "solution": "def bacon_trail(maze)\n  start = locate(maze, \"S\")\n  dist = { start => 0 }\n  queue = [start]\n  until queue.empty?\n    cell = queue.shift\n    open_neighbours(maze, cell).each do |n|\n      next if dist.key?(n)\n      dist[n] = dist[cell] + 1\n      queue.push(n)\n    end\n  end\n  cell = locate(maze, \"G\")\n  return nil unless dist[cell]\n  picture = maze.map(&:dup)\n  while dist[cell] > 0\n    ring = dist[cell] - 1\n    cell = open_neighbours(maze, cell).find { |n| dist[n] == ring }\n    r, c = cell\n    picture[r][c] = \"*\" if picture[r][c] == \".\"\n  end\n  picture\nend\n\nputs bacon_trail(maze)"
           }
         ]
@@ -15684,6 +18700,220 @@ window.LESSONS_JSON = JSON.stringify({
             "solution": "def typo_distance(a, b)\n  table = [(0..b.length).to_a]\n  1.upto(a.length) do |i|\n    row = [i]\n    1.upto(b.length) do |j|\n      cost = a[i - 1] == b[j - 1] ? 0 : 1\n      above = table[i - 1][j] + 1\n      left = row[j - 1] + 1\n      diagonal = table[i - 1][j - 1] + cost\n      best = [above, left, diagonal].min\n      swap = i > 1 && j > 1 && a[i - 1] == b[j - 2] && a[i - 2] == b[j - 1]\n      best = [best, table[i - 2][j - 2] + 1].min if swap\n      row << best\n    end\n    table << row\n  end\n  table.last.last\nend\n\ntypo_distance(\"bcaon\", \"bacon\")"
           }
         ]
+      },
+      "fr": {
+        "title": "À quel point deux mots se ressemblent-ils ?",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>À quel point deux mots se ressemblent-ils ?</h2><p>Faites une faute de frappe dans un nom, et Ruby ne se contente pas de râler : sous le message d’erreur, il propose ce que vous vouliez probablement dire – la leçon {{nr:fehler}} l’a montré. Essayez encore une fois, la cellule ci-dessous échoue exprès :</p>"
+          },
+          {
+            "t": "c",
+            "code": "breakfast = \"bacon\"\nputs breakfst",
+            "raises": "NameError"
+          },
+          {
+            "t": "h",
+            "html": "<p>Une <code>NameError</code>, et en dessous : « Did you mean <code>breakfast</code>? » (« Vouliez-vous dire… ? »). Ruby a comparé <code>breakfst</code> avec tous les noms qu’il connaît et a choisi celui qui est <em>le plus ressemblant</em>. Mais que veut dire « ressemblant » pour un ordinateur ? Il lui faut un nombre : à quelle distance deux mots sont-ils l’un de l’autre ? La mesure la plus simple fonctionne pour des mots de même longueur – compter les positions où ils diffèrent. C’est la <strong>distance de Hamming</strong>. <code>zip</code> range les lettres des deux mots côte à côte, par paires, et <code>count</code> compte les paires qui ne correspondent pas :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def hamming(a, b)\n  a.chars.zip(b.chars).count { |x, y| x != y }\nend\n\np hamming(\"toast\", \"roast\")\np hamming(\"bacon\", \"bagel\")\nhamming(\"chunky\", \"chunky\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Hamming a pourtant un point faible. Oubliez une seule lettre au début, et toutes les lettres suivantes glissent d’une place – d’un coup, plus <em>rien</em> ne correspond. (Là où un mot est terminé, <code>zip</code> associe la lettre à <code>nil</code>.)</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"chunky\".chars.zip(\"hunky\".chars)\nhamming(\"chunky\", \"hunky\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>6, pour une seule lettre manquante. Ce que nous voulons, c’est la <strong>distance d’édition</strong>, qui porte le nom de Vladimir Levenshtein : le plus petit nombre de modifications qui transforment un mot en l’autre, une modification consistant à insérer une lettre, à en supprimer une ou à en remplacer une. <code>\"hunky\"</code> devient <code>\"chunky\"</code> avec une insertion, leur distance vaut donc 1. Et voici comment on la calcule – regardez les premières lettres. Si elles sont égales, elles ne coûtent rien, et la distance est celle du reste. Sinon, essayez les trois modifications, qui coûtent chacune 1, et prenez la moins chère. Quand l’un des mots est vide, la distance est simplement la longueur de l’autre. C’est une récursion, comme dans la leçon {{nr:rekursion}} ; <code>a[1..]</code> est <code>a</code> sans sa première lettre :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def levenshtein(a, b)\n  return b.length if a.empty?\n  return a.length if b.empty?\n  return levenshtein(a[1..], b[1..]) if a[0] == b[0]\n  1 + [levenshtein(a[1..], b),          # supprimer la 1re lettre de a\n       levenshtein(a, b[1..]),          # insérer la 1re lettre de b\n       levenshtein(a[1..], b[1..])].min # remplacer l'une par l'autre\nend\n\np levenshtein(\"hunky\", \"chunky\")\nlevenshtein(\"chunky\", \"funky\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Juste – mais lent. Chaque fois que les premières lettres diffèrent, la méthode s’appelle elle-même trois fois, et chacun de ces appels peut recommencer. La plupart des appels posent des questions auxquelles on a répondu depuis longtemps : pour <code>\"chunky\"</code> et <code>\"funky\"</code>, il faut 1387 appels pour arriver à 2, et pour <code>\"chunky bacon\"</code> et <code>\"funky beacon\"</code>, ce serait plus de 40 millions – de nombreuses secondes, même hors du navigateur. Le remède est celui qu’utilisait <code>fast_fib</code> dans la leçon {{nr:rekursion}} : un hash comme mémoire. Ce qui a été calculé une fois est retrouvé, jamais recalculé :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def levenshtein_memo(a, b, memo = {})\n  return b.length if a.empty?\n  return a.length if b.empty?\n  memo[[a, b]] ||=\n    if a[0] == b[0]\n      levenshtein_memo(a[1..], b[1..], memo)\n    else\n      1 + [levenshtein_memo(a[1..], b, memo),\n           levenshtein_memo(a, b[1..], memo),\n           levenshtein_memo(a[1..], b[1..], memo)].min\n    end\nend\n\nmemo = {}\np levenshtein_memo(\"chunky bacon\", \"funky beacon\", memo)\nmemo.size"
+          },
+          {
+            "t": "h",
+            "html": "<p>3 modifications – supprimer le <code>c</code>, changer le <code>h</code> en <code>f</code>, insérer un <code>e</code> – et la mémoire ne contient que 142 réponses au lieu de 40 millions d’appels. Maintenant, retournons l’idée : au lieu de partir du haut en mémorisant en chemin, remplissez d’abord toutes les petites réponses, dans un ordre où tout ce dont une étape a besoin est déjà là – dans un tableau. La ligne <code>i</code>, colonne <code>j</code> contient la distance entre les <code>i</code> premières lettres de <code>a</code> et les <code>j</code> premières lettres de <code>b</code>. La ligne 0 compte 0, 1, 2 … (passer de rien à <code>j</code> lettres demande <code>j</code> insertions), et chaque ligne commence par son propre numéro. Toute autre case est la moins chère de trois : la case du dessus plus 1, la case de gauche plus 1, ou la case en diagonale en haut à gauche plus 0 ou 1. C’est ce qu’on appelle la <strong>programmation dynamique</strong> :</p>"
+          },
+          {
+            "t": "c",
+            "code": "a = \"chunky\"\nb = \"funky\"\ntable = [(0..b.length).to_a]\n1.upto(a.length) do |i|\n  row = [i]\n  1.upto(b.length) do |j|\n    cost = a[i - 1] == b[j - 1] ? 0 : 1\n    above = table[i - 1][j] + 1          # supprimer\n    left = row[j - 1] + 1                # insérer\n    diagonal = table[i - 1][j - 1] + cost  # garder ou remplacer\n    row << [above, left, diagonal].min\n  end\n  table << row\nend\ntable.last.last"
+          },
+          {
+            "t": "h",
+            "html": "<p>Le coin en bas à droite est la réponse, 2. Affichez le tableau avec les lettres le long des bords, et vous verrez comment il a été construit – ligne par ligne, chaque case à partir de ses voisines du dessus et de gauche :</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"    \" + b.chars.join(\" \")\ntable.each_with_index do |row, i|\n  letter = i == 0 ? \" \" : a[i - 1]\n  puts letter + \" \" + row.join(\" \")\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Suivez la diagonale : là où deux lettres correspondent (<code>u</code> et <code>u</code>, <code>n</code> et <code>n</code> …), le nombre est reporté gratuitement. Pas de récursion, pas de mémoire – deux boucles, et chaque case est remplie exactement une fois. Pour deux mots de 100 lettres, cela fait 10 000 petites additions, faites en un clin d’œil.</p><p>Avec une distance, « Vouliez-vous dire… ? » tient en une ligne : parmi tous les mots que vous connaissez, prenez celui qui est le plus proche de la faute de frappe. <code>min_by</code>, vu dans la leçon {{nr:iteratoren}}, fait exactement cela :</p>"
+          },
+          {
+            "t": "c",
+            "code": "menu = %w[bacon egg toast coffee pancake]\np menu.min_by { |w| levenshtein_memo(\"bacn\", w) }\nmenu.min_by { |w| levenshtein_memo(\"cofe\", w) }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Le « Did you mean? » de Ruby fonctionne de la même façon, et vous pouvez l’utiliser vous-même : <code>DidYouMean::SpellChecker</code> reçoit le dictionnaire, et <code>correct</code> renvoie les meilleurs candidats sous forme d’array. Un mot éloigné de tout n’obtient aucune suggestion – le correcteur a une limite, pour que <code>\"xylophone\"</code> ne devienne pas <code>\"toast\"</code>. (<code>require \"did_you_mean\"</code> garantit qu’il est chargé ; sur cette page, il l’est déjà.)</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"did_you_mean\"\nchecker = DidYouMean::SpellChecker.new(dictionary: menu)\np checker.correct(\"bacn\")\np checker.correct(\"panckae\")\nchecker.correct(\"xylophone\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>La distance d’édition transforme « ressemblant » en nombre. Les correcteurs orthographiques s’en servent, les champs de recherche qui pardonnent les fautes de frappe, et les biologistes qui comparent de l’ADN, dont les lettres ne sont que A, C, G et T. Une règle empirique de cette leçon va bien au-delà des mots : la récursion est la façon la plus simple de <em>comprendre</em> un problème ; une mémoire ou un tableau le rend <em>rapide</em>.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-zip' target='_blank'>Array#zip</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-5B-5D' target='_blank'>String#[]</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-min_by' target='_blank'>Enumerable#min_by</a> · <a href='https://docs.ruby-lang.org/en/4.0/DidYouMean/SpellChecker.html' target='_blank'>DidYouMean::SpellChecker</a></div><div class='task'><strong>Exercice :</strong> Écrivez votre propre « Vouliez-vous dire… ? » : <code>suggest(word, words)</code> renvoie le mot de <code>words</code> le plus proche de <code>word</code> – mais seulement s’il est à 2 modifications au plus ; sinon <code>nil</code>. Ainsi, <code>suggest(\"bacn\", %w[bacon egg toast])</code> vaut <code>\"bacon\"</code>, et <code>\"xylophone\"</code> obtient <code>nil</code>. <code>levenshtein_memo</code> vu plus haut mesure la distance.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def suggest(word, words)\n#   ...   # le mot de words à la plus petite distance d'édition de word\n#   ...   # - mais nil si même celui-là est à plus de 2 modifications\n# end\n\n# p suggest(\"bacn\", %w[bacon egg toast])\n# p suggest(\"xylophone\", %w[bacon egg toast])\n",
+            "hints": [
+              "Trouvez le mot le plus proche avec <code>min_by</code> et <code>levenshtein_memo</code>, comme dans la cellule du menu plus haut. Mesurez ensuite encore une fois la distance de ce mot et décidez : 2 au plus – le mot ; sinon <code>nil</code>."
+            ],
+            "check": "suggest(\"bacn\", %w[bacon egg toast coffee]) == \"bacon\" && suggest(\"tost\", %w[bacon egg toast coffee]) == \"toast\" && suggest(\"coffee\", %w[bacon egg toast coffee]) == \"coffee\" && suggest(\"bcaon\", %w[bacon egg toast coffee]) == \"bacon\" && suggest(\"beacons\", %w[bacon egg toast coffee]) == \"bacon\" && suggest(\"eggs\", %w[eggplant egg]) == \"egg\" && suggest(\"fax\", %w[box fox]) == \"fox\" && suggest(\"toasters\", %w[bacon egg toast coffee]).nil? && suggest(\"pancakes\", %w[bacon egg toast coffee]).nil?",
+            "hint": "<code>best = words.min_by { |w| levenshtein_memo(word, w) }</code>, puis <code>best if levenshtein_memo(word, best) &lt;= 2</code> – un <code>if</code> sans <code>else</code> donne <code>nil</code> tout seul.",
+            "solution": "def suggest(word, words)\n  best = words.min_by { |w| levenshtein_memo(word, w) }\n  best if levenshtein_memo(word, best) <= 2\nend\n\np suggest(\"bacn\", %w[bacon egg toast])\nsuggest(\"xylophone\", %w[bacon egg toast])"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Quand on tape vite, les doigts inversent des lettres : <code>\"bcaon\"</code>. Pour Levenshtein, cela coûte 2 – deux remplacements. Écrivez <code>typo_distance(a, b)</code>, la distance d’édition dans laquelle échanger deux lettres voisines ne compte que pour <em>une</em> modification : <code>typo_distance(\"bcaon\", \"bacon\")</code> vaut 1. Construisez le tableau comme plus haut et donnez à chaque case un quatrième candidat.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def typo_distance(a, b)\n#   ...   # le tableau comme plus haut, ligne par ligne\n#   ...   # en plus : deux lettres voisines inversées ne coûtent que 1\n# end\n\n# typo_distance(\"bcaon\", \"bacon\")\n",
+            "hints": [
+              "Mettez la cellule du tableau dans une méthode. L’échange est un candidat de plus pour le <code>min</code> : quand <code>a[i - 1] == b[j - 2]</code> et <code>a[i - 2] == b[j - 1]</code>, les deux dernières lettres sont inversées, et <code>table[i - 2][j - 2] + 1</code> est possible aussi – mais seulement à partir de <code>i &gt; 1</code> et <code>j &gt; 1</code>."
+            ],
+            "check": "typo_distance(\"bcaon\", \"bacon\") == 1 && typo_distance(\"chunky\", \"chnuky\") == 1 && typo_distance(\"ab\", \"ba\") == 1 && typo_distance(\"toast\", \"otsat\") == 2 && typo_distance(\"chunky\", \"funky\") == 2 && typo_distance(\"abcd\", \"badc\") == 2 && typo_distance(\"\", \"egg\") == 3 && typo_distance(\"egg\", \"\") == 3 && typo_distance(\"bacon\", \"bacon\") == 0 && [[\"bacon\", \"beacon\"], [\"fox\", \"foxes\"], [\"pancake\", \"bacon\"], [\"kitten\", \"sitting\"]].all? { |x, y| typo_distance(x, y) == levenshtein_memo(x, y) }",
+            "hint": "Dans la boucle intérieure, après <code>best = [above, left, diagonal].min</code> : <code>swap = i &gt; 1 &amp;&amp; j &gt; 1 &amp;&amp; a[i - 1] == b[j - 2] &amp;&amp; a[i - 2] == b[j - 1]</code> et <code>best = [best, table[i - 2][j - 2] + 1].min if swap</code>, puis <code>row &lt;&lt; best</code>. À la fin, <code>table.last.last</code>.",
+            "solution": "def typo_distance(a, b)\n  table = [(0..b.length).to_a]\n  1.upto(a.length) do |i|\n    row = [i]\n    1.upto(b.length) do |j|\n      cost = a[i - 1] == b[j - 1] ? 0 : 1\n      above = table[i - 1][j] + 1\n      left = row[j - 1] + 1\n      diagonal = table[i - 1][j - 1] + cost\n      best = [above, left, diagonal].min\n      swap = i > 1 && j > 1 && a[i - 1] == b[j - 2] && a[i - 2] == b[j - 1]\n      best = [best, table[i - 2][j - 2] + 1].min if swap\n      row << best\n    end\n    table << row\n  end\n  table.last.last\nend\n\ntypo_distance(\"bcaon\", \"bacon\")"
+          }
+        ]
+      },
+      "it": {
+        "title": "Quanto si somigliano due parole?",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Quanto si somigliano due parole?</h2><p>Fai un errore di battitura in un nome, e Ruby non si limita a lamentarsi: sotto il messaggio d'errore ti suggerisce che cosa probabilmente intendevi, come ha mostrato la lezione {{nr:fehler}}. Riprova ancora una volta, la cella qui sotto sbaglia apposta:</p>"
+          },
+          {
+            "t": "c",
+            "code": "breakfast = \"bacon\"\nputs breakfst",
+            "raises": "NameError"
+          },
+          {
+            "t": "h",
+            "html": "<p>Un <code>NameError</code>, e sotto: “Did you mean <code>breakfast</code>?” (“Intendevi…?”). Ruby ha confrontato <code>breakfst</code> con tutti i nomi che conosce e ha scelto quello <em>più simile</em>. Ma che cosa vuol dire “simile” per un computer? Gli serve un numero: quanto sono distanti due parole? La misura più semplice funziona per parole della stessa lunghezza: contare le posizioni in cui sono diverse. È la <strong>distanza di Hamming</strong>. <code>zip</code> mette le lettere delle due parole una accanto all'altra, a coppie, e <code>count</code> conta le coppie che non coincidono:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def hamming(a, b)\n  a.chars.zip(b.chars).count { |x, y| x != y }\nend\n\np hamming(\"toast\", \"roast\")\np hamming(\"bacon\", \"bagel\")\nhamming(\"chunky\", \"chunky\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Hamming però ha un punto debole. Togli una sola lettera all'inizio, e tutte le lettere successive scivolano di un posto: di colpo non coincide più <em>niente</em>. (Dove una parola è finita, <code>zip</code> abbina la lettera a <code>nil</code>.)</p>"
+          },
+          {
+            "t": "c",
+            "code": "p \"chunky\".chars.zip(\"hunky\".chars)\nhamming(\"chunky\", \"hunky\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>6, per una sola lettera mancante. Quello che vogliamo è la <strong>distanza di edit</strong>, che porta il nome di Vladimir Levenshtein: il numero minimo di modifiche che trasformano una parola nell'altra, dove una modifica è inserire una lettera, cancellarne una o sostituirne una. <code>\"hunky\"</code> diventa <code>\"chunky\"</code> con un inserimento, quindi la loro distanza è 1. Ed ecco come si calcola: guarda le prime lettere. Se sono uguali non costano niente, e la distanza è quella del resto. Altrimenti prova tutte e tre le modifiche, ognuna costa 1, e prendi la più economica. Quando una parola è vuota, la distanza è semplicemente la lunghezza dell'altra. È una ricorsione, come nella lezione {{nr:rekursion}}; <code>a[1..]</code> è <code>a</code> senza la prima lettera:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def levenshtein(a, b)\n  return b.length if a.empty?\n  return a.length if b.empty?\n  return levenshtein(a[1..], b[1..]) if a[0] == b[0]\n  1 + [levenshtein(a[1..], b),          # cancella la prima lettera di a\n       levenshtein(a, b[1..]),          # inserisci la prima lettera di b\n       levenshtein(a[1..], b[1..])].min # sostituisci l'una con l'altra\nend\n\np levenshtein(\"hunky\", \"chunky\")\nlevenshtein(\"chunky\", \"funky\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Giusto, ma lento. Ogni volta che le prime lettere sono diverse, il metodo chiama se stesso tre volte, e ognuna di queste chiamate può fare di nuovo lo stesso. La maggior parte delle chiamate pone domande a cui si è già risposto da tempo: per <code>\"chunky\"</code> e <code>\"funky\"</code> servono 1387 chiamate per arrivare a 2, e per <code>\"chunky bacon\"</code> e <code>\"funky beacon\"</code> sarebbero più di 40 milioni, parecchi secondi anche fuori dal browser. Il rimedio è quello che usava <code>fast_fib</code> nella lezione {{nr:rekursion}}: un hash come memoria. Ciò che è stato calcolato una volta viene ripreso, mai ricalcolato:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def levenshtein_memo(a, b, memo = {})\n  return b.length if a.empty?\n  return a.length if b.empty?\n  memo[[a, b]] ||=\n    if a[0] == b[0]\n      levenshtein_memo(a[1..], b[1..], memo)\n    else\n      1 + [levenshtein_memo(a[1..], b, memo),\n           levenshtein_memo(a, b[1..], memo),\n           levenshtein_memo(a[1..], b[1..], memo)].min\n    end\nend\n\nmemo = {}\np levenshtein_memo(\"chunky bacon\", \"funky beacon\", memo)\nmemo.size"
+          },
+          {
+            "t": "h",
+            "html": "<p>3 modifiche (cancellare la <code>c</code>, trasformare la <code>h</code> in una <code>f</code>, inserire una <code>e</code>) e la memoria contiene appena 142 risposte invece di 40 milioni di chiamate. Ora capovolgi l'idea: invece di chiedere dall'alto e ricordare lungo la strada, riempi prima tutte le risposte piccole, in un ordine in cui tutto ciò che serve a un passo c'è già: in una tabella. La riga <code>i</code>, colonna <code>j</code> contiene la distanza tra le prime <code>i</code> lettere di <code>a</code> e le prime <code>j</code> lettere di <code>b</code>. La riga 0 conta 0, 1, 2 … (dal nulla a <code>j</code> lettere servono <code>j</code> inserimenti), e ogni riga comincia con il proprio numero. Ogni altra casella è la più economica fra tre: la casella sopra più 1, la casella a sinistra più 1, o la casella in diagonale in alto a sinistra più 0 o 1. Si chiama <strong>programmazione dinamica</strong>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "a = \"chunky\"\nb = \"funky\"\ntable = [(0..b.length).to_a]\n1.upto(a.length) do |i|\n  row = [i]\n  1.upto(b.length) do |j|\n    cost = a[i - 1] == b[j - 1] ? 0 : 1\n    above = table[i - 1][j] + 1          # cancella\n    left = row[j - 1] + 1                # inserisci\n    diagonal = table[i - 1][j - 1] + cost  # tieni o sostituisci\n    row << [above, left, diagonal].min\n  end\n  table << row\nend\ntable.last.last"
+          },
+          {
+            "t": "h",
+            "html": "<p>L'angolo in basso a destra è la risposta, 2. Stampa la tabella con le lettere lungo i bordi, e vedrai come è stata costruita: riga per riga, ogni casella a partire dalle vicine sopra e a sinistra:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts \"    \" + b.chars.join(\" \")\ntable.each_with_index do |row, i|\n  letter = i == 0 ? \" \" : a[i - 1]\n  puts letter + \" \" + row.join(\" \")\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Segui la diagonale: dove due lettere coincidono (<code>u</code> e <code>u</code>, <code>n</code> e <code>n</code> …) il numero viene riportato gratis. Niente ricorsione, niente memoria: due cicli, e ogni casella viene riempita esattamente una volta. Per due parole di 100 lettere sono 10.000 piccole somme, fatte in un batter d'occhio.</p><p>Con una distanza, “Intendevi…?” sta in una riga: fra tutte le parole che conosci, prendi quella più vicina all'errore di battitura. <code>min_by</code> della lezione {{nr:iteratoren}} fa proprio questo:</p>"
+          },
+          {
+            "t": "c",
+            "code": "menu = %w[bacon egg toast coffee pancake]\np menu.min_by { |w| levenshtein_memo(\"bacn\", w) }\nmenu.min_by { |w| levenshtein_memo(\"cofe\", w) }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Il “Did you mean?” di Ruby funziona allo stesso modo, e puoi usarlo anche tu: <code>DidYouMean::SpellChecker</code> riceve il dizionario, e <code>correct</code> restituisce i candidati migliori come array. Una parola lontana da tutto non riceve alcun suggerimento: il correttore ha un limite, così <code>\"xylophone\"</code> non diventa <code>\"toast\"</code>. (<code>require \"did_you_mean\"</code> assicura che sia caricato; in questa pagina lo è già.)</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"did_you_mean\"\nchecker = DidYouMean::SpellChecker.new(dictionary: menu)\np checker.correct(\"bacn\")\np checker.correct(\"panckae\")\nchecker.correct(\"xylophone\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>La distanza di edit trasforma “simile” in un numero. La usano i correttori ortografici, le caselle di ricerca che perdonano gli errori di battitura e i biologi che confrontano il DNA, le cui lettere sono solo A, C, G e T. Una regola pratica di questa lezione va ben oltre le parole: la ricorsione è il modo più semplice per <em>capire</em> un problema; una memoria o una tabella lo rendono <em>veloce</em>.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-zip' target='_blank'>Array#zip</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-5B-5D' target='_blank'>String#[]</a> · <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-min_by' target='_blank'>Enumerable#min_by</a> · <a href='https://docs.ruby-lang.org/en/4.0/DidYouMean/SpellChecker.html' target='_blank'>DidYouMean::SpellChecker</a></div><div class='task'><strong>Esercizio:</strong> Scrivi il tuo “Intendevi…?”: <code>suggest(word, words)</code> restituisce la parola di <code>words</code> più vicina a <code>word</code>, ma solo se dista al massimo 2 modifiche; altrimenti <code>nil</code>. Quindi <code>suggest(\"bacn\", %w[bacon egg toast])</code> è <code>\"bacon\"</code>, e <code>\"xylophone\"</code> riceve <code>nil</code>. <code>levenshtein_memo</code> di sopra misura la distanza.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def suggest(word, words)\n#   ...   # la parola di words con la distanza di edit minima da word\n#   ...   # - ma nil se anche quella dista più di 2 modifiche\n# end\n\n# p suggest(\"bacn\", %w[bacon egg toast])\n# p suggest(\"xylophone\", %w[bacon egg toast])\n",
+            "hints": [
+              "Trova la parola più vicina con <code>min_by</code> e <code>levenshtein_memo</code>, come nella cella del menu qui sopra. Poi misura ancora una volta la distanza di quella parola e decidi: al massimo 2, la parola; altrimenti <code>nil</code>."
+            ],
+            "check": "suggest(\"bacn\", %w[bacon egg toast coffee]) == \"bacon\" && suggest(\"tost\", %w[bacon egg toast coffee]) == \"toast\" && suggest(\"coffee\", %w[bacon egg toast coffee]) == \"coffee\" && suggest(\"bcaon\", %w[bacon egg toast coffee]) == \"bacon\" && suggest(\"beacons\", %w[bacon egg toast coffee]) == \"bacon\" && suggest(\"eggs\", %w[eggplant egg]) == \"egg\" && suggest(\"fax\", %w[box fox]) == \"fox\" && suggest(\"toasters\", %w[bacon egg toast coffee]).nil? && suggest(\"pancakes\", %w[bacon egg toast coffee]).nil?",
+            "hint": "<code>best = words.min_by { |w| levenshtein_memo(word, w) }</code>, poi <code>best if levenshtein_memo(word, best) &lt;= 2</code>: un <code>if</code> senza <code>else</code> dà <code>nil</code> da solo.",
+            "solution": "def suggest(word, words)\n  best = words.min_by { |w| levenshtein_memo(word, w) }\n  best if levenshtein_memo(word, best) <= 2\nend\n\np suggest(\"bacn\", %w[bacon egg toast])\nsuggest(\"xylophone\", %w[bacon egg toast])"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Quando scrivi in fretta, le dita scambiano le lettere: <code>\"bcaon\"</code>. Per Levenshtein costa 2, due sostituzioni. Scrivi <code>typo_distance(a, b)</code>, la distanza di edit in cui scambiare due lettere vicine conta come <em>una</em> sola modifica: <code>typo_distance(\"bcaon\", \"bacon\")</code> è 1. Costruisci la tabella come sopra e dai a ogni casella un quarto candidato.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def typo_distance(a, b)\n#   ...   # la tabella come sopra, riga per riga\n#   ...   # in più: due lettere vicine scambiate costano solo 1\n# end\n\n# typo_distance(\"bcaon\", \"bacon\")\n",
+            "hints": [
+              "Metti la cella della tabella in un metodo. Lo scambio è un candidato in più per il <code>min</code>: quando <code>a[i - 1] == b[j - 2]</code> e <code>a[i - 2] == b[j - 1]</code>, le ultime due lettere sono scambiate, ed è possibile anche <code>table[i - 2][j - 2] + 1</code>, ma solo da <code>i &gt; 1</code> e <code>j &gt; 1</code> in poi."
+            ],
+            "check": "typo_distance(\"bcaon\", \"bacon\") == 1 && typo_distance(\"chunky\", \"chnuky\") == 1 && typo_distance(\"ab\", \"ba\") == 1 && typo_distance(\"toast\", \"otsat\") == 2 && typo_distance(\"chunky\", \"funky\") == 2 && typo_distance(\"abcd\", \"badc\") == 2 && typo_distance(\"\", \"egg\") == 3 && typo_distance(\"egg\", \"\") == 3 && typo_distance(\"bacon\", \"bacon\") == 0 && [[\"bacon\", \"beacon\"], [\"fox\", \"foxes\"], [\"pancake\", \"bacon\"], [\"kitten\", \"sitting\"]].all? { |x, y| typo_distance(x, y) == levenshtein_memo(x, y) }",
+            "hint": "Nel ciclo interno, dopo <code>best = [above, left, diagonal].min</code>: <code>swap = i &gt; 1 &amp;&amp; j &gt; 1 &amp;&amp; a[i - 1] == b[j - 2] &amp;&amp; a[i - 2] == b[j - 1]</code> e <code>best = [best, table[i - 2][j - 2] + 1].min if swap</code>, poi <code>row &lt;&lt; best</code>. Alla fine, <code>table.last.last</code>.",
+            "solution": "def typo_distance(a, b)\n  table = [(0..b.length).to_a]\n  1.upto(a.length) do |i|\n    row = [i]\n    1.upto(b.length) do |j|\n      cost = a[i - 1] == b[j - 1] ? 0 : 1\n      above = table[i - 1][j] + 1\n      left = row[j - 1] + 1\n      diagonal = table[i - 1][j - 1] + cost\n      best = [above, left, diagonal].min\n      swap = i > 1 && j > 1 && a[i - 1] == b[j - 2] && a[i - 2] == b[j - 1]\n      best = [best, table[i - 2][j - 2] + 1].min if swap\n      row << best\n    end\n    table << row\n  end\n  table.last.last\nend\n\ntypo_distance(\"bcaon\", \"bacon\")"
+          }
+        ]
       }
     },
     {
@@ -15931,6 +19161,170 @@ window.LESSONS_JSON = JSON.stringify({
             ],
             "check": "->(g) { 20.times { g = next_generation_wrapped(g) }; g }.(%w[.#... ..#.. ###.. ..... .....]) == %w[.#... ..#.. ###.. ..... .....] && next_generation_wrapped(%w[.#... ..#.. ###.. ..... .....]) == %w[..... #.#.. .##.. .#... .....] && next_generation_wrapped(%w[..... ....# ....# ....# .....]) == %w[..... ..... #..## ..... .....] && next_generation_wrapped(%w[#...# ..... ..... ..... #...#]) == %w[#...# ..... ..... ..... #...#] && next_generation_wrapped(%w[...... ...... .###.. ...... ...... ......]) == %w[...... ..#... ..#... ..#... ...... ......] && ->(g) { next_generation_wrapped(g); g == %w[..... ..... .###. ..... .....] }.(%w[..... ..... .###. ..... .....])",
             "hint": "課題と同じだけど、数えるのは<code>offsets.count { |dr, dc| grid[(r + dr) % rows][(c + dc) % cols] == \"#\" }</code>で、<code>offsets = [-1, 0, 1].product([-1, 0, 1]) - [[0, 0]]</code>、<code>rows = grid.length</code>、<code>cols = grid[0].length</code>だよ。",
+            "solution": "def next_generation_wrapped(grid)\n  rows = grid.length\n  cols = grid[0].length\n  offsets = [-1, 0, 1].product([-1, 0, 1]) - [[0, 0]]\n  rows.times.map do |r|\n    cols.times.map do |c|\n      n = offsets.count do |dr, dc|\n        grid[(r + dr) % rows][(c + dc) % cols] == \"#\"\n      end\n      alive = grid[r][c] == \"#\"\n      n == 3 || (alive && n == 2) ? \"#\" : \".\"\n    end.join\n  end\nend\n\nputs next_generation_wrapped(%w[....# ....# ....# ..... .....])"
+          }
+        ]
+      },
+      "fr": {
+        "title": "Le jeu de la vie de Conway",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Le jeu de la vie de Conway</h2><p>En 1970, le mathématicien John Conway a inventé un jeu sans joueurs. Le plateau est une grille de cellules, et chaque cellule est soit vivante, soit morte. D’une génération à la suivante, chaque cellule regarde ses huit voisines – en haut, en bas, à gauche, à droite et les quatre diagonales – et deux règles seulement décident de son sort :</p><ul><li>Une cellule morte avec <strong>exactement 3</strong> voisines vivantes prend vie – elle naît.</li><li>Une cellule vivante avec <strong>2 ou 3</strong> voisines vivantes survit. Avec moins, elle meurt de solitude ; avec plus, d’étouffement.</li></ul><p>C’est tout. Et pourtant, de ces règles naissent des formes qui clignotent, restent immobiles ou traversent le plateau. Comme pour un labyrinthe, une grille de chaînes suffit : <code>#</code> est vivant, <code>.</code> mort. Voici trois formes célèbres, côte à côte – <code>transpose</code> transforme la liste des trois grilles en une liste de lignes, chacune avec une ligne de chaque grille, et <code>tr</code> remplace les caractères par de plus jolis :</p>"
+          },
+          {
+            "t": "c",
+            "code": "blinker = [\".....\", \"..#..\", \"..#..\", \"..#..\", \".....\"]\nblock   = [\".....\", \".##..\", \".##..\", \".....\", \".....\"]\nglider  = [\".#...\", \"..#..\", \"###..\", \".....\", \".....\"]\n[blinker, block, glider].transpose.each do |rows|\n  puts rows.join(\"   \").tr(\"#.\", \"█·\")\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Quelles cellules sont les voisines ? Celles dont la ligne et la colonne diffèrent de −1, 0 ou +1. <code>product</code> forme toutes les paires de deux listes – ici les 9 combinaisons de pas en ligne et en colonne. L’une d’elles est la cellule elle-même, <code>[0, 0]</code>, et ce n’est pas une voisine :</p>"
+          },
+          {
+            "t": "c",
+            "code": "offsets = [-1, 0, 1].product([-1, 0, 1])\np offsets.length\noffsets - [[0, 0]]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Au bord du plateau, il y a moins de voisines : en dehors du plateau, tout compte comme mort. Attention – Ruby ne signale aucune erreur pour un pas hors du plateau. Un nombre négatif compte depuis l’autre extrémité, si bien qu’une cellule de la ligne du haut compterait des cellules de la ligne du <em>bas</em> parmi ses voisines, et au-delà de la fin il y a <code>nil</code> :</p>"
+          },
+          {
+            "t": "c",
+            "code": "p glider[-1]      # pas d'erreur : la dernière ligne\np glider[0][-1]   # la dernière case de la première ligne\nglider[0][5]      # au-delà de la fin : nil"
+          },
+          {
+            "t": "h",
+            "html": "<p>La méthode qui compte vérifie donc d’abord que la voisine se trouve dans le plateau, et seulement ensuite si elle est vivante. <code>count</code> avec un bloc compte les décalages pour lesquels le bloc est vrai :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def live_neighbours(grid, row, col)\n  offsets = [-1, 0, 1].product([-1, 0, 1]) - [[0, 0]]\n  offsets.count do |dr, dc|\n    r = row + dr\n    c = col + dc\n    inside = r >= 0 && c >= 0 && r < grid.length && c < grid[r].length\n    inside && grid[r][c] == \"#\"\n  end\nend\n\np live_neighbours(blinker, 2, 1)\nlive_neighbours(blinker, 2, 2)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Le milieu du clignotant a 2 voisines vivantes, la cellule à sa gauche 3. Comptons toutes les cellules du clignotant d’un coup et affichons les nombres dans sa forme :</p>"
+          },
+          {
+            "t": "c",
+            "code": "blinker.length.times do |r|\n  width = blinker[r].length\n  puts width.times.map { |c| live_neighbours(blinker, r, c) }.join\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Lisons maintenant les règles dans les nombres. Les deux cellules à gauche et à droite du milieu ont un 3 – elles naissent. Le milieu a 2 et continue de vivre. Les extrémités du haut et du bas n’ont que 1 – elles meurent. La ligne verticale devient donc horizontale. Un point est important ici : toutes les cellules changent <em>en même temps</em>. La génération suivante est une <em>nouvelle</em> grille, comptée dans l’ancienne – si vous modifiiez l’ancienne grille pendant le comptage, une cellule fraîchement née compterait déjà pour ses voisines. En Ruby, les deux règles tiennent en une seule ligne : <code>n == 3 || (alive &amp;&amp; n == 2)</code>. Voici le planeur, sur quatre générations, côte à côte :</p>"
+          },
+          {
+            "t": "c",
+            "code": "grid = glider\nframes = [grid]\n4.times do\n  grid = grid.length.times.map do |r|\n    grid[r].length.times.map do |c|\n      n = live_neighbours(grid, r, c)\n      alive = grid[r][c] == \"#\"\n      n == 3 || (alive && n == 2) ? \"#\" : \".\"\n    end.join\n  end\n  frames << grid\nend\nframes.transpose.each { |rows| puts rows.join(\"  \").tr(\"#.\", \"█·\") }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Après quatre générations, le planeur a retrouvé sa forme – une case plus bas et plus à droite. Il marche ! Changez la première ligne en <code>grid = blinker</code> : le clignotant bascule entre vertical et horizontal, et <code>grid = block</code> reste exactement tel quel. Les formes qui se répètent s’appellent des oscillateurs, celles qui ne changent jamais des natures mortes, celles qui se déplacent des vaisseaux. Les règles simples de Conway se révèlent assez puissantes pour construire un ordinateur entier à partir de planeurs. La règle d’or pour toute simulation de ce genre : construisez l’état suivant comme une nouvelle grille à partir de l’ancienne, et ne modifiez jamais la grille dans laquelle vous êtes encore en train de compter.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-product' target='_blank'>Array#product</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-transpose' target='_blank'>Array#transpose</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-tr' target='_blank'>String#tr</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-25' target='_blank'>Integer#%</a></div><div class='task'><strong>Exercice :</strong> Écrivez <code>next_generation(grid)</code> : elle renvoie la génération suivante de n’importe quelle grille de <code>#</code> et de <code>.</code> sous forme de nouvel array de chaînes, et laisse inchangée la grille qu’elle reçoit. <code>live_neighbours</code> vu plus haut se charge du comptage. La vérification essaie le clignotant, le bloc, le planeur et quelques cellules au bord.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def next_generation(grid)\n#   ...   # une nouvelle grille : chaque cellule selon les règles, comptée dans l'ancienne\n# end\n\n# puts next_generation(blinker)\n",
+            "hints": [
+              "La partie à l’intérieur de <code>4.times</code> dans la cellule du planeur correspond exactement à une génération : mettez-la dans la méthode avec <code>grid</code> comme paramètre, et renvoyez la nouvelle grille au lieu de collecter des images."
+            ],
+            "check": "next_generation(%w[..... ..#.. ..#.. ..#.. .....]) == %w[..... ..... .###. ..... .....] && next_generation(%w[..... ..... .###. ..... .....]) == %w[..... ..#.. ..#.. ..#.. .....] && next_generation(%w[.... .##. .##. ....]) == %w[.... .##. .##. ....] && next_generation(%w[...... .###.. ......]) == %w[..#... ..#... ..#...] && next_generation(%w[..# ..# ..#]) == %w[... .## ...] && next_generation(%w[#.. ... ...]) == %w[... ... ...] && ->(g) { 4.times { g = next_generation(g) }; g }.(%w[.#.... ..#... ###... ...... ...... ......]) == %w[...... ..#... ...#.. .###.. ...... ......] && ->(g) { next_generation(g); g == %w[.#. .#. .#.] }.(%w[.#. .#. .#.])",
+            "hint": "<code>def next_generation(grid)</code>, à l’intérieur <code>grid.length.times.map do |r|</code>, dedans <code>grid[r].length.times.map do |c|</code> avec <code>n</code>, <code>alive</code> et la règle <code>n == 3 || (alive &amp;&amp; n == 2) ? \"#\" : \".\"</code>, puis <code>end.join</code> et <code>end</code>.",
+            "solution": "def next_generation(grid)\n  grid.length.times.map do |r|\n    grid[r].length.times.map do |c|\n      n = live_neighbours(grid, r, c)\n      alive = grid[r][c] == \"#\"\n      n == 3 || (alive && n == 2) ? \"#\" : \".\"\n    end.join\n  end\nend\n\nputs next_generation(blinker)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Sur un plateau avec des bords, le planeur finit vite dans le coin – sur notre plateau de 5 × 5, il se fige en bloc après 11 générations. Beaucoup de programmes de Life font donc boucler le plateau : ce qui sort par le bord droit revient par la gauche, ce qui sort par le bas revient par le haut – le plateau devient un beignet. Écrivez <code>next_generation_wrapped(grid)</code>. Le reste <code>%</code> de la leçon {{nr:rechnen}} s’occupe du bouclage : avec 5 colonnes, <code>(4 + 1) % 5</code> vaut 0, et en Ruby même <code>-1 % 5</code> vaut 4. Sur un beignet de 5 × 5, le planeur est revenu à son point de départ après 20 générations.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def next_generation_wrapped(grid)\n#   ...   # comme une génération plus haut, mais le plateau boucle :\n#   ...   # après le bord droit vient le bord gauche, après le haut le bas\n# end\n\n# puts next_generation_wrapped(%w[....# ....# ....# ..... .....])\n",
+            "hints": [
+              "Cette fois, comptez les voisines vous-même, sans <code>live_neighbours</code> : avec <code>rows</code> et <code>cols</code> pour la taille du plateau, la voisine de <code>r, c</code> se trouve en <code>(r + dr) % rows</code> et <code>(c + dc) % cols</code> – toujours dans le plateau, il n’y a donc rien à vérifier."
+            ],
+            "check": "->(g) { 20.times { g = next_generation_wrapped(g) }; g }.(%w[.#... ..#.. ###.. ..... .....]) == %w[.#... ..#.. ###.. ..... .....] && next_generation_wrapped(%w[.#... ..#.. ###.. ..... .....]) == %w[..... #.#.. .##.. .#... .....] && next_generation_wrapped(%w[..... ....# ....# ....# .....]) == %w[..... ..... #..## ..... .....] && next_generation_wrapped(%w[#...# ..... ..... ..... #...#]) == %w[#...# ..... ..... ..... #...#] && next_generation_wrapped(%w[...... ...... .###.. ...... ...... ......]) == %w[...... ..#... ..#... ..#... ...... ......] && ->(g) { next_generation_wrapped(g); g == %w[..... ..... .###. ..... .....] }.(%w[..... ..... .###. ..... .....])",
+            "hint": "Comme dans l’exercice, mais le comptage est <code>offsets.count { |dr, dc| grid[(r + dr) % rows][(c + dc) % cols] == \"#\" }</code>, avec <code>offsets = [-1, 0, 1].product([-1, 0, 1]) - [[0, 0]]</code>, <code>rows = grid.length</code> et <code>cols = grid[0].length</code>.",
+            "solution": "def next_generation_wrapped(grid)\n  rows = grid.length\n  cols = grid[0].length\n  offsets = [-1, 0, 1].product([-1, 0, 1]) - [[0, 0]]\n  rows.times.map do |r|\n    cols.times.map do |c|\n      n = offsets.count do |dr, dc|\n        grid[(r + dr) % rows][(c + dc) % cols] == \"#\"\n      end\n      alive = grid[r][c] == \"#\"\n      n == 3 || (alive && n == 2) ? \"#\" : \".\"\n    end.join\n  end\nend\n\nputs next_generation_wrapped(%w[....# ....# ....# ..... .....])"
+          }
+        ]
+      },
+      "it": {
+        "title": "Il gioco della vita di Conway",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Il gioco della vita di Conway</h2><p>Nel 1970 il matematico John Conway inventò un gioco senza giocatori. Il tabellone è una griglia di celle, e ogni cella è viva o morta. Da una generazione alla successiva, ogni cella guarda le sue otto vicine (sopra, sotto, a sinistra, a destra e le quattro diagonali) e solo due regole decidono il suo destino:</p><ul><li>Una cella morta con <strong>esattamente 3</strong> vicine vive prende vita: nasce.</li><li>Una cella viva con <strong>2 o 3</strong> vicine vive sopravvive. Con meno muore di solitudine, con di più di sovraffollamento.</li></ul><p>Tutto qui. Eppure da queste regole nascono forme che lampeggiano, stanno ferme o attraversano il tabellone. Come per un labirinto, basta una griglia di stringhe: <code>#</code> è viva, <code>.</code> morta. Ecco tre forme famose, una accanto all'altra: <code>transpose</code> trasforma l'elenco delle tre griglie in un elenco di righe, ognuna con una riga di ogni griglia, e <code>tr</code> sostituisce i caratteri con altri più belli:</p>"
+          },
+          {
+            "t": "c",
+            "code": "blinker = [\".....\", \"..#..\", \"..#..\", \"..#..\", \".....\"]\nblock   = [\".....\", \".##..\", \".##..\", \".....\", \".....\"]\nglider  = [\".#...\", \"..#..\", \"###..\", \".....\", \".....\"]\n[blinker, block, glider].transpose.each do |rows|\n  puts rows.join(\"   \").tr(\"#.\", \"█·\")\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Quali celle sono le vicine? Quelle la cui riga e colonna differiscono di −1, 0 o +1. <code>product</code> forma tutte le coppie di due liste, qui tutte le 9 combinazioni di passo di riga e di colonna. Una di queste è la cella stessa, <code>[0, 0]</code>, e quella non è una vicina:</p>"
+          },
+          {
+            "t": "c",
+            "code": "offsets = [-1, 0, 1].product([-1, 0, 1])\np offsets.length\noffsets - [[0, 0]]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Sul bordo del tabellone ci sono meno vicine: fuori dal tabellone tutto conta come morto. Attenzione: Ruby non dà nessun errore per un passo fuori dal tabellone. Un numero negativo conta dall'altra estremità, quindi una cella della riga in alto conterebbe tra le sue vicine celle della riga in <em>basso</em>, e oltre la fine c'è <code>nil</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p glider[-1]      # nessun errore: l'ultima riga\np glider[0][-1]   # l'ultima casella della prima riga\nglider[0][5]      # oltre la fine: nil"
+          },
+          {
+            "t": "h",
+            "html": "<p>Quindi il metodo che conta controlla prima che la vicina stia dentro il tabellone, e solo dopo guarda se è viva. <code>count</code> con un blocco conta gli spostamenti per cui il blocco è vero:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def live_neighbours(grid, row, col)\n  offsets = [-1, 0, 1].product([-1, 0, 1]) - [[0, 0]]\n  offsets.count do |dr, dc|\n    r = row + dr\n    c = col + dc\n    inside = r >= 0 && c >= 0 && r < grid.length && c < grid[r].length\n    inside && grid[r][c] == \"#\"\n  end\nend\n\np live_neighbours(blinker, 2, 1)\nlive_neighbours(blinker, 2, 2)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Il centro del lampeggiatore ha 2 vicine vive, la cella alla sua sinistra 3. Contiamo tutte le celle del lampeggiatore in una volta e stampiamo i numeri nella sua forma:</p>"
+          },
+          {
+            "t": "c",
+            "code": "blinker.length.times do |r|\n  width = blinker[r].length\n  puts width.times.map { |c| live_neighbours(blinker, r, c) }.join\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ora leggi le regole nei numeri. Le due celle a sinistra e a destra del centro hanno un 3: nascono. Il centro ha 2 e continua a vivere. Le estremità in alto e in basso hanno solo 1: muoiono. Così la linea verticale diventa orizzontale. Una cosa qui è importante: tutte le celle cambiano <em>nello stesso momento</em>. La generazione successiva è una griglia <em>nuova</em>, contata in quella vecchia: se cambiassi la vecchia griglia mentre conti, una cella appena nata conterebbe già per le sue vicine. In Ruby le due regole stanno in una sola riga: <code>n == 3 || (alive &amp;&amp; n == 2)</code>. Ecco l'aliante, quattro generazioni una accanto all'altra:</p>"
+          },
+          {
+            "t": "c",
+            "code": "grid = glider\nframes = [grid]\n4.times do\n  grid = grid.length.times.map do |r|\n    grid[r].length.times.map do |c|\n      n = live_neighbours(grid, r, c)\n      alive = grid[r][c] == \"#\"\n      n == 3 || (alive && n == 2) ? \"#\" : \".\"\n    end.join\n  end\n  frames << grid\nend\nframes.transpose.each { |rows| puts rows.join(\"  \").tr(\"#.\", \"█·\") }"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dopo quattro generazioni l'aliante ha ripreso la sua forma, una casella più in basso e più a destra. Cammina! Cambia la prima riga in <code>grid = blinker</code>: il lampeggiatore passa da verticale a orizzontale e viceversa, e <code>grid = block</code> resta esattamente com'è. Le forme che si ripetono si chiamano oscillatori, quelle che non cambiano mai nature morte, quelle che si spostano astronavi. Le semplici regole di Conway si rivelano abbastanza potenti da costruire un intero computer fatto di alianti. La regola pratica per ogni simulazione di questo tipo: costruisci lo stato successivo come una nuova griglia a partire da quella vecchia, e non cambiare mai la griglia in cui stai ancora contando.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-product' target='_blank'>Array#product</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-transpose' target='_blank'>Array#transpose</a> · <a href='https://docs.ruby-lang.org/en/4.0/String.html#method-i-tr' target='_blank'>String#tr</a> · <a href='https://docs.ruby-lang.org/en/4.0/Integer.html#method-i-25' target='_blank'>Integer#%</a></div><div class='task'><strong>Esercizio:</strong> Scrivi <code>next_generation(grid)</code>: restituisce la generazione successiva di una qualsiasi griglia di <code>#</code> e <code>.</code> come nuovo array di stringhe, e lascia invariata la griglia che riceve. Il conteggio lo fa <code>live_neighbours</code> di sopra. Il controllo prova il lampeggiatore, il blocco, l'aliante e alcune celle sul bordo.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def next_generation(grid)\n#   ...   # una griglia nuova: ogni cella secondo le regole, contata nella vecchia\n# end\n\n# puts next_generation(blinker)\n",
+            "hints": [
+              "La parte dentro <code>4.times</code> nella cella dell'aliante è esattamente una generazione: mettila nel metodo con <code>grid</code> come parametro, e restituisci la nuova griglia invece di raccogliere fotogrammi."
+            ],
+            "check": "next_generation(%w[..... ..#.. ..#.. ..#.. .....]) == %w[..... ..... .###. ..... .....] && next_generation(%w[..... ..... .###. ..... .....]) == %w[..... ..#.. ..#.. ..#.. .....] && next_generation(%w[.... .##. .##. ....]) == %w[.... .##. .##. ....] && next_generation(%w[...... .###.. ......]) == %w[..#... ..#... ..#...] && next_generation(%w[..# ..# ..#]) == %w[... .## ...] && next_generation(%w[#.. ... ...]) == %w[... ... ...] && ->(g) { 4.times { g = next_generation(g) }; g }.(%w[.#.... ..#... ###... ...... ...... ......]) == %w[...... ..#... ...#.. .###.. ...... ......] && ->(g) { next_generation(g); g == %w[.#. .#. .#.] }.(%w[.#. .#. .#.])",
+            "hint": "<code>def next_generation(grid)</code>, dentro <code>grid.length.times.map do |r|</code>, al suo interno <code>grid[r].length.times.map do |c|</code> con <code>n</code>, <code>alive</code> e la regola <code>n == 3 || (alive &amp;&amp; n == 2) ? \"#\" : \".\"</code>, poi <code>end.join</code> ed <code>end</code>.",
+            "solution": "def next_generation(grid)\n  grid.length.times.map do |r|\n    grid[r].length.times.map do |c|\n      n = live_neighbours(grid, r, c)\n      alive = grid[r][c] == \"#\"\n      n == 3 || (alive && n == 2) ? \"#\" : \".\"\n    end.join\n  end\nend\n\nputs next_generation(blinker)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Su un tabellone con i bordi l'aliante finisce presto nell'angolo: sul nostro tabellone 5 × 5 si blocca in un blocco dopo 11 generazioni. Per questo molti programmi di Life fanno girare il tabellone su se stesso: ciò che esce dal bordo destro rientra da sinistra, ciò che esce dal basso rientra dall'alto, e il tabellone diventa una ciambella. Scrivi <code>next_generation_wrapped(grid)</code>. Il resto <code>%</code> della lezione {{nr:rechnen}} si occupa del giro: con 5 colonne, <code>(4 + 1) % 5</code> è 0, e in Ruby perfino <code>-1 % 5</code> è 4. Su una ciambella 5 × 5 l'aliante torna al punto di partenza dopo 20 generazioni.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def next_generation_wrapped(grid)\n#   ...   # come una generazione sopra, ma il tabellone gira su se stesso:\n#   ...   # oltre il bordo destro c'è quello sinistro, oltre l'alto il basso\n# end\n\n# puts next_generation_wrapped(%w[....# ....# ....# ..... .....])\n",
+            "hints": [
+              "Questa volta conta le vicine da solo, senza <code>live_neighbours</code>: con <code>rows</code> e <code>cols</code> per le dimensioni del tabellone, la vicina di <code>r, c</code> sta in <code>(r + dr) % rows</code> e <code>(c + dc) % cols</code>, sempre dentro il tabellone, quindi non c'è niente da controllare."
+            ],
+            "check": "->(g) { 20.times { g = next_generation_wrapped(g) }; g }.(%w[.#... ..#.. ###.. ..... .....]) == %w[.#... ..#.. ###.. ..... .....] && next_generation_wrapped(%w[.#... ..#.. ###.. ..... .....]) == %w[..... #.#.. .##.. .#... .....] && next_generation_wrapped(%w[..... ....# ....# ....# .....]) == %w[..... ..... #..## ..... .....] && next_generation_wrapped(%w[#...# ..... ..... ..... #...#]) == %w[#...# ..... ..... ..... #...#] && next_generation_wrapped(%w[...... ...... .###.. ...... ...... ......]) == %w[...... ..#... ..#... ..#... ...... ......] && ->(g) { next_generation_wrapped(g); g == %w[..... ..... .###. ..... .....] }.(%w[..... ..... .###. ..... .....])",
+            "hint": "Come nell'esercizio, ma il conteggio è <code>offsets.count { |dr, dc| grid[(r + dr) % rows][(c + dc) % cols] == \"#\" }</code>, con <code>offsets = [-1, 0, 1].product([-1, 0, 1]) - [[0, 0]]</code>, <code>rows = grid.length</code> e <code>cols = grid[0].length</code>.",
             "solution": "def next_generation_wrapped(grid)\n  rows = grid.length\n  cols = grid[0].length\n  offsets = [-1, 0, 1].product([-1, 0, 1]) - [[0, 0]]\n  rows.times.map do |r|\n    cols.times.map do |c|\n      n = offsets.count do |dr, dc|\n        grid[(r + dr) % rows][(c + dc) % cols] == \"#\"\n      end\n      alive = grid[r][c] == \"#\"\n      n == 3 || (alive && n == 2) ? \"#\" : \".\"\n    end.join\n  end\nend\n\nputs next_generation_wrapped(%w[....# ....# ....# ..... .....])"
           }
         ]
@@ -16205,6 +19599,186 @@ window.LESSONS_JSON = JSON.stringify({
             ],
             "check": "->(t) { (1..20).all? { |s| babble(t, \"the\", 8, Random.new(s)) == babble(t, \"the\", 8, Random.new(s)) } && (1..20).map { |s| babble(t, \"the\", 8, Random.new(s)) }.uniq.size > 2 && (1..20).all? { |s| babble(t, \"the\", 8, Random.new(s)).split.then { |w| w.first == \"the\" && w.size <= 8 && w.each_cons(2).all? { |a, b| t.fetch(a, []).include?(b) } && (w.size == 8 || t.fetch(w.last, []).empty?) } } && babble(t, \"moon\", 5, Random.new(1)) == \"moon\" && babble(t, \"the\", 1, Random.new(1)) == \"the\" && babble({ \"chunky\" => [\"bacon\"], \"bacon\" => [\"chunky\"] }, \"chunky\", 5, Random.new(3)) == \"chunky bacon chunky bacon chunky\" }.({ \"the\" => [\"fox\", \"fox\", \"cat\", \"moon\"], \"fox\" => [\"eats\", \"sings\"], \"eats\" => [\"bacon\", \"toast\"], \"sings\" => [\"to\"], \"to\" => [\"the\"], \"cat\" => [\"eats\"], \"bacon\" => [], \"toast\" => [\"sings\"] })",
             "hint": "<code>while words.length &lt; n</code>、中に<code>followers = table.fetch(words.last, [])</code>、<code>break if followers.empty?</code>、<code>words &lt;&lt; followers.sample(random: random)</code>。ループのあとで<code>words.join(\" \")</code>だよ。",
+            "solution": "def babble(table, start, n, random)\n  words = [start]\n  while words.length < n\n    followers = table.fetch(words.last, [])\n    break if followers.empty?\n    words << followers.sample(random: random)\n  end\n  words.join(\" \")\nend\n\nbabble(table, \"the\", 12, Random.new(24))"
+          }
+        ]
+      },
+      "fr": {
+        "title": "Du texte par hasard : les chaînes de Markov",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Du texte par hasard : les chaînes de Markov</h2><p>Un programme peut-il écrire ? Un programme très simple le peut – il lui suffit de lire quelque chose d’abord. L’idée remonte au mathématicien russe Andreï Markov, qui en 1913 a parcouru lettre par lettre le roman en vers de Pouchkine <em>Eugène Onéguine</em> et compté combien de fois une voyelle suit une consonne, et inversement. Notre version travaille avec des mots : pour chaque mot, notez quels mots l’ont suivi dans un texte, puis inventez un nouveau texte en choisissant toujours au hasard l’un de ces successeurs. Voici l’histoire que Chunky a lue, découpée en mots. <code>each_cons(2)</code> les parcourt par paires qui se chevauchent – le premier et le deuxième, le deuxième et le troisième, et ainsi de suite :</p>"
+          },
+          {
+            "t": "c",
+            "code": "text = <<~TEXT\n  the fox eats chunky bacon and the fox sings about chunky bacon\n  and the cat eats toast and the toast sings to the moon\nTEXT\nwords = text.split\nwords.each_cons(2).first(5)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Chaque paire dit : « ce mot est venu une fois après celui-là. » Rassemblez maintenant les paires dans une table qui contient, pour chaque mot, la liste des mots qui l’ont suivi. Un hash avec une liste par mot – mais quelle liste vide un nouveau mot reçoit-il ? <code>Hash.new(0)</code> de la leçon {{nr:hashes}} donne une valeur par défaut aux clés manquantes, donc <code>Hash.new([])</code> semble le choix évident. C’est un piège :</p>"
+          },
+          {
+            "t": "c",
+            "code": "trap = Hash.new([])\ntrap[\"fox\"] << \"eats\"\ntrap[\"cat\"] << \"naps\"\np trap\ntrap[\"owl\"]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>{}</code> – le hash est toujours vide, et pourtant <code>trap[\"owl\"]</code> répond <code>[\"eats\", \"naps\"]</code>. La valeur par défaut est <em>un seul et unique</em> array, partagé par toutes les clés manquantes, et <code>&lt;&lt;</code> pousse les mots dans cet array partagé sans jamais enregistrer de clé. (<code>Hash.new(0)</code> ne fonctionne que parce que <code>+= 1</code> enregistre un nouveau nombre sous la clé.) La solution est la forme avec bloc : <code>Hash.new { |hash, key| hash[key] = [] }</code> exécute le bloc pour chaque clé manquante, et le bloc enregistre un <em>nouvel</em> array vide sous cette clé :</p>"
+          },
+          {
+            "t": "c",
+            "code": "table = Hash.new { |hash, key| hash[key] = [] }\nwords.each_cons(2) { |a, b| table[a] << b }\ntable"
+          },
+          {
+            "t": "h",
+            "html": "<p>Cette table est tout ce que notre programme « sait ». Les répétitions comptent : après <code>\"the\"</code> est venu deux fois <code>\"fox\"</code>. <code>tally</code> les compte, et ces comptes sont les probabilités – dans 2 cas sur 5, <code>\"the\"</code> est suivi de <code>\"fox\"</code>, soit 40 % :</p>"
+          },
+          {
+            "t": "c",
+            "code": "p table[\"the\"]\ntable[\"the\"].tally"
+          },
+          {
+            "t": "h",
+            "html": "<p>Maintenant, laissons-le écrire. Partez d’un mot, choisissez au hasard l’un de ses successeurs, puis l’un des successeurs de <em>ce</em> mot, et ainsi de suite. <code>sample</code> tire dans la liste, donc un successeur qui y figure deux fois est tiré deux fois plus souvent – les probabilités se règlent d’elles-mêmes. Pour obtenir le même texte à chaque exécution, le dé reçoit une graine : <code>Random.new(24)</code> est un dé à part, et <code>sample(random: dice)</code> le lance – comme <code>srand</code> dans la leçon {{nr:zufall}}, mais seulement pour ce dé-là. Encore un piège : avec la forme avec bloc, même <em>lire</em> un mot manquant y enregistrerait une liste vide, c’est pourquoi on cherche les successeurs avec <code>fetch(word, [])</code>. Un mot sans successeur termine le texte :</p>"
+          },
+          {
+            "t": "c",
+            "code": "dice = Random.new(24)\nword = \"the\"\nstory = [word]\n10.times do\n  followers = table.fetch(word, [])\n  break if followers.empty?\n  word = followers.sample(random: dice)\n  story << word\nend\nstory.join(\" \")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>\"the cat eats toast and the fox sings about chunky bacon\"</code> – chaque paire de mots voisins vient de l’histoire de Chunky, mais pas la phrase dans son ensemble. Essayez d’autres graines : avec <code>Random.new(16)</code>, la chaîne tombe sur <code>\"moon\"</code>, que rien n’a jamais suivi, et s’arrête tôt.</p><p>La même astuce marche avec des lettres, et elle invente alors des noms. Mettez un <code>.</code> avant et après chaque nom : une lettre qui suit un <code>.</code> est une première lettre, et un <code>.</code> qui suit une lettre signifie « le nom s’arrête ici » :</p>"
+          },
+          {
+            "t": "c",
+            "code": "names = %w[chunky foxy rufus fenna roxy reynard]\nletters = Hash.new { |hash, key| hash[key] = [] }\nnames.each do |name|\n  \".#{name}.\".chars.each_cons(2) { |a, b| letters[a] << b }\nend\nletters[\".\"]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Voilà les premières lettres des six noms. Maintenant la même chaîne qu’avant, lettre par lettre, d’un <code>.</code> au <code>.</code> suivant :</p>"
+          },
+          {
+            "t": "c",
+            "code": "dice = Random.new(4)\n5.times.map do\n  name = \"\"\n  letter = letters[\".\"].sample(random: dice)\n  until letter == \".\"\n    name += letter\n    letter = letters[letter].sample(random: dice)\n  end\n  name.capitalize\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Quatre nouveaux noms de renard et un ancien : Foxy revient parce que la chaîne a, par hasard, suivi un nom d’origine. La table ne se souvient que d’<em>un</em> pas en arrière, c’est pourquoi les résultats sonnent presque juste puis partent dans tous les sens. Souvenez-vous de deux mots en arrière – une table construite avec <code>each_cons(3)</code> – et les textes ressemblent beaucoup plus à l’original (et le recopient plus souvent). Le clavier de votre téléphone qui propose le mot suivant repose sur la même idée, et les grands modèles de langage d’aujourd’hui en sont des parents lointains et infiniment plus grands : ils regardent des milliers de mots en arrière au lieu d’un seul.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-each_cons' target='_blank'>Enumerable#each_cons</a> · <a href='https://docs.ruby-lang.org/en/4.0/Hash.html#method-c-new' target='_blank'>Hash.new</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-sample' target='_blank'>Array#sample</a> · <a href='https://docs.ruby-lang.org/en/4.0/Random.html' target='_blank'>Random</a></div><div class='task'><strong>Exercice :</strong> Écrivez <code>follower_counts(text)</code> : un hash qui associe chaque mot de <code>text</code> à un hash de ses successeurs avec le nombre de fois où chacun est venu – la table vue plus haut, avec <code>tally</code> appliqué à chaque liste. <code>follower_counts(\"the fox and the fox naps\")</code> vaut <code>{ \"the\" =&gt; { \"fox\" =&gt; 2 }, \"fox\" =&gt; { \"and\" =&gt; 1, \"naps\" =&gt; 1 }, \"and\" =&gt; { \"the\" =&gt; 1 } }</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def follower_counts(text)\n#   ...   # chaque mot => { successeur => combien de fois il a suivi le mot }\n# end\n\n# p follower_counts(\"the fox and the fox naps\")\n",
+            "hints": [
+              "Construisez la table dans la méthode comme plus haut, à partir de <code>text.split</code>. Ensuite, chaque liste doit devenir des comptes : <code>tally</code> le fait pour une liste, et <code>transform_values</code> fait quelque chose à chaque valeur d’un hash."
+            ],
+            "check": "follower_counts(\"the fox and the fox naps\") == { \"the\" => { \"fox\" => 2 }, \"fox\" => { \"and\" => 1, \"naps\" => 1 }, \"and\" => { \"the\" => 1 } } && follower_counts(\"bacon\") == {} && follower_counts(\"chunky bacon chunky bacon chunky\") == { \"chunky\" => { \"bacon\" => 2 }, \"bacon\" => { \"chunky\" => 2 } } && follower_counts(\"toast and\\njam and  toast\") == { \"toast\" => { \"and\" => 1 }, \"and\" => { \"jam\" => 1, \"toast\" => 1 }, \"jam\" => { \"and\" => 1 } }",
+            "hint": "<code>table = Hash.new { |hash, key| hash[key] = [] }</code>, puis <code>text.split.each_cons(2) { |a, b| table[a] &lt;&lt; b }</code>, et à la fin <code>table.transform_values(&amp;:tally)</code>.",
+            "solution": "def follower_counts(text)\n  table = Hash.new { |hash, key| hash[key] = [] }\n  text.split.each_cons(2) { |a, b| table[a] << b }\n  table.transform_values(&:tally)\nend\n\nfollower_counts(\"the fox and the fox naps\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Écrivez <code>babble(table, start, n, random)</code> : un texte d’au plus <code>n</code> mots, sous forme de chaîne, qui commence par <code>start</code>. Chaque mot suivant est un successeur au hasard du mot précédent, tiré avec <code>sample(random: random)</code> ; le texte s’arrête plus tôt sur un mot sans successeur – un mot absent de la table, ou dont la liste est vide. La même graine doit donner le même texte : <code>babble(table, \"the\", 12, Random.new(24))</code> donne les mêmes mots à chaque fois.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def babble(table, start, n, random)\n#   ...   # start, puis un successeur au hasard du dernier mot, et ainsi de suite :\n#   ...   # au plus n mots, moins si un mot n'a pas de successeur\n# end\n\n# babble(table, \"the\", 12, Random.new(24))\n",
+            "hints": [
+              "Commencez par <code>words = [start]</code> et continuez d’ajouter tant qu’il y en a moins de <code>n</code>. <code>table.fetch(words.last, [])</code> donne les successeurs – une liste vide pour un mot absent de la table – et <code>break</code> quitte la boucle quand il n’y en a aucun."
+            ],
+            "check": "->(t) { (1..20).all? { |s| babble(t, \"the\", 8, Random.new(s)) == babble(t, \"the\", 8, Random.new(s)) } && (1..20).map { |s| babble(t, \"the\", 8, Random.new(s)) }.uniq.size > 2 && (1..20).all? { |s| babble(t, \"the\", 8, Random.new(s)).split.then { |w| w.first == \"the\" && w.size <= 8 && w.each_cons(2).all? { |a, b| t.fetch(a, []).include?(b) } && (w.size == 8 || t.fetch(w.last, []).empty?) } } && babble(t, \"moon\", 5, Random.new(1)) == \"moon\" && babble(t, \"the\", 1, Random.new(1)) == \"the\" && babble({ \"chunky\" => [\"bacon\"], \"bacon\" => [\"chunky\"] }, \"chunky\", 5, Random.new(3)) == \"chunky bacon chunky bacon chunky\" }.({ \"the\" => [\"fox\", \"fox\", \"cat\", \"moon\"], \"fox\" => [\"eats\", \"sings\"], \"eats\" => [\"bacon\", \"toast\"], \"sings\" => [\"to\"], \"to\" => [\"the\"], \"cat\" => [\"eats\"], \"bacon\" => [], \"toast\" => [\"sings\"] })",
+            "hint": "<code>while words.length &lt; n</code>, à l’intérieur <code>followers = table.fetch(words.last, [])</code>, <code>break if followers.empty?</code> et <code>words &lt;&lt; followers.sample(random: random)</code> ; après la boucle, <code>words.join(\" \")</code>.",
+            "solution": "def babble(table, start, n, random)\n  words = [start]\n  while words.length < n\n    followers = table.fetch(words.last, [])\n    break if followers.empty?\n    words << followers.sample(random: random)\n  end\n  words.join(\" \")\nend\n\nbabble(table, \"the\", 12, Random.new(24))"
+          }
+        ]
+      },
+      "it": {
+        "title": "Testo dal caso: le catene di Markov",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Testo dal caso: le catene di Markov</h2><p>Un programma sa scrivere? Uno molto semplice sì, basta che prima legga qualcosa. L'idea risale al matematico russo Andrej Markov, che nel 1913 percorse lettera per lettera il romanzo in versi di Puškin <em>Evgenij Onegin</em> e contò quante volte una vocale segue una consonante e viceversa. La nostra versione lavora con le parole: per ogni parola annota quali parole sono venute dopo di lei in un testo, poi inventa un nuovo testo scegliendo sempre a caso uno di questi successori. Ecco la storia che ha letto Chunky, tagliata in parole. <code>each_cons(2)</code> le percorre a coppie sovrapposte: la prima e la seconda, la seconda e la terza, e così via:</p>"
+          },
+          {
+            "t": "c",
+            "code": "text = <<~TEXT\n  the fox eats chunky bacon and the fox sings about chunky bacon\n  and the cat eats toast and the toast sings to the moon\nTEXT\nwords = text.split\nwords.each_cons(2).first(5)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ogni coppia dice: “questa parola una volta è venuta dopo quella.” Ora raccogli le coppie in una tabella che contiene, per ogni parola, l'elenco delle parole che l'hanno seguita. Un hash con un elenco per ogni parola, ma quale elenco vuoto riceve una parola nuova? <code>Hash.new(0)</code> della lezione {{nr:hashes}} dà un valore predefinito alle chiavi mancanti, quindi <code>Hash.new([])</code> sembra la scelta ovvia. È una trappola:</p>"
+          },
+          {
+            "t": "c",
+            "code": "trap = Hash.new([])\ntrap[\"fox\"] << \"eats\"\ntrap[\"cat\"] << \"naps\"\np trap\ntrap[\"owl\"]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>{}</code>: l'hash è ancora vuoto, eppure <code>trap[\"owl\"]</code> risponde <code>[\"eats\", \"naps\"]</code>. Il valore predefinito è <em>un unico</em> array, condiviso da tutte le chiavi mancanti, e <code>&lt;&lt;</code> spinge le parole in quell'array condiviso senza mai salvare una chiave. (<code>Hash.new(0)</code> funziona solo perché <code>+= 1</code> salva un nuovo numero sotto la chiave.) La via d'uscita è la forma con il blocco: <code>Hash.new { |hash, key| hash[key] = [] }</code> esegue il blocco per ogni chiave mancante, e il blocco salva un <em>nuovo</em> array vuoto sotto quella chiave:</p>"
+          },
+          {
+            "t": "c",
+            "code": "table = Hash.new { |hash, key| hash[key] = [] }\nwords.each_cons(2) { |a, b| table[a] << b }\ntable"
+          },
+          {
+            "t": "h",
+            "html": "<p>Quella tabella è tutto ciò che il nostro programma “sa”. Le ripetizioni contano: dopo <code>\"the\"</code> è venuto due volte <code>\"fox\"</code>. <code>tally</code> le conta, e i conteggi sono le probabilità: in 2 casi su 5 <code>\"the\"</code> è seguito da <code>\"fox\"</code>, cioè il 40%:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p table[\"the\"]\ntable[\"the\"].tally"
+          },
+          {
+            "t": "h",
+            "html": "<p>Adesso lasciamolo scrivere. Parti da una parola, scegli a caso uno dei suoi successori, poi uno dei successori di <em>quella</em> parola, e così via. <code>sample</code> pesca dall'elenco, quindi un successore che compare due volte viene pescato due volte più spesso: le probabilità si sistemano da sole. Per ottenere lo stesso testo a ogni esecuzione, il dado riceve un seme: <code>Random.new(24)</code> è un dado a sé, e <code>sample(random: dice)</code> lo lancia, come <code>srand</code> nella lezione {{nr:zufall}}, ma solo per questo dado. Un'altra trappola: con la forma con il blocco, anche solo <em>leggere</em> una parola mancante salverebbe sotto di essa un elenco vuoto, per questo i successori si cercano con <code>fetch(word, [])</code>. Una parola senza successori chiude il testo:</p>"
+          },
+          {
+            "t": "c",
+            "code": "dice = Random.new(24)\nword = \"the\"\nstory = [word]\n10.times do\n  followers = table.fetch(word, [])\n  break if followers.empty?\n  word = followers.sample(random: dice)\n  story << word\nend\nstory.join(\" \")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>\"the cat eats toast and the fox sings about chunky bacon\"</code>: ogni coppia di parole vicine viene dalla storia di Chunky, ma la frase nel suo insieme no. Prova altri semi: con <code>Random.new(16)</code> la catena finisce su <code>\"moon\"</code>, a cui non è mai seguito niente, e si ferma presto.</p><p>Lo stesso trucco funziona con le lettere, e allora inventa nomi. Metti un <code>.</code> prima e dopo ogni nome: una lettera che segue un <code>.</code> è una lettera iniziale, e un <code>.</code> che segue una lettera significa “il nome finisce qui”:</p>"
+          },
+          {
+            "t": "c",
+            "code": "names = %w[chunky foxy rufus fenna roxy reynard]\nletters = Hash.new { |hash, key| hash[key] = [] }\nnames.each do |name|\n  \".#{name}.\".chars.each_cons(2) { |a, b| letters[a] << b }\nend\nletters[\".\"]"
+          },
+          {
+            "t": "h",
+            "html": "<p>Queste sono le lettere iniziali dei sei nomi. Ora la stessa catena di prima, lettera per lettera, da un <code>.</code> al <code>.</code> successivo:</p>"
+          },
+          {
+            "t": "c",
+            "code": "dice = Random.new(4)\n5.times.map do\n  name = \"\"\n  letter = letters[\".\"].sample(random: dice)\n  until letter == \".\"\n    name += letter\n    letter = letters[letter].sample(random: dice)\n  end\n  name.capitalize\nend"
+          },
+          {
+            "t": "h",
+            "html": "<p>Quattro nuovi nomi di volpe e uno vecchio: Foxy ritorna perché la catena per caso ha percorso un nome originale. La tabella ricorda solo <em>un</em> passo indietro, per questo i risultati suonano quasi giusti e poi divagano. Ricorda due parole indietro (una tabella da <code>each_cons(3)</code>) e i testi somigliano molto di più all'originale (e lo copiano più spesso). La tastiera del telefono che ti suggerisce la parola successiva funziona sulla stessa idea, e i grandi modelli linguistici di oggi ne sono parenti lontani ed enormemente più grandi: guardano indietro di migliaia di parole invece che di una.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Enumerable.html#method-i-each_cons' target='_blank'>Enumerable#each_cons</a> · <a href='https://docs.ruby-lang.org/en/4.0/Hash.html#method-c-new' target='_blank'>Hash.new</a> · <a href='https://docs.ruby-lang.org/en/4.0/Array.html#method-i-sample' target='_blank'>Array#sample</a> · <a href='https://docs.ruby-lang.org/en/4.0/Random.html' target='_blank'>Random</a></div><div class='task'><strong>Esercizio:</strong> Scrivi <code>follower_counts(text)</code>: un hash che associa ogni parola di <code>text</code> a un hash dei suoi successori con quante volte è venuto ciascuno, cioè la tabella di sopra con <code>tally</code> applicato a ogni elenco. <code>follower_counts(\"the fox and the fox naps\")</code> è <code>{ \"the\" =&gt; { \"fox\" =&gt; 2 }, \"fox\" =&gt; { \"and\" =&gt; 1, \"naps\" =&gt; 1 }, \"and\" =&gt; { \"the\" =&gt; 1 } }</code>.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# def follower_counts(text)\n#   ...   # ogni parola => { successore => quante volte è venuto dopo la parola }\n# end\n\n# p follower_counts(\"the fox and the fox naps\")\n",
+            "hints": [
+              "Costruisci la tabella dentro il metodo come sopra, a partire da <code>text.split</code>. Poi ogni elenco deve diventare conteggi: <code>tally</code> lo fa per un elenco, e <code>transform_values</code> fa qualcosa a ogni valore di un hash."
+            ],
+            "check": "follower_counts(\"the fox and the fox naps\") == { \"the\" => { \"fox\" => 2 }, \"fox\" => { \"and\" => 1, \"naps\" => 1 }, \"and\" => { \"the\" => 1 } } && follower_counts(\"bacon\") == {} && follower_counts(\"chunky bacon chunky bacon chunky\") == { \"chunky\" => { \"bacon\" => 2 }, \"bacon\" => { \"chunky\" => 2 } } && follower_counts(\"toast and\\njam and  toast\") == { \"toast\" => { \"and\" => 1 }, \"and\" => { \"jam\" => 1, \"toast\" => 1 }, \"jam\" => { \"and\" => 1 } }",
+            "hint": "<code>table = Hash.new { |hash, key| hash[key] = [] }</code>, poi <code>text.split.each_cons(2) { |a, b| table[a] &lt;&lt; b }</code>, e alla fine <code>table.transform_values(&amp;:tally)</code>.",
+            "solution": "def follower_counts(text)\n  table = Hash.new { |hash, key| hash[key] = [] }\n  text.split.each_cons(2) { |a, b| table[a] << b }\n  table.transform_values(&:tally)\nend\n\nfollower_counts(\"the fox and the fox naps\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> Scrivi <code>babble(table, start, n, random)</code>: un testo di al massimo <code>n</code> parole, come stringa, che comincia con <code>start</code>. Ogni parola successiva è un successore a caso della parola precedente, pescato con <code>sample(random: random)</code>; il testo finisce prima a una parola senza successori, cioè che non è nella tabella o il cui elenco è vuoto. Lo stesso seme deve dare lo stesso testo: <code>babble(table, \"the\", 12, Random.new(24))</code> dà ogni volta le stesse parole.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# def babble(table, start, n, random)\n#   ...   # start, poi un successore a caso dell'ultima parola, e così via:\n#   ...   # al massimo n parole, meno se una parola non ha successori\n# end\n\n# babble(table, \"the\", 12, Random.new(24))\n",
+            "hints": [
+              "Comincia con <code>words = [start]</code> e continua ad aggiungere finché sono meno di <code>n</code>. <code>table.fetch(words.last, [])</code> dà i successori (un elenco vuoto per una parola che non è nella tabella) e <code>break</code> esce dal ciclo quando non ce ne sono."
+            ],
+            "check": "->(t) { (1..20).all? { |s| babble(t, \"the\", 8, Random.new(s)) == babble(t, \"the\", 8, Random.new(s)) } && (1..20).map { |s| babble(t, \"the\", 8, Random.new(s)) }.uniq.size > 2 && (1..20).all? { |s| babble(t, \"the\", 8, Random.new(s)).split.then { |w| w.first == \"the\" && w.size <= 8 && w.each_cons(2).all? { |a, b| t.fetch(a, []).include?(b) } && (w.size == 8 || t.fetch(w.last, []).empty?) } } && babble(t, \"moon\", 5, Random.new(1)) == \"moon\" && babble(t, \"the\", 1, Random.new(1)) == \"the\" && babble({ \"chunky\" => [\"bacon\"], \"bacon\" => [\"chunky\"] }, \"chunky\", 5, Random.new(3)) == \"chunky bacon chunky bacon chunky\" }.({ \"the\" => [\"fox\", \"fox\", \"cat\", \"moon\"], \"fox\" => [\"eats\", \"sings\"], \"eats\" => [\"bacon\", \"toast\"], \"sings\" => [\"to\"], \"to\" => [\"the\"], \"cat\" => [\"eats\"], \"bacon\" => [], \"toast\" => [\"sings\"] })",
+            "hint": "<code>while words.length &lt; n</code>, dentro <code>followers = table.fetch(words.last, [])</code>, <code>break if followers.empty?</code> e <code>words &lt;&lt; followers.sample(random: random)</code>; dopo il ciclo <code>words.join(\" \")</code>.",
             "solution": "def babble(table, start, n, random)\n  words = [start]\n  while words.length < n\n    followers = table.fetch(words.last, [])\n    break if followers.empty?\n    words << followers.sample(random: random)\n  end\n  words.join(\" \")\nend\n\nbabble(table, \"the\", 12, Random.new(24))"
           }
         ]
@@ -17961,6 +21535,204 @@ window.LESSONS_JSON = JSON.stringify({
             ],
             "check": "->(v) { v.(\"1.10.0\") > v.(\"1.9.2\") && v.(\"2.0.0\") > v.(\"1.99.99\") && v.(\"1.2.3\") == v.(\"1.2.3\") && v.(\"0.9.1\") < v.(\"0.10.0\") && [v.(\"1.10.0\"), v.(\"1.2.0\"), v.(\"1.9.2\")].sort.map(&:to_s) == [\"1.2.0\", \"1.9.2\", \"1.10.0\"] && [v.(\"3.4.1\"), v.(\"3.10.0\"), v.(\"3.3.9\")].max.to_s == \"3.10.0\" && v.(\"1.5.0\").between?(v.(\"1.2.0\"), v.(\"1.10.0\")) && \"#{v.(\"4.0.1\")}\" == \"4.0.1\" }.(->(t) { VersionNumber.new(t) }) && VersionNumber.include?(Comparable) && code.include?(\"<=>\") && code.match?(/^\\s*class VersionNumber\\b/)",
             "hint": "<code>def initialize(text)</code> → <code>@text = text</code>、<code>def to_s</code> → <code>@text</code>、<code>def parts</code> → <code>@text.split(\".\").map(&amp;:to_i)</code>、そして<code>def &lt;=&gt;(other)</code> →<code>parts &lt;=&gt; other.parts</code>だよ。",
+            "solution": "class VersionNumber\n  include Comparable\n\n  def initialize(text)\n    @text = text\n  end\n\n  def to_s\n    @text\n  end\n\n  def parts\n    @text.split(\".\").map(&:to_i)\n  end\n\n  def <=>(other)\n    parts <=> other.parts\n  end\nend\n\nVersionNumber.new(\"1.10.0\") > VersionNumber.new(\"1.9.2\")"
+          }
+        ]
+      },
+      "fr": {
+        "title": "Des opérateurs pour vos propres classes",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Des opérateurs pour vos propres classes</h2><p>Voici un petit secret de Ruby : <code>1 + 2</code> est en réalité un appel de méthode. Le nombre 1 reçoit le message <code>+</code> avec l’argument 2 – Ruby vous laisse simplement utiliser l’écriture la plus jolie. Il en va de même pour <code>*</code>, <code>==</code>, <code>&lt;</code> et même pour les crochets :</p>"
+          },
+          {
+            "t": "c",
+            "code": "p 1.+(2)\np \"bacon\".*(3)\np [10, 20, 30].[](1)\n5.==(5)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Et une méthode, vous pouvez en écrire pour vos propres classes. Chunky prépare des sauts sur une carte : 2 cases vers la droite et 1 vers le haut, puis 1 vers la droite et 3 vers le haut. Deux sauts l’un après l’autre valent un grand saut – on additionne les x et les y. En mathématiques, une telle chose s’appelle un <strong>vecteur</strong>. Avec <code>def +(other)</code>, <code>Hop</code> reçoit un plus, avec <code>def *(number)</code> un fois :</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Hop\n  attr_reader :x, :y\n\n  def initialize(x, y)\n    @x = x\n    @y = y\n  end\n\n  def +(other)\n    Hop.new(x + other.x, y + other.y)\n  end\n\n  def *(number)\n    Hop.new(x * number, y * number)\n  end\nend\n\nfar = Hop.new(2, 1) + Hop.new(1, 3)\np [far.x, far.y]\nHop.new(2, 1) * 3"
+          },
+          {
+            "t": "h",
+            "html": "<p>Les deux renvoient un <em>nouveau</em> saut et laissent les anciens tels quels – exactement comme <code>1 + 2</code> ne modifie pas le 1. Seule la ligne <code>=&gt;</code> est moche : <code>#&lt;Hop:0x… @x=6, @y=3&gt;</code>. Deux méthodes décident de l’apparence d’un objet sous forme de texte. <code>to_s</code>, de la leçon {{nr:klassen}}, est destinée aux personnes : <code>puts</code> et <code>\"#{…}\"</code> la demandent. <code>inspect</code> est destinée aux programmeurs : <code>p</code> et la ligne <code>=&gt;</code> la demandent. Et vous pouvez rouvrir une classe à tout moment pour y écrire d’autres méthodes :</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Hop\n  def to_s\n    \"#{x} right, #{y} up\"\n  end\n\n  def inspect\n    \"#<Hop #{x}|#{y}>\"\n  end\nend\n\nbig = Hop.new(2, 1) * 3\nputs \"Chunky hops #{big}.\"\np big"
+          },
+          {
+            "t": "h",
+            "html": "<p>Maintenant, inversons le calcul : <code>3 * Hop.new(2, 1)</code>. C’est la même chose pour nous – mais pour Ruby, c’est <code>3.*(…)</code>, la méthode <code>*</code> du nombre 3. Et celle-là ne sait rien des sauts :</p>"
+          },
+          {
+            "t": "c",
+            "code": "3 * Hop.new(2, 1)",
+            "raises": "TypeError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>TypeError: Hop can't be coerced into Integer</code> – le nombre ne sait pas quoi faire d’un saut. Un opérateur appartient toujours à l’objet situé à sa <em>gauche</em>. (Dans un tel cas, Ruby demande aussi de l’aide à l’objet de droite, avec une méthode appelée <code>coerce</code>. Ce sera pour plus tard ; <code>hop * 3</code> fonctionne, après tout.)</p><p>Question suivante : deux sauts avec les mêmes nombres sont-ils égaux ? Par défaut, <code>==</code> vérifie la même chose que <code>equal?</code> de la leçon {{nr:klassen}} : s’il s’agit du <em>même objet</em>. Pour un saut, pourtant, ce sont les valeurs qui comptent. Vous écrivez donc <code>==</code> vous-même – et <code>!=</code> vient avec, gratuitement :</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Hop\n  def ==(other)\n    other.is_a?(Hop) && x == other.x && y == other.y\n  end\nend\n\nshort = Hop.new(1, 2)\nagain = Hop.new(1, 2)\np short.equal?(again)   # deux objets différents ...\np short == again        # ... avec les mêmes valeurs\nshort != Hop.new(2, 1)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Le <code>other.is_a?(Hop)</code> placé en tête garantit qu’une comparaison avec tout autre chose – <code>short == 5</code> – soit simplement fausse au lieu de provoquer une erreur. Presque fini ! Seulement, les hashes et <code>uniq</code> ne demandent pas du tout <code>==</code>. Un hash range ses clés dans des tiroirs selon un nombre que calcule <code>hash</code>, et à l’intérieur du tiroir il compare avec <code>eql?</code>. Sans ces deux méthodes, chaque nouveau <code>Hop.new(1, 2)</code> serait un inconnu pour un hash. Des objets égaux ont donc besoin du même nombre – le plus simple est de prendre celui de <code>[x, y]</code>. Et <code>alias eql? ==</code> donne à <code>==</code> un second nom, <code>eql?</code> :</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Hop\n  alias eql? ==\n\n  def hash\n    [x, y].hash\n  end\nend\n\ntargets = { Hop.new(1, 2) => \"chicken coop\" }\np targets[Hop.new(1, 2)]\n[Hop.new(1, 2), Hop.new(1, 2), Hop.new(3, 0)].uniq"
+          },
+          {
+            "t": "h",
+            "html": "<p>Reste la comparaison avec <code>&lt;</code> et <code>&gt;</code>. Vous la connaissez depuis la leçon {{nr:module}} : <code>include Comparable</code> et un opérateur vaisseau spatial <code>&lt;=&gt;</code> – et vous obtenez d’un coup <code>&lt;</code>, <code>&gt;</code>, <code>between?</code> et <code>clamp</code>, et <code>sort</code> et <code>max</code> peuvent mettre les sauts en ordre. Quel saut va le plus loin ? Chunky compte les cases sur la carte : droite plus haut, sans le signe, comme le fait <code>abs</code> :</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Hop\n  include Comparable\n\n  def distance\n    x.abs + y.abs\n  end\n\n  def <=>(other)\n    distance <=> other.distance\n  end\nend\n\nhops = [Hop.new(3, 1), Hop.new(0, 2), Hop.new(-4, 2)]\np hops.max\np hops.sort\nHop.new(1, 1) < Hop.new(0, 3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Au passage, c’est bien votre propre <code>==</code> qui reste aux commandes, même si <code>Comparable</code> en apporte un aussi : dans la lignée des ancêtres, les méthodes de la classe elle-même passent avant celles du module. C’est pourquoi <code>Hop.new(2, 0) == Hop.new(0, 2)</code> reste faux, bien que les deux aillent aussi loin.</p><p>Pour finir, les crochets : avec <code>def [](i)</code>, un saut répond comme un array, 0 pour x et 1 pour y :</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Hop\n  def [](i)\n    [x, y][i]\n  end\nend\n\nhop = Hop.new(5, -2)\np hop[0]\np hop[1]\nhop[2]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>hop[2]</code> vaut nil, comme avec un array, parce que <code>[]</code> transmet simplement la question à <code>[x, y]</code>. Une règle empirique : donnez un opérateur à votre classe quand il est aussi naturel pour ses objets que pour les nombres – additionner des sauts, comparer des sommes d’argent. Faites-lui renvoyer un nouvel objet au lieu de modifier l’ancien. Qui écrit <code>==</code> écrit aussi <code>eql?</code> et <code>hash</code>. Et un bon <code>inspect</code> facilite chaque chasse aux bugs.</p><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/methods_rdoc.html#label-Method+Names' target='_blank'>Les opérateurs comme noms de méthode</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/operators_rdoc.html' target='_blank'>Opérateurs</a> · <a href='https://docs.ruby-lang.org/en/4.0/Object.html#method-i-hash' target='_blank'>Object#hash</a> · <a href='https://docs.ruby-lang.org/en/4.0/Comparable.html' target='_blank'>Comparable</a></div><div class='task'><strong>Exercice :</strong> Écrivez la classe <code>Money</code> pour des montants en francs suisses. Elle compte en centimes (centièmes de franc), car les nombres décimaux ne sont pas tout à fait exacts dans un ordinateur (le <code>0.30000000000000004</code> de la leçon {{nr:rechnen}}) : <code>Money.new(450)</code> vaut 4,50 francs. Il lui faut <code>attr_reader :cents</code>, un <code>+</code> qui renvoie un nouveau <code>Money</code>, un <code>to_s</code> qui donne <code>\"4.50 CHF\"</code>, et un <code>==</code> qui considère comme égaux deux montants ayant les mêmes centimes. Alors même <code>sum</code> pourra additionner vos courses.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# class Money\n#   attr_reader :cents\n#   ...   # initialize(cents), +(other), to_s (\"4.50 CHF\"), ==(other)\n# end\n\n# shopping = [Money.new(450), Money.new(120), Money.new(230)]\n# puts shopping.sum(Money.new(0))",
+            "hints": [
+              "Construisez-la comme <code>Hop</code> : <code>+</code> crée un <code>Money.new</code> à partir des centimes des deux montants, <code>==</code> compare les centimes (avec <code>other.is_a?(Money)</code> en tête). Pour <code>to_s</code>, <code>format</code> vous aide : <code>format(\"%.2f CHF\", cents / 100.0)</code>."
+            ],
+            "check": "->(m1, m2) { (m1 + m2).is_a?(Money) && (m1 + m2).to_s == \"5.70 CHF\" && m1.to_s == \"4.50 CHF\" && m1 + m2 == Money.new(570) && m1 != m2 && m1 == Money.new(450) }.(Money.new(450), Money.new(120)) && Money.new(5).to_s == \"0.05 CHF\" && \"#{Money.new(1000)}\" == \"10.00 CHF\" && [Money.new(100), Money.new(250), Money.new(50)].sum(Money.new(0)) == Money.new(400) && code.match?(/^\\s*class Money\\b/)",
+            "hint": "<code>def initialize(cents)</code> → <code>@cents = cents</code>, <code>def +(other)</code> → <code>Money.new(cents + other.cents)</code>, <code>def to_s</code> → <code>format(\"%.2f CHF\", cents / 100.0)</code> et <code>def ==(other)</code> → <code>other.is_a?(Money) &amp;&amp; cents == other.cents</code>.",
+            "solution": "class Money\n  attr_reader :cents\n\n  def initialize(cents)\n    @cents = cents\n  end\n\n  def +(other)\n    Money.new(cents + other.cents)\n  end\n\n  def to_s\n    format(\"%.2f CHF\", cents / 100.0)\n  end\n\n  def ==(other)\n    other.is_a?(Money) && cents == other.cents\n  end\nend\n\nshopping = [Money.new(450), Money.new(120), Money.new(230)]\nputs shopping.sum(Money.new(0))"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus :</strong> Les numéros de version comme <code>\"1.10.0\"</code> ne peuvent pas être comparés comme des chaînes : <code>\"1.10.0\" &gt; \"1.9.2\"</code> est faux, car les chaînes sont comparées caractère par caractère, et <code>\"1\"</code> vient avant <code>\"9\"</code>. Écrivez <code>VersionNumber</code> : <code>VersionNumber.new(\"1.10.0\")</code> retient le texte, <code>to_s</code> le renvoie, et avec <code>include Comparable</code> et un <code>&lt;=&gt;</code> qui compare les parties comme des nombres, <code>VersionNumber.new(\"1.10.0\") &gt; VersionNumber.new(\"1.9.2\")</code> devient vrai.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# class VersionNumber\n#   include Comparable\n#   ...   # initialize(text), to_s, parts ([1, 10, 0]), <=>(other)\n# end\n\n# VersionNumber.new(\"1.10.0\") > VersionNumber.new(\"1.9.2\")",
+            "hints": [
+              "<code>text.split(\".\").map(&amp;:to_i)</code> transforme <code>\"1.10.0\"</code> en l’array <code>[1, 10, 0]</code>. Et les arrays se comparent avec <code>&lt;=&gt;</code> élément par élément : <code>[1, 10, 0] &lt;=&gt; [1, 9, 2]</code> vaut 1. Votre <code>&lt;=&gt;</code> compare donc simplement les parties des deux versions."
+            ],
+            "check": "->(v) { v.(\"1.10.0\") > v.(\"1.9.2\") && v.(\"2.0.0\") > v.(\"1.99.99\") && v.(\"1.2.3\") == v.(\"1.2.3\") && v.(\"0.9.1\") < v.(\"0.10.0\") && [v.(\"1.10.0\"), v.(\"1.2.0\"), v.(\"1.9.2\")].sort.map(&:to_s) == [\"1.2.0\", \"1.9.2\", \"1.10.0\"] && [v.(\"3.4.1\"), v.(\"3.10.0\"), v.(\"3.3.9\")].max.to_s == \"3.10.0\" && v.(\"1.5.0\").between?(v.(\"1.2.0\"), v.(\"1.10.0\")) && \"#{v.(\"4.0.1\")}\" == \"4.0.1\" }.(->(t) { VersionNumber.new(t) }) && VersionNumber.include?(Comparable) && code.include?(\"<=>\") && code.match?(/^\\s*class VersionNumber\\b/)",
+            "hint": "<code>def initialize(text)</code> → <code>@text = text</code>, <code>def to_s</code> → <code>@text</code>, <code>def parts</code> → <code>@text.split(\".\").map(&amp;:to_i)</code> et <code>def &lt;=&gt;(other)</code> → <code>parts &lt;=&gt; other.parts</code>.",
+            "solution": "class VersionNumber\n  include Comparable\n\n  def initialize(text)\n    @text = text\n  end\n\n  def to_s\n    @text\n  end\n\n  def parts\n    @text.split(\".\").map(&:to_i)\n  end\n\n  def <=>(other)\n    parts <=> other.parts\n  end\nend\n\nVersionNumber.new(\"1.10.0\") > VersionNumber.new(\"1.9.2\")"
+          }
+        ]
+      },
+      "it": {
+        "title": "Operatori per le tue classi",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Operatori per le tue classi</h2><p>Ecco un piccolo segreto di Ruby: <code>1 + 2</code> in realtà è una chiamata di metodo. Il numero 1 riceve il messaggio <code>+</code> con l'argomento 2; Ruby ti lascia semplicemente usare la scrittura più carina. Lo stesso vale per <code>*</code>, <code>==</code>, <code>&lt;</code> e perfino per le parentesi quadre:</p>"
+          },
+          {
+            "t": "c",
+            "code": "p 1.+(2)\np \"bacon\".*(3)\np [10, 20, 30].[](1)\n5.==(5)"
+          },
+          {
+            "t": "h",
+            "html": "<p>E un metodo puoi scriverlo anche per le tue classi. Chunky sta pianificando dei salti su una mappa: 2 caselle a destra e 1 in su, poi 1 a destra e 3 in su. Due salti uno dopo l'altro sono come un salto grande: sommi le x e le y. In matematica una cosa del genere si chiama <strong>vettore</strong>. Con <code>def +(other)</code>, <code>Hop</code> riceve un più, con <code>def *(number)</code> un per:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Hop\n  attr_reader :x, :y\n\n  def initialize(x, y)\n    @x = x\n    @y = y\n  end\n\n  def +(other)\n    Hop.new(x + other.x, y + other.y)\n  end\n\n  def *(number)\n    Hop.new(x * number, y * number)\n  end\nend\n\nfar = Hop.new(2, 1) + Hop.new(1, 3)\np [far.x, far.y]\nHop.new(2, 1) * 3"
+          },
+          {
+            "t": "h",
+            "html": "<p>Entrambi restituiscono un salto <em>nuovo</em> e lasciano quelli vecchi come sono, proprio come <code>1 + 2</code> non cambia l'1. Solo la riga <code>=&gt;</code> è brutta: <code>#&lt;Hop:0x… @x=6, @y=3&gt;</code>. Due metodi decidono che aspetto ha un oggetto come testo. <code>to_s</code> della lezione {{nr:klassen}} è per le persone: lo chiedono <code>puts</code> e <code>\"#{…}\"</code>. <code>inspect</code> è per i programmatori: lo chiedono <code>p</code> e la riga <code>=&gt;</code>. E puoi riaprire una classe in qualsiasi momento e scriverci altri metodi:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Hop\n  def to_s\n    \"#{x} right, #{y} up\"\n  end\n\n  def inspect\n    \"#<Hop #{x}|#{y}>\"\n  end\nend\n\nbig = Hop.new(2, 1) * 3\nputs \"Chunky hops #{big}.\"\np big"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ora capovolgi il calcolo: <code>3 * Hop.new(2, 1)</code>. Per noi è la stessa cosa, ma per Ruby è <code>3.*(…)</code>, il metodo <code>*</code> del numero 3. E quello non sa niente di salti:</p>"
+          },
+          {
+            "t": "c",
+            "code": "3 * Hop.new(2, 1)",
+            "raises": "TypeError"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>TypeError: Hop can't be coerced into Integer</code>: il numero non sa che cosa fare con un salto. Un operatore appartiene sempre all'oggetto alla sua <em>sinistra</em>. (In un caso del genere Ruby chiede aiuto anche all'oggetto a destra, con un metodo chiamato <code>coerce</code>. È roba per più avanti; <code>hop * 3</code> funziona, in fondo.)</p><p>Prossima domanda: due salti con gli stessi numeri sono uguali? Di base, <code>==</code> controlla la stessa cosa di <code>equal?</code> della lezione {{nr:klassen}}: se si tratta dello <em>stesso oggetto</em>. Per un salto però contano i valori. Quindi <code>==</code> lo scrivi tu, e <code>!=</code> arriva gratis insieme:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Hop\n  def ==(other)\n    other.is_a?(Hop) && x == other.x && y == other.y\n  end\nend\n\nshort = Hop.new(1, 2)\nagain = Hop.new(1, 2)\np short.equal?(again)   # due oggetti diversi ...\np short == again        # ... con gli stessi valori\nshort != Hop.new(2, 1)"
+          },
+          {
+            "t": "h",
+            "html": "<p>L'<code>other.is_a?(Hop)</code> all'inizio fa sì che un confronto con qualcosa di completamente diverso (<code>short == 5</code>) sia semplicemente falso invece di dare un errore. Quasi fatto! Solo che gli hash e <code>uniq</code> non chiedono affatto <code>==</code>. Un hash smista le sue chiavi in cassetti in base a un numero calcolato da <code>hash</code>, e dentro il cassetto confronta con <code>eql?</code>. Senza questi due metodi, ogni nuovo <code>Hop.new(1, 2)</code> sarebbe un estraneo per un hash. Quindi oggetti uguali hanno bisogno dello stesso numero: la cosa più semplice è prendere quello di <code>[x, y]</code>. E <code>alias eql? ==</code> dà a <code>==</code> il secondo nome <code>eql?</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Hop\n  alias eql? ==\n\n  def hash\n    [x, y].hash\n  end\nend\n\ntargets = { Hop.new(1, 2) => \"chicken coop\" }\np targets[Hop.new(1, 2)]\n[Hop.new(1, 2), Hop.new(1, 2), Hop.new(3, 0)].uniq"
+          },
+          {
+            "t": "h",
+            "html": "<p>Resta il confronto con <code>&lt;</code> e <code>&gt;</code>. Lo conosci dalla lezione {{nr:module}}: <code>include Comparable</code> e un operatore astronave <code>&lt;=&gt;</code>, e di colpo ottieni <code>&lt;</code>, <code>&gt;</code>, <code>between?</code> e <code>clamp</code>, e <code>sort</code> e <code>max</code> possono mettere in ordine i salti. Quale salto va più lontano? Chunky conta le caselle sulla mappa: destra più su, senza segno, come fa <code>abs</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Hop\n  include Comparable\n\n  def distance\n    x.abs + y.abs\n  end\n\n  def <=>(other)\n    distance <=> other.distance\n  end\nend\n\nhops = [Hop.new(3, 1), Hop.new(0, 2), Hop.new(-4, 2)]\np hops.max\np hops.sort\nHop.new(1, 1) < Hop.new(0, 3)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Tra l'altro, a comandare resta il tuo <code>==</code>, anche se <code>Comparable</code> ne porta uno con sé: nella fila degli antenati, i metodi della classe stessa vengono prima di quelli del modulo. Per questo <code>Hop.new(2, 0) == Hop.new(0, 2)</code> resta falso, anche se i due vanno ugualmente lontano.</p><p>Infine le parentesi quadre: con <code>def [](i)</code> un salto risponde come un array, 0 per x e 1 per y:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class Hop\n  def [](i)\n    [x, y][i]\n  end\nend\n\nhop = Hop.new(5, -2)\np hop[0]\np hop[1]\nhop[2]"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>hop[2]</code> è nil, come con un array, perché <code>[]</code> passa semplicemente la domanda a <code>[x, y]</code>. Una regola pratica: dai un operatore alla tua classe quando per i suoi oggetti è naturale come per i numeri, come sommare salti o confrontare importi di denaro. Fagli restituire un oggetto nuovo invece di cambiare quello vecchio. Chi scrive <code>==</code> scrive anche <code>eql?</code> e <code>hash</code>. E un buon <code>inspect</code> rende più facile ogni caccia ai bug.</p><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/syntax/methods_rdoc.html#label-Method+Names' target='_blank'>Operatori come nomi di metodo</a> · <a href='https://docs.ruby-lang.org/en/4.0/syntax/operators_rdoc.html' target='_blank'>Operatori</a> · <a href='https://docs.ruby-lang.org/en/4.0/Object.html#method-i-hash' target='_blank'>Object#hash</a> · <a href='https://docs.ruby-lang.org/en/4.0/Comparable.html' target='_blank'>Comparable</a></div><div class='task'><strong>Esercizio:</strong> Scrivi la classe <code>Money</code> per importi in franchi svizzeri. Conta in centesimi (centesimi di franco), perché i numeri decimali in un computer non sono del tutto esatti (lo <code>0.30000000000000004</code> della lezione {{nr:rechnen}}): <code>Money.new(450)</code> sono 4,50 franchi. Le servono <code>attr_reader :cents</code>, un <code>+</code> che restituisce un nuovo <code>Money</code>, un <code>to_s</code> che dà <code>\"4.50 CHF\"</code>, e un <code>==</code> che considera uguali due importi con gli stessi centesimi. Allora anche <code>sum</code> potrà sommare la tua spesa.</div>"
+          },
+          {
+            "t": "x",
+            "code": "# class Money\n#   attr_reader :cents\n#   ...   # initialize(cents), +(other), to_s (\"4.50 CHF\"), ==(other)\n# end\n\n# shopping = [Money.new(450), Money.new(120), Money.new(230)]\n# puts shopping.sum(Money.new(0))",
+            "hints": [
+              "Costruiscila come <code>Hop</code>: <code>+</code> crea un <code>Money.new</code> dai centesimi dei due importi, <code>==</code> confronta i centesimi (con <code>other.is_a?(Money)</code> all'inizio). Per <code>to_s</code> ti aiuta <code>format</code>: <code>format(\"%.2f CHF\", cents / 100.0)</code>."
+            ],
+            "check": "->(m1, m2) { (m1 + m2).is_a?(Money) && (m1 + m2).to_s == \"5.70 CHF\" && m1.to_s == \"4.50 CHF\" && m1 + m2 == Money.new(570) && m1 != m2 && m1 == Money.new(450) }.(Money.new(450), Money.new(120)) && Money.new(5).to_s == \"0.05 CHF\" && \"#{Money.new(1000)}\" == \"10.00 CHF\" && [Money.new(100), Money.new(250), Money.new(50)].sum(Money.new(0)) == Money.new(400) && code.match?(/^\\s*class Money\\b/)",
+            "hint": "<code>def initialize(cents)</code> → <code>@cents = cents</code>, <code>def +(other)</code> → <code>Money.new(cents + other.cents)</code>, <code>def to_s</code> → <code>format(\"%.2f CHF\", cents / 100.0)</code> e <code>def ==(other)</code> → <code>other.is_a?(Money) &amp;&amp; cents == other.cents</code>.",
+            "solution": "class Money\n  attr_reader :cents\n\n  def initialize(cents)\n    @cents = cents\n  end\n\n  def +(other)\n    Money.new(cents + other.cents)\n  end\n\n  def to_s\n    format(\"%.2f CHF\", cents / 100.0)\n  end\n\n  def ==(other)\n    other.is_a?(Money) && cents == other.cents\n  end\nend\n\nshopping = [Money.new(450), Money.new(120), Money.new(230)]\nputs shopping.sum(Money.new(0))"
+          },
+          {
+            "t": "h",
+            "html": "<div class='task bonus'><strong>Bonus:</strong> I numeri di versione come <code>\"1.10.0\"</code> non si possono confrontare come stringhe: <code>\"1.10.0\" &gt; \"1.9.2\"</code> è falso, perché le stringhe vengono confrontate carattere per carattere, e <code>\"1\"</code> viene prima di <code>\"9\"</code>. Scrivi <code>VersionNumber</code>: <code>VersionNumber.new(\"1.10.0\")</code> si ricorda il testo, <code>to_s</code> lo restituisce, e con <code>include Comparable</code> e un <code>&lt;=&gt;</code> che confronta le parti come numeri, <code>VersionNumber.new(\"1.10.0\") &gt; VersionNumber.new(\"1.9.2\")</code> diventa vero.</div>"
+          },
+          {
+            "t": "x",
+            "bonus": true,
+            "code": "# class VersionNumber\n#   include Comparable\n#   ...   # initialize(text), to_s, parts ([1, 10, 0]), <=>(other)\n# end\n\n# VersionNumber.new(\"1.10.0\") > VersionNumber.new(\"1.9.2\")",
+            "hints": [
+              "<code>text.split(\".\").map(&amp;:to_i)</code> trasforma <code>\"1.10.0\"</code> nell'array <code>[1, 10, 0]</code>. E gli array si confrontano con <code>&lt;=&gt;</code> elemento per elemento: <code>[1, 10, 0] &lt;=&gt; [1, 9, 2]</code> è 1. Quindi il tuo <code>&lt;=&gt;</code> confronta semplicemente le parti delle due versioni."
+            ],
+            "check": "->(v) { v.(\"1.10.0\") > v.(\"1.9.2\") && v.(\"2.0.0\") > v.(\"1.99.99\") && v.(\"1.2.3\") == v.(\"1.2.3\") && v.(\"0.9.1\") < v.(\"0.10.0\") && [v.(\"1.10.0\"), v.(\"1.2.0\"), v.(\"1.9.2\")].sort.map(&:to_s) == [\"1.2.0\", \"1.9.2\", \"1.10.0\"] && [v.(\"3.4.1\"), v.(\"3.10.0\"), v.(\"3.3.9\")].max.to_s == \"3.10.0\" && v.(\"1.5.0\").between?(v.(\"1.2.0\"), v.(\"1.10.0\")) && \"#{v.(\"4.0.1\")}\" == \"4.0.1\" }.(->(t) { VersionNumber.new(t) }) && VersionNumber.include?(Comparable) && code.include?(\"<=>\") && code.match?(/^\\s*class VersionNumber\\b/)",
+            "hint": "<code>def initialize(text)</code> → <code>@text = text</code>, <code>def to_s</code> → <code>@text</code>, <code>def parts</code> → <code>@text.split(\".\").map(&amp;:to_i)</code> e <code>def &lt;=&gt;(other)</code> → <code>parts &lt;=&gt; other.parts</code>.",
             "solution": "class VersionNumber\n  include Comparable\n\n  def initialize(text)\n    @text = text\n  end\n\n  def to_s\n    @text\n  end\n\n  def parts\n    @text.split(\".\").map(&:to_i)\n  end\n\n  def <=>(other)\n    parts <=> other.parts\n  end\nend\n\nVersionNumber.new(\"1.10.0\") > VersionNumber.new(\"1.9.2\")"
           }
         ]
@@ -41654,43 +45426,57 @@ window.LESSONS_JSON = JSON.stringify({
           "c": "255.to_s(2)   \"ff\".to_i(16)",
           "de": "→ <code>\"11111111\"</code>, <code>255</code>: in einer anderen Basis schreiben und lesen",
           "en": "→ <code>\"11111111\"</code>, <code>255</code>: write and read in another base",
-          "ja": "→ <code>\"11111111\"</code>、<code>255</code>：別の基数で書く・読む"
+          "ja": "→ <code>\"11111111\"</code>、<code>255</code>：別の基数で書く・読む",
+          "fr": "→ <code>\"11111111\"</code>, <code>255</code> : écrire et lire dans une autre base",
+          "it": "→ <code>\"11111111\"</code>, <code>255</code>: scrivere e leggere in un'altra base"
         },
         {
           "c": "0b1010   0o17   0xff",
           "de": "binär, oktal, hexadezimal geschrieben: <code>10</code>, <code>15</code>, <code>255</code>",
           "en": "written in binary, octal, hex: <code>10</code>, <code>15</code>, <code>255</code>",
-          "ja": "2進数・8進数・16進数で書いた数：<code>10</code>、<code>15</code>、<code>255</code>"
+          "ja": "2進数・8進数・16進数で書いた数：<code>10</code>、<code>15</code>、<code>255</code>",
+          "fr": "écrits en binaire, octal, hexadécimal : <code>10</code>, <code>15</code>, <code>255</code>",
+          "it": "scritti in binario, ottale, esadecimale: <code>10</code>, <code>15</code>, <code>255</code>"
         },
         {
           "c": "a & b   a | b   a ^ b   1 << 4",
           "de": "bitweise UND, ODER, XOR, schieben (<code>n[0]</code>: das unterste Bit)",
           "en": "bitwise AND, OR, XOR, shift (<code>n[0]</code>: the lowest bit)",
-          "ja": "ビットごとのAND・OR・XOR・シフト（<code>n[0]</code>は最下位ビット）"
+          "ja": "ビットごとのAND・OR・XOR・シフト（<code>n[0]</code>は最下位ビット）",
+          "fr": "ET, OU, OU exclusif bit à bit, décalage (<code>n[0]</code> : le bit le plus bas)",
+          "it": "AND, OR, XOR bit a bit, scorrimento (<code>n[0]</code>: il bit più basso)"
         },
         {
           "c": "135.divmod(60)",
           "de": "→ <code>[2, 15]</code>: wie oft und was übrig bleibt (<code>h, m = …</code> nimmt es auseinander)",
           "en": "→ <code>[2, 15]</code>: how many times, and what is left (<code>h, m = …</code> takes it apart)",
-          "ja": "→ <code>[2, 15]</code>：商と余り（<code>h, m = …</code>で分けて受け取る）"
+          "ja": "→ <code>[2, 15]</code>：商と余り（<code>h, m = …</code>で分けて受け取る）",
+          "fr": "→ <code>[2, 15]</code> : combien de fois, et ce qui reste (<code>h, m = …</code> sépare les deux)",
+          "it": "→ <code>[2, 15]</code>: quante volte, e cosa avanza (<code>h, m = …</code> li separa)"
         },
         {
           "c": "12.gcd(18)   12.lcm(18)",
           "de": "→ <code>6</code>, <code>36</code>: grösster gemeinsamer Teiler, kleinstes gemeinsames Vielfaches",
           "en": "→ <code>6</code>, <code>36</code>: greatest common divisor, least common multiple",
-          "ja": "→ <code>6</code>、<code>36</code>：最大公約数と最小公倍数"
+          "ja": "→ <code>6</code>、<code>36</code>：最大公約数と最小公倍数",
+          "fr": "→ <code>6</code>, <code>36</code> : plus grand commun diviseur, plus petit commun multiple",
+          "it": "→ <code>6</code>, <code>36</code>: massimo comun divisore, minimo comune multiplo"
         },
         {
           "c": "3.7.floor   3.2.ceil   23.ceildiv(8)",
           "de": "→ <code>3</code>, <code>4</code>, <code>3</code>: abrunden, aufrunden, teilen und aufrunden",
           "en": "→ <code>3</code>, <code>4</code>, <code>3</code>: round down, round up, divide and round up",
-          "ja": "→ <code>3</code>、<code>4</code>、<code>3</code>：切り捨て、切り上げ、わって切り上げ"
+          "ja": "→ <code>3</code>、<code>4</code>、<code>3</code>：切り捨て、切り上げ、わって切り上げ",
+          "fr": "→ <code>3</code>, <code>4</code>, <code>3</code> : arrondir vers le bas, vers le haut, diviser et arrondir vers le haut",
+          "it": "→ <code>3</code>, <code>4</code>, <code>3</code>: arrotondare per difetto, per eccesso, dividere e arrotondare per eccesso"
         },
         {
           "c": "(-2).abs",
           "de": "→ <code>2</code>: der Betrag, ohne Vorzeichen",
           "en": "→ <code>2</code>: the absolute value, without the sign",
-          "ja": "→ <code>2</code>：絶対値（符号をとった数）"
+          "ja": "→ <code>2</code>：絶対値（符号をとった数）",
+          "fr": "→ <code>2</code> : la valeur absolue, sans le signe",
+          "it": "→ <code>2</code>: il valore assoluto, senza segno"
         }
       ]
     },
@@ -41888,31 +45674,41 @@ window.LESSONS_JSON = JSON.stringify({
           "c": "\"Grüezi\".bytesize",
           "de": "→ <code>7</code>: Bytes in UTF-8 (<code>length</code>: 6 Zeichen)",
           "en": "→ <code>7</code>: bytes in UTF-8 (<code>length</code>: 6 characters)",
-          "ja": "→ <code>7</code>：UTF-8でのバイト数（<code>length</code>は6文字）"
+          "ja": "→ <code>7</code>：UTF-8でのバイト数（<code>length</code>は6文字）",
+          "fr": "→ <code>7</code> : les octets en UTF-8 (<code>length</code> : 6 caractères)",
+          "it": "→ <code>7</code>: i byte in UTF-8 (<code>length</code>: 6 caratteri)"
         },
         {
           "c": "s.grapheme_clusters",
           "de": "→ die Zeichen, wie ein Mensch sie sieht: <code>\"🇨🇭\"</code> ist eins, nicht zwei",
           "en": "→ the characters as a person sees them: <code>\"🇨🇭\"</code> is one, not two",
-          "ja": "→ 人に見えるとおりの文字：<code>\"🇨🇭\"</code>は2つでなく1つ"
+          "ja": "→ 人に見えるとおりの文字：<code>\"🇨🇭\"</code>は2つでなく1つ",
+          "fr": "→ les caractères tels qu'une personne les voit : <code>\"🇨🇭\"</code> en est un, pas deux",
+          "it": "→ i caratteri come li vede una persona: <code>\"🇨🇭\"</code> è uno, non due"
         },
         {
           "c": "s.unicode_normalize",
           "de": "gleich aussehenden Text gleich machen (<code>:nfd</code>: Buchstabe und Akzent getrennt)",
           "en": "make equal-looking text equal (<code>:nfd</code>: letter and accent apart)",
-          "ja": "見た目が同じ文字列を同じ形に（<code>:nfd</code>なら文字とアクセントを分ける）"
+          "ja": "見た目が同じ文字列を同じ形に（<code>:nfd</code>なら文字とアクセントを分ける）",
+          "fr": "rendre égaux des textes qui se ressemblent (<code>:nfd</code> : lettre et accent séparés)",
+          "it": "rendere uguali testi che sembrano uguali (<code>:nfd</code>: lettera e accento separati)"
         },
         {
           "c": "a.chars.zip(b.chars).count { |x, y| x != y }",
           "de": "an wie vielen Stellen sich zwei gleich lange Wörter unterscheiden (Hamming-Abstand)",
           "en": "in how many places two words of the same length differ (Hamming distance)",
-          "ja": "同じ長さの2つの単語がちがう位置の数（ハミング距離）"
+          "ja": "同じ長さの2つの単語がちがう位置の数（ハミング距離）",
+          "fr": "à combien d'endroits deux mots de même longueur diffèrent (distance de Hamming)",
+          "it": "in quanti punti differiscono due parole della stessa lunghezza (distanza di Hamming)"
         },
         {
           "c": "DidYouMean::SpellChecker.new(dictionary: words).correct(s)",
           "de": "die ähnlichsten Wörter, wie Rubys „Meintest du?“ – <code>[]</code>, wenn keins nah genug ist",
           "en": "the most similar words, like Ruby's “Did you mean?” – <code>[]</code> when none is close enough",
-          "ja": "いちばん似ている単語。Rubyの「もしかして？」と同じ。近いものがなければ<code>[]</code>"
+          "ja": "いちばん似ている単語。Rubyの「もしかして？」と同じ。近いものがなければ<code>[]</code>",
+          "fr": "les mots les plus proches, comme le « Did you mean? » de Ruby – <code>[]</code> si aucun n'est assez proche",
+          "it": "le parole più simili, come il “Did you mean?” di Ruby – <code>[]</code> se nessuna è abbastanza vicina"
         }
       ]
     },
@@ -42160,13 +45956,17 @@ window.LESSONS_JSON = JSON.stringify({
           "c": "(1..).first(3)",
           "de": "→ <code>[1, 2, 3]</code>: ein endloser Bereich – nimm nur, was du brauchst (<code>each</code> nur mit <code>break</code>)",
           "en": "→ <code>[1, 2, 3]</code>: an endless range – take only what you need (<code>each</code> only with <code>break</code>)",
-          "ja": "→ <code>[1, 2, 3]</code>：終わりのない範囲。必要なぶんだけ取る（<code>each</code>は<code>break</code>とセットで）"
+          "ja": "→ <code>[1, 2, 3]</code>：終わりのない範囲。必要なぶんだけ取る（<code>each</code>は<code>break</code>とセットで）",
+          "fr": "→ <code>[1, 2, 3]</code> : un range sans fin – ne prenez que ce dont vous avez besoin (<code>each</code> seulement avec <code>break</code>)",
+          "it": "→ <code>[1, 2, 3]</code>: un range senza fine – prendi solo quello che ti serve (<code>each</code> solo con <code>break</code>)"
         },
         {
           "c": "(18..24).include?(20.5)   n.clamp(0..100)",
           "de": "liegt der Wert im Bereich? (auch <code>cover?</code>, <code>when 18..24</code>) / <code>n</code> in die Grenzen 0 bis 100 holen",
           "en": "is the value in the range? (also <code>cover?</code>, <code>when 18..24</code>) / bring <code>n</code> within the limits 0 to 100",
-          "ja": "値は範囲の中？（<code>cover?</code>、<code>when 18..24</code>も）／<code>n</code>を0から100の枠に収める"
+          "ja": "値は範囲の中？（<code>cover?</code>、<code>when 18..24</code>も）／<code>n</code>を0から100の枠に収める",
+          "fr": "la valeur est-elle dans le range ? (aussi <code>cover?</code>, <code>when 18..24</code>) / ramener <code>n</code> entre les limites 0 et 100",
+          "it": "il valore è nel range? (anche <code>cover?</code>, <code>when 18..24</code>) / riportare <code>n</code> entro i limiti da 0 a 100"
         }
       ]
     },
@@ -42318,79 +46118,105 @@ window.LESSONS_JSON = JSON.stringify({
           "c": "a[1..3]   a[2..]   a[-2..]",
           "de": "Stücke: Stelle 1 bis 3, ab Stelle 2 bis zum Schluss, die letzten zwei (auch bei Strings)",
           "en": "pieces: positions 1 to 3, from position 2 to the end, the last two (strings too)",
-          "ja": "一部を切り出す：1番目から3番目、2番目から最後まで、最後の2つ（文字列でも）"
+          "ja": "一部を切り出す：1番目から3番目、2番目から最後まで、最後の2つ（文字列でも）",
+          "fr": "des morceaux : positions 1 à 3, de la position 2 jusqu'à la fin, les deux derniers (aussi pour les chaînes)",
+          "it": "pezzi: posizioni da 1 a 3, dalla posizione 2 alla fine, gli ultimi due (anche per le stringhe)"
         },
         {
           "c": "Set[1, 2, 2]   a.to_set",
           "de": "→ <code>Set[1, 2]</code>: eine Menge – jedes Element nur einmal, ohne Reihenfolge",
           "en": "→ <code>Set[1, 2]</code>: a set – every element only once, no order",
-          "ja": "→ <code>Set[1, 2]</code>：集合。どの要素も1回だけで、順番はない"
+          "ja": "→ <code>Set[1, 2]</code>：集合。どの要素も1回だけで、順番はない",
+          "fr": "→ <code>Set[1, 2]</code> : un ensemble – chaque élément une seule fois, sans ordre",
+          "it": "→ <code>Set[1, 2]</code>: un insieme – ogni elemento una volta sola, senza ordine"
         },
         {
           "c": "s & t   s | t   s - t",
           "de": "in beiden / in mindestens einer / nur in <code>s</code> (auch <code>s.subset?(t)</code>)",
           "en": "in both / in at least one / only in <code>s</code> (also <code>s.subset?(t)</code>)",
-          "ja": "両方にある／少なくとも一方にある／<code>s</code>だけにある（<code>s.subset?(t)</code>も）"
+          "ja": "両方にある／少なくとも一方にある／<code>s</code>だけにある（<code>s.subset?(t)</code>も）",
+          "fr": "dans les deux / dans au moins un / seulement dans <code>s</code> (aussi <code>s.subset?(t)</code>)",
+          "it": "in entrambi / in almeno uno / solo in <code>s</code> (anche <code>s.subset?(t)</code>)"
         },
         {
           "c": "s.add?(x)",
           "de": "hinzufügen – <code>nil</code>, wenn <code>x</code> schon drin war",
           "en": "add – <code>nil</code> if <code>x</code> was in already",
-          "ja": "加える。<code>x</code>がもう入っていたら<code>nil</code>"
+          "ja": "加える。<code>x</code>がもう入っていたら<code>nil</code>",
+          "fr": "ajouter – <code>nil</code> si <code>x</code> y était déjà",
+          "it": "aggiungere – <code>nil</code> se <code>x</code> c'era già"
         },
         {
           "c": "grid[row][col]",
           "de": "ein Feld eines Gitters (Array von Zeilen): zuerst die Zeile, dann die Spalte",
           "en": "a cell of a grid (an array of rows): the row first, then the column",
-          "ja": "グリッド（行の配列）のマス：先に行、次に列"
+          "ja": "グリッド（行の配列）のマス：先に行、次に列",
+          "fr": "une case d'une grille (un array de lignes) : d'abord la ligne, puis la colonne",
+          "it": "una cella di una griglia (un array di righe): prima la riga, poi la colonna"
         },
         {
           "c": "Array.new(3) { Array.new(3, 0) }",
           "de": "ein 3 × 3-Gitter mit eigenen Zeilen (<code>Array.new(3, zeile)</code>: dreimal <em>dieselbe</em> Zeile)",
           "en": "a 3 × 3 grid with rows of their own (<code>Array.new(3, row)</code>: the <em>same</em> row three times)",
-          "ja": "3 × 3のグリッド、行はそれぞれ別（<code>Array.new(3, row)</code>だと<em>同じ</em>行が3回）"
+          "ja": "3 × 3のグリッド、行はそれぞれ別（<code>Array.new(3, row)</code>だと<em>同じ</em>行が3回）",
+          "fr": "une grille de 3 × 3 dont chaque ligne est la sienne (<code>Array.new(3, row)</code> : la <em>même</em> ligne trois fois)",
+          "it": "una griglia 3 × 3 con righe tutte sue (<code>Array.new(3, row)</code>: la <em>stessa</em> riga tre volte)"
         },
         {
           "c": "grid.transpose",
           "de": "Zeilen und Spalten tauschen (<code>.map(&amp;:reverse)</code> dazu: um 90° drehen)",
           "en": "swap rows and columns (add <code>.map(&amp;:reverse)</code>: turn by 90°)",
-          "ja": "行と列を入れかえる（<code>.map(&amp;:reverse)</code>をつけると90°回転）"
+          "ja": "行と列を入れかえる（<code>.map(&amp;:reverse)</code>をつけると90°回転）",
+          "fr": "échanger lignes et colonnes (en ajoutant <code>.map(&amp;:reverse)</code> : tourner de 90°)",
+          "it": "scambiare righe e colonne (aggiungendo <code>.map(&amp;:reverse)</code>: ruotare di 90°)"
         },
         {
           "c": "a.product(b)",
           "de": "jedes mit jedem: alle Paare <code>[x, y]</code> aus <code>a</code> und <code>b</code>",
           "en": "every with every: all pairs <code>[x, y]</code> from <code>a</code> and <code>b</code>",
-          "ja": "すべてとすべて：<code>a</code>と<code>b</code>からできる組<code>[x, y]</code>全部"
+          "ja": "すべてとすべて：<code>a</code>と<code>b</code>からできる組<code>[x, y]</code>全部",
+          "fr": "chacun avec chacun : toutes les paires <code>[x, y]</code> de <code>a</code> et <code>b</code>",
+          "it": "ognuno con ognuno: tutte le coppie <code>[x, y]</code> da <code>a</code> e <code>b</code>"
         },
         {
           "c": "a.combination(2)   a.permutation",
           "de": "alle Auswahlen von 2 (Reihenfolge egal) / alle Reihenfolgen",
           "en": "every choice of 2 (order doesn't matter) / every order",
-          "ja": "2つの選び方すべて（順番は関係ない）／すべての並び順"
+          "ja": "2つの選び方すべて（順番は関係ない）／すべての並び順",
+          "fr": "chaque choix de 2 (l'ordre ne compte pas) / chaque ordre",
+          "it": "ogni scelta di 2 (l'ordine non conta) / ogni ordine"
         },
         {
           "c": "a.repeated_permutation(3).size",
           "de": "Reihenfolgen mit Wiederholung; <code>size</code> zählt, ohne sie zu bauen",
           "en": "orders with repetition; <code>size</code> counts them without building them",
-          "ja": "重複ありの並び順。<code>size</code>は作らずに数える"
+          "ja": "重複ありの並び順。<code>size</code>は作らずに数える",
+          "fr": "ordres avec répétition ; <code>size</code> les compte sans les construire",
+          "it": "ordini con ripetizione; <code>size</code> li conta senza costruirli"
         },
         {
           "c": "st.push(x)   st.pop   st.last",
           "de": "Stapel: oben drauf, oben weg, oben nachschauen – wer zuletzt kam, geht zuerst (LIFO)",
           "en": "stack: put on top, take off the top, peek at the top – last in, first out (LIFO)",
-          "ja": "スタック：上にのせる、上から取る、上を見る。後入れ先出し（LIFO）"
+          "ja": "スタック：上にのせる、上から取る、上を見る。後入れ先出し（LIFO）",
+          "fr": "pile : poser dessus, retirer du dessus, regarder le dessus – dernier entré, premier sorti (LIFO)",
+          "it": "pila: mettere in cima, togliere dalla cima, guardare la cima – l'ultimo che entra è il primo che esce (LIFO)"
         },
         {
           "c": "q.push(x)   q.shift",
           "de": "Warteschlange: hinten anstellen, vorne dran – wer zuerst kam, zuerst (FIFO)",
           "en": "queue: join at the back, served at the front – first in, first out (FIFO)",
-          "ja": "キュー：後ろに並び、前から出る。先入れ先出し（FIFO）"
+          "ja": "キュー：後ろに並び、前から出る。先入れ先出し（FIFO）",
+          "fr": "file : se mettre au bout, être servi devant – premier entré, premier sorti (FIFO)",
+          "it": "coda: mettersi in fondo, essere serviti davanti – il primo che entra è il primo che esce (FIFO)"
         },
         {
           "c": "grid.map(&:dup)",
           "de": "ein Array von Strings kopieren, Zeile für Zeile – <code>dup</code> allein teilt die Strings",
           "en": "copy an array of strings row by row – <code>dup</code> alone shares the strings",
-          "ja": "文字列の配列を1行ずつコピー。<code>dup</code>だけでは中の文字列は共有のまま"
+          "ja": "文字列の配列を1行ずつコピー。<code>dup</code>だけでは中の文字列は共有のまま",
+          "fr": "copier un array de chaînes ligne par ligne – <code>dup</code> seul partage les chaînes",
+          "it": "copiare un array di stringhe riga per riga – <code>dup</code> da solo condivide le stringhe"
         }
       ]
     },
@@ -42573,67 +46399,89 @@ window.LESSONS_JSON = JSON.stringify({
           "c": "a.reduce(0) { |sum, x| sum + x }",
           "de": "falten mit Startwert: Was der Block zurückgibt, ist der neue Zwischenstand – also gehört er in die letzte Zeile",
           "en": "fold with a start value: what the block returns is the new running value – so it goes on the last line",
-          "ja": "初期値つきで畳み込む。ブロックが返す値が次の途中経過なので、最後の行に書く"
+          "ja": "初期値つきで畳み込む。ブロックが返す値が次の途中経過なので、最後の行に書く",
+          "fr": "réduire avec une valeur de départ : ce que renvoie le bloc devient la nouvelle valeur courante – donc à la dernière ligne",
+          "it": "ridurre con un valore iniziale: quello che restituisce il blocco è il nuovo valore corrente – quindi va sull'ultima riga"
         },
         {
           "c": "a.each_with_object({}) { |x, h| h[x] = x.size }",
           "de": "einen Hash (mit <code>[]</code>: ein Array) füllen – am Ende kommt das Objekt zurück",
           "en": "fill a hash (with <code>[]</code>: an array) – the object comes back at the end",
-          "ja": "ハッシュ（<code>[]</code>なら配列）を埋める。最後にそのオブジェクトが返る"
+          "ja": "ハッシュ（<code>[]</code>なら配列）を埋める。最後にそのオブジェクトが返る",
+          "fr": "remplir un hash (avec <code>[]</code> : un array) – l'objet revient à la fin",
+          "it": "riempire un hash (con <code>[]</code>: un array) – l'oggetto torna alla fine"
         },
         {
           "c": "a.each_cons(2).map { |x, y| y - x }",
           "de": "Nachbarn paarweise: hier die Änderung von einem Element zum nächsten",
           "en": "neighbours in pairs: here the change from one element to the next",
-          "ja": "となり同士のペア。ここでは1つ前の要素からの変化"
+          "ja": "となり同士のペア。ここでは1つ前の要素からの変化",
+          "fr": "les voisins par paires : ici la variation d'un élément au suivant",
+          "it": "i vicini a coppie: qui la variazione da un elemento al successivo"
         },
         {
           "c": "a.chunk_while { |x, y| y == x + 1 }",
           "de": "Folgen zusammenhalten: <code>[1, 2, 3, 7, 8]</code> → <code>[[1, 2, 3], [7, 8]]</code> (<code>slice_when</code>: schneiden, wo der Block <code>true</code> sagt)",
           "en": "keep runs together: <code>[1, 2, 3, 7, 8]</code> → <code>[[1, 2, 3], [7, 8]]</code> (<code>slice_when</code>: cut where the block says <code>true</code>)",
-          "ja": "連続をまとめる：<code>[1, 2, 3, 7, 8]</code> → <code>[[1, 2, 3], [7, 8]]</code>（<code>slice_when</code>はブロックが<code>true</code>のところで切る）"
+          "ja": "連続をまとめる：<code>[1, 2, 3, 7, 8]</code> → <code>[[1, 2, 3], [7, 8]]</code>（<code>slice_when</code>はブロックが<code>true</code>のところで切る）",
+          "fr": "garder les suites ensemble : <code>[1, 2, 3, 7, 8]</code> → <code>[[1, 2, 3], [7, 8]]</code> (<code>slice_when</code> : couper là où le bloc dit <code>true</code>)",
+          "it": "tenere insieme le sequenze: <code>[1, 2, 3, 7, 8]</code> → <code>[[1, 2, 3], [7, 8]]</code> (<code>slice_when</code>: tagliare dove il blocco dice <code>true</code>)"
         },
         {
           "c": "a.minmax   a.max(2)",
           "de": "→ <code>[kleinstes, grösstes]</code> / die zwei grössten (auch <code>min(2)</code>)",
           "en": "→ <code>[smallest, largest]</code> / the two largest (also <code>min(2)</code>)",
-          "ja": "→ <code>[最小, 最大]</code>／大きいほうから2つ（<code>min(2)</code>も）"
+          "ja": "→ <code>[最小, 最大]</code>／大きいほうから2つ（<code>min(2)</code>も）",
+          "fr": "→ <code>[smallest, largest]</code> / les deux plus grands (aussi <code>min(2)</code>)",
+          "it": "→ <code>[smallest, largest]</code> / i due più grandi (anche <code>min(2)</code>)"
         },
         {
           "c": "e = list.each\ne.next",
           "de": "ohne Block: ein Enumerator – <code>next</code> gibt ein Element nach dem anderen (danach <code>StopIteration</code>)",
           "en": "without a block: an Enumerator – <code>next</code> gives one element after the other (then <code>StopIteration</code>)",
-          "ja": "ブロックなしならEnumerator。<code>next</code>で1つずつ取り出す（最後のあとは<code>StopIteration</code>）"
+          "ja": "ブロックなしならEnumerator。<code>next</code>で1つずつ取り出す（最後のあとは<code>StopIteration</code>）",
+          "fr": "sans bloc : un Enumerator – <code>next</code> donne un élément après l'autre (puis <code>StopIteration</code>)",
+          "it": "senza blocco: un Enumerator – <code>next</code> dà un elemento dopo l'altro (poi <code>StopIteration</code>)"
         },
         {
           "c": "dice = Enumerator.new do |y|\n  loop { y << rand(1..6) }\nend",
           "de": "eine eigene endlose Liste: <code>y &lt;&lt;</code> gibt den nächsten Wert heraus – <code>dice.first(3)</code>",
           "en": "an endless list of your own: <code>y &lt;&lt;</code> hands out the next value – <code>dice.first(3)</code>",
-          "ja": "自分で作る終わりのない列。<code>y &lt;&lt;</code>で次の値を差し出す。<code>dice.first(3)</code>"
+          "ja": "自分で作る終わりのない列。<code>y &lt;&lt;</code>で次の値を差し出す。<code>dice.first(3)</code>",
+          "fr": "une liste sans fin à vous : <code>y &lt;&lt;</code> fournit la valeur suivante – <code>dice.first(3)</code>",
+          "it": "una lista senza fine tutta tua: <code>y &lt;&lt;</code> fornisce il valore successivo – <code>dice.first(3)</code>"
         },
         {
           "c": "(1..).lazy.select(&:even?).first(3)",
           "de": "→ <code>[2, 4, 6]</code>: <code>lazy</code> rechnet nur so viel, wie <code>first</code> verlangt – auch auf endlosen Listen",
           "en": "→ <code>[2, 4, 6]</code>: <code>lazy</code> computes only as much as <code>first</code> asks for – endless lists too",
-          "ja": "→ <code>[2, 4, 6]</code>：<code>lazy</code>は<code>first</code>がほしがる分だけ計算する。終わりのない列でも"
+          "ja": "→ <code>[2, 4, 6]</code>：<code>lazy</code>は<code>first</code>がほしがる分だけ計算する。終わりのない列でも",
+          "fr": "→ <code>[2, 4, 6]</code> : <code>lazy</code> ne calcule que ce que <code>first</code> demande – même pour les listes sans fin",
+          "it": "→ <code>[2, 4, 6]</code>: <code>lazy</code> calcola solo quanto chiede <code>first</code> – anche per le liste senza fine"
         },
         {
           "c": "a.index { |x| x > 3 }",
           "de": "die Stelle des ersten Elements, das passt (<code>nil</code>: keins)",
           "en": "the position of the first element that matches (<code>nil</code>: none)",
-          "ja": "条件に合う最初の要素の位置（なければ<code>nil</code>）"
+          "ja": "条件に合う最初の要素の位置（なければ<code>nil</code>）",
+          "fr": "la position du premier élément qui correspond (<code>nil</code> : aucun)",
+          "it": "la posizione del primo elemento che corrisponde (<code>nil</code>: nessuno)"
         },
         {
           "c": "a.insert(1, x)   a.delete_at(1)",
           "de": "an Stelle 1 einfügen (die anderen rücken nach) / die Stelle 1 herausnehmen",
           "en": "slip in at position 1 (the others move along) / take out position 1",
-          "ja": "位置1に差しこむ（ほかはずれる）／位置1を取りのぞく"
+          "ja": "位置1に差しこむ（ほかはずれる）／位置1を取りのぞく",
+          "fr": "glisser à la position 1 (les autres se décalent) / retirer la position 1",
+          "it": "infilare alla posizione 1 (gli altri si spostano) / togliere la posizione 1"
         },
         {
           "c": "a.drop(1)",
           "de": "alle ausser dem ersten – das Gegenstück zu <code>first(1)</code>",
           "en": "all but the first – the counterpart of <code>first(1)</code>",
-          "ja": "最初の1つ以外すべて。<code>first(1)</code>の反対"
+          "ja": "最初の1つ以外すべて。<code>first(1)</code>の反対",
+          "fr": "tous sauf le premier – le pendant de <code>first(1)</code>",
+          "it": "tutti tranne il primo – il contrario di <code>first(1)</code>"
         }
       ]
     },
@@ -42820,7 +46668,9 @@ window.LESSONS_JSON = JSON.stringify({
           "c": "Hash.new([])",
           "de": "Falle: <em>ein</em> Array für alle fehlenden Schlüssel, und <code>&lt;&lt;</code> speichert nichts – nimm die Block-Form",
           "en": "a trap: <em>one</em> array shared by every missing key, and <code>&lt;&lt;</code> stores nothing – use the block form",
-          "ja": "わな：ないキー全部で<em>1つの</em>配列を共有し、<code>&lt;&lt;</code>では何も保存されない。ブロックをわたす書き方を使う"
+          "ja": "わな：ないキー全部で<em>1つの</em>配列を共有し、<code>&lt;&lt;</code>では何も保存されない。ブロックをわたす書き方を使う",
+          "fr": "un piège : <em>un seul</em> array partagé par toutes les clés absentes, et <code>&lt;&lt;</code> n'enregistre rien – utilisez la forme avec bloc",
+          "it": "una trappola: <em>un solo</em> array condiviso da tutte le chiavi mancanti, e <code>&lt;&lt;</code> non salva niente – usa la forma con il blocco"
         }
       ]
     },
@@ -42956,19 +46806,25 @@ window.LESSONS_JSON = JSON.stringify({
           "c": "answer = yield(dish, price)",
           "de": "dem Block Werte mitgeben – was der Block ergibt, liefert <code>yield</code> zurück",
           "en": "hand the block values – <code>yield</code> returns what the block gives",
-          "ja": "ブロックに値を渡す。ブロックの結果が<code>yield</code>の値になる"
+          "ja": "ブロックに値を渡す。ブロックの結果が<code>yield</code>の値になる",
+          "fr": "passer des valeurs au bloc – <code>yield</code> renvoie ce que donne le bloc",
+          "it": "passare valori al blocco – <code>yield</code> restituisce quello che dà il blocco"
         },
         {
           "c": "def for_all(&block)\n  names.map(&block)\nend",
           "de": "den Block als Parameter auffangen und an eine andere Methode weiterreichen",
           "en": "catch the block as a parameter and pass it on to another method",
-          "ja": "ブロックを引数で受け取って、別のメソッドにそのまま渡す"
+          "ja": "ブロックを引数で受け取って、別のメソッドにそのまま渡す",
+          "fr": "attraper le bloc comme paramètre et le transmettre à une autre méthode",
+          "it": "prendere il blocco come parametro e passarlo a un altro metodo"
         },
         {
           "c": "placed << x\nfound = search(placed)\nreturn found if found\nplaced.pop",
           "de": "Backtracking: probieren, weitersuchen, zurücknehmen – passt nichts, heisst <code>nil</code> Sackgasse",
           "en": "backtracking: try, search on, take it back – if nothing fits, <code>nil</code> means dead end",
-          "ja": "バックトラッキング：試す、探しつづける、取りのぞく。何も合わなければ<code>nil</code>で行き止まり"
+          "ja": "バックトラッキング：試す、探しつづける、取りのぞく。何も合わなければ<code>nil</code>で行き止まり",
+          "fr": "backtracking : essayer, chercher plus loin, revenir en arrière – si rien ne va, <code>nil</code> veut dire impasse",
+          "it": "backtracking: provare, cercare oltre, tornare indietro – se niente va bene, <code>nil</code> vuol dire vicolo cieco"
         }
       ]
     },
@@ -43152,19 +47008,25 @@ window.LESSONS_JSON = JSON.stringify({
           "c": "def +(other)\n  Hop.new(x + other.x, y + other.y)\nend",
           "de": "ein eigener Operator: <code>a + b</code> ruft <code>a.+(b)</code> auf – gib ein neues Objekt zurück",
           "en": "an operator of your own: <code>a + b</code> calls <code>a.+(b)</code> – return a new object",
-          "ja": "自分の演算子：<code>a + b</code>は<code>a.+(b)</code>の呼び出し。新しいオブジェクトを返す"
+          "ja": "自分の演算子：<code>a + b</code>は<code>a.+(b)</code>の呼び出し。新しいオブジェクトを返す",
+          "fr": "un opérateur à vous : <code>a + b</code> appelle <code>a.+(b)</code> – renvoyez un nouvel objet",
+          "it": "un operatore tutto tuo: <code>a + b</code> chiama <code>a.+(b)</code> – restituisci un nuovo oggetto"
         },
         {
           "c": "alias eql? ==\ndef hash = [x, y].hash",
           "de": "zum eigenen <code>==</code>: damit gleiche Objekte auch als Hash-Schlüssel und für <code>uniq</code> gleich sind",
           "en": "goes with your own <code>==</code>: so that equal objects are equal as hash keys and for <code>uniq</code> too",
-          "ja": "自分の<code>==</code>とセットで。等しいオブジェクトが、ハッシュのキーや<code>uniq</code>でも等しくなる"
+          "ja": "自分の<code>==</code>とセットで。等しいオブジェクトが、ハッシュのキーや<code>uniq</code>でも等しくなる",
+          "fr": "va avec votre propre <code>==</code> : pour que des objets égaux le soient aussi comme clés de hash et pour <code>uniq</code>",
+          "it": "va con il tuo <code>==</code>: così oggetti uguali lo sono anche come chiavi di un hash e per <code>uniq</code>"
         },
         {
           "c": "def inspect",
           "de": "so zeigen <code>p</code> und die <code>=&gt;</code>-Zeile das Objekt (für <code>puts</code>: <code>to_s</code>)",
           "en": "how <code>p</code> and the <code>=&gt;</code> line show the object (for <code>puts</code>: <code>to_s</code>)",
-          "ja": "<code>p</code>や<code>=&gt;</code>の行での見え方（<code>puts</code>用は<code>to_s</code>）"
+          "ja": "<code>p</code>や<code>=&gt;</code>の行での見え方（<code>puts</code>用は<code>to_s</code>）",
+          "fr": "comment <code>p</code> et la ligne <code>=&gt;</code> montrent l'objet (pour <code>puts</code> : <code>to_s</code>)",
+          "it": "come <code>p</code> e la riga <code>=&gt;</code> mostrano l'oggetto (per <code>puts</code>: <code>to_s</code>)"
         }
       ]
     },
@@ -43303,19 +47165,25 @@ window.LESSONS_JSON = JSON.stringify({
           "c": "Integer(\"42\")   Integer(\"bacon\", exception: false)",
           "de": "→ <code>42</code> / <code>nil</code>: strenger als <code>to_i</code> – ohne <code>exception: false</code> gibt <code>\"bacon\"</code> einen <code>ArgumentError</code>",
           "en": "→ <code>42</code> / <code>nil</code>: stricter than <code>to_i</code> – without <code>exception: false</code>, <code>\"bacon\"</code> raises an <code>ArgumentError</code>",
-          "ja": "→ <code>42</code>／<code>nil</code>：<code>to_i</code>よりきびしい。<code>exception: false</code>がなければ<code>\"bacon\"</code>は<code>ArgumentError</code>"
+          "ja": "→ <code>42</code>／<code>nil</code>：<code>to_i</code>よりきびしい。<code>exception: false</code>がなければ<code>\"bacon\"</code>は<code>ArgumentError</code>",
+          "fr": "→ <code>42</code> / <code>nil</code> : plus strict que <code>to_i</code> – sans <code>exception: false</code>, <code>\"bacon\"</code> lève une <code>ArgumentError</code>",
+          "it": "→ <code>42</code> / <code>nil</code>: più severo di <code>to_i</code> – senza <code>exception: false</code>, <code>\"bacon\"</code> solleva un <code>ArgumentError</code>"
         },
         {
           "c": "def parse(text)\n  Integer(text)\nrescue ArgumentError\n  nil\nend",
           "de": "<code>rescue</code> direkt in der Methode – ohne <code>begin</code>",
           "en": "<code>rescue</code> right in the method – no <code>begin</code> needed",
-          "ja": "メソッドの中に直接<code>rescue</code>。<code>begin</code>はいらない"
+          "ja": "メソッドの中に直接<code>rescue</code>。<code>begin</code>はいらない",
+          "fr": "<code>rescue</code> directement dans la méthode – pas besoin de <code>begin</code>",
+          "it": "<code>rescue</code> direttamente nel metodo – non serve <code>begin</code>"
         },
         {
           "c": "rescue ArgumentError => e\n  p e.class, e.message",
           "de": "den Fehler selbst in die Hand nehmen: seine Klasse und seine Meldung",
           "en": "get hold of the error itself: its class and its message",
-          "ja": "エラーそのものを受け取る：そのクラスとメッセージ"
+          "ja": "エラーそのものを受け取る：そのクラスとメッセージ",
+          "fr": "attraper l'erreur elle-même : sa classe et son message",
+          "it": "prendere l'errore stesso: la sua classe e il suo messaggio"
         }
       ]
     },
