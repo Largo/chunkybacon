@@ -2,7 +2,9 @@
 // "ironruby", docs/HANDOVER.md §6s): IronRuby 4.0 on .NET 10's runtime for
 // the browser, compiled to WebAssembly (assets/ironruby/,
 // tools/vendor_ironruby.rb). Started by ironruby_lab.js only when that
-// lesson opens - nothing of it loads anywhere else.
+// lesson opens, or an embedded IronRuby cell runs (embed.html,
+// engine=ironruby: there a blob: worker imports this module, §6k) -
+// nothing of it loads anywhere else.
 //
 // A run blocks the thread it runs on, so it runs here: the page stays free
 // while a cell computes, and a loop that never ends is stopped by ending

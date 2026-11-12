@@ -2313,7 +2313,7 @@ analysis it started from).
 - **The pieces.** `embed.js`, on the host page, turns every
   `pre[data-chunky]` into an iframe of `embed.html`: the code without its
   shared indentation, deflate-raw and base64url into the fragment
-  (`#code=…&gems=…&lang=…&load=…&run=1&id=…`; `src=` takes plain text for
+  (`#code=…&engine=…&gems=…&lang=…&load=…&run=1&id=…`; `src=` takes plain text for
   hand-made links), `loading="lazy"`, and the `sandbox` attribute as a
   second line of defence. The frame posts `{chunkyEmbed: "size", height}`
   and timings with `"*"`; the host page matches them by `event.source`
@@ -2341,6 +2341,30 @@ analysis it started from).
   `processing.js` and `game.js`. main.rb itself is unchanged: it keeps a
   cell's code only through the shell's `chunkySaveCode`, which the embed
   does not register.
+- **IronRuby cells** (`engine=ironruby`, `data-engine="ironruby"`,
+  `make_embed_url.rb --engine ironruby`): the one lesson gets `"engine":
+  "ironruby"`, so main.rb runs its cell as in the IronRuby lesson (§6s) -
+  through `ironruby_lab.js`, which the embed loads with the kernel and
+  whose `.ironruby-status` line (with the progress bar) it puts above the
+  output. ruby.wasm still boots alongside: the kernel shows the answers,
+  checks the syntax and explains errors. Default `load=click` (about 20 MB
+  of .NET on top of ruby.wasm's 10). The worker is the problem: the page's
+  origin is opaque, and `new Worker("https://<course>/ironruby_worker.js")`
+  is a cross-origin worker, which no browser starts. So `embed-frame.js`
+  sets `window.chunkyIronRubyWorker` (`ironruby_lab.js` uses it when it is
+  there) to a worker from a `blob:` URL it makes - a **classic** one,
+  because Chrome starts no module worker from a `blob:` URL in an opaque
+  origin (checked in Chrome 157: `onerror` with no message, even without
+  any CSP) - whose only line is `import("https://<course>/
+  ironruby_worker.js")`. A dynamic import is a CORS fetch like every other
+  file here, and in the imported module `import.meta.url` is the course's,
+  so the worker finds `assets/ironruby/` unchanged. The worker inherits
+  the page's opaque origin and CSP. The only addition to the policy is
+  `worker-src blob:` (without it, `worker-src` falls back to `script-src
+  'self'`, which a `blob:` URL is not); scripts, connections and
+  `frame-ancestors` stay as they were, there is still no
+  `allow-same-origin`, and the `blob:` it allows can only be one this
+  page made itself.
 - **Accessibility**: the editor is named (`ui.embedCode`) and described
   (`ui.codeHint`: Shift+Enter, and Escape then Tab leaves it - no keyboard
   trap); ▶ keeps the focus through a run (disabled while it runs, focused
@@ -2378,7 +2402,9 @@ analysis it started from).
 - **Not here (yet)**: three.js (`ensureThree` is a stub), Python/PyCall
   and SQLite/Sequel (their `ensure*` from index.html), exercise checks,
   live runs, ⏯. Each is a copy of existing code, not new design.
-- **Costs**: every iframe is its own ruby.wasm VM (about 1 s of compile and
+- **Costs**: an IronRuby cell adds about 20 MB (.NET, the same files as
+  the lesson's, cached per site as below) and a .NET runtime in a worker
+  per iframe. Every iframe is its own ruby.wasm VM (about 1 s of compile and
   boot and tens of MB); Chrome partitions the HTTP cache by top-level
   site, so a reader with the course cached downloads the 10 MB once more
   per blog. `load=click` for a page with many cells.
@@ -2389,7 +2415,10 @@ analysis it started from).
   origin, ▶ by keyboard (result, focus, what is read out), the height,
   chunky_png from the cache, `load=click`/`visible`, the course's storage
   out of reach, a plain link, the bridge refused, evil.test not allowed to
-  frame it, and the page without its header running nothing.
+  frame it, the page without its header running nothing, and an IronRuby
+  cell (`data-engine="ironruby"`: no .NET before ▶, then `System::DateTime`,
+  a QRCoder PNG and `RUBY_ENGINE` in the opaque origin, a second run in
+  the same worker; needs `html/assets/ironruby/`).
 
 ## 6l. ruby2d: the gem's own Ruby, its C extension in Ruby
 

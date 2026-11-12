@@ -43,7 +43,7 @@ module CourseRules
               "frame-ancestors #{FRAME_ANCESTORS}; default-src 'self'; " \
               "script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; " \
               "img-src 'self' data: blob:; media-src 'self' data: blob:; font-src 'self'; " \
-              "connect-src 'self'; frame-src blob:; form-action 'none'; base-uri 'none'"
+              "connect-src 'self'; frame-src blob:; worker-src blob:; form-action 'none'; base-uri 'none'"
 
   # $chunky_bridge_ok: "<Referer>|<host asked>" - the Referer's host name
   # must be the host the request was sent to (ports aside)
