@@ -252,6 +252,12 @@ const dotnetErrors = [];
 dotnet.on('console', (m) => { if (m.type() === 'error') dotnetErrors.push(m.text()); });
 const dotnetFiles = [];
 dotnet.on('request', (r) => { if (/ironruby_worker\.js|assets\/ironruby\//.test(r.url())) dotnetFiles.push(r.url()); });
+// ironruby_lab.js arrives well after CRuby is up (about 2 s): the run
+// clicked meanwhile must wait for its controller, not fail without one
+await dotnet.route('**/ironruby_lab.js', async (route) => {
+  await new Promise((resolve) => setTimeout(resolve, 6000));
+  await route.continue();
+});
 await dotnet.goto(`${BLOG}dotnet.html`);
 const irHandle = await dotnet.waitForSelector('iframe[data-chunky-id]', { timeout: 30000 });
 check('data-engine="ironruby" goes into the address', (await irHandle.getAttribute('src')).includes('engine=ironruby'));
@@ -272,7 +278,7 @@ const irState = await irFrame.evaluate(() => {
            status: (document.querySelector('.ironruby-status') || {}).textContent || '',
            state: (document.querySelector('.ironruby-status') || { getAttribute: () => '' }).getAttribute('data-state') };
 });
-check('an IronRuby cell runs on .NET in the embed: DateTime, a QRCoder PNG, RUBY_ENGINE',
+check('an IronRuby cell runs on .NET in the embed (its controller late): DateTime, a QRCoder PNG, RUBY_ENGINE',
   irOut.includes('year ok: true') && irOut.includes('ironruby on .NET 10') && irState.png === 'PNG' && irState.width > 100,
   `${irOut.replace(/\s+/g, ' ').trim().slice(0, 120)} ${JSON.stringify(irState)}`);
 check('the IronRuby cell is still sandboxed (opaque origin), its worker from the course\'s host',

@@ -238,13 +238,17 @@
     worker.addEventListener("error", revoke, { once: true });
     return worker;
   };
+  // ironruby_lab.js's controller (window.chunkyIronRuby), which main.rb
+  // calls for every run: the kernel's queued runs wait for it (kernelReady),
+  // the worker's boot (ensureIronRuby) does not - chunkyIronRuby.run waits
+  // for that itself. Already there for a CRuby cell.
+  var controller = Promise.resolve();
   function startIronRuby() {
-    loadScript("ironruby_lab.js").then(function () {
+    controller = loadScript("ironruby_lab.js").then(function () {
       mark("ironruby-start");
-      return window.ensureIronRuby();
-    }).then(function (ok) {
-      if (ok) mark("ironruby-ready");
-    }).catch(function (e) {
+      window.ensureIronRuby().then(function (ok) { if (ok) mark("ironruby-ready"); });
+    });
+    controller.catch(function (e) {
       console.error("ironruby_lab.js did not load", e);
       kernelFailed("ironruby_lab.js could not be loaded");
     });
@@ -269,15 +273,20 @@
     permalinks: null,
     kernelReady: function () {
       // main.rb calls this from inside ChunkyApp#initialize: go on once it
-      // has returned
+      // has returned - and, for an IronRuby cell, once ironruby_lab.js has
+      // set up chunkyIronRuby (a run released before would find none)
       setTimeout(function () {
+        controller.then(release, function () {});
+      }, 0);
+      function release() {
+        if (bridge.failed) return;
         bridge.ready = true;
         mark("kernel-ready");
         setStatus("");
         var items = waiting;
         waiting = [];
         items.forEach(send);
-      }, 0);
+      }
     },
     ran: function (idx, outcome, elapsed) {
       setRunning(false, String(outcome), Number(elapsed));
