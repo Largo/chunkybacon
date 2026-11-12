@@ -309,9 +309,21 @@ README (GitHub drops iframes; the link opens the cell as a page of its own):
 ruby tools/make_embed_url.rb example.rb --gems chunky_png --lang en   # --engine ironruby, --load click, --run, --base URL
 ```
 
-Only pages on **https://idogawa.com** may put a cell in an iframe
-(`frame-ancestors`, `nginx/default.conf`); a plain link works from
-anywhere. The cell runs sandboxed, in an origin of its own: code from a
+Only the sites the course's server lists may put a cell in an iframe
+(`frame-ancestors`); a plain link works from anywhere. The list belongs to
+the deploy, not to git: on letsruby.com it is **https://idogawa.com**,
+which is also what it is when nothing is set. To add a site, the server's
+operator puts its origin into `EMBED_FRAME_ANCESTORS` in the checkout's
+`.env` (separated by spaces), and the next deploy (`tools/after_deploy.sh`)
+writes it into nginx and reloads nginx:
+
+```sh
+EMBED_FRAME_ANCESTORS="https://idogawa.com https://blog.example.org"
+```
+
+Only `https://` origins (with a port or a `*.` subdomain wildcard if
+needed; `http://localhost` and `http://*.test` for development) - never
+`*`. A wrong entry is refused, and the old list stays. The cell runs sandboxed, in an origin of its own: code from a
 link sees none of the course's progress, files or offline copy, although
 it comes from the course's host. Gems come from the course's cache only
 (the rubygems bridge serves the course's own pages). How it works:

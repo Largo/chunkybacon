@@ -152,8 +152,42 @@ class DevServerTest < Minitest::Test
   def test_nginx_sends_the_embeds_headers_as_the_dev_server_does
     block = NGINX[/location = \/embed\.html \{\n(.*?)\n    \}/m, 1] or flunk "no location = /embed.html"
     csp = block[/add_header Content-Security-Policy "([^"]*)" always;/, 1]
-    assert_equal CourseRules::EMBED_CSP, csp
+    # frame-ancestors is the host's setting: with nginx's default in it,
+    # the same policy as the dev server's default
+    default = NGINX[/^    set \$chunky_embed_frame_ancestors "([^"]*)";$/, 1] or flunk "no default frame-ancestors"
+    assert_equal FrameAncestors::DEFAULT, default
+    assert_equal CourseRules::EMBED_CSP, csp.sub("$chunky_embed_frame_ancestors", default)
     assert_includes block, 'add_header Cache-Control "no-cache";'
+  end
+
+  # the host's list comes in after the default, from a file nginx may lack
+  def test_nginx_takes_the_hosts_frame_ancestors_after_its_default
+    server = NGINX[/^server \{\n(.*?)^    location/m, 1]
+    set_at = server.index('set $chunky_embed_frame_ancestors "https://idogawa.com";') or flunk "no default"
+    include_at = server.index("include /etc/nginx/conf.d/embed-frame-ancestors*.inc;") or flunk "no include (a glob: optional)"
+    assert_operator set_at, :<, include_at
+    ignored = File.read(File.expand_path("../.gitignore", __dir__))
+    assert_includes ignored, "/nginx/embed-frame-ancestors.inc"
+  end
+
+  def test_frame_ancestors_the_host_may_list
+    parse = ->(text) { FrameAncestors.parse(text) }
+    assert_equal "https://idogawa.com", parse.(nil)
+    assert_equal "https://idogawa.com", parse.("  ")
+    assert_equal "https://idogawa.com https://blog.example.org", parse.("https://idogawa.com, https://Blog.Example.org https://idogawa.com")
+    assert_equal "https://*.example.org https://example.org:8443", parse.("https://*.example.org https://example.org:8443")
+    assert_equal "http://blog.test:* http://localhost:4000 http://127.0.0.1", parse.("http://blog.test:* http://localhost:4000 http://127.0.0.1")
+    ["*", "https://*", "https://*.com", "http://idogawa.com", "https://idogawa.com/blog",
+     "idogawa.com", "'self'", "'none'", "https://idogawa.com;", "data:", "https:",
+     "https://idogawa.com\" add_header X 1", "javascript:alert(1)", "https://localhost"].each do |bad|
+      assert_raises(FrameAncestors::Invalid, bad) { parse.("https://idogawa.com #{bad}") }
+    end
+  end
+
+  def test_the_nginx_include_for_the_hosts_list
+    text = FrameAncestors.nginx_include("https://idogawa.com https://blog.example.org")
+    assert_includes text, %(set $chunky_embed_frame_ancestors "https://idogawa.com https://blog.example.org";\n)
+    assert_equal 1, text.lines.grep_v(/^#/).size
   end
 
   def test_nginx_lets_static_files_be_read_cross_origin

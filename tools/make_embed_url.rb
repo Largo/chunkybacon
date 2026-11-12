@@ -1,8 +1,9 @@
 # The address of an embedded Chunky Bacon cell (html/embed.html) for a
 # piece of Ruby code - for an <iframe> in a blog post or a slide, or a
 # "Run it" link in a README (GitHub drops iframes, a link opens the cell as
-# a page of its own). Only pages on https://idogawa.com may frame it
-# (nginx/default.conf); a link works anywhere.
+# a page of its own). Only the sites the server lists may frame it
+# (EMBED_FRAME_ANCESTORS, by default https://idogawa.com; HANDOVER §6k);
+# a link works anywhere.
 #
 #   ruby tools/make_embed_url.rb example.rb [--gems chunky_png] [--lang en]
 #        [--engine ironruby] [--load visible|click|eager] [--run]

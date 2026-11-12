@@ -48,6 +48,10 @@ update, and a single-file mount would keep serving the old one). Consequences:
   from the host's `.cache/` (stocked once, by hand, with `--from`) and are
   no-ops while current. Nothing is built on deploy. Until they have run,
   lesson `jruby` says that JRuby could not be loaded.
+- **Who may frame `embed.html` is set on the host, not in git** (§6k):
+  `EMBED_FRAME_ANCESTORS` in the checkout's `.env` (unset:
+  https://idogawa.com). `tools/after_deploy.sh` writes it into
+  `nginx/embed-frame-ancestors.inc` and reloads nginx when it changed.
 - **One thing is built on a laptop and copied**: the 📦 Program toolchain for
   lesson `spinel` (`html/compile/toolchain/`, §6d): `tools/compile/build.sh`, then
   `tools/compile/publish.sh`. The host never builds it, and a push does not
@@ -1871,10 +1875,16 @@ credentials, and `null` would not be narrower - every sandboxed frame and
 `data:` page on any site is `null`. The bridges have their own
 `add_header`s, so they do not get it. `location = /embed.html` (exact, so
 the app-code regex does not take it) sends `Cache-Control: no-cache` and
-the `Content-Security-Policy` of §6k with `always`. The embed lives on the
+the `Content-Security-Policy` of §6k with `always`; its `frame-ancestors`
+is `$chunky_embed_frame_ancestors`, set at the server level to
+https://idogawa.com and again by the host's optional
+`nginx/embed-frame-ancestors.inc` (§6k: written on deploy from
+`EMBED_FRAME_ANCESTORS`, gitignored). The embed lives on the
 course's own host: no second server block or host name.
-`tools/dev_server.rb` sends the same; `FRAME_ANCESTORS=...` replaces
-https://idogawa.com there, for tests (`http://blog.test:*`).
+`tools/dev_server.rb` sends the same; `FRAME_ANCESTORS=...` (same format,
+same checks) replaces https://idogawa.com there, for tests
+(`http://blog.test:*`). `test/dev_server_test.rb` checks that nginx's
+policy, with its default filled in, is the dev server's.
 
 ## 6d. Python: Pyodide and the PyCall bridge
 
@@ -2375,14 +2385,35 @@ analysis it started from).
   page is on the course's host. So `embed.html` is served with
   `Content-Security-Policy: sandbox allow-scripts allow-popups
   allow-popups-to-escape-sandbox allow-downloads; frame-ancestors
-  https://idogawa.com; …` (§7): it runs in an **opaque origin** however it
+  <the host's list>; …` (§7): it runs in an **opaque origin** however it
   is opened (iframe or plain link), with no localStorage, IndexedDB, Cache
   Storage, service worker or cookies - none of the learner's progress,
   workshop files, connected folder or offline copy (the experiment showed
   code reading the progress without it). No `allow-same-origin`, no
   `allow-top-navigation`, no `allow-forms`. `frame-ancestors` lets only
-  https://idogawa.com frame it (not www., not http); a link opens it
-  anywhere. The rest of the policy is hardening: scripts, styles, fonts,
+  the host's list frame it - https://idogawa.com unless the host says
+  otherwise (not www., not http); a link opens it anywhere.
+- **Who may frame it is the host's setting**, not the code's, like the
+  runtimes under `html/assets/`: `EMBED_FRAME_ANCESTORS` (environment, or
+  that line of the checkout's `.env`, which is gitignored), origins
+  separated by spaces or commas. `tools/after_deploy.sh` runs
+  `tools/embed_frame_ancestors.rb`, which checks the list
+  (`tools/frame_ancestors.rb`: `https://` with at least one dot, an
+  optional port or `*.` wildcard over two labels or more; for development
+  `http://localhost`, `http://127.0.0.1`, `http://*.test`; no `*`, no
+  paths, quotes or other schemes, so a typo can neither open the cells to
+  every site nor break the header) and writes
+  `nginx/embed-frame-ancestors.inc` (gitignored) with one line, `set
+  $chunky_embed_frame_ancestors "…";`. `nginx/default.conf` sets the
+  default (https://idogawa.com) at the server level and then includes
+  `embed-frame-ancestors*.inc` - a glob, so a host without the file is
+  fine, and not `*.conf`, which conf.d's own include would put at the http
+  level. When the file changed, `after_deploy.sh` reloads nginx after `nginx
+  -t`. A refused list changes nothing (the old file stays) and is a
+  warning in the hook's log. Adding a blog: put its origin into `.env`,
+  then `sh tools/after_deploy.sh` (or wait for the next deploy).
+  `tools/dev_server.rb`'s `FRAME_ANCESTORS` takes the same format and is
+  checked the same way. The rest of the policy is hardening: scripts, styles, fonts,
   media and connections from its own host only (`'unsafe-eval'`: the js
   gem calls `JS.eval` while it boots; `'wasm-unsafe-eval'` for ruby.wasm).
   As the frame's origin is opaque, every file it loads from the course's

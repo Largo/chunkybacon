@@ -14,7 +14,8 @@
 // The cells come from the course's host: where this script came from, or
 // the script tag's data-base="https://letsruby.com/". Only pages
 // that host allows may frame them (Content-Security-Policy frame-ancestors,
-// nginx/default.conf: https://idogawa.com); elsewhere the iframe stays empty.
+// the host's EMBED_FRAME_ANCESTORS, by default https://idogawa.com;
+// HANDOVER §6k); elsewhere the iframe stays empty.
 //
 // The code goes into the iframe's fragment (deflate-raw, base64url), so the
 // embed's server never sees it. The iframe tells this page its height

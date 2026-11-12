@@ -12,13 +12,16 @@
 #   ruby tools/dev_server.rb             # http://127.0.0.1:8011/
 #   PORT=18011 ruby tools/dev_server.rb
 #   FRAME_ANCESTORS="http://blog.test:*" ruby tools/dev_server.rb
-#       # who may frame embed.html (default as nginx: https://idogawa.com);
-#       # test/embed_test.mjs needs its made-up blog.test here
+#       # who may frame embed.html (default as nginx: https://idogawa.com),
+#       # in the format of the host's EMBED_FRAME_ANCESTORS
+#       # (tools/frame_ancestors.rb); test/embed_test.mjs needs its made-up
+#       # blog.test here
 
 require "webrick"
 require "net/http"
 require "uri"
 require "zlib"
+require_relative "frame_ancestors"
 
 ROOT = File.expand_path("../html", __dir__)
 PORT = Integer(ENV.fetch("PORT", "8011"))
@@ -38,7 +41,12 @@ MIME = WEBrick::HTTPUtils::DefaultMimeTypes.merge(
 # checks that the two say the same).
 module CourseRules
   # embed.html runs sandboxed, and only https://idogawa.com may frame it
-  FRAME_ANCESTORS = ENV.fetch("FRAME_ANCESTORS", "https://idogawa.com")
+  # (or the list in FRAME_ANCESTORS, checked as the host's is)
+  FRAME_ANCESTORS = begin
+    FrameAncestors.parse(ENV["FRAME_ANCESTORS"])
+  rescue FrameAncestors::Invalid => e
+    abort "FRAME_ANCESTORS: #{e.message}"
+  end
   EMBED_CSP = "sandbox allow-scripts allow-popups allow-popups-to-escape-sandbox allow-downloads; " \
               "frame-ancestors #{FRAME_ANCESTORS}; default-src 'self'; " \
               "script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; " \

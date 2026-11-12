@@ -33,6 +33,13 @@
 # the NuGet DLLs into html/assets/ironruby/ - a no-op while it is current.
 # When it fails, the lesson says IronRuby could not be loaded and the rest
 # is unaffected: a warning, not this script's status.
+#
+# Last, who may put embed.html in an iframe (docs/HANDOVER.md §6k):
+# tools/embed_frame_ancestors.rb writes $EMBED_FRAME_ANCESTORS (or that line
+# of .env; unset: https://idogawa.com) into nginx/embed-frame-ancestors.inc,
+# and when the file changed nginx reloads - only if `nginx -t` passes. A
+# wrong entry leaves the old file and policy in place: a warning, not this
+# script's status.
 set -u
 cd "$(dirname "$0")/.." || exit 1
 
@@ -62,5 +69,20 @@ if command -v ruby >/dev/null 2>&1; then
 else
   docker compose --profile build run --rm spinel-build ruby tools/vendor_ironruby.rb ||
     echo "after_deploy: tools/vendor_ironruby.rb failed; the IronRuby lesson cannot load until it succeeds" >&2
+fi
+
+ancestors=nginx/embed-frame-ancestors.inc
+before=$(cat "$ancestors" 2>/dev/null)
+if command -v ruby >/dev/null 2>&1; then
+  ruby tools/embed_frame_ancestors.rb
+else
+  docker compose --profile build run --rm -e EMBED_FRAME_ANCESTORS spinel-build ruby tools/embed_frame_ancestors.rb
+fi || echo "after_deploy: tools/embed_frame_ancestors.rb refused EMBED_FRAME_ANCESTORS; embed.html keeps its old frame-ancestors" >&2
+if [ "$(cat "$ancestors" 2>/dev/null)" != "$before" ]; then
+  if docker exec chunkybacon nginx -t; then
+    docker exec chunkybacon nginx -s reload
+  else
+    echo "after_deploy: nginx -t failed with the new $ancestors; nginx keeps its old config" >&2
+  fi
 fi
 exit "$status"
