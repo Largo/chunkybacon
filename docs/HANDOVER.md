@@ -48,6 +48,10 @@ update, and a single-file mount would keep serving the old one). Consequences:
   from the host's `.cache/` (stocked once, by hand, with `--from`) and are
   no-ops while current. Nothing is built on deploy. Until they have run,
   lesson `jruby` says that JRuby could not be loaded.
+- **Who may frame `embed.html` is set on the host, not in git** (§6k):
+  `EMBED_FRAME_ANCESTORS` in the checkout's `.env` (unset:
+  https://idogawa.com). `tools/after_deploy.sh` writes it into
+  `nginx/embed-frame-ancestors.inc` and reloads nginx when it changed.
 - **One thing is built on a laptop and copied**: the 📦 Program toolchain for
   lesson `spinel` (`html/compile/toolchain/`, §6d): `tools/compile/build.sh`, then
   `tools/compile/publish.sh`. The host never builds it, and a push does not
@@ -1871,10 +1875,16 @@ credentials, and `null` would not be narrower - every sandboxed frame and
 `data:` page on any site is `null`. The bridges have their own
 `add_header`s, so they do not get it. `location = /embed.html` (exact, so
 the app-code regex does not take it) sends `Cache-Control: no-cache` and
-the `Content-Security-Policy` of §6k with `always`. The embed lives on the
+the `Content-Security-Policy` of §6k with `always`; its `frame-ancestors`
+is `$chunky_embed_frame_ancestors`, set at the server level to
+https://idogawa.com and again by the host's optional
+`nginx/embed-frame-ancestors.inc` (§6k: written on deploy from
+`EMBED_FRAME_ANCESTORS`, gitignored). The embed lives on the
 course's own host: no second server block or host name.
-`tools/dev_server.rb` sends the same; `FRAME_ANCESTORS=...` replaces
-https://idogawa.com there, for tests (`http://blog.test:*`).
+`tools/dev_server.rb` sends the same; `FRAME_ANCESTORS=...` (same format,
+same checks) replaces https://idogawa.com there, for tests
+(`http://blog.test:*`). `test/dev_server_test.rb` checks that nginx's
+policy, with its default filled in, is the dev server's.
 
 ## 6d. Python: Pyodide and the PyCall bridge
 
@@ -2313,7 +2323,7 @@ analysis it started from).
 - **The pieces.** `embed.js`, on the host page, turns every
   `pre[data-chunky]` into an iframe of `embed.html`: the code without its
   shared indentation, deflate-raw and base64url into the fragment
-  (`#code=…&gems=…&lang=…&load=…&run=1&id=…`; `src=` takes plain text for
+  (`#code=…&engine=…&gems=…&lang=…&load=…&run=1&id=…`; `src=` takes plain text for
   hand-made links), `loading="lazy"`, and the `sandbox` attribute as a
   second line of defence. The frame posts `{chunkyEmbed: "size", height}`
   and timings with `"*"`; the host page matches them by `event.source`
@@ -2341,6 +2351,30 @@ analysis it started from).
   `processing.js` and `game.js`. main.rb itself is unchanged: it keeps a
   cell's code only through the shell's `chunkySaveCode`, which the embed
   does not register.
+- **IronRuby cells** (`engine=ironruby`, `data-engine="ironruby"`,
+  `make_embed_url.rb --engine ironruby`): the one lesson gets `"engine":
+  "ironruby"`, so main.rb runs its cell as in the IronRuby lesson (§6s) -
+  through `ironruby_lab.js`, which the embed loads with the kernel and
+  whose `.ironruby-status` line (with the progress bar) it puts above the
+  output. ruby.wasm still boots alongside: the kernel shows the answers,
+  checks the syntax and explains errors. Default `load=click` (about 20 MB
+  of .NET on top of ruby.wasm's 10). The worker is the problem: the page's
+  origin is opaque, and `new Worker("https://<course>/ironruby_worker.js")`
+  is a cross-origin worker, which no browser starts. So `embed-frame.js`
+  sets `window.chunkyIronRubyWorker` (`ironruby_lab.js` uses it when it is
+  there) to a worker from a `blob:` URL it makes - a **classic** one,
+  because Chrome starts no module worker from a `blob:` URL in an opaque
+  origin (checked in Chrome 157: `onerror` with no message, even without
+  any CSP) - whose only line is `import("https://<course>/
+  ironruby_worker.js")`. A dynamic import is a CORS fetch like every other
+  file here, and in the imported module `import.meta.url` is the course's,
+  so the worker finds `assets/ironruby/` unchanged. The worker inherits
+  the page's opaque origin and CSP. The only addition to the policy is
+  `worker-src blob:` (without it, `worker-src` falls back to `script-src
+  'self'`, which a `blob:` URL is not); scripts, connections and
+  `frame-ancestors` stay as they were, there is still no
+  `allow-same-origin`, and the `blob:` it allows can only be one this
+  page made itself.
 - **Accessibility**: the editor is named (`ui.embedCode`) and described
   (`ui.codeHint`: Shift+Enter, and Escape then Tab leaves it - no keyboard
   trap); ▶ keeps the focus through a run (disabled while it runs, focused
@@ -2351,14 +2385,35 @@ analysis it started from).
   page is on the course's host. So `embed.html` is served with
   `Content-Security-Policy: sandbox allow-scripts allow-popups
   allow-popups-to-escape-sandbox allow-downloads; frame-ancestors
-  https://idogawa.com; …` (§7): it runs in an **opaque origin** however it
+  <the host's list>; …` (§7): it runs in an **opaque origin** however it
   is opened (iframe or plain link), with no localStorage, IndexedDB, Cache
   Storage, service worker or cookies - none of the learner's progress,
   workshop files, connected folder or offline copy (the experiment showed
   code reading the progress without it). No `allow-same-origin`, no
   `allow-top-navigation`, no `allow-forms`. `frame-ancestors` lets only
-  https://idogawa.com frame it (not www., not http); a link opens it
-  anywhere. The rest of the policy is hardening: scripts, styles, fonts,
+  the host's list frame it - https://idogawa.com unless the host says
+  otherwise (not www., not http); a link opens it anywhere.
+- **Who may frame it is the host's setting**, not the code's, like the
+  runtimes under `html/assets/`: `EMBED_FRAME_ANCESTORS` (environment, or
+  that line of the checkout's `.env`, which is gitignored), origins
+  separated by spaces or commas. `tools/after_deploy.sh` runs
+  `tools/embed_frame_ancestors.rb`, which checks the list
+  (`tools/frame_ancestors.rb`: `https://` with at least one dot, an
+  optional port or `*.` wildcard over two labels or more; for development
+  `http://localhost`, `http://127.0.0.1`, `http://*.test`; no `*`, no
+  paths, quotes or other schemes, so a typo can neither open the cells to
+  every site nor break the header) and writes
+  `nginx/embed-frame-ancestors.inc` (gitignored) with one line, `set
+  $chunky_embed_frame_ancestors "…";`. `nginx/default.conf` sets the
+  default (https://idogawa.com) at the server level and then includes
+  `embed-frame-ancestors*.inc` - a glob, so a host without the file is
+  fine, and not `*.conf`, which conf.d's own include would put at the http
+  level. When the file changed, `after_deploy.sh` reloads nginx after `nginx
+  -t`. A refused list changes nothing (the old file stays) and is a
+  warning in the hook's log. Adding a blog: put its origin into `.env`,
+  then `sh tools/after_deploy.sh` (or wait for the next deploy).
+  `tools/dev_server.rb`'s `FRAME_ANCESTORS` takes the same format and is
+  checked the same way. The rest of the policy is hardening: scripts, styles, fonts,
   media and connections from its own host only (`'unsafe-eval'`: the js
   gem calls `JS.eval` while it boots; `'wasm-unsafe-eval'` for ruby.wasm).
   As the frame's origin is opaque, every file it loads from the course's
@@ -2378,7 +2433,9 @@ analysis it started from).
 - **Not here (yet)**: three.js (`ensureThree` is a stub), Python/PyCall
   and SQLite/Sequel (their `ensure*` from index.html), exercise checks,
   live runs, ⏯. Each is a copy of existing code, not new design.
-- **Costs**: every iframe is its own ruby.wasm VM (about 1 s of compile and
+- **Costs**: an IronRuby cell adds about 20 MB (.NET, the same files as
+  the lesson's, cached per site as below) and a .NET runtime in a worker
+  per iframe. Every iframe is its own ruby.wasm VM (about 1 s of compile and
   boot and tens of MB); Chrome partitions the HTTP cache by top-level
   site, so a reader with the course cached downloads the 10 MB once more
   per blog. `load=click` for a page with many cells.
@@ -2389,7 +2446,10 @@ analysis it started from).
   origin, ▶ by keyboard (result, focus, what is read out), the height,
   chunky_png from the cache, `load=click`/`visible`, the course's storage
   out of reach, a plain link, the bridge refused, evil.test not allowed to
-  frame it, and the page without its header running nothing.
+  frame it, the page without its header running nothing, and an IronRuby
+  cell (`data-engine="ironruby"`: no .NET before ▶, then `System::DateTime`,
+  a QRCoder PNG and `RUBY_ENGINE` in the opaque origin, a second run in
+  the same worker; needs `html/assets/ironruby/`).
 
 ## 6l. ruby2d: the gem's own Ruby, its C extension in Ruby
 

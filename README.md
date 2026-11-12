@@ -281,21 +281,49 @@ course's Ruby, its output and its widgets:
 `embed.html`, as tall as the cell. Options on the `<pre>`: `data-gems`,
 `data-lang` (`de`, `en`, `ja`; else the page's language), `data-load`
 (`visible`, the default: Ruby loads when the cell scrolls into view;
-`click`: on the first ▶; `eager`), `data-run="1"` and `aria-label` (the
-iframe's title). The script's own `data-base` names the course's address;
-without it, it is where `embed.js` came from.
+`click`: on the first ▶; `eager`), `data-run="1"`, `data-engine` and
+`aria-label` (the iframe's title). The script's own `data-base` names the
+course's address; without it, it is where `embed.js` came from.
+
+`data-engine="ironruby"` runs the cell on IronRuby 4.0 - .NET 10 in
+WebAssembly, the IronRuby lesson's runtime - with .NET's classes and the
+lesson's QRCoder, and `show_png`, `show_svg`, `show_html` for pictures:
+
+```html
+<pre data-chunky data-engine="ironruby" data-lang="en">
+  puts System::DateTime.now.ToString("dddd, d MMMM yyyy")
+  gen  = QRCoder::QRCodeGenerator.new
+  data = gen.CreateQrCode("https://letsruby.com", QRCoder::QRCodeGenerator::ECCLevel.M)
+  show_png QRCoder::PngByteQRCode.new(data).get_graphic(8)
+</pre>
+```
+
+That is about 20 MB more for the reader (once, then cached), so an
+IronRuby cell loads on its first ▶ unless `data-load` says otherwise.
 
 The code goes into the address's fragment (`#code=…`, compressed), so it
 never reaches the server. For an `<iframe>` by hand, or a "▶ Run" link in a
 README (GitHub drops iframes; the link opens the cell as a page of its own):
 
 ```sh
-ruby tools/make_embed_url.rb example.rb --gems chunky_png --lang en   # --load click, --run, --base URL
+ruby tools/make_embed_url.rb example.rb --gems chunky_png --lang en   # --engine ironruby, --load click, --run, --base URL
 ```
 
-Only pages on **https://idogawa.com** may put a cell in an iframe
-(`frame-ancestors`, `nginx/default.conf`); a plain link works from
-anywhere. The cell runs sandboxed, in an origin of its own: code from a
+Only the sites the course's server lists may put a cell in an iframe
+(`frame-ancestors`); a plain link works from anywhere. The list belongs to
+the deploy, not to git: on letsruby.com it is **https://idogawa.com**,
+which is also what it is when nothing is set. To add a site, the server's
+operator puts its origin into `EMBED_FRAME_ANCESTORS` in the checkout's
+`.env` (separated by spaces), and the next deploy (`tools/after_deploy.sh`)
+writes it into nginx and reloads nginx:
+
+```sh
+EMBED_FRAME_ANCESTORS="https://idogawa.com https://blog.example.org"
+```
+
+Only `https://` origins (with a port or a `*.` subdomain wildcard if
+needed; `http://localhost` and `http://*.test` for development) - never
+`*`. A wrong entry is refused, and the old list stays. The cell runs sandboxed, in an origin of its own: code from a
 link sees none of the course's progress, files or offline copy, although
 it comes from the course's host. Gems come from the course's cache only
 (the rubygems bridge serves the course's own pages). How it works:

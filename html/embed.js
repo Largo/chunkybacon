@@ -6,12 +6,16 @@
 //
 // Attributes (all optional): data-gems="a,b", data-lang="de|en|ja|fr|it",
 // data-load="visible|click|eager" (when ruby.wasm loads, default visible),
-// data-run="1" (run once loaded), aria-label (the iframe's title).
+// data-run="1" (run once loaded), data-engine="ironruby" (run it on
+// IronRuby 4.0 / .NET 10 in WebAssembly; about 20 MB more, so it loads on
+// the first Run unless data-load says otherwise), aria-label (the iframe's
+// title).
 //
 // The cells come from the course's host: where this script came from, or
 // the script tag's data-base="https://letsruby.com/". Only pages
 // that host allows may frame them (Content-Security-Policy frame-ancestors,
-// nginx/default.conf: https://idogawa.com); elsewhere the iframe stays empty.
+// the host's EMBED_FRAME_ANCESTORS, by default https://idogawa.com;
+// HANDOVER §6k); elsewhere the iframe stays empty.
 //
 // The code goes into the iframe's fragment (deflate-raw, base64url), so the
 // embed's server never sees it. The iframe tells this page its height
@@ -53,7 +57,7 @@
     return deflate(code).then(function (bytes) {
       var fragment = new URLSearchParams();
       fragment.set("code", bytesToBase64url(bytes));
-      ["gems", "lang", "load", "run", "id"].forEach(function (key) {
+      ["engine", "gems", "lang", "load", "run", "id"].forEach(function (key) {
         if (options[key]) fragment.set(key, String(options[key]));
       });
       return base + "embed.html#" + fragment.toString();
@@ -84,7 +88,7 @@
     frame.dataset.chunkyId = id;
     frames.push(frame);
     url(code, {
-      gems: pre.dataset.gems, lang: pre.dataset.lang || document.documentElement.lang,
+      engine: pre.dataset.engine, gems: pre.dataset.gems, lang: pre.dataset.lang || document.documentElement.lang,
       load: pre.dataset.load, run: pre.dataset.run, id: id
     }).then(function (src) {
       frame.src = src;

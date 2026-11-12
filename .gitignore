@@ -21,6 +21,11 @@ test/lessons.json
 # the .gz copies: put there by tools/vendor_ironruby.rb from its pins in
 # tools/ironruby.json on the deploy host, never committed (docs/HANDOVER.md §6s)
 /html/assets/ironruby/
+# the host's settings for docker compose (PUBLIC_ORIGIN, EMBED_FRAME_ANCESTORS)
+/.env
+# who may frame embed.html on this host (EMBED_FRAME_ANCESTORS): written by
+# tools/embed_frame_ancestors.rb on deploy, never committed (docs/HANDOVER.md §6k)
+/nginx/embed-frame-ancestors.inc
 # the operator's legal pages: per deployment, never committed, so a fork never
 # names this site's operator (templates: html/*.example.html, README "Legal pages")
 /html/impressum.html

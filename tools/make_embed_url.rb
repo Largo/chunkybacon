@@ -1,11 +1,16 @@
 # The address of an embedded Chunky Bacon cell (html/embed.html) for a
 # piece of Ruby code - for an <iframe> in a blog post or a slide, or a
 # "Run it" link in a README (GitHub drops iframes, a link opens the cell as
-# a page of its own). Only pages on https://idogawa.com may frame it
-# (nginx/default.conf); a link works anywhere.
+# a page of its own). Only the sites the server lists may frame it
+# (EMBED_FRAME_ANCESTORS, by default https://idogawa.com; HANDOVER §6k);
+# a link works anywhere.
 #
 #   ruby tools/make_embed_url.rb example.rb [--gems chunky_png] [--lang en]
-#        [--load visible|click|eager] [--run] [--base https://letsruby.com/]
+#        [--engine ironruby] [--load visible|click|eager] [--run]
+#        [--base https://letsruby.com/]
+#
+# --engine ironruby: the cell runs on IronRuby 4.0 (.NET 10 in WebAssembly),
+# about 20 MB more; it loads on the first Run unless --load says otherwise.
 #
 # Prints the address, an <iframe> and a Markdown link. The code is
 # deflate-raw (zlib window bits -15, as the browser's CompressionStream
@@ -18,6 +23,7 @@ require "optparse"
 options = { base: "https://letsruby.com/" }
 OptionParser.new do |o|
   o.banner = "usage: ruby tools/make_embed_url.rb FILE [options]   (FILE - for stdin)"
+  o.on("--engine ENGINE", %w[ironruby]) { |v| options[:engine] = v }
   o.on("--gems LIST") { |v| options[:gems] = v }
   o.on("--lang LANG") { |v| options[:lang] = v }
   o.on("--load WHEN") { |v| options[:load] = v }
@@ -36,7 +42,7 @@ def deflate_raw(text)
 end
 
 fragment = [["code", Base64.urlsafe_encode64(deflate_raw(code), padding: false)]]
-%i[gems lang load run].each { |key| fragment << [key.to_s, options[key]] if options[key] }
+%i[engine gems lang load run].each { |key| fragment << [key.to_s, options[key]] if options[key] }
 url = "#{options[:base]}embed.html##{URI.encode_www_form(fragment)}"
 height = (code.lines.count * 23.25 + 60).round
 

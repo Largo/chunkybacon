@@ -4,9 +4,12 @@
 //   #code=<UTF-8, deflate-raw, base64url>   the cell's code (or src=<plain text>)
 //   &gems=chunky_png,prawn                  installed before the first run
 //   &lang=de|en|ja|fr|it                    the interface language (else the browser's)
+//   &engine=ironruby                        run it on IronRuby 4.0 (.NET 10 in
+//                                           WebAssembly, the IronRuby lesson's
+//                                           worker) instead of CRuby
 //   &load=visible|click|eager               when ruby.wasm loads: once the cell is
-//                                           on screen (default), on the first Run,
-//                                           or at once
+//                                           on screen (default; with IronRuby
+//                                           click), on the first Run, or at once
 //   &run=1                                  run once Ruby is up
 //   &id=<anything>                          echoed in the messages to the host page
 //
@@ -42,7 +45,10 @@
   }
   var lang = pickLang();
   var ui = (window.CHUNKY_EMBED_UI || {})[lang] || {};
-  var loadMode = params.get("load") || "visible";
+  // IronRuby: about 20 MB more (.NET's runtime, ironruby_lab.js), so only
+  // on the first Run unless the link asks otherwise
+  var ironruby = params.get("engine") === "ironruby";
+  var loadMode = params.get("load") || (ironruby ? "click" : "visible");
   var gems = (params.get("gems") || "").split(",").map(function (g) { return g.trim(); })
     .filter(function (g) { return /^[\w.-]+$/.test(g); });
   document.documentElement.lang = lang;
@@ -167,7 +173,8 @@
   // one lesson with one plain code cell, and the course's interface strings
   window.LESSONS_JSON = JSON.stringify({
     ui: window.CHUNKY_EMBED_UI || {},
-    lessons: [{ id: "embed", de: { cells: [{ t: "c" }] } }]
+    lessons: [ironruby ? { id: "embed", engine: "ironruby", de: { cells: [{ t: "c" }] } }
+                       : { id: "embed", de: { cells: [{ t: "c" }] } }]
   });
 
   // ---------- the bridge (a small shell/bridge.js) ----------
@@ -197,6 +204,9 @@
     kernelStarted = true;
     mark("kernel-start");
     setStatus(ui.loading || "Loading Ruby …");
+    // IronRuby boots alongside ruby.wasm (the kernel still shows the
+    // answers, as in the IronRuby lesson)
+    if (ironruby) startIronRuby();
     // the widgets' scripts the kernel calls (show_letter, processing,
     // show_game; ~12 KB gzipped), then ruby.wasm's loader
     Promise.all(["letter.js", "processing.js", "game.js"].map(loadScript)).catch(function (e) {
@@ -206,6 +216,41 @@
       script.src = "browser.script.iife.js";
       script.onerror = function () { kernelFailed("browser.script.iife.js could not be loaded"); };
       document.head.appendChild(script);
+    });
+  }
+  // IronRuby's worker (ironruby_lab.js, ironruby_worker.js; HANDOVER §6k).
+  // This page's origin is opaque, so new Worker("https://<course>/
+  // ironruby_worker.js") would be a cross-origin worker, which no browser
+  // starts. A worker from a blob: URL this page made has its (opaque)
+  // origin - a classic one: Chrome starts no module worker from a blob: URL
+  // in an opaque origin. All it does is import() the real
+  // ironruby_worker.js - a module, fetched with CORS like every file here -
+  // whose import.meta.url then finds .NET's files on the course's host. The
+  // CSP allows exactly that: worker-src blob: (nginx/default.conf).
+  window.chunkyIronRubyWorker = function () {
+    var src = new URL("ironruby_worker.js", document.baseURI).href;
+    var boot = "import(" + JSON.stringify(src) + ").catch(function (e) {\n" +
+      "  postMessage({ failed: \"ironruby_worker.js: \" + ((e && e.message) || e) });\n});\n";
+    var url = URL.createObjectURL(new Blob([boot], { type: "text/javascript" }));
+    var worker = new Worker(url);
+    var revoke = function () { URL.revokeObjectURL(url); };
+    worker.addEventListener("message", revoke, { once: true });
+    worker.addEventListener("error", revoke, { once: true });
+    return worker;
+  };
+  // ironruby_lab.js's controller (window.chunkyIronRuby), which main.rb
+  // calls for every run: the kernel's queued runs wait for it (kernelReady),
+  // the worker's boot (ensureIronRuby) does not - chunkyIronRuby.run waits
+  // for that itself. Already there for a CRuby cell.
+  var controller = Promise.resolve();
+  function startIronRuby() {
+    controller = loadScript("ironruby_lab.js").then(function () {
+      mark("ironruby-start");
+      window.ensureIronRuby().then(function (ok) { if (ok) mark("ironruby-ready"); });
+    });
+    controller.catch(function (e) {
+      console.error("ironruby_lab.js did not load", e);
+      kernelFailed("ironruby_lab.js could not be loaded");
     });
   }
   function kernelFailed(reason) {
@@ -228,15 +273,20 @@
     permalinks: null,
     kernelReady: function () {
       // main.rb calls this from inside ChunkyApp#initialize: go on once it
-      // has returned
+      // has returned - and, for an IronRuby cell, once ironruby_lab.js has
+      // set up chunkyIronRuby (a run released before would find none)
       setTimeout(function () {
+        controller.then(release, function () {});
+      }, 0);
+      function release() {
+        if (bridge.failed) return;
         bridge.ready = true;
         mark("kernel-ready");
         setStatus("");
         var items = waiting;
         waiting = [];
         items.forEach(send);
-      }, 0);
+      }
     },
     ran: function (idx, outcome, elapsed) {
       setRunning(false, String(outcome), Number(elapsed));
@@ -317,6 +367,14 @@
     els.plain.setAttribute("aria-label", ui.embedCode || "Ruby code you can run");
     els.run.textContent = ui.runCell || "▶ Run";
     els.run.addEventListener("click", run);
+    if (ironruby) {
+      // ironruby_lab.js writes how far .NET's download is into every
+      // .ironruby-status (with a progress bar); empty, it takes no room
+      var irStatus = document.createElement("div");
+      irStatus.className = "ironruby-status";
+      irStatus.setAttribute("role", "status");
+      els.cell.insertBefore(irStatus, document.getElementById("cell-out-0"));
+    }
     document.addEventListener("keydown", function (e) {
       if (e.key === "Enter" && e.shiftKey && !editor) { e.preventDefault(); run(); }
     });

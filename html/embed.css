@@ -29,6 +29,8 @@ body { padding: 2px; }
 }
 .embed-status:empty { display: none; }
 .cell-toolbar .run-time { margin-right: 0.6rem; }
+/* an IronRuby cell (engine=ironruby): how far .NET is, below the toolbar */
+.cell > .ironruby-status { padding: 0.35rem 0.9rem; background: var(--sheet); }
 .embed-status:not(:empty) + .run-time { margin-right: 0.6rem; }
 .embed-brand {
   display: inline-flex;

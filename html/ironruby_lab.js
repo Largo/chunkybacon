@@ -13,6 +13,9 @@
 //                                       run first, quietly, as CRuby's do.
 //                                       +probe+: the exercise's IronRuby check
 //   chunkyIronRuby.reset()              main.rb, a new lesson or a reset
+//   window.chunkyIronRubyWorker()       optional, set before ensureIronRuby: makes
+//                                       the Worker (the embed, embed-frame.js,
+//                                       starts it from a blob: URL; §6k)
 //
 // Answers come back as a "chunky:ironruby" event on window: {idx, seq,
 // elapsed (the cell's own run, s), status ("ok" | "error" | "stopped" |
@@ -138,7 +141,11 @@
     ir.loading = new Promise(function (resolve) {
       var worker;
       try {
-        worker = new Worker(new URL("ironruby_worker.js", document.baseURI).href, { type: "module" });
+        // the embed (embed-frame.js) starts it its own way: its page has an
+        // opaque origin, which may not start a worker from the course's host
+        worker = window.chunkyIronRubyWorker
+          ? window.chunkyIronRubyWorker()
+          : new Worker(new URL("ironruby_worker.js", document.baseURI).href, { type: "module" });
       } catch (e) {
         fail(null, (e && e.message) || e, resolve);
         return;

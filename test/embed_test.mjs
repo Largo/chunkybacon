@@ -4,6 +4,9 @@
 //   FRAME_ANCESTORS="http://blog.test:*" PORT=8011 ruby tools/dev_server.rb   (background)
 //   BASE=http://127.0.0.1:8011/ node embed_test.mjs
 //
+// The IronRuby cell (engine=ironruby) needs html/assets/ironruby/
+// (tools/vendor_ironruby.rb).
+//
 // Three made-up sites, all 127.0.0.1 (host-resolver rules): course.test is
 // the course (the dev server at BASE's port), blog.test a blog post that
 // embeds cells (a small server in this test), evil.test a site that may not
@@ -43,6 +46,14 @@ end
   indexed_db: peek { JS.global[:indexedDB].open("probe"); "open" }
 }`;
 
+// an IronRuby cell: .NET's DateTime, QRCoder's PNG (show_png), the engine
+const IRONRUBY = `now = System::DateTime.now
+puts "year ok: #{now.Year >= 2025}"
+gen = QRCoder::QRCodeGenerator.new
+data = gen.CreateQrCode("https://idogawa.com", QRCoder::QRCodeGenerator::ECCLevel.M)
+show_png QRCoder::PngByteQRCode.new(data).get_graphic(8)
+"#{RUBY_ENGINE} on .NET #{System::Environment.Version}"`;
+
 // ---------- the other sites ----------
 const pages = {
   // a blog post: <pre data-chunky> blocks and a hand-written iframe
@@ -73,6 +84,11 @@ const pages = {
   '/based.html': () => `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Own copy</title></head>
 <body><pre data-chunky data-load="click">1 + 1</pre><script src="/embed.js" data-base="${COURSE}"></script></body></html>`,
   '/embed.js': () => readFileSync(new URL('../html/embed.js', import.meta.url), 'utf8'),
+  // a post with an IronRuby cell (data-engine="ironruby"): .NET from the
+  // course, in a worker the opaque-origin frame starts from a blob: URL
+  '/dotnet.html': () => `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>IronRuby on .NET</title></head>
+<body><pre data-chunky data-engine="ironruby">${IRONRUBY.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</pre>
+<script src="${COURSE}embed.js"></script></body></html>`,
   // a site the course does not allow to frame its cells
   '/frame.html': () => `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Not allowed</title></head>
 <body><iframe id="cell" src="${embedUrl('1 + 1', { load: 'eager' })}" style="width:100%;height:200px"></iframe></body></html>`
@@ -228,6 +244,52 @@ const stranger = await page.evaluate(() => new Promise((done) => {
 check('a child frame that is not a cell is ignored (no size, no id, no prototype pollution)',
   stranger.sent && stranger.polluted === undefined && stranger.height === '150px' && stranger.id === null, JSON.stringify(stranger));
 check('no console errors on the blog post', errors.length === 0, errors.slice(0, 3).join(' | '));
+
+// ---------- an IronRuby cell (engine=ironruby; HANDOVER §6s, §6k) ----------
+// Needs html/assets/ironruby/ (tools/vendor_ironruby.rb); about 20 MB.
+const dotnet = await context.newPage();
+const dotnetErrors = [];
+dotnet.on('console', (m) => { if (m.type() === 'error') dotnetErrors.push(m.text()); });
+const dotnetFiles = [];
+dotnet.on('request', (r) => { if (/ironruby_worker\.js|assets\/ironruby\//.test(r.url())) dotnetFiles.push(r.url()); });
+// ironruby_lab.js arrives well after CRuby is up (about 2 s): the run
+// clicked meanwhile must wait for its controller, not fail without one
+await dotnet.route('**/ironruby_lab.js', async (route) => {
+  await new Promise((resolve) => setTimeout(resolve, 6000));
+  await route.continue();
+});
+await dotnet.goto(`${BLOG}dotnet.html`);
+const irHandle = await dotnet.waitForSelector('iframe[data-chunky-id]', { timeout: 30000 });
+check('data-engine="ironruby" goes into the address', (await irHandle.getAttribute('src')).includes('engine=ironruby'));
+let irFrame = null;
+for (let i = 0; i < 100 && !(irFrame && irFrame.url().includes('embed.html')); i++) {
+  irFrame = await irHandle.contentFrame();
+  await dotnet.waitForTimeout(100);
+}
+await irFrame.waitForSelector('.CodeMirror');
+await dotnet.waitForTimeout(1500);
+check('an IronRuby cell loads no .NET before Run (load=click is its default)', dotnetFiles.length === 0, dotnetFiles.slice(0, 2).join(' '));
+await irFrame.waitForSelector('#runBtn:not([disabled])');
+await irFrame.click('#runBtn');
+const irOut = await waitForResult(irFrame);
+const irState = await irFrame.evaluate(() => {
+  const img = document.querySelector('#cell-out-0 img.ironruby-png');
+  return { origin, png: img ? atob(img.src.split(',')[1]).slice(1, 4) : '', width: img ? img.naturalWidth : 0,
+           status: (document.querySelector('.ironruby-status') || {}).textContent || '',
+           state: (document.querySelector('.ironruby-status') || { getAttribute: () => '' }).getAttribute('data-state') };
+});
+check('an IronRuby cell runs on .NET in the embed (its controller late): DateTime, a QRCoder PNG, RUBY_ENGINE',
+  irOut.includes('year ok: true') && irOut.includes('ironruby on .NET 10') && irState.png === 'PNG' && irState.width > 100,
+  `${irOut.replace(/\s+/g, ' ').trim().slice(0, 120)} ${JSON.stringify(irState)}`);
+check('the IronRuby cell is still sandboxed (opaque origin), its worker from the course\'s host',
+  irState.origin === 'null' && dotnetFiles.some((u) => u.startsWith(`${COURSE}ironruby_worker.js`)) &&
+  dotnetFiles.some((u) => u.startsWith(`${COURSE}assets/ironruby/`)));
+check('IronRuby says it is ready below the cell', irState.state === 'ready' && irState.status.startsWith('IronRuby is ready'), irState.status);
+// a second run uses the same worker: the variables of the first are there
+await irFrame.evaluate(() => window.setCellCode(0, 'gen.class.name'));
+const irOut2 = await runAndWait(irFrame);
+check('a second run keeps the first one\'s variables (one IronRuby worker)', irOut2.includes('QRCoder.QRCodeGenerator') || irOut2.includes('QRCoder::QRCodeGenerator'), irOut2.trim());
+check('no console errors around the IronRuby cell', dotnetErrors.length === 0, dotnetErrors.slice(0, 3).join(' | '));
 
 // ---------- the other ways in ----------
 // a plain link (a README's "▶ Run"): the cell as a page of its own
