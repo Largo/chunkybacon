@@ -2338,7 +2338,17 @@ analysis it started from).
   `tools/make_embed_url.rb` writes the same address from Ruby (Zlib with
   window bits -15, `urlsafe_encode64(padding: false)`).
 - **Inside** (`embed-frame.js`): the code is on screen as plain text at
-  once, CodeMirror takes over when it has loaded. Ruby loads when the cell
+  once, CodeMirror takes over when it has loaded. The plain text is laid
+  out as the editor lays it out (`showPlain`, `embed.css` `.embed-plain`):
+  the same font size (14px up to 820px), line height, padding and gutter,
+  numbered lines wrapped at the same places with the same hanging indent,
+  measured as CodeMirror measures (the width of an `x`, not CSS's `ch`,
+  which is narrower in Atkinson Hyperlegible Mono; the gutter rounded up
+  to whole pixels; again when the fonts have loaded). Without that, at
+  375px the frame grew by half its height when the editor arrived, and a
+  tap on ▶ at that moment hit nothing (the IronRuby post on idogawa.com).
+  `embed.js` guesses the frame's first height from the same wrapping
+  (`estimateHeight`, within a row) before the cell reports its own. Ruby loads when the cell
   is in view (IntersectionObserver, which in a frame measures against the
   top page), on the first ▶ (`load=click`) or at once (`eager`). It stands
   in for what `index.html` and `shell/bridge.js` give the kernel: a
@@ -2449,7 +2459,9 @@ analysis it started from).
   frame it, the page without its header running nothing, and an IronRuby
   cell (`data-engine="ironruby"`: no .NET before ▶, then `System::DateTime`,
   a QRCoder PNG and `RUBY_ENGINE` in the opaque origin, a second run in
-  the same worker; needs `html/assets/ironruby/`).
+  the same worker; needs `html/assets/ironruby/`), and at 375px long lines
+  that wrap: ▶ keeps its place when the editor takes over, a click before
+  the editor has loaded runs the cell, `estimateHeight` within a row.
 
 ## 6l. ruby2d: the gem's own Ruby, its C extension in Ruby
 
