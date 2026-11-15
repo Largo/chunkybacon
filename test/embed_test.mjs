@@ -54,6 +54,13 @@ data = gen.CreateQrCode("https://idogawa.com", QRCoder::QRCodeGenerator::ECCLeve
 show_png QRCoder::PngByteQRCode.new(data).get_graphic(8)
 "#{RUBY_ENGINE} on .NET #{System::Environment.Version}"`;
 
+// long lines: at a phone's width the editor wraps them (with a hanging
+// indent), and the plain text before it must wrap the same way
+const NARROW = `# 日本語のコメント: 長い行は折り返されます。エディターが読み込まれる前も同じように。
+words = %w[chunky bacon is chunky and the foxes love chunky bacon more than anything else]
+counts = words.tally.sort_by { |word, count| [-count, word] }.map { |word, count| "#{word}: #{count}" }
+counts.first(3).join(", ")`;
+
 // ---------- the other sites ----------
 const pages = {
   // a blog post: <pre data-chunky> blocks and a hand-written iframe
@@ -81,6 +88,11 @@ const pages = {
   <script src="${COURSE}embed.js"></script>
 </body></html>`,
   // embed.js copied to the blog, pointed at the course by data-base
+  // a phone's narrow column, long lines that wrap (and Japanese text)
+  '/narrow.html': () => `<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width">
+<title>Narrow</title><style>body { margin: 0 16px; }</style></head>
+<body><pre data-chunky data-load="click">${NARROW.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</pre>
+<script src="${COURSE}embed.js"></script></body></html>`,
   '/based.html': () => `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Own copy</title></head>
 <body><pre data-chunky data-load="click">1 + 1</pre><script src="/embed.js" data-base="${COURSE}"></script></body></html>`,
   '/embed.js': () => readFileSync(new URL('../html/embed.js', import.meta.url), 'utf8'),
@@ -290,6 +302,57 @@ await irFrame.evaluate(() => window.setCellCode(0, 'gen.class.name'));
 const irOut2 = await runAndWait(irFrame);
 check('a second run keeps the first one\'s variables (one IronRuby worker)', irOut2.includes('QRCoder.QRCodeGenerator') || irOut2.includes('QRCoder::QRCodeGenerator'), irOut2.trim());
 check('no console errors around the IronRuby cell', dotnetErrors.length === 0, dotnetErrors.slice(0, 3).join(' | '));
+
+// ---------- a phone: the cell keeps its height when the editor arrives ----------
+// The plain text before CodeMirror wraps as the editor does (embed.css,
+// embed-frame.js showPlain), so ▶ does not move under a finger: a tap
+// before the editor has loaded runs the cell. At 375px the frame used to
+// grow by half its height when the editor took over, and a click at that
+// moment hit nothing. embed.js's first guess at the height counts the
+// wrapped rows too.
+{
+  const phone = await browser.newContext({ viewport: { width: 375, height: 800 } });
+  const narrow = await phone.newPage();
+  const narrowErrors = [];
+  narrow.on('console', (m) => { if (m.type() === 'error') narrowErrors.push(m.text()); });
+  let releaseEditor;
+  const editorHeld = new Promise((resolve) => { releaseEditor = resolve; });
+  await narrow.route('**/assets/codemirror.js', async (route) => { await editorHeld; await route.continue(); });
+  await narrow.goto(`${BLOG}narrow.html`);
+  const handle = await narrow.waitForSelector('iframe[data-chunky-id]', { timeout: 30000 });
+  let cell = null;
+  for (let i = 0; i < 100 && !(cell && cell.url().includes('embed.html')); i++) {
+    cell = await handle.contentFrame();
+    await narrow.waitForTimeout(100);
+  }
+  await cell.waitForSelector('.embed-plain-line');
+  await narrow.waitForTimeout(500);   // the size message, the fonts
+  // the frame's height, and the toolbar's place (▶ is in it; after the
+  // click it also says "Loading Ruby", so the frame may grow below it)
+  const size = () => Promise.all([
+    handle.evaluate((f) => Math.round(f.getBoundingClientRect().height)),
+    cell.evaluate(() => Math.round(document.querySelector('.cell-toolbar').getBoundingClientRect().top))
+  ]);
+  const [plainHeight, plainRun] = await size();
+  const guess = await narrow.evaluate(([code, frame]) => window.ChunkyEmbed.estimateHeight(code, frame),
+    [NARROW, await handle.evaluate((f) => f.getBoundingClientRect().width)]);
+  check('embed.js guesses the wrapped cell\'s height at a phone\'s width (within a row)',
+    Math.abs(guess - plainHeight) <= 25, `${guess} vs ${plainHeight}`);
+  // ▶ while the code is still plain text: it must run
+  await cell.click('#runBtn');
+  const ranEarly = await cell.evaluate(() => document.getElementById('cell').classList.contains('running') ||
+    document.getElementById('cell-out-0').style.display !== 'none');
+  releaseEditor();
+  await cell.waitForSelector('.CodeMirror');
+  await narrow.waitForTimeout(500);
+  const [, editorRun] = await size();
+  check('at a phone\'s width ▶ keeps its place when the editor takes over (the code wraps alike)',
+    Math.abs(editorRun - plainRun) <= 2, `toolbar at ${plainRun} -> ${editorRun}`);
+  const outNarrow = await waitForResult(cell);
+  check('▶ tapped before the editor has loaded runs the cell', ranEarly && outNarrow.includes('"chunky: 3, bacon: 2, and: 1"'), outNarrow.trim());
+  check('no console errors on the narrow page', narrowErrors.length === 0, narrowErrors.slice(0, 3).join(' | '));
+  await phone.close();
+}
 
 // ---------- the other ways in ----------
 // a plain link (a README's "▶ Run"): the cell as a page of its own

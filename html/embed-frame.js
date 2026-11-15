@@ -382,7 +382,7 @@
 
     codePromise.then(function (code) {
       plainCode = code;
-      els.plain.textContent = code;   // visible at once, before the editor
+      showPlain(code);   // visible at once, before the editor
       mark("code-visible");
       postSize();
       upgradeEditor();
@@ -407,6 +407,42 @@
       s.onload = resolve;
       s.onerror = function () { reject(new Error(src)); };
       document.head.appendChild(s);
+    });
+  }
+  // CodeMirror's measures: the width of an "x" (its defaultCharWidth, for
+  // the hanging indent), and its gutter - the last line's number, at least
+  // 20px (codemirror.css), its padding (app.css: 0.4rem + 0.5rem) and a 1px
+  // border, in whole pixels, rounded up as CodeMirror's come out
+  function plainMetrics(count) {
+    var probe = document.createElement("span");
+    probe.style.cssText = "position:absolute;visibility:hidden;white-space:pre";
+    els.plain.appendChild(probe);
+    probe.textContent = "xxxxxxxxxx";
+    els.plain.style.setProperty("--char-width", probe.getBoundingClientRect().width / 10 + "px");
+    probe.textContent = String(count);
+    var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    var gutter = Math.max(probe.getBoundingClientRect().width, 20) + 0.9 * rem + 1;
+    els.plain.style.setProperty("--gutter", Math.ceil(gutter - 0.01) + "px");
+    els.plain.removeChild(probe);
+  }
+  // the code as plain text, one numbered line each, wrapped as the editor
+  // wraps it (embed.css .embed-plain): a long line's continuation hangs two
+  // characters further in than the line itself (buildEditor's renderLine)
+  function showPlain(code) {
+    var lines = code.split("\n");
+    els.plain.textContent = "";
+    plainMetrics(lines.length);
+    // the code font may arrive after this: measure again then
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () { if (els.plain.isConnected) { plainMetrics(lines.length); postSize(); } });
+    }
+    lines.forEach(function (text, i) {
+      var line = document.createElement("span");
+      line.className = "embed-plain-line";
+      line.setAttribute("data-n", String(i + 1));
+      line.style.setProperty("--hang", String(text.match(/^[ \t]*/)[0].replace(/\t/g, "  ").length + 2));
+      line.textContent = text;
+      els.plain.appendChild(line);
     });
   }
   function upgradeEditor() {

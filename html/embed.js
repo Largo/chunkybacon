@@ -64,6 +64,38 @@
     });
   }
 
+  // About how tall the cell will be at this width, before it has said so
+  // (postMessage): its lines wrapped as embed.css and the editor wrap them
+  // - at spaces, a word longer than a row anywhere; 14px code in a frame up
+  // to 820px wide, 15px above, 1.6 lines, an "x" 0.632em wide (the code
+  // font), a 36px gutter, 0.7rem on each side, a continuation hanging two
+  // characters further in; wide (CJK) characters count as about 1.6. Plus
+  // the padding, the toolbar and the frame's 2px.
+  var WIDE_CHARS = "\\u1100-\\u115f\\u2e80-\\ua4cf\\uac00-\\ud7a3\\uf900-\\ufaff\\ufe30-\\ufe4f\\uff00-\\uff60\\uffe0-\\uffe6";
+  var WIDE = new RegExp("[" + WIDE_CHARS + "]", "g");
+  // what a line may break after: a wide character, a word up to a "-", a
+  // word, spaces
+  var PIECES = new RegExp("[" + WIDE_CHARS + "]|[^ " + WIDE_CHARS + "-]*-|[^ " + WIDE_CHARS + "-]+| +", "g");
+  function columns(text) { return text.length + (text.match(WIDE) || []).length * 0.6; }
+  function estimateHeight(code, width) {
+    var font = width <= 820 ? 14 : 15;
+    var room = Math.max(Math.floor((width - 4 - 36 - 2 * 11.2) / (font * 0.632)), 10);
+    var rows = 0;
+    code.split("\n").forEach(function (line) {
+      var next = Math.max(room - (line.match(/^ */)[0].length + 2), 4);
+      var used = 0, cap = room;
+      rows += 1;
+      (line.match(PIECES) || []).forEach(function (piece) {
+        var size = columns(piece);
+        if (piece.charAt(0) === " ") { used += size; return; }   // spaces may hang
+        if (used > 0 && used + size > cap) { rows += 1; used = 0; cap = next; }
+        while (size > cap) { size -= cap; rows += 1; cap = next; }
+        used += size;
+      });
+    });
+    return Math.round(rows * font * 1.6 + 2 * (7.2 + 4) + 54 + 4);
+  }
+
   var frames = [];
   // keyed by ids and names a frame sends: no prototype, so "__proto__" is
   // just a key and can't reach this page's Object.prototype
@@ -83,16 +115,18 @@
     // (NOTES.md); without allow-same-origin the cell has an origin of its
     // own, with no storage of this page's or the course's
     frame.setAttribute("sandbox", "allow-scripts allow-popups allow-popups-to-escape-sandbox allow-downloads");
-    frame.style.cssText = "display:block;width:100%;border:0;overflow:hidden;" +
-      "height:" + Math.round(lines * 23.25 + 60) + "px";   // close to the real height: little jump
+    frame.style.cssText = "display:block;width:100%;border:0;overflow:hidden;height:" + Math.round(lines * 23.25 + 60) + "px";
     frame.dataset.chunkyId = id;
     frames.push(frame);
     url(code, {
       engine: pre.dataset.engine, gems: pre.dataset.gems, lang: pre.dataset.lang || document.documentElement.lang,
       load: pre.dataset.load, run: pre.dataset.run, id: id
     }).then(function (src) {
-      frame.src = src;
       pre.replaceWith(frame);
+      // close to the real height at the width it got: little jump
+      var width = frame.getBoundingClientRect().width;
+      if (width > 0) frame.style.height = estimateHeight(code, width) + "px";
+      frame.src = src;
     });
   }
 
@@ -123,7 +157,7 @@
   function upgradeAll() {
     Array.prototype.forEach.call(document.querySelectorAll("pre[data-chunky]"), upgrade);
   }
-  window.ChunkyEmbed = { url: url, upgrade: upgrade, upgradeAll: upgradeAll, frames: frames, timings: timings };
+  window.ChunkyEmbed = { url: url, upgrade: upgrade, estimateHeight: estimateHeight, upgradeAll: upgradeAll, frames: frames, timings: timings };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", upgradeAll);
   else upgradeAll();
 })();
