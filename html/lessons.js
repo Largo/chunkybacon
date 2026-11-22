@@ -1,4 +1,7 @@
 // Lesson data for "Let's Ruby" (letsruby.com).
+// Each lesson has, per language, a title, its permalink word "slug"
+// (/en/variables; none in German, where the id is the word: run
+// ruby tools/lesson_slugs.rb for a new lesson) and its cells.
 // Notebook format: each lesson (per language) is a list of cells:
 //   { t: "h", html: ... }                        text block
 //   { t: "c", code: ... }                        runnable demo cell
@@ -98,6 +101,7 @@ window.LESSONS_JSON = JSON.stringify({
       "navToggle": "Lektionen ein- und ausblenden",
       "navDone": "%d von %d fertig",
       "workshopTitle": "Werkstatt",
+      "workshopSlug": "werkstatt",
       "workshopIntro": "Hier baust du deine eigenen Programme – mit so vielen Dateien, wie du willst. Ein Programm kann Dateien lesen und schreiben (<code>File.read</code>, <code>File.write</code>), andere .rb-Dateien mit <code>require_relative</code> laden und mit <code>gets</code> Eingaben lesen.",
       "workshopWelcome": "Willkommen in der <strong>Werkstatt</strong>! 🛠 Hier gibt es keine Aufgaben – nur dich und Ruby. Deine Dateien bleiben in diesem Browser. In Chrome und Edge kannst du oben unter <em>Fortschritt</em> einen Ordner verbinden, dann liegen sie als echte Dateien auf deinem Rechner.",
       "wsFiles": "Dateien",
@@ -541,6 +545,7 @@ window.LESSONS_JSON = JSON.stringify({
       "navToggle": "Show or hide the lessons",
       "navDone": "%d of %d done",
       "workshopTitle": "Workshop",
+      "workshopSlug": "workshop",
       "workshopIntro": "Build your own programs here – with as many files as you like. A program can read and write files (<code>File.read</code>, <code>File.write</code>), load other .rb files with <code>require_relative</code> and read input with <code>gets</code>.",
       "workshopWelcome": "Welcome to the <strong>workshop</strong>! 🛠 No tasks here – just you and Ruby. Your files stay in this browser. In Chrome and Edge you can connect a folder under <em>Progress</em> at the top, and they become real files on your computer.",
       "wsFiles": "Files",
@@ -984,6 +989,7 @@ window.LESSONS_JSON = JSON.stringify({
       "navToggle": "レッスン一覧を開く・閉じる",
       "navDone": "%d / %d 完了",
       "workshopTitle": "工房",
+      "workshopSlug": "工房",
       "workshopIntro": "ここでは自分だけのプログラムを作れます。ファイルはいくつでも作れます。プログラムはファイルを読み書きしたり（<code>File.read</code>、<code>File.write</code>）、<code>require_relative</code>でほかの.rbファイルを読み込んだり、<code>gets</code>で入力を読んだりできます。",
       "workshopWelcome": "<strong>工房</strong>へようこそ！🛠 ここには課題はないよ。きみとRubyだけ。ファイルはこのブラウザの中に保存される。ChromeとEdgeなら、上の<em>進捗</em>からフォルダーをつなげば、きみのコンピューター上の本物のファイルになるよ。",
       "wsFiles": "ファイル",
@@ -1427,6 +1433,7 @@ window.LESSONS_JSON = JSON.stringify({
       "navToggle": "Afficher ou masquer les leçons",
       "navDone": "%d sur %d terminées",
       "workshopTitle": "Atelier",
+      "workshopSlug": "atelier",
       "workshopIntro": "Créez ici vos propres programmes – avec autant de fichiers que vous le souhaitez. Un programme peut lire et écrire des fichiers (<code>File.read</code>, <code>File.write</code>), charger d'autres fichiers .rb avec <code>require_relative</code> et lire des saisies avec <code>gets</code>.",
       "workshopWelcome": "Bienvenue dans l'<strong>atelier</strong> ! 🛠 Pas d'exercices ici – juste vous et Ruby. Vos fichiers restent dans ce navigateur. Dans Chrome et Edge, vous pouvez connecter un dossier via <em>Progression</em> en haut de la page : ils deviennent alors de vrais fichiers sur votre ordinateur.",
       "wsFiles": "Fichiers",
@@ -1870,6 +1877,7 @@ window.LESSONS_JSON = JSON.stringify({
       "navToggle": "Mostra o nascondi le lezioni",
       "navDone": "%d di %d completate",
       "workshopTitle": "Laboratorio",
+      "workshopSlug": "laboratorio",
       "workshopIntro": "Qui puoi creare i tuoi programmi – con tutti i file che vuoi. Un programma può leggere e scrivere file (<code>File.read</code>, <code>File.write</code>), caricare altri file .rb con <code>require_relative</code> e leggere input con <code>gets</code>.",
       "workshopWelcome": "Benvenuto nel <strong>laboratorio</strong>! 🛠 Qui non ci sono esercizi – solo tu e Ruby. I tuoi file restano in questo browser. In Chrome ed Edge puoi collegare una cartella da <em>Progressi</em> in alto, e diventano file veri e propri sul tuo computer.",
       "wsFiles": "File",
@@ -2281,6 +2289,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Hello, World!",
+        "slug": "hello-world",
         "cells": [
           {
             "t": "h",
@@ -2324,6 +2333,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Hello, World!",
+        "slug": "hello-world",
         "cells": [
           {
             "t": "h",
@@ -2367,6 +2377,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Bonjour, le monde !",
+        "slug": "bonjour-le-monde",
         "cells": [
           {
             "t": "h",
@@ -2410,6 +2421,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Ciao, mondo!",
+        "slug": "ciao-mondo",
         "cells": [
           {
             "t": "h",
@@ -2538,6 +2550,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Arithmetic",
+        "slug": "arithmetic",
         "cells": [
           {
             "t": "h",
@@ -2620,6 +2633,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "計算",
+        "slug": "計算",
         "cells": [
           {
             "t": "h",
@@ -2702,6 +2716,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Calculer",
+        "slug": "calculer",
         "cells": [
           {
             "t": "h",
@@ -2784,6 +2799,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Fare i conti",
+        "slug": "fare-i-conti",
         "cells": [
           {
             "t": "h",
@@ -2935,6 +2951,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Variables",
+        "slug": "variables",
         "cells": [
           {
             "t": "h",
@@ -3001,6 +3018,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "変数",
+        "slug": "変数",
         "cells": [
           {
             "t": "h",
@@ -3067,6 +3085,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Variables",
+        "slug": "variables",
         "cells": [
           {
             "t": "h",
@@ -3133,6 +3152,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Variabili",
+        "slug": "variabili",
         "cells": [
           {
             "t": "h",
@@ -3285,6 +3305,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Strings – working with text",
+        "slug": "strings",
         "cells": [
           {
             "t": "h",
@@ -3367,6 +3388,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "文字列：テキストを扱う",
+        "slug": "文字列-テキストを扱う",
         "cells": [
           {
             "t": "h",
@@ -3449,6 +3471,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Les chaînes – travailler avec du texte",
+        "slug": "les-chaines",
         "cells": [
           {
             "t": "h",
@@ -3531,6 +3554,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Stringhe: lavorare con il testo",
+        "slug": "stringhe-lavorare-con-il-testo",
         "cells": [
           {
             "t": "h",
@@ -3699,6 +3723,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Decisions (if)",
+        "slug": "decisions-if",
         "cells": [
           {
             "t": "h",
@@ -3781,6 +3806,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "条件分岐（if）",
+        "slug": "条件分岐-if",
         "cells": [
           {
             "t": "h",
@@ -3863,6 +3889,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Décisions (if)",
+        "slug": "decisions-if",
         "cells": [
           {
             "t": "h",
@@ -3945,6 +3972,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Decisioni (if)",
+        "slug": "decisioni-if",
         "cells": [
           {
             "t": "h",
@@ -4113,6 +4141,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Loops",
+        "slug": "loops",
         "cells": [
           {
             "t": "h",
@@ -4195,6 +4224,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ループ",
+        "slug": "ループ",
         "cells": [
           {
             "t": "h",
@@ -4277,6 +4307,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Boucles",
+        "slug": "boucles",
         "cells": [
           {
             "t": "h",
@@ -4359,6 +4390,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Cicli",
+        "slug": "cicli",
         "cells": [
           {
             "t": "h",
@@ -4528,6 +4560,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Patterns with loops",
+        "slug": "patterns-with-loops",
         "cells": [
           {
             "t": "h",
@@ -4610,6 +4643,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ループで模様",
+        "slug": "ループで模様",
         "cells": [
           {
             "t": "h",
@@ -4692,6 +4726,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Motifs avec des boucles",
+        "slug": "motifs-avec-des-boucles",
         "cells": [
           {
             "t": "h",
@@ -4774,6 +4809,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Disegni con i cicli",
+        "slug": "disegni-con-i-cicli",
         "cells": [
           {
             "t": "h",
@@ -4953,6 +4989,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Arrays",
+        "slug": "arrays",
         "cells": [
           {
             "t": "h",
@@ -5047,6 +5084,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "配列",
+        "slug": "配列",
         "cells": [
           {
             "t": "h",
@@ -5141,6 +5179,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Arrays",
+        "slug": "arrays",
         "cells": [
           {
             "t": "h",
@@ -5235,6 +5274,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Array",
+        "slug": "array",
         "cells": [
           {
             "t": "h",
@@ -5432,6 +5472,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Ranges: from … to",
+        "slug": "ranges-from-to",
         "cells": [
           {
             "t": "h",
@@ -5530,6 +5571,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "範囲：Range",
+        "slug": "範囲-range",
         "cells": [
           {
             "t": "h",
@@ -5628,6 +5670,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Intervalles : de … à",
+        "slug": "intervalles-de-a",
         "cells": [
           {
             "t": "h",
@@ -5726,6 +5769,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Intervalli: da … a",
+        "slug": "intervalli-da-a",
         "cells": [
           {
             "t": "h",
@@ -5910,6 +5954,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Chance and dice",
+        "slug": "chance-and-dice",
         "cells": [
           {
             "t": "h",
@@ -5992,6 +6037,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ランダムとサイコロ",
+        "slug": "ランダムとサイコロ",
         "cells": [
           {
             "t": "h",
@@ -6074,6 +6120,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Hasard et dés",
+        "slug": "hasard-et-des",
         "cells": [
           {
             "t": "h",
@@ -6156,6 +6203,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Caso e dadi",
+        "slug": "caso-e-dadi",
         "cells": [
           {
             "t": "h",
@@ -6327,6 +6375,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Hashes",
+        "slug": "hashes",
         "cells": [
           {
             "t": "h",
@@ -6413,6 +6462,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ハッシュ",
+        "slug": "ハッシュ",
         "cells": [
           {
             "t": "h",
@@ -6499,6 +6549,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Hashes",
+        "slug": "hashes",
         "cells": [
           {
             "t": "h",
@@ -6585,6 +6636,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Hash",
+        "slug": "hash",
         "cells": [
           {
             "t": "h",
@@ -6758,6 +6810,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Sets",
+        "slug": "sets",
         "cells": [
           {
             "t": "h",
@@ -6840,6 +6893,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "集合：Set",
+        "slug": "集合-set",
         "cells": [
           {
             "t": "h",
@@ -6922,6 +6976,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Les ensembles",
+        "slug": "les-ensembles",
         "cells": [
           {
             "t": "h",
@@ -7004,6 +7059,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Insiemi",
+        "slug": "insiemi",
         "cells": [
           {
             "t": "h",
@@ -7179,6 +7235,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "map, select & co.",
+        "slug": "map-select-co",
         "cells": [
           {
             "t": "h",
@@ -7269,6 +7326,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "mapとselectの仲間たち",
+        "slug": "mapとselectの仲間たち",
         "cells": [
           {
             "t": "h",
@@ -7359,6 +7417,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "map, select & cie",
+        "slug": "map-select-cie",
         "cells": [
           {
             "t": "h",
@@ -7449,6 +7508,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "map, select & co.",
+        "slug": "map-select-co",
         "cells": [
           {
             "t": "h",
@@ -7642,6 +7702,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Folding: reduce and each_with_object",
+        "slug": "folding-reduce-and-each-with-object",
         "cells": [
           {
             "t": "h",
@@ -7741,6 +7802,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "畳み込み：reduceとeach_with_object",
+        "slug": "畳み込み-reduceとeach-with-object",
         "cells": [
           {
             "t": "h",
@@ -7840,6 +7902,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Replier une liste : reduce et each_with_object",
+        "slug": "replier-une-liste-reduce-et-each-with-object",
         "cells": [
           {
             "t": "h",
@@ -7939,6 +8002,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Ripiegare un elenco: reduce e each_with_object",
+        "slug": "ripiegare-un-elenco-reduce-e-each-with-object",
         "cells": [
           {
             "t": "h",
@@ -8140,6 +8204,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "More tools for lists",
+        "slug": "more-tools-for-lists",
         "cells": [
           {
             "t": "h",
@@ -8238,6 +8303,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "配列の便利な道具",
+        "slug": "配列の便利な道具",
         "cells": [
           {
             "t": "h",
@@ -8336,6 +8402,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Encore des outils pour les listes",
+        "slug": "encore-des-outils-pour-les-listes",
         "cells": [
           {
             "t": "h",
@@ -8434,6 +8501,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Altri strumenti per gli elenchi",
+        "slug": "altri-strumenti-per-gli-elenchi",
         "cells": [
           {
             "t": "h",
@@ -8626,6 +8694,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "nil, true and symbols",
+        "slug": "nil-true-and-symbols",
         "cells": [
           {
             "t": "h",
@@ -8716,6 +8785,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "nil、trueとシンボル",
+        "slug": "nil-trueとシンボル",
         "cells": [
           {
             "t": "h",
@@ -8806,6 +8876,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "nil, true et les symboles",
+        "slug": "nil-true-et-les-symboles",
         "cells": [
           {
             "t": "h",
@@ -8896,6 +8967,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "nil, true e i simboli",
+        "slug": "nil-true-e-i-simboli",
         "cells": [
           {
             "t": "h",
@@ -9088,6 +9160,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Sorting and searching",
+        "slug": "sorting-and-searching",
         "cells": [
           {
             "t": "h",
@@ -9186,6 +9259,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "並べかえと検索",
+        "slug": "並べかえと検索",
         "cells": [
           {
             "t": "h",
@@ -9284,6 +9358,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Trier et chercher",
+        "slug": "trier-et-chercher",
         "cells": [
           {
             "t": "h",
@@ -9382,6 +9457,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Ordinare e cercare",
+        "slug": "ordinare-e-cercare",
         "cells": [
           {
             "t": "h",
@@ -9565,6 +9641,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Regular expressions",
+        "slug": "regular-expressions",
         "cells": [
           {
             "t": "h",
@@ -9647,6 +9724,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "正規表現",
+        "slug": "正規表現",
         "cells": [
           {
             "t": "h",
@@ -9729,6 +9807,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Expressions régulières",
+        "slug": "expressions-regulieres",
         "cells": [
           {
             "t": "h",
@@ -9811,6 +9890,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Espressioni regolari",
+        "slug": "espressioni-regolari",
         "cells": [
           {
             "t": "h",
@@ -9979,6 +10059,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Formatting text",
+        "slug": "formatting-text",
         "cells": [
           {
             "t": "h",
@@ -10061,6 +10142,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "テキストの整形",
+        "slug": "テキストの整形",
         "cells": [
           {
             "t": "h",
@@ -10143,6 +10225,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Mettre du texte en forme",
+        "slug": "mettre-du-texte-en-forme",
         "cells": [
           {
             "t": "h",
@@ -10225,6 +10308,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Formattare il testo",
+        "slug": "formattare-il-testo",
         "cells": [
           {
             "t": "h",
@@ -10409,6 +10493,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Letters, bytes and emoji",
+        "slug": "letters-bytes-and-emoji",
         "cells": [
           {
             "t": "h",
@@ -10507,6 +10592,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "文字・バイト・絵文字",
+        "slug": "文字-バイト-絵文字",
         "cells": [
           {
             "t": "h",
@@ -10605,6 +10691,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Lettres, octets et emoji",
+        "slug": "lettres-octets-et-emoji",
         "cells": [
           {
             "t": "h",
@@ -10703,6 +10790,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Lettere, byte ed emoji",
+        "slug": "lettere-byte-ed-emoji",
         "cells": [
           {
             "t": "h",
@@ -10895,6 +10983,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Time and dates",
+        "slug": "time-and-dates",
         "cells": [
           {
             "t": "h",
@@ -10985,6 +11074,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "時刻と日付",
+        "slug": "時刻と日付",
         "cells": [
           {
             "t": "h",
@@ -11075,6 +11165,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "L’heure et les dates",
+        "slug": "l-heure-et-les-dates",
         "cells": [
           {
             "t": "h",
@@ -11165,6 +11256,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Ore e date",
+        "slug": "ore-e-date",
         "cells": [
           {
             "t": "h",
@@ -11333,6 +11425,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Methods",
+        "slug": "methods",
         "cells": [
           {
             "t": "h",
@@ -11408,6 +11501,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "メソッド",
+        "slug": "メソッド",
         "cells": [
           {
             "t": "h",
@@ -11483,6 +11577,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Méthodes",
+        "slug": "methodes",
         "cells": [
           {
             "t": "h",
@@ -11558,6 +11653,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Metodi",
+        "slug": "metodi",
         "cells": [
           {
             "t": "h",
@@ -11737,6 +11833,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Methods that take a block: yield",
+        "slug": "methods-that-take-a-block-yield",
         "cells": [
           {
             "t": "h",
@@ -11836,6 +11933,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ブロックを受け取るメソッド：yield",
+        "slug": "ブロックを受け取るメソッド-yield",
         "cells": [
           {
             "t": "h",
@@ -11935,6 +12033,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Des méthodes qui prennent un bloc : yield",
+        "slug": "des-methodes-qui-prennent-un-bloc-yield",
         "cells": [
           {
             "t": "h",
@@ -12034,6 +12133,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Metodi che prendono un blocco: yield",
+        "slug": "metodi-che-prendono-un-blocco-yield",
         "cells": [
           {
             "t": "h",
@@ -12219,6 +12319,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Secret codes",
+        "slug": "secret-codes",
         "cells": [
           {
             "t": "h",
@@ -12301,6 +12402,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "暗号",
+        "slug": "暗号",
         "cells": [
           {
             "t": "h",
@@ -12383,6 +12485,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Messages secrets",
+        "slug": "messages-secrets",
         "cells": [
           {
             "t": "h",
@@ -12465,6 +12568,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Messaggi segreti",
+        "slug": "messaggi-segreti",
         "cells": [
           {
             "t": "h",
@@ -12649,6 +12753,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Grids: arrays in arrays",
+        "slug": "grids-arrays-in-arrays",
         "cells": [
           {
             "t": "h",
@@ -12747,6 +12852,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "二次元配列：グリッド",
+        "slug": "二次元配列-グリッド",
         "cells": [
           {
             "t": "h",
@@ -12845,6 +12951,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Grilles : des arrays dans des arrays",
+        "slug": "grilles-des-arrays-dans-des-arrays",
         "cells": [
           {
             "t": "h",
@@ -12943,6 +13050,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Griglie: array dentro array",
+        "slug": "griglie-array-dentro-array",
         "cells": [
           {
             "t": "h",
@@ -13135,6 +13243,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Binary, hex and bits",
+        "slug": "binary-hex-and-bits",
         "cells": [
           {
             "t": "h",
@@ -13225,6 +13334,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "2進数・16進数・ビット",
+        "slug": "2進数-16進数-ビット",
         "cells": [
           {
             "t": "h",
@@ -13315,6 +13425,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Binaire, hexadécimal et bits",
+        "slug": "binaire-hexadecimal-et-bits",
         "cells": [
           {
             "t": "h",
@@ -13405,6 +13516,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Binario, esadecimale e bit",
+        "slug": "binario-esadecimale-e-bit",
         "cells": [
           {
             "t": "h",
@@ -13581,6 +13693,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Fractions and whole numbers",
+        "slug": "fractions-and-whole-numbers",
         "cells": [
           {
             "t": "h",
@@ -13663,6 +13776,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "分数と整数の計算",
+        "slug": "分数と整数の計算",
         "cells": [
           {
             "t": "h",
@@ -13745,6 +13859,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Fractions et nombres entiers",
+        "slug": "fractions-et-nombres-entiers",
         "cells": [
           {
             "t": "h",
@@ -13827,6 +13942,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Frazioni e numeri interi",
+        "slug": "frazioni-e-numeri-interi",
         "cells": [
           {
             "t": "h",
@@ -14017,6 +14133,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Reading error messages",
+        "slug": "reading-error-messages",
         "cells": [
           {
             "t": "h",
@@ -14122,6 +14239,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "エラーメッセージを読む",
+        "slug": "エラーメッセージを読む",
         "cells": [
           {
             "t": "h",
@@ -14227,6 +14345,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Lire les messages d'erreur",
+        "slug": "lire-les-messages-d-erreur",
         "cells": [
           {
             "t": "h",
@@ -14332,6 +14451,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Leggere i messaggi di errore",
+        "slug": "leggere-i-messaggi-di-errore",
         "cells": [
           {
             "t": "h",
@@ -14542,6 +14662,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Catching errors: rescue",
+        "slug": "catching-errors-rescue",
         "cells": [
           {
             "t": "h",
@@ -14642,6 +14763,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "エラーをつかまえる：rescue",
+        "slug": "エラーをつかまえる-rescue",
         "cells": [
           {
             "t": "h",
@@ -14742,6 +14864,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Intercepter les erreurs : rescue",
+        "slug": "intercepter-les-erreurs-rescue",
         "cells": [
           {
             "t": "h",
@@ -14842,6 +14965,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Catturare gli errori: rescue",
+        "slug": "catturare-gli-errori-rescue",
         "cells": [
           {
             "t": "h",
@@ -15020,6 +15144,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Recursion – methods that call themselves",
+        "slug": "recursion",
         "cells": [
           {
             "t": "h",
@@ -15094,6 +15219,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "再帰 – 自分を呼び出すメソッド",
+        "slug": "再帰",
         "cells": [
           {
             "t": "h",
@@ -15168,6 +15294,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Récursivité : des méthodes qui s'appellent elles-mêmes",
+        "slug": "recursivite-des-methodes-qui-s-appellent-elles-memes",
         "cells": [
           {
             "t": "h",
@@ -15242,6 +15369,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Ricorsione – metodi che chiamano se stessi",
+        "slug": "ricorsione",
         "cells": [
           {
             "t": "h",
@@ -15386,6 +15514,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Classic puzzles",
+        "slug": "classic-puzzles",
         "cells": [
           {
             "t": "h",
@@ -15452,6 +15581,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "定番パズル",
+        "slug": "定番パズル",
         "cells": [
           {
             "t": "h",
@@ -15518,6 +15648,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Casse-têtes classiques",
+        "slug": "casse-tetes-classiques",
         "cells": [
           {
             "t": "h",
@@ -15584,6 +15715,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Rompicapi classici",
+        "slug": "rompicapi-classici",
         "cells": [
           {
             "t": "h",
@@ -15752,6 +15884,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Endless lists: Enumerator and lazy",
+        "slug": "endless-lists-enumerator-and-lazy",
         "cells": [
           {
             "t": "h",
@@ -15850,6 +15983,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "終わりのない列：Enumeratorとlazy",
+        "slug": "終わりのない列-enumeratorとlazy",
         "cells": [
           {
             "t": "h",
@@ -15948,6 +16082,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Listes sans fin : Enumerator et lazy",
+        "slug": "listes-sans-fin-enumerator-et-lazy",
         "cells": [
           {
             "t": "h",
@@ -16046,6 +16181,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Liste infinite: Enumerator e lazy",
+        "slug": "liste-infinite-enumerator-e-lazy",
         "cells": [
           {
             "t": "h",
@@ -16206,6 +16342,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Drawing with Chunky",
+        "slug": "drawing-with-chunky",
         "cells": [
           {
             "t": "h",
@@ -16264,6 +16401,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Chunkyとお絵かき",
+        "slug": "chunkyとお絵かき",
         "cells": [
           {
             "t": "h",
@@ -16322,6 +16460,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Dessiner avec Chunky",
+        "slug": "dessiner-avec-chunky",
         "cells": [
           {
             "t": "h",
@@ -16380,6 +16519,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Disegnare con Chunky",
+        "slug": "disegnare-con-chunky",
         "cells": [
           {
             "t": "h",
@@ -16540,6 +16680,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Sorting by hand",
+        "slug": "sorting-by-hand",
         "cells": [
           {
             "t": "h",
@@ -16638,6 +16779,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "並べかえのしくみ",
+        "slug": "並べかえのしくみ",
         "cells": [
           {
             "t": "h",
@@ -16736,6 +16878,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Trier à la main",
+        "slug": "trier-a-la-main",
         "cells": [
           {
             "t": "h",
@@ -16834,6 +16977,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Ordinare a mano",
+        "slug": "ordinare-a-mano",
         "cells": [
           {
             "t": "h",
@@ -17034,6 +17178,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Every possibility: combinations",
+        "slug": "every-possibility-combinations",
         "cells": [
           {
             "t": "h",
@@ -17132,6 +17277,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "すべての組み合わせ",
+        "slug": "すべての組み合わせ",
         "cells": [
           {
             "t": "h",
@@ -17230,6 +17376,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Toutes les possibilités : la combinatoire",
+        "slug": "toutes-les-possibilites-la-combinatoire",
         "cells": [
           {
             "t": "h",
@@ -17328,6 +17475,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Tutte le possibilità: combinatoria",
+        "slug": "tutte-le-possibilita-combinatoria",
         "cells": [
           {
             "t": "h",
@@ -17512,6 +17660,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Backtracking: try, and step back",
+        "slug": "backtracking-try-and-step-back",
         "cells": [
           {
             "t": "h",
@@ -17594,6 +17743,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "バックトラッキング：試して、戻る",
+        "slug": "バックトラッキング-試して-戻る",
         "cells": [
           {
             "t": "h",
@@ -17676,6 +17826,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Backtracking : essayer et revenir en arrière",
+        "slug": "backtracking-essayer-et-revenir-en-arriere",
         "cells": [
           {
             "t": "h",
@@ -17758,6 +17909,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Backtracking: provare e tornare indietro",
+        "slug": "backtracking-provare-e-tornare-indietro",
         "cells": [
           {
             "t": "h",
@@ -17934,6 +18086,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Stacks and queues",
+        "slug": "stacks-and-queues",
         "cells": [
           {
             "t": "h",
@@ -18024,6 +18177,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "スタックとキュー",
+        "slug": "スタックとキュー",
         "cells": [
           {
             "t": "h",
@@ -18114,6 +18268,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Piles et files d’attente",
+        "slug": "piles-et-files-d-attente",
         "cells": [
           {
             "t": "h",
@@ -18204,6 +18359,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Pile e code",
+        "slug": "pile-e-code",
         "cells": [
           {
             "t": "h",
@@ -18396,6 +18552,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Through the maze: breadth-first search",
+        "slug": "through-the-maze-breadth-first-search",
         "cells": [
           {
             "t": "h",
@@ -18494,6 +18651,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "迷路を解く：幅優先探索",
+        "slug": "迷路を解く-幅優先探索",
         "cells": [
           {
             "t": "h",
@@ -18592,6 +18750,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "À travers le labyrinthe : le parcours en largeur",
+        "slug": "a-travers-le-labyrinthe-le-parcours-en-largeur",
         "cells": [
           {
             "t": "h",
@@ -18690,6 +18849,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Attraverso il labirinto: la ricerca in ampiezza",
+        "slug": "attraverso-il-labirinto-la-ricerca-in-ampiezza",
         "cells": [
           {
             "t": "h",
@@ -18899,6 +19059,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "How similar are two words?",
+        "slug": "how-similar-are-two-words",
         "cells": [
           {
             "t": "h",
@@ -19006,6 +19167,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "単語はどれくらい似ている？",
+        "slug": "単語はどれくらい似ている",
         "cells": [
           {
             "t": "h",
@@ -19113,6 +19275,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "À quel point deux mots se ressemblent-ils ?",
+        "slug": "a-quel-point-deux-mots-se-ressemblent-ils",
         "cells": [
           {
             "t": "h",
@@ -19220,6 +19383,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Quanto si somigliano due parole?",
+        "slug": "quanto-si-somigliano-due-parole",
         "cells": [
           {
             "t": "h",
@@ -19413,6 +19577,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Conway's Game of Life",
+        "slug": "conways-game-of-life",
         "cells": [
           {
             "t": "h",
@@ -19495,6 +19660,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ライフゲーム",
+        "slug": "ライフゲーム",
         "cells": [
           {
             "t": "h",
@@ -19577,6 +19743,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Le jeu de la vie de Conway",
+        "slug": "le-jeu-de-la-vie-de-conway",
         "cells": [
           {
             "t": "h",
@@ -19659,6 +19826,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Il gioco della vita di Conway",
+        "slug": "il-gioco-della-vita-di-conway",
         "cells": [
           {
             "t": "h",
@@ -19835,6 +20003,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Text from chance: Markov chains",
+        "slug": "text-from-chance-markov-chains",
         "cells": [
           {
             "t": "h",
@@ -19925,6 +20094,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "マルコフ連鎖で文章を作る",
+        "slug": "マルコフ連鎖で文章を作る",
         "cells": [
           {
             "t": "h",
@@ -20015,6 +20185,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Du texte par hasard : les chaînes de Markov",
+        "slug": "du-texte-par-hasard-les-chaines-de-markov",
         "cells": [
           {
             "t": "h",
@@ -20105,6 +20276,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Testo dal caso: le catene di Markov",
+        "slug": "testo-dal-caso-le-catene-di-markov",
         "cells": [
           {
             "t": "h",
@@ -20273,6 +20445,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Struct and Data – quick little classes",
+        "slug": "struct-and-data",
         "cells": [
           {
             "t": "h",
@@ -20347,6 +20520,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "StructとData – 手軽な小さいクラス",
+        "slug": "structとdata",
         "cells": [
           {
             "t": "h",
@@ -20421,6 +20595,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Struct et Data : de petites classes vite faites",
+        "slug": "struct-et-data-de-petites-classes-vite-faites",
         "cells": [
           {
             "t": "h",
@@ -20495,6 +20670,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Struct e Data – piccole classi al volo",
+        "slug": "struct-e-data",
         "cells": [
           {
             "t": "h",
@@ -20650,6 +20826,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Classes",
+        "slug": "classes",
         "cells": [
           {
             "t": "h",
@@ -20728,6 +20905,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "クラス",
+        "slug": "クラス",
         "cells": [
           {
             "t": "h",
@@ -20806,6 +20984,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Classes",
+        "slug": "classes",
         "cells": [
           {
             "t": "h",
@@ -20884,6 +21063,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Classi",
+        "slug": "classi",
         "cells": [
           {
             "t": "h",
@@ -21024,6 +21204,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Inheritance",
+        "slug": "inheritance",
         "cells": [
           {
             "t": "h",
@@ -21082,6 +21263,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "継承",
+        "slug": "継承",
         "cells": [
           {
             "t": "h",
@@ -21140,6 +21322,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Héritage",
+        "slug": "heritage",
         "cells": [
           {
             "t": "h",
@@ -21198,6 +21381,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Ereditarietà",
+        "slug": "ereditarieta",
         "cells": [
           {
             "t": "h",
@@ -21337,6 +21521,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Modules",
+        "slug": "modules",
         "cells": [
           {
             "t": "h",
@@ -21415,6 +21600,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "モジュール",
+        "slug": "モジュール",
         "cells": [
           {
             "t": "h",
@@ -21493,6 +21679,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Modules",
+        "slug": "modules",
         "cells": [
           {
             "t": "h",
@@ -21571,6 +21758,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Moduli",
+        "slug": "moduli",
         "cells": [
           {
             "t": "h",
@@ -21753,6 +21941,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Operators for your own classes",
+        "slug": "operators-for-your-own-classes",
         "cells": [
           {
             "t": "h",
@@ -21852,6 +22041,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "自分のクラスに演算子を",
+        "slug": "自分のクラスに演算子を",
         "cells": [
           {
             "t": "h",
@@ -21951,6 +22141,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Des opérateurs pour vos propres classes",
+        "slug": "des-operateurs-pour-vos-propres-classes",
         "cells": [
           {
             "t": "h",
@@ -22050,6 +22241,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Operatori per le tue classi",
+        "slug": "operatori-per-le-tue-classi",
         "cells": [
           {
             "t": "h",
@@ -22179,6 +22371,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "IRB – Ruby's playground",
+        "slug": "irb",
         "cells": [
           {
             "t": "h",
@@ -22206,6 +22399,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "IRB：Rubyの遊び場",
+        "slug": "irb-rubyの遊び場",
         "cells": [
           {
             "t": "h",
@@ -22233,6 +22427,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "IRB : le terrain de jeu de Ruby",
+        "slug": "irb-le-terrain-de-jeu-de-ruby",
         "cells": [
           {
             "t": "h",
@@ -22260,6 +22455,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "IRB – il parco giochi di Ruby",
+        "slug": "irb",
         "cells": [
           {
             "t": "h",
@@ -22349,6 +22545,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Reading the docs",
+        "slug": "reading-the-docs",
         "cells": [
           {
             "t": "h",
@@ -22408,6 +22605,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ドキュメントを読む",
+        "slug": "ドキュメントを読む",
         "cells": [
           {
             "t": "h",
@@ -22467,6 +22665,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Lire la documentation",
+        "slug": "lire-la-documentation",
         "cells": [
           {
             "t": "h",
@@ -22526,6 +22725,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Leggere la documentazione",
+        "slug": "leggere-la-documentazione",
         "cells": [
           {
             "t": "h",
@@ -22670,6 +22870,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Reading and writing files",
+        "slug": "reading-and-writing-files",
         "cells": [
           {
             "t": "h",
@@ -22752,6 +22953,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ファイルの読み書き",
+        "slug": "ファイルの読み書き",
         "cells": [
           {
             "t": "h",
@@ -22834,6 +23036,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Lire et écrire des fichiers",
+        "slug": "lire-et-ecrire-des-fichiers",
         "cells": [
           {
             "t": "h",
@@ -22916,6 +23119,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Leggere e scrivere file",
+        "slug": "leggere-e-scrivere-file",
         "cells": [
           {
             "t": "h",
@@ -23036,6 +23240,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Installing gems",
+        "slug": "installing-gems",
         "cells": [
           {
             "t": "h",
@@ -23071,6 +23276,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "gemのインストール",
+        "slug": "gemのインストール",
         "cells": [
           {
             "t": "h",
@@ -23106,6 +23312,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Installer des gems",
+        "slug": "installer-des-gems",
         "cells": [
           {
             "t": "h",
@@ -23141,6 +23348,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Installare gem",
+        "slug": "installare-gem",
         "cells": [
           {
             "t": "h",
@@ -23246,6 +23454,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Parsing HTML",
+        "slug": "parsing-html",
         "cells": [
           {
             "t": "h",
@@ -23313,6 +23522,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "HTMLのパース",
+        "slug": "htmlのパース",
         "cells": [
           {
             "t": "h",
@@ -23380,6 +23590,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Analyser du HTML",
+        "slug": "analyser-du-html",
         "cells": [
           {
             "t": "h",
@@ -23447,6 +23658,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Analizzare l'HTML",
+        "slug": "analizzare-l-html",
         "cells": [
           {
             "t": "h",
@@ -23544,6 +23756,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Sinatra – web server",
+        "slug": "sinatra",
         "cells": [
           {
             "t": "h",
@@ -23571,6 +23784,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "SinatraでWebサーバー",
+        "slug": "sinatraでwebサーバー",
         "cells": [
           {
             "t": "h",
@@ -23598,6 +23812,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Sinatra – serveur web",
+        "slug": "sinatra",
         "cells": [
           {
             "t": "h",
@@ -23625,6 +23840,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Sinatra – server web",
+        "slug": "sinatra",
         "cells": [
           {
             "t": "h",
@@ -23682,6 +23898,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Roda – the routing tree",
+        "slug": "roda",
         "cells": [
           {
             "t": "h",
@@ -23709,6 +23926,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Rodaとルーティングツリー",
+        "slug": "rodaとルーティングツリー",
         "cells": [
           {
             "t": "h",
@@ -23736,6 +23954,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Roda – l'arbre de routage",
+        "slug": "roda",
         "cells": [
           {
             "t": "h",
@@ -23763,6 +23982,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Roda – l'albero delle route",
+        "slug": "roda",
         "cells": [
           {
             "t": "h",
@@ -23836,6 +24056,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Rails – routes, controllers, views",
+        "slug": "rails-routes-controllers-views",
         "cells": [
           {
             "t": "h",
@@ -23879,6 +24100,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Rails：ルート・コントローラー・ビュー",
+        "slug": "rails-ルート-コントローラー-ビュー",
         "cells": [
           {
             "t": "h",
@@ -23922,6 +24144,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Rails – routes, contrôleurs, vues",
+        "slug": "rails-routes-controleurs-vues",
         "cells": [
           {
             "t": "h",
@@ -23965,6 +24188,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Rails – route, controller, view",
+        "slug": "rails-route-controller-view",
         "cells": [
           {
             "t": "h",
@@ -24054,6 +24278,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Active Record – models and the database",
+        "slug": "active-record-models-and-the-database",
         "cells": [
           {
             "t": "h",
@@ -24097,6 +24322,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Active Record：モデルとデータベース",
+        "slug": "active-record-モデルとデータベース",
         "cells": [
           {
             "t": "h",
@@ -24140,6 +24366,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Active Record – modèles et base de données",
+        "slug": "active-record-modeles-et-base-de-donnees",
         "cells": [
           {
             "t": "h",
@@ -24183,6 +24410,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Active Record – model e database",
+        "slug": "active-record-model-e-database",
         "cells": [
           {
             "t": "h",
@@ -24280,6 +24508,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Rails – a page from the database",
+        "slug": "rails-a-page-from-the-database",
         "cells": [
           {
             "t": "h",
@@ -24331,6 +24560,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Rails：データベースからページを作る",
+        "slug": "rails-データベースからページを作る",
         "cells": [
           {
             "t": "h",
@@ -24382,6 +24612,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Rails – une page issue de la base de données",
+        "slug": "rails-une-page-issue-de-la-base-de-donnees",
         "cells": [
           {
             "t": "h",
@@ -24433,6 +24664,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Rails – una pagina dal database",
+        "slug": "rails-una-pagina-dal-database",
         "cells": [
           {
             "t": "h",
@@ -24530,6 +24762,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Rails – forms: adding a dish",
+        "slug": "rails-forms-adding-a-dish",
         "cells": [
           {
             "t": "h",
@@ -24573,6 +24806,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Rails：フォームで料理を追加する",
+        "slug": "rails-フォームで料理を追加する",
         "cells": [
           {
             "t": "h",
@@ -24616,6 +24850,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Rails – formulaires : ajouter un plat",
+        "slug": "rails-formulaires-ajouter-un-plat",
         "cells": [
           {
             "t": "h",
@@ -24659,6 +24894,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Rails – form: aggiungere un piatto",
+        "slug": "rails-form-aggiungere-un-piatto",
         "cells": [
           {
             "t": "h",
@@ -24756,6 +24992,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Rails – editing and deleting: all seven",
+        "slug": "rails-editing-and-deleting-all-seven",
         "cells": [
           {
             "t": "h",
@@ -24807,6 +25044,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Rails：編集と削除、7つのアクション",
+        "slug": "rails-編集と削除-7つのアクション",
         "cells": [
           {
             "t": "h",
@@ -24858,6 +25096,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Rails – modifier et supprimer : les sept actions",
+        "slug": "rails-modifier-et-supprimer-les-sept-actions",
         "cells": [
           {
             "t": "h",
@@ -24909,6 +25148,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Rails – modificare ed eliminare: tutte e sette",
+        "slug": "rails-modificare-ed-eliminare-tutte-e-sette",
         "cells": [
           {
             "t": "h",
@@ -24998,6 +25238,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Active Record – has_many and belongs_to",
+        "slug": "active-record-has-many-and-belongs-to",
         "cells": [
           {
             "t": "h",
@@ -25033,6 +25274,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Active Record：has_manyとbelongs_to",
+        "slug": "active-record-has-manyとbelongs-to",
         "cells": [
           {
             "t": "h",
@@ -25068,6 +25310,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Active Record – has_many et belongs_to",
+        "slug": "active-record-has-many-et-belongs-to",
         "cells": [
           {
             "t": "h",
@@ -25103,6 +25346,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Active Record – has_many e belongs_to",
+        "slug": "active-record-has-many-e-belongs-to",
         "cells": [
           {
             "t": "h",
@@ -25192,6 +25436,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "HTTP – fetching data from the web",
+        "slug": "http",
         "cells": [
           {
             "t": "h",
@@ -25243,6 +25488,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "HTTPでWebからデータ取得",
+        "slug": "httpでwebからデータ取得",
         "cells": [
           {
             "t": "h",
@@ -25294,6 +25540,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "HTTP – récupérer des données sur le web",
+        "slug": "http",
         "cells": [
           {
             "t": "h",
@@ -25345,6 +25592,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "HTTP – scaricare dati dal web",
+        "slug": "http",
         "cells": [
           {
             "t": "h",
@@ -25458,6 +25706,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Exact arithmetic with BigDecimal",
+        "slug": "exact-arithmetic-with-bigdecimal",
         "cells": [
           {
             "t": "h",
@@ -25517,6 +25766,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "BigDecimalで正確な計算",
+        "slug": "bigdecimalで正確な計算",
         "cells": [
           {
             "t": "h",
@@ -25576,6 +25826,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Calcul exact avec BigDecimal",
+        "slug": "calcul-exact-avec-bigdecimal",
         "cells": [
           {
             "t": "h",
@@ -25635,6 +25886,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Calcoli esatti con BigDecimal",
+        "slug": "calcoli-esatti-con-bigdecimal",
         "cells": [
           {
             "t": "h",
@@ -25755,6 +26007,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "3D with three-rb",
+        "slug": "3d-with-three-rb",
         "cells": [
           {
             "t": "h",
@@ -25806,6 +26059,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "three-rbで3D",
+        "slug": "three-rbで3d",
         "cells": [
           {
             "t": "h",
@@ -25857,6 +26111,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "La 3D avec three-rb",
+        "slug": "la-3d-avec-three-rb",
         "cells": [
           {
             "t": "h",
@@ -25908,6 +26163,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "3D con three-rb",
+        "slug": "3d-con-three-rb",
         "cells": [
           {
             "t": "h",
@@ -26029,6 +26285,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "PowerPoint with ruby_pptx",
+        "slug": "powerpoint-with-ruby-pptx",
         "cells": [
           {
             "t": "h",
@@ -26096,6 +26353,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ruby_pptxでPowerPoint",
+        "slug": "ruby-pptxでpowerpoint",
         "cells": [
           {
             "t": "h",
@@ -26163,6 +26421,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "PowerPoint avec ruby_pptx",
+        "slug": "powerpoint-avec-ruby-pptx",
         "cells": [
           {
             "t": "h",
@@ -26230,6 +26489,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "PowerPoint con ruby_pptx",
+        "slug": "powerpoint-con-ruby-pptx",
         "cells": [
           {
             "t": "h",
@@ -26351,6 +26611,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "PDFs with Prawn & HexaPDF",
+        "slug": "pdfs-with-prawn-hexapdf",
         "cells": [
           {
             "t": "h",
@@ -26402,6 +26663,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "PrawnとHexaPDFでPDF",
+        "slug": "prawnとhexapdfでpdf",
         "cells": [
           {
             "t": "h",
@@ -26453,6 +26715,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Des PDF avec Prawn et HexaPDF",
+        "slug": "des-pdf-avec-prawn-et-hexapdf",
         "cells": [
           {
             "t": "h",
@@ -26504,6 +26767,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "PDF con Prawn e HexaPDF",
+        "slug": "pdf-con-prawn-e-hexapdf",
         "cells": [
           {
             "t": "h",
@@ -26609,6 +26873,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "JPEG photos with pure_jpeg",
+        "slug": "jpeg-photos-with-pure-jpeg",
         "cells": [
           {
             "t": "h",
@@ -26660,6 +26925,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "pure_jpegでJPEG写真",
+        "slug": "pure-jpegでjpeg写真",
         "cells": [
           {
             "t": "h",
@@ -26711,6 +26977,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Photos JPEG avec pure_jpeg",
+        "slug": "photos-jpeg-avec-pure-jpeg",
         "cells": [
           {
             "t": "h",
@@ -26762,6 +27029,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Foto JPEG con pure_jpeg",
+        "slug": "foto-jpeg-con-pure-jpeg",
         "cells": [
           {
             "t": "h",
@@ -26915,6 +27183,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "PyCall: pandas from Ruby",
+        "slug": "pycall-pandas-from-ruby",
         "cells": [
           {
             "t": "h",
@@ -27014,6 +27283,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "PyCall：Rubyからpandas",
+        "slug": "pycall-rubyからpandas",
         "cells": [
           {
             "t": "h",
@@ -27113,6 +27383,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "PyCall : pandas depuis Ruby",
+        "slug": "pycall-pandas-depuis-ruby",
         "cells": [
           {
             "t": "h",
@@ -27212,6 +27483,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "PyCall: pandas da Ruby",
+        "slug": "pycall-pandas-da-ruby",
         "cells": [
           {
             "t": "h",
@@ -27389,6 +27661,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "SymPy: maths with symbols",
+        "slug": "sympy-maths-with-symbols",
         "cells": [
           {
             "t": "h",
@@ -27464,6 +27737,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "SymPy：記号で数学",
+        "slug": "sympy-記号で数学",
         "cells": [
           {
             "t": "h",
@@ -27539,6 +27813,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "SymPy : des maths avec des symboles",
+        "slug": "sympy-des-maths-avec-des-symboles",
         "cells": [
           {
             "t": "h",
@@ -27614,6 +27889,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "SymPy: matematica con i simboli",
+        "slug": "sympy-matematica-con-i-simboli",
         "cells": [
           {
             "t": "h",
@@ -27767,6 +28043,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "NumPy: whole arrays at once",
+        "slug": "numpy-whole-arrays-at-once",
         "cells": [
           {
             "t": "h",
@@ -27842,6 +28119,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "NumPy：配列をまるごと計算",
+        "slug": "numpy-配列をまるごと計算",
         "cells": [
           {
             "t": "h",
@@ -27917,6 +28195,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "NumPy : des arrays entiers d'un coup",
+        "slug": "numpy-des-arrays-entiers-d-un-coup",
         "cells": [
           {
             "t": "h",
@@ -27992,6 +28271,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "NumPy: interi array in un colpo solo",
+        "slug": "numpy-interi-array-in-un-colpo-solo",
         "cells": [
           {
             "t": "h",
@@ -28129,6 +28409,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "matplotlib: charts",
+        "slug": "matplotlib-charts",
         "cells": [
           {
             "t": "h",
@@ -28188,6 +28469,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "matplotlib：グラフ",
+        "slug": "matplotlib-グラフ",
         "cells": [
           {
             "t": "h",
@@ -28247,6 +28529,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "matplotlib : des graphiques",
+        "slug": "matplotlib-des-graphiques",
         "cells": [
           {
             "t": "h",
@@ -28306,6 +28589,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "matplotlib: grafici",
+        "slug": "matplotlib-grafici",
         "cells": [
           {
             "t": "h",
@@ -28435,6 +28719,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "scikit-learn: letting the machine learn",
+        "slug": "scikit-learn-letting-the-machine-learn",
         "cells": [
           {
             "t": "h",
@@ -28502,6 +28787,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "scikit-learn：機械に学ばせる",
+        "slug": "scikit-learn-機械に学ばせる",
         "cells": [
           {
             "t": "h",
@@ -28569,6 +28855,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "scikit-learn : laisser la machine apprendre",
+        "slug": "scikit-learn-laisser-la-machine-apprendre",
         "cells": [
           {
             "t": "h",
@@ -28636,6 +28923,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "scikit-learn: far imparare la macchina",
+        "slug": "scikit-learn-far-imparare-la-macchina",
         "cells": [
           {
             "t": "h",
@@ -28776,6 +29064,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Rumale: machine learning in Ruby",
+        "slug": "rumale-machine-learning-in-ruby",
         "cells": [
           {
             "t": "h",
@@ -28843,6 +29132,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Rumale：Rubyで機械学習",
+        "slug": "rumale-rubyで機械学習",
         "cells": [
           {
             "t": "h",
@@ -28910,6 +29200,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Rumale : l'apprentissage automatique en Ruby",
+        "slug": "rumale-l-apprentissage-automatique-en-ruby",
         "cells": [
           {
             "t": "h",
@@ -28977,6 +29268,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Rumale: machine learning in Ruby",
+        "slug": "rumale-machine-learning-in-ruby",
         "cells": [
           {
             "t": "h",
@@ -29154,6 +29446,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Daru: data frames in plain Ruby",
+        "slug": "daru-data-frames-in-plain-ruby",
         "cells": [
           {
             "t": "h",
@@ -29261,6 +29554,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Daru：Rubyだけでデータフレーム",
+        "slug": "daru-rubyだけでデータフレーム",
         "cells": [
           {
             "t": "h",
@@ -29368,6 +29662,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Daru : des DataFrames en Ruby pur",
+        "slug": "daru-des-dataframes-en-ruby-pur",
         "cells": [
           {
             "t": "h",
@@ -29475,6 +29770,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Daru: data frame in puro Ruby",
+        "slug": "daru-data-frame-in-puro-ruby",
         "cells": [
           {
             "t": "h",
@@ -29676,6 +29972,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Statistics: chance and the bell curve",
+        "slug": "statistics-chance-and-the-bell-curve",
         "cells": [
           {
             "t": "h",
@@ -29767,6 +30064,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "統計：偶然と釣鐘型の曲線",
+        "slug": "統計-偶然と釣鐘型の曲線",
         "cells": [
           {
             "t": "h",
@@ -29858,6 +30156,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Statistiques : le hasard et la courbe en cloche",
+        "slug": "statistiques-le-hasard-et-la-courbe-en-cloche",
         "cells": [
           {
             "t": "h",
@@ -29949,6 +30248,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Statistica: il caso e la curva a campana",
+        "slug": "statistica-il-caso-e-la-curva-a-campana",
         "cells": [
           {
             "t": "h",
@@ -30118,6 +30418,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "networkx.rb: networks and shortest paths",
+        "slug": "networkx-rb-networks-and-shortest-paths",
         "cells": [
           {
             "t": "h",
@@ -30193,6 +30494,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "networkx.rb：ネットワークと最短経路",
+        "slug": "networkx-rb-ネットワークと最短経路",
         "cells": [
           {
             "t": "h",
@@ -30268,6 +30570,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "networkx.rb : réseaux et plus courts chemins",
+        "slug": "networkx-rb-reseaux-et-plus-courts-chemins",
         "cells": [
           {
             "t": "h",
@@ -30343,6 +30646,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "networkx.rb: reti e percorsi più brevi",
+        "slug": "networkx-rb-reti-e-percorsi-piu-brevi",
         "cells": [
           {
             "t": "h",
@@ -30520,6 +30824,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Sequel: a database from Ruby",
+        "slug": "sequel-a-database-from-ruby",
         "cells": [
           {
             "t": "h",
@@ -30619,6 +30924,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Sequel：Rubyからデータベース",
+        "slug": "sequel-rubyからデータベース",
         "cells": [
           {
             "t": "h",
@@ -30718,6 +31024,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Sequel : une base de données depuis Ruby",
+        "slug": "sequel-une-base-de-donnees-depuis-ruby",
         "cells": [
           {
             "t": "h",
@@ -30817,6 +31124,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Sequel: un database da Ruby",
+        "slug": "sequel-un-database-da-ruby",
         "cells": [
           {
             "t": "h",
@@ -30970,6 +31278,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Shoes apps with Scarpe",
+        "slug": "shoes-apps-with-scarpe",
         "cells": [
           {
             "t": "h",
@@ -31021,6 +31330,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ScarpeでShoesアプリ",
+        "slug": "scarpeでshoesアプリ",
         "cells": [
           {
             "t": "h",
@@ -31072,6 +31382,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Des applications Shoes avec Scarpe",
+        "slug": "des-applications-shoes-avec-scarpe",
         "cells": [
           {
             "t": "h",
@@ -31123,6 +31434,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "App Shoes con Scarpe",
+        "slug": "app-shoes-con-scarpe",
         "cells": [
           {
             "t": "h",
@@ -31244,6 +31556,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "OCRAN: shipping programs as an .exe",
+        "slug": "ocran-shipping-programs-as-an-exe",
         "cells": [
           {
             "t": "h",
@@ -31311,6 +31624,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "OCRAN：プログラムを.exeで配る",
+        "slug": "ocran-プログラムを-exeで配る",
         "cells": [
           {
             "t": "h",
@@ -31378,6 +31692,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "OCRAN : distribuer des programmes sous forme de .exe",
+        "slug": "ocran-distribuer-des-programmes-sous-forme-de-exe",
         "cells": [
           {
             "t": "h",
@@ -31445,6 +31760,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "OCRAN: distribuire programmi come .exe",
+        "slug": "ocran-distribuire-programmi-come-exe",
         "cells": [
           {
             "t": "h",
@@ -31574,6 +31890,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "TTY: good-looking terminal output",
+        "slug": "tty-good-looking-terminal-output",
         "cells": [
           {
             "t": "h",
@@ -31633,6 +31950,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "TTY：ターミナルをきれいに",
+        "slug": "tty-ターミナルをきれいに",
         "cells": [
           {
             "t": "h",
@@ -31692,6 +32010,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "TTY : de belles sorties dans le terminal",
+        "slug": "tty-de-belles-sorties-dans-le-terminal",
         "cells": [
           {
             "t": "h",
@@ -31751,6 +32070,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "TTY: output del terminale di bell'aspetto",
+        "slug": "tty-output-del-terminale-di-bell-aspetto",
         "cells": [
           {
             "t": "h",
@@ -31872,6 +32192,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Processing: drawing with code",
+        "slug": "processing-drawing-with-code",
         "cells": [
           {
             "t": "h",
@@ -31931,6 +32252,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Processing：コードで描く",
+        "slug": "processing-コードで描く",
         "cells": [
           {
             "t": "h",
@@ -31990,6 +32312,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Processing : dessiner avec du code",
+        "slug": "processing-dessiner-avec-du-code",
         "cells": [
           {
             "t": "h",
@@ -32049,6 +32372,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Processing: disegnare con il codice",
+        "slug": "processing-disegnare-con-il-codice",
         "cells": [
           {
             "t": "h",
@@ -32170,6 +32494,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Faker: test data that looks real",
+        "slug": "faker-test-data-that-looks-real",
         "cells": [
           {
             "t": "h",
@@ -32229,6 +32554,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Faker：本物らしいテストデータ",
+        "slug": "faker-本物らしいテストデータ",
         "cells": [
           {
             "t": "h",
@@ -32288,6 +32614,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Faker : des données de test qui ont l'air vraies",
+        "slug": "faker-des-donnees-de-test-qui-ont-l-air-vraies",
         "cells": [
           {
             "t": "h",
@@ -32347,6 +32674,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Faker: dati di test che sembrano veri",
+        "slug": "faker-dati-di-test-che-sembrano-veri",
         "cells": [
           {
             "t": "h",
@@ -32484,6 +32812,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "ERB: templates – and Herb, which checks them",
+        "slug": "erb-templates",
         "cells": [
           {
             "t": "h",
@@ -32559,6 +32888,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ERB：テンプレートと、それを確かめるHerb",
+        "slug": "erb-テンプレートと-それを確かめるherb",
         "cells": [
           {
             "t": "h",
@@ -32634,6 +32964,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "ERB : des templates – et Herb, qui les vérifie",
+        "slug": "erb-des-templates",
         "cells": [
           {
             "t": "h",
@@ -32709,6 +33040,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "ERB: i template, e Herb che li controlla",
+        "slug": "erb-i-template-e-herb-che-li-controlla",
         "cells": [
           {
             "t": "h",
@@ -32862,6 +33194,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "RubyKaigi & weird code",
+        "slug": "rubykaigi-weird-code",
         "cells": [
           {
             "t": "h",
@@ -32937,6 +33270,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "RubyKaigiと変なコード",
+        "slug": "rubykaigiと変なコード",
         "cells": [
           {
             "t": "h",
@@ -33012,6 +33346,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "RubyKaigi et code bizarre",
+        "slug": "rubykaigi-et-code-bizarre",
         "cells": [
           {
             "t": "h",
@@ -33087,6 +33422,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "RubyKaigi e codice bizzarro",
+        "slug": "rubykaigi-e-codice-bizzarro",
         "cells": [
           {
             "t": "h",
@@ -33233,6 +33569,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Ruby makes music",
+        "slug": "ruby-makes-music",
         "cells": [
           {
             "t": "h",
@@ -33300,6 +33637,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Rubyで音楽を作る",
+        "slug": "rubyで音楽を作る",
         "cells": [
           {
             "t": "h",
@@ -33367,6 +33705,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Ruby fait de la musique",
+        "slug": "ruby-fait-de-la-musique",
         "cells": [
           {
             "t": "h",
@@ -33434,6 +33773,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Ruby fa musica",
+        "slug": "ruby-fa-musica",
         "cells": [
           {
             "t": "h",
@@ -33563,6 +33903,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Chunky's Snake",
+        "slug": "chunkys-snake",
         "cells": [
           {
             "t": "h",
@@ -33622,6 +33963,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ChunkyのSnake",
+        "slug": "chunkyのsnake",
         "cells": [
           {
             "t": "h",
@@ -33681,6 +34023,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Le Snake de Chunky",
+        "slug": "le-snake-de-chunky",
         "cells": [
           {
             "t": "h",
@@ -33740,6 +34083,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Lo Snake di Chunky",
+        "slug": "lo-snake-di-chunky",
         "cells": [
           {
             "t": "h",
@@ -33869,6 +34213,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Games with ruby2d",
+        "slug": "games-with-ruby2d",
         "cells": [
           {
             "t": "h",
@@ -33936,6 +34281,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ruby2dでゲーム",
+        "slug": "ruby2dでゲーム",
         "cells": [
           {
             "t": "h",
@@ -34003,6 +34349,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Des jeux avec ruby2d",
+        "slug": "des-jeux-avec-ruby2d",
         "cells": [
           {
             "t": "h",
@@ -34070,6 +34417,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Giochi con ruby2d",
+        "slug": "giochi-con-ruby2d",
         "cells": [
           {
             "t": "h",
@@ -34191,6 +34539,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Other Rubies: JRuby, TruffleRuby, mruby & co.",
+        "slug": "other-rubies-jruby-truffleruby-mruby-co",
         "cells": [
           {
             "t": "h",
@@ -34242,6 +34591,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "いろいろなRuby：JRuby、TruffleRuby、mrubyなど",
+        "slug": "いろいろなruby-jruby-truffleruby-mrubyなど",
         "cells": [
           {
             "t": "h",
@@ -34293,6 +34643,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Les autres Ruby : JRuby, TruffleRuby, mruby & cie",
+        "slug": "les-autres-ruby-jruby-truffleruby-mruby-cie",
         "cells": [
           {
             "t": "h",
@@ -34344,6 +34695,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Altri Ruby: JRuby, TruffleRuby, mruby & co.",
+        "slug": "altri-ruby-jruby-truffleruby-mruby-co",
         "cells": [
           {
             "t": "h",
@@ -34478,6 +34830,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "PicoRuby: Ruby on a chip",
+        "slug": "picoruby-ruby-on-a-chip",
         "cells": [
           {
             "t": "h",
@@ -34557,6 +34910,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "PicoRuby：チップの上のRuby",
+        "slug": "picoruby-チップの上のruby",
         "cells": [
           {
             "t": "h",
@@ -34636,6 +34990,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "PicoRuby : Ruby sur une puce",
+        "slug": "picoruby-ruby-sur-une-puce",
         "cells": [
           {
             "t": "h",
@@ -34715,6 +35070,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "PicoRuby: Ruby su un chip",
+        "slug": "picoruby-ruby-su-un-chip",
         "cells": [
           {
             "t": "h",
@@ -34861,6 +35217,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Funicular: web apps in Ruby",
+        "slug": "funicular-web-apps-in-ruby",
         "cells": [
           {
             "t": "h",
@@ -34924,6 +35281,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Funicular：RubyでつくるWebアプリ",
+        "slug": "funicular-rubyでつくるwebアプリ",
         "cells": [
           {
             "t": "h",
@@ -34987,6 +35345,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Funicular : des applications web en Ruby",
+        "slug": "funicular-des-applications-web-en-ruby",
         "cells": [
           {
             "t": "h",
@@ -35050,6 +35409,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Funicular: app web in Ruby",
+        "slug": "funicular-app-web-in-ruby",
         "cells": [
           {
             "t": "h",
@@ -35202,6 +35562,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "IronRuby: Ruby on .NET",
+        "slug": "ironruby-ruby-on-net",
         "cells": [
           {
             "t": "h",
@@ -35286,6 +35647,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "IronRuby：.NETの上のRuby",
+        "slug": "ironruby-netの上のruby",
         "cells": [
           {
             "t": "h",
@@ -35370,6 +35732,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "IronRuby : Ruby sur .NET",
+        "slug": "ironruby-ruby-sur-net",
         "cells": [
           {
             "t": "h",
@@ -35454,6 +35817,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "IronRuby: Ruby su .NET",
+        "slug": "ironruby-ruby-su-net",
         "cells": [
           {
             "t": "h",
@@ -35606,6 +35970,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Spinel: Ruby, compiled",
+        "slug": "spinel-ruby-compiled",
         "cells": [
           {
             "t": "h",
@@ -35669,6 +36034,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Spinel：Rubyをコンパイルする",
+        "slug": "spinel-rubyをコンパイルする",
         "cells": [
           {
             "t": "h",
@@ -35732,6 +36098,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Spinel : Ruby, compilé",
+        "slug": "spinel-ruby-compile",
         "cells": [
           {
             "t": "h",
@@ -35795,6 +36162,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Spinel: Ruby compilato",
+        "slug": "spinel-ruby-compilato",
         "cells": [
           {
             "t": "h",
@@ -35983,6 +36351,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "JRuby: Ruby with Java's libraries",
+        "slug": "jruby-ruby-with-javas-libraries",
         "cells": [
           {
             "t": "h",
@@ -36103,6 +36472,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "JRuby：JavaのライブラリとRuby",
+        "slug": "jruby-javaのライブラリとruby",
         "cells": [
           {
             "t": "h",
@@ -36223,6 +36593,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "JRuby : Ruby avec les bibliothèques de Java",
+        "slug": "jruby-ruby-avec-les-bibliotheques-de-java",
         "cells": [
           {
             "t": "h",
@@ -36343,6 +36714,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "JRuby: Ruby con le librerie di Java",
+        "slug": "jruby-ruby-con-le-librerie-di-java",
         "cells": [
           {
             "t": "h",
@@ -36541,6 +36913,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Ruboto: Android apps in Ruby",
+        "slug": "ruboto-android-apps-in-ruby",
         "cells": [
           {
             "t": "h",
@@ -36613,6 +36986,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Ruboto：RubyでAndroidアプリ",
+        "slug": "ruboto-rubyでandroidアプリ",
         "cells": [
           {
             "t": "h",
@@ -36685,6 +37059,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Ruboto : des applications Android en Ruby",
+        "slug": "ruboto-des-applications-android-en-ruby",
         "cells": [
           {
             "t": "h",
@@ -36757,6 +37132,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Ruboto: app Android in Ruby",
+        "slug": "ruboto-app-android-in-ruby",
         "cells": [
           {
             "t": "h",
@@ -36935,6 +37311,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Blinking an LED",
+        "slug": "blinking-an-led",
         "cells": [
           {
             "t": "h",
@@ -37026,6 +37403,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "LEDを点滅させる",
+        "slug": "ledを点滅させる",
         "cells": [
           {
             "t": "h",
@@ -37117,6 +37495,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Faire clignoter une LED",
+        "slug": "faire-clignoter-une-led",
         "cells": [
           {
             "t": "h",
@@ -37208,6 +37587,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Far lampeggiare un LED",
+        "slug": "far-lampeggiare-un-led",
         "cells": [
           {
             "t": "h",
@@ -37428,6 +37808,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Buttons and sensors",
+        "slug": "buttons-and-sensors",
         "cells": [
           {
             "t": "h",
@@ -37549,6 +37930,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ボタンとセンサー",
+        "slug": "ボタンとセンサー",
         "cells": [
           {
             "t": "h",
@@ -37670,6 +38052,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Boutons et capteurs",
+        "slug": "boutons-et-capteurs",
         "cells": [
           {
             "t": "h",
@@ -37791,6 +38174,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Pulsanti e sensori",
+        "slug": "pulsanti-e-sensori",
         "cells": [
           {
             "t": "h",
@@ -38081,6 +38465,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "PWM, motors and a robot",
+        "slug": "pwm-motors-and-a-robot",
         "cells": [
           {
             "t": "h",
@@ -38242,6 +38627,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "PWMとモーターとロボット",
+        "slug": "pwmとモーターとロボット",
         "cells": [
           {
             "t": "h",
@@ -38403,6 +38789,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "PWM, moteurs et un robot",
+        "slug": "pwm-moteurs-et-un-robot",
         "cells": [
           {
             "t": "h",
@@ -38564,6 +38951,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "PWM, motori e un robot",
+        "slug": "pwm-motori-e-un-robot",
         "cells": [
           {
             "t": "h",
@@ -38864,6 +39252,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "E-paper over SPI",
+        "slug": "e-paper-over-spi",
         "cells": [
           {
             "t": "h",
@@ -38995,6 +39384,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "SPIで電子ペーパー",
+        "slug": "spiで電子ペーパー",
         "cells": [
           {
             "t": "h",
@@ -39126,6 +39516,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Papier électronique sur SPI",
+        "slug": "papier-electronique-sur-spi",
         "cells": [
           {
             "t": "h",
@@ -39257,6 +39648,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "E-paper via SPI",
+        "slug": "e-paper-via-spi",
         "cells": [
           {
             "t": "h",
@@ -39571,6 +39963,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "A colour screen and a joystick",
+        "slug": "a-colour-screen-and-a-joystick",
         "cells": [
           {
             "t": "h",
@@ -39746,6 +40139,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "カラー液晶とジョイスティック",
+        "slug": "カラー液晶とジョイスティック",
         "cells": [
           {
             "t": "h",
@@ -39921,6 +40315,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Un écran couleur et un joystick",
+        "slug": "un-ecran-couleur-et-un-joystick",
         "cells": [
           {
             "t": "h",
@@ -40096,6 +40491,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Uno schermo a colori e un joystick",
+        "slug": "uno-schermo-a-colori-e-un-joystick",
         "cells": [
           {
             "t": "h",
@@ -40423,6 +40819,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Wi-Fi: a web API on e-paper",
+        "slug": "wi-fi-a-web-api-on-e-paper",
         "cells": [
           {
             "t": "h",
@@ -40567,6 +40964,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Wi-Fi：Web APIを電子ペーパーに",
+        "slug": "wi-fi-web-apiを電子ペーパーに",
         "cells": [
           {
             "t": "h",
@@ -40711,6 +41109,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Wi-Fi : une API web sur papier électronique",
+        "slug": "wi-fi-une-api-web-sur-papier-electronique",
         "cells": [
           {
             "t": "h",
@@ -40855,6 +41254,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Wi-Fi: un'API web sull'e-paper",
+        "slug": "wi-fi-un-api-web-sull-e-paper",
         "cells": [
           {
             "t": "h",
@@ -41111,6 +41511,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Bluetooth: laptop and Pico",
+        "slug": "bluetooth-laptop-and-pico",
         "cells": [
           {
             "t": "h",
@@ -41215,6 +41616,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Bluetooth：パソコンとPico",
+        "slug": "bluetooth-パソコンとpico",
         "cells": [
           {
             "t": "h",
@@ -41319,6 +41721,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Bluetooth : ordinateur portable et Pico",
+        "slug": "bluetooth-ordinateur-portable-et-pico",
         "cells": [
           {
             "t": "h",
@@ -41423,6 +41826,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Bluetooth: laptop e Pico",
+        "slug": "bluetooth-laptop-e-pico",
         "cells": [
           {
             "t": "h",
@@ -41578,6 +41982,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Onto a real Pico: R2P2 and prremote",
+        "slug": "onto-a-real-pico-r2p2-and-prremote",
         "cells": [
           {
             "t": "h",
@@ -41621,6 +42026,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "本物のPicoへ：R2P2とprremote",
+        "slug": "本物のpicoへ-r2p2とprremote",
         "cells": [
           {
             "t": "h",
@@ -41664,6 +42070,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Sur un vrai Pico : R2P2 et prremote",
+        "slug": "sur-un-vrai-pico-r2p2-et-prremote",
         "cells": [
           {
             "t": "h",
@@ -41707,6 +42114,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Su un Pico reale: R2P2 e prremote",
+        "slug": "su-un-pico-reale-r2p2-e-prremote",
         "cells": [
           {
             "t": "h",
@@ -41812,6 +42220,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Writing and reading QR-bills",
+        "slug": "writing-and-reading-qr-bills",
         "cells": [
           {
             "t": "h",
@@ -41871,6 +42280,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "QR請求書を書いて読む",
+        "slug": "qr請求書を書いて読む",
         "cells": [
           {
             "t": "h",
@@ -41930,6 +42340,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Créer et lire des QR-factures",
+        "slug": "creer-et-lire-des-qr-factures",
         "cells": [
           {
             "t": "h",
@@ -41989,6 +42400,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Creare e leggere QR-fatture",
+        "slug": "creare-e-leggere-qr-fatture",
         "cells": [
           {
             "t": "h",
@@ -42101,6 +42513,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Project timelog: collections",
+        "slug": "project-timelog-collections",
         "cells": [
           {
             "t": "h",
@@ -42144,6 +42557,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "timelogプロジェクト：コレクション",
+        "slug": "timelogプロジェクト-コレクション",
         "cells": [
           {
             "t": "h",
@@ -42187,6 +42601,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Projet timelog : les collections",
+        "slug": "projet-timelog-les-collections",
         "cells": [
           {
             "t": "h",
@@ -42230,6 +42645,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Progetto timelog: collezioni",
+        "slug": "progetto-timelog-collezioni",
         "cells": [
           {
             "t": "h",
@@ -42311,6 +42727,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Parsing text: regex",
+        "slug": "parsing-text-regex",
         "cells": [
           {
             "t": "h",
@@ -42346,6 +42763,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "テキストのパース：正規表現",
+        "slug": "テキストのパース-正規表現",
         "cells": [
           {
             "t": "h",
@@ -42381,6 +42799,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Analyser du texte : les regex",
+        "slug": "analyser-du-texte-les-regex",
         "cells": [
           {
             "t": "h",
@@ -42416,6 +42835,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Interpretare testo: regex",
+        "slug": "interpretare-testo-regex",
         "cells": [
           {
             "t": "h",
@@ -42489,6 +42909,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Building methods properly",
+        "slug": "building-methods-properly",
         "cells": [
           {
             "t": "h",
@@ -42524,6 +42945,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "メソッドをきちんと作る",
+        "slug": "メソッドをきちんと作る",
         "cells": [
           {
             "t": "h",
@@ -42559,6 +42981,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Bien construire ses méthodes",
+        "slug": "bien-construire-ses-methodes",
         "cells": [
           {
             "t": "h",
@@ -42594,6 +43017,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Costruire bene i metodi",
+        "slug": "costruire-bene-i-metodi",
         "cells": [
           {
             "t": "h",
@@ -42667,6 +43091,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Entry & Timesheet",
+        "slug": "entry-timesheet",
         "cells": [
           {
             "t": "h",
@@ -42702,6 +43127,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "EntryとTimesheet",
+        "slug": "entryとtimesheet",
         "cells": [
           {
             "t": "h",
@@ -42737,6 +43163,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Entry et Timesheet",
+        "slug": "entry-et-timesheet",
         "cells": [
           {
             "t": "h",
@@ -42772,6 +43199,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Entry e Timesheet",
+        "slug": "entry-e-timesheet",
         "cells": [
           {
             "t": "h",
@@ -42869,6 +43297,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Calculating with time",
+        "slug": "calculating-with-time",
         "cells": [
           {
             "t": "h",
@@ -42928,6 +43357,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "時間を計算する",
+        "slug": "時間を計算する",
         "cells": [
           {
             "t": "h",
@@ -42987,6 +43417,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Calculer avec le temps",
+        "slug": "calculer-avec-le-temps",
         "cells": [
           {
             "t": "h",
@@ -43046,6 +43477,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Calcolare con il tempo",
+        "slug": "calcolare-con-il-tempo",
         "cells": [
           {
             "t": "h",
@@ -43184,6 +43616,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Sharing objects: dup & freeze",
+        "slug": "sharing-objects-dup-freeze",
         "cells": [
           {
             "t": "h",
@@ -43260,6 +43693,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "オブジェクトの共有：dupとfreeze",
+        "slug": "オブジェクトの共有-dupとfreeze",
         "cells": [
           {
             "t": "h",
@@ -43336,6 +43770,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Partager des objets : dup et freeze",
+        "slug": "partager-des-objets-dup-et-freeze",
         "cells": [
           {
             "t": "h",
@@ -43412,6 +43847,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Condividere oggetti: dup e freeze",
+        "slug": "condividere-oggetti-dup-e-freeze",
         "cells": [
           {
             "t": "h",
@@ -43526,6 +43962,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Testing with Minitest",
+        "slug": "testing-with-minitest",
         "cells": [
           {
             "t": "h",
@@ -43561,6 +43998,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "Minitestでテスト",
+        "slug": "minitestでテスト",
         "cells": [
           {
             "t": "h",
@@ -43596,6 +44034,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Tester avec Minitest",
+        "slug": "tester-avec-minitest",
         "cells": [
           {
             "t": "h",
@@ -43631,6 +44070,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Testare con Minitest",
+        "slug": "testare-con-minitest",
         "cells": [
           {
             "t": "h",
@@ -43704,6 +44144,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Enumerable & Data",
+        "slug": "enumerable-data",
         "cells": [
           {
             "t": "h",
@@ -43739,6 +44180,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "EnumerableとData",
+        "slug": "enumerableとdata",
         "cells": [
           {
             "t": "h",
@@ -43774,6 +44216,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Enumerable et Data",
+        "slug": "enumerable-et-data",
         "cells": [
           {
             "t": "h",
@@ -43809,6 +44252,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Enumerable e Data",
+        "slug": "enumerable-e-data",
         "cells": [
           {
             "t": "h",
@@ -43890,6 +44334,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Blocks, procs & lambdas",
+        "slug": "blocks-procs-lambdas",
         "cells": [
           {
             "t": "h",
@@ -43933,6 +44378,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ブロック、Proc、lambda",
+        "slug": "ブロック-proc-lambda",
         "cells": [
           {
             "t": "h",
@@ -43976,6 +44422,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Blocs, procs et lambdas",
+        "slug": "blocs-procs-et-lambdas",
         "cells": [
           {
             "t": "h",
@@ -44019,6 +44466,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Blocchi, proc e lambda",
+        "slug": "blocchi-proc-e-lambda",
         "cells": [
           {
             "t": "h",
@@ -44100,6 +44548,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Handling errors",
+        "slug": "handling-errors",
         "cells": [
           {
             "t": "h",
@@ -44135,6 +44584,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "エラー処理",
+        "slug": "エラー処理",
         "cells": [
           {
             "t": "h",
@@ -44170,6 +44620,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Gérer les erreurs",
+        "slug": "gerer-les-erreurs",
         "cells": [
           {
             "t": "h",
@@ -44205,6 +44656,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Gestire gli errori",
+        "slug": "gestire-gli-errori",
         "cells": [
           {
             "t": "h",
@@ -44302,6 +44754,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Saving data: formats",
+        "slug": "saving-data-formats",
         "cells": [
           {
             "t": "h",
@@ -44361,6 +44814,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "データの保存：フォーマット",
+        "slug": "データの保存-フォーマット",
         "cells": [
           {
             "t": "h",
@@ -44420,6 +44874,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Enregistrer des données : les formats",
+        "slug": "enregistrer-des-donnees-les-formats",
         "cells": [
           {
             "t": "h",
@@ -44479,6 +44934,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Salvare i dati: formati",
+        "slug": "salvare-i-dati-formati",
         "cells": [
           {
             "t": "h",
@@ -44576,6 +45032,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Command line & gems",
+        "slug": "command-line-gems",
         "cells": [
           {
             "t": "h",
@@ -44611,6 +45068,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "コマンドラインとgem",
+        "slug": "コマンドラインとgem",
         "cells": [
           {
             "t": "h",
@@ -44646,6 +45104,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Ligne de commande et gems",
+        "slug": "ligne-de-commande-et-gems",
         "cells": [
           {
             "t": "h",
@@ -44681,6 +45140,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Riga di comando e gem",
+        "slug": "riga-di-comando-e-gem",
         "cells": [
           {
             "t": "h",
@@ -44762,6 +45222,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Pattern matching",
+        "slug": "pattern-matching",
         "cells": [
           {
             "t": "h",
@@ -44805,6 +45266,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "パターンマッチ",
+        "slug": "パターンマッチ",
         "cells": [
           {
             "t": "h",
@@ -44848,6 +45310,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Le pattern matching",
+        "slug": "le-pattern-matching",
         "cells": [
           {
             "t": "h",
@@ -44891,6 +45354,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Pattern matching",
+        "slug": "pattern-matching",
         "cells": [
           {
             "t": "h",
@@ -44980,6 +45444,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Object model & metaprogramming",
+        "slug": "object-model-metaprogramming",
         "cells": [
           {
             "t": "h",
@@ -45023,6 +45488,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "オブジェクトモデルとメタプログラミング",
+        "slug": "オブジェクトモデルとメタプログラミング",
         "cells": [
           {
             "t": "h",
@@ -45066,6 +45532,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Modèle objet et métaprogrammation",
+        "slug": "modele-objet-et-metaprogrammation",
         "cells": [
           {
             "t": "h",
@@ -45109,6 +45576,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Modello a oggetti e metaprogrammazione",
+        "slug": "modello-a-oggetti-e-metaprogrammazione",
         "cells": [
           {
             "t": "h",
@@ -45182,6 +45650,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Your own DSL",
+        "slug": "your-own-dsl",
         "cells": [
           {
             "t": "h",
@@ -45209,6 +45678,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "自分だけのDSL",
+        "slug": "自分だけのdsl",
         "cells": [
           {
             "t": "h",
@@ -45236,6 +45706,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Votre propre DSL",
+        "slug": "votre-propre-dsl",
         "cells": [
           {
             "t": "h",
@@ -45263,6 +45734,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Il tuo DSL",
+        "slug": "il-tuo-dsl",
         "cells": [
           {
             "t": "h",
@@ -45328,6 +45800,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Code quality & debugging",
+        "slug": "code-quality-debugging",
         "cells": [
           {
             "t": "h",
@@ -45363,6 +45836,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "コードの品質とデバッグ",
+        "slug": "コードの品質とデバッグ",
         "cells": [
           {
             "t": "h",
@@ -45398,6 +45872,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Qualité du code et débogage",
+        "slug": "qualite-du-code-et-debogage",
         "cells": [
           {
             "t": "h",
@@ -45433,6 +45908,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Qualità del codice e debugging",
+        "slug": "qualita-del-codice-e-debugging",
         "cells": [
           {
             "t": "h",
@@ -45522,6 +45998,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Performance & concurrency",
+        "slug": "performance-concurrency",
         "cells": [
           {
             "t": "h",
@@ -45573,6 +46050,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "パフォーマンスと並行処理",
+        "slug": "パフォーマンスと並行処理",
         "cells": [
           {
             "t": "h",
@@ -45624,6 +46102,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Performance et concurrence",
+        "slug": "performance-et-concurrence",
         "cells": [
           {
             "t": "h",
@@ -45675,6 +46154,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Prestazioni e concorrenza",
+        "slug": "prestazioni-e-concorrenza",
         "cells": [
           {
             "t": "h",
@@ -45760,6 +46240,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Finale: timelog on the web",
+        "slug": "finale-timelog-on-the-web",
         "cells": [
           {
             "t": "h",
@@ -45791,6 +46272,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "フィナーレ：Webで動くtimelog",
+        "slug": "フィナーレ-webで動くtimelog",
         "cells": [
           {
             "t": "h",
@@ -45822,6 +46304,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Finale : timelog sur le web",
+        "slug": "finale-timelog-sur-le-web",
         "cells": [
           {
             "t": "h",
@@ -45853,6 +46336,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Gran finale: timelog sul web",
+        "slug": "gran-finale-timelog-sul-web",
         "cells": [
           {
             "t": "h",
@@ -45949,6 +46433,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Tokens and the syntax tree",
+        "slug": "tokens-and-the-syntax-tree",
         "cells": [
           {
             "t": "h",
@@ -46004,6 +46489,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "トークンと構文木",
+        "slug": "トークンと構文木",
         "cells": [
           {
             "t": "h",
@@ -46059,6 +46545,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Les tokens et l'arbre syntaxique",
+        "slug": "les-tokens-et-l-arbre-syntaxique",
         "cells": [
           {
             "t": "h",
@@ -46114,6 +46601,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Token e albero sintattico",
+        "slug": "token-e-albero-sintattico",
         "cells": [
           {
             "t": "h",
@@ -46223,6 +46711,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Compiled: YARV instructions",
+        "slug": "compiled-yarv-instructions",
         "cells": [
           {
             "t": "h",
@@ -46274,6 +46763,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "コンパイル後：YARV命令",
+        "slug": "コンパイル後-yarv命令",
         "cells": [
           {
             "t": "h",
@@ -46325,6 +46815,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Compilé : les instructions YARV",
+        "slug": "compile-les-instructions-yarv",
         "cells": [
           {
             "t": "h",
@@ -46376,6 +46867,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Compilato: istruzioni YARV",
+        "slug": "compilato-istruzioni-yarv",
         "cells": [
           {
             "t": "h",
@@ -46473,6 +46965,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "The stack machine",
+        "slug": "the-stack-machine",
         "cells": [
           {
             "t": "h",
@@ -46516,6 +47009,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "スタックマシン",
+        "slug": "スタックマシン",
         "cells": [
           {
             "t": "h",
@@ -46559,6 +47053,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "La machine à pile",
+        "slug": "la-machine-a-pile",
         "cells": [
           {
             "t": "h",
@@ -46602,6 +47097,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "La macchina a stack",
+        "slug": "la-macchina-a-stack",
         "cells": [
           {
             "t": "h",
@@ -46691,6 +47187,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Blocks, closures and the ep",
+        "slug": "blocks-closures-and-the-ep",
         "cells": [
           {
             "t": "h",
@@ -46734,6 +47231,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ブロック、クロージャ、そしてep",
+        "slug": "ブロック-クロージャ-そしてep",
         "cells": [
           {
             "t": "h",
@@ -46777,6 +47275,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Blocs, closures et l'ep",
+        "slug": "blocs-closures-et-l-ep",
         "cells": [
           {
             "t": "h",
@@ -46820,6 +47319,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Blocchi, closure e l’ep",
+        "slug": "blocchi-closure-e-l-ep",
         "cells": [
           {
             "t": "h",
@@ -46925,6 +47425,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "VALUE: what a variable holds",
+        "slug": "value-what-a-variable-holds",
         "cells": [
           {
             "t": "h",
@@ -46984,6 +47485,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "VALUE：変数が持っているもの",
+        "slug": "value-変数が持っているもの",
         "cells": [
           {
             "t": "h",
@@ -47043,6 +47545,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "VALUE : ce que contient une variable",
+        "slug": "value-ce-que-contient-une-variable",
         "cells": [
           {
             "t": "h",
@@ -47102,6 +47605,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "VALUE: che cosa contiene una variabile",
+        "slug": "value-che-cosa-contiene-una-variabile",
         "cells": [
           {
             "t": "h",
@@ -47211,6 +47715,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Classes and method lookup",
+        "slug": "classes-and-method-lookup",
         "cells": [
           {
             "t": "h",
@@ -47258,6 +47763,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "クラスとメソッド探索",
+        "slug": "クラスとメソッド探索",
         "cells": [
           {
             "t": "h",
@@ -47305,6 +47811,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Les classes et la recherche de méthode",
+        "slug": "les-classes-et-la-recherche-de-methode",
         "cells": [
           {
             "t": "h",
@@ -47352,6 +47859,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Classi e ricerca dei metodi",
+        "slug": "classi-e-ricerca-dei-metodi",
         "cells": [
           {
             "t": "h",
@@ -47449,6 +47957,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "en": {
         "title": "Garbage collection",
+        "slug": "garbage-collection",
         "cells": [
           {
             "t": "h",
@@ -47496,6 +48005,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "ja": {
         "title": "ガベージコレクション",
+        "slug": "ガベージコレクション",
         "cells": [
           {
             "t": "h",
@@ -47543,6 +48053,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "fr": {
         "title": "Le ramasse-miettes",
+        "slug": "le-ramasse-miettes",
         "cells": [
           {
             "t": "h",
@@ -47590,6 +48101,7 @@ window.LESSONS_JSON = JSON.stringify({
       },
       "it": {
         "title": "Garbage collection",
+        "slug": "garbage-collection",
         "cells": [
           {
             "t": "h",

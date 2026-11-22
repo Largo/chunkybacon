@@ -30,6 +30,22 @@ module ChunkyShell
     def numbered_title(idx, lang) = "#{idx + 1}. #{title(idx, lang)}"
     def cells(idx, lang) = l10n(idx, lang).cells.to_a
 
+    # The word in a lesson's permalink, /en/variables (lessons.js "slug",
+    # tools/lesson_slugs.rb); German, and a language without one, use the
+    # lesson's id. Read with brackets, as an optional field.
+    def slug(idx, lang)
+      own = @lessons[idx][lang]
+      slug = own && own[:slug]
+      slug ? slug.to_s : @ids[idx]
+    end
+
+    # the workshop's, /en/workshop (ui "workshopSlug"; else its id)
+    def workshop_slug(lang)
+      strings = @ui[lang]
+      slug = strings && strings[:workshopSlug]
+      slug ? slug.to_s : WORKSHOP_ID
+    end
+
     # The heading a lesson opens in the index with, if any. An optional
     # field is read with brackets: a dot read of a missing property also
     # answers nil, but PicoRuby logs "Method not found" for it.

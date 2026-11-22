@@ -32,8 +32,8 @@ module ChunkyShell
       # languages, English; without a bridge's word, the stored choice
       @lang = bridge[:lang] || Store.get("chunky_lang", "de")
       @lang = "de" unless @course.lang?(@lang)
-      # /#methoden, or /de/methoden when the server gives lessons permalinks
-      @router = Router.new(bridge[:permalinks])
+      # /#methoden, or /en/methods when the server gives lessons permalinks
+      @router = Router.new(bridge[:permalinks], @course)
       @workshop = workshop_address?
       @running = {}
       @gem_names = []
@@ -373,7 +373,7 @@ module ChunkyShell
     def render_nav
       active = workshop? ? nil : current_lesson_id
       done = Store.done_ids
-      el("lessonNav").innerHTML = View.nav_html(@course, @lang, active, done, @router.prefix(@lang),
+      el("lessonNav").innerHTML = View.nav_html(@course, @lang, active, done, @router,
                                                 @nav_closed, @nav_query, ui.navNone, ui.navDone)
       # the head: how far the whole course is
       finished = @course.ids.select { |id| done.include?(id) }.length
@@ -896,7 +896,7 @@ module ChunkyShell
       total = @course.size
       next_id = idx + 1 < total ? @course.id(idx + 1) : nil
       all_done = Store.done_ids.length >= total
-      show_bubble(View.passed_html(praise[rand(praise.length)], ui, idx, total, next_id, all_done, @router.prefix(@lang)), "pass")
+      show_bubble(View.passed_html(praise[rand(praise.length)], ui, idx, total, next_id, all_done, @router, @lang), "pass")
     end
 
     # a bonus exercise ("bonus": true, §3): praise, but the lesson's tick

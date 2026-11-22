@@ -9,7 +9,8 @@ module ChunkyShell
     # The index: one group per section, each with a head that folds it and
     # says how much of it is done. A group is named by the id of the lesson
     # that opens it, the same in every language.
-    # +prefix+: what goes before a lesson id in its link (Router#prefix)
+    # +prefix+: what goes before a lesson id in its link ("#"), or the
+    #   Router, whose links name a lesson by its slug (View.link)
     # +closed+: the groups folded away (App keeps them)
     # +query+: what the search field holds; only the lessons it matches show,
     #   in open groups, or +none+ when there are none
@@ -68,7 +69,7 @@ module ChunkyShell
       classes << "active" if id == active_id
       classes << "done" if done.include?(id)
       current = id == active_id ? ' aria-current="page"' : ""
-      %(<a class="#{classes.join(' ')}" href="#{prefix}#{id}" data-id="#{id}"#{current}>) +
+      %(<a class="#{classes.join(' ')}" href="#{link(prefix, lang, id)}" data-id="#{id}"#{current}>) +
         %(<span class="num">#{number}</span><span class="name">#{escape_html(name)}</span></a>)
     end
 
@@ -252,13 +253,16 @@ module ChunkyShell
       decimal(seconds < 0.1 ? "< 0.1 s" : format("%.1f s", seconds), lang)
     end
 
+    # a lesson's link: +prefix+ and its id, or the Router's permalink
+    def self.link(prefix, lang, id) = prefix.is_a?(String) ? "#{prefix}#{id}" : prefix.href(lang, id)
+
     # Chunky after a passed exercise: praise, then where to go next
-    def self.passed_html(praise, ui, idx, total, next_id, all_done, prefix = "#")
+    def self.passed_html(praise, ui, idx, total, next_id, all_done, prefix = "#", lang = nil)
       return "#{praise}<br><br>#{ui.allDone}" if all_done
       return praise unless next_id
 
       progress = format(ui.progress, idx + 1, total)
-      %(#{praise}<br><small>#{progress}</small><br><a href="#{prefix}#{next_id}" id="nextLessonLink">#{ui.nextLesson}</a>)
+      %(#{praise}<br><small>#{progress}</small><br><a href="#{link(prefix, lang, next_id)}" id="nextLessonLink">#{ui.nextLesson}</a>)
     end
 
     def self.failed_html(ui, hint)

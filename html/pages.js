@@ -48,17 +48,21 @@
   // Links to the course ("learn" in the HTML) open it in the language read
   // here - at index.html on a static host without /learn (welcome.html asks).
   // Where the server gives lessons permalinks (server/app.rb says so with
-  // <meta name="chunky-permalinks">) they are /en/hallo instead.
+  // <meta name="chunky-permalinks">) they are /en/hello-world instead: each
+  // lesson's path in every language comes along as #chunky-paths.
   var course = "learn";
   var permalinks = document.querySelector('meta[name="chunky-permalinks"]');
+  var paths = {};
+  try { paths = JSON.parse(document.getElementById("chunky-paths").textContent); } catch (e) { /* none */ }
   function relink() {
     var lang = document.documentElement.lang;
     document.querySelectorAll("a[data-href], a[href^=\"learn\"]").forEach(function (a) {
       var href = a.getAttribute("data-href") || a.getAttribute("href");
       a.setAttribute("data-href", href);
       var hash = href.split("#")[1];
+      var path = hash ? ((paths[lang] || {})[hash] || lang + "/" + hash) : lang;
       a.setAttribute("href", permalinks
-        ? permalinks.getAttribute("content") + lang + (hash ? "/" + hash : "")
+        ? permalinks.getAttribute("content") + path
         : course + "?lang=" + lang + (hash ? "#" + hash : ""));
     });
   }

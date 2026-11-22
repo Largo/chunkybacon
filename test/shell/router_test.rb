@@ -80,9 +80,42 @@ class RouterTest < Minitest::Test
     start_at("/de/methoden")
     byid("langSelect").props["value"] = "en"
     JS.fire(byid("langSelect").wrap, "change")
-    assert_equal "/en/methoden", pathname
-    assert_equal "/en/klassen", nav_href("klassen")
+    assert_equal "/en/methods", pathname
+    assert_equal "/en/classes", nav_href("klassen")
     assert_empty calls("pushState"), "the same lesson, so no new entry"
+  end
+
+  # a lesson's word in the language (lessons.js "slug"), Japanese in its
+  # script - percent-encoded in the address, as the browser keeps it
+  def test_a_slug_in_the_address_opens_its_lesson
+    start_at("/ja/%E3%83%AB%E3%83%BC%E3%83%97", lang: "ja")
+    assert_equal "schleifen", active_id
+    assert_equal "/ja/%E3%83%AB%E3%83%BC%E3%83%97", pathname
+    assert_empty calls("replaceState"), "already the right address"
+    assert_equal "/ja/%E3%83%A1%E3%82%BD%E3%83%83%E3%83%89", nav_href("methoden")
+    assert_equal "/ja/%E5%B7%A5%E6%88%BF", byid("workshopLink").attrs["href"]
+  end
+
+  # an old link with the id in another language opens the lesson and the
+  # address becomes its slug, without a history entry
+  def test_an_id_in_the_address_becomes_the_slug
+    start_at("/fr/hallo", lang: "fr")
+    assert_equal "hallo", active_id
+    assert_equal "/fr/bonjour-le-monde", pathname
+    assert_empty calls("pushState")
+  end
+
+  def test_the_workshop_has_its_word_too
+    start_at("/en/workshop", lang: "en")
+    assert_includes doc.js_get("body").attrs["class"], "in-workshop"
+    assert_equal "/en/workshop", pathname
+  end
+
+  def test_the_next_lesson_link_has_the_slug
+    start_at("/it/ciao-mondo", lang: "it")
+    idx = find(".cell.exercise .run-cell").attrs["data-idx"].to_i
+    fire("chunky:ran", { "idx" => idx, "outcome" => "pass", "elapsed" => 0.2, "auto" => false, "own" => 0.2 })
+    assert_equal "/it/fare-i-conti", byid("nextLessonLink").attrs["href"]
   end
 
   def test_the_workshop_has_a_permalink_too

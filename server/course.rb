@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "json"
+require "uri"
 require_relative "../html/lesson_refs"
 
 # The course as the server sees it: html/lessons.js, the same file the page
@@ -29,6 +30,10 @@ class Course
     @lessons = data.fetch("lessons")
     @numbers = LessonRefs.numbers(@lessons)
     @by_id = @lessons.to_h { |lesson| [lesson["id"], lesson] }
+    # lang => {slug => id}: what a permalink's word names
+    @by_slug = langs.to_h do |lang|
+      [lang, (ids + [WORKSHOP_ID]).to_h { |id| [slug(lang, id), id] }]
+    end
   end
 
   def langs = @ui.keys
@@ -67,6 +72,22 @@ class Course
     text.length > limit ? "#{text[0, limit - 1].rstrip}…" : text
   end
 
+  # The word in a page's permalink, /en/variables, /ja/ループ: lessons.js's
+  # "slug" (tools/lesson_slugs.rb), the workshop's ui "workshopSlug";
+  # German, and a page without one, its id - the addresses the course
+  # always had, which links and search engines already know.
+  def slug(lang, id)
+    own = id == WORKSHOP_ID ? @ui.dig(lang, "workshopSlug") : @by_id.dig(id, lang, "slug")
+    own || id
+  end
+
+  # the page a permalink's word names in +lang+, nil for none
+  def find(lang, slug) = @by_slug.dig(lang, slug)
+
+  # "en/variables", "ja/%E3%83%AB..." - a page's path below the base;
+  # "en" for a language's own start
+  def path(lang, id = nil) = id ? "#{lang}/#{URI.encode_uri_component(slug(lang, id))}" : lang
+
   # a lesson's cells in one language (English when a translation is missing)
   def cells(lang, id) = l10n(id, lang)&.dig("cells") || []
 
@@ -79,7 +100,7 @@ class Course
     end
     pages = [nil] + ids
     urls = [entry.("")] + pages.flat_map do |id|
-      alternates = langs.to_h { |lang| [lang, [lang, id].compact.join("/")] }
+      alternates = langs.to_h { |lang| [lang, path(lang, id)] }
       langs.map { |lang| entry.(alternates[lang], alternates) }
     end
     %(<?xml version="1.0" encoding="UTF-8"?>\n) +

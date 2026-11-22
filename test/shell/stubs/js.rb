@@ -1,3 +1,5 @@
+require "erb"
+require "uri"
 # PicoRuby.wasm's `js` interop for CRuby, so html/shell/*.rb loads and runs
 # under Minitest. It copies what PicoRuby 4.0.3 does (probed in Chrome,
 # docs/PICORUBY_SHELL.md), including what trips code up there:
@@ -571,6 +573,9 @@ module JS
         props[name] = proc { |*args| @calls << [name, *args]; nil }
       end
       props["confirm"] = proc { |_msg| @confirm }
+      # as the browser's: /ja/ループ goes in the address as %E3%83%AB...
+      props["encodeURIComponent"] = proc { |text| ERB::Util.url_encode(text.to_s) }
+      props["decodeURIComponent"] = proc { |text| URI.decode_uri_component(text.to_s) }
       # a phone-sized window once a test sets narrow = true
       props["matchMedia"] = proc { |query| { "matches" => @narrow == true, "media" => query.to_s } }
       props["ChunkyBridge"] = bridge

@@ -284,7 +284,7 @@ module LessonLint
             add("structure", "ERROR", "title-number", where: where(lesson, lang), line: line_of(lesson),
                 message: "title #{title.inspect} has a number - a lesson's number is its place (html/lesson_refs.rb)")
           end
-          (lesson[lang].keys - %w[title cells]).each do |k|
+          (lesson[lang].keys - %w[title slug cells]).each do |k|   # slug: tools/lesson_slugs.rb
             add("structure", "WARN", "unknown-key", where: where(lesson, lang), message: "unknown key #{k.inspect}")
           end
           xs = cells(lesson, lang).each_index.select { |i| cells(lesson, lang)[i]["t"] == "x" }

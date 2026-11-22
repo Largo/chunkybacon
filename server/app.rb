@@ -9,7 +9,8 @@
 #
 # What it serves:
 #   /                                     welcome.html, the landing page
-#   /learn, /de, /de/methoden, /de/werkstatt   index.html, told about permalinks
+#   /learn, /de, /de/methoden, /en/methods,   index.html, told about permalinks
+#   /ja/メソッド, /en/workshop
 #                                         (<base>, <meta name="chunky-permalinks">)
 #                                         and titled for the lesson
 #   /sitemap.xml                          every page above, for search engines
@@ -79,7 +80,17 @@ class ChunkyServer < Roda
       next unless course.lang?(lang)
 
       r.is { page(lang) }
-      r.is(String) { |id| page(lang, id) if course.page?(id) }
+      # /en/variables: a lesson by its word in the language. A lesson's id
+      # (/en/variablen, the addresses before the words) moves there for good.
+      r.is(String) do |segment|
+        named = Rack::Utils.unescape_path(segment).force_encoding(Encoding::UTF_8)
+        next unless named.valid_encoding?
+
+        id = course.find(lang, named)
+        next page(lang, id) if id
+
+        r.redirect("#{base_path}#{course.path(lang, named)}", 301) if course.page?(named)
+      end
     end
   end
 
@@ -104,10 +115,19 @@ class ChunkyServer < Roda
   # (data-href) and, told about permalinks, links in the reader's language
   def welcome
     html = File.read(WELCOME, encoding: "UTF-8")
+    course = self.class.course
+    linked = []
     html = html.gsub(/href="learn(?:#([^"]*))?"/) do
-      %(href="#{h base_path}de#{"/#{$1}" if $1}" data-href="#{$&[6..-2]}")
+      id = Regexp.last_match(1)
+      linked << id if id
+      %(href="#{h base_path}#{course.path("de", id)}" data-href="learn#{"##{id}" if id}")
     end
-    html.sub('<meta charset="utf-8">') { |charset| %(#{charset}\n  <meta name="chunky-permalinks" content="#{h base_path}">) }
+    # each linked lesson's path in every language, for pages.js
+    paths = course.langs.to_h { |lang| [lang, linked.uniq.to_h { |id| [id, course.path(lang, id)] }] }
+    html.sub('<meta charset="utf-8">') do |charset|
+      %(#{charset}\n  <meta name="chunky-permalinks" content="#{h base_path}">) +
+        %(\n  <script type="application/json" id="chunky-paths">#{JSON.generate(paths)}</script>)
+    end
   end
 
   # index.html, told that it has permalinks and, for a lesson, titled and
@@ -128,7 +148,7 @@ class ChunkyServer < Roda
       html = meta(html, "name", "description", description)
       html = meta(html, "property", "og:title", title)
       html = meta(html, "property", "og:description", description)
-      url = ->(language) { "#{origin}#{base}#{[language, id].compact.join("/")}" }
+      url = ->(language) { "#{origin}#{base}#{course.path(language, id)}" }
       added << %(<link rel="canonical" href="#{h url.(lang)}">)
       added << %(<meta property="og:url" content="#{h url.(lang)}">)
       course.langs.each { |language| added << %(<link rel="alternate" hreflang="#{language}" href="#{h url.(language)}">) }
@@ -144,7 +164,7 @@ class ChunkyServer < Roda
   # every lesson, linked, in the course's order
   def nav_html(lang)
     course = self.class.course
-    links = course.ids.map { |id| %(<li><a href="#{h base_path}#{lang}/#{id}">#{h course.numbered_title(lang, id)}</a></li>) }
+    links = course.ids.map { |id| %(<li><a href="#{h base_path}#{course.path(lang, id)}">#{h course.numbered_title(lang, id)}</a></li>) }
     "<ol>#{links.join}</ol>"
   end
 
