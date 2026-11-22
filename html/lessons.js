@@ -369,7 +369,23 @@ window.LESSONS_JSON = JSON.stringify({
       "hintOnError": "Lies die Erklärung unter der Zelle – und wenn du nicht weiterkommst: 💡 Tipp.",
       "hintAllShown": "Du hast alle Tipps gesehen. Mit „💡 Lösung zeigen“ bekommst du eine fertige Lösung zum Vergleichen.",
       "bonusLabel": "Bonus",
-      "bonusDone": "Bonus geschafft – das war die schwierigere Aufgabe! Das Häkchen der Lektion gibt es für die Aufgabe darüber."
+      "bonusDone": "Bonus geschafft – das war die schwierigere Aufgabe! Das Häkchen der Lektion gibt es für die Aufgabe darüber.",
+      "funicularTitle": "Funicular-App",
+      "funicularFlash": "Änderungen zeigen",
+      "funicularRestart": "Neu starten",
+      "funicularFrame": "Die Funicular-App der Zelle, auf PicoRuby.wasm",
+      "funicularLoading": "PicoRuby startet …",
+      "funicularFailed": "Die App ist nicht gestartet – die Meldung steht unten.",
+      "funicularSlow": "Noch nichts zu sehen – ruft der Code Funicular.start auf?",
+      "funicularMounted": "Läuft: %d Knoten auf der Seite. Klick, tipp – rote Rahmen zeigen, was sich ändert.",
+      "funicularUpdate": "Update %d:",
+      "funicularText": "Text ×%d",
+      "funicularAttrs": "Attribut ×%d",
+      "funicularAdded": "Element neu ×%d",
+      "funicularRemoved": "Element weg ×%d",
+      "funicularKept": "%d Knoten unberührt",
+      "funicularLog": "Was jedes Update geändert hat",
+      "funicularMissing": "Die Funicular-Vorschau braucht die Kursseite (funicular_frame.js)."
     },
     "en": {
       "title": "Let's Ruby",
@@ -730,7 +746,23 @@ window.LESSONS_JSON = JSON.stringify({
       "hintOnError": "Read the explanation below the cell – and if you're stuck: 💡 Hint.",
       "hintAllShown": "You've seen all the hints. “💡 Show a solution” gives you a finished one to compare with.",
       "bonusLabel": "Bonus",
-      "bonusDone": "Bonus done – that was the harder one! The lesson's tick comes from the task above it."
+      "bonusDone": "Bonus done – that was the harder one! The lesson's tick comes from the task above it.",
+      "funicularTitle": "Funicular app",
+      "funicularFlash": "Show changes",
+      "funicularRestart": "Restart",
+      "funicularFrame": "The cell's Funicular app, running on PicoRuby.wasm",
+      "funicularLoading": "Starting PicoRuby …",
+      "funicularFailed": "The app did not start – the message is below.",
+      "funicularSlow": "Nothing to show yet – does the code call Funicular.start?",
+      "funicularMounted": "Running: %d nodes on the page. Click, type – red frames show what changes.",
+      "funicularUpdate": "Update %d:",
+      "funicularText": "text ×%d",
+      "funicularAttrs": "attribute ×%d",
+      "funicularAdded": "element added ×%d",
+      "funicularRemoved": "element removed ×%d",
+      "funicularKept": "%d nodes left alone",
+      "funicularLog": "What each update changed",
+      "funicularMissing": "The Funicular preview needs the course page (funicular_frame.js)."
     },
     "ja": {
       "title": "Let's Ruby",
@@ -1091,7 +1123,23 @@ window.LESSONS_JSON = JSON.stringify({
       "hintOnError": "セルの下の説明を読んでみて。それでも困ったら💡 ヒントだよ。",
       "hintAllShown": "ヒントは全部見たね。「💡 答えを見る」で、できあがった答えと見比べられるよ。",
       "bonusLabel": "ボーナス",
-      "bonusDone": "ボーナスクリア！むずかしいほうの課題だったよ。レッスンのチェックは、その上の課題でつくよ。"
+      "bonusDone": "ボーナスクリア！むずかしいほうの課題だったよ。レッスンのチェックは、その上の課題でつくよ。",
+      "funicularTitle": "Funicularアプリ",
+      "funicularFlash": "変化を表示",
+      "funicularRestart": "再起動",
+      "funicularFrame": "セルのFunicularアプリ（PicoRuby.wasmで実行）",
+      "funicularLoading": "PicoRubyを起動しています…",
+      "funicularFailed": "アプリが起動しませんでした。メッセージは下にあります。",
+      "funicularSlow": "まだ何も表示されていません。コードでFunicular.startを呼んでいますか？",
+      "funicularMounted": "実行中：ページ上のノード%d個。クリックや入力をすると、変わったところが赤い枠で示されます。",
+      "funicularUpdate": "更新%d：",
+      "funicularText": "テキスト ×%d",
+      "funicularAttrs": "属性 ×%d",
+      "funicularAdded": "要素の追加 ×%d",
+      "funicularRemoved": "要素の削除 ×%d",
+      "funicularKept": "%d個のノードはそのまま",
+      "funicularLog": "更新ごとに変わったもの",
+      "funicularMissing": "Funicularのプレビューにはコースのページ（funicular_frame.js）が必要です。"
     },
     "fr": {
       "title": "Let's Ruby",
@@ -1452,7 +1500,23 @@ window.LESSONS_JSON = JSON.stringify({
       "hintOnError": "Lisez l'explication sous la cellule – et si vous êtes bloqué : 💡 Indice.",
       "hintAllShown": "Vous avez vu tous les indices. « 💡 Afficher une solution » vous en donne une toute prête pour comparer.",
       "bonusLabel": "Bonus",
-      "bonusDone": "Bonus réussi – c'était le plus difficile ! La coche de la leçon dépend de l'exercice au-dessus."
+      "bonusDone": "Bonus réussi – c'était le plus difficile ! La coche de la leçon dépend de l'exercice au-dessus.",
+      "funicularTitle": "Application Funicular",
+      "funicularFlash": "Montrer les changements",
+      "funicularRestart": "Redémarrer",
+      "funicularFrame": "L'application Funicular de la cellule, sur PicoRuby.wasm",
+      "funicularLoading": "Démarrage de PicoRuby…",
+      "funicularFailed": "L'application n'a pas démarré – le message est ci-dessous.",
+      "funicularSlow": "Rien à afficher pour l'instant – le code appelle-t-il Funicular.start ?",
+      "funicularMounted": "En marche : %d nœuds sur la page. Cliquez, tapez – des cadres rouges montrent ce qui change.",
+      "funicularUpdate": "Mise à jour %d :",
+      "funicularText": "texte ×%d",
+      "funicularAttrs": "attribut ×%d",
+      "funicularAdded": "élément ajouté ×%d",
+      "funicularRemoved": "élément retiré ×%d",
+      "funicularKept": "%d nœuds inchangés",
+      "funicularLog": "Ce que chaque mise à jour a changé",
+      "funicularMissing": "L'aperçu Funicular a besoin de la page du cours (funicular_frame.js)."
     },
     "it": {
       "title": "Let's Ruby",
@@ -1813,7 +1877,23 @@ window.LESSONS_JSON = JSON.stringify({
       "hintOnError": "Leggi la spiegazione sotto la cella – e se sei bloccato: 💡 Suggerimento.",
       "hintAllShown": "Hai visto tutti i suggerimenti. “💡 Mostra una soluzione” te ne dà una già pronta da confrontare.",
       "bonusLabel": "Bonus",
-      "bonusDone": "Bonus completato – era quello più difficile! La spunta della lezione dipende dall'esercizio qui sopra."
+      "bonusDone": "Bonus completato – era quello più difficile! La spunta della lezione dipende dall'esercizio qui sopra.",
+      "funicularTitle": "App Funicular",
+      "funicularFlash": "Mostra i cambiamenti",
+      "funicularRestart": "Riavvia",
+      "funicularFrame": "L'app Funicular della cella, su PicoRuby.wasm",
+      "funicularLoading": "Avvio di PicoRuby…",
+      "funicularFailed": "L'app non è partita – il messaggio è qui sotto.",
+      "funicularSlow": "Ancora niente da mostrare – il codice chiama Funicular.start?",
+      "funicularMounted": "In esecuzione: %d nodi nella pagina. Clicca, scrivi – le cornici rosse mostrano che cosa cambia.",
+      "funicularUpdate": "Aggiornamento %d:",
+      "funicularText": "testo ×%d",
+      "funicularAttrs": "attributo ×%d",
+      "funicularAdded": "elemento aggiunto ×%d",
+      "funicularRemoved": "elemento rimosso ×%d",
+      "funicularKept": "%d nodi invariati",
+      "funicularLog": "Che cosa ha cambiato ogni aggiornamento",
+      "funicularMissing": "L'anteprima di Funicular ha bisogno della pagina del corso (funicular_frame.js)."
     }
   },
   "lessons": [
@@ -34379,6 +34459,325 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "h",
             "html": "<h3>Ora con i pin</h3><p>PicoRuby è stato creato per chip come quello di un Raspberry Pi Pico. La lezione {{nr:pico-blink}} porta il Ruby di questa lezione su un Pico 2 W simulato: prima un LED su un pin, poi pulsanti, sensori, un robot, un display e-paper, Wi-Fi e Bluetooth – con gli stessi <code>Task</code> e <code>sleep_ms</code> di qui.</p>"
+          }
+        ]
+      }
+    },
+    {
+      "id": "funicular",
+      "funicular": true,
+      "de": {
+        "title": "Funicular: Web-Apps in Ruby",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Funicular: Web-Apps in Ruby</h2><p>Eine <em>Funicolare</em> ist eine Standseilbahn, die ihre Wagen an einem Seil den steilen Hang hinaufzieht – das alte neapolitanische Lied <em>Funiculì, Funiculà</em> handelt von der auf den Vesuv. <strong>Funicular</strong> heisst auch ein Framework von HASUMI Hitoshi, der PicoRuby gemacht hat: Damit baust du Apps für den Browser in Ruby statt in JavaScript. Es läuft auf PicoRuby.wasm aus Lektion {{nr:picoruby}}, und das ist klein: CRuby mit seiner Standardbibliothek braucht 31 MB, PicoRuby.wasm 2,7 MB.</p><p>Eine Funicular-App besteht aus <strong>Komponenten</strong>: Ruby-Klassen, deren Methode <code>render</code> sagt, wie die Seite aussieht. Führ die Zelle aus: Darunter startet ein frisches PicoRuby in einem eigenen Fenster und zeigt die App. Vorher liest CRuby deinen Code, ohne Browser – so wird ein Fehler hier erklärt, wie in jeder Lektion.</p>"
+          },
+          {
+            "t": "c",
+            "code": "class HalloFunicular < Funicular::Component\n  def render\n    div do\n      h1 { \"Chunky bacon!\" }\n      p { \"Diese Seite hat Ruby gezeichnet, hier in deinem Browser.\" }\n      p(style: \"color: #bd2d00\") { \"#{RUBY_ENGINE} #{RUBY_VERSION}\" }\n    end\n  end\nend\n\nFunicular.start(HalloFunicular, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>In <code>render</code> ist jedes HTML-Tag eine Methode: <code>div</code>, <code>h1</code>, <code>p</code>, <code>button</code>, <code>ul</code>, <code>li</code>, <code>input</code> … Was der Block zurückgibt, kommt ins Tag, und Blöcke in Blöcken ergeben Tags in Tags. Attribute sind Keyword-Argumente: <code>p(style: \"color: red\")</code>, <code>div(class: \"box\")</code>. Achtung: In einer Komponente macht <code>p</code> einen Absatz – es gibt nichts aus. <code>Funicular.start</code> setzt die Komponente in das Element der Seite mit der id <code>app</code>.</p><h3>Zustand und ein Klick</h3><p>Eine Seite, die nur etwas zeigt, könnte einfaches HTML sein. Eine App ändert sich. Was sich ändern kann, hält eine Komponente in ihrem <strong>Zustand</strong> (state): ein Hash, den <code>initialize_state</code> zurückgibt, gelesen mit <code>state[:scheiben]</code>. <code>onclick: :mehr</code> heisst: Bei einem Klick ruf die Methode <code>mehr</code> auf. Und diese Methode fasst die Seite nie an – sie ruft <code>patch</code> mit den neuen Werten auf. Klick auf die Knöpfe:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class SpeckZaehler < Funicular::Component\n  def initialize_state\n    { scheiben: 0 }\n  end\n\n  def mehr(event)\n    patch(scheiben: state[:scheiben] + 1)\n  end\n\n  def weniger(event)\n    patch(scheiben: state[:scheiben] - 1) if state[:scheiben] > 0\n  end\n\n  def render\n    div do\n      h2 { \"Speckscheiben: #{state[:scheiben]}\" }\n      p { \"🥓\" * state[:scheiben] }\n      button(onclick: :weniger) { \"–1\" }\n      button(onclick: :mehr) { \"+1\" }\n    end\n  end\nend\n\nFunicular.start(SpeckZaehler, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Was die roten Rahmen zeigen</h3><p><code>patch</code> mischt die neuen Werte in den Zustand und ruft <code>render</code> noch einmal auf. <code>render</code> beschreibt die <em>ganze</em> Komponente neu – aber Funicular wirft die Seite nicht weg. <code>render</code> baut ein <strong>virtuelles DOM</strong>: Ruby-Objekte, die für die Tags stehen. Der <em>Differ</em> vergleicht den neuen Baum mit dem letzten und listet nur die Unterschiede auf; der <em>Patcher</em> überträgt genau diese auf die echte Seite. Die roten Rahmen markieren, was der Patcher geändert hat, und das Protokoll unter der App zählt es: Ein Klick auf +1 ändert die beiden Texte – jeder andere Knoten bleibt, wie er war. React arbeitet auch so; Funicular macht es in Ruby, in etwa 10 000 Zeilen.</p><p>Tippen geht genauso. <code>oninput</code> ruft die Methode bei jeder Taste auf, und <code>event.target[:value]</code> ist, was gerade im Feld steht. Tipp deinen Namen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class FuchsGruss < Funicular::Component\n  def initialize_state\n    { name: \"\" }\n  end\n\n  def getippt(event)\n    patch(name: event.target[:value].to_s)\n  end\n\n  def render\n    name = state[:name]\n    div do\n      input(placeholder: \"Dein Name\", value: name, oninput: :getippt)\n      if name.empty?\n        p { \"🦊 Wer ist da?\" }\n      else\n        h2 { \"Hallo, #{name}!\" }\n        p { \"#{name.length} Buchstaben – rückwärts: #{name.reverse.downcase}\" }\n      end\n    end\n  end\nend\n\nFunicular.start(FuchsGruss, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das Feld bleibt stehen, während du tippst: Der Patcher lässt dieses Element in Ruhe und ändert nur die Texte darunter. Darum springt der Cursor nicht.</p><h3>Listen und <code>key</code></h3><p>Eine Liste ist eine Schleife in <code>render</code>: <code>each</code> über ein Array im Zustand, ein <code>li</code> pro Eintrag. Gib jedem <code>li</code> einen <code>key</code> – einen Wert, der zu seinem Eintrag gehört, etwa eine id. Dann lösch den ersten Punkt: Dank der Keys sieht der Differ, dass ein Eintrag weg ist und der Rest geblieben, und entfernt genau ein Element. Ohne Keys würde er nach Position vergleichen und jeden Eintrag darunter neu schreiben.</p><p>Zwei Dinge sind noch neu. <code>form(onsubmit: :dazu)</code> fängt Enter genauso wie den Knopf, und <code>event.preventDefault</code> hält den Browser davon ab, das Formular abzuschicken und die Seite neu zu laden. Und die Handler von ☐ und ✕ sind Lambdas, gemacht von <code>umschalten(id)</code> und <code>weg(id)</code> – jedes weiss, zu welchem Punkt es gehört. Der Zustand wird nie an Ort und Stelle verändert: <code>map</code>, <code>reject</code> und <code>+</code> machen ein neues Array, und <code>patch</code> bekommt es.</p>"
+          },
+          {
+            "t": "c",
+            "code": "class FuchsListe < Funicular::Component\n  def initialize_state\n    { punkte: [{ id: 1, text: \"Speck braten\", erledigt: true },\n               { id: 2, text: \"Ruby lernen\", erledigt: false }],\n      entwurf: \"\", naechste_id: 3 }\n  end\n\n  def getippt(event)\n    patch(entwurf: event.target[:value].to_s)\n  end\n\n  def dazu(event)\n    event.preventDefault\n    text = state[:entwurf].strip\n    return if text.empty?\n\n    punkt = { id: state[:naechste_id], text: text, erledigt: false }\n    patch(punkte: state[:punkte] + [punkt], entwurf: \"\", naechste_id: state[:naechste_id] + 1)\n  end\n\n  # ein Klick-Handler für einen Punkt: ein Lambda, das seine id kennt\n  def umschalten(id)\n    lambda do\n      punkte = state[:punkte].map do |pk|\n        pk[:id] == id ? pk.merge(erledigt: !pk[:erledigt]) : pk\n      end\n      patch(punkte: punkte)\n    end\n  end\n\n  def weg(id)\n    -> { patch(punkte: state[:punkte].reject { |pk| pk[:id] == id }) }\n  end\n\n  def render\n    offen = state[:punkte].select { |pk| !pk[:erledigt] }.size\n    div do\n      form(onsubmit: :dazu) do\n        input(value: state[:entwurf], placeholder: \"Was noch?\", oninput: :getippt)\n        button(type: \"submit\") { \"Dazu\" }\n      end\n      ul do\n        state[:punkte].each do |punkt|\n          li(key: punkt[:id]) do\n            button(onclick: umschalten(punkt[:id])) { punkt[:erledigt] ? \"☑\" : \"☐\" }\n            span(style: punkt[:erledigt] ? \"text-decoration: line-through\" : \"\") { punkt[:text] }\n            button(onclick: weg(punkt[:id])) { \"✕\" }\n          end\n        end\n      end\n      p { \"Noch offen: #{offen}\" }\n    end\n  end\nend\n\nFunicular.start(FuchsListe, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Komponenten in Komponenten</h3><p>Eine grosse App besteht aus kleinen Komponenten. <code>component(SpeckStern, nummer: n, …)</code> setzt eine in <code>render</code> ein und gibt ihr <strong>Props</strong> mit: Werte, die sie mit <code>props[:nummer]</code> liest und nicht ändert. Wie sagt ein Stern der Bewertung, dass er angeklickt wurde? Die Bewertung gibt ihm ein Lambda als Prop mit, <code>gewaehlt</code>, und der Stern ruft es auf. Daten fliessen als Props nach unten, Ereignisse über Lambdas nach oben – dasselbe Muster wie in React.</p>"
+          },
+          {
+            "t": "c",
+            "code": "class SpeckStern < Funicular::Component\n  def render\n    button(onclick: -> { props[:gewaehlt].call(props[:nummer]) }) do\n      props[:leuchtet] ? \"★\" : \"☆\"\n    end\n  end\nend\n\nclass SpeckBewertung < Funicular::Component\n  WORTE = [\"Wähl einen Stern\", \"Hmm\", \"Geht so\", \"Gut\", \"Sehr gut\", \"Chunky bacon!\"]\n\n  def initialize_state\n    { sterne: 0 }\n  end\n\n  def render\n    div do\n      h3 { \"Wie sehr magst du Speck?\" }\n      (1..5).each do |n|\n        component(SpeckStern, nummer: n, leuchtet: n <= state[:sterne],\n                              gewaehlt: ->(gewaehlte) { patch(sterne: gewaehlte) })\n      end\n      p { WORTE[state[:sterne]] }\n    end\n  end\nend\n\nFunicular.start(SpeckBewertung, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://github.com/picoruby/funicular' target='_blank'>Funicular auf GitHub</a> · <a href='https://picoruby.org/funicular-on-rails-quick-chat' target='_blank'>Funicular on Rails, das Tutorial</a> · <a href='https://slide.rabbit-shocker.org/authors/hasumikin/SendaiRubyKaigi03/' target='_blank'>«A Chat in Five Minutes», die Folien (japanisch)</a></div><div class='task'><strong>Aufgabe:</strong> Die Ampel unten ist gezeichnet, aber ihr Knopf tut noch nichts. Schreib die Methode <code>weiter(event)</code>: Sie schaltet die Ampel mit <code>patch</code> weiter – rot, dann grün, dann gelb, dann wieder rot. Dann gib dem Knopf <code>onclick: :weiter</code>. Führ die Zelle aus und klick dich durch die Farben.</div>"
+          },
+          {
+            "t": "x",
+            "code": "class Ampel < Funicular::Component\n  FARBEN = { \"rot\" => \"#e53935\", \"gelb\" => \"#fdd835\", \"grün\" => \"#43a047\" }\n\n  def initialize_state\n    { licht: \"rot\" }\n  end\n\n  # weiter: rot -> grün -> gelb -> rot\n\n  def lampe(farbe)\n    an = state[:licht] == farbe\n    div(style: \"width: 46px; height: 46px; margin: 6px; border-radius: 50%; \" \\\n               \"background: #{an ? FARBEN[farbe] : \"#444\"}\")\n  end\n\n  def render\n    div do\n      div(style: \"display: inline-block; padding: 4px; background: #222; border-radius: 12px\") do\n        lampe(\"rot\")\n        lampe(\"gelb\")\n        lampe(\"grün\")\n      end\n      p { \"Ampel: #{state[:licht]}\" }\n      button { \"Weiter\" }\n    end\n  end\nend\n\nFunicular.start(Ampel, container: \"app\")",
+            "hints": [
+              "Die Farbe steht schon im Zustand: <code>state[:licht]</code> ist am Anfang <code>\"rot\"</code>. Deine Methode bestimmt die Farbe, die als Nächstes kommt, und gibt sie an <code>patch(licht: …)</code> – den Rest macht <code>render</code>."
+            ],
+            "check": "result.is_a?(ChunkyFunicular::App) && result.component.to_s == \"Ampel\" && ->(app) { gesehen = [app.text[/Ampel: (\\S+)/, 1]]; 3.times { app.click(\"Weiter\"); gesehen << app.text[/Ampel: (\\S+)/, 1] }; gesehen == %w[rot grün gelb rot] }.(result.mount)",
+            "hint": "Ein Hash kann sagen, was als Nächstes kommt: <code>NAECHSTE = { \"rot\" => \"grün\", \"grün\" => \"gelb\", \"gelb\" => \"rot\" }</code>, und die Methode ist <code>patch(licht: NAECHSTE[state[:licht]])</code>. Der Knopf: <code>button(onclick: :weiter) { \"Weiter\" }</code>.",
+            "solution": "class Ampel < Funicular::Component\n  FARBEN = { \"rot\" => \"#e53935\", \"gelb\" => \"#fdd835\", \"grün\" => \"#43a047\" }\n  NAECHSTE = { \"rot\" => \"grün\", \"grün\" => \"gelb\", \"gelb\" => \"rot\" }\n\n  def initialize_state\n    { licht: \"rot\" }\n  end\n\n  def weiter(event)\n    patch(licht: NAECHSTE[state[:licht]])\n  end\n\n  def lampe(farbe)\n    an = state[:licht] == farbe\n    div(style: \"width: 46px; height: 46px; margin: 6px; border-radius: 50%; \" \\\n               \"background: #{an ? FARBEN[farbe] : \"#444\"}\")\n  end\n\n  def render\n    div do\n      div(style: \"display: inline-block; padding: 4px; background: #222; border-radius: 12px\") do\n        lampe(\"rot\")\n        lampe(\"gelb\")\n        lampe(\"grün\")\n      end\n      p { \"Ampel: #{state[:licht]}\" }\n      button(onclick: :weiter) { \"Weiter\" }\n    end\n  end\nend\n\nFunicular.start(Ampel, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Funicular on Rails</h3><p>Hier lebte jede App allein in ihrem Fenster. Im echten Leben ist Funicular ein Rails-Plugin, und dieselben Komponenten reden mit einem Server: <code>Funicular::HTTP.get</code> holt JSON, <code>Funicular::Cable</code> spricht ActionCable für Live-Updates, ein Router bildet Pfade wie <code>/chat/:channel_id</code> auf Komponenten ab, und der Browser bekommt sogar eine eigene SQLite-Datenbank, abgelegt in IndexedDB. Am Sendai RubyKaigi 03 im November 2026 hat HASUMI Hitoshi damit in fünf Minuten einen Chat gebaut – ohne eine Zeile JavaScript und ohne JavaScript-Build-Werkzeug.</p><p>Und einen Trick hast du schon bei der Arbeit gesehen: Derselbe Komponenten-Code läuft auch auf CRuby. Rails rendert die erste Seite auf dem Server als HTML, und PicoRuby im Browser übernimmt sie (Server-Side Rendering). So wurde auch deine Aufgabe geprüft: CRuby hat deine Ampel ohne Browser gerendert und dreimal auf ihren Knopf geklickt.</p><div class='offweb' data-title='Auf deinem Computer'><pre><code>rails new chat_demo\ncd chat_demo\nbundle add funicular\nbin/rails funicular:install\nbin/rails generate funicular:chat\nbin/rails db:migrate\nbin/rails funicular:compile\nbin/rails server</code></pre><p>Dann öffne <code>http://localhost:3000/funicular_chat</code> in zwei Fenstern und chatte mit dir selbst. Die Komponenten liegen in <code>app/funicular/</code>; <code>funicular:compile</code> macht daraus eine einzige <code>app.mrb</code>, die PicoRuby.wasm lädt. Ohne Rails genügen ein <code>&lt;script&gt;</code>-Tag für PicoRuby.wasm und deine Komponente in <code>&lt;script type=\"text/ruby\"&gt;</code>, wie in Lektion {{nr:picoruby}}.</p></div>"
+          }
+        ]
+      },
+      "en": {
+        "title": "Funicular: web apps in Ruby",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Funicular: web apps in Ruby</h2><p>A <em>funicular</em> is a cable railway that pulls its cars up a steep slope – the old Neapolitan song <em>Funiculì, Funiculà</em> is about the one on Mount Vesuvius. <strong>Funicular</strong> is also a framework by HASUMI Hitoshi, who made PicoRuby: with it you build apps for the browser in Ruby instead of JavaScript. It runs on PicoRuby.wasm from lesson {{nr:picoruby}}, which is small: CRuby with its standard library takes 31 MB, PicoRuby.wasm 2.7 MB.</p><p>A Funicular app is made of <strong>components</strong>: Ruby classes whose <code>render</code> method says what the page looks like. Run the cell: below it a fresh PicoRuby starts in a window of its own and shows the app. CRuby reads your code first, without a browser – so a mistake is explained here, as in every lesson.</p>"
+          },
+          {
+            "t": "c",
+            "code": "class HelloFunicular < Funicular::Component\n  def render\n    div do\n      h1 { \"Chunky bacon!\" }\n      p { \"Ruby drew this page, right here in your browser.\" }\n      p(style: \"color: #bd2d00\") { \"#{RUBY_ENGINE} #{RUBY_VERSION}\" }\n    end\n  end\nend\n\nFunicular.start(HelloFunicular, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Inside <code>render</code>, every HTML tag is a method: <code>div</code>, <code>h1</code>, <code>p</code>, <code>button</code>, <code>ul</code>, <code>li</code>, <code>input</code> … What the block returns goes inside the tag, and blocks inside blocks make tags inside tags. Attributes are keyword arguments: <code>p(style: \"color: red\")</code>, <code>div(class: \"box\")</code>. Careful: in a component <code>p</code> makes a paragraph – it prints nothing. <code>Funicular.start</code> puts the component into the element of the page whose id is <code>app</code>.</p><h3>State, and a click</h3><p>A page that only shows something could be plain HTML. An app changes. A component keeps what can change in its <strong>state</strong>: a Hash that <code>initialize_state</code> returns, read with <code>state[:slices]</code>. <code>onclick: :more</code> says: on a click, call the method <code>more</code>. And that method never touches the page – it calls <code>patch</code> with the new values. Click the buttons:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class BaconCounter < Funicular::Component\n  def initialize_state\n    { slices: 0 }\n  end\n\n  def more(event)\n    patch(slices: state[:slices] + 1)\n  end\n\n  def less(event)\n    patch(slices: state[:slices] - 1) if state[:slices] > 0\n  end\n\n  def render\n    div do\n      h2 { \"Bacon slices: #{state[:slices]}\" }\n      p { \"🥓\" * state[:slices] }\n      button(onclick: :less) { \"–1\" }\n      button(onclick: :more) { \"+1\" }\n    end\n  end\nend\n\nFunicular.start(BaconCounter, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>What the red frames show</h3><p><code>patch</code> merges the new values into the state and calls <code>render</code> again. <code>render</code> describes the <em>whole</em> component anew – but Funicular does not throw the page away. <code>render</code> builds a <strong>virtual DOM</strong>: Ruby objects that stand for the tags. The <em>Differ</em> compares the new tree with the last one and lists only the differences; the <em>Patcher</em> applies just those to the real page. The red frames mark what the Patcher changed, and the log under the app counts it: a click on +1 changes the two texts – every other node stays as it was. React works this way too; Funicular does it in Ruby, in about 10,000 lines.</p><p>Typing works the same way. <code>oninput</code> calls the method on every key, and <code>event.target[:value]</code> is what is in the box now. Type your name:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class FoxGreeter < Funicular::Component\n  def initialize_state\n    { name: \"\" }\n  end\n\n  def typed(event)\n    patch(name: event.target[:value].to_s)\n  end\n\n  def render\n    name = state[:name]\n    div do\n      input(placeholder: \"Your name\", value: name, oninput: :typed)\n      if name.empty?\n        p { \"🦊 Who's there?\" }\n      else\n        h2 { \"Hello, #{name}!\" }\n        p { \"#{name.length} letters – backwards: #{name.reverse.downcase}\" }\n      end\n    end\n  end\nend\n\nFunicular.start(FoxGreeter, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>The box stays put while you type: the Patcher leaves that element alone and changes only the texts below it. That is why the cursor does not jump.</p><h3>Lists, and <code>key</code></h3><p>A list is a loop in <code>render</code>: <code>each</code> over an Array in the state, one <code>li</code> per item. Give each <code>li</code> a <code>key</code> – a value that belongs to its item, like an id. Then delete the first item: thanks to the keys, the Differ sees that one item went and the rest stayed, and removes exactly one element. Without keys it would compare by position and rewrite every item below.</p><p>Two more things are new. <code>form(onsubmit: :add)</code> catches Enter as well as the button, and <code>event.preventDefault</code> stops the browser from sending the form off and reloading the page. And the handlers of ☐ and ✕ are lambdas, made by <code>toggle(id)</code> and <code>remove(id)</code> – each knows which item it belongs to. The state is never changed in place: <code>map</code>, <code>reject</code> and <code>+</code> make a new Array, and <code>patch</code> gets it.</p>"
+          },
+          {
+            "t": "c",
+            "code": "class FoxTodo < Funicular::Component\n  def initialize_state\n    { items: [{ id: 1, text: \"Fry bacon\", done: true },\n              { id: 2, text: \"Learn Ruby\", done: false }],\n      draft: \"\", next_id: 3 }\n  end\n\n  def typed(event)\n    patch(draft: event.target[:value].to_s)\n  end\n\n  def add(event)\n    event.preventDefault\n    text = state[:draft].strip\n    return if text.empty?\n\n    item = { id: state[:next_id], text: text, done: false }\n    patch(items: state[:items] + [item], draft: \"\", next_id: state[:next_id] + 1)\n  end\n\n  # a click handler for one item: a lambda that knows its id\n  def toggle(id)\n    lambda do\n      items = state[:items].map do |i|\n        i[:id] == id ? i.merge(done: !i[:done]) : i\n      end\n      patch(items: items)\n    end\n  end\n\n  def remove(id)\n    -> { patch(items: state[:items].reject { |i| i[:id] == id }) }\n  end\n\n  def render\n    left = state[:items].select { |i| !i[:done] }.size\n    div do\n      form(onsubmit: :add) do\n        input(value: state[:draft], placeholder: \"What next?\", oninput: :typed)\n        button(type: \"submit\") { \"Add\" }\n      end\n      ul do\n        state[:items].each do |item|\n          li(key: item[:id]) do\n            button(onclick: toggle(item[:id])) { item[:done] ? \"☑\" : \"☐\" }\n            span(style: item[:done] ? \"text-decoration: line-through\" : \"\") { item[:text] }\n            button(onclick: remove(item[:id])) { \"✕\" }\n          end\n        end\n      end\n      p { \"Still to do: #{left}\" }\n    end\n  end\nend\n\nFunicular.start(FoxTodo, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Components in components</h3><p>A big app is built from small components. <code>component(BaconStar, number: n, …)</code> puts one into <code>render</code> and hands it <strong>props</strong>: values it reads with <code>props[:number]</code> and does not change. How does a star tell the rating that it was clicked? The rating hands it a lambda as a prop, <code>on_pick</code>, and the star calls it. Data flows down as props, events flow up through lambdas – the same pattern as in React.</p>"
+          },
+          {
+            "t": "c",
+            "code": "class BaconStar < Funicular::Component\n  def render\n    button(onclick: -> { props[:on_pick].call(props[:number]) }) do\n      props[:lit] ? \"★\" : \"☆\"\n    end\n  end\nend\n\nclass BaconRating < Funicular::Component\n  WORDS = [\"Pick a star\", \"Hmm\", \"OK\", \"Good\", \"Very good\", \"Chunky bacon!\"]\n\n  def initialize_state\n    { stars: 0 }\n  end\n\n  def render\n    div do\n      h3 { \"How much do you like bacon?\" }\n      (1..5).each do |n|\n        component(BaconStar, number: n, lit: n <= state[:stars],\n                             on_pick: ->(picked) { patch(stars: picked) })\n      end\n      p { WORDS[state[:stars]] }\n    end\n  end\nend\n\nFunicular.start(BaconRating, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>Look it up:</strong> <a href='https://github.com/picoruby/funicular' target='_blank'>Funicular on GitHub</a> · <a href='https://picoruby.org/funicular-on-rails-quick-chat' target='_blank'>Funicular on Rails, the tutorial</a> · <a href='https://slide.rabbit-shocker.org/authors/hasumikin/SendaiRubyKaigi03/' target='_blank'>“A Chat in Five Minutes”, the slides (Japanese)</a></div><div class='task'><strong>Task:</strong> The traffic light below is drawn, but its button does nothing yet. Write the method <code>next_light(event)</code>: it switches the light on with <code>patch</code> – red, then green, then yellow, then red again. Then give the button <code>onclick: :next_light</code>. Run the cell and click through the colours.</div>"
+          },
+          {
+            "t": "x",
+            "code": "class TrafficLight < Funicular::Component\n  COLORS = { \"red\" => \"#e53935\", \"yellow\" => \"#fdd835\", \"green\" => \"#43a047\" }\n\n  def initialize_state\n    { light: \"red\" }\n  end\n\n  # next_light: red -> green -> yellow -> red\n\n  def lamp(color)\n    lit = state[:light] == color\n    div(style: \"width: 46px; height: 46px; margin: 6px; border-radius: 50%; \" \\\n               \"background: #{lit ? COLORS[color] : \"#444\"}\")\n  end\n\n  def render\n    div do\n      div(style: \"display: inline-block; padding: 4px; background: #222; border-radius: 12px\") do\n        lamp(\"red\")\n        lamp(\"yellow\")\n        lamp(\"green\")\n      end\n      p { \"Light: #{state[:light]}\" }\n      button { \"Next\" }\n    end\n  end\nend\n\nFunicular.start(TrafficLight, container: \"app\")",
+            "hints": [
+              "The state already holds the colour: <code>state[:light]</code> is <code>\"red\"</code> to begin with. Your method works out the colour that comes next and hands it to <code>patch(light: …)</code> – <code>render</code> does the rest."
+            ],
+            "check": "result.is_a?(ChunkyFunicular::App) && result.component.to_s == \"TrafficLight\" && ->(app) { seen = [app.text[/Light: (\\w+)/, 1]]; 3.times { app.click(\"Next\"); seen << app.text[/Light: (\\w+)/, 1] }; seen == %w[red green yellow red] }.(result.mount)",
+            "hint": "A Hash can say what comes next: <code>NEXT = { \"red\" => \"green\", \"green\" => \"yellow\", \"yellow\" => \"red\" }</code>, and the method is <code>patch(light: NEXT[state[:light]])</code>. The button: <code>button(onclick: :next_light) { \"Next\" }</code>.",
+            "solution": "class TrafficLight < Funicular::Component\n  COLORS = { \"red\" => \"#e53935\", \"yellow\" => \"#fdd835\", \"green\" => \"#43a047\" }\n  NEXT = { \"red\" => \"green\", \"green\" => \"yellow\", \"yellow\" => \"red\" }\n\n  def initialize_state\n    { light: \"red\" }\n  end\n\n  def next_light(event)\n    patch(light: NEXT[state[:light]])\n  end\n\n  def lamp(color)\n    lit = state[:light] == color\n    div(style: \"width: 46px; height: 46px; margin: 6px; border-radius: 50%; \" \\\n               \"background: #{lit ? COLORS[color] : \"#444\"}\")\n  end\n\n  def render\n    div do\n      div(style: \"display: inline-block; padding: 4px; background: #222; border-radius: 12px\") do\n        lamp(\"red\")\n        lamp(\"yellow\")\n        lamp(\"green\")\n      end\n      p { \"Light: #{state[:light]}\" }\n      button(onclick: :next_light) { \"Next\" }\n    end\n  end\nend\n\nFunicular.start(TrafficLight, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Funicular on Rails</h3><p>Here each app lived alone in its window. In real life Funicular is a Rails plugin, and the same components talk to a server: <code>Funicular::HTTP.get</code> fetches JSON, <code>Funicular::Cable</code> speaks ActionCable for live updates, a router maps paths like <code>/chat/:channel_id</code> to components, and the browser even gets a SQLite database of its own, kept in IndexedDB. At Sendai RubyKaigi 03 in November 2026, HASUMI Hitoshi built a chat with it in five minutes – without a line of JavaScript or a JavaScript build tool.</p><p>And one trick you have already seen at work: the same component code runs on CRuby too. Rails renders the first page on the server as HTML, and PicoRuby in the browser takes it over (server-side rendering). That is how your exercise was checked: CRuby rendered your traffic light without a browser and clicked its button three times.</p><div class='offweb' data-title='On your machine'><pre><code>rails new chat_demo\ncd chat_demo\nbundle add funicular\nbin/rails funicular:install\nbin/rails generate funicular:chat\nbin/rails db:migrate\nbin/rails funicular:compile\nbin/rails server</code></pre><p>Then open <code>http://localhost:3000/funicular_chat</code> in two windows and chat with yourself. The components live in <code>app/funicular/</code>; <code>funicular:compile</code> turns them into one <code>app.mrb</code> that PicoRuby.wasm loads. Without Rails, a <code>&lt;script&gt;</code> tag for PicoRuby.wasm and your component in <code>&lt;script type=\"text/ruby\"&gt;</code> are enough, as in lesson {{nr:picoruby}}.</p></div>"
+          }
+        ]
+      },
+      "ja": {
+        "title": "Funicular：RubyでつくるWebアプリ",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Funicular：RubyでつくるWebアプリ</h2><p><em>フニクラ</em>（funicular）とは、急な坂をケーブルで車両を引き上げるケーブルカーのことです。ナポリの古い歌『フニクリ・フニクラ』は、ヴェスヴィオ山のケーブルカーの歌です。そして<strong>Funicular</strong>は、PicoRubyの作者・羽角均（HASUMI Hitoshi）さんが作ったフレームワークの名前でもあります。JavaScriptではなくRubyで、ブラウザのアプリを作れます。動くのはレッスン{{nr:picoruby}}のPicoRuby.wasmの上です。標準ライブラリ込みのCRubyが31 MBなのに対して、こちらは2.7 MBです。</p><p>Funicularのアプリは<strong>コンポーネント</strong>でできています。コンポーネントはRubyのクラスで、<code>render</code>メソッドがページの見た目を決めます。セルを実行してみましょう。下に新しいPicoRubyが専用の小さなウィンドウで起動して、アプリを表示します。その前にCRubyがブラウザなしでコードを読むので、間違いがあれば、いつものレッスンと同じようにここで説明されます。</p>"
+          },
+          {
+            "t": "c",
+            "code": "class HelloFunicular < Funicular::Component\n  def render\n    div do\n      h1 { \"Chunky bacon!\" }\n      p { \"Ruby drew this page, right here in your browser.\" }\n      p(style: \"color: #bd2d00\") { \"#{RUBY_ENGINE} #{RUBY_VERSION}\" }\n    end\n  end\nend\n\nFunicular.start(HelloFunicular, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>render</code>の中では、HTMLのタグがそれぞれメソッドになっています。<code>div</code>、<code>h1</code>、<code>p</code>、<code>button</code>、<code>ul</code>、<code>li</code>、<code>input</code>……。ブロックが返したものがタグの中身になり、ブロックの中にブロックを書けば、タグの中にタグができます。属性はキーワード引数で書きます：<code>p(style: \"color: red\")</code>、<code>div(class: \"box\")</code>。注意：コンポーネントの中の<code>p</code>は段落を作るもので、何も出力しません。<code>Funicular.start</code>は、ページの中でidが<code>app</code>の要素にコンポーネントを入れます。</p><h3>状態とクリック</h3><p>表示するだけのページなら、ただのHTMLで十分です。アプリは変化します。変わりうるものを、コンポーネントは<strong>状態</strong>（state）として持っています。<code>initialize_state</code>が返すハッシュで、<code>state[:slices]</code>のように読みます。<code>onclick: :more</code>は「クリックされたら<code>more</code>メソッドを呼ぶ」という意味です。そしてそのメソッドはページに直接さわりません。新しい値を渡して<code>patch</code>を呼ぶだけです。ボタンを押してみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "class BaconCounter < Funicular::Component\n  def initialize_state\n    { slices: 0 }\n  end\n\n  def more(event)\n    patch(slices: state[:slices] + 1)\n  end\n\n  def less(event)\n    patch(slices: state[:slices] - 1) if state[:slices] > 0\n  end\n\n  def render\n    div do\n      h2 { \"Bacon slices: #{state[:slices]}\" }\n      p { \"🥓\" * state[:slices] }\n      button(onclick: :less) { \"–1\" }\n      button(onclick: :more) { \"+1\" }\n    end\n  end\nend\n\nFunicular.start(BaconCounter, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>赤い枠が見せているもの</h3><p><code>patch</code>は新しい値を状態にまぜて、もう一度<code>render</code>を呼びます。<code>render</code>はコンポーネント<em>全体</em>を描き直しますが、Funicularはページを捨てたりしません。<code>render</code>が作るのは<strong>仮想DOM</strong>、つまりタグの代わりになるRubyのオブジェクトです。<em>Differ</em>が新しい木と前の木を比べて違いだけを書き出し、<em>Patcher</em>がその違いだけを本物のページに反映します。赤い枠はPatcherが変えたところで、アプリの下のログがその数を数えます。+1を押すと変わるのは2つのテキストだけで、ほかのノードはそのままです。Reactも同じしくみですが、FunicularはこれをRubyの約1万行でやっています。</p><p>入力も同じです。<code>oninput</code>はキーを押すたびにメソッドを呼び、<code>event.target[:value]</code>がいま入力欄に入っている文字です。名前を入力してみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "class FoxGreeter < Funicular::Component\n  def initialize_state\n    { name: \"\" }\n  end\n\n  def typed(event)\n    patch(name: event.target[:value].to_s)\n  end\n\n  def render\n    name = state[:name]\n    div do\n      input(placeholder: \"Your name\", value: name, oninput: :typed)\n      if name.empty?\n        p { \"🦊 Who's there?\" }\n      else\n        h2 { \"Hello, #{name}!\" }\n        p { \"#{name.length} letters – backwards: #{name.reverse.downcase}\" }\n      end\n    end\n  end\nend\n\nFunicular.start(FoxGreeter, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>入力しているあいだ、入力欄そのものは変わりません。Patcherはその要素には手を出さず、下のテキストだけを変えます。だからカーソルが飛ばないのです。</p><h3>リストと<code>key</code></h3><p>リストは<code>render</code>の中のループです。状態の配列を<code>each</code>でたどり、項目ごとに<code>li</code>をひとつ作ります。それぞれの<code>li</code>には<code>key</code>をつけましょう。idのように、その項目に属する値です。では、最初の項目を消してみてください。keyのおかげでDifferは「1つが消えて、残りはそのまま」とわかり、要素をちょうど1つだけ取り除きます。keyがないと位置で比べるので、その下の項目を全部書き直すことになります。</p><p>新しいことがあと2つあります。<code>form(onsubmit: :add)</code>はボタンと同じようにEnterキーも受け取り、<code>event.preventDefault</code>はブラウザがフォームを送信してページを読み込み直すのを止めます。それから、☐と✕のハンドラはラムダで、<code>toggle(id)</code>と<code>remove(id)</code>が作っています。どのラムダも、自分がどの項目のものかを知っています。状態はその場で書き換えません。<code>map</code>、<code>reject</code>、<code>+</code>で新しい配列を作り、それを<code>patch</code>に渡します。</p>"
+          },
+          {
+            "t": "c",
+            "code": "class FoxTodo < Funicular::Component\n  def initialize_state\n    { items: [{ id: 1, text: \"Fry bacon\", done: true },\n              { id: 2, text: \"Learn Ruby\", done: false }],\n      draft: \"\", next_id: 3 }\n  end\n\n  def typed(event)\n    patch(draft: event.target[:value].to_s)\n  end\n\n  def add(event)\n    event.preventDefault\n    text = state[:draft].strip\n    return if text.empty?\n\n    item = { id: state[:next_id], text: text, done: false }\n    patch(items: state[:items] + [item], draft: \"\", next_id: state[:next_id] + 1)\n  end\n\n  # 項目ひとつ分のクリックハンドラ：自分のidを知っているラムダ\n  def toggle(id)\n    lambda do\n      items = state[:items].map do |i|\n        i[:id] == id ? i.merge(done: !i[:done]) : i\n      end\n      patch(items: items)\n    end\n  end\n\n  def remove(id)\n    -> { patch(items: state[:items].reject { |i| i[:id] == id }) }\n  end\n\n  def render\n    left = state[:items].select { |i| !i[:done] }.size\n    div do\n      form(onsubmit: :add) do\n        input(value: state[:draft], placeholder: \"What next?\", oninput: :typed)\n        button(type: \"submit\") { \"Add\" }\n      end\n      ul do\n        state[:items].each do |item|\n          li(key: item[:id]) do\n            button(onclick: toggle(item[:id])) { item[:done] ? \"☑\" : \"☐\" }\n            span(style: item[:done] ? \"text-decoration: line-through\" : \"\") { item[:text] }\n            button(onclick: remove(item[:id])) { \"✕\" }\n          end\n        end\n      end\n      p { \"Still to do: #{left}\" }\n    end\n  end\nend\n\nFunicular.start(FoxTodo, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>コンポーネントの中のコンポーネント</h3><p>大きなアプリは小さなコンポーネントの組み合わせです。<code>component(BaconStar, number: n, …)</code>で<code>render</code>の中にコンポーネントを入れ、<strong>props</strong>を渡します。propsは、受け取った側が<code>props[:number]</code>で読むだけで、変えない値です。では、星がクリックされたことを評価コンポーネントにどう伝えるのでしょう？　評価コンポーネントがラムダを<code>on_pick</code>というpropとして渡し、星がそれを呼びます。データはpropsとして下へ、イベントはラムダを通って上へ。Reactと同じパターンです。</p>"
+          },
+          {
+            "t": "c",
+            "code": "class BaconStar < Funicular::Component\n  def render\n    button(onclick: -> { props[:on_pick].call(props[:number]) }) do\n      props[:lit] ? \"★\" : \"☆\"\n    end\n  end\nend\n\nclass BaconRating < Funicular::Component\n  WORDS = [\"Pick a star\", \"Hmm\", \"OK\", \"Good\", \"Very good\", \"Chunky bacon!\"]\n\n  def initialize_state\n    { stars: 0 }\n  end\n\n  def render\n    div do\n      h3 { \"How much do you like bacon?\" }\n      (1..5).each do |n|\n        component(BaconStar, number: n, lit: n <= state[:stars],\n                             on_pick: ->(picked) { patch(stars: picked) })\n      end\n      p { WORDS[state[:stars]] }\n    end\n  end\nend\n\nFunicular.start(BaconRating, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>調べてみよう：</strong><a href='https://github.com/picoruby/funicular' target='_blank'>GitHubのFunicular（英語）</a>・<a href='https://picoruby.org/funicular-on-rails-quick-chat' target='_blank'>Funicular on Railsのチュートリアル（英語）</a>・<a href='https://slide.rabbit-shocker.org/authors/hasumikin/SendaiRubyKaigi03/' target='_blank'>スライド「5分でつくる！Funicular on Railsチャットアプリ」</a></div><div class='task'><strong>課題：</strong>下の信号機は描かれていますが、ボタンを押してもまだ何も起きません。メソッド<code>next_light(event)</code>を書きましょう。<code>patch</code>を使って、信号を赤（red）→青（green）→黄（yellow）→赤の順に切り替えます。それからボタンに<code>onclick: :next_light</code>をつけます。セルを実行して、色を順にクリックしてみましょう。</div>"
+          },
+          {
+            "t": "x",
+            "code": "class TrafficLight < Funicular::Component\n  COLORS = { \"red\" => \"#e53935\", \"yellow\" => \"#fdd835\", \"green\" => \"#43a047\" }\n\n  def initialize_state\n    { light: \"red\" }\n  end\n\n  # next_light：red → green → yellow → red の順に切り替える\n\n  def lamp(color)\n    lit = state[:light] == color\n    div(style: \"width: 46px; height: 46px; margin: 6px; border-radius: 50%; \" \\\n               \"background: #{lit ? COLORS[color] : \"#444\"}\")\n  end\n\n  def render\n    div do\n      div(style: \"display: inline-block; padding: 4px; background: #222; border-radius: 12px\") do\n        lamp(\"red\")\n        lamp(\"yellow\")\n        lamp(\"green\")\n      end\n      p { \"Light: #{state[:light]}\" }\n      button { \"Next\" }\n    end\n  end\nend\n\nFunicular.start(TrafficLight, container: \"app\")",
+            "hints": [
+              "色はもう状態に入ってるよ。最初は<code>state[:light]</code>が<code>\"red\"</code>だね。メソッドで次の色を決めて、<code>patch(light: …)</code>に渡そう。あとは<code>render</code>がやってくれるよ。"
+            ],
+            "check": "result.is_a?(ChunkyFunicular::App) && result.component.to_s == \"TrafficLight\" && ->(app) { seen = [app.text[/Light: (\\w+)/, 1]]; 3.times { app.click(\"Next\"); seen << app.text[/Light: (\\w+)/, 1] }; seen == %w[red green yellow red] }.(result.mount)",
+            "hint": "次の色はハッシュで決められるよ：<code>NEXT = { \"red\" => \"green\", \"green\" => \"yellow\", \"yellow\" => \"red\" }</code>。メソッドの中身は<code>patch(light: NEXT[state[:light]])</code>。ボタンは<code>button(onclick: :next_light) { \"Next\" }</code>だよ。",
+            "solution": "class TrafficLight < Funicular::Component\n  COLORS = { \"red\" => \"#e53935\", \"yellow\" => \"#fdd835\", \"green\" => \"#43a047\" }\n  NEXT = { \"red\" => \"green\", \"green\" => \"yellow\", \"yellow\" => \"red\" }\n\n  def initialize_state\n    { light: \"red\" }\n  end\n\n  def next_light(event)\n    patch(light: NEXT[state[:light]])\n  end\n\n  def lamp(color)\n    lit = state[:light] == color\n    div(style: \"width: 46px; height: 46px; margin: 6px; border-radius: 50%; \" \\\n               \"background: #{lit ? COLORS[color] : \"#444\"}\")\n  end\n\n  def render\n    div do\n      div(style: \"display: inline-block; padding: 4px; background: #222; border-radius: 12px\") do\n        lamp(\"red\")\n        lamp(\"yellow\")\n        lamp(\"green\")\n      end\n      p { \"Light: #{state[:light]}\" }\n      button(onclick: :next_light) { \"Next\" }\n    end\n  end\nend\n\nFunicular.start(TrafficLight, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Funicular on Rails</h3><p>このレッスンでは、どのアプリも自分のウィンドウの中だけで動いていました。実際のFunicularはRailsのプラグインで、同じコンポーネントがサーバーとやりとりします。<code>Funicular::HTTP.get</code>はJSONを取ってきて、<code>Funicular::Cable</code>はライブ更新のためにActionCableと話し、ルーターは<code>/chat/:channel_id</code>のようなパスをコンポーネントに結びつけます。さらにブラウザには自分専用のSQLiteデータベースまであり、IndexedDBに保存されます。2026年11月の仙台Ruby会議03で、羽角さんはこれを使って5分でチャットを作りました。JavaScriptは1行も書かず、JavaScriptのビルドツールも使っていません。</p><p>そしてもうひとつ、すでに見たしくみがあります。同じコンポーネントのコードはCRubyでも動きます。Railsは最初のページをサーバーでHTMLにして、ブラウザのPicoRubyがそれを引き継ぎます（サーバーサイドレンダリング）。あなたの課題もこうしてチェックされました。CRubyがブラウザなしで信号機を描き、ボタンを3回押したのです。</p><div class='offweb' data-title='自分のコンピューターでは'><pre><code>rails new chat_demo\ncd chat_demo\nbundle add funicular\nbin/rails funicular:install\nbin/rails generate funicular:chat\nbin/rails db:migrate\nbin/rails funicular:compile\nbin/rails server</code></pre><p>それから<code>http://localhost:3000/funicular_chat</code>を2つのウィンドウで開いて、自分とチャットしてみましょう。コンポーネントは<code>app/funicular/</code>にあり、<code>funicular:compile</code>がそれをPicoRuby.wasmの読み込む<code>app.mrb</code>ひとつにまとめます。Railsなしでも、レッスン{{nr:picoruby}}と同じように、PicoRuby.wasmの<code>&lt;script&gt;</code>タグと、<code>&lt;script type=\"text/ruby\"&gt;</code>に入れたコンポーネントがあれば動きます。</p></div>"
+          }
+        ]
+      },
+      "fr": {
+        "title": "Funicular : des applications web en Ruby",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Funicular : des applications web en Ruby</h2><p>Un <em>funiculaire</em> est un chemin de fer à câble qui tire ses voitures en haut d'une pente raide – la vieille chanson napolitaine <em>Funiculì, Funiculà</em> parle de celui du Vésuve. <strong>Funicular</strong>, c'est aussi un framework de HASUMI Hitoshi, l'auteur de PicoRuby : avec lui, vous écrivez des applications pour le navigateur en Ruby plutôt qu'en JavaScript. Il tourne sur PicoRuby.wasm, vu à la leçon {{nr:picoruby}}, qui est léger : CRuby et sa bibliothèque standard pèsent 31 Mo, PicoRuby.wasm 2,7 Mo.</p><p>Une application Funicular est faite de <strong>composants</strong> : des classes Ruby dont la méthode <code>render</code> dit à quoi ressemble la page. Exécutez la cellule : en dessous, un PicoRuby tout neuf démarre dans sa propre fenêtre et affiche l'application. Avant cela, CRuby lit votre code, sans navigateur – une erreur est donc expliquée ici, comme dans toutes les leçons.</p>"
+          },
+          {
+            "t": "c",
+            "code": "class HelloFunicular < Funicular::Component\n  def render\n    div do\n      h1 { \"Chunky bacon!\" }\n      p { \"Ruby drew this page, right here in your browser.\" }\n      p(style: \"color: #bd2d00\") { \"#{RUBY_ENGINE} #{RUBY_VERSION}\" }\n    end\n  end\nend\n\nFunicular.start(HelloFunicular, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dans <code>render</code>, chaque balise HTML est une méthode : <code>div</code>, <code>h1</code>, <code>p</code>, <code>button</code>, <code>ul</code>, <code>li</code>, <code>input</code>… Ce que renvoie le bloc va dans la balise, et des blocs dans des blocs donnent des balises dans des balises. Les attributs sont des arguments nommés : <code>p(style: \"color: red\")</code>, <code>div(class: \"box\")</code>. Attention : dans un composant, <code>p</code> crée un paragraphe – il n'affiche rien. <code>Funicular.start</code> place le composant dans l'élément de la page dont l'id est <code>app</code>.</p><h3>L'état, et un clic</h3><p>Une page qui se contente d'afficher pourrait être du simple HTML. Une application, elle, change. Ce qui peut changer, un composant le garde dans son <strong>état</strong> (state) : un Hash que renvoie <code>initialize_state</code>, lu avec <code>state[:slices]</code>. <code>onclick: :more</code> signifie : lors d'un clic, appeler la méthode <code>more</code>. Et cette méthode ne touche jamais à la page – elle appelle <code>patch</code> avec les nouvelles valeurs. Cliquez sur les boutons :</p>"
+          },
+          {
+            "t": "c",
+            "code": "class BaconCounter < Funicular::Component\n  def initialize_state\n    { slices: 0 }\n  end\n\n  def more(event)\n    patch(slices: state[:slices] + 1)\n  end\n\n  def less(event)\n    patch(slices: state[:slices] - 1) if state[:slices] > 0\n  end\n\n  def render\n    div do\n      h2 { \"Bacon slices: #{state[:slices]}\" }\n      p { \"🥓\" * state[:slices] }\n      button(onclick: :less) { \"–1\" }\n      button(onclick: :more) { \"+1\" }\n    end\n  end\nend\n\nFunicular.start(BaconCounter, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Ce que montrent les cadres rouges</h3><p><code>patch</code> fusionne les nouvelles valeurs dans l'état et rappelle <code>render</code>. <code>render</code> décrit à nouveau le composant <em>entier</em> – mais Funicular ne jette pas la page. <code>render</code> construit un <strong>DOM virtuel</strong> : des objets Ruby qui représentent les balises. Le <em>Differ</em> compare le nouvel arbre au précédent et ne liste que les différences ; le <em>Patcher</em> applique exactement celles-ci à la vraie page. Les cadres rouges marquent ce que le Patcher a modifié, et le journal sous l'application le compte : un clic sur +1 change les deux textes – tous les autres nœuds restent tels quels. React fonctionne aussi ainsi ; Funicular le fait en Ruby, en environ 10 000 lignes.</p><p>La saisie fonctionne de la même façon. <code>oninput</code> appelle la méthode à chaque touche, et <code>event.target[:value]</code> est ce qui se trouve dans le champ à cet instant. Tapez votre prénom :</p>"
+          },
+          {
+            "t": "c",
+            "code": "class FoxGreeter < Funicular::Component\n  def initialize_state\n    { name: \"\" }\n  end\n\n  def typed(event)\n    patch(name: event.target[:value].to_s)\n  end\n\n  def render\n    name = state[:name]\n    div do\n      input(placeholder: \"Your name\", value: name, oninput: :typed)\n      if name.empty?\n        p { \"🦊 Who's there?\" }\n      else\n        h2 { \"Hello, #{name}!\" }\n        p { \"#{name.length} letters – backwards: #{name.reverse.downcase}\" }\n      end\n    end\n  end\nend\n\nFunicular.start(FoxGreeter, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Le champ reste en place pendant que vous tapez : le Patcher ne touche pas à cet élément et change seulement les textes en dessous. C'est pourquoi le curseur ne saute pas.</p><h3>Les listes, et <code>key</code></h3><p>Une liste, c'est une boucle dans <code>render</code> : <code>each</code> sur un Array de l'état, un <code>li</code> par élément. Donnez à chaque <code>li</code> une <code>key</code> – une valeur propre à son élément, comme un id. Supprimez ensuite le premier élément : grâce aux clés, le Differ voit qu'un élément est parti et que les autres sont restés, et retire exactement un élément. Sans clés, il comparerait par position et réécrirait chaque élément en dessous.</p><p>Deux autres choses sont nouvelles. <code>form(onsubmit: :add)</code> réagit à Entrée comme au bouton, et <code>event.preventDefault</code> empêche le navigateur d'envoyer le formulaire et de recharger la page. Et les gestionnaires de ☐ et ✕ sont des lambdas, créées par <code>toggle(id)</code> et <code>remove(id)</code> – chacune sait à quel élément elle appartient. L'état n'est jamais modifié sur place : <code>map</code>, <code>reject</code> et <code>+</code> créent un nouvel Array, et c'est lui que reçoit <code>patch</code>.</p>"
+          },
+          {
+            "t": "c",
+            "code": "class FoxTodo < Funicular::Component\n  def initialize_state\n    { items: [{ id: 1, text: \"Fry bacon\", done: true },\n              { id: 2, text: \"Learn Ruby\", done: false }],\n      draft: \"\", next_id: 3 }\n  end\n\n  def typed(event)\n    patch(draft: event.target[:value].to_s)\n  end\n\n  def add(event)\n    event.preventDefault\n    text = state[:draft].strip\n    return if text.empty?\n\n    item = { id: state[:next_id], text: text, done: false }\n    patch(items: state[:items] + [item], draft: \"\", next_id: state[:next_id] + 1)\n  end\n\n  # un gestionnaire de clic pour un élément : une lambda qui connaît son id\n  def toggle(id)\n    lambda do\n      items = state[:items].map do |i|\n        i[:id] == id ? i.merge(done: !i[:done]) : i\n      end\n      patch(items: items)\n    end\n  end\n\n  def remove(id)\n    -> { patch(items: state[:items].reject { |i| i[:id] == id }) }\n  end\n\n  def render\n    left = state[:items].select { |i| !i[:done] }.size\n    div do\n      form(onsubmit: :add) do\n        input(value: state[:draft], placeholder: \"What next?\", oninput: :typed)\n        button(type: \"submit\") { \"Add\" }\n      end\n      ul do\n        state[:items].each do |item|\n          li(key: item[:id]) do\n            button(onclick: toggle(item[:id])) { item[:done] ? \"☑\" : \"☐\" }\n            span(style: item[:done] ? \"text-decoration: line-through\" : \"\") { item[:text] }\n            button(onclick: remove(item[:id])) { \"✕\" }\n          end\n        end\n      end\n      p { \"Still to do: #{left}\" }\n    end\n  end\nend\n\nFunicular.start(FoxTodo, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Des composants dans des composants</h3><p>Une grande application est faite de petits composants. <code>component(BaconStar, number: n, …)</code> en place un dans <code>render</code> et lui transmet des <strong>props</strong> : des valeurs qu'il lit avec <code>props[:number]</code> et ne modifie pas. Comment une étoile dit-elle à la notation qu'on a cliqué sur elle ? La notation lui passe une lambda comme prop, <code>on_pick</code>, et l'étoile l'appelle. Les données descendent sous forme de props, les événements remontent par des lambdas – le même schéma que dans React.</p>"
+          },
+          {
+            "t": "c",
+            "code": "class BaconStar < Funicular::Component\n  def render\n    button(onclick: -> { props[:on_pick].call(props[:number]) }) do\n      props[:lit] ? \"★\" : \"☆\"\n    end\n  end\nend\n\nclass BaconRating < Funicular::Component\n  WORDS = [\"Pick a star\", \"Hmm\", \"OK\", \"Good\", \"Very good\", \"Chunky bacon!\"]\n\n  def initialize_state\n    { stars: 0 }\n  end\n\n  def render\n    div do\n      h3 { \"How much do you like bacon?\" }\n      (1..5).each do |n|\n        component(BaconStar, number: n, lit: n <= state[:stars],\n                             on_pick: ->(picked) { patch(stars: picked) })\n      end\n      p { WORDS[state[:stars]] }\n    end\n  end\nend\n\nFunicular.start(BaconRating, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://github.com/picoruby/funicular' target='_blank'>Funicular sur GitHub</a> · <a href='https://picoruby.org/funicular-on-rails-quick-chat' target='_blank'>Funicular on Rails, le tutoriel</a> · <a href='https://slide.rabbit-shocker.org/authors/hasumikin/SendaiRubyKaigi03/' target='_blank'>« A Chat in Five Minutes », les diapositives (en japonais)</a></div><div class='task'><strong>Exercice :</strong> Le feu tricolore ci-dessous est dessiné, mais son bouton ne fait encore rien. Écrivez la méthode <code>next_light(event)</code> : avec <code>patch</code>, elle fait passer le feu du rouge (red) au vert (green), puis au jaune (yellow), puis de nouveau au rouge. Donnez ensuite au bouton <code>onclick: :next_light</code>. Exécutez la cellule et faites défiler les couleurs.</div>"
+          },
+          {
+            "t": "x",
+            "code": "class TrafficLight < Funicular::Component\n  COLORS = { \"red\" => \"#e53935\", \"yellow\" => \"#fdd835\", \"green\" => \"#43a047\" }\n\n  def initialize_state\n    { light: \"red\" }\n  end\n\n  # next_light : passe de red à green, puis yellow, puis de nouveau red\n\n  def lamp(color)\n    lit = state[:light] == color\n    div(style: \"width: 46px; height: 46px; margin: 6px; border-radius: 50%; \" \\\n               \"background: #{lit ? COLORS[color] : \"#444\"}\")\n  end\n\n  def render\n    div do\n      div(style: \"display: inline-block; padding: 4px; background: #222; border-radius: 12px\") do\n        lamp(\"red\")\n        lamp(\"yellow\")\n        lamp(\"green\")\n      end\n      p { \"Light: #{state[:light]}\" }\n      button { \"Next\" }\n    end\n  end\nend\n\nFunicular.start(TrafficLight, container: \"app\")",
+            "hints": [
+              "La couleur est déjà dans l'état : au départ, <code>state[:light]</code> vaut <code>\"red\"</code>. Votre méthode détermine la couleur suivante et la transmet à <code>patch(light: …)</code> – <code>render</code> fait le reste."
+            ],
+            "check": "result.is_a?(ChunkyFunicular::App) && result.component.to_s == \"TrafficLight\" && ->(app) { seen = [app.text[/Light: (\\w+)/, 1]]; 3.times { app.click(\"Next\"); seen << app.text[/Light: (\\w+)/, 1] }; seen == %w[red green yellow red] }.(result.mount)",
+            "hint": "Un Hash peut dire ce qui vient ensuite : <code>NEXT = { \"red\" => \"green\", \"green\" => \"yellow\", \"yellow\" => \"red\" }</code>, et la méthode est <code>patch(light: NEXT[state[:light]])</code>. Le bouton : <code>button(onclick: :next_light) { \"Next\" }</code>.",
+            "solution": "class TrafficLight < Funicular::Component\n  COLORS = { \"red\" => \"#e53935\", \"yellow\" => \"#fdd835\", \"green\" => \"#43a047\" }\n  NEXT = { \"red\" => \"green\", \"green\" => \"yellow\", \"yellow\" => \"red\" }\n\n  def initialize_state\n    { light: \"red\" }\n  end\n\n  def next_light(event)\n    patch(light: NEXT[state[:light]])\n  end\n\n  def lamp(color)\n    lit = state[:light] == color\n    div(style: \"width: 46px; height: 46px; margin: 6px; border-radius: 50%; \" \\\n               \"background: #{lit ? COLORS[color] : \"#444\"}\")\n  end\n\n  def render\n    div do\n      div(style: \"display: inline-block; padding: 4px; background: #222; border-radius: 12px\") do\n        lamp(\"red\")\n        lamp(\"yellow\")\n        lamp(\"green\")\n      end\n      p { \"Light: #{state[:light]}\" }\n      button(onclick: :next_light) { \"Next\" }\n    end\n  end\nend\n\nFunicular.start(TrafficLight, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Funicular on Rails</h3><p>Ici, chaque application vivait seule dans sa fenêtre. En vrai, Funicular est un plugin Rails, et les mêmes composants parlent à un serveur : <code>Funicular::HTTP.get</code> récupère du JSON, <code>Funicular::Cable</code> parle ActionCable pour les mises à jour en direct, un routeur associe des chemins comme <code>/chat/:channel_id</code> à des composants, et le navigateur reçoit même sa propre base SQLite, conservée dans IndexedDB. Au Sendai RubyKaigi 03, en novembre 2026, HASUMI Hitoshi a construit ainsi un chat en cinq minutes – sans une ligne de JavaScript ni outil de build JavaScript.</p><p>Et vous avez déjà vu une astuce à l'œuvre : le même code de composant tourne aussi sur CRuby. Rails rend la première page en HTML sur le serveur, et PicoRuby la reprend dans le navigateur (rendu côté serveur). C'est aussi ainsi que votre exercice a été vérifié : CRuby a rendu votre feu sans navigateur et a cliqué trois fois sur son bouton.</p><div class='offweb' data-title='Sur votre machine'><pre><code>rails new chat_demo\ncd chat_demo\nbundle add funicular\nbin/rails funicular:install\nbin/rails generate funicular:chat\nbin/rails db:migrate\nbin/rails funicular:compile\nbin/rails server</code></pre><p>Ouvrez ensuite <code>http://localhost:3000/funicular_chat</code> dans deux fenêtres et discutez avec vous-même. Les composants se trouvent dans <code>app/funicular/</code> ; <code>funicular:compile</code> en fait un seul <code>app.mrb</code> que charge PicoRuby.wasm. Sans Rails, une balise <code>&lt;script&gt;</code> pour PicoRuby.wasm et votre composant dans <code>&lt;script type=\"text/ruby\"&gt;</code> suffisent, comme à la leçon {{nr:picoruby}}.</p></div>"
+          }
+        ]
+      },
+      "it": {
+        "title": "Funicular: app web in Ruby",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Funicular: app web in Ruby</h2><p>Una <em>funicolare</em> è una ferrovia a fune che tira le sue vetture su per un pendio ripido – la vecchia canzone napoletana <em>Funiculì, Funiculà</em> parla di quella del Vesuvio. <strong>Funicular</strong> è anche un framework di HASUMI Hitoshi, l'autore di PicoRuby: con esso scrivi app per il browser in Ruby invece che in JavaScript. Gira su PicoRuby.wasm della lezione {{nr:picoruby}}, che è leggero: CRuby con la sua libreria standard occupa 31 MB, PicoRuby.wasm 2,7 MB.</p><p>Un'app Funicular è fatta di <strong>componenti</strong>: classi Ruby il cui metodo <code>render</code> dice com'è fatta la pagina. Esegui la cella: sotto parte un PicoRuby nuovo in una finestra tutta sua e mostra l'app. Prima CRuby legge il tuo codice, senza browser – così un errore viene spiegato qui, come in ogni lezione.</p>"
+          },
+          {
+            "t": "c",
+            "code": "class HelloFunicular < Funicular::Component\n  def render\n    div do\n      h1 { \"Chunky bacon!\" }\n      p { \"Ruby drew this page, right here in your browser.\" }\n      p(style: \"color: #bd2d00\") { \"#{RUBY_ENGINE} #{RUBY_VERSION}\" }\n    end\n  end\nend\n\nFunicular.start(HelloFunicular, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Dentro <code>render</code> ogni tag HTML è un metodo: <code>div</code>, <code>h1</code>, <code>p</code>, <code>button</code>, <code>ul</code>, <code>li</code>, <code>input</code>… Quello che il blocco restituisce va dentro il tag, e blocchi dentro blocchi danno tag dentro tag. Gli attributi sono argomenti con nome: <code>p(style: \"color: red\")</code>, <code>div(class: \"box\")</code>. Attenzione: in un componente <code>p</code> crea un paragrafo – non stampa nulla. <code>Funicular.start</code> mette il componente nell'elemento della pagina con id <code>app</code>.</p><h3>Lo stato, e un clic</h3><p>Una pagina che mostra soltanto qualcosa potrebbe essere semplice HTML. Un'app cambia. Ciò che può cambiare, un componente lo tiene nel suo <strong>stato</strong> (state): un Hash che <code>initialize_state</code> restituisce, letto con <code>state[:slices]</code>. <code>onclick: :more</code> vuol dire: a un clic, chiama il metodo <code>more</code>. E quel metodo non tocca mai la pagina – chiama <code>patch</code> con i nuovi valori. Clicca i pulsanti:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class BaconCounter < Funicular::Component\n  def initialize_state\n    { slices: 0 }\n  end\n\n  def more(event)\n    patch(slices: state[:slices] + 1)\n  end\n\n  def less(event)\n    patch(slices: state[:slices] - 1) if state[:slices] > 0\n  end\n\n  def render\n    div do\n      h2 { \"Bacon slices: #{state[:slices]}\" }\n      p { \"🥓\" * state[:slices] }\n      button(onclick: :less) { \"–1\" }\n      button(onclick: :more) { \"+1\" }\n    end\n  end\nend\n\nFunicular.start(BaconCounter, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Che cosa mostrano le cornici rosse</h3><p><code>patch</code> unisce i nuovi valori allo stato e richiama <code>render</code>. <code>render</code> descrive di nuovo <em>tutto</em> il componente – ma Funicular non butta via la pagina. <code>render</code> costruisce un <strong>DOM virtuale</strong>: oggetti Ruby che stanno al posto dei tag. Il <em>Differ</em> confronta il nuovo albero con il precedente ed elenca solo le differenze; il <em>Patcher</em> applica esattamente quelle alla pagina vera. Le cornici rosse segnano ciò che il Patcher ha cambiato, e il registro sotto l'app lo conta: un clic su +1 cambia i due testi – ogni altro nodo resta com'era. Anche React funziona così; Funicular lo fa in Ruby, in circa 10.000 righe.</p><p>Scrivere funziona allo stesso modo. <code>oninput</code> chiama il metodo a ogni tasto, e <code>event.target[:value]</code> è ciò che c'è nel campo in quel momento. Scrivi il tuo nome:</p>"
+          },
+          {
+            "t": "c",
+            "code": "class FoxGreeter < Funicular::Component\n  def initialize_state\n    { name: \"\" }\n  end\n\n  def typed(event)\n    patch(name: event.target[:value].to_s)\n  end\n\n  def render\n    name = state[:name]\n    div do\n      input(placeholder: \"Your name\", value: name, oninput: :typed)\n      if name.empty?\n        p { \"🦊 Who's there?\" }\n      else\n        h2 { \"Hello, #{name}!\" }\n        p { \"#{name.length} letters – backwards: #{name.reverse.downcase}\" }\n      end\n    end\n  end\nend\n\nFunicular.start(FoxGreeter, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Il campo resta fermo mentre scrivi: il Patcher lascia stare quell'elemento e cambia solo i testi sotto. Per questo il cursore non salta.</p><h3>Liste, e <code>key</code></h3><p>Una lista è un ciclo in <code>render</code>: <code>each</code> su un Array dello stato, un <code>li</code> per voce. Dai a ogni <code>li</code> una <code>key</code> – un valore che appartiene alla sua voce, come un id. Poi cancella la prima voce: grazie alle chiavi, il Differ vede che una voce se n'è andata e le altre sono rimaste, e rimuove esattamente un elemento. Senza chiavi confronterebbe per posizione e riscriverebbe ogni voce sotto.</p><p>Ci sono altre due novità. <code>form(onsubmit: :add)</code> reagisce a Invio come al pulsante, e <code>event.preventDefault</code> impedisce al browser di inviare il modulo e ricaricare la pagina. E i gestori di ☐ e ✕ sono lambda, create da <code>toggle(id)</code> e <code>remove(id)</code> – ognuna sa a quale voce appartiene. Lo stato non viene mai modificato sul posto: <code>map</code>, <code>reject</code> e <code>+</code> creano un nuovo Array, ed è quello che riceve <code>patch</code>.</p>"
+          },
+          {
+            "t": "c",
+            "code": "class FoxTodo < Funicular::Component\n  def initialize_state\n    { items: [{ id: 1, text: \"Fry bacon\", done: true },\n              { id: 2, text: \"Learn Ruby\", done: false }],\n      draft: \"\", next_id: 3 }\n  end\n\n  def typed(event)\n    patch(draft: event.target[:value].to_s)\n  end\n\n  def add(event)\n    event.preventDefault\n    text = state[:draft].strip\n    return if text.empty?\n\n    item = { id: state[:next_id], text: text, done: false }\n    patch(items: state[:items] + [item], draft: \"\", next_id: state[:next_id] + 1)\n  end\n\n  # un gestore di clic per un elemento: una lambda che conosce il suo id\n  def toggle(id)\n    lambda do\n      items = state[:items].map do |i|\n        i[:id] == id ? i.merge(done: !i[:done]) : i\n      end\n      patch(items: items)\n    end\n  end\n\n  def remove(id)\n    -> { patch(items: state[:items].reject { |i| i[:id] == id }) }\n  end\n\n  def render\n    left = state[:items].select { |i| !i[:done] }.size\n    div do\n      form(onsubmit: :add) do\n        input(value: state[:draft], placeholder: \"What next?\", oninput: :typed)\n        button(type: \"submit\") { \"Add\" }\n      end\n      ul do\n        state[:items].each do |item|\n          li(key: item[:id]) do\n            button(onclick: toggle(item[:id])) { item[:done] ? \"☑\" : \"☐\" }\n            span(style: item[:done] ? \"text-decoration: line-through\" : \"\") { item[:text] }\n            button(onclick: remove(item[:id])) { \"✕\" }\n          end\n        end\n      end\n      p { \"Still to do: #{left}\" }\n    end\n  end\nend\n\nFunicular.start(FoxTodo, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Componenti nei componenti</h3><p>Una grande app è fatta di piccoli componenti. <code>component(BaconStar, number: n, …)</code> ne mette uno in <code>render</code> e gli passa delle <strong>props</strong>: valori che legge con <code>props[:number]</code> e non cambia. Come fa una stella a dire alla valutazione che è stata cliccata? La valutazione le passa una lambda come prop, <code>on_pick</code>, e la stella la chiama. I dati scendono come props, gli eventi salgono attraverso le lambda – lo stesso schema di React.</p>"
+          },
+          {
+            "t": "c",
+            "code": "class BaconStar < Funicular::Component\n  def render\n    button(onclick: -> { props[:on_pick].call(props[:number]) }) do\n      props[:lit] ? \"★\" : \"☆\"\n    end\n  end\nend\n\nclass BaconRating < Funicular::Component\n  WORDS = [\"Pick a star\", \"Hmm\", \"OK\", \"Good\", \"Very good\", \"Chunky bacon!\"]\n\n  def initialize_state\n    { stars: 0 }\n  end\n\n  def render\n    div do\n      h3 { \"How much do you like bacon?\" }\n      (1..5).each do |n|\n        component(BaconStar, number: n, lit: n <= state[:stars],\n                             on_pick: ->(picked) { patch(stars: picked) })\n      end\n      p { WORDS[state[:stars]] }\n    end\n  end\nend\n\nFunicular.start(BaconRating, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='docs'><strong>Approfondimenti:</strong> <a href='https://github.com/picoruby/funicular' target='_blank'>Funicular su GitHub</a> · <a href='https://picoruby.org/funicular-on-rails-quick-chat' target='_blank'>Funicular on Rails, il tutorial</a> · <a href='https://slide.rabbit-shocker.org/authors/hasumikin/SendaiRubyKaigi03/' target='_blank'>«A Chat in Five Minutes», le slide (in giapponese)</a></div><div class='task'><strong>Esercizio:</strong> il semaforo qui sotto è disegnato, ma il suo pulsante non fa ancora niente. Scrivi il metodo <code>next_light(event)</code>: con <code>patch</code> fa passare il semaforo dal rosso (red) al verde (green), poi al giallo (yellow), poi di nuovo al rosso. Poi dai al pulsante <code>onclick: :next_light</code>. Esegui la cella e fai scorrere i colori.</div>"
+          },
+          {
+            "t": "x",
+            "code": "class TrafficLight < Funicular::Component\n  COLORS = { \"red\" => \"#e53935\", \"yellow\" => \"#fdd835\", \"green\" => \"#43a047\" }\n\n  def initialize_state\n    { light: \"red\" }\n  end\n\n  # next_light: passa da red a green, poi yellow, poi di nuovo red\n\n  def lamp(color)\n    lit = state[:light] == color\n    div(style: \"width: 46px; height: 46px; margin: 6px; border-radius: 50%; \" \\\n               \"background: #{lit ? COLORS[color] : \"#444\"}\")\n  end\n\n  def render\n    div do\n      div(style: \"display: inline-block; padding: 4px; background: #222; border-radius: 12px\") do\n        lamp(\"red\")\n        lamp(\"yellow\")\n        lamp(\"green\")\n      end\n      p { \"Light: #{state[:light]}\" }\n      button { \"Next\" }\n    end\n  end\nend\n\nFunicular.start(TrafficLight, container: \"app\")",
+            "hints": [
+              "Il colore è già nello stato: all'inizio <code>state[:light]</code> vale <code>\"red\"</code>. Il tuo metodo trova il colore successivo e lo passa a <code>patch(light: …)</code> – al resto pensa <code>render</code>."
+            ],
+            "check": "result.is_a?(ChunkyFunicular::App) && result.component.to_s == \"TrafficLight\" && ->(app) { seen = [app.text[/Light: (\\w+)/, 1]]; 3.times { app.click(\"Next\"); seen << app.text[/Light: (\\w+)/, 1] }; seen == %w[red green yellow red] }.(result.mount)",
+            "hint": "Un Hash può dire che cosa viene dopo: <code>NEXT = { \"red\" => \"green\", \"green\" => \"yellow\", \"yellow\" => \"red\" }</code>, e il metodo è <code>patch(light: NEXT[state[:light]])</code>. Il pulsante: <code>button(onclick: :next_light) { \"Next\" }</code>.",
+            "solution": "class TrafficLight < Funicular::Component\n  COLORS = { \"red\" => \"#e53935\", \"yellow\" => \"#fdd835\", \"green\" => \"#43a047\" }\n  NEXT = { \"red\" => \"green\", \"green\" => \"yellow\", \"yellow\" => \"red\" }\n\n  def initialize_state\n    { light: \"red\" }\n  end\n\n  def next_light(event)\n    patch(light: NEXT[state[:light]])\n  end\n\n  def lamp(color)\n    lit = state[:light] == color\n    div(style: \"width: 46px; height: 46px; margin: 6px; border-radius: 50%; \" \\\n               \"background: #{lit ? COLORS[color] : \"#444\"}\")\n  end\n\n  def render\n    div do\n      div(style: \"display: inline-block; padding: 4px; background: #222; border-radius: 12px\") do\n        lamp(\"red\")\n        lamp(\"yellow\")\n        lamp(\"green\")\n      end\n      p { \"Light: #{state[:light]}\" }\n      button(onclick: :next_light) { \"Next\" }\n    end\n  end\nend\n\nFunicular.start(TrafficLight, container: \"app\")"
+          },
+          {
+            "t": "h",
+            "html": "<h3>Funicular on Rails</h3><p>Qui ogni app viveva da sola nella sua finestra. Nella realtà Funicular è un plugin di Rails, e gli stessi componenti parlano con un server: <code>Funicular::HTTP.get</code> recupera JSON, <code>Funicular::Cable</code> parla ActionCable per gli aggiornamenti in tempo reale, un router associa percorsi come <code>/chat/:channel_id</code> ai componenti, e il browser riceve persino un suo database SQLite, conservato in IndexedDB. Al Sendai RubyKaigi 03, nel novembre 2026, HASUMI Hitoshi ci ha costruito una chat in cinque minuti – senza una riga di JavaScript né uno strumento di build JavaScript.</p><p>E un trucco l'hai già visto all'opera: lo stesso codice dei componenti gira anche su CRuby. Rails rende la prima pagina in HTML sul server, e PicoRuby nel browser la prende in carico (rendering lato server). È così che è stato verificato anche il tuo esercizio: CRuby ha reso il tuo semaforo senza browser e ha cliccato tre volte il suo pulsante.</p><div class='offweb' data-title='Sul tuo computer'><pre><code>rails new chat_demo\ncd chat_demo\nbundle add funicular\nbin/rails funicular:install\nbin/rails generate funicular:chat\nbin/rails db:migrate\nbin/rails funicular:compile\nbin/rails server</code></pre><p>Poi apri <code>http://localhost:3000/funicular_chat</code> in due finestre e chatta con te stesso. I componenti stanno in <code>app/funicular/</code>; <code>funicular:compile</code> ne fa un unico <code>app.mrb</code> che PicoRuby.wasm carica. Senza Rails bastano un tag <code>&lt;script&gt;</code> per PicoRuby.wasm e il tuo componente in <code>&lt;script type=\"text/ruby\"&gt;</code>, come nella lezione {{nr:picoruby}}.</p></div>"
           }
         ]
       }

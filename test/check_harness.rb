@@ -80,6 +80,21 @@ $shown_games = []
 # spinel(code) (lesson 45): without the page, spinel.rb is CRuby's run of the
 # program, which is what the lesson's check reads (result.output)
 require_relative "../html/spinel"
+# funicular(code) (lesson `funicular`): the app runs headless on Funicular's
+# vendored Ruby, which is what the check mounts and clicks (result.mount)
+require_relative "../html/funicular_cells"
+ChunkyFunicular.fetch_text = lambda do |path|
+  file = File.expand_path("../html/#{path}", __dir__)
+  File.exist?(file) ? File.read(file) : nil
+end
+# what main.rb runs for a cell: a lesson with "spinel": true or
+# "funicular": true wraps the cell's code as its program
+def cell_source(lesson, code)
+  return ChunkySpinel.cell_source(code) if lesson["spinel"]
+  return ChunkyFunicular.cell_source(code) if lesson["funicular"]
+
+  code
+end
 # require "ruby2d" finds the browser's stand-in (html/ruby2d.rb over the
 # gem's own Ruby, assets/ruby2d/), mixed into the top level as in main.rb;
 # a shown window goes to $shown_games, and a check plays a replayed copy
@@ -2471,6 +2486,157 @@ puts strong_quakes(quakes, 5))]
                             save: "getPreferences(0).edit.putInt('count', @count).apply")]
   },
   # PicoRuby has no tally: by hand, with || and with Hash.new(0)
+  # lesson `funicular`: funicular(code, binding) runs the app headless (html/funicular_cells.rb)
+  "funicular" => {
+    "de" => [
+      <<~'SOL'.chomp,
+        class Ampel < Funicular::Component
+          FARBEN = { "rot" => "#e53935", "gelb" => "#fdd835", "grün" => "#43a047" }
+          NAECHSTE = { "rot" => "grün", "grün" => "gelb", "gelb" => "rot" }
+
+          def initialize_state
+            { licht: "rot" }
+          end
+
+          def weiter(event)
+            patch(licht: NAECHSTE[state[:licht]])
+          end
+
+          def lampe(farbe)
+            an = state[:licht] == farbe
+            div(style: "width: 46px; height: 46px; margin: 6px; border-radius: 50%; " \
+                       "background: #{an ? FARBEN[farbe] : "#444"}")
+          end
+
+          def render
+            div do
+              div(style: "display: inline-block; padding: 4px; background: #222; border-radius: 12px") do
+                lampe("rot")
+                lampe("gelb")
+                lampe("grün")
+              end
+              p { "Ampel: #{state[:licht]}" }
+              button(onclick: :weiter) { "Weiter" }
+            end
+          end
+        end
+
+        Funicular.start(Ampel, container: "app")
+      SOL
+      <<~'SOL'.chomp,
+        class Ampel < Funicular::Component
+          FARBEN = { "rot" => "#e53935", "gelb" => "#fdd835", "grün" => "#43a047" }
+
+          def initialize_state
+            { licht: "rot" }
+          end
+
+          def weiter(event)
+            licht = case state[:licht]
+                    when "rot" then "grün"
+                    when "grün" then "gelb"
+                    else "rot"
+                    end
+            patch(licht: licht)
+          end
+
+          def lampe(farbe)
+            an = state[:licht] == farbe
+            div(style: "width: 46px; height: 46px; margin: 6px; border-radius: 50%; " \
+                       "background: #{an ? FARBEN[farbe] : "#444"}")
+          end
+
+          def render
+            div do
+              div(style: "display: inline-block; padding: 4px; background: #222; border-radius: 12px") do
+                lampe("rot")
+                lampe("gelb")
+                lampe("grün")
+              end
+              p { "Ampel: #{state[:licht]}" }
+              button(onclick: :weiter) { "Weiter" }
+            end
+          end
+        end
+
+        Funicular.start(Ampel, container: "app")
+      SOL
+    ],
+    "en" => [
+      <<~'SOL'.chomp,
+        class TrafficLight < Funicular::Component
+          COLORS = { "red" => "#e53935", "yellow" => "#fdd835", "green" => "#43a047" }
+          NEXT = { "red" => "green", "green" => "yellow", "yellow" => "red" }
+
+          def initialize_state
+            { light: "red" }
+          end
+
+          def next_light(event)
+            patch(light: NEXT[state[:light]])
+          end
+
+          def lamp(color)
+            lit = state[:light] == color
+            div(style: "width: 46px; height: 46px; margin: 6px; border-radius: 50%; " \
+                       "background: #{lit ? COLORS[color] : "#444"}")
+          end
+
+          def render
+            div do
+              div(style: "display: inline-block; padding: 4px; background: #222; border-radius: 12px") do
+                lamp("red")
+                lamp("yellow")
+                lamp("green")
+              end
+              p { "Light: #{state[:light]}" }
+              button(onclick: :next_light) { "Next" }
+            end
+          end
+        end
+
+        Funicular.start(TrafficLight, container: "app")
+      SOL
+      <<~'SOL'.chomp,
+        class TrafficLight < Funicular::Component
+          COLORS = { "red" => "#e53935", "yellow" => "#fdd835", "green" => "#43a047" }
+
+          def initialize_state
+            { light: "red" }
+          end
+
+          def next_light(event)
+            light = case state[:light]
+                    when "red" then "green"
+                    when "green" then "yellow"
+                    else "red"
+                    end
+            patch(light: light)
+          end
+
+          def lamp(color)
+            lit = state[:light] == color
+            div(style: "width: 46px; height: 46px; margin: 6px; border-radius: 50%; " \
+                       "background: #{lit ? COLORS[color] : "#444"}")
+          end
+
+          def render
+            div do
+              div(style: "display: inline-block; padding: 4px; background: #222; border-radius: 12px") do
+                lamp("red")
+                lamp("yellow")
+                lamp("green")
+              end
+              p { "Light: #{state[:light]}" }
+              button(onclick: :next_light) { "Next" }
+            end
+          end
+        end
+
+        Funicular.start(TrafficLight, container: "app")
+      SOL
+    ],
+  },
   "picoruby" => {
     "de" => [%(def woerter_zaehlen(woerter)
   anzahl = {}
@@ -3372,7 +3538,7 @@ def run_harness(langs)
       load_lesson_files(lesson)
       above = EarlierCells.before(last, cells, {}) { |i| cells[i]["code"] }.map(&:last)
       (above + [cells[last]["code"]]).each do |code|
-        _, _, err = run_in(bind, lesson["spinel"] ? ChunkySpinel.cell_source(code) : code)
+        _, _, err = run_in(bind, cell_source(lesson, code))
         next unless err
 
         puts "FAIL #{lesson["id"]}/#{lang}: cell #{last}, run first on a fresh page, raised #{err.class}: #{err.message}"
@@ -3412,7 +3578,7 @@ def run_harness(langs)
       # test/jruby_test.mjs runs them; its CRuby side reads the USGS data
       demos = [] if lesson["engine"] == "jruby"
       demos.each do |demo|
-        _, _, err = run_in(bind, lesson["spinel"] ? ChunkySpinel.cell_source(demo["code"]) : demo["code"])
+        _, _, err = run_in(bind, cell_source(lesson, demo["code"]))
         # a cell that shows an error on purpose names it ("raises"), and
         # must raise exactly that one
         expected = demo["raises"]
@@ -3446,8 +3612,8 @@ def run_harness(langs)
       load_lesson_files(lesson)
       JRubyCells.load_data if lesson["engine"] == "jruby"
       watch = FileWatch.snapshot
-      # a lesson with "spinel": true runs each cell's code as a program for Spinel (main.rb)
-      result, output, error = run_in(bind, lesson["spinel"] ? ChunkySpinel.cell_source(candidate) : candidate)
+      # a lesson with "spinel" or "funicular": true runs each cell's code as a program (main.rb)
+      result, output, error = run_in(bind, cell_source(lesson, candidate))
       downloads = FileWatch.changes_since(watch).map(&:first) | $explicit_downloads
       if error && label != "starter"
         puts "FAIL #{lesson["id"]}/#{lang} (#{label}): raised #{error.class}: #{error.message}"

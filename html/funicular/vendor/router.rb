@@ -1,0 +1,311 @@
+module Funicular
+  class Router
+    attr_reader :routes, :current_component, :current_path, :url_helpers, :route_helpers
+
+    def initialize(container)
+      @container = container
+      @routes = []
+      @default_route = nil
+      @current_component = nil
+      @current_path = nil
+      @popstate_callback_id = nil
+      @beforeunload_callback_id = nil
+      @url_helpers = Module.new
+      @route_helpers = Object.new
+      @route_helpers.extend(@url_helpers)
+      @runtime = Funicular::Runtime.new(self)
+    end
+
+    # Rails-style DSL methods
+    def get(path, to:, as: nil, constraints: nil)
+      add_route_with_method(:get, path, to, as, constraints)
+    end
+
+    def post(path, to:, as: nil, constraints: nil)
+      add_route_with_method(:post, path, to, as, constraints)
+    end
+
+    def put(path, to:, as: nil, constraints: nil)
+      add_route_with_method(:put, path, to, as, constraints)
+    end
+
+    def patch(path, to:, as: nil, constraints: nil)
+      add_route_with_method(:patch, path, to, as, constraints)
+    end
+
+    def delete(path, to:, as: nil, constraints: nil)
+      add_route_with_method(:delete, path, to, as, constraints)
+    end
+
+    # Add a route (backward compatibility)
+    def add_route(path, component_class, as: nil, constraints: nil)
+      add_route_with_method(:get, path, component_class, as, constraints)
+    end
+
+    # Set default route (used when path is empty)
+    def set_default(path)
+      @default_route = path
+    end
+
+    # Resolve a path to [component_class, params] without any DOM/JS work.
+    # Public entry point used by server-side rendering.
+    def match(path)
+      find_route(path)
+    end
+
+    # Start listening to popstate
+    #
+    # When hydrate is true and the container already holds server-rendered
+    # markup, the initial route hydrates that DOM instead of mounting fresh.
+    def start(hydrate: false)
+      # No browser history on the server.
+      return if Funicular.server?
+
+      @hydrate_initial = hydrate
+
+      # Clean up existing listeners if any (prevents duplicate registration)
+      if @popstate_callback_id
+        JS::Object.removeEventListener(@popstate_callback_id)
+        @popstate_callback_id = nil
+      end
+      if @beforeunload_callback_id
+        JS::Object.removeEventListener(@beforeunload_callback_id)
+        @beforeunload_callback_id = nil
+      end
+
+      # Set up popstate listener. The history entry has already moved by
+      # the time popstate fires; when the current component's navigation
+      # guard vetoes leaving, push the guarded path back (the one thing
+      # popstate cannot cancel).
+      @popstate_callback_id = JS.global.addEventListener('popstate') do |event|
+        if leave_allowed?
+          handle_route_change
+        elsif (guarded_path = @current_path)
+          # Local binding: the type checker does not narrow ivars
+          # through elsif.
+          JS.global.history.pushState(JS::Bridge.to_js({}), '', guarded_path)
+        end
+      end
+
+      # Reload / tab close: ask through the browser's native dialog when
+      # a guard is active. sync: the decision must be made on the JS
+      # event dispatch stack, so the guard must not suspend.
+      @beforeunload_callback_id = JS.global.addEventListener('beforeunload', sync: true) do |event|
+        if @current_component&.navigation_guard
+          event.preventDefault
+          event[:returnValue] = ''
+        end
+      end
+
+      # Handle initial route. Skip the default-route redirect when hydrating
+      # server content: the server already rendered for the current path.
+      hydrating_now = @hydrate_initial && Funicular.first_element_child(@container)
+      if !hydrating_now && current_location_path == '/' && @default_route
+        # Use replaceState to not add a new entry to the history
+        JS.global.history.replaceState(JS::Bridge.to_js({}), '', @default_route)
+      end
+      handle_route_change
+    end
+
+    # Stop listening to popstate
+    def stop
+      if @popstate_callback_id
+        JS::Object.removeEventListener(@popstate_callback_id)
+        @popstate_callback_id = nil
+      end
+
+      if @beforeunload_callback_id
+        JS::Object.removeEventListener(@beforeunload_callback_id)
+        @beforeunload_callback_id = nil
+      end
+
+      unmount_current_component
+    end
+
+    # Navigate to a path programmatically using History API. A vetoing
+    # navigation guard on the current component cancels the navigation
+    # before any history change.
+    def navigate(path)
+      return unless leave_allowed?
+      JS.global.history.pushState(JS::Bridge.to_js({}), '', path)
+      # Manually trigger route change because pushState doesn't fire popstate
+      handle_route_change
+    end
+
+    # Ask the current component's navigation guard whether leaving is
+    # allowed; a String from the guard prompts the user via
+    # Funicular.confirm. True when no component or no guard.
+    def leave_allowed?
+      message = @current_component&.navigation_guard
+      return true unless message
+      Funicular.confirm(message)
+    end
+
+    # Get current path from location
+    def current_location_path
+      js_path_obj = JS.global.location.pathname
+      path = js_path_obj.to_s
+      path.empty? ? '/' : path
+    end
+
+    private
+
+    # Handle route change
+    def handle_route_change
+      path = current_location_path
+
+      # Hydration only applies to the very first navigation. Consume the flag
+      # here so an unmatched initial route does not leave it set for later.
+      hydrate_now = @hydrate_initial
+      @hydrate_initial = false
+
+      # Find matching route
+      component_class, params = find_route(path)
+
+      unless component_class
+        # Maybe render a 404 component?
+        return
+      end
+
+      # Don't remount if already on this path
+      return if @current_path == path
+
+      # Unmount current component
+      unmount_current_component
+
+      # Mount new component
+      @current_path = path
+      @current_component = component_class.new(params)
+      @current_component.runtime = @runtime
+      # @type ivar @current_component: Funicular::Component
+
+      server_root = hydrate_now ? Funicular.first_element_child(@container) : nil
+
+      if server_root
+        begin
+          @current_component.seed_state(Funicular.window_state)
+          @current_component.hydrate(server_root)
+          return
+        rescue => e
+          # Server/client disagreed: discard server DOM and render fresh.
+          puts "[Funicular] Hydration failed, falling back to full render: #{e.message}"
+          @container[:innerHTML] = ''
+          @current_component = component_class.new(params)
+          @current_component.runtime = @runtime
+        end
+      end
+
+      @current_component.mount(@container)
+    end
+
+    # Unmount current component
+    def unmount_current_component
+      @current_component&.unmount
+      @current_component = nil
+      @current_path = nil
+    end
+
+    private
+
+    def add_route_with_method(method, path, component_class, name = '', constraints = nil)
+      pattern_segments = path.split('/').reject { |s| s.empty? }
+      route = {
+        method: method,
+        path: path,
+        component: component_class,
+        name: name,
+        pattern_segments: pattern_segments,
+        constraints: constraints || {}
+      }
+      # @type var route: Funicular::route_definition_t
+      @routes << route
+
+      # Generate URL helper if name is provided
+      generate_url_helper(name, path) if name
+    end
+
+    def generate_url_helper(name, path_pattern)
+      helper_method_name = "#{name}_path".to_sym
+
+      # Check for duplicate helper names
+      if @url_helpers.instance_methods.include?(helper_method_name)
+        raise "URL helper '#{helper_method_name}' is already defined"
+      end
+
+      # Extract parameter names from path pattern (without regex)
+      param_names = extract_param_names(path_pattern)
+
+      # Define the helper method
+      if param_names.empty?
+        # No parameters - return static path
+        @url_helpers.module_eval do
+          define_method(helper_method_name) do
+            path_pattern
+          end
+        end
+      else
+        # With parameters
+        @url_helpers.module_eval do
+          define_method(helper_method_name) do |*args|
+            # Handle model objects with id method
+            if args.length == 1 && args[0].respond_to?(:id) && param_names.length == 1
+              args = [args[0].id]
+            elsif args.length != param_names.length
+              Kernel.raise ArgumentError, "#{helper_method_name} expects #{param_names.length} argument(s), got #{args.length}"
+            end
+
+            result = path_pattern.dup
+            param_names.each_with_index do |param, idx|
+              result = result.sub(":#{param}", args[idx].to_s)
+            end
+            result
+          end
+        end
+      end
+    end
+
+    def extract_param_names(path_pattern)
+      path_pattern.split('/').select { |s|
+        s.start_with?(':')
+      }.map {
+        |s| s[1..-1]&.to_sym
+      }.compact
+    end
+
+    def find_route(path)
+      path_segments = path.split('/').reject { |s| s.empty? }
+      params = {} #: Hash[Symbol, untyped]
+
+      @routes.each do |route|
+        pattern_segments = route[:pattern_segments]
+        next if pattern_segments.length != path_segments.length
+
+        match = true
+
+        pattern_segments.each_with_index do |pattern_segment, index|
+          path_segment = path_segments[index]
+
+          if pattern_segment.start_with?(':')
+            param_name = pattern_segment[1..-1]&.to_sym
+            if param_name.nil?
+              raise "Invalid parameter name in route pattern: #{route[:path]}"
+            end
+            constraint = route[:constraints][param_name]
+            if constraint && !constraint.match?(path_segment)
+              match = false
+              break
+            end
+            params[param_name] = path_segment
+          elsif pattern_segment != path_segment
+            match = false
+            break
+          end
+        end
+
+        return [route[:component], params] if match
+      end
+
+      [nil, params] # No route found
+    end
+  end
+end

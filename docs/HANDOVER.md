@@ -325,6 +325,7 @@ parses, changes and rewrites it; prose edits can be done by hand.
   "engine": "picoruby", // optional: cells and IRBs run on PicoRuby.wasm, not CRuby (§6m)
                         // or "ironruby": cells run on IronRuby (.NET in wasm) (§6s)
   "pico": { "board": "pico2w" }, // optional: a Pico lesson - cells with "board" get the bench (§6r)
+  "funicular": true, // optional: every cell is a Funicular app - CRuby headless, then PicoRuby below the cell (§6w)
   "de": { "title": "HTML parsen", "cells": [ ... ] },   // no number: it is the lesson's place (§3)
   "en": { "title": "Parsing HTML", "cells": [ ... ] },
   "ja": { "title": "HTMLのパース", "cells": [ ... ] } }
@@ -3265,6 +3266,56 @@ cell: plain Ruby ("spinel": true)       (main.rb wraps it: spinel(code) -> spine
   (about half of a compile is parsing it, by a rough measurement); caching
   the module of an unchanged program; `gets` through a prompt.
 
+## 6w. Funicular: web apps on PicoRuby (lesson `funicular`)
+
+[Funicular](https://github.com/picoruby/funicular) (HASUMI Hitoshi) is an
+SPA framework for PicoRuby.wasm: components with `initialize_state`,
+`render` in a bareword tag DSL (`div`, `p`, `button` ...), `patch` to
+change state, a virtual DOM that a Differ compares and a Patcher applies.
+The course's PicoRuby.wasm (4.0.3, §6m) already has it compiled in, so the
+lesson needs no new download. Each cell is a whole app that ends in
+`Funicular.start(Klass, container: "app")`; `"funicular": true` makes
+main.rb run it as `funicular(code, binding)` (`ChunkyFunicular.cell_source`,
+`funicular_lesson?`), in two places:
+
+- **CRuby, headless** (`html/funicular_cells.rb`): on the first run the
+  kernel fetches Funicular's own Ruby, `html/funicular/vendor/*.rb`
+  (~400 KB; `tools/vendor_funicular.rb`: unchanged copies of the mrblib at
+  the commit PicoRuby 4.0.3 pins as its submodule, 86bb29b), and loads it
+  the way Funicular's SSR does (`Funicular.server = true`: no DOM). The
+  cell's code runs in the lesson's binding with the cell's file name, so a
+  SyntaxError or NameError is explained with its line like anywhere else;
+  `Funicular.start` is recorded (a prepended `StartHook`) and the component
+  rendered once, so an error in `render` shows up before any preview. The
+  answer is a `ChunkyFunicular::App`; `result.mount` is a `Headless`
+  component - `text`, `html`, `state`, `click("Next")`, `type("input",
+  "x")`, `submit`, `key`, `elements` - whose `patch` re-renders the tree
+  (child components expanded and kept by position). That is what a check
+  uses. A run first removes the components the code defines
+  (`forget_components`), so a deleted method does not live on in CRuby.
+  `JS::Object` is stubbed only where it is missing (plain CRuby in tests).
+- **The page** (`html/funicular_frame.js`, `mount_funicular`): an iframe
+  (srcdoc, same origin) with a fresh PicoRuby (`assets/picoruby/init.iife.js`,
+  cached) and the cell's code as its `text/picoruby` script - a second
+  instance in its own window, so its globals never meet the shell's. A
+  MutationObserver on `#app` turns every patch into an entry of the log
+  below the app ("Update 2: text ×2 – 7 nodes left alone": texts counted by
+  element, attributes only when their value changed, elements added and
+  removed) and red frames on an overlay layer (never classes on the app's
+  elements: the patcher owns those). `puts` and PicoRuby's errors are shown
+  under the log (the iframe's console, forwarded). ↻ restarts the app;
+  the checkbox turns the frames off. Strings: `ui.funicular*`.
+
+Not in the workshop, the embedded cell (it says `funicularMissing`) or ⏯;
+the cells above do not run first (each app stands alone). Live runs are
+on: a pause in typing starts the preview anew. Trap: the iframe shares the
+page's thread, so an endless loop in a click handler would freeze the page
+(one in `render` or `initialize_state` is caught by CRuby's time limit
+first). Tests: `ruby test/funicular_test.rb` (the headless side),
+`test/check_harness.rb` (the exercise, five languages), and
+`node test/funicular_test.mjs` (every demo in a browser, the log's counts,
+keyed vs. unkeyed delete, errors, the exercise in de and en).
+
 ## 6o. SciRuby: Daru, statistics, Rubyvis, networkx.rb (lessons `daru` to `networkx`)
 
 Three side trips with gems of [SciRuby](https://github.com/SciRuby), right
@@ -3544,6 +3595,9 @@ ruby spinel_build_test.rb                # the plain Ruby of the compiler worker
 # with the dev server started as FRAME_ANCESTORS="http://blog.test:*" ruby tools/dev_server.rb:
 BASE=http://127.0.0.1:8011/ node embed_test.mjs     # the embedded cell (§6k), ~1 min
 BASE=http://127.0.0.1:8011/ node picoruby_test.mjs  # the PicoRuby lesson (§6m), ~30 s
+BASE=http://127.0.0.1:8011/ node funicular_test.mjs # the Funicular lesson's previews (§6w), ~1 min
+ruby funicular_test.rb                   # funicular_cells.rb: headless mount, clicks, typing (§6w)
+ruby ../tools/vendor_funicular.rb --check           # html/funicular/vendor/ is the pinned Funicular mrblib
 BASE=http://127.0.0.1:8011/ node jruby_test.mjs     # the JRuby lesson (§6t), ~2 min with the CheerpJ bonus
 BASE=http://127.0.0.1:8011/ node ruboto_test.mjs    # the Ruboto lesson's phone (§6u), ~2 min
 node ruboto_sim_test.mjs                            # the simulated Android's lifecycle rules, ~1 min

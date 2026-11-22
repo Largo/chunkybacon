@@ -222,6 +222,14 @@ require_relative "game"
 # page (the shell's shell/spinel.rb and its workers, html/spinel/); the CRuby
 # run of the program beside it is here (lesson 45)
 require_relative "spinel"
+# funicular(code): a Funicular app (lesson `funicular`) runs headless here on
+# Funicular's own Ruby, fetched when the lesson first runs a cell
+# (html/funicular/vendor/), and for real below the cell (funicular_frame.js)
+require_relative "funicular_cells"
+ChunkyFunicular.fetch_text = lambda do |path|
+  text = JSG.w.fetchTextSync(path).to_s
+  text.start_with?("ERROR ") ? nil : text
+end
 # A lesson with "engine": "picoruby" runs on PicoRuby.wasm in a Web Worker
 # (picoruby_lab.js); this turns its answers into values, errors and CRuby's
 # syntax messages. ~3 KB at boot.
@@ -958,6 +966,34 @@ class ChunkyApp
     @run_spinels << :irb if @run_spinels
   end
 
+  # ---------- Funicular (funicular_cells.rb here, funicular_frame.js on the page) ----------
+
+  def add_funicular(app)
+    @run_funiculars << app if @run_funiculars && app.started?
+  end
+
+  FUNICULAR_LABELS = {
+    "title" => "funicularTitle", "flash" => "funicularFlash", "restart" => "funicularRestart",
+    "frameTitle" => "funicularFrame", "loading" => "funicularLoading", "failed" => "funicularFailed",
+    "slow" => "funicularSlow", "mounted" => "funicularMounted", "update" => "funicularUpdate",
+    "text" => "funicularText", "attrs" => "funicularAttrs", "added" => "funicularAdded",
+    "removed" => "funicularRemoved", "kept" => "funicularKept", "logTitle" => "funicularLog"
+  }.freeze
+
+  # The page runs the app on a PicoRuby of its own (funicular_frame.js);
+  # nothing comes back to Ruby. A page without it (the embedded cell) says so.
+  def mount_funicular(out_el, app)
+    node = $d.createElement("div")
+    out_el.appendChild(node)
+    if $window[:chunkyFunicular].typeof != "function"
+      node.className = "cell-error"
+      node.textContent = ui["funicularMissing"].to_s
+      return
+    end
+    labels = FUNICULAR_LABELS.transform_values { |key| ui[key].to_s }
+    $window.chunkyFunicular(node, app.source, JSON.generate({ labels: labels }))
+  end
+
   # The page compiles and runs it: the shell (shell/spinel.rb) draws the
   # widget into the element named here, its workers compile; nothing comes
   # back to Ruby. Plain strings only - the shell is PicoRuby.
@@ -1453,6 +1489,10 @@ class ChunkyApp
   # a lesson with "spinel": true (lesson 45): every cell's code is a program
   # for Spinel (spinel.rb's cell_source), no heredoc to write
   def spinel_lesson? = !workshop? && current_lesson && current_lesson["spinel"] == true
+
+  # a lesson with "funicular": true: every cell's code is a Funicular app
+  # (funicular_cells.rb's cell_source), run headless, then shown below it
+  def funicular_lesson? = !workshop? && current_lesson && current_lesson["funicular"] == true
 
   def start_picoruby_run(idx, code, auto)
     $window.clearCellMarks(idx)
@@ -2060,7 +2100,7 @@ class ChunkyApp
   # quietly: the helpers (show_image, show_browser, show_shoes, ...) collect
   # nothing then.
   RUN_LISTS = %i[@run_images @run_image_alts @run_pdfs @run_audios @run_browsers @run_irbs @run_files
-                 @run_three @run_shoes @run_letters @run_sketches @run_games @run_spinels @run_downloads].freeze
+                 @run_three @run_shoes @run_letters @run_sketches @run_games @run_spinels @run_funiculars @run_downloads].freeze
 
   # The cells above +idx+ that have not run in this binding yet, with the
   # code their editors show (earlier_cells.rb). Not in the workshop (one
@@ -2071,7 +2111,7 @@ class ChunkyApp
     # (the JRuby lesson: its CRuby cells, "on": "cruby", stand alone - the
     # cells above them ran on JRuby; the IronRuby lesson: its cells run in the
     # worker, which runs the cells above there - start_ironruby_run)
-    return [] if workshop? || picoruby? || spinel_lesson? || jruby? || ironruby?
+    return [] if workshop? || picoruby? || spinel_lesson? || funicular_lesson? || jruby? || ironruby?
 
     EarlierCells.before(idx, cells, @ran) { |i| $window.getCellCode(i).to_s }
   end
@@ -2219,6 +2259,7 @@ class ChunkyApp
     @run_sketches = []
     @run_games = []
     @run_spinels = []
+    @run_funiculars = []
     dispose_games(idx)
     @last_shoes_types = []
     dispose_shoes(idx)
@@ -2229,7 +2270,10 @@ class ChunkyApp
     Processing.reset__ if processing?
     Ruby2D.reset__ if ruby2d?   # each run a program of its own: a new window
     watch = FileWatch.snapshot
-    source = spinel_lesson? ? ChunkySpinel.cell_source(code) : code
+    source = if spinel_lesson? then ChunkySpinel.cell_source(code)
+             elsif funicular_lesson? then ChunkyFunicular.cell_source(code)
+             else code
+             end
 
     error = nil
     result = nil
@@ -2310,7 +2354,7 @@ class ChunkyApp
     widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any? || @run_three.any? ||
                       @run_shoes.any? || @run_downloads.any? || @run_pdfs.any? || @run_letters.any? ||
                       @run_sketches.any? || @run_audios.any? || @run_games.any? ||
-                      @run_spinels.any?
+                      @run_spinels.any? || @run_funiculars.any?
     # an error inside another workshop file keeps Ruby's message and its
     # "(helper.rb:3)": the explanation only sees the open file's code
     friendly = error && !where && friendly_error(error, code, file)
@@ -2338,7 +2382,7 @@ class ChunkyApp
     # a sketch's file ends in a block, mousePressed's true or false - what
     # it shows is the window
     # spinel(...) answers how CRuby ran the program: the widget shows it
-    elsif !((result.nil? || @run_sketches.any? || result.is_a?(ChunkySpinel::Program)) && (!output.empty? || widgets_present))
+    elsif !((result.nil? || @run_sketches.any? || result.is_a?(ChunkySpinel::Program) || result.is_a?(ChunkyFunicular::App)) && (!output.empty? || widgets_present))
       out_html += "<div class=\"cell-result\">=&gt; #{escape_html(inspect_result(result))}</div>"
     end
     @run_images.each do |data_url|
@@ -2392,6 +2436,7 @@ class ChunkyApp
     @run_sketches.each { |sketch| mount_sketch(idx, out_el, sketch) }
     @run_games.each { |game| mount_game(idx, out_el, game) }
     @run_spinels.each { |program| mount_spinel(out_el, program) }
+    @run_funiculars.each { |app| mount_funicular(out_el, app) }
     # the stepper goes on top of the output; the JSON is parsed in JS
     # (bridge.js), PicoRuby would take ages
     show_steps(idx, recorder) if recorder
