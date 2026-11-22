@@ -17,8 +17,87 @@ class ServerTest < Minitest::Test
   def test_the_root_is_the_landing_page
     res = get("/")
     assert_equal 200, res.status
-    assert_includes res.body, 'href="learn#hallo"'
-    refute_includes res.body, "chunky-permalinks"
+    assert_includes res.body, "Let&#39;s Ruby"
+  end
+
+  # a search engine follows the landing page's links to the lessons'
+  # permalinks; pages.js turns them into the reader's language
+  def test_the_landing_page_links_to_permalinks
+    body = get("/").body
+    assert_includes body, '<meta name="chunky-permalinks" content="/">'
+    assert_includes body, 'href="/de/hallo" data-href="learn#hallo"'
+    assert_includes body, 'href="/de" data-href="learn"'
+    refute_match(/[^-]href="learn/, body)
+  end
+
+  def test_the_lesson_comes_as_html_before_the_shell_starts
+    body = get("/en/methoden").body
+    lesson = body[%r{<article id="lessonBody">(.*?)</article>}m, 1]
+    assert_includes lesson, "<h2>"
+    assert_includes lesson, "<pre><code>"
+    assert_includes body, %(<a href="/en/methoden">#{METHODEN}. Methods</a>)
+    assert_includes body, '<nav id="lessonNav"><ol><li><a href="/en/hallo">'
+  end
+
+  def test_a_bare_language_is_canonical_with_alternates_and_no_lesson
+    body = get("/fr").body
+    assert_includes body, '<link rel="canonical" href="http://example.org/fr">'
+    assert_includes body, '<link rel="alternate" hreflang="it" href="http://example.org/it">'
+    assert_includes body, '<article id="lessonBody"></article>'
+    assert_includes body, '<a href="/fr/hallo">'
+  end
+
+  def test_the_workshop_has_the_index_but_no_lesson
+    body = get("/de/werkstatt").body
+    assert_includes body, '<article id="lessonBody"></article>'
+    assert_includes body, '<a href="/de/hallo">'
+  end
+
+  def test_learn_stays_as_it_is
+    body = get("/learn").body
+    assert_includes body, '<nav id="lessonNav"></nav>'
+    refute_includes body, 'rel="canonical"'
+  end
+
+  def test_the_sitemap_names_every_page_with_its_translations
+    ENV["PUBLIC_ORIGIN"] = "https://letsruby.com"
+    res = get("/sitemap.xml")
+    assert_equal 200, res.status
+    assert_equal "application/xml", res.headers["content-type"]
+    body = res.body
+    langs = Course.load(File.expand_path("../html/lessons.js", __dir__)).langs
+    assert_equal 1 + langs.size * (IDS.size + 1), body.scan("<loc>").size
+    assert_includes body, "<loc>https://letsruby.com/</loc>"
+    assert_includes body, "<loc>https://letsruby.com/ja/methoden</loc>"
+    assert_includes body, '<xhtml:link rel="alternate" hreflang="de" href="https://letsruby.com/de/methoden"/>'
+  ensure
+    ENV.delete("PUBLIC_ORIGIN")
+  end
+
+  # welcome.html counts the lessons by hand: the total (the figure and both
+  # descriptions) and each curriculum card's section - from the lesson it
+  # links to up to the next section - must match lessons.js
+  def test_the_landing_page_counts_the_lessons_of_lessons_js
+    html = File.read(File.expand_path("../html/welcome.html", __dir__), encoding: "UTF-8")
+    assert_includes html, "<strong>#{IDS.size}</strong>"
+    assert_includes html, "#{IDS.size} Lektionen von den Grundlagen"
+    assert_includes html, "#{IDS.size} lessons from your first line"
+
+    lessons = Course.load(File.expand_path("../html/lessons.js", __dir__)).instance_variable_get(:@lessons)
+    starts = lessons.each_index.select { |i| lessons[i]["section"] }
+    cards = html.scan(%r{<a class="card [^"]*" href="learn#([^"]+)">\s*<div class="count"><span data-l="de">(\d+) }m)
+    assert_equal 4, cards.size
+    cards.each do |id, count|
+      first = IDS.index(id)
+      assert_includes starts, first, "#{id} starts a section"
+      size = (starts.find { |i| i > first } || IDS.size) - first
+      assert_equal size, count.to_i, "the card for #{id}"
+    end
+  end
+
+  def test_robots_txt_names_the_sitemap
+    body = get("/robots.txt").body
+    assert_includes body, "Sitemap: https://letsruby.com/sitemap.xml"
   end
 
   def test_the_course_page_announces_permalinks

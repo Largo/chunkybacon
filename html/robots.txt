@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /api/
+Disallow: /rubygems/
+Disallow: /proxy/
+
+Sitemap: https://letsruby.com/sitemap.xml

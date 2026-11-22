@@ -67,6 +67,26 @@ class Course
     text.length > limit ? "#{text[0, limit - 1].rstrip}…" : text
   end
 
+  # a lesson's cells in one language (English when a translation is missing)
+  def cells(lang, id) = l10n(id, lang)&.dig("cells") || []
+
+  # /sitemap.xml: the landing page, each language's course and every
+  # lesson in every language, a page naming its translations (hreflang)
+  def sitemap(origin)
+    entry = lambda do |path, alternates = {}|
+      links = alternates.map { |lang, href| %(    <xhtml:link rel="alternate" hreflang="#{lang}" href="#{origin}/#{href}"/>\n) }
+      "  <url>\n    <loc>#{origin}/#{path}</loc>\n#{links.join}  </url>\n"
+    end
+    pages = [nil] + ids
+    urls = [entry.("")] + pages.flat_map do |id|
+      alternates = langs.to_h { |lang| [lang, [lang, id].compact.join("/")] }
+      langs.map { |lang| entry.(alternates[lang], alternates) }
+    end
+    %(<?xml version="1.0" encoding="UTF-8"?>\n) +
+      %(<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n) +
+      urls.join + "</urlset>\n"
+  end
+
   # every lesson with its titles, for /api/lessons
   def index
     @lessons.map do |lesson|

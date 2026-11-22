@@ -12,6 +12,7 @@
 #   /learn, /de, /de/methoden, /de/werkstatt   index.html, told about permalinks
 #                                         (<base>, <meta name="chunky-permalinks">)
 #                                         and titled for the lesson
+#   /sitemap.xml                          every page above, for search engines
 #   /api/lessons                          the lessons and their titles, JSON
 #   /rubygems/..., /proxy/ruby-lang/...   the same bridges as nginx/default.conf
 #   everything else under html/           as it is (.gz copies where they exist)
@@ -51,9 +52,13 @@ class ChunkyServer < Roda
     # the course is /learn, /de, /de/methoden
     r.root do
       response["cache-control"] = "no-cache"
-      File.read(WELCOME, encoding: "UTF-8")
+      welcome
     end
     r.is("learn") { page }
+    r.get "sitemap.xml" do
+      response["content-type"] = "application/xml"
+      course.sitemap(origin)
+    end
 
     r.on "api" do
       r.get("lessons") { course.index }
@@ -93,9 +98,23 @@ class ChunkyServer < Roda
   # where the course lives - "/" unless it is mounted under a path
   def base_path = "#{request.script_name}/"
 
+  # welcome.html with its links into the course as permalinks - /de/hallo,
+  # not learn#hallo, which a search engine takes for /learn - in German, the
+  # page's language until pages.js picks the reader's; it keeps the original
+  # (data-href) and, told about permalinks, links in the reader's language
+  def welcome
+    html = File.read(WELCOME, encoding: "UTF-8")
+    html = html.gsub(/href="learn(?:#([^"]*))?"/) do
+      %(href="#{h base_path}de#{"/#{$1}" if $1}" data-href="#{$&[6..-2]}")
+    end
+    html.sub('<meta charset="utf-8">') { |charset| %(#{charset}\n  <meta name="chunky-permalinks" content="#{h base_path}">) }
+  end
+
   # index.html, told that it has permalinks and, for a lesson, titled and
-  # described for it (search engines and link previews read this; the shell
-  # renders the page itself, as always)
+  # described for it (search engines and link previews read this). The
+  # index and the lesson's text and code come along as plain HTML, so a
+  # search engine reads the lesson without running the course; the shell
+  # draws both again when it starts.
   def page(lang = nil, id = nil)
     course = self.class.course
     base = base_path
@@ -109,15 +128,31 @@ class ChunkyServer < Roda
       html = meta(html, "name", "description", description)
       html = meta(html, "property", "og:title", title)
       html = meta(html, "property", "og:description", description)
-      if id
-        url = ->(language) { "#{origin}#{base}#{language}/#{id}" }
-        added << %(<link rel="canonical" href="#{h url.(lang)}">)
-        added << %(<meta property="og:url" content="#{h url.(lang)}">)
-        course.langs.each { |language| added << %(<link rel="alternate" hreflang="#{language}" href="#{h url.(language)}">) }
+      url = ->(language) { "#{origin}#{base}#{[language, id].compact.join("/")}" }
+      added << %(<link rel="canonical" href="#{h url.(lang)}">)
+      added << %(<meta property="og:url" content="#{h url.(lang)}">)
+      course.langs.each { |language| added << %(<link rel="alternate" hreflang="#{language}" href="#{h url.(language)}">) }
+      html = html.sub('<nav id="lessonNav"></nav>') { %(<nav id="lessonNav">#{nav_html(lang)}</nav>) }
+      if course.lesson?(id)
+        html = html.sub('<article id="lessonBody"></article>') { %(<article id="lessonBody">#{lesson_html(lang, id)}</article>) }
       end
     end
     # <base> before the first relative URL in <head>
     html.sub('<meta charset="UTF-8">') { |charset| ([charset] + added).join("\n    ") }
+  end
+
+  # every lesson, linked, in the course's order
+  def nav_html(lang)
+    course = self.class.course
+    links = course.ids.map { |id| %(<li><a href="#{h base_path}#{lang}/#{id}">#{h course.numbered_title(lang, id)}</a></li>) }
+    "<ol>#{links.join}</ol>"
+  end
+
+  # a lesson's text (lessons.js's own HTML) and its code, as it starts
+  def lesson_html(lang, id)
+    self.class.course.cells(lang, id).map do |cell|
+      cell["t"] == "h" ? cell["html"].to_s : "<pre><code>#{h cell['code']}</code></pre>"
+    end.join
   end
 
   def meta(html, attribute, name, value)
