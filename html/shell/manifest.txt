@@ -10,6 +10,7 @@ view.rb
 router.rb
 workspace.rb
 spinel.rb
+microscope.rb
 cheatsheet.rb
 app.rb
 boot.rb

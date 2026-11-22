@@ -80,6 +80,10 @@ $shown_games = []
 # spinel(code) (lesson 45): without the page, spinel.rb is CRuby's run of the
 # program, which is what the lesson's check reads (result.output)
 require_relative "../html/spinel"
+# the expert lessons' microscope (show_yarv, show_ast, show_lookup ...):
+# pictures go to show_image below, step-through views to $microscope_shown
+require_relative "../html/microscope"
+$microscope_shown = []
 # funicular(code) (lesson `funicular`): the app runs headless on Funicular's
 # vendored Ruby, which is what the check mounts and clicks (result.mount)
 require_relative "../html/funicular_cells"
@@ -2634,6 +2638,299 @@ puts strong_quakes(quakes, 5))]
         end
 
         Funicular.start(TrafficLight, container: "app")
+      SOL
+    ],
+  },
+  # the expert lessons (mikro-*): html/microscope.rb
+  "mikro-parser" => {
+    "de" => [
+      <<~'SOL'.chomp,
+        require "prism"
+
+        class AufrufZaehler < Prism::Visitor
+          attr_reader :aufrufe
+
+          def initialize
+            @aufrufe = 0
+          end
+
+          def visit_call_node(node)
+            @aufrufe += 1
+            super
+          end
+        end
+
+        def aufrufe_zaehlen(code)
+          zaehler = AufrufZaehler.new
+          Prism.parse(code).value.accept(zaehler)
+          zaehler.aufrufe
+        end
+
+        aufrufe_zaehlen("puts [1, 2].map { |x| x * 2 }.sum")
+      SOL
+    ],
+    "en" => [
+      <<~'SOL'.chomp,
+        require "prism"
+
+        class CallCounter < Prism::Visitor
+          attr_reader :calls
+
+          def initialize
+            @calls = 0
+          end
+
+          def visit_call_node(node)
+            @calls += 1
+            super
+          end
+        end
+
+        def count_calls(code)
+          counter = CallCounter.new
+          Prism.parse(code).value.accept(counter)
+          counter.calls
+        end
+
+        count_calls("puts [1, 2].map { |x| x * 2 }.sum")
+      SOL
+    ],
+  },
+  "mikro-yarv" => {
+    "de" => [
+      <<~'SOL'.chomp,
+        def instruktionen(code)
+          rumpf = RubyVM::InstructionSequence.compile(code).to_a.last
+          rumpf.select { |teil| teil.is_a?(Array) }.map(&:first)
+        end
+
+        instruktionen("a = 1 + 2")
+      SOL
+      <<~'SOL'.chomp,
+        def instruktionen(code)
+          rumpf = RubyVM::InstructionSequence.compile(code).to_a.last
+          rumpf.grep(Array).map(&:first)
+        end
+
+        instruktionen("a = 1 + 2")
+      SOL
+    ],
+    "en" => [
+      <<~'SOL'.chomp,
+        def insn_names(code)
+          body = RubyVM::InstructionSequence.compile(code).to_a.last
+          body.select { |item| item.is_a?(Array) }.map(&:first)
+        end
+
+        insn_names("a = 1 + 2")
+      SOL
+      <<~'SOL'.chomp,
+        def insn_names(code)
+          body = RubyVM::InstructionSequence.compile(code).to_a.last
+          body.grep(Array).map(&:first)
+        end
+
+        insn_names("a = 1 + 2")
+      SOL
+    ],
+  },
+  "mikro-stack" => {
+    "de" => [
+      <<~'SOL'.chomp,
+        def ausfuehren(programm)
+          stack = []
+          programm.each do |name, operand|
+            case name
+            when :putobject then stack.push(operand)
+            when :opt_plus
+              b = stack.pop
+              a = stack.pop
+              stack.push(a + b)
+            when :opt_mult
+              b = stack.pop
+              a = stack.pop
+              stack.push(a * b)
+            when :leave then return stack.pop
+            end
+          end
+        end
+
+        ausfuehren([[:putobject, 2], [:putobject, 3], [:opt_mult], [:putobject, 4], [:opt_plus], [:leave]])
+      SOL
+    ],
+    "en" => [
+      <<~'SOL'.chomp,
+        def run(program)
+          stack = []
+          program.each do |name, operand|
+            case name
+            when :putobject then stack.push(operand)
+            when :opt_plus
+              b = stack.pop
+              a = stack.pop
+              stack.push(a + b)
+            when :opt_mult
+              b = stack.pop
+              a = stack.pop
+              stack.push(a * b)
+            when :leave then return stack.pop
+            end
+          end
+        end
+
+        run([[:putobject, 2], [:putobject, 3], [:opt_mult], [:putobject, 4], [:opt_plus], [:leave]])
+      SOL
+    ],
+  },
+  "mikro-closures" => {
+    "de" => [
+      <<~'SOL'.chomp,
+        def geheimnis_von(pr)
+          pr.binding.local_variable_get(:geheimnis)
+        end
+
+        verschlossen = ->(geheimnis) { -> { raise "nicht aufrufen!" } }.("Speck")
+        geheimnis_von(verschlossen)
+      SOL
+    ],
+    "en" => [
+      <<~'SOL'.chomp,
+        def secret_of(pr)
+          pr.binding.local_variable_get(:secret)
+        end
+
+        locked = ->(secret) { -> { raise "don't call me!" } }.("bacon")
+        secret_of(locked)
+      SOL
+    ],
+  },
+  "mikro-values" => {
+    "de" => [
+      <<~'SOL'.chomp,
+        require "json"
+        require "objspace"
+
+        def eingebettet?(string)
+          JSON.parse(ObjectSpace.dump(string))["embedded"] == true
+        end
+
+        def laengster_eingebetteter
+          n = 0
+          n += 1 while eingebettet?("a" * (n + 1))
+          n
+        end
+
+        laengster_eingebetteter
+      SOL
+    ],
+    "en" => [
+      <<~'SOL'.chomp,
+        require "json"
+        require "objspace"
+
+        def embedded?(string)
+          JSON.parse(ObjectSpace.dump(string))["embedded"] == true
+        end
+
+        def longest_embedded
+          n = 0
+          n += 1 while embedded?("a" * (n + 1))
+          n
+        end
+
+        longest_embedded
+      SOL
+    ],
+  },
+  "mikro-lookup" => {
+    "de" => [
+      <<~'SOL'.chomp,
+        def besitzer_finden(obj, name)
+          obj.singleton_class.ancestors.each do |mod|
+            return mod if mod.method_defined?(name, false) || mod.private_method_defined?(name, false)
+          end
+          nil
+        end
+
+        besitzer_finden(jung, :gruss)
+      SOL
+      <<~'SOL'.chomp,
+        def besitzer_finden(obj, name)
+          obj.singleton_class.ancestors.find do |mod|
+            mod.method_defined?(name, false) || mod.private_method_defined?(name, false)
+          end
+        end
+
+        besitzer_finden(jung, :gruss)
+      SOL
+    ],
+    "en" => [
+      <<~'SOL'.chomp,
+        def find_owner(obj, name)
+          obj.singleton_class.ancestors.each do |mod|
+            return mod if mod.method_defined?(name, false) || mod.private_method_defined?(name, false)
+          end
+          nil
+        end
+
+        find_owner(kit, :greet)
+      SOL
+      <<~'SOL'.chomp,
+        def find_owner(obj, name)
+          obj.singleton_class.ancestors.find do |mod|
+            mod.method_defined?(name, false) || mod.private_method_defined?(name, false)
+          end
+        end
+
+        find_owner(kit, :greet)
+      SOL
+    ],
+  },
+  "mikro-gc" => {
+    "de" => [
+      <<~'SOL'.chomp,
+        require "objspace"
+
+        def erreichbar?(wurzel, ziel)
+          markiert = []
+          grau = [wurzel]
+          until grau.empty?
+            obj = grau.shift
+            return true if obj.equal?(ziel)
+            next if obj.is_a?(Module) || markiert.any? { |m| m.equal?(obj) }
+
+            markiert << obj
+            grau.concat(Array(ObjectSpace.reachable_objects_from(obj)))
+          end
+          false
+        end
+
+        kiste = ["Chunky", ["Speck"]]
+        kiste << kiste
+        erreichbar?(kiste, kiste[1][0])
+      SOL
+    ],
+    "en" => [
+      <<~'SOL'.chomp,
+        require "objspace"
+
+        def reachable?(root, target)
+          marked = []
+          grey = [root]
+          until grey.empty?
+            obj = grey.shift
+            return true if obj.equal?(target)
+            next if obj.is_a?(Module) || marked.any? { |m| m.equal?(obj) }
+
+            marked << obj
+            grey.concat(Array(ObjectSpace.reachable_objects_from(obj)))
+          end
+          false
+        end
+
+        box = ["Chunky", ["bacon"]]
+        box << box
+        reachable?(box, box[1][0])
       SOL
     ],
   },

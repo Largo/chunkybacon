@@ -59,6 +59,8 @@ module ChunkyShell
       @workspace = Workspace.new(self).start
       # the Spinel lesson's widgets and its compiler (shell/spinel.rb, html/spinel/)
       @spinel = SpinelUI.new(self).start
+      # the expert lessons' step-through views (shell/microscope.rb)
+      @microscope = MicroscopeUI.new(self).start
       # the cheat sheet beside the lesson (lessons.js "cheatsheet")
       @cheatsheet = Cheatsheet.new(self).start
       # the page before the editors: CodeMirror measures its container when

@@ -3316,6 +3316,64 @@ first). Tests: `ruby test/funicular_test.rb` (the headless side),
 `node test/funicular_test.mjs` (every demo in a browser, the log's counts,
 keyed vs. unkeyed delete, errors, the exercise in de and en).
 
+## 6x. Expert: Ruby under the microscope (lessons `mikro-parser` to `mikro-gc`)
+
+Seven lessons at the end of the course (their own sidebar section) on how
+CRuby works inside: Prism's tokens and tree, YARV instructions, the VM
+stack and its frames, blocks/closures and the ep chain, VALUE words and
+heap slots, method lookup, mark and sweep. The idea and the phrase come
+from the book *Ruby Under a Microscope* by Pat Shaughnessy (No Starch
+Press, 2013); the first and last lesson link it and say plainly that the
+book is his and the lessons are not by him nor connected to it.
+
+**Every fact is from this Ruby.** The page's CRuby is 4.0.0 for wasm32
+(`RUBY_DESCRIPTION`), and wasm32 differs from the 64-bit laptop most texts
+assume: no flonum (`USE_FLONUM` 0: `nil` is 0x02, `true` 0x06, every Float
+is a heap object), Fixnums up to 2**30 - 1, slot sizes 24/48/96/192/384,
+`RHASH_AR_TABLE_MAX_SIZE` = `SIZEOF_VALUE` = 4 (a Hash switches to an
+st_table at 5 entries, not 9), the longest embedded String 367 bytes. Each
+was run on the page's own `ruby+stdlib.wasm` (in Node through
+`@ruby/wasm-wasi`'s `RubyVM.instantiateModule`) and read in the source at
+tag v4.0.0; the lessons' "🔬 In the source" boxes (`.msc-source`) link
+those lines. A check that depends on the platform computes its expected
+value instead of hard-coding it (`mikro-values`), so the harness passes on
+a 64-bit CRuby too. After a ruby.wasm update: run `node
+test/microscope_test.mjs` and re-read the numbers in the prose.
+
+- `html/microscope.rb` (kernel, CRuby, at boot): `show_tokens`, `show_ast`
+  (Prism → SVG), `show_value` (the VALUE word bit by bit), `show_slots`,
+  `show_bars`, all through `show_image`; `show_lookup` (one picture per
+  class in the chain, `search_method0`'s order) and `show_gc` (BFS over
+  `ObjectSpace.reachable_objects_from`, which runs the GC's own
+  `rb_gc_mark_children`) as step-through pictures; and `show_yarv`.
+- **`Microscope::Yarv`, the simulator behind `show_yarv`**: compiles the
+  code with `RubyVM::InstructionSequence.compile`, reads `to_a` and executes
+  the instructions with insns.def's semantics (some 60: put*, get/setlocal
+  with levels, branches, `opt_case_dispatch` as a real hash lookup,
+  `opt_new`, `definemethod`, `send`, `invokeblock`, the `opt_*` calls ...),
+  recording before each instruction the control frames (locals, the three
+  env slots, operands, a block's ep to the env it reads - "on the heap"
+  once that frame has left), the line and a sentence ([key, args], ui
+  `msc` + Key). A method written in C is called for real (with a
+  `cfunc` frame shown while it runs a block of the cell); a method the code
+  defines is a real method whose body runs the simulator. At the end the
+  same code runs in Ruby itself (`ISeq#eval`, output discarded) and the last
+  step says whether the results agree. Unsupported instructions
+  (`defineclass`, `invokesuper`, `throw`, splats ...) end the stepping with
+  a note; the lessons only use code it covers. Capped at 700 steps.
+- `html/shell/microscope.rb` (the shell, PicoRuby): draws the step-through
+  views. `mount_microscope` (main.rb) makes `<div id="msc-N">` and calls
+  `chunkyMicroscope(id, kind, json)`; the shell has JavaScript parse the
+  JSON (`JSG.w.JSON.parse` - never in PicoRuby, §2a) and reads the fields
+  of the step it shows. ⏮ ◀ slider ▶ ⏭ and ⏵ (a Task with `sleep_ms`).
+  Strings: `ui.msc*` (the pictures' strings are Ruby format strings, the
+  views' fill `%s` in order).
+
+Tests: `test/check_harness.rb` (the seven exercises; it loads
+microscope.rb), `node test/microscope_test.mjs` (every cell of the seven
+lessons on ruby.wasm, each YARV view stepped to its end and agreeing with
+Ruby, the pictures, the solutions; LANGS=de,en,ja).
+
 ## 6o. SciRuby: Daru, statistics, Rubyvis, networkx.rb (lessons `daru` to `networkx`)
 
 Three side trips with gems of [SciRuby](https://github.com/SciRuby), right
@@ -3596,6 +3654,7 @@ ruby spinel_build_test.rb                # the plain Ruby of the compiler worker
 BASE=http://127.0.0.1:8011/ node embed_test.mjs     # the embedded cell (§6k), ~1 min
 BASE=http://127.0.0.1:8011/ node picoruby_test.mjs  # the PicoRuby lesson (§6m), ~30 s
 BASE=http://127.0.0.1:8011/ node funicular_test.mjs # the Funicular lesson's previews (§6w), ~1 min
+BASE=http://127.0.0.1:8011/ node microscope_test.mjs # the expert lessons mikro-* (§6x), a few minutes
 ruby funicular_test.rb                   # funicular_cells.rb: headless mount, clicks, typing (§6w)
 ruby ../tools/vendor_funicular.rb --check           # html/funicular/vendor/ is the pinned Funicular mrblib
 BASE=http://127.0.0.1:8011/ node jruby_test.mjs     # the JRuby lesson (§6t), ~2 min with the CheerpJ bonus

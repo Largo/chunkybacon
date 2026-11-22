@@ -2945,3 +2945,133 @@ footer a { color: var(--bakelite); }
   white-space: pre-wrap;
 }
 .funicular-err { color: var(--err); }
+
+/* ---------- the microscope: YARV step by step, lookup and GC pictures (shell/microscope.rb) ---------- */
+.msc-box {
+  margin: 0.7rem 0;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  background: var(--paper);
+  font-size: 0.85rem;
+  overflow: hidden;
+}
+.msc-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.8rem;
+  align-items: baseline;
+  padding: 0.4rem 0.7rem;
+  background: var(--cap);
+  color: var(--cap-text);
+}
+.msc-title { font-weight: 700; color: var(--paper); }
+.msc-title::before { content: "🔬 "; }
+.msc-sub { font-size: 0.78rem; }
+.msc-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--sheet);
+}
+.msc-btn {
+  font: inherit;
+  min-width: 2rem;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  background: var(--bakelite);
+  cursor: pointer;
+}
+.msc-btn:hover { background: var(--mustard); }
+.msc-range { flex: 1; min-width: 6rem; accent-color: var(--bacon); }
+.msc-count { font-family: var(--font-code); font-size: 0.78rem; color: var(--ink-soft); white-space: nowrap; }
+.msc-note {
+  margin: 0;
+  padding: 0.45rem 0.7rem;
+  min-height: 2.6em;
+  border-bottom: 1px solid var(--rule);
+  font-weight: 600;
+}
+.msc-note.is-done { color: var(--ok); }
+.msc-note.is-warn { color: var(--err); }
+.msc-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1fr);
+}
+@media (max-width: 760px) {
+  .msc-grid { grid-template-columns: minmax(0, 1fr); }
+}
+.msc-panel {
+  max-height: 360px;
+  overflow: auto;
+  padding: 0.3rem 0.4rem 0.5rem;
+  border-right: 1px solid var(--rule);
+  font-family: var(--font-code);
+  font-size: 0.76rem;
+}
+.msc-panel:last-child { border-right: 0; }
+.msc-h {
+  position: sticky;
+  top: -0.3rem;
+  margin: -0.3rem -0.4rem 0.3rem;
+  padding: 0.25rem 0.4rem;
+  background: var(--sheet);
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-print);
+  font-weight: 700;
+  font-size: 0.78rem;
+}
+.msc-line, .msc-insn { display: flex; gap: 0.4rem; white-space: pre; border-radius: 3px; }
+.msc-line.is-now, .msc-insn.is-now { background: var(--fat); outline: 1.5px solid var(--mustard); }
+.msc-ln { color: var(--ink-soft); min-width: 2.2em; text-align: right; user-select: none; }
+.msc-pc { width: 0.9em; color: var(--bacon); font-weight: 700; }
+.msc-insn code { white-space: pre; }
+.msc-frame {
+  margin: 0 0 0.45rem;
+  border: 1.5px solid var(--rule);
+  border-radius: 5px;
+  background: #fff;
+}
+.msc-frame.is-top { border-color: var(--bacon); }
+.msc-frame.msc-cfunc { background: var(--code-bg); }
+.msc-fhead { display: flex; justify-content: space-between; gap: 0.4rem; padding: 0.15rem 0.35rem; background: var(--sheet); font-weight: 700; }
+.msc-fkind { color: var(--ink-soft); font-weight: 400; }
+.msc-ep { padding: 0.1rem 0.35rem; color: #00639a; font-size: 0.72rem; }
+.msc-cell { display: flex; gap: 0.4rem; padding: 0.08rem 0.35rem; border-top: 1px solid var(--rule); }
+.msc-k { min-width: 3.6em; color: var(--ink-soft); }
+.msc-op code { color: var(--ink); font-weight: 600; }
+.msc-env { color: var(--ink-soft); background: repeating-linear-gradient(135deg, transparent 0 4px, rgba(0, 0, 0, 0.035) 4px 8px); font-size: 0.7rem; }
+.msc-local .msc-k { color: #00639a; }
+.msc-cell.is-new { background: #fde6df; }
+@media (prefers-reduced-motion: no-preference) {
+  .msc-cell.is-new { animation: msc-new 0.9s ease-out; }
+}
+@keyframes msc-new { from { background: #f6b8a6; } }
+.msc-cnote { color: var(--ink-soft); font-style: italic; }
+.msc-self { padding: 0.08rem 0.35rem; border-top: 1px dashed var(--rule); color: var(--ink-soft); font-size: 0.7rem; }
+.msc-out {
+  margin: 0;
+  padding: 0.35rem 0.7rem;
+  border-top: 1px solid var(--rule);
+  background: var(--code-bg);
+  font-family: var(--font-code);
+  font-size: 0.78rem;
+  white-space: pre-wrap;
+}
+.msc-out::before { content: attr(data-label) ": "; color: var(--ink-soft); }
+.msc-pic { overflow-x: auto; padding: 0.4rem; }
+.msc-pic svg { max-width: none; height: auto; }
+
+/* "in the source": where CRuby does what the lesson shows (the expert lessons) */
+.msc-source {
+  border-left: 4px solid #00639a;
+  background: #eef3f6;
+  padding: 0.6rem 1rem;
+  border-radius: 0 6px 6px 0;
+  margin: 1.2rem 0 0.5rem;
+}
+.msc-source::before { content: "🔬\00a0" attr(data-title); display: block; font-weight: 700; margin-bottom: 0.3rem; }
+.msc-source ul { margin: 0.2rem 0; padding-left: 1.2rem; }
+.msc-play { white-space: nowrap; }

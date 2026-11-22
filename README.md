@@ -71,7 +71,13 @@ Learn Ruby in your browser — an interactive, notebook-style course in
   from it with [swiss_qr](https://github.com/largo/swiss_qr) and
   [qr_reader](https://github.com/largo/qr_reader), and a project track that
   builds a small time tracker (with Time and Date, objects and copies,
-  tests, pattern matching, a DSL and a web front end).
+  tests, pattern matching, a DSL and a web front end), and an expert
+  section, "Ruby under the microscope" (after the book by Pat Shaughnessy,
+  which it links; the lessons are not his): Prism's tokens and syntax tree,
+  YARV instructions stepped one at a time with the VM stack, frames and ep
+  chains in view, closures, VALUE words and heap slots, method lookup and
+  mark-and-sweep - every fact checked in CRuby 4.0.0's source and on this
+  wasm32 Ruby itself.
 - **Notebook UI**: lessons interleave text with runnable CodeMirror
   cells (Shift+Enter). All cells of a lesson share one binding, and every
   cell shows its last expression as `=> …` — `puts` is never required.

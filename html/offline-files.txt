@@ -245,6 +245,7 @@ legal_links.js
 lessons.js
 letter.js
 main.rb
+microscope.rb
 numo_narray.rb
 object_graph.rb
 offline.js
@@ -328,6 +329,7 @@ shell/course.rb
 shell/jsg.rb
 shell/loader.js
 shell/manifest.txt
+shell/microscope.rb
 shell/router.rb
 shell/spinel.rb
 shell/store.rb

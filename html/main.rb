@@ -222,6 +222,10 @@ require_relative "game"
 # page (the shell's shell/spinel.rb and its workers, html/spinel/); the CRuby
 # run of the program beside it is here (lesson 45)
 require_relative "spinel"
+# the expert lessons' microscope (mikro-*): show_yarv steps through YARV,
+# show_ast, show_value, show_lookup, show_gc ... (microscope.rb; the shell
+# draws the step-through views, shell/microscope.rb). ~45 KB at boot.
+require_relative "microscope"
 # funicular(code): a Funicular app (lesson `funicular`) runs headless here on
 # Funicular's own Ruby, fetched when the lesson first runs a cell
 # (html/funicular/vendor/), and for real below the cell (funicular_frame.js)
@@ -954,6 +958,28 @@ class ChunkyApp
 
   def add_game(game)
     @run_games << game if @run_games
+  end
+
+  # ---------- the microscope (microscope.rb here, shell/microscope.rb on the page) ----------
+
+  def add_microscope(kind, payload)
+    @run_microscopes << [kind, payload] if @run_microscopes
+  end
+
+  # show_yarv and the step-through pictures: the shell (PicoRuby) draws them
+  # into the element named here from the JSON, which JavaScript parses
+  def mount_microscope(out_el, kind, payload)
+    node = $d.createElement("div")
+    @microscope_seq = (@microscope_seq || 0) + 1
+    id = "msc-#{@microscope_seq}"
+    node[:id] = id
+    out_el.appendChild(node)
+    if $window[:chunkyMicroscope].typeof != "function"
+      node.className = "cell-error"
+      node.textContent = ui["mscMissing"].to_s
+    else
+      $window.chunkyMicroscope(id, kind.to_s, JSON.generate(payload))
+    end
   end
 
   # ---------- Spinel (spinel.rb here, shell/spinel.rb on the page) ----------
@@ -2100,7 +2126,7 @@ class ChunkyApp
   # quietly: the helpers (show_image, show_browser, show_shoes, ...) collect
   # nothing then.
   RUN_LISTS = %i[@run_images @run_image_alts @run_pdfs @run_audios @run_browsers @run_irbs @run_files
-                 @run_three @run_shoes @run_letters @run_sketches @run_games @run_spinels @run_funiculars @run_downloads].freeze
+                 @run_three @run_shoes @run_letters @run_sketches @run_games @run_spinels @run_funiculars @run_microscopes @run_downloads].freeze
 
   # The cells above +idx+ that have not run in this binding yet, with the
   # code their editors show (earlier_cells.rb). Not in the workshop (one
@@ -2259,6 +2285,7 @@ class ChunkyApp
     @run_sketches = []
     @run_games = []
     @run_spinels = []
+    @run_microscopes = []
     @run_funiculars = []
     dispose_games(idx)
     @last_shoes_types = []
@@ -2354,7 +2381,7 @@ class ChunkyApp
     widgets_present = @run_images.any? || @run_browsers.any? || @run_irbs.any? || @run_three.any? ||
                       @run_shoes.any? || @run_downloads.any? || @run_pdfs.any? || @run_letters.any? ||
                       @run_sketches.any? || @run_audios.any? || @run_games.any? ||
-                      @run_spinels.any? || @run_funiculars.any?
+                      @run_spinels.any? || @run_funiculars.any? || @run_microscopes.any?
     # an error inside another workshop file keeps Ruby's message and its
     # "(helper.rb:3)": the explanation only sees the open file's code
     friendly = error && !where && friendly_error(error, code, file)
@@ -2436,6 +2463,7 @@ class ChunkyApp
     @run_sketches.each { |sketch| mount_sketch(idx, out_el, sketch) }
     @run_games.each { |game| mount_game(idx, out_el, game) }
     @run_spinels.each { |program| mount_spinel(out_el, program) }
+    @run_microscopes.each { |kind, payload| mount_microscope(out_el, kind, payload) }
     @run_funiculars.each { |app| mount_funicular(out_el, app) }
     # the stepper goes on top of the output; the JSON is parsed in JS
     # (bridge.js), PicoRuby would take ages

@@ -385,7 +385,73 @@ window.LESSONS_JSON = JSON.stringify({
       "funicularRemoved": "Element weg ×%d",
       "funicularKept": "%d Knoten unberührt",
       "funicularLog": "Was jedes Update geändert hat",
-      "funicularMissing": "Die Funicular-Vorschau braucht die Kursseite (funicular_frame.js)."
+      "funicularMissing": "Die Funicular-Vorschau braucht die Kursseite (funicular_frame.js).",
+      "mscTokensAlt": "Tokens",
+      "mscAstAlt": "Syntaxbaum",
+      "mscValFixnum": "Fixnum: die Zahl nach links verschoben, Tag-Bit 1 → (%d << 1) | 1 = 0x%x",
+      "mscValSymbol": "statisches Symbol: seine ID << 8, Tag 0x0e → 0x%x",
+      "mscValFlonum": "Flonum: der Float ins Wort selbst gepackt, Tag-Bits 10 → 0x%x",
+      "mscValPointer": "ein Zeiger auf einen %s in einem %d-Byte-Slot bei 0x%x (untere Bits 0: Slots sind ausgerichtet)",
+      "mscValSpecial": "%s ist ein festes Wort: 0x%02x (special_consts.h)",
+      "mscSlotHeap": "%s in einem %d-Byte-Slot, sein Inhalt im malloc-Heap: +%d Bytes",
+      "mscSlotExtra": "%s in einem %d-Byte-Slot, +%d Bytes ausserhalb",
+      "mscSlotEmbedded": "%s eingebettet: alles in seinem %d-Byte-Slot",
+      "mscFreed": "freier Slot",
+      "mscMissing": "Diese Ansicht braucht die Kursseite (shell/microscope.rb).",
+      "mscYarvTitle": "YARV, Schritt für Schritt",
+      "mscFirst": "Erster Schritt",
+      "mscPrev": "Einen Schritt zurück",
+      "mscNext": "Nächster Schritt",
+      "mscLast": "Letzter Schritt",
+      "mscPlay": "Abspielen",
+      "mscSlider": "Schritt",
+      "mscStep": "Schritt %s von %s",
+      "mscOutput": "Ausgabe",
+      "mscSource": "Quelltext",
+      "mscInsns": "Instruktionen",
+      "mscStack": "VM-Stack",
+      "mscCfunc": "C-Funktion",
+      "mscCfuncNote": "läuft in C: keine YARV-Instruktionen",
+      "mscEpTo": "ep[-1] → das Env von %s",
+      "mscEpHeap": "ep[-1] → das Env von %s, jetzt im Heap",
+      "mscPush": "%s auf den Stack legen.",
+      "mscPushInt": "%s auf den Stack legen – 0 und 1 haben eigene Instruktionen, ohne Operanden zum Lesen.",
+      "mscSelf": "self (%s) auf den Stack legen: der Empfänger des folgenden Aufrufs.",
+      "mscGet": "Die lokale Variable %s (Ebene %s) auf den Stack kopieren.",
+      "mscGetOuter": "getlocal %s, Ebene %s: ein Schritt der ep-Kette entlang – eine Variable von %s, aus dem Block heraus gelesen.",
+      "mscSet": "Das oberste Element in die lokale Variable %s nehmen (sie wird %s).",
+      "mscSetOuter": "setlocal %s: %s kommt in die Variable von %s, über die ep-Kette.",
+      "mscSend": "%s mit %s Argument(en) auf %s aufrufen: Eine Methode in C läuft, ihr Ergebnis kommt auf den Stack.",
+      "mscSendOwn": "%s mit %s Argument(en) auf %s aufrufen: eine Methode dieses Codes – ein neuer Frame kommt dazu.",
+      "mscSendBlock": "%s mit %s Argument(en) auf %s aufrufen, mit Block: Der Block bekommt einen eigenen Frame.",
+      "mscYield": "invokeblock: %s Wert(e) an den Block geben – ein Frame für den Block kommt dazu.",
+      "mscLeave": "leave: diesen Frame entfernen und %s dem Aufrufer geben.",
+      "mscBranchunless": "branchunless: %s herunternehmen; wenn false oder nil, zu %s springen.",
+      "mscBranchif": "branchif: %s herunternehmen; wenn wahr, zu %s springen.",
+      "mscBranchnil": "branchnil: %s herunternehmen; wenn nil, zu %s springen.",
+      "mscJump": "Zu %s springen.",
+      "mscDup": "dup: das oberste Element (%s) kopieren.",
+      "mscPop": "pop: %s wegwerfen – niemand braucht es.",
+      "mscDef": "definemethod: %s – mit eigener Instruktionsfolge – in die Methodentabelle legen.",
+      "mscNewarray": "newarray: %s Werte herunternehmen, ein Array drauflegen.",
+      "mscCase": "opt_case_dispatch: %s in einem Hash der when-Werte nachschlagen – keine Kette von === nötig.",
+      "mscOptNew": "opt_new: Class#new ist nicht umdefiniert – das Objekt gleich hier anlegen, dann initialize aufrufen.",
+      "mscOptFast": "%s auf %s und %s: schneller Weg, kein Methodenaufruf (vm_opt_* in vm_insnhelper.c).",
+      "mscOptCall": "%s auf %s mit %s: kein schneller Weg – ein echter Methodenaufruf.",
+      "mscOther": "%s",
+      "mscDone": "Fertig: %s – und Ruby selbst hat mit demselben Code dasselbe bekommen. ✓",
+      "mscDiffers": "Der Simulator bekam %s, Ruby selbst %s. ✗",
+      "mscRealError": "Ruby selbst hat %s ausgelöst",
+      "mscLimit": "Nach %s Schritten angehalten.",
+      "mscUnsupported": "Der Simulator kann %s nicht Schritt für Schritt – Rubys eigenes Ergebnis steht unten.",
+      "mscLookupMiss": "%s? Nicht in der Methodentabelle von %s – weiter dem Super-Zeiger nach.",
+      "mscLookupFound": "%s gefunden in %s.",
+      "mscLookupDone": "Die Methode %s läuft aus %s. super ginge weiter zu: %s",
+      "mscLookupNone": "%s ist nirgends in der Kette: method_missing, dann NoMethodError.",
+      "mscGcStart": "%s Objekte im Heap, %s Wurzeln. Markierphase: Alles beginnt weiss.",
+      "mscGcMark": "%s schwarz markieren, seine %s Referenzen grau.",
+      "mscGcSweep": "Nichts Graues mehr. Sweep: %s Objekte sind weiss geblieben – ihre Slots sind wieder frei: %s",
+      "mscPause": "Pause"
     },
     "en": {
       "title": "Let's Ruby",
@@ -762,7 +828,73 @@ window.LESSONS_JSON = JSON.stringify({
       "funicularRemoved": "element removed ×%d",
       "funicularKept": "%d nodes left alone",
       "funicularLog": "What each update changed",
-      "funicularMissing": "The Funicular preview needs the course page (funicular_frame.js)."
+      "funicularMissing": "The Funicular preview needs the course page (funicular_frame.js).",
+      "mscTokensAlt": "Tokens",
+      "mscAstAlt": "Syntax tree",
+      "mscValFixnum": "Fixnum: the number shifted left, tag bit 1 → (%d << 1) | 1 = 0x%x",
+      "mscValSymbol": "static Symbol: its ID << 8, tag 0x0e → 0x%x",
+      "mscValFlonum": "Flonum: the Float packed into the word itself, tag bits 10 → 0x%x",
+      "mscValPointer": "a pointer to a %s in a %d-byte slot at 0x%x (low bits 0: slots are aligned)",
+      "mscValSpecial": "%s is a fixed word: 0x%02x (special_consts.h)",
+      "mscSlotHeap": "%s in a %d-byte slot, its contents on the malloc heap: +%d bytes",
+      "mscSlotExtra": "%s in a %d-byte slot, +%d bytes outside it",
+      "mscSlotEmbedded": "%s embedded: all of it in its %d-byte slot",
+      "mscFreed": "free slot",
+      "mscMissing": "This view needs the course page (shell/microscope.rb).",
+      "mscYarvTitle": "YARV, step by step",
+      "mscFirst": "First step",
+      "mscPrev": "One step back",
+      "mscNext": "Next step",
+      "mscLast": "Last step",
+      "mscPlay": "Play",
+      "mscSlider": "Step",
+      "mscStep": "Step %s of %s",
+      "mscOutput": "Output",
+      "mscSource": "Source",
+      "mscInsns": "Instructions",
+      "mscStack": "VM stack",
+      "mscCfunc": "C function",
+      "mscCfuncNote": "runs in C: no YARV instructions",
+      "mscEpTo": "ep[-1] → the env of %s",
+      "mscEpHeap": "ep[-1] → the env of %s, now on the heap",
+      "mscPush": "Push %s onto the stack.",
+      "mscPushInt": "Push %s – 0 and 1 have instructions of their own, with no operand to read.",
+      "mscSelf": "Push self (%s): the receiver of the call that follows.",
+      "mscGet": "Copy the local variable %s (level %s) onto the stack.",
+      "mscGetOuter": "getlocal %s, level %s: one hop along the ep chain – a variable of %s, read from inside the block.",
+      "mscSet": "Pop the top into the local variable %s (it becomes %s).",
+      "mscSetOuter": "setlocal %s: %s goes into the variable of %s, through the ep chain.",
+      "mscSend": "Call %s with %s argument(s) on %s: a method written in C runs, its result is pushed.",
+      "mscSendOwn": "Call %s with %s argument(s) on %s: a method of this code – a new frame is pushed.",
+      "mscSendBlock": "Call %s with %s argument(s) on %s, with a block: the block will get a frame of its own.",
+      "mscYield": "invokeblock: yield %s value(s) – a frame for the block is pushed.",
+      "mscLeave": "leave: pop this frame and hand %s to the caller.",
+      "mscBranchunless": "branchunless: pop %s; if it is false or nil, jump to %s.",
+      "mscBranchif": "branchif: pop %s; if it is truthy, jump to %s.",
+      "mscBranchnil": "branchnil: pop %s; if it is nil, jump to %s.",
+      "mscJump": "jump to %s.",
+      "mscDup": "dup: copy the top (%s).",
+      "mscPop": "pop: drop %s – nobody needs it.",
+      "mscDef": "definemethod: put %s – with an instruction sequence of its own – into the method table.",
+      "mscNewarray": "newarray: pop %s values, push one Array.",
+      "mscCase": "opt_case_dispatch: look %s up in a hash of the when values – no chain of === needed.",
+      "mscOptNew": "opt_new: Class#new is not redefined – allocate the object right here, then call initialize.",
+      "mscOptFast": "%s on %s and %s: fast path, no method call (vm_opt_* in vm_insnhelper.c).",
+      "mscOptCall": "%s on %s with %s: no fast path – a real method call.",
+      "mscOther": "%s",
+      "mscDone": "Done: %s – and Ruby itself, running the same code, got the same. ✓",
+      "mscDiffers": "The simulator got %s, Ruby itself %s. ✗",
+      "mscRealError": "Ruby itself raised %s",
+      "mscLimit": "Stopped after %s steps.",
+      "mscUnsupported": "The simulator does not step %s – Ruby's own result is below.",
+      "mscLookupMiss": "%s? Not in the method table of %s – on along the super pointer.",
+      "mscLookupFound": "%s found in %s.",
+      "mscLookupDone": "The method of %s runs from %s. super would go on to: %s",
+      "mscLookupNone": "%s is nowhere in the chain: method_missing, then NoMethodError.",
+      "mscGcStart": "%s objects on the heap, %s roots. Mark phase: everything starts white.",
+      "mscGcMark": "Mark %s black, and its %s references grey.",
+      "mscGcSweep": "Nothing grey left. Sweep: %s objects stayed white – their slots are free again: %s",
+      "mscPause": "Pause"
     },
     "ja": {
       "title": "Let's Ruby",
@@ -1139,7 +1271,73 @@ window.LESSONS_JSON = JSON.stringify({
       "funicularRemoved": "要素の削除 ×%d",
       "funicularKept": "%d個のノードはそのまま",
       "funicularLog": "更新ごとに変わったもの",
-      "funicularMissing": "Funicularのプレビューにはコースのページ（funicular_frame.js）が必要です。"
+      "funicularMissing": "Funicularのプレビューにはコースのページ（funicular_frame.js）が必要です。",
+      "mscTokensAlt": "トークン",
+      "mscAstAlt": "構文木",
+      "mscValFixnum": "Fixnum：数を1ビット左にシフトし、タグビットは1 → (%d << 1) | 1 = 0x%x",
+      "mscValSymbol": "静的Symbol：ID << 8、タグ0x0e → 0x%x",
+      "mscValFlonum": "Flonum：Floatをワードそのものに詰め込んだもの、タグビットは10 → 0x%x",
+      "mscValPointer": "%sへのポインタ：%dバイトのスロット、アドレスは0x%x（下位ビットは0：スロットは整列されています）",
+      "mscValSpecial": "%sは固定のワードです：0x%02x（special_consts.h）",
+      "mscSlotHeap": "%s：%dバイトのスロット、中身はmallocのヒープに：+%dバイト",
+      "mscSlotExtra": "%s：%dバイトのスロット、その外に+%dバイト",
+      "mscSlotEmbedded": "%s：埋め込み。すべてが%dバイトのスロットの中にあります",
+      "mscFreed": "空きスロット",
+      "mscMissing": "この表示にはコースのページ（shell/microscope.rb）が必要です。",
+      "mscYarvTitle": "YARVを一歩ずつ",
+      "mscFirst": "最初のステップ",
+      "mscPrev": "1つ戻る",
+      "mscNext": "次のステップ",
+      "mscLast": "最後のステップ",
+      "mscPlay": "再生",
+      "mscSlider": "ステップ",
+      "mscStep": "ステップ %s / %s",
+      "mscOutput": "出力",
+      "mscSource": "ソース",
+      "mscInsns": "命令",
+      "mscStack": "VMスタック",
+      "mscCfunc": "C関数",
+      "mscCfuncNote": "Cで実行：YARV命令はありません",
+      "mscEpTo": "ep[-1] → %sのenv",
+      "mscEpHeap": "ep[-1] → %sのenv（今はヒープ上）",
+      "mscPush": "%sをスタックに積みます。",
+      "mscPushInt": "%sを積みます。0と1には専用の命令があり、読み取るオペランドはありません。",
+      "mscSelf": "self（%s）を積みます：このあとの呼び出しのレシーバです。",
+      "mscGet": "ローカル変数%s（レベル%s）をスタックにコピーします。",
+      "mscGetOuter": "getlocal %s、レベル%s：epチェーンを1つたどります。ブロックの中から読む、%sの変数です。",
+      "mscSet": "一番上を取り出してローカル変数%sに入れます（%sになります）。",
+      "mscSetOuter": "setlocal %s：%sがepチェーンを通って%sの変数に入ります。",
+      "mscSend": "%sを引数%s個で%sに対して呼び出します：Cで書かれたメソッドが実行され、その結果が積まれます。",
+      "mscSendOwn": "%sを引数%s個で%sに対して呼び出します：このコードのメソッドなので、新しいフレームが積まれます。",
+      "mscSendBlock": "%sを引数%s個で%sに対して、ブロック付きで呼び出します：ブロックには専用のフレームができます。",
+      "mscYield": "invokeblock：%s個の値をyieldします。ブロックのためのフレームが積まれます。",
+      "mscLeave": "leave：このフレームを取り除き、%sを呼び出し元に渡します。",
+      "mscBranchunless": "branchunless：%sを取り出します。falseかnilなら%sへジャンプします。",
+      "mscBranchif": "branchif：%sを取り出します。真なら%sへジャンプします。",
+      "mscBranchnil": "branchnil：%sを取り出します。nilなら%sへジャンプします。",
+      "mscJump": "%sへジャンプします。",
+      "mscDup": "dup：一番上（%s）をコピーします。",
+      "mscPop": "pop：%sを捨てます。もう誰も使いません。",
+      "mscDef": "definemethod：%sを、専用の命令列ごとメソッドテーブルに入れます。",
+      "mscNewarray": "newarray：%s個の値を取り出し、Arrayを1つ積みます。",
+      "mscCase": "opt_case_dispatch：whenの値のハッシュで%sを引きます。===の連鎖は必要ありません。",
+      "mscOptNew": "opt_new：Class#newは再定義されていないので、オブジェクトをこの場で確保し、initializeを呼び出します。",
+      "mscOptFast": "%sを%sと%sに：高速パスで、メソッド呼び出しはありません（vm_insnhelper.cのvm_opt_*）。",
+      "mscOptCall": "%sを%sに%sで：高速パスはなく、本物のメソッド呼び出しです。",
+      "mscOther": "%s",
+      "mscDone": "完了：%s。同じコードを実行したRuby本体も同じ結果でした。✓",
+      "mscDiffers": "シミュレーターの結果は%s、Ruby本体は%sでした。✗",
+      "mscRealError": "Ruby本体は%sを発生させました",
+      "mscLimit": "%sステップで停止しました。",
+      "mscUnsupported": "シミュレーターは%sをステップ実行できません。Ruby本体の結果は下にあります。",
+      "mscLookupMiss": "%s？ %sのメソッドテーブルにはありません。superポインタをたどって先へ。",
+      "mscLookupFound": "%sが%sで見つかりました。",
+      "mscLookupDone": "%sのメソッドは%sのものが実行されます。superなら次はここへ：%s",
+      "mscLookupNone": "%sはチェーンのどこにもありません：method_missing、そしてNoMethodErrorです。",
+      "mscGcStart": "ヒープ上のオブジェクトは%s個、ルートは%s個。マークフェーズ：最初はすべて白です。",
+      "mscGcMark": "%sを黒にマークし、その参照%s個を灰色にします。",
+      "mscGcSweep": "灰色はもう残っていません。スイープ：%s個のオブジェクトが白のままで、そのスロットはまた空きになります：%s",
+      "mscPause": "一時停止"
     },
     "fr": {
       "title": "Let's Ruby",
@@ -1516,7 +1714,73 @@ window.LESSONS_JSON = JSON.stringify({
       "funicularRemoved": "élément retiré ×%d",
       "funicularKept": "%d nœuds inchangés",
       "funicularLog": "Ce que chaque mise à jour a changé",
-      "funicularMissing": "L'aperçu Funicular a besoin de la page du cours (funicular_frame.js)."
+      "funicularMissing": "L'aperçu Funicular a besoin de la page du cours (funicular_frame.js).",
+      "mscTokensAlt": "Tokens",
+      "mscAstAlt": "Arbre syntaxique",
+      "mscValFixnum": "Fixnum : le nombre décalé vers la gauche, bit de tag 1 → (%d << 1) | 1 = 0x%x",
+      "mscValSymbol": "Symbol statique : son ID << 8, tag 0x0e → 0x%x",
+      "mscValFlonum": "Flonum : le Float logé dans le mot lui-même, bits de tag 10 → 0x%x",
+      "mscValPointer": "un pointeur vers un %s dans un slot de %d octets à 0x%x (bits de poids faible à 0 : les slots sont alignés)",
+      "mscValSpecial": "%s est un mot fixe : 0x%02x (special_consts.h)",
+      "mscSlotHeap": "%s dans un slot de %d octets, son contenu sur le tas malloc : +%d octets",
+      "mscSlotExtra": "%s dans un slot de %d octets, +%d octets en dehors",
+      "mscSlotEmbedded": "%s embarqué : tout entier dans son slot de %d octets",
+      "mscFreed": "slot libre",
+      "mscMissing": "Cette vue a besoin de la page du cours (shell/microscope.rb).",
+      "mscYarvTitle": "YARV, pas à pas",
+      "mscFirst": "Première étape",
+      "mscPrev": "Une étape en arrière",
+      "mscNext": "Étape suivante",
+      "mscLast": "Dernière étape",
+      "mscPlay": "Lecture",
+      "mscSlider": "Étape",
+      "mscStep": "Étape %s sur %s",
+      "mscOutput": "Sortie",
+      "mscSource": "Source",
+      "mscInsns": "Instructions",
+      "mscStack": "Pile de la VM",
+      "mscCfunc": "Fonction C",
+      "mscCfuncNote": "s'exécute en C : pas d'instructions YARV",
+      "mscEpTo": "ep[-1] → l'env de %s",
+      "mscEpHeap": "ep[-1] → l'env de %s, désormais sur le tas",
+      "mscPush": "Empiler %s.",
+      "mscPushInt": "Empiler %s – 0 et 1 ont leurs propres instructions, sans opérande à lire.",
+      "mscSelf": "Empiler self (%s) : le receveur de l'appel qui suit.",
+      "mscGet": "Copier la variable locale %s (niveau %s) sur la pile.",
+      "mscGetOuter": "getlocal %s, niveau %s : un saut le long de la chaîne des ep – une variable de %s, lue depuis l'intérieur du bloc.",
+      "mscSet": "Dépiler le sommet dans la variable locale %s (elle vaut maintenant %s).",
+      "mscSetOuter": "setlocal %s : %s va dans la variable de %s, via la chaîne des ep.",
+      "mscSend": "Appeler %s avec %s argument(s) sur %s : une méthode écrite en C s'exécute, son résultat est empilé.",
+      "mscSendOwn": "Appeler %s avec %s argument(s) sur %s : une méthode de ce code – une nouvelle frame est empilée.",
+      "mscSendBlock": "Appeler %s avec %s argument(s) sur %s, avec un bloc : le bloc aura sa propre frame.",
+      "mscYield": "invokeblock : yield de %s valeur(s) – une frame pour le bloc est empilée.",
+      "mscLeave": "leave : dépiler cette frame et remettre %s à l'appelant.",
+      "mscBranchunless": "branchunless : dépiler %s ; s'il vaut false ou nil, sauter à %s.",
+      "mscBranchif": "branchif : dépiler %s ; s'il compte comme vrai, sauter à %s.",
+      "mscBranchnil": "branchnil : dépiler %s ; s'il vaut nil, sauter à %s.",
+      "mscJump": "jump : sauter à %s.",
+      "mscDup": "dup : copier le sommet (%s).",
+      "mscPop": "pop : jeter %s – personne n'en a besoin.",
+      "mscDef": "definemethod : placer %s – avec sa propre séquence d'instructions – dans la table des méthodes.",
+      "mscNewarray": "newarray : dépiler %s valeurs, empiler un seul Array.",
+      "mscCase": "opt_case_dispatch : chercher %s dans un hash des valeurs des when – pas besoin d'une chaîne de ===.",
+      "mscOptNew": "opt_new : Class#new n'est pas redéfini – allouer l'objet ici même, puis appeler initialize.",
+      "mscOptFast": "%s sur %s et %s : voie rapide, sans appel de méthode (vm_opt_* dans vm_insnhelper.c).",
+      "mscOptCall": "%s sur %s avec %s : pas de voie rapide – un vrai appel de méthode.",
+      "mscOther": "%s",
+      "mscDone": "Terminé : %s – et Ruby lui-même, en exécutant le même code, a obtenu la même chose. ✓",
+      "mscDiffers": "Le simulateur a obtenu %s, Ruby lui-même %s. ✗",
+      "mscRealError": "Ruby lui-même a levé %s",
+      "mscLimit": "Arrêté après %s étapes.",
+      "mscUnsupported": "Le simulateur n'exécute pas %s pas à pas – le résultat de Ruby lui-même est ci-dessous.",
+      "mscLookupMiss": "%s ? Pas dans la table des méthodes de %s – on continue via le pointeur super.",
+      "mscLookupFound": "%s trouvé dans %s.",
+      "mscLookupDone": "La méthode de %s s'exécute depuis %s. super continuerait vers : %s",
+      "mscLookupNone": "%s n'est nulle part dans la chaîne : method_missing, puis NoMethodError.",
+      "mscGcStart": "%s objets sur le tas, %s racines. Phase de marquage : tout commence en blanc.",
+      "mscGcMark": "Marquer %s en noir, et ses %s références en gris.",
+      "mscGcSweep": "Plus rien de gris. Balayage : %s objets sont restés blancs – leurs slots sont de nouveau libres : %s",
+      "mscPause": "Pause"
     },
     "it": {
       "title": "Let's Ruby",
@@ -1893,7 +2157,73 @@ window.LESSONS_JSON = JSON.stringify({
       "funicularRemoved": "elemento rimosso ×%d",
       "funicularKept": "%d nodi invariati",
       "funicularLog": "Che cosa ha cambiato ogni aggiornamento",
-      "funicularMissing": "L'anteprima di Funicular ha bisogno della pagina del corso (funicular_frame.js)."
+      "funicularMissing": "L'anteprima di Funicular ha bisogno della pagina del corso (funicular_frame.js).",
+      "mscTokensAlt": "Token",
+      "mscAstAlt": "Albero sintattico",
+      "mscValFixnum": "Fixnum: il numero spostato a sinistra, bit di tag 1 → (%d << 1) | 1 = 0x%x",
+      "mscValSymbol": "Symbol statico: il suo ID << 8, tag 0x0e → 0x%x",
+      "mscValFlonum": "Flonum: il Float impacchettato nella parola stessa, bit di tag 10 → 0x%x",
+      "mscValPointer": "un puntatore a un %s in uno slot da %d byte a 0x%x (bit bassi 0: gli slot sono allineati)",
+      "mscValSpecial": "%s è una parola fissa: 0x%02x (special_consts.h)",
+      "mscSlotHeap": "%s in uno slot da %d byte, il contenuto nello heap di malloc: +%d byte",
+      "mscSlotExtra": "%s in uno slot da %d byte, +%d byte fuori da esso",
+      "mscSlotEmbedded": "%s embedded: tutto nel suo slot da %d byte",
+      "mscFreed": "slot libero",
+      "mscMissing": "Questa vista richiede la pagina del corso (shell/microscope.rb).",
+      "mscYarvTitle": "YARV, passo dopo passo",
+      "mscFirst": "Primo passo",
+      "mscPrev": "Un passo indietro",
+      "mscNext": "Passo successivo",
+      "mscLast": "Ultimo passo",
+      "mscPlay": "Avvia",
+      "mscSlider": "Passo",
+      "mscStep": "Passo %s di %s",
+      "mscOutput": "Output",
+      "mscSource": "Sorgente",
+      "mscInsns": "Istruzioni",
+      "mscStack": "Stack della VM",
+      "mscCfunc": "Funzione C",
+      "mscCfuncNote": "gira in C: nessuna istruzione YARV",
+      "mscEpTo": "ep[-1] → l’env di %s",
+      "mscEpHeap": "ep[-1] → l’env di %s, ora nello heap",
+      "mscPush": "Metti %s sullo stack.",
+      "mscPushInt": "Metti %s – 0 e 1 hanno istruzioni proprie, senza operando da leggere.",
+      "mscSelf": "Metti self (%s): il ricevente della chiamata che segue.",
+      "mscGet": "Copia la variabile locale %s (livello %s) sullo stack.",
+      "mscGetOuter": "getlocal %s, livello %s: un salto lungo la catena degli ep – una variabile di %s, letta da dentro il blocco.",
+      "mscSet": "Togli la cima e mettila nella variabile locale %s (diventa %s).",
+      "mscSetOuter": "setlocal %s: %s va nella variabile di %s, attraverso la catena degli ep.",
+      "mscSend": "Chiama %s con %s argomento/i su %s: gira un metodo scritto in C, il suo risultato va sullo stack.",
+      "mscSendOwn": "Chiama %s con %s argomento/i su %s: un metodo di questo codice – si aggiunge un nuovo frame.",
+      "mscSendBlock": "Chiama %s con %s argomento/i su %s, con un blocco: il blocco avrà un frame tutto suo.",
+      "mscYield": "invokeblock: yield di %s valore/i – si aggiunge un frame per il blocco.",
+      "mscLeave": "leave: togli questo frame e passa %s al chiamante.",
+      "mscBranchunless": "branchunless: togli %s; se è false o nil, salta a %s.",
+      "mscBranchif": "branchif: togli %s; se è vero (truthy), salta a %s.",
+      "mscBranchnil": "branchnil: togli %s; se è nil, salta a %s.",
+      "mscJump": "salta a %s.",
+      "mscDup": "dup: copia la cima (%s).",
+      "mscPop": "pop: scarta %s – non serve a nessuno.",
+      "mscDef": "definemethod: metti %s – con una sequenza di istruzioni tutta sua – nella tabella dei metodi.",
+      "mscNewarray": "newarray: togli %s valori, metti un Array.",
+      "mscCase": "opt_case_dispatch: cerca %s in un hash dei valori dei when – nessuna catena di === necessaria.",
+      "mscOptNew": "opt_new: Class#new non è ridefinito – alloca l’oggetto proprio qui, poi chiama initialize.",
+      "mscOptFast": "%s su %s e %s: percorso veloce, nessuna chiamata di metodo (vm_opt_* in vm_insnhelper.c).",
+      "mscOptCall": "%s su %s con %s: nessun percorso veloce – una vera chiamata di metodo.",
+      "mscOther": "%s",
+      "mscDone": "Fatto: %s – e Ruby stesso, eseguendo lo stesso codice, ha ottenuto lo stesso. ✓",
+      "mscDiffers": "Il simulatore ha ottenuto %s, Ruby stesso %s. ✗",
+      "mscRealError": "Ruby stesso ha sollevato %s",
+      "mscLimit": "Fermato dopo %s passi.",
+      "mscUnsupported": "Il simulatore non esegue passo per passo %s – il risultato di Ruby stesso è qui sotto.",
+      "mscLookupMiss": "%s? Non è nella tabella dei metodi di %s – avanti lungo il puntatore super.",
+      "mscLookupFound": "%s trovato in %s.",
+      "mscLookupDone": "Il metodo di %s viene eseguito da %s. super proseguirebbe verso: %s",
+      "mscLookupNone": "%s non è da nessuna parte nella catena: method_missing, poi NoMethodError.",
+      "mscGcStart": "%s oggetti nello heap, %s radici. Fase di mark: tutto parte bianco.",
+      "mscGcMark": "Marca %s di nero, e i suoi %s riferimenti di grigio.",
+      "mscGcSweep": "Niente più grigio. Sweep: %s oggetti sono rimasti bianchi – i loro slot sono di nuovo liberi: %s",
+      "mscPause": "Pausa"
     }
   },
   "lessons": [
@@ -45549,6 +45879,1759 @@ window.LESSONS_JSON = JSON.stringify({
           {
             "t": "h",
             "html": "<h2>🎓 Ce l'hai fatta!</h2><p>Hai costruito timelog dalla prima collezione fino a un'interfaccia web – con test, gestione degli errori, il tuo DSL e la metaprogrammazione. Non sono conoscenze da giocattolo: proprio questi mattoni si trovano in ogni vero progetto Ruby.</p><p><strong>E adesso?</strong> Esercitati con i <a href='https://koans.idogawa.com'>Ruby Koans</a>, ricostruisci timelog sul tuo computer come gem vera e propria (la lezione {{nr:tl-cli}} ne mostra la struttura) – e se vuoi approfondire: i libri <em>Programming Ruby</em> (“il Pickaxe”) e <em>Polished Ruby Programming</em> ti portano dal mestiere alla maestria. E tutto ciò che dimentichi strada facendo lo trovi nel <button type='button' class='cheat-link'>📋 Promemoria</button> e nella documentazione di Ruby (lezione {{nr:doku}}). CHUNKY BACON! 🦊🥓</p>"
+          }
+        ]
+      }
+    },
+    {
+      "id": "mikro-parser",
+      "section": {
+        "de": "Experten: Ruby unter dem Mikroskop",
+        "en": "Expert: Ruby under the microscope",
+        "ja": "エキスパート：顕微鏡で見るRuby",
+        "fr": "Expert : Ruby au microscope",
+        "it": "Esperto: Ruby al microscopio"
+      },
+      "de": {
+        "title": "Tokens und der Syntaxbaum",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ruby unter dem Mikroskop</h2><p>Dieser Teil schaut in Ruby hinein: was mit deinem Code zwischen ▶ und der Antwort passiert. Die Idee – und die Wendung – stammen aus dem Buch <a href='https://nostarch.com/rum' target='_blank'><em>Ruby Under a Microscope</em></a> von <a href='https://patshaughnessy.net/' target='_blank'>Pat Shaughnessy</a> (No Starch Press, 2013), das Rubys Innenleben mit Diagrammen und Experimenten erklärt. Das Buch ist sein Werk; diese Lektionen hat nicht er geschrieben, und sie gehören nicht dazu. Wenn dir dieser Teil gefällt, lies das Buch – es geht viel tiefer.</p><p>Jede Behauptung hier ist doppelt geprüft: im Quellcode von CRuby, in genau der Version, die diese Seite ausführt (Links auf <code>github.com/ruby/ruby</code> beim Tag <code>v4.0.0</code>), und indem sie hier läuft. Und «hier» zählt, denn dieses Ruby ist ungewöhnlich:</p>"
+          },
+          {
+            "t": "c",
+            "code": "RUBY_DESCRIPTION"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>wasm32-wasi</code>: CRuby, kompiliert zu WebAssembly mit 32-Bit-Zeigern. Die meisten Erklärungen von Rubys Innenleben gehen von einem 64-Bit-Laptop aus; wo wasm32 anders ist, zeigen diese Lektionen beides. <code>+PRISM</code> nennt den Parser. Ruby liest deinen Code in drei Schritten: Der <strong>Lexer</strong> zerlegt den Text in Tokens, der <strong>Parser</strong> baut daraus einen Baum, und der <strong>Compiler</strong> macht aus dem Baum Instruktionen für YARV, Rubys virtuelle Maschine. Schritt eins:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_tokens(\"summe = preis * 2 if hungrig?\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Jeder Chip ist ein Token: sein Text, darunter der Typ, den Prism ihm gegeben hat. Der Lexer weiss schon mehr als Buchstaben: <code>hungrig?</code> ist ein <code>METHOD_NAME</code> (eine lokale Variable kann nicht auf <code>?</code> enden), und dieses <code>if</code> ist ein <code>KEYWORD_IF_MODIFIER</code>, nicht das <code>if</code>, mit dem eine Zeile beginnt. Schritt zwei, der Parser:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_ast(\"summe = preis * 2 if hungrig?\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das <code>if</code>, das du zuletzt geschrieben hast, ist die Wurzel des Baums: Zuerst wird die Bedingung geprüft, die Zuweisung ist ihr Rumpf. <code>preis * 2</code> ist ein <code>Call</code> – die Methode <code>*</code>, an <code>preis</code> geschickt, mit <code>2</code> als Argument. Und <code>preis</code> ist auch ein <code>Call</code>: Nichts hat es vorher zugewiesen, also kann es für Ruby nur eine Methode sein. Prism ist auch ein Gem, und sein Baum besteht aus Ruby-Objekten. Nach einem Fehler macht es ausserdem weiter und meldet alle:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"prism\"\n\nergebnis = Prism.parse(\"1 +* 2\")\nergebnis.errors.map(&:message)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Im Quellcode (CRuby 4.0.0)'><ul><li>Lexer und Parser: <a href='https://github.com/ruby/ruby/blob/v4.0.0/prism/prism.c#L22271' target='_blank'><code>pm_parse:22271</code></a> – Prism ist eine einzige C-Datei mit über 22 000 Zeilen, die auch JRuby und TruffleRuby verwenden.</li><li>Der Compiler von Prisms Baum zu YARV: <a href='https://github.com/ruby/ruby/blob/v4.0.0/prism_compile.c#L8615' target='_blank'><code>pm_compile_node:8615</code></a>.</li></ul></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Prism.html' target='_blank'>Prism</a> · <a href='https://docs.ruby-lang.org/en/4.0/Prism/Visitor.html' target='_blank'>Prism::Visitor</a></div><div class='task'><strong>Aufgabe:</strong> Zähl die Methodenaufrufe in einem Stück Code. Ein <code>Prism::Visitor</code> läuft durch den Baum und ruft für jeden <code>Call</code> <code>visit_call_node(node)</code> auf. Definier sie in <code>AufrufZaehler</code>: Zähl <code>@aufrufe</code> um eins hoch – und ruf <code>super</code> auf, sonst hört der Weg bei diesem Knoten auf und verpasst die Aufrufe darin. <code>aufrufe_zaehlen(\"puts [1, 2].map { |x| x * 2 }.sum\")</code> soll 4 ergeben.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"prism\"\n\nclass AufrufZaehler < Prism::Visitor\n  attr_reader :aufrufe\n\n  def initialize\n    @aufrufe = 0\n  end\n\n  # visit_call_node(node): ein Aufruf mehr, dann super\nend\n\ndef aufrufe_zaehlen(code)\n  zaehler = AufrufZaehler.new\n  Prism.parse(code).value.accept(zaehler)\n  zaehler.aufrufe\nend\n\naufrufe_zaehlen(\"puts [1, 2].map { |x| x * 2 }.sum\")",
+            "hints": [
+              "Prism ruft für jeden Aufruf, den es trifft, <code>visit_call_node(node)</code> auf. Definier diese Methode in der Klasse, zähl, und gib den Knoten mit <code>super</code> weiter."
+            ],
+            "check": "result == 4 && aufrufe_zaehlen(\"1 + 2 * 3\") == 2 && aufrufe_zaehlen(\"a.b.c\") == 3",
+            "hint": "<code>def visit_call_node(node)</code>, darin <code>@aufrufe += 1</code> und <code>super</code> (es besucht Empfänger, Argumente und Block). Ohne <code>super</code> bekommst du 1: <code>puts</code> – der Rest steckt darin.",
+            "solution": "require \"prism\"\n\nclass AufrufZaehler < Prism::Visitor\n  attr_reader :aufrufe\n\n  def initialize\n    @aufrufe = 0\n  end\n\n  def visit_call_node(node)\n    @aufrufe += 1\n    super\n  end\nend\n\ndef aufrufe_zaehlen(code)\n  zaehler = AufrufZaehler.new\n  Prism.parse(code).value.accept(zaehler)\n  zaehler.aufrufe\nend\n\naufrufe_zaehlen(\"puts [1, 2].map { |x| x * 2 }.sum\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>4: <code>puts</code>, <code>map</code>, <code>*</code> und <code>sum</code>. Das <code>x</code> im Block ist ein Parameter, eine lokale Variable – kein Aufruf. Die nächste Lektion bringt den Baum einen Schritt weiter: zu den Instruktionen, die YARV ausführt.</p>"
+          }
+        ]
+      },
+      "en": {
+        "title": "Tokens and the syntax tree",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ruby under the microscope</h2><p>This section looks inside Ruby: what happens to your code between ▶ and the answer. The idea – and the phrase – come from the book <a href='https://nostarch.com/rum' target='_blank'><em>Ruby Under a Microscope</em></a> by <a href='https://patshaughnessy.net/' target='_blank'>Pat Shaughnessy</a> (No Starch Press, 2013), which explains Ruby's internals with diagrams and experiments. The book is his work; these lessons were not written by him and are not connected to it. If you like this section, read the book – it goes much deeper.</p><p>Every claim here was checked twice: in CRuby's own source code, at the exact version this page runs (links to <code>github.com/ruby/ruby</code> at tag <code>v4.0.0</code>), and by running it right here. And \"right here\" matters, because this Ruby is unusual:</p>"
+          },
+          {
+            "t": "c",
+            "code": "RUBY_DESCRIPTION"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>wasm32-wasi</code>: CRuby compiled to WebAssembly with 32-bit pointers. Most explanations of Ruby's internals assume a 64-bit laptop; where wasm32 is different, these lessons show both. <code>+PRISM</code> names the parser. Ruby reads your code in three steps: the <strong>lexer</strong> cuts the text into tokens, the <strong>parser</strong> builds a tree from them, and the <strong>compiler</strong> turns the tree into instructions for YARV, Ruby's virtual machine. Step one:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_tokens(\"total = price * 2 if hungry?\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Each chip is one token: its text, and below it the type Prism gave it. The lexer already knows more than letters: <code>hungry?</code> is a <code>METHOD_NAME</code> (a local variable cannot end in <code>?</code>), and this <code>if</code> is a <code>KEYWORD_IF_MODIFIER</code>, not the <code>if</code> that starts a line. Step two, the parser:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_ast(\"total = price * 2 if hungry?\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>The <code>if</code> you wrote last is the root of the tree: the condition is checked first, the assignment is its body. <code>price * 2</code> is a <code>Call</code> – the method <code>*</code> sent to <code>price</code>, with <code>2</code> as its argument. And <code>price</code> is a <code>Call</code> too: nothing assigned it before, so for Ruby it can only be a method. Prism is a gem as well, and its tree is made of Ruby objects. It also keeps going after a mistake and reports all of them:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"prism\"\n\nresult = Prism.parse(\"1 +* 2\")\nresult.errors.map(&:message)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='In the source (CRuby 4.0.0)'><ul><li>The lexer and parser: <a href='https://github.com/ruby/ruby/blob/v4.0.0/prism/prism.c#L22271' target='_blank'><code>pm_parse:22271</code></a> – Prism is one C file of 22,000+ lines, also used by JRuby and TruffleRuby.</li><li>The compiler from Prism's tree to YARV: <a href='https://github.com/ruby/ruby/blob/v4.0.0/prism_compile.c#L8615' target='_blank'><code>pm_compile_node:8615</code></a>.</li></ul></div><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Prism.html' target='_blank'>Prism</a> · <a href='https://docs.ruby-lang.org/en/4.0/Prism/Visitor.html' target='_blank'>Prism::Visitor</a></div><div class='task'><strong>Task:</strong> Count the method calls in a piece of code. A <code>Prism::Visitor</code> walks the tree and calls <code>visit_call_node(node)</code> for every <code>Call</code>. Define it in <code>CallCounter</code>: add one to <code>@calls</code> – and call <code>super</code>, or the walk stops at that node and misses the calls inside it. <code>count_calls(\"puts [1, 2].map { |x| x * 2 }.sum\")</code> should give 4.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"prism\"\n\nclass CallCounter < Prism::Visitor\n  attr_reader :calls\n\n  def initialize\n    @calls = 0\n  end\n\n  # visit_call_node(node): one more call, then super\nend\n\ndef count_calls(code)\n  counter = CallCounter.new\n  Prism.parse(code).value.accept(counter)\n  counter.calls\nend\n\ncount_calls(\"puts [1, 2].map { |x| x * 2 }.sum\")",
+            "hints": [
+              "Prism calls <code>visit_call_node(node)</code> for each call it meets. Define that method in the class, count, and hand the node on with <code>super</code>."
+            ],
+            "check": "result == 4 && count_calls(\"1 + 2 * 3\") == 2 && count_calls(\"a.b.c\") == 3",
+            "hint": "<code>def visit_call_node(node)</code>, inside it <code>@calls += 1</code> and <code>super</code> (it visits the receiver, the arguments and the block). Without <code>super</code> you get 1: <code>puts</code> – the rest sits inside it.",
+            "solution": "require \"prism\"\n\nclass CallCounter < Prism::Visitor\n  attr_reader :calls\n\n  def initialize\n    @calls = 0\n  end\n\n  def visit_call_node(node)\n    @calls += 1\n    super\n  end\nend\n\ndef count_calls(code)\n  counter = CallCounter.new\n  Prism.parse(code).value.accept(counter)\n  counter.calls\nend\n\ncount_calls(\"puts [1, 2].map { |x| x * 2 }.sum\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>4: <code>puts</code>, <code>map</code>, <code>*</code> and <code>sum</code>. The <code>x</code> in the block is a parameter, a local variable – not a call. The next lesson takes the tree one step further: to the instructions YARV runs.</p>"
+          }
+        ]
+      },
+      "ja": {
+        "title": "トークンと構文木",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>顕微鏡で見るRuby</h2><p>このセクションではRubyの内部をのぞきます。▶を押してから答えが出るまでに、あなたのコードに何が起きているのでしょうか。このアイデアも、この言い回しも、本 <a href='https://nostarch.com/rum' target='_blank'><em>Ruby Under a Microscope</em></a>（<a href='https://patshaughnessy.net/' target='_blank'>パット・ショーネシー（Pat Shaughnessy）</a>著、No Starch Press、2013年、英語）から来ています。この本は図と実験でRubyの内部を解説しています。本は彼の著作であり、これらのレッスンは彼が書いたものではなく、本とは関係ありません。このセクションが気に入ったら、ぜひ本を読んでください。ずっと深いところまで踏み込んでいます。</p><p>ここに書いたことはすべて二重に確かめてあります。このページが実行しているのとまったく同じバージョンのCRubyのソースコード（タグ<code>v4.0.0</code>の<code>github.com/ruby/ruby</code>へのリンク）と、この場での実行によってです。そして「この場で」が大事です。このRubyは少し変わっているからです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "RUBY_DESCRIPTION"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>wasm32-wasi</code>：32ビットのポインタを持つ、WebAssemblyにコンパイルされたCRubyです。Rubyの内部の解説の多くは64ビットのノートPCを前提にしています。wasm32で違うところは、これらのレッスンでは両方を示します。<code>+PRISM</code>はパーサーの名前です。Rubyはコードを3つの段階で読みます。<strong>レキサー</strong>がテキストをトークンに切り分け、<strong>パーサー</strong>がそこから木を組み立て、<strong>コンパイラ</strong>がその木をRubyの仮想マシンYARVのための命令に変えます。第1段階：</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_tokens(\"total = price * 2 if hungry?\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>チップの1つひとつが1つのトークンです。そのテキストと、下にPrismが付けた種類が出ています。レキサーは文字以上のことをすでに知っています。<code>hungry?</code>は<code>METHOD_NAME</code>です（ローカル変数は<code>?</code>で終われません）。そしてこの<code>if</code>は<code>KEYWORD_IF_MODIFIER</code>で、行の先頭に来る<code>if</code>とは別物です。第2段階、パーサー：</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_ast(\"total = price * 2 if hungry?\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>最後に書いた<code>if</code>が木の根です。条件が先に調べられ、代入はその本体です。<code>price * 2</code>は<code>Call</code>です。メソッド<code>*</code>を<code>price</code>に送り、<code>2</code>を引数にしています。そして<code>price</code>も<code>Call</code>です。それより前に何も代入していないので、Rubyにとってはメソッドでしかありえません。Prismはgemでもあり、その木はRubyのオブジェクトでできています。しかも間違いがあっても先へ進み、すべてを報告してくれます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"prism\"\n\nresult = Prism.parse(\"1 +* 2\")\nresult.errors.map(&:message)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='ソースコードでは（CRuby 4.0.0）'><ul><li>レキサーとパーサー：<a href='https://github.com/ruby/ruby/blob/v4.0.0/prism/prism.c#L22271' target='_blank'><code>pm_parse:22271</code></a>。Prismは22,000行を超える1つのCファイルで、JRubyやTruffleRubyでも使われています。</li><li>Prismの木からYARVへのコンパイラ：<a href='https://github.com/ruby/ruby/blob/v4.0.0/prism_compile.c#L8615' target='_blank'><code>pm_compile_node:8615</code></a>。</li></ul></div><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/en/4.0/Prism.html' target='_blank'>Prism</a>（英語）・<a href='https://docs.ruby-lang.org/en/4.0/Prism/Visitor.html' target='_blank'>Prism::Visitor</a>（英語）</div><div class='task'><strong>課題：</strong>コードの中のメソッド呼び出しを数えましょう。<code>Prism::Visitor</code>は木をたどり、<code>Call</code>があるたびに<code>visit_call_node(node)</code>を呼び出します。それを<code>CallCounter</code>に定義してください。<code>@calls</code>に1を足し、そして<code>super</code>を呼びます。呼ばないと、たどるのがそのノードで止まり、中にある呼び出しを見落とします。<code>count_calls(\"puts [1, 2].map { |x| x * 2 }.sum\")</code>は4になるはずです。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"prism\"\n\nclass CallCounter < Prism::Visitor\n  attr_reader :calls\n\n  def initialize\n    @calls = 0\n  end\n\n  # visit_call_node(node)：呼び出しを1つ数えて、super\nend\n\ndef count_calls(code)\n  counter = CallCounter.new\n  Prism.parse(code).value.accept(counter)\n  counter.calls\nend\n\ncount_calls(\"puts [1, 2].map { |x| x * 2 }.sum\")",
+            "hints": [
+              "Prismは呼び出しに出会うたびに<code>visit_call_node(node)</code>を呼ぶよ。クラスにそのメソッドを定義して、数えて、<code>super</code>でノードを先に渡そう。"
+            ],
+            "check": "result == 4 && count_calls(\"1 + 2 * 3\") == 2 && count_calls(\"a.b.c\") == 3",
+            "hint": "<code>def visit_call_node(node)</code>、その中で<code>@calls += 1</code>と<code>super</code>だよ（superがレシーバ、引数、ブロックをたどってくれる）。<code>super</code>がないと1になっちゃう：<code>puts</code>だけ。残りはその中にあるからね。",
+            "solution": "require \"prism\"\n\nclass CallCounter < Prism::Visitor\n  attr_reader :calls\n\n  def initialize\n    @calls = 0\n  end\n\n  def visit_call_node(node)\n    @calls += 1\n    super\n  end\nend\n\ndef count_calls(code)\n  counter = CallCounter.new\n  Prism.parse(code).value.accept(counter)\n  counter.calls\nend\n\ncount_calls(\"puts [1, 2].map { |x| x * 2 }.sum\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>4です：<code>puts</code>、<code>map</code>、<code>*</code>、<code>sum</code>。ブロックの中の<code>x</code>は引数、つまりローカル変数で、呼び出しではありません。次のレッスンでは木をもう一歩先へ進めます。YARVが実行する命令へ。</p>"
+          }
+        ]
+      },
+      "fr": {
+        "title": "Les tokens et l'arbre syntaxique",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ruby au microscope</h2><p>Cette section regarde à l'intérieur de Ruby : ce qui arrive à votre code entre ▶ et la réponse. L'idée – et l'expression – viennent du livre <a href='https://nostarch.com/rum' target='_blank'><em>Ruby Under a Microscope</em></a> de <a href='https://patshaughnessy.net/' target='_blank'>Pat Shaughnessy</a> (No Starch Press, 2013), qui explique les entrailles de Ruby avec des schémas et des expériences. Le livre est son œuvre ; ces leçons n'ont pas été écrites par lui et n'ont aucun lien avec ce livre. Si cette section vous plaît, lisez le livre – il va beaucoup plus loin.</p><p>Chaque affirmation ici a été vérifiée deux fois : dans le code source de CRuby, à la version exacte qu'exécute cette page (liens vers <code>github.com/ruby/ruby</code> au tag <code>v4.0.0</code>), et en l'exécutant ici même. Et « ici même » compte, car ce Ruby sort de l'ordinaire :</p>"
+          },
+          {
+            "t": "c",
+            "code": "RUBY_DESCRIPTION"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>wasm32-wasi</code> : CRuby compilé en WebAssembly avec des pointeurs de 32 bits. La plupart des explications sur les entrailles de Ruby supposent un ordinateur portable 64 bits ; là où wasm32 est différent, ces leçons montrent les deux. <code>+PRISM</code> désigne le parser. Ruby lit votre code en trois étapes : le <strong>lexer</strong> découpe le texte en tokens, le <strong>parser</strong> construit un arbre à partir d'eux, et le <strong>compilateur</strong> transforme l'arbre en instructions pour YARV, la machine virtuelle de Ruby. Première étape :</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_tokens(\"total = price * 2 if hungry?\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Chaque pastille est un token : son texte et, en dessous, le type que Prism lui a donné. Le lexer en sait déjà plus que les lettres : <code>hungry?</code> est un <code>METHOD_NAME</code> (une variable locale ne peut pas se terminer par <code>?</code>), et ce <code>if</code> est un <code>KEYWORD_IF_MODIFIER</code>, pas le <code>if</code> qui commence une ligne. Deuxième étape, le parser :</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_ast(\"total = price * 2 if hungry?\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Le <code>if</code> que vous avez écrit en dernier est la racine de l'arbre : la condition est vérifiée d'abord, l'affectation est son corps. <code>price * 2</code> est un <code>Call</code> – la méthode <code>*</code> envoyée à <code>price</code>, avec <code>2</code> comme argument. Et <code>price</code> est aussi un <code>Call</code> : rien ne lui a été affecté auparavant, donc pour Ruby ce ne peut être qu'une méthode. Prism est aussi une gem, et son arbre est fait d'objets Ruby. Il continue aussi après une erreur et les signale toutes :</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"prism\"\n\nresult = Prism.parse(\"1 +* 2\")\nresult.errors.map(&:message)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Dans le code source (CRuby 4.0.0)'><ul><li>Le lexer et le parser : <a href='https://github.com/ruby/ruby/blob/v4.0.0/prism/prism.c#L22271' target='_blank'><code>pm_parse:22271</code></a> – Prism est un seul fichier C de plus de 22 000 lignes, utilisé aussi par JRuby et TruffleRuby.</li><li>Le compilateur de l'arbre de Prism vers YARV : <a href='https://github.com/ruby/ruby/blob/v4.0.0/prism_compile.c#L8615' target='_blank'><code>pm_compile_node:8615</code></a>.</li></ul></div><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Prism.html' target='_blank'>Prism</a> · <a href='https://docs.ruby-lang.org/en/4.0/Prism/Visitor.html' target='_blank'>Prism::Visitor</a></div><div class='task'><strong>Exercice :</strong> Comptez les appels de méthode dans un morceau de code. Un <code>Prism::Visitor</code> parcourt l'arbre et appelle <code>visit_call_node(node)</code> pour chaque <code>Call</code>. Définissez-la dans <code>CallCounter</code> : ajoutez un à <code>@calls</code> – et appelez <code>super</code>, sinon le parcours s'arrête à ce nœud et manque les appels qu'il contient. <code>count_calls(\"puts [1, 2].map { |x| x * 2 }.sum\")</code> doit donner 4.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"prism\"\n\nclass CallCounter < Prism::Visitor\n  attr_reader :calls\n\n  def initialize\n    @calls = 0\n  end\n\n  # visit_call_node(node) : un appel de plus, puis super\nend\n\ndef count_calls(code)\n  counter = CallCounter.new\n  Prism.parse(code).value.accept(counter)\n  counter.calls\nend\n\ncount_calls(\"puts [1, 2].map { |x| x * 2 }.sum\")",
+            "hints": [
+              "Prism appelle <code>visit_call_node(node)</code> pour chaque appel qu'il rencontre. Définissez cette méthode dans la classe, comptez, et transmettez le nœud avec <code>super</code>."
+            ],
+            "check": "result == 4 && count_calls(\"1 + 2 * 3\") == 2 && count_calls(\"a.b.c\") == 3",
+            "hint": "<code>def visit_call_node(node)</code>, à l'intérieur <code>@calls += 1</code> et <code>super</code> (il visite le receveur, les arguments et le bloc). Sans <code>super</code>, vous obtenez 1 : <code>puts</code> – le reste se trouve à l'intérieur.",
+            "solution": "require \"prism\"\n\nclass CallCounter < Prism::Visitor\n  attr_reader :calls\n\n  def initialize\n    @calls = 0\n  end\n\n  def visit_call_node(node)\n    @calls += 1\n    super\n  end\nend\n\ndef count_calls(code)\n  counter = CallCounter.new\n  Prism.parse(code).value.accept(counter)\n  counter.calls\nend\n\ncount_calls(\"puts [1, 2].map { |x| x * 2 }.sum\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>4 : <code>puts</code>, <code>map</code>, <code>*</code> et <code>sum</code>. Le <code>x</code> dans le bloc est un paramètre, une variable locale – pas un appel. La leçon suivante emmène l'arbre une étape plus loin : vers les instructions qu'exécute YARV.</p>"
+          }
+        ]
+      },
+      "it": {
+        "title": "Token e albero sintattico",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<h2>Ruby al microscopio</h2><p>Questa sezione guarda dentro Ruby: che cosa succede al tuo codice tra ▶ e la risposta. L’idea – e l’espressione – vengono dal libro <a href='https://nostarch.com/rum' target='_blank'><em>Ruby Under a Microscope</em></a> di <a href='https://patshaughnessy.net/' target='_blank'>Pat Shaughnessy</a> (No Starch Press, 2013), che spiega l’interno di Ruby con diagrammi ed esperimenti. Il libro è opera sua; queste lezioni non sono scritte da lui e non hanno alcun legame con il libro. Se questa sezione ti piace, leggi il libro: va molto più a fondo.</p><p>Ogni affermazione qui è stata verificata due volte: nel codice sorgente di CRuby, alla versione esatta che gira in questa pagina (link a <code>github.com/ruby/ruby</code> al tag <code>v4.0.0</code>), ed eseguendola proprio qui. E «proprio qui» conta, perché questo Ruby è insolito:</p>"
+          },
+          {
+            "t": "c",
+            "code": "RUBY_DESCRIPTION"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>wasm32-wasi</code>: CRuby compilato in WebAssembly con puntatori a 32 bit. La maggior parte delle spiegazioni sull’interno di Ruby presuppone un portatile a 64 bit; dove wasm32 è diverso, queste lezioni mostrano entrambi. <code>+PRISM</code> indica il parser. Ruby legge il tuo codice in tre passi: il <strong>lexer</strong> taglia il testo in token, il <strong>parser</strong> ne costruisce un albero e il <strong>compilatore</strong> trasforma l’albero in istruzioni per YARV, la macchina virtuale di Ruby. Primo passo:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_tokens(\"total = price * 2 if hungry?\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ogni tassello è un token: il suo testo e, sotto, il tipo che Prism gli ha assegnato. Il lexer sa già più che semplici lettere: <code>hungry?</code> è un <code>METHOD_NAME</code> (una variabile locale non può finire con <code>?</code>), e questo <code>if</code> è un <code>KEYWORD_IF_MODIFIER</code>, non l’<code>if</code> che apre una riga. Secondo passo, il parser:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_ast(\"total = price * 2 if hungry?\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>L’<code>if</code> che hai scritto per ultimo è la radice dell’albero: la condizione viene controllata per prima, l’assegnazione è il suo corpo. <code>price * 2</code> è una <code>Call</code> – il metodo <code>*</code> inviato a <code>price</code>, con <code>2</code> come argomento. E anche <code>price</code> è una <code>Call</code>: niente gli ha assegnato un valore prima, quindi per Ruby può essere solo un metodo. Prism è anche una gem, e il suo albero è fatto di oggetti Ruby. Inoltre non si ferma dopo un errore e li segnala tutti:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"prism\"\n\nresult = Prism.parse(\"1 +* 2\")\nresult.errors.map(&:message)"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Nel codice sorgente (CRuby 4.0.0)'><ul><li>Il lexer e il parser: <a href='https://github.com/ruby/ruby/blob/v4.0.0/prism/prism.c#L22271' target='_blank'><code>pm_parse:22271</code></a> – Prism è un unico file C di oltre 22.000 righe, usato anche da JRuby e TruffleRuby.</li><li>Il compilatore dall’albero di Prism a YARV: <a href='https://github.com/ruby/ruby/blob/v4.0.0/prism_compile.c#L8615' target='_blank'><code>pm_compile_node:8615</code></a>.</li></ul></div><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Prism.html' target='_blank'>Prism</a> · <a href='https://docs.ruby-lang.org/en/4.0/Prism/Visitor.html' target='_blank'>Prism::Visitor</a></div><div class='task'><strong>Esercizio:</strong> conta le chiamate di metodo in un pezzo di codice. Un <code>Prism::Visitor</code> percorre l’albero e chiama <code>visit_call_node(node)</code> per ogni <code>Call</code>. Definiscilo in <code>CallCounter</code>: aggiungi uno a <code>@calls</code> – e chiama <code>super</code>, altrimenti il percorso si ferma a quel nodo e perde le chiamate al suo interno. <code>count_calls(\"puts [1, 2].map { |x| x * 2 }.sum\")</code> deve dare 4.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"prism\"\n\nclass CallCounter < Prism::Visitor\n  attr_reader :calls\n\n  def initialize\n    @calls = 0\n  end\n\n  # visit_call_node(node): una chiamata in più, poi super\nend\n\ndef count_calls(code)\n  counter = CallCounter.new\n  Prism.parse(code).value.accept(counter)\n  counter.calls\nend\n\ncount_calls(\"puts [1, 2].map { |x| x * 2 }.sum\")",
+            "hints": [
+              "Prism chiama <code>visit_call_node(node)</code> per ogni chiamata che incontra. Definisci quel metodo nella classe, conta e passa il nodo avanti con <code>super</code>."
+            ],
+            "check": "result == 4 && count_calls(\"1 + 2 * 3\") == 2 && count_calls(\"a.b.c\") == 3",
+            "hint": "<code>def visit_call_node(node)</code>, al suo interno <code>@calls += 1</code> e <code>super</code> (visita il ricevente, gli argomenti e il blocco). Senza <code>super</code> ottieni 1: <code>puts</code> – il resto sta dentro di lei.",
+            "solution": "require \"prism\"\n\nclass CallCounter < Prism::Visitor\n  attr_reader :calls\n\n  def initialize\n    @calls = 0\n  end\n\n  def visit_call_node(node)\n    @calls += 1\n    super\n  end\nend\n\ndef count_calls(code)\n  counter = CallCounter.new\n  Prism.parse(code).value.accept(counter)\n  counter.calls\nend\n\ncount_calls(\"puts [1, 2].map { |x| x * 2 }.sum\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>4: <code>puts</code>, <code>map</code>, <code>*</code> e <code>sum</code>. La <code>x</code> nel blocco è un parametro, una variabile locale – non una chiamata. La prossima lezione porta l’albero un passo più in là: alle istruzioni che YARV esegue.</p>"
+          }
+        ]
+      }
+    },
+    {
+      "id": "mikro-yarv",
+      "de": {
+        "title": "Kompiliert: YARV-Instruktionen",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Ruby führt nicht den Baum aus. Der Compiler macht daraus eine <strong>Instruktionsfolge</strong> für YARV (Yet Another Ruby VM, Rubys virtuelle Maschine seit 1.9). Du kannst sie dir zeigen lassen – <code>RubyVM::InstructionSequence</code> ist derselbe Compiler, den ▶ verwendet:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts RubyVM::InstructionSequence.compile(\"a = 1 + 2\\nputs a * 3\").disasm"
+          },
+          {
+            "t": "h",
+            "html": "<p>So liest du es: Die Zahl links ist die Position in der Folge (ein Operand belegt auch einen Platz, darum springt sie um 2), dann die Instruktion und ihre Operanden; <code>(1)</code> ist die Quellzeile. Die <code>local table</code> nennt die Variablen: <code>a@0</code>.</p><ul><li><code>putobject_INT2FIX_1_</code> legt die Zahl 1 auf den Stack. 0 und 1 kommen so oft vor, dass sie eigene Instruktionen haben, ohne Operanden zum Lesen.</li><li><code>opt_plus</code> ist <code>+</code> als eine Instruktion: Bei zwei Integers addiert sie sofort, ohne eine Methode aufzurufen. <code>opt_mult</code>, <code>opt_lt</code>, <code>opt_aref</code> (<code>[]</code>) und rund dreissig weitere sind solche Abkürzungen.</li><li><code>setlocal_WC_0</code> speichert in eine lokale Variable; <code>WC_0</code> heisst «in diesem Frame», Ebene 0.</li><li><code>putself</code> und <code>opt_send_without_block</code> sind <code>puts</code>: die Nachricht an <code>self</code> schicken, mit einem Argument. <code>leave</code> kehrt zurück.</li></ul><p>Warum wird <code>2 * 3 + 4</code> nicht einfach zu 10 kompiliert? Vergleich:</p>"
+          },
+          {
+            "t": "c",
+            "code": "namen = ->(code) { RubyVM::InstructionSequence.compile(code).to_a.last.grep(Array).map(&:first) }\nnamen.(\"2 * 3 + 4\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ruby rechnet es zur Laufzeit aus, jedes Mal: Jemand könnte <code>Integer#*</code> umdefinieren, bevor die Zeile läuft, und dann wäre 10 falsch. Darum prüft auch <code>opt_plus</code> zuerst: Sein schneller Weg läuft nur, solange <code>Integer#+</code> noch das Original ist (<code>BASIC_OP_UNREDEFINED_P</code> im Quellcode unten); sonst ruft es die Methode auf wie jede andere. Aufgeräumt wird trotzdem – ein Peephole-Optimierer geht über die Instruktionen. Schau dir das Ende von dieser an:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts RubyVM::InstructionSequence.compile(\"x = 7\\nx > 5 ? :gross : :klein\").disasm"
+          },
+          {
+            "t": "h",
+            "html": "<p>Zwei <code>leave</code>. Ein Compiler würde natürlich schreiben «nach dem ersten Zweig zum Ende springen, wo <code>leave</code> steht» – der Optimierer hat gesehen, dass der Sprung direkt zu <code>leave</code> führt, und das <code>leave</code> an seine Stelle gesetzt. <code>branchunless</code> springt, wenn die Bedingung falsch ist. Auch jede Methode hat ihre eigene Instruktionsfolge:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def doppelt(n) = n * 2\n\nputs RubyVM::InstructionSequence.of(method(:doppelt)).disasm"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Im Quellcode (CRuby 4.0.0)'><ul><li>Jede Instruktion ist in <a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def' target='_blank'><code>insns.def</code></a> definiert, etwa <a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def#L1299' target='_blank'><code>opt_plus:1299</code></a> und <a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def#L1156' target='_blank'><code>leave:1156</code></a>.</li><li>Der schnelle Weg von <code>+</code>: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_insnhelper.c#L6711' target='_blank'><code>vm_opt_plus:6711</code></a> – Fixnum, Flonum, Float, String, Array, jeweils nur solange nicht umdefiniert.</li><li>Der Peephole-Optimierer (das <code>leave</code> statt eines Sprungs): <a href='https://github.com/ruby/ruby/blob/v4.0.0/compile.c#L3358' target='_blank'><code>iseq_peephole_optimize:3358</code></a>.</li></ul></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/RubyVM/InstructionSequence.html' target='_blank'>RubyVM::InstructionSequence</a></div><div class='task'><strong>Aufgabe:</strong> <code>to_a.last</code> ist der Rumpf einer Instruktionsfolge: Zeilennummern (Integers), Ereignisse (Symbole wie <code>:RUBY_EVENT_LINE</code>) und die Instruktionen, jede ein Array <code>[name, operanden...]</code>. Schreib <code>instruktionen(code)</code>: die Namen der Instruktionen, der Reihe nach. Für <code>\"a = 1 + 2\"</code> ist das <code>[:putobject_INT2FIX_1_, :putobject, :opt_plus, :dup, :setlocal_WC_0, :leave]</code> – das <code>dup</code> ist da, weil die Zuweisung auch der Wert des Programms ist.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def instruktionen(code)\n  rumpf = RubyVM::InstructionSequence.compile(code).to_a.last\n  # die Arrays behalten, ihr erstes Element zurückgeben\n  rumpf\nend\n\ninstruktionen(\"a = 1 + 2\")",
+            "hints": [
+              "Zwei Schritte: nur die Teile behalten, die Arrays sind (<code>select</code> mit <code>is_a?(Array)</code>), dann von jedem das erste Element nehmen (<code>map</code>)."
+            ],
+            "check": "result == %i[putobject_INT2FIX_1_ putobject opt_plus dup setlocal_WC_0 leave] && instruktionen(\"nil\") == %i[putnil leave]",
+            "hint": "<code>rumpf.select { |teil| teil.is_a?(Array) }.map(&:first)</code> – oder kürzer <code>rumpf.grep(Array)</code>: <code>grep</code> vergleicht mit <code>===</code>, und <code>Array === x</code> fragt, ob x ein Array ist.",
+            "solution": "def instruktionen(code)\n  rumpf = RubyVM::InstructionSequence.compile(code).to_a.last\n  rumpf.select { |teil| teil.is_a?(Array) }.map(&:first)\nend\n\ninstruktionen(\"a = 1 + 2\")"
+          }
+        ]
+      },
+      "en": {
+        "title": "Compiled: YARV instructions",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Ruby does not run the tree. The compiler turns it into an <strong>instruction sequence</strong> for YARV (Yet Another Ruby VM, Ruby's virtual machine since 1.9). You can ask for it – <code>RubyVM::InstructionSequence</code> is the same compiler ▶ uses:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts RubyVM::InstructionSequence.compile(\"a = 1 + 2\\nputs a * 3\").disasm"
+          },
+          {
+            "t": "h",
+            "html": "<p>How to read it: the number on the left is the position in the sequence (an operand takes a place too, so it jumps by 2), then the instruction and its operands; <code>(1)</code> is the source line. The <code>local table</code> names the variables: <code>a@0</code>.</p><ul><li><code>putobject_INT2FIX_1_</code> pushes the number 1. 0 and 1 are so common that they have instructions of their own, without an operand to read.</li><li><code>opt_plus</code> is <code>+</code> as one instruction: for two Integers it adds right away, without calling a method. <code>opt_mult</code>, <code>opt_lt</code>, <code>opt_aref</code> (<code>[]</code>) and some thirty more are such shortcuts.</li><li><code>setlocal_WC_0</code> stores into a local variable; <code>WC_0</code> means \"in this frame\", level 0.</li><li><code>putself</code> and <code>opt_send_without_block</code> are <code>puts</code>: send the message to <code>self</code>, with one argument. <code>leave</code> returns.</li></ul><p>Why is <code>2 * 3 + 4</code> not simply compiled to 10? Compare:</p>"
+          },
+          {
+            "t": "c",
+            "code": "names = ->(code) { RubyVM::InstructionSequence.compile(code).to_a.last.grep(Array).map(&:first) }\nnames.(\"2 * 3 + 4\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ruby computes it at run time, every time: someone could redefine <code>Integer#*</code> before the line runs, and then 10 would be wrong. That is also why <code>opt_plus</code> checks first: its fast path runs only while <code>Integer#+</code> is still the original (<code>BASIC_OP_UNREDEFINED_P</code> in the source below); otherwise it calls the method like any other. The compiler does tidy up, though – a peephole optimizer goes over the instructions. Look at the end of this one:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts RubyVM::InstructionSequence.compile(\"x = 7\\nx > 5 ? :big : :small\").disasm"
+          },
+          {
+            "t": "h",
+            "html": "<p>Two <code>leave</code>s. A compiler would naturally write \"after the first branch, jump to the end, where <code>leave</code> is\" – the optimizer saw that the jump leads straight to <code>leave</code> and put the <code>leave</code> in its place. <code>branchunless</code> jumps when the condition is false. Every method has an instruction sequence of its own, too:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def double(n) = n * 2\n\nputs RubyVM::InstructionSequence.of(method(:double)).disasm"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='In the source (CRuby 4.0.0)'><ul><li>Every instruction is defined in <a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def' target='_blank'><code>insns.def</code></a>, e.g. <a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def#L1299' target='_blank'><code>opt_plus:1299</code></a> and <a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def#L1156' target='_blank'><code>leave:1156</code></a>.</li><li>The fast path of <code>+</code>: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_insnhelper.c#L6711' target='_blank'><code>vm_opt_plus:6711</code></a> – Fixnum, Flonum, Float, String, Array, each only while not redefined.</li><li>The peephole optimizer (the <code>leave</code> instead of a jump): <a href='https://github.com/ruby/ruby/blob/v4.0.0/compile.c#L3358' target='_blank'><code>iseq_peephole_optimize:3358</code></a>.</li></ul></div><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/RubyVM/InstructionSequence.html' target='_blank'>RubyVM::InstructionSequence</a></div><div class='task'><strong>Task:</strong> <code>to_a.last</code> is the body of an instruction sequence: line numbers (Integers), events (Symbols such as <code>:RUBY_EVENT_LINE</code>) and the instructions, each an Array <code>[name, operands...]</code>. Write <code>insn_names(code)</code>: the names of the instructions, in order. For <code>\"a = 1 + 2\"</code> that is <code>[:putobject_INT2FIX_1_, :putobject, :opt_plus, :dup, :setlocal_WC_0, :leave]</code> – the <code>dup</code> is there because the assignment is also the value of the program.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def insn_names(code)\n  body = RubyVM::InstructionSequence.compile(code).to_a.last\n  # keep the Arrays, give back their first element\n  body\nend\n\ninsn_names(\"a = 1 + 2\")",
+            "hints": [
+              "Two steps: keep only the items that are Arrays (<code>select</code> with <code>is_a?(Array)</code>), then take each one's first element (<code>map</code>)."
+            ],
+            "check": "result == %i[putobject_INT2FIX_1_ putobject opt_plus dup setlocal_WC_0 leave] && insn_names(\"nil\") == %i[putnil leave]",
+            "hint": "<code>body.select { |item| item.is_a?(Array) }.map(&:first)</code> – or shorter, <code>body.grep(Array)</code>: <code>grep</code> compares with <code>===</code>, and <code>Array === x</code> asks whether x is an Array.",
+            "solution": "def insn_names(code)\n  body = RubyVM::InstructionSequence.compile(code).to_a.last\n  body.select { |item| item.is_a?(Array) }.map(&:first)\nend\n\ninsn_names(\"a = 1 + 2\")"
+          }
+        ]
+      },
+      "ja": {
+        "title": "コンパイル後：YARV命令",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Rubyは木をそのまま実行するわけではありません。コンパイラが木をYARV（Yet Another Ruby VM、1.9からのRubyの仮想マシン）のための<strong>命令列</strong>に変えます。それを見せてもらうこともできます。<code>RubyVM::InstructionSequence</code>は▶が使っているのと同じコンパイラです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts RubyVM::InstructionSequence.compile(\"a = 1 + 2\\nputs a * 3\").disasm"
+          },
+          {
+            "t": "h",
+            "html": "<p>読み方：左の数字は命令列の中の位置です（オペランドも1つ場所を取るので、2ずつ飛びます）。続いて命令とそのオペランド、<code>(1)</code>はソースの行番号です。<code>local table</code>は変数の名前を示します：<code>a@0</code>。</p><ul><li><code>putobject_INT2FIX_1_</code>は数1を積みます。0と1はとてもよく使われるので専用の命令があり、読み取るオペランドがありません。</li><li><code>opt_plus</code>は<code>+</code>を1つの命令にしたものです。Integer同士ならメソッドを呼ばずにその場で足し算します。<code>opt_mult</code>、<code>opt_lt</code>、<code>opt_aref</code>（<code>[]</code>）など、ほかにも30ほどがこうした近道です。</li><li><code>setlocal_WC_0</code>はローカル変数に格納します。<code>WC_0</code>は「このフレームの」、つまりレベル0という意味です。</li><li><code>putself</code>と<code>opt_send_without_block</code>が<code>puts</code>です。メッセージを<code>self</code>に、引数1つで送ります。<code>leave</code>で戻ります。</li></ul><p><code>2 * 3 + 4</code>はなぜ単純に10へコンパイルされないのでしょうか。比べてみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "names = ->(code) { RubyVM::InstructionSequence.compile(code).to_a.last.grep(Array).map(&:first) }\nnames.(\"2 * 3 + 4\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Rubyは実行時に、毎回計算します。その行が実行される前に誰かが<code>Integer#*</code>を再定義するかもしれず、そうなると10は間違いになるからです。<code>opt_plus</code>が最初にチェックするのも同じ理由です。高速パスが使われるのは<code>Integer#+</code>がまだ元のままのあいだだけで（下のソースの<code>BASIC_OP_UNREDEFINED_P</code>）、そうでなければほかのメソッドと同じように呼び出します。とはいえコンパイラも片付けはします。のぞき穴（ピープホール）最適化が命令を見直すのです。この命令列の最後を見てください：</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts RubyVM::InstructionSequence.compile(\"x = 7\\nx > 5 ? :big : :small\").disasm"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>leave</code>が2つあります。コンパイラは素直に「最初の分岐のあとは、<code>leave</code>のある最後へジャンプ」と書くはずです。最適化はそのジャンプがまっすぐ<code>leave</code>に行くことに気づき、ジャンプの代わりに<code>leave</code>を置きました。<code>branchunless</code>は条件が偽のときにジャンプします。メソッドもそれぞれ自分の命令列を持っています：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def double(n) = n * 2\n\nputs RubyVM::InstructionSequence.of(method(:double)).disasm"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='ソースコードでは（CRuby 4.0.0）'><ul><li>すべての命令は<a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def' target='_blank'><code>insns.def</code></a>で定義されています。例えば<a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def#L1299' target='_blank'><code>opt_plus:1299</code></a>や<a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def#L1156' target='_blank'><code>leave:1156</code></a>。</li><li><code>+</code>の高速パス：<a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_insnhelper.c#L6711' target='_blank'><code>vm_opt_plus:6711</code></a>。Fixnum、Flonum、Float、String、Arrayについて、それぞれ再定義されていないときだけ。</li><li>ピープホール最適化（ジャンプの代わりの<code>leave</code>）：<a href='https://github.com/ruby/ruby/blob/v4.0.0/compile.c#L3358' target='_blank'><code>iseq_peephole_optimize:3358</code></a>。</li></ul></div><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/en/4.0/RubyVM/InstructionSequence.html' target='_blank'>RubyVM::InstructionSequence</a>（英語）</div><div class='task'><strong>課題：</strong><code>to_a.last</code>は命令列の本体です。行番号（Integer）、イベント（<code>:RUBY_EVENT_LINE</code>のようなSymbol）、そして命令が入っていて、命令はそれぞれArray <code>[name, operands...]</code>です。<code>insn_names(code)</code>を書いてください：命令の名前を順番に返します。<code>\"a = 1 + 2\"</code>なら<code>[:putobject_INT2FIX_1_, :putobject, :opt_plus, :dup, :setlocal_WC_0, :leave]</code>です。<code>dup</code>があるのは、代入がプログラムの値でもあるからです。</div>"
+          },
+          {
+            "t": "x",
+            "code": "def insn_names(code)\n  body = RubyVM::InstructionSequence.compile(code).to_a.last\n  # Arrayだけを残し、それぞれの最初の要素を返す\n  body\nend\n\ninsn_names(\"a = 1 + 2\")",
+            "hints": [
+              "2ステップだよ。まずArrayの要素だけ残して（<code>is_a?(Array)</code>で<code>select</code>）、それからそれぞれの最初の要素を取ろう（<code>map</code>）。"
+            ],
+            "check": "result == %i[putobject_INT2FIX_1_ putobject opt_plus dup setlocal_WC_0 leave] && insn_names(\"nil\") == %i[putnil leave]",
+            "hint": "<code>body.select { |item| item.is_a?(Array) }.map(&:first)</code>。もっと短く<code>body.grep(Array)</code>でもいいよ：<code>grep</code>は<code>===</code>で比べて、<code>Array === x</code>は「xはArray？」って聞くんだ。",
+            "solution": "def insn_names(code)\n  body = RubyVM::InstructionSequence.compile(code).to_a.last\n  body.select { |item| item.is_a?(Array) }.map(&:first)\nend\n\ninsn_names(\"a = 1 + 2\")"
+          }
+        ]
+      },
+      "fr": {
+        "title": "Compilé : les instructions YARV",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Ruby n'exécute pas l'arbre. Le compilateur le transforme en une <strong>séquence d'instructions</strong> pour YARV (Yet Another Ruby VM, la machine virtuelle de Ruby depuis la 1.9). Vous pouvez la demander – <code>RubyVM::InstructionSequence</code> est le même compilateur que celui qu'utilise ▶ :</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts RubyVM::InstructionSequence.compile(\"a = 1 + 2\\nputs a * 3\").disasm"
+          },
+          {
+            "t": "h",
+            "html": "<p>Comment la lire : le nombre à gauche est la position dans la séquence (un opérande occupe aussi une place, d'où les sauts de 2), puis viennent l'instruction et ses opérandes ; <code>(1)</code> est la ligne du source. La <code>local table</code> nomme les variables : <code>a@0</code>.</p><ul><li><code>putobject_INT2FIX_1_</code> empile le nombre 1. 0 et 1 sont si fréquents qu'ils ont leurs propres instructions, sans opérande à lire.</li><li><code>opt_plus</code>, c'est <code>+</code> en une seule instruction : pour deux Integers, il additionne directement, sans appeler de méthode. <code>opt_mult</code>, <code>opt_lt</code>, <code>opt_aref</code> (<code>[]</code>) et une trentaine d'autres sont de tels raccourcis.</li><li><code>setlocal_WC_0</code> stocke dans une variable locale ; <code>WC_0</code> signifie « dans cette frame », niveau 0.</li><li><code>putself</code> et <code>opt_send_without_block</code>, c'est <code>puts</code> : envoyer le message à <code>self</code>, avec un argument. <code>leave</code> rend la main.</li></ul><p>Pourquoi <code>2 * 3 + 4</code> n'est-il pas simplement compilé en 10 ? Comparez :</p>"
+          },
+          {
+            "t": "c",
+            "code": "names = ->(code) { RubyVM::InstructionSequence.compile(code).to_a.last.grep(Array).map(&:first) }\nnames.(\"2 * 3 + 4\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ruby le calcule à l'exécution, à chaque fois : quelqu'un pourrait redéfinir <code>Integer#*</code> avant que la ligne ne s'exécute, et 10 serait alors faux. C'est aussi pour cela que <code>opt_plus</code> vérifie d'abord : sa voie rapide ne sert que tant que <code>Integer#+</code> est encore l'original (<code>BASIC_OP_UNREDEFINED_P</code> dans le source ci-dessous) ; sinon il appelle la méthode comme n'importe quelle autre. Le compilateur fait quand même un peu de ménage – un optimiseur « peephole » repasse sur les instructions. Regardez la fin de celle-ci :</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts RubyVM::InstructionSequence.compile(\"x = 7\\nx > 5 ? :big : :small\").disasm"
+          },
+          {
+            "t": "h",
+            "html": "<p>Deux <code>leave</code>. Un compilateur écrirait naturellement « après la première branche, sauter à la fin, là où se trouve <code>leave</code> » – l'optimiseur a vu que le saut mène tout droit à <code>leave</code> et a mis le <code>leave</code> à sa place. <code>branchunless</code> saute quand la condition est fausse. Chaque méthode a aussi sa propre séquence d'instructions :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def double(n) = n * 2\n\nputs RubyVM::InstructionSequence.of(method(:double)).disasm"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Dans le code source (CRuby 4.0.0)'><ul><li>Chaque instruction est définie dans <a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def' target='_blank'><code>insns.def</code></a>, par exemple <a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def#L1299' target='_blank'><code>opt_plus:1299</code></a> et <a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def#L1156' target='_blank'><code>leave:1156</code></a>.</li><li>La voie rapide de <code>+</code> : <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_insnhelper.c#L6711' target='_blank'><code>vm_opt_plus:6711</code></a> – Fixnum, Flonum, Float, String, Array, chacun seulement tant qu'il n'est pas redéfini.</li><li>L'optimiseur peephole (le <code>leave</code> à la place d'un saut) : <a href='https://github.com/ruby/ruby/blob/v4.0.0/compile.c#L3358' target='_blank'><code>iseq_peephole_optimize:3358</code></a>.</li></ul></div><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/RubyVM/InstructionSequence.html' target='_blank'>RubyVM::InstructionSequence</a></div><div class='task'><strong>Exercice :</strong> <code>to_a.last</code> est le corps d'une séquence d'instructions : des numéros de ligne (Integers), des événements (des Symbols comme <code>:RUBY_EVENT_LINE</code>) et les instructions, chacune un Array <code>[name, operands...]</code>. Écrivez <code>insn_names(code)</code> : les noms des instructions, dans l'ordre. Pour <code>\"a = 1 + 2\"</code>, c'est <code>[:putobject_INT2FIX_1_, :putobject, :opt_plus, :dup, :setlocal_WC_0, :leave]</code> – le <code>dup</code> est là parce que l'affectation est aussi la valeur du programme.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def insn_names(code)\n  body = RubyVM::InstructionSequence.compile(code).to_a.last\n  # gardez les Arrays, renvoyez leur premier élément\n  body\nend\n\ninsn_names(\"a = 1 + 2\")",
+            "hints": [
+              "Deux étapes : ne gardez que les éléments qui sont des Arrays (<code>select</code> avec <code>is_a?(Array)</code>), puis prenez le premier élément de chacun (<code>map</code>)."
+            ],
+            "check": "result == %i[putobject_INT2FIX_1_ putobject opt_plus dup setlocal_WC_0 leave] && insn_names(\"nil\") == %i[putnil leave]",
+            "hint": "<code>body.select { |item| item.is_a?(Array) }.map(&:first)</code> – ou plus court, <code>body.grep(Array)</code> : <code>grep</code> compare avec <code>===</code>, et <code>Array === x</code> demande si x est un Array.",
+            "solution": "def insn_names(code)\n  body = RubyVM::InstructionSequence.compile(code).to_a.last\n  body.select { |item| item.is_a?(Array) }.map(&:first)\nend\n\ninsn_names(\"a = 1 + 2\")"
+          }
+        ]
+      },
+      "it": {
+        "title": "Compilato: istruzioni YARV",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Ruby non esegue l’albero. Il compilatore lo trasforma in una <strong>sequenza di istruzioni</strong> per YARV (Yet Another Ruby VM, la macchina virtuale di Ruby dalla 1.9). Puoi chiederla tu stesso – <code>RubyVM::InstructionSequence</code> è lo stesso compilatore che usa ▶:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts RubyVM::InstructionSequence.compile(\"a = 1 + 2\\nputs a * 3\").disasm"
+          },
+          {
+            "t": "h",
+            "html": "<p>Come leggerla: il numero a sinistra è la posizione nella sequenza (anche un operando occupa un posto, perciò salta di 2), poi l’istruzione e i suoi operandi; <code>(1)</code> è la riga del sorgente. La <code>local table</code> elenca le variabili: <code>a@0</code>.</p><ul><li><code>putobject_INT2FIX_1_</code> mette sullo stack il numero 1. 0 e 1 sono così frequenti che hanno istruzioni proprie, senza un operando da leggere.</li><li><code>opt_plus</code> è <code>+</code> come singola istruzione: per due Integer somma subito, senza chiamare un metodo. <code>opt_mult</code>, <code>opt_lt</code>, <code>opt_aref</code> (<code>[]</code>) e una trentina di altre sono scorciatoie di questo tipo.</li><li><code>setlocal_WC_0</code> salva in una variabile locale; <code>WC_0</code> significa «in questo frame», livello 0.</li><li><code>putself</code> e <code>opt_send_without_block</code> sono <code>puts</code>: invia il messaggio a <code>self</code>, con un argomento. <code>leave</code> ritorna.</li></ul><p>Perché <code>2 * 3 + 4</code> non viene semplicemente compilato in 10? Confronta:</p>"
+          },
+          {
+            "t": "c",
+            "code": "names = ->(code) { RubyVM::InstructionSequence.compile(code).to_a.last.grep(Array).map(&:first) }\nnames.(\"2 * 3 + 4\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Ruby lo calcola durante l’esecuzione, ogni volta: qualcuno potrebbe ridefinire <code>Integer#*</code> prima che la riga venga eseguita, e allora 10 sarebbe sbagliato. Ecco anche perché <code>opt_plus</code> controlla prima: il suo percorso veloce funziona solo finché <code>Integer#+</code> è ancora l’originale (<code>BASIC_OP_UNREDEFINED_P</code> nel sorgente qui sotto); altrimenti chiama il metodo come qualsiasi altro. Il compilatore però fa un po’ di pulizia: un ottimizzatore peephole ripassa le istruzioni. Guarda la fine di questa:</p>"
+          },
+          {
+            "t": "c",
+            "code": "puts RubyVM::InstructionSequence.compile(\"x = 7\\nx > 5 ? :big : :small\").disasm"
+          },
+          {
+            "t": "h",
+            "html": "<p>Due <code>leave</code>. Un compilatore scriverebbe naturalmente «dopo il primo ramo, salta alla fine, dove c’è <code>leave</code>» – l’ottimizzatore ha visto che il salto porta dritto a <code>leave</code> e ha messo il <code>leave</code> al suo posto. <code>branchunless</code> salta quando la condizione è falsa. Anche ogni metodo ha una sequenza di istruzioni tutta sua:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def double(n) = n * 2\n\nputs RubyVM::InstructionSequence.of(method(:double)).disasm"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Nel codice sorgente (CRuby 4.0.0)'><ul><li>Ogni istruzione è definita in <a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def' target='_blank'><code>insns.def</code></a>, per esempio <a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def#L1299' target='_blank'><code>opt_plus:1299</code></a> e <a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def#L1156' target='_blank'><code>leave:1156</code></a>.</li><li>Il percorso veloce di <code>+</code>: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_insnhelper.c#L6711' target='_blank'><code>vm_opt_plus:6711</code></a> – Fixnum, Flonum, Float, String, Array, ciascuno solo finché non è ridefinito.</li><li>L’ottimizzatore peephole (il <code>leave</code> al posto di un salto): <a href='https://github.com/ruby/ruby/blob/v4.0.0/compile.c#L3358' target='_blank'><code>iseq_peephole_optimize:3358</code></a>.</li></ul></div><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/RubyVM/InstructionSequence.html' target='_blank'>RubyVM::InstructionSequence</a></div><div class='task'><strong>Esercizio:</strong> <code>to_a.last</code> è il corpo di una sequenza di istruzioni: numeri di riga (Integer), eventi (Symbol come <code>:RUBY_EVENT_LINE</code>) e le istruzioni, ognuna un Array <code>[name, operands...]</code>. Scrivi <code>insn_names(code)</code>: i nomi delle istruzioni, in ordine. Per <code>\"a = 1 + 2\"</code> sono <code>[:putobject_INT2FIX_1_, :putobject, :opt_plus, :dup, :setlocal_WC_0, :leave]</code> – il <code>dup</code> c’è perché l’assegnazione è anche il valore del programma.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def insn_names(code)\n  body = RubyVM::InstructionSequence.compile(code).to_a.last\n  # tieni gli Array, restituisci il loro primo elemento\n  body\nend\n\ninsn_names(\"a = 1 + 2\")",
+            "hints": [
+              "Due passi: tieni solo gli elementi che sono Array (<code>select</code> con <code>is_a?(Array)</code>), poi prendi il primo elemento di ciascuno (<code>map</code>)."
+            ],
+            "check": "result == %i[putobject_INT2FIX_1_ putobject opt_plus dup setlocal_WC_0 leave] && insn_names(\"nil\") == %i[putnil leave]",
+            "hint": "<code>body.select { |item| item.is_a?(Array) }.map(&:first)</code> – o più breve, <code>body.grep(Array)</code>: <code>grep</code> confronta con <code>===</code>, e <code>Array === x</code> chiede se x è un Array.",
+            "solution": "def insn_names(code)\n  body = RubyVM::InstructionSequence.compile(code).to_a.last\n  body.select { |item| item.is_a?(Array) }.map(&:first)\nend\n\ninsn_names(\"a = 1 + 2\")"
+          }
+        ]
+      }
+    },
+    {
+      "id": "mikro-stack",
+      "de": {
+        "title": "Die Stackmaschine",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>YARV ist eine <strong>Stackmaschine</strong>: Eine Instruktion nimmt ihre Eingaben oben vom Stack und legt ihr Ergebnis wieder dorthin – keine Register. <code>show_yarv</code> kompiliert den Code und führt ihn Instruktion für Instruktion aus, damit du zuschauen kannst. Es ist ein Simulator in Ruby: Er führt genau die Instruktionen aus der letzten Lektion nach den Regeln von <code>insns.def</code> aus, ruft für <code>+</code> und <code>puts</code> die echten Methoden auf, und am Ende führt Ruby denselben Code wirklich aus – der letzte Schritt sagt dir, ob beide dasselbe Ergebnis haben. Mit ▶ gehst du einen Schritt weiter, oder mit ⏵:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"a = 1 + 2\\nputs a * 3\\na\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die rechte Spalte ist der VM-Stack, wie YARV ihn im Speicher anlegt, mit dem oberen Ende oben. Ganz unten im Frame: die lokale Variable <code>a</code>. Darüber drei Plätze, die jeder Frame bekommt (gestreift): <code>me/cref</code>, <code>specval</code> und <code>flags</code> – der <strong>ep</strong>, der Environment Pointer, zeigt auf <code>flags</code>, und die Locals liegen darunter: <code>a</code> ist <code>ep[-3]</code>. Darum zählt der Operand von <code>getlocal</code> nach unten. Darüber die Operanden: Schau, wie <code>opt_plus</code> zwei nimmt und einen zurücklässt. Ein Methodenaufruf fügt einen Frame hinzu:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"def quadrat(x) = x * x\\nquadrat(4) + 1\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>definemethod</code> legt die eigene Instruktionsfolge der Methode in die Methodentabelle von <code>Object</code>. Dann <code>putself</code>, <code>putobject 4</code>, <code>opt_send_without_block</code>: Ein neuer Control Frame kommt über den alten, die <code>4</code> wird seine Local <code>x</code>, die Instruktionen links wechseln zu denen der Methode. <code>leave</code> entfernt den Frame und lässt 16 auf dem Stack des Aufrufers. Rekursion ist einfach mehr Frames – geh bis zur tiefsten Stelle:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"def fakultaet(n) = n <= 1 ? 1 : n * fakultaet(n - 1)\\nfakultaet(4)\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Im Quellcode (CRuby 4.0.0)'><ul><li>Ein Frame kommt in <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_insnhelper.c#L372' target='_blank'><code>vm_push_frame:372</code></a> auf den Stack: die Locals, dann <code>cref_or_me</code>, <code>specval</code> und <code>type</code> – «ep with managing data» – und <code>.ep = sp - 1</code>.</li><li>Was ein Control Frame enthält: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_core.h#L911' target='_blank'><code>rb_control_frame_t:911</code></a> (pc, sp, iseq, self, ep …); die drei Env-Plätze: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_core.h#L1418' target='_blank'><code>VM_ENV_DATA_SIZE:1418</code></a>.</li></ul></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/RubyVM/InstructionSequence.html' target='_blank'>RubyVM::InstructionSequence</a></div><div class='task'><strong>Aufgabe:</strong> Bau eine winzige eigene Stackmaschine. <code>ausfuehren(programm)</code> bekommt Instruktionen wie die von YARV – <code>[:putobject, 2]</code>, <code>[:opt_mult]</code>, <code>[:leave]</code> – und arbeitet sie mit einem Array als Stack ab. <code>:putobject</code> und <code>:leave</code> sind schon da; ergänze <code>:opt_plus</code> und <code>:opt_mult</code>: zwei Werte herunternehmen, das Ergebnis drauflegen. Das Programm in der Zelle ist <code>2 * 3 + 4</code>, so kompiliert wie bei YARV: 10.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def ausfuehren(programm)\n  stack = []\n  programm.each do |name, operand|\n    case name\n    when :putobject then stack.push(operand)\n    # :opt_plus und :opt_mult: zwei herunter, das Ergebnis drauf\n    when :leave then return stack.pop\n    end\n  end\nend\n\nausfuehren([[:putobject, 2], [:putobject, 3], [:opt_mult], [:putobject, 4], [:opt_plus], [:leave]])",
+            "hints": [
+              "Zwei <code>when</code> mehr. In jedem nimmst du die obersten zwei Werte mit <code>pop</code> vom Stack und legst mit <code>push</code> ihre Summe oder ihr Produkt drauf."
+            ],
+            "check": "result == 10 && ausfuehren([[:putobject, 7], [:putobject, 5], [:opt_plus], [:leave]]) == 12 && ausfuehren([[:putobject, 2], [:putobject, 3], [:putobject, 4], [:opt_mult], [:opt_plus], [:leave]]) == 14",
+            "hint": "<code>when :opt_plus</code>, dann <code>b = stack.pop</code>, <code>a = stack.pop</code>, <code>stack.push(a + b)</code> – der zweite Operand liegt oben. Dasselbe mit <code>*</code> für <code>:opt_mult</code>.",
+            "solution": "def ausfuehren(programm)\n  stack = []\n  programm.each do |name, operand|\n    case name\n    when :putobject then stack.push(operand)\n    when :opt_plus\n      b = stack.pop\n      a = stack.pop\n      stack.push(a + b)\n    when :opt_mult\n      b = stack.pop\n      a = stack.pop\n      stack.push(a * b)\n    when :leave then return stack.pop\n    end\n  end\nend\n\nausfuehren([[:putobject, 2], [:putobject, 3], [:opt_mult], [:putobject, 4], [:opt_plus], [:leave]])"
+          }
+        ]
+      },
+      "en": {
+        "title": "The stack machine",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>YARV is a <strong>stack machine</strong>: an instruction takes its inputs from the top of a stack and puts its result back there – no registers. <code>show_yarv</code> compiles the code and runs it one instruction at a time, so you can watch. It is a simulator written in Ruby: it carries out the very instructions you saw in the last lesson with the rules of <code>insns.def</code>, calls the real methods for <code>+</code> and <code>puts</code>, and at the end Ruby runs the same code for real – the last step tells you whether both got the same result. Use ▶ to step, or ⏵:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"a = 1 + 2\\nputs a * 3\\na\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>The right column is the VM stack the way YARV lays it out in memory, its top at the top. At the bottom of the frame: the local variable <code>a</code>. Above it, three slots that every frame gets (striped): <code>me/cref</code>, <code>specval</code> and <code>flags</code> – the <strong>ep</strong>, the environment pointer, points at <code>flags</code>, and the locals are found below it: <code>a</code> is <code>ep[-3]</code>. That is why <code>getlocal</code>'s operand counts downwards. Above them, the operands: watch <code>opt_plus</code> take two and leave one. A method call adds a frame:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"def square(x) = x * x\\nsquare(4) + 1\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>definemethod</code> puts the method's own instruction sequence into <code>Object</code>'s method table. Then <code>putself</code>, <code>putobject 4</code>, <code>opt_send_without_block</code>: a new control frame is pushed above the old one, the <code>4</code> becomes its local <code>x</code>, the instructions on the left switch to those of the method. <code>leave</code> pops the frame and leaves 16 on the caller's stack. Recursion is just more frames – step through to the deepest point:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"def fact(n) = n <= 1 ? 1 : n * fact(n - 1)\\nfact(4)\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='In the source (CRuby 4.0.0)'><ul><li>A frame is pushed in <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_insnhelper.c#L372' target='_blank'><code>vm_push_frame:372</code></a>: the locals, then <code>cref_or_me</code>, <code>specval</code> and <code>type</code> – \"ep with managing data\" – and <code>.ep = sp - 1</code>.</li><li>What a control frame holds: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_core.h#L911' target='_blank'><code>rb_control_frame_t:911</code></a> (pc, sp, iseq, self, ep …); the three env slots: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_core.h#L1418' target='_blank'><code>VM_ENV_DATA_SIZE:1418</code></a>.</li></ul></div><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/RubyVM/InstructionSequence.html' target='_blank'>RubyVM::InstructionSequence</a></div><div class='task'><strong>Task:</strong> Build a tiny stack machine of your own. <code>run(program)</code> gets instructions like YARV's – <code>[:putobject, 2]</code>, <code>[:opt_mult]</code>, <code>[:leave]</code> – and works through them with an Array as its stack. <code>:putobject</code> and <code>:leave</code> are there; add <code>:opt_plus</code> and <code>:opt_mult</code>: pop two values, push the result. The program in the cell is <code>2 * 3 + 4</code>, compiled as YARV would: 10.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def run(program)\n  stack = []\n  program.each do |name, operand|\n    case name\n    when :putobject then stack.push(operand)\n    # :opt_plus and :opt_mult: pop two, push the result\n    when :leave then return stack.pop\n    end\n  end\nend\n\nrun([[:putobject, 2], [:putobject, 3], [:opt_mult], [:putobject, 4], [:opt_plus], [:leave]])",
+            "hints": [
+              "Two more <code>when</code>s. In each, take the top two values off the stack with <code>pop</code> and <code>push</code> their sum or product."
+            ],
+            "check": "result == 10 && run([[:putobject, 7], [:putobject, 5], [:opt_plus], [:leave]]) == 12 && run([[:putobject, 2], [:putobject, 3], [:putobject, 4], [:opt_mult], [:opt_plus], [:leave]]) == 14",
+            "hint": "<code>when :opt_plus</code>, then <code>b = stack.pop</code>, <code>a = stack.pop</code>, <code>stack.push(a + b)</code> – the second operand is on top. The same with <code>*</code> for <code>:opt_mult</code>.",
+            "solution": "def run(program)\n  stack = []\n  program.each do |name, operand|\n    case name\n    when :putobject then stack.push(operand)\n    when :opt_plus\n      b = stack.pop\n      a = stack.pop\n      stack.push(a + b)\n    when :opt_mult\n      b = stack.pop\n      a = stack.pop\n      stack.push(a * b)\n    when :leave then return stack.pop\n    end\n  end\nend\n\nrun([[:putobject, 2], [:putobject, 3], [:opt_mult], [:putobject, 4], [:opt_plus], [:leave]])"
+          }
+        ]
+      },
+      "ja": {
+        "title": "スタックマシン",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>YARVは<strong>スタックマシン</strong>です。命令は入力をスタックの一番上から取り、結果をそこへ戻します。レジスタはありません。<code>show_yarv</code>はコードをコンパイルし、1命令ずつ実行するので、その様子を見られます。これはRubyで書かれたシミュレーターです。前のレッスンで見たのとまったく同じ命令を<code>insns.def</code>の規則どおりに実行し、<code>+</code>や<code>puts</code>では本物のメソッドを呼び出します。そして最後にRubyが同じコードを本当に実行します。最後のステップで、両方が同じ結果になったかがわかります。▶で1ステップずつ、または⏵で：</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"a = 1 + 2\\nputs a * 3\\na\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>右の列はVMスタックで、YARVがメモリに並べるとおりに、一番上を上にして表示しています。フレームの一番下にはローカル変数<code>a</code>。その上に、どのフレームにもある3つのスロット（しま模様）：<code>me/cref</code>、<code>specval</code>、<code>flags</code>です。<strong>ep</strong>、つまり環境ポインタ（environment pointer）は<code>flags</code>を指していて、ローカル変数はその下にあります：<code>a</code>は<code>ep[-3]</code>です。だから<code>getlocal</code>のオペランドは下向きに数えるのです。その上にオペランドが来ます。<code>opt_plus</code>が2つ取って1つ残すところを見てください。メソッド呼び出しではフレームが1つ増えます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"def square(x) = x * x\\nsquare(4) + 1\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>definemethod</code>はメソッド専用の命令列を<code>Object</code>のメソッドテーブルに入れます。続いて<code>putself</code>、<code>putobject 4</code>、<code>opt_send_without_block</code>：古いフレームの上に新しい制御フレームが積まれ、<code>4</code>がそのローカル変数<code>x</code>になり、左の命令がメソッドのものに切り替わります。<code>leave</code>がフレームを取り除き、呼び出し元のスタックに16を残します。再帰はフレームが増えるだけのことです。一番深いところまでステップ実行してみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"def fact(n) = n <= 1 ? 1 : n * fact(n - 1)\\nfact(4)\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='ソースコードでは（CRuby 4.0.0）'><ul><li>フレームは<a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_insnhelper.c#L372' target='_blank'><code>vm_push_frame:372</code></a>で積まれます。ローカル変数、それから<code>cref_or_me</code>、<code>specval</code>、<code>type</code>（「ep with managing data」）、そして<code>.ep = sp - 1</code>。</li><li>制御フレームが持つもの：<a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_core.h#L911' target='_blank'><code>rb_control_frame_t:911</code></a>（pc、sp、iseq、self、ep…）。envの3つのスロット：<a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_core.h#L1418' target='_blank'><code>VM_ENV_DATA_SIZE:1418</code></a>。</li></ul></div><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/en/4.0/RubyVM/InstructionSequence.html' target='_blank'>RubyVM::InstructionSequence</a>（英語）</div><div class='task'><strong>課題：</strong>自分だけの小さなスタックマシンを作りましょう。<code>run(program)</code>はYARVのような命令（<code>[:putobject, 2]</code>、<code>[:opt_mult]</code>、<code>[:leave]</code>）を受け取り、Arrayをスタックにして順に処理します。<code>:putobject</code>と<code>:leave</code>はもうあります。<code>:opt_plus</code>と<code>:opt_mult</code>を追加してください：値を2つ取り出し、結果を積みます。セルのプログラムは、YARVと同じようにコンパイルした<code>2 * 3 + 4</code>です：10になります。</div>"
+          },
+          {
+            "t": "x",
+            "code": "def run(program)\n  stack = []\n  program.each do |name, operand|\n    case name\n    when :putobject then stack.push(operand)\n    # :opt_plus と :opt_mult：2つ取り出し、結果を積む\n    when :leave then return stack.pop\n    end\n  end\nend\n\nrun([[:putobject, 2], [:putobject, 3], [:opt_mult], [:putobject, 4], [:opt_plus], [:leave]])",
+            "hints": [
+              "<code>when</code>をあと2つ書こう。それぞれで、<code>pop</code>でスタックの上から値を2つ取って、和か積を<code>push</code>するんだ。"
+            ],
+            "check": "result == 10 && run([[:putobject, 7], [:putobject, 5], [:opt_plus], [:leave]]) == 12 && run([[:putobject, 2], [:putobject, 3], [:putobject, 4], [:opt_mult], [:opt_plus], [:leave]]) == 14",
+            "hint": "<code>when :opt_plus</code>、それから<code>b = stack.pop</code>、<code>a = stack.pop</code>、<code>stack.push(a + b)</code>。2つ目のオペランドが上にあるからね。<code>:opt_mult</code>も<code>*</code>で同じだよ。",
+            "solution": "def run(program)\n  stack = []\n  program.each do |name, operand|\n    case name\n    when :putobject then stack.push(operand)\n    when :opt_plus\n      b = stack.pop\n      a = stack.pop\n      stack.push(a + b)\n    when :opt_mult\n      b = stack.pop\n      a = stack.pop\n      stack.push(a * b)\n    when :leave then return stack.pop\n    end\n  end\nend\n\nrun([[:putobject, 2], [:putobject, 3], [:opt_mult], [:putobject, 4], [:opt_plus], [:leave]])"
+          }
+        ]
+      },
+      "fr": {
+        "title": "La machine à pile",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>YARV est une <strong>machine à pile</strong> : une instruction prend ses entrées au sommet d'une pile et y remet son résultat – pas de registres. <code>show_yarv</code> compile le code et l'exécute une instruction à la fois, pour que vous puissiez regarder. C'est un simulateur écrit en Ruby : il exécute exactement les instructions vues dans la leçon précédente selon les règles de <code>insns.def</code>, appelle les vraies méthodes pour <code>+</code> et <code>puts</code>, et à la fin Ruby exécute réellement le même code – la dernière étape vous dit si les deux ont obtenu le même résultat. Utilisez ▶ pour avancer pas à pas, ou ⏵ :</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"a = 1 + 2\\nputs a * 3\\na\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>La colonne de droite est la pile de la VM telle que YARV la dispose en mémoire, son sommet en haut. Au bas de la frame : la variable locale <code>a</code>. Au-dessus, trois slots que reçoit chaque frame (hachurés) : <code>me/cref</code>, <code>specval</code> et <code>flags</code> – l'<strong>ep</strong>, l'environment pointer (pointeur d'environnement), pointe sur <code>flags</code>, et les variables locales se trouvent en dessous : <code>a</code> est <code>ep[-3]</code>. C'est pourquoi l'opérande de <code>getlocal</code> compte vers le bas. Au-dessus, les opérandes : regardez <code>opt_plus</code> en prendre deux et en laisser un. Un appel de méthode ajoute une frame :</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"def square(x) = x * x\\nsquare(4) + 1\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>definemethod</code> place la séquence d'instructions propre à la méthode dans la table des méthodes d'<code>Object</code>. Puis <code>putself</code>, <code>putobject 4</code>, <code>opt_send_without_block</code> : une nouvelle frame de contrôle est empilée au-dessus de l'ancienne, le <code>4</code> devient sa variable locale <code>x</code>, les instructions à gauche passent à celles de la méthode. <code>leave</code> dépile la frame et laisse 16 sur la pile de l'appelant. La récursion, ce ne sont que davantage de frames – avancez jusqu'au point le plus profond :</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"def fact(n) = n <= 1 ? 1 : n * fact(n - 1)\\nfact(4)\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Dans le code source (CRuby 4.0.0)'><ul><li>Une frame est empilée dans <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_insnhelper.c#L372' target='_blank'><code>vm_push_frame:372</code></a> : les variables locales, puis <code>cref_or_me</code>, <code>specval</code> et <code>type</code> – « ep with managing data » – et <code>.ep = sp - 1</code>.</li><li>Ce que contient une frame de contrôle : <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_core.h#L911' target='_blank'><code>rb_control_frame_t:911</code></a> (pc, sp, iseq, self, ep …) ; les trois slots de l'env : <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_core.h#L1418' target='_blank'><code>VM_ENV_DATA_SIZE:1418</code></a>.</li></ul></div><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/RubyVM/InstructionSequence.html' target='_blank'>RubyVM::InstructionSequence</a></div><div class='task'><strong>Exercice :</strong> Construisez votre propre petite machine à pile. <code>run(program)</code> reçoit des instructions comme celles de YARV – <code>[:putobject, 2]</code>, <code>[:opt_mult]</code>, <code>[:leave]</code> – et les traite avec un Array comme pile. <code>:putobject</code> et <code>:leave</code> sont déjà là ; ajoutez <code>:opt_plus</code> et <code>:opt_mult</code> : dépiler deux valeurs, empiler le résultat. Le programme de la cellule est <code>2 * 3 + 4</code>, compilé comme le ferait YARV : 10.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def run(program)\n  stack = []\n  program.each do |name, operand|\n    case name\n    when :putobject then stack.push(operand)\n    # :opt_plus et :opt_mult : dépilez deux valeurs, empilez le résultat\n    when :leave then return stack.pop\n    end\n  end\nend\n\nrun([[:putobject, 2], [:putobject, 3], [:opt_mult], [:putobject, 4], [:opt_plus], [:leave]])",
+            "hints": [
+              "Deux <code>when</code> de plus. Dans chacun, retirez les deux valeurs du sommet de la pile avec <code>pop</code> et empilez (<code>push</code>) leur somme ou leur produit."
+            ],
+            "check": "result == 10 && run([[:putobject, 7], [:putobject, 5], [:opt_plus], [:leave]]) == 12 && run([[:putobject, 2], [:putobject, 3], [:putobject, 4], [:opt_mult], [:opt_plus], [:leave]]) == 14",
+            "hint": "<code>when :opt_plus</code>, puis <code>b = stack.pop</code>, <code>a = stack.pop</code>, <code>stack.push(a + b)</code> – le second opérande est au sommet. Même chose avec <code>*</code> pour <code>:opt_mult</code>.",
+            "solution": "def run(program)\n  stack = []\n  program.each do |name, operand|\n    case name\n    when :putobject then stack.push(operand)\n    when :opt_plus\n      b = stack.pop\n      a = stack.pop\n      stack.push(a + b)\n    when :opt_mult\n      b = stack.pop\n      a = stack.pop\n      stack.push(a * b)\n    when :leave then return stack.pop\n    end\n  end\nend\n\nrun([[:putobject, 2], [:putobject, 3], [:opt_mult], [:putobject, 4], [:opt_plus], [:leave]])"
+          }
+        ]
+      },
+      "it": {
+        "title": "La macchina a stack",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>YARV è una <strong>macchina a stack</strong>: un’istruzione prende i suoi input dalla cima di uno stack e rimette lì il risultato – niente registri. <code>show_yarv</code> compila il codice e lo esegue un’istruzione alla volta, così puoi guardare. È un simulatore scritto in Ruby: esegue proprio le istruzioni che hai visto nella lezione precedente secondo le regole di <code>insns.def</code>, chiama i metodi veri per <code>+</code> e <code>puts</code>, e alla fine Ruby esegue davvero lo stesso codice – l’ultimo passo ti dice se entrambi hanno ottenuto lo stesso risultato. Usa ▶ per avanzare di un passo, oppure ⏵:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"a = 1 + 2\\nputs a * 3\\na\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>La colonna di destra è lo stack della VM così come YARV lo dispone in memoria, con la cima in alto. In fondo al frame: la variabile locale <code>a</code>. Sopra, tre slot che ogni frame riceve (a righe): <code>me/cref</code>, <code>specval</code> e <code>flags</code> – l’<strong>ep</strong>, l’environment pointer, punta a <code>flags</code>, e le variabili locali si trovano sotto di esso: <code>a</code> è <code>ep[-3]</code>. Ecco perché l’operando di <code>getlocal</code> conta verso il basso. Più sopra ancora, gli operandi: guarda <code>opt_plus</code> prenderne due e lasciarne uno. Una chiamata di metodo aggiunge un frame:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"def square(x) = x * x\\nsquare(4) + 1\")"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>definemethod</code> mette la sequenza di istruzioni del metodo nella tabella dei metodi di <code>Object</code>. Poi <code>putself</code>, <code>putobject 4</code>, <code>opt_send_without_block</code>: un nuovo control frame viene messo sopra quello vecchio, il <code>4</code> diventa la sua variabile locale <code>x</code>, le istruzioni a sinistra passano a quelle del metodo. <code>leave</code> toglie il frame e lascia 16 sullo stack del chiamante. La ricorsione è solo una pila di frame in più – avanza fino al punto più profondo:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"def fact(n) = n <= 1 ? 1 : n * fact(n - 1)\\nfact(4)\")"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Nel codice sorgente (CRuby 4.0.0)'><ul><li>Un frame viene aggiunto in <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_insnhelper.c#L372' target='_blank'><code>vm_push_frame:372</code></a>: le variabili locali, poi <code>cref_or_me</code>, <code>specval</code> e <code>type</code> – «ep with managing data» – e <code>.ep = sp - 1</code>.</li><li>Che cosa contiene un control frame: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_core.h#L911' target='_blank'><code>rb_control_frame_t:911</code></a> (pc, sp, iseq, self, ep …); i tre slot dell’env: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_core.h#L1418' target='_blank'><code>VM_ENV_DATA_SIZE:1418</code></a>.</li></ul></div><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/RubyVM/InstructionSequence.html' target='_blank'>RubyVM::InstructionSequence</a></div><div class='task'><strong>Esercizio:</strong> costruisci una piccola macchina a stack tutta tua. <code>run(program)</code> riceve istruzioni come quelle di YARV – <code>[:putobject, 2]</code>, <code>[:opt_mult]</code>, <code>[:leave]</code> – e le esegue usando un Array come stack. <code>:putobject</code> e <code>:leave</code> ci sono già; aggiungi <code>:opt_plus</code> e <code>:opt_mult</code>: togli due valori, metti il risultato. Il programma nella cella è <code>2 * 3 + 4</code>, compilato come farebbe YARV: 10.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def run(program)\n  stack = []\n  program.each do |name, operand|\n    case name\n    when :putobject then stack.push(operand)\n    # :opt_plus e :opt_mult: togli due valori, metti il risultato\n    when :leave then return stack.pop\n    end\n  end\nend\n\nrun([[:putobject, 2], [:putobject, 3], [:opt_mult], [:putobject, 4], [:opt_plus], [:leave]])",
+            "hints": [
+              "Altri due <code>when</code>. In ciascuno, togli i due valori in cima allo stack con <code>pop</code> e fai <code>push</code> della loro somma o del loro prodotto."
+            ],
+            "check": "result == 10 && run([[:putobject, 7], [:putobject, 5], [:opt_plus], [:leave]]) == 12 && run([[:putobject, 2], [:putobject, 3], [:putobject, 4], [:opt_mult], [:opt_plus], [:leave]]) == 14",
+            "hint": "<code>when :opt_plus</code>, poi <code>b = stack.pop</code>, <code>a = stack.pop</code>, <code>stack.push(a + b)</code> – il secondo operando è in cima. Lo stesso con <code>*</code> per <code>:opt_mult</code>.",
+            "solution": "def run(program)\n  stack = []\n  program.each do |name, operand|\n    case name\n    when :putobject then stack.push(operand)\n    when :opt_plus\n      b = stack.pop\n      a = stack.pop\n      stack.push(a + b)\n    when :opt_mult\n      b = stack.pop\n      a = stack.pop\n      stack.push(a * b)\n    when :leave then return stack.pop\n    end\n  end\nend\n\nrun([[:putobject, 2], [:putobject, 3], [:opt_mult], [:putobject, 4], [:opt_plus], [:leave]])"
+          }
+        ]
+      }
+    },
+    {
+      "id": "mikro-closures",
+      "de": {
+        "title": "Blöcke, Closures und der ep",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Ein Block kann die Variablen um ihn herum lesen und ändern. Wie findet er sie? Geh hier durch und achte auf <code>getlocal_WC_1</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"summe = 0\\n[1, 2, 3].each { |i| summe += i }\\nsumme\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Drei Frames: unten <code>&lt;main&gt;</code>, dann <code>Array#each</code> – eine Methode in C, ohne YARV-Instruktionen – und oben der Block mit seiner eigenen Local <code>i</code>. Der Platz <code>specval</code> des Blocks (<code>ep[-1]</code>) ist kein Block-Handler, sondern ein Zeiger auf das Environment, in dem er geschrieben wurde: das Env von <code>&lt;main&gt;</code>, <em>vorbei</em> am C-Frame dazwischen. <code>getlocal_WC_1</code> geht einen Schritt diesem Zeiger entlang – Ebene 1 – und liest dort <code>summe</code>. Ein Block merkt sich, wo er geschrieben wurde, nicht, wer ihn aufgerufen hat. Das ist eine <strong>Closure</strong>.</p><p>Und wenn der Frame, zu dem das Env gehört, weg ist? Hier kehrt die Methode <code>zaehler</code> zurück – aber ihr Lambda lebt weiter:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"def zaehler\\n  n = 0\\n  -> { n += 1 }\\nend\\n\\nplus = zaehler\\nplus.call\\nplus.call\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Wenn das Lambda entsteht, kopiert Ruby das Env von <code>zaehler</code> vom VM-Stack in ein Objekt auf dem Heap (<code>vm_make_env_object</code>) und lässt den ep des Lambdas dorthin zeigen. <code>zaehler</code> kehrt zurück, sein Frame verschwindet – und wenn das Lambda läuft, führt sein ep zu diesem Env «jetzt auf dem Heap», wo <code>n</code> weiterzählt. Ein Proc trägt sein Env mit sich, und du kannst hineinschauen, ohne den Proc aufzurufen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "machen = ->(futter) { -> { \"Chunky frisst #{futter}\" } }\nhappen = machen.(\"Speck\")\n[happen.call, happen.binding.local_variables, happen.binding.local_variable_get(:futter)]"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Im Quellcode (CRuby 4.0.0)'><ul><li><code>getlocal</code> geht <code>level</code> Schritte der ep-Kette entlang: <a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def#L77' target='_blank'><code>getlocal:77</code></a>.</li><li>Das Env zieht auf den Heap, wenn ein Proc oder ein Binding entsteht: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm.c#L1180' target='_blank'><code>vm_make_env_object:1180</code></a> (und <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm.c#L1077' target='_blank'><code>vm_make_env_each:1077</code></a>, das auch die Envs darum herum umzieht).</li><li>Das <code>specval</code> eines Blocks ist <code>ep[-1]</code>: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_core.h#L1418' target='_blank'><code>VM_ENV_DATA_INDEX_SPECVAL:1418</code></a>.</li></ul></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Proc.html' target='_blank'>Proc</a> · <a href='https://docs.ruby-lang.org/en/4.0/Binding.html' target='_blank'>Binding</a></div><div class='task'><strong>Aufgabe:</strong> Schreib <code>geheimnis_von(pr)</code>: Es gibt den Wert der Variablen <code>geheimnis</code> zurück, die der Proc <code>pr</code> eingeschlossen hat – ohne <code>pr</code> aufzurufen (die Procs, die es bekommt, würden laut protestieren).</div>"
+          },
+          {
+            "t": "x",
+            "code": "def geheimnis_von(pr)\n  # ins Env schauen, das pr mitträgt, ohne es aufzurufen\nend\n\nverschlossen = ->(geheimnis) { -> { raise \"nicht aufrufen!\" } }.(\"Speck\")\ngeheimnis_von(verschlossen)",
+            "hints": [
+              "<code>pr.binding</code> ist das Env, das der Proc mitträgt, als <code>Binding</code>. Ein Binding kann seine lokalen Variablen beim Namen lesen."
+            ],
+            "check": "result == \"Speck\" && geheimnis_von(->(geheimnis) { -> { raise \"nein\" } }.(42)) == 42",
+            "hint": "<code>pr.binding.local_variable_get(:geheimnis)</code> – der Name als Symbol.",
+            "solution": "def geheimnis_von(pr)\n  pr.binding.local_variable_get(:geheimnis)\nend\n\nverschlossen = ->(geheimnis) { -> { raise \"nicht aufrufen!\" } }.(\"Speck\")\ngeheimnis_von(verschlossen)"
+          }
+        ]
+      },
+      "en": {
+        "title": "Blocks, closures and the ep",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>A block can read and change the variables around it. How does it find them? Step through this one and watch for <code>getlocal_WC_1</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"sum = 0\\n[1, 2, 3].each { |i| sum += i }\\nsum\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Three frames: <code>&lt;main&gt;</code> at the bottom, then <code>Array#each</code> – a method written in C, with no YARV instructions – and on top the block, with its own local <code>i</code>. The block's <code>specval</code> slot (<code>ep[-1]</code>) is not a block handler but a pointer to the environment it was written in: the env of <code>&lt;main&gt;</code>, <em>past</em> the C frame in between. <code>getlocal_WC_1</code> goes one hop along that pointer – level 1 – and reads <code>sum</code> there. A block remembers where it was written, not who called it. That is a <strong>closure</strong>.</p><p>And when the frame the env belongs to is gone? Here the method <code>counter</code> returns – but its lambda lives on:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"def counter\\n  count = 0\\n  -> { count += 1 }\\nend\\n\\ninc = counter\\ninc.call\\ninc.call\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>When the lambda is made, Ruby copies the env of <code>counter</code> from the VM stack into an object on the heap (<code>vm_make_env_object</code>), and points the lambda's ep there. <code>counter</code> leaves, its frame is popped – and when the lambda runs, its ep leads to that env \"now on the heap\", where <code>count</code> keeps counting. A Proc carries its env along, and you can look into it without calling the Proc:</p>"
+          },
+          {
+            "t": "c",
+            "code": "make = ->(food) { -> { \"Chunky eats #{food}\" } }\nsnack = make.(\"bacon\")\n[snack.call, snack.binding.local_variables, snack.binding.local_variable_get(:food)]"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='In the source (CRuby 4.0.0)'><ul><li><code>getlocal</code> walks <code>level</code> steps along the ep chain: <a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def#L77' target='_blank'><code>getlocal:77</code></a>.</li><li>The env moves to the heap when a Proc or binding is made: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm.c#L1180' target='_blank'><code>vm_make_env_object:1180</code></a> (and <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm.c#L1077' target='_blank'><code>vm_make_env_each:1077</code></a>, which also moves the envs around it).</li><li>A block's <code>specval</code> is <code>ep[-1]</code>: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_core.h#L1418' target='_blank'><code>VM_ENV_DATA_INDEX_SPECVAL:1418</code></a>.</li></ul></div><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Proc.html' target='_blank'>Proc</a> · <a href='https://docs.ruby-lang.org/en/4.0/Binding.html' target='_blank'>Binding</a></div><div class='task'><strong>Task:</strong> Write <code>secret_of(pr)</code>: it gives back the value of the variable <code>secret</code> that the Proc <code>pr</code> closed over – without calling <code>pr</code> (the Procs it gets would complain loudly).</div>"
+          },
+          {
+            "t": "x",
+            "code": "def secret_of(pr)\n  # look into the env pr carries, without calling it\nend\n\nlocked = ->(secret) { -> { raise \"don't call me!\" } }.(\"bacon\")\nsecret_of(locked)",
+            "hints": [
+              "<code>pr.binding</code> is the env the Proc carries, as a <code>Binding</code>. A Binding can read its local variables by name."
+            ],
+            "check": "result == \"bacon\" && secret_of(->(secret) { -> { raise \"no\" } }.(42)) == 42",
+            "hint": "<code>pr.binding.local_variable_get(:secret)</code> – the name as a Symbol.",
+            "solution": "def secret_of(pr)\n  pr.binding.local_variable_get(:secret)\nend\n\nlocked = ->(secret) { -> { raise \"don't call me!\" } }.(\"bacon\")\nsecret_of(locked)"
+          }
+        ]
+      },
+      "ja": {
+        "title": "ブロック、クロージャ、そしてep",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>ブロックは周りの変数を読んだり変えたりできます。どうやってそれを見つけるのでしょうか。これをステップ実行して、<code>getlocal_WC_1</code>に注目してください：</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"sum = 0\\n[1, 2, 3].each { |i| sum += i }\\nsum\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>フレームは3つあります。一番下に<code>&lt;main&gt;</code>、次に<code>Array#each</code>（Cで書かれたメソッドで、YARV命令はありません）、そして一番上に自分のローカル変数<code>i</code>を持つブロックです。ブロックの<code>specval</code>スロット（<code>ep[-1]</code>）はブロックハンドラではなく、ブロックが書かれた場所の環境へのポインタです。つまり<code>&lt;main&gt;</code>のenvで、間にあるCのフレームを<em>飛び越えて</em>います。<code>getlocal_WC_1</code>はこのポインタを1つたどり（レベル1）、そこで<code>sum</code>を読みます。ブロックは誰に呼ばれたかではなく、どこで書かれたかを覚えています。これが<strong>クロージャ</strong>です。</p><p>では、envが属するフレームがなくなったら？ ここではメソッド<code>counter</code>が戻ります。でもそのラムダは生き続けます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"def counter\\n  count = 0\\n  -> { count += 1 }\\nend\\n\\ninc = counter\\ninc.call\\ninc.call\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>ラムダが作られるとき、Rubyは<code>counter</code>のenvをVMスタックからヒープ上のオブジェクトにコピーし（<code>vm_make_env_object</code>）、ラムダのepをそこに向けます。<code>counter</code>が戻ってフレームが取り除かれても、ラムダが実行されるとき、そのepは「今はヒープ上」のenvにつながっていて、そこで<code>count</code>が数え続けます。Procは自分のenvを持ち歩いていて、Procを呼ばずに中をのぞくこともできます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "make = ->(food) { -> { \"Chunky eats #{food}\" } }\nsnack = make.(\"bacon\")\n[snack.call, snack.binding.local_variables, snack.binding.local_variable_get(:food)]"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='ソースコードでは（CRuby 4.0.0）'><ul><li><code>getlocal</code>はepチェーンを<code>level</code>歩だけたどります：<a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def#L77' target='_blank'><code>getlocal:77</code></a>。</li><li>Procやbindingが作られるとき、envはヒープへ移ります：<a href='https://github.com/ruby/ruby/blob/v4.0.0/vm.c#L1180' target='_blank'><code>vm_make_env_object:1180</code></a>（そして周りのenvも一緒に移す<a href='https://github.com/ruby/ruby/blob/v4.0.0/vm.c#L1077' target='_blank'><code>vm_make_env_each:1077</code></a>）。</li><li>ブロックの<code>specval</code>は<code>ep[-1]</code>です：<a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_core.h#L1418' target='_blank'><code>VM_ENV_DATA_INDEX_SPECVAL:1418</code></a>。</li></ul></div><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/en/4.0/Proc.html' target='_blank'>Proc</a>（英語）・<a href='https://docs.ruby-lang.org/en/4.0/Binding.html' target='_blank'>Binding</a>（英語）</div><div class='task'><strong>課題：</strong><code>secret_of(pr)</code>を書いてください。Proc <code>pr</code>が閉じ込めている変数<code>secret</code>の値を返します。ただし<code>pr</code>は呼ばずに（渡されるProcは呼ばれると大声で文句を言います）。</div>"
+          },
+          {
+            "t": "x",
+            "code": "def secret_of(pr)\n  # prを呼ばずに、prが持っているenvをのぞく\nend\n\nlocked = ->(secret) { -> { raise \"don't call me!\" } }.(\"bacon\")\nsecret_of(locked)",
+            "hints": [
+              "<code>pr.binding</code>はProcが持ち歩いているenvを<code>Binding</code>として返すよ。Bindingはローカル変数を名前で読めるんだ。"
+            ],
+            "check": "result == \"bacon\" && secret_of(->(secret) { -> { raise \"no\" } }.(42)) == 42",
+            "hint": "<code>pr.binding.local_variable_get(:secret)</code>だよ。名前はSymbolで渡してね。",
+            "solution": "def secret_of(pr)\n  pr.binding.local_variable_get(:secret)\nend\n\nlocked = ->(secret) { -> { raise \"don't call me!\" } }.(\"bacon\")\nsecret_of(locked)"
+          }
+        ]
+      },
+      "fr": {
+        "title": "Blocs, closures et l'ep",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Un bloc peut lire et modifier les variables qui l'entourent. Comment les trouve-t-il ? Avancez pas à pas dans celui-ci et guettez <code>getlocal_WC_1</code> :</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"sum = 0\\n[1, 2, 3].each { |i| sum += i }\\nsum\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Trois frames : <code>&lt;main&gt;</code> en bas, puis <code>Array#each</code> – une méthode écrite en C, sans instructions YARV – et au sommet le bloc, avec sa propre variable locale <code>i</code>. Le slot <code>specval</code> du bloc (<code>ep[-1]</code>) n'est pas un block handler mais un pointeur vers l'environnement dans lequel il a été écrit : l'env de <code>&lt;main&gt;</code>, <em>par-dessus</em> la frame C intermédiaire. <code>getlocal_WC_1</code> fait un saut le long de ce pointeur – niveau 1 – et y lit <code>sum</code>. Un bloc se souvient de l'endroit où il a été écrit, pas de qui l'a appelé. C'est une <strong>closure</strong> (fermeture).</p><p>Et quand la frame à laquelle appartient l'env a disparu ? Ici, la méthode <code>counter</code> se termine – mais sa lambda continue de vivre :</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"def counter\\n  count = 0\\n  -> { count += 1 }\\nend\\n\\ninc = counter\\ninc.call\\ninc.call\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Quand la lambda est créée, Ruby copie l'env de <code>counter</code> de la pile de la VM vers un objet sur le tas (<code>vm_make_env_object</code>), et fait pointer l'ep de la lambda vers lui. <code>counter</code> se termine, sa frame est dépilée – et quand la lambda s'exécute, son ep mène à cet env « désormais sur le tas », où <code>count</code> continue de compter. Un Proc emporte son env avec lui, et vous pouvez regarder dedans sans appeler le Proc :</p>"
+          },
+          {
+            "t": "c",
+            "code": "make = ->(food) { -> { \"Chunky eats #{food}\" } }\nsnack = make.(\"bacon\")\n[snack.call, snack.binding.local_variables, snack.binding.local_variable_get(:food)]"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Dans le code source (CRuby 4.0.0)'><ul><li><code>getlocal</code> remonte <code>level</code> pas le long de la chaîne des ep : <a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def#L77' target='_blank'><code>getlocal:77</code></a>.</li><li>L'env passe sur le tas quand un Proc ou un binding est créé : <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm.c#L1180' target='_blank'><code>vm_make_env_object:1180</code></a> (et <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm.c#L1077' target='_blank'><code>vm_make_env_each:1077</code></a>, qui déplace aussi les envs qui l'entourent).</li><li>Le <code>specval</code> d'un bloc est <code>ep[-1]</code> : <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_core.h#L1418' target='_blank'><code>VM_ENV_DATA_INDEX_SPECVAL:1418</code></a>.</li></ul></div><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Proc.html' target='_blank'>Proc</a> · <a href='https://docs.ruby-lang.org/en/4.0/Binding.html' target='_blank'>Binding</a></div><div class='task'><strong>Exercice :</strong> Écrivez <code>secret_of(pr)</code> : elle renvoie la valeur de la variable <code>secret</code> que le Proc <code>pr</code> a capturée – sans appeler <code>pr</code> (les Procs qu'elle reçoit protesteraient bruyamment).</div>"
+          },
+          {
+            "t": "x",
+            "code": "def secret_of(pr)\n  # regardez dans l'env que pr transporte, sans l'appeler\nend\n\nlocked = ->(secret) { -> { raise \"don't call me!\" } }.(\"bacon\")\nsecret_of(locked)",
+            "hints": [
+              "<code>pr.binding</code> est l'env que le Proc emporte, sous forme de <code>Binding</code>. Un Binding peut lire ses variables locales par leur nom."
+            ],
+            "check": "result == \"bacon\" && secret_of(->(secret) { -> { raise \"no\" } }.(42)) == 42",
+            "hint": "<code>pr.binding.local_variable_get(:secret)</code> – le nom sous forme de Symbol.",
+            "solution": "def secret_of(pr)\n  pr.binding.local_variable_get(:secret)\nend\n\nlocked = ->(secret) { -> { raise \"don't call me!\" } }.(\"bacon\")\nsecret_of(locked)"
+          }
+        ]
+      },
+      "it": {
+        "title": "Blocchi, closure e l’ep",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Un blocco può leggere e modificare le variabili intorno a sé. Come fa a trovarle? Esegui questo passo per passo e fai attenzione a <code>getlocal_WC_1</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"sum = 0\\n[1, 2, 3].each { |i| sum += i }\\nsum\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Tre frame: <code>&lt;main&gt;</code> in fondo, poi <code>Array#each</code> – un metodo scritto in C, senza istruzioni YARV – e in cima il blocco, con la sua variabile locale <code>i</code>. Lo slot <code>specval</code> del blocco (<code>ep[-1]</code>) non è un block handler ma un puntatore all’environment in cui il blocco è stato scritto: l’env di <code>&lt;main&gt;</code>, <em>oltre</em> il frame C che sta in mezzo. <code>getlocal_WC_1</code> fa un salto lungo quel puntatore – livello 1 – e legge lì <code>sum</code>. Un blocco ricorda dove è stato scritto, non chi lo ha chiamato. Questa è una <strong>closure</strong>.</p><p>E quando il frame a cui appartiene l’env non c’è più? Qui il metodo <code>counter</code> ritorna – ma la sua lambda continua a vivere:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_yarv(\"def counter\\n  count = 0\\n  -> { count += 1 }\\nend\\n\\ninc = counter\\ninc.call\\ninc.call\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Quando la lambda viene creata, Ruby copia l’env di <code>counter</code> dallo stack della VM in un oggetto nello heap (<code>vm_make_env_object</code>) e fa puntare lì l’ep della lambda. <code>counter</code> esce, il suo frame viene tolto – e quando la lambda gira, il suo ep porta a quell’env «ora nello heap», dove <code>count</code> continua a contare. Un Proc si porta dietro il suo env, e puoi guardarci dentro senza chiamare il Proc:</p>"
+          },
+          {
+            "t": "c",
+            "code": "make = ->(food) { -> { \"Chunky eats #{food}\" } }\nsnack = make.(\"bacon\")\n[snack.call, snack.binding.local_variables, snack.binding.local_variable_get(:food)]"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Nel codice sorgente (CRuby 4.0.0)'><ul><li><code>getlocal</code> percorre <code>level</code> passi lungo la catena degli ep: <a href='https://github.com/ruby/ruby/blob/v4.0.0/insns.def#L77' target='_blank'><code>getlocal:77</code></a>.</li><li>L’env si sposta nello heap quando viene creato un Proc o un binding: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm.c#L1180' target='_blank'><code>vm_make_env_object:1180</code></a> (e <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm.c#L1077' target='_blank'><code>vm_make_env_each:1077</code></a>, che sposta anche gli env intorno).</li><li>Lo <code>specval</code> di un blocco è <code>ep[-1]</code>: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_core.h#L1418' target='_blank'><code>VM_ENV_DATA_INDEX_SPECVAL:1418</code></a>.</li></ul></div><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Proc.html' target='_blank'>Proc</a> · <a href='https://docs.ruby-lang.org/en/4.0/Binding.html' target='_blank'>Binding</a></div><div class='task'><strong>Esercizio:</strong> scrivi <code>secret_of(pr)</code>: restituisce il valore della variabile <code>secret</code> che il Proc <code>pr</code> ha catturato – senza chiamare <code>pr</code> (i Proc che riceve protesterebbero rumorosamente).</div>"
+          },
+          {
+            "t": "x",
+            "code": "def secret_of(pr)\n  # guarda dentro l’env che pr si porta dietro, senza chiamarlo\nend\n\nlocked = ->(secret) { -> { raise \"don't call me!\" } }.(\"bacon\")\nsecret_of(locked)",
+            "hints": [
+              "<code>pr.binding</code> è l’env che il Proc si porta dietro, come <code>Binding</code>. Un Binding può leggere le sue variabili locali per nome."
+            ],
+            "check": "result == \"bacon\" && secret_of(->(secret) { -> { raise \"no\" } }.(42)) == 42",
+            "hint": "<code>pr.binding.local_variable_get(:secret)</code> – il nome come Symbol.",
+            "solution": "def secret_of(pr)\n  pr.binding.local_variable_get(:secret)\nend\n\nlocked = ->(secret) { -> { raise \"don't call me!\" } }.(\"bacon\")\nsecret_of(locked)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "mikro-values",
+      "de": {
+        "title": "VALUE: was eine Variable enthält",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Im Stack der letzten Lektionen enthielt jeder Platz genau eine Sache: einen <strong>VALUE</strong>, ein Maschinenwort. Hier sind das 32 Bit. Die meisten VALUEs sind Zeiger auf ein Objekt im Heap – aber Kleines wird ins Wort selbst gepackt, und die untersten Bits sagen, welche Art es ist. Hier sind sieben, Bit für Bit:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_value(7, nil, true, false, :fuchs, \"Speck\", 1.5)"
+          },
+          {
+            "t": "h",
+            "html": "<ul><li><strong>7</strong> ist <code>0b1111</code> = 15: Ein Integer, der hineinpasst, wird um ein Bit nach links verschoben gespeichert, mit dem untersten Bit 1. Dieses Bit ist das Tag: «Ich bin ein Fixnum». Ein kleiner Integer ist also gar kein Objekt im Heap, und <code>7.object_id</code> ist das Wort selbst: 15.</li><li><strong>nil, true, false</strong> sind feste Wörter: 0x02, 0x06 und 0. Auf einem 64-Bit-Laptop ist <code>nil</code> 0x08 und <code>true</code> 0x14 – eine andere Tabelle in derselben Header-Datei, ausgewählt durch <code>USE_FLONUM</code>.</li><li><strong>1.5</strong>: Bei 64 Bit passt auch ein Float ins Wort (ein «Flonum», Tag-Bits <code>10</code>). Bei 32 Bit ist kein Platz: <code>USE_FLONUM</code> ist 0, und jeder Float ist ein Objekt im Heap. Das Bild zeigt einen Zeiger.</li></ul><p>Beide Grenzen kannst du messen. <code>ObjectSpace.memsize_of</code> ist 0 für das, was im Wort lebt:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"objspace\"\n\n[2**30 - 1, 2**30, 1.5].map { |n| [n, ObjectSpace.memsize_of(n)] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>2<sup>30</sup> − 1 ist hier der grösste Fixnum (31 Bit minus das Vorzeichen); eins mehr, und der Integer wird ein Bignum im Heap. Bei 64 Bit liegt die Grenze bei 2<sup>62</sup> − 1. Alles, was nicht ins Wort gepackt wird, lebt in einem <strong>Slot</strong> im Heap. Slots gibt es in fünf Grössen, jede doppelt so gross wie die vorige – hier 24, 48, 96, 192 und 384 Bytes (40 bis 640 bei 64 Bit). Ein Objekt nimmt den kleinsten Slot, in den sein Inhalt passt; was nicht passt, kommt in Speicher von <code>malloc</code>, und der Slot zeigt nur dorthin:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_slots(\"Fuchs\", \"a\" * 40, \"a\" * 200, \"a\" * 400, [1, 2, 3], { fuchs: 1 })"
+          },
+          {
+            "t": "h",
+            "html": "<p>«Embedded» heisst: Die Zeichen stehen im Slot selbst, einen Speicherzugriff entfernt. Der 400-Zeichen-String passt nicht mehr in den grössten Slot, also enthält sein Slot einen Zeiger auf die Zeichen. Ein Hash hat einen eigenen Trick: Bis zu ein paar Einträgen hält er sie in einem kleinen Array (einer «ar_table») und durchsucht es von vorne bis hinten; darüber wechselt er zu einer echten Hashtabelle. Wie viele sind «ein paar»? Die Balken zeigen die Grösse des Hashs in Bytes für 0 bis 10 Einträge:</p>"
+          },
+          {
+            "t": "c",
+            "code": "groessen = (0..10).to_h { |n| [n.to_s, ObjectSpace.memsize_of((1..n).to_h { |i| [i, i] })] }\nshow_bars(groessen, title: \"Hash: Bytes nach Anzahl Einträge\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Der Sprung kommt bei 5. Bücher sagen 8 – und auf einem 64-Bit-Laptop stimmt das: Die Grenze ist <code>RHASH_AR_TABLE_MAX_SIZE</code>, definiert als <code>SIZEOF_VALUE</code>, die Grösse eines VALUE in Bytes. Hier ist das 4. (Der nächste Sprung, bei 9, ist die echte Tabelle, die wächst.) <code>ObjectSpace.dump</code> sagt dir all das über ein Objekt, als JSON:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\n\nJSON.parse(ObjectSpace.dump(\"chunky bacon\"))"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Im Quellcode (CRuby 4.0.0)'><ul><li>Die Wörter von <code>nil</code>, <code>true</code>, die Tags – zwei Tabellen, mit und ohne Flonum: <a href='https://github.com/ruby/ruby/blob/v4.0.0/include/ruby/internal/special_consts.h#L98' target='_blank'><code>special_consts.h:98</code></a>; <code>USE_FLONUM</code> braucht 64 Bit: <a href='https://github.com/ruby/ruby/blob/v4.0.0/include/ruby/internal/special_consts.h#L45' target='_blank'><code>include/ruby/internal/special_consts.h:45</code></a>.</li><li>Die <code>object_id</code> eines Immediates ist das Wort selbst: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc.c#L2163' target='_blank'><code>rb_find_object_id:2163</code></a>.</li><li>Fünf Slot-Grössen: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L190' target='_blank'><code>HEAP_COUNT:190</code></a>, die kleinste <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L677' target='_blank'><code>BASE_SLOT_SIZE:677</code></a>. Die Grenze des Hashs: <a href='https://github.com/ruby/ruby/blob/v4.0.0/internal/hash.h#L17' target='_blank'><code>RHASH_AR_TABLE_MAX_SIZE:17</code></a>.</li></ul></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/ObjectSpace.html' target='_blank'>ObjectSpace</a> (<code>memsize_of</code>, <code>dump</code>)</div><div class='task'><strong>Aufgabe:</strong> Finde den längsten String, der noch in seinem Slot steckt. Schreib <code>laengster_eingebetteter</code>: Probier <code>\"a\" * n</code> für n = 0, 1, 2 … aus und schau dir <code>\"embedded\"</code> in seinem Dump an; gib das letzte n zurück, für das es true war.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"json\"\nrequire \"objspace\"\n\ndef eingebettet?(string)\n  JSON.parse(ObjectSpace.dump(string))[\"embedded\"] == true\nend\n\ndef laengster_eingebetteter\n  n = 0\n  # n hochzählen, solange \"a\" * (n + 1) noch eingebettet ist\n  n\nend\n\nlaengster_eingebetteter",
+            "hints": [
+              "Eine Schleife, die <code>n</code> hochzählt, solange der nächstlängere String noch passt: <code>while</code> mit <code>eingebettet?(\"a\" * (n + 1))</code> als Bedingung."
+            ],
+            "check": "result == (0..5000).find { |n| !JSON.parse(ObjectSpace.dump(\"a\" * n))[\"embedded\"] } - 1 && result > 100",
+            "hint": "<code>n += 1 while eingebettet?(\"a\" * (n + 1))</code>. Hier bekommst du 367: der 384-Byte-Slot, minus Kopf des Objekts, Länge und abschliessendes NUL-Byte.",
+            "solution": "require \"json\"\nrequire \"objspace\"\n\ndef eingebettet?(string)\n  JSON.parse(ObjectSpace.dump(string))[\"embedded\"] == true\nend\n\ndef laengster_eingebetteter\n  n = 0\n  n += 1 while eingebettet?(\"a\" * (n + 1))\n  n\nend\n\nlaengster_eingebetteter"
+          }
+        ]
+      },
+      "en": {
+        "title": "VALUE: what a variable holds",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>In the stack of the last lessons, every slot held one thing: a <strong>VALUE</strong>, one machine word. Here that is 32 bits. Most VALUEs are pointers to an object on the heap – but small things are packed into the word itself, and the lowest bits say which kind it is. Here are seven, bit by bit:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_value(7, nil, true, false, :fox, \"bacon\", 1.5)"
+          },
+          {
+            "t": "h",
+            "html": "<ul><li><strong>7</strong> is <code>0b1111</code> = 15: an Integer that fits is stored shifted one bit left, with the lowest bit 1. That bit is the tag: \"I am a Fixnum\". So a small Integer is no object on the heap at all, and <code>7.object_id</code> is the word itself: 15.</li><li><strong>nil, true, false</strong> are fixed words: 0x02, 0x06 and 0. On a 64-bit laptop <code>nil</code> is 0x08 and <code>true</code> 0x14 – a different table in the same header file, chosen by <code>USE_FLONUM</code>.</li><li><strong>1.5</strong>: on 64 bits a Float fits into the word too (a \"flonum\", tag bits <code>10</code>). On 32 bits there is no room: <code>USE_FLONUM</code> is 0, and every Float is an object on the heap. The picture shows a pointer.</li></ul><p>You can measure both limits. <code>ObjectSpace.memsize_of</code> is 0 for what lives in the word:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"objspace\"\n\n[2**30 - 1, 2**30, 1.5].map { |n| [n, ObjectSpace.memsize_of(n)] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>2<sup>30</sup> − 1 is the largest Fixnum here (31 bits minus the sign); one more, and the Integer becomes a Bignum on the heap. On 64 bits the line is at 2<sup>62</sup> − 1. Everything that is not packed into the word lives in a <strong>slot</strong> on the heap. Slots come in five sizes, each twice the last – here 24, 48, 96, 192 and 384 bytes (40 to 640 on 64 bits). An object takes the smallest slot its contents fit into; what does not fit goes to memory from <code>malloc</code>, and the slot only points there:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_slots(\"fox\", \"a\" * 40, \"a\" * 200, \"a\" * 400, [1, 2, 3], { fox: 1 })"
+          },
+          {
+            "t": "h",
+            "html": "<p>\"Embedded\" means: the characters are inside the slot itself, one memory access away. The 400-character string no longer fits into the biggest slot, so its slot holds a pointer to the characters. A Hash has a trick of its own: up to a few entries it keeps them in a small array (an \"ar_table\") and searches it from start to end; above that it switches to a real hash table. How many is \"a few\"? The bars show the Hash's size in bytes for 0 to 10 entries:</p>"
+          },
+          {
+            "t": "c",
+            "code": "sizes = (0..10).to_h { |n| [n.to_s, ObjectSpace.memsize_of((1..n).to_h { |i| [i, i] })] }\nshow_bars(sizes, title: \"Hash: bytes by number of entries\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>The jump comes at 5. Books say 8 – and on a 64-bit laptop they are right: the limit is <code>RHASH_AR_TABLE_MAX_SIZE</code>, defined as <code>SIZEOF_VALUE</code>, the size of a VALUE in bytes. Here that is 4. (The next jump, at 9, is the real table growing.) <code>ObjectSpace.dump</code> tells you all of this about one object, as JSON:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\n\nJSON.parse(ObjectSpace.dump(\"chunky bacon\"))"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='In the source (CRuby 4.0.0)'><ul><li>The words of <code>nil</code>, <code>true</code>, the tags – two tables, with and without flonum: <a href='https://github.com/ruby/ruby/blob/v4.0.0/include/ruby/internal/special_consts.h#L98' target='_blank'><code>special_consts.h:98</code></a>; <code>USE_FLONUM</code> needs 64 bits: <a href='https://github.com/ruby/ruby/blob/v4.0.0/include/ruby/internal/special_consts.h#L45' target='_blank'><code>include/ruby/internal/special_consts.h:45</code></a>.</li><li><code>object_id</code> of an immediate is the word itself: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc.c#L2163' target='_blank'><code>rb_find_object_id:2163</code></a>.</li><li>Five slot sizes: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L190' target='_blank'><code>HEAP_COUNT:190</code></a>, the smallest <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L677' target='_blank'><code>BASE_SLOT_SIZE:677</code></a>. The Hash's limit: <a href='https://github.com/ruby/ruby/blob/v4.0.0/internal/hash.h#L17' target='_blank'><code>RHASH_AR_TABLE_MAX_SIZE:17</code></a>.</li></ul></div><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/ObjectSpace.html' target='_blank'>ObjectSpace</a> (<code>memsize_of</code>, <code>dump</code>)</div><div class='task'><strong>Task:</strong> Find the longest String that is still embedded in its slot. Write <code>longest_embedded</code>: try <code>\"a\" * n</code> for n = 0, 1, 2 … and look at <code>\"embedded\"</code> in its dump; give back the last n for which it was true.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"json\"\nrequire \"objspace\"\n\ndef embedded?(string)\n  JSON.parse(ObjectSpace.dump(string))[\"embedded\"] == true\nend\n\ndef longest_embedded\n  n = 0\n  # count n up while \"a\" * (n + 1) is still embedded\n  n\nend\n\nlongest_embedded",
+            "hints": [
+              "A loop that counts <code>n</code> up as long as the next longer string still fits: <code>while</code> with <code>embedded?(\"a\" * (n + 1))</code> as its condition."
+            ],
+            "check": "result == (0..5000).find { |n| !JSON.parse(ObjectSpace.dump(\"a\" * n))[\"embedded\"] } - 1 && result > 100",
+            "hint": "<code>n += 1 while embedded?(\"a\" * (n + 1))</code>. Here you will get 367: the 384-byte slot, minus the object's header, the length and the closing NUL byte.",
+            "solution": "require \"json\"\nrequire \"objspace\"\n\ndef embedded?(string)\n  JSON.parse(ObjectSpace.dump(string))[\"embedded\"] == true\nend\n\ndef longest_embedded\n  n = 0\n  n += 1 while embedded?(\"a\" * (n + 1))\n  n\nend\n\nlongest_embedded"
+          }
+        ]
+      },
+      "ja": {
+        "title": "VALUE：変数が持っているもの",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>これまでのレッスンのスタックでは、どのスロットにも1つのもの、つまり<strong>VALUE</strong>が入っていました。1マシンワードです。ここではそれが32ビットです。ほとんどのVALUEはヒープ上のオブジェクトへのポインタですが、小さなものはワードそのものに詰め込まれ、最下位のビットがその種類を示します。7つをビット単位で見てみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_value(7, nil, true, false, :fox, \"bacon\", 1.5)"
+          },
+          {
+            "t": "h",
+            "html": "<ul><li><strong>7</strong>は<code>0b1111</code> = 15です。収まるIntegerは1ビット左にシフトして格納され、最下位ビットが1になります。このビットがタグで、「私はFixnum」という意味です。ですから小さなIntegerはヒープ上のオブジェクトではまったくなく、<code>7.object_id</code>はワードそのもの、15です。</li><li><strong>nil、true、false</strong>は固定のワードです：0x02、0x06、0。64ビットのノートPCでは<code>nil</code>は0x08、<code>true</code>は0x14です。同じヘッダーファイルの別の表で、<code>USE_FLONUM</code>によって選ばれます。</li><li><strong>1.5</strong>：64ビットではFloatもワードに収まります（「flonum」、タグビット<code>10</code>）。32ビットでは場所がありません。<code>USE_FLONUM</code>は0で、Floatはすべてヒープ上のオブジェクトです。図にはポインタが出ています。</li></ul><p>どちらの限界も測れます。ワードの中にあるものは<code>ObjectSpace.memsize_of</code>が0になります：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"objspace\"\n\n[2**30 - 1, 2**30, 1.5].map { |n| [n, ObjectSpace.memsize_of(n)] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>ここでは2<sup>30</sup> − 1が最大のFixnumです（31ビットから符号を引いたもの）。1つ増えるとIntegerはヒープ上のBignumになります。64ビットでは境目は2<sup>62</sup> − 1です。ワードに詰め込まれないものはすべて、ヒープ上の<strong>スロット</strong>に住んでいます。スロットには5つのサイズがあり、それぞれ前の2倍です。ここでは24、48、96、192、384バイト（64ビットでは40から640）。オブジェクトは中身が収まる一番小さなスロットを使います。収まらない分は<code>malloc</code>のメモリへ行き、スロットはそこを指すだけです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_slots(\"fox\", \"a\" * 40, \"a\" * 200, \"a\" * 400, [1, 2, 3], { fox: 1 })"
+          },
+          {
+            "t": "h",
+            "html": "<p>「埋め込み（embedded）」とは、文字がスロットそのものの中にあり、メモリアクセス1回で届くということです。400文字の文字列はもう一番大きなスロットにも収まらないので、スロットには文字へのポインタが入っています。Hashには独自の工夫があります。エントリが数個までは小さな配列（「ar_table」）に入れて先頭から順に探し、それを超えると本物のハッシュテーブルに切り替えます。「数個」とはいくつでしょう？ 棒グラフは、エントリ0個から10個までのHashのサイズをバイトで示しています：</p>"
+          },
+          {
+            "t": "c",
+            "code": "sizes = (0..10).to_h { |n| [n.to_s, ObjectSpace.memsize_of((1..n).to_h { |i| [i, i] })] }\nshow_bars(sizes, title: \"Hash: bytes by number of entries\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>跳ね上がるのは5のところです。本には8と書いてあり、64ビットのノートPCならそれで正しいのです。上限は<code>RHASH_AR_TABLE_MAX_SIZE</code>で、<code>SIZEOF_VALUE</code>、つまりVALUEのバイト数として定義されています。ここではそれが4です。（次の9での跳ね上がりは、本物のテーブルが大きくなるところです。）<code>ObjectSpace.dump</code>は1つのオブジェクトについてこれらすべてをJSONで教えてくれます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\n\nJSON.parse(ObjectSpace.dump(\"chunky bacon\"))"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='ソースコードでは（CRuby 4.0.0）'><ul><li><code>nil</code>や<code>true</code>のワード、タグ。flonumありとなしの2つの表：<a href='https://github.com/ruby/ruby/blob/v4.0.0/include/ruby/internal/special_consts.h#L98' target='_blank'><code>special_consts.h:98</code></a>。<code>USE_FLONUM</code>には64ビットが必要です：<a href='https://github.com/ruby/ruby/blob/v4.0.0/include/ruby/internal/special_consts.h#L45' target='_blank'><code>include/ruby/internal/special_consts.h:45</code></a>。</li><li>即値の<code>object_id</code>はワードそのもの：<a href='https://github.com/ruby/ruby/blob/v4.0.0/gc.c#L2163' target='_blank'><code>rb_find_object_id:2163</code></a>。</li><li>5つのスロットサイズ：<a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L190' target='_blank'><code>HEAP_COUNT:190</code></a>、最小のもの：<a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L677' target='_blank'><code>BASE_SLOT_SIZE:677</code></a>。Hashの上限：<a href='https://github.com/ruby/ruby/blob/v4.0.0/internal/hash.h#L17' target='_blank'><code>RHASH_AR_TABLE_MAX_SIZE:17</code></a>。</li></ul></div><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/en/4.0/ObjectSpace.html' target='_blank'>ObjectSpace</a>（英語）（<code>memsize_of</code>、<code>dump</code>）</div><div class='task'><strong>課題：</strong>スロットにまだ埋め込まれる一番長いStringを見つけましょう。<code>longest_embedded</code>を書いてください。n = 0, 1, 2 …について<code>\"a\" * n</code>を試し、そのdumpの<code>\"embedded\"</code>を見ます。それがtrueだった最後のnを返してください。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"json\"\nrequire \"objspace\"\n\ndef embedded?(string)\n  JSON.parse(ObjectSpace.dump(string))[\"embedded\"] == true\nend\n\ndef longest_embedded\n  n = 0\n  # \"a\" * (n + 1) がまだ埋め込みのあいだ、nを増やす\n  n\nend\n\nlongest_embedded",
+            "hints": [
+              "次に長い文字列がまだ収まるあいだ、<code>n</code>を増やすループだよ：条件に<code>embedded?(\"a\" * (n + 1))</code>を使った<code>while</code>。"
+            ],
+            "check": "result == (0..5000).find { |n| !JSON.parse(ObjectSpace.dump(\"a\" * n))[\"embedded\"] } - 1 && result > 100",
+            "hint": "<code>n += 1 while embedded?(\"a\" * (n + 1))</code>。ここでは367になるよ：384バイトのスロットから、オブジェクトのヘッダーと長さと終わりのNULバイトを引いた分だね。",
+            "solution": "require \"json\"\nrequire \"objspace\"\n\ndef embedded?(string)\n  JSON.parse(ObjectSpace.dump(string))[\"embedded\"] == true\nend\n\ndef longest_embedded\n  n = 0\n  n += 1 while embedded?(\"a\" * (n + 1))\n  n\nend\n\nlongest_embedded"
+          }
+        ]
+      },
+      "fr": {
+        "title": "VALUE : ce que contient une variable",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Dans la pile des leçons précédentes, chaque slot contenait une seule chose : une <strong>VALUE</strong>, un mot machine. Ici, cela fait 32 bits. La plupart des VALUEs sont des pointeurs vers un objet sur le tas – mais les petites choses sont logées dans le mot lui-même, et les bits de poids faible indiquent de quel genre il s'agit. En voici sept, bit par bit :</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_value(7, nil, true, false, :fox, \"bacon\", 1.5)"
+          },
+          {
+            "t": "h",
+            "html": "<ul><li><strong>7</strong> donne <code>0b1111</code> = 15 : un Integer qui tient est stocké décalé d'un bit vers la gauche, avec le bit le plus bas à 1. Ce bit est le tag : « je suis un Fixnum ». Un petit Integer n'est donc pas du tout un objet sur le tas, et <code>7.object_id</code> est le mot lui-même : 15.</li><li><strong>nil, true, false</strong> sont des mots fixes : 0x02, 0x06 et 0. Sur un portable 64 bits, <code>nil</code> vaut 0x08 et <code>true</code> 0x14 – une autre table dans le même fichier d'en-tête, choisie par <code>USE_FLONUM</code>.</li><li><strong>1.5</strong> : sur 64 bits, un Float tient lui aussi dans le mot (un « flonum », bits de tag <code>10</code>). Sur 32 bits, il n'y a pas la place : <code>USE_FLONUM</code> vaut 0, et chaque Float est un objet sur le tas. L'image montre un pointeur.</li></ul><p>Vous pouvez mesurer les deux limites. <code>ObjectSpace.memsize_of</code> vaut 0 pour ce qui vit dans le mot :</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"objspace\"\n\n[2**30 - 1, 2**30, 1.5].map { |n| [n, ObjectSpace.memsize_of(n)] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>2<sup>30</sup> − 1 est le plus grand Fixnum ici (31 bits moins le signe) ; un de plus, et l'Integer devient un Bignum sur le tas. Sur 64 bits, la limite est à 2<sup>62</sup> − 1. Tout ce qui n'est pas logé dans le mot vit dans un <strong>slot</strong> sur le tas. Les slots existent en cinq tailles, chacune le double de la précédente – ici 24, 48, 96, 192 et 384 octets (40 à 640 sur 64 bits). Un objet prend le plus petit slot dans lequel son contenu tient ; ce qui ne tient pas va dans de la mémoire obtenue par <code>malloc</code>, et le slot se contente d'y pointer :</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_slots(\"fox\", \"a\" * 40, \"a\" * 200, \"a\" * 400, [1, 2, 3], { fox: 1 })"
+          },
+          {
+            "t": "h",
+            "html": "<p>« Embarqué » signifie : les caractères sont dans le slot lui-même, à un seul accès mémoire. La chaîne de 400 caractères ne tient plus dans le plus grand slot, donc son slot contient un pointeur vers les caractères. Un Hash a son propre tour : jusqu'à quelques entrées, il les garde dans un petit tableau (un « ar_table ») qu'il parcourt du début à la fin ; au-delà, il passe à une vraie table de hachage. Combien font « quelques » ? Les barres montrent la taille du Hash en octets pour 0 à 10 entrées :</p>"
+          },
+          {
+            "t": "c",
+            "code": "sizes = (0..10).to_h { |n| [n.to_s, ObjectSpace.memsize_of((1..n).to_h { |i| [i, i] })] }\nshow_bars(sizes, title: \"Hash: bytes by number of entries\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Le saut se produit à 5. Les livres disent 8 – et sur un portable 64 bits, ils ont raison : la limite est <code>RHASH_AR_TABLE_MAX_SIZE</code>, définie comme <code>SIZEOF_VALUE</code>, la taille d'une VALUE en octets. Ici, c'est 4. (Le saut suivant, à 9, c'est la vraie table qui grandit.) <code>ObjectSpace.dump</code> vous dit tout cela sur un objet, en JSON :</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\n\nJSON.parse(ObjectSpace.dump(\"chunky bacon\"))"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Dans le code source (CRuby 4.0.0)'><ul><li>Les mots de <code>nil</code>, <code>true</code>, les tags – deux tables, avec et sans flonum : <a href='https://github.com/ruby/ruby/blob/v4.0.0/include/ruby/internal/special_consts.h#L98' target='_blank'><code>special_consts.h:98</code></a> ; <code>USE_FLONUM</code> exige 64 bits : <a href='https://github.com/ruby/ruby/blob/v4.0.0/include/ruby/internal/special_consts.h#L45' target='_blank'><code>include/ruby/internal/special_consts.h:45</code></a>.</li><li>L'<code>object_id</code> d'une valeur immédiate est le mot lui-même : <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc.c#L2163' target='_blank'><code>rb_find_object_id:2163</code></a>.</li><li>Cinq tailles de slot : <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L190' target='_blank'><code>HEAP_COUNT:190</code></a>, la plus petite <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L677' target='_blank'><code>BASE_SLOT_SIZE:677</code></a>. La limite du Hash : <a href='https://github.com/ruby/ruby/blob/v4.0.0/internal/hash.h#L17' target='_blank'><code>RHASH_AR_TABLE_MAX_SIZE:17</code></a>.</li></ul></div><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/ObjectSpace.html' target='_blank'>ObjectSpace</a> (<code>memsize_of</code>, <code>dump</code>)</div><div class='task'><strong>Exercice :</strong> Trouvez la plus longue String qui est encore embarquée dans son slot. Écrivez <code>longest_embedded</code> : essayez <code>\"a\" * n</code> pour n = 0, 1, 2 … et regardez <code>\"embedded\"</code> dans son dump ; renvoyez le dernier n pour lequel c'était vrai.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"json\"\nrequire \"objspace\"\n\ndef embedded?(string)\n  JSON.parse(ObjectSpace.dump(string))[\"embedded\"] == true\nend\n\ndef longest_embedded\n  n = 0\n  # augmentez n tant que \"a\" * (n + 1) est encore embarqué\n  n\nend\n\nlongest_embedded",
+            "hints": [
+              "Une boucle qui augmente <code>n</code> tant que la chaîne suivante, plus longue d'un caractère, tient encore : <code>while</code> avec <code>embedded?(\"a\" * (n + 1))</code> comme condition."
+            ],
+            "check": "result == (0..5000).find { |n| !JSON.parse(ObjectSpace.dump(\"a\" * n))[\"embedded\"] } - 1 && result > 100",
+            "hint": "<code>n += 1 while embedded?(\"a\" * (n + 1))</code>. Ici, vous obtiendrez 367 : le slot de 384 octets, moins l'en-tête de l'objet, la longueur et l'octet NUL final.",
+            "solution": "require \"json\"\nrequire \"objspace\"\n\ndef embedded?(string)\n  JSON.parse(ObjectSpace.dump(string))[\"embedded\"] == true\nend\n\ndef longest_embedded\n  n = 0\n  n += 1 while embedded?(\"a\" * (n + 1))\n  n\nend\n\nlongest_embedded"
+          }
+        ]
+      },
+      "it": {
+        "title": "VALUE: che cosa contiene una variabile",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Nello stack delle ultime lezioni, ogni slot conteneva una cosa sola: un <strong>VALUE</strong>, una parola macchina. Qui sono 32 bit. La maggior parte dei VALUE sono puntatori a un oggetto nello heap – ma le cose piccole vengono impacchettate nella parola stessa, e i bit più bassi dicono di che tipo è. Eccone sette, bit per bit:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_value(7, nil, true, false, :fox, \"bacon\", 1.5)"
+          },
+          {
+            "t": "h",
+            "html": "<ul><li><strong>7</strong> è <code>0b1111</code> = 15: un Integer che ci sta viene salvato spostato di un bit a sinistra, con il bit più basso a 1. Quel bit è il tag: «sono un Fixnum». Quindi un Integer piccolo non è affatto un oggetto nello heap, e <code>7.object_id</code> è la parola stessa: 15.</li><li><strong>nil, true, false</strong> sono parole fisse: 0x02, 0x06 e 0. Su un portatile a 64 bit <code>nil</code> è 0x08 e <code>true</code> 0x14 – un’altra tabella nello stesso file header, scelta da <code>USE_FLONUM</code>.</li><li><strong>1.5</strong>: a 64 bit anche un Float entra nella parola (un «flonum», bit di tag <code>10</code>). A 32 bit non c’è spazio: <code>USE_FLONUM</code> è 0, e ogni Float è un oggetto nello heap. L’immagine mostra un puntatore.</li></ul><p>Puoi misurare entrambi i limiti. <code>ObjectSpace.memsize_of</code> è 0 per ciò che vive nella parola:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"objspace\"\n\n[2**30 - 1, 2**30, 1.5].map { |n| [n, ObjectSpace.memsize_of(n)] }"
+          },
+          {
+            "t": "h",
+            "html": "<p>2<sup>30</sup> − 1 è il Fixnum più grande qui (31 bit meno il segno); uno in più, e l’Integer diventa un Bignum nello heap. A 64 bit il limite è 2<sup>62</sup> − 1. Tutto ciò che non è impacchettato nella parola vive in uno <strong>slot</strong> nello heap. Gli slot hanno cinque dimensioni, ognuna il doppio della precedente – qui 24, 48, 96, 192 e 384 byte (da 40 a 640 a 64 bit). Un oggetto prende lo slot più piccolo in cui entra il suo contenuto; ciò che non ci sta va in memoria presa con <code>malloc</code>, e lo slot si limita a puntare lì:</p>"
+          },
+          {
+            "t": "c",
+            "code": "show_slots(\"fox\", \"a\" * 40, \"a\" * 200, \"a\" * 400, [1, 2, 3], { fox: 1 })"
+          },
+          {
+            "t": "h",
+            "html": "<p>«Embedded» significa: i caratteri sono dentro lo slot stesso, a un solo accesso in memoria. La stringa di 400 caratteri non entra più nemmeno nello slot più grande, quindi il suo slot contiene un puntatore ai caratteri. Un Hash ha un trucco tutto suo: fino a poche voci le tiene in un piccolo array (una «ar_table») e lo scorre dall’inizio alla fine; oltre passa a una vera tabella hash. Quante sono «poche»? Le barre mostrano la dimensione dell’Hash in byte da 0 a 10 voci:</p>"
+          },
+          {
+            "t": "c",
+            "code": "sizes = (0..10).to_h { |n| [n.to_s, ObjectSpace.memsize_of((1..n).to_h { |i| [i, i] })] }\nshow_bars(sizes, title: \"Hash: bytes by number of entries\")"
+          },
+          {
+            "t": "h",
+            "html": "<p>Il salto arriva a 5. I libri dicono 8 – e su un portatile a 64 bit hanno ragione: il limite è <code>RHASH_AR_TABLE_MAX_SIZE</code>, definito come <code>SIZEOF_VALUE</code>, la dimensione di un VALUE in byte. Qui è 4. (Il salto successivo, a 9, è la vera tabella che cresce.) <code>ObjectSpace.dump</code> ti dice tutto questo su un singolo oggetto, in JSON:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\n\nJSON.parse(ObjectSpace.dump(\"chunky bacon\"))"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Nel codice sorgente (CRuby 4.0.0)'><ul><li>Le parole di <code>nil</code>, <code>true</code>, i tag – due tabelle, con e senza flonum: <a href='https://github.com/ruby/ruby/blob/v4.0.0/include/ruby/internal/special_consts.h#L98' target='_blank'><code>special_consts.h:98</code></a>; <code>USE_FLONUM</code> richiede 64 bit: <a href='https://github.com/ruby/ruby/blob/v4.0.0/include/ruby/internal/special_consts.h#L45' target='_blank'><code>include/ruby/internal/special_consts.h:45</code></a>.</li><li>L’<code>object_id</code> di un valore immediato è la parola stessa: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc.c#L2163' target='_blank'><code>rb_find_object_id:2163</code></a>.</li><li>Cinque dimensioni di slot: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L190' target='_blank'><code>HEAP_COUNT:190</code></a>, la più piccola <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L677' target='_blank'><code>BASE_SLOT_SIZE:677</code></a>. Il limite dell’Hash: <a href='https://github.com/ruby/ruby/blob/v4.0.0/internal/hash.h#L17' target='_blank'><code>RHASH_AR_TABLE_MAX_SIZE:17</code></a>.</li></ul></div><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/ObjectSpace.html' target='_blank'>ObjectSpace</a> (<code>memsize_of</code>, <code>dump</code>)</div><div class='task'><strong>Esercizio:</strong> trova la String più lunga che è ancora embedded nel suo slot. Scrivi <code>longest_embedded</code>: prova <code>\"a\" * n</code> per n = 0, 1, 2 … e guarda <code>\"embedded\"</code> nel suo dump; restituisci l’ultimo n per cui era true.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"json\"\nrequire \"objspace\"\n\ndef embedded?(string)\n  JSON.parse(ObjectSpace.dump(string))[\"embedded\"] == true\nend\n\ndef longest_embedded\n  n = 0\n  # aumenta n finché \"a\" * (n + 1) è ancora embedded\n  n\nend\n\nlongest_embedded",
+            "hints": [
+              "Un ciclo che fa crescere <code>n</code> finché la stringa più lunga di uno ci sta ancora: <code>while</code> con <code>embedded?(\"a\" * (n + 1))</code> come condizione."
+            ],
+            "check": "result == (0..5000).find { |n| !JSON.parse(ObjectSpace.dump(\"a\" * n))[\"embedded\"] } - 1 && result > 100",
+            "hint": "<code>n += 1 while embedded?(\"a\" * (n + 1))</code>. Qui ottieni 367: lo slot da 384 byte, meno l’intestazione dell’oggetto, la lunghezza e il byte NUL finale.",
+            "solution": "require \"json\"\nrequire \"objspace\"\n\ndef embedded?(string)\n  JSON.parse(ObjectSpace.dump(string))[\"embedded\"] == true\nend\n\ndef longest_embedded\n  n = 0\n  n += 1 while embedded?(\"a\" * (n + 1))\n  n\nend\n\nlongest_embedded"
+          }
+        ]
+      }
+    },
+    {
+      "id": "mikro-lookup",
+      "de": {
+        "title": "Klassen und die Methodensuche",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Jedes Objekt im Heap beginnt mit zwei Wörtern: seinen Flags und <code>klass</code>, einem Zeiger auf seine Klasse. Die Klasse hat eine Methodentabelle und einen Zeiger auf ihre Oberklasse. Um <code>jung.gruss</code> auszuführen, folgt Ruby <code>klass</code> und dann den Super-Zeigern, bis eine Methodentabelle <code>gruss</code> enthält. Module reihen sich in diese Kette ein – hier eine Klasse mit einem eingebundenen und einem vorangestellten:</p>"
+          },
+          {
+            "t": "c",
+            "code": "module Schreiend\n  def gruss = super.upcase + \"!\"\nend\n\nmodule Hoeflich\n  def gruss = \"bitte, \" + super\nend\n\nclass Welpe\n  def gruss = \"hallo\"\nend\n\nclass Jungfuchs < Welpe\n  include Hoeflich\n  prepend Schreiend\n  def gruss = \"Jungfuchs sagt \" + super\nend\n\njung = Jungfuchs.new\n[jung.gruss, Jungfuchs.ancestors.first(5)]"
+          },
+          {
+            "t": "c",
+            "code": "show_lookup(jung, :gruss)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Geh hindurch. Die Suche beginnt bei <code>Schreiend</code>, nicht bei <code>Jungfuchs</code>: <code>prepend</code> hat das Modul davorgesetzt, und die eigenen Methoden von <code>Jungfuchs</code> sind einen Platz nach unten gerückt, in eine versteckte «Origin»-Klasse. Auch <code>include</code> hat <code>Hoeflich</code> nicht in <code>Jungfuchs</code> kopiert – es hat eine kleine Stellvertreterklasse, eine <strong>iclass</strong>, direkt nach <code>Jungfuchs</code> in die Kette gesetzt, die auf die Methodentabelle des Moduls zeigt. Der erste Treffer gewinnt; jedes <code>super</code> setzt die Suche von dort aus fort, und so landen alle vier <code>gruss</code> in einem Satz.</p><p>Und eine Methode für ein einziges Objekt? Die kann nicht in <code>Jungfuchs</code>. Ruby macht eine Klasse nur für dieses Objekt – seine <strong>Singleton-Klasse</strong> – und setzt sie zwischen das Objekt und <code>Jungfuchs</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def jung.gruss = \"nur ich: \" + super\n\nshow_lookup(jung, :gruss)\njung.gruss"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>jung.singleton_class</code> liefert sie, und <code>attached_object</code> führt zurück. Klassenmethoden sind derselbe Trick: <code>def self.erzeugen</code> in einer Klasse legt die Methode in die Singleton-Klasse des Klassenobjekts. Noch eine Art, der Kette zuzuschauen, ist <code>Method#super_method</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "m = jung.method(:gruss)\nbesitzer = []\nwhile m\n  besitzer << m.owner\n  m = m.super_method\nend\nbesitzer"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Im Quellcode (CRuby 4.0.0)'><ul><li>Die Suche selbst, eine Schleife entlang <code>RCLASS_SUPER</code>: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_method.c#L1685' target='_blank'><code>search_method0:1685</code></a>.</li><li><code>include</code> macht die iclass: <a href='https://github.com/ruby/ruby/blob/v4.0.0/class.c#L1977' target='_blank'><code>include_modules_at:1977</code></a>; <code>prepend</code> verschiebt die Methoden der Klasse in ihren Origin: <a href='https://github.com/ruby/ruby/blob/v4.0.0/class.c#L2048' target='_blank'><code>rb_prepend_module:2048</code></a>.</li><li>Die Singleton-Klasse, beim ersten Gebrauch erzeugt: <a href='https://github.com/ruby/ruby/blob/v4.0.0/class.c#L2915' target='_blank'><code>rb_singleton_class:2915</code></a>.</li></ul></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-ancestors' target='_blank'>Module#ancestors</a> · <a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-method_defined-3F' target='_blank'>Module#method_defined?</a></div><div class='task'><strong>Aufgabe:</strong> Mach die Suche selbst. <code>besitzer_finden(obj, name)</code> geht <code>obj.singleton_class.ancestors</code> entlang und gibt das erste Modul oder die erste Klasse zurück, deren <em>eigene</em> Methodentabelle <code>name</code> enthält – <code>method_defined?(name, false)</code> (das <code>false</code>: nicht geerbt) oder <code>private_method_defined?(name, false)</code>. Rubys eigene Antwort ist <code>obj.method(name).owner</code>; deine muss damit übereinstimmen.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def besitzer_finden(obj, name)\n  obj.singleton_class.ancestors.each do |mod|\n    # das erste mod, dessen eigene Tabelle name enthält\n  end\n  nil\nend\n\nbesitzer_finden(jung, :gruss)",
+            "hints": [
+              "In der Schleife: <code>return mod if</code> die Methode in der eigenen Tabelle von <code>mod</code> steht – öffentlich oder privat (<code>puts</code> ist eine private Methode von <code>Kernel</code>)."
+            ],
+            "check": "->(objs) { objs.all? { |o, n| besitzer_finden(o, n) == o.method(n).owner } }.([[jung, :gruss], [Jungfuchs.new, :gruss], [Welpe.new, :gruss], [\"x\", :puts], [[], :map]]) && !result.nil?",
+            "hint": "<code>return mod if mod.method_defined?(name, false) || mod.private_method_defined?(name, false)</code>. Oder die ganze Methode als <code>ancestors.find { |mod| ... }</code>.",
+            "solution": "def besitzer_finden(obj, name)\n  obj.singleton_class.ancestors.each do |mod|\n    return mod if mod.method_defined?(name, false) || mod.private_method_defined?(name, false)\n  end\n  nil\nend\n\nbesitzer_finden(jung, :gruss)"
+          }
+        ]
+      },
+      "en": {
+        "title": "Classes and method lookup",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Every object on the heap begins with two words: its flags and <code>klass</code>, a pointer to its class. The class holds a method table and a pointer to its superclass. To run <code>kit.greet</code>, Ruby follows <code>klass</code> and then the super pointers until a method table has <code>greet</code>. Modules join that chain – here is a class with both an included and a prepended one:</p>"
+          },
+          {
+            "t": "c",
+            "code": "module Shouty\n  def greet = super.upcase + \"!\"\nend\n\nmodule Courteous\n  def greet = \"please, \" + super\nend\n\nclass Pup\n  def greet = \"hi\"\nend\n\nclass Kit < Pup\n  include Courteous\n  prepend Shouty\n  def greet = \"kit says \" + super\nend\n\nkit = Kit.new\n[kit.greet, Kit.ancestors.first(5)]"
+          },
+          {
+            "t": "c",
+            "code": "show_lookup(kit, :greet)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Step through it. The search starts at <code>Shouty</code>, not at <code>Kit</code>: <code>prepend</code> put the module in front, and <code>Kit</code>'s own methods moved one place down, into a hidden \"origin\" class. <code>include</code> did not copy <code>Courteous</code> into <code>Kit</code> either – it put a small proxy class, an <strong>iclass</strong>, into the chain right after <code>Kit</code>, pointing at the module's method table. The first hit wins; every <code>super</code> continues the search from there, which is how all four <code>greet</code>s end up in one sentence.</p><p>And a method for one single object? It cannot go into <code>Kit</code>. Ruby makes a class just for this object – its <strong>singleton class</strong> – and puts it between the object and <code>Kit</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def kit.greet = \"only me: \" + super\n\nshow_lookup(kit, :greet)\nkit.greet"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>kit.singleton_class</code> answers it, and <code>attached_object</code> leads back. Class methods are the same trick: <code>def self.create</code> in a class puts the method into the singleton class of the class object. One more way to watch the chain is <code>Method#super_method</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "m = kit.method(:greet)\nowners = []\nwhile m\n  owners << m.owner\n  m = m.super_method\nend\nowners"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='In the source (CRuby 4.0.0)'><ul><li>The search itself, a loop along <code>RCLASS_SUPER</code>: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_method.c#L1685' target='_blank'><code>search_method0:1685</code></a>.</li><li><code>include</code> makes the iclass: <a href='https://github.com/ruby/ruby/blob/v4.0.0/class.c#L1977' target='_blank'><code>include_modules_at:1977</code></a>; <code>prepend</code> moves the class's methods to its origin: <a href='https://github.com/ruby/ruby/blob/v4.0.0/class.c#L2048' target='_blank'><code>rb_prepend_module:2048</code></a>.</li><li>The singleton class, made on first use: <a href='https://github.com/ruby/ruby/blob/v4.0.0/class.c#L2915' target='_blank'><code>rb_singleton_class:2915</code></a>.</li></ul></div><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-ancestors' target='_blank'>Module#ancestors</a> · <a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-method_defined-3F' target='_blank'>Module#method_defined?</a></div><div class='task'><strong>Task:</strong> Do the lookup yourself. <code>find_owner(obj, name)</code> walks <code>obj.singleton_class.ancestors</code> and gives back the first module or class whose <em>own</em> method table has <code>name</code> – <code>method_defined?(name, false)</code> (the <code>false</code>: not inherited) or <code>private_method_defined?(name, false)</code>. Ruby's own answer is <code>obj.method(name).owner</code>; yours must match it.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def find_owner(obj, name)\n  obj.singleton_class.ancestors.each do |mod|\n    # the first mod whose own table has name\n  end\n  nil\nend\n\nfind_owner(kit, :greet)",
+            "hints": [
+              "Inside the loop: <code>return mod if</code> the method is in <code>mod</code>'s own table – public or private (<code>puts</code> is a private method of <code>Kernel</code>)."
+            ],
+            "check": "->(objs) { objs.all? { |o, n| find_owner(o, n) == o.method(n).owner } }.([[kit, :greet], [Kit.new, :greet], [Pup.new, :greet], [\"x\", :puts], [[], :map]]) && !result.nil?",
+            "hint": "<code>return mod if mod.method_defined?(name, false) || mod.private_method_defined?(name, false)</code>. Or the whole method as <code>ancestors.find { |mod| ... }</code>.",
+            "solution": "def find_owner(obj, name)\n  obj.singleton_class.ancestors.each do |mod|\n    return mod if mod.method_defined?(name, false) || mod.private_method_defined?(name, false)\n  end\n  nil\nend\n\nfind_owner(kit, :greet)"
+          }
+        ]
+      },
+      "ja": {
+        "title": "クラスとメソッド探索",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>ヒープ上のオブジェクトはどれも2つのワードで始まります。フラグと<code>klass</code>、つまり自分のクラスへのポインタです。クラスはメソッドテーブルとスーパークラスへのポインタを持っています。<code>kit.greet</code>を実行するため、Rubyは<code>klass</code>をたどり、それからsuperポインタを、<code>greet</code>を持つメソッドテーブルが見つかるまでたどります。モジュールもこのチェーンに加わります。ここにあるのは、includeしたモジュールとprependしたモジュールを両方持つクラスです：</p>"
+          },
+          {
+            "t": "c",
+            "code": "module Shouty\n  def greet = super.upcase + \"!\"\nend\n\nmodule Courteous\n  def greet = \"please, \" + super\nend\n\nclass Pup\n  def greet = \"hi\"\nend\n\nclass Kit < Pup\n  include Courteous\n  prepend Shouty\n  def greet = \"kit says \" + super\nend\n\nkit = Kit.new\n[kit.greet, Kit.ancestors.first(5)]"
+          },
+          {
+            "t": "c",
+            "code": "show_lookup(kit, :greet)"
+          },
+          {
+            "t": "h",
+            "html": "<p>ステップ実行してみましょう。探索は<code>Kit</code>ではなく<code>Shouty</code>から始まります。<code>prepend</code>がモジュールを前に置き、<code>Kit</code>自身のメソッドは1つ下の、隠れた「origin」クラスに移ったのです。<code>include</code>も<code>Courteous</code>を<code>Kit</code>にコピーしたわけではありません。小さな代理クラス、<strong>iclass</strong>を<code>Kit</code>のすぐ後ろのチェーンに入れ、それがモジュールのメソッドテーブルを指しています。最初に見つかったものが勝ちます。<code>super</code>はそのたびにそこから探索を続けます。だから4つの<code>greet</code>がすべて1つの文になるのです。</p><p>では、たった1つのオブジェクトのためのメソッドは？ それは<code>Kit</code>には入れられません。Rubyはこのオブジェクト専用のクラス、<strong>特異クラス</strong>を作り、オブジェクトと<code>Kit</code>のあいだに置きます：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def kit.greet = \"only me: \" + super\n\nshow_lookup(kit, :greet)\nkit.greet"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>kit.singleton_class</code>がそれを返し、<code>attached_object</code>で元に戻れます。クラスメソッドも同じ仕組みです。クラスの中の<code>def self.create</code>は、メソッドをクラスオブジェクトの特異クラスに入れます。チェーンを見るもう1つの方法が<code>Method#super_method</code>です：</p>"
+          },
+          {
+            "t": "c",
+            "code": "m = kit.method(:greet)\nowners = []\nwhile m\n  owners << m.owner\n  m = m.super_method\nend\nowners"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='ソースコードでは（CRuby 4.0.0）'><ul><li>探索そのもの、<code>RCLASS_SUPER</code>をたどるループ：<a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_method.c#L1685' target='_blank'><code>search_method0:1685</code></a>。</li><li><code>include</code>がiclassを作る：<a href='https://github.com/ruby/ruby/blob/v4.0.0/class.c#L1977' target='_blank'><code>include_modules_at:1977</code></a>。<code>prepend</code>がクラスのメソッドをoriginへ移す：<a href='https://github.com/ruby/ruby/blob/v4.0.0/class.c#L2048' target='_blank'><code>rb_prepend_module:2048</code></a>。</li><li>最初に使われたときに作られる特異クラス：<a href='https://github.com/ruby/ruby/blob/v4.0.0/class.c#L2915' target='_blank'><code>rb_singleton_class:2915</code></a>。</li></ul></div><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-ancestors' target='_blank'>Module#ancestors</a>（英語）・<a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-method_defined-3F' target='_blank'>Module#method_defined?</a>（英語）</div><div class='task'><strong>課題：</strong>探索を自分でやってみましょう。<code>find_owner(obj, name)</code>は<code>obj.singleton_class.ancestors</code>をたどり、<em>自分の</em>メソッドテーブルに<code>name</code>を持つ最初のモジュールかクラスを返します。<code>method_defined?(name, false)</code>（<code>false</code>は「継承したものは除く」）か<code>private_method_defined?(name, false)</code>で調べます。Ruby自身の答えは<code>obj.method(name).owner</code>で、あなたの答えはそれと一致しなければなりません。</div>"
+          },
+          {
+            "t": "x",
+            "code": "def find_owner(obj, name)\n  obj.singleton_class.ancestors.each do |mod|\n    # 自分のテーブルにnameを持つ最初のmod\n  end\n  nil\nend\n\nfind_owner(kit, :greet)",
+            "hints": [
+              "ループの中で：メソッドが<code>mod</code>自身のテーブルにあったら<code>return mod if</code>。publicでもprivateでもね（<code>puts</code>は<code>Kernel</code>のprivateメソッドなんだ）。"
+            ],
+            "check": "->(objs) { objs.all? { |o, n| find_owner(o, n) == o.method(n).owner } }.([[kit, :greet], [Kit.new, :greet], [Pup.new, :greet], [\"x\", :puts], [[], :map]]) && !result.nil?",
+            "hint": "<code>return mod if mod.method_defined?(name, false) || mod.private_method_defined?(name, false)</code>。メソッド全体を<code>ancestors.find { |mod| ... }</code>にしてもいいよ。",
+            "solution": "def find_owner(obj, name)\n  obj.singleton_class.ancestors.each do |mod|\n    return mod if mod.method_defined?(name, false) || mod.private_method_defined?(name, false)\n  end\n  nil\nend\n\nfind_owner(kit, :greet)"
+          }
+        ]
+      },
+      "fr": {
+        "title": "Les classes et la recherche de méthode",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Chaque objet sur le tas commence par deux mots : ses flags et <code>klass</code>, un pointeur vers sa classe. La classe contient une table des méthodes et un pointeur vers sa superclasse. Pour exécuter <code>kit.greet</code>, Ruby suit <code>klass</code> puis les pointeurs super jusqu'à ce qu'une table des méthodes contienne <code>greet</code>. Les modules s'insèrent dans cette chaîne – voici une classe avec un module inclus et un module ajouté en tête par prepend :</p>"
+          },
+          {
+            "t": "c",
+            "code": "module Shouty\n  def greet = super.upcase + \"!\"\nend\n\nmodule Courteous\n  def greet = \"please, \" + super\nend\n\nclass Pup\n  def greet = \"hi\"\nend\n\nclass Kit < Pup\n  include Courteous\n  prepend Shouty\n  def greet = \"kit says \" + super\nend\n\nkit = Kit.new\n[kit.greet, Kit.ancestors.first(5)]"
+          },
+          {
+            "t": "c",
+            "code": "show_lookup(kit, :greet)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Avancez pas à pas. La recherche commence à <code>Shouty</code>, pas à <code>Kit</code> : <code>prepend</code> a placé le module devant, et les méthodes propres à <code>Kit</code> ont reculé d'une place, dans une classe « origin » cachée. <code>include</code> n'a pas non plus copié <code>Courteous</code> dans <code>Kit</code> – il a inséré une petite classe proxy, une <strong>iclass</strong>, dans la chaîne juste après <code>Kit</code>, qui pointe vers la table des méthodes du module. Le premier trouvé l'emporte ; chaque <code>super</code> poursuit la recherche à partir de là, et c'est ainsi que les quatre <code>greet</code> finissent dans une seule phrase.</p><p>Et une méthode pour un seul objet ? Elle ne peut pas aller dans <code>Kit</code>. Ruby crée une classe rien que pour cet objet – sa <strong>classe singleton</strong> – et la place entre l'objet et <code>Kit</code> :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def kit.greet = \"only me: \" + super\n\nshow_lookup(kit, :greet)\nkit.greet"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>kit.singleton_class</code> vous la donne, et <code>attached_object</code> ramène à l'objet. Les méthodes de classe utilisent la même astuce : <code>def self.create</code> dans une classe place la méthode dans la classe singleton de l'objet classe. Une autre façon d'observer la chaîne est <code>Method#super_method</code> :</p>"
+          },
+          {
+            "t": "c",
+            "code": "m = kit.method(:greet)\nowners = []\nwhile m\n  owners << m.owner\n  m = m.super_method\nend\nowners"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Dans le code source (CRuby 4.0.0)'><ul><li>La recherche elle-même, une boucle le long de <code>RCLASS_SUPER</code> : <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_method.c#L1685' target='_blank'><code>search_method0:1685</code></a>.</li><li><code>include</code> crée l'iclass : <a href='https://github.com/ruby/ruby/blob/v4.0.0/class.c#L1977' target='_blank'><code>include_modules_at:1977</code></a> ; <code>prepend</code> déplace les méthodes de la classe vers son origin : <a href='https://github.com/ruby/ruby/blob/v4.0.0/class.c#L2048' target='_blank'><code>rb_prepend_module:2048</code></a>.</li><li>La classe singleton, créée à la première utilisation : <a href='https://github.com/ruby/ruby/blob/v4.0.0/class.c#L2915' target='_blank'><code>rb_singleton_class:2915</code></a>.</li></ul></div><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-ancestors' target='_blank'>Module#ancestors</a> · <a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-method_defined-3F' target='_blank'>Module#method_defined?</a></div><div class='task'><strong>Exercice :</strong> Faites la recherche vous-même. <code>find_owner(obj, name)</code> parcourt <code>obj.singleton_class.ancestors</code> et renvoie le premier module ou la première classe dont la table des méthodes <em>propre</em> contient <code>name</code> – <code>method_defined?(name, false)</code> (le <code>false</code> : sans l'héritage) ou <code>private_method_defined?(name, false)</code>. La réponse de Ruby lui-même est <code>obj.method(name).owner</code> ; la vôtre doit lui correspondre.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def find_owner(obj, name)\n  obj.singleton_class.ancestors.each do |mod|\n    # le premier mod dont la propre table contient name\n  end\n  nil\nend\n\nfind_owner(kit, :greet)",
+            "hints": [
+              "Dans la boucle : <code>return mod if</code> la méthode est dans la table propre de <code>mod</code> – publique ou privée (<code>puts</code> est une méthode privée de <code>Kernel</code>)."
+            ],
+            "check": "->(objs) { objs.all? { |o, n| find_owner(o, n) == o.method(n).owner } }.([[kit, :greet], [Kit.new, :greet], [Pup.new, :greet], [\"x\", :puts], [[], :map]]) && !result.nil?",
+            "hint": "<code>return mod if mod.method_defined?(name, false) || mod.private_method_defined?(name, false)</code>. Ou toute la méthode sous la forme <code>ancestors.find { |mod| ... }</code>.",
+            "solution": "def find_owner(obj, name)\n  obj.singleton_class.ancestors.each do |mod|\n    return mod if mod.method_defined?(name, false) || mod.private_method_defined?(name, false)\n  end\n  nil\nend\n\nfind_owner(kit, :greet)"
+          }
+        ]
+      },
+      "it": {
+        "title": "Classi e ricerca dei metodi",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Ogni oggetto nello heap inizia con due parole: i suoi flag e <code>klass</code>, un puntatore alla sua classe. La classe contiene una tabella dei metodi e un puntatore alla sua superclasse. Per eseguire <code>kit.greet</code>, Ruby segue <code>klass</code> e poi i puntatori super finché una tabella dei metodi contiene <code>greet</code>. I moduli entrano in questa catena – ecco una classe con un modulo incluso e uno anteposto con prepend:</p>"
+          },
+          {
+            "t": "c",
+            "code": "module Shouty\n  def greet = super.upcase + \"!\"\nend\n\nmodule Courteous\n  def greet = \"please, \" + super\nend\n\nclass Pup\n  def greet = \"hi\"\nend\n\nclass Kit < Pup\n  include Courteous\n  prepend Shouty\n  def greet = \"kit says \" + super\nend\n\nkit = Kit.new\n[kit.greet, Kit.ancestors.first(5)]"
+          },
+          {
+            "t": "c",
+            "code": "show_lookup(kit, :greet)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Eseguilo passo per passo. La ricerca parte da <code>Shouty</code>, non da <code>Kit</code>: <code>prepend</code> ha messo il modulo davanti, e i metodi propri di <code>Kit</code> sono scesi di un posto, in una classe «origin» nascosta. Neanche <code>include</code> ha copiato <code>Courteous</code> in <code>Kit</code> – ha inserito una piccola classe proxy, una <strong>iclass</strong>, nella catena subito dopo <code>Kit</code>, che punta alla tabella dei metodi del modulo. Vince il primo risultato; ogni <code>super</code> continua la ricerca da lì, ed è così che tutti e quattro i <code>greet</code> finiscono in una sola frase.</p><p>E un metodo per un singolo oggetto? Non può andare in <code>Kit</code>. Ruby crea una classe solo per questo oggetto – la sua <strong>singleton class</strong> – e la mette tra l’oggetto e <code>Kit</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def kit.greet = \"only me: \" + super\n\nshow_lookup(kit, :greet)\nkit.greet"
+          },
+          {
+            "t": "h",
+            "html": "<p><code>kit.singleton_class</code> la restituisce, e <code>attached_object</code> riporta indietro. I metodi di classe sono lo stesso trucco: <code>def self.create</code> in una classe mette il metodo nella singleton class dell’oggetto classe. Un altro modo per osservare la catena è <code>Method#super_method</code>:</p>"
+          },
+          {
+            "t": "c",
+            "code": "m = kit.method(:greet)\nowners = []\nwhile m\n  owners << m.owner\n  m = m.super_method\nend\nowners"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Nel codice sorgente (CRuby 4.0.0)'><ul><li>La ricerca vera e propria, un ciclo lungo <code>RCLASS_SUPER</code>: <a href='https://github.com/ruby/ruby/blob/v4.0.0/vm_method.c#L1685' target='_blank'><code>search_method0:1685</code></a>.</li><li><code>include</code> crea l’iclass: <a href='https://github.com/ruby/ruby/blob/v4.0.0/class.c#L1977' target='_blank'><code>include_modules_at:1977</code></a>; <code>prepend</code> sposta i metodi della classe nella sua origin: <a href='https://github.com/ruby/ruby/blob/v4.0.0/class.c#L2048' target='_blank'><code>rb_prepend_module:2048</code></a>.</li><li>La singleton class, creata al primo utilizzo: <a href='https://github.com/ruby/ruby/blob/v4.0.0/class.c#L2915' target='_blank'><code>rb_singleton_class:2915</code></a>.</li></ul></div><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-ancestors' target='_blank'>Module#ancestors</a> · <a href='https://docs.ruby-lang.org/en/4.0/Module.html#method-i-method_defined-3F' target='_blank'>Module#method_defined?</a></div><div class='task'><strong>Esercizio:</strong> fai tu la ricerca. <code>find_owner(obj, name)</code> percorre <code>obj.singleton_class.ancestors</code> e restituisce il primo modulo o classe la cui tabella dei metodi <em>propria</em> contiene <code>name</code> – <code>method_defined?(name, false)</code> (il <code>false</code>: non ereditato) oppure <code>private_method_defined?(name, false)</code>. La risposta di Ruby è <code>obj.method(name).owner</code>; la tua deve coincidere.</div>"
+          },
+          {
+            "t": "x",
+            "code": "def find_owner(obj, name)\n  obj.singleton_class.ancestors.each do |mod|\n    # il primo mod la cui tabella propria contiene name\n  end\n  nil\nend\n\nfind_owner(kit, :greet)",
+            "hints": [
+              "Dentro il ciclo: <code>return mod if</code> il metodo è nella tabella propria di <code>mod</code> – pubblico o privato (<code>puts</code> è un metodo privato di <code>Kernel</code>)."
+            ],
+            "check": "->(objs) { objs.all? { |o, n| find_owner(o, n) == o.method(n).owner } }.([[kit, :greet], [Kit.new, :greet], [Pup.new, :greet], [\"x\", :puts], [[], :map]]) && !result.nil?",
+            "hint": "<code>return mod if mod.method_defined?(name, false) || mod.private_method_defined?(name, false)</code>. Oppure tutto il metodo come <code>ancestors.find { |mod| ... }</code>.",
+            "solution": "def find_owner(obj, name)\n  obj.singleton_class.ancestors.each do |mod|\n    return mod if mod.method_defined?(name, false) || mod.private_method_defined?(name, false)\n  end\n  nil\nend\n\nfind_owner(kit, :greet)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "mikro-gc",
+      "de": {
+        "title": "Garbage Collection",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Objekte entstehen ständig – die meisten, ohne dass du <code>new</code> schreibst. Ein Zähler des GC sagt, wie viele: <code>GC.stat(:total_allocated_objects)</code>. Die erste Messung eines neuen Stücks Code zählt auch die Caches, die Ruby dafür anlegt, darum wärmt sich die Hilfsmethode einmal auf:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def allokationen\n  vorher = GC.stat(:total_allocated_objects)\n  yield\n  GC.stat(:total_allocated_objects) - vorher\nend\n\nallokationen { }\n{\n  \"1 + 2\" => allokationen { 1 + 2 },\n  \"1.5 + 2.5\" => allokationen { 1.5 + 2.5 },\n  '\"a\" + \"b\"' => allokationen { \"a\" + \"b\" },\n  \":fuchs\" => allokationen { :fuchs },\n  \"[1, 2]\" => allokationen { [1, 2] }\n}"
+          },
+          {
+            "t": "h",
+            "html": "<p>Die letzte Lektion erklärt jede Zahl. <code>1 + 2</code>: Fixnums leben im Wort, nichts entsteht. <code>1.5 + 2.5</code>: 1 – hier, ohne Flonums, ist das Ergebnis ein neuer Float im Heap (auf einem Laptop: 0). <code>\"a\" + \"b\"</code>: 3 – jedes String-Literal macht einen neuen String, die Summe auch. Jemand muss aufräumen. Der GC von CRuby ist <strong>Mark and Sweep</strong>: Bei den Wurzeln anfangen – VM-Stack, Globale, Konstanten – und alles markieren, was erreichbar ist; was unmarkiert bleibt, ist Müll, und sein Slot wird frei. Schau zu, auf einem Graphen, den Ruby selbst liefert: <code>ObjectSpace.reachable_objects_from</code> führt die Markierfunktion des GC für ein Objekt aus.</p>"
+          },
+          {
+            "t": "c",
+            "code": "fuchs = [\"Chunky\", [\"Speck\", \"Schinken\"]]\nbau = { besitzer: fuchs }\nweg = [\"niemand\", [\"kennt\", \"mich\"]]\n\n# fuchs und bau sind Wurzeln; weg liegt im Heap, aber nichts zeigt darauf\nshow_gc({ fuchs: fuchs, bau: bau }, weg)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Schwarz: markiert. Grau: gesehen, seine Referenzen noch nicht verfolgt. Wenn nichts Graues mehr übrig ist, gibt der Sweep jeden weissen Slot frei. Jedes Mal den ganzen Heap zu markieren ist langsam, darum ist der GC von CRuby auch <strong>generationell</strong>: Ein Objekt, das einen GC überlebt, wird ein Jahr älter, und mit 3 ist es «alt» und wird von den schnellen, häufigen Minor-GCs nicht mehr angeschaut – die meisten Objekte sterben jung, und die alten sind selten Müll. Du kannst einem Objekt beim Altern zuschauen:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\n\nfossil = Object.new\nalter = [JSON.parse(ObjectSpace.dump(fossil))[\"flags\"]]\n3.times do\n  GC.start\n  alter << JSON.parse(ObjectSpace.dump(fossil))[\"flags\"]\nend\nalter"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Im Quellcode (CRuby 4.0.0)'><ul><li>Alt mit 3: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L746' target='_blank'><code>RVALUE_OLD_AGE:746</code></a>. Markieren: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L5766' target='_blank'><code>gc_marks_start:5766</code></a>, <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L4634' target='_blank'><code>gc_mark_children:4634</code></a>; Sweep: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L3552' target='_blank'><code>gc_sweep_page:3552</code></a>.</li><li><code>reachable_objects_from</code> leiht sich die Markierfunktion des GC: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc.c#L4533' target='_blank'><code>rb_objspace_reachable_objects_from:4533</code></a>, das <code>rb_gc_mark_children</code> aufruft.</li></ul></div><div class='docs'><strong>Nachschlagen</strong> (englisch): <a href='https://docs.ruby-lang.org/en/4.0/GC.html' target='_blank'>GC</a> · <a href='https://docs.ruby-lang.org/en/4.0/ObjectSpace.html' target='_blank'>ObjectSpace</a></div><div class='task'><strong>Aufgabe:</strong> Schreib die Markierphase selbst. <code>erreichbar?(wurzel, ziel)</code> beginnt bei <code>wurzel</code> und folgt <code>ObjectSpace.reachable_objects_from</code>, bis es <code>ziel</code> findet (genau dasselbe Objekt: <code>equal?</code>) oder keine Objekte mehr hat. Führ eine Liste der schon markierten Objekte, sonst hält dich ein Kreis ewig fest. Klassen und Module kannst du überspringen.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"objspace\"\n\ndef erreichbar?(wurzel, ziel)\n  markiert = []\n  grau = [wurzel]\n  until grau.empty?\n    obj = grau.shift\n    # gefunden? schon markiert? sonst markieren und anhängen, worauf es zeigt\n  end\n  false\nend\n\nkiste = [\"Chunky\", [\"Speck\"]]\nkiste << kiste\nerreichbar?(kiste, kiste[1][0])",
+            "hints": [
+              "Drei Schritte in der Schleife: <code>return true if obj.equal?(ziel)</code>; überspringen (<code>next</code>), wenn es schon in <code>markiert</code> ist oder ein Module; sonst in <code>markiert</code> aufnehmen und seine Referenzen an <code>grau</code> anhängen."
+            ],
+            "check": "result == true && ->(a) { erreichbar?(a, a[0]) && !erreichbar?(a, \"Schinken\") && !erreichbar?([1], a) }.([\"x\", { k: \"y\" }])",
+            "hint": "<code>next if obj.is_a?(Module) || markiert.any? { |m| m.equal?(obj) }</code>, dann <code>markiert &lt;&lt; obj</code> und <code>grau.concat(Array(ObjectSpace.reachable_objects_from(obj)))</code> – <code>Array(...)</code>, weil eine Zahl <code>nil</code> antwortet. Vergleich mit <code>equal?</code>: <code>include?</code> nimmt <code>==</code>, und zwei gleiche Arrays sind nicht dasselbe Objekt.",
+            "solution": "require \"objspace\"\n\ndef erreichbar?(wurzel, ziel)\n  markiert = []\n  grau = [wurzel]\n  until grau.empty?\n    obj = grau.shift\n    return true if obj.equal?(ziel)\n    next if obj.is_a?(Module) || markiert.any? { |m| m.equal?(obj) }\n\n    markiert << obj\n    grau.concat(Array(ObjectSpace.reachable_objects_from(obj)))\n  end\n  false\nend\n\nkiste = [\"Chunky\", [\"Speck\"]]\nkiste << kiste\nerreichbar?(kiste, kiste[1][0])"
+          },
+          {
+            "t": "h",
+            "html": "<p>Das ist die ganze Tour: Text → Tokens → Baum → Instruktionen → ein Stack von Frames → VALUEs in Slots → Klassen und ihre Ketten → und zurück zu freien Slots. Für die lange Fassung, mit viel mehr über Hashtabellen, Object Shapes und den JIT: <a href='https://nostarch.com/rum' target='_blank'><em>Ruby Under a Microscope</em></a> von <a href='https://patshaughnessy.net/' target='_blank'>Pat Shaughnessy</a>.</p>"
+          }
+        ]
+      },
+      "en": {
+        "title": "Garbage collection",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Objects come into being all the time – most without you writing <code>new</code>. A counter of the GC tells how many: <code>GC.stat(:total_allocated_objects)</code>. The first measurement of a new piece of code also counts the caches Ruby makes for it, so the helper warms up once:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def allocations\n  before = GC.stat(:total_allocated_objects)\n  yield\n  GC.stat(:total_allocated_objects) - before\nend\n\nallocations { }\n{\n  \"1 + 2\" => allocations { 1 + 2 },\n  \"1.5 + 2.5\" => allocations { 1.5 + 2.5 },\n  '\"a\" + \"b\"' => allocations { \"a\" + \"b\" },\n  \":fox\" => allocations { :fox },\n  \"[1, 2]\" => allocations { [1, 2] }\n}"
+          },
+          {
+            "t": "h",
+            "html": "<p>The last lesson explains each number. <code>1 + 2</code>: Fixnums live in the word, nothing is made. <code>1.5 + 2.5</code>: 1 – here, without flonums, the result is a new Float on the heap (on a laptop: 0). <code>\"a\" + \"b\"</code>: 3 – each string literal makes a new String, and so does the sum. Someone has to clean up. CRuby's GC is <strong>mark and sweep</strong>: start at the roots – the VM stack, globals, constants – and mark everything reachable; whatever is left unmarked is garbage, and its slot becomes free. Watch it, on a graph Ruby itself provides: <code>ObjectSpace.reachable_objects_from</code> runs the GC's own marking function for one object.</p>"
+          },
+          {
+            "t": "c",
+            "code": "fox = [\"Chunky\", [\"bacon\", \"ham\"]]\nden = { owner: fox }\nlost = [\"nobody\", [\"knows\", \"me\"]]\n\n# fox and den are roots; lost is on the heap, but nothing points at it\nshow_gc({ fox: fox, den: den }, lost)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Black: marked. Grey: seen, its references not yet followed. When nothing grey is left, the sweep frees every white slot. Marking the whole heap each time is slow, so CRuby is also <strong>generational</strong>: an object that survives a GC gets one year older, and at age 3 it is \"old\" and no longer looked at by the quick, frequent minor GCs – most objects die young, and the old ones are rarely garbage. You can watch an object age:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\n\nfossil = Object.new\nages = [JSON.parse(ObjectSpace.dump(fossil))[\"flags\"]]\n3.times do\n  GC.start\n  ages << JSON.parse(ObjectSpace.dump(fossil))[\"flags\"]\nend\nages"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='In the source (CRuby 4.0.0)'><ul><li>Old at age 3: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L746' target='_blank'><code>RVALUE_OLD_AGE:746</code></a>. Mark: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L5766' target='_blank'><code>gc_marks_start:5766</code></a>, <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L4634' target='_blank'><code>gc_mark_children:4634</code></a>; sweep: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L3552' target='_blank'><code>gc_sweep_page:3552</code></a>.</li><li><code>reachable_objects_from</code> lends the GC's marking function: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc.c#L4533' target='_blank'><code>rb_objspace_reachable_objects_from:4533</code></a>, which calls <code>rb_gc_mark_children</code>.</li></ul></div><div class='docs'><strong>Look it up:</strong> <a href='https://docs.ruby-lang.org/en/4.0/GC.html' target='_blank'>GC</a> · <a href='https://docs.ruby-lang.org/en/4.0/ObjectSpace.html' target='_blank'>ObjectSpace</a></div><div class='task'><strong>Task:</strong> Write the mark phase yourself. <code>reachable?(root, target)</code> starts at <code>root</code> and follows <code>ObjectSpace.reachable_objects_from</code> until it finds <code>target</code> (the very same object: <code>equal?</code>) or runs out of objects. Keep a list of the objects already marked, or a cycle will keep you going forever. Classes and modules can be skipped.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"objspace\"\n\ndef reachable?(root, target)\n  marked = []\n  grey = [root]\n  until grey.empty?\n    obj = grey.shift\n    # found it? already marked? otherwise mark it and add what it points at\n  end\n  false\nend\n\nbox = [\"Chunky\", [\"bacon\"]]\nbox << box\nreachable?(box, box[1][0])",
+            "hints": [
+              "Three steps in the loop: <code>return true if obj.equal?(target)</code>; skip it (<code>next</code>) if it is already in <code>marked</code> or a Module; otherwise add it to <code>marked</code> and its references to <code>grey</code>."
+            ],
+            "check": "result == true && ->(a) { reachable?(a, a[0]) && !reachable?(a, \"ham\") && !reachable?([1], a) }.([\"x\", { k: \"y\" }])",
+            "hint": "<code>next if obj.is_a?(Module) || marked.any? { |m| m.equal?(obj) }</code>, then <code>marked &lt;&lt; obj</code> and <code>grey.concat(Array(ObjectSpace.reachable_objects_from(obj)))</code> – <code>Array(...)</code> because a number answers <code>nil</code>. Compare with <code>equal?</code>: <code>include?</code> uses <code>==</code>, and two equal Arrays are not the same object.",
+            "solution": "require \"objspace\"\n\ndef reachable?(root, target)\n  marked = []\n  grey = [root]\n  until grey.empty?\n    obj = grey.shift\n    return true if obj.equal?(target)\n    next if obj.is_a?(Module) || marked.any? { |m| m.equal?(obj) }\n\n    marked << obj\n    grey.concat(Array(ObjectSpace.reachable_objects_from(obj)))\n  end\n  false\nend\n\nbox = [\"Chunky\", [\"bacon\"]]\nbox << box\nreachable?(box, box[1][0])"
+          },
+          {
+            "t": "h",
+            "html": "<p>That is the whole tour: text → tokens → tree → instructions → a stack of frames → VALUEs in slots → classes and their chains → and back to free slots. For the long version, with much more about hash tables, object shapes and the JIT: <a href='https://nostarch.com/rum' target='_blank'><em>Ruby Under a Microscope</em></a> by <a href='https://patshaughnessy.net/' target='_blank'>Pat Shaughnessy</a>.</p>"
+          }
+        ]
+      },
+      "ja": {
+        "title": "ガベージコレクション",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>オブジェクトはひっきりなしに生まれています。そのほとんどは<code>new</code>を書かなくてもです。いくつ生まれたかはGCのカウンター<code>GC.stat(:total_allocated_objects)</code>が教えてくれます。新しいコードの最初の計測では、Rubyがそのコードのために作るキャッシュも数えられてしまうので、ヘルパーは一度ウォームアップします：</p>"
+          },
+          {
+            "t": "c",
+            "code": "def allocations\n  before = GC.stat(:total_allocated_objects)\n  yield\n  GC.stat(:total_allocated_objects) - before\nend\n\nallocations { }\n{\n  \"1 + 2\" => allocations { 1 + 2 },\n  \"1.5 + 2.5\" => allocations { 1.5 + 2.5 },\n  '\"a\" + \"b\"' => allocations { \"a\" + \"b\" },\n  \":fox\" => allocations { :fox },\n  \"[1, 2]\" => allocations { [1, 2] }\n}"
+          },
+          {
+            "t": "h",
+            "html": "<p>それぞれの数は前のレッスンで説明がつきます。<code>1 + 2</code>：Fixnumはワードの中にあるので、何も作られません。<code>1.5 + 2.5</code>：1。ここにはflonumがないので、結果はヒープ上の新しいFloatです（ノートPCなら0）。<code>\"a\" + \"b\"</code>：3。文字列リテラルはそれぞれ新しいStringを作り、和も同じです。誰かが片付けなければなりません。CRubyのGCは<strong>マーク・アンド・スイープ</strong>です。ルート（VMスタック、グローバル変数、定数）から始めて、たどり着けるものすべてにマークを付けます。マークされずに残ったものはゴミで、そのスロットは空きになります。Ruby自身が用意しているグラフで見てみましょう：<code>ObjectSpace.reachable_objects_from</code>は1つのオブジェクトに対してGC自身のマーク関数を実行します。</p>"
+          },
+          {
+            "t": "c",
+            "code": "fox = [\"Chunky\", [\"bacon\", \"ham\"]]\nden = { owner: fox }\nlost = [\"nobody\", [\"knows\", \"me\"]]\n\n# foxとdenはルート。lostはヒープ上にあるが、何からも指されていない\nshow_gc({ fox: fox, den: den }, lost)"
+          },
+          {
+            "t": "h",
+            "html": "<p>黒：マーク済み。灰色：見つけましたが、その参照はまだたどっていません。灰色がなくなったら、スイープが白いスロットをすべて解放します。毎回ヒープ全体をマークするのは遅いので、CRubyは<strong>世代別</strong>でもあります。GCを生き延びたオブジェクトは1歳年を取り、3歳で「old」になって、頻繁に走る軽いマイナーGCではもう見られなくなります。ほとんどのオブジェクトは若くして死に、古いものはめったにゴミにならないからです。オブジェクトが年を取るところを見てみましょう：</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\n\nfossil = Object.new\nages = [JSON.parse(ObjectSpace.dump(fossil))[\"flags\"]]\n3.times do\n  GC.start\n  ages << JSON.parse(ObjectSpace.dump(fossil))[\"flags\"]\nend\nages"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='ソースコードでは（CRuby 4.0.0）'><ul><li>3歳でold：<a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L746' target='_blank'><code>RVALUE_OLD_AGE:746</code></a>。マーク：<a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L5766' target='_blank'><code>gc_marks_start:5766</code></a>、<a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L4634' target='_blank'><code>gc_mark_children:4634</code></a>。スイープ：<a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L3552' target='_blank'><code>gc_sweep_page:3552</code></a>。</li><li><code>reachable_objects_from</code>はGCのマーク関数を借りています：<a href='https://github.com/ruby/ruby/blob/v4.0.0/gc.c#L4533' target='_blank'><code>rb_objspace_reachable_objects_from:4533</code></a>。これが<code>rb_gc_mark_children</code>を呼び出します。</li></ul></div><div class='docs'><strong>調べてみよう：</strong><a href='https://docs.ruby-lang.org/en/4.0/GC.html' target='_blank'>GC</a>（英語）・<a href='https://docs.ruby-lang.org/en/4.0/ObjectSpace.html' target='_blank'>ObjectSpace</a>（英語）</div><div class='task'><strong>課題：</strong>マークフェーズを自分で書きましょう。<code>reachable?(root, target)</code>は<code>root</code>から始めて、<code>target</code>（まったく同じオブジェクト：<code>equal?</code>）が見つかるか、たどるオブジェクトがなくなるまで<code>ObjectSpace.reachable_objects_from</code>をたどります。マーク済みのオブジェクトのリストを持っておかないと、循環があったときに永遠に回り続けます。クラスとモジュールは飛ばしてかまいません。</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"objspace\"\n\ndef reachable?(root, target)\n  marked = []\n  grey = [root]\n  until grey.empty?\n    obj = grey.shift\n    # 見つかった？ マーク済み？ そうでなければマークして、指している先を追加\n  end\n  false\nend\n\nbox = [\"Chunky\", [\"bacon\"]]\nbox << box\nreachable?(box, box[1][0])",
+            "hints": [
+              "ループの中は3ステップ：<code>return true if obj.equal?(target)</code>。もう<code>marked</code>にあるかModuleなら飛ばす（<code>next</code>）。そうでなければ<code>marked</code>に入れて、その参照を<code>grey</code>に足そう。"
+            ],
+            "check": "result == true && ->(a) { reachable?(a, a[0]) && !reachable?(a, \"ham\") && !reachable?([1], a) }.([\"x\", { k: \"y\" }])",
+            "hint": "<code>next if obj.is_a?(Module) || marked.any? { |m| m.equal?(obj) }</code>、それから<code>marked &lt;&lt; obj</code>と<code>grey.concat(Array(ObjectSpace.reachable_objects_from(obj)))</code>。<code>Array(...)</code>なのは、数だと<code>nil</code>が返ってくるからだよ。比べるのは<code>equal?</code>でね：<code>include?</code>は<code>==</code>を使うし、等しい2つのArrayが同じオブジェクトとは限らないんだ。",
+            "solution": "require \"objspace\"\n\ndef reachable?(root, target)\n  marked = []\n  grey = [root]\n  until grey.empty?\n    obj = grey.shift\n    return true if obj.equal?(target)\n    next if obj.is_a?(Module) || marked.any? { |m| m.equal?(obj) }\n\n    marked << obj\n    grey.concat(Array(ObjectSpace.reachable_objects_from(obj)))\n  end\n  false\nend\n\nbox = [\"Chunky\", [\"bacon\"]]\nbox << box\nreachable?(box, box[1][0])"
+          },
+          {
+            "t": "h",
+            "html": "<p>これでひと回りです：テキスト → トークン → 木 → 命令 → フレームのスタック → スロットの中のVALUE → クラスとそのチェーン → そしてまた空きスロットへ。ハッシュテーブル、オブジェクトシェイプ、JITなどについてもっと詳しく知りたければ、本 <a href='https://nostarch.com/rum' target='_blank'><em>Ruby Under a Microscope</em></a>（<a href='https://patshaughnessy.net/' target='_blank'>パット・ショーネシー（Pat Shaughnessy）</a>著、英語）をどうぞ。</p>"
+          }
+        ]
+      },
+      "fr": {
+        "title": "Le ramasse-miettes",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Des objets naissent sans arrêt – la plupart sans que vous écriviez <code>new</code>. Un compteur du GC dit combien : <code>GC.stat(:total_allocated_objects)</code>. La première mesure d'un nouveau morceau de code compte aussi les caches que Ruby crée pour lui, c'est pourquoi l'assistant fait d'abord un tour de chauffe :</p>"
+          },
+          {
+            "t": "c",
+            "code": "def allocations\n  before = GC.stat(:total_allocated_objects)\n  yield\n  GC.stat(:total_allocated_objects) - before\nend\n\nallocations { }\n{\n  \"1 + 2\" => allocations { 1 + 2 },\n  \"1.5 + 2.5\" => allocations { 1.5 + 2.5 },\n  '\"a\" + \"b\"' => allocations { \"a\" + \"b\" },\n  \":fox\" => allocations { :fox },\n  \"[1, 2]\" => allocations { [1, 2] }\n}"
+          },
+          {
+            "t": "h",
+            "html": "<p>La leçon précédente explique chaque nombre. <code>1 + 2</code> : les Fixnums vivent dans le mot, rien n'est créé. <code>1.5 + 2.5</code> : 1 – ici, sans flonums, le résultat est un nouveau Float sur le tas (sur un portable : 0). <code>\"a\" + \"b\"</code> : 3 – chaque littéral de chaîne crée une nouvelle String, et la somme aussi. Il faut bien que quelqu'un fasse le ménage. Le GC de CRuby fonctionne par <strong>marquage et balayage</strong> (mark and sweep) : partir des racines – la pile de la VM, les variables globales, les constantes – et marquer tout ce qui est atteignable ; ce qui reste non marqué est un déchet, et son slot redevient libre. Regardez-le faire, sur un graphe que Ruby fournit lui-même : <code>ObjectSpace.reachable_objects_from</code> exécute la fonction de marquage du GC lui-même pour un objet.</p>"
+          },
+          {
+            "t": "c",
+            "code": "fox = [\"Chunky\", [\"bacon\", \"ham\"]]\nden = { owner: fox }\nlost = [\"nobody\", [\"knows\", \"me\"]]\n\n# fox et den sont des racines ; lost est sur le tas, mais rien ne pointe vers lui\nshow_gc({ fox: fox, den: den }, lost)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Noir : marqué. Gris : vu, mais ses références n'ont pas encore été suivies. Quand il ne reste plus rien de gris, le balayage libère chaque slot blanc. Marquer tout le tas à chaque fois est lent, c'est pourquoi CRuby est aussi <strong>générationnel</strong> : un objet qui survit à un GC prend un an, et à 3 ans il est « vieux » et n'est plus examiné par les GC mineurs, rapides et fréquents – la plupart des objets meurent jeunes, et les vieux sont rarement des déchets. Vous pouvez regarder un objet vieillir :</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\n\nfossil = Object.new\nages = [JSON.parse(ObjectSpace.dump(fossil))[\"flags\"]]\n3.times do\n  GC.start\n  ages << JSON.parse(ObjectSpace.dump(fossil))[\"flags\"]\nend\nages"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Dans le code source (CRuby 4.0.0)'><ul><li>Vieux à 3 ans : <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L746' target='_blank'><code>RVALUE_OLD_AGE:746</code></a>. Marquage : <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L5766' target='_blank'><code>gc_marks_start:5766</code></a>, <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L4634' target='_blank'><code>gc_mark_children:4634</code></a> ; balayage : <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L3552' target='_blank'><code>gc_sweep_page:3552</code></a>.</li><li><code>reachable_objects_from</code> emprunte la fonction de marquage du GC : <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc.c#L4533' target='_blank'><code>rb_objspace_reachable_objects_from:4533</code></a>, qui appelle <code>rb_gc_mark_children</code>.</li></ul></div><div class='docs'><strong>Pour aller plus loin :</strong> <a href='https://docs.ruby-lang.org/en/4.0/GC.html' target='_blank'>GC</a> · <a href='https://docs.ruby-lang.org/en/4.0/ObjectSpace.html' target='_blank'>ObjectSpace</a></div><div class='task'><strong>Exercice :</strong> Écrivez vous-même la phase de marquage. <code>reachable?(root, target)</code> part de <code>root</code> et suit <code>ObjectSpace.reachable_objects_from</code> jusqu'à trouver <code>target</code> (exactement le même objet : <code>equal?</code>) ou jusqu'à épuisement des objets. Tenez une liste des objets déjà marqués, sinon un cycle vous fera tourner indéfiniment. Les classes et les modules peuvent être ignorés.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"objspace\"\n\ndef reachable?(root, target)\n  marked = []\n  grey = [root]\n  until grey.empty?\n    obj = grey.shift\n    # trouvé ? déjà marqué ? sinon, marquez-le et ajoutez ce vers quoi il pointe\n  end\n  false\nend\n\nbox = [\"Chunky\", [\"bacon\"]]\nbox << box\nreachable?(box, box[1][0])",
+            "hints": [
+              "Trois étapes dans la boucle : <code>return true if obj.equal?(target)</code> ; passez-le (<code>next</code>) s'il est déjà dans <code>marked</code> ou si c'est un Module ; sinon ajoutez-le à <code>marked</code> et ses références à <code>grey</code>."
+            ],
+            "check": "result == true && ->(a) { reachable?(a, a[0]) && !reachable?(a, \"ham\") && !reachable?([1], a) }.([\"x\", { k: \"y\" }])",
+            "hint": "<code>next if obj.is_a?(Module) || marked.any? { |m| m.equal?(obj) }</code>, puis <code>marked &lt;&lt; obj</code> et <code>grey.concat(Array(ObjectSpace.reachable_objects_from(obj)))</code> – <code>Array(...)</code> parce qu'un nombre répond <code>nil</code>. Comparez avec <code>equal?</code> : <code>include?</code> utilise <code>==</code>, et deux Arrays égaux ne sont pas le même objet.",
+            "solution": "require \"objspace\"\n\ndef reachable?(root, target)\n  marked = []\n  grey = [root]\n  until grey.empty?\n    obj = grey.shift\n    return true if obj.equal?(target)\n    next if obj.is_a?(Module) || marked.any? { |m| m.equal?(obj) }\n\n    marked << obj\n    grey.concat(Array(ObjectSpace.reachable_objects_from(obj)))\n  end\n  false\nend\n\nbox = [\"Chunky\", [\"bacon\"]]\nbox << box\nreachable?(box, box[1][0])"
+          },
+          {
+            "t": "h",
+            "html": "<p>Voilà tout le parcours : texte → tokens → arbre → instructions → une pile de frames → des VALUEs dans des slots → les classes et leurs chaînes → et retour aux slots libres. Pour la version longue, avec bien plus sur les tables de hachage, les object shapes et le JIT : <a href='https://nostarch.com/rum' target='_blank'><em>Ruby Under a Microscope</em></a> de <a href='https://patshaughnessy.net/' target='_blank'>Pat Shaughnessy</a>.</p>"
+          }
+        ]
+      },
+      "it": {
+        "title": "Garbage collection",
+        "cells": [
+          {
+            "t": "h",
+            "html": "<p>Gli oggetti nascono in continuazione – la maggior parte senza che tu scriva <code>new</code>. Un contatore del GC dice quanti: <code>GC.stat(:total_allocated_objects)</code>. La prima misurazione di un nuovo pezzo di codice conta anche le cache che Ruby crea per esso, perciò l’helper si scalda una volta:</p>"
+          },
+          {
+            "t": "c",
+            "code": "def allocations\n  before = GC.stat(:total_allocated_objects)\n  yield\n  GC.stat(:total_allocated_objects) - before\nend\n\nallocations { }\n{\n  \"1 + 2\" => allocations { 1 + 2 },\n  \"1.5 + 2.5\" => allocations { 1.5 + 2.5 },\n  '\"a\" + \"b\"' => allocations { \"a\" + \"b\" },\n  \":fox\" => allocations { :fox },\n  \"[1, 2]\" => allocations { [1, 2] }\n}"
+          },
+          {
+            "t": "h",
+            "html": "<p>L’ultima lezione spiega ogni numero. <code>1 + 2</code>: i Fixnum vivono nella parola, non viene creato niente. <code>1.5 + 2.5</code>: 1 – qui, senza flonum, il risultato è un nuovo Float nello heap (su un portatile: 0). <code>\"a\" + \"b\"</code>: 3 – ogni letterale stringa crea una nuova String, e così anche la somma. Qualcuno deve fare pulizia. Il GC di CRuby è <strong>mark and sweep</strong>: parte dalle radici – lo stack della VM, le variabili globali, le costanti – e marca tutto ciò che è raggiungibile; ciò che resta non marcato è spazzatura, e il suo slot torna libero. Guardalo all’opera, su un grafo fornito da Ruby stesso: <code>ObjectSpace.reachable_objects_from</code> esegue la funzione di marcatura del GC per un singolo oggetto.</p>"
+          },
+          {
+            "t": "c",
+            "code": "fox = [\"Chunky\", [\"bacon\", \"ham\"]]\nden = { owner: fox }\nlost = [\"nobody\", [\"knows\", \"me\"]]\n\n# fox e den sono radici; lost è nello heap, ma niente punta a lui\nshow_gc({ fox: fox, den: den }, lost)"
+          },
+          {
+            "t": "h",
+            "html": "<p>Nero: marcato. Grigio: visto, ma i suoi riferimenti non ancora seguiti. Quando non resta più niente di grigio, lo sweep libera ogni slot bianco. Marcare l’intero heap ogni volta è lento, perciò CRuby è anche <strong>generazionale</strong>: un oggetto che sopravvive a un GC invecchia di un anno, e a 3 anni è «old» e i GC minori, rapidi e frequenti, non lo guardano più – la maggior parte degli oggetti muore giovane, e quelli vecchi raramente sono spazzatura. Puoi guardare un oggetto invecchiare:</p>"
+          },
+          {
+            "t": "c",
+            "code": "require \"json\"\n\nfossil = Object.new\nages = [JSON.parse(ObjectSpace.dump(fossil))[\"flags\"]]\n3.times do\n  GC.start\n  ages << JSON.parse(ObjectSpace.dump(fossil))[\"flags\"]\nend\nages"
+          },
+          {
+            "t": "h",
+            "html": "<div class='msc-source' data-title='Nel codice sorgente (CRuby 4.0.0)'><ul><li>Old a 3 anni: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L746' target='_blank'><code>RVALUE_OLD_AGE:746</code></a>. Mark: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L5766' target='_blank'><code>gc_marks_start:5766</code></a>, <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L4634' target='_blank'><code>gc_mark_children:4634</code></a>; sweep: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc/default/default.c#L3552' target='_blank'><code>gc_sweep_page:3552</code></a>.</li><li><code>reachable_objects_from</code> prende in prestito la funzione di marcatura del GC: <a href='https://github.com/ruby/ruby/blob/v4.0.0/gc.c#L4533' target='_blank'><code>rb_objspace_reachable_objects_from:4533</code></a>, che chiama <code>rb_gc_mark_children</code>.</li></ul></div><div class='docs'><strong>Approfondimenti:</strong> <a href='https://docs.ruby-lang.org/en/4.0/GC.html' target='_blank'>GC</a> · <a href='https://docs.ruby-lang.org/en/4.0/ObjectSpace.html' target='_blank'>ObjectSpace</a></div><div class='task'><strong>Esercizio:</strong> scrivi tu la fase di mark. <code>reachable?(root, target)</code> parte da <code>root</code> e segue <code>ObjectSpace.reachable_objects_from</code> finché trova <code>target</code> (proprio lo stesso oggetto: <code>equal?</code>) o finisce gli oggetti. Tieni una lista degli oggetti già marcati, altrimenti un ciclo ti farà girare all’infinito. Classi e moduli si possono saltare.</div>"
+          },
+          {
+            "t": "x",
+            "code": "require \"objspace\"\n\ndef reachable?(root, target)\n  marked = []\n  grey = [root]\n  until grey.empty?\n    obj = grey.shift\n    # trovato? già marcato? altrimenti marcalo e aggiungi ciò a cui punta\n  end\n  false\nend\n\nbox = [\"Chunky\", [\"bacon\"]]\nbox << box\nreachable?(box, box[1][0])",
+            "hints": [
+              "Tre passi nel ciclo: <code>return true if obj.equal?(target)</code>; saltalo (<code>next</code>) se è già in <code>marked</code> o se è un Module; altrimenti aggiungilo a <code>marked</code> e i suoi riferimenti a <code>grey</code>."
+            ],
+            "check": "result == true && ->(a) { reachable?(a, a[0]) && !reachable?(a, \"ham\") && !reachable?([1], a) }.([\"x\", { k: \"y\" }])",
+            "hint": "<code>next if obj.is_a?(Module) || marked.any? { |m| m.equal?(obj) }</code>, poi <code>marked &lt;&lt; obj</code> e <code>grey.concat(Array(ObjectSpace.reachable_objects_from(obj)))</code> – <code>Array(...)</code> perché un numero risponde <code>nil</code>. Confronta con <code>equal?</code>: <code>include?</code> usa <code>==</code>, e due Array uguali non sono lo stesso oggetto.",
+            "solution": "require \"objspace\"\n\ndef reachable?(root, target)\n  marked = []\n  grey = [root]\n  until grey.empty?\n    obj = grey.shift\n    return true if obj.equal?(target)\n    next if obj.is_a?(Module) || marked.any? { |m| m.equal?(obj) }\n\n    marked << obj\n    grey.concat(Array(ObjectSpace.reachable_objects_from(obj)))\n  end\n  false\nend\n\nbox = [\"Chunky\", [\"bacon\"]]\nbox << box\nreachable?(box, box[1][0])"
+          },
+          {
+            "t": "h",
+            "html": "<p>Questo è tutto il giro: testo → token → albero → istruzioni → una pila di frame → VALUE negli slot → classi e le loro catene → e di nuovo slot liberi. Per la versione lunga, con molto di più su tabelle hash, object shape e il JIT: <a href='https://nostarch.com/rum' target='_blank'><em>Ruby Under a Microscope</em></a> di <a href='https://patshaughnessy.net/' target='_blank'>Pat Shaughnessy</a>.</p>"
           }
         ]
       }

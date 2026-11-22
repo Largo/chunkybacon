@@ -86,7 +86,7 @@ class ServerTest < Minitest::Test
     lessons = Course.load(File.expand_path("../html/lessons.js", __dir__)).instance_variable_get(:@lessons)
     starts = lessons.each_index.select { |i| lessons[i]["section"] }
     cards = html.scan(%r{<a class="card [^"]*" href="learn#([^"]+)">\s*<div class="count"><span data-l="de">(\d+) }m)
-    assert_equal 4, cards.size
+    assert_equal 5, cards.size
     cards.each do |id, count|
       first = IDS.index(id)
       assert_includes starts, first, "#{id} starts a section"
