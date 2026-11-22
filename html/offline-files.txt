@@ -308,6 +308,7 @@ processing.js
 processing.rb
 pycall.rb
 rack_playground.rb
+robots.txt
 ruboto_phone.js
 ruboto_sim/manifest.txt
 ruboto_sim/ruboto_sim.rb
