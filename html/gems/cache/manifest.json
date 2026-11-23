@@ -618,5 +618,30 @@
     "version": "1.0.8",
     "file": "crass-1.0.8.gem",
     "deps": []
+  },
+  "rspec-core": {
+    "version": "3.13.7",
+    "file": "rspec-core-3.13.7.gem",
+    "deps": [
+      "rspec-support"
+    ]
+  },
+  "rspec-support": {
+    "version": "3.13.8",
+    "file": "rspec-support-3.13.8.gem",
+    "deps": []
+  },
+  "rspec-expectations": {
+    "version": "3.13.6",
+    "file": "rspec-expectations-3.13.6.gem",
+    "deps": [
+      "diff-lcs",
+      "rspec-support"
+    ]
+  },
+  "diff-lcs": {
+    "version": "1.6.2",
+    "file": "diff-lcs-1.6.2.gem",
+    "deps": []
   }
 }

@@ -152,6 +152,7 @@ gems/cache/connection_pool-3.0.2.gem
 gems/cache/crass-1.0.8.gem
 gems/cache/csv-3.3.6.gem
 gems/cache/daru-0.3.gem
+gems/cache/diff-lcs-1.6.2.gem
 gems/cache/distribution-0.8.0.gem
 gems/cache/drb-2.2.3.gem
 gems/cache/erubi-1.13.1.gem
@@ -198,6 +199,9 @@ gems/cache/rexml-3.4.4.gem
 gems/cache/roda-3.108.0.gem
 gems/cache/rqrcode-2.2.0.gem
 gems/cache/rqrcode_core-1.2.0.gem
+gems/cache/rspec-core-3.13.7.gem
+gems/cache/rspec-expectations-3.13.6.gem
+gems/cache/rspec-support-3.13.8.gem
 gems/cache/ruby_pptx-0.2.0.gem
 gems/cache/rubyvis-0.7.0.gem
 gems/cache/rubyzip-3.7.0.gem

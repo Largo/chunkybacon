@@ -2491,12 +2491,19 @@ class ChunkyApp
   end
 
   def evaluate(code, file)
+    outer, @evaluating = @evaluating, code
     if workshop?
       Workshop.with_io(file, $window.workshopStdin.to_s) { eval(code, @bind, file) }
     else
       eval(code, @bind, file)
     end
+  ensure
+    @evaluating = outer
   end
+
+  # the code of the cell running now (EVAL_FILE is no file on disk):
+  # run_specs shows RSpec the failed line from it
+  attr_reader :evaluating
 
   # The kind explanation of a cell's error in the lesson's language
   # (friendly_errors.rb: headline, the line with a caret, what to do, Ruby's
@@ -2810,6 +2817,41 @@ module Kernel
     result = Minitest.run([])
     Minitest::Runnable.runnables.clear
     result
+  end
+
+  # The same for RSpec (install_gem "rspec-core" and "rspec-expectations"
+  # first): runs the examples RSpec.describe defined so far, prints RSpec's
+  # report, then RSpec.reset forgets them, so a second ▶ does not run them
+  # twice. True when all passed. Options as for the rspec command:
+  #   run_specs "--format", "documentation"
+  def run_specs(*options)
+    require "rspec/core"
+    ChunkySpecSource.install
+    config = RSpec.configuration
+    config.output_stream = $stdout
+    # no spec files to load ("files took": since rspec/core was required)
+    config.start_time = RSpec::Core::Time.now
+    # the cell's frames only, not main.rb's or the eval around them
+    config.backtrace_exclusion_patterns << /\A(?!#{Regexp.escape(ChunkyApp::EVAL_FILE)}:)/
+    RSpec::Core::Runner.new(RSpec::Core::ConfigurationOptions.new(options)).run($stderr, $stdout).zero?
+  ensure
+    RSpec.reset if defined?(RSpec.reset)
+  end
+end
+
+# RSpec prints a failed example's line from its file; a cell is no file, so
+# it gets the line from the code of the cell running now
+module ChunkySpecSource
+  def self.install
+    RSpec::Support.require_rspec_core "formatters/snippet_extractor"
+    RSpec::Support.require_rspec_support "source"
+    extractor = RSpec::Core::Formatters::SnippetExtractor.singleton_class
+    extractor.prepend(self) unless extractor.include?(self)
+  end
+
+  def source_from_file(path)
+    code = ChunkyApp.instance.evaluating if path == ChunkyApp::EVAL_FILE
+    code ? RSpec::Support::Source.new(code, path) : super
   end
 end
 

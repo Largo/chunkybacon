@@ -16,7 +16,7 @@ GEMS = %w[chunky_bacon chunky_png gammo racc sinatra roda minitest csv benchmark
           pastel tty-table tty-box tty-tree tty-font faker herb
           daru distribution minimization integration networkx rubyvis
           qr-bills swiss_qr qr_reader wavefile
-          rails tzinfo-data]
+          rails tzinfo-data rspec-core rspec-expectations]
 
 # C extensions compiled into the wasm image: a gem may depend on them (hexapdf
 # on openssl and strscan, jsg on js), the browser finds them built in
@@ -40,9 +40,9 @@ SUBSTITUTES = { "bigdecimal" => "bigdecimal-pure" }
 # unicode-display_width below 3) - or when the gem has to match a vendored
 # build (herb: the parser in html/assets/herb/, tools/vendor_herb.rb) - or
 # when a gem rules out the latest (qr-bills wants rqrcode below 3, and
-# rqrcode 2 wants rqrcode_core 1)
+# rqrcode 2 wants rqrcode_core 1; rspec-expectations wants diff-lcs below 2)
 PINNED = { "minitest" => "5.27.0", "unicode-display_width" => "2.6.0", "herb" => "0.10.3",
-           "rqrcode" => "2.2.0", "rqrcode_core" => "1.2.0" }
+           "rqrcode" => "2.2.0", "rqrcode_core" => "1.2.0", "diff-lcs" => "1.6.2" }
 
 # gems whose C extension is optional (pure-Ruby fallback in lib/) or stood
 # in for (herb's is its parser: html/herb_bridge.rb hands it to Herb's

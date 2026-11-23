@@ -339,6 +339,56 @@ const runAssoc = async (lang, words) => {
   await page.close();
 };
 
+// lesson `rails-through`: has_many :through a join model, a layout with
+// yield and content_for in the mini browser, dependent: :destroy and the
+// foreign key error; the exercise declares both associations of a supplier
+const runThrough = async (lang, words) => {
+  const page = await browser.newPage({ locale: lang === 'de' ? 'de-DE' : 'en-US' });
+  page.on('pageerror', (e) => { console.log('[pageerror]', e.message); failures++; });
+  const out = (idx) => page.evaluate((i) => document.getElementById(`cell-out-${i}`).innerText, idx);
+  const until = (fn, arg, timeout = 90000) => page.waitForFunction(fn, arg, { timeout }).then(() => true, () => false);
+  const codeCells = () => page.$$eval('.run-cell', (buttons) => buttons.map((b) => b.getAttribute('data-idx')));
+  const outHas = (idx, re, timeout) => until(([i, src]) => new RegExp(src).test(document.getElementById(`cell-out-${i}`).innerText), [idx, re.source], timeout);
+  const mbText = (idx) => page.$eval(`#cell-out-${idx} .mb-view`, (view) => view.shadowRoot.querySelector('.mb-page').innerText);
+  const mbHas = (idx, re) => until(([i, src]) => { const v = document.querySelector(`#cell-out-${i} .mb-view`); return v && v.shadowRoot && new RegExp(src).test(v.shadowRoot.textContent); }, [idx, re.source]);
+  const clickLink = (idx, text) => page.$eval(`#cell-out-${idx} .mb-view`, (view, t) => [...view.shadowRoot.querySelectorAll('a')].find((a) => a.textContent.trim() === t).click(), text);
+
+  await page.goto(`${BASE}?lang=${lang}#rails-through`, { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('#app', { state: 'visible', timeout: 120000 });
+  const [boot, data, queries, app, dependent, exercise] = await codeCells();
+  await page.click(`.run-cell[data-idx="${boot}"]`);
+  check(`${lang}: through: Rails boots`, await outHas(boot, /=> "8\.\d+\.\d+"/, 180000), await out(boot));
+  await page.click(`.run-cell[data-idx="${data}"]`);
+  check(`${lang}: through: the dish's ingredients through the join table`, await outHas(data, new RegExp(`=> \\["${words.bacon}", "${words.egg}"\\]`), 180000), await out(data));
+  const d = await out(data);
+  check(`${lang}: through: the join table has foreign keys`, new RegExp(`FOREIGN KEY \\("${words.dish}_id"\\)`).test(d) && new RegExp(`INNER JOIN "${words.join}"`).test(d), d.slice(-1500));
+  await page.click(`.run-cell[data-idx="${queries}"]`);
+  check(`${lang}: through: both directions, joins, the amount`, await outHas(queries, new RegExp(words.amount)), await out(queries));
+  check(`${lang}: through: includes in three queries`, new RegExp(`"${words.join}"\\."${words.dish}_id" IN \\(`).test(await out(queries)), await out(queries));
+  await page.click(`.run-cell[data-idx="${app}"]`);
+  check(`${lang}: through: the page in its layout`, await mbHas(app, new RegExp(words.footer)) && new RegExp(words.diner).test(await mbText(app)) && /Rösti/.test(await mbText(app)), await out(app));
+  const log = await page.$eval(`#cell-out-${app} .mb-log`, (el) => el.innerText);
+  check(`${lang}: through: the log names the layout`, /within layouts\/application/.test(log), log.slice(-800));
+  await clickLink(app, words.open);
+  check(`${lang}: through: content_for fills the header`, await mbHas(app, new RegExp(`› ${words.open}`)) && new RegExp(words.footer).test(await mbText(app)), await mbText(app));
+  await page.click(`.run-cell[data-idx="${dependent}"]`);
+  check(`${lang}: through: dependent: :destroy takes the join rows along`, await outHas(dependent, /FOREIGN KEY constraint failed/), await out(dependent));
+  const dep = await out(dependent);
+  check(`${lang}: through: the dish's join rows deleted, the bacon refused`, new RegExp(`${words.joinModel} Destroy`).test(dep) && /ROLLBACK/.test(dep) && /=> 4(\n|$)/.test(dep), dep.slice(-1500));
+  await page.click(`.run-cell[data-idx="${exercise}"]`);
+  check(`${lang}: through: the starter fails on the foreign key`, await outHas(exercise, /InvalidForeignKey|FOREIGN KEY constraint failed/), await out(exercise));
+  check(`${lang}: through: the starter does not pass`, !(await page.getAttribute('#chunkyChat', 'class')).includes('pass'));
+  const starter = await page.evaluate((i) => window.cellEditors[i].getValue(), exercise);
+  const solution = starter.replace(/# has_many \.\.\. \(.*\)/, words.dep).replace('# has_many ... through ...', words.thr);
+  check(`${lang}: rails-through: 💡 offers this very solution`, solution === await cellSolution(page, 'rails-through', lang), solution);
+  check(`${lang}: through: the solution differs from the starter`, solution !== starter && solution.includes('through: :'), solution);
+  await page.evaluate(([i, c]) => window.cellEditors[i].setValue(c), [exercise, solution]);
+  await page.click(`.run-cell[data-idx="${exercise}"]`);
+  check(`${lang}: through: the solution passes`, await until(() => document.getElementById('chunkyChat').className.includes('pass'), null), await out(exercise));
+  check(`${lang}: through: the farm's products, what is left`, new RegExp(`=> \\[\\["${words.result[0]}", "${words.result[1]}"\\], 2, 1\\]`).test(await out(exercise)), await out(exercise));
+  await page.close();
+};
+
 await run('en', { home: 'home', hello: 'hello', bacon: 'bacon' });
 await run('de', { home: 'start', hello: 'hallo', bacon: 'speck' });
 await runModel('en', { db: 'diner.db', table: 'dishes', model: 'Guest', visits: 'visits' });
@@ -351,6 +401,8 @@ await runCrud('en', { resource: 'dishes', param: 'dish', first: 'Bacon', editTit
 await runCrud('de', { resource: 'gerichte', param: 'gericht', first: 'Speck', editTitle: 'Speck bearbeiten', updated: 'wurde geändert', deleted: 'ist von der Karte', deleteLabel: 'Löschen' });
 await runAssoc('en', { dishes: 'dishes', price: 'price', fk: 'category_id', category: 'Category', mains: 'Mains', specials: 'specials', cook: 'cook' });
 await runAssoc('de', { dishes: 'gerichte', price: 'preis', fk: 'kategorie_id', category: 'Kategorie', mains: 'Hauptgänge', specials: 'spezialitaeten', cook: 'koch' });
+await runThrough('en', { open: 'Bacon and eggs', bacon: 'Bacon', egg: 'Egg', dish: 'dish', join: 'dish_ingredients', joinModel: 'DishIngredient', amount: '3 rashers Bacon', diner: "Chunky's Diner", footer: 'chunky bacon guaranteed', dep: 'has_many :deliveries, dependent: :destroy', thr: 'has_many :products, through: :deliveries', result: ['Eggs', 'Milk'] });
+await runThrough('de', { open: 'Speck mit Ei', bacon: 'Speck', egg: 'Ei', dish: 'gericht', join: 'gericht_zutaten', joinModel: 'GerichtZutat', amount: '3 Tranchen Speck', diner: 'Chunkys Imbiss', footer: 'chunky bacon garantiert', dep: 'has_many :lieferungen, dependent: :destroy', thr: 'has_many :produkte, through: :lieferungen', result: ['Eier', 'Milch'] });
 // the Japanese lessons run the English code under the Japanese interface
 await run('ja', { home: 'home', hello: 'hello', bacon: 'bacon' });
 await runForms('ja', { resource: 'dishes', param: 'dish', price: 'price', builder: 'form', newTitle: 'New dish', notice: 'is on the menu' });

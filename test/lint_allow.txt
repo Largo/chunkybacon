@@ -48,6 +48,7 @@ links@rails-mvccell8
 links@rails-formscell6
 links@rails-crudcell8
 links@rails-associationscell4
+links@rails-throughcell10
 
 # rails-associations [de]: the German plurals (Kategorie, Gericht, Koch,
 # Spezialitaet) are told to the inflector in the setup cell, six lines en
@@ -64,3 +65,9 @@ plain-form@doku*ja*cell10@*
 
 # vererbung [ja]: 犬は動物<em>である</em> quotes the "〜は〜である" test
 plain-form@vererbung*ja*cell6@*
+
+# vererbung [en/ja/fr/it]: one sentence lists three superclasses, each with
+# its own lesson (Sinatra::Base, Minitest::Test, StandardError); since lesson
+# rack names Sinatra too, the linter guesses the Sinatra reference belongs
+# to the Minitest one beside it
+ref-context@vererbung*cell6@*

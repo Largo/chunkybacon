@@ -48,10 +48,10 @@ Last updated 2026-11-05.
   file, controller, views, the mini browser's new log pane - Active Record
   runs on the sqlite3 stand-in (§6f), then `resources`, forms, all seven
   REST actions (the mini browser submits forms, keeps cookies, follows
-  redirects, §6) and associations. Open there: `has_many :through`,
-  `dependent: :destroy` and layouts are only mentioned; the companion gem
+  redirects, §6) and associations. Since then lesson `rails-through` (has_many :through,
+  `dependent: :destroy`, layouts). Open there: the companion gem
   has no `mock_post` (checks only use it); the Japanese runs of
-  `test/rails_test.mjs` cover two of the six lessons.
+  `test/rails_test.mjs` cover two of the seven lessons.
 - `main` deploys again: since 2026-10-06 the host polls GitHub every two
   minutes and resets its checkout to `origin/main` (it refuses while the
   checkout is dirty - commit or stash before leaving it). `main` holds the

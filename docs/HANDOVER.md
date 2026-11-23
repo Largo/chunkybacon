@@ -495,7 +495,7 @@ check plays `games`, in `game.rb`, §6),
 `spinel(code)` / `show_spinel_irb` (Spinel, in `spinel.rb`, §6n; in a lesson with `"spinel": true` every cell is run as `spinel(its code)` - `ChunkySpinel.cell_source`, `Course#spinel?`),
 `download_file(data, name)`, `show_pdf(pdf)` (a file
 name, PDF bytes, a Prawn or HexaPDF document), `show_audio(sound, rate:)`
-(WAV bytes, a file name or an Array of samples, §6), `run_tests` (Minitest);
+(WAV bytes, a file name or an Array of samples, §6), `run_tests` (Minitest), `run_specs` (RSpec: after `install_gem "rspec-core"` and `"rspec-expectations"`, runs the `RSpec.describe` groups defined so far, prints RSpec's report and `RSpec.reset`s, so a second ▶ starts fresh; options as for the rspec command, `run_specs "--format", "documentation"`);
 in `pycall.rb`: `show_plot(fig)` (a matplotlib figure, §6d).
 
 ## 3a. The cheat sheet and the documentation
@@ -642,6 +642,34 @@ lesson's Prawn PDF about 1 s. Traps: qr-bills reads the IBAN from
 `bill_params[:creditor][:iban]`, not from the address hash its own skeleton
 puts it in, and writes the address type `S` for an empty debtor, which
 swiss_qr rejects (the exercise's hint says so).
+
+### Lessons on gems that cannot run here
+
+- **RSpec** (lesson `tl-rspec`) is cached as rspec-core 3.13.7,
+  rspec-expectations 3.13.6, rspec-support 3.13.8 and diff-lcs 1.6.2
+  (`PINNED`: rspec-expectations wants it below 2). rspec-mocks is not
+  needed: rspec-core falls back to its null mocking adapter. `run_specs`
+  (main.rb) runs the examples defined so far with `RSpec::Core::Runner#run`
+  (not `Runner.run`, which traps INT) and `RSpec.reset`s after. A cell is
+  not a file, so `ChunkySpecSource` gives RSpec's SnippetExtractor the
+  running cell's code (`ChunkyApp#evaluating`) to print the failed line.
+  The harness has a smaller `run_specs` without that line. Loading
+  rspec-core puts `describe`/`context` on `main` and `Module` for the rest
+  of the page, as it does anywhere.
+- **Bundler** cannot load (the image's RubyGems is stripped: no
+  `Gem::VERSION`). Lesson `bundler` builds its ideas in plain Ruby: a
+  Gemfile read through `instance_eval` (like `Bundler::Dsl`), the real
+  `Gem::Version`/`Gem::Requirement` (`require "rubygems/requirement"`
+  works), a real `Gemfile.lock`'s specs parsed with a regex, a
+  one-gem-at-a-time resolver as the exercise.
+- **RBS** (lesson `tl-rbs`): the rbs gem has a C parser, so typeprof and
+  steep cannot install either. The lesson shows RBS as text (validated with
+  `rbs validate` from rbs 3.10.0) and models `rbs test` (`rbs/test/setup`):
+  `type_ok?` (`===`), `parse_sig` (one regex), `enforce` (a prepended
+  `Module.new`). The guards go on subclasses so the first cell can run again.
+- **Ractor** does not exist in ruby.wasm (`Ractor.new` raises
+  NotImplementedError); lesson `tl-fibers` covers it in prose and an
+  offweb box. Lesson `tl-threads` runs on SimThread (§5).
 
 ## 5. Browser-environment fixups (in `main.rb`, top)
 
@@ -1649,7 +1677,7 @@ and solutions on the real `jruby.js` under Node (`test/ruboto_node.mjs`,
 §6t), `ruby tools/vendor_ruboto.rb --check`. Deploy: nothing new - the phone's files are in git, the stand-ins
 are in `jruby.js` (§6t's `vendor_jruby.rb` and `publish_jruby`).
 
-## 6v. Rails in the page (lessons `rails` to `rails-associations`)
+## 6v. Rails in the page (lessons `rails` to `rails-through`)
 
 Real Rails 8.1 (railties, actionpack, actionview, activesupport) from the
 gem cache, as one file - the shape of Rails' own bug report templates - in
@@ -1823,6 +1851,40 @@ query is the N+1 point). The exercise makes `cooks` and `specials` and
 declares both sides. German needs four irregular inflections (Kategorie,
 Gericht, Koch, Spezialitaet), all in the setup cell, so the exercise keeps
 en's shape (the linter allows the setup cell's six extra lines).
+
+**Through, layouts, dependent** (lesson `rails-through`): the boot cell of
+`rails-crud`, then Active Record on `db/menu.sqlite3` under `Rails.root`
+with four tables - `categories`, `dishes`, `ingredients` and the join table
+`dish_ingredients` (`t.references ..., foreign_key: true`, an `amount`
+column) - and `has_many :ingredients, through: :dish_ingredients` on both
+sides of the join model `DishIngredient`. It reopens `Category` and `Dish`
+of `rails-associations` (same superclass, and it declares `belongs_to
+:category` itself, so a dish made here passes the validation that lesson's
+`belongs_to` left behind). The sqlite3 stand-in has `PRAGMA foreign_keys`
+on (the adapter sets it) and sql.js enforces it: deleting a row still
+referenced raises `ActiveRecord::InvalidForeignKey` ("FOREIGN KEY constraint
+failed") and rolls back. That is why the schema starts with `drop_table
+:dish_ingredients, if_exists: true`: with rows in the join table, the `force:
+true` drop of `dishes` on a second run would fail the same way. The layout
+cell writes `app/views/layouts/application.html.erb` (`yield`, `yield
+:title`, `content_for?`) and needs `class ApplicationController <
+ActionController::Base`: Rails finds `layouts/application` through the
+controller's superclass, and the earlier lessons' controllers, straight
+from `ActionController::Base`, get no layout (and still get none after
+this lesson). `MenuController` (`SpeisekarteController`) renders the index
+and a dish whose show view sets `content_for :title`; the `<title>` is in
+the page but the mini browser has no tab, so the layout also puts the title
+in its header. The dependent cell destroys a dish (`dependent: :destroy`:
+its join rows go first) and then fails to destroy an ingredient still in
+use (no `dependent:`, the foreign key refuses). The exercise gives
+`Supplier` `has_many :deliveries, dependent: :destroy` and `has_many
+:products, through: :deliveries`; the starter fails with the same
+`InvalidForeignKey` at `dairy.destroy`. The check reads the two reflections
+(`options[:dependent]` is `:destroy` or `:delete_all`, `options[:through]`)
+and the result `[["Eggs", "Milk"], 2, 1]`. German needs six irregular
+inflections (Kategorie, Gericht, Zutat, Lieferant, Lieferung, Produkt), all
+in the data cell. BROWSER_ONLY in the check harness; `test/rails_test.mjs`
+runs it in en and de.
 
 ## 7. nginx and the proxy
 
@@ -3321,10 +3383,10 @@ keyed vs. unkeyed delete, errors, the exercise in de and en).
 
 ## 6x. Expert: Ruby under the microscope (lessons `mikro-parser` to `mikro-gc`)
 
-Eight lessons at the end of the course (their own sidebar section) on how
+Ten lessons at the end of the course (their own sidebar section) on how
 CRuby works inside: Prism's tokens and tree, YARV instructions, the VM
 stack and its frames, blocks/closures and the ep chain, VALUE words and
-heap slots, method lookup, the ZJIT compiler, mark and sweep. The idea and the phrase come
+heap slots, object shapes and the inline caches that use them, method lookup, the YJIT and ZJIT compilers, mark and sweep. The idea and the phrase come
 from the book *Ruby Under a Microscope* by Pat Shaughnessy (No Starch
 Press, 2013); the first and last lesson link it and say plainly that the
 book is his and the lessons are not by him nor connected to it.
@@ -3334,7 +3396,7 @@ book is his and the lessons are not by him nor connected to it.
 assume: no flonum (`USE_FLONUM` 0: `nil` is 0x02, `true` 0x06, every Float
 is a heap object), Fixnums up to 2**30 - 1, slot sizes 24/48/96/192/384,
 `RHASH_AR_TABLE_MAX_SIZE` = `SIZEOF_VALUE` = 4 (a Hash switches to an
-st_table at 5 entries, not 9), the longest embedded String 367 bytes. Each
+st_table at 5 entries, not 9), the longest embedded String 367 bytes, a 24-byte slot embeds three instance variables. Each
 was run on the page's own `ruby+stdlib.wasm` (in Node through
 `@ruby/wasm-wasi`'s `RubyVM.instantiateModule`) and read in the source at
 tag v4.0.0; the lessons' "🔬 In the source" boxes (`.msc-source`) link
@@ -3372,6 +3434,49 @@ test/microscope_test.mjs` and re-read the numbers in the prose.
   Strings: `ui.msc*` (the pictures' strings are Ruby format strings, the
   views' fill `%s` in order).
 
+- **`mikro-shapes`** reads shapes from `ObjectSpace.dump` (`"shape_id"`,
+  `"embedded"`, `"slot_size"`, `"too_complex_shape"`) and
+  `RubyVM.stat(:next_shape_id)`; both work in the page. The dump prints only
+  the node in the global shape tree (`shape_id & SHAPE_ID_OFFSET_MASK`,
+  objspace_dump.c); the real id also carries the slot size (heap index) and
+  frozen/object_id/too-complex flags (shape.h). Shape ids depend on what ran
+  before, so the prose never states a number but 0 (the root) and 1 (the
+  root plus object_id, a hidden field since 4.0), and the check compares
+  only equality: the model's nodes against real objects made with
+  `Class.new.new` (a fresh class each, so no class reaches
+  `SHAPE_MAX_VARIATIONS` = 8 and turns too complex). Cells: a Dot's dump;
+  shared shapes across classes, another order, 0 new shapes for 1000 Dots;
+  slot size from `def initialize`'s ivar count (`rb_estimate_iv_count`,
+  first object 48 bytes) against a class that learns it (first object 24
+  bytes and extended, the second 48 and embedded); `getinstancevariable
+  :@weight, <is:0>` and a model of the one-entry inline cache fed real shape
+  ids (conditional ivars: 10 misses; uniform: 1 miss, 9 hits); a class
+  whose objects branch at the root: seven shapes, the eighth variation
+  prints the performance warning (captured with `$stderr = $stdout`, since
+  the page does not show stderr), then too complex. Exercise: the model's
+  `transition` (shared nodes) and `index_of` (walk up, `shape_get_iv_index`).
+  After a Ruby update: re-read `SHAPE_MAX_VARIATIONS`, the warning text and
+  the slot capacities.
+
+- **`mikro-yjit`** (before `mikro-zjit`) has no YJIT either
+  (`defined?(RubyVM::YJIT)` is nil on wasm32). Its cells model YJIT's lazy
+  basic block versioning on this Ruby's real YARV: `yarv_body` (the ISeq's
+  `to_a` as `{pc => insn}`, labels resolved to pcs, local indexes to names),
+  `block_at` (a block runs from a pc to the next branchif/branchunless/jump/
+  leave - not cut at jump targets, as `gen_single_block` does), a tiny
+  interpreter (`yarv_step`, `interpret`), and `TinyYjit`, which compiles a
+  block the first time it is reached, once per type context (`{local =>
+  Integer}`), with guards placed by peeking at the live locals, a side exit
+  into the interpreter at the failing pc, and versions in `@versions[pc][ctx]`.
+  The exercise `CappedYjit#version_for` adds `--yjit-max-versions` (4): the
+  4th version of a block becomes the generic context `{}`
+  (`limit_block_versions`). The pcs in the prose (blocks 0/24/9/31, the guard
+  at 27; `drift`'s loop block 15) were read on both 4.0.0 wasm32 and 4.0.1
+  x86-64; after a Ruby update re-run the cells and re-read them. Thresholds
+  (30, 120 above 40,000 ISeqs, max_versions 4) are from `yjit/src/options.rs`
+  v4.0.0. The offweb box's `--yjit-log` output (index 9 several times,
+  `index: 27, chain_depth: 1`) was checked with a local 4.0.1 +YJIT.
+
 - **`mikro-zjit`** has no ZJIT to show: the page's wasm32 CRuby is built
   without one (`defined?(RubyVM::ZJIT)` is nil, no `zjit_*` instructions;
   ZJIT writes x86-64/arm64 code). Its cells are small Ruby models of each
@@ -3384,8 +3489,8 @@ test/microscope_test.mjs` and re-read the numbers in the prose.
   prose is copied from ZJIT's own `opt_tests.rs` (v4.0.0). After a Ruby
   update, re-read the thresholds and the pass list (`Function::optimize`).
 
-Tests: `test/check_harness.rb` (the eight exercises; it loads
-microscope.rb), `node test/microscope_test.mjs` (every cell of the eight
+Tests: `test/check_harness.rb` (the ten exercises; it loads
+microscope.rb), `node test/microscope_test.mjs` (every cell of the ten
 lessons on ruby.wasm, each YARV view stepped to its end and agreeing with
 Ruby, the pictures, the solutions; LANGS=de,en,ja).
 

@@ -202,6 +202,18 @@ module Kernel
     Minitest::Runnable.runnables.clear
     result
   end
+
+  # main.rb's run_specs, but a failed example's line is not shown (no cell
+  # code to take it from: "Unable to find chunky.rb")
+  def run_specs(*options)
+    require "rspec/core"
+    config = RSpec.configuration
+    config.output_stream = $stdout
+    config.start_time = RSpec::Core::Time.now
+    RSpec::Core::Runner.new(RSpec::Core::ConfigurationOptions.new(options)).run($stderr, $stdout).zero?
+  ensure
+    RSpec.reset if defined?(RSpec.reset)
+  end
 end
 
 require "minitest"
@@ -276,7 +288,7 @@ SOLUTION_LANG = { "ja" => "en", "fr" => "en", "it" => "en" }.freeze
 # Sequel's sqlite3 to sql.js (html/sqlite3_sqljs.rb), and Herb's parser is
 # its WebAssembly build (html/herb_bridge.rb) - only a page has them;
 # test/browser_test.mjs runs them.
-BROWSER_ONLY = %w[pycall sympy numpy matplotlib sklearn sequel erb activerecord rails-mvc rails-forms rails-crud rails-associations].freeze
+BROWSER_ONLY = %w[pycall sympy numpy matplotlib sklearn sequel erb activerecord rails-mvc rails-forms rails-crud rails-associations rails-through].freeze
 
 # the Rumale exercise's picture of a seven (its starter defines it too)
 RUMALE_SEVEN = "PIC = %w[.######. ......#. .....#.. ....#... ...#.... ...#.... ..#..... ..#.....].join(\"\\n\") + \"\\n\"\n"
@@ -1372,9 +1384,17 @@ puts best)]
     "de" => [%(install_gem "chunky_png"\nrequire "chunky_png"\nbild = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times do |y|\n  next unless y.even?\n  8.times { |x| bild[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }\nend\nshow_image bild)],
     "en" => [%(install_gem "chunky_png"\nrequire "chunky_png"\nimage = ChunkyPNG::Image.new(8, 8, ChunkyPNG::Color::WHITE)\n8.times do |y|\n  next unless y.even?\n  8.times { |x| image[x, y] = ChunkyPNG::Color.rgb(193, 74, 46) }\nend\nshow_image image)]
   },
+  "bundler" => {
+    "de" => [%(require "rubygems/requirement"\n\ndef neueste_passende(index, name, *anforderungen)\n  anforderung = Gem::Requirement.new(*anforderungen)\n  index.fetch(name, [])\n       .select { |v| anforderung.satisfied_by?(Gem::Version.new(v)) }\n       .max_by { |v| Gem::Version.new(v) }\nend\n\ndef alle_aufloesen(index, wuensche)\n  wuensche.to_h do |name, anforderungen|\n    version = neueste_passende(index, name, *Array(anforderungen))\n    raise "keine Version von \#{name} passt zu \#{anforderungen}" unless version\n    [name, version]\n  end\nend\n\nindex = {\n  "rack" => ["2.2.9", "3.0.0", "3.1.8", "3.2.7"],\n  "sinatra" => ["3.2.0", "4.0.0", "4.1.1", "4.2.2"],\n  "tilt" => ["1.4.1", "2.0.9", "2.0.10", "2.0.11"],\n}\np neueste_passende(index, "rack", "~> 3.1")\np neueste_passende(index, "tilt", "~> 2.0")\np neueste_passende(index, "rack", "~> 4.0")\nalle_aufloesen(index, { "sinatra" => "~> 4.1", "rack" => [">= 3.0", "< 3.2"] }))],
+    "en" => [%(require "rubygems/requirement"\n\ndef newest_match(index, name, *requirements)\n  requirement = Gem::Requirement.new(*requirements)\n  index.fetch(name, [])\n       .select { |v| requirement.satisfied_by?(Gem::Version.new(v)) }\n       .max_by { |v| Gem::Version.new(v) }\nend\n\ndef resolve_all(index, wishes)\n  wishes.to_h do |name, requirements|\n    version = newest_match(index, name, *Array(requirements))\n    raise "no version of \#{name} fits \#{requirements}" unless version\n    [name, version]\n  end\nend\n\nindex = {\n  "rack" => ["2.2.9", "3.0.0", "3.1.8", "3.2.7"],\n  "sinatra" => ["3.2.0", "4.0.0", "4.1.1", "4.2.2"],\n  "tilt" => ["1.4.1", "2.0.9", "2.0.10", "2.0.11"],\n}\np newest_match(index, "rack", "~> 3.1")\np newest_match(index, "tilt", "~> 2.0")\np newest_match(index, "rack", "~> 4.0")\nresolve_all(index, { "sinatra" => "~> 4.1", "rack" => [">= 3.0", "< 3.2"] }))]
+  },
   "html" => {
     "de" => [%(links = doc.css("a").map { |link| link["href"] }\nlinks)],
     "en" => [%(links = doc.css("a").map { |link| link["href"] }\nlinks)]
+  },
+  "rack" => {
+    "de" => [%(install_gem "rack"\nrequire "rack"\nclass Megafon\n  def initialize(app)\n    @app = app\n  end\n  def call(env)\n    status, headers, body = @app.call(env)\n    laut = []\n    body.each { |stueck| laut << stueck.upcase }\n    body.close if body.respond_to?(:close)\n    [status, headers.merge("x-megafon" => "an"), laut]\n  end\nend\nleise = ->(env) { [200, { "content-type" => "text/html" }, ["<h1>Hallo, Rack!</h1>"]] }\nshow_browser Megafon.new(leise), "/")],
+    "en" => [%(install_gem "rack"\nrequire "rack"\nclass Megaphone\n  def initialize(app)\n    @app = app\n  end\n  def call(env)\n    status, headers, body = @app.call(env)\n    loud = []\n    body.each { |part| loud << part.upcase }\n    body.close if body.respond_to?(:close)\n    [status, headers.merge("x-megaphone" => "on"), loud]\n  end\nend\nquiet = ->(env) { [200, { "content-type" => "text/html" }, ["<h1>Hello, Rack!</h1>"]] }\nshow_browser Megaphone.new(quiet), "/")]
   },
   "sinatra" => {
     "de" => [%(install_gem "sinatra"\nrequire "sinatra/base"\nclass MeineSeite < Sinatra::Base\n  get "/" do\n    "<h1>Meine Seite</h1>"\n  end\n  get "/speck" do\n    "CHUNKY BACON!"\n  end\nend\nshow_browser MeineSeite, "/speck")],
@@ -2842,6 +2862,98 @@ puts strong_quakes(quakes, 5))]
       SOL
     ],
   },
+  "mikro-shapes" => {
+    "de" => [
+      <<~'SOL'.chomp,
+        class ShapeKnoten
+          attr_reader :id, :eltern, :ivar, :index, :kanten
+
+          def initialize(id, eltern, ivar)
+            @id = id
+            @eltern = eltern
+            @ivar = ivar
+            @index = eltern ? eltern.index + 1 : -1
+            @kanten = {}
+          end
+        end
+
+        class ShapeBaum
+          attr_reader :wurzel
+
+          def initialize
+            @wurzel = ShapeKnoten.new(0, nil, nil)
+            @naechste_id = 1
+          end
+
+          def shape_fuer(ivars)
+            ivars.reduce(wurzel) { |shape, ivar| uebergang(shape, ivar) }
+          end
+
+          def uebergang(shape, ivar)
+            return shape.kanten[ivar] if shape.kanten.key?(ivar)
+
+            knoten = ShapeKnoten.new(@naechste_id, shape, ivar)
+            @naechste_id += 1
+            shape.kanten[ivar] = knoten
+          end
+
+          def index_von(shape, ivar)
+            shape = shape.eltern until shape.nil? || shape.ivar == ivar
+            shape&.index
+          end
+        end
+
+        baum = ShapeBaum.new
+        xy = baum.shape_fuer([:@x, :@y])
+        [xy.equal?(baum.shape_fuer([:@x, :@y])), baum.index_von(xy, :@y)]
+      SOL
+    ],
+    "en" => [
+      <<~'SOL'.chomp,
+        class ShapeNode
+          attr_reader :id, :parent, :ivar, :index, :edges
+
+          def initialize(id, parent, ivar)
+            @id = id
+            @parent = parent
+            @ivar = ivar
+            @index = parent ? parent.index + 1 : -1
+            @edges = {}
+          end
+        end
+
+        class ShapeTree
+          attr_reader :root
+
+          def initialize
+            @root = ShapeNode.new(0, nil, nil)
+            @next_id = 1
+          end
+
+          def shape_for(ivars)
+            ivars.reduce(root) { |shape, ivar| transition(shape, ivar) }
+          end
+
+          def transition(shape, ivar)
+            return shape.edges[ivar] if shape.edges.key?(ivar)
+
+            node = ShapeNode.new(@next_id, shape, ivar)
+            @next_id += 1
+            shape.edges[ivar] = node
+          end
+
+          def index_of(shape, ivar)
+            shape = shape.parent until shape.nil? || shape.ivar == ivar
+            shape&.index
+          end
+        end
+
+        tree = ShapeTree.new
+        xy = tree.shape_for([:@x, :@y])
+        [xy.equal?(tree.shape_for([:@x, :@y])), tree.index_of(xy, :@y)]
+      SOL
+    ],
+  },
   "mikro-lookup" => {
     "de" => [
       <<~'SOL'.chomp,
@@ -2883,6 +2995,68 @@ puts strong_quakes(quakes, 5))]
         end
 
         find_owner(kit, :greet)
+      SOL
+    ],
+  },
+  "mikro-yjit" => {
+    "de" => [
+      <<~'SOL'.chomp,
+        def wandern(n)
+          a = 0
+          b = 0
+          c = 0
+          while n > 0
+            c = b
+            b = a
+            a = a + 0.5
+            n -= 1
+          end
+          c
+        end
+
+        class GedeckelterYjit < MiniYjit
+          def version_fuer(pc, kontext)
+            max_versions = 4
+            versionen = @versionen[pc]
+            return versionen[kontext] if versionen[kontext]
+            kontext = {} if versionen.size + 1 >= max_versions
+            versionen[kontext] ||= kompiliere(pc, kontext)
+          end
+        end
+
+        jit = GedeckelterYjit.new(method(:wandern))
+        p jit.call(6)
+        puts jit.protokoll
+      SOL
+    ],
+    "en" => [
+      <<~'SOL'.chomp,
+        def drift(n)
+          a = 0
+          b = 0
+          c = 0
+          while n > 0
+            c = b
+            b = a
+            a = a + 0.5
+            n -= 1
+          end
+          c
+        end
+
+        class CappedYjit < TinyYjit
+          def version_for(pc, ctx)
+            max_versions = 4
+            versions = @versions[pc]
+            return versions[ctx] if versions[ctx]
+            ctx = {} if versions.size + 1 >= max_versions
+            versions[ctx] ||= compile(pc, ctx)
+          end
+        end
+
+        jit = CappedYjit.new(method(:drift))
+        p jit.call(6)
+        puts jit.log
       SOL
     ],
   },
@@ -3208,6 +3382,96 @@ end
 
 run_tests)]
   },
+  "tl-rspec" => {
+    "de" => [%(class Tagesrapport
+  def initialize
+    @stunden = Hash.new(0)
+  end
+
+  def erfasse(projekt, stunden)
+    raise ArgumentError, "nicht positiv" unless stunden.positive?
+
+    @stunden[projekt] += stunden
+    self
+  end
+
+  def total
+    @stunden.values.sum
+  end
+
+  def projekte
+    @stunden.keys
+  end
+
+  def leer?
+    @stunden.empty?
+  end
+end
+
+RSpec.describe Tagesrapport do
+  let(:rapport) { Tagesrapport.new }
+
+  it "beginnt leer" do
+    expect(rapport).to be_leer
+  end
+
+  it "zählt die Stunden zusammen" do
+    rapport.erfasse("Website", 2.5).erfasse("Shop", 1.5)
+    expect(rapport.total).to eq(4.0)
+    expect(rapport.projekte).to include("Shop")
+  end
+
+  it "lehnt null Stunden ab" do
+    expect { rapport.erfasse("Website", 0) }.to raise_error(ArgumentError)
+  end
+end
+
+run_specs)],
+    "en" => [%(class DayLog
+  def initialize
+    @hours = Hash.new(0)
+  end
+
+  def add(project, hours)
+    raise ArgumentError, "not positive" unless hours.positive?
+
+    @hours[project] += hours
+    self
+  end
+
+  def total
+    @hours.values.sum
+  end
+
+  def projects
+    @hours.keys
+  end
+
+  def empty?
+    @hours.empty?
+  end
+end
+
+RSpec.describe DayLog do
+  let(:log) { DayLog.new }
+
+  it "starts empty" do
+    expect(log).to be_empty
+  end
+
+  it "adds up the hours" do
+    log.add("Website", 2.5).add("Shop", 1.5)
+    expect(log.total).to eq(4.0)
+    expect(log.projects).to include("Shop")
+  end
+
+  it "refuses zero hours" do
+    expect { log.add("Website", 0) }.to raise_error(ArgumentError)
+  end
+end
+
+run_specs)]
+  },
   "tl-mixins" => {
     "de" => [%(class Timesheet
   include Enumerable
@@ -3382,6 +3646,66 @@ class Booking < BaseModel
   validates_presence_of :project
 end)]
   },
+  "tl-refinements" => {
+    "de" => [%(module Zeiteinheiten
+  refine Numeric do
+    def stunden = (self * 60).round
+    def minuten = self
+  end
+end
+
+using Zeiteinheiten
+
+class Einsatz
+  attr_reader :aufgabe
+
+  def initialize(aufgabe, dauer)
+    @aufgabe = aufgabe
+    @dauer = dauer
+  end
+
+  def laenger_als?(anderer)
+    dauer > anderer.dauer
+  end
+
+  protected
+
+  attr_reader :dauer
+end
+
+review = Einsatz.new("Code-Review", 1.5.stunden)
+standup = Einsatz.new("Standup", 20.minuten)
+[review.laenger_als?(standup), Integer.method_defined?(:stunden)])],
+    "en" => [%(module TimeUnits
+  refine Numeric do
+    def hrs = (self * 60).round
+    def mins = self
+  end
+end
+
+using TimeUnits
+
+class Stint
+  attr_reader :task
+
+  def initialize(task, minutes)
+    @task = task
+    @minutes = minutes
+  end
+
+  def longer_than?(other)
+    minutes > other.minutes
+  end
+
+  protected
+
+  attr_reader :minutes
+end
+
+review = Stint.new("Code review", 1.5.hrs)
+standup = Stint.new("Standup", 20.mins)
+[review.longer_than?(standup), Integer.method_defined?(:hrs)])]
+  },
   "tl-dsl" => {
     "de" => [%(module Timelog
   class Konfiguration
@@ -3448,6 +3772,32 @@ end)],
   (minutes.to_f / grid).round * grid
 end)]
   },
+  "tl-rbs" => {
+    "de" => [%(def passt?(wert, typ)
+  teile = typ.split("|").map(&:strip)
+  return teile.any? { |teil| passt?(wert, teil) } if teile.size > 1
+  return wert.nil? || passt?(wert, typ.chomp("?")) if typ.end_with?("?")
+
+  case typ
+  when "untyped" then true
+  when "bool" then wert == true || wert == false
+  when "nil" then wert.nil?
+  else Object.const_get(typ) === wert
+  end
+end)],
+    "en" => [%(def conforms?(value, type)
+  parts = type.split("|").map(&:strip)
+  return parts.any? { |part| conforms?(value, part) } if parts.size > 1
+  return value.nil? || conforms?(value, type.chomp("?")) if type.end_with?("?")
+
+  case type
+  when "untyped" then true
+  when "bool" then value == true || value == false
+  when "nil" then value.nil?
+  else Object.const_get(type) === value
+  end
+end)]
+  },
   "tl-performance" => {
     "de" => [%(eintraege = 500.times.map { |i| { projekt: "P\#{i % 5}", stunden: 1.0 } }
 
@@ -3471,6 +3821,120 @@ end
 def fast_report(entries)
   entries.group_by { |e| e[:project] }.transform_values { |l| l.sum { |e| e[:hours] } }
 end)]
+  },
+  "tl-threads" => {
+    "de" => [%(class Stundenbuch
+  attr_reader :summe
+
+  def initialize
+    @summe = 0
+    @schloss = Mutex.new
+  end
+
+  def buchen(stunden)
+    @schloss.synchronize do
+      vorher = @summe
+      sleep 0.01
+      @summe = vorher + stunden
+    end
+  end
+end
+
+buch = Stundenbuch.new
+4.times.map { Thread.new { 5.times { buch.buchen(2) } } }.each(&:join)
+buch.summe), %(class Stundenbuch
+  attr_reader :summe
+
+  def initialize
+    @summe = 0
+    @schloss = Thread::Mutex.new
+  end
+
+  def buchen(stunden)
+    @schloss.synchronize { @summe += stunden }
+  end
+end
+buch = Stundenbuch.new
+4.times.map { Thread.new { 5.times { buch.buchen(2) } } }.each(&:join)
+puts buch.summe)],
+    "en" => [%(class TimeLedger
+  attr_reader :total
+
+  def initialize
+    @total = 0
+    @lock = Mutex.new
+  end
+
+  def book(hours)
+    @lock.synchronize do
+      before = @total
+      sleep 0.01
+      @total = before + hours
+    end
+  end
+end
+
+ledger = TimeLedger.new
+4.times.map { Thread.new { 5.times { ledger.book(2) } } }.each(&:join)
+ledger.total), %(class TimeLedger
+  attr_reader :total
+
+  def initialize
+    @total = 0
+    @lock = Thread::Mutex.new
+  end
+
+  def book(hours)
+    @lock.synchronize { @total += hours }
+  end
+end
+ledger = TimeLedger.new
+4.times.map { Thread.new { 5.times { ledger.book(2) } } }.each(&:join)
+puts ledger.total)]
+  },
+  "tl-fibers" => {
+    "de" => [%(def abwechselnd(*fibers)
+  ergebnisse = []
+  while fibers.any?(&:alive?)
+    fibers.each do |fiber|
+      ergebnisse << fiber.resume if fiber.alive?
+    end
+  end
+  ergebnisse
+end
+
+speck = Fiber.new do
+  Fiber.yield "Speck: brutzeln"
+  Fiber.yield "Speck: wenden"
+  "Speck: knusprig"
+end
+kaffee = Fiber.new do
+  Fiber.yield "Kaffee: mahlen"
+  "Kaffee: bereit"
+end
+
+abwechselnd(speck, kaffee))],
+    "en" => [%(def take_turns(*fibers)
+  results = []
+  while fibers.any?(&:alive?)
+    fibers.each do |fiber|
+      results << fiber.resume if fiber.alive?
+    end
+  end
+  results
+end
+
+bacon = Fiber.new do
+  Fiber.yield "bacon: sizzle"
+  Fiber.yield "bacon: flip"
+  "bacon: crispy"
+end
+coffee = Fiber.new do
+  Fiber.yield "coffee: grind"
+  "coffee: ready"
+end
+
+take_turns(bacon, coffee))]
   },
   "tl-capstone" => {
     "de" => [%(install_gem "roda"
