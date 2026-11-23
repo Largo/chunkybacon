@@ -663,7 +663,10 @@ Things ruby.wasm/WASI lacks that gems assume, each patched at boot:
   path fall back to a real file when the store does not have it (pure_jpeg
   asks `File.exist?` before `File.binread`). `sleep` is a virtual clock (a
   real sleep crashes the VM uncatchably); `Thread` is a Fiber scheduler that
-  interleaves at sleep points. `FileWatch` snapshots both stores per cell run
+  interleaves at sleep points. A contended `Mutex#lock`/`synchronize` and a
+  `Queue#pop` on an empty queue wait their turn there (`SimThread.wait_until`)
+  instead of raising or stopping the page; when every thread waits, it is
+  the `ThreadError` "No live threads left. Deadlock?" (`test/sim_thread_test.rb`). `FileWatch` snapshots both stores per cell run
   to offer downloads; it skips `BrowserGems.root` and `/tmp`. `Kernel#open`
   for reading finds a file only the store has (Daru's `from_csv`, §6o). It compares
   contents, so it also notes what `File.open` and `File.binwrite` wrote: a run that
@@ -3647,6 +3650,7 @@ ruby gems_harness.rb           # installer, sinatra/roda, nokogiri, bigdecimal, 
 ruby shell/run.rb              # the shell under Minitest, with PicoRuby portability scans
 ruby autorun_test.rb           # live runs: runnable?, the time limit, rescue-proof
 ruby earlier_cells_test.rb     # which cells above ▶ runs first (§6p)
+ruby sim_thread_test.rb       # the browser's threads (SimThread): sleep, Mutex, Queue, deadlock (§5)
 ruby ansi_test.rb              # terminal colours in a cell's output
 ruby game_test.rb              # show_game headless: the lesson's Snake, restart, check copies
 ruby ruby2d_test.rb            # ruby2d headless: frames, draw commands, keys, mouse, replayed copies, mixing, lesson `ruby2d`'s cells

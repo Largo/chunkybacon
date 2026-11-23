@@ -266,13 +266,33 @@ if defined?(JS)
         @registry ||= []
       end
 
+      # Runs the other threads until done says so. A thread waiting for a
+      # Mutex or a Queue (wait_until) is passed over until what it waits
+      # for is true; when every thread left waits, nothing can wake them:
+      # the deadlock a real Ruby reports too.
       def run_scheduler(&done)
         until done.call
           runnable = registry.reject(&:finished?)
           break if runnable.empty?
+          runnable = runnable.reject { |t| t.equal?(scheduler_current) || t.waiting? }
+          raise ThreadError, "No live threads left. Deadlock?" if runnable.empty?
           nxt = runnable.min_by(&:wake_at)
           SandboxTime.clock = nxt.wake_at if nxt.wake_at > SandboxTime.clock
           nxt.resume_once
+        end
+      end
+
+      # Waits until the block is true: a simulated thread gives up its turn
+      # until then (the scheduler resumes it once the block holds), the
+      # main program runs the threads until then.
+      def wait_until(&ready)
+        return if ready.call
+
+        if in_sim_thread?
+          Fiber.yield([:wait, ready]) until ready.call
+        else
+          run_scheduler(&ready)
+          raise ThreadError, "No live threads left. Deadlock?" unless ready.call
         end
       end
     end
@@ -319,13 +339,25 @@ if defined?(JS)
       previous = SimThread.scheduler_current
       SimThread.scheduler_current = self
       yielded = @fiber.resume
-      @wake_at = SandboxTime.clock + yielded[1] if yielded.is_a?(Array) && yielded[0] == :sleep
+      @waiting_for = nil
+      if yielded.is_a?(Array)
+        @wake_at = SandboxTime.clock + yielded[1] if yielded[0] == :sleep
+        @waiting_for = yielded[1] if yielded[0] == :wait
+      end
     ensure
       SimThread.scheduler_current = previous
     end
 
+    # true while it waits for something that has not happened yet
+    def waiting?
+      return false unless @waiting_for
+
+      @waiting_for = nil if @waiting_for.call
+      !@waiting_for.nil?
+    end
+
     def join(_limit = nil)
-      SimThread.run_scheduler { @finished }
+      SimThread.wait_until { @finished }
       raise @error if @error
       self
     end
@@ -359,6 +391,41 @@ if defined?(JS)
       !scheduler_current.nil?
     end
   end
+
+  # A Mutex is owned by a fiber, so a simulated thread that finds it locked
+  # by another one would raise "deadlock; lock already owned by another
+  # fiber": it waits its turn instead. synchronize is C that locks without
+  # calling lock, so it gets the same in Ruby. Uncontended - the main
+  # program, every gem - it is the real Mutex unchanged.
+  module SimMutexWait
+    def lock
+      SimThread.wait_until { !locked? } if locked? && !owned?
+      super
+    end
+
+    def synchronize
+      lock
+      begin
+        yield
+      ensure
+        unlock
+      end
+    end
+  end
+  ::Thread::Mutex.prepend(SimMutexWait)
+
+  # Queue#pop on an empty queue waits for a push (or close) by another
+  # thread; a real wait would stop the only native thread there is.
+  module SimQueueWait
+    def pop(non_block = false, timeout: nil)
+      SimThread.wait_until { !empty? || closed? } unless non_block || timeout || !empty? || closed?
+      super
+    end
+
+    def shift(*args, **kw) = pop(*args, **kw)
+    def deq(*args, **kw) = pop(*args, **kw)
+  end
+  ::Thread::Queue.prepend(SimQueueWait)
 
   # constants and class methods other code expects to find on Thread
   # (Singleton uses Thread::Mutex; the real Mutex/Queue work fine in wasm -
