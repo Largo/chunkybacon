@@ -11,7 +11,7 @@ Last updated 2026-10-16. The course is in German, English, Japanese, French and 
 | | |
 |---|---|
 | Live | https://chunkybacon.idogawa.com/ (behind the host's reverse proxy); the host's address and paths are kept outside the repository |
-| Host | container `chunkybacon` (nginx:1.27-alpine) |
+| Host | container `chunkybacon` (nginx:1.31-alpine) |
 | Checkout on the host | this repo, branch `main` |
 | GitHub | https://github.com/Largo/chunkybacon (public) |
 
@@ -3809,7 +3809,7 @@ git worktree add -b my-change ../chunkybacon-dev main
 docker network create chunkybacon-dev
 docker run -d --name chunkybacon-dev --network chunkybacon-dev -p 127.0.0.1:18011:80 \
   -v $PWD/../chunkybacon-dev/html:/usr/share/nginx/html:ro \
-  -v $PWD/../chunkybacon-dev/nginx:/etc/nginx/conf.d:ro nginx:1.27-alpine
+  -v $PWD/../chunkybacon-dev/nginx:/etc/nginx/conf.d:ro nginx:1.31-alpine
 BASE=http://127.0.0.1:18011/ node test/browser_test.mjs
 # then: git merge --ff-only, push (the host deploys it), remove container + worktree
 ```
