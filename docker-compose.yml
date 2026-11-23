@@ -1,7 +1,7 @@
 name: chunkybacon
 services:
   chunkybacon:
-    image: nginx:1.31-alpine
+    image: nginx:latest
     container_name: chunkybacon
     restart: unless-stopped
     ports:
