@@ -2886,6 +2886,52 @@ puts strong_quakes(quakes, 5))]
       SOL
     ],
   },
+  "mikro-zjit" => {
+    "de" => [
+      <<~'SOL'.chomp,
+        def spezialisiere(hir, profil)
+          bekannt = {}
+          hir.flat_map do |ziel, op, *args|
+            links, name, rechts = args
+            if op == :Param && profil[links] == [Integer]
+              bekannt[ziel] = :vermutet
+            elsif op == :Const && links.is_a?(Integer)
+              bekannt[ziel] = :sicher
+            elsif op == :SendWithoutBlock && fixnum_op(name) && bekannt[links] && bekannt[rechts]
+              waechter = [links, rechts].uniq.select { |v| bekannt[v] == :vermutet }
+              bekannt[ziel] = :sicher
+              next waechter.map { |v| [nil, :GuardType, v, :Fixnum] } + [[ziel, fixnum_op(name), links, rechts]]
+            end
+            [[ziel, op, *args]]
+          end
+        end
+
+        zeige_hir spezialisiere(zu_hir(method(:flaeche)), { breite: [Integer], hoehe: [Integer] })
+      SOL
+    ],
+    "en" => [
+      <<~'SOL'.chomp,
+        def specialize(hir, profile)
+          known = {}
+          hir.flat_map do |dst, op, *args|
+            left, name, right = args
+            if op == :Param && profile[left] == [Integer]
+              known[dst] = :param
+            elsif op == :Const && left.is_a?(Integer)
+              known[dst] = :sure
+            elsif op == :SendWithoutBlock && fixnum_op(name) && known[left] && known[right]
+              guards = [left, right].uniq.select { |v| known[v] == :param }
+              known[dst] = :sure
+              next guards.map { |v| [nil, :GuardType, v, :Fixnum] } + [[dst, fixnum_op(name), left, right]]
+            end
+            [[dst, op, *args]]
+          end
+        end
+
+        show_hir specialize(to_hir(method(:area)), { w: [Integer], h: [Integer] })
+      SOL
+    ],
+  },
   "mikro-gc" => {
     "de" => [
       <<~'SOL'.chomp,

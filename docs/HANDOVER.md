@@ -3318,10 +3318,10 @@ keyed vs. unkeyed delete, errors, the exercise in de and en).
 
 ## 6x. Expert: Ruby under the microscope (lessons `mikro-parser` to `mikro-gc`)
 
-Seven lessons at the end of the course (their own sidebar section) on how
+Eight lessons at the end of the course (their own sidebar section) on how
 CRuby works inside: Prism's tokens and tree, YARV instructions, the VM
 stack and its frames, blocks/closures and the ep chain, VALUE words and
-heap slots, method lookup, mark and sweep. The idea and the phrase come
+heap slots, method lookup, the ZJIT compiler, mark and sweep. The idea and the phrase come
 from the book *Ruby Under a Microscope* by Pat Shaughnessy (No Starch
 Press, 2013); the first and last lesson link it and say plainly that the
 book is his and the lessons are not by him nor connected to it.
@@ -3369,8 +3369,20 @@ test/microscope_test.mjs` and re-read the numbers in the prose.
   Strings: `ui.msc*` (the pictures' strings are Ruby format strings, the
   views' fill `%s` in order).
 
-Tests: `test/check_harness.rb` (the seven exercises; it loads
-microscope.rb), `node test/microscope_test.mjs` (every cell of the seven
+- **`mikro-zjit`** has no ZJIT to show: the page's wasm32 CRuby is built
+  without one (`defined?(RubyVM::ZJIT)` is nil, no `zjit_*` instructions;
+  ZJIT writes x86-64/arm64 code). Its cells are small Ruby models of each
+  step instead, on this Ruby's real YARV: a TracePoint counting calls and
+  noting parameter classes (vm.c `zjit_compile`: profiling from call 25,
+  compiling at 30, `options.rs`), YARV → SSA HIR with `SendWithoutBlock`,
+  a hand-specialized HIR with `GuardType`/`FixnumMult` and a side exit back
+  to the method, and the exercise `specialize` - `try_inline_fixnum_op`
+  with `likely_a`/`coerce_to` in `cruby_methods.rs`/`hir.rs`. The HIR in the
+  prose is copied from ZJIT's own `opt_tests.rs` (v4.0.0). After a Ruby
+  update, re-read the thresholds and the pass list (`Function::optimize`).
+
+Tests: `test/check_harness.rb` (the eight exercises; it loads
+microscope.rb), `node test/microscope_test.mjs` (every cell of the eight
 lessons on ruby.wasm, each YARV view stepped to its end and agreeing with
 Ruby, the pictures, the solutions; LANGS=de,en,ja).
 

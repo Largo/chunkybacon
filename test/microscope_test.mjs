@@ -9,7 +9,7 @@
 import { chromium } from '/usr/local/lib/node_modules/playwright/index.mjs';
 
 const BASE = process.env.BASE || 'http://127.0.0.1:8011/';
-const LESSONS = ['mikro-parser', 'mikro-yarv', 'mikro-stack', 'mikro-closures', 'mikro-values', 'mikro-lookup', 'mikro-gc'];
+const LESSONS = ['mikro-parser', 'mikro-yarv', 'mikro-stack', 'mikro-closures', 'mikro-values', 'mikro-lookup', 'mikro-zjit', 'mikro-gc'];
 const browser = await chromium.launch();
 let failures = 0;
 const check = (name, cond, extra) => {
